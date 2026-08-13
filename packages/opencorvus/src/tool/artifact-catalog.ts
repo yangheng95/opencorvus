@@ -28,7 +28,11 @@ import { publishTaskArtifactProjectFiles, readTaskArtifactResourceSet } from "@/
 import { resolveArtifactSnapshotReadAuthority } from "@/build/merge-back-publication-authority"
 import { tool as aiTool } from "ai"
 import { Tool } from "./tool"
-import { resolveCoreProjectedWorkerToolExecutionScope } from "./task-tool-execution-scope"
+import {
+  resolveCoreProjectedTaskToolExecutionScope,
+  resolveCoreProjectedWorkerToolExecutionScope,
+  type TaskToolExecutionScope,
+} from "./task-tool-execution-scope"
 import {
   completeArtifactReadsBeforePublication,
   selectedArtifactLocatorsBeforePublication,
@@ -41,7 +45,8 @@ const ARTIFACT_SEARCH_DESCRIPTION =
   "entry's producer field carries projected-Agent or Mission provenance; Core projections remain Core-owned even " +
   "when their payload records a source Agent turn. Substring is the default " +
   "discovery mode and fuzzy matching is available only when explicitly requested. Sort can be relevance, newest, " +
-  "oldest, or name. A fuzzy candidate is never automatic evidence selection. Stable cursors freeze membership; " +
+  "oldest, or name. Task Artifact snapshots are accompanied by independently pageable task_artifact_resource entries; " +
+  "pass each returned resource locator unchanged to artifact_read and artifact_select. A fuzzy candidate is never automatic evidence selection. Stable cursors freeze membership; " +
   "zero matches are valid. Inspect resolution, catalog_complete, provider_errors, and metadata_truncated."
 
 const ARTIFACT_READ_DESCRIPTION =
@@ -64,64 +69,98 @@ const ARTIFACT_PUBLISH_DESCRIPTION =
   "JSON value, never the transport string. " +
   "The Host derives Task, Session, Agent, active Expert Squad, projection, message, and tool-call provenance; " +
   "the model cannot supply or override them. artifact_type must begin with the active Expert Squad ID followed " +
-  "by '/'. source_artifact_locators is optional and defaults to [] when the output has no semantic Artifact source. Every supplied source " +
+  "by '/'. Package-owned strict ABI namespaces such as evolution-lab/ must use their package-owned typed publisher " +
+  "and are rejected here. source_artifact_locators is optional and defaults to [] when the output has no semantic Artifact source. Every supplied source " +
   "must have been completely read earlier in this physical Turn. resource_set is required; pass null when there are no files. A supplied filesystem resource set must be an exact " +
   "current-Task ref and is verified before commit. " +
   "An exact retry of the same Task-scoped publication atomically reuses the canonical publication; changed JSON, resource set, or sources remain distinct. " +
   "Use this for durable inter-Agent evidence; the visible final message remains narrative and is not Artifact transport."
 
-const ARTIFACT_SNAPSHOT_DESCRIPTION =
+export class ArtifactPublisherAuthorityError extends Error {
+  readonly code = "PACKAGE_TYPED_PUBLISHER_REQUIRED"
+
+  constructor(readonly artifactType: string) {
+    super(`artifact_publish cannot publish package-owned strict ABI type ${artifactType}; use its typed publisher`)
+    this.name = "ArtifactPublisherAuthorityError"
+  }
+}
+
+export function assertGenericArtifactPublisherAuthority(artifactType: string) {
+  if (artifactType.startsWith("evolution-lab/")) {
+    throw new ArtifactPublisherAuthorityError(artifactType)
+  }
+}
+
+const CURRENT_PROJECT_ARTIFACT_SNAPSHOT_DESCRIPTION =
   "Publish real files from the canonical current Task primary project as one immutable Task Artifact snapshot. " +
-  "This tool never reads a projected worker's mutable managed worktree. A managed Build worker must commit, receive a merged merge_back result, and pass that exact primary_head as source_commit; the Host then reads the immutable Git commit bytes even if the primary worktree advances. " +
+  "This tool never reads a projected worker's mutable managed worktree and does not claim Build merge authority. " +
   "Supply canonical project-relative paths and normalized media types. The Host validates Task ownership and stable " +
-  "regular-file bytes, then atomically publishes or reuses the exact Task-scoped content snapshot and returns one compact resource-set locator. The Host expands that set in canonical UTF-8 byte path order. Pass that locator to artifact_publish " +
+  "regular-file bytes, then atomically publishes or reuses the exact Task-scoped content snapshot. The result returns the resource_set for publication plus exact snapshot_locator and resource_locators for reading and selection; use those returned locators verbatim and never reconstruct opaque IDs or digests. The Host expands the set in canonical UTF-8 byte path order. Pass resource_set to artifact_publish " +
   "when a semantic Engine Artifact owns the files. Downstream Agents discover and read locators from the catalog; " +
   "they never scan this worker's mutable directory."
 
-const ArtifactSnapshotToolInputSchema = z
+const MANAGED_BUILD_ARTIFACT_SNAPSHOT_DESCRIPTION =
+  "Publish real files from the exact immutable primary commit returned by this managed Build worker's completed merge_back. " +
+  "Commit the managed worktree, call merge_back, and pass that result's exact primary_head as source_commit. The Host binds it to the latest completed merge_back and reads immutable Git commit bytes even if the primary worktree advances. " +
+  "Supply canonical project-relative paths and normalized media types. The result returns exact snapshot and resource locators; use them verbatim for reading, selection, and publication."
+
+const ArtifactSnapshotFilesSchema = z
+  .array(
+    z
+      .object({
+        path: ProjectRelativePathSchema.describe(
+          "Exact current-Task project-relative source file path using forward slashes.",
+        ),
+        media_type: TaskArtifactMediaTypeSchema.describe("Normalized media type for the immutable published bytes."),
+      })
+      .strict(),
+  )
+  .min(1)
+  .max(ArtifactSchemaLimits.publishResources)
+
+function refineArtifactSnapshotFiles(
+  input: { files: z.infer<typeof ArtifactSnapshotFilesSchema> },
+  context: z.RefinementCtx,
+) {
+  const seen = new Map<string, string>()
+  for (const [index, file] of input.files.entries()) {
+    const folded = file.path.toLowerCase()
+    const prior = seen.get(folded)
+    if (prior) {
+      context.addIssue({
+        code: "custom",
+        path: ["files", index, "path"],
+        message:
+          prior === file.path
+            ? "artifact_snapshot file paths must be unique"
+            : `artifact_snapshot file path case-collides with ${prior}`,
+      })
+    }
+    seen.set(folded, file.path)
+  }
+}
+
+const CurrentProjectArtifactSnapshotToolInputSchema = z
+  .object({
+    files: ArtifactSnapshotFilesSchema,
+  })
+  .strict()
+  .superRefine(refineArtifactSnapshotFiles)
+
+const ManagedBuildArtifactSnapshotToolInputSchema = z
   .object({
     source_commit: z
       .string()
       .regex(/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/)
-      .optional()
-      .describe(
-        "Exact immutable Git commit returned as primary_head by merge_back. Required for managed Build publication; omit only when the current Task project file itself is the canonical source and merge_back is unavailable.",
-      ),
-    files: z
-      .array(
-        z
-          .object({
-            path: ProjectRelativePathSchema.describe(
-              "Exact current-Task project-relative source file path using forward slashes.",
-            ),
-            media_type: TaskArtifactMediaTypeSchema.describe(
-              "Normalized media type for the immutable published bytes.",
-            ),
-          })
-          .strict(),
-      )
-      .min(1)
-      .max(ArtifactSchemaLimits.publishResources),
+      .describe("Exact immutable Git commit returned as primary_head by this worker's latest completed merge_back."),
+    files: ArtifactSnapshotFilesSchema,
   })
   .strict()
-  .superRefine((input, context) => {
-    const seen = new Map<string, string>()
-    for (const [index, file] of input.files.entries()) {
-      const folded = file.path.toLowerCase()
-      const prior = seen.get(folded)
-      if (prior) {
-        context.addIssue({
-          code: "custom",
-          path: ["files", index, "path"],
-          message:
-            prior === file.path
-              ? "artifact_snapshot file paths must be unique"
-              : `artifact_snapshot file path case-collides with ${prior}`,
-        })
-      }
-      seen.set(folded, file.path)
-    }
-  })
+  .superRefine(refineArtifactSnapshotFiles)
+
+type ArtifactSnapshotToolInput =
+  | z.infer<typeof CurrentProjectArtifactSnapshotToolInputSchema>
+  | z.infer<typeof ManagedBuildArtifactSnapshotToolInputSchema>
 
 const ArtifactPublishToolInputSchema = EngineArtifactPublishInputSchema.omit({
   payload: true,
@@ -285,7 +324,7 @@ async function readArtifactForTool(taskID: string, input: ArtifactReadInput) {
   })
 }
 
-function snapshotTransport(
+export function artifactSnapshotTransport(
   snapshot: {
     schema_version: 2
     project_id: string
@@ -293,14 +332,35 @@ function snapshotTransport(
     snapshot_id: string
     manifest_sha256: string
   },
-  resourceCount: number,
+  resources: readonly {
+    snapshot: {
+      schema_version: 2
+      project_id: string
+      task_id: string
+      snapshot_id: string
+      manifest_sha256: string
+    }
+    tree: string
+    path: string
+    media_type: string
+    bytes: number
+    sha256: string
+  }[],
 ) {
   return {
     resource_set: {
       snapshot,
       tree: "resources" as const,
     },
-    resource_count: resourceCount,
+    snapshot_locator: {
+      source: "task_artifact_snapshot" as const,
+      snapshot,
+    },
+    resource_locators: resources.map((ref) => ({
+      source: "task_artifact_resource" as const,
+      ref,
+    })),
+    resource_count: resources.length,
   }
 }
 
@@ -352,59 +412,84 @@ export const ArtifactSelectTool = Tool.define("artifact_select", {
   },
 })
 
-async function resolveArtifactWorkerScope(ctx: Tool.Context, toolName: "artifact_snapshot" | "artifact_publish") {
+function artifactExecutionOptions(ctx: Tool.Context, toolName: "artifact_snapshot" | "artifact_publish") {
   if (!ctx.callID) throw new Error(`${toolName}: missing persisted tool call identity`)
-  return resolveCoreProjectedWorkerToolExecutionScope({
-    options: {
-      toolCallId: ctx.callID,
-      opencorvus: {
-        projectID: ctx.extra?.projectID,
-        sessionID: ctx.sessionID,
-        messageID: ctx.messageID,
-        toolCallID: ctx.callID,
-        toolPartID: ctx.extra?.toolPartID,
-        invocationAuthority: ctx.extra?.invocationAuthority,
-      },
+  return {
+    toolCallId: ctx.callID,
+    opencorvus: {
+      projectID: ctx.extra?.projectID,
+      sessionID: ctx.sessionID,
+      messageID: ctx.messageID,
+      toolCallID: ctx.callID,
+      toolPartID: ctx.extra?.toolPartID,
+      invocationAuthority: ctx.extra?.invocationAuthority,
     },
-    toolName,
+  }
+}
+
+async function resolveArtifactSnapshotScope(ctx: Tool.Context) {
+  return resolveCoreProjectedTaskToolExecutionScope({
+    options: artifactExecutionOptions(ctx, "artifact_snapshot"),
+    toolName: "artifact_snapshot",
   })
 }
 
-export const ArtifactSnapshotTool = Tool.define("artifact_snapshot", {
-  description: ARTIFACT_SNAPSHOT_DESCRIPTION,
-  parameters: ArtifactSnapshotToolInputSchema,
-  async execute(args, ctx) {
-    const scope = await resolveArtifactWorkerScope(ctx, "artifact_snapshot")
-    const source = await resolveArtifactSnapshotReadAuthority({
-      scope,
-      ...(args.source_commit ? { claimedSourceCommit: args.source_commit } : {}),
-    })
-    const publication = await publishTaskArtifactProjectFiles({
-      scope,
-      source,
-      files: args.files.map((file) => ({
-        path: file.path,
-        mediaType: file.media_type,
-      })),
-    })
-    const output = JSON.stringify(snapshotTransport(publication.snapshot, publication.artifacts.length))
+async function resolveArtifactWorkerScope(ctx: Tool.Context) {
+  return resolveCoreProjectedWorkerToolExecutionScope({
+    options: artifactExecutionOptions(ctx, "artifact_publish"),
+    toolName: "artifact_publish",
+  })
+}
+
+export const ArtifactSnapshotTool = Tool.define<z.ZodType<ArtifactSnapshotToolInput>, {}>(
+  "artifact_snapshot",
+  async (initCtx) => {
+    const managedBuild = initCtx?.artifactSnapshotSource === "merged_primary_commit"
     return {
-      title: `Published Artifact snapshot (${publication.artifacts.length} files)`,
-      metadata: {
-        truncated: false,
-        snapshotID: publication.snapshot.snapshot_id,
-        resources: publication.artifacts.length,
+      description: managedBuild
+        ? MANAGED_BUILD_ARTIFACT_SNAPSHOT_DESCRIPTION
+        : CURRENT_PROJECT_ARTIFACT_SNAPSHOT_DESCRIPTION,
+      parameters: managedBuild
+        ? ManagedBuildArtifactSnapshotToolInputSchema
+        : CurrentProjectArtifactSnapshotToolInputSchema,
+      async execute(args, ctx) {
+        return executeArtifactSnapshot(args, await resolveArtifactSnapshotScope(ctx))
       },
-      output,
     }
   },
-})
+)
+
+async function executeArtifactSnapshot(args: ArtifactSnapshotToolInput, scope: TaskToolExecutionScope) {
+  const source = await resolveArtifactSnapshotReadAuthority({
+    scope,
+    ...("source_commit" in args ? { claimedSourceCommit: args.source_commit } : {}),
+  })
+  const publication = await publishTaskArtifactProjectFiles({
+    scope,
+    source,
+    files: args.files.map((file) => ({
+      path: file.path,
+      mediaType: file.media_type,
+    })),
+  })
+  const output = JSON.stringify(artifactSnapshotTransport(publication.snapshot, publication.artifacts))
+  return {
+    title: `Published Artifact snapshot (${publication.artifacts.length} files)`,
+    metadata: {
+      truncated: false,
+      snapshotID: publication.snapshot.snapshot_id,
+      resources: publication.artifacts.length,
+    },
+    output,
+  }
+}
 
 export const ArtifactPublishTool = Tool.define("artifact_publish", {
   description: ARTIFACT_PUBLISH_DESCRIPTION,
   parameters: ArtifactPublishToolInputSchema,
   async execute(args, ctx) {
-    const scope = await resolveArtifactWorkerScope(ctx, "artifact_publish")
+    assertGenericArtifactPublisherAuthority(args.artifact_type)
+    const scope = await resolveArtifactWorkerScope(ctx)
     const { payload_json, resource_set, ...metadata } = args
     const resources = resource_set
       ? await readTaskArtifactResourceSet({
@@ -488,6 +573,23 @@ export function createArtifactSelectAiTool(taskID: string) {
       const messageID = typeof meta?.messageID === "string" ? meta.messageID : ""
       if (!messageID) throw new Error("artifact_select: missing persisted Orchestrator message identity")
       return selectArtifactForSession(sessionID, messageID, args)
+    },
+  })
+}
+
+export function createArtifactSnapshotAiTool(taskID: string) {
+  return aiTool({
+    description: CURRENT_PROJECT_ARTIFACT_SNAPSHOT_DESCRIPTION,
+    inputSchema: CurrentProjectArtifactSnapshotToolInputSchema,
+    execute: async (args: z.infer<typeof CurrentProjectArtifactSnapshotToolInputSchema>, options) => {
+      const scope = await resolveCoreProjectedTaskToolExecutionScope({
+        options,
+        toolName: "artifact_snapshot",
+      })
+      if (scope.taskID !== taskID) {
+        throw new Error("artifact_snapshot: Orchestrator Session belongs to another Task")
+      }
+      return executeArtifactSnapshot(args, scope)
     },
   })
 }

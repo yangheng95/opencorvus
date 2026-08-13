@@ -129,10 +129,11 @@ export function completeArtifactReadLocatorsForSession(
     const rawInput = state?.input
     if (data.tool === "panel") {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
-      if ((rawInput as Record<string, unknown>).action !== "read_task_artifact") continue
-      const panelInput = MissionPanelActionSchema.parse(
+      const parsed = MissionPanelActionSchema.safeParse(
         materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
       )
+      if (!parsed.success) continue
+      const panelInput = parsed.data
       if (panelInput.action !== "read_task_artifact") continue
       const { action: _action, taskID, ...read } = panelInput
       if (options?.panelTaskID !== undefined && taskID !== options.panelTaskID) continue

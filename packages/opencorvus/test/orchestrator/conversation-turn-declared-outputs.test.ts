@@ -1,7 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
-import { artifactCatalogAuthority, exactEngineArtifactLocator, searchTaskArtifacts } from "../../src/artifact-catalog"
+import {
+  artifactCatalogAuthority,
+  exactEngineArtifactLocator,
+  readTaskArtifact,
+  searchTaskArtifacts,
+} from "../../src/artifact-catalog"
 import { projectDeclaredTurnOutputs, resolveCompletionArtifactEntries } from "../../src/conversation/turn-artifacts"
 import { recordEngineArtifact } from "../../src/engine/artifact"
 import { EngineTaskTable } from "../../src/engine/engine.sql"
@@ -101,7 +106,73 @@ async function publishFiles(scope: TaskToolExecutionScope) {
   }
 }
 
+async function publishResourceBatch(scope: TaskToolExecutionScope, prefix: string, count: number) {
+  const files = Array.from({ length: count }, (_, index) => ({
+    path: `${prefix}/resource-${index.toString().padStart(2, "0")}.txt`,
+    mediaType: "text/plain",
+    bytes: Buffer.from(`${prefix}-${index}\n`),
+  }))
+  const store = createTaskArtifactStoreExecution(scope)
+  try {
+    const stage = await store.stage({ trees: ["deliverables"] })
+    for (const file of files) {
+      const target = path.join(stage.treeDirectories.deliverables!, file.path)
+      await fs.mkdir(path.dirname(target), { recursive: true })
+      await fs.writeFile(target, file.bytes)
+    }
+    return await store.publish(stage, {
+      snapshot_kind: "catalog",
+      files: files.map((file) => ({ tree: "deliverables", path: file.path, media_type: file.mediaType })),
+    })
+  } finally {
+    await store.close()
+  }
+}
+
 describe("Conversation Agent-declared output projection", () => {
+  test("keeps Task Artifact resource membership frozen across paginated catalog reads", async () => {
+    await using project = await memoryProject()
+    const task = await taskFixture(project.path)
+    await publishResourceBatch(task.scope, "initial", 30)
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const authority = artifactCatalogAuthority(task.taskID)
+        const search = {
+          kinds: ["task_artifact_resource" as const],
+          version_scope: "all" as const,
+          sort: "oldest" as const,
+          limit: 10,
+        }
+        const first = await searchTaskArtifacts({ authority, search })
+        expect(first).toMatchObject({ filtered_total: 30, catalog_complete: true })
+        expect(first.entries).toHaveLength(10)
+        expect(first.next_cursor).toEqual(expect.any(String))
+
+        await publishResourceBatch(task.scope, "later", 1)
+        const frozenEntries = [...first.entries]
+        let cursor = first.next_cursor
+        while (cursor) {
+          const page = await searchTaskArtifacts({ authority, search: { ...search, cursor } })
+          expect(page.filtered_total).toBe(30)
+          frozenEntries.push(...page.entries)
+          cursor = page.next_cursor
+        }
+        expect(frozenEntries).toHaveLength(30)
+        expect(
+          frozenEntries.every(
+            (entry) => entry.locator.source === "task_artifact_resource" && entry.locator.ref.path.startsWith("initial/"),
+          ),
+        ).toBe(true)
+
+        const refreshed = await searchTaskArtifacts({ authority, search: { ...search, limit: 100 } })
+        expect(refreshed).toMatchObject({ filtered_total: 31, next_cursor: null })
+        expect(refreshed.entries).toHaveLength(31)
+      },
+    })
+  })
+
   test("preserves every selected producer declaration when their exact resources repeat", async () => {
     await using project = await memoryProject()
     const task = await taskFixture(project.path)
@@ -242,9 +313,46 @@ describe("Conversation Agent-declared output projection", () => {
     const outputs = await Instance.provide({
       directory: project.path,
       fn: async () => {
+        const authority = artifactCatalogAuthority(task.taskID)
         const page = await searchTaskArtifacts({
-          authority: artifactCatalogAuthority(task.taskID),
+          authority,
           search: { version_scope: "all", sort: "oldest", limit: 100 },
+        })
+        const resourcePage = await searchTaskArtifacts({
+          authority,
+          search: {
+            kinds: ["task_artifact_resource"],
+            version_scope: "all",
+            sort: "oldest",
+            limit: 100,
+          },
+        })
+        expect(resourcePage.entries.map((entry) => entry.locator)).toEqual(
+          publication.artifacts.map((ref) => ({ source: "task_artifact_resource", ref })),
+        )
+        const exactEntry = resourcePage.entries.find(
+          (entry) =>
+            entry.locator.source === "task_artifact_resource" &&
+            entry.locator.ref.tree === resourceLocator.ref.tree &&
+            entry.locator.ref.path === resourceLocator.ref.path &&
+            entry.locator.ref.sha256 === resourceLocator.ref.sha256,
+        )
+        if (!exactEntry) throw new Error("Exact Task Artifact resource catalog entry is missing")
+        const read = await readTaskArtifact({
+          authority,
+          read: {
+            locator: exactEntry.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          },
+        })
+        expect(read.chunk).toMatchObject({
+          locator: resourceLocator,
+          complete: true,
+          total_bytes: publication.artifacts[1]!.bytes,
+          sha256: publication.artifacts[1]!.sha256,
+          text: "export const result = true\n",
         })
         const locators = [resourceLocator, structuredLocator, rawCoreLocator]
         return projectDeclaredTurnOutputs({

@@ -19,7 +19,7 @@ import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from
 import fs from "node:fs/promises"
 import path from "node:path"
 import fuzzysort from "fuzzysort"
-import { insertEngineArtifact, recordEngineArtifact, type EngineArtifactRow } from "@/engine/artifact"
+import { insertEngineArtifact, type EngineArtifactRow } from "@/engine/artifact"
 import {
   ENGINE_ARTIFACT_CATALOG_LABEL_INDEX_CODE_POINTS,
   engineArtifactCatalogLabelIndex,
@@ -34,6 +34,7 @@ import {
   EngineArtifactCatalogRevisionTable,
   EngineArtifactTable,
   EngineArtifactVersionTable,
+  EngineTaskTable,
   type EngineArtifactKind,
 } from "@/engine/engine.sql"
 import { requireTask } from "@/engine/store"
@@ -51,6 +52,7 @@ import {
 } from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { Identifier } from "@/id/id"
 
 type EngineCatalogRow = Readonly<{
   id: string
@@ -103,7 +105,7 @@ const CATALOG_LABEL_PREVIEW_CHARS = 512
 const CATALOG_DIAGNOSTIC_PREVIEW_CHARS = 2_048
 const CATALOG_ENTRY_MEDIA_TYPE_LIMIT = 64
 const CATALOG_FACET_VALUE_LIMIT = 100
-const ARTIFACT_SEARCH_ABI_VERSION = 1
+const ARTIFACT_SEARCH_ABI_VERSION = 2
 const ARTIFACT_CURSOR_AUTHORITY_KEY = randomBytes(32)
 const ARTIFACT_FUZZY_SCORE_MINIMUM = 0.1
 const CATALOG_SOURCE_ORDER: Record<ArtifactCatalogEntry["source"], number> = {
@@ -678,6 +680,63 @@ function snapshotCandidate(record: TaskArtifactSnapshotRecord): CatalogCandidate
   }
 }
 
+function resourceCandidate(record: TaskArtifactSnapshotRecord, resource: TaskArtifactRef): CatalogCandidate {
+  const label = boundedCatalogText(resource.path, CATALOG_LABEL_PREVIEW_CHARS)
+  const entry: ArtifactCatalogEntry = {
+    source: "task_artifact",
+    locator: { source: "task_artifact_resource", ref: resource },
+    kind: "task_artifact_resource",
+    schema_diagnostic_truncated: false,
+    label: label.value,
+    label_truncated: label.truncated,
+    goal_id: null,
+    import_source_task_id: null,
+    producer: record.manifest.producer,
+    created_at_ms: record.manifest.created_at_ms,
+    bytes: resource.bytes,
+    sha256: resource.sha256,
+    resource_count: 1,
+    resource_media_types: [resource.media_type],
+    resource_media_types_truncated: false,
+    version: {
+      state: "immutable",
+      publication_sequence: record.manifest.publication_sequence,
+    },
+  }
+  const fullIdentity = [
+    record.identity.snapshot_id,
+    record.identity.manifest_sha256,
+    resource.tree,
+    resource.path,
+    resource.media_type,
+    resource.bytes,
+    resource.sha256,
+  ]
+  const identitySearchText = fullIdentity.join("\n").normalize("NFKC").toLowerCase()
+  return {
+    entry,
+    exactLabel: resource.path,
+    stableID: `${record.manifest.publication_sequence}\u0000${fullIdentity.join("\u0000")}`,
+    identitySearchText,
+    labelSearchText: entry.label.normalize("NFKC").toLowerCase(),
+    searchText: [entry.kind, resource.tree, resource.path, resource.media_type, resource.sha256]
+      .join("\n")
+      .normalize("NFKC")
+      .toLowerCase(),
+    resourceMediaTypes: [resource.media_type],
+    engineCatalogRevision: null,
+    snapshotSequence: record.manifest.publication_sequence,
+    searchMetadataTruncated: false,
+  }
+}
+
+function snapshotCandidates(record: TaskArtifactSnapshotRecord): CatalogCandidate[] {
+  return [
+    snapshotCandidate(record),
+    ...taskArtifactSnapshotResourceRefs(record).map((resource) => resourceCandidate(record, resource)),
+  ]
+}
+
 const MATCH_MODE_RANK: Record<NonNullable<ArtifactCatalogEntry["match"]>["tier"], number> = {
   exact_identity: 0,
   exact_label: 1,
@@ -1108,10 +1167,7 @@ export async function searchTaskArtifacts(input: {
     engine.push(...result.engine)
     snapshots.push(...result.snapshots.filter((record) => record.manifest.snapshot_kind === "catalog"))
   }
-  const allCandidates = [
-    ...engine.map(engineCandidate),
-    ...snapshots.map(snapshotCandidate),
-  ]
+  const allCandidates = [...engine.map(engineCandidate), ...snapshots.flatMap(snapshotCandidates)]
   const snapshotSequenceUpper =
     cursor?.snapshotSequenceUpper ?? Math.max(0, ...snapshots.map((record) => record.manifest.publication_sequence))
   const frozenCandidates = allCandidates.filter(
@@ -1163,8 +1219,7 @@ export async function searchTaskArtifacts(input: {
   const filteredTotal = cursor?.filteredTotal ?? filtered.length
   const afterIndex = cursor
     ? filtered.findIndex(
-        (candidate) =>
-          stableJSON(candidateSortTuple(candidate, parsed.sort!)) === stableJSON(cursor.afterSortTuple),
+        (candidate) => stableJSON(candidateSortTuple(candidate, parsed.sort!)) === stableJSON(cursor.afterSortTuple),
       )
     : -1
   if (cursor && afterIndex < 0 && membershipDriftErrors.length === 0) {
@@ -2028,6 +2083,30 @@ function idempotentExpertPublicationIdentity(input: {
   }
 }
 
+export class TaskArtifactPublicationClosedError extends Error {
+  override readonly name = "TaskArtifactPublicationClosedError"
+  readonly code = "TASK_ARTIFACT_PUBLICATION_CLOSED"
+
+  constructor(
+    readonly taskID: string,
+    readonly timeCompleted: number,
+  ) {
+    super(`Task ${taskID} completed at ${timeCompleted}; new expert Artifact publication is closed`)
+  }
+}
+
+function assertExpertArtifactPublicationOpenInTransaction(db: Database.TxOrDb, taskID: string): void {
+  const task = db
+    .select({ id: EngineTaskTable.id, timeCompleted: EngineTaskTable.time_completed })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, taskID))
+    .get()
+  if (!task) throw new Error(`engineArtifacts.publish Task ${taskID} does not exist`)
+  if (task.timeCompleted !== null) {
+    throw new TaskArtifactPublicationClosedError(taskID, task.timeCompleted)
+  }
+}
+
 export async function publishExpertArtifact(input: {
   scope: TaskToolExecutionScope
   artifact: EngineArtifactPublishRequest
@@ -2092,47 +2171,51 @@ export async function publishExpertArtifact(input: {
     observed_artifact_locators: observedArtifactLocators,
     source_artifact_locators: sourceArtifactLocators,
   })
-  const artifactID = artifact.idempotent
-    ? Database.transaction((db) => {
-        const identity = idempotentExpertPublicationIdentity({
-          taskID: input.scope.taskID,
-          label: artifact.label,
-          envelope,
-        })
-        const existing = db
-          .select()
-          .from(EngineArtifactTable)
-          .where(eq(EngineArtifactTable.id, identity.artifactID))
-          .get()
-        if (existing) {
-          if (existing.task_id !== input.scope.taskID || existing.kind !== "expert_output") {
-            throw new Error("idempotent Engine Artifact identity resolved to a foreign partition")
-          }
-          const existingEnvelope = EngineArtifactEnvelopeSchema.parse(existing.payload)
-          const existingIdentity = idempotentExpertPublicationIdentity({
-            taskID: existing.task_id,
-            label: existing.label,
-            envelope: existingEnvelope,
-          })
-          if (existingIdentity.canonical !== identity.canonical) {
-            throw new Error("idempotent Engine Artifact identity collision")
-          }
-          return existing.id
-        }
-        return insertEngineArtifact(db, {
-          id: identity.artifactID,
-          taskID: input.scope.taskID,
-          kind: "expert_output",
-          label: artifact.label,
-          payload: envelope,
-        })
+  const artifactID = Database.transaction((db) => {
+    if (artifact.idempotent) {
+      const identity = idempotentExpertPublicationIdentity({
+        taskID: input.scope.taskID,
+        label: artifact.label,
+        envelope,
       })
-    : recordEngineArtifact({
+      const existing = db
+        .select()
+        .from(EngineArtifactTable)
+        .where(eq(EngineArtifactTable.id, identity.artifactID))
+        .get()
+      if (existing) {
+        if (existing.task_id !== input.scope.taskID || existing.kind !== "expert_output") {
+          throw new Error("idempotent Engine Artifact identity resolved to a foreign partition")
+        }
+        const existingEnvelope = EngineArtifactEnvelopeSchema.parse(existing.payload)
+        const existingIdentity = idempotentExpertPublicationIdentity({
+          taskID: existing.task_id,
+          label: existing.label,
+          envelope: existingEnvelope,
+        })
+        if (existingIdentity.canonical !== identity.canonical) {
+          throw new Error("idempotent Engine Artifact identity collision")
+        }
+        return existing.id
+      }
+      assertExpertArtifactPublicationOpenInTransaction(db, input.scope.taskID)
+      return insertEngineArtifact(db, {
+        id: identity.artifactID,
         taskID: input.scope.taskID,
         kind: "expert_output",
         label: artifact.label,
         payload: envelope,
       })
+    }
+    assertExpertArtifactPublicationOpenInTransaction(db, input.scope.taskID)
+    return insertEngineArtifact(db, {
+      id: Identifier.ascending("artifact"),
+      taskID: input.scope.taskID,
+      kind: "expert_output",
+      label: artifact.label,
+      payload: envelope,
+    })
+  })
   const locator = exactEngineArtifactLocator({ taskID: input.scope.taskID, artifactID })
   return {
     locator,
