@@ -21,6 +21,7 @@ import {
   schemaObjectFingerprint,
 } from "./schema-contract"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { Identifier } from "@/id/id"
 import {
   TASK_CANCELLED_EVENT_TYPE,
   projectTaskCancellationEventChain,
@@ -244,6 +245,25 @@ function cancellationEventView(
  * database becomes available to any route.
  */
 function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
+  const legacyProject = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM project
+     WHERE length(id) > ${Identifier.MAX_LENGTH}
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyProject) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Project ${legacyProject.id} at ${dbPath}. ` +
+        "Its relational identity belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactProjectIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyIdempotentArtifact = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

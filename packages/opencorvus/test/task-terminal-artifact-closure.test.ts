@@ -1,6 +1,7 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { randomUUID } from "node:crypto"
 import {
   artifactCatalogAuthority,
   EngineArtifactIdentityCollisionError,
@@ -39,6 +40,8 @@ import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { ProjectTable } from "@/project/project.sql"
+import { Project } from "@/project/project"
 import { Session } from "@/session"
 import { Database, DatabaseUnavailableError, and, eq } from "@/storage/db"
 import { createToolExecutionSurface } from "@/tool/execution-surface"
@@ -408,6 +411,59 @@ test("requires a pre-release reset for the legacy expanded idempotent Artifact e
       })
       await Database.resetFiles(Database.Path())
       Database.Client()
+    },
+  })
+}, 60_000)
+
+test("requires a pre-release reset for the legacy expanded Project identity epoch", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const legacyID = "a".repeat(40)
+      const markerPath = path.join(project.path, ".git", "opencorvus")
+      await fs.writeFile(markerPath, legacyID, "utf8")
+      Database.use((db) =>
+        db
+          .insert(ProjectTable)
+          .values({
+            id: legacyID,
+            worktree: path.join(project.path, "legacy-project"),
+            sandboxes: [],
+            generation: randomUUID(),
+          })
+          .run(),
+      )
+      await Database.awaitEffectIdle(30_000)
+      Database.close()
+
+      let observed: unknown
+      try {
+        Database.Client()
+      } catch (error) {
+        observed = error
+      }
+      expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+        code: "DATA_RESET_REQUIRED",
+        operation: "Database.Client.dataIntegrity.compactProjectIdentity",
+      })
+      await Database.resetFiles(Database.Path())
+      Database.Client()
+      const discovered = await Project.fromDirectory(project.path)
+      expect(discovered.project.id).toHaveLength(Identifier.MAX_LENGTH)
+      expect(Identifier.isCanonical("project", discovered.project.id)).toBe(true)
+      expect(await fs.readFile(markerPath, "utf8")).toBe(discovered.project.id)
+      expect(
+        Database.use((db) =>
+          db
+            .select({ id: ProjectTable.id })
+            .from(ProjectTable)
+            .where(eq(ProjectTable.id, discovered.project.id))
+            .get(),
+        ),
+      ).toEqual({ id: discovered.project.id })
+      Database.close()
+      expect(() => Database.Client()).not.toThrow()
     },
   })
 }, 60_000)

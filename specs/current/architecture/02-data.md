@@ -37,8 +37,11 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 `src/id/id.ts` 的默认新签发路径为每个 canonical identity family 生成总长度不超过 24 个字符的
 标识；读取或重放历史 caller-supplied 标识仍保持原值。需要稳定重放的业务身份只能在它的存储
 迁移或明确 epoch 边界内切换到紧凑派生键。完整 SHA-256 继续保存在其所属 payload、目录或完整性
-列中，作为字节相等和防冲突事实；紧凑业务 ID 不是截断后冒充的密码学摘要。Project ID、延迟
-Task wait、其他手工或 caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。
+列中，作为字节相等和防冲突事实；紧凑业务 ID 不是截断后冒充的密码学摘要。Project ID 由完整
+normalized repository identity material 经 `Identifier.deterministic("project", material)` 生成不超过
+24 字符的 `prj_*` 身份；包含旧 expanded Project primary key 的 pre-release Database 在 bootstrap
+返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait、其他手工或 caller-supplied
+新落盘身份尚未迁入该默认签发面，属于后续迁移契约。
 
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一

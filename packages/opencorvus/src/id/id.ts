@@ -8,6 +8,7 @@ export namespace Identifier {
     permission: "per",
     question: "que",
     user: "usr",
+    project: "prj",
     part: "prt",
     pty: "pty",
     tool: "tool",

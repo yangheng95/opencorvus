@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test"
+import path from "node:path"
 import { Identifier } from "../src/id/id"
+import { Project } from "../src/project/project"
 
 describe("compact OpenCorvus identifiers", () => {
   test("keeps every generated identity family within 24 characters and ordered across its sequence window", () => {
@@ -36,5 +38,20 @@ describe("compact OpenCorvus identifiers", () => {
       expect(replay).toBe(first)
       expect(other).not.toBe(first)
     }
+  })
+
+  test("derives one compact Project identity from the complete normalized repository path", () => {
+    const root = path.resolve("identifier-project-fixture")
+    const first = Project.directoryProjectID(root)
+    const replay = Project.directoryProjectID(root)
+    const equivalent = Project.directoryProjectID(path.join(root, "."))
+    const other = Project.directoryProjectID(path.resolve("identifier-other-project-fixture"))
+
+    expect(first).toHaveLength(Identifier.MAX_LENGTH)
+    expect(Identifier.isCanonical("project", first)).toBe(true)
+    expect(replay).toBe(first)
+    expect(equivalent).toBe(first)
+    if (process.platform === "win32") expect(Project.directoryProjectID(root.toUpperCase())).toBe(first)
+    expect(other).not.toBe(first)
   })
 })

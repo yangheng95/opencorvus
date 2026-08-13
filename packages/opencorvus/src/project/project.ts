@@ -1,7 +1,7 @@
 import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import path from "path"
-import { createHash, randomUUID } from "crypto"
+import { randomUUID } from "crypto"
 import { Database, eq, NotFoundError } from "../storage/db"
 import { ProjectTable } from "./project.sql"
 import { Log } from "../util/log"
@@ -16,6 +16,7 @@ import { Glob } from "../util/glob"
 import { which } from "@/util/which"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { assertProjectDurableAdmissionOpen } from "./deletion-registry"
+import { Identifier } from "@/id/id"
 
 export namespace Project {
   export const DurableAdmissionClosedError = NamedError.create(
@@ -105,7 +106,13 @@ export namespace Project {
   }
 
   function generated(seed: string) {
-    return createHash("sha1").update(Filesystem.windowsPath(seed)).digest("hex")
+    return Identifier.deterministic("project", comparePath(path.resolve(seed)))
+  }
+
+  function currentMarkerIdentity(value: string | undefined) {
+    return value && value.length <= Identifier.MAX_LENGTH && Identifier.isCanonical("project", value)
+      ? value
+      : undefined
   }
 
   export function directoryProjectID(directory: string) {
@@ -234,11 +241,12 @@ export namespace Project {
   async function identify(common: string, worktree: string) {
     const markerPath = marker(common)
     const localID = generated(common)
-    const cached = await Filesystem.readText(marker(common))
+    const cachedValue = await Filesystem.readText(marker(common))
       .then((x) => x.trim())
       .catch(() => undefined)
+    const cached = currentMarkerIdentity(cachedValue)
     const selectedRow = await findExactWorktreeRow(worktree)
-    if (!cached || cached === "global") {
+    if (!cached) {
       const id = selectedRow?.id ?? localID
       await Filesystem.write(markerPath, id).catch(() => undefined)
       return id
@@ -271,12 +279,13 @@ export namespace Project {
   }): Promise<{ id: string; sandbox: string; worktree: string }> {
     const localID = generated(input.dotgit)
     const markerPath = marker(input.dotgit)
-    const cached = await Filesystem.readText(markerPath)
+    const cachedValue = await Filesystem.readText(markerPath)
       .then((x) => x.trim())
       .catch(() => undefined)
+    const cached = currentMarkerIdentity(cachedValue)
     const selectedRow = await findExactWorktreeRow(input.directory)
-    const id = selectedRow?.id ?? (cached && cached !== "global" ? cached : localID)
-    if (input.local && id !== cached) await Filesystem.write(markerPath, id).catch(() => undefined)
+    const id = selectedRow?.id ?? cached ?? localID
+    if (input.local && id !== cachedValue) await Filesystem.write(markerPath, id).catch(() => undefined)
     return {
       id,
       sandbox: input.directory,
