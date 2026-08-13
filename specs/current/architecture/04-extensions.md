@@ -524,17 +524,20 @@ Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 由 runtime
 consumer 必须先完整精确读取，再对 typed output 的每个语义来源调用 `artifact_select`。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
-`source_artifact_locators`，Host 只接受同一物理 Turn 中更早的完整读取和语义选择，因此一个 Turn 的多次发布不会互相污染。
+`source_selection_refs`；Host 只从同一 Session、同一物理 Turn 中更早的持久化选择恢复完整 canonical
+`source_artifact_locators`，因此一个 Turn 的多次发布不会互相污染。模型 transport 不重复提交 locator 结构。
 `artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor
 携带的 frozen revision、membership、provider state、total 与 position 在验证前均不可信。runtime restart 会使旧 cursor
 明确失效，caller 必须从第一页重新开始；不保留 unkeyed checksum decoder 或跨 runtime fallback。
 `artifact_snapshot` 投影给 scheduler 与 worker，`artifact_publish` 只投影给 worker；Multica mapping、manifest、prompt 和 Skill
-不声明、遮蔽或复制这些平台工具及 Artifact body。`artifact_snapshot` 返回内容寻址的 `resource_set`、snapshot locator 与该次发布的
-完整 resource locators。其模型输入由冻结 runtime contract 投影：scheduler 与没有精确 Build `merge_back` 私有 stage surface 的普通
+不声明、遮蔽或复制这些平台工具及 Artifact body。`artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
+返回 Host-minted `artifact_locator_ref`。其模型输入由冻结 runtime contract 投影：scheduler 与没有精确 Build `merge_back` 私有 stage surface 的普通
 worker 只获得当前主项目 `files`；只有该 managed Build surface 获得必填 `source_commit`，且 Host 再次校验它等于最近完成 merge 的
 `primary_head`。schema 收窄不替代执行权限校验。
 后续 Session 的 `artifact_search` 从同一个已验证 snapshot record 确定性投影一个 parent snapshot entry 和逐资源
-分页的 `task_artifact_resource` entries。consumer 只原样使用 search 返回的 locator，不手工重构 path、bytes 或 SHA-256。publisher 仍只接收
+分页的 `task_artifact_resource` entries。consumer 把 search/snapshot 返回的 `artifact_locator_ref` 交给 `artifact_read`，再把完整读取返回的
+`artifact_read_ref` 交给 `artifact_select`；Host 从同 Turn 持久化 Tool facts 恢复 canonical locator，不按 path、label 或当前 catalog 猜测，
+模型也不手工重构 path、bytes 或 SHA-256。publisher 仍只接收
 紧凑 `resource_set`；完整 refs 由 `TaskArtifactHost.resources` 在可信 Host 边界内验证并按 UTF-8 字节路径顺序展开，不把整组 refs 作为发布
 输入重复传输。面向模型的
 `artifact_publish` 应用二进制接口（Application Binary Interface，ABI）只接受对象键唯一的严格 JSON 文本

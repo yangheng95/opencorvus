@@ -4,7 +4,10 @@ import {
   artifactSnapshotTransport,
   assertGenericArtifactPublisherAuthority,
 } from "../src/tool/artifact-catalog"
-import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import {
+  ArtifactReadLocatorSchema,
+  ArtifactLocatorReferenceSchema,
+} from "@opencorvus-ai/plugin/artifact-catalog"
 import { TaskArtifactResourceSetLocatorSchema } from "@opencorvus-ai/plugin/task-artifact"
 
 describe("generic Artifact publisher authority", () => {
@@ -26,7 +29,7 @@ describe("generic Artifact publisher authority", () => {
     expect(assertGenericArtifactPublisherAuthority("records-ediscovery-operations/review-pack")).toBeUndefined()
   })
 
-  test("returns exact read locators with the published snapshot resource set", () => {
+  test("returns Host-minted read references with the published snapshot resource set", () => {
     const snapshot = {
       schema_version: 2 as const,
       project_id: "project-1",
@@ -48,13 +51,28 @@ describe("generic Artifact publisher authority", () => {
       snapshot,
       tree: "resources",
     })
-    expect(ArtifactReadLocatorSchema.parse(transport.snapshot_locator)).toEqual({
+    const expectedLocators = [
+      {
       source: "task_artifact_snapshot",
       snapshot,
-    })
-    expect(transport.resource_locators.map((locator) => ArtifactReadLocatorSchema.parse(locator))).toEqual([
+      },
       { source: "task_artifact_resource", ref: resource },
+    ].map((locator) => ArtifactReadLocatorSchema.parse(locator))
+    expect(transport.locators).toEqual([
+      {
+        role: "snapshot",
+        locator: expectedLocators[0],
+        artifact_locator_ref: expect.any(String),
+      },
+      {
+        role: "resource",
+        locator: expectedLocators[1],
+        artifact_locator_ref: expect.any(String),
+      },
     ])
+    for (const item of transport.locators) {
+      expect(ArtifactLocatorReferenceSchema.parse(item.artifact_locator_ref).length).toBe(19)
+    }
     expect(transport.resource_count).toBe(1)
   })
 })

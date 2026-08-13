@@ -2665,3 +2665,83 @@ test now aborts through an external signal, observes the exact downstream error 
 twice the 20-millisecond physical window, and still observes the explicit `aborted` settlement with
 `physicalTimeout=false`. The independent reviewer re-ran both complete focused files: `10 pass / 28 assertions`.
 OpenCorvus typecheck, `docs:check` and `git diff --check` also pass. No review finding remains in this Provider phase.
+
+### Exact-Terra R17: model-side immutable locator transcription is not a reliable Tool protocol
+
+#### Recall
+
+- User requirement: continue the real-page random Expert Squad evolution acceptance on exact
+  `openai/gpt-5.6-terra`, investigate every failure to its full impact surface, retain the isolated running evidence,
+  use an independent reviewer, and deliver each repair as a separate phase commit rather than mixing unrelated work.
+- Acceptance for this phase: model-facing Artifact Tools exchange short Host-minted references; the Host resolves each
+  reference only from persisted facts in the same Session and physical Turn, while durable selection and publication
+  provenance remain complete canonical immutable locators. A paginated read must still cover every byte before
+  selection. Publication must explicitly name selection references and persist their exact canonical locator set.
+- Hard constraints: do not relax SHA-256 or locator integrity, do not infer evidence from labels/paths/current catalog,
+  do not add a raw-locator fallback or dual input, do not change the typed package ToolHost API, do not restart or
+  mutate the active R17 runtime, and do not add, modify or run UI automation tests.
+- Sources read: the complete Artifact locator/read/select/publish schemas in `packages/plugin/src/artifact-catalog.ts`,
+  ordinary and Orchestrator Tool builders in `packages/opencorvus/src/tool/artifact-catalog.ts`, persisted Turn fact
+  reconstruction in `packages/opencorvus/src/agent/artifact-read-facts.ts`, Mission Panel capability/execution, the
+  current Artifact architecture sections, focused Artifact authority tests, and the exact R17 SQLite Tool Parts.
+- Repository search: every definition and caller of `ArtifactReadInputSchema`, `ArtifactSelectInputSchema`,
+  `EngineArtifactPublishInputSchema`, `artifact_search`, `artifact_snapshot`, `query_task_artifacts`, and
+  `read_task_artifact` was classified. The internal package ToolHost is code-to-code and retains structural locators;
+  ordinary Agent, Orchestrator and Mission Panel provider surfaces currently repeat them through model JSON.
+- Independent agent: an uninvolved read-only reviewer verified the R17 Part chain and the cross-surface schema/data
+  flow. It found the same repeated-transcription defect at search-to-read, read-to-select, select-to-publish and Panel
+  query-to-read boundaries, and rejected digest relaxation, suffix repair, prompt-only instructions and Host lookup by
+  display fields as symptom patches.
+
+R17 Part `prt_g019ff9f17b6d000000000000di5lerTpmmD38O` attempted `artifact_select` after the same Turn had already
+completed an exact `artifact_read` of `case/input.md`. The model recopied a 56-character
+`locator.ref.snapshot.manifest_sha256`; provider input validation correctly rejected it before selection authority
+could run. A later call recopied all 64 characters and succeeded. Catalog membership, bytes, Task authority and
+complete-read evidence were therefore healthy. The failure is the provider contract itself: it makes the model
+reconstruct a nested immutable identity that the Host has already validated and persisted. R8 made full locators
+visible but left every subsequent transcription in place.
+
+The root design has one durable identity and three bounded transport references. `artifact_locator_ref` identifies an
+exact locator previously emitted by `artifact_search` or `artifact_snapshot`; `artifact_read_ref` identifies the exact
+canonical locator of persisted read chunks; `artifact_selection_ref` identifies one persisted locator/purpose
+selection. Each reference is a Host-minted 96-bit random token with a typed three-character prefix and a 19-character
+wire form. It contains no digest, locator, path or user data. Resolution is scoped to prior completed Tool Parts in the
+same Session and physical Turn. It never searches by path, label or mutable catalog state.
+The read fact reconstructs its canonical request from the Host-produced chunk locator plus the provider's byte window,
+so the existing contiguous-window audit remains the sole completeness authority. Selection output and the Engine
+Artifact envelope continue to persist full canonical locators; references are transport capabilities, not a second
+provenance format.
+
+The first independent implementation review rejected an interim SHA-256 reference design because it still required
+the model to copy 64 hex characters and therefore reproduced the exact R17 failure shape. It also found that a
+reference-only fact reader would reject immutable pre-v2 read/select Parts. The final protocol uses the short random
+tokens above. New provider inputs and outputs carry explicit `artifact_transport_version: 2`; the current provider
+surface is v2-only. The persisted-fact reader has one bounded decoder for already-written pre-v2 physical events and
+never exposes structural locators as a current provider input or execution fallback.
+
+Delivery is intentionally staged. The first commit replaces the ordinary and Orchestrator
+`artifact_search/snapshot -> artifact_read -> artifact_select -> artifact_publish` provider chain, updates fact
+reconstruction, prompt/architecture text and focused positive contracts. A second commit converges the Mission Panel
+terminal-catalog query/read boundary onto the same reference family and revalidates terminal lifecycle authority.
+Only after both independent reviews pass may a fresh isolated run start. R17 remains a diagnostic failure and cannot
+count among the three required clean successes, even if its remaining workflow later terminates.
+
+The first implementation review also found two provenance edge cases. A repeated selection token bound to different
+canonical locators was initially collapsed by a `Map`; it now fails closed with the typed
+`ARTIFACT_REFERENCE_AMBIGUOUS` contract, matching the locator and read-reference collision boundaries. Conversely,
+two legitimate selections of the same locator and purpose now preserve every distinct Host-minted selection reference
+while semantic provenance remains deduplicated. The focused contract exercises both receipts and proves they resolve
+to one canonical publication source. The reviewer also identified an active Squad SDK import Skill that still taught
+raw publication locators; it now teaches the same `al_ -> ar_ -> as_` protocol and the staged embedded payload was
+regenerated from that source.
+
+An independently noticed local `specs/current/architecture/01-agents.md` is not a repository delivery source:
+`git check-ignore` maps it to the repository's `/specs/` ignore rule, `git log --all` contains no history for it, and
+the tracked current-architecture README does not index it. This phase does not force-add or overwrite that unrelated
+local ignored file. The tracked architecture authority for this transport is `04-extensions.md`, which is updated.
+
+Positive acceptance is `7 pass / 25 assertions` across the provider-reference flow, publisher authority and persisted
+provider-input fact files. It includes paginated reads, duplicate valid receipts, typed collision rejection, immutable
+pre-v2 persisted-event decoding, a real `publishExpertArtifact` call and a stored Engine envelope whose Task resource
+manifest remains the complete 64-character canonical digest. Plugin and OpenCorvus typechecks, `docs:check`, generated
+payload regeneration and the staged whitespace check pass. No UI automation test was added, modified or run.

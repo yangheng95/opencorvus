@@ -145,7 +145,7 @@ export function projectIntegrityEvidenceFacts(
   const contextSections = [
     `Exact Goal refs selected for this review: ${input.goalIDs.map((goalID) => `goal:${goalID}`).join(", ") || "(none)"}.`,
     `Exact attachment refs selected for this review: ${input.attachmentRefs.join(", ") || "(none)"}.`,
-    "Search the same-Task Artifact catalog yourself by exact name/kind, current or historical version, recency, and fuzzy relevance. Completely read every candidate you inspect with artifact_read, then call artifact_select for every Artifact that semantically supports the IntegrityReview. Complete but unselected reads remain observations and zero selections are valid; no upstream participant selected or copied Artifact bodies into this prompt.",
+    "Search the same-Task Artifact catalog yourself by exact name/kind, current or historical version, recency, and fuzzy relevance. Pass each candidate's artifact_locator_ref to artifact_read until complete, then pass artifact_read_ref to artifact_select for every Artifact that semantically supports the IntegrityReview. Complete but unselected reads remain observations and zero selections are valid; no upstream participant selected or copied Artifact bodies into this prompt.",
     ...(goals.length === 0 ? ["No Goal facts are available in the requested scope."] : []),
     ...(selectedGoalRequirementIDs
       ? [
