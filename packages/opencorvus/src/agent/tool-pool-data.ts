@@ -9,7 +9,7 @@ import {
   GLOBAL_TOOL_IDS,
   GLOBAL_TOOL_ID_SET,
   PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
-  TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+  TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
   WORKER_COMMUNICATION_TOOL_IDS,
 } from "@/tool/tool-id-catalog"
 import { VISUAL_QA_STATIC_TOOL_IDS } from "@/visual-qa/static-tools"
@@ -73,7 +73,7 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   "read_task_message",
   "respond_agent_coordination",
   "cancel_subagent",
-  ...TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+  ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
   "publish_interactive_artifact",
 ] as const
 
@@ -93,6 +93,10 @@ export const PACKAGE_PROJECTABLE_DEFAULT_HOST_TOOL_IDS: Partial<Record<RuntimeTe
   "frontend-design": FRONTEND_DESIGN_EXPERT_DEFAULT_TOOL_IDS,
   "frontend-research": WEBPAGE_EVIDENCE_DEFAULT_HOST_TOOL_IDS,
   "visual-qa": VISUAL_QA_EXPERT_DEFAULT_TOOL_IDS,
+}
+
+export const PACKAGE_PROJECTABLE_BUILT_IN_TOOL_IDS: Partial<Record<RuntimeTemplateID, readonly string[]>> = {
+  build: WORK_ARTIFACT_TOOL_IDS,
 }
 
 export function uniqueToolIDs(input: readonly string[]): string[] {

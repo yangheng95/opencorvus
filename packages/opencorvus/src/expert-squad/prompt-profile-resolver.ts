@@ -79,7 +79,7 @@ import {
   compareCanonicalStrings,
   textSHA256,
 } from "./projection-hash"
-import { TASK_ARTIFACT_DISCOVERY_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { ExpertSquadRegistry } from "./registry"
 import { runtimeOverrideLayers } from "@/agent/runtime-override"
 import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -1173,7 +1173,7 @@ export namespace PromptProfileResolver {
     return expandedProjectedBuiltInToolIDs({
       inheritedToolIDs: [
         ...(projection.inherit_base_tools ? AgentToolPool.orchestratorSchedulerRoleBaseToolIDs() : []),
-        ...TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+        ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
         "publish_interactive_artifact",
       ],
       explicitToolIDs: projection.built_in_tool_ids,
@@ -3549,10 +3549,25 @@ export namespace PromptProfileResolver {
             "</task_artifact_catalog>",
           ].join("\n")
         : undefined
+    const installedPackageBoundary = [
+      "<installed_expert_squad_package_boundary>",
+      "Project-installed Expert Squad directories under .opencorvus/expert-squads are immutable runtime dependencies, not Task deliverable directories. Read their prompts, Skills, references, examples, assets, and tools as package inputs. Write generated domain deliverables to ordinary project output paths outside the installed package tree. A request to populate or complete a package-provided template authorizes a copied deliverable, not an in-place package edit. Only a Task that explicitly authorizes Expert Squad package authoring or evolution may modify a package, and it must use the exact authoring workspace and publication contract supplied by that Task.",
+      "</installed_expert_squad_package_boundary>",
+    ].join("\n")
+    const schedulerSnapshotProtocol =
+      "scheduler" in input.capability && input.capability.builtInToolIDs.includes("artifact_snapshot")
+        ? [
+            "<task_input_snapshot_authority>",
+            "You own the read-only Task input evidence boundary. Before dispatching workflow workers that require current-project files, call artifact_snapshot with the complete exact input file set, then completely read and select every exact resource_locator in the returned resource_locators array. Use returned locators verbatim; never reconstruct snapshot IDs, paths, byte counts, or digests from prose or serialized fragments. artifact_snapshot does not edit project files or publish a domain conclusion. Workers remain the only owners of generic artifact_publish and typed domain outputs.",
+            "</task_input_snapshot_authority>",
+          ].join("\n")
+        : undefined
     return [
       projectedIdentity,
       input.base,
+      installedPackageBoundary,
       artifactCatalogProtocol,
+      schedulerSnapshotProtocol,
       readme,
       virtualWorkflows,
       input.capability.promptOverlay,

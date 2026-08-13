@@ -4,6 +4,7 @@ import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } f
 import {
   ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS,
   ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS,
+  PACKAGE_PROJECTABLE_BUILT_IN_TOOL_IDS,
   PACKAGE_PROJECTABLE_DEFAULT_HOST_TOOL_IDS,
   allPackageProjectableDefaultHostToolIDs as collectPackageProjectableDefaultHostToolIDs,
   coreBuiltInToolIDs as collectCoreBuiltInToolIDs,
@@ -39,9 +40,11 @@ export namespace AgentToolPool {
   }
 
   export function projectableRuntimeTemplateBuiltInToolIDs(templateID: RuntimeTemplateIDValue): Set<string> {
+    const exactID = RuntimeTemplateID.get(templateID)
     return new Set([
-      ...visibleToolIDs(runtimeTemplateAssignments[RuntimeTemplateID.get(templateID)]),
+      ...visibleToolIDs(runtimeTemplateAssignments[exactID]),
       ...TASK_ARTIFACT_TOOL_IDS,
+      ...(PACKAGE_PROJECTABLE_BUILT_IN_TOOL_IDS[exactID] ?? []),
     ])
   }
 

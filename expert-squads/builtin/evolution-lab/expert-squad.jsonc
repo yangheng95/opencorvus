@@ -223,7 +223,7 @@
     },
     "virtual_workflows": {
       "evolution-opportunity-analysis": {
-        "label": "Parallel Evolution Opportunity Analysis",
+        "label": "Sequential Evolution Opportunity Analysis",
         "description": "Opportunity observation consumes the frozen diagnostic boundary; causal analysis then consumes that exact typed opportunity. Campaign planning remains owned by candidate preparation.",
         "nodes": {
           "evolution-observer": {
