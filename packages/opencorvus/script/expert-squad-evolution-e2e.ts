@@ -60,6 +60,11 @@ const FAILURE_ABORT_TIMEOUT_MS = positiveIntegerSetting(
   15_000,
   "EXPERT_SQUAD_EVOLUTION_FAILURE_ABORT_MS",
 )
+const FAILURE_STATUS_OBSERVATION_TIMEOUT_MS = positiveIntegerSetting(
+  process.env.EXPERT_SQUAD_EVOLUTION_FAILURE_STATUS_MS,
+  15_000,
+  "EXPERT_SQUAD_EVOLUTION_FAILURE_STATUS_MS",
+)
 const RESOURCE_SETTLEMENT_TIMEOUT_MS = positiveIntegerSetting(
   process.env.EXPERT_SQUAD_EVOLUTION_RESOURCE_SETTLEMENT_MS,
   120_000,
@@ -111,6 +116,20 @@ type MissionStatus = {
     lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
     error?: string
   }>
+}
+
+function missionStatusProjection(status: MissionStatus | undefined) {
+  if (!status) return undefined
+  return {
+    status: status.status,
+    task_counts: status.taskCounts,
+    tasks: status.tasks.map((task) => ({
+      id: task.taskID,
+      title: task.title,
+      lifecycle_status: task.lifecycleStatus,
+      error: task.error,
+    })),
+  }
 }
 
 async function writeJSON(filePath: string, value: unknown) {
@@ -405,6 +424,7 @@ let installedTargetDigest: string | undefined
 let installedEvolutionDigest: string | undefined
 let productPillar: "code" | "work" | undefined
 let abortMission: ((reason: string, signal: AbortSignal) => Promise<void>) | undefined
+let observeMissionStatus: (() => Promise<MissionStatus>) | undefined
 let disposeRuntime: (() => Promise<void>) | undefined
 let isolatedAuthCopied = false
 let modelCatalogReceipt: { bytes: number; sha256: string } | undefined
@@ -692,6 +712,10 @@ try {
       body: JSON.stringify(missionAbortRequest(reason)),
       signal,
     })
+  }
+  observeMissionStatus = async () => {
+    if (!missionID) throw new Error("Mission status observation requires a Mission identity")
+    return (await requestJSON(`/mission/${encodeURIComponent(missionID)}/status`)) as unknown as MissionStatus
   }
 
   await appendEvent("backend.started", {
@@ -1369,16 +1393,33 @@ try {
 } catch (error) {
   await appendEvent("run.failed", { error: errorMessage(error) }).catch(() => {})
   let failureResourceSettlement: Awaited<ReturnType<typeof settleRunResourcesWithinDeadline>> | undefined
+  let failureAbortSettlement: { status: "skipped" | "settled" | "timed_out" | "failed"; error?: string } = {
+    status: "skipped",
+  }
+  let failureStatusObservation: { status: "skipped" | "settled" | "timed_out" | "failed"; error?: string } = {
+    status: "skipped",
+  }
+  let postAbortStatus: MissionStatus | undefined
   await settleFailureAfterBoundedAbort({
     abortMission: abortMission
       ? (signal) => abortMission!(`Automated evolution E2E failed: ${errorMessage(error)}`, signal)
       : undefined,
     abortTimeoutMs: FAILURE_ABORT_TIMEOUT_MS,
+    observeAfterAbort: missionID && abortMission ? observeMissionStatus : undefined,
+    observationTimeoutMs: FAILURE_STATUS_OBSERVATION_TIMEOUT_MS,
     settleResources: async () => {
       failureResourceSettlement = await settleRunResourcesWithinDeadline()
     },
   })
-    .then(async ({ abortStatus, abortError }) => {
+    .then(async ({ abortStatus, abortError, observation }) => {
+      failureAbortSettlement = { status: abortStatus, ...(abortError ? { error: abortError } : {}) }
+      failureStatusObservation = {
+        status: observation.status,
+        ...(observation.status === "timed_out" || observation.status === "failed"
+          ? { error: observation.error }
+          : {}),
+      }
+      if (observation.status === "settled") postAbortStatus = observation.value
       if (abortStatus === "timed_out" || abortStatus === "failed") {
         await appendEvent("mission.abort.failed", {
           error:
@@ -1439,18 +1480,10 @@ try {
     mission: {
       mission_id: missionID,
       session_id: missionSessionID,
-      latest_status: latestStatus
-        ? {
-            status: latestStatus.status,
-            task_counts: latestStatus.taskCounts,
-            tasks: latestStatus.tasks.map((task) => ({
-              id: task.taskID,
-              title: task.title,
-              lifecycle_status: task.lifecycleStatus,
-              error: task.error,
-            })),
-          }
-        : undefined,
+      abort_settlement: failureAbortSettlement,
+      post_abort_status_observation: failureStatusObservation,
+      last_observed_status_before_abort: missionStatusProjection(latestStatus),
+      post_abort_status: missionStatusProjection(postAbortStatus),
     },
     request_summary: summarizeEvolutionRequests(requests),
     artifact_failure_history: await fs

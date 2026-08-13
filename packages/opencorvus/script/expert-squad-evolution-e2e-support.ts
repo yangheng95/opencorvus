@@ -239,6 +239,12 @@ export type DeadlineSettlement =
   | { status: "timed_out"; error: string }
   | { status: "failed"; error: string }
 
+export type FailureObservationSettlement<T> =
+  | { status: "skipped" }
+  | { status: "settled"; value: T }
+  | { status: "timed_out"; error: string }
+  | { status: "failed"; error: string }
+
 export async function settleOperationWithinDeadline(input: {
   operation: () => Promise<void>
   timeoutMs: number
@@ -275,11 +281,16 @@ export async function settleOperationWithinDeadline(input: {
   }
 }
 
-export async function settleFailureAfterBoundedAbort(input: {
+export async function settleFailureAfterBoundedAbort<T = never>(input: {
   abortMission?: (signal: AbortSignal) => Promise<void>
   abortTimeoutMs: number
+  observeAfterAbort?: () => Promise<T>
+  observationTimeoutMs?: number
   settleResources: () => Promise<void>
 }) {
+  if (input.observeAfterAbort && input.observationTimeoutMs === undefined) {
+    throw new Error("Evolution E2E post-abort observation timeout is required")
+  }
   let abortStatus: "skipped" | "settled" | "timed_out" | "failed" = "skipped"
   let abortError: string | undefined
   if (input.abortMission) {
@@ -305,8 +316,20 @@ export async function settleFailureAfterBoundedAbort(input: {
       if (timer) clearTimeout(timer)
     }
   }
+  let observation: FailureObservationSettlement<T> = { status: "skipped" }
+  if (input.observeAfterAbort) {
+    let value: T | undefined
+    const settlement = await settleOperationWithinDeadline({
+      operation: async () => {
+        value = await input.observeAfterAbort!()
+      },
+      timeoutMs: input.observationTimeoutMs!,
+      label: "Evolution E2E post-abort Mission status observation",
+    })
+    observation = settlement.status === "settled" ? { status: "settled", value: value as T } : settlement
+  }
   await input.settleResources()
-  return { abortStatus, ...(abortError ? { abortError } : {}) }
+  return { abortStatus, ...(abortError ? { abortError } : {}), observation }
 }
 
 const RANDOM_SELECTION_DOMAIN = "opencorvus-random-expert-squad-evolution-v1"
