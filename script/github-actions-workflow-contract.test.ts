@@ -50,6 +50,8 @@ describe("GitHub Actions workflow contract", () => {
     }
 
     expect(checkoutReferences).toEqual([
+      { file: "build-check.yml", job: "version-sync", uses: "actions/checkout@v6" },
+      { file: "build-check.yml", job: "build-critical", uses: "actions/checkout@v6" },
       { file: "build-overlays.yml", job: "build-overlay", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "package-overlay", uses: "actions/checkout@v6" },
@@ -69,9 +71,7 @@ describe("GitHub Actions workflow contract", () => {
       { file: "generate.yml", job: "verify", uses: "actions/checkout@v6" },
       { file: "security.yml", job: "repository", uses: "actions/checkout@v6" },
       { file: "security.yml", job: "dependency-review", uses: "actions/checkout@v6" },
-      { file: "test.yml", job: "version-sync", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "unit", uses: "actions/checkout@v6" },
-      { file: "test.yml", job: "build-critical", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "channel-runtime-unit", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "overlay-unit", uses: "actions/checkout@v6" },
       { file: "typecheck.yml", job: "typecheck", uses: "actions/checkout@v6" },
@@ -111,9 +111,7 @@ describe("GitHub Actions workflow contract", () => {
     const workArtifactQualification = jobs["package-cli"]?.steps?.find(
       ({ name }) => name === "Verify packaged Work Artifact lifecycle",
     )
-    expect(workArtifactQualification?.run).toContain(
-      "bun packages/opencorvus/script/check-work-artifact-profile.ts \\",
-    )
+    expect(workArtifactQualification?.run).toContain("bun packages/opencorvus/script/check-work-artifact-profile.ts \\")
     expect(workArtifactQualification?.run).toContain("--profile office.presentation@1 \\")
     expect(workArtifactQualification?.run).toContain('--package-root "$bundle" | tee "$evidence"')
     expect(workArtifactQualification?.run).toContain('test "$verified" -gt 0')
@@ -130,7 +128,9 @@ describe("GitHub Actions workflow contract", () => {
     }
     const overlayWorkflow = await readWorkflow("build-overlays.yml")
     expect(
-      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(({ name }) => name === "Install Windows runtime dependencies"),
+      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(
+        ({ name }) => name === "Install Windows runtime dependencies",
+      ),
     ).toEqual({
       name: "Install Windows runtime dependencies",
       if: "runner.os == 'Windows'",
@@ -231,13 +231,15 @@ describe("GitHub Actions workflow contract", () => {
       "${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}",
     )
     expect(jobs["sign-and-deploy"]?.needs).toEqual(["resolve-source", "archive-determinism", "build"])
-    expect(
-      jobs.build?.steps?.find(({ name }) => name === "Upload frozen unsigned site")?.with?.name,
-    ).toBe("opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}")
+    expect(jobs.build?.steps?.find(({ name }) => name === "Upload frozen unsigned site")?.with?.name).toBe(
+      "opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}",
+    )
     expect(
       jobs["sign-and-deploy"]?.steps?.find(({ name }) => name === "Download frozen unsigned site")?.with?.name,
     ).toBe("opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}")
-    const freezeStep = jobs["sign-and-deploy"]?.steps?.find(({ name }) => name === "Freeze deploy archive and checksums")
+    const freezeStep = jobs["sign-and-deploy"]?.steps?.find(
+      ({ name }) => name === "Freeze deploy archive and checksums",
+    )
     expect(freezeStep?.env).toEqual({ WEBSITE_SOURCE_SHA: "${{ needs.resolve-source.outputs.source-sha }}" })
     expect(freezeStep?.run).toContain('RELEASE_ID="${WEBSITE_SOURCE_SHA}-')
 
@@ -252,17 +254,41 @@ describe("GitHub Actions workflow contract", () => {
     expect(buildSteps.indexOf(manifestStep!)).toBeLessThan(buildSteps.findIndex(({ name }) => name === "Check website"))
   })
 
-  test("prepares generated dependencies and native runtime tools before push verification", async () => {
-    const workflow = await readWorkflow("test.yml")
-    const jobs = workflow.jobs ?? {}
+  test("separates unit, build, and website workflows with their required preparation", async () => {
+    const unitWorkflow = await readWorkflow("test.yml")
+    const jobs = unitWorkflow.jobs ?? {}
+    const buildWorkflow = await readWorkflow("build-check.yml")
+    const buildJobs = buildWorkflow.jobs ?? {}
+    const releaseWorkflow = await readWorkflow("build.yml")
+    const websiteWorkflow = await readWorkflow("deploy-opencorvus-com.yml")
 
-    for (const job of ["build-critical", "channel-runtime-unit", "overlay-unit"]) {
+    expect(Object.keys(jobs).sort()).toEqual(["channel-runtime-unit", "overlay-unit", "required", "unit"])
+    expect(Object.keys(buildJobs).sort()).toEqual(["build-critical", "required", "version-sync"])
+    expect(unitWorkflow.on).toEqual({ push: { branches: ["**"] }, pull_request: null, workflow_dispatch: null })
+    expect(buildWorkflow.on).toEqual({ push: { branches: ["**"] }, pull_request: null, workflow_dispatch: null })
+    expect(releaseWorkflow.on).toEqual({
+      push: { tags: ["v*"] },
+      workflow_dispatch: {
+        inputs: {
+          version: {
+            description: "Release version (for example 0.0.1 or v0.0.1).",
+            required: true,
+          },
+        },
+      },
+    })
+    expect(websiteWorkflow.on?.push).toEqual({
+      branches: ["main"],
+      paths: expect.any(Array),
+    })
+
+    for (const job of ["channel-runtime-unit", "overlay-unit"]) {
       expect(jobs[job]?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
         prepare_sdk: "true",
       })
     }
     expect(
-      jobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"),
+      buildJobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"),
     ).toEqual({
       name: "Install critical build runtime dependencies",
       run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
@@ -282,8 +308,7 @@ describe("GitHub Actions workflow contract", () => {
         name: "Install Windows test runtime dependencies",
         if: "runner.os == 'Windows'",
         shell: "pwsh",
-        run:
-          "./script/install-windows-ripgrep.ps1\nbun packages/opencorvus/script/prepare-test-process-supervisor.ts\n",
+        run: "./script/install-windows-ripgrep.ps1\nbun packages/opencorvus/script/prepare-test-process-supervisor.ts\n",
       },
     ])
   })

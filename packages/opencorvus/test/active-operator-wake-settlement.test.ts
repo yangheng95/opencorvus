@@ -104,6 +104,17 @@ async function provideTestInstance<R>(input: { directory: string; fn: () => R })
   try {
     return await Instance.provide({ directory: input.directory, init: InstanceBootstrap, fn: input.fn })
   } finally {
+    await waitForIngressDeliveryHooksForTest()
+    {
+      using runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
+      runtimeGate.closeAdmission(["task_root_ingress_delivery"])
+      runtimeGate.requestCancellation(
+        ["task_root_ingress_delivery"],
+        new Error("active-operator fixture ingress settlement"),
+      )
+      await runtimeGate.waitForIdle(["task_root_ingress_delivery"], 60_000)
+      runtimeGate.commit()
+    }
     testTaskLoopRunners.delete(key)
   }
 }
@@ -326,6 +337,7 @@ async function persistFinalAssistantMessage(input: {
     })
   }
   const messageID = Identifier.ascending("message")
+  const stepBoundary = stepStartPart({ sessionID: session.id, messageID })
   const info: Message.Assistant = {
     id: messageID,
     sessionID: session.id,
@@ -362,7 +374,7 @@ async function persistFinalAssistantMessage(input: {
   await Session.persistMessage({
     info,
     parts: [
-      stepStartPart({ sessionID: session.id, messageID }),
+      stepBoundary,
       completedTextPart({ sessionID: session.id, messageID, text: input.text }),
       ...providedParts,
       ...decisionParts,
@@ -1005,6 +1017,10 @@ describe.serial("active operator wake settlement", () => {
       },
     })
     await waitForCancelledCheckpoint(taskID)
+    {
+      using cancellationGate = RuntimeExecutionSettlement.acquireSettlementGate()
+      await cancellationGate.waitForIdle(["task_cancellation"], 60_000)
+    }
   }, 0)
 
   test("promotes an in-flight operator cancellation when Project deletion joins after admission closes", async () => {

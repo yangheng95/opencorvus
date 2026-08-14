@@ -1,0 +1,63 @@
+name: build check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  version-sync:
+    name: version-sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+
+      - name: Verify opencorvus and overlay versions are aligned
+        run: bun ./script/sync-version.ts --check
+
+  build-critical:
+    name: build-critical (linux)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
+
+      - name: Install critical build runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
+      - name: Run critical builds
+        run: bun run --cwd packages/opencorvus build --single --skip-install
+
+  required:
+    name: build check (linux)
+    runs-on: ubuntu-latest
+    needs:
+      - version-sync
+      - build-critical
+    if: always()
+    steps:
+      - name: Verify upstream build jobs passed
+        run: |
+          echo "version-sync=${{ needs['version-sync'].result }}"
+          echo "build-critical=${{ needs['build-critical'].result }}"
+          test "${{ needs['version-sync'].result }}" = "success"
+          test "${{ needs['build-critical'].result }}" = "success"
