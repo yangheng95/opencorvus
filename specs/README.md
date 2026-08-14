@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest OpenCorvus promotion-video production script and recording playbook: [`2026-08-15-opencorvus-promotion-video-production-script.md`](records/2026-08/2026-08-15-opencorvus-promotion-video-production-script.md).
+
 Latest every-Agent on-demand MCP Tool-block projection and permission plan: [`2026-08-14-agent-tool-block-projection-plan.md`](records/2026-08/2026-08-14-agent-tool-block-projection-plan.md).
 
 Latest default Browser and Computer native-conversation capability: [`2026-08-14-default-browser-computer-capabilities.md`](records/2026-08/2026-08-14-default-browser-computer-capabilities.md).
