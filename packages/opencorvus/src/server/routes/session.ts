@@ -77,6 +77,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash } from "node:crypto"
 import { Identifier } from "@/id/id"
 import { SessionContext } from "@/session/context"
+import { projectPersistedSessionMessage } from "@/orchestrator/protocol/message-bridge"
 import {
   CONVERSATION_HISTORY_PAGE_LIMIT,
   CONVERSATION_TAIL_MESSAGE_LIMIT,
@@ -1637,7 +1638,15 @@ export const SessionRoutes = lazy(() =>
               "application/json": {
                 schema: resolver(
                   z.object({
-                    info: Message.Assistant.safeExtend({ orderKey: z.string().min(1) }),
+                    info: Message.Assistant.safeExtend({
+                      orderKey: z.string().min(1),
+                      resolvedRole: z.string().min(1),
+                      channel: z.string().min(1),
+                      agentID: z.string().min(1),
+                      sessionAgentID: z.string().min(1),
+                      originSource: z.string(),
+                      parentSessionID: z.string().optional(),
+                    }),
                     parts: Message.VisiblePart.array(),
                   }),
                 ),
@@ -1665,7 +1674,7 @@ export const SessionRoutes = lazy(() =>
         const prepared = await preparePublicSessionPrompt(sessionID, body)
         if (!prepared.ok) return c.json(badRequestBody(prepared.message), 400)
         const msg = await executePublicSessionPrompt(sessionID, { sessionID, ...prepared.prompt })
-        return c.json(msg)
+        return c.json(projectPersistedSessionMessage(msg))
       },
     )
     .post(

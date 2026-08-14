@@ -24764,8 +24764,10 @@ export type SessionPromptResponses = {
   200: {
     info: {
       agent: string
+      agentID: string
       author: string
       billing?: BillingCoverage
+      channel: string
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -24807,13 +24809,17 @@ export type SessionPromptResponses = {
         phase: "snapshot_patch"
       }>
       orderKey: string
+      originSource: string
       parentID: string
+      parentSessionID?: string
       path: {
         cwd: string
         root: string
       }
       providerID: string
+      resolvedRole: string
       role: "assistant"
+      sessionAgentID: string
       sessionID: string
       structured?: unknown
       summary?: boolean

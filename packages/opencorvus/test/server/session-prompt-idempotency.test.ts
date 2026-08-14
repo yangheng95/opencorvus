@@ -98,9 +98,39 @@ describe("direct Session prompt identity", () => {
 
           const firstResponse = await send(body)
           const first = (await firstResponse.json()) as any
-          expect({ status: firstResponse.status, parentID: first.info.parentID, physicalTurns }).toEqual({
+          const responseProjection = (message: any) => ({
+            origin: {
+              role: message.info.role,
+              author: message.info.author,
+              channel: message.info.channel,
+              resolvedRole: message.info.resolvedRole,
+              agentID: message.info.agentID,
+              sessionAgentID: message.info.sessionAgentID,
+              originSource: message.info.originSource,
+            },
+            messageOrderKey: message.info.orderKey,
+            partOrderKeys: message.parts.map((part: any) => part.orderKey),
+          })
+          const firstProjection = responseProjection(first)
+          expect({
+            status: firstResponse.status,
+            parentID: first.info.parentID,
+            ...firstProjection,
+            physicalTurns,
+          }).toEqual({
             status: 200,
             parentID: messageID,
+            origin: {
+              role: "assistant",
+              author: "chat",
+              channel: "assistant",
+              resolvedRole: "chat",
+              agentID: "chat",
+              sessionAgentID: "chat",
+              originSource: "",
+            },
+            messageOrderKey: expect.any(String),
+            partOrderKeys: [expect.any(String)],
             physicalTurns: 1,
           })
 
@@ -110,11 +140,13 @@ describe("direct Session prompt identity", () => {
           expect({
             status: retryResponse.status,
             sameAssistant: retry.info.id === first.info.id,
+            sameProjection: responseProjection(retry),
             messageRoles: persisted.map((message) => message.info.role),
             physicalTurns,
           }).toEqual({
             status: 200,
             sameAssistant: true,
+            sameProjection: firstProjection,
             messageRoles: ["user", "assistant"],
             physicalTurns: 1,
           })

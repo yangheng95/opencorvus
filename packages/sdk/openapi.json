@@ -82331,12 +82331,20 @@
                         "agent": {
                           "type": "string"
                         },
+                        "agentID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
                         "author": {
                           "minLength": 1,
                           "type": "string"
                         },
                         "billing": {
                           "$ref": "#/components/schemas/BillingCoverage"
+                        },
+                        "channel": {
+                          "minLength": 1,
+                          "type": "string"
                         },
                         "convergenceFailure": {
                           "additionalProperties": false,
@@ -82507,7 +82515,13 @@
                           "minLength": 1,
                           "type": "string"
                         },
+                        "originSource": {
+                          "type": "string"
+                        },
                         "parentID": {
+                          "type": "string"
+                        },
+                        "parentSessionID": {
                           "type": "string"
                         },
                         "path": {
@@ -82528,8 +82542,16 @@
                         "providerID": {
                           "type": "string"
                         },
+                        "resolvedRole": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
                         "role": {
                           "const": "assistant",
+                          "type": "string"
+                        },
+                        "sessionAgentID": {
+                          "minLength": 1,
                           "type": "string"
                         },
                         "sessionID": {
@@ -82591,7 +82613,12 @@
                         "agent",
                         "path",
                         "cost",
-                        "tokens"
+                        "tokens",
+                        "resolvedRole",
+                        "channel",
+                        "agentID",
+                        "sessionAgentID",
+                        "originSource"
                       ],
                       "type": "object"
                     },

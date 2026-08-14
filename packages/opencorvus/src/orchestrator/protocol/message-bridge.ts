@@ -526,9 +526,9 @@ export type ProjectedTaskMessage<TInfo extends Message.Info = Message.Info> = {
   parts: Message.VisiblePart[]
 }
 
-export function projectPersistedTaskMessage<TInfo extends Message.Info>(
+function projectPersistedMessage<TInfo extends Message.Info>(
   message: { info: TInfo; parts: Message.Part[] },
-  taskID: string,
+  taskID?: string,
 ): ProjectedTaskMessage<TInfo> {
   const sessionID = message.info.sessionID
   const messageProperties = enrichMessageEventProperties(
@@ -550,6 +550,20 @@ export function projectPersistedTaskMessage<TInfo extends Message.Info>(
     info: messageProperties.info as ProjectedTaskMessage<TInfo>["info"],
     parts,
   }
+}
+
+export function projectPersistedSessionMessage<TInfo extends Message.Info>(message: {
+  info: TInfo
+  parts: Message.Part[]
+}): ProjectedTaskMessage<TInfo> {
+  return projectPersistedMessage(message)
+}
+
+export function projectPersistedTaskMessage<TInfo extends Message.Info>(
+  message: { info: TInfo; parts: Message.Part[] },
+  taskID: string,
+): ProjectedTaskMessage<TInfo> {
+  return projectPersistedMessage(message, taskID)
 }
 
 function ephemeralEnvelopeOrderKey(type: string, payload: Record<string, unknown>): string {
@@ -696,13 +710,16 @@ function appendBridgePersistFailure(input: {
   })
 }
 
-async function appendBridgeEvent(input: {
-  type: string
-  taskID: string
-  sessionID: string
-  orderKey?: string
-  payload: Record<string, unknown>
-}, options?: { required?: boolean }) {
+async function appendBridgeEvent(
+  input: {
+    type: string
+    taskID: string
+    sessionID: string
+    orderKey?: string
+    payload: Record<string, unknown>
+  },
+  options?: { required?: boolean },
+) {
   const now = Date.now()
   try {
     await ProtocolStore.appendEvent({

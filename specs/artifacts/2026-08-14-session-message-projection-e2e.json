@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-08-14",
+  "surface": "real OpenCorvus development UI at /ui/",
+  "screenshotSha256": "2802c9f332fe3b90c81f42acea40ea7e11a0fac55ad0c7f661d2c1fc45403ca5",
+  "prompt": "会话端到端验收：请只回复 SESSION_E2E_OK，不要使用工具。",
+  "assistantResponse": "SESSION_E2E_OK",
+  "visibleTerminalState": "Not running",
+  "composerRestored": true,
+  "errorDialogCount": 0,
+  "browserConsoleErrorCount": 0,
+  "persistedMessageIdentity": {
+    "sessionID": "ses_-zUXils3kzzvDpumL7H1",
+    "user": {
+      "messageID": "msg_f31ff30e-550f-4618-af8c-6bc5c4dbdc35",
+      "role": "user",
+      "author": "user",
+      "agentID": "work"
+    },
+    "assistant": {
+      "messageID": "msg_g0VSHE8HO00JgQbS2JCw",
+      "role": "assistant",
+      "author": "work",
+      "agentID": "work",
+      "providerID": "openai",
+      "modelID": "gpt-5.5",
+      "parentID": "msg_f31ff30e-550f-4618-af8c-6bc5c4dbdc35",
+      "finish": "stop",
+      "completed": true
+    }
+  },
+  "notes": [
+    "The screenshot is the visual record; console and persistence fields are sanitized operator-captured observations from the isolated runtime.",
+    "The isolated server log contained an unrelated provider-refresh credential warning, so only the browser console is asserted error-free. The exact selected model request completed successfully."
+  ]
+}
