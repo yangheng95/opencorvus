@@ -4,6 +4,7 @@ import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { WorkerTurnSettlementError } from "@/agent/runner"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
@@ -1219,6 +1220,8 @@ async function verifyDetachedDispatchLifecycle(input: {
         },
       })
     }
+    await Database.awaitEffectIdle(60_000)
+    await Bus.TestHooks.disposeOwnedState()
     await project[Symbol.asyncDispose]()
     using effectGate = await Database.acquireEffectSettlementGate(60_000)
   }
