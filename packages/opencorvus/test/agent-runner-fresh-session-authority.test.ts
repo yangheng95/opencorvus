@@ -305,10 +305,11 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         })
         const blockerTaskID = Identifier.ascending("task")
         const blockerRoot = await Session.create({ kind: "root", title: "Occupied root queue owner" })
+        const blockerTimeCreated = Date.now()
         persistTask({
           taskID: blockerTaskID,
           sessionID: blockerRoot.id,
-          now: Date.now(),
+          now: blockerTimeCreated,
           title: "Occupied root queue owner",
           request: "Keep the root queue occupied while lifecycle delivery is accepted",
           productPillar: "work",
@@ -323,7 +324,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
             projectID: Instance.project.id,
             rootDirectory: Instance.directory,
             packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: Date.now(),
+            timeCreated: blockerTimeCreated,
           }),
         })
         expect(
