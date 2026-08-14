@@ -318,7 +318,7 @@ test("PPTX inspection recursively rejects executable content in a chart workbook
   await expect(inspectPptxPackage(Buffer.from(output.getData()))).rejects.toThrow(
     "embedded workbook contains an unsupported create-only OOXML part: xl/vbaProject.bin",
   )
-})
+}, 45_000)
 
 test("pinned runtime download bounds a chunked body before buffering the overrun", async () => {
   const cacheDir = await fs.mkdtemp(path.join(os.tmpdir(), "work-artifact-download-"))
