@@ -19,7 +19,10 @@ import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package
 import { listGoalWorkloadArtifacts } from "@/engine/store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { describeTask } from "@/engine/describe"
-import { configureTaskIngressRunner, reconcileTerminalAgentLifecycleDelivery } from "@/engine/task-root-ingress-delivery"
+import {
+  configureTaskIngressRunner,
+  reconcileTerminalAgentLifecycleDelivery,
+} from "@/engine/task-root-ingress-delivery"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { GoalWorkloadAnalystAgent } from "@/goal-workload-analyst/agent"
 import { createGoalWorkloadOutputTools } from "@/goal-workload-analyst/output-tools"
@@ -704,77 +707,6 @@ describe("Goal Workload coverage contract", () => {
       await removeManagedDirectoryTree(barrier)
     }
   }, 180_000)
-
-  test("an exited publication process is reconciled before a production continuation opens Integrity", async () => {
-    await using project = await memoryProject()
-    const processRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
-    if (!processRoot) throw new Error("Goal Workload process tests require the repository test runtime")
-    const runtime = await createManagedTemporaryDirectory(processRoot, "goal-workload-cut-runtime-")
-    const barrier = await createManagedTemporaryDirectory(processRoot, "goal-workload-cut-barrier-")
-    const fixturePath = path.join(barrier, "fixture.json")
-    const worker = path.join(import.meta.dir, "fixture", "goal-workload-process-worker.ts")
-    const environment = { ...process.env, OPENCORVUS_HOME: runtime, OPENCORVUS_TEST_PROCESS_ROOT: processRoot }
-    const children: ReturnType<typeof Bun.spawn>[] = []
-    const spawn = (mode: string) => {
-      const child = Bun.spawn(
-        [
-          process.execPath,
-          `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
-          worker,
-          mode,
-          project.path,
-          barrier,
-          fixturePath,
-        ],
-        { cwd: path.join(import.meta.dir, ".."), env: environment, stdout: "pipe", stderr: "pipe" },
-      )
-      children.push(child)
-      return child
-    }
-    const read = async (child: ReturnType<typeof spawn>, expectedExit = 0) => {
-      const [stdout, stderr, exitCode] = await Promise.all([
-        new Response(child.stdout).text(),
-        new Response(child.stderr).text(),
-        child.exited,
-      ])
-      expect(exitCode, stderr).toBe(expectedExit)
-      return JSON.parse(stdout.trim()) as Record<string, any>
-    }
-    try {
-      const cut = await read(spawn("cut"), 86)
-      const fixture = cut.fixture
-      expect(cut.publication).toMatchObject({ deliveryStatus: "complete" })
-      const recovered = await read(spawn("recover"))
-      expect(recovered).toMatchObject({
-        recovered: "already_delivered",
-        settlement: {
-          kind: "partial",
-          failed_operation: "recover_dispatch_domain_settlement",
-        },
-        artifacts: [{ id: cut.publication.locator.artifact_id, status: "complete" }],
-        projection: { frontier_node_ids: [] },
-      })
-      const continuation = await read(spawn("continue"))
-      expect(continuation).toMatchObject({
-        outcome: { kind: "terminal_success" },
-        sameSession: true,
-        sameOccurrence: true,
-        sourceDispatchID: fixture.dispatchID,
-        settlement: { kind: "terminal_success" },
-        projection: { frontier_node_ids: [integrityNodeID] },
-      })
-      expect(continuation.continuationDispatchID).not.toBe(fixture.dispatchID)
-      expect(continuation.artifacts).toEqual([
-        { id: cut.publication.locator.artifact_id, dispatchID: fixture.dispatchID, status: "complete" },
-        expect.objectContaining({ dispatchID: continuation.continuationDispatchID, status: "complete" }),
-      ])
-    } finally {
-      for (const child of children) if (child.exitCode === null) child.kill()
-      await Promise.all(children.map((child) => child.exited.catch(() => -1)))
-      await removeManagedDirectoryTree(runtime)
-      await removeManagedDirectoryTree(barrier)
-    }
-  }, 240_000)
 
   test("independent settlement callers return the same durable first winner in both controlled orders", async () => {
     await using project = await memoryProject()

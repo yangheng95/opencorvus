@@ -2410,7 +2410,7 @@ describe.serial("active operator wake settlement", () => {
         }
       },
     })
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
   }, 120_000)
 
   test("converges a historical non-tail failed ingress into one visible recovery occurrence", async () => {

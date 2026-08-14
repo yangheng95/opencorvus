@@ -321,6 +321,7 @@ describe("ChannelRuntime adapter startup settlement", () => {
         promptInputs: [
           {
             sessionID: "session_mock",
+            messageID: expect.stringMatching(/^msg_h[0-9a-f]{19}$/),
             parts: [{ type: "text", text: "initial hello" }],
           },
         ],

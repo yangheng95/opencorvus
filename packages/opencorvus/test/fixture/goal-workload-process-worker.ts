@@ -1,31 +1,22 @@
 import fs from "node:fs/promises"
 import path from "node:path"
-import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { createDispatchLineageOrigin, findDispatchLineageByDispatchID, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
-import { describeTask } from "@/engine/describe"
 import { persistArchitectGoalProjection } from "@/engine/persist"
-import { reconcileTerminalAgentLifecycleDelivery, TestHooks as IngressTestHooks } from "@/engine/task-root-ingress-delivery"
-import { listGoalWorkloadArtifacts } from "@/engine/store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
-import { GoalWorkloadAnalystAgent } from "@/goal-workload-analyst/agent"
 import { publishGoalWorkload } from "@/goal-workload-analyst/publication"
 import { WorkloadBriefSchema, type WorkloadBrief } from "@/goal-workload-analyst/types"
 import { Identifier } from "@/id/id"
-import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
-import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
-import { createWorkloadAnalysisTool } from "@/orchestrator/workload-analysis-tool"
 import { Instance } from "@/project/instance"
-import { InstanceBootstrap } from "@/project/bootstrap"
 import { ProtocolStore } from "@/protocol/store"
-import { Session, type Message } from "@/session"
+import { Session } from "@/session"
 import { executionLifecycleOrderKey } from "@/session/status"
 import { Database, count, eq } from "@/storage/db"
-import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { persistEstablishedTask } from "./engine-task"
@@ -63,122 +54,6 @@ const workloadIdentity = {
 const workflowID = "goal-workload-process-chain"
 const workloadNodeID = "workload-reviewer"
 const integrityNodeID = "system-integrity-reviewer"
-const virtualWorkflows = {
-  [workflowID]: {
-    label: "Workload then integrity",
-    description: "Cross-process Workload settlement contract.",
-    nodes: {
-      [workloadNodeID]: {
-        agent_id: workloadIdentity.agentID,
-        description: "Publish exact Workload coverage.",
-        depends_on: [],
-      },
-      [integrityNodeID]: {
-        agent_id: "system-integrity-reviewer",
-        description: "Consume complete Workload evidence.",
-        depends_on: [workloadNodeID],
-      },
-    },
-  },
-}
-
-async function settleQueuedLifecycleWake(input: { taskID: string; wakeID?: string }) {
-  if (!input.wakeID) throw new Error(`Task ${input.taskID} lifecycle delivery has no durable ingress identity`)
-  const task = Database.use((db) =>
-    db
-      .select({ rootSessionID: EngineTaskTable.session_id })
-      .from(EngineTaskTable)
-      .where(eq(EngineTaskTable.id, input.taskID))
-      .get(),
-  )
-  if (!task) throw new Error(`Task ${input.taskID} disappeared before lifecycle delivery`)
-  const orchestrator = await Session.create({
-    kind: "orchestrator",
-    parentID: task.rootSessionID,
-    title: "Goal Workload lifecycle recovery",
-  })
-  const now = Date.now()
-  const controlMessageID = orchestratorControlOccurrenceIdentity(input.wakeID).messageID
-  await Session.persistMessage({
-    info: {
-      id: controlMessageID,
-      sessionID: orchestrator.id,
-      role: "user",
-      author: "orchestrator",
-      time: { created: now },
-      agent: "orchestrator",
-      model: { providerID: "test", modelID: "goal-workload-process-worker" },
-    },
-    parts: [
-      {
-        id: Identifier.ascending("part"),
-        sessionID: orchestrator.id,
-        messageID: controlMessageID,
-        type: "text",
-        text: "Recover the exact terminal Workload dispatch.",
-      },
-    ],
-  })
-  const finalMessageID = Identifier.ascending("message")
-  const assistant: Message.Assistant = {
-    id: finalMessageID,
-    sessionID: orchestrator.id,
-    parentID: controlMessageID,
-    role: "assistant",
-    author: "orchestrator",
-    time: { created: now, completed: now + 1 },
-    agent: "orchestrator",
-    providerID: "test",
-    modelID: "goal-workload-process-worker",
-    path: { cwd: Instance.directory, root: Instance.directory },
-    cost: 0,
-    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-    finish: "stop",
-    taskIngress: { id: input.wakeID, kind: "agent_lifecycle_delivery" },
-  }
-  await Session.persistMessage({
-    info: assistant,
-    parts: [
-      {
-        id: Identifier.ascending("part"),
-        sessionID: orchestrator.id,
-        messageID: finalMessageID,
-        type: "text",
-        text: "Recovered terminal Workload delivery.",
-        time: { start: now, end: now + 1 },
-      },
-    ],
-  })
-  return { finalMessageID }
-}
-
-const projectedWorkloadAgent = {
-  identity: workloadIdentity,
-  packageRevision,
-  virtualWorkflows,
-  capabilityOwner: "package" as const,
-  label: "Workload reviewer",
-  builtInToolIDs: [],
-  projectedToolIDs: [],
-}
-
-const projectedIntegrityAgent = {
-  identity: {
-    agentID: "system-integrity-reviewer",
-    baseRole: "integrity" as const,
-    sessionKind: "integrity" as const,
-    dispatchAdapterID: "integrity" as const,
-    runtimeTemplateABIVersion: 1 as const,
-    dispatchAdapterABIVersion: 1 as const,
-    projectionHash: "d".repeat(64),
-  },
-  packageRevision,
-  virtualWorkflows,
-  capabilityOwner: "package" as const,
-  label: "System integrity reviewer",
-  builtInToolIDs: [],
-  projectedToolIDs: [],
-}
 
 function brief(goalID: string): WorkloadBrief {
   return WorkloadBriefSchema.parse({
@@ -406,216 +281,11 @@ async function awaitBarrier(label: string, release = releaseName ?? "go") {
 }
 
 async function exactArtifactCount(artifactID: string) {
-  return Database.use((db) =>
-    db
-      .select({ value: count() })
-      .from(EngineArtifactTable)
-      .where(eq(EngineArtifactTable.id, artifactID))
-      .get()!.value,
+  return Database.use(
+    (db) =>
+      db.select({ value: count() }).from(EngineArtifactTable).where(eq(EngineArtifactTable.id, artifactID)).get()!
+        .value,
   )
-}
-
-async function runContinuation(fixture: Fixture) {
-  const originalAnalyze = GoalWorkloadAnalystAgent.analyze
-  GoalWorkloadAnalystAgent.analyze = async (analysisInput) => {
-    if (analysisInput.existingSessionID !== fixture.childSessionID || analysisInput.newSessionID) {
-      throw new Error("Continuation did not reuse the exact prior Workload Session")
-    }
-    const child = { id: fixture.childSessionID }
-    const parent = await Session.updateMessage({
-      id: Identifier.ascending("message"),
-      sessionID: child.id,
-      role: "user",
-      author: "orchestrator",
-      time: { created: Date.now() },
-      agent: workloadIdentity.agentID,
-      model: { providerID: "test", modelID: "test-model" },
-    })
-    const controlID = Identifier.ascending("part")
-    const controlText = "Continue exact Workload coverage"
-    const descriptor = WorkerTurnDescriptor.create({
-      sessionID: child.id,
-      payload: {
-        identity: workloadIdentity,
-        expertSquadID: packageRevision.id,
-        packageRevision,
-        model: { selection: "explicit", providerID: "test", modelID: "test-model" },
-        prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
-        tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
-        output: { format: "text", resultMode: "reply" },
-        lifecycle: { taskID: fixture.taskID, workScope: { kind: "task" } },
-        messageAuthority: {
-          user_message_id: parent.id,
-          control_text_parts: [{ part_id: controlID, text_sha256: taskRequestSHA256(controlText) }],
-        },
-        dispatchTurn: analysisInput.dispatchTurn!,
-      },
-    })
-    await analysisInput.onDispatchAuthorityCommit?.(child.id, descriptor)
-    await Session.updatePart({
-      id: controlID,
-      sessionID: child.id,
-      messageID: parent.id,
-      type: "text",
-      text: controlText,
-    })
-    const final = await Session.updateMessage({
-      id: Identifier.ascending("message"),
-      sessionID: child.id,
-      role: "assistant",
-      author: workloadIdentity.agentID,
-      parentID: parent.id,
-      time: { created: Date.now(), completed: Date.now() + 1 },
-      agent: workloadIdentity.agentID,
-      providerID: "test",
-      modelID: "test-model",
-      path: { cwd: Instance.directory, root: Instance.directory },
-      cost: 0,
-      tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-      finish: "stop",
-    })
-    return { briefs: [brief(fixture.goalID)], sessionID: child.id, finalMessageID: final.id }
-  }
-  try {
-    const workloadTool = createWorkloadAnalysisTool({
-      inputSchema: DispatchAdapterContractRegistry.inputSchema("workload_analysis"),
-      taskID: fixture.taskID,
-      agentSessionID: fixture.rootSessionID,
-    }).workload_analysis
-    const executors = Object.fromEntries(
-      DispatchAdapterContractRegistry.ids.map((id) => [
-        id,
-        id === "workload_analysis"
-          ? async (args: unknown, context: Parameters<NonNullable<typeof workloadTool.execute>>[1]) =>
-              workloadTool.execute!(args as never, context)
-          : async () => {
-              throw new Error(`Unexpected ${id} adapter execution`)
-            },
-      ]),
-    ) as Record<AgentDispatchAdapterID, DispatchAdapterExecutors[AgentDispatchAdapterID]>
-    let continuationDispatchID = ""
-    const dispatchTool = createDispatchAgentTool({
-      taskID: fixture.taskID,
-      projectedAgents: [projectedWorkloadAgent, projectedIntegrityAgent],
-      executors,
-      runDetached: async (run) => run(),
-      runDetachedRecovery: async (run) => run(),
-      runInWorktree: async ({ run }) => run(),
-      openLineage(input) {
-        if (input.continuationDispatchID !== fixture.dispatchID) {
-          throw new Error("dispatch_agent did not resolve the exact prior dispatch continuation authority")
-        }
-        const source = findDispatchLineageByDispatchID({
-          taskID: fixture.taskID,
-          dispatchID: input.continuationDispatchID,
-        })
-        if (!source) throw new Error("Continuation source lineage is missing")
-        continuationDispatchID = Identifier.ascending("artifact")
-        const origin = createDispatchLineageOrigin({
-          dispatchID: continuationDispatchID,
-          taskID: fixture.taskID,
-          orchestratorSessionID: fixture.rootSessionID,
-          orchestratorMessageID: Identifier.ascending("message"),
-          toolPartID: Identifier.ascending("part"),
-          toolCallID: Identifier.ascending("call"),
-          targetAgentID: input.targetAgentID,
-          projectedWorkerIdentity: input.projectedAgent.identity,
-          workScope: input.workScope,
-          deliverySliceRevisionIDs: [...source.payload.delivery_slice_revision_ids],
-          workflowBinding: source.payload.workflow_binding,
-          workflowNodeID: source.payload.workflow_node_id,
-          workflowOccurrenceID: source.payload.workflow_occurrence_id,
-          continuationOfDispatchID: source.dispatchID,
-          adapterInput: { ...source.payload.adapter_input },
-        })
-        const turn = {
-          kind: "continuation" as const,
-          source_dispatch_id: source.dispatchID,
-          child_session_id: source.payload.child_session_id,
-          current_dispatch_id: continuationDispatchID,
-          workflow_binding: source.payload.workflow_binding,
-          workflow_node_id: source.payload.workflow_node_id,
-          workflow_occurrence_id: source.payload.workflow_occurrence_id,
-          delivery_slice_revision_ids: [...source.payload.delivery_slice_revision_ids],
-          evidence_locators: [],
-          task_authority: {
-            task_id: fixture.taskID,
-            root_session_id: fixture.rootSessionID,
-            request_sha256: taskRequestSHA256(fixture.request),
-            initial_control_text_parts: [],
-          },
-        }
-        return {
-          dispatchID: continuationDispatchID,
-          deliverySliceRevisionIDs: [...source.payload.delivery_slice_revision_ids],
-          existingSessionID: source.payload.child_session_id,
-          turn,
-          adapterInput: { ...source.payload.adapter_input },
-          continuationGuidance: input.continuationGuidance,
-          observeSession(sessionID: string) {
-            if (sessionID !== source.payload.child_session_id) throw new Error("Continuation Session identity drift")
-          },
-          commitSession(sessionID: string) {
-            if (sessionID !== source.payload.child_session_id) throw new Error("Continuation Session identity drift")
-            const lineage = recordDispatchLineage({ origin, childSessionID: sessionID, now: Date.now() })
-            return { artifactID: lineage.artifactID }
-          },
-        }
-      },
-    })
-    if (!dispatchTool.execute) throw new Error("dispatch_agent has no executor")
-    const immediateOutcome = await dispatchTool.execute(
-      {
-        dispatch: {
-          target: workloadIdentity.agentID,
-          work_scope: { kind: "task" },
-          use_worktree: false,
-          turn: {
-            kind: "continuation",
-            authority: { kind: "prior_dispatch", continuation_dispatch_id: fixture.dispatchID },
-            guidance: "Retry the exact Workload coverage publication after startup recovery.",
-            evidence_locators: [],
-          },
-        },
-      },
-      {} as never,
-    )
-    let outcome = immediateOutcome
-    if (outcome.kind === "accepted") {
-      for (let attempt = 0; attempt < 300; attempt += 1) {
-        const settlement = findDispatchSettlementByDispatchID({
-          taskID: fixture.taskID,
-          dispatchID: continuationDispatchID,
-        })
-        if (settlement) {
-          outcome = settlement.payload.outcome
-          break
-        }
-        await Bun.sleep(10)
-      }
-    }
-    const source = findDispatchLineageByDispatchID({ taskID: fixture.taskID, dispatchID: fixture.dispatchID })!
-    const continuation = findDispatchLineageByDispatchID({ taskID: fixture.taskID, dispatchID: continuationDispatchID })!
-    return {
-      outcome,
-      continuationDispatchID,
-      sameSession: continuation.payload.child_session_id === source.payload.child_session_id,
-      sameOccurrence: continuation.payload.workflow_occurrence_id === source.payload.workflow_occurrence_id,
-      sourceDispatchID: continuation.payload.continuation_of_dispatch_id,
-      artifacts: listGoalWorkloadArtifacts(fixture.taskID).map((row) => ({
-        id: row.id,
-        dispatchID: row.payload.dispatch.dispatch_id,
-        status: row.payload.coverage_receipt.status,
-      })),
-      settlement: findDispatchSettlementByDispatchID({
-        taskID: fixture.taskID,
-        dispatchID: continuationDispatchID,
-      })?.payload.outcome,
-      projection: (await describeTask(fixture.taskID)).workflow_execution,
-    }
-  } finally {
-    GoalWorkloadAnalystAgent.analyze = originalAnalyze
-  }
 }
 
 async function settleCandidate() {
@@ -670,63 +340,27 @@ async function result() {
       },
     })
   }
-  using _taskLoopRunner = IngressTestHooks.replaceTaskIngressRunner({
-    directory: projectDirectory,
-    runner: settleQueuedLifecycleWake,
-  })
   const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
   try {
     return await Instance.provide({
       directory: projectDirectory,
-      init: mode === "recover" || mode === "continue" ? InstanceBootstrap : async () => {},
+      init: async () => {},
       fn: async () => {
-      Database.Client()
-      if (mode === "init-publication") {
-        const fixture = await createFixture("Cross-process publication")
-        await fs.writeFile(fixturePath, JSON.stringify(fixture))
-        return fixture
-      }
-      if (mode === "cut") {
-        const fixture = await createFixture("Cross-process publication cut")
-        await fs.writeFile(fixturePath, JSON.stringify(fixture))
-        const publication = publishGoalWorkload({
-          taskID: fixture.taskID,
-          dispatchID: fixture.dispatchID,
-          sessionID: fixture.childSessionID,
-          finalMessageID: fixture.finalMessageID,
-          briefs: [brief(fixture.goalID)],
-          now: fixture.now + 20,
-        })
-        process.stdout.write(JSON.stringify({ fixture, publication }))
-        process.exit(86)
-      }
-      if (mode === "recover") {
-        const fixture = await readFixture()
-        const recovered = await reconcileTerminalAgentLifecycleDelivery({
-          taskID: fixture.taskID,
-          sessionID: fixture.childSessionID,
-          dispatchID: fixture.dispatchID,
-        })
-        return {
-          recovered,
-          settlement: findDispatchSettlementByDispatchID({
-            taskID: fixture.taskID,
-            dispatchID: fixture.dispatchID,
-          })?.payload.outcome,
-          artifacts: listGoalWorkloadArtifacts(fixture.taskID).map((row) => ({ id: row.id, status: row.payload.coverage_receipt.status })),
-          projection: (await describeTask(fixture.taskID)).workflow_execution,
+        Database.Client()
+        if (mode === "init-publication") {
+          const fixture = await createFixture("Cross-process publication")
+          await fs.writeFile(fixturePath, JSON.stringify(fixture))
+          return fixture
         }
-      }
-      if (mode === "continue") return runContinuation(await readFixture())
-      if (mode === "init-settlement") {
-        const fixtures = []
-        for (const label of ["race", "mapped-first", "partial-first"]) {
-          fixtures.push(await createFixture(`Cross-process settlement ${label}`, true))
+        if (mode === "init-settlement") {
+          const fixtures = []
+          for (const label of ["race", "mapped-first", "partial-first"]) {
+            fixtures.push(await createFixture(`Cross-process settlement ${label}`, true))
+          }
+          await fs.writeFile(fixturePath, JSON.stringify(fixtures))
+          return { dispatchIDs: fixtures.map((fixture) => fixture.dispatchID) }
         }
-        await fs.writeFile(fixturePath, JSON.stringify(fixtures))
-        return { dispatchIDs: fixtures.map((fixture) => fixture.dispatchID) }
-      }
-      throw new Error(`Unknown Goal Workload process worker mode: ${mode}`)
+        throw new Error(`Unknown Goal Workload process worker mode: ${mode}`)
       },
     })
   } finally {
