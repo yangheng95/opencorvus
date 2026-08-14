@@ -41,6 +41,7 @@ import { createWorkloadAnalysisTool } from "@/orchestrator/workload-analysis-too
 import { Session } from "@/session"
 import { executionLifecycleOrderKey } from "@/session/status"
 import { ProtocolStore } from "@/protocol/store"
+import { Bus } from "@/bus"
 import { Database, DatabaseUnavailableError } from "@/storage/db"
 import type { EngineArtifactLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import z from "zod"
@@ -673,7 +674,9 @@ describe("Goal Workload coverage contract", () => {
           throw new Error(`Goal Workload worker ${exited.label} exited before barrier: ${stderr}`)
         }
         if (Date.now() >= deadline) {
-          throw new Error(`Goal Workload workers did not reach barrier: ${workers.map(({ label }) => label).join(", ")}`)
+          throw new Error(
+            `Goal Workload workers did not reach barrier: ${workers.map(({ label }) => label).join(", ")}`,
+          )
         }
         await Bun.sleep(5)
       }
@@ -714,7 +717,15 @@ describe("Goal Workload coverage contract", () => {
     const children: ReturnType<typeof Bun.spawn>[] = []
     const spawn = (mode: string) => {
       const child = Bun.spawn(
-        [process.execPath, `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`, worker, mode, project.path, barrier, fixturePath],
+        [
+          process.execPath,
+          `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
+          worker,
+          mode,
+          project.path,
+          barrier,
+          fixturePath,
+        ],
         { cwd: path.join(import.meta.dir, ".."), env: environment, stdout: "pipe", stderr: "pipe" },
       )
       children.push(child)
@@ -777,7 +788,17 @@ describe("Goal Workload coverage contract", () => {
     const children: ReturnType<typeof Bun.spawn>[] = []
     const spawn = (mode: string, label = "worker", release = "go") => {
       const child = Bun.spawn(
-        [process.execPath, `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`, worker, mode, project.path, barrier, fixturePath, label, release],
+        [
+          process.execPath,
+          `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
+          worker,
+          mode,
+          project.path,
+          barrier,
+          fixturePath,
+          label,
+          release,
+        ],
         { cwd: path.join(import.meta.dir, ".."), env: environment, stdout: "pipe", stderr: "pipe" },
       )
       children.push(child)
@@ -841,8 +862,7 @@ describe("Goal Workload coverage contract", () => {
           await fs.writeFile(path.join(barrier, simultaneousRelease), "go")
           const [firstReceipt, secondReceipt] = await Promise.all([read(first), read(second)])
           expect([firstReceipt.winner.kind, secondReceipt.winner.kind]).toSatisfy(
-            (kinds: string[]) =>
-              kinds[0] === kinds[1] && (kinds[0] === "terminal_success" || kinds[0] === "partial"),
+            (kinds: string[]) => kinds[0] === kinds[1] && (kinds[0] === "terminal_success" || kinds[0] === "partial"),
           )
         } else {
           await fs.writeFile(path.join(barrier, `release-${candidate.index}-first`), "go")
@@ -1522,9 +1542,8 @@ describe("Goal Workload coverage contract", () => {
                 currentRevisionIDs: [goalID],
                 currentGoalGraphAvailable: true,
               }),
-              current_goal_graph_projection_artifact_locator: (
-                original.coverage_receipt as Record<string, unknown>
-              ).current_goal_graph_projection_artifact_locator,
+              current_goal_graph_projection_artifact_locator: (original.coverage_receipt as Record<string, unknown>)
+                .current_goal_graph_projection_artifact_locator,
             }
             mutated = {
               ...original,
@@ -1812,6 +1831,7 @@ describe("Goal Workload coverage contract", () => {
         )
       },
     })
+    await Bus.TestHooks.disposeOwnedState()
   }, 30_000)
 
   test("settle-or-return-existing also preserves a mapped outcome that commits before recovery", async () => {
