@@ -55,6 +55,14 @@ export interface NativeBinarySmokeCommand {
   argv: string[]
 }
 
+export interface NativeBinaryFinalization {
+  smoke: () => Promise<void>
+  sign: () => Promise<void>
+  writeManifest: () => Promise<void>
+  writeStamp: () => Promise<void>
+  verify: () => Promise<void>
+}
+
 export function nativeBinaryCodeSignCommands(executables: readonly string[], platform: NodeJS.Platform): string[][] {
   if (platform !== "darwin") return []
   return executables.flatMap((executable) => [
@@ -233,11 +241,28 @@ export function nativeBinarySmokeCommands(
   ]
 }
 
-export async function verifyNativeBinaryArtifact(
+export async function verifyNativeBinaryRuntimeSmoke(
   artifact: NativeBinaryArtifact,
   platform: NodeJS.Platform,
   arch: NodeJS.Architecture,
   expectedVersion: string,
+): Promise<void> {
+  const smokeCommands = nativeBinarySmokeCommands(artifact, platform, arch)
+  const [openCorvus, ...runtimeCommands] = smokeCommands
+  const actualVersion = (await $`${openCorvus.argv}`.text()).trim()
+  if (actualVersion !== expectedVersion) {
+    throw new Error(`Unexpected ${artifact.executable} version: ${actualVersion}; expected ${expectedVersion}`)
+  }
+  for (const command of runtimeCommands) {
+    const output = (await $`${command.argv}`.text()).trim()
+    if (!output) throw new Error(`${command.label} did not report a version`)
+  }
+}
+
+export async function verifyNativeBinaryArtifact(
+  artifact: NativeBinaryArtifact,
+  platform: NodeJS.Platform,
+  arch: NodeJS.Architecture,
 ): Promise<void> {
   const missing = requiredNativeBundleFiles(artifact, platform, arch).filter((file) => !fs.existsSync(file))
   if (missing.length > 0) {
@@ -259,16 +284,14 @@ export async function verifyNativeBinaryArtifact(
       }
     }
   }
-  const smokeCommands = nativeBinarySmokeCommands(artifact, platform, arch)
-  const [openCorvus, ...runtimeCommands] = smokeCommands
-  const actualVersion = (await $`${openCorvus.argv}`.text()).trim()
-  if (actualVersion !== expectedVersion) {
-    throw new Error(`Unexpected ${artifact.executable} version: ${actualVersion}; expected ${expectedVersion}`)
-  }
-  for (const command of runtimeCommands) {
-    const output = (await $`${command.argv}`.text()).trim()
-    if (!output) throw new Error(`${command.label} did not report a version`)
-  }
+}
+
+export async function finalizeNativeBinaryArtifact(finalization: NativeBinaryFinalization): Promise<void> {
+  await finalization.smoke()
+  await finalization.sign()
+  await finalization.writeManifest()
+  await finalization.writeStamp()
+  await finalization.verify()
 }
 
 export async function signNativeBinaryArtifact(
@@ -301,6 +324,13 @@ export function nativeBinaryArchiveListingCommand(archive: string): NativeBinary
   return {
     cwd: path.dirname(archive),
     argv: ["tar", "-tvzf", path.basename(archive)],
+  }
+}
+
+export function nativeBinaryArchiveExtractionCommand(archive: string, destination: string): NativeBinaryBuildCommand {
+  return {
+    cwd: path.dirname(archive),
+    argv: ["tar", "-xzf", path.basename(archive), "-C", destination],
   }
 }
 
@@ -390,16 +420,15 @@ export async function verifyNativeBinaryArchive(
     "script",
     "check-work-artifact-profile.ts",
   )
-  await $`${process.execPath} ${profileChecker} --profile office.presentation@1 --package-root ${artifact.bundleDir}`
-  const command = nativeBinaryArchiveListingCommand(artifact.archive)
-  const listing = (await $`${command.argv}`.cwd(command.cwd).text()).replaceAll("\\", "/")
-  assertNativeArchiveClosure({ archive: artifact.archive, listing, platform })
   const executableClosure = await inspectArtifactExecutableClosure({ root: artifact.bundleDir, os: platform })
   const manifest = await verifyWorkArtifactTargetPackageManifest({
     root: artifact.bundleDir,
     target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
     lock: WORK_ARTIFACT_RUNTIME_LOCK,
   })
+  const command = nativeBinaryArchiveListingCommand(artifact.archive)
+  const listing = (await $`${command.argv}`.cwd(command.cwd).text()).replaceAll("\\", "/")
+  assertNativeArchiveClosure({ archive: artifact.archive, listing, platform })
   const entries = [
     ...executableClosure.map((file) => ({
       path: path.relative(artifact.bundleDir, file.path).replaceAll("\\", "/"),
@@ -413,7 +442,8 @@ export async function verifyNativeBinaryArchive(
   }
   const extracted = await fs.promises.mkdtemp(path.join(os.tmpdir(), "opencorvus-native-archive-check-"))
   try {
-    await $`tar -xzf ${artifact.archive} -C ${extracted}`
+    const extraction = nativeBinaryArchiveExtractionCommand(artifact.archive, extracted)
+    await $`${extraction.argv}`.cwd(extraction.cwd)
     await $`${process.execPath} ${profileChecker} --profile office.presentation@1 --package-root ${extracted}`
   } finally {
     await fs.promises.rm(extracted, { recursive: true, force: true })
@@ -439,15 +469,22 @@ export async function packageNativeBinary(
   for (const artifact of artifacts) {
     await stageOverlayUi(repoRoot, artifact)
     await normalizeArtifactExecutablePermissions({ root: artifact.bundleDir, os: platform })
-    await signNativeBinaryArtifact(artifact, platform)
-    await writeWorkArtifactTargetPackageManifest({
-      root: artifact.bundleDir,
-      target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
-      lock: WORK_ARTIFACT_RUNTIME_LOCK,
-      phase: "final",
+    await finalizeNativeBinaryArtifact({
+      smoke: () => verifyNativeBinaryRuntimeSmoke(artifact, platform, arch, env.OPENCORVUS_VERSION!),
+      sign: () => signNativeBinaryArtifact(artifact, platform),
+      writeManifest: async () => {
+        await writeWorkArtifactTargetPackageManifest({
+          root: artifact.bundleDir,
+          target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
+          lock: WORK_ARTIFACT_RUNTIME_LOCK,
+          phase: "final",
+        })
+      },
+      writeStamp: async () => {
+        await writeOverlayPayloadStamp(artifact.bundleDir)
+      },
+      verify: () => verifyNativeBinaryArtifact(artifact, platform, arch),
     })
-    await writeOverlayPayloadStamp(artifact.bundleDir)
-    await verifyNativeBinaryArtifact(artifact, platform, arch, env.OPENCORVUS_VERSION!)
     await archiveNativeBinaryArtifact(artifact, platform)
     await verifyNativeBinaryArchive(artifact, platform, arch)
   }
