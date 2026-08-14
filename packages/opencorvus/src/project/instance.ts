@@ -197,6 +197,7 @@ let convergenceRequested = false
 let scheduledMaximumRetained = 1
 let scheduledConvergence: Promise<void> | undefined
 const pendingEvictions = new Set<CacheEntry>()
+const pendingEvictionSettlements = new Map<CacheEntry, Promise<void>>()
 let beforeConvergenceDisposalForTest:
   | ((input: { directory: string; projectID?: string }) => void | Promise<void>)
   | undefined
@@ -267,12 +268,17 @@ function createCacheEntry(contextPromise: Promise<Context>, identityKnown: Promi
   }
 }
 
-function seedProjectDeletionIdentity(directory: string, project: Project.Info): void {
+function seedProjectDeletionIdentity(
+  directory: string,
+  project: Project.Info,
+): { key: string; entry: CacheEntry } | undefined {
   const resolved = Filesystem.resolve(directory)
   const key = instanceCacheKey(resolved)
-  if (cache.has(key)) return
+  if (cache.has(key)) return undefined
   const context: Context = {
     directory: resolved,
+    // Instance.worktree is the exact execution sandbox, while Project.worktree
+    // remains the registered repository root. This matches refreshedContext.
     worktree: resolved,
     project,
     git: Project.isGitRepo(project.worktree),
@@ -280,6 +286,7 @@ function seedProjectDeletionIdentity(directory: string, project: Project.Info): 
   const entry = createCacheEntry(Promise.resolve(context), Promise.resolve())
   entry.projectID = project.id
   cache.set(key, entry)
+  return { key, entry }
 }
 
 function pumpLock(entry: CacheEntry) {
@@ -1270,24 +1277,58 @@ export const Instance: InstanceApi = {
     for (const discovery of discoveries.keys()) {
       void discovery.finally(() => discoveries.delete(discovery)).catch(() => undefined)
     }
-    await Promise.allSettled(discoveries.keys())
-    await Promise.resolve()
-    const project = Project.get(input.projectID)
-    if (!project) {
-      closedProjectAdmissions.delete(input.projectID)
-      throw new Error(`Project ${input.projectID} disappeared while closing deletion admission`)
+    const seededEntries: Array<{ key: string; entry: CacheEntry }> = []
+    const discardUnusedSeededEntries = () => {
+      for (const { key, entry } of seededEntries) {
+        if (cache.get(key) === entry && !entry.initialized) cache.delete(key)
+      }
     }
-    for (const directory of directories) seedProjectDeletionIdentity(directory, project)
-    const authority: ProjectDeletionAdmission = {
-      projectID: input.projectID,
-      [Symbol.dispose]() {
-        if (closedProjectAdmissions.get(input.projectID)?.token === token) {
-          closedProjectAdmissions.delete(input.projectID)
-        }
-      },
+    try {
+      await Promise.allSettled(discoveries.keys())
+      await waitForRuntimeSettlementIdle({
+        snapshot: () =>
+          [...pendingEvictionSettlements]
+            .filter(([entry]) => entry.projectID === input.projectID)
+            .map(([entry, settled]) => ({
+              label: `project-convergence:${entry.projectID}`,
+              settled,
+            })),
+        inactivityTimeoutMilliseconds: Flag.OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS,
+        inactivityError: (labels) =>
+          new InstanceSettlementInactivityError(labels, Flag.OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS),
+      })
+      await Promise.resolve()
+      const project = Project.get(input.projectID)
+      if (!project) {
+        throw new Error(`Project ${input.projectID} disappeared while closing deletion admission`)
+      }
+      for (const directory of directories) {
+        const seeded = seedProjectDeletionIdentity(directory, project)
+        if (seeded) seededEntries.push(seeded)
+      }
+      const authority: ProjectDeletionAdmission = {
+        projectID: input.projectID,
+        [Symbol.dispose]() {
+          // Once authority is returned, deletion settlement may initialize lazy
+          // State on these identities. Retain any entries not formally disposed
+          // so ordinary bootstrap or later convergence can own their cleanup.
+          if (closedProjectAdmissions.get(input.projectID)?.token === token) {
+            closedProjectAdmissions.delete(input.projectID)
+          }
+          projectDeletionAdmissionTokens.delete(authority)
+        },
+      }
+      projectDeletionAdmissionTokens.set(authority, token)
+      return authority
+    } catch (error) {
+      // No async work runs between seeding and authority publication, so entries
+      // created by a failed pre-authority handshake are still safe to discard.
+      discardUnusedSeededEntries()
+      if (closedProjectAdmissions.get(input.projectID)?.token === token) {
+        closedProjectAdmissions.delete(input.projectID)
+      }
+      throw error
     }
-    projectDeletionAdmissionTokens.set(authority, token)
-    return authority
   },
   async disposeProjectEntries(projectID, inactivityTimeoutMilliseconds = 60_000) {
     SchedulerTaskOwner.assertCanStartLifecycleDisposal("Project instance disposal")
@@ -1343,8 +1384,7 @@ export const Instance: InstanceApi = {
             provideLeaseContext(lease, ctx, () =>
               runLeaseLifecycle(lease, "Project instance disposal", async () => {
                 if (entry.rollback) await retryRollbackCleanup(key, entry, lease, entry.rollback)
-                else if (entry.initialized) await disposeEntry(key, entry, ctx)
-                else if (cache.get(key) === entry) cache.delete(key)
+                else await disposeEntry(key, entry, ctx)
               }),
             ),
           )
@@ -1507,10 +1547,10 @@ export const Instance: InstanceApi = {
             }
             const ctx = await entry.context
             if (cache.get(key) !== entry) return { status: "replaced" as const, directory }
-            await beforeConvergenceDisposalForTest?.({ directory: ctx.directory, projectID: entry.projectID })
             if (entry.projectID && closedProjectAdmissions.has(entry.projectID)) {
               return { status: "retained" as const, directory: ctx.directory }
             }
+            await beforeConvergenceDisposalForTest?.({ directory: ctx.directory, projectID: entry.projectID })
             await leaseContext.provide(lease, () =>
               provideLeaseContext(lease, ctx, () =>
                 runLeaseLifecycle(lease, "instance cache convergence", () => disposeEntry(key, entry, ctx)),
@@ -1531,6 +1571,15 @@ export const Instance: InstanceApi = {
             }
           }
         })()
+        const evictionSettlement = disposal.then(() => undefined)
+        pendingEvictionSettlements.set(entry, evictionSettlement)
+        void evictionSettlement
+          .finally(() => {
+            if (pendingEvictionSettlements.get(entry) === evictionSettlement) {
+              pendingEvictionSettlements.delete(entry)
+            }
+          })
+          .catch(() => undefined)
         let timeout: ReturnType<typeof setTimeout> | undefined
         const outcome = await Promise.race([
           disposal,

@@ -123,11 +123,7 @@ import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-hando
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
-import {
-  assertToolResultControlPreserved,
-  toolResultControl,
-  toolResultDisposition,
-} from "./tool-result-control"
+import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
 import {
   bindToolExecutionMode,
   ToolTurnExecutionCoordinator,
@@ -1322,19 +1318,20 @@ export namespace SessionLoop {
       messages: input.msgs,
       config,
     })
-    const structuredOutputTool = input.lastUser.format?.type === "json_schema"
-      ? prepareProviderTool({
-        name: "StructuredOutput",
-        source: "structured",
-        model: input.model,
-        tool: createStructuredOutputTool({
-          schema: input.lastUser.format.schema,
-          onSuccess(output) {
-            structured = output
-          },
-        }),
-      })
-      : undefined
+    const structuredOutputTool =
+      input.lastUser.format?.type === "json_schema"
+        ? prepareProviderTool({
+            name: "StructuredOutput",
+            source: "structured",
+            model: input.model,
+            tool: createStructuredOutputTool({
+              schema: input.lastUser.format.schema,
+              onSuccess(output) {
+                structured = output
+              },
+            }),
+          })
+        : undefined
     const skillSurface = await finalizeResolvedToolSkillSurface(
       tools,
       structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
@@ -2281,10 +2278,21 @@ export namespace SessionLoop {
         }
       } catch (e) {
         SessionRuntimeContractStore.failConsumedWake(sessionID, e)
-        const terminalPublished =
-          SessionStatus.get(sessionID).type === "terminal"
-            ? true
-            : await lifecycle.reenter({ directory, fn: () => publishTerminal(e) })
+        const executionCancelled = isExecutionCancellationError(e) || isExecutionCancellationError(abort.reason)
+        let terminalPublished = executionCancelled || SessionStatus.get(sessionID).type === "terminal"
+        if (!terminalPublished) {
+          try {
+            terminalPublished = (await lifecycle.reenter({ directory, fn: () => publishTerminal(e) })) === true
+          } catch (publicationError) {
+            SessionRuntimeContractStore.failConsumedWake(sessionID, publicationError)
+            log.error("session prompt terminal status publication failed during loop settlement", {
+              sessionID,
+              directory,
+              error: publicationError instanceof Error ? publicationError.message : String(publicationError),
+              originalError: e instanceof Error ? e.message : String(e),
+            })
+          }
+        }
         rejectCallbacks(e)
         if (terminalPublished !== true) {
           log.error("session prompt terminal status could not re-enter released instance", {
@@ -2307,7 +2315,14 @@ export namespace SessionLoop {
           })
         }
       }
-    })()
+    })().catch((error) => {
+      SessionRuntimeContractStore.failConsumedWake(sessionID, error)
+      log.error("detached session prompt loop failed to converge", {
+        sessionID,
+        directory,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    })
 
     return firstResult
   })
@@ -3085,10 +3100,7 @@ export namespace SessionLoop {
     if (!assistant.parentID) {
       throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
     }
-    if (
-      toolPart.state.status === "completed" &&
-      toolResultDisposition(completedToolControl) !== "continue"
-    ) {
+    if (toolPart.state.status === "completed" && toolResultDisposition(completedToolControl) !== "continue") {
       if (!assistantWasCompleted) {
         assistant.finish = "tool-calls"
         assistant.time.completed = Date.now()
@@ -3427,10 +3439,7 @@ export namespace SessionLoop {
       )
     }
     const selectedModel = await resolveAgentModel("orchestrator", { sessionID: task.session_id ?? undefined })
-    if (
-      selectedModel.providerID !== input.assistant.providerID ||
-      selectedModel.id !== input.assistant.modelID
-    ) {
+    if (selectedModel.providerID !== input.assistant.providerID || selectedModel.id !== input.assistant.modelID) {
       throw new PermissionAuthority.StaleContinuationError(
         input.request.id,
         "The projected scheduler model changed after restart",
