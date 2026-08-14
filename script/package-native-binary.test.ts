@@ -9,6 +9,8 @@ import {
   nativeBinaryArchiveListingCommand,
   nativeBinaryBuildCommands,
   nativeBinaryBuildEnv,
+  nativeBinarySmokeCommands,
+  runNativeBinarySmokeCommand,
 } from "./package-native-binary"
 
 test("native binary build environment retains the selected release identity", () => {
@@ -35,6 +37,50 @@ test("native binary build prepares the SDK before its overlay and CLI consumers"
       argv: ["bun", "run", "script/build.ts", "--single", "--baseline", "--no-clean"],
     },
   ])
+})
+
+test("native binary smoke applies the locked OfficeCLI non-resident update policy", () => {
+  const bundleDir = path.resolve("native-output", "opencorvus-linux-x64")
+  const commands = nativeBinarySmokeCommands(
+    {
+      id: "opencorvus-linux-x64",
+      bundleDir,
+      executable: path.join(bundleDir, "opencorvus"),
+      archive: path.resolve("native-output", "opencorvus-linux-x64.tar.gz"),
+    },
+    "linux",
+    "x64",
+  )
+
+  expect(commands.find((command) => command.label === "officecli")?.env).toEqual({
+    OFFICECLI_NO_AUTO_RESIDENT: "1",
+    OFFICECLI_SKIP_UPDATE: "1",
+  })
+})
+
+test("native binary smoke executes with locked policy over the inherited environment", async () => {
+  const output = await runNativeBinarySmokeCommand(
+    {
+      label: "officecli",
+      argv: [
+        process.execPath,
+        "-e",
+        "console.log(JSON.stringify({ caller: process.env.CALLER_FACT, resident: process.env.OFFICECLI_NO_AUTO_RESIDENT, update: process.env.OFFICECLI_SKIP_UPDATE }))",
+      ],
+      env: {
+        OFFICECLI_NO_AUTO_RESIDENT: "1",
+        OFFICECLI_SKIP_UPDATE: "1",
+      },
+    },
+    {
+      ...process.env,
+      CALLER_FACT: "retained",
+      OFFICECLI_NO_AUTO_RESIDENT: "caller",
+      OFFICECLI_SKIP_UPDATE: "caller",
+    },
+  )
+
+  expect(JSON.parse(output)).toEqual({ caller: "retained", resident: "1", update: "1" })
 })
 
 test("native archive verification runs tar from the archive directory", () => {

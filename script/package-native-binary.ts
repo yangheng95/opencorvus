@@ -53,6 +53,7 @@ export interface NativeBinaryBuildCommand {
 export interface NativeBinarySmokeCommand {
   label: string
   argv: string[]
+  env?: Record<string, string>
 }
 
 export interface NativeBinaryFinalization {
@@ -222,6 +223,7 @@ export function nativeBinarySmokeCommands(
     {
       label: runtime.id,
       argv: [path.join(artifact.bundleDir, ...runtimeFile.path.split("/")), ...runtime.smoke_argv],
+      env: runtime.execution_policy.environment,
     },
     {
       label: "Browser MCP Node.js",
@@ -241,6 +243,13 @@ export function nativeBinarySmokeCommands(
   ]
 }
 
+export async function runNativeBinarySmokeCommand(
+  command: NativeBinarySmokeCommand,
+  inheritedEnv: NodeJS.ProcessEnv = process.env,
+): Promise<string> {
+  return (await $`${command.argv}`.env({ ...inheritedEnv, ...command.env }).text()).trim()
+}
+
 export async function verifyNativeBinaryRuntimeSmoke(
   artifact: NativeBinaryArtifact,
   platform: NodeJS.Platform,
@@ -254,7 +263,7 @@ export async function verifyNativeBinaryRuntimeSmoke(
     throw new Error(`Unexpected ${artifact.executable} version: ${actualVersion}; expected ${expectedVersion}`)
   }
   for (const command of runtimeCommands) {
-    const output = (await $`${command.argv}`.text()).trim()
+    const output = await runNativeBinarySmokeCommand(command)
     if (!output) throw new Error(`${command.label} did not report a version`)
   }
 }
