@@ -1003,14 +1003,14 @@
               "activity": {
                 "description": "Chunk-driven inactivity thresholds for session LLM streams and provider execution work.",
                 "properties": {
-                  "session_llm_idle_ms": {
-                    "description": "Max idle (no stream chunk) window for session LLM streams, ms",
+                  "execution_progress_idle_ms": {
+                    "description": "Max idle window without durable execution progress, ms",
                     "maximum": 9007199254740991,
                     "minimum": 1000,
                     "type": "integer"
                   },
-                  "task_queue_run_timeout_ms": {
-                    "description": "Max idle window without queue task progress, ms",
+                  "session_llm_idle_ms": {
+                    "description": "Max idle (no stream chunk) window for session LLM streams, ms",
                     "maximum": 9007199254740991,
                     "minimum": 1000,
                     "type": "integer"
@@ -2167,12 +2167,6 @@
             "$ref": "#/components/schemas/Event.task_plan.updated"
           },
           {
-            "$ref": "#/components/schemas/Event.task-queue.changed"
-          },
-          {
-            "$ref": "#/components/schemas/Event.task-queue.completed"
-          },
-          {
             "$ref": "#/components/schemas/Event.task.cancellation.requested"
           },
           {
@@ -2524,9 +2518,8 @@
                   "goal_workload",
                   "dispatch_lineage",
                   "dispatch_settlement",
-                  "operator_message_wake",
                   "mission_acceptance_resume_receipt",
-                  "queued_operator_wake",
+                  "task_root_ingress",
                   "task_checkpoint_settlement",
                   "task_auxiliary_settlement",
                   "exploration",
@@ -4923,74 +4916,6 @@
           },
           "type": {
             "const": "session.updated",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
-      "Event.task-queue.changed": {
-        "properties": {
-          "properties": {
-            "properties": {
-              "queueTaskID": {
-                "type": "string"
-              },
-              "sequence": {
-                "type": "number"
-              },
-              "sessionID": {
-                "type": "string"
-              },
-              "status": {
-                "enum": [
-                  "queued",
-                  "failed"
-                ],
-                "type": "string"
-              }
-            },
-            "required": [
-              "queueTaskID",
-              "sessionID",
-              "status",
-              "sequence"
-            ],
-            "type": "object"
-          },
-          "type": {
-            "const": "task-queue.changed",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
-      "Event.task-queue.completed": {
-        "properties": {
-          "properties": {
-            "properties": {
-              "queueTaskID": {
-                "type": "string"
-              },
-              "sessionID": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "queueTaskID",
-              "sessionID"
-            ],
-            "type": "object"
-          },
-          "type": {
-            "const": "task-queue.completed",
             "type": "string"
           }
         },
@@ -11915,10 +11840,6 @@
                     "minLength": 1,
                     "type": "string"
                   },
-                  "queueOccurrenceID": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
                   "reason": {
                     "minLength": 1,
                     "type": "string"
@@ -11944,7 +11865,6 @@
                       "panel.cancel_task",
                       "orchestrator.cancel_task",
                       "task.lifecycle",
-                      "task.queue_timeout",
                       "process.shutdown",
                       "agent.parent_signal",
                       "agent.coordination_signal",
@@ -21000,7 +20920,7 @@
     },
     "/coding/chat/session/{sessionID}/abort": {
       "post": {
-        "description": "Stop active and queued processing for a project-bound right sidebar Chat session.",
+        "description": "Stop active processing for a project-bound right sidebar Chat session.",
         "operationId": "coding.chat.session.abort",
         "parameters": [
           {
@@ -22007,7 +21927,7 @@
     },
     "/coding/work/session/{sessionID}/abort": {
       "post": {
-        "description": "Stop active and queued processing for a project-bound right sidebar Work session.",
+        "description": "Stop active processing for a project-bound right sidebar Work session.",
         "operationId": "coding.work.session.abort",
         "parameters": [
           {
@@ -82753,6 +82673,33 @@
             },
             "description": "Not found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "PublicSessionPromptIdentityConflictError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Message identity is already bound to another public Session prompt"
+          },
           "503": {
             "content": {
               "application/json": {
@@ -83251,379 +83198,6 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.part.update({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/session/{sessionID}/prompt_async": {
-      "post": {
-        "description": "Create and send a new message to a standalone, Mission, or Coding Assistant session asynchronously, starting the session if needed and returning immediately. Projected worker guidance uses the task-scoped operator-steer route.",
-        "operationId": "session.prompt_async",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Session ID",
-            "in": "path",
-            "name": "sessionID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "additionalProperties": false,
-                "properties": {
-                  "agent": {
-                    "type": "string"
-                  },
-                  "format": {
-                    "$ref": "#/components/schemas/OutputFormat"
-                  },
-                  "messageID": {
-                    "pattern": "^msg.*",
-                    "type": "string"
-                  },
-                  "model": {
-                    "properties": {
-                      "modelID": {
-                        "type": "string"
-                      },
-                      "providerID": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "providerID",
-                      "modelID"
-                    ],
-                    "type": "object"
-                  },
-                  "parts": {
-                    "items": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/TextPartInput"
-                        },
-                        {
-                          "$ref": "#/components/schemas/FilePartInput"
-                        }
-                      ]
-                    },
-                    "type": "array"
-                  },
-                  "variant": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parts"
-                ],
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "taskID": {
-                      "type": "string"
-                    },
-                    "user_message": {
-                      "$ref": "#/components/schemas/VisibleMessageWithParts"
-                    }
-                  },
-                  "required": [
-                    "taskID",
-                    "user_message"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Prompt accepted"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                }
-              }
-            },
-            "description": "Not found"
-          },
-          "503": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthReadError"
-                }
-              }
-            },
-            "description": "Saved Provider credentials could not be observed safely"
-          }
-        },
-        "summary": "Send async message",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.promptAsync({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/session/{sessionID}/prompt_async/{taskID}": {
-      "get": {
-        "description": "Get status for a previously submitted async prompt task.",
-        "operationId": "session.prompt_async_status",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Session ID",
-            "in": "path",
-            "name": "sessionID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Task ID",
-            "in": "path",
-            "name": "taskID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "completedAt": {
-                      "anyOf": [
-                        {
-                          "maximum": 9007199254740991,
-                          "minimum": -9007199254740991,
-                          "type": "integer"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "error": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "prompt": {
-                      "type": "string"
-                    },
-                    "sessionID": {
-                      "type": "string"
-                    },
-                    "source": {
-                      "type": "string"
-                    },
-                    "startedAt": {
-                      "anyOf": [
-                        {
-                          "maximum": 9007199254740991,
-                          "minimum": -9007199254740991,
-                          "type": "integer"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "status": {
-                      "enum": [
-                        "queued",
-                        "running",
-                        "completed",
-                        "failed"
-                      ],
-                      "type": "string"
-                    },
-                    "taskID": {
-                      "type": "string"
-                    },
-                    "updatedAt": {
-                      "maximum": 9007199254740991,
-                      "minimum": -9007199254740991,
-                      "type": "integer"
-                    }
-                  },
-                  "required": [
-                    "taskID",
-                    "sessionID",
-                    "status",
-                    "source",
-                    "prompt",
-                    "error",
-                    "startedAt",
-                    "completedAt",
-                    "updatedAt"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Task status"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                }
-              }
-            },
-            "description": "Not found"
-          }
-        },
-        "summary": "Get async prompt task status",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.promptAsyncStatus({\n  ...\n})"
           }
         ]
       }
@@ -91291,9 +90865,8 @@
                               "goal_workload",
                               "dispatch_lineage",
                               "dispatch_settlement",
-                              "operator_message_wake",
                               "mission_acceptance_resume_receipt",
-                              "queued_operator_wake",
+                              "task_root_ingress",
                               "task_checkpoint_settlement",
                               "task_auxiliary_settlement",
                               "exploration",
@@ -98179,9 +97752,8 @@
                                   "goal_workload",
                                   "dispatch_lineage",
                                   "dispatch_settlement",
-                                  "operator_message_wake",
                                   "mission_acceptance_resume_receipt",
-                                  "queued_operator_wake",
+                                  "task_root_ingress",
                                   "task_checkpoint_settlement",
                                   "task_auxiliary_settlement",
                                   "exploration",
@@ -105441,21 +105013,12 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "current_owner_ingress_id": {
-                      "pattern": "^art.*",
-                      "type": "string"
-                    },
                     "ingress_id": {
                       "pattern": "^art.*",
                       "type": "string"
                     },
                     "message": {
                       "type": "string"
-                    },
-                    "queue_position": {
-                      "exclusiveMinimum": 0,
-                      "maximum": 9007199254740991,
-                      "type": "integer"
                     },
                     "user_message": {
                       "properties": {
@@ -105478,7 +105041,6 @@
                     "wake_status": {
                       "enum": [
                         "accepted",
-                        "queued",
                         "not_woken"
                       ],
                       "type": "string"
@@ -110742,7 +110304,7 @@
     },
     "/task/{taskID}/session/{sessionID}/cancel": {
       "post": {
-        "description": "Abort the active SessionLoop for a non-orchestrator task agent session. For projected child sessions, also cancel their owned SessionPrompt and queued prompt work.",
+        "description": "Abort the active SessionLoop for a non-orchestrator task agent session. For projected child sessions, also cancel their owned SessionPrompt and durable Task ingress delivery.",
         "operationId": "task.session.cancel",
         "parameters": [
           {
@@ -110972,10 +110534,7 @@
                       "type": "string"
                     },
                     "wake_status": {
-                      "enum": [
-                        "accepted",
-                        "queued"
-                      ],
+                      "const": "accepted",
                       "type": "string"
                     }
                   },

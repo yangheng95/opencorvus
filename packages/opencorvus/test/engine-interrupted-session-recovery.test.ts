@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { listInterruptedSessionEvidence } from "@/engine/queue"
+import { listInterruptedSessionEvidence } from "@/engine/task-root-ingress-delivery"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { findTask } from "@/engine/store"
 import { publishTaskAgentCancellationStatusesAfterSettlement } from "@/engine/task-agent-lifecycle"

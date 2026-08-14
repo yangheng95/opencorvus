@@ -143,7 +143,6 @@ type RuntimeContractOwner = {
 }
 
 const runtimeContractOwners = new Map<string, Map<symbol, RuntimeContractOwner>>()
-const messageWriteOwners = new Map<string, symbol>()
 const runtimeWakeSettlementWaiters = new Map<
   string,
   Map<SessionRuntimeContract, Set<{ resolve: () => void; reject: (error: Error) => void }>>
@@ -579,24 +578,7 @@ export namespace SessionRuntimeContractStore {
     sessionID: string,
     expectedContract: SessionRuntimeContract | undefined,
   ): Disposable {
-    if (messageWriteOwners.has(sessionID)) {
-      throw new Error(`Session message commit already owns runtime contract ${sessionID}`)
-    }
-    const token = Symbol(sessionID)
-    messageWriteOwners.set(sessionID, token)
-    let runtimeOwnership: Disposable
-    try {
-      runtimeOwnership = claimOperation(sessionID, expectedContract, "message commit")
-    } catch (error) {
-      if (messageWriteOwners.get(sessionID) === token) messageWriteOwners.delete(sessionID)
-      throw error
-    }
-    return {
-      [Symbol.dispose]: () => {
-        runtimeOwnership[Symbol.dispose]()
-        if (messageWriteOwners.get(sessionID) === token) messageWriteOwners.delete(sessionID)
-      },
-    }
+    return claimOperation(sessionID, expectedContract, "message commit")
   }
 
   export function setAndClaimMessageWrite(

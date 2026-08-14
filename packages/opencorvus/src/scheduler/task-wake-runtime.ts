@@ -1,6 +1,6 @@
 import type { OrchestratorEvent } from "@/orchestrator/event"
 
-export type TaskWakeDispatchResult = "started" | "queued" | "ignored"
+export type TaskWakeDispatchResult = "accepted" | "ignored"
 
 export interface TaskWakeRuntime {
   consumePendingTaskWaits(input: {

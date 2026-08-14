@@ -50,6 +50,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "RequestOriginForbiddenError") return 403
   if (err.name === "InvalidInitGitParameterError") return 400
   if (err.name === "OwnedPromptControllersError") return 409
+  if (err.name === "PublicSessionPromptIdentityConflictError") return 409
   if (err.name === "AnonymousProjectPromotionError") return 400
   if (err.name === "InvalidDirectoryError") return 400
   if (err.name === "ProjectDirectoryIntegrityError") return 400

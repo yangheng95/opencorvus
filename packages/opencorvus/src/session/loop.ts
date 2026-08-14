@@ -123,11 +123,7 @@ import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-hando
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
-import {
-  assertToolResultControlPreserved,
-  toolResultControl,
-  toolResultDisposition,
-} from "./tool-result-control"
+import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
 import {
   bindToolExecutionMode,
   ToolTurnExecutionCoordinator,
@@ -181,7 +177,8 @@ export namespace SessionLoop {
     }
   }
 
-  const { log, state, cancel, finish, flushCallbacks, enterLoop, touch } = SessionPromptState
+  const { log, state, cancel, finish, flushCallbacks, enterLoop, touch, attachedReplyTargets, hasAttachedPromptWork } =
+    SessionPromptState
 
   type StrictAITool = AITool & { strict?: boolean }
   const resolvedToolSkillSurfaces = new WeakMap<Record<string, AITool>, ResolvedSkillSurface>()
@@ -659,7 +656,7 @@ export namespace SessionLoop {
     return new Message.PromptBudgetOverflowError({
       message:
         `${input.reason} after source user ${input.sourceUserID} already had ` +
-        `a valid structured compaction summary. Queueing another same-source ` +
+        `a valid structured compaction summary. Recording another same-source ` +
         `compaction cannot reduce the remaining filtered prompt.`,
       systemTokensEst: input.systemTokensEst,
       messagePayloadChars: input.messagePayloadChars,
@@ -1075,6 +1072,17 @@ export namespace SessionLoop {
     return { lastUser, lastAssistant, lastFinished, compactions }
   }
 
+  /** Keep later persisted inputs out of the active provider turn. */
+  function promptMessagePrefix(msgs: Message.WithParts[], replyTarget?: string): Message.WithParts[] {
+    if (!replyTarget) return msgs
+    const activeUserIndex = msgs.findIndex((message) => message.info.role === "user" && message.info.id === replyTarget)
+    if (activeUserIndex < 0) {
+      throw new Error(`Session prompt reply target ${replyTarget} is not a durable user Message`)
+    }
+    const laterUserIndex = msgs.findIndex((message, index) => index > activeUserIndex && message.info.role === "user")
+    return laterUserIndex < 0 ? msgs : msgs.slice(0, laterUserIndex)
+  }
+
   function isCompletedReplyToUserMessage(
     message: Message.WithParts,
     userMessageID: string,
@@ -1322,19 +1330,20 @@ export namespace SessionLoop {
       messages: input.msgs,
       config,
     })
-    const structuredOutputTool = input.lastUser.format?.type === "json_schema"
-      ? prepareProviderTool({
-        name: "StructuredOutput",
-        source: "structured",
-        model: input.model,
-        tool: createStructuredOutputTool({
-          schema: input.lastUser.format.schema,
-          onSuccess(output) {
-            structured = output
-          },
-        }),
-      })
-      : undefined
+    const structuredOutputTool =
+      input.lastUser.format?.type === "json_schema"
+        ? prepareProviderTool({
+            name: "StructuredOutput",
+            source: "structured",
+            model: input.model,
+            tool: createStructuredOutputTool({
+              schema: input.lastUser.format.schema,
+              onSuccess(output) {
+                structured = output
+              },
+            }),
+          })
+        : undefined
     const skillSurface = await finalizeResolvedToolSkillSurface(
       tools,
       structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
@@ -1499,7 +1508,7 @@ export namespace SessionLoop {
     // BEFORE we issue it. The historical compaction trigger only inspected
     // `lastFinished.tokens` *after* a turn returned, which means the offending
     // call had already burned the context window. We instead skip this turn
-    // and queue a compaction message; the outer loop will pick it up on the
+    // and persist a compaction control; the outer loop will pick it up on the
     // next iteration and the post-compaction continuation re-enters with a
     // shrunk history.
     //
@@ -1960,9 +1969,17 @@ export namespace SessionLoop {
       return active.value
     }
 
-    const finalizePrompt = async () => {
+    const finalizePrompt = async (replyToMessageID?: string) => {
       await SessionCompaction.prune({ sessionID })
       await SessionStatus.settleAcceptedExecutionOccurrence(sessionID, abort)
+      if (replyToMessageID) {
+        const reply = await completedReplyToUserMessage(sessionID, replyToMessageID, true)
+        if (!reply) {
+          throw new Error(`Session ${sessionID} completed without a durable reply to ${replyToMessageID}`)
+        }
+        flushCallbacks(sessionID, reply, directory, "reply", replyToMessageID)
+        return
+      }
       await flushPromptFinalMessage({ sessionID, abort, resultMode, directory })
     }
 
@@ -2005,11 +2022,17 @@ export namespace SessionLoop {
         let step = 0
         while (true) {
           const runActiveTurn = async () => {
+            let finalizedTerminalTurn = false
             while (true) {
               touch(sessionID, directory)
               log.info("loop", { step, sessionID })
               if (abort.aborted) break
-              const msgs = await Message.filterCompacted(MessageStore.stream(sessionID))
+              const durableMessages = await Message.filterCompacted(MessageStore.stream(sessionID))
+              const attachedTargets = new Set(attachedReplyTargets(sessionID, directory))
+              const replyTarget = durableMessages.find(
+                (message) => message.info.role === "user" && attachedTargets.has(message.info.id),
+              )?.info.id
+              const msgs = promptMessagePrefix(durableMessages, replyTarget)
               const { lastUser, lastAssistant, lastFinished, compactions } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
@@ -2124,7 +2147,18 @@ export namespace SessionLoop {
                       { prepareProviderTool, createStructuredOutputTool, structuredOutputToolChoice },
                     ),
                 })
-                if (result === "stop") break
+                if (result === "stop") {
+                  const completedMessages: Message.WithParts[] = []
+                  for await (const message of MessageStore.stream(sessionID)) completedMessages.push(message)
+                  const completedSummary = completedCompactionForSource(completedMessages, sourceUserMessageID)
+                  if (!completedSummary) {
+                    throw new Error(
+                      `Manual summary for source ${sourceUserMessageID} completed without a durable summary message`,
+                    )
+                  }
+                  flushCallbacks(sessionID, completedSummary, directory, "summary")
+                  break
+                }
                 continue
               }
 
@@ -2235,22 +2269,33 @@ export namespace SessionLoop {
                   abort,
                 })
               }
-              const queuedCompaction = turn === "continue" && hasPendingAutomaticCompactionControl(sessionID)
-              if (runRuntimeContractTurn && !queuedCompaction) consumeRuntimeContractTurn(sessionID)
+              const pendingCompaction = turn === "continue" && hasPendingAutomaticCompactionControl(sessionID)
+              if (runRuntimeContractTurn && !pendingCompaction) consumeRuntimeContractTurn(sessionID)
               // Fire the registered step hook (phase 3-a-4) — agents that
               // dispatch via a tool and want to abort the active generation
               // once the tool landed use this hook to fire their deferred-stop
               // signal.
               await fireStepHook(sessionID, { step, turn })
-              if (turn === "stop") break
+              if (turn === "stop") {
+                await finalizePrompt(lastUser.id)
+                if (
+                  hasAttachedPromptWork(sessionID, directory) ||
+                  SessionControl.pending(sessionID).some(isActionableSessionControl)
+                ) {
+                  step = 0
+                  continue
+                }
+                finalizedTerminalTurn = true
+                break
+              }
               continue
             }
-            return { type: "stop" as const }
+            return { type: "stop" as const, finalized: finalizedTerminalTurn }
           }
           const runAcceptedTurn = async () => {
             try {
               const outcome = await runActiveTurn()
-              if (outcome.type === "stop") await finalizePrompt()
+              if (outcome.type === "stop" && !outcome.finalized) await finalizePrompt()
               return outcome
             } catch (error) {
               try {
@@ -3085,10 +3130,7 @@ export namespace SessionLoop {
     if (!assistant.parentID) {
       throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
     }
-    if (
-      toolPart.state.status === "completed" &&
-      toolResultDisposition(completedToolControl) !== "continue"
-    ) {
+    if (toolPart.state.status === "completed" && toolResultDisposition(completedToolControl) !== "continue") {
       if (!assistantWasCompleted) {
         assistant.finish = "tool-calls"
         assistant.time.completed = Date.now()
@@ -3427,10 +3469,7 @@ export namespace SessionLoop {
       )
     }
     const selectedModel = await resolveAgentModel("orchestrator", { sessionID: task.session_id ?? undefined })
-    if (
-      selectedModel.providerID !== input.assistant.providerID ||
-      selectedModel.id !== input.assistant.modelID
-    ) {
+    if (selectedModel.providerID !== input.assistant.providerID || selectedModel.id !== input.assistant.modelID) {
       throw new PermissionAuthority.StaleContinuationError(
         input.request.id,
         "The projected scheduler model changed after restart",

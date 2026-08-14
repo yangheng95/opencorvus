@@ -21,7 +21,7 @@ const benchmarkRoot = await fs.mkdtemp(path.join(isolatedRuntime.processRoot, "a
 const projectDirectory = path.join(benchmarkRoot, "project")
 process.env.OPENCORVUS_HOME = path.join(benchmarkRoot, "home")
 const { Database } = await import("@/storage/db")
-const { waitForQueueCompletionHooksForTest } = await import("@/engine/queue")
+const { waitForIngressDeliveryHooksForTest } = await import("@/engine/task-root-ingress-delivery")
 const { Log } = await import("@/util/log")
 const { Server } = await import("@/server/server")
 const { declareNativeTaskProcessDeployment } = await import("@/runtime/task-process-deployment")
@@ -642,7 +642,7 @@ try {
 } finally {
   const cleanupFailures: unknown[] = []
   try {
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
   } catch (error) {
     cleanupFailures.push(error)
   }

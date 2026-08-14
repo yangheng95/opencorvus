@@ -221,7 +221,7 @@ export async function promptSessionMessage(input: {
     }
     const result = await apiJson(
       directoryScopedPath(
-        `session/${encodeURIComponent(input.sessionID)}/prompt_async`,
+        `session/${encodeURIComponent(input.sessionID)}/message`,
         input.directory,
         "session prompt",
       ),
@@ -229,13 +229,14 @@ export async function promptSessionMessage(input: {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          messageID: `msg_${requestID}`,
           parts: sessionPromptParts(input.text, input.attachments ?? [], input.metadata ?? {}),
           model: input.model ?? currentOpenCorvusPromptModel(),
         }),
         signal: controller.signal,
       },
     )
-    ingestPersistedConversationMessage(result.user_message)
+    ingestPersistedConversationMessage(result)
     return result
   } finally {
     if (messageStore.chatRequest?.requestID === request.requestID) {

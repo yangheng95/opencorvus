@@ -25,7 +25,7 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { MessageStore } from "../src/session/message-store"
 import { EngineService } from "../src/task-api"
-import { configureTaskLoopRunner } from "../src/engine/queue"
+import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { deriveComparisonRecommendation } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison"
 
@@ -194,7 +194,7 @@ describe("authorized expert squad evolution mutation", () => {
       await Instance.provide({
         directory: project.path,
         fn: async () => {
-          configureTaskLoopRunner(async () => {})
+          configureTaskIngressRunner(async () => {})
           const installed = await ExpertSquadPackageManager.importDirectory({
             projectDirectory: project.path,
             sourceDirectory: baselineSource,

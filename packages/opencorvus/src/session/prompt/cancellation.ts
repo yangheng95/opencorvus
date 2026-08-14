@@ -30,7 +30,6 @@ export const ExecutionCancellationSourceIdentity = z.enum([
   "panel.cancel_task",
   "orchestrator.cancel_task",
   "task.lifecycle",
-  "task.queue_timeout",
   "process.shutdown",
   "agent.parent_signal",
   "agent.coordination_signal",
@@ -58,7 +57,6 @@ export const ExecutionCancellationOrigin = z
     toolCallID: z.string().trim().min(1).optional(),
     toolPartID: z.string().trim().min(1).optional(),
     wakeID: z.string().trim().min(1).optional(),
-    queueOccurrenceID: z.string().trim().min(1).optional(),
     causationEventID: z.string().trim().min(1).optional(),
   })
   .strict()

@@ -19,7 +19,7 @@ import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package
 import { listGoalWorkloadArtifacts } from "@/engine/store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { describeTask } from "@/engine/describe"
-import { configureTaskLoopRunner, reconcileTerminalAgentLifecycleDelivery } from "@/engine/queue"
+import { configureTaskIngressRunner, reconcileTerminalAgentLifecycleDelivery } from "@/engine/task-root-ingress-delivery"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { GoalWorkloadAnalystAgent } from "@/goal-workload-analyst/agent"
 import { createGoalWorkloadOutputTools } from "@/goal-workload-analyst/output-tools"
@@ -1646,7 +1646,7 @@ describe("Goal Workload coverage contract", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(async () => {})
+        configureTaskIngressRunner(async () => {})
         const task = await createTaskFixture("Production startup Workload recovery")
         const goalID = Identifier.ascending("goal")
         persistGoalGraph({ taskID: task.taskID, goalIDs: [goalID], now: task.now + 1 })

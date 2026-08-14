@@ -50,7 +50,7 @@ export function assertMissionExpertSquadSnapshot(
 /**
  * Project the fixed Mission control-plane capability onto a user prompt.
  * Mission is an independent panel runtime; caller ingress provenance does not
- * decide this authorization and queue transport must only preserve it.
+ * decide this authorization and durable ingress transport must only preserve it.
  */
 export function applyMissionControlPromptOverlay<T extends Omit<SessionPrompt.PromptInput, "sessionID">>(prompt: T): T {
   return {

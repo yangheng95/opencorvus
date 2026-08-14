@@ -33,24 +33,12 @@ type OperatorIngressPresentation = { label: string; tone: BadgeTone; state: stri
 function operatorIngressPresentation(messageID: string | undefined): OperatorIngressPresentation | undefined {
   if (!messageID || boardStore.selectedSource?.kind !== "task") return undefined
   const artifact = boardStore.board?.artifacts.find(
-    (item: any) => item.kind === "queued_operator_wake" && item.payload?.message_id === messageID,
+    (item: any) => item.kind === "task_root_ingress" && item.payload?.message_id === messageID,
   )
   if (!artifact) return undefined
-  if (artifact.label === "pending") {
-    const position = Number(artifact.payload?.queue_position)
-    const owner = String(artifact.payload?.current_owner_ingress_id ?? "").trim()
-    return {
-      label:
-        Number.isInteger(position) && position > 0
-          ? t("task.ingress.queued_position", { position })
-          : t("task.ingress.queued"),
-      tone: "muted",
-      state: "queued",
-      title: owner ? t("task.ingress.current_owner", { owner }) : undefined,
-    }
-  }
-  if (artifact.label === "running") return { label: t("task.ingress.running"), tone: "accent", state: "running" }
-  if (artifact.label === "drained") return { label: t("task.ingress.delivered"), tone: "ok", state: "delivered" }
+  if (artifact.label === "accepted") return { label: t("task.ingress.accepted"), tone: "muted", state: "accepted" }
+  if (artifact.label === "delivering") return { label: t("task.ingress.delivering"), tone: "accent", state: "delivering" }
+  if (artifact.label === "delivered") return { label: t("task.ingress.delivered"), tone: "ok", state: "delivered" }
   if (artifact.label === "terminal_inapplicable") {
     return { label: t("task.ingress.cancelled"), tone: "muted", state: "cancelled" }
   }

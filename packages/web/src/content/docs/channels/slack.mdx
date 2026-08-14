@@ -84,7 +84,7 @@ ChannelRuntime.handleMessage()            [packages/channel-runtime/src/core.ts]
   ↓
 SessionCoordinator.get("slack:C...:123")
   ↓  new thread → new session; existing → reuse
-client.session.promptAsync(sessionId, message)
+client.session.prompt(sessionId, message)
 ```
 
 Thread semantics: Slack's `thread_ts` uniquely identifies a conversation; subsequent messages in the same thread are injected as **follow-ups** into the same task loop.
@@ -97,7 +97,7 @@ OpenCorvus SSE pushes events
 handleEvent(event)                        [packages/channel-runtime/src/core.ts]
   ↓
 message.updated    → text buffering → safeSend()
-session.idle       → release the current request and dequeue the next message
+assistant completed → settle the direct prompt request
 part.updated(image) → uploadImage() via files.uploadV2
 permission.asked   → auto-reply if enabled; otherwise @ user
 ```

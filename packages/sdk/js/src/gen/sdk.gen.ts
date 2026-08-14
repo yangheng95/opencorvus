@@ -477,10 +477,6 @@ import type {
   SessionMessageResponses,
   SessionMessagesErrors,
   SessionMessagesResponses,
-  SessionPromptAsyncErrors,
-  SessionPromptAsyncResponses,
-  SessionPromptAsyncStatusErrors,
-  SessionPromptAsyncStatusResponses,
   SessionPromptErrors,
   SessionPromptResponses,
   SessionShellErrors,
@@ -1427,7 +1423,7 @@ export class Session extends HeyApiClient {
   /**
    * Abort right sidebar Chat session
    *
-   * Stop active and queued processing for a project-bound right sidebar Chat session.
+   * Stop active processing for a project-bound right sidebar Chat session.
    */
   public abort<ThrowOnError extends boolean = false>(
     parameters: {
@@ -1814,7 +1810,7 @@ export class Session2 extends HeyApiClient {
   /**
    * Abort right sidebar Work session
    *
-   * Stop active and queued processing for a project-bound right sidebar Work session.
+   * Stop active processing for a project-bound right sidebar Work session.
    */
   public abort<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6937,7 +6933,7 @@ export class Session3 extends HeyApiClient {
   /**
    * Cancel a task agent session
    *
-   * Abort the active SessionLoop for a non-orchestrator task agent session. For projected child sessions, also cancel their owned SessionPrompt and queued prompt work.
+   * Abort the active SessionLoop for a non-orchestrator task agent session. For projected child sessions, also cancel their owned SessionPrompt and durable Task ingress delivery.
    */
   public cancel<ThrowOnError extends boolean = false>(
     parameters: {
@@ -12016,92 +12012,6 @@ export class Session4 extends HeyApiClient {
     )
     return (options?.client ?? this.client).get<SessionMessageResponses, SessionMessageErrors, ThrowOnError>({
       url: "/session/{sessionID}/message/{messageID}",
-      ...options,
-      ...params,
-    })
-  }
-
-  /**
-   * Send async message
-   *
-   * Create and send a new message to a standalone, Mission, or Coding Assistant session asynchronously, starting the session if needed and returning immediately. Projected worker guidance uses the task-scoped operator-steer route.
-   */
-  public promptAsync<ThrowOnError extends boolean = false>(
-    parameters: {
-      sessionID: string
-      directory?: string
-      agent?: string
-      format?: OutputFormat
-      messageID?: string
-      model?: {
-        modelID: string
-        providerID: string
-      }
-      parts: Array<TextPartInput | FilePartInput>
-      variant?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "sessionID" },
-            { in: "query", key: "directory" },
-            { in: "body", key: "agent" },
-            { in: "body", key: "format" },
-            { in: "body", key: "messageID" },
-            { in: "body", key: "model" },
-            { in: "body", key: "parts" },
-            { in: "body", key: "variant" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).post<SessionPromptAsyncResponses, SessionPromptAsyncErrors, ThrowOnError>({
-      url: "/session/{sessionID}/prompt_async",
-      ...options,
-      ...params,
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers,
-        ...params.headers,
-      },
-    })
-  }
-
-  /**
-   * Get async prompt task status
-   *
-   * Get status for a previously submitted async prompt task.
-   */
-  public promptAsyncStatus<ThrowOnError extends boolean = false>(
-    parameters: {
-      sessionID: string
-      taskID: string
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "sessionID" },
-            { in: "path", key: "taskID" },
-            { in: "query", key: "directory" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).get<
-      SessionPromptAsyncStatusResponses,
-      SessionPromptAsyncStatusErrors,
-      ThrowOnError
-    >({
-      url: "/session/{sessionID}/prompt_async/{taskID}",
       ...options,
       ...params,
     })

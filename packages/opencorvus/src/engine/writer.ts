@@ -6,7 +6,7 @@ import { Instance } from "@/project/instance"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "./cancellation-scope"
 import { taskIDForSession } from "./task-session-lineage"
 import { findTask } from "./store"
-import { persistProcessShutdownRecoveryHandoffs } from "./queue"
+import { persistProcessShutdownRecoveryHandoffs } from "./task-root-ingress-delivery"
 import { Database, and, eq, inArray, isNull } from "@/storage/db"
 import { EngineTaskTable } from "./engine.sql"
 import { SessionTable } from "@/session/session.sql"
@@ -152,7 +152,7 @@ export async function terminateCurrentProcessOwnedExecution(input: {
   try {
     // Freeze every Task root in each affected serialization directory before
     // persisting one handoff occurrence and recovery wake per physically owned
-    // Task. This closes both re-entry and queued-sibling launch races while the
+    // Task. This closes both re-entry and concurrent-sibling launch races while the
     // current process settles its owners.
     for (const rootSessionID of new Set(affectedRootSessionIDs)) {
       const taskID = taskIDForSession(rootSessionID)

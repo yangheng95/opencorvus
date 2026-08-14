@@ -159,7 +159,7 @@ Before the first dispatch in a decision epoch:
 3. remove nodes blocked by a real shared mutation or resource conflict;
 4. dispatch every remaining independent node up to capacity.
 
-`dispatch_agent` starts the selected worker immediately. No hidden Host layer queues it behind Delivery Slices or ContractGraph relations.
+`dispatch_agent` starts the selected worker immediately. No hidden Host layer delays it behind Delivery Slices or ContractGraph relations.
 
 A selected workflow node has one logical occurrence per Task. The occurrence becomes committed only with its immutable dispatch lineage and Worker Turn descriptor; a created-only physical Session is audit evidence, not a logical occurrence or continuation authority. A dependency-ready node with `occurrence_status=occurrence_not_committed` uses its one `turn.kind=initial` dispatch. Once committed, later Turns continue that exact lineage through its listed dispatch ID and never allocate a second node occurrence. Build cannot manufacture another mandatory node's terminal-success evidence or owned Artifact. The phase-closure exception is the exact active package Build or final-delivery owner: after every mandatory predecessor and the owner's initial occurrence have terminal-success evidence, a downstream blocking finding exposes recoverable product or final-deliverable work owned by that Agent. Inspect immutable dispatch lineage before dispatch: if no phase-closure occurrence exists, dispatch that exact owner once with the complete bounded evidence; if one exists, continue that closure lineage and never allocate another. After closure changes the product or deliverable evidence, identify every affected Test, Visual, Interface Integrity, System Integrity, or other independent verification lineage whose latest judgment predates the change or reported an affected finding, and continue all dependency-independent affected lineages in the same response up to capacity. These are new evidence Turns on the original logical occurrences, not a second workflow round. Do not repeat unaffected Requirements, Research, Architect, or Workload evidence. An Integrity `concerns` verdict whose findings are all `advisory` is acceptable improvement evidence: complete from the remaining acceptance evidence without dispatching Build for those findings. Never substitute `universal-build` for a package-owned owner or let a review-only worker edit the product.
 
@@ -199,7 +199,7 @@ Complete the Task only when the whole request is supported. Call `manage_task ac
 - every exact user-consumable Artifact in `deliverable_artifact_locators`;
 - every accepted current Delivery Slice revision ID.
 
-Use an empty deliverable list only when the Task truthfully produced no Artifact deliverable. Internal lifecycle, queue, coordination, or error facts are not deliverables unless the operator requested them as the output.
+Use an empty deliverable list only when the Task truthfully produced no Artifact deliverable. Internal lifecycle, ingress, coordination, or error facts are not deliverables unless the operator requested them as the output.
 
 There is no prose-only completion, `deliver`, or host-owned final acceptance object.
 

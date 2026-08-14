@@ -155,7 +155,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("cb2dcc068c60375bb3565c447b5589467f55db6ebebf09ffbf7c9c371e6705ae")
+    expect(mysqlSchemaFingerprint()).toBe("5492a41b0788675adf49594dd7246ea414a6be122c75b39fd7acbd7df5babad6")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )
@@ -206,6 +206,31 @@ test("returns the reset-required database contract for an older schema", async (
       code: "SCHEMA_RESET_REQUIRED",
     })
     expect(captured.data.message).toContain("pre-release builds do not patch older schemas")
+  } finally {
+    rebuildTestDatabase()
+  }
+})
+
+test("returns the reset-required contract for an unexpected legacy application table", async () => {
+  const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
+  try {
+    rebuildTestDatabase()
+    Database.rebuildSqlite((sqlite) =>
+      sqlite.run('CREATE TABLE "a2a_task_queue" ("id" text PRIMARY KEY NOT NULL)'),
+    )
+    let captured: unknown
+    try {
+      Database.Client()
+    } catch (error) {
+      captured = error
+    }
+    expect(DatabaseUnavailableError.isInstance(captured)).toBe(true)
+    if (!DatabaseUnavailableError.isInstance(captured)) return
+    expect(captured.data).toMatchObject({
+      operation: "Database.Client.schemaValidation",
+      code: "SCHEMA_RESET_REQUIRED",
+    })
+    expect(captured.data.message).toContain("unexpected schema object table:a2a_task_queue")
   } finally {
     rebuildTestDatabase()
   }

@@ -23,60 +23,10 @@ import { Instance, InstanceSettlementInactivityError } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageTable } from "@/session/session.sql"
 import { SessionWake } from "@/session/wake"
-import { TaskQueueTable } from "@/scheduler/task-queue.sql"
-import {
-  TaskQueueProcessRollbackRecoveryError,
-  TaskQueueService,
-} from "@/scheduler/task-queue-service"
 import { Database, eq } from "@/storage/db"
 import { ProjectGitLock } from "@/worktree/git-lock"
 import { withKeyedLock } from "@/util/lock"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-
-async function prepareTaskQueueProcessRollback(directory: string) {
-  return await Instance.provide({
-    directory,
-    fn: async () => {
-      const session = await Session.createNext({ directory, kind: "assistant", title: "queue rollback receipt" })
-      const taskID = Identifier.ascending("task")
-      const now = Date.now()
-      Database.use((db) =>
-        db
-          .insert(TaskQueueTable)
-          .values({
-            id: taskID,
-            session_id: session.id,
-            prompt: "queue rollback receipt",
-            priority: "normal",
-            status: "queued",
-            source: "queue-rollback-receipt-contract",
-            metadata: { kind: "invalid-after-claim" },
-            time_created: now,
-            time_updated: now,
-          })
-          .run(),
-      )
-      expect(await TaskQueueService.TestHooks.claimReadyTaskIDs({ limit: 1 })).toEqual([taskID])
-      let releasePhysical!: () => void
-      const physicalSettlement = new Promise<void>((resolve) => (releasePhysical = resolve))
-      const disposition = TaskQueueService.TestHooks.trackRecoverableExecution({ taskID, physicalSettlement })
-      const queueGate = TaskQueueService.acquireProcessSettlementGate()
-      const runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
-      runtimeGate.closeAdmission(["task_queue"])
-      runtimeGate.requestCancellation(["task_queue"], new Error("rollback receipt handoff"))
-      await TaskQueueService.TestHooks.waitForRecoveryCancellation(taskID)
-      releasePhysical()
-      await disposition
-      await runtimeGate.waitForIdle(["task_queue"])
-      expect(TaskQueueService.getStatusByID(taskID)?.status).toBe("queued")
-      const rollback = queueGate.rollback()
-      await Instance.dispose()
-      queueGate[Symbol.dispose]()
-      runtimeGate[Symbol.dispose]()
-      return { taskID, rollback }
-    },
-  })
-}
 
 describe("runtime execution settlement authority", () => {
   test("returns shutdown cancellation and admits a successor after owner release", async () => {
@@ -96,8 +46,8 @@ describe("runtime execution settlement authority", () => {
       controller.signal,
     )
 
-    controller.abort(new Error("shutdown cancelled queued owner"))
-    await expect(queued).rejects.toThrow("shutdown cancelled queued owner")
+    controller.abort(new Error("shutdown cancelled pending owner"))
+    await expect(queued).rejects.toThrow("shutdown cancelled pending owner")
     releaseOwner()
     await owner
     const successor = await withKeyedLock(locks, "project-memory", async () => "successor-acquired")
@@ -298,7 +248,7 @@ describe("runtime execution settlement authority", () => {
     const ownerSettlement = new Promise<void>((resolve) => {
       releaseOwner = resolve
     })
-    const reservation = RuntimeExecutionSettlement.reserve("task_queue", "timing-contract")
+    const reservation = RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "timing-contract")
     reservation.onCancel((reason) => {
       events.push(`cancel:${reason instanceof Error ? reason.message : String(reason)}`)
     })
@@ -309,9 +259,9 @@ describe("runtime execution settlement authority", () => {
     )
 
     using gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_queue"])
-    gate.requestCancellation(["task_queue"], new Error("runtime handoff"))
-    const gateSettlement = gate.waitForIdle(["task_queue"]).then(() => {
+    gate.closeAdmission(["task_root_ingress_delivery"])
+    gate.requestCancellation(["task_root_ingress_delivery"], new Error("runtime handoff"))
+    const gateSettlement = gate.waitForIdle(["task_root_ingress_delivery"]).then(() => {
       events.push("gate:settled")
     })
     releaseOwner()
@@ -340,13 +290,13 @@ describe("runtime execution settlement authority", () => {
 
   test("reopens admission under the same gate token and starts the registered durable rescan", () => {
     const events: string[] = []
-    using _reopen = RuntimeExecutionSettlement.onAdmissionReopened("task_queue", () => {
+    using _reopen = RuntimeExecutionSettlement.onAdmissionReopened("task_root_ingress_delivery", () => {
       events.push("admission:reopened")
-      RuntimeExecutionSettlement.reserve("task_queue", "durable-rescan").settle()
+      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "durable-rescan").settle()
       events.push("rescan:accepted")
     })
     const gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_queue"])
+    gate.closeAdmission(["task_root_ingress_delivery"])
     events.push("admission:closed")
     gate[Symbol.dispose]()
 
@@ -355,31 +305,31 @@ describe("runtime execution settlement authority", () => {
 
   test("restores every owned admission and reports an aggregate when one reopen listener fails", () => {
     const events: string[] = []
-    using _failing = RuntimeExecutionSettlement.onAdmissionReopened("task_queue", () => {
-      events.push("task-queue:reopened")
-      throw new Error("injected Task Queue rescan failure")
+    using _failing = RuntimeExecutionSettlement.onAdmissionReopened("task_root_ingress_delivery", () => {
+      events.push("task-ingress:reopened")
+      throw new Error("injected Task ingress rescan failure")
     })
     using _succeeding = RuntimeExecutionSettlement.onAdmissionReopened("task_cancellation", () => {
       events.push("task-cancellation:reopened")
     })
     const gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_queue", "task_cancellation"])
+    gate.closeAdmission(["task_root_ingress_delivery", "task_cancellation"])
     let releaseError: unknown
     try {
       gate[Symbol.dispose]()
     } catch (error) {
       releaseError = error
     }
-    RuntimeExecutionSettlement.reserve("task_queue", "post-failure-queue-admission").settle()
+    RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "post-failure-ingress-admission").settle()
     RuntimeExecutionSettlement.reserve("task_cancellation", "post-failure-cancellation-admission").settle()
     events.push("post-failure:admitted")
 
     expect({ events, releaseError }).toMatchObject({
-      events: ["task-queue:reopened", "task-cancellation:reopened", "post-failure:admitted"],
+      events: ["task-ingress:reopened", "task-cancellation:reopened", "post-failure:admitted"],
       releaseError: {
         name: "AggregateError",
         message: "Runtime execution admission reopen listeners failed",
-        errors: [expect.objectContaining({ message: "injected Task Queue rescan failure" })],
+        errors: [expect.objectContaining({ message: "injected Task ingress rescan failure" })],
       },
     })
   })
@@ -529,242 +479,6 @@ describe("runtime execution settlement authority", () => {
     }
   })
 
-  test("cancels a claimed queue execution before Prompt owner capture and settles its runtime gate", async () => {
-    const { TaskQueueService } = await import("@/scheduler/task-queue-service")
-    const events: string[] = []
-    let enteredPromptStart!: () => void
-    const promptStartEntered = new Promise<void>((resolve) => {
-      enteredPromptStart = resolve
-    })
-    using _promptStart = TaskQueueService.TestHooks.installBeforeQueuePromptStart(async (signal) => {
-      events.push("prompt-start:entered")
-      enteredPromptStart()
-      await new Promise<void>((resolve) => {
-        const cancelled = () => {
-          events.push("prompt-start:cancelled")
-          resolve()
-        }
-        if (signal.aborted) cancelled()
-        else signal.addEventListener("abort", cancelled, { once: true })
-      })
-    })
-    const execution = TaskQueueService.TestHooks.runClaimedPromptStart({
-      taskID: "task_claim_time_contract",
-      sessionID: "ses_claim_time_contract",
-      directory: "D:/claim-time-contract",
-    }).catch((error) => {
-      events.push(`execution:${error instanceof Error ? error.message : String(error)}`)
-    })
-    await promptStartEntered
-
-    using gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_queue"])
-    gate.requestCancellation(["task_queue"], new Error("claim-time runtime handoff"))
-    const settlement = gate.waitForIdle(["task_queue"]).then(() => {
-      events.push("gate:settled")
-    })
-    await Promise.all([execution, settlement])
-
-    expect(events).toEqual([
-      "prompt-start:entered",
-      "prompt-start:cancelled",
-      "execution:claim-time runtime handoff",
-      "gate:settled",
-    ])
-  }, 30_000)
-
-  test("closes Task Queue admission before claim and reclaims the same durable row after reopen", async () => {
-    const [{ Instance }, { TaskQueueService }, { Session }, { TaskQueueTable }, { Database }, { Identifier }] =
-      await Promise.all([
-        import("@/project/instance"),
-        import("@/scheduler/task-queue-service"),
-        import("@/session"),
-        import("@/scheduler/task-queue.sql"),
-        import("@/storage/db"),
-        import("@/id/id"),
-      ])
-    const [{ mkdtemp, rm }, { tmpdir }, path, { execFileSync }] = await Promise.all([
-      import("node:fs/promises"),
-      import("node:os"),
-      import("node:path"),
-      import("node:child_process"),
-    ])
-    const directory = await mkdtemp(path.default.join(tmpdir(), "opencorvus-queue-preclaim-"))
-    execFileSync("git", ["init"], { cwd: directory, stdio: "ignore" })
-    try {
-      const handoff = await Instance.provide({
-        directory,
-        fn: async () => {
-          const session = await Session.createNext({ directory, kind: "assistant", title: "preclaim authority" })
-          const taskID = Identifier.ascending("task")
-          const now = Date.now()
-          Database.use((db) =>
-            db.insert(TaskQueueTable).values({
-              id: taskID,
-              session_id: session.id,
-              prompt: "preclaim authority",
-              priority: "normal",
-              status: "queued",
-              source: "preclaim-authority-contract",
-              metadata: { kind: "session_prompt", input: {} },
-              time_created: now,
-              time_updated: now,
-            }).run(),
-          )
-          const events: string[] = []
-          let continueClaim!: () => void
-          let enteredClaim!: () => void
-          const claimEntered = new Promise<void>((resolve) => (enteredClaim = resolve))
-          using _claim = TaskQueueService.TestHooks.installBeforeQueueClaimReservation(async () => {
-            events.push("claim:validated")
-            enteredClaim()
-            await new Promise<void>((resolve) => (continueClaim = resolve))
-          })
-          const execution = TaskQueueService.runNow().catch((error) => {
-            events.push(`claim:${error instanceof Error ? error.name : String(error)}`)
-          })
-          await claimEntered
-          const gate = RuntimeExecutionSettlement.acquireSettlementGate()
-          gate.closeAdmission(["task_queue"])
-          gate.requestCancellation(["task_queue"], new Error("preclaim handoff"))
-          events.push("admission:closed")
-          continueClaim()
-          await Promise.all([execution, gate.waitForIdle(["task_queue"])])
-          gate[Symbol.dispose]()
-          events.push("admission:reopened")
-          const claimed = await TaskQueueService.TestHooks.claimReadyTaskIDs({ limit: 1 })
-          events.push(`claim:accepted:${claimed[0]}`)
-          let releasePhysical!: () => void
-          const physicalSettlement = new Promise<void>((resolve) => (releasePhysical = resolve))
-          const disposition = TaskQueueService.TestHooks.trackRecoverableExecution({ taskID, physicalSettlement })
-          const handoffGate = RuntimeExecutionSettlement.acquireSettlementGate()
-          handoffGate.closeAdmission(["task_queue"])
-          handoffGate.requestCancellation(["task_queue"], new Error("graceful runtime handoff"))
-          const cancellation = await TaskQueueService.TestHooks.waitForRecoveryCancellation(taskID)
-          events.push(`handoff:cancel:${cancellation}`)
-          releasePhysical()
-          const handoffDisposition = await disposition
-          events.push(`handoff:${handoffDisposition?.name}`)
-          await handoffGate.waitForIdle(["task_queue"])
-          events.push(`handoff:${TaskQueueService.getStatusByID(taskID)?.status}`)
-          await Instance.dispose()
-          handoffGate[Symbol.dispose]()
-
-          return { events, taskID, handoffDisposition }
-        },
-      })
-      const resumed = await Instance.provide({
-        directory,
-        fn: async () => {
-          const claimed = await TaskQueueService.TestHooks.claimReadyTaskIDs({ limit: 1 })
-          return { claimed, row: TaskQueueService.getStatusByID(handoff.taskID) }
-        },
-      })
-      expect({ ...handoff, resumed }).toMatchObject({
-            events: [
-              "claim:validated",
-              "admission:closed",
-              "claim:RuntimeExecutionAdmissionClosedError",
-              "admission:reopened",
-              `claim:accepted:${handoff.taskID}`,
-              "handoff:cancel:graceful runtime handoff",
-              "handoff:RuntimeExecutionHandoffCancellation",
-              "handoff:queued",
-            ],
-            handoffDisposition: {
-              name: "RuntimeExecutionHandoffCancellation",
-              taskID: handoff.taskID,
-              queueOccurrenceID: handoff.taskID,
-              reason: "graceful runtime handoff",
-            },
-            resumed: {
-              claimed: [handoff.taskID],
-              row: { taskID: handoff.taskID, status: "running" },
-            },
-          })
-    } finally {
-      await Instance.disposeAll()
-      await rm(directory, { recursive: true, force: true })
-    }
-  }, 30_000)
-
-  test("awaits the exact held Task Queue drain before rollback settlement completes", async () => {
-    await using project = await memoryProject()
-    let releaseClaim!: () => void
-    let claimEntered!: () => void
-    const entered = new Promise<void>((resolve) => (claimEntered = resolve))
-    const claimHook = TaskQueueService.TestHooks.installBeforeQueueClaimReservation(async () => {
-      claimEntered()
-      await new Promise<void>((resolve) => (releaseClaim = resolve))
-    })
-    try {
-      const receipt = await prepareTaskQueueProcessRollback(project.path)
-      let settled = false
-      const rollback = receipt.rollback().then(() => {
-        settled = true
-      })
-      await entered
-      await Bun.sleep(20)
-      expect(settled).toBe(false)
-      releaseClaim()
-      await rollback
-      expect({ settled, row: TaskQueueService.getStatusByID(receipt.taskID) }).toMatchObject({
-        settled: true,
-        row: { taskID: receipt.taskID, status: "failed" },
-      })
-    } finally {
-      claimHook[Symbol.dispose]()
-      await Instance.disposeAll()
-      await resetMemoryDatabase()
-    }
-  }, 30_000)
-
-  test("returns typed aggregate recovery failure and retries the same Task Queue rollback receipt", async () => {
-    await using project = await memoryProject()
-    let releaseClaim!: () => void
-    const claimHook = TaskQueueService.TestHooks.installBeforeQueueClaimReservation(
-      async () => await new Promise<void>((resolve) => (releaseClaim = resolve)),
-    )
-    const recoveryHook = TaskQueueService.TestHooks.installBeforeProcessRollbackRecovery(({ directory, taskIDs }) => {
-      throw new Error(`injected rollback recovery failure for ${directory}:${taskIDs.join(",")}`)
-    })
-    try {
-      const receipt = await prepareTaskQueueProcessRollback(project.path)
-      let failure: unknown
-      try {
-        await receipt.rollback()
-      } catch (error) {
-        failure = error
-      }
-      expect(failure).toMatchObject({
-        name: "AggregateError",
-        message: "Failed to resume Task Queue projects after runtime rollback",
-        errors: [
-          {
-            name: "TaskQueueProcessRollbackRecoveryError",
-            directory: project.path,
-            taskIDs: [receipt.taskID],
-          },
-        ],
-      })
-      expect((failure as AggregateError).errors[0]).toBeInstanceOf(TaskQueueProcessRollbackRecoveryError)
-      expect(TaskQueueService.getStatusByID(receipt.taskID)?.status).toBe("queued")
-      recoveryHook[Symbol.dispose]()
-      const retry = receipt.rollback()
-      releaseClaim()
-      await retry
-      expect(TaskQueueService.getStatusByID(receipt.taskID)).toMatchObject({
-        taskID: receipt.taskID,
-        status: "failed",
-      })
-    } finally {
-      recoveryHook[Symbol.dispose]()
-      claimHook[Symbol.dispose]()
-      await Instance.disposeAll()
-      await resetMemoryDatabase()
-    }
-  }, 30_000)
-
   test("settles a durable Session wake loop before the runtime gate releases ownership", async () => {
     await using project = await memoryProject()
     const events: string[] = []
@@ -866,7 +580,7 @@ describe("runtime execution settlement authority", () => {
       releaseBridge()
       await trackedBridge
       await awaitTaskMessageProtocolBridgeIdle()
-      RuntimeExecutionSettlement.reserve("task_queue", "late-bridge-rollback-admission").settle()
+      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "late-bridge-rollback-admission").settle()
 
       expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(occurrenceID)
     } finally {

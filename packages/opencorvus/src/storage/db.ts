@@ -649,7 +649,7 @@ function assertCurrentDataIntegrity(
     sqlite,
     `SELECT id
      FROM engine_artifact
-     WHERE kind = 'queued_operator_wake'
+     WHERE kind = 'task_root_ingress'
        AND CASE
          WHEN json_valid(payload) = 0 THEN 1
          WHEN json_type(payload, '$.task_occurrence_started_at') IS NULL THEN 1

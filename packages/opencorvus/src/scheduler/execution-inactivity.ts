@@ -25,7 +25,7 @@ export async function createSchedulerExecutionInactivityFence(input: {
   const configured =
     timeoutForTest ??
     (await (input.configurationOwner === "global" ? EngineConfig.getGlobal() : EngineConfig.get())).activity
-      .task_queue_run_timeout_ms
+      .execution_progress_idle_ms
   if (!Number.isInteger(configured) || configured <= 0) {
     throw new Error(`Invalid scheduler execution inactivity timeout ${configured}`)
   }

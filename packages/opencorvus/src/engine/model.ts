@@ -561,10 +561,8 @@ const MessageVisibleWithPartsArray = z.lazy(() => Message.VisibleWithParts.array
 
 export const TaskMessageResult = z.object({
   message: z.string(),
-  wake_status: z.enum(["accepted", "queued", "not_woken"]),
+  wake_status: z.enum(["accepted", "not_woken"]),
   ingress_id: Identifier.schema("artifact").optional(),
-  queue_position: z.number().int().positive().optional(),
-  current_owner_ingress_id: Identifier.schema("artifact").optional(),
   /** The persisted user `Message` row + parts the server just wrote.
    *  Returned so the overlay can insert the real message into its store
    *  immediately (no client-side synthetic placeholder; rule 22). The
@@ -1138,7 +1136,7 @@ export const AgentSessionOperatorSteerResult = z.object({
   task_id: Identifier.schema("task"),
   session_id: Identifier.schema("session"),
   request_id: Identifier.schema("artifact"),
-  wake_status: z.enum(["accepted", "queued"]),
+  wake_status: z.literal("accepted"),
 })
 
 export const AgentSessionCancelResult = z.object({

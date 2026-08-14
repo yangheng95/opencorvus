@@ -1501,7 +1501,7 @@ export const EngineRoutes = lazy(() =>
         summary: "Cancel a task agent session",
         description:
           "Abort the active SessionLoop for a non-orchestrator task agent session. " +
-          "For projected child sessions, also cancel their owned SessionPrompt and queued prompt work.",
+          "For projected child sessions, also cancel their owned SessionPrompt and durable Task ingress delivery.",
         operationId: "task.session.cancel",
         responses: {
           200: {

@@ -33,7 +33,6 @@ import { IntegrityReviewArtifactPayloadSchema } from "@/integrity/review-artifac
 import { VisualReviewArtifactPayloadSchema } from "@/visual-qa/persist"
 import { FactCheckReviewArtifactSchema } from "@/fact-check/schema"
 import { parseProcessRecoveryFactContext } from "@/engine/process-recovery-fact"
-import { SessionPromptState } from "@/session/prompt/state"
 import { MessageTable } from "@/session/session.sql"
 
 const BOARD_SNAPSHOT_LIMIT = 80
@@ -146,11 +145,6 @@ function buildBoard(
         item.kind === "build_host_observation"
           ? compactBuildObservationPayload(item)
           : compactArtifactPayload(item.kind, item.payload)
-      const ingress = item.kind === "queued_operator_wake" ? artifactPayloadRecord(item.payload) : undefined
-      const queueProjection =
-        ingress && typeof ingress.root_session_id === "string"
-          ? SessionPromptState.rootWakeQueueProjection(ingress.root_session_id, item.id)
-          : undefined
       return {
         id: item.id,
         taskID: item.task_id,
@@ -162,13 +156,7 @@ function buildBoard(
         },
         kind: item.kind,
         label: item.label,
-        payload: queueProjection
-          ? {
-              ...(payload ?? {}),
-              queue_position: queueProjection.queuePosition,
-              current_owner_ingress_id: queueProjection.currentOwnerWakeID,
-            }
-          : payload,
+        payload,
         time: {
           created: item.time_created,
           updated: item.time_updated,

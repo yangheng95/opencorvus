@@ -2,18 +2,19 @@ import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { unlink } from "node:fs/promises"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import {
-  configureTaskLoopRunner as configureEngineTaskLoopRunner,
+  configureTaskIngressRunner as configureEngineTaskIngressRunner,
   dispatchTaskLoop,
   dispatchPersistedTaskLoop,
-  persistQueuedCoordinationWakeInTransaction,
-  persistQueuedRootMessageWakeInTransaction,
-  persistQueuedTaskIntentInTransaction,
-  persistQueuedTaskWaitWakeInTransaction,
+  persistCoordinationIngressInTransaction,
+  persistTaskRootMessageIngressInTransaction,
+  persistTaskRootIntentIngressInTransaction,
+  persistTaskWaitIngressInTransaction,
   reconcileInterruptedTaskExecutions,
-  requeueInterruptedRunningTaskIngresses,
-  TestHooks as QueueTestHooks,
-  waitForQueueCompletionHooksForTest,
-} from "@/engine/queue"
+  recoverTaskRootIngressesAfterRuntimeRollback,
+  recoverInterruptedTaskIngressDeliveries,
+  TestHooks as IngressTestHooks,
+  waitForIngressDeliveryHooksForTest,
+} from "@/engine/task-root-ingress-delivery"
 import {
   EngineArtifactTable,
   EngineChannelBindingTable,
@@ -22,7 +23,7 @@ import {
   EngineTaskTable,
 } from "@/engine/engine.sql"
 import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
-import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+import { TaskRootIngressSchema } from "@/engine/task-root-ingress"
 import { Event } from "@/engine/model"
 import { TASK_CANCELLED_EVENT_TYPE, TASK_CANCELLATION_REQUESTED_EVENT_TYPE } from "@/engine/cancellation-origin"
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
@@ -76,21 +77,21 @@ const packageRevision = {
   packageDigest: "a".repeat(64),
 }
 
-type TestTaskLoopRunner = Parameters<typeof configureEngineTaskLoopRunner>[0]
+type TestTaskLoopRunner = Parameters<typeof configureEngineTaskIngressRunner>[0]
 const testTaskLoopRunners = new Map<string, TestTaskLoopRunner>()
 
 function testInstanceKey(directory: string): string {
   return process.platform === "win32" ? directory.toLowerCase() : directory
 }
 
-function configureTaskLoopRunner(runner: TestTaskLoopRunner): void {
+function configureTaskIngressRunner(runner: TestTaskLoopRunner): void {
   testTaskLoopRunners.set(testInstanceKey(Instance.directory), runner)
-  configureEngineTaskLoopRunner(runner)
+  configureEngineTaskIngressRunner(runner)
 }
 
 async function provideTestInstance<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R>> {
   const key = testInstanceKey(input.directory)
-  using runnerOverride = QueueTestHooks.replaceTaskLoopRunner({
+  using runnerOverride = IngressTestHooks.replaceTaskIngressRunner({
     directory: input.directory,
     runner: async (args) => {
       const runner = testTaskLoopRunners.get(key)
@@ -130,7 +131,7 @@ function orchestratorProviderModel(): ProviderType.Model {
 }
 
 afterEach(async () => {
-  await waitForQueueCompletionHooksForTest()
+  await waitForIngressDeliveryHooksForTest()
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
@@ -210,12 +211,12 @@ async function createActiveTask(input: {
   return { taskID, rootSessionID: root.id }
 }
 
-function findQueuedWake(wakeID: string) {
+function findTaskRootIngress(wakeID: string) {
   return Database.use((db) =>
     db
       .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.id, wakeID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+      .where(and(eq(EngineArtifactTable.id, wakeID), eq(EngineArtifactTable.kind, "task_root_ingress")))
       .get(),
   )
 }
@@ -377,7 +378,7 @@ async function persistOperatorRootMessage(input: { taskID: string; rootSessionID
 
 async function dispatchOperatorIntent(input: { taskID: string; supersededOperatorMessageIDs: string[] }) {
   Database.transaction((db) => {
-    persistQueuedTaskIntentInTransaction(db, {
+    persistTaskRootIntentIngressInTransaction(db, {
       task: requireTask(input.taskID),
       intent: "retry",
       supersededOperatorMessageIDs: input.supersededOperatorMessageIDs,
@@ -389,7 +390,7 @@ async function dispatchOperatorIntent(input: { taskID: string; supersededOperato
 
 async function dispatchTaskWaitWake(input: { taskID: string; jobID: string }) {
   Database.transaction((db) => {
-    persistQueuedTaskWaitWakeInTransaction(db, {
+    persistTaskWaitIngressInTransaction(db, {
       taskID: input.taskID,
       projectID: Instance.project.id,
       jobID: input.jobID,
@@ -402,21 +403,75 @@ async function dispatchTaskWaitWake(input: { taskID: string; jobID: string }) {
   return dispatchPersistedTaskLoop(input.taskID)
 }
 
-function latestQueuedOperatorWake(taskID: string) {
+function latestTaskRootIngress(taskID: string) {
   const row = Database.use((db) =>
     db
       .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
       .orderBy(desc(EngineArtifactTable.time_created), desc(EngineArtifactTable.id))
       .get(),
   )
-  if (!row) throw new Error(`Task ${taskID} has no queued_operator_wake artifact`)
-  return { label: row.label, payload: QueuedTaskIngressSchema.parse(row.payload) }
+  if (!row) throw new Error(`Task ${taskID} has no task_root_ingress artifact`)
+  return { label: row.label, payload: TaskRootIngressSchema.parse(row.payload) }
 }
 
 describe.serial("active operator wake settlement", () => {
-  test("preserves typed cancellation authority before task-loop failure normalization", () => {
+  test("recovers and delivers the exact persisted ingress after a runtime handoff rolls back", async () => {
+    await using project = await memoryProject()
+    const deliveredWakeIDs: string[] = []
+    await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Runtime rollback ingress recovery",
+          request: "Recover the durable Task root ingress after listener rollback",
+        })
+        configureTaskIngressRunner(async ({ wakeID }) => {
+          if (!wakeID) throw new Error("rollback recovery runner requires an exact ingress identity")
+          deliveredWakeIDs.push(wakeID)
+          return {
+            finalMessageID: await persistFinalAssistantMessage({
+              rootSessionID,
+              taskIngress: { id: wakeID, kind: "operator_intent" },
+              text: "Recovered the exact durable ingress after runtime rollback.",
+            }),
+          }
+        })
+        let ingressID = ""
+        Database.transaction((db) => {
+          ingressID = persistTaskRootIntentIngressInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          })
+        })
+        const persisted = findTaskRootIngress(ingressID)
+        updateEngineArtifact({
+          id: ingressID,
+          label: "delivering",
+          payload: {
+            ...TaskRootIngressSchema.parse(persisted?.payload),
+            accepted_by_process_id: process.pid + 10_000,
+          },
+        })
+
+        await recoverTaskRootIngressesAfterRuntimeRollback([project.path])
+        await waitForIngressDeliveryHooksForTest()
+        expect({ ingress: findTaskRootIngress(ingressID), deliveredWakeIDs }).toMatchObject({
+          ingress: {
+            id: ingressID,
+            label: "delivered",
+            payload: { delivery_result: { status: "completed", assistant_message_id: expect.any(String) } },
+          },
+          deliveredWakeIDs: [ingressID],
+        })
+      },
+    })
+  }, 0)
+
+  test("preserves typed cancellation authority before task-ingress failure normalization", () => {
     const requestID = "req_typed_task_loop_cancellation"
     const cancellation = new ExecutionCancellationError({
       source: "session_prompt",
@@ -424,13 +479,13 @@ describe.serial("active operator wake settlement", () => {
       origin: createExecutionCancellationOrigin({
         actor: "runtime",
         source: "process.shutdown",
-        surface: "engine.queue.test",
+        surface: "engine.task-root-ingress.test",
         requestID,
         reason: "Test exact typed cancellation classification",
       }),
     })
 
-    expect(QueueTestHooks.taskLoopExitProjection(cancellation)).toEqual({
+    expect(IngressTestHooks.taskLoopExitProjection(cancellation)).toEqual({
       kind: "cancelled",
       source: "process.shutdown",
       requestID,
@@ -708,7 +763,7 @@ describe.serial("active operator wake settlement", () => {
         })
         let interruptedIngressID = ""
         Database.transaction((db) => {
-          interruptedIngressID = persistQueuedTaskIntentInTransaction(db, {
+          interruptedIngressID = persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -724,13 +779,13 @@ describe.serial("active operator wake settlement", () => {
         )
         updateEngineArtifact({
           id: interruptedIngressID,
-          label: "running",
+          label: "delivering",
           payload: {
-            ...QueuedTaskIngressSchema.parse(interruptedIngress?.payload),
-            queued_by_process_id: process.pid + 10_000,
+            ...TaskRootIngressSchema.parse(interruptedIngress?.payload),
+            accepted_by_process_id: process.pid + 10_000,
           },
         })
-        expect(await requeueInterruptedRunningTaskIngresses()).toBe(0)
+        expect(await recoverInterruptedTaskIngressDeliveries()).toBe(0)
 
         expect(
           await EngineService.cancelTask(taskID, {
@@ -840,7 +895,7 @@ describe.serial("active operator wake settlement", () => {
       fn: async () => {
         const { taskID } = await createActiveTask({
           title: "Late cancellation heartbeat fence",
-          request: "Lose the convergence lease after prompt, queue, and lifecycle settlement",
+          request: "Lose the convergence lease after prompt, ingress, and lifecycle settlement",
         })
         const origin = {
           actor: "user" as const,
@@ -899,24 +954,24 @@ describe.serial("active operator wake settlement", () => {
       fn: async () => {
         const { taskID } = await createActiveTask({
           title: "Cancellation ingress authority",
-          request: "Make every queued and later infrastructure ingress terminal under one cancellation request",
+          request: "Make every accepted and later infrastructure ingress terminal under one cancellation request",
         })
         const existingWakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
             now: Date.now(),
           }),
         )
-        expect(QueueTestHooks.startQueuedWake(existingWakeID)).toBe(true)
+        expect(IngressTestHooks.startTaskRootIngress(existingWakeID)).toBe(true)
         const infrastructureFactID = "art_cancellation_infrastructure_fact"
         let ingressAtCancellation:
           | {
               result: Awaited<ReturnType<typeof dispatchTaskLoop>>
               taskStatus: string
-              existing: ReturnType<typeof findQueuedWake>
-              infrastructure: ReturnType<typeof findQueuedWake>
+              existing: ReturnType<typeof findTaskRootIngress>
+              infrastructure: ReturnType<typeof findTaskRootIngress>
             }
           | undefined
         using _lateStage = TaskCancellationConvergenceTestHooks.installBeforeLateStage(async () => {
@@ -949,25 +1004,25 @@ describe.serial("active operator wake settlement", () => {
                 .where(
                   and(
                     eq(EngineArtifactTable.task_id, taskID),
-                    eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                    eq(EngineArtifactTable.kind, "task_root_ingress"),
                     sql`json_extract(${EngineArtifactTable.payload}, '$.infrastructure_fact_id') = ${infrastructureFactID}`,
                   ),
                 )
                 .get()?.id,
           )
           if (!infrastructureWakeID) throw new Error("Cancellation infrastructure ingress was not persisted")
-          const existingWake = findQueuedWake(existingWakeID)
-          const infrastructureWake = findQueuedWake(infrastructureWakeID)
+          const existingWake = findTaskRootIngress(existingWakeID)
+          const infrastructureWake = findTaskRootIngress(infrastructureWakeID)
           ingressAtCancellation = {
             result,
             taskStatus: deriveTaskStatus(requireTask(taskID)),
             existing: existingWake && {
               ...existingWake,
-              payload: QueuedTaskIngressSchema.parse(existingWake.payload),
+              payload: TaskRootIngressSchema.parse(existingWake.payload),
             },
             infrastructure: infrastructureWake && {
               ...infrastructureWake,
-              payload: QueuedTaskIngressSchema.parse(infrastructureWake.payload),
+              payload: TaskRootIngressSchema.parse(infrastructureWake.payload),
             },
           }
         })
@@ -1006,12 +1061,12 @@ describe.serial("active operator wake settlement", () => {
             },
           },
         })
-        QueueTestHooks.completeQueuedWake(existingWakeID, Identifier.ascending("message"))
-        const afterLateCompletion = findQueuedWake(existingWakeID)
+        IngressTestHooks.completeTaskRootIngress(existingWakeID, Identifier.ascending("message"))
+        const afterLateCompletion = findTaskRootIngress(existingWakeID)
         expect(
           afterLateCompletion && {
             label: afterLateCompletion.label,
-            payload: QueuedTaskIngressSchema.parse(afterLateCompletion.payload),
+            payload: TaskRootIngressSchema.parse(afterLateCompletion.payload),
           },
         ).toMatchObject({
           label: "terminal_inapplicable",
@@ -1053,7 +1108,7 @@ describe.serial("active operator wake settlement", () => {
           text: "Report the cancellation receipt.",
         })
         const wakeID = Database.transaction((db) =>
-          persistQueuedRootMessageWakeInTransaction(db, {
+          persistTaskRootMessageIngressInTransaction(db, {
             task: requireTask(taskID),
             messageID,
             kind: "operator",
@@ -1062,26 +1117,26 @@ describe.serial("active operator wake settlement", () => {
         )
 
         expect(await EngineService.cancelTask(taskID, { origin })).toBe(true)
-        expect(QueueTestHooks.startQueuedWake(wakeID)).toBe(true)
+        expect(IngressTestHooks.startTaskRootIngress(wakeID)).toBe(true)
         const assistantMessageID = Identifier.ascending("message")
-        QueueTestHooks.completeQueuedWake(wakeID, assistantMessageID)
+        IngressTestHooks.completeTaskRootIngress(wakeID, assistantMessageID)
 
         const requests = ProtocolStore.listTaskEvents(taskID).filter(
           (event) => event.type === TASK_CANCELLATION_REQUESTED_EVENT_TYPE,
         )
-        const settled = findQueuedWake(wakeID)
+        const settled = findTaskRootIngress(wakeID)
         expect({
           taskStatus: deriveTaskStatus(requireTask(taskID)),
           requestIDs: requests.map((event) => event.id),
           wake: settled && {
             label: settled.label,
-            payload: QueuedTaskIngressSchema.parse(settled.payload),
+            payload: TaskRootIngressSchema.parse(settled.payload),
           },
         }).toMatchObject({
           taskStatus: "cancelled",
           requestIDs: [expect.any(String)],
           wake: {
-            label: "drained",
+            label: "delivered",
             payload: {
               source_kind: "operator_message",
               message_id: messageID,
@@ -1718,7 +1773,7 @@ describe.serial("active operator wake settlement", () => {
         let started!: () => void
         const observedStart = new Promise<void>((resolve) => (started = resolve))
         let invocations = 0
-        configureTaskLoopRunner(async ({ wakeID }) => {
+        configureTaskIngressRunner(async ({ wakeID }) => {
           invocations += 1
           started()
           await released
@@ -1739,29 +1794,28 @@ describe.serial("active operator wake settlement", () => {
           },
         }
         try {
-          expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+          expect(await dispatchTaskLoop({ taskID, event })).toBe("accepted")
           await observedStart
-          expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+          expect(await dispatchTaskLoop({ taskID, event })).toBe("accepted")
         } finally {
           release()
         }
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
         const rows = Database.use((db) =>
           db
             .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
             .from(EngineArtifactTable)
-            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
             .all(),
         )
         const lifecycleRows = rows.filter(
-          (row) =>
-            QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
+          (row) => TaskRootIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
         )
         expect({
           invocations,
           occurrences: lifecycleRows.length,
           label: lifecycleRows[0]?.label,
-        }).toEqual({ invocations: 1, occurrences: 1, label: "drained" })
+        }).toEqual({ invocations: 1, occurrences: 1, label: "delivered" })
       },
     })
   })
@@ -1776,7 +1830,7 @@ describe.serial("active operator wake settlement", () => {
           request: "Settle one exact worker lifecycle delivery with visible assistant evidence",
         })
         let invocations = 0
-        configureTaskLoopRunner(async () => {
+        configureTaskIngressRunner(async () => {
           invocations += 1
           return
         })
@@ -1789,8 +1843,8 @@ describe.serial("active operator wake settlement", () => {
           },
         }
 
-        expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        expect(await dispatchTaskLoop({ taskID, event })).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
         const row = Database.use((db) =>
           db
             .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
@@ -1798,14 +1852,14 @@ describe.serial("active operator wake settlement", () => {
             .where(
               and(
                 eq(EngineArtifactTable.task_id, taskID),
-                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                eq(EngineArtifactTable.kind, "task_root_ingress"),
                 sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${event.agentLifecycleDelivery.eventID}`,
               ),
             )
             .get(),
         )!
 
-        expect({ invocations, label: row.label, ingress: QueuedTaskIngressSchema.parse(row.payload) }).toMatchObject({
+        expect({ invocations, label: row.label, ingress: TaskRootIngressSchema.parse(row.payload) }).toMatchObject({
           invocations: 1,
           label: "delivery_failed",
           ingress: {
@@ -1813,7 +1867,7 @@ describe.serial("active operator wake settlement", () => {
             delivery_attempt: 1,
             delivery_result: {
               status: "delivery_failed",
-              error_name: "QueuedWakeSettlementError",
+              error_name: "TaskRootIngressSettlementError",
               message: expect.stringContaining("completed without a final assistant message"),
             },
           },
@@ -1840,7 +1894,7 @@ describe.serial("active operator wake settlement", () => {
           },
         }
         let duplicateDispatchStatus = ""
-        configureTaskLoopRunner(async ({ event: currentEvent, wakeID }) => {
+        configureTaskIngressRunner(async ({ event: currentEvent, wakeID }) => {
           const finalMessageID = await persistFinalAssistantMessage({
             rootSessionID,
             taskIngress: { id: wakeID!, kind: "agent_lifecycle_delivery" },
@@ -1860,18 +1914,17 @@ describe.serial("active operator wake settlement", () => {
           return { finalMessageID }
         })
 
-        expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        expect(await dispatchTaskLoop({ taskID, event })).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
         const rows = Database.use((db) =>
           db
             .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
             .from(EngineArtifactTable)
-            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
             .all(),
         )
         const occurrence = rows.filter(
-          (row) =>
-            QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
+          (row) => TaskRootIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
         )
         expect({
           taskStatus: deriveTaskStatus(requireTask(taskID)),
@@ -1879,26 +1932,26 @@ describe.serial("active operator wake settlement", () => {
           occurrenceCount: occurrence.length,
           occurrenceLabel: occurrence[0]?.label,
           occurrenceDelivery: occurrence[0]
-            ? QueuedTaskIngressSchema.parse(occurrence[0].payload).delivery_result
+            ? TaskRootIngressSchema.parse(occurrence[0].payload).delivery_result
             : undefined,
-          rootWakeQueue: SessionPromptState.TestHooks.rootWakeQueueSnapshot(rootSessionID),
+          taskRootIngressOwnership: SessionPromptState.TestHooks.taskRootIngressSnapshot(rootSessionID),
         }).toEqual({
           taskStatus: "completed",
-          duplicateDispatchStatus: "started",
+          duplicateDispatchStatus: "accepted",
           occurrenceCount: 1,
-          occurrenceLabel: "drained",
+          occurrenceLabel: "delivered",
           occurrenceDelivery: {
             status: "completed",
             assistant_message_id: expect.any(String),
             time_completed: expect.any(Number),
           },
-          rootWakeQueue: undefined,
+          taskRootIngressOwnership: undefined,
         })
       },
     })
   })
 
-  test("requeues a prior-process running ingress and drains its original occurrence", async () => {
+  test("recovers a prior-process running ingress and drains its original occurrence", async () => {
     await using project = await memoryProject()
     await provideTestInstance({
       directory: project.path,
@@ -1909,7 +1962,7 @@ describe.serial("active operator wake settlement", () => {
         })
         let artifactID = ""
         Database.transaction((db) => {
-          artifactID = persistQueuedTaskIntentInTransaction(db, {
+          artifactID = persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -1923,13 +1976,13 @@ describe.serial("active operator wake settlement", () => {
             .where(eq(EngineArtifactTable.id, artifactID))
             .get(),
         )
-        const payload = QueuedTaskIngressSchema.parse(row?.payload)
+        const payload = TaskRootIngressSchema.parse(row?.payload)
         updateEngineArtifact({
           id: artifactID,
-          label: "running",
-          payload: { ...payload, queued_by_process_id: process.pid + 10_000 },
+          label: "delivering",
+          payload: { ...payload, accepted_by_process_id: process.pid + 10_000 },
         })
-        configureTaskLoopRunner(async () => ({
+        configureTaskIngressRunner(async () => ({
           finalMessageID: await persistFinalAssistantMessage({
             rootSessionID,
             taskIngress: { id: artifactID, kind: "operator_intent" },
@@ -1946,11 +1999,11 @@ describe.serial("active operator wake settlement", () => {
           }),
         }))
 
-        expect(await requeueInterruptedRunningTaskIngresses()).toBe(1)
-        expect(await dispatchPersistedTaskLoop(taskID)).toBe("started")
-        await waitForQueueCompletionHooksForTest()
-        expect(latestQueuedOperatorWake(taskID)).toMatchObject({
-          label: "drained",
+        expect(await recoverInterruptedTaskIngressDeliveries()).toBe(1)
+        expect(await dispatchPersistedTaskLoop(taskID)).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
+        expect(latestTaskRootIngress(taskID)).toMatchObject({
+          label: "delivered",
           payload: {
             wake_id: expect.any(String),
             delivery_result: {
@@ -1996,8 +2049,8 @@ describe.serial("active operator wake settlement", () => {
             })
           },
         )
-        using _runtime = QueueTestHooks.replaceTerminalIngressDeliveryRuntime("same-terminal-retry-runtime")
-        const initialRetryDelay = QueueTestHooks.replaceTerminalIngressDelayedRetryDelay(5_000)
+        using _runtime = IngressTestHooks.replaceTerminalIngressDeliveryRuntime("same-terminal-retry-runtime")
+        const initialRetryDelay = IngressTestHooks.replaceTerminalIngressDelayedRetryDelay(5_000)
         try {
           const accepted = await EngineService.handleTaskMessage(taskID, {
             text: "Explain the terminal result through this exact ingress.",
@@ -2026,7 +2079,7 @@ describe.serial("active operator wake settlement", () => {
             attempts,
             id: exhausted?.id,
             label: exhausted.label,
-            ingress: QueuedTaskIngressSchema.parse(exhausted.payload),
+            ingress: TaskRootIngressSchema.parse(exhausted.payload),
           }).toMatchObject({
             attempts: 2,
             id: accepted.ingress_id,
@@ -2041,7 +2094,7 @@ describe.serial("active operator wake settlement", () => {
             text: "This later terminal ingress must remain behind the failed durable head.",
             source: "operator.test",
           })
-          expect(younger.wake_status).toBe("queued")
+          expect(younger.wake_status).toBe("accepted")
           const youngerWhileBlocked = Database.use((db) =>
             db
               .select({ label: EngineArtifactTable.label })
@@ -2052,10 +2105,10 @@ describe.serial("active operator wake settlement", () => {
           expect({ attempts, attemptedIngresses, youngerLabel: youngerWhileBlocked?.label }).toEqual({
             attempts: 2,
             attemptedIngresses: [accepted.ingress_id, accepted.ingress_id],
-            youngerLabel: "pending",
+            youngerLabel: "accepted",
           })
           initialRetryDelay[Symbol.dispose]()
-          using _fastRetryDelay = QueueTestHooks.replaceTerminalIngressDelayedRetryDelay(10)
+          using _fastRetryDelay = IngressTestHooks.replaceTerminalIngressDelayedRetryDelay(10)
           let row: { id: string; label: string; payload: unknown } | undefined
           const recoveryDeadline = Date.now() + 10_000
           while (Date.now() < recoveryDeadline) {
@@ -2070,7 +2123,7 @@ describe.serial("active operator wake settlement", () => {
                 .where(eq(EngineArtifactTable.id, accepted.ingress_id!))
                 .get(),
             )
-            if (row?.label === "drained") break
+            if (row?.label === "delivered") break
             await Bun.sleep(10)
           }
           if (!row) throw new Error("Exact terminal ingress disappeared during delayed retry")
@@ -2078,11 +2131,11 @@ describe.serial("active operator wake settlement", () => {
             attempts,
             id: row.id,
             label: row.label,
-            ingress: QueuedTaskIngressSchema.parse(row.payload),
+            ingress: TaskRootIngressSchema.parse(row.payload),
           }).toMatchObject({
             attempts: 6,
             id: accepted.ingress_id,
-            label: "drained",
+            label: "delivered",
             ingress: {
               delivery_attempt: 5,
               delivery_runtime_id: "same-terminal-retry-runtime",
@@ -2099,11 +2152,11 @@ describe.serial("active operator wake settlement", () => {
                 .where(eq(EngineArtifactTable.id, younger.ingress_id!))
                 .get(),
             )?.label
-            if (youngerLabel === "drained") break
+            if (youngerLabel === "delivered") break
             await Bun.sleep(10)
           }
           expect({ youngerLabel, attemptedIngresses }).toEqual({
-            youngerLabel: "drained",
+            youngerLabel: "delivered",
             attemptedIngresses: [
               accepted.ingress_id,
               accepted.ingress_id,
@@ -2159,9 +2212,9 @@ describe.serial("active operator wake settlement", () => {
         recordEngineArtifact({
           id: wakeID,
           taskID,
-          kind: "queued_operator_wake",
+          kind: "task_root_ingress",
           label: "delivery_failed",
-          payload: QueuedTaskIngressSchema.parse({
+          payload: TaskRootIngressSchema.parse({
             wake_id: wakeID,
             task_id: taskID,
             root_session_id: rootSessionID,
@@ -2180,11 +2233,11 @@ describe.serial("active operator wake settlement", () => {
             delivery_attempt: 2,
             delivery_runtime_id: "historical-runtime",
             delivery_runtime_attempt: 2,
-            time_queued: now,
-            queued_by_process_id: process.pid,
+            time_accepted: now,
+            accepted_by_process_id: process.pid,
             delivery_result: {
               status: "delivery_failed",
-              error_name: "QueuedWakeSettlementError",
+              error_name: "TaskRootIngressSettlementError",
               message: "historical assistant/control provenance conflict",
               time_completed: now,
             },
@@ -2192,8 +2245,8 @@ describe.serial("active operator wake settlement", () => {
           timeCreated: now,
         })
 
-        expect(QueueTestHooks.reconcileHistoricalNonTailFailedIngress(taskID, wakeID)).toBe(true)
-        expect(QueueTestHooks.reconcileHistoricalNonTailFailedIngress(taskID, wakeID)).toBe(false)
+        expect(IngressTestHooks.reconcileHistoricalNonTailFailedIngress(taskID, wakeID)).toBe(true)
+        expect(IngressTestHooks.reconcileHistoricalNonTailFailedIngress(taskID, wakeID)).toBe(false)
         const artifacts = Database.use((db) =>
           db
             .select({
@@ -2222,7 +2275,7 @@ describe.serial("active operator wake settlement", () => {
         )
         const recoveryWakes = artifacts.filter(
           (artifact) =>
-            artifact.kind === "queued_operator_wake" &&
+            artifact.kind === "task_root_ingress" &&
             (artifact.payload as { source_kind?: string }).source_kind === "infrastructure_recovery",
         )
         expect({ recoveryFacts: recoveryFacts.length, recoveryWakes: recoveryWakes.length }).toEqual({
@@ -2233,7 +2286,7 @@ describe.serial("active operator wake settlement", () => {
     })
   })
 
-  test("requeues a prior-process running ingress for an ordinary terminal Task and drains its original occurrence", async () => {
+  test("recovers a prior-process running ingress for an ordinary terminal Task and drains its original occurrence", async () => {
     await using project = await memoryProject()
     await provideTestInstance({
       directory: project.path,
@@ -2244,7 +2297,7 @@ describe.serial("active operator wake settlement", () => {
         })
         let artifactID = ""
         Database.transaction((db) => {
-          artifactID = persistQueuedTaskIntentInTransaction(db, {
+          artifactID = persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -2258,11 +2311,11 @@ describe.serial("active operator wake settlement", () => {
             .where(eq(EngineArtifactTable.id, artifactID))
             .get(),
         )
-        const payload = QueuedTaskIngressSchema.parse(row?.payload)
+        const payload = TaskRootIngressSchema.parse(row?.payload)
         updateEngineArtifact({
           id: artifactID,
-          label: "running",
-          payload: { ...payload, queued_by_process_id: process.pid + 10_000 },
+          label: "delivering",
+          payload: { ...payload, accepted_by_process_id: process.pid + 10_000 },
         })
         await terminalTask(
           requireTask(taskID),
@@ -2270,9 +2323,9 @@ describe.serial("active operator wake settlement", () => {
           "Task completed before the host restarted its running ingress",
         )
 
-        expect(await requeueInterruptedRunningTaskIngresses()).toBe(1)
-        expect(await dispatchPersistedTaskLoop(taskID)).toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        expect(await recoverInterruptedTaskIngressDeliveries()).toBe(1)
+        expect(await dispatchPersistedTaskLoop(taskID)).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
         expect(
           Database.use((db) =>
             db
@@ -2287,7 +2340,7 @@ describe.serial("active operator wake settlement", () => {
           ),
         ).toMatchObject({
           id: artifactID,
-          label: "drained",
+          label: "delivered",
           payload: {
             wake_id: payload.wake_id,
             delivery_result: { status: "terminal_inapplicable" },
@@ -2324,13 +2377,13 @@ describe.serial("active operator wake settlement", () => {
         const [firstWakeID, secondWakeID] = Database.transaction((db) => {
           const task = requireTask(taskID)
           return [
-            persistQueuedRootMessageWakeInTransaction(db, {
+            persistTaskRootMessageIngressInTransaction(db, {
               task,
               messageID: firstMessageID,
               kind: "operator",
               now: Date.now(),
             }),
-            persistQueuedRootMessageWakeInTransaction(db, {
+            persistTaskRootMessageIngressInTransaction(db, {
               task,
               messageID: secondMessageID,
               kind: "operator",
@@ -2338,10 +2391,10 @@ describe.serial("active operator wake settlement", () => {
             }),
           ]
         })
-        updateEngineArtifact({ id: firstWakeID, label: "running" })
+        updateEngineArtifact({ id: firstWakeID, label: "delivering" })
 
         const delivered: string[] = []
-        configureTaskLoopRunner(async ({ wakeID }) => {
+        configureTaskIngressRunner(async ({ wakeID }) => {
           const row = Database.use((db) =>
             db
               .select({ payload: EngineArtifactTable.payload })
@@ -2349,7 +2402,7 @@ describe.serial("active operator wake settlement", () => {
               .where(eq(EngineArtifactTable.id, wakeID!))
               .get(),
           )
-          const ingress = QueuedTaskIngressSchema.parse(row?.payload)
+          const ingress = TaskRootIngressSchema.parse(row?.payload)
           delivered.push(wakeID!)
           return {
             finalMessageID: await persistFinalAssistantMessage({
@@ -2361,9 +2414,9 @@ describe.serial("active operator wake settlement", () => {
           }
         })
 
-        expect(await requeueInterruptedRunningTaskIngresses()).toBe(1)
+        expect(await recoverInterruptedTaskIngressDeliveries()).toBe(1)
         expect(await reconcileInterruptedTaskExecutions()).toBe(1)
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
 
         expect(delivered.slice(0, 2)).toEqual([firstWakeID, secondWakeID])
         expect(
@@ -2371,13 +2424,13 @@ describe.serial("active operator wake settlement", () => {
             db
               .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label })
               .from(EngineArtifactTable)
-              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
               .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
               .all(),
           ).filter((row) => row.id === firstWakeID || row.id === secondWakeID),
         ).toEqual([
-          { id: firstWakeID, label: "drained" },
-          { id: secondWakeID, label: "drained" },
+          { id: firstWakeID, label: "delivered" },
+          { id: secondWakeID, label: "delivered" },
         ])
       },
     })
@@ -2398,7 +2451,7 @@ describe.serial("active operator wake settlement", () => {
           text: "Report current work before the accepted cancellation settles.",
         })
         const wakeID = Database.transaction((db) =>
-          persistQueuedRootMessageWakeInTransaction(db, {
+          persistTaskRootMessageIngressInTransaction(db, {
             task: requireTask(taskID),
             messageID,
             kind: "operator",
@@ -2423,7 +2476,7 @@ describe.serial("active operator wake settlement", () => {
             .values({ task_id: taskID, request_event_id: requested.id })
             .run(),
         )
-        expect(await requeueInterruptedRunningTaskIngresses()).toBe(0)
+        expect(await recoverInterruptedTaskIngressDeliveries()).toBe(0)
         expect(await EngineService.reconcilePendingTaskCancellations()).toBe(1)
 
         expect({
@@ -2469,7 +2522,7 @@ describe.serial("active operator wake settlement", () => {
           value: "The exact cancellation occurrence remains the terminal authority.",
           reason: "Answer the operator from persisted Task evidence.",
         })
-        const ingress = QueuedTaskIngressSchema.parse({
+        const ingress = TaskRootIngressSchema.parse({
           wake_id: "art_terminal_follow_up_evidence",
           delivery_attempt: 1,
           task_id: taskID,
@@ -2477,8 +2530,8 @@ describe.serial("active operator wake settlement", () => {
           task_occurrence_started_at: Database.use(
             (db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!.time_started,
           ),
-          time_queued: Date.now(),
-          queued_by_process_id: process.pid,
+          time_accepted: Date.now(),
+          accepted_by_process_id: process.pid,
           source_kind: "operator_message",
           message_id: messageID,
           event: { rootMessage: { messageID, kind: "operator" } },
@@ -2552,7 +2605,7 @@ describe.serial("active operator wake settlement", () => {
     })
   })
 
-  test("requeues a valid durable ingress while reporting a malformed peer item", async () => {
+  test("recovers a valid durable ingress while reporting a malformed peer item", async () => {
     await using project = await memoryProject()
     await provideTestInstance({
       directory: project.path,
@@ -2568,7 +2621,7 @@ describe.serial("active operator wake settlement", () => {
         const persistRunningIngress = (taskID: string) => {
           let artifactID = ""
           Database.transaction((db) => {
-            artifactID = persistQueuedTaskIntentInTransaction(db, {
+            artifactID = persistTaskRootIntentIngressInTransaction(db, {
               task: requireTask(taskID),
               intent: "retry",
               supersededOperatorMessageIDs: [],
@@ -2584,23 +2637,23 @@ describe.serial("active operator wake settlement", () => {
           )
           updateEngineArtifact({
             id: artifactID,
-            label: "running",
-            payload: { ...QueuedTaskIngressSchema.parse(row?.payload), queued_by_process_id: process.pid + 10_000 },
+            label: "delivering",
+            payload: { ...TaskRootIngressSchema.parse(row?.payload), accepted_by_process_id: process.pid + 10_000 },
           })
           return artifactID
         }
         const malformedID = persistRunningIngress(malformedTask.taskID)
         const validID = persistRunningIngress(validTask.taskID)
-        const queuePosition = spyOn(SessionPromptState, "rootWakeQueuePosition").mockImplementation(
+        const ingressOwner = spyOn(SessionPromptState, "hasTaskRootIngressOwner").mockImplementation(
           (rootSessionID, wakeID) => {
             if (wakeID === malformedID) throw new Error("injected malformed peer recovery failure")
-            return undefined
+            return false
           },
         )
         try {
-          await expect(requeueInterruptedRunningTaskIngresses()).rejects.toBeInstanceOf(AggregateError)
+          await expect(recoverInterruptedTaskIngressDeliveries()).rejects.toBeInstanceOf(AggregateError)
         } finally {
-          queuePosition.mockRestore()
+          ingressOwner.mockRestore()
         }
         expect(
           Database.use((db) =>
@@ -2610,12 +2663,12 @@ describe.serial("active operator wake settlement", () => {
               .where(eq(EngineArtifactTable.id, validID))
               .get(),
           ),
-        ).toEqual({ id: validID, label: "pending" })
+        ).toEqual({ id: validID, label: "accepted" })
       },
     })
   })
 
-  test("reconciles a committed active assistant result before requeueing its running ingress", async () => {
+  test("reconciles a committed active assistant result before recovering its running ingress", async () => {
     await using project = await memoryProject()
     await provideTestInstance({
       directory: project.path,
@@ -2625,7 +2678,7 @@ describe.serial("active operator wake settlement", () => {
           request: "Reuse the exact committed assistant result after restart",
         })
         const artifactID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -2637,9 +2690,9 @@ describe.serial("active operator wake settlement", () => {
           taskIngress: { id: artifactID, kind: "operator_intent" },
           text: "The exact active ingress has a durable assistant result.",
         })
-        updateEngineArtifact({ id: artifactID, label: "running" })
+        updateEngineArtifact({ id: artifactID, label: "delivering" })
 
-        expect(await requeueInterruptedRunningTaskIngresses()).toBe(0)
+        expect(await recoverInterruptedTaskIngressDeliveries()).toBe(0)
         expect(
           Database.use((db) =>
             db
@@ -2649,7 +2702,7 @@ describe.serial("active operator wake settlement", () => {
               .get(),
           ),
         ).toMatchObject({
-          label: "drained",
+          label: "delivered",
           payload: {
             delivery_result: { status: "completed", assistant_message_id: assistantMessageID },
           },
@@ -2668,7 +2721,7 @@ describe.serial("active operator wake settlement", () => {
           request: "Settle the committed FIFO head before delivering later work",
         })
         const oldWakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -2680,10 +2733,10 @@ describe.serial("active operator wake settlement", () => {
           taskIngress: { id: oldWakeID, kind: "operator_intent" },
           text: "The older running ingress already has its exact durable result.",
         })
-        updateEngineArtifact({ id: oldWakeID, label: "running" })
+        updateEngineArtifact({ id: oldWakeID, label: "delivering" })
 
         const deliveredWakeIDs: string[] = []
-        configureTaskLoopRunner(async ({ wakeID }) => {
+        configureTaskIngressRunner(async ({ wakeID }) => {
           deliveredWakeIDs.push(wakeID)
           const row = Database.use((db) =>
             db
@@ -2692,7 +2745,7 @@ describe.serial("active operator wake settlement", () => {
               .where(eq(EngineArtifactTable.id, wakeID))
               .get(),
           )
-          const ingress = QueuedTaskIngressSchema.parse(row?.payload)
+          const ingress = TaskRootIngressSchema.parse(row?.payload)
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
@@ -2702,8 +2755,8 @@ describe.serial("active operator wake settlement", () => {
           }
         })
 
-        expect(await dispatchTaskLoop({ taskID, event: { note: "Deliver the younger active wake" } })).toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        expect(await dispatchTaskLoop({ taskID, event: { note: "Deliver the younger active wake" } })).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
 
         const wakes = Database.use((db) =>
           db
@@ -2713,7 +2766,7 @@ describe.serial("active operator wake settlement", () => {
               payload: EngineArtifactTable.payload,
             })
             .from(EngineArtifactTable)
-            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
             .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
             .all(),
         )
@@ -2721,14 +2774,14 @@ describe.serial("active operator wake settlement", () => {
         expect(relevantWakes).toHaveLength(2)
         expect(relevantWakes[0]).toMatchObject({
           id: oldWakeID,
-          label: "drained",
+          label: "delivered",
           payload: {
             delivery_result: { status: "completed", assistant_message_id: oldAssistantMessageID },
           },
         })
         expect(relevantWakes[1]).toMatchObject({
           id: deliveredWakeIDs[0],
-          label: "drained",
+          label: "delivered",
           payload: { delivery_result: { status: "completed" } },
         })
         expect(deliveredWakeIDs).toEqual([relevantWakes[1]?.id])
@@ -2746,7 +2799,7 @@ describe.serial("active operator wake settlement", () => {
           request: "Return the idempotent result after the durable head converges",
         })
         const wakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -2758,11 +2811,11 @@ describe.serial("active operator wake settlement", () => {
           taskIngress: { id: wakeID, kind: "operator_intent" },
           text: "The sole persisted wake has already completed durably.",
         })
-        updateEngineArtifact({ id: wakeID, label: "running" })
+        updateEngineArtifact({ id: wakeID, label: "delivering" })
 
-        expect(await dispatchPersistedTaskLoop(taskID, wakeID)).toBe("started")
-        expect(findQueuedWake(wakeID)).toMatchObject({
-          label: "drained",
+        expect(await dispatchPersistedTaskLoop(taskID, wakeID)).toBe("accepted")
+        expect(findTaskRootIngress(wakeID)).toMatchObject({
+          label: "delivered",
           payload: {
             delivery_result: { status: "completed", assistant_message_id: assistantMessageID },
           },
@@ -2781,16 +2834,16 @@ describe.serial("active operator wake settlement", () => {
           request: "Restore the physical owner for the older durable head",
         })
         const oldWakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
             now: Date.now() - 1_000,
           }),
         )
-        updateEngineArtifact({ id: oldWakeID, label: "running" })
+        updateEngineArtifact({ id: oldWakeID, label: "delivering" })
         const youngerWakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "replan",
             supersededOperatorMessageIDs: [],
@@ -2798,9 +2851,9 @@ describe.serial("active operator wake settlement", () => {
           }),
         )
         const deliveredWakeIDs: string[] = []
-        configureTaskLoopRunner(async ({ wakeID }) => {
+        configureTaskIngressRunner(async ({ wakeID }) => {
           deliveredWakeIDs.push(wakeID)
-          const ingress = QueuedTaskIngressSchema.parse(findQueuedWake(wakeID)?.payload)
+          const ingress = TaskRootIngressSchema.parse(findTaskRootIngress(wakeID)?.payload)
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
@@ -2810,11 +2863,14 @@ describe.serial("active operator wake settlement", () => {
           }
         })
 
-        expect(await dispatchPersistedTaskLoop(taskID, youngerWakeID)).toBe("queued")
-        await waitForQueueCompletionHooksForTest()
+        expect(await dispatchPersistedTaskLoop(taskID, youngerWakeID)).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
 
         expect(deliveredWakeIDs).toEqual([oldWakeID, youngerWakeID])
-        expect([findQueuedWake(oldWakeID)?.label, findQueuedWake(youngerWakeID)?.label]).toEqual(["drained", "drained"])
+        expect([findTaskRootIngress(oldWakeID)?.label, findTaskRootIngress(youngerWakeID)?.label]).toEqual([
+          "delivered",
+          "delivered",
+        ])
       },
     })
   })
@@ -2825,11 +2881,11 @@ describe.serial("active operator wake settlement", () => {
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
-          title: "Persisted exact replay queue advance",
+          title: "Persisted exact replay ingress advance",
           request: "Advance the next durable wake after exact replay convergence",
         })
         const oldWakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "retry",
             supersededOperatorMessageIDs: [],
@@ -2841,9 +2897,9 @@ describe.serial("active operator wake settlement", () => {
           taskIngress: { id: oldWakeID, kind: "operator_intent" },
           text: "The replayed older ingress has already completed.",
         })
-        updateEngineArtifact({ id: oldWakeID, label: "running" })
+        updateEngineArtifact({ id: oldWakeID, label: "delivering" })
         const youngerWakeID = Database.transaction((db) =>
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: requireTask(taskID),
             intent: "replan",
             supersededOperatorMessageIDs: [],
@@ -2851,9 +2907,9 @@ describe.serial("active operator wake settlement", () => {
           }),
         )
         const deliveredWakeIDs: string[] = []
-        configureTaskLoopRunner(async ({ wakeID }) => {
+        configureTaskIngressRunner(async ({ wakeID }) => {
           deliveredWakeIDs.push(wakeID)
-          const ingress = QueuedTaskIngressSchema.parse(findQueuedWake(wakeID)?.payload)
+          const ingress = TaskRootIngressSchema.parse(findTaskRootIngress(wakeID)?.payload)
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
@@ -2863,17 +2919,17 @@ describe.serial("active operator wake settlement", () => {
           }
         })
 
-        expect(await dispatchPersistedTaskLoop(taskID, oldWakeID)).toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        expect(await dispatchPersistedTaskLoop(taskID, oldWakeID)).toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
 
-        expect(findQueuedWake(oldWakeID)).toMatchObject({
-          label: "drained",
+        expect(findTaskRootIngress(oldWakeID)).toMatchObject({
+          label: "delivered",
           payload: {
             delivery_result: { status: "completed", assistant_message_id: oldAssistantMessageID },
           },
         })
         expect(deliveredWakeIDs).toEqual([youngerWakeID])
-        expect(findQueuedWake(youngerWakeID)?.label).toBe("drained")
+        expect(findTaskRootIngress(youngerWakeID)?.label).toBe("delivered")
       },
     })
   })
@@ -2889,7 +2945,7 @@ describe.serial("active operator wake settlement", () => {
         })
         const requestID = "coordination-request:stable-identity"
         const firstID = Database.transaction((db) =>
-          persistQueuedCoordinationWakeInTransaction(db, { taskID, rootSessionID, requestID }),
+          persistCoordinationIngressInTransaction(db, { taskID, rootSessionID, requestID }),
         )
         const first = Database.use((db) =>
           db
@@ -2901,8 +2957,8 @@ describe.serial("active operator wake settlement", () => {
         updateEngineArtifact({
           id: firstID,
           label: "delivery_failed",
-          payload: QueuedTaskIngressSchema.parse({
-            ...QueuedTaskIngressSchema.parse(first?.payload),
+          payload: TaskRootIngressSchema.parse({
+            ...TaskRootIngressSchema.parse(first?.payload),
             delivery_result: {
               status: "delivery_failed",
               error_name: "InjectedDeliveryError",
@@ -2913,7 +2969,7 @@ describe.serial("active operator wake settlement", () => {
         })
 
         const retryID = Database.transaction((db) =>
-          persistQueuedCoordinationWakeInTransaction(db, { taskID, rootSessionID, requestID }),
+          persistCoordinationIngressInTransaction(db, { taskID, rootSessionID, requestID }),
         )
         const rows = Database.use((db) =>
           db
@@ -2926,7 +2982,7 @@ describe.serial("active operator wake settlement", () => {
             .where(
               and(
                 eq(EngineArtifactTable.task_id, taskID),
-                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                eq(EngineArtifactTable.kind, "task_root_ingress"),
                 sql`json_extract(${EngineArtifactTable.payload}, '$.request_id') = ${requestID}`,
               ),
             )
@@ -2935,7 +2991,7 @@ describe.serial("active operator wake settlement", () => {
         expect({ firstID, retryID, rows }).toMatchObject({
           firstID,
           retryID: firstID,
-          rows: [{ id: firstID, label: "pending", payload: { delivery_attempt: 2, wake_id: requestID } }],
+          rows: [{ id: firstID, label: "accepted", payload: { delivery_attempt: 2, wake_id: requestID } }],
         })
       },
     })
@@ -2999,7 +3055,7 @@ describe.serial("active operator wake settlement", () => {
           title: "Prose-only operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator status wake test expected a rootMessage event")
           return {
@@ -3029,11 +3085,11 @@ describe.serial("active operator wake settlement", () => {
         })
         expect(response.wake_status).toBe("accepted")
         expect(requireTask(taskID).time_updated).toBeGreaterThanOrEqual(response.user_message!.info.time.created)
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({ label: wake.label, sourceKind: wake.payload.source_kind }).toEqual({
-          label: "drained",
+          label: "delivered",
           sourceKind: "operator_message",
         })
       },
@@ -3049,7 +3105,7 @@ describe.serial("active operator wake settlement", () => {
           title: "Settled operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
@@ -3094,15 +3150,15 @@ describe.serial("active operator wake settlement", () => {
           source: "operator.test",
         })
         expect(response.wake_status).toBe("accepted")
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
@@ -3120,7 +3176,7 @@ describe.serial("active operator wake settlement", () => {
           title: "Same-turn read and dispatch",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
@@ -3156,15 +3212,15 @@ describe.serial("active operator wake settlement", () => {
           source: "operator.test",
         })
         expect(response.wake_status).toBe("accepted")
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
@@ -3181,7 +3237,7 @@ describe.serial("active operator wake settlement", () => {
           title: "Multi-turn settled operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
@@ -3229,15 +3285,15 @@ describe.serial("active operator wake settlement", () => {
           source: "operator.test",
         })
         expect(response.wake_status).toBe("accepted")
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
@@ -3279,7 +3335,7 @@ describe.serial("active operator wake settlement", () => {
             },
           ],
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
@@ -3314,15 +3370,15 @@ describe.serial("active operator wake settlement", () => {
           source: "operator.test",
         })
         expect(response.wake_status).toBe("accepted")
-        await waitForQueueCompletionHooksForTest()
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
@@ -3344,7 +3400,7 @@ describe.serial("active operator wake settlement", () => {
           rootSessionID,
           text: "Retry by reading this retired operator message before scheduling.",
         })
-        configureTaskLoopRunner(async ({ wakeID }) => ({
+        configureTaskIngressRunner(async ({ wakeID }) => ({
           finalMessageID: await persistFinalAssistantMessage({
             rootSessionID,
             taskIngress: { id: wakeID!, kind: "operator_intent" },
@@ -3354,16 +3410,16 @@ describe.serial("active operator wake settlement", () => {
 
         await expect(
           dispatchOperatorIntent({ taskID, supersededOperatorMessageIDs: [supersededMessageID] }),
-        ).resolves.toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        ).resolves.toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_intent",
         })
@@ -3385,7 +3441,7 @@ describe.serial("active operator wake settlement", () => {
           rootSessionID,
           text: "Retry by reading this retired operator message before scheduling.",
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           const [messageID] = event?.taskIntent?.supersededOperatorMessageIDs ?? []
           if (!messageID) throw new Error("operator intent test expected a superseded operator message")
           return {
@@ -3427,16 +3483,16 @@ describe.serial("active operator wake settlement", () => {
 
         await expect(
           dispatchOperatorIntent({ taskID, supersededOperatorMessageIDs: [supersededMessageID] }),
-        ).resolves.toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        ).resolves.toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_intent",
         })
@@ -3453,7 +3509,7 @@ describe.serial("active operator wake settlement", () => {
           title: "Settled task wait wake",
           request: "Wait for a scheduled continuation",
         })
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
+        configureTaskIngressRunner(async ({ event, wakeID }) => {
           if (!event?.taskWaitWake?.jobID) throw new Error("task wait test expected a taskWaitWake event")
           return {
             finalMessageID: await persistFinalAssistantMessage({
@@ -3473,16 +3529,16 @@ describe.serial("active operator wake settlement", () => {
           }
         })
 
-        await expect(dispatchTaskWaitWake({ taskID, jobID: "wait_active_settlement" })).resolves.toBe("started")
-        await waitForQueueCompletionHooksForTest()
+        await expect(dispatchTaskWaitWake({ taskID, jobID: "wait_active_settlement" })).resolves.toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestQueuedOperatorWake(taskID)
+        const wake = latestTaskRootIngress(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "drained",
+          label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "task_wait_wake",
         })

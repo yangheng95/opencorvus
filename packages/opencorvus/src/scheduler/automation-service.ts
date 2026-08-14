@@ -12,7 +12,7 @@ import { SessionWake } from "@/session/wake"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
 import { taskWaitFireID } from "./task-wait-fire-identity"
 import { EngineTaskTable } from "@/engine/engine.sql"
-import { persistQueuedTaskWaitWakeInTransaction } from "@/engine/queue"
+import { persistTaskWaitIngressInTransaction } from "@/engine/task-root-ingress-delivery"
 import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
@@ -1657,7 +1657,7 @@ export namespace AutomationService {
         fn: async () => {
           const committedAt = Date.now()
           const wakeID = Database.transaction((tx) => {
-            const persistedWakeID = persistQueuedTaskWaitWakeInTransaction(tx, {
+            const persistedWakeID = persistTaskWaitIngressInTransaction(tx, {
               taskID: job.task_id!,
               projectID: job.project_id!,
               jobID: job.id,
@@ -1693,7 +1693,7 @@ export namespace AutomationService {
             return { taskID: job.task_id!, wakeID, dispatchResult, automationConsumed: true as const }
           } catch (error) {
             const dispatchError = error instanceof Error ? error.message : String(error)
-            log.error("scheduled Task wait ingress remains queued after delivery failure", {
+            log.error("scheduled Task wait ingress remains accepted after delivery failure", {
               jobId: job.id,
               taskID: job.task_id!,
               wakeID,
@@ -1704,7 +1704,7 @@ export namespace AutomationService {
             return {
               taskID: job.task_id!,
               wakeID,
-              dispatchResult: "queued",
+              dispatchResult: "accepted",
               dispatchError,
               automationConsumed: true as const,
             }

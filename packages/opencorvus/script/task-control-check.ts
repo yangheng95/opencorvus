@@ -279,7 +279,7 @@ async function runPhaseProcess(
     const recoveryLines = output
       .split(/\r?\n/)
       .filter((line) =>
-        /bootstrapping|recover-interrupted|requeue-interrupted|drain-persisted|interrupted Task|queued operator wake failed|task loop failed/i.test(
+        /bootstrapping|recover-interrupted|recover-interrupted|drain-persisted|interrupted Task|Task root ingress failed|task loop failed/i.test(
           line,
         ),
       )
@@ -368,7 +368,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/shell/process-supervisor"),
     import("@/protocol/store"),
     import("@/session"),
-    import("@/engine/queue"),
+    import("@/engine/task-root-ingress-delivery"),
     import("@/engine/store"),
   ])
   const preparedServer = await listenWithRecoveredServerRuntime({
@@ -480,7 +480,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
           if (!lifecycle) return undefined
           const wake = current.artifacts.find(
             (artifact) =>
-              artifact.kind === "queued_operator_wake" &&
+              artifact.kind === "task_root_ingress" &&
               artifact.label === "drained" &&
               artifact.payload?.lifecycle_event_id === lifecycle.id,
           )
@@ -490,7 +490,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
               (occurrence) => occurrence.sessionID !== childSessionID && occurrence.kind === "orchestrator",
             )
             const pendingWake = current.artifacts.some(
-              (artifact) => artifact.kind === "queued_operator_wake" && ["pending", "running"].includes(artifact.label),
+              (artifact) => artifact.kind === "task_root_ingress" && ["pending", "running"].includes(artifact.label),
             )
             const allWorkersTerminal = current.executionProjection.occurrences
               .filter((occurrence) => occurrence.kind !== "orchestrator")
@@ -543,7 +543,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
           (occurrence) => occurrence.sessionID === childSessionID,
         )
         const activeIngress = current.artifacts.some(
-          (artifact) => artifact.kind === "queued_operator_wake" && ["pending", "running"].includes(artifact.label),
+          (artifact) => artifact.kind === "task_root_ingress" && ["pending", "running"].includes(artifact.label),
         )
         return lineage && child && child.latest?.status?.type !== "terminal" && !activeIngress
           ? { childSessionID: childSessionID! }
@@ -557,7 +557,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         "operator ingress running projection",
         async () => {
           const ingress = (await board()).artifacts.find((artifact) => artifact.id === progress.ingress_id)
-          return ingress?.label === "running" || ingress?.label === "drained" ? ingress : undefined
+          return ingress?.label === "delivering" || ingress?.label === "delivered" ? ingress : undefined
         },
         2_000,
       )
@@ -565,7 +565,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       await stream.waitFor("progress response while child remains live", async () => {
         const current = await board()
         const ingress = current.artifacts.find(
-          (artifact) => artifact.id === progress.ingress_id && artifact.label === "drained",
+          (artifact) => artifact.id === progress.ingress_id && artifact.label === "delivered",
         )
         const child = current.executionProjection.occurrences.find(
           (occurrence) => occurrence.sessionID === dispatched.childSessionID,
@@ -578,12 +578,12 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
 
       const firstRecovery = await sendMessage("Recovery message one: answer this before recovery message two.")
       const secondRecovery = await sendMessage("Recovery message two: answer only after recovery message one.")
-      if (firstRecovery.wake_status !== "accepted" || secondRecovery.wake_status !== "queued") {
+      if (firstRecovery.wake_status !== "accepted" || secondRecovery.wake_status !== "accepted") {
         throw new Error(`FIFO recovery seed failed: ${JSON.stringify({ firstRecovery, secondRecovery })}`)
       }
       await stream.waitFor("running ingress before abrupt restart", async () => {
         const ingress = (await board()).artifacts.find((artifact) => artifact.id === firstRecovery.ingress_id)
-        return ingress?.label === "running" ? ingress : undefined
+        return ingress?.label === "delivering" ? ingress : undefined
       })
       const checkpoint: Checkpoint = {
         taskID,
@@ -729,7 +729,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     }
     const finalBoard = await board()
     const ingressDispositions = finalBoard.artifacts
-      .filter((artifact) => artifact.kind === "queued_operator_wake")
+      .filter((artifact) => artifact.kind === "task_root_ingress")
       .map((artifact) => ({ id: artifact.id, label: artifact.label }))
     const unsettledIngresses = ingressDispositions.filter(
       (ingress) => !["drained", "delivery_failed", "terminal_inapplicable"].includes(ingress.label),
@@ -819,7 +819,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
               )
             ).filter((session) => session.messages.length > 0)
             const rootSessionID = current.artifacts
-              .filter((artifact) => artifact.kind === "queued_operator_wake")
+              .filter((artifact) => artifact.kind === "task_root_ingress")
               .map((artifact) => artifact.payload?.root_session_id)
               .find((value): value is string => typeof value === "string")
             const ownedPromptSessions = listOwnedPromptSessionsForTask(taskID)
@@ -838,7 +838,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
                   }).map((entry) => ({ sessionID: entry.session_id, inputMessageID: entry.input_message_id }))
                 : [],
               wakes: current.artifacts
-                .filter((artifact) => artifact.kind === "queued_operator_wake")
+                .filter((artifact) => artifact.kind === "task_root_ingress")
                 .map((artifact) => ({ id: artifact.id, status: artifact.label })),
               lineages: current.artifacts
                 .filter((artifact) => artifact.kind === "dispatch_lineage")

@@ -12,8 +12,6 @@ import { AutomationRunTable, AutomationTable } from "../src/scheduler/automation
 import { AutomationService } from "../src/scheduler/automation-service"
 import { SchedulerExecutionInactivityTestHooks } from "../src/scheduler/execution-inactivity"
 import { Scheduler, SchedulerDisposalInactivityError } from "../src/scheduler"
-import { TaskQueueTable, type TaskQueuePriority } from "../src/scheduler/task-queue.sql"
-import { TaskQueueService } from "../src/scheduler/task-queue-service"
 import { Database, eq } from "../src/storage/db"
 import { assertStartedTaskProjectRecoverySucceeded } from "../src/engine/host-recovery"
 import { RuntimeExecutionSettlement } from "../src/runtime/execution-settlement"
@@ -31,25 +29,6 @@ import {
 afterAll(async () => {
   await resetMemoryDatabase()
 })
-
-function insertQueuedTask(input: { id: string; sessionID: string; priority: TaskQueuePriority; timeCreated: number }) {
-  Database.use((db) =>
-    db
-      .insert(TaskQueueTable)
-      .values({
-        id: input.id,
-        session_id: input.sessionID,
-        prompt: input.id,
-        priority: input.priority,
-        status: "queued",
-        source: "scheduler-positive-contract",
-        metadata: { kind: "session_prompt", input: {} },
-        time_created: input.timeCreated,
-        time_updated: input.timeCreated,
-      })
-      .run(),
-  )
-}
 
 async function createSession(title: string) {
   return Session.createNext({
@@ -81,95 +60,6 @@ describe("scheduler atomic identity and progress contracts", () => {
       }),
     )
   })
-
-  test("reserves one shared project concurrency slot across two Instance directories", async () => {
-    const previousConcurrency = process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY
-    process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY = "1"
-    try {
-      await using project = await memoryProject()
-      const setup = await Instance.provide({
-        directory: project.path,
-        fn: async () => {
-          const peerDirectory = path.join(project.path, "queue-peer-instance")
-          await fs.mkdir(peerDirectory, { recursive: true })
-          await Project.addSandbox(Instance.project.id, peerDirectory)
-          const firstSession = await createSession("Cross-Instance concurrency first")
-          const secondSession = await createSession("Cross-Instance concurrency second")
-          return { peerDirectory, firstSessionID: firstSession.id, secondSessionID: secondSession.id }
-        },
-      })
-      await Instance.provide({ directory: setup.peerDirectory, fn: () => undefined })
-
-      let readyInstances = 0
-      let reportBothInstancesReady!: () => void
-      const bothInstancesReady = new Promise<void>((resolve) => (reportBothInstancesReady = resolve))
-      let startClaims!: () => void
-      const claimsStarted = new Promise<void>((resolve) => (startClaims = resolve))
-      let releaseValidations!: () => void
-      const validationsReleased = new Promise<void>((resolve) => (releaseValidations = resolve))
-      let reportBothValidations!: () => void
-      const bothValidations = new Promise<void>((resolve) => (reportBothValidations = resolve))
-      let validationCount = 0
-      const claimFrom = (directory: string) =>
-        Instance.provideProjectIdentity({
-          directory,
-          fn: async () => {
-            readyInstances += 1
-            if (readyInstances === 2) reportBothInstancesReady()
-            await claimsStarted
-            return TaskQueueService.TestHooks.claimReadyTaskIDs({
-              limit: 1,
-              beforeValidation: async () => {
-                validationCount += 1
-                if (validationCount === 2) reportBothValidations()
-                await validationsReleased
-              },
-            })
-          },
-        })
-      const primaryClaim = claimFrom(project.path)
-      const peerClaim = claimFrom(setup.peerDirectory)
-      await bothInstancesReady
-
-      const firstID = Identifier.ascending("task")
-      const secondID = Identifier.ascending("task")
-      const createdAt = Date.now()
-      insertQueuedTask({ id: firstID, sessionID: setup.firstSessionID, priority: "normal", timeCreated: createdAt })
-      insertQueuedTask({
-        id: secondID,
-        sessionID: setup.secondSessionID,
-        priority: "normal",
-        timeCreated: createdAt + 1,
-      })
-
-      startClaims()
-      await bothValidations
-      releaseValidations()
-      const [primaryClaimed, peerClaimed] = await Promise.all([primaryClaim, peerClaim])
-      const rows = Database.use((db) =>
-        db
-          .select({ id: TaskQueueTable.id, status: TaskQueueTable.status })
-          .from(TaskQueueTable)
-          .where(eq(TaskQueueTable.source, "scheduler-positive-contract"))
-          .all()
-          .filter((row) => row.id === firstID || row.id === secondID)
-          .sort((left, right) => left.id.localeCompare(right.id)),
-      )
-
-      expect({
-        validationCount,
-        claimed: [...primaryClaimed, ...peerClaimed],
-        statuses: rows.map((row) => row.status).sort(),
-      }).toEqual({
-        validationCount: 2,
-        claimed: [firstID],
-        statuses: ["queued", "running"],
-      })
-    } finally {
-      if (previousConcurrency === undefined) delete process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY
-      else process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY = previousConcurrency
-    }
-  }, 30_000)
 
   test("coalesces overlapping ticks into one ordered successor occurrence", async () => {
     const events: string[] = []
@@ -264,113 +154,6 @@ describe("scheduler atomic identity and progress contracts", () => {
         } finally {
           reenter.mockRestore()
         }
-      },
-    })
-  })
-
-  test("claims the current highest-priority queued task after asynchronous validation", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await createSession("priority claim")
-        const lowID = Identifier.ascending("task")
-        const highID = Identifier.ascending("task")
-        const now = Date.now()
-        insertQueuedTask({ id: lowID, sessionID: session.id, priority: "low", timeCreated: now })
-
-        let insertedHigh = false
-        const firstClaim = await TaskQueueService.TestHooks.claimReadyTaskIDs({
-          limit: 1,
-          beforeValidation: () => {
-            if (insertedHigh) return
-            insertedHigh = true
-            insertQueuedTask({ id: highID, sessionID: session.id, priority: "high", timeCreated: now + 1 })
-          },
-        })
-        expect(firstClaim).toEqual([highID])
-
-        Database.use((db) =>
-          db
-            .update(TaskQueueTable)
-            .set({ status: "completed", time_completed: now + 2, time_updated: now + 2 })
-            .where(eq(TaskQueueTable.id, highID))
-            .run(),
-        )
-        expect(await TaskQueueService.TestHooks.claimReadyTaskIDs({ limit: 1 })).toEqual([lowID])
-      },
-    })
-  })
-
-  test("ages an old low-priority occurrence into bounded admission ahead of new high-priority work", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const oldSession = await createSession("aged low priority")
-        const newSession = await createSession("new high priority")
-        const oldLowID = Identifier.ascending("task")
-        const newHighID = Identifier.ascending("task")
-        const now = Date.now()
-        insertQueuedTask({
-          id: oldLowID,
-          sessionID: oldSession.id,
-          priority: "low",
-          timeCreated: now - 60_001,
-        })
-        insertQueuedTask({ id: newHighID, sessionID: newSession.id, priority: "high", timeCreated: now })
-
-        expect(await TaskQueueService.TestHooks.claimReadyTaskIDs({ limit: 1 })).toEqual([oldLowID])
-      },
-    })
-  })
-
-  test("refills capacity after rejected head candidates and claims the later valid task", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const firstRejected = await createSession("first rejected candidate")
-        const secondRejected = await createSession("second rejected candidate")
-        const valid = await createSession("later valid candidate")
-        const firstRejectedID = Identifier.ascending("task")
-        const secondRejectedID = Identifier.ascending("task")
-        const validID = Identifier.ascending("task")
-        const now = Date.now()
-        insertQueuedTask({ id: firstRejectedID, sessionID: firstRejected.id, priority: "normal", timeCreated: now })
-        insertQueuedTask({
-          id: secondRejectedID,
-          sessionID: secondRejected.id,
-          priority: "normal",
-          timeCreated: now + 1,
-        })
-        insertQueuedTask({ id: validID, sessionID: valid.id, priority: "normal", timeCreated: now + 2 })
-
-        const rejectedSessions = new Set([firstRejected.id, secondRejected.id])
-        const claimed = await TaskQueueService.TestHooks.claimReadyTaskIDs({
-          limit: 2,
-          beforeValidation: (sessionID) => {
-            if (rejectedSessions.has(sessionID)) throw new Error(`Rejected Session ${sessionID}`)
-          },
-        })
-        expect(claimed).toEqual([validID])
-        expect(
-          Database.use((db) =>
-            db
-              .select({ id: TaskQueueTable.id, status: TaskQueueTable.status })
-              .from(TaskQueueTable)
-              .where(eq(TaskQueueTable.source, "scheduler-positive-contract"))
-              .all(),
-          )
-            .filter((row) => [firstRejectedID, secondRejectedID, validID].includes(row.id))
-            .sort((left, right) => left.id.localeCompare(right.id)),
-        ).toEqual(
-          [
-            { id: firstRejectedID, status: "failed" },
-            { id: secondRejectedID, status: "failed" },
-            { id: validID, status: "running" },
-          ].sort((left, right) => left.id.localeCompare(right.id)),
-        )
       },
     })
   })

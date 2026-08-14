@@ -1,10 +1,10 @@
 import { ExecutionCancellationError, createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 
-type QueueEntry = {
+type TurnOwnershipEntry = {
   tail: Promise<void>
 }
 
-const entries = new Map<string, QueueEntry>()
+const entries = new Map<string, TurnOwnershipEntry>()
 
 /**
  * True while this process owns or is waiting to own a complete projected
@@ -25,13 +25,13 @@ function waitForPriorTurn(prior: Promise<void>, sessionID: string, signal?: Abor
         : new ExecutionCancellationError({
             source: "session_prompt",
             sessionID,
-            message: `Projected worker Session ${sessionID} Turn was cancelled before queue ownership`,
+            message: `Projected worker Session ${sessionID} Turn was cancelled before Turn ownership`,
             origin: createExecutionCancellationOrigin({
               actor: "runtime",
               source: "runtime.prompt_owner",
               surface: "agent",
               requestID: sessionID,
-              reason: `Projected worker Session ${sessionID} Turn was cancelled before queue ownership`,
+              reason: `Projected worker Session ${sessionID} Turn was cancelled before Turn ownership`,
               targetSessionID: sessionID,
             }),
           }),
@@ -56,8 +56,8 @@ function waitForPriorTurn(prior: Promise<void>, sessionID: string, signal?: Abor
 /**
  * Serialize complete projected-worker Turns by their physical Session.
  *
- * Durable lineage is deliberately validated by the caller only after this
- * queue grants ownership. The queue owns process-local ordering, while the
+ * Durable lineage is deliberately validated by the caller only after the
+ * previous owner settles. The owner chain preserves one physical writer, while the
  * descriptor/message/runtime stores remain the durable authorities.
  */
 export async function runProjectedWorkerTurnExclusive<T>(input: {
@@ -66,7 +66,7 @@ export async function runProjectedWorkerTurnExclusive<T>(input: {
   run: () => Promise<T>
 }): Promise<T> {
   const sessionID = input.sessionID.trim()
-  if (!sessionID) throw new Error("Projected worker Turn queue requires a Session ID")
+  if (!sessionID) throw new Error("Projected worker Turn ownership requires a Session ID")
 
   const prior = entries.get(sessionID)?.tail ?? Promise.resolve()
   let release!: () => void
@@ -92,6 +92,6 @@ export async function runProjectedWorkerTurnExclusive<T>(input: {
   }
 }
 
-export async function waitForProjectedWorkerTurnQueuesForTest(): Promise<void> {
+export async function waitForProjectedWorkerTurnOwnersForTest(): Promise<void> {
   while (entries.size > 0) await Promise.all([...entries.values()].map((entry) => entry.tail))
 }

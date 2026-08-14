@@ -48,7 +48,6 @@ import { InstanceBootstrap } from "@/project/bootstrap"
 import { Project } from "@/project/project"
 import { Worktree } from "@/worktree"
 import { Question } from "@/question"
-import { TaskQueueService } from "@/scheduler/task-queue-service"
 import { Session } from "@/session"
 import { SessionContext } from "@/session/context"
 import { Message } from "@/session/message"
@@ -115,20 +114,20 @@ import { budgetRow, deriveTitle, progressStatus } from "@/engine/helpers"
 import { orchestratorState } from "@/engine/orchestrator-state"
 import { writeTaskChecks } from "@/engine/checks"
 import {
-  drainQueuedTaskEvent,
-  discardQueuedTaskEvent,
-  terminalizeQueuedTaskEventsForCancellationInTransaction,
+  deliverTaskRootIngress,
+  discardTaskRootIngress,
+  terminalizeTaskRootIngressesForCancellationInTransaction,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
-  persistQueuedTaskIntentInTransaction,
-  persistQueuedRootMessageWakeInTransaction,
-  persistQueuedMissionAcceptanceResumeInTransaction,
+  persistTaskRootIntentIngressInTransaction,
+  persistTaskRootMessageIngressInTransaction,
+  persistMissionAcceptanceResumeIngressInTransaction,
   requireTaskCreationIngressID,
-  queuedTaskEventStats,
-  retirePendingQueuedTaskEventsForOperatorIntentInTransaction,
+  taskRootIngressStats,
+  retirePendingTaskRootIngressesForOperatorIntentInTransaction,
   type DispatchTaskLoopResult,
   taskCwd,
-} from "@/engine/queue"
+} from "@/engine/task-root-ingress-delivery"
 import { openTaskForContinuationInTransaction, openTaskForOperatorIntentInTransaction } from "@/engine/task-intent-open"
 import {
   applyGoalGraphMutationInTransaction,
@@ -256,7 +255,7 @@ import {
 
 const log = Log.create({ service: "assistant" })
 
-type TaskMessageWakeStatus = Extract<DispatchTaskLoopResult, "started" | "queued"> | "not_woken"
+type TaskMessageWakeStatus = Extract<DispatchTaskLoopResult, "accepted"> | "not_woken"
 
 export const TaskEmptyMessageError = NamedError.create(
   "TaskEmptyMessageError",
@@ -475,37 +474,14 @@ async function provideActiveTaskRootSessionInstance<T>(
   return await awaitWithAbort(operation, signal)
 }
 
-async function awaitRootSessionWakeQueueSettled(task: TaskRow, inactivityTimeoutMs: number): Promise<void> {
+async function awaitTaskRootIngressSettled(task: TaskRow, inactivityTimeoutMs: number): Promise<void> {
   if (!task.session_id) return
   try {
-    await SessionPromptState.waitForRootWakeQueueIdle(task.session_id, inactivityTimeoutMs)
+    await SessionPromptState.waitForTaskRootIngressIdle(task.session_id, inactivityTimeoutMs)
   } catch (cause) {
     throw createTaskCancellationIncomplete({
       taskID: task.id,
-      handle: "root Session wake queue settlement before destructive operation",
-      cause,
-    })
-  }
-}
-
-async function awaitTaskQueuePromptsIdle(input: {
-  sessionIDs: string[]
-  inactivityTimeoutMs: number
-  taskID?: string
-  handle: string
-  signal?: AbortSignal
-}): Promise<void> {
-  input.signal?.throwIfAborted()
-  try {
-    await TaskQueueService.awaitSessionPromptsIdle({
-      sessionIDs: input.sessionIDs,
-      inactivityTimeoutMs: input.inactivityTimeoutMs,
-      signal: input.signal,
-    })
-  } catch (cause) {
-    throw createTaskCancellationIncomplete({
-      taskID: input.taskID,
-      handle: input.handle,
+      handle: "Task root ingress settlement before destructive operation",
       cause,
     })
   }
@@ -516,7 +492,6 @@ async function settleTaskSessionWork(
   input: {
     reason: string
     handle: string
-    queueHandle: string
     origin: Omit<ExecutionCancellationOrigin, "targetSessionID">
   },
   options?: TaskCancellationSettlementOptions,
@@ -527,39 +502,6 @@ async function settleTaskSessionWork(
     handle: input.handle,
     origin: input.origin,
   })
-  const queueCancelledInCurrentInstance = Boolean(Instance.current())
-  TaskQueueService.cancelSessionPrompts({
-    sessionIDs: lifecycle.sessionIDs,
-    reason: input.reason,
-    origin: input.origin,
-  })
-  if (queueCancelledInCurrentInstance) {
-    await awaitTaskQueuePromptsIdle({
-      sessionIDs: lifecycle.sessionIDs,
-      inactivityTimeoutMs: options?.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
-      taskID: task.id,
-      handle: input.queueHandle,
-    })
-  } else {
-    await provideActiveTaskRootSessionInstance(
-      task,
-      async () => {
-        TaskQueueService.cancelSessionPrompts({
-          sessionIDs: lifecycle.sessionIDs,
-          reason: input.reason,
-          origin: input.origin,
-        })
-        await awaitTaskQueuePromptsIdle({
-          sessionIDs: lifecycle.sessionIDs,
-          inactivityTimeoutMs: options?.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
-          taskID: task.id,
-          handle: input.queueHandle,
-        })
-      },
-      undefined,
-      (options as DestructiveTaskOptions | undefined)?.projectDeletionAdmission,
-    )
-  }
   await assertSessionPromptSubtreeFinished({
     sessions: lifecycle.cancelledSessions,
     failures: lifecycle.cancellationFailures,
@@ -579,7 +521,6 @@ function deleteSettledSessionTreeRows(
   tx: Database.TxOrDb,
   input: { sessionID: string; projectID: string; expectedSessionIDs: string[] },
 ): void {
-  TaskQueueService.deleteSettledForSessions(tx, { sessionIDs: input.expectedSessionIDs })
   Session.deleteExactTreeInProject(tx, input)
 }
 
@@ -735,10 +676,10 @@ async function requireSessionTraceTaskInCurrentProject(sessionID: string): Promi
 export const CANCEL_PROMPT_SETTLE_INACTIVITY_MS = 5_000
 
 /**
- * Inactivity window for queue prompt settlement. Any observable queue/session
+ * Inactivity window for ingress and prompt settlement. Any observable ingress/session
  * activity renews the window; this is not a wall-clock cancellation deadline.
  */
-export const CANCEL_QUEUE_SETTLE_INACTIVITY_MS = 60_000
+export const CANCEL_INGRESS_SETTLE_INACTIVITY_MS = 60_000
 
 function missionTaskTitleInput(input: z.infer<typeof CreateTaskInput>):
   | {
@@ -768,8 +709,8 @@ function resolveTaskTitle(input: z.infer<typeof CreateTaskInput>): string {
 export interface TaskCancellationSettlementOptions {
   /** Override prompt-settle inactivity (ms). Tests use this to keep zombie checks small. */
   promptSettleInactivityMs?: number
-  /** Override queue-settle inactivity (ms). Tests use this to keep zombie checks small. */
-  queueSettleInactivityMs?: number
+  /** Override durable-ingress settlement inactivity (ms). */
+  ingressSettleInactivityMs?: number
 }
 
 export interface CancelTaskOptions extends TaskCancellationSettlementOptions {
@@ -1146,7 +1087,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
         { taskID: task.id, source, summary: "Operator message recorded", messageID: bundle.info.id },
         { taskID: task.id, source: "service.message" },
       )
-      ingressArtifactID = persistQueuedRootMessageWakeInTransaction(db, {
+      ingressArtifactID = persistTaskRootMessageIngressInTransaction(db, {
         task,
         messageID: bundle.info.id,
         kind: "operator",
@@ -1167,7 +1108,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
   return {
     task: requireTaskInCurrentProject(input.taskID),
     userMessage,
-    resumed: dispatchResult === "started",
+    resumed: dispatchResult === "accepted",
     wakeStatus: dispatchResult,
   }
 }
@@ -1561,12 +1502,12 @@ export namespace EngineService {
         if (currentBody !== input.message) {
           throw new Error(`Scheduler delivery ${delivery.id} source body changed before Task materialization.`)
         }
-        // Every queued root ingress uses EngineArtifact catalog_revision as
-        // its durable monotonic queue ordinal, independent of wall clock and
+        // Every root ingress uses EngineArtifact catalog_revision as
+        // its durable monotonic causal ordinal, independent of wall clock and
         // participant kind. Protocol sequence determines scheduler claim order;
-        // this shared ordinal preserves that order in the mixed root queue.
+        // this shared ordinal preserves causal order for one root Session.
         const now = Date.now()
-        ingressID = persistQueuedRootMessageWakeInTransaction(db, {
+        ingressID = persistTaskRootMessageIngressInTransaction(db, {
           task: currentTask,
           messageID: bundle.info.id,
           kind: rootKind,
@@ -2328,7 +2269,7 @@ export namespace EngineService {
       executionCancellationOrigin,
     )
     try {
-      discardQueuedTaskEvent(taskID)
+      discardTaskRootIngress(taskID)
       if (!isTaskTerminal(task)) {
         if (!options?.origin) {
           throw new Error(`deleteTask requires cancellation origin while task ${taskID} is non-terminal.`)
@@ -2339,16 +2280,15 @@ export namespace EngineService {
           throw new NotFoundError({ message: `Task not found: ${taskID}` })
         }
       }
-      await awaitRootSessionWakeQueueSettled(
+      await awaitTaskRootIngressSettled(
         task,
-        options?.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
+        options?.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS,
       )
       const settledSessionIDs = await settleTaskSessionWork(
         task,
         {
           reason: "task deleted",
           handle: "EngineService.deleteTask",
-          queueHandle: "EngineService.deleteTask.TaskQueueService.awaitSessionPromptsIdle",
           origin: executionCancellationOrigin,
         },
         options,
@@ -2356,7 +2296,7 @@ export namespace EngineService {
       await cancelPendingPermissionsForSessions(settledSessionIDs, "Task deleted before the Tool invocation ran")
       await recordTaskPhysicalDeleteBreadcrumb(task, "EngineService.deleteTask", {}, !options?.projectDeletionAdmission)
       if (options?.projectDeletionAdmission) return true
-      // Delete the settled queue audit rows, session tree, and task row in one
+      // Delete the settled ingress audit rows, session tree, and task row in one
       // transaction. Snapshot disk reclaim is intentionally NOT triggered here:
       // every tree object emitted by this task's `Snapshot.track()` is dangling
       // (no ref), so `git gc --prune=now` would also collect snapshots that other
@@ -2412,7 +2352,7 @@ export namespace EngineService {
         executionCancellationOrigin,
       )
       try {
-        discardQueuedTaskEvent(taskID)
+        discardTaskRootIngress(taskID)
         if (!isTaskTerminal(task)) {
           if (!options?.origin) {
             throw new Error(`setTaskArchived requires cancellation origin while task ${taskID} is non-terminal.`)
@@ -2420,16 +2360,15 @@ export namespace EngineService {
           await cancelTask(taskID, { ...options, origin: options.origin })
           task = requireTaskInCurrentProject(taskID)
         }
-        await awaitRootSessionWakeQueueSettled(
+        await awaitTaskRootIngressSettled(
           task,
-          options?.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
+        options?.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS,
         )
         await settleTaskSessionWork(
           task,
           {
             reason: "task archived",
             handle: "EngineService.setTaskArchived",
-            queueHandle: "EngineService.setTaskArchived.TaskQueueService.awaitSessionPromptsIdle",
             origin: executionCancellationOrigin,
           },
           options,
@@ -2591,7 +2530,7 @@ export namespace EngineService {
       operatorMessage: input.message,
     })
 
-    let dispatchResult: "accepted" | "queued"
+    let dispatchResult: "accepted"
     try {
       const result = await dispatch({
         taskID: task.id,
@@ -2599,7 +2538,10 @@ export namespace EngineService {
           coordinationRequest: { requestID: request.payload.request_id },
         },
       })
-      dispatchResult = result === "started" ? "accepted" : "queued"
+      if (result === "ignored") {
+        throw new Error(`Operator steer request ${request.payload.request_id} was rejected by Task ingress delivery`)
+      }
+      dispatchResult = "accepted"
     } catch (error) {
       const reason = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
       log.error("operator steer wake attempt failed after durable request persistence", {
@@ -2618,7 +2560,7 @@ export namespace EngineService {
       })
       let directDrainStarted = false
       try {
-        directDrainStarted = await drainQueuedTaskEvent(task.id)
+        directDrainStarted = await deliverTaskRootIngress(task.id)
       } catch (drainError) {
         const drainReason =
           drainError instanceof Error ? `${drainError.name}: ${drainError.message}` : String(drainError)
@@ -2633,8 +2575,8 @@ export namespace EngineService {
       }
       if (directDrainStarted) {
         dispatchResult = "accepted"
-      } else if (queuedTaskEventStats(task.id).events > 0) {
-        dispatchResult = "queued"
+      } else if (taskRootIngressStats(task.id).events > 0) {
+        dispatchResult = "accepted"
       } else {
         throw new Error(
           `Operator steer request ${request.payload.request_id} has neither an active Turn nor a durable pending wake`,
@@ -2835,7 +2777,7 @@ export namespace EngineService {
         .get()
       if (existingAuthority) {
         if (current.time_completed == null) {
-          terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+          terminalizeTaskRootIngressesForCancellationInTransaction(db, {
             taskID,
             cancellationRequestEventID: existingAuthority.requestEventID,
             now: Date.now(),
@@ -2863,7 +2805,7 @@ export namespace EngineService {
         },
       )
       db.insert(EngineTaskCancellationAuthorityTable).values({ task_id: taskID, request_event_id: requested.id }).run()
-      terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+      terminalizeTaskRootIngressesForCancellationInTransaction(db, {
         taskID,
         cancellationRequestEventID: requested.id,
         now: requested.time.emitted,
@@ -2910,7 +2852,7 @@ export namespace EngineService {
       const taskDirectory = taskCwd(taskID)
       const decisions = createDecisionLog(taskID)
       const promptSettleInactivityMs = options.promptSettleInactivityMs ?? CANCEL_PROMPT_SETTLE_INACTIVITY_MS
-      const queueSettleInactivityMs = options.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS
+      const ingressSettleInactivityMs = options.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS
 
       // Helper: log + decision_log breadcrumb when an abort cannot be proven.
       // Cancellation success must mean the owned handle stopped; otherwise the
@@ -2931,7 +2873,7 @@ export namespace EngineService {
             error: err instanceof Error ? err.message : String(err),
           }),
           reason:
-            "session prompt or queue settlement failed; cancellation is incomplete and task status was not marked cancelled.",
+            "session prompt or ingress settlement failed; cancellation is incomplete and task status was not marked cancelled.",
         })
         throw createTaskCancellationIncomplete({ taskID, handle: label, cause: err })
       }
@@ -2945,42 +2887,6 @@ export namespace EngineService {
         signal: convergenceOwner.signal,
       })
       logConvergenceStage("session_cancellation_requested")
-      convergenceOwner.assertActive()
-      const queueCancelledInCurrentInstance = Boolean(Instance.current())
-      const queuedPromptCancellations = TaskQueueService.cancelSessionPrompts({
-        sessionIDs: lifecycle.sessionIDs,
-        reason: "task cancelled",
-        origin: executionCancellationOrigin,
-      })
-      convergenceOwner.assertActive()
-      if (!queueCancelledInCurrentInstance) {
-        await provideActiveTaskRootSessionInstance(
-          task,
-          async () => {
-            convergenceOwner.assertActive()
-            TaskQueueService.cancelSessionPrompts({
-              sessionIDs: lifecycle.sessionIDs,
-              reason: "task cancelled",
-              origin: executionCancellationOrigin,
-            })
-          },
-          convergenceOwner.signal,
-        )
-      }
-      convergenceOwner.assertActive()
-      await provideActiveTaskRootSessionInstance(
-        task,
-        () =>
-          awaitTaskQueuePromptsIdle({
-            sessionIDs: lifecycle.sessionIDs,
-            inactivityTimeoutMs: queueSettleInactivityMs,
-            taskID,
-            handle: "TaskQueueService.awaitSessionPromptsIdle",
-            signal: convergenceOwner.signal,
-          }),
-        convergenceOwner.signal,
-      )
-      logConvergenceStage("task_queue_idle")
       convergenceOwner.assertActive()
       await assertSessionPromptSubtreeFinished({
         sessions: lifecycle.cancelledSessions,
@@ -3029,7 +2935,6 @@ export namespace EngineService {
           sessionIDs: lifecycle.sessionIDs,
           promptCancellations: lifecycle.cancelledSessions.map((session) => session.id),
           convergedAgentSessionIDs,
-          queuedPromptCancellations,
           pendingCoordinationRequestsCancelled,
           interruptedAssistantSessions,
           cancellationFailures: lifecycle.cancellationFailures.map((error) =>
@@ -3052,13 +2957,13 @@ export namespace EngineService {
         )
       }
       convergenceOwner.assertActive()
-      logConvergenceStage("root_wake_queue_waiting")
-      await SessionPromptState.waitForRootWakeQueueIdle(
+      logConvergenceStage("task_root_ingress_waiting")
+      await SessionPromptState.waitForTaskRootIngressIdle(
         task.session_id,
-        queueSettleInactivityMs,
+        ingressSettleInactivityMs,
         convergenceOwner.signal,
-      ).catch((err) => onAbortFailure("root Session wake queue idle before cancellation terminal write", err, {}))
-      logConvergenceStage("root_wake_queue_idle")
+      ).catch((err) => onAbortFailure("Task root ingress idle before cancellation terminal write", err, {}))
+      logConvergenceStage("task_root_ingress_idle")
       convergenceOwner.assertActive()
       const terminalResult = await ProcessSupervisor.withTaskCancellationBarrier(
         taskID,
@@ -3077,7 +2982,7 @@ export namespace EngineService {
               transactionEffect(db) {
                 convergenceOwner.assertInTransaction(db)
                 deleteEngineChannelBindingsForTask(db, taskID)
-                terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+                terminalizeTaskRootIngressesForCancellationInTransaction(db, {
                   taskID,
                   cancellationRequestEventID: cancellationRequest.id,
                   now: Date.now(),
@@ -3167,35 +3072,6 @@ export namespace EngineService {
       origin: executionCancellationOrigin,
     })
     const ids = requested.sessionIDs
-    const queueCancelledInCurrentInstance = Boolean(Instance.current())
-    TaskQueueService.cancelSessionPrompts({
-      sessionIDs: ids,
-      reason: "session deleted",
-      origin: executionCancellationOrigin,
-    })
-    if (queueCancelledInCurrentInstance) {
-      await awaitTaskQueuePromptsIdle({
-        sessionIDs: ids,
-        inactivityTimeoutMs: CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
-        handle: "EngineService.deleteSession.TaskQueueService.awaitSessionPromptsIdle",
-      })
-    } else {
-      await Instance.tryProvideActive({
-        directory: root.directory,
-        fn: async () => {
-          TaskQueueService.cancelSessionPrompts({
-            sessionIDs: ids,
-            reason: "session deleted",
-            origin: executionCancellationOrigin,
-          })
-          await awaitTaskQueuePromptsIdle({
-            sessionIDs: ids,
-            inactivityTimeoutMs: CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
-            handle: "EngineService.deleteSession.TaskQueueService.awaitSessionPromptsIdle",
-          })
-        },
-      })
-    }
     await assertSessionPromptSubtreeFinished({
       sessions: requested.cancelledSessions,
       failures: requested.failures,
@@ -3221,7 +3097,7 @@ export namespace EngineService {
         tasksForDelete.push(requireTaskInCurrentProject(item.id))
       }
       for (const item of tasksForDelete) {
-        await awaitRootSessionWakeQueueSettled(item, CANCEL_QUEUE_SETTLE_INACTIVITY_MS)
+        await awaitTaskRootIngressSettled(item, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
       }
       for (const item of tasksForDelete) {
         await recordTaskPhysicalDeleteBreadcrumb(item, "EngineService.deleteSession.deleteTasks", {
@@ -3416,7 +3292,7 @@ export namespace EngineService {
     let durableReceipt: { artifactID: string; receipt: z.infer<typeof MissionTaskResumeReceiptSchema> } | undefined
     let wakeStatus: DispatchTaskLoopResult | "accepted" | undefined
     try {
-      await SessionPromptState.enqueueRootWake({
+      await SessionPromptState.runTaskRootIngress({
         rootSessionID: task.session_id!,
         wakeID: `mission-acceptance-resume:${input.importer.toolCallID}`,
         run: async () => {
@@ -3444,7 +3320,7 @@ export namespace EngineService {
                 now,
               })
               clearEngineTaskRewindCursor(db, { taskID: input.taskID, timeUpdated: now })
-              const ingressArtifactID = persistQueuedMissionAcceptanceResumeInTransaction(db, {
+              const ingressArtifactID = persistMissionAcceptanceResumeIngressInTransaction(db, {
                 task: openedTask,
                 event,
                 now,
@@ -3508,7 +3384,7 @@ export namespace EngineService {
   async function wakeTaskForIntent(taskID: string, intent: "retry" | "replan") {
     const task = requireTaskInCurrentProject(taskID)
     await assertTaskRootSessionLineageInCurrentProject(task)
-    await SessionPromptState.enqueueRootWake({
+    await SessionPromptState.runTaskRootIngress({
       rootSessionID: task.session_id!,
       wakeID: Identifier.ascending("artifact"),
       run: async () => {
@@ -3525,7 +3401,7 @@ export namespace EngineService {
             })
           }
           const now = Date.now()
-          const supersededOperatorMessageIDs = retirePendingQueuedTaskEventsForOperatorIntentInTransaction(db, {
+          const supersededOperatorMessageIDs = retirePendingTaskRootIngressesForOperatorIntentInTransaction(db, {
             taskID,
             now,
           })
@@ -3535,7 +3411,7 @@ export namespace EngineService {
             intent,
             now,
           })
-          persistQueuedTaskIntentInTransaction(db, {
+          persistTaskRootIntentIngressInTransaction(db, {
             task: openedTask,
             intent,
             supersededOperatorMessageIDs,
@@ -3623,32 +3499,20 @@ export namespace EngineService {
             .where(
               and(
                 eq(EngineArtifactTable.task_id, taskID),
-                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                eq(EngineArtifactTable.kind, "task_root_ingress"),
                 sql`json_extract(${EngineArtifactTable.payload}, '$.message_id') = ${note.user_message.info.id}`,
               ),
             )
             .get()?.id,
       )
       const message =
-        note.wakeStatus === "started"
+        note.wakeStatus === "accepted"
           ? "Operator message recorded and accepted for delivery."
-          : note.wakeStatus === "queued"
-            ? "Operator message recorded. Task wake queued behind an earlier root Session wake."
-            : "Operator message recorded."
-      const queueProjection =
-        ingressID && task.session_id
-          ? SessionPromptState.rootWakeQueueProjection(task.session_id, ingressID)
-          : undefined
+          : "Operator message recorded."
       return {
         message,
-        wake_status: note.wakeStatus === "started" ? ("accepted" as const) : note.wakeStatus,
+        wake_status: note.wakeStatus,
         ...(ingressID ? { ingress_id: ingressID } : {}),
-        ...(queueProjection
-          ? {
-              queue_position: queueProjection.queuePosition,
-              current_owner_ingress_id: queueProjection.currentOwnerWakeID,
-            }
-          : {}),
         user_message: note.user_message,
       }
     } catch (error) {

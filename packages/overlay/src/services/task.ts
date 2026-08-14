@@ -595,15 +595,13 @@ export async function submitMessage(
 
   const requestPayload = panelRequestBody(text, options.metadata ?? {}, requestID, attachments)
 
-  markActivity()
-
   const selectedSource = boardStore.selectedSource
   if (selectedSource?.kind === "session") {
     const directory = conversationSourceDirectory(selectedSource)
     try {
       const result = await apiJson(
         directoryScopedPath(
-          `session/${encodeURIComponent(selectedSource.id)}/prompt_async`,
+          `session/${encodeURIComponent(selectedSource.id)}/message`,
           directory,
           "submitMessage",
         ),
@@ -611,6 +609,7 @@ export async function submitMessage(
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            messageID: `msg_${requestID}`,
             parts: [
               {
                 type: "text",
@@ -624,13 +623,15 @@ export async function submitMessage(
           signal: controller.signal,
         },
       )
-      ingestPersistedConversationMessage(result.user_message)
+      ingestPersistedConversationMessage(result)
       return result
     } finally {
       if (inactivityTimer) clearTimeout(inactivityTimer)
       cleanupRelay()
     }
   }
+
+  markActivity()
 
   // Route through HostTransport.openStream so this POST-stream pattern works
   // identically under Tauri (fetch + ReadableStream + manual Server-Sent
@@ -864,7 +865,7 @@ export interface OperatorSteerResult {
   task_id: string
   session_id: string
   request_id: string
-  wake_status: "accepted" | "queued"
+  wake_status: "accepted"
 }
 
 export class OperatorSteerInputError extends Error {

@@ -19,7 +19,6 @@ import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
 import { isMailboxChangeEventType } from "@/engine/mailbox"
-import { TaskQueueEvent } from "@/scheduler/task-queue-service"
 import { ProjectMemory } from "@/memory/project-memory"
 import { listArchivedWorkLedger, listWorkLedger } from "@/work-ledger/projection"
 import { errors } from "../error"
@@ -155,22 +154,6 @@ function workLedgerGlobalBusStatusEvent(input: {
   return { sourceType, sessionID: parsed.data.sessionID, sequence: Date.now() }
 }
 
-function workLedgerGlobalBusQueueEvent(input: {
-  payload?: unknown
-}): { sourceType: string; sessionID: string; sequence: number } | null {
-  const payload = input.payload
-  if (!payload || typeof payload !== "object") return null
-  const envelope = payload as { type?: unknown; properties?: unknown }
-  if (envelope.type !== TaskQueueEvent.Changed.type) return null
-  const parsed = TaskQueueEvent.Changed.properties.safeParse(envelope.properties)
-  if (!parsed.success) return null
-  return {
-    sourceType: TaskQueueEvent.Changed.type,
-    sessionID: parsed.data.sessionID,
-    sequence: parsed.data.sequence,
-  }
-}
-
 function workLedgerGlobalBusProjectMemoryEvent(input: {
   payload?: unknown
 }): { sourceType: string; projectID: string; sequence: number } | null {
@@ -188,7 +171,6 @@ function workLedgerGlobalBusProjectMemoryEvent(input: {
 }
 
 export const WorkLedgerRouteTestHooks = {
-  workLedgerGlobalBusQueueEvent,
   workLedgerGlobalBusProjectMemoryEvent,
   workLedgerSessionChangedEvent,
 }
@@ -368,16 +350,6 @@ export function WorkLedgerRoutes() {
             if (sessionEvent) {
               const changed = workLedgerSessionChangedEvent(sessionEvent.sourceType, sessionEvent.info)
               if (changed) writeWorkLedgerEventData(writeData, changed)
-              return
-            }
-            const queueEvent = workLedgerGlobalBusQueueEvent(event)
-            if (queueEvent) {
-              void Session.get(queueEvent.sessionID)
-                .then((info) => {
-                  const changed = workLedgerSessionChangedEvent(queueEvent.sourceType, info, queueEvent.sequence)
-                  if (changed) writeWorkLedgerEventData(writeData, changed)
-                })
-                .catch(() => undefined)
               return
             }
             const projectMemoryEvent = workLedgerGlobalBusProjectMemoryEvent(event)

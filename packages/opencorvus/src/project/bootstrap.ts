@@ -14,7 +14,6 @@ import { WorktreeGC } from "../worktree/gc"
 import { Truncate } from "../tool/truncation"
 import { AutomationService } from "../scheduler/automation-service"
 import { EventService } from "../scheduler/event-service"
-import { TaskQueueService } from "../scheduler/task-queue-service"
 import { EngineService } from "@/task-api"
 import { EngineEventLog } from "@/engine/event-log"
 import { EngineInteraction } from "@/engine/interaction"
@@ -25,14 +24,14 @@ import { TerminalProfile } from "@/system-terminal/profile"
 import { ensureMissionCallerReceiptBridge } from "@/mission/caller-receipt"
 import { ProjectOpenLifecycle } from "./open-lifecycle"
 import {
-  configureTaskLoopRunner,
-  drainPendingQueuedOperatorWakes,
+  configureTaskIngressRunner,
+  deliverPendingTaskRootIngresses,
   reconcileFailedExactTerminalIngressDeliveries,
   reconcileUndeliveredDispatchInfrastructureFacts,
   reconcileTerminalAgentLifecycleDeliveries,
   reconcileInterruptedTaskExecutions,
-  requeueInterruptedRunningTaskIngresses,
-} from "@/engine/queue"
+  recoverInterruptedTaskIngressDeliveries,
+} from "@/engine/task-root-ingress-delivery"
 import { runTaskLoop } from "@/orchestrator/loop"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
 import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
@@ -65,7 +64,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   Log.Default.info("bootstrapping", { directory: Instance.directory })
   installDefaultControlPlaneToolLoaders()
   installDefaultTaskWakeRuntime()
-  configureTaskLoopRunner(runTaskLoop)
+  configureTaskIngressRunner(runTaskLoop)
   const lifecycleContext = {
     directory: Instance.directory,
     worktree: Instance.worktree,
@@ -112,7 +111,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   await ProjectOpenLifecycle.stage("engine-task.recover-completion-closures", lifecycleContext, async () => {
     recoverAbandonedTaskCompletionClosures(Instance.project.id)
   })
-  TaskQueueService.init()
   EngineService.init()
   await ProjectOpenLifecycle.stage("build-observation.reconcile-cleanup", lifecycleContext, () =>
     reconcileBuildObservationCleanups({ projectID: Instance.project.id }),
@@ -133,12 +131,12 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   })
   // Restore the prior runtime's exact FIFO head before interrupted worker
   // recovery can append and drain new process-recovery/lifecycle wakes. If a
-  // stale `running` ingress remains ineligible here, the next `pending` row
+  // stale `delivering` ingress remains ineligible here, the next `accepted` row
   // can overtake it during recovery and permanently invert operator order.
-  await ProjectOpenLifecycle.stage("engine-queue.requeue-interrupted-running-ingresses", lifecycleContext, () =>
-    requeueInterruptedRunningTaskIngresses().then(() => undefined),
+  await ProjectOpenLifecycle.stage("task-root-ingress.recover-interrupted-running-ingresses", lifecycleContext, () =>
+    recoverInterruptedTaskIngressDeliveries().then(() => undefined),
   )
-  await ProjectOpenLifecycle.stage("engine-queue.recover-interrupted-executions", lifecycleContext, async () => {
+  await ProjectOpenLifecycle.stage("task-root-ingress.recover-interrupted-executions", lifecycleContext, async () => {
     try {
       await reconcileInterruptedTaskExecutions()
     } catch (error) {
@@ -149,7 +147,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
       throw error
     }
   })
-  await ProjectOpenLifecycle.stage("engine-queue.drain-persisted-wakes", lifecycleContext, async () => {
+  await ProjectOpenLifecycle.stage("task-root-ingress.deliver-persisted-ingresses", lifecycleContext, async () => {
     const failures: Error[] = []
     const recover = async (operation: string, run: () => void | Promise<void>) => {
       try {
@@ -176,8 +174,8 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
     await recover("reconcile-undelivered-dispatch-infrastructure-facts", () =>
       reconcileUndeliveredDispatchInfrastructureFacts().then(() => undefined),
     )
-    await recover("drain-pending-queued-operator-wakes", () =>
-      drainPendingQueuedOperatorWakes().then(() => undefined),
+    await recover("deliver-pending-task-root-ingresses", () =>
+      deliverPendingTaskRootIngresses().then(() => undefined),
     )
     if (failures.length > 0) {
       throw new AggregateError(failures, `Failed ${failures.length} persisted coordination recovery operation(s)`)
@@ -189,10 +187,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   await ProjectOpenLifecycle.stage("channel-supervisor.sync", lifecycleContext, async () => {
     await ChannelSupervisor.sync(await Config.get())
   })
-  await ProjectOpenLifecycle.stage("task-queue.start", lifecycleContext, async () => {
-    TaskQueueService.start()
-  })
-
   Bus.subscribe(Command.Event.Executed, async (payload) => {
     if (payload.properties.name === Command.Default.INIT) {
       await Project.setInitialized(Instance.project.id)

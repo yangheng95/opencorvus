@@ -1,7 +1,7 @@
 /**
  * Wall-clock timeout race for an arbitrary promise.
  *
- * cancelTask and other tear-down paths await internal prompt and queue owners.
+ * cancelTask and other tear-down paths await internal prompt and ingress owners.
  * If an owner never resolves, the await pins the entire cancel chain — task row stays active,
  * UI spinner never clears, deleteTask blocks. `withTimeout` provides an
  * upper bound; the caller decides whether timeout is fatal (throw) or

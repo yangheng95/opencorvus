@@ -50,14 +50,11 @@ describe("channel runtime session isolation", () => {
 
     const core = new ChannelRuntime() as unknown as {
       adapters: ChannelAdapter[]
-      session: SessionCoordinator<
-        { sessionId: string; adapter: ChannelAdapter; channel: string; thread: string },
-        IncomingMessage
-      >
+      session: SessionCoordinator<{ sessionId: string; adapter: ChannelAdapter; channel: string; thread: string }>
       client: {
         session: {
           create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-          promptAsync(input: {
+          prompt(input: {
             sessionID: string
             parts: Array<{ type: "text"; text: string }>
             system: string
@@ -76,7 +73,7 @@ describe("channel runtime session isolation", () => {
           if (!id) throw new Error("unexpected extra session.create call")
           return { data: { id } }
         },
-        promptAsync: async (input) => {
+        prompt: async (input) => {
           promptCalls.push({
             sessionID: input.sessionID,
             text: input.parts[0]?.text ?? "",
@@ -109,7 +106,7 @@ describe("channel runtime session isolation", () => {
         client: {
           session: {
             create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-            promptAsync(input: {
+            prompt(input: {
               sessionID: string
               parts: Array<{ type: "text"; text: string }>
               system: string
@@ -126,7 +123,7 @@ describe("channel runtime session isolation", () => {
             createCalls.push(input)
             return { data: { id: "shared_corrupt_replacement" } }
           },
-          promptAsync: async (input) => {
+          prompt: async (input) => {
             promptCalls.push({
               sessionID: input.sessionID,
               text: input.parts[0]?.text ?? "",
@@ -166,7 +163,7 @@ describe("channel runtime session isolation", () => {
         client: {
           session: {
             create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-            promptAsync(input: {
+            prompt(input: {
               sessionID: string
               parts: Array<{ type: "text"; text: string }>
               system: string
@@ -183,7 +180,7 @@ describe("channel runtime session isolation", () => {
             createCalls.push(input)
             return { data: { id: "shared_invalid_replacement" } }
           },
-          promptAsync: async (input) => {
+          prompt: async (input) => {
             promptCalls.push({
               sessionID: input.sessionID,
               text: input.parts[0]?.text ?? "",
@@ -220,7 +217,7 @@ describe("channel runtime session isolation", () => {
         client: {
           session: {
             create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-            promptAsync(input: {
+            prompt(input: {
               sessionID: string
               parts: Array<{ type: "text"; text: string }>
               system: string
@@ -237,7 +234,7 @@ describe("channel runtime session isolation", () => {
             createCalls.push(input)
             return { data: { id: "shared_unwritable_replacement" } }
           },
-          promptAsync: async (input) => {
+          prompt: async (input) => {
             promptCalls.push({
               sessionID: input.sessionID,
               text: input.parts[0]?.text ?? "",
@@ -271,7 +268,7 @@ describe("channel runtime session isolation", () => {
         client: {
           session: {
             create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-            promptAsync(input: {
+            prompt(input: {
               sessionID: string
               parts: Array<{ type: "text"; text: string }>
               system: string
@@ -288,7 +285,7 @@ describe("channel runtime session isolation", () => {
             createCalls.push(input)
             return { data: { id: "shared_persisted" } }
           },
-          promptAsync: async (input) => {
+          prompt: async (input) => {
             expect(JSON.parse(await readFile(sharedFile, "utf8")).session_id).toBe(input.sessionID)
             promptCalls.push({
               sessionID: input.sessionID,
@@ -307,7 +304,7 @@ describe("channel runtime session isolation", () => {
         client: {
           session: {
             create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-            promptAsync(input: {
+            prompt(input: {
               sessionID: string
               parts: Array<{ type: "text"; text: string }>
               system: string
@@ -340,7 +337,7 @@ describe("channel runtime session isolation", () => {
           client: {
             session: {
               create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-              promptAsync(input: {
+              prompt(input: {
                 sessionID: string
                 parts: Array<{ type: "text"; text: string }>
               }): Promise<{ error?: unknown; data: { taskID: string } }>
@@ -356,7 +353,7 @@ describe("channel runtime session isolation", () => {
               await new Promise<void>((resolve) => setTimeout(resolve, 20))
               return { data: { id: "shared_single_owner" } }
             },
-            promptAsync: async (input) => {
+            prompt: async (input) => {
               promptCalls.push(input.sessionID)
               return { data: { taskID: `task_${input.sessionID}` } }
             },
@@ -453,7 +450,7 @@ describe("channel runtime session isolation", () => {
         client: {
           session: {
             create(input: { title: string }): Promise<{ error?: unknown; data: { id: string } }>
-            promptAsync(input: {
+            prompt(input: {
               sessionID: string
               parts: Array<{ type: "text"; text: string }>
               system: string
@@ -473,7 +470,7 @@ describe("channel runtime session isolation", () => {
             createCalls.push(input)
             return { data: { id: "shared_unpersisted" } }
           },
-          promptAsync: async (input) => {
+          prompt: async (input) => {
             promptCalls.push({
               sessionID: input.sessionID,
               text: input.parts[0]?.text ?? "",

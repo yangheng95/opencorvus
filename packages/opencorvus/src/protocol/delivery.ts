@@ -4,7 +4,7 @@ import z from "zod"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { deriveTaskStatus, isTaskActive } from "@/engine/task-status"
-import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+import { TaskRootIngressSchema } from "@/engine/task-root-ingress"
 import { Identifier } from "@/id/id"
 import { MessageTable, PartTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
 import { and, asc, Database, eq, inArray, lte, or, sql } from "@/storage/db"
@@ -526,7 +526,7 @@ function requireTaskSourceMessageOccurrence(
     .where(
       and(
         eq(EngineArtifactTable.id, taskIngress.data.taskIngress.id),
-        eq(EngineArtifactTable.kind, "queued_operator_wake"),
+        eq(EngineArtifactTable.kind, "task_root_ingress"),
       ),
     )
     .get()
@@ -535,7 +535,7 @@ function requireTaskSourceMessageOccurrence(
       message: `Task scheduler source Message ${input.sourceMessageID} names an ingress outside Task ${input.source.task_id}.`,
     })
   }
-  const ingress = QueuedTaskIngressSchema.parse(artifact.payload)
+  const ingress = TaskRootIngressSchema.parse(artifact.payload)
   if (
     ingress.root_session_id !== input.source.root_session_id ||
     ingress.source_kind !== taskIngress.data.taskIngress.kind
@@ -687,7 +687,7 @@ function requireDeliveryResultOccurrence(
     !message ||
     !ingress ||
     ingress.taskID !== inbox.actor_id ||
-    ingress.kind !== "queued_operator_wake" ||
+    ingress.kind !== "task_root_ingress" ||
     provenance?.taskID !== inbox.actor_id ||
     provenance.schedulerDelivery?.eventID !== inbox.envelope_id ||
     provenance.schedulerDelivery.inboxID !== inbox.id ||
@@ -698,7 +698,7 @@ function requireDeliveryResultOccurrence(
     rootMessage.schedulerDelivery.inboxID !== inbox.id
   ) {
     throw new SchedulerMessageConflictError({
-      message: `Scheduler inbox ${inbox.id} task_ingress result does not name its exact Message and queued ingress occurrence in the recipient Task.`,
+      message: `Scheduler inbox ${inbox.id} task_ingress result does not name its exact Message and accepted ingress occurrence in the recipient Task.`,
       eventID: inbox.envelope_id,
     })
   }

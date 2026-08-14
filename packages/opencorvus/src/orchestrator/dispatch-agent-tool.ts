@@ -648,7 +648,7 @@ export function createDispatchAgentTool(input: {
           runDetachedRecovery: input.runDetachedRecovery,
           committedLineage,
           deliver: async ({ sessionID: completedSessionID, outcome, executionError }) => {
-            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
+            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/task-root-ingress-delivery")
             const completedOutcome =
               outcome ??
               (executionError instanceof WorkerTurnSettlementError
@@ -744,7 +744,7 @@ export function createDispatchAgentTool(input: {
                   `Detached dispatch infrastructure recovery has no durable fact for ${completedSessionID}`,
                 )
               }
-              const { dispatchTaskLoop } = await import("@/engine/queue")
+              const { dispatchTaskLoop } = await import("@/engine/task-root-ingress-delivery")
               const result = await dispatchTaskLoop({
                 taskID: input.taskID,
                 event: {
@@ -752,8 +752,8 @@ export function createDispatchAgentTool(input: {
                   dispatchInfrastructureFailure: { infrastructureFactID, outcome: infrastructureOutcome },
                 },
               })
-              if (result === "started" || result === "queued") return
-              const { dispatchInfrastructureFailureWakeDisposition } = await import("@/engine/queue")
+              if (result === "accepted") return
+              const { dispatchInfrastructureFailureWakeDisposition } = await import("@/engine/task-root-ingress-delivery")
               const disposition = dispatchInfrastructureFailureWakeDisposition({
                 taskID: input.taskID,
                 infrastructureFactID,
@@ -764,7 +764,7 @@ export function createDispatchAgentTool(input: {
               if (disposition === "terminal_inapplicable") return
               throw new Error(`Detached dispatch infrastructure ingress is ${disposition} for ${completedSessionID}`)
             }
-            const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
+            const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/task-root-ingress-delivery")
             const result = await reconcileTerminalAgentLifecycleDelivery({
               taskID: input.taskID,
               sessionID: completedSessionID,
@@ -808,7 +808,7 @@ export function createDispatchAgentTool(input: {
             if (outcome.kind !== "infrastructure_failure") {
               throw new Error("Detached pipeline owner failure constructor returned a non-infrastructure outcome")
             }
-            const { dispatchTaskLoop } = await import("@/engine/queue")
+            const { dispatchTaskLoop } = await import("@/engine/task-root-ingress-delivery")
             await dispatchTaskLoop({
               taskID: input.taskID,
               event: {

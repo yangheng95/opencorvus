@@ -6,7 +6,6 @@ import { Instance } from "@/project/instance"
 import { Config } from "@/config/config"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
 import { EngineService } from "@/task-api"
-import { TaskQueueService } from "@/scheduler/task-queue-service"
 import { NotFoundError } from "@/storage/db"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
@@ -104,17 +103,7 @@ async function closeRightSidebarConversationSession(
     targetSessionID: session.id,
   })
   cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
-  TaskQueueService.cancelSessionPrompts({
-    sessionIDs: [session.id],
-    reason,
-    origin,
-    source: "session.prompt_async",
-  })
   await awaitSessionPromptFinishedInScope({ session, handle })
-  await TaskQueueService.awaitSessionPromptsIdle({
-    sessionIDs: [session.id],
-    source: "session.prompt_async",
-  })
   const occurrence = SessionStatus.executionOccurrence(session.id)
   if (occurrence && SessionStatus.getExecution(session.id, occurrence.inputMessageID).type !== "terminal") {
     await publishSessionStatus(
@@ -317,7 +306,7 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
       "/session/:sessionID/abort",
       describeRoute({
         summary: `Abort right sidebar ${label} session`,
-        description: `Stop active and queued processing for a project-bound right sidebar ${label} session.`,
+        description: `Stop active processing for a project-bound right sidebar ${label} session.`,
         operationId: `${operation}.session.abort`,
         responses: {
           200: {

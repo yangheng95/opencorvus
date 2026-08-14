@@ -334,7 +334,7 @@ try {
   if (paused.status !== "paused" || resumed.status !== "active" || resumed.nextRun <= Date.now())
     findings.push("pause/resume did not converge")
 
-  await post(`/session/${session.id}/prompt_async`, {
+  const busyPrompt = post(`/session/${session.id}/message`, {
     model: { providerID, modelID },
     agent: "chat",
     parts: [{ type: "text", text: "SCHEDULED_E2E_BUSY_HOLD" }],
@@ -360,6 +360,7 @@ try {
   })
   if (busyRunNow.status !== 409) findings.push(`busy Session Run now returned ${busyRunNow.status}`)
   provider.releaseBusy()
+  await busyPrompt
   const busyRun = await waitFor("busy Session delayed due", async () =>
     (await runs(busyAutomation.id)).find((row) => row.outcome === "succeeded"),
   )

@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import {
-  persistQueuedRootMessageWakeInTransaction,
-  QueueOrderingTestHooks,
-  TestHooks as QueueTestHooks,
-} from "@/engine/queue"
+  persistTaskRootMessageIngressInTransaction,
+  IngressOrderingTestHooks,
+  TestHooks as TaskRootIngressTestHooks,
+} from "@/engine/task-root-ingress-delivery"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
@@ -65,7 +65,7 @@ async function persistOperatorMessage(input: { taskID: string; rootSessionID: st
 }
 
 describe("Task root Session durable ingress FIFO", () => {
-  test("keeps a later operator ingress pending behind the exact running head", async () => {
+  test("delivers accepted operator ingress in exact root Session order", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -104,14 +104,14 @@ describe("Task root Session durable ingress FIFO", () => {
           text: "First exact operator message",
         })
         const firstIngressID = Database.transaction((db) =>
-          persistQueuedRootMessageWakeInTransaction(db, {
+          persistTaskRootMessageIngressInTransaction(db, {
             task: db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!,
             messageID: firstMessage.messageID,
             kind: "operator",
             now: firstMessage.now,
           }),
         )
-        expect(QueueTestHooks.startQueuedWake(firstIngressID)).toBe(true)
+        expect(TaskRootIngressTestHooks.startTaskRootIngress(firstIngressID)).toBe(true)
 
         const secondMessage = await persistOperatorMessage({
           taskID,
@@ -119,7 +119,7 @@ describe("Task root Session durable ingress FIFO", () => {
           text: "Second exact operator message",
         })
         const secondIngressID = Database.transaction((db) =>
-          persistQueuedRootMessageWakeInTransaction(db, {
+          persistTaskRootMessageIngressInTransaction(db, {
             task: db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!,
             messageID: secondMessage.messageID,
             kind: "operator",
@@ -134,10 +134,10 @@ describe("Task root Session durable ingress FIFO", () => {
               .where(eq(EngineArtifactTable.id, secondIngressID))
               .get()?.label,
         )
-        const head = QueueOrderingTestHooks.head(taskID)
+        const head = IngressOrderingTestHooks.head(taskID)
         expect(head?.id).toBe(firstIngressID)
-        expect(head?.label).toBe("running")
-        expect(secondLabel).toBe("pending")
+        expect(head?.label).toBe("delivering")
+        expect(secondLabel).toBe("accepted")
       },
     })
   })

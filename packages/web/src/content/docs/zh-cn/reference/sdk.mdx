@@ -119,13 +119,13 @@ try {
 
 ## 命名空间
 
-SDK 跟随 OpenAPI `operationId` 命名。点号分段变成 namespace，snake_case 方法名变成 camelCase。例如 `session.prompt_async` 映射为 `client.session.promptAsync()`。
+SDK 跟随 OpenAPI `operationId` 命名。点号分段变成 namespace，snake_case 方法名变成 camelCase。例如 `session.prompt` 映射为 `client.session.prompt()`。
 
 | 命名空间                                 | 示例                                                       |
 | ---------------------------------------- | ---------------------------------------------------------- |
 | `client.global.*`                        | `health`、`event`、`config.get`、`db.reset`                |
 | `client.task.*`                          | `create`、`list`、`message`、`retry`、`replan`、`followup` |
-| `client.session.*`                       | `create`、`prompt`、`promptAsync`、`events`、`trace`       |
+| `client.session.*`                       | `create`、`prompt`、`events`、`trace`、`summarize`         |
 | `client.goal.*`                          | Delivery Slice 创建、immutable revision 与派生进度路由    |
 | `client.channel.*`                       | Channel runtime 与附件路由                                 |
 | `client.mcp.*`                           | MCP server 生命周期与认证路由                              |

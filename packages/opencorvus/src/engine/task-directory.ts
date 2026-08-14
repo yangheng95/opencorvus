@@ -2,8 +2,8 @@ import { SessionTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"
 import type { TaskRow } from "./store"
 
-export class TaskQueueError extends Error {
-  override readonly name = "TaskQueueError"
+export class TaskRootIngressError extends Error {
+  override readonly name = "TaskRootIngressError"
 
   constructor(
     message: string,
@@ -24,11 +24,11 @@ export class TaskQueueError extends Error {
 
 /**
  * The Task root Session is the single durable execution-directory authority
- * shared by queueing, artifacts, prompt re-entry, and projected workers.
+ * shared by durable ingress, artifacts, prompt re-entry, and projected workers.
  */
 export function taskRootDirectory(task: Pick<TaskRow, "id" | "session_id" | "project_id">): string {
   if (!task.session_id) {
-    throw new TaskQueueError(`Task ${task.id} has no root session`, "session_not_bound", task.id)
+    throw new TaskRootIngressError(`Task ${task.id} has no root session`, "session_not_bound", task.id)
   }
   const session = Database.use((db) =>
     db
@@ -43,28 +43,28 @@ export function taskRootDirectory(task: Pick<TaskRow, "id" | "session_id" | "pro
       .get(),
   )
   if (!session) {
-    throw new TaskQueueError(
+    throw new TaskRootIngressError(
       `Task ${task.id} root session ${task.session_id} does not exist`,
       "session_not_found",
       task.id,
     )
   }
   if (session.projectID !== task.project_id) {
-    throw new TaskQueueError(
+    throw new TaskRootIngressError(
       `Task ${task.id} project ${task.project_id} does not match root session project ${session.projectID}`,
       "project_mismatch",
       task.id,
     )
   }
   if (session.kind !== "root" || session.parentID) {
-    throw new TaskQueueError(
+    throw new TaskRootIngressError(
       `Task ${task.id} session ${task.session_id} must be a parentless root session`,
       "invalid_root_lineage",
       task.id,
     )
   }
   if (!session.directory.trim()) {
-    throw new TaskQueueError(`Task ${task.id} root session has no directory`, "directory_missing", task.id)
+    throw new TaskRootIngressError(`Task ${task.id} root session has no directory`, "directory_missing", task.id)
   }
   return session.directory
 }

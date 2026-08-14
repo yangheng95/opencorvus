@@ -7,9 +7,8 @@ import { assertSessionPromptSubtreeFinished, cancelSessionPromptInScope } from "
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { deleteProjectNotes } from "@/quicknote/service"
-import { TaskQueueService } from "@/scheduler/task-queue-service"
 import { SessionTable } from "@/session/session.sql"
-import { CANCEL_QUEUE_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
+import { CANCEL_INGRESS_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { Filesystem } from "@/util/filesystem"
@@ -159,7 +158,6 @@ async function cancelRemainingProjectSessionPrompts(
   cancellationOrigin: TaskCancellationOrigin,
 ): Promise<void> {
   const sessions = projectPromptSessions(projectID)
-  const sessionIDs = sessions.map((session) => session.id)
   const cancelledSessions: ProjectPromptSession[] = []
   const failures: unknown[] = []
   const executionOrigin = createExecutionCancellationOrigin({
@@ -169,12 +167,6 @@ async function cancelRemainingProjectSessionPrompts(
     requestID: cancellationOrigin.requestID,
     reason: cancellationOrigin.reason,
     ...(cancellationOrigin.missionID ? { missionID: cancellationOrigin.missionID } : {}),
-  })
-
-  TaskQueueService.cancelSessionPrompts({
-    sessionIDs,
-    reason: "project deleted",
-    origin: executionOrigin,
   })
 
   for (const session of sessions.slice().reverse()) {
@@ -192,18 +184,6 @@ async function cancelRemainingProjectSessionPrompts(
     } catch (error) {
       failures.push(error)
     }
-  }
-
-  try {
-    await TaskQueueService.awaitSessionPromptsIdle({
-      sessionIDs,
-      inactivityTimeoutMs: CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
-    })
-  } catch (cause) {
-    throw createTaskCancellationIncomplete({
-      handle: "ProjectDelete.TaskQueueService.awaitSessionPromptsIdle",
-      cause,
-    })
   }
 
   await assertSessionPromptSubtreeFinished({
@@ -264,7 +244,7 @@ export async function deleteProject(
     }
 
     await cancelRemainingProjectSessionPrompts(projectID, cancellationOrigin)
-    await Instance.disposeProjectEntries(projectID, CANCEL_QUEUE_SETTLE_INACTIVITY_MS)
+    await Instance.disposeProjectEntries(projectID, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
     stage = "filesystem-quarantine"
     const rootPlans = await projectRootRemovalPlans(directory)
     if (rootPlans.length > 0) {

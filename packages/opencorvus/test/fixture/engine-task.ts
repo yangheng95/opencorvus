@@ -1,6 +1,6 @@
 import { Database } from "../../src/storage/db"
 import { persistTask } from "../../src/engine/pipeline"
-import { retirePendingQueuedTaskEventsForOperatorIntentInTransaction } from "../../src/engine/queue"
+import { retirePendingTaskRootIngressesForOperatorIntentInTransaction } from "../../src/engine/task-root-ingress-delivery"
 
 /**
  * Establish a Task fixture whose creation ingress is outside the test's scope.
@@ -13,7 +13,7 @@ import { retirePendingQueuedTaskEventsForOperatorIntentInTransaction } from "../
 export function persistEstablishedTask(input: Parameters<typeof persistTask>[0]): void {
   persistTask(input)
   Database.transaction((db) => {
-    retirePendingQueuedTaskEventsForOperatorIntentInTransaction(db, {
+    retirePendingTaskRootIngressesForOperatorIntentInTransaction(db, {
       taskID: input.taskID,
       now: Date.now(),
     })

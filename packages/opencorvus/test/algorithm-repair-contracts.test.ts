@@ -40,16 +40,16 @@ describe("algorithm repair contracts", () => {
     })
   })
 
-  test("unregisters a timed-out root wake idle waiter from its live queue", async () => {
+  test("unregisters a timed-out root ingress idle waiter from its live ownership set", async () => {
     let settleWake!: () => void
-    const wake = SessionPromptState.enqueueRootWake({
+    const wake = SessionPromptState.runTaskRootIngress({
       rootSessionID: "root_waiter_contract",
       wakeID: "wake_waiter_contract",
       run: () => new Promise<void>((resolve) => (settleWake = resolve)),
     })
     await Promise.resolve()
-    await SessionPromptState.waitForRootWakeQueueIdle("root_waiter_contract", 5).catch(() => undefined)
-    expect(SessionPromptState.TestHooks.rootWakeQueueSnapshot("root_waiter_contract")).toEqual({
+    await SessionPromptState.waitForTaskRootIngressIdle("root_waiter_contract", 5).catch(() => undefined)
+    expect(SessionPromptState.TestHooks.taskRootIngressSnapshot("root_waiter_contract")).toEqual({
       entries: 1,
       idleWaiters: 0,
     })
@@ -61,7 +61,7 @@ describe("algorithm repair contracts", () => {
     let settleCurrent!: () => void
     let currentStarted!: () => void
     const observedCurrentStart = new Promise<void>((resolve) => (currentStarted = resolve))
-    const current = SessionPromptState.enqueueRootWake({
+    const current = SessionPromptState.runTaskRootIngress({
       rootSessionID: "root_wake_settlement_contract",
       wakeID: "wake_settlement_contract",
       run: async () => {
@@ -75,20 +75,20 @@ describe("algorithm repair contracts", () => {
       "root_wake_settlement_contract",
       "wake_settlement_contract",
     ).then(() =>
-      SessionPromptState.enqueueRootWake({
+      SessionPromptState.runTaskRootIngress({
         rootSessionID: "root_wake_settlement_contract",
         wakeID: "wake_settlement_contract",
         run: async () => ({ phase: "terminal_delivery" as const }),
       }),
     )
 
-    expect(SessionPromptState.TestHooks.rootWakeQueueSnapshot("root_wake_settlement_contract")).toEqual({
+    expect(SessionPromptState.TestHooks.taskRootIngressSnapshot("root_wake_settlement_contract")).toEqual({
       entries: 1,
       idleWaiters: 0,
     })
     settleCurrent()
     await current
     expect(await nextDelivery).toEqual({ phase: "terminal_delivery" })
-    expect(SessionPromptState.TestHooks.rootWakeQueueSnapshot("root_wake_settlement_contract")).toBeUndefined()
+    expect(SessionPromptState.TestHooks.taskRootIngressSnapshot("root_wake_settlement_contract")).toBeUndefined()
   })
 })

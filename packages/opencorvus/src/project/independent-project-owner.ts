@@ -38,7 +38,7 @@ export async function provideInitializedProjectExecution<R>(input: {
 
 /**
  * Run an executable project lifecycle under a fresh, fully initialized lease.
- * Session loops and queue recovery use this owner because a process restart
+ * Session loops and ingress recovery use this owner because a process restart
  * leaves the Instance cache empty even though their durable database rows
  * remain runnable. Identity-only owners stay reserved for persistence,
  * publication, and cleanup paths that do not execute project capabilities.

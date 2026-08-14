@@ -31,8 +31,8 @@
  *     stream-error"`. After the canonical LLM Activity retries are exhausted,
  *     the physical Session and Task execution window are terminalized. A
  *     later operator Retry/Replan creates a fresh execution window.
- *   - Concurrency state (`running.set(taskID, ctrl)`) and SerialQueue-driven
- *     wake scheduling sit OUTSIDE any single processTask invocation; the
+ *   - Per-Session physical ownership and durable Task ingress delivery sit
+ *     OUTSIDE any single processTask invocation; the
  *     runner has no analog because workers do not own their own dispatch.
  *
  * See the matching NON-GOAL section in `src/agent/runner.ts` for the full
@@ -80,7 +80,7 @@ import { requireTask, terminalTask } from "@/engine"
 import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
-import { queuedTaskIngressSourceKind } from "@/engine/queued-task-ingress"
+import { taskRootIngressSourceKind } from "@/engine/task-root-ingress"
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
@@ -304,9 +304,9 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
   session: Session.Info
   run: () => Promise<T>
 }): Promise<T> {
-  const timeout = (await EngineConfig.get()).activity.task_queue_run_timeout_ms
+  const timeout = (await EngineConfig.get()).activity.execution_progress_idle_ms
   if (!Number.isFinite(timeout) || timeout <= 0) {
-    throw new Error(`Invalid assistant.activity.task_queue_run_timeout_ms: ${timeout}`)
+    throw new Error(`Invalid assistant.activity.execution_progress_idle_ms: ${timeout}`)
   }
 
   const pollMs = Math.min(1_000, Math.max(50, Math.floor(timeout / 20)))
@@ -785,7 +785,7 @@ export namespace Orchestrator {
                     taskIngressKind: terminalConversationAuthority.ingressKind,
                   }
                 : wakeID && event
-                  ? { taskIngressID: wakeID, taskIngressKind: queuedTaskIngressSourceKind(event) }
+                  ? { taskIngressID: wakeID, taskIngressKind: taskRootIngressSourceKind(event) }
                   : {}),
               ...(currentVisibleInputMessageID ? { inputMessageID: currentVisibleInputMessageID } : {}),
               installedAt: Date.now(),
@@ -1037,7 +1037,7 @@ export namespace Orchestrator {
       // A second wake may attach to the Session while the current prompt owner
       // is still unwinding. Its natural closure rejects that attached caller
       // with this exact disposition; the occurrence is not a provider,
-      // scheduler, or Task failure. The queued wake remains authoritative and
+      // scheduler, or Task failure. The accepted ingress remains authoritative and
       // will reconstruct current facts on its own turn.
       if (error instanceof SessionPromptLoopFinishedError && !wasCtrlAborted) {
         log.info("orchestrator prompt owner closed before attached wake produced a result", {
@@ -1323,7 +1323,7 @@ export type CurrentOrchestratorControlMessage = {
  * Exact terminal control occurrences have no participant-authored source
  * Message of their own. Persist one visible Orchestrator-authored input so
  * the provider's current conversation tail and the product transcript carry
- * the same ingress. The durable queued wake and referenced fact remain the
+ * the same ingress. The durable accepted ingress and referenced fact remain the
  * only scheduler authorities; this Message is their delivery projection.
  */
 export function currentOrchestratorControlMessage(

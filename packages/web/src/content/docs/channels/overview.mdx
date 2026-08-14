@@ -65,7 +65,8 @@ Provider gateway
   -> ChannelAdapter.onMessage(IncomingMessage)
   -> ChannelRuntime.handleMessage()
   -> session create/reuse
-  -> client.session.promptAsync()
+  -> client.session.prompt()
+  -> exact assistant response
 
 OpenCorvus event stream
   -> ChannelRuntime.handleEvent()

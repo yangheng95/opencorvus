@@ -31,7 +31,7 @@ import {
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { SessionTable } from "@/session/session.sql"
 import { ProjectMemory } from "@/memory/project-memory"
-import { persistQueuedOperatorWakeInTransaction } from "./queue"
+import { persistTaskRootIngressInTransaction } from "./task-root-ingress-delivery"
 
 const log = Log.create({ service: "engine-pipeline" })
 
@@ -164,7 +164,7 @@ export function persistTask(input: {
     })
     const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
     if (!task) throw new Error(`Task ${input.taskID} disappeared during active occurrence creation`)
-    const initialIngressID = persistQueuedOperatorWakeInTransaction(
+    const initialIngressID = persistTaskRootIngressInTransaction(
       db,
       task,
       {

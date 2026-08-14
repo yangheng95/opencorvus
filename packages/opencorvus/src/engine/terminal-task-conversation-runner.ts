@@ -10,12 +10,12 @@ import { listAgentCoordinationActions } from "./agent-coordination"
 import { updateEngineArtifactWhereReturning } from "./artifact"
 import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
 import {
-  QueuedTaskIngressSchema,
+  TaskRootIngressSchema,
   TerminalIngressResultSchema,
   sameTerminalIngressResult,
-  type QueuedTaskIngress,
+  type TaskRootIngress,
   type TerminalIngressResult,
-} from "./queued-task-ingress"
+} from "./task-root-ingress"
 import {
   TerminalLifecycleReferenceSchema,
   requireCurrentTerminalLifecycleReference,
@@ -88,7 +88,7 @@ function assertConsistentCandidates(
 export async function resolveDurableTerminalIngressResult(input: {
   task: TaskRow
   ingressArtifactID: string
-  ingress: QueuedTaskIngress
+  ingress: TaskRootIngress
 }): Promise<DurableTerminalResultCandidate | undefined> {
   const candidates: DurableTerminalResultCandidate[] = []
   if (input.ingress.delivery_result) {
@@ -210,16 +210,16 @@ export function settleTerminalIngress(input: {
         and(
           eq(EngineArtifactTable.id, input.ingressArtifactID),
           eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "queued_operator_wake"),
-          eq(EngineArtifactTable.label, "pending"),
+          eq(EngineArtifactTable.kind, "task_root_ingress"),
+          eq(EngineArtifactTable.label, "accepted"),
         ),
       )
       .get()
     if (!row) return false
-    const ingress = QueuedTaskIngressSchema.parse(row.payload)
+    const ingress = TaskRootIngressSchema.parse(row.payload)
     if (ingress.delivery_result) {
       throw new TerminalIngressIntegrityError(
-        `Pending terminal ingress ${input.ingressArtifactID} already contains a delivery result`,
+        `Accepted terminal ingress ${input.ingressArtifactID} already contains a delivery result`,
       )
     }
     const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
@@ -229,11 +229,11 @@ export function settleTerminalIngress(input: {
         where: and(
           eq(EngineArtifactTable.id, row.id),
           eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "queued_operator_wake"),
-          eq(EngineArtifactTable.label, "pending"),
+          eq(EngineArtifactTable.kind, "task_root_ingress"),
+          eq(EngineArtifactTable.label, "accepted"),
         )!,
-        kind: "queued_operator_wake",
-        label: input.result.status === "delivery_failed" ? "delivery_failed" : "drained",
+        kind: "task_root_ingress",
+        label: input.result.status === "delivery_failed" ? "delivery_failed" : "delivered",
         payload: { ...ingress, delivery_result: input.result },
         timeUpdated: input.result.time_completed,
       }),
@@ -244,7 +244,7 @@ export function settleTerminalIngress(input: {
 async function executeTerminalIngress(input: {
   task: TaskRow
   ingressArtifactID: string
-  ingress: QueuedTaskIngress
+  ingress: TaskRootIngress
   signal: AbortSignal
   terminalLifecycleReference: TerminalLifecycleReference
 }): Promise<DurableTerminalResultCandidate & { terminalLifecycleReference: TerminalLifecycleReference }> {
@@ -315,11 +315,11 @@ export interface TerminalIngressDelivery {
 export async function deliverTerminalTaskIngress(input: {
   task: TaskRow
   ingressArtifactID: string
-  ingress: QueuedTaskIngress
+  ingress: TaskRootIngress
 }): Promise<TerminalIngressDelivery> {
   if (!input.task.session_id) throw new Error(`Terminal Task ${input.task.id} has no root Session`)
   const terminalLifecycleReference = requireCurrentTerminalLifecycleReference(input.task.id)
-  return SessionPromptState.enqueueRootWake({
+  return SessionPromptState.runTaskRootIngress({
     rootSessionID: input.task.session_id,
     wakeID: input.ingressArtifactID,
     run: async (signal) => {

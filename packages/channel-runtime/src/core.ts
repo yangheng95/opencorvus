@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto"
+import { createHash, randomUUID } from "node:crypto"
 import path from "node:path"
 import { ChannelId, type ChannelName } from "@opencorvus-ai/channel-config"
 import { createOpenCorvus, createOpenCorvusClient, type Event, type OpenCorvusClient } from "@opencorvus-ai/sdk"
@@ -13,7 +13,6 @@ import {
   polishText,
   splitText,
 } from "./message-formatter"
-import { queueLimit as queueLimitRule } from "./channel-policy"
 import { SessionCoordinator } from "./session-coordinator"
 
 interface SessionEntry {
@@ -47,15 +46,19 @@ type ChannelResult = {
   attachments?: ChannelAttachment[]
 }
 type EventPermissionAsked = Extract<Event, { type: "permission.asked" }>
-type EventSessionError = Extract<Event, { type: "session.error" }>
-type EventExecutionLifecycle = Extract<Event, { type: "agent.execution.lifecycle" }>
 type EventMessageUpdated = Extract<Event, { type: "message.updated" }>
 type EventMessagePartUpdated = Extract<Event, { type: "message.part.updated" }>
 type EventTaskCompleted = Extract<Event, { type: "task.completed" }>
 const MIRROR_PREFIX = "[opencorvus-mirror]"
-type PendingTask = {
-  taskId: string
-  touch: number
+type PendingPromptExecution = {
+  executionId: string
+  sessionID: string
+  messageID: string
+}
+
+type DirectPromptOperation = {
+  controller: AbortController
+  completion: Promise<void>
 }
 
 export interface ChannelRuntimeOptions {
@@ -74,7 +77,7 @@ export type ChannelRuntimeStartReceipt = {
 
 export class ChannelRuntime {
   private static readonly STARTUP_MESSAGE_LIMIT = 1_000
-  private session = new SessionCoordinator<SessionEntry, IncomingMessage>()
+  private session = new SessionCoordinator<SessionEntry>()
   private candidates: ChannelAdapter[] = []
   private adapters: ChannelAdapter[] = []
   private cleanupPending = new Set<ChannelAdapter>()
@@ -101,12 +104,12 @@ export class ChannelRuntime {
   private sharedSessionId?: string
   /** Prevent creating duplicate overlay mirror threads */
   private overlayMirrorBound = false
-  private pending = new Map<string, PendingTask>()
-  /** Guard against concurrent releaseSession() calls for the same session */
-  private releasing = new Set<string>()
+  private pending = new Map<string, PendingPromptExecution>()
+  private directPromptOperations = new Map<string, DirectPromptOperation>()
+  private directPromptAdmissionClosed = false
+  private directPromptAdmissionGeneration = 0
   private taskBindings = new Map<string, SessionEntry[]>()
   private taskByThread = new Map<string, string>()
-  private pendingWatch: ReturnType<typeof setInterval> | null = null
 
   constructor(private options?: ChannelRuntimeOptions) {}
 
@@ -171,6 +174,7 @@ export class ChannelRuntime {
 
   private async _doStart(): Promise<ChannelRuntimeStartReceipt> {
     this.running = true
+    this.directPromptAdmissionClosed = false
     this.directory = this.requireDirectory()
 
     // Validate existing shared-session state before starting server, event subscriptions, or adapters.
@@ -196,7 +200,6 @@ export class ChannelRuntime {
     console.log(`[ChannelRuntime] OpenCorvus server running at ${this.serverUrl}`)
 
     this.subscribeEvents()
-    this.startPendingWatch()
 
     // Standalone and managed bootstraps reject an empty configuration before
     // calling start. Keeping an empty runtime valid preserves the core's
@@ -298,25 +301,31 @@ export class ChannelRuntime {
 
   async stop(): Promise<void> {
     this.running = false
+    this.directPromptAdmissionClosed = true
+    this.directPromptAdmissionGeneration += 1
     this.startReceipt = undefined
-    this.stopPendingWatch()
+    const promptOperations = [...this.directPromptOperations.values()]
+    for (const operation of promptOperations) {
+      operation.controller.abort(new Error("Channel runtime stopped"))
+    }
+    const adapters = [...new Set([...this.adapters, ...this.cleanupPending])]
+    const server = this.server
+    const results = await Promise.allSettled([
+      ...promptOperations.map((operation) => operation.completion),
+      ...adapters.map((adapter) => adapter.stop()),
+      Promise.resolve().then(() => server?.close()),
+    ])
     this.pending.clear()
+    this.directPromptOperations.clear()
     this.taskBindings.clear()
     this.taskByThread.clear()
     this.textBuffers.clear()
     this.userMessageIds.clear()
     this.pendingPartTexts.clear()
-    this.releasing.clear()
     this.session.clear()
-    const adapters = [...new Set([...this.adapters, ...this.cleanupPending])]
-    const server = this.server
-    const results = await Promise.allSettled([
-      ...adapters.map((adapter) => adapter.stop()),
-      Promise.resolve().then(() => server?.close()),
-    ])
-    for (const [index, result] of results.entries()) {
+    for (const [resultIndex, result] of results.slice(promptOperations.length).entries()) {
       if (result.status !== "fulfilled") continue
-      const adapter = adapters[index]
+      const adapter = adapters[resultIndex]
       if (adapter) {
         this.adapters = this.adapters.filter((candidate) => candidate !== adapter)
         this.cleanupPending.delete(adapter)
@@ -331,6 +340,11 @@ export class ChannelRuntime {
   }
 
   async handleMessage(msg: IncomingMessage): Promise<void> {
+    const promptAdmissionGeneration = this.directPromptAdmissionGeneration
+    const promptAdmissionIsCurrent = () =>
+      !this.directPromptAdmissionClosed &&
+      promptAdmissionGeneration === this.directPromptAdmissionGeneration
+    if (!promptAdmissionIsCurrent()) return
     const threadKey = `${msg.platform}:${msg.channel}:${msg.thread}`
     const adapter = this.adapters.find((a) => a.platform === msg.platform)
     if (!adapter) return
@@ -350,6 +364,7 @@ export class ChannelRuntime {
       } else {
         try {
           const result = await this.stt.transcribe(msg.audio)
+          if (!promptAdmissionIsCurrent()) return
           const prefix = `[Voice message transcript]: ${result.text}`
           text = text ? `${prefix}\n\n${text}` : prefix
           console.log(`[ChannelRuntime] Transcribed voice (${result.provider}, ${result.durationMs}ms)`)
@@ -378,6 +393,7 @@ export class ChannelRuntime {
     if (!session) {
       const shared = this.sharedMode()
       const sharedId = shared ? await this.ensureSharedSession(msg) : undefined
+      if (!promptAdmissionIsCurrent()) return
       if (shared) {
         if (!sharedId) {
           const notice = "Failed to initialize shared session."
@@ -403,6 +419,7 @@ export class ChannelRuntime {
           kind: "assistant",
           title: `${msg.platform} thread ${msg.thread}`,
         })
+        if (!promptAdmissionIsCurrent()) return
 
         if (createResult.error || !createResult.data) {
           console.error("[ChannelRuntime] session.create error:", JSON.stringify(createResult.error).slice(0, 500))
@@ -437,6 +454,7 @@ export class ChannelRuntime {
       await adapter.sendMessage(msg.channel, msg.thread, notice)
       return
     }
+    if (!promptAdmissionIsCurrent()) return
     this.mirror("user", text, {
       platform: msg.platform,
       channel: msg.channel,
@@ -444,64 +462,80 @@ export class ChannelRuntime {
       sessionId: session.sessionId,
     })
 
-    // If session is currently processing a task, queue this message and notify user
-    if (this.session.processing(session.sessionId)) {
-      const queue = this.session.enqueue(session.sessionId, { msg, text }, this.queueLimit())
-      if (!queue.ok) {
-        const notice = `Current task is still running. Queue is full (${queue.limit}). Please retry later.`
-        this.mirror("system", notice, {
-          platform: msg.platform,
-          channel: msg.channel,
-          thread: msg.thread,
-          sessionId: session.sessionId,
-        })
-        await adapter.sendMessage(msg.channel, msg.thread, notice)
-        console.warn(`[ChannelRuntime] Dropped message for ${session.sessionId}, queue limit reached: ${queue.limit}`)
-        return
-      }
-      const notice = `Current task is still running. Your message is queued (#${queue.size}).`
-      this.mirror("system", notice, {
-        platform: msg.platform,
-        channel: msg.channel,
-        thread: msg.thread,
-        sessionId: session.sessionId,
-      })
-      await adapter.sendMessage(msg.channel, msg.thread, notice)
-      console.log(`[ChannelRuntime] Queued message for ${session.sessionId}, queue size: ${queue.size}`)
-      return
-    }
-
-    // Mark session as processing before sending prompt
-    this.session.start(session.sessionId)
-
-    const result = await this.submitTask(session.sessionId, text, msg.platform)
-    if (result !== "ok") {
-      this.clearPending(session.sessionId)
-      this.session.stop(session.sessionId)
-      const notice = "Failed to send prompt."
-      this.mirror("system", notice, {
-        platform: msg.platform,
-        channel: msg.channel,
-        thread: msg.thread,
-        sessionId: session.sessionId,
-      })
-      await adapter.sendMessage(msg.channel, msg.thread, notice)
-      return
-    }
+    await this.submitTask(session.sessionId, text, msg, adapter, promptAdmissionGeneration)
   }
 
-  private async submitTask(sessionID: string, text: string, _platform: string) {
-    const result = await this.client.session.promptAsync({
-      sessionID,
-      parts: [{ type: "text", text }],
-    })
-    if (result.error) {
-      console.error("[ChannelRuntime] session.promptAsync error:", JSON.stringify(result.error).slice(0, 500))
-      return "failed" as const
+  private async submitTask(
+    sessionID: string,
+    text: string,
+    source: IncomingMessage,
+    adapter: ChannelAdapter,
+    promptAdmissionGeneration: number,
+  ) {
+    if (
+      this.directPromptAdmissionClosed ||
+      promptAdmissionGeneration !== this.directPromptAdmissionGeneration
+    ) {
+      return
     }
-    this.markPending(sessionID, result.data.taskID)
-    console.log(`[ChannelRuntime] Prompt sent via session.promptAsync for session ${sessionID}`)
-    return "ok" as const
+    const executionId = randomUUID()
+    const messageID = `msg_h${createHash("sha256")
+      .update(
+        `channel-session-prompt\0${source.platform}\0${source.channel}\0${source.thread}\0${source.id ?? executionId}`,
+      )
+      .digest("hex")
+      .slice(0, 19)}`
+    const controller = new AbortController()
+    this.markPending({ sessionID, executionId, messageID })
+    const completion = (async () => {
+      let result: Awaited<ReturnType<OpenCorvusClient["session"]["prompt"]>>
+      try {
+        result = await this.client.session.prompt(
+          {
+            sessionID,
+            messageID,
+            parts: [{ type: "text", text }],
+          },
+          { signal: controller.signal },
+        )
+      } catch (error) {
+        if (controller.signal.aborted) return
+        console.error("[ChannelRuntime] session.prompt failed:", error)
+        if (!this.releaseExecution(executionId)) return
+        const notice = "Failed to send prompt."
+        this.mirror("system", notice, {
+          platform: source.platform,
+          channel: source.channel,
+          thread: source.thread,
+          sessionId: sessionID,
+        })
+        await adapter.sendMessage(source.channel, source.thread, notice)
+        return
+      }
+      if (result.error) {
+        console.error("[ChannelRuntime] session.prompt error:", JSON.stringify(result.error).slice(0, 500))
+        if (!this.releaseExecution(executionId)) return
+        const notice = "Failed to send prompt."
+        this.mirror("system", notice, {
+          platform: source.platform,
+          channel: source.channel,
+          thread: source.thread,
+          sessionId: sessionID,
+        })
+        await adapter.sendMessage(source.channel, source.thread, notice)
+        return
+      }
+      if (!this.releaseExecution(executionId)) return
+      console.log(`[ChannelRuntime] Prompt completed via session.prompt for session ${sessionID}`)
+    })()
+    this.directPromptOperations.set(executionId, { controller, completion })
+    try {
+      await completion
+    } finally {
+      if (this.directPromptOperations.get(executionId)?.completion === completion) {
+        this.directPromptOperations.delete(executionId)
+      }
+    }
   }
 
   private channelProtocol(platform: string): platform is ControlPlatform {
@@ -754,6 +788,20 @@ export class ChannelRuntime {
     return file
   }
 
+  private async publishSharedSessionFile(temporary: string, file: string) {
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        await rename(temporary, file)
+        return
+      } catch (error) {
+        const code = error && typeof error === "object" && "code" in error ? error.code : undefined
+        const retryable = process.platform === "win32" && ["EACCES", "EBUSY", "EPERM"].includes(String(code))
+        if (!retryable || attempt >= 100) throw error
+        await new Promise<void>((resolve) => setTimeout(resolve, Math.min(25, attempt)))
+      }
+    }
+  }
+
   private async writeSharedSessionFile(file: string, sessionId: string) {
     const payload = {
       session_id: sessionId,
@@ -767,12 +815,14 @@ export class ChannelRuntime {
       await handle.sync()
       await handle.close()
       handle = undefined
-      await rename(temporary, file)
-      const directory = await open(path.dirname(file), "r")
-      try {
-        await directory.sync()
-      } finally {
-        await directory.close()
+      await this.publishSharedSessionFile(temporary, file)
+      if (process.platform !== "win32") {
+        const directory = await open(path.dirname(file), "r")
+        try {
+          await directory.sync()
+        } finally {
+          await directory.close()
+        }
       }
     } finally {
       await handle?.close().catch(() => undefined)
@@ -857,87 +907,18 @@ export class ChannelRuntime {
     })
   }
 
-  private pendingTimeout() {
-    const raw = Number(process.env.OPENCORVUS_CHANNEL_TASK_TIMEOUT_MS)
-    if (!Number.isFinite(raw) || raw <= 0) return 10 * 60 * 1000
-    if (raw < 1_000) return 1_000
-    return Math.floor(raw)
-  }
-
-  private pendingSweepMs() {
-    const raw = Number(process.env.OPENCORVUS_CHANNEL_TASK_SWEEP_MS)
-    if (!Number.isFinite(raw) || raw <= 0) return 5_000
-    if (raw < 1_000) return 1_000
-    return Math.floor(raw)
-  }
-
-  private startPendingWatch() {
-    if (this.pendingWatch) return
-    this.pendingWatch = setInterval(() => {
-      this.expirePending().catch((err) => console.error("[ChannelRuntime] pending watchdog error:", err))
-    }, this.pendingSweepMs())
-    this.pendingWatch.unref?.()
-  }
-
-  private stopPendingWatch() {
-    if (!this.pendingWatch) return
-    clearInterval(this.pendingWatch)
-    this.pendingWatch = null
-  }
-
-  private markPending(sessionId: string, taskId: string) {
-    this.pending.set(sessionId, {
-      taskId,
-      touch: Date.now(),
+  private markPending(input: { sessionID: string; executionId: string; messageID: string }) {
+    this.pending.set(input.executionId, {
+      ...input,
     })
   }
 
-  private touchPending(sessionId: string) {
-    const item = this.pending.get(sessionId)
-    if (!item) return
-    item.touch = Date.now()
+  private releaseExecution(executionId: string): boolean {
+    if (!this.pending.has(executionId)) return false
+    this.pending.delete(executionId)
+    return true
   }
 
-  private clearPending(sessionId: string) {
-    this.pending.delete(sessionId)
-  }
-
-  private releaseSession(sessionId: string) {
-    // Prevent concurrent release when lifecycle settlement and expiry arrive together.
-    if (this.releasing.has(sessionId)) return
-    this.releasing.add(sessionId)
-
-    this.clearPending(sessionId)
-    this.session.stop(sessionId)
-    this.releasing.delete(sessionId)
-    const next = this.session.dequeue(sessionId)
-    if (!next.item) return
-    this.handleMessage(next.item.msg).catch((err) =>
-      console.error("[ChannelRuntime] dequeue handleMessage error:", err),
-    )
-  }
-
-  private async expirePending() {
-    if (this.pending.size === 0) return
-    const now = Date.now()
-    const timeout = this.pendingTimeout()
-    for (const [sessionId, item] of Array.from(this.pending.entries())) {
-      if (now - item.touch < timeout) continue
-      this.releaseSession(sessionId)
-      const sessions = this.findSessions(sessionId)
-      if (sessions.length === 0) continue
-      const sec = Math.floor(timeout / 1000)
-      const msg = `Task timed out after ${sec}s (${item.taskId}). Queue released.`
-      this.mirrorSessions("system", msg, sessionId, sessions)
-      for (const session of sessions) {
-        await this.safeSend(session.adapter, session.channel, session.thread, msg)
-      }
-    }
-  }
-
-  private queueLimit() {
-    return queueLimitRule(process.env)
-  }
 
   /** Format a brief status message for important tool completions */
   private formatToolStatus(tool: string, input: unknown): string | null {
@@ -1084,22 +1065,8 @@ export class ChannelRuntime {
       return
     }
 
-    if (event.type === "agent.execution.lifecycle") {
-      const info = (event as EventExecutionLifecycle).properties
-      if (!info.sessionID) return
-      if (info.status.type !== "terminal") {
-        this.touchPending(info.sessionID)
-        return
-      }
-      const pending = this.pending.get(info.sessionID)
-      if (!pending) return
-      this.releaseSession(info.sessionID)
-      return
-    }
-
     if (event.type === "permission.asked") {
       const asked = (event as EventPermissionAsked).properties as PermissionAsked
-      this.touchPending(asked.sessionID)
       const sessions = this.findSessions(asked.sessionID)
       this.mirrorSessions(
         "system",
@@ -1119,35 +1086,9 @@ export class ChannelRuntime {
       return
     }
 
-    if (event.type === "session.error") {
-      const props = (event as EventSessionError).properties
-      const sessionId = "sessionID" in props ? props.sessionID : undefined
-      if (!sessionId) return
-      this.releaseSession(sessionId)
-      const sessions = this.findSessions(sessionId)
-      if (sessions.length === 0) return
-      const msg = (() => {
-        const error = props.error
-        if (!error) return "Session failed."
-        const data = "data" in error ? error.data : undefined
-        const detail =
-          data && typeof data === "object" && "message" in data && typeof data.message === "string"
-            ? data.message
-            : undefined
-        if (detail) return `Session failed: ${detail}`
-        return `Session failed: ${String(error.name ?? "unknown_error")}`
-      })()
-      this.mirrorSessions("system", msg, sessionId, sessions)
-      for (const session of sessions) {
-        await this.safeSend(session.adapter, session.channel, session.thread, msg)
-      }
-      return
-    }
-
     // Track user message IDs so we can skip their parts
     if (event.type === "message.updated") {
       const info = (event as EventMessageUpdated).properties.info
-      this.touchPending(info.sessionID)
 
       if (info.role === "user") {
         // Track on first event only; message.updated fires twice for the same user message
@@ -1222,7 +1163,6 @@ export class ChannelRuntime {
 
     if (event.type === "message.part.updated") {
       const part = (event as EventMessagePartUpdated).properties.part
-      this.touchPending(part.sessionID)
 
       // In shared mode, pre-capture text parts before we know the message role.
       // message.part.updated fires BEFORE message.updated(role=user), so we store

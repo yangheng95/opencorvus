@@ -1,6 +1,6 @@
 import z from "zod"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
-import type { QueuedTaskIngress } from "@/engine/queued-task-ingress"
+import type { TaskRootIngress } from "@/engine/task-root-ingress"
 import {
   requireCurrentTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
@@ -39,7 +39,7 @@ export type TerminalConversationAuthority = z.infer<typeof TerminalConversationA
 export function createTerminalConversationAuthority(input: {
   taskID: string
   ingressID: string
-  ingress: Extract<QueuedTaskIngress, { source_kind: "operator_message" | "coordination_request" }>
+  ingress: Extract<TaskRootIngress, { source_kind: "operator_message" | "coordination_request" }>
 }): TerminalConversationAuthority {
   const terminalLifecycleReference = requireCurrentTerminalLifecycleReference(input.taskID)
   const completionDecision =

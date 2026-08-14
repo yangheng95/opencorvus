@@ -106,7 +106,7 @@ export namespace SessionPromptState {
   const cancellationReceipts = new Map<string, CancellationReceipt>()
   let processSettlementGate: symbol | undefined
   const messageOwnersBySession = new Map<string, { owners: Map<string, AbortSignal>; latestMessageID?: string }>()
-  const rootWakeQueues = new Map<
+  const taskRootIngressOwners = new Map<
     string,
     {
       tail: Promise<void>
@@ -371,6 +371,19 @@ export namespace SessionPromptState {
     })
   }
 
+  export function attachedReplyTargets(sessionID: string, directory?: string): string[] {
+    const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
+    return (
+      match?.callbacks.flatMap((callback) =>
+        callback.resultMode === "reply" && callback.replyToMessageID !== undefined ? [callback.replyToMessageID] : [],
+      ) ?? []
+    )
+  }
+
+  export function hasAttachedPromptWork(sessionID: string, directory?: string): boolean {
+    return (existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]?.callbacks.length ?? 0) > 0
+  }
+
   export async function enterLoop(input: {
     sessionID: string
     directory: string
@@ -425,23 +438,8 @@ export namespace SessionPromptState {
     return Boolean(promptState && Object.keys(promptState).length > 0)
   }
 
-  export function rootWakeQueuePosition(rootSessionID: string, wakeID: string): number | undefined {
-    const queue = rootWakeQueues.get(rootSessionID)
-    if (!queue) return undefined
-    const position = [...queue.entries.keys()].indexOf(wakeID)
-    return position < 0 ? undefined : position
-  }
-
-  export function rootWakeQueueProjection(rootSessionID: string, wakeID: string) {
-    const queue = rootWakeQueues.get(rootSessionID)
-    if (!queue) return undefined
-    const wakeIDs = [...queue.entries.keys()]
-    const position = wakeIDs.indexOf(wakeID)
-    if (position < 0) return undefined
-    return {
-      queuePosition: position + 1,
-      currentOwnerWakeID: wakeIDs[0]!,
-    }
+  export function hasTaskRootIngressOwner(rootSessionID: string, ingressID: string): boolean {
+    return taskRootIngressOwners.get(rootSessionID)?.entries.has(ingressID) === true
   }
 
   /**
@@ -450,18 +448,17 @@ export namespace SessionPromptState {
    * whether the same wake still requires a different delivery phase.
    */
   export async function waitForRootWakeSettlement(rootSessionID: string, wakeID: string): Promise<void> {
-    const execution = rootWakeQueues.get(rootSessionID)?.entries.get(wakeID)
+    const execution = taskRootIngressOwners.get(rootSessionID)?.entries.get(wakeID)
     if (!execution) return
     await execution.catch(() => undefined)
   }
 
   /**
-   * Serialize persisted scheduler wakes by the Task root Session identity.
-   * A wake ID is the durable artifact identity supplied by the caller; this
-   * process-local queue owns ordering only and never decides whether work is
-   * current, live, stale, or admissible.
+   * Preserve one physical writer for persisted Task ingress within a root
+   * Session. The durable ingress ID is supplied by the caller; this owner
+   * chain does not rank work or decide whether another Task may execute.
    */
-  export function enqueueRootWake<T>(input: {
+  export function runTaskRootIngress<T>(input: {
     rootSessionID: string
     wakeID: string
     run: (signal: AbortSignal) => Promise<T>
@@ -481,22 +478,22 @@ export namespace SessionPromptState {
         }),
       )
     }
-    let queue = rootWakeQueues.get(input.rootSessionID)
-    if (!queue) {
-      queue = {
+    let ownership = taskRootIngressOwners.get(input.rootSessionID)
+    if (!ownership) {
+      ownership = {
         tail: Promise.resolve(),
         entries: new Map(),
         controllers: new Map(),
         idleWaiters: new Set(),
       }
-      rootWakeQueues.set(input.rootSessionID, queue)
+      taskRootIngressOwners.set(input.rootSessionID, ownership)
     }
-    const existing = queue.entries.get(input.wakeID)
+    const existing = ownership.entries.get(input.wakeID)
     if (existing) return existing as Promise<T>
 
     const controller = new AbortController()
-    queue.controllers.set(input.wakeID, controller)
-    const execution = queue.tail
+    ownership.controllers.set(input.wakeID, controller)
+    const execution = ownership.tail
       .catch(() => undefined)
       .then(async () => {
         if (controller.signal.aborted) {
@@ -507,19 +504,19 @@ export namespace SessionPromptState {
         }
         return await input.run(controller.signal)
       })
-    queue.entries.set(input.wakeID, execution)
-    queue.tail = execution.then(
+    ownership.entries.set(input.wakeID, execution)
+    ownership.tail = execution.then(
       () => undefined,
       () => undefined,
     )
     void execution
       .finally(() => {
-        const current = rootWakeQueues.get(input.rootSessionID)
+        const current = taskRootIngressOwners.get(input.rootSessionID)
         if (!current || current.entries.get(input.wakeID) !== execution) return
         current.entries.delete(input.wakeID)
         current.controllers.delete(input.wakeID)
         if (current.entries.size > 0) return
-        rootWakeQueues.delete(input.rootSessionID)
+        taskRootIngressOwners.delete(input.rootSessionID)
         for (const resolve of current.idleWaiters) resolve()
         current.idleWaiters.clear()
       })
@@ -527,11 +524,11 @@ export namespace SessionPromptState {
     return execution
   }
 
-  export function cancelRootWakeQueue(rootSessionID: string, origin: RootSessionDestructiveOrigin): number {
-    const queue = rootWakeQueues.get(rootSessionID)
-    if (!queue) return 0
+  export function cancelTaskRootIngresses(rootSessionID: string, origin: RootSessionDestructiveOrigin): number {
+    const ownership = taskRootIngressOwners.get(rootSessionID)
+    if (!ownership) return 0
     let cancelled = 0
-    for (const [wakeID, controller] of queue.controllers) {
+    for (const [wakeID, controller] of ownership.controllers) {
       if (controller.signal.aborted) continue
       controller.abort(
         new ExecutionCancellationError({
@@ -574,7 +571,7 @@ export namespace SessionPromptState {
     const scopes = rootSessionDestructiveScopes.get(rootSessionID) ?? new Map<symbol, RootSessionDestructiveOrigin>()
     scopes.set(token, origin)
     rootSessionDestructiveScopes.set(rootSessionID, scopes)
-    const cancelledWakes = cancelRootWakeQueue(rootSessionID, origin)
+    const cancelledWakes = cancelTaskRootIngresses(rootSessionID, origin)
     let closed = false
     return {
       cancelledWakes,
@@ -624,7 +621,7 @@ export namespace SessionPromptState {
     return (rootSessionProcessShutdownHandoffs.get(rootSessionID)?.size ?? 0) > 0
   }
 
-  export async function waitForRootWakeQueueIdle(
+  export async function waitForTaskRootIngressIdle(
     rootSessionID: string,
     inactivityTimeoutMs: number,
     signal?: AbortSignal,
@@ -633,14 +630,14 @@ export namespace SessionPromptState {
     if (!Number.isInteger(inactivityTimeoutMs) || inactivityTimeoutMs <= 0) {
       throw new Error(`Invalid root Session wake idle timeout ${inactivityTimeoutMs}`)
     }
-    let remaining = rootWakeQueues.get(rootSessionID)?.entries.size ?? 0
+    let remaining = taskRootIngressOwners.get(rootSessionID)?.entries.size ?? 0
     if (remaining === 0) return
     let inactiveAt = Date.now() + inactivityTimeoutMs
     const pollMs = Math.min(250, Math.max(25, Math.floor(inactivityTimeoutMs / 10)))
     while (remaining > 0) {
       await awaitWithAbort(new Promise((resolve) => setTimeout(resolve, pollMs)), signal)
       signal?.throwIfAborted()
-      const next = rootWakeQueues.get(rootSessionID)?.entries.size ?? 0
+      const next = taskRootIngressOwners.get(rootSessionID)?.entries.size ?? 0
       if (next === 0) return
       if (next !== remaining) {
         remaining = next
@@ -649,7 +646,7 @@ export namespace SessionPromptState {
       }
       if (Date.now() >= inactiveAt) {
         throw new Error(
-          `Root Session ${rootSessionID} wake queue made no settlement progress for ${inactivityTimeoutMs}ms; ${remaining} wake(s) remain`,
+          `Root Session ${rootSessionID} root ingress delivery made no settlement progress for ${inactivityTimeoutMs}ms; ${remaining} wake(s) remain`,
         )
       }
     }
@@ -808,7 +805,7 @@ export namespace SessionPromptState {
     match.timeCancelled = now
     match.timeUpdated = now
     // Reject all pending callbacks before deleting state so that
-    // executePrompt() callers (task-queue-service) are unblocked.
+    // Exact prompt callers are unblocked after the owner settles.
     for (const cb of match.callbacks) {
       cb.reject(error)
     }
@@ -850,9 +847,9 @@ export namespace SessionPromptState {
   }
 
   export const TestHooks = {
-    rootWakeQueueSnapshot(rootSessionID: string) {
-      const queue = rootWakeQueues.get(rootSessionID)
-      return queue ? { entries: queue.entries.size, idleWaiters: queue.idleWaiters.size } : undefined
+    taskRootIngressSnapshot(rootSessionID: string) {
+      const ownership = taskRootIngressOwners.get(rootSessionID)
+      return ownership ? { entries: ownership.entries.size, idleWaiters: ownership.idleWaiters.size } : undefined
     },
     promptResourceSnapshot(sessionID: string) {
       const entry = existingStateEntryBySessionID(sessionID)

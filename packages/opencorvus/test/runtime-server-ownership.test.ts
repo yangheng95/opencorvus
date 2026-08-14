@@ -23,6 +23,9 @@ import { bootstrap } from "../src/cli/bootstrap"
 import { restartFailureDisposition } from "../src/server/restart-handoff"
 import { Scheduler } from "../src/scheduler"
 import { SchedulerMessageTestHooks } from "../src/protocol/scheduler-message"
+import { Instance } from "../src/project/instance"
+import { InstanceBootstrap } from "../src/project/bootstrap"
+import * as TaskRootIngressDelivery from "../src/engine/task-root-ingress-delivery"
 
 const temporaryDirectories: string[] = []
 const children = new Set<ChildProcessWithoutNullStreams>()
@@ -497,10 +500,10 @@ describe("runtime server database ownership", () => {
       )
       await owner.stop(true)
       owner = undefined
-      RuntimeExecutionSettlement.reserve("task_queue", "stopped-runtime-settled").settle()
+      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "stopped-runtime-settled").settle()
 
       successor = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
-      RuntimeExecutionSettlement.reserve("task_queue", "successor-runtime-recovery").settle()
+      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "successor-runtime-recovery").settle()
       expect(successor.url).toBeInstanceOf(URL)
     } finally {
       if (successor) await successor.stop(true)
@@ -572,10 +575,10 @@ describe("runtime server database ownership", () => {
     })
     const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
     try {
-      const request = fetch(new URL("/global/health", server.url))
+      const request = fetch(new URL("/global/health", server.url)).catch(() => undefined)
       await started
       await server.stop(true)
-      await request.catch(() => undefined)
+      await request
       events.push("stop_completed")
       expect(events).toEqual(["cancellation_requested", "request_settled", "stop_completed"])
     } finally {
@@ -589,19 +592,34 @@ describe("runtime server database ownership", () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-stop-listener-retry-"))
     temporaryDirectories.push(root)
     const home = path.join(root, "home")
-    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const project = path.join(root, "project")
+    await import("node:fs/promises").then((fs) => Promise.all([fs.mkdir(home), fs.mkdir(project)]))
+    execFileSync("git", ["init"], { cwd: project, stdio: "ignore" })
     const previousHome = process.env.OPENCORVUS_TEST_HOME
     process.env.OPENCORVUS_TEST_HOME = home
     const failure = Server.TestHooks.failNextListenerStop(1)
     const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+    const recoveryDirectories: string[][] = []
+    const recoverTaskRootIngressesAfterRuntimeRollback =
+      TaskRootIngressDelivery.recoverTaskRootIngressesAfterRuntimeRollback
+    const recoverTaskIngresses = spyOn(
+      TaskRootIngressDelivery,
+      "recoverTaskRootIngressesAfterRuntimeRollback",
+    ).mockImplementation(async (directories) => {
+      recoveryDirectories.push([...directories])
+      await recoverTaskRootIngressesAfterRuntimeRollback(directories)
+    })
     try {
+      await Instance.provide({ directory: project, init: InstanceBootstrap, fn: async () => undefined })
       await expect(server.stop(true)).rejects.toThrow("injected server listener stop failure")
+      expect(recoveryDirectories).toEqual([[project]])
       failure[Symbol.dispose]()
       RuntimeExecutionSettlement.reserve("session_wake_loop", "listener-stop-rollback-admission").settle()
       await server.stop(true)
       const successor = RuntimeServerOwnership.acquire({ database: Database.Path() })
       successor.release()
     } finally {
+      recoverTaskIngresses.mockRestore()
       failure[Symbol.dispose]()
       await server.stop(true).catch(() => undefined)
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME

@@ -14,16 +14,16 @@ import { Event } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
-import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+import { TaskRootIngressSchema } from "@/engine/task-root-ingress"
 import {
   dispatchTaskLoop,
   reconcileFailedExactTerminalIngressDeliveries,
   reconcileTerminalAgentLifecycleDelivery,
   reconcileTerminalAgentLifecycleDeliveries,
   reconcileUndeliveredDispatchInfrastructureFacts,
-  TestHooks as QueueTestHooks,
-  waitForQueueCompletionHooksForTest,
-} from "@/engine/queue"
+  TestHooks as IngressTestHooks,
+  waitForIngressDeliveryHooksForTest,
+} from "@/engine/task-root-ingress-delivery"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { terminalTask } from "@/engine/state"
 import { requireTask } from "@/engine/store"
@@ -493,7 +493,7 @@ async function verifyDetachedDispatchLifecycle(input: {
               .get(),
           )
           if (!wake) throw new Error(`managed lifecycle ingress ${loopInput.wakeID} disappeared`)
-          const ingress = QueuedTaskIngressSchema.parse(wake.payload)
+          const ingress = TaskRootIngressSchema.parse(wake.payload)
           const orchestrator = await Session.create({
             kind: "orchestrator",
             parentID: root.id,
@@ -744,7 +744,7 @@ async function verifyDetachedDispatchLifecycle(input: {
           expect(artifacts.filter((artifact) => artifact.kind === "task-infrastructure-error")).toHaveLength(1)
           expect(
             artifacts.filter(
-              (artifact) => artifact.kind === "queued_operator_wake" && artifact.label === "terminal_inapplicable",
+              (artifact) => artifact.kind === "task_root_ingress" && artifact.label === "terminal_inapplicable",
             ),
           ).toHaveLength(1)
         },
@@ -759,7 +759,7 @@ async function verifyDetachedDispatchLifecycle(input: {
         settlementError = error
       }
       await awaitDetachedRuns()
-      await waitForQueueCompletionHooksForTest()
+      await waitForIngressDeliveryHooksForTest()
       expect(settlementError).toBeInstanceOf(WorkerTurnSettlementError)
       const typedError = settlementError as WorkerTurnSettlementError
       expect(settlementError).toMatchObject({
@@ -841,15 +841,15 @@ async function verifyDetachedDispatchLifecycle(input: {
                 .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
                 .where(
-                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
                 )
                 .all(),
             )
-              .map((wake) => ({ ...wake, ingress: QueuedTaskIngressSchema.parse(wake.payload) }))
+              .map((wake) => ({ ...wake, ingress: TaskRootIngressSchema.parse(wake.payload) }))
               .filter((wake) => wake.ingress.source_kind === "dispatch_infrastructure_failure"),
           ).toEqual([
             expect.objectContaining({
-              label: input.exhaustRootFailure ? "delivery_failed" : "drained",
+              label: input.exhaustRootFailure ? "delivery_failed" : "delivered",
               ingress: expect.objectContaining({
                 infrastructure_fact_id: typedError.infrastructureArtifactID,
                 delivery_attempt: input.retryRootFailure || input.exhaustRootFailure ? 2 : 1,
@@ -865,25 +865,25 @@ async function verifyDetachedDispatchLifecycle(input: {
             expect(await dispatchTaskLoop({ taskID, event: rootEvents[0] })).toBe("ignored")
             expect(rootAttempts).toBe(2)
             if (input.recoverAfterRuntimeRestart) {
-              using _successorRuntime = QueueTestHooks.replaceTerminalIngressDeliveryRuntime("successor-runtime")
+              using _successorRuntime = IngressTestHooks.replaceTerminalIngressDeliveryRuntime("successor-runtime")
               expect(await reconcileFailedExactTerminalIngressDeliveries()).toBe(1)
-              await waitForQueueCompletionHooksForTest()
+              await waitForIngressDeliveryHooksForTest()
               const recovered = Database.use((db) =>
                 db
                   .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                   .from(EngineArtifactTable)
                   .where(
-                    and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
+                    and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
                   )
                   .all(),
               )
-                .map((wake) => ({ ...wake, ingress: QueuedTaskIngressSchema.parse(wake.payload) }))
+                .map((wake) => ({ ...wake, ingress: TaskRootIngressSchema.parse(wake.payload) }))
                 .find((wake) => wake.ingress.infrastructure_fact_id === typedError.infrastructureArtifactID)!
               expect({
                 label: recovered.label,
                 ingress: recovered.ingress,
               }).toMatchObject({
-                label: "drained",
+                label: "delivered",
                 ingress: { delivery_attempt: 3, delivery_runtime_id: "successor-runtime", delivery_runtime_attempt: 1 },
               })
               expect(rootAttempts).toBe(3)
@@ -904,26 +904,26 @@ async function verifyDetachedDispatchLifecycle(input: {
               db
                 .delete(EngineArtifactTable)
                 .where(
-                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
                 )
                 .run(),
             )
             expect(await reconcileUndeliveredDispatchInfrastructureFacts()).toBe(1)
-            await waitForQueueCompletionHooksForTest()
+            await waitForIngressDeliveryHooksForTest()
             const recoveredWake = Database.use((db) =>
               db
                 .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
                 .where(
-                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
                 )
                 .get(),
             )!
             expect({
               label: recoveredWake.label,
-              ingress: QueuedTaskIngressSchema.parse(recoveredWake.payload),
+              ingress: TaskRootIngressSchema.parse(recoveredWake.payload),
             }).toMatchObject({
-              label: "drained",
+              label: "delivered",
               ingress: { infrastructure_fact_id: typedError.infrastructureArtifactID },
             })
           }
@@ -934,7 +934,7 @@ async function verifyDetachedDispatchLifecycle(input: {
     }
     await workerSettlement
     await awaitDetachedRuns()
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
     expect(
       terminalSettlementSnapshots.map(({ reason, resources }) => ({
         reason,
@@ -958,7 +958,7 @@ async function verifyDetachedDispatchLifecycle(input: {
         })
         const deadline = Date.now() + 5_000
         let lifecycleWake:
-          | { id: string; label: string; ingress: ReturnType<typeof QueuedTaskIngressSchema.parse> }
+          | { id: string; label: string; ingress: ReturnType<typeof TaskRootIngressSchema.parse> }
           | undefined
         while (Date.now() < deadline) {
           lifecycleWake = Database.use((db) =>
@@ -969,12 +969,12 @@ async function verifyDetachedDispatchLifecycle(input: {
                 payload: EngineArtifactTable.payload,
               })
               .from(EngineArtifactTable)
-              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
               .all(),
           )
-            .map((row) => ({ ...row, ingress: QueuedTaskIngressSchema.parse(row.payload) }))
+            .map((row) => ({ ...row, ingress: TaskRootIngressSchema.parse(row.payload) }))
             .find((row) => row.ingress.event.agentLifecycleDelivery?.sessionID === workerSessionID)
-          const expectedLabel = input.exhaustRootFailure ? "delivery_failed" : "drained"
+          const expectedLabel = input.exhaustRootFailure ? "delivery_failed" : "delivered"
           const expectedAttempt = input.retryRootFailure || input.exhaustRootFailure ? 2 : 1
           if (lifecycleWake?.label === expectedLabel && lifecycleWake.ingress.delivery_attempt === expectedAttempt)
             break
@@ -987,7 +987,7 @@ async function verifyDetachedDispatchLifecycle(input: {
           descriptor.payload.messageAuthority.user_message_id,
         )!
         expect(lifecycleWake).toMatchObject({
-          label: input.exhaustRootFailure ? "delivery_failed" : "drained",
+          label: input.exhaustRootFailure ? "delivery_failed" : "delivered",
           ingress: {
             delivery_attempt: input.retryRootFailure || input.exhaustRootFailure ? 2 : 1,
             lifecycle_event_id: lifecycle.id,
@@ -1027,9 +1027,9 @@ async function verifyDetachedDispatchLifecycle(input: {
           expect(rootAttempts).toBe(2)
           if (input.recoverAfterRuntimeRestart) {
             using _successorRuntime =
-              QueueTestHooks.replaceTerminalIngressDeliveryRuntime("successor-lifecycle-runtime")
+              IngressTestHooks.replaceTerminalIngressDeliveryRuntime("successor-lifecycle-runtime")
             expect(await reconcileFailedExactTerminalIngressDeliveries()).toBe(1)
-            await waitForQueueCompletionHooksForTest()
+            await waitForIngressDeliveryHooksForTest()
             const recovered = Database.use((db) =>
               db
                 .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
@@ -1037,9 +1037,9 @@ async function verifyDetachedDispatchLifecycle(input: {
                 .where(eq(EngineArtifactTable.id, lifecycleWake!.id))
                 .get(),
             )!
-            expect({ label: recovered.label, ingress: QueuedTaskIngressSchema.parse(recovered.payload) }).toMatchObject(
+            expect({ label: recovered.label, ingress: TaskRootIngressSchema.parse(recovered.payload) }).toMatchObject(
               {
-                label: "drained",
+                label: "delivered",
                 ingress: {
                   delivery_attempt: 3,
                   delivery_runtime_id: "successor-lifecycle-runtime",
@@ -1119,17 +1119,17 @@ async function verifyDetachedDispatchLifecycle(input: {
       },
     })
     await awaitDetachedRuns()
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
     await ProjectGitLock.waitForIdle()
   } finally {
     releaseWorker()
     await awaitDetachedRuns()
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
     {
       using runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
-      runtimeGate.closeAdmission(["protocol_publication", "engine_queue_completion"])
+      runtimeGate.closeAdmission(["protocol_publication", "task_root_ingress_delivery"])
       await runtimeGate.waitForIdle(["protocol_publication"])
-      await runtimeGate.waitForIdle(["engine_queue_completion"])
+      await runtimeGate.waitForIdle(["task_root_ingress_delivery"])
       runtimeGate.commit()
     }
     await ProjectGitLock.waitForIdle()
@@ -1334,7 +1334,7 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
   })
   // The recovered delivery owns a fresh initialized project lease. Release
   // the setup lease before joining its physical queue completion.
-  await waitForQueueCompletionHooksForTest()
+  await waitForIngressDeliveryHooksForTest()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
@@ -1345,15 +1345,15 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
           .where(
             and(
               eq(EngineArtifactTable.task_id, recovery.taskID),
-              eq(EngineArtifactTable.kind, "queued_operator_wake"),
+              eq(EngineArtifactTable.kind, "task_root_ingress"),
             ),
           )
           .all(),
       )
-        .map((wake) => ({ ...wake, ingress: QueuedTaskIngressSchema.parse(wake.payload) }))
+        .map((wake) => ({ ...wake, ingress: TaskRootIngressSchema.parse(wake.payload) }))
         .find((wake) => wake.ingress.infrastructure_fact_id === recovery.infrastructureFactID)!
       expect({ label: exactWake.label, ingress: exactWake.ingress }).toMatchObject({
-        label: "drained",
+        label: "delivered",
         ingress: {
           source_kind: "dispatch_infrastructure_failure",
           infrastructure_fact_id: recovery.infrastructureFactID,

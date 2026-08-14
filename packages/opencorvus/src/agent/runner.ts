@@ -50,7 +50,7 @@
  *      failures throw.
  *
  * The orchestrator additionally owns concurrency state (`running.set(taskID,
- * ctrl)`) and SerialQueue-driven wake scheduling — neither of which the runner
+ * ctrl)`) and process-local wake admission — neither of which the runner
  * models, by design.
  *
  * Anyone considering "consolidating orchestrator onto runAgentSession":
@@ -134,7 +134,7 @@ import {
 import { resolvedPackageRevisionFromBinding } from "@/engine/workflow-binding"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
-import { runProjectedWorkerTurnExclusive } from "./projected-worker-turn-queue"
+import { runProjectedWorkerTurnExclusive } from "./projected-worker-turn-owner"
 
 const log = Log.create({ service: "agent-runner" })
 

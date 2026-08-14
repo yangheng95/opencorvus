@@ -58,7 +58,7 @@ function stubClient() {
       create: async () => ({ data: { id: "session_mock" }, error: undefined }),
       get: async () => ({ data: undefined, error: undefined }),
       message: async () => ({ data: { parts: [] }, error: undefined }),
-      promptAsync: async () => ({ data: {}, error: undefined }),
+      prompt: async () => ({ data: {}, error: undefined }),
     },
   }
 }

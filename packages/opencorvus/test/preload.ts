@@ -136,8 +136,8 @@ const { installDefaultControlPlaneToolLoaders } = await import("../src/tool/cont
 installDefaultControlPlaneToolLoaders()
 const { installDefaultTaskWakeRuntime } = await import("../src/scheduler/task-wake-composition")
 installDefaultTaskWakeRuntime()
-const { TestHooks: QueueTestHooks } = await import("../src/engine/queue")
-terminalIngressRuntimeOverride = QueueTestHooks.replaceTerminalIngressDeliveryRuntime(`test-runtime:${process.pid}`)
+const { TestHooks: TaskRootIngressTestHooks } = await import("../src/engine/task-root-ingress-delivery")
+terminalIngressRuntimeOverride = TaskRootIngressTestHooks.replaceTerminalIngressDeliveryRuntime(`test-runtime:${process.pid}`)
   })()
   return setupPromise
 }

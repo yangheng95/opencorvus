@@ -14,7 +14,7 @@
  * iterations grew three such gates (acceptance-rejection rewake,
  * build-settled-without-deliver rewake, general orchestrator-stream-error
  * rewake); all three were FSM in disguise and have been deleted. External
- * ingress settlement is owned by the durable queue: a current operator/root
+ * ingress settlement is owned by the durable root-ingress record: a current operator/root
  * message must be read and paired with a scheduler decision before the wake is
  * marked delivered. Only explicit external ingress can re-enter the task loop.
  *
@@ -52,7 +52,7 @@ export async function runTaskLoop(input: {
  * exit. If the LLM stops mid-task after a valid
  * decision (acceptance rejection, build settled, stream error, pending
  * question), the next external trigger re-enters this function. Current
- * operator/root ingress is not considered delivered until the queue verifies
+ * operator/root ingress is not considered delivered until its owner verifies
  * that this physical pass read the exact ingress message and made a scheduler
  * decision. Concurrent entries for the same task are serialised by
  * `runTaskLoop`.

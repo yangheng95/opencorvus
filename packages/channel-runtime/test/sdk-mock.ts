@@ -29,23 +29,7 @@ function createNoopClient() {
       create: async () => ({ data: { id: "session_mock" }, error: undefined }),
       get: async () => ({ data: undefined, error: undefined }),
       message: async () => ({ data: { parts: [] }, error: undefined }),
-      promptAsync: async () => ({ data: { taskID: "task_mock" }, error: undefined }),
-      promptAsyncStatus: async () => ({
-        data: {
-          taskID: "task_mock",
-          sessionID: "session_mock",
-          status: "completed" as const,
-          retryCount: 0,
-          maxRetries: 0,
-          source: "test",
-          prompt: "",
-          error: null,
-          startedAt: 1,
-          completedAt: 2,
-          updatedAt: 2,
-        },
-        error: undefined,
-      }),
+      prompt: async () => ({ data: { info: { id: "message_mock" }, parts: [] }, error: undefined }),
     },
   }
 }

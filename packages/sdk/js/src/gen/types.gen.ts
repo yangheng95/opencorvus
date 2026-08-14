@@ -302,13 +302,13 @@ export type Config = {
      */
     activity?: {
       /**
+       * Max idle window without durable execution progress, ms
+       */
+      execution_progress_idle_ms?: number
+      /**
        * Max idle (no stream chunk) window for session LLM streams, ms
        */
       session_llm_idle_ms?: number
-      /**
-       * Max idle window without queue task progress, ms
-       */
-      task_queue_run_timeout_ms?: number
     }
     /**
      * Maximum parallel projected agent sessions
@@ -786,8 +786,6 @@ export type Event =
   | EventSessionError
   | EventSessionUpdated
   | EventTaskPlanUpdated
-  | EventTaskQueueChanged
-  | EventTaskQueueCompleted
   | EventTaskCancellationRequested
   | EventTaskCancelled
   | EventTaskCompleted
@@ -894,9 +892,8 @@ export type EventArtifactPersisted = {
       | "goal_workload"
       | "dispatch_lineage"
       | "dispatch_settlement"
-      | "operator_message_wake"
       | "mission_acceptance_resume_receipt"
-      | "queued_operator_wake"
+      | "task_root_ingress"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
       | "exploration"
@@ -1536,24 +1533,6 @@ export type EventSessionUpdated = {
     info: Session
   }
   type: "session.updated"
-}
-
-export type EventTaskQueueChanged = {
-  properties: {
-    queueTaskID: string
-    sequence: number
-    sessionID: string
-    status: "queued" | "failed"
-  }
-  type: "task-queue.changed"
-}
-
-export type EventTaskQueueCompleted = {
-  properties: {
-    queueTaskID: string
-    sessionID: string
-  }
-  type: "task-queue.completed"
 }
 
 export type EventTaskCancellationRequested = {
@@ -3378,7 +3357,6 @@ export type MessageAbortedError = {
       causationEventID?: string
       messageID?: string
       missionID?: string
-      queueOccurrenceID?: string
       reason: string
       requestID: string
       source:
@@ -3397,7 +3375,6 @@ export type MessageAbortedError = {
         | "panel.cancel_task"
         | "orchestrator.cancel_task"
         | "task.lifecycle"
-        | "task.queue_timeout"
         | "process.shutdown"
         | "agent.parent_signal"
         | "agent.coordination_signal"
@@ -24764,6 +24741,15 @@ export type SessionPromptErrors = {
         name: "LogFileNotFoundError"
       }
   /**
+   * Message identity is already bound to another public Session prompt
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "PublicSessionPromptIdentityConflictError"
+  }
+  /**
    * Saved Provider credentials could not be observed safely
    */
   503: AuthReadError
@@ -25075,140 +25061,6 @@ export type PartUpdateResponses = {
 }
 
 export type PartUpdateResponse = PartUpdateResponses[keyof PartUpdateResponses]
-
-export type SessionPromptAsyncData = {
-  body: {
-    agent?: string
-    format?: OutputFormat
-    messageID?: string
-    model?: {
-      modelID: string
-      providerID: string
-    }
-    parts: Array<TextPartInput | FilePartInput>
-    variant?: string
-  }
-  path: {
-    /**
-     * Session ID
-     */
-    sessionID: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/session/{sessionID}/prompt_async"
-}
-
-export type SessionPromptAsyncErrors = {
-  /**
-   * Bad request
-   */
-  400: BadRequestError
-  /**
-   * Not found
-   */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
-  /**
-   * Saved Provider credentials could not be observed safely
-   */
-  503: AuthReadError
-}
-
-export type SessionPromptAsyncError = SessionPromptAsyncErrors[keyof SessionPromptAsyncErrors]
-
-export type SessionPromptAsyncResponses = {
-  /**
-   * Prompt accepted
-   */
-  202: {
-    taskID: string
-    user_message: VisibleMessageWithParts
-  }
-}
-
-export type SessionPromptAsyncResponse = SessionPromptAsyncResponses[keyof SessionPromptAsyncResponses]
-
-export type SessionPromptAsyncStatusData = {
-  body?: never
-  path: {
-    /**
-     * Session ID
-     */
-    sessionID: string
-    /**
-     * Task ID
-     */
-    taskID: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/session/{sessionID}/prompt_async/{taskID}"
-}
-
-export type SessionPromptAsyncStatusErrors = {
-  /**
-   * Bad request
-   */
-  400: BadRequestError
-  /**
-   * Not found
-   */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
-}
-
-export type SessionPromptAsyncStatusError = SessionPromptAsyncStatusErrors[keyof SessionPromptAsyncStatusErrors]
-
-export type SessionPromptAsyncStatusResponses = {
-  /**
-   * Task status
-   */
-  200: {
-    completedAt: number | null
-    error: string | null
-    prompt: string
-    sessionID: string
-    source: string
-    startedAt: number | null
-    status: "queued" | "running" | "completed" | "failed"
-    taskID: string
-    updatedAt: number
-  }
-}
-
-export type SessionPromptAsyncStatusResponse =
-  SessionPromptAsyncStatusResponses[keyof SessionPromptAsyncStatusResponses]
 
 export type SessionShellData = {
   body: {
@@ -27459,9 +27311,8 @@ export type TaskBoardResponses = {
         | "goal_workload"
         | "dispatch_lineage"
         | "dispatch_settlement"
-        | "operator_message_wake"
         | "mission_acceptance_resume_receipt"
-        | "queued_operator_wake"
+        | "task_root_ingress"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
         | "exploration"
@@ -29488,9 +29339,8 @@ export type TaskConversationResponses = {
           | "goal_workload"
           | "dispatch_lineage"
           | "dispatch_settlement"
-          | "operator_message_wake"
           | "mission_acceptance_resume_receipt"
-          | "queued_operator_wake"
+          | "task_root_ingress"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"
           | "exploration"
@@ -31338,15 +31188,13 @@ export type TaskMessageResponses = {
    * Task message durably accepted for delivery
    */
   202: {
-    current_owner_ingress_id?: string
     ingress_id?: string
     message: string
-    queue_position?: number
     user_message?: {
       info: TaskMessageUserInfo
       parts: Array<TaskMessageUserPart>
     }
-    wake_status: "accepted" | "queued" | "not_woken"
+    wake_status: "accepted" | "not_woken"
   }
 }
 
@@ -32991,7 +32839,7 @@ export type TaskSessionOperatorSteerResponses = {
     request_id: string
     session_id: string
     task_id: string
-    wake_status: "accepted" | "queued"
+    wake_status: "accepted"
   }
 }
 

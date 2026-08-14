@@ -35,14 +35,14 @@ import {
   observeSchedulerMessageDrainSignal,
 } from "@/protocol/scheduler-drain-signal"
 import {
-  QueueOrderingTestHooks,
-  TestHooks as QueueTestHooks,
-  configureTaskLoopRunner,
-  persistQueuedOperatorWakeInTransaction,
-  persistQueuedRootMessageWakeInTransaction,
-  waitForQueueCompletionHooksForTest,
-} from "@/engine/queue"
-import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+  IngressOrderingTestHooks,
+  TestHooks as IngressTestHooks,
+  configureTaskIngressRunner,
+  persistTaskRootIngressInTransaction,
+  persistTaskRootMessageIngressInTransaction,
+  waitForIngressDeliveryHooksForTest,
+} from "@/engine/task-root-ingress-delivery"
+import { TaskRootIngressSchema } from "@/engine/task-root-ingress"
 import { MessageStore } from "@/session/message-store"
 import { Message } from "@/session/message"
 import { EngineService } from "@/task-api"
@@ -106,7 +106,7 @@ function persistSourceOccurrence(sessionID: string, messageID: string, partID: s
   })
   const taskIngressID = task
     ? Database.transaction((db) =>
-        persistQueuedOperatorWakeInTransaction(db, task, { note: "Scheduler source occurrence" }, {}, now),
+        persistTaskRootIngressInTransaction(db, task, { note: "Scheduler source occurrence" }, {}, now),
       )
     : undefined
   Database.transaction((db) => {
@@ -142,10 +142,10 @@ function persistSourceOccurrence(sessionID: string, messageID: string, partID: s
       .run()
   })
   if (taskIngressID) {
-    if (!QueueTestHooks.startQueuedWake(taskIngressID)) {
+    if (!IngressTestHooks.startTaskRootIngress(taskIngressID)) {
       throw new Error(`Scheduler source ingress ${taskIngressID} did not enter running state`)
     }
-    QueueTestHooks.completeQueuedWake(taskIngressID, messageID)
+    IngressTestHooks.completeTaskRootIngress(taskIngressID, messageID)
   }
 }
 
@@ -957,7 +957,7 @@ describe("durable scheduler.message delivery", () => {
           return db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!
         })
         const ingressID = Database.transaction((db) =>
-          persistQueuedOperatorWakeInTransaction(db, task, { note: "Legacy ingress" }, {}, now),
+          persistTaskRootIngressInTransaction(db, task, { note: "Legacy ingress" }, {}, now),
         )
         await Database.awaitEffectIdle(30_000)
         Database.close()
@@ -1156,7 +1156,7 @@ describe("durable scheduler.message delivery", () => {
           return db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!
         })
         const ingressID = Database.transaction((db) =>
-          persistQueuedOperatorWakeInTransaction(db, task, { note: "Materialized scheduler ingress" }, {}, started),
+          persistTaskRootIngressInTransaction(db, task, { note: "Materialized scheduler ingress" }, {}, started),
         )
         Database.use((db) =>
           db
@@ -1167,7 +1167,7 @@ describe("durable scheduler.message delivery", () => {
         )
         let startResult: boolean
         try {
-          startResult = QueueTestHooks.startQueuedWake(ingressID)
+          startResult = IngressTestHooks.startTaskRootIngress(ingressID)
         } catch (error) {
           throw new Error(`Stale ingress claim failed: ${error instanceof Error ? error.stack : String(error)}`)
         }
@@ -1182,7 +1182,7 @@ describe("durable scheduler.message delivery", () => {
           return current
         })
         expect(persisted?.label).toBe("terminal_inapplicable")
-        expect(QueuedTaskIngressSchema.parse(persisted?.payload).delivery_result).toMatchObject({
+        expect(TaskRootIngressSchema.parse(persisted?.payload).delivery_result).toMatchObject({
           status: "terminal_inapplicable",
           reason: expect.stringContaining("TaskIngressOccurrenceStaleError"),
         })
@@ -1221,7 +1221,7 @@ describe("durable scheduler.message delivery", () => {
         const persistPair = (task: typeof EngineTaskTable.$inferSelect, first: "scheduler" | "operator") =>
           Database.transaction((db) => {
             const insert = (kind: "scheduler" | "operator", index: number) =>
-              persistQueuedRootMessageWakeInTransaction(db, {
+              persistTaskRootMessageIngressInTransaction(db, {
                 task,
                 messageID: `msg_mixed_${task.id}_${index}`,
                 kind: kind === "scheduler" ? "mission" : "operator",
@@ -1243,11 +1243,11 @@ describe("durable scheduler.message delivery", () => {
 
         const schedulerFirstTask = await makeTask("Scheduler first")
         const [schedulerFirst, operatorSecond] = persistPair(schedulerFirstTask, "scheduler")
-        expect(QueueOrderingTestHooks.head(schedulerFirstTask.id)).toEqual({ id: schedulerFirst, label: "pending" })
-        Database.transaction((db) => patchEngineArtifact(db, { id: schedulerFirst, label: "running" }))
-        expect(QueueOrderingTestHooks.head(schedulerFirstTask.id)).toEqual({ id: schedulerFirst, label: "running" })
+        expect(IngressOrderingTestHooks.head(schedulerFirstTask.id)).toEqual({ id: schedulerFirst, label: "accepted" })
+        Database.transaction((db) => patchEngineArtifact(db, { id: schedulerFirst, label: "delivering" }))
+        expect(IngressOrderingTestHooks.head(schedulerFirstTask.id)).toEqual({ id: schedulerFirst, label: "delivering" })
         Database.transaction((db) => patchEngineArtifact(db, { id: schedulerFirst, label: "delivery_failed" }))
-        expect(QueueOrderingTestHooks.head(schedulerFirstTask.id)).toEqual({
+        expect(IngressOrderingTestHooks.head(schedulerFirstTask.id)).toEqual({
           id: schedulerFirst,
           label: "delivery_failed",
         })
@@ -1255,7 +1255,7 @@ describe("durable scheduler.message delivery", () => {
 
         const operatorFirstTask = await makeTask("Operator first")
         const [operatorFirst, schedulerSecond] = persistPair(operatorFirstTask, "operator")
-        expect(QueueOrderingTestHooks.head(operatorFirstTask.id)).toEqual({ id: operatorFirst, label: "pending" })
+        expect(IngressOrderingTestHooks.head(operatorFirstTask.id)).toEqual({ id: operatorFirst, label: "accepted" })
         expect(schedulerSecond).not.toBe(operatorFirst)
       },
     })
@@ -1469,8 +1469,8 @@ describe("durable scheduler.message delivery", () => {
             .run()
           const artifactID = insertEngineArtifact(db, {
             taskID,
-            kind: "queued_operator_wake",
-            label: "pending",
+            kind: "task_root_ingress",
+            label: "accepted",
             payload: {
               message_id: targetMessageID,
               source_kind: "mission_message",
@@ -3394,7 +3394,7 @@ describe("durable scheduler.message delivery", () => {
     })
   })
 
-  test("materializes Mission identity as one real Task root Message and exact queued ingress", async () => {
+  test("materializes Mission identity as one real Task root Message and exact accepted ingress", async () => {
     await using project = await memoryProject()
     let release!: () => void
     const released = new Promise<void>((resolve) => (release = resolve))
@@ -3404,7 +3404,7 @@ describe("durable scheduler.message delivery", () => {
     const taskLoopRunner = async ({
       event,
       wakeID,
-    }: Parameters<Parameters<typeof QueueTestHooks.replaceTaskLoopRunner>[0]["runner"]>[0]) => {
+    }: Parameters<Parameters<typeof IngressTestHooks.replaceTaskIngressRunner>[0]["runner"]>[0]) => {
       observedEvents.push(event)
       if (wakeID) observedWakeIDs.push(wakeID)
       await released
@@ -3417,7 +3417,7 @@ describe("durable scheduler.message delivery", () => {
             : "orchestrator_message"
       return { finalMessageID: await persistRunnerReply({ rootSessionID, wakeID, ingressKind }) }
     }
-    using taskLoopRunnerOverride = QueueTestHooks.replaceTaskLoopRunner({
+    using taskLoopRunnerOverride = IngressTestHooks.replaceTaskIngressRunner({
       directory: project.path,
       runner: taskLoopRunner,
     })
@@ -3425,7 +3425,7 @@ describe("durable scheduler.message delivery", () => {
       const materialized = await Instance.provide({
         directory: project.path,
         fn: async () => {
-          configureTaskLoopRunner(taskLoopRunner)
+          configureTaskIngressRunner(taskLoopRunner)
           const missionID = "mission-materialized"
           const mission = await Session.create({
             kind: "mission",
@@ -3503,7 +3503,7 @@ describe("durable scheduler.message delivery", () => {
                 .where(eq(EngineArtifactTable.id, receipt.ingressID))
                 .get(),
             )
-            const parsedIngress = QueuedTaskIngressSchema.parse(ingress?.payload)
+            const parsedIngress = TaskRootIngressSchema.parse(ingress?.payload)
             const visibleRootMessage = visible.info.extra?.task_root_message as {
               protocol: string
               taskID: string
@@ -3521,7 +3521,7 @@ describe("durable scheduler.message delivery", () => {
             const ingressRootMessage = parsedIngress.event.rootMessage!
             expect(receipt.status).toBe("delivered")
             expect(receipt.replayed).toBe(false)
-            expect(receipt.wakeStatus).toBe("started")
+            expect(receipt.wakeStatus).toBe("accepted")
             expect(visible.info.role).toBe("user")
             expect(visible.info.author).toBe("mission")
             expect(visibleRootMessage.protocol).toBe("task-root-message")
@@ -3616,9 +3616,9 @@ describe("durable scheduler.message delivery", () => {
                 return { id, ordinal: first?.ordinal ?? current.ordinal }
               }),
             )
-            expect(second).toMatchObject({ status: "delivered", wakeStatus: "queued" })
+            expect(second).toMatchObject({ status: "delivered", wakeStatus: "accepted" })
             expect(second.eventID.localeCompare(receipt.eventID)).toBeLessThan(0)
-            expect(operator).toMatchObject({ wake_status: "queued" })
+            expect(operator).toMatchObject({ wake_status: "accepted" })
             expect(
               ingressOrdinals
                 .slice()
@@ -3645,7 +3645,7 @@ describe("durable scheduler.message delivery", () => {
         },
       })
 
-      await waitForQueueCompletionHooksForTest()
+      await waitForIngressDeliveryHooksForTest()
       expect(taskLoopRunnerOverride.configurationCount()).toBeGreaterThanOrEqual(2)
       expect(observedWakeIDs).toEqual([
         materialized.receipt.ingressID,
@@ -3735,7 +3735,7 @@ describe("durable scheduler.message delivery", () => {
       })
     } finally {
       release()
-      await waitForQueueCompletionHooksForTest()
+      await waitForIngressDeliveryHooksForTest()
     }
   }, 120_000)
 })

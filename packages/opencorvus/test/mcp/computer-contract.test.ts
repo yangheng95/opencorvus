@@ -24,7 +24,7 @@ import { CapabilityCatalog, searchCapabilityCatalog } from "../../src/capability
 import { ComputerHostRuntimeAuthority } from "../../src/mcp/computer/host-runtime"
 import { HostComputerBackend } from "../../src/mcp/computer/host-client"
 import { EngineService } from "../../src/task-api"
-import { configureTaskLoopRunner } from "../../src/engine/queue"
+import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-delivery"
 import { artifactRuntimeNodeModuleNames } from "../../script/build-artifact"
 
 function pngBase64(width: number, height: number) {
@@ -614,7 +614,7 @@ describe("Computer Use exact control contract", () => {
             ...ComputerMCPBuiltin.ImportableToolRefs,
           ])
 
-          configureTaskLoopRunner(async () => {})
+          configureTaskIngressRunner(async () => {})
           const taskID = await EngineService.createTask(
             {
               requestID: "computer-harness-contract-task",

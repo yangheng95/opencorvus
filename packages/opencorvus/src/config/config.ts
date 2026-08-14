@@ -1475,12 +1475,12 @@ export namespace Config {
                 .min(1000)
                 .optional()
                 .describe("Max idle (no stream chunk) window for session LLM streams, ms"),
-              task_queue_run_timeout_ms: z
+              execution_progress_idle_ms: z
                 .number()
                 .int()
                 .min(1000)
                 .optional()
-                .describe("Max idle window without queue task progress, ms"),
+                .describe("Max idle window without durable execution progress, ms"),
             })
             .optional()
             .describe("Chunk-driven inactivity thresholds for session LLM streams and provider execution work."),

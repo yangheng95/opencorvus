@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test"
+import { describe, expect, mock, test } from "bun:test"
 import type { ChannelAdapter, IncomingMessage } from "../src/adapter"
 import { SessionCoordinator } from "../src/session-coordinator"
 import { sdkMock } from "./sdk-mock"
@@ -7,389 +7,219 @@ mock.module("@opencorvus-ai/sdk", () => sdkMock)
 
 const { ChannelRuntime } = await import("../src/core")
 
-function adapter(): ChannelAdapter {
+type PromptCall = {
+  sessionID: string
+  messageID?: string
+  parts: Array<{ type: "text"; text: string }>
+}
+
+type RuntimeCore = {
+  adapters: ChannelAdapter[]
+  session: SessionCoordinator<{ sessionId: string; adapter: ChannelAdapter; channel: string; thread: string }>
+  client: {
+    session: {
+      prompt(input: PromptCall, options?: { signal?: AbortSignal }): Promise<{ error?: unknown; data?: unknown }>
+    }
+  }
+  pending: Map<string, { executionId: string; sessionID: string; messageID: string }>
+  stop(): Promise<void>
+  handleMessage(msg: IncomingMessage): Promise<void>
+}
+
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((done) => {
+    resolve = done
+  })
+  return { promise, resolve }
+}
+
+function adapter(sent: string[] = []): ChannelAdapter {
   return {
     platform: "slack",
     start: async () => {},
     stop: async () => {},
-    sendMessage: async () => {},
+    sendMessage: async (_channel, _thread, text) => {
+      sent.push(text)
+    },
     uploadImage: async () => {},
     onMessage: () => {},
   }
 }
 
-function incoming(text: string): IncomingMessage {
+function incoming(text: string, thread = "T1", id = `event-${text}`): IncomingMessage {
   return {
+    id,
     platform: "slack",
     channel: "C1",
-    thread: "T1",
+    thread,
     user: "U1",
     text,
   }
 }
 
-type PromptCall = { sessionID: string; parts: Array<{ type: "text"; text: string }>; system: string }
-type RuntimeCore = {
-  adapters: ChannelAdapter[]
-  running?: boolean
-  session: SessionCoordinator<
-    { sessionId: string; adapter: ChannelAdapter; channel: string; thread: string },
-    IncomingMessage
-  >
-  client: {
-    session: {
-      promptAsync(input: PromptCall): Promise<{ error?: unknown; data?: { taskID: string } }>
-    }
-  }
-  handleMessage(msg: IncomingMessage): Promise<void>
-  handleEvent(event: unknown): Promise<void>
-  expirePending(): Promise<void>
+function bind(core: RuntimeCore, owner: ChannelAdapter, sessionID: string, thread: string) {
+  core.session.bind(`slack:C1:${thread}`, {
+    sessionId: sessionID,
+    adapter: owner,
+    channel: "C1",
+    thread,
+  })
 }
 
-beforeEach(() => {
-  delete process.env.OPENCORVUS_CHANNEL_PROTOCOL
-  delete process.env.OPENCORVUS_CHANNEL_TASK_MODE
-  delete process.env.OPENCORVUS_CHANNEL_TASK_TIMEOUT_MS
-  delete process.env.OPENCORVUS_CHANNEL_TASK_SWEEP_MS
-})
-
-describe("channel runtime submit mode", () => {
-  test("ignores OPENCORVUS_CHANNEL_PROTOCOL inside core unless constructor option enables it", async () => {
-    process.env.OPENCORVUS_CHANNEL_PROTOCOL = "1"
-    const promptCalls: PromptCall[] = []
-    const a = adapter()
+describe("channel runtime direct Session prompt", () => {
+  test("waits for the exact prompt result and releases Session ownership", async () => {
+    const calls: PromptCall[] = []
+    const owner = adapter()
     const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
+    core.adapters = [owner]
+    bind(core, owner, "session_1", "T1")
     core.client = {
       session: {
-        promptAsync: async (input) => {
-          promptCalls.push(input)
-          return { data: { taskID: "task_env_ignored" } }
-        },
-      },
-    }
-
-    await core.handleMessage(incoming("env should not select protocol"))
-
-    expect(promptCalls).toHaveLength(1)
-    expect(promptCalls[0]?.parts[0]?.text).toBe("env should not select protocol")
-  })
-
-  test("uses session.promptAsync by default", async () => {
-    const promptCalls: PromptCall[] = []
-    const a = adapter()
-    const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
-    core.client = {
-      session: {
-        promptAsync: async (input) => {
-          promptCalls.push(input)
-          return { data: { taskID: "task_ship" } }
+        prompt: async (input) => {
+          calls.push(input)
+          return { data: { info: { id: "assistant_1" }, parts: [] } }
         },
       },
     }
 
     await core.handleMessage(incoming("ship it"))
 
-    expect(promptCalls).toHaveLength(1)
-    expect(promptCalls[0]?.sessionID).toBe("session_1")
-    expect(promptCalls[0]?.parts).toEqual([{ type: "text", text: "ship it" }])
+    expect(calls).toHaveLength(1)
+    expect(calls[0]?.sessionID).toBe("session_1")
+    expect(calls[0]?.messageID).toMatch(/^msg_h[0-9a-f]{19}$/)
+    expect(calls[0]?.parts).toEqual([{ type: "text", text: "ship it" }])
+    expect(core.pending.size).toBe(0)
   })
 
-  test("fails when session.promptAsync returns an API error", async () => {
-    const sent: string[] = []
-    const promptCalls: PromptCall[] = []
-    const a: ChannelAdapter = {
-      ...adapter(),
-      sendMessage: async (_channel, _thread, text) => {
-        sent.push(text)
-      },
-    }
+  test("submits overlapping events for one Session with exact independent message identities", async () => {
+    const owner = adapter()
+    const firstGate = deferred<{ data: unknown }>()
+    const secondGate = deferred<{ data: unknown }>()
+    const calls: PromptCall[] = []
     const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
+    core.adapters = [owner]
+    bind(core, owner, "session_1", "T1")
     core.client = {
       session: {
-        promptAsync: async (input) => {
-          promptCalls.push(input)
-          return { error: { message: "submit failed" } }
+        prompt: async (input) => {
+          calls.push(input)
+          return calls.length === 1 ? firstGate.promise : secondGate.promise
         },
       },
     }
 
-    await core.handleMessage(incoming("submit failure"))
+    const first = core.handleMessage(incoming("first", "T1", "event-overlap-first"))
+    const second = core.handleMessage(incoming("second", "T1", "event-overlap-second"))
+    while (calls.length < 2) await Promise.resolve()
+    expect({
+      sessionIDs: calls.map((call) => call.sessionID),
+      messageIDs: calls.map((call) => call.messageID),
+      pending: core.pending.size,
+    }).toEqual({
+      sessionIDs: ["session_1", "session_1"],
+      messageIDs: [expect.stringMatching(/^msg_h[0-9a-f]{19}$/), expect.stringMatching(/^msg_h[0-9a-f]{19}$/)],
+      pending: 2,
+    })
 
-    expect(promptCalls).toHaveLength(1)
-    expect(sent.at(-1)).toBe("Failed to send prompt.")
+    firstGate.resolve({ data: { info: { id: "assistant_1" }, parts: [] } })
+    await first
+    expect(core.pending.size).toBe(1)
+    secondGate.resolve({ data: { info: { id: "assistant_2" }, parts: [] } })
+    await second
+    expect(core.pending.size).toBe(0)
   })
 
-  test("keeps processing until the submitted execution reaches a terminal lifecycle event", async () => {
-    const sendCalls: Array<string> = []
-    const promptCalls: PromptCall[] = []
-    const a: ChannelAdapter = {
-      platform: "slack",
-      start: async () => {},
-      stop: async () => {},
-      sendMessage: async (_channel, _thread, text) => {
-        sendCalls.push(text)
-      },
-      uploadImage: async () => {},
-      onMessage: () => {},
-    }
+  test("starts independent Sessions without shared Host admission", async () => {
+    const owner = adapter()
+    const gates = new Map<string, ReturnType<typeof deferred<{ data: unknown }>>>()
+    const calls: string[] = []
     const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
+    core.adapters = [owner]
+    bind(core, owner, "session_1", "T1")
+    bind(core, owner, "session_2", "T2")
     core.client = {
       session: {
-        promptAsync: async (input) => {
-          promptCalls.push(input)
-          return { data: { taskID: `task_prompt_${promptCalls.length}` } }
+        prompt: async (input) => {
+          calls.push(input.sessionID)
+          const gate = deferred<{ data: unknown }>()
+          gates.set(input.sessionID, gate)
+          return gate.promise
         },
       },
     }
 
-    await core.handleMessage(incoming("first"))
+    const first = core.handleMessage(incoming("one", "T1"))
+    const second = core.handleMessage(incoming("two", "T2"))
+    while (calls.length < 2) await Promise.resolve()
 
-    expect(core.session.processing("session_1")).toBe(true)
-    expect(sendCalls).toHaveLength(0)
-    expect(promptCalls).toHaveLength(1)
-
-    await core.handleEvent({
-      type: "agent.execution.lifecycle",
-      properties: {
-        sessionID: "session_1",
-        inputMessageID: "message_1",
-        status: { type: "terminal", reason: "completed", emittedAt: Date.now() },
-      },
-    })
-    expect(core.session.processing("session_1")).toBe(false)
-
-    await core.handleMessage(incoming("second"))
-
-    expect(promptCalls).toHaveLength(2)
-    expect(promptCalls[1]?.parts[0]?.text).toBe("second")
+    expect(calls.sort()).toEqual(["session_1", "session_2"])
+    gates.get("session_1")!.resolve({ data: {} })
+    gates.get("session_2")!.resolve({ data: {} })
+    await Promise.all([first, second])
   })
 
-  test("releases processing on an execution terminal lifecycle event", async () => {
-    const a = adapter()
+  test("aborts and joins the exact direct prompt before Channel runtime stop settles", async () => {
+    const owner = adapter()
+    const gate = deferred<{ data: unknown }>()
+    let promptSignal: AbortSignal | undefined
     const core = new ChannelRuntime() as unknown as RuntimeCore
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
+    core.adapters = [owner]
+    bind(core, owner, "session_1", "T1")
     core.client = {
       session: {
-        promptAsync: async () => {
-          return { data: { taskID: "task_idle" } }
+        prompt: async (_input, options) => {
+          promptSignal = options?.signal
+          return gate.promise
         },
       },
     }
 
-    await core.handleMessage(incoming("release-on-idle"))
-    expect(core.session.processing("session_1")).toBe(true)
-
-    await core.handleEvent({
-      type: "agent.execution.lifecycle",
-      properties: {
-        sessionID: "session_1",
-        inputMessageID: "message_1",
-        status: { type: "terminal", reason: "completed", emittedAt: Date.now() },
-      },
+    const prompt = core.handleMessage(incoming("long request", "T1", "event-stop-owner"))
+    while (!promptSignal) await Promise.resolve()
+    let stopSettled = false
+    const stop = core.stop().then(() => {
+      stopSettled = true
     })
+    await Promise.resolve()
+    expect({ aborted: promptSignal.aborted, stopSettled }).toEqual({ aborted: true, stopSettled: false })
 
-    expect(core.session.processing("session_1")).toBe(false)
+    gate.resolve({ data: { info: { id: "assistant_after_abort" }, parts: [] } })
+    await Promise.all([prompt, stop])
+    expect({ stopSettled, pending: core.pending.size }).toEqual({
+      stopSettled: true,
+      pending: 0,
+    })
   })
 
-  test("releases processing when async task watchdog expires", async () => {
-    process.env.OPENCORVUS_CHANNEL_TASK_TIMEOUT_MS = "1000"
-    const sendCalls: Array<string> = []
-    const a: ChannelAdapter = {
-      platform: "slack",
-      start: async () => {},
-      stop: async () => {},
-      sendMessage: async (_channel, _thread, text) => {
-        sendCalls.push(text)
-      },
-      uploadImage: async () => {},
-      onMessage: () => {},
-    }
+  test("closes direct prompt admission before stop snapshots active operations", async () => {
+    const owner = adapter()
+    const createGate = deferred<{ data: { id: string }; error?: unknown }>()
+    let createStarted = false
+    let promptCalls = 0
     const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.running = true
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
+    core.adapters = [owner]
     core.client = {
       session: {
-        promptAsync: async () => {
-          return { data: { taskID: "task_watchdog" } }
+        create: async () => {
+          createStarted = true
+          return createGate.promise
+        },
+        prompt: async () => {
+          promptCalls += 1
+          return { data: {} }
         },
       },
-    }
+    } as any
 
-    await core.handleMessage(incoming("watchdog"))
-    expect(core.session.processing("session_1")).toBe(true)
-
-    await new Promise((resolve) => setTimeout(resolve, 1100))
-    await core.expirePending()
-
-    expect(core.session.processing("session_1")).toBe(false)
-    expect(sendCalls.at(-1)).toContain("Task timed out")
-  })
-
-  test("dispatches the queued channel request after the current execution reaches terminal", async () => {
-    const sent: string[] = []
-    const promptCalls: PromptCall[] = []
-    const a: ChannelAdapter = {
-      ...adapter(),
-      sendMessage: async (_channel, _thread, text) => {
-        sent.push(text)
-      },
-    }
-    const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
+    const incomingOperation = core.handleMessage(incoming("arrived before stop", "T-new", "event-before-stop"))
+    while (!createStarted) await Promise.resolve()
+    await core.stop()
+    createGate.resolve({ data: { id: "session_after_stop" } })
+    await incomingOperation
+    expect({ promptCalls, activePromptOwners: core.pending.size }).toEqual({
+      promptCalls: 0,
+      activePromptOwners: 0,
     })
-    core.client = {
-      session: {
-        promptAsync: async (input) => {
-          promptCalls.push(input)
-          return { data: { taskID: `task_${promptCalls.length}` } }
-        },
-      },
-    }
-
-    await core.handleMessage(incoming("first-request"))
-    await core.handleMessage(incoming("queued-request"))
-    await core.handleEvent({
-      type: "agent.execution.lifecycle",
-      properties: {
-        sessionID: "session_1",
-        inputMessageID: "message_1",
-        status: { type: "terminal", reason: "completed", emittedAt: Date.now() },
-      },
-    })
-    await Bun.sleep(0)
-    await Bun.sleep(0)
-
-    expect(promptCalls).toHaveLength(2)
-    expect(promptCalls.map((call) => call.parts)).toEqual([
-      [{ type: "text", text: "first-request" }],
-      [{ type: "text", text: "queued-request" }],
-    ])
-    expect(sent.some((item) => item.includes("queued (#1)"))).toBe(true)
-  })
-
-  test("ignores removed OPENCORVUS_CHANNEL_TASK_MODE and uses session.promptAsync", async () => {
-    process.env.OPENCORVUS_CHANNEL_TASK_MODE = "session-async"
-    const promptCalls: PromptCall[] = []
-    const a = adapter()
-    const core = new ChannelRuntime() as unknown as RuntimeCore
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
-    core.client = {
-      session: {
-        promptAsync: async (input) => {
-          promptCalls.push(input)
-          return { data: { taskID: "task_legacy" } }
-        },
-      },
-    }
-
-    await core.handleMessage(incoming("legacy"))
-
-    expect(promptCalls).toHaveLength(1)
-    expect(promptCalls[0]?.parts[0]?.text).toBe("legacy")
-  })
-
-  test("releases processing on session.error event", async () => {
-    const sent: string[] = []
-    const a: ChannelAdapter = {
-      platform: "slack",
-      start: async () => {},
-      stop: async () => {},
-      sendMessage: async (_channel, _thread, text) => {
-        sent.push(text)
-      },
-      uploadImage: async () => {},
-      onMessage: () => {},
-    }
-    const core = new ChannelRuntime() as unknown as {
-      adapters: ChannelAdapter[]
-      session: SessionCoordinator<
-        { sessionId: string; adapter: ChannelAdapter; channel: string; thread: string },
-        IncomingMessage
-      >
-      handleEvent(event: unknown): Promise<void>
-    }
-
-    core.adapters = [a]
-    core.session.bind("slack:C1:T1", {
-      sessionId: "session_1",
-      adapter: a,
-      channel: "C1",
-      thread: "T1",
-    })
-    core.session.start("session_1")
-
-    await core.handleEvent({
-      type: "session.error",
-      properties: {
-        sessionID: "session_1",
-        error: {
-          name: "UnknownError",
-          data: {
-            message: "runtime stopped",
-          },
-        },
-      },
-    })
-
-    expect(core.session.processing("session_1")).toBe(false)
-    expect(sent.at(-1)).toBe("Session failed: runtime stopped")
   })
 })

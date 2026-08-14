@@ -3181,10 +3181,10 @@ removed, and the exact failure/result receipts retained. It does not count towar
   `OPENCORVUS_TASK_QUEUE_CONCURRENCY`, `task_queue_run_timeout_ms`, async prompt queue submission/status routes and
   their generated Software Development Kit surface are deleted. Different Sessions begin Provider execution
   independently without Host ranking or a project concurrency cap. The existing Session prompt owner remains the
-  sole same-Session writer and returns its typed busy contract when a second direct caller races it.
+  sole same-Session writer; an overlapping caller attaches to the exact reply for its own persisted input Message.
 - Preserved integrity boundary: the already-persisted Task-root Message delivery occurrence remains the single
   durable recovery fact for Task/Mission execution, but the reset-required epoch renames it from
-  `queued_operator_wake` to `task_root_ingress`. Its lifecycle is `pending -> delivering -> delivered` or one typed
+  `queued_operator_wake` to `task_root_ingress`. Its lifecycle is `accepted -> delivering -> delivered` or one typed
   terminal disposition. Per-root-Session causal ownership prevents two model turns from concurrently mutating one
   conversation. It may not select among Tasks, expose a queue position, inspect project directories, rank priority,
   or cap cross-Session execution. No replacement Provider queue table, compatibility reader, shadow status or
@@ -3280,3 +3280,43 @@ durable Task-root ingress and Session wake recovery.
   Web UI and visibly confirms model-owned parallel Task creation, stable same-Session conversation ordering and clean
   terminal settlement. This is control-plane acceptance and does not substitute for the three still-required full
   Evolution successes.
+
+#### Implementation and focused verification
+
+The implementation deletes the Provider-admission `TaskQueueService`, `TaskQueueTable`, `a2a_task_queue`, capacity,
+priority, aging, queue-status routes, async prompt submission, queue lifecycle events and their configuration and
+generated contracts. The former root-wake files and facts are now `task_root_ingress`; that record accepts and
+recovers one real Task-root Message and preserves causal First-In-First-Out delivery only inside its owning root
+Session. It has no cross-Task claim, ranking or capacity role. Current-schema startup returns
+`SCHEMA_RESET_REQUIRED` when it finds the retired application table.
+
+Direct public and Channel prompts now submit one durable input Message and await its exact assistant parent. The Host
+mints a Message identity when a public caller omits one, while caller-supplied identities retain a fingerprint for
+idempotent retry and typed conflict. The message-write runtime claim ends with the atomic commit; the sole Session
+owner may therefore accept later durable inputs while an earlier model Turn streams. It advances attached exact
+reply occurrences in durable Message order, keeps later input text outside the active Provider context, and handles
+manual summary controls through the same owner. Context-only `noReply` Messages remain context and never become
+execution authority. Different Sessions own independent physical Turns without a shared Host admission gate.
+
+Focused non-UI evidence after generation is:
+
+- direct Session routes and real SessionProcessor barriers: `9` passed / `17` assertions, covering exact retry after
+  a persisted failed assistant, three overlapping same-Session inputs under one owner, Host-minted identities,
+  context-only predecessors, overlapping manual summary, two different Sessions active concurrently, initialized
+  project context and direct summary;
+- Channel direct prompts and Session isolation: `19` passed / `63` assertions; Channel typecheck passed;
+- canonical schema/reset plus Task-root ingress FIFO: `8` passed / `42` assertions;
+- exact runtime-rollback ingress recovery: `1` passed / `1` assertion with a real durable final assistant;
+- runtime server ownership and shutdown: `24` passed / `72` assertions, including cancellation before listener wait,
+  listener-stop rollback, recovery and retry;
+- Session execution occurrence, owner capture and root-ingress ownership contracts: `8` passed / `27` assertions;
+- OpenCorvus typecheck passed in `58` seconds; generated OpenAPI/JavaScript SDK and bilingual API docs completed;
+  docs check reported `332` operations / `25` groups, route inventory passed `6` rules across `34` files, and the SDK
+  import checker passed;
+- `git diff --check` is clean. The retired-contract search has no production/generated match; its only Task Queue
+  identity is the positive schema-reset fixture that creates `a2a_task_queue` and verifies the typed reset error.
+
+No UI automation test was added, modified or run. The random-port, random-project, isolated-home/SQLite real dev Web
+UI acceptance remains the next delivery phase and is not implied by these focused results. The already running
+isolated exact-`openai/gpt-5.6-terra` Evolution attempt remains a separate end-to-end acceptance record; neither this
+control-plane phase nor a failed Evolution attempt counts toward the three required successful Evolutions.

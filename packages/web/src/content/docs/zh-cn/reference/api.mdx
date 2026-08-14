@@ -206,13 +206,11 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request 错误: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
 | GET | `/session/{sessionID}/message` | Get session messages 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.messages` |
-| POST | `/session/{sessionID}/message` | Send message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt` |
+| POST | `/session/{sessionID}/message` | Send message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.prompt` |
 | DELETE | `/session/{sessionID}/message/{messageID}` | Delete message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.deleteMessage` |
 | GET | `/session/{sessionID}/message/{messageID}` | Get message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/prompt_async` | Send async message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async` |
-| GET | `/session/{sessionID}/prompt_async/{taskID}` | Get async prompt task status 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async_status` |
 | POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.shell` |
 | POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.summarize` |
 | GET | `/session/{sessionID}/todo` | Get session todos 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.todo` |

@@ -25,7 +25,7 @@ import { Database, eq } from "../src/storage/db"
 import { ProjectTable } from "../src/project/project.sql"
 import { Project } from "../src/project/project"
 import { EngineService } from "../src/task-api"
-import { configureTaskLoopRunner } from "../src/engine/queue"
+import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
 
 async function validWorktreeOwners(primaryWorktreeDir: string) {
   const snapshot = await Ownership.Worktree.list(primaryWorktreeDir)
@@ -466,7 +466,7 @@ describe("worktree ownership critical section", () => {
       directory: project.path,
       fn: async () => {
         const worktree = await Worktree.create({ name: `delete-admission-${Date.now()}` })
-        configureTaskLoopRunner(async () => {})
+        configureTaskIngressRunner(async () => {})
         const originalRegister = Project.registerExecutionDirectory
         let releaseRegistration!: () => void
         let registrationOwned!: () => void

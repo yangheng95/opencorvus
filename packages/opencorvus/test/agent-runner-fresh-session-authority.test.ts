@@ -2,10 +2,13 @@ import { afterEach, expect, spyOn, test } from "bun:test"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
-import { EngineArtifactTable, EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
+import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
-import { reconcileTerminalAgentLifecycleDelivery, waitForQueueCompletionHooksForTest } from "@/engine/queue"
-import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+import {
+  reconcileTerminalAgentLifecycleDelivery,
+  TestHooks as IngressTestHooks,
+  waitForIngressDeliveryHooksForTest,
+} from "@/engine/task-root-ingress-delivery"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { selectedWorkflowBinding } from "@/engine/workflow-binding"
 import {
@@ -19,6 +22,7 @@ import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
 import { Session } from "@/session"
+import { Message } from "@/session/message"
 import { SessionProcessor } from "@/session/processor"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { resolveSessionMessageIdentity } from "@/session/message-identity"
@@ -30,6 +34,8 @@ import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { Database, and, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { requireTask } from "@/engine/store"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 
 const model = { providerID: "test", modelID: "fresh-runner-authority" }
 
@@ -64,6 +70,52 @@ afterEach(async () => {
 
 test("fresh delegated worker commits Session, input authority, lineage, and occurrence before provider processing", async () => {
   await using project = await memoryProject()
+  using _ingressRunner = IngressTestHooks.replaceTaskIngressRunner({
+    directory: project.path,
+    runner: async ({ taskID, wakeID }) => {
+      if (!wakeID) throw new Error("Lifecycle delivery requires its exact Task ingress identity")
+      const task = requireTask(taskID)
+      if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
+      const orchestrator = await Session.create({
+        kind: "orchestrator",
+        parentID: task.session_id,
+        title: "Fresh worker lifecycle receiver",
+      })
+      const now = Date.now()
+      const parentID = orchestratorControlOccurrenceIdentity(wakeID).messageID
+      await Session.persistMessage({
+        info: {
+          id: parentID,
+          sessionID: orchestrator.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: now },
+          agent: "orchestrator",
+          model,
+        },
+        parts: [],
+      })
+      const finalMessageID = Identifier.ascending("message")
+      const assistant: Message.Assistant = {
+        id: finalMessageID,
+        sessionID: orchestrator.id,
+        parentID,
+        role: "assistant",
+        author: "orchestrator",
+        time: { created: now, completed: now + 1 },
+        agent: "orchestrator",
+        providerID: model.providerID,
+        modelID: model.modelID,
+        path: { cwd: project.path, root: project.path },
+        cost: 0,
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        finish: "stop",
+        taskIngress: { id: wakeID, kind: "agent_lifecycle_delivery" },
+      }
+      await Session.persistMessage({ info: assistant, parts: [] })
+      return { finalMessageID }
+    },
+  })
   await Instance.provide({
     directory: project.path,
     fn: async () => {
@@ -303,61 +355,12 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           sessionID: committedSessionID,
           payload: { status: { type: "terminal", reason: "completed" } },
         })
-        const blockerTaskID = Identifier.ascending("task")
-        const blockerRoot = await Session.create({ kind: "root", title: "Occupied root queue owner" })
-        const blockerTimeCreated = Date.now()
-        persistTask({
-          taskID: blockerTaskID,
-          sessionID: blockerRoot.id,
-          now: blockerTimeCreated,
-          title: "Occupied root queue owner",
-          request: "Keep the root queue occupied while lifecycle delivery is accepted",
-          productPillar: "work",
-          source: "test",
-          priority: "normal",
-          metadata: {},
-          projectID: Instance.project.id,
-          packageRevision,
-          executionCapsuleBinding: await prepareTaskProcessBinding({
-            mode: "native",
-            taskID: blockerTaskID,
-            projectID: Instance.project.id,
-            rootDirectory: Instance.directory,
-            packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: blockerTimeCreated,
-          }),
-        })
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("delivered")
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("already_delivered")
-        const lifecycleWakes = Database.use((db) =>
-          db
-            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
-            .from(EngineArtifactTable)
-            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
-            .all(),
-        )
-          .map((row) => ({ label: row.label, ingress: QueuedTaskIngressSchema.parse(row.payload) }))
-          .filter((row) => row.ingress.lifecycle_event_id === lifecycle!.id)
-        expect(lifecycleWakes).toMatchObject([
-          {
-            label: "running",
-            ingress: {
-              delivery_attempt: 1,
-              lifecycle_event_id: lifecycle!.id,
-              event: {
-                agentLifecycleDelivery: {
-                  eventID: lifecycle!.id,
-                  sessionID: committedSessionID,
-                  dispatchID,
-                },
-              },
-            },
-          },
-        ])
         const directBinding = selectedWorkflowBinding({
           projection: {
             packageRevision,
@@ -436,5 +439,5 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
   })
   // The accepted lifecycle delivery owns an independent project lease. Join
   // it only after the setup/contract assertion lease has been released.
-  await waitForQueueCompletionHooksForTest()
+  await waitForIngressDeliveryHooksForTest()
 }, 60_000)

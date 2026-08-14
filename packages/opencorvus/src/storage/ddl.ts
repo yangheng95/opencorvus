@@ -646,7 +646,7 @@ BEGIN
 END;
 
 -- Architect ContractGraph and GoalGraphProjection rows are immutable
--- execution facts. Mutable coordination/queue artifacts keep their dedicated
+-- execution facts. Mutable coordination and ingress artifacts keep their dedicated
 -- update protocols; these two kinds can only be superseded by appending a new
 -- exact Artifact.
 CREATE TRIGGER IF NOT EXISTS engine_goal_graph_artifact_immutable

@@ -24,14 +24,13 @@ import { Config } from "@/config/config"
  * streaming boundary. They are TCP-level "no-byte-moved" deadlines,
  * NOT agent-level turn budgets. Rule of thumb when tuning:
  *
- * `task_queue_run_timeout_ms` is the max no-activity window for a
- * single queue task — measured from the last observed chunk-driven
+ * `execution_progress_idle_ms` is the max no-activity window for one
+ * Provider-backed execution — measured from the last observed chunk-driven
  * heartbeat, NOT from process start or an unconditional setInterval.
- * See scheduler/task-queue-service.ts.
  */
 interface ActivityConfig {
   session_llm_idle_ms: number
-  task_queue_run_timeout_ms: number
+  execution_progress_idle_ms: number
 }
 
 export interface EngineConfigType {
@@ -49,10 +48,9 @@ const DEFAULTS: EngineConfigType = {
     // 3 min of zero chunks is already anomalous (observed cases: TCP
     // hang to alibaba-coding-plan-cn, NAT-silenced connection).
     session_llm_idle_ms: 180_000,
-    // TaskQueueService recover() compares against this. The scheduler
-    // heartbeat is chunk-driven now, so this is a real deadline, not
-    // a self-fed timer.
-    task_queue_run_timeout_ms: 600_000,
+    // Durable execution recovery compares against chunk-driven progress;
+    // this is a real deadline, not a self-fed timer.
+    execution_progress_idle_ms: 600_000,
   },
   max_executor_groups: 5,
 }
@@ -105,8 +103,8 @@ function merge(user?: Config.Info["assistant"]): EngineConfigType {
   return {
     activity: {
       session_llm_idle_ms: user?.activity?.session_llm_idle_ms ?? DEFAULTS.activity.session_llm_idle_ms,
-      task_queue_run_timeout_ms:
-        user?.activity?.task_queue_run_timeout_ms ?? DEFAULTS.activity.task_queue_run_timeout_ms,
+      execution_progress_idle_ms:
+        user?.activity?.execution_progress_idle_ms ?? DEFAULTS.activity.execution_progress_idle_ms,
     },
     max_executor_groups: user?.max_executor_groups ?? DEFAULTS.max_executor_groups,
   }

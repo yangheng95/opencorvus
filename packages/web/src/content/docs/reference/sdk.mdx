@@ -119,13 +119,13 @@ If `OPENCORVUS_SERVER_PASSWORD` is set, `createOpenCorvus()` passes it into the 
 
 ## Namespaces
 
-The SDK follows OpenAPI `operationId` names. Dotted segments become namespaces; snake_case method names become camelCase. For example, `session.prompt_async` becomes `client.session.promptAsync()`.
+The SDK follows OpenAPI `operationId` names. Dotted segments become namespaces and snake_case method names become camelCase. For example, `session.prompt` becomes `client.session.prompt()`.
 
 | Namespace                                | Examples                                                   |
 | ---------------------------------------- | ---------------------------------------------------------- |
 | `client.global.*`                        | `health`, `event`, `config.get`, `db.reset`                |
 | `client.task.*`                          | `create`, `list`, `message`, `retry`, `replan`, `followup` |
-| `client.session.*`                       | `create`, `prompt`, `promptAsync`, `events`, `trace`       |
+| `client.session.*`                       | `create`, `prompt`, `events`, `trace`, `summarize`         |
 | `client.goal.*`                          | Delivery Slice creation, immutable revision, and derived-progress routes |
 | `client.channel.*`                       | Channel runtime and attachment routes                      |
 | `client.mcp.*`                           | MCP server lifecycle and auth routes                       |

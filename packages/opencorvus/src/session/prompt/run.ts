@@ -33,9 +33,14 @@ async function continueUserMessage(
   },
 ) {
   const prepared = consumePreparedUserMessage(input, runtime.prepared ?? (await prepareUserMessage(input)))
-  using _runtimeWrite = runtime.runtimeClaim
-    ? consumePreparedUserMessageRuntimeClaim(prepared, runtime.runtimeClaim)
-    : claimPreparedUserMessageRuntime(prepared)
+  // A message-write claim protects only the atomic user-message commit.  A
+  // persisted input must be able to attach to the existing Session owner while
+  // that owner is streaming an earlier input; retaining this claim across the
+  // physical model turn would turn the runtime-contract guard into a hidden
+  // per-Session admission gate.
+  if (runtime.runtimeClaim) {
+    using _runtimeWrite = consumePreparedUserMessageRuntimeClaim(prepared, runtime.runtimeClaim)
+  }
   const session = await Session.get(input.sessionID)
   await clearRewindCursorForSession(session.id)
   return await SessionContext.provide(session, async () => {

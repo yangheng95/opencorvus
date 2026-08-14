@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { Config } from "../../src/config/config"
-import { configureTaskLoopRunner } from "../../src/engine/queue"
+import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-delivery"
 import { ExpertSquadConversationAuthoring } from "../../src/expert-squad/conversation-authoring"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { MCP } from "../../src/mcp"
@@ -69,7 +69,7 @@ describe("Browser MCP projection contract", () => {
             config,
           })
 
-          configureTaskLoopRunner(async () => {})
+          configureTaskIngressRunner(async () => {})
           const taskID = await EngineService.createTask(
             {
               requestID: "browser-projection-contract-task",

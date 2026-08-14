@@ -21,11 +21,11 @@ import { Config } from "../src/config/config"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { EngineService } from "../src/task-api"
 import {
-  configureTaskLoopRunner,
+  configureTaskIngressRunner,
   requireTaskCreationIngressID,
-  waitForQueueCompletionHooksForTest,
-} from "../src/engine/queue"
-import { QueuedTaskIngressSchema } from "../src/engine/queued-task-ingress"
+  waitForIngressDeliveryHooksForTest,
+} from "../src/engine/task-root-ingress-delivery"
+import { TaskRootIngressSchema } from "../src/engine/task-root-ingress"
 import {
   resolvePinnedTaskSchedulerTurnProjection,
   taskPackageRevisionForSession,
@@ -140,7 +140,7 @@ describe("Task package revision binding", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(settleTaskCreationIngress)
+        configureTaskIngressRunner(settleTaskCreationIngress)
         const mission = await ensureMissionSession({
           missionID: "mission-authority-held",
           defaultCwd: project.path,
@@ -205,7 +205,7 @@ describe("Task package revision binding", () => {
         }
       },
     })
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
   }, 0)
 
   test("commits one exact package revision with the Task and projects it through Task reads", async () => {
@@ -295,7 +295,7 @@ describe("Task package revision binding", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(settleTaskCreationIngress)
+        configureTaskIngressRunner(settleTaskCreationIngress)
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
           prompt_profile: { active: "base" },
         })
@@ -332,7 +332,7 @@ describe("Task package revision binding", () => {
         expect({
           status: viewTask(firstTask).status,
           timeStarted: firstTask.time_started,
-          ingress: QueuedTaskIngressSchema.parse(firstCreationIngress?.payload),
+          ingress: TaskRootIngressSchema.parse(firstCreationIngress?.payload),
         }).toMatchObject({
           status: "active",
           timeStarted: expect.any(Number),
@@ -441,7 +441,7 @@ describe("Task package revision binding", () => {
         ).toBe(resolved.packageDigest)
       },
     })
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
   }, 0)
   test("reopens a persisted Task against the same package revision after Project runtime disposal", async () => {
     const project = await memoryProject()
@@ -449,7 +449,7 @@ describe("Task package revision binding", () => {
       const created = await Instance.provide({
         directory: project.path,
         fn: async () => {
-          configureTaskLoopRunner(settleTaskCreationIngress)
+          configureTaskIngressRunner(settleTaskCreationIngress)
           const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
             prompt_profile: { active: "base" },
           })
@@ -472,7 +472,7 @@ describe("Task package revision binding", () => {
         },
       })
 
-      await waitForQueueCompletionHooksForTest()
+      await waitForIngressDeliveryHooksForTest()
       await Instance.disposeAll()
       expect(ProcessSupervisor.metricsSnapshot()).toEqual({ live: 0, owners: {} })
 
@@ -512,7 +512,7 @@ describe("Task package revision binding", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(settleTaskCreationIngress)
+        configureTaskIngressRunner(settleTaskCreationIngress)
         const sourcePackage = await materializeMirrorPrismPackage(path.join(project.path, "source-prism"))
         const baseline = await ExpertSquadPackageManager.importDirectory({
           projectDirectory: project.path,
@@ -631,6 +631,6 @@ describe("Task package revision binding", () => {
         ).toMatchObject({ session_override: false, manifest_grant: true, effective: true })
       },
     })
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
   }, 0)
 })

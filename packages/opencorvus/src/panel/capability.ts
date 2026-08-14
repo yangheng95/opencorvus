@@ -480,7 +480,7 @@ export const PanelCapabilityRegistry = list(
   }),
   item({
     action: "retry_task",
-    description: "Queue a retry for a task.",
+    description: "Request a retry for a task.",
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {
@@ -489,7 +489,7 @@ export const PanelCapabilityRegistry = list(
   }),
   item({
     action: "replan_task",
-    description: "Queue a replan for a task.",
+    description: "Request a replan for a task.",
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {

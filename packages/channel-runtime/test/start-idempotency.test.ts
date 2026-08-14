@@ -61,7 +61,7 @@ function stubClient() {
       create: async () => ({ data: { id: "session_mock" }, error: undefined }),
       get: async () => ({ data: undefined, error: undefined }),
       message: async () => ({ data: { parts: [] }, error: undefined }),
-      promptAsync: async (input: unknown) => {
+      prompt: async (input: unknown) => {
         promptInputs.push(input)
         return { data: { taskID: "task_mock" }, error: undefined }
       },

@@ -2,7 +2,6 @@ import { describe, expect, mock, test } from "bun:test"
 import { sdkMock } from "./sdk-mock"
 
 mock.module("@opencorvus-ai/sdk", () => sdkMock)
-mock.module("@opencorvus-ai/sdk", () => sdkMock)
 
 const { ChannelRuntime } = await import("../src/core")
 
@@ -13,14 +12,12 @@ describe("channel runtime message state", () => {
       pendingPartTexts: Map<string, string>
       textBuffers: Map<string, string>
       handleEvent(event: unknown): Promise<void>
-      touchPending(sessionId: string): void
       sharedMode(): boolean
     }
 
     core.userMessageIds = new Set<string>()
     core.pendingPartTexts = new Map<string, string>([["message_1", "hello"]])
     core.textBuffers = new Map<string, string>([["message_1", "hello"]])
-    core.touchPending = () => {}
     core.sharedMode = () => false
 
     await core.handleEvent({

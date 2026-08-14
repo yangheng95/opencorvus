@@ -7,7 +7,7 @@ import { createDispatchLineageOrigin, findDispatchLineageByDispatchID, recordDis
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { persistArchitectGoalProjection } from "@/engine/persist"
-import { reconcileTerminalAgentLifecycleDelivery, TestHooks as QueueTestHooks } from "@/engine/queue"
+import { reconcileTerminalAgentLifecycleDelivery, TestHooks as IngressTestHooks } from "@/engine/task-root-ingress-delivery"
 import { listGoalWorkloadArtifacts } from "@/engine/store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
@@ -670,7 +670,7 @@ async function result() {
       },
     })
   }
-  using _taskLoopRunner = QueueTestHooks.replaceTaskLoopRunner({
+  using _taskLoopRunner = IngressTestHooks.replaceTaskIngressRunner({
     directory: projectDirectory,
     runner: settleQueuedLifecycleWake,
   })

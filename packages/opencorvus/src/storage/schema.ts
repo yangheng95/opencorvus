@@ -20,7 +20,6 @@ import { WorkspaceTable } from "../workspace/workspace.sql"
 import { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
 import { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "../scheduler/automation.sql"
 import { EventJobFireTable, EventJobTable } from "../scheduler/event.sql"
-import { TaskQueueTable } from "../scheduler/task-queue.sql"
 import { TaskPlanTable } from "../memory/task-plan.sql"
 import { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
 import {
@@ -71,7 +70,6 @@ export {
   AutomationTable,
   EventJobFireTable,
   EventJobTable,
-  TaskQueueTable,
   TaskPlanTable,
   WorkbenchBriefSnapshotTable,
   EngineTaskTable,
@@ -125,7 +123,6 @@ export const ApplicationSchema = {
   AutomationTable,
   EventJobFireTable,
   EventJobTable,
-  TaskQueueTable,
   TaskPlanTable,
   WorkbenchBriefSnapshotTable,
   EngineTaskTable,

@@ -42,7 +42,6 @@ const TREE_WRITER_NOOP_TYPES = new Set([
   "mcp.browser.open.failed",
   "mcp.prompts.changed",
   "mcp.resources.changed",
-  "task-queue.completed",
   "scheduler.message",
   "file.watcher.updated",
   "file.watcher.failed",

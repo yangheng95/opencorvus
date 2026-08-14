@@ -18,7 +18,7 @@ import { Database } from "@/storage/db"
 import { EngineArtifactTable, EngineTaskTable, type EngineArtifactKind, type EngineMetadata } from "./engine.sql"
 import { insertEngineArtifact, updateEngineArtifactsWhere, updateEngineArtifactWhereReturning } from "./artifact"
 import { findDispatchLineageBySession, parseDispatchLineagePayload } from "./dispatch-lineage"
-import { persistQueuedCoordinationWakeInTransaction } from "./queue"
+import { persistCoordinationIngressInTransaction } from "./task-root-ingress-delivery"
 import { assertTaskEvidenceLocators } from "./evidence-locator"
 
 export const AgentCoordinationRedispatchBindingSchema = ProjectedWorkerBindingSchema.safeExtend({
@@ -760,7 +760,7 @@ export async function createOperatorSteerCoordinationRequest(input: {
         details,
         deliverySliceSubject: input.deliverySliceSubject,
       })
-      persistQueuedCoordinationWakeInTransaction(db, {
+      persistCoordinationIngressInTransaction(db, {
         taskID: input.taskID,
         rootSessionID: task.rootSessionID,
         requestID,
@@ -817,7 +817,7 @@ export async function createOperatorSteerCoordinationRequest(input: {
         correlationID: requestID,
       },
     )
-    persistQueuedCoordinationWakeInTransaction(db, {
+    persistCoordinationIngressInTransaction(db, {
       taskID: input.taskID,
       rootSessionID: task.rootSessionID,
       requestID,

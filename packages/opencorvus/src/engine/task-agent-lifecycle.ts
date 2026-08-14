@@ -15,7 +15,10 @@ export type TaskAgentLifecycleReport = {
   cancellationFailures: unknown[]
 }
 
-export async function collectTaskAgentLifecycleHandles(task: TaskRow, signal?: AbortSignal): Promise<{
+export async function collectTaskAgentLifecycleHandles(
+  task: TaskRow,
+  signal?: AbortSignal,
+): Promise<{
   taskID: string
   sessionIDs: string[]
   promptSessions: TaskAgentPromptSession[]
@@ -88,7 +91,7 @@ export async function requestTaskAgentLifecycleCancellation(input: {
 
 /**
  * Converge durable Agent lifecycle evidence only after physical prompt and
- * queue ownership settlement has succeeded. Persisted streaming/retry is
+ * ingress ownership settlement has succeeded. Persisted streaming/retry is
  * historical evidence, never a liveness source.
  */
 export async function publishTaskAgentCancellationStatusesAfterSettlement(input: {

@@ -1,6 +1,5 @@
 export type RuntimeExecutionKind =
-  | "task_queue"
-  | "engine_queue_completion"
+  | "task_root_ingress_delivery"
   | "task_cancellation"
   | "scheduler_event_fire"
   | "scheduler_automation_fire"

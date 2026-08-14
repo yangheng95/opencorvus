@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { EngineArtifactTable } from "../src/engine/engine.sql"
-import { configureTaskLoopRunner, waitForQueueCompletionHooksForTest } from "../src/engine/queue"
-import { QueuedTaskIngressSchema } from "../src/engine/queued-task-ingress"
+import { configureTaskIngressRunner, waitForIngressDeliveryHooksForTest } from "../src/engine/task-root-ingress-delivery"
+import { TaskRootIngressSchema } from "../src/engine/task-root-ingress"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
@@ -16,12 +16,12 @@ import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(async () => {
-  await waitForQueueCompletionHooksForTest()
+  await waitForIngressDeliveryHooksForTest()
   await resetMemoryDatabase()
 })
 
 describe("delayed Task-wait fire identity", () => {
-  test("atomically transfers one compact durable fire into the root Task queue", async () => {
+  test("atomically transfers one compact durable fire into Task root ingress", async () => {
     await using project = await memoryProject()
     let taskID = ""
     let waitID = ""
@@ -30,7 +30,7 @@ describe("delayed Task-wait fire identity", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(async () => {})
+        configureTaskIngressRunner(async () => {})
         taskID = Identifier.ascending("task")
         const root = await Session.create({ kind: "root", title: "Scheduled Task wait runtime" })
         const now = Date.now()
@@ -85,7 +85,7 @@ describe("delayed Task-wait fire identity", () => {
 
     await Instance.disposeAll()
     await AutomationService.runDueNow()
-    await waitForQueueCompletionHooksForTest()
+    await waitForIngressDeliveryHooksForTest()
     await AutomationService.runDueNow()
 
     expect(
@@ -98,14 +98,14 @@ describe("delayed Task-wait fire identity", () => {
         .where(
           and(
             eq(EngineArtifactTable.task_id, taskID),
-            eq(EngineArtifactTable.kind, "queued_operator_wake"),
+            eq(EngineArtifactTable.kind, "task_root_ingress"),
             sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitID}`,
           ),
         )
         .all(),
     )
     expect(wakes).toHaveLength(1)
-    const wake = QueuedTaskIngressSchema.parse(wakes[0]!.payload)
+    const wake = TaskRootIngressSchema.parse(wakes[0]!.payload)
     const expectedFireID = taskWaitFireID(waitID)
     expect({
       label: wakes[0]!.label,
@@ -115,7 +115,7 @@ describe("delayed Task-wait fire identity", () => {
       dueAt: wake.source_kind === "task_wait_wake" ? wake.event.taskWaitWake.dueAt : undefined,
       deliveryStatus: wake.delivery_result?.status,
     }).toEqual({
-      label: "drained",
+      label: "delivered",
       sourceKind: "task_wait_wake",
       jobID: waitID,
       fireID: expectedFireID,

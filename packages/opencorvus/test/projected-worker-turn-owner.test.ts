@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test"
 import {
   runProjectedWorkerTurnExclusive,
-  waitForProjectedWorkerTurnQueuesForTest,
-} from "@/agent/projected-worker-turn-queue"
+  waitForProjectedWorkerTurnOwnersForTest,
+} from "@/agent/projected-worker-turn-owner"
 
 test("projected worker Turns acquire one physical Session in submission order", async () => {
   const events: string[] = []
@@ -38,5 +38,5 @@ test("projected worker Turns acquire one physical Session in submission order", 
   releaseFirst()
   expect(await Promise.all([first, second])).toEqual(["first", "second"])
   expect(events).toEqual(["first:owned", "first:settled", "second:owned"])
-  await waitForProjectedWorkerTurnQueuesForTest()
+  await waitForProjectedWorkerTurnOwnersForTest()
 })

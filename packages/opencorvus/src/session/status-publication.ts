@@ -45,7 +45,7 @@ export async function publishSessionStatus(
 }
 
 /**
- * Close one Session after its physical prompt and queue ownership have already
+ * Close one Session after its physical prompt and ingress ownership have already
  * settled. This is the restart-safe complement to publishSessionStatus:
  * process-local state can be empty while the durable Task ledger still ends in
  * streaming/retry. Persist the process latch's first terminal fact when one

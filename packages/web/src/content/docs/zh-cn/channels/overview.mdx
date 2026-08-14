@@ -65,7 +65,8 @@ bun run dev
   -> ChannelAdapter.onMessage(IncomingMessage)
   -> ChannelRuntime.handleMessage()
   -> 创建或复用 session
-  -> client.session.promptAsync()
+  -> client.session.prompt()
+  -> 返回精确 assistant 响应
 
 OpenCorvus 事件流
   -> ChannelRuntime.handleEvent()

@@ -88,7 +88,7 @@ ChannelRuntime.handleMessage()            [packages/channel-runtime/src/core.ts]
   ↓
 SessionCoordinator.get("slack:C...:123")
   ↓  新 thread → 新 session；同 thread → 复用
-client.session.promptAsync(sessionId, message)
+client.session.prompt(sessionId, message)
 ```
 
 Thread 语义：Slack 的 `thread_ts` 唯一标识一条对话；同 thread 内的后续消息会作为 **follow-up** 注入同一任务循环。
@@ -101,7 +101,7 @@ OpenCorvus 后端 SSE 推事件
 handleEvent(event)                        [packages/channel-runtime/src/core.ts]
   ↓
 message.updated    → 文本缓冲 → safeSend()
-session.idle       → 释放当前请求并出队下一条消息
+assistant completed → 结算当前直接 prompt 请求
 part.updated(image) → uploadImage() 调 files.uploadV2
 permission.asked   → 若开启自动回复则直接 reply；否则 @ 用户等人工
 ```

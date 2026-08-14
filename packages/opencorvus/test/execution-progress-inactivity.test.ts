@@ -6,13 +6,13 @@ import {
   SchedulerExecutionInactivityError,
 } from "../src/scheduler/execution-inactivity"
 
-describe("scheduler execution inactivity configuration ownership", () => {
+describe("execution progress inactivity configuration ownership", () => {
   test("projects the global assistant inactivity timeout through EngineConfig", async () => {
     const getGlobal = spyOn(Config, "getGlobal").mockResolvedValue({
       assistant: {
         activity: {
           session_llm_idle_ms: 321,
-          task_queue_run_timeout_ms: 654,
+          execution_progress_idle_ms: 654,
         },
       },
     } as Config.Info)
@@ -20,7 +20,7 @@ describe("scheduler execution inactivity configuration ownership", () => {
       expect(await EngineConfig.getGlobal()).toMatchObject({
         activity: {
           session_llm_idle_ms: 321,
-          task_queue_run_timeout_ms: 654,
+          execution_progress_idle_ms: 654,
         },
       })
     } finally {
@@ -28,12 +28,12 @@ describe("scheduler execution inactivity configuration ownership", () => {
     }
   })
 
-  test("arms the global scheduler fence without a Project instance context", async () => {
+  test("arms the global execution fence without a Project instance context", async () => {
     const getGlobal = spyOn(EngineConfig, "getGlobal").mockResolvedValue({
       ...EngineConfig.defaults,
       activity: {
         ...EngineConfig.defaults.activity,
-        task_queue_run_timeout_ms: 25,
+        execution_progress_idle_ms: 25,
       },
     })
     try {
@@ -67,7 +67,7 @@ describe("scheduler execution inactivity configuration ownership", () => {
       ...EngineConfig.defaults,
       activity: {
         ...EngineConfig.defaults.activity,
-        task_queue_run_timeout_ms: 25,
+        execution_progress_idle_ms: 25,
       },
     })
     try {

@@ -95,11 +95,6 @@ export namespace SessionWake {
       eventType: z.string(),
       oneShot: z.boolean(),
     }),
-    z.object({
-      source: z.literal("scheduler.task_queue"),
-      queueTaskID: z.string().optional(),
-      queueSource: z.string().optional(),
-    }),
   ])
   export type WakeReason = z.infer<typeof WakeReason>
 

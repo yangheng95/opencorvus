@@ -42,7 +42,7 @@ normalized repository identity material 经 `Identifier.deterministic("project",
 24 字符的 `prj_*` 身份；包含旧 expanded Project primary key 的 pre-release Database 在 bootstrap
 返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait 的 fire identity 由完整 Automation
 job identity 确定性派生为不超过 24 字符的 `cal_*`；pending delay 尚未签发 fire identity，而签发与
-queued ingress 持久化、delay 消费处于同一事务，因此 restart 只重放一个 durable ingress。其他手工或
+accepted `task_root_ingress` 持久化、delay 消费处于同一事务，因此 restart 只重放一个 durable ingress。其他手工或
 caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。Project Memory 的 pending
 user-input file/chunk 与 Project `MEMORY.MD` envelope file/chunk 分别使用 domain-separated 的 compact
 `memory` / `memchunk` identity；完整 Project、occurrence、content 和 provenance 仍在关系与 payload 中。
@@ -301,13 +301,13 @@ foreign attachment 来“修复”。Attachment bytes 的物理池在
 | `quick_note`                                                  | `quicknote/quicknote.sql.ts` | quicknote                                       |
 | `session_share`                                               | `share/share.sql.ts`         | 分享                                            |
 | `protocol_event` · `protocol_inbox` · `protocol_stream_chunk` | `protocol/protocol.sql.ts`   | 可观测协议事件与流分片                          |
-| `task_queue` · `automation` · `automation_run` · `event_job`  | `scheduler/*.sql.ts`         | 调度器                                          |
+| `automation` · `automation_run` · `event_job`                 | `scheduler/*.sql.ts`         | 定时与事件触发                                  |
 
-Scheduler 表按 service 分层写入：`task_queue` 的唯一直接表写入文件是
-`scheduler/task-queue-service.ts`；`automation` 与 `automation_run` 的唯一直接表写入文件是
+Scheduler 表按 service 分层写入：`automation` 与 `automation_run` 的唯一直接表写入文件是
 `scheduler/automation-service.ts`；`event_job` 的唯一直接表写入文件是
 `scheduler/event-service.ts`。Tool、server route 和 engine 层只能通过
-scheduler service 创建、更新或删除 scheduler job / queue rows，不能直接写 scheduler 表。
+scheduler service 创建、更新或删除 scheduler job，不能直接写 scheduler 表。业务 Task
+没有 Host 调度表；Mission/Orchestrator 决定何时创建并行或依赖 Task。
 
 ## Trace — 统一运行追踪（横切）
 

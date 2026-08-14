@@ -23,8 +23,10 @@ import { PromptProfile } from "@/agent/prompt-profile"
 import { Provider } from "@/provider/provider"
 import { SessionPrompt } from "../../session/prompt"
 import { Instance } from "@/project/instance"
+import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
 import { clearRewindCursorForSession } from "@/engine/rewind"
 import { CompactionHandoff } from "@/session/compaction-handoff"
+import { SessionCompaction } from "@/session/compaction"
 import { SessionSummary } from "@/session/summary"
 import { Message } from "../../session/message"
 import { MessageStore } from "../../session/message-store"
@@ -32,7 +34,6 @@ import { Todo } from "../../session/todo"
 import { TodoStore } from "../../session/todo-store"
 import { EngineService } from "@/task-api"
 import { Snapshot } from "@/snapshot"
-import { TaskQueueService } from "@/scheduler/task-queue-service"
 import { Log } from "../../util/log"
 import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
@@ -72,6 +73,10 @@ import { Question } from "@/question"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
 import { visibleComposerReferences } from "@opencorvus-ai/transport-protocol"
+import { NamedError } from "@opencorvus-ai/util/error"
+import { createHash } from "node:crypto"
+import { Identifier } from "@/id/id"
+import { SessionContext } from "@/session/context"
 import {
   CONVERSATION_HISTORY_PAGE_LIMIT,
   CONVERSATION_TAIL_MESSAGE_LIMIT,
@@ -118,6 +123,127 @@ const PublicSessionPromptInput = SessionPrompt.PromptInput.omit({
 })
 type SessionPromptRouteBody = z.infer<typeof PublicSessionPromptInput>
 
+const PublicSessionPromptIdentity = z
+  .object({
+    version: z.literal(1),
+    fingerprint: z.string().regex(/^[0-9a-f]{64}$/),
+  })
+  .strict()
+
+const PublicSessionPromptIdentityConflictError = NamedError.create(
+  "PublicSessionPromptIdentityConflictError",
+  z.object({
+    sessionID: z.string(),
+    messageID: z.string(),
+    message: z.string(),
+  }),
+)
+
+const publicSessionPromptOperations = new Map<string, { fingerprint: string; operation: Promise<Message.WithParts> }>()
+
+function publicSessionPromptFingerprint(prompt: SessionPromptRouteBody): string {
+  return createHash("sha256").update(JSON.stringify(prompt)).digest("hex")
+}
+
+async function completedAssistantReplyForUserMessage(
+  sessionID: string,
+  messageID: string,
+): Promise<Message.WithParts | undefined> {
+  for await (const candidate of MessageStore.stream(sessionID)) {
+    if (
+      candidate.info.role === "assistant" &&
+      candidate.info.parentID === messageID &&
+      candidate.info.time.completed !== undefined &&
+      Boolean(candidate.info.finish) &&
+      candidate.info.finish !== "error" &&
+      candidate.info.finish !== "tool-calls" &&
+      candidate.info.error === undefined &&
+      candidate.info.summary !== true
+    ) {
+      return candidate
+    }
+  }
+}
+
+async function executePublicSessionPrompt(
+  sessionID: string,
+  prompt: SessionPrompt.PromptInput,
+): Promise<Message.WithParts> {
+  if (!prompt.messageID) {
+    throw new Error(`Public Session prompt for ${sessionID} is missing its Host-minted input Message identity`)
+  }
+  const expectedIdentity = PublicSessionPromptIdentity.parse(prompt.extra?.publicSessionPromptIdentity)
+  const operationKey = `${sessionID}\0${prompt.messageID}`
+  const active = publicSessionPromptOperations.get(operationKey)
+  if (active) {
+    if (active.fingerprint !== expectedIdentity.fingerprint) {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID: prompt.messageID,
+        message: `Message ${prompt.messageID} is already bound to a different public Session prompt`,
+      })
+    }
+    return active.operation
+  }
+  const operation = executePublicSessionPromptOperation(
+    sessionID,
+    { ...prompt, messageID: prompt.messageID },
+    expectedIdentity,
+  )
+  publicSessionPromptOperations.set(operationKey, {
+    fingerprint: expectedIdentity.fingerprint,
+    operation,
+  })
+  try {
+    return await operation
+  } finally {
+    if (publicSessionPromptOperations.get(operationKey)?.operation === operation) {
+      publicSessionPromptOperations.delete(operationKey)
+    }
+  }
+}
+
+async function executePublicSessionPromptOperation(
+  sessionID: string,
+  prompt: SessionPrompt.PromptInput & { messageID: string },
+  expectedIdentity: z.infer<typeof PublicSessionPromptIdentity>,
+): Promise<Message.WithParts> {
+  const existing = await MessageStore.get({ sessionID, messageID: prompt.messageID }).catch((error) => {
+    if (NotFoundError.isInstance(error as Error)) return undefined
+    throw error
+  })
+  if (!existing) return SessionPrompt.prompt(prompt)
+  if (existing.info.role !== "user") {
+    throw new PublicSessionPromptIdentityConflictError({
+      sessionID,
+      messageID: prompt.messageID,
+      message: `Message ${prompt.messageID} is already bound to a non-user Session message`,
+    })
+  }
+  const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
+  if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== expectedIdentity.fingerprint) {
+    throw new PublicSessionPromptIdentityConflictError({
+      sessionID,
+      messageID: prompt.messageID,
+      message: `Message ${prompt.messageID} is already bound to a different public Session prompt`,
+    })
+  }
+  const completed = await completedAssistantReplyForUserMessage(sessionID, prompt.messageID)
+  if (completed) return completed
+  const session = await Session.get(sessionID)
+  return SessionContext.provide(session, () =>
+    provideInitializedProjectExecution({
+      directory: session.directory,
+      fn: () =>
+        SessionPrompt.loop({
+          sessionID,
+          reply_to_message_id: prompt.messageID,
+          retry_failed_reply: true,
+        }),
+    }),
+  )
+}
+
 function projectedWorkerPublicPromptRejection(sessionID: string): string | undefined {
   const workerTurn = WorkerTurnDescriptor.latestForSession(sessionID)
   if (!workerTurn) return
@@ -153,16 +279,27 @@ async function preparePublicSessionPrompt(sessionID: string, prompt: SessionProm
     }
   }
   const runtimeContract = SessionPrompt.getSessionRuntimeContract(sessionID)
-  const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
+  const identifiedPrompt = {
     ...prompt,
+    messageID: prompt.messageID ?? Identifier.ascending("message"),
+  }
+  const publicSessionPromptIdentity = {
+    version: 1 as const,
+    fingerprint: publicSessionPromptFingerprint(identifiedPrompt),
+  }
+  const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
+    ...identifiedPrompt,
     author: "user",
-    extra: ProjectMemory.userInputExtra({
-      surface: "session.prompt",
-      literalText: prompt.parts
-        .filter((part): part is Extract<(typeof prompt.parts)[number], { type: "text" }> => part.type === "text")
-        .map((part) => part.text)
-        .join("\n\n"),
-    }),
+    extra: {
+      ...ProjectMemory.userInputExtra({
+        surface: "session.prompt",
+        literalText: prompt.parts
+          .filter((part): part is Extract<(typeof prompt.parts)[number], { type: "text" }> => part.type === "text")
+          .map((part) => part.text)
+          .join("\n\n"),
+      }),
+      publicSessionPromptIdentity,
+    },
   }
   const overlaidPrompt =
     session.kind === "mission"
@@ -1206,17 +1343,7 @@ export const SessionRoutes = lazy(() =>
           targetSessionID: session.id,
         })
         cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
-        TaskQueueService.cancelSessionPrompts({
-          sessionIDs: [sessionID],
-          reason: "session aborted",
-          origin,
-          source: "session.prompt_async",
-        })
         await awaitSessionPromptFinishedInScope({ session, handle: "session.abort" })
-        await TaskQueueService.awaitSessionPromptsIdle({
-          sessionIDs: [sessionID],
-          source: "session.prompt_async",
-        })
         const occurrence = SessionStatus.executionOccurrence(sessionID)
         if (occurrence && SessionStatus.getExecution(sessionID, occurrence.inputMessageID).type !== "terminal") {
           await publishSessionStatus(
@@ -1297,23 +1424,29 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
-        await getActiveProjectSession(sessionID)
-        await clearRewindCursorForSession(sessionID)
-        const msgs = await Session.messages({ sessionID })
-        const source = latestSummarizableUser(msgs)
-        if (!source) {
-          throw new Error(`Cannot compact session ${sessionID}: no real user message found`)
-        }
-        const result = await TaskQueueService.executeCompaction({
-          sessionID,
-          sourceUserMessageID: source.id,
-          model: {
-            providerID: body.providerID,
-            modelID: body.modelID,
-          },
-          auto: body.auto,
-          focus: body.focus,
-        })
+        const session = await getActiveProjectSession(sessionID)
+        const result = await SessionContext.provide(session, () =>
+          provideInitializedProjectExecution({
+            directory: session.directory,
+            fn: async () => {
+              await clearRewindCursorForSession(sessionID)
+              const msgs = await Session.messages({ sessionID })
+              const source = latestSummarizableUser(msgs)
+              if (!source) {
+                throw new Error(`Cannot compact session ${sessionID}: no real user message found`)
+              }
+              await SessionCompaction.create({
+                sessionID,
+                source,
+                model: { providerID: body.providerID, modelID: body.modelID },
+                auto: body.auto,
+                overflow: false,
+                focus: body.focus,
+              })
+              return SessionPrompt.loop(body.auto ? { sessionID } : { sessionID, result_mode: "summary" })
+            },
+          }),
+        )
         return c.json(result.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(result.info))
       },
     )
@@ -1512,6 +1645,10 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          409: namedErrorResponse(
+            "Message identity is already bound to another public Session prompt",
+            "PublicSessionPromptIdentityConflictError",
+          ),
           503: AuthReadUnavailableResponse,
         },
       }),
@@ -1527,108 +1664,8 @@ export const SessionRoutes = lazy(() =>
         const body = c.req.valid("json")
         const prepared = await preparePublicSessionPrompt(sessionID, body)
         if (!prepared.ok) return c.json(badRequestBody(prepared.message), 400)
-        const msg = await TaskQueueService.executePrompt({
-          sessionID,
-          prompt: prepared.prompt,
-          source: "session.prompt",
-        })
+        const msg = await executePublicSessionPrompt(sessionID, { sessionID, ...prepared.prompt })
         return c.json(msg)
-      },
-    )
-    .post(
-      "/:sessionID/prompt_async",
-      describeRoute({
-        summary: "Send async message",
-        description:
-          "Create and send a new message to a standalone, Mission, or Coding Assistant session asynchronously, starting the session if needed and returning immediately. Projected worker guidance uses the task-scoped operator-steer route.",
-        operationId: "session.prompt_async",
-        responses: {
-          202: {
-            description: "Prompt accepted",
-            content: {
-              "application/json": {
-                schema: resolver(
-                  z.object({
-                    taskID: z.string(),
-                    user_message: Message.VisibleWithParts,
-                  }),
-                ),
-              },
-            },
-          },
-          ...errors(400, 404),
-          503: AuthReadUnavailableResponse,
-        },
-      }),
-      validator(
-        "param",
-        z.object({
-          sessionID: z.string().meta({ description: "Session ID" }),
-        }),
-      ),
-      validator("json", PublicSessionPromptInput),
-      async (c) => {
-        const sessionID = c.req.valid("param").sessionID
-        const body = c.req.valid("json")
-        const prepared = await preparePublicSessionPrompt(sessionID, body)
-        if (!prepared.ok) return c.json(badRequestBody(prepared.message), 400)
-        const result = await TaskQueueService.enqueuePromptAfterPersistingUserMessage({
-          sessionID,
-          prompt: prepared.prompt,
-          source: "session.prompt_async",
-        })
-        const [userMessage] = enrichStandaloneSessionTranscript([result.userMessage])
-        return c.json({ taskID: result.taskID, user_message: userMessage }, 202)
-      },
-    )
-    .get(
-      "/:sessionID/prompt_async/:taskID",
-      describeRoute({
-        summary: "Get async prompt task status",
-        description: "Get status for a previously submitted async prompt task.",
-        operationId: "session.prompt_async_status",
-        responses: {
-          200: {
-            description: "Task status",
-            content: {
-              "application/json": {
-                schema: resolver(
-                  z.object({
-                    taskID: z.string(),
-                    sessionID: z.string(),
-                    status: z.enum(["queued", "running", "completed", "failed"]),
-                    source: z.string(),
-                    prompt: z.string(),
-                    error: z.string().nullable(),
-                    startedAt: z.number().int().nullable(),
-                    completedAt: z.number().int().nullable(),
-                    updatedAt: z.number().int(),
-                  }),
-                ),
-              },
-            },
-          },
-          ...errors(400, 404),
-        },
-      }),
-      validator(
-        "param",
-        z.object({
-          sessionID: z.string().meta({ description: "Session ID" }),
-          taskID: z.string().meta({ description: "Task ID" }),
-        }),
-      ),
-      async (c) => {
-        const sessionID = c.req.valid("param").sessionID
-        const taskID = c.req.valid("param").taskID
-        await assertActiveProjectSession(sessionID)
-        const status = TaskQueueService.getStatus({
-          sessionID,
-          taskID,
-          source: "session.prompt_async",
-        })
-        if (!status) throw new NotFoundError({ message: `Task ${taskID} not found` })
-        return c.json(status)
       },
     )
     .post(

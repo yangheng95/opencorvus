@@ -64,10 +64,10 @@ const CommonShape = {
   root_session_id: z.string().min(1),
   /** Immutable active Task occurrence that admitted this root ingress. */
   task_occurrence_started_at: z.number().int().positive(),
-  time_queued: z.number().int().nonnegative(),
-  queued_by_process_id: z.number().int().nonnegative(),
-  queued_by_instance_directory: z.string().optional(),
-  queued_by_project_id: z.string().optional(),
+  time_accepted: z.number().int().nonnegative(),
+  accepted_by_process_id: z.number().int().nonnegative(),
+  accepted_by_instance_directory: z.string().optional(),
+  accepted_by_project_id: z.string().optional(),
   delivery_result: TerminalIngressResultSchema.optional(),
 }
 
@@ -255,7 +255,7 @@ const OrchestratorEvent = z
   })
   .strict()
 
-export const QueuedTaskIngressSchema = z
+export const TaskRootIngressSchema = z
   .discriminatedUnion("source_kind", [
     TaskCreation,
     OperatorMessage,
@@ -281,7 +281,7 @@ export const QueuedTaskIngressSchema = z
       payload.source_kind === "mission_message"
     ) {
       if (payload.message_id !== payload.event.rootMessage.messageID) {
-        context.addIssue({ code: "custom", message: "queued message identity does not match rootMessage" })
+        context.addIssue({ code: "custom", message: "ingress message identity does not match rootMessage" })
       }
     }
     if (
@@ -294,13 +294,13 @@ export const QueuedTaskIngressSchema = z
       payload.source_kind === "coordination_request" &&
       payload.request_id !== payload.event.coordinationRequest.requestID
     ) {
-      context.addIssue({ code: "custom", message: "queued request identity does not match coordinationRequest" })
+      context.addIssue({ code: "custom", message: "ingress request identity does not match coordinationRequest" })
     }
     if (
       payload.source_kind === "infrastructure_recovery" &&
       payload.recovery_fact_id !== payload.event.processRecovery.recoveryFactID
     ) {
-      context.addIssue({ code: "custom", message: "queued recovery identity does not match processRecovery" })
+      context.addIssue({ code: "custom", message: "ingress recovery identity does not match processRecovery" })
     }
     if (
       payload.source_kind === "dispatch_infrastructure_failure" &&
@@ -308,7 +308,7 @@ export const QueuedTaskIngressSchema = z
     ) {
       context.addIssue({
         code: "custom",
-        message: "queued dispatch infrastructure identity does not match dispatchInfrastructureFailure",
+        message: "ingress dispatch infrastructure identity does not match dispatchInfrastructureFailure",
       })
     }
     if (
@@ -322,12 +322,12 @@ export const QueuedTaskIngressSchema = z
     }
   })
 
-export type QueuedTaskIngress = z.infer<typeof QueuedTaskIngressSchema>
-export type QueuedTaskIngressSourceKind = QueuedTaskIngress["source_kind"]
+export type TaskRootIngress = z.infer<typeof TaskRootIngressSchema>
+export type TaskRootIngressSourceKind = TaskRootIngress["source_kind"]
 
-export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTaskIngressSourceKind {
+export function taskRootIngressSourceKind(event: OrchestratorEvent): TaskRootIngressSourceKind {
   const parsed = OrchestratorEventSchema.parse(event)
-  const candidates: QueuedTaskIngressSourceKind[] = []
+  const candidates: TaskRootIngressSourceKind[] = []
   if (parsed.taskCreation) candidates.push("task_creation")
   if (parsed.rootMessage?.kind === "operator") candidates.push("operator_message")
   if (parsed.rootMessage?.kind === "orchestrator") candidates.push("orchestrator_message")
@@ -342,7 +342,7 @@ export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTas
   if (parsed.taskWaitWake) candidates.push("task_wait_wake")
   if (parsed.note && candidates.length === 0) candidates.push("orchestrator_event")
   if (candidates.length !== 1) {
-    throw new Error(`Queued Task ingress requires exactly one source kind; received ${candidates.join(", ") || "none"}`)
+    throw new Error(`Task root ingress requires exactly one source kind; received ${candidates.join(", ") || "none"}`)
   }
   return candidates[0]!
 }
