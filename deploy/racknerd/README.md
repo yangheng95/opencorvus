@@ -73,6 +73,59 @@ Routine operations:
 - Signing rotation: first add the new browser root and secondary key/ID and publish a dual-signature release. Before promoting that key as the primary deploy signer, use the manual root boundary to replace `/etc/opencorvus/deploy-signing-public.pem`, verify its fingerprint and a real full-manifest signature, and retain the old PEM. Then promote CI, publish, remove the old browser signer/root, and publish new-only. Browser overlap alone does not rotate the host deployment root.
 - Deploy-key rotation: append and test the new public key, replace the GitHub secret, require one successful real deployment, then converge `authorized_keys` to the new key.
 
+### Repair missing activation sudo authority
+
+The deploy workflow intentionally connects as the restricted `opencorvus-deploy` account and invokes exactly `sudo -n /usr/local/bin/opencorvus-activate-release`. If the final Action step reports `sudo: a password is required`, the signed candidate was built, signed, and uploaded, but production was not activated. Do not remove `-n`, pass a password through Actions, grant general sudo, change the deploy user to root, or repoint `/srv/opencorvus/current` manually.
+
+This is a one-time root/bootstrap repair. Use the RackNerd provider console or an independently authorized root session; the GitHub deploy key deliberately cannot perform it. In a trusted local checkout, materialize the policy from the exact accepted source commit and record its non-secret digest before transferring it through that privileged channel:
+
+```bash
+set -euo pipefail
+accepted_sha=<exact-accepted-commit-sha>
+candidate=opencorvus-deploy.sudoers.candidate
+git rev-parse --verify "$accepted_sha^{commit}"
+git show "$accepted_sha:deploy/racknerd/opencorvus-deploy.sudoers" > "$candidate"
+expected_sudoers_sha=$(sha256sum "$candidate" | cut -d' ' -f1)
+printf 'expected sudoers SHA-256: %s\n' "$expected_sudoers_sha"
+```
+
+Transfer that candidate to `/root/opencorvus-deploy.sudoers.candidate` and carry the printed digest separately. In the authorized root session, substitute that 64-character digest and run:
+
+```bash
+set -euo pipefail
+candidate=/root/opencorvus-deploy.sudoers.candidate
+expected_sudoers_sha=<sha256-from-trusted-checkout>
+case "$expected_sudoers_sha" in
+  (*[!0-9a-f]*|'') echo "invalid expected sudoers SHA-256" >&2; exit 2 ;;
+esac
+test "${#expected_sudoers_sha}" -eq 64
+activator=$(readlink -e -- /usr/local/bin/opencorvus-activate-release)
+test "$activator" = /usr/local/bin/opencorvus-activate-release
+test "$(stat -c '%u:%g:%a:%F' -- "$activator")" = "0:0:755:regular file"
+test -f "$candidate"
+chown root:root "$candidate"
+chmod 0600 "$candidate"
+printf '%s  %s\n' "$expected_sudoers_sha" "$candidate" | sha256sum -c -
+visudo -cf "$candidate"
+install -o root -g root -m 0440 "$candidate" /etc/sudoers.d/opencorvus-deploy
+visudo -cf /etc/sudoers.d/opencorvus-deploy
+cmp --silent -- "$candidate" /etc/sudoers.d/opencorvus-deploy
+printf '%s  %s\n' "$expected_sudoers_sha" /etc/sudoers.d/opencorvus-deploy | sha256sum -c -
+sudo -u opencorvus-deploy sudo -n -l -- /usr/local/bin/opencorvus-activate-release
+rm -f -- "$candidate"
+```
+
+The resolved activator check prevents a symlink, non-root owner, unexpected group, writable mode, or non-regular file from becoming a root execution primitive. The candidate and installed-policy checks both fail closed against the digest obtained from the accepted commit; retain that digest in the deployment record, not credentials or private-key material.
+
+After the two digests match and the non-interactive authorization check succeeds, rerun only the failed jobs from the exact website workflow attempt:
+
+```bash
+gh run rerun <website-run-id> --failed
+gh run watch <website-run-id> --exit-status
+```
+
+Acceptance requires the rerun's `sign and deploy RackNerd release` job to pass, `/health/ready` to agree with the signed publication, the public downloads manifest to reference the intended immutable application tag, both locale routes and one exact archive to pass, and a real visual inspection of the public navigation. A green build/sign/archive phase followed by failed activation is not a website deployment.
+
 ## Required facts
 
 Before the first database-backed deployment, record the RackNerd server IP, SSH port, operating system, free disk and memory, existing listeners/services, Bun version/path, systemd availability, OpenSSL version and Ed25519 verification support, deploy username, exact SSH host-key fingerprint, off-host backup destination, and tested restore capacity. Require enough free space for the candidate, immutable blobs, live database, pre-deploy snapshot, and rollback copy (at least three times the measured Registry state plus the normal release reserve). Inspect the server read-only before changing Caddy, systemd, `/srv/opencorvus`, or `/var/lib/opencorvus-web`.
