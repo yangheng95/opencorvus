@@ -7,6 +7,7 @@ if [ "$(id -u)" -eq 0 ]; then
     OPENCORVUS_BACKUP_TIMER OPENCORVUS_BACKUP_TIMER_UNIT OPENCORVUS_CADDY_CONFIG \
     OPENCORVUS_DEPLOY_PUBLIC_KEY OPENCORVUS_DEPLOY_PUBLIC_KEY_OWNER OPENCORVUS_DEPLOY_ROOT \
     OPENCORVUS_DEPLOY_ROOT_OWNER OPENCORVUS_ROLLBACK_OWNER OPENCORVUS_ROLLBACK_ROOT \
+    OPENCORVUS_READINESS_DELAY_SECONDS OPENCORVUS_READINESS_REQUEST_TIMEOUT_SECONDS OPENCORVUS_READINESS_TIMEOUT_SECONDS \
     OPENCORVUS_STATE_ROOT OPENCORVUS_SUDOERS_INSTALL OPENCORVUS_SYSTEMCTL OPENCORVUS_SYSTEMD_UNIT OPENCORVUS_WEB_SERVICE \
     OPENCORVUS_WEB_SERVICE_USER OPENCORVUS_TEST_HARNESS
   PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -41,6 +42,9 @@ BACKUP_TIMER_UNIT=${OPENCORVUS_BACKUP_TIMER_UNIT:-/etc/systemd/system/opencorvus
 BACKUP_TIMER=${OPENCORVUS_BACKUP_TIMER:-opencorvus-registry-backup.timer}
 SUDOERS_INSTALL=${OPENCORVUS_SUDOERS_INSTALL:-/etc/sudoers.d/opencorvus-deploy}
 LOCK_FILE="$STATE_ROOT/registry-operation.lock"
+READINESS_DELAY_SECONDS=${OPENCORVUS_READINESS_DELAY_SECONDS:-0.1}
+READINESS_REQUEST_TIMEOUT_SECONDS=${OPENCORVUS_READINESS_REQUEST_TIMEOUT_SECONDS:-1}
+READINESS_TIMEOUT_SECONDS=${OPENCORVUS_READINESS_TIMEOUT_SECONDS:-30}
 
 acquire_registry_lock() {
   mkdir -p "$STATE_ROOT"
@@ -139,10 +143,21 @@ PY
 }
 
 probe_live_release() {
-  local probe pointer name path digest bytes output
+  local probe pointer name path digest bytes output deadline readiness
   probe=$(mktemp -d)
   curl --fail --silent --show-error http://127.0.0.1:8080/ > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
-  curl --fail --silent --show-error http://127.0.0.1:8080/health/ready > "$probe/ready.json" || { rm -rf -- "$probe"; return 1; }
+  readiness="$probe/ready.pending.json"
+  deadline=$((SECONDS + READINESS_TIMEOUT_SECONDS))
+  while ! curl --fail --silent --show-error \
+    --connect-timeout "$READINESS_REQUEST_TIMEOUT_SECONDS" \
+    --max-time "$READINESS_REQUEST_TIMEOUT_SECONDS" \
+    http://127.0.0.1:8080/health/ready > "$readiness"
+  do
+    if [ "$SECONDS" -ge "$deadline" ]; then rm -rf -- "$probe"; return 1; fi
+    : > "$readiness"
+    sleep "$READINESS_DELAY_SECONDS"
+  done
+  mv "$readiness" "$probe/ready.json"
   curl --fail --silent --show-error http://127.0.0.1:8080/market/ > "$probe/market-en.html" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/zh-cn/market/ > "$probe/market-zh.html" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/api/site/v1/visitors > "$probe/visitors.json" || { rm -rf -- "$probe"; return 1; }

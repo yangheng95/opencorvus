@@ -23,6 +23,9 @@ export OPENCORVUS_BACKUP_SERVICE_UNIT="$TEST_ROOT/installed-opencorvus-registry-
 export OPENCORVUS_BACKUP_TIMER_UNIT="$TEST_ROOT/installed-opencorvus-registry-backup.timer"
 export OPENCORVUS_BACKUP_TIMER="opencorvus-registry-backup.timer"
 export OPENCORVUS_SUDOERS_INSTALL="$TEST_ROOT/opencorvus-deploy.sudoers"
+export OPENCORVUS_READINESS_DELAY_SECONDS=0.01
+export OPENCORVUS_READINESS_REQUEST_TIMEOUT_SECONDS=0.1
+export OPENCORVUS_READINESS_TIMEOUT_SECONDS=1
 mkdir -p "$OPENCORVUS_DEPLOY_ROOT/incoming" "$OPENCORVUS_DEPLOY_ROOT/releases" "$OPENCORVUS_STATE_ROOT" "$OPENCORVUS_ROLLBACK_ROOT" "$TEST_ROOT/bin"
 chmod 0755 "$OPENCORVUS_DEPLOY_ROOT" "$OPENCORVUS_DEPLOY_ROOT/releases" "$OPENCORVUS_ROLLBACK_ROOT"
 touch "$OPENCORVUS_CADDY_CONFIG"
@@ -67,7 +70,25 @@ fi
 case "$path" in
   /) cat "$public/index.html" ;;
   /health/ready)
+    connect_timeout=false
+    max_time=false
+    while [ "$#" -gt 0 ]; do
+      case "$1" in
+        --connect-timeout) connect_timeout=true; shift ;;
+        --max-time) max_time=true; shift ;;
+      esac
+      shift
+    done
+    "$connect_timeout"
+    "$max_time"
     if [ -f "$OPENCORVUS_STATE_ROOT/fail-readiness" ]; then exit 22; fi
+    if [ -f "$OPENCORVUS_STATE_ROOT/readiness-failures-remaining" ]; then
+      failures=$(cat "$OPENCORVUS_STATE_ROOT/readiness-failures-remaining")
+      if [ "$failures" -gt 0 ]; then
+        printf '%s\n' "$((failures - 1))" > "$OPENCORVUS_STATE_ROOT/readiness-failures-remaining"
+        exit 22
+      fi
+    fi
     python3 - "$public/expert-squads/catalog.json" <<'PY'
 import json, sys
 pointer = json.load(open(sys.argv[1], encoding="utf-8"))
@@ -201,7 +222,10 @@ test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/current")" = "releases/$LEGACY"
 test "$(curl --fail --silent --show-error http://127.0.0.1:8080/)" = '<!doctype html><title>release 1</title>'
 
 make_release "$R1" 2
+printf '2\n' > "$OPENCORVUS_STATE_ROOT/readiness-failures-remaining"
 activate "$R1" > /dev/null
+test "$(cat "$OPENCORVUS_STATE_ROOT/readiness-failures-remaining")" = 0
+rm -f -- "$OPENCORVUS_STATE_ROOT/readiness-failures-remaining"
 test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/current")" = "releases/$R1"
 test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/previous")" = "releases/$LEGACY"
 R1_DATABASE=$(cat "$OPENCORVUS_STATE_ROOT/registry.sqlite3")
