@@ -32,6 +32,10 @@ import {
 } from "@/tool/artifact-catalog"
 import type { DecisionEntry } from "@/decision-log"
 import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
+import {
+  AGENT_COORDINATION_ACTIVE_DECISIONS,
+  AGENT_COORDINATION_DECISIONS,
+} from "@/engine/agent-coordination-decision"
 import { DecisionLogTable } from "@/decision-log/schema"
 import {
   bindAgentCoordinationRedispatchSuccessor,
@@ -165,6 +169,7 @@ import {
 } from "./tool-execution-context"
 import { createVisualQaStageDispatcher } from "./visual-qa-stage"
 import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
+import { ORCHESTRATOR_DECISION_TOOL_NAMES } from "./decision-tool-names"
 import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
 import {
   DispatchTurnSchema,
@@ -1494,8 +1499,8 @@ export function createOrchestratorTools(input: {
         .object({
           request_id: z.string().min(1).describe("Pending agent_coordination_request artifact id."),
           decision: (input.terminalConversationAuthority
-            ? z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user", "acknowledge_terminal"])
-            : z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user"])
+            ? z.enum(AGENT_COORDINATION_DECISIONS)
+            : z.enum(AGENT_COORDINATION_ACTIVE_DECISIONS)
           ).describe(
             input.terminalConversationAuthority
               ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
@@ -2678,6 +2683,11 @@ export function createOrchestratorTools(input: {
     publish_interactive_artifact: createPublishInteractiveArtifactAiTool(),
     dispatch_agent: dispatchAgentTool,
     manage_task: manageTaskTool,
+  }
+  for (const decisionToolName of ORCHESTRATOR_DECISION_TOOL_NAMES) {
+    if (!(decisionToolName in publicTools)) {
+      throw new Error(`Orchestrator decision Tool ${decisionToolName} is absent from the public Tool surface`)
+    }
   }
   for (const hidden of [...DispatchAdapterContractRegistry.ids, ...MANAGE_TASK_ACTION_NAMES]) {
     delete publicTools[hidden]

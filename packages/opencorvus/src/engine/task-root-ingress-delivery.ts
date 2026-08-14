@@ -75,6 +75,11 @@ import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { Filesystem } from "@/util/filesystem"
+import {
+  isOrchestratorDecisionToolName,
+  orchestratorDecisionToolCompletionEffect,
+} from "@/orchestrator/decision-tool-names"
+import type { OrchestratorDecisionToolName } from "@/orchestrator/decision-tool-names"
 
 const immutableArtifactIngressOrdinal = sql<number>`coalesce(
   (
@@ -467,7 +472,8 @@ export function persistTaskRootIngressInTransaction(
   },
   now = Date.now(),
 ): string {
-  if (!task.session_id) throw new TaskRootIngressError(`Task ${task.id} has no root session`, "session_not_bound", task.id)
+  if (!task.session_id)
+    throw new TaskRootIngressError(`Task ${task.id} has no root session`, "session_not_bound", task.id)
   const messageID = identity.messageID
   const requestID = identity.requestID
   const recoveryFactID = identity.recoveryFactID
@@ -1395,9 +1401,7 @@ async function reconcileOwnerlessDeliveringTaskIngress(input: {
     if (SessionPromptState.hasTaskRootIngressOwner(current.ingress.root_session_id, current.id)) {
       return "owned"
     }
-    throw new Error(
-      `Task root ingress ${input.id} remained delivering without a physical owner after reconciliation`,
-    )
+    throw new Error(`Task root ingress ${input.id} remained delivering without a physical owner after reconciliation`)
   }
   throw new Error(`Task root ingress ${input.id} has unsupported reconciliation state ${current.label}`)
 }
@@ -1685,6 +1689,73 @@ async function assistantMessagesForWakeSettlement(input: {
   ) {
     throw new TaskRootIngressSettlementError(
       `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} is not the final assistant message for its invocation`,
+    )
+  }
+  const executionControlIngress = !["operator_message", "orchestrator_message", "mission_message"].includes(
+    wake.ingress.source_kind,
+  )
+  let hasStepBoundary = false
+  let completedDecisionInCurrentEpoch = false
+  let currentStepParts: Message.Part[] = []
+  const settleCurrentStep = () => {
+    const attempts = currentStepParts.filter(
+      (part): part is Message.ToolPart & { tool: OrchestratorDecisionToolName } =>
+        part.type === "tool" && isOrchestratorDecisionToolName(part.tool),
+    )
+    if (attempts.length === 0) return
+    if (attempts.some((part) => part.state.status !== "completed")) {
+      completedDecisionInCurrentEpoch = false
+      return
+    }
+    const decisions = attempts.filter(
+      (part): part is Message.ToolPart & { tool: OrchestratorDecisionToolName; state: Message.ToolStateCompleted } =>
+        part.state.status === "completed",
+    )
+    let followupDecisionRequired = false
+    for (const part of decisions) {
+      let effect: ReturnType<typeof orchestratorDecisionToolCompletionEffect>
+      try {
+        effect = orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input })
+      } catch (error) {
+        throw new TaskRootIngressSettlementError(
+          `Task ${input.taskID} wake ${input.wakeID} decision ${part.id} has no valid persisted completion contract: ` +
+            (error instanceof Error ? error.message : String(error)),
+        )
+      }
+      if (effect === "requires_followup_decision") {
+        followupDecisionRequired = true
+        continue
+      }
+      if (effect !== "inspect_dispatch_outcome") continue
+      let outcome: ReturnType<typeof DispatchOutcome.parse>
+      try {
+        outcome = DispatchOutcome.parse(JSON.parse(part.state.output))
+      } catch (error) {
+        throw new TaskRootIngressSettlementError(
+          `Task ${input.taskID} wake ${input.wakeID} dispatch decision ${part.id} has no valid persisted DispatchOutcome: ` +
+            (error instanceof Error ? error.message : String(error)),
+        )
+      }
+      if (outcome.kind !== "accepted") followupDecisionRequired = true
+    }
+    completedDecisionInCurrentEpoch = !followupDecisionRequired
+  }
+  for (const message of messages) {
+    for (const part of message.parts) {
+      if (part.type === "step-start") {
+        if (hasStepBoundary) settleCurrentStep()
+        hasStepBoundary = true
+        currentStepParts = []
+        continue
+      }
+      if (hasStepBoundary) currentStepParts.push(part)
+    }
+  }
+  if (hasStepBoundary) settleCurrentStep()
+  if (executionControlIngress && (!hasStepBoundary || !completedDecisionInCurrentEpoch)) {
+    throw new TaskRootIngressSettlementError(
+      `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} did not commit a current ` +
+        `Orchestrator scheduling or lifecycle decision for ${wake.ingress.source_kind} ingress`,
     )
   }
   return messages
@@ -2546,9 +2617,7 @@ export async function deliverPendingTaskRootIngresses(): Promise<number> {
     ),
   )
   const taskIDs = [
-    ...new Set(
-      acceptedTaskRootIngressTaskIDs(Instance.project.id).filter((taskID) => !cancellingTaskIDs.has(taskID)),
-    ),
+    ...new Set(acceptedTaskRootIngressTaskIDs(Instance.project.id).filter((taskID) => !cancellingTaskIDs.has(taskID))),
   ]
   let delivered = 0
   const failures: string[] = []
@@ -3107,7 +3176,10 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
 export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<DispatchTaskLoopResult> {
   const task = findTask(input.taskID)
   if (!task) throw new TaskRootIngressError(`Task ${input.taskID} does not exist`, "task_not_found", input.taskID)
-  const persistedWakeID = persistTaskIngressEvent(task, OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }))
+  const persistedWakeID = persistTaskIngressEvent(
+    task,
+    OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }),
+  )
   if (findTaskRootIngressByID(task.id, persistedWakeID)?.label === "terminal_inapplicable") {
     return "ignored"
   }

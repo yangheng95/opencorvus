@@ -26,6 +26,7 @@ import {
   TASK_CANCELLATION_REQUESTED_EVENT_TYPE,
 } from "@/engine/cancellation-origin"
 import { ENGINE_ARTIFACT_KINDS } from "@/engine/engine.sql"
+import { AGENT_COORDINATION_DECISIONS } from "@/engine/agent-coordination-decision"
 import { Identifier } from "@/id/id"
 import { Message } from "@/session/message"
 import { PermissionAuthority } from "@/permission/authority"
@@ -1365,7 +1366,7 @@ export const Event = {
       responseID: Identifier.schema("artifact"),
       actionID: Identifier.schema("artifact"),
       sessionID: Identifier.schema("session"),
-      decision: z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user", "acknowledge_terminal"]),
+      decision: z.enum(AGENT_COORDINATION_DECISIONS),
       summary: z.string(),
     }),
     { tier: 2 },

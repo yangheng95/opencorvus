@@ -27,6 +27,7 @@ import { TaskRootIngressSchema } from "@/engine/task-root-ingress"
 import { Event } from "@/engine/model"
 import { TASK_CANCELLED_EVENT_TYPE, TASK_CANCELLATION_REQUESTED_EVENT_TYPE } from "@/engine/cancellation-origin"
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
+import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { EngineProtocol } from "@/engine/protocol"
 import { deriveTaskStatus } from "@/engine/task-status"
 import { createDecisionLog } from "@/decision-log"
@@ -47,6 +48,7 @@ import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-me
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { createTerminalConversationAuthority } from "@/orchestrator/terminal-conversation-authority"
 import { createOrchestratorTools } from "@/orchestrator/tools"
+import { isOrchestratorDecisionToolName, ORCHESTRATOR_DECISION_TOOL_NAMES } from "@/orchestrator/decision-tool-names"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
 import { ProtocolStore } from "@/protocol/store"
@@ -146,6 +148,15 @@ function completedTextPart(input: { sessionID: string; messageID: string; text: 
   }
 }
 
+function stepStartPart(input: { sessionID: string; messageID: string }): Message.StepStartPart {
+  return {
+    id: Identifier.ascending("part"),
+    sessionID: input.sessionID,
+    messageID: input.messageID,
+    type: "step-start",
+  }
+}
+
 function completedToolPart(input: {
   sessionID: string
   messageID: string
@@ -153,6 +164,7 @@ function completedToolPart(input: {
   tool: string
   stateInput: Record<string, unknown>
   metadata?: Record<string, unknown>
+  output?: string
 }): Message.ToolPart {
   const start = Date.now()
   return {
@@ -165,9 +177,48 @@ function completedToolPart(input: {
     state: {
       status: "completed",
       input: input.stateInput,
-      output: "ok",
+      output:
+        input.output ??
+        (input.tool === "dispatch_agent"
+          ? JSON.stringify(
+              DispatchOutcome.accepted({
+                sessionID: Identifier.ascending("session"),
+                dispatchLineageID: Identifier.ascending("artifact"),
+              }),
+            )
+          : "ok"),
       title: input.tool,
       metadata: input.metadata ?? {},
+      time: { start, end: start + 1 },
+    },
+  }
+}
+
+function failedToolPart(input: {
+  sessionID: string
+  messageID: string
+  callID: string
+  tool: string
+  stateInput: Record<string, unknown>
+}): Message.ToolPart {
+  const start = Date.now()
+  return {
+    id: Identifier.ascending("part"),
+    sessionID: input.sessionID,
+    messageID: input.messageID,
+    type: "tool",
+    callID: input.callID,
+    tool: input.tool,
+    state: {
+      status: "error",
+      input: input.stateInput,
+      failure: {
+        kind: "injected-decision-failure",
+        name: "InjectedDecisionFailure",
+        message: "Injected failed decision Tool attempt",
+        originSite: "active-operator-wake-settlement.test",
+        classification: "tool-execution",
+      },
       time: { start, end: start + 1 },
     },
   }
@@ -247,6 +298,7 @@ async function persistFinalAssistantMessage(input: {
   text: string
   taskIngress?: { id: string; kind: string }
   parts?: (sessionID: string, messageID: string) => Message.Part[]
+  decisionTool?: (typeof ORCHESTRATOR_DECISION_TOOL_NAMES)[number] | false
 }) {
   const session = await Session.create({
     kind: "orchestrator",
@@ -290,11 +342,30 @@ async function persistFinalAssistantMessage(input: {
     finish: "stop",
     taskIngress: input.taskIngress,
   }
+  const providedParts = input.parts?.(session.id, messageID) ?? []
+  const executionControlIngress =
+    input.taskIngress &&
+    !["operator_message", "orchestrator_message", "mission_message"].includes(input.taskIngress.kind)
+  const hasDecision = providedParts.some((part) => part.type === "tool" && isOrchestratorDecisionToolName(part.tool))
+  const decisionParts =
+    executionControlIngress && input.decisionTool !== false && !hasDecision
+      ? [
+          completedToolPart({
+            sessionID: session.id,
+            messageID,
+            callID: Identifier.ascending("call"),
+            tool: input.decisionTool || ORCHESTRATOR_DECISION_TOOL_NAMES[0],
+            stateInput: { dispatch: { target: "base-developer" } },
+          }),
+        ]
+      : []
   await Session.persistMessage({
     info,
     parts: [
+      stepStartPart({ sessionID: session.id, messageID }),
       completedTextPart({ sessionID: session.id, messageID, text: input.text }),
-      ...(input.parts?.(session.id, messageID) ?? []),
+      ...providedParts,
+      ...decisionParts,
     ],
   })
   return messageID
@@ -342,6 +413,7 @@ async function persistAssistantInvocation(input: {
     await Session.persistMessage({
       info,
       parts: [
+        stepStartPart({ sessionID: session.id, messageID }),
         completedTextPart({ sessionID: session.id, messageID, text: turn.text }),
         ...(turn.parts?.(session.id, messageID) ?? []),
       ],
@@ -3386,43 +3458,275 @@ describe.serial("active operator wake settlement", () => {
     })
   })
 
-  test("drains the exact operator intent from its assistant receipt without requiring a named retrieval tool", async () => {
+  test("maps a prose-only execution-control settlement to its typed delivery error", async () => {
     await using project = await memoryProject()
     await provideTestInstance({
       directory: project.path,
       fn: async () => {
-        const { taskID, rootSessionID } = await createActiveTask({
-          title: "Prose-only operator intent",
-          request: "Wait for a retry intent",
-        })
-        const supersededMessageID = await persistOperatorRootMessage({
-          taskID,
-          rootSessionID,
-          text: "Retry by reading this retired operator message before scheduling.",
-        })
-        configureTaskIngressRunner(async ({ wakeID }) => ({
-          finalMessageID: await persistFinalAssistantMessage({
+        for (const invalidKind of ["terminal", "error"] as const) {
+          for (const invalidFirst of [true, false]) {
+            const { taskID, rootSessionID } = await createActiveTask({
+              title: `Prose-only operator intent (${invalidKind}-${invalidFirst ? "first" : "last"})`,
+              request: "Wait for a retry intent",
+            })
+            const supersededMessageID = await persistOperatorRootMessage({
+              taskID,
+              rootSessionID,
+              text: "Retry by reading this retired operator message before scheduling.",
+            })
+            configureTaskIngressRunner(async ({ wakeID }) => ({
+              finalMessageID: await persistAssistantInvocation({
+                rootSessionID,
+                taskIngress: { id: wakeID!, kind: "operator_intent" },
+                turns: [
+                  {
+                    text: "Dispatched two workers in the same Provider step.",
+                    parts: (sessionID, messageID) => {
+                      const invalid =
+                        invalidKind === "terminal"
+                          ? completedToolPart({
+                              sessionID,
+                              messageID,
+                              callID: `call_terminal_${invalidFirst ? "first" : "last"}`,
+                              tool: "dispatch_agent",
+                              stateInput: { dispatch: { target: "base-developer" } },
+                              output: JSON.stringify(
+                                DispatchOutcome.terminal({
+                                  sessionID: Identifier.ascending("session"),
+                                  finalMessageID: Identifier.ascending("message"),
+                                }),
+                              ),
+                            })
+                          : failedToolPart({
+                              sessionID,
+                              messageID,
+                              callID: `call_error_${invalidFirst ? "first" : "last"}`,
+                              tool: "dispatch_agent",
+                              stateInput: { dispatch: { target: "base-developer" } },
+                            })
+                      const accepted = completedToolPart({
+                        sessionID,
+                        messageID,
+                        callID: `call_accepted_${invalidFirst ? "last" : "first"}`,
+                        tool: "dispatch_agent",
+                        stateInput: { dispatch: { target: "base-integrity-reviewer" } },
+                      })
+                      return invalidFirst ? [invalid, accepted] : [accepted, invalid]
+                    },
+                  },
+                  { text: "Retry acknowledged; I will continue later." },
+                ],
+              }),
+            }))
+
+            await expect(
+              dispatchOperatorIntent({ taskID, supersededOperatorMessageIDs: [supersededMessageID] }),
+            ).resolves.toBe("accepted")
+            await waitForIngressDeliveryHooksForTest()
+
+            const wake = latestTaskRootIngress(taskID)
+            expect({
+              label: wake.label,
+              deliveryStatus: wake.payload.delivery_result?.status,
+              errorName:
+                wake.payload.delivery_result?.status === "delivery_failed"
+                  ? wake.payload.delivery_result.error_name
+                  : undefined,
+              errorMessage:
+                wake.payload.delivery_result?.status === "delivery_failed"
+                  ? wake.payload.delivery_result.message
+                  : undefined,
+              sourceKind: wake.payload.source_kind,
+            }).toEqual({
+              label: "delivery_failed",
+              deliveryStatus: "delivery_failed",
+              errorName: "TaskRootIngressSettlementError",
+              errorMessage: expect.stringContaining(
+                "did not commit a current Orchestrator scheduling or lifecycle decision",
+              ),
+              sourceKind: "operator_intent",
+            })
+          }
+        }
+      },
+    })
+  })
+
+  test("requires a new completed decision after a failed decision step", async () => {
+    await using project = await memoryProject()
+    await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        for (const recovered of [false, true]) {
+          const { taskID, rootSessionID } = await createActiveTask({
+            title: `Failed decision epoch (${recovered ? "recovered" : "unresolved"})`,
+            request: "Continue only after the failed scheduling attempt is resolved",
+          })
+          const supersededMessageID = await persistOperatorRootMessage({
+            taskID,
             rootSessionID,
-            taskIngress: { id: wakeID!, kind: "operator_intent" },
-            text: "Retry acknowledged; I will continue later.",
-          }),
-        }))
+            text: "Retry and make a durable current scheduling decision.",
+          })
+          configureTaskIngressRunner(async ({ wakeID }) => ({
+            finalMessageID: await persistAssistantInvocation({
+              rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_intent" },
+              turns: [
+                {
+                  text: "The first worker was accepted.",
+                  parts: (sessionID, messageID) => [
+                    completedToolPart({
+                      sessionID,
+                      messageID,
+                      callID: "call_initial_accepted_dispatch",
+                      tool: "dispatch_agent",
+                      stateInput: { dispatch: { target: "base-developer" } },
+                    }),
+                  ],
+                },
+                {
+                  text: "The next scheduling attempt failed.",
+                  parts: (sessionID, messageID) => [
+                    failedToolPart({
+                      sessionID,
+                      messageID,
+                      callID: "call_failed_followup_dispatch",
+                      tool: "dispatch_agent",
+                      stateInput: { dispatch: { target: "base-integrity-reviewer" } },
+                    }),
+                  ],
+                },
+                ...(recovered
+                  ? [
+                      {
+                        text: "A new completed dispatch resolved the failed decision epoch.",
+                        parts: (sessionID: string, messageID: string) => [
+                          completedToolPart({
+                            sessionID,
+                            messageID,
+                            callID: "call_recovered_followup_dispatch",
+                            tool: "dispatch_agent",
+                            stateInput: { dispatch: { target: "base-integrity-reviewer" } },
+                          }),
+                        ],
+                      },
+                    ]
+                  : []),
+                { text: "The current decision epoch is now complete." },
+              ],
+            }),
+          }))
 
-        await expect(
-          dispatchOperatorIntent({ taskID, supersededOperatorMessageIDs: [supersededMessageID] }),
-        ).resolves.toBe("accepted")
-        await waitForIngressDeliveryHooksForTest()
+          await expect(
+            dispatchOperatorIntent({ taskID, supersededOperatorMessageIDs: [supersededMessageID] }),
+          ).resolves.toBe("accepted")
+          await waitForIngressDeliveryHooksForTest()
 
-        const wake = latestTaskRootIngress(taskID)
-        expect({
-          label: wake.label,
-          deliveryStatus: wake.payload.delivery_result?.status,
-          sourceKind: wake.payload.source_kind,
-        }).toEqual({
-          label: "delivered",
-          deliveryStatus: "completed",
-          sourceKind: "operator_intent",
-        })
+          const wake = latestTaskRootIngress(taskID)
+          expect({ label: wake.label, deliveryStatus: wake.payload.delivery_result?.status }).toEqual(
+            recovered
+              ? { label: "delivered", deliveryStatus: "completed" }
+              : { label: "delivery_failed", deliveryStatus: "delivery_failed" },
+          )
+        }
+      },
+    })
+  })
+
+  test("requires a new decision after an interaction fact or pending coordination redispatch", async () => {
+    await using project = await memoryProject()
+    await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        const returnedFacts = [
+          {
+            name: "answered-question",
+            tool: "question",
+            stateInput: {
+              questions: [{ question: "Choose the next action", header: "Next", options: [] }],
+            },
+            output: "User answered: continue with the selected implementation.",
+          },
+          {
+            name: "coordination-redispatch",
+            tool: "respond_agent_coordination",
+            stateInput: { request_id: "req_redispatch", decision: "redispatch", reason: "Continue the worker." },
+            output: "Pending redispatch authority recorded; call dispatch_agent explicitly.",
+          },
+          ...(["answered", "rejected", "expired"] as const).map((interactionStatus) => ({
+            name: `coordination-ask-user-${interactionStatus}`,
+            tool: "respond_agent_coordination",
+            stateInput: {
+              request_id: `req_ask_user_${interactionStatus}`,
+              decision: "ask_user",
+              reason: "Obtain the operator decision.",
+            },
+            output: `ask_user interaction resolved as ${interactionStatus}.`,
+          })),
+        ]
+        for (const returnedFact of returnedFacts) {
+          for (const followedByDecision of [false, true]) {
+            const { taskID, rootSessionID } = await createActiveTask({
+              title: `${returnedFact.name} (${followedByDecision ? "decided" : "prose-only"})`,
+              request: "Continue only after a returned fact receives a fresh scheduling decision",
+            })
+            const supersededMessageID = await persistOperatorRootMessage({
+              taskID,
+              rootSessionID,
+              text: "Retry and make a durable current scheduling decision.",
+            })
+            configureTaskIngressRunner(async ({ wakeID }) => ({
+              finalMessageID: await persistAssistantInvocation({
+                rootSessionID,
+                taskIngress: { id: wakeID!, kind: "operator_intent" },
+                turns: [
+                  {
+                    text: "The interaction or coordination Tool returned a new fact.",
+                    parts: (sessionID, messageID) => [
+                      completedToolPart({
+                        sessionID,
+                        messageID,
+                        callID: `call_${returnedFact.name}`,
+                        tool: returnedFact.tool,
+                        stateInput: returnedFact.stateInput,
+                        output: returnedFact.output,
+                      }),
+                    ],
+                  },
+                  ...(followedByDecision
+                    ? [
+                        {
+                          text: "The returned fact now has an explicit continuation decision.",
+                          parts: (sessionID: string, messageID: string) => [
+                            completedToolPart({
+                              sessionID,
+                              messageID,
+                              callID: `call_followup_${returnedFact.name}`,
+                              tool: "dispatch_agent",
+                              stateInput: { dispatch: { target: "base-developer" } },
+                            }),
+                          ],
+                        },
+                      ]
+                    : []),
+                  { text: "The current ingress has been handled." },
+                ],
+              }),
+            }))
+
+            await expect(
+              dispatchOperatorIntent({ taskID, supersededOperatorMessageIDs: [supersededMessageID] }),
+            ).resolves.toBe("accepted")
+            await waitForIngressDeliveryHooksForTest()
+
+            const wake = latestTaskRootIngress(taskID)
+            expect({ label: wake.label, deliveryStatus: wake.payload.delivery_result?.status }).toEqual(
+              followedByDecision
+                ? { label: "delivered", deliveryStatus: "completed" }
+                : { label: "delivery_failed", deliveryStatus: "delivery_failed" },
+            )
+          }
+        }
       },
     })
   })
@@ -3465,7 +3769,7 @@ describe.serial("active operator wake settlement", () => {
                   ],
                 },
                 {
-                  text: "Dispatched the retry continuation after reading the retired operator message.",
+                  text: "Dispatched two independent retry continuations after reading the retired operator message.",
                   parts: (sessionID, turnMessageID) => [
                     completedToolPart({
                       sessionID,
@@ -3474,8 +3778,16 @@ describe.serial("active operator wake settlement", () => {
                       tool: "dispatch_agent",
                       stateInput: { dispatch: { target: "base-developer" } },
                     }),
+                    completedToolPart({
+                      sessionID,
+                      messageID: turnMessageID,
+                      callID: "call_dispatch_parallel_review",
+                      tool: "dispatch_agent",
+                      stateInput: { dispatch: { target: "base-integrity-reviewer" } },
+                    }),
                   ],
                 },
+                { text: "Both accepted workers now run independently." },
               ],
             }),
           }
@@ -3495,6 +3807,95 @@ describe.serial("active operator wake settlement", () => {
           label: "delivered",
           deliveryStatus: "completed",
           sourceKind: "operator_intent",
+        })
+      },
+    })
+  })
+
+  test("delivers a Mission acceptance-resume only with its current scheduling decision", async () => {
+    await using project = await memoryProject()
+    await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Mission acceptance repair decision",
+          request: "Repair the reviewed terminal evidence in the same Task occurrence",
+        })
+        const event = {
+          note: "Resume the reviewed Task for acceptance repair",
+          missionAcceptanceResume: {
+            missionID: "mission_acceptance_repair",
+            missionSessionID: "ses_mission_acceptance_repair",
+            messageID: Identifier.ascending("message"),
+            panelMessageID: Identifier.ascending("message"),
+            toolCallID: "call_mission_acceptance_repair",
+            toolPartID: Identifier.ascending("part"),
+            reviewedTerminalLifecycleReference: {
+              terminalEventID: "pev_mission_acceptance_repair",
+              terminalStatus: "completed" as const,
+              timeCompleted: Date.now() - 1,
+            },
+            evidenceLocators: [
+              {
+                source: "engine_artifact" as const,
+                artifact_id: "art_mission_acceptance_evidence",
+                catalog_revision: 1,
+                expected_sha256: "a".repeat(64),
+              },
+            ],
+          },
+        }
+        configureTaskIngressRunner(async ({ wakeID }) => ({
+          finalMessageID: await persistAssistantInvocation({
+            rootSessionID,
+            taskIngress: { id: wakeID!, kind: "mission_acceptance_resume" },
+            turns: [
+              {
+                text: "The first repair worker already returned terminal evidence.",
+                parts: (sessionID, messageID) => [
+                  completedToolPart({
+                    sessionID,
+                    messageID,
+                    callID: "call_terminal_acceptance_repair",
+                    tool: "dispatch_agent",
+                    stateInput: { dispatch: { target: "base-developer" } },
+                    output: JSON.stringify(
+                      DispatchOutcome.terminal({
+                        sessionID: Identifier.ascending("session"),
+                        finalMessageID: Identifier.ascending("message"),
+                      }),
+                    ),
+                  }),
+                ],
+              },
+              {
+                text: "Dispatched the next acceptance-repair decision after that terminal result.",
+                parts: (sessionID, messageID) => [
+                  completedToolPart({
+                    sessionID,
+                    messageID,
+                    callID: "call_dispatch_acceptance_repair",
+                    tool: "dispatch_agent",
+                    stateInput: { dispatch: { target: "base-integrity-reviewer" } },
+                  }),
+                ],
+              },
+            ],
+          }),
+        }))
+
+        await expect(dispatchTaskLoop({ taskID, event })).resolves.toBe("accepted")
+        await waitForIngressDeliveryHooksForTest()
+
+        const wake = latestTaskRootIngress(taskID)
+        expect({
+          label: wake.label,
+          deliveryStatus: wake.payload.delivery_result?.status,
+          sourceKind: wake.payload.source_kind,
+        }).toEqual({
+          label: "delivered",
+          deliveryStatus: "completed",
+          sourceKind: "mission_acceptance_resume",
         })
       },
     })

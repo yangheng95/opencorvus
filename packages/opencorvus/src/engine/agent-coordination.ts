@@ -20,6 +20,9 @@ import { insertEngineArtifact, updateEngineArtifactsWhere, updateEngineArtifactW
 import { findDispatchLineageBySession, parseDispatchLineagePayload } from "./dispatch-lineage"
 import { persistCoordinationIngressInTransaction } from "./task-root-ingress-delivery"
 import { assertTaskEvidenceLocators } from "./evidence-locator"
+import type { AgentCoordinationDecision } from "./agent-coordination-decision"
+
+export type { AgentCoordinationDecision } from "./agent-coordination-decision"
 
 export const AgentCoordinationRedispatchBindingSchema = ProjectedWorkerBindingSchema.safeExtend({
   sourceDispatchLineageID: z.string().min(1),
@@ -39,12 +42,6 @@ export function agentCoordinationQuestionID(actionID: string): string {
 }
 export type AgentCoordinationRequestStatus = "pending" | "responded" | "cancelled"
 export type AgentCoordinationRequestOrigin = "worker_handoff" | "operator_steer"
-export type AgentCoordinationDecision =
-  | "cancel_worker"
-  | "redispatch"
-  | "fail_task"
-  | "ask_user"
-  | "acknowledge_terminal"
 export type AgentCoordinationActionKind =
   | "cancel_worker"
   | "redispatch_worker"

@@ -3320,3 +3320,63 @@ No UI automation test was added, modified or run. The random-port, random-projec
 UI acceptance remains the next delivery phase and is not implied by these focused results. The already running
 isolated exact-`openai/gpt-5.6-terra` Evolution attempt remains a separate end-to-end acceptance record; neither this
 control-plane phase nor a failed Evolution attempt counts toward the three required successful Evolutions.
+
+#### R20 isolated-run scheduling audit: execution-control settlement
+
+The first random-isolation run after the removal work still failed and therefore is not acceptance evidence. It used
+dev backend port `61654`, a fresh project/home/SQLite database, project-installed
+`localization-adaptation@2026.08.13.1` plus Evolution Lab, and exact `openai/gpt-5.6-terra`. The diagnostic Task
+completed at `2026-08-14T06:31:44Z`; Mission then reviewed its canonical artifacts and used `resume_task` to open an
+acceptance-repair occurrence at `06:32:54Z`. The controller failed the run after ten minutes without another durable
+activity fact and settled the runtime, database and isolated credentials.
+
+This was not a provider stall, lost Task transition, undelivered ingress, old Task Queue admission or missing process
+owner. SQLite shows the `mission_acceptance_resume` ingress accepted, delivering and delivered on attempt one. The
+reported final assistant was persisted nine seconds after acceptance and the ingress owner became idle. However,
+that assistant's `parentID` still named the preceding worker-terminal control Message, its only content repeated the
+old completed diagnostic, and it contained no scheduling or lifecycle Tool call. The Host nevertheless accepted it
+because Task-root ingress settlement checked only the ingress-stamped assistant identity. The Task occurrence
+therefore remained active with no pending ingress, dispatch, wait, interaction or other durable continuation.
+
+The defect is shared by every typed execution-control epoch, not specific to Mission resume or Localization. Task
+creation, Retry/Replan, Mission acceptance repair, coordination, process recovery, Task wait, worker lifecycle and
+dispatch-infrastructure delivery all require a current model-owned decision. The current prompt already defines the
+single visible decision surface: `dispatch_agent`, `respond_agent_coordination`, `manage_task`, `question` or `wait`.
+Host settlement must validate that the final assistant for a typed execution-control ingress contains one completed
+call on that surface in the current decision epoch. An accepted asynchronous `dispatch_agent` result keeps that
+dispatch as the current decision; a typed terminal `DispatchOutcome` opens a new epoch, so an earlier decision cannot
+settle it. It must not choose a worker, verdict, serial/parallel order or lifecycle outcome. The three
+real-participant conversation ingress kinds — `operator_message`,
+`orchestrator_message` and `mission_message` — remain exempt because the Host may not classify participant prose as
+work or status; their existing exact root-Message contracts prove that the model reads and interprets the current
+message itself.
+
+The positive repair contract is: a typed execution-control ingress plus a final completed decision Tool call settles
+to `delivered`; a prose-only final assistant maps to the explicit `TaskRootIngressSettlementError` delivery result
+and remains recoverable through the existing exact-ingress recovery authority. Tests must cover a successful current
+decision and the typed invalid-settlement response on the production ingress boundary, then re-run the real isolated
+dev Web UI campaign. No prompt-only retry, synthetic participant Message, inferred scheduling outcome or replacement
+queue is allowed.
+
+Implementation now performs that validation at the one Task-root ingress settlement boundary. It walks the durable
+assistant Messages and Provider steps for the exact ingress in order. Completed decision Tools satisfy the current
+epoch only according to their typed completion contract. The typed `DispatchOutcome` distinguishes nonterminal
+`accepted` from every terminal dispatch result that resets the epoch. A completed `question` or
+`respond_agent_coordination(decision=ask_user)` has already returned an answered, rejected or expired interaction
+fact, so it opens a new epoch instead of pretending the Task is still waiting. A completed coordination `redispatch`
+only freezes authority for the required later `dispatch_agent`, so it also opens a new epoch. Completed
+`cancel_worker`, `fail_task`, `manage_task` and durable `wait` actions remain valid decisions. A dependency-free typed
+decision-Tool catalog is consumed by settlement, production tool-surface construction and production-shaped
+fixtures.
+
+The focused R20 matrix uses real multi-Message SessionLoop shapes and proves the required branches: parallel accepted
+dispatches followed by prose remain a valid model-owned decision; terminal or failed sibling decisions in either
+Part order leave the epoch open; a later failed decision step invalidates an earlier accepted dispatch; terminal or
+failed steps require a subsequent completed decision; Mission acceptance resume settles only after that current
+decision; and returned question/coordination facts fail closed until a later explicit decision. The final focused
+selection passed `3` tests / `32` assertions in `26` seconds. The official ingress suite passed `45` tests / `208`
+assertions in `239` seconds, and OpenCorvus typecheck passed in `51` seconds. The uninvolved read-only reviewer found
+and verified closure of four step-order/result-status defects plus the final interaction/coordination result-semantic
+defect. Its final re-review reported zero P0/P1/P2 after the coordination decision enum, Engine event schema, Tool
+schema and settlement parser were bound to one dependency-free fact source. A fresh random-isolation dev Web UI run
+was explicitly cancelled by the user, so this control-plane delivery does not claim a successful Evolution E2E.
