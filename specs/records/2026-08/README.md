@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-14-mission-submit-selection-supersession.md](2026-08-14-mission-submit-selection-supersession.md) keeps a committed Mission submit successful when newer operator navigation supersedes only its automatic page selection.
+
 - [2026-08-14-message-source-file-layout-repair.md](2026-08-14-message-source-file-layout-repair.md) keeps exact cited-line selection while preventing CodeMirror center alignment from scrolling the Right Dock ancestor and displacing the full File pane.
 
 - [2026-08-14-mission-wake-activation-fence-p0.md](2026-08-14-mission-wake-activation-fence-p0.md) closes the bounded handoff between Mission lifecycle admission and physical prompt ownership across operator, scheduler, and startup-recovery wakes without changing retry policy.

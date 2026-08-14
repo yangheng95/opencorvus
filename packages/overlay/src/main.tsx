@@ -565,7 +565,8 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   if (missionHandoff) {
     runMainAsync("work-ledger.mission-handoff", async () => {
       try {
-        await openMissionSession(missionHandoff, missionHandoff.directory)
+        const opened = await openMissionSession(missionHandoff, missionHandoff.directory)
+        if (!opened) return
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return
         throw error
@@ -665,7 +666,7 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
   })
   if (!confirmation.confirmed) return
   setMissionLauncherSubmitting(true)
-  const selectionEpoch = beginWorkspaceSelection()
+  const selectionEpoch = supersedePendingWorkspaceSelection()
   try {
     const result = await wakeMission({
       directory: projectDirectory,
@@ -674,8 +675,6 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
       productPillar: "code",
       expertSquadIDs: [],
     })
-    setComposerIntent({ productPillar: "code", conversationTarget: "mission" })
-    resetCenterWorkbenchToPrimaryPanel("mission")
     await openMissionSession(result, projectDirectory, selectionEpoch)
     setMissionSharedRefreshToken((value) => value + 1)
   } finally {
@@ -861,7 +860,7 @@ async function createMissionBoardDraft(input: MissionManualCreateRequest): Promi
 }
 
 async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<void> {
-  const selectionEpoch = beginWorkspaceSelection()
+  const selectionEpoch = supersedePendingWorkspaceSelection()
   const result = await wakeMission({
     directory: input.directory,
     text: input.request,
@@ -874,7 +873,7 @@ async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<vo
 }
 
 async function dispatchMissionBoardDraft(mission: MissionRecord): Promise<void> {
-  const selectionEpoch = beginWorkspaceSelection()
+  const selectionEpoch = supersedePendingWorkspaceSelection()
   const result = await dispatchMission({ missionID: mission.missionID, directory: mission.directory })
   setMissionSharedRefreshToken((value) => value + 1)
   if (!ownsWorkspaceSelection(selectionEpoch)) return
@@ -1280,12 +1279,12 @@ async function openMissionSession(
   },
   directory: string,
   expectedSelectionEpoch?: number,
-): Promise<void> {
+): Promise<boolean> {
   const missionDirectory = directory.trim()
   if (!missionDirectory) throw new Error("openMissionSession: directory is required")
   const selectionEpoch = expectedSelectionEpoch ?? beginWorkspaceSelection()
   if (!ownsWorkspaceSelection(selectionEpoch)) {
-    throw new DOMException("Mission selection superseded", "AbortError")
+    return false
   }
   const source = {
     kind: "session" as const,
@@ -1313,7 +1312,7 @@ async function openMissionSession(
       selectionEpoch,
     })
     if (!applied || !ownsWorkspaceSelection(selectionEpoch)) {
-      throw new DOMException("Mission selection superseded", "AbortError")
+      return false
     }
     await projectComposerModelFromSession(
       { sessionID: result.sessionID, directory: missionDirectory },
@@ -1322,19 +1321,20 @@ async function openMissionSession(
         boardStore.selectedSource?.kind === "session" &&
         boardStore.selectedSource.id === result.sessionID,
     )
-    if (!ownsWorkspaceSelection(selectionEpoch)) return
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
     setComposerIntent({ productPillar: result.productPillar, conversationTarget: "mission" })
     await loadConversation(source, {
       scrollIntent: "bottom",
       resetCause: "mission-session-hydrate",
       directory: missionDirectory,
     })
-    if (!ownsWorkspaceSelection(selectionEpoch)) return
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
     startSSE(source, 0, { directory: missionDirectory })
     resetCenterWorkbenchToPrimaryPanel("mission")
+    return true
   } catch (error) {
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
     if (
-      ownsWorkspaceSelection(selectionEpoch) &&
       boardStore.selectedSource?.kind === "session" &&
       boardStore.selectedSource.id === result.sessionID
     ) {
@@ -2292,7 +2292,7 @@ function OverlayRoot() {
               setExpertSquadLauncherSubmitting(true)
               try {
                 const { directory, model } = await resolveGlobalComposerSubmissionContext()
-                const selectionEpoch = beginWorkspaceSelection()
+                const selectionEpoch = supersedePendingWorkspaceSelection()
                 const result = await wakeMission({
                   directory,
                   text,
@@ -2301,8 +2301,6 @@ function OverlayRoot() {
                   productPillar: intentRoute.productPillar,
                   expertSquadIDs: submitRoute.kind === "mission" ? submitRoute.expertSquadIDs : undefined,
                 })
-                setComposerIntent((current) => ({ ...current, conversationTarget: "mission" }))
-                resetCenterWorkbenchToPrimaryPanel("mission")
                 await openMissionSession(result, directory, selectionEpoch)
                 setMissionSharedRefreshToken((value) => value + 1)
                 return result

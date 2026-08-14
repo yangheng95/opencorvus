@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Mission submit selection-supersession settlement: [`2026-08-14-mission-submit-selection-supersession.md`](records/2026-08/2026-08-14-mission-submit-selection-supersession.md).
+
 Latest message-source File layout repair: [`2026-08-14-message-source-file-layout-repair.md`](records/2026-08/2026-08-14-message-source-file-layout-repair.md).
 
 Latest Mission wake activation fence P0: [`2026-08-14-mission-wake-activation-fence-p0.md`](records/2026-08/2026-08-14-mission-wake-activation-fence-p0.md).
