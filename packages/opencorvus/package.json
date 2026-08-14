@@ -1,14 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "version": "0.0.38-beta",
+  "version": "0.0.43-beta",
   "name": "opencorvus",
   "type": "module",
   "license": "MIT",
   "private": true,
   "scripts": {
     "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
-    "test": "bun script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 --parallel=2 test",
+    "pretest": "bun script/prepare-test-process-supervisor.ts",
+    "test": "bun script/run-tests.ts",
+    "prepare:test-runtime": "bun script/prepare-test-process-supervisor.ts",
     "build": "bun run script/build.ts",
+    "precheck:permission-modes": "bun script/prepare-test-process-supervisor.ts",
+    "check:permission-modes": "bun run script/run-with-inactivity.ts --inactivity-ms 120000 -- bun run script/permission-modes-check-worker.ts",
+    "check:work-artifact-profile": "bun run script/generate-work-artifact-qualification-matrix.ts --check && bun run script/check-work-artifact-profile.ts --profile office.presentation@1",
+    "check:scheduled-automations-e2e": "bun run script/scheduled-automations-e2e.ts",
+    "check:mission-task-duplex-e2e": "bun run script/check-mission-task-duplex-e2e.ts",
     "dev": "bun ./src/index.ts"
   },
   "bin": {
@@ -112,6 +119,7 @@
     "minimatch": "10.2.3",
     "node-screenshots": "0.2.8",
     "open": "10.1.2",
+    "open-websearch": "2.1.11",
     "opencode-gitlab-auth": "2.1.0",
     "opencode-poe-auth": "0.0.1",
     "parse5": "7.3.0",

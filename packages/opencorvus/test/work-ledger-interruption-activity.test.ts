@@ -8,6 +8,7 @@ import { TaskQueueTable } from "../src/scheduler/task-queue.sql"
 import { TaskQueueEvent, TaskQueueService } from "../src/scheduler/task-queue-service"
 import { Database } from "../src/storage/db"
 import { WorkLedgerRouteTestHooks } from "../src/server/routes/work-ledger"
+import { ProjectMemory } from "../src/memory/project-memory"
 import { listWorkLedger } from "../src/work-ledger/projection"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -16,12 +17,35 @@ afterAll(async () => {
 })
 
 describe("Work Ledger interruption activity", () => {
+  test("projects Project Memory notice changes onto the unified stream", () => {
+    const envelope = WorkLedgerRouteTestHooks.workLedgerGlobalBusProjectMemoryEvent({
+      payload: {
+        type: ProjectMemory.Event.NoticeChanged.type,
+        properties: {
+          projectID: "project-1",
+          status: "capacity_reached",
+          message: "Project memory capacity reached",
+          generation: "generation-1",
+          acknowledged: false,
+        },
+      },
+    })
+    expect(envelope).toMatchObject({
+      sourceType: ProjectMemory.Event.NoticeChanged.type,
+      projectID: "project-1",
+    })
+    expect(envelope?.sequence).toBeGreaterThan(0)
+  })
+
   test("projects queued Work as active and publishes its queued-to-failed refresh contract", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await createRightSidebarConversationSession("work")
+        const session = await Session.mergeMetadata({
+          sessionID: (await createRightSidebarConversationSession("work")).id,
+          patch: { configOverlay: { model: "openai/gpt-5.6-sol" } },
+        })
         const now = Date.now()
         Database.use((db) =>
           db
@@ -33,7 +57,7 @@ describe("Work Ledger interruption activity", () => {
               priority: "normal",
               status: "queued",
               source: "session.prompt_async",
-              metadata: { kind: "session_prompt", input: {} },
+              metadata: { kind: "session_wake", messageID: Identifier.ascending("message"), input: {} },
               time_created: now,
               time_updated: now,
             })
@@ -66,7 +90,7 @@ describe("Work Ledger interruption activity", () => {
           }
           if (event.properties.queueTaskID === queueTaskID && event.properties.status === "failed") resolveFailed()
         })
-        const enqueuedTaskID = TaskQueueService.enqueuePrompt({
+        const { taskID: enqueuedTaskID } = await TaskQueueService.enqueuePromptAfterPersistingUserMessage({
           sessionID: session.id,
           source: "session.prompt_async",
           prompt: {

@@ -13,14 +13,11 @@ const acceptanceSkillRef = "frontend-replica/shared/acceptance"
 const agentIDs = [
   "frontend-replica-explorer",
   "frontend-replica-intent-analyst",
-  "frontend-replica-requirements-analyst",
-  "frontend-replica-solution-architect",
   "frontend-replica-interface-modeler",
   "frontend-replica-source-researcher",
   "frontend-replica-workload-analyst",
   "frontend-replica-implementer",
-  "frontend-replica-visual-reviewer",
-  "frontend-replica-integrity-reviewer",
+  "frontend-replica-planner",
 ] as const
 
 describe("Frontend Replica acceptance package", () => {
@@ -32,7 +29,7 @@ describe("Frontend Replica acceptance package", () => {
       schema_version: 1,
       namespace: "builtin",
       id: "frontend-replica",
-      version: "2026.08.07.1",
+      version: "2026.08.13.1",
     })
     expect([...loaded.packageSkills.keys()]).toEqual([acceptanceSkillRef])
     expect(acceptance?.content).toContain(

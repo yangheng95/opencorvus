@@ -28,9 +28,10 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
 | GET | `/global/automations/{id}/runs` | List scheduled automation runs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.chat.create` |
+| GET | `/global/composer-expert-squads` | Search global Composer expert squads Errors: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references Errors: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration Errors: `NonCanonicalConfigFileError`. | `global.config.get` |
-| PATCH | `/global/config` | Update global configuration Errors: `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
+| PATCH | `/global/config` | Update global configuration Errors: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
 | GET | `/global/db/mysql/export` | Export MySQL transfer snapshot | `global.db.mysql.export` |
 | POST | `/global/db/mysql/import` | Import MySQL transfer snapshot Body: `snapshot`; Errors: `BadRequestError`, `OwnedPromptControllersError`. | `global.db.mysql.import` |
 | GET | `/global/db/mysql/schema` | Export MySQL staging schema | `global.db.mysql.schema` |
@@ -41,24 +42,25 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/global/projects/discover` | Discover local OpenCorvus projects Errors: `BadRequestError`, `UnknownError`. | `global.projects.discover` |
 | GET | `/global/providers` | List providers for a new global task | `global.providers.list` |
 | GET | `/global/providers/auth` | Get global Provider auth methods | `global.providers.auth` |
-| POST | `/global/providers/discover-models` | Discover global Provider models Body: `api`, `apiKey`, `providerID`; Errors: `BadRequestError`. | `global.providers.discover.models` |
-| POST | `/global/providers/models/refresh` | Refresh global configured provider model lists | `global.providers.models.refresh` |
+| POST | `/global/providers/discover-models` | Discover global Provider models Body: `api`, `apiKey`, `providerID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.discover.models` |
+| POST | `/global/providers/models/refresh` | Refresh global configured provider model lists Errors: `AuthReadError`. | `global.providers.models.refresh` |
 | POST | `/global/providers/refresh` | Refresh the global provider registry | `global.providers.refresh` |
-| DELETE | `/global/providers/{providerID}` | Delete a global provider Errors: `BadRequestError`. | `global.providers.remove` |
-| GET | `/global/providers/{providerID}/account-usage` | Get global Provider account usage | `global.providers.account.usage` |
-| POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.auth.execute` |
+| DELETE | `/global/providers/{providerID}` | Delete a global provider Errors: `AuthReadError`, `BadRequestError`. | `global.providers.remove` |
+| GET | `/global/providers/{providerID}/account-usage` | Get global Provider account usage Errors: `AuthReadError`. | `global.providers.account.usage` |
+| POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
 | POST | `/global/providers/{providerID}/auth/prompts` | Get global Provider auth prompts Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.auth.prompts` |
 | POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.oauth.authorize` |
-| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `method`; Errors: `BadRequestError`. | `global.providers.oauth.callback` |
-| POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `BadRequestError`. | `global.providers.test` |
+| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
+| POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source Body: `kind`, `policy`, `value`; Errors: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
-| POST | `/global/tasks` | Create a task in an implicit project Body: `artifactImports`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `queue`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
+| POST | `/global/tasks` | Create a task in an implicit project Body: `artifactSources`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
+| GET | `/global/usage` | Get natural-period Provider usage Errors: `BadRequestError`. | `global.usage` |
 | POST | `/global/work` | Create Work in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.work.create` |
 | POST | `/instance/dispose` | Dispose instance Errors: `OwnedPromptControllersError`. | `instance.dispose` |
 | GET | `/log` | Read logs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `log.read` |
-| POST | `/log` | Write log Body: `extra`, `level`, `message`, `service`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `app.log` |
+| POST | `/log` | Write log batch Body: `entries`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `app.log` |
 | GET | `/log/export` | Export log support bundle | `log.export` |
 | GET | `/log/files` | List log files | `log.files` |
 | GET | `/log/tail` | Read recent logs Errors: `LogFileNotFoundError`, `NotFoundError`. | `log.tail` |
@@ -69,18 +71,18 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| DELETE | `/auth/{providerID}` | Remove auth credentials Errors: `BadRequestError`. | `auth.remove` |
-| PUT | `/auth/{providerID}` | Set auth credentials Errors: `BadRequestError`. | `auth.set` |
+| DELETE | `/auth/{providerID}` | Remove auth credentials Errors: `AuthReadError`, `BadRequestError`. | `auth.remove` |
+| PUT | `/auth/{providerID}` | Set auth credentials Errors: `AuthReadError`, `BadRequestError`. | `auth.set` |
 
 ### Configuration
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
 | GET | `/command` | List commands Errors: `UnknownError`. | `command.list` |
-| GET | `/config` | Get configuration Errors: `NonCanonicalConfigFileError`. | `config.get` |
-| PATCH | `/config` | Update configuration (JSON Merge Patch) Errors: `BadRequestError`, `NonCanonicalConfigFileError`. | `config.update` |
-| GET | `/config/prompt` | List prompt catalog | `config.prompt` |
-| GET | `/config/providers` | List config providers | `config.providers` |
+| GET | `/config` | Get configuration Errors: `AuthReadError`, `NonCanonicalConfigFileError`. | `config.get` |
+| PATCH | `/config` | Update configuration (JSON Merge Patch) Errors: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `config.update` |
+| GET | `/config/prompt` | List prompt catalog Errors: `AuthReadError`. | `config.prompt` |
+| GET | `/config/providers` | List config providers Errors: `AuthReadError`. | `config.providers` |
 | POST | `/config/proxy/test` | Test network proxy Errors: `NetworkProxyTestResponse`. | `config.proxy.test` |
 | GET | `/formatter` | Get formatter status | `formatter.status` |
 | GET | `/path` | Get paths | `path.get` |
@@ -93,10 +95,10 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | DELETE | `/project/current` | Delete current project Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.delete` |
 | GET | `/project/current` | Get current project | `project.current` |
 | PATCH | `/project/current` | Update current project Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.update` |
-| GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.cleanupCandidates` |
+| GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.cleanupCandidates` |
 | POST | `/project/current/init-git` | Initialize git in current directory Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.initGit` |
 | POST | `/project/current/promote-anonymous` | Convert current anonymous project to a named project Body: `destinationParent`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.promoteAnonymous` |
-| DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees.delete` |
+| DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |
 | PATCH | `/project/{projectID}` | Update project Body: `commands`, `icon`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.update` |
 | GET | `/vcs` | Get VCS info Errors: `UnknownError`. | `vcs.get` |
@@ -113,28 +115,25 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 |---|---|---|---|
 | DELETE | `/goal/{goalID}` | Delete goal Errors: `LogFileNotFoundError`, `NotFoundError`. | `goal.delete` |
 | PATCH | `/goal/{goalID}` | Update goal title Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `goal.updateTitle` |
-| POST | `/interaction/{interactionID}/reject` | Reject interaction Body: `autoReply`, `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reject` |
-| POST | `/interaction/{interactionID}/reply` | Reply to interaction Body: `answers`, `autoReply`, `message`, `reply`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reply` |
+| POST | `/interaction/{interactionID}/reject` | Reject interaction Body: `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reject` |
+| POST | `/interaction/{interactionID}/reply` | Reply to interaction Body: `answers`, `decision`, `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reply` |
 | DELETE | `/mailbox` | Delete selected mailbox items Body: `messageIDs`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.deleteMany` |
 | GET | `/mailbox` | List the global mailbox Errors: `BadRequestError`. | `mailbox.list` |
-| GET | `/mailbox/events` | Subscribe to global mailbox changes | `mailbox.events` |
 | PATCH | `/mailbox/read-all` | Mark all active mailbox items as read | `mailbox.readAll` |
 | DELETE | `/mailbox/{messageID}` | Delete a mailbox item Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.delete` |
 | PATCH | `/mailbox/{messageID}` | Update a mailbox item Body: `action`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.acknowledge` |
 | GET | `/mission` | List Missions | `mission.list` |
 | POST | `/mission/draft` | Create a Mission draft Body: `expertSquadIDs`, `productPillar`, `request`, `title`; Errors: `BadRequestError`. | `mission.createDraft` |
-| POST | `/mission/wake` | Wake the Mission agent Body: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; Errors: `BadRequestError`. | `mission.wake` |
+| POST | `/mission/wake` | Wake the Mission agent Body: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; Errors: `AuthReadError`, `BadRequestError`, `MissionExecutionClosingError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
 | DELETE | `/mission/{missionID}` | Delete a Mission Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.delete` |
 | POST | `/mission/{missionID}/abort` | Abort a Mission Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.abort` |
 | GET | `/mission/{missionID}/activity-cursor` | Get Mission durable activity cursor Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.activityCursor` |
 | PATCH | `/mission/{missionID}/archive` | Archive or restore a Mission Body: `archived`, `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.setArchived` |
-| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft Body: `model`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mission.dispatch` |
+| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft Body: `model`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `NotFoundError`. | `mission.dispatch` |
 | GET | `/mission/{missionID}/project-archive` | Download Mission project archive Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.projectArchive` |
 | GET | `/mission/{missionID}/status` | Get Mission status Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.status` |
 | PATCH | `/mission/{missionID}/title` | Rename a Mission Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.rename` |
-| POST | `/task` | Create task Body: `artifactImports`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `queue`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.create` |
-| PATCH | `/task-queue/reorder` | Reorder queued tasks in a directory Body: `directory`, `orderedTaskIDs`, `revision`. | `task.queue.reorder` |
-| GET | `/task/events` | Subscribe to global task-list change notifications | `task.list.events` |
+| POST | `/task` | Create task Body: `artifactSources`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.create` |
 | DELETE | `/task/{taskID}` | Delete task Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskCancellationIncompleteError`, `UnknownError`. | `task.delete` |
 | GET | `/task/{taskID}` | Get task Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.get` |
 | PATCH | `/task/{taskID}/archive` | Archive or restore task Body: `archived`, `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.setArchived` |
@@ -169,7 +168,6 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/task/{taskID}/rewind/clear` | Clear the Task conversation visibility cursor Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.clearRewindCursor` |
 | POST | `/task/{taskID}/session/{sessionID}/cancel` | Cancel a task agent session Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.session.cancel` |
 | POST | `/task/{taskID}/session/{sessionID}/operator-steer` | Steer a task agent session through operator coordination Body: `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OperatorSteerTargetError`, `TaskCancellationIncompleteError`. | `task.session.operatorSteer` |
-| POST | `/task/{taskID}/start-now` | Start a queued task immediately Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.queue.startNow` |
 | GET | `/task/{taskID}/status` | Get task status Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.status` |
 | PATCH | `/task/{taskID}/title` | Update task title Body: `title`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `task.updateTitle` |
 | GET | `/task/{taskID}/trace` | Get task AgentTrace events (all sessions) Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.trace` |
@@ -196,9 +194,10 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/session/{sessionID}/abort` | Abort session Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
 | POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.command` |
-| GET | `/session/{sessionID}/config` | Get session effective configuration Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
-| PATCH | `/session/{sessionID}/config` | Update session configuration overlay Body: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
+| GET | `/session/{sessionID}/config` | Get session effective configuration Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
+| PATCH | `/session/{sessionID}/config` | Update session configuration overlay Body: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
+| GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
 | POST | `/session/{sessionID}/fork` | Fork session Body: `messageID`. | `session.fork` |
@@ -207,12 +206,12 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request Errors: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
 | GET | `/session/{sessionID}/message` | Get session messages Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.messages` |
-| POST | `/session/{sessionID}/message` | Send message Body: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt` |
+| POST | `/session/{sessionID}/message` | Send message Body: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt` |
 | DELETE | `/session/{sessionID}/message/{messageID}` | Delete message Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.deleteMessage` |
 | GET | `/session/{sessionID}/message/{messageID}` | Get message Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | (no summary) Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | (no summary) Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/prompt_async` | Send async message Body: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async` |
+| POST | `/session/{sessionID}/prompt_async` | Send async message Body: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async` |
 | GET | `/session/{sessionID}/prompt_async/{taskID}` | Get async prompt task status Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async_status` |
 | POST | `/session/{sessionID}/shell` | Run shell command Body: `agent`, `command`, `model`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.shell` |
 | POST | `/session/{sessionID}/summarize` | Summarize session Body: `auto`, `focus`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.summarize` |
@@ -224,7 +223,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| POST | `/coding/chat/session` | Create right sidebar Chat session Body: `model`. | `coding.chat.session.create` |
+| POST | `/coding/chat/session` | Create right sidebar Chat session Body: `model`; Errors: `AuthReadError`. | `coding.chat.session.create` |
 | DELETE | `/coding/chat/session/{sessionID}` | Delete right sidebar Chat session Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.delete` |
 | GET | `/coding/chat/session/{sessionID}` | Claim right sidebar Chat session Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.get` |
 | PATCH | `/coding/chat/session/{sessionID}` | Update right sidebar Chat session Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.update` |
@@ -234,7 +233,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/coding/chat/sessions` | List right sidebar Chat sessions Errors: `BadRequestError`. | `coding.chat.sessions.list` |
 | POST | `/coding/cli/open` | Open coding CLI Body: `cliID`, `cwd`, `terminalProfileID`; Errors: `BadRequestError`. | `coding.cli.open` |
 | GET | `/coding/cli/profiles` | List installed coding CLIs Errors: `BadRequestError`. | `coding.cli.profiles` |
-| POST | `/coding/work/session` | Create right sidebar Work session Body: `model`. | `coding.work.session.create` |
+| POST | `/coding/work/session` | Create right sidebar Work session Body: `model`; Errors: `AuthReadError`. | `coding.work.session.create` |
 | DELETE | `/coding/work/session/{sessionID}` | Delete right sidebar Work session Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.delete` |
 | GET | `/coding/work/session/{sessionID}` | Claim right sidebar Work session Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.get` |
 | PATCH | `/coding/work/session/{sessionID}` | Update right sidebar Work session Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.update` |
@@ -260,7 +259,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 |---|---|---|---|
 | GET | `/gateway/capabilities` | List gateway capabilities | `gateway.capabilities` |
 | POST | `/gateway/channel/{platform}/message` | Handle gateway channel message Body: `allow_create`, `allow_session_mutation`, `attachments`, `bind`, `channel`, `model`, `platform`, `request_id`, `source`, `task_id`, `text`, `thread`, `user_id`. | `gateway.channel.message` |
-| POST | `/gateway/control/action` | Run gateway control action Body: `acceptance_specs`, `action`, `allow_create`, `artifact_types`, `byte_offset`, `channel`, `checks`, `created_at_or_after_ms`, `created_before_ms`, `cursor`, `delivery`, `directory`, `evidence_locators`, `expectedPackageDigest`, `goalID`, `goal_ids`, `import_source_task_ids`, `includeInteractions`, `interactionID`, `kinds`, `labels`, `locator`, `match`, `max_bytes`, `media_types`, `message`, `metadata`, `model`, `platform`, `producer_agent_ids`, `producer_session_ids`, `producer_squad_ids`, `productPillar`, `promptProfile`, `query`, `queue`, `reason`, `reply`, `request`, `request_id`, `sessionID`, `sort`, `source`, `sources`, `summary`, `taskID`, `taskIDs`, `task_acceptances`, `text`, `thread`, `title`, `user_id`, `version_scope`. | `gateway.control.action` |
+| POST | `/gateway/control/action` | Run gateway control action Body: `acceptance_specs`, `action`, `allow_create`, `artifact_locator_ref`, `artifact_transport_version`, `artifact_types`, `byte_offset`, `channel`, `checks`, `created_at_or_after_ms`, `created_before_ms`, `delivery`, `directory`, `evidence_read_refs`, `expectedPackageDigest`, `goalID`, `goal_ids`, `id`, `import_source_task_ids`, `includeInteractions`, `interactionID`, `kinds`, `labels`, `match`, `max_bytes`, `media_types`, `message`, `metadata`, `model`, `page_number`, `platform`, `producer_agent_ids`, `producer_session_ids`, `producer_squad_ids`, `productPillar`, `promptProfile`, `query`, `reason`, `reply`, `request`, `request_id`, `sessionID`, `sort`, `source`, `sources`, `summary`, `taskID`, `taskIDs`, `task_acceptances`, `terminal_lifecycle_reference`, `text`, `thread`, `title`, `user_id`, `version_scope`, `workflowCursor`. | `gateway.control.action` |
 | POST | `/gateway/control/message` | Handle gateway control message Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `gateway.control.message` |
 | GET | `/gateway/stats` | Get gateway stats | `gateway.stats` |
 
@@ -288,23 +287,29 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/expert-squad/catalog` | List expert squads and active capability projection Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
+| GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection Errors: `AuthReadError`, `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
 | GET | `/expert-squad/configuration` | Get expert squad configuration Errors: `ExpertSquadPackageError`. | `expertSquad.configuration.get` |
 | PUT | `/expert-squad/configuration` | Update expert squad configuration Body: `id`, `installationScope`, `updates`; Errors: `ExpertSquadPackageError`. | `expertSquad.configuration.update` |
+| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics Errors: `BadRequestError`, `UnknownError`. | `expertSquad.diagnostics` |
 | POST | `/expert-squad/evolution-authorization` | Authorize an expert squad evolution mutation Body: `confirmationText`, `intent`, `sessionID`, `taskID`; Errors: `ExpertSquadPackageError`. | `expertSquad.evolutionAuthorization` |
 | GET | `/expert-squad/evolution-history` | Read expert squad evolution history Errors: `ExpertSquadPackageError`. | `expertSquad.evolutionHistory` |
 | POST | `/expert-squad/evolution-history/detail` | Read one exact expert squad evolution campaign Body: `campaignLocator`, `campaignTaskID`, `candidateLocator`, `catalogRevisionUpper`, `comparisonLocator`, `id`, `installationScope`, `namespace`; Errors: `EvolutionHistoryAuthorityError`, `ExpertSquadPackageError`. | `expertSquad.evolutionHistoryDetail` |
 | POST | `/expert-squad/evolution-mutation` | Execute an authorized expert squad evolution mutation Body: `authorization`, `campaignSpecLocator`, `candidateRevisionLocator`, `comparisonResultLocator`, `expectedCurrentPackageDigest`, `operation`, `priorReceiptLocator`, `restorePackageDigest`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.evolutionMutation` |
 | POST | `/expert-squad/export` | Export an expert squad ZIP archive Body: `id`, `installationScope`; Errors: `ExpertSquadPackageError`. | `expertSquad.export` |
+| POST | `/expert-squad/import-exact-file` | Import an exact hosted expert squad ZIP revision Body: `archiveBase64`, `expectedCurrentPackageDigest`, `expectedID`, `expectedNamespace`, `expectedPackageDigest`, `expectedVersion`, `filename`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importExactFile` |
 | POST | `/expert-squad/import-file` | Import an expert squad ZIP archive Body: `archiveBase64`, `expectedCurrentPackageDigest`, `filename`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFile` |
 | POST | `/expert-squad/import-folder` | Import an expert squad folder Body: `expectedCurrentPackageDigest`, `installationScope`, `sourceDirectory`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFolder` |
+| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad Body: `id`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
+| GET | `/expert-squad/inventory-status` | Get expert-squad inventory status Errors: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
 | GET | `/expert-squad/market` | Browse bundled expert squads Errors: `ExpertSquadPackageError`. | `expertSquad.market` |
+| GET | `/expert-squad/market/detail` | Inspect one bundled expert squad Errors: `ExpertSquadPackageError`, `NotFoundError`. | `expertSquad.marketDetail` |
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import Body: `mapping`, `squadID`; Errors: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status Errors: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
-| GET | `/expert-squad/settings` | Inspect project Expert Squad settings Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settings` |
-| POST | `/expert-squad/uninstall` | Uninstall an expert squad package Body: `id`, `installationScope`, `replacementID`; Errors: `ExpertSquadPackageError`. | `expertSquad.uninstall` |
+| GET | `/expert-squad/search` | Search expert-squad declarations Errors: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
+| GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
+| POST | `/expert-squad/uninstall` | Uninstall an expert squad package Body: `id`, `installationScope`, `replacementID`; Errors: `AuthReadError`, `ExpertSquadPackageError`. | `expertSquad.uninstall` |
 | POST | `/expert-squad/update` | Update an installed expert squad Body: `expectedCurrentPackageDigest`, `id`, `installationScope`, `source`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.update` |
 | POST | `/expert-squad/validate-folder` | Validate an expert squad source folder Body: `sourceDirectory`; Errors: `ExpertSquadPackageError`. | `expertSquad.validateFolder` |
 
@@ -382,8 +387,11 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/permission` | List pending permissions | `permission.list` |
-| POST | `/permission/{requestID}/reply` | Respond to permission request Body: `autoReply`, `message`, `reply`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `permission.reply` |
+| GET | `/permission` | List durable pending permission requests | `permission.list` |
+| GET | `/permission/grants` | List active permission grants | `permission.grants` |
+| POST | `/permission/grants/{grantID}/revoke` | Revoke an active permission grant Errors: `LogFileNotFoundError`, `NotFoundError`. | `permission.revoke` |
+| GET | `/permission/history` | List permission ledger history | `permission.history` |
+| POST | `/permission/{requestID}/reply` | Decide a pending permission request Body: `actorID`, `decision`, `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `permission.reply` |
 
 ### Provider
 
@@ -391,16 +399,16 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 |---|---|---|---|
 | GET | `/provider` | List providers | `provider.list` |
 | GET | `/provider/auth` | Get provider auth methods | `provider.auth` |
-| POST | `/provider/discover-models` | Discover OpenAI-compatible provider models Body: `api`, `apiKey`, `providerID`; Errors: `BadRequestError`. | `provider.discover.models` |
-| POST | `/provider/models/refresh` | Refresh configured provider model lists | `provider.models.refresh` |
+| POST | `/provider/discover-models` | Discover OpenAI-compatible provider models Body: `api`, `apiKey`, `providerID`; Errors: `AuthReadError`, `BadRequestError`. | `provider.discover.models` |
+| POST | `/provider/models/refresh` | Refresh configured provider model lists Errors: `AuthReadError`. | `provider.models.refresh` |
 | POST | `/provider/refresh` | Refresh the provider registry | `provider.refresh` |
-| DELETE | `/provider/{providerID}` | Delete a project provider Errors: `BadRequestError`. | `provider.remove` |
-| GET | `/provider/{providerID}/account-usage` | Get Provider account usage | `provider.account.usage` |
-| POST | `/provider/{providerID}/auth/execute` | Execute auth method Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.auth.execute` |
+| DELETE | `/provider/{providerID}` | Delete a project provider Errors: `AuthReadError`, `BadRequestError`. | `provider.remove` |
+| GET | `/provider/{providerID}/account-usage` | Get Provider account usage Errors: `AuthReadError`. | `provider.account.usage` |
+| POST | `/provider/{providerID}/auth/execute` | Execute auth method Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
 | POST | `/provider/{providerID}/auth/prompts` | Get auth prompts Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.auth.prompts` |
 | POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.oauth.authorize` |
-| POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `method`; Errors: `BadRequestError`. | `provider.oauth.callback` |
-| POST | `/provider/{providerID}/test` | Test provider connection Body: `modelID`; Errors: `BadRequestError`. | `provider.test` |
+| POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
+| POST | `/provider/{providerID}/test` | Test provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `provider.test` |
 
 ### Question
 
@@ -435,6 +443,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/file/item` | Move file item Body: `newPath`, `path`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.move` |
 | POST | `/file/item` | Create file item Body: `content`, `path`, `type`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.create` |
 | POST | `/file/item/copy` | Copy file item Body: `newPath`, `path`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.copy` |
+| GET | `/file/source-content` | Read an absolute source file Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.readSource` |
 | GET | `/file/status` | Get file status | `file.status` |
 | POST | `/file/upload` | Upload files Body: `files`, `targetDir`; Errors: `BadRequestError`, `TaskCancellationIncompleteError`. | `file.upload` |
 | GET | `/find` | Find text Errors: `UnknownError`. | `find.text` |
@@ -450,6 +459,9 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/experimental/event-schedule` | Create event-triggered task Body: `cooldownMs`, `eventType`, `match`, `name`, `oneShot`, `prompt`, `sessionId`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.eventschedule.create` |
 | DELETE | `/experimental/event-schedule/{id}` | Cancel event-triggered task Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.eventschedule.delete` |
 | GET | `/experimental/memory` | Get the Session MEMORY.MD document Errors: `LogFileNotFoundError`, `NotFoundError`. | `experimental.memory.get` |
+| GET | `/experimental/project-memory` | Get the organized Project MEMORY.MD context | `experimental.projectMemory.get` |
+| POST | `/experimental/project-memory/notice/acknowledge` | Acknowledge a Project MEMORY.MD notice Body: `generation`. | `experimental.projectMemory.acknowledgeNotice` |
+| POST | `/experimental/project-memory/organize` | Request Project MEMORY.MD organization | `experimental.projectMemory.organize` |
 | GET | `/experimental/resource` | Get MCP resources Errors: `UnknownError`. | `experimental.resource.list` |
 | GET | `/experimental/task-plan` | List tasks for a session Errors: `LogFileNotFoundError`, `NotFoundError`. | `experimental.taskplan.list` |
 | GET | `/experimental/tool` | List tools Errors: `BadRequestError`. | `tool.list` |
@@ -457,7 +469,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/experimental/workspace` | List workspaces | `experimental.workspace.list` |
 | DELETE | `/experimental/workspace/{id}` | Remove workspace Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.workspace.remove` |
 | POST | `/experimental/workspace/{id}` | Create workspace Errors: `BadRequestError`. | `experimental.workspace.create` |
-| DELETE | `/experimental/worktree` | Remove worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.remove` |
+| DELETE | `/experimental/worktree` | Remove worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `worktree.remove` |
 | GET | `/experimental/worktree` | List worktrees | `worktree.list` |
 | POST | `/experimental/worktree` | Create worktree Errors: `BadRequestError`. | `worktree.create` |
 | POST | `/experimental/worktree/reset` | Reset worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.reset` |

@@ -225,24 +225,32 @@ export const TaskCancellationEventLink = z
 
 export type TaskCancellationEventLink = z.infer<typeof TaskCancellationEventLink>
 
-export const TaskCancellationProjection = z
-  .object({
-    requestEventID: Identifier.schema("protocol_event"),
-    terminalEventID: Identifier.schema("protocol_event"),
-    requestedAt: z.number().int().positive(),
-    terminalAt: z.number().int().positive(),
-    source: TaskCancellationSource,
-    requestID: z.string().trim().min(1),
-    actor: TaskCancellationActor,
-    surface: TaskCancellationSurface,
-    reason: TaskCancellationReason,
-    sessionID: CancellationSessionID.optional(),
-    messageID: CancellationMessageID.optional(),
-    toolCallID: z.string().trim().min(1).optional(),
-    toolPartID: CancellationToolPartID.optional(),
-    missionID: MissionID.optional(),
-  })
-  .strict()
+const TaskCancellationProjectionBase = {
+  requestEventID: Identifier.schema("protocol_event"),
+  requestedAt: z.number().int().positive(),
+  source: TaskCancellationSource,
+  requestID: z.string().trim().min(1),
+  actor: TaskCancellationActor,
+  surface: TaskCancellationSurface,
+  reason: TaskCancellationReason,
+  sessionID: CancellationSessionID.optional(),
+  messageID: CancellationMessageID.optional(),
+  toolCallID: z.string().trim().min(1).optional(),
+  toolPartID: CancellationToolPartID.optional(),
+  missionID: MissionID.optional(),
+}
+
+export const TaskCancellationProjection = z.discriminatedUnion("status", [
+  z.object({ ...TaskCancellationProjectionBase, status: z.literal("cancelling") }).strict(),
+  z
+    .object({
+      ...TaskCancellationProjectionBase,
+      status: z.literal("cancelled"),
+      terminalEventID: Identifier.schema("protocol_event"),
+      terminalAt: z.number().int().positive(),
+    })
+    .strict(),
+])
 
 export type TaskCancellationProjection = z.infer<typeof TaskCancellationProjection>
 
@@ -398,6 +406,7 @@ export function projectTaskCancellationEventChain(
   }
   const origin = request.origin
   return TaskCancellationProjection.parse({
+    status: "cancelled",
     requestEventID: requestEvent.id,
     terminalEventID: terminal.id,
     requestedAt: requestEvent.time.emitted,

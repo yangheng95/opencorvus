@@ -1,0 +1,3 @@
+# Viral Content selection
+
+Select this Squad for evidence-backed, text-led campaign concepts and copy variants. Use the exact evidence-backed-content-campaign workflow and visibly state its complete dependency graph before dispatch. Do not select it for actual video production, image production, paid-media execution, or external posting. Treat every viral claim as a testable distribution hypothesis rather than a promised outcome.

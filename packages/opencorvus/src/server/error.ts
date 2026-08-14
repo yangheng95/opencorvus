@@ -29,9 +29,36 @@ const BAD_REQUEST_SCHEMA = z
     error: z.array(z.record(z.string(), z.any())),
     success: z.literal(false),
   })
-  .meta({
-    ref: "BadRequestError",
+  .meta({ ref: "BadRequestError" })
+
+const WORKTREE_OWNERSHIP_OBSERVATION_SCHEMA = z
+  .object({
+    name: z.literal("WorktreeOwnershipObservationError"),
+    data: z
+      .object({
+        operation: z.string(),
+        code: z.string(),
+        scope: z.string(),
+        message: z.string(),
+      })
+      .strict(),
   })
+  .strict()
+  .meta({ ref: "WorktreeOwnershipObservationError" })
+
+const AUTH_READ_ERROR_SCHEMA = z
+  .object({
+    name: z.literal("AuthReadError"),
+    data: z
+      .object({
+        operation: z.literal("read_saved_credentials"),
+        reason: z.enum(["io", "malformed_json", "invalid_credential"]),
+        message: z.string(),
+      })
+      .strict(),
+  })
+  .strict()
+  .meta({ ref: "AuthReadError" })
 
 export const ERRORS = {
   400: {
@@ -71,6 +98,14 @@ export const ERRORS = {
     content: {
       "application/json": {
         schema: namedErrorSchema("UnknownError"),
+      },
+    },
+  },
+  503: {
+    description: "Required ownership authority could not be observed safely",
+    content: {
+      "application/json": {
+        schema: resolver(WORKTREE_OWNERSHIP_OBSERVATION_SCHEMA),
       },
     },
   },
@@ -124,6 +159,15 @@ export const OwnedPromptControllersResponse = namedErrorResponse(
   "Owned prompt controllers prevent this operation",
   "OwnedPromptControllersError",
 )
+
+export const AuthReadUnavailableResponse = {
+  description: "Saved Provider credentials could not be observed safely",
+  content: {
+    "application/json": {
+      schema: resolver(AUTH_READ_ERROR_SCHEMA),
+    },
+  },
+} as const
 
 export function operatorSteerRouteErrors(...codes: number[]) {
   return Object.fromEntries(

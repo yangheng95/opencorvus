@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
-import { apiJson, apiJsonWithTimeout, ApiError, configure } from "../src/services/api"
+import { apiHeaders, apiJson, apiJsonWithTimeout, ApiError, configure } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 
@@ -39,10 +39,15 @@ beforeEach(() => configure({ directory: TEST_DIRECTORY }))
 
 afterEach(() => {
   __setHostTransportForTest(undefined)
-  configure({ directory: "" })
+  configure({ username: "opencorvus", password: "", directory: "" })
 })
 
 describe("apiJson + ApiError", () => {
+  test("applies an explicit empty Basic Auth username", () => {
+    configure({ username: "", password: "secret" })
+    expect(apiHeaders().Authorization).toBe("Basic OnNlY3JldA==")
+  })
+
   test("2xx returns the parsed body unchanged", async () => {
     __setHostTransportForTest(fakeTransport(() => ({ status: 200, ok: true, headers: {}, body: { hello: "world" } })))
     const result = await apiJson("config")

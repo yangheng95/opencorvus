@@ -325,10 +325,12 @@ function userMessageInputPreview(message: any): ConversationSessionView["inputPr
 }
 
 export function projectConversationView(
-  transcript: any[],
-  lifecycleEvents: ConversationLifecycleEvent[] = [],
-  ledgerSessions: ConversationAgentSessionLedgerEntry[] = [],
+  input: {
+    transcript: any[]
+    ledgerSessions?: ConversationAgentSessionLedgerEntry[]
+  },
 ): ConversationView {
+  const { transcript, ledgerSessions = [] } = input
   const sorted = [...(Array.isArray(transcript) ? transcript : [])].sort(conversationTranscriptMessageOrder)
   const ledgerBySession = new Map<string, ConversationAgentSessionLedgerEntry>()
   for (const ledger of ledgerSessions) {
@@ -454,7 +456,6 @@ export function projectConversationView(
       placement,
     })
   }
-  void lifecycleEvents
   const sessions = [...bySession.values()].sort((left, right) => {
     return compareTimelineOrderKeys(left.orderKey, right.orderKey)
   })
@@ -477,7 +478,7 @@ export function projectConversationAgentView(
   todoSnapshotsBySession: ReadonlyMap<string, TodoStore.Snapshot> = new Map(),
   preparedExecutions: ConversationPreparedExecution[] = [],
 ): ConversationAgentView {
-  const view = projectConversationView(transcript, [], ledgerSessions)
+  const view = projectConversationView({ transcript, ledgerSessions })
   const bySession = new Map<string, ConversationSessionView>()
   const projectedSessions = new Map(view.sessions.map((session) => [session.sessionID, session]))
   for (const session of ledgerSessions) {

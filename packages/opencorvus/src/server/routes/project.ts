@@ -13,7 +13,8 @@ import { Vcs } from "../../project/vcs"
 import { Worktree } from "../../worktree"
 import { Ownership } from "../../engine/ownership"
 import { WorktreeGC } from "../../worktree/gc"
-import { deleteCurrentProject, ProjectDeleteResult } from "../../project/delete"
+import { deleteProject, ProjectDeleteResult } from "../../project/delete"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import z from "zod"
 import { errors } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
@@ -23,34 +24,30 @@ import { ImplicitProject } from "../../project/implicit-project"
 import { hasProjectOwnedPromptControllers, ownedPromptControllersError } from "../../engine/runtime"
 import { ProcessSupervisor } from "../../shell/process-supervisor"
 
-const OwnershipMarker = z.object({
-  taskID: z.string(),
-  sessionID: z.string(),
-  cwd: z.string(),
-  ownerPid: z.number(),
-  createdAt: z.number(),
-  kind: z.literal("worktree"),
-})
-
 const OwnershipCandidate = z.object({
-  marker: OwnershipMarker,
-  markerPath: z.string(),
-  reason: z.string(),
+  taskID: z.string().optional(),
+  sessionID: z.string().optional(),
   worktreeDir: z.string().optional(),
-})
+  reason: z.enum(["owner-process-dead", "target-missing", "marker-invalid"]),
+}).strict()
 
 const WorktreeGCCandidate = z.object({
   projectID: z.string(),
-  primaryDir: z.string(),
   directory: z.string(),
-})
+  reason: z.enum(["old-clean", "old-zombie", "registry-prunable"]),
+}).strict()
 
 const WorktreeGCPreservation = z.object({
   projectID: z.string(),
-  primaryDir: z.string(),
-  reason: z.literal("registry-unavailable"),
-  detail: z.string(),
-})
+  reason: z.enum([
+    "primary-directory-unavailable",
+    "managed-state-unavailable",
+    "registry-unavailable",
+    "durable-sandbox-owner",
+  ]),
+  operation: z.literal("inspect-worktree-gc"),
+  code: z.string(),
+}).strict()
 
 const CleanupCandidates = z.object({
   worktreeOrphans: OwnershipCandidate.array(),
@@ -130,7 +127,7 @@ export const ProjectRoutes = lazy(() =>
       async (c) => {
         const body = c.req.valid("json")
         return c.json(
-          await deleteCurrentProject({
+          await deleteProject(PersistedProjectContext.currentProject(), {
             actor: "user",
             source: "project.delete",
             surface: body.surface,
@@ -279,7 +276,7 @@ export const ProjectRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404),
+          ...errors(400, 404, 503),
         },
       }),
       async (c) => {
@@ -294,12 +291,17 @@ export const ProjectRoutes = lazy(() =>
             .filter((candidate) => path.resolve(candidate.primaryDir) === current)
             .map((candidate) => ({
               projectID: candidate.projectID,
-              primaryDir: candidate.primaryDir,
               directory: candidate.directory,
+              reason: candidate.reason,
             })),
-          worktreeGCPreservations: gcPlan.preservations.filter(
-            (preservation) => path.resolve(preservation.primaryDir) === current,
-          ),
+          worktreeGCPreservations: gcPlan.preservations
+            .filter((preservation) => path.resolve(preservation.primaryDir) === current)
+            .map((preservation) => ({
+              projectID: preservation.projectID,
+              reason: preservation.reason,
+              operation: "inspect-worktree-gc" as const,
+              code: preservation.reason.replaceAll("-", "_").toUpperCase(),
+            })),
         })
       },
     )
@@ -318,14 +320,14 @@ export const ProjectRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404),
+          ...errors(400, 404, 503),
         },
       }),
       validator("json", Worktree.RemoveInput),
       async (c) => {
         const body = c.req.valid("json")
-        await Worktree.removeProjectWorktree(body)
-        return c.json(ProjectWorktreeDeleteReceipt.parse({ ok: true }))
+        const result = await Worktree.removeProjectWorktree(body)
+        return c.json(ProjectWorktreeDeleteReceipt.parse(result.receipt))
       },
     )
     .patch(

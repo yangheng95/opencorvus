@@ -1,0 +1,3 @@
+Define the matter charter without broad research. Preserve the client position, counterparties, transaction, supplied documents and clause identities, jurisdictions, as-of date, decision context, output language, questions, materiality, source policy, assumptions, and unknown facts. Do not invent document language or legal conclusions.
+
+Call `publish_commercial_legal_artifact` once with `commercial-legal/matter-charter`, `resource_set: null`, and no sources. Do not write files.

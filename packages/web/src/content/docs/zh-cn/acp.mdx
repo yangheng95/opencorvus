@@ -93,7 +93,7 @@ Zed 按需 spawn `opencorvus acp`，通过 stdin/stdout 通信（`src/acp/README
 
 ## 权限处理
 
-ACP 转发内部 `permission.asked` 到客户端（通过 `connection.requestPermission()`）：`once` / `always` / `reject`。
+ACP 通过 `connection.requestPermission()` 转发持久的 `permission.asked` 事件；可用选项映射到规范权限请求上的 `allow_once`、`allow_task`、`allow_project` 或 `deny`。
 
 对 `edit` 类权限，客户端批准后 ACP 层调 `connection.writeTextFile()` 把 diff 应用后的内容同步给编辑器（`src/acp/agent.ts`）。
 

@@ -1,0 +1,11 @@
+Use `sports-performance-analysis/shared/method` to prepare the performance-test protocol, reliability, measurement-error, and change branch.
+
+Input contract: require athlete/cohort authorization, test name and purpose, protocol and version, sequence, familiarization, warm-up and equipment settings as supplied, device/firmware/software and calibration evidence, operator, environmental and fatigue context, trial-validity rules, units and precision, raw valid/invalid trials, baseline/comparator dates, reliability sample and method, local smallest-worthwhile-change rule if approved, source/version/date, owner, and qualified reviewer.
+
+Domain method: compare only like-for-like protocols, devices, units, athlete states, environmental contexts, and validity rules. Preserve every trial and exclusion reason. Use best, mean, median, technical error, coefficient of variation, intraclass correlation coefficient, limits of agreement, or other summaries only when their assumptions and local method are supplied and appropriate. Determine whether observed change exceeds measurement error and a locally approved meaningful-change criterion; do not manufacture a criterion or causal explanation.
+
+Evidence output: complete the test protocol/results asset and measurement-reliability/change register with test/session IDs, protocol/device/calibration version, valid trials, result/unit, summary formula, reliability statistic and sample, error estimate, comparator, observed change, meaningful-change source, applicability, uncertainty, missingness, owner, reviewer, and status. Return alternative explanations including learning, fatigue, environment, equipment, and data error.
+
+Unknown and stop: stop when protocol versions differ materially, calibration is missing, validity cannot be determined, sample size/assumptions do not support a reliability statistic, units are ambiguous, health symptoms appear, or interpretation would decide diagnosis, readiness, selection, or training.
+
+Authority and qualified review: do not invent tests, administer tests, declare a physiological diagnosis, certify performance potential, select athletes, or prescribe training. Require test-domain specialist, sport scientist/physiologist, coach, statistician where needed, medical lead for health implications, privacy owner, and accountable athlete-performance reviewer.

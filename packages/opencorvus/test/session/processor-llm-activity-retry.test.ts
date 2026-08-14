@@ -13,6 +13,7 @@ import { LLM } from "../../src/session/llm"
 import { MessageStore } from "../../src/session/message-store"
 import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
+import { abortableIterable } from "../../src/util/stream-activity"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 function providerModel(): Provider.Model {
@@ -21,7 +22,7 @@ function providerModel(): Provider.Model {
     providerID: "processor-activity-provider",
     name: "Processor Activity Model",
     limit: { context: 1_000_000, input: 900_000, output: 4_096 },
-    cost: { input: 0, output: 0, cache: { read: 0, write: 0 } },
+    cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
     capabilities: {
       toolcall: true,
       attachment: false,
@@ -84,15 +85,15 @@ describe("SessionProcessor semantic LLM activity retry", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
           attempts += 1
           if (attempts === 1) {
-            return {
-              fullStream: (async function* () {
+            const fullStream = (async function* () {
                 yield { type: "start" }
                 yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
                 while (!streamInput.abort.aborted) {
-                  await new Promise((resolve) => setTimeout(resolve, 5))
                   yield { type: "tool-input-delta", id: "call_abandoned", delta: "" }
                 }
-              })(),
+              })()
+            return {
+              fullStream: abortableIterable(fullStream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           return {
@@ -149,6 +150,134 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           parts: [
             { type: "text", text: "Recovered after semantic idle." },
             { type: "step-finish", reason: "stop", tokens: { total: 6, input: 1, output: 5 } },
+          ],
+        })
+      },
+    })
+  }, 30_000)
+
+  test("retries after Tool input chunks that do not mutate the pending draft", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const nativeAgent = await PrimaryAssistantRegistry.get("coding", { config })
+        const agent = sessionRuntimeFromNativeAgent(nativeAgent)
+        const session = await Session.create({ kind: "assistant", title: "Processor unowned delta retry" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          time: { created: Date.now() },
+          agent: "coding",
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const idleSpy = spyOn(EngineConfig, "get").mockResolvedValue({
+          ...EngineConfig.defaults,
+          activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 250 },
+        })
+        let attempts = 0
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
+          attempts += 1
+          if (attempts === 1) {
+            const fullStream = (async function* () {
+              yield { type: "start" }
+              yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
+              yield { type: "text-start", id: "text_owned_by_the_attempt" }
+              const stopAt = Date.now() + 600
+              while (Date.now() < stopAt && !streamInput.abort.aborted) {
+                await new Promise((resolve) => setTimeout(resolve, 25))
+                yield { type: "tool-input-end", id: "call_abandoned" }
+                yield {
+                  type: "tool-input-delta",
+                  id: "call_not_owned_by_the_draft",
+                  delta: '{"path":"ignored"}',
+                }
+                yield {
+                  type: "text-delta",
+                  id: "text_not_owned_by_the_attempt",
+                  text: "ignored",
+                }
+              }
+            })()
+            return {
+              fullStream: abortableIterable(fullStream, streamInput.abort),
+            } as Awaited<ReturnType<typeof LLM.stream>>
+          }
+          return {
+            fullStream: (async function* () {
+              yield { type: "start" }
+              yield { type: "text-start", id: "recovered" }
+              yield { type: "text-end", id: "text_not_owned_by_the_recovered_attempt" }
+              yield { type: "text-delta", id: "recovered", text: "Recovered after unowned Tool deltas." }
+              yield { type: "text-end", id: "recovered" }
+              yield {
+                type: "finish-step",
+                finishReason: "stop",
+                usage: { inputTokens: 1, outputTokens: 6, totalTokens: 7 },
+              }
+              yield {
+                type: "finish",
+                finishReason: "stop",
+                totalUsage: { inputTokens: 1, outputTokens: 6, totalTokens: 7 },
+              }
+            })(),
+          } as Awaited<ReturnType<typeof LLM.stream>>
+        })
+
+        try {
+          await processor.process({
+            user,
+            agentID: "coding",
+            agent,
+            abort,
+            sessionID: session.id,
+            system: [],
+            messages: [],
+            tools: {},
+            model,
+          })
+        } finally {
+          streamSpy.mockRestore()
+          idleSpy.mockRestore()
+        }
+
+        const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        expect({
+          attempts,
+          info: persisted.info,
+          parts: persisted.parts.map((part) =>
+            part.type === "text"
+              ? { type: part.type, text: part.text }
+              : part.type === "step-finish"
+                ? { type: part.type, reason: part.reason, tokens: part.tokens }
+                : { type: part.type },
+          ),
+        }).toMatchObject({
+          attempts: 2,
+          info: { finish: "stop", tokens: { total: 7, input: 1, output: 6 } },
+          parts: [
+            { type: "text", text: "Recovered after unowned Tool deltas." },
+            { type: "step-finish", reason: "stop", tokens: { total: 7, input: 1, output: 6 } },
           ],
         })
       },

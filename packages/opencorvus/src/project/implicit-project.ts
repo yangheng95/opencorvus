@@ -364,10 +364,6 @@ export namespace ImplicitProject {
       return {
         directory: initialized.project.worktree,
         project: initialized.project,
-        discard: async () => {
-          await fs.rm(directory, { recursive: true, force: true })
-          Project.deleteRows([initialized.project.id])
-        },
       }
     } catch (error) {
       await fs.rm(directory, { recursive: true, force: true })

@@ -1,13 +1,13 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import { cp, readFile, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "../src/engine/engine.sql"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
 import { requireCurrentTerminalLifecycleReference } from "../src/engine/terminal-lifecycle-reference"
@@ -20,34 +20,67 @@ import {
   TaskArtifactResourceSetLocatorSchema,
   TaskArtifactRefSchema,
   EngineArtifactEnvelopeSchema,
-  MaterializedExpertSquadPackageSchema,
+  PreparedExpertSquadCandidateSchema,
   ValidatedExpertSquadPackageSchema,
   canonicalTaskRunEvidenceJSON,
   canonicalWorkspaceTreeJSON,
 } from "@opencorvus-ai/plugin"
-import type { EngineArtifactLocator } from "@opencorvus-ai/plugin"
-import { createTaskArtifactStoreExecution, readTaskArtifactSnapshotManifest } from "../src/task-artifact/store"
+import type { ArtifactReadLocator, EngineArtifactLocator } from "@opencorvus-ai/plugin"
+import {
+  createTaskArtifactStoreExecution,
+  publishTaskArtifactProjectFiles,
+  readTaskArtifactSnapshotManifest,
+} from "../src/task-artifact/store"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
 import type { TaskToolExecutionScope } from "../src/tool/task-tool-execution-scope"
 import {
   EvolutionArtifactIntegrityError,
   EvolutionMetricIdentityError,
   EvolutionArtifactSchemas,
+  EvolutionPackagePublishableArtifactInputSchema,
 } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/artifacts"
 import collectRunEvidenceTool from "../../../expert-squads/builtin/evolution-lab/tools/collect-run-evidence"
 import expertSquadPackageTool from "../../../expert-squads/builtin/evolution-lab/tools/expert-squad-package"
-import publishEvolutionArtifactTool from "../../../expert-squads/builtin/evolution-lab/tools/publish-evolution-artifact"
+import publishEvolutionArtifactTool, {
+  assertEvolutionArtifactOwner,
+  evolutionArtifactOwner,
+  requireEvolutionWorkerProducer,
+} from "../../../expert-squads/builtin/evolution-lab/tools/publish-evolution-artifact"
 import executeEvolutionMetricsTool from "../../../expert-squads/builtin/evolution-lab/tools/execute-evolution-metrics"
 import { withTaskScopedPluginToolHost } from "../src/tool/plugin-tool-host"
 import { prepareCrossTaskArtifactImports } from "../src/engine/cross-task-artifact-import"
 import rehydrateEvolutionResourcesTool from "../../../expert-squads/builtin/evolution-lab/tools/rehydrate-evolution-resources"
 import { prepareTaskProcessBinding, readTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
-import { EngineGit, ensureGitignore } from "../src/engine/git"
+import { requireTaskPackageRevisionBinding } from "../src/engine/task-package-revision-binding"
+import { insertPreparedTaskCompletionDecision, prepareTaskCompletionDecision } from "../src/engine/completion-decision"
+import { EngineGit, ensureGitProjectMetadata } from "../src/engine/git"
 import { Worktree } from "../src/worktree"
 import {
   executionCapsuleSourceTreeDigest,
   executionCapsuleSourceTreeSnapshot,
 } from "../src/execution-capsule/tree-digest"
+
+function executePublishEvolutionArtifact(
+  args: Record<string, unknown> & { artifact_type: string; payload: unknown },
+  context: Parameters<typeof publishEvolutionArtifactTool.execute>[1],
+) {
+  const { artifact_type, payload, ...publication } = args
+  const artifactOwner = {
+    "evolution-lab/opportunity": "evolution-observer",
+    "evolution-lab/failure-attribution": "evolution-failure-analyst",
+    "evolution-lab/campaign-spec": "evolution-experiment-planner",
+    "evolution-lab/candidate-revision": "evolution-candidate-author",
+    "evolution-lab/run-evidence-bundle": "evolution-evaluator",
+    "evolution-lab/evaluation-result": "evolution-safety-auditor",
+    "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
+  } as const
+  return publishEvolutionArtifactTool.execute(
+    { artifact: { artifact_type, payload, ...publication } } as Parameters<
+      typeof publishEvolutionArtifactTool.execute
+    >[0],
+    { ...context, agent: artifactOwner[artifact_type as keyof typeof artifactOwner] },
+  )
+}
 
 let project: Awaited<ReturnType<typeof memoryProject>> | undefined
 
@@ -57,7 +90,7 @@ async function sharedProject() {
 }
 
 async function taskProcessBinding(taskID: string, packageDigest: string, timeCreated: number) {
-  await ensureGitignore()
+  await ensureGitProjectMetadata()
   return prepareTaskProcessBinding({
     mode: "native",
     taskID,
@@ -68,12 +101,158 @@ async function taskProcessBinding(taskID: string, packageDigest: string, timeCre
   })
 }
 
+async function completeFixtureTaskWithDeliverables(input: {
+  taskID: string
+  sessionID: string
+  deliverableArtifactLocators: ArtifactReadLocator[]
+  completedAt: number
+}) {
+  const packageRevision = requireTaskPackageRevisionBinding(input.taskID)
+  await Session.mergeMetadata({
+    sessionID: input.sessionID,
+    patch: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
+  })
+  const userMessage = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: input.sessionID,
+    role: "user",
+    author: "orchestrator",
+    time: { created: input.completedAt - 2 },
+    agent: "orchestrator",
+    model: { providerID: "test", modelID: "test" },
+  })
+  const message = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: input.sessionID,
+    parentID: userMessage.id,
+    role: "assistant",
+    author: "orchestrator",
+    time: { created: input.completedAt - 1 },
+    agent: "orchestrator",
+    providerID: "test",
+    modelID: "test",
+    path: { cwd: Instance.directory, root: Instance.directory },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+  })
+  const toolCallID = `call-complete-fixture-${input.taskID}`
+  const part = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: input.sessionID,
+    messageID: message.id,
+    type: "tool",
+    callID: toolCallID,
+    tool: "complete_task",
+    state: { status: "running", input: {}, time: { start: input.completedAt - 1 } },
+  })
+  const prepared = await prepareTaskCompletionDecision({
+    taskID: input.taskID,
+    visibleToolName: "complete_task",
+    payload: {
+      orchestrator_session_id: input.sessionID,
+      orchestrator_message_id: message.id,
+      tool_call_id: toolCallID,
+      tool_part_id: part.id,
+      evidence_locators: input.deliverableArtifactLocators,
+      deliverable_artifact_locators: input.deliverableArtifactLocators,
+      accepted_delivery_slice_revision_ids: [],
+      workflow_binding: { kind: "direct", package_revision: packageRevision },
+      time_recorded: input.completedAt,
+    },
+  })
+  Database.transaction((db) => {
+    const terminal = db
+      .update(EngineTaskTable)
+      .set({ time_completed: input.completedAt, error: null, time_updated: input.completedAt })
+      .where(eq(EngineTaskTable.id, input.taskID))
+      .returning()
+      .get()
+    if (!terminal) throw new Error(`Fixture Task ${input.taskID} does not exist`)
+    insertPreparedTaskCompletionDecision(db, prepared, terminal)
+  })
+}
+
 afterAll(async () => {
   if (project) await project[Symbol.asyncDispose]()
   await resetMemoryDatabase()
 })
 
-describe("Evolution Artifact and exact evidence Host", () => {
+describe.serial("Evolution Artifact and exact evidence Host", () => {
+  test("binds every typed Evolution Artifact to its single declared worker owner", () => {
+    expect(evolutionArtifactOwner).toEqual({
+      "evolution-lab/opportunity": "evolution-observer",
+      "evolution-lab/failure-attribution": "evolution-failure-analyst",
+      "evolution-lab/campaign-spec": "evolution-experiment-planner",
+      "evolution-lab/candidate-revision": "evolution-candidate-author",
+      "evolution-lab/run-evidence-bundle": "evolution-evaluator",
+      "evolution-lab/evaluation-result": "evolution-safety-auditor",
+      "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
+    })
+    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer")).not.toThrow()
+    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-failure-analyst")).toThrow(
+      new EvolutionArtifactIntegrityError(
+        "evolution-lab/opportunity must be published by Evolution Lab worker evolution-observer",
+      ),
+    )
+  })
+
+  test("preserves the exact Evolution worker authority through one immutable cross-Task import", () => {
+    const workerProducer = {
+      owner_kind: "projected-worker" as const,
+      expert_squad_id: "evolution-lab",
+      package_revision: {
+        scope: "project" as const,
+        project_id: "project-1",
+        namespace: "builtin",
+        id: "evolution-lab",
+        version: "2026.08.13.1",
+        package_digest: "a".repeat(64),
+      },
+      agent_id: "evolution-observer",
+      projection_hash: "b".repeat(64),
+      session_id: "session-source",
+      message_id: "message-source",
+      tool_call_id: "call-source",
+    }
+    const importedEnvelope = EngineArtifactEnvelopeSchema.parse({
+      artifact_type: "evolution-lab/opportunity",
+      schema_version: 1,
+      producer: {
+        owner_kind: "mission",
+        mission_id: "mission-1",
+        session_id: "session-mission",
+        message_id: "message-import",
+        tool_call_id: "call-import",
+      },
+      payload: {},
+      resources: [],
+      observed_artifact_locators: [],
+      source_artifact_locators: [],
+      import_lineage: {
+        source_task_id: "task-source",
+        source_locator: {
+          source: "engine_artifact",
+          artifact_id: "artifact-source",
+          catalog_revision: 1,
+          expected_sha256: "c".repeat(64),
+        },
+        source_kind: "expert_output",
+        source_producer: workerProducer,
+        source_provenance: {
+          observed_artifact_locators: [],
+          source_artifact_locators: [],
+        },
+      },
+    })
+
+    expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-observer")).not.toThrow()
+    expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-failure-analyst")).toThrow(
+      new EvolutionArtifactIntegrityError(
+        "evolution-lab/opportunity must be produced by Evolution Lab worker evolution-failure-analyst",
+      ),
+    )
+  })
+
   test("parses all eight package-owned evolution Artifact ABI values", () => {
     const digest = "b".repeat(64)
     const revision = { namespace: "acme", id: "target", version: "2026.08.06.1", package_digest: digest }
@@ -423,6 +602,10 @@ describe("Evolution Artifact and exact evidence Host", () => {
       [
         { path: "cases", message: "campaign case identifiers must be unique portable path segments" },
         {
+          path: "budget.max_runs",
+          message: "campaign run budget must cover the complete two-arm matrix (8 runs)",
+        },
+        {
           path: "frozen_inputs.cases",
           message: "frozen campaign case identifiers must be unique portable path segments",
         },
@@ -509,12 +692,41 @@ describe("Evolution Artifact and exact evidence Host", () => {
         const loaded = await ExpertSquadRegistry.loadSourcePackage(
           path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab"),
         )
+        const publisherSchema = publishEvolutionArtifactTool.introspect().inputSchema as {
+          required?: string[]
+          properties?: Record<
+            string,
+            {
+              oneOf?: Array<{ properties?: Record<string, { const?: string }>; required?: string[] }>
+            }
+          >
+        }
+        expect(Object.keys(publisherSchema.properties ?? {})).toEqual(["artifact"])
+        expect(publisherSchema.required).toEqual(["artifact"])
+        const publicationBranches = publisherSchema.properties?.artifact?.oneOf ?? []
+        expect(publicationBranches.map((branch) => branch.properties?.artifact_type?.const)).toEqual(
+          EvolutionPackagePublishableArtifactInputSchema.options.map((branch) => branch.shape.artifact_type.value),
+        )
+        expect(
+          publicationBranches.every(
+            (branch) => branch.required?.join("|") === "artifact_type|payload|resource_set|source_artifact_locators",
+          ),
+        ).toBe(true)
+        const attributionBranch = publicationBranches.find(
+          (branch) => branch.properties?.artifact_type?.const === "evolution-lab/failure-attribution",
+        )
+        expect(attributionBranch?.required).toEqual([
+          "artifact_type",
+          "payload",
+          "resource_set",
+          "source_artifact_locators",
+        ])
         const session = await Session.create({ kind: "root", title: "Evolution typed ABI chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        const missionID = Identifier.ascending("mission")
+        const missionID = "evolution-abi-chain"
         const missionSessionID = Identifier.ascending("session")
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -525,7 +737,6 @@ describe("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -536,7 +747,6 @@ describe("Evolution Artifact and exact evidence Host", () => {
           },
           executionCapsuleBinding: await taskProcessBinding(taskID, loaded.packageDigest, started),
         })
-        const digest = "f".repeat(64)
         const userMessage = await Session.updateMessage({
           id: "message-user-authority",
           sessionID: session.id,
@@ -572,10 +782,15 @@ describe("Evolution Artifact and exact evidence Host", () => {
           scope: "project" as const,
           project_id: Instance.project.id,
           project_directory: project.path,
-          namespace: "acme",
-          id: "target",
+          namespace: loaded.namespace,
+          id: loaded.id,
         }
-        const revision = { namespace: "acme", id: "target", version: "2026.08.06.1", package_digest: digest }
+        const revision = {
+          namespace: loaded.namespace,
+          id: loaded.id,
+          version: loaded.manifest.version,
+          package_digest: loaded.packageDigest,
+        }
         const scope: TaskToolExecutionScope = {
           kind: "task" as const,
           projectID: Instance.project.id,
@@ -605,11 +820,16 @@ describe("Evolution Artifact and exact evidence Host", () => {
           },
         }
 
+        let sourceOpportunityLocator!: EngineArtifactLocator
+        let sourceAttributionLocator!: EngineArtifactLocator
         let sourceCampaignLocator!: EngineArtifactLocator
         let sourceRunLocator!: EngineArtifactLocator
+        let sourceOpportunityInput!: Record<string, unknown>
+        let sourceCampaignInput!: Record<string, unknown>
         await withTaskScopedPluginToolHost(scope, async (host) => {
+          ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
           const opportunityReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/opportunity",
                 payload: {
@@ -635,6 +855,24 @@ describe("Evolution Artifact and exact evidence Host", () => {
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          sourceOpportunityLocator = opportunityReceipt.locator as EngineArtifactLocator
+          sourceOpportunityInput = {
+            target,
+            current_revision: revision,
+            trigger: { type: "user", identity: "message-user-authority" },
+            evidence: [],
+            observable_symptom: "Repeated incomplete delivery",
+            impact_scope: "target workflow",
+            frequency: "3 of 5 runs",
+            data_window: {
+              started_at: "2026-08-01T00:00:00.000Z",
+              ended_at: "2026-08-06T00:00:00.000Z",
+            },
+            owner_hypothesis: "Target prompt contract",
+            unknowns: ["provider variance"],
+            sensitivity: "internal",
+            suggested_budget: { runs: 4, max_cost: 12 },
+          }
           const read = await host.engineArtifacts.read({
             locator: opportunityReceipt.locator,
             byte_offset: 0,
@@ -646,22 +884,53 @@ describe("Evolution Artifact and exact evidence Host", () => {
             locator: opportunityReceipt.locator,
             purpose: "Exact opportunity predecessor for causal attribution",
           })
-          const attributionReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+          ;(scope.owner as { agentID: string }).agentID = "evolution-failure-analyst"
+          const attributionPayload = {
+            symptom: "Incomplete delivery",
+            direct_trigger: "Missing source selection",
+            root_cause: "Prompt omitted exact evidence requirement",
+            causal_chain: ["The prompt omitted selection", "The worker completed with partial evidence"],
+            owner_evidence: [opportunityReceipt.locator],
+            prior_path_failure: "Earlier edits changed narration only",
+            competing_hypotheses: ["Provider variance"],
+            disproved_hypotheses: ["Workspace corruption"],
+            affected_surface: ["agents/worker/system.md"],
+            unknowns: ["holdout behavior"],
+          }
+          const attributionCountBefore = Database.use(
+            (db) =>
+              db
+                .select({ id: EngineArtifactTable.id })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.catalog_artifact_type, "evolution-lab/failure-attribution"))
+                .all().length,
+          )
+          await expect(
+            executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/failure-attribution",
-                payload: {
-                  symptom: "Incomplete delivery",
-                  direct_trigger: "Missing source selection",
-                  root_cause: "Prompt omitted exact evidence requirement",
-                  causal_chain: ["The prompt omitted selection", "The worker completed with partial evidence"],
-                  owner_evidence: [opportunityReceipt.locator],
-                  prior_path_failure: "Earlier edits changed narration only",
-                  competing_hypotheses: ["Provider variance"],
-                  disproved_hypotheses: ["Workspace corruption"],
-                  affected_surface: ["agents/worker/system.md"],
-                  unknowns: ["holdout behavior"],
-                },
+                payload: attributionPayload,
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow("failure-attribution requires exactly one opportunity Engine Artifact source")
+          expect(
+            Database.use(
+              (db) =>
+                db
+                  .select({ id: EngineArtifactTable.id })
+                  .from(EngineArtifactTable)
+                  .where(eq(EngineArtifactTable.catalog_artifact_type, "evolution-lab/failure-attribution"))
+                  .all().length,
+            ),
+          ).toBe(attributionCountBefore)
+          const attributionReceipt = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/failure-attribution",
+                payload: attributionPayload,
                 resource_set: null,
                 source_artifact_locators: [opportunityReceipt.locator],
               },
@@ -669,26 +938,31 @@ describe("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(attributionReceipt.artifact_type).toBe("evolution-lab/failure-attribution")
+          sourceAttributionLocator = attributionReceipt.locator as EngineArtifactLocator
+          const attributionRead = await host.engineArtifacts.read({
+            locator: attributionReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(attributionRead.chunk.complete).toBe(true)
           expect(
-            (
-              await host.engineArtifacts.read({
-                locator: attributionReceipt.locator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-            ).chunk.complete,
-          ).toBe(true)
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(attributionRead.chunk.text!)).source_artifact_locators,
+          ).toEqual([opportunityReceipt.locator])
           await host.engineArtifacts.select({
             locator: attributionReceipt.locator,
             purpose: "Exact causal attribution for the frozen campaign specification",
           })
           const trialWorktree = await Worktree.create({ name: `evolution-trial-${taskID}` })
-          await ensureGitignore(trialWorktree.directory)
+          await ensureGitProjectMetadata(trialWorktree.directory)
+          await mkdir(path.join(trialWorktree.directory, "subject"), { recursive: true })
+          await writeFile(
+            path.join(trialWorktree.directory, "subject", "decision-ledger.mjs"),
+            "export const decision = 'trial-workspace-only'\n",
+          )
           const campaignWorkspaceSnapshot = canonicalWorkspaceTreeJSON(
             await executionCapsuleSourceTreeSnapshot(trialWorktree.directory),
           )
-          const campaignInputStage = await host.taskArtifacts.stage({ trees: ["campaign-inputs"] })
           const campaignInputNames = [
             "dataset.json",
             "case-1.json",
@@ -698,99 +972,96 @@ describe("Evolution Artifact and exact evidence Host", () => {
             "permission-snapshot.json",
             "scorer-correctness.json",
           ].sort()
+          const campaignInputPaths = campaignInputNames.map((name) => `campaign-inputs/${name}`)
+          await mkdir(path.join(project.path, "campaign-inputs"), { recursive: true })
+          const campaignInputContents = new Map<string, string>([
+            ["dataset.json", JSON.stringify({ schema_version: 1, partition: "development" })],
+            ["case-1.json", JSON.stringify({ schema_version: 1, case_id: "case-1" })],
+            [
+              "model-configuration.json",
+              JSON.stringify({
+                schema_version: 1,
+                provider_id: "provider",
+                model_id: "model",
+                streaming: true,
+                retries: 0,
+                inactivity_timeout_ms: 60_000,
+                max_evidence_bytes: 65_536,
+              }),
+            ],
+            ["environment.json", JSON.stringify({ schema_version: 1, runtime: "isolated-test" })],
+            ["workspace-template.json", campaignWorkspaceSnapshot],
+            ["permission-snapshot.json", JSON.stringify({ schema_version: 1, granted_permissions: [] })],
+            [
+              "scorer-correctness.json",
+              JSON.stringify({
+                schema_version: 1,
+                scorer_id: "correctness",
+                evaluator_kind: "query",
+                direction: "higher_better",
+                target: 1,
+                floor: 0,
+                weight: 1,
+                unit: "ratio",
+                observation_class: "quality",
+                description: "Exact correctness observation",
+                query: "constant_value",
+                value: 1,
+              }),
+            ],
+          ])
           for (const name of campaignInputNames)
-            await writeFile(
-              path.join(campaignInputStage.treeDirectories["campaign-inputs"]!, name),
-              name === "workspace-template.json" ? campaignWorkspaceSnapshot : JSON.stringify({ name, frozen: true }),
-            )
-          const campaignInputPublication = await host.taskArtifacts.publish(campaignInputStage, {
-            snapshot_kind: "catalog",
-            files: campaignInputNames.map((name) => ({
-              tree: "campaign-inputs",
-              path: name,
-              media_type: "application/json",
+            await writeFile(path.join(project.path, "campaign-inputs", name), campaignInputContents.get(name)!)
+          const campaignInputPublication = await publishTaskArtifactProjectFiles({
+            scope,
+            source: { kind: "current_task_project" },
+            files: campaignInputPaths.toReversed().map((inputPath) => ({
+              path: inputPath,
+              mediaType: "application/json",
             })),
           })
           const campaignInputResourceSet = TaskArtifactResourceSetLocatorSchema.parse({
             snapshot: campaignInputPublication.snapshot,
-            tree: "campaign-inputs",
+            tree: "resources",
           })
+          expect(campaignInputPublication.artifacts.map((resource) => resource.path)).toEqual(campaignInputPaths)
           const campaignInput = new Map(campaignInputPublication.artifacts.map((resource) => [resource.path, resource]))
-          const datasetResource = campaignInput.get("dataset.json")!
-          const caseResource = campaignInput.get("case-1.json")!
-          const modelConfigurationResource = campaignInput.get("model-configuration.json")!
-          const environmentResource = campaignInput.get("environment.json")!
-          const workspaceResource = campaignInput.get("workspace-template.json")!
-          const permissionResource = campaignInput.get("permission-snapshot.json")!
-          const scorerResource = campaignInput.get("scorer-correctness.json")!
+          const datasetResource = campaignInput.get("campaign-inputs/dataset.json")!
+          const caseResource = campaignInput.get("campaign-inputs/case-1.json")!
+          const modelConfigurationResource = campaignInput.get("campaign-inputs/model-configuration.json")!
+          const environmentResource = campaignInput.get("campaign-inputs/environment.json")!
+          const workspaceResource = campaignInput.get("campaign-inputs/workspace-template.json")!
+          const permissionResource = campaignInput.get("campaign-inputs/permission-snapshot.json")!
+          const scorerResource = campaignInput.get("campaign-inputs/scorer-correctness.json")!
           const campaignWorkspaceTreeSHA256 = await executionCapsuleSourceTreeDigest(trialWorktree.directory)
           ;(scope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
+          const campaignDraft = {
+            candidate_version_policy: "increment the dated revision ordinal",
+            candidate_hypothesis: "Exact evidence language closes the gap",
+            dataset_partition: "development" as const,
+            resource_roles: {
+              dataset_path: datasetResource.path,
+              cases: [{ case_id: "case-1", resource_path: caseResource.path }],
+              model_configuration_path: modelConfigurationResource.path,
+              environment_path: environmentResource.path,
+              workspace_template_path: workspaceResource.path,
+              permission_snapshot_path: permissionResource.path,
+              scorer_assets: [{ scorer_id: "correctness", resource_path: scorerResource.path }],
+            },
+            external_side_effect_policy: "No production side effects",
+            repetitions: 1,
+            arm_order: ["baseline", "candidate"] as const,
+            statistics: "paired mean and variance",
+            budget: { max_runs: 2, max_cost: 12 },
+          }
+          sourceCampaignInput = campaignDraft
           const campaignReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/campaign-spec",
-                payload: {
-                  target,
-                  baseline_revision: revision,
-                  candidate_version_policy: "increment the dated revision ordinal",
-                  candidate_hypothesis: "Exact evidence language closes the gap",
-                  dataset_partition: "development",
-                  dataset_digest: datasetResource.sha256,
-                  cases: ["case-1"],
-                  scorer_digests: [scorerResource.sha256],
-                  scorers: [
-                    {
-                      scorer_id: "correctness",
-                      scorer_revision: scorerResource.sha256,
-                      scope: "global",
-                      goal_id: null,
-                      description: "Exact correctness observation",
-                      unit: "ratio",
-                      direction: "higher_better",
-                      target: 1,
-                      floor: 0,
-                      weight: 1,
-                      observation_class: "quality",
-                      evaluator_kind: "query",
-                      evaluator_config: {
-                        scorer_revision: scorerResource.sha256,
-                        query: "constant_value",
-                        value: 1,
-                      },
-                    },
-                  ],
-                  frozen_inputs: {
-                    dataset: datasetResource,
-                    cases: [{ case_id: "case-1", resource: caseResource }],
-                    model_configuration: modelConfigurationResource,
-                    environment: environmentResource,
-                    workspace_template: workspaceResource,
-                    permission_snapshot: permissionResource,
-                    scorer_assets: [
-                      {
-                        scorer_id: "correctness",
-                        scorer_revision: scorerResource.sha256,
-                        resource: scorerResource,
-                      },
-                    ],
-                  },
-                  model: "provider/model",
-                  model_configuration_digest: modelConfigurationResource.sha256,
-                  environment_digest: environmentResource.sha256,
-                  workspace_digest: campaignWorkspaceTreeSHA256,
-                  permission_snapshot_digest: permissionResource.sha256,
-                  external_side_effect_policy: "No production side effects",
-                  repetitions: 1,
-                  arm_order: ["baseline", "candidate"],
-                  statistics: "paired mean and variance",
-                  budget: { max_runs: 2, max_cost: 12 },
-                  inactivity_timeout_ms: 60_000,
-                  ui_rubric_digest: null,
-                  mutable_paths: ["README.md"],
-                  trial_execution: { status: "available", installation_scope: "project" },
-                },
+                payload: campaignDraft,
                 resource_set: campaignInputResourceSet,
-                source_artifact_locators: [attributionReceipt.locator],
+                source_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
               },
               { host } as never,
             ),
@@ -803,24 +1074,166 @@ describe("Evolution Artifact and exact evidence Host", () => {
             delivery: "inline",
           })
           const campaignEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(campaignEnvelopeRead.chunk.text!))
+          const persistedCampaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
+            campaignEnvelope.payload,
+          )
+          expect(persistedCampaign).toMatchObject({
+            target,
+            baseline_revision: revision,
+            dataset_digest: datasetResource.sha256,
+            scorer_digests: [scorerResource.sha256],
+            model: "provider/model",
+            model_configuration_digest: modelConfigurationResource.sha256,
+            environment_digest: environmentResource.sha256,
+            workspace_digest: campaignWorkspaceTreeSHA256,
+            permission_snapshot_digest: permissionResource.sha256,
+            inactivity_timeout_ms: 60_000,
+            ui_rubric_digest: null,
+            trial_execution: { status: "available", installation_scope: "project" },
+          })
+          expect(persistedCampaign.mutable_paths).toEqual(
+            candidateMutableTextPaths(
+              await host.expertSquadPackages.inspectRevision({
+                revision: { package_digest: revision.package_digest },
+              }),
+            ),
+          )
+          expect(persistedCampaign.scorers[0]).toMatchObject({
+            scorer_id: "correctness",
+            scorer_revision: scorerResource.sha256,
+            evaluator_kind: "query",
+            evaluator_config: {
+              scorer_revision: scorerResource.sha256,
+              query: "constant_value",
+              value: 1,
+            },
+          })
           await expect(
-            publishEvolutionArtifactTool.execute(
+            executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/campaign-spec",
                 payload: {
-                  ...campaignEnvelope.payload,
-                  frozen_inputs: {
-                    ...(campaignEnvelope.payload as { frozen_inputs: Record<string, unknown> }).frozen_inputs,
-                    dataset: caseResource,
+                  ...campaignDraft,
+                  resource_roles: {
+                    ...campaignDraft.resource_roles,
+                    dataset_path: caseResource.path,
                   },
-                  dataset_digest: caseResource.sha256,
                 },
                 resource_set: campaignInputResourceSet,
-                source_artifact_locators: [attributionReceipt.locator],
+                source_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
               },
               { host } as never,
             ),
           ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
+          ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
+          const builtInOpportunity = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/opportunity",
+                payload: {
+                  ...EvolutionArtifactSchemas["evolution-lab/opportunity"].parse({
+                    target,
+                    current_revision: revision,
+                    trigger: { type: "user", identity: "message-user-authority" },
+                    evidence: [],
+                    observable_symptom: "Repeated incomplete delivery",
+                    impact_scope: "target workflow",
+                    frequency: "3 of 5 runs",
+                    data_window: {
+                      started_at: "2026-08-01T00:00:00.000Z",
+                      ended_at: "2026-08-06T00:00:00.000Z",
+                    },
+                    owner_hypothesis: "Target prompt contract",
+                    unknowns: ["provider variance"],
+                    sensitivity: "internal",
+                    suggested_budget: { runs: 4, max_cost: 12 },
+                  }),
+                  target: {
+                    scope: "built_in",
+                    project_id: null,
+                    project_directory: null,
+                    namespace: loaded.namespace,
+                    id: loaded.id,
+                  },
+                  current_revision: {
+                    namespace: loaded.namespace,
+                    id: loaded.id,
+                    version: loaded.manifest.version,
+                    package_digest: loaded.packageDigest,
+                  },
+                },
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          await host.engineArtifacts.read({
+            locator: builtInOpportunity.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          await host.engineArtifacts.select({
+            locator: builtInOpportunity.locator,
+            purpose: "Exact built-in opportunity for scope-derived campaign execution",
+          })
+          ;(scope.owner as { agentID: string }).agentID = "evolution-failure-analyst"
+          const builtInAttribution = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/failure-attribution",
+                payload: {
+                  symptom: "Incomplete delivery",
+                  direct_trigger: "Missing source selection",
+                  root_cause: "Prompt omitted exact evidence requirement",
+                  causal_chain: ["The prompt omitted selection", "The run completed with partial evidence"],
+                  owner_evidence: [builtInOpportunity.locator],
+                  prior_path_failure: "Earlier edits changed narration only",
+                  competing_hypotheses: ["Provider variance"],
+                  disproved_hypotheses: ["Workspace corruption"],
+                  affected_surface: ["agents/worker/system.md"],
+                  unknowns: ["holdout behavior"],
+                },
+                resource_set: null,
+                source_artifact_locators: [builtInOpportunity.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          await host.engineArtifacts.read({
+            locator: builtInAttribution.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          await host.engineArtifacts.select({
+            locator: builtInAttribution.locator,
+            purpose: "Exact built-in attribution for scope-derived campaign execution",
+          })
+          ;(scope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
+          const builtInCampaign = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: campaignDraft,
+                resource_set: campaignInputResourceSet,
+                source_artifact_locators: [builtInOpportunity.locator, builtInAttribution.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const builtInCampaignRead = await host.engineArtifacts.read({
+            locator: builtInCampaign.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(
+            EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
+              EngineArtifactEnvelopeSchema.parse(JSON.parse(builtInCampaignRead.chunk.text!)).payload,
+            ).trial_execution,
+          ).toEqual({ status: "unavailable", reason_code: "product_release_required" })
           const trial = await Instance.provide({
             directory: trialWorktree.directory,
             fn: async () => {
@@ -828,132 +1241,135 @@ describe("Evolution Artifact and exact evidence Host", () => {
               const trialTaskID = Identifier.ascending("task")
               const trialStarted = started + 10
               const trialCompleted = trialStarted + 1
-              persistQueuedTask({
-            taskID: trialTaskID,
-            sessionID: trialSession.id,
-            now: trialStarted - 1,
-            title: "Frozen baseline Trial",
-            request: "Execute case-1 against the exact baseline revision",
-            productPillar: "code",
-            source: "test",
-            priority: "normal",
-            metadata: {},
-            projectID: Instance.project.id,
-            queue: true,
-            packageRevision: {
-              scope: "project",
-              projectID: Instance.project.id,
-              namespace: "acme",
-              id: "target",
-              version: revision.version,
-              packageDigest: revision.package_digest,
-            },
-            creationExpectedPackageDigest: revision.package_digest,
-            executionCapsuleBinding: await taskProcessBinding(trialTaskID, revision.package_digest, trialStarted - 1),
-          })
-              const trialBaseline = await EngineGit.prepare(requireTask(trialTaskID))
-              if (trialBaseline.error) throw new Error(trialBaseline.error)
-              const trialArtifactExecution = createTaskArtifactStoreExecution({
-            kind: "task",
-            projectID: Instance.project.id,
-            projectDirectory: trialWorktree.directory,
-            taskID: trialTaskID,
-            taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(trialWorktree.directory, trialTaskID),
-            sessionID: trialSession.id,
-            messageID: "message-trial-artifact",
-            toolCallID: "call-trial-artifact",
-            toolPartID: "part-trial-artifact",
-            executionSurface: {},
-            owner: {
-              kind: "projected-worker",
-              expertSquadID: "target",
-              packageRevision: {
-                scope: "project",
+              persistTask({
+                taskID: trialTaskID,
+                sessionID: trialSession.id,
+                now: trialStarted - 1,
+                title: "Frozen baseline Trial",
+                request: "Execute case-1 against the exact baseline revision",
+                productPillar: "code",
+                source: "test",
+                priority: "normal",
+                metadata: { actor: "user" },
                 projectID: Instance.project.id,
-                namespace: "acme",
-                id: "target",
-                version: revision.version,
-                packageDigest: revision.package_digest,
-              },
-              agentID: "target-worker",
-              projectionHash: "1".repeat(64),
-              workerTurnDescriptorID: "descriptor-trial",
-              workerTurnDescriptorHash: "2".repeat(64),
-            },
-          } as unknown as TaskToolExecutionScope)
-              const trialStage = await trialArtifactExecution.stage({ trees: ["result"] })
-          await writeFile(
-            path.join(trialStage.treeDirectories.result!, "case-1.json"),
-            JSON.stringify({ name: "case-1.json", frozen: true }),
-          )
-          await writeFile(path.join(trialStage.treeDirectories.result!, "result.txt"), "exact baseline result")
-          await trialArtifactExecution.publish(trialStage, {
-            snapshot_kind: "catalog",
-            files: [
-              { tree: "result", path: "case-1.json", media_type: "application/json" },
-              { tree: "result", path: "result.txt", media_type: "text/plain" },
-            ],
-          })
-          await trialArtifactExecution.close()
-          recordEngineArtifact({
-            taskID: trialTaskID,
-            kind: "dispatch_lineage",
-            label: "Frozen baseline Trial workflow binding",
-            payload: {
-              adapter_input: {},
-              workflow_binding: {
-                kind: "direct",
-                package_revision: {
+                packageRevision: {
                   scope: "project",
-                  project_id: Instance.project.id,
+                  projectID: Instance.project.id,
                   namespace: "acme",
                   id: "target",
                   version: revision.version,
-                  package_digest: revision.package_digest,
+                  packageDigest: revision.package_digest,
                 },
-              },
-            },
-          })
-          const trialUser = await Session.updateMessage({
-            id: Identifier.ascending("message"),
-            sessionID: trialSession.id,
-            role: "user",
-            author: "user",
-            time: { created: trialStarted },
-            agent: "user",
-            model: { providerID: "test", modelID: "test" },
-          })
-          const trialAssistant = await Session.updateMessage({
-            id: Identifier.ascending("message"),
-            sessionID: trialSession.id,
-            role: "assistant",
-            author: "target-worker",
-            time: { created: trialStarted, completed: trialCompleted },
-            parentID: trialUser.id,
-            modelID: "test",
-            providerID: "test",
-            agent: "target-worker",
-            path: { cwd: trialWorktree.directory, root: trialWorktree.directory },
-            cost: 0,
-            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-            finish: "stop",
-          })
-          await terminalTask(
-            requireTask(trialTaskID),
-            {
-              status: "failed",
-              time_started: trialStarted,
-              time_completed: trialCompleted,
-              error: "fixture terminal Trial",
-            },
-            "Exact baseline Trial reached a terminal fixture outcome",
-          )
-          const trialLifecycle = requireCurrentTerminalLifecycleReference(trialTaskID)
-          const terminalOccurrence = {
-            status: "failed" as const,
-            lifecycle: trialLifecycle,
-            completion_decision_artifact_id: null,
-          }
+                creationExpectedPackageDigest: revision.package_digest,
+                executionCapsuleBinding: await taskProcessBinding(
+                  trialTaskID,
+                  revision.package_digest,
+                  trialStarted - 1,
+                ),
+              })
+              const trialBaseline = await EngineGit.prepare(requireTask(trialTaskID))
+              if (trialBaseline.error) throw new Error(trialBaseline.error)
+              const trialArtifactExecution = createTaskArtifactStoreExecution({
+                kind: "task",
+                projectID: Instance.project.id,
+                projectDirectory: trialWorktree.directory,
+                taskID: trialTaskID,
+                taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(trialWorktree.directory, trialTaskID),
+                sessionID: trialSession.id,
+                messageID: "message-trial-artifact",
+                toolCallID: "call-trial-artifact",
+                toolPartID: "part-trial-artifact",
+                executionSurface: {},
+                owner: {
+                  kind: "projected-worker",
+                  expertSquadID: "target",
+                  packageRevision: {
+                    scope: "project",
+                    projectID: Instance.project.id,
+                    namespace: "acme",
+                    id: "target",
+                    version: revision.version,
+                    packageDigest: revision.package_digest,
+                  },
+                  agentID: "target-worker",
+                  projectionHash: "1".repeat(64),
+                  workerTurnDescriptorID: "descriptor-trial",
+                  workerTurnDescriptorHash: "2".repeat(64),
+                },
+              } as unknown as TaskToolExecutionScope)
+              const trialStage = await trialArtifactExecution.stage({ trees: ["result"] })
+              await writeFile(
+                path.join(trialStage.treeDirectories.result!, "case-1.json"),
+                campaignInputContents.get("case-1.json")!,
+              )
+              await writeFile(path.join(trialStage.treeDirectories.result!, "result.txt"), "exact baseline result")
+              await trialArtifactExecution.publish(trialStage, {
+                snapshot_kind: "catalog",
+                files: [
+                  { tree: "result", path: "case-1.json", media_type: "application/json" },
+                  { tree: "result", path: "result.txt", media_type: "text/plain" },
+                ],
+              })
+              await trialArtifactExecution.close()
+              recordEngineArtifact({
+                taskID: trialTaskID,
+                kind: "dispatch_lineage",
+                label: "Frozen baseline Trial workflow binding",
+                payload: {
+                  adapter_input: {},
+                  workflow_binding: {
+                    kind: "direct",
+                    package_revision: {
+                      scope: "project",
+                      project_id: Instance.project.id,
+                      namespace: "acme",
+                      id: "target",
+                      version: revision.version,
+                      package_digest: revision.package_digest,
+                    },
+                  },
+                },
+              })
+              const trialUser = await Session.updateMessage({
+                id: Identifier.ascending("message"),
+                sessionID: trialSession.id,
+                role: "user",
+                author: "user",
+                time: { created: trialStarted },
+                agent: "user",
+                model: { providerID: "test", modelID: "test" },
+              })
+              const trialAssistant = await Session.updateMessage({
+                id: Identifier.ascending("message"),
+                sessionID: trialSession.id,
+                role: "assistant",
+                author: "target-worker",
+                time: { created: trialStarted, completed: trialCompleted },
+                parentID: trialUser.id,
+                modelID: "test",
+                providerID: "test",
+                agent: "target-worker",
+                path: { cwd: trialWorktree.directory, root: trialWorktree.directory },
+                cost: 0,
+                tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+                finish: "stop",
+              })
+              await terminalTask(
+                requireTask(trialTaskID),
+                {
+                  status: "failed",
+                  time_started: trialStarted,
+                  time_completed: trialCompleted,
+                  error: "fixture terminal Trial",
+                },
+                "Exact baseline Trial reached a terminal fixture outcome",
+              )
+              const trialLifecycle = requireCurrentTerminalLifecycleReference(trialTaskID)
+              const terminalOccurrence = {
+                status: "failed" as const,
+                lifecycle: trialLifecycle,
+                completion_decision_artifact_id: null,
+              }
               return {
                 trialSession,
                 trialTaskID,
@@ -999,9 +1415,10 @@ describe("Evolution Artifact and exact evidence Host", () => {
           }
           const collectorResourceSet = TaskArtifactResourceSetLocatorSchema.parse(collectorReceipt.resource_set)
           const trialProcessBinding = readTaskProcessBinding(trialTaskID)
-          const trialInitialTreeSHA256 = trialProcessBinding.protocol === "task-native-process-binding-v1"
-            ? trialProcessBinding.initial_tree_sha256
-            : trialProcessBinding.workspace.initial_tree_sha256
+          const trialInitialTreeSHA256 =
+            trialProcessBinding.protocol === "task-native-process-binding-v1"
+              ? trialProcessBinding.initial_tree_sha256
+              : trialProcessBinding.workspace.initial_tree_sha256
           const runArtifactPayload = {
             case_id: "case-1",
             arm: "baseline" as const,
@@ -1028,7 +1445,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           }
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const runReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runArtifactPayload,
@@ -1040,7 +1457,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           sourceRunLocator = runReceipt.locator as EngineArtifactLocator
           const mislabeledRunReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: { ...runArtifactPayload, arm: "candidate" },
@@ -1118,7 +1535,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             purpose: "Exact metric execution evidence for the baseline arm",
           })
           await expect(
-            publishEvolutionArtifactTool.execute(
+            executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/evaluation-result",
                 payload: {
@@ -1142,7 +1559,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const evaluationReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/evaluation-result",
                 payload: {
@@ -1178,9 +1595,9 @@ describe("Evolution Artifact and exact evidence Host", () => {
             locator: evaluationReceipt.locator,
             purpose: "Measured evaluation result for independent integrity review",
           })
-          ;(scope.owner as { agentID: string }).agentID = "evolution-security-integrity-reviewer"
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const reviewedEvaluationReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/evaluation-result",
                 payload: {
@@ -1203,7 +1620,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
                         outcome: "passed",
                         evidence: [metricEvidenceLocator, evaluationReceipt.locator],
                         severity: "info",
-                        owner: "evolution-security-integrity-reviewer",
+                        owner: "evolution-safety-auditor",
                         correction: null,
                       },
                     ],
@@ -1262,7 +1679,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
           const recommendationReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/comparison-recommendation",
                 payload: {
@@ -1316,17 +1733,23 @@ describe("Evolution Artifact and exact evidence Host", () => {
         })
 
         const sourceCompleted = Date.now()
-        Database.use((db) =>
-          db
-            .update(EngineTaskTable)
-            .set({ time_started: sourceCompleted - 1, time_completed: sourceCompleted, error: "terminal fixture" })
-            .where(eq(EngineTaskTable.id, taskID))
-            .run(),
-        )
+        await completeFixtureTaskWithDeliverables({
+          taskID,
+          sessionID: session.id,
+          deliverableArtifactLocators: [
+            sourceOpportunityLocator,
+            sourceAttributionLocator,
+            sourceCampaignLocator,
+            sourceRunLocator,
+          ],
+          completedAt: sourceCompleted,
+        })
         const importedTaskID = Identifier.ascending("task")
         const importedSession = await Session.create({ kind: "root", title: "Imported campaign evaluation" })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [
+            { source_task_id: taskID, locator: sourceOpportunityLocator },
+            { source_task_id: taskID, locator: sourceAttributionLocator },
             { source_task_id: taskID, locator: sourceCampaignLocator },
             { source_task_id: taskID, locator: sourceRunLocator },
           ],
@@ -1340,7 +1763,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             toolCallID: "call-campaign-import",
           },
         })
-        persistQueuedTask({
+        persistTask({
           taskID: importedTaskID,
           sessionID: importedSession.id,
           now: sourceCompleted + 1,
@@ -1351,7 +1774,6 @@ describe("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           artifactImports: preparedImports,
           packageRevision: {
             scope: "project",
@@ -1386,6 +1808,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
         }
         const importedCampaignLocator = importedLocators.get("evolution-lab/campaign-spec")!
         const importedRunLocator = importedLocators.get("evolution-lab/run-evidence-bundle")!
+        const importedOpportunityLocator = importedLocators.get("evolution-lab/opportunity")!
+        const importedAttributionLocator = importedLocators.get("evolution-lab/failure-attribution")!
         const importedUser = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: importedSession.id,
@@ -1444,7 +1868,10 @@ describe("Evolution Artifact and exact evidence Host", () => {
               { artifact_locator: importedCampaignLocator, resource_role: "campaign_inputs" },
               { host } as never,
             ),
-          ) as { role_resources: Array<{ role: string }> }
+          ) as {
+            resource_set: Parameters<typeof TaskArtifactResourceSetLocatorSchema.parse>[0]
+            role_resources: Array<{ role: string; resource: { path: string } }>
+          }
           expect(rehydrated.role_resources.map((item) => item.role).sort()).toEqual([
             "case:case-1",
             "dataset",
@@ -1454,6 +1881,102 @@ describe("Evolution Artifact and exact evidence Host", () => {
             "scorer:correctness",
             "workspace_template",
           ])
+          const resourcePathByRole = new Map(rehydrated.role_resources.map((item) => [item.role, item.resource.path]))
+          const importedCampaignInput = {
+            ...sourceCampaignInput,
+            resource_roles: {
+              dataset_path: resourcePathByRole.get("dataset")!,
+              cases: [{ case_id: "case-1", resource_path: resourcePathByRole.get("case:case-1")! }],
+              model_configuration_path: resourcePathByRole.get("model_configuration")!,
+              environment_path: resourcePathByRole.get("environment")!,
+              workspace_template_path: resourcePathByRole.get("workspace_template")!,
+              permission_snapshot_path: resourcePathByRole.get("permission_snapshot")!,
+              scorer_assets: [
+                { scorer_id: "correctness", resource_path: resourcePathByRole.get("scorer:correctness")! },
+              ],
+            },
+          }
+          for (const [locator, purpose] of [
+            [importedOpportunityLocator, "Exact imported opportunity for Campaign correlation"],
+            [importedAttributionLocator, "Exact imported attribution for Campaign correlation"],
+          ] as const) {
+            const read = await host.engineArtifacts.read({
+              locator,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
+            })
+            expect(read.chunk.complete).toBe(true)
+            await host.engineArtifacts.select({ locator, purpose })
+          }
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-observer"
+          const unrelatedOpportunity = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/opportunity",
+                payload: { ...sourceOpportunityInput, observable_symptom: "Unrelated imported-task opportunity" },
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          await host.engineArtifacts.read({
+            locator: unrelatedOpportunity.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          await host.engineArtifacts.select({
+            locator: unrelatedOpportunity.locator,
+            purpose: "Different current opportunity for imported correlation mismatch",
+          })
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
+          let mismatchedPairError: unknown
+          try {
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: importedCampaignInput,
+                resource_set: rehydrated.resource_set,
+                source_artifact_locators: [unrelatedOpportunity.locator, importedAttributionLocator],
+              },
+              { host } as never,
+            )
+          } catch (error) {
+            mismatchedPairError = error
+          }
+          expect(mismatchedPairError).toBeInstanceOf(EvolutionArtifactIntegrityError)
+          expect((mismatchedPairError as Error).message).toBe(
+            "campaign failure-attribution must directly identify its exact opportunity source",
+          )
+          const importedPairCampaign = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: importedCampaignInput,
+                resource_set: rehydrated.resource_set,
+                source_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const importedPairCampaignRead = await host.engineArtifacts.read({
+            locator: importedPairCampaign.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(importedPairCampaignRead.chunk.text!))
+              .source_artifact_locators.map((locator) => JSON.stringify(locator))
+              .toSorted(),
+          ).toEqual(
+            [importedOpportunityLocator, importedAttributionLocator]
+              .map((locator) => JSON.stringify(locator))
+              .toSorted(),
+          )
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const importedMetricOutcome = JSON.parse(
             await executeEvolutionMetricsTool.execute(
               {
@@ -1494,10 +2017,10 @@ describe("Evolution Artifact and exact evidence Host", () => {
       fn: async () => {
         const session = await Session.create({ kind: "root", title: "Evolution package fixture" })
         const taskID = Identifier.ascending("task")
-        const missionID = Identifier.ascending("mission")
+        const missionID = "evolution-candidate-chain"
         const missionSessionID = Identifier.ascending("session")
         const timeCreated = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: timeCreated,
@@ -1508,7 +2031,6 @@ describe("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -1548,21 +2070,85 @@ describe("Evolution Artifact and exact evidence Host", () => {
               workerTurnDescriptorHash: "c".repeat(64),
             },
           } as unknown as TaskToolExecutionScope)
-        const materializeExecution = createExecution("materialize")
-        const materialized = MaterializedExpertSquadPackageSchema.parse(
+        const materializeExecution = createExecution("prepare-candidate")
+        const candidateWorktree = path.join(
+          ProjectRuntimePaths.taskRoot(project.path, taskID),
+          "sessions",
+          session.id,
+          "worktree",
+        )
+        const preparationScope = {
+          taskID,
+          projectDirectory: project.path,
+          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
+          executionDirectory: candidateWorktree,
+          owner: { kind: "projected-worker" },
+        } as TaskToolExecutionScope
+        const packageHost = createExpertSquadPackageHost(materializeExecution, preparationScope)
+        const artifactsBeforeInspection = Database.use(
+          (db) =>
+            db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.task_id, taskID))
+              .all().length,
+        )
+        const inspected = await packageHost.inspectRevision({
+          revision: { package_digest: loaded.packageDigest },
+        })
+        expect(inspected).toMatchObject({
+          package_digest: loaded.packageDigest,
+          namespace: loaded.namespace,
+          id: loaded.id,
+          version: loaded.manifest.version,
+        })
+        expect(
+          Database.use(
+            (db) =>
+              db
+                .select({ id: EngineArtifactTable.id })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.task_id, taskID))
+                .all().length,
+          ),
+        ).toBe(artifactsBeforeInspection)
+        const inspectedCandidateRoot = path.join(
+          candidateWorktree,
+          "expert-squad-evolution-candidates",
+          taskID,
+          loaded.namespace,
+          loaded.id,
+        )
+        expect(
+          await stat(inspectedCandidateRoot).catch((error: NodeJS.ErrnoException) =>
+            error.code === "ENOENT" ? undefined : Promise.reject(error),
+          ),
+        ).toBeUndefined()
+        await mkdir(candidateWorktree, { recursive: true })
+        const materialized = PreparedExpertSquadCandidateSchema.parse(
           JSON.parse(
-            await expertSquadPackageTool.execute({ action: "materialize", package_digest: loaded.packageDigest }, {
-              host: { expertSquadPackages: createExpertSquadPackageHost(materializeExecution) },
-            } as never),
+            await expertSquadPackageTool.execute(
+              { action: "prepare_candidate", package_digest: loaded.packageDigest },
+              {
+                host: {
+                  expertSquadPackages: packageHost,
+                },
+              } as never,
+            ),
           ),
         )
         expect(materialized).toMatchObject({
           package_digest: loaded.packageDigest,
           namespace: "builtin",
           id: "evolution-lab",
-          version: "2026.08.06.3",
+          version: "2026.08.13.1",
           resource_set: { tree: "package" },
+          package_root: `expert-squad-evolution-candidates/${taskID}/builtin/evolution-lab`,
         })
+        expect(
+          (await ExpertSquadRegistry.loadSourcePackage(path.join(candidateWorktree, materialized.package_root)))
+            .packageDigest,
+        ).toBe(loaded.packageDigest)
         await materializeExecution.close()
 
         const candidateExecution = createExecution("candidate")
@@ -1582,7 +2168,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           "agents/evolution-failure-analyst/system.md",
           "agents/evolution-observer/system.md",
           "agents/evolution-recommendation-owner/system.md",
-          "agents/evolution-security-integrity-reviewer/system.md",
+          "agents/evolution-safety-auditor/system.md",
           "agents/orchestrator/system.md",
           "expert-squad.jsonc",
           "lib/evolution-lab/artifacts.ts",
@@ -1614,7 +2200,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
         const candidateManifest = path.join(candidateDirectory, "expert-squad.jsonc")
         await writeFile(
           candidateManifest,
-          (await readFile(candidateManifest, "utf8")).replace('"version": "2026.08.06.3"', '"version": "2026.08.06.4"'),
+          (await readFile(candidateManifest, "utf8")).replace('"version": "2026.08.13.1"', '"version": "2026.08.13.2"'),
         )
         const candidatePublication = await candidateExecution.publish(candidateStage, {
           snapshot_kind: "catalog",
@@ -1666,7 +2252,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
         expect(validatedCandidate).toMatchObject({
           namespace: "builtin",
           id: "evolution-lab",
-          version: "2026.08.06.4",
+          version: "2026.08.13.2",
           package_digest: comparison.candidate_digest,
           resource_set: candidateResourceSet,
         })
@@ -1679,7 +2265,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           "agents/evolution-failure-analyst/system.md",
           "agents/evolution-observer/system.md",
           "agents/evolution-recommendation-owner/system.md",
-          "agents/evolution-security-integrity-reviewer/system.md",
+          "agents/evolution-safety-auditor/system.md",
           "agents/orchestrator/system.md",
           "selector.md",
           "skills/campaign/SKILL.md",
@@ -1826,7 +2412,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
               budget: { max_runs: 2, max_cost: 1 },
               inactivity_timeout_ms: 60_000,
               ui_rubric_digest: null,
-              mutable_paths: ["README.md"],
+              mutable_paths: comparison.mutable_paths,
               trial_execution: { status: "unavailable", reason_code: "product_release_required" },
             },
             resources: [],
@@ -1846,6 +2432,14 @@ describe("Evolution Artifact and exact evidence Host", () => {
             schema_version: 1,
             label: "Holdout campaign fixture",
             payload: { ...developmentCampaignEnvelope.payload, dataset_partition: "holdout" },
+            resources: [],
+            source_artifact_locators: [],
+          })
+          const incompatibleCampaign = await host.engineArtifacts.publish({
+            artifact_type: "evolution-lab/campaign-spec",
+            schema_version: 1,
+            label: "Incompatible mutable closure fixture",
+            payload: { ...developmentCampaignEnvelope.payload, mutable_paths: ["README.md"] },
             resources: [],
             source_artifact_locators: [],
           })
@@ -1878,8 +2472,31 @@ describe("Evolution Artifact and exact evidence Host", () => {
             },
             provenance: [developmentCampaign.locator],
           }
+          let incompatibleCampaignError: unknown
+          try {
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/candidate-revision",
+                payload: {
+                  ...candidatePayload,
+                  development_campaign_locator: incompatibleCampaign.locator,
+                  provenance: [incompatibleCampaign.locator],
+                },
+                resource_set: candidateResourceSet,
+                parent_resource_set: materialized.resource_set,
+                source_artifact_locators: [incompatibleCampaign.locator],
+              },
+              { host } as never,
+            )
+          } catch (error) {
+            incompatibleCampaignError = error
+          }
+          expect(incompatibleCampaignError).toBeInstanceOf(EvolutionArtifactIntegrityError)
+          expect((incompatibleCampaignError as Error).message).toBe(
+            "candidate parent mutable path closure must equal its exact development campaign",
+          )
           await expect(
-            publishEvolutionArtifactTool.execute(
+            executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/candidate-revision",
                 payload: {
@@ -1895,7 +2512,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             ),
           ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
           await expect(
-            publishEvolutionArtifactTool.execute(
+            executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/candidate-revision",
                 payload: { ...candidatePayload, diff_sha256: "0".repeat(64) },
@@ -1907,7 +2524,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             ),
           ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
           const candidateReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/candidate-revision",
                 payload: candidatePayload,
@@ -1923,13 +2540,12 @@ describe("Evolution Artifact and exact evidence Host", () => {
         })
 
         const sourceCompleted = Date.now()
-        Database.use((db) =>
-          db
-            .update(EngineTaskTable)
-            .set({ time_started: sourceCompleted - 1, time_completed: sourceCompleted, error: "terminal fixture" })
-            .where(eq(EngineTaskTable.id, taskID))
-            .run(),
-        )
+        await completeFixtureTaskWithDeliverables({
+          taskID,
+          sessionID: session.id,
+          deliverableArtifactLocators: [candidateArtifactLocator],
+          completedAt: sourceCompleted,
+        })
         const importedTaskID = Identifier.ascending("task")
         const importedSession = await Session.create({ kind: "root", title: "Imported candidate validation" })
         const preparedImports = await prepareCrossTaskArtifactImports({
@@ -1944,7 +2560,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             toolCallID: "call-candidate-import",
           },
         })
-        persistQueuedTask({
+        persistTask({
           taskID: importedTaskID,
           sessionID: importedSession.id,
           now: sourceCompleted + 1,
@@ -1955,7 +2571,6 @@ describe("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           artifactImports: preparedImports,
           packageRevision: {
             scope: "built_in",
@@ -1997,12 +2612,12 @@ describe("Evolution Artifact and exact evidence Host", () => {
           id: Identifier.ascending("message"),
           sessionID: importedSession.id,
           role: "assistant",
-          author: "evolution-security-integrity-reviewer",
+          author: "evolution-safety-auditor",
           time: { created: sourceCompleted + 1, completed: sourceCompleted + 2 },
           parentID: importedUser.id,
           modelID: "test",
           providerID: "test",
-          agent: "evolution-security-integrity-reviewer",
+          agent: "evolution-safety-auditor",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
@@ -2030,7 +2645,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
               version: loaded.manifest.version,
               packageDigest: loaded.packageDigest,
             },
-            agentID: "evolution-security-integrity-reviewer",
+            agentID: "evolution-safety-auditor",
             projectionHash: "3".repeat(64),
             workerTurnDescriptorID: "descriptor-imported-candidate",
             workerTurnDescriptorHash: "4".repeat(64),
@@ -2086,7 +2701,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Evolution evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started - 1,
@@ -2095,9 +2710,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
           productPillar: "code",
           source: "test",
           priority: "normal",
-          metadata: {},
+          metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2208,7 +2822,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             input: { locator: "artifact-1" },
             output: "exact output",
             title: "Read exact Artifact",
-            metadata: {},
+            metadata: { actor: "user" },
             time: { start: started, end: started + 1 },
           },
         })
@@ -2272,6 +2886,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
         expect(evidence.engine_artifacts.map((artifact) => artifact.kind)).toEqual([
           "task_package_revision_binding",
           "task_execution_capsule_binding",
+          "queued_operator_wake",
+          "queued_operator_wake",
           "dispatch_lineage",
         ])
         expect(evidence.revision_facts).toEqual({
@@ -2307,7 +2923,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
 
         const evidenceOwnerSession = await Session.create({ kind: "root", title: "Evolution evidence owner" })
         const evidenceOwnerTaskID = Identifier.ascending("task")
-        persistQueuedTask({
+        persistTask({
           taskID: evidenceOwnerTaskID,
           sessionID: evidenceOwnerSession.id,
           now: completed + 1,
@@ -2316,9 +2932,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
           productPillar: "code",
           source: "test",
           priority: "normal",
-          metadata: {},
+          metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2462,7 +3077,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
         } satisfies TaskToolExecutionScope
         await withTaskScopedPluginToolHost(evidencePublisherScope, async (host) => {
           await expect(
-            publishEvolutionArtifactTool.execute(
+            executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: {
@@ -2496,7 +3111,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             ),
           ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
           const runArtifactReceipt = JSON.parse(
-            await publishEvolutionArtifactTool.execute(
+            await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: {
@@ -2603,7 +3218,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Nonterminal Trial evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -2612,9 +3227,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
           productPillar: "code",
           source: "test",
           priority: "normal",
-          metadata: {},
+          metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,

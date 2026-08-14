@@ -1,8 +1,8 @@
 import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import path from "path"
-import { createHash } from "crypto"
-import { Database, eq, inArray, NotFoundError, sql } from "../storage/db"
+import { randomUUID } from "crypto"
+import { Database, eq, NotFoundError } from "../storage/db"
 import { ProjectTable } from "./project.sql"
 import { Log } from "../util/log"
 import { Flag } from "@/flag/flag"
@@ -10,23 +10,83 @@ import { fn } from "@opencorvus-ai/util/fn"
 import { BusEvent } from "@/bus/bus-event"
 import { iife } from "@/util/iife"
 import { GlobalBus } from "@/bus/global"
-import { existsSync, lstatSync } from "fs"
 import { readFile, realpath, readdir, stat } from "fs/promises"
 import { hostGit as git } from "../util/git"
 import { Glob } from "../util/glob"
 import { which } from "@/util/which"
-import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { assertProjectDurableAdmissionOpen } from "./deletion-registry"
+import { Identifier } from "@/id/id"
 
 export namespace Project {
+  export const DurableAdmissionClosedError = NamedError.create(
+    "ProjectDurableAdmissionClosedError",
+    z.object({
+      projectID: z.string(),
+      message: z.string(),
+    }),
+  )
+
+  export function assertDurableAdmissionOpen(projectID: string): void {
+    if (assertProjectDurableAdmissionOpen(projectID)) return
+    throw new DurableAdmissionClosedError({
+      projectID,
+      message: `Project ${projectID} durable admission is closed during deletion`,
+    })
+  }
+
+  function assertRegistryAdmissionOpen(projectID: string) {
+    if (!assertProjectDurableAdmissionOpen(projectID)) {
+      throw new DurableAdmissionClosedError({
+        projectID,
+        message: `Project ${projectID} registry admission is closed during deletion`,
+      })
+    }
+  }
   const log = Log.create({ service: "project" })
   type Row = typeof ProjectTable.$inferSelect
+  type DiscoveryCommitHook = (input: {
+    projectID: string
+    directory: string
+    proposedSandbox?: string
+  }) => void | Promise<void>
+  let beforeDiscoveryCommit: DiscoveryCommitHook | undefined
+
+  export namespace TestHooks {
+    export function installBeforeDiscoveryCommit(hook: DiscoveryCommitHook) {
+      const previous = beforeDiscoveryCommit
+      beforeDiscoveryCommit = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeDiscoveryCommit === hook) beforeDiscoveryCommit = previous
+        },
+      }
+    }
+  }
 
   export const DirectoryIntegrityError = NamedError.create(
     "ProjectDirectoryIntegrityError",
     z.object({
       directory: z.string(),
       reason: z.enum(["missing", "not-directory"]),
+      message: z.string(),
+    }),
+  )
+
+  export const RegisteredDirectoryConflictError = NamedError.create(
+    "ProjectRegisteredDirectoryConflictError",
+    z.object({
+      directory: z.string(),
+      projectIDs: z.array(z.string()).min(2),
+      message: z.string(),
+    }),
+  )
+
+  export const DuplicateWorktreeIdentityError = NamedError.create(
+    "ProjectDuplicateWorktreeIdentityError",
+    z.object({
+      worktree: z.string(),
+      projectIDs: z.array(z.string()).min(2),
       message: z.string(),
     }),
   )
@@ -46,11 +106,13 @@ export namespace Project {
   }
 
   function generated(seed: string) {
-    return createHash("sha1").update(Filesystem.windowsPath(seed)).digest("hex")
+    return Identifier.deterministic("project", comparePath(path.resolve(seed)))
   }
 
-  function sqliteIdentifier(name: string) {
-    return `"${name.replaceAll('"', '""')}"`
+  function currentMarkerIdentity(value: string | undefined) {
+    return value && value.length <= Identifier.MAX_LENGTH && Identifier.isCanonical("project", value)
+      ? value
+      : undefined
   }
 
   export function directoryProjectID(directory: string) {
@@ -157,220 +219,18 @@ export namespace Project {
     return Filesystem.resolve(path.isAbsolute(gitdir) ? gitdir : path.join(worktree, gitdir))
   }
 
-  function projectIDTables(db: Database.TxOrDb) {
-    const rows = db.all<{ name: string }>(sql`
-      SELECT name
-      FROM sqlite_schema
-      WHERE type = 'table'
-        AND name NOT LIKE 'sqlite_%'
-      ORDER BY name
-    `)
-    return rows
-      .filter((row) =>
-        db
-          .all<{ name: string }>(sql.raw(`PRAGMA table_info(${sqliteIdentifier(row.name)})`))
-          .some((column) => column.name === "project_id"),
-      )
-      .map((row) => row.name)
-  }
-
-  function projectReferenceCount(db: Database.TxOrDb, table: string, projectID: string) {
-    const row = db.get<{ count: number }>(
-      sql`SELECT count(*) as count FROM ${sql.raw(sqliteIdentifier(table))} WHERE project_id = ${projectID}`,
-    )
-    return row?.count ?? 0
-  }
-
-  function chooseCanonicalExactWorktreeRow(input: { rows: Row[]; preferredIDs: string[] }) {
-    for (const id of input.preferredIDs) {
-      const row = input.rows.find((candidate) => candidate.id === id)
-      if (row) return row
-    }
-  }
-
-  function assertNoEmbeddedProjectIDReferences(
-    db: Database.TxOrDb,
-    worktree: string,
-    canonicalID: string,
-    duplicateIDs: string[],
-  ) {
-    const rows = db.all<{ tableName: string }>(sql`
-      SELECT name as tableName
-      FROM sqlite_schema
-      WHERE type = 'table'
-        AND name NOT LIKE 'sqlite_%'
-        AND sql LIKE 'CREATE TABLE%'
-      ORDER BY name
-    `)
-    for (const duplicateID of duplicateIDs) {
-      const needle = `/attachment/${duplicateID}/`
-      for (const row of rows) {
-        const columns = db.all<{ name: string; type: string }>(
-          sql.raw(`PRAGMA table_info(${sqliteIdentifier(row.tableName)})`),
-        )
-        const textColumns = columns.filter((column) => column.type.toUpperCase().includes("TEXT"))
-        for (const column of textColumns) {
-          const match = db.get<{ count: number }>(
-            sql`SELECT count(*) as count FROM ${sql.raw(sqliteIdentifier(row.tableName))} WHERE instr(${sql.raw(sqliteIdentifier(column.name))}, ${needle}) > 0`,
-          )
-          if ((match?.count ?? 0) > 0) {
-            throw new WorktreeIdentityConflictError({
-              projectID: [canonicalID, ...duplicateIDs].join(","),
-              existingWorktree: worktree,
-              nextWorktree: `${worktree} blocked by embedded attachment reference ${needle} in ${row.tableName}.${column.name}`,
-            })
-          }
-        }
-      }
-    }
-  }
-
-  function assertNoUniqueProjectConstraintConflict(
-    db: Database.TxOrDb,
-    worktree: string,
-    canonicalID: string,
-    duplicateIDs: string[],
-  ) {
-    const convergenceIDs = [canonicalID, ...duplicateIDs]
-    const permissionOwners = convergenceIDs.filter((id) => projectReferenceCount(db, "permission", id) > 0)
-    if (permissionOwners.length > 1) {
-      throw new WorktreeIdentityConflictError({
-        projectID: permissionOwners.join(","),
-        existingWorktree: worktree,
-        nextWorktree: `${worktree} blocked by duplicate permission rows that cannot be converged`,
-      })
-    }
-
-    const rows = db.all<{ requestID: string; projectID: string; count: number }>(sql`
-      SELECT request_id as requestID, project_id as projectID, count(*) as count
-      FROM engine_task
-      WHERE request_id IS NOT NULL
-        AND project_id IN (${sql.join([canonicalID, ...duplicateIDs], sql`, `)})
-      GROUP BY request_id, project_id
-    `)
-    const byRequest = new Map<string, Set<string>>()
-    for (const row of rows) {
-      if (row.count <= 0) continue
-      const owners = byRequest.get(row.requestID) ?? new Set<string>()
-      owners.add(row.projectID)
-      byRequest.set(row.requestID, owners)
-    }
-    for (const [requestID, owners] of byRequest) {
-      if (owners.size > 1) {
-        throw new WorktreeIdentityConflictError({
-          projectID: [...owners].join(","),
-          existingWorktree: worktree,
-          nextWorktree: `${worktree} blocked by duplicate request_id ${requestID} that cannot be converged`,
-        })
-      }
-    }
-  }
-
-  function assertNoTaskArtifactProjectIdentityConflict(
-    db: Database.TxOrDb,
-    worktree: string,
-    duplicateIDs: string[],
-  ): void {
-    const tasks = db.all<{ id: string; projectID: string }>(sql`
-      SELECT id, project_id as projectID
-      FROM engine_task
-      WHERE project_id IN (${sql.join(duplicateIDs, sql`, `)})
-    `)
-    for (const task of tasks) {
-      const artifactPaths = [ProjectRuntimePaths.taskArtifactRoot(worktree, task.id)]
-      let found = false
-      for (const artifactPath of artifactPaths) {
-        try {
-          lstatSync(artifactPath)
-          found = true
-          break
-        } catch (cause) {
-          if ((cause as NodeJS.ErrnoException | undefined)?.code === "ENOENT") continue
-          throw new WorktreeIdentityConflictError({
-            projectID: task.projectID,
-            existingWorktree: worktree,
-            nextWorktree:
-              `${worktree} blocked because TaskArtifact identity could not be inspected for Task ${task.id}: ` +
-              (cause instanceof Error ? cause.message : String(cause)),
-          })
-        }
-      }
-      if (!found) continue
-      throw new WorktreeIdentityConflictError({
-        projectID: task.projectID,
-        existingWorktree: worktree,
-        nextWorktree:
-          `${worktree} blocked by immutable TaskArtifact identity for Task ${task.id}; ` +
-          "Project identity convergence must complete before TaskArtifact publication",
-      })
-    }
-  }
-
-  function mergeExactWorktreeRows(input: { worktree: string; rows: Row[]; canonical: Row }) {
-    const duplicateRows = input.rows.filter((row) => row.id !== input.canonical.id)
-    if (duplicateRows.length === 0) return input.canonical
-
-    return Database.transaction((db) => {
-      const duplicateIDs = duplicateRows.map((row) => row.id)
-      assertNoEmbeddedProjectIDReferences(db, input.worktree, input.canonical.id, duplicateIDs)
-      assertNoUniqueProjectConstraintConflict(db, input.worktree, input.canonical.id, duplicateIDs)
-      assertNoTaskArtifactProjectIdentityConflict(db, input.worktree, duplicateIDs)
-      const projectScopedTables = projectIDTables(db)
-      for (const duplicate of duplicateRows) {
-        for (const table of projectScopedTables) {
-          db.run(
-            sql`UPDATE ${sql.raw(sqliteIdentifier(table))} SET project_id = ${input.canonical.id} WHERE project_id = ${duplicate.id}`,
-          )
-        }
-      }
-
-      const duplicateSandboxes = duplicateRows.flatMap((row) => row.sandboxes)
-      const sandboxes = [...new Set([...input.canonical.sandboxes, ...duplicateSandboxes])]
-      const firstWith = <K extends keyof Row>(key: K) =>
-        input.canonical[key] ?? duplicateRows.find((row) => row[key] !== null && row[key] !== undefined)?.[key]
-      const now = Date.now()
-      db.update(ProjectTable)
-        .set({
-          name: firstWith("name") as string | null,
-          icon_url: firstWith("icon_url") as string | null,
-          icon_color: firstWith("icon_color") as string | null,
-          time_updated: now,
-          time_initialized: firstWith("time_initialized") as number | null,
-          sandboxes,
-          commands: firstWith("commands") as { start?: string } | null,
-        })
-        .where(eq(ProjectTable.id, input.canonical.id))
-        .run()
-
-      for (const duplicate of duplicateRows) {
-        db.delete(ProjectTable).where(eq(ProjectTable.id, duplicate.id)).run()
-      }
-
-      log.warn("converged duplicate exact project worktree rows", {
-        worktree: input.worktree,
-        canonicalProjectID: input.canonical.id,
-        duplicateProjectIDs: duplicateRows.map((row) => row.id).join(","),
-      })
-
-      return db.select().from(ProjectTable).where(eq(ProjectTable.id, input.canonical.id)).get() ?? input.canonical
-    })
-  }
-
-  function findExactWorktreeRow(worktree: string, preferredIDs: string[] = []) {
+  async function findExactWorktreeRow(worktree: string) {
     const rows = Database.use((db) => db.select().from(ProjectTable).all())
-    const matches = rows.filter((row) => samePath(row.worktree, worktree))
+    const matches: Row[] = []
+    for (const row of rows) {
+      if (await sameFilesystemLocation(row.worktree, worktree)) matches.push(row)
+    }
     if (matches.length <= 1) return matches[0]
-    const canonical = Database.use((db) =>
-      chooseCanonicalExactWorktreeRow({
-        rows: matches,
-        preferredIDs: preferredIDs.filter(Boolean),
-      }),
-    )
-    if (canonical) return mergeExactWorktreeRows({ worktree, rows: matches, canonical })
-    throw new WorktreeIdentityConflictError({
-      projectID: matches.map((row) => row.id).join(","),
-      existingWorktree: matches[0].worktree,
-      nextWorktree: worktree,
+    const projectIDs = matches.map((row) => row.id).sort()
+    throw new DuplicateWorktreeIdentityError({
+      worktree: path.resolve(worktree),
+      projectIDs,
+      message: `Worktree ${path.resolve(worktree)} belongs to multiple Projects: ${projectIDs.join(", ")}`,
     })
   }
 
@@ -381,11 +241,12 @@ export namespace Project {
   async function identify(common: string, worktree: string) {
     const markerPath = marker(common)
     const localID = generated(common)
-    const cached = await Filesystem.readText(marker(common))
+    const cachedValue = await Filesystem.readText(marker(common))
       .then((x) => x.trim())
       .catch(() => undefined)
-    const selectedRow = findExactWorktreeRow(worktree, [cached ?? "", localID])
-    if (!cached || cached === "global") {
+    const cached = currentMarkerIdentity(cachedValue)
+    const selectedRow = await findExactWorktreeRow(worktree)
+    if (!cached) {
       const id = selectedRow?.id ?? localID
       await Filesystem.write(markerPath, id).catch(() => undefined)
       return id
@@ -418,12 +279,13 @@ export namespace Project {
   }): Promise<{ id: string; sandbox: string; worktree: string }> {
     const localID = generated(input.dotgit)
     const markerPath = marker(input.dotgit)
-    const cached = await Filesystem.readText(markerPath)
+    const cachedValue = await Filesystem.readText(markerPath)
       .then((x) => x.trim())
       .catch(() => undefined)
-    const selectedRow = findExactWorktreeRow(input.directory, [cached ?? "", localID])
-    const id = selectedRow?.id ?? (cached && cached !== "global" ? cached : localID)
-    if (input.local && id !== cached) await Filesystem.write(markerPath, id).catch(() => undefined)
+    const cached = currentMarkerIdentity(cachedValue)
+    const selectedRow = await findExactWorktreeRow(input.directory)
+    const id = selectedRow?.id ?? cached ?? localID
+    if (input.local && id !== cachedValue) await Filesystem.write(markerPath, id).catch(() => undefined)
     return {
       id,
       sandbox: input.directory,
@@ -536,13 +398,14 @@ export namespace Project {
     }
   }
 
-  export async function fromDirectory(directory: string) {
+  export async function fromDirectory(directory: string, options: { blockedProjectIDs?: ReadonlySet<string> } = {}) {
     await assertDirectoryIntegrity(directory)
     log.info("fromDirectory", { directory })
 
     const data = await iife(async () => {
       const registered = findByRegisteredSandbox(directory)
       if (registered) {
+        await findExactWorktreeRow(registered.project.worktree)
         return {
           id: registered.project.id,
           sandbox: registered.directory,
@@ -600,77 +463,84 @@ export namespace Project {
         nextWorktree: data.worktree,
       })
     }
-    const resolvedAt = Date.now()
-    const existing = await iife(async () => {
-      if (row) return fromRow(row)
-      const fresh: Info = {
-        id: data.id,
+    // Durable sandbox membership is ownership, not a reachability cache.
+    // Resolve only the candidate introduced by this request outside the DB
+    // transaction. The transaction re-reads the current authority and unions
+    // this candidate into that latest row; it never writes a stale snapshot.
+    const proposedSandbox =
+      data.sandbox !== data.worktree &&
+      !(await sameFilesystemLocation(data.sandbox, data.worktree))
+        ? data.sandbox
+        : undefined
+    if (options.blockedProjectIDs?.has(data.id)) {
+      throw new DurableAdmissionClosedError({
+        projectID: data.id,
+        message: `Project ${data.id} discovery was admitted while deletion was in progress`,
+      })
+    }
+    assertRegistryAdmissionOpen(data.id)
+    await beforeDiscoveryCommit?.({ projectID: data.id, directory, proposedSandbox })
+
+    const committed = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(data.id)
+      const currentRow = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
+      const resolvedAt = Date.now()
+      const current: Info = currentRow
+        ? fromRow(currentRow)
+        : {
+            id: data.id,
+            worktree: data.worktree,
+            sandboxes: [],
+            time: { created: resolvedAt, updated: resolvedAt },
+          }
+      const sandboxes = [...current.sandboxes]
+      if (proposedSandbox && !sandboxes.includes(proposedSandbox)) sandboxes.push(proposedSandbox)
+      const changed =
+        !currentRow || current.worktree !== data.worktree || !sameDirectoryList(current.sandboxes, sandboxes)
+      const result: Info = {
+        ...current,
         worktree: data.worktree,
-        sandboxes: [],
-        time: {
-          created: resolvedAt,
-          updated: resolvedAt,
-        },
+        sandboxes,
+        time: { ...current.time, updated: changed ? resolvedAt : current.time.updated },
       }
-      return fresh
+      if (!changed) return { result, changed }
+
+      const projects = db
+        .select()
+        .from(ProjectTable)
+        .all()
+        .map((candidate) => fromRow(candidate))
+      for (const directory of [result.worktree, ...result.sandboxes]) {
+        assertRegisteredDirectoryAvailable(result.id, directory, projects)
+      }
+      if (currentRow) {
+        db.update(ProjectTable)
+          .set({ worktree: result.worktree, time_updated: result.time.updated, sandboxes: result.sandboxes })
+          .where(eq(ProjectTable.id, result.id))
+          .run()
+      } else {
+        db.insert(ProjectTable)
+          .values({
+            id: result.id,
+            generation: randomUUID(),
+            worktree: result.worktree,
+            name: result.name,
+            icon_url: result.icon?.url,
+            icon_color: result.icon?.color,
+            time_created: result.time.created,
+            time_updated: result.time.updated,
+            time_pinned: result.time.pinned,
+            time_initialized: result.time.initialized,
+            sandboxes: result.sandboxes,
+            commands: result.commands,
+          })
+          .run()
+      }
+      return { result, changed }
     })
-
-    if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(existing)
-
-    const sandboxes = [...existing.sandboxes]
-    if (data.sandbox !== data.worktree && !sandboxes.includes(data.sandbox)) sandboxes.push(data.sandbox)
-    const resolvedSandboxes = (
-      await Promise.all(
-        sandboxes
-          .filter((candidate) => existsSync(candidate))
-          .map(async (candidate) => ({
-            path: candidate,
-            isProjectRoot: await sameFilesystemLocation(candidate, data.worktree),
-          })),
-      )
-    )
-      .filter((candidate) => !candidate.isProjectRoot)
-      .map((candidate) => candidate.path)
-    const changed =
-      !row || existing.worktree !== data.worktree || !sameDirectoryList(existing.sandboxes, resolvedSandboxes)
-    const result: Info = {
-      ...existing,
-      worktree: data.worktree,
-      sandboxes: resolvedSandboxes,
-      time: {
-        ...existing.time,
-        updated: changed ? resolvedAt : existing.time.updated,
-      },
-    }
-    if (!changed) return { project: result, sandbox: data.sandbox }
-
-    const insert = {
-      id: result.id,
-      worktree: result.worktree,
-      name: result.name,
-      icon_url: result.icon?.url,
-      icon_color: result.icon?.color,
-      time_created: result.time.created,
-      time_updated: result.time.updated,
-      time_pinned: result.time.pinned,
-      time_initialized: result.time.initialized,
-      sandboxes: result.sandboxes,
-      commands: result.commands,
-    }
-    const updateSet = {
-      worktree: result.worktree,
-      name: result.name,
-      icon_url: result.icon?.url,
-      icon_color: result.icon?.color,
-      time_updated: result.time.updated,
-      time_pinned: result.time.pinned,
-      time_initialized: result.time.initialized,
-      sandboxes: result.sandboxes,
-      commands: result.commands,
-    }
-    Database.use((db) =>
-      db.insert(ProjectTable).values(insert).onConflictDoUpdate({ target: ProjectTable.id, set: updateSet }).run(),
-    )
+    const result = committed.result
+    if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(result)
+    if (!committed.changed) return { project: result, sandbox: data.sandbox }
     GlobalBus.emit("event", {
       payload: {
         type: Event.Updated.type,
@@ -735,6 +605,15 @@ export namespace Project {
     },
     db: Database.TxOrDb,
   ) {
+    assertRegistryAdmissionOpen(input.projectID)
+    const projects = db
+      .select()
+      .from(ProjectTable)
+      .all()
+      .map((candidate) => fromRow(candidate))
+    for (const directory of [input.worktree, ...input.sandboxes]) {
+      assertRegisteredDirectoryAvailable(input.projectID, directory, projects)
+    }
     const row = db
       .update(ProjectTable)
       .set({
@@ -760,21 +639,68 @@ export namespace Project {
     return directories
   }
 
+  function registeredDirectoryMatches(directory: string, projects: Info[]) {
+    const target = path.resolve(directory)
+    const matches = new Map<string, { project: Info; directory: string }>()
+    for (const project of projects) {
+      if (samePath(project.worktree, target)) {
+        matches.set(project.id, { project, directory: project.worktree })
+        continue
+      }
+      const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
+      if (sandbox) matches.set(project.id, { project, directory: sandbox })
+    }
+    return [...matches.values()]
+  }
+
+  function assertRegisteredDirectoryAvailable(projectID: string, directory: string, projects: Info[]) {
+    const target = path.resolve(directory)
+    const conflictingProjectIDs = [
+      ...new Set(
+        registeredDirectoryMatches(target, projects)
+          .map((match) => match.project.id)
+          .filter((value) => value !== projectID),
+      ),
+    ]
+    if (conflictingProjectIDs.length === 0) return
+    const projectIDs = [projectID, ...conflictingProjectIDs].sort()
+    throw new RegisteredDirectoryConflictError({
+      directory: target,
+      projectIDs,
+      message: `Cannot register ${target} for Project ${projectID}; it belongs to Project${conflictingProjectIDs.length === 1 ? "" : "s"} ${conflictingProjectIDs.join(", ")}`,
+    })
+  }
+
   export function findByRegisteredDirectory(directory: string) {
     const target = path.resolve(directory)
-    for (const project of list()) {
-      if (samePath(project.worktree, target)) return { project, directory: project.worktree }
-      const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
-      if (sandbox) return { project, directory: sandbox }
+    const matches = registeredDirectoryMatches(target, list())
+    if (matches.length > 1) {
+      const projectIDs = matches.map((match) => match.project.id).sort()
+      throw new RegisteredDirectoryConflictError({
+        directory: target,
+        projectIDs,
+        message: `Registered directory ${target} belongs to multiple Projects: ${projectIDs.join(", ")}`,
+      })
     }
+    return matches[0]
   }
 
   function findByRegisteredSandbox(directory: string) {
     const target = path.resolve(directory)
+    const matches: Array<{ project: Info; directory: string }> = []
     for (const project of list()) {
       const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
-      if (sandbox) return { project, directory: sandbox }
+      if (sandbox) matches.push({ project, directory: sandbox })
     }
+    if (matches.length > 1) {
+      const projectIDs = matches.map((match) => match.project.id).sort()
+      throw new RegisteredDirectoryConflictError({
+        directory: target,
+        projectIDs,
+        message: `Registered sandbox ${target} belongs to multiple Projects: ${projectIDs.join(", ")}`,
+      })
+    }
+    return matches[0]
   }
 
   function explicitLaunchProjectDirectory() {
@@ -850,16 +776,6 @@ export namespace Project {
     const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
     if (!row) return undefined
     return fromRow(row)
-  }
-
-  export function deleteRows(ids: string[], db?: Database.TxOrDb): void {
-    if (ids.length === 0) return
-    const write = (target: Database.TxOrDb) => target.delete(ProjectTable).where(inArray(ProjectTable.id, ids)).run()
-    if (db) {
-      write(db)
-      return
-    }
-    Database.use(write)
   }
 
   export async function initGit(directory: string) {
@@ -972,28 +888,37 @@ export namespace Project {
     return valid
   }
 
-  export async function addSandbox(id: string, directory: string) {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
-    if (!row) throw new Error(`Project not found: ${id}`)
-    const sandboxes = [...row.sandboxes]
-    if (!sandboxes.includes(directory)) sandboxes.push(directory)
-    const result = Database.use((db) =>
-      db
-        .update(ProjectTable)
-        .set({ sandboxes, time_updated: Date.now() })
-        .where(eq(ProjectTable.id, id))
-        .returning()
-        .get(),
-    )
-    if (!result) throw new Error(`Project not found: ${id}`)
-    const data = fromRow(result)
+  function addSandboxRow(id: string, target: string) {
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const rows = db.select().from(ProjectTable).all()
+      const row = rows.find((candidate) => candidate.id === id)
+      if (!row) throw new Error(`Project not found: ${id}`)
+      const projects = rows.map((candidate) => fromRow(candidate))
+      assertRegisteredDirectoryAvailable(id, target, projects)
+      const matches = registeredDirectoryMatches(target, projects)
+      if (matches.some((match) => match.project.id === id)) return fromRow(row)
+      return fromRow(
+        db
+          .update(ProjectTable)
+          .set({ sandboxes: [...row.sandboxes, target], time_updated: Date.now() })
+          .where(eq(ProjectTable.id, id))
+          .returning()
+          .get(),
+      )
+    })
     GlobalBus.emit("event", {
       payload: {
         type: Event.Updated.type,
-        properties: data,
+        properties: result,
       },
     })
-    return data
+    return result
+  }
+
+  export async function addSandbox(id: string, directory: string) {
+    const target = Filesystem.resolve(directory)
+    return addSandboxRow(id, target)
   }
 
   /**
@@ -1023,18 +948,19 @@ export namespace Project {
   }
 
   export async function removeSandbox(id: string, directory: string) {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
-    if (!row) throw new Error(`Project not found: ${id}`)
     const target = Filesystem.windowsPath(path.resolve(directory))
-    const sandboxes = row.sandboxes.filter((s) => Filesystem.windowsPath(path.resolve(s)) !== target)
-    const result = Database.use((db) =>
-      db
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
+      if (!row) throw new Error(`Project not found: ${id}`)
+      const sandboxes = row.sandboxes.filter((s) => Filesystem.windowsPath(path.resolve(s)) !== target)
+      return db
         .update(ProjectTable)
         .set({ sandboxes, time_updated: Date.now() })
         .where(eq(ProjectTable.id, id))
         .returning()
-        .get(),
-    )
+        .get()
+    })
     if (!result) throw new Error(`Project not found: ${id}`)
     const data = fromRow(result)
     GlobalBus.emit("event", {
@@ -1044,5 +970,62 @@ export namespace Project {
       },
     })
     return data
+  }
+
+  export async function removeExactSandboxes(
+    id: string,
+    directories: readonly string[],
+    expected: { sandboxes: readonly string[]; timeUpdated: number },
+  ) {
+    const targets = new Set(directories)
+    if (targets.size === 0) {
+      const project = get(id)
+      if (!project) throw new Error(`Project not found: ${id}`)
+      return project
+    }
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
+      if (!row) throw new Error(`Project not found: ${id}`)
+      if (
+        row.time_updated !== expected.timeUpdated ||
+        row.sandboxes.length !== expected.sandboxes.length ||
+        row.sandboxes.some((sandbox, index) => sandbox !== expected.sandboxes[index])
+      ) {
+        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+      }
+      const remainingTargets = new Set(targets)
+      for (const sandbox of row.sandboxes) remainingTargets.delete(sandbox)
+      if (remainingTargets.size > 0) {
+        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+      }
+      return db
+        .update(ProjectTable)
+        .set({ sandboxes: row.sandboxes.filter((sandbox) => !targets.has(sandbox)), time_updated: Date.now() })
+        .where(eq(ProjectTable.id, id))
+        .returning()
+        .get()
+    })
+    if (!result) throw new Error(`Project not found: ${id}`)
+    const data = fromRow(result)
+    GlobalBus.emit("event", {
+      payload: {
+        type: Event.Updated.type,
+        properties: data,
+      },
+    })
+    return data
+  }
+
+  export function exactSandboxAuthority(id: string): { sandboxes: string[]; timeUpdated: number } | undefined {
+    const row = Database.use((db) =>
+      db
+        .select({ sandboxes: ProjectTable.sandboxes, timeUpdated: ProjectTable.time_updated })
+        .from(ProjectTable)
+        .where(eq(ProjectTable.id, id))
+        .get(),
+    )
+    if (!row) return undefined
+    return { sandboxes: [...row.sandboxes], timeUpdated: row.timeUpdated }
   }
 }

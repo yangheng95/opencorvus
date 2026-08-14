@@ -1,0 +1,423 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import WorkflowTopology from "./WorkflowTopology.astro"
+import { publicPath, segmentPublicMarketText, squadPath, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
+import { generatedExpertSquadDistribution } from "../content/expert-squad-distribution.generated"
+import type { WebsitePublicationSummary } from "../lib/website-registry-contract"
+
+const { locale, records, publication } = Astro.props as {
+  locale: PublicLocale
+  records: PublicSquadRecord[]
+  publication: WebsitePublicationSummary
+}
+const distributionPointer = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/expert-squads/catalog.json`
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: "专家团市场 · OpenCorvus",
+        description: "按任务适配度、角色、工作流和精确版本选择 OpenCorvus 专家团，并下载经过签名验证的完整资源包。",
+        languageHref: publicPath("root", "/market/"),
+        eyebrow: "全部专家团",
+        heading: "先看它能完成什么，再决定要不要把团队带进任务。",
+        lead: `这里展示当前数据库发布中的全部 ${records.length} 个专家团。每个条目都从签名资源包的精确 ZIP 内容重建并核对，说明适用场景、角色、工作流与版本。`,
+        bundleKicker: "精确 / 来源 / 修订",
+        bundleTitle: `${publication.total} 个资源，一份经过验证的完整包`,
+        bundleBody: "网页会先验证 OpenCorvus 发布签名、发布版本、过期时间与资源计数，再启用下载；ZIP 到达浏览器后还会重算 SHA-256。下载不会安装或激活任何团队。",
+        downloadAll: `下载全部 ${publication.total} 个专家团资源`,
+        downloadAllNote: `其中 ${publication.embeddedAlreadyAvailable} 个已经内置于客户端，${publication.bundledMarketImportable} 个可由客户端导入。`,
+        downloadPreparing: "正在读取当前签名发布…",
+        downloadVerifying: "正在校验资源包字节与 SHA-256…",
+        downloadReady: "签名目录与内容寻址资源包已经匹配。",
+        downloadUnavailable: "签名、版本、过期时间或资源摘要未通过校验；不会提供未签名替代文件。",
+        chooseTitle: "三步判断一支团队是否适合",
+        chooseSteps: [
+          ["01 · 看选择说明", "先确认当前结果是否落在团队边界内，而不是只看名称。"],
+          ["02 · 看责任与顺序", "检查需要哪些专家、如何交接，以及哪里会独立复核。"],
+          ["03 · 看精确版本", "版本和 digest 共同标识内容；相似名称不能替代同一 revision。"],
+        ],
+        search: "搜索全部专家团",
+        placeholder: "名称或使用场景",
+        filter: "按工作类型筛选",
+        all: "全部",
+        code: "代码与产品",
+        work: "知识与业务",
+        multi: "跨领域",
+        identityTitle: "为什么显示 identity 和 digest？",
+        identityBody: "名称帮助人理解，namespace / id / version / digest 帮助系统确认拿到的是哪一份内容。点击条目可查看完整角色与工作流。",
+        snapshot: "全部条目 · 精确事实",
+        suffix: "个团队",
+        agents: "个 Agent",
+        workflows: "条工作流",
+        skills: "项 Skill",
+        tools: "项工具",
+        mcpRefs: "项 MCP 引用",
+        emptyTitle: "没有符合条件的专家团。",
+        emptyBody: "清空搜索或选择其他工作类型；目录不会用相似名称代替精确身份。",
+      }
+    : {
+        title: "Expert Squad market · OpenCorvus",
+        description: "Choose an OpenCorvus Expert Squad by task fit, roles, workflow, and exact revision, then download the verified signed resource bundle.",
+        languageHref: publicPath("zh-cn", "/market/"),
+        eyebrow: "All Expert Squads",
+        heading: "Understand what the team can finish before bringing it into the mission.",
+        lead: `This page presents all ${records.length} Expert Squads in the active database publication. Every record is reconstructed and checked against its exact ZIP in the signed bundle, then presented with fit, roles, workflow, and version.`,
+        bundleKicker: "Exact / source / revision",
+        bundleTitle: `${publication.total} resources, one verified bundle`,
+        bundleBody:
+          "The page verifies the OpenCorvus publication signature, publication version, expiry, and resource counts before enabling download. It recomputes SHA-256 after the ZIP reaches the browser. Downloading never installs or activates a team.",
+        downloadAll: `Download all ${publication.total} Expert Squad resources`,
+        downloadAllNote: `${publication.embeddedAlreadyAvailable} are already embedded in the client and ${publication.bundledMarketImportable} can be imported by the client.`,
+        downloadPreparing: "Reading the current signed publication…",
+        downloadVerifying: "Verifying bundle bytes and SHA-256…",
+        downloadReady: "The signed catalog matches the content-addressed bundle.",
+        downloadUnavailable:
+          "Signature, version, expiry, or resource digest validation failed. No unsigned fallback will be offered.",
+        chooseTitle: "Three checks for choosing the right team",
+        chooseSteps: [
+          ["01 · Read the selector", "Confirm that the requested outcome falls inside the team's boundary instead of choosing by name."],
+          ["02 · Inspect ownership and order", "See which specialists are required, how they hand off work, and where independent review occurs."],
+          ["03 · Check the exact revision", "Version and digest identify the content together. A similar name cannot substitute for the same revision."],
+        ],
+        search: "Search all Expert Squads",
+        placeholder: "Name or use case",
+        filter: "Filter by work type",
+        all: "All",
+        code: "Code and product",
+        work: "Knowledge and operations",
+        multi: "Cross-domain",
+        identityTitle: "Why show identity and digest?",
+        identityBody:
+          "Names help people understand. namespace / id / version / digest let the system prove which content it received. Open a record to inspect the complete roles and workflow.",
+        snapshot: "All records · exact facts",
+        suffix: "teams",
+        agents: "Agents",
+        workflows: "workflows",
+        skills: "Skills",
+        tools: "tools",
+        mcpRefs: "MCP refs",
+        emptyTitle: "No Expert Squads match these conditions.",
+        emptyBody: "Clear the search or choose another work type. Similar names never substitute for exact identity.",
+      }
+---
+
+<PublicSiteLayout
+  {locale}
+  current="market"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main" data-market-root>
+    <section class="market-intro" aria-labelledby="market-title">
+      <div class="market-intro-grid">
+        <div>
+          <p class="eyebrow">{copy.eyebrow}</p>
+          <h1 id="market-title">{copy.heading}</h1>
+          <p class="section-lead">{copy.lead}</p>
+        </div>
+        <aside id="complete-bundle" class="registry-fact">
+          <span class="registry-fact-kicker">{copy.bundleKicker}</span>
+          <strong>{copy.bundleTitle}</strong>
+          <p>{copy.bundleBody}</p>
+          <div
+            class="distribution-download"
+            data-distribution-download
+            data-pointer={distributionPointer}
+            data-catalog-path={generatedExpertSquadDistribution.catalogPath}
+            data-catalog-sha256={generatedExpertSquadDistribution.catalogSha256}
+            data-catalog-bytes={generatedExpertSquadDistribution.catalogBytes}
+            data-resources={JSON.stringify({
+              total: generatedExpertSquadDistribution.total,
+              embeddedAlreadyAvailable: generatedExpertSquadDistribution.embeddedAlreadyAvailable,
+              bundledMarketImportable: generatedExpertSquadDistribution.bundledMarketImportable,
+            })}
+            data-trusted-keys={JSON.stringify(generatedExpertSquadDistribution.trustedKeys)}
+            data-ready={copy.downloadReady}
+            data-verifying={copy.downloadVerifying}
+            data-unavailable={copy.downloadUnavailable}
+          >
+            <p>{copy.downloadAllNote}</p>
+            <a class="distribution-download-action" aria-disabled="true" data-distribution-action download>{copy.downloadAll} ↓</a>
+            <span role="status" aria-live="polite" data-distribution-status>{copy.downloadPreparing}</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="market-selection-guide" aria-labelledby="selection-guide-title">
+      <h2 id="selection-guide-title">{copy.chooseTitle}</h2>
+      <div>
+        {copy.chooseSteps.map(([title, description]) => (
+          <article><h3>{title}</h3><p>{description}</p></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="market-workspace" aria-label={copy.heading}>
+      <aside class="market-controls">
+        <label for="market-search">{copy.search}</label>
+        <input id="market-search" class="market-search" type="search" placeholder={copy.placeholder} autocomplete="off" />
+
+        <p class="filter-heading">{copy.filter}</p>
+        <div class="market-filter-list" role="group" aria-label={copy.filter}>
+          <button class="market-filter" type="button" data-market-filter="all" aria-pressed="true">{copy.all}</button>
+          <button class="market-filter" type="button" data-market-filter="code" aria-pressed="false">{copy.code}</button>
+          <button class="market-filter" type="button" data-market-filter="work" aria-pressed="false">{copy.work}</button>
+          <button class="market-filter" type="button" data-market-filter="multi" aria-pressed="false">{copy.multi}</button>
+        </div>
+
+        <details class="state-notes">
+          <summary>{copy.identityTitle}</summary>
+          <p>{copy.identityBody}</p>
+          <a class="text-action" href={publicPath(locale, "/trust/")}>{locale === "zh-cn" ? "查看可信机制" : "Read the trust model"} →</a>
+        </details>
+      </aside>
+
+      <div>
+        <div class="results-toolbar">
+          <span
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            data-market-status
+            data-count-suffix={copy.suffix}
+            data-empty-status={copy.emptyTitle}
+          >{records.length} {copy.suffix}</span>
+          <span>{copy.snapshot}</span>
+        </div>
+        <div class="market-results">
+          {records.map((record) => (
+            <a
+              class="market-record"
+              href={squadPath(locale, record)}
+              data-market-record
+              data-pillars={record.pillars.join(" ")}
+              data-search={`${record.displayLabel[locale]} ${record.label} ${record.identity.namespace} ${record.identity.id} ${record.description[locale]} ${record.selectorSummary[locale]}`.toLowerCase()}
+            >
+              <div>
+                <span class="squad-identity">{record.identity.namespace}/{record.identity.id}</span>
+                <h2>{segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</h2>
+              </div>
+              <div class="market-record-copy">
+                <p>{segmentPublicMarketText(locale, record.description[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
+                <p class="selector-line">{segmentPublicMarketText(locale, record.selectorSummary[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
+                <WorkflowTopology {record} {locale} />
+              </div>
+              <div class="record-meta">
+                <span>v{record.identity.version}</span>
+                <span>{record.agents.length} {copy.agents} · {record.workflows.length} {copy.workflows}</span>
+                <span>{record.projectedCapabilities.skills} {copy.skills} · {record.projectedCapabilities.tools} {copy.tools}</span>
+                <span>{record.projectedCapabilities.mcp} {copy.mcpRefs}</span>
+                <code>sha256:{record.identity.digest.slice(0, 12)}…</code>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="market-empty" data-market-empty hidden>
+          <h2>{copy.emptyTitle}</h2>
+          <p>{copy.emptyBody}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</PublicSiteLayout>
+
+<script>
+  import { fetchVerifiedExpertSquadBundle, resolveVerifiedExpertSquadBundle } from "../lib/expert-squad-publication"
+
+  const marketRoot = document.querySelector<HTMLElement>("[data-market-root]")
+  if (marketRoot) {
+    const search = marketRoot.querySelector<HTMLInputElement>("#market-search")!
+    const filters = Array.from(marketRoot.querySelectorAll<HTMLButtonElement>("[data-market-filter]"))
+    const records = Array.from(marketRoot.querySelectorAll<HTMLElement>("[data-market-record]"))
+    const status = marketRoot.querySelector<HTMLElement>("[data-market-status]")!
+    const empty = marketRoot.querySelector<HTMLElement>("[data-market-empty]")!
+    let activeFilter = "all"
+
+    const refresh = () => {
+      const query = search.value.trim().toLowerCase()
+      let visible = 0
+      for (const record of records) {
+        const pillars = record.dataset.pillars?.split(" ") ?? []
+        const pillarMatch = activeFilter === "all" || (activeFilter === "multi" ? pillars.length > 1 : pillars.includes(activeFilter))
+        const searchMatch = !query || record.dataset.search?.includes(query)
+        record.hidden = !(pillarMatch && searchMatch)
+        if (!record.hidden) visible += 1
+      }
+      status.textContent = visible > 0 ? `${visible} ${status.dataset.countSuffix}` : status.dataset.emptyStatus ?? ""
+      empty.hidden = visible > 0
+    }
+
+    search.addEventListener("input", refresh)
+    for (const filter of filters) {
+      filter.addEventListener("click", () => {
+        activeFilter = filter.dataset.marketFilter ?? "all"
+        for (const candidate of filters) candidate.setAttribute("aria-pressed", String(candidate === filter))
+        refresh()
+      })
+    }
+  }
+
+  const distributionRoot = document.querySelector<HTMLElement>("[data-distribution-download]")
+  if (distributionRoot) {
+    const action = distributionRoot.querySelector<HTMLAnchorElement>("[data-distribution-action]")!
+    const status = distributionRoot.querySelector<HTMLElement>("[data-distribution-status]")!
+    resolveVerifiedExpertSquadBundle({
+      pointerUrl: distributionRoot.dataset.pointer!,
+      expectedCatalog: {
+        path: distributionRoot.dataset.catalogPath!,
+        sha256: distributionRoot.dataset.catalogSha256!,
+        bytes: Number(distributionRoot.dataset.catalogBytes),
+      },
+      expectedResources: JSON.parse(distributionRoot.dataset.resources ?? "null"),
+      trustedKeys: JSON.parse(distributionRoot.dataset.trustedKeys ?? "[]"),
+      storage: window.localStorage,
+    })
+      .then((bundle) => {
+        action.href = bundle.path
+        action.setAttribute("data-sha256", bundle.sha256)
+        action.removeAttribute("aria-disabled")
+        status.textContent = distributionRoot.dataset.ready ?? ""
+        action.addEventListener("click", async (event) => {
+          event.preventDefault()
+          if (action.getAttribute("aria-disabled") === "true") return
+          action.setAttribute("aria-disabled", "true")
+          status.textContent = distributionRoot.dataset.verifying ?? ""
+          try {
+            const blob = await fetchVerifiedExpertSquadBundle(bundle)
+            const objectURL = URL.createObjectURL(blob)
+            const verifiedDownload = document.createElement("a")
+            verifiedDownload.href = objectURL
+            verifiedDownload.download = "all-expert-squads.zip"
+            verifiedDownload.click()
+            window.setTimeout(() => URL.revokeObjectURL(objectURL), 60_000)
+            status.textContent = distributionRoot.dataset.ready ?? ""
+          } catch {
+            status.textContent = distributionRoot.dataset.unavailable ?? ""
+          } finally {
+            action.removeAttribute("aria-disabled")
+          }
+        })
+      })
+      .catch(() => {
+        action.removeAttribute("href")
+        action.setAttribute("aria-disabled", "true")
+        status.textContent = distributionRoot.dataset.unavailable ?? ""
+      })
+  }
+</script>
+
+<style>
+  .market-selection-guide {
+    display: grid;
+    grid-template-columns: 0.72fr 1.28fr;
+    gap: 56px;
+    padding: 42px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .market-selection-guide > div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+
+  .market-selection-guide h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .market-selection-guide article {
+    padding: 18px;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .market-selection-guide h3 {
+    margin: 0;
+    color: var(--cobalt);
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .market-selection-guide p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 1099px) {
+    :global([data-market-root] .market-intro-grid),
+    .market-selection-guide,
+    :global([data-market-root] .market-workspace) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global([data-market-root] .market-intro-grid),
+    .market-selection-guide {
+      gap: 28px;
+    }
+
+    .market-selection-guide > div {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    :global([data-market-root] .market-workspace) {
+      gap: 28px;
+      padding-bottom: 54px;
+    }
+
+    :global([data-market-root] .market-controls) {
+      position: static;
+    }
+
+    :global([data-market-root] .market-record) {
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 14px 18px;
+      min-height: 0;
+      padding: 22px 18px 22px 0;
+    }
+
+    :global([data-market-root] .market-record::before) {
+      grid-column: 1;
+      grid-row: 1 / span 3;
+    }
+
+    :global([data-market-root] .market-record > div) {
+      grid-column: 2;
+    }
+
+    :global([data-market-root] .record-meta) {
+      justify-items: start;
+      text-align: left;
+    }
+
+    :global([data-market-root] .results-toolbar) {
+      gap: 12px;
+      padding: 10px 14px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .market-selection-guide > div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global([data-market-root] .registry-fact),
+    :global([data-market-root] .market-controls) {
+      padding: 22px;
+    }
+
+    :global([data-market-root] .results-toolbar) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

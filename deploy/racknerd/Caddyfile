@@ -1,0 +1,35 @@
+(opencorvus_static) {
+	root * /srv/opencorvus/current/client
+	encode zstd gzip
+
+	@website_runtime path /market /market/* /zh-cn/market /zh-cn/market/* /api/registry/* /api/site/v1/visitors /api/site/v1/visitors/current /health/live /health/ready
+	@visitor_post {
+		path /api/site/v1/visitors
+		method POST
+	}
+	request_body @visitor_post {
+		max_size 1KB
+	}
+	reverse_proxy @website_runtime 127.0.0.1:4321
+
+	@expert_squad_pointer path /expert-squads/catalog.json
+	header @expert_squad_pointer Cache-Control "no-store, max-age=0"
+
+	@expert_squad_immutable path_regexp expert_squad_immutable ^/expert-squads/(archives|catalogs|signatures|bundles)/[a-f0-9/._-]+$
+	header @expert_squad_immutable Cache-Control "public, max-age=31536000, immutable"
+
+	file_server
+}
+
+opencorvus.com {
+	import opencorvus_static
+}
+
+http://127.0.0.1:8080 {
+	bind 127.0.0.1
+	import opencorvus_static
+}
+
+www.opencorvus.com {
+	redir https://opencorvus.com{uri} permanent
+}

@@ -1,0 +1,7 @@
+# Water and Wastewater Operations
+
+Water and Wastewater Operations prepares a bounded, source-grounded review through three independent professional views: drinking-water treatment and quality, wastewater collection and treatment, and asset/monitoring/reliability evidence. `water-wastewater-operations-review-owner` is the explicit join and cannot run until all three reports exist.
+
+Every facility, process train, asset, sample point, instrument, flow, concentration, mass load, laboratory result, alarm, work order, permit condition and response action keeps stable identifiers, units, source and method locations, version/effective and observation dates, owner, qualified reviewer, applicability, uncertainty, status, decision-not-made and stop conditions. Values below detection limits, estimates, censored data and incompatible sampling bases remain explicit.
+
+The package never changes chemical dose, process setpoint, pump, valve or Supervisory Control and Data Acquisition control; declares water safe; validates a laboratory result; approves discharge, bypass or overflow; interprets a permit or claims compliance; issues public notice; isolates or releases equipment; approves design/capital work; or directs emergency response. Those decisions remain with certified operators, engineers, laboratory quality personnel, maintenance/electrical owners, environmental compliance, public-health and regulatory authorities.

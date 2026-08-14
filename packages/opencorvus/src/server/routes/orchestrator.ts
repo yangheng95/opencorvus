@@ -23,8 +23,8 @@ import {
   Interaction,
   Progress,
   ProjectBoard,
-  RejectInteractionInput,
-  ReplyInteractionInput,
+  UserRejectInteractionInput,
+  UserReplyInteractionInput,
   TaskBoard,
   TaskBrief,
   TaskConversationEventPage,
@@ -47,8 +47,7 @@ import { TaskStatusDetail, taskStatusDetailFromBoard } from "@/status/task-statu
 import { RewindTaskInput, taskRewindCursor } from "@/engine/rewind"
 import { requireTask } from "@/engine/store"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
-import { TaskQueueError, TaskQueueReorderError } from "@/engine/queue"
-import { EngineService, PlannerFailureError, TaskQueueStartError } from "@/task-api"
+import { EngineService, PlannerFailureError } from "@/task-api"
 import { GlobalTaskService } from "@/task-api/global-task-service"
 import { ProtocolStore } from "@/protocol/store"
 import { ChannelIngress } from "@/channel/ingress"
@@ -64,6 +63,7 @@ import { compileBoard } from "@/workbench/board"
 import { buildTaskProjectArchive, ProjectArchiveUnsupportedProjectError } from "@/engine/task-project-archive"
 import { badRequestOrNamedErrorResponse, errors, namedErrorResponse, operatorSteerRouteErrors } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { lazy } from "../../util/lazy"
 import { Log } from "@/util/log"
@@ -94,6 +94,7 @@ import {
   timelineOrderKey,
 } from "@/timeline/order"
 import { TaskArchiveRequestBody, TaskCancellationRequestBody } from "@opencorvus-ai/transport-protocol"
+import { TaskCancellationProjection } from "@/engine/cancellation-origin"
 import {
   BUILD_OBSERVATION_CONTENT_CHUNK_BYTES,
   BuildObservationContentError,
@@ -127,7 +128,6 @@ const TASK_LIST_PROJECTION_EVENT_TYPES = new Set([
   "task.failed",
   "task.cancelled",
   "task.blocked",
-  "task.requeued",
   "task.rewound",
   "task.deleted",
   "task.archived",
@@ -141,33 +141,6 @@ export function isTaskListProjectionEventType(type: string) {
     TASK_LIST_PROJECTION_EVENT_PREFIXES.some((prefix) => normalized.startsWith(prefix))
   )
 }
-
-export const TaskListEvent = z
-  .object({
-    type: z.string(),
-    taskID: z.string().nullable(),
-    sequence: z.number(),
-    source: z.string().min(1).optional(),
-    notify: BusEvent.NotifyDescriptorSchema.optional(),
-    notificationDetails: z.string().optional(),
-  })
-  .superRefine((event, ctx) => {
-    const hasDetails = typeof event.notificationDetails === "string" && event.notificationDetails.trim().length > 0
-    if (event.notify && !hasDetails) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["notificationDetails"],
-        message: "Task-list events with notify metadata must include copyable notificationDetails",
-      })
-    }
-    if (!event.notify && event.notificationDetails !== undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["notificationDetails"],
-        message: "Task-list events without notify metadata must not include notificationDetails",
-      })
-    }
-  })
 
 const TaskListQuery = z.object({
   q: z.string().optional(),
@@ -198,26 +171,6 @@ const ConversationHistoryQuery = z.object({
   before_order_key: z.string().min(1),
   before_id: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(1000).default(CONVERSATION_HISTORY_PAGE_LIMIT),
-})
-
-const ReorderTaskQueueInput = z.object({
-  directory: z.string().min(1),
-  orderedTaskIDs: z.array(z.string()).default([]),
-  revision: z.string().optional(),
-})
-
-const ReorderTaskQueueResult = z.object({
-  directory: z.string(),
-  revision: z.string(),
-  queuedTaskIDs: z.array(z.string()),
-})
-
-const StartQueuedTaskNowResult = z.object({
-  task: Task,
-  directory: z.string(),
-  status: z.string(),
-  started: z.boolean(),
-  queuedTaskIDs: z.array(z.string()),
 })
 
 const TaskBindingList = z.array(
@@ -400,154 +353,6 @@ export const EngineRoutes = lazy(() =>
         )
       },
     )
-    .patch(
-      "/task-queue/reorder",
-      describeRoute({
-        summary: "Reorder queued tasks in a directory",
-        operationId: "task.queue.reorder",
-        responses: {
-          200: {
-            description: "Updated directory queue order",
-            content: {
-              "application/json": {
-                schema: resolver(ReorderTaskQueueResult),
-              },
-            },
-          },
-          409: { description: "Queue revision conflict" },
-          422: { description: "Invalid queued task ordering" },
-        },
-      }),
-      validator("json", ReorderTaskQueueInput),
-      async (c) => {
-        try {
-          return c.json(await EngineService.reorderTaskQueue(c.req.valid("json")))
-        } catch (error) {
-          if (error instanceof TaskQueueReorderError) {
-            throw new HTTPException(error.code === "conflict" ? 409 : 422, { message: error.message })
-          }
-          throw error
-        }
-      },
-    )
-    .post(
-      "/task/:taskID/start-now",
-      describeRoute({
-        summary: "Start a queued task immediately",
-        operationId: "task.queue.startNow",
-        responses: {
-          200: {
-            description: "Queued task started and scheduler invoked",
-            content: {
-              "application/json": {
-                schema: resolver(StartQueuedTaskNowResult),
-              },
-            },
-          },
-          409: { description: "Task is not queued" },
-          422: { description: "Task has no working directory" },
-          ...errors(404),
-        },
-      }),
-      validator("param", z.object({ taskID: Task.shape.id })),
-      async (c) => {
-        try {
-          return c.json(await EngineService.startQueuedTaskNow(c.req.valid("param").taskID))
-        } catch (error) {
-          if (error instanceof TaskQueueStartError) {
-            throw new HTTPException(409, { message: error.message })
-          }
-          if (error instanceof TaskQueueError) {
-            throw new HTTPException(422, { message: error.message })
-          }
-          throw error
-        }
-      },
-    )
-    .get(
-      "/task/events",
-      describeRoute({
-        summary: "Subscribe to global task-list change notifications",
-        description:
-          "Pure change-notification SSE for the task list sidebar. Emits " +
-          "`{type, taskID, sequence}` when a persisted task aggregate event " +
-          "changes the task-list projection. Conversation stream/status chunks " +
-          "belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy " +
-          "events also carry `notificationDetails` for copyable diagnostics. No " +
-          "replay — clients call /task separately to fetch the refreshed list.",
-        operationId: "task.list.events",
-        responses: {
-          200: {
-            description: "Task-list change stream",
-            content: {
-              "text/event-stream": {
-                schema: resolver(TaskListEvent),
-              },
-            },
-          },
-        },
-      }),
-      async (c) => {
-        c.header("X-Accel-Buffering", "no")
-        c.header("X-Content-Type-Options", "nosniff")
-        return streamGlobalSSE(c, async (stream, bind) => {
-          let heartbeat: ReturnType<typeof setInterval> | undefined
-          let stop = () => {}
-          let finishStream = () => {}
-          let closed = false
-          const cleanup = (input?: { closeStream?: boolean; error?: unknown }) => {
-            if (closed) return
-            closed = true
-            if (heartbeat) clearInterval(heartbeat)
-            stop()
-            if (input?.error) {
-              log.warn("task-list event stream write failed", { error: errorMessage(input.error) })
-            }
-            if (input?.closeStream) stream.close()
-            finishStream()
-          }
-          const finished = new Promise<void>((resolve) => {
-            finishStream = resolve
-          })
-          let writes = Promise.resolve()
-          const writeData = (data: string) => {
-            writes = writes
-              .then(() => {
-                if (closed) return
-                return stream.writeSSE({ data })
-              })
-              .catch((error) => {
-                cleanup({ closeStream: true, error })
-              })
-            return writes
-          }
-          stop = ProtocolStore.subscribeEvents(
-            bind((event) => {
-              if (!isTaskListProjectionEventType(event.type)) return
-              const payload = JSON.stringify(taskListProtocolEvent(event))
-              void writeData(payload)
-            }),
-            { aggregate: "task" },
-          )
-          await writeData(JSON.stringify({ type: "task-list.connected", taskID: null, sequence: 0 }))
-          if (closed) {
-            await writes
-            return
-          }
-          heartbeat = setInterval(
-            bind(() => {
-              void writeData(JSON.stringify({ type: "task-list.heartbeat", taskID: null, sequence: 0 }))
-            }),
-            10_000,
-          )
-          stream.onAbort(() => {
-            cleanup()
-          })
-          await finished
-          await writes
-        })
-      },
-    )
     .get(
       "/task/:taskID",
       describeRoute({
@@ -576,7 +381,7 @@ export const EngineRoutes = lazy(() =>
         summary: "Get task status",
         description:
           "Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. " +
-          'The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
+          'The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
         operationId: "task.status",
         responses: {
           200: {
@@ -1031,7 +836,10 @@ export const EngineRoutes = lazy(() =>
           return c.json([])
         }
         const transcript = await loadFullTaskTranscript(taskID, { scope: "task" })
-        const view = projectConversationView(transcript, [], listTaskConversationAgentSessions(taskID))
+        const view = projectConversationView({
+          transcript,
+          ledgerSessions: listTaskConversationAgentSessions(taskID),
+        })
         return c.json(await projectTaskTurnArtifacts({ taskID, transcript, view }))
       },
     )
@@ -1208,7 +1016,7 @@ export const EngineRoutes = lazy(() =>
           rewindCursor,
           sinceTimestamp: history.hasMore ? history.oldestTimestamp : null,
         })
-        const view = projectConversationView(historyWindow.transcript, eventPage.events, agentSessions)
+        const view = projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions })
         const turnArtifacts =
           board.task.status === "completed" || board.task.status === "failed" || board.task.status === "cancelled"
             ? await projectTaskTurnArtifacts({
@@ -1289,11 +1097,10 @@ export const EngineRoutes = lazy(() =>
               liveEpoch,
               transcriptMode: "snapshot",
               events: sessionEvents,
-              view: projectConversationView(
-                sessionTranscript,
-                sessionEvents,
-                listTaskConversationAgentSessions(taskID),
-              ),
+              view: projectConversationView({
+                transcript: sessionTranscript,
+                ledgerSessions: listTaskConversationAgentSessions(taskID),
+              }),
               history: {
                 oldestTimestamp: sessionTranscript[0] ? conversationItemTimestamp(sessionTranscript[0]) : null,
                 oldestOrderKey: sessionTranscript[0]?.info?.orderKey ?? null,
@@ -1305,8 +1112,17 @@ export const EngineRoutes = lazy(() =>
           }
           const changedMessageIDs = new Set<string>()
           for (const event of replay.events) {
-            if (event.sessionID !== sessionID || !isPersistedMessageTaskEvent(event.type)) continue
             const payload = event.payload && typeof event.payload === "object" ? event.payload : {}
+            const movedFromRequestedSession =
+              event.type === Message.Event.Moved.type &&
+              "sourceSessionID" in payload &&
+              payload.sourceSessionID === sessionID
+            if (
+              (event.sessionID !== sessionID && !movedFromRequestedSession) ||
+              !isPersistedMessageTaskEvent(event.type)
+            ) {
+              continue
+            }
             const info =
               payload.info && typeof payload.info === "object" ? (payload.info as Record<string, unknown>) : {}
             const part =
@@ -1331,7 +1147,10 @@ export const EngineRoutes = lazy(() =>
             liveEpoch,
             transcriptMode: "delta",
             events: [],
-            view: projectConversationView(transcript, [], listTaskConversationAgentSessions(taskID)),
+            view: projectConversationView({
+              transcript,
+              ledgerSessions: listTaskConversationAgentSessions(taskID),
+            }),
             history: {
               oldestTimestamp: null,
               oldestOrderKey: null,
@@ -1357,7 +1176,7 @@ export const EngineRoutes = lazy(() =>
           liveEpoch,
           transcriptMode: "snapshot",
           events: sessionEvents,
-          view: projectConversationView(sessionTranscript, sessionEvents, agentSessions),
+          view: projectConversationView({ transcript: sessionTranscript, ledgerSessions: agentSessions }),
           history: {
             oldestTimestamp: oldestTimestamp ?? sessionEvents[0]?.timestamp ?? null,
             oldestOrderKey: sessionTranscript[0]?.info?.orderKey ?? sessionEvents[0]?.orderKey ?? null,
@@ -1424,7 +1243,7 @@ export const EngineRoutes = lazy(() =>
         return c.json({
           transcript: page.transcript,
           events: pageEvents,
-          view: projectConversationView(page.transcript, pageEvents, agentSessions),
+          view: projectConversationView({ transcript: page.transcript, ledgerSessions: agentSessions }),
           history: page.history,
         })
       },
@@ -1596,8 +1415,8 @@ export const EngineRoutes = lazy(() =>
         summary: "Handle task message",
         operationId: "task.message",
         responses: {
-          200: {
-            description: "Task message handled",
+          202: {
+            description: "Task message durably accepted for delivery",
             content: {
               "application/json": {
                 schema: resolver(TaskMessageResult),
@@ -1615,7 +1434,7 @@ export const EngineRoutes = lazy(() =>
       validator("param", z.object({ taskID: Task.shape.id })),
       validator("json", TaskMessageInput),
       async (c) => {
-        return c.json(await EngineService.handleTaskMessage(c.req.valid("param").taskID, c.req.valid("json")))
+        return c.json(await EngineService.handleTaskMessage(c.req.valid("param").taskID, c.req.valid("json")), 202)
       },
     )
     .post(
@@ -1731,11 +1550,11 @@ export const EngineRoutes = lazy(() =>
         summary: "Cancel task",
         operationId: "task.cancel",
         responses: {
-          200: {
-            description: "Task cancelled",
+          202: {
+            description: "Task cancellation accepted or completed",
             content: {
               "application/json": {
-                schema: resolver(z.boolean()),
+                schema: resolver(TaskCancellationProjection),
               },
             },
           },
@@ -1746,8 +1565,9 @@ export const EngineRoutes = lazy(() =>
       validator("json", TaskCancellationRequestBody),
       async (c) => {
         const body = c.req.valid("json")
+        const taskID = c.req.valid("param").taskID
         return c.json(
-          await EngineService.cancelTask(c.req.valid("param").taskID, {
+          await EngineService.requestTaskCancellation(taskID, {
             origin: {
               actor: "user",
               source: "task.cancel",
@@ -1756,6 +1576,7 @@ export const EngineRoutes = lazy(() =>
               reason: body.reason,
             },
           }),
+          202,
         )
       },
     )
@@ -1830,7 +1651,7 @@ export const EngineRoutes = lazy(() =>
         operationId: "task.retry",
         responses: {
           200: {
-            description: "Task retry queued",
+            description: "Task retry accepted",
             content: {
               "application/json": {
                 schema: resolver(Task),
@@ -1856,7 +1677,7 @@ export const EngineRoutes = lazy(() =>
         operationId: "task.replan",
         responses: {
           200: {
-            description: "Task replan queued",
+            description: "Task replan accepted",
             content: {
               "application/json": {
                 schema: resolver(Task),
@@ -1945,9 +1766,23 @@ export const EngineRoutes = lazy(() =>
         },
       }),
       validator("param", z.object({ interactionID: Interaction.shape.id })),
-      validator("json", ReplyInteractionInput),
+      validator("json", UserReplyInteractionInput.omit({ userInput: true })),
       async (c) => {
-        return c.json(await EngineService.replyInteraction(c.req.valid("param").interactionID, c.req.valid("json")))
+        const interactionID = c.req.valid("param").interactionID
+        const input = c.req.valid("json")
+        return c.json(
+          await EngineService.replyUserInteraction(interactionID, {
+            ...input,
+            userInput: {
+              surface: "http.interaction",
+              text: input.message?.trim() || JSON.stringify(input.answers ?? input.decision ?? "allow_once"),
+              structured: {
+                ...(input.decision ? { decision: input.decision } : {}),
+                ...(input.answers ? { answers: input.answers } : {}),
+              },
+            },
+          }),
+        )
       },
     )
     .post(
@@ -1968,9 +1803,19 @@ export const EngineRoutes = lazy(() =>
         },
       }),
       validator("param", z.object({ interactionID: Interaction.shape.id })),
-      validator("json", RejectInteractionInput),
+      validator("json", UserRejectInteractionInput.omit({ userInput: true })),
       async (c) => {
-        return c.json(await EngineService.rejectInteraction(c.req.valid("param").interactionID, c.req.valid("json")))
+        const interactionID = c.req.valid("param").interactionID
+        const input = c.req.valid("json")
+        return c.json(
+          await EngineService.rejectUserInteraction(interactionID, {
+            ...input,
+            userInput: {
+              surface: "http.interaction",
+              text: input.message?.trim() || "Interaction rejected",
+            },
+          }),
+        )
       },
     )
     .patch(
@@ -2007,7 +1852,11 @@ export const EngineRoutes = lazy(() =>
       }),
       validator("param", z.object({ goalID: z.string() })),
       async (c) => {
-        return c.json(await EngineService.deleteGoal(c.req.valid("param").goalID))
+        return c.json(
+          await EngineService.deleteGoal(c.req.valid("param").goalID, {
+            projectID: PersistedProjectContext.currentProject().id,
+          }),
+        )
       },
     )
     .delete(
@@ -2032,6 +1881,7 @@ export const EngineRoutes = lazy(() =>
         const body = c.req.valid("json")
         return c.json(
           await EngineService.deleteTask(c.req.valid("param").taskID, {
+            projectID: PersistedProjectContext.currentProject().id,
             origin: {
               actor: "user",
               source: "task.delete",
@@ -2187,6 +2037,7 @@ function taskEvent(taskID: string, event: { type: string; properties: Record<str
 
 function isMessageTaskEvent(type: string): boolean {
   return (
+    type === "message.moved" ||
     type === "message.updated" ||
     type === "message.part.updated" ||
     type === "message.part.delta" ||
@@ -2197,6 +2048,7 @@ function isMessageTaskEvent(type: string): boolean {
 
 function isPersistedMessageTaskEvent(type: string): boolean {
   return (
+    type === "message.moved" ||
     type === "message.updated" ||
     type === "message.part.updated" ||
     type === "message.removed" ||

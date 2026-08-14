@@ -56,9 +56,11 @@ function resetGoalDialog(): void {
   })
 }
 
-export function closeGoalDialog(): void {
+export function closeGoalDialog(): boolean {
+  if (dialogStore.goal.saving) return false
   goalDialogGeneration += 1
   resetGoalDialog()
+  return true
 }
 
 export async function saveGoalDialog(): Promise<void> {

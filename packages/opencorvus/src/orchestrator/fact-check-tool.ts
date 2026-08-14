@@ -43,6 +43,7 @@ export type FactCheckToolDependencies = {
     targetMessageID: string
     assertedTargetAgent?: string
   }): Promise<{ targetAgent: string; targetMessageID: string; targetMessageContentHash: string } | { error: string }>
+  runFactCheck?: typeof FactCheckAgent.run
 }
 
 export function renderFactCheckReview(review: FactCheckReview): string {
@@ -92,12 +93,25 @@ export function renderFactCheckReview(review: FactCheckReview): string {
   return sections.join("\n\n")
 }
 
+function factCheckReviewScopeMatchesTarget(
+  review: FactCheckReview,
+  target: FactCheckStageInput,
+): boolean {
+  return (
+    review.scope.target_session_id === target.target_session_id &&
+    review.scope.target_agent === target.target_agent &&
+    review.scope.target_message_id === target.target_message_id &&
+    review.scope.target_message_content_hash === target.target_message_content_hash
+  )
+}
+
 export function createFactCheckTool(dependencies: FactCheckToolDependencies) {
+  const runFactCheck = dependencies.runFactCheck ?? FactCheckAgent.run
   return tool({
     description:
       "Ask a projected fact-check agent to inspect factual claims from a visible assistant message or domain artifact. " +
-      "The child session may record a FactCheckReview artifact, but the review is not a completion gate. " +
-      "The orchestrator judges complete, partial, missing, and conflicting evidence from the child session, final message, and artifact references.",
+      "The streamed child Turn may finish naturally, but Fact Check domain completion requires one valid FactCheckReview Artifact. " +
+      "A Turn without that review settles as durable domain-incomplete evidence and never opens workflow successors.",
     inputSchema: dependencies.inputSchema,
     execute: async (args, executionInput) => {
       const execution = requireDispatchAdapterExecutionContext(executionInput)
@@ -127,7 +141,7 @@ export function createFactCheckTool(dependencies: FactCheckToolDependencies) {
         target_message_content_hash: targetScope.targetMessageContentHash,
       })
 
-      const result = await FactCheckAgent.run({
+      const result = await runFactCheck({
         agentID: factCheckAgentName,
         packageRevision: execution.projectedAgent.packageRevision,
         workScope: execution.workScope,
@@ -149,16 +163,34 @@ export function createFactCheckTool(dependencies: FactCheckToolDependencies) {
       if (isAgentCoordinationHandoffResult(result)) {
         return DispatchOutcome.coordination(result)
       }
-      if (!result.review) {
-        return DispatchOutcome.terminal({
-          sessionID: result.sessionID,
-          finalMessageID: result.finalMessageID,
-        })
-      }
-
       try {
-        const { recordFactCheckReview } = await import("@/fact-check/persist")
+        const { recordFactCheckIncomplete, recordFactCheckReview } = await import("@/fact-check/persist")
         const provenance = artifactProvenanceForAgentTurn(result.sessionID, result.finalMessageID)
+        const settleIncomplete = (reason: "review_not_published" | "review_scope_mismatch") => {
+          const domainArtifact = recordFactCheckIncomplete({
+            taskID: task.id,
+            factCheckSessionID: result.sessionID,
+            finalMessageID: result.finalMessageID,
+            targetSessionID: resolvedArgs.target_session_id,
+            targetAgent: resolvedArgs.target_agent,
+            targetMessageID: resolvedArgs.target_message_id,
+            targetMessageContentHash: resolvedArgs.target_message_content_hash,
+            invokedByOrchestratorSessionID: dependencies.orchestratorSessionID,
+            observedArtifactLocators: provenance.observedArtifactLocators,
+            sourceArtifactLocators: provenance.sourceArtifactLocators,
+            reason,
+          })
+          return DispatchOutcome.domainIncomplete({
+            sessionID: result.sessionID,
+            finalMessageID: result.finalMessageID,
+            domain: "fact_check",
+            domainArtifact,
+          })
+        }
+        if (!result.review) return settleIncomplete("review_not_published")
+        if (!factCheckReviewScopeMatchesTarget(result.review, resolvedArgs)) {
+          return settleIncomplete("review_scope_mismatch")
+        }
         recordFactCheckReview({
           taskID: task.id,
           factCheckSessionID: result.sessionID,

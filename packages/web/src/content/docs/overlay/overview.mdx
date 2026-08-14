@@ -44,17 +44,17 @@ produced by the native matrix through `packages/overlay/script/build.ts`.
 
 ## Core panels
 
-| Panel                   | Role                                                  | File                                     |
-| ----------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| **Board**               | Task lifecycle plus fact-derived Delivery Slice revision progress | `src/components/Board.tsx`               |
-| **WorkLedger**          | Left-hand project, Mission, Task, and chat ledger     | `src/components/WorkLedger.tsx`          |
-| **Conversation**        | Agent dialogue / tool calls / reasoning               | `src/components/Conversation.tsx`        |
-| **ChatComposer**        | Input with attachments                                | `src/components/ChatComposer.tsx`        |
-| **InteractionCard**     | Permission and question replies in timeline/dialogs   | `src/components/InteractionCard.tsx`     |
-| **ChangesPanel**        | Pending file diffs                                    | `src/components/ChangesPanel.tsx`        |
-| **MemoryPanel**         | Agent memory / context                                | `src/components/MemoryPanel.tsx`         |
-| **TracePanel**          | Execution trace                                       | `src/components/TracePanel.tsx`          |
-| **LogViewer**           | Raw logs                                              | `src/components/LogViewer.tsx`           |
+| Panel               | Role                                                              | File                                 |
+| ------------------- | ----------------------------------------------------------------- | ------------------------------------ |
+| **Board**           | Task lifecycle plus fact-derived Delivery Slice revision progress | `src/components/Board.tsx`           |
+| **WorkLedger**      | Left-hand project, Mission, Task, and chat ledger                 | `src/components/WorkLedger.tsx`      |
+| **Conversation**    | Agent dialogue / tool calls / reasoning                           | `src/components/Conversation.tsx`    |
+| **ChatComposer**    | Input with attachments                                            | `src/components/ChatComposer.tsx`    |
+| **InteractionCard** | Permission and question replies in timeline/dialogs               | `src/components/InteractionCard.tsx` |
+| **ChangesPanel**    | Pending file diffs                                                | `src/components/ChangesPanel.tsx`    |
+| **MemoryPanel**     | Agent memory / context                                            | `src/components/MemoryPanel.tsx`     |
+| **TracePanel**      | Execution trace                                                   | `src/components/TracePanel.tsx`      |
+| **LogViewer**       | Raw logs                                                          | `src/components/LogViewer.tsx`       |
 
 Settings navigation comes from `src/store/dialog.ts` `CONFIG_SECTIONS`; `ConfigDialogHost.tsx` groups those tabs under Personal, Expert Squad, Chat, Memory & Context, Integrations, Archived, and About.
 
@@ -94,15 +94,14 @@ Settings navigation comes from `src/store/dialog.ts` `CONFIG_SECTIONS`; `ConfigD
 
 `src-tauri/src/main.rs` is the sole Rust source, registering all Tauri commands:
 
-| Command                                           | Role                                                                                                           |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `overlay_server_info` / `overlay_server_restart`  | Embedded opencorvus process management                                                                         |
-| `overlay_settings_load` / `overlay_settings_save` | Persists to Tauri's app config directory as `overlay.jsonc`                                                    |
-| `overlay_pick_dir` / `overlay_pick_files`         | File/dir dialogs                                                                                               |
-| `overlay_open_url` / `overlay_open_path`          | External open                                                                                                  |
-| `overlay_attention_set`                           | Tray blink                                                                                                     |
-| `overlay_badge_set`                               | Persistent dock/taskbar badge projection (`set_badge_count` on macOS/Linux, alert dot overlay icon on Windows) |
-| `overlay_toggle_devtools`                         | DevTools toggle                                                                                                |
+| Command                                           | Role                                                                                                                                                       |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `overlay_server_info` / `overlay_server_restart`  | Embedded opencorvus process management                                                                                                                     |
+| `overlay_settings_load` / `overlay_settings_save` | Persists to Tauri's app config directory as `overlay.jsonc`                                                                                                |
+| `overlay_pick_dir` / `overlay_pick_files`         | File/dir dialogs                                                                                                                                           |
+| `overlay_open_url` / `overlay_open_path`          | External open                                                                                                                                              |
+| `overlay_notification_send`                       | System notification plus native informational attention (Dock bounce, taskbar flash, or desktop-environment urgency hint), cleared when the window focuses |
+| `overlay_toggle_devtools`                         | DevTools toggle                                                                                                                                            |
 
 Process cleanup: Windows uses a Job Object + `KILL_ON_JOB_CLOSE`; Unix uses SIGKILL on the process group — ensuring the backend (and its children) are reaped on overlay exit.
 

@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "seo-geo",
+  "name": "SEO & Generative Engine Optimization",
+  "label": "SEO & Generative Engine Optimization",
+  "description": "Evidence-led search and generative discovery research, technical/content analysis, and prioritized optimization planning.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Diagnose and improve search-engine and generative-engine discoverability with dated evidence.",
+    "selection_guidance": "Use for Search Engine Optimization (SEO), Generative Engine Optimization (GEO), source visibility, content architecture, and measurement. Do not use to guarantee ranking, indexing, citation, or model mention.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "package_skill_refs": [
+        "seo-geo/shared/workflow",
+        "seo-geo/shared/method"
+      ],
+      "package_tool_refs": [],
+      "default_skill_refs": [],
+      "default_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "seo-geo-planner": {
+        "label": "SEO and GEO Planner",
+        "description": "Defines the discovery scope, targets, questions, evidence, and acceptance measures.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/seo-geo-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "seo-geo-source-researcher": {
+        "label": "Discovery Source Researcher",
+        "description": "Builds a current dossier from first-party pages, search guidance, observed results, and authoritative sources.",
+        "base_role": "deep-research",
+        "prompt": "agents/seo-geo-source-researcher/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "seo-geo-search-analyst": {
+        "label": "Search Optimization Analyst",
+        "description": "Analyzes technical and content search discoverability with reproducible observations.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/seo-geo-search-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "seo-geo-generative-analyst": {
+        "label": "Generative Discovery Analyst",
+        "description": "Analyzes entity clarity, answer extractability, source corroboration, and current generative discovery evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/seo-geo-generative-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "seo-geo-strategist": {
+        "label": "Discoverability Strategy Synthesizer",
+        "description": "Combines search and generative evidence into one prioritized implementation and measurement strategy.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/seo-geo-strategist/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "seo-geo-fact-checker": {
+        "label": "SEO and GEO Fact Checker",
+        "description": "Audits evidence, observations, recommendation mechanisms, dates, scope, and unsupported ranking claims.",
+        "base_role": "fact-check",
+        "prompt": "agents/seo-geo-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "seo-geo-plan-writer": {
+        "label": "SEO and GEO Optimization Plan Writer",
+        "description": "Owns the corrected canonical optimization plan and interactive delivery.",
+        "base_role": "build",
+        "prompt": "agents/seo-geo-plan-writer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "seo-geo/shared/workflow",
+          "seo-geo/shared/method"
+        ],
+        "package_tool_refs": [
+          "seo-geo/shared/publish-seo-geo-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "search-generative-discovery-plan": {
+        "label": "Search and Generative Discovery Plan",
+        "description": "Binding SEO & Generative Engine Optimization workflow. Every node runs exactly once; independent branches start concurrently and joins wait for every predecessor.",
+        "nodes": {
+          "seo-geo-planner": {
+            "agent_id": "seo-geo-planner",
+            "description": "Defines the discovery scope, targets, questions, evidence, and acceptance measures.",
+            "depends_on": []
+          },
+          "seo-geo-source-researcher": {
+            "agent_id": "seo-geo-source-researcher",
+            "description": "Builds a current dossier from first-party pages, search guidance, observed results, and authoritative sources.",
+            "depends_on": [
+              "seo-geo-planner"
+            ]
+          },
+          "seo-geo-search-analyst": {
+            "agent_id": "seo-geo-search-analyst",
+            "description": "Analyzes technical and content search discoverability with reproducible observations.",
+            "depends_on": [
+              "seo-geo-source-researcher"
+            ]
+          },
+          "seo-geo-generative-analyst": {
+            "agent_id": "seo-geo-generative-analyst",
+            "description": "Analyzes entity clarity, answer extractability, source corroboration, and current generative discovery evidence.",
+            "depends_on": [
+              "seo-geo-source-researcher"
+            ]
+          },
+          "seo-geo-strategist": {
+            "agent_id": "seo-geo-strategist",
+            "description": "Combines search and generative evidence into one prioritized implementation and measurement strategy.",
+            "depends_on": [
+              "seo-geo-generative-analyst",
+              "seo-geo-search-analyst"
+            ]
+          },
+          "seo-geo-fact-checker": {
+            "agent_id": "seo-geo-fact-checker",
+            "description": "Audits evidence, observations, recommendation mechanisms, dates, scope, and unsupported ranking claims.",
+            "depends_on": [
+              "seo-geo-strategist"
+            ]
+          },
+          "seo-geo-plan-writer": {
+            "agent_id": "seo-geo-plan-writer",
+            "description": "Owns the corrected canonical optimization plan and interactive delivery.",
+            "depends_on": [
+              "seo-geo-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

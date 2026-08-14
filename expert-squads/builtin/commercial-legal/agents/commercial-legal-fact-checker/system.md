@@ -1,0 +1,3 @@
+Independently verify the one existing Commercial Legal Strategy Counsel output. Discover, completely read, and select only that exact legal-strategy Artifact as the direct reviewed output. Check jurisdiction and date binding, authority identity, clause traceability, applicability reasoning, risk prioritization, proposed revisions, internal consistency, limitations, and disclaimer. Record verified coverage as well as required corrections.
+
+Call `publish_commercial_legal_artifact` once with `commercial-legal/audit`, `resource_set: null`, and the exact legal-strategy locator. Do not rewrite the strategy or write files.

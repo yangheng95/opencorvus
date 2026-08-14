@@ -1,0 +1,11 @@
+Use `cultural-heritage-preservation/shared/method` to prepare the condition, deterioration, hazard, and preventive-risk branch.
+
+Input contract: require stable asset/site and component IDs, exact location, material and construction facts supplied by qualified records, dated condition surveys and images, measurement units and instrument versions, environment and pest logs, handling/storage/display history, fire/water/security and natural-hazard information, existing controls, incident history, evidence cutoff, inspection limitations, responsible owner, and qualified conservator/safety reviewers. Never infer a material or defect from an image alone.
+
+Domain method: establish a location-specific baseline and compare only like-for-like observations. Map observation, extent, severity under a supplied rubric, measurement method, image or record evidence, and change since the previous compatible baseline. Frame risk as source or agent, vulnerability, event, effect on valued attributes, time horizon, likelihood band, consequence band, uncertainty, existing control, failure mode, and residual question. Keep environment readings as measured ranges with units; do not invent universal temperature, humidity, light, vibration, pest, structural, or fire thresholds.
+
+Evidence output: complete the condition/change log and preventive-risk register with IDs, units, source/version/date, applicability, uncertainty, control status, owner, reviewer, evidence links, priority rationale, and monitoring question. Flag active deterioration or immediate hazards for human escalation without proposing intervention instructions.
+
+Unknown and stop: stop on unsafe access, suspected active fire/water/structural/chemical/biological hazard, incompatible survey methods, unverified material identification, missing baseline, undocumented treatment history, or any request for sampling, cleaning, stabilization, repair, packing, transport, environmental-setpoint change, or emergency action.
+
+Authority and qualified review: do not diagnose material failure, certify structural or fire safety, prescribe treatment, accept residual risk, or authorize handling. Require an appropriate conservator, collections manager, building/structural engineer, fire/security/emergency specialist, occupational-safety lead, and accountable custodian.

@@ -5,6 +5,8 @@ dist/
 
 # dependencies
 node_modules/
+.hosted-market-sim/
+.generated/
 
 # logs
 npm-debug.log*

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "materials-failure-analysis",
+  "name": "Materials Failure Analysis",
+  "label": "Materials Failure Analysis",
+  "description": "Physical-component custody, service history, fracture-surface, material-characterization, load, environment, mechanics and competing-hypothesis evidence joined for qualified review.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded physical materials-failure evidence without touching evidence, destructive testing, root-cause, liability, fitness, disposition, recall, or return-to-service authority.",
+    "selection_guidance": "Select for failed physical-component identity and custody, as-received condition, service/design/manufacturing history, fracture origin/morphology, metallography/composition/hardness/mechanical-test evidence, loads, environment, fracture-mechanics applicability, and competing failure hypotheses. Do not select for generic manufacturing disposition, laboratory accreditation, vehicle functional-safety HARA, aircraft maintenance release, well-integrity declaration, semiconductor-device failure analysis, evidence handling/cleaning/cutting/etching/testing, root-cause/liability conclusions, fitness-for-service, rework/recall/scrap, or return to service.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "materials-failure-analysis/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "materials-failure-evidence-custody-history-analyst": {
+        "label": "Materials Failure Evidence, Custody and History Analyst",
+        "description": "Freezes failed-component identity, as-received condition, evidence custody, design/manufacturing and service chronology.",
+        "base_role": "explore",
+        "prompt": "agents/materials-failure-evidence-custody-history-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "materials-failure-analysis/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "materials-fractography-characterization-analyst": {
+        "label": "Materials Fractography and Characterization Analyst",
+        "description": "Maps supplied fracture-origin/morphology, metallography, composition, hardness and mechanical-test evidence with uncertainty.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/materials-fractography-characterization-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "materials-failure-analysis/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "materials-load-environment-mechanics-analyst": {
+        "label": "Materials Load, Environment and Mechanics Analyst",
+        "description": "Reconciles service loads, geometry, environment and bounded mechanics calculations into competing failure hypotheses.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/materials-load-environment-mechanics-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "materials-failure-analysis/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "materials-failure-analysis-review-owner": {
+        "label": "Materials Failure Analysis Review Owner",
+        "description": "Joins custody/history, characterization and mechanics evidence while preserving competing hypotheses and professional authority.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/materials-failure-analysis-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "materials-failure-analysis/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "materials-failure-analysis-review": {
+        "label": "Materials Failure Analysis Review",
+        "description": "Three independent custody/history, characterization and mechanics branches converge into a bounded failure-evidence pack.",
+        "nodes": {
+          "materials-failure-evidence-custody-history-analyst": {
+            "agent_id": "materials-failure-evidence-custody-history-analyst",
+            "description": "Freezes failed-component identity, as-received evidence, custody and service/design/manufacturing history.",
+            "depends_on": []
+          },
+          "materials-fractography-characterization-analyst": {
+            "agent_id": "materials-fractography-characterization-analyst",
+            "description": "Maps fracture surfaces and material characterization evidence with method and uncertainty.",
+            "depends_on": []
+          },
+          "materials-load-environment-mechanics-analyst": {
+            "agent_id": "materials-load-environment-mechanics-analyst",
+            "description": "Reconciles load, geometry, environment and bounded mechanics into competing hypotheses.",
+            "depends_on": []
+          },
+          "materials-failure-analysis-review-owner": {
+            "agent_id": "materials-failure-analysis-review-owner",
+            "description": "Joins all branches, preserves contradictions and alternative hypotheses, and routes professional decisions.",
+            "depends_on": [
+              "materials-failure-evidence-custody-history-analyst",
+              "materials-fractography-characterization-analyst",
+              "materials-load-environment-mechanics-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

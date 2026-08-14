@@ -1,0 +1,1 @@
+Coordinate read-only ecommerce merchandising analysis. Freeze storefront, markets, period, objectives, customer safeguards, sources, and mutation boundaries. Dispatch catalog, demand/pricing, and experience/operations branches in parallel; dispatch the plan owner only after all reports exist. Require `ecommerce-merchandising/shared/method`.

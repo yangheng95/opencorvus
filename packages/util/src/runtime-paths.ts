@@ -11,6 +11,15 @@ export class OpenCorvusRuntimeRootError extends Error {
   }
 }
 
+export class OpenCorvusTestRuntimeIsolationError extends Error {
+  readonly code = "INVALID_OPENCORVUS_TEST_RUNTIME"
+
+  constructor(message: string) {
+    super(message)
+    this.name = "OpenCorvusTestRuntimeIsolationError"
+  }
+}
+
 export type OpenCorvusRuntimePathInput = {
   env: NodeJS.ProcessEnv
   platform: NodeJS.Platform
@@ -70,9 +79,28 @@ function defaultRoot(input: OpenCorvusRuntimePathInput) {
   return paths.join(crossDesktopGroupData, APPLICATION_DIRECTORY_NAME)
 }
 
+function assertTestRuntimeIsolation(input: OpenCorvusRuntimePathInput, root: string) {
+  if (!input.env.OPENCORVUS_TEST_HOME?.trim()) return
+  const paths = platformPath(input.platform)
+  const processRoot = input.env.OPENCORVUS_TEST_PROCESS_ROOT?.trim()
+  if (!processRoot || !paths.isAbsolute(processRoot)) {
+    throw new OpenCorvusTestRuntimeIsolationError(
+      "OPENCORVUS_TEST_HOME requires an absolute OPENCORVUS_TEST_PROCESS_ROOT from the test-runtime preload",
+    )
+  }
+  const normalizedProcessRoot = paths.normalize(processRoot)
+  const relative = paths.relative(normalizedProcessRoot, root)
+  if (!relative || relative.startsWith("..") || paths.isAbsolute(relative)) {
+    throw new OpenCorvusTestRuntimeIsolationError(
+      `Test runtime root must be a child of OPENCORVUS_TEST_PROCESS_ROOT: ${root}`,
+    )
+  }
+}
+
 export function resolveOpenCorvusRuntimePaths(input: OpenCorvusRuntimePathInput): OpenCorvusRuntimePaths {
   const paths = platformPath(input.platform)
   const root = explicitRoot(input) ?? defaultRoot(input)
+  assertTestRuntimeIsolation(input, root)
   const overlay = paths.join(root, "overlay")
   return {
     root,

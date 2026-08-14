@@ -1,8 +1,9 @@
 import { Database, eq } from "@/storage/db"
-import { EngineTaskTable } from "./engine.sql"
+import { EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
 import { writeTaskUpdateInTransaction } from "./state"
 import { isTaskTerminal } from "./task-status"
 import type { TaskRow } from "./store"
+import { metadataWithoutTaskCompletionClosure } from "./task-completion-closure"
 
 export function openTaskForContinuationInTransaction(input: {
   db: Database.TxOrDb
@@ -15,16 +16,23 @@ export function openTaskForContinuationInTransaction(input: {
   if (!isTaskTerminal(current)) {
     throw new Error(`task ${input.taskID} must be terminal before continuation open`)
   }
-  const metadata =
-    current.metadata && typeof current.metadata === "object" && !Array.isArray(current.metadata)
-      ? { ...(current.metadata as Record<string, unknown>) }
-      : {}
+  const metadata = metadataWithoutTaskCompletionClosure(current.metadata)
   delete metadata.cancelled
   delete metadata.interrupted
+  // A continuation is another terminal occurrence of the same Task and the
+  // same immutable creation workspace, not a newly-created Task. Keep the
+  // original baseline and the prior result checkpoint so EngineGit.prepare
+  // does not compare a post-result workspace with the creation capsule as if
+  // no execution had ever occurred. EngineGit.complete owns appending the
+  // prior result to result_history when this continuation closes.
+  input.db
+    .delete(EngineTaskCancellationAuthorityTable)
+    .where(eq(EngineTaskCancellationAuthorityTable.task_id, input.taskID))
+    .run()
   return writeTaskUpdateInTransaction({
     db: input.db,
     taskID: input.taskID,
-    values: { status: "queued", error: null, metadata },
+    values: { status: "active", error: null, metadata },
     summary: input.summary,
     now: input.now,
   }).task

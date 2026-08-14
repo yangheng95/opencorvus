@@ -8,6 +8,7 @@ import { ProjectedWorkerIdentitySchema } from "./projected-worker-identity"
 import { ProjectedAgentWorkScope, ProjectedAgentWorkScopeSchema } from "./projected-agent-work-scope"
 import { materializeProjectedWorkerBinding, type ProjectedWorkerBinding } from "./projected-worker-binding"
 import { DispatchTurnSchema, WorkerInputMessageAuthoritySchema } from "@/orchestrator/dispatch-turn-projection"
+import { StageToolMaterializerBindingSchema } from "./stage-tool-materializer"
 
 export class PersistedWorkerTurnDescriptorIncompatibleError extends Error {
   override readonly name = "PersistedWorkerTurnDescriptorIncompatibleError"
@@ -67,6 +68,8 @@ export namespace WorkerTurnDescriptor {
         enabled: z.array(z.string()),
         switches: z.record(z.string(), z.boolean()).optional(),
         coordinationHandoff: z.literal("request_orchestrator_decision").optional(),
+        stageOwned: z.array(z.string()),
+        stageMaterializers: z.record(z.string(), StageToolMaterializerBindingSchema),
       }),
       output: z.object({
         format: z.literal("text"),
@@ -226,8 +229,14 @@ export namespace WorkerTurnDescriptor {
   }
 
   export function findForDispatch(input: { sessionID: string; dispatchID: string }): Info | undefined {
-    const rows = Database.use((db) =>
-      db
+    return Database.use((db) => findForDispatchInDatabase(db, input))
+  }
+
+  export function findForDispatchInDatabase(
+    db: Database.TxOrDb,
+    input: { sessionID: string; dispatchID: string },
+  ): Info | undefined {
+    const rows = db
         .select()
         .from(WorkerTurnDescriptorTable)
         .where(
@@ -236,8 +245,7 @@ export namespace WorkerTurnDescriptor {
             sql`json_extract(${WorkerTurnDescriptorTable.payload}, '$.dispatchTurn.current_dispatch_id') = ${input.dispatchID}`,
           ),
         )
-        .all(),
-    )
+        .all()
     if (rows.length > 1) {
       throw new Error(
         `Session ${input.sessionID} dispatch ${input.dispatchID} has ${rows.length} Worker Turn descriptors`,

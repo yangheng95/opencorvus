@@ -5,20 +5,27 @@
   "name": "Research Studio",
   "label": "Research Studio",
   "description": "A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.",
-  "version": "2026.08.08.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-backed retrieval, reproducible analysis, synthesis, and evidence-led report delivery without a software-delivery planning workflow.",
     "selection_guidance": "Select Research Studio only when its declared workflow owns the complete evidence, computation, fact-check, report-rendering, and acceptance surface required by the outcome; a deliverable being called a report is not sufficient by itself.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "read", "browser_preview_capture"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "read",
+        "browser_preview_capture"
+      ],
       "default_skill_refs": [],
       "package_skill_refs": [],
       "default_tool_refs": [],
@@ -30,7 +37,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "research-studio-planner": {
@@ -51,7 +58,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-studio-researcher": {
         "label": "Research Studio Deep Researcher",
@@ -71,7 +78,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-studio-analyst": {
         "label": "Research Studio Evidence Analyst",
@@ -81,7 +88,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["research-studio/shared/analysis-report-quality"],
+        "package_skill_refs": [
+          "research-studio/shared/analysis-report-quality"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +100,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-studio-fact-checker": {
         "label": "Research Studio Fact Checker",
@@ -101,7 +110,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["research-studio/shared/analysis-report-quality"],
+        "package_skill_refs": [
+          "research-studio/shared/analysis-report-quality"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +122,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-studio-writer": {
         "label": "Research Studio Report Writer",
@@ -120,8 +131,12 @@
         "prompt": "agents/research-studio-writer/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
-        "default_skill_refs": ["default/skill/design-taste-frontend"],
-        "package_skill_refs": ["research-studio/shared/analysis-report-quality"],
+        "default_skill_refs": [
+          "default/skill/design-taste-frontend"
+        ],
+        "package_skill_refs": [
+          "research-studio/shared/analysis-report-quality"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +146,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "direct-writing": {
@@ -142,9 +157,9 @@
           "research-studio-writer": {
             "agent_id": "research-studio-writer",
             "description": "Faithfully write and deliver the report from sufficient bounded supplied material.",
-            "depends_on": [],
-          },
-        },
+            "depends_on": []
+          }
+        }
       },
       "evidence-synthesis": {
         "label": "Verified Evidence Synthesis",
@@ -153,19 +168,23 @@
           "research-studio-analyst": {
             "agent_id": "research-studio-analyst",
             "description": "Produce explicit claims, reproducible calculations when required, canonical evidence resources, comparisons, and limitations from the supplied evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "research-studio-fact-checker": {
             "agent_id": "research-studio-fact-checker",
             "description": "Verify the analyst's post-computation load-bearing claims and method evidence and record corrections or unresolved items.",
-            "depends_on": ["research-studio-analyst"],
+            "depends_on": [
+              "research-studio-analyst"
+            ]
           },
           "research-studio-writer": {
             "agent_id": "research-studio-writer",
             "description": "Render and deliver the template-driven report from accepted analysis and fact-check verdicts without recomputing their claims.",
-            "depends_on": ["research-studio-fact-checker"],
-          },
-        },
+            "depends_on": [
+              "research-studio-fact-checker"
+            ]
+          }
+        }
       },
       "full-research": {
         "label": "Full Source-Backed Research",
@@ -174,30 +193,38 @@
           "research-studio-planner": {
             "agent_id": "research-studio-planner",
             "description": "Define the bounded research charter, source strategy, comparison method, and stopping conditions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "research-studio-researcher": {
             "agent_id": "research-studio-researcher",
             "description": "Collect durable multi-source evidence using the accepted research charter.",
-            "depends_on": ["research-studio-planner"],
+            "depends_on": [
+              "research-studio-planner"
+            ]
           },
           "research-studio-analyst": {
             "agent_id": "research-studio-analyst",
             "description": "Produce explicit claims, reproducible calculations, canonical evidence resources, comparisons, and limitations from the collected evidence.",
-            "depends_on": ["research-studio-researcher"],
+            "depends_on": [
+              "research-studio-researcher"
+            ]
           },
           "research-studio-fact-checker": {
             "agent_id": "research-studio-fact-checker",
             "description": "Verify the analyst's post-computation load-bearing claims and method evidence and record corrections or unresolved items.",
-            "depends_on": ["research-studio-analyst"],
+            "depends_on": [
+              "research-studio-analyst"
+            ]
           },
           "research-studio-writer": {
             "agent_id": "research-studio-writer",
             "description": "Render and deliver the template-driven report from accepted evidence, analysis, and fact-check verdicts without recomputing their claims.",
-            "depends_on": ["research-studio-fact-checker"],
-          },
-        },
-      },
-    },
-  },
+            "depends_on": [
+              "research-studio-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,3 @@
+Independently map the decision to the operator's approval and evidence requirements. Identify mandatory procurement, finance, security, privacy, legal, compliance, accessibility, sustainability, conflict-of-interest, and executive checks only where applicable to the supplied policy and scope. Preserve segregation of duties and name the evidence owner for every checkpoint.
+
+Publish one `procurement-vendor/approval-evidence` Artifact containing the approval matrix, evidence checklist, present evidence, missing evidence, exceptions, conflicts, required approvers, decision conditions, expiration or refresh dates, and the authority boundary. Do not claim an approval from silence, role labels, or model judgment.

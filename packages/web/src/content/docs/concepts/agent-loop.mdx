@@ -16,7 +16,7 @@ Worker sessions follow the **standard agentic loop**: LLM emits tool-call → to
 Each tool-call returned by the LLM is routed by `SessionLoop.resolveTools`:
 
 1. **Filter** — `resolveTools()` applies the `input.tools` allow-list so DashScope isn't bombarded with 30+ tools.
-2. **Permission check** — `PermissionNext.ask()` (see [Permissions](../../permissions/)).
+2. **Permission check** — the central invocation authorizer applies the Session's frozen `Full access` or `Ask me` policy (see [Permissions](../../permissions/)).
 3. **Execute** — dispatch to the tool handler.
 4. **Write back** — the result becomes a `tool-result` part on the session message stream.
 

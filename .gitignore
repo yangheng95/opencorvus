@@ -16,6 +16,7 @@ tmp
 .tmp
 .tmp-*
 packages/opencorvus/.*.tmp/
+packages/opencorvus/.scratch-work-artifact-build-check/
 dist
 ts-dist
 .turbo
@@ -38,6 +39,12 @@ code_review.txt
 # Local dev files
 /AGENTS.md
 /specs/
+
+# Local production credential material belongs in the external DPAPI vault.
+deploy/racknerd/production.env
+deploy/racknerd/*.dpapi.json
+deploy/racknerd/*_ed25519
+deploy/racknerd/*_ed25519.pem
 .opencorvus-worktrees/
 .opencorvus-meta.json
 /opencorvus.json
@@ -142,6 +149,7 @@ _codex_*.prompt.md
 packages/sdk/js/openapi-ts-error-*.log
 packages/overlay/src-tauri/target-codex-repaired/
 packages/overlay/dist-artifacts/
+packages/web/public/downloads/latest.json
 packages/overlay/src-tauri/gen/schemas/macOS-schema.json
 
 # Benchmark / scratch artifacts at repo root

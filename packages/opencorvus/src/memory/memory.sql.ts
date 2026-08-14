@@ -2,7 +2,7 @@ import { sqliteTable, text, integer, index, blob } from "drizzle-orm/sqlite-core
 import { ProjectTable } from "../project/project.sql"
 import { Timestamps } from "@/storage/schema.sql"
 
-export type MemoryKind = "note" | "episode" | "fact" | "lesson" | "profile"
+export type MemoryKind = "note" | "episode" | "fact" | "lesson" | "profile" | "user_message" | "project_context"
 export type MemorySource = "agent" | "compaction" | "user" | "reflection"
 
 export const MemoryFileTable = sqliteTable(

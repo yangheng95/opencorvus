@@ -98,7 +98,7 @@ export const VisibleComposerReferences = z
   .object({
     skillNames: z.array(z.string()),
     missionSkillNames: z.array(z.string()),
-    /** Agent Squad IDs (Identifiers) preserve first-visible-reference order. */
+    /** Expert Squad IDs (Identifiers) preserve first-visible-reference order. */
     expertSquadIDs: z.array(z.string()),
   })
   .strict()
@@ -244,41 +244,21 @@ export type PtyOutputStreamEvent = z.infer<typeof PtyOutputStreamEvent>
 
 // ── Mailbox change stream ──
 
-export const MailboxChangeStreamEvent = z.discriminatedUnion("type", [
-  z
-    .object({
-      type: z.literal("mailbox.connected"),
-      sourceType: z.literal("mailbox.connected"),
-      messageID: z.null(),
-      taskID: z.null(),
-      sequence: z.literal(0),
-    })
-    .strict(),
-  z
-    .object({
-      type: z.literal("mailbox.heartbeat"),
-      sourceType: z.literal("mailbox.heartbeat"),
-      messageID: z.null(),
-      taskID: z.null(),
-      sequence: z.literal(0),
-    })
-    .strict(),
-  z
-    .object({
-      type: z.literal("mailbox.changed"),
-      sourceType: z.string().min(1),
-      messageID: z.string().min(1),
-      taskID: z.string().min(1).nullable(),
-      sequence: z.number(),
-    })
-    .strict(),
-])
+export const MailboxChangeStreamEvent = z
+  .object({
+    type: z.literal("mailbox.changed"),
+    sourceType: z.string().min(1),
+    messageID: z.string().min(1),
+    taskID: z.string().min(1).nullable(),
+    sequence: z.number(),
+  })
+  .strict()
 export type MailboxChangeStreamEvent = z.infer<typeof MailboxChangeStreamEvent>
 
 // ── Work Ledger projection and change stream ──
 
 export const WorkLedgerChatStatus = z.enum(["active", "idle", "terminal"])
-export const WorkLedgerTaskLifecycleStatus = z.enum(["queued", "active", "completed", "failed", "cancelled"])
+export const WorkLedgerTaskLifecycleStatus = z.enum(["active", "completed", "failed", "cancelled"])
 export const WorkLedgerActivityStatus = z.enum(["running", "inactive"])
 export const WorkLedgerTaskPriority = z.enum(["critical", "high", "normal", "low"])
 export const WorkLedgerMissionID = z
@@ -307,7 +287,7 @@ export const WorkLedgerProjectRow = z
   })
   .strict()
 
-export const WorkLedgerTaskRow = z
+const WorkLedgerTaskRowObject = z
   .object({
     kind: z.literal("task"),
     id: z.string(),
@@ -315,15 +295,16 @@ export const WorkLedgerTaskRow = z
     description: z.string(),
     directory: z.string(),
     created: z.number(),
-    started: z.number().nullable(),
+    started: z.number(),
+    completed: z.number().optional(),
     updated: z.number(),
     pinned: z.boolean(),
     lifecycleStatus: WorkLedgerTaskLifecycleStatus,
+    cancellationStatus: z.enum(["none", "cancelling", "cancelled"]),
     activityStatus: WorkLedgerActivityStatus,
     priority: WorkLedgerTaskPriority,
     source: z.string(),
     productPillar: ProductPillarSchema,
-    queueOrder: z.number(),
     pendingInteractions: z.number().int().nonnegative(),
     archived: z.number().optional(),
     missionID: WorkLedgerMissionID.optional(),
@@ -331,10 +312,28 @@ export const WorkLedgerTaskRow = z
   })
   .strict()
 
-export const WorkLedgerMissionTaskRow = WorkLedgerTaskRow.extend({
+function validateWorkLedgerTaskTiming(
+  task: { started: number; completed?: number; lifecycleStatus: z.infer<typeof WorkLedgerTaskLifecycleStatus> },
+  context: z.RefinementCtx,
+) {
+  if (task.lifecycleStatus === "active") return
+  if (!(task.completed !== undefined && task.completed >= task.started)) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["completed"],
+      message: `Terminal Work Ledger Task lifecycle ${task.lifecycleStatus} requires completed >= started`,
+    })
+  }
+}
+
+export const WorkLedgerTaskRow = WorkLedgerTaskRowObject.superRefine(validateWorkLedgerTaskTiming)
+
+export const WorkLedgerMissionTaskRow = WorkLedgerTaskRowObject.extend({
   missionID: WorkLedgerMissionID,
   missionSessionID: z.string(),
-}).strict()
+})
+  .strict()
+  .superRefine(validateWorkLedgerTaskTiming)
 
 export const WorkLedgerMissionRow = z
   .object({
@@ -380,11 +379,15 @@ export const WorkLedgerRow = z.discriminatedUnion("kind", [
   WorkLedgerChatRow,
 ])
 
-export const WorkLedgerArchiveRow = z.discriminatedUnion("kind", [
+const WorkLedgerArchiveRowObject = z.discriminatedUnion("kind", [
   WorkLedgerMissionRow,
-  WorkLedgerTaskRow,
+  WorkLedgerTaskRowObject,
   WorkLedgerChatRow,
 ])
+
+export const WorkLedgerArchiveRow = WorkLedgerArchiveRowObject.superRefine((row, context) => {
+  if (row.kind === "task") validateWorkLedgerTaskTiming(row, context)
+})
 
 export const WorkLedgerCursor = z
   .object({
@@ -487,6 +490,7 @@ export const WorkLedgerEvent = z.discriminatedUnion("type", [
   WorkLedgerChangedEvent,
   WorkLedgerMissionHandoffEvent,
   WorkLedgerConversationHandoffEvent,
+  MailboxChangeStreamEvent,
 ])
 export type WorkLedgerActionEvent = z.infer<typeof WorkLedgerActionEvent>
 export type WorkLedgerEvent = z.infer<typeof WorkLedgerEvent>
@@ -504,7 +508,27 @@ export const ProjectWorktreeInfo = z
   .strict()
   .meta({ ref: "ProjectWorktree" })
 export const ProjectWorktreeList = ProjectWorktreeInfo.array()
-export const ProjectWorktreeDeleteReceipt = z.object({ ok: z.literal(true) }).strict()
+export const ProjectWorktreeDeleteReceipt = z.discriminatedUnion("status", [
+  z.object({ ok: z.literal(true), status: z.literal("removed") }).strict(),
+  z
+    .object({
+      ok: z.literal(true),
+      status: z.literal("removed_with_preservation"),
+      preservations: z
+        .array(
+          z
+            .object({
+              operation: z.string(),
+              code: z.string(),
+              scope: z.literal("worktree-cleanup"),
+              message: z.string(),
+            })
+            .strict(),
+        )
+        .min(1),
+    })
+    .strict(),
+])
 
 export type ProjectWorktreeInfo = z.infer<typeof ProjectWorktreeInfo>
 export type ProjectWorktreeDeleteReceipt = z.infer<typeof ProjectWorktreeDeleteReceipt>
@@ -557,6 +581,9 @@ export const CONVERSATION_DISPLAY_MESSAGE_PART_TYPES = [
   "text",
   "part-error",
   "reasoning",
+  "source-url",
+  "source-document",
+  "source-file",
   "tool",
   "patch",
   "file",
@@ -604,6 +631,26 @@ export type ConversationAgentActivityItem =
       type: "part-error"
       title?: string
       message: string
+    })
+  | (ConversationAgentActivityBase & {
+      type: "source-url"
+      sourceId: string
+      url: string
+      title?: string
+    })
+  | (ConversationAgentActivityBase & {
+      type: "source-document"
+      sourceId: string
+      mediaType: string
+      title: string
+      filename?: string
+    })
+  | (ConversationAgentActivityBase & {
+      type: "source-file"
+      sourceId: string
+      path: string
+      title: string
+      range?: { startLine: number; endLine: number }
     })
 
 function compactConversationAgentActivityText(value: unknown, limit: number): string {
@@ -686,6 +733,46 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
         }
       : null
   }
+  if (part.type === "source-url") {
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const url = compactConversationAgentActivityText(part.url, 2048)
+    const title = compactConversationAgentActivityText(part.title, 240)
+    return sourceId && /^https?:\/\//i.test(url)
+      ? { id, orderKey, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
+      : null
+  }
+  if (part.type === "source-document") {
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const mediaType = compactConversationAgentActivityText(part.mediaType, 160)
+    const title = compactConversationAgentActivityText(part.title, 240)
+    const filename = compactConversationAgentActivityText(part.filename, 240)
+    return sourceId && mediaType && title
+      ? {
+          id,
+          orderKey,
+          type: "source-document",
+          sourceId,
+          mediaType,
+          title,
+          ...(filename ? { filename } : {}),
+        }
+      : null
+  }
+  if (part.type === "source-file") {
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const path = compactConversationAgentActivityText(part.path, 1024)
+    const title = compactConversationAgentActivityText(part.title, 240)
+    const rawRange = part.range && typeof part.range === "object" ? (part.range as Record<string, unknown>) : undefined
+    const startLine = typeof rawRange?.startLine === "number" ? rawRange.startLine : undefined
+    const endLine = typeof rawRange?.endLine === "number" ? rawRange.endLine : undefined
+    const range =
+      startLine !== undefined && endLine !== undefined && startLine > 0 && endLine >= startLine
+        ? { startLine, endLine }
+        : undefined
+    return sourceId && path && title
+      ? { id, orderKey, type: "source-file", sourceId, path, title, ...(range ? { range } : {}) }
+      : null
+  }
   return null
 }
 
@@ -763,7 +850,6 @@ const TASK_ROUTE_ID_SEGMENT = "(?!events(?:/|$))[^/]+"
 const TASK_RECORD_READ_ROUTE = new RegExp(
   `^/task/${TASK_ROUTE_ID_SEGMENT}(?:/(?:status|bindings|progress|events|brief|board|transcript|operator-model-context|interactions|conversation(?:/(?:history|events|session/${TASK_ROUTE_ID_SEGMENT}))?))?$`,
 )
-const TASK_ROOT_RECORD_ROUTE = new RegExp(`^/task/${TASK_ROUTE_ID_SEGMENT}$`)
 const CHANNEL_ATTACHMENT_PUBLIC_ROUTE = /^\/channel\/attachment\/[^/]+$/
 
 export function normalizedServerRoutePath(routePath: string): string {
@@ -783,7 +869,6 @@ export function routeRequiresProjectDirectory(routePath: string, method?: string
   if ((PROJECT_DIRECTORY_BYPASS_PATHS as readonly string[]).includes(pathOnly)) return false
   if (pathOnly === "/global" || pathOnly === "/auth" || pathOnly === "/ui") return false
   if (routeMethod === "GET" && TASK_RECORD_READ_ROUTE.test(pathOnly)) return false
-  if (routeMethod === "DELETE" && TASK_ROOT_RECORD_ROUTE.test(pathOnly)) return false
   if (routeMethod === "GET" && CHANNEL_ATTACHMENT_PUBLIC_ROUTE.test(pathOnly)) return false
   return !(PROJECT_DIRECTORY_BYPASS_PREFIXES as readonly string[]).some((prefix) => pathOnly.startsWith(prefix))
 }
@@ -964,9 +1049,9 @@ export type NativeCommand =
   | { kind: "browserPreview.selection.take"; surfaceID: string; scopeKey: string }
   | { kind: "browserPreview.currentPage"; surfaceID: string; scopeKey: string }
   | { kind: "browserPreview.setZoom"; surfaceID: string; scopeKey: string; factor: number }
+  | { kind: "clipboard.readText" }
   | { kind: "settings.load" }
   | { kind: "settings.save"; payload: OverlayPersistedSettings }
-  | { kind: "config.write-file"; path: string; content: string }
   | { kind: "server.info" }
   | { kind: "server.restart" }
   | { kind: "devtools.toggle" }
@@ -974,7 +1059,6 @@ export type NativeCommand =
   | { kind: "desktopUpdate.download"; expectedVersion: string }
   | { kind: "desktopUpdate.install"; expectedVersion: string }
   | { kind: "window.quit" }
-  | { kind: "badge.set"; count: number }
   | { kind: "workspace.pickDir"; start?: string }
   | { kind: "workspace.pickFiles"; start?: string; multiple?: boolean }
   | { kind: "workspace.openProjectEditor"; editor: ProjectEditorID; path: string }
@@ -1107,7 +1191,7 @@ export function isOverlayPersistedSettings(value: unknown): value is OverlayPers
     isNonBlankString(settings.serverUrl) &&
     typeof settings.autoServer === "boolean" &&
     typeof settings.password === "string" &&
-    isNonBlankString(settings.username) &&
+    typeof settings.username === "string" &&
     (PROJECT_EDITOR_IDS as readonly unknown[]).includes(settings.projectEditor) &&
     typeof settings.initGit === "boolean" &&
     typeof settings.sidebarCollapsed === "boolean" &&
@@ -1180,11 +1264,10 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
         obj["factor"] <= 5
       )
     case "settings.load":
+    case "clipboard.readText":
       return true
     case "settings.save":
       return isOverlayPersistedSettings(obj["payload"])
-    case "config.write-file":
-      return typeof obj["path"] === "string" && typeof obj["content"] === "string"
     case "server.info":
     case "server.restart":
     case "devtools.toggle":
@@ -1196,8 +1279,6 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
     case "desktopUpdate.download":
     case "desktopUpdate.install":
       return isNonBlankString(obj["expectedVersion"])
-    case "badge.set":
-      return typeof obj["count"] === "number" && Number.isFinite(obj["count"]) && obj["count"] >= 0
     case "workspace.pickDir":
       return obj["start"] === undefined || typeof obj["start"] === "string"
     case "workspace.pickFiles":

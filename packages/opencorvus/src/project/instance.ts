@@ -22,6 +22,8 @@ import { lifecycleError } from "./lifecycle-error"
 import { provideInstanceLifecycleContext } from "./instance-lifecycle-context"
 import { conversationCapabilityInitPreflight } from "@/conversation/capability-transaction"
 import { Flag } from "@/flag/flag"
+import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
+import { AwaitTimeoutError, withTimeout } from "@/util/await-with-timeout"
 
 type LockMode = "read" | "write"
 type LockRelease = () => void
@@ -40,14 +42,18 @@ interface RollbackOwner {
 
 interface CacheEntry {
   context: Promise<Context>
+  identityKnown: Promise<void>
+  projectID?: string
   lastAccess: number
   initialized: boolean
+  permissionRecoveryStarted: boolean
   initRuns: Map<InstanceInit, Promise<void>>
   capabilityPreflights: Set<InstanceInit>
   healthChecks: Map<string, () => void>
   activeLeases: Set<Lease>
   failure?: { error: Error }
   rollback?: RollbackOwner
+  abandoned: boolean
   lock: {
     readers: number
     writer: boolean
@@ -95,8 +101,14 @@ type StateFactory = <S>(
 type InstanceApi = {
   provide<R>(input: { directory: string; init?: InstanceInit; fn: () => R }): Promise<R>
   provideProjectIdentity<R>(input: { directory: string; fn: () => R }): Promise<R>
-  tryProvideActive<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined>
+  tryProvideActive<R>(input: {
+    directory: string
+    fn: () => R
+    projectDeletionAdmission?: ProjectDeletionAdmission
+  }): Promise<Awaited<R> | undefined>
   forEachActive(input: { fn: () => void | Promise<void> }): Promise<void>
+  closeProjectAdmission(input: { projectID: string; directories: string[] }): Promise<ProjectDeletionAdmission>
+  disposeProjectEntries(projectID: string, inactivityTimeoutMilliseconds?: number): Promise<void>
   readonly directory: string
   readonly worktree: string
   readonly project: Project.Info
@@ -106,9 +118,16 @@ type InstanceApi = {
   state: StateFactory
   dispose(): Promise<void>
   disposeAll(): Promise<void>
+  acquireProcessSettlementGate(): Disposable & { waitForIdle(inactivityTimeoutMilliseconds: number): Promise<void> }
   converge(input: { maximumRetained: number }): Promise<InstanceCacheConvergence>
   scheduleConvergence(input: { maximumRetained: number }): void
 }
+
+export interface ProjectDeletionAdmission extends Disposable {
+  readonly projectID: string
+}
+
+const projectDeletionAdmissionTokens = new WeakMap<ProjectDeletionAdmission, symbol>()
 
 export interface InstanceCacheConvergence {
   maximumRetained: number
@@ -122,10 +141,19 @@ function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
   const existing = cache.get(key)
   if (existing) return existing
   Log.Default.info("creating instance", { directory })
+  let settleIdentity!: () => void
+  const identityKnown = new Promise<void>((resolve) => {
+    settleIdentity = resolve
+  })
+  const blockedProjectIDs = new Set(closedProjectAdmissions.keys())
+  let created!: CacheEntry
   const contextPromise = iife(async () => {
     const { project, sandbox } = await ProjectOpenLifecycle.stage("project.from-directory", { directory }, () =>
-      Project.fromDirectory(directory),
+      Project.fromDirectory(directory, { blockedProjectIDs }),
     )
+    created.projectID = project.id
+    settleIdentity()
+    assertEntryProjectAdmissionOpen(created)
     const legacy = (
       await Promise.all(
         ProjectRuntimePaths.legacyRuntimeRelativePaths.map(async (relative) => ({
@@ -144,9 +172,14 @@ function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
     }
     return refreshedContext(directory, { project, sandbox })
   }).catch((error) => {
+    settleIdentity()
     throw lifecycleError(error, `Instance project discovery for ${directory}`)
   })
-  const created = createCacheEntry(contextPromise)
+  created = createCacheEntry(contextPromise, identityKnown)
+  for (const admission of closedProjectAdmissions.values()) admission.discoveries.set(identityKnown, key)
+  void identityKnown.finally(() => {
+    for (const admission of closedProjectAdmissions.values()) admission.discoveries.delete(identityKnown)
+  })
   void contextPromise.catch(() => {
     if (cache.get(key) === created) cache.delete(key)
   })
@@ -164,30 +197,96 @@ let convergenceRequested = false
 let scheduledMaximumRetained = 1
 let scheduledConvergence: Promise<void> | undefined
 const pendingEvictions = new Set<CacheEntry>()
+const pendingEvictionSettlements = new Map<CacheEntry, Promise<void>>()
+let beforeConvergenceDisposalForTest:
+  | ((input: { directory: string; projectID?: string }) => void | Promise<void>)
+  | undefined
+const closedProjectAdmissions = new Map<
+  string,
+  { directories: string[]; token: symbol; discoveries: Map<Promise<void>, string> }
+>()
 
 const disposal = {
   all: undefined as Promise<void> | undefined,
+}
+let processSettlementGate: symbol | undefined
+
+export class InstanceProcessAdmissionClosedError extends Error {
+  override readonly name = "InstanceProcessAdmissionClosedError"
+
+  constructor() {
+    super("Instance process admission is closed during runtime settlement")
+  }
+}
+
+export class InstanceSettlementInactivityError extends Error {
+  override readonly name = "InstanceSettlementInactivityError"
+
+  constructor(
+    readonly labels: string[],
+    readonly inactivityTimeoutMilliseconds: number,
+  ) {
+    super(
+      `Instance settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+        `active authorities: ${labels.join(", ") || "unknown"}`,
+    )
+  }
+}
+
+async function awaitSettlementPromise<T>(input: {
+  label: string
+  settled: Promise<T>
+  inactivityTimeoutMilliseconds: number
+}): Promise<T> {
+  return await withTimeout(input.settled, input.inactivityTimeoutMilliseconds, input.label).catch((error) => {
+    if (!(error instanceof AwaitTimeoutError)) throw error
+    throw new InstanceSettlementInactivityError([input.label], input.inactivityTimeoutMilliseconds)
+  })
 }
 
 function instanceCacheKey(directory: string) {
   return process.platform === "win32" ? directory.toLowerCase() : directory
 }
 
-function createCacheEntry(contextPromise: Promise<Context>): CacheEntry {
+function createCacheEntry(contextPromise: Promise<Context>, identityKnown: Promise<void>): CacheEntry {
   return {
     context: contextPromise,
+    identityKnown,
     lastAccess: ++accessSequence,
     initialized: false,
+    permissionRecoveryStarted: false,
     initRuns: new Map(),
     capabilityPreflights: new Set(),
     healthChecks: new Map(),
     activeLeases: new Set(),
+    abandoned: false,
     lock: {
       readers: 0,
       writer: false,
       waiters: [],
     },
   }
+}
+
+function seedProjectDeletionIdentity(
+  directory: string,
+  project: Project.Info,
+): { key: string; entry: CacheEntry } | undefined {
+  const resolved = Filesystem.resolve(directory)
+  const key = instanceCacheKey(resolved)
+  if (cache.has(key)) return undefined
+  const context: Context = {
+    directory: resolved,
+    // Instance.worktree is the exact execution sandbox, while Project.worktree
+    // remains the registered repository root. This matches refreshedContext.
+    worktree: resolved,
+    project,
+    git: Project.isGitRepo(project.worktree),
+  }
+  const entry = createCacheEntry(Promise.resolve(context), Promise.resolve())
+  entry.projectID = project.id
+  cache.set(key, entry)
+  return { key, entry }
 }
 
 function pumpLock(entry: CacheEntry) {
@@ -227,9 +326,44 @@ function acquireLock(entry: CacheEntry, mode: LockMode): Promise<LockRelease> {
   })
 }
 
+function acquireLockWithin(
+  entry: CacheEntry,
+  mode: LockMode,
+  label: string,
+  inactivityTimeoutMilliseconds: number,
+): Promise<LockRelease> {
+  return new Promise((resolve, reject) => {
+    let expired = false
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const waiter: LockWaiter = {
+      mode,
+      resolve(release) {
+        if (expired) {
+          release()
+          return
+        }
+        if (timer) clearTimeout(timer)
+        resolve(release)
+      },
+    }
+    timer = setTimeout(() => {
+      expired = true
+      const index = entry.lock.waiters.indexOf(waiter)
+      if (index >= 0) {
+        entry.lock.waiters.splice(index, 1)
+        pumpLock(entry)
+      }
+      reject(new InstanceSettlementInactivityError([label], inactivityTimeoutMilliseconds))
+    }, inactivityTimeoutMilliseconds)
+    entry.lock.waiters.push(waiter)
+    pumpLock(entry)
+  })
+}
+
 function acquireUpgradeLock(entry: CacheEntry): Promise<LockRelease> {
   return new Promise((resolve) => {
     entry.lock.waiters.unshift({ mode: "write", resolve })
+    pumpLock(entry)
   })
 }
 
@@ -289,6 +423,18 @@ async function closeLease(lease: Lease) {
   }
 }
 
+function abandonLease(lease: Lease): void {
+  if (lease.closed) return
+  lease.closing = true
+  lease.closed = true
+  if (lease.owned) {
+    lease.owned = false
+    lease.release()
+  }
+  lease.entry.activeLeases.delete(lease)
+  lease.signalClosed()
+}
+
 async function upgradeLease(lease: Lease) {
   if (lease.mode === "write") return
   if (lease.closed) throw new Error(`Cannot upgrade a closed instance cache lease: ${lease.key}`)
@@ -320,13 +466,19 @@ async function downgradeLease(lease: Lease) {
   if (lease.mode === "read") return
   if (lease.closed) throw new Error(`Cannot downgrade a closed instance cache lease: ${lease.key}`)
   if (!lease.owned) throw new Error(`Cannot downgrade an unowned instance cache lease: ${lease.key}`)
-  const acquired = acquireLock(lease.entry, "read")
-  lease.owned = false
-  lease.release()
-  const release = await acquired
+  const lock = lease.entry.lock
+  if (!lock.writer) throw new Error(`Cannot downgrade a lease that does not own the write lock: ${lease.key}`)
+  lock.writer = false
+  lock.readers += 1
+  let released = false
   lease.mode = "read"
-  lease.release = release
-  lease.owned = true
+  lease.release = () => {
+    if (released) throw new Error("Instance downgraded read lock released more than once")
+    released = true
+    lock.readers -= 1
+    pumpLock(lease.entry)
+  }
+  pumpLock(lease.entry)
 }
 
 async function runLeaseLifecycle<T>(lease: Lease, label: string, run: () => Promise<T>): Promise<T> {
@@ -463,8 +615,18 @@ function assertEntryCurrent(key: string, entry: CacheEntry) {
   }
 }
 
-function assertNotDisposing() {
+function assertNotDisposing(directory?: string) {
   if (disposal.all) throw new Error("Cannot enter an instance while global instance disposal is in progress")
+  if (processSettlementGate && !leaseContext.tryUse()) {
+    throw new InstanceProcessAdmissionClosedError()
+  }
+  if (directory) {
+    for (const [projectID, admission] of closedProjectAdmissions) {
+      if (admission.directories.some((registered) => Filesystem.overlaps(registered, directory))) {
+        throw new Error(`Project ${projectID} instance admission is closed during deletion`)
+      }
+    }
+  }
 }
 
 function assertContextHealthy(entry: CacheEntry) {
@@ -475,6 +637,16 @@ function assertContextHealthy(entry: CacheEntry) {
       throw lifecycleError(error, `Instance health check ${label}`)
     }
   }
+}
+
+function assertProjectAdmissionOpen(key: string, entry: CacheEntry, ctx: Context) {
+  if (!closedProjectAdmissions.has(ctx.project.id)) return
+  throw new Error(`Project ${ctx.project.id} instance admission is closed during deletion`)
+}
+
+function assertEntryProjectAdmissionOpen(entry: CacheEntry) {
+  if (!entry.projectID || !closedProjectAdmissions.has(entry.projectID)) return
+  throw new Error(`Project ${entry.projectID} instance admission is closed during deletion`)
 }
 
 function initializers(entry: CacheEntry, extra?: InstanceInit) {
@@ -660,12 +832,7 @@ async function runCapabilityPreflight(entry: CacheEntry, init: InstanceInit) {
   )
 }
 
-async function prepareInheritedCapabilityPreflight(
-  key: string,
-  entry: CacheEntry,
-  lease: Lease,
-  init: InstanceInit,
-) {
+async function prepareInheritedCapabilityPreflight(key: string, entry: CacheEntry, lease: Lease, init: InstanceInit) {
   if (!conversationCapabilityInitPreflight(init)) return
   if (entry.capabilityPreflights.has(init)) {
     await lease.lifecycleTail
@@ -694,10 +861,11 @@ function needsProjectRefresh(ctx: Context) {
 
 async function bootstrapContext(ctx: Context, entry: CacheEntry, inits: readonly InstanceInit[]) {
   const lifecycleContext = { directory: ctx.directory, worktree: ctx.worktree, projectID: ctx.project.id }
-  // .gitignore upkeep runs inside the established project context because
-  // ensureGitignore reads the current project directory from that context.
-  const { ensureGitignore } = await import("@/engine/git")
-  await ProjectOpenLifecycle.stage("engine.git.ensure-gitignore", lifecycleContext, () => ensureGitignore())
+  // Project metadata upkeep runs inside the established project context.
+  const { ensureGitProjectMetadata } = await import("@/engine/git-project-metadata")
+  await ProjectOpenLifecycle.stage("engine.git.ensure-project-metadata", lifecycleContext, () =>
+    ensureGitProjectMetadata(),
+  )
   const { ExpertSquadRegistry } = await import("@/expert-squad/registry")
   await ProjectOpenLifecycle.stage("expert-squad.discover", lifecycleContext, async () => {
     const result = await ExpertSquadRegistry.discoverAvailable(ctx.project.worktree)
@@ -763,6 +931,7 @@ async function disposeEntry(key: string, entry: CacheEntry, ctx: Context) {
     const owner = retainRollbackOwner(entry, ctx, error)
     throw owner.primaryError
   }
+  if (entry.abandoned) return
   if (cache.get(key) === entry) cache.delete(key)
   GlobalBus.emit("event", {
     directory: ctx.directory,
@@ -822,10 +991,40 @@ export function reenterActiveInstance<R>(input: { directory: string; fn: () => R
 }
 
 export const Instance: InstanceApi = {
+  acquireProcessSettlementGate(): Disposable & { waitForIdle(inactivityTimeoutMilliseconds: number): Promise<void> } {
+    if (processSettlementGate) throw new Error("Instance process settlement is already in progress")
+    const token = Symbol("instance-process-settlement")
+    processSettlementGate = token
+    return {
+      async waitForIdle(inactivityTimeoutMilliseconds) {
+        if (processSettlementGate !== token) throw new Error("Instance process settlement gate is no longer active")
+        await waitForRuntimeSettlementIdle({
+          snapshot: () =>
+            [...cache.entries()].flatMap(([key, entry]) =>
+              [...entry.activeLeases].map((lease) => ({
+                label:
+                  `instance:${key}:${lease.mode}:` +
+                  `activities=${lease.activities.size}:closing=${String(lease.closing)}`,
+                settled: lease.closedSignal,
+              })),
+            ),
+          inactivityTimeoutMilliseconds,
+          inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+        })
+      },
+      [Symbol.dispose]() {
+        if (processSettlementGate !== token) return
+        processSettlementGate = undefined
+        if (convergenceRequested && !scheduledConvergence) {
+          Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+        }
+      },
+    }
+  },
   async provide<R>(input: { directory: string; init?: InstanceInit; fn: () => R }): Promise<R> {
-    assertNotDisposing()
     // Normalize project directories once so cache keys and boundary checks stay stable.
     const directory = Filesystem.resolve(input.directory)
+    assertNotDisposing(directory)
     const key = instanceCacheKey(directory)
     const inheritedLease = leaseContext.tryUse()
     assertNoRecursiveLifecycle(key, "provide an instance")
@@ -850,6 +1049,7 @@ export const Instance: InstanceApi = {
           else await inheritedLease.lifecycleTail
           assertInheritedLeaseOpen(inheritedLease, "prepare an inherited instance")
           const prepared = await prepareContext(key, entry, inheritedLease, input.init)
+          assertProjectAdmissionOpen(key, entry, prepared)
           if (inheritedMode === "read") await downgradeLease(inheritedLease)
           return prepared
         })
@@ -858,6 +1058,7 @@ export const Instance: InstanceApi = {
     }
     assertInheritedLeaseOpen(inheritedLease, "provide an instance")
     for (;;) {
+      assertNotDisposing(directory)
       const entry = getOrCreateCacheEntry(directory, key)
       entry.lastAccess = ++accessSequence
       // Project discovery is the authority for this exact entry. Await it
@@ -866,6 +1067,7 @@ export const Instance: InstanceApi = {
       // cache entry, and treating that self-removal as a concurrent cache
       // replacement here would otherwise rebuild the same entry forever.
       const initial = await entry.context
+      assertProjectAdmissionOpen(key, entry, initial)
       if (input.init) {
         try {
           await prepareCapabilityPreflight(key, entry, input.init)
@@ -906,21 +1108,34 @@ export const Instance: InstanceApi = {
       }
       const lease = createLease(key, entry, "read", release)
       try {
-        return await leaseContext.provide(lease, () =>
+        const result = await leaseContext.provide(lease, () =>
           provideLeaseContext(lease, initial, async () => {
             const ctx = await prepareContext(key, entry, lease, input.init)
             await downgradeLease(lease)
-            return await provideLeaseContext(lease, ctx, async () => input.fn())
+            return await provideLeaseContext(lease, ctx, async () => {
+              if (input.init && !entry.permissionRecoveryStarted) {
+                const { PermissionAuthority } = await import("@/permission/authority")
+                try {
+                  await PermissionAuthority.resumeApprovedContinuations()
+                  entry.permissionRecoveryStarted = true
+                } catch (error) {
+                  entry.permissionRecoveryStarted = false
+                  throw error
+                }
+              }
+              return input.fn()
+            })
           }),
         )
+        return result
       } finally {
         await closeLease(lease)
       }
     }
   },
   async provideProjectIdentity<R>(input: { directory: string; fn: () => R }): Promise<R> {
-    assertNotDisposing()
     const directory = Filesystem.resolve(input.directory)
+    assertNotDisposing(directory)
     const key = instanceCacheKey(directory)
     const inheritedLease = leaseContext.tryUse()
     assertInheritedLeaseOpen(inheritedLease, "provide project identity")
@@ -930,9 +1145,11 @@ export const Instance: InstanceApi = {
       if (entry !== inheritedLease.entry) throw new Error(`Cannot re-enter replaced instance cache entry: ${key}`)
       if (entry.rollback) throw rollbackError(entry.rollback)
       const ctx = await entry.context
+      assertProjectAdmissionOpen(key, entry, ctx)
       return await provideLeaseContext(inheritedLease, ctx, async () => input.fn())
     }
     for (;;) {
+      assertNotDisposing(directory)
       const entry = getOrCreateCacheEntry(directory, key)
       entry.lastAccess = ++accessSequence
       const release = await acquireLock(entry, "read")
@@ -944,15 +1161,32 @@ export const Instance: InstanceApi = {
       try {
         if (entry.rollback) throw rollbackError(entry.rollback)
         const ctx = await entry.context
+        assertProjectAdmissionOpen(key, entry, ctx)
         return await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, async () => input.fn()))
       } finally {
         await closeLease(lease)
       }
     }
   },
-  async tryProvideActive<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined> {
-    assertNotDisposing()
+  async tryProvideActive<R>(input: {
+    directory: string
+    fn: () => R
+    projectDeletionAdmission?: ProjectDeletionAdmission
+  }): Promise<Awaited<R> | undefined> {
     const directory = Filesystem.resolve(input.directory)
+    const deletionAdmission = input.projectDeletionAdmission
+    if (deletionAdmission) {
+      if (
+        closedProjectAdmissions.get(deletionAdmission.projectID)?.token !==
+        projectDeletionAdmissionTokens.get(deletionAdmission)
+      ) {
+        throw new Error(`Project ${deletionAdmission.projectID} deletion admission is not active`)
+      }
+    }
+    // Project deletion authority bypasses only this Project's directory gate.
+    // Process-wide settlement and global disposal remain authoritative.
+    assertNotDisposing()
+    if (!deletionAdmission) assertNotDisposing(directory)
     const key = instanceCacheKey(directory)
     const entry = cache.get(key)
     if (!entry) return undefined
@@ -963,9 +1197,14 @@ export const Instance: InstanceApi = {
     if (inheritedLease?.key === key) {
       if (inheritedLease.entry !== entry) return undefined
       if (entry.rollback) throw rollbackError(entry.rollback)
-      if (!entry.initialized) return undefined
+      // Deletion-owned identities intentionally skip capability bootstrap;
+      // they exist only to settle durable lifecycle facts under the closed gate.
+      if (!entry.initialized && !deletionAdmission) return undefined
       const ctx = await entry.context
-      assertContextHealthy(entry)
+      if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
+        throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
+      }
+      if (entry.initialized) assertContextHealthy(entry)
       return await input.fn()
     }
     const release = await acquireLock(entry, "read")
@@ -973,10 +1212,13 @@ export const Instance: InstanceApi = {
     try {
       if (cache.get(key) !== entry) return undefined
       if (entry.rollback) throw rollbackError(entry.rollback)
-      if (!entry.initialized) return undefined
+      if (!entry.initialized && !deletionAdmission) return undefined
       const ctx = await entry.context
+      if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
+        throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
+      }
       if (cache.get(key) !== entry) return undefined
-      assertContextHealthy(entry)
+      if (entry.initialized) assertContextHealthy(entry)
       return await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, async () => input.fn()))
     } finally {
       await closeLease(lease)
@@ -994,6 +1236,7 @@ export const Instance: InstanceApi = {
         if (entry.rollback) throw rollbackError(entry.rollback)
         if (!entry.initialized) continue
         const ctx = await entry.context
+        assertProjectAdmissionOpen(key, entry, ctx)
         if (cache.get(key) !== entry) continue
         assertContextHealthy(entry)
         await provideLeaseContext(inheritedLease, ctx, input.fn)
@@ -1006,6 +1249,7 @@ export const Instance: InstanceApi = {
         if (entry.rollback) throw rollbackError(entry.rollback)
         if (!entry.initialized) continue
         const ctx = await entry.context
+        assertProjectAdmissionOpen(key, entry, ctx)
         if (cache.get(key) !== entry) continue
         assertContextHealthy(entry)
         await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, input.fn))
@@ -1013,6 +1257,163 @@ export const Instance: InstanceApi = {
         await closeLease(lease)
       }
     }
+  },
+  async closeProjectAdmission(input) {
+    if (closedProjectAdmissions.has(input.projectID)) {
+      throw new Error(`Project ${input.projectID} instance admission is already closed`)
+    }
+    const token = Symbol(input.projectID)
+    const discoveries = new Map(
+      [...cache.entries()]
+        .filter(([, entry]) => !entry.projectID)
+        .map(([key, entry]) => [entry.identityKnown, key] as const),
+    )
+    const directories = input.directories.map((directory) => Filesystem.resolve(directory))
+    closedProjectAdmissions.set(input.projectID, {
+      token,
+      directories,
+      discoveries,
+    })
+    for (const discovery of discoveries.keys()) {
+      void discovery.finally(() => discoveries.delete(discovery)).catch(() => undefined)
+    }
+    const seededEntries: Array<{ key: string; entry: CacheEntry }> = []
+    const discardUnusedSeededEntries = () => {
+      for (const { key, entry } of seededEntries) {
+        if (cache.get(key) === entry && !entry.initialized) cache.delete(key)
+      }
+    }
+    try {
+      await Promise.allSettled(discoveries.keys())
+      await waitForRuntimeSettlementIdle({
+        snapshot: () =>
+          [...pendingEvictionSettlements]
+            .filter(([entry]) => entry.projectID === input.projectID)
+            .map(([entry, settled]) => ({
+              label: `project-convergence:${entry.projectID}`,
+              settled,
+            })),
+        inactivityTimeoutMilliseconds: Flag.OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS,
+        inactivityError: (labels) =>
+          new InstanceSettlementInactivityError(labels, Flag.OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS),
+      })
+      await Promise.resolve()
+      const project = Project.get(input.projectID)
+      if (!project) {
+        throw new Error(`Project ${input.projectID} disappeared while closing deletion admission`)
+      }
+      for (const directory of directories) {
+        const seeded = seedProjectDeletionIdentity(directory, project)
+        if (seeded) seededEntries.push(seeded)
+      }
+      const authority: ProjectDeletionAdmission = {
+        projectID: input.projectID,
+        [Symbol.dispose]() {
+          // Once authority is returned, deletion settlement may initialize lazy
+          // State on these identities. Retain any entries not formally disposed
+          // so ordinary bootstrap or later convergence can own their cleanup.
+          if (closedProjectAdmissions.get(input.projectID)?.token === token) {
+            closedProjectAdmissions.delete(input.projectID)
+          }
+          projectDeletionAdmissionTokens.delete(authority)
+        },
+      }
+      projectDeletionAdmissionTokens.set(authority, token)
+      return authority
+    } catch (error) {
+      // No async work runs between seeding and authority publication, so entries
+      // created by a failed pre-authority handshake are still safe to discard.
+      discardUnusedSeededEntries()
+      if (closedProjectAdmissions.get(input.projectID)?.token === token) {
+        closedProjectAdmissions.delete(input.projectID)
+      }
+      throw error
+    }
+  },
+  async disposeProjectEntries(projectID, inactivityTimeoutMilliseconds = 60_000) {
+    SchedulerTaskOwner.assertCanStartLifecycleDisposal("Project instance disposal")
+    if (leaseContext.tryUse()) {
+      throw new Error("Cannot dispose Project instances from within an active instance callback")
+    }
+    const errors: unknown[] = []
+    const processed = new Set<CacheEntry>()
+    const admission = closedProjectAdmissions.get(projectID)
+    if (!admission) throw new Error(`Project ${projectID} instance admission must be closed before disposal`)
+    for (;;) {
+      await waitForRuntimeSettlementIdle({
+        snapshot: () =>
+          [...admission.discoveries].map(([settled, key]) => ({
+            label: `project-discovery:${key}`,
+            settled,
+          })),
+        inactivityTimeoutMilliseconds,
+        inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+      })
+      const targets = [...cache.entries()].filter(([, entry]) => entry.projectID === projectID && !processed.has(entry))
+      if (targets.length === 0) {
+        if (admission.discoveries.size === 0) break
+        continue
+      }
+      for (const [key, entry] of targets) {
+        processed.add(entry)
+        await waitForRuntimeSettlementIdle({
+          snapshot: () =>
+            [...entry.activeLeases].map((lease) => ({
+              label: `project-instance:${key}:${lease.mode}:activities=${lease.activities.size}`,
+              settled: lease.closedSignal,
+            })),
+          inactivityTimeoutMilliseconds,
+          inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+        })
+        const release = await acquireLockWithin(
+          entry,
+          "write",
+          `project-instance-lock:${key}:write`,
+          inactivityTimeoutMilliseconds,
+        )
+        const lease = createLease(key, entry, "write", release)
+        let abandoned = false
+        try {
+          const ctx = await awaitSettlementPromise({
+            label: `project-context:${key}`,
+            settled: entry.context,
+            inactivityTimeoutMilliseconds,
+          })
+          if (cache.get(key) !== entry || ctx.project.id !== projectID) continue
+          const disposal = leaseContext.provide(lease, () =>
+            provideLeaseContext(lease, ctx, () =>
+              runLeaseLifecycle(lease, "Project instance disposal", async () => {
+                if (entry.rollback) await retryRollbackCleanup(key, entry, lease, entry.rollback)
+                else await disposeEntry(key, entry, ctx)
+              }),
+            ),
+          )
+          try {
+            await awaitSettlementPromise({
+              label: `project-instance-disposal:${key}`,
+              settled: disposal,
+              inactivityTimeoutMilliseconds,
+            })
+          } catch (error) {
+            if (error instanceof InstanceSettlementInactivityError) {
+              abandoned = true
+              entry.abandoned = true
+              State.abandon(ctx.directory)
+              if (cache.get(key) === entry) cache.delete(key)
+              abandonLease(lease)
+              void disposal.catch(() => undefined)
+            }
+            throw error
+          }
+        } catch (error) {
+          errors.push(error)
+        } finally {
+          if (!abandoned) await closeLease(lease)
+        }
+      }
+    }
+    if (errors.length === 1) throw errors[0]
+    if (errors.length > 1) throw new AggregateError(errors, `Failed to dispose Project ${projectID} Instance entries`)
   },
   get directory() {
     return ProjectInstanceContext.use().directory
@@ -1027,9 +1428,9 @@ export const Instance: InstanceApi = {
     return ProjectInstanceContext.tryUse()
   },
   async refresh(directory = Instance.directory) {
-    assertNotDisposing()
-    assertInheritedLeaseOpen(leaseContext.tryUse(), "refresh an instance")
     const resolved = Filesystem.resolve(directory)
+    assertNotDisposing(resolved)
+    assertInheritedLeaseOpen(leaseContext.tryUse(), "refresh an instance")
     const key = instanceCacheKey(resolved)
     assertNoRecursiveLifecycle(key, "refresh an instance")
     const entry = cache.get(key)
@@ -1107,6 +1508,7 @@ export const Instance: InstanceApi = {
     })
   },
   async converge(input) {
+    assertNotDisposing()
     SchedulerTaskOwner.assertCanStartLifecycleDisposal("instance cache convergence")
     if (leaseContext.tryUse()) {
       throw new Error("Cannot converge the instance cache from within an active instance callback")
@@ -1121,6 +1523,7 @@ export const Instance: InstanceApi = {
       for (const [key, entry] of candidates) {
         if (cache.size - pendingEvictions.size <= maximumRetained) break
         if (cache.get(key) !== entry || pendingEvictions.has(entry)) continue
+        if (entry.projectID && closedProjectAdmissions.has(entry.projectID)) continue
         const release = tryAcquireIdleWriteLock(entry)
         if (!release) continue
         pendingEvictions.add(entry)
@@ -1130,10 +1533,13 @@ export const Instance: InstanceApi = {
           try {
             if (entry.rollback) {
               await leaseContext.provide(lease, () =>
-                provideLeaseContext(lease, entry.rollback!.ctx, () =>
-                  runLeaseLifecycle(lease, "instance rollback convergence", () =>
-                    retryRollbackCleanup(key, entry, lease),
-                  ),
+                provideLeaseContext(
+                  lease,
+                  entry.rollback!.ctx,
+                  () =>
+                    runLeaseLifecycle(lease, "instance rollback convergence", () =>
+                      retryRollbackCleanup(key, entry, lease),
+                    ),
                   { allowRollback: true },
                 ),
               )
@@ -1141,6 +1547,10 @@ export const Instance: InstanceApi = {
             }
             const ctx = await entry.context
             if (cache.get(key) !== entry) return { status: "replaced" as const, directory }
+            if (entry.projectID && closedProjectAdmissions.has(entry.projectID)) {
+              return { status: "retained" as const, directory: ctx.directory }
+            }
+            await beforeConvergenceDisposalForTest?.({ directory: ctx.directory, projectID: entry.projectID })
             await leaseContext.provide(lease, () =>
               provideLeaseContext(lease, ctx, () =>
                 runLeaseLifecycle(lease, "instance cache convergence", () => disposeEntry(key, entry, ctx)),
@@ -1161,6 +1571,15 @@ export const Instance: InstanceApi = {
             }
           }
         })()
+        const evictionSettlement = disposal.then(() => undefined)
+        pendingEvictionSettlements.set(entry, evictionSettlement)
+        void evictionSettlement
+          .finally(() => {
+            if (pendingEvictionSettlements.get(entry) === evictionSettlement) {
+              pendingEvictionSettlements.delete(entry)
+            }
+          })
+          .catch(() => undefined)
         let timeout: ReturnType<typeof setTimeout> | undefined
         const outcome = await Promise.race([
           disposal,
@@ -1187,7 +1606,9 @@ export const Instance: InstanceApi = {
           void disposal.then((settled) =>
             Promise.resolve().then(() => {
               Log.Default.info("delayed Project runtime convergence settled", { directory, outcome: settled })
-              if (scheduled) Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+              if (scheduled && !processSettlementGate) {
+                Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+              }
             }),
           )
         }
@@ -1209,6 +1630,7 @@ export const Instance: InstanceApi = {
     return await operation
   },
   scheduleConvergence(input) {
+    assertNotDisposing()
     scheduledMaximumRetained = Math.max(1, Math.floor(input.maximumRetained))
     convergenceRequested = true
     if (scheduledConvergence) return
@@ -1222,10 +1644,15 @@ export const Instance: InstanceApi = {
           }
         }
       })
-      .catch((error) => Log.Default.error("scheduled instance cache convergence failed", { error }))
+      .catch((error) => {
+        if (error instanceof InstanceProcessAdmissionClosedError) return
+        Log.Default.error("scheduled instance cache convergence failed", { error })
+      })
       .finally(() => {
         scheduledConvergence = undefined
-        if (convergenceRequested) Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+        if (convergenceRequested && !processSettlementGate) {
+          Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+        }
       })
   },
   async disposeAll() {
@@ -1305,5 +1732,29 @@ export const Instance: InstanceApi = {
     })
 
     return disposal.all
+  },
+}
+
+export const InstanceTestHooks = {
+  installBeforeConvergenceDisposal(
+    hook: (input: { directory: string; projectID?: string }) => void | Promise<void>,
+  ): Disposable {
+    if (beforeConvergenceDisposalForTest) throw new Error("Instance convergence disposal hook is already installed")
+    beforeConvergenceDisposalForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeConvergenceDisposalForTest === hook) beforeConvergenceDisposalForTest = undefined
+      },
+    }
+  },
+  isProjectAdmissionClosed(projectID: string): boolean {
+    return closedProjectAdmissions.has(projectID)
+  },
+  async acquireCacheWriteLock(directory: string): Promise<Disposable> {
+    const key = instanceCacheKey(Filesystem.resolve(directory))
+    const entry = cache.get(key)
+    if (!entry) throw new Error(`Cannot acquire a test cache lock for inactive instance: ${directory}`)
+    const release = await acquireLock(entry, "write")
+    return { [Symbol.dispose]: release }
   },
 }

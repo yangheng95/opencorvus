@@ -62,17 +62,6 @@ async function sendHostNotification(item: MailboxItem): Promise<NotificationDeli
   }
 }
 
-async function setMailboxBadge(count: number): Promise<void> {
-  const transport = getHostTransport()
-  if (!transport.capabilities.nativeCommands["badge.set"]) return
-  try {
-    await transport.native({ kind: "badge.set", count })
-  } catch (error) {
-    reportDesktopNotificationFailure("Agent mailbox badge update failed", error)
-    throw error
-  }
-}
-
 export function requestNotificationPermission(): Promise<HostPermission> {
   if (permissionRequestPending) return permissionRequestPending
   const request = requestHostPermission().finally(() => {
@@ -96,31 +85,18 @@ export function isMailboxNotification(item: MailboxItem): boolean {
 }
 
 interface MailboxNotificationProjectionDependencies {
-  setBadge: (count: number) => Promise<void>
   sendNotification: (item: MailboxItem) => Promise<NotificationDelivery>
   canSendNotification: () => Promise<boolean>
 }
 
 export class MailboxNotificationProjector {
   private seen: Set<string> | undefined
-  private presented = new Set<string>()
   private projectionTail = Promise.resolve()
 
   constructor(private readonly dependencies: MailboxNotificationProjectionDependencies) {}
 
-  async project(
-    items: MailboxItem[],
-    ownsProjection: ProjectionOwnership,
-    presentNotification?: (item: MailboxItem) => void,
-  ): Promise<void> {
-    await this.runSerialized(() => this.projectOwned(items, ownsProjection, presentNotification))
-  }
-
-  async replaceScope(ownsProjection: ProjectionOwnership): Promise<void> {
-    await this.runSerialized(async () => {
-      if (!ownsProjection()) return
-      await this.dependencies.setBadge(0)
-    })
+  async project(items: MailboxItem[], ownsProjection: ProjectionOwnership): Promise<void> {
+    await this.runSerialized(() => this.projectOwned(items, ownsProjection))
   }
 
   private async runSerialized(effect: () => Promise<void>): Promise<void> {
@@ -137,29 +113,15 @@ export class MailboxNotificationProjector {
     }
   }
 
-  private async projectOwned(
-    items: MailboxItem[],
-    ownsProjection: ProjectionOwnership,
-    presentNotification: ((item: MailboxItem) => void) | undefined,
-  ): Promise<void> {
+  private async projectOwned(items: MailboxItem[], ownsProjection: ProjectionOwnership): Promise<void> {
     if (!ownsProjection()) return
     const current = items.filter(isMailboxNotification)
-    await this.dependencies.setBadge(current.length)
-    if (!ownsProjection()) return
 
     const currentIDs = new Set(current.map((item) => item.id))
     const seen = this.seen
     if (!seen) {
       this.seen = currentIDs
-      this.presented = new Set(currentIDs)
       return
-    }
-
-    for (const item of current) {
-      if (this.presented.has(item.id)) continue
-      if (!ownsProjection()) return
-      presentNotification?.(item)
-      this.presented.add(item.id)
     }
 
     const added = current.filter((item) => !seen.has(item.id))
@@ -189,21 +151,12 @@ async function canSendDesktopNotification(): Promise<boolean> {
 
 export function createDesktopMailboxNotificationProjector(): MailboxNotificationProjector {
   return new MailboxNotificationProjector({
-    setBadge: setMailboxBadge,
     sendNotification: sendHostNotification,
     canSendNotification: canSendDesktopNotification,
   })
 }
 
 const projector = createDesktopMailboxNotificationProjector()
-
-export async function projectMailboxNotificationScopeReplacement(input: { signal: AbortSignal }): Promise<void> {
-  try {
-    await projector.replaceScope(() => !input.signal.aborted)
-  } catch (error) {
-    if (!input.signal.aborted) reportDesktopNotificationFailure("Agent mailbox badge reset failed", error)
-  }
-}
 
 async function loadAllActiveMailboxItems(
   initialPage: MailboxPage | undefined,
@@ -234,12 +187,11 @@ export async function projectMailboxNotifications(input: {
   view: MailboxView
   page: MailboxPage
   signal: AbortSignal
-  onNotification?: (item: MailboxItem) => void
 }): Promise<void> {
   try {
     const items = await loadAllActiveMailboxItems(input.page, input.view, input.signal)
     if (input.signal.aborted) return
-    await projector.project(items, () => !input.signal.aborted, input.onNotification)
+    await projector.project(items, () => !input.signal.aborted)
   } catch (error) {
     if (!input.signal.aborted) reportDesktopNotificationFailure("Agent mailbox notification projection failed", error)
   }

@@ -1,10 +1,10 @@
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Session } from "@/session"
 import { SessionStatus } from "@/session/status"
 import z from "zod"
 import { Tool } from "./tool"
-import { OFFICE_ARTIFACT_TOOL_IDS, WORK_PARENT_ONLY_TOOL_IDS } from "@/work/harness"
+import { WORK_ARTIFACT_TOOL_IDS, WORK_PARENT_ONLY_TOOL_IDS } from "@/work/harness"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
 
 export const DELEGATE_AGENT_TOOL_ID = "delegate_agent" as const
@@ -73,7 +73,7 @@ function delegatedInstruction(input: { instruction: string; parentAgent: "coding
     ...(input.parentAgent === "work"
       ? [
           "",
-          `You may inspect and validate office artifacts with ${OFFICE_ARTIFACT_TOOL_IDS[0]} and ${OFFICE_ARTIFACT_TOOL_IDS[2]}, but ${OFFICE_ARTIFACT_TOOL_IDS[3]} is parent-owned and unavailable. Report review findings to the parent; do not claim final delivery.`,
+          `You may inspect and validate Work Artifacts with ${WORK_ARTIFACT_TOOL_IDS[0]} and ${WORK_ARTIFACT_TOOL_IDS[2]}, but ${WORK_ARTIFACT_TOOL_IDS[3]} is parent-owned and unavailable. Report review findings to the parent; do not claim final delivery.`,
         ]
       : []),
     "",
@@ -105,12 +105,12 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
     }
     const parent = await Session.get(ctx.sessionID)
     const model = requireParentModel(ctx.extra?.model)
-    const deniedPermissions: PermissionNext.Ruleset = LOCAL_DELEGATE_DISABLED_TOOLS.map((permission) => ({
+    const deniedPermissions: CapabilityRules.Ruleset = LOCAL_DELEGATE_DISABLED_TOOLS.map((permission) => ({
       permission,
       pattern: "*",
       action: "deny" as const,
     }))
-    const childPermission = PermissionNext.merge(parent.permission ?? [], deniedPermissions)
+    const childPermission = CapabilityRules.merge(parent.permission ?? [], deniedPermissions)
     const { SessionPrompt } = await import("@/session/prompt")
     const child = await Session.createNext({
       kind: "assistant",

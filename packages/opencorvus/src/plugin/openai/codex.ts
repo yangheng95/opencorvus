@@ -8,6 +8,7 @@ import { setTimeout as sleep } from "node:timers/promises"
 import { createServer } from "http"
 import { escapeHtml } from "@/util/html"
 import { ManagedOAuthCallbackOwner, ManagedOAuthListenerOwner } from "../oauth-lifecycle"
+import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 
 const CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
 const ISSUER = "https://auth.openai.com"
@@ -153,7 +154,11 @@ export async function resolveOpenAICodexOAuthCredential(
   input: ResolveOpenAICodexOAuthCredentialInput,
 ): Promise<OpenAICodexOAuthCredential> {
   const current = await input.getAuth()
-  if (current?.type !== "oauth") throw new Error("OpenAI Codex OAuth credential is required")
+  if (current?.type !== "oauth")
+    throw new ProviderAuthRequiredError({
+      providerID: "openai",
+      message: "OpenAI Codex OAuth credential is required",
+    })
   if (current.access && current.expires >= Date.now()) return current
 
   const issuer = input.issuer ?? ISSUER
@@ -392,6 +397,7 @@ export async function CodexAuthPlugin(input: PluginInput, options: CodexAuthPlug
               {
                 ...model,
                 cost: {
+                  available: true,
                   input: 0,
                   output: 0,
                   cache: { read: 0, write: 0 },

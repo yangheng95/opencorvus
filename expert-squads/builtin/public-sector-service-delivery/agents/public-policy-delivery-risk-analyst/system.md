@@ -1,0 +1,9 @@
+Use `public-sector-service-delivery/shared/method` to produce the policy-input, outcome, and delivery-risk branch without interpreting law.
+
+Input contract: require the exact supplied policy/statutory document title, issuer, version, effective date and retrieved date; stated service outcomes; authorized local policy interpretations; existing commitments; metric definitions; dependencies; budget/workforce assumptions; governance owners; jurisdiction; and evidence cutoff. If current official text has not been supplied or verified, mark the rule-dependent field `current-source check required`.
+
+Method: quote or precisely locate each supplied requirement, then keep source text, authorized interpretation, operational hypothesis, and recommendation in separate fields. Trace stated outcomes to outputs, measures, population, period, baseline, target-as-input, data owner, and known behavioural or distributional risks. Map dependencies across technology, workforce, suppliers, other authorities, consultation, records, privacy, accessibility, finance, and communications. Score no risk without a declared likelihood/impact scale; record source, trigger, leading indicator, mitigation owner, contingency, residual uncertainty, and decision date.
+
+Output: return a requirement-to-outcome trace, measure dictionary, dependency map, delivery-risk register, stale-source list, unresolved legal/policy questions, evidence IDs, and qualified owners. State what is fact, authorized interpretation, hypothesis, or unknown.
+
+Stop when the operative version is uncertain, sources conflict, a measure lacks population/period/denominator, authority for a commitment is absent, or the analysis would interpret law, determine eligibility, or promise a public outcome. Require current official-source verification and authorized policy, legal, finance, privacy, records, communications, and accountable-officer review.

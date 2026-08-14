@@ -29,6 +29,7 @@ export type GitTimeoutProfile = keyof typeof GitTimeout
 export interface GitOptions {
   cwd: string
   env?: Record<string, string>
+  abort?: AbortSignal
   /** Explicit ms; wins over `timeoutProfile`. */
   timeoutMs?: number
   /** Named band; ignored when `timeoutMs` is supplied. */
@@ -87,6 +88,7 @@ async function executeGit(
     nothrow: true,
     inactivityTimeoutMs: timeoutMs,
     inactivityTimeoutMessage: timeoutMessage,
+    abort: opts.abort,
   })
   return {
     exitCode: result.code,
@@ -105,9 +107,8 @@ export function taskGit(
   args: string[],
   opts: Omit<GitOptions, "cwd">,
 ): Promise<GitResult> {
-  return executeGit(
-    (command, options) => Process.runTask(identity, command, options),
-    args,
-    { ...opts, cwd: identity.cwd },
-  )
+  return executeGit((command, options) => Process.runTask(identity, command, options), args, {
+    ...opts,
+    cwd: identity.cwd,
+  })
 }

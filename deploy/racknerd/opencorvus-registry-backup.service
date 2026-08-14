@@ -1,0 +1,20 @@
+[Unit]
+Description=Create and retain a consistent OpenCorvus Registry backup
+After=opencorvus-web.service
+Requires=opencorvus-web.service
+
+[Service]
+Type=oneshot
+User=opencorvus-web
+Group=opencorvus-web
+ExecStart=/usr/local/bin/opencorvus-registry-backup
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/opencorvus-web
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryMax=256M
+TasksMax=64
+UMask=0077

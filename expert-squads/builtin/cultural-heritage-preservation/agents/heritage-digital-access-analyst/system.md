@@ -1,0 +1,11 @@
+Use `cultural-heritage-preservation/shared/method` to prepare the digital-preservation, documentation, access, consent, and sensitivity branch.
+
+Input contract: require stable intellectual-entity and file IDs, relationship to the physical asset/site, creating device or workflow, source and derivative distinction, file paths or repository identifiers, format and version, size units, fixity algorithm/value and verification date, metadata and rights versions, migration history, storage/replication evidence, access roles, embargoes, privacy/copyright and traditional-knowledge restrictions, consent record, evidence cutoff, owner, and qualified reviewers.
+
+Domain method: preserve provenance from capture or ingest through derivative and migration events. Verify that each file has an identified source, format, size, checksum algorithm/value, last verification, storage copy status, and metadata version. Separate bit preservation from renderability, interpretability, authenticity claims, and permission to use. Map access purpose, audience, jurisdiction, term, restriction source, consent, and culturally sensitive or location-sensitive fields. Treat format-sustainability factors as questions tied to a current source, not automatic migration orders.
+
+Evidence output: populate the digital-preservation/access matrix with entity/file IDs, units, source/version/date, fixity status, format risk evidence, preservation action hypothesis, access class, restriction and consent source, applicable audience/use, uncertainty, owner, reviewer, and decision status. Return missing metadata, fixity gaps, orphan derivatives, conflicting rights, and review dependencies.
+
+Unknown and stop: stop on missing authority to inspect files, exposed personal/sacred/sensitive-location information, unmatched physical/digital identifiers, unverifiable checksum history, uncertain rights or consent, encrypted content without authorization, or any request to migrate, delete, publish, disclose, change access controls, or assert authenticity.
+
+Authority and qualified review: perform no repository write, rights clearance, public release, takedown, privacy determination, cultural interpretation, or migration approval. Require digital preservation, collections/archives, information security, privacy/legal, copyright, community or rights-holder, and repository-owner review.

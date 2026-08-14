@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "mergers-acquisitions-due-diligence",
+  "name": "Mergers and Acquisitions Due Diligence",
+  "label": "Mergers and Acquisitions Due Diligence",
+  "description": "Authorized M&A perimeter, VDR completeness, financial-quality, commercial, legal, technology and people evidence without valuation, negotiation, legal or go/no-go authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for source-bound cross-functional M&A due-diligence evidence prepared for qualified review.",
+    "selection_guidance": "Select for authorized deal perimeter, VDR completeness, financial quality, working capital, commercial/customer/market/operations and legal/regulatory/technology/people evidence. Do not select for valuation, negotiation, filing, legal conclusions, party contact or go/no-go decisions.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "mergers-acquisitions-due-diligence/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "commercial-customer-market-operations-analyst": {
+        "label": "Commercial Customer Market Operations Analyst",
+        "description": "Tests source-bound commercial, customer, market, channel and operating evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/commercial-customer-market-operations-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mergers-acquisitions-due-diligence/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "deal-scope-vdr-completeness-analyst": {
+        "label": "Deal Scope VDR Completeness Analyst",
+        "description": "Freezes deal perimeter and reconciles VDR inventory, request coverage and source provenance.",
+        "base_role": "explore",
+        "prompt": "agents/deal-scope-vdr-completeness-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mergers-acquisitions-due-diligence/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "financial-quality-working-capital-analyst": {
+        "label": "Financial Quality Working Capital Analyst",
+        "description": "Reconciles financial quality, recurring adjustments, working capital, net debt and cash evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/financial-quality-working-capital-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mergers-acquisitions-due-diligence/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "legal-regulatory-technology-people-analyst": {
+        "label": "Legal Regulatory Technology People Analyst",
+        "description": "Extracts source-bound legal, regulatory, IP, technology, security and people issues for specialist review.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/legal-regulatory-technology-people-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mergers-acquisitions-due-diligence/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "mergers-acquisitions-due-diligence-review-owner": {
+        "label": "Mergers and Acquisitions Due Diligence Review Owner",
+        "description": "Joins all diligence branches into a conflict-preserving qualified review pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/mergers-acquisitions-due-diligence-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mergers-acquisitions-due-diligence/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "qualified-review": {
+        "label": "Mergers and Acquisitions Due Diligence Qualified Review",
+        "description": "Four independent diligence branches converge into one qualified review owner.",
+        "nodes": {
+          "commercial-customer-market-operations-analyst": {
+            "agent_id": "commercial-customer-market-operations-analyst",
+            "description": "Tests source-bound commercial, customer, market, channel and operating evidence.",
+            "depends_on": []
+          },
+          "deal-scope-vdr-completeness-analyst": {
+            "agent_id": "deal-scope-vdr-completeness-analyst",
+            "description": "Freezes deal perimeter and reconciles VDR inventory, request coverage and source provenance.",
+            "depends_on": []
+          },
+          "financial-quality-working-capital-analyst": {
+            "agent_id": "financial-quality-working-capital-analyst",
+            "description": "Reconciles financial quality, recurring adjustments, working capital, net debt and cash evidence.",
+            "depends_on": []
+          },
+          "legal-regulatory-technology-people-analyst": {
+            "agent_id": "legal-regulatory-technology-people-analyst",
+            "description": "Extracts source-bound legal, regulatory, IP, technology, security and people issues for specialist review.",
+            "depends_on": []
+          },
+          "mergers-acquisitions-due-diligence-review-owner": {
+            "agent_id": "mergers-acquisitions-due-diligence-review-owner",
+            "description": "Joins all diligence branches into a conflict-preserving qualified review pack.",
+            "depends_on": [
+              "commercial-customer-market-operations-analyst",
+              "deal-scope-vdr-completeness-analyst",
+              "financial-quality-working-capital-analyst",
+              "legal-regulatory-technology-people-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

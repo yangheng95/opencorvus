@@ -27,6 +27,8 @@ import {
   normalizeArtifactExecutablePermissions,
 } from "../packages/opencorvus/script/runtime-executable-contract"
 import { verifyNativeBinaryArchive } from "./package-native-binary"
+import { finalizeWorkArtifactPackage } from "../packages/opencorvus/script/finalize-work-artifact-package"
+import { writeOverlayPayloadStamp } from "../packages/opencorvus/script/build-overlay-payload-stamp"
 
 export interface LinuxBinaryTarget {
   distDirName: string
@@ -277,6 +279,8 @@ export async function packageLinuxBinary(
   for (const artifact of artifacts) {
     await copyBinaryArtifact(artifact)
     await normalizeArtifactExecutablePermissions({ root: artifact.bundleDir, os: "linux" })
+    await finalizeWorkArtifactPackage({ root: artifact.bundleDir, target: { os: "linux", arch: "x64" } })
+    await writeOverlayPayloadStamp(artifact.bundleDir)
     const actualVersion = await verifyBinaryArtifact(artifact)
     if (actualVersion !== env.OPENCORVUS_VERSION) {
       throw new Error(`Unexpected ${artifact.output} version: ${actualVersion}; expected ${env.OPENCORVUS_VERSION}`)
@@ -294,6 +298,7 @@ export async function packageLinuxBinary(
         archive: artifact.archive,
       },
       "linux",
+      "x64",
     )
   }
 

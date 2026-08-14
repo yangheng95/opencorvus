@@ -1,7 +1,7 @@
 import { For, Match, Show, Switch, createMemo } from "solid-js"
 
 import type { CardNode } from "../store/card-tree"
-import { rootTaskSessionID, activeTaskID } from "../store/board"
+import { rootTaskSessionID, activeTaskID, boardStore } from "../store/board"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 import {
   collapsedActivityPreviewText,
@@ -26,6 +26,37 @@ import { storeCardNode } from "./StoreCardNode"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ConversationTurnControl } from "./ConversationTurnControl"
+import { Badge, type BadgeTone } from "./ui/Badge"
+
+type OperatorIngressPresentation = { label: string; tone: BadgeTone; state: string; title?: string }
+
+function operatorIngressPresentation(messageID: string | undefined): OperatorIngressPresentation | undefined {
+  if (!messageID || boardStore.selectedSource?.kind !== "task") return undefined
+  const artifact = boardStore.board?.artifacts.find(
+    (item: any) => item.kind === "queued_operator_wake" && item.payload?.message_id === messageID,
+  )
+  if (!artifact) return undefined
+  if (artifact.label === "pending") {
+    const position = Number(artifact.payload?.queue_position)
+    const owner = String(artifact.payload?.current_owner_ingress_id ?? "").trim()
+    return {
+      label:
+        Number.isInteger(position) && position > 0
+          ? t("task.ingress.queued_position", { position })
+          : t("task.ingress.queued"),
+      tone: "muted",
+      state: "queued",
+      title: owner ? t("task.ingress.current_owner", { owner }) : undefined,
+    }
+  }
+  if (artifact.label === "running") return { label: t("task.ingress.running"), tone: "accent", state: "running" }
+  if (artifact.label === "drained") return { label: t("task.ingress.delivered"), tone: "ok", state: "delivered" }
+  if (artifact.label === "terminal_inapplicable") {
+    return { label: t("task.ingress.cancelled"), tone: "muted", state: "cancelled" }
+  }
+  if (artifact.label === "delivery_failed") return { label: t("task.ingress.failed"), tone: "bad", state: "failed" }
+  return undefined
+}
 
 function UnsupportedChatBubbleChild(props: { child: CardNode; parentID: string }): null {
   throw new Error(`ChatBubble: unsupported child kind "${props.child.kind}" for ${props.parentID}`)
@@ -54,21 +85,10 @@ function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDura
 function ChatBubbleEmptyTurnState(props: { node: CardNode; hasVisibleContent: boolean }) {
   const errorReason = () => props.node.errorReason?.trim() || ""
   return (
-    <Show when={!props.hasVisibleContent}>
-      <Show
-        when={props.node.status === "error" && errorReason()}
-        fallback={
-          <Show when={props.node.status === "running"}>
-            <span class="msg-streaming-status" role="status">
-              正在生成
-            </span>
-          </Show>
-        }
-      >
-        <div class="msg-tool-error" data-agent-error-card-id={props.node.id} role="alert">
-          {errorReason()}
-        </div>
-      </Show>
+    <Show when={!props.hasVisibleContent && props.node.status === "error" && errorReason()}>
+      <div class="msg-tool-error" data-agent-error-card-id={props.node.id} role="alert">
+        {errorReason()}
+      </div>
     </Show>
   )
 }
@@ -184,6 +204,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
   const align = () => bubbleAlign(props.node)
   const normalizedRole = () => normalizeAgentRole(props.node.role || props.node.stage || "")
   const isUser = () => normalizedRole() === "user"
+  const ingress = createMemo(() => (isUser() ? operatorIngressPresentation(props.node.messageID) : undefined))
   const collapsible = () => !isUser() && props.collapsible !== false
   const defaultExpanded = () => defaultExpandedForNode(props.node)
   const expanded = () => isUser() || !collapsible() || cardExpanded(props.node.id, defaultExpanded())
@@ -315,6 +336,19 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
             <Show when={errorReason()}>{(reason) => <CardErrorReasonIndicator reason={reason()} />}</Show>
             <Show when={errorReason()}>
               <CardDurationChip node={props.node} />
+            </Show>
+            <Show when={ingress()}>
+              {(item) => (
+                <Badge
+                  tone={item().tone}
+                  size="sm"
+                  data-ui="operator-ingress-state"
+                  data-state={item().state}
+                  title={item().title}
+                >
+                  {item().label}
+                </Badge>
+              )}
             </Show>
           </div>
           <Show when={expanded()}>

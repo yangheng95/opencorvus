@@ -1,6 +1,7 @@
 import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js"
 import type { JSX } from "solid-js"
 import ExpertSquadPanel from "./settings/ExpertSquadPanel"
+import ExpertSquadMarketPanel from "./settings/ExpertSquadMarketPanel"
 import ConversationCapabilityPanel from "./settings/ConversationCapabilityPanel"
 import { McpResourceManagementPanel, SkillResourceManagementPanel } from "./settings/SkillMarketPanel"
 import ChannelsPanel from "./settings/ChannelsPanel"
@@ -13,9 +14,11 @@ import ArchivePanel from "./settings/ArchivePanel"
 import ScheduledAutomationsPanel from "./settings/ScheduledAutomationsPanel"
 import { MemoryContextPanel } from "./settings/MemoryContextPanel"
 import DesktopUpdatePanel from "./settings/DesktopUpdatePanel"
+import UsagePanel from "./settings/UsagePanel"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
+import { LinkButton } from "./ui/LinkButton"
 import { SearchField } from "./ui/SearchField"
 import { Tab, TabList, TabPanel, Tabs } from "./ui/Tabs"
 import { appStore } from "../store/app"
@@ -61,6 +64,7 @@ const SECTION_ICONS: Record<ConfigDialogTab, IconName> = {
   memory: "config-memory",
   network: "config-network",
   providers: "config-providers",
+  usage: "usage-metrics",
   scheduled: "scheduled",
   archive: "archive",
   about: "info-circle",
@@ -107,7 +111,7 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
   },
   {
     labelKey: "settings.nav.data",
-    tabs: ["archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
+    tabs: ["usage", "archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
 ]
 const ABOUT_CONFIG_TAB = CONFIG_TABS.find((tab) => tab.id === "about") as ConfigTabDef
@@ -145,6 +149,8 @@ function activePanelBodyID(tab: ConfigDialogTab): string {
       return "networkBody"
     case "providers":
       return "providersConfigBody"
+    case "usage":
+      return "usageBody"
     case "scheduled":
       return "scheduledAutomationsBody"
     case "archive":
@@ -285,7 +291,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     return rows
   })
   const activeConfigTab = createMemo(() => dialogStore.config.activeTab)
-  const [renderedConfigTab, setRenderedConfigTab] = createSignal<ConfigDialogTab | null>(null)
   const [settingsSearch, setSettingsSearch] = createSignal("")
   let settingsSearchInput: HTMLInputElement | undefined
   const normalizedSettingsSearch = createMemo(() => settingsSearch().trim().toLowerCase())
@@ -317,17 +322,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     return closeConfigDialog()
   }
 
-  createEffect(() => {
-    const tab = effectiveActiveTab()
-    if (!dialogStore.config.open) {
-      setRenderedConfigTab(null)
-      return
-    }
-    setRenderedConfigTab(null)
-    const frameID = window.requestAnimationFrame(() => setRenderedConfigTab(tab))
-    onCleanup(() => window.cancelAnimationFrame(frameID))
-  })
-
   const renderActivePanel = (tab: ConfigDialogTab) => {
     switch (tab) {
       case "general":
@@ -339,9 +333,9 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       case "work":
         return <ConversationCapabilityPanel experience="work" directory={activeProjectDirectory} />
       case "expert-squad-install":
-        return <ExpertSquadPanel page="install" />
+        return <ExpertSquadMarketPanel />
       case "expert-squad":
-        return <ExpertSquadPanel page="details" />
+        return <ExpertSquadPanel />
       case "channel":
         return <ChannelsPanel directory={activeProjectDirectory()} />
       case "skill":
@@ -356,6 +350,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         return <NetworkPanel />
       case "providers":
         return <ProvidersPanel />
+      case "usage":
+        return <UsagePanel />
       case "scheduled":
         return <ScheduledAutomationsPanel onOpenSession={props.onOpenAutomationSession} />
       case "archive":
@@ -384,10 +380,17 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               <div class="about-links">
                 <For each={ABOUT_LINKS}>
                   {(link) => (
-                    <a class="about-link" href={link.href} target="_blank" rel="noopener">
+                    <LinkButton
+                      variant="outline"
+                      size="md"
+                      tone="neutral"
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener"
+                    >
                       <Icon name={link.icon} />
                       <span>{link.label()}</span>
-                    </a>
+                    </LinkButton>
                   )}
                 </For>
               </div>
@@ -559,16 +562,12 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                   id={configPanelID(active())}
                   aria-labelledby={configTabID(active())}
                 >
-                  <Show when={renderedConfigTab()}>
-                    {(tab) => (
-                      <div
-                        classList={{ "config-section-body": true, "about-body": tab() === "about" }}
-                        id={activePanelBodyID(tab())}
-                      >
-                        {renderActivePanel(tab())}
-                      </div>
-                    )}
-                  </Show>
+                  <div
+                    classList={{ "config-section-body": true, "about-body": active() === "about" }}
+                    id={activePanelBodyID(active())}
+                  >
+                    {renderActivePanel(active())}
+                  </div>
                 </TabPanel>
               )}
             </Show>

@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto"
+import { createHash, randomBytes } from "node:crypto"
 import { z } from "zod"
 import {
   ArtifactIdentifierSchema,
@@ -85,6 +85,33 @@ export const ArtifactReadLocatorListSchema = z
   .array(ArtifactReadLocatorSchema)
   .superRefine((locators, context) => refineUniqueLocatorList(locators, context, "Artifact read"))
 
+function artifactReference(prefix: "al" | "ar" | "as"): string {
+  return `${prefix}_${randomBytes(12).toString("base64url")}`
+}
+
+export const ArtifactLocatorReferenceSchema = z
+  .string()
+  .regex(/^al_[A-Za-z0-9_-]{16}$/)
+  .describe("Host-minted reference to one exact locator emitted earlier in this Session Turn.")
+
+export const ArtifactReadReferenceSchema = z
+  .string()
+  .regex(/^ar_[A-Za-z0-9_-]{16}$/)
+  .describe("Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.")
+
+export const ArtifactSelectionReferenceSchema = z
+  .string()
+  .regex(/^as_[A-Za-z0-9_-]{16}$/)
+  .describe("Host-minted reference to one persisted semantic Artifact selection in this Session Turn.")
+
+export function mintArtifactLocatorReference(): string {
+  return ArtifactLocatorReferenceSchema.parse(artifactReference("al"))
+}
+
+export function mintArtifactReadReference(): string {
+  return ArtifactReadReferenceSchema.parse(artifactReference("ar"))
+}
+
 export const ArtifactSelectInputSchema = z
   .object({
     locator: ArtifactReadLocatorSchema,
@@ -100,6 +127,10 @@ export const ArtifactSelectInputSchema = z
   .strict()
 
 export const ArtifactSelectOutputSchema = ArtifactSelectInputSchema
+
+export function mintArtifactSelectionReference(): string {
+  return ArtifactSelectionReferenceSchema.parse(artifactReference("as"))
+}
 
 export const ArtifactConsumptionProvenanceFields = {
   observed_artifact_locators: z
@@ -176,6 +207,42 @@ export const CrossTaskArtifactImportListSchema = z
           code: "custom",
           path: [index],
           message: "cross-Task Artifact imports must be unique exact source locators",
+        })
+      }
+      identities.add(identity)
+    }
+  })
+
+export const CrossTaskArtifactSourceSchema = z.discriminatedUnion("authority", [
+  z
+    .object({
+      authority: z.literal("completion_decision"),
+      source_task_id: ArtifactIdentifierSchema,
+    })
+    .strict(),
+  z
+    .object({
+      authority: z.literal("terminal_lifecycle"),
+      source_task_id: ArtifactIdentifierSchema,
+      locator: ArtifactReadLocatorSchema,
+    })
+    .strict(),
+])
+
+export const CrossTaskArtifactSourceListSchema = z
+  .array(CrossTaskArtifactSourceSchema)
+  .max(ArtifactSchemaLimits.filterValues)
+  .superRefine((sources, context) => {
+    const identities = new Set<string>()
+    for (const [index, source] of sources.entries()) {
+      const identity = `${source.authority}\u0000${source.source_task_id}\u0000${
+        source.authority === "terminal_lifecycle" ? JSON.stringify(source.locator) : ""
+      }`
+      if (identities.has(identity)) {
+        context.addIssue({
+          code: "custom",
+          path: [index],
+          message: "cross-Task Artifact sources must be unique exact authorities",
         })
       }
       identities.add(identity)
@@ -285,7 +352,7 @@ export const ArtifactCatalogVersionSchema = z.discriminatedUnion("state", [
 export const ArtifactCatalogEntrySchema = z
   .object({
     source: ArtifactCatalogSourceSchema,
-    locator: ArtifactLocatorSchema,
+    locator: ArtifactReadLocatorSchema,
     kind: ArtifactCatalogValueSchema,
     artifact_type: EngineArtifactTypeSchema.optional(),
     schema_diagnostic: z.string().min(1).max(ArtifactSchemaLimits.schemaDiagnosticLength).optional(),
@@ -313,6 +380,15 @@ export const ArtifactCatalogEntrySchema = z
         code: "custom",
         path: ["version"],
         message: "Engine entries must be current/historical and Task Artifact entries must be immutable",
+      })
+    }
+    if (
+      (entry.source === "engine_artifact") !== (entry.locator.source === "engine_artifact")
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["locator", "source"],
+        message: "Catalog entry source must match its exact locator authority",
       })
     }
     if (
@@ -515,6 +591,16 @@ export const ArtifactSearchTransportPageSchema = ArtifactSearchPageSchema.omit({
   facets: true,
 })
 
+export const ArtifactSearchReferenceTransportPageSchema = ArtifactSearchTransportPageSchema.extend({
+  entries: z
+    .array(
+      ArtifactCatalogEntrySchema.extend({
+        artifact_locator_ref: ArtifactLocatorReferenceSchema,
+      }),
+    )
+    .max(ArtifactSchemaLimits.catalogEntries),
+})
+
 const ArtifactReadMaxBytesSchema = z
   .number()
   .int()
@@ -569,6 +655,26 @@ export const ArtifactReadInputSchema = z
     }
   })
 
+export const ArtifactReadReferenceInputSchema = z
+  .object({
+    artifact_transport_version: z.literal(2),
+    artifact_locator_ref: ArtifactLocatorReferenceSchema,
+    byte_offset: z
+      .number()
+      .int()
+      .nonnegative()
+      .default(0)
+      .describe("Zero-based byte offset within the exact locator identified by artifact_locator_ref."),
+    max_bytes: ArtifactReadMaxBytesSchema,
+    delivery: z
+      .enum(["inline", "materialized_file"])
+      .default("inline")
+      .describe(
+        "inline returns one bounded content chunk. materialized_file verifies one complete text resource and returns an immutable local cache path for bounded command-line inspection.",
+      ),
+  })
+  .strict()
+
 export const ArtifactReadChunkSchema = z
   .object({
     locator: ArtifactReadLocatorSchema,
@@ -582,6 +688,28 @@ export const ArtifactReadChunkSchema = z
     text: z.string().max(ArtifactSchemaLimits.maxReadBytes).optional(),
     materialized_path: z.string().min(1).optional(),
     attachment: z.boolean(),
+  })
+  .strict()
+
+export const ArtifactReadReferenceChunkSchema = ArtifactReadChunkSchema.extend({
+  artifact_transport_version: z.literal(2),
+  artifact_locator_ref: ArtifactLocatorReferenceSchema,
+  artifact_read_ref: ArtifactReadReferenceSchema,
+})
+
+export const ArtifactSelectReferenceInputSchema = z
+  .object({
+    artifact_transport_version: z.literal(2),
+    artifact_read_ref: ArtifactReadReferenceSchema,
+    purpose: ArtifactSelectInputSchema.shape.purpose,
+  })
+  .strict()
+
+export const ArtifactSelectReferenceOutputSchema = z
+  .object({
+    artifact_transport_version: z.literal(2),
+    selection: ArtifactSelectOutputSchema,
+    artifact_selection_ref: ArtifactSelectionReferenceSchema,
   })
   .strict()
 
@@ -742,14 +870,20 @@ export const EngineArtifactPublishResultSchema = z
 export type { ArtifactProducer } from "./artifact-producer"
 export type EngineArtifactLocator = z.infer<typeof EngineArtifactLocatorSchema>
 export type CrossTaskArtifactImport = z.infer<typeof CrossTaskArtifactImportSchema>
+export type CrossTaskArtifactSource = z.infer<typeof CrossTaskArtifactSourceSchema>
 export type EngineArtifactImportLineage = z.infer<typeof EngineArtifactImportLineageSchema>
 export type CrossTaskArtifactImportMapping = z.infer<typeof CrossTaskArtifactImportMappingSchema>
 export type TaskArtifactSnapshotLocator = z.infer<typeof TaskArtifactSnapshotLocatorSchema>
 export type TaskArtifactResourceLocator = z.infer<typeof TaskArtifactResourceLocatorSchema>
 export type ArtifactLocator = z.infer<typeof ArtifactLocatorSchema>
 export type ArtifactReadLocator = z.infer<typeof ArtifactReadLocatorSchema>
+export type ArtifactLocatorReference = z.infer<typeof ArtifactLocatorReferenceSchema>
+export type ArtifactReadReference = z.infer<typeof ArtifactReadReferenceSchema>
+export type ArtifactSelectionReference = z.infer<typeof ArtifactSelectionReferenceSchema>
 export type ArtifactSelectInput = z.infer<typeof ArtifactSelectInputSchema>
 export type ArtifactSelectOutput = z.infer<typeof ArtifactSelectOutputSchema>
+export type ArtifactSelectReferenceInput = z.infer<typeof ArtifactSelectReferenceInputSchema>
+export type ArtifactSelectReferenceOutput = z.infer<typeof ArtifactSelectReferenceOutputSchema>
 export type ArtifactConsumptionProvenance = z.infer<typeof ArtifactConsumptionProvenanceSchema>
 export type SessionEvidenceLocator = z.infer<typeof SessionEvidenceLocatorSchema>
 export type SessionMessageEvidenceLocator = z.infer<typeof SessionMessageEvidenceLocatorSchema>
@@ -762,7 +896,9 @@ export type ArtifactSearchRequest = z.input<typeof ArtifactSearchInputSchema>
 export type ArtifactSearchPage = z.infer<typeof ArtifactSearchPageSchema>
 export type ArtifactReadInput = z.infer<typeof ArtifactReadInputSchema>
 export type ArtifactReadRequest = z.input<typeof ArtifactReadInputSchema>
+export type ArtifactReadReferenceInput = z.infer<typeof ArtifactReadReferenceInputSchema>
 export type ArtifactReadChunk = z.infer<typeof ArtifactReadChunkSchema>
+export type ArtifactReadReferenceChunk = z.infer<typeof ArtifactReadReferenceChunkSchema>
 export type EngineArtifactPublishInput = z.infer<typeof EngineArtifactPublishInputSchema>
 export type EngineArtifactPublishRequest = z.input<typeof EngineArtifactPublishInputSchema>
 export type PackageEngineArtifactPublishRequest = Omit<EngineArtifactPublishRequest, "idempotent">

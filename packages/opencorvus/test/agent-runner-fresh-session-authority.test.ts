@@ -1,13 +1,21 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
+import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
-import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { EngineArtifactTable, EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
+import { reconcileTerminalAgentLifecycleDelivery, waitForQueueCompletionHooksForTest } from "@/engine/queue"
+import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { selectedWorkflowBinding } from "@/engine/workflow-binding"
+import {
+  assertTaskWorkflowBindingInTransaction,
+  TaskWorkflowBindingConflictError,
+} from "@/engine/workflow-binding-facts"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
+import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
 import { Session } from "@/session"
@@ -17,6 +25,7 @@ import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { materializeUserMessage, preparedUserMessageFromPreflight } from "@/session/prompt/parts"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { Database, and, eq } from "@/storage/db"
@@ -30,7 +39,7 @@ function providerModel(): ProviderType.Model {
     providerID: model.providerID,
     name: "Fresh Runner Authority Test",
     limit: { context: 1_000_000, input: 900_000, output: 4_096 },
-    cost: { input: 0, output: 0, cache: { read: 0, write: 0 } },
+    cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
     capabilities: {
       toolcall: true,
       attachment: false,
@@ -76,12 +85,17 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         config,
         packageRevision,
       })
+      const skillProjection = await PromptProfileResolver.resolveSkillProjection({
+        projectDirectory: Instance.project.worktree,
+        config,
+        packageRevision,
+      })
       const workflowBinding = selectedWorkflowBinding({
         projection: {
           packageRevision,
           virtualWorkflows: scheduler.virtualWorkflows,
         },
-        workflowID: "composite-delivery",
+        workflowID: "planner-parallel-delivery",
       })
       const taskID = Identifier.ascending("task")
       const taskRequest = "Publish the bounded research charter"
@@ -91,7 +105,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -102,7 +116,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         priority: "normal",
         metadata: {},
         projectID: Instance.project.id,
-        queue: true,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -277,10 +290,151 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
 
         expect(result).toMatchObject({ sessionID: committedSessionID })
         expect(processorStarts).toBe(1)
+        const descriptor = WorkerTurnDescriptor.findForDispatch({
+          sessionID: committedSessionID!,
+          dispatchID,
+        })
+        const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+          committedSessionID!,
+          "agent.execution.lifecycle",
+          descriptor!.payload.messageAuthority.user_message_id,
+        )
+        expect(lifecycle).toMatchObject({
+          sessionID: committedSessionID,
+          payload: { status: { type: "terminal", reason: "completed" } },
+        })
+        const blockerTaskID = Identifier.ascending("task")
+        const blockerRoot = await Session.create({ kind: "root", title: "Occupied root queue owner" })
+        const blockerTimeCreated = Date.now()
+        persistTask({
+          taskID: blockerTaskID,
+          sessionID: blockerRoot.id,
+          now: blockerTimeCreated,
+          title: "Occupied root queue owner",
+          request: "Keep the root queue occupied while lifecycle delivery is accepted",
+          productPillar: "work",
+          source: "test",
+          priority: "normal",
+          metadata: {},
+          projectID: Instance.project.id,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID: blockerTaskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: blockerTimeCreated,
+          }),
+        })
+        expect(
+          await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
+        ).toBe("delivered")
+        expect(
+          await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
+        ).toBe("already_delivered")
+        const lifecycleWakes = Database.use((db) =>
+          db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .all(),
+        )
+          .map((row) => ({ label: row.label, ingress: QueuedTaskIngressSchema.parse(row.payload) }))
+          .filter((row) => row.ingress.lifecycle_event_id === lifecycle!.id)
+        expect(lifecycleWakes).toMatchObject([
+          {
+            label: "running",
+            ingress: {
+              delivery_attempt: 1,
+              lifecycle_event_id: lifecycle!.id,
+              event: {
+                agentLifecycleDelivery: {
+                  eventID: lifecycle!.id,
+                  sessionID: committedSessionID,
+                  dispatchID,
+                },
+              },
+            },
+          },
+        ])
+        const directBinding = selectedWorkflowBinding({
+          projection: {
+            packageRevision,
+            virtualWorkflows: scheduler.virtualWorkflows,
+          },
+          workflowID: null,
+        })
+        try {
+          Database.use((db) => assertTaskWorkflowBindingInTransaction({ db, taskID, workflowBinding: directBinding }))
+          throw new Error("Expected immutable workflow binding conflict")
+        } catch (error) {
+          expect(error).toBeInstanceOf(TaskWorkflowBindingConflictError)
+          expect(error).toMatchObject({
+            code: "task_workflow_binding_conflict",
+            taskID,
+            artifactID: lineageArtifactID,
+          })
+        }
+        const executors = Object.fromEntries(
+          DispatchAdapterContractRegistry.ids.map((id) => [
+            id,
+            async () => {
+              throw new Error(`unexpected ${id} provider execution`)
+            },
+          ]),
+        ) as Record<AgentDispatchAdapterID, DispatchAdapterExecutors[AgentDispatchAdapterID]>
+        const dispatchTool = createDispatchAgentTool({
+          taskID,
+          projectedAgents: skillProjection.projectedAgents,
+          executors,
+          openLineage({ workflowBinding: requestedBinding }) {
+            return Database.use((db) =>
+              assertTaskWorkflowBindingInTransaction({ db, taskID, workflowBinding: requestedBinding! }),
+            ) as never
+          },
+          runInWorktree: async ({ run }) => await run(),
+          runDetached: async (run) => await run(),
+          runDetachedRecovery: async (run) => await run(),
+        })
+        const conflictOutcome = await (dispatchTool.execute as any)(
+          {
+            dispatch: {
+              target: projection.workerCapability.identity.agentID,
+              work_scope: { kind: "task" },
+              use_worktree: false,
+              turn: {
+                kind: "initial",
+                workflow_subject: { kind: "direct" },
+                input: {
+                  goal_ids: [],
+                  instruction: "attempt an invalid direct dispatch after virtual workflow selection",
+                  reason: "verify immutable binding is exposed by the public dispatch contract",
+                },
+              },
+            },
+          },
+          {},
+        )
+        expect(conflictOutcome).toMatchObject({
+          kind: "infrastructure_failure",
+          operation: "workflow_binding_initial_claim",
+          error_name: "TaskWorkflowBindingConflictError",
+          recovery_authority: { occurrence_status: "occurrence_not_committed" },
+          failure_issues: [
+            {
+              code: "task_workflow_binding_conflict",
+              path: ["dispatch", "turn", "workflow_subject"],
+            },
+          ],
+        })
       } finally {
         processorSpy.mockRestore()
         providerSpy.mockRestore()
       }
     },
   })
+  // The accepted lifecycle delivery owns an independent project lease. Join
+  // it only after the setup/contract assertion lease has been released.
+  await waitForQueueCompletionHooksForTest()
 }, 60_000)

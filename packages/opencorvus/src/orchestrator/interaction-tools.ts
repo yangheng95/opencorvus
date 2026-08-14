@@ -3,25 +3,22 @@ import z from "zod"
 import { Log } from "@/util/log"
 import { Question } from "@/question"
 import { requireTask } from "@/engine/store"
-import { MessageStore } from "@/session/message-store"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { TaskRootMessageProvenance, type TaskRootMessageKind } from "@/task-api/task-root-message"
+import { TaskRootMessageProvenance, getTaskRootMessage, type TaskRootMessageKind } from "@/task-api/task-root-message"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 
 const log = Log.create({ service: "task-tools" })
 
 export const ORCHESTRATOR_QUESTION_DESCRIPTION =
-  "Ask the user for the one pre-dispatch verification-budget preference defined by the scheduler instructions, or for authority or facts that exclusively belong to the operator and block the accepted Task contract. " +
-  "The verification-budget interaction asks one concise question, recommends skip_optional_testing, and offers run_optional_testing only when the active package can execute a concrete additional confidence increment with an exact test scope and stated relative time/token cost. Rejection or automatic deadline expiry has exactly the skip_optional_testing meaning: do not dispatch or execute any testing or assurance work named by the question; continue only requirements that were already mandatory outside the optional question. Never repeat an answered preference or ask after domain dispatch exists. " +
-  "Other valid triggers are credentials or inaccessible external facts only the operator can provide, explicit approval for an irreversible or destructive operation, or an irreducible externally meaningful product choice that current Task evidence cannot decide. " +
+  "Ask the user only for authority or facts that exclusively belong to the operator and block the accepted Task contract: credentials or inaccessible external facts only the operator can provide, explicit approval for an irreversible or destructive operation, or an irreducible externally meaningful product choice that current Task evidence cannot decide. " +
   "A local runtime, process, provider, projected-worker, repository, or Tool failure is recovery evidence, never a user decision and never authority to ask whether work should continue or stop; use the exact dispatch, named wait, recovery, or lifecycle action instead. " +
   "The questions appear in the Task Interaction panel. Each question may provide options for click-selection; omit options for free text. Set multiple=true to allow multi-select. Returns a model-visible answered, operator-rejected, or automatic-deadline-expired outcome."
 
 export function authorizedTaskRootMessagesForWake(input: {
   rootMessage?: {
     messageID: string
-    kind: "operator" | "orchestrator"
+    kind: "operator" | "orchestrator" | "mission"
   }
   taskIntent?: {
     supersededOperatorMessageIDs: readonly string[]
@@ -71,7 +68,7 @@ export function createOrchestratorInteractionTools(input: {
   return {
     read_task_message: tool({
       description:
-        "Read one exact already-recorded task-root message ID explicitly authorized by this wake's Wake Provenance as the current root message, Mission acceptance-resume message, or an ordered superseded Retry/Replan operator message. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
+        "Read the exact real-participant Task-root Message authorized by the current wake. For a current rootMessage, call this before any wait, lifecycle decision, or scheduler response so the new Mission/operator/orchestrator input is not inferred from older conversation history. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
       inputSchema: z
         .object({
           message_id: z.string().min(1).describe("Exact authorized task-root message ID."),
@@ -87,7 +84,7 @@ export function createOrchestratorInteractionTools(input: {
           throw new Error(`Task-root message ${wake.messageID} does not belong to the active project`)
         }
         await Session.assertLineageInProject({ sessionID: task.session_id, projectID: task.project_id })
-        const message = await MessageStore.get({ sessionID: task.session_id, messageID: message_id })
+        const message = await getTaskRootMessage(task, message_id)
         if (message.info.role !== "user") {
           throw new Error(`Task-root message ${message_id} must have role=user, received ${message.info.role}`)
         }

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "railway-operations-safety",
+  "name": "Railway Operations Safety",
+  "label": "Railway Operations Safety",
+  "description": "Timetable, route-capacity, signalling-restriction, service-occurrence, and assurance evidence joined into a bounded railway operations review pack.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for source-grounded railway operating-plan and safety-assurance review without train-control authority.",
+    "selection_guidance": "Select for railway timetable paths, platforms, route occupancy, approved headway evidence, signalling or infrastructure restrictions, possessions, service disruption, delay attribution, occurrences, and assurance actions. Do not select for movement authority, live signalling, dispatch, maintenance release, accident classification, or emergency command.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "railway-operations-safety/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "railway-timetable-capacity-analyst": {
+        "label": "Railway Timetable and Capacity Analyst",
+        "description": "Reconciles train paths, platforms, route occupation, recovery time, and approved separation evidence.",
+        "base_role": "explore",
+        "prompt": "agents/railway-timetable-capacity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "railway-operations-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "railway-signalling-infrastructure-risk-analyst": {
+        "label": "Railway Signalling and Infrastructure Risk Analyst",
+        "description": "Traces signalling, interlocking, route, possession, temporary restriction, and control evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/railway-signalling-infrastructure-risk-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "railway-operations-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "railway-service-occurrence-assurance-analyst": {
+        "label": "Railway Service Occurrence and Assurance Analyst",
+        "description": "Reconciles service performance, disruptions, occurrences, candidate attribution, controls, and assurance actions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/railway-service-occurrence-assurance-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "railway-operations-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "railway-operations-safety-review-owner": {
+        "label": "Railway Operations Safety Review Owner",
+        "description": "Joins three independent railway evidence branches and assigns qualified decision gates.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/railway-operations-safety-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "railway-operations-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "railway-operations-safety-review": {
+        "label": "Railway Operations Safety Review",
+        "description": "Three independent operating-evidence branches converge into one bounded railway assurance pack.",
+        "nodes": {
+          "railway-timetable-capacity-analyst": {
+            "agent_id": "railway-timetable-capacity-analyst",
+            "description": "Reconciles paths, platforms, route occupancy, dwell, recovery, and approved separation evidence.",
+            "depends_on": []
+          },
+          "railway-signalling-infrastructure-risk-analyst": {
+            "agent_id": "railway-signalling-infrastructure-risk-analyst",
+            "description": "Traces signalling, infrastructure, possessions, restrictions, hazards, controls, and evidence.",
+            "depends_on": []
+          },
+          "railway-service-occurrence-assurance-analyst": {
+            "agent_id": "railway-service-occurrence-assurance-analyst",
+            "description": "Reconciles service events, occurrences, attribution candidates, actions, and assurance status.",
+            "depends_on": []
+          },
+          "railway-operations-safety-review-owner": {
+            "agent_id": "railway-operations-safety-review-owner",
+            "description": "Joins all branches, exposes conflicts and unknowns, and routes qualified decisions.",
+            "depends_on": [
+              "railway-service-occurrence-assurance-analyst",
+              "railway-signalling-infrastructure-risk-analyst",
+              "railway-timetable-capacity-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

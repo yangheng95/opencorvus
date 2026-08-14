@@ -2,8 +2,8 @@ import { DynamicAgentIDSchema } from "@/agent/dynamic-agent-id"
 import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } from "@/agent/runtime-template-id"
 import { PackageToolBundle } from "@/expert-squad/package-tool-bundle"
 import { McpConfigSchema } from "@/config/mcp-schema"
-import { ConfigMarkdown } from "@/config/markdown"
 import { Filesystem } from "@/util/filesystem"
+import { parseFrontmatter } from "@/util/frontmatter"
 import { Global } from "@/global"
 import type { Skill } from "@/skill"
 import { DefaultSkillRefSchema } from "@/skill/default-skill-ref"
@@ -15,8 +15,6 @@ import {
   type ExpertSquadGenerationMetadata,
 } from "@/expert-squad/installation-metadata"
 import { ExpertSquadVersionSchema } from "@/expert-squad/version"
-import { ProjectInstanceContext } from "@/project/instance-context"
-import { createInstanceState } from "@/project/instance-state"
 import {
   type ExpertSquadAgentProjection,
   type ExpertSquadSchedulerProjection,
@@ -32,7 +30,7 @@ import { defaultToolNameFromRef } from "@/expert-squad/provider-names"
 import { createHash } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import type { Dirent } from "fs"
-import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, writeFile } from "fs/promises"
+import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from "fs/promises"
 import { parse as parseJsonc, type ParseError, printParseErrorCode } from "jsonc-parser"
 import path from "path"
 import z from "zod"
@@ -131,12 +129,16 @@ export namespace ExpertSquadRegistry {
     readonly location: ExpertSquadPackageLocations.Location["kind"]
   }
 
+  interface AvailableInstalledPackageIdentity extends InstalledPackageIdentity {
+    readonly rawManifest?: unknown
+  }
+
   export const InstalledPackageKeySchema = z
     .object({
       scope: ExpertSquadPackageLocations.InstallationScopeSchema,
       namespace: Namespace,
       id: ID,
-      root: z.string(),
+      root: z.string().min(1).max(4_096),
     })
     .strict()
   export type InstalledPackageKey = z.output<typeof InstalledPackageKeySchema>
@@ -161,10 +163,10 @@ export namespace ExpertSquadRegistry {
   export const DiscoveryIssue = z
     .object({
       phase: z.enum(["location.scan", "namespace.scan", "package.identity", "package.catalog", "identity.duplicate"]),
-      location: z.string(),
-      namespace: z.string().optional(),
-      id: z.string().optional(),
-      message: z.string(),
+      location: z.string().max(4_096),
+      namespace: Namespace.optional(),
+      id: ID.optional(),
+      message: z.string().max(4_096),
     })
     .strict()
   export type DiscoveryIssue = z.infer<typeof DiscoveryIssue>
@@ -286,6 +288,14 @@ export namespace ExpertSquadRegistry {
     readonly selectorInstructions: string
   }
 
+  /**
+   * Manifest-derived catalog declaration used by list and search surfaces.
+   * It deliberately excludes README/selector bodies and the package-tree digest.
+   */
+  export interface CatalogDeclaration extends PackageCatalogEntry {
+    readonly manifest: Manifest
+  }
+
   export interface EmbeddedPackageSource {
     namespace: string
     id: string
@@ -304,6 +314,16 @@ export namespace ExpertSquadRegistry {
     manifest: Manifest
     readmeContent: string
     selectorInstructions: string
+  }
+
+  export interface EmbeddedCatalogDeclaration {
+    namespace: string
+    id: string
+    name: string
+    label: string
+    description?: string
+    version: string
+    manifest: Manifest
   }
 
   export interface EmbeddedPackage extends EmbeddedPackageDeclaration {
@@ -365,7 +385,7 @@ export namespace ExpertSquadRegistry {
   }
 
   function parseReadmeText(text: string, context: string): string {
-    const parsed = ConfigMarkdown.parseText(text, context)
+    const parsed = parseFrontmatter(text)
     const content = parsed.content.trim()
     if (!content) throw new Error(`${context}: referenced file is blank`)
     return content
@@ -677,7 +697,7 @@ export namespace ExpertSquadRegistry {
         await writeFile(destination, file.bytes, { flag: "wx" })
       }
       try {
-        await rename(staging, target)
+        await Filesystem.renameAfterTransientContention(staging, target)
       } catch (error) {
         const code = (error as NodeJS.ErrnoException).code
         if (code !== "EEXIST" && code !== "ENOTEMPTY") throw error
@@ -923,7 +943,7 @@ export namespace ExpertSquadRegistry {
         if (!skillFile) throw new Error(`Package skill ${ref}: missing SKILL.md`)
         if (!isUtf8(skillFile.bytes)) throw new Error(`Package skill ${ref}: SKILL.md must be UTF-8 text`)
         const raw = Buffer.from(skillFile.bytes).toString("utf8")
-        const parsed = ConfigMarkdown.parseText(raw, `Package skill ${ref}`)
+        const parsed = parseFrontmatter(raw)
         const definition = input.packageSkillDefinition.safeParse(parsed.data)
         if (!definition.success) {
           throw new Error(`Package skill ${ref}: invalid frontmatter: ${definition.error.message}`)
@@ -1551,16 +1571,16 @@ export namespace ExpertSquadRegistry {
     }
   }
 
-  async function readPackageMetadata(
+  async function readPackageDeclaration(
     root: string,
-    options: { canonicalFolder: boolean },
-  ): Promise<ParsedPackageMetadata> {
+    options: { canonicalFolder: boolean; rawManifest?: unknown },
+  ): Promise<CatalogDeclaration> {
     const normalizedRoot = Filesystem.normalizePath(root)
     await validatePackageRoot(normalizedRoot)
-    await validatePackageTree(normalizedRoot)
     const manifestPath = path.join(normalizedRoot, MANIFEST)
-    const rawManifest = await readJsoncFile(manifestPath)
+    const rawManifest = "rawManifest" in options ? options.rawManifest : await readJsoncFile(manifestPath)
     const manifest = ManifestSchema.parse(rawManifest)
+    validatePromptProfileManifest(manifest)
 
     const folderID = path.basename(normalizedRoot)
     const folderNamespace = path.basename(path.dirname(normalizedRoot))
@@ -1572,21 +1592,33 @@ export namespace ExpertSquadRegistry {
     }
 
     const readmePath = await assertFile(normalizedRoot, manifest.readme, "readme")
-    const readmeContent = parseReadmeText(await Filesystem.readText(readmePath), "readme")
+    assertSelectorInstructionsPath(manifest.selector.instructions, "selector.instructions")
+    await assertFile(normalizedRoot, manifest.selector.instructions, "selector.instructions")
+    const installationMetadata = await readExpertSquadInstallationMetadata(normalizedRoot)
     return {
       id: manifest.id,
       namespace: manifest.namespace,
       root: normalizedRoot,
       manifestPath,
       readmePath,
-      readmeContent,
       name: displayName(manifest),
       label: manifest.label,
       description: manifest.description,
       version: manifest.version,
       manifest,
       selector: selectorMetadata(manifest),
+      ...(installationMetadata ? { generation: installationMetadata.generation } : {}),
     }
+  }
+
+  async function readPackageMetadata(
+    root: string,
+    options: { canonicalFolder: boolean },
+  ): Promise<ParsedPackageMetadata> {
+    const declaration = await readPackageDeclaration(root, options)
+    await validatePackageTree(declaration.root)
+    const readmeContent = parseReadmeText(await Filesystem.readText(declaration.readmePath), "readme")
+    return { ...declaration, readmeContent }
   }
 
   async function readCatalogSelectorInstructions(metadata: ParsedPackageMetadata): Promise<string> {
@@ -1632,20 +1664,8 @@ export namespace ExpertSquadRegistry {
   }
 
   export function loadEmbeddedPackageDeclaration(source: EmbeddedPackageSource): EmbeddedPackageDeclaration {
-    const manifestText = embeddedPackageTextFile(
-      source.files[MANIFEST],
-      `embedded expert squad ${source.id}/${MANIFEST}`,
-    )
-    const manifest = parseManifestText(manifestText, `embedded expert squad ${source.id}/${MANIFEST}`)
-    validatePromptProfileManifest(manifest)
-    if (manifest.id !== source.id) {
-      throw new Error(`embedded expert squad source id "${source.id}" does not match manifest id "${manifest.id}"`)
-    }
-    if (manifest.namespace !== source.namespace) {
-      throw new Error(
-        `embedded expert squad source namespace "${source.namespace}" does not match manifest namespace "${manifest.namespace}"`,
-      )
-    }
+    const declaration = loadEmbeddedCatalogDeclaration(source)
+    const manifest = declaration.manifest
     const readmeContent = embeddedPackageTextFile(
       source.files[manifest.readme],
       `embedded expert squad ${manifest.id} ${manifest.readme}`,
@@ -1671,17 +1691,37 @@ export namespace ExpertSquadRegistry {
     }
 
     return {
+      ...declaration,
+      packageDigest: embeddedPackageDigest(source),
+      selector: selectorMetadata(manifest),
+      readmeContent: parsedReadmeContent,
+      selectorInstructions,
+    }
+  }
+
+  export function loadEmbeddedCatalogDeclaration(source: EmbeddedPackageSource): EmbeddedCatalogDeclaration {
+    const manifestText = embeddedPackageTextFile(
+      source.files[MANIFEST],
+      `embedded expert squad ${source.id}/${MANIFEST}`,
+    )
+    const manifest = parseManifestText(manifestText, `embedded expert squad ${source.id}/${MANIFEST}`)
+    validatePromptProfileManifest(manifest)
+    if (manifest.id !== source.id) {
+      throw new Error(`embedded expert squad source id "${source.id}" does not match manifest id "${manifest.id}"`)
+    }
+    if (manifest.namespace !== source.namespace) {
+      throw new Error(
+        `embedded expert squad source namespace "${source.namespace}" does not match manifest namespace "${manifest.namespace}"`,
+      )
+    }
+    return {
       id: manifest.id,
       namespace: manifest.namespace,
       name: displayName(manifest),
       label: manifest.label,
       description: manifest.description,
       version: manifest.version,
-      packageDigest: embeddedPackageDigest(source),
-      selector: selectorMetadata(manifest),
       manifest,
-      readmeContent: parsedReadmeContent,
-      selectorInstructions,
     }
   }
 
@@ -1928,17 +1968,85 @@ export namespace ExpertSquadRegistry {
     root: string,
     options: { canonicalFolder?: boolean } = {},
   ): Promise<CatalogPackage> {
-    const metadata = await readPackageMetadata(root, { canonicalFolder: options.canonicalFolder ?? true })
-    validatePromptProfileManifest(metadata.manifest)
-    const installationMetadata = await readExpertSquadInstallationMetadata(metadata.root)
+    const normalizedRoot = Filesystem.normalizePath(root)
+    const snapshot = await capturePackageTree(normalizedRoot)
+    const file = (relativePath: string, context: string) => {
+      const captured = snapshot.files.find((entry) => entry.relativePath === relativePath)
+      if (!captured) throw new Error(`${context}: missing file ${relativePath}`)
+      return captured.bytes.toString("utf8")
+    }
+    const manifest = parseManifestText(file(MANIFEST, "expert squad manifest"), path.join(normalizedRoot, MANIFEST))
+    validatePromptProfileManifest(manifest)
+    if (options.canonicalFolder ?? true) {
+      const folderID = path.basename(normalizedRoot)
+      const folderNamespace = path.basename(path.dirname(normalizedRoot))
+      if (manifest.id !== folderID) throw new Error(`expert squad id "${manifest.id}" must match folder "${folderID}"`)
+      if (manifest.namespace !== folderNamespace) {
+        throw new Error(`expert squad namespace "${manifest.namespace}" must match folder "${folderNamespace}"`)
+      }
+    }
+    assertSafeManifestRelativePath(manifest.readme, "readme")
+    assertSelectorInstructionsPath(manifest.selector.instructions, "selector.instructions")
+    const readmeContent = parseReadmeText(file(manifest.readme, "readme"), "readme")
+    const selectorInstructions = file(manifest.selector.instructions, "selector.instructions").trim()
+    if (!selectorInstructions) throw new Error("selector.instructions: file is blank")
+    const installationMetadata = await readExpertSquadInstallationMetadata(normalizedRoot)
     const loaded: CatalogPackage = {
-      ...metadata,
+      id: manifest.id,
+      namespace: manifest.namespace,
+      root: normalizedRoot,
+      manifestPath: path.join(normalizedRoot, MANIFEST),
+      readmePath: path.join(normalizedRoot, manifest.readme),
+      name: displayName(manifest),
+      label: manifest.label,
+      description: manifest.description,
+      version: manifest.version,
+      selector: selectorMetadata(manifest),
+      manifest,
+      readmeContent,
       ...(installationMetadata ? { generation: installationMetadata.generation } : {}),
-      packageDigest: await packageDigest(metadata.root),
-      selectorInstructions: await readCatalogSelectorInstructions(metadata),
+      packageDigest: snapshot.digest,
+      selectorInstructions,
     }
     deepFreeze(loaded)
     return loaded
+  }
+
+  export async function loadCatalogDeclaration(
+    root: string,
+    options: { canonicalFolder?: boolean } = {},
+  ): Promise<CatalogDeclaration> {
+    const declaration = await readPackageDeclaration(root, { canonicalFolder: options.canonicalFolder ?? true })
+    deepFreeze(declaration)
+    return declaration
+  }
+
+  export function installedPackageRoot(input: {
+    projectDirectory: string
+    installationScope: ExpertSquadPackageLocations.InstallationScope
+    namespace: string
+    id: string
+  }): string {
+    const namespace = Namespace.parse(input.namespace)
+    const id = ID.parse(input.id)
+    return path.join(
+      ExpertSquadPackageLocations.resolve(input.installationScope, input.projectDirectory).packagesRoot,
+      namespace,
+      id,
+    )
+  }
+
+  export async function loadInstalledCatalogPackage(input: {
+    projectDirectory: string
+    installationScope: ExpertSquadPackageLocations.InstallationScope
+    namespace: string
+    id: string
+  }): Promise<CatalogPackage | undefined> {
+    const root = installedPackageRoot(input)
+    const state = await lstatIfExists(root)
+    if (!state) return undefined
+    if (!state.isDirectory()) throw new Error(`Expert squad target exists and is not a directory: ${root}`)
+    return loadCatalogPackage(root)
   }
 
   async function discoverIdentityLocation(
@@ -1994,9 +2102,9 @@ export namespace ExpertSquadRegistry {
 
   async function discoverIdentityLocationAvailable(
     location: ExpertSquadPackageLocations.Location,
-  ): Promise<DiscoveryResult<InstalledPackageIdentity>> {
+  ): Promise<DiscoveryResult<AvailableInstalledPackageIdentity>> {
     const base = location.packagesRoot
-    const items: InstalledPackageIdentity[] = []
+    const items: AvailableInstalledPackageIdentity[] = []
     const issues: DiscoveryIssue[] = []
     const context = `${location.kind} OpenCorvus config expert-squads`
     let namespaces: Dirent[]
@@ -2054,7 +2162,8 @@ export namespace ExpertSquadRegistry {
         }
         const manifestPath = path.join(packageRoot, MANIFEST)
         try {
-          const identity = InstalledIdentity.parse(await readJsoncFile(manifestPath))
+          const rawManifest = await readJsoncFile(manifestPath)
+          const identity = InstalledIdentity.parse(rawManifest)
           const version = ExpertSquadVersionSchema.safeParse(identity.version)
           if (identity.namespace !== namespaceEntry.name || identity.id !== entry.name) {
             throw new Error(
@@ -2068,6 +2177,7 @@ export namespace ExpertSquadRegistry {
             root: packageRoot,
             manifestPath,
             location: location.kind,
+            rawManifest,
           })
         } catch (error) {
           discoveryIssue(
@@ -2087,10 +2197,10 @@ export namespace ExpertSquadRegistry {
   }
 
   function uniqueAvailableIdentitiesInScope(
-    discovered: DiscoveryResult<InstalledPackageIdentity>,
-  ): DiscoveryResult<InstalledPackageIdentity> {
+    discovered: DiscoveryResult<AvailableInstalledPackageIdentity>,
+  ): DiscoveryResult<AvailableInstalledPackageIdentity> {
     const issues = [...discovered.issues]
-    const byID = new Map<string, InstalledPackageIdentity>()
+    const byID = new Map<string, AvailableInstalledPackageIdentity>()
     const quarantined = new Set<string>()
     for (const identity of discovered.items) {
       if (quarantined.has(identity.id)) {
@@ -2127,7 +2237,7 @@ export namespace ExpertSquadRegistry {
 
   async function discoverAvailableIdentitiesFromLocation(
     location: ExpertSquadPackageLocations.Location,
-  ): Promise<DiscoveryResult<InstalledPackageIdentity>> {
+  ): Promise<DiscoveryResult<AvailableInstalledPackageIdentity>> {
     return uniqueAvailableIdentitiesInScope(await discoverIdentityLocationAvailable(location))
   }
 
@@ -2140,10 +2250,10 @@ export namespace ExpertSquadRegistry {
   }
 
   async function discoverEffectiveIdentities(projectDirectory: string): Promise<{
-    effective: DiscoveryResult<InstalledPackageIdentity>
-    installations: InstalledPackageIdentity[]
-    projectByID: Map<string, InstalledPackageIdentity>
-    globalByID: Map<string, InstalledPackageIdentity>
+    effective: DiscoveryResult<AvailableInstalledPackageIdentity>
+    installations: AvailableInstalledPackageIdentity[]
+    projectByID: Map<string, AvailableInstalledPackageIdentity>
+    globalByID: Map<string, AvailableInstalledPackageIdentity>
   }> {
     const [global, project] = await Promise.all([
       discoverAvailableIdentitiesFromLocation(ExpertSquadPackageLocations.global()),
@@ -2178,14 +2288,19 @@ export namespace ExpertSquadRegistry {
   }
 
   async function discoverAvailableFromIdentities(
-    discovered: DiscoveryResult<InstalledPackageIdentity>,
-  ): Promise<DiscoveryResult<CatalogPackage>> {
-    const items: CatalogPackage[] = []
+    discovered: DiscoveryResult<AvailableInstalledPackageIdentity>,
+  ): Promise<DiscoveryResult<CatalogDeclaration>> {
+    const items: CatalogDeclaration[] = []
     const issues = [...discovered.issues]
     for (const identity of discovered.items) {
       try {
         items.push({
-          ...(await loadCatalogPackage(identity.root)),
+          ...(identity.rawManifest === undefined
+            ? await loadCatalogDeclaration(identity.root)
+            : await readPackageDeclaration(identity.root, {
+                canonicalFolder: true,
+                rawManifest: identity.rawManifest,
+              })),
           installationScope: identity.location,
         })
       } catch (error) {
@@ -2204,20 +2319,23 @@ export namespace ExpertSquadRegistry {
     return { items, issues }
   }
 
-  function revision(identity: InstalledPackageIdentity, loaded: CatalogPackage): ResolvedPackageRevision {
+  async function revision(
+    identity: InstalledPackageIdentity,
+    loaded: CatalogDeclaration,
+  ): Promise<ResolvedPackageRevision> {
     return ResolvedPackageRevisionSchema.parse({
       scope: identity.location,
       namespace: identity.namespace,
       id: identity.id,
       root: identity.root,
       version: loaded.version,
-      package_digest: loaded.packageDigest,
+      package_digest: await packageDigest(identity.root),
     })
   }
 
   async function discoverAvailableUncached(
     projectDirectory: string,
-  ): Promise<EffectiveDiscoveryResult<PackageCatalogEntry>> {
+  ): Promise<EffectiveDiscoveryResult<CatalogDeclaration>> {
     const identities = await discoverEffectiveIdentities(projectDirectory)
     const inventory = await discoverAvailableFromIdentities({ items: identities.installations, issues: [] })
     const inventoryByRoot = new Map(inventory.items.map((entry) => [Filesystem.normalizePath(entry.root), entry]))
@@ -2232,13 +2350,17 @@ export namespace ExpertSquadRegistry {
       const projectEntry = inventoryByRoot.get(Filesystem.normalizePath(projectIdentity.root))
       const globalEntry = inventoryByRoot.get(Filesystem.normalizePath(globalIdentity.root))
       if (!projectEntry || !globalEntry) continue
+      const [effectiveRevision, shadowedRevision] = await Promise.all([
+        revision(projectIdentity, projectEntry),
+        revision(globalIdentity, globalEntry),
+      ])
       warnings.push(
         DiscoveryWarning.parse({
           code: "project_overrides_global",
           severity: "warning",
           logical_id: id,
-          effective: revision(projectIdentity, projectEntry),
-          shadowed: revision(globalIdentity, globalEntry),
+          effective: effectiveRevision,
+          shadowed: shadowedRevision,
         }),
       )
     }
@@ -2250,41 +2372,59 @@ export namespace ExpertSquadRegistry {
     }
   }
 
-  const availableInventoryState = createInstanceState(
-    () => new Map<string, Promise<EffectiveDiscoveryResult<PackageCatalogEntry>>>(),
-    undefined,
-    "expert-squad-available-inventory",
-  )
+  const availableInventories = new Map<
+    string,
+    Promise<EffectiveDiscoveryResult<CatalogDeclaration> | DiscoveryResult<CatalogDeclaration>>
+  >()
+  let availableInventoryGeneration = 0
+
+  export function catalogInventoryGeneration(): number {
+    return availableInventoryGeneration
+  }
 
   export async function discoverAvailable(
     projectDirectory: string,
     options: { reconcileEvolutionMutations?: boolean } = {},
-  ): Promise<EffectiveDiscoveryResult<PackageCatalogEntry>> {
+  ): Promise<EffectiveDiscoveryResult<CatalogDeclaration>> {
     if (options.reconcileEvolutionMutations !== false) {
       const { ExpertSquadPackageManager } = await import("./manager")
       await ExpertSquadPackageManager.reconcilePendingPackageMutations(projectDirectory)
     }
-    if (!ProjectInstanceContext.tryUse()) return discoverAvailableUncached(projectDirectory)
-    const inventories = availableInventoryState()
-    const key = Filesystem.normalizePath(projectDirectory)
-    const active = inventories.get(key)
+    const key = `${Filesystem.normalizePath(ExpertSquadPackageLocations.global().packagesRoot)}:${Filesystem.normalizePath(projectDirectory)}`
+    const active = availableInventories.get(key) as Promise<EffectiveDiscoveryResult<CatalogDeclaration>> | undefined
     if (active) return active
     const inventory = discoverAvailableUncached(projectDirectory)
-    inventories.set(key, inventory)
+    availableInventories.delete(key)
+    availableInventories.set(key, inventory)
+    if (availableInventories.size > 64) availableInventories.delete(availableInventories.keys().next().value!)
     try {
       return await inventory
     } catch (error) {
-      if (inventories.get(key) === inventory) inventories.delete(key)
+      if (availableInventories.get(key) === inventory) availableInventories.delete(key)
       throw error
     }
   }
 
   export async function invalidateAvailable() {
-    await availableInventoryState.resetAll()
+    availableInventoryGeneration++
+    availableInventories.clear()
   }
 
-  export async function discoverGlobalAvailable(): Promise<DiscoveryResult<PackageCatalogEntry>> {
-    return discoverAvailableFromIdentities(await discoverGlobalAvailableIdentities())
+  export async function discoverGlobalAvailable(): Promise<DiscoveryResult<CatalogDeclaration>> {
+    const load = async () => discoverAvailableFromIdentities(await discoverGlobalAvailableIdentities())
+    const key = `${Filesystem.normalizePath(ExpertSquadPackageLocations.global().packagesRoot)}:<global>`
+    const active = availableInventories.get(key) as Promise<DiscoveryResult<CatalogDeclaration>> | undefined
+    if (active) return active
+    const inventory = load()
+    availableInventories.delete(key)
+    availableInventories.set(key, inventory)
+    if (availableInventories.size > 64) availableInventories.delete(availableInventories.keys().next().value!)
+    try {
+      return await inventory
+    } catch (error) {
+      if (availableInventories.get(key) === inventory) availableInventories.delete(key)
+      throw error
+    }
   }
 
   export async function discoverInstalledPackageIdentities(
@@ -2325,19 +2465,4 @@ export namespace ExpertSquadRegistry {
     return matches
   }
 
-  export async function discover(projectDirectory: string): Promise<PackageCatalogEntry[]> {
-    const packages: PackageCatalogEntry[] = []
-    const installed = await discoverInstalledPackageIdentities(projectDirectory)
-    const projectIDs = new Set(
-      installed.filter((identity) => identity.location === "project").map((identity) => identity.id),
-    )
-    const effective = installed.filter((identity) => identity.location === "project" || !projectIDs.has(identity.id))
-    for (const identity of effective) {
-      packages.push({
-        ...(await publicMetadata(await readPackageMetadata(identity.root, { canonicalFolder: true }))),
-        installationScope: identity.location,
-      })
-    }
-    return packages
-  }
 }

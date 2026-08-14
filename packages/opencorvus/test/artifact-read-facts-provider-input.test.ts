@@ -16,9 +16,28 @@ describe("Artifact read facts from provider Tool input", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "mission", title: "Provider read facts" })
+        const session = await Session.create({
+          kind: "mission",
+          title: "Provider read facts",
+          metadata: {
+            mission: {
+              id: "provider-read-facts",
+              channelKey: "mission:provider-read-facts",
+              cwd: project.path,
+              productPillar: "code",
+              visibleExpertSquadIDs: ["base"],
+            },
+          },
+        })
         const now = Date.now()
         const taskID = "task-provider-read-facts"
+        const locatorRef = "al_1234567890abcdef"
+        const readRef = "ar_1234567890abcdef"
+        const terminalReference = {
+          terminalEventID: "evt_provider_read_fact",
+          terminalStatus: "completed" as const,
+          timeCompleted: now + 1,
+        }
         const locator = {
           source: "engine_artifact" as const,
           artifact_id: "art_provider_read_fact",
@@ -32,7 +51,7 @@ describe("Artifact read facts from provider Tool input", () => {
           author: "user",
           time: { created: now },
           agent: "mission",
-          model: { providerID: "openai", modelID: "gpt-5.6-sol" },
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
         })
         const readMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -43,7 +62,7 @@ describe("Artifact read facts from provider Tool input", () => {
           time: { created: now + 1, completed: now + 2 },
           agent: "mission",
           providerID: "openai",
-          modelID: "gpt-5.6-sol",
+          modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
@@ -75,17 +94,22 @@ describe("Artifact read facts from provider Tool input", () => {
           state: {
             status: "completed",
             input: {
-              action: "read_task_artifact",
-              taskID,
-              locator,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-              model: null,
-              text: null,
-              evidence_locators: null,
+              operation: {
+                action: "read_task_artifact",
+                taskID,
+                artifact_transport_version: 2,
+                artifact_locator_ref: locatorRef,
+                byte_offset: 0,
+                max_bytes: 65_536,
+                delivery: "inline",
+              },
             },
             output: JSON.stringify({
+              taskID,
+              terminal_lifecycle_reference: terminalReference,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              artifact_read_ref: readRef,
               locator,
               media_type: "application/json",
               byte_start: 0,
@@ -111,7 +135,7 @@ describe("Artifact read facts from provider Tool input", () => {
           time: { created: now + 3, completed: now + 4 },
           agent: "mission",
           providerID: "openai",
-          modelID: "gpt-5.6-sol",
+          modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },

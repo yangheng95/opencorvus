@@ -13,8 +13,7 @@ import { LLM } from "./llm"
 import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "@/engine/config"
 import { CompactionOverflow } from "./compaction-overflow"
-import { PermissionNext } from "@/permission/next"
-import { abortableIterable } from "@/util/stream-activity"
+import { PermissionAuthority } from "@/permission/authority"
 import {
   withLLMActivity,
   chunkHeartbeatKind,
@@ -33,7 +32,7 @@ import {
   type ProcessorObservationFailure,
   type ToolFailureCause,
 } from "./tool-failure-cause"
-import { shouldParkAfterToolResult, toolResultControl, type ToolResultControl } from "./tool-result-control"
+import { toolResultControl, toolResultDisposition, type ToolResultControl } from "./tool-result-control"
 import { parsePartialJson } from "ai"
 import type { McpAppToolLifecycleController } from "@/interactive-artifact/mcp-app-lifecycle"
 import {
@@ -41,6 +40,8 @@ import {
   materializeToolResultInlineAttachments,
 } from "@/tool/result-attachment-materialization"
 import { Instance } from "@/project/instance"
+import { persistMessageSources } from "./source-persistence"
+import { normalizeToolResult } from "./tool-result-normalization"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -79,6 +80,7 @@ export namespace SessionProcessor {
   type AssistantMessageSnapshot = {
     cost: number
     tokens: Message.Assistant["tokens"]
+    billing?: Message.Assistant["billing"]
     finish?: Message.Assistant["finish"]
     error?: Message.Assistant["error"]
   }
@@ -256,6 +258,76 @@ export namespace SessionProcessor {
       for (const draft of drafts) await discardToolInputDraft(draft, reason)
     }
 
+    const completeToolPart = async (
+      value: {
+        toolCallId: string
+        input?: unknown
+        output: {
+          output: string
+          title: string
+          metadata: Record<string, unknown>
+          attachments?: Message.FilePart[]
+          display?: unknown
+          sources?: unknown
+        }
+      },
+      onPartCreated: (partID: string) => void = () => {},
+    ): Promise<ToolResultControl | undefined> => {
+      const metadata = value.output.metadata
+      const control = toolResultControl(metadata)
+      const displayParts = Array.isArray(value.output.display) ? value.output.display : []
+      const sourcePayloads = Array.isArray(value.output.sources)
+        ? value.output.sources.map((source) => Message.SourcePayload.parse(source))
+        : []
+      await withToolPartLock(value.toolCallId, async () => {
+        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
+        if (!match || (match.state.status !== "running" && match.state.status !== "pending")) {
+          throw new Error(`Open ToolPart not found for Tool call ${value.toolCallId}`)
+        }
+        const resolvedInput =
+          value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
+        await Session.updatePart({
+          ...match,
+          state: {
+            status: "completed",
+            input: resolvedInput,
+            output: value.output.output,
+            metadata,
+            title: value.output.title,
+            time: completedToolTime(toolStartTime(match)),
+            attachments: value.output.attachments,
+          },
+        })
+        delete toolcalls[value.toolCallId]
+        if (displayParts.length > 0) {
+          const existingPartIDs = new Set((await MessageStore.parts(input.assistantMessage.id)).map((part) => part.id))
+          for (const candidate of displayParts) {
+            const displayPart = Message.InteractiveArtifactPart.parse(candidate)
+            if (displayPart.sessionID !== input.assistantMessage.sessionID) {
+              throw new Error(`tool result display part ${displayPart.id} belongs to a different session`)
+            }
+            if (displayPart.messageID !== input.assistantMessage.id) {
+              throw new Error(`tool result display part ${displayPart.id} belongs to a different message`)
+            }
+            if (existingPartIDs.has(displayPart.id)) continue
+            await Session.updatePart(displayPart)
+            existingPartIDs.add(displayPart.id)
+            onPartCreated(displayPart.id)
+          }
+        }
+        if (sourcePayloads.length > 0) {
+          const persisted = await persistMessageSources({
+            sessionID: input.assistantMessage.sessionID,
+            messageID: input.assistantMessage.id,
+            sources: sourcePayloads,
+          })
+          for (const part of persisted) onPartCreated(part.id)
+        }
+      })
+      mcpAppCalls.delete(value.toolCallId)
+      return control
+    }
+
     let snapshot: string | undefined
     let blocked = false
     let needsCompaction = false
@@ -307,6 +379,31 @@ export namespace SessionProcessor {
           return part as Message.ToolPart
         })
       },
+      async completeRecoveredToolPart(input: {
+        toolCallID: string
+        toolInput: unknown
+        output: {
+          output: string
+          title: string
+          metadata: Record<string, unknown>
+          attachments?: Message.FilePart[]
+          display?: unknown
+          sources?: unknown
+        }
+      }) {
+        return completeToolPart({
+          toolCallId: input.toolCallID,
+          input: input.toolInput,
+          output: input.output,
+        })
+      },
+      async failRecoveredToolPart(toolCallID: string, failure: ToolFailureCause) {
+        await withToolPartLock(toolCallID, async () => {
+          const match = toolcalls[toolCallID] ?? (await priorToolPart(toolCallID))
+          if (!match || (match.state.status !== "running" && match.state.status !== "pending")) return
+          await failToolPart(match, failure)
+        })
+      },
       async process(streamInput: LLM.StreamInput) {
         log.info("process")
         needsCompaction = false
@@ -339,6 +436,7 @@ export namespace SessionProcessor {
         }
         {
           let currentText: Message.TextPart | undefined
+          let currentTextStreamID: string | undefined
           let reasoningMap: Record<string, Message.ReasoningPart> = {}
           const flushReasoningDeltas = async () => {
             const buffered = [...reasoningDeltaBuf]
@@ -409,6 +507,7 @@ export namespace SessionProcessor {
                 messageSnapshot: {
                   cost: input.assistantMessage.cost,
                   tokens: cloneTokens(),
+                  billing: input.assistantMessage.billing,
                   finish: input.assistantMessage.finish,
                   error: input.assistantMessage.error,
                 },
@@ -431,6 +530,7 @@ export namespace SessionProcessor {
                 ...snapshot.tokens,
                 cache: { ...snapshot.tokens.cache },
               }
+              input.assistantMessage.billing = snapshot.billing
               input.assistantMessage.finish = snapshot.finish
               input.assistantMessage.error = snapshot.error
               await Session.updateMessage(input.assistantMessage)
@@ -468,7 +568,10 @@ export namespace SessionProcessor {
               for (const toolCallID of scope.toolCallIDs) {
                 delete toolcalls[toolCallID]
               }
-              if (currentText && scope.createdPartIDs.has(currentText.id)) currentText = undefined
+              if (currentText && scope.createdPartIDs.has(currentText.id)) {
+                currentText = undefined
+                currentTextStreamID = undefined
+              }
               for (const [reasoningID, part] of Object.entries(reasoningMap)) {
                 if (scope.createdPartIDs.has(part.id)) delete reasoningMap[reasoningID]
               }
@@ -486,11 +589,11 @@ export namespace SessionProcessor {
               async (run) => {
                 const stream = await LLM.stream({ ...streamInput, abort: run.signal })
 
-                for await (const value of abortableIterable(stream.fullStream, run.signal)) {
+                // LLM.stream returns the canonical @/llm/api wrapped stream.
+                for await (const value of stream.fullStream) {
                   run.bump("first-byte")
                   await streamInput.stream?.onChunk?.({ chunk: value } as never)
-                  const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
-                  if (heartbeatKind) run.bump(heartbeatKind)
+                  let semanticChunkAccepted = false
                   run.signal.throwIfAborted()
                   switch (value.type) {
                     case "start":
@@ -515,6 +618,7 @@ export namespace SessionProcessor {
                       reasoningMap[value.id] = reasoningPart
                       await Session.updatePart(reasoningPart)
                       trackCreatedPart(run.attempt, reasoningPart.id)
+                      semanticChunkAccepted = true
                       break
 
                     case "reasoning-delta":
@@ -528,6 +632,7 @@ export namespace SessionProcessor {
                         const prev = reasoningDeltaBuf.get(bufKey) || ""
                         reasoningDeltaBuf.set(bufKey, prev + value.text)
                         scheduleReasoningFlush()
+                        semanticChunkAccepted = true
                       }
                       break
 
@@ -546,6 +651,7 @@ export namespace SessionProcessor {
                         if (value.providerMetadata) part.metadata = value.providerMetadata
                         await Session.updatePart(part)
                         delete reasoningMap[value.id]
+                        semanticChunkAccepted = true
                       }
                       break
 
@@ -584,6 +690,7 @@ export namespace SessionProcessor {
                         return part
                       })
                       toolcalls[toolCallID] = part as Message.ToolPart
+                      semanticChunkAccepted = true
                       break
                     }
 
@@ -618,6 +725,7 @@ export namespace SessionProcessor {
                             await lifecycle.partial(toolCallID, partial.value as Record<string, unknown>)
                           }
                         }
+                        semanticChunkAccepted = true
                       }
                       break
                     }
@@ -687,22 +795,11 @@ export namespace SessionProcessor {
                         )
 
                       if (exactMatch) {
-                        await PermissionNext.ask({
-                          permission: "doom_loop",
-                          patterns: [value.toolName],
-                          sessionID: input.assistantMessage.sessionID,
-                          tool: {
-                            messageID: input.assistantMessage.id,
-                            callID: value.toolCallId,
-                          },
-                          metadata: {
-                            tool: value.toolName,
-                            input: value.input,
-                          },
-                          always: [value.toolName],
-                          ruleset: streamInput.agent.permission ?? [],
-                        })
+                        throw new Error(
+                          `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
+                        )
                       }
+                      semanticChunkAccepted = true
                       break
                     }
                     case "tool-result": {
@@ -712,54 +809,30 @@ export namespace SessionProcessor {
                       // matching tool-call after a recovery), so this is safe to
                       // run unconditionally before the match check.
                       run.resume(toolPauseOwner(value.toolCallId))
-                      const metadata = value.output.metadata
-                      const displayParts = Array.isArray((value.output as { display?: unknown }).display)
-                        ? ((value.output as { display: unknown[] }).display ?? [])
-                        : []
-                      await withToolPartLock(value.toolCallId, async () => {
-                        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
-                        if (match && (match.state.status === "running" || match.state.status === "pending")) {
-                          const resolvedInput =
-                            value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
-                          await Session.updatePart({
-                            ...match,
-                            state: {
-                              status: "completed",
-                              input: resolvedInput,
-                              output: value.output.output,
-                              metadata,
-                              title: value.output.title,
-                              time: completedToolTime(toolStartTime(match)),
-                              attachments: value.output.attachments,
-                            },
-                          })
-                          delete toolcalls[value.toolCallId]
+                      const output = normalizeToolResult(value.output)
+                      const metadata = output.metadata
+                      const control = await completeToolPart(
+                        {
+                          toolCallId: value.toolCallId,
+                          input: value.input,
+                          output: {
+                            output: output.output,
+                            title: output.title,
+                            metadata: output.metadata,
+                            ...(Array.isArray(output.attachments)
+                              ? { attachments: output.attachments as Message.FilePart[] }
+                              : {}),
+                            ...(output.display !== undefined ? { display: output.display } : {}),
+                            ...(output.sources !== undefined ? { sources: output.sources } : {}),
+                          },
+                        },
+                        (partID) => trackCreatedPart(run.attempt, partID),
+                      )
+                      const disposition = toolResultDisposition(control)
+                      if (disposition === "handoff") {
+                        if (!control || control.kind !== "handoff_drain") {
+                          throw new Error("Coordination handoff disposition has no handoff control")
                         }
-                        if (displayParts.length > 0) {
-                          const existingPartIDs = new Set(
-                            (await MessageStore.parts(input.assistantMessage.id)).map((part) => part.id),
-                          )
-                          for (const candidate of displayParts) {
-                            const displayPart = Message.InteractiveArtifactPart.parse(candidate)
-                            if (displayPart.sessionID !== input.assistantMessage.sessionID) {
-                              throw new Error(
-                                `tool result display part ${displayPart.id} belongs to a different session`,
-                              )
-                            }
-                            if (displayPart.messageID !== input.assistantMessage.id) {
-                              throw new Error(
-                                `tool result display part ${displayPart.id} belongs to a different message`,
-                              )
-                            }
-                            if (existingPartIDs.has(displayPart.id)) continue
-                            await Session.updatePart(displayPart)
-                            existingPartIDs.add(displayPart.id)
-                          }
-                        }
-                      })
-                      const control = toolResultControl(metadata)
-                      mcpAppCalls.delete(value.toolCallId)
-                      if (control?.kind === "handoff_drain") {
                         if (
                           coordinationHandoff &&
                           (coordinationHandoff.request_id !== control.request_id ||
@@ -769,10 +842,11 @@ export namespace SessionProcessor {
                         }
                         coordinationHandoff = control
                         input.assistantMessage.finish = "tool-calls"
-                      } else if (shouldParkAfterToolResult(metadata)) {
+                      } else if (disposition === "park") {
                         input.assistantMessage.finish = "tool-calls"
                         parkAfterToolResult = true
                       }
+                      semanticChunkAccepted = true
                       break
                     }
 
@@ -781,6 +855,7 @@ export namespace SessionProcessor {
                       // Pair with the exact call-owned pause from tool-call (errors close the
                       // tool-call window just like results).
                       run.resume(toolPauseOwner(value.toolCallId))
+                      let toolErrorAccepted = false
                       await withToolPartLock(value.toolCallId, async () => {
                         const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
                         if (match && (match.state.status === "running" || match.state.status === "pending")) {
@@ -808,13 +883,15 @@ export namespace SessionProcessor {
                             },
                           })
 
-                          if (value.error instanceof PermissionNext.RejectedError) {
+                          if (value.error instanceof PermissionAuthority.RejectedError) {
                             blocked = shouldBreak
                           }
                           delete toolcalls[value.toolCallId]
+                          toolErrorAccepted = true
                         }
                       })
                       mcpAppCalls.delete(value.toolCallId)
+                      semanticChunkAccepted = toolErrorAccepted
                       break
                     }
                     case "error":
@@ -832,6 +909,7 @@ export namespace SessionProcessor {
                         })
                         trackCreatedPart(run.attempt, part.id)
                       }
+                      semanticChunkAccepted = true
                       break
 
                     case "finish-step":
@@ -842,6 +920,7 @@ export namespace SessionProcessor {
                       })
                       input.assistantMessage.finish = value.finishReason
                       input.assistantMessage.cost += usage.cost
+                      input.assistantMessage.billing = usage.billing
                       // Accumulate across steps so multi-step messages keep all
                       // tokens (overwrite-only would silently drop earlier steps;
                       // `cost +=` is already cumulative — match it).
@@ -865,6 +944,7 @@ export namespace SessionProcessor {
                           type: "step-finish",
                           tokens: usage.tokens,
                           cost: usage.cost,
+                          billing: usage.billing,
                         })
                         trackCreatedPart(run.attempt, part.id)
                       }
@@ -898,9 +978,11 @@ export namespace SessionProcessor {
                       ) {
                         needsCompaction = true
                       }
+                      semanticChunkAccepted = true
                       break
 
                     case "text-start":
+                      currentTextStreamID = value.id
                       currentText = {
                         id: Identifier.ascending("part"),
                         messageID: input.assistantMessage.id,
@@ -914,10 +996,11 @@ export namespace SessionProcessor {
                       }
                       await Session.updatePart(currentText)
                       trackCreatedPart(run.attempt, currentText.id)
+                      semanticChunkAccepted = true
                       break
 
                     case "text-delta":
-                      if (currentText) {
+                      if (currentText && value.id === currentTextStreamID) {
                         currentText.text += value.text
                         if (value.providerMetadata) currentText.metadata = value.providerMetadata
                         await Session.updatePartDelta({
@@ -927,11 +1010,12 @@ export namespace SessionProcessor {
                           field: "text",
                           delta: value.text,
                         })
+                        semanticChunkAccepted = true
                       }
                       break
 
                     case "text-end":
-                      if (currentText) {
+                      if (currentText && value.id === currentTextStreamID) {
                         currentText.text = currentText.text.trimEnd()
                         const textOutput = await Plugin.trigger(
                           "experimental.text.complete",
@@ -950,19 +1034,54 @@ export namespace SessionProcessor {
                         if (value.providerMetadata) currentText.metadata = value.providerMetadata
 
                         await Session.updatePart(currentText)
+                        semanticChunkAccepted = true
+                        currentText = undefined
+                        currentTextStreamID = undefined
                       }
-                      currentText = undefined
                       break
+
+                    case "source": {
+                      const source =
+                        value.sourceType === "url"
+                          ? Message.SourceUrlPayload.parse({
+                              type: "source-url",
+                              sourceId: value.id,
+                              url: value.url,
+                              title: value.title,
+                              provider: input.assistantMessage.providerID,
+                              providerMetadata: value.providerMetadata,
+                            })
+                          : Message.SourceDocumentPayload.parse({
+                              type: "source-document",
+                              sourceId: value.id,
+                              mediaType: value.mediaType,
+                              title: value.title,
+                              filename: value.filename,
+                              provider: input.assistantMessage.providerID,
+                              providerMetadata: value.providerMetadata,
+                            })
+                      const persisted = await persistMessageSources({
+                        sessionID: input.assistantMessage.sessionID,
+                        messageID: input.assistantMessage.id,
+                        sources: [source],
+                      })
+                      for (const part of persisted) trackCreatedPart(run.attempt, part.id)
+                      break
+                    }
 
                     case "finish":
                       await streamInput.stream?.onFinish?.(value as never)
                       break
 
-                    default:
+                  default:
                       log.info("unhandled", {
                         ...value,
                       })
                       continue
+                  }
+                  if (semanticChunkAccepted) {
+                    const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
+                    if (heartbeatKind) run.bump(heartbeatKind)
                   }
                   if (needsCompaction) break
                   if (parkAfterToolResult) break

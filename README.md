@@ -7,28 +7,70 @@
 </p>
 
 <p align="center">
-  <strong>Open-source orchestration for multi-agent work.</strong>
+  <strong>Open-source Agent Workbench for long-horizon work.</strong>
 </p>
 
 <p align="center">
-  <a href="https://opencorvus.ai">Website</a> ·
-  <a href="https://opencorvus.ai/docs">Documentation</a> ·
-  <a href="#download-the-desktop-app">Downloads</a> ·
-  <a href="#quick-start">Quick Start</a>
+  <a href="https://opencorvus.com">Website</a> ·
+  <a href="https://opencorvus.com/mission/">Mission</a> ·
+  <a href="https://opencorvus.com/use-with-agents/">Use with Agents</a> ·
+  <a href="https://opencorvus.com/market/">Expert Squads</a> ·
+  <a href="https://opencorvus.com/download/">Download</a> ·
+  <a href="https://opencorvus.com/start/quickstart/">Quickstart</a>
 </p>
 
-OpenCorvus runs agent work from a desktop application, Hypertext Transfer
-Protocol (HTTP) application programming interface (API), or connected channel.
-It assigns each Task to one fixed Expert Squad and, when the package requires
-one, a declared workflow. It streams execution and stores messages, tool results,
-Artifacts, and completion evidence. A Mission can coordinate several Tasks when
-an outcome needs different squads or explicit dependencies.
+OpenCorvus lets you shape an Agent Workbench around real work. Connect a
+workspace, choose the Skills, tools, models, connected services, and permission
+rules it needs, then configure an inspectable Expert Squad instead of accepting
+an anonymous agent pool. Each Task keeps one exact Squad revision and any
+selected workflow fixed from first instruction to reviewed delivery. When an
+outcome needs several Tasks or Squads, a Mission connects their dependencies
+without erasing ownership.
+
+Run that work from the desktop application, Hypertext Transfer Protocol (HTTP)
+application programming interface (API), or a connected channel. OpenCorvus
+streams execution and keeps messages, tool results, typed Artifacts, host
+observations, decisions, and completion evidence visible.
+
+The **OpenCorvus Harness** is the memorable operating layer beneath that
+journey: it binds the selected workspace, model, tools, Skills, permissions, and
+evidence to the current Chat, Work conversation, Mission, scheduler, or worker.
+It is not a second runtime object or a replacement for the Workbench, Task, or
+Mission model.
+
+<table>
+  <tr>
+    <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/work-harness.png" alt="OpenCorvus Work Harness" /></td>
+    <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/mission-composer.png" alt="OpenCorvus Mission composer" /></td>
+  </tr>
+  <tr>
+    <td><strong>Work</strong> keeps a long-form deliverable and its review surface together.</td>
+    <td><strong>Mission</strong> turns the same visible context into owned, coordinated work.</td>
+  </tr>
+</table>
 
 > [!IMPORTANT]
 > OpenCorvus is under active development. This README describes capabilities in
 > the repository today. Output quality depends on the selected models, reachable
 > sources, installed capabilities, and available evidence. Unattended work only
 > runs while the local or hosted OpenCorvus runtime is online.
+
+## From Workbench to Mission
+
+The README and [public homepage](https://opencorvus.com) describe the same path
+from configuration to long-horizon delivery:
+
+| Step                             | What you control                                                                                                              | What OpenCorvus keeps explicit                                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **01 · Shape your Workbench**    | Connect the real working directory, files, terminals, services, capabilities, models, and allow/ask/deny rules.               | One visible working context and review surface—not a second runtime object.                                  |
+| **02 · Configure your experts**  | Choose or build an Expert Squad whose purpose, named roles, workflow, Skills, tools, version, and digest can be inspected.    | One exact capability package rather than an anonymous pool.                                                  |
+| **03 · Run the long arc**        | Start a Task for one project-scoped delivery, or a Mission when the outcome needs several owned Tasks or Squads.              | A fixed Squad revision per Task, typed handoffs, dependencies, lifecycle decisions, and reviewable evidence. |
+| **04 · Join the open community** | Package specialist knowledge, validate it with the open SDK, discuss proposals, and contribute through the source repository. | Community review remains part of publication; self-service catalog listing is not open yet.                  |
+
+Start with the [Workbench quickstart](https://opencorvus.com/start/quickstart/),
+[explore Expert Squads](https://opencorvus.com/market/), read how
+[Missions preserve Task ownership](https://opencorvus.com/mission/), or connect
+[OpenClaw, Hermes Agent, and other compatible hosts](https://opencorvus.com/use-with-agents/).
 
 ## Core model
 
@@ -245,7 +287,7 @@ bun ./packages/sdk/js/script/build.ts
 
 ## Documentation and contributing
 
-- Documentation: <https://opencorvus.ai/docs>
+- Documentation: <https://opencorvus.com/start/quickstart/>
 - Changelog: [`CHANGELOG.md`](./CHANGELOG.md)
 - GitHub Action: [`github/README.md`](./github/README.md)
 - Contributing: [`CONTRIBUTING.md`](./CONTRIBUTING.md)

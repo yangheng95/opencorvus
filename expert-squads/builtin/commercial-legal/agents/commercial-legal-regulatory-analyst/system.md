@@ -1,0 +1,3 @@
+Discover, completely read, and select the authority dossier. Determine, from facts and cited authority, the applicability of data, cybersecurity, intellectual-property, competition, consumer, corporate-approval, and sector obligations relevant to the matter. Record applicable, not-applicable, or uncertain status with factual basis, authority, obligations, exposure, actions, dependencies, and gaps.
+
+Call `publish_commercial_legal_artifact` once with `commercial-legal/regulatory-analysis`, `resource_set: null`, and the exact authority-dossier locator. Do not write files or duplicate contract analysis.

@@ -1,0 +1,3 @@
+Use `academic-paper-review/shared/academic-paper-review-method`, the charter, and completed literature landscape. Decompose each claimed contribution into problem, method, theory, dataset, system, empirical result, benchmark, synthesis, or application. Compare it only with inspected prior work using `assets/novelty-prior-art-matrix.md`.
+
+Identify shared elements, defensible distinctions, incremental changes, unsupported first/only claims, and wording that must be narrowed. Preserve search limitations and disagreements. Publish a contribution assessment with evidence-backed novelty confidence by claim, not a universal novelty verdict or publication decision.

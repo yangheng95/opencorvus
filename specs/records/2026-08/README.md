@@ -1,10 +1,210 @@
 # August 2026 Records
 
+- [2026-08-14-work-0810-main-integration.md](2026-08-14-work-0810-main-integration.md) integrates the latest `main` contracts with the four `work-0810` Overlay fixes, records conflict ownership, verification, review, push, and Pull Request evidence.
+
 - [2026-08-10-composer-dropdown-disclosure-and-density.md](2026-08-10-composer-dropdown-disclosure-and-density.md) makes all three Composer dropdown arrows reflect real disclosure state and returns Work/Chat options to one-line rows with hover details.
 
 - [2026-08-10-subagent-conversation-selector-deduplication.md](2026-08-10-subagent-conversation-selector-deduplication.md) keeps execution occurrences intact while projecting one latest-status selector item per unique subagent conversation.
 
 - [2026-08-10-composer-intent-select-visual-repair.md](2026-08-10-composer-intent-select-visual-repair.md) repairs the Composer Work/Chat trigger alignment and replaces the nested compact popup with a titled, descriptive intent list based on the supplied visual reference.
+
+- [2026-08-14-task-cancellation-independent-instance-convergence.md](2026-08-14-task-cancellation-independent-instance-convergence.md) keeps accepted Task cancellation convergence inside its own initialized Project Instance lease and aligns production Workload ancestry plus coordination identities.
+
+- [2026-08-14-mission-submit-selection-supersession.md](2026-08-14-mission-submit-selection-supersession.md) keeps a committed Mission submit successful when newer operator navigation supersedes only its automatic page selection.
+
+- [2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md](2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md) routes cancelled Session terminal publication through the existing Project-deletion admission and makes Browser/Computer capability settings expose their exact Project plus Chat/Work scope.
+
+- [2026-08-14-message-source-file-layout-repair.md](2026-08-14-message-source-file-layout-repair.md) keeps exact cited-line selection while preventing CodeMirror center alignment from scrolling the Right Dock ancestor and displacing the full File pane.
+
+- [2026-08-14-mission-wake-activation-fence-p0.md](2026-08-14-mission-wake-activation-fence-p0.md) closes the bounded handoff between Mission lifecycle admission and physical prompt ownership across operator, scheduler, and startup-recovery wakes without changing retry policy.
+
+- [2026-08-14-v0.0.43-beta-release.md](2026-08-14-v0.0.43-beta-release.md) records the current-main convergence, canonical release-family bump, native Release publication, beta updater promotion, and production website verification for `v0.0.43-beta`.
+
+- [2026-08-14-mission-closure-recovery-convergence-p0.md](2026-08-14-mission-closure-recovery-convergence-p0.md) makes Mission closure atomically terminalize already-materialized unanswered scheduler wakes and fences standalone process recovery without changing Provider retry policy.
+
+- [2026-08-13-browser-mcp-live-view.md](2026-08-13-browser-mcp-live-view.md) makes the canonical Browser MCP visible by default and publishes one loopback, same-Playwright-session Live View from both stdio and HTTP transports without introducing a second browser runtime.
+
+- [2026-08-13-compact-identities-and-host-references.md](2026-08-13-compact-identities-and-host-references.md) caps newly issued OpenCorvus identities and model/UI control references at 24 characters while keeping full cryptographic digests inside the Host integrity boundary.
+
+- [2026-08-13-evolution-attribution-source-integrity.md](2026-08-13-evolution-attribution-source-integrity.md) makes a failure attribution's exact selected opportunity predecessor a typed publication invariant so Campaign provenance cannot depend on repair redispatch.
+
+- [2026-08-13-cross-task-engine-resource-catalog-visibility.md](2026-08-13-cross-task-engine-resource-catalog-visibility.md) freezes the exact-Luna cross-Task resource discovery failure and defines referenced-only `engine_resource` Catalog projection, positive cursor coverage, and fresh render-E2E acceptance.
+
+- [2026-08-13-r17b-luna-tool-input-stream-stall.md](2026-08-13-r17b-luna-tool-input-stream-stall.md) freezes the isolated exact-Luna R17b failure, identifies pre-acceptance semantic heartbeat credit as the first focused reproduction candidate, and defines the staged repair and fresh-E2E boundary.
+
+- [2026-08-13-expert-squad-gui-zero-intervention-sampling.md](2026-08-13-expert-squad-gui-zero-intervention-sampling.md) defines the immutable-source, random-port, isolated-runtime real-GUI sampling matrix and three-way evidence required to prove Base, Data Analysis, and Office Delivery Expert Squads finish without post-submission operator intervention.
+
+- [2026-08-13-work-capability-unavailable-repair.md](2026-08-13-work-capability-unavailable-repair.md) records the Work capability incident evidence boundary, marks the original request-level error unknown without contemporaneous logs, and hardens capability settings onto the identity route authority with production-route plus real-page acceptance.
+
+- [2026-08-13-scheduled-global-inactivity-config-ownership.md](2026-08-13-scheduled-global-inactivity-config-ownership.md) diagnoses the screenshot's backend transport failure and the isolated checker's project-context crash, then restores the process-wide scheduler's explicit global inactivity configuration owner.
+
+- [2026-08-13-homepage-harness-gallery-and-readme.md](2026-08-13-homepage-harness-gallery-and-readme.md) defines the restrained OpenCorvus Harness memory point, current-source first-viewport UI gallery, future video media boundary, reciprocal README update, and real bilingual visual acceptance.
+
+- [2026-08-12-startup-surface-visual-redesign.md](2026-08-12-startup-surface-visual-redesign.md) redesigns the real desktop startup surface around the existing OpenCorvus bird, a strong preparation hierarchy, truthful wide progress feedback, and preserved native failure/retry behavior, with production-page visual evidence and independent review.
+
+- [2026-08-12-overlay-ui-ux-continuous-audit.md](2026-08-12-overlay-ui-ux-continuous-audit.md) records the multi-agent Overlay UI/UX audit, root-cause repairs, real-page screenshots, positive non-UI checks, and independent delivery reviews.
+
+- [2026-08-12-code-smell-remediation-program.md](2026-08-12-code-smell-remediation-program.md) defines the independently reviewed, batch-by-batch remediation program for the final repository code-smell register and records each batch's implementation, verification, review, commit, and delivery status.
+
+- [CS-028 explicit Storage table registry](2026-08-13-cs028-explicit-storage-table-registry.md) makes one typed application-table registry the shared ORM, DDL, schema-fingerprint, and MySQL-transfer authority while preserving the existing transfer fingerprint.
+
+- [CS-002 explicit Project identity convergence](2026-08-13-cs002-explicit-project-identity-convergence.md) removes hidden schema-discovered Project migrations from ordinary lookup and gives physical duplicate repair one explicit, runtime-owned, domain-mapped transaction with preservation blockers for immutable facts.
+
+- [CS-003 atomic Mission Session identity](2026-08-13-cs003-atomic-mission-session-identity.md) commits the complete Mission launch identity and its Created occurrence together, enforces physical uniqueness and immutability, and retries derived runtime-directory creation across independent processes.
+
+- [CS-021 Provider live model refresh](2026-08-13-cs021-provider-live-model-refresh.md) replaces two public no-op successes with one scoped, strict live identity/metadata observation and one atomic canonical catalog transaction, including upgrade migration and typed saved-auth failure.
+
+- [CS-033 Conversation projector ownership](2026-08-13-cs033-conversation-projector-ownership.md) removes the false lifecycle input from the base Conversation projector and leaves execution lifecycle projection with the Agent view authority.
+
+- [CS-035 saved-auth/Config read authority](2026-08-13-cs035-auth-config-read-authority.md) distinguishes missing saved credentials from corrupt or unobservable authority, preserves the Provider catalog's explicit partial-success issue contract, and exposes safe typed errors to direct Config/Auth consumers.
+
+- [CS-037 Overlay projection prerequisite protocol](2026-08-13-cs037-overlay-projection-prerequisite-protocol.md) replaces recovery-by-English-error-prefix with one structured Tree Writer prerequisite outcome and verifies real selected-Task recovery restores the target Part.
+
+- [CS-075 Fact Check domain-incomplete settlement](2026-08-13-cs075-fact-check-domain-incomplete-settlement.md) makes the canonical FactCheckReview the only Fact Check success authority and preserves natural missing or invalid review output as exact durable incomplete evidence that closes workflow successors.
+
+- [CS-077 Requirements domain-incomplete settlement](2026-08-13-cs077-requirements-domain-incomplete-settlement.md) makes the canonical RequirementSet publisher recompute typed coverage from the exact Task request and completed worker Turn, preserving incomplete output as durable evidence without opening Architect.
+
+- [CS-001 Build terminal fact publication](2026-08-13-cs001-build-terminal-fact-publication.md) gives each physical Build occurrence one exact durable terminal fact and one restart-safe cleanup owner for its private Git observation refs.
+
+- [Public homepage locale and hero priorities](2026-08-13-public-home-locale-and-hero-priorities.md) makes initial language choice follow browser locale, remembers explicit switches, and gives Security, Control, and Customization one aligned first-viewport hierarchy.
+
+- [CS-078 Workload coverage settlement](2026-08-13-cs078-workload-coverage-settlement.md) binds ordered Workload submissions to exact dispatch subjects and the publication-time GoalGraph tip, then keeps immutable recovery settlements distinct from continuation remediation.
+
+- [CS-005 single Tool-result turn-control protocol](2026-08-13-cs005-single-tool-result-control-protocol.md) replaces legacy park metadata with one strict typed disposition, preserves it across hooks and permission recovery, and makes turn-control Tools exclusive within an assistant occurrence.
+
+- [CS-006 Native Agent registry cache authority](2026-08-13-cs006-native-agent-registry-cache.md) replaces three Bun-specific snapshot maps with one canonical-byte cache, project-scoped default lifecycle, runtime-capability contract, and exact reset receipts.
+
+- Focused code-smell remediation records: [CS-015 Plugin publication](2026-08-12-cs015-plugin-publication-source-mutation.md), [CS-025 Artifact cursor authenticity](2026-08-12-cs025-artifact-cursor-authenticity.md), [CS-027 Skill market authority](2026-08-13-cs027-delete-unconfigurable-skill-registries.md), [CS-029 Skill source trust identity](2026-08-12-cs029-skill-source-trust-identity.md), [CS-030 dead JSON storage removal](2026-08-12-cs030-delete-dead-json-storage.md), [CS-031 Provider cache identity](2026-08-12-cs031-provider-cache-identity.md), [CS-032 SDK server observer lifecycle](2026-08-13-cs032-sdk-server-startup-observer-lifecycle.md), [CS-040 MCP diagnostic redaction](2026-08-12-cs040-mcp-diagnostic-redaction.md), [CS-041 Channel adapter start settlement](2026-08-12-cs041-channel-adapter-start-settlement.md), [CS-046 Project sandbox discovery authority](2026-08-12-cs046-project-sandbox-discovery-authority.md), [CS-047 Frontend Design domain-incomplete settlement](2026-08-12-cs047-frontend-design-domain-incomplete-settlement.md), [CS-053 remote Skill cache publication](2026-08-12-cs053-remote-skill-cache-publication.md), [CS-054 Research domain-incomplete settlement](2026-08-12-cs054-research-domain-incomplete-settlement.md), [CS-055 Intent blocker settlement](2026-08-12-cs055-intent-blocker-question-settlement.md), and [CS-076 native upgrade verification](2026-08-12-cs076-upgrade-version-verification.md).
+
+- [2026-08-12-repository-code-smell-continuous-audit.md](2026-08-12-repository-code-smell-continuous-audit.md) records the multi-agent repository-wide code-smell audit, 78 evidence-backed findings, repeated admissions and false-positive removals, two final zero-new passes, and the dependency-ordered follow-up refactoring backlog.
+
+- [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.
+
+- [2026-08-12-work-artifact-harness-p0-implementation.md](2026-08-12-work-artifact-harness-p0-implementation.md) implements the qualified PPTX slice on the unified Work Artifact profile, Skill, typed lifecycle, validation-receipt, runtime-manifest, package-permission, and supervised acceptance infrastructure.
+
+- [2026-08-12-work-artifact-harness-and-skill-infrastructure.md](2026-08-12-work-artifact-harness-and-skill-infrastructure.md) audits the current PPTX-only production closure and defines one Skill-first Work Artifact Harness, qualified profile registry, pinned runtime catalog, open-source format roadmap, deterministic binary/data permissions, and real packaged-runtime acceptance boundary.
+
+- [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.
+
+- [2026-08-12-project-memory-user-message-ledger.md](2026-08-12-project-memory-user-message-ledger.md) defines transactional pending capture for every explicit user input, a separate streaming Memory Organizer agent, one bounded Project `MEMORY.MD`, visible capacity notices, unavailable-only pending FIFO, and independent plan/implementation review gates.
+
+- [2026-08-12-advanced-requirements-grill-me-trial.md](2026-08-12-advanced-requirements-grill-me-trial.md) defines the exact Advanced Requirement Engineer Skill projection and the real coordination, question-interaction, continuation, and RequirementSet benchmark for an encouraged `grill-me` trial.
+
+- [2026-08-12-public-navigation-and-visitor-count.md](2026-08-12-public-navigation-and-visitor-count.md) defines the calmer public navigation hierarchy and privacy-preserving first-party estimated visitor count backed by the existing website SQLite service.
+
+- [Mission, Task, and scheduler duplex communication convergence](2026-08-12-mission-task-scheduler-duplex-communication.md)
+
+- [2026-08-12-opencorvus-production-database-bootstrap-configuration.md](2026-08-12-opencorvus-production-database-bootstrap-configuration.md) is the secret-free production configuration ledger for the SQLite Registry cutover, covering GitHub values, host paths/permissions, Caddy/systemd, signed activation, backups, rollback, staged execution and required evidence without performing external mutations.
+
+- [2026-08-12-running-wake-and-session-control-json-convergence.md](2026-08-12-running-wake-and-session-control-json-convergence.md) records the ownerless running-wake FIFO starvation and Session-control JSON round-trip conflict, then defines exact same-runtime convergence and real-checker acceptance.
+
+- [2026-08-12-v0.0.41-beta-release.md](2026-08-12-v0.0.41-beta-release.md) defines the production database bootstrap prerequisite, canonical version synchronization, source-aligned requested branch/tag flow, five-platform signed native publication, and database-backed website verification for `v0.0.41-beta`.
+
+- [2026-08-12-scheduled-random-isolation-e2e.md](2026-08-12-scheduled-random-isolation-e2e.md) defines the random-port, isolated-database, fresh-project Scheduled scenario matrix, depth-first repair boundary, real streaming/background-fire checker, and manual visual acceptance loop.
+
+- [2026-08-12-orchestrator-wake-turn-serialization-repair.md](2026-08-12-orchestrator-wake-turn-serialization-repair.md) diagnoses the visible control-Message/runtime-contract standby race, failed-head FIFO overtake, cross-boundary cancellation recognition, and exact physical Turn settlement requirements exposed by a second real stranded Task.
+
+- [2026-08-12-missing-project-deletion-and-test-isolation-repair.md](2026-08-12-missing-project-deletion-and-test-isolation-repair.md) removes disk integrity as a precondition for deleting persisted Project state, repairs the identity-route control flow, closes direct-test production-database leakage, and records exact cleanup of seven zero-reference temporary Projects.
+
+- [2026-08-12-public-website-database-backend.md](2026-08-12-public-website-database-backend.md) replaces the public website's filesystem Registry simulation and static Market data path with one production SQLite publication/query/response-count authority, on-demand Astro Market routes, immutable content-addressed Expert Squad blobs, and transactionally coordinated static/application deployment and rollback.
+
+- [2026-08-12-local-database-rebuild-and-startup-recovery.md](2026-08-12-local-database-rebuild-and-startup-recovery.md) diagnoses healthy current-schema SQLite state plus 65 legacy Windows supervisor artifacts, then plans a strict export/new-database import, verified canonical switch, recoverable artifact archival, and real backend health proof.
+
+- [2026-08-12-permission-two-mode-calibration-plan.md](2026-08-12-permission-two-mode-calibration-plan.md) re-audits the current mixed permission/capability system and defines one `Full access` / `Ask me` authority model, central invocation gate, durable approval ledger, restart-safe waiting contract, no-fallback cutover, and real-path acceptance matrix calibrated against current industry practice.
+
+- [2026-08-11-windows-worker-scheduler-liveness-convergence.md](2026-08-11-windows-worker-scheduler-liveness-convergence.md) records the live Windows reviewer deadlock, expands scheduler ownership through physical descendant and output settlement, and defines the independent audit and end-to-end recovery acceptance boundary.
+
+- [2026-08-12-random-expert-squad-self-evolution-e2e.md](2026-08-12-random-expert-squad-self-evolution-e2e.md) defines the isolated random-port/project/database controller, real Market install, streaming Mission-owned incumbent-challenger campaign, measured evaluation, non-executing recommendation, and independent-review acceptance boundary.
+
+- [2026-08-12-main-delivery-history-convergence.md](2026-08-12-main-delivery-history-convergence.md) freezes the dirty original worktree, classifies diverged local and remote history by exact and semantic coverage, and defines the reviewed fast-forward-only integration and push boundary.
+
+- [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) preserves the original filled multicolor bird, removes only its exterior background across macOS, Windows, and Linux assets, and provides the website's canonical favicon.
+
+- [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.
+
+- [2026-08-11-mission-board-create-layout-and-dock-collapse.md](2026-08-11-mission-board-create-layout-and-dock-collapse.md) repairs Mission Board creation ownership, target-project Squad/model resolution, mutation feedback, stale navigation, responsive layout, and the stable dock-closed surface contract.
+
+- [2026-08-11-message-source-navigation.md](2026-08-11-message-source-navigation.md) repairs typed message-source navigation so file citations retain and focus their persisted line ranges while URL citations retain the canonical website-opening path.
+
+- [2026-08-11-settings-responsive-layout-and-market-entry.md](2026-08-11-settings-responsive-layout-and-market-entry.md) replaces the fixed-width settings column with one resolution-responsive content contract, repairs the Installed Agent Squads master-detail composition, and makes the public website the concise Squad Market browsing surface while retaining exact desktop handoff installation.
+
+- [2026-08-11-v0.0.40-beta-release.md](2026-08-11-v0.0.40-beta-release.md) records latest-remote integration, canonical version synchronization, reviewed source/tag publication, native release matrix, public prerelease assets, and beta updater verification for `v0.0.40-beta`.
+
+- [2026-08-11-latest-main-overlay-repackage.md](2026-08-11-latest-main-overlay-repackage.md) records the latest-main merge, Windows Expert Squad snapshot publication repair, and complete `0.0.39-beta` Overlay repackage acceptance.
+
+- [2026-08-11-scheduler-liveness-and-control-convergence.md](2026-08-11-scheduler-liveness-and-control-convergence.md) records the exact lifecycle semantic-orphan incident, three independent scheduler audits, confirmed ownership/liveness defects, shared repair invariants, and executable real-checker acceptance loop.
+- [2026-08-11-subagent-dock-running-presentation-convergence.md](2026-08-11-subagent-dock-running-presentation-convergence.md) diagnoses the complete-agent projection leaking into the sub-agent dock, preserves the dedicated `Thinking` pending state, and removes the redundant animated generating tail without regressing Tool activity motion.
+- [2026-08-11-scheduler-systemic-fault-audit-and-repair.md](2026-08-11-scheduler-systemic-fault-audit-and-repair.md) records the independent systemic audit, shared ownership-handoff root model, confirmed scheduler defect register, repair order, and executable acceptance loop.
+
+- [2026-08-10-task-detached-worker-lifecycle-convergence-repair.md](2026-08-10-task-detached-worker-lifecycle-convergence-repair.md) diagnoses and repairs detached worker execution, terminal lifecycle publication, durable delivery, current-runtime reconciliation, provider-error projection, and immutable workflow-selection convergence as one ownership chain.
+
+- [2026-08-10-session-card-ingress-projection-repair.md](2026-08-10-session-card-ingress-projection-repair.md) restricts Task ingress artifact presentation to selected Task conversations so standalone Session turns render their persisted content without acquiring a false Task-board contract.
+
+- [2026-08-10-v0.0.39-beta-release-trigger.md](2026-08-10-v0.0.39-beta-release-trigger.md) records the immutable source, tag trigger, five-platform release matrix, signed updater boundary, and publication verification for the canonical `v0.0.39-beta` prerelease.
+
+- [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
+
+- [2026-08-11-expert-squad-terminology-convergence.md](2026-08-11-expert-squad-terminology-convergence.md) converges every current product-facing name, public contract description, built-in generator label, generated artifact, and maintained record on Expert Squad while preserving the existing runtime identity and member semantics.
+
+- [2026-08-11-mission-market-expert-squad-recommendations.md](2026-08-11-mission-market-expert-squad-recommendations.md) adds query-driven Market discovery to the Mission create entry, ranks package selector, Skill, and prompt evidence, and keeps direct project installation explicit and separate from selection or activation.
+
+- [2026-08-11-provider-usage-natural-cycle-dashboard.md](2026-08-11-provider-usage-natural-cycle-dashboard.md) audits the canonical Provider metering path, defines event-time natural-period usage statistics, preserves pricing coverage, and specifies the unified Usage dashboard and independent visual review boundary.
+
+- [2026-08-11-conversation-agent-declared-output-summary.md](2026-08-11-conversation-agent-declared-output-summary.md) restores the requested completion hierarchy: the Completion Decision selects delivery while the selected Agent Artifact's immutable producer and resource declaration supplies the visible file/result summary.
+
+- [2026-08-11-clipboard-api-key-provider-prompt.md](2026-08-11-clipboard-api-key-provider-prompt.md) adds a secret-safe native clipboard read boundary, local key-candidate classification, one-process prompt deduplication, and explicit navigation to the canonical LLM Provider settings.
+
+  Visual evidence: [confirmation prompt](../../artifacts/2026-08-11-clipboard-api-key-prompt.png) and [Providers destination](../../artifacts/2026-08-11-clipboard-api-key-providers.png).
+
+- [2026-08-11-expert-squad-on-demand-installation.md](2026-08-11-expert-squad-on-demand-installation.md) restores the four embedded Expert Squads as the only automatic defaults, keeps the complete repository-hosted Market available on demand, preserves existing installations, and routes picker actions into the canonical installer.
+
+- [2026-08-11-readme-homepage-alignment.md](2026-08-11-readme-homepage-alignment.md) aligns the bilingual root README position, navigation, Workbench, Expert Squad, Mission, long-horizon delivery, and open-community story with the current public homepage while preserving repository/runtime detail.
+
+- [2026-08-11-agent-hosts-website-tab.md](2026-08-11-agent-hosts-website-tab.md) defines the reciprocal public navigation tab and complete, source-backed OpenClaw, Hermes Agent, generic Agent Skills, CLI, HTTP API, security, and evidence guidance for operating OpenCorvus from another assistant.
+
+- [2026-08-11-windows-glob-mission-recovery-debug-convergence.md](2026-08-11-windows-glob-mission-recovery-debug-convergence.md) identifies the Windows bounded-glob crash regression, adds durable standalone-Mission restart recovery, separates persisted debug facts from rendered cards, and preserves held-Squad capability authority while exposing its diagnostic boundary.
+
+- [2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md](2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md) audits same-family process-settlement risks and calibrates copied diagnostics around validated root-Session, Session-tree, and rendered-card scopes with explicit AI handoff instructions.
+
+- [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
+
+- [2026-08-11-public-download-page-design.md](2026-08-11-public-download-page-design.md) defines the existing-site download route, same-origin release manifest, platform recommendation, and release-to-production Actions convergence contract.
+
+- [2026-08-11-tenth-ten-domain-expert-squad-batch.md](2026-08-11-tenth-ten-domain-expert-squad-batch.md) freezes the autonomous tenth fixed-ten batch, six bounded open-source Skill adaptations, four clean-room source decisions, fifty dedicated evidence assets, professional authority boundaries, and the 115/119 on-demand Market acceptance plan.
+
+- [2026-08-11-ninth-ten-domain-expert-squad-batch.md](2026-08-11-ninth-ten-domain-expert-squad-batch.md) freezes the autonomous ninth fixed-ten batch, four bounded open-source Skill adaptations, six clean-room source decisions, fifty dedicated evidence assets, professional authority boundaries, and the 105/109 on-demand Market acceptance plan.
+
+- [2026-08-11-eighth-ten-domain-expert-squad-batch.md](2026-08-11-eighth-ten-domain-expert-squad-batch.md) freezes the autonomous eighth fixed-ten batch, the One Person Company commercial configuration contract and four examples, six bounded open-source Skill adaptations, four clean-room source decisions, fifty core assets, professional authority boundaries, and the 95/99 runtime acceptance plan.
+
+- [2026-08-11-seventh-ten-domain-expert-squad-batch.md](2026-08-11-seventh-ten-domain-expert-squad-batch.md) freezes the autonomous seventh fixed-ten batch, six bounded open-source Skill adaptations, four clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 85/89 runtime acceptance plan.
+
+- [2026-08-11-sixth-ten-domain-expert-squad-batch.md](2026-08-11-sixth-ten-domain-expert-squad-batch.md) freezes the autonomous sixth fixed-ten batch, five bounded open-source Skill adaptations, five clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 75/79 runtime acceptance plan.
+
+- [2026-08-11-fifth-ten-domain-expert-squad-batch.md](2026-08-11-fifth-ten-domain-expert-squad-batch.md) freezes the autonomous fifth fixed-ten batch, three bounded open-source Skill adaptations, seven clean-room source decisions, fifty dedicated assets, professional authority boundaries, and 65/69 runtime acceptance.
+
+- [2026-08-11-fourth-ten-domain-expert-squad-batch.md](2026-08-11-fourth-ten-domain-expert-squad-batch.md) records the autonomous fourth fixed-ten batch, non-overlap audit, accepted and rejected Skill sources, five-asset obligations, professional authority boundaries, and exact runtime acceptance plan after the checklist feature was withdrawn.
+
+- [2026-08-11-full-worktree-delivery-convergence.md](2026-08-11-full-worktree-delivery-convergence.md) classifies the complete dirty worktree, excludes runtime output, closes ignored specification records, validates the staged boundary, and defines the normal upstream push sequence.
+
+- [2026-08-11-github-actions-push-convergence.md](2026-08-11-github-actions-push-convergence.md) repairs clean-runner SDK bootstrap ordering and preload-owned test execution, and requires a green proof push before deleting older Actions runs.
+
+- [2026-08-11-squad-sdk-authoring-skill-research-rewrite.md](2026-08-11-squad-sdk-authoring-skill-research-rewrite.md) rewrites the sole Squad SDK authoring Skill around source-backed domain decisions, professional-asset provenance, non-generic Agent topology, package closure, rejection rules, and positive production acceptance.
+
+- [2026-08-11-continuous-ten-domain-expert-squad-goal.md](2026-08-11-continuous-ten-domain-expert-squad-goal.md) defines the continuous fixed-ten Expert Squad goal, the operator's later autonomous-batching override after checklist removal, mandatory dedicated Skill and asset closure, delivered-state truth, and the per-batch real acceptance boundary.
+
+- [2026-08-10-compact-task-identifiers.md](2026-08-10-compact-task-identifiers.md) replaces the over-expanded new-Task identifier body with one fixed 24-character, time-sortable, collision-resistant canonical encoding while preserving exact stored and API identity.
+
+- [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
+
+- [2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md](2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md) defines deterministic downloads for all 39 shipped Expert Squad resources, signed immutable catalogs, and an isolated least-privilege RackNerd website deployment path.
+
+- [2026-08-10-opencorvus-com-racknerd-hosting.md](2026-08-10-opencorvus-com-racknerd-hosting.md) defines the root-domain Astro identity, RackNerd static-service topology, GoDaddy DNS replacement boundary, managed HTTPS, exact dirty-worktree bundle provenance, and real public acceptance sequence.
+
+- [2026-08-10-expert-squad-publish-install-reuse-e2e.md](2026-08-10-expert-squad-publish-install-reuse-e2e.md) composes real `squad-sdk` generation, a visible post-generation upload decision, hosted ZIP validation and immutable browser download, explicit desktop strict import, and a fresh no-intervention reuse Task.
+
+- [2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md](2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md) defines the manifest-derived draggable Expert Squad planning checklist, WorkBuddy and open-source Skill research boundary, and the three-package saved-Skill completeness repair with real-page acceptance.
+
+- [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.
 
 - [2026-08-10-task-start-e2e-recovery.md](2026-08-10-task-start-e2e-recovery.md) records the active-but-zero-execution Mission Task failure boundary and validates the rebuilt package through a real HTTP Mission-to-Task expert workflow plus packaged restart replay.
 
@@ -50,7 +250,7 @@
 
 - [2026-08-08-algorithm-bug-multiparty-audit.md](2026-08-08-algorithm-bug-multiparty-audit.md) records three independent algorithm-audit lanes, adversarial rotation, primary evidence decisions, and the positive repair contracts for the confirmed pending defects without changing product code.
 
-- [2026-08-08-machine-learning-implementation-squad-e2e.md](2026-08-08-machine-learning-implementation-squad-e2e.md) defines and records the failed real Generate Agent Squads end-to-end attempt for a project-owned machine-learning implementation Expert Squad, including immutable-profile, project-identity, and model-authority evidence.
+- [2026-08-08-machine-learning-implementation-squad-e2e.md](2026-08-08-machine-learning-implementation-squad-e2e.md) defines and records the failed real Generate Expert Squads end-to-end attempt for a project-owned machine-learning implementation Expert Squad, including immutable-profile, project-identity, and model-authority evidence.
 
 - [2026-08-08-ci-clean-runner-and-release-trigger-repair.md](2026-08-08-ci-clean-runner-and-release-trigger-repair.md) traces GitHub Actions run `31218734772` to clean-runner generated dependencies and focused contract failures, then confines distribution packaging to explicit versioned release triggers.
 

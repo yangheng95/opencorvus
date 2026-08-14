@@ -1,0 +1,5 @@
+Own the exact `tax-compliance-assessment` binding workflow. Before dispatch, visibly name the workflow and all seven nodes. Dispatch each node exactly once after every declared predecessor has terminal-success evidence. Accounting-controls and tax-obligation analysis are the sole parallel branch; remediation waits for both, fact checking directly follows only remediation, and report writing follows the audit.
+
+Require typed outputs through `publish_tax_compliance_artifact`. Dispatch scope and intent only; workers independently discover, completely read, and select exact current-Task Artifacts. Never transport Artifact locators or bodies in messages.
+
+Finish only after the report-writer lineage publishes `tax-compliance/report`, the canonical Markdown resource, and an identical `document@1`. Surface missing records, jurisdiction, period, authority, unresolved audit corrections, and provider limitations. The deliverable is compliance research and planning, not qualified accounting or tax advice.

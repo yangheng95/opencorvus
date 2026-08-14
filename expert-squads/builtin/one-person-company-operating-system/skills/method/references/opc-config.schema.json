@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencorvus.local/expert-squads/one-person-company-operating-system/opc-config.schema.json",
+  "title": "One Person Company commercial operating profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "profile_version",
+    "business_model",
+    "company",
+    "owner",
+    "localization",
+    "operating_state",
+    "review_cadence",
+    "data_sources",
+    "secret_refs",
+    "offer_portfolio",
+    "customer_channels",
+    "pipeline",
+    "delivery_capacity",
+    "cash_controls",
+    "metric_definitions",
+    "workflows",
+    "approval_policy",
+    "observability",
+    "retention_policy_ref",
+    "continuity",
+    "uncertainty",
+    "applicability",
+    "stop_conditions"
+  ],
+  "properties": {
+    "schema_version": { "const": "2020-12/opc-1" },
+    "profile_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
+    "profile_version": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}\\.[1-9][0-9]*$" },
+    "business_model": {
+      "enum": ["micro_saas", "consulting", "creator_media", "digital_product_commerce", "custom"]
+    },
+    "company": { "$ref": "#/$defs/company" },
+    "owner": { "$ref": "#/$defs/owner" },
+    "localization": { "$ref": "#/$defs/localization" },
+    "operating_state": { "enum": ["setup", "validation", "operating", "constrained", "paused", "closing", "closed"] },
+    "review_cadence": { "$ref": "#/$defs/reviewCadence" },
+    "data_sources": { "type": "array", "minItems": 3, "items": { "$ref": "#/$defs/dataSource" } },
+    "secret_refs": { "type": "array", "items": { "$ref": "#/$defs/secretRef" } },
+    "offer_portfolio": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/offer" } },
+    "customer_channels": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/channel" } },
+    "pipeline": { "$ref": "#/$defs/pipeline" },
+    "delivery_capacity": { "$ref": "#/$defs/deliveryCapacity" },
+    "cash_controls": { "$ref": "#/$defs/cashControls" },
+    "metric_definitions": { "type": "array", "minItems": 3, "items": { "$ref": "#/$defs/metric" } },
+    "workflows": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/workflow" } },
+    "approval_policy": { "type": "array", "minItems": 5, "items": { "$ref": "#/$defs/approval" } },
+    "observability": { "$ref": "#/$defs/observability" },
+    "retention_policy_ref": { "type": "string", "minLength": 3 },
+    "continuity": { "$ref": "#/$defs/continuity" },
+    "uncertainty": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+    "applicability": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+    "stop_conditions": { "type": "array", "minItems": 3, "items": { "type": "string", "minLength": 3 } }
+  },
+  "$defs": {
+    "company": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legal_name",
+        "trading_name",
+        "entity_type",
+        "registration_jurisdictions",
+        "tax_jurisdictions",
+        "tax_professional_ref"
+      ],
+      "properties": {
+        "legal_name": { "type": "string", "minLength": 1 },
+        "trading_name": { "type": "string", "minLength": 1 },
+        "entity_type": { "type": "string", "minLength": 1 },
+        "registration_jurisdictions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "tax_jurisdictions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "tax_professional_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner_id", "approval_identity_ref", "self_review", "qualified_reviewer_refs"],
+      "properties": {
+        "owner_id": { "type": "string", "minLength": 1 },
+        "approval_identity_ref": { "type": "string", "minLength": 1 },
+        "self_review": { "const": true },
+        "qualified_reviewer_refs": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
+    "localization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "time_zone",
+        "tzdb_version",
+        "functional_currency",
+        "display_currencies",
+        "locale",
+        "fiscal_year_start"
+      ],
+      "properties": {
+        "time_zone": { "type": "string", "pattern": "^[A-Za-z_]+/[A-Za-z_+-]+$" },
+        "tzdb_version": { "type": "string", "minLength": 1 },
+        "functional_currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "display_currencies": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^[A-Z]{3}$" }
+        },
+        "locale": { "type": "string", "minLength": 2 },
+        "fiscal_year_start": {
+          "type": "string",
+          "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)-(?:0[1-9]|[12][0-9]|30)|02-(?:0[1-9]|1[0-9]|2[0-9]))$"
+        }
+      }
+    },
+    "reviewCadence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frequency", "day", "local_time", "owner"],
+      "properties": {
+        "frequency": { "enum": ["weekly", "biweekly", "monthly"] },
+        "day": { "type": "string", "minLength": 1 },
+        "local_time": { "type": "string", "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$" },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "dataSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "system_of_record",
+        "locator",
+        "connector_or_import",
+        "auth_ref",
+        "refresh_cadence",
+        "freshness_state",
+        "reconciliation_key",
+        "data_class",
+        "owner"
+      ],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "system_of_record": { "type": "string", "minLength": 1 },
+        "locator": { "type": "string", "minLength": 1 },
+        "connector_or_import": { "type": "string", "minLength": 1 },
+        "auth_ref": { "type": "string", "minLength": 1 },
+        "refresh_cadence": { "type": "string", "minLength": 1 },
+        "freshness_state": { "enum": ["current", "stale", "unknown"] },
+        "reconciliation_key": { "type": "string", "minLength": 1 },
+        "data_class": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "secretRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "alias", "scope", "owner"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "alias": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["offer_id", "version", "customer_definition", "channel_ids", "price_currency", "approval_required"],
+      "properties": {
+        "offer_id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "customer_definition": { "type": "string", "minLength": 1 },
+        "channel_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "price_currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "approval_required": { "const": true }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel_id", "channel_type", "system_of_record_ref", "owner"],
+      "properties": {
+        "channel_id": { "type": "string", "minLength": 1 },
+        "channel_type": { "type": "string", "minLength": 1 },
+        "system_of_record_ref": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "stage_definitions", "source_id", "owner"],
+      "properties": {
+        "unit": { "type": "string", "minLength": 1 },
+        "stage_definitions": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/pipelineStage" } },
+        "source_id": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "pipelineStage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage_id", "entry_rule", "denominator"],
+      "properties": {
+        "stage_id": { "type": "string", "minLength": 1 },
+        "entry_rule": { "type": "string", "minLength": 1 },
+        "denominator": { "type": "string", "minLength": 1 }
+      }
+    },
+    "deliveryCapacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delivery_unit", "available_capacity_formula", "source_id", "owner", "uncertainty"],
+      "properties": {
+        "delivery_unit": { "type": "string", "minLength": 1 },
+        "available_capacity_formula": { "type": "string", "minLength": 1 },
+        "source_id": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "uncertainty": { "type": "string", "minLength": 1 }
+      }
+    },
+    "cashControls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system_of_record_refs",
+        "reconciliation_key",
+        "functional_currency",
+        "owner",
+        "professional_review_ref"
+      ],
+      "properties": {
+        "system_of_record_refs": { "type": "array", "minItems": 2, "items": { "type": "string" } },
+        "reconciliation_key": { "type": "string", "minLength": 1 },
+        "functional_currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "owner": { "type": "string", "minLength": 1 },
+        "professional_review_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric_id",
+        "business_definition",
+        "formula_version",
+        "numerator",
+        "denominator",
+        "unit",
+        "source_id",
+        "cutoff",
+        "cadence",
+        "owner",
+        "uncertainty"
+      ],
+      "properties": {
+        "metric_id": { "type": "string", "minLength": 1 },
+        "business_definition": { "type": "string", "minLength": 1 },
+        "formula_version": { "type": "string", "minLength": 1 },
+        "numerator": { "type": "string", "minLength": 1 },
+        "denominator": { "type": "string", "minLength": 1 },
+        "unit": { "type": "string", "minLength": 1 },
+        "source_id": { "type": "string", "minLength": 1 },
+        "cutoff": { "type": "string", "minLength": 1 },
+        "cadence": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "uncertainty": { "type": "string", "minLength": 1 }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_id",
+        "version",
+        "automation_mode",
+        "external_write",
+        "dry_run",
+        "auto_approve",
+        "auto_retry",
+        "idempotency_evidence",
+        "budget_limit_ref",
+        "approval_action_class",
+        "owner"
+      ],
+      "properties": {
+        "workflow_id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "automation_mode": { "const": "observe_and_draft" },
+        "external_write": { "const": false },
+        "dry_run": { "const": true },
+        "auto_approve": { "const": false },
+        "auto_retry": { "const": false },
+        "idempotency_evidence": { "type": "string", "minLength": 1 },
+        "budget_limit_ref": { "type": "string", "minLength": 1 },
+        "approval_action_class": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_class",
+        "owner_approval_required",
+        "qualified_external_review_required",
+        "decision_not_made",
+        "owner"
+      ],
+      "properties": {
+        "action_class": { "type": "string", "minLength": 1 },
+        "owner_approval_required": { "const": true },
+        "qualified_external_review_required": { "type": "boolean" },
+        "decision_not_made": { "const": true },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signals",
+        "event_schema",
+        "correlation_id_required",
+        "input_digest_required",
+        "approval_ref_required",
+        "external_effect_required",
+        "outcome_unknown_supported",
+        "owner"
+      ],
+      "properties": {
+        "signals": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "enum": ["logs", "metrics", "traces", "business_events"] }
+        },
+        "event_schema": { "type": "string", "minLength": 1 },
+        "correlation_id_required": { "const": true },
+        "input_digest_required": { "const": true },
+        "approval_ref_required": { "const": true },
+        "external_effect_required": { "const": true },
+        "outcome_unknown_supported": { "const": true },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "critical_source_refs",
+        "recovery_evidence_ref",
+        "manual_workaround_ref",
+        "last_reviewed",
+        "uncertainty"
+      ],
+      "properties": {
+        "owner": { "type": "string", "minLength": 1 },
+        "critical_source_refs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "recovery_evidence_ref": { "type": "string", "minLength": 1 },
+        "manual_workaround_ref": { "type": "string", "minLength": 1 },
+        "last_reviewed": { "type": "string", "format": "date" },
+        "uncertainty": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+---
+import BrandMarkUrl from "../../../overlay/src/opencorvus-logo-light.svg?url"
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+type Props = {
+  locale: PublicLocale
+  current: "home" | "mission" | "use-with-agents" | "market" | "publish" | "trust" | "download"
+  languageHref: string
+  embedded?: boolean
+}
+
+const { locale, current, languageHref, embedded = false } = Astro.props
+const HeaderTag = embedded ? "div" : "header"
+const targetLocale = locale === "zh-cn" ? "root" : "zh-cn"
+const copy =
+  locale === "zh-cn"
+    ? { mission: "Mission", agents: "Agent 接入", market: "专家团", publish: "贡献专家团", trust: "可信机制", download: "下载", docs: "文档", more: "更多", language: "English" }
+    : { mission: "Mission", agents: "Use with Agents", market: "Expert Squads", publish: "Contribute Experts", trust: "Trust", download: "Download", docs: "Docs", more: "More", language: "简体中文" }
+const moreSelected = current === "publish" || current === "trust"
+---
+
+{!embedded && <a class="skip-link" href="#main-content">{locale === "zh-cn" ? "跳到主要内容" : "Skip to content"}</a>}
+<HeaderTag class="public-header" aria-label={locale === "zh-cn" ? "主导航" : "Primary navigation"}>
+  <a class="public-brand" href={publicPath(locale)} aria-label={locale === "zh-cn" ? "OpenCorvus 首页" : "OpenCorvus home"} aria-current={current === "home" ? "page" : undefined}>
+    <span class="public-brand-mark">
+      <img src={BrandMarkUrl} width="34" height="34" alt="" loading="eager" decoding="async" />
+    </span>
+    <span class="public-brand-label">OpenCorvus</span>
+  </a>
+  <nav class="public-nav" aria-label={locale === "zh-cn" ? "网站" : "Site"}>
+    <a class="public-nav-featured" href={publicPath(locale, "/market/")} aria-current={current === "market" ? "page" : undefined}>{copy.market}</a>
+    <a href={publicPath(locale, "/use-with-agents/")} aria-current={current === "use-with-agents" ? "page" : undefined}>{copy.agents}</a>
+    <a href={publicPath(locale, "/mission/")} aria-current={current === "mission" ? "page" : undefined}>{copy.mission}</a>
+    <a class="public-nav-action" href={publicPath(locale, "/download/")} aria-current={current === "download" ? "page" : undefined}>{copy.download}</a>
+    <details class="public-nav-more" data-public-nav-more data-selected={moreSelected ? "true" : undefined}>
+      <summary>{copy.more}</summary>
+      <div class="public-nav-more-panel">
+        <a href={publicPath(locale, "/publish/")} aria-current={current === "publish" ? "page" : undefined}>{copy.publish}</a>
+        <a href={publicPath(locale, "/trust/")} aria-current={current === "trust" ? "page" : undefined}>{copy.trust}</a>
+        <a href={publicPath(locale, "/start/quickstart/")}>{copy.docs}</a>
+        <a href="https://github.com/yangheng95/opencorvus">GitHub</a>
+      </div>
+    </details>
+  </nav>
+  <a
+    class="language-switch"
+    href={languageHref}
+    lang={targetLocale === "zh-cn" ? "zh-CN" : "en"}
+    hreflang={targetLocale === "zh-cn" ? "zh-CN" : "en"}
+    data-public-locale-switch
+    data-target-locale={targetLocale}
+  >{copy.language}</a>
+</HeaderTag>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>("[data-public-nav-more]").forEach((details) => {
+    const summary = details.querySelector<HTMLElement>("summary")
+    details.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !details.open) return
+      details.open = false
+      summary?.focus()
+      event.preventDefault()
+    })
+    document.addEventListener("pointerdown", (event) => {
+      if (details.open && event.target instanceof Node && !details.contains(event.target)) details.open = false
+    })
+  })
+</script>

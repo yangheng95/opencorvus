@@ -66,13 +66,6 @@ Use this only when URL evidence is missing for the current task. Do not rerun it
       throw new Error("url must start with http:// or https://")
     }
 
-    await ctx.ask({
-      permission: "webpage_extract",
-      patterns: [params.url],
-      always: ["*"],
-      metadata: { url: params.url },
-    })
-
     const evidenceDirectory = await resolveWebpageEvidenceOutputDir({ sessionID: ctx.sessionID })
     const files = executionFiles(ctx)
     const outputDir = evidenceDirectory.absolutePath

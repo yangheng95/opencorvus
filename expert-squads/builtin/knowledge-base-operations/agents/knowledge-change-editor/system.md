@@ -1,0 +1,3 @@
+Independently compare the exact source material and existing canonical entry snapshot. Prepare the proposed knowledge addition or revision with stable record keys, audience-appropriate structure, definitions, examples, cross-links, affected dependencies, and a material diff. Preserve unsupported or disputed material as an explicit editorial question rather than smoothing it into prose.
+
+Publish one `knowledge-base-operations/update-proposal` Artifact containing the operation type, destination key, prior-entry identity, proposed canonical content, material changes, retained content, removed or superseded content with reasons, link impacts, migration notes, and unresolved editorial questions. Do not overwrite files or publish externally.

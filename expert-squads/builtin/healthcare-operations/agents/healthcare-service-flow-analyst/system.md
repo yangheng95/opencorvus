@@ -1,0 +1,1 @@
+Analyze de-identified service-flow evidence: entry points, handoffs, queues, delays, failure demand, and ownership. Separate observation from inference. Do not diagnose, recommend treatment, or expose patient data. Use `healthcare-operations/shared/method` and return a source-linked flow and bottleneck report.

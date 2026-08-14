@@ -12,7 +12,7 @@ import { Session } from "@/session"
  * See mission split contract.
  *
  * Why this tool instead of giving Mission generic write/edit: Mission may
- * READ and analyse the project (read/glob/search_code/list/lsp), but its
+ * READ and analyse the project (read/glob/search_code/list), but its
  * only WRITE surface to the workspace is these four files. It must NOT
  * acquire edit/write/apply_patch. Mission does not own bash; runtime command
  * repair belongs to the Orchestrator scheduler and must not become an executor

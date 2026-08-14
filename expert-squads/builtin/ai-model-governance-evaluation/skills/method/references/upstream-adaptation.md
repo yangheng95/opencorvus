@@ -1,0 +1,11 @@
+# Upstream adaptation and provenance
+
+Upstream original repository: `https://github.com/NVIDIA-NeMo/nemo-platform`; fixed commit `60ad37bd8f1b0e48041069ff6ff621a2e56a852b`; exact source path `skills/nemo-evaluator-plugin/SKILL.md`. Retrieved 2026-08-11. License: Apache-2.0; exact root LICENSE and NOTICE at that commit are retained byte-for-byte as `upstream-LICENSE` and `upstream-NOTICE` in this directory.
+
+Retained and adapted concepts: dataset-driven versus task-driven evaluation shape; choose the simplest behavior-valid deterministic metric; first run a tiny expected-pass and expected-failure smoke case; inspect row-level results and aggregates; correct mapping, scoring or parsing before scaling. Modified: rewritten as dependency-free evidence methods with explicit provenance, uncertainty, stop and human-authority contracts. Added: NIST AI RMF-oriented governance, risk ownership, model/data/prompt/tool provenance, fairness/privacy/security/human-oversight counterevidence, monitoring/change/incident lifecycle and five OpenCorvus asset schemas.
+
+Excluded entirely: NeMo CLI and SDK commands, Platform job submission/execution/retrieval, API keys and secret references, remote model calls, bundled scripts/examples/configuration, durable resources, authentication, troubleshooting and all vendor-specific runtime behavior. No upstream scripts, evaluation assets, benchmark data, signature or skill-card content are distributed. This package cannot invoke NeMo.
+
+Additional primary governance sources accessed 2026-08-11: NIST AI RMF 1.0 and resource page (`https://www.nist.gov/itl/ai-risk-management-framework`), NIST AI Resource Center and TEVV resources (`https://airc.nist.gov/`), and NIST AI 600-1 Generative AI Profile (`https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence`). These are referenced as frameworks, not compliance certifications.
+
+Rejected alternative: `tinh2/skills-hub-registry` fixed commit `e5e3c5145f5ddba5a27e6eba5c1d3f03f91c1ccf`, `ops/model-resilience-audit/SKILL.md`; it only scans hard-coded model references and fallback configuration, orders autonomous mutation, and lacks repository/Skill license closure. No text or assets were copied.

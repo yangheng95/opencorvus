@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "office-delivery",
+  "name": "Office Delivery",
+  "label": "Office Delivery",
+  "description": "Develops new source-backed PPTX presentations through parallel content and format planning plus the qualified Work Artifact lifecycle.",
+  "version": "2026.08.13.4",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for a new editable PPTX presentation that requires traceable content, a real chart, fresh renders, and canonical validation.",
+    "selection_guidance": "Select Office Delivery only for a new PPTX presentation supported by the current office.presentation@1 profile. Do not select it for DOCX, XLSX, PDF, existing-presentation editing, or coordinated multi-format packs until those profiles are qualified.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "office-delivery/shared/office-delivery-method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "office-source-analyst": {
+        "label": "Office Source Analyst",
+        "description": "Builds the dated source, claim, calculation, citation, terminology, and missing-input model.",
+        "base_role": "deep-research",
+        "prompt": "agents/office-source-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "office-delivery/shared/office-delivery-method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "office-delivery-builder": {
+        "label": "Office Delivery Builder",
+        "description": "Builds editable deliverables and canonical exports directly from the Planner contract and original sources, then renders and inspects them.",
+        "base_role": "build",
+        "prompt": "agents/office-delivery-builder/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [
+          "work_artifact_inspect",
+          "work_artifact_author",
+          "work_artifact_validate",
+          "work_artifact_deliver"
+        ],
+        "default_skill_refs": [
+          "default/skill/work-artifacts"
+        ],
+        "package_skill_refs": [
+          "office-delivery/shared/office-delivery-method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "office-delivery-planner": {
+        "label": "Office Delivery Planner",
+        "description": "Publishes the source boundary, document structure, formatting system, worker partition, and acceptance allocation.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/office-delivery-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "office-delivery/shared/office-delivery-method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "planned-office-delivery": {
+        "label": "Planned Parallel Office Delivery",
+        "description": "One Planner fixes the source and formatting contract before source and build workers execute in parallel; no separate visual-review Agent exists.",
+        "nodes": {
+          "office-delivery-planner": {
+            "agent_id": "office-delivery-planner",
+            "description": "Publishes the source boundary, document structure, formatting system, and acceptance allocation.",
+            "depends_on": []
+          },
+          "office-source-analyst": {
+            "agent_id": "office-source-analyst",
+            "description": "Validates source facts, citations, data, and content completeness.",
+            "depends_on": [
+              "office-delivery-planner"
+            ]
+          },
+          "office-delivery-builder": {
+            "agent_id": "office-delivery-builder",
+            "description": "Builds, renders, and visually inspects the planned Office deliverable.",
+            "depends_on": [
+              "office-delivery-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

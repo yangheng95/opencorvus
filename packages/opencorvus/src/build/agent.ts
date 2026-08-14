@@ -55,7 +55,6 @@ import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
 import { Worktree } from "@/worktree"
 import { gitCeilingEnvForWorktree } from "@/worktree/git-ceiling"
 import { requireTask } from "@/engine/store"
-import { recordTaskInfrastructureError, recordTaskLevelBuildHostObservation } from "@/engine/persist"
 import { EngineConfig } from "@/engine/config"
 import { Identifier } from "@/id/id"
 import { Message } from "@/session/message"
@@ -65,13 +64,14 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import { Database, eq } from "@/storage/db"
 import { buildObservationRefName, deleteBuildObservationRefs } from "@/engine/build-observation-ref"
 import { PartTable } from "@/session/session.sql"
+import { MergeBackToolOutputSchema } from "./merge-back-tool-contract"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import {
   artifactProvenanceFactHighWatermarkForSession,
   artifactProvenanceForSession,
 } from "@/agent/artifact-read-facts"
 import { abortableIterable, withStreamActivity } from "@/util/stream-activity"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { ToolRegistry } from "@/tool/registry"
 import { SkillTool } from "@/tool/skill"
 import {
@@ -81,12 +81,24 @@ import {
 } from "@/tool/execution-surface"
 import { SkillMount } from "@/skill/mounts"
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
-import { exactEngineArtifactLocator } from "@/artifact-catalog"
-import type { EngineArtifactLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Tool } from "@/tool/tool"
 import { Plugin } from "@/plugin"
 import { InstructionPrompt } from "@/session/instruction"
 import { renderBuildPromptOverlays } from "./prompt-context"
+import { createMergeBackSingleFlight, materializeBuildMergeBackTool } from "./merge-back-tool"
+import {
+  buildTerminalFactObservationID,
+  publishBuildTerminalFact,
+  type BuildTerminalFactPublicationInput,
+  type BuildTerminalFactPublicationReceipt,
+  type BuildTerminalFactWriter,
+} from "./terminal-fact-publication"
+import {
+  beginBuildObservationCleanup,
+  resolveBuildObservationGitDir,
+  settleBuildObservationCleanup,
+} from "@/engine/build-observation-cleanup"
+export { createMergeBackSingleFlight, materializeBuildMergeBackTool } from "./merge-back-tool"
 
 const log = Log.create({ service: "build-agent" })
 
@@ -447,23 +459,6 @@ export async function repairManagedBuildSessionStagedFileParts(input: {
   return { checked, repaired }
 }
 
-export function createMergeBackSingleFlight<T extends { status: string }>(execute: () => Promise<T>): () => Promise<T> {
-  let inFlight: Promise<T> | undefined
-  let merged: T | undefined
-  return async () => {
-    if (merged) return merged
-    if (inFlight) return await inFlight
-    inFlight = execute()
-    try {
-      const result = await inFlight
-      if (result.status === "merged") merged = result
-      return result
-    } finally {
-      if (!merged) inFlight = undefined
-    }
-  }
-}
-
 export function currentProjectCommitPublication(input: { baselineHead?: string; terminalHead?: string }): {
   contributionCommitRef?: string
   publishedCommitRef?: string
@@ -547,16 +542,20 @@ export namespace BuildAgent {
       branch: string
       baseRef?: string | null
     }
+    /** Test-only writer seam below the canonical publication/recovery owner. Production leaves this unset. */
+    terminalFactWriter?: BuildTerminalFactWriter
+    /** Test-only cleanup executor below the durable cleanup owner. */
+    terminalFactCleanup?: typeof settleBuildObservationCleanup
+    /** Test-only observation seam below the physical Turn. */
+    terminalFactProvenance?: typeof artifactProvenanceForSession
   }
 
   export interface RunOutput {
     /** The child build session and its visible final assistant message. */
     sessionID: string
     finalMessageID: string
-    /** Exact Host infrastructure errors that prevented complete terminal-fact
-     *  persistence. Ordinary successful domain facts are Catalog-discovered
-     *  and never copied into the dispatch result. */
-    infrastructureObservationLocators?: EngineArtifactLocator[]
+    /** Required durable publication receipt for this physical Build result. */
+    terminalFactPublication: BuildTerminalFactPublicationReceipt
   }
 
   /**
@@ -739,52 +738,6 @@ export namespace BuildAgent {
       // Tracks the Host-observed primary HEAD returned by merge_back so it can
       // be attached to the single Build Host observation after the Turn.
       let mergedHead: string | undefined
-      const executeMergeBack = createMergeBackSingleFlight(async () => {
-        const outcome = await Worktree.mergeSafely({
-          branch: worktreeBranch!,
-          worktreeDir: worktreeDir!,
-        })
-        if (outcome.status === "merged") {
-          mergedHead = outcome.primaryHead
-          return {
-            status: "merged" as const,
-            primary_head: outcome.primaryHead,
-            primary_branch: outcome.primaryBranch,
-            ...(outcome.primaryRecoveryCommit ? { primary_recovery_commit: outcome.primaryRecoveryCommit } : {}),
-          }
-        }
-        if (outcome.status === "conflict") {
-          return {
-            status: "conflict" as const,
-            primary_branch: outcome.primaryBranch,
-            primary_tip: outcome.primaryTip,
-            conflict_paths: outcome.conflictPaths,
-            hint:
-              "Worktree is in MERGING state with conflict markers in " +
-              "the listed paths. Edit each path to resolve the markers, " +
-              "git add <path>, then `git commit` to finalize the merge. " +
-              "Then call merge_back again to ff-publish into " +
-              outcome.primaryBranch +
-              ".",
-          }
-        }
-        if (outcome.status === "blocked") {
-          return {
-            status: "blocked" as const,
-            reason: outcome.reason,
-            branch: outcome.branch,
-            worktree_dir: outcome.worktreeDir,
-            ...(outcome.dirtyPaths ? { dirty_paths: outcome.dirtyPaths } : {}),
-            ...(outcome.mergeHead ? { merge_head: true } : {}),
-          }
-        }
-        return {
-          status: "infra_error" as const,
-          reason: outcome.reason,
-          branch: outcome.branch,
-          ...(outcome.stderr ? { stderr: outcome.stderr } : {}),
-        }
-      })
 
       type BuildCollector = Record<string, never>
       const buildCollector: BuildCollector = {}
@@ -796,31 +749,12 @@ export namespace BuildAgent {
         ownsWorktree && worktreeBranch && worktreeDir
           ? (() => {
               const stageTools = {
-                merge_back: tool({
-                  description:
-                    "Publish this Task execution Session's commits onto the project's primary " +
-                    "worktree branch. Runs `git merge <primary>` inside this " +
-                    "worktree, then `git merge --ff-only` on the primary worktree, " +
-                    "atomically under a host-side lock so concurrent Task Sessions do not " +
-                    "race each other.\n\n" +
-                    "Call this after you have committed all changes and verification passed. It is the last git-affecting action of the session. " +
-                    "After the tool result, summarize implementation semantics, limitations, and blockers in the final visible assistant message.\n\n" +
-                    "Returns one of:\n" +
-                    "  • {status:'merged', primary_head, primary_branch} — published.\n" +
-                    "  • {status:'conflict', primary_branch, primary_tip, " +
-                    "    conflict_paths[]} — the merge hit textual conflicts. Your " +
-                    "    worktree is now IN MERGING state: each path in conflict_paths " +
-                    "    has `<<<<<<<`/`=======`/`>>>>>>>` markers in place. Edit each " +
-                    "    path to remove the markers (keep both intentions where " +
-                    "    possible; respect owned_paths), `git add <path>`, then once " +
-                    "    all paths are resolved `git commit` — that finalizes the " +
-                    "    merge. Call merge_back again to ff-publish into primary.\n" +
-                    "  • {status:'blocked', reason, dirty_paths?, merge_head?} — repository state " +
-                    "    prevents merge from starting; fix that exact state in this worktree.\n" +
-                    "  • {status:'infra_error', reason} — infrastructure problem; explain it in the final message.",
-                  inputSchema: z.object({}),
-                  execute: executeMergeBack,
-                }),
+                merge_back: materializeBuildMergeBackTool(
+                  { taskID: task.id, branch: worktreeBranch, worktreeDir },
+                  (primaryHead) => {
+                    mergedHead = primaryHead
+                  },
+                ),
               }
               return {
                 tools: stageTools,
@@ -835,7 +769,12 @@ export namespace BuildAgent {
             }
 
       const artifactReadHighWatermark = artifactProvenanceFactHighWatermarkForSession(buildSessionID)
-      const observationID = Identifier.ascending("artifact")
+      const observationID = buildTerminalFactObservationID({
+        taskID: task.id,
+        dispatchID: input.dispatchTurn?.current_dispatch_id ?? buildSessionID,
+      })
+      const observationGitDir = await resolveBuildObservationGitDir(worktreeDir!)
+      beginBuildObservationCleanup({ observationID, taskID: task.id, gitDir: observationGitDir })
       let out:
         | {
             session: { id: string }
@@ -1013,36 +952,36 @@ export namespace BuildAgent {
 
       const sessionID = out?.session.id ?? buildSessionID
       const finalMessageID = out?.finalMessage.info.id
-      const infrastructureObservationLocators: EngineArtifactLocator[] = []
-      const recordInfrastructureFailure = (operation: string, reason: string, errorName?: string) => {
-        try {
-          const artifactID = recordTaskInfrastructureError({
-            taskID: task.id,
-            component: "build-host-observation",
-            operation,
-            reason,
-            errorName,
-            sessionID,
-            now: Date.now(),
-          })
-          infrastructureObservationLocators.push(exactEngineArtifactLocator({ taskID: task.id, artifactID }))
-        } catch (error) {
-          log.error("build agent: infrastructure observation persistence failed", {
-            taskID: task.id,
-            sessionID,
-            operation,
-            error: error instanceof Error ? error.message : String(error),
-          })
-        }
+      if (runError) {
+        observationErrors.push(
+          `Build Turn failed: ${runError instanceof Error ? runError.message : String(runError)}`,
+        )
       }
-      for (const error of observationErrors) recordInfrastructureFailure("collect-git-workspace", error)
-
+      const coordinationHandoff = out ? agentCoordinationHandoffResult(out) : undefined
+      if (coordinationHandoff) {
+        const cleanup = input.terminalFactCleanup ?? settleBuildObservationCleanup
+        await cleanup({ observationID })
+        return coordinationHandoff
+      }
+      let provenance = { observedArtifactLocators: [], sourceArtifactLocators: [], selections: [] } as ReturnType<
+        typeof artifactProvenanceForSession
+      >
       try {
-        const provenance = artifactProvenanceForSession(
+        provenance = (input.terminalFactProvenance ?? artifactProvenanceForSession)(
           sessionID,
           artifactReadHighWatermark ? { after: artifactReadHighWatermark } : undefined,
         )
-        recordTaskLevelBuildHostObservation({
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        observationErrors.push(`artifact provenance materialization failed: ${message}`)
+        log.warn("build agent: artifact provenance materialization failed", {
+          taskID: task.id,
+          sessionID,
+          error: message,
+        })
+      }
+      const terminalFactInput: BuildTerminalFactPublicationInput = {
+        observation: {
           id: observationID,
           taskID: task.id,
           sessionID,
@@ -1057,32 +996,30 @@ export namespace BuildAgent {
           diffs,
           observedArtifactLocators: provenance.observedArtifactLocators,
           sourceArtifactLocators: provenance.sourceArtifactLocators,
-        })
-      } catch (error) {
-        const reason = error instanceof Error ? error.message : String(error)
-        log.error("build agent: Host observation persistence failed", {
+        },
+        observationErrors,
+      }
+      const terminalFactPublication = publishBuildTerminalFact(terminalFactInput, {
+        write: input.terminalFactWriter,
+      })
+      if (terminalFactPublication.kind !== "terminal_success") {
+        const cleanup = input.terminalFactCleanup ?? settleBuildObservationCleanup
+        // The durable pending owner is the recovery authority. Do not return
+        // a final adapter outcome while its private refs remain unsettled.
+        await cleanup({ observationID })
+      }
+      if (terminalFactPublication.kind === "publication_failed") {
+        log.error("build agent: required terminal fact publication failed", {
           taskID: task.id,
           sessionID,
-          error: reason,
+          observationID,
+          operation: terminalFactPublication.operation,
+          error: terminalFactPublication.message,
         })
-        recordInfrastructureFailure("persist-git-workspace", reason, error instanceof Error ? error.name : undefined)
-        if (worktreeDir) {
-          try {
-            await deleteBuildObservationRefs({ worktreeDir, observationIDs: [observationID] })
-          } catch (cleanupError) {
-            recordInfrastructureFailure(
-              "cleanup-git-observation-refs",
-              cleanupError instanceof Error ? cleanupError.message : String(cleanupError),
-              cleanupError instanceof Error ? cleanupError.name : undefined,
-            )
-          }
-        }
       }
 
       if (runError) throw runError
       if (!out) throw new Error("Build Session ended without a physical Turn result")
-      const coordinationHandoff = agentCoordinationHandoffResult(out)
-      if (coordinationHandoff) return coordinationHandoff
       log.info("build agent finished", {
         taskID: task.id,
         sessionID,
@@ -1092,8 +1029,7 @@ export namespace BuildAgent {
       return {
         sessionID,
         finalMessageID: out.finalMessage.info.id,
-        infrastructureObservationLocators:
-          infrastructureObservationLocators.length > 0 ? infrastructureObservationLocators : undefined,
+        terminalFactPublication,
       }
     }
   }

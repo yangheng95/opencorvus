@@ -58,8 +58,12 @@ export function sameTerminalIngressResult(left: TerminalIngressResult, right: Te
 const CommonShape = {
   wake_id: z.string().min(1),
   delivery_attempt: z.number().int().positive(),
+  delivery_runtime_id: z.string().min(1).optional(),
+  delivery_runtime_attempt: z.number().int().positive().optional(),
   task_id: z.string().min(1),
   root_session_id: z.string().min(1),
+  /** Immutable active Task occurrence that admitted this root ingress. */
+  task_occurrence_started_at: z.number().int().positive(),
   time_queued: z.number().int().nonnegative(),
   queued_by_process_id: z.number().int().nonnegative(),
   queued_by_instance_directory: z.string().optional(),
@@ -68,6 +72,20 @@ const CommonShape = {
 }
 
 const NoteShape = { note: z.string().optional() }
+
+const TaskCreation = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("task_creation"),
+    task_creation_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        taskCreation: OrchestratorEventSchema.shape.taskCreation.unwrap(),
+      })
+      .strict(),
+  })
+  .strict()
 
 const OperatorMessage = z
   .object({
@@ -91,7 +109,24 @@ const OrchestratorMessage = z
     event: z
       .object({
         ...NoteShape,
-        rootMessage: z.object({ messageID: z.string().min(1), kind: z.literal("orchestrator") }).strict(),
+        rootMessage: OrchestratorEventSchema.shape.rootMessage.unwrap().extend({ kind: z.literal("orchestrator") }),
+      })
+      .strict(),
+  })
+  .strict()
+
+const MissionMessage = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("mission_message"),
+    message_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        rootMessage: OrchestratorEventSchema.shape.rootMessage.unwrap().extend({
+          kind: z.literal("mission"),
+          schedulerDelivery: OrchestratorEventSchema.shape.rootMessage.unwrap().shape.schedulerDelivery.unwrap(),
+        }),
       })
       .strict(),
   })
@@ -147,6 +182,34 @@ const InfrastructureRecovery = z
   })
   .strict()
 
+const DispatchInfrastructureFailure = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("dispatch_infrastructure_failure"),
+    infrastructure_fact_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        dispatchInfrastructureFailure: OrchestratorEventSchema.shape.dispatchInfrastructureFailure.unwrap(),
+      })
+      .strict(),
+  })
+  .strict()
+
+const AgentLifecycleDelivery = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("agent_lifecycle_delivery"),
+    lifecycle_event_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        agentLifecycleDelivery: OrchestratorEventSchema.shape.agentLifecycleDelivery.unwrap(),
+      })
+      .strict(),
+  })
+  .strict()
+
 const TaskWaitActivity = z
   .object({
     ...CommonShape,
@@ -194,18 +257,29 @@ const OrchestratorEvent = z
 
 export const QueuedTaskIngressSchema = z
   .discriminatedUnion("source_kind", [
+    TaskCreation,
     OperatorMessage,
     OrchestratorMessage,
+    MissionMessage,
     OperatorIntent,
     MissionAcceptanceResume,
     CoordinationRequest,
     InfrastructureRecovery,
+    DispatchInfrastructureFailure,
+    AgentLifecycleDelivery,
     TaskWaitActivity,
     TaskWaitWake,
     OrchestratorEvent,
   ])
   .superRefine((payload, context) => {
-    if (payload.source_kind === "operator_message" || payload.source_kind === "orchestrator_message") {
+    if (payload.source_kind === "task_creation" && payload.task_creation_id !== payload.event.taskCreation.taskID) {
+      context.addIssue({ code: "custom", message: "Task creation ingress identity does not match event" })
+    }
+    if (
+      payload.source_kind === "operator_message" ||
+      payload.source_kind === "orchestrator_message" ||
+      payload.source_kind === "mission_message"
+    ) {
       if (payload.message_id !== payload.event.rootMessage.messageID) {
         context.addIssue({ code: "custom", message: "queued message identity does not match rootMessage" })
       }
@@ -228,8 +302,23 @@ export const QueuedTaskIngressSchema = z
     ) {
       context.addIssue({ code: "custom", message: "queued recovery identity does not match processRecovery" })
     }
+    if (
+      payload.source_kind === "dispatch_infrastructure_failure" &&
+      payload.infrastructure_fact_id !== payload.event.dispatchInfrastructureFailure.infrastructureFactID
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "queued dispatch infrastructure identity does not match dispatchInfrastructureFailure",
+      })
+    }
+    if (
+      payload.source_kind === "agent_lifecycle_delivery" &&
+      payload.lifecycle_event_id !== payload.event.agentLifecycleDelivery.eventID
+    ) {
+      context.addIssue({ code: "custom", message: "lifecycle delivery identity does not match event" })
+    }
     if (payload.source_kind === "task_wait_wake" && payload.wait_job_id !== payload.event.taskWaitWake.jobID) {
-      context.addIssue({ code: "custom", message: "queued task wait identity does not match taskWaitWake" })
+      context.addIssue({ code: "custom", message: "Task wait delivery identity does not match taskWaitWake" })
     }
   })
 
@@ -239,12 +328,16 @@ export type QueuedTaskIngressSourceKind = QueuedTaskIngress["source_kind"]
 export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTaskIngressSourceKind {
   const parsed = OrchestratorEventSchema.parse(event)
   const candidates: QueuedTaskIngressSourceKind[] = []
+  if (parsed.taskCreation) candidates.push("task_creation")
   if (parsed.rootMessage?.kind === "operator") candidates.push("operator_message")
   if (parsed.rootMessage?.kind === "orchestrator") candidates.push("orchestrator_message")
+  if (parsed.rootMessage?.kind === "mission") candidates.push("mission_message")
   if (parsed.taskIntent) candidates.push("operator_intent")
   if (parsed.missionAcceptanceResume) candidates.push("mission_acceptance_resume")
   if (parsed.coordinationRequest) candidates.push("coordination_request")
   if (parsed.processRecovery) candidates.push("infrastructure_recovery")
+  if (parsed.dispatchInfrastructureFailure) candidates.push("dispatch_infrastructure_failure")
+  if (parsed.agentLifecycleDelivery) candidates.push("agent_lifecycle_delivery")
   if (parsed.taskWaitActivity) candidates.push("task_wait_activity")
   if (parsed.taskWaitWake) candidates.push("task_wait_wake")
   if (parsed.note && candidates.length === 0) candidates.push("orchestrator_event")

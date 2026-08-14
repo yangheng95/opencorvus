@@ -5,26 +5,32 @@
 import { createEffect, createMemo, createSignal, For, Show, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
 import { renderMarkdown } from "../../utils/markdown"
-import { pickDirectory } from "../../services/workspace"
 import {
   clearSessionExpertSquadOverride,
   clearExpertSquadUninstallReceipt,
   exportExpertSquadArchive,
-  importExpertSquadArchive,
-  importExpertSquadFolder,
-  installExpertSquadMarketPackage,
   updateExpertSquadPackage,
   uninstallExpertSquadPackage,
   expertSquadUninstallReceipt,
   loadExpertSquadCatalog,
   loadExpertSquadConfiguration,
+  loadExpertSquadInventoryStatus,
+  loadExpertSquadDiagnostics,
   loadExpertSquadMarket,
+  loadExpertSquadMarketDetail,
+  loadExpertSquadSettings,
+  inspectExpertSquad,
+  searchExpertSquads,
   setProjectExpertSquadActive,
   setSessionExpertSquadActive,
   updateExpertSquadConfiguration,
   type ExpertSquadCatalog,
   type ExpertSquadConfiguration,
+  type ExpertSquadDetail,
   type ExpertSquadMarketItem,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadInventoryStatus,
+  type ExpertSquadDiagnosticsPage,
   type ExpertSquadOption,
   type ExpertSquadInstallationScope,
   type ExpertSquadUpdateSource,
@@ -38,8 +44,6 @@ import { Button } from "../ui/Button"
 import { Badge } from "../ui/Badge"
 import { Disclosure } from "../ui/Disclosure"
 import { DropdownMenu } from "../ui/DropdownMenu"
-import { SearchField } from "../ui/SearchField"
-import { SelectField } from "../ui/SelectField"
 import { Icon, type IconName } from "../ui/Icon"
 import { Tab, TabList, TabPanel, Tabs } from "../ui/Tabs"
 import { SettingsGroup, SettingsPanel, SettingsRow, SettingsState, SettingsSurface } from "./layout"
@@ -55,32 +59,32 @@ function markdownHtml(value: string): string {
   return renderMarkdown(value)
 }
 
-function sourceLabel(squad: ExpertSquadOption): string {
+type ExpertSquadSelectionIdentity = Pick<ExpertSquadOption, "id" | "source"> | Pick<ExpertSquadDetail, "id" | "source">
+
+function sourceLabel(squad: ExpertSquadSelectionIdentity): string {
   if (squad.source.kind === "built_in") return t("expert_squad.built_in")
   return squad.source.installation_scope === "project"
     ? t("expert_squad.package_project")
     : t("expert_squad.package_global")
 }
 
-function hasBuiltinMarketSource(squad: ExpertSquadOption, market: ExpertSquadMarketItem[]): boolean {
+function hasBuiltinMarketSource(squad: ExpertSquadDetail, market: ExpertSquadMarketItem[]): boolean {
   if (squad.source.kind !== "installed_package") return false
   const namespace = squad.source.namespace
   return market.some((item) => item.id === squad.id && item.namespace === namespace)
 }
 
-function installedPackageScope(squad: ExpertSquadOption): ExpertSquadInstallationScope | "" {
+function installedPackageScope(squad: ExpertSquadDetail): ExpertSquadInstallationScope | "" {
   return squad.source.kind === "installed_package" ? squad.source.installation_scope : ""
 }
 
-function generationTrace(squad: ExpertSquadOption) {
+function generationTrace(squad: ExpertSquadDetail) {
   return squad.source.kind === "installed_package" ? squad.source.generation : undefined
 }
 
 function generationMethodLabel(method: "sdk_authoring" | "heterogeneous_import"): string {
   return t(
-    method === "sdk_authoring"
-      ? "expert_squad.generation_method_authoring"
-      : "expert_squad.generation_method_import",
+    method === "sdk_authoring" ? "expert_squad.generation_method_authoring" : "expert_squad.generation_method_import",
   )
 }
 
@@ -94,7 +98,7 @@ function projectionCount(values: string[] | undefined): number {
 }
 
 type ProjectionEntry = Omit<
-  ExpertSquadOption["capability_projection"]["scheduler"],
+  ExpertSquadDetail["capability_projection"]["scheduler"],
   "base_role" | "inherit_base_tools" | "prompt"
 >
 
@@ -243,24 +247,34 @@ function catalogScopeIdentity(scope = expertSquadCatalogScope()): string {
 
 type WritableCatalogScope = Extract<ReturnType<typeof expertSquadCatalogScope>, { kind: "project" | "session" }>
 type CapturedCatalogActionScope = { scope: WritableCatalogScope; identity: string }
-type MarketOperation = "install" | "update" | "uninstall"
 type MarketInstallation = ExpertSquadMarketItem["installations"][number]
+const EMPTY_MARKET_DIGEST = "0".repeat(64)
+
+function marketIndexView(item: ExpertSquadMarketIndexItem): ExpertSquadMarketItem {
+  return {
+    ...item,
+    package_digest: EMPTY_MARKET_DIGEST,
+    selector_summary: "",
+    agents: [],
+    skill_count: 0,
+    tool_count: 0,
+    mcp_count: 0,
+    installations: item.installation_scopes.map((installation_scope) => ({
+      installation_scope,
+      installed_version: null,
+      installed_package_digest: EMPTY_MARKET_DIGEST,
+      update_available: false,
+    })),
+  }
+}
 type BusyAction = {
   key: string
   scopeIdentity: string
   itemID?: string
   installationScope?: ExpertSquadInstallationScope
-  operation?: MarketOperation
 }
-type MarketFilter = "all" | "available" | "installed"
 type CatalogFilter = "all" | "active" | "package" | "built_in"
 type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolution" | "package"
-
-function marketFilterLabel(filter: MarketFilter): string {
-  if (filter === "available") return t("expert_squad.filter_available")
-  if (filter === "installed") return t("expert_squad.filter_installed")
-  return t("expert_squad.filter_all")
-}
 
 function catalogFilterLabel(filter: CatalogFilter): string {
   if (filter === "active") return t("expert_squad.filter_active")
@@ -273,19 +287,6 @@ function captureCatalogActionScope(): CapturedCatalogActionScope | null {
   const scope = expertSquadCatalogScope()
   if (scope.kind !== "project" && scope.kind !== "session") return null
   return { scope, identity: catalogScopeIdentity(scope) }
-}
-
-async function fileToBase64(file: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const value = typeof reader.result === "string" ? reader.result : ""
-      const comma = value.indexOf(",")
-      resolve(comma >= 0 ? value.slice(comma + 1) : value)
-    }
-    reader.onerror = () => reject(reader.error || new Error("Failed to read expert-squad archive"))
-    reader.readAsDataURL(file)
-  })
 }
 
 function saveBase64Archive(filename: string, archiveBase64: string): void {
@@ -304,23 +305,27 @@ function saveBase64Archive(filename: string, archiveBase64: string): void {
   URL.revokeObjectURL(url)
 }
 
-export default function ExpertSquadPanel(props: { page: "install" | "details" }) {
+export default function ExpertSquadPanel() {
   const [selectedSquadID, setSelectedSquadID] = createSignal("")
   const [catalog, setCatalog] = createSignal<ExpertSquadCatalog | null>(null)
+  const [catalogEntries, setCatalogEntries] = createSignal<ExpertSquadOption[]>([])
+  const [catalogNextCursor, setCatalogNextCursor] = createSignal<string | null>(null)
+  const [inventoryStatus, setInventoryStatus] = createSignal<ExpertSquadInventoryStatus | null>(null)
+  const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<ExpertSquadDiagnosticsPage["entries"]>([])
+  const [catalogDiagnosticsNextCursor, setCatalogDiagnosticsNextCursor] = createSignal<string | null>(null)
+  const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadDetail | null>(null)
+  const [selectedDetailIdentity, setSelectedDetailIdentity] = createSignal("")
+  const [selectedDetailLoading, setSelectedDetailLoading] = createSignal(false)
+  const [selectedDetailError, setSelectedDetailError] = createSignal("")
   const [notice, setNotice] = createSignal("")
   const [noticeTone, setNoticeTone] = createSignal("")
   const [busy, setBusy] = createSignal<BusyAction | null>(null)
   const [marketBusy, setMarketBusy] = createSignal<BusyAction[]>([])
   const [loading, setLoading] = createSignal(false)
-  const [installationScope, setInstallationScope] = createSignal<ExpertSquadInstallationScope>("global")
   const [market, setMarket] = createSignal<ExpertSquadMarketItem[]>([])
   const [marketIdentity, setMarketIdentity] = createSignal("")
   const [marketLoading, setMarketLoading] = createSignal(false)
-  const [marketError, setMarketError] = createSignal("")
-  const [marketQuery, setMarketQuery] = createSignal("")
-  const [marketFilter, setMarketFilter] = createSignal<MarketFilter>("all")
   const [catalogFilter, setCatalogFilter] = createSignal<CatalogFilter>("all")
-  const [selectedMarketID, setSelectedMarketID] = createSignal("")
   const [catalogError, setCatalogError] = createSignal("")
   const [catalogIdentity, setCatalogIdentity] = createSignal("")
   const [actionError, setActionError] = createSignal("")
@@ -332,15 +337,14 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
   const [configurationError, setConfigurationError] = createSignal("")
   const [expandedAgentIDs, setExpandedAgentIDs] = createSignal<ReadonlySet<string>>(new Set())
   const [installedSquadSection, setInstalledSquadSection] = createSignal<InstalledSquadSection>("overview")
-  const isInstallPage = () => props.page === "install"
 
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
   let loadSequence = 0
+  let detailLoadSequence = 0
   let marketLoadSequence = 0
+  let marketDetailLoadSequence = 0
   let configurationLoadSequence = 0
   let configurationSaveSequence = 0
-  let archiveInput: HTMLInputElement | undefined
-  let pendingArchiveImportScope: CapturedCatalogActionScope | null = null
 
   const currentScope = createMemo(() => expertSquadCatalogScope())
   const currentScopeIdentity = createMemo(() => catalogScopeIdentity(currentScope()))
@@ -364,11 +368,8 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     const scopeIdentity = currentScopeIdentity()
     return marketBusy().filter((action) => action.scopeIdentity === scopeIdentity)
   })
-  const isMarketItemBusy = (itemID: string) => activeMarketActions().some((action) => action.itemID === itemID)
   const isMarketInstallationBusy = (itemID: string, installationScope: ExpertSquadInstallationScope) =>
     activeMarketActions().some((action) => action.itemID === itemID && action.installationScope === installationScope)
-  const isMarketOperationBusy = (itemID: string, operation: MarketOperation) =>
-    activeMarketActions().some((action) => action.itemID === itemID && action.operation === operation)
   const isMarketActionBusy = (key: string) => activeMarketBusyKeys().has(key)
   const requestKey = createMemo(() => expertSquadCatalogRequestKey())
   const currentScopeSessionID = createMemo(() => {
@@ -376,38 +377,16 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     return scope.kind === "session" ? scope.sessionID : ""
   })
   const scopedCatalog = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalog() : null))
-  const squads = createMemo(() => scopedCatalog()?.installations ?? scopedCatalog()?.squads ?? [])
-  const catalogIssues = createMemo(
-    () =>
-      (
-        scopedCatalog() as
-          | (ExpertSquadCatalog & {
-              issues?: Array<{ phase: string; location: string; id?: string; message: string }>
-            })
-          | null
-      )?.issues ?? [],
+  const squads = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalogEntries() : []))
+  const catalogIssues = createMemo(() =>
+    catalogDiagnostics().flatMap((entry) => (entry.kind === "issue" ? [entry.issue] : [])),
   )
-  const catalogWarnings = createMemo(() => scopedCatalog()?.warnings ?? [])
-  const squadSelectionKey = (squad: ExpertSquadCatalog["squads"][number]) =>
+  const catalogWarnings = createMemo(() =>
+    catalogDiagnostics().flatMap((entry) => (entry.kind === "warning" ? [entry.warning] : [])),
+  )
+  const squadSelectionKey = (squad: ExpertSquadSelectionIdentity) =>
     squad.source.kind === "built_in" ? `built_in:${squad.id}` : `${squad.source.installation_scope}:${squad.id}`
   const scopedMarket = createMemo(() => (marketIdentity() === currentScopeIdentity() ? market() : []))
-  const filteredMarket = createMemo(() => {
-    const query = marketQuery().trim().toLocaleLowerCase()
-    const filter = marketFilter()
-    return scopedMarket().filter((item) => {
-      if (filter === "available" && item.installations.length > 0) return false
-      if (filter === "installed" && item.installations.length === 0) return false
-      if (!query) return true
-      return [item.name, item.label, item.id, item.namespace, item.description ?? "", item.selector_summary ?? ""]
-        .join("\n")
-        .toLocaleLowerCase()
-        .includes(query)
-    })
-  })
-  const selectedMarketItem = createMemo(() => {
-    const list = filteredMarket()
-    return list.find((item) => item.id === selectedMarketID()) ?? list[0]
-  })
   const recoveryUpdates = createMemo(() =>
     scopedMarket().flatMap((item) =>
       item.installations
@@ -422,14 +401,15 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
   const sessionOverrideID = createMemo(() => scopedCatalog()?.active.session_override ?? "")
   const effectiveActiveID = createMemo(() => scopedCatalog()?.active.effective ?? "")
   const effectiveInstallationKey = (id: string) => {
-    const effective = scopedCatalog()?.squads.find((squad) => squad.id === id)
-    return effective ? squadSelectionKey(effective) : ""
+    const revision = scopedCatalog()?.active.package_revision
+    if (!revision || revision.id !== id) return ""
+    return revision.scope === "built_in" ? `built_in:${id}` : `${revision.scope}:${id}`
   }
-  const isEffectiveInstallation = (squad: ExpertSquadOption) =>
+  const isEffectiveInstallation = (squad: ExpertSquadSelectionIdentity) =>
     effectiveInstallationKey(squad.id) === squadSelectionKey(squad)
-  const isProjectActiveInstallation = (squad: ExpertSquadOption) =>
+  const isProjectActiveInstallation = (squad: ExpertSquadSelectionIdentity) =>
     projectActiveID() === squad.id && isEffectiveInstallation(squad)
-  const isSessionOverrideInstallation = (squad: ExpertSquadOption) =>
+  const isSessionOverrideInstallation = (squad: ExpertSquadSelectionIdentity) =>
     sessionOverrideID() === squad.id && isEffectiveInstallation(squad)
   const activeAgentProjection = createMemo(() => scopedCatalog()?.active_agent_projection ?? null)
   const filteredSquads = createMemo(() => {
@@ -441,7 +421,7 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
       return true
     })
   })
-  const currentSquad = createMemo(() => {
+  const currentSquadIndex = createMemo(() => {
     const list = filteredSquads()
     return (
       list.find((squad) => squadSelectionKey(squad) === selectedSquadID()) ??
@@ -449,8 +429,13 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
       list[0]
     )
   })
+  const selectedDetailKey = createMemo(() => {
+    const squad = currentSquadIndex()
+    return squad ? `${currentScopeIdentity()}\n${squadSelectionKey(squad)}` : ""
+  })
+  const currentSquad = createMemo(() => (selectedDetailIdentity() === selectedDetailKey() ? selectedDetail() : null))
   createEffect<string>((previousSelectionIdentity) => {
-    const squad = currentSquad()
+    const squad = currentSquadIndex()
     const selectionIdentity = `${currentScopeIdentity()}\n${squad ? squadSelectionKey(squad) : ""}`
     if (selectionIdentity !== previousSelectionIdentity) {
       configurationLoadSequence++
@@ -466,6 +451,36 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     }
     return selectionIdentity
   }, "")
+
+  createEffect(() => {
+    const squad = currentSquadIndex()
+    const scope = currentScope()
+    const identity = selectedDetailKey()
+    const sequence = ++detailLoadSequence
+    setSelectedDetail(null)
+    setSelectedDetailIdentity("")
+    setSelectedDetailError("")
+    if (!squad || (scope.kind !== "project" && scope.kind !== "session")) {
+      setSelectedDetailLoading(false)
+      return
+    }
+    setSelectedDetailLoading(true)
+    const installationScope = squad.source.kind === "built_in" ? "built_in" : squad.source.installation_scope
+    const namespace = squad.source.kind === "installed_package" ? squad.source.namespace : undefined
+    void loadExpertSquadSettings(scope.directory, squad.id, installationScope, namespace)
+      .then((surface) => {
+        if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
+        setSelectedDetail(surface.selected)
+        setSelectedDetailIdentity(identity)
+      })
+      .catch((error) => {
+        if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
+        setSelectedDetailError(error instanceof Error ? error.message : String(error))
+      })
+      .finally(() => {
+        if (sequence === detailLoadSequence && selectedDetailKey() === identity) setSelectedDetailLoading(false)
+      })
+  })
 
   function setAgentExpanded(agentID: string, open: boolean): void {
     setExpandedAgentIDs((current) => {
@@ -502,6 +517,11 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     if (scope.kind === "unavailable" || scope.kind === "pending") {
       loadSequence++
       setCatalog(null)
+      setCatalogEntries([])
+      setCatalogNextCursor(null)
+      setInventoryStatus(null)
+      setCatalogDiagnostics([])
+      setCatalogDiagnosticsNextCursor(null)
       setCatalogIdentity("")
       setCatalogError("")
       setLoading(false)
@@ -511,13 +531,62 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError("")
     const sequence = ++loadSequence
     try {
-      const next = await loadExpertSquadCatalog(scope)
+      const [next, entries, status, diagnostics] = await Promise.all([
+        loadExpertSquadCatalog(scope),
+        searchExpertSquads({ directory: scope.directory, view: "installations", limit: 20 }),
+        loadExpertSquadInventoryStatus(scope.directory),
+        loadExpertSquadDiagnostics(scope.directory, { limit: 20 }),
+      ])
+      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
+      const installations = [...entries.entries]
+      const desired = nextSelectedID || selectedSquadID()
+      const exactRequests: Array<{
+        id: string
+        installationScope?: "built_in" | ExpertSquadInstallationScope
+        namespace?: string
+      }> = [
+        {
+          id: next.active.effective,
+          installationScope: next.active.package_revision.scope,
+          namespace: next.active.package_revision.namespace,
+        },
+      ]
+      if (desired) {
+        const separator = desired.indexOf(":")
+        exactRequests.push(
+          separator > 0
+            ? {
+                id: desired.slice(separator + 1),
+                installationScope: desired.slice(0, separator) as "built_in" | ExpertSquadInstallationScope,
+              }
+            : { id: desired },
+        )
+      }
+      for (const request of exactRequests) {
+        const present = installations.some((entry) => {
+          if (entry.id !== request.id) return false
+          if (!request.installationScope) return true
+          if (request.installationScope === "built_in") return entry.source.kind === "built_in"
+          return (
+            entry.source.kind === "installed_package" &&
+            entry.source.installation_scope === request.installationScope &&
+            (!request.namespace || entry.source.namespace === request.namespace)
+          )
+        })
+        if (present) continue
+        const exact = await inspectExpertSquad({ directory: scope.directory, ...request })
+        installations.unshift(exact)
+      }
       if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
       setCatalog(next)
+      setCatalogEntries(installations)
+      setCatalogNextCursor(entries.next_cursor)
+      setInventoryStatus(status)
+      setCatalogDiagnostics(diagnostics.entries)
+      setCatalogDiagnosticsNextCursor(diagnostics.next_cursor)
       setCatalogIdentity(expectedScopeIdentity)
       setCatalogError("")
       setSelectedSquadID((current) => {
-        const installations = next.installations ?? next.squads
         const requested = nextSelectedID || current
         const selected =
           installations.find((squad) => squadSelectionKey(squad) === requested) ??
@@ -541,35 +610,73 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     scope = expertSquadCatalogScope(),
     expectedScopeIdentity = catalogScopeIdentity(scope),
   ): Promise<void> {
+    marketDetailLoadSequence++
     if (scope.kind === "unavailable" || scope.kind === "pending") {
       marketLoadSequence++
       setMarket([])
       setMarketIdentity("")
-      setMarketError("")
       setMarketLoading(false)
       return
     }
     setMarketLoading(true)
-    if (currentScopeIdentity() === expectedScopeIdentity) setMarketError("")
     const sequence = ++marketLoadSequence
     try {
-      const next = await loadExpertSquadMarket(scope.directory)
-      if (sequence !== marketLoadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
-      setMarket(next)
-      setMarketIdentity(expectedScopeIdentity)
-      setMarketError("")
-      setSelectedMarketID((current) =>
-        next.some((item) => item.id === (nextSelectedID || current))
-          ? nextSelectedID || current
-          : next.find((item) => item.installations.length === 0)?.id || next[0]?.id || "",
+      const next = await loadExpertSquadMarket(scope.directory, { availability: "all", limit: 20 })
+      const exactIDs = [nextSelectedID, currentSquadIndex()?.id, effectiveActiveID()].filter((id): id is string =>
+        Boolean(id),
       )
-    } catch (error) {
-      if (sequence === marketLoadSequence && currentScopeIdentity() === expectedScopeIdentity) {
-        setMarketError(error instanceof Error ? error.message : String(error))
+      const exactResults = await Promise.allSettled(
+        [...new Set(exactIDs)].map((id) => loadExpertSquadMarketDetail(scope.directory, id)),
+      )
+      if (sequence !== marketLoadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
+      const items = new Map(next.entries.map((item) => [item.id, marketIndexView(item)]))
+      for (const result of exactResults) {
+        if (result.status === "fulfilled") items.set(result.value.id, result.value)
       }
-      throw error
+      setMarket([...items.values()])
+      setMarketIdentity(expectedScopeIdentity)
     } finally {
       if (sequence === marketLoadSequence && currentScopeIdentity() === expectedScopeIdentity) setMarketLoading(false)
+    }
+  }
+
+  async function loadMoreCatalog(): Promise<void> {
+    const scope = currentScope()
+    const cursor = catalogNextCursor()
+    if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
+    setLoading(true)
+    try {
+      const page = await searchExpertSquads({
+        directory: scope.directory,
+        view: "installations",
+        cursor,
+        limit: 20,
+      })
+      setCatalogEntries((current) => {
+        const identities = new Set(current.map(squadSelectionKey))
+        return [...current, ...page.entries.filter((entry) => !identities.has(squadSelectionKey(entry)))]
+      })
+      setCatalogNextCursor(page.next_cursor)
+    } catch (error) {
+      setCatalogError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadMoreDiagnostics(): Promise<void> {
+    const scope = currentScope()
+    const cursor = catalogDiagnosticsNextCursor()
+    if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
+    setLoading(true)
+    try {
+      const page = await loadExpertSquadDiagnostics(scope.directory, { cursor, limit: 20 })
+      setCatalogDiagnostics((current) => [...current, ...page.entries])
+      setCatalogDiagnosticsNextCursor(page.next_cursor)
+    } catch (error) {
+      setCatalogError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -583,12 +690,16 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
       loadSequence++
       marketLoadSequence++
       setCatalog(null)
+      setCatalogEntries([])
+      setCatalogNextCursor(null)
+      setInventoryStatus(null)
+      setCatalogDiagnostics([])
+      setCatalogDiagnosticsNextCursor(null)
       setCatalogIdentity("")
       setCatalogError("")
       setLoading(false)
       setMarket([])
       setMarketIdentity("")
-      setMarketError("")
       setMarketLoading(false)
       return key
     }
@@ -596,6 +707,26 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     void refreshMarket().catch(() => undefined)
     return key
   }, "")
+
+  createEffect(() => {
+    const scope = currentScope()
+    const identity = currentScopeIdentity()
+    const ids = [...new Set([currentSquadIndex()?.id, effectiveActiveID()].filter((id): id is string => Boolean(id)))]
+    const sequence = ++marketDetailLoadSequence
+    if (ids.length === 0 || marketIdentity() !== identity || (scope.kind !== "project" && scope.kind !== "session")) {
+      return
+    }
+    void Promise.allSettled(ids.map((id) => loadExpertSquadMarketDetail(scope.directory, id))).then((results) => {
+      if (sequence !== marketDetailLoadSequence || currentScopeIdentity() !== identity) return
+      const details = results.flatMap((result) => (result.status === "fulfilled" ? [result.value] : []))
+      if (details.length === 0) return
+      setMarket((current) => {
+        const items = new Map(current.map((item) => [item.id, item]))
+        for (const detail of details) items.set(detail.id, detail)
+        return [...items.values()]
+      })
+    })
+  })
 
   createEffect(() => {
     const list = squads()
@@ -655,13 +786,12 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
   async function runMarketBusy(
     itemID: string,
     installationScope: ExpertSquadInstallationScope,
-    operation: MarketOperation,
     key: string,
     fn: () => Promise<void>,
     expectedScopeIdentity = currentScopeIdentity(),
   ) {
     if (isMarketInstallationBusy(itemID, installationScope)) return
-    const action = { key, scopeIdentity: expectedScopeIdentity, itemID, installationScope, operation }
+    const action = { key, scopeIdentity: expectedScopeIdentity, itemID, installationScope }
     setMarketBusy((current) => [...current, action])
     setActionError("")
     try {
@@ -739,87 +869,6 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     )
   }
 
-  async function importFolder() {
-    const captured = captureCatalogActionScope()
-    if (!captured) return
-    const targetInstallationScope = installationScope()
-    await runBusy(
-      "import-folder",
-      async () => {
-        const sourceDirectory = await pickDirectory(captured.scope.directory)
-        if (!sourceDirectory.trim()) return
-        if (currentScopeIdentity() !== captured.identity) return
-        const result = await importExpertSquadFolder({
-          directory: captured.scope.directory,
-          sourceDirectory,
-          installationScope: targetInstallationScope,
-        })
-        if (currentScopeIdentity() !== captured.identity) return
-        await refreshCatalog(`${targetInstallationScope}:${result.after.id}`, captured.scope, captured.identity)
-        if (isInstallPage()) await refreshMarket(result.after.id, captured.scope, captured.identity)
-        showNotice(t("expert_squad.imported", { id: result.after.id }), "active")
-      },
-      captured.identity,
-    )
-  }
-
-  async function importArchive(file: File | undefined) {
-    const captured = pendingArchiveImportScope
-    pendingArchiveImportScope = null
-    if (!captured || !file) {
-      if (archiveInput) archiveInput.value = ""
-      return
-    }
-    const targetInstallationScope = installationScope()
-    await runBusy(
-      "import-archive",
-      async () => {
-        const archiveBase64 = await fileToBase64(file)
-        if (currentScopeIdentity() !== captured.identity) return
-        const result = await importExpertSquadArchive({
-          directory: captured.scope.directory,
-          archiveBase64,
-          filename: file.name,
-          installationScope: targetInstallationScope,
-        })
-        if (currentScopeIdentity() !== captured.identity) return
-        await refreshCatalog(`${targetInstallationScope}:${result.after.id}`, captured.scope, captured.identity)
-        if (isInstallPage()) await refreshMarket(result.after.id, captured.scope, captured.identity)
-        showNotice(t("expert_squad.imported", { id: result.after.id }), "active")
-      },
-      captured.identity,
-    )
-    if (archiveInput) archiveInput.value = ""
-  }
-
-  function openArchivePicker() {
-    const captured = captureCatalogActionScope()
-    if (!captured) return
-    pendingArchiveImportScope = captured
-    archiveInput?.click()
-  }
-
-  async function installMarketItem(item: ExpertSquadMarketItem, scope: ExpertSquadInstallationScope) {
-    const captured = captureCatalogActionScope()
-    if (!captured || item.installations.some((installation) => installation.installation_scope === scope)) return
-    await runMarketBusy(
-      item.id,
-      scope,
-      "install",
-      `install-market:${item.id}:${scope}`,
-      async () => {
-        const result = await installExpertSquadMarketPackage(captured.scope.directory, item.id, scope)
-        if (currentScopeIdentity() !== captured.identity) return
-        await Promise.all([
-          refreshMarket(item.id, captured.scope, captured.identity),
-          refreshCatalog(`${scope}:${result.after.id}`, captured.scope, captured.identity),
-        ])
-        showNotice(t("expert_squad.market_installed", { id: result.after.id }), "active")
-      },
-      captured.identity,
-    )
-  }
-
   async function updateMarketItem(item: ExpertSquadMarketItem, installation: MarketInstallation) {
     const captured = captureCatalogActionScope()
     const installedScope = installation.installation_scope
@@ -827,7 +876,6 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     await runMarketBusy(
       item.id,
       installedScope,
-      "update",
       `update-market:${item.id}:${installedScope}`,
       async () => {
         const result = await updateExpertSquadPackage(
@@ -908,7 +956,6 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     id: string,
     installedScope: ExpertSquadInstallationScope,
     busyKey: string,
-    independentMarketItemID?: string,
   ): Promise<void> {
     const captured = captureCatalogActionScope()
     if (!captured) return
@@ -917,6 +964,7 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
       message: t("expert_squad.uninstall_confirm_replace", { id }),
       cancel: true,
       okLabel: t("expert_squad.uninstall"),
+      okTone: "danger",
     })
     if (!dialog.confirmed || currentScopeIdentity() !== captured.identity) return
     const action = async () => {
@@ -927,18 +975,7 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
         refreshMarket(undefined, captured.scope, captured.identity),
       ])
     }
-    if (independentMarketItemID) {
-      await runMarketBusy(independentMarketItemID, installedScope, "uninstall", busyKey, action, captured.identity)
-      return
-    }
     await runBusy(busyKey, action, captured.identity)
-  }
-
-  async function uninstallMarketItem(
-    item: ExpertSquadMarketItem,
-    installedScope: ExpertSquadInstallationScope,
-  ): Promise<void> {
-    await uninstallInstalledSquad(item.id, installedScope, `uninstall-market:${item.id}:${installedScope}`, item.id)
   }
 
   async function uninstallCurrent(): Promise<void> {
@@ -1245,379 +1282,6 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
 
       <SettingsPanel class="general-panel expert-squad-panel">
         <SettingsGroup>
-          <Show when={isInstallPage()}>
-            <div class="expert-squad-install-intro">
-              <div>
-                <h2>{t("expert_squad.market_title")}</h2>
-                <p>{t("expert_squad.market_intro")}</p>
-              </div>
-              <div class="expert-squad-install-context">
-                <span class="expert-squad-type-meta">{t("expert_squad.install_target")}</span>
-                <span class="expert-squad-install-scope">
-                  {t("expert_squad.scope_global")} · {t("expert_squad.scope_project")}
-                </span>
-                <span class="expert-squad-type-meta">
-                  {t("expert_squad.market_available", { count: scopedMarket().length })}
-                </span>
-              </div>
-            </div>
-            <div class="expert-squad-list-toolbar" data-ui="expert-squad-market-toolbar">
-              <div class="expert-squad-filter-list" role="toolbar" aria-label={t("expert_squad.market_filter_label")}>
-                <For each={["all", "available", "installed"] as MarketFilter[]}>
-                  {(filter) => (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      tone="neutral"
-                      class="expert-squad-filter-chip"
-                      data-selected={marketFilter() === filter ? "true" : undefined}
-                      data-ui="expert-squad-market-filter"
-                      data-filter={filter}
-                      aria-pressed={marketFilter() === filter}
-                      onClick={() => setMarketFilter(filter)}
-                    >
-                      {marketFilterLabel(filter)}
-                    </Button>
-                  )}
-                </For>
-              </div>
-              <SearchField
-                class="expert-squad-market-search"
-                dataUI="expert-squad-market-search"
-                size="md"
-                value={marketQuery()}
-                placeholder={t("expert_squad.market_search_placeholder")}
-                onValueChange={setMarketQuery}
-                onClear={() => setMarketQuery("")}
-                clearDataUI="expert-squad-market-search-clear"
-              />
-            </div>
-            <Show when={marketError()}>
-              <SettingsState tone="error" data-ui="expert-squad-market-error">
-                {marketError()}
-              </SettingsState>
-            </Show>
-            <div class="expert-squad-market" data-ui="expert-squad-market">
-              <Show when={!marketLoading()} fallback={<div class="empty-hint">{t("common.loading")}</div>}>
-                <Show
-                  when={filteredMarket().length > 0}
-                  fallback={<div class="empty-hint">{t("expert_squad.market_empty")}</div>}
-                >
-                  <div class="expert-squad-market-browser">
-                    <SettingsSurface class="expert-squad-market-list" data-ui="expert-squad-market-list">
-                      <For each={filteredMarket()}>
-                        {(item) => (
-                          <SettingsRow
-                            customContent
-                            class="expert-squad-master-row expert-squad-market-row"
-                            data-selected={selectedMarketItem()?.id === item.id ? "true" : undefined}
-                            data-installed={item.installations.length > 0 ? "true" : "false"}
-                          >
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="md"
-                              tone="neutral"
-                              class="expert-squad-master-select"
-                              data-ui="expert-squad-market-select"
-                              data-market-id={item.id}
-                              aria-current={selectedMarketItem()?.id === item.id ? "true" : undefined}
-                              onClick={() => setSelectedMarketID(item.id)}
-                            >
-                              <span class="expert-squad-master-icon" aria-hidden="true">
-                                <Icon name="config-skill-market" size="medium" />
-                              </span>
-                              <span class="expert-squad-master-copy">
-                                <span class="expert-squad-type-title">{item.name}</span>
-                                <span class="expert-squad-type-body">
-                                  {item.description || item.selector_summary || ""}
-                                </span>
-                              </span>
-                            </Button>
-                            <div class="expert-squad-master-action">
-                              <Show when={item.installations.length > 0}>
-                                <Badge tone="ok">{t("expert_squad.filter_installed")}</Badge>
-                              </Show>
-                              <Show when={item.installations.length < 2}>
-                                <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
-                                  <DropdownMenu.Trigger
-                                    as={Button}
-                                    type="button"
-                                    variant="solid"
-                                    size="md"
-                                    tone="accent"
-                                    class="expert-squad-market-card-action"
-                                    data-ui="expert-squad-market-install"
-                                    data-market-id={item.id}
-                                    title={t("expert_squad.install")}
-                                    aria-label={t("expert_squad.install")}
-                                    disabled={!writableScopeAvailable() || isMarketItemBusy(item.id)}
-                                  >
-                                    <span>
-                                      {isMarketOperationBusy(item.id, "install")
-                                        ? t("expert_squad.installing")
-                                        : t("expert_squad.install")}
-                                    </span>
-                                    <Icon name="chevron-down" size="compact" />
-                                  </DropdownMenu.Trigger>
-                                  <DropdownMenu.Portal>
-                                    <DropdownMenu.Content
-                                      class="expert-squad-market-install-menu"
-                                      data-ui="expert-squad-market-install-menu"
-                                    >
-                                      <Show
-                                        when={
-                                          !item.installations.some(
-                                            (installation) => installation.installation_scope === "global",
-                                          )
-                                        }
-                                      >
-                                        <DropdownMenu.Item
-                                          as="button"
-                                          type="button"
-                                          class="expert-squad-market-install-menu-item"
-                                          data-ui="expert-squad-market-install-scope"
-                                          data-market-id={item.id}
-                                          data-installation-scope="global"
-                                          onSelect={() => void installMarketItem(item, "global")}
-                                        >
-                                          <Icon name="web-search" size="medium" />
-                                          <span>{t("expert_squad.install_global")}</span>
-                                        </DropdownMenu.Item>
-                                      </Show>
-                                      <Show
-                                        when={
-                                          !item.installations.some(
-                                            (installation) => installation.installation_scope === "project",
-                                          )
-                                        }
-                                      >
-                                        <DropdownMenu.Item
-                                          as="button"
-                                          type="button"
-                                          class="expert-squad-market-install-menu-item"
-                                          data-ui="expert-squad-market-install-scope"
-                                          data-market-id={item.id}
-                                          data-installation-scope="project"
-                                          onSelect={() => void installMarketItem(item, "project")}
-                                        >
-                                          <Icon name="folder" size="medium" />
-                                          <span>{t("expert_squad.install_project")}</span>
-                                        </DropdownMenu.Item>
-                                      </Show>
-                                    </DropdownMenu.Content>
-                                  </DropdownMenu.Portal>
-                                </DropdownMenu.Root>
-                              </Show>
-                            </div>
-                          </SettingsRow>
-                        )}
-                      </For>
-                    </SettingsSurface>
-                    <Show when={selectedMarketItem()}>
-                      {(item) => (
-                        <section class="expert-squad-market-detail" data-ui="expert-squad-market-detail">
-                          <header class="expert-squad-identity-head">
-                            <span class="expert-squad-identity-icon" aria-hidden="true">
-                              <Icon name="config-skill-market" size="large" />
-                            </span>
-                            <div class="expert-squad-identity-copy">
-                              <h2>{item().name}</h2>
-                              <div class="expert-squad-identity-meta">
-                                <code>
-                                  {item().namespace}/{item().id}
-                                </code>
-                                <span>{t("expert_squad.market_available_version", { version: item().version })}</span>
-                              </div>
-                              <p>{item().selector_summary || item().description || ""}</p>
-                            </div>
-                          </header>
-                          <div
-                            class="expert-squad-capability-summary"
-                            aria-label={t("expert_squad.capability_projection")}
-                          >
-                            <span>{t("expert_squad.market_agents", { count: item().agents.length })}</span>
-                            <span>{t("expert_squad.market_skills", { count: item().skill_count })}</span>
-                            <span>{t("expert_squad.market_tools", { count: item().tool_count })}</span>
-                            <span>{t("expert_squad.market_mcp", { count: item().mcp_count })}</span>
-                          </div>
-                          <Show when={item().installations.length > 0}>
-                            <div class="expert-squad-market-installations">
-                              <For each={item().installations}>
-                                {(installation) => (
-                                  <div class="expert-squad-market-installation-row">
-                                    <Badge tone="ok">
-                                      {installation.update_available
-                                        ? t("expert_squad.market_update_versions", {
-                                            installed:
-                                              installation.installed_version ?? t("expert_squad.version_unknown"),
-                                            available: item().version,
-                                          })
-                                        : t("expert_squad.market_installed_version", {
-                                            version:
-                                              installation.installed_version ?? t("expert_squad.version_unknown"),
-                                          })}{" "}
-                                      ·{" "}
-                                      {installation.installation_scope === "global"
-                                        ? t("expert_squad.scope_global")
-                                        : t("expert_squad.scope_project")}
-                                    </Badge>
-                                    <div class="expert-squad-market-installation-actions">
-                                      <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        tone="neutral"
-                                        data-ui="expert-squad-market-update"
-                                        data-market-id={item().id}
-                                        data-installation-scope={installation.installation_scope}
-                                        disabled={
-                                          !writableScopeAvailable() ||
-                                          isMarketInstallationBusy(item().id, installation.installation_scope)
-                                        }
-                                        onClick={() => void updateMarketItem(item(), installation)}
-                                      >
-                                        <Icon
-                                          name={
-                                            isMarketActionBusy(
-                                              `update-market:${item().id}:${installation.installation_scope}`,
-                                            )
-                                              ? "loading"
-                                              : "refresh"
-                                          }
-                                        />
-                                        <span>{t("expert_squad.update_builtin")}</span>
-                                      </Button>
-                                      <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        tone="danger"
-                                        data-ui="expert-squad-market-uninstall"
-                                        data-market-id={item().id}
-                                        data-installation-scope={installation.installation_scope}
-                                        disabled={
-                                          !writableScopeAvailable() ||
-                                          isMarketInstallationBusy(item().id, installation.installation_scope)
-                                        }
-                                        onClick={() =>
-                                          void uninstallMarketItem(item(), installation.installation_scope)
-                                        }
-                                      >
-                                        <Icon
-                                          name={
-                                            isMarketActionBusy(
-                                              `uninstall-market:${item().id}:${installation.installation_scope}`,
-                                            )
-                                              ? "loading"
-                                              : "delete"
-                                          }
-                                        />
-                                        <span>{t("expert_squad.uninstall")}</span>
-                                      </Button>
-                                    </div>
-                                  </div>
-                                )}
-                              </For>
-                            </div>
-                          </Show>
-                          <SettingsSurface class="expert-squad-market-agents">
-                            <For each={item().agents}>
-                              {(agent) => (
-                                <SettingsRow
-                                  align="center"
-                                  leading={<Icon name="config-agent-models" size="medium" />}
-                                  title={agent.label}
-                                />
-                              )}
-                            </For>
-                          </SettingsSurface>
-                        </section>
-                      )}
-                    </Show>
-                  </div>
-                </Show>
-              </Show>
-            </div>
-            <Disclosure.Root class="expert-squad-local-install" data-ui="expert-squad-local-install" variant="surface">
-              <Disclosure.Trigger>{t("expert_squad.local_sources")}</Disclosure.Trigger>
-              <Disclosure.Content class="expert-squad-install-options" data-ui="expert-squad-install-options">
-                <SettingsRow
-                  class="expert-squad-install-option"
-                  align="center"
-                  leading={<Icon name="config-general" size="medium" />}
-                  title={t("expert_squad.install_target")}
-                  desc={t("expert_squad.install_target_body")}
-                  actions={
-                    <SelectField
-                      value={installationScope()}
-                      options={[
-                        { value: "global", label: t("expert_squad.scope_global") },
-                        { value: "project", label: t("expert_squad.scope_project") },
-                      ]}
-                      ariaLabel={t("expert_squad.install_target")}
-                      onChange={(value) => setInstallationScope(value as ExpertSquadInstallationScope)}
-                      disabled={!writableScopeAvailable() || !!activeBusy()}
-                      testid="expert-squad-install-scope"
-                    />
-                  }
-                />
-                <SettingsRow
-                  class="expert-squad-install-option"
-                  align="center"
-                  leading={<Icon name="folder-open" size="medium" />}
-                  title={t("expert_squad.install_folder_title")}
-                  desc={t("expert_squad.install_folder_body")}
-                  actions={
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="md"
-                      tone="neutral"
-                      data-ui="expert-squad-import-folder"
-                      disabled={!writableScopeAvailable() || !!activeBusy()}
-                      onClick={importFolder}
-                    >
-                      {t("expert_squad.import_folder")}
-                    </Button>
-                  }
-                />
-                <SettingsRow
-                  class="expert-squad-install-option"
-                  align="center"
-                  leading={<Icon name="upload" size="medium" />}
-                  title={t("expert_squad.install_archive_title")}
-                  desc={t("expert_squad.install_archive_body")}
-                  actions={
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="md"
-                      tone="neutral"
-                      data-ui="expert-squad-import-archive"
-                      disabled={!writableScopeAvailable() || !!activeBusy()}
-                      onClick={openArchivePicker}
-                    >
-                      {t("expert_squad.import_archive")}
-                    </Button>
-                  }
-                />
-                <input
-                  ref={(el) => {
-                    archiveInput = el
-                  }}
-                  type="file"
-                  accept=".zip,application/zip"
-                  class="expert-squad-file-input"
-                  onChange={(event) => void importArchive(event.currentTarget.files?.[0] ?? undefined)}
-                />
-              </Disclosure.Content>
-            </Disclosure.Root>
-            <Show when={currentScopeSessionID()}>
-              <p class="agent-models-info">{t("expert_squad.session_scope_hint")}</p>
-            </Show>
-          </Show>
           <Show when={catalogError()}>
             <SettingsState tone="error" data-ui="expert-squad-catalog-error">
               {t("expert_squad.catalog_failed", {
@@ -1643,6 +1307,11 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
               </SettingsState>
             )}
           </For>
+          <Show when={catalogDiagnosticsNextCursor()}>
+            <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void loadMoreDiagnostics()}>
+              {t("expert_squad.load_more")}
+            </Button>
+          </Show>
           <Show when={actionError()}>
             <SettingsState
               tone="error"
@@ -1708,10 +1377,10 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
                 </div>
               </div>
             </Show>
-            <Show when={!isInstallPage() && !scopeStatus() && !catalogError() && squads().length === 0}>
+            <Show when={!scopeStatus() && !catalogError() && squads().length === 0}>
               <div class="empty-hint">{t("expert_squad.none")}</div>
             </Show>
-            <Show when={!isInstallPage() && !scopeStatus() && !catalogError() && squads().length > 0}>
+            <Show when={!scopeStatus() && !catalogError() && squads().length > 0}>
               <div class="expert-squad-layout" data-ui="expert-squad-panel">
                 <div class="expert-squad-list-toolbar expert-squad-catalog-toolbar">
                   <div
@@ -1747,7 +1416,9 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
                     <For each={filteredSquads()}>
                       {(squad) => {
                         const selected = () =>
-                          currentSquad() ? squadSelectionKey(currentSquad()!) === squadSelectionKey(squad) : false
+                          currentSquadIndex()
+                            ? squadSelectionKey(currentSquadIndex()!) === squadSelectionKey(squad)
+                            : false
                         return (
                           <SettingsRow
                             as="button"
@@ -1785,8 +1456,25 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
                       }}
                     </For>
                   </SettingsSurface>
+                  <Show when={catalogNextCursor()}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="md"
+                      tone="neutral"
+                      onClick={() => void loadMoreCatalog()}
+                    >
+                      {t("expert_squad.load_more")}
+                    </Button>
+                  </Show>
                 </Show>
 
+                <Show when={selectedDetailLoading()}>
+                  <div class="loading-hint">{t("expert_squad.loading")}</div>
+                </Show>
+                <Show when={selectedDetailError()}>
+                  <SettingsState tone="error">{selectedDetailError()}</SettingsState>
+                </Show>
                 <Show when={currentSquad()} keyed>
                   {(squad) => (
                     <div class="expert-squad-detail" data-ui="expert-squad-detail">
@@ -2137,11 +1825,7 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
                                 onMutation={async () => {
                                   const captured = captureCatalogActionScope()
                                   if (!captured) return
-                                  await refreshCatalog(
-                                    squadSelectionKey(squad),
-                                    captured.scope,
-                                    captured.identity,
-                                  )
+                                  await refreshCatalog(squadSelectionKey(squad), captured.scope, captured.identity)
                                 }}
                               />
                             </TabPanel>
@@ -2167,9 +1851,7 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
                                 {(generation) => (
                                   <>
                                     <div>
-                                      <span class="expert-squad-technical-label">
-                                        {t("expert_squad.generated_by")}
-                                      </span>
+                                      <span class="expert-squad-technical-label">{t("expert_squad.generated_by")}</span>
                                       <code>{generation.generator_expert_squad_id}</code>
                                     </div>
                                     <div>
@@ -2185,7 +1867,9 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
                                       <time dateTime={generation.generated_at}>{generation.generated_at}</time>
                                     </div>
                                     <div>
-                                      <span class="expert-squad-technical-label">{t("expert_squad.generation_task")}</span>
+                                      <span class="expert-squad-technical-label">
+                                        {t("expert_squad.generation_task")}
+                                      </span>
                                       <code>{generation.task_id}</code>
                                     </div>
                                     <div class="expert-squad-source-grid-agents">

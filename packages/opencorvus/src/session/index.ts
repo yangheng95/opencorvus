@@ -26,7 +26,7 @@ import { Filesystem } from "@/util/filesystem"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 
 import type { Provider } from "@/provider/provider"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { iife } from "@/util/iife"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
@@ -36,18 +36,16 @@ import { SessionControl } from "./control"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
+import { PermissionAuthority } from "@/permission/authority"
 import {
   TaskPromptProfileImmutableError,
   requireTaskPackageRevisionBinding,
+  requireTaskResolvedPackageRevision,
 } from "@/engine/task-package-revision-binding"
+import { ProjectMemory } from "@/memory/project-memory"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
-
-  // [observability/phase-0] Dedupe set for the cache_write extraction-miss log
-  // in getUsage(). Keyed by `${providerID}/${modelID}` so we emit one structured
-  // sample per distinct provider+model combination per process lifetime.
-  const cacheWriteMissLogged = new Set<string>()
 
   const parentTitlePrefix = "New session - "
   const childTitlePrefix = "Child session - "
@@ -207,7 +205,7 @@ export namespace Session {
         archived: z.number().optional(),
         pinned: z.number().optional(),
       }),
-      permission: PermissionNext.Ruleset.optional(),
+      permission: CapabilityRules.Ruleset.optional(),
     })
     .meta({
       ref: "Session",
@@ -337,7 +335,7 @@ export namespace Session {
 
   export const touch = fn(Identifier.schema("session"), async (sessionID) => {
     const now = Date.now()
-    Database.use((db) => {
+    Database.transaction((db) => {
       const row = db
         .update(SessionTable)
         .set({ time_updated: now })
@@ -346,11 +344,11 @@ export namespace Session {
         .get()
       if (!row) throw new NotFoundError({ message: `Session not found: ${sessionID}` })
       const info = fromRow(row)
-      Database.effect(() => Bus.publish(Event.Updated, { info }))
+      Bus.publishOwnedInTransaction(Event.Updated, { info })
     })
   })
 
-  export async function prepareNext(input: {
+  type PrepareNextInput = {
     /** Required. The session's role/purpose — see SessionKind in session.sql.ts.
      *  Authoritative for UI channel routing. There is NO default: every
      *  caller must state what the session is for. */
@@ -359,15 +357,12 @@ export namespace Session {
     title?: string
     parentID?: string
     directory: string
-    permission?: PermissionNext.Ruleset
+    permission?: CapabilityRules.Ruleset
     metadata?: Record<string, unknown>
-  }) {
-    if (input.parentID) {
-      const lineage = await lineageInProject({ sessionID: input.parentID, projectID: Instance.project.id })
-      const { SessionPromptState } = await import("./prompt/state")
-      SessionPromptState.assertSessionCreationAllowed(lineage.map((session) => session.id))
-    }
-    const result: Info = {
+  }
+
+  function preparedNextInfo(input: PrepareNextInput): Info {
+    return {
       id: Identifier.descending("session", input.id),
       slug: Slug.create(),
       version: Installation.VERSION,
@@ -383,24 +378,40 @@ export namespace Session {
         updated: Date.now(),
       },
     }
+  }
+
+  /** Prepare a root Session synchronously for an enclosing domain identity
+   * transaction. Child creation must use `prepareNext` so lineage admission
+   * is checked before persistence. */
+  export function prepareRootNext(input: Omit<PrepareNextInput, "parentID"> & { parentID?: never }): Info {
+    return preparedNextInfo(input)
+  }
+
+  export async function prepareNext(input: PrepareNextInput) {
+    if (input.parentID) {
+      const lineage = await lineageInProject({ sessionID: input.parentID, projectID: Instance.project.id })
+      const { SessionPromptState } = await import("./prompt/state")
+      SessionPromptState.assertSessionCreationAllowed(lineage.map((session) => session.id))
+    }
+    return preparedNextInfo(input)
+  }
+
+  /** Persist one exact prepared Session in the caller's active transaction.
+   * This is the sole physical insert/event authority; domain find-or-create
+   * operations may reserve a writer and call it without opening a second
+   * transaction around their identity read. */
+  export function persistPreparedNextInTransaction(db: Database.TxOrDb, result: Info): Info {
+    Project.assertDurableAdmissionOpen(result.projectID)
+    db.insert(SessionTable).values(toRow(result)).run()
+    log.info("created", result)
+    Bus.publishOwnedInTransaction(Event.Created, { info: result })
+    Bus.publishOwnedInTransaction(Event.Updated, { info: result })
     return result
   }
 
-  /** Persist one exact prepared Session inside the caller's active transaction.
-   * Creation and update events are post-commit effects, so a rolled-back
-   * authority bundle never exposes a physical Session to observers. */
+  /** Persist one exact prepared Session in its own transaction. */
   export function persistPreparedNext(result: Info): Info {
-    Database.use((db) => {
-      db.insert(SessionTable).values(toRow(result)).run()
-      Database.effect(() => {
-        log.info("created", result)
-        return Bus.publish(Event.Created, {
-          info: result,
-        })
-      })
-      Database.effect(() => Bus.publish(Event.Updated, { info: result }))
-    })
-    return result
+    return Database.transaction((db) => persistPreparedNextInTransaction(db, result))
   }
 
   export async function createNext(input: Parameters<typeof prepareNext>[0]) {
@@ -453,7 +464,7 @@ export namespace Session {
       title: z.string(),
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({ title: input.title, time_updated: Date.now() })
@@ -462,7 +473,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -534,7 +545,7 @@ export namespace Session {
       .returning()
       .get()!
     const info = fromRow(updated)
-    Database.effect(() => Bus.publish(Event.Updated, { info }))
+    Bus.publishOwnedInTransaction(Event.Updated, { info })
     return info
   }
 
@@ -606,6 +617,7 @@ export namespace Session {
           await PromptProfileResolver.assertSkillMountConfig({
             projectDirectory: capabilityProjectDirectory,
             config: effective,
+            packageRevision: initialTask ? requireTaskResolvedPackageRevision(initialTask.id) : undefined,
           })
         }
         return Database.transaction((db) => {
@@ -651,8 +663,8 @@ export namespace Session {
             .returning()
             .get()!
           const info = fromRow(updated)
-          Database.effect(() => Bus.publish(Event.Updated, { info }))
-          Database.effect(() => Bus.publish(Event.ConfigChanged, { sessionID: input.sessionID }))
+          Bus.publishOwnedInTransaction(Event.Updated, { info })
+          Bus.publishOwnedInTransaction(Event.ConfigChanged, { sessionID: input.sessionID })
           return info
         })
       })
@@ -669,7 +681,7 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({ time_archived: input.time, time_updated: Date.now() })
@@ -678,7 +690,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -690,7 +702,7 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({
@@ -702,7 +714,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -711,10 +723,10 @@ export namespace Session {
   export const setPermission = fn(
     z.object({
       sessionID: Identifier.schema("session"),
-      permission: PermissionNext.Ruleset,
+      permission: CapabilityRules.Ruleset,
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({ permission: input.permission, time_updated: Date.now() })
@@ -723,7 +735,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -735,7 +747,7 @@ export namespace Session {
       summary: Info.shape.summary,
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({
@@ -749,7 +761,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -1104,8 +1116,9 @@ export namespace Session {
     for (const child of await childrenInProject({ parentID: sessionID, projectID })) {
       await removeSessionTree({ sessionID: child.id, projectID, publishDeleted })
     }
+    await PermissionAuthority.cancelPendingForSession(sessionID, "Session deleted before the Tool invocation ran")
     // CASCADE delete handles messages and parts automatically
-    Database.use((db) => {
+    Database.transaction((db) => {
       db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
       Database.effect(() => Database.incrementalVacuum())
       Database.effect(async () => {
@@ -1116,11 +1129,7 @@ export namespace Session {
         }
       })
       if (publishDeleted) {
-        Database.effect(() =>
-          Bus.publish(Event.Deleted, {
-            info: session,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Event.Deleted, { info: session })
       }
     })
   }
@@ -1158,7 +1167,7 @@ export namespace Session {
     },
   ): Message.VisibleInfo {
     let persisted: Message.VisibleInfo | undefined
-    Database.use((db) => {
+    Database.transaction((db) => {
       const existing = db
         .select({ time_created: MessageTable.time_created })
         .from(MessageTable)
@@ -1178,18 +1187,10 @@ export namespace Session {
         .onConflictDoUpdate({ target: MessageTable.id, set: { data } })
         .run()
       if (options.publishCreated && !existing) {
-        Database.effect(() =>
-          Bus.publish(Message.Event.Created, {
-            info: persistedMessage,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Created, { info: persistedMessage })
       }
       if (options.publishUpdated) {
-        Database.effect(() =>
-          Bus.publish(Message.Event.Updated, {
-            info: persistedMessage,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Updated, { info: persistedMessage })
       }
     })
     if (!persisted) throw new Error(`Session message ${msg.id} was not persisted`)
@@ -1289,7 +1290,12 @@ export namespace Session {
   })
   export type PersistMessageInput = z.infer<typeof PersistMessageInput>
 
-  function persistMessageBundleRows(input: PersistMessageInput, commit?: () => void) {
+  function persistMessageBundleRows(
+    input: PersistMessageInput,
+    commit?: () => void,
+    beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
+  ) {
     for (const control of input.controls ?? []) {
       if (control.sessionID !== input.info.sessionID) {
         throw new Error(
@@ -1297,21 +1303,18 @@ export namespace Session {
         )
       }
     }
-    const existing = Database.use((db) =>
-      db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.info.id)).get(),
-    )
     Database.transaction((db) => {
+      preflightBundle?.()
+      const existing = db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.info.id)).get()
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: false })
+      beforeVisibilityEffects?.()
       if (!existing) {
         const createdInfo = messageWithPersistedCreated(input.info, input.info.time.created)
-        Database.effect(() =>
-          Bus.publish(Message.Event.Created, {
-            info: createdInfo,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Created, { info: createdInfo })
       }
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
       for (const part of input.parts) updatePartRow(part, { publish: true })
+      ProjectMemory.captureMessageInTransaction(db, { info: input.info, parts: input.parts })
       for (const control of input.controls ?? []) SessionControl.createInTransaction(db, control)
       for (const patch of input.metadataPatches ?? []) mergeMetadataInTransaction(db, patch)
       if (input.touchSessionID) touch(input.touchSessionID)
@@ -1334,8 +1337,12 @@ export namespace Session {
     }
   }
 
-  async function persistMessageBundle(input: PersistMessageInput, commit?: () => void) {
-    const persisted = persistMessageWithCommitInTransaction(input, commit ?? (() => undefined))
+  async function persistMessageBundle(
+    input: PersistMessageInput,
+    commit?: () => void,
+    beforeVisibilityEffects?: () => void,
+  ) {
+    const persisted = persistMessageWithCommitInTransaction(input, commit ?? (() => undefined), beforeVisibilityEffects)
     return persisted.complete()
   }
 
@@ -1346,15 +1353,29 @@ export namespace Session {
    * SQLite transaction. The callback is for durable facts whose validity is
    * defined by the exact message/Part set, such as a projected-worker Turn
    * descriptor and its dispatch lineage. It must not perform asynchronous
-   * work or publish process-local runtime state.
+   * work or publish process-local runtime state. `beforeVisibilityEffects`
+   * may only register post-commit effects that must run before the Message
+   * publication effects registered by this bundle.
    */
-  export async function persistMessageWithCommit(input: PersistMessageInput, commit: () => void) {
-    return persistMessageBundle(PersistMessageInput.parse(input), commit)
+  export async function persistMessageWithCommit(
+    input: PersistMessageInput,
+    commit: () => void,
+    beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
+  ) {
+    const parsed = PersistMessageInput.parse(input)
+    const persisted = persistMessageWithCommitInTransaction(parsed, commit, beforeVisibilityEffects, preflightBundle)
+    return persisted.complete()
   }
 
-  export function persistMessageWithCommitInTransaction(input: PersistMessageInput, commit: () => void) {
+  export function persistMessageWithCommitInTransaction(
+    input: PersistMessageInput,
+    commit: () => void,
+    beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
+  ) {
     const parsed = PersistMessageInput.parse(input)
-    persistMessageBundleRows(parsed, commit)
+    persistMessageBundleRows(parsed, commit, beforeVisibilityEffects, preflightBundle)
     return {
       complete: () => hydratePersistedMessageBundle(parsed),
     }
@@ -1367,19 +1388,17 @@ export namespace Session {
     }),
     async (input) => {
       // CASCADE delete handles parts automatically
-      Database.use((db) => {
+      Database.transaction((db) => {
         const removed = db
           .delete(MessageTable)
           .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
           .returning({ id: MessageTable.id })
           .get()
         if (!removed) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
-        Database.effect(() =>
-          Bus.publish(Message.Event.Removed, {
-            sessionID: input.sessionID,
-            messageID: input.messageID,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Removed, {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+        })
       })
       return input.messageID
     },
@@ -1392,7 +1411,7 @@ export namespace Session {
       partID: Identifier.schema("part"),
     }),
     async (input) => {
-      Database.use((db) => {
+      Database.transaction((db) => {
         const removed = db
           .delete(PartTable)
           .where(
@@ -1405,13 +1424,11 @@ export namespace Session {
           .returning({ id: PartTable.id })
           .get()
         if (!removed) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
-        Database.effect(() =>
-          Bus.publish(Message.Event.PartRemoved, {
-            sessionID: input.sessionID,
-            messageID: input.messageID,
-            partID: input.partID,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.PartRemoved, {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+          partID: input.partID,
+        })
       })
       return input.partID
     },
@@ -1517,11 +1534,11 @@ export namespace Session {
     let outputPart = part
     let messageOrderKey = ""
     const publishPartUpdated = () =>
-      Bus.publish(Message.Event.PartUpdated, {
+      Bus.publishOwnedInTransaction(Message.Event.PartUpdated, {
         orderKey: messageOrderKey,
         part: outputPart as Message.VisiblePart,
       })
-    const publishAfterCommit = options.publish && Database.hasActiveContext()
+    const publishAfterCommit = options.publish && Database.hasActiveTransaction()
     let wrotePart = false
     const write = (db: Database.TxOrDb) => {
       const message = db
@@ -1586,7 +1603,7 @@ export namespace Session {
         .onConflictDoUpdate({ target: PartTable.id, set: { data } })
         .run()
       wrotePart = true
-      if (publishAfterCommit) Database.effect(publishPartUpdated)
+      if (publishAfterCommit) publishPartUpdated()
     }
     if (transaction) write(transaction)
     else Database.use(write)
@@ -1604,14 +1621,12 @@ export namespace Session {
     part: Message.Part,
     options: { publish: boolean } = { publish: true },
   ): { outputPart: Message.Part; wrotePart: boolean } {
-    if (!Database.hasActiveContext()) {
-      throw new Error("Session.writePartInTransaction requires an active database transaction")
-    }
+    Database.requireActiveTransaction("Session.writePartInTransaction")
     return updatePartRow(part, options, db)
   }
 
   export const updatePart = fn(UpdatePartInput, async (part) => {
-    const publishAfterCommit = Database.hasActiveContext()
+    const publishAfterCommit = Database.hasActiveTransaction()
     const { outputPart, wrotePart } = updatePartRow(part, { publish: true })
     // SSE (Server-Sent Events) stream deltas depend on the part-created
     // event already being visible to live subscribers. Outside an existing
@@ -1657,6 +1672,7 @@ export namespace Session {
     }),
     async (input) => {
       Database.transaction((db) => {
+        Project.assertDurableAdmissionOpen(input.info.projectID)
         const sessionRow = toRow(input.info)
         const { id: _sessionID, ...sessionSet } = sessionRow
         db.insert(SessionTable)
@@ -1714,58 +1730,28 @@ export namespace Session {
       metadata: z.custom<ProviderMetadata>().optional(),
     }),
     (input) => {
-      const safe = (value: number) => {
-        if (!Number.isFinite(value)) return 0
-        return value
+      const safe = (value: number | null | undefined) => {
+        if (!Number.isFinite(value) || Number(value) < 0) return 0
+        return Number(value)
       }
-      const inputTokens = safe(input.usage.inputTokens ?? 0)
-      const outputTokens = safe(input.usage.outputTokens ?? 0)
-      const reasoningTokens = safe(input.usage.reasoningTokens ?? 0)
-
-      const cacheReadInputTokens = safe(input.usage.cachedInputTokens ?? 0)
+      const inputTokens = safe(input.usage.inputTokens)
+      const outputTokens = safe(input.usage.outputTokens)
+      const reasoningTokens = safe(input.usage.outputTokenDetails?.reasoningTokens ?? input.usage.reasoningTokens)
+      const textOutputTokens = safe(input.usage.outputTokenDetails?.textTokens ?? outputTokens - reasoningTokens)
+      const cacheReadInputTokens = safe(input.usage.inputTokenDetails?.cacheReadTokens ?? input.usage.cachedInputTokens)
       const cacheWriteInputTokens = safe(
-        (input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
+        (input.usage.inputTokenDetails?.cacheWriteTokens ??
+          input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
           (input.metadata?.["bedrock"] as any)?.["usage"]?.["cacheWriteInputTokens"] ??
           (input.metadata?.["venice"] as any)?.["usage"]?.["cacheCreationInputTokens"] ??
           0) as number,
       )
 
-      // [observability/phase-0] When a provider reports cache hits (read>0) but we
-      // extract 0 write tokens, the provider either (a) genuinely doesn't expose
-      // a "creation" field (OpenAI-style servers manage cache server-side and only
-      // surface read), or (b) nests the field under a provider key we haven't
-      // added above. Log the metadata shape once per (provider, model) combo so
-      // the fix (or documented "this provider has no write signal") is
-      // evidence-based — not spammed per request.
-      if (cacheReadInputTokens > 0 && cacheWriteInputTokens === 0 && input.metadata) {
-        const dedupeKey = `${input.model.providerID}/${input.model.id}`
-        if (!cacheWriteMissLogged.has(dedupeKey)) {
-          cacheWriteMissLogged.add(dedupeKey)
-          const providerKeys = Object.keys(input.metadata)
-          const snapshot = providerKeys.reduce<Record<string, unknown>>((acc, key) => {
-            const value = (input.metadata as Record<string, unknown>)[key]
-            acc[key] = value && typeof value === "object" ? { keys: Object.keys(value as object) } : typeof value
-            return acc
-          }, {})
-          log.info("cache_write extraction miss", {
-            providerID: input.model.providerID,
-            modelID: input.model.id,
-            npm: input.model.api.npm,
-            cacheReadInputTokens,
-            metadataProviderKeys: providerKeys,
-            metadataShape: snapshot,
-            usageKeys: Object.keys(input.usage as object),
-          })
-        }
-      }
-
-      // OpenRouter provides inputTokens as the total count of input tokens (including cached).
-      // AFAIK other providers (OpenRouter/OpenAI/Gemini etc.) do it the same way e.g. vercel/ai#8794 (comment)
-      // Anthropic does it differently though - inputTokens doesn't include cached tokens.
-      // It looks like OpenCorvus's cost calculation assumes all providers return inputTokens the same way Anthropic does (I'm guessing getUsage logic was originally implemented with anthropic), so it's causing incorrect cost calculation for OpenRouter and others.
-      const excludesCachedTokens = !!(input.metadata?.["anthropic"] || input.metadata?.["bedrock"])
+      // AI SDK 6 owns the provider-specific input convention and exposes the
+      // normalized non-cache count. Only fall back to subtraction for adapters
+      // that do not supply that detail.
       const adjustedInputTokens = safe(
-        excludesCachedTokens ? inputTokens : inputTokens - cacheReadInputTokens - cacheWriteInputTokens,
+        input.usage.inputTokenDetails?.noCacheTokens ?? inputTokens - cacheReadInputTokens - cacheWriteInputTokens,
       )
 
       const total = iife(() => {
@@ -1776,18 +1762,18 @@ export namespace Session {
           input.model.api.npm === "@ai-sdk/amazon-bedrock" ||
           input.model.api.npm === "@ai-sdk/google-vertex/anthropic"
         ) {
-          return adjustedInputTokens + outputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens
+          return adjustedInputTokens + textOutputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens
         }
         return safe(
           input.usage.totalTokens ??
-            adjustedInputTokens + outputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens,
+            adjustedInputTokens + textOutputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens,
         )
       })
 
       const tokens = {
         total,
         input: adjustedInputTokens,
-        output: outputTokens,
+        output: textOutputTokens,
         reasoning: reasoningTokens,
         cache: {
           write: cacheWriteInputTokens,
@@ -1796,19 +1782,22 @@ export namespace Session {
       }
 
       const costInfo =
-        input.model.cost?.experimentalOver200K && tokens.input + tokens.cache.read > 200_000
+        input.model.cost?.experimentalOver200K && tokens.input + tokens.cache.read + tokens.cache.write > 200_000
           ? input.model.cost.experimentalOver200K
           : input.model.cost
       return {
+        billing: {
+          status: input.model.cost.available === true ? ("priced" as const) : ("unpriced" as const),
+        },
         cost: safe(
           new Decimal(0)
             .add(new Decimal(tokens.input).mul(costInfo?.input ?? 0).div(1_000_000))
-            .add(new Decimal(tokens.output).mul(costInfo?.output ?? 0).div(1_000_000))
-            .add(new Decimal(tokens.cache.read).mul(costInfo?.cache?.read ?? 0).div(1_000_000))
-            .add(new Decimal(tokens.cache.write).mul(costInfo?.cache?.write ?? 0).div(1_000_000))
-            // models.dev does not expose a separate reasoning rate; charge reasoning
-            // tokens at the output rate.
-            .add(new Decimal(tokens.reasoning).mul(costInfo?.output ?? 0).div(1_000_000))
+            .add(new Decimal(tokens.output).mul(costInfo.output).div(1_000_000))
+            .add(new Decimal(tokens.cache.read).mul(costInfo.cache.read).div(1_000_000))
+            .add(new Decimal(tokens.cache.write).mul(costInfo.cache.write).div(1_000_000))
+            // Reasoning is an output-token subset. It is separated from text for
+            // presentation, then charged once at the output rate.
+            .add(new Decimal(tokens.reasoning).mul(costInfo.output).div(1_000_000))
             .toNumber(),
         ),
         tokens,

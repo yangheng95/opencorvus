@@ -5,10 +5,13 @@ import { observeAppliedTheme } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
 import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
+import { SelectControl } from "../ui/SelectControl"
 
 type DashboardPayload = Extract<InteractiveArtifactPayload, { renderer: "dashboard@1" }>
 type DashboardViewPayload = DashboardPayload["views"][number]
 type DashboardRow = DashboardPayload["data"][number]
+type DashboardFilter = DashboardPayload["filters"][number]
+type DashboardFilterOption = { id: string; label: string; value: DashboardRow[string] | undefined }
 
 const MAX_DASHBOARD_WIDTH = 1_600
 const MIN_DASHBOARD_PLOT_WIDTH = 240
@@ -126,6 +129,38 @@ function DashboardView(props: { view: DashboardViewPayload; data: DashboardRow[]
   )
 }
 
+function DashboardFilterControl(props: {
+  filter: DashboardFilter
+  selected: DashboardRow[string] | undefined
+  onChange: (value: DashboardRow[string] | undefined) => void
+}) {
+  const options = createMemo<DashboardFilterOption[]>(() => [
+    { id: "all", label: "All", value: undefined },
+    ...props.filter.values.map((value, index) => ({ id: String(index), label: String(value), value })),
+  ])
+  const selectedOption = createMemo(
+    () => options().find((option) => Object.is(option.value, props.selected)) ?? options()[0]!,
+  )
+
+  return (
+    <label>
+      <span>{props.filter.label}</span>
+      <SelectControl<DashboardFilterOption>
+        class="msg-artifact-dashboard__filter-control"
+        options={options()}
+        value={selectedOption()}
+        onChange={(option) => props.onChange(option?.value)}
+        optionValue="id"
+        optionTextValue="label"
+        renderValue={(option) => option?.label ?? "All"}
+        renderOptionLabel={(option) => option.label}
+        ariaLabel={props.filter.label}
+        disallowEmptySelection
+      />
+    </label>
+  )
+}
+
 export function DashboardArtifact(props: { payload: DashboardPayload }) {
   const [filters, setFilters] = createSignal<Record<string, DashboardRow[string] | undefined>>({})
   const filtered = createMemo(() =>
@@ -167,22 +202,11 @@ export function DashboardArtifact(props: { payload: DashboardPayload }) {
           <div class="msg-artifact-dashboard__filters">
             <For each={props.payload.filters}>
               {(filter) => (
-                <label>
-                  <span>{filter.label}</span>
-                  <select
-                    data-filter-id={filter.id}
-                    onChange={(event) => {
-                      const next = Number(event.currentTarget.value)
-                      setFilters((current) => ({
-                        ...current,
-                        [filter.id]: next < 0 ? undefined : filter.values[next],
-                      }))
-                    }}
-                  >
-                    <option value="-1">All</option>
-                    <For each={filter.values}>{(value, index) => <option value={index()}>{String(value)}</option>}</For>
-                  </select>
-                </label>
+                <DashboardFilterControl
+                  filter={filter}
+                  selected={filters()[filter.id]}
+                  onChange={(value) => setFilters((current) => ({ ...current, [filter.id]: value }))}
+                />
               )}
             </For>
           </div>

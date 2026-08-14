@@ -1,332 +1,326 @@
 export type LandingLocale = "root" | "zh-cn"
 
 export const landingProductName = "OpenCorvus"
-const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
-
-type LandingLink = {
-  label: string
-  href: string
-}
-
-type LandingSurface = {
-  title: string
-  description: string
-}
-
-type LandingStory = {
-  label: string
-  title: string
-  description: string
-  bullets: string[]
-}
-
-type LandingContent = {
-  language: LandingLink
-  imageViewer: {
-    open: string
-    close: string
-    dialog: string
-  }
-  nav: {
-    download: string
-    features: string
-    expertSquads: string
-  }
-  hero: {
-    title: string
-    description: string
-    videoLabel: string
-    videoCaption: string
-  }
-  download: {
-    eyebrow: string
-    title: string
-    description: string
-    systemLabel: string
-    architectureLabel: string
-    packageLabel: string
-    actions: {
-      "windows-x64": string
-      "darwin-arm64": string
-      "linux-x64": string
-    }
-    web: {
-      platformName: string
-      action: string
-      system: string
-      architecture: string
-      packageType: string
-    }
-  }
-  features: {
-    eyebrow: string
-    title: string
-    description: string
-    items: LandingStory[]
-  }
-  expertSquads: {
-    title: string
-    description: string
-    capabilities: Array<{ label: string; description: string }>
-    flowLabel: string
-    flowAlt: string
-    media: Array<{ alt: string }>
-  }
-  surfaces: {
-    eyebrow: string
-    title: string
-    description: string
-    items: LandingSurface[]
-  }
-  cta: {
-    title: string
-    description: string
-  }
-}
 
 export const landingContent = {
   root: {
-    language: { label: "简体中文", href: `${publicBase}/zh-cn/` },
-    imageViewer: {
-      open: "View full-size image",
-      close: "Close image preview",
-      dialog: "Product screenshot preview",
-    },
-    nav: {
-      download: "Download",
-      features: "Use cases",
-      expertSquads: "Expert Squads",
-    },
+    language: { label: "简体中文", href: "/zh-cn/" },
     hero: {
-      title: "From an idea to a review-ready delivery.",
+      eyebrow: "Open-source Agent Workbench for long-horizon work",
+      titleLines: ["Build your Workbench.", "Run Missions."],
       description:
-        `${landingProductName} keeps investigation, implementation, evidence, and long-running work in one project context—so you can stay in flow without becoming your own full engineering department.`,
-      videoLabel: "Play the 01:36 local client walkthrough",
-      videoCaption: "Real OpenCorvus client · durable Mission execution with visible evidence · 01:36",
-    },
-    download: {
-      eyebrow: `${landingProductName} access`,
-      title: `Run ${landingProductName} where you work.`,
-      description:
-        "Choose a native package for your system or enter the Web application directly. Every path keeps your work attached to one durable project context.",
-      systemLabel: "System",
-      architectureLabel: "Architecture",
-      packageLabel: "Installer",
-      actions: {
-        "windows-x64": "Download Windows x64",
-        "darwin-arm64": "Download for Apple Silicon",
-        "linux-x64": "Download Linux x64",
+        "Connect a real workspace, choose tools and permission rules, configure an Expert Squad, and keep its collaboration, files, decisions, and evidence connected through one Task.",
+      primary: "Set up your Workbench",
+      secondary: "Explore Expert Squads",
+      boundary:
+        "You choose what connects, which Squad runs, and the permission rules. OpenCorvus keeps the Task and its evidence visible.",
+      harness: {
+        label: "The OpenCorvus Harness",
+        description:
+          "One visible operating layer binds the workspace, model, tools, Skills, permissions, and evidence to the work at hand.",
       },
-      web: {
-        platformName: "Web",
-        action: "Open Web application",
-        system: "Modern browser",
-        architecture: "Cloud",
-        packageType: "Web application",
+      gallery: {
+        label: "Inside the Harness",
+        ariaLabel: "OpenCorvus product surfaces",
+        items: [
+          {
+            id: "work",
+            kind: "image",
+            label: "Work",
+            title: "Shape a review-ready deliverable",
+            description:
+              "Set the outcome, select the Work Harness, and keep production and review in one conversation.",
+            alt: "The OpenCorvus Work Harness with the composer, product mode, tools, and suggested long-form tasks visible.",
+          },
+          {
+            id: "code",
+            kind: "image",
+            label: "Code",
+            title: "Stay grounded in the project",
+            description:
+              "Switch the same operating surface to Code for repository work, terminals, files, and engineering evidence.",
+            alt: "The OpenCorvus Code Harness selected in the project-bound composer.",
+          },
+          {
+            id: "mission",
+            kind: "image",
+            label: "Mission",
+            title: "Hand an outcome to a Mission",
+            description:
+              "Move from one conversation to Mission-scale coordination without losing the selected context and controls.",
+            alt: "The OpenCorvus composer switched to Mission with the Expert Squad context boundary visible.",
+          },
+          {
+            id: "squads",
+            kind: "image",
+            label: "Squads",
+            title: "Inspect the capability package",
+            description:
+              "Compare and install Expert Squads explicitly; installation never activates a team on its own.",
+            alt: "The OpenCorvus Expert Squad Market and its explicit local installation controls.",
+          },
+        ],
       },
     },
-    features: {
-      eyebrow: "Built for the way solo developers actually work",
-      title: "One project context. Three practical use cases.",
+    proof: {
+      eyebrow: "Built around your authority",
+      label: "Product priorities",
+      items: [
+        [
+          "Security",
+          "Keep trust boundaries explicit with permission rules, inspectable Squad revisions, and visible evidence.",
+        ],
+        [
+          "Control",
+          "You decide what connects, which capabilities are available, which Squad runs, and how execution is authorized.",
+        ],
+        [
+          "Customization",
+          "Shape the Workbench around your environment, then configure roles, workflows, Skills, tools, and models for the work.",
+        ],
+      ],
+    },
+    workbench: {
+      eyebrow: "01 · Make it yours",
+      title: "Shape an Agent Workbench around the way you work.",
       description:
-        "Move from a quick investigation to a complete change or durable delegation without reconstructing the work at every step.",
+        "Your Agent Workbench brings the working directory, capabilities, permission rules, and review surface into one visible setup. It describes the surface you configure, not a second runtime object.",
       items: [
         {
-          label: "Investigate & unblock",
-          title: "Find the cause while the code is still in your head.",
+          index: "01",
+          name: "Connect real work",
+          use: "Ground the work",
           description:
-            "Use Chat for fast repository exploration, questions, and iterative debugging in a streaming conversation attached to the current project.",
-          bullets: [
-            "Repository context, attachments, Skills, and tools stay together",
-            "Tool activity and reasoning progress remain visible",
-            "Follow-up questions continue from the same evidence",
-          ],
+            "Bring repositories, files, terminals, and connected systems into the same visible working context.",
+          output: "A real working context",
         },
         {
-          label: "Build a complete change",
-          title: "Turn a request into something you can actually review.",
-          description:
-            "Use Work for the deeper production pass: research, implementation, and finished artifacts that stay inspectable beside their source conversation.",
-          bullets: [
-            "Longer research and implementation passes",
-            "Interactive documents, tables, presentations, and sites",
-            "Reviewable output stays connected to its evidence",
-          ],
+          index: "02",
+          name: "Choose capabilities",
+          use: "Fit the capability set",
+          description: "Select the Skills, tools, models, and connected services the work actually needs.",
+          output: "Only the capabilities you chose",
         },
         {
-          label: "Delegate durable work",
-          title: "Keep complex work moving after you step away.",
+          index: "03",
+          name: "Set the rules",
+          use: "Keep authority explicit",
           description:
-            "Use Mission when an outcome needs decomposition, specialized Agents, Goals, evidence, and resumable progress over a longer execution horizon.",
-          bullets: [
-            "Mission-owned Tasks and Goal-level progress",
-            "Specialists coordinate through visible contracts",
-            "Durable local evidence supports inspection and continuation",
-          ],
+            "Choose which capabilities are available, then select Full access or Ask me for execution authority.",
+          output: "Inspectable capabilities and authority",
         },
       ],
     },
-    expertSquads: {
-      title: "Choose a complete expert team—not a pile of disconnected Agents.",
+    squads: {
+      eyebrow: "02 · Configure your experts",
+      title: "Choose or build the Expert Squad that fits the work.",
       description:
-        "An Expert Squad is a self-contained capability package. Selecting one projects the right Agent roster, Skills, tools, Model Context Protocol (MCP) access, and binding workflow into the task as one coherent operating contract.",
+        "Each Expert Squad is a configurable, inspectable package: roles, workflow, Skills, tools, selection guidance, version, and digest travel together.",
       capabilities: [
-        { label: "Agents", description: "A task-specific roster with explicit responsibilities." },
-        { label: "Skills", description: "Domain instructions travel with the selected team." },
-        { label: "Tools + MCP", description: "Only the required tool and Model Context Protocol access is projected." },
-        { label: "Binding workflows", description: "Evidence dependencies stay visible and reviewable." },
+        ["Start from task fit", "Choose by the outcome, inputs, and limits the team declares."],
+        ["Shape roles and workflow", "Give each specialist visible responsibility and connect their handoffs."],
+        ["Freeze an exact revision", "Keep roles, capabilities, workflow, version, and digest bound together."],
       ],
-      flowLabel: "OpenCorvus / complete Mission workflow",
-      flowAlt:
-        "A complete Mission workflow branching through two schedulers, investigators, planners, developers, reviewers, and handoffs.",
-      media: [
-        { alt: "Expert Squad catalog and installation options" },
-        { alt: "Installed Expert Squads overview and selected package details" },
-      ],
+      catalogAlt: "OpenCorvus Expert Squad catalog",
+      installedAlt: "Installed Expert Squad details in OpenCorvus",
+      action: "Explore Expert Squads",
+      buildAction: "Build your Expert Squad",
     },
-    surfaces: {
-      eyebrow: "The runtime behind 24/7 operation",
-      title: "Your work does not depend on one open window.",
+    mission: {
+      eyebrow: "03 · Run the long arc",
+      title: "Let one Expert Squad carry a Task from first instruction to reviewed delivery.",
       description:
-        "Desktop, headless runtime, messaging channels, and repository automation keep the same project work reachable and resumable.",
-      items: [
+        "A Task keeps one exact Expert Squad and its workflow fixed through the lifecycle. Named roles hand off typed Artifacts and evidence; when an outcome needs several Tasks or Squads, a Mission connects their dependencies without erasing ownership.",
+      facts: [
+        [
+          "One fixed team per Task",
+          "A Task resolves one exact Expert Squad revision at creation and cannot silently switch it mid-run.",
+        ],
+        [
+          "Typed handoffs",
+          "Named roles pass exact Artifact references and evidence instead of relying on summaries alone.",
+        ],
+        [
+          "Mission-scale coordination",
+          "When an outcome needs several Tasks or Squads, Mission records dependencies and preserves each Task's owner.",
+        ],
+      ],
+      imageAlt: "OpenCorvus Task continuing across desktop and headless runtime surfaces",
+    },
+    community: {
+      eyebrow: "04 · Join us",
+      title: "Contribute your experts. Expand what everyone can accomplish.",
+      description:
+        "Package specialist knowledge as an inspectable Expert Squad, validate it with the open SDK, and contribute it through the source repository. Self-service listing is not open yet; community review remains part of publication.",
+      cards: [
         {
-          title: "Desktop continuity",
-          description: "Chat, Work, Mission, and Scheduled share one project ledger with visible state and evidence.",
+          label: "Set up your Workbench",
+          title: "Install, connect a workspace, and shape your first Agent setup.",
+          note: "OpenCorvus quickstart →",
+          href: "/start/quickstart/",
+          primary: true,
         },
         {
-          title: "Headless runtime",
-          description:
-            "Keep task APIs, durable state, and event streams available without depending on the desktop interface.",
+          label: "Contribute an Expert Squad",
+          title: "Package, validate, and contribute specialist knowledge through the open source path.",
+          note: "Expert Squad author path →",
+          href: "/publish/",
+          primary: false,
         },
         {
-          title: "Channel reach",
-          description:
-            `Start and follow ${landingProductName} work through supported messaging channels and their permission flow.`,
-        },
-        {
-          title: "Scheduled repository automation",
-          description: "Wake work from recurring schedules, issue or pull-request events, and manual workflows.",
+          label: "Join the discussion",
+          title: "Share use cases, review proposals, and help shape the community.",
+          note: "GitHub Discussions →",
+          href: "https://github.com/yangheng95/opencorvus/discussions",
+          primary: false,
         },
       ],
-    },
-    cta: {
-      title: "Keep your context. Bring in the right team. Ship the result.",
-      description:
-        `Start with one repository and one request. ${landingProductName} helps you investigate, produce a complete deliverable, and keep complex work moving with visible evidence.`,
     },
   },
   "zh-cn": {
-    language: { label: "English", href: `${publicBase}/` },
-    imageViewer: {
-      open: "查看大图",
-      close: "关闭图片预览",
-      dialog: "产品截图预览",
-    },
-    nav: {
-      download: "下载",
-      features: "使用场景",
-      expertSquads: "专家团",
-    },
+    language: { label: "English", href: "/" },
     hero: {
-      title: "从一个想法，到可审查的完整交付。",
+      eyebrow: "面向长程任务的开源 Agent 工作台",
+      titleLines: ["定制你的工作台，", "运行 Mission。"],
+      description: "连接真实工作区，选择工具与权限规则，配置专家团，并让协作、文件、决策与证据贯穿同一个任务。",
+      primary: "开始定制工作台",
+      secondary: "探索专家团",
+      boundary: "由你决定连接什么、启用哪个专家团以及权限规则；OpenCorvus 让任务与证据保持可见。",
+      harness: {
+        label: "OpenCorvus Harness",
+        description: "同一套可见运行层，把工作区、模型、工具、Skills、权限与证据绑定到当前工作。",
+      },
+      gallery: {
+        label: "Harness 内部",
+        ariaLabel: "OpenCorvus 产品界面",
+        items: [
+          {
+            id: "work",
+            kind: "image",
+            label: "Work",
+            title: "把成果推进到可审查状态",
+            description: "明确目标，选择 Work Harness，让生产与复核留在同一段对话里。",
+            alt: "OpenCorvus Work Harness，显示了输入区、产品模式、工具和长程任务建议。",
+          },
+          {
+            id: "code",
+            kind: "image",
+            label: "Code",
+            title: "始终扎根真实项目",
+            description: "在同一运行界面切换到 Code，把代码仓库、终端、文件和工程证据连在一起。",
+            alt: "在项目输入区中选中的 OpenCorvus Code Harness。",
+          },
+          {
+            id: "mission",
+            kind: "image",
+            label: "Mission",
+            title: "把结果交给 Mission 推进",
+            description: "从单段对话进入 Mission 级协同，同时保留已选上下文与控制。",
+            alt: "OpenCorvus 输入区切换至 Mission，并显示专家团上下文边界。",
+          },
+          {
+            id: "squads",
+            kind: "image",
+            label: "专家团",
+            title: "检查完整能力包",
+            description: "显式比较和安装专家团；安装本身绝不会自动激活一支团队。",
+            alt: "OpenCorvus 专家团市场及其显式本地安装控制。",
+          },
+        ],
+      },
+    },
+    proof: {
+      eyebrow: "围绕你的权限制定",
+      label: "产品核心价值",
+      items: [
+        ["安全", "通过权限规则、可检查的专家团版本与可见证据，明确每一道信任边界。"],
+        ["控制", "由你决定连接什么、开放哪些能力、启用哪个专家团，以及如何授予执行权限。"],
+        ["定制", "围绕你的环境组织工作台，再按任务配置角色、工作流、Skills、工具与模型。"],
+      ],
+    },
+    workbench: {
+      eyebrow: "01 · 定制你的工作方式",
+      title: "围绕你的工作方式，定制 Agent 工作台。",
       description:
-        `${landingProductName} 把调查、实现、证据与长程工作留在同一个项目上下文中，让独立开发者保持专注，也拥有一支完整工程团队的交付能力。`,
-      videoLabel: "播放 01:36 本地客户端实录",
-      videoCaption: "OpenCorvus 真实客户端 · 带可见证据的长程 Mission 执行 · 01:36",
-    },
-    download: {
-      eyebrow: `${landingProductName} 使用入口`,
-      title: `选择适合你的 ${landingProductName} 运行方式。`,
-      description: "下载适合当前系统的原生安装包，或直接进入网页版。每一种入口都让工作持续留在同一个可回看的项目上下文中。",
-      systemLabel: "系统",
-      architectureLabel: "架构",
-      packageLabel: "安装包",
-      actions: {
-        "windows-x64": "下载 Windows x64 版",
-        "darwin-arm64": "下载 Apple Silicon 版",
-        "linux-x64": "下载 Linux x64 版",
-      },
-      web: {
-        platformName: "网页版",
-        action: "进入网页版",
-        system: "现代浏览器",
-        architecture: "云端",
-        packageType: "Web 应用",
-      },
-    },
-    features: {
-      eyebrow: "为独立开发者的真实工作方式而生",
-      title: "一个项目上下文，覆盖三种高频场景。",
-      description: "从快速调查到完整改动，再到长程委托，无需在每一步重新拼装上下文。",
+        "Agent 工作台把工作目录、能力、权限规则与审查界面组织在一套可见配置中。它描述的是你定制的工作界面，而不是第二套运行时对象。",
       items: [
         {
-          label: "快速排障",
-          title: "沿着当前上下文，把问题一次查清。",
-          description: "在与当前项目绑定的流式 Chat 中探索仓库、连续追问并迭代排障。",
-          bullets: [
-            "项目上下文、附件、Skill 与工具保持在同一对话",
-            "工具活动与推进过程持续可见",
-            "后续追问沿用同一份证据",
-          ],
+          index: "01",
+          name: "连接真实工作",
+          use: "让工作落地",
+          description: "把代码仓库、文件、终端与已连接系统带进同一个可见工作环境。",
+          output: "一个真实工作环境",
         },
         {
-          label: "完整交付",
-          title: "把一个需求变成真正可以审查的成果。",
-          description: "用 Work 完成更深入的研究、实现和成品输出，交付物始终与来源对话和证据保持连接。",
-          bullets: ["更长的研究与实现过程", "交互式文档、表格、演示文稿与网站", "可审查产物与证据保持连接"],
+          index: "02",
+          name: "选择能力",
+          use: "匹配所需能力",
+          description: "选择任务真正需要的 Skills、工具、模型与已连接服务。",
+          output: "只使用你选择的能力",
         },
         {
-          label: "长程推进",
-          title: "离开电脑后，复杂工作仍然可以继续。",
-          description: "当目标需要拆解、专业 Agent、Goal、证据与更长执行周期时，把它交给 Mission 持续推进。",
-          bullets: ["Mission 持有 Task 与 Goal 级进度", "专业 Agent 按可见契约协作", "本地持久证据支持检查与续跑"],
+          index: "03",
+          name: "设定规则",
+          use: "明确保留权限",
+          description: "配置允许、询问或拒绝规则，并让审查界面保持可见。",
+          output: "可检查的规则与审查",
         },
       ],
     },
-    expertSquads: {
-      title: "选择一支完整专家团队，而不是堆叠更多 Agent。",
-      description:
-        "Expert Squad（专家团）是自包含的能力包。选择专家团后，Agent 阵容、Skill、工具、MCP（Model Context Protocol，模型上下文协议）访问与绑定工作流会作为一份一致的执行契约投影到任务中。",
+    squads: {
+      eyebrow: "02 · 配置你的专家团",
+      title: "选择或构建真正适合任务的专家团。",
+      description: "每个专家团都是可配置、可检查的能力包：角色、工作流、Skills、工具、选择说明、版本与摘要一起交付。",
       capabilities: [
-        { label: "Agent 阵容", description: "针对任务配置职责清晰的专业角色。" },
-        { label: "Skill", description: "领域方法与约束随专家团一起生效。" },
-        { label: "工具与 MCP", description: "只投影当前团队需要的工具和协议访问。" },
-        { label: "绑定工作流", description: "证据依赖与协作顺序持续可见、可审查。" },
+        ["从任务适配开始", "根据团队声明的目标、输入与边界来选择。"],
+        ["配置角色与工作流", "为每位专家分配可见责任，并明确彼此的交接关系。"],
+        ["冻结精确版本", "把角色、能力、工作流、版本与摘要绑定在同一精确版本中。"],
       ],
-      flowLabel: "OpenCorvus / 完整 Mission 工作流",
-      flowAlt: "一条完整 Mission 工作流，分为两条调度链，依次经过调查、规划、开发、审查与交接。",
-      media: [
-        { alt: "专家团目录与安装选项" },
-        { alt: "已安装专家团总览与所选能力包详情" },
-      ],
+      catalogAlt: "OpenCorvus 专家团目录",
+      installedAlt: "OpenCorvus 中已安装专家团的详情",
+      action: "探索专家团",
+      buildAction: "构建你的专家团",
     },
-    surfaces: {
-      eyebrow: "支撑 7×24 小时运行的基础能力",
-      title: "你的工作不依赖一个始终打开的窗口。",
-      description: "桌面端、无界面运行时、消息通道与仓库自动化让同一个项目持续可达、随时可续跑。",
-      items: [
+    mission: {
+      eyebrow: "03 · 推进长程任务",
+      title: "让一个专家团把任务从首次指令推进到经过复核的交付。",
+      description:
+        "一个任务在整个生命周期中固定使用同一精确版本的专家团及其工作流。具名角色通过带类型的产物与证据完成交接；当一个结果需要多个任务或专家团时，Mission 连接它们的依赖，同时保留清晰责任。",
+      facts: [
+        ["每个任务固定一支团队", "任务创建时解析一个精确版本的专家团，运行中不能静默切换。"],
+        ["带类型的交接", "具名角色传递精确的 Artifact 引用与证据，而不是只依赖文字总结。"],
+        ["Mission 级协同", "当一个结果需要多个任务或专家团时，Mission 记录依赖并保留每个任务的责任归属。"],
+      ],
+      imageAlt: "OpenCorvus 任务在桌面和无头运行界面之间保持连续",
+    },
+    community: {
+      eyebrow: "04 · 加入我们",
+      title: "贡献你的专家能力，让每个人都能完成更多。",
+      description:
+        "把专业知识封装成可检查的专家团，用开放 SDK 完成验证，再通过源码仓库贡献。自助上架尚未开放，社区审查仍是发布路径的一部分。",
+      cards: [
         {
-          title: "桌面连续性",
-          description: "Chat、Work、Mission 与定时任务共用一个项目账本，状态和证据始终可见。",
+          label: "开始定制工作台",
+          title: "安装 OpenCorvus、连接工作区，并完成第一套 Agent 配置。",
+          note: "OpenCorvus 快速开始 →",
+          href: "/start/quickstart/",
+          primary: true,
         },
         {
-          title: "无界面运行时",
-          description: "无需依赖桌面界面，也能持续提供任务 API、持久状态与事件流。",
+          label: "贡献一个专家团",
+          title: "通过开源路径封装、验证并贡献专业能力。",
+          note: "专家团作者路径 →",
+          href: "/publish/",
+          primary: false,
         },
         {
-          title: "消息通道触达",
-          description: `通过受支持的消息通道发起并跟进 ${landingProductName} 工作，同时保留权限流程。`,
-        },
-        {
-          title: "定时与仓库自动化",
-          description: "通过周期计划、Issue 或合并请求事件以及手动工作流唤醒工作。",
+          label: "加入讨论",
+          title: "分享使用场景、审查提案，并一起建设社区。",
+          note: "GitHub Discussions →",
+          href: "https://github.com/yangheng95/opencorvus/discussions",
+          primary: false,
         },
       ],
-    },
-    cta: {
-      title: "保留上下文，带上合适的团队，交付最终结果。",
-      description: `从一个仓库和一个需求开始。${landingProductName} 帮你调查问题、完成可审查交付，并用可见证据持续推进复杂工作。`,
     },
   },
-} satisfies Record<LandingLocale, LandingContent>
+} as const

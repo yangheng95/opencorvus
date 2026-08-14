@@ -4,6 +4,21 @@ import { nodeBinaryPackageName, nodeExecutableName } from "@opencorvus-ai/util/n
 
 export type BuildFlavor = "cli" | "overlay-server"
 
+export function artifactCompileDefines(input: {
+  channel: string
+  embeddedEnv: string
+  libc: string
+  version: string
+}): Record<string, string> {
+  return {
+    OPENCORVUS_COMPILED_BINARY: "true",
+    OPENCORVUS_VERSION: `'${input.version}'`,
+    OPENCORVUS_CHANNEL: `'${input.channel}'`,
+    OPENCORVUS_LIBC: input.libc,
+    OPENCORVUS_EMBEDDED_ENV: input.embeddedEnv,
+  }
+}
+
 export function parseBuildFlavor(argv: string[]): BuildFlavor {
   return argv.includes("--overlay-server") ? "overlay-server" : "cli"
 }
@@ -14,8 +29,7 @@ export function artifactPackageBaseName(pkgName: string, flavor: BuildFlavor): s
 }
 
 export function artifactEntrypoints(flavor: BuildFlavor): string[] {
-  if (flavor === "overlay-server") return ["./src/overlay-launcher.ts"]
-  return ["./src/launcher.ts"]
+  return [flavor === "overlay-server" ? "./src/overlay-launcher.ts" : "./src/launcher.ts"]
 }
 
 export function artifactExternalModules(): string[] {

@@ -38,13 +38,6 @@ export const PlannerTool = Tool.define("planner", {
   async execute(params, ctx) {
     const sessionID = ctx.sessionID
 
-    await ctx.ask({
-      permission: "planner",
-      patterns: ["*"],
-      always: ["*"],
-      metadata: { action: params.action },
-    })
-
     switch (params.action) {
       case "add_task": {
         const task = TaskPlan.add({

@@ -21,11 +21,12 @@ import { t } from "../utils/i18n"
 import { apiJson, ApiError, configure as configureApi, serverSettledRequest } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import type { ProjectEditorID } from "./host-transport"
-import { nativeMessage } from "./app-dialog"
+import { nativeMessage, showAppDialog } from "./app-dialog"
 import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
 import { reloadProjectScope } from "./config"
-import { startTaskListSSE, stopSSE, stopTaskListSSE } from "./sse"
+import { stopSSE } from "./sse"
+import { refreshProjectMemory } from "./project-memory"
 import { activeProjectDirectory, restoreWorkspaceDirectory, setProjectDirectoryContext } from "./project-directory"
 import { directoryScopedPath } from "./task-path"
 import { cancelConversationReplay, resetConversationProjection } from "./conversation"
@@ -232,10 +233,10 @@ export function clearProjectScopeData(): void {
     channels: [],
     skills: [],
     skillMounts: null,
-    skillMarket: [],
     mcp: {},
     memoryFiles: [],
     memorySearchMode: false,
+    projectMemory: null,
     criteriaSpecs: [],
   })
 }
@@ -246,7 +247,6 @@ function enterDirectoryFreeWorkspace(savedDirectory: string): number {
   const selectionEpoch = beginWorkspaceSelection()
   clearComposerModelProjection()
   stopSSE()
-  stopTaskListSSE()
   setSettingsStore("directoryEpoch", (n: number) => n + 1)
   setSettingsStore({
     directory: "",
@@ -342,9 +342,11 @@ export async function resolveGlobalComposerSubmissionContext(): Promise<GlobalCo
 
 export interface ProjectDeleteResult {
   ok: true
+  status: "committed" | "committed_with_residue"
   projectID: string
   directory: string
   deletedTaskCount: number
+  residue: Array<{ path: string; message: string }>
 }
 
 export type ProjectDeleteOutcome =
@@ -452,6 +454,20 @@ export async function deleteProjectState(
     (result as Record<string, unknown>).ok !== true ||
     typeof (result as Record<string, unknown>).projectID !== "string" ||
     typeof (result as Record<string, unknown>).directory !== "string" ||
+    !["committed", "committed_with_residue"].includes(String((result as Record<string, unknown>).status)) ||
+    (() => {
+      const residue = (result as Record<string, unknown>).residue
+      return (
+        !Array.isArray(residue) ||
+        residue.some(
+          (item) =>
+            !item ||
+            typeof item !== "object" ||
+            typeof (item as Record<string, unknown>).path !== "string" ||
+            typeof (item as Record<string, unknown>).message !== "string",
+        )
+      )
+    })() ||
     !Number.isInteger((result as Record<string, unknown>).deletedTaskCount) ||
     Number((result as Record<string, unknown>).deletedTaskCount) < 0
   ) {
@@ -629,6 +645,8 @@ export async function loadDiscoveredProjects(): Promise<ProjectDiscovery> {
 // ── applyDirectory ──
 
 export interface ApplyDirectoryOptions {
+  /** Explicit caller cancellation; ordinary wall-clock time does not cancel project mutations. */
+  signal?: AbortSignal
   /** Shared selection intent that must still own boardStore.selectEpoch. */
   selectionEpoch?: number
   /**
@@ -666,6 +684,22 @@ export function beginWorkspaceSelection(): number {
   return epoch
 }
 
+/**
+ * Transfer selection ownership to a non-work-item surface. A stable selected
+ * work item remains available when the operator returns, while a partially
+ * hydrated selection is cleared so its former owner cannot leave a stuck busy
+ * projection behind.
+ */
+export function supersedePendingWorkspaceSelection(): number {
+  const pending = boardStore.taskSwitching
+  const epoch = beginWorkspaceSelection()
+  if (!pending) return epoch
+  stopSSE()
+  clearComposerModelProjection()
+  clearSelectedWorkItem()
+  return epoch
+}
+
 export function ownsWorkspaceSelection(epoch: number): boolean {
   return boardStore.selectEpoch === epoch
 }
@@ -698,7 +732,6 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   console.log("[applyDir] switching", { from: curDir, to: next, save })
 
   stopSSE()
-  stopTaskListSSE()
   if (options.preserveSelection !== true) {
     clearSelectedWorkItem()
   }
@@ -717,7 +750,7 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   // changing Git identity after Mission/Chat execution begins would require an
   // exclusive refresh behind their long-lived project lease.
   if (settingsStore.initGit) {
-    await initializeProjectDirectoryGit(next)
+    await initializeProjectDirectoryGit(next, { signal: options.signal })
     if (!ownsWorkspaceSelection(selectionEpoch)) return false
   }
 
@@ -761,7 +794,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
     console.log("[applyDir] superseded after reload, discarding")
     return false
   }
-  startTaskListSSE()
+  void refreshProjectMemory().catch((error) =>
+    AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
+  )
   console.log("[applyDir] done, tasks=", boardStore.tasks.length)
   return true
 }
@@ -785,7 +820,21 @@ export async function setActiveDirectory(value: string, options: ApplyDirectoryO
  */
 export async function browseDirectory(): Promise<void> {
   try {
-    const selected = await pickDirectory(activeDirectory())
+    const host = getHostTransport()
+    const selected = host.capabilities.ui.manualWorkspacePathEntry
+      ? await showAppDialog({
+          title: t("cwd.title"),
+          message: t("work_ledger.tooltip.create.existing_folder"),
+          input: true,
+          inputLabel: t("cwd.path_label"),
+          inputPlaceholder: t("cwd.path_placeholder"),
+          inputValue: activeDirectory(),
+          inputRequired: true,
+          inputRequiredMessage: t("cwd.path_required"),
+          cancel: true,
+          okLabel: t("cwd.choose_level"),
+        }).then((result) => (result.confirmed ? String(result.value || "").trim() : ""))
+      : await pickDirectory(activeDirectory())
     if (!selected) return
     await setDirectory(selected)
   } catch (e) {
@@ -868,6 +917,10 @@ export async function openPathInSelectedEditor(target: string): Promise<void> {
     }
     return
   }
+  if (!getHostTransport().capabilities.nativeCommands["workspace.openProjectEditor"]) {
+    await openProjectPathInWorkbench(target)
+    return
+  }
   await openDirectoryInEditor(settingsStore.projectEditor, path)
 }
 
@@ -882,7 +935,23 @@ export async function openProjectFile(target: string): Promise<void> {
     }
     return
   }
+  if (!getHostTransport().capabilities.nativeCommands["open-path"]) {
+    await openProjectPathInWorkbench(target)
+    return
+  }
   await nativeOpen(path)
+}
+
+async function openProjectPathInWorkbench(target: string): Promise<void> {
+  const directory = activeDirectory().trim()
+  const rawTarget = typeof target === "string" ? target.trim() : ""
+  if (!directory || !rawTarget) return
+  const { openFileEditor, openSourceFileEditor } = await import("./file-workbench")
+  if (isAbsoluteEditorPath(rawTarget)) {
+    await openSourceFileEditor(rawTarget, { directory })
+    return
+  }
+  await openFileEditor(rawTarget, { directory })
 }
 
 function isAbsoluteEditorPath(path: string): boolean {

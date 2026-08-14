@@ -21,7 +21,13 @@ import { updateGlobalConfigPatch } from "../../config/update-global"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { NativeAgentInfoSchema } from "@/agent/native-agent-info"
 import { Database } from "../../storage/db"
-import { OwnedPromptControllersResponse, badRequestBody, errors, namedErrorResponse } from "../error"
+import {
+  AuthReadUnavailableResponse,
+  OwnedPromptControllersResponse,
+  badRequestBody,
+  errors,
+  namedErrorResponse,
+} from "../error"
 import { canRestartServer, startServerRestart } from "../restart"
 import { GlobalConversationService } from "@/chat/global-chat-service"
 import { RightSidebarConversationSessionResponse } from "@/chat/session"
@@ -40,12 +46,12 @@ import {
 } from "@/storage/mysql-transfer"
 import { settleCanonicalProviderCatalogInvalidation, settleProviderRefreshInvalidation } from "../provider-refresh"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { ExpertSquadCatalogSummarySchema } from "@/expert-squad/catalog"
-import { ExpertSquadRegistry } from "@/expert-squad/registry"
+import { ExpertSquadCatalogPageSchema, ExpertSquadCatalogSearchQuerySchema } from "@/expert-squad/catalog"
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
-import { AutomationService } from "@/scheduler/automation-service"
+import { AutomationRunOutcomes, AutomationService } from "@/scheduler/automation-service"
 import { ProviderAccountUsage } from "@/provider/account-usage"
+import { UsageStats } from "@/usage"
 
 const log = Log.create({ service: "server" })
 
@@ -86,7 +92,7 @@ const AutomationView = z
   })
   .strict()
 
-const AutomationRunView = z
+export const AutomationRunViewSchema = z
   .object({
     id: z.string(),
     automationId: z.string(),
@@ -103,7 +109,7 @@ const AutomationRunView = z
         productPillar: z.enum(["code", "work"]).nullable(),
       })
       .nullable(),
-    outcome: z.enum(["running", "succeeded", "failed"]),
+    outcome: z.enum(AutomationRunOutcomes),
     startedAt: z.number(),
     completedAt: z.number().nullable(),
     error: z.string().nullable(),
@@ -143,8 +149,7 @@ const GlobalComposerReferencesResponse = z
       .strict(),
     expert_squads: z
       .object({
-        squads: ExpertSquadCatalogSummarySchema.array(),
-        issues: ExpertSquadRegistry.DiscoveryIssue.array(),
+        page: ExpertSquadCatalogPageSchema,
       })
       .strict(),
     mission_skills: MissionSkillCatalog.Response,
@@ -158,6 +163,24 @@ function errorMessage(error: unknown): string {
 
 export const GlobalRoutes = lazy(() =>
   new Hono()
+    .get(
+      "/usage",
+      describeRoute({
+        summary: "Get natural-period Provider usage",
+        description:
+          "Aggregate persisted streamed Provider calls across all projects by their event time for one IANA calendar period.",
+        operationId: "global.usage",
+        responses: {
+          200: {
+            description: "Natural-period Token, cost, Provider, model, comparison, and time-series statistics",
+            content: { "application/json": { schema: resolver(UsageStats.Response) } },
+          },
+          ...errors(400),
+        },
+      }),
+      validator("query", UsageStats.Query),
+      async (c) => c.json(await UsageStats.read(c.req.valid("query"))),
+    )
     .get(
       "/automations",
       describeRoute({
@@ -217,7 +240,7 @@ export const GlobalRoutes = lazy(() =>
         responses: {
           200: {
             description: "One completed run per target",
-            content: { "application/json": { schema: resolver(z.array(AutomationRunView)) } },
+            content: { "application/json": { schema: resolver(z.array(AutomationRunViewSchema)) } },
           },
           ...errors(400, 404, 409),
         },
@@ -232,7 +255,7 @@ export const GlobalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Scheduled automation run history",
-            content: { "application/json": { schema: resolver(z.array(AutomationRunView)) } },
+            content: { "application/json": { schema: resolver(z.array(AutomationRunViewSchema)) } },
           },
           ...errors(400, 404),
         },
@@ -311,7 +334,7 @@ export const GlobalRoutes = lazy(() =>
       describeRoute({
         summary: "List global Composer references",
         description:
-          "Return the built-in and user-global Skills, Agent Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
+          "Return the built-in and user-global Skills, Expert Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
         operationId: "global.composerReferences",
         responses: {
           200: {
@@ -322,16 +345,47 @@ export const GlobalRoutes = lazy(() =>
         },
       }),
       async (c) => {
-        const [skills, expertSquads, missionSkills] = await Promise.all([
+        const [skills, expertSquadPage, missionSkills] = await Promise.all([
           Skill.globalSummaries(),
-          PromptProfileResolver.globalCatalog(),
+          PromptProfileResolver.searchCatalog({ limit: 20 }),
           MissionSkillCatalog.globalSummaries(),
         ])
         return c.json(
           GlobalComposerReferencesResponse.parse({
             skills,
-            expert_squads: expertSquads,
+            expert_squads: {
+              page: expertSquadPage,
+            },
             mission_skills: missionSkills,
+          }),
+        )
+      },
+    )
+    .get(
+      "/composer-expert-squads",
+      describeRoute({
+        summary: "Search global Composer expert squads",
+        description:
+          "Returns a bounded page of built-in and user-global Expert Squads without creating a Project or Session.",
+        operationId: "global.composerExpertSquads",
+        responses: {
+          200: {
+            description: "Bounded global Composer Expert Squad page",
+            content: { "application/json": { schema: resolver(ExpertSquadCatalogPageSchema) } },
+          },
+          ...errors(400, 500),
+        },
+      }),
+      validator("query", ExpertSquadCatalogSearchQuerySchema),
+      async (c) => {
+        const query = c.req.valid("query")
+        return c.json(
+          await PromptProfileResolver.searchCatalog({
+            view: query.view,
+            query: query.query,
+            productPillar: query.productPillar,
+            cursor: query.cursor,
+            limit: query.limit,
           }),
         )
       },
@@ -483,6 +537,7 @@ export const GlobalRoutes = lazy(() =>
             description: "Provider account usage lookup result",
             content: { "application/json": { schema: resolver(ProviderAccountUsage.Response) } },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string().trim().min(1) })),
@@ -545,6 +600,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(GlobalProviderAuthMutationResponse) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -606,6 +662,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(GlobalProviderAuthMutationResponse) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -650,6 +707,7 @@ export const GlobalRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -692,6 +750,7 @@ export const GlobalRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -751,6 +810,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(ProviderRemovalReceipt) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string().trim().min(1) })),
@@ -794,16 +854,11 @@ export const GlobalRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {
-        const result = await Config.getGlobal().then(
-          (config) => Provider.refreshModels(config),
-          (error) => ({
-            ok: false as const,
-            error: errorMessage(error),
-          }),
-        )
+        const result = await Provider.refreshModels(await Config.getGlobal())
         if (result.ok) {
           const issues = await settleCanonicalProviderCatalogInvalidation()
           return c.json({ ...result, ...(issues.length > 0 ? { issues } : {}) })
@@ -1016,6 +1071,7 @@ export const GlobalRoutes = lazy(() =>
           },
           ...errors(400),
           409: namedErrorResponse("Non-canonical configuration file", "NonCanonicalConfigFileError"),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", z.record(z.string(), z.unknown())),

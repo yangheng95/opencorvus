@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "public-health-surveillance",
+  "name": "Public Health Surveillance",
+  "label": "Public Health Surveillance",
+  "description": "Evidence-bounded surveillance-system, case-definition, data-quality, epidemiologic trend, and multi-indicator review without case classification or public-health action authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for source-bound public-health surveillance evidence and qualified review preparation.",
+    "selection_guidance": "Select for surveillance-system scope, case-definition version trace, completeness and timeliness, epidemiologic measures, trends, analytic signals, or laboratory/genomic/syndromic indicator integration. Do not select for diagnosis, case classification, outbreak declaration, reporting, alerts, contact tracing, or public-health orders.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "public-health-surveillance/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "surveillance-system-case-definition-data-quality-analyst": {
+        "label": "Surveillance System Case Definition Data Quality Analyst",
+        "description": "Traces surveillance scope, population, case-definition versions, record lineage, completeness, timeliness, and representativeness evidence.",
+        "base_role": "explore",
+        "prompt": "agents/surveillance-system-case-definition-data-quality-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-health-surveillance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "surveillance-measure-trend-signal-analyst": {
+        "label": "Surveillance Measure Trend Signal Analyst",
+        "description": "Produces reproducible descriptive measures, trends, baselines, and analytic signal questions without declaring clusters or outbreaks.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/surveillance-measure-trend-signal-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-health-surveillance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "laboratory-genomic-indicator-integration-analyst": {
+        "label": "Laboratory Genomic Indicator Integration Analyst",
+        "description": "Links laboratory, genomic, syndromic, mortality, and other indicators through compatible definitions, denominators, and reporting lags.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/laboratory-genomic-indicator-integration-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-health-surveillance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "public-health-surveillance-review-owner": {
+        "label": "Public Health Surveillance Review Owner",
+        "description": "Joins system-quality, trend, and indicator branches into a qualified-review pack while preserving unresolved public-health decisions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/public-health-surveillance-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-health-surveillance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "public-health-surveillance-review": {
+        "label": "Public Health Surveillance Review",
+        "description": "Three independent surveillance evidence branches converge into one controlled review.",
+        "nodes": {
+          "surveillance-system-case-definition-data-quality-analyst": {
+            "agent_id": "surveillance-system-case-definition-data-quality-analyst",
+            "description": "Traces system scope, definitions, record lineage, completeness, timeliness, and representativeness.",
+            "depends_on": []
+          },
+          "surveillance-measure-trend-signal-analyst": {
+            "agent_id": "surveillance-measure-trend-signal-analyst",
+            "description": "Builds descriptive measures, trend comparisons, and analytic signal questions.",
+            "depends_on": []
+          },
+          "laboratory-genomic-indicator-integration-analyst": {
+            "agent_id": "laboratory-genomic-indicator-integration-analyst",
+            "description": "Links source-bound laboratory, genomic, syndromic, and other indicators.",
+            "depends_on": []
+          },
+          "public-health-surveillance-review-owner": {
+            "agent_id": "public-health-surveillance-review-owner",
+            "description": "Joins all branches without case, outbreak, alert, reporting, or intervention authority.",
+            "depends_on": [
+              "laboratory-genomic-indicator-integration-analyst",
+              "surveillance-measure-trend-signal-analyst",
+              "surveillance-system-case-definition-data-quality-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

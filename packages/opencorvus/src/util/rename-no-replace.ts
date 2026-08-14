@@ -78,14 +78,14 @@ async function renameLinux(source: string, target: string): Promise<void> {
   })
 }
 
-async function renameWindows(source: string, target: string): Promise<void> {
+async function renameWindows(source: string, target: string, writeThrough: boolean): Promise<void> {
   const { dlopen } = await import("bun:ffi")
   const library = dlopen("kernel32.dll", {
     MoveFileExW: { args: ["ptr", "ptr", "u32"], returns: "bool" },
     GetLastError: { args: [], returns: "u32" },
   })
   try {
-    if (library.symbols.MoveFileExW(wideString(source), wideString(target), 0)) return
+    if (library.symbols.MoveFileExW(wideString(source), wideString(target), writeThrough ? 0x00000008 : 0)) return
     const error = library.symbols.GetLastError()
     const code = error === 80 || error === 183 ? "EEXIST" : `WIN32_${error}`
     throw nativeError(`MoveFileExW failed for ${source} -> ${target}`, code, error)
@@ -102,6 +102,18 @@ async function renameWindows(source: string, target: string): Promise<void> {
 export async function renameNoReplace(source: string, target: string): Promise<void> {
   if (process.platform === "darwin") return renameDarwin(source, target)
   if (process.platform === "linux") return renameLinux(source, target)
-  if (process.platform === "win32") return renameWindows(source, target)
+  if (process.platform === "win32") return renameWindows(source, target, false)
   throw new Error(`Atomic rename-no-replace is unsupported on ${process.platform}`)
+}
+
+/**
+ * Publish one same-volume namespace move with persistence semantics. Windows
+ * uses MOVEFILE_WRITE_THROUGH; POSIX callers must fsync the affected parent
+ * directories after the atomic rename.
+ */
+export async function renameNoReplaceWriteThrough(source: string, target: string): Promise<void> {
+  if (process.platform === "darwin") return renameDarwin(source, target)
+  if (process.platform === "linux") return renameLinux(source, target)
+  if (process.platform === "win32") return renameWindows(source, target, true)
+  throw new Error(`Durable atomic rename-no-replace is unsupported on ${process.platform}`)
 }

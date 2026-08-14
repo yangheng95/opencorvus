@@ -6,10 +6,6 @@ export type TaskQueuePriority = "high" | "normal" | "low"
 export type TaskQueueStatus = "queued" | "running" | "completed" | "failed"
 export type TaskQueueMetadata =
   | {
-      kind: "session_prompt"
-      input: Record<string, unknown>
-    }
-  | {
       kind: "session_wake"
       messageID: string
       input: Record<string, unknown>

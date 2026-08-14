@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "patent-landscape-prior-art",
+  "name": "Patent Landscape and Prior Art",
+  "label": "Patent Landscape and Prior Art",
+  "description": "Reproducible invention-feature, search, family, bibliography, and passage-evidence review without patentability, freedom-to-operate, infringement, or legal authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded patent-search, family normalization, landscape, and prior-art passage evidence.",
+    "selection_guidance": "Select for authorized technical decomposition, reproducible query logs, CPC/IPC exploration, family and priority ledgers, and element-to-passage evidence matrices. Do not select for novelty, non-obviousness, patentability, validity, infringement, freedom-to-operate, claim drafting, or legal strategy.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "patent-landscape-prior-art/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "invention-claim-concept-decomposer": {
+        "label": "Invention Claim Concept Decomposer",
+        "description": "Builds an authorized technical feature and search-concept chart without claim construction or legal conclusions.",
+        "base_role": "explore",
+        "prompt": "agents/invention-claim-concept-decomposer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "patent-landscape-prior-art/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "patent-search-family-bibliography-analyst": {
+        "label": "Patent Search Family and Bibliography Analyst",
+        "description": "Executes reproducible search plans and separates document, family, priority, publication, and register-event evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/patent-search-family-bibliography-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "patent-landscape-prior-art/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "prior-art-claim-evidence-landscape-analyst": {
+        "label": "Prior Art Claim Evidence and Landscape Analyst",
+        "description": "Maps technical elements to exact passages and produces bounded descriptive landscape summaries.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/prior-art-claim-evidence-landscape-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "patent-landscape-prior-art/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "patent-landscape-prior-art-owner": {
+        "label": "Patent Landscape and Prior Art Owner",
+        "description": "Joins feature, search, family, and passage evidence into a lawyer-reviewable technical pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/patent-landscape-prior-art-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "patent-landscape-prior-art/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "patent-landscape-prior-art-review": {
+        "label": "Patent Landscape and Prior Art Review",
+        "description": "Three independent technical patent-evidence branches converge into one qualified-review pack.",
+        "nodes": {
+          "invention-claim-concept-decomposer": {
+            "agent_id": "invention-claim-concept-decomposer",
+            "description": "Decomposes authorized disclosure into neutral technical features and search concepts.",
+            "depends_on": []
+          },
+          "patent-search-family-bibliography-analyst": {
+            "agent_id": "patent-search-family-bibliography-analyst",
+            "description": "Logs searches and normalizes family, priority, publication, and bibliographic evidence.",
+            "depends_on": []
+          },
+          "prior-art-claim-evidence-landscape-analyst": {
+            "agent_id": "prior-art-claim-evidence-landscape-analyst",
+            "description": "Maps elements to passages and produces bounded descriptive landscape evidence.",
+            "depends_on": []
+          },
+          "patent-landscape-prior-art-owner": {
+            "agent_id": "patent-landscape-prior-art-owner",
+            "description": "Joins all branches without patentability, FTO, infringement, drafting, filing, or legal authority.",
+            "depends_on": [
+              "invention-claim-concept-decomposer",
+              "patent-search-family-bibliography-analyst",
+              "prior-art-claim-evidence-landscape-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

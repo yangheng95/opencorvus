@@ -5,22 +5,30 @@
   "name": "Review & Debug",
   "label": "Review & Debug",
   "description": "Evidence-backed product review, root-cause debugging, product-source repair, and independent repair verification through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.08.05.1",
-  "product_pillars": ["code"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for review of existing product changes, reproducible defect investigation, root-cause debugging, product repair, and repair verification.",
     "selection_guidance": "Select Review & Debug only when the Task already identifies the concrete repository/revision and review target or reproducible defect evidence; bootstrap repository and issue selection under Advanced first. Keep independent audit responsible for post-delivery test artifacts and independent audit reports.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["review-debug/shared/workflow"],
+      "package_skill_refs": [
+        "review-debug/shared/workflow"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,29 +38,9 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
-      "review-debug-evidence-investigator": {
-        "label": "Review & Debug Evidence Investigator",
-        "description": "Reproduces the observed symptom, inventories runtime and repository evidence, and bounds the affected product surface.",
-        "base_role": "explore",
-        "prompt": "agents/review-debug-evidence-investigator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
       "review-debug-code-reviewer": {
         "label": "Review & Debug Code Reviewer",
         "description": "Reviews the change and complete call graph for correctness, regressions, architectural violations, and causal clues.",
@@ -61,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
+        "package_skill_refs": [
+          "review-debug/shared/workflow"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "review-debug-root-cause-investigator": {
         "label": "Review & Debug Root Cause Investigator",
@@ -81,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
+        "package_skill_refs": [
+          "review-debug/shared/workflow"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "review-debug-repair-implementer": {
         "label": "Review & Debug Repair Implementer",
@@ -101,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
+        "package_skill_refs": [
+          "review-debug/shared/workflow"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -123,222 +117,127 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
-      "review-debug-integrity-reviewer": {
-        "label": "Review & Debug Integrity Reviewer",
-        "description": "Independently reviews the repair diff and reruns the original reproduction and focused regression checks.",
+      "review-debug-planner": {
+        "label": "Review and Debug Planner",
+        "description": "Publishes the exact reproduction, affected call graph, worker partition, and repair acceptance contract.",
         "base_role": "delegated-worker",
-        "prompt": "agents/review-debug-integrity-reviewer/system.md",
+        "prompt": "agents/review-debug-planner/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
+        "package_skill_refs": [
+          "review-debug/shared/workflow"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
-        ],
+        "default_mcp_tool_refs": [],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "review-debug-visual-investigator": {
-        "label": "Review & Debug Visual Investigator",
-        "description": "Reproduces a graphical defect in a real task-scoped preview and captures affected states, interactions, screenshots, and diagnostics.",
-        "base_role": "visual-qa",
-        "prompt": "agents/review-debug-visual-investigator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "review-debug-visual-reviewer": {
-        "label": "Review & Debug Visual Reviewer",
-        "description": "Independently verifies the repaired graphical state with fresh browser screenshots, interactions, focus paths, and diagnostics.",
-        "base_role": "visual-qa",
-        "prompt": "agents/review-debug-visual-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["review-debug/shared/workflow"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "review-only": {
-        "label": "Evidence-backed Review",
-        "description": "Establish the exact requirement, review target, diff, and call-graph evidence, then issue an evidence-backed code review without implying product repair.",
+        "label": "Planned Parallel Review",
+        "description": "One Planner fixes the review boundary before code and root-cause workers inspect it in parallel.",
         "nodes": {
-          "review-debug-evidence-investigator": {
-            "agent_id": "review-debug-evidence-investigator",
-            "description": "Establishes the exact requirement, review target, diff, checks, and affected call graph.",
-            "depends_on": [],
+          "review-debug-planner": {
+            "agent_id": "review-debug-planner",
+            "description": "Publishes the exact evidence boundary, call graph, worker partition, and acceptance contract.",
+            "depends_on": []
           },
           "review-debug-code-reviewer": {
             "agent_id": "review-debug-code-reviewer",
-            "description": "Reviews the change and surrounding call graph against the established evidence.",
-            "depends_on": ["review-debug-evidence-investigator"],
+            "description": "Reviews the affected implementation and regression risk against the plan.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
           },
-        },
+          "review-debug-root-cause-investigator": {
+            "agent_id": "review-debug-root-cause-investigator",
+            "description": "Proves the causal chain and why earlier paths did not cure it.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
+          }
+        }
       },
       "debug-repair": {
-        "label": "Product Debug and Repair",
-        "description": "Reproduce the defect, independently review code and prove root cause, repair the product, and independently verify the repair.",
+        "label": "Planned Parallel Debug and Repair",
+        "description": "One Planner fixes reproduction, ownership, and acceptance before code review, root-cause proof, and repair execute as independent workers.",
         "nodes": {
-          "review-debug-evidence-investigator": {
-            "agent_id": "review-debug-evidence-investigator",
-            "description": "Reproduces the defect and establishes the exact evidence and affected surface.",
-            "depends_on": [],
+          "review-debug-planner": {
+            "agent_id": "review-debug-planner",
+            "description": "Publishes the exact evidence boundary, call graph, worker partition, and acceptance contract.",
+            "depends_on": []
           },
           "review-debug-code-reviewer": {
             "agent_id": "review-debug-code-reviewer",
-            "description": "Reviews the affected call graph and existing change for correctness and regression risk.",
-            "depends_on": ["review-debug-evidence-investigator"],
+            "description": "Reviews the affected implementation and regression risk against the plan.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
           },
           "review-debug-root-cause-investigator": {
             "agent_id": "review-debug-root-cause-investigator",
-            "description": "Proves the causal chain and explains why earlier paths did not cure the defect.",
-            "depends_on": ["review-debug-evidence-investigator"],
+            "description": "Proves the causal chain and why earlier paths did not cure it.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
           },
           "review-debug-repair-implementer": {
             "agent_id": "review-debug-repair-implementer",
-            "description": "Repairs the proven root cause and adds focused regression coverage.",
-            "depends_on": ["review-debug-code-reviewer", "review-debug-root-cause-investigator"],
-          },
-          "review-debug-integrity-reviewer": {
-            "agent_id": "review-debug-integrity-reviewer",
-            "description": "Independently reviews the diff and reruns the reproduction and regression checks.",
-            "depends_on": ["review-debug-repair-implementer"],
-          },
-        },
+            "description": "Repairs the Planner-proven fault boundary and runs repair-owned checks.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
+          }
+        }
       },
       "visual-debug-repair": {
-        "label": "Graphical Product Debug and Repair",
-        "description": "Reproduce a graphical defect, prove its code and visual causes, repair it, and independently verify fresh browser and repository evidence.",
+        "label": "Planned Parallel Graphical Debug and Repair",
+        "description": "One Planner binds real rendered evidence and repair ownership before code, cause, and implementation workers execute in parallel; no separate visual-review Agent exists.",
         "nodes": {
-          "review-debug-evidence-investigator": {
-            "agent_id": "review-debug-evidence-investigator",
-            "description": "Establishes the reported symptom, product boundary, repository evidence, and preview target.",
-            "depends_on": [],
+          "review-debug-planner": {
+            "agent_id": "review-debug-planner",
+            "description": "Publishes the exact evidence boundary, call graph, worker partition, and acceptance contract.",
+            "depends_on": []
           },
           "review-debug-code-reviewer": {
             "agent_id": "review-debug-code-reviewer",
-            "description": "Reviews the graphical implementation call graph and regression risk.",
-            "depends_on": ["review-debug-evidence-investigator"],
+            "description": "Reviews the affected implementation and regression risk against the plan.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
           },
           "review-debug-root-cause-investigator": {
             "agent_id": "review-debug-root-cause-investigator",
-            "description": "Proves the product data, event, rendering, or styling causal chain.",
-            "depends_on": ["review-debug-evidence-investigator"],
-          },
-          "review-debug-visual-investigator": {
-            "agent_id": "review-debug-visual-investigator",
-            "description": "Captures the broken graphical states and interaction evidence in a real task-scoped preview.",
-            "depends_on": ["review-debug-evidence-investigator"],
+            "description": "Proves the causal chain and why earlier paths did not cure it.",
+            "depends_on": [
+              "review-debug-planner"
+            ]
           },
           "review-debug-repair-implementer": {
             "agent_id": "review-debug-repair-implementer",
-            "description": "Repairs the proven graphical product root cause and adds regression coverage.",
+            "description": "Repairs the graphical fault and captures fresh real-page evidence in owned paths.",
             "depends_on": [
-              "review-debug-code-reviewer",
-              "review-debug-root-cause-investigator",
-              "review-debug-visual-investigator",
-            ],
-          },
-          "review-debug-integrity-reviewer": {
-            "agent_id": "review-debug-integrity-reviewer",
-            "description": "Independently reviews the repair diff and repository regression evidence.",
-            "depends_on": ["review-debug-repair-implementer"],
-          },
-          "review-debug-visual-reviewer": {
-            "agent_id": "review-debug-visual-reviewer",
-            "description": "Verifies the repaired states with fresh screenshots, interactions, focus paths, and diagnostics.",
-            "depends_on": ["review-debug-repair-implementer"],
-          },
-        },
-      },
-    },
-  },
+              "review-debug-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

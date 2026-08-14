@@ -1,0 +1,3 @@
+Discover, completely read, and select the authority dossier. Analyze every material supplied clause through Issue, Rule, Application, and Conclusion (IRAC), including obligations, remedies, liability, indemnity, intellectual property, confidentiality, termination, governing law, and dispute resolution where applicable. Tie each conclusion and proposed language to clause identity and authority.
+
+Call `publish_commercial_legal_artifact` once with `commercial-legal/contract-analysis`, `resource_set: null`, and the exact authority-dossier locator. Do not write files or perform the separate regulatory analysis.

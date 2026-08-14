@@ -1,0 +1,222 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: "构建专家团 · OpenCorvus",
+        description: "使用当前 OpenCorvus SDK 构建、验证和冻结一份可检查的专家团能力包。",
+        languageHref: publicPath("root", "/publish/"),
+        eyebrow: "专家团作者路径",
+        heading: "构建一支别人能够理解、检查和复现的专家团。",
+        lead: "专家团不是一组提示词。它要说明适用场景、角色责任、协作顺序、所需能力和交付证据，并把这些内容冻结在同一个可验证版本中。",
+        currentEyebrow: "今天就能完成",
+        currentTitle: "从任务边界到精确能力包",
+        stages: [
+          ["定义选择边界", "先写清团队适合什么结果、需要哪些输入，以及什么情况不该选择它。"],
+          ["组织角色与工作流", "为每位专家分配可见责任，并声明依赖关系、交付物和独立复核点。"],
+          ["加入 Skills 与工具", "只绑定团队真正需要的能力；所有引用都必须留在自包含包的验证闭包内。"],
+          ["严格验证", "使用 Registry 和 Manager 检查身份、schema、路径、引用闭包、工作流拓扑和能力投影。"],
+          ["冻结精确版本", "导出规范 ZIP，记录 namespace / id / version / digest，并在真实客户端里检查选择与安装结果。"],
+        ],
+        deliverableTitle: "一份可交付能力包应回答什么？",
+        deliverables: [
+          ["什么时候选择它？", "selector 说明任务边界，而不是只写宣传语。"],
+          ["谁负责什么？", "Agent 角色、输入、输出和复核责任都能被检查。"],
+          ["如何证明完成？", "工作流与 Skills 定义证据、交付物和验收方法。"],
+          ["拿到的是哪一版？", "身份、版本和 digest 共同绑定精确内容。"],
+        ],
+        futureEyebrow: "公开发布边界",
+        futureTitle: "构建能力已经开放，自助上架还没有开放。",
+        futureBody: "当前公共网站可以展示仓库中已选定的专家团，并分发由 OpenCorvus 发布密钥签名的完整资源包；它还不是第三方作者自助 Registry。namespace 注册、发布者身份验证、第三方审核与撤回服务尚未开放，因此作者应先在源码仓库中构建、验证和提交能力包。",
+        activationTitle: "下载、安装和激活是三件事",
+        activationBody: "网站只负责说明与分发；客户端下载后仍会重新校验并要求明确安装范围。安装完成也不会自动选择团队，只有用户明确激活后，运行时行为才会变化。",
+        sdk: "阅读 Squad SDK",
+        template: "查看能力包模板",
+        market: "浏览专家团市场",
+        trust: "理解可信机制",
+      }
+    : {
+        title: "Build an Expert Squad · OpenCorvus",
+        description: "Use the current OpenCorvus SDK to build, validate, and freeze an inspectable Expert Squad package.",
+        languageHref: publicPath("zh-cn", "/publish/"),
+        eyebrow: "Expert Squad author path",
+        heading: "Build a team other people can understand, inspect, and reproduce.",
+        lead:
+          "An Expert Squad is more than a set of prompts. It explains selection fit, role ownership, collaboration order, required capabilities, and delivery evidence—and freezes them in one verifiable revision.",
+        currentEyebrow: "Available today",
+        currentTitle: "From task boundary to exact package",
+        stages: [
+          ["Define the selection boundary", "State the outcome the team fits, the inputs it needs, and the conditions where it should not be selected."],
+          ["Shape roles and workflow", "Give every specialist visible ownership and declare dependencies, deliverables, and independent review points."],
+          ["Add Skills and tools", "Bind only the capabilities the team needs; every reference must remain inside the validated self-contained package closure."],
+          ["Validate strictly", "Use the Registry and Manager to check identity, schema, paths, reference closure, workflow topology, and capability projection."],
+          ["Freeze the exact revision", "Export a canonical ZIP, record namespace / id / version / digest, and inspect selection and installation in a real client."],
+        ],
+        deliverableTitle: "What must a deliverable package answer?",
+        deliverables: [
+          ["When should it be selected?", "The selector defines task fit instead of repeating marketing copy."],
+          ["Who owns what?", "Agent roles, inputs, outputs, and review responsibility are inspectable."],
+          ["How is completion proved?", "The workflow and Skills define evidence, deliverables, and acceptance."],
+          ["Which exact revision is this?", "Identity, version, and digest bind the content together."],
+        ],
+        futureEyebrow: "Public publication boundary",
+        futureTitle: "Package authoring is open. Self-service listing is not open yet.",
+        futureBody:
+          "The public site can showcase repository-selected Squads and distribute a complete bundle signed by the OpenCorvus publication key. It is not yet a third-party self-service Registry. Namespace enrollment, publisher identity, third-party review, and withdrawal services are not open, so authors currently build, validate, and contribute packages through the source repository.",
+        activationTitle: "Download, install, and activate are separate decisions",
+        activationBody:
+          "The website explains and distributes. The client repeats validation after download and requires an explicit install scope. Installation does not select the team; runtime behavior changes only after the user activates it.",
+        sdk: "Read the Squad SDK",
+        template: "Inspect the package template",
+        market: "Browse the Expert Squad market",
+        trust: "Understand the trust model",
+      }
+---
+
+<PublicSiteLayout
+  {locale}
+  current="publish"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main publish-page">
+    <section class="utility-intro" aria-labelledby="publish-title">
+      <div><p class="eyebrow">{copy.eyebrow}</p><h1 id="publish-title">{copy.heading}</h1></div>
+      <p class="section-lead">{copy.lead}</p>
+    </section>
+
+    <section class="utility-section" aria-labelledby="author-path-title">
+      <div class="landing-band-header">
+        <div><p class="eyebrow">{copy.currentEyebrow}</p><h2 id="author-path-title">{copy.currentTitle}</h2></div>
+        <div class="author-actions">
+          <a class="primary-action" href={publicPath(locale, "/sdk/")}>{copy.sdk}</a>
+          <a class="secondary-action" href="https://github.com/yangheng95/opencorvus/tree/main/templates/portable-expert-squad-template">{copy.template}</a>
+        </div>
+      </div>
+      <ol class="publish-chain author-chain">
+        {copy.stages.map(([title, description], index) => (
+          <li>
+            <span class="chain-number">0{index + 1}</span>
+            <h3>{title}</h3>
+            <p>{description}</p>
+            <span class="status-label">{copy.currentEyebrow}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="utility-section" aria-labelledby="package-questions-title">
+      <div class="landing-band-header">
+        <h2 id="package-questions-title">{copy.deliverableTitle}</h2>
+        <p class="section-lead">{locale === "zh-cn" ? "这四个问题把内部实现变成用户能够判断的公开契约。" : "These four questions turn internal implementation into a public contract a user can evaluate."}</p>
+      </div>
+      <div class="state-grid package-question-grid">
+        {copy.deliverables.map(([title, description]) => (
+          <article><h3>{title}</h3><p>{description}</p></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="utility-section publication-boundary" aria-labelledby="publication-boundary-title">
+      <div>
+        <p class="eyebrow">{copy.futureEyebrow}</p>
+        <h2 id="publication-boundary-title">{copy.futureTitle}</h2>
+        <p class="section-lead">{copy.futureBody}</p>
+      </div>
+      <aside>
+        <h3>{copy.activationTitle}</h3>
+        <p>{copy.activationBody}</p>
+        <div class="hero-actions">
+          <a class="primary-action" href={publicPath(locale, "/market/")}>{copy.market}</a>
+          <a class="secondary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+</PublicSiteLayout>
+
+<style>
+  .author-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .author-chain {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .package-question-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .publication-boundary {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 72px;
+    align-items: start;
+    background: var(--cobalt-wash);
+  }
+
+  .publication-boundary aside {
+    padding: 30px;
+    border: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .publication-boundary aside h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 34px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .publication-boundary aside p {
+    color: var(--muted);
+  }
+
+  @media (max-width: 1099px) {
+    .publish-page .author-actions {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .publish-page .author-chain,
+    .publish-page .package-question-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .publish-page .publication-boundary {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .publish-page .author-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .publish-page .author-actions a {
+      width: 100%;
+    }
+
+    .publish-page .author-chain,
+    .publish-page .package-question-grid,
+    :global(.publish-page .publish-chain li) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global(.publish-page .publish-chain li) {
+      gap: 10px;
+      min-height: 0;
+      padding: 22px 18px;
+    }
+  }
+</style>

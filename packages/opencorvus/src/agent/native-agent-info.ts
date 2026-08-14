@@ -1,5 +1,5 @@
 import z from "zod"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 
 export const NativeAgentInfoSchema = z
   .object({
@@ -9,7 +9,7 @@ export const NativeAgentInfoSchema = z
     topP: z.number().optional(),
     temperature: z.number().optional(),
     color: z.string().optional(),
-    permission: PermissionNext.Ruleset.optional(),
+    permission: CapabilityRules.Ruleset.optional(),
     model: z
       .object({
         modelID: z.string(),

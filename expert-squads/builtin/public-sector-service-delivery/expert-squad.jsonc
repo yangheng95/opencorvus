@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "public-sector-service-delivery",
+  "name": "Public Sector Service Delivery",
+  "label": "Public Sector Service Delivery",
+  "description": "Resident needs, process and accessibility evidence, and policy-delivery risks joined into an accountable public-service outcome register.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded public-service delivery design and review.",
+    "selection_guidance": "Select for resident journeys, service accessibility, administrative process, delivery metrics, stakeholder coordination, or policy implementation evidence without legal interpretation, eligibility decisions, public commitments, or record changes.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "public-sector-service-delivery/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "public-resident-needs-analyst": {
+        "label": "Resident Needs Analyst",
+        "description": "Maps resident needs, journeys, channels, barriers, and evidence gaps.",
+        "base_role": "explore",
+        "prompt": "agents/public-resident-needs-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-sector-service-delivery/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "public-process-accessibility-analyst": {
+        "label": "Process and Accessibility Analyst",
+        "description": "Maps service steps, handoffs, waiting, accessibility, and exclusion risks.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/public-process-accessibility-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-sector-service-delivery/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "public-policy-delivery-risk-analyst": {
+        "label": "Policy Delivery Risk Analyst",
+        "description": "Maps stated outcomes, dependencies, metrics, governance, and delivery risks.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/public-policy-delivery-risk-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-sector-service-delivery/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "public-service-plan-owner": {
+        "label": "Public Service Plan Owner",
+        "description": "Joins the branches into an accountable service-delivery outcome register.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/public-service-plan-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "public-sector-service-delivery/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "public-service-delivery-pack": {
+        "label": "Public Service Delivery Pack",
+        "description": "Three independent evidence branches converge into one accountable review pack.",
+        "nodes": {
+          "public-resident-needs-analyst": {
+            "agent_id": "public-resident-needs-analyst",
+            "description": "Maps resident needs, journeys, channels, barriers, and evidence gaps.",
+            "depends_on": []
+          },
+          "public-process-accessibility-analyst": {
+            "agent_id": "public-process-accessibility-analyst",
+            "description": "Maps service steps, handoffs, waiting, accessibility, and exclusion risks.",
+            "depends_on": []
+          },
+          "public-policy-delivery-risk-analyst": {
+            "agent_id": "public-policy-delivery-risk-analyst",
+            "description": "Maps stated outcomes, dependencies, metrics, governance, and delivery risks.",
+            "depends_on": []
+          },
+          "public-service-plan-owner": {
+            "agent_id": "public-service-plan-owner",
+            "description": "Joins the branches into an accountable service-delivery outcome register.",
+            "depends_on": [
+              "public-policy-delivery-risk-analyst",
+              "public-process-accessibility-analyst",
+              "public-resident-needs-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

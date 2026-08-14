@@ -105,12 +105,6 @@ export const ScheduleTool = Tool.define("schedule", {
   ]),
   async execute(params, ctx) {
     const projectID = Instance.project.id
-    await ctx.ask({
-      permission: "schedule",
-      patterns: ["*"],
-      always: ["*"],
-      metadata: { action: params.action },
-    })
 
     switch (params.action) {
       case "create": {

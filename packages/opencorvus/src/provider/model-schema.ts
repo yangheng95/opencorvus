@@ -50,6 +50,8 @@ export const ProviderModelSchema = z
       })
       .optional(),
     cost: z.object({
+      /** Whether a catalog, Provider, or explicit config supplied authoritative pricing. */
+      available: z.boolean(),
       input: z.number(),
       output: z.number(),
       cache: z.object({

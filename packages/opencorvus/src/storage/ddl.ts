@@ -1,13 +1,12 @@
 import { SQL } from "drizzle-orm"
-import { getTableConfig, SQLiteSyncDialect } from "drizzle-orm/sqlite-core"
+import { getTableConfig, SQLiteSyncDialect, type AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { ENGINE_ARTIFACT_CATALOG_LABEL_INDEX_CODE_POINTS } from "@/engine/artifact-catalog-constants"
-import * as schema from "./schema"
+import { ApplicationSchema } from "./schema"
 
 type Column = ReturnType<typeof getTableConfig>["columns"][number]
 type IndexColumn = ReturnType<typeof getTableConfig>["indexes"][number]["config"]["columns"][number]
 
 const dialect = new SQLiteSyncDialect()
-const deferredIndexNames = new Set(["engine_channel_binding_thread_idx"])
 
 function quoteIdentifier(name: string) {
   return `"${name.replaceAll('"', '""')}"`
@@ -108,24 +107,51 @@ function renderTable(table: unknown) {
     ");",
   ].join("\n")
 
-  const indexSql = config.indexes
-    .filter((index) => !deferredIndexNames.has(index.config.name))
-    .map((index) => renderIndex(config, index))
+  const indexSql = config.indexes.map((index) => renderIndex(config, index))
 
   return [tableSql, ...indexSql].join("\n")
 }
 
-export function collectTables() {
-  const tables: unknown[] = []
-  const seen = new Set<string>()
+export class ApplicationSchemaRegistryError extends Error {
+  constructor(
+    readonly kind: "invalid_table" | "duplicate_table_name",
+    readonly registryKey: string,
+    readonly tableName?: string,
+    options?: ErrorOptions,
+  ) {
+    super(
+      kind === "invalid_table"
+        ? `Application schema entry is not a SQLite table: ${registryKey}`
+        : `Application schema contains duplicate physical table name ${tableName}: ${registryKey}`,
+      options,
+    )
+    this.name = "ApplicationSchemaRegistryError"
+  }
+}
 
-  for (const value of Object.values(schema)) {
+/**
+ * Module namespace exports were historically enumerated in code-unit key order.
+ * Keep that stable order as part of the MySQL transfer fingerprint contract.
+ */
+export function collectTables(
+  registry: Readonly<Record<string, AnySQLiteTable>> = ApplicationSchema,
+): AnySQLiteTable[] {
+  const tables: AnySQLiteTable[] = []
+  const seen = new Set<string>()
+  const entries = Object.entries(registry).sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+
+  for (const [registryKey, table] of entries) {
+    let name: string
     try {
-      const name = tableName(value)
-      if (seen.has(name)) continue
-      seen.add(name)
-      tables.push(value)
-    } catch {}
+      name = tableName(table)
+    } catch (cause) {
+      throw new ApplicationSchemaRegistryError("invalid_table", registryKey, undefined, { cause })
+    }
+    if (seen.has(name)) {
+      throw new ApplicationSchemaRegistryError("duplicate_table_name", registryKey, name)
+    }
+    seen.add(name)
+    tables.push(table)
   }
 
   return tables
@@ -135,33 +161,148 @@ function generatedSchemaDdl() {
   return collectTables().map(renderTable).join("\n\n")
 }
 
-function generatedDeferredIndexDdl() {
-  const indexSql: string[] = []
-  for (const table of collectTables()) {
-    const config = getTableConfig(table as never)
-    for (const index of config.indexes) {
-      if (deferredIndexNames.has(index.config.name)) indexSql.push(renderIndex(config, index))
-    }
-  }
-  return indexSql.join("\n")
-}
-
 // FTS is Full-Text Search. Drizzle table declarations do not model SQLite FTS5
 // virtual tables, so this remains an explicit storage extension.
 const STORAGE_EXTENSION_DDL = /* sql */ `
+CREATE TRIGGER IF NOT EXISTS project_generation_required_insert
+BEFORE INSERT ON project
+FOR EACH ROW
+WHEN length(NEW.generation) != 36
+  OR length(replace(NEW.generation, '-', '')) != 32
+  OR substr(NEW.generation, 9, 1) != '-'
+  OR substr(NEW.generation, 14, 1) != '-'
+  OR substr(NEW.generation, 19, 1) != '-'
+  OR substr(NEW.generation, 24, 1) != '-'
+  OR lower(replace(NEW.generation, '-', '')) GLOB '*[^0-9a-f]*'
+  OR (
+    NEW.generation NOT IN (
+      '00000000-0000-0000-0000-000000000000',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff'
+    )
+    AND substr(lower(NEW.generation), 15, 1) NOT BETWEEN '1' AND '8'
+  )
+  OR (
+    NEW.generation NOT IN (
+      '00000000-0000-0000-0000-000000000000',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff'
+    )
+    AND instr('89ab', substr(lower(NEW.generation), 20, 1)) = 0
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'project: generation must be a UUID');
+END;
+
+CREATE TRIGGER IF NOT EXISTS project_generation_immutable_update
+BEFORE UPDATE OF generation ON project
+FOR EACH ROW
+WHEN NEW.generation IS NOT OLD.generation
+BEGIN
+  SELECT RAISE(ABORT, 'project: generation is immutable');
+END;
+
+-- A Mission Session is a complete durable domain identity at its first
+-- observable commit. Mutable Mission state may be added later, but the launch
+-- identity cannot be manufactured or rewritten afterward. cwd may move only
+-- together with session.directory so Project relocation remains one atomic
+-- identity-preserving operation.
+CREATE TRIGGER IF NOT EXISTS session_mission_identity_required_insert
+BEFORE INSERT ON session
+FOR EACH ROW
+WHEN NEW.kind = 'mission'
+  AND (
+    json_type(NEW.metadata, '$.mission') IS NOT 'object'
+    OR json_type(NEW.metadata, '$.mission.id') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.id')) NOT BETWEEN 1 AND 64
+    OR json_extract(NEW.metadata, '$.mission.id') GLOB '*[^a-z0-9-]*'
+    OR json_type(NEW.metadata, '$.mission.channelKey') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.channelKey') IS NOT 'mission:' || json_extract(NEW.metadata, '$.mission.id')
+    OR json_type(NEW.metadata, '$.mission.cwd') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.cwd')) < 1
+    OR json_extract(NEW.metadata, '$.mission.cwd') IS NOT NEW.directory
+    OR json_type(NEW.metadata, '$.mission.productPillar') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.productPillar') NOT IN ('code', 'work')
+    OR json_type(NEW.metadata, '$.mission.visibleExpertSquadIDs') IS NOT 'array'
+    OR json_array_length(NEW.metadata, '$.mission.visibleExpertSquadIDs') < 1
+    OR EXISTS (
+      SELECT 1 FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs') AS squad
+      WHERE squad.type IS NOT 'text'
+        OR length(squad.value) NOT BETWEEN 1 AND 64
+        OR squad.value NOT GLOB '[a-z]*'
+        OR squad.value GLOB '*[^a-z0-9-]*'
+        OR squad.value GLOB '*--*'
+        OR substr(squad.value, -1) = '-'
+    )
+    OR (
+      SELECT count(*) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    ) IS NOT (
+      SELECT count(DISTINCT value) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'session: mission identity metadata is incomplete');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_mission_identity_required_update
+BEFORE UPDATE ON session
+FOR EACH ROW
+WHEN NEW.kind = 'mission'
+  AND (
+    json_type(NEW.metadata, '$.mission') IS NOT 'object'
+    OR json_type(NEW.metadata, '$.mission.id') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.id')) NOT BETWEEN 1 AND 64
+    OR json_extract(NEW.metadata, '$.mission.id') GLOB '*[^a-z0-9-]*'
+    OR json_type(NEW.metadata, '$.mission.channelKey') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.channelKey') IS NOT 'mission:' || json_extract(NEW.metadata, '$.mission.id')
+    OR json_type(NEW.metadata, '$.mission.cwd') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.cwd')) < 1
+    OR json_extract(NEW.metadata, '$.mission.cwd') IS NOT NEW.directory
+    OR json_type(NEW.metadata, '$.mission.productPillar') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.productPillar') NOT IN ('code', 'work')
+    OR json_type(NEW.metadata, '$.mission.visibleExpertSquadIDs') IS NOT 'array'
+    OR json_array_length(NEW.metadata, '$.mission.visibleExpertSquadIDs') < 1
+    OR EXISTS (
+      SELECT 1 FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs') AS squad
+      WHERE squad.type IS NOT 'text'
+        OR length(squad.value) NOT BETWEEN 1 AND 64
+        OR squad.value NOT GLOB '[a-z]*'
+        OR squad.value GLOB '*[^a-z0-9-]*'
+        OR squad.value GLOB '*--*'
+        OR substr(squad.value, -1) = '-'
+    )
+    OR (
+      SELECT count(*) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    ) IS NOT (
+      SELECT count(DISTINCT value) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'session: mission identity metadata is incomplete');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_mission_identity_immutable_update
+BEFORE UPDATE ON session
+FOR EACH ROW
+WHEN (OLD.kind = 'mission' OR NEW.kind = 'mission')
+  AND (
+    NEW.kind IS NOT OLD.kind
+    OR json_extract(NEW.metadata, '$.mission.id') IS NOT json_extract(OLD.metadata, '$.mission.id')
+    OR json_extract(NEW.metadata, '$.mission.channelKey') IS NOT json_extract(OLD.metadata, '$.mission.channelKey')
+    OR json_extract(NEW.metadata, '$.mission.productPillar') IS NOT json_extract(OLD.metadata, '$.mission.productPillar')
+    OR json_extract(NEW.metadata, '$.mission.visibleExpertSquadIDs') IS NOT json_extract(OLD.metadata, '$.mission.visibleExpertSquadIDs')
+    OR (
+      json_extract(NEW.metadata, '$.mission.cwd') IS NOT json_extract(OLD.metadata, '$.mission.cwd')
+      AND NEW.directory IS OLD.directory
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'session: mission identity metadata is immutable');
+END;
+
 CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(
   content,
   chunk_id UNINDEXED,
   project_id UNINDEXED
 );
-
-DELETE FROM engine_channel_binding
-WHERE rowid NOT IN (
-  SELECT MIN(rowid)
-  FROM engine_channel_binding
-  GROUP BY platform, channel, thread
-);
-${generatedDeferredIndexDdl()}
 
 -- Dispatch lineage is immutable physical-execution authority. Adapter input
 -- must be present as an exact JSON (JavaScript Object Notation) object because
@@ -511,9 +652,9 @@ END;
 CREATE TRIGGER IF NOT EXISTS engine_goal_graph_artifact_immutable
 BEFORE UPDATE ON engine_artifact
 FOR EACH ROW
-WHEN OLD.kind IN ('architect_contract_graph', 'goal_graph_projection')
+WHEN OLD.kind IN ('architect_contract_graph', 'goal_graph_projection', 'goal_workload')
 BEGIN
-  SELECT RAISE(ABORT, 'engine_artifact: Architect ContractGraph and GoalGraphProjection facts are immutable');
+  SELECT RAISE(ABORT, 'engine_artifact: domain publication facts are immutable');
 END;
 
 CREATE TRIGGER IF NOT EXISTS engine_goal_exact_artifact_binding_insert

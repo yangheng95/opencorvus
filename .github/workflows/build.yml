@@ -20,6 +20,7 @@ jobs:
       version: ${{ steps.meta.outputs.version }}
       prerelease: ${{ steps.meta.outputs.prerelease }}
       update-channel: ${{ steps.meta.outputs.update-channel }}
+      source-sha: ${{ steps.meta.outputs.source-sha }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -41,9 +42,11 @@ jobs:
           fi
           PRERELEASE="$(bun -e 'import { releaseVersionMetadata } from "./script/sync-version.ts"; console.log(releaseVersionMetadata(Bun.argv.at(-1)).prerelease)' "$VERSION")"
           UPDATE_CHANNEL="$(bun -e 'import { desktopUpdateChannel } from "./script/desktop-update-channel.ts"; console.log(desktopUpdateChannel(Bun.argv.at(-1)))' "$VERSION")"
+          SOURCE_SHA="$(git rev-parse 'HEAD^{commit}')"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
           echo "update-channel=$UPDATE_CHANNEL" >> "$GITHUB_OUTPUT"
+          echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Sync repo versions
         shell: bash
@@ -208,6 +211,26 @@ jobs:
           OPENCORVUS_CHANNEL: latest
         run: bun run package:binary-matrix
 
+      - name: Verify packaged Work Artifact lifecycle
+        run: |
+          set -euo pipefail
+          verified=0
+          for bundle in \
+            "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}" \
+            "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline"; do
+            if [[ ! -d "$bundle" ]]; then
+              continue
+            fi
+            name="$(basename "$bundle")"
+            evidence="packages/opencorvus/dist/work-artifact-qualification-${name}.json"
+            bun packages/opencorvus/script/check-work-artifact-profile.ts \
+              --profile office.presentation@1 \
+              --package-root "$bundle" | tee "$evidence"
+            verified=$((verified + 1))
+          done
+          test "$verified" -gt 0
+          echo "Work Artifact packaged lifecycle passed for $verified ${{ matrix.platform }} bundle(s)." >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload CLI artifact
         uses: actions/upload-artifact@v7
         with:
@@ -217,6 +240,7 @@ jobs:
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz
+            packages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json
           if-no-files-found: error
           retention-days: 7
 
@@ -304,3 +328,16 @@ jobs:
           CHANNEL_DIR="$(mktemp -d)"
           gh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"
           gh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"
+
+      - name: Dispatch public download page deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+        run: |
+          TAG="v${VERSION}"
+          gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \
+            -f event_type=opencorvus-release-published \
+            -f "client_payload[version]=$VERSION" \
+            -f "client_payload[tag]=$TAG" \
+            -f "client_payload[source_sha]=$SOURCE_SHA"

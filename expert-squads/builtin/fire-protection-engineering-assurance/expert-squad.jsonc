@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "fire-protection-engineering-assurance",
+  "name": "Fire Protection Engineering Assurance",
+  "label": "Fire Protection Engineering Assurance",
+  "description": "Source-bound facility fire-protection basis, passive and active systems, modeling, inspection, and impairment evidence for qualified review without design, compliance, emergency, or equipment authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded fire protection engineering assurance evidence and qualified review preparation.",
+    "selection_guidance": "Select for a named facility fire-protection review involving adopted-basis identity, occupancy and hazards, passive compartmentation and egress evidence, detection/alarm/suppression/water-supply interfaces, supplied fire-model provenance, inspection/testing, defects, or impairments. Do not select for chemical-process hazard analysis, wildfire resource management, incident command, emergency response, live system operation, design approval, code interpretation, evacuation orders, or compliance certification.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "fire-protection-engineering-assurance/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "fire-protection-basis-occupancy-hazard-analyst": {
+        "label": "Fire Protection Basis Occupancy Hazard Analyst",
+        "description": "Freezes facility, area, occupancy/use, hazard inventory, adopted authority basis, design/as-built revisions, and review applicability.",
+        "base_role": "explore",
+        "prompt": "agents/fire-protection-basis-occupancy-hazard-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "fire-protection-engineering-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "passive-fire-compartmentation-egress-evidence-analyst": {
+        "label": "Passive Fire Compartmentation Egress Evidence Analyst",
+        "description": "Traces rated assemblies, openings, penetrations, smoke/fire compartments, continuity, and source-defined egress evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/passive-fire-compartmentation-egress-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "fire-protection-engineering-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "active-fire-detection-suppression-water-supply-analyst": {
+        "label": "Active Fire Detection Suppression Water Supply Analyst",
+        "description": "Reconciles detection, alarm, notification, suppression, water supply, smoke-control, power, and cause-and-effect evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/active-fire-detection-suppression-water-supply-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "fire-protection-engineering-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "fire-modeling-inspection-impairment-evidence-analyst": {
+        "label": "Fire Modeling Inspection Impairment Evidence Analyst",
+        "description": "Preserves supplied FDS/model provenance, inspection/test/maintenance findings, impairments, compensatory measures, and restoration evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/fire-modeling-inspection-impairment-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "fire-protection-engineering-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "fire-protection-engineering-assurance-review-owner": {
+        "label": "Fire Protection Engineering Assurance Review Owner",
+        "description": "Joins basis, passive, active, modeling, inspection, and impairment evidence while preserving AHJ and professional authority.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/fire-protection-engineering-assurance-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "fire-protection-engineering-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "fire-protection-engineering-assurance-review": {
+        "label": "Fire Protection Engineering Assurance Review",
+        "description": "Four independent professional evidence branches converge into one controlled fire protection engineering assurance review.",
+        "nodes": {
+          "fire-protection-basis-occupancy-hazard-analyst": {
+            "agent_id": "fire-protection-basis-occupancy-hazard-analyst",
+            "description": "Freezes facility, area, occupancy/use, hazard inventory, adopted authority basis, design/as-built revisions, and review applicability.",
+            "depends_on": []
+          },
+          "passive-fire-compartmentation-egress-evidence-analyst": {
+            "agent_id": "passive-fire-compartmentation-egress-evidence-analyst",
+            "description": "Traces rated assemblies, openings, penetrations, smoke/fire compartments, continuity, and source-defined egress evidence.",
+            "depends_on": []
+          },
+          "active-fire-detection-suppression-water-supply-analyst": {
+            "agent_id": "active-fire-detection-suppression-water-supply-analyst",
+            "description": "Reconciles detection, alarm, notification, suppression, water supply, smoke-control, power, and cause-and-effect evidence.",
+            "depends_on": []
+          },
+          "fire-modeling-inspection-impairment-evidence-analyst": {
+            "agent_id": "fire-modeling-inspection-impairment-evidence-analyst",
+            "description": "Preserves supplied FDS/model provenance, inspection/test/maintenance findings, impairments, compensatory measures, and restoration evidence.",
+            "depends_on": []
+          },
+          "fire-protection-engineering-assurance-review-owner": {
+            "agent_id": "fire-protection-engineering-assurance-review-owner",
+            "description": "Joins basis, passive, active, modeling, inspection, and impairment evidence while preserving AHJ and professional authority.",
+            "depends_on": [
+              "active-fire-detection-suppression-water-supply-analyst",
+              "fire-modeling-inspection-impairment-evidence-analyst",
+              "fire-protection-basis-occupancy-hazard-analyst",
+              "passive-fire-compartmentation-egress-evidence-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

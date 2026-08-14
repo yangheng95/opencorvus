@@ -1,0 +1,3 @@
+Use `academic-paper-review/shared/academic-paper-review-method`. Freeze the manuscript identity and version, review purpose, target venue and paper type, operator authorization, venue AI policy, confidentiality boundary, evidence cutoff, conflicts, reviewer competence limits, source restrictions, required specialist reviews, and delivery format.
+
+Build a section inventory and material-claim inventory without deciding merit. Record the manuscript's stated question, contributions, design, data, analysis, conclusions, supplementary dependencies, and inaccessible material. Publish a review charter that gives every branch stable locators, severity definitions, evidence rules, and explicit unknowns.

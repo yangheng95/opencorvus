@@ -20,6 +20,9 @@ export function AppDialogHost() {
     if (!option) return
     setDialogStore("app", "selectValue", option.value)
   }
+  const confirm = async () => {
+    if (!(await settleAppDialog(true, dialogStore.app.epoch))) inputRef?.focus()
+  }
 
   return (
     <Dialog
@@ -29,6 +32,7 @@ export function AppDialogHost() {
       title={<span id="appDialogTitle">{dialogStore.app.title || t("dialog.notice")}</span>}
       overlayClass="app-dialog-overlay"
       formClass="app-dialog-form"
+      aria-describedby="appDialogBody"
       onOpenAutoFocus={(event) => {
         event.preventDefault()
         if (dialogStore.app.input && inputRef) {
@@ -66,12 +70,12 @@ export function AppDialogHost() {
             id="btnAppDialogOk"
             variant="solid"
             size="md"
-            tone="accent"
+            tone={dialogStore.app.okTone || "accent"}
             ref={(el) => {
               okButtonRef = el
             }}
             onClick={() => {
-              void settleAppDialog(true, dialogStore.app.epoch)
+              void confirm()
             }}
           >
             {dialogStore.app.okLabel || t("common.ok")}
@@ -86,6 +90,7 @@ export function AppDialogHost() {
         as="label"
         classList={{ hidden: dialogStore.app.input !== true }}
         id="appDialogInputField"
+        invalid={Boolean(dialogStore.app.inputError)}
       >
         <TextField.Label id="appDialogInputLabel">
           {dialogStore.app.inputLabel || t("dialog.input")}
@@ -101,15 +106,19 @@ export function AppDialogHost() {
           }}
           onInput={(event) => {
             setDialogStore("app", "inputValue", event.currentTarget.value)
+            if (dialogStore.app.inputError) setDialogStore("app", "inputError", "")
           }}
           onKeyDown={(event) => {
             if (event.isComposing) return
             if (event.key === "Enter") {
               event.preventDefault()
-              void settleAppDialog(true, dialogStore.app.epoch)
+              void confirm()
             }
           }}
         />
+        <Show when={dialogStore.app.inputError}>
+          <TextField.ErrorMessage role="alert">{dialogStore.app.inputError}</TextField.ErrorMessage>
+        </Show>
       </TextField.Root>
       <TextField.Root classList={{ hidden: dialogStore.app.select !== true }} id="appDialogSelectField">
         <TextField.Label id="appDialogSelectLabel">

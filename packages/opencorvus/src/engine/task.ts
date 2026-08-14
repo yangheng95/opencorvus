@@ -1,5 +1,6 @@
 import { Database, and, eq, inArray, isNull, sql } from "@/storage/db"
 import { EngineTaskTable, type EngineMetadata } from "./engine.sql"
+import { Project } from "@/project/project"
 
 type EngineTaskInsert = typeof EngineTaskTable.$inferInsert
 type EngineTaskSelect = typeof EngineTaskTable.$inferSelect
@@ -17,14 +18,14 @@ export function insertEngineTask(
     request: string
     attachments?: EngineTaskInsert["attachments"]
     priority: EngineTaskInsert["priority"]
-    queueOrder: number
     budget?: EngineTaskInsert["budget"]
     metadata: EngineMetadata
-    timeStarted?: number | null
+    timeStarted: number
     timeCreated: number
     timeUpdated: number
   },
 ): void {
+  Project.assertDurableAdmissionOpen(input.projectID)
   db.insert(EngineTaskTable)
     .values({
       id: input.taskID,
@@ -37,10 +38,9 @@ export function insertEngineTask(
       request: input.request,
       attachments: input.attachments,
       priority: input.priority,
-      queue_order: input.queueOrder,
       budget: input.budget,
       metadata: input.metadata,
-      time_started: input.timeStarted ?? null,
+      time_started: input.timeStarted,
       time_created: input.timeCreated,
       time_updated: input.timeUpdated,
     })
@@ -139,88 +139,6 @@ export function clearEngineTaskRewindCursor(db: Database.TxOrDb, input: { taskID
     })
     .where(eq(EngineTaskTable.id, input.taskID))
     .run()
-}
-
-export function setEngineTaskQueueOrder(
-  db: Database.TxOrDb,
-  input: { taskID: string; queueOrder: number; timeUpdated: number },
-): void {
-  db.update(EngineTaskTable)
-    .set({ queue_order: input.queueOrder, time_updated: input.timeUpdated })
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .run()
-}
-
-export function claimNextEngineTaskForCwd(
-  db: Database.TxOrDb,
-  input: { cwd: string; timeStarted: number },
-): EngineTaskSelect | undefined {
-  return db
-    .update(EngineTaskTable)
-    .set({
-      time_started: input.timeStarted,
-      time_updated: input.timeStarted,
-    })
-    .where(
-      sql`${EngineTaskTable.id} = (
-        SELECT t.id
-        FROM engine_task t
-        JOIN session s ON s.id = t.session_id
-        WHERE t.time_started IS NULL AND t.time_completed IS NULL
-          AND t.time_archived IS NULL
-          AND s.directory = ${input.cwd}
-          AND NOT EXISTS (
-            SELECT 1
-            FROM engine_task t2
-            JOIN session s2 ON s2.id = t2.session_id
-            WHERE t2.time_started IS NOT NULL AND t2.time_completed IS NULL
-              AND COALESCE(json_extract(t2.metadata, '$.interrupted'), 0) != 1
-              AND s2.directory = ${input.cwd}
-          )
-        ORDER BY
-          CASE t.priority WHEN 'critical' THEN 0 ELSE 1 END,
-          t.queue_order,
-          t.time_created,
-          t.id
-        LIMIT 1
-      )`,
-    )
-    .returning()
-    .get()
-}
-
-export function claimQueuedEngineTaskForCwd(
-  db: Database.TxOrDb,
-  input: { taskID: string; cwd: string; timeStarted: number },
-): EngineTaskSelect | undefined {
-  return db
-    .update(EngineTaskTable)
-    .set({
-      time_started: input.timeStarted,
-      time_updated: input.timeStarted,
-    })
-    .where(
-      sql`${EngineTaskTable.id} = (
-        SELECT t.id
-        FROM engine_task t
-        JOIN session s ON s.id = t.session_id
-        WHERE t.id = ${input.taskID}
-          AND t.time_started IS NULL AND t.time_completed IS NULL
-          AND t.time_archived IS NULL
-          AND s.directory = ${input.cwd}
-          AND NOT EXISTS (
-            SELECT 1
-            FROM engine_task t2
-            JOIN session s2 ON s2.id = t2.session_id
-            WHERE t2.time_started IS NOT NULL AND t2.time_completed IS NULL
-              AND COALESCE(json_extract(t2.metadata, '$.interrupted'), 0) != 1
-              AND s2.directory = ${input.cwd}
-          )
-        LIMIT 1
-      )`,
-    )
-    .returning()
-    .get()
 }
 
 export function deleteEngineTask(db: Database.TxOrDb, input: { taskID: string }): void {

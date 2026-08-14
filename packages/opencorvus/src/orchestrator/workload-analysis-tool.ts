@@ -1,8 +1,7 @@
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { isAgentCoordinationHandoffResult } from "@/agent/runner"
 import { createDecisionLog } from "@/decision-log"
-import { persistGoalWorkloadForDomainRefs } from "@/engine/persist"
-import { Database } from "@/storage/db"
+import { publishGoalWorkload } from "@/goal-workload-analyst/publication"
 import { Log } from "@/util/log"
 import { tool } from "ai"
 import type { z } from "zod"
@@ -11,7 +10,6 @@ import {
   requireDispatchAdapterExecutionContext,
 } from "./dispatch-adapter-execution-context"
 import { recordTaskInfrastructureErrorBestEffort } from "./infrastructure-observation"
-import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { GoalWorkloadAnalystAgent } from "@/goal-workload-analyst/agent"
 
 const log = Log.create({ service: "workload-analysis-tool" })
@@ -56,7 +54,8 @@ export function createWorkloadAnalysisTool<TSchema extends z.ZodType<WorkloadAna
             onSessionCreated: async (sessionID) => {
               execution.dispatch.observeSession(sessionID)
             },
-            onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
+            onDispatchAuthorityCommit: (sessionID, descriptor) =>
+              execution.dispatch.commitSession(sessionID, descriptor),
           })
           if (isAgentCoordinationHandoffResult(result)) {
             return DispatchOutcome.coordination(result)
@@ -65,22 +64,22 @@ export function createWorkloadAnalysisTool<TSchema extends z.ZodType<WorkloadAna
             sessionID: result.sessionID,
             finalMessageID: result.finalMessageID,
           }
-          const provenance = artifactProvenanceForAgentTurn(result.sessionID, result.finalMessageID)
-          Database.use((db) =>
-            persistGoalWorkloadForDomainRefs(db, {
-              taskID: input.taskID,
-              sessionID: result.sessionID,
-              finalMessageID: result.finalMessageID,
-              observedArtifactLocators: provenance.observedArtifactLocators,
-              sourceArtifactLocators: provenance.sourceArtifactLocators,
-              briefs: result.briefs,
-              now: Date.now(),
-            }),
-          )
-          return DispatchOutcome.terminal({
+          const publication = publishGoalWorkload({
+            taskID: input.taskID,
+            dispatchID: execution.dispatch.dispatchID,
             sessionID: result.sessionID,
             finalMessageID: result.finalMessageID,
+            briefs: result.briefs,
+            now: Date.now(),
           })
+          return publication.deliveryStatus === "complete"
+            ? DispatchOutcome.terminal({ sessionID: result.sessionID, finalMessageID: result.finalMessageID })
+            : DispatchOutcome.domainIncomplete({
+                sessionID: result.sessionID,
+                finalMessageID: result.finalMessageID,
+                domain: "workload_analysis",
+                domainArtifact: publication.locator,
+              })
         } catch (error) {
           const failureReason = error instanceof Error ? error.message : String(error)
           if (completedTurn) {

@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "data-analysis",
+  "name": "Data Analysis & Business Insights",
+  "label": "Data Analysis & Business Insights",
+  "description": "Turns bounded operating data into reproducible performance and segment analysis, audited business insights, and an actionable operating report.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for a bounded operating dataset that needs metric reconciliation, parallel performance and segment analysis, and an audited decision report.",
+    "selection_guidance": "Select when the operator supplies or identifies business data, metric definitions, a time boundary, and decision questions. Use Deep Research for broad public-source questions and Equity Research for public-company valuation.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "data-analysis/shared/method",
+        "data-analysis/shared/workflow"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "data-analysis-planner": {
+        "label": "Data Analysis Planner",
+        "description": "Defines the business question, metrics, dataset boundary, comparison plan, and stopping conditions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-analysis-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-analysis-data-steward": {
+        "label": "Data Analysis Data Steward",
+        "description": "Builds the normalized data dossier with provenance, grain, quality findings, and metric reconciliation.",
+        "base_role": "deep-research",
+        "prompt": "agents/data-analysis-data-steward/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-analysis-performance-analyst": {
+        "label": "Data Analysis Performance Analyst",
+        "description": "Analyzes trends, variance, efficiency, and operational performance from the accepted dossier.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-analysis-performance-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-analysis-segment-analyst": {
+        "label": "Data Analysis Segment Analyst",
+        "description": "Analyzes cohort, region, channel, product, or customer segments from the accepted dossier.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-analysis-segment-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-analysis-insight-synthesizer": {
+        "label": "Data Analysis Insight Synthesizer",
+        "description": "Reconciles both analytical branches into prioritized insights and an operating action sequence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-analysis-insight-synthesizer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-analysis-fact-checker": {
+        "label": "Data Analysis Fact Checker",
+        "description": "Independently checks the synthesized brief against its calculations, sources, definitions, and limitations.",
+        "base_role": "fact-check",
+        "prompt": "agents/data-analysis-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-analysis-report-writer": {
+        "label": "Data Analysis Report Writer",
+        "description": "Resolves the audit and publishes the canonical operating insight report.",
+        "base_role": "build",
+        "prompt": "agents/data-analysis-report-writer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-analysis/shared/method",
+          "data-analysis/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "data-analysis/shared/publish-data-analysis-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "operating-insight-report": {
+        "label": "Audited Operating Insight Report",
+        "description": "Use when the Task supplies bounded operating data and metric definitions: define the analysis, curate the data dossier, analyze performance and segments in parallel, synthesize insights, audit them, and publish the report.",
+        "nodes": {
+          "data-analysis-planner": {
+            "agent_id": "data-analysis-planner",
+            "description": "Publishes data-analysis/analysis-charter.",
+            "depends_on": []
+          },
+          "data-analysis-data-steward": {
+            "agent_id": "data-analysis-data-steward",
+            "description": "Publishes data-analysis/data-dossier.",
+            "depends_on": [
+              "data-analysis-planner"
+            ]
+          },
+          "data-analysis-performance-analyst": {
+            "agent_id": "data-analysis-performance-analyst",
+            "description": "Publishes data-analysis/performance-analysis.",
+            "depends_on": [
+              "data-analysis-data-steward"
+            ]
+          },
+          "data-analysis-segment-analyst": {
+            "agent_id": "data-analysis-segment-analyst",
+            "description": "Publishes data-analysis/segment-analysis.",
+            "depends_on": [
+              "data-analysis-data-steward"
+            ]
+          },
+          "data-analysis-insight-synthesizer": {
+            "agent_id": "data-analysis-insight-synthesizer",
+            "description": "Publishes data-analysis/insight-brief.",
+            "depends_on": [
+              "data-analysis-performance-analyst",
+              "data-analysis-segment-analyst"
+            ]
+          },
+          "data-analysis-fact-checker": {
+            "agent_id": "data-analysis-fact-checker",
+            "description": "Publishes data-analysis/audit.",
+            "depends_on": [
+              "data-analysis-insight-synthesizer"
+            ]
+          },
+          "data-analysis-report-writer": {
+            "agent_id": "data-analysis-report-writer",
+            "description": "Publishes data-analysis/report.",
+            "depends_on": [
+              "data-analysis-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

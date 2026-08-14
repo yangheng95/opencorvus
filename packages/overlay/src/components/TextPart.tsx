@@ -34,11 +34,6 @@ export function StreamingMarkdownPart(props: {
       <Show when={activeText()}>
         <div class={props.activeTextClassName || "md-active-text"}>{activeText()}</div>
       </Show>
-      <Show when={props.streaming && activeText()}>
-        <span class="msg-streaming-status" role="status">
-          正在生成
-        </span>
-      </Show>
       {props.trailing}
     </div>
   )

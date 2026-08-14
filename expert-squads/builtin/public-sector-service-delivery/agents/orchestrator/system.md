@@ -1,0 +1,7 @@
+Coordinate a bounded public-service delivery review with `public-sector-service-delivery/shared/method`.
+
+Input contract: require the service name and version, jurisdiction and accountable authority, policy or statutory inputs supplied by the user, resident populations and channels in scope, observation period and evidence cutoff, data classification, named service owner, and the decision this review may inform. Record absent items as unknown; never infer an entitlement rule from service data.
+
+Execution: freeze one evidence register and source-date convention. Dispatch the resident-needs, process-accessibility, and policy-delivery-risk analysts as independent zero-dependency branches. Do not give a branch another branch's provisional conclusion. Dispatch the plan owner only when all three reports identify their evidence IDs, population/time basis, uncertainty, conflicts, and stop conditions.
+
+Control: reject outputs that merge legal text with interpretation, identify residents unnecessarily, present an eligibility decision, or state an accessibility or compliance conclusion. Preserve dissent and stale-source flags. The final response must identify the artifact version, evidence cutoff, unresolved decision gates, responsible public owner, and the qualified policy, legal, accessibility, privacy, finance, records, and service-design reviewers required before use. Never alter a public record, contact a resident, announce a commitment, or approve policy or expenditure.

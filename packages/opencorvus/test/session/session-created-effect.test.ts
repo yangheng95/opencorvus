@@ -11,15 +11,25 @@ afterEach(async () => {
 })
 
 describe("Session Created post-commit lifecycle", () => {
-  test("keeps database subscribers and the exact global Created envelope inside the effect lifetime", async () => {
+  test("delivers the exact global Created envelope from the durable post-commit publication", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         EventService.init()
         const received: Array<{ directory?: string; payload: unknown }> = []
+        let resolveCreated!: () => void
+        const created = new Promise<void>((resolve) => (resolveCreated = resolve))
         const listener = (envelope: { directory?: string; payload: unknown }) => {
           received.push(envelope)
+          const payload = envelope.payload as { type?: string; properties?: { info?: { title?: string } } }
+          if (
+            envelope.directory === project.path &&
+            payload.type === Session.Event.Created.type &&
+            payload.properties?.info?.title === "Created effect positive contract"
+          ) {
+            resolveCreated()
+          }
         }
         GlobalBus.on("event", listener)
         try {
@@ -29,7 +39,12 @@ describe("Session Created post-commit lifecycle", () => {
             title: "Created effect positive contract",
           })
 
-          await Database.awaitEffectIdle(2_000)
+          await Promise.race([
+            created,
+            Bun.sleep(2_000).then(() => {
+              throw new Error(`Session ${session.id} Created envelope did not arrive`)
+            }),
+          ])
 
           expect(await Session.get(session.id)).toEqual(session)
           expect(

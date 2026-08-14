@@ -184,13 +184,6 @@ export function createSkillLoaderTool(input: { id: SkillSurfaceToolID; family: S
           throw new Error(`Skill "${params.name}" not found or not allowed. Compatible skills: ${available || "none"}`)
         }
 
-        await ctx.ask({
-          permission: "skill",
-          patterns: [params.name],
-          always: [params.name],
-          metadata: {},
-        })
-
         const location =
           surface.family === "mission" ? await MissionSkillCatalog.materialize(skill) : await Skill.materialize(skill)
         const dir = filesystemSkillDirectory(location)

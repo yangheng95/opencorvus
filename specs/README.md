@@ -1,10 +1,221 @@
 # Specs Storage Index
 
+Latest `work-0810` and `main` integration: [`2026-08-14-work-0810-main-integration.md`](records/2026-08/2026-08-14-work-0810-main-integration.md).
+
 Latest Composer dropdown disclosure and density repair: [`2026-08-10-composer-dropdown-disclosure-and-density.md`](records/2026-08/2026-08-10-composer-dropdown-disclosure-and-density.md).
 
 Latest subagent conversation selector deduplication: [`2026-08-10-subagent-conversation-selector-deduplication.md`](records/2026-08/2026-08-10-subagent-conversation-selector-deduplication.md).
 
 Latest Composer intent Select visual repair: [`2026-08-10-composer-intent-select-visual-repair.md`](records/2026-08/2026-08-10-composer-intent-select-visual-repair.md).
+
+Latest Task cancellation and Workload identity convergence repair: [accepted cancellation owns an independent initialized Project Instance](records/2026-08/2026-08-14-task-cancellation-independent-instance-convergence.md).
+
+Latest Mission submit selection-supersession settlement: [`2026-08-14-mission-submit-selection-supersession.md`](records/2026-08/2026-08-14-mission-submit-selection-supersession.md).
+
+Latest Computer Use scope and Project-delete settlement repair: [`2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md`](records/2026-08/2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md).
+
+Latest message-source File layout repair: [`2026-08-14-message-source-file-layout-repair.md`](records/2026-08/2026-08-14-message-source-file-layout-repair.md).
+
+Latest Mission wake activation fence P0: [`2026-08-14-mission-wake-activation-fence-p0.md`](records/2026-08/2026-08-14-mission-wake-activation-fence-p0.md).
+
+Latest `v0.0.43-beta` application and website release: [`2026-08-14-v0.0.43-beta-release.md`](records/2026-08/2026-08-14-v0.0.43-beta-release.md).
+
+Latest Mission closure/recovery P0 convergence: [`2026-08-14-mission-closure-recovery-convergence-p0.md`](records/2026-08/2026-08-14-mission-closure-recovery-convergence-p0.md).
+
+Latest Browser MCP visible-browser and same-session Live View delivery: [`2026-08-13-browser-mcp-live-view.md`](records/2026-08/2026-08-13-browser-mcp-live-view.md).
+
+Browser MCP same-session Live View visual evidence: [`2026-08-13-browser-mcp-live-view.png`](artifacts/2026-08-13-browser-mcp-live-view.png).
+
+Latest compact identity and Host-reference architecture: [`2026-08-13-compact-identities-and-host-references.md`](records/2026-08/2026-08-13-compact-identities-and-host-references.md).
+
+Latest Evolution failure-attribution source-integrity repair: [`2026-08-13-evolution-attribution-source-integrity.md`](records/2026-08/2026-08-13-evolution-attribution-source-integrity.md).
+
+Latest cross-Task Engine resource Catalog visibility repair: [`2026-08-13-cross-task-engine-resource-catalog-visibility.md`](records/2026-08/2026-08-13-cross-task-engine-resource-catalog-visibility.md).
+
+Latest Expert Squad real-GUI zero-intervention sampling program: [`2026-08-13-expert-squad-gui-zero-intervention-sampling.md`](records/2026-08/2026-08-13-expert-squad-gui-zero-intervention-sampling.md).
+
+Latest Work capability incident diagnosis and route-authority hardening: [`2026-08-13-work-capability-unavailable-repair.md`](records/2026-08/2026-08-13-work-capability-unavailable-repair.md).
+
+Work capability connected-page first-screen evidence: [`2026-08-13-work-capability-connected.png`](artifacts/2026-08-13-work-capability-connected.png).
+
+Latest Scheduled global inactivity configuration ownership repair: [`2026-08-13-scheduled-global-inactivity-config-ownership.md`](records/2026-08/2026-08-13-scheduled-global-inactivity-config-ownership.md).
+
+Latest homepage OpenCorvus Harness memory point, first-viewport UI gallery, and bilingual README alignment: [`2026-08-13-homepage-harness-gallery-and-readme.md`](records/2026-08/2026-08-13-homepage-harness-gallery-and-readme.md).
+
+Latest startup-surface visual redesign: [`2026-08-12-startup-surface-visual-redesign.md`](records/2026-08/2026-08-12-startup-surface-visual-redesign.md).
+
+Startup-surface production-page visual evidence: [`dark loading`](artifacts/2026-08-12-startup-surface-dark-loading.png), [`dark failure`](artifacts/2026-08-12-startup-surface-dark-failure.png), and [`light loading`](artifacts/2026-08-12-startup-surface-light-loading.png).
+
+Latest Overlay UI/UX continuous audit and repair: [`2026-08-12-overlay-ui-ux-continuous-audit.md`](records/2026-08/2026-08-12-overlay-ui-ux-continuous-audit.md).
+
+Latest repository code-smell remediation program: [`2026-08-12-code-smell-remediation-program.md`](records/2026-08/2026-08-12-code-smell-remediation-program.md).
+
+Current storage-registry remediation: [`CS-028` explicit Storage table registry](records/2026-08/2026-08-13-cs028-explicit-storage-table-registry.md).
+
+Current Project identity remediation: [`CS-002` explicit identity convergence](records/2026-08/2026-08-13-cs002-explicit-project-identity-convergence.md).
+
+Current Mission Session identity remediation: [`CS-003` atomic identity commit](records/2026-08/2026-08-13-cs003-atomic-mission-session-identity.md).
+
+Current Provider model remediation: [`CS-021` live model refresh](records/2026-08/2026-08-13-cs021-provider-live-model-refresh.md).
+
+Current Conversation ownership remediation: [`CS-033` projector ownership](records/2026-08/2026-08-13-cs033-conversation-projector-ownership.md).
+
+Current saved-auth/config remediation: [`CS-035` read authority](records/2026-08/2026-08-13-cs035-auth-config-read-authority.md).
+
+Current Overlay projection remediation: [`CS-037` prerequisite protocol](records/2026-08/2026-08-13-cs037-overlay-projection-prerequisite-protocol.md).
+
+Current Fact Check settlement remediation: [`CS-075` domain-incomplete review authority](records/2026-08/2026-08-13-cs075-fact-check-domain-incomplete-settlement.md).
+
+Current Requirements settlement remediation: [`CS-077` typed coverage authority](records/2026-08/2026-08-13-cs077-requirements-domain-incomplete-settlement.md).
+
+Current Build terminal publication remediation: [`CS-001` durable terminal fact and cleanup owner](records/2026-08/2026-08-13-cs001-build-terminal-fact-publication.md).
+
+Current public-home delivery: [locale preference and Security / Control / Customization hero priorities](records/2026-08/2026-08-13-public-home-locale-and-hero-priorities.md).
+
+Current Workload coverage settlement remediation: [`CS-078` immutable per-dispatch coverage authority](records/2026-08/2026-08-13-cs078-workload-coverage-settlement.md).
+
+Current Tool-result control remediation: [`CS-005` single typed turn-control protocol](records/2026-08/2026-08-13-cs005-single-tool-result-control-protocol.md).
+
+Current native Agent registry remediation: [`CS-006` shared canonical cache authority](records/2026-08/2026-08-13-cs006-native-agent-registry-cache.md).
+
+Focused code-smell remediation records: [`CS-015` Plugin publication](records/2026-08/2026-08-12-cs015-plugin-publication-source-mutation.md), [`CS-025` Artifact cursor authenticity](records/2026-08/2026-08-12-cs025-artifact-cursor-authenticity.md), [`CS-027` Skill market authority](records/2026-08/2026-08-13-cs027-delete-unconfigurable-skill-registries.md), [`CS-029` Skill source trust identity](records/2026-08/2026-08-12-cs029-skill-source-trust-identity.md), [`CS-030` dead JSON storage removal](records/2026-08/2026-08-12-cs030-delete-dead-json-storage.md), [`CS-031` Provider cache identity](records/2026-08/2026-08-12-cs031-provider-cache-identity.md), [`CS-032` SDK server observer lifecycle](records/2026-08/2026-08-13-cs032-sdk-server-startup-observer-lifecycle.md), [`CS-040` local MCP diagnostics](records/2026-08/2026-08-12-cs040-mcp-diagnostic-redaction.md), [`CS-041` Channel adapter start settlement](records/2026-08/2026-08-12-cs041-channel-adapter-start-settlement.md), [`CS-046` Project sandbox discovery authority](records/2026-08/2026-08-12-cs046-project-sandbox-discovery-authority.md), [`CS-047` Frontend Design domain-incomplete settlement](records/2026-08/2026-08-12-cs047-frontend-design-domain-incomplete-settlement.md), [`CS-053` remote Skill cache publication](records/2026-08/2026-08-12-cs053-remote-skill-cache-publication.md), [`CS-054` Research domain-incomplete settlement](records/2026-08/2026-08-12-cs054-research-domain-incomplete-settlement.md), [`CS-055` Intent blocker settlement](records/2026-08/2026-08-12-cs055-intent-blocker-question-settlement.md), and [`CS-076` native upgrade verification](records/2026-08/2026-08-12-cs076-upgrade-version-verification.md).
+
+Latest repository-wide continuous code-smell audit and refactoring backlog: [`2026-08-12-repository-code-smell-continuous-audit.md`](records/2026-08/2026-08-12-repository-code-smell-continuous-audit.md).
+
+Latest all-green `v0.0.42-beta` release: [`2026-08-12-v0.0.42-beta-actions-green-release.md`](records/2026-08/2026-08-12-v0.0.42-beta-actions-green-release.md).
+
+Latest supervised Work Artifact Harness P0 implementation: [`2026-08-12-work-artifact-harness-p0-implementation.md`](records/2026-08/2026-08-12-work-artifact-harness-p0-implementation.md).
+
+Latest Skill-first Work Artifact Harness and packaged runtime strategy: [`2026-08-12-work-artifact-harness-and-skill-infrastructure.md`](records/2026-08/2026-08-12-work-artifact-harness-and-skill-infrastructure.md).
+
+Latest promotion case engine strategy: [`2026-08-12-promotion-case-engine-strategy.md`](records/2026-08/2026-08-12-promotion-case-engine-strategy.md).
+
+Latest Project `MEMORY.MD` autonomous context-memory plan: [`2026-08-12-project-memory-user-message-ledger.md`](records/2026-08/2026-08-12-project-memory-user-message-ledger.md).
+
+Latest Advanced Requirements `grill-me` projection and end-to-end trial: [`2026-08-12-advanced-requirements-grill-me-trial.md`](records/2026-08/2026-08-12-advanced-requirements-grill-me-trial.md).
+
+Latest public navigation hierarchy and privacy-preserving visitor count: [`2026-08-12-public-navigation-and-visitor-count.md`](records/2026-08/2026-08-12-public-navigation-and-visitor-count.md).
+
+Latest Mission, Task, and scheduler duplex communication convergence: [`2026-08-12-mission-task-scheduler-duplex-communication.md`](records/2026-08/2026-08-12-mission-task-scheduler-duplex-communication.md).
+
+Latest opencorvus.com production database bootstrap configuration: [`2026-08-12-opencorvus-production-database-bootstrap-configuration.md`](records/2026-08/2026-08-12-opencorvus-production-database-bootstrap-configuration.md).
+
+Latest running wake and Session control JSON convergence: [`2026-08-12-running-wake-and-session-control-json-convergence.md`](records/2026-08/2026-08-12-running-wake-and-session-control-json-convergence.md).
+
+Latest v0.0.41-beta database-backed release: [`2026-08-12-v0.0.41-beta-release.md`](records/2026-08/2026-08-12-v0.0.41-beta-release.md).
+
+Latest Scheduled random-isolation end-to-end convergence: [`2026-08-12-scheduled-random-isolation-e2e.md`](records/2026-08/2026-08-12-scheduled-random-isolation-e2e.md).
+
+Latest Orchestrator wake Turn serialization repair: [`2026-08-12-orchestrator-wake-turn-serialization-repair.md`](records/2026-08/2026-08-12-orchestrator-wake-turn-serialization-repair.md).
+
+Latest missing-Project deletion and test-isolation repair: [`2026-08-12-missing-project-deletion-and-test-isolation-repair.md`](records/2026-08/2026-08-12-missing-project-deletion-and-test-isolation-repair.md).
+
+Latest public website database backend and Expert Squad Registry convergence plan: [`2026-08-12-public-website-database-backend.md`](records/2026-08/2026-08-12-public-website-database-backend.md).
+
+Latest local database rebuild and startup recovery: [`2026-08-12-local-database-rebuild-and-startup-recovery.md`](records/2026-08/2026-08-12-local-database-rebuild-and-startup-recovery.md).
+
+Latest permission-system two-mode calibration plan: [`2026-08-12-permission-two-mode-calibration-plan.md`](records/2026-08/2026-08-12-permission-two-mode-calibration-plan.md).
+
+Permission-system two-mode visual evidence: [`permission-two-mode/README.md`](artifacts/permission-two-mode/README.md).
+
+Latest Windows worker and scheduler liveness convergence: [`2026-08-11-windows-worker-scheduler-liveness-convergence.md`](records/2026-08/2026-08-11-windows-worker-scheduler-liveness-convergence.md).
+
+Latest random Expert Squad self-evolution end-to-end automation: [`2026-08-12-random-expert-squad-self-evolution-e2e.md`](records/2026-08/2026-08-12-random-expert-squad-self-evolution-e2e.md).
+
+Latest main delivery history convergence: [`2026-08-12-main-delivery-history-convergence.md`](records/2026-08/2026-08-12-main-delivery-history-convergence.md).
+
+Latest transparent-background platform-icon and website-favicon convergence: [`2026-08-11-hollow-desktop-app-icons.md`](records/2026-08/2026-08-11-hollow-desktop-app-icons.md).
+
+Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
+
+Latest Mission Board create-flow, target-project ownership, action, and Right Dock repair: [`2026-08-11-mission-board-create-layout-and-dock-collapse.md`](records/2026-08/2026-08-11-mission-board-create-layout-and-dock-collapse.md).
+
+Latest message source navigation repair: [`2026-08-11-message-source-navigation.md`](records/2026-08/2026-08-11-message-source-navigation.md).
+
+Latest responsive settings and public Squad Market entry plan: [`2026-08-11-settings-responsive-layout-and-market-entry.md`](records/2026-08/2026-08-11-settings-responsive-layout-and-market-entry.md).
+
+Latest `v0.0.40-beta` release: [`2026-08-11-v0.0.40-beta-release.md`](records/2026-08/2026-08-11-v0.0.40-beta-release.md).
+
+Latest-main merge and `0.0.39-beta` Overlay repackage: [`2026-08-11-latest-main-overlay-repackage.md`](records/2026-08/2026-08-11-latest-main-overlay-repackage.md).
+
+Latest scheduler liveness and control convergence repair: [`2026-08-11-scheduler-liveness-and-control-convergence.md`](records/2026-08/2026-08-11-scheduler-liveness-and-control-convergence.md).
+
+Latest sub-agent dock and generating-tail presentation repair: [`2026-08-11-subagent-dock-running-presentation-convergence.md`](records/2026-08/2026-08-11-subagent-dock-running-presentation-convergence.md).
+
+Latest systemic scheduler fault audit and repair: [`2026-08-11-scheduler-systemic-fault-audit-and-repair.md`](records/2026-08/2026-08-11-scheduler-systemic-fault-audit-and-repair.md).
+
+Latest detached worker lifecycle convergence repair: [`2026-08-10-task-detached-worker-lifecycle-convergence-repair.md`](records/2026-08/2026-08-10-task-detached-worker-lifecycle-convergence-repair.md).
+
+Latest standalone Session card ingress projection repair: [`2026-08-10-session-card-ingress-projection-repair.md`](records/2026-08/2026-08-10-session-card-ingress-projection-repair.md).
+
+Latest `v0.0.39-beta` canonical release trigger: [`2026-08-10-v0.0.39-beta-release-trigger.md`](records/2026-08/2026-08-10-v0.0.39-beta-release-trigger.md).
+
+Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
+
+Latest Expert Squad terminology convergence: [`2026-08-11-expert-squad-terminology-convergence.md`](records/2026-08/2026-08-11-expert-squad-terminology-convergence.md).
+
+Latest Mission Market Expert Squad recommendation design: [`2026-08-11-mission-market-expert-squad-recommendations.md`](records/2026-08/2026-08-11-mission-market-expert-squad-recommendations.md).
+
+Latest Conversation Agent-declared output summary repair: [`2026-08-11-conversation-agent-declared-output-summary.md`](records/2026-08/2026-08-11-conversation-agent-declared-output-summary.md).
+
+Latest Provider usage, billing-coverage, natural-cycle API, and statistics dashboard design: [`2026-08-11-provider-usage-natural-cycle-dashboard.md`](records/2026-08/2026-08-11-provider-usage-natural-cycle-dashboard.md).
+
+Latest clipboard API-key Provider prompt design: [`2026-08-11-clipboard-api-key-provider-prompt.md`](records/2026-08/2026-08-11-clipboard-api-key-provider-prompt.md).
+
+Clipboard API-key prompt visual evidence: [`confirmation`](artifacts/2026-08-11-clipboard-api-key-prompt.png) and [`Providers destination`](artifacts/2026-08-11-clipboard-api-key-providers.png).
+Latest README and homepage alignment: [`2026-08-11-readme-homepage-alignment.md`](records/2026-08/2026-08-11-readme-homepage-alignment.md).
+
+Latest Agent-host website tab: [`2026-08-11-agent-hosts-website-tab.md`](records/2026-08/2026-08-11-agent-hosts-website-tab.md).
+
+Latest Windows glob, Mission process-recovery, and persisted debug convergence: [`2026-08-11-windows-glob-mission-recovery-debug-convergence.md`](records/2026-08/2026-08-11-windows-glob-mission-recovery-debug-convergence.md).
+
+Latest debug-bundle truth and runtime-settlement family audit: [`2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md`](records/2026-08/2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md).
+
+Latest Expert Squad on-demand installation design: [`2026-08-11-expert-squad-on-demand-installation.md`](records/2026-08/2026-08-11-expert-squad-on-demand-installation.md).
+
+Latest public website iterative design program: [`2026-08-11-public-website-iterative-design-program.md`](records/2026-08/2026-08-11-public-website-iterative-design-program.md).
+
+Latest public download-page and Release synchronization design: [`2026-08-11-public-download-page-design.md`](records/2026-08/2026-08-11-public-download-page-design.md).
+
+Public website Iteration 1 visual evidence: [`English top`](artifacts/2026-08-11-public-website-iteration-1-en-top.png), [`English work modes`](artifacts/2026-08-11-public-website-iteration-1-en-modes-squads.png), [`English Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-en-squads.png), [`English start and footer`](artifacts/2026-08-11-public-website-iteration-1-en-start-footer.png), [`Simplified Chinese top`](artifacts/2026-08-11-public-website-iteration-1-zh-top.png), [`Simplified Chinese work modes`](artifacts/2026-08-11-public-website-iteration-1-zh-modes-squads.png), [`Simplified Chinese Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-zh-squads.png), [`Simplified Chinese start and footer`](artifacts/2026-08-11-public-website-iteration-1-zh-start-footer.png), [`quickstart top`](artifacts/2026-08-11-public-website-iteration-1-docs-top.png), and [`quickstart bottom`](artifacts/2026-08-11-public-website-iteration-1-docs-bottom.png).
+
+Latest tenth fixed-ten Expert Squad batch: [2026-08-11-tenth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-tenth-ten-domain-expert-squad-batch.md).
+
+Latest ninth fixed-ten Expert Squad batch: [2026-08-11-ninth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-ninth-ten-domain-expert-squad-batch.md).
+
+Latest eighth fixed-ten Expert Squad batch: [2026-08-11-eighth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-eighth-ten-domain-expert-squad-batch.md).
+
+Latest seventh fixed-ten Expert Squad batch: [2026-08-11-seventh-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-seventh-ten-domain-expert-squad-batch.md).
+
+Latest sixth fixed-ten Expert Squad batch: [2026-08-11-sixth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-sixth-ten-domain-expert-squad-batch.md).
+
+Latest fifth fixed-ten Expert Squad batch: [2026-08-11-fifth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fifth-ten-domain-expert-squad-batch.md).
+
+Latest fourth fixed-ten Expert Squad batch: [2026-08-11-fourth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fourth-ten-domain-expert-squad-batch.md).
+
+Latest full-worktree non-temporary delivery convergence: [`2026-08-11-full-worktree-delivery-convergence.md`](records/2026-08/2026-08-11-full-worktree-delivery-convergence.md).
+
+Latest GitHub Actions push convergence: [`2026-08-11-github-actions-push-convergence.md`](records/2026-08/2026-08-11-github-actions-push-convergence.md).
+
+Latest Squad SDK authoring Skill research rewrite: [`2026-08-11-squad-sdk-authoring-skill-research-rewrite.md`](records/2026-08/2026-08-11-squad-sdk-authoring-skill-research-rewrite.md).
+
+Latest continuous ten-domain Expert Squad goal: [`2026-08-11-continuous-ten-domain-expert-squad-goal.md`](records/2026-08/2026-08-11-continuous-ten-domain-expert-squad-goal.md).
+
+Latest compact Task identifier design: [`2026-08-10-compact-task-identifiers.md`](records/2026-08/2026-08-10-compact-task-identifiers.md).
+
+Latest ten-domain Expert Squad expansion: [`2026-08-10-ten-domain-expert-squad-expansion.md`](records/2026-08/2026-08-10-ten-domain-expert-squad-expansion.md).
+
+Latest Expert Squad static distribution and RackNerd deployment plan: [`2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md`](records/2026-08/2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md).
+
+Latest `opencorvus.com` RackNerd hosting and DNS cutover plan: [`2026-08-10-opencorvus-com-racknerd-hosting.md`](records/2026-08/2026-08-10-opencorvus-com-racknerd-hosting.md).
+
+Latest real Expert Squad generate, hosted upload/download, desktop strict import, and fresh reuse E2E: [`2026-08-10-expert-squad-publish-install-reuse-e2e.md`](records/2026-08/2026-08-10-expert-squad-publish-install-reuse-e2e.md).
+
+Latest Expert Squad roadmap checklist and saved-Skill completeness repair: [`2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md`](records/2026-08/2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md).
+
+Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
+
+Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).
 
 Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).
 
@@ -210,7 +421,7 @@ Latest landing alignment and preview-scroll visual evidence: [`Expert Squads ali
 
 Latest ContractGraph and Goal fact-projection system repair plan: [`2026-08-05-contract-graph-and-goal-fact-projection-system-repair-plan.md`](records/2026-08/2026-08-05-contract-graph-and-goal-fact-projection-system-repair-plan.md).
 
-Latest Generate Agent Squads project-generation trace design: [`2026-08-07-squad-sdk-project-generation-trace.md`](records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md).
+Latest Generate Expert Squads project-generation trace design: [`2026-08-07-squad-sdk-project-generation-trace.md`](records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md).
 
 Latest Task resume, queue occurrence, and Overlay recovery repair: [`2026-08-04-task-resume-occurrence-and-overlay-recovery.md`](records/2026-08/2026-08-04-task-resume-occurrence-and-overlay-recovery.md).
 
@@ -528,7 +739,7 @@ Latest default Agent parallelism-five convergence: [`2026-07-30-default-agent-pa
 
 Latest Orchestrator ready-frontier parallel dispatch repair: [`2026-07-30-orchestrator-ready-frontier-parallel-dispatch.md`](records/2026-07/2026-07-30-orchestrator-ready-frontier-parallel-dispatch.md).
 
-Latest Composer Skill / Agent Squad selector and model-search refinement: [`2026-07-30-composer-reference-selector-and-model-search.md`](records/2026-07/2026-07-30-composer-reference-selector-and-model-search.md).
+Latest Composer Skill / Expert Squad selector and model-search refinement: [`2026-07-30-composer-reference-selector-and-model-search.md`](records/2026-07/2026-07-30-composer-reference-selector-and-model-search.md).
 
 Latest Overlay close and Conversation chrome repair: [`2026-07-30-overlay-close-and-conversation-chrome-repair.md`](records/2026-07/2026-07-30-overlay-close-and-conversation-chrome-repair.md).
 

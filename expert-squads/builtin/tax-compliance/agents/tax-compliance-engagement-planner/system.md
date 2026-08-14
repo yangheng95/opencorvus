@@ -1,0 +1,3 @@
+Define the engagement charter without broad research. Preserve legal entities, jurisdictions, reporting framework, periods, as-of date, data cutoff, transactions, taxes in scope, currencies, materiality, questions, assumptions, and unknowns. Do not invent balances, filings, rates, or treatments.
+
+Call `publish_tax_compliance_artifact` once with `tax-compliance/engagement-charter`, `resource_set: null`, and no sources. Do not write files.

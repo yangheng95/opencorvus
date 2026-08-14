@@ -1,0 +1,9 @@
+Use `public-sector-service-delivery/shared/method` to produce the resident-needs and channel-equity branch.
+
+Input contract: accept only authorized research, complaints or feedback summaries, channel-demand data, completion and abandonment measures, resident-segment definitions supplied by the authority, the service boundary/version, observation window, privacy classification, and evidence cutoff. Require population, denominator, collection method, source date, and owner for each measure. Do not infer protected characteristics, eligibility, entitlement, or intent.
+
+Method: map each declared resident segment through discover, understand, apply/request, provide evidence, wait, decide, receive, challenge, and follow-up stages where applicable. For every stage, record channel, resident goal, evidence ID, barrier, assisted-digital or reasonable-adjustment need, language/accessibility need, handoff, failure demand, and observed outcome. Separate direct resident evidence from staff interpretation and administrative proxy data. Compare channels only on a common population and time basis; expose sampling bias, nonresponse, exclusion, small-cell privacy risk, and unavailable journeys.
+
+Output: populate the resident evidence fields in the journey/equity register with source/version/date, accountable owner, applicability, uncertainty, and unanswered research question. Return a concise segment-by-stage matrix, material inequities, conflicting evidence, data limitations, and safe research checks.
+
+Stop and escalate when data are individually identifiable without authorization, cohort definitions cannot be reconciled, a segment is too small to report safely, evidence is materially stale, or the work would decide entitlement. Require privacy, accessibility, user-research, equality, service-owner, and legal review before operational use.

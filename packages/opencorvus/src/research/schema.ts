@@ -21,9 +21,6 @@ export const RESEARCH_BUNDLE_LIMITS = {
   citationMapJsonChars: 100_000,
 } as const
 
-const PROJECT_RELATIVE_RUNTIME_RESEARCH_PATH =
-  /^\.opencorvus\/\.r\/t\/[0-9A-Za-z]{2}\/[0-9A-Za-z]{6}\/(?:dr|fr)\/[0-9A-Za-z]{2}\/[0-9A-Za-z]{6}\/[^/]+$/
-
 export const ResearchEvidenceRefSchema = z
   .object({
     id: z.string().min(1),
@@ -471,12 +468,13 @@ export function validateResearchBriefIntegrity(brief: ResearchBrief): string | u
   }
 
   const bundlePaths = [brief.bundle.full_markdown_path, brief.bundle.evidence_json_path, brief.bundle.citation_map_path]
+  const runtimePrefix = `${ProjectRuntimePaths.relativeRuntimeRoot()}/`
   for (const bundlePath of bundlePaths) {
     const normalized = bundlePath.replaceAll("\\", "/")
     if (
       normalized.startsWith("/") ||
       normalized.includes("..") ||
-      !PROJECT_RELATIVE_RUNTIME_RESEARCH_PATH.test(normalized)
+      !normalized.startsWith(runtimePrefix)
     ) {
       return `bundle path is outside the task research runtime boundary: ${bundlePath}.`
     }

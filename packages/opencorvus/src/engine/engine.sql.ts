@@ -12,7 +12,7 @@ export type EngineBudget = {
 
 export type EngineMetadata = Record<string, unknown>
 
-export type EngineTaskStatus = "queued" | "active" | "completed" | "failed" | "cancelled"
+export type EngineTaskStatus = "active" | "completed" | "failed" | "cancelled"
 
 export type EngineTaskPriority = "critical" | "high" | "normal" | "low"
 export type EngineGoalPriority = "blocking" | "advisory"
@@ -32,6 +32,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "build_host_observation",
   "integrity_review",
   "fact_check_review",
+  "fact_check_incomplete",
   "visual_review",
   "intent_analysis",
   "requirement_set",
@@ -43,9 +44,12 @@ export const ENGINE_ARTIFACT_KINDS = [
   "goal_graph_projection",
   "goal_workload",
   "dispatch_lineage",
+  "dispatch_settlement",
   "operator_message_wake",
   "mission_acceptance_resume_receipt",
   "queued_operator_wake",
+  "task_checkpoint_settlement",
+  "task_auxiliary_settlement",
   "exploration",
   "browser_preview_target",
   "browser_preview_evidence",
@@ -131,16 +135,12 @@ export const EngineTaskTable = sqliteTable(
      *  `engine/task-status.ts::deriveTaskStatus` from
      *  (time_started, time_completed, error, metadata.cancelled). */
     priority: text().notNull().$type<EngineTaskPriority>().default("normal"),
-    /** Directory-scoped runnable queue order. Active tasks are excluded from
-     *  reordering and queued siblings are claimed by this value. Priority only
-     *  seeds initial placement; user drag order rewrites this field directly. */
-    queue_order: integer().notNull().default(0),
     /** The former task-wide blocker cache is removed. Current blockers are
      *  explicit interaction or evidence facts, never an execution status. */
     error: text(),
     budget: text({ mode: "json" }).$type<EngineBudget>(),
     metadata: text({ mode: "json" }).$type<EngineMetadata>(),
-    time_started: integer(),
+    time_started: integer().notNull(),
     time_completed: integer(),
     /** User-facing archive timestamp. Archived Tasks remain durable and may be
      *  restored or permanently deleted from Settings. */
@@ -174,9 +174,38 @@ export const EngineTaskTable = sqliteTable(
     index("engine_task_time_completed_idx").on(table.time_completed),
     index("engine_task_time_archived_idx").on(table.time_archived),
     index("engine_task_time_pinned_idx").on(table.time_pinned),
-    index("engine_task_queue_order_idx").on(table.queue_order),
     uniqueIndex("engine_task_project_request_idx").on(table.project_id, table.request_id),
   ],
+)
+
+export const EngineTaskCancellationAuthorityTable = sqliteTable("engine_task_cancellation_authority", {
+  task_id: text()
+    .primaryKey()
+    .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+  request_event_id: text().notNull(),
+  convergence_owner_id: text(),
+  convergence_owner_process_id: integer(),
+  convergence_lease_expires_at: integer(),
+})
+
+/** Durable owner for private Git refs created while materializing one Build
+ * terminal observation. A row exists before the first ref write, so a crash,
+ * publication failure, or vanished linked worktree cannot orphan the refs. */
+export const EngineBuildObservationCleanupTable = sqliteTable(
+  "engine_build_observation_cleanup",
+  {
+    observation_id: text().primaryKey(),
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    git_dir: text().notNull(),
+    status: text({ enum: ["active", "pending", "retained", "complete"] }).notNull(),
+    owner_runtime_id: text().notNull(),
+    attempts: integer().notNull().default(0),
+    last_error: text(),
+    ...Timestamps,
+  },
+  (table) => [index("engine_build_observation_cleanup_task_status_idx").on(table.task_id, table.status)],
 )
 
 export const EngineGoalTable = sqliteTable(

@@ -24,11 +24,11 @@ export type ConversationHandoffEvent = z.infer<typeof ConversationHandoffEvent.p
  * Publish the visible surface transition only after the target conversation's
  * first user message has been persisted by SessionWake.
  */
-export function publishConversationHandoff(input: {
+export async function publishConversationHandoff(input: {
   targetSession: Session.Info
   callerSession: Session.Info
   callerMessageID: string
-}): ConversationHandoffEvent {
+}): Promise<ConversationHandoffEvent> {
   const targetExperience = rightSidebarConversationExperience(input.targetSession)
   const callerExperience = rightSidebarConversationExperience(input.callerSession)
   if (!targetExperience) {
@@ -58,6 +58,6 @@ export function publishConversationHandoff(input: {
     callerMessageID: input.callerMessageID,
     timeCreated: Date.now(),
   })
-  void Bus.publish(ConversationHandoffEvent, event)
+  await Bus.publish(ConversationHandoffEvent, event)
   return event
 }

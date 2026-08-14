@@ -91,6 +91,86 @@ test("one reusable Session publishes independent lifecycle histories for consecu
   })
 })
 
+test("one exact generation settlement releases a waiter while its reusable prompt owner remains live", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "reusable standby owner" })
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        role: "user",
+        sessionID: session.id,
+        author: "orchestrator",
+        time: { created: Date.now() },
+        agent: "orchestrator",
+        model: { providerID: "test", modelID: "test" },
+      })
+      const owner = new AbortController()
+      SessionStatus.beginExecutionOccurrence(session.id, input.id, owner.signal)
+      await SessionStatus.set(session.id, { type: "streaming" }, { publish: false, inputMessageID: input.id })
+
+      let released = false
+      const settlement = SessionStatus.waitForExecutionSettlement({
+        sessionID: session.id,
+        inputMessageID: input.id,
+        owner: owner.signal,
+      }).then(() => {
+        released = true
+      })
+      await Promise.resolve()
+      expect(released).toBe(false)
+
+      await SessionStatus.set(session.id, { type: "idle" }, { inputMessageID: input.id })
+      await settlement
+      expect({ released, status: SessionStatus.getExecution(session.id, input.id), ownerAborted: owner.signal.aborted }).toEqual({
+        released: true,
+        status: { type: "idle" },
+        ownerAborted: false,
+      })
+    },
+  })
+})
+
+test("an accepted prompt Turn publishes its exact occurrence idle before the reusable owner returns to standby", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "accepted parked turn" })
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        role: "user",
+        sessionID: session.id,
+        author: "orchestrator",
+        time: { created: Date.now() },
+        agent: "orchestrator",
+        model: { providerID: "test", modelID: "test" },
+      })
+      const owner = new AbortController()
+      SessionStatus.beginPromptGeneration(session.id, owner.signal)
+      SessionStatus.beginExecutionOccurrence(session.id, input.id, owner.signal)
+      await SessionStatus.set(session.id, { type: "streaming" }, { promptGenerationOwner: owner.signal })
+
+      const settlement = SessionStatus.waitForExecutionSettlement({
+        sessionID: session.id,
+        inputMessageID: input.id,
+        owner: owner.signal,
+      })
+      await SessionStatus.settleAcceptedExecutionOccurrence(session.id, owner.signal)
+      await settlement
+
+      expect({
+        status: SessionStatus.getExecution(session.id, input.id),
+        ownerAborted: owner.signal.aborted,
+      }).toEqual({
+        status: { type: "idle" },
+        ownerAborted: false,
+      })
+    },
+  })
+})
+
 test("a failed terminal publication releases its occurrence latch for the successful publication", async () => {
   await using project = await tmpdir({ git: true })
   await Instance.provide({

@@ -32,7 +32,11 @@ export type Agent = {
   options: {
     [key: string]: unknown
   }
-  permission?: PermissionRuleset
+  permission?: Array<{
+    action: "allow" | "deny"
+    pattern: string
+    permission: string
+  }>
   prompt?: string
   promptAppend?: string
   steps?: number
@@ -67,12 +71,25 @@ export type ApiAuth = {
 
 export type Auth = OAuth | ApiAuth | WellKnownAuth
 
+export type AuthReadError = {
+  data: {
+    message: string
+    operation: "read_saved_credentials"
+    reason: "io" | "malformed_json" | "invalid_credential"
+  }
+  name: "AuthReadError"
+}
+
 export type BadRequestError = {
   data: unknown
   error: Array<{
     [key: string]: unknown
   }>
   success: false
+}
+
+export type BillingCoverage = {
+  status: "priced" | "unpriced"
 }
 
 /**
@@ -170,9 +187,9 @@ export type ChatCapabilitySettings = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       required_tools?: Array<string>
       risk: {
         has_agents: boolean
@@ -270,6 +287,7 @@ export type Config = {
     coding?: NativeAgentOverride
     compaction?: NativeAgentOverride
     control?: NativeAgentOverride
+    memory?: NativeAgentOverride
     mission?: NativeAgentOverride
     orchestrator?: NativeAgentOverride
     summary?: NativeAgentOverride
@@ -280,7 +298,7 @@ export type Config = {
    */
   assistant?: {
     /**
-     * Chunk-driven inactivity thresholds for session LLM streams and task queue work.
+     * Chunk-driven inactivity thresholds for session LLM streams and provider execution work.
      */
     activity?: {
       /**
@@ -378,9 +396,21 @@ export type Config = {
        */
       auto_inject?: boolean
       /**
+       * Fixed maximum estimated token count of Project MEMORY.MD
+       */
+      document_token_limit?: number
+      /**
        * Enable persistent memory store
        */
       enabled?: boolean
+      /**
+       * Maximum estimated input tokens for one Memory Organizer run
+       */
+      organizer_input_token_budget?: number
+      /**
+       * Maximum pending occurrences retained while the Memory Organizer is unavailable
+       */
+      pending_availability_limit?: number
       /**
        * Max tokens for auto-injected memory context
        */
@@ -443,6 +473,9 @@ export type Config = {
    */
   locale?: "en-US" | "zh-CN"
   logLevel?: LogLevel
+  /**
+   * Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.
+   */
   lsp?:
     | false
     | {
@@ -487,7 +520,19 @@ export type Config = {
      */
     server_url: string
   }
-  permission?: PermissionConfig
+  /**
+   * Durable, idempotent audit record for the one-time legacy permission configuration cutover.
+   */
+  permission_migration?: {
+    permission_mode: "full_access" | "ask"
+    reason: "all_allow" | "restricted_or_mixed" | "explicit_mode"
+    source_fields: Array<"permission" | "tool_permissions">
+    version: 1
+  }
+  /**
+   * Operator authorization mode. Full access is the default; Ask me pauses permission-bearing invocations for an operator decision.
+   */
+  permission_mode?: "full_access" | "ask"
   plugin?: Array<string>
   /**
    * Project-owned Skill and MCP server assignments for fixed native primary assistants.
@@ -552,6 +597,12 @@ export type Config = {
     }
   }
   /**
+   * Capability projection for installed Skills. Operator invocation authorization is controlled separately.
+   */
+  skill_policy?: {
+    [key: string]: PermissionActionConfig
+  }
+  /**
    * Additional skill folder paths
    */
   skills?: {
@@ -573,16 +624,6 @@ export type Config = {
    */
   snapshot?: boolean
   terminal?: TerminalConfig
-  /**
-   * Default tool permission actions for new tasks. When not set, defaults to 'allow'. Set a tool to 'ask' for confirmation, or 'deny' to block it entirely.
-   */
-  tool_permissions?: {
-    external_directory?: PermissionActionConfig
-    schedule?: PermissionActionConfig
-    skill?: PermissionActionConfig
-    webfetch?: PermissionActionConfig
-    websearch?: PermissionActionConfig
-  }
   /**
    * Custom username to display in conversations instead of system username
    */
@@ -711,15 +752,17 @@ export type Event =
   | EventMcpToolsChanged
   | EventMessageCreated
   | EventMessageInjected
+  | EventMessageMoved
   | EventMessagePartDelta
   | EventMessagePartRemoved
   | EventMessagePartUpdated
   | EventMessageRemoved
   | EventMessageUpdated
   | EventMissionHandoff
-  | EventPermissionAbandoned
   | EventPermissionAsked
   | EventPermissionReplied
+  | EventProjectMemoryNoticeChanged
+  | EventProjectMemoryOrganizeRequested
   | EventProjectUpdated
   | EventPtyCreated
   | EventPtyDeleted
@@ -838,6 +881,7 @@ export type EventArtifactPersisted = {
       | "build_host_observation"
       | "integrity_review"
       | "fact_check_review"
+      | "fact_check_incomplete"
       | "visual_review"
       | "intent_analysis"
       | "requirement_set"
@@ -849,9 +893,12 @@ export type EventArtifactPersisted = {
       | "goal_graph_projection"
       | "goal_workload"
       | "dispatch_lineage"
+      | "dispatch_settlement"
       | "operator_message_wake"
       | "mission_acceptance_resume_receipt"
       | "queued_operator_wake"
+      | "task_checkpoint_settlement"
+      | "task_auxiliary_settlement"
       | "exploration"
       | "browser_preview_target"
       | "browser_preview_evidence"
@@ -1135,6 +1182,15 @@ export type EventMessageInjected = {
   type: "message.injected"
 }
 
+export type EventMessageMoved = {
+  properties: {
+    info: VisibleMessage
+    parts: Array<VisibleMessagePart>
+    sourceSessionID: string
+  }
+  type: "message.moved"
+}
+
 export type EventMessagePartDelta = {
   properties: {
     delta: string
@@ -1192,16 +1248,6 @@ export type EventMissionHandoff = {
   type: "mission.handoff"
 }
 
-export type EventPermissionAbandoned = {
-  properties: {
-    origin: "infrastructure"
-    requestID: string
-    sessionID: string
-    timeResolved: number
-  }
-  type: "permission.abandoned"
-}
-
 export type EventPermissionAsked = {
   properties: PermissionRequest
   type: "permission.asked"
@@ -1209,12 +1255,46 @@ export type EventPermissionAsked = {
 
 export type EventPermissionReplied = {
   properties: {
+    actorID: string
     autoReply: boolean
-    reply: "once" | "always" | "reject"
-    requestID: string
+    decision: PermissionDecision
+    requestID: PermissionIdentity
     sessionID: string
+    userInput?: {
+      structured?: {
+        [key: string]: unknown
+      }
+      surface: string
+      text: string
+    }
   }
   type: "permission.replied"
+}
+
+export type EventProjectMemoryNoticeChanged = {
+  properties: {
+    acknowledged: boolean
+    generation: string
+    message: string
+    projectID: string
+    status:
+      | "idle"
+      | "organizing"
+      | "capacity_reached"
+      | "evidence_too_large"
+      | "model_context_incompatible"
+      | "unavailable"
+      | "retry_wait"
+  }
+  type: "project.memory.notice.changed"
+}
+
+export type EventProjectMemoryOrganizeRequested = {
+  properties: {
+    projectID: string
+    sessionID?: string
+  }
+  type: "project.memory.organize.requested"
 }
 
 export type EventProjectUpdated = {
@@ -1283,6 +1363,13 @@ export type EventQuestionRejected = {
     requestID: string
     sessionID: string
     timeResolved: number
+    userInput?: {
+      structured?: {
+        [key: string]: unknown
+      }
+      surface: string
+      text: string
+    }
   }
   type: "question.rejected"
 }
@@ -1294,6 +1381,13 @@ export type EventQuestionReplied = {
     requestID: string
     sessionID: string
     timeResolved: number
+    userInput?: {
+      structured?: {
+        [key: string]: unknown
+      }
+      surface: string
+      text: string
+    }
   }
   type: "question.replied"
 }
@@ -1538,7 +1632,7 @@ export type EventTaskCompleted = {
 
 export type EventTaskCreated = {
   properties: {
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     summary: string
     taskID: string
   }
@@ -1651,7 +1745,7 @@ export type EventTaskRewound = {
 
 export type EventTaskUpdated = {
   properties: {
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     summary: string
     taskID: string
   }
@@ -1717,34 +1811,71 @@ export type EventWorktreeReady = {
   type: "worktree.ready"
 }
 
-export type ExpertSquadSettingsSurface = {
-  installations: Array<{
-    built_in: boolean
-    capability_projection: {
-      agents: {
-        [key: string]: {
-          base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          description?: string
-          inherit_base_tools: boolean
-          label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
+export type ExpertSquadCatalogIndexEntry = {
+  built_in: boolean
+  description?: string
+  display_label: string
+  id: string
+  name: string
+  product_pillars: Array<"code" | "work">
+  source:
+    | {
+        kind: "built_in"
       }
-      scheduler: {
-        base_role: "orchestrator"
+    | {
+        installation_scope: "project" | "global"
+        kind: "installed_package"
+        namespace: string
+      }
+  system_role?: "expert_squad_generator"
+}
+
+export type ExpertSquadCatalogInspection = {
+  built_in: boolean
+  description?: string
+  display_label: string
+  id: string
+  label: string
+  name: string
+  next_workflow_cursor: string | null
+  product_pillars: Array<"code" | "work">
+  selector: {
+    selection_guidance: string
+    summary: string
+  }
+  source:
+    | {
+        kind: "built_in"
+      }
+    | {
+        installation_scope: "project" | "global"
+        kind: "installed_package"
+        namespace: string
+      }
+  system_role?: "expert_squad_generator"
+  version: string
+  workflow_count: number
+  workflows: Array<{
+    description: string
+    id: string
+    label: string
+    node_count: number
+  }>
+}
+
+export type ExpertSquadCatalogPage = {
+  catalog_revision: string
+  entries: Array<ExpertSquadCatalogIndexEntry>
+  next_cursor: string | null
+  total_count: number
+}
+
+export type ExpertSquadCatalogSummary = {
+  built_in: boolean
+  capability_projection: {
+    agents: {
+      [key: string]: {
+        base_role: string
         built_in_tool_ids: Array<string>
         default_mcp_prompt_refs: Array<string>
         default_mcp_resource_refs: Array<string>
@@ -1752,7 +1883,10 @@ export type ExpertSquadSettingsSurface = {
         default_mcp_tool_refs: Array<string>
         default_skill_refs: Array<string>
         default_tool_refs: Array<string>
+        description?: string
+        execution_contract?: "platform_integrity_review"
         inherit_base_tools: boolean
+        label: string
         package_mcp_prompt_refs: Array<string>
         package_mcp_resource_refs: Array<string>
         package_mcp_server_refs: Array<string>
@@ -1761,360 +1895,172 @@ export type ExpertSquadSettingsSurface = {
         package_tool_refs: Array<string>
         prompt?: string
       }
-      virtual_workflows: {
-        [key: string]: {
-          description: string
-          label: string
-          nodes: {
-            [key: string]: {
-              agent_id: string
-              depends_on: Array<string>
-              description: string
-            }
+    }
+    scheduler: {
+      base_role: "orchestrator"
+      built_in_tool_ids: Array<string>
+      default_mcp_prompt_refs: Array<string>
+      default_mcp_resource_refs: Array<string>
+      default_mcp_server_refs: Array<string>
+      default_mcp_tool_refs: Array<string>
+      default_skill_refs: Array<string>
+      default_tool_refs: Array<string>
+      inherit_base_tools: boolean
+      package_mcp_prompt_refs: Array<string>
+      package_mcp_resource_refs: Array<string>
+      package_mcp_server_refs: Array<string>
+      package_mcp_tool_refs: Array<string>
+      package_skill_refs: Array<string>
+      package_tool_refs: Array<string>
+      prompt?: string
+    }
+    virtual_workflows: {
+      [key: string]: {
+        description: string
+        label: string
+        nodes: {
+          [key: string]: {
+            agent_id: string
+            depends_on: Array<string>
+            description: string
           }
         }
       }
     }
-    configuration?: {
-      fields: Array<{
-        description?: string
-        key: string
-        label: string
-        placeholder?: string
-        required: boolean
-        type: "boolean" | "text" | "secret"
-      }>
-    }
-    declaration_hash: string
-    description?: string
-    display_label: string
-    editable: boolean
-    id: string
-    label: string
-    name: string
-    package_digest: string
-    product_pillars: Array<"code" | "work">
-    readme: {
-      append_target: "orchestrator"
-      content: string
-      path: "README.md"
-    }
-    selector: {
+  }
+  configuration?: {
+    fields: Array<{
       description?: string
-      id: string
-      instructions: string
-      instructions_path: "selector.md"
+      key: string
       label: string
-      ref: string
-      selection_guidance: string
-      summary: string
-    }
-    source:
-      | {
-          kind: "built_in"
+      placeholder?: string
+      required: boolean
+      type: "boolean" | "text" | "secret"
+    }>
+  }
+  declaration_hash: string
+  description?: string
+  display_label: string
+  editable: boolean
+  id: string
+  label: string
+  name: string
+  package_digest: string
+  product_pillars: Array<"code" | "work">
+  readme: {
+    append_target: "orchestrator"
+    content: string
+    path: "README.md"
+  }
+  selector: {
+    description?: string
+    id: string
+    instructions: string
+    instructions_path: "selector.md"
+    label: string
+    ref: string
+    selection_guidance: string
+    summary: string
+  }
+  source:
+    | {
+        kind: "built_in"
+      }
+    | {
+        generation?:
+          | {
+              generated_at: string
+              generator_expert_squad_id: "squad-sdk"
+              method: "sdk_authoring"
+              session_id: string
+              task_id: string
+            }
+          | {
+              generated_at: string
+              generator_expert_squad_id: "squad-sdk"
+              mapping_digest: string
+              method: "heterogeneous_import"
+              session_id: string
+              source_digest: string
+              task_id: string
+            }
+        installation_scope: "project" | "global"
+        kind: "installed_package"
+        manifest_path: string
+        namespace: string
+        package_digest: string
+        readme_path: string
+        root: string
+      }
+  system_role?: "expert_squad_generator"
+  version: string
+}
+
+export type ExpertSquadDiagnosticPage = {
+  catalog_revision: string
+  entries: Array<
+    | {
+        issue: {
+          id?: string
+          location: string
+          message: string
+          namespace?: string
+          phase: "location.scan" | "namespace.scan" | "package.identity" | "package.catalog" | "identity.duplicate"
         }
-      | {
-          generation?:
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                method: "sdk_authoring"
-                session_id: string
-                task_id: string
-              }
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                mapping_digest: string
-                method: "heterogeneous_import"
-                session_id: string
-                source_digest: string
-                task_id: string
-              }
-          installation_scope: "project" | "global"
-          kind: "installed_package"
-          manifest_path: string
-          namespace: string
-          package_digest: string
-          readme_path: string
-          root: string
+        kind: "issue"
+      }
+    | {
+        kind: "warning"
+        warning: {
+          code: "project_overrides_global"
+          effective: {
+            id: string
+            namespace: string
+            package_digest: string
+            root: string
+            scope: "project" | "global"
+            version: string
+          }
+          logical_id: string
+          severity: "warning"
+          shadowed: {
+            id: string
+            namespace: string
+            package_digest: string
+            root: string
+            scope: "project" | "global"
+            version: string
+          }
         }
-    system_role?: "expert_squad_generator"
-    version: string
-  }>
+      }
+  >
+  next_cursor: string | null
+  total_count: number
+}
+
+export type ExpertSquadInventoryStatus = {
+  catalog_revision: string
+  effective_count: number
+  installation_count: number
+  issue_count: number
+  warning_count: number
+}
+
+export type ExpertSquadPackageRevision = {
+  id: string
+  namespace: string
+  package_digest: string
+  project_id: string | null
+  scope: "built_in" | "project" | "global"
+  version: string
+}
+
+export type ExpertSquadSettingsDetail = {
   scope: {
     directory: string
     kind: "project"
   }
-  selected: {
-    built_in: boolean
-    capability_projection: {
-      agents: {
-        [key: string]: {
-          base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          description?: string
-          inherit_base_tools: boolean
-          label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-      }
-      scheduler: {
-        base_role: "orchestrator"
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
-        inherit_base_tools: boolean
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
-        prompt?: string
-      }
-      virtual_workflows: {
-        [key: string]: {
-          description: string
-          label: string
-          nodes: {
-            [key: string]: {
-              agent_id: string
-              depends_on: Array<string>
-              description: string
-            }
-          }
-        }
-      }
-    }
-    configuration?: {
-      fields: Array<{
-        description?: string
-        key: string
-        label: string
-        placeholder?: string
-        required: boolean
-        type: "boolean" | "text" | "secret"
-      }>
-    }
-    declaration_hash: string
-    description?: string
-    display_label: string
-    editable: boolean
-    id: string
-    label: string
-    name: string
-    package_digest: string
-    product_pillars: Array<"code" | "work">
-    readme: {
-      append_target: "orchestrator"
-      content: string
-      path: "README.md"
-    }
-    selector: {
-      description?: string
-      id: string
-      instructions: string
-      instructions_path: "selector.md"
-      label: string
-      ref: string
-      selection_guidance: string
-      summary: string
-    }
-    source:
-      | {
-          kind: "built_in"
-        }
-      | {
-          generation?:
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                method: "sdk_authoring"
-                session_id: string
-                task_id: string
-              }
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                mapping_digest: string
-                method: "heterogeneous_import"
-                session_id: string
-                source_digest: string
-                task_id: string
-              }
-          installation_scope: "project" | "global"
-          kind: "installed_package"
-          manifest_path: string
-          namespace: string
-          package_digest: string
-          readme_path: string
-          root: string
-        }
-    system_role?: "expert_squad_generator"
-    version: string
-  }
-  squads: Array<{
-    built_in: boolean
-    capability_projection: {
-      agents: {
-        [key: string]: {
-          base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          description?: string
-          inherit_base_tools: boolean
-          label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-      }
-      scheduler: {
-        base_role: "orchestrator"
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
-        inherit_base_tools: boolean
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
-        prompt?: string
-      }
-      virtual_workflows: {
-        [key: string]: {
-          description: string
-          label: string
-          nodes: {
-            [key: string]: {
-              agent_id: string
-              depends_on: Array<string>
-              description: string
-            }
-          }
-        }
-      }
-    }
-    configuration?: {
-      fields: Array<{
-        description?: string
-        key: string
-        label: string
-        placeholder?: string
-        required: boolean
-        type: "boolean" | "text" | "secret"
-      }>
-    }
-    declaration_hash: string
-    description?: string
-    display_label: string
-    editable: boolean
-    id: string
-    label: string
-    name: string
-    package_digest: string
-    product_pillars: Array<"code" | "work">
-    readme: {
-      append_target: "orchestrator"
-      content: string
-      path: "README.md"
-    }
-    selector: {
-      description?: string
-      id: string
-      instructions: string
-      instructions_path: "selector.md"
-      label: string
-      ref: string
-      selection_guidance: string
-      summary: string
-    }
-    source:
-      | {
-          kind: "built_in"
-        }
-      | {
-          generation?:
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                method: "sdk_authoring"
-                session_id: string
-                task_id: string
-              }
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                mapping_digest: string
-                method: "heterogeneous_import"
-                session_id: string
-                source_digest: string
-                task_id: string
-              }
-          installation_scope: "project" | "global"
-          kind: "installed_package"
-          manifest_path: string
-          namespace: string
-          package_digest: string
-          readme_path: string
-          root: string
-        }
-    system_role?: "expert_squad_generator"
-    version: string
-  }>
-  warnings: Array<{
-    code: "project_overrides_global"
-    effective: {
-      id: string
-      namespace: string
-      package_digest: string
-      root: string
-      scope: "project" | "global"
-      version: string
-    }
-    logical_id: string
-    severity: "warning"
-    shadowed: {
-      id: string
-      namespace: string
-      package_digest: string
-      root: string
-      scope: "project" | "global"
-      version: string
-    }
-  }>
+  selected: ExpertSquadCatalogSummary
 }
 
 export type FeishuChannelConfig = {
@@ -2269,7 +2215,11 @@ export type GlobalSession = {
     [key: string]: unknown
   }
   parentID?: string
-  permission?: PermissionRuleset
+  permission?: Array<{
+    action: "allow" | "deny"
+    pattern: string
+    permission: string
+  }>
   project: ProjectSummary | null
   projectID: string
   share?: {
@@ -3509,6 +3459,7 @@ export type Model = {
     toolcall: boolean
   }
   cost: {
+    available: boolean
     cache: {
       read: number
       write: number
@@ -3714,6 +3665,95 @@ export type OAuth = {
   type: "oauth"
 }
 
+export type OfficialOpenRouterKeyLedger = {
+  activeCount: number
+  byokUsageDailyUSD: number
+  byokUsageMonthlyUSD: number
+  byokUsageUSD: number
+  byokUsageWeeklyUSD: number
+  count: number
+  items: Array<OfficialOpenRouterKeyUsage>
+  limitedCount: number
+  usageDailyUSD: number
+  usageMonthlyUSD: number
+  usageUSD: number
+  usageWeeklyUSD: number
+}
+
+export type OfficialOpenRouterKeyUsage = {
+  byokUsageDailyUSD: number
+  byokUsageMonthlyUSD: number
+  byokUsageUSD: number
+  byokUsageWeeklyUSD: number
+  createdAt: string
+  disabled: boolean
+  hash: string
+  includeByokInLimit: boolean
+  limitRemainingUSD: number | null
+  limitReset: "daily" | "weekly" | "monthly" | null
+  limitUSD: number | null
+  name: string
+  updatedAt: string | null
+  usageDailyUSD: number
+  usageMonthlyUSD: number
+  usageUSD: number
+  usageWeeklyUSD: number
+}
+
+export type OfficialUsageReconciliation = {
+  additive: false
+  costDeltaUSD: number | null
+  localEstimatedCostUSD: number
+  localTokens: number
+  officialCostUSD: number | null
+  officialTokens: number
+  tokenDelta: number
+}
+
+export type OfficialUsageResult = {
+  fetchedAt: number
+  rule: "compare_never_sum"
+  sources: Array<OfficialUsageSource>
+}
+
+export type OfficialUsageSource = {
+  authorities: Array<"organization_usage" | "financial_ledger" | "account_credit" | "cloud_control_plane">
+  costUSD: number | null
+  credentialEnv: string | null
+  credits: {
+    purchasedUSD: number
+    remainingUSD: number
+    usedUSD: number
+  } | null
+  documentationURL: string
+  freshness: string
+  id: string
+  keyUsage: OfficialOpenRouterKeyLedger | null
+  label: string
+  message: string | null
+  period: {
+    end: number
+    start: number
+  } | null
+  periodAlignment: "exact" | "utc_day_envelope" | null
+  providerID: string
+  reconciliation: OfficialUsageReconciliation | null
+  scope: string
+  status: "available" | "partial" | "unconfigured" | "requires_configuration" | "error"
+  tokens: OfficialUsageTokens | null
+}
+
+export type OfficialUsageTokens = {
+  cacheRead: number | null
+  cacheWrite: number | null
+  calls: number | null
+  input: number
+  inputIncludesCache: boolean
+  output: number
+  reasoning: number | null
+  total: number
+}
+
 export type OutputFormat = OutputFormatText | OutputFormatJsonSchema
 
 export type OutputFormatJsonSchema = {
@@ -3730,6 +3770,9 @@ export type Part =
   | TextPart
   | PartErrorPart
   | ReasoningPart
+  | SourceUrlPart
+  | SourceDocumentPart
+  | SourceFilePart
   | FilePart
   | InteractiveArtifactPart
   | ToolPart
@@ -3776,9 +3819,7 @@ export type Path = {
   worktree: string
 }
 
-export type PermissionAction = "allow" | "deny" | "ask"
-
-export type PermissionActionConfig = "ask" | "allow" | "deny"
+export type PermissionActionConfig = "allow" | "deny"
 
 export type PermissionConfig =
   | {
@@ -3803,34 +3844,52 @@ export type PermissionConfig =
     }
   | PermissionActionConfig
 
+export type PermissionDecision = "allow_once" | "allow_task" | "allow_project" | "deny"
+
+export type PermissionIdentity = string
+
+export type PermissionMode = "full_access" | "ask"
+
 export type PermissionObjectConfig = {
   [key: string]: PermissionActionConfig
 }
 
 export type PermissionRequest = {
-  always: Array<string>
-  id: string
-  metadata: {
+  choices: Array<PermissionDecision>
+  effectClass: string
+  fingerprint: string
+  id: PermissionIdentity
+  messageID: string
+  mode: PermissionMode
+  policyRevision: string
+  projectGrantEligible: boolean
+  projectID: string
+  providerDigest: string
+  providerID: string
+  providerKind:
+    | "builtin"
+    | "plugin"
+    | "skill"
+    | "mcp"
+    | "mcp_app"
+    | "browser"
+    | "computer"
+    | "projected"
+    | "schedule"
+    | "external"
+  scope: {
     [key: string]: unknown
   }
-  patterns: Array<string>
-  permission: string
+  scopeVersion: string
   sessionID: string
-  tool?: {
-    callID: string
-    messageID: string
-  }
-}
-
-export type PermissionRule = {
-  action: PermissionAction
-  pattern: string
-  permission: string
+  summary: string
+  taskID?: string
+  timeCreated: number
+  toolCallID: string
+  toolName: string
 }
 
 export type PermissionRuleConfig = PermissionActionConfig | PermissionObjectConfig
-
-export type PermissionRuleset = Array<PermissionRule>
 
 export type Project = {
   commands?: {
@@ -3861,6 +3920,11 @@ export type ProjectDeleteResult = {
   directory: string
   ok: boolean
   projectID: string
+  residue: Array<{
+    message: string
+    path: string
+  }>
+  status: "committed" | "committed_with_residue"
 }
 
 export type ProjectDiscovery = {
@@ -4430,7 +4494,11 @@ export type Session = {
     [key: string]: unknown
   }
   parentID?: string
-  permission?: PermissionRuleset
+  permission?: Array<{
+    action: "allow" | "deny"
+    pattern: string
+    permission: string
+  }>
   projectID: string
   share?: {
     url: string
@@ -4550,7 +4618,64 @@ export type SnapshotPart = {
   type: "snapshot"
 }
 
+export type SourceDocumentPart = {
+  filename?: string
+  id: string
+  mediaType: string
+  messageID: string
+  orderKey?: string
+  provider?: string
+  providerMetadata?: {
+    [key: string]: unknown
+  }
+  sessionID: string
+  sourceId: string
+  title: string
+  type: "source-document"
+}
+
+export type SourceFilePart = {
+  id: string
+  messageID: string
+  orderKey?: string
+  path: string
+  provider?: string
+  providerMetadata?: {
+    [key: string]: unknown
+  }
+  range?: SourceFileRange
+  sessionID: string
+  sourceId: string
+  symbol?: string
+  title: string
+  type: "source-file"
+}
+
+export type SourceFileRange = {
+  endLine: number
+  startLine: number
+}
+
+export type SourceUrlPart = {
+  author?: string
+  id: string
+  messageID: string
+  orderKey?: string
+  provider?: string
+  providerMetadata?: {
+    [key: string]: unknown
+  }
+  publishedAt?: string
+  sessionID: string
+  snippet?: string
+  sourceId: string
+  title?: string
+  type: "source-url"
+  url: string
+}
+
 export type StepFinishPart = {
+  billing?: BillingCoverage
   cost: number
   id: string
   messageID: string
@@ -4948,6 +5073,81 @@ export type UnknownError = {
   name: "UnknownError"
 }
 
+export type UsageBillingCoverage = {
+  percent: number | null
+  pricedTokens: number
+  unknownTokens: number
+  unpricedTokens: number
+}
+
+export type UsageBucket = {
+  calls: number
+  costUSD: number
+  end: number
+  start: number
+  tokens: UsageTokenTotals
+}
+
+export type UsageComparison = {
+  callsPercent: number | null
+  costPercent: number | null
+  tokensPercent: number | null
+}
+
+export type UsageModelRow = {
+  modelID: string
+  providerID: string
+  share: number
+  summary: UsageSummary
+}
+
+export type UsagePeriod = "day" | "week" | "month" | "year"
+
+export type UsageProviderRow = {
+  modelCount: number
+  providerID: string
+  share: number
+  summary: UsageSummary
+}
+
+export type UsageStatistics = {
+  buckets: Array<UsageBucket>
+  comparison: UsageComparison
+  current: {
+    end: number
+    start: number
+    summary: UsageSummary
+  }
+  grain: "hour" | "day" | "month"
+  models: Array<UsageModelRow>
+  official: OfficialUsageResult
+  period: UsagePeriod
+  previous: {
+    end: number
+    start: number
+    summary: UsageSummary
+  }
+  providers: Array<UsageProviderRow>
+  timeZone: string
+}
+
+export type UsageSummary = {
+  averageTokensPerCall: number
+  billing: UsageBillingCoverage
+  calls: number
+  costUSD: number
+  tokens: UsageTokenTotals
+}
+
+export type UsageTokenTotals = {
+  cacheRead: number
+  cacheWrite: number
+  input: number
+  output: number
+  reasoning: number
+  total: number
+}
+
 export type VcsBranch = {
   current: boolean
   name: string
@@ -5018,6 +5218,7 @@ export type VisibleMessage =
   | {
       agent: string
       author: string
+      billing?: BillingCoverage
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -5071,7 +5272,7 @@ export type VisibleMessage =
       summary?: boolean
       taskIngress?: {
         id: string
-        kind: "operator_message" | "coordination_request"
+        kind: string
       }
       time: {
         completed?: number
@@ -5127,6 +5328,54 @@ export type VisibleMessagePart =
       type: "reasoning"
     }
   | {
+      author?: string
+      id: string
+      messageID: string
+      orderKey: string
+      provider?: string
+      providerMetadata?: {
+        [key: string]: unknown
+      }
+      publishedAt?: string
+      sessionID: string
+      snippet?: string
+      sourceId: string
+      title?: string
+      type: "source-url"
+      url: string
+    }
+  | {
+      filename?: string
+      id: string
+      mediaType: string
+      messageID: string
+      orderKey: string
+      provider?: string
+      providerMetadata?: {
+        [key: string]: unknown
+      }
+      sessionID: string
+      sourceId: string
+      title: string
+      type: "source-document"
+    }
+  | {
+      id: string
+      messageID: string
+      orderKey: string
+      path: string
+      provider?: string
+      providerMetadata?: {
+        [key: string]: unknown
+      }
+      range?: SourceFileRange
+      sessionID: string
+      sourceId: string
+      symbol?: string
+      title: string
+      type: "source-file"
+    }
+  | {
       filename?: string
       id: string
       messageID: string
@@ -5168,6 +5417,7 @@ export type VisibleMessagePart =
       type: "step-start"
     }
   | {
+      billing?: BillingCoverage
       cost: number
       id: string
       messageID: string
@@ -5367,9 +5617,9 @@ export type WorkCapabilitySettings = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       required_tools?: Array<string>
       risk: {
         has_agents: boolean
@@ -5417,6 +5667,16 @@ export type WorktreeCreateInput = {
    */
   startCommand?: string
   taskID?: string
+}
+
+export type WorktreeOwnershipObservationError = {
+  data: {
+    code: string
+    message: string
+    operation: string
+    scope: string
+  }
+  name: "WorktreeOwnershipObservationError"
 }
 
 export type WorktreeRemoveInput = {
@@ -5616,6 +5876,10 @@ export type AuthRemoveErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type AuthRemoveError = AuthRemoveErrors[keyof AuthRemoveErrors]
@@ -5651,6 +5915,10 @@ export type AuthSetErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type AuthSetError = AuthSetErrors[keyof AuthSetErrors]
@@ -6024,6 +6292,15 @@ export type CodingChatSessionCreateData = {
   }
   url: "/coding/chat/session"
 }
+
+export type CodingChatSessionCreateErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type CodingChatSessionCreateError = CodingChatSessionCreateErrors[keyof CodingChatSessionCreateErrors]
 
 export type CodingChatSessionCreateResponses = {
   /**
@@ -6453,6 +6730,15 @@ export type CodingWorkSessionCreateData = {
   }
   url: "/coding/work/session"
 }
+
+export type CodingWorkSessionCreateErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type CodingWorkSessionCreateError = CodingWorkSessionCreateErrors[keyof CodingWorkSessionCreateErrors]
 
 export type CodingWorkSessionCreateResponses = {
   /**
@@ -6997,6 +7283,10 @@ export type ConfigGetErrors = {
     }
     name: "NonCanonicalConfigFileError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ConfigGetError = ConfigGetErrors[keyof ConfigGetErrors]
@@ -7038,6 +7328,10 @@ export type ConfigUpdateErrors = {
     }
     name: "NonCanonicalConfigFileError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ConfigUpdateError = ConfigUpdateErrors[keyof ConfigUpdateErrors]
@@ -7067,6 +7361,15 @@ export type ConfigPromptData = {
   url: "/config/prompt"
 }
 
+export type ConfigPromptErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ConfigPromptError = ConfigPromptErrors[keyof ConfigPromptErrors]
+
 export type ConfigPromptResponses = {
   /**
    * Prompt catalog entries
@@ -7087,6 +7390,15 @@ export type ConfigProvidersData = {
   }
   url: "/config/providers"
 }
+
+export type ConfigProvidersErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ConfigProvidersError = ConfigProvidersErrors[keyof ConfigProvidersErrors]
 
 export type ConfigProvidersResponses = {
   /**
@@ -7354,6 +7666,91 @@ export type ExperimentalMemoryGetResponses = {
 }
 
 export type ExperimentalMemoryGetResponse = ExperimentalMemoryGetResponses[keyof ExperimentalMemoryGetResponses]
+
+export type ExperimentalProjectMemoryGetData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory"
+}
+
+export type ExperimentalProjectMemoryGetResponses = {
+  /**
+   * Project MEMORY.MD
+   */
+  200: {
+    content: string
+    droppedPendingCount: number
+    filename: "MEMORY.MD"
+    notice?: unknown
+    pendingCount: number
+    revision: number
+    scope: "project"
+    status: string
+    timeCreated: number
+    timeUpdated: number
+    tokenCount: number
+  }
+}
+
+export type ExperimentalProjectMemoryGetResponse =
+  ExperimentalProjectMemoryGetResponses[keyof ExperimentalProjectMemoryGetResponses]
+
+export type ExperimentalProjectMemoryAcknowledgeNoticeData = {
+  body: {
+    generation: string
+  }
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory/notice/acknowledge"
+}
+
+export type ExperimentalProjectMemoryAcknowledgeNoticeResponses = {
+  /**
+   * Notice acknowledgement
+   */
+  200: {
+    acknowledged: boolean
+  }
+}
+
+export type ExperimentalProjectMemoryAcknowledgeNoticeResponse =
+  ExperimentalProjectMemoryAcknowledgeNoticeResponses[keyof ExperimentalProjectMemoryAcknowledgeNoticeResponses]
+
+export type ExperimentalProjectMemoryOrganizeData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory/organize"
+}
+
+export type ExperimentalProjectMemoryOrganizeResponses = {
+  /**
+   * Memory Organizer result
+   */
+  200: {
+    document: unknown
+    result: unknown
+  }
+}
+
+export type ExperimentalProjectMemoryOrganizeResponse =
+  ExperimentalProjectMemoryOrganizeResponses[keyof ExperimentalProjectMemoryOrganizeResponses]
 
 export type ExperimentalResourceListData = {
   body?: never
@@ -7646,6 +8043,10 @@ export type WorktreeRemoveErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type WorktreeRemoveError = WorktreeRemoveErrors[keyof WorktreeRemoveErrors]
@@ -7654,7 +8055,21 @@ export type WorktreeRemoveResponses = {
   /**
    * Worktree removed
    */
-  200: boolean
+  200:
+    | {
+        ok: true
+        status: "removed"
+      }
+    | {
+        ok: true
+        preservations: Array<{
+          code: string
+          message: string
+          operation: string
+          scope: "worktree-cleanup"
+        }>
+        status: "removed_with_preservation"
+      }
 }
 
 export type WorktreeRemoveResponse = WorktreeRemoveResponses[keyof WorktreeRemoveResponses]
@@ -7790,6 +8205,10 @@ export type ExpertSquadCatalogErrors = {
    * Internal server error
    */
   500: UnknownError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ExpertSquadCatalogError = ExpertSquadCatalogErrors[keyof ExpertSquadCatalogErrors]
@@ -7801,6 +8220,7 @@ export type ExpertSquadCatalogResponses = {
   200: {
     active: {
       effective: string
+      package_revision: ExpertSquadPackageRevision
       project: string
       session_override: string | null
     }
@@ -7868,149 +8288,9 @@ export type ExpertSquadCatalogResponses = {
       projected_tool_ids: Array<string>
       projection_hash: string
       selector_skill_names: Array<string>
-      selector_skills: Array<{
-        description: string
-        digest: string
-        expert_squad_id: string
-        instructions: string
-        kind: "selector"
-        location: string
-        name: string
-        required_tools: Array<unknown>
-      }>
     }
     default: string
-    installations: Array<{
-      built_in: boolean
-      capability_projection: {
-        agents: {
-          [key: string]: {
-            base_role: string
-            built_in_tool_ids: Array<string>
-            default_mcp_prompt_refs: Array<string>
-            default_mcp_resource_refs: Array<string>
-            default_mcp_server_refs: Array<string>
-            default_mcp_tool_refs: Array<string>
-            default_skill_refs: Array<string>
-            default_tool_refs: Array<string>
-            description?: string
-            inherit_base_tools: boolean
-            label: string
-            package_mcp_prompt_refs: Array<string>
-            package_mcp_resource_refs: Array<string>
-            package_mcp_server_refs: Array<string>
-            package_mcp_tool_refs: Array<string>
-            package_skill_refs: Array<string>
-            package_tool_refs: Array<string>
-            prompt?: string
-          }
-        }
-        scheduler: {
-          base_role: "orchestrator"
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          inherit_base_tools: boolean
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-        virtual_workflows: {
-          [key: string]: {
-            description: string
-            label: string
-            nodes: {
-              [key: string]: {
-                agent_id: string
-                depends_on: Array<string>
-                description: string
-              }
-            }
-          }
-        }
-      }
-      configuration?: {
-        fields: Array<{
-          description?: string
-          key: string
-          label: string
-          placeholder?: string
-          required: boolean
-          type: "boolean" | "text" | "secret"
-        }>
-      }
-      declaration_hash: string
-      description?: string
-      display_label: string
-      editable: boolean
-      id: string
-      label: string
-      name: string
-      package_digest: string
-      product_pillars: Array<"code" | "work">
-      readme: {
-        append_target: "orchestrator"
-        content: string
-        path: "README.md"
-      }
-      selector: {
-        description?: string
-        id: string
-        instructions: string
-        instructions_path: "selector.md"
-        label: string
-        ref: string
-        selection_guidance: string
-        summary: string
-      }
-      source:
-        | {
-            kind: "built_in"
-          }
-        | {
-            generation?:
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  method: "sdk_authoring"
-                  session_id: string
-                  task_id: string
-                }
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  mapping_digest: string
-                  method: "heterogeneous_import"
-                  session_id: string
-                  source_digest: string
-                  task_id: string
-                }
-            installation_scope: "project" | "global"
-            kind: "installed_package"
-            manifest_path: string
-            namespace: string
-            package_digest: string
-            readme_path: string
-            root: string
-          }
-      system_role?: "expert_squad_generator"
-      version: string
-    }>
-    issues: Array<{
-      id?: string
-      location: string
-      message: string
-      namespace?: string
-      phase: "location.scan" | "namespace.scan" | "package.identity" | "package.catalog" | "identity.duplicate"
-    }>
+    launch_catalog_revision: string
     scope:
       | {
           directory: string
@@ -8021,151 +8301,6 @@ export type ExpertSquadCatalogResponses = {
           kind: "session"
           sessionID: string
         }
-    squads: Array<{
-      built_in: boolean
-      capability_projection: {
-        agents: {
-          [key: string]: {
-            base_role: string
-            built_in_tool_ids: Array<string>
-            default_mcp_prompt_refs: Array<string>
-            default_mcp_resource_refs: Array<string>
-            default_mcp_server_refs: Array<string>
-            default_mcp_tool_refs: Array<string>
-            default_skill_refs: Array<string>
-            default_tool_refs: Array<string>
-            description?: string
-            inherit_base_tools: boolean
-            label: string
-            package_mcp_prompt_refs: Array<string>
-            package_mcp_resource_refs: Array<string>
-            package_mcp_server_refs: Array<string>
-            package_mcp_tool_refs: Array<string>
-            package_skill_refs: Array<string>
-            package_tool_refs: Array<string>
-            prompt?: string
-          }
-        }
-        scheduler: {
-          base_role: "orchestrator"
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          inherit_base_tools: boolean
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-        virtual_workflows: {
-          [key: string]: {
-            description: string
-            label: string
-            nodes: {
-              [key: string]: {
-                agent_id: string
-                depends_on: Array<string>
-                description: string
-              }
-            }
-          }
-        }
-      }
-      configuration?: {
-        fields: Array<{
-          description?: string
-          key: string
-          label: string
-          placeholder?: string
-          required: boolean
-          type: "boolean" | "text" | "secret"
-        }>
-      }
-      declaration_hash: string
-      description?: string
-      display_label: string
-      editable: boolean
-      id: string
-      label: string
-      name: string
-      package_digest: string
-      product_pillars: Array<"code" | "work">
-      readme: {
-        append_target: "orchestrator"
-        content: string
-        path: "README.md"
-      }
-      selector: {
-        description?: string
-        id: string
-        instructions: string
-        instructions_path: "selector.md"
-        label: string
-        ref: string
-        selection_guidance: string
-        summary: string
-      }
-      source:
-        | {
-            kind: "built_in"
-          }
-        | {
-            generation?:
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  method: "sdk_authoring"
-                  session_id: string
-                  task_id: string
-                }
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  mapping_digest: string
-                  method: "heterogeneous_import"
-                  session_id: string
-                  source_digest: string
-                  task_id: string
-                }
-            installation_scope: "project" | "global"
-            kind: "installed_package"
-            manifest_path: string
-            namespace: string
-            package_digest: string
-            readme_path: string
-            root: string
-          }
-      system_role?: "expert_squad_generator"
-      version: string
-    }>
-    warnings: Array<{
-      code: "project_overrides_global"
-      effective: {
-        id: string
-        namespace: string
-        package_digest: string
-        root: string
-        scope: "project" | "global"
-        version: string
-      }
-      logical_id: string
-      severity: "warning"
-      shadowed: {
-        id: string
-        namespace: string
-        package_digest: string
-        root: string
-        scope: "project" | "global"
-        version: string
-      }
-    }>
   }
 }
 
@@ -8280,6 +8415,42 @@ export type ExpertSquadConfigurationUpdateResponses = {
 
 export type ExpertSquadConfigurationUpdateResponse =
   ExpertSquadConfigurationUpdateResponses[keyof ExpertSquadConfigurationUpdateResponses]
+
+export type ExpertSquadDiagnosticsData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    cursor?: string
+    limit?: number
+  }
+  url: "/expert-squad/diagnostics"
+}
+
+export type ExpertSquadDiagnosticsErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadDiagnosticsError = ExpertSquadDiagnosticsErrors[keyof ExpertSquadDiagnosticsErrors]
+
+export type ExpertSquadDiagnosticsResponses = {
+  /**
+   * Bounded Expert Squad diagnostics
+   */
+  200: ExpertSquadDiagnosticPage
+}
+
+export type ExpertSquadDiagnosticsResponse = ExpertSquadDiagnosticsResponses[keyof ExpertSquadDiagnosticsResponses]
 
 export type ExpertSquadEvolutionAuthorizationData = {
   body: {
@@ -12393,13 +12564,189 @@ export type ExpertSquadExportResponses = {
    */
   200: {
     archiveBase64: string
+    archiveSha256: string
     fileCount: number
     filename: string
     id: string
+    namespace: string
+    packageDigest: string
+    version: string
   }
 }
 
 export type ExpertSquadExportResponse = ExpertSquadExportResponses[keyof ExpertSquadExportResponses]
+
+export type ExpertSquadImportExactFileData = {
+  body: {
+    archiveBase64: string
+    expectedCurrentPackageDigest?: string
+    expectedID: string
+    expectedNamespace: string
+    expectedPackageDigest: string
+    expectedVersion: string
+    filename?: string
+    installationScope: "project" | "global"
+  }
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/expert-squad/import-exact-file"
+}
+
+export type ExpertSquadImportExactFileErrors = {
+  /**
+   * Expert squad package import rejected
+   */
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageError"
+  }
+  /**
+   * Expert squad package changed
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageMutationConflictError"
+  }
+}
+
+export type ExpertSquadImportExactFileError = ExpertSquadImportExactFileErrors[keyof ExpertSquadImportExactFileErrors]
+
+export type ExpertSquadImportExactFileResponses = {
+  /**
+   * Imported exact expert squad package revision
+   */
+  200:
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: null
+        operation: "installed"
+      }
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        operation: "unchanged"
+      }
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        operation: "replaced"
+      }
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        operation: "restored"
+      }
+}
+
+export type ExpertSquadImportExactFileResponse =
+  ExpertSquadImportExactFileResponses[keyof ExpertSquadImportExactFileResponses]
 
 export type ExpertSquadImportFileData = {
   body: {
@@ -12734,6 +13081,50 @@ export type ExpertSquadImportFolderResponses = {
 
 export type ExpertSquadImportFolderResponse = ExpertSquadImportFolderResponses[keyof ExpertSquadImportFolderResponses]
 
+export type ExpertSquadInspectData = {
+  body?: never
+  path?: never
+  query: {
+    directory: string
+    id: string
+    installationScope?: "built_in" | "project" | "global"
+    namespace?: string
+    workflowCursor?: string
+  }
+  url: "/expert-squad/inspect"
+}
+
+export type ExpertSquadInspectErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Expert Squad not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "NotFoundError"
+  }
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadInspectError = ExpertSquadInspectErrors[keyof ExpertSquadInspectErrors]
+
+export type ExpertSquadInspectResponses = {
+  /**
+   * Expert-squad declaration inspection
+   */
+  200: ExpertSquadCatalogInspection
+}
+
+export type ExpertSquadInspectResponse = ExpertSquadInspectResponses[keyof ExpertSquadInspectResponses]
+
 export type ExpertSquadInstallPayloadData = {
   body: {
     id: string
@@ -12900,6 +13291,41 @@ export type ExpertSquadInstallPayloadResponses = {
 export type ExpertSquadInstallPayloadResponse =
   ExpertSquadInstallPayloadResponses[keyof ExpertSquadInstallPayloadResponses]
 
+export type ExpertSquadInventoryStatusData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/expert-squad/inventory-status"
+}
+
+export type ExpertSquadInventoryStatusErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadInventoryStatusError = ExpertSquadInventoryStatusErrors[keyof ExpertSquadInventoryStatusErrors]
+
+export type ExpertSquadInventoryStatusResponses = {
+  /**
+   * Expert-squad inventory status
+   */
+  200: ExpertSquadInventoryStatus
+}
+
+export type ExpertSquadInventoryStatusResponse =
+  ExpertSquadInventoryStatusResponses[keyof ExpertSquadInventoryStatusResponses]
+
 export type ExpertSquadMarketData = {
   body?: never
   path?: never
@@ -12908,6 +13334,10 @@ export type ExpertSquadMarketData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
+    query?: string
+    availability?: "all" | "available" | "installed"
+    cursor?: string
+    limit?: number
   }
   url: "/expert-squad/market"
 }
@@ -12930,7 +13360,65 @@ export type ExpertSquadMarketResponses = {
   /**
    * Expert squad market entries
    */
-  200: Array<{
+  200: {
+    catalog_revision: string
+    entries: Array<{
+      description?: string
+      id: string
+      installation_scopes: Array<"project" | "global">
+      label: string
+      name: string
+      namespace: string
+      version: string
+    }>
+    next_cursor: string | null
+    total_count: number
+  }
+}
+
+export type ExpertSquadMarketResponse = ExpertSquadMarketResponses[keyof ExpertSquadMarketResponses]
+
+export type ExpertSquadMarketDetailData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+  }
+  url: "/expert-squad/market/detail"
+}
+
+export type ExpertSquadMarketDetailErrors = {
+  /**
+   * Expert squad market rejected
+   */
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageError"
+  }
+  /**
+   * Expert Squad not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "NotFoundError"
+  }
+}
+
+export type ExpertSquadMarketDetailError = ExpertSquadMarketDetailErrors[keyof ExpertSquadMarketDetailErrors]
+
+export type ExpertSquadMarketDetailResponses = {
+  /**
+   * Bundled expert-squad detail
+   */
+  200: {
     agents: Array<{
       base_role: string
       description?: string
@@ -12954,10 +13442,10 @@ export type ExpertSquadMarketResponses = {
     skill_count: number
     tool_count: number
     version: string
-  }>
+  }
 }
 
-export type ExpertSquadMarketResponse = ExpertSquadMarketResponses[keyof ExpertSquadMarketResponses]
+export type ExpertSquadMarketDetailResponse = ExpertSquadMarketDetailResponses[keyof ExpertSquadMarketDetailResponses]
 
 export type ExpertSquadMulticaPreviewData = {
   body: {
@@ -13442,7 +13930,7 @@ export type ExpertSquadReleasePayloadResponses = {
 export type ExpertSquadReleasePayloadResponse =
   ExpertSquadReleasePayloadResponses[keyof ExpertSquadReleasePayloadResponses]
 
-export type ExpertSquadSettingsData = {
+export type ExpertSquadSearchData = {
   body?: never
   path?: never
   query?: {
@@ -13450,13 +13938,50 @@ export type ExpertSquadSettingsData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
-    id?: string
-    installationScope?: "built_in" | "project" | "global"
+    view?: "effective" | "installations"
+    query?: string
+    productPillar?: "code" | "work"
+    cursor?: string
+    limit?: number
   }
-  url: "/expert-squad/settings"
+  url: "/expert-squad/search"
 }
 
-export type ExpertSquadSettingsErrors = {
+export type ExpertSquadSearchErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadSearchError = ExpertSquadSearchErrors[keyof ExpertSquadSearchErrors]
+
+export type ExpertSquadSearchResponses = {
+  /**
+   * Bounded expert-squad search page
+   */
+  200: ExpertSquadCatalogPage
+}
+
+export type ExpertSquadSearchResponse = ExpertSquadSearchResponses[keyof ExpertSquadSearchResponses]
+
+export type ExpertSquadSettingsDetailData = {
+  body?: never
+  path?: never
+  query: {
+    directory: string
+    id: string
+    installationScope: "built_in" | "project" | "global"
+    namespace?: string
+  }
+  url: "/expert-squad/settings/detail"
+}
+
+export type ExpertSquadSettingsDetailErrors = {
   /**
    * Bad request
    */
@@ -13476,16 +14001,17 @@ export type ExpertSquadSettingsErrors = {
   500: UnknownError
 }
 
-export type ExpertSquadSettingsError = ExpertSquadSettingsErrors[keyof ExpertSquadSettingsErrors]
+export type ExpertSquadSettingsDetailError = ExpertSquadSettingsDetailErrors[keyof ExpertSquadSettingsDetailErrors]
 
-export type ExpertSquadSettingsResponses = {
+export type ExpertSquadSettingsDetailResponses = {
   /**
-   * Project Expert Squad settings
+   * Exact expert-squad settings detail
    */
-  200: ExpertSquadSettingsSurface
+  200: ExpertSquadSettingsDetail
 }
 
-export type ExpertSquadSettingsResponse = ExpertSquadSettingsResponses[keyof ExpertSquadSettingsResponses]
+export type ExpertSquadSettingsDetailResponse =
+  ExpertSquadSettingsDetailResponses[keyof ExpertSquadSettingsDetailResponses]
 
 export type ExpertSquadUninstallData = {
   body: {
@@ -13513,6 +14039,10 @@ export type ExpertSquadUninstallErrors = {
     }
     name: "ExpertSquadPackageError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ExpertSquadUninstallError = ExpertSquadUninstallErrors[keyof ExpertSquadUninstallErrors]
@@ -13752,6 +14282,7 @@ export type ExpertSquadValidateFolderResponses = {
           default_skill_refs: Array<string>
           default_tool_refs: Array<string>
           description?: string
+          execution_contract?: "platform_integrity_review"
           inherit_base_tools: boolean
           label: string
           package_mcp_prompt_refs: Array<string>
@@ -14225,6 +14756,57 @@ export type FileCopyResponses = {
 
 export type FileCopyResponse = FileCopyResponses[keyof FileCopyResponses]
 
+export type FileReadSourceData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    path: string
+  }
+  url: "/file/source-content"
+}
+
+export type FileReadSourceErrors = {
+  /**
+   * Invalid source file request
+   */
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "FileInvalidPathError"
+      }
+  /**
+   * Source file not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "FileNotFoundError"
+  }
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type FileReadSourceError = FileReadSourceErrors[keyof FileReadSourceErrors]
+
+export type FileReadSourceResponses = {
+  /**
+   * Read-only source file content
+   */
+  200: FileContent
+}
+
+export type FileReadSourceResponse = FileReadSourceResponses[keyof FileReadSourceResponses]
+
 export type FileStatusData = {
   body?: never
   path?: never
@@ -14659,7 +15241,15 @@ export type GatewayChannelMessageResponse = GatewayChannelMessageResponses[keyof
 export type GatewayControlActionData = {
   body:
     | {
-        action: "expert_squad_catalog"
+        action: "expert_squad_inspect"
+        /**
+         * Exact held Expert Squad manifest ID returned by capability_search.
+         */
+        id: string
+        /**
+         * Opaque next_workflow_cursor returned by the preceding inspection of this exact Squad.
+         */
+        workflowCursor?: string
       }
     | {
         action: "multica_catalog"
@@ -14707,10 +15297,6 @@ export type GatewayControlActionData = {
          */
         created_before_ms?: number
         /**
-         * Opaque cursor returned by the preceding page; omit it for the first page.
-         */
-        cursor?: string
-        /**
          * Optional exact logical Goal-subject filter.
          */
         goal_ids?: Array<string>
@@ -14730,6 +15316,10 @@ export type GatewayControlActionData = {
          * Optional exact resource media-type filter.
          */
         media_types?: Array<string>
+        /**
+         * One-based page number. Start at 1, then use the preceding response's next_page_number.
+         */
+        page_number: number
         /**
          * Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.
          */
@@ -14762,6 +15352,16 @@ export type GatewayControlActionData = {
          */
         taskID: string
         /**
+         * Exact current terminal occurrence returned by panel.query_task for this source Task.
+         */
+        terminal_lifecycle_reference: {
+          terminalError?: string
+          terminalEventID: string
+          terminalReason?: "interrupted"
+          terminalStatus: "completed" | "failed" | "cancelled"
+          timeCompleted: number
+        }
+        /**
          * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
          */
         version_scope?: "current" | "historical" | "all"
@@ -14769,50 +15369,18 @@ export type GatewayControlActionData = {
     | {
         action: "read_task_artifact"
         /**
-         * Zero-based byte offset within the exact canonical payload or resource.
+         * Host-minted reference to one exact locator emitted earlier in this Session Turn.
+         */
+        artifact_locator_ref: string
+        artifact_transport_version: 2
+        /**
+         * Zero-based byte offset within the exact locator identified by artifact_locator_ref.
          */
         byte_offset?: number
         /**
          * inline returns one bounded content chunk. materialized_file verifies one complete text resource and returns an immutable local cache path for bounded command-line inspection.
          */
         delivery?: "inline" | "materialized_file"
-        /**
-         * Exact typed locator returned by Artifact search, including its immutable digest.
-         */
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
         /**
          * Maximum UTF-8 text bytes to return in this exact-read chunk. Binary resources use one complete attachment and ignore text pagination.
          */
@@ -14833,43 +15401,9 @@ export type GatewayControlActionData = {
          */
         task_acceptances: Array<{
           /**
-           * Exact Task Artifact locators completely read earlier in this Mission Turn.
+           * Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn.
            */
-          evidence_locators: Array<
-            | {
-                artifact_id: string
-                catalog_revision: number
-                expected_sha256: string
-                source: "engine_artifact"
-              }
-            | {
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                source: "task_artifact_snapshot"
-              }
-            | {
-                ref: {
-                  bytes: number
-                  media_type: string
-                  path: string
-                  sha256: string
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  tree: string
-                }
-                source: "task_artifact_resource"
-              }
-          >
+          evidence_read_refs: Array<string>
           /**
            * Current child Task accepted by this Mission decision.
            */
@@ -15069,13 +15603,9 @@ export type GatewayControlActionData = {
          */
         productPillar?: "code" | "work"
         /**
-         * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose this from expert_squad_catalog for every created Task. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
+         * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
          */
         promptProfile?: string
-        /**
-         * Whether to queue this task behind other work in the same directory.
-         */
-        queue?: boolean
         /**
          * Full user request to execute in the new task.
          */
@@ -15153,43 +15683,9 @@ export type GatewayControlActionData = {
     | {
         action: "resume_task"
         /**
-         * Exact source Task locators completely read earlier in this same Mission Turn.
+         * Host-minted references returned by complete source Task reads earlier in this Mission Turn.
          */
-        evidence_locators: Array<
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        >
+        evidence_read_refs: Array<string>
         /**
          * Completed or failed source Task in the current Mission lineage.
          */
@@ -15228,14 +15724,14 @@ export type GatewayControlActionData = {
     | {
         action: "retry_task"
         /**
-         * Task ID to queue for retry.
+         * Task ID for the retry request.
          */
         taskID: string
       }
     | {
         action: "replan_task"
         /**
-         * Task ID to queue for replanning.
+         * Task ID for the replan request.
          */
         taskID: string
       }
@@ -16064,7 +16560,7 @@ export type GlobalAutomationsRunResponses = {
     error: string | null
     fireId: string
     id: string
-    outcome: "running" | "succeeded" | "failed"
+    outcome: "running" | "retry_wait" | "succeeded" | "failed"
     session: {
       directory: string
       experience: "chat" | "work" | null
@@ -16125,7 +16621,7 @@ export type GlobalAutomationsRunsResponses = {
     error: string | null
     fireId: string
     id: string
-    outcome: "running" | "succeeded" | "failed"
+    outcome: "running" | "retry_wait" | "succeeded" | "failed"
     session: {
       directory: string
       experience: "chat" | "work" | null
@@ -16171,6 +16667,42 @@ export type GlobalChatCreateResponses = {
 
 export type GlobalChatCreateResponse = GlobalChatCreateResponses[keyof GlobalChatCreateResponses]
 
+export type GlobalComposerExpertSquadsData = {
+  body?: never
+  path?: never
+  query?: {
+    view?: "effective" | "installations"
+    query?: string
+    productPillar?: "code" | "work"
+    cursor?: string
+    limit?: number
+  }
+  url: "/global/composer-expert-squads"
+}
+
+export type GlobalComposerExpertSquadsErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type GlobalComposerExpertSquadsError = GlobalComposerExpertSquadsErrors[keyof GlobalComposerExpertSquadsErrors]
+
+export type GlobalComposerExpertSquadsResponses = {
+  /**
+   * Bounded global Composer Expert Squad page
+   */
+  200: ExpertSquadCatalogPage
+}
+
+export type GlobalComposerExpertSquadsResponse =
+  GlobalComposerExpertSquadsResponses[keyof GlobalComposerExpertSquadsResponses]
+
 export type GlobalComposerReferencesData = {
   body?: never
   path?: never
@@ -16193,137 +16725,7 @@ export type GlobalComposerReferencesResponses = {
    */
   200: {
     expert_squads: {
-      issues: Array<{
-        id?: string
-        location: string
-        message: string
-        namespace?: string
-        phase: "location.scan" | "namespace.scan" | "package.identity" | "package.catalog" | "identity.duplicate"
-      }>
-      squads: Array<{
-        built_in: boolean
-        capability_projection: {
-          agents: {
-            [key: string]: {
-              base_role: string
-              built_in_tool_ids: Array<string>
-              default_mcp_prompt_refs: Array<string>
-              default_mcp_resource_refs: Array<string>
-              default_mcp_server_refs: Array<string>
-              default_mcp_tool_refs: Array<string>
-              default_skill_refs: Array<string>
-              default_tool_refs: Array<string>
-              description?: string
-              inherit_base_tools: boolean
-              label: string
-              package_mcp_prompt_refs: Array<string>
-              package_mcp_resource_refs: Array<string>
-              package_mcp_server_refs: Array<string>
-              package_mcp_tool_refs: Array<string>
-              package_skill_refs: Array<string>
-              package_tool_refs: Array<string>
-              prompt?: string
-            }
-          }
-          scheduler: {
-            base_role: "orchestrator"
-            built_in_tool_ids: Array<string>
-            default_mcp_prompt_refs: Array<string>
-            default_mcp_resource_refs: Array<string>
-            default_mcp_server_refs: Array<string>
-            default_mcp_tool_refs: Array<string>
-            default_skill_refs: Array<string>
-            default_tool_refs: Array<string>
-            inherit_base_tools: boolean
-            package_mcp_prompt_refs: Array<string>
-            package_mcp_resource_refs: Array<string>
-            package_mcp_server_refs: Array<string>
-            package_mcp_tool_refs: Array<string>
-            package_skill_refs: Array<string>
-            package_tool_refs: Array<string>
-            prompt?: string
-          }
-          virtual_workflows: {
-            [key: string]: {
-              description: string
-              label: string
-              nodes: {
-                [key: string]: {
-                  agent_id: string
-                  depends_on: Array<string>
-                  description: string
-                }
-              }
-            }
-          }
-        }
-        configuration?: {
-          fields: Array<{
-            description?: string
-            key: string
-            label: string
-            placeholder?: string
-            required: boolean
-            type: "boolean" | "text" | "secret"
-          }>
-        }
-        declaration_hash: string
-        description?: string
-        display_label: string
-        editable: boolean
-        id: string
-        label: string
-        name: string
-        package_digest: string
-        product_pillars: Array<"code" | "work">
-        readme: {
-          append_target: "orchestrator"
-          content: string
-          path: "README.md"
-        }
-        selector: {
-          description?: string
-          id: string
-          instructions: string
-          instructions_path: "selector.md"
-          label: string
-          ref: string
-          selection_guidance: string
-          summary: string
-        }
-        source:
-          | {
-              kind: "built_in"
-            }
-          | {
-              generation?:
-                | {
-                    generated_at: string
-                    generator_expert_squad_id: "squad-sdk"
-                    method: "sdk_authoring"
-                    session_id: string
-                    task_id: string
-                  }
-                | {
-                    generated_at: string
-                    generator_expert_squad_id: "squad-sdk"
-                    mapping_digest: string
-                    method: "heterogeneous_import"
-                    session_id: string
-                    source_digest: string
-                    task_id: string
-                  }
-              installation_scope: "project" | "global"
-              kind: "installed_package"
-              manifest_path: string
-              namespace: string
-              package_digest: string
-              readme_path: string
-              root: string
-            }
-        system_role?: "expert_squad_generator"
-        version: string
-      }>
+      page: ExpertSquadCatalogPage
     }
     mission_skills: {
       issues: Array<{
@@ -16421,6 +16823,10 @@ export type GlobalConfigUpdateErrors = {
     }
     name: "NonCanonicalConfigFileError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalConfigUpdateError = GlobalConfigUpdateErrors[keyof GlobalConfigUpdateErrors]
@@ -16748,6 +17154,10 @@ export type GlobalProvidersDiscoverModelsErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersDiscoverModelsError =
@@ -16774,6 +17184,16 @@ export type GlobalProvidersModelsRefreshData = {
   query?: never
   url: "/global/providers/models/refresh"
 }
+
+export type GlobalProvidersModelsRefreshErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalProvidersModelsRefreshError =
+  GlobalProvidersModelsRefreshErrors[keyof GlobalProvidersModelsRefreshErrors]
 
 export type GlobalProvidersModelsRefreshResponses = {
   /**
@@ -16840,6 +17260,10 @@ export type GlobalProvidersRemoveErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersRemoveError = GlobalProvidersRemoveErrors[keyof GlobalProvidersRemoveErrors]
@@ -16861,6 +17285,16 @@ export type GlobalProvidersAccountUsageData = {
   query?: never
   url: "/global/providers/{providerID}/account-usage"
 }
+
+export type GlobalProvidersAccountUsageErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalProvidersAccountUsageError =
+  GlobalProvidersAccountUsageErrors[keyof GlobalProvidersAccountUsageErrors]
 
 export type GlobalProvidersAccountUsageResponses = {
   /**
@@ -16891,6 +17325,10 @@ export type GlobalProvidersAuthExecuteErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersAuthExecuteError = GlobalProvidersAuthExecuteErrors[keyof GlobalProvidersAuthExecuteErrors]
@@ -16997,6 +17435,10 @@ export type GlobalProvidersOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersOauthCallbackError =
@@ -17036,6 +17478,10 @@ export type GlobalProvidersTestErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersTestError = GlobalProvidersTestErrors[keyof GlobalProvidersTestErrors]
@@ -17058,7 +17504,7 @@ export type GlobalProvidersTestResponse = GlobalProvidersTestResponses[keyof Glo
 export type GlobalSkillInstallData = {
   body: {
     kind: "url" | "git"
-    policy?: PermissionAction
+    policy?: "allow" | "deny"
     value: string
   }
   path?: never
@@ -17108,7 +17554,7 @@ export type GlobalSkillMarketResponses = {
     name: string
     notes?: string
     provider: string
-    recommended_policy: PermissionAction
+    recommended_policy: "allow" | "deny"
     source?: string
     trust: "official" | "curated" | "community"
   }>
@@ -17195,20 +17641,16 @@ export type TaskGlobalListResponses = {
         priority: "critical" | "high" | "normal" | "low"
         productPillar: "code" | "work"
         projectID: string
-        queue?: {
-          order: number
-          revision?: string
-        }
         requestID?: string
         sessionID?: string | null
         source: string
-        status: "queued" | "active" | "completed" | "failed" | "cancelled"
+        status: "active" | "completed" | "failed" | "cancelled"
         terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
         time: {
           archived?: number
           completed?: number
           created: number
-          started?: number
+          started: number
           updated: number
         }
         title: string
@@ -17222,43 +17664,50 @@ export type TaskGlobalListResponse = TaskGlobalListResponses[keyof TaskGlobalLis
 
 export type TaskGlobalCreateData = {
   body: {
-    artifactImports?: Array<{
-      locator:
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
+    artifactSources?: Array<
+      | {
+          authority: "completion_decision"
+          source_task_id: string
+        }
+      | {
+          authority: "terminal_lifecycle"
+          locator:
+            | {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
               }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-      source_task_id: string
-    }>
+            | {
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                source: "task_artifact_snapshot"
+              }
+            | {
+                ref: {
+                  bytes: number
+                  media_type: string
+                  path: string
+                  sha256: string
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  tree: string
+                }
+                source: "task_artifact_resource"
+              }
+          source_task_id: string
+        }
+    >
     attachments?: Array<
       | {
           filename?: string
@@ -17415,7 +17864,6 @@ export type TaskGlobalCreateData = {
     productPillar: "code" | "work"
     project?: string
     promptProfile?: string
-    queue?: boolean
     request: string
     requestID?: string
     source?: string
@@ -17504,6 +17952,34 @@ export type TaskGlobalCreateResponses = {
 }
 
 export type TaskGlobalCreateResponse = TaskGlobalCreateResponses[keyof TaskGlobalCreateResponses]
+
+export type GlobalUsageData = {
+  body?: never
+  path?: never
+  query?: {
+    period?: UsagePeriod
+    timeZone?: string
+  }
+  url: "/global/usage"
+}
+
+export type GlobalUsageErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+}
+
+export type GlobalUsageError = GlobalUsageErrors[keyof GlobalUsageErrors]
+
+export type GlobalUsageResponses = {
+  /**
+   * Natural-period Token, cost, Provider, model, comparison, and time-series statistics
+   */
+  200: UsageStatistics
+}
+
+export type GlobalUsageResponse = GlobalUsageResponses[keyof GlobalUsageResponses]
 
 export type GlobalWorkCreateData = {
   body?: {
@@ -17678,8 +18154,7 @@ export type InstanceDisposeResponses = {
 export type InstanceDisposeResponse = InstanceDisposeResponses[keyof InstanceDisposeResponses]
 
 export type InteractionRejectData = {
-  body: {
-    autoReply: boolean
+  body?: {
     message?: string
   }
   path: {
@@ -17751,11 +18226,10 @@ export type InteractionRejectResponses = {
 export type InteractionRejectResponse = InteractionRejectResponses[keyof InteractionRejectResponses]
 
 export type InteractionReplyData = {
-  body: {
+  body?: {
     answers?: Array<QuestionAnswer>
-    autoReply: boolean
+    decision?: PermissionDecision
     message?: string
-    reply?: "once" | "always" | "reject"
   }
   path: {
     interactionID: string
@@ -17876,24 +18350,26 @@ export type LogReadResponse = LogReadResponses[keyof LogReadResponses]
 
 export type AppLogData = {
   body: {
-    /**
-     * Additional metadata for the log entry
-     */
-    extra?: {
-      [key: string]: unknown
-    }
-    /**
-     * Log level
-     */
-    level: "debug" | "info" | "error" | "warn"
-    /**
-     * Log message
-     */
-    message: string
-    /**
-     * Service name for the log entry
-     */
-    service: string
+    entries: Array<{
+      /**
+       * Additional metadata for the log entry
+       */
+      extra?: {
+        [key: string]: unknown
+      }
+      /**
+       * Log level
+       */
+      level: "debug" | "info" | "error" | "warn"
+      /**
+       * Log message
+       */
+      message: string
+      /**
+       * Service name for the log entry
+       */
+      service: string
+    }>
   }
   path?: never
   query?: never
@@ -18200,43 +18676,6 @@ export type MailboxListResponses = {
 }
 
 export type MailboxListResponse = MailboxListResponses[keyof MailboxListResponses]
-
-export type MailboxEventsData = {
-  body?: never
-  path?: never
-  query?: never
-  url: "/mailbox/events"
-}
-
-export type MailboxEventsResponses = {
-  /**
-   * Mailbox change stream
-   */
-  200:
-    | {
-        messageID: null
-        sequence: 0
-        sourceType: "mailbox.connected"
-        taskID: null
-        type: "mailbox.connected"
-      }
-    | {
-        messageID: null
-        sequence: 0
-        sourceType: "mailbox.heartbeat"
-        taskID: null
-        type: "mailbox.heartbeat"
-      }
-    | {
-        messageID: string
-        sequence: number
-        sourceType: string
-        taskID: string | null
-        type: "mailbox.changed"
-      }
-}
-
-export type MailboxEventsResponse = MailboxEventsResponses[keyof MailboxEventsResponses]
 
 export type MailboxReadAllData = {
   body?: never
@@ -18873,18 +19312,18 @@ export type MissionListResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -19148,18 +19587,18 @@ export type MissionCreateDraftResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -19202,9 +19641,29 @@ export type MissionWakeData = {
 
 export type MissionWakeErrors = {
   /**
-   * Bad request
+   * Mission wake request or immutable Expert Squad snapshot rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExpertSquadSnapshotMismatchError"
+      }
+  /**
+   * Mission execution is still completing its durable close operation
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionExecutionClosingError"
+  }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type MissionWakeError = MissionWakeErrors[keyof MissionWakeErrors]
@@ -19508,18 +19967,18 @@ export type MissionSetArchivedResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -19567,6 +20026,19 @@ export type MissionDispatchErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution is still completing its durable close operation
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionExecutionClosingError"
+  }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type MissionDispatchError = MissionDispatchErrors[keyof MissionDispatchErrors]
@@ -19771,7 +20243,7 @@ export type MissionStatusResponses = {
         revision: number
         title: string
       }>
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       requirements?: Array<{
@@ -19834,7 +20306,7 @@ export type MissionStatusResponses = {
       time: {
         completed?: number
         created: number
-        started?: number
+        started: number
         updated: number
       }
       title: string
@@ -19913,18 +20385,18 @@ export type MissionRenameResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -20512,21 +20984,169 @@ export type PermissionListData = {
 
 export type PermissionListResponses = {
   /**
-   * List of pending permissions
+   * Pending permission requests
    */
   200: Array<PermissionRequest>
 }
 
 export type PermissionListResponse = PermissionListResponses[keyof PermissionListResponses]
 
+export type PermissionGrantsData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/permission/grants"
+}
+
+export type PermissionGrantsResponses = {
+  /**
+   * Active exact-scope grants
+   */
+  200: Array<{
+    actor_id: string | null
+    attempt_id: PermissionIdentity | null
+    decision_scope: string | null
+    decision_slot: PermissionIdentity | null
+    effect_class: string
+    event_type: string
+    fingerprint: string
+    id: PermissionIdentity
+    message_id: string
+    mode: PermissionMode
+    outcome_slot: PermissionIdentity | null
+    policy_revision: string
+    project_id: string
+    provider_digest: string
+    provider_id: string
+    provider_kind: string
+    reason: string | null
+    request_id: PermissionIdentity
+    scope: {
+      [key: string]: unknown
+    }
+    scope_version: string
+    session_id: string
+    source_event_id: PermissionIdentity | null
+    summary: string
+    task_id: string | null
+    time_created: number
+    tool_call_id: string
+    tool_name: string
+    [key: string]: unknown
+  }>
+}
+
+export type PermissionGrantsResponse = PermissionGrantsResponses[keyof PermissionGrantsResponses]
+
+export type PermissionRevokeData = {
+  body?: never
+  path: {
+    grantID: PermissionIdentity
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/permission/grants/{grantID}/revoke"
+}
+
+export type PermissionRevokeErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type PermissionRevokeError = PermissionRevokeErrors[keyof PermissionRevokeErrors]
+
+export type PermissionRevokeResponses = {
+  /**
+   * Grant revoked
+   */
+  200: boolean
+}
+
+export type PermissionRevokeResponse = PermissionRevokeResponses[keyof PermissionRevokeResponses]
+
+export type PermissionHistoryData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/permission/history"
+}
+
+export type PermissionHistoryResponses = {
+  /**
+   * Append-only permission ledger
+   */
+  200: Array<{
+    actor_id: string | null
+    attempt_id: PermissionIdentity | null
+    decision_scope: string | null
+    decision_slot: PermissionIdentity | null
+    effect_class: string
+    event_type: string
+    fingerprint: string
+    id: PermissionIdentity
+    message_id: string
+    mode: PermissionMode
+    outcome_slot: PermissionIdentity | null
+    policy_revision: string
+    project_id: string
+    provider_digest: string
+    provider_id: string
+    provider_kind: string
+    reason: string | null
+    request_id: PermissionIdentity
+    scope: {
+      [key: string]: unknown
+    }
+    scope_version: string
+    session_id: string
+    source_event_id: PermissionIdentity | null
+    summary: string
+    task_id: string | null
+    time_created: number
+    tool_call_id: string
+    tool_name: string
+    [key: string]: unknown
+  }>
+}
+
+export type PermissionHistoryResponse = PermissionHistoryResponses[keyof PermissionHistoryResponses]
+
 export type PermissionReplyData = {
   body: {
-    autoReply: boolean
+    actorID?: string
+    decision: PermissionDecision
     message?: string
-    reply: "once" | "always" | "reject"
   }
   path: {
-    requestID: string
+    requestID: PermissionIdentity
   }
   query?: {
     /**
@@ -20564,9 +21184,13 @@ export type PermissionReplyError = PermissionReplyErrors[keyof PermissionReplyEr
 
 export type PermissionReplyResponses = {
   /**
-   * Permission processed successfully
+   * Committed permission decision
    */
-  200: boolean
+  200: {
+    decision: PermissionDecision
+    eventID: PermissionIdentity
+    request: PermissionRequest
+  }
 }
 
 export type PermissionReplyResponse = PermissionReplyResponses[keyof PermissionReplyResponses]
@@ -20759,6 +21383,10 @@ export type ProjectCurrentCleanupCandidatesErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type ProjectCurrentCleanupCandidatesError =
@@ -20771,26 +21399,23 @@ export type ProjectCurrentCleanupCandidatesResponses = {
   200: {
     worktreeGCCandidates: Array<{
       directory: string
-      primaryDir: string
       projectID: string
+      reason: "old-clean" | "old-zombie" | "registry-prunable"
     }>
     worktreeGCPreservations: Array<{
-      detail: string
-      primaryDir: string
+      code: string
+      operation: "inspect-worktree-gc"
       projectID: string
-      reason: "registry-unavailable"
+      reason:
+        | "primary-directory-unavailable"
+        | "managed-state-unavailable"
+        | "registry-unavailable"
+        | "durable-sandbox-owner"
     }>
     worktreeOrphans: Array<{
-      marker: {
-        createdAt: number
-        cwd: string
-        kind: "worktree"
-        ownerPid: number
-        sessionID: string
-        taskID: string
-      }
-      markerPath: string
-      reason: string
+      reason: "owner-process-dead" | "target-missing" | "marker-invalid"
+      sessionID?: string
+      taskID?: string
       worktreeDir?: string
     }>
   }
@@ -20938,6 +21563,10 @@ export type ProjectCurrentWorktreesDeleteErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type ProjectCurrentWorktreesDeleteError =
@@ -20947,9 +21576,21 @@ export type ProjectCurrentWorktreesDeleteResponses = {
   /**
    * Worktree removed
    */
-  200: {
-    ok: true
-  }
+  200:
+    | {
+        ok: true
+        status: "removed"
+      }
+    | {
+        ok: true
+        preservations: Array<{
+          code: string
+          message: string
+          operation: string
+          scope: "worktree-cleanup"
+        }>
+        status: "removed_with_preservation"
+      }
 }
 
 export type ProjectCurrentWorktreesDeleteResponse =
@@ -21149,6 +21790,10 @@ export type ProviderDiscoverModelsErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderDiscoverModelsError = ProviderDiscoverModelsErrors[keyof ProviderDiscoverModelsErrors]
@@ -21178,6 +21823,15 @@ export type ProviderModelsRefreshData = {
   }
   url: "/provider/models/refresh"
 }
+
+export type ProviderModelsRefreshErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ProviderModelsRefreshError = ProviderModelsRefreshErrors[keyof ProviderModelsRefreshErrors]
 
 export type ProviderModelsRefreshResponses = {
   /**
@@ -21253,6 +21907,10 @@ export type ProviderRemoveErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderRemoveError = ProviderRemoveErrors[keyof ProviderRemoveErrors]
@@ -21279,6 +21937,15 @@ export type ProviderAccountUsageData = {
   }
   url: "/provider/{providerID}/account-usage"
 }
+
+export type ProviderAccountUsageErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ProviderAccountUsageError = ProviderAccountUsageErrors[keyof ProviderAccountUsageErrors]
 
 export type ProviderAccountUsageResponses = {
   /**
@@ -21322,6 +21989,10 @@ export type ProviderAuthExecuteErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderAuthExecuteError = ProviderAuthExecuteErrors[keyof ProviderAuthExecuteErrors]
@@ -21466,6 +22137,10 @@ export type ProviderOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderOauthCallbackError = ProviderOauthCallbackErrors[keyof ProviderOauthCallbackErrors]
@@ -21511,6 +22186,10 @@ export type ProviderTestErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderTestError = ProviderTestErrors[keyof ProviderTestErrors]
@@ -22044,7 +22723,11 @@ export type SessionCreateData = {
       [key: string]: unknown
     }
     parentID?: string
-    permission?: PermissionRuleset
+    permission?: Array<{
+      action: "allow" | "deny"
+      pattern: string
+      permission: string
+    }>
     title?: string
   }
   path?: never
@@ -22522,6 +23205,7 @@ export type SessionCommandResponses = {
     info: {
       agent: string
       author: string
+      billing?: BillingCoverage
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -22575,7 +23259,7 @@ export type SessionCommandResponses = {
       summary?: boolean
       taskIngress?: {
         id: string
-        kind: "operator_message" | "coordination_request"
+        kind: string
       }
       time: {
         completed?: number
@@ -22628,6 +23312,10 @@ export type SessionConfigGetErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionConfigGetError = SessionConfigGetErrors[keyof SessionConfigGetErrors]
@@ -22808,6 +23496,10 @@ export type SessionConfigUpdateErrors = {
         }
         name: "TaskPackageRevisionBindingError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionConfigUpdateError = SessionConfigUpdateErrors[keyof SessionConfigUpdateErrors]
@@ -22834,6 +23526,7 @@ export type SessionConversationData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
+    tail_limit?: number
   }
   url: "/session/{sessionID}/conversation"
 }
@@ -23085,6 +23778,89 @@ export type SessionConversationResponses = {
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
+      declaredOutputs: Array<{
+        artifactType?: string
+        declarationLocator:
+          | {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+          | {
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
+        label: string
+        producer:
+          | {
+              agent_id: string
+              expert_squad_id: string
+              message_id: string
+              owner_kind: "projected-scheduler" | "projected-worker"
+              package_revision: {
+                id: string
+                namespace: string
+                package_digest: string
+                project_id: string | null
+                scope: "built_in" | "project" | "global"
+                version: string
+              }
+              projection_hash: string
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              message_id: string
+              mission_id: string
+              owner_kind: "mission"
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              component_id: string
+              operation_id: string
+              owner_kind: "core"
+            }
+          | null
+        resources: Array<{
+          bytes: number
+          media_type: string
+          path: string
+          sha256: string
+          snapshot: {
+            manifest_sha256: string
+            project_id: string
+            schema_version: 2
+            snapshot_id: string
+            task_id: string
+          }
+          tree: string
+        }>
+      }>
       entries: Array<{
         artifact_type?: string
         bytes: number
@@ -23110,6 +23886,23 @@ export type SessionConversationResponses = {
                 task_id: string
               }
               source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
             }
         match?: {
           matched_fields: Array<string>
@@ -23335,6 +24128,222 @@ export type SessionConversationResponses = {
 }
 
 export type SessionConversationResponse = SessionConversationResponses[keyof SessionConversationResponses]
+
+export type SessionConversationHistoryData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    before: number
+    before_order_key: string
+    before_id?: string
+    limit?: number
+  }
+  url: "/session/{sessionID}/conversation/history"
+}
+
+export type SessionConversationHistoryErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionConversationHistoryError = SessionConversationHistoryErrors[keyof SessionConversationHistoryErrors]
+
+export type SessionConversationHistoryResponses = {
+  /**
+   * Session conversation history page
+   */
+  200: {
+    events: Array<{
+      emittedAt: number
+      event_id: string
+      notify?: {
+        badge?: boolean
+        tier: 1 | 2 | 3
+      }
+      orderKey: string
+      payload: {
+        [key: string]: unknown
+      }
+      sequence?: number
+      session_id: string
+      summary: string
+      timestamp: number
+      type: string
+    }>
+    history: {
+      hasMore: boolean
+      limit: number
+      oldestMessageID?: string | null
+      oldestOrderKey: string | null
+      oldestTimestamp: number | null
+    }
+    transcript: Array<VisibleMessageWithParts>
+    view: {
+      messages: Array<{
+        agentID: string
+        inputMessageID: string
+        messageID: string
+        orderKey: string
+        parentSessionID?: string
+        placement: "top_level"
+        sessionAgentID: string
+        sessionID: string
+        stage: string
+        time: number
+      }>
+      sessions: Array<
+        | {
+            activity: Array<
+              | {
+                  id: string
+                  orderKey: string
+                  text: string
+                  type: "text"
+                }
+              | {
+                  callID?: string
+                  id: string
+                  orderKey: string
+                  state: {
+                    [key: string]: unknown
+                  }
+                  tool: string
+                  type: "tool"
+                }
+              | {
+                  files: Array<unknown>
+                  id: string
+                  orderKey: string
+                  type: "patch"
+                }
+              | {
+                  filename: string
+                  id: string
+                  orderKey: string
+                  type: "file"
+                }
+              | {
+                  id: string
+                  message: string
+                  orderKey: string
+                  title?: string
+                  type: "part-error"
+                }
+            >
+            agentID: string
+            errorReason?: string
+            executionID: string
+            firstMessageTime: number
+            firstObservedAt?: number
+            inputMessageID: string
+            inputPreview?: {
+              messageID: string
+              observedAt: number
+              source: "user_message"
+              text: string
+            }
+            lastDisplayMessageID?: string
+            lastMessageTime: number
+            lastObservedAt?: number
+            messageIDs: Array<string>
+            orderKey: string
+            parentSessionID?: string
+            placement: "top_level"
+            sessionID: string
+            stage: string
+            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            todoUpdatedAt: number
+            todos: Array<Todo>
+          }
+        | {
+            activity: Array<
+              | {
+                  id: string
+                  orderKey: string
+                  text: string
+                  type: "text"
+                }
+              | {
+                  callID?: string
+                  id: string
+                  orderKey: string
+                  state: {
+                    [key: string]: unknown
+                  }
+                  tool: string
+                  type: "tool"
+                }
+              | {
+                  files: Array<unknown>
+                  id: string
+                  orderKey: string
+                  type: "patch"
+                }
+              | {
+                  filename: string
+                  id: string
+                  orderKey: string
+                  type: "file"
+                }
+              | {
+                  id: string
+                  message: string
+                  orderKey: string
+                  title?: string
+                  type: "part-error"
+                }
+            >
+            agentID: string
+            errorReason?: string
+            firstMessageTime: number
+            firstObservedAt?: number
+            inputPreview?: {
+              messageID: string
+              observedAt: number
+              source: "user_message"
+              text: string
+            }
+            lastDisplayMessageID?: string
+            lastMessageTime: number
+            lastObservedAt?: number
+            messageIDs: Array<string>
+            orderKey: string
+            parentSessionID?: string
+            placement: "top_level"
+            sessionID: string
+            stage: string
+            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            todoUpdatedAt: number
+            todos: Array<Todo>
+          }
+      >
+      topLevelSessionIDs: Array<string>
+    }
+  }
+}
+
+export type SessionConversationHistoryResponse =
+  SessionConversationHistoryResponses[keyof SessionConversationHistoryResponses]
 
 export type SessionDiffData = {
   body?: never
@@ -23754,6 +24763,10 @@ export type SessionPromptErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionPromptError = SessionPromptErrors[keyof SessionPromptErrors]
@@ -23766,6 +24779,7 @@ export type SessionPromptResponses = {
     info: {
       agent: string
       author: string
+      billing?: BillingCoverage
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -23819,7 +24833,7 @@ export type SessionPromptResponses = {
       summary?: boolean
       taskIngress?: {
         id: string
-        kind: "operator_message" | "coordination_request"
+        kind: string
       }
       time: {
         completed?: number
@@ -24110,6 +25124,10 @@ export type SessionPromptAsyncErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionPromptAsyncError = SessionPromptAsyncErrors[keyof SessionPromptAsyncErrors]
@@ -24248,6 +25266,7 @@ export type SessionShellResponses = {
   200: {
     agent: string
     author: string
+    billing?: BillingCoverage
     convergenceFailure?: {
       failure_occurrence: {
         assistant_message_id: string
@@ -24301,7 +25320,7 @@ export type SessionShellResponses = {
     summary?: boolean
     taskIngress?: {
       id: string
-      kind: "operator_message" | "coordination_request"
+      kind: string
     }
     time: {
       completed?: number
@@ -24504,6 +25523,89 @@ export type SessionTurnArtifactsResponses = {
    */
   200: Array<{
     catalogComplete: boolean
+    declaredOutputs: Array<{
+      artifactType?: string
+      declarationLocator:
+        | {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+        | {
+            snapshot: {
+              manifest_sha256: string
+              project_id: string
+              schema_version: 2
+              snapshot_id: string
+              task_id: string
+            }
+            source: "task_artifact_snapshot"
+          }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
+          }
+      label: string
+      producer:
+        | {
+            agent_id: string
+            expert_squad_id: string
+            message_id: string
+            owner_kind: "projected-scheduler" | "projected-worker"
+            package_revision: {
+              id: string
+              namespace: string
+              package_digest: string
+              project_id: string | null
+              scope: "built_in" | "project" | "global"
+              version: string
+            }
+            projection_hash: string
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            message_id: string
+            mission_id: string
+            owner_kind: "mission"
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            component_id: string
+            operation_id: string
+            owner_kind: "core"
+          }
+        | null
+      resources: Array<{
+        bytes: number
+        media_type: string
+        path: string
+        sha256: string
+        snapshot: {
+          manifest_sha256: string
+          project_id: string
+          schema_version: 2
+          snapshot_id: string
+          task_id: string
+        }
+        tree: string
+      }>
+    }>
     entries: Array<{
       artifact_type?: string
       bytes: number
@@ -24529,6 +25631,23 @@ export type SessionTurnArtifactsResponses = {
               task_id: string
             }
             source: "task_artifact_snapshot"
+          }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
           }
       match?: {
         matched_fields: Array<string>
@@ -24754,7 +25873,7 @@ export type SkillImportFileData = {
       contentBase64?: string
       path: string
     }>
-    policy?: PermissionAction
+    policy?: "allow" | "deny"
     sourceName?: string
   }
   path?: never
@@ -24785,7 +25904,7 @@ export type SkillImportFileResponse = SkillImportFileResponses[keyof SkillImport
 export type SkillInstallData = {
   body: {
     kind: "path" | "url" | "git"
-    policy?: PermissionAction
+    policy?: "allow" | "deny"
     value: string
   }
   path?: never
@@ -24877,9 +25996,9 @@ export type SkillInstalledResponses = {
     }
     name: string
     platforms?: Array<"windows" | "macos" | "linux">
-    policy: PermissionAction
+    policy: "allow" | "deny"
     priority?: number
-    recommended_policy: PermissionAction
+    recommended_policy: "allow" | "deny"
     required_tools?: Array<string>
     risk: {
       has_agents: boolean
@@ -24956,7 +26075,7 @@ export type SkillMarketResponses = {
     name: string
     notes?: string
     provider: string
-    recommended_policy: PermissionAction
+    recommended_policy: "allow" | "deny"
     source?: string
     trust: "official" | "curated" | "community"
   }>
@@ -25081,10 +26200,10 @@ export type SkillSetMountOverrideResponses = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
       projection_source: "default" | "package"
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       ref: string
       required_tools?: Array<string>
       risk: {
@@ -25223,10 +26342,10 @@ export type SkillMountsResponses = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
       projection_source: "default" | "package"
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       ref: string
       required_tools?: Array<string>
       risk: {
@@ -25262,7 +26381,7 @@ export type SkillMountsResponse = SkillMountsResponses[keyof SkillMountsResponse
 
 export type SkillPolicyData = {
   body: {
-    action: PermissionAction
+    action: "allow" | "deny"
     name: string
   }
   path?: never
@@ -25339,43 +26458,50 @@ export type SkillUpdateResponse = SkillUpdateResponses[keyof SkillUpdateResponse
 
 export type TaskCreateData = {
   body: {
-    artifactImports?: Array<{
-      locator:
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
+    artifactSources?: Array<
+      | {
+          authority: "completion_decision"
+          source_task_id: string
+        }
+      | {
+          authority: "terminal_lifecycle"
+          locator:
+            | {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
               }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-      source_task_id: string
-    }>
+            | {
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                source: "task_artifact_snapshot"
+              }
+            | {
+                ref: {
+                  bytes: number
+                  media_type: string
+                  path: string
+                  sha256: string
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  tree: string
+                }
+                source: "task_artifact_resource"
+              }
+          source_task_id: string
+        }
+    >
     attachments?: Array<
       | {
           filename?: string
@@ -25532,7 +26658,6 @@ export type TaskCreateData = {
     productPillar: "code" | "work"
     project?: string
     promptProfile?: string
-    queue?: boolean
     request: string
     requestID?: string
     source?: string
@@ -25631,72 +26756,6 @@ export type TaskCreateResponses = {
 
 export type TaskCreateResponse = TaskCreateResponses[keyof TaskCreateResponses]
 
-export type TaskQueueReorderData = {
-  body: {
-    directory: string
-    orderedTaskIDs?: Array<string>
-    revision?: string
-  }
-  path?: never
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/task-queue/reorder"
-}
-
-export type TaskQueueReorderErrors = {
-  /**
-   * Queue revision conflict
-   */
-  409: unknown
-  /**
-   * Invalid queued task ordering
-   */
-  422: unknown
-}
-
-export type TaskQueueReorderResponses = {
-  /**
-   * Updated directory queue order
-   */
-  200: {
-    directory: string
-    queuedTaskIDs: Array<string>
-    revision: string
-  }
-}
-
-export type TaskQueueReorderResponse = TaskQueueReorderResponses[keyof TaskQueueReorderResponses]
-
-export type TaskListEventsData = {
-  body?: never
-  path?: never
-  query?: never
-  url: "/task/events"
-}
-
-export type TaskListEventsResponses = {
-  /**
-   * Task-list change stream
-   */
-  200: {
-    notificationDetails?: string
-    notify?: {
-      badge?: boolean
-      tier: 1 | 2 | 3
-    }
-    sequence: number
-    source?: string
-    taskID: string | null
-    type: string
-  }
-}
-
-export type TaskListEventsResponse = TaskListEventsResponses[keyof TaskListEventsResponses]
-
 export type TaskDeleteData = {
   body: {
     reason: string
@@ -25712,7 +26771,12 @@ export type TaskDeleteData = {
   path: {
     taskID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
   url: "/task/{taskID}"
 }
 
@@ -25821,70 +26885,135 @@ export type TaskGetResponses = {
     budget?: {
       maxExecutorGroups?: number
     }
-    cancellation?: {
-      actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-      messageID?: string
-      missionID?: string
-      reason: string
-      requestEventID: string
-      requestID: string
-      requestedAt: number
-      sessionID?: string
-      source:
-        | "task.cancel"
-        | "task.delete"
-        | "task.archive"
-        | "mission.abort"
-        | "mission.archive"
-        | "mission.delete"
-        | "panel.cancel_task"
-        | "orchestrator.cancel_task"
-        | "session.delete"
-        | "project.delete"
-      surface:
-        | "api"
-        | "overlay.work_ledger"
-        | "overlay.selected_task"
-        | "overlay.composer_stop"
-        | "overlay.chat_request_stop"
-        | "overlay.interrupt_task"
-        | "overlay.archive_panel"
-        | "panel"
-        | "gateway"
-        | "slack"
-        | "telegram"
-        | "discord"
-        | "feishu"
-        | "whatsapp"
-        | "googlechat"
-        | "msteams"
-        | "line"
-        | "matrix"
-        | "mattermost"
-        | "signal"
-        | "wecom"
-        | "dingtalk"
-        | "clickclack"
-        | "imessage"
-        | "irc"
-        | "nextcloud-talk"
-        | "nostr"
-        | "qqbot"
-        | "raft"
-        | "reef"
-        | "sms"
-        | "synology-chat"
-        | "tlon"
-        | "twitch"
-        | "zalo"
-        | "zalouser"
-        | "right-sidebar"
-        | "orchestrator"
-      terminalAt: number
-      terminalEventID: string
-      toolCallID?: string
-      toolPartID?: string
-    }
+    cancellation?:
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelling"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          toolCallID?: string
+          toolPartID?: string
+        }
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelled"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          terminalAt: number
+          terminalEventID: string
+          toolCallID?: string
+          toolPartID?: string
+        }
     completionDecision?: {
       acceptedDeliverySliceRevisionIDs: Array<string>
       artifactLocator: {
@@ -26039,21 +27168,17 @@ export type TaskGetResponses = {
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     projectID: string
-    queue?: {
-      order: number
-      revision?: string
-    }
     request: string
     requestID?: string
     sessionID?: string | null
     source: string
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
     time: {
       archived?: number
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -26321,6 +27446,7 @@ export type TaskBoardResponses = {
         | "build_host_observation"
         | "integrity_review"
         | "fact_check_review"
+        | "fact_check_incomplete"
         | "visual_review"
         | "intent_analysis"
         | "requirement_set"
@@ -26332,9 +27458,12 @@ export type TaskBoardResponses = {
         | "goal_graph_projection"
         | "goal_workload"
         | "dispatch_lineage"
+        | "dispatch_settlement"
         | "operator_message_wake"
         | "mission_acceptance_resume_receipt"
         | "queued_operator_wake"
+        | "task_checkpoint_settlement"
+        | "task_auxiliary_settlement"
         | "exploration"
         | "browser_preview_target"
         | "browser_preview_evidence"
@@ -26733,70 +27862,135 @@ export type TaskBoardResponses = {
       budget?: {
         maxExecutorGroups?: number
       }
-      cancellation?: {
-        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-        messageID?: string
-        missionID?: string
-        reason: string
-        requestEventID: string
-        requestID: string
-        requestedAt: number
-        sessionID?: string
-        source:
-          | "task.cancel"
-          | "task.delete"
-          | "task.archive"
-          | "mission.abort"
-          | "mission.archive"
-          | "mission.delete"
-          | "panel.cancel_task"
-          | "orchestrator.cancel_task"
-          | "session.delete"
-          | "project.delete"
-        surface:
-          | "api"
-          | "overlay.work_ledger"
-          | "overlay.selected_task"
-          | "overlay.composer_stop"
-          | "overlay.chat_request_stop"
-          | "overlay.interrupt_task"
-          | "overlay.archive_panel"
-          | "panel"
-          | "gateway"
-          | "slack"
-          | "telegram"
-          | "discord"
-          | "feishu"
-          | "whatsapp"
-          | "googlechat"
-          | "msteams"
-          | "line"
-          | "matrix"
-          | "mattermost"
-          | "signal"
-          | "wecom"
-          | "dingtalk"
-          | "clickclack"
-          | "imessage"
-          | "irc"
-          | "nextcloud-talk"
-          | "nostr"
-          | "qqbot"
-          | "raft"
-          | "reef"
-          | "sms"
-          | "synology-chat"
-          | "tlon"
-          | "twitch"
-          | "zalo"
-          | "zalouser"
-          | "right-sidebar"
-          | "orchestrator"
-        terminalAt: number
-        terminalEventID: string
-        toolCallID?: string
-        toolPartID?: string
-      }
+      cancellation?:
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelling"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            toolCallID?: string
+            toolPartID?: string
+          }
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelled"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            terminalAt: number
+            terminalEventID: string
+            toolCallID?: string
+            toolPartID?: string
+          }
       completionDecision?: {
         acceptedDeliverySliceRevisionIDs: Array<string>
         artifactLocator: {
@@ -26951,21 +28145,17 @@ export type TaskBoardResponses = {
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       projectID: string
-      queue?: {
-        order: number
-        revision?: string
-      }
       request: string
       requestID?: string
       sessionID?: string | null
       source: string
-      status: "queued" | "active" | "completed" | "failed" | "cancelled"
+      status: "active" | "completed" | "failed" | "cancelled"
       terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
       time: {
         archived?: number
         completed?: number
         created: number
-        started?: number
+        started: number
         updated: number
       }
       title: string
@@ -27946,9 +29136,137 @@ export type TaskCancelError = TaskCancelErrors[keyof TaskCancelErrors]
 
 export type TaskCancelResponses = {
   /**
-   * Task cancelled
+   * Task cancellation accepted or completed
    */
-  200: boolean
+  202:
+    | {
+        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+        messageID?: string
+        missionID?: string
+        reason: string
+        requestEventID: string
+        requestID: string
+        requestedAt: number
+        sessionID?: string
+        source:
+          | "task.cancel"
+          | "task.delete"
+          | "task.archive"
+          | "mission.abort"
+          | "mission.archive"
+          | "mission.delete"
+          | "panel.cancel_task"
+          | "orchestrator.cancel_task"
+          | "session.delete"
+          | "project.delete"
+        status: "cancelling"
+        surface:
+          | "api"
+          | "overlay.work_ledger"
+          | "overlay.selected_task"
+          | "overlay.composer_stop"
+          | "overlay.chat_request_stop"
+          | "overlay.interrupt_task"
+          | "overlay.archive_panel"
+          | "panel"
+          | "gateway"
+          | "slack"
+          | "telegram"
+          | "discord"
+          | "feishu"
+          | "whatsapp"
+          | "googlechat"
+          | "msteams"
+          | "line"
+          | "matrix"
+          | "mattermost"
+          | "signal"
+          | "wecom"
+          | "dingtalk"
+          | "clickclack"
+          | "imessage"
+          | "irc"
+          | "nextcloud-talk"
+          | "nostr"
+          | "qqbot"
+          | "raft"
+          | "reef"
+          | "sms"
+          | "synology-chat"
+          | "tlon"
+          | "twitch"
+          | "zalo"
+          | "zalouser"
+          | "right-sidebar"
+          | "orchestrator"
+        toolCallID?: string
+        toolPartID?: string
+      }
+    | {
+        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+        messageID?: string
+        missionID?: string
+        reason: string
+        requestEventID: string
+        requestID: string
+        requestedAt: number
+        sessionID?: string
+        source:
+          | "task.cancel"
+          | "task.delete"
+          | "task.archive"
+          | "mission.abort"
+          | "mission.archive"
+          | "mission.delete"
+          | "panel.cancel_task"
+          | "orchestrator.cancel_task"
+          | "session.delete"
+          | "project.delete"
+        status: "cancelled"
+        surface:
+          | "api"
+          | "overlay.work_ledger"
+          | "overlay.selected_task"
+          | "overlay.composer_stop"
+          | "overlay.chat_request_stop"
+          | "overlay.interrupt_task"
+          | "overlay.archive_panel"
+          | "panel"
+          | "gateway"
+          | "slack"
+          | "telegram"
+          | "discord"
+          | "feishu"
+          | "whatsapp"
+          | "googlechat"
+          | "msteams"
+          | "line"
+          | "matrix"
+          | "mattermost"
+          | "signal"
+          | "wecom"
+          | "dingtalk"
+          | "clickclack"
+          | "imessage"
+          | "irc"
+          | "nextcloud-talk"
+          | "nostr"
+          | "qqbot"
+          | "raft"
+          | "reef"
+          | "sms"
+          | "synology-chat"
+          | "tlon"
+          | "twitch"
+          | "zalo"
+          | "zalouser"
+          | "right-sidebar"
+          | "orchestrator"
+        terminalAt: number
+        terminalEventID: string
+        toolCallID?: string
+        toolPartID?: string
+      }
 }
 
 export type TaskCancelResponse = TaskCancelResponses[keyof TaskCancelResponses]
@@ -28157,6 +29475,7 @@ export type TaskConversationResponses = {
           | "build_host_observation"
           | "integrity_review"
           | "fact_check_review"
+          | "fact_check_incomplete"
           | "visual_review"
           | "intent_analysis"
           | "requirement_set"
@@ -28168,9 +29487,12 @@ export type TaskConversationResponses = {
           | "goal_graph_projection"
           | "goal_workload"
           | "dispatch_lineage"
+          | "dispatch_settlement"
           | "operator_message_wake"
           | "mission_acceptance_resume_receipt"
           | "queued_operator_wake"
+          | "task_checkpoint_settlement"
+          | "task_auxiliary_settlement"
           | "exploration"
           | "browser_preview_target"
           | "browser_preview_evidence"
@@ -28569,70 +29891,135 @@ export type TaskConversationResponses = {
         budget?: {
           maxExecutorGroups?: number
         }
-        cancellation?: {
-          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-          messageID?: string
-          missionID?: string
-          reason: string
-          requestEventID: string
-          requestID: string
-          requestedAt: number
-          sessionID?: string
-          source:
-            | "task.cancel"
-            | "task.delete"
-            | "task.archive"
-            | "mission.abort"
-            | "mission.archive"
-            | "mission.delete"
-            | "panel.cancel_task"
-            | "orchestrator.cancel_task"
-            | "session.delete"
-            | "project.delete"
-          surface:
-            | "api"
-            | "overlay.work_ledger"
-            | "overlay.selected_task"
-            | "overlay.composer_stop"
-            | "overlay.chat_request_stop"
-            | "overlay.interrupt_task"
-            | "overlay.archive_panel"
-            | "panel"
-            | "gateway"
-            | "slack"
-            | "telegram"
-            | "discord"
-            | "feishu"
-            | "whatsapp"
-            | "googlechat"
-            | "msteams"
-            | "line"
-            | "matrix"
-            | "mattermost"
-            | "signal"
-            | "wecom"
-            | "dingtalk"
-            | "clickclack"
-            | "imessage"
-            | "irc"
-            | "nextcloud-talk"
-            | "nostr"
-            | "qqbot"
-            | "raft"
-            | "reef"
-            | "sms"
-            | "synology-chat"
-            | "tlon"
-            | "twitch"
-            | "zalo"
-            | "zalouser"
-            | "right-sidebar"
-            | "orchestrator"
-          terminalAt: number
-          terminalEventID: string
-          toolCallID?: string
-          toolPartID?: string
-        }
+        cancellation?:
+          | {
+              actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+              messageID?: string
+              missionID?: string
+              reason: string
+              requestEventID: string
+              requestID: string
+              requestedAt: number
+              sessionID?: string
+              source:
+                | "task.cancel"
+                | "task.delete"
+                | "task.archive"
+                | "mission.abort"
+                | "mission.archive"
+                | "mission.delete"
+                | "panel.cancel_task"
+                | "orchestrator.cancel_task"
+                | "session.delete"
+                | "project.delete"
+              status: "cancelling"
+              surface:
+                | "api"
+                | "overlay.work_ledger"
+                | "overlay.selected_task"
+                | "overlay.composer_stop"
+                | "overlay.chat_request_stop"
+                | "overlay.interrupt_task"
+                | "overlay.archive_panel"
+                | "panel"
+                | "gateway"
+                | "slack"
+                | "telegram"
+                | "discord"
+                | "feishu"
+                | "whatsapp"
+                | "googlechat"
+                | "msteams"
+                | "line"
+                | "matrix"
+                | "mattermost"
+                | "signal"
+                | "wecom"
+                | "dingtalk"
+                | "clickclack"
+                | "imessage"
+                | "irc"
+                | "nextcloud-talk"
+                | "nostr"
+                | "qqbot"
+                | "raft"
+                | "reef"
+                | "sms"
+                | "synology-chat"
+                | "tlon"
+                | "twitch"
+                | "zalo"
+                | "zalouser"
+                | "right-sidebar"
+                | "orchestrator"
+              toolCallID?: string
+              toolPartID?: string
+            }
+          | {
+              actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+              messageID?: string
+              missionID?: string
+              reason: string
+              requestEventID: string
+              requestID: string
+              requestedAt: number
+              sessionID?: string
+              source:
+                | "task.cancel"
+                | "task.delete"
+                | "task.archive"
+                | "mission.abort"
+                | "mission.archive"
+                | "mission.delete"
+                | "panel.cancel_task"
+                | "orchestrator.cancel_task"
+                | "session.delete"
+                | "project.delete"
+              status: "cancelled"
+              surface:
+                | "api"
+                | "overlay.work_ledger"
+                | "overlay.selected_task"
+                | "overlay.composer_stop"
+                | "overlay.chat_request_stop"
+                | "overlay.interrupt_task"
+                | "overlay.archive_panel"
+                | "panel"
+                | "gateway"
+                | "slack"
+                | "telegram"
+                | "discord"
+                | "feishu"
+                | "whatsapp"
+                | "googlechat"
+                | "msteams"
+                | "line"
+                | "matrix"
+                | "mattermost"
+                | "signal"
+                | "wecom"
+                | "dingtalk"
+                | "clickclack"
+                | "imessage"
+                | "irc"
+                | "nextcloud-talk"
+                | "nostr"
+                | "qqbot"
+                | "raft"
+                | "reef"
+                | "sms"
+                | "synology-chat"
+                | "tlon"
+                | "twitch"
+                | "zalo"
+                | "zalouser"
+                | "right-sidebar"
+                | "orchestrator"
+              terminalAt: number
+              terminalEventID: string
+              toolCallID?: string
+              toolPartID?: string
+            }
         completionDecision?: {
           acceptedDeliverySliceRevisionIDs: Array<string>
           artifactLocator: {
@@ -28787,21 +30174,17 @@ export type TaskConversationResponses = {
         priority: "critical" | "high" | "normal" | "low"
         productPillar: "code" | "work"
         projectID: string
-        queue?: {
-          order: number
-          revision?: string
-        }
         request: string
         requestID?: string
         sessionID?: string | null
         source: string
-        status: "queued" | "active" | "completed" | "failed" | "cancelled"
+        status: "active" | "completed" | "failed" | "cancelled"
         terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
         time: {
           archived?: number
           completed?: number
           created: number
-          started?: number
+          started: number
           updated: number
         }
         title: string
@@ -28849,6 +30232,89 @@ export type TaskConversationResponses = {
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
+      declaredOutputs: Array<{
+        artifactType?: string
+        declarationLocator:
+          | {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+          | {
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
+        label: string
+        producer:
+          | {
+              agent_id: string
+              expert_squad_id: string
+              message_id: string
+              owner_kind: "projected-scheduler" | "projected-worker"
+              package_revision: {
+                id: string
+                namespace: string
+                package_digest: string
+                project_id: string | null
+                scope: "built_in" | "project" | "global"
+                version: string
+              }
+              projection_hash: string
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              message_id: string
+              mission_id: string
+              owner_kind: "mission"
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              component_id: string
+              operation_id: string
+              owner_kind: "core"
+            }
+          | null
+        resources: Array<{
+          bytes: number
+          media_type: string
+          path: string
+          sha256: string
+          snapshot: {
+            manifest_sha256: string
+            project_id: string
+            schema_version: 2
+            snapshot_id: string
+            task_id: string
+          }
+          tree: string
+        }>
+      }>
       entries: Array<{
         artifact_type?: string
         bytes: number
@@ -28874,6 +30340,23 @@ export type TaskConversationResponses = {
                 task_id: string
               }
               source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
             }
         match?: {
           matched_fields: Array<string>
@@ -29852,16 +31335,18 @@ export type TaskMessageError = TaskMessageErrors[keyof TaskMessageErrors]
 
 export type TaskMessageResponses = {
   /**
-   * Task message handled
+   * Task message durably accepted for delivery
    */
-  200: {
+  202: {
+    current_owner_ingress_id?: string
+    ingress_id?: string
     message: string
-    should_resume: boolean
+    queue_position?: number
     user_message?: {
       info: TaskMessageUserInfo
       parts: Array<TaskMessageUserPart>
     }
-    wake_status: "started" | "queued" | "not_woken"
+    wake_status: "accepted" | "queued" | "not_woken"
   }
 }
 
@@ -30190,70 +31675,135 @@ export type TaskProgressResponses = {
       budget?: {
         maxExecutorGroups?: number
       }
-      cancellation?: {
-        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-        messageID?: string
-        missionID?: string
-        reason: string
-        requestEventID: string
-        requestID: string
-        requestedAt: number
-        sessionID?: string
-        source:
-          | "task.cancel"
-          | "task.delete"
-          | "task.archive"
-          | "mission.abort"
-          | "mission.archive"
-          | "mission.delete"
-          | "panel.cancel_task"
-          | "orchestrator.cancel_task"
-          | "session.delete"
-          | "project.delete"
-        surface:
-          | "api"
-          | "overlay.work_ledger"
-          | "overlay.selected_task"
-          | "overlay.composer_stop"
-          | "overlay.chat_request_stop"
-          | "overlay.interrupt_task"
-          | "overlay.archive_panel"
-          | "panel"
-          | "gateway"
-          | "slack"
-          | "telegram"
-          | "discord"
-          | "feishu"
-          | "whatsapp"
-          | "googlechat"
-          | "msteams"
-          | "line"
-          | "matrix"
-          | "mattermost"
-          | "signal"
-          | "wecom"
-          | "dingtalk"
-          | "clickclack"
-          | "imessage"
-          | "irc"
-          | "nextcloud-talk"
-          | "nostr"
-          | "qqbot"
-          | "raft"
-          | "reef"
-          | "sms"
-          | "synology-chat"
-          | "tlon"
-          | "twitch"
-          | "zalo"
-          | "zalouser"
-          | "right-sidebar"
-          | "orchestrator"
-        terminalAt: number
-        terminalEventID: string
-        toolCallID?: string
-        toolPartID?: string
-      }
+      cancellation?:
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelling"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            toolCallID?: string
+            toolPartID?: string
+          }
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelled"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            terminalAt: number
+            terminalEventID: string
+            toolCallID?: string
+            toolPartID?: string
+          }
       completionDecision?: {
         acceptedDeliverySliceRevisionIDs: Array<string>
         artifactLocator: {
@@ -30408,21 +31958,17 @@ export type TaskProgressResponses = {
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       projectID: string
-      queue?: {
-        order: number
-        revision?: string
-      }
       request: string
       requestID?: string
       sessionID?: string | null
       source: string
-      status: "queued" | "active" | "completed" | "failed" | "cancelled"
+      status: "active" | "completed" | "failed" | "cancelled"
       terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
       time: {
         archived?: number
         completed?: number
         created: number
-        started?: number
+        started: number
         updated: number
       }
       title: string
@@ -30528,7 +32074,7 @@ export type TaskReplanError = TaskReplanErrors[keyof TaskReplanErrors]
 
 export type TaskReplanResponses = {
   /**
-   * Task replan queued
+   * Task replan accepted
    */
   200: {
     attachments?: Array<{
@@ -30544,70 +32090,135 @@ export type TaskReplanResponses = {
     budget?: {
       maxExecutorGroups?: number
     }
-    cancellation?: {
-      actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-      messageID?: string
-      missionID?: string
-      reason: string
-      requestEventID: string
-      requestID: string
-      requestedAt: number
-      sessionID?: string
-      source:
-        | "task.cancel"
-        | "task.delete"
-        | "task.archive"
-        | "mission.abort"
-        | "mission.archive"
-        | "mission.delete"
-        | "panel.cancel_task"
-        | "orchestrator.cancel_task"
-        | "session.delete"
-        | "project.delete"
-      surface:
-        | "api"
-        | "overlay.work_ledger"
-        | "overlay.selected_task"
-        | "overlay.composer_stop"
-        | "overlay.chat_request_stop"
-        | "overlay.interrupt_task"
-        | "overlay.archive_panel"
-        | "panel"
-        | "gateway"
-        | "slack"
-        | "telegram"
-        | "discord"
-        | "feishu"
-        | "whatsapp"
-        | "googlechat"
-        | "msteams"
-        | "line"
-        | "matrix"
-        | "mattermost"
-        | "signal"
-        | "wecom"
-        | "dingtalk"
-        | "clickclack"
-        | "imessage"
-        | "irc"
-        | "nextcloud-talk"
-        | "nostr"
-        | "qqbot"
-        | "raft"
-        | "reef"
-        | "sms"
-        | "synology-chat"
-        | "tlon"
-        | "twitch"
-        | "zalo"
-        | "zalouser"
-        | "right-sidebar"
-        | "orchestrator"
-      terminalAt: number
-      terminalEventID: string
-      toolCallID?: string
-      toolPartID?: string
-    }
+    cancellation?:
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelling"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          toolCallID?: string
+          toolPartID?: string
+        }
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelled"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          terminalAt: number
+          terminalEventID: string
+          toolCallID?: string
+          toolPartID?: string
+        }
     completionDecision?: {
       acceptedDeliverySliceRevisionIDs: Array<string>
       artifactLocator: {
@@ -30762,21 +32373,17 @@ export type TaskReplanResponses = {
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     projectID: string
-    queue?: {
-      order: number
-      revision?: string
-    }
     request: string
     requestID?: string
     sessionID?: string | null
     source: string
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
     time: {
       archived?: number
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -30831,7 +32438,7 @@ export type TaskRetryError = TaskRetryErrors[keyof TaskRetryErrors]
 
 export type TaskRetryResponses = {
   /**
-   * Task retry queued
+   * Task retry accepted
    */
   200: {
     attachments?: Array<{
@@ -30847,70 +32454,135 @@ export type TaskRetryResponses = {
     budget?: {
       maxExecutorGroups?: number
     }
-    cancellation?: {
-      actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-      messageID?: string
-      missionID?: string
-      reason: string
-      requestEventID: string
-      requestID: string
-      requestedAt: number
-      sessionID?: string
-      source:
-        | "task.cancel"
-        | "task.delete"
-        | "task.archive"
-        | "mission.abort"
-        | "mission.archive"
-        | "mission.delete"
-        | "panel.cancel_task"
-        | "orchestrator.cancel_task"
-        | "session.delete"
-        | "project.delete"
-      surface:
-        | "api"
-        | "overlay.work_ledger"
-        | "overlay.selected_task"
-        | "overlay.composer_stop"
-        | "overlay.chat_request_stop"
-        | "overlay.interrupt_task"
-        | "overlay.archive_panel"
-        | "panel"
-        | "gateway"
-        | "slack"
-        | "telegram"
-        | "discord"
-        | "feishu"
-        | "whatsapp"
-        | "googlechat"
-        | "msteams"
-        | "line"
-        | "matrix"
-        | "mattermost"
-        | "signal"
-        | "wecom"
-        | "dingtalk"
-        | "clickclack"
-        | "imessage"
-        | "irc"
-        | "nextcloud-talk"
-        | "nostr"
-        | "qqbot"
-        | "raft"
-        | "reef"
-        | "sms"
-        | "synology-chat"
-        | "tlon"
-        | "twitch"
-        | "zalo"
-        | "zalouser"
-        | "right-sidebar"
-        | "orchestrator"
-      terminalAt: number
-      terminalEventID: string
-      toolCallID?: string
-      toolPartID?: string
-    }
+    cancellation?:
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelling"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          toolCallID?: string
+          toolPartID?: string
+        }
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelled"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          terminalAt: number
+          terminalEventID: string
+          toolCallID?: string
+          toolPartID?: string
+        }
     completionDecision?: {
       acceptedDeliverySliceRevisionIDs: Array<string>
       artifactLocator: {
@@ -31065,21 +32737,17 @@ export type TaskRetryResponses = {
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     projectID: string
-    queue?: {
-      order: number
-      revision?: string
-    }
     request: string
     requestID?: string
     sessionID?: string | null
     source: string
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
     time: {
       archived?: number
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -31323,320 +32991,12 @@ export type TaskSessionOperatorSteerResponses = {
     request_id: string
     session_id: string
     task_id: string
-    wake_status: "started" | "queued"
+    wake_status: "accepted" | "queued"
   }
 }
 
 export type TaskSessionOperatorSteerResponse =
   TaskSessionOperatorSteerResponses[keyof TaskSessionOperatorSteerResponses]
-
-export type TaskQueueStartNowData = {
-  body?: never
-  path: {
-    taskID: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/task/{taskID}/start-now"
-}
-
-export type TaskQueueStartNowErrors = {
-  /**
-   * Not found
-   */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
-  /**
-   * Task is not queued
-   */
-  409: unknown
-  /**
-   * Task has no working directory
-   */
-  422: unknown
-}
-
-export type TaskQueueStartNowError = TaskQueueStartNowErrors[keyof TaskQueueStartNowErrors]
-
-export type TaskQueueStartNowResponses = {
-  /**
-   * Queued task started and scheduler invoked
-   */
-  200: {
-    directory: string
-    queuedTaskIDs: Array<string>
-    started: boolean
-    status: string
-    task: {
-      attachments?: Array<{
-        filename?: string
-        intent: "task_input"
-        mime: string
-        sha: string
-        size: number
-        source: "user-upload"
-        url: string
-      }>
-      blockingReason?: string
-      budget?: {
-        maxExecutorGroups?: number
-      }
-      cancellation?: {
-        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-        messageID?: string
-        missionID?: string
-        reason: string
-        requestEventID: string
-        requestID: string
-        requestedAt: number
-        sessionID?: string
-        source:
-          | "task.cancel"
-          | "task.delete"
-          | "task.archive"
-          | "mission.abort"
-          | "mission.archive"
-          | "mission.delete"
-          | "panel.cancel_task"
-          | "orchestrator.cancel_task"
-          | "session.delete"
-          | "project.delete"
-        surface:
-          | "api"
-          | "overlay.work_ledger"
-          | "overlay.selected_task"
-          | "overlay.composer_stop"
-          | "overlay.chat_request_stop"
-          | "overlay.interrupt_task"
-          | "overlay.archive_panel"
-          | "panel"
-          | "gateway"
-          | "slack"
-          | "telegram"
-          | "discord"
-          | "feishu"
-          | "whatsapp"
-          | "googlechat"
-          | "msteams"
-          | "line"
-          | "matrix"
-          | "mattermost"
-          | "signal"
-          | "wecom"
-          | "dingtalk"
-          | "clickclack"
-          | "imessage"
-          | "irc"
-          | "nextcloud-talk"
-          | "nostr"
-          | "qqbot"
-          | "raft"
-          | "reef"
-          | "sms"
-          | "synology-chat"
-          | "tlon"
-          | "twitch"
-          | "zalo"
-          | "zalouser"
-          | "right-sidebar"
-          | "orchestrator"
-        terminalAt: number
-        terminalEventID: string
-        toolCallID?: string
-        toolPartID?: string
-      }
-      completionDecision?: {
-        acceptedDeliverySliceRevisionIDs: Array<string>
-        artifactLocator: {
-          artifact_id: string
-          catalog_revision: number
-          expected_sha256: string
-          source: "engine_artifact"
-        }
-        deliverableArtifactLocators: Array<
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        >
-        evidenceLocators: Array<
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-          | {
-              session_id: string
-              source: "session"
-            }
-          | {
-              /**
-               * Exact Message ID stored in the paired session_id.
-               */
-              message_id: string
-              /**
-               * Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.
-               */
-              session_id: string
-              source: "session_message"
-            }
-          | {
-              goal_id: string
-              source: "goal_revision"
-            }
-          | {
-              request_id: string
-              source: "coordination_request"
-            }
-        >
-        orchestratorMessageID: string
-        orchestratorSessionID: string
-        timeRecorded: number
-        toolCallID: string
-        toolPartID: string
-        workflowBinding:
-          | {
-              kind: "direct"
-              package_revision: {
-                id: string
-                namespace: string
-                package_digest: string
-                project_id: string | null
-                scope: "built_in" | "project" | "global"
-                version: string
-              }
-            }
-          | {
-              kind: "virtual_workflow"
-              nodes: Array<{
-                agent_id: string
-                depends_on: Array<string>
-                node_id: string
-              }>
-              package_revision: {
-                id: string
-                namespace: string
-                package_digest: string
-                project_id: string | null
-                scope: "built_in" | "project" | "global"
-                version: string
-              }
-              workflow_id: string
-            }
-      }
-      directory?: string
-      error?: string
-      id: string
-      metadata?: {
-        [key: string]: unknown
-      }
-      orderKey: string
-      packageRevisionBinding: {
-        id: string
-        namespace: string
-        package_digest: string
-        project_id: string | null
-        scope: "built_in" | "project" | "global"
-        version: string
-      }
-      priority: "critical" | "high" | "normal" | "low"
-      productPillar: "code" | "work"
-      projectID: string
-      queue?: {
-        order: number
-        revision?: string
-      }
-      request: string
-      requestID?: string
-      sessionID?: string | null
-      source: string
-      status: "queued" | "active" | "completed" | "failed" | "cancelled"
-      terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
-      time: {
-        archived?: number
-        completed?: number
-        created: number
-        started?: number
-        updated: number
-      }
-      title: string
-    }
-  }
-}
-
-export type TaskQueueStartNowResponse = TaskQueueStartNowResponses[keyof TaskQueueStartNowResponses]
 
 export type TaskStatusData = {
   body?: never
@@ -31752,7 +33112,7 @@ export type TaskStatusResponses = {
       revision: number
       title: string
     }>
-    lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+    lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     requirements?: Array<{
@@ -31815,7 +33175,7 @@ export type TaskStatusResponses = {
     time: {
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -32012,6 +33372,89 @@ export type TaskTurnArtifactsResponses = {
    */
   200: Array<{
     catalogComplete: boolean
+    declaredOutputs: Array<{
+      artifactType?: string
+      declarationLocator:
+        | {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+        | {
+            snapshot: {
+              manifest_sha256: string
+              project_id: string
+              schema_version: 2
+              snapshot_id: string
+              task_id: string
+            }
+            source: "task_artifact_snapshot"
+          }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
+          }
+      label: string
+      producer:
+        | {
+            agent_id: string
+            expert_squad_id: string
+            message_id: string
+            owner_kind: "projected-scheduler" | "projected-worker"
+            package_revision: {
+              id: string
+              namespace: string
+              package_digest: string
+              project_id: string | null
+              scope: "built_in" | "project" | "global"
+              version: string
+            }
+            projection_hash: string
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            message_id: string
+            mission_id: string
+            owner_kind: "mission"
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            component_id: string
+            operation_id: string
+            owner_kind: "core"
+          }
+        | null
+      resources: Array<{
+        bytes: number
+        media_type: string
+        path: string
+        sha256: string
+        snapshot: {
+          manifest_sha256: string
+          project_id: string
+          schema_version: 2
+          snapshot_id: string
+          task_id: string
+        }
+        tree: string
+      }>
+    }>
     entries: Array<{
       artifact_type?: string
       bytes: number
@@ -32037,6 +33480,23 @@ export type TaskTurnArtifactsResponses = {
               task_id: string
             }
             source: "task_artifact_snapshot"
+          }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
           }
       match?: {
         matched_fields: Array<string>
@@ -32206,20 +33666,16 @@ export type TaskListResponses = {
         priority: "critical" | "high" | "normal" | "low"
         productPillar: "code" | "work"
         projectID: string
-        queue?: {
-          order: number
-          revision?: string
-        }
         requestID?: string
         sessionID?: string | null
         source: string
-        status: "queued" | "active" | "completed" | "failed" | "cancelled"
+        status: "active" | "completed" | "failed" | "cancelled"
         terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
         time: {
           archived?: number
           completed?: number
           created: number
-          started?: number
+          started: number
           updated: number
         }
         title: string
@@ -32631,21 +34087,22 @@ export type WorkLedgerListResponses = {
           tasks: Array<{
             activityStatus: "running" | "inactive"
             archived?: number
+            cancellationStatus: "none" | "cancelling" | "cancelled"
+            completed?: number
             created: number
             description: string
             directory: string
             id: string
             kind: "task"
-            lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+            lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
             missionID: string
             missionSessionID: string
             pendingInteractions: number
             pinned: boolean
             priority: "critical" | "high" | "normal" | "low"
             productPillar: "code" | "work"
-            queueOrder: number
             source: string
-            started: number | null
+            started: number
             title: string
             updated: number
           }>
@@ -32727,21 +34184,22 @@ export type WorkLedgerListArchivedResponses = {
           tasks: Array<{
             activityStatus: "running" | "inactive"
             archived?: number
+            cancellationStatus: "none" | "cancelling" | "cancelled"
+            completed?: number
             created: number
             description: string
             directory: string
             id: string
             kind: "task"
-            lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+            lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
             missionID: string
             missionSessionID: string
             pendingInteractions: number
             pinned: boolean
             priority: "critical" | "high" | "normal" | "low"
             productPillar: "code" | "work"
-            queueOrder: number
             source: string
-            started: number | null
+            started: number
             title: string
             updated: number
           }>
@@ -32751,21 +34209,22 @@ export type WorkLedgerListArchivedResponses = {
       | {
           activityStatus: "running" | "inactive"
           archived?: number
+          cancellationStatus: "none" | "cancelling" | "cancelled"
+          completed?: number
           created: number
           description: string
           directory: string
           id: string
           kind: "task"
-          lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+          lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
           missionID?: string
           missionSessionID?: string
           pendingInteractions: number
           pinned: boolean
           priority: "critical" | "high" | "normal" | "low"
           productPillar: "code" | "work"
-          queueOrder: number
           source: string
-          started: number | null
+          started: number
           title: string
           updated: number
         }
@@ -32843,6 +34302,13 @@ export type WorkLedgerEventsResponses = {
         sessionID: string
         sourceType: "conversation.handoff"
         type: "work-ledger.conversation-handoff"
+      }
+    | {
+        messageID: string
+        sequence: number
+        sourceType: string
+        taskID: string | null
+        type: "mailbox.changed"
       }
 }
 

@@ -1,0 +1,11 @@
+Own projection, measurement, join/overlay, raster/vector operation, reconciliation, and spatial-uncertainty analysis. Apply geospatial-analysis-cartography/shared/method.
+
+Input contract: require approved source-ledger revision, area of interest, analysis question, geometry and feature keys, source/target CRS and transformation operation if approved, measurement units, raster grid origin/resolution/extent/bands/nodata, resampling rule, temporal support, join predicates and cardinality expectations, overlay/buffer/zonal-stat definitions, classification or aggregation unit, denominator, and comparison plan. Require owner-supplied accuracy and decision scale.
+
+Domain method: choose geodesic, projected, equal-area, equidistant or other measurement basis only with a documented fitness rationale; never infer a CRS from coordinate appearance. Record transformation identifier and datum/epoch handling. For joins and overlays, reconcile input/output feature counts, unmatched keys, one-to-many multiplication, geometry dimension and area/length totals in declared units. For raster work, align grid, extent, resolution, nodata, pixel interpretation and time; distinguish categorical nearest-neighbor from continuous resampling selected by the owner. Track resolution and positional uncertainty through buffers, zonal statistics and aggregation. Test sensitivity to projection, resolution, classification and boundary choice. State spatial autocorrelation, modifiable areal unit problem and ecological-fallacy limits.
+
+Evidence output: populate operation provenance and raster/vector uncertainty registers with operation ID/version, inputs/hashes, parameters/units, counts/totals before and after, residuals, applicability, assumptions, uncertainty and owner/reviewer.
+
+Unknown and stop: stop on unresolved CRS, transformation, grid alignment, nodata, join cardinality, denominator, temporal mismatch, license, or sensitive output. Do not execute remote reads or writes.
+
+Authority and qualified review: do not establish property boundaries, navigation safety, emergency routing, site selection, or legal conclusions. Require GIS/geodesy, domain, survey, privacy/security and decision-owner review.

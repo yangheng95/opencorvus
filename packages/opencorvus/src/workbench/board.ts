@@ -1,4 +1,4 @@
-import { deriveTaskStatus, isTaskActive, isTaskQueued, taskTerminalReason } from "@/engine/task-status"
+import { deriveTaskStatus, isTaskActive, taskTerminalReason } from "@/engine/task-status"
 import {
   listCurrentGoals,
   listTaskRows,
@@ -33,6 +33,7 @@ import { IntegrityReviewArtifactPayloadSchema } from "@/integrity/review-artifac
 import { VisualReviewArtifactPayloadSchema } from "@/visual-qa/persist"
 import { FactCheckReviewArtifactSchema } from "@/fact-check/schema"
 import { parseProcessRecoveryFactContext } from "@/engine/process-recovery-fact"
+import { SessionPromptState } from "@/session/prompt/state"
 import { MessageTable } from "@/session/session.sql"
 
 const BOARD_SNAPSHOT_LIMIT = 80
@@ -140,26 +141,40 @@ function buildBoard(
     sessionInvocationTopology: sessionInvocationTopologyForTask(task.id),
     executionProjection,
     processIncidents: taskProcessIncidents(task.id, executionProjection),
-    artifacts: artifacts.map((item) => ({
-      id: item.id,
-      taskID: item.task_id,
-      locator: {
-        source: "engine_artifact" as const,
-        artifact_id: item.id,
-        catalog_revision: item.catalog_revision,
-        expected_sha256: item.payload_sha256,
-      },
-      kind: item.kind,
-      label: item.label,
-      payload:
+    artifacts: artifacts.map((item) => {
+      const payload =
         item.kind === "build_host_observation"
           ? compactBuildObservationPayload(item)
-          : compactArtifactPayload(item.kind, item.payload),
-      time: {
-        created: item.time_created,
-        updated: item.time_updated,
-      },
-    })),
+          : compactArtifactPayload(item.kind, item.payload)
+      const ingress = item.kind === "queued_operator_wake" ? artifactPayloadRecord(item.payload) : undefined
+      const queueProjection =
+        ingress && typeof ingress.root_session_id === "string"
+          ? SessionPromptState.rootWakeQueueProjection(ingress.root_session_id, item.id)
+          : undefined
+      return {
+        id: item.id,
+        taskID: item.task_id,
+        locator: {
+          source: "engine_artifact" as const,
+          artifact_id: item.id,
+          catalog_revision: item.catalog_revision,
+          expected_sha256: item.payload_sha256,
+        },
+        kind: item.kind,
+        label: item.label,
+        payload: queueProjection
+          ? {
+              ...(payload ?? {}),
+              queue_position: queueProjection.queuePosition,
+              current_owner_ingress_id: queueProjection.currentOwnerWakeID,
+            }
+          : payload,
+        time: {
+          created: item.time_created,
+          updated: item.time_updated,
+        },
+      }
+    }),
     overview,
     brief: {
       content: brief.content,
@@ -542,23 +557,21 @@ function boardOverview(input: {
 }) {
   const derivedStatus = deriveTaskStatus(input.task)
   const terminalReason = taskTerminalReason(input.task)
-  const active = derivedStatus === "queued" || derivedStatus === "active"
+  const active = derivedStatus === "active"
   const terminal = derivedStatus === "completed" || derivedStatus === "failed" || derivedStatus === "cancelled"
   const canRetry = terminal && input.pendingInteractions.length === 0
   const headline =
     input.pendingInteractions.length > 0
       ? "Waiting on human input"
-      : derivedStatus === "completed"
-        ? "Task completed"
-        : terminalReason === "interrupted"
-          ? "Task was interrupted"
-          : derivedStatus === "failed"
-            ? "Task ended with a recorded failure"
-            : derivedStatus === "cancelled"
-              ? "Task was cancelled"
-              : derivedStatus === "active"
-                ? "Task is actively progressing"
-                : "Task is queued"
+      : terminalReason === "interrupted"
+        ? "Task was interrupted"
+        : derivedStatus === "active"
+          ? "Task is actively progressing"
+          : derivedStatus === "completed"
+            ? "Task completed"
+            : derivedStatus === "failed"
+              ? "Task ended with a recorded failure"
+              : "Task was cancelled"
   const activeExecutionCount = input.executionProjection.occurrences.filter(
     (occurrence) => occurrence.latest?.status.type === "streaming" || occurrence.latest?.status.type === "retry",
   ).length
@@ -624,7 +637,7 @@ function boardOverview(input: {
     controls: {
       canRetry,
       canReplan: canRetry,
-      canCancel: isTaskQueued(input.task) || isTaskActive(input.task),
+      canCancel: isTaskActive(input.task),
     },
   }
 }

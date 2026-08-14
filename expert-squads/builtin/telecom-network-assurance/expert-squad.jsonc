@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "telecom-network-assurance",
+  "name": "Telecom Network Assurance",
+  "label": "Telecom Network Assurance",
+  "description": "Demand, topology, service-level, capacity, and change-risk evidence joined into a non-operational network assurance plan.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded telecom service-assurance and capacity analysis.",
+    "selection_guidance": "Select for telecom demand, topology, service-level indicators, error budgets, incident patterns, capacity, dependency, and change-risk analysis without accessing or changing live networks.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "telecom-network-assurance/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "telecom-demand-topology-analyst": {
+        "label": "Demand and Topology Analyst",
+        "description": "Maps service demand, topology, dependencies, traffic boundaries, and evidence gaps.",
+        "base_role": "explore",
+        "prompt": "agents/telecom-demand-topology-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "telecom-network-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "telecom-service-level-analyst": {
+        "label": "Service-Level Analyst",
+        "description": "Defines sourced service indicators, objectives, error budgets, and incident evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/telecom-service-level-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "telecom-network-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "telecom-capacity-change-risk-analyst": {
+        "label": "Capacity and Change-Risk Analyst",
+        "description": "Maps capacity constraints, maintenance windows, rollout dependencies, and change risk.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/telecom-capacity-change-risk-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "telecom-network-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "network-assurance-owner": {
+        "label": "Network Assurance Owner",
+        "description": "Joins the branches into a reviewable non-operational assurance plan.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/network-assurance-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "telecom-network-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "network-assurance-plan": {
+        "label": "Network Assurance Plan",
+        "description": "Three independent evidence branches converge into one accountable review pack.",
+        "nodes": {
+          "telecom-demand-topology-analyst": {
+            "agent_id": "telecom-demand-topology-analyst",
+            "description": "Maps service demand, topology, dependencies, traffic boundaries, and evidence gaps.",
+            "depends_on": []
+          },
+          "telecom-service-level-analyst": {
+            "agent_id": "telecom-service-level-analyst",
+            "description": "Defines sourced service indicators, objectives, error budgets, and incident evidence.",
+            "depends_on": []
+          },
+          "telecom-capacity-change-risk-analyst": {
+            "agent_id": "telecom-capacity-change-risk-analyst",
+            "description": "Maps capacity constraints, maintenance windows, rollout dependencies, and change risk.",
+            "depends_on": []
+          },
+          "network-assurance-owner": {
+            "agent_id": "network-assurance-owner",
+            "description": "Joins the branches into a reviewable non-operational assurance plan.",
+            "depends_on": [
+              "telecom-capacity-change-risk-analyst",
+              "telecom-demand-topology-analyst",
+              "telecom-service-level-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

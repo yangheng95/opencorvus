@@ -1,5 +1,6 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, integer, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { Timestamps } from "@/storage/schema.sql"
+import { randomUUID } from "node:crypto"
 
 export const ProjectTable = sqliteTable("project", {
   id: text().primaryKey(),
@@ -18,4 +19,9 @@ export const ProjectTable = sqliteTable("project", {
   time_initialized: integer(),
   sandboxes: text({ mode: "json" }).notNull().$type<string[]>(),
   commands: text({ mode: "json" }).$type<{ start?: string }>(),
-})
+  // Project IDs are derived from repository identity and may be reused after
+  // deletion. This UUID identifies one exact durable row occurrence.
+  generation: text()
+    .notNull()
+    .$defaultFn(() => randomUUID()),
+}, (table) => [uniqueIndex("project_generation_idx").on(table.generation)])

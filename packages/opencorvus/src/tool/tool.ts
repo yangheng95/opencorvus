@@ -1,6 +1,6 @@
 import z from "zod"
 import type { Message } from "../session/message"
-import type { PermissionNext } from "../permission/next"
+import type { CapabilityRules } from "../capability/rules"
 import type { Config } from "../config/config"
 import type { ResolvedSkillSurface } from "../skill/surface"
 import type { PromptInput } from "../session/prompt/schema"
@@ -9,6 +9,7 @@ import { createToolExecutionSurface, type ToolExecutionSurface } from "./executi
 import { materializeToolResultInlineAttachments } from "./result-attachment-materialization"
 import { Instance } from "@/project/instance"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
+import type { ToolExecutionMode } from "./execution-mode"
 
 /**
  * Coerce string values that LLMs sometimes produce for non-string fields.
@@ -29,7 +30,7 @@ function coerceArgs(args: unknown): unknown {
 export namespace Tool {
   export function executionSurface(
     toolIDs: Iterable<string>,
-    permission: PermissionNext.Ruleset,
+    permission: CapabilityRules.Ruleset,
   ): ToolExecutionSurface {
     return createToolExecutionSurface({ toolIDs, permission })
   }
@@ -42,6 +43,7 @@ export namespace Tool {
     agentID?: string
     config?: Config.Info
     skillSurface?: ResolvedSkillSurface
+    artifactSnapshotSource?: "current_task_project" | "merged_primary_commit"
   }
 
   export type Context<M extends Metadata = Metadata> = {
@@ -56,7 +58,6 @@ export namespace Tool {
     executionSurface: ToolExecutionSurface
     prompt?(input: PromptInput): Promise<Message.WithParts>
     metadata(input: { title?: string; metadata?: M }): void
-    ask(input: Omit<PermissionNext.Request, "id" | "sessionID" | "tool">): Promise<void>
   }
 
   export function requireExecutionAuthority(ctx: Pick<Context, "executionAuthority">): SessionExecutionAuthority {
@@ -70,6 +71,7 @@ export namespace Tool {
     init: (ctx?: InitContext) => Promise<{
       description: string
       parameters: Parameters
+      executionMode?: ToolExecutionMode
       execute(
         args: z.infer<Parameters>,
         ctx: Context,
@@ -78,6 +80,7 @@ export namespace Tool {
         metadata: M
         output: string
         attachments?: Omit<Message.FilePart, "id" | "sessionID" | "messageID">[]
+        sources?: Message.SourcePayload[]
         display?: Omit<Message.InteractiveArtifactPart, "id" | "sessionID" | "messageID" | "orderKey">[]
       }>
       formatValidationError?(error: z.ZodError): string
@@ -120,8 +123,7 @@ export namespace Tool {
             // The AI SDK may pass strings for numbers (e.g. x: "500" instead of x: 500);
             // Zod preprocess/coerce transforms fix these, but only in the parse result.
             result = await materializeToolResultInlineAttachments({
-              projectID: () =>
-                typeof ctx.extra?.projectID === "string" ? ctx.extra.projectID : Instance.project.id,
+              projectID: () => (typeof ctx.extra?.projectID === "string" ? ctx.extra.projectID : Instance.project.id),
               value: await execute(parsed, ctx),
             })
           } catch (e) {

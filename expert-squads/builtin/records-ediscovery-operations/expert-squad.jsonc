@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "records-ediscovery-operations",
+  "name": "Records and E-Discovery Operations",
+  "label": "Records and E-Discovery Operations",
+  "description": "Matter-authorized records, preservation, collection provenance, processing, review and production evidence without live collection, deletion, legal rulings or production authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for source-bound records and e-discovery operational evidence prepared for counsel and records-owner review.",
+    "selection_guidance": "Select for matter authority, retention and hold sources, custodians and systems, collection provenance, processing, deduplication, families, search/review, privilege flags, request mapping and production evidence. Do not select for live collection, deletion, hold release, production, privilege/responsiveness/admissibility/spoliation decisions or legal advice.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "records-ediscovery-operations/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "custodian-source-collection-provenance-analyst": {
+        "label": "Custodian Source Collection Provenance Analyst",
+        "description": "Maps authorized custodians, systems, preservation and collection provenance without live collection.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/custodian-source-collection-provenance-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "records-ediscovery-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "processing-dedup-search-review-analyst": {
+        "label": "Processing Dedup Search Review Analyst",
+        "description": "Reconciles processing, normalization, deduplication, family, search and review evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/processing-dedup-search-review-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "records-ediscovery-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "production-privilege-disposition-analyst": {
+        "label": "Production Privilege Disposition Analyst",
+        "description": "Builds request, privilege-flag, redaction, production and disposition evidence for counsel review.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/production-privilege-disposition-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "records-ediscovery-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "records-authority-retention-hold-analyst": {
+        "label": "Records Authority Retention Hold Analyst",
+        "description": "Freezes matter authority, records schedules, retention, hold scope, notices and acknowledgement evidence.",
+        "base_role": "explore",
+        "prompt": "agents/records-authority-retention-hold-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "records-ediscovery-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "records-ediscovery-operations-review-owner": {
+        "label": "Records Ediscovery Operations Review Owner",
+        "description": "Joins all records and e-discovery branches into a conflict-preserving qualified review pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/records-ediscovery-operations-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "records-ediscovery-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "qualified-review": {
+        "label": "Records and E-Discovery Operations Qualified Review",
+        "description": "Four independent records and e-discovery branches converge into one qualified review owner.",
+        "nodes": {
+          "custodian-source-collection-provenance-analyst": {
+            "agent_id": "custodian-source-collection-provenance-analyst",
+            "description": "Maps authorized custodians, systems, preservation and collection provenance without live collection.",
+            "depends_on": []
+          },
+          "processing-dedup-search-review-analyst": {
+            "agent_id": "processing-dedup-search-review-analyst",
+            "description": "Reconciles processing, normalization, deduplication, family, search and review evidence.",
+            "depends_on": []
+          },
+          "production-privilege-disposition-analyst": {
+            "agent_id": "production-privilege-disposition-analyst",
+            "description": "Builds request, privilege-flag, redaction, production and disposition evidence for counsel review.",
+            "depends_on": []
+          },
+          "records-authority-retention-hold-analyst": {
+            "agent_id": "records-authority-retention-hold-analyst",
+            "description": "Freezes matter authority, records schedules, retention, hold scope, notices and acknowledgement evidence.",
+            "depends_on": []
+          },
+          "records-ediscovery-operations-review-owner": {
+            "agent_id": "records-ediscovery-operations-review-owner",
+            "description": "Joins all records and e-discovery branches into a conflict-preserving qualified review pack.",
+            "depends_on": [
+              "custodian-source-collection-provenance-analyst",
+              "processing-dedup-search-review-analyst",
+              "production-privilege-disposition-analyst",
+              "records-authority-retention-hold-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

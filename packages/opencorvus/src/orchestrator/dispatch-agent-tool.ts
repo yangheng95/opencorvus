@@ -26,13 +26,20 @@ import {
 } from "@/engine/workflow-binding"
 import { Identifier } from "@/id/id"
 import type { DispatchTurn } from "./dispatch-turn-projection"
-import type { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
+import { taskCancellationAuthorityExecutionError } from "@/engine/cancellation-projection"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
+import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-facts"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
+import { Log } from "@/util/log"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
+import { settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
+
+const log = Log.create({ service: "dispatch-agent-tool" })
 
 export type DispatchAgentExecute = (
   args: unknown,
@@ -49,6 +56,8 @@ export interface DispatchAgentLineageHandle {
   readonly turn: DispatchTurn
   readonly adapterInput: Readonly<Record<string, unknown>>
   readonly continuationGuidance?: string
+  /** Durable result for an exact replay of an already committed parent tool occurrence. */
+  readonly replayOutcome?: DispatchOutcomeResult
   /** Observe the physical Session identity without publishing logical dispatch lineage. */
   observeSession(sessionID: string): void
   /** Commit logical dispatch authority only after the exact Turn descriptor is durable. */
@@ -81,6 +90,233 @@ export type RunDispatchAgentInWorktree = <T>(input: {
   run: () => Promise<T>
 }) => Promise<T>
 
+export type RunDetachedDispatch = <T>(run: () => Promise<T>) => Promise<T>
+
+const detachedDispatchPipelines = new Set<Promise<void>>()
+const detachedDispatchPipelineFailures = new Map<string, { generation: number; error: unknown }>()
+const detachedDispatchPipelineGenerations = new Map<string, number>()
+let detachedDispatchPipelineGeneration = 0
+let detachedDispatchSettlementGate: symbol | undefined
+
+function reserveDetachedDispatchPipeline(): (input: { pipeline: Promise<void>; dispatchLineageID?: string }) => void {
+  if (detachedDispatchSettlementGate) {
+    throw new Error("Detached dispatch admission is closed for runtime settlement")
+  }
+  const runtimeReservation = RuntimeExecutionSettlement.reserve(
+    "detached_dispatch_pipeline",
+    `detached-dispatch-pipeline:${detachedDispatchPipelineGeneration + 1}`,
+  )
+  let settle!: (pipeline: Promise<void>) => void
+  const reservation = new Promise<void>((resolve, reject) => {
+    settle = (pipeline) => void pipeline.then(resolve, reject)
+  })
+  detachedDispatchPipelines.add(reservation)
+  runtimeReservation.settleWith(reservation)
+  let committed = false
+  return ({ pipeline, dispatchLineageID }) => {
+    if (committed) throw new Error("Detached dispatch pipeline reservation was already committed")
+    committed = true
+    const generation = ++detachedDispatchPipelineGeneration
+    if (dispatchLineageID) detachedDispatchPipelineGenerations.set(dispatchLineageID, generation)
+    void reservation
+      .then(
+        () => {
+          if (dispatchLineageID && detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation) {
+            detachedDispatchPipelineFailures.delete(dispatchLineageID)
+            detachedDispatchPipelineGenerations.delete(dispatchLineageID)
+          }
+        },
+        (error) => {
+          if (dispatchLineageID && detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation) {
+            detachedDispatchPipelineFailures.set(dispatchLineageID, { generation, error })
+          }
+        },
+      )
+      .finally(() => detachedDispatchPipelines.delete(reservation))
+    settle(pipeline)
+  }
+}
+
+/**
+ * Clear one process-local failed pipeline barrier only after the exact durable
+ * dispatch occurrence has acquired a replacement root-delivery authority.
+ * Callers must prove that authority from the committed lineage/ingress; this
+ * function deliberately accepts no Session-wide or Task-wide fallback key.
+ */
+export function settleDetachedDispatchPipelineRecovery(dispatchLineageID: string): void {
+  const exactID = dispatchLineageID.trim()
+  if (!exactID) throw new Error("Detached dispatch recovery requires an exact dispatch lineage Artifact ID")
+  detachedDispatchPipelineFailures.delete(exactID)
+  detachedDispatchPipelineGenerations.delete(exactID)
+}
+
+export type DetachedDispatchSettlementGate = Disposable & {
+  waitForIdle(): Promise<void>
+}
+
+export function acquireDetachedDispatchSettlementGate(): DetachedDispatchSettlementGate {
+  if (detachedDispatchSettlementGate) throw new Error("Detached dispatch settlement is already in progress")
+  const token = Symbol("detached-dispatch-settlement")
+  detachedDispatchSettlementGate = token
+  return {
+    async waitForIdle() {
+      while (detachedDispatchPipelines.size > 0) {
+        await Promise.allSettled([...detachedDispatchPipelines])
+      }
+      if (detachedDispatchPipelineFailures.size > 0) {
+        const failures = [...detachedDispatchPipelineFailures.entries()].map(
+          ([dispatchLineageID, failure]) =>
+            new Error(
+              `Detached dispatch lineage ${dispatchLineageID} has no successful replacement delivery authority`,
+              { cause: failure.error },
+            ),
+        )
+        throw new AggregateError(failures, `Failed to settle ${failures.length} detached dispatch pipeline(s)`)
+      }
+    },
+    [Symbol.dispose]: () => {
+      if (detachedDispatchSettlementGate === token) detachedDispatchSettlementGate = undefined
+    },
+  }
+}
+
+export async function waitForDetachedDispatchPipelinesForTest(): Promise<void> {
+  while (detachedDispatchPipelines.size > 0) await Promise.all([...detachedDispatchPipelines])
+}
+
+function workerTurnSettlementFailureOutcome(input: {
+  taskID: string
+  dispatchID: string
+  error: WorkerTurnSettlementError
+}): Extract<DispatchOutcomeResult, { kind: "infrastructure_failure" }> {
+  const outcome = DispatchOutcome.infrastructureFailure({
+    operation: input.error.operation,
+    message: input.error.message,
+    errorName: input.error.name,
+    sessionID: input.error.sessionID,
+    finalMessageID: input.error.finalMessageID,
+    workerTurn: input.error.evidence,
+    recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID: input.dispatchID }),
+    failureIssues: [
+      {
+        code: input.error.causeErrorName,
+        path: ["worker_turn", input.error.operation],
+        message: input.error.causeMessage,
+      },
+    ],
+    ...(input.error.infrastructureArtifactID
+      ? {
+          infrastructureError: exactEngineArtifactLocator({
+            taskID: input.taskID,
+            artifactID: input.error.infrastructureArtifactID,
+          }),
+        }
+      : {}),
+  })
+  if (outcome.kind !== "infrastructure_failure") {
+    throw new Error("Worker Turn settlement failure constructor returned a non-infrastructure outcome")
+  }
+  return outcome
+}
+
+export async function detachDispatchExecution(input: {
+  execute: () => Promise<DispatchOutcomeResult>
+  runDetached: RunDetachedDispatch
+  runDetachedRecovery: RunDetachedDispatch
+  committedLineage: Promise<{ sessionID: string; artifactID: string }>
+  deliver: (input: { sessionID: string; outcome?: DispatchOutcomeResult; executionError?: unknown }) => Promise<void>
+  onDeliveryFailure: (input: {
+    sessionID: string
+    outcome?: DispatchOutcomeResult
+    executionError?: unknown
+    error: unknown
+  }) => void | Promise<void>
+  onPipelineOwnerCleanupFailure: (input: { sessionID: string; error: unknown }) => void | Promise<void>
+}): Promise<DispatchOutcomeResult> {
+  const commitPipelineReservation = reserveDetachedDispatchPipeline()
+  const execution = Promise.resolve().then(() => input.runDetached(input.execute))
+  let first:
+    | { kind: "completed"; outcome: DispatchOutcomeResult }
+    | { kind: "accepted"; lineage: { sessionID: string; artifactID: string } }
+  try {
+    first = await Promise.race([
+      execution.then((outcome) => ({ kind: "completed" as const, outcome })),
+      input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
+    ])
+  } catch (error) {
+    commitPipelineReservation({
+      pipeline: execution.then(
+        () => undefined,
+        () => undefined,
+      ),
+    })
+    throw error
+  }
+  if (first.kind === "completed") {
+    commitPipelineReservation({ pipeline: Promise.resolve() })
+    return first.outcome
+  }
+  const supervisedPipeline = (async () => {
+    const deliveryInput = await execution.then(
+      (outcome) => ({ sessionID: first.lineage.sessionID, outcome }),
+      (executionError) => ({ sessionID: first.lineage.sessionID, executionError }),
+    )
+    const deliverWithRecovery = async () => {
+      try {
+        await input.deliver(deliveryInput)
+      } catch (error) {
+        await input.onDeliveryFailure({ ...deliveryInput, error })
+      }
+    }
+    const publishOwnerCleanupFailure = async (ownerError: unknown) => {
+      await input.runDetachedRecovery(async () => {
+        await input.onPipelineOwnerCleanupFailure({ sessionID: first.lineage.sessionID, error: ownerError })
+      })
+    }
+    for (let ownerAttempt = 1; ownerAttempt <= 2; ownerAttempt += 1) {
+      let callbackCompleted = false
+      try {
+        await input.runDetached(async () => {
+          await deliverWithRecovery()
+          callbackCompleted = true
+        })
+        return
+      } catch (ownerError) {
+        if (!callbackCompleted && ownerAttempt < 2) continue
+        if (callbackCompleted) {
+          await publishOwnerCleanupFailure(ownerError)
+          return
+        }
+        let recoveryCompleted = false
+        try {
+          await input.runDetachedRecovery(async () => {
+            await deliverWithRecovery()
+            recoveryCompleted = true
+          })
+          return
+        } catch (recoveryError) {
+          if (recoveryCompleted) {
+            await publishOwnerCleanupFailure(recoveryError)
+            return
+          }
+          throw new AggregateError(
+            [ownerError, recoveryError],
+            `Detached dispatch ${first.lineage.sessionID} exhausted delivery owners`,
+          )
+        }
+      }
+    }
+  })()
+  commitPipelineReservation({
+    pipeline: supervisedPipeline,
+    dispatchLineageID: first.lineage.artifactID,
+  })
+  return DispatchOutcome.accepted({
+    sessionID: first.lineage.sessionID,
+    dispatchLineageID: first.lineage.artifactID,
+  })
+}
+
 export function bindDispatchAdapterExecutors(
   input: Record<AgentDispatchAdapterID, DispatchAgentExecute>,
 ): DispatchAdapterExecutors {
@@ -97,6 +333,16 @@ export function bindDispatchAdapterExecutors(
   return Object.freeze({ ...input })
 }
 
+const dispatchAgentToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+
+export const DispatchAgentToolTestHooks = Object.freeze({
+  openLineage(tool: object): OpenDispatchAgentLineage {
+    const openLineage = dispatchAgentToolLineageHooks.get(tool)
+    if (!openLineage) throw new Error("Dispatch Agent Tool lineage hook is unavailable")
+    return openLineage
+  },
+})
+
 export function createDispatchAgentTool(input: {
   taskID: string
   projectedAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
@@ -104,6 +350,8 @@ export function createDispatchAgentTool(input: {
   signal?: AbortSignal
   openLineage: OpenDispatchAgentLineage
   runInWorktree: RunDispatchAgentInWorktree
+  runDetached: RunDetachedDispatch
+  runDetachedRecovery: RunDetachedDispatch
 }) {
   if (input.projectedAgents.length === 0) {
     throw new Error("dispatch_agent requires at least one projected agent")
@@ -174,7 +422,7 @@ export function createDispatchAgentTool(input: {
         .object({
           kind: z.literal("initial"),
           workflow_subject: DispatchWorkflowSubjectSchema.describe(
-            "Exact Task workflow subject for this first logical node occurrence.",
+            "Exact Task workflow subject for this first logical node occurrence. After any virtual workflow node has committed, every later initial dispatch must name another node from that same selected virtual workflow; direct is valid only before the Task has selected a virtual workflow.",
           ),
           input: publicAdapterInputSchema.describe(
             `Exact immutable ${agentID} adapter input for the initial worker Turn.`,
@@ -217,11 +465,12 @@ export function createDispatchAgentTool(input: {
     })
     .strict()
 
-  return tool({
+  const dispatchTool = tool({
     description:
       "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
+      "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
       "Every call must declare use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
-      "Every adapter returns terminal_success, partial, infrastructure_failure, or a coordination request. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, exact artifact_read, and artifact_select for semantic sources. " +
+      "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
       "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
     inputSchema,
     outputSchema: DispatchOutcomeSchema,
@@ -263,6 +512,8 @@ export function createDispatchAgentTool(input: {
       if (!projectedAgent || !execute) {
         throw new Error(`dispatch_agent target ${target} lost its construction-validated runtime binding`)
       }
+      const cancellation = taskCancellationAuthorityExecutionError(input.taskID, `dispatch_agent ${target} preparation`)
+      if (cancellation) throw cancellation
       const exactWorkScope = ProjectedAgentWorkScopeSchema.parse(workScope)
       const exactWorkflow =
         coordinationActionID || continuationDispatchID
@@ -295,6 +546,7 @@ export function createDispatchAgentTool(input: {
           continuationGuidance,
           evidenceLocators: EvidenceLocatorListSchema.parse(continuationEvidenceLocators ?? []),
         })
+        if (dispatch.replayOutcome) return dispatch.replayOutcome
         dispatchID = dispatch.dispatchID
         if (input.signal?.aborted) {
           const origin = isExecutionCancellationError(input.signal.reason)
@@ -328,6 +580,10 @@ export function createDispatchAgentTool(input: {
           useWorktree && projectedAgent.identity.dispatchAdapterID !== "build" && !dispatch.existingSessionID
             ? Identifier.descending("session")
             : undefined
+        let resolveCommittedLineage!: (lineage: { sessionID: string; artifactID: string }) => void
+        const committedLineage = new Promise<{ sessionID: string; artifactID: string }>((resolve) => {
+          resolveCommittedLineage = resolve
+        })
         const trackedDispatch: DispatchAgentLineageHandle = {
           dispatchID: dispatch.dispatchID,
           deliverySliceRevisionIDs: dispatch.deliverySliceRevisionIDs,
@@ -346,7 +602,9 @@ export function createDispatchAgentTool(input: {
           },
           commitSession: (sessionID, descriptor) => {
             trackedDispatch.observeSession(sessionID)
-            return dispatch.commitSession(sessionID, descriptor)
+            const committed = dispatch.commitSession(sessionID, descriptor)
+            resolveCommittedLineage({ sessionID, artifactID: committed.artifactID })
+            return committed
           },
         }
         if (dispatch.existingSessionID) {
@@ -365,24 +623,230 @@ export function createDispatchAgentTool(input: {
               toolOptions: optionsWithVisibleOrchestratorToolName(options, "dispatch_agent"),
             }),
           )
-          return DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(outcome)
-        }
-        if (useWorktree && projectedAgent.identity.dispatchAdapterID !== "build") {
-          const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
-          if (!worktreeSessionID) {
-            throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
+          const parsed = DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(
+            outcome,
+          )
+          if (parsed.kind !== "accepted" && (parsed.kind !== "infrastructure_failure" || parsed.session_id)) {
+            return settleDispatchOrReturnExisting({
+              taskID: input.taskID,
+              dispatchID: dispatch.dispatchID,
+              outcome: parsed,
+            }).payload.outcome
           }
-          return await input.runInWorktree({
-            taskID: input.taskID,
-            sessionID: worktreeSessionID,
-            existingSessionID: dispatch.existingSessionID,
-            targetAgentID: target,
-            dispatchID: dispatch.dispatchID,
-            run,
+          return parsed
+        }
+        const executeDetached = async () => {
+          if (useWorktree && projectedAgent.identity.dispatchAdapterID !== "build") {
+            const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
+            if (!worktreeSessionID) {
+              throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
+            }
+            return await input.runInWorktree({
+              taskID: input.taskID,
+              sessionID: worktreeSessionID,
+              existingSessionID: dispatch.existingSessionID,
+              targetAgentID: target,
+              dispatchID: dispatch.dispatchID,
+              run,
+            })
+          }
+          return await run()
+        }
+        return await detachDispatchExecution({
+          execute: executeDetached,
+          runDetached: input.runDetached,
+          runDetachedRecovery: input.runDetachedRecovery,
+          committedLineage,
+          deliver: async ({ sessionID: completedSessionID, outcome, executionError }) => {
+            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
+            const completedOutcome =
+              outcome ??
+              (executionError instanceof WorkerTurnSettlementError
+                ? workerTurnSettlementFailureOutcome({
+                    taskID: input.taskID,
+                    dispatchID: dispatch.dispatchID,
+                    error: executionError,
+                  })
+                : undefined)
+            if (completedOutcome?.kind === "infrastructure_failure") {
+              const infrastructureFactID = completedOutcome.infrastructure_error?.artifact_id
+              if (!infrastructureFactID) {
+                throw new Error(
+                  `dispatch_agent ${target} infrastructure outcome has no durable Artifact for Session ${completedSessionID}`,
+                )
+              }
+              await dispatchTaskLoop({
+                taskID: input.taskID,
+                event: {
+                  note: `Accepted worker Session ${completedSessionID} failed ${completedOutcome.operation}`,
+                  dispatchInfrastructureFailure: { infrastructureFactID, outcome: completedOutcome },
+                },
+              })
+              return
+            }
+            if (executionError) throw executionError
+            const result = await reconcileTerminalAgentLifecycleDelivery({
+              taskID: input.taskID,
+              sessionID: completedSessionID,
+              dispatchID: dispatch.dispatchID,
+            })
+            if (result !== "delivered" && result !== "already_delivered") {
+              throw new Error(
+                `dispatch_agent ${target} completion delivery is ${result} for Session ${completedSessionID}`,
+              )
+            }
+          },
+          onDeliveryFailure: async ({ sessionID: completedSessionID, outcome, executionError, error }) => {
+            log.error("detached dispatch completion delivery failed", {
+              taskID: input.taskID,
+              target,
+              dispatchID: dispatch.dispatchID,
+              sessionID: completedSessionID,
+              error: error instanceof Error ? error.message : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+            })
+            let infrastructureOutcome: Extract<DispatchOutcomeResult, { kind: "infrastructure_failure" }> | undefined
+            if (outcome?.kind === "infrastructure_failure") infrastructureOutcome = outcome
+            if (!infrastructureOutcome && executionError instanceof WorkerTurnSettlementError) {
+              infrastructureOutcome = workerTurnSettlementFailureOutcome({
+                taskID: input.taskID,
+                dispatchID: dispatch.dispatchID,
+                error: executionError,
+              })
+            }
+            if (executionError && !infrastructureOutcome) {
+              const { recordTaskInfrastructureError } = await import("@/engine/persist")
+              const infrastructureArtifactID = recordTaskInfrastructureError({
+                taskID: input.taskID,
+                component: "dispatch-agent",
+                operation: "execute-detached-worker",
+                reason:
+                  executionError instanceof Error
+                    ? `${executionError.name}: ${executionError.message}`
+                    : String(executionError),
+                errorName: executionError instanceof Error ? executionError.name : undefined,
+                sessionID: completedSessionID,
+                context: { target, dispatchID: dispatch.dispatchID },
+              })
+              const failedOutcome = DispatchOutcome.infrastructureFailure({
+                operation: "execute-detached-worker",
+                message: executionError instanceof Error ? executionError.message : String(executionError),
+                errorName: executionError instanceof Error ? executionError.name : undefined,
+                sessionID: completedSessionID,
+                recoveryAuthority: resolveDispatchOccurrenceAuthority({
+                  taskID: input.taskID,
+                  dispatchID: dispatch.dispatchID,
+                }),
+                infrastructureError: exactEngineArtifactLocator({
+                  taskID: input.taskID,
+                  artifactID: infrastructureArtifactID,
+                }),
+              })
+              if (failedOutcome.kind !== "infrastructure_failure") {
+                throw new Error("Detached worker failure constructor returned a non-infrastructure outcome")
+              }
+              infrastructureOutcome = failedOutcome
+            }
+            if (infrastructureOutcome) {
+              const infrastructureFactID = infrastructureOutcome.infrastructure_error?.artifact_id
+              if (!infrastructureFactID) {
+                throw new Error(
+                  `Detached dispatch infrastructure recovery has no durable fact for ${completedSessionID}`,
+                )
+              }
+              const { dispatchTaskLoop } = await import("@/engine/queue")
+              const result = await dispatchTaskLoop({
+                taskID: input.taskID,
+                event: {
+                  note: `Accepted worker Session ${completedSessionID} failed ${infrastructureOutcome.operation}`,
+                  dispatchInfrastructureFailure: { infrastructureFactID, outcome: infrastructureOutcome },
+                },
+              })
+              if (result === "started" || result === "queued") return
+              const { dispatchInfrastructureFailureWakeDisposition } = await import("@/engine/queue")
+              const disposition = dispatchInfrastructureFailureWakeDisposition({
+                taskID: input.taskID,
+                infrastructureFactID,
+              })
+              // Task cancellation is an exact durable disposition, not a
+              // delivery failure. A delivery_failed receipt remains a failed
+              // detached pipeline and must stay visible to runtime settlement.
+              if (disposition === "terminal_inapplicable") return
+              throw new Error(`Detached dispatch infrastructure ingress is ${disposition} for ${completedSessionID}`)
+            }
+            const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
+            const result = await reconcileTerminalAgentLifecycleDelivery({
+              taskID: input.taskID,
+              sessionID: completedSessionID,
+              dispatchID: dispatch.dispatchID,
+            })
+            if (result === "delivered" || result === "already_delivered") return
+            throw new Error(`Detached worker lifecycle recovery is ${result} for Session ${completedSessionID}`)
+          },
+          onPipelineOwnerCleanupFailure: async ({ sessionID: completedSessionID, error }) => {
+            const { recordTaskInfrastructureError } = await import("@/engine/persist")
+            const infrastructureArtifactID = recordTaskInfrastructureError({
+              taskID: input.taskID,
+              component: "dispatch-agent",
+              operation: "settle-detached-pipeline-owner",
+              reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+              sessionID: completedSessionID,
+              context: { target, dispatchID: dispatch.dispatchID },
+            })
+            const outcome = DispatchOutcome.infrastructureFailure({
+              operation: "settle-detached-pipeline-owner",
+              message: error instanceof Error ? error.message : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+              sessionID: completedSessionID,
+              recoveryAuthority: resolveDispatchOccurrenceAuthority({
+                taskID: input.taskID,
+                dispatchID: dispatch.dispatchID,
+              }),
+              infrastructureError: exactEngineArtifactLocator({
+                taskID: input.taskID,
+                artifactID: infrastructureArtifactID,
+              }),
+              failureIssues: [
+                {
+                  code: error instanceof Error ? error.name : "PipelineOwnerCleanupError",
+                  path: ["detached_pipeline", "owner_cleanup"],
+                  message: error instanceof Error ? error.message : String(error),
+                },
+              ],
+            })
+            if (outcome.kind !== "infrastructure_failure") {
+              throw new Error("Detached pipeline owner failure constructor returned a non-infrastructure outcome")
+            }
+            const { dispatchTaskLoop } = await import("@/engine/queue")
+            await dispatchTaskLoop({
+              taskID: input.taskID,
+              event: {
+                note: `Accepted worker Session ${completedSessionID} pipeline owner cleanup failed`,
+                dispatchInfrastructureFailure: {
+                  infrastructureFactID: infrastructureArtifactID,
+                  outcome,
+                },
+              },
+            })
+          },
+        })
+      } catch (error) {
+        if (error instanceof TaskWorkflowBindingConflictError) {
+          return DispatchOutcome.infrastructureFailure({
+            operation: "workflow_binding_initial_claim",
+            message: error.message,
+            errorName: error.name,
+            recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
+            failureIssues: [
+              {
+                code: error.code,
+                path: ["dispatch", "turn", "workflow_subject"],
+                message: error.message,
+              },
+            ],
           })
         }
-        return await run()
-      } catch (error) {
         if (error instanceof WorkflowNodeOccurrenceConflictError) {
           return DispatchOutcome.infrastructureFailure({
             operation: "workflow_node_initial_claim",
@@ -400,30 +864,7 @@ export function createDispatchAgentTool(input: {
         }
         if (error instanceof WorkerTurnSettlementError) {
           if (!dispatchID) throw error
-          return DispatchOutcome.infrastructureFailure({
-            operation: error.operation,
-            message: error.message,
-            errorName: error.name,
-            sessionID: error.sessionID,
-            finalMessageID: error.finalMessageID,
-            workerTurn: error.evidence,
-            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
-            failureIssues: [
-              {
-                code: error.causeErrorName,
-                path: ["worker_turn", error.operation],
-                message: error.causeMessage,
-              },
-            ],
-            ...(error.infrastructureArtifactID
-              ? {
-                  infrastructureError: exactEngineArtifactLocator({
-                    taskID: input.taskID,
-                    artifactID: error.infrastructureArtifactID,
-                  }),
-                }
-              : {}),
-          })
+          return workerTurnSettlementFailureOutcome({ taskID: input.taskID, dispatchID, error })
         }
         if (isExecutionCancellationError(error)) {
           if (childSessionID && error.sessionID !== childSessionID) {
@@ -470,4 +911,6 @@ export function createDispatchAgentTool(input: {
       }
     },
   })
+  dispatchAgentToolLineageHooks.set(dispatchTool, input.openLineage)
+  return dispatchTool
 }

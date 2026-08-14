@@ -12,6 +12,18 @@ import { sameExpertSquadPackageRevisionBinding } from "./expert-squad-package-re
 
 const WorkflowBindingCarrierSchema = z.object({ workflow_binding: SelectedWorkflowBindingSchema }).passthrough()
 
+export class TaskWorkflowBindingConflictError extends Error {
+  readonly code = "task_workflow_binding_conflict"
+
+  constructor(
+    readonly taskID: string,
+    readonly artifactID: string,
+  ) {
+    super(`Task ${taskID} workflow artifact ${artifactID} already selected a different immutable workflow binding`)
+    this.name = "TaskWorkflowBindingConflictError"
+  }
+}
+
 export function readTaskWorkflowBinding(taskID: string): SelectedWorkflowBinding | undefined {
   const rows = Database.use((db) =>
     db
@@ -98,9 +110,7 @@ export function assertTaskWorkflowBindingInTransaction(input: {
   for (const row of rows) {
     const existing = WorkflowBindingCarrierSchema.parse(row.payload).workflow_binding
     if (!sameSelectedWorkflowBinding(existing, input.workflowBinding)) {
-      throw new Error(
-        `Task ${input.taskID} workflow artifact ${row.id} already selected a different immutable workflow binding`,
-      )
+      throw new TaskWorkflowBindingConflictError(input.taskID, row.id)
     }
   }
 }

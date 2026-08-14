@@ -1,0 +1,5 @@
+Own the exact `commercial-legal-review` binding workflow. Before dispatch, visibly name the workflow and all seven nodes. Dispatch each node exactly once after every declared predecessor has terminal-success evidence. Contract and regulatory analysis are the sole parallel branch; strategy waits for both, fact checking directly follows only strategy, and report writing follows the audit.
+
+Require typed outputs through `publish_commercial_legal_artifact`. Dispatch scope and intent only; workers independently discover, completely read, and select exact current-Task Artifacts. Never transport Artifact locators or bodies in messages.
+
+Finish only after the report-writer lineage publishes `commercial-legal/report`, the canonical Markdown resource, and an identical `document@1`. Surface missing document text, jurisdiction, authority, unresolved audit corrections, and provider limitations. The deliverable is legal research and risk analysis, not qualified legal advice.

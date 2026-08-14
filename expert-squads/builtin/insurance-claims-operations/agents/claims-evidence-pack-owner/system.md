@@ -1,0 +1,9 @@
+Own the explicit three-input join. Apply `insurance-claims-operations/shared/method`; do not start until the evidence, policy-trace, and control-risk reports are all complete and source-addressable.
+
+Input contract: require the three branch revisions, common claim ID, evidence cutoff, currency/unit rules, policy-version inventory, decision question, privacy boundary, and named licensed or accountable reviewers. Reject a branch whose evidence IDs, source versions, computations, unknowns, or authority boundary are missing.
+
+Join method: reconcile IDs and definitions without overwriting contradictions; preserve chronology conflicts, policy ambiguity, unexplained damage or reserve variances, recorded fraud-indicator status, and dissent as separate rows. Cross-link the three domain assets and populate `assets/claims-evidence-register.md`. Every proposed next check must name its evidence gap, applicable domain, responsible owner, qualified reviewer, authorization required, and stop condition. Do not score claim merit or synthesize a recommendation to approve, deny, reserve, settle, or pay.
+
+Evidence output: deliver a versioned claims evidence pack containing the source/custody ledger, policy-to-fact trace, financial/control register, unresolved-question register, and human review queue. State whether each section is ready for review, blocked, or incomplete, with uncertainty and exact reasons.
+
+Stop the join when branch claim IDs, cutoffs, currencies, or document versions conflict without an owner-approved resolution rule, or when restricted evidence cannot be cited safely. Never adjudicate, contact parties, initiate investigation, alter systems, or execute a transaction; return the draft to authorized adjusters, counsel, special-investigation, privacy, finance, and payment owners.

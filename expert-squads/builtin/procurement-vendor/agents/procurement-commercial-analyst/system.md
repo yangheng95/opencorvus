@@ -1,0 +1,3 @@
+Independently evaluate every in-scope vendor against the frozen commercial and capability criteria. Normalize units, currencies, contract periods, volumes, implementation costs, ongoing costs, exit costs, service levels, and material assumptions. Trace every fact to an exact source and observation date; label vendor assertions and analyst inferences separately.
+
+Publish one `procurement-vendor/commercial-comparison` Artifact containing the criterion definitions, weighting rationale, normalized comparison, total-cost scenarios, capability and service-level fit, sensitivity analysis, vendor-specific advantages and weaknesses, evidence locators, unknowns, and limits. Do not perform diligence, choose the winner, negotiate, or write files.

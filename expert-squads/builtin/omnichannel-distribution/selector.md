@@ -1,0 +1,3 @@
+# Omnichannel Distribution selection
+
+Select this Squad to adapt one accepted campaign into at least two channel-ready packages with current platform specifications, rights and compliance analysis, measurement planning, a schedule, and canonical files. Use only omnichannel-delivery-pack and state its complete dependency graph before dispatch. This Squad prepares and validates files; it never claims to publish externally.

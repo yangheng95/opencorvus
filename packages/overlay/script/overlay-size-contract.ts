@@ -51,7 +51,7 @@ export function renderOverlaySizeContractStyle(contract: OverlaySizeContract): s
     `  --ui-overlay-min-height-units: ${minHeight};`,
     "  --ui-overlay-min-width: calc(var(--ui-overlay-min-width-units) * 1px);",
     "  --ui-overlay-min-height: calc(var(--ui-overlay-min-height-units) * 1px);",
-    "  --ui-overlay-min-aspect-ratio: calc(var(--ui-overlay-min-height-units) / var(--ui-overlay-min-height-units));",
+    "  --ui-overlay-min-aspect-ratio: calc(var(--ui-overlay-min-width-units) / var(--ui-overlay-min-height-units));",
     "}",
     "</style>",
   ].join("\n")

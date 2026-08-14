@@ -6,16 +6,13 @@ import {
   deleteMailboxItems,
   loadMailbox,
   markAllMailboxItemsRead,
-  openMailboxChangeStream,
+  subscribeMailboxChangeNotifications,
   type MailboxAction,
   type MailboxCursor,
   type MailboxItem,
   type MailboxView,
 } from "../services/mailbox"
-import {
-  projectMailboxNotificationScopeReplacement,
-  projectMailboxNotifications,
-} from "../services/desktop-notifications"
+import { projectMailboxNotifications } from "../services/desktop-notifications"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog } from "../services/app-dialog"
 import { syncActiveDirectoryApiContext } from "../services/workspace"
@@ -31,11 +28,10 @@ import { Button } from "./ui/Button"
 import { Checkbox } from "./ui/Checkbox"
 import { Disclosure } from "./ui/Disclosure"
 import { SearchField } from "./ui/SearchField"
-import { createMailboxRequestOwner, mailboxStreamOwnsCurrent } from "./mailbox-request-owner"
+import { createMailboxRequestOwner } from "./mailbox-request-owner"
 
 const MAILBOX_PAGE_SIZE = 40
 const MAILBOX_VIEW: MailboxView = "active"
-const MAILBOX_RECONNECT_DELAY_MILLISECONDS = 3_000
 const MAILBOX_REFRESH_DEBOUNCE_MILLISECONDS = 120
 
 function itemIcon(item: MailboxItem): IconName {
@@ -62,8 +58,6 @@ function mergeItems(current: MailboxItem[], next: MailboxItem[]): MailboxItem[] 
 }
 
 export interface MailboxPanelProps {
-  onNotification?: (item: MailboxItem) => void
-  onUnreadCountChange?: (count: number) => void
   onSelectTask: (taskID: string, directory: string) => Promise<void>
 }
 
@@ -95,14 +89,11 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const [expandedMessageIDs, setExpandedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
   const [loadError, setLoadError] = createSignal("")
   const requestOwner = createMailboxRequestOwner()
-  let stream: ReturnType<typeof openMailboxChangeStream> | undefined
-  let reconnectTimer: ReturnType<typeof setTimeout> | undefined
+  let unsubscribeMailboxChanges: (() => void) | undefined
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   let searchInput: HTMLInputElement | undefined
   let searchToggle: HTMLButtonElement | undefined
   let disposed = false
-  let streamGeneration = 0
-  let streamDirectory = ""
   const mailboxActionOperations = new Map<string, MailboxActionOperation>()
 
   const currentDirectory = createMemo(() => syncActiveDirectoryApiContext().trim())
@@ -227,12 +218,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
           setExpandedMessageIDs(new Set<string>())
         })
       })
-      if (base.scopeChanged) {
-        const notificationRequest = requestOwner.join(requestedScope)
-        void projectMailboxNotificationScopeReplacement({ signal: notificationRequest.signal }).finally(() =>
-          notificationRequest.complete(),
-        )
-      }
       if (!base.scopeChanged) {
         batch(() => {
           setLoadError("")
@@ -258,7 +243,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
         setItems((current) => (append ? mergeItems(current, page.items) : page.items))
         setCursor(page.nextCursor)
         setCounts({ unread: page.unreadCount, active: page.activeCount, archived: page.archivedCount })
-        props.onUnreadCountChange?.(page.unreadCount)
         if (!append) setLoadedDirectory(directory)
       })
       if (!committed) return
@@ -269,7 +253,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
           view: requestView,
           page,
           signal: notificationRequest.signal,
-          onNotification: props.onNotification,
         }).finally(() => notificationRequest.complete())
       }
     } catch (error) {
@@ -284,43 +267,24 @@ export function MailboxPanel(props: MailboxPanelProps) {
     }
   }
 
-  function scheduleRefresh(
-    handle: ReturnType<typeof openMailboxChangeStream>,
-    generation: number,
-    directory: string,
-  ): void {
-    if (!mailboxStreamOwnsCurrent(handle, generation, stream, streamGeneration)) return
+  function scheduleRefresh(directory: string): void {
     if (refreshTimer) clearTimeout(refreshTimer)
     refreshTimer = setTimeout(() => {
       refreshTimer = undefined
-      if (
-        disposed ||
-        currentDirectory() !== directory ||
-        !mailboxStreamOwnsCurrent(handle, generation, stream, streamGeneration)
-      )
-        return
+      if (disposed || currentDirectory() !== directory) return
       void refresh()
     }, MAILBOX_REFRESH_DEBOUNCE_MILLISECONDS)
   }
 
-  function connect(directory: string, generation: number): void {
-    if (disposed || generation !== streamGeneration) return
-    let handle!: ReturnType<typeof openMailboxChangeStream>
-    handle = openMailboxChangeStream({
-      onRefresh: () => scheduleRefresh(handle, generation, directory),
-      onClose() {
-        if (disposed || !mailboxStreamOwnsCurrent(handle, generation, stream, streamGeneration)) return
-        stream = undefined
-        streamDirectory = ""
-        reconnectTimer = setTimeout(() => connect(directory, generation), MAILBOX_RECONNECT_DELAY_MILLISECONDS)
-      },
+  function connect(directory: string): void {
+    if (disposed) return
+    unsubscribeMailboxChanges?.()
+    unsubscribeMailboxChanges = subscribeMailboxChangeNotifications({
+      onRefresh: () => scheduleRefresh(directory),
       onError(error) {
-        if (!mailboxStreamOwnsCurrent(handle, generation, stream, streamGeneration)) return
         console.error("[mailbox] change stream failed", error)
       },
     })
-    stream = handle
-    streamDirectory = directory
   }
 
   function applyAction(item: MailboxItem, action: MailboxAction): Promise<void> {
@@ -389,6 +353,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
           : t("mailbox.delete_many_confirm", { count: deleteItems.length }),
       kind: "mailbox-delete",
       okLabel: t("common.delete"),
+      okTone: "danger",
       cancel: true,
     })
     if (!result.confirmed) return
@@ -448,13 +413,10 @@ export function MailboxPanel(props: MailboxPanelProps) {
       if (!connected || !directory) {
         const emptyScope = { directory: "", view: MAILBOX_VIEW }
         const emptyRequest = requestOwner.beginBase(emptyScope, () => undefined).request
-        void projectMailboxNotificationScopeReplacement({ signal: emptyRequest.signal }).finally(() =>
-          emptyRequest.complete(),
-        )
+        emptyRequest.complete()
         setItems([])
         setCursor(null)
         setCounts({ unread: 0, active: 0, archived: 0 })
-        props.onUnreadCountChange?.(0)
         setLoadError("")
         setLoadedDirectory("")
         setLoading(false)
@@ -486,25 +448,17 @@ export function MailboxPanel(props: MailboxPanelProps) {
   createEffect(() => {
     const directory = currentDirectory()
     const connected = appStore.connected
-    if (connected && directory && stream && streamDirectory === directory) return
-    streamGeneration += 1
-    const generation = streamGeneration
-    if (reconnectTimer) clearTimeout(reconnectTimer)
-    reconnectTimer = undefined
     if (refreshTimer) clearTimeout(refreshTimer)
     refreshTimer = undefined
-    stream?.close("superseded")
-    stream = undefined
-    streamDirectory = ""
-    if (connected && directory) connect(directory, generation)
+    unsubscribeMailboxChanges?.()
+    unsubscribeMailboxChanges = undefined
+    if (connected && directory) connect(directory)
   })
 
   onCleanup(() => {
     disposed = true
-    streamGeneration += 1
     requestOwner.abortAll()
-    stream?.close("consumer-dispose")
-    if (reconnectTimer) clearTimeout(reconnectTimer)
+    unsubscribeMailboxChanges?.()
     if (refreshTimer) clearTimeout(refreshTimer)
   })
 
@@ -655,10 +609,32 @@ export function MailboxPanel(props: MailboxPanelProps) {
               >
                 <div class="mailbox-panel__empty">
                   <Icon name="notifications" size="large" />
-                  <div class="mailbox-panel__empty-title">
-                    {query() ? t("mailbox.no_search_results") : t("mailbox.empty.active")}
-                  </div>
-                  <div class="mailbox-panel__empty-body">{t("mailbox.empty.active.body")}</div>
+                  <Show
+                    when={query()}
+                    fallback={
+                      <>
+                        <div class="mailbox-panel__empty-title">{t("mailbox.empty.active")}</div>
+                        <div class="mailbox-panel__empty-body">{t("mailbox.empty.active.body")}</div>
+                      </>
+                    }
+                  >
+                    <div class="mailbox-panel__empty-title">{t("mailbox.no_search_results")}</div>
+                    <div class="mailbox-panel__empty-body">
+                      {t("mailbox.no_search_results_body", { query: query().trim() })}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      tone="neutral"
+                      onClick={() => {
+                        setQuery("")
+                        queueMicrotask(() => searchInput?.focus())
+                      }}
+                    >
+                      {t("mailbox.clear_search")}
+                    </Button>
+                  </Show>
                 </div>
               </Show>
             }

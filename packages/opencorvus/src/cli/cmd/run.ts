@@ -10,7 +10,7 @@ import { Filesystem } from "../../util/filesystem"
 import { createOpenCorvusClient, type OpenCorvusClient, type ToolPart } from "@opencorvus-ai/sdk"
 import { Provider } from "../../provider/provider"
 import { PrimaryAssistantRegistry } from "../../agent/primary-assistant-registry"
-import { PermissionNext } from "../../permission/next"
+import { CapabilityRules } from "../../capability/rules"
 import { Tool } from "../../tool/tool"
 import { GlobTool } from "../../tool/glob"
 import { SearchCodeTool } from "../../tool/grep"
@@ -29,6 +29,7 @@ import { createInProcessFetch } from "@/server/in-process-client"
 import { renderToolFailureCause } from "@/session/tool-failure-cause"
 import { inProcessRunClientOptions } from "./run-client"
 import { runFileMime } from "./run-file"
+import { durablePendingPermissionsForSession } from "@/permission/pending-projection"
 
 type ToolProps<T extends Tool.Info> = {
   input: Tool.InferParameters<T>
@@ -344,7 +345,7 @@ export const RunCommand = cmd({
       process.exit(1)
     }
 
-    const rules: PermissionNext.Ruleset = [
+    const rules: CapabilityRules.Ruleset = [
       {
         permission: "question",
         action: "deny",
@@ -422,6 +423,39 @@ export const RunCommand = cmd({
           },
         )
         const toggles = new Map<string, boolean>()
+        const projectedPermissions = new Set<string>()
+        const permissionRequested = (permission: {
+          id: string
+          sessionID: string
+          toolName: string
+          summary: string
+        }) => {
+          if (permission.sessionID !== sessionID || projectedPermissions.has(permission.id)) return
+          projectedPermissions.add(permission.id)
+          if (
+            emit("permission_requested", {
+              permission: {
+                requestID: permission.id,
+                toolName: permission.toolName,
+                summary: permission.summary,
+              },
+            })
+          ) {
+            return
+          }
+          UI.println(
+            UI.Style.TEXT_WARNING_BOLD + "!",
+            UI.Style.TEXT_NORMAL +
+              `permission requested: ${permission.toolName} — ${permission.summary}; waiting for operator reply`,
+          )
+        }
+        for (const permission of await durablePendingPermissionsForSession({
+          sdk,
+          sessionID: sessionID!,
+          directory,
+        })) {
+          permissionRequested(permission)
+        }
         // Track reasoning part IDs so their deltas are not emitted as text_delta.
         const reasoningPartIDs = new Set<string>()
 
@@ -530,13 +564,7 @@ export const RunCommand = cmd({
           }
 
           if (event.type === "permission.asked") {
-            const permission = event.properties
-            if (permission.sessionID !== sessionID) continue
-            UI.println(
-              UI.Style.TEXT_WARNING_BOLD + "!",
-              UI.Style.TEXT_NORMAL +
-                `permission requested: ${permission.permission} (${permission.patterns.join(", ")}); waiting for operator reply`,
-            )
+            permissionRequested(event.properties)
           }
         }
       }

@@ -1,7 +1,7 @@
+import { PermissionAuthority } from "@/permission/authority"
 import { Hono } from "hono"
-import { describeRoute, validator, resolver } from "hono-openapi"
+import { describeRoute, resolver, validator } from "hono-openapi"
 import z from "zod"
-import { PermissionNext } from "@/permission/next"
 import { errors } from "../error"
 import { lazy } from "../../util/lazy"
 
@@ -10,63 +10,90 @@ export const PermissionRoutes = lazy(() =>
     .post(
       "/:requestID/reply",
       describeRoute({
-        summary: "Respond to permission request",
-        description: "Approve or deny a permission request from the AI assistant.",
+        summary: "Decide a pending permission request",
         operationId: "permission.reply",
         responses: {
           200: {
-            description: "Permission processed successfully",
-            content: {
-              "application/json": {
-                schema: resolver(z.boolean()),
-              },
-            },
+            description: "Committed permission decision",
+            content: { "application/json": { schema: resolver(PermissionAuthority.Resolution) } },
           },
           ...errors(400, 404),
         },
       }),
-      validator(
-        "param",
-        z.object({
-          requestID: z.string(),
-        }),
-      ),
-      validator(
-        "json",
-        z.object({ reply: PermissionNext.Reply, autoReply: z.boolean(), message: z.string().optional() }),
-      ),
+      validator("param", z.object({ requestID: PermissionAuthority.Identity })),
+      validator("json", PermissionAuthority.UserReply.omit({ requestID: true, userInput: true })),
       async (c) => {
-        const params = c.req.valid("param")
-        const json = c.req.valid("json")
-        await PermissionNext.reply({
-          requestID: params.requestID,
-          reply: json.reply,
-          autoReply: json.autoReply,
-          message: json.message,
-        })
-        return c.json(true)
+        const requestID = c.req.valid("param").requestID
+        const input = c.req.valid("json")
+        return c.json(
+          await PermissionAuthority.replyUser({
+            requestID,
+            ...input,
+            userInput: {
+              surface: "http.permission",
+              text: input.message?.trim() || `Permission decision: ${input.decision}`,
+              structured: { decision: input.decision },
+            },
+          }),
+        )
       },
     )
     .get(
       "/",
       describeRoute({
-        summary: "List pending permissions",
-        description: "Get all pending permission requests across all sessions.",
+        summary: "List durable pending permission requests",
         operationId: "permission.list",
         responses: {
           200: {
-            description: "List of pending permissions",
-            content: {
-              "application/json": {
-                schema: resolver(PermissionNext.Request.array()),
-              },
-            },
+            description: "Pending permission requests",
+            content: { "application/json": { schema: resolver(PermissionAuthority.Request.array()) } },
           },
         },
       }),
+      async (c) => c.json(await PermissionAuthority.list()),
+    )
+    .get(
+      "/history",
+      describeRoute({
+        summary: "List permission ledger history",
+        operationId: "permission.history",
+        responses: {
+          200: {
+            description: "Append-only permission ledger",
+            content: { "application/json": { schema: resolver(PermissionAuthority.LedgerEvent.array()) } },
+          },
+        },
+      }),
+      async (c) => c.json(await PermissionAuthority.history()),
+    )
+    .get(
+      "/grants",
+      describeRoute({
+        summary: "List active permission grants",
+        operationId: "permission.grants",
+        responses: {
+          200: {
+            description: "Active exact-scope grants",
+            content: { "application/json": { schema: resolver(PermissionAuthority.LedgerEvent.array()) } },
+          },
+        },
+      }),
+      async (c) => c.json(await PermissionAuthority.grants()),
+    )
+    .post(
+      "/grants/:grantID/revoke",
+      describeRoute({
+        summary: "Revoke an active permission grant",
+        operationId: "permission.revoke",
+        responses: {
+          200: { description: "Grant revoked", content: { "application/json": { schema: resolver(z.boolean()) } } },
+          ...errors(404),
+        },
+      }),
+      validator("param", z.object({ grantID: PermissionAuthority.Identity })),
       async (c) => {
-        const permissions = await PermissionNext.list()
-        return c.json(permissions)
+        await PermissionAuthority.revoke(c.req.valid("param").grantID)
+        return c.json(true)
       },
     ),
 )

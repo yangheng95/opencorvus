@@ -33,14 +33,16 @@ export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[]; k
         "execution_inventory / verification_inventory / decomposition_concern; REFERENCE surfaces and contracts " +
         "only with identities declared by completely read Artifacts (never restate them). Leave inapplicable " +
         "reference arrays empty; do not encode Artifact locators or JSON fragments as design_sections. " +
-        "Re-registering the same goal_id overwrites.",
+        "Every submission remains durable coverage evidence; repeated and unselected goal IDs are reported as errors.",
       inputSchema: WorkloadBriefSchema,
       execute: async (raw) => {
         const brief = WorkloadBriefSchema.parse(raw) as WorkloadBrief
+        const repeated = collector.briefs.some((candidate) => candidate.goal_id === brief.goal_id)
+        collector.briefs.push(brief)
         if (!knownGoals.has(brief.goal_id)) {
           return (
             `Error: goal_id "${brief.goal_id}" is not a registered plan goal. ` +
-            `Known goals: ${[...knownGoals].join(", ") || "(none)"}. Collector unchanged.`
+            `Known goals: ${[...knownGoals].join(", ") || "(none)"}. Submission retained as invalid coverage evidence.`
           )
         }
         const unknownContracts =
@@ -49,12 +51,9 @@ export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[]; k
           unknownContracts.length > 0
             ? `\nWarning: referenced contract id(s) not in the contract graph: ${unknownContracts.join(", ")}.`
             : ""
-        const idx = collector.briefs.findIndex((b) => b.goal_id === brief.goal_id)
-        if (idx >= 0) {
-          collector.briefs[idx] = brief
-          return `OK: workload brief for "${brief.goal_id}" updated (${collector.briefs.length} total).${warn}`
+        if (repeated) {
+          return `Error: goal_id "${brief.goal_id}" was submitted more than once. Submission retained as duplicate coverage evidence.${warn}`
         }
-        collector.briefs.push(brief)
         return `OK: workload brief for "${brief.goal_id}" registered (${collector.briefs.length} total).${warn}`
       },
     }),

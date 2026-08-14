@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "knowledge-base-operations",
+  "name": "Knowledge Base Operations",
+  "label": "Knowledge Base Operations",
+  "description": "Parallel source mapping, change editing, and lifecycle governance joined into a traceable knowledge publication record.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use to add, update, deprecate, or replace governed knowledge with exact source, destination, lifecycle, and publication evidence.",
+    "selection_guidance": "Select when content enters a maintained knowledge base. Use direct document editing for one-off prose without ownership, review, and deprecation requirements.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "knowledge-base-operations/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "knowledge-source-curator": {
+        "label": "Knowledge Source Curator",
+        "description": "Maps authoritative source claims to exact knowledge destinations with conflicts and freshness evidence.",
+        "base_role": "deep-research",
+        "prompt": "agents/knowledge-source-curator/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "knowledge-base-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "knowledge-change-editor": {
+        "label": "Knowledge Change Editor",
+        "description": "Prepares canonical additions or revisions with stable keys, material diffs, and dependency impacts.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/knowledge-change-editor/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "knowledge-base-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "knowledge-lifecycle-governor": {
+        "label": "Knowledge Lifecycle Governor",
+        "description": "Defines ownership, review, approval, deprecation, replacement, retention, and correction controls.",
+        "base_role": "fact-check",
+        "prompt": "agents/knowledge-lifecycle-governor/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "knowledge-base-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "knowledge-publication-integrator": {
+        "label": "Knowledge Publication Integrator",
+        "description": "Joins source, change, and lifecycle evidence into the canonical prepared publication record.",
+        "base_role": "build",
+        "prompt": "agents/knowledge-publication-integrator/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "knowledge-base-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "grounded-knowledge-release": {
+        "label": "Source-grounded Knowledge Release",
+        "description": "Run source mapping, change editing, and lifecycle governance independently, then join them into a traceable publication record.",
+        "nodes": {
+          "knowledge-source-curator": {
+            "agent_id": "knowledge-source-curator",
+            "description": "Publishes the source, claim, and destination map.",
+            "depends_on": []
+          },
+          "knowledge-change-editor": {
+            "agent_id": "knowledge-change-editor",
+            "description": "Publishes the canonical knowledge update proposal and material diff.",
+            "depends_on": []
+          },
+          "knowledge-lifecycle-governor": {
+            "agent_id": "knowledge-lifecycle-governor",
+            "description": "Publishes ownership, review, deprecation, replacement, and publication controls.",
+            "depends_on": []
+          },
+          "knowledge-publication-integrator": {
+            "agent_id": "knowledge-publication-integrator",
+            "description": "Joins source, change, and lifecycle evidence into the final publication record.",
+            "depends_on": [
+              "knowledge-change-editor",
+              "knowledge-lifecycle-governor",
+              "knowledge-source-curator"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

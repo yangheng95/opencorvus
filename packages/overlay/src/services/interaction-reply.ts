@@ -6,7 +6,7 @@
 // `autoReply` is required on every call: `false` for direct user actions
 // (permission card buttons, question submissions), `true` for server-side
 // timeout resolution. This flag propagates all the way through to
-// PermissionNext.Event.Replied so the transcript can render "[auto-reply]".
+// the durable permission ledger so the transcript can render "[auto-reply]".
 //
 // Per-interaction mutex: the same interaction id can surface in multiple UI
 // surfaces simultaneously (inline conversation card + task-scope card),
@@ -25,6 +25,7 @@ const inflight = new Map<string, Promise<void>>()
 
 export type InteractionReplyEndpoint = "interaction" | "question"
 export type InteractionReplyTarget = { id: string; directory: string }
+export type PermissionDecision = "allow_once" | "allow_task" | "allow_project"
 
 function interactionPath(target: InteractionReplyTarget, path: string, label: string): string {
   const id = String(target.id || "").trim()
@@ -44,7 +45,7 @@ function lockedRequest(id: string, fn: () => Promise<void>): Promise<void> {
 
 export async function replyInteraction(
   target: InteractionReplyTarget,
-  action: "once" | "always" | "answer",
+  action: PermissionDecision | "answer",
   autoReply: boolean,
   input: { answers?: unknown[]; message?: string } = {},
   endpoint: InteractionReplyEndpoint = "interaction",
@@ -62,11 +63,11 @@ export async function replyInteraction(
       return
     }
 
-    if (action === "once" || action === "always") {
+    if (action !== "answer") {
       await apiJson(interactionPath(target, "interaction/:id/reply", "interaction reply"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reply: action, autoReply }),
+        body: JSON.stringify({ decision: action, autoReply }),
         signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),
       })
       return

@@ -34,6 +34,7 @@ import { SessionWake } from "@/session/wake"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveConfiguredModelRef } from "@/agent/model"
 import { attachMissionCaller, publishMissionHandoff } from "@/mission/caller-receipt"
+import { openMissionExecutionWithWake } from "@/mission/execution-closure"
 import { MulticaExpertSquadImport } from "@/expert-squad/multica-import"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
@@ -43,19 +44,30 @@ import { ChannelId } from "@/channel/catalog"
 import { ControlPromptContext } from "@/control/prompt"
 import {
   ArtifactReadInputSchema,
+  ArtifactReadReferenceChunkSchema,
+  ArtifactReadReferenceInputSchema,
   ArtifactSchemaLimits,
   ArtifactSearchInputSchema,
-  ArtifactSearchTransportPageSchema,
+  ArtifactSearchReferenceTransportPageSchema,
   artifactReadLocatorKey,
+  mintArtifactLocatorReference,
+  mintArtifactReadReference,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { completeArtifactReadsBeforePanelAction } from "@/agent/artifact-read-facts"
+
+import {
+  completeArtifactReadsBeforePanelAction,
+  resolvePanelArtifactLocatorReferenceBeforeRead,
+  resolvePanelArtifactReadReferencesBeforeAction,
+} from "@/agent/artifact-read-facts"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { listMissionTasks } from "@/engine/store"
 import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mission/completion"
 import {
   requireCurrentTerminalLifecycleReference,
   sameTerminalLifecycleReference,
+  type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
+import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import {
   PanelQueryTaskErrorRow,
   PanelQueryTaskOutput,
@@ -65,13 +77,30 @@ import {
   PanelTaskResult,
 } from "@/panel/task-query"
 
+let missionWakeForTest: typeof SessionWake.wakeWithReceipt | undefined
+
+export const PanelToolTestHooks = {
+  installMissionWakeExecutor(executor: typeof SessionWake.wakeWithReceipt): Disposable {
+    if (missionWakeForTest) throw new Error("Panel Mission wake executor is already installed")
+    missionWakeForTest = executor
+    return {
+      [Symbol.dispose]() {
+        if (missionWakeForTest === executor) missionWakeForTest = undefined
+      },
+    }
+  },
+}
+
 const localOnly = (ctx: Tool.Context) => {
   const surface = resolvePanelSurface(ctx)
   return surface === "panel" || surface === "right-sidebar"
 }
 
-const PanelTaskArtifactPage = ArtifactSearchTransportPageSchema.extend({
+const PanelTaskArtifactPage = ArtifactSearchReferenceTransportPageSchema.omit({ next_cursor: true }).extend({
   taskID: z.string().min(1),
+  terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+  page_number: z.number().int().min(1),
+  next_page_number: z.number().int().min(2).nullable(),
 })
 
 const PANEL_ARTIFACT_PAGE_INITIAL_LIMIT = 16
@@ -230,34 +259,75 @@ function panelStructuredOutput(value: unknown, context: string): string {
 
 async function panelTaskArtifactPage(
   taskID: string,
-  input: Omit<z.input<typeof ArtifactSearchInputSchema>, "limit">,
+  input: Omit<z.input<typeof ArtifactSearchInputSchema>, "limit" | "cursor"> & {
+    terminal_lifecycle_reference: TerminalLifecycleReference
+    page_number: number
+  },
 ): Promise<string> {
-  let limit = PANEL_ARTIFACT_PAGE_INITIAL_LIMIT
-  for (;;) {
-    const page = await EngineService.searchArtifactCatalog(taskID, {
-      ...input,
-      limit,
-    })
-    const projected = PanelTaskArtifactPage.parse({
-      taskID,
-      entries: page.entries,
-      next_cursor: page.next_cursor,
-      catalog_total: page.catalog_total,
-      filtered_total: page.filtered_total,
-      catalog_complete: page.catalog_complete,
-      metadata_truncated: page.metadata_truncated,
-      provider_errors: page.provider_errors,
-      resolution: page.resolution,
-    })
-    const output = JSON.stringify(projected)
-    if (Buffer.byteLength(output, "utf8") <= ArtifactSchemaLimits.structuredOutputBytes) return output
-    if (limit === 1) {
+  const { terminal_lifecycle_reference: expectedTerminalReference, page_number: requestedPageNumber, ...search } = input
+  const assertCurrentTerminalOccurrence = () => {
+    const current = requireCurrentTerminalLifecycleReference(taskID)
+    if (!sameTerminalLifecycleReference(current, expectedTerminalReference)) {
       throw new Error(
-        `panel.query_task_artifacts cannot encode one catalog page within the ${ArtifactSchemaLimits.structuredOutputBytes}-byte structured-output boundary`,
+        `panel.query_task_artifacts terminal occurrence changed for Task ${taskID}; query the current Task before enumerating its Artifact catalog`,
       )
     }
-    limit = Math.max(1, Math.floor(limit / 2))
+    return current
   }
+
+  assertCurrentTerminalOccurrence()
+  let cursor: string | undefined
+  for (let pageNumber = 1; pageNumber <= requestedPageNumber; pageNumber += 1) {
+    let limit = PANEL_ARTIFACT_PAGE_INITIAL_LIMIT
+    for (;;) {
+      assertCurrentTerminalOccurrence()
+      const page = await EngineService.searchArtifactCatalog(taskID, {
+        ...search,
+        limit,
+        ...(cursor ? { cursor } : {}),
+      })
+      const terminalReference = assertCurrentTerminalOccurrence()
+      const projected = PanelTaskArtifactPage.parse({
+        taskID,
+        terminal_lifecycle_reference: terminalReference,
+        page_number: pageNumber,
+        next_page_number: page.next_cursor ? pageNumber + 1 : null,
+        entries: page.entries.map((entry) => ({
+          ...entry,
+          artifact_locator_ref: mintArtifactLocatorReference(),
+        })),
+        catalog_total: page.catalog_total,
+        filtered_total: page.filtered_total,
+        catalog_complete: page.catalog_complete,
+        metadata_truncated: page.metadata_truncated,
+        provider_errors: page.provider_errors,
+        resolution: page.resolution,
+      })
+      const output = JSON.stringify(projected)
+      if (Buffer.byteLength(output, "utf8") <= ArtifactSchemaLimits.structuredOutputBytes) {
+        if (pageNumber === requestedPageNumber) return output
+        if (pageNumber === 1 && requestedPageNumber > Math.max(1, page.filtered_total)) {
+          throw new Error(
+            `panel.query_task_artifacts page ${requestedPageNumber} exceeds the catalog's ${page.filtered_total} matching entries for Task ${taskID}`,
+          )
+        }
+        if (!page.next_cursor) {
+          throw new Error(
+            `panel.query_task_artifacts page ${requestedPageNumber} is beyond the complete ${pageNumber}-page catalog for Task ${taskID}`,
+          )
+        }
+        cursor = page.next_cursor
+        break
+      }
+      if (limit === 1) {
+        throw new Error(
+          `panel.query_task_artifacts cannot encode one catalog page within the ${ArtifactSchemaLimits.structuredOutputBytes}-byte structured-output boundary`,
+        )
+      }
+      limit = Math.max(1, Math.floor(limit / 2))
+    }
+  }
+  throw new Error(`panel.query_task_artifacts failed to resolve requested page ${requestedPageNumber}`)
 }
 
 async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeof PanelQueryTaskSummaryRow>> {
@@ -269,7 +339,7 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
     title: board.task.title,
     status: board.task.status,
     created: board.task.time?.created,
-    started: board.task.time?.started,
+    started: board.task.time.started,
     completed: board.task.time?.completed,
     error: board.task.error,
     result: panelTaskResult(board),
@@ -323,9 +393,6 @@ export function createPanelUIRequestToolContext(input: {
     messages: [],
     executionSurface: Tool.executionSurface([], []),
     metadata() {},
-    async ask() {
-      throw new Error("Panel user-interface requests cannot ask interactive tool permissions.")
-    },
   }
 }
 
@@ -539,19 +606,32 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
       )
     }
     switch (params.action) {
-      case "expert_squad_catalog": {
+      case "expert_squad_inspect": {
         if (actor !== "mission") {
-          throw new Error(`panel.expert_squad_catalog is only permitted for Mission.`)
+          throw new Error(`panel.expert_squad_inspect is only permitted for Mission.`)
         }
         const missionSession = await Session.get(ctx.sessionID)
-        const squads = await PromptProfileResolver.recommendationCatalog({
-          projectDirectory: missionSession.directory,
+        const heldExpertSquadIDs = missionVisibleExpertSquadIDs(missionSession)
+        if (!heldExpertSquadIDs.includes(params.id)) {
+          throw new Error(`Mission does not hold Expert Squad ${JSON.stringify(params.id)}.`)
+        }
+        const projectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: ctx.sessionID })
+        const [candidate] = await PromptProfileResolver.recommendationCatalog({
+          projectDirectory,
           productPillar: missionProductPillar(missionSession),
-          visibleExpertSquadIDs: missionVisibleExpertSquadIDs(missionSession),
+          restrictToExpertSquadIDs: [params.id],
         })
+        const squad = candidate
+          ? await PromptProfileResolver.catalogInspection({
+              projectDirectory,
+              id: candidate.id,
+              workflowCursor: params.workflowCursor,
+            })
+          : undefined
+        if (!squad) throw new Error(`Mission-held Expert Squad ${JSON.stringify(params.id)} is unavailable.`)
         return {
-          title: "Expert Squads",
-          output: JSON.stringify({ squads }),
+          title: "Expert Squad",
+          output: JSON.stringify({ squad }),
           metadata: {},
         }
       }
@@ -651,14 +731,49 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const mission = await requireMissionSession(ctx.sessionID)
         const { action: _action, taskID, ...rawRead } = params
+        const transport = ArtifactReadReferenceInputSchema.parse(rawRead)
+        const resolvedReference = resolvePanelArtifactLocatorReferenceBeforeRead({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          taskID,
+          reference: transport.artifact_locator_ref,
+        })
+        const currentReference = requireCurrentTerminalLifecycleReference(taskID)
+        if (!sameTerminalLifecycleReference(currentReference, resolvedReference.terminalLifecycleReference)) {
+          throw new Error(
+            `panel.read_task_artifact terminal occurrence changed for Task ${taskID}; query the current Task and Artifact catalog before reading`,
+          )
+        }
         const result = await EngineService.readMissionTaskArtifact({
           taskID,
           importer: { missionID: mission.missionID, sessionID: mission.id },
-          read: ArtifactReadInputSchema.parse(rawRead),
+          read: ArtifactReadInputSchema.parse({
+            locator: resolvedReference.locator,
+            byte_offset: transport.byte_offset,
+            max_bytes: transport.max_bytes,
+            delivery: transport.delivery,
+          }),
+        })
+        const settledReference = requireCurrentTerminalLifecycleReference(taskID)
+        if (!sameTerminalLifecycleReference(settledReference, resolvedReference.terminalLifecycleReference)) {
+          throw new Error(
+            `panel.read_task_artifact terminal occurrence changed while reading Task ${taskID}; query the current Task and Artifact catalog again`,
+          )
+        }
+        const transportChunk = ArtifactReadReferenceChunkSchema.extend({
+          taskID: z.string().min(1),
+          terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+        }).parse({
+          ...result.chunk,
+          taskID,
+          terminal_lifecycle_reference: settledReference,
+          artifact_transport_version: 2,
+          artifact_locator_ref: transport.artifact_locator_ref,
+          artifact_read_ref: mintArtifactReadReference(),
         })
         return {
           title: "Task Artifact",
-          output: JSON.stringify(result.chunk),
+          output: JSON.stringify(transportChunk),
           metadata: { truncated: false },
           ...(result.attachment
             ? {
@@ -717,24 +832,16 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               `panel.complete_mission Task ${acceptance.task_id} must cite its exact current completed occurrence.`,
             )
           }
-          const completeLocatorKeys = new Set(
-            completeArtifactReadsBeforePanelAction({
-              sessionID: ctx.sessionID,
-              assistantMessageID: ctx.messageID,
-              taskID: acceptance.task_id,
-            }).map(artifactReadLocatorKey),
-          )
-          const acceptedLocatorKeys = acceptance.evidence_locators.map(artifactReadLocatorKey)
-          if (
-            new Set(acceptedLocatorKeys).size !== acceptedLocatorKeys.length ||
-            acceptedLocatorKeys.some((key) => !completeLocatorKeys.has(key))
-          ) {
-            throw new Error(
-              `panel.complete_mission Task ${acceptance.task_id} evidence must be completely read in this Mission Turn.`,
-            )
-          }
+          const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
+            sessionID: ctx.sessionID,
+            assistantMessageID: ctx.messageID,
+            taskID: acceptance.task_id,
+            terminalLifecycleReference: reviewedReference,
+            references: acceptance.evidence_read_refs,
+          })
           authoritativeAcceptances.push({
-            ...acceptance,
+            task_id: acceptance.task_id,
+            evidence_locators: evidenceLocators,
             terminal_lifecycle_reference: reviewedReference,
           })
         }
@@ -785,12 +892,11 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const panelUIRequest = panelUIRequestContext(ctx)
         const attachments = panelUIRequest ? [] : await callerUserAttachmentRefs(ctx)
-        const queue = params.queue ?? false
         if (actor === "mission") {
           requireMissionTaskSemanticTitle(params.title)
         }
-        if (params.artifact_imports && params.artifact_imports.length > 0 && actor !== "mission") {
-          throw new Error("panel.create_task artifact_imports is only available to a real Mission")
+        if (params.artifact_sources && params.artifact_sources.length > 0 && actor !== "mission") {
+          throw new Error("panel.create_task artifact_sources is only available to a real Mission")
         }
         const taskCreator = resolvePanelTaskCreator(actor, ctx)
         const taskChannelBinding = resolveCreateTaskChannelBinding(params, ctx)
@@ -830,7 +936,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               ? params.request_id
               : (params.request_id ??
                 (actor === "control_agent" ? controlContext(ctx).requestID : ctx.extra?.requestID)),
-            artifactImports: params.artifact_imports,
+            artifactSources: params.artifact_sources,
             directory: params.directory,
             title: params.title,
             request: params.request,
@@ -843,7 +949,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               : {}),
             promptProfile: inheritedPromptProfile,
             expectedPackageDigest: params.expectedPackageDigest,
-            queue,
             checks: params.checks,
             source,
             ...(taskChannelBinding ? { channelBinding: taskChannelBinding } : {}),
@@ -861,7 +966,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           output: JSON.stringify({
             kind: "created",
             task_id: taskID,
-            artifact_imports: EngineService.getCrossTaskArtifactImportMappings(taskID),
+            artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
             message: `Task accepted: \`${taskID}\``,
           }),
           metadata: {},
@@ -916,10 +1021,12 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           }
         }
         const missionID = newChatForwardedMissionID()
+        const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({
+          sessionID: callerSession.id,
+        })
         const heldExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
-          projectDirectory: callerSession.directory,
+          projectDirectory: capabilityProjectDirectory,
           productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
-          requestedExpertSquadIDs: [],
         })
         const missionSession = await ensureMissionSession({
           missionID,
@@ -946,19 +1053,26 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           callerSession,
           callerMessageID,
         })
-        await SessionWake.wake({
+        await openMissionExecutionWithWake({
+          missionID,
           sessionID: missionSession.id,
-          prompt: params.request,
-          author: ctx.agent,
-          agent: "mission",
-          surface: "panel",
-          parts: callerFileParts,
-          reason: {
-            source: "mission.operator",
-            missionID,
-          },
+          source: "mission.wake",
+          requestID: ctx.callID || callerMessageID,
+          wake: () =>
+            (missionWakeForTest ?? SessionWake.wakeWithReceipt)({
+              sessionID: missionSession.id,
+              prompt: params.request,
+              author: ctx.agent,
+              agent: "mission",
+              surface: "panel",
+              parts: callerFileParts,
+              reason: {
+                source: "mission.operator",
+                missionID,
+              },
+            }),
         })
-        publishMissionHandoff(attachedMissionSession)
+        await publishMissionHandoff(attachedMissionSession)
         return {
           title: "Mission started",
           output: JSON.stringify({
@@ -1061,7 +1175,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           },
         })
         const hydratedWorkSession = await Session.get(workSession.id)
-        publishConversationHandoff({
+        await publishConversationHandoff({
           targetSession: hydratedWorkSession,
           callerSession,
           callerMessageID,
@@ -1106,10 +1220,17 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const mission = await requireMissionSession(ctx.sessionID)
         const identity = await requirePanelMutationToolIdentity(ctx, "resume_task")
-        const completeEvidenceLocators = completeArtifactReadsBeforePanelAction({
+        const reviewedTerminalLifecycleReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
           taskID: params.taskID,
+        })
+        const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          taskID: params.taskID,
+          terminalLifecycleReference: reviewedTerminalLifecycleReference,
+          references: params.evidence_read_refs,
         })
         const result = await EngineService.resumeMissionTask({
           taskID: params.taskID,
@@ -1119,14 +1240,10 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             messageID: identity.messageID,
             toolCallID: identity.toolCallID,
           },
-          reviewedTerminalLifecycleReference: reviewedTerminalLifecycleReferenceBeforePanelAction({
-            sessionID: ctx.sessionID,
-            assistantMessageID: ctx.messageID,
-            taskID: params.taskID,
-          }),
+          reviewedTerminalLifecycleReference,
           text: params.text,
-          evidenceLocators: params.evidence_locators,
-          completeEvidenceLocators,
+          evidenceLocators,
+          completeEvidenceLocators: evidenceLocators,
           toolPartID: identity.toolPartID,
         })
         return {
@@ -1139,10 +1256,13 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const result = await EngineService.replyInteraction(
           params.interactionID,
           params.reply
-            ? { reply: params.reply, autoReply: false }
+            ? {
+                decision: params.reply === "always" ? ("allow_project" as const) : ("allow_once" as const),
+                autoReply: false,
+              }
             : params.message
               ? { message: params.message, autoReply: false }
-              : { reply: "once", autoReply: false },
+              : { decision: "allow_once", autoReply: false },
         )
         return {
           title: "Interaction replied",
@@ -1174,15 +1294,15 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
       case "retry_task":
         await EngineService.retryTask(params.taskID)
         return {
-          title: "Retry queued",
-          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Retry queued." }),
+          title: "Retry accepted",
+          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Retry accepted." }),
           metadata: {},
         }
       case "replan_task":
         await EngineService.replanTask(params.taskID)
         return {
-          title: "Replan queued",
-          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Replan queued." }),
+          title: "Replan accepted",
+          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Replan accepted." }),
           metadata: {},
         }
       case "cancel_task":

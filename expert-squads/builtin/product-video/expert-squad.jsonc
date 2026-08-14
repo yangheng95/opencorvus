@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "product-video",
+  "name": "Product Video Production",
+  "label": "Product Video Production",
+  "description": "Source-grounded product-video briefs, narrative and visual planning in parallel, and an independently reviewed production handoff without pretending unavailable media generation occurred.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for an evidence-backed product-video brief, script, storyboard, shot plan, and production acceptance handoff.",
+    "selection_guidance": "Select when the Task supplies a concrete product, audience, channel, duration, claims evidence, and production constraints. This package plans and reviews production; it performs media generation only when the active Task independently grants an exact compatible media tool.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "product-video/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "product-video-brief-strategist": {
+        "label": "Product Video Brief Strategist",
+        "description": "Freezes the product truth, audience, channel, duration, claims, constraints, and measurable acceptance boundary.",
+        "base_role": "explore",
+        "prompt": "agents/product-video-brief-strategist/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "product-video/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "product-video-narrative-producer": {
+        "label": "Product Video Narrative Producer",
+        "description": "Turns the approved brief into timed narration, on-screen copy, claim references, and alternate openings.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/product-video-narrative-producer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "product-video/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "product-video-visual-planner": {
+        "label": "Product Video Visual Planner",
+        "description": "Builds the storyboard, shot list, asset ledger, accessibility plan, and production constraints from the same brief.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/product-video-visual-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "product-video/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "product-video-delivery-reviewer": {
+        "label": "Product Video Delivery Reviewer",
+        "description": "Joins narrative and visual plans, resolves contradictions, and issues the canonical production and acceptance handoff.",
+        "base_role": "fact-check",
+        "prompt": "agents/product-video-delivery-reviewer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "product-video/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "product-video-production-handoff": {
+        "label": "Product Video Production Handoff",
+        "description": "Freeze a source-grounded brief, develop narrative and visual plans in parallel, then join and independently review the canonical production handoff.",
+        "nodes": {
+          "product-video-brief-strategist": {
+            "agent_id": "product-video-brief-strategist",
+            "description": "Publishes the bounded brief and claim ledger.",
+            "depends_on": []
+          },
+          "product-video-narrative-producer": {
+            "agent_id": "product-video-narrative-producer",
+            "description": "Publishes timed narration and on-screen copy from the brief.",
+            "depends_on": [
+              "product-video-brief-strategist"
+            ]
+          },
+          "product-video-visual-planner": {
+            "agent_id": "product-video-visual-planner",
+            "description": "Publishes the storyboard, shot, asset, and accessibility plan from the brief.",
+            "depends_on": [
+              "product-video-brief-strategist"
+            ]
+          },
+          "product-video-delivery-reviewer": {
+            "agent_id": "product-video-delivery-reviewer",
+            "description": "Joins both branches and publishes the reviewed production and acceptance handoff.",
+            "depends_on": [
+              "product-video-narrative-producer",
+              "product-video-visual-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

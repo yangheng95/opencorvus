@@ -248,7 +248,6 @@ function SharedResourceManagementPanel(props: {
     { value: "git", label: t("skill.source.git") },
   ]
   const skillPolicyOptions = (): FormSelectOption[] => [
-    { value: "ask", label: t("skill.policy.ask") },
     { value: "allow", label: t("skill.policy.allow") },
     { value: "deny", label: t("skill.policy.deny") },
   ]
@@ -344,7 +343,7 @@ function SharedResourceManagementPanel(props: {
       setPanelNotice(t("workspace.no_directory"), "warn")
       return
     }
-    if (!(await nativeConfirm(t("skill.delete_confirm", { name })))) return
+    if (!(await nativeConfirm(t("skill.delete_confirm", { name }), { okTone: "danger" }))) return
     try {
       await deleteSkill(source, kind, { directory, isCurrentDirectory: sourceMatchesDirectory })
       await reloadCurrentPanel({ directory })
@@ -400,7 +399,7 @@ function SharedResourceManagementPanel(props: {
     }
     const names = mcpEntries().map(([name]) => name)
     if (names.length === 0) return
-    if (!(await nativeConfirm(t("mcp.delete_all_confirm", { count: names.length })))) return
+    if (!(await nativeConfirm(t("mcp.delete_all_confirm", { count: names.length }), { okTone: "danger" }))) return
     try {
       await deleteAllMcp({ directory, isCurrentDirectory: sourceMatchesDirectory, names })
       await reloadCurrentPanel({ directory })
@@ -416,7 +415,7 @@ function SharedResourceManagementPanel(props: {
   const [skillForm, setSkillForm] = createStore({
     type: "path" as "path" | "url" | "git",
     value: "",
-    policy: "ask" as "ask" | "allow" | "deny",
+    policy: "allow" as "allow" | "deny",
   })
 
   async function handleAddSkill() {
@@ -433,7 +432,7 @@ function SharedResourceManagementPanel(props: {
         isCurrentDirectory: sourceMatchesDirectory,
       })
       if (!sourceMatchesDirectory(directory)) return
-      setSkillForm({ type: "path", value: "", policy: "ask" })
+      setSkillForm({ type: "path", value: "", policy: "allow" })
       setShowAddSkill(false)
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
@@ -707,7 +706,13 @@ function SharedResourceManagementPanel(props: {
 
             {/* Add Skill inline form */}
             <Show when={showAddSkill()}>
-              <div class="config-inline-form">
+              <form
+                class="config-inline-form"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void handleAddSkill()
+                }}
+              >
                 <TextField.Root>
                   <TextField.Label>{t("skill.source_type")}</TextField.Label>
                   <SelectField<FormSelectOption>
@@ -765,19 +770,18 @@ function SharedResourceManagementPanel(props: {
                     {t("common.cancel")}
                   </Button>
                   <Button
-                    type="button"
+                    type="submit"
                     variant="solid"
                     size="md"
                     tone="accent"
                     disabled={!skillForm.value.trim()}
                     title={t("skill.install")}
                     aria-label={t("skill.install")}
-                    onClick={handleAddSkill}
                   >
                     {t("skill.install")}
                   </Button>
                 </div>
-              </div>
+              </form>
             </Show>
             <div class="extension-list" id="skillList">
               <Show when={poolSkills().length > 0} fallback={<div class="empty-hint">{t("skill.none_custom")}</div>}>
@@ -907,7 +911,13 @@ function SharedResourceManagementPanel(props: {
           <div class="extension-settings-body">
             {/* Add MCP inline form */}
             <Show when={showAddMcp()}>
-              <div class="config-inline-form">
+              <form
+                class="config-inline-form"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void handleAddMcp()
+                }}
+              >
                 <TextField.Root as="label">
                   <TextField.Label>{t("mcp.name")}</TextField.Label>
                   {/* Fixed MCP server-name example. */}
@@ -1010,7 +1020,7 @@ function SharedResourceManagementPanel(props: {
                     {t("common.cancel")}
                   </Button>
                   <Button
-                    type="button"
+                    type="submit"
                     variant="solid"
                     size="md"
                     tone="accent"
@@ -1024,12 +1034,11 @@ function SharedResourceManagementPanel(props: {
                                 !mcpForm.credentialName.trim())))
                         : !mcpForm.command.trim())
                     }
-                    onClick={handleAddMcp}
                   >
                     {t("mcp.add_action")}
                   </Button>
                 </div>
-              </div>
+              </form>
             </Show>
             <SettingsDetailSection
               class="extension-list"

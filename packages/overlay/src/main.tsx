@@ -3,9 +3,9 @@
 // Mounts all Solid components and initialises the application.
 // Self-sufficient — no external script dependencies.
 
-import "@fontsource-variable/geist"
-import "@fontsource-variable/noto-sans-sc"
-import "@fontsource-variable/jetbrains-mono"
+import "@fontsource-variable/geist/index.css"
+import "@fontsource-variable/noto-sans-sc/index.css"
+import "@fontsource-variable/jetbrains-mono/index.css"
 import { insert, render } from "solid-js/web"
 import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, untrack } from "solid-js"
 import { App } from "./components/App"
@@ -34,6 +34,10 @@ import { LogViewer } from "./components/LogViewer"
 import { FileExplorerPanel } from "./components/FileExplorerPanel"
 import { FileChangesPanel, type FileChangesActiveView } from "./components/FileChangesPanel"
 import { BrowserPreviewPanel, type BrowserPreviewPanelController } from "./components/BrowserPreviewPanel"
+import {
+  browserPreviewNativeSurfaceAvailable,
+  browserPreviewNativeUrlNavigationAvailable,
+} from "./services/browser-preview-native"
 import { browserPreviewRevision } from "./services/browser-preview"
 import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
@@ -42,7 +46,7 @@ import { FileEditorPane } from "./components/FileEditorPane"
 import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
-import { closeFileEditor, fileWorkbenchOpen } from "./services/file-workbench"
+import { closeFileEditor, fileEditorRevealRevision, fileWorkbenchOpen } from "./services/file-workbench"
 import type { DiffTarget } from "./services/diff"
 import { initApp } from "./services/init"
 import {
@@ -55,6 +59,7 @@ import {
   clearBoard,
   rootTaskSessionID,
   setBoardStore,
+  type BoardSource,
 } from "./store/board"
 import { abortChatRequest, messageStore, setChatAttachments } from "./store/messages"
 import { clearConversationUiState } from "./store/conversation-ui"
@@ -70,7 +75,6 @@ import {
   renameTask,
   downloadTaskProjectArchive,
 } from "./services/task"
-import { startQueuedTaskNow } from "./services/task-queue"
 import { canComposeChat, stopChatRequest } from "./services/chat"
 import { isTaskInterruptable } from "./store/board"
 import { loadAllLocales, localeTag, setLocale } from "./utils/i18n"
@@ -96,9 +100,19 @@ import {
 } from "./services/pane"
 import { panelMessage } from "./services/chat"
 import { loadConversationCapability } from "./services/conversation-capability"
-import { loadExpertSquadCatalog, type ExpertSquadCatalogScope } from "./services/expert-squad"
+import {
+  expertSquadPublicMarketURL,
+  inspectExpertSquad,
+  installExpertSquadMarketPackage,
+  loadExpertSquadCatalog,
+  loadExpertSquadMarket,
+  searchExpertSquads,
+  type ExpertSquadCatalogScope,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadOption,
+} from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
-import { loadGlobalComposerReferences } from "./services/global-composer-references"
+import { loadGlobalComposerReferences, searchGlobalComposerExpertSquads } from "./services/global-composer-references"
 import { resolveComposerSubmitRoute } from "./services/composer-submit-route"
 import {
   VisibleComposerReferences as VisibleComposerReferencesSchema,
@@ -113,6 +127,7 @@ import { getHostTransport } from "./services/host-transport-runtime"
 import { checkDesktopUpdate } from "./services/desktop-update"
 import { installNativeWindowCloseLifecycle } from "./services/native-window-lifecycle"
 import { showOverlayWindow } from "./services/window"
+import { installExpertSquadInstallHandoffBridge } from "./services/expert-squad-install-handoff"
 import { hydrateIconPlaceholders, installIconHtmlRenderer } from "./utils/icon-html"
 import { installNativeContextMenuSuppression } from "./utils/context-menu"
 import {
@@ -130,6 +145,7 @@ import {
   browseDirectory,
   resolveGlobalComposerProject,
   resolveGlobalComposerSubmissionContext,
+  supersedePendingWorkspaceSelection,
   deleteProjectState,
   leaveDeletedProject,
   openGlobalChatLauncher,
@@ -143,9 +159,16 @@ import {
 } from "./services/workspace"
 import { openGoalDialog } from "./services/dialog"
 import { openConfigDialog } from "./services/config-dialog-control"
+import { installClipboardApiKeyPrompt } from "./services/clipboard-api-key-prompt"
 import { cardTreeStore } from "./store/card-tree"
 import { composerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
-import { cancelConversationReplay, loadConversation, resetConversationProjection } from "./services/conversation"
+import { normalizeDebugDirectory } from "./utils/debug-text"
+import {
+  cancelConversationReplay,
+  loadConversation,
+  optionalConversationSourceDirectory,
+  resetConversationProjection,
+} from "./services/conversation"
 import {
   conversationSourceExperience,
   createConversationSession,
@@ -172,15 +195,18 @@ import {
 } from "./services/mission"
 import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "./services/work-ledger"
 import { setWorkLedgerChangeHandler, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
+import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
 import {
   buildChatDebugBlob,
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
+  requireNamedDebugProjectDirectory,
   writeDebugClipboard,
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
 import { taskScopedPath } from "./services/task-path"
+import { loadPersistedChatDebugProjection } from "./services/session-debug"
 import { registerReviewPanelPresenter, requestReviewPanel } from "./services/review-focus"
 import { createAnimationFrameScheduler } from "./utils/animation-frame"
 import {
@@ -193,6 +219,7 @@ import {
   createGlobalComposerReferenceCatalogSnapshot,
   createComposerReferenceCatalogSnapshotFromSettled,
   emptyComposerExpertSquadCatalog,
+  mergeComposerExpertSquadOptions,
 } from "./services/composer-expert-squad-catalog"
 import { currentUIScale, layoutTokenPx } from "./utils/layout-tokens"
 
@@ -399,8 +426,6 @@ const [centerWorkbenchPanels, setCenterWorkbenchPanels] = createSignal<CenterWor
 const [selectedCenterWorkbenchTabID, setSelectedCenterWorkbenchTabID] = createSignal("conversation")
 const [rightDockAddMenuOpen, setRightDockAddMenuOpen] = createSignal(false)
 const [rightDockOverflowMenuOpen, setRightDockOverflowMenuOpen] = createSignal(false)
-const [mailboxAttention, setMailboxAttention] = createSignal(false)
-const [mailboxUnreadCount, setMailboxUnreadCount] = createSignal(0)
 const [browserPreviewPageTitles, setBrowserPreviewPageTitles] = createSignal<Record<string, string>>({})
 let primaryBrowserPreviewController: BrowserPreviewPanelController | undefined
 const [selectedSubagentSessionID, setSelectedSubagentSessionID] = createSignal("")
@@ -474,11 +499,25 @@ function openDiffActivity(): void {
   openCenterWorkbenchPanel("diff")
 }
 
-function openRightDockPanel(panel: RightDockPanel): void {
+function showRightDockForExplicitAction(): void {
+  if (primaryWorkspaceSurface() === "mission-board") setPrimaryWorkspaceSurface("conversation")
   setRightDockVisible(true)
+}
+
+function openRightDockPanel(panel: RightDockPanel): void {
+  showRightDockForExplicitAction()
   if (panel === "diff") {
     openDiffActivity()
     return
+  }
+  openCenterWorkbenchPanel(panel)
+}
+
+function presentRightDockPanel(panel: RightDockPanel): void {
+  if (primaryWorkspaceSurface() !== "conversation") return
+  setRightDockVisible(true)
+  if (panel === "diff") {
+    setFileChangesActiveView("changes")
   }
   openCenterWorkbenchPanel(panel)
 }
@@ -487,17 +526,13 @@ function openSubagentConversation(sessionID: string): void {
   const value = sessionID.trim()
   if (!value) throw new Error("Sub-agent conversation session ID is required")
   setSelectedSubagentSessionID(value)
-  openCenterWorkbenchPanel("subagent")
+  openRightDockPanel("subagent")
 }
 
 function openRightDockAddMenu(): void {
-  setRightDockVisible(true)
+  showRightDockForExplicitAction()
   setRightDockOverflowMenuOpen(false)
   setRightDockAddMenuOpen(true)
-}
-
-function presentMailboxNotification(): void {
-  setMailboxAttention(true)
 }
 
 function registerPrimaryBrowserPreviewController(controller: BrowserPreviewPanelController): () => void {
@@ -520,12 +555,18 @@ function isMissionSessionSource(): boolean {
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   setMissionSharedRefreshToken((value) => value + 1)
+  if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
+    void refreshProjectMemory().catch((error) =>
+      AppLog.warn("project-memory", "Project MEMORY.MD notice refresh failed", { error: String(error) }),
+    )
+  }
   const selectedSource = boardStore.selectedSource
   const missionHandoff = activeMissionHandoff(event, selectedSource)
   if (missionHandoff) {
     runMainAsync("work-ledger.mission-handoff", async () => {
       try {
-        await openMissionSession(missionHandoff, missionHandoff.directory)
+        const opened = await openMissionSession(missionHandoff, missionHandoff.directory)
+        if (!opened) return
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return
         throw error
@@ -625,7 +666,7 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
   })
   if (!confirmation.confirmed) return
   setMissionLauncherSubmitting(true)
-  const selectionEpoch = beginWorkspaceSelection()
+  const selectionEpoch = supersedePendingWorkspaceSelection()
   try {
     const result = await wakeMission({
       directory: projectDirectory,
@@ -634,8 +675,6 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
       productPillar: "code",
       expertSquadIDs: [],
     })
-    setComposerIntent({ productPillar: "code", conversationTarget: "mission" })
-    resetCenterWorkbenchToPrimaryPanel("mission")
     await openMissionSession(result, projectDirectory, selectionEpoch)
     setMissionSharedRefreshToken((value) => value + 1)
   } finally {
@@ -661,6 +700,7 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
     message: t("project.delete_confirm", { directory: projectDirectory }),
     cancel: true,
     okLabel: t("common.delete"),
+    okTone: "danger",
   })
   if (!dialog.confirmed) return
 
@@ -688,12 +728,22 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
     setMissionSharedRefreshToken((value) => value + 1)
   })
   runPostCommitUiEffect({ id: `${diagnosticID}:notification`, title: "Project deletion committed" }, () => {
+    const directory = outcome.status === "deleted" ? outcome.result.directory : outcome.directory
+    if (outcome.status === "deleted" && outcome.result.status === "committed_with_residue") {
+      reportWarning({
+        id: diagnosticID,
+        title: t("project.delete_cleanup_pending_title"),
+        message: t("project.delete_cleanup_pending", {
+          directory,
+          reason: outcome.result.residue.map((item) => `${item.path}: ${item.message}`).join("; "),
+        }),
+      })
+      return
+    }
     reportSuccess({
       id: diagnosticID,
       title: t("project.delete_success_title"),
-      message: t("project.delete_success", {
-        directory: outcome.status === "deleted" ? outcome.result.directory : outcome.directory,
-      }),
+      message: t("project.delete_success", { directory }),
     })
   })
 }
@@ -714,6 +764,8 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
     inputLabel: t("project.rename_input_label"),
     inputValue: currentName.trim(),
     inputPlaceholder: t("project.rename_input_placeholder"),
+    inputRequired: true,
+    inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("project.rename_menu_label"),
   })
@@ -734,6 +786,8 @@ async function promoteWorkLedgerAnonymousProject(directory: string): Promise<voi
     input: true,
     inputLabel: t("project.rename_input_label"),
     inputPlaceholder: t("project.rename_input_placeholder"),
+    inputRequired: true,
+    inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("common.continue"),
   })
@@ -762,26 +816,28 @@ async function promoteWorkLedgerAnonymousProject(directory: string): Promise<voi
 
 async function openWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
   setComposerIntent({ productPillar: row.productPillar, conversationTarget: "mission" })
-  resetCenterWorkbenchToPrimaryPanel("mission")
   await openMissionSession(
     {
       missionID: row.missionID,
       sessionID: row.sessionID,
       created: false,
       productPillar: row.productPillar,
+      title: row.title,
     },
     row.directory,
   )
 }
 
 function openMissionBoard(): void {
-  beginWorkspaceSelection()
-  setPrimaryWorkspaceSurface("mission-board")
+  supersedePendingWorkspaceSelection()
+  batch(() => {
+    setRightDockVisible(false)
+    setPrimaryWorkspaceSurface("mission-board")
+  })
+  queueMicrotask(() => document.getElementById("missionBoardTitle")?.focus())
 }
 
 async function openMissionBoardMission(row: MissionRecord): Promise<void> {
-  setComposerIntent({ productPillar: row.productPillar, conversationTarget: "mission" })
-  resetCenterWorkbenchToPrimaryPanel("mission")
   await openMissionSession(
     {
       missionID: row.missionID,
@@ -804,39 +860,38 @@ async function createMissionBoardDraft(input: MissionManualCreateRequest): Promi
 }
 
 async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<void> {
-  const selectionEpoch = beginWorkspaceSelection()
+  const selectionEpoch = supersedePendingWorkspaceSelection()
   const result = await wakeMission({
     directory: input.directory,
     text: input.request,
-    model: appStore.composerModel.trim() || undefined,
     productPillar: input.productPillar,
     expertSquadIDs: input.expertSquadIDs,
   })
-  resetCenterWorkbenchToPrimaryPanel("mission")
-  await openMissionSession(result, input.directory, selectionEpoch)
   setMissionSharedRefreshToken((value) => value + 1)
+  if (!ownsWorkspaceSelection(selectionEpoch)) return
+  await openMissionSession(result, input.directory, selectionEpoch)
 }
 
 async function dispatchMissionBoardDraft(mission: MissionRecord): Promise<void> {
-  const selectionEpoch = beginWorkspaceSelection()
-  const result = await dispatchMission(
-    { missionID: mission.missionID, directory: mission.directory },
-    appStore.composerModel.trim() || undefined,
-  )
-  resetCenterWorkbenchToPrimaryPanel("mission")
-  await openMissionSession(result, mission.directory, selectionEpoch)
+  const selectionEpoch = supersedePendingWorkspaceSelection()
+  const result = await dispatchMission({ missionID: mission.missionID, directory: mission.directory })
   setMissionSharedRefreshToken((value) => value + 1)
+  if (!ownsWorkspaceSelection(selectionEpoch)) return
+  await openMissionSession(result, mission.directory, selectionEpoch)
 }
 
-async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
+async function confirmDeleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
   const confirmation = await showAppDialog({
     title: t("mission_board.delete.title"),
     message: t("mission_board.delete.confirm", { title: mission.title || mission.missionID }),
     cancel: true,
     okLabel: t("common.delete"),
+    okTone: "danger",
   })
-  if (!confirmation.confirmed) return false
+  return confirmation.confirmed
+}
 
+async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
   const deleted = await deleteMission(
     { missionID: mission.missionID, directory: mission.directory },
     {
@@ -847,9 +902,12 @@ async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolea
   if (!deleted) throw new Error(t("mission_board.delete.failed"))
 
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === mission.sessionID) {
-    runPostCommitUiEffect({ id: `mission:delete-selection:${mission.missionID}`, title: "Mission deletion committed" }, () => {
-      void selectTask("").catch((error) => reportOverlayRuntimeError("mission-board.delete-selection", error))
-    })
+    runPostCommitUiEffect(
+      { id: `mission:delete-selection:${mission.missionID}`, title: "Mission deletion committed" },
+      () => {
+        void selectTask("").catch((error) => reportOverlayRuntimeError("mission-board.delete-selection", error))
+      },
+    )
   }
   setMissionSharedRefreshToken((value) => value + 1)
   reportSuccess({
@@ -889,6 +947,8 @@ async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void>
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.missionID,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -994,25 +1054,6 @@ async function replanTerminalTask(row: WorkLedgerTaskRow): Promise<void> {
   return runTerminalTaskMutation(row, "replan")
 }
 
-async function startWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
-  const result = await startQueuedTaskNow({ taskID: row.id, directory: row.directory })
-  await loadTasks({ requireFresh: true })
-  if (result.started) {
-    reportSuccess({
-      id: `task:start-now:${row.id}`,
-      title: t("task.start_now_started_title"),
-      message: result.task?.title || row.title || row.id,
-    })
-  } else {
-    reportWarning({
-      id: `task:start-now:${row.id}`,
-      title: t("task.start_now_not_started_title"),
-      message: t("task.start_now_not_started"),
-    })
-  }
-  setMissionSharedRefreshToken((value) => value + 1)
-}
-
 async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   const ok = await downloadTaskProjectArchive({ taskID: row.id, directory: row.directory })
   if (!ok) throw new Error(t("task.download_project_failed", { error: row.id }))
@@ -1030,6 +1071,8 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
     inputLabel: t("task.rename_placeholder"),
     inputPlaceholder: t("task.rename_placeholder"),
     inputValue: row.title || row.id,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1069,6 +1112,8 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.sessionID,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1115,22 +1160,95 @@ async function setActiveWorkLedgerItemPinned(
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
+function assertDebugSelectionCurrent(source: BoardSource): void {
+  const current = boardStore.selectedSource
+  if (!current || current.kind !== source.kind || current.id !== source.id) {
+    throw new Error(`Conversation selection changed while collecting debug information; retry the copy action`)
+  }
+  const expectedDirectory = normalizeDebugDirectory(source.directory)
+  const currentDirectory = normalizeDebugDirectory(current.directory)
+  if (expectedDirectory && currentDirectory && expectedDirectory !== currentDirectory) {
+    throw new Error(`Conversation directory changed while collecting debug information; retry the copy action`)
+  }
+}
+
+async function openExpertSquadMarketForProject(projectDirectory?: string): Promise<void> {
+  const requestedDirectory = projectDirectory?.trim() ?? ""
+  if (requestedDirectory && requestedDirectory !== activeDirectory().trim()) {
+    const applied = await applyDirectory(requestedDirectory, {
+      save: false,
+      persist: false,
+      restoreWorkspace: false,
+    })
+    if (!applied) return
+  } else if (!requestedDirectory) {
+    await resolveGlobalComposerProject()
+  }
+  await openConfigDialog("expert-squad-install")
+}
+
+async function searchMissionMarketExpertSquads(
+  projectDirectory: string,
+  query: string,
+): Promise<readonly ExpertSquadMarketIndexItem[]> {
+  const page = await loadExpertSquadMarket(projectDirectory, {
+    query: query.trim().slice(0, 500),
+    availability: "available",
+    limit: 3,
+  })
+  return page.entries
+}
+
+async function installMissionMarketExpertSquad(
+  projectDirectory: string,
+  item: ExpertSquadMarketIndexItem,
+): Promise<void> {
+  await installExpertSquadMarketPackage(projectDirectory, item.id, "project")
+}
+
+async function openMissionMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+  const opened = await nativeOpen(
+    expertSquadPublicMarketURL({ namespace: item.namespace, id: item.id, locale: localeTag() }),
+  )
+  if (!opened) throw new Error(t("mission_board.create.market_open_unavailable"))
+}
 async function copyActiveConversationDebug(): Promise<void> {
-  const selectedSource = boardStore.selectedSource
+  const initialSource = boardStore.selectedSource
+  const selectedSource = initialSource ? ({ ...initialSource } as BoardSource) : null
   const taskSelectionError = boardStore.taskSelectionError
   const selectedTaskFailure =
     selectedSource?.kind === "task" && taskSelectionError?.taskID === selectedSource.id ? taskSelectionError : null
-  if (selectedSource?.kind !== "session" && !selectedTaskFailure) {
+  if (!selectedSource) throw new Error("No active Task or Chat")
+  selectedSource.directory = requireNamedDebugProjectDirectory(
+    String(selectedSource.directory ?? "").trim() ||
+      (selectedSource.kind === "session" ? (optionalConversationSourceDirectory(selectedSource) ?? "") : ""),
+    t("chat.debug_copy_named_project_required"),
+  )
+  if (selectedSource.kind !== "session" && !selectedTaskFailure) {
     await loadBoard({ sync: true, requireFresh: true })
   }
+  assertDebugSelectionCurrent(selectedSource)
+  const persistedChat =
+    selectedSource.kind === "session"
+      ? await loadPersistedChatDebugProjection({
+          sessionID: selectedSource.id,
+          directory: String(selectedSource.directory),
+        })
+      : undefined
+  assertDebugSelectionCurrent(selectedSource)
+  const debugBoard = selectedSource.kind === "session" ? { ...boardStore.board } : boardStore.board
+  const debugCardTree =
+    selectedSource.kind === "session"
+      ? ({ cards: { ...cardTreeStore.cards }, order: [...cardTreeStore.order] } as typeof cardTreeStore)
+      : cardTreeStore
   const blob =
-    selectedSource?.kind === "session"
-      ? buildChatDebugBlob(boardStore.board, selectedSource, cardTreeStore)
+    selectedSource.kind === "session"
+      ? buildChatDebugBlob(debugBoard, selectedSource, debugCardTree, persistedChat!)
       : selectedTaskFailure
         ? buildTaskSelectionErrorDebugBlob(selectedTaskFailure, appStore.enginePaths)
-        : buildTaskDebugBlob(boardStore.board, appStore.enginePaths)
+        : buildTaskDebugBlob(debugBoard, selectedSource, appStore.enginePaths)
   if (!blob) {
-    throw new Error(selectedSource?.kind === "session" ? "No active chat session" : "No active task")
+    throw new Error(selectedSource.kind === "session" ? "No active chat session" : "No active task")
   }
   await writeDebugClipboard(blob)
 }
@@ -1152,15 +1270,21 @@ async function archiveActiveWorkLedgerItem(
 }
 
 async function openMissionSession(
-  result: { sessionID: string; missionID?: string; created?: boolean; productPillar: "code" | "work" },
+  result: {
+    sessionID: string
+    missionID?: string
+    created?: boolean
+    productPillar: "code" | "work"
+    title?: string
+  },
   directory: string,
   expectedSelectionEpoch?: number,
-): Promise<void> {
+): Promise<boolean> {
   const missionDirectory = directory.trim()
   if (!missionDirectory) throw new Error("openMissionSession: directory is required")
   const selectionEpoch = expectedSelectionEpoch ?? beginWorkspaceSelection()
   if (!ownsWorkspaceSelection(selectionEpoch)) {
-    throw new DOMException("Mission selection superseded", "AbortError")
+    return false
   }
   const source = {
     kind: "session" as const,
@@ -1188,7 +1312,7 @@ async function openMissionSession(
       selectionEpoch,
     })
     if (!applied || !ownsWorkspaceSelection(selectionEpoch)) {
-      throw new DOMException("Mission selection superseded", "AbortError")
+      return false
     }
     await projectComposerModelFromSession(
       { sessionID: result.sessionID, directory: missionDirectory },
@@ -1197,26 +1321,27 @@ async function openMissionSession(
         boardStore.selectedSource?.kind === "session" &&
         boardStore.selectedSource.id === result.sessionID,
     )
-    if (!ownsWorkspaceSelection(selectionEpoch)) return
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
     setComposerIntent({ productPillar: result.productPillar, conversationTarget: "mission" })
-    resetCenterWorkbenchToPrimaryPanel("mission")
     await loadConversation(source, {
       scrollIntent: "bottom",
       resetCause: "mission-session-hydrate",
       directory: missionDirectory,
     })
-    if (!ownsWorkspaceSelection(selectionEpoch)) return
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
     startSSE(source, 0, { directory: missionDirectory })
+    resetCenterWorkbenchToPrimaryPanel("mission")
+    return true
   } catch (error) {
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
     if (
-      ownsWorkspaceSelection(selectionEpoch) &&
       boardStore.selectedSource?.kind === "session" &&
       boardStore.selectedSource.id === result.sessionID
     ) {
       batch(() => {
-        setBoardStore("selectedSource", null)
         resetConversationProjection({ scrollIntent: "bottom", cause: "mission-session-switch-failed" })
         clearBoard()
+        resetCenterWorkbenchToPrimaryPanel("mission")
       })
     }
     throw error
@@ -1231,7 +1356,6 @@ function focusInitialRestoredTaskWorkspace(): void {
 }
 
 function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
-  if (panel !== "conversation") setRightDockVisible(true)
   const tab: CenterWorkbenchTab = {
     id: panel,
     panel,
@@ -1247,8 +1371,7 @@ function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
 
 disposers.push(
   registerReviewPanelPresenter(() => {
-    setFileChangesActiveView("changes")
-    openCenterWorkbenchPanel("diff")
+    presentRightDockPanel("diff")
   }),
 )
 
@@ -1257,7 +1380,7 @@ function openBlankBrowserTab(tabID: string): void {
     id: tabID,
     panel: "browser",
   }
-  setRightDockVisible(true)
+  showRightDockForExplicitAction()
   setCenterWorkbenchPanels((current) => [...current, tab])
   setSelectedCenterWorkbenchTabID(tab.id)
 }
@@ -1378,6 +1501,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function openWorkspace(): void {
   setWorkspaceOpen(true)
   setFileChangesActiveView("diff")
+  showRightDockForExplicitAction()
   openCenterWorkbenchPanel("diff")
 }
 
@@ -1450,16 +1574,21 @@ document.addEventListener(
     const href = previewUrl || anchor.getAttribute("href") || ""
     if (!/^https?:\/\//i.test(href)) return
     const canOpenExternalUrl = getHostTransport().capabilities.nativeCommands["open-url"]
-    if (!previewUrl && !canOpenExternalUrl) return
+    const canOpenBrowserPreview =
+      Boolean(previewUrl) &&
+      Boolean(primaryBrowserPreviewController) &&
+      browserPreviewNativeSurfaceAvailable() &&
+      browserPreviewNativeUrlNavigationAvailable()
+    if (!canOpenBrowserPreview && !canOpenExternalUrl) return
     ev.preventDefault()
     runMainAsync("browser-preview.open-url", async () => {
       try {
-        if (previewUrl) {
+        if (canOpenBrowserPreview) {
           openBrowserPreviewFromMessage(previewUrl)
           return
         }
         if (!canOpenExternalUrl) return
-        await nativeOpen(href)
+        await nativeOpen(previewUrl || href)
       } catch (error) {
         console.error("[ui] Failed to open external link", error)
         reportError({
@@ -1519,11 +1648,7 @@ document.addEventListener(
   listenerOpts,
 )
 
-window.addEventListener(
-  "acceptance:focus-changes",
-  requestReviewPanel,
-  listenerOpts,
-)
+window.addEventListener("acceptance:focus-changes", requestReviewPanel, listenerOpts)
 
 function installGlobalBridges(): void {
   ;(window as any).renderMarkdown = renderMarkdown
@@ -1572,6 +1697,7 @@ const [composerExpertSquadCatalogSnapshot, setComposerExpertSquadCatalogSnapshot
 let expertSquadLoadSequence = 0
 let expertSquadInFlight: { requestKey: string; promise: Promise<void> } | null = null
 let expertSquadLoadedRequestKey = ""
+let expertSquadSearchSequence = 0
 async function refreshExpertSquads(
   scope: ExpertSquadCatalogScope | Extract<ComposerReferenceCatalogScopeState, { kind: "global" }>,
   requestKey: string,
@@ -1588,17 +1714,25 @@ async function refreshExpertSquads(
         expertSquadLoadedRequestKey = requestKey
         return
       }
-      const [catalog, missionSkillCatalog, chatCapability] = await Promise.allSettled([
-        loadExpertSquadCatalog(scope),
+      const catalogPromise = loadExpertSquadCatalog(scope)
+      const activeInspectionPromise = catalogPromise.then((catalog) =>
+        inspectExpertSquad({ directory: scope.directory, id: catalog.active.effective }),
+      )
+      const [catalog, squads, missionSkillCatalog, chatCapability, activeInspection] = await Promise.allSettled([
+        catalogPromise,
+        searchExpertSquads({ directory: scope.directory, productPillar: composerIntent().productPillar }),
         loadMissionSkillCatalog(scope),
         loadConversationCapability(scope.directory, "chat"),
+        activeInspectionPromise,
       ])
       if (sequence !== expertSquadLoadSequence) return
       setComposerExpertSquadCatalogSnapshot(
         createComposerReferenceCatalogSnapshotFromSettled(requestKey, composerExpertSquadCatalogSnapshot(), {
           catalog,
+          squads,
           missionSkills: missionSkillCatalog,
           chatCapability,
+          activeInspection,
         }),
       )
       expertSquadLoadedRequestKey = requestKey
@@ -1623,6 +1757,51 @@ async function refreshExpertSquads(
   await promise
 }
 
+async function searchComposerExpertSquads(
+  query: string,
+  selectedExpertSquadIDs: readonly string[] = [],
+): Promise<void> {
+  const sequence = ++expertSquadSearchSequence
+  const requestKey = composerReferenceCatalogRequestKey()
+  const scope = composerReferenceCatalogScope()
+  if (scope.kind === "pending" || scope.kind === "unavailable") return
+  try {
+    const page =
+      scope.kind === "global"
+        ? await searchGlobalComposerExpertSquads({
+            query,
+            productPillar: composerIntent().productPillar,
+            limit: 20,
+          })
+        : await searchExpertSquads({
+            directory: scope.directory,
+            query,
+            productPillar: composerIntent().productPillar,
+            limit: 20,
+          })
+    if (sequence !== expertSquadSearchSequence || requestKey !== composerReferenceCatalogRequestKey()) return
+    setComposerExpertSquadCatalogSnapshot((current) =>
+      current.requestKey === requestKey
+        ? {
+            ...current,
+            squads: mergeComposerExpertSquadOptions(page.entries, current.squads, [
+              current.activeID,
+              ...selectedExpertSquadIDs,
+            ]),
+            error: "",
+          }
+        : current,
+    )
+  } catch (error) {
+    if (sequence !== expertSquadSearchSequence || requestKey !== composerReferenceCatalogRequestKey()) return
+    const message = `expert squad search: ${runtimeErrorMessage(error)}`
+    setComposerExpertSquadCatalogSnapshot((current) =>
+      current.requestKey === requestKey ? { ...current, error: message } : current,
+    )
+    AppLog.warn("composer-reference", "Expert Squad search failed", { error: message, requestKey })
+  }
+}
+
 function newRequestComposerDraftKey(): string {
   const directory = activeDirectory()
   return directory ? composerDraftKey("launcher", "new", directory) : composerDraftKey("launcher", "new")
@@ -1641,7 +1820,7 @@ function missionSubmitActive(): boolean {
 }
 
 function conversationSubmitActive(): boolean {
-  return composerIntent().conversationTarget === "chat" && !isConversationSource()
+  return composerIntent().conversationTarget === "chat" && !activeTaskID() && !isConversationSource()
 }
 
 function resolvedActiveComposerIntent(): ComposerIntent | undefined {
@@ -1730,12 +1909,6 @@ function OverlayRoot() {
     return requestKey
   }, "")
 
-  createEffect<string>((previousDirectory) => {
-    const directory = activeDirectory()
-    if (directory !== previousDirectory) setMailboxAttention(false)
-    return directory
-  }, "")
-
   createEffect(() => {
     const open = rightDockOpen()
     if (!open && rightDockAddMenuOpen()) setRightDockAddMenuOpen(false)
@@ -1753,6 +1926,10 @@ function OverlayRoot() {
       resizer.tabIndex = open ? 0 : -1
     }
     renderRightDockWidth()
+  })
+
+  createEffect(() => {
+    if (primaryWorkspaceSurface() === "mission-board" && rightDockOpen()) setRightDockVisible(false)
   })
 
   // body.dataset.workspace / .connection writes were dead — no CSS or JS in
@@ -1827,9 +2004,10 @@ function OverlayRoot() {
 
   createEffect(() => {
     const open = fileWorkbenchOpen()
+    void fileEditorRevealRevision()
     if (open) {
       setWorkspaceOpen(false)
-      openCenterWorkbenchPanel("file")
+      openRightDockPanel("file")
     } else {
       removeCenterWorkbenchTabs((tab) => tab.panel === "file")
     }
@@ -1873,15 +2051,20 @@ function OverlayRoot() {
         <MissionBoard
           projectDirectories={missionBoardProjectDirectories()}
           defaultProjectDirectory={activeDirectory()}
-          productPillar={composerIntent().productPillar}
-          expertSquads={composerExpertSquadCatalog().squads}
-          activeExpertSquadID={composerExpertSquadCatalog().activeID}
+          onInstallMoreExpertSquads={(directory) =>
+            void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
+          }
+          onMarketExpertSquadQuery={searchMissionMarketExpertSquads}
+          onInstallMarketExpertSquad={installMissionMarketExpertSquad}
+          onOpenMarketExpertSquad={openMissionMarketExpertSquad}
+          canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))
           }
           onCreateManual={createMissionBoardDraft}
           onCreateWithAI={createMissionBoardWithAI}
           onDispatchMission={dispatchMissionBoardDraft}
+          onConfirmDeleteMission={confirmDeleteMissionBoardMission}
           onDeleteMission={deleteMissionBoardMission}
         />
       }
@@ -1939,9 +2122,6 @@ function OverlayRoot() {
       onRetryTask={(row) => runMainAsync("task.header-retry", () => retryTerminalTask(row))}
       onReplanTask={(row) => runMainAsync("task.header-replan", () => replanTerminalTask(row))}
       onOpenAutomationSession={openAutomationSession}
-      mailboxAttention={mailboxAttention()}
-      mailboxUnreadCount={mailboxUnreadCount()}
-      onMailboxViewed={() => setMailboxAttention(false)}
       sidebarToggle={
         <Button
           variant="ghost"
@@ -1979,6 +2159,7 @@ function OverlayRoot() {
       }
       workLedger={
         <WorkLedger
+          primarySurface={primaryWorkspaceSurface()}
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
           refreshToken={missionSharedRefreshToken()}
@@ -1990,7 +2171,6 @@ function OverlayRoot() {
           onDownloadMission={downloadWorkLedgerMission}
           onRenameMission={renameWorkLedgerMission}
           onArchiveMission={archiveWorkLedgerMission}
-          onStartTask={startWorkLedgerTask}
           onCancelTask={cancelWorkLedgerTask}
           onDownloadTask={downloadWorkLedgerTask}
           onRenameTask={renameWorkLedgerTask}
@@ -2025,13 +2205,7 @@ function OverlayRoot() {
           onArchiveChat={archiveWorkLedgerChat}
         />
       }
-      mailbox={
-        <MailboxPanel
-          onNotification={presentMailboxNotification}
-          onUnreadCountChange={setMailboxUnreadCount}
-          onSelectTask={selectTaskWithUILifecycle}
-        />
-      }
+      mailbox={<MailboxPanel onSelectTask={selectTaskWithUILifecycle} />}
       conversation={(container) => (
         <Conversation
           container={container}
@@ -2089,6 +2263,10 @@ function OverlayRoot() {
           missionSkills={composerExpertSquadCatalog().missionSkills}
           referenceCatalogError={composerExpertSquadCatalog().error}
           expertSquads={composerExpertSquadCatalog().squads}
+          onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
+          onInstallMoreExpertSquads={() =>
+            void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject())
+          }
           activeExpertSquadID={composerExpertSquadCatalog().activeID}
           conversationActive={Boolean(activeTaskID() || activeSessionID())}
           launchReferences={composerLaunchReferences()}
@@ -2114,7 +2292,7 @@ function OverlayRoot() {
               setExpertSquadLauncherSubmitting(true)
               try {
                 const { directory, model } = await resolveGlobalComposerSubmissionContext()
-                const selectionEpoch = beginWorkspaceSelection()
+                const selectionEpoch = supersedePendingWorkspaceSelection()
                 const result = await wakeMission({
                   directory,
                   text,
@@ -2123,8 +2301,6 @@ function OverlayRoot() {
                   productPillar: intentRoute.productPillar,
                   expertSquadIDs: submitRoute.kind === "mission" ? submitRoute.expertSquadIDs : undefined,
                 })
-                setComposerIntent((current) => ({ ...current, conversationTarget: "mission" }))
-                resetCenterWorkbenchToPrimaryPanel("mission")
                 await openMissionSession(result, directory, selectionEpoch)
                 setMissionSharedRefreshToken((value) => value + 1)
                 return result
@@ -2224,7 +2400,7 @@ function OverlayRoot() {
             return selected?.panel === "conversation" ? null : (selected?.id ?? null)
           }}
           onSelect={selectRightDockTab}
-          onOpen={(panel) => openCenterWorkbenchPanel(panel)}
+          onOpen={openRightDockPanel}
           onNewBrowserTab={openBlankBrowserTab}
           onClose={closeRightDockTab}
           onCloseDock={() => setRightDockVisible(false)}
@@ -2292,7 +2468,7 @@ function OverlayRoot() {
                 onPageTitleChange={(title) =>
                   setBrowserPreviewPageTitles((current) => ({ ...current, browser: title }))
                 }
-                onReady={() => openRightDockPanel("browser")}
+                onReady={() => presentRightDockPanel("browser")}
                 onCommentDraft={(text) => {
                   const key = panelComposerDraftKey()
                   const existing = composerDraftText(key)
@@ -2434,6 +2610,9 @@ overlayAppHost.replaceChildren()
 disposers.push(render(() => <OverlayRoot />, overlayAppHost))
 await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 await showOverlayWindow()
+disposers.push(await installExpertSquadInstallHandoffBridge())
+const clipboardApiKeyPrompt = installClipboardApiKeyPrompt()
+disposers.push(() => clipboardApiKeyPrompt.dispose())
 
 // ── Right dock width resize ──
 // The right dock is resized by dragging `#rightDockResizer`. Width persists to
@@ -2578,30 +2757,7 @@ window.addEventListener("beforeunload", () => {
 })
 installSystemThemeListener(() => applyTheme(settingsStore.theme))
 
-// Dev-only hook used by `script/snap-settings.ts` to drive the config
-// dialog open from Playwright. Vite dev does not happily serve the
-// `.ts` modules to a dynamic-import call from a foreign origin, so the
-// snap script cannot reach `openConfigDialog` through the module graph
-// — it reaches in via `window.__OC_DEV__` instead. Gated on
-// `import.meta.env.DEV` so the production bundle does not carry it.
-//
-// The application root mounts before `initApp()` starts, so these
-// assertions only verify that the shared host is available to the
-// snapshot script while the backend is offline.
-if (import.meta.env.DEV) {
-  function assertOverlayAppMounted(): void {
-    if (!overlayAppHost.firstElementChild) throw new Error("Overlay application root is not mounted")
-  }
-  ;(window as any).__OC_DEV__ = {
-    openConfigDialog,
-    ensureConfigHost: assertOverlayAppMounted,
-    openGoalDialog,
-    ensureGoalHost: assertOverlayAppMounted,
-  }
-}
-
 // ── Init ──
-
 ;(window as any).__overlayInitSettled = false
 runMainAsync("initApp", async () => {
   try {
@@ -2611,6 +2767,7 @@ runMainAsync("initApp", async () => {
       },
       onConnected: async () => {
         await focusInitialRestoredTaskWorkspace()
+        void clipboardApiKeyPrompt.checkNow()
         void checkDesktopUpdate({ background: true })
       },
     })

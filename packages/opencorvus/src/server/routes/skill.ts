@@ -284,7 +284,7 @@ export function SkillRoutes() {
       "/policy",
       describeRoute({
         summary: "Set skill permission policy",
-        description: "Set the global allow, ask, or deny policy for a named skill.",
+        description: "Set the global allow or deny capability policy for a named skill.",
         operationId: "skill.policy",
         responses: {
           200: {

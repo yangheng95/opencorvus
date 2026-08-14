@@ -1,7 +1,6 @@
 import { normalizedServerRoutePath } from "@opencorvus-ai/transport-protocol"
 
 const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
-  "DELETE /project/current",
   "POST /project/current/init-git",
   "GET /expert-squad/market",
   "POST /expert-squad/install-payload",
@@ -17,12 +16,27 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /path",
   "GET /skill/mounts",
   "GET /mcp",
+  "GET /chat/capability",
+  "PATCH /chat/capability",
+  "GET /work/capability",
+  "PATCH /work/capability",
   "GET /provider",
   "GET /provider/auth",
   "POST /provider/refresh",
   "POST /provider/models/refresh",
   "POST /provider/discover-models",
 ])
+
+const PROJECT_PERSISTED_ROUTE_KEYS = new Set(["DELETE /project/current"])
+
+const PROJECT_PERSISTED_ROUTE_PATTERNS = [
+  /^DELETE \/session\/[^/]+$/,
+  /^DELETE \/session\/[^/]+\/message\/[^/]+$/,
+  /^DELETE \/session\/[^/]+\/message\/[^/]+\/part\/[^/]+$/,
+  /^DELETE \/goal\/[^/]+$/,
+  /^DELETE \/task\/[^/]+$/,
+  /^DELETE \/mission\/[^/]+$/,
+]
 
 const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
   /^GET \/provider\/[^/]+\/account-usage$/,
@@ -36,17 +50,24 @@ const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
   /^GET \/session\/[^/]+\/conversation$/,
 ]
 
-/**
- * Returns true only for project-owned operations whose handler requires the
- * canonical Project identity but not full runtime bootstrap. This includes
- * control-plane repair operations and exact persisted conversation reads.
- */
-export function projectRouteUsesIdentityContext(routePath: string, method?: string): boolean {
+/** Selects the least-capable Project authority required by the exact route. */
+export type ProjectRouteContextKind = "persisted" | "identity" | "runtime"
+
+export function projectRouteContextKind(routePath: string, method?: string): ProjectRouteContextKind {
   const routeMethod = String(method || "GET").toUpperCase()
   const routeKey = `${routeMethod} ${normalizedServerRoutePath(routePath)}`
-  return (
+  if (
+    PROJECT_PERSISTED_ROUTE_KEYS.has(routeKey) ||
+    PROJECT_PERSISTED_ROUTE_PATTERNS.some((pattern) => pattern.test(routeKey))
+  ) {
+    return "persisted"
+  }
+  if (
     PROJECT_IDENTITY_ROUTE_KEYS.has(routeKey) ||
     PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS.some((pattern) => pattern.test(routeKey)) ||
     PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS.some((pattern) => pattern.test(routeKey))
-  )
+  ) {
+    return "identity"
+  }
+  return "runtime"
 }

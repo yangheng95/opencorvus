@@ -5,6 +5,7 @@ import path from "path"
 import { which } from "@/util/which"
 import { PidGuard } from "./pid-guard"
 import { ProcessSupervisor } from "./process-supervisor"
+import { awaitWithAbort } from "@/util/abort"
 
 export namespace Shell {
   export interface RunOptions {
@@ -12,6 +13,8 @@ export namespace Shell {
     env?: NodeJS.ProcessEnv
     /** Hard wall-clock timeout (ms). Process killed after this regardless of activity. */
     timeoutMs?: number
+    /** Shared absolute deadline for setup, execution, drain, and cleanup. */
+    deadlineAt?: number
     abort?: AbortSignal
   }
 
@@ -68,73 +71,87 @@ export namespace Shell {
 
   type ShellSpawner = (options: ProcessSupervisor.SpawnOptions) => Promise<ProcessSupervisor.Handle>
 
-  async function runWithSpawner(
-    command: string,
-    opts: RunOptions,
-    spawnShell: ShellSpawner,
-  ): Promise<RunResult> {
-    const shell = acceptable()
-    const guardEnv = await PidGuard.env(shell)
-    const supervisor = await spawnShell({
-      command,
-      shell,
-      cwd: opts.cwd,
-      env: { ...process.env, ...opts.env, ...guardEnv },
-    })
-
+  async function runWithSpawner(command: string, opts: RunOptions, spawnShell: ShellSpawner): Promise<RunResult> {
+    const timeoutMs = typeof opts.timeoutMs === "number" && Number.isFinite(opts.timeoutMs) ? opts.timeoutMs : undefined
+    const deadlineAt = Math.min(
+      opts.deadlineAt ?? Number.POSITIVE_INFINITY,
+      timeoutMs !== undefined ? Date.now() + Math.max(0, timeoutMs) : Number.POSITIVE_INFINITY,
+    )
+    const cleanupDeadlineAt = Number.isFinite(deadlineAt)
+      ? deadlineAt + ProcessSupervisor.TERMINATION_CLEANUP_TIMEOUT_MS
+      : undefined
+    const controller = new AbortController()
     const stdoutChunks: Buffer[] = []
     const stderrChunks: Buffer[] = []
     let timedOut = false
     let aborted = false
-
-    let terminationPromise: Promise<number> | undefined
-    let resolveTerminationRequested: ((promise: Promise<number>) => void) | undefined
-    const terminationRequested = new Promise<Promise<number>>((resolve) => {
-      resolveTerminationRequested = resolve
-    })
-    const requestTermination = (reason: string) => {
-      if (!terminationPromise) {
-        terminationPromise = ProcessSupervisor.terminateAndWaitForExit(supervisor, `Shell.run ${reason}`)
-        terminationPromise.catch(() => undefined)
-        resolveTerminationRequested?.(terminationPromise)
-      }
-      return terminationPromise
-    }
-
-    supervisor.stdout?.on("data", (chunk) => {
-      stdoutChunks.push(Buffer.from(chunk))
-    })
-    supervisor.stderr?.on("data", (chunk) => {
-      stderrChunks.push(Buffer.from(chunk))
-    })
-
-    if (opts.abort?.aborted) {
+    const abortFromCaller = () => {
       aborted = true
-      requestTermination("abort")
+      controller.abort(opts.abort?.reason)
     }
+    if (opts.abort?.aborted) abortFromCaller()
+    else opts.abort?.addEventListener("abort", abortFromCaller, { once: true })
+    const timer = Number.isFinite(deadlineAt)
+      ? setTimeout(() => {
+          timedOut = true
+          controller.abort(new DOMException("Shell.run deadline exceeded", "TimeoutError"))
+        }, Math.max(0, deadlineAt - Date.now()))
+      : undefined
 
-    const abortHandler = () => {
-      aborted = true
-      requestTermination("abort")
-    }
-    opts.abort?.addEventListener("abort", abortHandler, { once: true })
-
-    const timeoutMs = typeof opts.timeoutMs === "number" && Number.isFinite(opts.timeoutMs) ? opts.timeoutMs : undefined
-    const timer =
-      timeoutMs && timeoutMs > 0
-        ? setTimeout(() => {
-            timedOut = true
-            requestTermination("timeout")
-          }, timeoutMs)
-        : undefined
-    timer?.unref?.()
-
+    let supervisor: ProcessSupervisor.Handle | undefined
     let primaryError: unknown
     try {
+      const shell = acceptable()
+      const guardEnv = await awaitWithAbort(PidGuard.env(shell), controller.signal)
+      supervisor = await spawnShell({
+        command,
+        shell,
+        cwd: opts.cwd,
+        env: { ...process.env, ...opts.env, ...guardEnv },
+        signal: controller.signal,
+        deadlineAt,
+      })
+
+      let terminationPromise: Promise<number> | undefined
+      let resolveTerminationRequested: ((promise: Promise<number>) => void) | undefined
+      const terminationRequested = new Promise<Promise<number>>((resolve) => {
+        resolveTerminationRequested = resolve
+      })
+      const requestTermination = (reason: string) => {
+        if (!terminationPromise) {
+          terminationPromise = ProcessSupervisor.terminateAndWaitForExit(supervisor!, `Shell.run ${reason}`, {
+            deadlineAt: cleanupDeadlineAt,
+          })
+          terminationPromise.catch(() => undefined)
+          resolveTerminationRequested?.(terminationPromise)
+        }
+        return terminationPromise
+      }
+
+      supervisor.stdout?.on("data", (chunk) => {
+        stdoutChunks.push(Buffer.from(chunk))
+      })
+      supervisor.stderr?.on("data", (chunk) => {
+        stderrChunks.push(Buffer.from(chunk))
+      })
+
+      const abortHandler = () => requestTermination(timedOut ? "timeout" : "abort")
+      controller.signal.addEventListener("abort", abortHandler, { once: true })
+      if (controller.signal.aborted) abortHandler()
       const exitCode = await Promise.race([supervisor.exited, terminationRequested.then((cleanup) => cleanup)])
       if (terminationPromise) {
         await terminationPromise
       }
+      if (cleanupDeadlineAt === undefined) {
+        await supervisor.outputSettled
+      } else {
+        await ProcessSupervisor.awaitWithTimeout(
+          supervisor.outputSettled ?? supervisor.exited.then(() => undefined),
+          Math.max(1, cleanupDeadlineAt - Date.now()),
+          "Shell.run output did not settle before the absolute cleanup deadline",
+        )
+      }
+      controller.signal.removeEventListener("abort", abortHandler)
       const stdoutBytes = Buffer.concat(stdoutChunks)
       const stderrBytes = Buffer.concat(stderrChunks)
       return {
@@ -152,14 +169,16 @@ export namespace Shell {
       throw error
     } finally {
       if (timer) clearTimeout(timer)
-      opts.abort?.removeEventListener("abort", abortHandler)
-      try {
-        await ProcessSupervisor.disposeAndWaitForExit(supervisor, "Shell.run")
-      } catch (error) {
-        if (primaryError) {
-          throw ProcessSupervisor.combineFailures("Shell.run execution and disposal failed", [primaryError, error])
+      opts.abort?.removeEventListener("abort", abortFromCaller)
+      if (supervisor) {
+        try {
+          await ProcessSupervisor.disposeAndWaitForExit(supervisor, "Shell.run", { deadlineAt: cleanupDeadlineAt })
+        } catch (error) {
+          if (primaryError) {
+            throw ProcessSupervisor.combineFailures("Shell.run execution and disposal failed", [primaryError, error])
+          }
+          throw error
         }
-        throw error
       }
     }
   }
@@ -198,6 +217,8 @@ export namespace Shell {
     env?: NodeJS.ProcessEnv
     outputSniffMs?: number
     leaseMs?: number
+    /** Shared absolute deadline for setup and the background process lease. */
+    deadlineAt?: number
     abort?: AbortSignal
   }
 
@@ -207,14 +228,37 @@ export namespace Shell {
     spawnShell: ShellSpawner,
   ): Promise<LaunchResult> {
     const { cwd, env, outputSniffMs = 8000, leaseMs } = opts
+    const deadlineAt = Math.min(
+      opts.deadlineAt ?? Number.POSITIVE_INFINITY,
+      typeof leaseMs === "number" && Number.isFinite(leaseMs) ? Date.now() + Math.max(0, leaseMs) : Number.POSITIVE_INFINITY,
+    )
+    const controller = new AbortController()
+    const abortFromCaller = () => controller.abort(opts.abort?.reason)
+    if (opts.abort?.aborted) abortFromCaller()
+    else opts.abort?.addEventListener("abort", abortFromCaller, { once: true })
+    const leaseTimer = Number.isFinite(deadlineAt)
+      ? setTimeout(
+          () => controller.abort(new DOMException("Shell.launch deadline exceeded", "TimeoutError")),
+          Math.max(0, deadlineAt - Date.now()),
+        )
+      : undefined
     const shell = acceptable()
-    const guardEnv = await PidGuard.env(shell)
-    const supervisor = await spawnShell({
-      command,
-      shell,
-      cwd,
-      env: { ...process.env, ...env, ...guardEnv },
-    })
+    let supervisor: ProcessSupervisor.Handle
+    try {
+      const guardEnv = await awaitWithAbort(PidGuard.env(shell), controller.signal)
+      supervisor = await spawnShell({
+        command,
+        shell,
+        cwd,
+        env: { ...process.env, ...env, ...guardEnv },
+        signal: controller.signal,
+        deadlineAt,
+      })
+    } catch (error) {
+      if (leaseTimer) clearTimeout(leaseTimer)
+      opts.abort?.removeEventListener("abort", abortFromCaller)
+      throw error
+    }
 
     let initialOutput = ""
     let processSettled = false
@@ -247,7 +291,11 @@ export namespace Shell {
     const requestDispose = (reason: string) => {
       if (!disposePromise) {
         disposeReason = reason
-        disposePromise = ProcessSupervisor.disposeAndWaitForExit(supervisor, `Shell.launch ${reason}`)
+        disposePromise = ProcessSupervisor.disposeAndWaitForExit(supervisor, `Shell.launch ${reason}`, {
+          deadlineAt: Number.isFinite(deadlineAt)
+            ? deadlineAt + ProcessSupervisor.TERMINATION_CLEANUP_TIMEOUT_MS
+            : undefined,
+        })
         void disposePromise.catch(() => undefined)
         resolveDisposeRequested?.()
       }
@@ -260,12 +308,15 @@ export namespace Shell {
       requestDispose("abort")
       finishSniff?.()
     }
-    opts.abort?.addEventListener("abort", abortHandler, { once: true })
-    if (opts.abort?.aborted) abortHandler()
+    controller.signal.addEventListener("abort", abortHandler, { once: true })
+    if (controller.signal.aborted) abortHandler()
 
     await new Promise<void>((resolve) => {
       let finished = false
-      const timer = setTimeout(() => finishSniff?.(), outputSniffMs)
+      const timer = setTimeout(
+        () => finishSniff?.(),
+        Math.max(0, Math.min(outputSniffMs, deadlineAt - Date.now())),
+      )
       const done = () => {
         if (finished) return
         finished = true
@@ -287,12 +338,16 @@ export namespace Shell {
     }
 
     if (aborted) {
-      opts.abort?.removeEventListener("abort", abortHandler)
+      controller.signal.removeEventListener("abort", abortHandler)
+      if (leaseTimer) clearTimeout(leaseTimer)
+      opts.abort?.removeEventListener("abort", abortFromCaller)
       await throwAfterDispose(new Error(`Process launch aborted. Output:\n${initialOutput.slice(0, 1000)}`), "abort")
     }
 
     if (processSettled) {
-      opts.abort?.removeEventListener("abort", abortHandler)
+      controller.signal.removeEventListener("abort", abortHandler)
+      if (leaseTimer) clearTimeout(leaseTimer)
+      opts.abort?.removeEventListener("abort", abortFromCaller)
       const outcome = await processOutcome
       const immediate = new Error(`Process exited immediately after launch. Output:\n${initialOutput.slice(0, 1000)}`)
       const primary =
@@ -302,19 +357,13 @@ export namespace Shell {
       await throwAfterDispose(primary, "immediate exit")
     }
 
-    const leaseTimer =
-      typeof leaseMs === "number" && Number.isFinite(leaseMs) && leaseMs > 0
-        ? setTimeout(() => {
-            requestDispose("lease timeout")
-          }, leaseMs)
-        : undefined
-    leaseTimer?.unref?.()
     const lifecyclePromise = (async () => {
       await Promise.race([processOutcome.then(() => undefined), disposeRequested])
       await requestDispose(disposeReason ?? "natural exit")
     })().finally(() => {
       if (leaseTimer) clearTimeout(leaseTimer)
-      opts.abort?.removeEventListener("abort", abortHandler)
+      controller.signal.removeEventListener("abort", abortHandler)
+      opts.abort?.removeEventListener("abort", abortFromCaller)
     })
     void lifecyclePromise.catch(() => undefined)
     supervisor.unref()

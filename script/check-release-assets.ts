@@ -3,6 +3,11 @@
 import fs from "fs"
 import path from "path"
 import { artifactEmbeddedExecutableRelativePaths } from "../packages/opencorvus/script/build-artifact"
+import { WORK_ARTIFACT_RUNTIME_LOCK } from "../packages/opencorvus/script/work-artifact-runtime-lock"
+import {
+  WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST,
+  workArtifactManagedPackageFiles,
+} from "../packages/opencorvus/src/work-artifact/runtime/package-manifest"
 import { overlayBundlePatterns, overlayUpdaterContract, updaterSignatureName } from "./release-asset-contract"
 
 const args = process.argv.slice(2)
@@ -80,6 +85,15 @@ function requireUiBundle(uiRoot: string) {
   }
 }
 
+function workArtifactTarget(platform: string) {
+  const [rawOs, arch, abi] = platform.split("-")
+  const os = rawOs === "windows" ? "win32" : rawOs
+  if ((os !== "win32" && os !== "darwin" && os !== "linux") || (arch !== "x64" && arch !== "arm64")) {
+    throw new Error(`Unsupported Work Artifact release target: ${platform}`)
+  }
+  return { os, arch, ...(abi === "musl" ? { abi: "musl" as const } : {}) }
+}
+
 if (mode === "cli") {
   const dir = path.resolve(flag("--dir") || "")
   const rawPlatforms = flag("--platforms")
@@ -97,8 +111,13 @@ if (mode === "cli") {
     const ui = path.join(root, "ui")
     if (!exists(root)) throw new Error(`Missing CLI platform directory: ${root}`)
     for (const executable of artifactEmbeddedExecutableRelativePaths(platform)) requireFile(path.join(root, executable))
-    requireFile(path.join(root, "licenses", "OfficeCLI-LICENSE"))
-    requireFile(path.join(root, "licenses", "OfficeCLI-RUNTIME-LOCK.json"))
+    for (const file of workArtifactManagedPackageFiles({
+      lock: WORK_ARTIFACT_RUNTIME_LOCK,
+      target: workArtifactTarget(platform),
+    })) {
+      requireFile(path.join(root, ...file.path.split("/")))
+    }
+    requireFile(path.join(root, WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST))
     requireFile(path.join(root, "browser-mcp-node", "browser.mjs"))
     requireFile(path.join(root, "browser-mcp-node", "node_modules", "playwright", "package.json"))
     requireUiBundle(ui)

@@ -1,15 +1,22 @@
 import { Session } from "@/session"
-import { Instance } from "@/project/instance"
 import { SessionPromptState } from "@/session/prompt/state"
 import { SessionStatus } from "@/session/status"
 import { publishSessionStatus } from "@/session/status-publication"
 import { AwaitTimeoutError } from "@/util/await-with-timeout"
 import { createTaskCancellationIncomplete } from "./cancellation-error"
 import type { ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import type { ProjectDeletionAdmission } from "@/project/instance"
 
 type SessionInfo = Awaited<ReturnType<typeof Session.get>>
 type PromptSession = Pick<SessionInfo, "id" | "directory">
 export type TaskAgentPromptSession = PromptSession
+export type ProjectDeletionAdmissionSource = ProjectDeletionAdmission | (() => ProjectDeletionAdmission | undefined)
+
+function resolveProjectDeletionAdmission(
+  source: ProjectDeletionAdmissionSource | undefined,
+): ProjectDeletionAdmission | undefined {
+  return typeof source === "function" ? source() : source
+}
 
 const DEFAULT_PROMPT_SETTLE_INACTIVITY_MS = 5_000
 
@@ -18,10 +25,25 @@ export function cancelSessionPromptInScope(input: {
   taskID?: string
   handle?: string
   origin: ExecutionCancellationOrigin
-}): boolean {
+  settleBeforeReuse: boolean
+}): SessionPromptState.CancellationReceipt | undefined {
   const handle = input.handle ?? "SessionPrompt.cancel"
+  const retained = SessionPromptState.joinCancellationSettlement({
+    sessionID: input.session.id,
+    directory: input.session.directory,
+    settlementRequired: input.settleBeforeReuse,
+  })
+  if (retained.status === "mismatch") {
+    throw createTaskCancellationIncomplete({
+      taskID: input.taskID,
+      handle,
+      cause: new Error(`Session ${input.session.id} has retained cancellation outside its exact directory`),
+    })
+  }
+  if (retained.status === "joined") return retained.receipt
   const cancelled = SessionPromptState.cancel(input.session.id, input.session.directory, {
     origin: input.origin,
+    settlementRequired: input.settleBeforeReuse,
   })
   if (!cancelled && SessionPromptState.hasOwnedPromptInAnyDirectory(input.session.id)) {
     throw createTaskCancellationIncomplete({
@@ -40,7 +62,10 @@ export async function awaitSessionPromptFinishedInScope(input: {
   taskID?: string
   handle?: string
   inactivityTimeoutMs?: number
+  signal?: AbortSignal
+  projectDeletionAdmission?: ProjectDeletionAdmissionSource
 }): Promise<boolean> {
+  input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.finish"
   const receipt = SessionPromptState.cancellationReceipt(input.session.id, input.session.directory)
   if (!receipt && !SessionPromptState.hasOwnedPrompt(input.session.id, input.session.directory)) return false
@@ -51,13 +76,20 @@ export async function awaitSessionPromptFinishedInScope(input: {
       promptFinished: receipt?.finished,
       inactivityTimeoutMs: input.inactivityTimeoutMs ?? DEFAULT_PROMPT_SETTLE_INACTIVITY_MS,
       label: handle,
+      signal: input.signal,
     })
     if (receipt) {
+      input.signal?.throwIfAborted()
       await publishSessionStatus(
         input.session,
         { type: "terminal", reason: "aborted", error: receipt.error.message },
-        { promptGenerationOwner: receipt.owner },
+        {
+          promptGenerationOwner: receipt.owner,
+          signal: input.signal,
+          projectDeletionAdmission: resolveProjectDeletionAdmission(input.projectDeletionAdmission),
+        },
       )
+      input.signal?.throwIfAborted()
       SessionPromptState.clearCancellationReceipt(input.session.id, receipt.owner)
     }
     return true
@@ -109,15 +141,12 @@ export async function requestSessionPromptSubtreeCancellation(input: {
 
   for (const session of sessions.slice().reverse()) {
     try {
-      const cancelled = await Instance.provide({
-        directory: session.directory,
-        fn: () =>
-          cancelSessionPromptInScope({
-            session,
-            taskID: input.taskID,
-            handle,
-            origin: { ...input.origin, targetSessionID: session.id },
-          }),
+      const cancelled = cancelSessionPromptInScope({
+        session,
+        taskID: input.taskID,
+        handle,
+        origin: { ...input.origin, targetSessionID: session.id },
+        settleBeforeReuse: true,
       })
       if (cancelled) {
         cancelledSessions.push(session)
@@ -136,7 +165,10 @@ export async function assertSessionPromptSubtreeFinished(input: {
   taskID?: string
   handle?: string
   inactivityTimeoutMs?: number
+  signal?: AbortSignal
+  projectDeletionAdmission?: ProjectDeletionAdmissionSource
 }): Promise<void> {
+  input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.cancel"
   const failures = [...(input.failures ?? [])]
   const settled = await Promise.allSettled(
@@ -146,6 +178,8 @@ export async function assertSessionPromptSubtreeFinished(input: {
         taskID: input.taskID,
         handle: `${handle}.finish`,
         inactivityTimeoutMs: input.inactivityTimeoutMs,
+        signal: input.signal,
+        projectDeletionAdmission: input.projectDeletionAdmission,
       }),
     ),
   )
@@ -166,14 +200,19 @@ export async function terminateSessionPromptInScope(input: {
   session: Pick<SessionInfo, "id" | "directory">
   origin: ExecutionCancellationOrigin
 }): Promise<boolean> {
-  const cancelled = SessionPromptState.cancel(input.session.id, input.session.directory, { origin: input.origin })
-  if (cancelled) {
+  const settlement = cancelSessionPromptInScope({
+    session: input.session,
+    origin: input.origin,
+    handle: "SessionPrompt.terminate",
+    settleBeforeReuse: true,
+  })
+  if (settlement) {
     await awaitSessionPromptFinishedInScope({
       session: input.session,
       handle: "SessionPrompt.terminate",
     })
   }
-  return cancelled
+  return Boolean(settlement)
 }
 
 export async function terminateOwnedSessionPromptInScope(input: {
@@ -184,27 +223,41 @@ export async function terminateOwnedSessionPromptInScope(input: {
   inactivityTimeoutMs?: number
 }): Promise<boolean> {
   const handle = input.handle ?? "SessionPrompt.terminateOwned"
-  const cancelled = SessionPromptState.cancelOwned(input.session.id, input.session.directory, input.owner, {
-    origin: input.origin,
-  })
-  if (!cancelled) return false
   try {
+    const retained = SessionPromptState.joinCancellationSettlement({
+      sessionID: input.session.id,
+      directory: input.session.directory,
+      owner: input.owner,
+      settlementRequired: true,
+    })
+    if (retained.status === "mismatch") {
+      throw new Error(`Session ${input.session.id} retained cancellation does not match its exact owner and directory`)
+    }
+    let receipt = retained.status === "joined" ? retained.receipt : undefined
+    if (!receipt) {
+      const cancelled = SessionPromptState.cancelOwned(input.session.id, input.session.directory, input.owner, {
+        origin: input.origin,
+        settlementRequired: true,
+      })
+      if (!cancelled) return false
+      receipt = SessionPromptState.cancellationReceipt(input.session.id, input.session.directory)
+      if (!receipt || receipt.owner !== input.owner) {
+        throw new Error(`Session ${input.session.id} cancelled without its exact prompt-owner receipt`)
+      }
+    }
     await waitForPromptFinishAfterInactivity({
       sessionID: input.session.id,
       directory: input.session.directory,
-      promptFinished: SessionPromptState.waitForOwnedFinish(input.session.id, input.session.directory, input.owner),
+      promptFinished: receipt.finished,
       inactivityTimeoutMs: input.inactivityTimeoutMs ?? DEFAULT_PROMPT_SETTLE_INACTIVITY_MS,
       label: handle,
     })
-    const receipt = SessionPromptState.cancellationReceipt(input.session.id, input.session.directory)
-    if (receipt?.owner === input.owner) {
-      await publishSessionStatus(
-        input.session,
-        { type: "terminal", reason: "aborted", error: receipt.error.message },
-        { promptGenerationOwner: input.owner },
-      )
-      SessionPromptState.clearCancellationReceipt(input.session.id, input.owner)
-    }
+    await publishSessionStatus(
+      input.session,
+      { type: "terminal", reason: "aborted", error: receipt.error.message },
+      { promptGenerationOwner: input.owner },
+    )
+    SessionPromptState.clearCancellationReceipt(input.session.id, input.owner)
     return true
   } catch (cause) {
     throw createTaskCancellationIncomplete({ handle, cause })
@@ -217,12 +270,15 @@ export async function cancelSessionPromptByID(input: {
   handle?: string
   origin: ExecutionCancellationOrigin
 }): Promise<boolean> {
-  return cancelSessionPromptInScope({
-    session: await Session.get(input.sessionID),
-    taskID: input.taskID,
-    handle: input.handle,
-    origin: input.origin,
-  })
+  return Boolean(
+    cancelSessionPromptInScope({
+      session: await Session.get(input.sessionID),
+      taskID: input.taskID,
+      handle: input.handle,
+      origin: input.origin,
+      settleBeforeReuse: false,
+    }),
+  )
 }
 
 function waitForPromptFinishAfterInactivity(input: {
@@ -231,7 +287,9 @@ function waitForPromptFinishAfterInactivity(input: {
   promptFinished?: Promise<void>
   inactivityTimeoutMs: number
   label: string
+  signal?: AbortSignal
 }): Promise<void> {
+  input.signal?.throwIfAborted()
   if (!input.promptFinished && !SessionPromptState.hasOwnedPrompt(input.sessionID, input.directory))
     return Promise.resolve()
 
@@ -260,8 +318,10 @@ function waitForPromptFinishAfterInactivity(input: {
       if (settled) return
       settled = true
       if (timer) clearTimeout(timer)
+      input.signal?.removeEventListener("abort", abort)
       fn()
     }
+    const abort = () => complete(() => reject(input.signal?.reason))
     const tick = () => {
       if (settled) return
       observeActivity()
@@ -275,7 +335,9 @@ function waitForPromptFinishAfterInactivity(input: {
     }
 
     observeActivity()
-    timer = setTimeout(tick, pollMs)
+    input.signal?.addEventListener("abort", abort, { once: true })
+    if (input.signal?.aborted) abort()
+    if (!settled) timer = setTimeout(tick, pollMs)
     promptFinished.then(
       () => complete(() => resolve()),
       (error) => complete(() => reject(error)),

@@ -39,7 +39,9 @@ function createToolCallSchema(tools: InitializedTool[]) {
 
 export function createBatchTool(visibleTools: InitializedTool[]): Tool.Info {
   return Tool.define("batch", async () => {
-    const availableTools = visibleTools.filter((tool) => !DISALLOWED.has(tool.id))
+    const availableTools = visibleTools.filter(
+      (tool) => !DISALLOWED.has(tool.id) && tool.executionMode !== "turn_control_exclusive",
+    )
     const toolMap = new Map(availableTools.map((tool) => [tool.id, tool]))
 
     return {
@@ -137,6 +139,9 @@ export function createBatchTool(visibleTools: InitializedTool[]): Tool.Info {
                 toolCallID: partID,
                 toolPartID: partID,
                 providerName: call.tool,
+                providerKind: "builtin",
+                providerID: call.tool,
+                args: validatedParams,
               }, ctx.executionSurface, async (invocationAuthority) => {
                 const childContext: Tool.Context = {
                   ...ctx,

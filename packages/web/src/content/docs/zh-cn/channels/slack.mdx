@@ -140,4 +140,4 @@ Slack 的 `file_share` 子类型（语音消息）会被下载并走已配置的
 **检查**：去重事实由 OpenCorvus channel ingress 的稳定消息 ID 持久化；若看到重复，检查是否有两个托管或独立 channel-runtime owner 使用了同一组 Slack app 凭据。
 
 **问题**：权限审批消息无人回复
-**检查**：内置权限默认 `allow`；检查项目配置是否显式写了 `ask`，然后从操作员界面审批，或把对应规则改为 `allow`。
+**检查**：默认权限模式是 `Full access`。如果项目显式选择了 `Ask me`，请从操作员界面审批，或把项目切换为 `Full access`。

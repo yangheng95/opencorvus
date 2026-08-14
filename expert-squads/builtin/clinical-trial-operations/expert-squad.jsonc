@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "clinical-trial-operations",
+  "name": "Clinical Trial Operations",
+  "label": "Clinical Trial Operations",
+  "description": "Site readiness, participant-flow and conduct, data quality and monitoring, and safety/TMF/closeout evidence joined into a bounded clinical-trial operations review.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for evidence-led clinical-trial operations review without participant, medical, regulatory, or release authority.",
+    "selection_guidance": "Select for protocol-versioned site readiness, training/delegation evidence, screening/enrollment/visit flow, deviation facts, critical-to-quality monitoring, data-query reconciliation, safety-event routing evidence, Trial Master File completeness, and closeout dependencies. Do not select for eligibility, consent, treatment, dosing, unblinding, safety adjudication, site activation, submission, database lock, certification, CAPA approval, or stop/continue decisions.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "clinical-trial-operations/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "trial-startup-site-readiness-analyst": {
+        "label": "Trial Startup and Site Readiness Analyst",
+        "description": "Maps protocol-versioned approvals, essential documents, roles, training, delegation, facilities, systems, and activation dependencies.",
+        "base_role": "explore",
+        "prompt": "agents/trial-startup-site-readiness-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-trial-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "trial-enrollment-conduct-analyst": {
+        "label": "Enrollment and Trial Conduct Analyst",
+        "description": "Reconciles screening, enrollment, visits, discontinuation, and deviation facts to the supplied protocol without participant decisions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/trial-enrollment-conduct-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-trial-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "trial-data-quality-monitoring-analyst": {
+        "label": "Data Quality and Monitoring Analyst",
+        "description": "Maps critical-to-quality risks, missingness, query aging, reconciliation, and risk-based monitoring evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/trial-data-quality-monitoring-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-trial-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "trial-safety-tmf-closeout-analyst": {
+        "label": "Safety, TMF, and Closeout Analyst",
+        "description": "Checks safety routing and reconciliation evidence plus Trial Master File and closeout completeness without adjudication or certification.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/trial-safety-tmf-closeout-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-trial-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "clinical-trial-operations-review-owner": {
+        "label": "Clinical Trial Operations Review Owner",
+        "description": "Joins four independent operations branches into an accountable issue, escalation, and approval pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/clinical-trial-operations-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-trial-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "clinical-trial-operations-review": {
+        "label": "Clinical Trial Operations Review",
+        "description": "Four independent trial-operations evidence branches converge into one accountable review pack.",
+        "nodes": {
+          "trial-startup-site-readiness-analyst": {
+            "agent_id": "trial-startup-site-readiness-analyst",
+            "description": "Maps approvals, essential documents, roles, training, delegation, facilities, systems, and activation dependencies.",
+            "depends_on": []
+          },
+          "trial-enrollment-conduct-analyst": {
+            "agent_id": "trial-enrollment-conduct-analyst",
+            "description": "Reconciles participant-flow denominators, visit-window facts, discontinuations, and deviation evidence.",
+            "depends_on": []
+          },
+          "trial-data-quality-monitoring-analyst": {
+            "agent_id": "trial-data-quality-monitoring-analyst",
+            "description": "Maps critical-to-quality risks, queries, missingness, reconciliation, and monitoring evidence.",
+            "depends_on": []
+          },
+          "trial-safety-tmf-closeout-analyst": {
+            "agent_id": "trial-safety-tmf-closeout-analyst",
+            "description": "Maps safety routing/reconciliation and TMF/closeout completeness evidence.",
+            "depends_on": []
+          },
+          "clinical-trial-operations-review-owner": {
+            "agent_id": "clinical-trial-operations-review-owner",
+            "description": "Joins all branches into versioned issues, dependencies, escalation, and qualified approval gates.",
+            "depends_on": [
+              "trial-data-quality-monitoring-analyst",
+              "trial-enrollment-conduct-analyst",
+              "trial-safety-tmf-closeout-analyst",
+              "trial-startup-site-readiness-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,721 @@
+name: deploy opencorvus.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/actions/setup-bun/**"
+      - ".github/workflows/deploy-opencorvus-com.yml"
+      - "deploy/racknerd/**"
+      - "expert-squads/builtin/**"
+      - "packages/opencorvus/generated/expert-squad-payload.ts"
+      - "packages/opencorvus/src/expert-squad/**"
+      - "packages/web/**"
+      - "bun.lock"
+      - "package.json"
+  schedule:
+    - cron: "17 3 1 * *"
+  repository_dispatch:
+    types: [opencorvus-release-published]
+  workflow_dispatch:
+    inputs:
+      deployment_mode:
+        description: Daily deploy, pre-DNS bootstrap stage, or post-cutover public verification
+        required: true
+        default: daily
+        type: choice
+        options:
+          - daily
+          - bootstrap-stage
+          - bootstrap-verify
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opencorvus-com-production
+  queue: max
+  cancel-in-progress: false
+
+jobs:
+  resolve-source:
+    name: resolve immutable website source
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      source-sha: ${{ steps.source.outputs.source-sha }}
+    steps:
+      - name: Resolve and verify website source
+        id: source
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SHA: ${{ github.sha }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
+          DISPATCH_TAG: ${{ github.event.client_payload.tag || '' }}
+          DISPATCH_SOURCE_SHA: ${{ github.event.client_payload.source_sha || '' }}
+        run: |
+          set -euo pipefail
+          SOURCE_SHA="$EVENT_SHA"
+          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            python3 - "$DISPATCH_VERSION" "$DISPATCH_TAG" "$DISPATCH_SOURCE_SHA" <<'PY'
+          import re, sys
+          version, tag, source = sys.argv[1:]
+          if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?", version):
+              raise SystemExit("release dispatch version is invalid")
+          if tag != f"v{version}":
+              raise SystemExit("release dispatch tag does not match its version")
+          if not re.fullmatch(r"[a-f0-9]{40}", source):
+              raise SystemExit("release dispatch source SHA is invalid")
+          PY
+            OBJECT="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$DISPATCH_TAG" --jq '.object.type + " " + .object.sha')"
+            read -r OBJECT_TYPE OBJECT_SHA <<< "$OBJECT"
+            for _ in 1 2 3 4; do
+              if [ "$OBJECT_TYPE" != "tag" ]; then break; fi
+              OBJECT="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA" --jq '.object.type + " " + .object.sha')"
+              read -r OBJECT_TYPE OBJECT_SHA <<< "$OBJECT"
+            done
+            test "$OBJECT_TYPE" = "commit"
+            test "$OBJECT_SHA" = "$DISPATCH_SOURCE_SHA"
+            SOURCE_SHA="$DISPATCH_SOURCE_SHA"
+          fi
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "Resolved immutable website source $SOURCE_SHA"
+
+  archive-determinism:
+    name: canonical archive (${{ matrix.os }})
+    needs: resolve-source
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          ref: ${{ needs.resolve-source.outputs.source-sha }}
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install frozen dependencies
+        run: bun install --frozen-lockfile --no-progress --ignore-scripts
+        env:
+          HUSKY: "0"
+
+      - name: Build SDK dependency
+        run: bun run --cwd packages/sdk/js build
+
+      - name: Verify fixed canonical archive bytes
+        run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts
+
+  build:
+    name: build and verify database-backed release
+    needs: resolve-source
+    runs-on: ubuntu-latest
+    env:
+      EXPERT_SQUAD_TRUSTED_KEYS_JSON: ${{ vars.EXPERT_SQUAD_TRUSTED_KEYS_JSON }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          ref: ${{ needs.resolve-source.outputs.source-sha }}
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install frozen dependencies
+        run: bun install --frozen-lockfile --no-progress --ignore-scripts
+        env:
+          HUSKY: "0"
+
+      - name: Build SDK dependency
+        run: bun run --cwd packages/sdk/js build
+
+      - name: Verify production configuration contract
+        shell: bash
+        run: bash deploy/racknerd/check-production-configuration.sh
+
+      - name: Require a browser trust root
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -c 'import json,os; value=json.loads(os.environ["EXPERT_SQUAD_TRUSTED_KEYS_JSON"]); assert isinstance(value,list) and len(value) >= 1'
+
+      - name: Generate current public download manifest
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
+        run: |
+          set -euo pipefail
+          RELEASES_JSON="$(mktemp)"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq -s '.' > "$RELEASES_JSON"
+          ARGS=(
+            --releases-json "$RELEASES_JSON"
+            --out packages/web/public/downloads/latest.json
+          )
+          if test -n "$DISPATCH_VERSION"; then
+            ARGS+=(--dispatched-version "$DISPATCH_VERSION")
+          fi
+          bun ./script/generate-website-download-manifest.ts "${ARGS[@]}"
+
+      - name: Verify canonical Expert Squad archives
+        run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts packages/web/test/expert-squad-static-distribution.test.ts packages/web/test/expert-squad-publication.test.ts
+
+      - name: Verify website Registry database lifecycle
+        run: bun run --cwd packages/web test:registry
+
+      - name: Verify RackNerd activation and rollback paths
+        run: bash deploy/racknerd/test-opencorvus-activate-release.sh
+
+      - name: Check website
+        run: bun run --cwd packages/web check
+
+      - name: Build website and unsigned distribution
+        run: bun run --cwd packages/web build
+        env:
+          OPENCORVUS_REGISTRY_CONTROL_TARGET: bun-linux-x64-baseline
+
+      - name: Exercise packaged database runtime
+        run: bun run --cwd packages/web runtime:smoke
+
+      - name: Rehearse exact signing and bundle assembly with temporary rotation keys
+        run: bun run packages/web/test/signing-workflow-integration.ts
+
+      - name: Verify static tree has only regular files and directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find packages/web/dist -mindepth 1 ! -type f ! -type d -print -quit | grep -q .; then
+            echo "Static release contains a symlink or special file" >&2
+            exit 1
+          fi
+          EXPECTED_ARCHIVES="$(jq -er '.resources.total' packages/web/dist/client/expert-squads/publication-input.json)"
+          test "$(find packages/web/dist/client/expert-squads/archives -type f -name '*.zip' | wc -l)" -eq "$EXPECTED_ARCHIVES"
+          test -x packages/web/dist/server/opencorvus-registry-control
+          test -s packages/web/dist/server/opencorvus-web.mjs
+          test -s packages/web/dist/server/website-registry-seed.json
+          jq -e '
+            .protocol == "opencorvus/website-downloads@1" and
+            (.version | test("^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$")) and
+            (.assets | type == "array" and length > 0) and
+            (all(.assets[]; .bytes > 0 and (.url | contains("/releases/download/v" + $version + "/"))))
+          ' --arg version "$(jq -r '.version' packages/web/dist/client/downloads/latest.json)" \
+            packages/web/dist/client/downloads/latest.json >/dev/null
+
+      - name: Upload frozen unsigned site
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}
+          path: packages/web/dist
+          if-no-files-found: error
+          include-hidden-files: true
+
+  sign-and-deploy:
+    name: sign and deploy RackNerd release
+    needs: [resolve-source, archive-determinism, build]
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Download frozen unsigned site
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}
+          path: candidate
+
+      - name: Verify artifact tree before signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find candidate -mindepth 1 ! -type f ! -type d -print -quit | grep -q .; then
+            echo "Downloaded site contains a symlink or special file" >&2
+            exit 1
+          fi
+          EXPECTED_ARCHIVES="$(jq -er '.resources.total' candidate/client/expert-squads/publication-input.json)"
+          test "$(find candidate/client/expert-squads/archives -type f -name '*.zip' | wc -l)" -eq "$EXPECTED_ARCHIVES"
+
+      - name: Sign catalog and assemble content-addressed bundle
+        shell: bash
+        env:
+          SIGNING_PRIVATE_KEY_B64: ${{ secrets.EXPERT_SQUAD_SIGNING_PRIVATE_KEY_B64 }}
+          SIGNING_KEY_ID: ${{ vars.EXPERT_SQUAD_SIGNING_KEY_ID }}
+          SECONDARY_SIGNING_PRIVATE_KEY_B64: ${{ secrets.EXPERT_SQUAD_SECONDARY_SIGNING_PRIVATE_KEY_B64 }}
+          SECONDARY_SIGNING_KEY_ID: ${{ vars.EXPERT_SQUAD_SECONDARY_SIGNING_KEY_ID }}
+          TRUSTED_KEYS_JSON: ${{ vars.EXPERT_SQUAD_TRUSTED_KEYS_JSON }}
+          DEPLOYMENT_MODE: ${{ inputs.deployment_mode || 'daily' }}
+          BOOTSTRAP_PUBLICATION_VERSION: ${{ vars.EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_VERSION }}
+          BOOTSTRAP_PUBLICATION_EXPIRES_AT: ${{ vars.EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_EXPIRES_AT }}
+        run: |
+          set -euo pipefail
+          umask 077
+          cleanup_signing_material() {
+            rm -f "$RUNNER_TEMP"/expert-squad-signing-key-*.pem \
+              "$RUNNER_TEMP"/expert-squad-signing-public-*.pem \
+              "$RUNNER_TEMP"/expert-squad-signing-message-*.bin \
+              "$RUNNER_TEMP"/expert-squad-signature-*.bin \
+              "$RUNNER_TEMP/expert-squad-signing-metadata.json" \
+              "$RUNNER_TEMP/expert-squad-signature-result.json"
+            unset SIGNING_PRIVATE_KEY_B64 SECONDARY_SIGNING_PRIVATE_KEY_B64 \
+              SIGNING_PUBLIC_KEY_SPKI_B64 SECONDARY_SIGNING_PUBLIC_KEY_SPKI_B64
+          }
+          trap cleanup_signing_material EXIT
+          case "$DEPLOYMENT_MODE" in
+            daily)
+              export PUBLICATION_VERSION="$(python3 - <<'PY'
+          import os
+          run_number = int(os.environ["GITHUB_RUN_NUMBER"])
+          attempt = int(os.environ["GITHUB_RUN_ATTEMPT"])
+          if run_number <= 0 or attempt <= 0 or attempt >= 1000:
+              raise SystemExit("GitHub run metadata is outside the publication-version contract")
+          version = run_number * 1000 + attempt
+          if version > 9007199254740991:
+              raise SystemExit("derived publication version is not a JavaScript safe integer")
+          print(version)
+          PY
+              )"
+              export PUBLICATION_EXPIRES_AT="$(python3 - <<'PY'
+          import datetime
+          expires = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=90)
+          print(expires.replace(microsecond=0).isoformat().replace("+00:00", "Z"))
+          PY
+              )"
+              ;;
+            bootstrap-stage|bootstrap-verify)
+              export PUBLICATION_VERSION="$BOOTSTRAP_PUBLICATION_VERSION"
+              export PUBLICATION_EXPIRES_AT="$BOOTSTRAP_PUBLICATION_EXPIRES_AT"
+              ;;
+            *) echo "invalid deployment mode: $DEPLOYMENT_MODE" >&2; exit 2 ;;
+          esac
+          test -n "$SIGNING_PRIVATE_KEY_B64"
+          test -n "$SIGNING_KEY_ID"
+          test -n "$TRUSTED_KEYS_JSON"
+          test -n "$PUBLICATION_VERSION"
+          test -n "$PUBLICATION_EXPIRES_AT"
+          if { test -n "$SECONDARY_SIGNING_PRIVATE_KEY_B64" && test -z "$SECONDARY_SIGNING_KEY_ID"; } || \
+             { test -z "$SECONDARY_SIGNING_PRIVATE_KEY_B64" && test -n "$SECONDARY_SIGNING_KEY_ID"; }; then
+            echo "secondary signing key and key id must be configured together" >&2
+            exit 1
+          fi
+          printf '%s' "$SIGNING_PRIVATE_KEY_B64" | base64 --decode > "$RUNNER_TEMP/expert-squad-signing-key-0.pem"
+          if test -n "$SECONDARY_SIGNING_PRIVATE_KEY_B64"; then
+            printf '%s' "$SECONDARY_SIGNING_PRIVATE_KEY_B64" | base64 --decode > "$RUNNER_TEMP/expert-squad-signing-key-1.pem"
+          fi
+          openssl pkey -in "$RUNNER_TEMP/expert-squad-signing-key-0.pem" -pubout -out "$RUNNER_TEMP/expert-squad-signing-public-0.pem"
+          export SIGNING_PUBLIC_KEY_SPKI_B64="$(openssl pkey -in "$RUNNER_TEMP/expert-squad-signing-key-0.pem" -pubout -outform DER | base64 -w0)"
+          export SECONDARY_SIGNING_PUBLIC_KEY_SPKI_B64=""
+          if test -n "$SECONDARY_SIGNING_PRIVATE_KEY_B64"; then
+            openssl pkey -in "$RUNNER_TEMP/expert-squad-signing-key-1.pem" -pubout -out "$RUNNER_TEMP/expert-squad-signing-public-1.pem"
+            export SECONDARY_SIGNING_PUBLIC_KEY_SPKI_B64="$(openssl pkey -in "$RUNNER_TEMP/expert-squad-signing-key-1.pem" -pubout -outform DER | base64 -w0)"
+          fi
+
+          mkdir -p "$RUNNER_TEMP/bundle-root/expert-squads"
+          cp -a candidate/client/expert-squads/archives candidate/client/expert-squads/catalogs \
+            candidate/client/expert-squads/publication-input.json candidate/client/expert-squads/SHA256SUMS \
+            "$RUNNER_TEMP/bundle-root/expert-squads/"
+          python3 - <<'PY'
+          import os, pathlib, zipfile
+          root = pathlib.Path(os.environ["RUNNER_TEMP"], "bundle-root").resolve()
+          checksum_manifest = root / "expert-squads" / "SHA256SUMS"
+          names = [line.split("  ", 1)[1] for line in checksum_manifest.read_text("utf-8").splitlines()]
+          names.append("expert-squads/SHA256SUMS")
+          if len(names) != len(set(names)):
+              raise SystemExit("bundle source contains duplicate paths")
+          names.sort()
+          def native(path):
+              value = str(path.resolve())
+              return "\\\\?\\" + value if os.name == "nt" else value
+          def assemble(target):
+              with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+                  for name in names:
+                      info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+                      info.compress_type = zipfile.ZIP_DEFLATED
+                      info.create_system = 3
+                      info.external_attr = 0o100644 << 16
+                      with open(native(root / pathlib.PurePosixPath(name)), "rb") as source:
+                          archive.writestr(info, source.read(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+          assemble(pathlib.Path(os.environ["RUNNER_TEMP"], "all-expert-squads.zip"))
+          assemble(pathlib.Path(os.environ["RUNNER_TEMP"], "all-expert-squads-repeat.zip"))
+          PY
+          cmp "$RUNNER_TEMP/all-expert-squads.zip" "$RUNNER_TEMP/all-expert-squads-repeat.zip"
+          rm -f "$RUNNER_TEMP/all-expert-squads-repeat.zip"
+          export BUNDLE_SHA="$(sha256sum "$RUNNER_TEMP/all-expert-squads.zip" | cut -d' ' -f1)"
+          export BUNDLE_BYTES="$(stat -c %s "$RUNNER_TEMP/all-expert-squads.zip")"
+          export BUNDLE_PATH="/expert-squads/bundles/$BUNDLE_SHA/all-expert-squads.zip"
+          mkdir -p "candidate/client/expert-squads/bundles/$BUNDLE_SHA"
+          mv "$RUNNER_TEMP/all-expert-squads.zip" "candidate/client/expert-squads/bundles/$BUNDLE_SHA/all-expert-squads.zip"
+
+          python3 - <<'PY'
+          import base64, datetime, hashlib, json, os, pathlib, re
+          root = pathlib.Path("candidate/client/expert-squads")
+          publication = json.loads((root / "publication-input.json").read_text("utf-8"))
+          if publication.get("protocol") != "opencorvus/expert-squad-publication-input@1":
+              raise SystemExit("invalid publication input protocol")
+          catalog = publication.get("catalog", {})
+          sha = catalog.get("sha256", "")
+          if not re.fullmatch(r"[a-f0-9]{64}", sha):
+              raise SystemExit("invalid catalog digest")
+          catalog_path = pathlib.Path("candidate/client") / str(catalog.get("path", "")).lstrip("/")
+          catalog_bytes = catalog_path.read_bytes()
+          if len(catalog_bytes) != catalog.get("bytes") or hashlib.sha256(catalog_bytes).hexdigest() != sha:
+              raise SystemExit("catalog byte binding failed")
+          version = os.environ["PUBLICATION_VERSION"]
+          expires = os.environ["PUBLICATION_EXPIRES_AT"]
+          if not re.fullmatch(r"[1-9][0-9]*", version):
+              raise SystemExit("publication version must be a positive integer")
+          if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z", expires):
+              raise SystemExit("publication expiry must be a canonical UTC timestamp")
+          expiry = datetime.datetime.fromisoformat(expires.replace("Z", "+00:00"))
+          if expiry <= datetime.datetime.now(datetime.timezone.utc):
+              raise SystemExit("publication expiry must be a future UTC instant")
+          trusted = json.loads(os.environ["TRUSTED_KEYS_JSON"])
+          trusted_by_id = {}
+          for entry in trusted:
+              if not isinstance(entry, dict) or not isinstance(entry.get("keyId"), str) or not isinstance(entry.get("publicKeySpkiBase64"), str):
+                  raise SystemExit("browser trust root is invalid")
+              key_id = entry["keyId"]
+              if key_id in trusted_by_id:
+                  raise SystemExit("browser trust root contains duplicate key ids")
+              try:
+                  trusted_by_id[key_id] = base64.b64decode(entry["publicKeySpkiBase64"], validate=True)
+              except Exception as error:
+                  raise SystemExit("browser trust root contains invalid base64") from error
+          key_ids = [os.environ["SIGNING_KEY_ID"]]
+          signer_public_keys = [base64.b64decode(os.environ["SIGNING_PUBLIC_KEY_SPKI_B64"], validate=True)]
+          if os.environ.get("SECONDARY_SIGNING_KEY_ID"):
+              key_ids.append(os.environ["SECONDARY_SIGNING_KEY_ID"])
+              signer_public_keys.append(base64.b64decode(os.environ["SECONDARY_SIGNING_PUBLIC_KEY_SPKI_B64"], validate=True))
+          if len(set(key_ids)) != len(key_ids):
+              raise SystemExit("signing key ids must be distinct")
+          signers = []
+          for index, key_id in enumerate(key_ids):
+              if not re.fullmatch(r"[A-Za-z0-9._-]{1,128}", key_id) or key_id not in trusted_by_id:
+                  raise SystemExit("every signer must be present in the browser trust root")
+              if signer_public_keys[index] != trusted_by_id[key_id]:
+                  raise SystemExit("signing private key does not match the trusted browser public key")
+              fields = [
+                  b"Ed25519", key_id.encode(), version.encode(), expires.encode(),
+                  str(len(catalog_bytes)).encode(), sha.encode(),
+                  os.environ["BUNDLE_PATH"].encode(), os.environ["BUNDLE_SHA"].encode(), os.environ["BUNDLE_BYTES"].encode(),
+              ]
+              message = b"opencorvus/expert-squad-catalog-signature@1" + b"".join(len(value).to_bytes(8, "big") + value for value in fields)
+              pathlib.Path(os.environ["RUNNER_TEMP"], f"expert-squad-signing-message-{index}.bin").write_bytes(message)
+              signers.append({"keyId": key_id, "messageSha256": hashlib.sha256(message).hexdigest(), "index": index})
+          pathlib.Path(os.environ["RUNNER_TEMP"], "expert-squad-signing-metadata.json").write_text(json.dumps({
+              "catalog": catalog,
+              "version": int(version),
+              "expiresAt": expires,
+              "signers": signers,
+              "resources": publication["resources"],
+              "bundle": {"path": os.environ["BUNDLE_PATH"], "sha256": os.environ["BUNDLE_SHA"], "bytes": int(os.environ["BUNDLE_BYTES"])},
+          }, separators=(",", ":")), "utf-8")
+          PY
+
+          openssl pkeyutl -sign -rawin \
+            -inkey "$RUNNER_TEMP/expert-squad-signing-key-0.pem" \
+            -in "$RUNNER_TEMP/expert-squad-signing-message-0.bin" \
+            -out "$RUNNER_TEMP/expert-squad-signature-0.bin"
+          openssl pkeyutl -sign -rawin \
+            -inkey "$RUNNER_TEMP/expert-squad-signing-key-0.pem" \
+            -in "$RUNNER_TEMP/expert-squad-signing-message-0.bin" \
+            -out "$RUNNER_TEMP/expert-squad-signature-repeat.bin"
+          cmp "$RUNNER_TEMP/expert-squad-signature-0.bin" "$RUNNER_TEMP/expert-squad-signature-repeat.bin"
+          rm -f "$RUNNER_TEMP/expert-squad-signature-repeat.bin"
+          openssl pkeyutl -verify -rawin -pubin \
+            -inkey "$RUNNER_TEMP/expert-squad-signing-public-0.pem" \
+            -in "$RUNNER_TEMP/expert-squad-signing-message-0.bin" \
+            -sigfile "$RUNNER_TEMP/expert-squad-signature-0.bin"
+          if test -n "$SECONDARY_SIGNING_PRIVATE_KEY_B64"; then
+            openssl pkeyutl -sign -rawin \
+              -inkey "$RUNNER_TEMP/expert-squad-signing-key-1.pem" \
+              -in "$RUNNER_TEMP/expert-squad-signing-message-1.bin" \
+              -out "$RUNNER_TEMP/expert-squad-signature-1.bin"
+            openssl pkeyutl -sign -rawin \
+              -inkey "$RUNNER_TEMP/expert-squad-signing-key-1.pem" \
+              -in "$RUNNER_TEMP/expert-squad-signing-message-1.bin" \
+              -out "$RUNNER_TEMP/expert-squad-signature-repeat.bin"
+            cmp "$RUNNER_TEMP/expert-squad-signature-1.bin" "$RUNNER_TEMP/expert-squad-signature-repeat.bin"
+            rm -f "$RUNNER_TEMP/expert-squad-signature-repeat.bin"
+            openssl pkeyutl -verify -rawin -pubin \
+              -inkey "$RUNNER_TEMP/expert-squad-signing-public-1.pem" \
+              -in "$RUNNER_TEMP/expert-squad-signing-message-1.bin" \
+              -sigfile "$RUNNER_TEMP/expert-squad-signature-1.bin"
+          fi
+          python3 - <<'PY'
+          import base64, hashlib, json, os, pathlib
+          temporary = pathlib.Path(os.environ["RUNNER_TEMP"])
+          metadata = json.loads((temporary / "expert-squad-signing-metadata.json").read_text("utf-8"))
+          envelope = {
+              "protocol": "opencorvus/expert-squad-catalog-signatures@1",
+              "threshold": 1,
+              "catalog": metadata["catalog"],
+              "bundle": metadata["bundle"],
+              "publicationVersion": metadata["version"],
+              "expiresAt": metadata["expiresAt"],
+              "signatures": [{
+                  "algorithm": "Ed25519",
+                  "keyId": signer["keyId"],
+                  "messageSha256": signer["messageSha256"],
+                  "signatureBase64": base64.b64encode((temporary / f"expert-squad-signature-{signer['index']}.bin").read_bytes()).decode(),
+              } for signer in metadata["signers"]],
+          }
+          raw = (json.dumps(envelope, indent=2) + "\n").encode()
+          digest = hashlib.sha256(raw).hexdigest()
+          target = pathlib.Path("candidate/client/expert-squads/signatures") / f"{digest}.json"
+          target.parent.mkdir(parents=True, exist_ok=True)
+          target.write_bytes(raw)
+          (temporary / "expert-squad-signature-result.json").write_text(json.dumps({
+              "path": f"/expert-squads/signatures/{digest}.json", "sha256": digest, "bytes": len(raw),
+              "publicationVersion": metadata["version"], "expiresAt": metadata["expiresAt"],
+              "catalog": metadata["catalog"], "bundle": metadata["bundle"], "resources": metadata["resources"],
+          }, separators=(",", ":")), "utf-8")
+          PY
+
+          SIGNATURE_PATH="$(python3 -c 'import json,os; print(json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "expert-squad-signature-result.json")))["path"].removeprefix("/expert-squads/"))')"
+          python3 - <<'PY'
+          import json, os, pathlib
+          result = json.loads(pathlib.Path(os.environ["RUNNER_TEMP"], "expert-squad-signature-result.json").read_text("utf-8"))
+          pointer = {
+              "protocol": "opencorvus/expert-squad-publication@1",
+              "publicationVersion": result["publicationVersion"],
+              "expiresAt": result["expiresAt"],
+              "resources": result["resources"],
+              "catalog": result["catalog"],
+              "signatures": {key: result[key] for key in ("path", "sha256", "bytes")},
+              "bundle": result["bundle"],
+          }
+          pathlib.Path("candidate/client/expert-squads/catalog.json").write_text(json.dumps(pointer, indent=2) + "\n", "utf-8")
+          PY
+
+          POINTER_BUNDLE_PATH="$(python3 -c 'import json; print(json.load(open("candidate/client/expert-squads/catalog.json"))["bundle"]["path"])')"
+          POINTER_BUNDLE="candidate/client/${POINTER_BUNDLE_PATH#/}"
+          POINTER_BUNDLE_BYTES="$(python3 -c 'import json; print(json.load(open("candidate/client/expert-squads/catalog.json"))["bundle"]["bytes"])')"
+          POINTER_BUNDLE_SHA="$(python3 -c 'import json; print(json.load(open("candidate/client/expert-squads/catalog.json"))["bundle"]["sha256"])')"
+          test "$(stat -c %s "$POINTER_BUNDLE")" -eq "$POINTER_BUNDLE_BYTES"
+          test "$(sha256sum "$POINTER_BUNDLE" | cut -d' ' -f1)" = "$POINTER_BUNDLE_SHA"
+          python3 - "$POINTER_BUNDLE" candidate/client/expert-squads/catalog.json <<'PY'
+          import hashlib, json, pathlib, sys, zipfile
+          bundle_path, pointer_path = map(pathlib.Path, sys.argv[1:])
+          expected = json.loads(pointer_path.read_text("utf-8"))["resources"]["total"]
+          with zipfile.ZipFile(bundle_path) as bundle:
+              names = bundle.namelist()
+              if len(names) != len(set(names)):
+                  raise SystemExit("bundle contains duplicate paths")
+              archives = [name for name in names if name.startswith("expert-squads/archives/") and name.endswith(".zip")]
+              if len(archives) != expected:
+                  raise SystemExit("bundle archive count does not match the publication pointer")
+              sums = bundle.read("expert-squads/SHA256SUMS").decode("utf-8").splitlines()
+              if len(sums) != expected + 2:
+                  raise SystemExit("bundle checksum manifest count is invalid")
+              for line in sums:
+                  digest, name = line.split("  ", 1)
+                  if name not in names or hashlib.sha256(bundle.read(name)).hexdigest() != digest:
+                      raise SystemExit(f"bundle checksum binding failed: {name}")
+          PY
+          test "$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))["signatures"]))' "candidate/client/expert-squads/$SIGNATURE_PATH")" -ge 1
+          (cd candidate && find . -type f -print | LC_ALL=C sort | xargs sha256sum) > "$RUNNER_TEMP/DEPLOY_SHA256SUMS"
+          openssl pkeyutl -sign -inkey "$RUNNER_TEMP/expert-squad-signing-key-0.pem" -rawin \
+            -in "$RUNNER_TEMP/DEPLOY_SHA256SUMS" -out "$RUNNER_TEMP/DEPLOY_SHA256SUMS.sig"
+          cleanup_signing_material
+          trap - EXIT
+
+      - name: Freeze deploy archive and checksums
+        id: release
+        shell: bash
+        env:
+          WEBSITE_SOURCE_SHA: ${{ needs.resolve-source.outputs.source-sha }}
+        run: |
+          set -euo pipefail
+          RELEASE_ID="${WEBSITE_SOURCE_SHA}-$(sha256sum candidate/client/expert-squads/catalog.json | cut -c1-16)"
+          echo "id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+          (cd candidate && sha256sum --check "$RUNNER_TEMP/DEPLOY_SHA256SUMS")
+          openssl pkeyutl -verify -pubin -inkey candidate/server/deploy-signing-public.pem -rawin \
+            -in "$RUNNER_TEMP/DEPLOY_SHA256SUMS" -sigfile "$RUNNER_TEMP/DEPLOY_SHA256SUMS.sig"
+          tar --sort=name --mtime='1980-01-01 UTC' --owner=0 --group=0 --numeric-owner \
+            -czf "$RUNNER_TEMP/$RELEASE_ID.tar.gz" -C candidate .
+          (cd "$RUNNER_TEMP" && sha256sum "$RELEASE_ID.tar.gz" > "$RELEASE_ID.tar.gz.sha256")
+
+      - name: Deploy immutable release and atomically switch current
+        shell: bash
+        env:
+          RACKNERD_HOST: ${{ secrets.RACKNERD_HOST }}
+          RACKNERD_PORT: ${{ vars.RACKNERD_SSH_PORT }}
+          RACKNERD_USER: ${{ vars.RACKNERD_DEPLOY_USER }}
+          RACKNERD_SSH_PRIVATE_KEY: ${{ secrets.RACKNERD_SSH_PRIVATE_KEY }}
+          RACKNERD_KNOWN_HOSTS: ${{ secrets.RACKNERD_KNOWN_HOSTS }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+          DEPLOYMENT_MODE: ${{ inputs.deployment_mode || 'daily' }}
+        run: |
+          set -euo pipefail
+          umask 077
+          cleanup_deploy_credentials() {
+            rm -f "$RUNNER_TEMP/racknerd-deploy-key" "$RUNNER_TEMP/racknerd-known-hosts"
+          }
+          trap cleanup_deploy_credentials EXIT
+          probe_public_release() {
+            local expected_pointer=${1:-} probe pointer name path digest bytes output
+            probe=$(mktemp -d)
+            curl --fail --silent --show-error --location --max-redirs 2 "https://opencorvus.com/" > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/downloads/latest.json" > "$probe/downloads.json" || { rm -rf -- "$probe"; return 1; }
+            python3 - "$probe/downloads.json" <<'PY' || { rm -rf -- "$probe"; return 1; }
+          import json, re, sys
+          manifest = json.load(open(sys.argv[1], encoding="utf-8"))
+          version = manifest.get("version", "")
+          assets = manifest.get("assets")
+          if manifest.get("protocol") != "opencorvus/website-downloads@1" or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?", version):
+              raise SystemExit("invalid public download manifest identity")
+          if not isinstance(assets, list) or not assets:
+              raise SystemExit("public download manifest has no assets")
+          tag = f"/releases/download/v{version}/"
+          if any(not isinstance(asset, dict) or not isinstance(asset.get("bytes"), int) or asset["bytes"] <= 0 or tag not in str(asset.get("url", "")) for asset in assets):
+              raise SystemExit("invalid public download manifest asset")
+          PY
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/expert-squads/catalog.json" > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
+            pointer="$probe/pointer.json"
+            if test -n "$expected_pointer"; then
+              cmp "$pointer" "$expected_pointer" || { rm -rf -- "$probe"; return 1; }
+            fi
+            python3 - "$pointer" > "$probe/references.tsv" <<'PY'
+          import json, re, sys
+          pointer = json.load(open(sys.argv[1], encoding="utf-8"))
+          patterns = {
+              "catalog": r"/expert-squads/catalogs/([a-f0-9]{64})\.json",
+              "signatures": r"/expert-squads/signatures/([a-f0-9]{64})\.json",
+              "bundle": r"/expert-squads/bundles/([a-f0-9]{64})/all-expert-squads\.zip",
+          }
+          if pointer.get("protocol") != "opencorvus/expert-squad-publication@1":
+              raise SystemExit("invalid public pointer")
+          for name, pattern in patterns.items():
+              reference = pointer.get(name, {})
+              match = re.fullmatch(pattern, str(reference.get("path", "")))
+              if not match or match.group(1) != reference.get("sha256") or not isinstance(reference.get("bytes"), int) or reference["bytes"] <= 0:
+                  raise SystemExit(f"invalid public {name} reference")
+              print(name, reference["path"], reference["sha256"], reference["bytes"], sep="\t")
+          PY
+            sed -i 's/\r$//' "$probe/references.tsv"
+            test -s "$probe/references.tsv" || { rm -rf -- "$probe"; return 1; }
+            while IFS=$'\t' read -r name path digest bytes; do
+              output="$probe/$name"
+              curl --fail --silent --show-error --location --max-redirs 2 "https://opencorvus.com$path" > "$output" || { rm -rf -- "$probe"; return 1; }
+              test "$(stat -c %s "$output")" -eq "$bytes" || { rm -rf -- "$probe"; return 1; }
+              test "$(sha256sum "$output" | cut -d' ' -f1)" = "$digest" || { rm -rf -- "$probe"; return 1; }
+            done < "$probe/references.tsv"
+            python3 - "$pointer" "$probe/catalog" "$probe/signatures" <<'PY'
+          import json, sys
+          pointer, catalog, envelope = [json.load(open(path, encoding="utf-8")) for path in sys.argv[1:]]
+          resources = pointer.get("resources")
+          if not isinstance(resources, dict):
+              raise SystemExit("invalid public resources")
+          counts = [resources.get(key) for key in ("total", "embeddedAlreadyAvailable", "bundledMarketImportable")]
+          if any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in counts) or counts[0] <= 0 or counts[0] != counts[1] + counts[2]:
+              raise SystemExit("invalid public resource counts")
+          packages = catalog.get("packages")
+          if (
+              catalog.get("protocol") != "opencorvus/expert-squad-static-catalog@1"
+              or catalog.get("resources") != resources
+              or not isinstance(packages, list)
+              or len(packages) != resources["total"]
+              or sum(item.get("disposition") == "embedded_already_available" for item in packages if isinstance(item, dict)) != resources["embeddedAlreadyAvailable"]
+              or sum(item.get("disposition") == "bundled_market_importable" for item in packages if isinstance(item, dict)) != resources["bundledMarketImportable"]
+          ):
+              raise SystemExit("invalid public catalog")
+          threshold = envelope.get("threshold")
+          signatures = envelope.get("signatures")
+          if (
+              envelope.get("protocol") != "opencorvus/expert-squad-catalog-signatures@1"
+              or envelope.get("catalog") != pointer.get("catalog")
+              or envelope.get("bundle") != pointer.get("bundle")
+              or envelope.get("publicationVersion") != pointer.get("publicationVersion")
+              or envelope.get("expiresAt") != pointer.get("expiresAt")
+              or not isinstance(threshold, int) or isinstance(threshold, bool) or threshold <= 0
+              or not isinstance(signatures, list) or len(signatures) < threshold
+          ):
+              raise SystemExit("invalid public signature envelope")
+          PY
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/health/ready" > "$probe/ready.json" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/market/" > "$probe/market-en.html" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/zh-cn/market/" > "$probe/market-zh.html" || { rm -rf -- "$probe"; return 1; }
+            python3 - "$probe/ready.json" "$probe/pointer.json" "$probe/catalog" > "$probe/exact.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
+          import json, sys
+          ready, pointer, catalog = [json.load(open(path, encoding="utf-8")) for path in sys.argv[1:]]
+          resources = pointer["resources"]
+          expected = {
+              "catalogSha256": pointer["catalog"]["sha256"],
+              "total": resources["total"],
+              "embeddedAlreadyAvailable": resources["embeddedAlreadyAvailable"],
+              "bundledMarketImportable": resources["bundledMarketImportable"],
+          }
+          publication = ready.get("publication")
+          if ready.get("status") != "ready" or not isinstance(publication, dict) or any(publication.get(key) != value for key, value in expected.items()):
+              raise SystemExit("public database readiness disagrees with the signed publication")
+          item = catalog["packages"][0]
+          print(item["namespace"], item["id"], item["version"], item["packageDigest"], item["archive"]["sha256"], item["archive"]["bytes"], sep="\t")
+          PY
+            IFS=$'\t' read -r namespace squad_id version package_digest archive_digest archive_bytes < "$probe/exact.tsv"
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/market/$namespace/$squad_id/" > "$probe/detail-en.html" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/zh-cn/market/$namespace/$squad_id/" > "$probe/detail-zh.html" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/api/registry/v1/squads/$namespace/$squad_id/$version/$package_digest/archive" > "$probe/exact.zip" || { rm -rf -- "$probe"; return 1; }
+            test "$(stat -c %s "$probe/exact.zip")" -eq "$archive_bytes" || { rm -rf -- "$probe"; return 1; }
+            test "$(sha256sum "$probe/exact.zip" | cut -d' ' -f1)" = "$archive_digest" || { rm -rf -- "$probe"; return 1; }
+            rm -rf -- "$probe"
+          }
+          case "$DEPLOYMENT_MODE" in
+            daily|bootstrap-stage|bootstrap-verify) ;;
+            *) echo "invalid deployment mode: $DEPLOYMENT_MODE" >&2; exit 2 ;;
+          esac
+          if [ "$DEPLOYMENT_MODE" = "bootstrap-verify" ]; then
+            probe_public_release candidate/client/expert-squads/catalog.json
+            cleanup_deploy_credentials
+            trap - EXIT
+            exit 0
+          fi
+          test -n "$RACKNERD_HOST"
+          test -n "$RACKNERD_PORT"
+          test -n "$RACKNERD_USER"
+          printf '%s\n' "$RACKNERD_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/racknerd-deploy-key"
+          printf '%s\n' "$RACKNERD_KNOWN_HOSTS" > "$RUNNER_TEMP/racknerd-known-hosts"
+          SSH=(ssh -i "$RUNNER_TEMP/racknerd-deploy-key" -p "$RACKNERD_PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/racknerd-known-hosts")
+          SCP=(scp -i "$RUNNER_TEMP/racknerd-deploy-key" -P "$RACKNERD_PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/racknerd-known-hosts")
+          "${SSH[@]}" "$RACKNERD_USER@$RACKNERD_HOST" "mkdir -p /srv/opencorvus/incoming/$RELEASE_ID"
+          "${SCP[@]}" "$RUNNER_TEMP/$RELEASE_ID.tar.gz" "$RUNNER_TEMP/$RELEASE_ID.tar.gz.sha256" \
+            "$RUNNER_TEMP/DEPLOY_SHA256SUMS" "$RUNNER_TEMP/DEPLOY_SHA256SUMS.sig" \
+            "$RACKNERD_USER@$RACKNERD_HOST:/srv/opencorvus/incoming/$RELEASE_ID/"
+          "${SSH[@]}" "$RACKNERD_USER@$RACKNERD_HOST" \
+            "sudo -n /usr/local/bin/opencorvus-activate-release '$RELEASE_ID' '/srv/opencorvus/incoming/$RELEASE_ID/$RELEASE_ID.tar.gz' '/srv/opencorvus/incoming/$RELEASE_ID/DEPLOY_SHA256SUMS'"
+          if [ "$DEPLOYMENT_MODE" = "bootstrap-stage" ]; then
+            echo "Bootstrap release passed the RackNerd loopback readiness check; DNS has not been probed"
+            cleanup_deploy_credentials
+            trap - EXIT
+            exit 0
+          fi
+          if ! probe_public_release candidate/client/expert-squads/catalog.json; then
+            ROLLBACK_TARGET=$("${SSH[@]}" "$RACKNERD_USER@$RACKNERD_HOST" \
+              "sudo -n /usr/local/bin/opencorvus-activate-release --rollback '$RELEASE_ID'")
+            if [ "$ROLLBACK_TARGET" = "no-previous-release" ]; then
+              if curl --fail --silent --show-error "https://opencorvus.com/" > /dev/null; then
+                echo "first-release rollback left a publicly healthy current pointer" >&2
+                exit 1
+              fi
+            else
+              probe_public_release
+            fi
+            echo "Public health check failed and the server was rolled back" >&2
+            exit 1
+          fi
+          cleanup_deploy_credentials
+          trap - EXIT

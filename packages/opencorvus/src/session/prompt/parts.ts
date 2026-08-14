@@ -12,14 +12,12 @@ import { Instance } from "../../project/instance"
 import { InstructionPrompt } from "../instruction"
 import { Plugin } from "../../plugin"
 import { MCP } from "../../mcp"
-import { LSP } from "../../lsp"
-import type { Range } from "../../lsp/schema"
 import { ReadTool } from "../../tool/read"
 import { FileTime } from "../../file/time"
 import { ConfigMarkdown } from "../../config/markdown"
 import { EffectiveConfig } from "../../config/effective"
 import type { Config } from "../../config/config"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Tool } from "@/tool/tool"
 import { iife } from "@/util/iife"
 import { defer } from "../../util/defer"
@@ -110,6 +108,11 @@ export type UserMessagePersistenceHooks = {
     pendingSession?: Readonly<Pick<Session.Info, "id" | "projectID" | "parentID" | "directory">>
   }
   commitBundle?: (message: Message.User, parts: Message.Part[]) => void
+  /** Fail-closed identity/ownership check executed inside the persistence
+   * transaction before any Message, Part, or control row is written. */
+  preflightBundle?: (message: Message.User, parts: Message.Part[]) => void
+  /** Register post-commit ownership effects before Message visibility effects. */
+  beforeVisibilityEffects?: (message: Message.User, parts: Message.Part[]) => void
 }
 
 export type MaterializedUserMessage = {
@@ -381,10 +384,6 @@ export async function materializeUserMessage(
         : { kind: "conversation" }),
     ...(authorityResolution?.pendingSession ? { pendingSession: authorityResolution.pendingSession } : {}),
   })
-  const lspProcessAuthority = executionAuthority.kind === "task"
-    ? { kind: "task" as const, taskID: executionAuthority.taskID, cwd: executionAuthority.directory }
-    : { kind: "host" as const, cwd: executionAuthority.directory }
-
   const info: Message.Info = {
     id: input.messageID ?? Identifier.ascending("message"),
     role: "user",
@@ -561,27 +560,10 @@ export async function materializeUserMessage(
                     end: url.searchParams.get("end"),
                   }
                   if (range.start != null) {
-                    const filePathURI = part.url.split("?")[0]
-                    let start = parseFileRangeLine(range.start, "start")
-                    let end = range.end != null ? parseFileRangeLine(range.end, "end") : undefined
+                    const start = parseFileRangeLine(range.start, "start")
+                    const end = range.end != null ? parseFileRangeLine(range.end, "end") : undefined
                     if (end !== undefined && end < start) {
                       throw new Error("file range end must be greater than or equal to start")
-                    }
-                    if (start === end) {
-                      const symbols = await LSP.documentSymbol(filePathURI, lspProcessAuthority)
-                      for (const symbol of symbols) {
-                        let range: Range | undefined
-                        if ("range" in symbol) {
-                          range = symbol.range
-                        } else if ("location" in symbol) {
-                          range = symbol.location.range
-                        }
-                        if (range?.start?.line && range.start.line === start) {
-                          start = range.start.line
-                          end = range.end?.line ?? start
-                          break
-                        }
-                      }
                     }
                     offset = start
                     if (end !== undefined) {
@@ -611,7 +593,6 @@ export async function materializeUserMessage(
                     executionAuthority,
                     executionSurface: Tool.executionSurface([], []),
                     metadata: async () => {},
-                    ask: async () => {},
                   }
                   const result = await t.execute(args, readCtx)
                   const completedExplicitRange = limit !== undefined && result.metadata.lines === limit
@@ -658,7 +639,6 @@ export async function materializeUserMessage(
                     executionAuthority,
                     executionSurface: Tool.executionSurface([], []),
                     metadata: async () => {},
-                    ask: async () => {},
                   }
                   const result = await ReadTool.init().then((t) => t.execute(args, listCtx))
                   if (result.metadata.truncated === true) {
@@ -786,8 +766,24 @@ export async function persistMaterializedUserMessage(
     controls: persistence.controls?.(info),
   }
   const persisted = persistence.commitBundle
-    ? await Session.persistMessageWithCommit(bundle, () => persistence.commitBundle!(info, parts))
-    : await Session.persistMessage(bundle)
+    ? await Session.persistMessageWithCommit(
+        bundle,
+        () => persistence.commitBundle!(info, parts),
+        persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
+        persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
+      )
+    : persistence.beforeVisibilityEffects
+      ? await Session.persistMessageWithCommit(
+          bundle,
+          () => undefined,
+          () => persistence.beforeVisibilityEffects!(info, parts),
+          persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
+        )
+      : persistence.preflightBundle
+        ? await Session.persistMessageWithCommit(bundle, () => undefined, undefined, () =>
+            persistence.preflightBundle!(info, parts),
+          )
+        : await Session.persistMessage(bundle)
   return persistedUserMessageReceipt(materialized, persisted)
 }
 
@@ -821,7 +817,12 @@ export function persistMaterializedUserMessageInTransaction(
     parts,
     controls: persistence.controls?.(info),
   }
-  const persisted = Session.persistMessageWithCommitInTransaction(bundle, () => persistence.commitBundle(info, parts))
+  const persisted = Session.persistMessageWithCommitInTransaction(
+    bundle,
+    () => persistence.commitBundle(info, parts),
+    persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
+    persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
+  )
   return {
     complete: async () => persistedUserMessageReceipt(materialized, await persisted.complete()),
   }

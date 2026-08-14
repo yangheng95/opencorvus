@@ -52,6 +52,7 @@ const MIME_EXT: Record<string, string> = {
   "text/markdown": "md",
   "text/csv": "csv",
   "application/json": "json",
+  "application/vnd.opencorvus.work-artifact-validation-receipt+json": "work-artifact-receipt.json",
   "audio/mpeg": "mp3",
   "audio/wav": "wav",
   "audio/webm": "weba",
@@ -103,9 +104,20 @@ function storageDir(projectDir: string): string {
 const log = Log.create({ service: "attachment-store" })
 const publicationLocks = new Map<string, Promise<unknown>>()
 const authorityLocks = new Map<string, Promise<unknown>>()
+const AUTHORITY_LOCK_WAIT_MS = 30_000
+const AUTHORITY_LOCK_RETRY_MS = 25
 
 async function withAuthorityFileLock<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
-  const release = await lockfile.lock(filePath, { realpath: false })
+  const release = await lockfile.lock(filePath, {
+    realpath: false,
+    retries: {
+      retries: Math.ceil(AUTHORITY_LOCK_WAIT_MS / AUTHORITY_LOCK_RETRY_MS),
+      factor: 1,
+      minTimeout: AUTHORITY_LOCK_RETRY_MS,
+      maxTimeout: AUTHORITY_LOCK_RETRY_MS,
+      randomize: false,
+    },
+  })
   try {
     return await operation()
   } finally {
@@ -201,6 +213,26 @@ export namespace AttachmentStore {
       )
     }
     return actual
+  }
+
+  /** Observe an existing attachment authority without claiming or rewriting it. */
+  export async function observeAuthority(projectDir: string): Promise<Authority | undefined> {
+    const filePath = authorityPath(projectDir)
+    try {
+      return parseAuthority(await fs.readFile(filePath, "utf8"), filePath)
+    } catch (error) {
+      if (hasNodeErrorCode(error, "ENOENT")) return undefined
+      throw error
+    }
+  }
+
+  /**
+   * Fail closed when durable JSON/text facts still name a Project occurrence.
+   * This is the same retain-surface authority used by attachment garbage
+   * collection; Project repair does not maintain a parallel column registry.
+   */
+  export function hasProjectIdentityReference(projectID: string): boolean {
+    return collectReferencedShas().has(projectID)
   }
 
   async function storeOwnedByDatabase(projectID: string): Promise<boolean> {
@@ -558,7 +590,12 @@ export namespace AttachmentStore {
    * URL ownership, metadata, and the underlying blob must all agree before a
    * conversation, Mission, or Task can retain an out-of-band upload ref.
    */
-  export async function requireReference(input: { projectID: string; url: string; mime?: string }): Promise<Reference> {
+  export async function readVerifiedReference(input: {
+    projectID: string
+    url: string
+    mime?: string
+    maxBytes?: number
+  }): Promise<{ reference: Reference; bytes: Buffer }> {
     const located = nameFromUrl(input.url)
     if (!located) throw new Error(`attachment URL is not canonical: ${input.url}`)
     if (located.projectID !== input.projectID) {
@@ -567,14 +604,41 @@ export namespace AttachmentStore {
     const reference = await readReference(located.projectID, located.name)
     const abs = resolveAbsolute(located.projectID, located.name)
     if (!abs) throw new Error(`attachment ${located.projectID}/${located.name} is not resolvable`)
-    const info = await fs.stat(abs)
-    if (!info.isFile() || info.size !== reference.size) {
-      throw new Error(`attachment blob does not match canonical metadata: ${input.url}`)
+    const handle = await fs.open(abs, "r")
+    let bytes: Buffer
+    try {
+      const before = await handle.stat()
+      if (!before.isFile() || before.size !== reference.size) {
+        throw new Error(`attachment blob does not match canonical metadata: ${input.url}`)
+      }
+      if (input.maxBytes !== undefined && before.size > input.maxBytes) {
+        throw new Error(`attachment blob exceeds ${input.maxBytes} bytes: ${input.url}`)
+      }
+      bytes = await handle.readFile()
+      const after = await handle.stat()
+      if (after.size !== before.size || after.mtimeMs !== before.mtimeMs || after.ctimeMs !== before.ctimeMs) {
+        throw new Error(`attachment blob changed while being read: ${input.url}`)
+      }
+    } finally {
+      await handle.close()
+    }
+    const digest = crypto.createHash("sha256").update(bytes).digest("hex")
+    if (digest !== reference.sha) {
+      throw new Error(`attachment blob digest does not match canonical metadata: ${input.url}`)
     }
     if (input.mime !== undefined && input.mime !== reference.mime) {
       throw new Error(`attachment MIME does not match canonical metadata: ${input.url}`)
     }
-    return reference
+    return { reference, bytes }
+  }
+
+  export async function requireReference(input: {
+    projectID: string
+    url: string
+    mime?: string
+    maxBytes?: number
+  }): Promise<Reference> {
+    return (await readVerifiedReference(input)).reference
   }
 
   export interface DerivedAttachment {

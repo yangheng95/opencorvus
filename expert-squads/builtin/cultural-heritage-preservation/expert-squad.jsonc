@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "cultural-heritage-preservation",
+  "name": "Cultural Heritage Preservation",
+  "label": "Cultural Heritage Preservation",
+  "description": "Significance, provenance, condition, preventive-risk, digital-preservation, and access evidence joined into a bounded conservation planning pack.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for evidence-led cultural-heritage preservation planning without treatment or rights authority.",
+    "selection_guidance": "Select for museum objects, archives, built heritage, sites, collections, significance and provenance records, condition change, agents of deterioration, preventive conservation, digital preservation, or culturally restricted access. Do not select for physical treatment, authentication, title or restitution decisions, excavation, deaccession, or public release.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "cultural-heritage-preservation/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "heritage-significance-provenance-analyst": {
+        "label": "Significance and Provenance Analyst",
+        "description": "Separates verified records, inference, oral sources, community-held knowledge, custody, and rights restrictions.",
+        "base_role": "explore",
+        "prompt": "agents/heritage-significance-provenance-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "cultural-heritage-preservation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "heritage-condition-risk-analyst": {
+        "label": "Condition and Risk Analyst",
+        "description": "Maps condition change, agents of deterioration, hazards, and preventive-risk evidence without prescribing treatment.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/heritage-condition-risk-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "cultural-heritage-preservation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "heritage-digital-access-analyst": {
+        "label": "Digital Preservation and Access Analyst",
+        "description": "Reviews digital provenance, fixity, format sustainability, access controls, consent, and cultural sensitivity.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/heritage-digital-access-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "cultural-heritage-preservation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "heritage-conservation-plan-owner": {
+        "label": "Conservation Plan Owner",
+        "description": "Joins the independent evidence branches into bounded preservation options and qualified decision gates.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/heritage-conservation-plan-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "cultural-heritage-preservation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "heritage-preservation-plan": {
+        "label": "Heritage Preservation Plan",
+        "description": "Three independent heritage evidence branches converge into one conservation planning pack.",
+        "nodes": {
+          "heritage-significance-provenance-analyst": {
+            "agent_id": "heritage-significance-provenance-analyst",
+            "description": "Maps significance, provenance, custody, evidence class, rights, and community-held knowledge.",
+            "depends_on": []
+          },
+          "heritage-condition-risk-analyst": {
+            "agent_id": "heritage-condition-risk-analyst",
+            "description": "Maps condition change, deterioration agents, hazard scenarios, and preventive controls.",
+            "depends_on": []
+          },
+          "heritage-digital-access-analyst": {
+            "agent_id": "heritage-digital-access-analyst",
+            "description": "Maps digital fixity, format, access, consent, and culturally sensitive restrictions.",
+            "depends_on": []
+          },
+          "heritage-conservation-plan-owner": {
+            "agent_id": "heritage-conservation-plan-owner",
+            "description": "Joins all branches into prioritized preservation options, dependencies, and approval gates.",
+            "depends_on": [
+              "heritage-condition-risk-analyst",
+              "heritage-digital-access-analyst",
+              "heritage-significance-provenance-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

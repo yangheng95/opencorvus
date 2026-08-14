@@ -253,11 +253,19 @@ async function tryReplyInteraction(
   const value = text.trim().toLowerCase()
   if (pending.type === "permission") {
     if (["allow", "approve", "yes", "y", "once"].includes(value)) {
-      const result = await EngineService.replyInteraction(pending.id, { reply: "once", autoReply: false })
+      const result = await EngineService.replyUserInteraction(pending.id, {
+        decision: "allow_once",
+        message: text,
+        userInput: { surface: "channel.permission", text, structured: { decision: "allow_once" } },
+      })
       return { kind: "interaction", message: "Permission granted.", task_id: taskID, interaction_id: result.id }
     }
     if (["always", "allow always", "approve always"].includes(value)) {
-      const result = await EngineService.replyInteraction(pending.id, { reply: "always", autoReply: false })
+      const result = await EngineService.replyUserInteraction(pending.id, {
+        decision: "allow_project",
+        message: text,
+        userInput: { surface: "channel.permission", text, structured: { decision: "allow_project" } },
+      })
       return {
         kind: "interaction",
         message: "Permission granted (always).",
@@ -266,7 +274,10 @@ async function tryReplyInteraction(
       }
     }
     if (["reject", "deny", "no", "n"].includes(value)) {
-      const result = await EngineService.rejectInteraction(pending.id, { autoReply: false })
+      const result = await EngineService.rejectUserInteraction(pending.id, {
+        message: text,
+        userInput: { surface: "channel.permission", text, structured: { decision: "deny" } },
+      })
       return { kind: "interaction", message: "Permission rejected.", task_id: taskID, interaction_id: result.id }
     }
     return {
@@ -278,9 +289,9 @@ async function tryReplyInteraction(
   }
 
   // Question interaction — pass message text; service will derive answers
-  const result = await EngineService.replyInteraction(pending.id, {
-    autoReply: false,
+  const result = await EngineService.replyUserInteraction(pending.id, {
     message: text,
+    userInput: { surface: "channel.question", text, structured: { message: text } },
   })
   return { kind: "interaction", message: "Answer recorded.", task_id: taskID, interaction_id: result.id }
 }

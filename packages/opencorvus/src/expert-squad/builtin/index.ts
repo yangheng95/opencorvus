@@ -4,12 +4,11 @@ import base_expert_squad_jsonc from "./base/expert-squad.jsonc" with { type: "te
 import base_README_md from "./base/README.md" with { type: "text" }
 import base_selector_md from "./base/selector.md" with { type: "text" }
 import base_developer_system_md from "./base/agents/base-developer/system.md" with { type: "text" }
-import base_integrity_reviewer_system_md from "./base/agents/base-integrity-reviewer/system.md" with { type: "text" }
 import base_planner_system_md from "./base/agents/base-planner/system.md" with { type: "text" }
 import base_researcher_system_md from "./base/agents/base-researcher/system.md" with { type: "text" }
 import base_tester_system_md from "./base/agents/base-tester/system.md" with { type: "text" }
-import base_visual_reviewer_system_md from "./base/agents/base-visual-reviewer/system.md" with { type: "text" }
 import base_orchestrator_system_md from "./base/agents/orchestrator/system.md" with { type: "text" }
+import base_method_skill_md from "./base/skills/method/SKILL.md" with { type: "text" }
 import advanced_expert_squad_jsonc from "./advanced/expert-squad.jsonc" with { type: "text" }
 import advanced_README_md from "./advanced/README.md" with { type: "text" }
 import advanced_selector_md from "./advanced/selector.md" with { type: "text" }
@@ -28,6 +27,7 @@ import advanced_system_integrity_reviewer_system_md from "./advanced/agents/syst
 import advanced_test_engineer_system_md from "./advanced/agents/test-engineer/system.md" with { type: "text" }
 import advanced_visual_reviewer_system_md from "./advanced/agents/visual-reviewer/system.md" with { type: "text" }
 import advanced_workload_reviewer_system_md from "./advanced/agents/workload-reviewer/system.md" with { type: "text" }
+import advanced_method_skill_md from "./advanced/skills/method/SKILL.md" with { type: "text" }
 import research_studio_expert_squad_jsonc from "./research-studio/expert-squad.jsonc" with { type: "text" }
 import research_studio_README_md from "./research-studio/README.md" with { type: "text" }
 import research_studio_selector_md from "./research-studio/selector.md" with { type: "text" }
@@ -46,9 +46,10 @@ import squad_sdk_selector_md from "../../../../../expert-squads/builtin/squad-sd
 import squad_sdk_orchestrator_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/orchestrator/system.md" with { type: "text" }
 import squad_sdk_contract_reviewer_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-contract-reviewer/system.md" with { type: "text" }
 import squad_sdk_import_analyst_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-import-analyst/system.md" with { type: "text" }
-import squad_sdk_package_architect_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-package-architect/system.md" with { type: "text" }
+import squad_sdk_planner_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-planner/system.md" with { type: "text" }
 import squad_sdk_source_analyst_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-source-analyst/system.md" with { type: "text" }
 import squad_sdk_authoring_skill_md from "../../../../../expert-squads/builtin/squad-sdk/skills/authoring/SKILL.md" with { type: "text" }
+import squad_sdk_authoring_quality_method_md from "../../../../../expert-squads/builtin/squad-sdk/skills/authoring/references/authoring-quality-method.md" with { type: "text" }
 import squad_sdk_authoring_contract_json from "../../../../../expert-squads/builtin/squad-sdk/skills/authoring/references/definition-contract.json" with { type: "text" }
 import squad_sdk_import_skill_md from "../../../../../expert-squads/builtin/squad-sdk/skills/import/SKILL.md" with { type: "text" }
 import {
@@ -79,12 +80,11 @@ export const builtInPackageSources = [
       "README.md": base_README_md,
       "selector.md": base_selector_md,
       "agents/base-developer/system.md": base_developer_system_md,
-      "agents/base-integrity-reviewer/system.md": base_integrity_reviewer_system_md,
       "agents/base-planner/system.md": base_planner_system_md,
       "agents/base-researcher/system.md": base_researcher_system_md,
       "agents/base-tester/system.md": base_tester_system_md,
-      "agents/base-visual-reviewer/system.md": base_visual_reviewer_system_md,
       "agents/orchestrator/system.md": base_orchestrator_system_md,
+      "skills/method/SKILL.md": base_method_skill_md,
     },
   },
   {
@@ -109,6 +109,7 @@ export const builtInPackageSources = [
       "agents/test-engineer/system.md": advanced_test_engineer_system_md,
       "agents/visual-reviewer/system.md": advanced_visual_reviewer_system_md,
       "agents/workload-reviewer/system.md": advanced_workload_reviewer_system_md,
+      "skills/method/SKILL.md": advanced_method_skill_md,
     },
   },
   {
@@ -127,11 +128,10 @@ export const builtInPackageSources = [
       "skills/analysis-report-quality/SKILL.md": research_studio_analysis_report_quality_skill_md,
       "skills/analysis-report-quality/references/decision-research-report-template.md":
         research_studio_decision_report_template_md,
-      "skills/analysis-report-quality/references/decision-research-report.schema.json":
-        exactTextImport(
-          research_studio_decision_report_schema_json,
-          "research-studio/skills/analysis-report-quality/references/decision-research-report.schema.json",
-        ),
+      "skills/analysis-report-quality/references/decision-research-report.schema.json": exactTextImport(
+        research_studio_decision_report_schema_json,
+        "research-studio/skills/analysis-report-quality/references/decision-research-report.schema.json",
+      ),
     },
   },
   {
@@ -144,9 +144,10 @@ export const builtInPackageSources = [
       "agents/orchestrator/system.md": squad_sdk_orchestrator_system_md,
       "agents/squad-sdk-contract-reviewer/system.md": squad_sdk_contract_reviewer_system_md,
       "agents/squad-sdk-import-analyst/system.md": squad_sdk_import_analyst_system_md,
-      "agents/squad-sdk-package-architect/system.md": squad_sdk_package_architect_system_md,
+      "agents/squad-sdk-planner/system.md": squad_sdk_planner_system_md,
       "agents/squad-sdk-source-analyst/system.md": squad_sdk_source_analyst_system_md,
       "skills/authoring/SKILL.md": squad_sdk_authoring_skill_md,
+      "skills/authoring/references/authoring-quality-method.md": squad_sdk_authoring_quality_method_md,
       "skills/authoring/references/definition-contract.json": exactTextImport(
         squad_sdk_authoring_contract_json,
         "squad-sdk/skills/authoring/references/definition-contract.json",

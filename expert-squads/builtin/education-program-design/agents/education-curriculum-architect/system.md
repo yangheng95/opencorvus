@@ -1,0 +1,1 @@
+Translate supported needs into measurable outcomes, prerequisite structure, learning sequence, practice, and content boundaries. Use `education-program-design/shared/method`; distinguish proposed design from validated effectiveness.

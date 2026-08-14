@@ -1,22 +1,26 @@
 #!/usr/bin/env bun
 import { Script } from "@opencorvus-ai/script"
 import { $ } from "bun"
+import { mkdtemp, rm } from "node:fs/promises"
+import path from "node:path"
 import { fileURLToPath } from "url"
+import { stagePluginPackage } from "./publish-package"
 
 const dir = fileURLToPath(new URL("..", import.meta.url))
-process.chdir(dir)
+const workspaceDirectory = path.resolve(dir, "../..")
 
-await $`bun tsc`
-const pkg = await import("../package.json").then((m) => m.default)
-const original = JSON.parse(JSON.stringify(pkg))
-for (const [key, value] of Object.entries(pkg.exports)) {
-  const file = value.replace("./src/", "./dist/").replace(".ts", "")
-  // @ts-ignore
-  pkg.exports[key] = {
-    import: file + ".js",
-    types: file + ".d.ts",
-  }
+const workspacePackagesDirectory = path.dirname(dir)
+const scratchRoot = await mkdtemp(path.join(workspacePackagesDirectory, "plugin-publish-stage-"))
+try {
+  const staged = await stagePluginPackage({
+    sourceDirectory: dir,
+    stagingDirectory: path.join(scratchRoot, "package"),
+    workspaceDirectory,
+  })
+  const filename = `${staged.packageJson.name.replace(/^@/, "").replaceAll("/", "-")}-${staged.packageJson.version}.tgz`
+  const tarball = path.join(scratchRoot, filename)
+  await $`bun pm pack --ignore-scripts --filename ${tarball}`.cwd(staged.directory)
+  await $`npm publish ${tarball} --tag ${Script.channel} --access public`
+} finally {
+  await rm(scratchRoot, { recursive: true, force: true })
 }
-await Bun.write("package.json", JSON.stringify(pkg, null, 2))
-await $`bun pm pack && npm publish *.tgz --tag ${Script.channel} --access public`
-await Bun.write("package.json", JSON.stringify(original, null, 2))

@@ -553,7 +553,7 @@ export namespace File {
   async function notifyEdited(files: readonly string[]): Promise<void> {
     const settled = await Promise.allSettled(
       files.map((file) =>
-        Bus.publish(Event.Edited, {
+        Bus.publishOwned(Event.Edited, {
           file,
           processAuthority: { kind: "host", cwd: Instance.directory },
         }),
@@ -869,14 +869,7 @@ export namespace File {
     })
   }
 
-  export async function read(file: string): Promise<Content> {
-    using _ = log.time("read", { file })
-    const full = path.join(Instance.directory, file)
-
-    if (!(await isPathAllowed(full))) {
-      throw new Error(`Access denied: path escapes project directory`)
-    }
-
+  async function readResolvedContent(file: string, full: string): Promise<Content> {
     await statReadableFile(file, full)
     await assertReadableFile(file, full)
 
@@ -907,7 +900,28 @@ export namespace File {
       return { type: "text", content, mimeType, encoding: "base64" }
     }
 
-    const content = await readFileText(file, full)
+    return { type: "text", content: await readFileText(file, full) }
+  }
+
+  export async function readSource(file: string): Promise<Content> {
+    using _ = log.time("read-source", { file })
+    if (!path.isAbsolute(file)) {
+      throw fileInvalidPath({ path: file, message: `Source file path must be absolute: ${file}` })
+    }
+    return readResolvedContent(file, path.resolve(file))
+  }
+
+  export async function read(file: string): Promise<Content> {
+    using _ = log.time("read", { file })
+    const full = path.join(Instance.directory, file)
+
+    if (!(await isPathAllowed(full))) {
+      throw new Error(`Access denied: path escapes project directory`)
+    }
+
+    const result = await readResolvedContent(file, full)
+    if (result.type !== "text" || result.encoding) return result
+    const content = result.content
 
     if (Project.isGitRepo(Instance.directory)) {
       let diff = await $`git -c core.fsmonitor=false diff ${file}`.cwd(Instance.directory).quiet().nothrow().text()
@@ -927,7 +941,7 @@ export namespace File {
         return { type: "text", content, patch, diff }
       }
     }
-    return { type: "text", content }
+    return result
   }
 
   export async function writeText(file: string, content: string): Promise<Content> {
@@ -1407,7 +1421,7 @@ export namespace File {
       }))
       await Promise.allSettled(
         results.map((item) =>
-          Bus.publish(Event.Edited, {
+          Bus.publishOwned(Event.Edited, {
             file: item.path,
             processAuthority: { kind: "host", cwd: Instance.directory },
           }),

@@ -28,9 +28,8 @@ import { listAgentCoordinationResponses, listPendingAgentCoordinationRequests } 
 import { listRecentTaskMailboxMessages, type MailboxSchedulerMessage } from "./mailbox"
 import { EngineArtifactTable } from "./engine.sql"
 import { findDispatchLineageByArtifactID, parseDispatchLineagePayload } from "./dispatch-lineage"
-import {
-  type SelectedWorkflowBinding,
-} from "./workflow-binding"
+import { findDispatchSettlementByDispatchID } from "./dispatch-settlement"
+import { type SelectedWorkflowBinding } from "./workflow-binding"
 import { readTaskWorkflowBinding } from "./workflow-binding-facts"
 import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
@@ -151,8 +150,7 @@ export function describeProcessRecoveryFact(taskID: string, factID: string) {
       if (
         !lineage ||
         lineage.payload.child_session_id !== subject.session_id ||
-        (descriptor?.payload.dispatchTurn &&
-          descriptor.payload.dispatchTurn.current_dispatch_id !== lineage.dispatchID)
+        (descriptor?.payload.dispatchTurn && descriptor.payload.dispatchTurn.current_dispatch_id !== lineage.dispatchID)
       ) {
         throw new Error(`Process recovery fact ${factID} dispatch lineage authority changed`)
       }
@@ -319,6 +317,7 @@ export interface TaskWorkflowDispatchDesc {
     summary?: string
     emitted_at: number
   } | null
+  settlement: { artifact_id: string; outcome_kind: string } | null
   terminal_success: boolean
 }
 
@@ -624,10 +623,7 @@ function listAgentMessageRefs(task: TaskRow): AgentMessageRefDesc[] {
         const fixedRole = AgentRoleContract.isRoleID(message.agent_id)
           ? AgentRoleContract.get(message.agent_id)
           : undefined
-        if (
-          fixedRole?.controlSurface !== "helper" &&
-          descriptor.payload.identity.agentID !== message.agent_id
-        ) {
+        if (fixedRole?.controlSurface !== "helper" && descriptor.payload.identity.agentID !== message.agent_id) {
           throw new Error(
             `descriptor ${descriptor.id} agent ${descriptor.payload.identity.agentID} does not match assistant ${message.agent_id}`,
           )
@@ -682,14 +678,16 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
       sessionID: dispatch.payload.child_session_id,
       dispatchID: dispatch.payload.dispatch_id,
     })
-    return descriptor
-      ? executionByInputMessageID.get(descriptor.payload.messageAuthority.user_message_id)
-      : undefined
+    return descriptor ? executionByInputMessageID.get(descriptor.payload.messageAuthority.user_message_id) : undefined
   }
   if (binding.kind === "direct") {
     const directDispatches = dispatches.map((dispatch): TaskWorkflowDispatchDesc => {
       const execution = executionForDispatch(dispatch)
       const status = execution?.latest
+      const settlement = findDispatchSettlementByDispatchID({
+        taskID: task.id,
+        dispatchID: dispatch.payload.dispatch_id,
+      })
       return {
         artifact_id: dispatch.artifactID,
         dispatch_id: dispatch.payload.dispatch_id,
@@ -706,7 +704,10 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
               emitted_at: status.emittedAt,
             }
           : null,
-        terminal_success: status?.status.type === "terminal" && status.status.reason === "completed",
+        settlement: settlement
+          ? { artifact_id: settlement.artifactID, outcome_kind: settlement.payload.outcome.kind }
+          : null,
+        terminal_success: settlement?.payload.outcome.kind === "terminal_success",
       }
     })
     return {
@@ -731,6 +732,7 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
     if (!dispatch.payload.workflow_node_id) continue
     const execution = executionForDispatch(dispatch)
     const status = execution?.latest
+    const settlement = findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: dispatch.payload.dispatch_id })
     const nodeDispatches = dispatchesByNodeID.get(dispatch.payload.workflow_node_id) ?? []
     nodeDispatches.push({
       artifact_id: dispatch.artifactID,
@@ -748,7 +750,10 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
             emitted_at: status.emittedAt,
           }
         : null,
-      terminal_success: status?.status.type === "terminal" && status.status.reason === "completed",
+      settlement: settlement
+        ? { artifact_id: settlement.artifactID, outcome_kind: settlement.payload.outcome.kind }
+        : null,
+      terminal_success: settlement?.payload.outcome.kind === "terminal_success",
     })
     dispatchesByNodeID.set(dispatch.payload.workflow_node_id, nodeDispatches)
   }
@@ -847,7 +852,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   // the next user-driven wake and decide retry / restart / fail. Runtime
   // restart must not auto-wake active tasks: the overlay restores the task
   // view and waits for a real operator message.
-  const streamErrorFloor = task.time_started ?? task.time_created
+  const streamErrorFloor = task.time_started
   const infrastructureErrorRows = listTaskInfrastructureErrorArtifacts(
     task.id,
     streamErrorFloor,
@@ -915,7 +920,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
     }
   })
 
-  const agentFailureFloor = task.time_started ?? task.time_created
+  const agentFailureFloor = task.time_started
   const recentAgentFailures: AgentFailureDesc[] = createDecisionLog(task.id)
     .readByPhase("agent_error")
     .filter((entry) => entry.timeCreated >= agentFailureFloor)
@@ -959,7 +964,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   const openToolCallsWithoutCurrentOwner = listOpenToolCallsWithoutCurrentOwner(task)
   const completedToolCallRefs = listCompletedToolCallRefs(task)
   const agentMessageRefs = listAgentMessageRefs(task)
-  const taskScheduledWaits = describeTaskScheduledWaits(task.id, task.time_started ?? task.time_created)
+  const taskScheduledWaits = describeTaskScheduledWaits(task.id, task.time_started)
 
   return {
     id: task.id,
@@ -1030,7 +1035,7 @@ function renderTaskWorkflowExecution(execution: TaskWorkflowExecutionDesc | unde
     lines.push(
       `- node=${node.node_id}; agent=${node.agent_id}; depends_on=${node.depends_on.join(",") || "(none)"}; ` +
         `occurrence_status=${node.occurrence_status}; terminal_success=${node.terminal_success}; ` +
-          `terminal_success_predecessors=${node.terminal_success_predecessor_ids.join(",") || "(none)"}`,
+        `terminal_success_predecessors=${node.terminal_success_predecessor_ids.join(",") || "(none)"}`,
     )
     for (const dispatch of node.dispatches) {
       const status = dispatch.session_status
@@ -1038,7 +1043,7 @@ function renderTaskWorkflowExecution(execution: TaskWorkflowExecutionDesc | unde
         : "unreported"
       lines.push(
         `  - dispatch_artifact=${dispatch.artifact_id}; dispatch=${dispatch.dispatch_id}; session=${dispatch.session_id}; ` +
-          `target=${dispatch.target_agent_id}; session_status=${status}; terminal_success=${dispatch.terminal_success}; ` +
+          `target=${dispatch.target_agent_id}; session_status=${status}; settlement=${dispatch.settlement?.outcome_kind ?? "unsettled"}; terminal_success=${dispatch.terminal_success}; ` +
           `delivery_slice_subjects=${dispatch.delivery_slice_revision_ids.join(",") || "(none)"}`,
       )
     }
@@ -1205,7 +1210,7 @@ export function renderTaskDescription(desc: TaskDesc): string {
   }
   lines.push("## Durable evidence")
   lines.push(
-    "The Task Artifact Catalog is the only durable evidence inventory. Use artifact_search to enumerate it, artifact_read with an exact locator to inspect every byte, and artifact_select to declare each semantic source of a typed output. Complete but unselected reads remain observations; zero selections are valid. This Task description does not copy Artifact IDs, payload summaries, paths, or domain inventories.",
+    "The Task Artifact Catalog is the only durable evidence inventory. Use artifact_search to enumerate it, pass artifact_locator_ref to artifact_read until complete, and pass artifact_read_ref to artifact_select for each semantic source of a typed output. Complete but unselected reads remain observations; zero selections are valid. This Task description does not copy Artifact IDs, payload summaries, paths, or domain inventories.",
   )
   if (desc.error) lines.push(`Error: ${desc.error}`)
   lines.push(

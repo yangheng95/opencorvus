@@ -15,9 +15,11 @@ type DeepResearchStageDependencies = {
   taskID: string
   parentSessionID: string
   signal?: AbortSignal
+  runResearch?: typeof DeepResearchAgent.run
 }
 
 export function createDeepResearchStageDispatcher(dependencies: DeepResearchStageDependencies) {
+  const runResearch = dependencies.runResearch ?? DeepResearchAgent.run
   return async function dispatchDeepResearchStage(dispatch: {
     task: TaskRow
     reason: string
@@ -38,7 +40,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
     const dispatchID = dispatch.dispatchTurn?.current_dispatch_id
     if (!dispatchID) throw new Error("Deep Research dispatch requires current dispatch authority")
     try {
-      const result = await DeepResearchAgent.run({
+      const result = await runResearch({
         agentID: dispatch.agentID,
         packageRevision: dispatch.packageRevision,
         workScope: dispatch.workScope,
@@ -72,6 +74,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
           dispatchID,
           component: "deep-research",
           operation: "persist-partial-research-brief",
+          delivery: "incomplete",
           sessionID: result.sessionID,
           finalMessageID: result.finalMessageID,
           persist: () =>
@@ -97,6 +100,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
         dispatchID,
         component: "deep-research",
         operation: "persist-research-brief",
+        delivery: "complete",
         sessionID: result.sessionID,
         finalMessageID: result.brief.metadata.created_for_message_id,
         persist: () =>

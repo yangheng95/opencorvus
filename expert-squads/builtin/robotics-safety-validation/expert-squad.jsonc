@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "robotics-safety-validation",
+  "name": "Robotics Safety Validation",
+  "label": "Robotics Safety Validation",
+  "description": "Integrated robot application requirements, hazards, safety functions and deterministic validation evidence joined for qualified safety review.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded integrated-robot application safety evidence.",
+    "selection_guidance": "Select for robot task and mode hazards, safeguards, safety-function traceability and layered verification evidence without commanding equipment or accepting risk.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "robotics-safety-validation/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "robot-system-requirement-interface-analyst": {
+        "label": "Robot System Requirement and Interface Analyst",
+        "description": "Freeze the integrated robot application boundary and trace requirements across robot, controller, end effector, sensors, energy, communications, workspace, people and external equipment.",
+        "base_role": "explore",
+        "prompt": "agents/robot-system-requirement-interface-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "robotics-safety-validation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "robot-task-hazard-risk-reduction-analyst": {
+        "label": "Robot Task Hazard and Risk Reduction Analyst",
+        "description": "Analyze task, mode and lifecycle hazards and the supplied risk-reduction evidence without accepting residual risk.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/robot-task-hazard-risk-reduction-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "robotics-safety-validation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "robot-safety-function-control-validation-analyst": {
+        "label": "Robot Safety Function and Control Validation Analyst",
+        "description": "Trace safety functions and safety-related parts of control systems to configuration, analysis and test evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/robot-safety-function-control-validation-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "robotics-safety-validation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "robot-application-test-evidence-analyst": {
+        "label": "Robot Application Test Evidence Analyst",
+        "description": "Organize deterministic verification and validation evidence across unit, integration, simulation, hardware-in-the-loop and bounded field layers.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/robot-application-test-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "robotics-safety-validation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "robotics-safety-validation-case-owner": {
+        "label": "Robotics Safety Validation Case Owner",
+        "description": "Join the four independent branches into a contradiction-preserving evidence case for qualified safety review.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/robotics-safety-validation-case-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "robotics-safety-validation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "robotics-safety-validation-review": {
+        "label": "Robotics Safety Validation Review",
+        "description": "Four independent evidence branches converge into an explicit qualified-review case owner.",
+        "nodes": {
+          "robot-system-requirement-interface-analyst": {
+            "agent_id": "robot-system-requirement-interface-analyst",
+            "description": "Freeze the integrated robot application boundary and trace requirements across robot, controller, end effector, sensors, energy, communications, workspace, people and external equipment.",
+            "depends_on": []
+          },
+          "robot-task-hazard-risk-reduction-analyst": {
+            "agent_id": "robot-task-hazard-risk-reduction-analyst",
+            "description": "Analyze task, mode and lifecycle hazards and the supplied risk-reduction evidence without accepting residual risk.",
+            "depends_on": []
+          },
+          "robot-safety-function-control-validation-analyst": {
+            "agent_id": "robot-safety-function-control-validation-analyst",
+            "description": "Trace safety functions and safety-related parts of control systems to configuration, analysis and test evidence.",
+            "depends_on": []
+          },
+          "robot-application-test-evidence-analyst": {
+            "agent_id": "robot-application-test-evidence-analyst",
+            "description": "Organize deterministic verification and validation evidence across unit, integration, simulation, hardware-in-the-loop and bounded field layers.",
+            "depends_on": []
+          },
+          "robotics-safety-validation-case-owner": {
+            "agent_id": "robotics-safety-validation-case-owner",
+            "description": "Join the four independent branches into a contradiction-preserving evidence case for qualified safety review.",
+            "depends_on": [
+              "robot-application-test-evidence-analyst",
+              "robot-safety-function-control-validation-analyst",
+              "robot-system-requirement-interface-analyst",
+              "robot-task-hazard-risk-reduction-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

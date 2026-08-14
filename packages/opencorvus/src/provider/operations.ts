@@ -195,6 +195,7 @@ export async function testProviderConnection(
     const isCodexOauth = providerID === "openai" && auth?.type === "oauth"
     const stream = streamText({
       model: language,
+      usagePurpose: "provider-connectivity",
       timeoutMs: false,
       ...(isCodexOauth ? {} : { maxOutputTokens: 64 }),
       abortSignal: AbortSignal.timeout(30_000),
@@ -223,6 +224,7 @@ export async function testProviderConnection(
       body: { ok: true, status: "connected", providerID, modelID: selectedModelID, message: "Provider is reachable." },
     }
   } catch (error) {
+    if (Auth.findReadError(error)) throw error
     const cause = error instanceof Error && error.cause instanceof Error ? error.cause : undefined
     const message = ProviderError.redactSensitiveProviderText(
       cause?.message || (error instanceof Error ? error.message : String(error)),

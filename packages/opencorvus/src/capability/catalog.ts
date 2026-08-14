@@ -3,11 +3,12 @@ import z from "zod"
 import type { Config } from "@/config/config"
 import { ConversationCapability } from "@/conversation/capability"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { requireMissionSession } from "@/mission/session"
+import { missionVisibleExpertSquadIDs, requireMissionSession } from "@/mission/session"
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { SkillManager } from "@/skill/manager"
 import { Instance } from "@/project/instance"
+import { EffectiveConfig } from "@/config/effective"
 import { CapabilityKind, CapabilityRef, CapabilityRefCodec, capabilityRef } from "./ref"
 import type { HarnessProjection } from "./harness-projection"
 import { scoreDiscoveryFields, type DiscoverySearchField } from "./fuzzy"
@@ -70,21 +71,23 @@ export type CapabilityCatalogSnapshot = z.infer<typeof CapabilityCatalogSnapshot
 
 export const CapabilitySearchInput = z
   .object({
-    query: z.string().default(""),
+    query: z.string().max(500).default(""),
     kinds: z
       .array(CapabilityKind)
+      .max(20)
       .optional()
       .describe(
         'Exact stored capability kinds. "tool" selects platform tools and "mcp_tool" selects Model Context Protocol tools; omit this field to search across stored kinds.',
       ),
     next_owner_kinds: z
       .array(CapabilityNextOwnerKind)
+      .max(20)
       .optional()
       .describe('Exact next-step kinds. Use ["call_tool"] to search every executable platform or MCP tool.'),
-    owner_refs: z.array(z.string().trim().min(1)).optional(),
+    owner_refs: z.array(z.string().trim().min(1).max(320)).max(20).optional(),
     product_pillar: z.enum(["code", "work"]).optional(),
-    limit: z.number().int().min(1).max(100).default(20),
-    expected_catalog_revision: z.string().optional(),
+    limit: z.number().int().min(1).max(20).default(20),
+    expected_catalog_revision: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   })
   .strict()
 export type CapabilitySearchInput = z.infer<typeof CapabilitySearchInput>
@@ -400,11 +403,14 @@ export namespace CapabilityCatalog {
       ]
       sources.push(...sourcesFromEntries(entries))
     } else if (caller === "mission") {
+      const mission = await requireMissionSession(input.sessionID)
+      const projectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: input.sessionID })
       const [missionSkills, squads] = await Promise.all([
         MissionSkillCatalog.all(),
         PromptProfileResolver.recommendationCatalog({
-          projectDirectory: Instance.project.worktree,
-          productPillar: (await requireMissionSession(input.sessionID)).productPillar,
+          projectDirectory,
+          productPillar: mission.productPillar,
+          restrictToExpertSquadIDs: missionVisibleExpertSquadIDs(mission),
         }),
       ])
       sources.push(
@@ -440,8 +446,8 @@ export namespace CapabilityCatalog {
                 local_ref: squad.id,
               }),
               name: squad.display_label,
-              description: squad.description ?? squad.selector.summary,
-              aliases: [squad.label, squad.id],
+              description: squad.description ?? squad.name,
+              aliases: [squad.name, squad.id],
               discoverable_by: ["mission"],
               product_pillars: squad.product_pillars,
               availability: "installed_unbound",

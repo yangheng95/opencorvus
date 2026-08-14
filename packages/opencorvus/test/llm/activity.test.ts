@@ -1,10 +1,7 @@
 import { describe, expect, test } from "bun:test"
-import {
-  DefaultLLMActivityPolicy,
-  chunkHeartbeatKind,
-  withLLMActivity,
-  type LLMActivityEvent,
-} from "@/llm/activity"
+import { DefaultLLMActivityPolicy, chunkHeartbeatKind, withLLMActivity, type LLMActivityEvent } from "@/llm/activity"
+import { abortableIterable } from "@/util/stream-activity"
+import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 
 const policy = {
   ...DefaultLLMActivityPolicy,
@@ -24,6 +21,63 @@ function waitForAbort(signal: AbortSignal): Promise<never> {
 }
 
 describe("LLM semantic activity", () => {
+  test("terminates a typed missing Provider credential after one attempt", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    await expect(
+      withLLMActivity(
+        { sessionID: "session-auth-required", provider: "openai", model: "gpt-5.6-terra" },
+        policy,
+        new AbortController().signal,
+        async () => {
+          attempts += 1
+          throw new ProviderAuthRequiredError({
+            providerID: "openai",
+            message: "OpenAI Codex OAuth credential is required",
+          })
+        },
+        (event) => events.push(event),
+      ),
+    ).rejects.toMatchObject({ name: "LLMActivityError", cls: "auth_required", attempts: 0 })
+    expect(attempts).toBe(1)
+    expect(events.filter((event) => event.type === "retry")).toEqual([])
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "failed", cls: "auth_required" })
+  })
+  test("lets the idle authority preempt an immediately resolving no-op provider stream", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await withLLMActivity(
+      { sessionID: "session-hot-semantic-idle", provider: "test", model: "hot-semantic-idle" },
+      policy,
+      new AbortController().signal,
+      async (run) => {
+        attempts += 1
+        if (run.attempt > 0) {
+          run.bump("text-delta")
+          return "recovered"
+        }
+        run.bump("first-byte")
+        const immediatelyResolvingNoOpStream = (async function* () {
+          while (true) yield { type: "unknown-provider-keepalive" }
+        })()
+        for await (const _chunk of abortableIterable(immediatelyResolvingNoOpStream, run.signal)) {
+          // No semantic heartbeat: the idle authority must win.
+        }
+        throw new Error("hot provider stream ended without the idle authority")
+      },
+      (event) => events.push(event),
+    )
+
+    expect({ result, attempts }).toEqual({ result: "recovered", attempts: 2 })
+    expect(events.find((event) => event.type === "retry")).toMatchObject({
+      type: "retry",
+      attempt: 1,
+      cls: "idle",
+      lastHeartbeat: { kind: "first-byte" },
+    })
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
   test("retries an attempt whose transport emits only repeated no-op first-byte observations", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0
@@ -83,6 +137,40 @@ describe("LLM semantic activity", () => {
     expect({ result, attempts }).toEqual({ result: "completed", attempts: 1 })
     expect(events.some((event) => event.type === "retry")).toBe(false)
     expect(events.filter((event) => event.type === "heartbeat" && event.kind === "tool-input-delta")).toHaveLength(5)
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("classifies the observed OpenAI socket closure as network and recovers on the next attempt", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await withLLMActivity(
+      { sessionID: "session-openai-socket-close", provider: "openai", model: "gpt-5.6-terra" },
+      {
+        ...policy,
+        maxRetries: { default: 0, network: 1 },
+      },
+      new AbortController().signal,
+      async (run) => {
+        attempts += 1
+        run.bump("first-byte")
+        if (run.attempt === 0) {
+          throw new Error(
+            "Cannot connect to API: The socket connection was closed unexpectedly. For more information, pass verbose true to fetch()",
+          )
+        }
+        run.bump("text-delta")
+        return "recovered"
+      },
+      (event) => events.push(event),
+    )
+
+    expect({ result, attempts }).toEqual({ result: "recovered", attempts: 2 })
+    expect(events.find((event) => event.type === "retry")).toMatchObject({
+      type: "retry",
+      attempt: 1,
+      cls: "network",
+      lastHeartbeat: { kind: "first-byte" },
+    })
     expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
   })
 

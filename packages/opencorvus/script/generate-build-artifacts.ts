@@ -2,6 +2,7 @@ import path from "path"
 import { generateExpertSquadPayloadModule } from "./generate-expert-squad-payload"
 import { generateBuiltinSkillPayloadModule } from "./generate-builtin-skill-payload"
 import { generateBuiltinMissionSkillPayloadModule } from "./generate-builtin-mission-skill-payload"
+import { generateWorkArtifactQualificationMatrix } from "./generate-work-artifact-qualification-matrix"
 
 export async function generateOpencorvusGeneratedBuildArtifacts(
   input: {
@@ -20,4 +21,6 @@ export async function generateOpencorvusGeneratedBuildArtifacts(
   log("Generated built-in Skill payload module")
   await generateBuiltinMissionSkillPayloadModule(repoRoot)
   log("Generated built-in Mission Skill payload module")
+  await generateWorkArtifactQualificationMatrix(packageRoot)
+  log("Generated Work Artifact qualification matrix")
 }

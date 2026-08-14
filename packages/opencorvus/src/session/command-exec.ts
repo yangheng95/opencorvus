@@ -16,6 +16,7 @@ import { SessionPromptState } from "./prompt/state"
 import { sessionLifecycleOrderKey } from "./status"
 import { resolvePromptParts } from "./prompt/parts"
 import type { PromptInput } from "./prompt/schema"
+import { ProjectMemory } from "@/memory/project-memory"
 
 export namespace SessionCommand {
   const { log } = SessionPromptState
@@ -60,7 +61,7 @@ export namespace SessionCommand {
       const error = new NamedError.Unknown({
         message: `Command agent ${JSON.stringify(requestedAgentID)} is not a primary assistant`,
       })
-      Bus.publish(Session.Event.Error, {
+      await Bus.publish(Session.Event.Error, {
         sessionID: input.sessionID,
         orderKey: sessionLifecycleOrderKey(input.sessionID),
         error: error.toObject(),
@@ -133,7 +134,7 @@ export namespace SessionCommand {
       if (Provider.ModelNotFoundError.isInstance(e)) {
         const { providerID, modelID, suggestions } = e.data
         const hint = suggestions?.length ? ` Did you mean: ${suggestions.join(", ")}?` : ""
-        Bus.publish(Session.Event.Error, {
+        await Bus.publish(Session.Event.Error, {
           sessionID: input.sessionID,
           orderKey: sessionLifecycleOrderKey(input.sessionID),
           error: new NamedError.Unknown({ message: `Model not found: ${providerID}/${modelID}.${hint}` }).toObject(),
@@ -161,11 +162,15 @@ export namespace SessionCommand {
       model: taskModel,
       agent: agentName,
       byteMaterializationProjectID: session.projectID,
+      extra: ProjectMemory.userInputExtra({
+        surface: "session.command",
+        literalText: `/${input.command}${input.arguments ? ` ${input.arguments}` : ""}`,
+      }),
       parts,
       variant: input.variant,
     })
 
-    Bus.publish(Command.Event.Executed, {
+    await Bus.publish(Command.Event.Executed, {
       name: input.command,
       sessionID: input.sessionID,
       arguments: input.arguments,

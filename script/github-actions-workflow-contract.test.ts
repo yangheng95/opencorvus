@@ -12,6 +12,7 @@ type WorkflowStep = {
 }
 
 type WorkflowJob = {
+  if?: string
   needs?: string | string[]
   outputs?: Record<string, string>
   strategy?: {
@@ -24,6 +25,7 @@ type WorkflowJob = {
 
 type Workflow = {
   on?: Record<string, unknown>
+  concurrency?: Record<string, unknown>
   jobs?: Record<string, WorkflowJob>
 }
 
@@ -47,8 +49,33 @@ describe("GitHub Actions workflow contract", () => {
       }
     }
 
-    expect(checkoutReferences).toHaveLength(15)
-    expect(checkoutReferences.map(({ uses }) => uses)).toEqual(checkoutReferences.map(() => "actions/checkout@v6"))
+    expect(checkoutReferences).toEqual([
+      { file: "build-overlays.yml", job: "build-overlay", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "package-overlay", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "publish-release-assets", uses: "actions/checkout@v6" },
+      { file: "codeql.yml", job: "analyze", uses: "actions/checkout@v6" },
+      {
+        file: "deploy-opencorvus-com.yml",
+        job: "archive-determinism",
+        uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+      },
+      {
+        file: "deploy-opencorvus-com.yml",
+        job: "build",
+        uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+      },
+      { file: "generate.yml", job: "verify", uses: "actions/checkout@v6" },
+      { file: "security.yml", job: "repository", uses: "actions/checkout@v6" },
+      { file: "security.yml", job: "dependency-review", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "version-sync", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "unit", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "build-critical", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "channel-runtime-unit", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "overlay-unit", uses: "actions/checkout@v6" },
+      { file: "typecheck.yml", job: "typecheck", uses: "actions/checkout@v6" },
+    ])
   })
 
   test("packages all five native GUI and CLI rows before publishing the release", async () => {
@@ -81,6 +108,15 @@ describe("GitHub Actions workflow contract", () => {
       prepare_compile_runtimes: "true",
     })
     expect(jobs["package-cli"]?.steps?.map(({ run }) => run)).toContain("bun run package:binary-matrix")
+    const workArtifactQualification = jobs["package-cli"]?.steps?.find(
+      ({ name }) => name === "Verify packaged Work Artifact lifecycle",
+    )
+    expect(workArtifactQualification?.run).toContain(
+      "bun packages/opencorvus/script/check-work-artifact-profile.ts \\",
+    )
+    expect(workArtifactQualification?.run).toContain("--profile office.presentation@1 \\")
+    expect(workArtifactQualification?.run).toContain('--package-root "$bundle" | tee "$evidence"')
+    expect(workArtifactQualification?.run).toContain('test "$verified" -gt 0')
     for (const job of ["package-overlay", "package-cli"]) {
       expect(jobs[job]?.steps?.find(({ name }) => name?.startsWith("Install Windows"))).toEqual({
         name:
@@ -92,9 +128,18 @@ describe("GitHub Actions workflow contract", () => {
         run: "./script/install-windows-ripgrep.ps1",
       })
     }
+    const overlayWorkflow = await readWorkflow("build-overlays.yml")
+    expect(
+      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(({ name }) => name === "Install Windows runtime dependencies"),
+    ).toEqual({
+      name: "Install Windows runtime dependencies",
+      if: "runner.os == 'Windows'",
+      shell: "pwsh",
+      run: "./script/install-windows-ripgrep.ps1",
+    })
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
-      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\n",
+      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\npackages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json\n",
       "if-no-files-found": "error",
       "retention-days": 7,
     })
@@ -104,9 +149,13 @@ describe("GitHub Actions workflow contract", () => {
       version: "${{ steps.meta.outputs.version }}",
       prerelease: "${{ steps.meta.outputs.prerelease }}",
       "update-channel": "${{ steps.meta.outputs.update-channel }}",
+      "source-sha": "${{ steps.meta.outputs.source-sha }}",
     })
     expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
       "releaseVersionMetadata(Bun.argv.at(-1)).prerelease",
+    )
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
+      "git rev-parse 'HEAD^{commit}'",
     )
     expect(
       jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
@@ -133,6 +182,74 @@ describe("GitHub Actions workflow contract", () => {
       },
       run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"\nCHANNEL_TAG="desktop-update-${UPDATE_CHANNEL}"\nif ! gh release view "$CHANNEL_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then\n  gh release create "$CHANNEL_TAG" \\\n    --prerelease \\\n    --title "OpenCorvus ${UPDATE_CHANNEL} desktop update channel" \\\n    --notes "Mutable signed desktop update metadata. Installers remain in immutable versioned releases." \\\n    --repo "$GITHUB_REPOSITORY"\nfi\nCHANNEL_DIR="$(mktemp -d)"\ngh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"\ngh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"\n',
     })
+    expect(
+      jobs["publish-release"]?.steps?.find(({ name }) => name === "Dispatch public download page deployment"),
+    ).toEqual({
+      name: "Dispatch public download page deployment",
+      env: {
+        GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+        VERSION: "${{ needs.prepare.outputs.version }}",
+        SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      },
+      run: 'TAG="v${VERSION}"\ngh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \\\n  -f event_type=opencorvus-release-published \\\n  -f "client_payload[version]=$VERSION" \\\n  -f "client_payload[tag]=$TAG" \\\n  -f "client_payload[source_sha]=$SOURCE_SHA"\n',
+    })
+  })
+
+  test("converges every production trigger on the current release download manifest", async () => {
+    const workflow = await readWorkflow("deploy-opencorvus-com.yml")
+    const jobs = workflow.jobs ?? {}
+    expect(workflow.on?.repository_dispatch).toEqual({ types: ["opencorvus-release-published"] })
+    expect(workflow.concurrency).toEqual({
+      group: "opencorvus-com-production",
+      queue: "max",
+      "cancel-in-progress": false,
+    })
+    expect(jobs["resolve-source"]?.outputs).toEqual({
+      "source-sha": "${{ steps.source.outputs.source-sha }}",
+    })
+    const sourceStep = jobs["resolve-source"]?.steps?.find(({ name }) => name === "Resolve and verify website source")
+    expect(sourceStep?.env).toEqual({
+      GH_TOKEN: "${{ github.token }}",
+      EVENT_NAME: "${{ github.event_name }}",
+      EVENT_SHA: "${{ github.sha }}",
+      DISPATCH_VERSION: "${{ github.event.client_payload.version || '' }}",
+      DISPATCH_TAG: "${{ github.event.client_payload.tag || '' }}",
+      DISPATCH_SOURCE_SHA: "${{ github.event.client_payload.source_sha || '' }}",
+    })
+    expect(sourceStep?.run).toContain('gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$DISPATCH_TAG"')
+    expect(sourceStep?.run).toContain('gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA"')
+    expect(sourceStep?.run).toContain('test "$OBJECT_TYPE" = "commit"')
+    expect(sourceStep?.run).toContain('test "$OBJECT_SHA" = "$DISPATCH_SOURCE_SHA"')
+    expect(sourceStep?.run).toContain('echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"')
+    for (const job of ["archive-determinism", "build"]) {
+      expect(jobs[job]?.needs).toBe("resolve-source")
+      expect(jobs[job]?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with?.ref).toBe(
+        "${{ needs.resolve-source.outputs.source-sha }}",
+      )
+    }
+    expect(jobs["sign-and-deploy"]?.if).toBe(
+      "${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}",
+    )
+    expect(jobs["sign-and-deploy"]?.needs).toEqual(["resolve-source", "archive-determinism", "build"])
+    expect(
+      jobs.build?.steps?.find(({ name }) => name === "Upload frozen unsigned site")?.with?.name,
+    ).toBe("opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}")
+    expect(
+      jobs["sign-and-deploy"]?.steps?.find(({ name }) => name === "Download frozen unsigned site")?.with?.name,
+    ).toBe("opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}")
+    const freezeStep = jobs["sign-and-deploy"]?.steps?.find(({ name }) => name === "Freeze deploy archive and checksums")
+    expect(freezeStep?.env).toEqual({ WEBSITE_SOURCE_SHA: "${{ needs.resolve-source.outputs.source-sha }}" })
+    expect(freezeStep?.run).toContain('RELEASE_ID="${WEBSITE_SOURCE_SHA}-')
+
+    const buildSteps = jobs.build?.steps ?? []
+    const manifestStep = buildSteps.find(({ name }) => name === "Generate current public download manifest")
+    expect(manifestStep?.env).toEqual({
+      GH_TOKEN: "${{ github.token }}",
+      DISPATCH_VERSION: "${{ github.event.client_payload.version || '' }}",
+    })
+    expect(manifestStep?.run).toContain('gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100"')
+    expect(manifestStep?.run).toContain("generate-website-download-manifest.ts")
+    expect(buildSteps.indexOf(manifestStep!)).toBeLessThan(buildSteps.findIndex(({ name }) => name === "Check website"))
   })
 
   test("prepares generated dependencies and native runtime tools before push verification", async () => {
@@ -165,8 +282,24 @@ describe("GitHub Actions workflow contract", () => {
         name: "Install Windows test runtime dependencies",
         if: "runner.os == 'Windows'",
         shell: "pwsh",
-        run: "./script/install-windows-ripgrep.ps1",
+        run:
+          "./script/install-windows-ripgrep.ps1\nbun packages/opencorvus/script/prepare-test-process-supervisor.ts\n",
       },
     ])
+  })
+
+  test("bootstraps every generator consumer and preserves the preload-owned unit process", async () => {
+    for (const file of ["generate.yml", "typecheck.yml"]) {
+      const workflow = await readWorkflow(file)
+      const setup = Object.values(workflow.jobs ?? {})
+        .flatMap((job) => job.steps ?? [])
+        .find(({ uses }) => uses === "./.github/actions/setup-bun")
+      expect(setup?.with).toEqual({ prepare_sdk: "true" })
+    }
+
+    const packageDefinition = await Bun.file(
+      path.join(import.meta.dir, "..", "packages", "opencorvus", "package.json"),
+    ).json()
+    expect(packageDefinition.scripts.test).toBe("bun script/run-tests.ts")
   })
 })

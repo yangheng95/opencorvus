@@ -26,7 +26,7 @@ import { clarificationTranscriptSection } from "@/engine"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { renderPromptSections, withAttachmentPromptSections } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
-import type { RequirementSet } from "./types"
+import type { RequirementCoverageDeclaration, RequirementSet } from "./types"
 import { createRequirementsOutputTools, type RequirementsCollector } from "./output-tools"
 import { createDecisionLog } from "@/decision-log"
 import {
@@ -34,7 +34,6 @@ import {
   type RequirementsInputRefs,
   type RequirementsPromptProjection,
 } from "./input-projection"
-import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 
 const log = Log.create({ service: "requirements-agent" })
 
@@ -72,7 +71,14 @@ export namespace RequirementsAgent {
    */
   export async function run(
     input: RunInput,
-  ): Promise<(RequirementSet & { sessionID: string; finalMessageID: string }) | AgentCoordinationHandoffResult> {
+  ): Promise<
+    | (RequirementSet & {
+        sessionID: string
+        finalMessageID: string
+        finalization?: RequirementCoverageDeclaration
+      })
+    | AgentCoordinationHandoffResult
+  > {
     const projection = projectRequirementsInput(input)
     // Rule 11 / rule 25: the working directory is a structural fact
     // (`Instance.directory`), not something to keyword-regex out of the
@@ -92,6 +98,7 @@ export namespace RequirementsAgent {
       },
     )
     const outputToolKit = createRequirementsOutputTools({
+      taskID: input.taskID,
       decisionLog: createDecisionLog(input.taskID),
     })
 
@@ -128,32 +135,9 @@ export namespace RequirementsAgent {
     if (coordinationHandoff) return coordinationHandoff
 
     const collector = out.collector as RequirementsCollector
-    const provenance = artifactProvenanceForAgentTurn(out.session.id, out.finalMessage.info.id)
-    const selectedSourceKeys = new Set(
-      provenance.sourceArtifactLocators.map((locator) =>
-        JSON.stringify(locator),
-      ),
-    )
-    const unreadEvidence = collector.requirements.flatMap((requirement) =>
-      requirement.evidence_refs
-        .filter((locator) => !selectedSourceKeys.has(JSON.stringify(locator)))
-        .map((locator) => ({
-          requirementID: requirement.id,
-          locator,
-        })),
-    )
-    if (unreadEvidence.length > 0) {
-      throw new Error(
-        `Requirements output referenced Artifact locators not explicitly selected from complete reads in the current Turn: ${unreadEvidence
-          .map(
-            ({ requirementID, locator }) =>
-              `${requirementID}:${JSON.stringify(locator)}`,
-          )
-          .join(", ")}`,
-      )
-    }
-
-    // Collector tool-call output is the only supported path. If the LLM
+    // Collector tool-call output is the only supported path. The durable
+    // publication owner reconstructs evidence provenance from the completed
+    // Turn; the runner never supplies or pre-validates an authoritative copy.
     const parsed = collectorToOutput(collector)
     log.info("requirements agent output", {
       requirements: parsed.requirements.length,
@@ -164,6 +148,7 @@ export namespace RequirementsAgent {
       ...parsed,
       sessionID: out.session.id,
       finalMessageID: out.finalMessage.info.id,
+      ...(collector.finalization ? { finalization: collector.finalization } : {}),
     }
   }
 }
@@ -199,6 +184,9 @@ function buildUserPrompt(input: RequirementsPromptProjection, agentID: string, p
 
   sections.push(
     `# Delegation\n\nProjected agent "${agentID}" is asked to extract the task requirements and foundational decisions through the requirements adapter.\n\n${input.instruction}`,
+  )
+  sections.push(
+    `## Requirements coverage authority\n\n- request_sha256: ${input.taskRequestSHA256}\n- Before finishing, call \`finalize_requirements\` exactly once with this hash, every registered REQ-N identity, the exact selected source Artifact locators, and all unresolved coverage.`,
   )
   sections.push(
     renderUserRequestSection({

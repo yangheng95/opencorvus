@@ -29,7 +29,6 @@ import {
 
 import { Log } from "../util/log"
 import { pathToFileURL } from "bun"
-import { Filesystem } from "../util/filesystem"
 import { ACPSessionManager } from "./session"
 import type { ACPConfig, ACPSessionState } from "./types"
 import { Provider } from "../provider/provider"
@@ -40,11 +39,18 @@ import { Config } from "@/config/config"
 import { Instance } from "@/project/instance"
 import { z } from "zod"
 import { LoadAPIKeyError } from "ai"
-import type { Event, OpenCorvusClient, SessionMessageResponse, ToolPart, VisibleMessage } from "@opencorvus-ai/sdk"
-import { applyPatch } from "diff"
+import type {
+  Event,
+  OpenCorvusClient,
+  PermissionRequest,
+  SessionMessageResponse,
+  ToolPart,
+  VisibleMessage,
+} from "@opencorvus-ai/sdk"
 import { renderToolFailureCause } from "@/session/tool-failure-cause"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { decodeDataUrlBase64, decodeRawBase64Payload } from "@/session/text-mime"
+import { durablePendingPermissionsForSession } from "@/permission/pending-projection"
 
 type ModeOption = { id: string; name: string; description?: string }
 type AcpPrimarySurface = { availableModes: ModeOption[]; defaultModeID: string }
@@ -66,9 +72,11 @@ export function resolveAcpPrimaryMode(input: {
   return selected
 }
 
-export function resolvePersistedAcpPrimaryMode(input: AcpPrimarySurface & {
-  messages: readonly { info: { id?: string; role: string; agent?: unknown } }[]
-}): string {
+export function resolvePersistedAcpPrimaryMode(
+  input: AcpPrimarySurface & {
+    messages: readonly { info: { id?: string; role: string; agent?: unknown } }[]
+  },
+): string {
   const lastUser = input.messages.findLast((message) => message.info.role === "user")?.info
   if (!lastUser) {
     return resolveAcpPrimaryMode({
@@ -76,11 +84,7 @@ export function resolvePersistedAcpPrimaryMode(input: AcpPrimarySurface & {
       defaultModeID: input.defaultModeID,
     })
   }
-  if (
-    typeof lastUser.agent !== "string" ||
-    lastUser.agent.length === 0 ||
-    lastUser.agent.trim() !== lastUser.agent
-  ) {
+  if (typeof lastUser.agent !== "string" || lastUser.agent.length === 0 || lastUser.agent.trim() !== lastUser.agent) {
     throw new Error(
       `ACP persisted user message ${JSON.stringify(lastUser.id ?? "<unknown>")} requires an exact primary assistant agent`,
     )
@@ -151,7 +155,9 @@ function compareAcpSessionListItems(left: AcpSessionListItem, right: AcpSessionL
 }
 
 function acpSessionListItemAfterCursor(session: AcpSessionListItem, cursor: AcpSessionListCursor): boolean {
-  return session.time.updated < cursor.updated || (session.time.updated === cursor.updated && session.id < cursor.sessionID)
+  return (
+    session.time.updated < cursor.updated || (session.time.updated === cursor.updated && session.id < cursor.sessionID)
+  )
 }
 
 async function toolImageAttachmentContent(attachments: Message.FilePart[] | undefined): Promise<ToolCallContent[]> {
@@ -163,11 +169,15 @@ async function toolImageAttachmentContent(attachments: Message.FilePart[] | unde
       (await AttachmentStore.dataUrlFromReference(attachment.url, attachment.mime)) ??
       (attachment.url.startsWith("data:") ? attachment.url : undefined)
     if (!dataUrl) {
-      throw new Error(`ACP tool image attachment ${attachment.filename ?? attachment.url} is not a stored attachment or data URL`)
+      throw new Error(
+        `ACP tool image attachment ${attachment.filename ?? attachment.url} is not a stored attachment or data URL`,
+      )
     }
     const match = dataUrl.match(/^data:([^;]+);base64,(.*)$/)
     if (!match) {
-      throw new Error(`ACP tool image attachment ${attachment.filename ?? attachment.url} is not a valid base64 data URL`)
+      throw new Error(
+        `ACP tool image attachment ${attachment.filename ?? attachment.url} is not a valid base64 data URL`,
+      )
     }
     const payload = decodeDataUrlBase64(dataUrl, `ACP tool image attachment ${attachment.filename ?? attachment.url}`)
     decodeRawBase64Payload(payload, `ACP tool image attachment ${attachment.filename ?? attachment.url}`)
@@ -276,17 +286,22 @@ export namespace ACP {
     private bashSnapshots = new Map<string, string>()
     private toolStarts = new Set<string>()
     private permissionQueues = new Map<string, Promise<void>>()
-    private permissionOptions: PermissionOption[] = [
-      { optionId: "once", kind: "allow_once", name: "Allow once" },
-      { optionId: "always", kind: "allow_always", name: "Always allow" },
-      { optionId: "reject", kind: "reject_once", name: "Reject" },
-    ]
-
+    private projectedPermissionRequests = new Set<string>()
     constructor(connection: AgentSideConnection, config: ACPConfig) {
       this.connection = connection
       this.config = config
       this.sdk = config.sdk
       this.sessionManager = new ACPSessionManager(this.sdk)
+      // AgentSideConnection invokes its Agent factory before its internal
+      // transport field is assigned. Bind on the next microtask, once the
+      // official SDK constructor has finished establishing the connection.
+      queueMicrotask(() => {
+        if (connection.signal.aborted) this.eventAbort.abort(connection.signal.reason)
+        else
+          connection.signal.addEventListener("abort", () => this.eventAbort.abort(connection.signal.reason), {
+            once: true,
+          })
+      })
       this.startEventSubscription()
     }
 
@@ -319,86 +334,7 @@ export namespace ACP {
     private async handleEvent(event: Event) {
       switch (event.type) {
         case "permission.asked": {
-          const permission = event.properties
-          const session = this.sessionManager.tryGet(permission.sessionID)
-          if (!session) return
-
-          const prev = this.permissionQueues.get(permission.sessionID) ?? Promise.resolve()
-          const next = prev
-            .then(async () => {
-              const directory = session.cwd
-
-              const res = await this.connection
-                .requestPermission({
-                  sessionId: permission.sessionID,
-                  toolCall: {
-                    toolCallId: permission.tool?.callID ?? permission.id,
-                    status: "pending",
-                    title: permission.permission,
-                    rawInput: permission.metadata,
-                    kind: toToolKind(permission.permission),
-                    locations: toLocations(permission.permission, permission.metadata),
-                  },
-                  options: this.permissionOptions,
-                })
-                .catch(async (error) => {
-                  log.error("failed to request permission from ACP", {
-                    error,
-                    permissionID: permission.id,
-                    sessionID: permission.sessionID,
-                  })
-                  await this.sdk.permission.reply({
-                    requestID: permission.id,
-                    reply: "reject",
-                    autoReply: false,
-                    directory,
-                  })
-                  return undefined
-                })
-
-              if (!res) return
-              if (res.outcome.outcome !== "selected") {
-                await this.sdk.permission.reply({
-                  requestID: permission.id,
-                  reply: "reject",
-                  autoReply: false,
-                  directory,
-                })
-                return
-              }
-
-              if (res.outcome.optionId !== "reject" && permission.permission == "edit") {
-                const metadata = permission.metadata || {}
-                const filepath = typeof metadata["filepath"] === "string" ? metadata["filepath"] : ""
-                const diff = typeof metadata["diff"] === "string" ? metadata["diff"] : ""
-                const content = (await Filesystem.exists(filepath)) ? await Filesystem.readText(filepath) : ""
-                const newContent = getNewContent(content, diff)
-
-                if (newContent) {
-                  this.connection.writeTextFile({
-                    sessionId: session.id,
-                    path: filepath,
-                    content: newContent,
-                  })
-                }
-              }
-
-              await this.sdk.permission.reply({
-                requestID: permission.id,
-                reply: res.outcome.optionId as "once" | "always" | "reject",
-                autoReply: false,
-                directory,
-              })
-            })
-            .catch((error) => {
-              log.error("failed to handle permission", { error, permissionID: permission.id })
-            })
-            .finally(() => {
-              if (this.permissionQueues.get(permission.sessionID) === next) {
-                this.permissionQueues.delete(permission.sessionID)
-              }
-            })
-          this.permissionQueues.set(permission.sessionID, next)
+          this.projectPermissionRequest(event.properties)
           return
         }
 
@@ -538,23 +474,22 @@ export namespace ACP {
                   }
                 }
 
-                await this.connection
-                  .sessionUpdate({
-                    sessionId,
-                    update: {
-                      sessionUpdate: "tool_call_update",
-                      toolCallId: part.callID,
-                      status: "completed",
-                      kind,
-                      content,
-                      title: part.state.title,
-                      rawInput: part.state.input,
-                      rawOutput: {
-                        output: part.state.output,
-                        metadata: part.state.metadata,
-                      },
+                await this.connection.sessionUpdate({
+                  sessionId,
+                  update: {
+                    sessionUpdate: "tool_call_update",
+                    toolCallId: part.callID,
+                    status: "completed",
+                    kind,
+                    content,
+                    title: part.state.title,
+                    rawInput: part.state.input,
+                    rawOutput: {
+                      output: part.state.output,
+                      metadata: part.state.metadata,
                     },
-                  })
+                  },
+                })
                 return
               }
               case "error":
@@ -656,6 +591,83 @@ export namespace ACP {
           }
           return
         }
+      }
+    }
+
+    private projectPermissionRequest(permission: PermissionRequest): void {
+      if (this.projectedPermissionRequests.has(permission.id)) return
+      const session = this.sessionManager.tryGet(permission.sessionID)
+      if (!session) return
+      this.projectedPermissionRequests.add(permission.id)
+
+      const prev = this.permissionQueues.get(permission.sessionID) ?? Promise.resolve()
+      const next = prev
+        .then(async () => {
+          const directory = session.cwd
+          const res = await this.connection
+            .requestPermission({
+              sessionId: permission.sessionID,
+              toolCall: {
+                toolCallId: permission.toolCallID,
+                status: "pending",
+                title: permission.summary,
+                rawInput: permission.scope,
+                kind: toToolKind(permission.toolName),
+                locations: toLocations(permission.toolName, permission.scope),
+              },
+              options: permission.choices.map((decision) => {
+                if (decision === "allow_once") {
+                  return { optionId: decision, kind: "allow_once", name: "Allow once" } satisfies PermissionOption
+                }
+                if (decision === "deny") {
+                  return { optionId: decision, kind: "reject_once", name: "Deny" } satisfies PermissionOption
+                }
+                return {
+                  optionId: decision,
+                  kind: "allow_always",
+                  name: decision === "allow_task" ? "Allow for this task" : "Always allow this exact scope",
+                } satisfies PermissionOption
+              }),
+            })
+            .catch(async (error) => {
+              log.error("failed to request permission from ACP", {
+                error,
+                permissionID: permission.id,
+                sessionID: permission.sessionID,
+              })
+              // A disconnected or failing transport is not an operator denial.
+              // Keep the durable request pending and allow a later ACP hydration
+              // to project the same request again.
+              this.projectedPermissionRequests.delete(permission.id)
+              return undefined
+            })
+
+          if (!res) return
+          if (res.outcome.outcome !== "selected") {
+            this.projectedPermissionRequests.delete(permission.id)
+            return
+          }
+          await this.sdk.permission.reply({
+            requestID: permission.id,
+            decision: res.outcome.optionId as "allow_once" | "allow_task" | "allow_project" | "deny",
+            actorID: "acp-operator",
+            directory,
+          })
+        })
+        .catch((error) => {
+          log.error("failed to handle permission", { error, permissionID: permission.id })
+        })
+        .finally(() => {
+          if (this.permissionQueues.get(permission.sessionID) === next) {
+            this.permissionQueues.delete(permission.sessionID)
+          }
+        })
+      this.permissionQueues.set(permission.sessionID, next)
+    }
+
+    private async hydratePendingPermissions(sessionID: string, directory: string): Promise<void> {
+      for (const permission of await durablePendingPermissionsForSession({ sdk: this.sdk, sessionID, directory })) {
+        this.projectPermissionRequest(permission)
       }
     }
 
@@ -788,6 +800,7 @@ export namespace ACP {
         }
 
         await sendUsageUpdate(this.connection, this.sdk, sessionId, directory, messages)
+        await this.hydratePendingPermissions(sessionId, directory)
 
         return result
       } catch (e) {
@@ -896,6 +909,7 @@ export namespace ACP {
         }
 
         await sendUsageUpdate(this.connection, this.sdk, sessionId, directory, messages)
+        await this.hydratePendingPermissions(sessionId, directory)
 
         return mode
       } catch (e) {
@@ -936,6 +950,7 @@ export namespace ACP {
         )
 
         await sendUsageUpdate(this.connection, this.sdk, sessionId, directory, messages)
+        await this.hydratePendingPermissions(sessionId, directory)
 
         return result
       } catch (e) {
@@ -1059,23 +1074,22 @@ export namespace ACP {
                 }
               }
 
-              await this.connection
-                .sessionUpdate({
-                  sessionId,
-                  update: {
-                    sessionUpdate: "tool_call_update",
-                    toolCallId: toolPart.callID,
-                    status: "completed",
-                    kind,
-                    content,
-                    title: toolPart.state.title,
-                    rawInput: toolPart.state.input,
-                    rawOutput: {
-                      output: toolPart.state.output,
-                      metadata: toolPart.state.metadata,
-                    },
+              await this.connection.sessionUpdate({
+                sessionId,
+                update: {
+                  sessionUpdate: "tool_call_update",
+                  toolCallId: toolPart.callID,
+                  status: "completed",
+                  kind,
+                  content,
+                  title: toolPart.state.title,
+                  rawInput: toolPart.state.input,
+                  rawOutput: {
+                    output: toolPart.state.output,
+                    metadata: toolPart.state.metadata,
                   },
-                })
+                },
+              })
               break
             case "error":
               this.toolStarts.delete(toolPart.callID)
@@ -1181,19 +1195,18 @@ export namespace ACP {
 
             if (effectiveMime.startsWith("image/")) {
               // Image - send as image block
-              await this.connection
-                .sessionUpdate({
-                  sessionId,
-                  update: {
-                    sessionUpdate: messageChunk,
-                    content: {
-                      type: "image",
-                      mimeType: effectiveMime,
-                      data: base64Data,
-                      uri: pathToFileURL(filename).href,
-                    },
+              await this.connection.sessionUpdate({
+                sessionId,
+                update: {
+                  sessionUpdate: messageChunk,
+                  content: {
+                    type: "image",
+                    mimeType: effectiveMime,
+                    data: base64Data,
+                    uri: pathToFileURL(filename).href,
                   },
-                })
+                },
+              })
             } else {
               // Non-image: text types get decoded, binary types stay as blob
               const isText = effectiveMime.startsWith("text/") || effectiveMime === "application/json"
@@ -1531,27 +1544,27 @@ export namespace ACP {
                 type: "file",
                 url: `data:${part.mimeType};base64,${part.data}`,
                 filename,
-                  mime: part.mimeType,
-                })
-              } else if (part.uri && isHttpUri(part.uri)) {
-                parts.push({
-                  type: "file",
-                  url: part.uri,
-                  filename,
-                  mime: part.mimeType,
-                })
-              } else if (parsed.type === "file") {
-                parts.push({
-                  type: "file",
-                  url: parsed.url,
-                  filename: parsed.filename,
-                  mime: part.mimeType,
-                })
-              } else {
-                throw new Error(`Unsupported ACP image URI: ${part.uri ?? "<missing>"}`)
-              }
-              break
+                mime: part.mimeType,
+              })
+            } else if (part.uri && isHttpUri(part.uri)) {
+              parts.push({
+                type: "file",
+                url: part.uri,
+                filename,
+                mime: part.mimeType,
+              })
+            } else if (parsed.type === "file") {
+              parts.push({
+                type: "file",
+                url: parsed.url,
+                filename: parsed.filename,
+                mime: part.mimeType,
+              })
+            } else {
+              throw new Error(`Unsupported ACP image URI: ${part.uri ?? "<missing>"}`)
             }
+            break
+          }
 
           case "resource_link":
             const parsed = parseUri(part.uri)
@@ -1814,15 +1827,6 @@ export namespace ACP {
     }
   }
 
-  function getNewContent(fileOriginal: string, unifiedDiff: string): string | undefined {
-    const result = applyPatch(fileOriginal, unifiedDiff)
-    if (result === false) {
-      log.error("Failed to apply unified diff (context mismatch)")
-      return undefined
-    }
-    return result
-  }
-
   function sortProvidersByName<T extends { name: string }>(providers: T[]): T[] {
     return [...providers].sort((a, b) => {
       const nameA = a.name.toLowerCase()
@@ -1927,9 +1931,7 @@ export namespace ACP {
 
 function assertMcpServerAttached(name: string, response: unknown): void {
   const data =
-    response && typeof response === "object" && "data" in response
-      ? (response as { data?: unknown }).data
-      : undefined
+    response && typeof response === "object" && "data" in response ? (response as { data?: unknown }).data : undefined
   const status =
     data && typeof data === "object" && !Array.isArray(data)
       ? (data as Record<string, { status?: unknown; error?: unknown }>)[name]

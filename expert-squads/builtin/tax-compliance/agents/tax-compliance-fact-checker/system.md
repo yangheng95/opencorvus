@@ -1,0 +1,3 @@
+Independently verify the one existing Tax Compliance Remediation Analyst output. Discover, completely read, and select only that exact compliance-plan Artifact as the direct reviewed output. Check entity, jurisdiction, period, authority, rate or treatment, deadlines, formulas, units, rounding, book-to-tax reconciliation, risk prioritization, filing calendar, limitations, and disclaimer. Recalculate sampled values and record verified coverage as well as required corrections.
+
+Call `publish_tax_compliance_artifact` once with `tax-compliance/audit`, `resource_set: null`, and the exact compliance-plan locator. Do not rewrite the plan or write files.

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "battery-safety-reliability",
+  "name": "Battery Safety Reliability",
+  "label": "Battery Safety Reliability",
+  "description": "Cell, module, pack, operating-envelope, abuse-test, thermal-runaway, propagation, barrier, failure and reliability evidence joined for qualified review.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded battery safety and reliability evidence without live test, BMS, damaged-battery, emergency, transport, certification, or release authority.",
+    "selection_guidance": "Select for battery cell/module/pack configuration and genealogy, intended operating envelope, state-of-charge/state-of-health context, abuse-test conditions and instrumentation, thermal-runaway and propagation observations, barrier evidence, failure populations, censoring, reliability models and uncertainty. Do not select for vehicle E/E HARA/ASIL, grid dispatch, aircraft maintenance release, generic process safety, live charging/discharging/shorting/heating/crushing/puncturing/fire tests, BMS changes, damaged-battery handling, transport/emergency action, certification, product release or safety claims.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "battery-safety-reliability/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "battery-configuration-operating-envelope-analyst": {
+        "label": "Battery Configuration and Operating-envelope Analyst",
+        "description": "Reconciles cell/module/pack genealogy, BMS/protection versions, intended use and controlled operating-envelope evidence.",
+        "base_role": "explore",
+        "prompt": "agents/battery-configuration-operating-envelope-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "battery-safety-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "battery-abuse-thermal-runaway-evidence-analyst": {
+        "label": "Battery Abuse and Thermal-runaway Evidence Analyst",
+        "description": "Reconstructs authorized historical abuse-test conditions, instrumentation, thermal events, propagation and barrier observations.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/battery-abuse-thermal-runaway-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "battery-safety-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "battery-reliability-failure-data-analyst": {
+        "label": "Battery Reliability and Failure-data Analyst",
+        "description": "Defines comparable populations, exposure, failure and censoring before bounded reliability calculations and uncertainty review.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/battery-reliability-failure-data-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "battery-safety-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "battery-safety-reliability-review-owner": {
+        "label": "Battery Safety Reliability Review Owner",
+        "description": "Joins configuration, abuse/thermal and reliability branches while preserving application-specific professional authority.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/battery-safety-reliability-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "battery-safety-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "battery-safety-reliability-review": {
+        "label": "Battery Safety Reliability Review",
+        "description": "Three independent configuration, abuse/thermal and failure-reliability branches converge into a bounded review pack.",
+        "nodes": {
+          "battery-configuration-operating-envelope-analyst": {
+            "agent_id": "battery-configuration-operating-envelope-analyst",
+            "description": "Reconciles battery genealogy, protection configuration, application and controlled envelope evidence.",
+            "depends_on": []
+          },
+          "battery-abuse-thermal-runaway-evidence-analyst": {
+            "agent_id": "battery-abuse-thermal-runaway-evidence-analyst",
+            "description": "Reconstructs already-authorized historical test conditions, measurements, thermal events and propagation evidence.",
+            "depends_on": []
+          },
+          "battery-reliability-failure-data-analyst": {
+            "agent_id": "battery-reliability-failure-data-analyst",
+            "description": "Builds comparable populations, exposure, failure/censoring and bounded reliability evidence.",
+            "depends_on": []
+          },
+          "battery-safety-reliability-review-owner": {
+            "agent_id": "battery-safety-reliability-review-owner",
+            "description": "Joins all branches, preserves uncertainty and routes safety, test, transport, certification and release decisions.",
+            "depends_on": [
+              "battery-abuse-thermal-runaway-evidence-analyst",
+              "battery-configuration-operating-envelope-analyst",
+              "battery-reliability-failure-data-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

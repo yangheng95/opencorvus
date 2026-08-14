@@ -48,10 +48,7 @@ const terminalEventTypeByStatus = {
   cancelled: Event.TaskCancelled.type,
 } as const
 
-export function requireTerminalLifecycleReferenceEvent(
-  taskID: string,
-  input: TerminalLifecycleReference,
-) {
+export function requireTerminalLifecycleReferenceEvent(taskID: string, input: TerminalLifecycleReference) {
   const reference = TerminalLifecycleReferenceSchema.parse(input)
   const event = ProtocolStore.requireEvent(reference.terminalEventID)
   const payload = event.payload ?? {}
@@ -79,11 +76,7 @@ export function requireCurrentTerminalLifecycleReference(taskID: string): Termin
   }
   const events = ProtocolStore.listTaskEvents(taskID)
   const latestNonterminalSequence = events
-    .filter(
-      (event) =>
-        event.type === Event.TaskUpdated.type &&
-        (event.payload?.status === "queued" || event.payload?.status === "active"),
-    )
+    .filter((event) => event.type === Event.TaskUpdated.type && event.payload?.status === "active")
     .reduce((latest, event) => Math.max(latest, event.sequence), 0)
   const terminal = events
     .filter((event) => terminalTypes.has(event.type) && event.sequence > latestNonterminalSequence)

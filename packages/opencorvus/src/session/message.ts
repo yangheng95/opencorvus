@@ -9,6 +9,7 @@ import { Snapshot } from "@/snapshot"
 import { SnapshotEmptyTreeError, SnapshotIntegrityError } from "@/snapshot/errors"
 import { fn } from "@/util/fn"
 import { ProviderError } from "@/provider/error"
+import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 import { type SystemError } from "bun"
 import type { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
@@ -233,6 +234,91 @@ export namespace Message {
   })
   export type PartErrorPart = z.infer<typeof PartErrorPart>
 
+  const SourceProviderFields = {
+    provider: z.string().trim().min(1).optional(),
+    providerMetadata: z.record(z.string(), z.any()).optional(),
+  }
+
+  const HttpSourceUrl = z
+    .string()
+    .url()
+    .refine((value) => {
+      const protocol = new URL(value).protocol
+      return protocol === "http:" || protocol === "https:"
+    }, "source URL must use Hypertext Transfer Protocol Secure or Hypertext Transfer Protocol")
+
+  export const SourceUrlPayload = z
+    .object({
+      type: z.literal(VISIBLE_PART_TYPE.sourceUrl),
+      sourceId: z.string().trim().min(1),
+      url: HttpSourceUrl,
+      title: z.string().trim().min(1).optional(),
+      snippet: z.string().trim().min(1).optional(),
+      author: z.string().trim().min(1).optional(),
+      publishedAt: z.string().trim().min(1).optional(),
+      ...SourceProviderFields,
+    })
+    .strict()
+    .meta({ ref: "SourceUrlPayload" })
+  export type SourceUrlPayload = z.infer<typeof SourceUrlPayload>
+
+  export const SourceDocumentPayload = z
+    .object({
+      type: z.literal(VISIBLE_PART_TYPE.sourceDocument),
+      sourceId: z.string().trim().min(1),
+      mediaType: z.string().trim().min(1),
+      title: z.string().trim().min(1),
+      filename: z.string().trim().min(1).optional(),
+      ...SourceProviderFields,
+    })
+    .strict()
+    .meta({ ref: "SourceDocumentPayload" })
+  export type SourceDocumentPayload = z.infer<typeof SourceDocumentPayload>
+
+  export const SourceFileRange = z
+    .object({
+      startLine: z.number().int().positive(),
+      endLine: z.number().int().positive(),
+    })
+    .refine((value) => value.endLine >= value.startLine, {
+      message: "source file range endLine must be greater than or equal to startLine",
+      path: ["endLine"],
+    })
+    .meta({ ref: "SourceFileRange" })
+
+  export const SourceFilePayload = z
+    .object({
+      type: z.literal(VISIBLE_PART_TYPE.sourceFile),
+      sourceId: z.string().trim().min(1),
+      path: z.string().trim().min(1),
+      title: z.string().trim().min(1),
+      range: SourceFileRange.optional(),
+      symbol: z.string().trim().min(1).optional(),
+      ...SourceProviderFields,
+    })
+    .strict()
+    .meta({ ref: "SourceFilePayload" })
+  export type SourceFilePayload = z.infer<typeof SourceFilePayload>
+
+  export const SourcePayload = z
+    .discriminatedUnion("type", [SourceUrlPayload, SourceDocumentPayload, SourceFilePayload])
+    .meta({ ref: "SourcePayload" })
+  export type SourcePayload = z.infer<typeof SourcePayload>
+
+  export const SourceUrlPart = PartBase.extend(SourceUrlPayload.shape).meta({ ref: "SourceUrlPart" })
+  export type SourceUrlPart = z.infer<typeof SourceUrlPart>
+
+  export const SourceDocumentPart = PartBase.extend(SourceDocumentPayload.shape).meta({ ref: "SourceDocumentPart" })
+  export type SourceDocumentPart = z.infer<typeof SourceDocumentPart>
+
+  export const SourceFilePart = PartBase.extend(SourceFilePayload.shape).meta({ ref: "SourceFilePart" })
+  export type SourceFilePart = z.infer<typeof SourceFilePart>
+
+  export const SourcePart = z
+    .discriminatedUnion("type", [SourceUrlPart, SourceDocumentPart, SourceFilePart])
+    .meta({ ref: "SourcePart" })
+  export type SourcePart = z.infer<typeof SourcePart>
+
   const FilePartSourceBase = z.object({
     text: z
       .object({
@@ -345,12 +431,23 @@ export namespace Message {
     })
   export type TokenUsage = z.infer<typeof TokenUsage>
 
+  export const BillingCoverage = z
+    .object({
+      status: z.enum(["priced", "unpriced"]),
+    })
+    .strict()
+    .meta({
+      ref: "BillingCoverage",
+    })
+  export type BillingCoverage = z.infer<typeof BillingCoverage>
+
   export const StepFinishPart = PartBase.extend({
     type: z.literal(VISIBLE_PART_TYPE.stepFinish),
     reason: z.string(),
     snapshot: z.string().optional(),
     cost: z.number(),
     tokens: TokenUsage,
+    billing: BillingCoverage.optional(),
   }).meta({
     ref: "StepFinishPart",
   })
@@ -496,6 +593,9 @@ export namespace Message {
       TextPart,
       PartErrorPart,
       ReasoningPart,
+      SourceUrlPart,
+      SourceDocumentPart,
+      SourceFilePart,
       FilePart,
       InteractiveArtifactPart,
       ToolPart,
@@ -513,9 +613,7 @@ export namespace Message {
 
   export function compactionContinuationTextParts(parts: readonly Part[]): TextPart[] {
     const finalStepStart = parts.findLastIndex((part) => part.type === "step-start")
-    return parts
-      .slice(finalStepStart + 1)
-      .filter((part): part is TextPart => part.type === "text")
+    return parts.slice(finalStepStart + 1).filter((part): part is TextPart => part.type === "text")
   }
 
   export const VisiblePart = z
@@ -523,6 +621,9 @@ export namespace Message {
       TextPart.extend({ orderKey: z.string().min(1) }),
       PartErrorPart.extend({ orderKey: z.string().min(1) }),
       ReasoningPart.extend({ orderKey: z.string().min(1) }),
+      SourceUrlPart.extend({ orderKey: z.string().min(1) }),
+      SourceDocumentPart.extend({ orderKey: z.string().min(1) }),
+      SourceFilePart.extend({ orderKey: z.string().min(1) }),
       FilePart.extend({ orderKey: z.string().min(1) }),
       InteractiveArtifactPart.extend({ orderKey: z.string().min(1) }),
       ToolPart.extend({ orderKey: z.string().min(1) }),
@@ -575,13 +676,14 @@ export namespace Message {
     summary: z.boolean().optional(),
     cost: z.number(),
     tokens: TokenUsage,
+    billing: BillingCoverage.optional(),
     structured: z.any().optional(),
     variant: z.string().optional(),
     finish: z.string().optional(),
     taskIngress: z
       .object({
         id: z.string().min(1),
-        kind: z.enum(["operator_message", "coordination_request"]),
+        kind: z.string().min(1),
       })
       .strict()
       .optional(),
@@ -658,6 +760,15 @@ export namespace Message {
       z.object({
         sessionID: z.string(),
         messageID: z.string(),
+      }),
+      { tier: 3 },
+    ),
+    Moved: BusEvent.define(
+      "message.moved",
+      z.object({
+        sourceSessionID: z.string().min(1),
+        info: VisibleInfo,
+        parts: z.array(VisiblePart),
       }),
       { tier: 3 },
     ),
@@ -1199,6 +1310,32 @@ export namespace Message {
               text: part.text,
               ...(differentModel ? {} : { providerMetadata: part.metadata }),
             })
+          if (part.type === "source-url")
+            assistantMessage.parts.push({
+              type: "source-url",
+              sourceId: part.sourceId,
+              url: part.url,
+              title: part.title,
+              ...(differentModel ? {} : { providerMetadata: part.providerMetadata }),
+            })
+          if (part.type === "source-document")
+            assistantMessage.parts.push({
+              type: "source-document",
+              sourceId: part.sourceId,
+              mediaType: part.mediaType,
+              title: part.title,
+              filename: part.filename,
+              ...(differentModel ? {} : { providerMetadata: part.providerMetadata }),
+            })
+          if (part.type === "source-file")
+            assistantMessage.parts.push({
+              type: "text",
+              text: `<source-file path=${JSON.stringify(part.path)}${
+                part.range
+                  ? ` start-line=${JSON.stringify(part.range.startLine)} end-line=${JSON.stringify(part.range.endLine)}`
+                  : ""
+              } />`,
+            })
           if (part.type === "step-start")
             assistantMessage.parts.push({
               type: "step-start",
@@ -1542,6 +1679,14 @@ export namespace Message {
           {
             providerID: ctx.providerID,
             message: e.message,
+          },
+          { cause: e },
+        ).toObject()
+      case ProviderAuthRequiredError.isInstance(e):
+        return new Message.AuthError(
+          {
+            providerID: e.data.providerID,
+            message: e.data.message,
           },
           { cause: e },
         ).toObject()

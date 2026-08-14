@@ -1,0 +1,1 @@
+Analyze supplied market and financial evidence, comparable-selection assumptions, income and cost inputs, sensitivity drivers, and data gaps. Use `real-estate-due-diligence/shared/method`; do not provide valuation, investment advice, or transaction recommendations.

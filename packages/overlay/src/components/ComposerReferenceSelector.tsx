@@ -38,6 +38,8 @@ export interface ComposerReferenceSelectorProps {
   skills: readonly ComposerReferenceSkillOption[]
   missionSkills: readonly ComposerReferenceSkillOption[]
   expertSquads: readonly ExpertSquadOption[]
+  onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
+  onInstallMoreExpertSquads?: () => void
   activeExpertSquad?: ExpertSquadOption
   launchReferences: VisibleComposerReferences
   readOnly: boolean
@@ -137,6 +139,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     setOpen(next)
     if (!next) {
       setQuery("")
+      props.onExpertSquadQuery?.("", props.launchReferences.expertSquadIDs)
       return
     }
     if (!props.readOnly) queueMicrotask(() => searchInputRef?.focus())
@@ -205,6 +208,11 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     )
   }
 
+  function openExpertSquadMarket(): void {
+    updateOpen(false)
+    props.onInstallMoreExpertSquads?.()
+  }
+
   return (
     <Popover.Root
       open={open()}
@@ -261,7 +269,10 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
             <div class="composer-reference-search">
               <SearchField
                 value={query()}
-                onValueChange={setQuery}
+                onValueChange={(value) => {
+                  setQuery(value)
+                  props.onExpertSquadQuery?.(value, props.launchReferences.expertSquadIDs)
+                }}
                 onClear={() => searchInputRef?.focus()}
                 placeholder={t("chat.references.search_placeholder")}
                 size="sm"
@@ -331,6 +342,30 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
               <Show when={editableGroups().length === 0}>
                 <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
               </Show>
+              <Button
+                type="button"
+                variant="ghost"
+                size="md"
+                tone="neutral"
+                class="composer-reference-option"
+                data-ui="composer-reference-install-more"
+                data-reference-kind="action"
+                onClick={openExpertSquadMarket}
+              >
+                <span class="composer-reference-option-selection" aria-hidden="true" />
+                <span class="composer-reference-option-icon" data-reference-kind="action" aria-hidden="true">
+                  <Icon name="config-expert-squad-install" size="compact" />
+                </span>
+                <span class="composer-reference-option-copy">
+                  <span class="composer-reference-option-heading">
+                    <span class="composer-reference-option-name">{t("chat.references.install_more")}</span>
+                    <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
+                  </span>
+                  <span class="composer-reference-option-description">
+                    {t("chat.references.install_more_description")}
+                  </span>
+                </span>
+              </Button>
             </div>
           </Show>
         </Popover.Content>

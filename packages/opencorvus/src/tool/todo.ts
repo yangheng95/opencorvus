@@ -10,12 +10,6 @@ export const TodoWriteTool = Tool.define("todowrite", {
     todos: z.array(z.object(Todo.Info.shape)).describe("The updated todo list"),
   }),
   async execute(params, ctx) {
-    await ctx.ask({
-      permission: "todowrite",
-      patterns: ["*"],
-      always: ["*"],
-      metadata: {},
-    })
 
     await TodoStore.update({
       sessionID: ctx.sessionID,
@@ -35,12 +29,6 @@ export const TodoReadTool = Tool.define("todoread", {
   description: "Use this tool to read your todo list",
   parameters: z.object({}),
   async execute(_params, ctx) {
-    await ctx.ask({
-      permission: "todoread",
-      patterns: ["*"],
-      always: ["*"],
-      metadata: {},
-    })
 
     const todos = await TodoStore.get(ctx.sessionID)
     return {

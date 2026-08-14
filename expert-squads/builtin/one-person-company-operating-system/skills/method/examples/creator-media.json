@@ -1,0 +1,295 @@
+{
+  "schema_version": "2020-12/opc-1",
+  "profile_id": "opc-creator-media-commercial",
+  "profile_version": "2026.08.11.1",
+  "business_model": "creator_media",
+  "company": {
+    "legal_name": "OPERATOR_SUPPLIED_LEGAL_NAME",
+    "trading_name": "OPERATOR_SUPPLIED_CREATOR_BRAND",
+    "entity_type": "OPERATOR_AND_COUNSEL_SUPPLIED_ENTITY_TYPE",
+    "registration_jurisdictions": ["OPERATOR_SUPPLIED_REGISTRATION_JURISDICTION"],
+    "tax_jurisdictions": ["OPERATOR_AND_TAX_PROFESSIONAL_SUPPLIED_TAX_JURISDICTION"],
+    "tax_professional_ref": "qualified-review/tax-professional"
+  },
+  "owner": {
+    "owner_id": "owner/primary",
+    "approval_identity_ref": "identity/owner-explicit-approval",
+    "self_review": true,
+    "qualified_reviewer_refs": [
+      "qualified-review/media-rights-legal",
+      "qualified-review/accounting-tax",
+      "qualified-review/privacy-advertising"
+    ]
+  },
+  "localization": {
+    "time_zone": "Asia/Shanghai",
+    "tzdb_version": "OPERATOR_SUPPLIED_TZDB_VERSION",
+    "functional_currency": "CNY",
+    "display_currencies": ["CNY", "USD"],
+    "locale": "zh-CN",
+    "fiscal_year_start": "01-01"
+  },
+  "operating_state": "operating",
+  "review_cadence": { "frequency": "weekly", "day": "Thursday", "local_time": "15:00", "owner": "owner/primary" },
+  "data_sources": [
+    {
+      "source_id": "content-rights-inventory",
+      "system_of_record": "content-and-rights-ledger",
+      "locator": "operator-controlled/content/rights",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "approval-ref/rights-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "content_id+asset_id+rights_id",
+      "data_class": "confidential-rights",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "editorial-audience-evidence",
+      "system_of_record": "editorial-calendar-and-platform-exports",
+      "locator": "operator-controlled/content/audience",
+      "connector_or_import": "read-only-snapshot",
+      "auth_ref": "secret-ref/audience-readonly",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "content_id+platform_event_id",
+      "data_class": "restricted-audience",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "newsletter-customer",
+      "system_of_record": "consented-newsletter-and-customer-store",
+      "locator": "operator-controlled/audience/customer",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "secret-ref/newsletter-readonly",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "consented_contact_id+event_id",
+      "data_class": "restricted-personal",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "sponsor-revenue-payment",
+      "system_of_record": "sponsor-affiliate-contract-and-payment-exports",
+      "locator": "operator-controlled/commercial/reconciliation",
+      "connector_or_import": "manual-signed-export",
+      "auth_ref": "approval-ref/commercial-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "agreement_id+deliverable_id+payment_id",
+      "data_class": "confidential-commercial-financial",
+      "owner": "owner/primary"
+    }
+  ],
+  "secret_refs": [
+    {
+      "provider": "operator-secret-manager",
+      "alias": "audience-readonly",
+      "scope": "platform-analytics-readonly",
+      "owner": "owner/primary"
+    },
+    {
+      "provider": "operator-secret-manager",
+      "alias": "newsletter-readonly",
+      "scope": "consented-audience-export-readonly",
+      "owner": "owner/primary"
+    }
+  ],
+  "offer_portfolio": [
+    {
+      "offer_id": "creator-primary-offer",
+      "version": "OPERATOR_SUPPLIED_OFFER_VERSION",
+      "customer_definition": "OPERATOR_SUPPLIED_AUDIENCE_OR_BUYER_DEFINITION",
+      "channel_ids": ["owned-newsletter", "approved-platform"],
+      "price_currency": "CNY",
+      "approval_required": true
+    }
+  ],
+  "customer_channels": [
+    {
+      "channel_id": "owned-newsletter",
+      "channel_type": "consented-owned-audience",
+      "system_of_record_ref": "newsletter-customer",
+      "owner": "owner/primary"
+    },
+    {
+      "channel_id": "approved-platform",
+      "channel_type": "third-party-platform",
+      "system_of_record_ref": "editorial-audience-evidence",
+      "owner": "owner/primary"
+    }
+  ],
+  "pipeline": {
+    "unit": "qualified-audience-action",
+    "stage_definitions": [
+      {
+        "stage_id": "eligible-exposure",
+        "entry_rule": "Content/audience event meets the frozen eligibility and consent definition",
+        "denominator": "eligible audience events with complete observation window"
+      },
+      {
+        "stage_id": "qualified-action",
+        "entry_rule": "Observed action matches the operator-controlled qualified-action definition",
+        "denominator": "eligible exposures with comparable instrumentation"
+      },
+      {
+        "stage_id": "reconciled-commercial-event",
+        "entry_rule": "Agreement/order, delivery, payment, rights, and disclosure evidence reconcile",
+        "denominator": "qualified actions eligible for the frozen offer"
+      }
+    ],
+    "source_id": "editorial-audience-evidence",
+    "owner": "owner/primary"
+  },
+  "delivery_capacity": {
+    "delivery_unit": "rights-cleared-content-or-sponsor-deliverable",
+    "available_capacity_formula": "owner_content_capacity minus committed_editorial_and_sponsor_work minus reserved_rights_and_recovery_capacity",
+    "source_id": "content-rights-inventory",
+    "owner": "owner/primary",
+    "uncertainty": "Editorial, rights, platform, sponsor-approval, and audience-response timing vary"
+  },
+  "cash_controls": {
+    "system_of_record_refs": ["sponsor-revenue-payment", "newsletter-customer"],
+    "reconciliation_key": "agreement_or_order_id+deliverable_id+payment_id+currency",
+    "functional_currency": "CNY",
+    "owner": "owner/primary",
+    "professional_review_ref": "qualified-review/accounting-tax"
+  },
+  "metric_definitions": [
+    {
+      "metric_id": "rights-cleared-output",
+      "business_definition": "Published-as-supplied output with reconciled component rights and approval evidence",
+      "formula_version": "opc-1",
+      "numerator": "rights-cleared approved output records",
+      "denominator": "planned output records in the frozen period",
+      "unit": "ratio",
+      "source_id": "content-rights-inventory",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "No legal clearance conclusion is made by this metric"
+    },
+    {
+      "metric_id": "qualified-audience-action-rate",
+      "business_definition": "Qualified actions over eligible comparable exposures",
+      "formula_version": "opc-1",
+      "numerator": "unique qualified actions",
+      "denominator": "eligible comparable exposures",
+      "unit": "ratio",
+      "source_id": "editorial-audience-evidence",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Platform definitions, bots, reporting lag, and attribution limit comparability"
+    },
+    {
+      "metric_id": "reconciled-attributed-revenue",
+      "business_definition": "Commercial amount supported by agreement/order, deliverable, payment, attribution, currency, and cutoff evidence",
+      "formula_version": "opc-1",
+      "numerator": "sum of reconciled attributed amounts",
+      "denominator": "one frozen reporting period",
+      "unit": "CNY/period",
+      "source_id": "sponsor-revenue-payment",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Excludes unresolved platform attribution, refunds, disputes, and outcome-unknown events"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow_id": "content-brief-rights-gap-draft",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Local draft only; no asset use or publication",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "publication-and-public-claim",
+      "owner": "owner/primary"
+    },
+    {
+      "workflow_id": "sponsor-deliverable-reconciliation",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Read-only agreement-delivery-payment join",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "sponsored-claim-affiliate-disclosure",
+      "owner": "owner/primary"
+    }
+  ],
+  "approval_policy": [
+    {
+      "action_class": "publication-and-public-claim",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "rights-license-likeness-privacy",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "sponsored-claim-affiliate-disclosure",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "audience-export-bulk-contact",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "offer-price-payment-refund",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    }
+  ],
+  "observability": {
+    "signals": ["logs", "metrics", "business_events"],
+    "event_schema": "opc-observability-event-v1",
+    "correlation_id_required": true,
+    "input_digest_required": true,
+    "approval_ref_required": true,
+    "external_effect_required": true,
+    "outcome_unknown_supported": true,
+    "owner": "owner/primary"
+  },
+  "retention_policy_ref": "operator-and-qualified-professional-controlled/content-audience-commercial-retention-policy",
+  "continuity": {
+    "owner": "owner/primary",
+    "critical_source_refs": ["content-rights-inventory", "editorial-audience-evidence", "sponsor-revenue-payment"],
+    "recovery_evidence_ref": "operator-controlled/continuity/content-commercial-recovery-evidence",
+    "manual_workaround_ref": "operator-controlled/continuity/editorial-and-sponsor-handoff",
+    "last_reviewed": "2026-08-11",
+    "uncertainty": "Platform access, rights status, and sponsor approvals require current evidence"
+  },
+  "uncertainty": [
+    "Audience metrics, attribution, rights, platform policy, and sponsor acceptance are source- and version-dependent"
+  ],
+  "applicability": [
+    "Owner-operated creator or media business with controlled rights, audience, contract, and payment evidence"
+  ],
+  "stop_conditions": [
+    "Missing rights, consent, disclosure, or approval evidence",
+    "Unknown jurisdiction or qualified reviewer",
+    "Unreconciled publication, sponsor delivery, audience export, payment, or refund outcome",
+    "Request to publish, license, contact, charge, refund, or claim"
+  ]
+}

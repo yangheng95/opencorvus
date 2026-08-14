@@ -83,6 +83,7 @@ type RenderWorkLedgerTopLevelItemRow = RenderWorkLedgerMissionRow | RenderWorkLe
 type RenderWorkLedgerRow = RenderWorkLedgerProjectRow | RenderWorkLedgerTopLevelItemRow
 
 export interface WorkLedgerProps {
+  primarySurface: "conversation" | "mission-board"
   selectedTaskID?: string
   selectedSessionID?: string
   refreshToken?: number
@@ -94,7 +95,6 @@ export interface WorkLedgerProps {
   onDownloadMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onRenameMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
-  onStartTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -228,7 +228,11 @@ function pendingInteractionCount(row: WorkLedgerItemRow): number {
 }
 
 function taskCanStop(row: WorkLedgerTaskRow): boolean {
-  return row.lifecycleStatus === "queued" || row.lifecycleStatus === "active"
+  return row.lifecycleStatus === "active"
+}
+
+function taskCancellationPending(row: WorkLedgerTaskRow): boolean {
+  return row.cancellationStatus === "cancelling"
 }
 
 function missionHasVisibleStoppableTask(row: WorkLedgerMissionRow): boolean {
@@ -270,6 +274,7 @@ function WorkLedgerNavigationAction(props: {
   trailing?: JSX.Element
   tooltipContent?: JSX.Element
   disabled?: boolean
+  active?: boolean
   onClick: () => void
 }) {
   return (
@@ -282,6 +287,8 @@ function WorkLedgerNavigationAction(props: {
         tone="neutral"
         class="sidebar-codex-action oc-navigation-row"
         data-ui={props["data-ui"]}
+        data-active={props.active ? "true" : undefined}
+        aria-current={props.active ? "page" : undefined}
         aria-label={props.label}
         disabled={props.disabled}
         onClick={props.onClick}
@@ -326,7 +333,6 @@ function WorkLedgerRowView(props: {
   onDownloadMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onRenameMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
-  onStartTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -334,12 +340,6 @@ function WorkLedgerRowView(props: {
   onStopChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onRenameChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onArchiveChat: (row: WorkLedgerChatRow) => void | Promise<void>
-  draggable?: boolean
-  dragOver?: boolean
-  onDragStart?: (row: WorkLedgerTaskRow) => void
-  onDragEnd?: () => void
-  onDragOver?: (row: WorkLedgerTaskRow, event: DragEvent) => void
-  onDrop?: (row: WorkLedgerTaskRow, event: DragEvent) => void
 }) {
   const [busy, setBusy] = createSignal(false)
   const row = () => props.row
@@ -366,6 +366,7 @@ function WorkLedgerRowView(props: {
   const hasSelectedMissionTask = () =>
     row().kind === "mission" && (row() as WorkLedgerMissionRow).tasks.some((task) => props.isSelected?.(task) === true)
   const rowLoading = () => workLedgerPresentationStatus(row()) === "active"
+  const cancellationPending = () => row().kind === "task" && taskCancellationPending(row() as WorkLedgerTaskRow)
 
   const canStop = () => {
     const current = row()
@@ -373,7 +374,6 @@ function WorkLedgerRowView(props: {
     if (current.kind === "task") return taskCanStop(current)
     return current.status === "active"
   }
-  const canStartNow = () => row().kind === "task" && (row() as WorkLedgerTaskRow).lifecycleStatus === "queued"
   const canDownload = () => row().kind !== "chat" && !!row().directory
   const showDownloadActions = getHostTransport().kind !== "tauri"
   const hasActions = () => true
@@ -381,7 +381,6 @@ function WorkLedgerRowView(props: {
   const actionCount = () => {
     let count = 2
     if (canStop()) count += 1
-    if (canStartNow()) count += 1
     if (showDownloadActions && canDownload()) count += 1
     return count
   }
@@ -408,6 +407,7 @@ function WorkLedgerRowView(props: {
   function stopLabel() {
     if (row().kind === "mission") return t("mission.ledger.abort_title")
     if (row().kind === "chat") return t("coding_assistant.ledger.stop_title")
+    if (cancellationPending()) return t("task.cancelling_button_title")
     return t("task.cancel_button_title")
   }
 
@@ -430,13 +430,6 @@ function WorkLedgerRowView(props: {
       data-has-child-tasks={hasMissionTasks() ? "true" : undefined}
       data-pointer-within={hasMissionTasks() && pointerWithinMission() ? "true" : undefined}
       data-has-selected-child={hasSelectedMissionTask() ? "true" : undefined}
-      data-queue-drag-over={props.dragOver ? "true" : undefined}
-      draggable={props.draggable}
-      aria-grabbed={props.draggable ? "false" : undefined}
-      onDragStart={() => row().kind === "task" && props.onDragStart?.(row() as WorkLedgerTaskRow)}
-      onDragEnd={() => props.onDragEnd?.()}
-      onDragOver={(event) => row().kind === "task" && props.onDragOver?.(row() as WorkLedgerTaskRow, event)}
-      onDrop={(event) => row().kind === "task" && props.onDrop?.(row() as WorkLedgerTaskRow, event)}
       onPointerEnter={() => setPointerWithinMission(hasMissionTasks())}
       onPointerLeave={() => setPointerWithinMission(false)}
     >
@@ -472,16 +465,6 @@ function WorkLedgerRowView(props: {
               aria-keyshortcuts={hasActions() ? "ArrowRight" : undefined}
               onKeyDown={rowActions.openActionsFromKeyboard}
               onClick={() => props.onSelect(row())}
-              onDblClick={(event) => {
-                event.preventDefault()
-                event.stopPropagation()
-                void runAction("rename", () => {
-                  const current = row()
-                  if (current.kind === "mission") return props.onRenameMission(current)
-                  if (current.kind === "chat") return props.onRenameChat(current)
-                  return props.onRenameTask(current)
-                })
-              }}
             >
               <div class="task-row-head work-row-head">
                 <Show when={hasMissionTasks()}>
@@ -568,26 +551,6 @@ function WorkLedgerRowView(props: {
             </span>
           </Show>
           <div class="task-row-actions work-row-actions" onKeyDown={rowActions.closeActionsFromKeyboardEvent}>
-            <Show when={canStartNow()}>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                tone="accent"
-                data-chrome="icon-action"
-                data-ui="task-row-start-now"
-                disabled={busy()}
-                tabIndex={rowActions.actionButtonTabIndex()}
-                title={t("task.start_now_button_title")}
-                aria-label={t("task.start_now_button_title")}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  void runAction("start", () => props.onStartTask(row() as WorkLedgerTaskRow))
-                }}
-              >
-                <Icon name="send" />
-              </Button>
-            </Show>
             <Show when={canStop()}>
               <Button
                 type="button"
@@ -596,7 +559,8 @@ function WorkLedgerRowView(props: {
                 tone="neutral"
                 data-chrome="icon-action"
                 data-ui={stopDataUi()}
-                disabled={busy()}
+                data-state={cancellationPending() ? "pending" : "idle"}
+                disabled={busy() || cancellationPending()}
                 tabIndex={rowActions.actionButtonTabIndex()}
                 title={stopLabel()}
                 aria-label={stopLabel()}
@@ -610,7 +574,7 @@ function WorkLedgerRowView(props: {
                   })
                 }}
               >
-                <Icon name="stop" />
+                <Icon name={cancellationPending() ? "loading" : "stop"} />
               </Button>
             </Show>
             <Show when={showDownloadActions && canDownload()}>
@@ -714,7 +678,6 @@ function WorkLedgerRowView(props: {
                   isSelected={props.isSelected}
                   onSelect={props.onSelect}
                   onAfterAction={props.onAfterAction}
-                  onStartTask={props.onStartTask}
                   onCancelTask={props.onCancelTask}
                   onDownloadTask={props.onDownloadTask}
                   onRenameTask={props.onRenameTask}
@@ -747,7 +710,6 @@ function WorkLedgerTaskChildRow(props: {
   onDownloadMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onRenameMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
-  onStartTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -775,7 +737,6 @@ function WorkLedgerTaskChildRow(props: {
         onDownloadMission={props.onDownloadMission}
         onRenameMission={props.onRenameMission}
         onArchiveMission={props.onArchiveMission}
-        onStartTask={props.onStartTask}
         onCancelTask={props.onCancelTask}
         onDownloadTask={props.onDownloadTask}
         onRenameTask={props.onRenameTask}
@@ -799,7 +760,6 @@ function WorkLedgerProjectGroupView(props: {
   onDownloadMission: WorkLedgerProps["onDownloadMission"]
   onRenameMission: WorkLedgerProps["onRenameMission"]
   onArchiveMission: WorkLedgerProps["onArchiveMission"]
-  onStartTask: WorkLedgerProps["onStartTask"]
   onCancelTask: WorkLedgerProps["onCancelTask"]
   onDownloadTask: WorkLedgerProps["onDownloadTask"]
   onRenameTask: WorkLedgerProps["onRenameTask"]
@@ -831,7 +791,6 @@ function WorkLedgerProjectGroupView(props: {
           onDownloadMission={props.onDownloadMission}
           onRenameMission={props.onRenameMission}
           onArchiveMission={props.onArchiveMission}
-          onStartTask={props.onStartTask}
           onCancelTask={props.onCancelTask}
           onDownloadTask={props.onDownloadTask}
           onRenameTask={props.onRenameTask}
@@ -1047,6 +1006,7 @@ export function WorkLedger(props: WorkLedgerProps) {
   const unpinnedGroups = createMemo(() => groups.filter((group) => !isPinnedProjectGroup(group)))
 
   function selected(row: WorkLedgerItemRow): boolean {
+    if (props.primarySurface !== "conversation") return false
     if (row.kind === "task") return props.selectedTaskID === row.id
     return props.selectedSessionID === row.id || ("sessionID" in row && props.selectedSessionID === row.sessionID)
   }
@@ -1128,7 +1088,6 @@ export function WorkLedger(props: WorkLedgerProps) {
       onDownloadMission={props.onDownloadMission}
       onRenameMission={props.onRenameMission}
       onArchiveMission={props.onArchiveMission}
-      onStartTask={props.onStartTask}
       onCancelTask={props.onCancelTask}
       onDownloadTask={props.onDownloadTask}
       onRenameTask={props.onRenameTask}
@@ -1167,6 +1126,7 @@ export function WorkLedger(props: WorkLedgerProps) {
           icon="tasks"
           label={t("mission_board.navigation")}
           description={t("mission_board.navigation_description")}
+          active={props.primarySurface === "mission-board"}
           trailing={
             <Badge class="mission-board-nav-count" size="sm" tone={missionCounts().running > 0 ? "accent" : "muted"}>
               {missionCounts().running}
@@ -1203,7 +1163,7 @@ export function WorkLedger(props: WorkLedgerProps) {
           icon="expert-squad"
           label={t("expert_squad.title")}
           description={t("work_ledger.tooltip.expert_squads")}
-          onClick={() => openConfigDialog("expert-squad")}
+          onClick={() => openConfigDialog("expert-squad-install")}
         />
         <WorkLedgerNavigationAction
           data-ui="work-ledger-multica-import"

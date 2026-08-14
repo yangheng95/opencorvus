@@ -4,6 +4,7 @@ import { CommandPalette } from "./CommandPalette"
 import { ConnectionBadge } from "./ConnectionBadge"
 import { ConfigDialogHost } from "./ConfigDialogHost"
 import { ConnectionBanner } from "./ConnectionBanner"
+import { ProjectMemoryBanner } from "./ProjectMemoryBanner"
 import { ChatHeaderRightDockToggle } from "./ChatHeaderRightDockToggle"
 import { ConversationAgentRail } from "./ConversationAgentRail"
 import { GoalDialogHost } from "./GoalDialogHost"
@@ -20,11 +21,10 @@ import { WindowControls } from "./WindowControls"
 import { WorkspaceEditorLaunchers } from "./WorkspaceEditorLaunchers"
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
-import { Badge } from "./ui/Badge"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
-import { StatusIndicator } from "./ui/StatusIndicator"
 import { t } from "../utils/i18n"
+import { debugCopyFailureMessage } from "../utils/debug-info"
 import { conversationExperienceIcon } from "../services/conversation-experience"
 import { formatUsageStrip } from "../utils/format-usage"
 import type { RightDockPanel } from "./RightDock"
@@ -36,11 +36,6 @@ import type { AutomationRunSession } from "../services/automations"
 import type { WorkLedgerItemRow, WorkLedgerTaskRow } from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
-const MAX_VISIBLE_MAILBOX_UNREAD_COUNT = 99
-
-function formatMailboxUnreadCount(count: number): string {
-  return count > MAX_VISIBLE_MAILBOX_UNREAD_COUNT ? `${MAX_VISIBLE_MAILBOX_UNREAD_COUNT}+` : String(count)
-}
 
 function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
   if (row.kind === "mission") return t("work_ledger.action.rename_mission")
@@ -73,7 +68,15 @@ function ChatViewTitle(props: {
     const item = props.item()
     return item && isTerminalTaskRow(item) ? item : null
   })
-  const [copyFeedback, setCopyFeedback] = createSignal<"copied" | "failed" | null>(null)
+  const [copyFeedback, setCopyFeedback] = createSignal<
+    { kind: "copied" } | { kind: "failed"; message?: string } | null
+  >(null)
+  const copyFeedbackText = createMemo(() => {
+    const feedback = copyFeedback()
+    if (feedback?.kind === "copied") return t("chat.debug_copy_success")
+    if (feedback?.kind === "failed") return feedback.message || t("markdown.copy_failed")
+    return ""
+  })
   let copyFeedbackTimer: number | undefined
 
   onCleanup(() => {
@@ -84,55 +87,46 @@ function ChatViewTitle(props: {
     if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
     try {
       await props.onCopyDebug()
-      setCopyFeedback("copied")
+      setCopyFeedback({ kind: "copied" })
     } catch (error) {
       console.error("[chat-view-title dblclick] clipboard write failed", error)
-      setCopyFeedback("failed")
+      setCopyFeedback({
+        kind: "failed",
+        message: debugCopyFailureMessage(error, t("markdown.copy_failed")),
+      })
     }
     copyFeedbackTimer = window.setTimeout(() => {
       setCopyFeedback(null)
       copyFeedbackTimer = undefined
-    }, 1400)
+    }, 4000)
   }
 
   return (
     <div class="chat-title-group">
-      <Tooltip.Root
-        disabled={!usageText()}
-        openDelay={160}
-        closeDelay={80}
-        placement="bottom-start"
-        gutter={8}
-        fitViewport
-      >
+      <Tooltip.Root openDelay={160} closeDelay={80} placement="bottom-start" gutter={8} fitViewport>
         <Tooltip.Trigger
           as="span"
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           id="chatViewTitle"
-          tabIndex={usageText() ? 0 : undefined}
-          aria-live="polite"
-          data-copy-feedback={copyFeedback() ?? undefined}
-          onDblClick={(event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            void copyDebugInfo()
-          }}
+          data-copy-feedback={copyFeedback()?.kind}
         >
-          {copyFeedback() === "copied"
-            ? t("common.copied")
-            : copyFeedback() === "failed"
-              ? t("markdown.copy_failed")
-              : props.title()}
+          {copyFeedbackText() || props.title()}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content class="chat-title-usage-tooltip" data-ui="chat-title-usage-tooltip">
-            <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
-            <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">
-              {usageText()}
-            </strong>
+            <Show when={usageText()}>
+              <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
+              <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">
+                {usageText()}
+              </strong>
+            </Show>
+            <span class="chat-title-usage-tooltip__debug-hint">{copyFeedbackText() || t("chat.debug_copy_hint")}</span>
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
+      <span class="chat-title-copy-feedback-a11y" role="status" aria-live="polite" aria-atomic="true">
+        {copyFeedbackText()}
+      </span>
       <Show when={props.item()}>
         {(item) => (
           <DropdownMenu.Root placement="bottom-start" gutter={6} fitViewport>
@@ -151,6 +145,15 @@ function ChatViewTitle(props: {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
+                <DropdownMenu.Item
+                  as="button"
+                  type="button"
+                  data-ui="chat-title-copy-debug"
+                  onSelect={() => void copyDebugInfo()}
+                >
+                  <Icon name="copy" size="medium" />
+                  <span>{t("chat.debug_copy_action")}</span>
+                </DropdownMenu.Item>
                 <DropdownMenu.Item
                   as="button"
                   type="button"
@@ -224,9 +227,6 @@ export interface AppProps {
   homeActive: boolean
   rightDock: JSX.Element
   logViewer: JSX.Element
-  mailboxAttention: boolean
-  mailboxUnreadCount: number
-  onMailboxViewed: () => void
   onOpenRightDockPanel: (panel: RightDockPanel) => void
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
@@ -249,7 +249,8 @@ export function App(props: AppProps) {
   let mailboxHoverOpenTimer: number | undefined
   let mailboxHoverCloseTimer: number | undefined
   const [mailboxHoverPreview, setMailboxHoverPreview] = createSignal(false)
-  const mailboxVisible = mailboxHoverPreview
+  const [mailboxPinned, setMailboxPinned] = createSignal(false)
+  const mailboxVisible = () => mailboxPinned() || mailboxHoverPreview()
   const conversationExecutionStatus = createMemo(() => {
     const source = boardStore.selectedSource
     const board = boardStore.board
@@ -261,10 +262,6 @@ export function App(props: AppProps) {
     }
     return ""
   })
-  const selectedTaskQueued = createMemo(
-    () =>
-      appStore.i18nReady && boardStore.selectedSource?.kind === "task" && conversationExecutionStatus() === "queued",
-  )
 
   function cancelMailboxHoverOpen(): void {
     if (mailboxHoverOpenTimer !== undefined) window.clearTimeout(mailboxHoverOpenTimer)
@@ -296,7 +293,17 @@ export function App(props: AppProps) {
   function openMailboxHoverPreview(): void {
     cancelMailboxHoverOpen()
     setMailboxHoverPreview(true)
-    props.onMailboxViewed()
+  }
+
+  function toggleMailbox(): void {
+    cancelMailboxHoverOpen()
+    cancelMailboxHoverClose()
+    if (mailboxPinned()) {
+      setMailboxPinned(false)
+      setMailboxHoverPreview(false)
+      return
+    }
+    setMailboxPinned(true)
   }
 
   onCleanup(() => {
@@ -361,39 +368,15 @@ export function App(props: AppProps) {
                   class="workspace-command-action workspace-command-mailbox"
                   data-chrome="icon-action"
                   data-ui="mailbox-toggle"
-                  data-attention={String(props.mailboxAttention)}
                   data-active={String(mailboxVisible())}
-                  title={
-                    props.mailboxUnreadCount > 0
-                      ? t("mailbox.unread_count", { count: props.mailboxUnreadCount })
-                      : props.mailboxAttention
-                        ? `${t("mailbox.title")}: ${t("mailbox.unread")}`
-                        : t("mailbox.title")
-                  }
-                  aria-label={
-                    props.mailboxUnreadCount > 0
-                      ? `${t("mailbox.title")}: ${t("mailbox.unread_count", { count: props.mailboxUnreadCount })}`
-                      : props.mailboxAttention
-                        ? `${t("mailbox.title")}: ${t("mailbox.unread")}`
-                        : t("mailbox.title")
-                  }
+                  title={t("mailbox.title")}
+                  aria-label={t("mailbox.title")}
                   aria-controls="leftPanelMailbox"
                   aria-expanded={mailboxVisible()}
                   onMouseEnter={scheduleMailboxHoverPreview}
+                  onClick={toggleMailbox}
                 >
                   <Icon name="mailbox" size="medium" />
-                  <Show when={props.mailboxUnreadCount > 0}>
-                    <Badge
-                      class="workspace-command-mailbox__count"
-                      tone="accent"
-                      size="sm"
-                      data-ui="mailbox-unread-count"
-                      data-count={String(props.mailboxUnreadCount)}
-                      aria-hidden="true"
-                    >
-                      {formatMailboxUnreadCount(props.mailboxUnreadCount)}
-                    </Badge>
-                  </Show>
                 </Button>
               </div>
             </div>
@@ -434,7 +417,7 @@ export function App(props: AppProps) {
                     {props.mailbox}
                   </div>
                 </div>
-                <footer class="sidebar-footer" aria-label="Author">
+                <footer class="sidebar-footer" aria-label={t("sidebar.author")}>
                   <span class="chat-version">
                     <span id="solidChatVersion">
                       <SidebarVersionLabel />
@@ -452,7 +435,7 @@ export function App(props: AppProps) {
             id="leftPaneResizer"
             role="separator"
             aria-orientation="vertical"
-            aria-label="Resize left panel"
+            aria-label={t("workspace.resize_left_panel")}
             aria-controls="sidebar workspaceMain"
             aria-valuemin="0"
             aria-valuemax="0"
@@ -478,7 +461,7 @@ export function App(props: AppProps) {
                         <div
                           class="task-switch-progress"
                           id="taskSwitchProgress"
-                          aria-label="Loading task"
+                          aria-label={t("workspace.loading_task")}
                           aria-busy="false"
                           data-active="false"
                         />
@@ -548,25 +531,7 @@ export function App(props: AppProps) {
                                 </div>
                                 <div class="chat-home-composition" id="chatHomeComposition">
                                   <div id="solidChatHomePromptMount" />
-                                  <div id="solidChatComposer">
-                                    <Show when={selectedTaskQueued()}>
-                                      <div
-                                        class="task-queue-notice"
-                                        data-ui="task-queue-notice"
-                                        role="status"
-                                        aria-live="polite"
-                                      >
-                                        <StatusIndicator
-                                          status="queued"
-                                          label={t("chat.task_queue_notice")}
-                                          size="medium"
-                                          aria-hidden="true"
-                                        />
-                                        <span>{t("chat.task_queue_notice")}</span>
-                                      </div>
-                                    </Show>
-                                    {props.composer}
-                                  </div>
+                                  <div id="solidChatComposer">{props.composer}</div>
                                   <div id="solidChatHomeAfterMount" />
                                 </div>
                               </div>
@@ -594,12 +559,18 @@ export function App(props: AppProps) {
               data-open="false"
               role="separator"
               aria-orientation="vertical"
-              aria-label="Resize right panel"
+              aria-label={t("workspace.resize_right_panel")}
               aria-controls="rightDock"
               aria-hidden="true"
               tabIndex={-1}
             />
-            <aside class="right-dock" id="rightDock" data-open="false" aria-label="Tools panel" aria-hidden="true">
+            <aside
+              class="right-dock"
+              id="rightDock"
+              data-open="false"
+              aria-label={t("right_dock.tools_panel")}
+              aria-hidden="true"
+            >
               {props.rightDock}
             </aside>
           </div>
@@ -609,6 +580,7 @@ export function App(props: AppProps) {
       <div id="connectionBannerHost">
         <ConnectionBanner />
       </div>
+      <ProjectMemoryBanner />
       <div id="commandPaletteHost">
         <CommandPalette onSelectTask={props.onSelectTask} onSelectChat={props.onSelectChat} />
       </div>

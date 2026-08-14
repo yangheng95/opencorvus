@@ -3,6 +3,7 @@ import Ajv2020 from "ajv/dist/2020"
 import type { AnySchema, ErrorObject } from "ajv"
 import { Identifier } from "../id/id"
 import { Message } from "./message"
+import { normalizeToolResult } from "./tool-result-normalization"
 import { MessageStore } from "./message-store"
 import { NotFoundError } from "@/storage/db"
 import { Session } from "."
@@ -22,10 +23,7 @@ import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
-import {
-  resolveSessionExecutionAuthority,
-  taskIDForSession,
-} from "@/engine/task-session-lineage"
+import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
 import { ContextBudget } from "./context-budget"
 import { Instance } from "../project/instance"
@@ -35,8 +33,8 @@ import { materializeMcpToolResult, materializedMcpAttachmentsToFileParts } from 
 import { Bus } from "../bus"
 import { ProviderTransform } from "../provider/transform"
 import { ProviderSchema } from "../provider/schema"
+import { artifactSnapshotSourceForRuntimeContract } from "@/build/merge-back-publication-authority"
 import { requiresOpenAIStrictToolSchema } from "../provider/strict-tool-schema"
-import { materializeToolExecutionInput } from "../provider/tool-execution-input"
 import { SystemPrompt } from "./system"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveAgentModel, resolveProjectedWorkerModel } from "@/agent/model"
@@ -47,26 +45,18 @@ import { defer } from "../util/defer"
 import { ToolRegistry } from "../tool/registry"
 import { Env } from "../env"
 import { MCP } from "../mcp"
-import {
-  browserMcpPermissionKeyOf,
-  browserMcpToolKeyFromRuntimeName,
-  executeBrowserMcpToolWithPermission,
-  mcpPermissionPlan,
-} from "@/mcp/browser/permission-plan"
-import {
-  computerMcpPermissionKeyOf,
-  computerMcpToolKeyFromRuntimeName,
-  executeComputerMcpToolWithPermission,
-} from "@/mcp/computer/permission-plan"
+import { browserMcpPermissionKeyOf, browserMcpToolKeyFromRuntimeName } from "@/mcp/browser/permission-plan"
+import { computerMcpPermissionKeyOf, computerMcpToolKeyFromRuntimeName } from "@/mcp/computer/permission-plan"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
 import { MissionSkillTool, SkillTool } from "@/tool/skill"
 import { Tool } from "@/tool/tool"
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
+import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { ensureTitle } from "./prompt/title"
 import { Truncate } from "@/tool/truncation"
@@ -76,7 +66,7 @@ import {
   toolSwitchAllows as executionToolSwitchAllows,
   type ToolExecutionSurface,
 } from "@/tool/execution-surface"
-import { TASK_ARTIFACT_DISCOVERY_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { MemoryInjection } from "@/memory/injection"
 import { resolveSessionMessageIdentity } from "./message-identity"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -116,6 +106,35 @@ import {
 import { createMcpAppToolLifecycle, mcpAppAuthorityForRuntimeTool } from "@/interactive-artifact/mcp-app-lifecycle"
 import { visibleMentionDirectiveRanges } from "@opencorvus-ai/transport-protocol"
 import type { HarnessProjection } from "@/capability/harness-projection"
+import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
+import { PermissionAuthority } from "@/permission/authority"
+import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
+import { sessionRuntimeWithResolvedModel } from "@/agent/session-agent-runtime"
+import { textSHA256 } from "@/expert-squad/projection-hash"
+import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
+import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
+import { createAgentContextTools } from "@/agent/context-tools"
+import { filterAgentTools } from "@/agent/filter-tools"
+import { MCP as McpRuntime } from "@/mcp"
+import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
+import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
+import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-handoff"
+import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
+import { requireTask } from "@/engine/store"
+import { createOrchestratorTools } from "@/orchestrator/tools"
+import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
+import {
+  bindToolExecutionMode,
+  ToolTurnExecutionCoordinator,
+  toolExecutionModeOf,
+  type ToolExecutionMode,
+} from "@/tool/execution-mode"
+import {
+  materializeBoundStageTool,
+  internalStageToolBindingOf,
+  stageToolMaterializerBindingOf,
+} from "@/agent/stage-tool-materializer"
 
 muteAISdkWarnings()
 
@@ -150,10 +169,7 @@ export namespace SessionLoop {
     })
   }
 
-  export function toolExecutionExtra(input: {
-    messageExtra?: Record<string, unknown>
-    model: Provider.Model
-  }) {
+  export function toolExecutionExtra(input: { messageExtra?: Record<string, unknown>; model: Provider.Model }) {
     const { taskID: _untrustedTaskID, ...messageExtra } = input.messageExtra ?? {}
     return {
       ...messageExtra,
@@ -161,13 +177,20 @@ export namespace SessionLoop {
     }
   }
 
-  const { log, state, cancel, finish, flushCallbacks, start, resume, attach, touch } = SessionPromptState
+  const { log, state, cancel, finish, flushCallbacks, enterLoop, touch } = SessionPromptState
 
   type StrictAITool = AITool & { strict?: boolean }
   const resolvedToolSkillSurfaces = new WeakMap<Record<string, AITool>, ResolvedSkillSurface>()
   const resolvedToolSkillFinalizers = new WeakMap<
     Record<string, AITool>,
     (availableToolNames: Iterable<string>) => Promise<ResolvedSkillSurface | undefined>
+  >()
+  const resolvedToolExecutionSurfaces = new WeakMap<
+    Record<string, AITool>,
+    {
+      coordinator: ToolTurnExecutionCoordinator
+      coordinatedTools: WeakSet<object>
+    }
   >()
 
   function strictTool(input: AITool): AITool {
@@ -187,6 +210,32 @@ export namespace SessionLoop {
     return resolvedToolSkillSurfaces.get(tools)
   }
 
+  /**
+   * Bind every executable on the final provider-visible Tool surface to the
+   * one assistant-occurrence coordinator created by resolveTools(). The
+   * surface is mutable while StructuredOutput and Skill tools are finalized,
+   * so callers repeat this idempotent operation after each finalization step.
+   */
+  export function coordinateResolvedToolExecutionSurface(tools: Record<string, AITool>): void {
+    const surface = resolvedToolExecutionSurfaces.get(tools)
+    if (!surface) throw new Error("Resolved Tool surface is missing its execution coordinator")
+    for (const [name, current] of Object.entries(tools)) {
+      if (surface.coordinatedTools.has(current as object)) continue
+      const execute = current.execute
+      if (!execute) continue
+      const mode = toolExecutionModeOf(current as object)
+      const coordinated = {
+        ...current,
+        execute(args: unknown, options: ToolExecutionOptions) {
+          return surface.coordinator.run(mode, () => execute(args, options))
+        },
+      } as AITool
+      bindToolExecutionMode(coordinated as object, mode)
+      surface.coordinatedTools.add(coordinated as object)
+      tools[name] = coordinated
+    }
+  }
+
   export type SessionRuntimeContractKind = RuntimeContractKind
   export type SessionRuntimeContractIdentity = RuntimeContractIdentity
   export type SessionRuntimeContract = RuntimeContract
@@ -204,12 +253,27 @@ export namespace SessionLoop {
   // only how the next Turn is executed; it never invalidates the Session or
   // prevents a durable operator coordination request from being accepted.
   // ---------------------------------------------------------------------------
-  export function setSessionRuntimeContract(sessionID: string, contract: SessionRuntimeContract | undefined): void {
+  export function setSessionRuntimeContract(
+    sessionID: string,
+    contract: SessionRuntimeContract | undefined,
+    options: { armWake?: boolean; notifyWake?: boolean } = {},
+  ): SessionRuntimeContract | undefined {
     if (!contract) {
       SessionRuntimeContractStore.clear(sessionID)
       return
     }
-    SessionRuntimeContractStore.set(sessionID, contract)
+    return SessionRuntimeContractStore.set(sessionID, contract, options)
+  }
+
+  export function armSessionRuntimeContractWake(sessionID: string, expected: SessionRuntimeContract): void {
+    SessionRuntimeContractStore.armPendingWake(sessionID, expected)
+  }
+
+  export function waitForSessionRuntimeContractWakeSettlement(
+    sessionID: string,
+    expected: SessionRuntimeContract,
+  ): Promise<void> {
+    return SessionRuntimeContractStore.waitForWakeConsumed(sessionID, expected)
   }
 
   export function getSessionRuntimeContract(sessionID: string): SessionRuntimeContract | undefined {
@@ -569,7 +633,7 @@ export namespace SessionLoop {
       },
     } satisfies Message.TextPart)
     await Session.updateMessage(input.processor.message)
-    Bus.publish(Session.Event.Error, {
+    await Bus.publish(Session.Event.Error, {
       sessionID: input.sessionID,
       orderKey: sessionLifecycleOrderKey(input.sessionID),
       error: input.error,
@@ -724,6 +788,7 @@ export namespace SessionLoop {
             toModelOutput: (args: unknown) => Message.toolResultToModelOutput(args, input.model),
           }),
     } as AITool
+    bindToolExecutionMode(prepared as object, toolExecutionModeOf(input.tool as object))
     if (log.enabled("DEBUG")) {
       const schemaPayload = asSchema((prepared as { inputSchema?: unknown }).inputSchema as never).jsonSchema
       const rootType =
@@ -750,9 +815,7 @@ export namespace SessionLoop {
     const schema = asSchema(input.inputSchema as never) as {
       validate?: (args: unknown) => Promise<ValidationResult>
     }
-    const args = requiresOpenAIStrictToolSchema(input.model)
-      ? materializeOpenAIStrictToolInput(input.name, input.inputSchema, input.args)
-      : input.args
+    const args = materializeProviderToolInput(input.name, input.model, input.inputSchema, input.args)
     if (typeof schema.validate !== "function") return args
 
     let result: ValidationResult
@@ -765,9 +828,14 @@ export namespace SessionLoop {
     throw invalidProviderToolInput(input.name, args, result.error)
   }
 
-  function materializeOpenAIStrictToolInput(toolName: string, inputSchema: unknown, args: unknown): unknown {
+  function materializeProviderToolInput(
+    toolName: string,
+    model: Provider.Model,
+    inputSchema: unknown,
+    args: unknown,
+  ): unknown {
     try {
-      return materializeToolExecutionInput(inputSchema, args)
+      return ProviderSchema.materializeInput(model, inputSchema, args)
     } catch (err) {
       throw invalidProviderToolInput(toolName, args, err)
     }
@@ -946,39 +1014,6 @@ export namespace SessionLoop {
     return { messagePayloadChars, mediaCounts, mediaTokensEst }
   }
 
-  export function normalizeExtraToolResult(input: unknown): {
-    output: string
-    title: string
-    metadata: object
-    attachments?: unknown
-    display?: unknown
-  } {
-    if (typeof input === "string") return { output: input, title: "", metadata: {} }
-
-    if (input && typeof input === "object") {
-      const r = input as Record<string, unknown>
-      const output = (() => {
-        if (typeof r.output === "string") return r.output
-        if (typeof r.text === "string") return r.text
-        if (r.output !== undefined) return JSON.stringify(r.output)
-        if (r.attachments !== undefined) {
-          throw new Error("Extra tool returned attachments without string output/text")
-        }
-        return JSON.stringify(r)
-      })()
-      return {
-        ...r,
-        output,
-        title: typeof r.title === "string" ? r.title : "",
-        metadata: r.metadata && typeof r.metadata === "object" ? r.metadata : {},
-        ...(r.attachments !== undefined ? { attachments: r.attachments } : {}),
-        ...(r.display !== undefined ? { display: r.display } : {}),
-      }
-    }
-
-    return { output: String(input ?? ""), title: "", metadata: {} }
-  }
-
   export async function materializeToolResultAttachments(attachments: unknown): Promise<unknown> {
     if (!Array.isArray(attachments)) return attachments
     return Promise.all(
@@ -1063,8 +1098,7 @@ export namespace SessionLoop {
 
   function shouldEnterStandby(input: { lastUser: Message.User; lastAssistant: Message.Assistant | undefined }) {
     return !!(
-      input.lastAssistant &&
-      isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
+      input.lastAssistant && isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
     )
   }
 
@@ -1145,12 +1179,13 @@ export namespace SessionLoop {
     })
   }
 
-  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterID: string }) {
+  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterOrderKey: string }) {
     await SessionCompaction.prune({ sessionID: input.sessionID })
     log.info("entering standby", { sessionID: input.sessionID })
     touch(input.sessionID)
-    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterID)
-    SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
+    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterOrderKey)
+    await SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
+    SessionRuntimeContractStore.settleConsumedWake(input.sessionID)
     return { waitForWake }
   }
 
@@ -1243,11 +1278,11 @@ export namespace SessionLoop {
       },
       modelID: input.model.id,
       providerID: input.model.providerID,
-      ...(runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.terminalIngressID
+      ...(runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? {
             taskIngress: {
-              id: runtimeIdentity.terminalIngressID,
-              kind: runtimeIdentity.terminalIngressKind!,
+              id: runtimeIdentity.taskIngressID,
+              kind: runtimeIdentity.taskIngressKind!,
             },
           }
         : {}),
@@ -1283,20 +1318,29 @@ export namespace SessionLoop {
       messages: input.msgs,
       config,
     })
-    if (input.lastUser.format?.type === "json_schema") {
-      tools["StructuredOutput"] = prepareProviderTool({
-        name: "StructuredOutput",
-        source: "structured",
-        model: input.model,
-        tool: createStructuredOutputTool({
-          schema: input.lastUser.format.schema,
-          onSuccess(output) {
-            structured = output
-          },
-        }),
-      })
-    }
-    const skillSurface = await finalizeResolvedToolSkillSurface(tools, Object.keys(tools))
+    const structuredOutputTool =
+      input.lastUser.format?.type === "json_schema"
+        ? prepareProviderTool({
+            name: "StructuredOutput",
+            source: "structured",
+            model: input.model,
+            tool: createStructuredOutputTool({
+              schema: input.lastUser.format.schema,
+              onSuccess(output) {
+                structured = output
+              },
+            }),
+          })
+        : undefined
+    const skillSurface = await finalizeResolvedToolSkillSurface(
+      tools,
+      structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
+    )
+    coordinateResolvedToolExecutionSurface(tools)
+    // StructuredOutput encodes the assistant response. It is not an executable
+    // effect, permission occurrence, or turn-control producer, so it is added
+    // only after the final executable Tool surface has been coordinated.
+    if (structuredOutputTool) tools.StructuredOutput = structuredOutputTool
     if (input.step === 1) {
       await SessionSummary.summarize({
         sessionID: input.sessionID,
@@ -1660,6 +1704,7 @@ export namespace SessionLoop {
     resume_existing: z.boolean().optional(),
     result_mode: z.enum(["reply", "summary"]).optional(),
     reply_to_message_id: Identifier.schema("message").optional(),
+    retry_failed_reply: z.boolean().optional(),
   })
 
   export function structuredOutputToolChoice(
@@ -1776,9 +1821,14 @@ export namespace SessionLoop {
    * synchronous dispatch. Persist the real interruption before continuing so
    * every Agent and Expert Squad family observes one truthful message stream.
    */
-  export async function terminalizeRecoveredIncompleteAssistant(sessionID: string): Promise<boolean> {
+  export async function terminalizeRecoveredIncompleteAssistant(
+    sessionID: string,
+    signal?: AbortSignal,
+  ): Promise<boolean> {
+    signal?.throwIfAborted()
     const candidates: Message.WithParts[] = []
     for await (const message of MessageStore.stream(sessionID)) {
+      signal?.throwIfAborted()
       if (message.info.role === "user") break
       if (message.info.role !== "assistant") continue
       if (message.info.time.completed === undefined) candidates.push(message)
@@ -1787,12 +1837,14 @@ export namespace SessionLoop {
 
     const now = Date.now()
     for (const candidate of candidates) {
+      signal?.throwIfAborted()
       if (candidate.info.role !== "assistant") continue
       const interruption = new Error(
         `Previous process ended before Session ${sessionID} completed assistant message ${candidate.info.id}`,
       )
       interruption.name = "ProcessExecutionInterruptedError"
       for (const part of candidate.parts) {
+        signal?.throwIfAborted()
         if (part.type !== "tool" || (part.state.status !== "pending" && part.state.status !== "running")) continue
         const taskID = taskIDForSession(sessionID)
         const lineage =
@@ -1837,11 +1889,13 @@ export namespace SessionLoop {
             },
           },
         })
+        signal?.throwIfAborted()
       }
       candidate.info.error = Message.fromError(interruption, { providerID: candidate.info.providerID })
       candidate.info.finish = "error"
       candidate.info.time.completed = now
       await Session.updateMessage(candidate.info)
+      signal?.throwIfAborted()
     }
     return true
   }
@@ -1853,20 +1907,26 @@ export namespace SessionLoop {
     const directory = session.directory
     assertSessionLoopRuntimeContract(SessionRuntimeContractStore.get(sessionID), `SessionLoop session ${sessionID}`)
 
-    const abort = resume_existing ? resume(sessionID, directory) : start(sessionID, directory)
-    const startedOwner = !resume_existing && abort !== undefined
-    const firstResult = attach(sessionID, directory, resultMode, input.reply_to_message_id)
+    const { abort, startedOwner, firstResult } = await enterLoop({
+      sessionID,
+      directory,
+      resumeExisting: resume_existing === true,
+      resultMode,
+      replyToMessageID: input.reply_to_message_id,
+    })
     try {
       if (input.reply_to_message_id) {
         const persistedReply = await completedReplyToUserMessage(
           sessionID,
           input.reply_to_message_id,
-          startedOwner,
+          startedOwner && input.retry_failed_reply !== true,
         )
         if (persistedReply) {
           flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
+          consumeRuntimeContractTurn(sessionID)
           if (startedOwner) {
             await finish(sessionID, abort, directory)
+            SessionRuntimeContractStore.settleConsumedWake(sessionID)
             return firstResult
           }
         }
@@ -1874,16 +1934,11 @@ export namespace SessionLoop {
       if (!abort) return firstResult
       if (!resume_existing) await terminalizeRecoveredIncompleteAssistant(sessionID)
     } catch (error) {
+      SessionRuntimeContractStore.failConsumedWake(sessionID, error)
       if (abort && !resume_existing) {
         await finish(sessionID, abort, directory, error)
       } else {
-        SessionPromptState.rejectAttachedCallbacks(
-          sessionID,
-          error,
-          directory,
-          resultMode,
-          input.reply_to_message_id,
-        )
+        SessionPromptState.rejectAttachedCallbacks(sessionID, error, directory, resultMode, input.reply_to_message_id)
       }
       await firstResult.catch(() => undefined)
       throw error
@@ -1904,6 +1959,7 @@ export namespace SessionLoop {
 
     const finalizePrompt = async () => {
       await SessionCompaction.prune({ sessionID })
+      await SessionStatus.settleAcceptedExecutionOccurrence(sessionID, abort)
       await flushPromptFinalMessage({ sessionID, abort, resultMode, directory })
     }
 
@@ -1954,7 +2010,7 @@ export namespace SessionLoop {
               const { lastUser, lastAssistant, lastFinished, compactions } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
-                if (isActionableSessionControl(control)) continue
+                if (isActionableSessionControl(control) || control.kind === "mission_process_recovery") continue
                 SessionControl.fail({
                   id: control.id,
                   sessionID,
@@ -1963,11 +2019,27 @@ export namespace SessionLoop {
               }
               const controls = pendingControls.filter(isActionableSessionControl)
               const runRuntimeContractTurn = shouldRunRuntimeContractTurn(sessionID)
+              const currentRuntimeContract = SessionRuntimeContractStore.get(sessionID)
+              if (
+                runRuntimeContractTurn &&
+                currentRuntimeContract?.identity.identityKind === "projected-scheduler" &&
+                currentRuntimeContract.identity.inputMessageID &&
+                lastUser.id !== currentRuntimeContract.identity.inputMessageID
+              ) {
+                throw new Error(
+                  `Orchestrator wake ${currentRuntimeContract.identity.taskIngressID ?? "<unknown>"} is bound to input ` +
+                    `${currentRuntimeContract.identity.inputMessageID}, but Session ${sessionID} current input is ${lastUser.id}`,
+                )
+              }
               if (!runRuntimeContractTurn && controls.length === 0 && shouldEnterStandby({ lastUser, lastAssistant })) {
                 if (!lastAssistant) break
                 const lastResult = msgs.find((m) => m.info.id === lastAssistant.id)
                 if (lastResult) flushCallbacks(sessionID, lastResult, directory, "reply")
-                const { waitForWake } = await beginStandby({ sessionID, abort, afterID: lastAssistant.id })
+                const { waitForWake } = await beginStandby({
+                  sessionID,
+                  abort,
+                  afterOrderKey: timelineMessageOrderKey({ info: lastAssistant }),
+                })
                 return { type: "standby" as const, waitForWake }
               }
 
@@ -2037,7 +2109,8 @@ export namespace SessionLoop {
                           compactionControl.payload.model &&
                           typeof compactionControl.payload.model === "object" &&
                           !Array.isArray(compactionControl.payload.model) &&
-                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID === "string" &&
+                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID ===
+                            "string" &&
                           typeof (compactionControl.payload.model as { modelID?: unknown }).modelID === "string"
                             ? {
                                 providerID: (compactionControl.payload.model as { providerID: string }).providerID,
@@ -2111,10 +2184,10 @@ export namespace SessionLoop {
                           sessionID,
                           explicitModel: lastUser.model,
                         })
-                ).catch((e) => {
+                ).catch(async (e) => {
                   if (Provider.ModelNotFoundError.isInstance(e)) {
                     const hint = e.data.suggestions?.length ? ` Did you mean: ${e.data.suggestions.join(", ")}?` : ""
-                    Bus.publish(Session.Event.Error, {
+                    await Bus.publish(Session.Event.Error, {
                       sessionID,
                       orderKey: sessionLifecycleOrderKey(sessionID),
                       error: new NamedError.Unknown({
@@ -2204,10 +2277,22 @@ export namespace SessionLoop {
           step = 0
         }
       } catch (e) {
-        const terminalPublished =
-          SessionStatus.get(sessionID).type === "terminal"
-            ? true
-            : await lifecycle.reenter({ directory, fn: () => publishTerminal(e) })
+        SessionRuntimeContractStore.failConsumedWake(sessionID, e)
+        const executionCancelled = isExecutionCancellationError(e) || isExecutionCancellationError(abort.reason)
+        let terminalPublished = executionCancelled || SessionStatus.get(sessionID).type === "terminal"
+        if (!terminalPublished) {
+          try {
+            terminalPublished = (await lifecycle.reenter({ directory, fn: () => publishTerminal(e) })) === true
+          } catch (publicationError) {
+            SessionRuntimeContractStore.failConsumedWake(sessionID, publicationError)
+            log.error("session prompt terminal status publication failed during loop settlement", {
+              sessionID,
+              directory,
+              error: publicationError instanceof Error ? publicationError.message : String(publicationError),
+              originalError: e instanceof Error ? e.message : String(e),
+            })
+          }
+        }
         rejectCallbacks(e)
         if (terminalPublished !== true) {
           log.error("session prompt terminal status could not re-enter released instance", {
@@ -2218,14 +2303,31 @@ export namespace SessionLoop {
         }
       } finally {
         const s = state(directory)[sessionID]
-        if (s?.abort.signal === abort) await finish(sessionID, abort, directory)
+        try {
+          if (s?.abort.signal === abort) await finish(sessionID, abort, directory)
+          SessionRuntimeContractStore.settleConsumedWake(sessionID)
+        } catch (error) {
+          SessionRuntimeContractStore.failConsumedWake(sessionID, error)
+          log.error("session prompt resources failed to settle", {
+            sessionID,
+            directory,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
       }
-    })()
+    })().catch((error) => {
+      SessionRuntimeContractStore.failConsumedWake(sessionID, error)
+      log.error("detached session prompt loop failed to converge", {
+        sessionID,
+        directory,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    })
 
     return firstResult
   })
 
-  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterID: string): Promise<void> {
+  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterOrderKey: string): Promise<void> {
     return new Promise<void>((resolve) => {
       if (abort.aborted) {
         resolve()
@@ -2251,7 +2353,7 @@ export namespace SessionLoop {
         if (
           event.properties.info.role === "user" &&
           event.properties.info.sessionID === sessionID &&
-          event.properties.info.id > afterID
+          compareTimelineOrderKeys(event.properties.info.orderKey, afterOrderKey) > 0
         ) {
           settle()
         }
@@ -2263,14 +2365,17 @@ export namespace SessionLoop {
       // Re-read both durable wake sources after subscribing so a control
       // committed between the loop's standby decision and this subscription
       // cannot leave the prompt owner asleep.
-      if (shouldRunRuntimeContractTurn(sessionID) || SessionControl.pending(sessionID).length > 0) {
+      if (
+        shouldRunRuntimeContractTurn(sessionID) ||
+        SessionControl.pending(sessionID).some(isActionableSessionControl)
+      ) {
         settle()
         return
       }
 
       void (async () => {
         for await (const item of MessageStore.stream(sessionID)) {
-          if (item.info.id <= afterID) break
+          if (compareTimelineOrderKeys(timelineMessageOrderKey(item), afterOrderKey) <= 0) break
           if (item.info.role === "user") {
             settle()
             return
@@ -2294,8 +2399,12 @@ export namespace SessionLoop {
   }) {
     using _ = log.time("resolveTools")
     const tools: Record<string, AITool> = {}
+    resolvedToolExecutionSurfaces.set(tools, {
+      coordinator: new ToolTurnExecutionCoordinator(),
+      coordinatedTools: new WeakSet<object>(),
+    })
     const toolSources = new Map<string, ProviderToolSource>()
-    const executionPermission = PermissionNext.merge(input.agent.permission, input.session.permission)
+    const executionPermission = CapabilityRules.merge(input.agent.permission, input.session.permission)
     const runtimeContract = getSessionRuntimeContract(input.session.id)
     assertSessionLoopRuntimeContract(runtimeContract, `SessionLoop tool resolver ${input.session.id}`)
     const executionAuthority = await resolveToolExecutionAuthority({
@@ -2371,14 +2480,6 @@ export namespace SessionLoop {
         metadata(value) {
           metadataSink.update(redactToolDiagnosticValue(value))
         },
-        async ask(req) {
-          await PermissionNext.ask({
-            ...req,
-            sessionID: input.session.id,
-            tool: { messageID: input.processor.message.id, callID: options.toolCallId },
-            ruleset: PermissionNext.merge(input.agent.permission, input.session.permission ?? []),
-          })
-        },
       }
     }
 
@@ -2391,6 +2492,7 @@ export namespace SessionLoop {
           ? Execute
           : never
         : never
+      executionMode?: ToolExecutionMode
     }) => {
       const registryTool = tool({
         id: item.id as any,
@@ -2419,6 +2521,9 @@ export namespace SessionLoop {
             toolCallID,
             toolPartID: toolPart.id,
             providerName: item.id,
+            providerKind: "builtin" as const,
+            providerID: item.id,
+            args: normalizedInput.ok ? normalizedInput.value : {},
           }
           return withTaskToolInvocation(invocationIdentity, executionSurface, async (invocationAuthority) => {
             const ctx = context(args, options, {
@@ -2461,6 +2566,7 @@ export namespace SessionLoop {
               projectID: invocationIdentity.projectID,
               value: rawResult,
             })
+            const hostControl = toolResultControl(result.metadata)
             const materializedAttachments = await materializeToolResultAttachments(result.attachments)
             const output = {
               ...result,
@@ -2491,6 +2597,7 @@ export namespace SessionLoop {
               },
               output,
             )
+            assertToolResultControlPreserved(hostControl, output.metadata)
             return materializeToolResultInlineAttachments({
               projectID: invocationIdentity.projectID,
               value: output,
@@ -2498,12 +2605,14 @@ export namespace SessionLoop {
           })
         },
       })
-      tools[item.id] = prepareProviderTool({
+      const preparedRegistryTool = prepareProviderTool({
         name: item.id,
         source: "registry",
         model: input.model,
         tool: registryTool,
       })
+      bindToolExecutionMode(preparedRegistryTool as object, item.executionMode ?? "ordinary")
+      tools[item.id] = preparedRegistryTool
       toolSources.set(item.id, "registry")
     }
 
@@ -2536,6 +2645,7 @@ export namespace SessionLoop {
               sessionPermission: input.session.permission,
               toolSwitches: input.tools,
               batchTargetExclusions: Object.keys(extras),
+              artifactSnapshotSource: artifactSnapshotSourceForRuntimeContract(runtimeContract),
             },
           )
         : undefined
@@ -2554,7 +2664,7 @@ export namespace SessionLoop {
         if (projectedRegistryToolIDs && !projectedRegistryToolIDs.has(item.id)) continue
         // Session-level deny rules take precedence over the runtime template.
         if (!projectedWorkerRuntime && input.session.permission?.length) {
-          const rule = PermissionNext.evaluate(item.id, "*", input.session.permission)
+          const rule = CapabilityRules.evaluate(item.id, "*", input.session.permission)
           if (rule.action === "deny") continue
         }
         bindRegistryTool(item)
@@ -2570,18 +2680,23 @@ export namespace SessionLoop {
       ConversationCapability.isAgentID(input.agentID)
         ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
         : undefined
-    const defaultMcpProcessAuthority = executionAuthority.kind === "task"
-      ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
-      : MCP.hostProcessAuthority(executionAuthority.directory)
+    const defaultMcpProcessAuthority =
+      executionAuthority.kind === "task"
+        ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
+        : MCP.hostProcessAuthority(executionAuthority.directory)
     const resolvedMcpTools =
       exactRuntimeContractTools || !includeMcpTools
         ? {}
-        : (nativeConversationMcpTools ??
-          (await MCP.tools(defaultMcpProcessAuthority)))
+        : (nativeConversationMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
     for (const [key, item] of Object.entries(resolvedMcpTools)) {
       const execute = item.execute
       if (!execute) continue
       const mcpAppBinding = MCP.appToolBinding(item)
+      const mcpAuthorityBinding = MCP.toolAuthorityBinding(item)
+      const isBuiltinMcp = Boolean(browserMcpToolKeyFromRuntimeName(key) || computerMcpToolKeyFromRuntimeName(key))
+      if (!isBuiltinMcp && !mcpAuthorityBinding) {
+        throw new Error(`MCP Tool ${key} is missing its immutable authorization binding`)
+      }
       const mcpAppLifecycle = mcpAppBinding
         ? createMcpAppToolLifecycle({
             sessionID: input.session.id,
@@ -2596,105 +2711,107 @@ export namespace SessionLoop {
         ...(item as any),
         async execute(args: any, opts: ToolExecutionOptions) {
           const ctx = context(args, opts)
-          try {
-            await mcpAppLifecycle?.input(opts.toolCallId, args)
-            await Plugin.trigger(
-              "tool.execute.before",
-              {
-                tool: key,
-                sessionID: ctx.sessionID,
-                callID: opts.toolCallId,
-              },
-              {
-                args,
-              },
-            )
-
-            const permissionKey = browserMcpToolKeyFromRuntimeName(key)
-            const computerPermissionKey = computerMcpToolKeyFromRuntimeName(key)
-            const result = permissionKey
-              ? await executeBrowserMcpToolWithPermission({
-                  key: permissionKey,
-                  args,
-                  sessionID: input.session.id,
-                  messageID: input.processor.message.id,
-                  callID: opts.toolCallId,
-                  rulesets: [input.agent.permission, input.session.permission],
-                  execute: () => execute(args, opts),
-                })
+          const normalizedInput = normalizeToolInput(args)
+          const persistedInput = cloneToolInputForPersistence(normalizedInput.ok ? normalizedInput.value : {})
+          const toolPart = await input.processor.ensureToolPart(opts.toolCallId, key, persistedInput)
+          const browserPermissionKey = browserMcpToolKeyFromRuntimeName(key)
+          const computerPermissionKey = computerMcpToolKeyFromRuntimeName(key)
+          const invocationIdentity = {
+            projectID: Instance.project.id,
+            sessionID: input.session.id,
+            messageID: input.processor.message.id,
+            toolCallID: opts.toolCallId,
+            toolPartID: toolPart.id,
+            providerName: key,
+            providerKind: browserPermissionKey
+              ? ("browser" as const)
               : computerPermissionKey
-                ? await executeComputerMcpToolWithPermission({
-                    key: computerPermissionKey,
-                    args,
-                    sessionID: input.session.id,
-                    messageID: input.processor.message.id,
-                    callID: opts.toolCallId,
-                    rulesets: [input.agent.permission, input.session.permission],
-                    execute: () => execute(args, opts),
-                  })
-                : await (async () => {
-                  await ctx.ask(mcpPermissionPlan(key, args))
-                  return execute(args, opts)
-                })()
-
-            await Plugin.trigger(
-              "tool.execute.after",
-              {
-                tool: key,
-                sessionID: ctx.sessionID,
-                callID: opts.toolCallId,
-                args,
-              },
-              result,
-            )
-            await mcpAppLifecycle?.complete(opts.toolCallId, args, result)
-
-            // MCP tool image / resource content used to inline as
-            // `data:<mime>;base64,...` directly into `attachment.url`,
-            // which (a) blew up `part.data` (see attachment-store DB
-            // forensics) and
-            // (b) now trips Session.updatePart's inline-base64 guard.
-            // Funnel both branches through AttachmentStore so the
-            // persisted url is the canonical `/attachment/<id>/<sha>.<ext>`
-            // ref; bytes only re-inline transiently in toModelOutput when
-            // the AI SDK actually feeds the tool result back to the model.
-            const materialized = await materializeMcpToolResult({
-              projectID: Instance.project.id,
-              result,
-            })
-
-            const truncated = await Truncate.output(
-              materialized.text,
-              { sessionID: ctx.sessionID, executionAuthority },
-              ctx.executionSurface,
-            )
-            const metadata = {
-              ...materialized.metadata,
-              truncated: truncated.truncated,
-              ...(truncated.truncated && { outputPath: truncated.outputPath }),
-            }
-
-            return {
-              title: "",
-              metadata,
-              output: truncated.content,
-              attachments: materializedMcpAttachmentsToFileParts({
-                attachments: materialized.attachments,
-                sessionID: ctx.sessionID,
-                messageID: input.processor.message.id,
-              }),
-              content: result.content,
-            }
-          } catch (error) {
-            if (mcpAppLifecycle) {
-              if (opts.abortSignal?.aborted) {
-                await mcpAppLifecycle.cancel(opts.toolCallId, args, "Tool execution cancelled")
-              } else {
-                await mcpAppLifecycle.fail(opts.toolCallId, args, error)
-              }
-            }
-            throw error
+                ? ("computer" as const)
+                : mcpAppLifecycle
+                  ? ("mcp_app" as const)
+                  : ("mcp" as const),
+            providerID: mcpAuthorityBinding?.serverID ?? key,
+            providerDigest: mcpAuthorityBinding
+              ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
+              : undefined,
+            args: persistedInput,
           }
+          return withTaskToolInvocation(invocationIdentity, ctx.executionSurface, async () => {
+            try {
+              await mcpAppLifecycle?.input(opts.toolCallId, args)
+              await Plugin.trigger(
+                "tool.execute.before",
+                {
+                  tool: key,
+                  sessionID: ctx.sessionID,
+                  callID: opts.toolCallId,
+                },
+                {
+                  args,
+                },
+              )
+
+              const result = await execute(args, opts)
+
+              await Plugin.trigger(
+                "tool.execute.after",
+                {
+                  tool: key,
+                  sessionID: ctx.sessionID,
+                  callID: opts.toolCallId,
+                  args,
+                },
+                result,
+              )
+              await mcpAppLifecycle?.complete(opts.toolCallId, args, result)
+
+              // MCP tool image / resource content used to inline as
+              // `data:<mime>;base64,...` directly into `attachment.url`,
+              // which (a) blew up `part.data` (see attachment-store DB
+              // forensics) and
+              // (b) now trips Session.updatePart's inline-base64 guard.
+              // Funnel both branches through AttachmentStore so the
+              // persisted url is the canonical `/attachment/<id>/<sha>.<ext>`
+              // ref; bytes only re-inline transiently in toModelOutput when
+              // the AI SDK actually feeds the tool result back to the model.
+              const materialized = await materializeMcpToolResult({
+                projectID: Instance.project.id,
+                result,
+              })
+
+              const truncated = await Truncate.output(
+                materialized.text,
+                { sessionID: ctx.sessionID, executionAuthority },
+                ctx.executionSurface,
+              )
+              const metadata = {
+                ...materialized.metadata,
+                truncated: truncated.truncated,
+                ...(truncated.truncated && { outputPath: truncated.outputPath }),
+              }
+
+              return {
+                title: "",
+                metadata,
+                output: truncated.content,
+                attachments: materializedMcpAttachmentsToFileParts({
+                  attachments: materialized.attachments,
+                  sessionID: ctx.sessionID,
+                  messageID: input.processor.message.id,
+                }),
+                content: result.content,
+              }
+            } catch (error) {
+              if (mcpAppLifecycle) {
+                if (opts.abortSignal?.aborted) {
+                  await mcpAppLifecycle.cancel(opts.toolCallId, args, "Tool execution cancelled")
+                } else {
+                  await mcpAppLifecycle.fail(opts.toolCallId, args, error)
+                }
+              }
+              throw error
+            }
+          })
         },
       } as AITool
       tools[key] = prepareProviderTool({
@@ -2731,7 +2848,6 @@ export namespace SessionLoop {
       const wrapped = wrapExtraTool(name, extraTool, {
         sessionID: sessionIDForExtras,
         messageID: messageIDForExtras,
-        browserPermissionRulesets: [input.agent.permission, input.session.permission],
         executionSurface: () =>
           createToolExecutionSurface({
             toolIDs: Object.keys(tools),
@@ -2761,7 +2877,7 @@ export namespace SessionLoop {
       switches: input.tools,
       requiredToolIDs:
         runtimeContract?.identity.identityKind === "projected-scheduler"
-          ? TASK_ARTIFACT_DISCOVERY_TOOL_IDS
+          ? TASK_ARTIFACT_SCHEDULER_TOOL_IDS
           : runtimeContract?.identity.identityKind === "projected-worker"
             ? TASK_ARTIFACT_TOOL_IDS
             : undefined,
@@ -2893,7 +3009,7 @@ export namespace SessionLoop {
       projectedWorkerVisibleRegistryToolIDs === undefined &&
       projectedRegistryToolIDs?.has(SkillTool.id) &&
       (!input.session.permission?.length ||
-        PermissionNext.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
+        CapabilityRules.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
       toolSwitchAllows(SkillTool.id, input.tools)
     if (projectedWorkerAllowsSkill || nonWorkerAllowsSkill) {
       initialToolNames.add(SkillTool.id)
@@ -2904,7 +3020,7 @@ export namespace SessionLoop {
       input.session.kind === "mission" &&
       AgentToolPool.visibleToolIDs(input.agent.tools).has(MissionSkillTool.id) &&
       (!input.session.permission?.length ||
-        PermissionNext.evaluate(MissionSkillTool.id, "*", input.session.permission).action !== "deny") &&
+        CapabilityRules.evaluate(MissionSkillTool.id, "*", input.session.permission).action !== "deny") &&
       toolSwitchAllows(MissionSkillTool.id, input.tools)
     if (missionRoleAllowsSkill) initialToolNames.add(MissionSkillTool.id)
     const nativeConversationAllowsSkill =
@@ -2912,7 +3028,7 @@ export namespace SessionLoop {
       (input.agentID === "chat" || input.agentID === "work") &&
       AgentToolPool.visibleToolIDs(input.agent.tools).has(SkillTool.id) &&
       (!input.session.permission?.length ||
-        PermissionNext.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
+        CapabilityRules.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
       toolSwitchAllows(SkillTool.id, input.tools)
     if (nativeConversationAllowsSkill) initialToolNames.add(SkillTool.id)
     await finalizeSkillSurface(initialToolNames)
@@ -2938,7 +3054,450 @@ export namespace SessionLoop {
       })
     }
 
+    coordinateResolvedToolExecutionSurface(tools)
+    const finalizeWithCoordination = resolvedToolSkillFinalizers.get(tools)
+    if (finalizeWithCoordination) {
+      resolvedToolSkillFinalizers.set(tools, async (availableToolNames) => {
+        const surface = await finalizeWithCoordination(availableToolNames)
+        coordinateResolvedToolExecutionSurface(tools)
+        return surface
+      })
+    }
     return tools
+  }
+
+  /**
+   * Resume the exact persisted Tool invocation after an Ask-me decision was
+   * committed in a later process. This deliberately rebuilds the ordinary
+   * SessionLoop Tool surface; it does not call a registry or MCP executor
+   * directly.
+   */
+  export async function resumePermissionContinuation(request: PermissionAuthority.Request): Promise<void> {
+    const session = await Session.get(request.sessionID)
+    const persistedAssistant = await MessageStore.get({
+      sessionID: request.sessionID,
+      messageID: request.messageID,
+    })
+    if (persistedAssistant.info.role !== "assistant") {
+      throw new Error(`Permission continuation ${request.id} message ${request.messageID} is not an assistant message`)
+    }
+    const assistant = persistedAssistant.info
+    const toolPart = persistedAssistant.parts.find(
+      (part): part is Message.ToolPart => part.type === "tool" && part.callID === request.toolCallID,
+    )
+    if (!toolPart) {
+      throw new Error(`Permission continuation ${request.id} has no persisted ToolPart ${request.toolCallID}`)
+    }
+    if (toolPart.tool !== request.toolName) {
+      throw new Error(`Permission continuation ${request.id} Tool changed from ${request.toolName} to ${toolPart.tool}`)
+    }
+    const completedToolControl =
+      toolPart.state.status === "completed" ? toolResultControl(toolPart.state.metadata) : undefined
+    const assistantWasCompleted = assistant.time.completed !== undefined
+    if (toolPart.state.status === "error") {
+      throw new Error(`Permission continuation ${request.id} ToolPart is already terminal with an error`)
+    }
+    if (!assistant.parentID) {
+      throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
+    }
+    if (toolPart.state.status === "completed" && toolResultDisposition(completedToolControl) !== "continue") {
+      if (!assistantWasCompleted) {
+        assistant.finish = "tool-calls"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+      }
+      return
+    }
+    const persistedUser = await MessageStore.get({ sessionID: request.sessionID, messageID: assistant.parentID })
+    if (persistedUser.info.role !== "user") {
+      throw new Error(`Permission continuation ${request.id} parent ${assistant.parentID} is not a user message`)
+    }
+    const config = await EffectiveConfig.effective({ sessionID: request.sessionID })
+    const installedRuntimeContract = SessionRuntimeContractStore.get(request.sessionID)
+    const recoveredRuntimeContract = installedRuntimeContract
+      ? undefined
+      : await reconstructProjectedPermissionRuntime({ session, request, assistant, config })
+    await using _recoveredRuntime = recoveredRuntimeContract
+    if (toolPart.state.status === "completed") {
+      if (!assistantWasCompleted) {
+        assistant.finish = "tool-calls"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+      }
+      if (
+        !assistantWasCompleted &&
+        !recoveredRuntimeContract &&
+        toolResultDisposition(completedToolControl) === "continue"
+      ) {
+        await loop({ sessionID: request.sessionID })
+      }
+      return
+    }
+    const model = await Provider.getModel(assistant.providerID, assistant.modelID, { config })
+    const messageIdentity = await resolveSessionMessageIdentity({
+      session,
+      requestedAgentID: assistant.agent,
+      config,
+    })
+    const abortController = new AbortController()
+    const processor = SessionProcessor.create({
+      assistantMessage: assistant,
+      sessionID: request.sessionID,
+      model,
+      abort: abortController.signal,
+    })
+    const messages = await Session.messages({ sessionID: request.sessionID })
+    const tools = await resolveTools({
+      agent: messageIdentity.runtime,
+      agentID: messageIdentity.agentID,
+      model,
+      session,
+      tools: persistedUser.info.tools,
+      includeMcpTools: persistedUser.info.includeMcpTools,
+      processor,
+      extra: persistedUser.info.extra,
+      messages,
+      config,
+    })
+    const recoveredTool = tools[request.toolName]
+    if (!recoveredTool?.execute) {
+      throw new Error(`Permission continuation ${request.id} Tool ${request.toolName} is no longer projected`)
+    }
+    let raw: unknown
+    try {
+      raw = await recoveredTool.execute(toolPart.state.input, {
+        toolCallId: request.toolCallID,
+        messages: [],
+        abortSignal: abortController.signal,
+      })
+    } catch (error) {
+      const recoveredFailure =
+        error instanceof PermissionAuthority.ExecutionAlreadySucceededError
+          ? toolFailureCauseFromUnknown({
+              error,
+              originSite: "SessionLoop.resumePermissionContinuation",
+              classification: "tool-execution",
+              kind: "recovered-permission-result-unavailable",
+              data: {
+                requestID: request.id,
+                toolCallID: request.toolCallID,
+                attemptID: error.attemptID,
+                effectOutcome: "execution_succeeded",
+              },
+            })
+          : toolFailureCauseFromUnknown({
+              error,
+              originSite: "SessionLoop.resumePermissionContinuation",
+              classification: "tool-execution",
+              kind: "recovered-permission-tool-execution",
+              data: { requestID: request.id, toolCallID: request.toolCallID },
+            })
+      await processor.failRecoveredToolPart(request.toolCallID, recoveredFailure)
+      throw error
+    }
+    // ToolPart persistence is deliberately outside the execution catch. Once
+    // the authority has recorded execution_succeeded, a local persistence
+    // failure must leave the ToolPart open so startup recovery can replay the
+    // durable result; it must not rewrite the completed effect as a Tool error.
+    const output = normalizeToolResult(raw)
+    const recoveredControl = await processor.completeRecoveredToolPart({
+      toolCallID: request.toolCallID,
+      toolInput: toolPart.state.input,
+      output: {
+        output: output.output,
+        title: output.title,
+        metadata: output.metadata as Record<string, unknown>,
+        ...(Array.isArray(output.attachments) ? { attachments: output.attachments as Message.FilePart[] } : {}),
+        ...(output.display !== undefined ? { display: output.display } : {}),
+        ...((raw as { sources?: unknown } | undefined)?.sources !== undefined
+          ? { sources: (raw as { sources: unknown }).sources }
+          : {}),
+      },
+    })
+    assistant.finish = "tool-calls"
+    assistant.time.completed = Date.now()
+    await Session.updateMessage(assistant)
+    if (!recoveredRuntimeContract && toolResultDisposition(recoveredControl) === "continue") {
+      await loop({ sessionID: request.sessionID })
+    }
+  }
+
+  async function reconstructProjectedPermissionRuntime(input: {
+    session: Session.Info
+    request: PermissionAuthority.Request
+    assistant: Message.Assistant
+    config: Config.Info
+  }): Promise<AsyncDisposable | undefined> {
+    if (input.session.kind === "orchestrator" && input.assistant.agent === "orchestrator") {
+      return reconstructProjectedSchedulerPermissionRuntime(input)
+    }
+    if (!RuntimeTemplateRegistry.isWorkerSessionKind(input.session.kind)) return undefined
+    const descriptor = WorkerTurnDescriptor.latestForSession(input.session.id)
+    if (!descriptor) {
+      throw new Error(`Permission continuation ${input.request.id} has no persisted Worker Turn descriptor`)
+    }
+    const payload = descriptor.payload
+    if (
+      payload.identity.agentID !== input.assistant.agent ||
+      payload.identity.sessionKind !== input.session.kind ||
+      payload.model.selection !== "explicit" ||
+      payload.model.providerID !== input.assistant.providerID ||
+      payload.model.modelID !== input.assistant.modelID
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The persisted projected worker identity or model changed after restart",
+      )
+    }
+    const projectDirectory = await EffectiveConfig.directory({ sessionID: input.session.id })
+    const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: input.session.id })
+    const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+      config: input.config,
+      projectDirectory: capabilityProjectDirectory,
+      agentID: payload.identity.agentID,
+      packageRevision: payload.packageRevision,
+    })
+    const capability = projection.workerCapability
+    if (
+      !sameExpertSquadPackageRevision(capability.packageRevision, payload.packageRevision) ||
+      JSON.stringify(capability.identity) !== JSON.stringify(payload.identity)
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected worker capability changed after restart",
+      )
+    }
+    const model = await Provider.getModel(payload.model.providerID, payload.model.modelID, { config: input.config })
+    const runtime = sessionRuntimeWithResolvedModel(capability.runtime, {
+      providerID: payload.model.providerID,
+      modelID: payload.model.modelID,
+    })
+    const coordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID(
+      payload.identity.dispatchAdapterID,
+    )
+    const system = await composeProjectedWorkerSystemPrompt({
+      taskID: payload.lifecycle.taskID,
+      baseRole: RuntimeTemplateID.get(payload.identity.baseRole),
+      core: coordinationToolID
+        ? `${RuntimeTemplateRegistry.get(payload.identity.baseRole).corePromptSeed}\n\n${coordinationHandoffPrompt(coordinationToolID)}`
+        : RuntimeTemplateRegistry.get(payload.identity.baseRole).corePromptSeed,
+      projectDirectory,
+      capability,
+    })
+    if (textSHA256(system.prompt) !== payload.prompt.systemSha256) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected worker system contract changed after restart",
+      )
+    }
+    const contextTools = await filterAgentTools(
+      {
+        ...createAgentContextTools(),
+        ...(await createAgentCoordinationRuntimeTools({
+          agentID: payload.identity.agentID,
+          taskID: payload.lifecycle.taskID,
+        })),
+      },
+      RuntimeTemplateID.get(payload.identity.baseRole),
+      { taskID: payload.lifecycle.taskID, sessionID: input.session.parentID },
+    )
+    const owner = McpRuntime.createScopedConnectionOwner(
+      computerRuntimeScopeIdentity({
+        ownerKind: "worker",
+        taskID: payload.lifecycle.taskID,
+        sessionID: input.session.id,
+      }),
+    )
+    try {
+      const stageBinding = payload.tools.stageMaterializers[input.request.toolName]
+      const requestedStageTool = stageBinding
+        ? await materializeBoundStageTool({
+            adapterID: payload.identity.dispatchAdapterID,
+            toolName: input.request.toolName,
+            binding: stageBinding,
+            authority: {
+              taskID: payload.lifecycle.taskID,
+              projectDirectory,
+              toolDirectory: input.session.directory,
+            },
+          })
+        : undefined
+      const runtimeTools = await PromptProfileResolver.projectWorkerTools(
+        requestedStageTool ? { ...contextTools, [input.request.toolName]: requestedStageTool } : contextTools,
+        capability,
+        {
+          taskID: payload.lifecycle.taskID,
+          projectDirectory,
+          toolDirectory: input.session.directory,
+          stageOwnedToolIDs: requestedStageTool ? [input.request.toolName] : [],
+          connectionOwner: owner,
+        },
+      )
+      const persistedStageIDs = [...payload.tools.stageOwned].sort()
+      const materializedStageIDs = Object.keys(payload.tools.stageMaterializers).sort()
+      const enabled = new Set(payload.tools.enabled)
+      if (
+        persistedStageIDs.some((toolID) => !enabled.has(toolID)) ||
+        materializedStageIDs.some((toolID) => !persistedStageIDs.includes(toolID))
+      ) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "A persisted stage Tool materializer is outside the enabled Tool surface",
+        )
+      }
+      if (persistedStageIDs.includes(input.request.toolName) && !requestedStageTool) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "The requested private stage Tool has no exact persisted materializer",
+        )
+      }
+      const recoveredProjectedIDs = Object.keys(runtimeTools.projectedTools).sort()
+      const persistedProjectedIDs = payload.tools.enabled.filter((toolID) => !persistedStageIDs.includes(toolID)).sort()
+      if (JSON.stringify(recoveredProjectedIDs) !== JSON.stringify(persistedProjectedIDs)) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "The projected worker Tool surface changed after restart",
+        )
+      }
+      SessionRuntimeContractStore.set(input.session.id, {
+        identity: {
+          identityKind: "projected-worker",
+          sessionID: input.session.id,
+          ...payload.identity,
+          expertSquadID: payload.expertSquadID,
+          packageRevision: payload.packageRevision,
+          workerTurnDescriptorID: descriptor.id,
+          workerTurnDescriptorHash: descriptor.hash,
+          taskID: payload.lifecycle.taskID,
+          workScope: payload.lifecycle.workScope,
+          attemptID: payload.lifecycle.attemptID,
+          contractKind: "stage-attempt",
+          installedAt: Date.now(),
+        },
+        runtime,
+        permissionContinuation: { requestID: input.request.id, toolName: input.request.toolName },
+        projectedTools: runtimeTools.projectedTools,
+        stageTools: runtimeTools.stageTools,
+        system: [system.prompt],
+        systemMode: "complete",
+        includeMcpTools: capability.includeMcpTools,
+        exactTools: RuntimeTemplateRegistry.get(payload.identity.baseRole).exactRuntimeContract,
+        projectedRegistryToolIDs: capability.builtInToolIDs,
+        skillProjection: projection.skillProjection,
+        harnessProjection: PromptProfileResolver.workerHarnessProjection({
+          taskID: payload.lifecycle.taskID,
+          capability,
+        }),
+        projectDirectory,
+        resources: { mcp: owner },
+      })
+      return {
+        async [Symbol.asyncDispose]() {
+          await SessionRuntimeContractStore.dispose(input.session.id)
+        },
+      }
+    } catch (error) {
+      await owner.close()
+      throw error
+    }
+  }
+
+  async function reconstructProjectedSchedulerPermissionRuntime(input: {
+    session: Session.Info
+    request: PermissionAuthority.Request
+    assistant: Message.Assistant
+    config: Config.Info
+  }): Promise<AsyncDisposable> {
+    const taskID = taskIDForSession(input.session.id)
+    if (!taskID) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The Orchestrator Session is no longer bound to a Task",
+      )
+    }
+    const task = requireTask(taskID)
+    if (task.project_id !== input.session.projectID) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The Orchestrator Session project changed after restart",
+      )
+    }
+    const projectDirectory = await EffectiveConfig.directory({ sessionID: input.session.id })
+    const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: input.session.id })
+    const { schedulerCapability, skillProjection } = await resolvePinnedTaskSchedulerTurnProjection({
+      taskID,
+      projectDirectory: capabilityProjectDirectory,
+      config: input.config,
+    })
+    if (
+      schedulerCapability.identity.agentID !== input.assistant.agent ||
+      schedulerCapability.identity.sessionKind !== input.session.kind
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected scheduler identity changed after restart",
+      )
+    }
+    const selectedModel = await resolveAgentModel("orchestrator", { sessionID: task.session_id ?? undefined })
+    if (selectedModel.providerID !== input.assistant.providerID || selectedModel.id !== input.assistant.modelID) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected scheduler model changed after restart",
+      )
+    }
+    const owner = McpRuntime.createScopedConnectionOwner(
+      computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: input.session.id }),
+    )
+    try {
+      const rawTools = createOrchestratorTools({
+        taskID,
+        agentSessionID: input.session.id,
+        dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
+      }).tools as Record<string, AITool>
+      const projectedTools = await PromptProfileResolver.projectOrchestratorTools(rawTools, schedulerCapability, {
+        taskID,
+        projectDirectory,
+        connectionOwner: owner,
+      })
+      if (!Object.hasOwn(projectedTools, input.request.toolName)) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          `The projected scheduler Tool ${input.request.toolName} changed after restart`,
+        )
+      }
+      SessionRuntimeContractStore.set(input.session.id, {
+        identity: {
+          identityKind: "projected-scheduler",
+          sessionID: input.session.id,
+          ...schedulerCapability.identity,
+          expertSquadID: schedulerCapability.expertSquadID,
+          packageRevision: schedulerCapability.packageRevision,
+          taskID,
+          contractKind: "orchestrator-wake",
+          installedAt: Date.now(),
+        },
+        projectedTools,
+        projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
+        skillProjection,
+        harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
+          taskID,
+          capability: schedulerCapability,
+        }),
+        projectDirectory,
+        includeMcpTools: false,
+        system: [],
+        systemMode: "complete",
+        resources: { mcp: owner },
+      })
+      return {
+        async [Symbol.asyncDispose]() {
+          await SessionRuntimeContractStore.dispose(input.session.id)
+        },
+      }
+    } catch (error) {
+      await owner.close()
+      throw error
+    }
   }
 
   export function usesExactRuntimeContractTools(contract: SessionRuntimeContract | undefined): boolean {
@@ -2981,7 +3540,6 @@ export namespace SessionLoop {
     ctx: {
       sessionID: string
       messageID: string
-      browserPermissionRulesets: readonly (PermissionNext.Ruleset | undefined)[]
       executionSurface: () => ToolExecutionSurface
       ensureToolPart: (
         toolCallID: string,
@@ -2996,6 +3554,62 @@ export namespace SessionLoop {
     const execute = original.execute
     const browserPermissionKey = browserMcpPermissionKeyOf(raw)
     const computerPermissionKey = computerMcpPermissionKeyOf(raw)
+    const mcpAuthorityBinding = MCP.toolAuthorityBinding(raw as object)
+    const stageMaterializerBinding = stageToolMaterializerBindingOf(raw as object)
+    const internalStageBinding = internalStageToolBindingOf(raw as object)
+    if (internalStageBinding) {
+      const runtimeIdentity = SessionRuntimeContractStore.get(ctx.sessionID)?.identity
+      const runtimeAdapterID =
+        runtimeIdentity?.identityKind === "projected-worker" ? runtimeIdentity.dispatchAdapterID : undefined
+      if (
+        runtimeAdapterID !== internalStageBinding.adapterID ||
+        internalStageBinding.toolName !== name ||
+        DispatchAdapterContractRegistry.permissionBearingStageToolIDSet(internalStageBinding.adapterID).has(name)
+      ) {
+        throw new Error(`Internal stage Tool ${name} has an invalid dispatch-adapter effect binding`)
+      }
+      return raw
+    }
+    let projectedBinding = projectedTaskToolRuntimeBindingOf(raw as object)
+    const runtimeContract = SessionRuntimeContractStore.get(ctx.sessionID)
+    if (
+      !browserPermissionKey &&
+      !computerPermissionKey &&
+      !mcpAuthorityBinding &&
+      !projectedBinding &&
+      runtimeContract
+    ) {
+      const records = sessionRuntimeToolRecords(runtimeContract)
+      const record = records.projectedTools[name] ?? records.stageTools[name]
+      if (record) {
+        const bound = bindProjectedTaskToolRuntime(
+          { ...(raw as object) },
+          {
+            taskID: runtimeContract.identity.taskID,
+            projectDirectory: runtimeContract.projectDirectory,
+            ownerKind: "projected-worker",
+            expertSquadID: runtimeContract.identity.expertSquadID,
+            packageRevision: runtimeContract.identity.packageRevision,
+            agentID: runtimeContract.identity.agentID,
+            projectionHash: runtimeContract.identity.projectionHash,
+            providerKind: "package-tool",
+            toolRef: name,
+            providerName: name,
+            runtimeToolID: name,
+          },
+        )
+        projectedBinding = projectedTaskToolRuntimeBindingOf(bound)
+      }
+    }
+    if (
+      !browserPermissionKey &&
+      !computerPermissionKey &&
+      !mcpAuthorityBinding &&
+      !projectedBinding &&
+      !stageMaterializerBinding
+    ) {
+      throw new Error(`Projected Tool ${name} is missing its immutable authorization binding`)
+    }
     // Mirror the attachment stamping the registry-tools wrapper applies
     // (loop.ts:967-987). Extras (e.g. build/runtime visual
     // tools) build attachments via buildMultimodalToolResult
@@ -3024,7 +3638,7 @@ export namespace SessionLoop {
         messageID: ctx.messageID,
       }))
     }
-    return {
+    const wrappedTool = {
       ...(raw as any),
       async execute(args: unknown, options: unknown) {
         const toolCallID = typeof (options as any)?.toolCallId === "string" ? (options as any).toolCallId : undefined
@@ -3039,6 +3653,23 @@ export namespace SessionLoop {
           toolCallID,
           toolPartID: toolPart.id,
           providerName: name,
+          providerKind: browserPermissionKey
+            ? ("browser" as const)
+            : computerPermissionKey
+              ? ("computer" as const)
+              : ctx.mcpAppLifecycle
+                ? ("mcp_app" as const)
+                : ("projected" as const),
+          providerID:
+            mcpAuthorityBinding?.serverID ?? stageMaterializerBinding?.id ?? projectedBinding?.providerName ?? name,
+          providerDigest: mcpAuthorityBinding
+            ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
+            : stageMaterializerBinding
+              ? `${stageMaterializerBinding.revision}:${stageMaterializerBinding.inputSha256}`
+              : projectedBinding
+                ? `${projectedBinding.projectionHash}:${projectedBinding.mcpServerConfigSHA256 ?? projectedBinding.packageRevision.packageDigest}`
+                : undefined,
+          args: toolInput,
         }
         const executeProjectedTool = () =>
           withTaskToolInvocation(invocationIdentity, ctx.executionSurface(), (invocationAuthority) =>
@@ -3052,27 +3683,7 @@ export namespace SessionLoop {
           )
         try {
           await ctx.mcpAppLifecycle?.input(toolCallID, toolInput)
-          const result = browserPermissionKey
-            ? await executeBrowserMcpToolWithPermission({
-                key: browserPermissionKey,
-                args,
-                sessionID: ctx.sessionID,
-                messageID: ctx.messageID,
-                callID: toolCallID,
-                rulesets: ctx.browserPermissionRulesets,
-                execute: executeProjectedTool,
-              })
-            : computerPermissionKey
-              ? await executeComputerMcpToolWithPermission({
-                  key: computerPermissionKey,
-                  args,
-                  sessionID: ctx.sessionID,
-                  messageID: ctx.messageID,
-                  callID: toolCallID,
-                  rulesets: ctx.browserPermissionRulesets,
-                  execute: executeProjectedTool,
-                })
-              : await executeProjectedTool()
+          const result = await executeProjectedTool()
           const rawMcpResult = result && typeof result === "object" ? MCP.appToolResult(result as object) : undefined
           if (ctx.mcpAppLifecycle) {
             if (!rawMcpResult) throw new Error(`${name}: scoped MCP App tool did not retain its protocol result`)
@@ -3080,7 +3691,7 @@ export namespace SessionLoop {
           }
           const normalized = await materializeToolResultInlineAttachments({
             projectID: invocationIdentity.projectID,
-            value: normalizeExtraToolResult(result),
+            value: normalizeToolResult(result),
           })
           const materializedAttachments = await materializeToolResultAttachments(normalized.attachments)
           return {
@@ -3103,6 +3714,8 @@ export namespace SessionLoop {
         }
       },
     } as AITool
+    bindToolExecutionMode(wrappedTool as object, toolExecutionModeOf(raw as object))
+    return wrappedTool
   }
 
   export function createStructuredOutputTool(input: {

@@ -72,6 +72,7 @@ import {
   composerMentionAtomicEdit,
   composerMentionAtomicNavigation,
   composerMentionAtomicSelection,
+  composerMentionDirectiveRanges,
   ComposerMentionDirectiveError,
   composerMentionOptions,
   composerMentionPresentationSegments,
@@ -167,6 +168,8 @@ export interface ChatComposerProps {
   missionSkills: ComposerSkillOption[]
   referenceCatalogError?: string
   expertSquads: ExpertSquadOption[]
+  onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
+  onInstallMoreExpertSquads?: () => void
   activeExpertSquadID: string
   conversationActive: boolean
   launchReferences: VisibleComposerReferences
@@ -588,6 +591,17 @@ export function ChatComposer(props: ChatComposerProps) {
     if (!focused() || !props.enabled || props.busy) return null
     return findComposerMentionQuery(text(), caretPosition())
   })
+  createEffect<string>((previousQuery) => {
+    const mention = activeMentionQuery()
+    const query = mention?.stage === "entity" && mention.kind === "squad" ? mention.query : ""
+    if (query !== previousQuery) {
+      const selectedExpertSquadIDs = composerMentionDirectiveRanges(text())
+        .filter((directive) => directive.kind === "squad")
+        .map((directive) => directive.value)
+      props.onExpertSquadQuery?.(query, selectedExpertSquadIDs)
+    }
+    return query
+  }, "")
   const activeMentionOptions = createMemo(() => {
     const query = activeMentionQuery()
     return query ? composerMentionOptions(query, mentionCatalog()) : []
@@ -1521,6 +1535,8 @@ export function ChatComposer(props: ChatComposerProps) {
                     skills={props.skills}
                     missionSkills={props.missionSkills}
                     expertSquads={props.expertSquads}
+                    onExpertSquadQuery={props.onExpertSquadQuery}
+                    onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
                     launchReferences={visibleComposerReferences(text())}
                     readOnly={false}
                     disabled={!props.enabled || props.busy}

@@ -2,9 +2,9 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { eq } from "drizzle-orm"
 import { readMissionDurableActivity } from "../src/engine/durable-activity"
 import { EngineTaskTable } from "../src/engine/engine.sql"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { Identifier } from "../src/id/id"
-import { ensureMissionSession } from "../src/mission/session"
+import { ensureMissionSession, MissionExpertSquadSnapshotMismatchError } from "../src/mission/session"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { MessageTable, SessionTable } from "../src/session/session.sql"
@@ -14,6 +14,9 @@ import { createOpenCorvusClient } from "@opencorvus-ai/sdk/client"
 import { Hono } from "hono"
 import { MissionRoutes } from "../src/server/routes/mission"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
+import { closeMissionExecutionOperation, currentMissionExecutionClosure } from "../src/mission/execution-closure"
+import { serverErrorResponse } from "../src/server/error-handler"
+import { Auth } from "../src/auth"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -29,13 +32,127 @@ afterAll(async () => {
 })
 
 describe("Mission durable activity", () => {
+  test("rejects a wake during durable close without mutating the Session config overlay", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "closing-wake-config-authority"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const initial = await Session.mergeConfigOverlay({
+          sessionID: mission.id,
+          patch: { model: "firmware/gpt-5", prompt_profile: { active: "base" } },
+        })
+        await Auth.set("firmware", { type: "api", key: "isolated-route-contract-key" })
+        await expect(
+          closeMissionExecutionOperation({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.abort",
+            requestID: "close-before-rejected-wake",
+            close: async () => {
+              throw new Error("injected close interruption")
+            },
+          }),
+        ).rejects.toThrow("injected close interruption")
+        expect(currentMissionExecutionClosure(mission.id)).toMatchObject({ state: "closing" })
+
+        const app = new Hono().route("/mission", MissionRoutes())
+        app.onError(serverErrorResponse)
+        const response = await app.fetch(
+          new Request("http://opencorvus.test/mission/wake", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              missionID,
+              productPillar: "code",
+              text: "This rejected wake must not alter Mission configuration.",
+            }),
+          }),
+        )
+        expect({ status: response.status, body: await response.json() }).toMatchObject({
+          status: 409,
+          body: {
+            name: "MissionExecutionClosingError",
+            data: { missionID, sessionID: mission.id },
+          },
+        })
+        expect((await Session.get(mission.id)).metadata?.configOverlay).toEqual(initial.metadata?.configOverlay)
+      },
+    })
+  }, 0)
+
+  test("resumes only the same immutable Expert Squad snapshot", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = {
+          missionID: "immutable-snapshot-resume",
+          defaultCwd: project.path,
+          productPillar: "code" as const,
+          heldExpertSquadIDs: ["base"] as [string, ...string[]],
+        }
+        const created = await ensureMissionSession(input)
+        const resumed = await ensureMissionSession(input)
+        expect(resumed.id).toBe(created.id)
+        try {
+          await ensureMissionSession({ ...input, heldExpertSquadIDs: ["advanced"] })
+          throw new Error("Expected immutable Mission Expert Squad snapshot mismatch")
+        } catch (error) {
+          expect(error).toBeInstanceOf(MissionExpertSquadSnapshotMismatchError)
+          expect((error as InstanceType<typeof MissionExpertSquadSnapshotMismatchError>).toObject().data).toMatchObject(
+            {
+              missionID: input.missionID,
+              heldCount: 1,
+              heldSnapshotHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+            },
+          )
+        }
+        const app = new Hono().route("/mission", MissionRoutes())
+        const response = await app.fetch(
+          new Request("http://opencorvus.test/mission/wake", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              missionID: input.missionID,
+              productPillar: input.productPillar,
+              text: "Resume with the requested immutable Expert Squad snapshot.",
+              expertSquadIDs: ["advanced"],
+              model: "firmware/gpt-5",
+            }),
+          }),
+        )
+        expect(response.status).toBe(400)
+        expect(await response.json()).toMatchObject({
+          name: "MissionExpertSquadSnapshotMismatchError",
+          data: {
+            missionID: input.missionID,
+            heldCount: 1,
+            heldSnapshotHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+          },
+        })
+      },
+    })
+  }, 0)
+
   test("projects one restart-safe cursor from Mission and child Task durable facts", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const missionID = "benchmark-mission"
-        const mission = await ensureMissionSession({ missionID, defaultCwd: project.path, productPillar: "code" })
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
         const taskSession = await Session.create({
           kind: "root",
           parentID: mission.id,
@@ -43,7 +160,7 @@ describe("Mission durable activity", () => {
         })
         const taskID = Identifier.ascending("task")
         const timeCreated = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: taskSession.id,
           now: timeCreated,
@@ -54,7 +171,6 @@ describe("Mission durable activity", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -208,9 +324,7 @@ describe("Mission durable activity", () => {
           directory: project.path,
           fetch: (request) => app.fetch(request),
         })
-        expect(
-          (await client.mission.activityCursor({ missionID }, { throwOnError: true })).data,
-        ).toEqual(
+        expect((await client.mission.activityCursor({ missionID }, { throwOnError: true })).data).toEqual(
           readMissionDurableActivity({
             projectID: Instance.project.id,
             missionID,

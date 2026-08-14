@@ -128,7 +128,7 @@ export function renderDispatchContinuationTurn(input: {
     ...(evidenceLocators.length > 0
       ? evidenceLocators.map((locator) => `- ${JSON.stringify(locator)}`)
       : [
-          "Use artifact_search, complete artifact_read, and artifact_select. Keep Artifact bodies in the Catalog instead of copying them into this Turn.",
+          "Use artifact_search, complete each artifact_locator_ref read, and select with artifact_read_ref. Keep Artifact bodies in the Catalog instead of copying them into this Turn.",
         ]),
   ].join("\n")
 }

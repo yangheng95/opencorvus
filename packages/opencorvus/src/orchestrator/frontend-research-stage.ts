@@ -17,9 +17,11 @@ type FrontendResearchStageDependencies = {
   taskID: string
   parentSessionID: string
   signal?: AbortSignal
+  runResearch?: typeof FrontendResearchAgent.run
 }
 
 export function createFrontendResearchStageDispatcher(dependencies: FrontendResearchStageDependencies) {
+  const runResearch = dependencies.runResearch ?? FrontendResearchAgent.run
   return async function dispatchFrontendResearchStage(dispatch: {
     task: TaskRow
     reason: string
@@ -41,7 +43,7 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
     if (!dispatchID) throw new Error("Frontend Research dispatch requires current dispatch authority")
     const sourceUrls = dispatch.sourceUrls?.filter(isHttpWebpageUrl)
     try {
-      const result = await FrontendResearchAgent.run({
+      const result = await runResearch({
         agentID: dispatch.agentID,
         packageRevision: dispatch.packageRevision,
         workScope: dispatch.workScope,
@@ -77,6 +79,7 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
           dispatchID,
           component: "frontend-research",
           operation: "persist-partial-research-brief",
+          delivery: "incomplete",
           sessionID: result.sessionID,
           finalMessageID: result.finalMessageID,
           persist: () =>
@@ -105,6 +108,7 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
           dispatchID,
           component: "frontend-research",
           operation: "persist-research-brief",
+          delivery: "complete",
           sessionID: result.sessionID,
           finalMessageID: result.brief.metadata.created_for_message_id,
           persist: () =>

@@ -58,6 +58,19 @@ function persistedPart(row: typeof PartTable.$inferSelect): Message.Part {
 }
 
 export namespace MessageStore {
+  export async function earliestInSession(input: { sessionID: string; limit: number }): Promise<Message.WithParts[]> {
+    const rows = Database.use((db) =>
+      db
+        .select({ id: MessageTable.id })
+        .from(MessageTable)
+        .where(eq(MessageTable.session_id, input.sessionID))
+        .orderBy(MessageTable.time_created, MessageTable.id)
+        .limit(Math.max(1, Math.floor(input.limit)))
+        .all(),
+    )
+    return byIDs({ sessionID: input.sessionID, messageIDs: rows.map((row) => row.id) })
+  }
+
   export async function byIDs(input: { sessionID: string; messageIDs: string[] }): Promise<Message.WithParts[]> {
     const messageIDs = [...new Set(input.messageIDs.map((id) => String(id || "").trim()).filter(Boolean))]
     if (messageIDs.length === 0) return []
@@ -196,6 +209,58 @@ export namespace MessageStore {
     },
   )
 
+  export const latestAcrossSessionsBefore = fn(
+    z.object({
+      sessionIDs: z.array(Identifier.schema("session")),
+      before: z.number().positive(),
+      beforeID: Identifier.schema("message").optional(),
+      limit: z.number().int().positive(),
+    }),
+    async (input) => {
+      const sessionIDs = [...new Set(input.sessionIDs)]
+      if (sessionIDs.length === 0) return [] as Message.WithParts[]
+      const before = input.beforeID
+        ? or(
+            lt(MessageTable.time_created, input.before),
+            and(eq(MessageTable.time_created, input.before), lt(MessageTable.id, input.beforeID)),
+          )
+        : lt(MessageTable.time_created, input.before)
+      const rows = Database.use((db) =>
+        db
+          .select()
+          .from(MessageTable)
+          .where(and(inArray(MessageTable.session_id, sessionIDs), before))
+          .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+          .limit(input.limit)
+          .all(),
+      )
+      const ids = rows.map((row) => row.id)
+      const partsByMessage = new Map<string, Message.Part[]>()
+      if (ids.length > 0) {
+        const partRows = Database.use((db) =>
+          db
+            .select()
+            .from(PartTable)
+            .where(inArray(PartTable.message_id, ids))
+            .orderBy(PartTable.message_id, PartTable.time_created, PartTable.id)
+            .all(),
+        )
+        for (const row of partRows) {
+          const part = persistedPart(row)
+          const list = partsByMessage.get(row.message_id)
+          if (list) list.push(part)
+          else partsByMessage.set(row.message_id, [part])
+        }
+      }
+      return rows
+        .map((row) => ({
+          info: { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info,
+          parts: partsByMessage.get(row.id) ?? [],
+        }))
+        .reverse()
+    },
+  )
+
   /** Load a compact latest-part projection for every requested execution
    * occurrence. A physical Session may serve multiple turns, so the persisted
    * query is bound to the authoritative input Message (and assistant Messages
@@ -227,6 +292,9 @@ export namespace MessageStore {
       VISIBLE_PART_TYPE.patch,
       VISIBLE_PART_TYPE.file,
       VISIBLE_PART_TYPE.partError,
+      VISIBLE_PART_TYPE.sourceUrl,
+      VISIBLE_PART_TYPE.sourceDocument,
+      VISIBLE_PART_TYPE.sourceFile,
     ]
     for (const [executionID, scope] of scopes) {
       const candidates: ConversationAgentActivityItem[] = []

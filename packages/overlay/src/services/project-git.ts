@@ -1,7 +1,11 @@
-import { apiJson } from "./api"
+import { apiJson, serverSettledRequest } from "./api"
 
 export interface ProjectGitInitializationResult {
   created: boolean
+}
+
+export interface ProjectGitInitializationOptions {
+  signal?: AbortSignal
 }
 
 /**
@@ -11,9 +15,13 @@ export interface ProjectGitInitializationResult {
  */
 export async function initializeProjectDirectoryGit(
   directory: string,
+  options: ProjectGitInitializationOptions = {},
 ): Promise<ProjectGitInitializationResult> {
   const target = directory.trim()
   if (!target) throw new Error("Git initialization requires a project directory")
   const query = new URLSearchParams({ directory: target })
-  return await apiJson(`project/current/init-git?${query.toString()}`, { method: "POST" })
+  return await apiJson(
+    `project/current/init-git?${query.toString()}`,
+    serverSettledRequest({ method: "POST", signal: options.signal }),
+  )
 }

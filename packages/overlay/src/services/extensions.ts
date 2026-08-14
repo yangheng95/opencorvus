@@ -1,6 +1,6 @@
 // ── Extensions Service ──
 // TypeScript port of skill/extension and MCP functions
-// loadExtensions, loadSkillMarket, installSkill,
+// loadExtensions, installSkill,
 // removeSkillSource, deleteSkill, deleteAllSkills.
 // Retired DOM-rendering functions are intentionally not ported here; Solid
 // components own rendering, while this service only updates store data.
@@ -11,7 +11,7 @@ import type {
   SkillUpdateData,
   SkillUpdateResponse,
 } from "@opencorvus-ai/sdk"
-import { appStore, setSkills, setMcp, setSkillMarket, setSkillMounts } from "../store/app"
+import { appStore, setSkills, setMcp, setSkillMounts } from "../store/app"
 import { apiJson } from "./api"
 
 // ── Types ──
@@ -228,21 +228,6 @@ export async function loadProjectMcpStatus(options: DirectoryOwnedRequestOptions
   return mcp
 }
 
-/**
- * Fetches the skill marketplace catalogue from the server and updates the app
- * store.
- * NOTE: This only refreshes store data; callers own dialog visibility.
- */
-export async function loadSkillMarket(options: DirectoryOwnedRequestOptions = {}): Promise<any[]> {
-  const directory = String(options.directory || "").trim()
-  const items = await apiJson(directory ? directoryOwnedPath("skill/market", options) : "global/skill/market")
-  if (!Array.isArray(items)) {
-    throw new Error("skill/market returned a non-array payload")
-  }
-  if (ownsDirectoryRequest(options)) setSkillMarket(items)
-  return items
-}
-
 // ── Mutations ──
 
 /**
@@ -268,7 +253,7 @@ export async function removeSkillSource(
 export async function installSkill(
   kind: string,
   value: string,
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<void> {
   const directory = String(options.directory || "").trim()
@@ -299,7 +284,7 @@ export async function updateSkill(
 export async function importSkillFile(
   filename: string,
   content: string,
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
@@ -317,7 +302,7 @@ export interface SkillImportPackageFile {
 export async function importSkillPackage(
   sourceName: string,
   files: SkillImportPackageFile[],
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
@@ -330,7 +315,7 @@ export async function importSkillPackage(
 export async function importSkillArchive(
   filename: string,
   archiveBase64: string,
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {

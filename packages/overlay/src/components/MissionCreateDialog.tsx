@@ -1,19 +1,26 @@
-import { createEffect, createMemo, createSignal, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, on, onCleanup, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
-import type { ExpertSquadOption } from "../services/expert-squad"
+import {
+  loadExpertSquadCatalog,
+  searchExpertSquads,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadOption,
+} from "../services/expert-squad"
 import { projectDirectoryLabel } from "../utils/project-directory"
 import { t } from "../utils/i18n"
-import { ComposerModelSelector } from "./ComposerModelSelector"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Button } from "./ui/Button"
+import { Checkbox } from "./ui/Checkbox"
 import { Dialog } from "./ui/Dialog"
 import { Icon } from "./ui/Icon"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
 import { SelectControl } from "./ui/SelectControl"
+import { SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
 
 type MissionCreateMode = "manual" | "ai"
-type SelectOption = { value: string; label: string; description?: string }
+type MissionTypeSelection = ProductPillar | ""
+type SelectOption = { value: string; label: string; description?: string; action?: "install-more" }
 
 export interface MissionCreateRequest {
   directory: string
@@ -30,12 +37,27 @@ export interface MissionCreateDialogProps {
   open: boolean
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
-  productPillar: ProductPillar
-  expertSquads: readonly ExpertSquadOption[]
-  activeExpertSquadID: string
+  onInstallMoreExpertSquads?: (projectDirectory: string) => void
+  onMarketExpertSquadQuery?: (projectDirectory: string, query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
+  onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
+  canOpenMarketWebPage?: boolean
   onClose: () => void
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
+}
+
+function mergeSquadOptions(
+  incoming: readonly ExpertSquadOption[],
+  current: readonly ExpertSquadOption[],
+  selectedIDs: readonly string[],
+): ExpertSquadOption[] {
+  const merged = new Map(incoming.map((option) => [option.id, option]))
+  for (const selectedID of selectedIDs) {
+    const selected = current.find((option) => option.id === selectedID)
+    if (selected && !merged.has(selected.id)) merged.set(selected.id, selected)
+  }
+  return [...merged.values()]
 }
 
 export function MissionCreateDialog(props: MissionCreateDialogProps) {
@@ -43,16 +65,40 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [title, setTitle] = createSignal("")
   const [request, setRequest] = createSignal("")
   const [projectDirectory, setProjectDirectory] = createSignal("")
-  const [expertSquadID, setExpertSquadID] = createSignal("")
+  const [productPillar, setProductPillar] = createSignal<MissionTypeSelection>("")
+  const [expertSquads, setExpertSquads] = createSignal<ExpertSquadOption[]>([])
+  const [expertSquadIDs, setExpertSquadIDs] = createSignal<string[]>([])
+  const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
+  const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
+  const [expertSquadError, setExpertSquadError] = createSignal("")
+  const [marketRecommendations, setMarketRecommendations] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
+  const [marketLoading, setMarketLoading] = createSignal(false)
+  const [marketError, setMarketError] = createSignal("")
+  const [marketInstallingID, setMarketInstallingID] = createSignal("")
+  const [marketInstalledID, setMarketInstalledID] = createSignal("")
   const [submitting, setSubmitting] = createSignal(false)
   const [error, setError] = createSignal("")
-  const [modelAvailable, setModelAvailable] = createSignal(false)
+  const [submitAttempted, setSubmitAttempted] = createSignal(false)
   let requestRef: HTMLTextAreaElement | undefined
   let titleRef: HTMLInputElement | undefined
+  let dialogGeneration = 0
+  let expertSquadRequestSequence = 0
 
   const modeOptions = createMemo<SegmentedControlOption<MissionCreateMode>[]>(() => [
-    { value: "ai", label: t("mission_board.create.ai") },
-    { value: "manual", label: t("mission_board.create.manual") },
+    { value: "ai", label: t("mission_board.create.ai"), disabled: submitting() },
+    { value: "manual", label: t("mission_board.create.manual"), disabled: submitting() },
+  ])
+  const missionTypeOptions = createMemo<SegmentedControlOption<MissionTypeSelection>[]>(() => [
+    {
+      value: "code",
+      label: t("chat.composer_mode_code"),
+      title: t("chat.composer_mode_code_description"),
+    },
+    {
+      value: "work",
+      label: t("chat.composer_mode_work"),
+      title: t("chat.composer_mode_work_description"),
+    },
   ])
   const projectOptions = createMemo<SelectOption[]>(() =>
     props.projectDirectories.map((directory) => {
@@ -63,51 +109,306 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const selectedProject = createMemo(
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? null,
   )
-  const expertSquadOptions = createMemo<SelectOption[]>(() =>
-    props.expertSquads.map((squad) => ({
+  const expertSquadOptions = createMemo<SelectOption[]>(() => {
+    const options = expertSquads().map((squad) => ({
       value: squad.id,
-      label: squad.display_label || squad.label,
+      label: squad.display_label,
       description: squad.description,
-    })),
-  )
-  const selectedExpertSquad = createMemo(
-    () => expertSquadOptions().find((option) => option.value === expertSquadID()) ?? null,
-  )
+    }))
+    if (!projectDirectory()) return options
+    return [
+      ...options,
+      {
+        value: "__install-more-expert-squads__",
+        label: t("chat.references.install_more"),
+        description: t("chat.references.install_more_description"),
+        action: "install-more" as const,
+      },
+    ]
+  })
+  const selectedExpertSquadCount = createMemo(() => expertSquadIDs().length)
   const canSubmit = createMemo(
     () =>
-      Boolean(projectDirectory() && expertSquadID() && request().trim()) &&
-      (mode() === "manual" ? Boolean(title().trim()) : modelAvailable()),
+      Boolean(
+        projectDirectory() &&
+          productPillar() &&
+          selectedExpertSquadCount() > 0 &&
+          request().trim() &&
+          !marketInstallingID() &&
+          !expertSquadLoading() &&
+          !expertSquadError(),
+      ) && (mode() === "manual" ? Boolean(title().trim()) : true),
+  )
+  const prerequisiteMessage = createMemo(() => {
+    if (props.projectDirectories.length === 0) return t("mission_board.create.no_projects")
+    if (!productPillar()) return t("mission_board.create.select_mission_type")
+    if (expertSquadLoading()) return t("mission_board.create.loading_context")
+    if (expertSquadError()) return t("mission_board.create.context_load_failed")
+    if (selectedExpertSquadCount() === 0) return t("mission_board.create.no_compatible_squad")
+    return ""
+  })
+  const titleInvalid = createMemo(() => mode() === "manual" && submitAttempted() && !title().trim())
+  const requestInvalid = createMemo(() => submitAttempted() && !request().trim())
+
+  function ownsSquadRequest(generation: number, sequence: number, directory: string, pillar: ProductPillar): boolean {
+    return (
+      props.open &&
+      generation === dialogGeneration &&
+      sequence === expertSquadRequestSequence &&
+      directory === projectDirectory() &&
+      pillar === productPillar()
+    )
+  }
+
+  async function loadExpertSquadsForContext(directory: string, pillar: ProductPillar): Promise<void> {
+    const generation = dialogGeneration
+    const sequence = ++expertSquadRequestSequence
+    setExpertSquadIDs([])
+    setExpertSquads([])
+    setExpertSquadLoading(true)
+    setExpertSquadError("")
+    try {
+      const [catalog, page] = await Promise.all([
+        loadExpertSquadCatalog({ kind: "project", directory }),
+        searchExpertSquads({ directory, productPillar: pillar, limit: 20 }),
+      ])
+      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      const squads = page.entries
+      const activeID = squads.some((squad) => squad.id === catalog.active.effective)
+        ? catalog.active.effective
+        : (squads[0]?.id ?? "")
+      setExpertSquads(squads)
+      setExpertSquadIDs(activeID ? [activeID] : [])
+    } catch (nextError) {
+      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
+    } finally {
+      if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
+    }
+  }
+
+  async function searchSquads(query: string): Promise<void> {
+    const directory = projectDirectory()
+    const pillar = productPillar()
+    if (!directory || !pillar) return
+    const generation = dialogGeneration
+    const sequence = ++expertSquadRequestSequence
+    setExpertSquadLoading(true)
+    setExpertSquadError("")
+    try {
+      const page = await searchExpertSquads({ directory, productPillar: pillar, query, limit: 20 })
+      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      const squads = mergeSquadOptions(page.entries, expertSquads(), expertSquadIDs())
+      setExpertSquads(squads)
+      if (expertSquadIDs().length === 0 && squads[0]?.id) setExpertSquadIDs([squads[0].id])
+    } catch (nextError) {
+      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
+    } finally {
+      if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
+    }
+  }
+
+  function changeProject(directory: string): void {
+    expertSquadRequestSequence += 1
+    setProjectDirectory(directory)
+    setExpertSquadQuery("")
+    setExpertSquads([])
+    setExpertSquadIDs([])
+    setExpertSquadLoading(false)
+    setExpertSquadError("")
+    setMarketRecommendations([])
+    setMarketLoading(false)
+    setMarketError("")
+    setMarketInstallingID("")
+    setMarketInstalledID("")
+    const pillar = productPillar()
+    if (directory && pillar) void loadExpertSquadsForContext(directory, pillar)
+  }
+
+  function changeMissionType(pillar: ProductPillar): void {
+    setProductPillar(pillar)
+    setExpertSquadQuery("")
+    setError("")
+    const directory = projectDirectory()
+    if (directory) void loadExpertSquadsForContext(directory, pillar)
+  }
+
+  function retryExpertSquads(): void {
+    const directory = projectDirectory()
+    const pillar = productPillar()
+    if (!directory || !pillar || submitting()) return
+    const query = expertSquadQuery()
+    if (query) {
+      void searchSquads(query)
+      return
+    }
+    void loadExpertSquadsForContext(directory, pillar)
+  }
+
+  createEffect(
+    on(
+      () => props.open,
+      (open) => {
+        if (!open) {
+          expertSquadRequestSequence += 1
+          return
+        }
+        dialogGeneration += 1
+        expertSquadRequestSequence += 1
+        const directories = props.projectDirectories
+        const preferredDirectory = directories.includes(props.defaultProjectDirectory)
+          ? props.defaultProjectDirectory
+          : (directories[0] ?? "")
+        setMode("ai")
+        setTitle("")
+        setRequest("")
+        setProjectDirectory(preferredDirectory)
+        setProductPillar("")
+        setExpertSquads([])
+        setExpertSquadIDs([])
+        setExpertSquadQuery("")
+        setExpertSquadLoading(false)
+        setExpertSquadError("")
+        setMarketRecommendations([])
+        setMarketLoading(false)
+        setMarketError("")
+        setMarketInstallingID("")
+        setMarketInstalledID("")
+        setSubmitting(false)
+        setError("")
+        setSubmitAttempted(false)
+        queueMicrotask(() => requestRef?.focus())
+      },
+    ),
   )
 
+  createEffect(
+    on(
+      () => props.projectDirectories,
+      (directories) => {
+        if (!props.open) return
+        const currentDirectory = projectDirectory()
+        if (currentDirectory && directories.includes(currentDirectory)) return
+        const preferredDirectory = directories.includes(props.defaultProjectDirectory)
+          ? props.defaultProjectDirectory
+          : (directories[0] ?? "")
+        changeProject(preferredDirectory)
+      },
+    ),
+  )
+
+  let marketSearchSequence = 0
   createEffect(() => {
-    if (!props.open) return
-    const directories = props.projectDirectories
-    const preferredDirectory = directories.includes(props.defaultProjectDirectory)
-      ? props.defaultProjectDirectory
-      : (directories[0] ?? "")
-    const squadIDs = props.expertSquads.map((squad) => squad.id)
-    const preferredSquad = squadIDs.includes(props.activeExpertSquadID)
-      ? props.activeExpertSquadID
-      : (squadIDs[0] ?? "")
-    setMode("ai")
-    setTitle("")
-    setRequest("")
-    setProjectDirectory(preferredDirectory)
-    setExpertSquadID(preferredSquad)
-    setSubmitting(false)
-    setError("")
-    queueMicrotask(() => requestRef?.focus())
+    const open = props.open
+    const directory = projectDirectory().trim()
+    const query = expertSquadQuery().trim().slice(0, 500)
+    const search = props.onMarketExpertSquadQuery
+    const sequence = ++marketSearchSequence
+    if (!open || !directory || query.length < 2 || !search) {
+      setMarketRecommendations([])
+      setMarketLoading(false)
+      setMarketError("")
+      return
+    }
+    setMarketLoading(true)
+    setMarketRecommendations([])
+    setMarketError("")
+    const timer = window.setTimeout(() => {
+      void search(directory, query)
+        .then((items) => {
+          if (sequence !== marketSearchSequence) return
+          setMarketRecommendations(items)
+        })
+        .catch((nextError) => {
+          if (sequence !== marketSearchSequence) return
+          setMarketRecommendations([])
+          setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+        })
+        .finally(() => {
+          if (sequence === marketSearchSequence) setMarketLoading(false)
+        })
+    }, 280)
+    onCleanup(() => window.clearTimeout(timer))
   })
 
+  let installLifecycleSequence = 0
+  createEffect(() => {
+    const open = props.open
+    projectDirectory()
+    installLifecycleSequence += 1
+    if (!open) {
+      setMarketInstallingID("")
+      setMarketLoading(false)
+    }
+  })
+
+  async function installMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+    const install = props.onInstallMarketExpertSquad
+    const directory = projectDirectory().trim()
+    const loadMarket = props.onMarketExpertSquadQuery
+    if (!install || !loadMarket || !directory || marketInstallingID()) return
+    const lifecycle = ++installLifecycleSequence
+    marketSearchSequence += 1
+    setMarketLoading(false)
+    setMarketInstallingID(item.id)
+    setMarketInstalledID("")
+    setMarketError("")
+    try {
+      await install(directory, item)
+      if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
+      const query = expertSquadQuery().trim().slice(0, 500)
+      const marketSequence = ++marketSearchSequence
+      const [, market] = await Promise.all([
+        searchSquads(query),
+        query.length >= 2 ? loadMarket(directory, query) : Promise.resolve([]),
+      ])
+      if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
+      if (marketSequence === marketSearchSequence) {
+        setMarketRecommendations(market)
+        setMarketLoading(false)
+      }
+      setMarketInstalledID(item.id)
+    } catch (nextError) {
+      if (lifecycle === installLifecycleSequence) {
+        setMarketLoading(false)
+        setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+      }
+    } finally {
+      if (lifecycle === installLifecycleSequence) setMarketInstallingID("")
+    }
+  }
+
+  async function openMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+    if (!props.onOpenMarketExpertSquad) return
+    setMarketError("")
+    try {
+      await props.onOpenMarketExpertSquad(item)
+    } catch (nextError) {
+      setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+    }
+  }
+
   async function submit(): Promise<void> {
-    if (!canSubmit() || submitting()) return
+    const pillar = productPillar()
+    setSubmitAttempted(true)
+    if (!canSubmit() || submitting() || !pillar) {
+      queueMicrotask(() => {
+        if (mode() === "manual" && !title().trim()) {
+          titleRef?.focus()
+          return
+        }
+        if (!request().trim()) requestRef?.focus()
+      })
+      return
+    }
     setSubmitting(true)
     setError("")
     const common = {
       directory: projectDirectory(),
       request: request().trim(),
-      productPillar: props.productPillar,
-      expertSquadIDs: [expertSquadID()],
+      productPillar: pillar,
+      expertSquadIDs: [...expertSquadIDs()],
     }
     try {
       if (mode() === "manual") {
@@ -128,6 +429,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       id="missionCreateDialog"
       open={props.open}
       class="mission-create-dialog"
+      wide
       backdropClose={!submitting()}
       title={
         <span class="mission-create-dialog__breadcrumb">
@@ -159,7 +461,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             size="md"
             tone="accent"
             data-ui="mission-create-submit"
-            disabled={!canSubmit() || submitting()}
+            disabled={Boolean(prerequisiteMessage()) || submitting()}
+            title={prerequisiteMessage() || undefined}
           >
             <Show when={submitting()}>
               <Icon name="loading" size="compact" />
@@ -188,14 +491,19 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           options={modeOptions()}
           ariaLabel={t("mission_board.create.mode")}
           onChange={(nextMode) => {
+            if (submitting()) return
             setMode(nextMode)
             setError("")
-            queueMicrotask(() => (nextMode === "manual" ? titleRef?.focus() : requestRef?.focus()))
+            setSubmitAttempted(false)
           }}
         />
 
         <Show when={mode() === "manual"}>
-          <TextField.Root as="label" class="mission-create-form__title">
+          <TextField.Root
+            as="label"
+            class="mission-create-form__title"
+            invalid={titleInvalid()}
+          >
             <TextField.Label>{t("mission_board.create.title")}</TextField.Label>
             <TextField.Input
               ref={(element) => {
@@ -203,14 +511,20 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               }}
               value={title()}
               maxlength={200}
+              disabled={submitting()}
+              required
+              aria-required="true"
               placeholder={t("mission_board.create.title_placeholder")}
               data-ui="mission-create-title"
               onInput={(event) => setTitle(event.currentTarget.value)}
             />
+            <Show when={titleInvalid()}>
+              <TextField.ErrorMessage>{t("mission_board.create.enter_title")}</TextField.ErrorMessage>
+            </Show>
           </TextField.Root>
         </Show>
 
-        <TextField.Root as="label" class="mission-create-form__request">
+        <TextField.Root as="label" class="mission-create-form__request" invalid={requestInvalid()}>
           <TextField.Label>
             {mode() === "manual" ? t("mission_board.create.description") : t("mission_board.create.ai_prompt")}
           </TextField.Label>
@@ -218,9 +532,12 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             ref={(element) => {
               requestRef = element
             }}
-            rows={8}
-            maxLines={18}
+            rows={7}
+            maxLines={16}
             maxlength={32_000}
+            disabled={submitting()}
+            required
+            aria-required="true"
             value={request()}
             placeholder={
               mode() === "manual"
@@ -230,66 +547,222 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             data-ui="mission-create-request"
             onInput={(event) => setRequest(event.currentTarget.value)}
           />
+          <Show when={requestInvalid()}>
+            <TextField.ErrorMessage>{t("mission_board.create.enter_request")}</TextField.ErrorMessage>
+          </Show>
         </TextField.Root>
 
-        <Show when={mode() === "ai"}>
-          <TextField.Root class="mission-create-form__model">
-            <TextField.Label>{t("model_selector.group")}</TextField.Label>
-            <ComposerModelSelector onModelAvailabilityChange={setModelAvailable} />
+        <fieldset class="mission-create-form__context" disabled={submitting()}>
+          <legend>{t("mission_board.create.execution_context")}</legend>
+          <div class="mission-create-form__context-grid">
+            <TextField.Root>
+              <TextField.Label>{t("mission_board.create.project")}</TextField.Label>
+              <SelectControl<SelectOption>
+                options={projectOptions()}
+                value={selectedProject()}
+                onChange={(option) => changeProject(option?.value ?? "")}
+                optionValue="value"
+                optionTextValue="label"
+                disallowEmptySelection
+                sameWidth
+                ariaLabel={t("mission_board.create.project")}
+                triggerDataUI="mission-create-project"
+                renderValue={(option) => option?.label ?? t("mission_board.create.project_placeholder")}
+                renderOptionLabel={(option) => (
+                  <span class="mission-create-form__option">
+                    <strong>{option.label}</strong>
+                    <small>{option.description}</small>
+                  </span>
+                )}
+              />
+            </TextField.Root>
+            <TextField.Root class="mission-create-form__mission-type">
+              <TextField.Label>{t("mission_board.create.mission_type")}</TextField.Label>
+              <SegmentedControl<MissionTypeSelection>
+                value={productPillar()}
+                options={missionTypeOptions()}
+                ariaLabel={t("mission_board.create.mission_type")}
+                onChange={(value) => {
+                  if (value) changeMissionType(value)
+                }}
+              />
+            </TextField.Root>
+          </div>
+          <TextField.Root class="mission-create-form__expert-squad">
+            <TextField.Label>
+              {t("mission_board.create.expert_squad")}
+              <Show when={expertSquadLoading()}>
+                <Icon name="loading" size="compact" />
+              </Show>
+            </TextField.Label>
+            <SearchField
+              value={expertSquadQuery()}
+              disabled={!projectDirectory() || !productPillar()}
+              onValueChange={(value) => {
+                setExpertSquadQuery(value)
+                void searchSquads(value)
+              }}
+              onClear={() => undefined}
+              placeholder={t("chat.references.search_placeholder")}
+              size="sm"
+            />
+            <div
+              class="mission-create-form__expert-squad-list"
+              role="group"
+              aria-label={t("mission_board.create.expert_squad")}
+              data-ui="mission-create-expert-squads"
+            >
+              <For each={expertSquadOptions()}>
+                {(option) => (
+                  <Show
+                    when={option.action !== "install-more"}
+                    fallback={
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="accent"
+                        data-ui="mission-create-install-more-squads"
+                        disabled={submitting() || expertSquadLoading()}
+                        onClick={() => {
+                          props.onClose()
+                          props.onInstallMoreExpertSquads?.(projectDirectory())
+                        }}
+                      >
+                        <Icon name="config-expert-squad-install" size="compact" />
+                        {option.label}
+                      </Button>
+                    }
+                  >
+                    <Checkbox
+                      checked={expertSquadIDs().includes(option.value)}
+                      disabled={submitting() || expertSquadLoading()}
+                      onChange={(checked) => {
+                        setExpertSquadIDs((current) =>
+                          checked
+                            ? current.includes(option.value)
+                              ? current
+                              : [...current, option.value]
+                            : current.filter((id) => id !== option.value),
+                        )
+                      }}
+                    >
+                      <span class="mission-create-form__option">
+                        <strong>{option.label}</strong>
+                        <Show when={option.description}>
+                          <small>{option.description}</small>
+                        </Show>
+                      </span>
+                    </Checkbox>
+                  </Show>
+                )}
+              </For>
+            </div>
           </TextField.Root>
+          <Show
+            when={expertSquadError()}
+            fallback={
+              <Show when={prerequisiteMessage()}>
+                <p class="mission-create-form__context-status" role="status">
+                  {prerequisiteMessage()}
+                </p>
+              </Show>
+            }
+          >
+            <div
+              id="missionCreateExpertSquadError"
+              class="mission-create-form__context-error"
+              role="alert"
+              tabIndex={-1}
+            >
+              <span>
+                <strong>{t("mission_board.create.context_load_failed")}</strong>
+                <small>{expertSquadError()}</small>
+              </span>
+              <Button type="button" variant="outline" size="sm" tone="neutral" onClick={retryExpertSquads}>
+                {t("common.retry")}
+              </Button>
+            </div>
+          </Show>
+          <p class="mission-create-form__model-note">{t("mission_board.create.project_model_note")}</p>
+        </fieldset>
+
+        <Show when={marketLoading()}>
+          <div class="mission-create-form__market-state" role="status" aria-live="polite">
+            <Icon name="loading" size="compact" />
+            <span>{t("mission_board.create.market_searching")}</span>
+          </div>
+        </Show>
+        <Show when={marketRecommendations().length > 0}>
+          <section class="mission-create-form__market" aria-labelledby="missionCreateMarketTitle">
+            <header>
+              <div>
+                <strong id="missionCreateMarketTitle">{t("mission_board.create.market_title")}</strong>
+                <small>{t("mission_board.create.market_intro")}</small>
+              </div>
+              <Icon name="config-skill-market" size="medium" />
+            </header>
+            <div class="mission-create-form__market-list">
+              <For each={marketRecommendations()}>
+                {(item) => (
+                  <article class="mission-create-form__market-item" data-market-id={item.id}>
+                    <div class="mission-create-form__market-copy">
+                      <strong>{item.name || item.label}</strong>
+                      <small>
+                        {item.namespace}/{item.id} · {item.version}
+                      </small>
+                      <p>{item.description || item.label}</p>
+                    </div>
+                    <div class="mission-create-form__market-actions">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="neutral"
+                        disabled={!props.canOpenMarketWebPage || Boolean(marketInstallingID())}
+                        onClick={() => void openMarketExpertSquad(item)}
+                      >
+                        <Icon name="web-search" size="compact" />
+                        {t("mission_board.create.market_open")}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        tone="accent"
+                        disabled={submitting() || Boolean(marketInstallingID())}
+                        onClick={() => void installMarketExpertSquad(item)}
+                      >
+                        <Icon
+                          name={marketInstallingID() === item.id ? "loading" : "config-expert-squad-install"}
+                          size="compact"
+                        />
+                        {marketInstallingID() === item.id
+                          ? t("expert_squad.installing")
+                          : t("mission_board.create.market_install")}
+                      </Button>
+                    </div>
+                  </article>
+                )}
+              </For>
+            </div>
+          </section>
+        </Show>
+        <Show when={marketInstalledID()}>
+          <div class="mission-create-form__market-state is-success" role="status" aria-live="polite">
+            <Icon name="status-completed" size="compact" />
+            <span>{t("mission_board.create.market_installed", { id: marketInstalledID() })}</span>
+          </div>
         </Show>
 
-        <div class="mission-create-form__assignments">
-          <TextField.Root>
-            <TextField.Label>{t("mission_board.create.project")}</TextField.Label>
-            <SelectControl<SelectOption>
-              options={projectOptions()}
-              value={selectedProject()}
-              onChange={(option) => setProjectDirectory(option?.value ?? "")}
-              optionValue="value"
-              optionTextValue="label"
-              disallowEmptySelection
-              sameWidth
-              ariaLabel={t("mission_board.create.project")}
-              triggerDataUI="mission-create-project"
-              renderValue={(option) => option?.label ?? t("mission_board.create.project_placeholder")}
-              renderOptionLabel={(option) => (
-                <span class="mission-create-form__option">
-                  <strong>{option.label}</strong>
-                  <small>{option.description}</small>
-                </span>
-              )}
-            />
-          </TextField.Root>
-          <TextField.Root>
-            <TextField.Label>{t("mission_board.create.expert_squad")}</TextField.Label>
-            <SelectControl<SelectOption>
-              options={expertSquadOptions()}
-              value={selectedExpertSquad()}
-              onChange={(option) => setExpertSquadID(option?.value ?? "")}
-              optionValue="value"
-              optionTextValue="label"
-              disallowEmptySelection
-              sameWidth
-              ariaLabel={t("mission_board.create.expert_squad")}
-              triggerDataUI="mission-create-expert-squad"
-              renderValue={(option) => option?.label ?? t("mission_board.create.expert_squad_placeholder")}
-              renderOptionLabel={(option) => (
-                <span class="mission-create-form__option">
-                  <strong>{option.label}</strong>
-                  <Show when={option.description}>
-                    <small>{option.description}</small>
-                  </Show>
-                </span>
-              )}
-            />
-          </TextField.Root>
-        </div>
-
-        <Show when={error()}>
-          <div class="mission-create-form__error" role="alert">
+        <Show when={error() || marketError()}>
+          <div
+            class="mission-create-form__error"
+            role="alert"
+            tabIndex={-1}
+          >
             <Icon name="error-reason" size="compact" />
-            <span>{error()}</span>
+            <span>{error() || marketError()}</span>
           </div>
         </Show>
       </form>

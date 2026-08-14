@@ -48,8 +48,6 @@ export interface EngineArtifactWhereUpdateInput {
   timeUpdated?: number
 }
 
-let artifactWriteSavepointSequence = 0
-
 function exactArtifactLabel(label: string): string {
   if (label.length === 0 || label.length > ArtifactSchemaLimits.storedLabelLength) {
     throw new Error(
@@ -64,21 +62,12 @@ function exactArtifactLabel(label: string): string {
  * multi-statement Artifact writer atomic both when called with the base
  * database and when composed inside a larger caller-owned transaction.
  */
-function artifactWriteTransaction<T>(db: Database.TxOrDb, callback: () => T): T {
-  const savepoint = `engine_artifact_write_${process.pid}_${++artifactWriteSavepointSequence}`
-  db.run(sql.raw(`SAVEPOINT "${savepoint}"`))
-  try {
-    const result = callback()
-    db.run(sql.raw(`RELEASE SAVEPOINT "${savepoint}"`))
-    return result
-  } catch (cause) {
-    try {
-      db.run(sql.raw(`ROLLBACK TO SAVEPOINT "${savepoint}"`))
-    } finally {
-      db.run(sql.raw(`RELEASE SAVEPOINT "${savepoint}"`))
-    }
-    throw cause
-  }
+function artifactWriteTransaction<T>(
+  db: Database.TxOrDb,
+  callback: () => T,
+  ...synchronousOnly: T extends PromiseLike<unknown> ? [never] : []
+): T {
+  return Database.savepoint<T>(db, callback, ...synchronousOnly)
 }
 
 function allocateCatalogRevision(db: Database.TxOrDb): number {

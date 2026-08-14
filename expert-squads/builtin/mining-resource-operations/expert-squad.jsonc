@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "mining-resource-operations",
+  "name": "Mining Resource Operations",
+  "label": "Mining Resource Operations",
+  "description": "Geological, mine-reconciliation, metallurgical, water-tailings, fleet-maintenance and critical-control evidence joined into a qualified-review pack.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded mining evidence and operating-reconciliation preparation.",
+    "selection_guidance": "Select for geological QA/QC, resource assumptions, plan and grade-control reconciliation, metallurgical accounting, water-tailings dependencies, fleet-maintenance exposure, and critical-control verification without Resource/Reserve signing, disclosure, operational approval, dispatch, safety clearance, compliance, or investment authority.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "mining-resource-operations/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "mineral-data-resource-evidence-analyst": {
+        "label": "Mineral Data and Resource Evidence Analyst",
+        "description": "Tests sampling, assay QA/QC, survey, density, domaining, model and resource-assumption evidence.",
+        "base_role": "explore",
+        "prompt": "agents/mineral-data-resource-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mining-resource-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "mine-planning-grade-control-reconciliation-analyst": {
+        "label": "Mine Planning, Grade Control and Reconciliation Analyst",
+        "description": "Reconciles plan, grade-control, survey, mining, stockpile and plant-feed records on compatible bases.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/mine-planning-grade-control-reconciliation-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mining-resource-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "processing-metallurgy-water-tailings-analyst": {
+        "label": "Processing, Metallurgy, Water and Tailings Analyst",
+        "description": "Checks metallurgical accounting boundaries, recovery, inventories, water balance and tailings dependencies.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/processing-metallurgy-water-tailings-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mining-resource-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "fleet-maintenance-critical-control-analyst": {
+        "label": "Fleet, Maintenance and Critical Control Analyst",
+        "description": "Separates fleet availability and utilization while tracing maintenance exposure and critical-control verification.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/fleet-maintenance-critical-control-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mining-resource-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "mining-integrated-operations-owner": {
+        "label": "Mining Integrated Operations Owner",
+        "description": "Joins four evidence branches into a versioned pack for qualified multidisciplinary review.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/mining-integrated-operations-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "mining-resource-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "mining-integrated-operations-pack": {
+        "label": "Mining Integrated Operations Pack",
+        "description": "Four independent evidence branches converge into one qualified-review pack.",
+        "nodes": {
+          "mineral-data-resource-evidence-analyst": {
+            "agent_id": "mineral-data-resource-evidence-analyst",
+            "description": "Tests geological data, QA/QC and resource assumptions.",
+            "depends_on": []
+          },
+          "mine-planning-grade-control-reconciliation-analyst": {
+            "agent_id": "mine-planning-grade-control-reconciliation-analyst",
+            "description": "Reconciles plan, grade control, stockpiles and feed.",
+            "depends_on": []
+          },
+          "processing-metallurgy-water-tailings-analyst": {
+            "agent_id": "processing-metallurgy-water-tailings-analyst",
+            "description": "Tests accounting, recovery, water and tailings dependencies.",
+            "depends_on": []
+          },
+          "fleet-maintenance-critical-control-analyst": {
+            "agent_id": "fleet-maintenance-critical-control-analyst",
+            "description": "Tests fleet, maintenance and critical-control evidence.",
+            "depends_on": []
+          },
+          "mining-integrated-operations-owner": {
+            "agent_id": "mining-integrated-operations-owner",
+            "description": "Joins all branches without hiding incompatible bases or unresolved risk.",
+            "depends_on": [
+              "fleet-maintenance-critical-control-analyst",
+              "mine-planning-grade-control-reconciliation-analyst",
+              "mineral-data-resource-evidence-analyst",
+              "processing-metallurgy-water-tailings-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

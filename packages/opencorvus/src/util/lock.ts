@@ -9,7 +9,9 @@ export async function withKeyedLock<T>(
   key: string,
   fn: () => Promise<T>,
   timeoutMs = DEFAULT_KEYED_LOCK_TIMEOUT_MS,
+  signal?: AbortSignal,
 ): Promise<T> {
+  signal?.throwIfAborted()
   const deadline = Date.now() + timeoutMs
   while (locks.has(key)) {
     const remaining = deadline - Date.now()
@@ -18,17 +20,29 @@ export async function withKeyedLock<T>(
     }
     let timeout: ReturnType<typeof setTimeout> | undefined
     try {
-      await Promise.race([
+      const wait = Promise.race([
         locks.get(key)!.catch(() => undefined),
         new Promise<void>((resolve) => {
           timeout = setTimeout(resolve, remaining)
           timeout.unref?.()
         }),
       ])
+      if (signal) {
+        signal.throwIfAborted()
+        let abort!: () => void
+        await new Promise<void>((resolve, reject) => {
+          abort = () => reject(signal.reason)
+          signal.addEventListener("abort", abort, { once: true })
+          wait.then(() => resolve(), reject)
+        }).finally(() => signal.removeEventListener("abort", abort))
+      } else {
+        await wait
+      }
     } finally {
       if (timeout) clearTimeout(timeout)
     }
   }
+  signal?.throwIfAborted()
   const promise = fn()
   locks.set(key, promise)
   try {

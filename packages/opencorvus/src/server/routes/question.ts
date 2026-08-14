@@ -61,6 +61,11 @@ export const QuestionRoutes = lazy(() =>
         await Question.reply({
           requestID: params.requestID,
           answers: json.answers,
+          userInput: {
+            surface: "http.question",
+            text: JSON.stringify(json.answers),
+            structured: { answers: json.answers },
+          },
         })
         return c.json(true)
       },
@@ -91,7 +96,7 @@ export const QuestionRoutes = lazy(() =>
       ),
       async (c) => {
         const params = c.req.valid("param")
-        await Question.reject(params.requestID)
+        await Question.reject(params.requestID, { surface: "http.question", text: "Question rejected" })
         return c.json(true)
       },
     ),

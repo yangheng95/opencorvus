@@ -152,6 +152,11 @@ button.s-row {
   cursor: pointer;
 }
 
+button.s-row:disabled {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
 button.s-row:focus-visible {
   outline: var(--oc-border-width) solid var(--accent);
   outline-offset: calc(1px * var(--ui-scale));
@@ -164,8 +169,8 @@ button.s-row:focus-visible {
 /* Hover wash is opt-in via `data-interactive="true"` so static info rows
  * (e.g. About panel runtime grid lines) do not pick up a hover glow on
  * an inert region. */
-.s-row[data-interactive="true"]:hover,
-.s-row[data-interactive="true"]:focus-within {
+.s-row[data-interactive="true"]:not(:disabled):hover,
+.s-row[data-interactive="true"]:not(:disabled):focus-within {
   background: var(--ui-list-hover-bg);
 }
 
@@ -224,6 +229,17 @@ button.s-row:focus-visible {
   flex-shrink: 0;
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+/* Permission copy can contain long canonical paths and commands. Keep the
+   mode selector visible and let the explanatory column wrap before it can
+   push actions outside the settings viewport. */
+.permissions-settings-group .s-row {
+  flex-wrap: wrap;
+}
+
+.permissions-settings-group .s-row-actions {
+  margin-inline-start: auto;
 }
 
 /* Toolbar — search + filter strip above a list. */
@@ -1065,10 +1081,10 @@ button.s-row:focus-visible {
 .log-copy-feedback {
   flex: 0 0 auto;
   padding: calc(7px * var(--ui-scale)) calc(10px * var(--ui-scale));
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--ok) 42%, transparent);
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--good) 42%, transparent);
   border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--ok) 9%, var(--surface));
-  color: var(--ok);
+  background: color-mix(in srgb, var(--good) 9%, var(--surface));
+  color: var(--good);
   font-size: var(--ui-font-control);
   line-height: 1.35;
 }
@@ -1208,7 +1224,7 @@ button.s-row:focus-visible {
 }
 
 #configDialog .dialog-form {
-  --settings-content-width: calc(880px * var(--ui-scale));
+  --settings-content-width: 100%;
   --settings-content-inset: calc(16px * var(--ui-scale));
   --settings-font-nav: var(--ui-font-control);
   --settings-font-body: var(--ui-font-body);
@@ -1418,6 +1434,8 @@ button.s-row:focus-visible {
   border-top-left-radius: var(--oc-radius-large);
   border-left: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 76%, transparent);
   background: var(--surface);
+  container-name: settings-content;
+  container-type: inline-size;
 }
 
 .config-content::before {
@@ -1605,8 +1623,8 @@ button.s-row:focus-visible {
   box-shadow: inset 0 calc(1px * var(--ui-scale)) 0 0 color-mix(in srgb, var(--divider-soft) 76%, transparent);
 }
 
-#configDialog .s-row[data-interactive="true"]:hover,
-#configDialog .s-row[data-interactive="true"]:focus-within {
+#configDialog .s-row[data-interactive="true"]:not(:disabled):hover,
+#configDialog .s-row[data-interactive="true"]:not(:disabled):focus-within {
   background: color-mix(in srgb, var(--surface-hover) 64%, transparent);
 }
 
@@ -1728,37 +1746,6 @@ button.s-row:focus-visible {
   flex-wrap: wrap;
 }
 
-.about-link {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(6px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(14px * var(--ui-scale));
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
-  background: var(--settings-surface-base);
-  color: var(--text-soft);
-  font-size: var(--ui-font-control);
-  text-decoration: none;
-  transition:
-    background var(--ui-duration-base),
-    border-color var(--ui-duration-base),
-    color var(--ui-duration-base);
-}
-
-.about-link:hover {
-  background: var(--settings-surface-muted);
-  border-color: var(--border-hover);
-  color: var(--text-strong);
-}
-
-.about-link:focus-visible {
-  background: var(--settings-surface-muted);
-  border-color: var(--border-hover);
-  color: var(--text-strong);
-  outline: var(--oc-border-width) solid var(--accent);
-  outline-offset: calc(2px * var(--ui-scale));
-}
-
 .about-shortcut-grid {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1851,13 +1838,188 @@ button.s-row:focus-visible {
   line-height: 1.4;
 }
 
-.expert-squad-layout,
-.expert-squad-market-browser {
+.expert-squad-layout {
   display: grid;
-  grid-template-columns: minmax(calc(260px * var(--ui-scale)), 0.8fr) minmax(0, 1.45fr);
+  grid-template-columns: minmax(calc(300px * var(--ui-scale)), 0.72fr) minmax(0, 1.7fr);
   gap: calc(20px * var(--ui-scale));
   align-items: start;
   min-width: 0;
+}
+
+.expert-squad-market-entry-panel {
+  max-width: none;
+}
+
+.expert-squad-market-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(20px * var(--ui-scale));
+  padding: calc(24px * var(--ui-scale));
+  background: color-mix(in srgb, var(--accent) 5%, var(--settings-surface-base));
+}
+
+.expert-squad-market-entry-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(52px * var(--ui-scale));
+  height: calc(52px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--accent) 12%, var(--settings-surface-muted));
+  color: var(--accent);
+}
+
+.expert-squad-market-entry-copy {
+  min-width: 0;
+  display: grid;
+  gap: calc(5px * var(--ui-scale));
+}
+
+.expert-squad-market-entry-copy h2,
+.expert-squad-market-entry-copy p {
+  margin: 0;
+}
+
+.expert-squad-market-entry-copy h2 {
+  color: var(--text-strong);
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-market-entry-copy p {
+  max-width: calc(760px * var(--ui-scale));
+  color: var(--text-soft);
+  font-size: var(--ui-font-body);
+  line-height: 1.5;
+}
+
+.expert-squad-market-facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(6px * var(--ui-scale));
+  margin-top: calc(5px * var(--ui-scale));
+}
+
+.expert-squad-market-facts > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: calc(4px * var(--ui-scale));
+  min-height: calc(25px * var(--ui-scale));
+  padding: calc(3px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--accent) 5%, var(--settings-surface-muted));
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.4;
+}
+
+.expert-squad-market-facts strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-variant-numeric: tabular-nums;
+}
+
+.expert-squad-market-entry-actions {
+  display: grid;
+  justify-items: stretch;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.expert-squad-market-entry-actions .oc-button {
+  justify-content: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.expert-squad-local-install {
+  overflow: hidden;
+}
+
+.expert-squad-local-install-head {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: calc(16px * var(--ui-scale));
+  padding: calc(16px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  background: color-mix(in srgb, var(--accent) 3%, var(--settings-surface-muted));
+}
+
+.expert-squad-local-install-head > div {
+  min-width: 0;
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+}
+
+.expert-squad-local-install-head span {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-local-install-head small {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.4;
+}
+
+.expert-squad-local-install-scope {
+  min-width: calc(170px * var(--ui-scale));
+}
+
+.expert-squad-local-install-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.expert-squad-local-install-option {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(12px * var(--ui-scale));
+  padding: calc(18px * var(--ui-scale));
+}
+
+.expert-squad-local-install-option + .expert-squad-local-install-option {
+  border-left: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.expert-squad-local-install-option > div {
+  min-width: 0;
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+}
+
+.expert-squad-local-install-option strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-local-install-option > div > span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.4;
+}
+
+.expert-squad-local-install-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+  background: var(--settings-surface-muted);
+  color: var(--text-soft);
+}
+
+.expert-squad-file-input {
+  display: none;
 }
 
 .expert-squad-layout > .expert-squad-catalog-toolbar,
@@ -1899,65 +2061,6 @@ button.s-row:focus-visible {
   font-weight: var(--ui-font-weight-medium);
 }
 
-.expert-squad-market-search {
-  flex: 0 0 calc(280px * var(--ui-scale));
-  width: calc(280px * var(--ui-scale));
-  background: var(--settings-surface-base);
-}
-
-.expert-squad-install-intro {
-  display: grid;
-  gap: calc(14px * var(--ui-scale));
-  margin-bottom: calc(20px * var(--ui-scale));
-}
-
-.expert-squad-install-intro > div:first-child {
-  display: grid;
-  gap: calc(4px * var(--ui-scale));
-}
-
-.expert-squad-install-intro h2 {
-  margin: 0;
-  color: var(--text-strong);
-  font-size: var(--ui-font-title);
-  font-weight: var(--ui-font-weight-medium);
-  line-height: 1.35;
-}
-
-.expert-squad-install-intro p {
-  margin: 0;
-  max-width: calc(700px * var(--ui-scale));
-  color: var(--text-soft);
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-body);
-  line-height: 1.55;
-}
-
-.expert-squad-install-context {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(10px * var(--ui-scale)) 0;
-  border-block: var(--oc-border-width) solid var(--divider-soft);
-}
-
-.expert-squad-install-scope {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--text-strong);
-  font-size: var(--ui-font-meta);
-  font-weight: var(--ui-font-weight-medium);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.expert-squad-market {
-  min-width: 0;
-}
-
-.expert-squad-market-list,
 .expert-squad-list {
   grid-column: 1;
   min-width: 0;
@@ -1972,12 +2075,6 @@ button.s-row:focus-visible {
   border-radius: 0;
 }
 
-#configDialog .expert-squad-market-row.s-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: stretch;
-}
-
 #configDialog .expert-squad-master-row.s-row[data-selected="true"] {
   background: color-mix(in srgb, var(--accent) 8%, var(--settings-surface-base));
   box-shadow:
@@ -1989,32 +2086,6 @@ button.s-row:focus-visible {
   background: var(--ui-list-hover-bg);
 }
 
-.expert-squad-master-select.oc-button {
-  min-width: 0;
-  min-height: calc(78px * var(--ui-scale));
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale));
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
-  text-align: left;
-  white-space: normal;
-}
-
-.expert-squad-master-select.oc-button:hover {
-  background: transparent;
-}
-
-.expert-squad-master-select.oc-button:focus-visible {
-  outline: calc(2px * var(--ui-scale)) solid var(--accent-ring);
-  outline-offset: calc(-2px * var(--ui-scale));
-}
-
-.expert-squad-master-icon,
 .expert-squad-identity-icon {
   display: inline-flex;
   align-items: center;
@@ -2025,44 +2096,6 @@ button.s-row:focus-visible {
   color: color-mix(in srgb, var(--accent) 70%, var(--text-soft));
 }
 
-.expert-squad-master-icon {
-  width: calc(34px * var(--ui-scale));
-  height: calc(34px * var(--ui-scale));
-}
-
-.expert-squad-master-copy {
-  min-width: 0;
-  display: grid;
-  gap: calc(3px * var(--ui-scale));
-}
-
-.expert-squad-master-copy > .expert-squad-type-title,
-.expert-squad-master-copy > .expert-squad-type-body {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.expert-squad-master-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: calc(6px * var(--ui-scale));
-  padding: 0 calc(14px * var(--ui-scale)) calc(14px * var(--ui-scale)) calc(58px * var(--ui-scale));
-}
-
-.expert-squad-market-card-action.oc-button {
-  justify-content: center;
-  min-width: calc(82px * var(--ui-scale));
-}
-
-.expert-squad-market-install-menu {
-  min-width: calc(190px * var(--ui-scale));
-}
-
-.expert-squad-market-install-menu-item,
 .expert-squad-package-menu > .oc-menu-item {
   grid-template-columns: auto minmax(0, 1fr);
 }
@@ -2085,7 +2118,6 @@ button.s-row:focus-visible {
   font-weight: var(--ui-font-weight-medium);
 }
 
-.expert-squad-market-detail,
 .expert-squad-detail {
   grid-column: 2;
   min-width: 0;
@@ -2150,7 +2182,6 @@ button.s-row:focus-visible {
 }
 
 .expert-squad-identity-meta code,
-.expert-squad-market-agents code,
 .expert-squad-overview-list code,
 .expert-squad-source-grid code,
 .expert-squad-section-head code,
@@ -2171,76 +2202,12 @@ button.s-row:focus-visible {
   display: none;
 }
 
-.expert-squad-capability-summary {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: calc(5px * var(--ui-scale)) calc(10px * var(--ui-scale));
-  color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  font-weight: var(--ui-font-weight-body);
-}
-
-.expert-squad-capability-summary span + span::before {
-  content: "·";
-  margin-right: calc(10px * var(--ui-scale));
-  color: var(--divider-strong);
-}
-
-.expert-squad-market-installations {
-  display: grid;
-  border-block: var(--oc-border-width) solid var(--divider-soft);
-}
-
-.expert-squad-market-installation-row {
-  min-width: 0;
-  display: grid;
-  align-items: start;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(12px * var(--ui-scale)) 0;
-}
-
-.expert-squad-market-installation-row + .expert-squad-market-installation-row {
-  border-top: var(--oc-border-width) solid var(--divider-soft);
-}
-
-.expert-squad-market-installation-row > .oc-badge {
-  justify-self: start;
-}
-
-.expert-squad-market-installation-actions,
 .expert-squad-selection-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: calc(6px * var(--ui-scale));
-}
-
-.expert-squad-market-installation-actions {
-  justify-content: flex-start;
-}
-
-.expert-squad-market-agents {
-  max-height: calc(420px * var(--ui-scale));
-  overflow-y: auto;
-}
-
-#configDialog .expert-squad-market-agents .s-row {
-  min-height: calc(64px * var(--ui-scale));
-  padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale));
-}
-
-#configDialog .expert-squad-market-agents .s-row-leading {
-  width: calc(30px * var(--ui-scale));
-  height: calc(30px * var(--ui-scale));
-  border-radius: var(--oc-radius-pill);
-  background: var(--settings-surface-muted);
-}
-
-#configDialog .expert-squad-market-agents .s-row-title {
-  font-size: var(--ui-font-control);
-  font-weight: var(--ui-font-weight-medium);
 }
 
 .expert-squad-package-menu-trigger.oc-button {
@@ -2420,7 +2387,7 @@ button.s-row:focus-visible {
   min-width: 0;
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 68%, transparent);
   border-radius: var(--oc-radius-soft);
-  background: var(--surface-primary);
+  background: var(--surface);
 }
 
 .expert-squad-evolution-record.is-selected {
@@ -2433,21 +2400,7 @@ button.s-row:focus-visible {
   display: grid;
   gap: calc(7px * var(--ui-scale));
   padding: calc(11px * var(--ui-scale));
-  border: 0;
   border-radius: inherit;
-  background: transparent;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.expert-squad-evolution-record-select:hover {
-  background: color-mix(in srgb, var(--accent) 4%, transparent);
-}
-
-.expert-squad-evolution-record-select:focus-visible {
-  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 60%, transparent);
-  outline-offset: calc(-2px * var(--ui-scale));
 }
 
 .expert-squad-evolution-record-title strong {
@@ -2520,7 +2473,7 @@ button.s-row:focus-visible {
   gap: calc(4px * var(--ui-scale));
   min-width: 0;
   padding: calc(9px * var(--ui-scale));
-  border-radius: var(--oc-radius-compact);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
 }
 
@@ -2534,7 +2487,7 @@ button.s-row:focus-visible {
   min-width: 0;
   padding: calc(9px * var(--ui-scale));
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 34%, var(--border));
-  border-radius: var(--oc-radius-compact);
+  border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--bad) 5%, var(--surface-inset));
 }
 
@@ -2559,7 +2512,7 @@ button.s-row:focus-visible {
   gap: calc(5px * var(--ui-scale)) calc(8px * var(--ui-scale));
   align-items: center;
   padding: calc(9px * var(--ui-scale));
-  border-radius: var(--oc-radius-compact);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
 }
 
@@ -2887,44 +2840,6 @@ button.s-row:focus-visible {
   color: var(--text-soft);
 }
 
-.expert-squad-local-install {
-  margin-top: calc(22px * var(--ui-scale));
-}
-
-.expert-squad-local-install > .expert-squad-install-options {
-  margin-bottom: calc(6px * var(--ui-scale));
-}
-
-.expert-squad-install-options {
-  overflow: hidden;
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 68%, transparent);
-  border-radius: var(--oc-radius-large);
-  background: var(--settings-surface-base);
-}
-
-#configDialog .expert-squad-install-option.s-row {
-  min-height: calc(72px * var(--ui-scale));
-  padding: calc(14px * var(--ui-scale)) calc(16px * var(--ui-scale));
-}
-
-.expert-squad-install-option .s-row-leading {
-  width: calc(34px * var(--ui-scale));
-  height: calc(34px * var(--ui-scale));
-  border-radius: var(--oc-radius-soft);
-  background: var(--settings-surface-muted);
-  color: var(--text-soft);
-}
-
-.expert-squad-replace-toggle {
-  color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  white-space: nowrap;
-}
-
-.expert-squad-file-input {
-  display: none;
-}
-
 .expert-squad-recovery {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -2973,6 +2888,11 @@ button.s-row:focus-visible {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   line-height: 1.5;
+}
+
+.conversation-capability-scope-path,
+.conversation-capability-scope-notice {
+  overflow-wrap: anywhere;
 }
 
 .conversation-capability-sections {
@@ -3526,4 +3446,110 @@ button.s-row:focus-visible {
 
 .log-source[data-source="pipeline"] {
   color: color-mix(in srgb, var(--accent) 60%, var(--bad));
+}
+.expert-squad-hosted-handoff {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: calc(14px * var(--ui-scale));
+  align-items: start;
+  margin-bottom: calc(20px * var(--ui-scale));
+  padding: calc(18px * var(--ui-scale));
+  border-inline-start: calc(4px * var(--ui-scale)) solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--settings-surface-base));
+}
+
+.expert-squad-hosted-handoff-copy {
+  min-width: 0;
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.expert-squad-hosted-handoff-copy h2,
+.expert-squad-hosted-handoff-copy p {
+  margin: 0;
+}
+
+.expert-squad-hosted-handoff-copy h2 {
+  color: var(--text-strong);
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-hosted-handoff-copy p,
+.expert-squad-hosted-handoff-copy code {
+  color: var(--text-soft);
+  font-size: var(--ui-font-meta);
+}
+
+.expert-squad-hosted-handoff-copy code {
+  overflow-wrap: anywhere;
+}
+
+.expert-squad-hosted-handoff-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: calc(8px * var(--ui-scale));
+}
+
+@container settings-content (max-width: 1050px) {
+  .expert-squad-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-layout > .expert-squad-list,
+  .expert-squad-layout > .expert-squad-detail {
+    grid-column: 1;
+  }
+
+  .expert-squad-market-entry {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .expert-squad-market-entry-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-self: stretch;
+  }
+
+  .expert-squad-local-install-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-local-install-option + .expert-squad-local-install-option {
+    border-top: var(--oc-border-width) solid var(--divider-soft);
+    border-left: 0;
+  }
+}
+
+@container settings-content (max-width: 700px) {
+  .expert-squad-market-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-market-entry-icon {
+    display: none;
+  }
+
+  .expert-squad-market-entry-actions {
+    display: grid;
+  }
+
+  .expert-squad-local-install-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-local-install-scope {
+    width: 100%;
+  }
+
+  .expert-squad-local-install-option {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .expert-squad-local-install-option > .oc-button {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
 }

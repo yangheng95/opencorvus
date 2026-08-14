@@ -1,5 +1,4 @@
-import { closeSync, openSync, readSync, readdirSync, statSync } from "node:fs"
-import { fileURLToPath } from "node:url"
+import { closeSync, existsSync, openSync, readSync, readdirSync, statSync } from "node:fs"
 import path from "node:path"
 
 export type LandingBinaryPlatform = "windows-x64" | "darwin-arm64" | "linux-x64"
@@ -29,7 +28,7 @@ type LandingArtifactDefinition = Pick<
 }
 
 const VERSIONED_ARTIFACT_PATTERN = /^OpenCorvus_([^_]+)_/
-const defaultRepoRoot = fileURLToPath(new URL("../../../..", import.meta.url))
+const defaultRepoRoot = path.resolve(process.cwd(), "../..")
 
 function startsWithBytes(signature: Buffer, expected: readonly number[]): boolean {
   return expected.every((byte, index) => signature[index] === byte)
@@ -114,7 +113,7 @@ function discoverPlatformDownload(repoRoot: string, definition: LandingArtifactD
     platform: definition.platform,
     version,
     sourceDirectory,
-    destinationDirectory: path.resolve(repoRoot, "packages/web/dist/downloads", definition.platform),
+    destinationDirectory: path.resolve(repoRoot, "packages/web/dist/client/downloads", definition.platform),
     sourceFileName: installer.fileName,
     downloadFileName,
     publicRelativePath: `downloads/${definition.platform}/${downloadFileName}`,
@@ -127,19 +126,18 @@ function discoverPlatformDownload(repoRoot: string, definition: LandingArtifactD
 }
 
 export function discoverLandingBinaryDownloads(repoRoot = defaultRepoRoot): LandingBinaryDownload[] {
-  const downloads = landingArtifactDefinitions.map((definition) => discoverPlatformDownload(repoRoot, definition))
+  const downloads = landingArtifactDefinitions.flatMap((definition) =>
+    existsSync(path.resolve(repoRoot, definition.sourceDirectory))
+      ? [discoverPlatformDownload(repoRoot, definition)]
+      : [],
+  )
+  // A source checkout does not necessarily contain release-matrix installers.
+  // The landing renders documentation, source, and release actions when this
+  // list is empty; it never presents the source repository as a web app.
+  if (downloads.length === 0) return []
   const versions = new Set(downloads.map((download) => download.version))
   if (versions.size !== 1) {
     throw new Error(`Landing platform installer versions must match; found ${[...versions].join(", ")}`)
   }
   return downloads
 }
-
-export const landingWebApplication = {
-  kind: "web",
-  href: "https://github.com/yangheng95/opencorvus",
-  platformName: "Web",
-  system: "Modern browser",
-  architecture: "Cloud",
-  packageType: "Web application",
-} as const

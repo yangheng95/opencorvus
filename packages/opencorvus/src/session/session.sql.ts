@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm"
 import { sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { ProjectTable } from "../project/project.sql"
 import type { Message } from "./message"
-import type { PermissionNext } from "@/permission/next"
+import type { CapabilityRules } from "@/capability/rules"
 import { Timestamps } from "@/storage/schema.sql"
 import type { InteractiveArtifactPayload } from "@/interactive-artifact/schema"
 
@@ -104,7 +104,7 @@ export const SessionTable = sqliteTable(
     summary_additions: integer(),
     summary_deletions: integer(),
     summary_files: integer(),
-    permission: text({ mode: "json" }).$type<PermissionNext.Ruleset>(),
+    permission: text({ mode: "json" }).$type<CapabilityRules.Ruleset>(),
     /** Free-form per-session metadata. */
     metadata: text({ mode: "json" }).$type<Record<string, unknown>>(),
     ...Timestamps,
@@ -119,6 +119,9 @@ export const SessionTable = sqliteTable(
     index("session_parent_idx").on(table.parent_id),
     index("session_kind_idx").on(table.kind),
     index("session_time_pinned_idx").on(table.time_pinned),
+    uniqueIndex("session_mission_identity_idx")
+      .on(table.project_id, table.directory, sql<string>`json_extract(${table.metadata}, '$.mission.id')`)
+      .where(sql`${table.kind} = 'mission'`),
   ],
 )
 
@@ -178,7 +181,11 @@ export const InteractiveArtifactTable = sqliteTable(
   (table) => [index("interactive_artifact_message_idx").on(table.message_id)],
 )
 
-export type SessionControlKind = "manual_summarize" | "compaction_request" | "wake_reason"
+export type SessionControlKind =
+  | "manual_summarize"
+  | "compaction_request"
+  | "wake_reason"
+  | "mission_process_recovery"
 
 export type SessionControlStatus = "pending" | "consumed" | "failed"
 
@@ -244,12 +251,4 @@ export const TodoSnapshotTable = sqliteTable("todo_snapshot", {
     .primaryKey()
     .references(() => SessionTable.id, { onDelete: "cascade" }),
   revision: integer().notNull(),
-})
-
-export const PermissionTable = sqliteTable("permission", {
-  project_id: text()
-    .primaryKey()
-    .references(() => ProjectTable.id, { onDelete: "cascade" }),
-  ...Timestamps,
-  data: text({ mode: "json" }).notNull().$type<PermissionNext.Ruleset>(),
 })

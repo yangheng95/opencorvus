@@ -1,6 +1,7 @@
 import { selectPromptAttachments, type PromptAttachmentRef } from "@/agent/prompt-projection"
 import type { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import { requireTask } from "@/engine/store"
+import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 
 export interface RequirementsInputRefs {
   instruction: string
@@ -14,6 +15,7 @@ export interface RequirementsPromptProjection {
   taskID: string
   taskTitle: string
   taskRequest: string
+  taskRequestSHA256: string
   attachments: PromptAttachmentRef[]
   observationSections: string[]
 }
@@ -48,6 +50,7 @@ export function projectRequirementsInput(input: RequirementsInputRefs): Requirem
     taskID: input.taskID,
     taskTitle: task.title,
     taskRequest: task.request,
+    taskRequestSHA256: taskRequestSHA256(task.request),
     attachments: selectedAttachments.attachments,
     observationSections,
   }

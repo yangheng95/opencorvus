@@ -3,8 +3,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { createOpenCorvusServer } from "../src/server"
-
-const serverSourcePath = path.resolve(import.meta.dir, "..", "src", "server.ts")
+import { BoundedDiagnosticTail, SERVER_STARTUP_DIAGNOSTIC_LIMIT_BYTES } from "../src/server-startup-observer"
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -254,14 +253,102 @@ describe("createOpenCorvusServer", () => {
     },
   )
 
-  test.serial("Windows PowerShell cleanup delegate is bounded and stale PID tolerant", () => {
-    const source = readFileSync(serverSourcePath, "utf8")
+  test("retains an exact UTF-8 byte-bounded diagnostic tail", () => {
+    const tail = new BoundedDiagnosticTail(12)
+    const encoded = Buffer.from("prefix-甲乙终点", "utf8")
+    tail.append(encoded.subarray(0, encoded.length - 2))
+    tail.append(encoded.subarray(encoded.length - 2))
 
-    expect(source).toContain("const WINDOWS_POWERSHELL_CLEANUP_TIMEOUT_MS = 5_000")
-    expect(source).toContain("PowerShell cleanup timed out after")
-    expect(source).toContain("runner.kill()")
-    expect(source).toContain("clearTimeout(timer)")
-    expect(source).toContain("Stop-Process -Id $target -Force -ErrorAction SilentlyContinue")
-    expect(source).not.toContain("Stop-Process -Id $target -Force -ErrorAction Stop")
+    expect(tail.snapshot()).toEqual({
+      text: "甲乙终点",
+      truncated: true,
+      retainedBytes: 12,
+    })
+  })
+
+  test.serial(
+    "drains stdout and stderr after split readiness until close",
+    async () => {
+      const tempDir = mkdtempSync(path.join(tmpdir(), "opencorvus-sdk-server-drain-"))
+      const completionFile = path.join(tempDir, "drain-complete")
+      const previousCwd = process.cwd()
+      const previousBinPath = process.env.OPENCORVUS_BIN_PATH
+      const previousCompletionFile = process.env.OPENCORVUS_FAKE_COMPLETION_FILE
+      let server: Awaited<ReturnType<typeof createOpenCorvusServer>> | undefined
+
+      writeFileSync(
+        path.join(tempDir, "serve"),
+        [
+          'const fs = require("node:fs")',
+          'process.stdout.write("opencorvus server listening")',
+          "setTimeout(() => {",
+          '  process.stdout.write(" on http://127.0.0.1:43211\\n")',
+          '  const flood = Buffer.alloc(2 * 1024 * 1024, "x")',
+          "  process.stdout.write(flood, () => {",
+          "    process.stderr.write(flood, () => {",
+          '      fs.writeFileSync(process.env.OPENCORVUS_FAKE_COMPLETION_FILE, "drained")',
+          "    })",
+          "  })",
+          "}, 10)",
+          "setInterval(() => {}, 10_000)",
+          "",
+        ].join("\n"),
+      )
+
+      process.chdir(tempDir)
+      process.env.OPENCORVUS_BIN_PATH = "node"
+      process.env.OPENCORVUS_FAKE_COMPLETION_FILE = completionFile
+      try {
+        server = await createOpenCorvusServer({ timeout: 2_000, port: 0 })
+        expect(server.url).toBe("http://127.0.0.1:43211")
+        await waitForPidFile(completionFile, 4_000)
+        expect(readFileSync(completionFile, "utf8")).toBe("drained")
+        await server.close()
+        server = undefined
+      } finally {
+        await server?.close().catch(() => undefined)
+        process.chdir(previousCwd)
+        if (previousBinPath === undefined) delete process.env.OPENCORVUS_BIN_PATH
+        else process.env.OPENCORVUS_BIN_PATH = previousBinPath
+        if (previousCompletionFile === undefined) delete process.env.OPENCORVUS_FAKE_COMPLETION_FILE
+        else process.env.OPENCORVUS_FAKE_COMPLETION_FILE = previousCompletionFile
+        await removeTempDir(tempDir)
+      }
+    },
+  )
+
+  test.serial("returns only the bounded diagnostic tail when startup exits", async () => {
+    const tempDir = mkdtempSync(path.join(tmpdir(), "opencorvus-sdk-server-tail-"))
+    const previousCwd = process.cwd()
+    const previousBinPath = process.env.OPENCORVUS_BIN_PATH
+    writeFileSync(
+      path.join(tempDir, "serve"),
+      [
+        'const flood = Buffer.alloc(2 * 1024 * 1024, "z")',
+        'process.stderr.write(flood, () => process.stderr.write("甲乙终点", () => process.exit(7)))',
+        "",
+      ].join("\n"),
+    )
+    process.chdir(tempDir)
+    process.env.OPENCORVUS_BIN_PATH = "node"
+    try {
+      let failure: Error | undefined
+      try {
+        await createOpenCorvusServer({ timeout: 2_000, port: 0 })
+      } catch (error) {
+        failure = error as Error
+      }
+      if (!failure) throw new Error("Expected bounded startup diagnostic failure")
+      expect(failure.message).toContain("Server exited with code 7")
+      expect(failure.message).toContain("truncated=true")
+      const diagnostic = failure.message.split(": ").at(-1) ?? ""
+      expect(Buffer.byteLength(diagnostic, "utf8")).toBeLessThanOrEqual(SERVER_STARTUP_DIAGNOSTIC_LIMIT_BYTES)
+      expect(diagnostic.endsWith("甲乙终点")).toBe(true)
+    } finally {
+      process.chdir(previousCwd)
+      if (previousBinPath === undefined) delete process.env.OPENCORVUS_BIN_PATH
+      else process.env.OPENCORVUS_BIN_PATH = previousBinPath
+      await removeTempDir(tempDir)
+    }
   })
 })

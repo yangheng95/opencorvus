@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config"
 import starlight from "@astrojs/starlight"
 import solidJs from "@astrojs/solid-js"
+import node from "@astrojs/node"
 import theme from "toolbeam-docs-theme"
 import config from "./config.mjs"
 import { rehypeHeadingIds } from "@astrojs/markdown-remark"
@@ -12,13 +13,14 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings"
 const astroRehypeAutolinkHeadings = /** @type {import("@astrojs/markdown-remark").RehypePlugin} */ (
   /** @type {unknown} */ (rehypeAutolinkHeadings)
 )
-const publicBase = "/opencorvus-dist/dist"
+const publicBase = config.base
 
 // https://astro.build/config
 export default defineConfig({
   site: config.url,
   base: publicBase,
   output: "static",
+  adapter: node({ mode: "standalone" }),
   devToolbar: {
     enabled: false,
   },
@@ -29,6 +31,12 @@ export default defineConfig({
     rehypePlugins: [rehypeHeadingIds, [astroRehypeAutolinkHeadings, { behavior: "wrap" }]],
   },
   build: {},
+  vite: {
+    // esbuild 0.28 no longer lowers destructuring for Safari 14.0. Safari 14.1 is the
+    // narrowest target that preserves the site's previous baseline without making
+    // Astro's own audit client fail the production build.
+    build: { target: ["chrome87", "edge88", "firefox78", "safari14.1"] },
+  },
   integrations: [
     solidJs(),
     starlight({
@@ -46,34 +54,7 @@ export default defineConfig({
           dir: "ltr",
         },
       },
-      favicon: "/favicon-v3.svg",
-      head: [
-        {
-          tag: "link",
-          attrs: {
-            rel: "icon",
-            href: `${publicBase}/favicon-v3.ico`,
-            sizes: "32x32",
-          },
-        },
-        {
-          tag: "link",
-          attrs: {
-            rel: "icon",
-            type: "image/png",
-            href: `${publicBase}/favicon-96x96-v3.png`,
-            sizes: "96x96",
-          },
-        },
-        {
-          tag: "link",
-          attrs: {
-            rel: "apple-touch-icon",
-            href: `${publicBase}/apple-touch-icon-v3.png`,
-            sizes: "180x180",
-          },
-        },
-      ],
+      favicon: "/favicon.svg",
       lastUpdated: true,
       expressiveCode: { themes: ["github-light", "github-dark"] },
       social: [
@@ -93,7 +74,6 @@ export default defineConfig({
         replacesTitle: true,
       },
       sidebar: [
-        "",
         {
           label: "Get Started",
           translations: { en: "Get Started", "zh-CN": "快速开始" },
@@ -190,7 +170,6 @@ export default defineConfig({
         },
       ],
       components: {
-        Hero: "./src/components/Hero.astro",
         Head: "./src/components/Head.astro",
         Header: "./src/components/Header.astro",
         Footer: "./src/components/Footer.astro",

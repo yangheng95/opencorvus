@@ -48,6 +48,32 @@ test("overlay error logs remain AppLog-only diagnostics", async () => {
   )
 })
 
+test("overlay log upload drains bounded batches through one physical request at a time", async () => {
+  setConnectionStatus("online")
+  let activeRequests = 0
+  let maximumActiveRequests = 0
+  const uploadedMessages: string[][] = []
+  __setHostTransportForTest(
+    logTransport(async (request) => {
+      activeRequests += 1
+      maximumActiveRequests = Math.max(maximumActiveRequests, activeRequests)
+      expect(request.body?.kind).toBe("json")
+      const body = request.body?.kind === "json" ? (request.body.value as { entries: Array<{ message: string }> }) : undefined
+      uploadedMessages.push(body?.entries.map((entry) => entry.message) ?? [])
+      await Promise.resolve()
+      activeRequests -= 1
+      return { status: 200, ok: true, headers: {}, body: { ok: true } }
+    }),
+  )
+
+  for (let index = 0; index < 100; index++) AppLog.info("batch", `entry-${index}`)
+  await waitForLogDrain(2_500)
+
+  expect(maximumActiveRequests).toBe(1)
+  expect(uploadedMessages.map((batch) => batch.length)).toEqual([50, 50])
+  expect(uploadedMessages.flat()).toEqual(Array.from({ length: 100 }, (_, index) => `entry-${index}`))
+})
+
 test("overlay log upload failure creates one local diagnostic without recursive upload", async () => {
   setConnectionStatus("online")
   let requests = 0

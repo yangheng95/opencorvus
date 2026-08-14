@@ -1,0 +1,534 @@
+#!/bin/bash
+set -euo pipefail
+umask 077
+
+if [ "$(id -u)" -eq 0 ]; then
+  unset OPENCORVUS_ACTIVATOR_INSTALL OPENCORVUS_BACKUP_SCRIPT_INSTALL OPENCORVUS_BACKUP_SERVICE_UNIT \
+    OPENCORVUS_BACKUP_TIMER OPENCORVUS_BACKUP_TIMER_UNIT OPENCORVUS_CADDY_CONFIG \
+    OPENCORVUS_DEPLOY_PUBLIC_KEY OPENCORVUS_DEPLOY_PUBLIC_KEY_OWNER OPENCORVUS_DEPLOY_ROOT \
+    OPENCORVUS_DEPLOY_ROOT_OWNER OPENCORVUS_ROLLBACK_OWNER OPENCORVUS_ROLLBACK_ROOT \
+    OPENCORVUS_STATE_ROOT OPENCORVUS_SUDOERS_INSTALL OPENCORVUS_SYSTEMCTL OPENCORVUS_SYSTEMD_UNIT OPENCORVUS_WEB_SERVICE \
+    OPENCORVUS_WEB_SERVICE_USER OPENCORVUS_TEST_HARNESS
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  export PATH
+elif [ "${OPENCORVUS_TEST_HARNESS:-}" != "1" ]; then
+  echo "the production activator must run as root" >&2
+  exit 1
+fi
+
+ROOT=${OPENCORVUS_DEPLOY_ROOT:-/srv/opencorvus}
+ROOT_OWNER=${OPENCORVUS_DEPLOY_ROOT_OWNER:-root}
+RELEASES="$ROOT/releases"
+CURRENT="$ROOT/current"
+PREVIOUS="$ROOT/previous"
+STATE_ROOT=${OPENCORVUS_STATE_ROOT:-/var/lib/opencorvus-web}
+DATABASE="$STATE_ROOT/registry.sqlite3"
+BACKUPS="$STATE_ROOT/backups"
+ROLLBACK_ROOT=${OPENCORVUS_ROLLBACK_ROOT:-/var/lib/opencorvus-deploy}
+ROLLBACKS="$ROLLBACK_ROOT/rollbacks"
+ROLLBACK_OWNER=${OPENCORVUS_ROLLBACK_OWNER:-root}
+SERVICE=${OPENCORVUS_WEB_SERVICE:-opencorvus-web.service}
+SERVICE_USER=${OPENCORVUS_WEB_SERVICE_USER-opencorvus-web}
+SYSTEMCTL=${OPENCORVUS_SYSTEMCTL:-systemctl}
+CADDY_CONFIG=${OPENCORVUS_CADDY_CONFIG:-/etc/caddy/Caddyfile}
+SYSTEMD_UNIT=${OPENCORVUS_SYSTEMD_UNIT:-/etc/systemd/system/opencorvus-web.service}
+ACTIVATOR_INSTALL=${OPENCORVUS_ACTIVATOR_INSTALL:-/usr/local/bin/opencorvus-activate-release}
+DEPLOY_PUBLIC_KEY=${OPENCORVUS_DEPLOY_PUBLIC_KEY:-/etc/opencorvus/deploy-signing-public.pem}
+DEPLOY_PUBLIC_KEY_OWNER=${OPENCORVUS_DEPLOY_PUBLIC_KEY_OWNER:-root}
+BACKUP_SCRIPT_INSTALL=${OPENCORVUS_BACKUP_SCRIPT_INSTALL:-/usr/local/bin/opencorvus-registry-backup}
+BACKUP_SERVICE_UNIT=${OPENCORVUS_BACKUP_SERVICE_UNIT:-/etc/systemd/system/opencorvus-registry-backup.service}
+BACKUP_TIMER_UNIT=${OPENCORVUS_BACKUP_TIMER_UNIT:-/etc/systemd/system/opencorvus-registry-backup.timer}
+BACKUP_TIMER=${OPENCORVUS_BACKUP_TIMER:-opencorvus-registry-backup.timer}
+SUDOERS_INSTALL=${OPENCORVUS_SUDOERS_INSTALL:-/etc/sudoers.d/opencorvus-deploy}
+LOCK_FILE="$STATE_ROOT/registry-operation.lock"
+
+acquire_registry_lock() {
+  mkdir -p "$STATE_ROOT"
+  if [ ! -e "$LOCK_FILE" ]; then
+    : > "$LOCK_FILE"
+    if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$LOCK_FILE"; fi
+    chmod 0600 "$LOCK_FILE"
+  fi
+  exec 9>>"$LOCK_FILE"
+  flock -w 300 9 || { echo "timed out waiting for the Registry operation lock" >&2; exit 1; }
+}
+
+assert_root_owned_path() {
+  local target=$1
+  test "$(stat -c %U "$target")" = "$ROOT_OWNER" || { echo "trusted deployment path has the wrong owner: $target" >&2; exit 1; }
+  if find "$target" -maxdepth 0 -perm /022 -print -quit | grep -q .; then
+    echo "trusted deployment path is group/world writable: $target" >&2
+    exit 1
+  fi
+}
+
+run_as_service() {
+  if [ -n "$SERVICE_USER" ]; then
+    runuser -u "$SERVICE_USER" -- "$@"
+  else
+    "$@"
+  fi
+}
+
+service_stop() {
+  "$SYSTEMCTL" stop "$SERVICE"
+}
+
+service_start() {
+  "$SYSTEMCTL" restart "$SERVICE"
+}
+
+restore_service_enablement() {
+  local release_id=$1 state
+  state=$(cat "$ROLLBACKS/pre-$release_id.service-enabled")
+  case "$state" in
+    enabled) "$SYSTEMCTL" enable "$SERVICE" ;;
+    disabled) "$SYSTEMCTL" disable "$SERVICE" ;;
+    *) echo "invalid saved service enablement: $state" >&2; return 1 ;;
+  esac
+}
+
+validate_release_tree() {
+  python3 - "$1" <<'PY'
+import datetime, hashlib, json, pathlib, re, sys
+tree = pathlib.Path(sys.argv[1]).resolve()
+public = tree / "client"
+server = tree / "server"
+if not (public / "index.html").is_file(): raise SystemExit("release client index is missing")
+for name in ("opencorvus-web.mjs", "opencorvus-registry-control", "website-registry-seed.json", "Caddyfile", "opencorvus-web.service", "opencorvus-activate-release", "deploy-signing-public.pem", "opencorvus-registry-backup", "opencorvus-registry-backup.service", "opencorvus-registry-backup.timer", "opencorvus-deploy.sudoers"):
+    if not (server / name).is_file(): raise SystemExit(f"release server artifact is missing: {name}")
+pointer = json.loads((public / "expert-squads/catalog.json").read_text("utf-8"))
+resources = pointer.get("resources")
+if pointer.get("protocol") != "opencorvus/expert-squad-publication@1" or not isinstance(resources, dict): raise SystemExit("invalid publication pointer")
+counts = [resources.get(key) for key in ("total", "embeddedAlreadyAvailable", "bundledMarketImportable")]
+if any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in counts) or counts[0] <= 0 or counts[0] != counts[1] + counts[2]: raise SystemExit("invalid publication resource counts")
+version = pointer.get("publicationVersion")
+if not isinstance(version, int) or isinstance(version, bool) or version <= 0: raise SystemExit("invalid publication version")
+expires = pointer.get("expiresAt")
+if not isinstance(expires, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z", expires): raise SystemExit("invalid publication expiry")
+if datetime.datetime.fromisoformat(expires.replace("Z", "+00:00")) <= datetime.datetime.now(datetime.timezone.utc): raise SystemExit("publication is expired")
+patterns = {
+    "catalog": r"/expert-squads/catalogs/([a-f0-9]{64})\.json",
+    "signatures": r"/expert-squads/signatures/([a-f0-9]{64})\.json",
+    "bundle": r"/expert-squads/bundles/([a-f0-9]{64})/all-expert-squads\.zip",
+}
+documents = {}
+for name, pattern in patterns.items():
+    reference = pointer.get(name)
+    if not isinstance(reference, dict): raise SystemExit(f"invalid {name} reference")
+    match = re.fullmatch(pattern, str(reference.get("path", "")))
+    digest, size = reference.get("sha256"), reference.get("bytes")
+    if not match or match.group(1) != digest or not isinstance(size, int) or isinstance(size, bool) or size <= 0: raise SystemExit(f"invalid content-addressed {name} reference")
+    target = (public / reference["path"].lstrip("/")).resolve()
+    if public not in target.parents or not target.is_file(): raise SystemExit(f"{name} escapes or is missing from the client tree")
+    raw = target.read_bytes()
+    if len(raw) != size or hashlib.sha256(raw).hexdigest() != digest: raise SystemExit(f"{name} byte binding failed")
+    if name != "bundle": documents[name] = json.loads(raw)
+catalog, envelope = documents["catalog"], documents["signatures"]
+packages = catalog.get("packages")
+if catalog.get("protocol") != "opencorvus/expert-squad-static-catalog@1" or catalog.get("resources") != resources or not isinstance(packages, list) or len(packages) != resources["total"]: raise SystemExit("invalid signed catalog")
+if sum(item.get("disposition") == "embedded_already_available" for item in packages if isinstance(item, dict)) != resources["embeddedAlreadyAvailable"]: raise SystemExit("invalid embedded resource count")
+if sum(item.get("disposition") == "bundled_market_importable" for item in packages if isinstance(item, dict)) != resources["bundledMarketImportable"]: raise SystemExit("invalid importable resource count")
+if envelope.get("protocol") != "opencorvus/expert-squad-catalog-signatures@1" or envelope.get("catalog") != pointer["catalog"] or envelope.get("bundle") != pointer["bundle"] or envelope.get("publicationVersion") != version or envelope.get("expiresAt") != expires: raise SystemExit("invalid signature envelope binding")
+threshold, signatures = envelope.get("threshold"), envelope.get("signatures")
+if not isinstance(threshold, int) or threshold <= 0 or not isinstance(signatures, list) or len(signatures) < threshold: raise SystemExit("invalid signature threshold")
+seed = json.loads((server / "website-registry-seed.json").read_text("utf-8"))
+if seed.get("protocol") != "opencorvus/website-registry-seed@1" or seed.get("catalog") != pointer.get("catalog") or seed.get("resources") != resources or len(seed.get("packages", [])) != resources["total"]: raise SystemExit("website registry seed disagrees with the signed publication")
+print(version)
+PY
+}
+
+probe_live_release() {
+  local probe pointer name path digest bytes output
+  probe=$(mktemp -d)
+  curl --fail --silent --show-error http://127.0.0.1:8080/ > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/health/ready > "$probe/ready.json" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/market/ > "$probe/market-en.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/zh-cn/market/ > "$probe/market-zh.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/api/site/v1/visitors > "$probe/visitors.json" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/expert-squads/catalog.json > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
+  cmp "$probe/pointer.json" "$CURRENT/client/expert-squads/catalog.json" || { rm -rf -- "$probe"; return 1; }
+  python3 - "$probe/ready.json" "$CURRENT/client/expert-squads/catalog.json" "$probe/visitors.json" "$probe/references.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
+import json, sys
+ready, pointer, visitors = [json.load(open(item, encoding="utf-8")) for item in sys.argv[1:4]]
+resources = pointer.get("resources", {})
+expected = {
+    "catalogSha256": pointer.get("catalog", {}).get("sha256"),
+    "total": resources.get("total"),
+    "embeddedAlreadyAvailable": resources.get("embeddedAlreadyAvailable"),
+    "bundledMarketImportable": resources.get("bundledMarketImportable"),
+}
+publication = ready.get("publication")
+if ready.get("status") != "ready" or not isinstance(publication, dict) or any(publication.get(key) != value for key, value in expected.items()): raise SystemExit("database readiness disagrees with publication")
+if visitors.get("protocol") != "opencorvus/site-visitors@1" or visitors.get("measuredWindowDays") != 30 or not isinstance(visitors.get("estimatedParticipatingBrowsers"), int) or visitors.get("estimatedParticipatingBrowsers") < 0: raise SystemExit("visitor summary contract is invalid")
+if visitors.get("participating") is not False or visitors.get("renewalDue") is not False: raise SystemExit("cookie-free visitor probe must be read-only")
+with open(sys.argv[4], "w", encoding="utf-8") as output:
+    for name in ("catalog", "signatures", "bundle"):
+        ref = pointer[name]
+        output.write(f"static\t{ref['path']}\t{ref['sha256']}\t{ref['bytes']}\n")
+PY
+  pointer="$probe/pointer.json"
+  while IFS=$'\t' read -r name path digest bytes; do
+    output="$probe/$digest"
+    curl --fail --silent --show-error "http://127.0.0.1:8080$path" > "$output" || { rm -rf -- "$probe"; return 1; }
+    test "$(stat -c %s "$output")" -eq "$bytes" || { rm -rf -- "$probe"; return 1; }
+    test "$(sha256sum "$output" | cut -d' ' -f1)" = "$digest" || { rm -rf -- "$probe"; return 1; }
+  done < "$probe/references.tsv"
+  python3 - "$CURRENT/client" "$probe/exact.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+pointer = json.loads((root / "expert-squads/catalog.json").read_text("utf-8"))
+catalog = json.loads((root / pointer["catalog"]["path"].lstrip("/")).read_text("utf-8"))
+item = catalog["packages"][0]
+with open(sys.argv[2], "w", encoding="utf-8") as output:
+    output.write("\t".join([item["namespace"], item["id"], item["version"], item["packageDigest"], item["archive"]["sha256"], str(item["archive"]["bytes"])]) + "\n")
+PY
+  IFS=$'\t' read -r namespace squad_id version package_digest archive_digest archive_bytes < "$probe/exact.tsv"
+  curl --fail --silent --show-error "http://127.0.0.1:8080/market/$namespace/$squad_id/" > "$probe/detail-en.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error "http://127.0.0.1:8080/zh-cn/market/$namespace/$squad_id/" > "$probe/detail-zh.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error "http://127.0.0.1:8080/api/registry/v1/squads/$namespace/$squad_id/$version/$package_digest/archive" > "$probe/archive.zip" || { rm -rf -- "$probe"; return 1; }
+  test "$(stat -c %s "$probe/archive.zip")" -eq "$archive_bytes" || { rm -rf -- "$probe"; return 1; }
+  test "$(sha256sum "$probe/archive.zip" | cut -d' ' -f1)" = "$archive_digest" || { rm -rf -- "$probe"; return 1; }
+  rm -rf -- "$probe"
+}
+
+restore_snapshot() {
+  local snapshot=$1
+  test -f "$snapshot"
+  test -f "$snapshot.sha256"
+  sha256sum --check "$snapshot.sha256" > /dev/null
+  rm -f -- "$DATABASE-wal" "$DATABASE-shm"
+  cp -- "$snapshot" "$DATABASE"
+  if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$DATABASE"; fi
+  chmod 0600 "$DATABASE"
+}
+
+rollback_release() {
+  local release_id=$1 old_target=$2 snapshot unit_backup activator_backup service_state
+  snapshot="$ROLLBACKS/pre-$release_id.sqlite3"
+  unit_backup="$ROLLBACKS/pre-$release_id.opencorvus-web.service"
+  activator_backup="$ROLLBACKS/pre-$release_id.opencorvus-activate-release"
+  service_state=$(cat "$ROLLBACKS/pre-$release_id.service-enabled")
+  service_stop
+  if [ -f "$ROLLBACKS/pre-$release_id.database-absent" ]; then
+    rm -f -- "$DATABASE" "$DATABASE-wal" "$DATABASE-shm"
+  else
+    restore_snapshot "$snapshot"
+  fi
+  if [ -f "$unit_backup" ]; then
+    install -m 0644 "$unit_backup" "$SYSTEMD_UNIT"
+  else
+    if [ "$service_state" = "disabled" ]; then "$SYSTEMCTL" disable "$SERVICE"; fi
+    rm -f -- "$SYSTEMD_UNIT"
+  fi
+  "$SYSTEMCTL" daemon-reload
+  if [ -n "$old_target" ]; then
+    ln -s "$old_target" "$ROOT/.rollback-$release_id"
+    mv -T "$ROOT/.rollback-$release_id" "$CURRENT"
+  else
+    rm -f -- "$CURRENT"
+  fi
+  if [ -f "$ROLLBACKS/pre-$release_id.Caddyfile" ]; then
+    install -m 0644 "$ROLLBACKS/pre-$release_id.Caddyfile" "$CADDY_CONFIG"
+    "$SYSTEMCTL" reload caddy.service
+  fi
+  if [ -f "$activator_backup" ]; then install -m 0755 "$activator_backup" "$ACTIVATOR_INSTALL"; fi
+  if [ -f "$unit_backup" ]; then restore_service_enablement "$release_id"; fi
+  case "$(cat "$ROLLBACKS/pre-$release_id.backup-timer-enabled")" in
+    enabled) "$SYSTEMCTL" enable --now "$BACKUP_TIMER" ;;
+    disabled) "$SYSTEMCTL" disable --now "$BACKUP_TIMER" ;;
+    *) echo "invalid saved backup timer enablement" >&2; return 1 ;;
+  esac
+  if [ -n "$old_target" ] && [ -f "$ROOT/$old_target/server/opencorvus-web.mjs" ]; then service_start; fi
+  rm -f -- "$ROOT/.current-$release_id" "$ROOT/.rollback-$release_id" "$ROOT/.previous-$release_id"
+  rm -rf -- "$RELEASES/$release_id"
+}
+
+probe_restored_release() {
+  local target=$1
+  if [ -f "$ROOT/$target/server/opencorvus-web.mjs" ]; then
+    probe_live_release
+  else
+    curl --fail --silent --show-error http://127.0.0.1:8080/ > /dev/null
+    curl --fail --silent --show-error http://127.0.0.1:8080/expert-squads/catalog.json | cmp - "$ROOT/$target/expert-squads/catalog.json"
+  fi
+}
+
+prune_unreferenced_releases() {
+  local current_target previous_target keep_unreferenced=3 kept=0 directory name
+  current_target=$(readlink "$CURRENT" 2>/dev/null || true)
+  previous_target=$(readlink "$PREVIOUS" 2>/dev/null || true)
+  while IFS= read -r directory; do
+    name=$(basename "$directory")
+    [[ "$name" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]] || continue
+    if [ "releases/$name" = "$current_target" ] || [ "releases/$name" = "$previous_target" ]; then continue; fi
+    if [ "$kept" -lt "$keep_unreferenced" ]; then kept=$((kept + 1)); continue; fi
+    case "$(realpath "$directory")" in "$RELEASES"/*) rm -rf -- "$directory" ;; *) return 1 ;; esac
+  done < <(find "$RELEASES" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
+}
+
+prune_activation_backups() {
+  local marker release_id kept=0
+  while IFS= read -r marker; do
+    release_id=$(basename "$marker")
+    release_id=${release_id#pre-}
+    release_id=${release_id%.service-enabled}
+    [[ "$release_id" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]] || { echo "invalid activation backup marker" >&2; return 1; }
+    kept=$((kept + 1))
+    if [ "$kept" -le 4 ]; then continue; fi
+    rm -f -- "$ROLLBACKS/pre-$release_id.sqlite3" "$ROLLBACKS/pre-$release_id.sqlite3.sha256" \
+      "$ROLLBACKS/pre-$release_id.database-absent" "$ROLLBACKS/pre-$release_id.Caddyfile" \
+      "$ROLLBACKS/pre-$release_id.opencorvus-web.service" "$ROLLBACKS/pre-$release_id.opencorvus-activate-release" \
+      "$ROLLBACKS/pre-$release_id.service-enabled" \
+      "$ROLLBACKS/pre-$release_id.backup-timer-enabled"
+  done < <(find "$ROLLBACKS" -maxdepth 1 -type f -name 'pre-*.service-enabled' -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
+}
+
+if [ "$#" -eq 2 ] && [ "$1" = "--rollback" ]; then
+  RELEASE_ID=$2
+  [[ "$RELEASE_ID" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]] || { echo "invalid rollback release id" >&2; exit 2; }
+  test -d "$ROOT" && test -d "$RELEASES" && test -d "$ROLLBACK_ROOT" && test -d "$ROLLBACKS"
+  assert_root_owned_path "$ROOT"
+  assert_root_owned_path "$RELEASES"
+  assert_root_owned_path "$ROLLBACK_ROOT"
+  assert_root_owned_path "$ROLLBACKS"
+  acquire_registry_lock
+  test -L "$CURRENT"
+  test "$(readlink "$CURRENT")" = "releases/$RELEASE_ID"
+  if [ ! -L "$PREVIOUS" ]; then
+    rollback_release "$RELEASE_ID" ""
+    printf '%s\n' "no-previous-release"
+    exit 0
+  fi
+  PREVIOUS_TARGET=$(readlink "$PREVIOUS")
+  case "$PREVIOUS_TARGET" in releases/*) ;; *) echo "invalid previous release target" >&2; exit 1 ;; esac
+  test -d "$ROOT/$PREVIOUS_TARGET"
+  rollback_release "$RELEASE_ID" "$PREVIOUS_TARGET"
+  probe_restored_release "$PREVIOUS_TARGET"
+  printf '%s\n' "$PREVIOUS_TARGET"
+  exit 0
+fi
+
+if [ "$#" -ne 3 ]; then
+  echo "usage: opencorvus-activate-release <release-id> <archive.tar.gz> <deploy-checksums> | --rollback <release-id>" >&2
+  exit 2
+fi
+
+RELEASE_ID=$1
+ARCHIVE=$2
+DEPLOY_CHECKSUMS=$3
+[[ "$RELEASE_ID" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]] || { echo "invalid release id" >&2; exit 2; }
+INCOMING="$ROOT/incoming/$RELEASE_ID"
+ARCHIVE_REAL=$(realpath "$ARCHIVE")
+CHECKSUMS_REAL=$(realpath "$DEPLOY_CHECKSUMS")
+SIGNATURE_REAL=$(realpath "$DEPLOY_CHECKSUMS.sig")
+case "$ARCHIVE_REAL" in "$INCOMING"/*) ;; *) echo "archive is outside the release inbox" >&2; exit 2 ;; esac
+case "$CHECKSUMS_REAL" in "$INCOMING"/*) ;; *) echo "checksums are outside the release inbox" >&2; exit 2 ;; esac
+case "$SIGNATURE_REAL" in "$INCOMING"/*) ;; *) echo "deploy signature is outside the release inbox" >&2; exit 2 ;; esac
+test -d "$ROOT" && test -d "$RELEASES" && test -d "$ROLLBACK_ROOT"
+assert_root_owned_path "$ROOT"
+assert_root_owned_path "$RELEASES"
+assert_root_owned_path "$ROLLBACK_ROOT"
+acquire_registry_lock
+TRUSTED_INPUT=$(mktemp -d "$ROLLBACK_ROOT/.candidate-input-$RELEASE_ID.XXXXXX")
+cleanup_scratch() {
+  if [ -n "${CANDIDATE:-}" ]; then rm -rf -- "$CANDIDATE"; fi
+  rm -rf -- "$TRUSTED_INPUT"
+}
+trap cleanup_scratch EXIT
+TRUSTED_ARCHIVE_NAME=$(basename "$ARCHIVE_REAL")
+cp -- "$ARCHIVE_REAL" "$TRUSTED_INPUT/$TRUSTED_ARCHIVE_NAME"
+cp -- "$ARCHIVE_REAL.sha256" "$TRUSTED_INPUT/$TRUSTED_ARCHIVE_NAME.sha256"
+cp -- "$CHECKSUMS_REAL" "$TRUSTED_INPUT/DEPLOY_SHA256SUMS"
+cp -- "$SIGNATURE_REAL" "$TRUSTED_INPUT/DEPLOY_SHA256SUMS.sig"
+ARCHIVE_REAL="$TRUSTED_INPUT/$TRUSTED_ARCHIVE_NAME"
+CHECKSUMS_REAL="$TRUSTED_INPUT/DEPLOY_SHA256SUMS"
+SIGNATURE_REAL="$TRUSTED_INPUT/DEPLOY_SHA256SUMS.sig"
+test "$(stat -c %U "$DEPLOY_PUBLIC_KEY")" = "$DEPLOY_PUBLIC_KEY_OWNER" || { echo "deploy verification key has the wrong owner" >&2; exit 1; }
+case "$(stat -c %a "$DEPLOY_PUBLIC_KEY")" in *[2367][0-7]|*[0-7][2367]) echo "deploy verification key is group/world writable" >&2; exit 1 ;; esac
+openssl pkeyutl -verify -pubin -inkey "$DEPLOY_PUBLIC_KEY" -rawin -in "$CHECKSUMS_REAL" -sigfile "$SIGNATURE_REAL" > /dev/null
+cd "$TRUSTED_INPUT"
+sha256sum --check "$(basename "$ARCHIVE_REAL").sha256" > /dev/null
+if tar -tzf "$ARCHIVE_REAL" | grep -E '(^/|(^|/)\.\.(/|$))'; then echo "release archive contains an unsafe path" >&2; exit 1; fi
+if tar -tvzf "$ARCHIVE_REAL" | awk 'substr($1,1,1) != "-" && substr($1,1,1) != "d" { found=1 } END { exit !found }'; then echo "release archive contains a link or special entry" >&2; exit 1; fi
+
+mkdir -p "$RELEASES" "$BACKUPS"
+if [ -n "$SERVICE_USER" ]; then
+  install -d -m 0700 -o "$SERVICE_USER" -g "$SERVICE_USER" "$STATE_ROOT" "$BACKUPS"
+fi
+install -d -m 0700 -o "$ROLLBACK_OWNER" -g "$ROLLBACK_OWNER" "$ROLLBACKS"
+test "$(stat -c %U "$ROLLBACKS")" = "$ROLLBACK_OWNER"
+case "$(stat -c %a "$ROLLBACKS")" in 700) ;; *) echo "rollback directory permissions are not root-only" >&2; exit 1 ;; esac
+TARGET="$RELEASES/$RELEASE_ID"
+test ! -e "$TARGET" || { echo "immutable release already exists: $TARGET" >&2; exit 1; }
+CANDIDATE=$(mktemp -d "$RELEASES/.candidate-$RELEASE_ID.XXXXXX")
+tar --extract --gzip --file "$ARCHIVE_REAL" --directory "$CANDIDATE" --no-same-owner --no-same-permissions
+if find "$CANDIDATE" -mindepth 1 ! -type f ! -type d -print -quit | grep -q .; then echo "extracted release contains a link or special file" >&2; exit 1; fi
+python3 - "$CANDIDATE" "$CHECKSUMS_REAL" <<'PY'
+import pathlib, sys
+root = pathlib.Path(sys.argv[1])
+actual = sorted("./" + item.relative_to(root).as_posix() for item in root.rglob("*") if item.is_file())
+listed = []
+for line in pathlib.Path(sys.argv[2]).read_text("utf-8").splitlines():
+    digest, separator, name = line.partition("  ")
+    if len(digest) != 64 or any(character not in "0123456789abcdef" for character in digest) or separator != "  " or not name.startswith("./"):
+        raise SystemExit("deploy checksum manifest contains an invalid entry")
+    listed.append(name)
+if listed != actual or len(listed) != len(set(listed)):
+    raise SystemExit("signed deploy manifest and candidate file set disagree")
+PY
+(cd "$CANDIDATE" && sha256sum --check "$CHECKSUMS_REAL" > /dev/null)
+find "$CANDIDATE" -type d -exec chmod 0755 {} +
+find "$CANDIDATE" -type f -exec chmod 0644 {} +
+chmod 0755 "$CANDIDATE/server/opencorvus-registry-control"
+chmod 0755 "$CANDIDATE/server/opencorvus-activate-release"
+chmod 0755 "$CANDIDATE/server/opencorvus-registry-backup"
+NEW_VERSION=$(validate_release_tree "$CANDIDATE")
+cmp "$CANDIDATE/server/deploy-signing-public.pem" "$DEPLOY_PUBLIC_KEY"
+cmp "$CANDIDATE/server/opencorvus-registry-backup" "$BACKUP_SCRIPT_INSTALL"
+cmp "$CANDIDATE/server/opencorvus-registry-backup.service" "$BACKUP_SERVICE_UNIT"
+cmp "$CANDIDATE/server/opencorvus-registry-backup.timer" "$BACKUP_TIMER_UNIT"
+cmp "$CANDIDATE/server/opencorvus-deploy.sudoers" "$SUDOERS_INSTALL"
+caddy validate --config "$CANDIDATE/server/Caddyfile"
+
+OLD_TARGET=""
+if [ -L "$CURRENT" ]; then OLD_TARGET=$(readlink "$CURRENT"); fi
+if [ -n "$OLD_TARGET" ]; then
+  case "$OLD_TARGET" in releases/*) ;; *) echo "invalid current release target" >&2; exit 1 ;; esac
+  OLD_VERSION=$(curl --fail --silent --show-error http://127.0.0.1:8080/expert-squads/catalog.json | python3 -c 'import json,sys; print(json.load(sys.stdin)["publicationVersion"])')
+  test "$NEW_VERSION" -gt "$OLD_VERSION" || { echo "publication version must increase: current=$OLD_VERSION candidate=$NEW_VERSION" >&2; exit 1; }
+fi
+
+SNAPSHOT="$ROLLBACKS/pre-$RELEASE_ID.sqlite3"
+rm -f -- "$SNAPSHOT" "$SNAPSHOT.sha256" \
+  "$ROLLBACKS/pre-$RELEASE_ID.database-absent" \
+  "$ROLLBACKS/pre-$RELEASE_ID.Caddyfile" \
+  "$ROLLBACKS/pre-$RELEASE_ID.opencorvus-web.service" \
+  "$ROLLBACKS/pre-$RELEASE_ID.opencorvus-activate-release" \
+  "$ROLLBACKS/pre-$RELEASE_ID.service-enabled" \
+  "$ROLLBACKS/pre-$RELEASE_ID.backup-timer-enabled"
+cp -- "$CADDY_CONFIG" "$ROLLBACKS/pre-$RELEASE_ID.Caddyfile"
+if [ -f "$SYSTEMD_UNIT" ]; then cp -- "$SYSTEMD_UNIT" "$ROLLBACKS/pre-$RELEASE_ID.opencorvus-web.service"; fi
+cp -- "$ACTIVATOR_INSTALL" "$ROLLBACKS/pre-$RELEASE_ID.opencorvus-activate-release"
+if "$SYSTEMCTL" is-enabled --quiet "$SERVICE"; then
+  printf '%s\n' enabled > "$ROLLBACKS/pre-$RELEASE_ID.service-enabled"
+else
+  printf '%s\n' disabled > "$ROLLBACKS/pre-$RELEASE_ID.service-enabled"
+fi
+if "$SYSTEMCTL" is-enabled --quiet "$BACKUP_TIMER"; then
+  printf '%s\n' enabled > "$ROLLBACKS/pre-$RELEASE_ID.backup-timer-enabled"
+else
+  printf '%s\n' disabled > "$ROLLBACKS/pre-$RELEASE_ID.backup-timer-enabled"
+fi
+abort_activation() {
+  local message=$1
+  if [ -n "${RESET_DATABASE:-}" ]; then
+    case "$RESET_DATABASE" in "$STATE_ROOT/.registry-$RELEASE_ID.sqlite3") ;; *) echo "invalid reset database cleanup path" >&2; exit 1 ;; esac
+    rm -f -- "$RESET_DATABASE" "$RESET_DATABASE-wal" "$RESET_DATABASE-shm"
+  fi
+  rollback_release "$RELEASE_ID" "$OLD_TARGET"
+  if [ -n "$OLD_TARGET" ]; then
+    probe_restored_release "$OLD_TARGET"
+  else
+    test ! -e "$CURRENT"
+    test ! -e "$DATABASE"
+  fi
+  echo "$message" >&2
+  exit 1
+}
+abort_before_database_mutation() {
+  local message=$1
+  service_start || true
+  echo "$message" >&2
+  exit 1
+}
+activation_fault() {
+  local point=$1 marker="$STATE_ROOT/test-fail-$1"
+  if [ "${OPENCORVUS_TEST_HARNESS:-}" = "1" ] && [ -f "$marker" ]; then
+    rm -f -- "$marker"
+    return 0
+  fi
+  return 1
+}
+service_stop || abort_before_database_mutation "previous service could not be stopped"
+RESET_DATABASE=""
+if [ -f "$DATABASE" ]; then
+  test -n "$OLD_TARGET" || abort_before_database_mutation "database exists without a previous release"
+  OLD_CONTROL="$ROOT/$OLD_TARGET/server/opencorvus-registry-control"
+  test -x "$OLD_CONTROL" || abort_before_database_mutation "previous Registry control is unavailable"
+  if ! "$OLD_CONTROL" backup --database "$DATABASE" --data "$STATE_ROOT" --target "$SNAPSHOT"; then
+    abort_before_database_mutation "database snapshot failed; previous service was restarted"
+  fi
+  chmod 0600 "$SNAPSHOT" || abort_before_database_mutation "database snapshot mode failed; previous service was restarted"
+  sha256sum "$SNAPSHOT" > "$SNAPSHOT.sha256" || abort_before_database_mutation "database snapshot checksum failed; previous service was restarted"
+  chmod 0600 "$SNAPSHOT.sha256" || abort_before_database_mutation "database snapshot checksum mode failed; previous service was restarted"
+  if activation_fault snapshot-metadata; then abort_activation "database snapshot metadata fixture requested rollback"; fi
+  if ! SCHEMA_STATE=$(run_as_service "$CANDIDATE/server/opencorvus-registry-control" schema-state --database "$DATABASE" --data "$STATE_ROOT"); then
+    abort_activation "database v1 fingerprint inspection failed; previous release was restored"
+  fi
+  case "$SCHEMA_STATE" in
+    *'"schemaVersion":1,"state":"legacy"'*)
+      RESET_DATABASE="$STATE_ROOT/.registry-$RELEASE_ID.sqlite3"
+      rm -f -- "$RESET_DATABASE" "$RESET_DATABASE-wal" "$RESET_DATABASE-shm" || abort_activation "database v1 reset staging cleanup failed"
+      if ! run_as_service "$CANDIDATE/server/opencorvus-registry-control" reset-v1 \
+        --database "$DATABASE" --data "$STATE_ROOT" --target "$RESET_DATABASE" \
+        --seed "$CANDIDATE/server/website-registry-seed.json" --source "$CANDIDATE/client"; then
+        abort_activation "database v1 reset failed; previous release was restored"
+      fi
+      if [ -e "$RESET_DATABASE-wal" ] || [ -e "$RESET_DATABASE-shm" ]; then abort_activation "database v1 reset left uncheckpointed sidecars"; fi
+      rm -f -- "$DATABASE-wal" "$DATABASE-shm" || abort_activation "database v1 sidecar cleanup failed"
+      if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$RESET_DATABASE" || abort_activation "database v1 reset ownership failed"; fi
+      chmod 0600 "$RESET_DATABASE" || abort_activation "database v1 reset mode failed"
+      if activation_fault pre-swap; then abort_activation "database v1 pre-swap fixture requested rollback"; fi
+      mv -T "$RESET_DATABASE" "$DATABASE" || abort_activation "database v1 atomic swap failed"
+      if activation_fault post-swap; then abort_activation "database v1 post-swap fixture requested rollback"; fi
+      if ! python3 - "$STATE_ROOT" <<'PY'
+import os, sys
+fd = os.open(sys.argv[1], os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+try: os.fsync(fd)
+finally: os.close(fd)
+PY
+      then abort_activation "database v1 parent fsync failed"; fi
+      ;;
+    *'"schemaVersion":1,"state":"current"'*)
+      if activation_fault current-path; then abort_activation "database current-path fixture requested rollback"; fi
+      rm -f -- "$DATABASE-wal" "$DATABASE-shm" || abort_activation "database current-fingerprint sidecar cleanup failed"
+      ;;
+    *)
+      abort_activation "database v1 fingerprint is not eligible for activation"
+      ;;
+  esac
+  if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$DATABASE" || abort_activation "database ownership normalization failed"; fi
+  chmod 0600 "$DATABASE" || abort_activation "database mode normalization failed"
+else
+  : > "$ROLLBACKS/pre-$RELEASE_ID.database-absent" || abort_activation "database absence marker creation failed"
+fi
+if ! install -m 0644 "$CANDIDATE/server/opencorvus-web.service" "$SYSTEMD_UNIT"; then abort_activation "service unit installation failed"; fi
+if ! "$SYSTEMCTL" daemon-reload; then abort_activation "systemd reload failed"; fi
+if ! "$SYSTEMCTL" enable "$SERVICE"; then abort_activation "service enablement failed"; fi
+if ! run_as_service "$CANDIDATE/server/opencorvus-registry-control" import \
+  --database "$DATABASE" --data "$STATE_ROOT" \
+  --seed "$CANDIDATE/server/website-registry-seed.json" --source "$CANDIDATE/client"; then
+  abort_activation "database import failed"
+fi
+if ! mv "$CANDIDATE" "$TARGET"; then abort_activation "candidate installation failed"; fi
+CANDIDATE=""
+if ! ln -s "releases/$RELEASE_ID" "$ROOT/.current-$RELEASE_ID"; then abort_activation "release pointer preparation failed"; fi
+if ! mv -T "$ROOT/.current-$RELEASE_ID" "$CURRENT"; then abort_activation "release pointer switch failed"; fi
+if ! service_start; then abort_activation "service startup failed"; fi
+if ! install -m 0644 "$TARGET/server/Caddyfile" "$CADDY_CONFIG"; then abort_activation "Caddy configuration installation failed"; fi
+if ! "$SYSTEMCTL" reload caddy.service; then abort_activation "Caddy reload failed"; fi
+if ! install -m 0755 "$TARGET/server/opencorvus-activate-release" "$ACTIVATOR_INSTALL"; then abort_activation "activator installation failed"; fi
+
+if ! probe_live_release; then
+  abort_activation "local readiness check failed; release, database, and service were rolled back"
+fi
+if ! "$SYSTEMCTL" enable --now "$BACKUP_TIMER"; then abort_activation "Registry backup timer enablement failed"; fi
+if [ -n "$OLD_TARGET" ]; then
+  ln -s "$OLD_TARGET" "$ROOT/.previous-$RELEASE_ID"
+  mv -T "$ROOT/.previous-$RELEASE_ID" "$PREVIOUS"
+fi
+rm -rf -- "$INCOMING" || echo "warning: activated release inbox cleanup failed" >&2
+prune_unreferenced_releases || echo "warning: activated release pruning failed" >&2
+prune_activation_backups || echo "warning: activation backup pruning failed" >&2
+printf '%s\n' "$RELEASE_ID"

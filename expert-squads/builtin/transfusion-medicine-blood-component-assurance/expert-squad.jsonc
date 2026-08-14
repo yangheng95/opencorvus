@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "transfusion-medicine-blood-component-assurance",
+  "name": "Transfusion Medicine Blood Component Assurance",
+  "label": "Transfusion Medicine Blood Component Assurance",
+  "description": "Evidence continuity for patient, order, specimen, blood component, compatibility, issue, transfusion, reaction and blood-bank quality records without component-selection or clinical authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for source-bound transfusion and blood-component evidence reconciliation before qualified review.",
+    "selection_guidance": "Select for patient/specimen/order identity, component inventory and attributes, test and compatibility trace, issue/transfusion chain, reaction workup evidence, wastage, recall or quality discrepancy review. Do not select to choose, crossmatch, release or transfuse a component, diagnose a reaction, or advise a patient.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "transfusion-medicine-blood-component-assurance/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "transfusion-patient-order-specimen-identity-analyst": {
+        "label": "Patient Order Specimen Identity Analyst",
+        "description": "Freezes authorized patient, order, specimen, collection, labeling and chain-of-custody evidence.",
+        "base_role": "explore",
+        "prompt": "agents/transfusion-patient-order-specimen-identity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "transfusion-medicine-blood-component-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "blood-component-inventory-compatibility-evidence-analyst": {
+        "label": "Blood Component Inventory Compatibility Evidence Analyst",
+        "description": "Traces component identity, attributes, storage, test and compatibility evidence as supplied.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/blood-component-inventory-compatibility-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "transfusion-medicine-blood-component-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "component-issue-transfusion-trace-analyst": {
+        "label": "Component Issue and Transfusion Trace Analyst",
+        "description": "Reconciles reservation, issue, transport, bedside receipt, transfusion, return and disposition events.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/component-issue-transfusion-trace-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "transfusion-medicine-blood-component-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "transfusion-reaction-quality-reconciliation-analyst": {
+        "label": "Transfusion Reaction and Quality Reconciliation Analyst",
+        "description": "Assembles reaction chronology, supplied workup observations, notifications and quality-event linkage without diagnosis.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/transfusion-reaction-quality-reconciliation-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "transfusion-medicine-blood-component-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "transfusion-medicine-blood-component-assurance-owner": {
+        "label": "Transfusion Medicine Blood Component Assurance Owner",
+        "description": "Joins identity, component, issue/transfusion and reaction/quality evidence into a qualified-review pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/transfusion-medicine-blood-component-assurance-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "transfusion-medicine-blood-component-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "qualified-review": {
+        "label": "Transfusion Medicine Blood Component Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Transfusion Medicine Blood Component Assurance review.",
+        "nodes": {
+          "transfusion-patient-order-specimen-identity-analyst": {
+            "agent_id": "transfusion-patient-order-specimen-identity-analyst",
+            "description": "Freezes authorized patient, order, specimen, collection, labeling and chain-of-custody evidence.",
+            "depends_on": []
+          },
+          "blood-component-inventory-compatibility-evidence-analyst": {
+            "agent_id": "blood-component-inventory-compatibility-evidence-analyst",
+            "description": "Traces component identity, attributes, storage, test and compatibility evidence as supplied.",
+            "depends_on": []
+          },
+          "component-issue-transfusion-trace-analyst": {
+            "agent_id": "component-issue-transfusion-trace-analyst",
+            "description": "Reconciles reservation, issue, transport, bedside receipt, transfusion, return and disposition events.",
+            "depends_on": []
+          },
+          "transfusion-reaction-quality-reconciliation-analyst": {
+            "agent_id": "transfusion-reaction-quality-reconciliation-analyst",
+            "description": "Assembles reaction chronology, supplied workup observations, notifications and quality-event linkage without diagnosis.",
+            "depends_on": []
+          },
+          "transfusion-medicine-blood-component-assurance-owner": {
+            "agent_id": "transfusion-medicine-blood-component-assurance-owner",
+            "description": "Joins identity, component, issue/transfusion and reaction/quality evidence into a qualified-review pack.",
+            "depends_on": [
+              "blood-component-inventory-compatibility-evidence-analyst",
+              "component-issue-transfusion-trace-analyst",
+              "transfusion-patient-order-specimen-identity-analyst",
+              "transfusion-reaction-quality-reconciliation-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

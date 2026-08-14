@@ -7,14 +7,17 @@ import { ExpertSquadIDSchema } from "@/expert-squad/id"
 import { isModelReference } from "@/provider/model-ref"
 import { TaskCallerMetadata } from "@/task-api/task-caller-metadata"
 import {
-  ArtifactReadInputSchema,
-  ArtifactReadLocatorSchema,
+  ArtifactReadReferenceInputSchema,
+  ArtifactReadReferenceSchema,
   ArtifactSearchWithoutLimitSchema,
-  CrossTaskArtifactImportListSchema,
+  CrossTaskArtifactSourceListSchema,
   refineArtifactSearchInput,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { MissionCompletionInput } from "@/mission/completion"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
+import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+
+const { cursor: _genericArtifactCursor, ...PanelArtifactSearchShape } = ArtifactSearchWithoutLimitSchema.shape
 
 export const RIGHT_SIDEBAR_SURFACE = "right-sidebar"
 export const PanelSurface = z.enum([...SharedChannelSurface.options, RIGHT_SIDEBAR_SURFACE])
@@ -180,7 +183,7 @@ function agentSchemas<const T extends readonly Capability[]>(
 
 function panelUISchema(item: Capability) {
   return item.action === "create_task"
-    ? unrefinedCapabilitySchema(item).omit({ artifact_imports: true }).superRefine(refineCreateTaskChannelBinding)
+    ? unrefinedCapabilitySchema(item).omit({ artifact_sources: true }).superRefine(refineCreateTaskChannelBinding)
     : item.schema
 }
 
@@ -189,7 +192,7 @@ function panelUISchemas<const T extends readonly Capability[]>(items: T) {
 }
 
 const MissionPanelCapabilityActions = [
-  "expert_squad_catalog",
+  "expert_squad_inspect",
   "multica_catalog",
   "create_task",
   "query_task",
@@ -199,7 +202,6 @@ const MissionPanelCapabilityActions = [
   "view_board",
   "view_plan",
   "view_tasks",
-  "send_task_message",
   "resume_task",
   "cancel_task",
   "reply_interaction",
@@ -220,12 +222,19 @@ function selectCapabilities(actions: readonly string[], context: string): Capabi
 
 export const PanelCapabilityRegistry = list(
   item({
-    action: "expert_squad_catalog",
+    action: "expert_squad_inspect",
     description:
-      "List the exact immutable Expert Squad snapshot held by this Mission for stage planning and Task ownership recommendations. The Mission launch path resolves either the operator-selected IDs or all Squads installed at launch into this persisted snapshot; later installations never widen it.",
+      "Inspect selector guidance and workflow summaries for one exact Expert Squad candidate returned by held-filtered capability_search. This never enumerates the Mission held set or returns a full package declaration.",
     kind: "query",
     surfaces: ["panel"],
-    params: {},
+    params: {
+      id: ExpertSquadIDSchema.describe("Exact held Expert Squad manifest ID returned by capability_search."),
+      workflowCursor: z
+        .string()
+        .min(1)
+        .optional()
+        .describe("Opaque next_workflow_cursor returned by the preceding inspection of this exact Squad."),
+    },
   }),
   item({
     action: "multica_catalog",
@@ -280,24 +289,33 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one Task's canonical Artifact catalog through a bounded cursor page. Repeat with next_cursor until null; empty entries are a valid result. The response returns exact ArtifactReadLocator values and never writes oversized output to a path side channel.",
+      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. Start with page_number 1 and repeat with next_page_number until null; the Host retains and authenticates opaque catalog cursors internally. Empty entries are a valid result. Each entry returns a short Host-minted artifact_locator_ref for read_task_artifact; the model never reconstructs its canonical locator.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
       taskID: z.string().min(1).describe("Source Task whose Artifact catalog should be enumerated."),
-      ...ArtifactSearchWithoutLimitSchema.shape,
+      terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
+        "Exact current terminal occurrence returned by panel.query_task for this source Task.",
+      ),
+      page_number: z
+        .number()
+        .int()
+        .min(1)
+        .max(1_000)
+        .describe("One-based page number. Start at 1, then use the preceding response's next_page_number."),
+      ...PanelArtifactSearchShape,
     },
     refine: refineArtifactSearchInput,
   }),
   item({
     action: "read_task_artifact",
     description:
-      "Read one exact canonical Artifact locator from a terminal Task in this Mission lineage. Continue through every next_offset until complete before making an acceptance or resume decision.",
+      "Read one exact Artifact selected by a Host-minted catalog reference from one terminal Task occurrence in this Mission lineage. Continue through every next_offset until complete, then use the returned occurrence-bound artifact_read_ref for acceptance or resume.",
     kind: "query",
     surfaces: ["panel"],
     params: {
       taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
-      ...ArtifactReadInputSchema.shape,
+      ...ArtifactReadReferenceInputSchema.shape,
     },
   }),
   item({
@@ -329,8 +347,8 @@ export const PanelCapabilityRegistry = list(
           "Absolute execution repository for the new Task. Sessions, tools, artifacts, and git operations use this directory while Task storage remains in the caller project.",
         ),
       request_id: z.string().optional().describe("External request ID used for idempotent task creation."),
-      artifact_imports: CrossTaskArtifactImportListSchema.optional().describe(
-        "Exact predecessor ArtifactReadLocator values selected from every panel.query_task_artifacts cursor page and imported through the target-owned publication protocol. Mission-only; payload bodies never belong in request text.",
+      artifact_sources: CrossTaskArtifactSourceListSchema.optional().describe(
+        "Mission-only cross-Task delivery authorities. For a completed source, provide only {authority:'completion_decision',source_task_id}; the Host imports the complete current deliverable set without copied locator IDs. For failed/cancelled recovery, provide {authority:'terminal_lifecycle',source_task_id,locator}.",
       ),
       model: z
         .string()
@@ -340,7 +358,7 @@ export const PanelCapabilityRegistry = list(
         .optional()
         .describe("Model reference in provider/model format for the new task."),
       promptProfile: ExpertSquadIDSchema.optional().describe(
-        "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose this from expert_squad_catalog for every created Task. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
+        "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
       ),
       expectedPackageDigest: z
         .string()
@@ -349,7 +367,6 @@ export const PanelCapabilityRegistry = list(
         .describe(
           "Optional compare-and-swap assertion for the exact immutable expert-squad package revision resolved at Task creation.",
         ),
-      queue: z.boolean().optional().describe("Whether to queue this task behind other work in the same directory."),
       checks: CheckConfig.optional().describe("Host verification check configuration for the new task."),
       channel: z.string().optional().describe("External channel identifier to bind to the new task."),
       thread: z.string().optional().describe("External thread identifier to bind to the new task."),
@@ -422,7 +439,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "resume_task",
     description:
-      "Resume the same completed or failed Mission-owned Task from an evidence-backed acceptance gap. This writes one visible Mission message and opens a new execution occurrence; ordinary send_task_message remains conversation-only for terminal Tasks.",
+      "Resume the same completed or failed Mission-owned Task from an evidence-backed acceptance gap. This writes one visible Mission message and opens a new execution occurrence; scheduler_message remains communication-only and never reopens a terminal Task.",
     kind: "mutation",
     surfaces: ["panel"],
     params: {
@@ -433,11 +450,11 @@ export const PanelCapabilityRegistry = list(
         .min(1)
         .max(32_000)
         .describe("Visible Mission-authored repair request describing the observed acceptance gap."),
-      evidence_locators: z
-        .array(ArtifactReadLocatorSchema)
+      evidence_read_refs: z
+        .array(ArtifactReadReferenceSchema)
         .min(1)
         .max(64)
-        .describe("Exact source Task locators completely read earlier in this same Mission Turn."),
+        .describe("Host-minted references returned by complete source Task reads earlier in this Mission Turn."),
     },
   }),
   item({
@@ -467,7 +484,7 @@ export const PanelCapabilityRegistry = list(
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {
-      taskID: z.string().describe("Task ID to queue for retry."),
+      taskID: z.string().describe("Task ID for the retry request."),
     },
   }),
   item({
@@ -476,7 +493,7 @@ export const PanelCapabilityRegistry = list(
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {
-      taskID: z.string().describe("Task ID to queue for replanning."),
+      taskID: z.string().describe("Task ID for the replan request."),
     },
   }),
   item({

@@ -6,11 +6,9 @@ import path from "path"
 import { pathToFileURL, fileURLToPath } from "url"
 import { LSPServer } from "./server"
 import z from "zod"
-import { Config } from "../config/config"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
-import { Flag } from "@/flag/flag"
-import { entries, values as objectValues } from "@/util/object"
+import { values as objectValues } from "@/util/object"
 import type { DocumentSymbol, Symbol } from "./schema"
 import {
   readTaskProcessBinding,
@@ -35,21 +33,6 @@ export namespace LSP {
     return () => {
       clientIdleTtlMs = previous.clientIdleTtlMs
       brokenTtlMs = previous.brokenTtlMs
-    }
-  }
-
-  const filterExperimentalServers = (servers: Record<string, LSPServer.Info>) => {
-    if (Flag.OPENCORVUS_EXPERIMENTAL_LSP_TY) {
-      // If experimental flag is enabled, disable pyright
-      if (servers["pyright"]) {
-        log.info("LSP server pyright is disabled because OPENCORVUS_EXPERIMENTAL_LSP_TY is enabled")
-        delete servers["pyright"]
-      }
-    } else {
-      // If experimental flag is disabled, disable ty
-      if (servers["ty"]) {
-        delete servers["ty"]
-      }
     }
   }
 
@@ -175,52 +158,7 @@ export namespace LSP {
         directory: Instance.directory,
         lifecycle: InstanceLifecycleContext.use(),
       }
-      const cfg = await Config.get()
-
-      if (cfg.lsp === false) {
-        log.info("all LSPs are disabled")
-        return createState(servers, owner, clients)
-      }
-
-      for (const server of LSPServer.builtInServers()) {
-        servers[server.id] = server
-      }
-
-      filterExperimentalServers(servers)
-
-      for (const [name, item] of entries((cfg.lsp ?? {}) as Exclude<NonNullable<Config.Info["lsp"]>, false>)) {
-        const existing = servers[name]
-        if (item.disabled) {
-          log.info(`LSP server ${name} is disabled`)
-          delete servers[name]
-          continue
-        }
-        servers[name] = {
-          ...existing,
-          id: name,
-          root: existing?.root ?? (async () => Instance.directory),
-          extensions: item.extensions ?? existing?.extensions ?? [],
-          spawn: async (root, stdio) => {
-            return {
-              process: await stdio(item.command[0], item.command.slice(1), {
-                cwd: root,
-                env: {
-                  ...process.env,
-                  ...item.env,
-                },
-              }),
-              initialization: item.initialization,
-            }
-          },
-        }
-      }
-
-      log.info("enabled LSP servers", {
-        serverIds: objectValues(servers)
-          .map((server) => server.id)
-          .join(", "),
-      })
-
+      log.info("all Language Server Protocol runtimes are disabled")
       return createState(servers, owner, clients)
     },
     async (state) => {
@@ -271,6 +209,8 @@ export namespace LSP {
   }
 
   async function getClients(file: string, authority: ProcessAuthority) {
+    const s = await state()
+    if (s.disposed || Object.keys(s.servers).length === 0) return []
     const binding = authority.kind === "task" ? readTaskProcessBinding(authority.taskID) : undefined
     let capsuleServerIDs: ReadonlySet<string> | undefined
     if (binding?.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL) {
@@ -280,8 +220,6 @@ export namespace LSP {
       if (runtime.lspServerIDs.length === 0) return []
       capsuleServerIDs = new Set(runtime.lspServerIDs)
     }
-    const s = await state()
-    if (s.disposed) return []
     const now = Date.now()
     pruneBroken(s, now)
     await pruneIdleClients(s, now)
@@ -358,7 +296,7 @@ export namespace LSP {
         onDiagnostics(properties) {
           if (s.disposed) return
           return runPersistentProjectOperation(s.owner, `LSP server ${server.id} diagnostics`, () =>
-            Bus.publish(LSPClient.Event.Diagnostics, properties),
+            Bus.publishOwned(LSPClient.Event.Diagnostics, properties),
           ).catch((error) => {
             log.error(`LSP server ${server.id} diagnostics publication failed`, { root, error: String(error) })
           })
@@ -479,6 +417,9 @@ export namespace LSP {
         broken: current.broken.size,
         clients: current.clients.length,
       }
+    },
+    async serverIDs() {
+      return Object.keys((await state()).servers).sort()
     },
   }
 

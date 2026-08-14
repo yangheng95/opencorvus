@@ -1,0 +1,893 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const skillSource = "https://github.com/yangheng95/opencorvus/tree/main/skills/opencorvus"
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: "通过 OpenClaw、Hermes 等 Agent 使用 OpenCorvus · OpenCorvus",
+        description: "安装可移植的 OpenCorvus Agent Skill，让 OpenClaw、Hermes Agent 与兼容 Agent 安全地运行、创建、观察和引导 OpenCorvus 工作。",
+        languageHref: publicPath("root", "/use-with-agents/"),
+        eyebrow: "Agent 接入",
+        heading: "让你已经在用的 Agent，把复杂工作交给 OpenCorvus。",
+        lead: "OpenClaw、Hermes Agent 或其他兼容 Agent Skills 的助手可以通过仓库内置的 opencorvus Skill 检查环境、启动运行时、创建 Task、跟进进度并读取交付证据。Skill 是操作说明层；OpenCorvus 才是实际运行时与 Task 权限边界。",
+        trustNote: "从可信的 OpenCorvus checkout 与明确 revision 安装，并在启用前检查完整 Skill 目录。不要只复制 SKILL.md；references/ 中保存了安装、API、运维与故障诊断契约。",
+        readinessEyebrow: "从零开始",
+        readinessHeading: "先让运行时就绪，再把操作方法交给 Agent。",
+        readinessLead: "Skill 可用、OpenCorvus 健康、模型可用、Task 已受理是四种不同状态。逐层验证，失败时就知道该修哪一层。",
+        readiness: [
+          ["取得运行时", "从下载页安装发布版本，或按下方经过验证的源码路径构建。"],
+          ["验证健康", "运行 doctor，保留所有警告；需要无警告验收时使用 doctor --strict。"],
+          ["连接模型", "完成 provider 登录，再用 auth list 和 models 确认一个真实可用的 provider/model。"],
+          ["安装操作 Skill", "复制完整 Skill 包，确认宿主能发现 opencorvus，然后在新会话中先做只读检查。"],
+        ],
+        sourceTitle: "经过验证的源码准备路径",
+        sourceCommandsLabel: "OpenCorvus 源码准备命令",
+        sourceHint: "如果已安装全局 opencorvus 命令，可以使用同名简写；否则始终保留下面的显式源码入口。",
+        download: "下载 OpenCorvus",
+        quickstart: "打开快速开始",
+        hostsEyebrow: "宿主设置",
+        hostsHeading: "同一个 Skill，两种原生安装方式。",
+        hostsLead: "安装命令不同，但两种宿主读取的是同一套 SKILL.md 与相对 references。安装完成后，先确认 Skill 名称，再开始会改变机器的操作。",
+        openclawScope: "安装到当前 workspace；只有确实要让所有本地 Agent 共享时才添加 --global。",
+        openclawVerify: "列表中应出现 opencorvus 且状态为 ready / eligible。skills check 是更广的依赖就绪摘要，不能代替按名称确认。新会话是最确定的刷新方式。",
+        openclawInvoke: "Control UI 使用 $opencorvus；消息频道使用 /opencorvus。",
+        openclawCommandsLabel: "OpenClaw Skill 安装与验证命令",
+        openclawPrompt: "Use $opencorvus to check whether OpenCorvus is installed and healthy. Do not change anything.",
+        hermesScope: "Hermes 会递归发现 ~/.hermes/skills 下的 Skill；这里用 developer-tools 目录保持分类清晰。",
+        hermesVerify: "hermes skills list 应显示 opencorvus。手动复制后启动新会话或执行 /reset；--now 只用于支持该参数的 hermes skills install 流程。",
+        hermesInvoke: "在新会话中把 Skill 当作 slash command 使用。",
+        hermesCommandsLabel: "Hermes Agent Skill 安装与验证命令",
+        hermesPowerShellLabel: "Hermes Agent PowerShell 安装命令",
+        hermesPrompt: "/opencorvus 检查 OpenCorvus 是否已经安装且健康。不要修改任何内容。",
+        powershell: "Windows PowerShell 安装",
+        genericTitle: "其他 Agent Skills 兼容宿主",
+        genericBody: "如果宿主支持 Agent Skills 目录、YAML frontmatter 与相对引用，可以把完整 opencorvus/ 目录放入它声明的 Skill root。安装位置、显式调用语法与刷新方式由宿主决定；启用前仍需确认它能按需读取 references/。这是一项条件兼容声明，不是对所有 Agent 的通用保证。",
+        genericAction: "查看完整 Skill 源码",
+        surfacesEyebrow: "选择运行方式",
+        surfacesHeading: "Skill 指导操作；真正的工作运行在两种 OpenCorvus 表面。",
+        surfacesLead: "一次性会话适合快速工作；持久服务与 Task 适合需要身份、事件、跟进、恢复和证据的交付。不要把两者的状态混在一起。",
+        oneOffLabel: "一次性",
+        oneOffTitle: "run：一次会话，一次结果",
+        oneOffBody: "让宿主在目标项目目录执行 opencorvus run，或用 run --attach 连接已运行的 server。它属于 Session 路径，不返回 Task ID，也没有 Task board 或 Task events。",
+        oneOffCommandLabel: "一次性 OpenCorvus Session 命令",
+        durableLabel: "持久交付",
+        durableTitle: "serve + Task/API：可观察、可跟进",
+        durableBody: "启动或连接 opencorvus serve，然后为一个明确的绝对项目目录创建 Task。HTTP 202 返回 task_id；宿主必须保存它，并通过 board、events 与最终证据判断进度和完成状态。",
+        durableCommandLabel: "持久 OpenCorvus server 命令",
+        durablePrompt: "为 /absolute/path/to/project 启动或连接 OpenCorvus。为要求的结果创建 code Task，保存返回的 task_id，并报告可观察的 board 与 event 进度。",
+        capabilityEyebrow: "Agent 可以做什么",
+        capabilities: [
+          ["检查", "发现现有命令、checkout、配置、进程与项目目录，不先做改动。"],
+          ["配置", "登录 provider、列出模型，并只修改用户要求的权威配置范围。"],
+          ["启动", "以 localhost 为默认边界启动 headless server，并验证真实 /ui/。"],
+          ["创建与观察", "创建 code 或 work Task，保存 task_id，读取 board 与 SSE events。"],
+          ["继续与恢复", "发送普通 follow-up；只有根因已改变时 retry，需要新计划时 replan。"],
+          ["停止", "取消是破坏性操作，必须获得明确授权并保留原因；停止 server 不等于取消 Task。"],
+        ],
+        boundaryEyebrow: "真实边界",
+        boundaryHeading: "Agent 必须真正看得见运行时、项目与网络。",
+        boundaries: [
+          ["同一执行环境", "宿主必须能执行 OpenCorvus CLI，或从自己的用户、机器、容器与网络 namespace 访问 server 和精确项目目录。"],
+          ["localhost 不是跨机器地址", "127.0.0.1 指发起请求的环境；容器或远程 Agent 的 localhost 不会自动指向你的桌面。"],
+          ["凭据留在安全边界内", "不要把 provider key、Basic Auth 密码或 Authorization header 写进 prompt、日志、源码或提交。"],
+          ["对外访问必须受保护", "只有得到明确授权后才绑定非 loopback 地址，并设置 OPENCORVUS_SERVER_PASSWORD 与合适的网络隔离。"],
+          ["目录与身份必须精确", "项目作用域请求使用绝对目录；Task 以返回的 task_id 为准，不从标题或最近列表猜测。"],
+          ["完成必须有证据", "区分 Skill 可见、运行时健康、Task 受理、Task 运行中，以及带可审查交付证据的终态。"],
+        ],
+        docsEyebrow: "继续配置",
+        docsHeading: "从宿主接入，进入真实运行路径。",
+        docsLead: "先安装 OpenCorvus 与 Skill，再根据工作长度选择 run 或 serve + Task。API 参考给出项目目录、Task 路由、认证和事件流的完整契约。",
+        server: "阅读 Server 运维",
+        api: "查看 HTTP API",
+      }
+    : {
+        title: "Use OpenCorvus from OpenClaw, Hermes, and other Agents · OpenCorvus",
+        description: "Install the portable OpenCorvus Agent Skill so OpenClaw, Hermes Agent, and compatible Agents can safely run, create, observe, and guide OpenCorvus work.",
+        languageHref: publicPath("zh-cn", "/use-with-agents/"),
+        eyebrow: "Use with agents",
+        heading: "Let the Agent you already use hand complex work to OpenCorvus.",
+        lead: "OpenClaw, Hermes Agent, and other Agent Skills-compatible assistants can use the repository's opencorvus Skill to inspect an environment, start the runtime, create Tasks, follow progress, and read delivery evidence. The Skill is the operating-instruction layer; OpenCorvus remains the runtime and Task authority.",
+        trustNote: "Install from a trusted OpenCorvus checkout at an intentional revision, and inspect the complete Skill directory before enabling it. Do not copy only SKILL.md: references/ carries the installation, API, operations, and troubleshooting contracts.",
+        readinessEyebrow: "Start from zero",
+        readinessHeading: "Ready the runtime before teaching your Agent how to operate it.",
+        readinessLead: "A visible Skill, a healthy OpenCorvus runtime, an available model, and an accepted Task are four different states. Verify them one layer at a time so a failure has a precise owner.",
+        readiness: [
+          ["Get the runtime", "Install a published build from Download, or use the verified source path below."],
+          ["Verify health", "Run doctor and keep every warning visible; use doctor --strict when acceptance requires a warning-free result."],
+          ["Connect a model", "Complete provider sign-in, then use auth list and models to confirm one real provider/model."],
+          ["Install the operating Skill", "Copy the complete Skill package, confirm the host discovers opencorvus, then begin with a read-only check in a fresh session."],
+        ],
+        sourceTitle: "Verified source preparation",
+        sourceCommandsLabel: "OpenCorvus source preparation commands",
+        sourceHint: "If a global opencorvus command is installed, the equivalent short commands work. Otherwise keep the explicit source entry point shown below.",
+        download: "Download OpenCorvus",
+        quickstart: "Open Quickstart",
+        hostsEyebrow: "Host setup",
+        hostsHeading: "One Skill, two native installation paths.",
+        hostsLead: "The install commands differ, but both hosts read the same SKILL.md and relative references. Confirm the Skill by name before asking it to change the machine.",
+        openclawScope: "Install into the active workspace. Add --global only when every local Agent should share this Skill.",
+        openclawVerify: "The list should show opencorvus as ready / eligible. skills check is a broader dependency-readiness summary; it does not replace the named discovery check. A fresh session is the most certain refresh path.",
+        openclawInvoke: "Use $opencorvus in the Control UI and /opencorvus in messaging channels.",
+        openclawCommandsLabel: "OpenClaw Skill installation and verification commands",
+        openclawPrompt: "Use $opencorvus to check whether OpenCorvus is installed and healthy. Do not change anything.",
+        hermesScope: "Hermes recursively discovers Skills under ~/.hermes/skills; developer-tools keeps this package grouped clearly.",
+        hermesVerify: "hermes skills list should show opencorvus. After a manual copy, start a new session or use /reset. Reserve --now for a supported hermes skills install flow.",
+        hermesInvoke: "Invoke the Skill as a slash command in the fresh session.",
+        hermesCommandsLabel: "Hermes Agent Skill installation and verification commands",
+        hermesPowerShellLabel: "Hermes Agent PowerShell installation commands",
+        hermesPrompt: "/opencorvus Check whether OpenCorvus is installed and healthy. Do not change anything.",
+        powershell: "Windows PowerShell install",
+        genericTitle: "Other Agent Skills-compatible hosts",
+        genericBody: "If a host supports Agent Skills directories, YAML frontmatter, and relative references, place the complete opencorvus/ directory in its declared Skill root. The host defines its install location, invocation syntax, and refresh behavior; verify that it can load references/ on demand before enabling it. This is conditional compatibility, not a promise about every Agent.",
+        genericAction: "Inspect the complete Skill source",
+        surfacesEyebrow: "Choose an operating surface",
+        surfacesHeading: "The Skill guides the work; two OpenCorvus surfaces run it.",
+        surfacesLead: "A one-off Session fits quick work. A durable service and Task fit deliveries that need identity, events, follow-up, recovery, and evidence. Keep their lifecycle claims separate.",
+        oneOffLabel: "One-off",
+        oneOffTitle: "run: one Session, one result",
+        oneOffBody: "Ask the host to execute opencorvus run in the target project, or use run --attach with an existing server. This is a Session path: it does not return a Task ID and has no Task board or Task events.",
+        oneOffCommandLabel: "One-off OpenCorvus Session command",
+        durableLabel: "Durable delivery",
+        durableTitle: "serve + Task/API: observable and steerable",
+        durableBody: "Start or reach opencorvus serve, then create a Task for one exact absolute project directory. HTTP 202 returns task_id. The host must retain it and use the board, events, and final evidence to judge progress and completion.",
+        durableCommandLabel: "Durable OpenCorvus server command",
+        durablePrompt: "Start or reach OpenCorvus for /absolute/path/to/project. Create a code Task for the requested outcome, retain the returned task_id, and report observable board and event progress.",
+        capabilityEyebrow: "What the Agent can operate",
+        capabilities: [
+          ["Inspect", "Discover the existing command, checkout, configuration, process, and project directory before changing anything."],
+          ["Configure", "Sign in to a provider, list models, and change only the authoritative configuration scope the user requested."],
+          ["Start", "Launch the headless server with localhost as the default boundary and verify the real /ui/."],
+          ["Create and observe", "Create a code or work Task, retain task_id, and read the board and Server-Sent Events."],
+          ["Continue and recover", "Send ordinary follow-up; retry only after the root cause changes, and replan when a new plan is genuinely needed."],
+          ["Stop", "Cancellation is destructive and needs explicit authority plus a reason. Stopping the server is not Task cancellation."],
+        ],
+        boundaryEyebrow: "The real boundary",
+        boundaryHeading: "The Agent must actually see the runtime, project, and network.",
+        boundaries: [
+          ["Same execution environment", "The host must execute the OpenCorvus CLI, or reach the server and exact project directory from its own user, machine, container, and network namespace."],
+          ["Localhost is not cross-machine", "127.0.0.1 means the environment making the request. A container or remote Agent's localhost is not automatically your desktop."],
+          ["Keep credentials inside the boundary", "Never place provider keys, Basic Auth passwords, or Authorization headers in prompts, logs, source files, or commits."],
+          ["Protect external access", "Bind beyond loopback only with explicit authority, OPENCORVUS_SERVER_PASSWORD, and an appropriate network boundary."],
+          ["Keep directory and identity exact", "Use absolute directories on project-scoped requests and the returned task_id for Tasks; never guess from a title or recent list."],
+          ["Completion needs evidence", "Distinguish Skill visible, runtime healthy, Task accepted, Task running, and a terminal Task with reviewable delivery evidence."],
+        ],
+        docsEyebrow: "Continue the setup",
+        docsHeading: "Move from host integration into the real operating path.",
+        docsLead: "Install OpenCorvus and the Skill, then choose run or serve + Task based on the work. The API reference carries the complete project-directory, Task-route, authentication, and event-stream contracts.",
+        server: "Read Server operations",
+        api: "Open the HTTP API",
+      }
+
+const sourceCommands = `git clone https://github.com/yangheng95/opencorvus.git
+cd opencorvus
+bun install
+bun run --cwd packages/opencorvus build
+bun packages/opencorvus/src/index.ts doctor
+bun packages/opencorvus/src/index.ts auth login
+bun packages/opencorvus/src/index.ts auth list
+bun packages/opencorvus/src/index.ts models`
+
+const openClawCommands = `openclaw skills install ./skills/opencorvus --as opencorvus
+openclaw skills list
+openclaw skills check`
+
+const hermesCommands = `mkdir -p ~/.hermes/skills/developer-tools
+cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
+hermes skills list`
+
+const hermesPowerShell = `New-Item -ItemType Directory -Force "$HOME\\.hermes\\skills\\developer-tools" | Out-Null
+Copy-Item -Recurse -Force ".\\skills\\opencorvus" "$HOME\\.hermes\\skills\\developer-tools\\opencorvus"
+hermes skills list`
+---
+
+<PublicSiteLayout
+  {locale}
+  current="use-with-agents"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main agent-hosts-page">
+    <section class="utility-intro agent-hosts-intro" aria-labelledby="agent-hosts-title">
+      <div>
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1 id="agent-hosts-title">{copy.heading}</h1>
+      </div>
+      <div class="intro-aside">
+        <p class="section-lead">{copy.lead}</p>
+        <p class="trust-note">{copy.trustNote}</p>
+      </div>
+    </section>
+
+    <section class="utility-section" aria-labelledby="agent-readiness-title">
+      <div class="landing-band-header">
+        <div><p class="eyebrow">{copy.readinessEyebrow}</p><h2 id="agent-readiness-title">{copy.readinessHeading}</h2></div>
+        <p class="section-lead">{copy.readinessLead}</p>
+      </div>
+      <ol class="readiness-flow">
+        {copy.readiness.map(([title, description], index) => (
+          <li><span>0{index + 1}</span><h3>{title}</h3><p>{description}</p></li>
+        ))}
+      </ol>
+      <div class="source-setup">
+        <div>
+          <p class="eyebrow">CLI / SOURCE</p>
+          <h3>{copy.sourceTitle}</h3>
+          <p>{copy.sourceHint}</p>
+          <div class="hero-actions">
+            <a class="primary-action" href={publicPath(locale, "/download/")}>{copy.download}</a>
+            <a class="secondary-action" href={publicPath(locale, "/start/quickstart/")}>{copy.quickstart}</a>
+          </div>
+        </div>
+        <pre tabindex="0" aria-label={copy.sourceCommandsLabel}><code>{sourceCommands}</code></pre>
+      </div>
+    </section>
+
+    <section class="utility-section hosts-section" aria-labelledby="agent-hosts-setup-title">
+      <div class="landing-band-header">
+        <div><p class="eyebrow">{copy.hostsEyebrow}</p><h2 id="agent-hosts-setup-title">{copy.hostsHeading}</h2></div>
+        <p class="section-lead">{copy.hostsLead}</p>
+      </div>
+      <div class="host-grid">
+        <article class="host-card host-openclaw">
+          <header><span>01</span><div><p>HOST</p><h3>OpenClaw</h3></div></header>
+          <p>{copy.openclawScope}</p>
+          <pre tabindex="0" aria-label={copy.openclawCommandsLabel}><code>{openClawCommands}</code></pre>
+          <p class="verification-copy">{copy.openclawVerify}</p>
+          <div class="invoke-block"><strong>{copy.openclawInvoke}</strong><code>{copy.openclawPrompt}</code></div>
+        </article>
+        <article class="host-card host-hermes">
+          <header><span>02</span><div><p>HOST</p><h3>Hermes Agent</h3></div></header>
+          <p>{copy.hermesScope}</p>
+          <pre tabindex="0" aria-label={copy.hermesCommandsLabel}><code>{hermesCommands}</code></pre>
+          <details><summary>{copy.powershell}</summary><pre tabindex="0" aria-label={copy.hermesPowerShellLabel}><code>{hermesPowerShell}</code></pre></details>
+          <p class="verification-copy">{copy.hermesVerify}</p>
+          <div class="invoke-block"><strong>{copy.hermesInvoke}</strong><code>{copy.hermesPrompt}</code></div>
+        </article>
+      </div>
+      <aside class="generic-host">
+        <div><span>03</span><h3>{copy.genericTitle}</h3></div>
+        <p>{copy.genericBody}</p>
+        <a class="secondary-action" href={skillSource}>{copy.genericAction}</a>
+      </aside>
+    </section>
+
+    <section class="utility-section" aria-labelledby="agent-surfaces-title">
+      <div class="landing-band-header">
+        <div><p class="eyebrow">{copy.surfacesEyebrow}</p><h2 id="agent-surfaces-title">{copy.surfacesHeading}</h2></div>
+        <p class="section-lead">{copy.surfacesLead}</p>
+      </div>
+      <div class="surface-grid">
+        <article>
+          <span>{copy.oneOffLabel}</span><h3>{copy.oneOffTitle}</h3><p>{copy.oneOffBody}</p>
+          <pre tabindex="0" aria-label={copy.oneOffCommandLabel}><code>opencorvus run "Inspect this project and explain the current architecture." --dir /absolute/path/to/project</code></pre>
+        </article>
+        <article class="durable-surface">
+          <span>{copy.durableLabel}</span><h3>{copy.durableTitle}</h3><p>{copy.durableBody}</p>
+          <pre tabindex="0" aria-label={copy.durableCommandLabel}><code>opencorvus serve --hostname 127.0.0.1 --port 7878 --project-dir /absolute/path/to/project</code></pre>
+          <div class="invoke-block"><code>{copy.durablePrompt}</code></div>
+        </article>
+      </div>
+      <div class="capability-heading"><p class="eyebrow">{copy.capabilityEyebrow}</p></div>
+      <div class="capability-grid">
+        {copy.capabilities.map(([title, description], index) => (
+          <article><span>0{index + 1}</span><h3>{title}</h3><p>{description}</p></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="utility-section boundary-section" aria-labelledby="agent-boundary-title">
+      <div class="boundary-title"><p class="eyebrow">{copy.boundaryEyebrow}</p><h2 id="agent-boundary-title">{copy.boundaryHeading}</h2></div>
+      <div class="boundary-list">
+        {copy.boundaries.map(([title, description], index) => (
+          <article><span>0{index + 1}</span><div><h3>{title}</h3><p>{description}</p></div></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="utility-section agent-docs" aria-labelledby="agent-docs-title">
+      <div><p class="eyebrow">{copy.docsEyebrow}</p><h2 id="agent-docs-title">{copy.docsHeading}</h2></div>
+      <div>
+        <p class="section-lead">{copy.docsLead}</p>
+        <div class="hero-actions">
+          <a class="primary-action" href={publicPath(locale, "/server/")}>{copy.server}</a>
+          <a class="secondary-action" href={publicPath(locale, "/reference/api/")}>{copy.api}</a>
+          <a class="secondary-action" href={skillSource}>{copy.genericAction}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</PublicSiteLayout>
+
+<style is:global>
+  body.public-agent-hosts-body {
+    min-width: 0;
+  }
+</style>
+
+<style>
+  .agent-hosts-page {
+    padding-bottom: 96px;
+  }
+
+  .agent-hosts-intro {
+    align-items: center;
+  }
+
+  .agent-hosts-intro::after {
+    content: "HOST / SKILL / RUNTIME / TASK";
+  }
+
+  .agent-hosts-intro h1 {
+    max-width: 720px;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(54px, 5vw, 76px);
+    font-weight: 760;
+    line-height: 0.92;
+    letter-spacing: -0.06em;
+  }
+
+  .intro-aside {
+    display: grid;
+    gap: 24px;
+  }
+
+  .trust-note {
+    margin: 0;
+    padding: 18px 20px;
+    border-left: 4px solid var(--clay);
+    background: rgb(255 255 255 / 7%);
+    color: #e7e4da;
+    font-size: 13px;
+  }
+
+  .landing-band-header h2,
+  .boundary-title h2,
+  .agent-docs h2 {
+    max-width: 780px;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(44px, 4.1vw, 66px);
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+  }
+
+  .readiness-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 44px 0 0;
+    padding: 0;
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+    list-style: none;
+  }
+
+  .readiness-flow li {
+    min-height: 250px;
+    padding: 26px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .readiness-flow li:nth-child(even) {
+    background: var(--cobalt-wash);
+  }
+
+  .readiness-flow span,
+  .capability-grid span,
+  .boundary-list > article > span,
+  .generic-host span {
+    color: var(--cobalt);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .readiness-flow h3 {
+    min-height: 72px;
+    margin: 34px 0 14px;
+    font-family: var(--display);
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .readiness-flow p,
+  .source-setup p,
+  .host-card > p,
+  .generic-host p,
+  .surface-grid p,
+  .capability-grid p,
+  .boundary-list p {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .source-setup {
+    display: grid;
+    grid-template-columns: 0.78fr 1.22fr;
+    gap: 38px;
+    margin-top: 32px;
+    padding: 32px;
+    border: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .source-setup h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  pre {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 22px;
+    overflow-x: auto;
+    border: 1px solid #45483f;
+    background: var(--ink);
+    color: #f4f1e8;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.75;
+    white-space: pre;
+  }
+
+  pre:focus-visible {
+    outline: 3px solid var(--cobalt);
+    outline-offset: 3px;
+  }
+
+  code {
+    font-family: var(--mono);
+  }
+
+  .hosts-section {
+    padding-right: 42px;
+    padding-left: 42px;
+    background: #e3ded2;
+  }
+
+  .host-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 44px;
+  }
+
+  .host-card {
+    min-width: 0;
+    padding: 30px;
+    border: 2px solid var(--ink);
+    background: var(--paper-raised);
+    box-shadow: 10px 10px 0 var(--cobalt-wash);
+  }
+
+  .host-hermes {
+    box-shadow: 10px 10px 0 var(--clay-wash);
+  }
+
+  .host-card header {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 18px;
+    align-items: start;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .host-card header > span {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    background: var(--cobalt);
+    color: white;
+    font-family: var(--mono);
+  }
+
+  .host-hermes header > span {
+    background: var(--clay);
+  }
+
+  .host-card header p,
+  .host-card header h3 {
+    margin: 0;
+  }
+
+  .host-card header p {
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+
+  .host-card header h3 {
+    font-family: var(--display);
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  .host-card > p {
+    min-height: 62px;
+    margin: 24px 0 18px;
+  }
+
+  .host-card .verification-copy {
+    min-height: 84px;
+    padding: 16px;
+    border-left: 4px solid var(--cobalt);
+    background: var(--cobalt-wash);
+    color: var(--ink);
+  }
+
+  .host-hermes .verification-copy {
+    border-color: var(--clay);
+    background: var(--clay-wash);
+  }
+
+  details {
+    margin-top: 12px;
+    border: 1px solid var(--rule-strong);
+  }
+
+  summary {
+    box-sizing: border-box;
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 12px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  details pre {
+    border: 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .invoke-block {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ink);
+  }
+
+  .invoke-block strong {
+    font-size: 13px;
+  }
+
+  .invoke-block code {
+    display: block;
+    padding: 14px;
+    overflow-wrap: anywhere;
+    background: #ece9df;
+    color: var(--cobalt-deep);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .generic-host {
+    display: grid;
+    grid-template-columns: 0.55fr 1.4fr auto;
+    gap: 34px;
+    align-items: center;
+    margin-top: 28px;
+    padding: 28px 30px;
+    border: 2px solid var(--ink);
+    background: var(--cobalt-wash);
+  }
+
+  .generic-host h3 {
+    margin: 8px 0 0;
+    font-family: var(--display);
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .generic-host p {
+    margin: 0;
+  }
+
+  .surface-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 44px;
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+  }
+
+  .surface-grid > article {
+    min-width: 0;
+    padding: 32px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .surface-grid > article > span {
+    display: inline-flex;
+    padding: 5px 9px;
+    background: var(--ink);
+    color: white;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+
+  .surface-grid h3 {
+    margin: 28px 0 18px;
+    font-family: var(--display);
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  .surface-grid p {
+    min-height: 86px;
+  }
+
+  .surface-grid pre {
+    margin-top: 22px;
+  }
+
+  .durable-surface {
+    background: var(--cobalt-wash) !important;
+  }
+
+  .durable-surface .invoke-block code {
+    background: var(--paper-raised);
+  }
+
+  .capability-heading {
+    margin-top: 52px;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+  }
+
+  .capability-grid article {
+    min-height: 190px;
+    padding: 24px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .capability-grid h3 {
+    margin: 28px 0 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .capability-grid p {
+    margin: 0;
+  }
+
+  .boundary-section {
+    display: grid;
+    grid-template-columns: 0.72fr 1.28fr;
+    gap: 64px;
+    padding: 64px;
+    background: var(--ink);
+    color: white;
+  }
+
+  .boundary-title {
+    position: sticky;
+    top: 28px;
+    align-self: start;
+  }
+
+  .boundary-title .eyebrow::before {
+    background: var(--clay);
+  }
+
+  .boundary-list {
+    border-top: 1px solid #55574f;
+  }
+
+  .boundary-list article {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 22px;
+    padding: 22px 0;
+    border-bottom: 1px solid #55574f;
+  }
+
+  .boundary-list h3,
+  .boundary-list p {
+    margin: 0;
+  }
+
+  .boundary-list h3 {
+    font-size: 15px;
+  }
+
+  .boundary-list p {
+    margin-top: 6px;
+    color: #b9b8b0;
+  }
+
+  .agent-docs {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 72px;
+    padding: 72px 64px;
+    background: var(--clay-wash);
+  }
+
+  .agent-docs .section-lead {
+    margin: 0;
+    color: #47352d;
+  }
+
+  @media (max-width: 1320px) {
+    .agent-hosts-intro,
+    .landing-band-header,
+    .source-setup,
+    .boundary-section,
+    .agent-docs {
+      gap: 42px;
+    }
+
+    .agent-hosts-intro h1 {
+      font-size: 56px;
+    }
+
+    .readiness-flow h3 {
+      font-size: 26px;
+    }
+
+    .host-card {
+      padding: 24px;
+    }
+
+    .generic-host {
+      grid-template-columns: 0.6fr 1.35fr;
+    }
+
+    .generic-host .secondary-action {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 1099px) {
+    .agent-hosts-intro,
+    .source-setup,
+    .boundary-section,
+    .agent-docs,
+    .generic-host {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .agent-hosts-intro > *,
+    .source-setup > *,
+    .host-grid > *,
+    .host-card > *,
+    .generic-host > *,
+    .surface-grid > *,
+    .capability-grid > *,
+    .boundary-section > *,
+    .boundary-list > *,
+    .agent-docs > *,
+    details {
+      min-width: 0;
+    }
+
+    .readiness-flow {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .readiness-flow li,
+    .capability-grid article {
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .capability-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .generic-host .secondary-action {
+      grid-column: auto;
+      justify-self: start;
+    }
+
+    .boundary-section,
+    .agent-docs {
+      padding: 48px 36px;
+    }
+
+    .boundary-title {
+      position: static;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .agent-hosts-page {
+      padding-bottom: 64px;
+    }
+
+    .agent-hosts-intro h1 {
+      font-size: clamp(42px, 13vw, 52px);
+      letter-spacing: -0.045em;
+    }
+
+    .landing-band-header h2,
+    .boundary-title h2,
+    .agent-docs h2 {
+      font-size: clamp(36px, 10vw, 44px) !important;
+    }
+
+    .readiness-flow,
+    .host-grid,
+    .surface-grid,
+    .capability-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .readiness-flow h3,
+    .readiness-flow li,
+    .host-card > p,
+    .host-card .verification-copy,
+    .surface-grid p,
+    .capability-grid article {
+      min-height: 0;
+    }
+
+    .hosts-section {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    .source-setup,
+    .host-card,
+    .generic-host,
+    .surface-grid > article,
+    .boundary-section,
+    .agent-docs {
+      padding: 24px;
+    }
+
+    .host-card header {
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .host-card header h3,
+    .source-setup h3,
+    .surface-grid h3 {
+      font-size: 32px;
+    }
+
+    .hero-actions,
+    .hero-actions :is(a, button),
+    .generic-host .secondary-action {
+      width: 100%;
+    }
+
+    pre {
+      padding: 16px;
+    }
+  }
+</style>

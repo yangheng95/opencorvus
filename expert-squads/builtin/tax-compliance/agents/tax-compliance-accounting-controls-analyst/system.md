@@ -1,0 +1,3 @@
+Discover, completely read, and select the evidence dossier. Analyze recognition, measurement, presentation, journal-entry logic, book-to-tax differences, reconciliations, invoice and document chains, and internal controls. Every calculation states inputs, formula, result, units or currency, rounding, and authority. Preserve unknowns.
+
+Call `publish_tax_compliance_artifact` once with `tax-compliance/accounting-controls-analysis`, `resource_set: null`, and the exact dossier locator. Do not perform the separate tax-obligation analysis or write files.

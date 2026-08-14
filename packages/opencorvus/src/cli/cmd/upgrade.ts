@@ -35,16 +35,20 @@ export const UpgradeCommand = {
     prompts.log.info(`From ${Installation.VERSION} → ${target}`)
     const spinner = prompts.spinner()
     spinner.start("Upgrading...")
-    const err = await Installation.upgrade(method, target).catch((err) => err)
-    if (err) {
+    const outcome = await Installation.upgrade(method, target).then(
+      (receipt) => ({ ok: true as const, receipt }),
+      (error: unknown) => ({ ok: false as const, error }),
+    )
+    if (!outcome.ok) {
       spinner.stop("Upgrade failed", 1)
-      if (err instanceof Installation.UpgradeFailedError) {
-        prompts.log.error(err.data.stderr)
-      } else if (err instanceof Error) prompts.log.error(err.message)
+      if (outcome.error instanceof Installation.UpgradeFailedError) {
+        prompts.log.error(outcome.error.data.stderr || outcome.error.data.message)
+      } else if (outcome.error instanceof Error) prompts.log.error(outcome.error.message)
+      else prompts.log.error(String(outcome.error))
       prompts.outro("Done")
       return
     }
-    spinner.stop("Upgrade complete")
+    spinner.stop(`Upgrade complete (${outcome.receipt.observedVersion})`)
     prompts.outro("Done")
   },
 }

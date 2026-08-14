@@ -5,6 +5,8 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { isRightSidebarConversationSession } from "@/chat/session"
 import { suppliedTaskCreatorMetadataKeys } from "./task-caller-metadata"
+import { MissionVisibleExpertSquadIDs } from "@/mission/schema"
+import { createHash } from "node:crypto"
 
 export const TaskCreatorActor = z.enum([
   "user",
@@ -37,6 +39,7 @@ const ResolvedTaskCreator = z.discriminatedUnion("actor", [
     .object({
       actor: z.literal("mission"),
       missionID: z.string().min(1),
+      heldExpertSquadIDs: MissionVisibleExpertSquadIDs,
       sessionID: Identifier.schema("session"),
       messageID: Identifier.schema("message").optional(),
       toolCallID: z.string().min(1).optional(),
@@ -84,6 +87,17 @@ export const TaskCreatorAuthorityError = NamedError.create(
 )
 
 export const TaskCreatorSessionError = NamedError.create("TaskCreatorSessionError", z.object({ message: z.string() }))
+
+export const MissionExpertSquadAuthorityError = NamedError.create(
+  "MissionExpertSquadAuthorityError",
+  z.object({
+    message: z.string(),
+    missionSessionID: Identifier.schema("session"),
+    requestedProfileID: z.string().nullable(),
+    heldExpertSquadCount: z.number().int().positive(),
+    heldExpertSquadSnapshotHash: z.string().regex(/^[a-f0-9]{64}$/),
+  }),
+)
 
 export function assertNoCallerSuppliedTaskCreatorMetadata(metadata: Record<string, unknown> | undefined): void {
   const supplied = suppliedTaskCreatorMetadataKeys(metadata)
@@ -134,7 +148,28 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
       message: `Mission task creator session ${creator.sessionID} is missing metadata.mission.id`,
     })
   }
-  return ResolvedTaskCreator.parse({ ...creator, missionID })
+  const heldExpertSquadIDs = MissionVisibleExpertSquadIDs.parse(
+    (mission as Record<string, unknown>).visibleExpertSquadIDs,
+  )
+  return ResolvedTaskCreator.parse({ ...creator, missionID, heldExpertSquadIDs })
+}
+
+export function assertTaskCreatorExpertSquadAuthority(input: {
+  creator: z.infer<typeof ResolvedTaskCreator>
+  promptProfile?: string
+}): void {
+  if (input.creator.actor !== "mission") return
+  const held = input.creator.heldExpertSquadIDs
+  if (input.promptProfile && held.includes(input.promptProfile)) return
+  throw new MissionExpertSquadAuthorityError({
+    message: input.promptProfile
+      ? `Mission may create a Task only with a held Expert Squad; received ${JSON.stringify(input.promptProfile)}.`
+      : "Mission Task creation requires one explicit held Expert Squad promptProfile.",
+    missionSessionID: input.creator.sessionID,
+    requestedProfileID: input.promptProfile ?? null,
+    heldExpertSquadCount: held.length,
+    heldExpertSquadSnapshotHash: createHash("sha256").update(JSON.stringify(held)).digest("hex"),
+  })
 }
 
 export function projectTaskCreatorMetadata(

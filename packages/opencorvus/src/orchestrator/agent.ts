@@ -42,7 +42,7 @@
  * ───────────────────────────────────────────────────────────────────────────
  */
 import ORCHESTRATOR_CORE from "@/prompt/core/orchestrator-core.txt"
-import { isDeepStrictEqual } from "node:util"
+import z from "zod"
 import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-narrative"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { Provider } from "@/provider/provider"
@@ -77,20 +77,37 @@ import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { readIterationHistory as readHistForPrompt } from "@/metrics/store"
 import { requireTask, terminalTask } from "@/engine"
-import { NotFoundError } from "@/storage/db"
+import { Database, NotFoundError, eq } from "@/storage/db"
+import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
+import { queuedTaskIngressSourceKind } from "@/engine/queued-task-ingress"
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import type { TaskRow } from "@/engine"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
+import {
+  TaskRootMessageProvenance,
+  deliverTaskRootMessageToOrchestratorSession,
+  getTaskRootMessage,
+} from "@/task-api/task-root-message"
 import { AgentTrace } from "@/trace"
+import { ProtocolStore } from "@/protocol/store"
+import { SchedulerMessagePayload } from "@/protocol/schema"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { isDeepStrictEqual } from "node:util"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import { ORCHESTRATOR_TASK_ERROR_ENVELOPE_MARKER, type OrchestratorTaskErrorEnvelope } from "./error-envelope"
+import { assertTaskRootSessionLineage, taskOrchestratorSession } from "./task-session"
+import { orchestratorControlOccurrenceIdentity } from "./control-message-identity"
 
 const log = Log.create({ service: "orchestrator" })
+
+export const OrchestratorControlIdentityConflictError = NamedError.create(
+  "OrchestratorControlIdentityConflictError",
+  z.object({ message: z.string().min(1), wakeID: z.string().min(1) }),
+)
 // The scheduler step budget lives on HostAgentRegistry's orchestrator record;
 // SessionLoop consumes that exact host runtime through the composed native surface.
 
@@ -167,6 +184,13 @@ async function latestSessionMessageID(sessionID: string): Promise<string | undef
   return undefined
 }
 
+async function latestSessionUserMessageID(sessionID: string): Promise<string | undefined> {
+  for await (const message of MessageStore.stream(sessionID)) {
+    if (message.info.role === "user") return message.info.id
+  }
+  return undefined
+}
+
 async function recordOrchestratorSessionHardError(input: { taskID: string; sessionID: string; error: AgentRunError }) {
   return recordOrchestratorSessionErrorEnvelope({
     taskID: input.taskID,
@@ -218,7 +242,7 @@ async function settleOrchestratorStartupFailure(input: {
       {
         status: "failed",
         error: input.taskError,
-        time_started: task.time_started ?? Math.min(task.time_created, now - 1),
+        time_started: task.time_started,
         time_completed: now,
       },
       `Orchestrator startup failed: ${input.envelope.message}`,
@@ -257,7 +281,7 @@ async function settleOrchestratorExecutionFailure(input: {
       {
         status: "failed",
         error: input.taskError,
-        time_started: task.time_started ?? Math.min(task.time_created, now - 1),
+        time_started: task.time_started,
         time_completed: now,
       },
       `Orchestrator execution interrupted: ${input.envelope.message}`,
@@ -410,70 +434,6 @@ function renderTaskAttachmentInventory(
   ].join("\n")
 }
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
-
-export function currentWakeControlProjection(input: { taskID: string; event?: OrchestratorEvent; wakeID?: string }) {
-  const taskIntent = input.event?.taskIntent
-  const missionAcceptanceResume = input.event?.missionAcceptanceResume
-  if (!taskIntent && !missionAcceptanceResume) return undefined
-  const currentControlCount = [taskIntent, missionAcceptanceResume].filter(Boolean).length
-  if (currentControlCount > 1) {
-    throw new Error(`Task ${input.taskID} wake has multiple current control occurrences`)
-  }
-  if (!input.wakeID) {
-    const kind = taskIntent ? taskIntent.kind : "mission acceptance-resume"
-    throw new Error(`Task ${input.taskID} ${kind} wake is missing its persisted ingress identity`)
-  }
-  const messageID = `msg_${input.wakeID.slice(input.wakeID.indexOf("_") + 1)}`
-  if (taskIntent) {
-    return {
-      messageID,
-      author: taskIntent.actor,
-      text: [
-        "# Operator Task Control",
-        "",
-        taskIntent.kind === "retry"
-          ? "Retry this same Task as a new non-terminal execution occurrence. Re-evaluate the current durable evidence and continue the work."
-          : "Replan this same Task as a new non-terminal execution occurrence. Re-evaluate the current durable evidence and choose the next concrete action.",
-        renderMissionAcceptanceResumeReceiptMeaning(),
-        "Before this Turn ends, make the current scheduling or lifecycle decision through the appropriate real tool. A historical completed or cancelled summary does not settle this occurrence.",
-      ].join("\n"),
-      wakeReason: {
-        source: "task.operator_intent" as const,
-        wakeID: input.wakeID,
-        taskID: input.taskID,
-        taskIntent,
-      },
-    }
-  }
-  return {
-    messageID,
-    author: "mission" as const,
-    text: [
-      "# Mission Acceptance Repair Control",
-      "",
-      "An evidence-backed Mission acceptance gap opened a new non-terminal execution occurrence for this same Task.",
-      `Read the one visible Mission-authored Task-root message with \`read_task_message(message_id="${missionAcceptanceResume!.messageID}", ...)\` before deciding.`,
-      "For any successor session_message evidence locator, pair that Message with its actual Task-root Session authority. missionSessionID identifies the originating Mission and is not the producing Session for the persisted visible Mission-authored Task-root message.",
-      renderMissionAcceptanceResumeReceiptMeaning(),
-      "Preserve the fixed Expert Squad and existing workflow binding. Choose the responsible existing lineage from current Task and Artifact evidence; this control does not prescribe a worker, verdict, or completion outcome.",
-      renderCurrentOccurrenceDecisionObligation(),
-    ].join("\n"),
-    wakeReason: {
-      source: "mission.acceptance_resume" as const,
-      wakeID: input.wakeID,
-      taskID: input.taskID,
-      missionAcceptanceResume,
-    },
-  }
-}
-
-function renderMissionAcceptanceResumeReceiptMeaning(): string {
-  return "A historical mission_acceptance_resume_receipt proves only that the Host accepted a prior request to reopen the Task. It is not Mission acceptance of deliverables, repair-completion evidence, or a lifecycle decision for this occurrence."
-}
-
 export namespace Orchestrator {
   export async function processTask(
     taskID: string,
@@ -534,9 +494,16 @@ export namespace Orchestrator {
       // Own one durable participant before any scheduler preparation that can
       // fail. This Session is the real lifecycle/audit identity even when no
       // LLM message is ever materialized.
-      const agentSession = await orchestratorSessionForTask(task)
+      const agentSession = await taskOrchestratorSession(task)
       agentSessionID = agentSession.id
       agentSessionInfo = agentSession
+      if (event?.rootMessage?.schedulerDelivery) {
+        await deliverTaskRootMessageToOrchestratorSession({
+          task,
+          messageID: event.rootMessage.messageID,
+          orchestratorSessionID: agentSession.id,
+        })
+      }
       wakeStartMessageID = await latestSessionMessageID(agentSession.id)
 
       const profileScope = task.session_id ? { sessionID: task.session_id } : { taskID: task.id }
@@ -590,10 +557,11 @@ export namespace Orchestrator {
 
       // 4. Build prompt. Each newly constructed Orchestrator child receives
       //    the original task brief once, authored by the durable task creator.
-      //    Follow-up operator text remains in its root message and is read by
-      //    exact ID through read_task_message. Retry/Replan is itself a real
-      //    operator control occurrence, so it becomes a visible, auditable
-      //    user-role Turn in this durable Orchestrator Session.
+      //    Follow-up operator text remains in its real root message. The wake
+      //    projects its exact identity without prescribing a retrieval tool. Typed Retry/Replan and
+      //    Mission resume occurrences stay in the system control projection. Exact terminal
+      //    occurrences additionally materialize one durable, visible Orchestrator-authored control
+      //    Message so the provider and transcript share the same current input.
       //    A wake can span multiple model turns while dispatch_agent waits for
       //    a child, so the contract resolves DB-backed task context per turn.
       let systemContext = await buildSystemParts(
@@ -603,42 +571,15 @@ export namespace Orchestrator {
         schedulerDispatchAgents,
         schedulerProjectDirectory,
       )
-      const appendUserMessage = !(await sessionHasUserMessage(agentSession.id))
-      const currentWakeControl = currentWakeControlProjection({ taskID, event, wakeID })
-      const existingMessages = currentWakeControl ? await Session.messages({ sessionID: agentSession.id }) : []
-      const existingCurrentWakeControlMessage = currentWakeControl
-        ? existingMessages.find(
-            (message) => message.info.role === "user" && message.info.id === currentWakeControl.messageID,
-          )
-        : undefined
-      if (existingCurrentWakeControlMessage && currentWakeControl) {
-        const reason = (existingCurrentWakeControlMessage.info as Message.User).extra?.wake_reason
-        if (
-          existingCurrentWakeControlMessage.info.author !== currentWakeControl.author ||
-          (existingCurrentWakeControlMessage.info as Message.User).agent !== "orchestrator" ||
-          !isDeepStrictEqual(reason, currentWakeControl.wakeReason)
-        ) {
-          throw new Error(
-            `Task ${taskID} current wake control message ${currentWakeControl.messageID} conflicts with wake ${wakeID}`,
-          )
-        }
-      }
-      const latestCurrentWakeControlReply = existingCurrentWakeControlMessage
-        ? existingMessages
-            .filter(
-              (message) => message.info.role === "assistant" && message.info.parentID === currentWakeControl!.messageID,
-            )
-            .at(-1)
-        : undefined
-      const existingCurrentWakeControlReply =
-        latestCurrentWakeControlReply?.info.role === "assistant" &&
-        latestCurrentWakeControlReply.info.time.completed !== undefined &&
-        latestCurrentWakeControlReply.info.finish === "stop" &&
-        latestCurrentWakeControlReply.info.error === undefined
-          ? latestCurrentWakeControlReply
-          : undefined
-      const materializeCreatorBeforeCurrentWakeControl = appendUserMessage && Boolean(currentWakeControl)
-      const appendCreatorMessage = appendUserMessage && !currentWakeControl
+      const appendUserMessage = !(await sessionHasCreatorMessage(agentSession.id))
+      const hasTypedControlOccurrence = Boolean(
+        event?.taskIntent ||
+          event?.missionAcceptanceResume ||
+          event?.agentLifecycleDelivery ||
+          event?.dispatchInfrastructureFailure,
+      )
+      const materializeCreatorBeforeTypedControl = appendUserMessage && hasTypedControlOccurrence
+      const appendCreatorMessage = appendUserMessage && !hasTypedControlOccurrence
       const taskCreator = TaskCreatorMetadata.parse(task.metadata)
       const userText = appendCreatorMessage ? orchestratorUserText(task) : ""
       // Build attachment inventory when the task has file attachments. Wakes
@@ -654,19 +595,17 @@ export namespace Orchestrator {
         appendCreatorMessage,
         schedulerCapability.builtInToolIDs.includes("read"),
       )
-      const creatorInventoryText = materializeCreatorBeforeCurrentWakeControl
+      const creatorInventoryText = materializeCreatorBeforeTypedControl
         ? renderTaskAttachmentInventory(allAttachments, true, schedulerCapability.builtInToolIDs.includes("read"))
         : ""
       const enrichedUserText = appendCreatorMessage ? userText + inventoryText : ""
-      const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID)
-      const hasCurrentWakeIngress = Boolean(
-        event?.rootMessage ||
-          event?.taskIntent ||
-          event?.coordinationRequest ||
-          event?.taskWaitActivity ||
-          event?.taskWaitWake ||
-          event?.processRecovery,
-      )
+      const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
+      const hasCurrentWakeIngress = isCurrentWakeIngress(event)
+      const currentControlMessage = currentOrchestratorControlMessage(event, taskID, wakeID)
+      const currentSchedulerInputMessageID = event?.rootMessage?.schedulerDelivery
+        ? event.rootMessage.messageID
+        : undefined
+      const currentVisibleInputMessageID = currentControlMessage?.messageID ?? currentSchedulerInputMessageID
       const resolveRuntimeSystem = async () => {
         systemContext = await buildSystemParts(
           requireTask(taskID),
@@ -675,10 +614,15 @@ export namespace Orchestrator {
           schedulerDispatchAgents,
           schedulerProjectDirectory,
         )
+        const currentIngressSystemNotice = currentControlMessage
+          ? "The last visible input Message is the exact current Orchestrator-authored control occurrence. Resolve that Message before using older conversation history; its durable identities and facts are authoritative for this decision pass."
+          : currentSchedulerInputMessageID
+            ? "The last visible input Message is the exact current Mission/Orchestrator scheduler message. Respond to that real participant Message before using older conversation history."
+            : wakeProvenanceNotice
         const runtimeParts =
           appendCreatorMessage && !hasCurrentWakeIngress
             ? systemContext.parts
-            : [...systemContext.parts, wakeProvenanceNotice, ...(inventoryText.trim() ? [inventoryText] : [])]
+            : [...systemContext.parts, currentIngressSystemNotice, ...(inventoryText.trim() ? [inventoryText] : [])]
         return terminalConversation
           ? [
               ...runtimeParts,
@@ -688,12 +632,9 @@ export namespace Orchestrator {
       }
       // Build PromptInput.parts. Text only; attachment media is referenced by
       // URL/index in the prompt inventory.
-      const parts: Array<{ type: "text"; text: string }> =
-        currentWakeControl && !existingCurrentWakeControlMessage
-          ? [{ type: "text", text: currentWakeControl.text }]
-          : appendCreatorMessage
-            ? [{ type: "text", text: enrichedUserText }]
-            : []
+      const parts: Array<{ type: "text"; text: string }> = appendCreatorMessage
+        ? [{ type: "text", text: enrichedUserText }]
+        : []
       const partsWithIds = parts.map((p) => ({ ...p, id: Identifier.ascending("part") }))
       const creatorPartsWithIds = [
         { type: "text" as const, text: orchestratorUserText(task) + creatorInventoryText },
@@ -748,6 +689,7 @@ export namespace Orchestrator {
                 taskID,
                 handle: "orchestrator.abort-cascade",
                 origin: { ...origin, targetSessionID: descendant.id },
+                settleBeforeReuse: false,
               })
             }
           } catch (err) {
@@ -761,6 +703,7 @@ export namespace Orchestrator {
               taskID,
               handle: "orchestrator.abort-cascade",
               origin: { ...origin, targetSessionID: agentSession.id },
+              settleBeforeReuse: false,
             })
             throw err
           }
@@ -793,6 +736,7 @@ export namespace Orchestrator {
       // 5. Run the orchestrator session — tools via SessionRuntimeContract.
       //    Step limit lives on agent.orchestrator.steps.
       let finalMessage: Message.WithParts | undefined
+      let promptGenerationOwner: AbortSignal | undefined
       const finalMessagePromptOwner = () => {
         if (!finalMessage) return undefined
         const owner = SessionPrompt.messageOwner(agentSession.id, finalMessage.info.id)
@@ -804,44 +748,16 @@ export namespace Orchestrator {
         return owner
       }
       const promptBoundaryMessageID = await latestSessionMessageID(agentSession.id)
+      let installedRuntimeContract: SessionPrompt.SessionRuntimeContract | undefined
+      let runtimeWakeArmed = false
+      let promptInvocationStarted = false
       try {
-        SessionPrompt.setSessionRuntimeContract(agentSession.id, {
-          identity: {
-            identityKind: "projected-scheduler",
-            sessionID: agentSession.id,
-            ...schedulerCapability.identity,
-            expertSquadID: schedulerCapability.expertSquadID,
-            packageRevision: schedulerCapability.packageRevision,
-            taskID,
-            contractKind: "orchestrator-wake",
-            ...(terminalConversation
-              ? {
-                  terminalIngressID: terminalConversationAuthority.ingressID,
-                  terminalIngressKind: terminalConversationAuthority.ingressKind,
-                }
-              : {}),
-            installedAt: Date.now(),
-          },
-          projectedTools: guard.tools as any,
-          projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
-          skillProjection,
-          harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
-            taskID,
-            capability: schedulerCapability,
-          }),
-          projectDirectory: schedulerProjectDirectory,
-          includeMcpTools: false,
-          system: resolveRuntimeSystem,
-          systemMode: "complete",
-          runOnce:
-            terminalConversation ||
-            Boolean(existingCurrentWakeControlMessage) ||
-            (!appendCreatorMessage && !currentWakeControl),
-          resources: { mcp: schedulerMcpOwner },
-        })
-        schedulerMcpOwnerTransferred = true
-        promptInFlight = true
-        if (materializeCreatorBeforeCurrentWakeControl) {
+        if (materializeCreatorBeforeTypedControl) {
+          if (SessionPrompt.hasGeneration(agentSession.id)) {
+            throw new Error(
+              `Fresh Orchestrator creator Message cannot be materialized while Session ${agentSession.id} has a prompt owner`,
+            )
+          }
           await SessionPrompt.prompt({
             sessionID: agentSession.id,
             author: taskCreator.actor,
@@ -852,41 +768,166 @@ export namespace Orchestrator {
             parts: creatorPartsWithIds,
           })
         }
-        finalMessage =
-          existingCurrentWakeControlReply ??
-          (await SessionContext.provide(agentSession, () =>
-            provideInitializedProjectExecution({
-              directory: agentSession.directory,
-              fn: () =>
-                runOrchestratorPromptWithInactivity({
-                  taskID,
-                  session: agentSession,
-                  run: async () =>
-                    appendCreatorMessage || (currentWakeControl && !existingCurrentWakeControlMessage)
-                      ? ((await SessionPrompt.prompt({
-                          sessionID: agentSession.id,
-                          messageID: currentWakeControl?.messageID,
-                          author: currentWakeControl?.author ?? taskCreator.actor,
-                          model: { providerID: model.providerID, modelID: model.api.id },
-                          agent: "orchestrator",
-                          byteMaterializationProjectID: agentSession.projectID,
-                          extra: currentWakeControl ? { wake_reason: currentWakeControl.wakeReason } : undefined,
-                          parts: partsWithIds,
-                        })) as Message.WithParts)
-                      : ((await SessionPrompt.loop({
-                          sessionID: agentSession.id,
-                        })) as Message.WithParts),
-                }),
+        installedRuntimeContract = SessionPrompt.setSessionRuntimeContract(
+          agentSession.id,
+          {
+            identity: {
+              identityKind: "projected-scheduler",
+              sessionID: agentSession.id,
+              ...schedulerCapability.identity,
+              expertSquadID: schedulerCapability.expertSquadID,
+              packageRevision: schedulerCapability.packageRevision,
+              taskID,
+              contractKind: "orchestrator-wake",
+              ...(terminalConversation
+                ? {
+                    taskIngressID: terminalConversationAuthority.ingressID,
+                    taskIngressKind: terminalConversationAuthority.ingressKind,
+                  }
+                : wakeID && event
+                  ? { taskIngressID: wakeID, taskIngressKind: queuedTaskIngressSourceKind(event) }
+                  : {}),
+              ...(currentVisibleInputMessageID ? { inputMessageID: currentVisibleInputMessageID } : {}),
+              installedAt: Date.now(),
+            },
+            projectedTools: guard.tools as any,
+            projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
+            skillProjection,
+            harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
+              taskID,
+              capability: schedulerCapability,
             }),
-          ))
+            projectDirectory: schedulerProjectDirectory,
+            includeMcpTools: false,
+            system: resolveRuntimeSystem,
+            systemMode: "complete",
+            // A follow-up durable ingress is an explicit runtime wake. The
+            // creator occurrence is carried by its real user Message, so it
+            // reaches the same boundary through Session standby instead of
+            // arming a second wake during that Message's commit.
+            runOnce: terminalConversation || !appendCreatorMessage,
+            resources: { mcp: schedulerMcpOwner },
+          },
+          { armWake: !currentVisibleInputMessageID, notifyWake: !currentVisibleInputMessageID },
+        )
+        if (!installedRuntimeContract) {
+          throw new Error(`Orchestrator Session ${agentSession.id} runtime contract was not installed`)
+        }
+        const runtimeContract = installedRuntimeContract
+        schedulerMcpOwnerTransferred = true
+        promptInFlight = true
+        if (currentControlMessage) {
+          const materialized = await materializeOrReuseCurrentOrchestratorControlMessage({
+            session: agentSession,
+            model: { providerID: model.providerID, modelID: model.api.id },
+            control: currentControlMessage,
+            beforeVisibilityEffects: () =>
+              Database.effect(() => {
+                SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+                runtimeWakeArmed = true
+              }),
+          })
+          if (materialized === "reused") {
+            const latestUserMessageID = await latestSessionUserMessageID(agentSession.id)
+            if (latestUserMessageID !== currentControlMessage.messageID) {
+              throw new Error(
+                `Orchestrator control Message ${currentControlMessage.messageID} is not the current visible input for ` +
+                  `${agentSession.id}; latest user Message is ${latestUserMessageID ?? "<none>"}`,
+              )
+            }
+            SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+            runtimeWakeArmed = true
+          }
+        } else if (currentSchedulerInputMessageID) {
+          const currentMessage = await MessageStore.get({
+            sessionID: agentSession.id,
+            messageID: currentSchedulerInputMessageID,
+          })
+          if (currentMessage.info.role !== "user") {
+            throw new Error(`Scheduler input Message ${currentSchedulerInputMessageID} must have role=user.`)
+          }
+          const latestUserMessageID = await latestSessionUserMessageID(agentSession.id)
+          if (latestUserMessageID !== currentSchedulerInputMessageID) {
+            throw new Error(
+              `Scheduler input Message ${currentSchedulerInputMessageID} is not the current visible input for ` +
+                `${agentSession.id}; latest user Message is ${latestUserMessageID ?? "<none>"}`,
+            )
+          }
+          SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+          runtimeWakeArmed = true
+        }
+        finalMessage = await SessionPrompt.withPromptOwnerCapture(
+          agentSession.id,
+          (owner) => {
+            if (promptGenerationOwner && promptGenerationOwner !== owner) {
+              throw new Error(`Session ${agentSession.id} orchestrator Turn captured multiple prompt generation owners`)
+            }
+            promptGenerationOwner = owner
+          },
+          () =>
+            SessionContext.provide(agentSession, () =>
+              provideInitializedProjectExecution({
+                directory: agentSession.directory,
+                fn: () =>
+                  runOrchestratorPromptWithInactivity({
+                    taskID,
+                    session: agentSession,
+                    run: async () => {
+                      promptInvocationStarted = true
+                      const result = appendCreatorMessage
+                        ? ((await SessionPrompt.prompt({
+                            sessionID: agentSession.id,
+                            author: taskCreator.actor,
+                            model: { providerID: model.providerID, modelID: model.api.id },
+                            agent: "orchestrator",
+                            byteMaterializationProjectID: agentSession.projectID,
+                            parts: partsWithIds,
+                          })) as Message.WithParts)
+                        : ((await SessionPrompt.loop({
+                            sessionID: agentSession.id,
+                            ...(currentVisibleInputMessageID
+                              ? { reply_to_message_id: currentVisibleInputMessageID }
+                              : {}),
+                          })) as Message.WithParts)
+                      if (runtimeContract.runOnce) {
+                        await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(
+                          agentSession.id,
+                          runtimeContract,
+                        )
+                      }
+                      return result
+                    },
+                  }),
+              }),
+            ),
+        )
+        if (promptGenerationOwner && finalMessage?.info.role === "assistant" && finalMessage.info.parentID) {
+          await SessionStatus.waitForExecutionSettlement({
+            sessionID: agentSession.id,
+            inputMessageID: finalMessage.info.parentID,
+            owner: promptGenerationOwner,
+          })
+        }
         promptInFlight = false
       } finally {
         // SessionPrompt cancellation rejects attached callers before its
         // background loop finishes unwinding the active model-turn owner.
-        // Exceptional exits therefore have to settle that owner before the
-        // runtime contract can be cleared. Successful standby exits keep the
-        // loop asleep for the next wake and deliberately skip this wait.
-        if (promptInFlight) await SessionPrompt.waitForFinish(agentSession.id, agentSession.directory)
+        // Exceptional exits therefore have to settle that exact run-once
+        // Turn, or join a failed prompt owner, before the runtime contract can
+        // be cleared. A persistent owner that successfully returned to
+        // standby deliberately remains alive and must not be awaited as a
+        // finished Session.
+        if (promptInFlight) {
+          if (installedRuntimeContract?.runOnce && runtimeWakeArmed && SessionPrompt.hasGeneration(agentSession.id)) {
+            try {
+              await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(agentSession.id, installedRuntimeContract)
+            } catch {
+              await SessionPrompt.waitForFinish(agentSession.id, agentSession.directory)
+            }
+          } else if (promptInvocationStarted) {
+            await SessionPrompt.waitForFinish(agentSession.id, agentSession.directory)
+          }
+        }
         const resources = SessionPrompt.clearSessionRuntimeContract(agentSession.id)
         await resources?.mcp.close()
         errorUnsub()
@@ -1004,7 +1045,7 @@ export namespace Orchestrator {
           note: event?.note,
           promptSessionID: error.sessionID,
         })
-        return
+        throw error
       }
       const structured = serializeOrchestratorTaskError(error)
       const latestMessageID = agentSessionID ? await latestSessionMessageID(agentSessionID) : undefined
@@ -1101,45 +1142,16 @@ export namespace Orchestrator {
   }
 }
 
-async function assertTaskRootSessionLineage(task: Pick<TaskRow, "id" | "session_id" | "project_id">): Promise<void> {
-  if (!task.session_id) {
-    throw new Error(`Task ${task.id} has no root session`)
-  }
-  await Session.assertLineageInProject({
-    sessionID: task.session_id,
-    projectID: task.project_id,
-  })
-}
-
-async function orchestratorSessionForTask(task: TaskRow): Promise<Session.Info> {
-  if (!task.session_id) {
-    throw new Error(`Task ${task.id} has no root session`)
-  }
-  await assertTaskRootSessionLineage(task)
-  const existing = (await Session.children(task.session_id))
-    .filter((session) => session.kind === "orchestrator")
-    .sort((left, right) => left.time.created - right.time.created)
-
-  // The Orchestrator Session is durable conversation history. Successive
-  // physical Turns reuse that identity; a persisted terminal observation from
-  // an older Turn never invalidates the Session after a backend restart.
-  const latest = existing.at(-1)
-  if (latest) {
-    await Session.touch(latest.id)
-    return latest
-  }
-
-  return Session.createNext({
-    kind: "orchestrator",
-    parentID: task.session_id,
-    title: `Agent: ${task.title}`,
-    directory: Instance.directory,
-  })
-}
-
-async function sessionHasUserMessage(sessionID: string): Promise<boolean> {
+async function sessionHasCreatorMessage(sessionID: string): Promise<boolean> {
   for await (const item of MessageStore.stream(sessionID)) {
-    if (item.info.role === "user") return true
+    if (item.info.role !== "user") continue
+    const extra = item.info.extra as
+      | {
+          task_root_message?: unknown
+          orchestrator_control_ingress?: unknown
+        }
+      | undefined
+    if (!extra?.task_root_message && !extra?.orchestrator_control_ingress) return true
   }
   return false
 }
@@ -1156,12 +1168,13 @@ export function renderTaskRuntimeDirectory(projectDirectory: string): string {
   ].join("\n")
 }
 
-export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: string): string {
+export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: string, wakeID?: string): string {
   const lines = [
     "## Wake Provenance",
     "这是一条 wake 消息，不是用户发送的新消息。",
     "This is a wake message, not a user-authored message.",
   ]
+  if (wakeID) lines.push(`Current durable wake occurrence=${wakeID}.`)
   let currentIngressCount = 0
 
   if (event?.taskWaitActivity) {
@@ -1185,8 +1198,13 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   if (event?.rootMessage) {
     currentIngressCount += 1
     lines.push(
-      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact message is current ingress for this wake; call \`read_task_message(message_id="${event.rootMessage.messageID}", ...)\` before deciding.`,
+      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact real-participant message is the current input for this wake. ${event.rootMessage.schedulerDelivery ? "It is the visible current input in the Orchestrator conversation; act on it directly." : "Read it through read_task_message before any wait or lifecycle decision."} Do not infer its contents from older conversation history.`,
     )
+    if (event.rootMessage.schedulerDelivery) {
+      lines.push(
+        `Current scheduler delivery event_id=${event.rootMessage.schedulerDelivery.eventID}; inbox_id=${event.rootMessage.schedulerDelivery.inboxID}; thread_id=${event.rootMessage.schedulerDelivery.threadID}. Use that exact event_id as reply_to when the real Message is a scheduler request.`,
+      )
+    }
   }
 
   if (event?.taskIntent) {
@@ -1197,7 +1215,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     )
     if (supersededOperatorMessageIDs.length > 0) {
       lines.push(
-        `Ordered superseded operator messages=${supersededOperatorMessageIDs.join(",")}. Read every exact ID in this order through \`read_task_message(message_id=..., ...)\` before scheduling; these refs preserve visible ingress that the Retry/Replan transaction retired from delivery.`,
+        `Ordered superseded operator messages=${supersededOperatorMessageIDs.join(",")}. These exact identities preserve real participant ingress that the Retry/Replan transaction retired from delivery; use them in this order without any Host-prescribed tool workflow.`,
       )
     }
     if (kind === "retry") {
@@ -1218,7 +1236,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
       `Current missionAcceptanceResume: mission_id=${resume.missionID}; mission_session_id=${resume.missionSessionID}; ` +
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
         `evidence_locators=${JSON.stringify(resume.evidenceLocators)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Call \`read_task_message(message_id="${resume.messageID}", ...)\` before deciding. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message identified above when deciding, without a Host-prescribed retrieval tool. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }
@@ -1241,12 +1259,38 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     )
   }
 
+  if (event?.dispatchInfrastructureFailure) {
+    currentIngressCount += 1
+    const failure = event.dispatchInfrastructureFailure
+    lines.push(
+      `Current dispatchInfrastructureFailure=${failure.infrastructureFactID}; typed_outcome=${JSON.stringify(failure.outcome)}. ` +
+        "This exact accepted worker dispatch failed during physical settlement. Use its Artifact locator, Worker Turn descriptor, and recovery authority as the current infrastructure ingress; do not infer a terminal worker lifecycle or create a second failure fact.",
+    )
+  }
+
+  if (event?.agentLifecycleDelivery) {
+    currentIngressCount += 1
+    const delivery = event.agentLifecycleDelivery
+    const lifecycle = requireCurrentAgentLifecycleFact(delivery, taskID)
+    lines.push(
+      `CURRENT LIFECYCLE CONTROL FACT: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; ` +
+        `dispatch_id=${delivery.dispatchID}; input_message_id=${lifecycle.inputMessageID}; ` +
+        `authoritative_status=${lifecycle.status.type}/${lifecycle.status.reason}; ` +
+        "physical_turn_state=settled; " +
+        `emitted_at=${new Date(lifecycle.emittedAt).toISOString()}; ` +
+        `summary=${JSON.stringify(lifecycle.summary)}; error=${JSON.stringify(lifecycle.status.error ?? null)}. ` +
+        "This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. " +
+        "Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. " +
+        "The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
+    )
+  }
+
   if (currentIngressCount === 0) {
     lines.push(
       "This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.",
     )
     lines.push(
-      "On the initial Task wake, the creator request is already the normal `# User Request` in this Turn. It has no task-root message identity. Read it directly; call `read_task_message` only for an exact message ID explicitly listed by this Wake Provenance as `Current rootMessage`, `Current missionAcceptanceResume`, or an ordered superseded Retry/Replan operator message.",
+      "On the initial Task wake, the creator request is already the normal `# User Request` in this Turn. It has no task-root message identity. Read that real participant message directly.",
     )
   } else {
     lines.push(
@@ -1255,6 +1299,196 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   }
 
   return lines.join("\n")
+}
+
+export type CurrentOrchestratorControlMessage = {
+  messageID: string
+  partID: string
+  text: string
+  extra: {
+    orchestrator_control_ingress: {
+      wake_id: string
+      source_kind: "agent_lifecycle_delivery" | "dispatch_infrastructure_failure"
+      fact_id: string
+    }
+  }
+  partMetadata: {
+    wake_id: string
+    source_kind: "agent_lifecycle_delivery" | "dispatch_infrastructure_failure"
+    fact_id: string
+  }
+}
+
+/**
+ * Exact terminal control occurrences have no participant-authored source
+ * Message of their own. Persist one visible Orchestrator-authored input so
+ * the provider's current conversation tail and the product transcript carry
+ * the same ingress. The durable queued wake and referenced fact remain the
+ * only scheduler authorities; this Message is their delivery projection.
+ */
+export function currentOrchestratorControlMessage(
+  event?: OrchestratorEvent,
+  taskID?: string,
+  wakeID?: string,
+): CurrentOrchestratorControlMessage | undefined {
+  const sourceKind = event?.agentLifecycleDelivery
+    ? ("agent_lifecycle_delivery" as const)
+    : event?.dispatchInfrastructureFailure
+      ? ("dispatch_infrastructure_failure" as const)
+      : undefined
+  if (!sourceKind) return undefined
+  const exactWakeID = wakeID?.trim()
+  if (!exactWakeID) throw new Error(`${sourceKind} requires exact durable wake identity`)
+  const factID =
+    sourceKind === "agent_lifecycle_delivery"
+      ? event!.agentLifecycleDelivery!.eventID
+      : event!.dispatchInfrastructureFailure!.infrastructureFactID
+  const identity = {
+    wake_id: exactWakeID,
+    source_kind: sourceKind,
+    fact_id: factID,
+  }
+  const occurrence = orchestratorControlOccurrenceIdentity(exactWakeID)
+  return {
+    ...occurrence,
+    text: ["## Orchestrator Control Occurrence", renderWakeProvenanceNotice(event, taskID, exactWakeID)].join("\n\n"),
+    extra: { orchestrator_control_ingress: identity },
+    partMetadata: identity,
+  }
+}
+
+export async function materializeOrReuseCurrentOrchestratorControlMessage(input: {
+  session: Session.Info
+  model: { providerID: string; modelID: string }
+  control: CurrentOrchestratorControlMessage
+  beforeVisibilityEffects?: () => void
+}): Promise<"created" | "reused"> {
+  const assertExact = (existing: Message.WithParts) => {
+    const part = existing.parts[0]
+    const valid =
+      existing.info.role === "user" &&
+      existing.info.author === "orchestrator" &&
+      existing.info.agent === "orchestrator" &&
+      isDeepStrictEqual(existing.info.extra, input.control.extra) &&
+      existing.parts.length === 1 &&
+      part?.id === input.control.partID &&
+      part.type === "text" &&
+      part.text === input.control.text &&
+      part.kind === "control" &&
+      part.source === "system" &&
+      isDeepStrictEqual(part.metadata, input.control.partMetadata)
+    if (!valid) {
+      throw new OrchestratorControlIdentityConflictError({
+        message:
+          `Orchestrator control Message ${input.control.messageID} does not match exact wake ` +
+          `${input.control.partMetadata.wake_id}`,
+        wakeID: input.control.partMetadata.wake_id,
+      })
+    }
+  }
+  let existing: Message.WithParts | undefined
+  let disposition: "created" | "reused" = "reused"
+  try {
+    existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
+  } catch (error) {
+    if (!NotFoundError.isInstance(error as Error)) throw error
+  }
+  if (!existing) {
+    const assertUnoccupied = () => {
+      const messageRow = Database.use((db) =>
+        db.select().from(MessageTable).where(eq(MessageTable.id, input.control.messageID)).get(),
+      )
+      const partRow = Database.use((db) =>
+        db.select().from(PartTable).where(eq(PartTable.id, input.control.partID)).get(),
+      )
+      if (!messageRow && !partRow) return
+      throw new OrchestratorControlIdentityConflictError({
+        message: `Orchestrator control occurrence for wake ${input.control.partMetadata.wake_id} is already occupied.`,
+        wakeID: input.control.partMetadata.wake_id,
+      })
+    }
+    // Reject a known compact-ID occupant before prompt preparation. The same
+    // check runs again in the persistence transaction to fence a concurrent
+    // occupant created after this read.
+    assertUnoccupied()
+    disposition = "created"
+    await SessionPrompt.prompt(
+      {
+        sessionID: input.session.id,
+        messageID: input.control.messageID,
+        author: "orchestrator",
+        model: input.model,
+        agent: "orchestrator",
+        byteMaterializationProjectID: input.session.projectID,
+        noReply: true,
+        extra: input.control.extra,
+        parts: [
+          {
+            id: input.control.partID,
+            type: "text",
+            text: input.control.text,
+            kind: "control",
+            source: "system",
+            metadata: input.control.partMetadata,
+          },
+        ],
+      },
+      {
+        beforeVisibilityEffects: input.beforeVisibilityEffects,
+        preflightBundle: assertUnoccupied,
+      },
+    )
+    existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
+  }
+  assertExact(existing)
+  return disposition
+}
+
+export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
+  return Boolean(
+    event?.rootMessage ||
+      event?.taskIntent ||
+      event?.missionAcceptanceResume ||
+      event?.coordinationRequest ||
+      event?.taskWaitActivity ||
+      event?.taskWaitWake ||
+      event?.processRecovery ||
+      event?.agentLifecycleDelivery ||
+      event?.dispatchInfrastructureFailure,
+  )
+}
+
+export function renderInitialDispatchContractInstruction(): string {
+  return "- Call `dispatch_agent` with one target-discriminated `dispatch` object. For a first node occurrence, set `turn.kind=initial`, put the exact workflow subject in `turn.workflow_subject`, and put only the selected row's `target_fields` in `turn.input`; `target`, `work_scope`, and `use_worktree` remain dispatch-level fields. Supply every field required by that target schema. When `instruction` is listed, it carries the complete bounded work the worker must perform. When `reason` is listed, it separately explains why that work is needed now and never substitutes for `instruction`. Never copy fields from another target. For a successor Turn, set `turn.kind=continuation`, choose exactly one typed `turn.authority` (`coordination_action` or `prior_dispatch`), and provide only incremental `turn.guidance` plus exact `turn.evidence_locators`; never invent placeholder guidance or a lineage identity."
+}
+
+function requireCurrentAgentLifecycleFact(
+  delivery: NonNullable<OrchestratorEvent["agentLifecycleDelivery"]>,
+  taskID?: string,
+) {
+  const exact = ProtocolStore.requireEvent(delivery.eventID)
+  if (exact.type !== SessionStatus.Event.Status.type) {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} references ${exact.type}`)
+  }
+  if (taskID && exact.taskID !== taskID) {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} belongs to Task ${exact.taskID ?? "<none>"}`)
+  }
+  const payloadSessionID = typeof exact.payload?.sessionID === "string" ? exact.payload.sessionID : undefined
+  if (exact.sessionID !== delivery.sessionID || payloadSessionID !== delivery.sessionID) {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} Session identity drifted`)
+  }
+  const inputMessageID = typeof exact.payload?.inputMessageID === "string" ? exact.payload.inputMessageID.trim() : ""
+  if (!inputMessageID) throw new Error(`Agent lifecycle delivery ${delivery.eventID} has no input Message identity`)
+  const status = SessionStatus.Info.parse(exact.payload?.status)
+  if (status.type !== "terminal") {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} is not terminal`)
+  }
+  return {
+    inputMessageID,
+    status,
+    emittedAt: exact.time.emitted,
+    summary: exact.summary,
+  }
 }
 
 function renderCurrentOccurrenceDecisionObligation(): string {
@@ -1272,8 +1506,9 @@ const ORCHESTRATOR_INSTRUCTIONS = withObservableWorkNarrative(ORCHESTRATOR_CORE)
  * Build the orchestrator system prompt as a two-part array:
  *   [0] = static instructions (stable, benefits from 1h cache TTL)
  *   [1] = dynamic context — Task, Delivery Slice, budget, metric, review,
- *         Session, and Artifact facts. All are derived from durable storage. A wake may
- *         identify one persisted root message without copying its contents.
+ *         Session, and Artifact facts. All are derived from durable storage. A scheduler
+ *         wake projects its exact source Message body directly from the canonical
+ *         Message/Part rows; no second transport body is persisted.
  */
 async function buildSystemParts(
   task: TaskRow,
@@ -1298,8 +1533,48 @@ async function buildSystemParts(
     ctx.push("## Current Wake Root Message")
     ctx.push(`- message_id=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}`)
     ctx.push(
-      "- Call `read_task_message` once before deciding this wake; the message contents exist only in the task root session.",
+      event.rootMessage.schedulerDelivery
+        ? "- This exact real-participant Message is the visible current input in the Orchestrator conversation. Its body remains in this one Message/Part authority."
+        : "- This exact real-participant Message is the current ingress. Its body remains in the original Message/Part authority; read it through read_task_message before acting on this wake.",
     )
+    if (event.rootMessage.schedulerDelivery) {
+      if (!task.session_id) throw new Error(`Task ${task.id} scheduler wake has no root Session.`)
+      const currentMessage = await getTaskRootMessage(task, event.rootMessage.messageID)
+      if (currentMessage.info.role !== "user") {
+        throw new Error(`Task ${task.id} current scheduler Message is not a user-role participant ingress.`)
+      }
+      const expectedAuthor = event.rootMessage.kind === "mission" ? "mission" : "orchestrator"
+      const provenance = TaskRootMessageProvenance.parse(currentMessage.info.extra?.task_root_message)
+      const schedulerEvent = ProtocolStore.requireEvent(event.rootMessage.schedulerDelivery.eventID)
+      const schedulerPayload = SchedulerMessagePayload.parse(schedulerEvent.payload)
+      if (
+        currentMessage.info.author !== expectedAuthor ||
+        schedulerEvent.type !== "scheduler.message" ||
+        provenance.taskID !== task.id ||
+        provenance.kind !== event.rootMessage.kind ||
+        provenance.schedulerDelivery?.eventID !== event.rootMessage.schedulerDelivery.eventID ||
+        provenance.schedulerDelivery.inboxID !== event.rootMessage.schedulerDelivery.inboxID ||
+        schedulerPayload.thread_id !== event.rootMessage.schedulerDelivery.threadID ||
+        schedulerEvent.replyTo !== event.rootMessage.schedulerDelivery.replyTo
+      ) {
+        throw new Error(`Task ${task.id} current scheduler Message provenance does not match its wake occurrence.`)
+      }
+      const body = currentMessage.parts
+        .filter((part): part is Message.TextPart => part.type === "text")
+        .map((part) => part.text)
+        .join("\n")
+        .trim()
+      if (!body) throw new Error(`Task ${task.id} current scheduler Message has no visible text body.`)
+      ctx.push(
+        `- scheduler_event_id=${event.rootMessage.schedulerDelivery.eventID}; scheduler_inbox_id=${event.rootMessage.schedulerDelivery.inboxID}; thread_id=${event.rootMessage.schedulerDelivery.threadID}`,
+      )
+      ctx.push(
+        `- message_kind=${schedulerPayload.message_kind}; subject=${JSON.stringify(schedulerPayload.subject)}; source_endpoint=${schedulerEvent.source}; reply_to=${schedulerEvent.replyTo ?? "<none>"}`,
+      )
+      ctx.push(
+        `- The canonical Message is the visible current user input in the Orchestrator Session (body length ${body.length}). Act on this exact envelope and body now.${schedulerPayload.message_kind === "request" ? ` Reply through scheduler_message with kind=reply and reply_to=${event.rootMessage.schedulerDelivery.eventID}.` : ""}`,
+      )
+    }
     ctx.push("")
   }
   if (event?.missionAcceptanceResume) {
@@ -1324,9 +1599,7 @@ async function buildSystemParts(
       `- target=${projectedAgent.identity.agentID}; label=${JSON.stringify(projectedAgent.label)}; description=${JSON.stringify(projectedAgent.description ?? "")}; base_role=${projectedAgent.identity.baseRole}; dispatch_adapter_id=${projectedAgent.identity.dispatchAdapterID}; target_fields=${adapterFields.join(",")}`,
     )
   }
-  ctx.push(
-    "- Call `dispatch_agent` with one target-discriminated `dispatch` object. For a first node occurrence, set `turn.kind=initial`, put the exact workflow subject in `turn.workflow_subject`, and put only the selected row's `target_fields` in `turn.input`; `target`, `work_scope`, and `use_worktree` remain dispatch-level fields. Put the complete bounded worker instruction in `turn.input.reason` when that row lists `reason`; never copy fields from another target. For a successor Turn, set `turn.kind=continuation`, choose exactly one typed `turn.authority` (`coordination_action` or `prior_dispatch`), and provide only incremental `turn.guidance` plus exact `turn.evidence_locators`; never invent placeholder guidance or a lineage identity.",
-  )
+  ctx.push(renderInitialDispatchContractInstruction())
   ctx.push("")
   // ── Recovery discipline ──
   // Rendered as one invariant instead of a configuration mode: the orchestrator

@@ -1,0 +1,1 @@
+Analyze defect modes, occurrence patterns, containment evidence, competing causal hypotheses, and discriminating checks. Use `manufacturing-quality/shared/method`; do not overstate root cause or safety impact and do not authorize disposition.

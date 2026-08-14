@@ -32,7 +32,7 @@ const agentTools = {
     "evolution-lab/shared/publish-evolution-artifact",
     "evolution-lab/shared/rehydrate-evolution-resources",
   ],
-  "evolution-security-integrity-reviewer": [
+  "evolution-safety-auditor": [
     "evolution-lab/shared/expert-squad-package",
     "evolution-lab/shared/publish-evolution-artifact",
     "evolution-lab/shared/rehydrate-evolution-resources",
@@ -48,11 +48,13 @@ const workflowDependencies = {
   "evolution-candidate-preparation": {
     "evolution-experiment-planner": [],
     "evolution-candidate-author": ["evolution-experiment-planner"],
+    "evolution-observer": ["evolution-experiment-planner"],
   },
   "evolution-campaign-evaluation": {
-    "evolution-evaluator": [],
-    "evolution-security-integrity-reviewer": ["evolution-evaluator"],
-    "evolution-recommendation-owner": ["evolution-security-integrity-reviewer"],
+    "evolution-experiment-planner": [],
+    "evolution-evaluator": ["evolution-experiment-planner"],
+    "evolution-safety-auditor": ["evolution-experiment-planner"],
+    "evolution-recommendation-owner": ["evolution-evaluator", "evolution-safety-auditor"],
   },
 } as const
 
@@ -73,7 +75,7 @@ describe("Evolution Lab complete package projection", () => {
             installationScope: "project",
             namespace: "builtin",
             id: "evolution-lab",
-            version: "2026.08.06.3",
+            version: "2026.08.13.1",
           },
         })
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -86,7 +88,7 @@ describe("Evolution Lab complete package projection", () => {
         expect(revision).toMatchObject({
           id: "evolution-lab",
           namespace: "builtin",
-          version: "2026.08.06.3",
+          version: "2026.08.13.1",
         })
 
         const scheduler = await PromptProfileResolver.resolveSchedulerCapability({
@@ -96,6 +98,9 @@ describe("Evolution Lab complete package projection", () => {
         })
         expect(scheduler.expertSquadID).toBe("evolution-lab")
         expect(scheduler.packageRevision).toEqual(revision)
+        expect(scheduler.builtInToolIDs).toEqual(
+          expect.arrayContaining(["artifact_search", "artifact_read", "artifact_select", "artifact_snapshot"]),
+        )
         expect(scheduler.productionSkills.map((grant) => grant.ref)).toEqual(["evolution-lab/shared/campaign"])
         expect(Object.keys(scheduler.virtualWorkflows)).toEqual(Object.keys(workflowDependencies))
         for (const [workflowID, dependencies] of Object.entries(workflowDependencies)) {

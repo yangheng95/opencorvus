@@ -109,7 +109,7 @@ jobs:
       - uses: yangheng95/opencorvus/github@latest
         env:
           ALIBABA_CODING_PLAN_API_KEY: ${{ secrets.ALIBABA_CODING_PLAN_API_KEY }}
-          OPENCORVUS_PERMISSION: '{"bash": "deny"}'
+          OPENCORVUS_CONFIG_CONTENT: '{"permission_mode":"full_access"}'
         with:
           model: alibaba-coding-plan-cn/qwen3.5-plus
 ```
@@ -139,7 +139,7 @@ jobs:
       - uses: yangheng95/opencorvus/github@latest
         env:
           ALIBABA_CODING_PLAN_API_KEY: ${{ secrets.ALIBABA_CODING_PLAN_API_KEY }}
-          OPENCORVUS_PERMISSION: '{"bash": "deny"}'
+          OPENCORVUS_CONFIG_CONTENT: '{"permission_mode":"full_access"}'
         with:
           model: alibaba-coding-plan-cn/qwen3.5-plus
           prompt: Maintain this repository from the triggering issue, pull request, schedule, or manual dispatch.

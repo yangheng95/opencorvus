@@ -6,6 +6,8 @@ import { conversationMessageHasDisplay } from "@/conversation/view"
 import { Instance } from "@/project/instance"
 import {
   ensureMissionSession,
+  assertMissionExpertSquadSnapshot,
+  MissionExpertSquadSnapshotMismatchError,
   findExistingMissionSession,
   getMissionSessionByDirectory,
   listGlobalMissionSessions,
@@ -21,11 +23,12 @@ import {
   MissionVisibleExpertSquadIDs,
   ProductPillarSchema,
 } from "@/mission/schema"
-import { missionExpertSquadSnapshotsMatch, resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-authority"
+import { resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-authority"
 import { MissionRecord, missionRecord, missionStatusRecord } from "@/mission/projection"
 import { listMissionTasks } from "@/engine/store"
 import { deriveTaskStatus } from "@/engine/task-status"
 import { Config } from "@/config/config"
+import { Auth } from "@/auth"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
 import { MissionStatusSnapshot } from "@/status/task-status-snapshot"
 import { Session } from "@/session"
@@ -41,10 +44,18 @@ import { UserUploadInput, UserUploadList } from "@/engine/model"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
-import { badRequestBody, errors } from "../error"
+import {
+  AuthReadUnavailableResponse,
+  badRequestBody,
+  badRequestOrNamedErrorResponse,
+  errors,
+  namedErrorResponse,
+} from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
+import { NotFoundError } from "@/storage/db"
 import { MissionDurableActivityCursorSchema, readMissionDurableActivity } from "@/engine/durable-activity"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
 import {
@@ -52,6 +63,8 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
+import { closeMissionExecutionOperation, openMissionExecutionWithWake } from "@/mission/execution-closure"
+import { drainSchedulerMessagesForProject } from "@/protocol/scheduler-message"
 
 function newMissionID(): string {
   return randomBytes(8).toString("hex")
@@ -185,52 +198,72 @@ async function closeMissionExecution(
     sessionID: session.id,
     missionID: session.missionID,
   } satisfies TaskCancellationOrigin
-  const childTasks = listMissionTasks({
-    projectID: session.projectID,
+  await closeMissionExecutionOperation({
     missionID: session.missionID,
     sessionID: session.id,
-  }).filter((task) => {
-    const status = deriveTaskStatus(task)
-    return status === "queued" || status === "active"
-  })
-  const failures: string[] = []
-  for (const task of childTasks) {
-    try {
-      await EngineService.cancelTask(task.id, {
-        origin: cancellationOrigin,
+    source: handle,
+    requestID,
+    close: async () => {
+      const failures: string[] = []
+      try {
+        const origin = createExecutionCancellationOrigin({
+          actor: cancellationOrigin.actor,
+          source: cancellationOrigin.source,
+          surface: cancellationOrigin.surface,
+          requestID: cancellationOrigin.requestID,
+          reason: cancellationOrigin.reason,
+          targetSessionID: session.id,
+          missionID: cancellationOrigin.missionID,
+        })
+        cancelSessionPromptInScope({
+          session,
+          handle,
+          origin,
+          settleBeforeReuse: true,
+        })
+      } catch (error) {
+        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
+      }
+      const childTasks = listMissionTasks({
+        projectID: session.projectID,
+        missionID: session.missionID,
+        sessionID: session.id,
+      }).filter((task) => {
+        const status = deriveTaskStatus(task)
+        return status === "active"
       })
-    } catch (error) {
-      failures.push(`task ${task.id}: ${error instanceof Error ? error.message : String(error)}`)
-    }
-  }
-  try {
-    const origin = createExecutionCancellationOrigin({
-      actor: cancellationOrigin.actor,
-      source: cancellationOrigin.source,
-      surface: cancellationOrigin.surface,
-      requestID: cancellationOrigin.requestID,
-      reason: cancellationOrigin.reason,
-      targetSessionID: session.id,
-      missionID: cancellationOrigin.missionID,
-    })
-    cancelSessionPromptInScope({
-      session,
-      handle,
-      origin,
-    })
-    await awaitSessionPromptFinishedInScope({
-      session,
-      handle,
-    })
-  } catch (error) {
-    failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-  }
-  if (failures.length > 0) {
-    throw createTaskCancellationIncomplete({
-      handle,
-      cause: new Error(failures.join("; ")),
-    })
-  }
+      for (const task of childTasks) {
+        try {
+          await EngineService.cancelTask(task.id, {
+            origin: cancellationOrigin,
+          })
+        } catch (error) {
+          failures.push(`task ${task.id}: ${error instanceof Error ? error.message : String(error)}`)
+        }
+      }
+      try {
+        await awaitSessionPromptFinishedInScope({
+          session,
+          handle,
+        })
+      } catch (error) {
+        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
+      }
+      try {
+        await drainSchedulerMessagesForProject()
+      } catch (error) {
+        failures.push(
+          `mission ${session.missionID} scheduler inbox: ${error instanceof Error ? error.message : String(error)}`,
+        )
+      }
+      if (failures.length > 0) {
+        throw createTaskCancellationIncomplete({
+          handle,
+          cause: new Error(failures.join("; ")),
+        })
+      }
+    },
+  })
   return cancellationOrigin
 }
 
@@ -321,7 +354,7 @@ export function MissionRoutes() {
         summary: "Get Mission status",
         description:
           "Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. " +
-          'Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
+          'Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
         operationId: "mission.status",
         responses: {
           200: {
@@ -518,7 +551,14 @@ export function MissionRoutes() {
       validator("param", MissionParam),
       validator("json", TaskCancellationRequestBody),
       async (c) => {
-        const session = await missionRouteSession(c.req.valid("param").missionID)
+        const missionID = c.req.valid("param").missionID
+        const session = await getMissionSessionByDirectory({
+          missionID,
+          directory: PersistedProjectContext.currentDirectory(),
+        })
+        if (session.projectID !== PersistedProjectContext.currentProject().id) {
+          throw new NotFoundError({ message: `Mission not found: ${missionID}` })
+        }
         const cancellationOrigin = await closeMissionExecution(
           session,
           "mission.delete",
@@ -545,6 +585,11 @@ export function MissionRoutes() {
             content: { "application/json": { schema: resolver(MissionWakeResult) } },
           },
           ...errors(400, 404),
+          409: namedErrorResponse(
+            "Mission execution is still completing its durable close operation",
+            "MissionExecutionClosingError",
+          ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", MissionParam),
@@ -566,6 +611,7 @@ export function MissionRoutes() {
           const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
           await validateConfigModelReferences(preview.effective, "mission.configOverlay")
         } catch (error) {
+          if (Auth.findReadError(error)) throw error
           const message = error instanceof Error ? error.message : String(error)
           return c.json(badRequestBody(message), 400)
         }
@@ -573,19 +619,28 @@ export function MissionRoutes() {
           sessionID: session.id,
           explicitModel: input.model ? Provider.parseModel(input.model) : undefined,
         })
-        await Session.mergeConfigOverlay({
+        await openMissionExecutionWithWake({
+          missionID,
           sessionID: session.id,
-          patch: configPatch,
-        })
-        await SessionWake.wake({
-          sessionID: session.id,
-          prompt: pendingPrompt.text,
-          author: "user",
-          agent: "mission",
-          surface: "panel",
-          reason: {
-            source: "mission.operator",
-            missionID,
+          source: "mission.dispatch",
+          requestID: resolveRequestID(c),
+          wake: async () => {
+            await Session.mergeConfigOverlay({
+              sessionID: session.id,
+              patch: configPatch,
+            })
+            return SessionWake.wakeWithReceipt({
+              sessionID: session.id,
+              prompt: pendingPrompt.text,
+              author: "user",
+              agent: "mission",
+              surface: "panel",
+              userAuthored: true,
+              reason: {
+                source: "mission.operator",
+                missionID,
+              },
+            })
           },
         })
         await setMissionPendingPrompt({
@@ -616,7 +671,15 @@ export function MissionRoutes() {
             description: "Mission wake accepted",
             content: { "application/json": { schema: resolver(MissionWakeResult) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse(
+            "Mission wake request or immutable Expert Squad snapshot rejected",
+            "MissionExpertSquadSnapshotMismatchError",
+          ),
+          409: namedErrorResponse(
+            "Mission execution is still completing its durable close operation",
+            "MissionExecutionClosingError",
+          ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", MissionWakeInput),
@@ -632,26 +695,20 @@ export function MissionRoutes() {
         let launchHeldExpertSquadIDs: MissionVisibleExpertSquadIDs | undefined
         if (input.model) configPatch.model = input.model
         try {
-          const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
-          await validateConfigModelReferences(preview.effective, "mission.configOverlay")
           if (existingSession) {
             if (missionProductPillar(existingSession) !== input.productPillar) {
               throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
             }
             const heldExpertSquadIDs = missionVisibleExpertSquadIDs(existingSession)
-            if (input.expertSquadIDs !== undefined) {
-              const requestedExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
-                projectDirectory: Instance.project.worktree,
-                productPillar: input.productPillar,
-                requestedExpertSquadIDs: input.expertSquadIDs,
-              })
-              if (!missionExpertSquadSnapshotsMatch(heldExpertSquadIDs, requestedExpertSquadIDs)) {
-                throw new Error(
-                  `Mission ${missionID} already holds the immutable Expert Squad snapshot ` +
-                    `${heldExpertSquadIDs.map((id) => JSON.stringify(id)).join(", ")}.`,
-                )
-              }
-            }
+            launchHeldExpertSquadIDs =
+              input.expertSquadIDs === undefined
+                ? heldExpertSquadIDs
+                : await resolveMissionLaunchExpertSquadIDs({
+                    projectDirectory: Instance.project.worktree,
+                    productPillar: input.productPillar,
+                    requestedExpertSquadIDs: input.expertSquadIDs,
+                  })
+            assertMissionExpertSquadSnapshot(missionID, heldExpertSquadIDs, launchHeldExpertSquadIDs)
           } else {
             launchHeldExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
               projectDirectory: Instance.project.worktree,
@@ -660,6 +717,16 @@ export function MissionRoutes() {
             })
           }
         } catch (error) {
+          if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
+          if (Auth.findReadError(error)) throw error
+          const message = error instanceof Error ? error.message : String(error)
+          return c.json(badRequestBody(message), 400)
+        }
+        try {
+          const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
+          await validateConfigModelReferences(preview.effective, "mission.configOverlay")
+        } catch (error) {
+          if (Auth.findReadError(error)) throw error
           const message = error instanceof Error ? error.message : String(error)
           return c.json(badRequestBody(message), 400)
         }
@@ -671,26 +738,42 @@ export function MissionRoutes() {
         // distinguishes "started" from "resumed". The lookup and the ensure
         // call both use the active request directory, so linked worktrees do
         // not resume each other's Mission session.
-        const session = await ensureMissionSession({
-          missionID,
-          defaultCwd: Instance.directory,
-          productPillar: input.productPillar,
-          heldExpertSquadIDs: launchHeldExpertSquadIDs,
-        })
-        await Session.mergeConfigOverlay({
-          sessionID: session.id,
-          patch: configPatch,
-        })
-        await SessionWake.wake({
-          sessionID: session.id,
-          prompt: input.text,
-          author: "user",
-          agent: "mission",
-          surface: "panel",
-          parts: await missionWakeAttachmentParts(input.attachments),
-          reason: {
-            source: "mission.operator",
+        let session
+        try {
+          session = await ensureMissionSession({
             missionID,
+            defaultCwd: Instance.directory,
+            productPillar: input.productPillar,
+            heldExpertSquadIDs: launchHeldExpertSquadIDs,
+          })
+        } catch (error) {
+          if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
+          throw error
+        }
+        const attachmentParts = await missionWakeAttachmentParts(input.attachments)
+        await openMissionExecutionWithWake({
+          missionID,
+          sessionID: session.id,
+          source: "mission.wake",
+          requestID: resolveRequestID(c),
+          wake: async () => {
+            await Session.mergeConfigOverlay({
+              sessionID: session.id,
+              patch: configPatch,
+            })
+            return SessionWake.wakeWithReceipt({
+              sessionID: session.id,
+              prompt: input.text,
+              author: "user",
+              agent: "mission",
+              surface: "panel",
+              userAuthored: true,
+              parts: attachmentParts,
+              reason: {
+                source: "mission.operator",
+                missionID,
+              },
+            })
           },
         })
         return c.json(

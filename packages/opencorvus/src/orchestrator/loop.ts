@@ -18,9 +18,6 @@
  * message must be read and paired with a scheduler decision before the wake is
  * marked delivered. Only explicit external ingress can re-enter the task loop.
  *
- * What this owns:
- *   - Marking queued → active so the cwd-scoped queue sees ownership.
- *
  * What this does NOT own:
  *   - Deciding what the orchestrator does on wake (LLM reads describe).
  *   - Dispatching Task workflow nodes (the Orchestrator chooses an exact projected worker).
@@ -33,7 +30,7 @@ import { Orchestrator } from "@/orchestrator/agent"
 import type { OrchestratorEvent } from "@/orchestrator/event"
 import { findTask } from "@/engine"
 import { terminalTask, updateTask } from "@/engine/state"
-import { deriveTaskStatus, isTaskQueued, isTaskTerminal } from "@/engine/task-status"
+import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { recordTaskInfrastructureError, recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
 
 const log = Log.create({ service: "orchestrator-loop" })
@@ -51,8 +48,8 @@ export async function runTaskLoop(input: {
 /**
  * Run one orchestrator decision pass.
  *
- * Single-pass: enter, mark active if queued, run `Orchestrator.processTask`
- * once with the caller event, exit. If the LLM stops mid-task after a valid
+ * Single-pass: enter, run `Orchestrator.processTask` once with the caller event,
+ * exit. If the LLM stops mid-task after a valid
  * decision (acceptance rejection, build settled, stream error, pending
  * question), the next external trigger re-enters this function. Current
  * operator/root ingress is not considered delivered until the queue verifies
@@ -68,15 +65,6 @@ async function runTaskLoopInner(input: {
 }) {
   const { taskID, signal, event, wakeID } = input
   if (signal?.aborted) return
-
-  // Mark queued tasks active so the cwd-scoped queue sees ownership before
-  // the first orchestrator decision completes.
-  {
-    const task = findTask(taskID)
-    if (task && isTaskQueued(task)) {
-      await updateTask(task, { status: "active" }, "Task loop started — marking active for serial queue")
-    }
-  }
 
   log.info("task loop started", { taskID, note: event?.note })
 

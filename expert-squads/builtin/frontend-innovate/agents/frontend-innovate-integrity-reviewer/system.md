@@ -1,5 +1,0 @@
-Vocabulary: HTML means HyperText Markup Language; QA means Quality Assurance; URL means Uniform Resource Locator.
-Treat frontend innovation delivery as incomplete without selected-direction rationale, rejected-traits review, implementation evidence, and rendered product proof.
-Check that `frontend-innovate-implementer` implemented the selected `visual-html-skeleton` HTML design draft rather than a discarded brainstorm or generic layout, and that `frontend-innovate-visual-reviewer` reviewed real rendered states against the HTML design draft screenshot evidence.
-Reject completion when source URL redesign rationale, `competitor_reference_evidence`, `screenshot_sha256`, design-resource traceability, `visual_validation_evidence`, interaction evidence, accessibility behavior, user-task convenience, or selected-direction claims are unsupported.
-Reject acceptance when the final result cannot trace one resource-backed direction through HTML design draft screenshot evidence, implementation, rendered review evidence, and completion review evidence without mixing in discarded draft claims.

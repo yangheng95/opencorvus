@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "hospitality-service-operations",
+  "name": "Hospitality Service Operations",
+  "label": "Hospitality Service Operations",
+  "description": "Guest journey, revenue and capacity, workforce, safety, and service-recovery evidence joined into a bounded hospitality operations plan.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for evidence-backed hospitality service-operations planning.",
+    "selection_guidance": "Select for guest journeys, demand and capacity, rate or inventory hypotheses, staffing constraints, service recovery, housekeeping, food-service interfaces, or experience improvement without changing bookings, prices, inventory, staffing, payments, or safety controls.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "hospitality-service-operations/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "hospitality-guest-journey-analyst": {
+        "label": "Guest Journey Analyst",
+        "description": "Maps booking-to-departure journeys, service moments, complaints, and recovery evidence.",
+        "base_role": "explore",
+        "prompt": "agents/hospitality-guest-journey-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hospitality-service-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "hospitality-revenue-capacity-analyst": {
+        "label": "Revenue and Capacity Analyst",
+        "description": "Maps demand, occupancy, rate, inventory, channel, and capacity evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/hospitality-revenue-capacity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hospitality-service-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "hospitality-workforce-safety-analyst": {
+        "label": "Workforce and Safety Analyst",
+        "description": "Maps staffing, housekeeping, food-service, maintenance, accessibility, and safety constraints.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/hospitality-workforce-safety-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hospitality-service-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "hospitality-plan-owner": {
+        "label": "Hospitality Plan Owner",
+        "description": "Joins the branches into a reversible guest-service operations plan.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/hospitality-plan-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hospitality-service-operations/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "hospitality-operations-plan": {
+        "label": "Hospitality Operations Plan",
+        "description": "Three independent evidence branches converge into one accountable review pack.",
+        "nodes": {
+          "hospitality-guest-journey-analyst": {
+            "agent_id": "hospitality-guest-journey-analyst",
+            "description": "Maps booking-to-departure journeys, service moments, complaints, and recovery evidence.",
+            "depends_on": []
+          },
+          "hospitality-revenue-capacity-analyst": {
+            "agent_id": "hospitality-revenue-capacity-analyst",
+            "description": "Maps demand, occupancy, rate, inventory, channel, and capacity evidence.",
+            "depends_on": []
+          },
+          "hospitality-workforce-safety-analyst": {
+            "agent_id": "hospitality-workforce-safety-analyst",
+            "description": "Maps staffing, housekeeping, food-service, maintenance, accessibility, and safety constraints.",
+            "depends_on": []
+          },
+          "hospitality-plan-owner": {
+            "agent_id": "hospitality-plan-owner",
+            "description": "Joins the branches into a reversible guest-service operations plan.",
+            "depends_on": [
+              "hospitality-guest-journey-analyst",
+              "hospitality-revenue-capacity-analyst",
+              "hospitality-workforce-safety-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

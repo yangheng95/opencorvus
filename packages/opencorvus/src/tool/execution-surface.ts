@@ -1,13 +1,13 @@
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import type { HarnessProjection } from "@/capability/harness-projection"
 
 export interface ToolExecutionSurface {
   toolIDs: readonly string[]
-  permission: PermissionNext.Ruleset
+  permission: CapabilityRules.Ruleset
   harness_projection?: HarnessProjection
   permission_layers?: Readonly<{
-    agent: PermissionNext.Ruleset
-    session: PermissionNext.Ruleset
+    agent: CapabilityRules.Ruleset
+    session: CapabilityRules.Ruleset
   }>
 }
 
@@ -19,19 +19,19 @@ export function toolSwitchAllows(name: string, switches: Readonly<Record<string,
 
 export function visibleExecutionToolIDs(input: {
   toolIDs: readonly string[]
-  permission: PermissionNext.Ruleset
+  permission: CapabilityRules.Ruleset
   switches?: Readonly<Record<string, boolean>>
 }): string[] {
   return input.toolIDs.filter(
     (toolID) =>
       toolSwitchAllows(toolID, input.switches) &&
-      PermissionNext.evaluate(toolID, "*", input.permission).action !== "deny",
+      CapabilityRules.evaluate(toolID, "*", input.permission).action !== "deny",
   )
 }
 
 export function applyToolExecutionPolicy<T>(input: {
   tools: Record<string, T>
-  permission: PermissionNext.Ruleset
+  permission: CapabilityRules.Ruleset
   switches?: Readonly<Record<string, boolean>>
   requiredToolIDs?: Iterable<string>
 }): void {
@@ -55,10 +55,10 @@ export function applyToolExecutionPolicy<T>(input: {
 
 export function createToolExecutionSurface(input: {
   toolIDs: Iterable<string>
-  permission: PermissionNext.Ruleset
+  permission: CapabilityRules.Ruleset
   permissionLayers?: {
-    agent?: PermissionNext.Ruleset
-    session?: PermissionNext.Ruleset
+    agent?: CapabilityRules.Ruleset
+    session?: CapabilityRules.Ruleset
   }
   harnessProjection?: HarnessProjection
 }): ToolExecutionSurface {
@@ -71,15 +71,15 @@ export function createToolExecutionSurface(input: {
     ? Object.freeze({
         agent: Object.freeze(
           (input.permissionLayers.agent ?? []).map((rule) => Object.freeze({ ...rule })),
-        ) as PermissionNext.Ruleset,
+        ) as CapabilityRules.Ruleset,
         session: Object.freeze(
           (input.permissionLayers.session ?? []).map((rule) => Object.freeze({ ...rule })),
-        ) as PermissionNext.Ruleset,
+        ) as CapabilityRules.Ruleset,
       })
     : undefined
   return Object.freeze({
     toolIDs: Object.freeze(toolIDs),
-    permission: Object.freeze(permission) as PermissionNext.Ruleset,
+    permission: Object.freeze(permission) as CapabilityRules.Ruleset,
     ...(input.harnessProjection ? { harness_projection: input.harnessProjection } : {}),
     ...(permissionLayers ? { permission_layers: permissionLayers } : {}),
   })

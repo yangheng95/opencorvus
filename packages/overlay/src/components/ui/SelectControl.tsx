@@ -2,6 +2,7 @@ import * as Select from "@kobalte/core/select"
 import { createSignal, Show, type JSX } from "solid-js"
 import { Icon } from "./Icon"
 import { Tooltip } from "./Tooltip"
+import { useTextFieldControlProps } from "./TextField"
 
 type SelectDataAttributes = Record<string, string | undefined>
 export type SelectControlVariant = "control" | "composer"
@@ -27,6 +28,9 @@ export interface SelectControlProps<T extends object> {
   triggerRef?: (el: HTMLButtonElement) => void
   ariaLabel?: string
   ariaLabelledBy?: string
+  ariaDescribedBy?: string
+  invalid?: boolean
+  errorMessageID?: string
   disabled?: boolean
   disallowEmptySelection?: boolean
   gutter?: number
@@ -39,6 +43,10 @@ function withClass(base: string, extra?: string): string {
 
 export function SelectControl<T extends object>(props: SelectControlProps<T>): JSX.Element {
   const variant = () => props.variant ?? "control"
+  const textFieldControl = useTextFieldControlProps()
+  const ariaDescribedBy = () => props.ariaDescribedBy ?? textFieldControl.describedBy()
+  const invalid = () => props.invalid ?? textFieldControl.invalid()
+  const errorMessageID = () => props.errorMessageID ?? textFieldControl.errorMessageID()
   const shouldWrapOptionCopy = () => !!props.renderOptionDescription || !!props.renderOptionTooltip
 
   function SelectControlItem(itemProps: Select.SelectRootItemComponentProps<T>): JSX.Element {
@@ -127,6 +135,9 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         data-testid={props.triggerTestID}
         aria-label={props.ariaLabel}
         aria-labelledby={props.ariaLabelledBy}
+        aria-describedby={ariaDescribedBy()}
+        aria-invalid={invalid() ? "true" : undefined}
+        aria-errormessage={invalid() ? errorMessageID() : undefined}
         ref={props.triggerRef}
       >
         <span class="oc-select-value">{props.renderValue(props.value)}</span>
@@ -134,7 +145,13 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
           <Icon name="chevron-down" size="compact" />
         </Select.Icon>
       </Select.Trigger>
-      <Select.HiddenSelect aria-label={props.ariaLabel} aria-labelledby={props.ariaLabelledBy} />
+      <Select.HiddenSelect
+        aria-label={props.ariaLabel}
+        aria-labelledby={props.ariaLabelledBy}
+        aria-describedby={ariaDescribedBy()}
+        aria-invalid={invalid() ? "true" : undefined}
+        aria-errormessage={invalid() ? errorMessageID() : undefined}
+      />
       <Select.Portal>
         <Select.Content class="oc-select-content" data-variant={variant()}>
           <Show when={variant() === "composer" && props.ariaLabel}>

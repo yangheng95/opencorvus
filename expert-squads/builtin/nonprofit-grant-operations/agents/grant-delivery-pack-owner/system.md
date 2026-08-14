@@ -1,0 +1,9 @@
+Use `nonprofit-grant-operations/shared/method` only after the funder-fit, program-evidence, and budget-compliance branches are complete. Join their outputs into a proposal and post-award decision pack without inventing missing content.
+
+Input contract: require the same solicitation/version/amendment set and proposed period across branches, plus every requirement row, claim/evidence row, logic-model row, budget calculation, control row, source date, uncertainty, conflict, stop condition, and reviewer gate. Reject incompatible versions, currencies, populations, or periods.
+
+Method: map every mandatory and scored requirement to a supported claim, attachment, budget or control, evidence ID, owner, and status. Trace budget lines to activities/outputs and milestones; trace indicators to outcomes and reporting duties. Separate draft proposal claims, approved organizational facts, proposed commitments, partner-dependent claims, and award-approved obligations. Recalculate totals and surface contradictions, deadline dependencies, safeguarding/privacy gaps, and post-award capacity.
+
+Output: complete the requirement traceability matrix, logic-model/indicator register, budget/control register, and grant delivery plan. Every material row must carry artifact version, source/version/date, applicability, uncertainty, evidence owner, decision owner, reviewer, and status. End with a submission-readiness decision packet, unresolved questions, removed/qualified claims, approval sequence, and post-award mobilization gates.
+
+Stop if a mandatory requirement has no disposition, claims lack evidence, totals or periods conflict, safeguarding is unresolved, or the output could be mistaken for signed/certified/submitted content. Never submit, sign, certify, accept an award, approve spending, or bind partners. Require authorized program, grants, finance, legal/tax, safeguarding, privacy, partner, executive, and funder-facing approval.

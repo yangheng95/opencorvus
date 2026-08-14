@@ -21,7 +21,7 @@ export function builtInToolProviderState(
       ? "available"
       : "unavailable"
   }
-  if (toolID === "lsp") return Flag.OPENCORVUS_EXPERIMENTAL_LSP_TOOL ? "available" : "unavailable"
+  if (toolID === "lsp") return "unavailable"
   return "available"
 }
 
@@ -66,10 +66,10 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     { MemoryTool },
     { PlannerTool },
     { MissionStateTool },
+    { SchedulerMessageTool },
     { AnalyticsTool },
-    { LspTool },
     { PublishInteractiveArtifactTool },
-    { OfficeArtifactInspectTool, OfficeArtifactAuthorTool, OfficeArtifactValidateTool, OfficeArtifactDeliverTool },
+    { WorkArtifactInspectTool, WorkArtifactAuthorTool, WorkArtifactValidateTool, WorkArtifactDeliverTool },
     { ArtifactSearchTool, ArtifactReadTool, ArtifactSelectTool, ArtifactSnapshotTool, ArtifactPublishTool },
     { ExpertSquadAuthorTool },
     { CapabilitySearchTool },
@@ -95,10 +95,10 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     import("./memory"),
     import("./planner"),
     import("./mission-state"),
+    import("./scheduler-message"),
     import("./analytics"),
-    import("./lsp"),
     import("./publish-interactive-artifact"),
-    import("./office-artifact"),
+    import("./work-artifact"),
     import("./artifact-catalog"),
     import("./expert-squad-author"),
     import("./capability-search"),
@@ -138,6 +138,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     PlannerTool,
     PanelTool,
     MissionStateTool,
+    SchedulerMessageTool,
     WaitTool,
     RequestOrchestratorDecisionTool,
     SendMailboxMessageTool,
@@ -150,11 +151,10 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     ExpertSquadAuthorTool,
     CapabilitySearchTool,
     PublishInteractiveArtifactTool,
-    OfficeArtifactInspectTool,
-    OfficeArtifactAuthorTool,
-    OfficeArtifactValidateTool,
-    OfficeArtifactDeliverTool,
-    LspTool,
+    WorkArtifactInspectTool,
+    WorkArtifactAuthorTool,
+    WorkArtifactValidateTool,
+    WorkArtifactDeliverTool,
   ])
 }
 

@@ -1,0 +1,9 @@
+Use `public-sector-service-delivery/shared/method` to produce the process, queue, and access branch.
+
+Input contract: require the current service-process version, step and handoff definitions, channel capacities and opening rules, queue/backlog snapshots, arrival/completion/rework volumes, elapsed and touch-time definitions, cost basis, accessibility evidence, language support, records-retention constraints, owners, period, and source dates. Treat service standards and thresholds as supplied inputs, not invented targets.
+
+Method: construct a step-level flow from demand entry to final disposition. Reconcile opening backlog + arrivals - completions - valid withdrawals = closing backlog for the same cohort and period; report any unexplained residual. Distinguish elapsed time from active processing time, first-time completion from rework, and failure demand from new demand. Locate duplicate evidence requests, avoidable handoffs, inaccessible channels, language barriers, digital exclusion, capacity bottlenecks, and records/privacy exposures. Preserve alternative routes and reasonable adjustments instead of assuming a digital-only happy path.
+
+Output: return the process/version map, flow measures with units and denominators, reconciliation residuals, access-barrier observations, capacity assumptions, evidence IDs, uncertainty, accountable owners, and reversible test options. Populate the process/access fields of the service outcome register.
+
+Stop when step definitions or cohort boundaries differ, backlog snapshots cannot be dated, accessibility evidence is absent for a material channel, costs mix incompatible bases, or a proposed change would alter eligibility, records, or statutory procedure. Never claim accessibility compliance or change a public process. Require operational, accessibility, records, privacy, workforce, finance, and legal review.

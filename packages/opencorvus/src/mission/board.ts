@@ -5,12 +5,38 @@ import { MessageTable, PartTable } from "@/session/session.sql"
 import { Message } from "@/session/message"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
+import { resolvePanelArtifactReadReferencesBeforeAction } from "@/agent/artifact-read-facts"
+import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { MissionSession } from "./session"
 import {
+  MissionCompletionActionInput,
   MissionCompletionFact,
   MissionCompletionReceipt,
   type MissionCompletionFactValue,
 } from "./completion"
+
+const LegacyMissionCompletionActionInput = z
+  .object({
+    action: z.literal("complete_mission"),
+    summary: z.string().trim().min(1).max(4_000),
+    task_acceptances: z
+      .array(
+        z
+          .object({
+            task_id: z.string().min(1),
+            evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
+          })
+          .strict(),
+      )
+      .max(128),
+  })
+  .strict()
+
+function unwrapPersistedProviderOperation(input: unknown): unknown {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return input
+  const entries = Object.entries(input as Record<string, unknown>)
+  return entries.length === 1 && entries[0]?.[0] === "operation" ? entries[0][1] : input
+}
 
 export const MissionBoardLane = z.enum(["backlog", "running", "attention", "review", "completed"])
 
@@ -20,7 +46,7 @@ export const MissionBoardProjection = z.object({
   completion: MissionCompletionFact.optional(),
 })
 
-type MissionTaskLifecycleStatus = "queued" | "active" | "completed" | "failed" | "cancelled"
+type MissionTaskLifecycleStatus = "active" | "completed" | "failed" | "cancelled"
 
 export type MissionBoardProjectionInput = {
   interruptible: boolean
@@ -42,8 +68,7 @@ export function deriveMissionBoardLane(input: MissionBoardProjectionInput): z.in
     },
     {
       lane: "running",
-      matches:
-        input.interruptible || input.taskLifecycleStatuses.some((status) => status === "queued" || status === "active"),
+      matches: input.interruptible || input.taskLifecycleStatuses.some((status) => status === "active"),
     },
     {
       lane: "review",
@@ -105,15 +130,19 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
       sessionID: session.id,
     })
     if (!part.success || part.data.tool !== "panel" || part.data.state.status !== "completed") continue
-    let input: z.infer<typeof MissionPanelActionSchema>
-    try {
-      input = MissionPanelActionSchema.parse(
-        materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
-      )
-    } catch {
-      continue
-    }
-    if (input.action !== "complete_mission") continue
+    const currentInput = MissionCompletionActionInput.safeParse(
+      materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
+    )
+    const legacyInput = currentInput.success
+      ? undefined
+      : LegacyMissionCompletionActionInput.safeParse(unwrapPersistedProviderOperation(part.data.state.input))
+    let input: z.infer<typeof MissionCompletionActionInput> | z.infer<typeof LegacyMissionCompletionActionInput>
+    let currentCompletionInput: z.infer<typeof MissionCompletionActionInput> | undefined
+    if (currentInput.success) {
+      input = currentInput.data
+      currentCompletionInput = currentInput.data
+    } else if (legacyInput?.success) input = legacyInput.data
+    else continue
     let decoded: unknown
     try {
       decoded = JSON.parse(part.data.state.output)
@@ -125,6 +154,26 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     const receiptInputAcceptances = receipt.data.task_acceptances.map(
       ({ terminal_lifecycle_reference: _reference, ...acceptance }) => acceptance,
     )
+    const canonicalInputAcceptances = currentCompletionInput
+      ? currentCompletionInput.task_acceptances.map((acceptance) => {
+          const receiptAcceptance = receipt.data.task_acceptances.find(
+            (candidate) => candidate.task_id === acceptance.task_id,
+          )
+          if (!receiptAcceptance) {
+            throw new Error(`Mission completion receipt omits Task ${acceptance.task_id}.`)
+          }
+          return {
+            task_id: acceptance.task_id,
+            evidence_locators: resolvePanelArtifactReadReferencesBeforeAction({
+              sessionID: session.id,
+              assistantMessageID: row.messageID,
+              taskID: acceptance.task_id,
+              terminalLifecycleReference: receiptAcceptance.terminal_lifecycle_reference,
+              references: acceptance.evidence_read_refs,
+            }),
+          }
+        })
+      : input.task_acceptances
     if (
       receipt.data.mission_id !== session.missionID ||
       receipt.data.mission_session_id !== session.id ||
@@ -132,7 +181,7 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
       receipt.data.tool_call_id !== part.data.callID ||
       receipt.data.tool_part_id !== row.id ||
       receipt.data.summary !== input.summary ||
-      !isDeepStrictEqual(receiptInputAcceptances, input.task_acceptances)
+      !isDeepStrictEqual(receiptInputAcceptances, canonicalInputAcceptances)
     ) {
       continue
     }

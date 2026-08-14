@@ -1,1144 +1,748 @@
 ---
 import { Image } from "astro:assets"
-import { Icon } from "@astrojs/starlight/components"
-import BrandMark from "../../../overlay/src-tauri/icons/icon.png"
-import ClientAgentWorkspace from "../assets/lander/client-agent-workspace.png"
-import ClientEnvironmentEvidence from "../assets/lander/client-environment-evidence.png"
-import ClientTaskEvidence from "../assets/lander/client-task-evidence.png"
 import ExpertSquadCatalog from "../assets/lander/expert-squad-catalog.png"
 import ExpertSquadInstalled from "../assets/lander/expert-squad-installed.png"
-import RuntimeChannelReach from "../assets/lander/runtime-channel-reach-agent-v2.png"
+import CodeHarness from "../assets/lander/harness-gallery/code-harness.png"
+import ExpertSquadsHarness from "../assets/lander/harness-gallery/expert-squads.png"
+import MissionHarness from "../assets/lander/harness-gallery/mission-composer.png"
+import WorkHarness from "../assets/lander/harness-gallery/work-harness.png"
 import RuntimeDesktopContinuity from "../assets/lander/runtime-desktop-continuity-agent-v2.png"
-import RuntimeHeadless from "../assets/lander/runtime-headless-agent-v2.png"
-import RuntimeRepositoryAutomation from "../assets/lander/runtime-repository-automation-agent-v2.png"
-import LandingMissionFlow from "./LandingMissionFlow.astro"
-import { landingContent, landingProductName, type LandingLocale } from "../content/landing"
-import { discoverLandingBinaryDownloads, landingWebApplication } from "../lib/landing-download"
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import { landingContent, type LandingLocale } from "../content/landing"
+import { publicPath } from "../content/public-market"
+import "../styles/public-site.css"
 
-const { lang } = Astro.locals.starlightRoute
-const locale: LandingLocale = lang === "zh-CN" ? "zh-cn" : "root"
-const content = landingContent[locale]
-const storyImages = [ClientAgentWorkspace, ClientEnvironmentEvidence, ClientTaskEvidence]
-const expertSquadImages = [ExpertSquadCatalog, ExpertSquadInstalled]
-const expertSquadMediaItems = content.expertSquads.media.map((item, index) => ({ item, image: expertSquadImages[index] }))
-const expertSquadMediaOrder = expertSquadMediaItems
-const runtimeImages = [RuntimeDesktopContinuity, RuntimeHeadless, RuntimeChannelReach, RuntimeRepositoryAutomation]
-const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
-const landingBinaryDownloads = discoverLandingBinaryDownloads()
-const homeHref = locale === "zh-cn" ? `${publicBase}/zh-cn/` : `${publicBase}/`
-const demoSource = `${publicBase}/media/opencorvus-client-demo.webm`
-const downloadCards = landingBinaryDownloads.map((download) => ({
-  ...download,
-  href: `${publicBase}/${download.publicRelativePath}`,
-  action: content.download.actions[download.platform],
-}))
-const webApplicationCard = {
-  ...landingWebApplication,
-  platformName: content.download.web.platformName,
-  action: content.download.web.action,
-  system: content.download.web.system,
-  architecture: content.download.web.architecture,
-  packageType: content.download.web.packageType,
+type Props = {
+  locale: LandingLocale
 }
+
+const { locale } = Astro.props
+const content = landingContent[locale]
+const languageHref = publicPath(locale === "zh-cn" ? "root" : "zh-cn")
+const galleryImages = {
+  work: WorkHarness,
+  code: CodeHarness,
+  mission: MissionHarness,
+  squads: ExpertSquadsHarness,
+} as const
+const metadata =
+  locale === "zh-cn"
+    ? {
+        title: "OpenCorvus | 面向编码智能体的工程基础设施",
+        description: "定制你的 Agent 工作台，配置专家团，让长程任务从首次指令走到可审查交付。",
+      }
+    : {
+        title: "OpenCorvus | Engineering infrastructure for coding agents",
+        description: "Customize your Agent Workbench, configure Expert Squads, and carry long-horizon work from first instruction to reviewable delivery.",
+      }
 ---
 
-<div class="landing-shell">
-  <div class="hero-canvas">
-    <header class="landing-header" aria-label={landingProductName}>
-      <a class="brand" href={homeHref} aria-label={`${landingProductName} home`}>
-        <Image src={BrandMark} width={42} height={42} alt="" loading="eager" decoding="async" />
-        <span>{landingProductName}</span>
-      </a>
-      <nav aria-label="Primary navigation">
-        <a href="#download">{content.nav.download}</a>
-        <a href="#features">{content.nav.features}</a>
-        <a href="#expert-squads">{content.nav.expertSquads}</a>
-      </nav>
-      <div class="header-actions">
-        <a class="language-link" href={content.language.href}>{content.language.label}</a>
-      </div>
-    </header>
-
-    <section class="hero-section" aria-labelledby="landing-title">
+<PublicSiteLayout
+  {locale}
+  current="home"
+  title={metadata.title}
+  description={metadata.description}
+  {languageHref}
+  socialImage="/social-share.png"
+>
+  <div class="public-landing">
+  <main id="main-content" class="public-main" tabindex="-1">
+    <section class="landing-hero" aria-labelledby="landing-title">
       <div class="hero-copy">
-        <h1 id="landing-title">{content.hero.title}</h1>
-        <p class="hero-description">{content.hero.description}</p>
-      </div>
-
-      <div class="hero-product">
-        <div class="hero-video-frame">
-          <video controls muted playsinline preload="metadata" poster={ClientAgentWorkspace.src} aria-label={content.hero.videoLabel}>
-            <source src={demoSource} type="video/webm" />
-            <a href={demoSource}>{content.hero.videoLabel}</a>
-          </video>
-          <p>{content.hero.videoCaption}</p>
+        <p class="eyebrow">{content.hero.eyebrow}</p>
+        <h1 id="landing-title" aria-label={content.hero.titleLines.join(locale === "zh-cn" ? "" : " ")}>
+          {content.hero.titleLines.map((line) => <span class="hero-title-line" aria-hidden="true">{line}</span>)}
+        </h1>
+        <p>{content.hero.description}</p>
+        <div class="hero-actions">
+          <a class="primary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.primary}</a>
+          <a class="secondary-action" href={publicPath(locale, "/market/")}>{content.hero.secondary}</a>
         </div>
       </div>
-    </section>
-  </div>
 
-  <div class="landing-main">
-    <section id="download" class="download-section" aria-labelledby="landing-download-title">
-      <div class="section-wrap download-layout">
-        <div class="download-copy">
-          <p class="section-kicker">{content.download.eyebrow}</p>
-          <h2 id="landing-download-title">{content.download.title}</h2>
-          <p>{content.download.description}</p>
-        </div>
-        <div class="download-card-grid">
-          {downloadCards.map((download) => (
-            <article class="download-card">
-              <div class="download-card-heading">
-                <span class="download-platform">{download.platformName}</span>
-              </div>
-              <dl class="download-facts">
-                <div><dt>{content.download.systemLabel}</dt><dd>{download.system}</dd></div>
-                <div><dt>{content.download.architectureLabel}</dt><dd>{download.architecture}</dd></div>
-                <div><dt>{content.download.packageLabel}</dt><dd>{download.packageType}</dd></div>
-              </dl>
-              <a class="download-button" href={download.href} download>
-                <span>{download.action}</span><Icon name="download" size="1rem" />
-              </a>
-            </article>
-          ))}
-          <article class="download-card download-card-web">
-            <div class="download-card-heading">
-              <span class="download-platform">{webApplicationCard.platformName}</span>
-            </div>
-            <dl class="download-facts">
-              <div><dt>{content.download.systemLabel}</dt><dd>{webApplicationCard.system}</dd></div>
-              <div><dt>{content.download.architectureLabel}</dt><dd>{webApplicationCard.architecture}</dd></div>
-              <div><dt>{content.download.packageLabel}</dt><dd>{webApplicationCard.packageType}</dd></div>
-            </dl>
-            <a
-              class="download-button"
-              href={webApplicationCard.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>{webApplicationCard.action}</span><Icon name="rocket" size="1rem" />
-            </a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="features-section" aria-labelledby="features-title">
-      <div class="section-wrap">
-        <div class="features-heading">
-          <p class="section-kicker">{content.features.eyebrow}</p>
-          <h2 id="features-title">{content.features.title}</h2>
-          <p>{content.features.description}</p>
-        </div>
-        <div class="feature-stories">
-          {content.features.items.map((item, index) => (
-            <article class:list={{ reverse: index % 2 === 1 }}>
-              <div class="story-copy">
-                <span class="story-index">{String(index + 1).padStart(2, "0")} / {item.label}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ul>
-                  {item.bullets.map((bullet) => (
-                    <li><span aria-hidden="true">✓</span>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-              <div class="story-media">
-                <div class="story-window-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
-                <button
-                  class="image-preview-trigger"
-                  type="button"
-                  aria-label={`${content.imageViewer.open}: ${item.title}`}
-                  aria-haspopup="dialog"
-                  aria-controls="landing-image-preview"
-                  data-image-preview-trigger
-                  data-preview-src={storyImages[index].src}
-                  data-preview-alt={item.title}
-                >
-                  <Image
-                    src={storyImages[index]}
-                    width={1600}
-                    height={Math.round(1600 * storyImages[index].height / storyImages[index].width)}
-                    alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </button>
-              </div>
+      <aside class="hero-principles" aria-label={content.proof.label}>
+        <p class="eyebrow">{content.proof.eyebrow}</p>
+        <div class="hero-principle-list">
+          {content.proof.items.map(([title, description], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <div><h2>{title}</h2><p>{description}</p></div>
             </article>
           ))}
         </div>
-      </div>
+      </aside>
+
+      <p class="hero-boundary">{content.hero.boundary}</p>
     </section>
 
-    <section id="expert-squads" class="squad-section" aria-labelledby="squad-title">
-      <div class="section-wrap squad-layout">
-        <div class="squad-copy">
-          <h2 id="squad-title">{content.expertSquads.title}</h2>
-          <p>{content.expertSquads.description}</p>
+    <section class="harness-showcase" aria-labelledby="harness-showcase-title">
+      <div class="harness-showcase-intro">
+        <p class="eyebrow">{content.hero.gallery.label}</p>
+        <h2 id="harness-showcase-title">{content.hero.harness.label}</h2>
+        <p>{content.hero.harness.description}</p>
+      </div>
+      <figure class="harness-gallery" data-harness-gallery>
+        <div class="harness-gallery-heading">
+          <span>{content.hero.gallery.label}</span>
+          <span aria-hidden="true">UI / INTERACTION</span>
         </div>
-
-        <div class="squad-proof">
-          <div class="squad-capability-list">
-            {content.expertSquads.capabilities.map((item, index) => (
-              <article>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{item.label}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-        <div class="squad-media-grid">
-          {expertSquadMediaOrder.map(({ item, image }) => (
+        <div class="harness-gallery-tabs" role="tablist" aria-label={content.hero.gallery.ariaLabel}>
+          {content.hero.gallery.items.map((item, index) => (
             <button
-              class="squad-media-card image-preview-trigger"
               type="button"
-              aria-label={`${content.imageViewer.open}: ${item.alt}`}
-              aria-haspopup="dialog"
-              aria-controls="landing-image-preview"
-              data-image-preview-trigger
-              data-preview-src={image.src}
-              data-preview-alt={item.alt}
+              role="tab"
+              id={`harness-tab-${item.id}`}
+              aria-controls={`harness-panel-${item.id}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              tabindex={index === 0 ? "0" : "-1"}
+              data-gallery-tab={item.id}
             >
-              <Image
-                src={image}
-                width={720}
-                height={Math.round(720 * image.height / image.width)}
-                alt={item.alt}
-                loading="lazy"
-                decoding="async"
-              />
+              <span>0{index + 1}</span>{item.label}
             </button>
           ))}
         </div>
-        <div class="squad-flow">
-          <div class="window-chrome" aria-hidden="true">
-            <span></span><span></span><span></span>
-            <p>{content.expertSquads.flowLabel}</p>
+        {content.hero.gallery.items.map((item, index) => (
+          <div
+            class="harness-gallery-panel"
+            role="tabpanel"
+            id={`harness-panel-${item.id}`}
+            aria-labelledby={`harness-tab-${item.id}`}
+            data-gallery-panel={item.id}
+            data-media-kind={item.kind}
+            hidden={index !== 0}
+          >
+            <Image
+              src={galleryImages[item.id]}
+              width={1280}
+              alt={item.alt}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={index === 0 ? "high" : "auto"}
+            />
+            <div class="harness-gallery-caption"><strong>{item.title}</strong><span>{item.description}</span></div>
           </div>
-          <LandingMissionFlow locale={locale} description={content.expertSquads.flowAlt} />
+        ))}
+      </figure>
+    </section>
+
+    <section class="landing-band" aria-labelledby="workbench-title">
+      <div class="landing-band-header">
+        <div>
+          <p class="eyebrow">{content.workbench.eyebrow}</p>
+          <h2 id="workbench-title" class="section-heading">{content.workbench.title}</h2>
         </div>
+        <p class="section-lead">{content.workbench.description}</p>
+      </div>
+      <div class="work-mode-grid">
+        {content.workbench.items.map((item) => (
+          <article>
+            <span class="mode-index">{item.index}</span>
+            <p class="mode-use">{item.use}</p>
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <strong>{item.output}</strong>
+          </article>
+        ))}
       </div>
     </section>
 
-    <section class="surfaces-section" aria-labelledby="surfaces-title">
-      <div class="section-wrap">
-        <div class="surfaces-heading">
-          <div>
-            <p class="section-kicker">{content.surfaces.eyebrow}</p>
-            <h2 id="surfaces-title">{content.surfaces.title}</h2>
-          </div>
-          <p>{content.surfaces.description}</p>
+    <section class="landing-band" aria-labelledby="expert-squads-title">
+      <div class="landing-band-header">
+        <div>
+          <p class="eyebrow">{content.squads.eyebrow}</p>
+          <h2 id="expert-squads-title" class="section-heading">{content.squads.title}</h2>
         </div>
-        <div class="surface-grid">
-          {content.surfaces.items.map((item, index) => (
-            <article class="surface-card">
-              <div class="surface-media">
-                <Image
-                  src={runtimeImages[index]}
-                  width={768}
-                  height={512}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <span class="surface-number">{String(index + 1).padStart(2, "0")}</span>
-              <div class="surface-copy">
-                <strong>{item.title}</strong>
-                <span class="surface-description">{item.description}</span>
-              </div>
+        <div>
+          <p class="section-lead">{content.squads.description}</p>
+          <div class="hero-actions">
+            <a class="primary-action" href={publicPath(locale, "/market/")}>{content.squads.action}</a>
+            <a class="secondary-action" href={publicPath(locale, "/publish/")}>{content.squads.buildAction}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="squad-story-grid">
+        <div class="squad-capabilities">
+          {content.squads.capabilities.map(([title, description], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <div><h3>{title}</h3><p>{description}</p></div>
             </article>
           ))}
         </div>
+        <div class="squad-image-stack">
+          <figure>
+            <Image src={ExpertSquadCatalog} width={900} alt={content.squads.catalogAlt} loading="lazy" decoding="async" />
+            <figcaption>{locale === "zh-cn" ? "先比较用途、角色与工作流" : "Compare purpose, roles, and workflow first"}</figcaption>
+          </figure>
+          <figure>
+            <Image src={ExpertSquadInstalled} width={900} alt={content.squads.installedAlt} loading="lazy" decoding="async" />
+            <figcaption>{locale === "zh-cn" ? "安装后仍由你明确选择与激活" : "Selection and activation remain explicit after install"}</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
-    <section class="cta-section section-wrap" aria-labelledby="cta-title">
-      <div class="cta-mark" aria-hidden="true">
-        <Image src={BrandMark} width={148} height={148} alt="" loading="lazy" decoding="async" />
+    <section class="landing-band runtime-boundary" aria-labelledby="mission-title">
+      <div>
+        <p class="eyebrow">{content.mission.eyebrow}</p>
+        <h2 id="mission-title" class="section-heading">{content.mission.title}</h2>
+        <p class="section-lead">{content.mission.description}</p>
+        <figure class="runtime-image">
+          <Image src={RuntimeDesktopContinuity} width={900} alt={content.mission.imageAlt} loading="lazy" decoding="async" />
+        </figure>
       </div>
-      <div class="cta-copy">
-        <h2 id="cta-title">{content.cta.title}</h2>
-        <p>{content.cta.description}</p>
+      <div class="runtime-facts">
+        {content.mission.facts.map(([title, description]) => (
+          <article><b>{title}</b><p>{description}</p></article>
+        ))}
       </div>
     </section>
+
+    <section class="landing-band start-section" aria-labelledby="community-title">
+      <div>
+        <p class="eyebrow">{content.community.eyebrow}</p>
+        <h2 id="community-title" class="section-heading">{content.community.title}</h2>
+        <p class="section-lead">{content.community.description}</p>
+      </div>
+      <div class="start-actions">
+        {content.community.cards.map((card) => (
+          <a
+            class:list={["start-card", { "start-card-primary": card.primary }]}
+            href={card.href.startsWith("https://") ? card.href : publicPath(locale, card.href)}
+          >
+            <span>{card.label}</span>
+            <strong>{card.title}</strong>
+            <small>{card.note}</small>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
   </div>
-
-  <dialog
-    id="landing-image-preview"
-    class="image-preview-dialog"
-    aria-label={content.imageViewer.dialog}
-    data-landing-image-dialog
-  >
-    <div class="image-preview-surface">
-      <img src="" alt="" data-landing-image-preview />
-      <form method="dialog">
-        <button type="submit" class="image-preview-close" aria-label={content.imageViewer.close}>
-          <span aria-hidden="true">×</span>
-        </button>
-      </form>
-    </div>
-  </dialog>
-
-</div>
+</PublicSiteLayout>
 
 <script>
-  const previewDialog = document.querySelector<HTMLDialogElement>("[data-landing-image-dialog]")!
-  const previewImage = previewDialog.querySelector<HTMLImageElement>("[data-landing-image-preview]")!
-  let previewRequest = 0
-
-  document.querySelectorAll<HTMLButtonElement>("[data-image-preview-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", async () => {
-      const request = ++previewRequest
-      const source = trigger.getAttribute("data-preview-src")!
-      const alternativeText = trigger.getAttribute("data-preview-alt")!
-      previewImage.removeAttribute("src")
-      previewImage.alt = ""
-
-      const candidate = new Image()
-      candidate.decoding = "async"
-      candidate.src = source
-      try {
-        await candidate.decode()
-      } catch {
-        return
+  for (const gallery of document.querySelectorAll<HTMLElement>("[data-harness-gallery]")) {
+    const tabs = [...gallery.querySelectorAll<HTMLButtonElement>("[data-gallery-tab]")]
+    const panels = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-panel]")]
+    const select = (next: HTMLButtonElement) => {
+      for (const tab of tabs) {
+        const selected = tab === next
+        tab.setAttribute("aria-selected", String(selected))
+        tab.tabIndex = selected ? 0 : -1
       }
-      if (request !== previewRequest) return
-
-      previewImage.src = source
-      previewImage.alt = alternativeText
-      previewDialog.showModal()
-    })
-  })
-
-  previewDialog.addEventListener("click", (event) => {
-    if (event.target === previewDialog) previewDialog.close()
-  })
-
-  previewDialog.addEventListener("close", () => {
-    previewRequest += 1
-    previewImage.removeAttribute("src")
-    previewImage.alt = ""
-  })
+      for (const panel of panels) panel.hidden = panel.dataset.galleryPanel !== next.dataset.galleryTab
+    }
+    for (const [index, tab] of tabs.entries()) {
+      tab.addEventListener("click", () => select(tab))
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return
+        event.preventDefault()
+        const nextIndex = event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? tabs.length - 1
+            : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length
+        const next = tabs[nextIndex]
+        select(next)
+        next.focus()
+      })
+    }
+  }
 </script>
 
 <style>
-  .landing-shell {
-    --ink: #0a0a0a;
-    --ink-soft: #1f1f1f;
-    --paper: #f5f5f5;
-    --paper-bright: #ffffff;
-    --muted: #737373;
-    --line: #d4d4d4;
-    --web-card: #eaf7ee;
-    --web-card-border: #9ecfaf;
-    --web-card-line: #b9ddc5;
-    --web-action: #14532d;
-    --web-action-hover: #1f6b3d;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: Inter, "Noto Sans SC", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-width: 70rem;
+  .public-landing {
+    min-width: 1100px;
     overflow: hidden;
   }
 
-  .hero-canvas {
-    background: var(--ink);
-    color: white !important;
-    min-height: 52rem;
-    overflow: hidden;
-    position: relative;
+  .landing-hero {
+    grid-template-rows: auto auto;
+    align-items: stretch;
   }
 
-  .landing-header,
-  .hero-section,
-  .section-wrap {
-    margin-inline: auto;
-    max-width: 78rem;
+  .hero-title-line {
+    display: block;
+    white-space: nowrap;
   }
 
-  .landing-header {
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  .hero-copy {
+    align-self: center;
+  }
+
+  .hero-principles {
+    align-self: stretch;
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    min-height: 5.6rem;
-    position: relative;
-    z-index: 5;
+    grid-template-rows: auto 1fr;
+    padding: 28px 30px 30px;
+    border: 2px solid var(--ink);
+    border-top: 10px solid var(--cobalt);
+    background: var(--paper-raised);
   }
 
-  .brand,
-  .landing-header nav,
-  .header-actions,
-  .story-copy li {
-    align-items: center;
-    display: flex;
+  .hero-principles > .eyebrow {
+    margin-bottom: 18px;
   }
 
-  .brand {
-    color: white !important;
-    font-size: 1.06rem;
-    font-weight: 780;
-    gap: 0.72rem;
-    letter-spacing: -0.03em;
-    text-decoration: none;
-  }
-
-  .brand img,
-  .cta-mark img {
-    border-radius: 23%;
-  }
-
-  .landing-header nav {
-    gap: 2.2rem;
-    justify-self: center;
-  }
-
-  .landing-header a {
-    text-decoration: none;
-  }
-
-  .landing-header nav a,
-  .language-link {
-    font-size: 0.78rem;
-    font-weight: 700;
-  }
-
-  .landing-header nav a,
-  .language-link {
-    color: #a3a3a3 !important;
-  }
-
-  .hero-section {
+  .hero-principle-list {
     display: grid;
-    gap: 3.75rem;
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 46rem;
-    padding: 6.5rem 0 8rem;
-    position: relative;
-    z-index: 1;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ink);
   }
 
-  .section-kicker {
-    color: var(--ink);
-    font-size: 0.7rem;
-    font-weight: 840;
-    letter-spacing: 0.16em;
-    margin: 0;
-    text-transform: uppercase;
-  }
-
-  .hero-copy h1 {
-    color: white !important;
-    font-size: 4.65rem !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.075em !important;
-    line-height: 1.04 !important;
-    margin: 0 0 2rem !important;
-    text-wrap: wrap;
-  }
-
-  :global(html[lang="zh-CN"]) .hero-copy h1 {
-    font-size: 3.75rem !important;
-    letter-spacing: -0.045em !important;
-    line-height: 1.1 !important;
-  }
-
-  .hero-description {
-    color: #a3a3a3;
-    font-size: 1.02rem;
-    line-height: 1.72;
-    margin: 0;
-  }
-
-  .hero-product {
-    position: relative;
-  }
-
-  .story-media {
-    background: #111111;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    overflow: hidden;
-  }
-
-  .window-chrome,
-  .story-window-chrome {
+  .hero-principle-list article {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 16px;
     align-items: center;
-    background: #1f1f1f;
-    display: flex;
-    gap: 0.38rem;
-    height: 2.3rem;
-    padding-inline: 0.8rem;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--ink);
   }
 
-  .window-chrome > span,
-  .story-window-chrome > span {
-    background: #737373;
-    border-radius: 50%;
-    height: 0.45rem;
-    width: 0.45rem;
+  .hero-principle-list article > span {
+    align-self: start;
+    color: var(--cobalt);
+    font: 500 10px/1.4 var(--mono);
   }
 
-  .window-chrome p {
+  .public-landing .hero-principle-list h2 {
+    margin: 0 0 5px;
+    color: var(--ink) !important;
+    font-family: var(--display);
+    font-size: 29px !important;
+    font-weight: 760 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.045em;
+  }
+
+  .hero-principle-list p {
+    margin: 0;
     color: var(--muted);
-    font: 0.58rem ui-monospace, "SFMono-Regular", Consolas, monospace;
-    margin: 0 0 0 0.5rem;
+    font-size: 13px;
+    line-height: 1.5;
   }
 
-  .hero-video-frame {
-    background: #111111;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 1.25rem;
-    overflow: hidden;
-  }
-
-  .hero-video-frame video {
-    aspect-ratio: 16 / 9;
-    background: #050505;
-    display: block;
-    object-fit: cover;
-    width: 100%;
-  }
-
-  .hero-video-frame > p {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #8f8f8f;
-    font: 0.62rem ui-monospace, "SFMono-Regular", Consolas, monospace;
-    letter-spacing: 0.02em;
+  .hero-boundary {
+    grid-column: 1 / -1;
     margin: 0;
-    padding: 0.9rem 1.15rem;
-  }
-
-  .image-preview-trigger {
-    background: transparent;
+    padding: 18px 22px;
     border: 0;
-    color: inherit;
-    cursor: zoom-in;
-    display: block;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    width: 100%;
+    border-left: 8px solid var(--cobalt);
+    background: var(--cobalt-wash);
+    color: #353b56;
+    font-size: 13px;
+    line-height: 1.5;
   }
 
-  .image-preview-trigger::after {
-    background: rgba(255, 255, 255, 0.1);
-    content: "";
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    transition: opacity 160ms ease;
+  .harness-showcase {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.48fr) minmax(0, 1.52fr);
+    gap: 56px;
+    align-items: start;
+    padding: 72px 0;
+    border-bottom: 2px solid var(--ink);
   }
 
-  .image-preview-trigger:hover::after,
-  .image-preview-trigger:focus-visible::after {
-    opacity: 1;
+  .harness-showcase-intro {
+    position: sticky;
+    top: 28px;
   }
 
-  .image-preview-dialog {
-    background: transparent;
-    border: 0;
-    height: calc(100vh - 4rem);
-    inset: 0;
-    margin: auto;
-    max-height: calc(100vh - 4rem);
-    max-width: calc(100vw - 4rem);
-    overflow: auto;
-    overscroll-behavior: contain;
-    padding: 0;
-    position: fixed;
-    scrollbar-gutter: stable;
-    width: calc(100vw - 4rem);
+  .public-landing .harness-showcase-intro h2 {
+    margin: 0;
+    color: var(--ink) !important;
+    font-family: var(--display);
+    font-size: clamp(42px, 4vw, 60px) !important;
+    font-weight: 760 !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.06em;
   }
 
-  .image-preview-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.88);
-    backdrop-filter: blur(0.5rem);
+  .harness-showcase-intro > p:last-child {
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.65;
   }
 
-  .image-preview-surface {
-    box-sizing: border-box;
-    display: flex;
-    min-height: 100%;
-    padding: 1rem;
-    position: relative;
-    width: 100%;
-  }
-
-  .image-preview-surface > img {
+  .harness-gallery {
+    margin: 0;
+    border: 2px solid var(--ink);
     background: var(--ink);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 1rem;
-    display: block;
-    height: auto;
-    margin: auto;
-    max-width: 100%;
-    object-fit: contain;
-    width: auto;
-  }
-
-  .image-preview-close {
-    align-items: center;
-    background: rgba(10, 10, 10, 0.86);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    border-radius: 999px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    font-size: 1.5rem;
-    height: 2.75rem;
-    justify-content: center;
-    line-height: 1;
-    padding: 0 0 0.12rem;
-    position: fixed;
-    right: 2.9rem;
-    top: 2.9rem;
-    width: 2.75rem;
-    z-index: 1;
-  }
-
-  .image-preview-close:hover {
-    background: var(--ink-soft);
-  }
-
-  .download-section {
-    background: var(--ink);
-    border-top: 1px solid rgba(255, 255, 255, 0.09);
-    color: white;
-    padding-block: 8rem;
-  }
-
-  .download-layout {
-    align-items: center;
-    display: grid;
-    gap: 5rem;
-    grid-template-columns: minmax(0, 0.72fr) minmax(42rem, 1.28fr);
-  }
-
-  .download-copy h2 {
-    color: white !important;
-    font-size: 3.05rem !important;
-    letter-spacing: -0.058em !important;
-    line-height: 1.08 !important;
-    margin: 1.15rem 0 0 !important;
-    max-width: 100%;
-  }
-
-  .download-copy > p:last-child {
-    color: #a3a3a3;
-    font-size: 0.95rem;
-    line-height: 1.75;
-    margin: 1.6rem 0 0;
-    max-width: 35rem;
-  }
-
-  .download-card-grid {
-    display: grid;
-    gap: 1.25rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .download-card {
-    background: var(--paper-bright);
-    border: 1px solid var(--line);
-    border-radius: 1.45rem;
-    color: var(--ink);
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+    box-shadow: 14px 14px 0 var(--cobalt-wash);
     overflow: hidden;
-    min-height: 18.5rem;
-    padding: 1.65rem;
   }
 
-  .download-card-web {
-    background: var(--web-card);
-    border-color: var(--web-card-border);
-  }
-
-  .download-card-web .download-platform {
-    color: var(--web-action);
-  }
-
-  .download-card-web .download-facts,
-  .download-card-web .download-facts > div {
-    border-color: var(--web-card-line);
-  }
-
-  .download-card-web .download-button {
-    background: var(--web-action);
-  }
-
-  .download-card-web .download-button:hover {
-    background: var(--web-action-hover);
-  }
-
-  .download-card-heading {
-    align-items: center;
+  .harness-gallery-heading {
     display: flex;
-  }
-
-  .download-platform {
-    font-size: 1.5rem;
-    font-weight: 820;
-    letter-spacing: -0.04em;
-    line-height: 1.2;
-  }
-
-  .download-facts {
-    border-bottom: 1px solid var(--line);
-    border-top: 1px solid var(--line);
-    display: grid;
-    grid-template-columns: 1fr;
-    margin: 1.35rem 0;
-  }
-
-  .download-facts > div {
-    align-items: baseline;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    gap: 1rem;
     justify-content: space-between;
-    padding: 0.85rem 0;
-  }
-
-  .download-facts > div:last-child {
-    border-bottom: 0;
-  }
-
-  .download-facts dt {
-    color: var(--muted);
-    font-size: 0.63rem;
-    font-weight: 760;
+    gap: 20px;
+    padding: 10px 14px;
+    color: #d9d9d2;
+    font: 700 10px/1.2 var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  .download-facts dd {
-    color: var(--ink);
-    font-size: 0.84rem;
-    font-weight: 750;
-    margin: 0;
-    text-align: right;
-  }
-
-  .download-button {
-    align-items: center;
-    background: var(--ink);
-    border-radius: 0.8rem;
-    color: white !important;
-    display: flex;
-    font-size: 0.84rem;
-    font-weight: 780;
-    justify-content: space-between;
-    min-height: 3.4rem;
-    padding: 0.95rem 1.15rem;
-    text-decoration: none;
-    transition: background-color 160ms ease, transform 160ms ease;
-  }
-
-  .download-button:hover {
-    background: var(--ink-soft);
-  }
-
-  .features-heading {
-    margin-inline: auto;
-    max-width: 56rem;
-    text-align: center;
-  }
-
-  .features-heading h2,
-  .surfaces-heading h2,
-  .cta-copy h2 {
-    color: var(--ink) !important;
-    font-size: 3.7rem !important;
-    font-weight: 790 !important;
-    letter-spacing: -0.065em !important;
-    line-height: 1.1 !important;
-    margin: 1rem 0 0 !important;
-    text-wrap: balance;
-  }
-
-  .features-heading > p:last-child,
-  .surfaces-heading > p,
-  .cta-copy > p:last-child {
-    color: var(--muted);
-    line-height: 1.72;
-    margin: 1.35rem auto 0;
-    max-width: 47rem;
-  }
-
-  .story-index,
-  .surface-number {
-    color: var(--muted);
-    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-    font-size: 0.66rem;
-  }
-
-  .features-section {
-    background: var(--paper-bright);
-    padding-block: 9rem;
-  }
-
-  .feature-stories {
+  .harness-gallery-tabs {
     display: grid;
-    gap: 7.5rem;
-    margin-top: 7rem;
-  }
-
-  .feature-stories article {
-    align-items: center;
-    display: grid;
-    gap: 5.8rem;
-    grid-template-columns: 0.78fr 1.22fr;
-  }
-
-  .feature-stories article.reverse {
-    grid-template-columns: 1.22fr 0.78fr;
-  }
-
-  .feature-stories article.reverse .story-copy {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .feature-stories article.reverse .story-media {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .story-copy h3 {
-    color: var(--ink) !important;
-    font-size: 2.55rem !important;
-    font-weight: 780 !important;
-    letter-spacing: -0.055em !important;
-    line-height: 1.12 !important;
-    margin: 1.25rem 0 0 !important;
-    text-wrap: balance;
-  }
-
-  .story-copy > p {
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.72;
-    margin: 1.2rem 0 0;
-  }
-
-  .story-copy ul {
-    border-top: 1px solid var(--line);
-    list-style: none;
-    margin: 1.6rem 0 0;
-    padding: 0;
-  }
-
-  .story-copy li {
-    border-bottom: 1px solid var(--line);
-    font-size: 0.76rem;
-    font-weight: 680;
-    gap: 0.62rem;
-    padding: 0.82rem 0;
-  }
-
-  .story-copy li span {
-    color: var(--ink);
-  }
-
-  .story-media {
-    border-color: var(--line);
-    border-radius: 1.4rem;
-  }
-
-  .story-window-chrome {
-    background: var(--paper);
-  }
-
-  .story-media img {
-    display: block;
-    height: auto;
-    width: 100%;
-  }
-
-  .squad-section {
-    background: var(--ink);
-    color: white;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .squad-layout {
-    align-items: start;
-    column-gap: 6rem;
-    display: grid;
-    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-    padding-block: 11rem;
-    position: relative;
-    row-gap: 1.25rem;
-    z-index: 1;
-  }
-
-  .squad-copy h2 {
-    color: white !important;
-    font-size: 3.65rem !important;
-    font-weight: 790 !important;
-    letter-spacing: -0.065em !important;
-    line-height: 1.1 !important;
-    margin: 0 !important;
-    text-wrap: balance;
-  }
-
-  .squad-copy > p:last-of-type {
-    color: #a3a3a3;
-    line-height: 1.75;
-    margin: 1.5rem 0 0;
-    max-width: 38rem;
-  }
-
-  .squad-proof {
-    display: grid;
-    gap: 1.25rem;
-    padding-top: 0.55rem;
-  }
-
-  .squad-capability-list {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .squad-capability-list article {
-    background: rgba(255, 255, 255, 0.055);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    border-radius: 1.1rem;
-    display: grid;
-    gap: 0.6rem;
-    min-height: 8.5rem;
-    padding: 1.1rem 1.3rem;
-  }
-
-  .squad-capability-list article > span {
-    color: #a3a3a3;
-    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-    font-size: 0.64rem;
-  }
-
-  .squad-capability-list article > div {
-    align-self: end;
-  }
-
-  .squad-capability-list h3 {
-    color: white !important;
-    font-size: 1rem !important;
-    line-height: 1.25 !important;
-    margin: 0 !important;
-  }
-
-  .squad-capability-list p {
-    color: #a3a3a3;
-    font-size: 0.7rem;
-    line-height: 1.55;
-    margin: 0.55rem 0 0;
-  }
-
-  .squad-media-grid {
-    display: grid;
-    gap: 1rem;
-    grid-column: 1 / -1;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid #393a3f;
+    border-bottom: 1px solid #393a3f;
   }
 
-  .squad-media-card {
-    aspect-ratio: 2.02 / 1;
-    background: #f5f5f5;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 0.9rem;
+  .harness-gallery-tabs button {
+    min-height: 44px;
+    padding: 10px 8px;
+    border: 0;
+    border-right: 1px solid #393a3f;
+    background: transparent;
+    color: #d9d9d2;
+    font: 700 11px/1.2 var(--mono);
+    cursor: pointer;
   }
 
-  .squad-media-card img {
-    display: block;
-    height: 100%;
-    object-fit: contain;
-    object-position: top center;
-    width: 100%;
+  .harness-gallery-tabs button:last-child {
+    border-right: 0;
   }
 
-  .squad-flow {
-    background: #0b0b0b;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 1.4rem;
-    grid-column: 1 / -1;
-    margin-top: 5.75rem;
-    overflow: hidden;
+  .harness-gallery-tabs button span {
+    margin-right: 7px;
+    color: #788cff;
+    font-size: 9px;
   }
 
-  .surfaces-section {
-    background: var(--ink);
-    color: white !important;
-    padding-block: 10.5rem;
-  }
-
-  .surfaces-heading {
-    align-items: end;
-    display: grid;
-    gap: 7rem;
-    grid-template-columns: 1fr 0.66fr;
-  }
-
-  .surfaces-heading .section-kicker {
+  .harness-gallery-tabs button:hover {
+    background: #20243a;
     color: white;
   }
 
-  .surfaces-heading h2 {
-    color: white !important;
+  .harness-gallery-tabs button[aria-selected="true"] {
+    background: var(--cobalt);
+    color: white;
   }
 
-  .surfaces-heading > p {
-    color: #a3a3a3;
+  .harness-gallery-tabs button[aria-selected="true"] span {
+    color: white;
+  }
+
+  .harness-gallery-panel {
+    background: #0d0e12;
+  }
+
+  .harness-gallery-panel[hidden] {
+    display: none;
+  }
+
+  .harness-gallery-panel img,
+  .runtime-image img,
+  .squad-image-stack img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .harness-gallery-caption {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1.3fr);
+    gap: 18px;
+    min-height: 72px;
+    padding: 13px 16px;
+    border-top: 1px solid #393a3f;
+    color: #d9d9d2;
+  }
+
+  .harness-gallery-caption strong {
+    color: white;
+    font: 700 11px/1.4 var(--mono);
+  }
+
+  .harness-gallery-caption span,
+  .squad-image-stack figcaption {
+    color: #b9b9b2;
+    font: 400 11px/1.45 var(--mono);
+  }
+
+  .work-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+  }
+
+  .work-mode-grid article {
+    min-height: 330px;
+    padding: 26px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .work-mode-grid article:nth-child(2) {
+    background: var(--cobalt-wash);
+  }
+
+  .mode-index,
+  .mode-use {
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .mode-index {
+    color: var(--cobalt);
+  }
+
+  .mode-use {
+    min-height: 36px;
+    margin: 36px 0 0;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .public-landing .work-mode-grid h3 {
+    margin: 8px 0 18px;
+    font-family: var(--display);
+    color: var(--ink) !important;
+    font-size: 42px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.055em;
+  }
+
+  .work-mode-grid article > p:not(.mode-use) {
+    min-height: 92px;
+    margin: 0 0 24px;
+    color: var(--muted);
+  }
+
+  .work-mode-grid strong {
+    display: block;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink);
+    font-size: 13px;
+  }
+
+  .squad-story-grid {
+    display: grid;
+    grid-template-columns: 0.72fr 1.28fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .squad-capabilities {
+    border-top: 2px solid var(--ink);
+  }
+
+  .squad-capabilities article {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 18px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .squad-capabilities span {
+    color: var(--cobalt);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .public-landing .squad-capabilities h3 {
+    margin: 0 0 7px;
+    color: var(--ink) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.6 !important;
+  }
+
+  .squad-capabilities p {
     margin: 0;
+    color: var(--muted);
+    font-size: 14px;
   }
 
-  .surface-grid {
+  .squad-image-stack {
     display: grid;
-    gap: 1.1rem;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: 5.5rem;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+    align-items: end;
   }
 
-  .surface-card {
-    background: rgba(255, 255, 255, 0.045);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 1.2rem;
-    color: white !important;
+  .squad-image-stack figure,
+  .runtime-image {
+    margin: 0;
+    border: 2px solid var(--ink);
+    background: #0d0e12;
+  }
+
+  .squad-image-stack figure:last-child {
+    transform: translateY(32px);
+  }
+
+  .squad-image-stack figcaption {
+    padding: 12px 16px;
+    border-top: 1px solid #393a3f;
+  }
+
+  .runtime-image {
+    margin-top: 38px;
+  }
+
+  .start-section {
     display: grid;
-    grid-template-rows: auto 1fr;
-    overflow: hidden;
-    position: relative;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 72px;
+    align-items: start;
   }
 
-  .surface-media {
-    aspect-ratio: 3 / 2;
-    background: #0a0a0a;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    overflow: hidden;
+  .start-actions {
+    border-top: 2px solid var(--ink);
   }
 
-  .surface-media img {
-    display: block;
-    height: 100%;
-    object-fit: contain;
-    width: 100%;
+  .start-card {
+    display: grid;
+    grid-template-columns: 0.55fr 1fr;
+    gap: 10px 24px;
+    padding: 24px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+    text-decoration: none;
   }
 
-  .surface-number {
-    background: #0a0a0a;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 999px;
+  .start-card:hover {
+    background: var(--cobalt-wash);
+  }
+
+  .start-card-primary {
+    background: var(--cobalt);
     color: white;
-    padding: 0.35rem 0.5rem;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    z-index: 1;
   }
 
-  .surface-copy {
-    padding: 0.25rem 1.55rem 1.55rem;
+  .start-card-primary:hover {
+    background: var(--cobalt-deep);
   }
 
-  .surface-card strong {
-    color: white;
-    display: block;
-    font-size: 1.08rem;
-    letter-spacing: -0.025em;
-    line-height: 1.25;
+  .start-card span {
+    grid-row: 1 / span 2;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
   }
 
-  .surface-description {
-    color: #d4d4d4;
-    display: block;
-    font-size: 0.76rem;
-    line-height: 1.58;
-    margin-top: 0.62rem;
+  .start-card strong {
+    line-height: 1.35;
   }
 
-  .cta-section {
-    align-items: center;
-    display: grid;
-    gap: 5rem;
-    grid-template-columns: auto minmax(0, 1fr);
-    min-height: 42rem;
-    padding-block: 11rem;
+  .start-card small {
+    color: currentColor;
+    opacity: 0.72;
   }
 
-  .cta-mark {
-    background: white;
-    border: 1px solid var(--line);
-    border-radius: 2.4rem;
-    display: grid;
-    padding: 0.55rem;
-    place-items: center;
-  }
+  @media (max-width: 1099px) {
+    .public-landing {
+      min-width: 0;
+      overflow: visible;
+    }
 
-  .cta-copy {
-    max-width: none;
-  }
+    .public-landing .landing-hero,
+    .public-landing .harness-showcase,
+    .public-landing .squad-story-grid,
+    .public-landing .squad-image-stack,
+    .public-landing .runtime-boundary,
+    .public-landing .start-section {
+      grid-template-columns: minmax(0, 1fr);
+    }
 
-  .cta-copy h2 {
-    font-size: 4.5rem !important;
-    max-width: none;
-    text-wrap: wrap;
-  }
+    .public-landing .landing-hero {
+      gap: 40px;
+      min-height: 0;
+      padding: 48px 0 56px;
+    }
 
-  .cta-copy > p:last-child {
-    margin-left: 0;
-    margin-right: 0;
-  }
+    .public-landing .harness-showcase {
+      gap: 32px;
+      padding: 54px 0;
+    }
 
-  .landing-header nav a:hover,
-  .language-link:hover {
-    color: white !important;
-  }
+    .harness-showcase-intro {
+      position: static;
+    }
 
-  .landing-shell a:focus-visible,
-  .landing-shell video:focus-visible,
-  .landing-shell button:focus-visible {
-    outline: 3px solid #a3a3a3;
-    outline-offset: 4px;
-  }
+    .hero-title-line {
+      white-space: normal;
+    }
 
-  @media (prefers-reduced-motion: reduce) {
-    .landing-shell *,
-    .landing-shell *::before,
-    .landing-shell *::after {
-      scroll-behavior: auto !important;
-      transition-duration: 0.01ms !important;
+    .public-landing .proof-strip,
+    .public-landing .work-mode-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .public-landing .proof-strip article,
+    .public-landing .proof-strip article:last-child {
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .work-mode-grid article {
+      min-height: 0;
+    }
+
+    .work-mode-grid article > p:not(.mode-use),
+    .mode-use {
+      min-height: 0;
+    }
+
+    .mode-use {
+      margin-top: 24px;
+    }
+
+    .public-landing .squad-story-grid,
+    .public-landing .squad-image-stack,
+    .public-landing .start-section {
+      gap: 32px;
+    }
+
+    .squad-image-stack figure:last-child {
+      transform: none;
+    }
+
+    .public-landing .runtime-boundary {
+      gap: 38px;
+    }
+
+    .public-landing .runtime-facts article {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .start-card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .start-card span {
+      grid-row: auto;
     }
   }
-</style>
 
-<style is:global>
-  :root[data-has-hero] header.header {
-    display: none;
-  }
+  @media (max-width: 720px) {
+    .public-landing .hero-actions {
+      grid-template-columns: minmax(0, 1fr);
+    }
 
-  :root[data-has-hero] .main-frame,
-  :root[data-has-hero] .main-pane,
-  :root[data-has-hero] .main-pane > main {
-    padding: 0;
-  }
+    .harness-gallery-caption {
+      grid-template-columns: minmax(0, 1fr);
+    }
 
-  :root[data-has-hero] .content-panel,
-  :root[data-has-hero] .content-panel > .sl-container {
-    border: 0;
-    margin: 0;
-    max-width: none;
-    padding: 0 !important;
-  }
+    .public-landing .hero-actions {
+      display: grid;
+    }
 
-  :root[data-has-hero] .content-panel .sl-markdown-content {
-    display: none;
+    .public-landing .hero-actions a {
+      width: 100%;
+    }
   }
 </style>

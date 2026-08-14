@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "laboratory-quality-assurance",
+  "name": "Laboratory Quality Assurance",
+  "label": "Laboratory Quality Assurance",
+  "description": "Method-performance, metrology, and sample-quality evidence review joined for qualified laboratory assurance without result release, clinical interpretation, or accreditation authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded laboratory method, metrology, sample, QC, proficiency-testing, and CAPA evidence review.",
+    "selection_guidance": "Select when work requires method validation or verification evidence, calibration and traceability chains, measurement uncertainty records, sample custody, QC, proficiency testing, nonconformance, or CAPA traceability. Do not select for clinical interpretation, result release, accreditation, or equipment/sample actions.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "laboratory-quality-assurance/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "laboratory-method-validation-analyst": {
+        "label": "Laboratory Method Validation Analyst",
+        "description": "Structures intended-use, measurand, matrix, range, performance, and verification evidence without approving a method.",
+        "base_role": "explore",
+        "prompt": "agents/laboratory-method-validation-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "laboratory-quality-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "laboratory-metrology-equipment-analyst": {
+        "label": "Laboratory Metrology and Equipment Analyst",
+        "description": "Traces equipment state, calibration, reference standards, metrological traceability, and uncertainty evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/laboratory-metrology-equipment-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "laboratory-quality-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "laboratory-sample-qc-proficiency-analyst": {
+        "label": "Laboratory Sample QC and Proficiency Analyst",
+        "description": "Audits custody, quality controls, proficiency testing, nonconformance, and CAPA evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/laboratory-sample-qc-proficiency-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "laboratory-quality-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "laboratory-quality-review-owner": {
+        "label": "Laboratory Quality Review Owner",
+        "description": "Joins the three laboratory evidence branches into a controlled qualified-review pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/laboratory-quality-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "laboratory-quality-assurance/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "laboratory-quality-assurance-review": {
+        "label": "Laboratory Quality Assurance Review",
+        "description": "Three independent laboratory assurance branches converge into one qualified-review pack.",
+        "nodes": {
+          "laboratory-method-validation-analyst": {
+            "agent_id": "laboratory-method-validation-analyst",
+            "description": "Assesses intended use and method performance evidence.",
+            "depends_on": []
+          },
+          "laboratory-metrology-equipment-analyst": {
+            "agent_id": "laboratory-metrology-equipment-analyst",
+            "description": "Traces equipment, calibration, standards, uncertainty, and metrological evidence.",
+            "depends_on": []
+          },
+          "laboratory-sample-qc-proficiency-analyst": {
+            "agent_id": "laboratory-sample-qc-proficiency-analyst",
+            "description": "Audits custody, QC, PT, nonconformance, and CAPA evidence.",
+            "depends_on": []
+          },
+          "laboratory-quality-review-owner": {
+            "agent_id": "laboratory-quality-review-owner",
+            "description": "Joins all branches without method approval, result release, accreditation, or operational authority.",
+            "depends_on": [
+              "laboratory-method-validation-analyst",
+              "laboratory-metrology-equipment-analyst",
+              "laboratory-sample-qc-proficiency-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

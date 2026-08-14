@@ -2,16 +2,20 @@ import {
   awaitTaskMessageProtocolBridgeIdle,
   ensureTaskMessageProtocolBridge,
   persistTaskSessionLifecycle,
+  provideTaskMessageProtocolBridgeProjectDeletionAdmission,
 } from "@/orchestrator/protocol/message-bridge"
-import { Instance } from "@/project/instance"
+import { Instance, type ProjectDeletionAdmission } from "@/project/instance"
+import { runWithIndependentProjectIdentity, runWithProjectDeletionIdentity } from "@/project/independent-project-owner"
 import type { Session } from "@/session"
 import { executionLifecycleOrderKey, SessionStatus } from "@/session/status"
+import { awaitWithAbort } from "@/util/abort"
 
 type SettledSessionTerminalStatusInput = {
   session: Pick<Session.Info, "id" | "directory" | "projectID">
   taskID: string
   inputMessageID: string
   status: Extract<SessionStatus.Info, { type: "terminal" }>
+  signal?: AbortSignal
 }
 
 /**
@@ -23,16 +27,34 @@ type SettledSessionTerminalStatusInput = {
 export async function publishSessionStatus(
   session: Pick<Session.Info, "id" | "directory">,
   status: SessionStatus.Info,
-  options?: { promptGenerationOwner?: AbortSignal; inputMessageID?: string; taskID?: string },
+  options?: {
+    promptGenerationOwner?: AbortSignal
+    inputMessageID?: string
+    taskID?: string
+    signal?: AbortSignal
+    projectDeletionAdmission?: ProjectDeletionAdmission
+  },
 ): Promise<void> {
-  await Instance.provideProjectIdentity({
-    directory: session.directory,
-    fn: () => {
-      ensureTaskMessageProtocolBridge()
-      return SessionStatus.set(session.id, status, options)
-    },
-  })
-  if (options?.taskID) await awaitTaskMessageProtocolBridgeIdle()
+  options?.signal?.throwIfAborted()
+  const publishStatus = () => {
+    options?.signal?.throwIfAborted()
+    ensureTaskMessageProtocolBridge()
+    return SessionStatus.set(session.id, status, options)
+  }
+  const publish = () =>
+    options?.projectDeletionAdmission
+      ? provideTaskMessageProtocolBridgeProjectDeletionAdmission(options.projectDeletionAdmission, publishStatus)
+      : publishStatus()
+  const publication = options?.projectDeletionAdmission
+    ? runWithProjectDeletionIdentity({
+        directory: session.directory,
+        projectDeletionAdmission: options.projectDeletionAdmission,
+        fn: publish,
+      })
+    : runWithIndependentProjectIdentity({ directory: session.directory, fn: publish })
+  await awaitWithAbort(publication, options?.signal)
+  options?.signal?.throwIfAborted()
+  if (options?.taskID) await awaitWithAbort(awaitTaskMessageProtocolBridgeIdle(), options.signal)
 }
 
 /**
@@ -45,15 +67,33 @@ export async function publishSessionStatus(
 async function persistSettledSessionTerminalStatus(
   input: SettledSessionTerminalStatusInput,
 ): Promise<Extract<SessionStatus.Info, { type: "terminal" }>> {
+  input.signal?.throwIfAborted()
+  const currentOccurrence = SessionStatus.executionOccurrence(input.session.id)
+  if (!currentOccurrence) {
+    SessionStatus.beginExecutionOccurrence(input.session.id, input.inputMessageID)
+  }
+  const isCurrentOccurrence =
+    SessionStatus.executionOccurrence(input.session.id)?.inputMessageID === input.inputMessageID
   const current = SessionStatus.getExecution(input.session.id, input.inputMessageID)
-  if (current.type !== "terminal") {
+  if (!isCurrentOccurrence) {
+    // Validate the historical occurrence against its durable user Message
+    // without replacing the Session's live process occurrence or activity.
+    await SessionStatus.set(input.session.id, input.status, {
+      publish: false,
+      taskID: input.taskID,
+      inputMessageID: input.inputMessageID,
+    })
+  } else if (current.type !== "terminal") {
     await SessionStatus.set(input.session.id, input.status, {
       publish: false,
       taskID: input.taskID,
       inputMessageID: input.inputMessageID,
     })
   }
-  const terminal = SessionStatus.getExecution(input.session.id, input.inputMessageID)
+  input.signal?.throwIfAborted()
+  const terminal = isCurrentOccurrence
+    ? SessionStatus.getExecution(input.session.id, input.inputMessageID)
+    : input.status
   if (terminal.type !== "terminal") {
     throw new Error(`settled Session ${input.session.id} did not acquire a terminal lifecycle fact`)
   }
@@ -64,16 +104,24 @@ async function persistSettledSessionTerminalStatus(
     orderKey: executionLifecycleOrderKey(input.session.id, input.inputMessageID),
     status: terminal,
   })
+  input.signal?.throwIfAborted()
   return terminal
 }
 
 export async function publishSettledSessionTerminalStatus(
   input: SettledSessionTerminalStatusInput,
 ): Promise<Extract<SessionStatus.Info, { type: "terminal" }>> {
-  return Instance.provideProjectIdentity({
-    directory: input.session.directory,
-    fn: () => persistSettledSessionTerminalStatus(input),
-  })
+  input.signal?.throwIfAborted()
+  return await awaitWithAbort(
+    runWithIndependentProjectIdentity({
+      directory: input.session.directory,
+      fn: () => {
+        input.signal?.throwIfAborted()
+        return persistSettledSessionTerminalStatus(input)
+      },
+    }),
+    input.signal,
+  )
 }
 
 /**

@@ -1,4 +1,11 @@
-import type { ExpertSquadCatalogProfile, ExpertSquadCatalogSummary } from "@/expert-squad/catalog"
+import {
+  ExpertSquadCatalogIndexEntrySchema,
+  ExpertSquadCatalogInspectionSchema,
+  type ExpertSquadCatalogIndexEntry,
+  type ExpertSquadCatalogInspection,
+  type ExpertSquadCatalogProfile,
+  type ExpertSquadCatalogSummary,
+} from "@/expert-squad/catalog"
 import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "@/expert-squad/id"
 import { ExpertSquadRegistry } from "@/expert-squad/registry"
 import type { ExpertSquadPackageLocations } from "@/expert-squad/locations"
@@ -16,7 +23,7 @@ export type ExpertSquadCatalogPackage = {
   id: string
   version: string
   selector: ExpertSquadRegistry.SelectorMetadata
-  selectorInstructions: string
+  selectorInstructions?: string
   readmeContent?: string
   root?: string
   manifestPath?: string
@@ -75,6 +82,7 @@ function declarationCapabilityProjection(
             label: projection.label,
             ...(projection.description ? { description: projection.description } : {}),
             base_role: projection.base_role,
+            ...(projection.execution_contract ? { execution_contract: projection.execution_contract } : {}),
             ...(projection.prompt ? { prompt: projection.prompt } : {}),
             ...declarationResources(projection),
           },
@@ -133,7 +141,7 @@ export function catalogProfileFromPackage(input: {
         description: input.pkg.selector.description ?? null,
         summary: input.pkg.selector.summary,
         selection_guidance: input.pkg.selector.selection_guidance,
-        instructions_sha256: textSHA256(input.pkg.selectorInstructions),
+        instructions_sha256: textSHA256(input.pkg.selectorInstructions ?? ""),
       },
     }),
     capability_projection: capabilityProjection,
@@ -145,6 +153,7 @@ export function catalogSummaryFromPackage(input: {
   builtIn: boolean
 }): ExpertSquadCatalogSummary {
   const profile = catalogProfileFromPackage(input)
+  const selectorInstructions = input.pkg.selectorInstructions ?? ""
   const selector = {
     ref: input.pkg.selector.ref,
     id: input.pkg.selector.id,
@@ -153,7 +162,7 @@ export function catalogSummaryFromPackage(input: {
     summary: input.pkg.selector.summary,
     selection_guidance: input.pkg.selector.selection_guidance,
     instructions_path: "selector.md" as const,
-    instructions: input.pkg.selectorInstructions,
+    instructions: selectorInstructions,
   }
   if (!selector.instructions.trim()) {
     throw new Error(`Expert squad ${input.pkg.id} selector requires top-level selector.md instructions.`)
@@ -197,4 +206,55 @@ export function catalogSummaryFromPackage(input: {
     },
     selector,
   }
+}
+
+export function catalogIndexFromPackage(input: {
+  pkg: ExpertSquadCatalogPackage
+  builtIn: boolean
+}): ExpertSquadCatalogIndexEntry {
+  const source = input.builtIn
+    ? { kind: "built_in" as const }
+    : (() => {
+        if (!input.pkg.installationScope) {
+          throw new Error(`Installed expert squad ${input.pkg.id} is missing its installation scope.`)
+        }
+        return {
+          kind: "installed_package" as const,
+          installation_scope: input.pkg.installationScope,
+          namespace: input.pkg.namespace,
+        }
+      })()
+  return ExpertSquadCatalogIndexEntrySchema.parse({
+    id: input.pkg.id,
+    name: ExpertSquadRegistry.displayName(input.pkg.manifest).slice(0, 160),
+    display_label: displayLabel(input.pkg.manifest.label, input.pkg.namespace).slice(0, 240),
+    ...(input.pkg.manifest.description?.length
+      ? { description: input.pkg.manifest.description.slice(0, 1_000) }
+      : {}),
+    built_in: input.builtIn,
+    product_pillars: input.pkg.manifest.product_pillars,
+    ...(input.pkg.manifest.system_role ? { system_role: input.pkg.manifest.system_role } : {}),
+    source,
+  })
+}
+
+export function catalogInspectionFromPackage(input: {
+  pkg: ExpertSquadCatalogPackage
+  builtIn: boolean
+  workflows: ExpertSquadCatalogInspection["workflows"]
+  workflowCount: number
+  nextWorkflowCursor?: string | null
+}): ExpertSquadCatalogInspection {
+  return ExpertSquadCatalogInspectionSchema.parse({
+    ...catalogIndexFromPackage(input),
+    label: input.pkg.manifest.label.slice(0, 160),
+    version: input.pkg.version.slice(0, 80),
+    selector: {
+      summary: input.pkg.selector.summary.slice(0, 1_000),
+      selection_guidance: input.pkg.selector.selection_guidance.slice(0, 2_000),
+    },
+    workflow_count: input.workflowCount,
+    workflows: input.workflows,
+    next_workflow_cursor: input.nextWorkflowCursor ?? null,
+  })
 }

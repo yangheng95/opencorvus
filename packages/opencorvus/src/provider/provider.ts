@@ -26,6 +26,9 @@ import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { Plugin } from "../plugin"
 import { BUNDLED_PROVIDERS } from "./bundled"
 import { dashscopeKey } from "./dashscope"
+import { canonicalDigestSource, containsRuntimeCapability } from "@/util/canonical-digest"
+import { CanonicalCache } from "@/util/canonical-cache"
+import { activityTrackedReadableStream, withStreamActivity } from "@/util/stream-activity"
 
 export namespace Provider {
   const log = Log.create({ service: "provider" })
@@ -142,6 +145,24 @@ export namespace Provider {
     )
   }
 
+  export function mergeModelCost(
+    existing: Model["cost"] | undefined,
+    configured:
+      | { input?: number; output?: number; cache_read?: number; cache_write?: number }
+      | undefined,
+  ): Model["cost"] {
+    return {
+      available: configured !== undefined || existing?.available === true,
+      input: configured?.input ?? existing?.input ?? 0,
+      output: configured?.output ?? existing?.output ?? 0,
+      cache: {
+        read: configured?.cache_read ?? existing?.cache.read ?? 0,
+        write: configured?.cache_write ?? existing?.cache.write ?? 0,
+      },
+      experimentalOver200K: existing?.experimentalOver200K,
+    }
+  }
+
   function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model): Model {
     const m: Model = {
       id: model.id,
@@ -157,6 +178,7 @@ export namespace Provider {
       headers: model.headers ?? {},
       options: model.options ?? {},
       cost: {
+        available: model.cost !== undefined,
         input: model.cost?.input ?? 0,
         output: model.cost?.output ?? 0,
         cache: {
@@ -225,11 +247,12 @@ export namespace Provider {
   }
 
   type ProviderState = {
+    config: Config.Info
     models: Map<string, LanguageModel>
     providers: { [providerID: string]: Info }
     database: { [providerID: string]: Info }
     issues: LoadIssue[]
-    sdk: Map<number, LanguageModelProvider>
+    sdk: CanonicalCache<LanguageModelProvider>
     modelLoaders: {
       [providerID: string]: CustomModelLoader
     }
@@ -286,6 +309,10 @@ export namespace Provider {
               ...model,
               id: modelID,
               providerID: projection.id,
+              cost: {
+                ...model.cost,
+                available: model.cost.available === true,
+              },
             },
           ]),
         )
@@ -307,7 +334,7 @@ export namespace Provider {
     const modelLoaders: {
       [providerID: string]: CustomModelLoader
     } = {}
-    const sdk = new Map<number, LanguageModelProvider>()
+    const sdk = new CanonicalCache<LanguageModelProvider>()
 
     log.info("init")
 
@@ -387,14 +414,7 @@ export namespace Provider {
                 },
                 interleaved: model.interleaved ?? false,
               },
-              cost: {
-                input: model?.cost?.input ?? existingModel?.cost?.input ?? 0,
-                output: model?.cost?.output ?? existingModel?.cost?.output ?? 0,
-                cache: {
-                  read: model?.cost?.cache_read ?? existingModel?.cost?.cache.read ?? 0,
-                  write: model?.cost?.cache_write ?? existingModel?.cost?.cache.write ?? 0,
-                },
-              },
+              cost: mergeModelCost(existingModel?.cost, model.cost),
               options: mergeDeep(existingModel?.options ?? {}, model.options ?? {}),
               limit: {
                 context: model.limit?.context ?? existingModel?.limit?.context ?? 0,
@@ -596,6 +616,7 @@ export namespace Provider {
     }
 
     return {
+      config,
       models: languages,
       providers,
       database,
@@ -605,43 +626,56 @@ export namespace Provider {
     }
   }
 
-  const state = createInstanceState(async () => buildState(await Config.get()), undefined, "provider")
-  const scopedStates = new Map<string, Promise<ProviderState>>()
-  const globalScopedStates = new Map<string, Promise<ProviderState>>()
+  const state = createInstanceState(async () => buildState(Config.Info.parse(await Config.get())), undefined, "provider")
+  const scopedStates = new Map<string, CanonicalCache<Promise<ProviderState>>>()
+  const globalScopedStates = new CanonicalCache<Promise<ProviderState>>()
 
-  function configStateKey(config: Config.Info): string {
-    return String(Bun.hash.xxHash64(JSON.stringify(config)))
-  }
-
-  function projectConfigStateKey(config: Config.Info): string {
-    return `${currentProjectDirectory()}\u0000${configStateKey(config)}`
+  function configStateSource(config: Config.Info) {
+    const snapshot = Config.Info.parse(config)
+    return {
+      snapshot,
+      source: canonicalDigestSource("opencorvus.provider.config-state.v1", snapshot),
+    }
   }
 
   function cachedState(
-    states: Map<string, Promise<ProviderState>>,
-    key: string,
+    states: CanonicalCache<Promise<ProviderState>>,
+    source: ReturnType<typeof canonicalDigestSource>,
     init: () => Promise<ProviderState>,
   ): Promise<ProviderState> {
-    const existing = states.get(key)
+    const existing = states.get(source)
     if (existing) return existing
     const next = init().catch((error) => {
-      if (states.get(key) === next) states.delete(key)
+      states.delete(source, next)
       throw error
     })
-    states.set(key, next)
+    states.set(source, next)
     return next
   }
 
   function stateFor(config?: Config.Info): Promise<ProviderState> {
     if (!config) return state()
-    const key = projectConfigStateKey(config)
-    return cachedState(scopedStates, key, () => buildState(config))
+    const snapshot = Config.Info.parse(config)
+    if (containsRuntimeCapability(snapshot)) return buildState(snapshot)
+    const { source } = configStateSource(snapshot)
+    const directory = currentProjectDirectory()
+    const states = scopedStates.get(directory) ?? new CanonicalCache<Promise<ProviderState>>()
+    scopedStates.set(directory, states)
+    return cachedState(states, source, () => buildState(snapshot))
   }
 
   function globalStateFor(config: Config.Info): Promise<ProviderState> {
-    const key = configStateKey(config)
-    return cachedState(globalScopedStates, key, () =>
-      buildState(config, {
+    const snapshot = Config.Info.parse(config)
+    if (containsRuntimeCapability(snapshot)) {
+      return buildState(snapshot, {
+        environment: { ...process.env },
+        pluginHooks: Plugin.listGlobalProviderHooks,
+        includeCustomLoaders: false,
+      })
+    }
+    const { source } = configStateSource(snapshot)
+    return cachedState(globalScopedStates, source, () =>
+      buildState(snapshot, {
         environment: { ...process.env },
         pluginHooks: Plugin.listGlobalProviderHooks,
         includeCustomLoaders: false,
@@ -650,10 +684,7 @@ export namespace Provider {
   }
 
   export async function reset(): Promise<void> {
-    const prefix = `${currentProjectDirectory()}\u0000`
-    for (const key of scopedStates.keys()) {
-      if (key.startsWith(prefix)) scopedStates.delete(key)
-    }
+    scopedStates.delete(currentProjectDirectory())
     await state.reset()
   }
 
@@ -678,9 +709,83 @@ export namespace Provider {
       }
     | { ok: false; error: string }
 
+  const LiveModelsResponse = z
+    .object({
+      data: z.array(
+        z
+          .object({
+            id: z.string().trim().min(1),
+          })
+          .passthrough(),
+      ),
+    })
+    .passthrough()
+
+  const LiveModelInfoResponse = z
+    .object({
+      data: z.array(ModelsDev.LiveModelInfo),
+    })
+    .strict()
+
   /** Refresh configured live model identities without refreshing the provider registry declaration. */
-  export async function refreshModels(_config?: Config.Info): Promise<RefreshModelsResult> {
-    return { ok: true, fetchedAt: Date.now(), providers: [] }
+  export async function refreshModels(config?: Config.Info): Promise<RefreshModelsResult> {
+    try {
+      await Auth.all()
+      const snapshot = Config.Info.parse(config ?? (await Config.get()))
+      const provider = config
+        ? await getProviderGlobal("opencorvus", snapshot)
+        : await getProvider("opencorvus", { config: snapshot })
+      if (!provider?.key) throw new Error("OpenCorvus Provider credentials are not configured")
+      const catalog = await ModelsDev.get()
+      const declaration = catalog.opencorvus
+      if (!declaration) throw new Error("Model catalog is missing provider opencorvus")
+      const endpoint = (snapshot.provider?.opencorvus?.api ?? declaration.api)?.trim().replace(/\/+$/, "")
+      if (!endpoint) throw new Error("OpenCorvus Provider is missing its live models endpoint")
+      const request = async (pathname: "/models" | "/model/info") => {
+        const response = await fetch(
+          `${endpoint}${pathname}`,
+          providerFetchInit(
+            {
+              headers: { Authorization: `Bearer ${provider.key}` },
+              signal: AbortSignal.timeout(15_000),
+            },
+            resolveFetchProxy(snapshot),
+          ),
+        )
+        if (!response.ok) throw new Error(`GET ${endpoint}${pathname} returned HTTP ${response.status}`)
+        return response.json()
+      }
+      const [identityInput, infoInput] = await Promise.all([request("/models"), request("/model/info")])
+      const payload = LiveModelsResponse.parse(identityInput)
+      const ids = payload.data.map((item) => item.id)
+      if (ids.length === 0) throw new Error(`GET ${endpoint}/models returned no model ids`)
+      if (new Set(ids).size !== ids.length) throw new Error(`GET ${endpoint}/models returned duplicate model ids`)
+      ids.sort((a, b) => a.localeCompare(b))
+
+      const infoRows = LiveModelInfoResponse.parse(infoInput).data
+      const infoByID = new Map<string, ModelsDev.Model>()
+      for (const model of infoRows) {
+        if (infoByID.has(model.id)) throw new Error(`GET ${endpoint}/model/info returned duplicate model metadata`)
+        infoByID.set(model.id, model)
+      }
+      const models = Object.fromEntries(
+        ids.map((id) => {
+          const model = infoByID.get(id) ?? declaration.models[id]
+          if (!model) throw new Error(`GET ${endpoint}/model/info is missing metadata for model ${id}`)
+          return [id, { ...model, id }]
+        }),
+      )
+      await ModelsDev.replaceProviderModels("opencorvus", models)
+      return {
+        ok: true,
+        fetchedAt: Date.now(),
+        providers: [{ providerID: "opencorvus", count: ids.length, ids }],
+      }
+    } catch (error) {
+      const authError = Auth.findReadError(error)
+      if (authError) throw authError
+      return { ok: false, error: error instanceof Error ? error.message : String(error) }
+    }
   }
 
   export async function list(opts?: { config?: Config.Info }) {
@@ -728,7 +833,7 @@ export namespace Provider {
         providerID: model.providerID,
       })
       const s = await (opts?.state ?? stateFor(opts?.config))
-      const config = opts?.config ?? (await Config.get())
+      const config = s.config
       const provider = s.providers[model.providerID]
       const options = { ...provider.options }
       if (options["apiKey"] === undefined && provider.key) options["apiKey"] = provider.key
@@ -750,12 +855,19 @@ export namespace Provider {
           ...model.headers,
         }
 
-      const key = Bun.hash.xxHash32(JSON.stringify({ providerID: model.providerID, npm: model.api.npm, options }))
-      const existing = s.sdk.get(key)
-      if (existing) return existing
-
       const customFetch = options["fetch"]
       const proxyUrl = customFetch ? undefined : resolveFetchProxy(config)
+      const declarativeOptions = { ...options }
+      delete declarativeOptions["fetch"]
+      const sdkSource = customFetch || containsRuntimeCapability(declarativeOptions)
+        ? undefined
+        : canonicalDigestSource("opencorvus.provider.sdk-instance.v1", {
+            providerID: model.providerID,
+            npm: model.api.npm,
+            options: declarativeOptions,
+          })
+      const existing = sdkSource ? s.sdk.get(sdkSource) : undefined
+      if (existing) return existing
 
       options["fetch"] = async (input: any, init?: BunFetchRequestInit) => {
         // Preserve custom fetch if it exists, wrap it with timeout logic
@@ -772,35 +884,31 @@ export namespace Provider {
         // on every streaming chunk. This handles both:
         // - Server hangs before sending any response (initial connect timeout)
         // - Server stops sending data mid-stream (stream stall timeout)
-        const inactivityController = inactivityMs > 0 ? new AbortController() : undefined
-        let inactivityTimer: ReturnType<typeof setTimeout> | undefined
-        const resetInactivityTimer = inactivityController
-          ? () => {
-              if (inactivityTimer) clearTimeout(inactivityTimer)
-              inactivityTimer = setTimeout(() => {
+        const fetchActivity =
+          inactivityMs > 0
+            ? withStreamActivity({
+                idleMs: inactivityMs,
+                signal: opts.signal ?? undefined,
+                label: `provider:${model.providerID}`,
+              })
+            : undefined
+
+        if (fetchActivity) {
+          fetchActivity.signal.addEventListener(
+            "abort",
+            () => {
+              if (fetchActivity.timedOut()) {
                 log.warn("fetch inactivity timeout — no data for configured period, aborting", {
                   providerID: model.providerID,
                   inactivityMs,
                 })
-                inactivityController!.abort()
-              }, inactivityMs)
-            }
-          : undefined
-        const clearInactivityTimer = () => {
-          if (!inactivityTimer) return
-          clearTimeout(inactivityTimer)
-          inactivityTimer = undefined
+              }
+              fetchActivity.dispose()
+            },
+            { once: true },
+          )
+          opts.signal = fetchActivity.signal
         }
-
-        if (inactivityController) {
-          const signals: AbortSignal[] = []
-          if (opts.signal) signals.push(opts.signal)
-          signals.push(inactivityController.signal)
-          opts.signal = signals.length > 1 ? AbortSignal.any(signals) : signals[0]
-        }
-
-        // Start the inactivity timer BEFORE fetch — covers initial connection hang
-        resetInactivityTimer?.()
 
         try {
           // Strip openai itemId metadata following what codex does
@@ -823,8 +931,8 @@ export namespace Provider {
 
           const response = await fetchFn(input, providerFetchInit(opts, proxyUrl))
 
-          // Response received — reset timer (server is alive)
-          resetInactivityTimer?.()
+          // Response headers are physical upstream activity.
+          fetchActivity?.observe()
 
           // Some SDKs (e.g. @ai-sdk/openai-compatible) do not surface HTTP
           // errors from streaming responses — they silently consume the body
@@ -844,7 +952,7 @@ export namespace Provider {
           //      orchestrator into an "unknown session error" wake loop —
           //      see _session-20260428-130617.out incident.
           if (!response.ok) {
-            clearInactivityTimer()
+            fetchActivity?.dispose()
             const text = ProviderError.redactSensitiveProviderText(await response.text().catch(() => ""))
             let detail = ""
             try {
@@ -880,19 +988,11 @@ export namespace Provider {
           }
 
           // For streaming responses, wrap the body so each chunk resets the timer.
-          if (inactivityController && response.body) {
-            const original = response.body
-            const wrapped = original.pipeThrough(
-              new TransformStream({
-                transform(chunk, controller) {
-                  resetInactivityTimer!()
-                  controller.enqueue(chunk)
-                },
-                flush() {
-                  clearInactivityTimer()
-                },
-              }),
-            )
+          if (fetchActivity && response.body) {
+            const wrapped = activityTrackedReadableStream({
+              source: response.body,
+              activity: fetchActivity,
+            })
 
             // Return a new Response with the wrapped body, preserving headers/status
             return new Response(wrapped, {
@@ -903,10 +1003,10 @@ export namespace Provider {
           }
 
           // Non-streaming response — clear the inactivity timer
-          clearInactivityTimer()
+          fetchActivity?.dispose()
           return response
         } catch (error) {
-          clearInactivityTimer()
+          fetchActivity?.dispose()
           throw error
         }
       }
@@ -918,7 +1018,7 @@ export namespace Provider {
           name: model.providerID,
           ...options,
         })
-        s.sdk.set(key, loaded)
+        if (sdkSource) s.sdk.set(sdkSource, loaded)
         return loaded as LanguageModelProvider
       }
 
@@ -934,7 +1034,7 @@ export namespace Provider {
         name: model.providerID,
         ...options,
       })
-      s.sdk.set(key, loaded)
+      if (sdkSource) s.sdk.set(sdkSource, loaded)
       return loaded as LanguageModelProvider
     } catch (e) {
       throw new InitError({ providerID: model.providerID }, { cause: e })

@@ -233,10 +233,10 @@ export async function authorProjectExpertSquad(
 
 const DESCRIPTION = [
   "Author, validate, and explicitly import one OpenCorvus Expert Squad through the canonical SDK writer.",
+  "Prefer one package-owned Planner node followed by at least two independent worker nodes that all depend only on that Planner. Use a richer acyclic evidence graph only when an exact producer/consumer Artifact dependency makes the edge unavoidable; never manufacture roles or edges for topology metrics.",
   "Submit the compact authoring blueprint directly. Prompts and README/selector content are inline; the Host deterministically owns canonical manifest paths and package file projection. Empty resource arrays, empty depends_on arrays, and extra_files may be omitted.",
   'Package tools use no top-level tools field. Put each shared entrypoint in extra_files["tools/<tool-id>.ts"] and project <squad-id>/shared/<tool-id> through package_tool_refs; Agent-owned entries use extra_files["agents/<agent-id>/tools/<tool-id>.ts"] and <squad-id>/<agent-id>/<tool-id>. Supporting code lives under lib/ or the matching Agent lib/.',
-  "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, read-only workflow topology analysis, file count, canonical package digest, generation trace, and target.",
-  "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, read-only workflow topology analysis, file count, canonical package digest, mutation operation, generation trace, and target.",
+  "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, deterministic workflow structure/frontier analysis, file count, canonical package digest, mutation operation, generation trace, and target.",
   "A new project-owned ID installs directly. Replacing an existing exact ID requires expected_current_package_digest; a stale digest returns an explicit compare-and-swap conflict.",
   "Every successful generation becomes discoverable through the current project catalog. The tool never activates the generated Squad and exposes no model-selected installation scope or target path.",
 ].join("\n")
@@ -246,15 +246,9 @@ export const ExpertSquadAuthorTool = Tool.define("expert_squad_author", {
   parameters: ExpertSquadAuthorParameters,
   async execute(args, ctx) {
     const taskID = taskExecutionID(ctx, "expert_squad_author")
-    await ctx.ask({
-      permission: "expert_squad_author",
-      patterns: [`project:${Instance.project.id}`],
-      always: [],
-      metadata: { installationScope: "project", projectID: Instance.project.id },
-    })
     const result = await authorProjectExpertSquad(args, { taskID, sessionID: ctx.sessionID })
     return {
-      title: `Authored Agent Squad ${result.id}`,
+      title: `Authored Expert Squad ${result.id}`,
       metadata: result,
       output: JSON.stringify(result, null, 2),
     }

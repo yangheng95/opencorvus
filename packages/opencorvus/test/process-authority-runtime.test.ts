@@ -4,15 +4,15 @@ import path from "node:path"
 import { PassThrough } from "node:stream"
 import { TextReader, Uint8ArrayWriter, ZipWriter } from "@zip.js/zip.js"
 import { runHostBrowserNodeSidecar, runTaskBrowserNodeSidecar } from "../src/browser/runtime/node-executor"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { MCP } from "../src/mcp"
 import {
-  authorOfficeArtifact,
-  defaultOfficeArtifactDependencies,
-  type OfficeArtifactDependencies,
-} from "../src/office-artifact/presentation"
+  authorWorkArtifactPresentation,
+  defaultWorkArtifactPresentationDependencies,
+  type WorkArtifactPresentationDependencies,
+} from "../src/work-artifact/presentation"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { runFormatterProcess } from "../src/format/process"
@@ -23,6 +23,7 @@ import { ProcessSupervisor } from "../src/shell/process-supervisor"
 import { Truncate } from "../src/tool/truncation"
 import { Tool } from "../src/tool/tool"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
+import { PermissionAuthority } from "../src/permission/authority"
 import { SessionLoop } from "../src/session/loop"
 import { SessionStatus } from "../src/session/status"
 
@@ -44,8 +45,8 @@ async function minimalPresentationBytes() {
   const zip = new ZipWriter(output)
   await zip.add("[Content_Types].xml", new TextReader("<Types/>"))
   await zip.add("_rels/.rels", new TextReader("<Relationships/>"))
-  await zip.add("ppt/presentation.xml", new TextReader("<p:presentation xmlns:p=\"urn:p\"/>"))
-  await zip.add("ppt/slides/slide1.xml", new TextReader("<p:sld xmlns:p=\"urn:p\"/>"))
+  await zip.add("ppt/presentation.xml", new TextReader('<p:presentation xmlns:p="urn:p"/>'))
+  await zip.add("ppt/slides/slide1.xml", new TextReader('<p:sld xmlns:p="urn:p"/>'))
   await zip.close()
   return Buffer.from(output.getData())
 }
@@ -72,7 +73,7 @@ describe("explicit conversation and Task execution authority", () => {
         const session = await Session.create({ kind: "root", title: "Process authority contract" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now,
@@ -81,7 +82,6 @@ describe("explicit conversation and Task execution authority", () => {
           productPillar: "code",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -95,6 +95,14 @@ describe("explicit conversation and Task execution authority", () => {
         const hostSession = await Session.create({ kind: "assistant", title: "Host authority contract" })
         const hostDirectory = path.join(project.path, "host-control")
         await fs.mkdir(hostDirectory)
+        const delegatedWorktree = path.join(project.path, ".opencorvus", ".r", "w", "authority-worker")
+        await fs.mkdir(delegatedWorktree, { recursive: true })
+        const delegatedSession = await Session.createNext({
+          kind: "delegated-worker",
+          parentID: session.id,
+          directory: delegatedWorktree,
+          title: "Delegated worktree authority contract",
+        })
         const taskAuthority = await resolveSessionExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,
@@ -105,9 +113,25 @@ describe("explicit conversation and Task execution authority", () => {
           projectID: Instance.project.id,
           expected: { kind: "conversation" },
         })
-        if (taskAuthority.kind !== "task" || conversationAuthority.kind !== "conversation") {
+        const delegatedTaskAuthority = await resolveSessionExecutionAuthority({
+          sessionID: delegatedSession.id,
+          projectID: Instance.project.id,
+          expected: { kind: "task", taskID },
+        })
+        if (
+          taskAuthority.kind !== "task" ||
+          conversationAuthority.kind !== "conversation" ||
+          delegatedTaskAuthority.kind !== "task"
+        ) {
           throw new Error("Session process authority contract resolved an unexpected owner")
         }
+        expect(delegatedTaskAuthority).toEqual({
+          kind: "task",
+          sessionID: delegatedSession.id,
+          projectID: Instance.project.id,
+          taskID,
+          directory: delegatedWorktree,
+        })
         const terminalInput = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
@@ -131,11 +155,7 @@ describe("explicit conversation and Task execution authority", () => {
         const largeOutput = "authority-output\n".repeat(4_000)
         const recoverySurface = Tool.executionSurface(["read"], [])
         const [taskTruncation, conversationTruncation] = await Promise.all([
-          Truncate.output(
-            largeOutput,
-            { sessionID: session.id, executionAuthority: taskAuthority },
-            recoverySurface,
-          ),
+          Truncate.output(largeOutput, { sessionID: session.id, executionAuthority: taskAuthority }, recoverySurface),
           Truncate.output(
             largeOutput,
             { sessionID: hostSession.id, executionAuthority: conversationAuthority },
@@ -160,14 +180,16 @@ describe("explicit conversation and Task execution authority", () => {
         const conversationProcessAuthority = { kind: "host" as const, cwd: hostDirectory }
 
         const formatterScript = "process.stdout.write(process.cwd())"
-        const taskFormatter = await runFormatterProcess(
-          taskProcessAuthority,
-          { command: [process.execPath, "-e", formatterScript], timeoutMs: 10_000, captureOutput: true },
-        )
-        const hostFormatter = await runFormatterProcess(
-          conversationProcessAuthority,
-          { command: [process.execPath, "-e", formatterScript], timeoutMs: 10_000, captureOutput: true },
-        )
+        const taskFormatter = await runFormatterProcess(taskProcessAuthority, {
+          command: [process.execPath, "-e", formatterScript],
+          timeoutMs: 10_000,
+          captureOutput: true,
+        })
+        const hostFormatter = await runFormatterProcess(conversationProcessAuthority, {
+          command: [process.execPath, "-e", formatterScript],
+          timeoutMs: 10_000,
+          captureOutput: true,
+        })
         expect([taskFormatter, hostFormatter]).toEqual([
           { exitCode: 0, stdout: project.path, stderr: "" },
           { exitCode: 0, stdout: hostDirectory, stderr: "" },
@@ -175,11 +197,16 @@ describe("explicit conversation and Task execution authority", () => {
 
         const browserInput = {
           runtime: {
-            nodeExecutable: which("node") ?? (() => { throw new Error("Node runtime is required") })(),
+            nodeExecutable:
+              which("node") ??
+              (() => {
+                throw new Error("Node runtime is required")
+              })(),
             playwrightRequirePath: process.execPath,
             packaged: false,
           },
-          script: "const value=JSON.parse(Buffer.from(process.argv[2],'base64').toString('utf8'));process.stdout.write(JSON.stringify({cwd:process.cwd(),value}));",
+          script:
+            "const value=JSON.parse(Buffer.from(process.argv[2],'base64').toString('utf8'));process.stdout.write(JSON.stringify({cwd:process.cwd(),value}));",
           payload: { authority: "exact" },
           inactivityTimeoutMs: 10_000,
           label: "process authority browser protocol",
@@ -202,7 +229,7 @@ describe("explicit conversation and Task execution authority", () => {
         const mcp = { type: "local" as const, command: [process.execPath, mcpFixture], timeout: 10_000 }
         const owner = MCP.createScopedConnectionOwner("authority-owner")
         try {
-          const taskResult = await MCP.callScopedTool({
+          await MCP.scopedToolInfo({
             key: "authority-fixture",
             mcp,
             cwd: project.path,
@@ -210,9 +237,32 @@ describe("explicit conversation and Task execution authority", () => {
             connectionIdentity: "shared-logical-server",
             processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.directory),
             toolName: "authority_echo",
-            args: {},
           })
-          const hostResult = await MCP.callScopedTool({
+          const taskResult = await PermissionAuthority.authorizeAndExecute(
+            {
+              projectID: Instance.project.id,
+              sessionID: session.id,
+              messageID: "msg_task_mcp_authority",
+              toolCallID: "call_task_mcp_authority",
+              providerKind: "mcp",
+              providerID: "authority-fixture",
+              providerDigest: "a".repeat(64),
+              toolName: "authority_echo",
+              args: {},
+            },
+            () =>
+              MCP.callScopedTool({
+                key: "authority-fixture",
+                mcp,
+                cwd: project.path,
+                connectionOwner: owner,
+                connectionIdentity: "shared-logical-server",
+                processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.directory),
+                toolName: "authority_echo",
+                args: {},
+              }),
+          )
+          await MCP.scopedToolInfo({
             key: "authority-fixture",
             mcp,
             cwd: hostDirectory,
@@ -220,8 +270,31 @@ describe("explicit conversation and Task execution authority", () => {
             connectionIdentity: "shared-logical-server",
             processAuthority: MCP.hostProcessAuthority(conversationProcessAuthority.cwd),
             toolName: "authority_echo",
-            args: {},
           })
+          const hostResult = await PermissionAuthority.authorizeAndExecute(
+            {
+              projectID: Instance.project.id,
+              sessionID: hostSession.id,
+              messageID: "msg_host_mcp_authority",
+              toolCallID: "call_host_mcp_authority",
+              providerKind: "mcp",
+              providerID: "authority-fixture",
+              providerDigest: "a".repeat(64),
+              toolName: "authority_echo",
+              args: {},
+            },
+            () =>
+              MCP.callScopedTool({
+                key: "authority-fixture",
+                mcp,
+                cwd: hostDirectory,
+                connectionOwner: owner,
+                connectionIdentity: "shared-logical-server",
+                processAuthority: MCP.hostProcessAuthority(conversationProcessAuthority.cwd),
+                toolName: "authority_echo",
+                args: {},
+              }),
+          )
           expect([taskResult.content, hostResult.content]).toEqual([
             [{ type: "text", text: project.path }],
             [{ type: "text", text: hostDirectory }],
@@ -231,7 +304,7 @@ describe("explicit conversation and Task execution authority", () => {
         }
 
         const officeCalls: Array<{ owner: string; cwd: string; operation: string }> = []
-        const officeDependencies: OfficeArtifactDependencies = {
+        const officeDependencies: WorkArtifactPresentationDependencies = {
           async officeCliPath() {
             return process.execPath
           },
@@ -240,9 +313,10 @@ describe("explicit conversation and Task execution authority", () => {
           },
           async runOfficeCli(input) {
             officeCalls.push({
-              owner: input.executionAuthority.kind === "task"
-                ? `task:${input.executionAuthority.taskID}`
-                : `conversation:${input.executionAuthority.sessionID}`,
+              owner:
+                input.executionAuthority.kind === "task"
+                  ? `task:${input.executionAuthority.taskID}`
+                  : `conversation:${input.executionAuthority.sessionID}`,
               cwd: input.cwd,
               operation: input.args[0]!,
             })
@@ -250,9 +324,9 @@ describe("explicit conversation and Task execution authority", () => {
             return { code: 0, stdout: Buffer.from('{"success":true,"data":{}}'), stderr: Buffer.alloc(0) }
           },
         }
-        const office = await authorOfficeArtifact({
+        const office = await authorWorkArtifactPresentation({
           raw: {
-            format: "presentation",
+            profile: "office.presentation@1",
             filename: "authority.pptx",
             locale: "en-US",
             aspect_ratio: "16:9",
@@ -262,9 +336,9 @@ describe("explicit conversation and Task execution authority", () => {
           abort: new AbortController().signal,
           dependencies: officeDependencies,
         })
-        const conversationOffice = await authorOfficeArtifact({
+        const conversationOffice = await authorWorkArtifactPresentation({
           raw: {
-            format: "presentation",
+            profile: "office.presentation@1",
             filename: "conversation-authority.pptx",
             locale: "en-US",
             aspect_ratio: "16:9",
@@ -291,7 +365,7 @@ describe("explicit conversation and Task execution authority", () => {
 
         const officeCliExecutable = path.join(project.path, "officecli-authority")
         const defaultOfficeSpawns: Array<{ cwd?: string; executable: string; args: string[] }> = []
-        const originalOfficeCliPath = defaultOfficeArtifactDependencies.officeCliPath
+        const originalOfficeCliPath = defaultWorkArtifactPresentationDependencies.officeCliPath
         const restoreProcessFactory = ProcessSupervisor.setCommandFactoryForTest(async (options) => {
           defaultOfficeSpawns.push({ cwd: options.cwd, executable: options.executable, args: options.args })
           const stdout = new PassThrough()
@@ -309,9 +383,9 @@ describe("explicit conversation and Task execution authority", () => {
             unref() {},
           }
         })
-        defaultOfficeArtifactDependencies.officeCliPath = async () => officeCliExecutable
+        defaultWorkArtifactPresentationDependencies.officeCliPath = async () => officeCliExecutable
         try {
-          const defaultOfficeResult = await defaultOfficeArtifactDependencies.runOfficeCli({
+          const defaultOfficeResult = await defaultWorkArtifactPresentationDependencies.runOfficeCli({
             executionAuthority: taskAuthority,
             args: ["validate", "authority.pptx", "--json"],
             cwd: project.path,
@@ -324,14 +398,16 @@ describe("explicit conversation and Task execution authority", () => {
           }).toEqual({
             exitCode: 0,
             payload: { success: true, data: { authority: "task" } },
-            spawns: [{
-              cwd: project.path,
-              executable: officeCliExecutable,
-              args: ["validate", "authority.pptx", "--json"],
-            }],
+            spawns: [
+              {
+                cwd: project.path,
+                executable: officeCliExecutable,
+                args: ["validate", "authority.pptx", "--json"],
+              },
+            ],
           })
         } finally {
-          defaultOfficeArtifactDependencies.officeCliPath = originalOfficeCliPath
+          defaultWorkArtifactPresentationDependencies.officeCliPath = originalOfficeCliPath
           restoreProcessFactory()
         }
 
@@ -362,6 +438,10 @@ describe("explicit conversation and Task execution authority", () => {
             { taskID, cwd: project.path },
             { executable: process.execPath, args: ["--version"] },
           )
+          expect(ProcessSupervisor.taskMetricsSnapshot(taskID)).toEqual({
+            live: 1,
+            owners: { unclassified: { count: 1, pids: [first.pid] } },
+          })
           let enterFirst!: () => void
           const firstEntered = new Promise<void>((resolve) => (enterFirst = resolve))
           let releaseFirst!: () => void
@@ -382,6 +462,10 @@ describe("explicit conversation and Task execution authority", () => {
           })
           releaseFirst()
           const second = await secondSpawn
+          expect(ProcessSupervisor.taskMetricsSnapshot(taskID)).toEqual({
+            live: 1,
+            owners: { unclassified: { count: 1, pids: [second.pid] } },
+          })
           await Promise.all([checkpointA, checkpointB])
           await second.dispose()
           expect({ order, firstExit: await first.exited, secondExit: await second.exited }).toEqual({
@@ -394,5 +478,5 @@ describe("explicit conversation and Task execution authority", () => {
         }
       },
     })
-  })
+  }, 30_000)
 })

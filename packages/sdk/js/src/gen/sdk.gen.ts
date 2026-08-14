@@ -46,6 +46,7 @@ import type {
   ChatCapabilityUpdateResponses,
   CodingChatSessionAbortErrors,
   CodingChatSessionAbortResponses,
+  CodingChatSessionCreateErrors,
   CodingChatSessionCreateResponses,
   CodingChatSessionDeleteErrors,
   CodingChatSessionDeleteResponses,
@@ -65,6 +66,7 @@ import type {
   CodingCliProfilesResponses,
   CodingWorkSessionAbortErrors,
   CodingWorkSessionAbortResponses,
+  CodingWorkSessionCreateErrors,
   CodingWorkSessionCreateResponses,
   CodingWorkSessionDeleteErrors,
   CodingWorkSessionDeleteResponses,
@@ -88,7 +90,9 @@ import type {
   ComputerTakeoverResponses,
   ConfigGetErrors,
   ConfigGetResponses,
+  ConfigPromptErrors,
   ConfigPromptResponses,
+  ConfigProvidersErrors,
   ConfigProvidersResponses,
   ConfigProxyTestErrors,
   ConfigProxyTestResponses,
@@ -106,6 +110,9 @@ import type {
   ExperimentalEventscheduleListResponses,
   ExperimentalMemoryGetErrors,
   ExperimentalMemoryGetResponses,
+  ExperimentalProjectMemoryAcknowledgeNoticeResponses,
+  ExperimentalProjectMemoryGetResponses,
+  ExperimentalProjectMemoryOrganizeResponses,
   ExperimentalResourceListErrors,
   ExperimentalResourceListResponses,
   ExperimentalTaskplanListErrors,
@@ -121,6 +128,8 @@ import type {
   ExpertSquadConfigurationGetResponses,
   ExpertSquadConfigurationUpdateErrors,
   ExpertSquadConfigurationUpdateResponses,
+  ExpertSquadDiagnosticsErrors,
+  ExpertSquadDiagnosticsResponses,
   ExpertSquadEvolutionAuthorizationErrors,
   ExpertSquadEvolutionAuthorizationResponses,
   ExpertSquadEvolutionHistoryDetailErrors,
@@ -131,12 +140,20 @@ import type {
   ExpertSquadEvolutionMutationResponses,
   ExpertSquadExportErrors,
   ExpertSquadExportResponses,
+  ExpertSquadImportExactFileErrors,
+  ExpertSquadImportExactFileResponses,
   ExpertSquadImportFileErrors,
   ExpertSquadImportFileResponses,
   ExpertSquadImportFolderErrors,
   ExpertSquadImportFolderResponses,
+  ExpertSquadInspectErrors,
+  ExpertSquadInspectResponses,
   ExpertSquadInstallPayloadErrors,
   ExpertSquadInstallPayloadResponses,
+  ExpertSquadInventoryStatusErrors,
+  ExpertSquadInventoryStatusResponses,
+  ExpertSquadMarketDetailErrors,
+  ExpertSquadMarketDetailResponses,
   ExpertSquadMarketErrors,
   ExpertSquadMarketResponses,
   ExpertSquadMulticaPreviewErrors,
@@ -145,8 +162,10 @@ import type {
   ExpertSquadMulticaSquadsResponses,
   ExpertSquadReleasePayloadErrors,
   ExpertSquadReleasePayloadResponses,
-  ExpertSquadSettingsErrors,
-  ExpertSquadSettingsResponses,
+  ExpertSquadSearchErrors,
+  ExpertSquadSearchResponses,
+  ExpertSquadSettingsDetailErrors,
+  ExpertSquadSettingsDetailResponses,
   ExpertSquadUninstallErrors,
   ExpertSquadUninstallResponses,
   ExpertSquadUpdateErrors,
@@ -168,6 +187,8 @@ import type {
   FilePartSource,
   FileReadErrors,
   FileReadResponses,
+  FileReadSourceErrors,
+  FileReadSourceResponses,
   FileStatusResponses,
   FileUploadErrors,
   FileUploadResponses,
@@ -199,6 +220,8 @@ import type {
   GlobalAutomationsUpdateResponses,
   GlobalChatCreateErrors,
   GlobalChatCreateResponses,
+  GlobalComposerExpertSquadsErrors,
+  GlobalComposerExpertSquadsResponses,
   GlobalComposerReferencesErrors,
   GlobalComposerReferencesResponses,
   GlobalConfigGetErrors,
@@ -217,6 +240,7 @@ import type {
   GlobalProjectsAnonymousResponses,
   GlobalProjectsDiscoverErrors,
   GlobalProjectsDiscoverResponses,
+  GlobalProvidersAccountUsageErrors,
   GlobalProvidersAccountUsageResponses,
   GlobalProvidersAuthExecuteErrors,
   GlobalProvidersAuthExecuteResponses,
@@ -226,6 +250,7 @@ import type {
   GlobalProvidersDiscoverModelsErrors,
   GlobalProvidersDiscoverModelsResponses,
   GlobalProvidersListResponses,
+  GlobalProvidersModelsRefreshErrors,
   GlobalProvidersModelsRefreshResponses,
   GlobalProvidersOauthAuthorizeErrors,
   GlobalProvidersOauthAuthorizeResponses,
@@ -239,6 +264,8 @@ import type {
   GlobalSkillInstallErrors,
   GlobalSkillInstallResponses,
   GlobalSkillMarketResponses,
+  GlobalUsageErrors,
+  GlobalUsageResponses,
   GlobalWorkCreateErrors,
   GlobalWorkCreateResponses,
   GoalDeleteErrors,
@@ -271,8 +298,6 @@ import type {
   MailboxDeleteManyErrors,
   MailboxDeleteManyResponses,
   MailboxDeleteResponses,
-  MailboxEventsResponse,
-  MailboxEventsResponses,
   MailboxListErrors,
   MailboxListResponses,
   MailboxReadAllResponses,
@@ -343,11 +368,15 @@ import type {
   PartUpdateErrors,
   PartUpdateResponses,
   PathGetResponses,
-  PermissionAction,
+  PermissionDecision,
+  PermissionGrantsResponses,
+  PermissionHistoryResponses,
+  PermissionIdentity,
   PermissionListResponses,
   PermissionReplyErrors,
   PermissionReplyResponses,
-  PermissionRuleset,
+  PermissionRevokeErrors,
+  PermissionRevokeResponses,
   ProjectCurrentCleanupCandidatesErrors,
   ProjectCurrentCleanupCandidatesResponses,
   ProjectCurrentDeleteErrors,
@@ -366,6 +395,7 @@ import type {
   ProjectListResponses,
   ProjectUpdateErrors,
   ProjectUpdateResponses,
+  ProviderAccountUsageErrors,
   ProviderAccountUsageResponses,
   ProviderAuthExecuteErrors,
   ProviderAuthExecuteResponses,
@@ -375,6 +405,7 @@ import type {
   ProviderDiscoverModelsErrors,
   ProviderDiscoverModelsResponses,
   ProviderListResponses,
+  ProviderModelsRefreshErrors,
   ProviderModelsRefreshResponses,
   ProviderOauthAuthorizeErrors,
   ProviderOauthAuthorizeResponses,
@@ -422,6 +453,8 @@ import type {
   SessionConfigUpdateErrors,
   SessionConfigUpdateResponses,
   SessionConversationErrors,
+  SessionConversationHistoryErrors,
+  SessionConversationHistoryResponses,
   SessionConversationResponses,
   SessionCreateErrors,
   SessionCreateResponses,
@@ -508,8 +541,6 @@ import type {
   TaskInjectResponses,
   TaskInteractionsErrors,
   TaskInteractionsResponses,
-  TaskListEventsResponse,
-  TaskListEventsResponses,
   TaskListResponses,
   TaskMessageErrors,
   TaskMessageResponses,
@@ -519,10 +550,6 @@ import type {
   TaskProgressResponses,
   TaskProjectArchiveErrors,
   TaskProjectArchiveResponses,
-  TaskQueueReorderErrors,
-  TaskQueueReorderResponses,
-  TaskQueueStartNowErrors,
-  TaskQueueStartNowResponses,
   TaskReadConversationArtifactErrors,
   TaskReadConversationArtifactResponses,
   TaskReplanErrors,
@@ -558,6 +585,7 @@ import type {
   ToolIdsResponses,
   ToolListErrors,
   ToolListResponses,
+  UsagePeriod,
   VcsBranchesErrors,
   VcsBranchesResponses,
   VcsCommitErrors,
@@ -664,34 +692,36 @@ export class App extends HeyApiClient {
   }
 
   /**
-   * Write log
+   * Write log batch
    *
-   * Write a log entry to the server logs with specified level and metadata.
+   * Write one bounded ordered batch of log entries to the server logs.
    */
   public log<ThrowOnError extends boolean = false>(
     parameters: {
-      extra?: {
-        [key: string]: unknown
-      }
-      level: "debug" | "info" | "error" | "warn"
-      message: string
-      service: string
+      entries: Array<{
+        /**
+         * Additional metadata for the log entry
+         */
+        extra?: {
+          [key: string]: unknown
+        }
+        /**
+         * Log level
+         */
+        level: "debug" | "info" | "error" | "warn"
+        /**
+         * Log message
+         */
+        message: string
+        /**
+         * Service name for the log entry
+         */
+        service: string
+      }>
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "body", key: "extra" },
-            { in: "body", key: "level" },
-            { in: "body", key: "message" },
-            { in: "body", key: "service" },
-          ],
-        },
-      ],
-    )
+    const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "entries" }] }])
     return (options?.client ?? this.client).post<AppLogResponses, AppLogErrors, ThrowOnError>({
       url: "/log",
       ...options,
@@ -1269,7 +1299,11 @@ export class Session extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<CodingChatSessionCreateResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      CodingChatSessionCreateResponses,
+      CodingChatSessionCreateErrors,
+      ThrowOnError
+    >({
       url: "/coding/chat/session",
       ...options,
       ...params,
@@ -1652,7 +1686,11 @@ export class Session2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<CodingWorkSessionCreateResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      CodingWorkSessionCreateResponses,
+      CodingWorkSessionCreateErrors,
+      ThrowOnError
+    >({
       url: "/coding/work/session",
       ...options,
       ...params,
@@ -2182,7 +2220,7 @@ export class Config extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<ConfigPromptResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<ConfigPromptResponses, ConfigPromptErrors, ThrowOnError>({
       url: "/config/prompt",
       ...options,
       ...params,
@@ -2201,7 +2239,7 @@ export class Config extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<ConfigProvidersResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<ConfigProvidersResponses, ConfigProvidersErrors, ThrowOnError>({
       url: "/config/providers",
       ...options,
       ...params,
@@ -2375,6 +2413,79 @@ export class Memory extends HeyApiClient {
   }
 }
 
+export class ProjectMemory extends HeyApiClient {
+  /**
+   * Get the organized Project MEMORY.MD context
+   */
+  public get<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<ExperimentalProjectMemoryGetResponses, unknown, ThrowOnError>({
+      url: "/experimental/project-memory",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Acknowledge a Project MEMORY.MD notice
+   */
+  public acknowledgeNotice<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      generation: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "generation" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      ExperimentalProjectMemoryAcknowledgeNoticeResponses,
+      unknown,
+      ThrowOnError
+    >({
+      url: "/experimental/project-memory/notice/acknowledge",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Request Project MEMORY.MD organization
+   */
+  public organize<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).post<ExperimentalProjectMemoryOrganizeResponses, unknown, ThrowOnError>({
+      url: "/experimental/project-memory/organize",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Resource extends HeyApiClient {
   /**
    * Get MCP resources
@@ -2541,6 +2652,11 @@ export class Experimental extends HeyApiClient {
   private _memory?: Memory
   get memory(): Memory {
     return (this._memory ??= new Memory({ client: this.client }))
+  }
+
+  private _projectMemory?: ProjectMemory
+  get projectMemory(): ProjectMemory {
+    return (this._projectMemory ??= new ProjectMemory({ client: this.client }))
   }
 
   private _resource?: Resource
@@ -2823,9 +2939,9 @@ export class Configuration extends HeyApiClient {
 
 export class ExpertSquad extends HeyApiClient {
   /**
-   * List expert squads and active capability projection
+   * Resolve the active expert-squad capability projection
    *
-   * Returns the effective expert-squad catalog for the current project or session. The active value is still the single prompt_profile.active config field; this route exposes its expert-squad package view.
+   * Returns only the active runtime projection for the current project or session. Use bounded search and exact inspection for inactive packages. Task sessions remain pinned to their creation-time package revision.
    */
   public catalog<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2847,6 +2963,42 @@ export class ExpertSquad extends HeyApiClient {
     )
     return (options?.client ?? this.client).get<ExpertSquadCatalogResponses, ExpertSquadCatalogErrors, ThrowOnError>({
       url: "/expert-squad/catalog",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Page Expert Squad discovery diagnostics
+   *
+   * Returns at most 20 discovery issues or override warnings from the current catalog snapshot.
+   */
+  public diagnostics<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      ExpertSquadDiagnosticsResponses,
+      ExpertSquadDiagnosticsErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/diagnostics",
       ...options,
       ...params,
     })
@@ -3162,6 +3314,59 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
+   * Import an exact hosted expert squad ZIP revision
+   *
+   * Validate and install one downloaded ZIP only when its exact namespace, id, version, and canonical package digest match the web-to-client handoff target.
+   */
+  public importExactFile<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      archiveBase64: string
+      expectedCurrentPackageDigest?: string
+      expectedID: string
+      expectedNamespace: string
+      expectedPackageDigest: string
+      expectedVersion: string
+      filename?: string
+      installationScope: "project" | "global"
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "archiveBase64" },
+            { in: "body", key: "expectedCurrentPackageDigest" },
+            { in: "body", key: "expectedID" },
+            { in: "body", key: "expectedNamespace" },
+            { in: "body", key: "expectedPackageDigest" },
+            { in: "body", key: "expectedVersion" },
+            { in: "body", key: "filename" },
+            { in: "body", key: "installationScope" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      ExpertSquadImportExactFileResponses,
+      ExpertSquadImportExactFileErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/import-exact-file",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
    * Import an expert squad ZIP archive
    *
    * Validate and install a dropped expert-squad ZIP archive into the explicitly selected project or user-global expert-squad catalog.
@@ -3250,6 +3455,42 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
+   * Inspect one expert-squad declaration
+   *
+   * Returns bounded selector and workflow guidance for one exact effective or physical installation identity.
+   */
+  public inspect<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory: string
+      id: string
+      installationScope?: "built_in" | "project" | "global"
+      namespace?: string
+      workflowCursor?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+            { in: "query", key: "installationScope" },
+            { in: "query", key: "namespace" },
+            { in: "query", key: "workflowCursor" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<ExpertSquadInspectResponses, ExpertSquadInspectErrors, ThrowOnError>({
+      url: "/expert-squad/inspect",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
    * Install one bundled expert squad
    *
    * Installs the selected bundled expert-squad payload package into the explicitly selected project or user-global catalog without activating or overwriting it. If that scope already contains the package, installed is false and version/packageDigest describe the existing bytes at targetRoot.
@@ -3291,19 +3532,93 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
-   * Browse bundled expert squads
+   * Get expert-squad inventory status
    *
-   * Lists bundled expert-squad payload packages with manifest-owned identity, member and capability summaries, and project installation state.
+   * Returns declaration and diagnostic counts without package bodies or unbounded diagnostic arrays.
    */
-  public market<ThrowOnError extends boolean = false>(
+  public inventoryStatus<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<
+      ExpertSquadInventoryStatusResponses,
+      ExpertSquadInventoryStatusErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/inventory-status",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Browse bundled expert squads
+   *
+   * Returns a bounded manifest-derived page of bundled expert-squad payload packages. Rich package and update detail is loaded only for an exact selection.
+   */
+  public market<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+      query?: string
+      availability?: "all" | "available" | "installed"
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "query" },
+            { in: "query", key: "availability" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).get<ExpertSquadMarketResponses, ExpertSquadMarketErrors, ThrowOnError>({
       url: "/expert-squad/market",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Inspect one bundled expert squad
+   *
+   * Returns digest, selector, agents, capability counts, and exact installation revisions for one selection.
+   */
+  public marketDetail<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      ExpertSquadMarketDetailResponses,
+      ExpertSquadMarketDetailErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/market/detail",
       ...options,
       ...params,
     })
@@ -3439,15 +3754,54 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
-   * Inspect project Expert Squad settings
+   * Search expert-squad declarations
    *
-   * Returns the project-installed Squad declarations and one exact selected declaration without resolving or changing the active runtime profile.
+   * Returns at most twenty manifest-derived entries and an opaque cursor. Rich selector guidance and full package detail require exact follow-up requests.
    */
-  public settings<ThrowOnError extends boolean = false>(
+  public search<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
-      id?: string
-      installationScope?: "built_in" | "project" | "global"
+      view?: "effective" | "installations"
+      query?: string
+      productPillar?: "code" | "work"
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "view" },
+            { in: "query", key: "query" },
+            { in: "query", key: "productPillar" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<ExpertSquadSearchResponses, ExpertSquadSearchErrors, ThrowOnError>({
+      url: "/expert-squad/search",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Load one full expert-squad settings declaration
+   *
+   * Loads README, selector instructions, digest, and runtime declaration only for one exact selected identity.
+   */
+  public settingsDetail<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory: string
+      id: string
+      installationScope: "built_in" | "project" | "global"
+      namespace?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -3459,12 +3813,17 @@ export class ExpertSquad extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "query", key: "id" },
             { in: "query", key: "installationScope" },
+            { in: "query", key: "namespace" },
           ],
         },
       ],
     )
-    return (options?.client ?? this.client).get<ExpertSquadSettingsResponses, ExpertSquadSettingsErrors, ThrowOnError>({
-      url: "/expert-squad/settings",
+    return (options?.client ?? this.client).get<
+      ExpertSquadSettingsDetailResponses,
+      ExpertSquadSettingsDetailErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/settings/detail",
       ...options,
       ...params,
     })
@@ -3871,6 +4230,36 @@ export class File_ extends HeyApiClient {
   }
 
   /**
+   * Read an absolute source file
+   *
+   * Read the exact absolute file represented by a persisted source-file citation.
+   */
+  public readSource<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      path: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "path" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<FileReadSourceResponses, FileReadSourceErrors, ThrowOnError>({
+      url: "/file/source-content",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
    * Get file status
    *
    * Get the git status of all files in the project.
@@ -4001,7 +4390,7 @@ export class Find extends HeyApiClient {
   /**
    * Find symbols
    *
-   * Search for workspace symbols like functions, classes, and variables using LSP.
+   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
    */
   public symbols<ThrowOnError extends boolean = false>(
     parameters: {
@@ -4164,7 +4553,15 @@ export class Control extends HeyApiClient {
       directory?: string
       body:
         | {
-            action: "expert_squad_catalog"
+            action: "expert_squad_inspect"
+            /**
+             * Exact held Expert Squad manifest ID returned by capability_search.
+             */
+            id: string
+            /**
+             * Opaque next_workflow_cursor returned by the preceding inspection of this exact Squad.
+             */
+            workflowCursor?: string
           }
         | {
             action: "multica_catalog"
@@ -4212,10 +4609,6 @@ export class Control extends HeyApiClient {
              */
             created_before_ms?: number
             /**
-             * Opaque cursor returned by the preceding page; omit it for the first page.
-             */
-            cursor?: string
-            /**
              * Optional exact logical Goal-subject filter.
              */
             goal_ids?: Array<string>
@@ -4235,6 +4628,10 @@ export class Control extends HeyApiClient {
              * Optional exact resource media-type filter.
              */
             media_types?: Array<string>
+            /**
+             * One-based page number. Start at 1, then use the preceding response's next_page_number.
+             */
+            page_number: number
             /**
              * Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.
              */
@@ -4267,6 +4664,16 @@ export class Control extends HeyApiClient {
              */
             taskID: string
             /**
+             * Exact current terminal occurrence returned by panel.query_task for this source Task.
+             */
+            terminal_lifecycle_reference: {
+              terminalError?: string
+              terminalEventID: string
+              terminalReason?: "interrupted"
+              terminalStatus: "completed" | "failed" | "cancelled"
+              timeCompleted: number
+            }
+            /**
              * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
              */
             version_scope?: "current" | "historical" | "all"
@@ -4274,50 +4681,18 @@ export class Control extends HeyApiClient {
         | {
             action: "read_task_artifact"
             /**
-             * Zero-based byte offset within the exact canonical payload or resource.
+             * Host-minted reference to one exact locator emitted earlier in this Session Turn.
+             */
+            artifact_locator_ref: string
+            artifact_transport_version: 2
+            /**
+             * Zero-based byte offset within the exact locator identified by artifact_locator_ref.
              */
             byte_offset?: number
             /**
              * inline returns one bounded content chunk. materialized_file verifies one complete text resource and returns an immutable local cache path for bounded command-line inspection.
              */
             delivery?: "inline" | "materialized_file"
-            /**
-             * Exact typed locator returned by Artifact search, including its immutable digest.
-             */
-            locator:
-              | {
-                  artifact_id: string
-                  catalog_revision: number
-                  expected_sha256: string
-                  source: "engine_artifact"
-                }
-              | {
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  source: "task_artifact_snapshot"
-                }
-              | {
-                  ref: {
-                    bytes: number
-                    media_type: string
-                    path: string
-                    sha256: string
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    tree: string
-                  }
-                  source: "task_artifact_resource"
-                }
             /**
              * Maximum UTF-8 text bytes to return in this exact-read chunk. Binary resources use one complete attachment and ignore text pagination.
              */
@@ -4338,43 +4713,9 @@ export class Control extends HeyApiClient {
              */
             task_acceptances: Array<{
               /**
-               * Exact Task Artifact locators completely read earlier in this Mission Turn.
+               * Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn.
                */
-              evidence_locators: Array<
-                | {
-                    artifact_id: string
-                    catalog_revision: number
-                    expected_sha256: string
-                    source: "engine_artifact"
-                  }
-                | {
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    source: "task_artifact_snapshot"
-                  }
-                | {
-                    ref: {
-                      bytes: number
-                      media_type: string
-                      path: string
-                      sha256: string
-                      snapshot: {
-                        manifest_sha256: string
-                        project_id: string
-                        schema_version: 2
-                        snapshot_id: string
-                        task_id: string
-                      }
-                      tree: string
-                    }
-                    source: "task_artifact_resource"
-                  }
-              >
+              evidence_read_refs: Array<string>
               /**
                * Current child Task accepted by this Mission decision.
                */
@@ -4574,13 +4915,9 @@ export class Control extends HeyApiClient {
              */
             productPillar?: "code" | "work"
             /**
-             * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose this from expert_squad_catalog for every created Task. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
+             * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
              */
             promptProfile?: string
-            /**
-             * Whether to queue this task behind other work in the same directory.
-             */
-            queue?: boolean
             /**
              * Full user request to execute in the new task.
              */
@@ -4658,43 +4995,9 @@ export class Control extends HeyApiClient {
         | {
             action: "resume_task"
             /**
-             * Exact source Task locators completely read earlier in this same Mission Turn.
+             * Host-minted references returned by complete source Task reads earlier in this Mission Turn.
              */
-            evidence_locators: Array<
-              | {
-                  artifact_id: string
-                  catalog_revision: number
-                  expected_sha256: string
-                  source: "engine_artifact"
-                }
-              | {
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  source: "task_artifact_snapshot"
-                }
-              | {
-                  ref: {
-                    bytes: number
-                    media_type: string
-                    path: string
-                    sha256: string
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    tree: string
-                  }
-                  source: "task_artifact_resource"
-                }
-            >
+            evidence_read_refs: Array<string>
             /**
              * Completed or failed source Task in the current Mission lineage.
              */
@@ -4733,14 +5036,14 @@ export class Control extends HeyApiClient {
         | {
             action: "retry_task"
             /**
-             * Task ID to queue for retry.
+             * Task ID for the retry request.
              */
             taskID: string
           }
         | {
             action: "replan_task"
             /**
-             * Task ID to queue for replanning.
+             * Task ID for the replan request.
              */
             taskID: string
           }
@@ -5651,10 +5954,11 @@ export class Models extends HeyApiClient {
    * Refresh live model identities from saved global provider credentials without requiring an active project or refreshing the provider registry declaration.
    */
   public refresh<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<GlobalProvidersModelsRefreshResponses, unknown, ThrowOnError>({
-      url: "/global/providers/models/refresh",
-      ...options,
-    })
+    return (options?.client ?? this.client).post<
+      GlobalProvidersModelsRefreshResponses,
+      GlobalProvidersModelsRefreshErrors,
+      ThrowOnError
+    >({ url: "/global/providers/models/refresh", ...options })
   }
 }
 
@@ -5671,7 +5975,11 @@ export class Account extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "providerID" }] }])
-    return (options?.client ?? this.client).get<GlobalProvidersAccountUsageResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<
+      GlobalProvidersAccountUsageResponses,
+      GlobalProvidersAccountUsageErrors,
+      ThrowOnError
+    >({
       url: "/global/providers/{providerID}/account-usage",
       ...options,
       ...params,
@@ -5985,7 +6293,7 @@ export class Skill extends HeyApiClient {
   public install<ThrowOnError extends boolean = false>(
     parameters: {
       kind: "url" | "git"
-      policy?: PermissionAction
+      policy?: "allow" | "deny"
       value: string
     },
     options?: Options<never, ThrowOnError>,
@@ -6055,9 +6363,49 @@ export class Work2 extends HeyApiClient {
 
 export class Global extends HeyApiClient {
   /**
+   * Search global Composer expert squads
+   *
+   * Returns a bounded page of built-in and user-global Expert Squads without creating a Project or Session.
+   */
+  public composerExpertSquads<ThrowOnError extends boolean = false>(
+    parameters?: {
+      view?: "effective" | "installations"
+      query?: string
+      productPillar?: "code" | "work"
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "view" },
+            { in: "query", key: "query" },
+            { in: "query", key: "productPillar" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      GlobalComposerExpertSquadsResponses,
+      GlobalComposerExpertSquadsErrors,
+      ThrowOnError
+    >({
+      url: "/global/composer-expert-squads",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
    * List global Composer references
    *
-   * Return the built-in and user-global Skills, Agent Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.
+   * Return the built-in and user-global Skills, Expert Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.
    */
   public composerReferences<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<
@@ -6100,6 +6448,36 @@ export class Global extends HeyApiClient {
     return (options?.client ?? this.client).get<GlobalHealthResponses, unknown, ThrowOnError>({
       url: "/global/health",
       ...options,
+    })
+  }
+
+  /**
+   * Get natural-period Provider usage
+   *
+   * Aggregate persisted streamed Provider calls across all projects by their event time for one IANA calendar period.
+   */
+  public usage<ThrowOnError extends boolean = false>(
+    parameters?: {
+      period?: UsagePeriod
+      timeZone?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "period" },
+            { in: "query", key: "timeZone" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<GlobalUsageResponses, GlobalUsageErrors, ThrowOnError>({
+      url: "/global/usage",
+      ...options,
+      ...params,
     })
   }
 
@@ -6193,43 +6571,50 @@ export class Global2 extends HeyApiClient {
    */
   public create<ThrowOnError extends boolean = false>(
     parameters: {
-      artifactImports?: Array<{
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
+      artifactSources?: Array<
+        | {
+            authority: "completion_decision"
+            source_task_id: string
+          }
+        | {
+            authority: "terminal_lifecycle"
+            locator:
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
                 }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        source_task_id: string
-      }>
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            source_task_id: string
+          }
+      >
       attachments?: Array<
         | {
             filename?: string
@@ -6386,7 +6771,6 @@ export class Global2 extends HeyApiClient {
       productPillar: "code" | "work"
       project?: string
       promptProfile?: string
-      queue?: boolean
       request: string
       requestID?: string
       source?: string
@@ -6399,7 +6783,7 @@ export class Global2 extends HeyApiClient {
       [
         {
           args: [
-            { in: "body", key: "artifactImports" },
+            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
@@ -6412,7 +6796,6 @@ export class Global2 extends HeyApiClient {
             { in: "body", key: "productPillar" },
             { in: "body", key: "project" },
             { in: "body", key: "promptProfile" },
-            { in: "body", key: "queue" },
             { in: "body", key: "request" },
             { in: "body", key: "requestID" },
             { in: "body", key: "source" },
@@ -6430,95 +6813,6 @@ export class Global2 extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
-    })
-  }
-}
-
-export class Queue extends HeyApiClient {
-  /**
-   * Reorder queued tasks in a directory
-   */
-  public reorder<ThrowOnError extends boolean = false>(
-    parameters: {
-      query_directory?: string
-      body_directory: string
-      orderedTaskIDs?: Array<string>
-      revision?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            {
-              in: "query",
-              key: "query_directory",
-              map: "directory",
-            },
-            {
-              in: "body",
-              key: "body_directory",
-              map: "directory",
-            },
-            { in: "body", key: "orderedTaskIDs" },
-            { in: "body", key: "revision" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).patch<TaskQueueReorderResponses, TaskQueueReorderErrors, ThrowOnError>({
-      url: "/task-queue/reorder",
-      ...options,
-      ...params,
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers,
-        ...params.headers,
-      },
-    })
-  }
-
-  /**
-   * Start a queued task immediately
-   */
-  public startNow<ThrowOnError extends boolean = false>(
-    parameters: {
-      taskID: string
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "taskID" },
-            { in: "query", key: "directory" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).post<TaskQueueStartNowResponses, TaskQueueStartNowErrors, ThrowOnError>({
-      url: "/task/{taskID}/start-now",
-      ...options,
-      ...params,
-    })
-  }
-}
-
-export class List extends HeyApiClient {
-  /**
-   * Subscribe to global task-list change notifications
-   *
-   * Pure change-notification SSE for the task list sidebar. Emits `{type, taskID, sequence}` when a persisted task aggregate event changes the task-list projection. Conversation stream/status chunks belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy events also carry `notificationDetails` for copyable diagnostics. No replay — clients call /task separately to fetch the refreshed list.
-   */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, TaskListEventsResponse>) {
-    return (options?.client ?? this.client).sse.get<TaskListEventsResponses, unknown, ThrowOnError>({
-      url: "/task/events",
-      ...options,
     })
   }
 }
@@ -6724,43 +7018,50 @@ export class Task extends HeyApiClient {
     parameters: {
       query_directory?: string
       "init-git"?: boolean
-      artifactImports?: Array<{
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
+      artifactSources?: Array<
+        | {
+            authority: "completion_decision"
+            source_task_id: string
+          }
+        | {
+            authority: "terminal_lifecycle"
+            locator:
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
                 }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        source_task_id: string
-      }>
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            source_task_id: string
+          }
+      >
       attachments?: Array<
         | {
             filename?: string
@@ -6917,7 +7218,6 @@ export class Task extends HeyApiClient {
       productPillar: "code" | "work"
       project?: string
       promptProfile?: string
-      queue?: boolean
       request: string
       requestID?: string
       source?: string
@@ -6936,7 +7236,7 @@ export class Task extends HeyApiClient {
               map: "directory",
             },
             { in: "query", key: "init-git" },
-            { in: "body", key: "artifactImports" },
+            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
@@ -6953,7 +7253,6 @@ export class Task extends HeyApiClient {
             { in: "body", key: "productPillar" },
             { in: "body", key: "project" },
             { in: "body", key: "promptProfile" },
-            { in: "body", key: "queue" },
             { in: "body", key: "request" },
             { in: "body", key: "requestID" },
             { in: "body", key: "source" },
@@ -6980,6 +7279,7 @@ export class Task extends HeyApiClient {
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
       taskID: string
+      directory?: string
       reason: string
       surface:
         | "api"
@@ -6998,6 +7298,7 @@ export class Task extends HeyApiClient {
         {
           args: [
             { in: "path", key: "taskID" },
+            { in: "query", key: "directory" },
             { in: "body", key: "reason" },
             { in: "body", key: "surface" },
           ],
@@ -7709,7 +8010,7 @@ export class Task extends HeyApiClient {
   /**
    * Get task status
    *
-   * Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
+   * Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters: {
@@ -7870,16 +8171,6 @@ export class Task extends HeyApiClient {
     return (this._global ??= new Global2({ client: this.client }))
   }
 
-  private _queue?: Queue
-  get queue(): Queue {
-    return (this._queue ??= new Queue({ client: this.client }))
-  }
-
-  private _list?: List
-  get list2(): List {
-    return (this._list ??= new List({ client: this.client }))
-  }
-
   private _conversation?: Conversation
   get conversation2(): Conversation {
     return (this._conversation ??= new Conversation({ client: this.client }))
@@ -7985,7 +8276,6 @@ export class Interaction extends HeyApiClient {
     parameters: {
       interactionID: string
       directory?: string
-      autoReply: boolean
       message?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -7997,7 +8287,6 @@ export class Interaction extends HeyApiClient {
           args: [
             { in: "path", key: "interactionID" },
             { in: "query", key: "directory" },
-            { in: "body", key: "autoReply" },
             { in: "body", key: "message" },
           ],
         },
@@ -8023,9 +8312,8 @@ export class Interaction extends HeyApiClient {
       interactionID: string
       directory?: string
       answers?: Array<QuestionAnswer>
-      autoReply: boolean
+      decision?: PermissionDecision
       message?: string
-      reply?: "once" | "always" | "reject"
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -8037,9 +8325,8 @@ export class Interaction extends HeyApiClient {
             { in: "path", key: "interactionID" },
             { in: "query", key: "directory" },
             { in: "body", key: "answers" },
-            { in: "body", key: "autoReply" },
+            { in: "body", key: "decision" },
             { in: "body", key: "message" },
-            { in: "body", key: "reply" },
           ],
         },
       ],
@@ -8136,7 +8423,7 @@ export class Lsp extends HeyApiClient {
   /**
    * Get LSP status
    *
-   * Get LSP server status
+   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -8209,18 +8496,6 @@ export class Mailbox extends HeyApiClient {
       url: "/mailbox",
       ...options,
       ...params,
-    })
-  }
-
-  /**
-   * Subscribe to global mailbox changes
-   *
-   * Pure change-notification Server-Sent Events stream. Clients refetch /mailbox for the canonical projection.
-   */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, MailboxEventsResponse>) {
-    return (options?.client ?? this.client).sse.get<MailboxEventsResponses, unknown, ThrowOnError>({
-      url: "/mailbox/events",
-      ...options,
     })
   }
 
@@ -8994,7 +9269,7 @@ export class Mission extends HeyApiClient {
   /**
    * Get Mission status
    *
-   * Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
+   * Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters: {
@@ -9568,9 +9843,7 @@ export class Path extends HeyApiClient {
 
 export class Permission extends HeyApiClient {
   /**
-   * List pending permissions
-   *
-   * Get all pending permission requests across all sessions.
+   * List durable pending permission requests
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -9587,17 +9860,77 @@ export class Permission extends HeyApiClient {
   }
 
   /**
-   * Respond to permission request
-   *
-   * Approve or deny a permission request from the AI assistant.
+   * List active permission grants
+   */
+  public grants<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<PermissionGrantsResponses, unknown, ThrowOnError>({
+      url: "/permission/grants",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Revoke an active permission grant
+   */
+  public revoke<ThrowOnError extends boolean = false>(
+    parameters: {
+      grantID: PermissionIdentity
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "grantID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<PermissionRevokeResponses, PermissionRevokeErrors, ThrowOnError>({
+      url: "/permission/grants/{grantID}/revoke",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * List permission ledger history
+   */
+  public history<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<PermissionHistoryResponses, unknown, ThrowOnError>({
+      url: "/permission/history",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Decide a pending permission request
    */
   public reply<ThrowOnError extends boolean = false>(
     parameters: {
-      requestID: string
+      requestID: PermissionIdentity
       directory?: string
-      autoReply: boolean
+      actorID?: string
+      decision: PermissionDecision
       message?: string
-      reply: "once" | "always" | "reject"
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -9608,9 +9941,9 @@ export class Permission extends HeyApiClient {
           args: [
             { in: "path", key: "requestID" },
             { in: "query", key: "directory" },
-            { in: "body", key: "autoReply" },
+            { in: "body", key: "actorID" },
+            { in: "body", key: "decision" },
             { in: "body", key: "message" },
-            { in: "body", key: "reply" },
           ],
         },
       ],
@@ -10026,7 +10359,11 @@ export class Models2 extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).post<ProviderModelsRefreshResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      ProviderModelsRefreshResponses,
+      ProviderModelsRefreshErrors,
+      ThrowOnError
+    >({
       url: "/provider/models/refresh",
       ...options,
       ...params,
@@ -10058,7 +10395,11 @@ export class Account2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<ProviderAccountUsageResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<
+      ProviderAccountUsageResponses,
+      ProviderAccountUsageErrors,
+      ThrowOnError
+    >({
       url: "/provider/{providerID}/account-usage",
       ...options,
       ...params,
@@ -10930,6 +11271,50 @@ export class Config3 extends HeyApiClient {
   }
 }
 
+export class Conversation2 extends HeyApiClient {
+  /**
+   * Page older session conversation transcript
+   *
+   * Return a bounded Mission or conversation transcript slice older than the current hydrate tail.
+   */
+  public history<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      directory?: string
+      before: number
+      before_order_key: string
+      before_id?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "query", key: "directory" },
+            { in: "query", key: "before" },
+            { in: "query", key: "before_order_key" },
+            { in: "query", key: "before_id" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      SessionConversationHistoryResponses,
+      SessionConversationHistoryErrors,
+      ThrowOnError
+    >({
+      url: "/session/{sessionID}/conversation/history",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Session4 extends HeyApiClient {
   /**
    * List sessions
@@ -10998,7 +11383,11 @@ export class Session4 extends HeyApiClient {
         [key: string]: unknown
       }
       parentID?: string
-      permission?: PermissionRuleset
+      permission?: Array<{
+        action: "allow" | "deny"
+        pattern: string
+        permission: string
+      }>
       title?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -11321,6 +11710,7 @@ export class Session4 extends HeyApiClient {
     parameters: {
       sessionID: string
       directory?: string
+      tail_limit?: number
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -11331,6 +11721,7 @@ export class Session4 extends HeyApiClient {
           args: [
             { in: "path", key: "sessionID" },
             { in: "query", key: "directory" },
+            { in: "query", key: "tail_limit" },
           ],
         },
       ],
@@ -11897,6 +12288,11 @@ export class Session4 extends HeyApiClient {
   get config(): Config3 {
     return (this._config ??= new Config3({ client: this.client }))
   }
+
+  private _conversation?: Conversation2
+  get conversation2(): Conversation2 {
+    return (this._conversation ??= new Conversation2({ client: this.client }))
+  }
 }
 
 export class InteractiveArtifact extends HeyApiClient {
@@ -12125,7 +12521,7 @@ export class Skill2 extends HeyApiClient {
         contentBase64?: string
         path: string
       }>
-      policy?: PermissionAction
+      policy?: "allow" | "deny"
       sourceName?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12167,7 +12563,7 @@ export class Skill2 extends HeyApiClient {
     parameters: {
       directory?: string
       kind: "path" | "url" | "git"
-      policy?: PermissionAction
+      policy?: "allow" | "deny"
       value: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12341,12 +12737,12 @@ export class Skill2 extends HeyApiClient {
   /**
    * Set skill permission policy
    *
-   * Set the global allow, ask, or deny policy for a named skill.
+   * Set the global allow or deny capability policy for a named skill.
    */
   public policy<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
-      action: PermissionAction
+      action: "allow" | "deny"
       name: string
     },
     options?: Options<never, ThrowOnError>,

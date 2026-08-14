@@ -22,7 +22,7 @@ import {
   setRightSidebarConversationSelectedTask,
   type ConversationExperience,
 } from "@/chat/session"
-import { errors } from "../error"
+import { AuthReadUnavailableResponse, errors } from "../error"
 
 const ConversationSessionQuery = z
   .object({
@@ -103,7 +103,7 @@ async function closeRightSidebarConversationSession(
     reason,
     targetSessionID: session.id,
   })
-  cancelSessionPromptInScope({ session, origin })
+  cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
   TaskQueueService.cancelSessionPrompts({
     sessionIDs: [session.id],
     reason,
@@ -144,6 +144,7 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", ConversationSessionCreateInput.optional()),

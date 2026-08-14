@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "one-person-company-operating-system",
+  "name": "One Person Company Operating System",
+  "label": "One Person Company Operating System",
+  "description": "A commercial-grade operating evidence system for an owner-operated company, joining offer and demand, revenue and obligations, delivery capacity, and automation governance without performing external actions.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Run one evidence-grounded operating review across the whole owner-operated company.",
+    "selection_guidance": "Select when one owner needs a single operating state across offers, demand, pipeline, revenue, cash, obligations, delivery, customers, capacity, workflows, approvals, and resilience. This is a company-level reconciliation and priority surface, not a substitute for specialist marketing, sales, finance, tax, legal, product, customer-success, security, or engineering review. It never sends, publishes, pays, refunds, signs, files, deploys, deletes, changes permissions, or contacts external parties.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "one-person-company-operating-system/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "opc-strategy-offer-demand-analyst": {
+        "label": "OPC Strategy, Offer, and Demand Analyst",
+        "description": "Reconciles company stage, customer and channel evidence, offer versions, demand signals, experiments, and opportunity cost.",
+        "base_role": "deep-research",
+        "prompt": "agents/opc-strategy-offer-demand-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "one-person-company-operating-system/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "opc-revenue-finance-obligation-analyst": {
+        "label": "OPC Revenue, Finance, and Obligation Analyst",
+        "description": "Reconciles source-bound revenue, payment, refund, receivable, cost, cash, and obligation evidence without accounting or tax authority.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/opc-revenue-finance-obligation-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "one-person-company-operating-system/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "opc-delivery-customer-capacity-analyst": {
+        "label": "OPC Delivery, Customer, and Capacity Analyst",
+        "description": "Reconciles fulfillment, customer state, support load, available capacity, commitments, and recovery evidence across business models.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/opc-delivery-customer-capacity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "one-person-company-operating-system/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "opc-automation-governance-resilience-analyst": {
+        "label": "OPC Automation, Governance, and Resilience Analyst",
+        "description": "Audits data sources, approval classes, secret references, workflow idempotency, external effects, observability, and continuity evidence.",
+        "base_role": "fact-check",
+        "prompt": "agents/opc-automation-governance-resilience-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "one-person-company-operating-system/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "one-person-company-operating-system-review-owner": {
+        "label": "OPC Operating Review Owner",
+        "description": "Joins the four independent operating branches into one evidence-bound decision pack while preserving owner and professional approvals.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/one-person-company-operating-system-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "one-person-company-operating-system/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "one-person-company-operating-review": {
+        "label": "One Person Company Operating Review",
+        "description": "Four independent operating evidence branches run concurrently and converge once into a company-level decision pack.",
+        "nodes": {
+          "opc-strategy-offer-demand-analyst": {
+            "agent_id": "opc-strategy-offer-demand-analyst",
+            "description": "Produces the offer, channel, demand, and experiment portfolio.",
+            "depends_on": []
+          },
+          "opc-revenue-finance-obligation-analyst": {
+            "agent_id": "opc-revenue-finance-obligation-analyst",
+            "description": "Produces the reconciled revenue, cash, cost, and obligation evidence ledger.",
+            "depends_on": []
+          },
+          "opc-delivery-customer-capacity-analyst": {
+            "agent_id": "opc-delivery-customer-capacity-analyst",
+            "description": "Produces delivery, customer-state, support, and capacity evidence.",
+            "depends_on": []
+          },
+          "opc-automation-governance-resilience-analyst": {
+            "agent_id": "opc-automation-governance-resilience-analyst",
+            "description": "Produces workflow, approval, secret-reference, observability, and resilience evidence.",
+            "depends_on": []
+          },
+          "one-person-company-operating-system-review-owner": {
+            "agent_id": "one-person-company-operating-system-review-owner",
+            "description": "Joins all four branches into one prioritized and bounded operating review.",
+            "depends_on": [
+              "opc-automation-governance-resilience-analyst",
+              "opc-delivery-customer-capacity-analyst",
+              "opc-revenue-finance-obligation-analyst",
+              "opc-strategy-offer-demand-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

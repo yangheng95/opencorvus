@@ -4,23 +4,32 @@
   "id": "base",
   "name": "Base",
   "label": "Base",
-  "description": "Advanced's convenient composite Expert Squad for non-Goal delivery: Researcher, Planner, Developer, and Tester provide the compact path, with package-owned Integrity and Visual Reviewers available through fixed verified-delivery workflows.",
-  "version": "2026.08.09.1",
-  "product_pillars": ["code", "work"],
+  "description": "Built-in Planner-first Expert Squad for compact delivery through one bounded plan and parallel research, implementation, and verification workers.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
-    "summary": "Use Base, Advanced's convenient composite version, for one complete non-Goal Task delivery through research, planning, implementation, testing, and the selected verified-review closure.",
-    "selection_guidance": "Select Base when its compact chain or fixed integrity-verified or visual-verified variant owns the complete Task outcome. Workload size, deliverable count, directories, reports, audits, and internal evidence handoffs stay inside that one Task; select Advanced or a more specific installed Squad only when its different specialist contract is materially required.",
-    "instructions": "selector.md",
+    "summary": "Use Base for one compact Task planned once and executed by parallel research, implementation, and verification workers.",
+    "selection_guidance": "Select Base when one Planner can partition the complete Task into independent research, implementation, and verification worker ownership. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": [],
+      "package_skill_refs": [
+        "base/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "base-researcher": {
@@ -39,9 +48,15 @@
         "base_role": "explore",
         "prompt": "agents/base-researcher/system.md",
         "inherit_base_tools": true,
-        "built_in_tool_ids": ["webfetch", "websearch", "external_code_search"],
+        "built_in_tool_ids": [
+          "webfetch",
+          "websearch",
+          "external_code_search"
+        ],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "base/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +66,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "base-planner": {
         "label": "Base Planner",
@@ -61,7 +76,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "base/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +88,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "base-developer": {
         "label": "Base Developer",
@@ -81,7 +98,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "base/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -103,13 +122,13 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "base-tester": {
         "label": "Base Tester",
@@ -119,7 +138,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "base/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -141,167 +162,48 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "base-integrity-reviewer": {
-        "label": "Base Integrity Reviewer",
-        "description": "Independently reviews the complete Base delivery across the selected upstream Artifacts, implementation behavior, tests, runtime evidence, and unresolved risk.",
-        "base_role": "integrity",
-        "prompt": "agents/base-integrity-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "base-visual-reviewer": {
-        "label": "Base Visual Reviewer",
-        "description": "Independently reviews the real rendered delivery, interaction states, and visual acceptance evidence without substituting source or automated User-Interface assertions.",
-        "base_role": "visual-qa",
-        "prompt": "agents/base-visual-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
-      "composite-delivery": {
-        "label": "Composite Delivery",
-        "description": "One Task-scoped typed research, planning, implementation, and testing chain without RequirementSet, ContractGraph, Goal, or Delivery Slice planning.",
+      "planner-parallel-delivery": {
+        "label": "Planner and Parallel Workers",
+        "description": "Publish one bounded Task plan, then run research, implementation, and verification workers in the same dependency-ready frontier.",
         "nodes": {
-          "base-researcher": {
-            "agent_id": "base-researcher",
-            "description": "Investigates the exact task and publishes the canonical Base research report.",
-            "depends_on": [],
-          },
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Reads and selects the Base research report and publishes the canonical non-Goal implementation plan.",
-            "depends_on": ["base-researcher"],
+            "description": "Publishes the complete Task partition, shared inputs, owned paths, and acceptance allocation.",
+            "depends_on": []
+          },
+          "base-researcher": {
+            "agent_id": "base-researcher",
+            "description": "Executes the plan's evidence and repository research partition.",
+            "depends_on": [
+              "base-planner"
+            ]
           },
           "base-developer": {
             "agent_id": "base-developer",
-            "description": "Reads and selects the Base plan, implements the complete Task delivery, runs implementation-owned checks, and publishes the development report.",
-            "depends_on": ["base-planner"],
+            "description": "Executes the plan's implementation partition and its implementation-owned checks.",
+            "depends_on": [
+              "base-planner"
+            ]
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Reads and selects the complete Base handoff, independently verifies the delivery, and publishes the canonical test report.",
-            "depends_on": ["base-developer"],
-          },
-        },
-      },
-      "integrity-verified-delivery": {
-        "label": "Integrity Verified Delivery",
-        "description": "Run the compact non-Goal delivery chain and then perform independent system-level integrity review against the complete test-backed handoff.",
-        "nodes": {
-          "base-researcher": {
-            "agent_id": "base-researcher",
-            "description": "Investigates the exact task and publishes the canonical Base research report.",
-            "depends_on": [],
-          },
-          "base-planner": {
-            "agent_id": "base-planner",
-            "description": "Reads and selects the Base research report and publishes the canonical non-Goal implementation plan.",
-            "depends_on": ["base-researcher"],
-          },
-          "base-developer": {
-            "agent_id": "base-developer",
-            "description": "Reads and selects the Base plan, implements the complete Task delivery, runs implementation-owned checks, and publishes the development report.",
-            "depends_on": ["base-planner"],
-          },
-          "base-tester": {
-            "agent_id": "base-tester",
-            "description": "Reads and selects the complete Base handoff, independently verifies the delivery, and publishes the canonical test report.",
-            "depends_on": ["base-developer"],
-          },
-          "base-integrity-reviewer": {
-            "agent_id": "base-integrity-reviewer",
-            "description": "Performs independent system-level integrity review against the complete research, plan, development, test, diff, command, and runtime evidence.",
-            "depends_on": ["base-tester"],
-          },
-        },
-      },
-      "visual-verified-delivery": {
-        "label": "Visual Verified Delivery",
-        "description": "Run the compact non-Goal delivery chain, test and visually review the real rendered implementation in parallel, then perform independent integrity review across both evidence branches.",
-        "nodes": {
-          "base-researcher": {
-            "agent_id": "base-researcher",
-            "description": "Investigates the exact task and publishes the canonical Base research report.",
-            "depends_on": [],
-          },
-          "base-planner": {
-            "agent_id": "base-planner",
-            "description": "Reads and selects the Base research report and publishes the canonical non-Goal implementation plan.",
-            "depends_on": ["base-researcher"],
-          },
-          "base-developer": {
-            "agent_id": "base-developer",
-            "description": "Reads and selects the Base plan, implements the complete Task delivery, runs implementation-owned checks, and publishes the development report.",
-            "depends_on": ["base-planner"],
-          },
-          "base-tester": {
-            "agent_id": "base-tester",
-            "description": "Reads and selects the complete Base handoff, independently verifies the delivery, and publishes the canonical test report.",
-            "depends_on": ["base-developer"],
-          },
-          "base-visual-reviewer": {
-            "agent_id": "base-visual-reviewer",
-            "description": "Exercises and reviews the real rendered implementation, interaction states, diagnostics, and fresh visual evidence.",
-            "depends_on": ["base-developer"],
-          },
-          "base-integrity-reviewer": {
-            "agent_id": "base-integrity-reviewer",
-            "description": "Performs independent system-level integrity review after both test and real rendered visual evidence are complete.",
-            "depends_on": ["base-tester", "base-visual-reviewer"],
-          },
-        },
-      },
-    },
-  },
+            "description": "Executes the plan's independent verification partition and records exact results.",
+            "depends_on": [
+              "base-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

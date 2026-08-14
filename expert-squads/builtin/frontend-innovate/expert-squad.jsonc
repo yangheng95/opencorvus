@@ -5,13 +5,15 @@
   "name": "Frontend Innovate",
   "label": "Frontend Innovate",
   "description": "Evidence-backed product redesign, visual direction, implementation, and rendered proof through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.08.07.1",
-  "product_pillars": ["code"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-backed frontend redesign and product innovation with rendered design proof.",
     "selection_guidance": "Select frontend-innovate when the task requires a new design direction rather than source parity.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "configuration": {
     "fields": [
@@ -20,20 +22,29 @@
         "label": "Figma access token",
         "description": "Benchmark-scoped Figma API token used only inside the trusted materialization tool.",
         "type": "secret",
-        "required": true,
-      },
-    ],
+        "required": true
+      }
+    ]
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "browser_preview", "bash"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "browser_preview",
+        "bash"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": [],
+      "package_skill_refs": [
+        "frontend-innovate/shared/method"
+      ],
       "default_tool_refs": [],
-      "package_tool_refs": ["frontend-innovate/shared/materialize-figma-resources"],
+      "package_tool_refs": [
+        "frontend-innovate/shared/materialize-figma-resources"
+      ],
       "default_mcp_server_refs": [],
       "package_mcp_server_refs": [],
       "default_mcp_tool_refs": [],
@@ -41,7 +52,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "frontend-innovate-explorer": {
@@ -52,7 +63,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -62,7 +75,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-intent-analyst": {
         "label": "Frontend Innovation Intent Analyst",
@@ -72,7 +85,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -82,47 +97,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "frontend-innovate-requirements-analyst": {
-        "label": "Frontend Innovation Requirements Analyst",
-        "description": "Defines observable product, component, data, interaction, and verification requirements.",
-        "base_role": "requirements",
-        "prompt": "agents/frontend-innovate-requirements-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "frontend-innovate-solution-architect": {
-        "label": "Frontend Innovation Solution Architect",
-        "description": "Decomposes the selected direction into coherent product and implementation contracts.",
-        "base_role": "architect",
-        "prompt": "agents/frontend-innovate-solution-architect/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-experience-designer": {
         "label": "Frontend Innovation Experience Designer",
@@ -133,11 +108,13 @@
         "default_tool_refs": [
           "default/tool/create_visual_region_coordinate_atlas",
           "default/tool/create_visual_region_binding_package",
-          "default/tool/update_frontend_competitor_reference",
+          "default/tool/update_frontend_competitor_reference"
         ],
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
@@ -146,7 +123,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-source-researcher": {
         "label": "Frontend Innovation Source Researcher",
@@ -156,7 +133,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -166,7 +145,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-implementer": {
         "label": "Frontend Innovation Implementer",
@@ -176,7 +155,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -198,51 +179,13 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "frontend-innovate-visual-reviewer": {
-        "label": "Frontend Innovation Visual Reviewer",
-        "description": "Reviews the rendered product against the selected design draft and evidence.",
-        "base_role": "visual-qa",
-        "prompt": "agents/frontend-innovate-visual-reviewer/system.md",
-        "inherit_base_tools": true,
-        "default_tool_refs": ["default/tool/browser_preview_layout_geometry"],
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-deep-researcher": {
         "label": "Frontend Innovation Researcher",
@@ -252,7 +195,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -262,7 +207,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-fact-checker": {
         "label": "Frontend Innovation Fact Checker",
@@ -272,7 +217,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -282,7 +229,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-innovate-workload-analyst": {
         "label": "Frontend Innovation Workload Analyst",
@@ -292,7 +239,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -302,17 +251,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
-      "frontend-innovate-integrity-reviewer": {
-        "label": "Frontend Innovation Integrity Reviewer",
-        "description": "Rejects generic, unevidenced, or structurally divergent design delivery.",
-        "base_role": "integrity",
-        "prompt": "agents/frontend-innovate-integrity-reviewer/system.md",
+      "frontend-innovate-planner": {
+        "label": "Frontend Innovation Planner",
+        "description": "Publishes one implementation-ready direction, evidence boundary, work partition, and acceptance allocation for parallel specialist execution.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/frontend-innovate-planner/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": [],
+        "package_skill_refs": [
+          "frontend-innovate/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -322,85 +273,77 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "delivery": {
-        "label": "Frontend Innovate Delivery",
-        "description": "Evidence-guided Frontend Innovate collaboration from investigation through delivery and independent review.",
+        "label": "Planned Parallel Frontend Innovation",
+        "description": "One Planner fixes the selected direction and work partition before independent research, design, implementation, workload, and fact workers execute in parallel.",
         "nodes": {
+          "frontend-innovate-planner": {
+            "agent_id": "frontend-innovate-planner",
+            "description": "Publishes the selected direction, evidence boundary, work partition, and acceptance allocation.",
+            "depends_on": []
+          },
           "frontend-innovate-explorer": {
             "agent_id": "frontend-innovate-explorer",
-            "description": "Locates the current product surface, reusable assets, and implementation constraints.",
-            "depends_on": [],
+            "description": "Investigates the target repository and reusable product primitives.",
+            "depends_on": [
+              "frontend-innovate-planner"
+            ]
           },
           "frontend-innovate-intent-analyst": {
             "agent_id": "frontend-innovate-intent-analyst",
-            "description": "Classifies product intent, design ambition, evidence needs, and constraints.",
-            "depends_on": [],
-          },
-          "frontend-innovate-requirements-analyst": {
-            "agent_id": "frontend-innovate-requirements-analyst",
-            "description": "Defines observable product, component, data, interaction, and verification requirements.",
+            "description": "Checks the plan against the user task and convenience outcome.",
             "depends_on": [
-              "frontend-innovate-deep-researcher",
-              "frontend-innovate-explorer",
-              "frontend-innovate-intent-analyst",
-              "frontend-innovate-source-researcher",
-            ],
-          },
-          "frontend-innovate-solution-architect": {
-            "agent_id": "frontend-innovate-solution-architect",
-            "description": "Decomposes the selected direction into coherent product and implementation contracts.",
-            "depends_on": ["frontend-innovate-requirements-analyst"],
+              "frontend-innovate-planner"
+            ]
           },
           "frontend-innovate-experience-designer": {
             "agent_id": "frontend-innovate-experience-designer",
-            "description": "Produces evidence-backed design directions and a rendered source-editable design draft.",
-            "depends_on": ["frontend-innovate-solution-architect", "frontend-innovate-source-researcher"],
+            "description": "Produces the plan-owned design and rendered design evidence.",
+            "depends_on": [
+              "frontend-innovate-planner"
+            ]
           },
           "frontend-innovate-source-researcher": {
             "agent_id": "frontend-innovate-source-researcher",
-            "description": "Investigates source pages, interaction states, information architecture, and visual evidence.",
-            "depends_on": [],
-          },
-          "frontend-innovate-implementer": {
-            "agent_id": "frontend-innovate-implementer",
-            "description": "Implements the selected rendered design direction without inventing a parallel structure.",
+            "description": "Collects applicable source and competitor evidence within the planned boundary.",
             "depends_on": [
-              "frontend-innovate-experience-designer",
-              "frontend-innovate-solution-architect",
-              "frontend-innovate-workload-analyst",
-            ],
-          },
-          "frontend-innovate-visual-reviewer": {
-            "agent_id": "frontend-innovate-visual-reviewer",
-            "description": "Reviews the rendered product against the selected design draft and evidence.",
-            "depends_on": ["frontend-innovate-implementer"],
+              "frontend-innovate-planner"
+            ]
           },
           "frontend-innovate-deep-researcher": {
             "agent_id": "frontend-innovate-deep-researcher",
-            "description": "Collects competitor, industry, and design-reference evidence.",
-            "depends_on": [],
-          },
-          "frontend-innovate-fact-checker": {
-            "agent_id": "frontend-innovate-fact-checker",
-            "description": "Verifies reference and product claims against evidence.",
-            "depends_on": ["frontend-innovate-deep-researcher", "frontend-innovate-integrity-reviewer"],
+            "description": "Collects durable external product evidence within the planned boundary.",
+            "depends_on": [
+              "frontend-innovate-planner"
+            ]
           },
           "frontend-innovate-workload-analyst": {
             "agent_id": "frontend-innovate-workload-analyst",
-            "description": "Sizes design, implementation, evidence, and verification work.",
-            "depends_on": ["frontend-innovate-solution-architect"],
+            "description": "Challenges work partition, ownership, and verification cost.",
+            "depends_on": [
+              "frontend-innovate-planner"
+            ]
           },
-          "frontend-innovate-integrity-reviewer": {
-            "agent_id": "frontend-innovate-integrity-reviewer",
-            "description": "Rejects generic, unevidenced, or structurally divergent design delivery.",
-            "depends_on": ["frontend-innovate-implementer"],
+          "frontend-innovate-implementer": {
+            "agent_id": "frontend-innovate-implementer",
+            "description": "Implements the selected direction and captures its own real rendered proof.",
+            "depends_on": [
+              "frontend-innovate-planner"
+            ]
           },
-        },
-      },
-    },
-  },
+          "frontend-innovate-fact-checker": {
+            "agent_id": "frontend-innovate-fact-checker",
+            "description": "Independently verifies material claims and declared evidence against the plan.",
+            "depends_on": [
+              "frontend-innovate-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

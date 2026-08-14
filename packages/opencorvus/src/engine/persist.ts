@@ -1,8 +1,15 @@
 import { Identifier } from "@/id/id"
+import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Event } from "./model"
-import { EngineArtifactTable, EngineGoalTable, EngineTaskTable, type EngineArtifactKind } from "./engine.sql"
+import {
+  EngineArtifactTable,
+  EngineBuildObservationCleanupTable,
+  EngineGoalTable,
+  EngineTaskTable,
+  type EngineArtifactKind,
+} from "./engine.sql"
 import type { ToolFailureCause } from "@/session/tool-failure-cause"
 import { createIntegrityReviewArtifactPayload } from "@/integrity/review-artifact"
 import type { IntegrityReview } from "@/integrity/team-schema"
@@ -35,7 +42,6 @@ import {
   type GoalGraphMutationProducer,
   type GoalGraphProjectionConflict,
 } from "./goal-graph-projection"
-import type { WorkloadBrief } from "@/goal-workload-analyst/types"
 import {
   ResearchBriefSchema,
   validateResearchBriefIntegrity,
@@ -44,7 +50,14 @@ import {
 } from "@/research/schema"
 import { ResearchPartialDraftSchema, type ResearchPartialDraft } from "@/research/output-tools"
 import { renderSpecsAsText } from "@/acceptance/types"
-import type { RequirementSet } from "@/requirements/types"
+import {
+  RequirementCoverageDeclarationSchema,
+  RequirementCoverageReceiptSchema,
+  RequirementSetArtifactPayloadSchema,
+  RequirementSetSchema,
+  type RequirementCoverageIssue,
+  type RequirementSet,
+} from "@/requirements/types"
 import { IntentAnalysisArtifactPayloadSchema, type IntentAnalysisArtifactPayload } from "@/intent-analysis/artifact"
 import { assertTaskAssistantProducerMessage } from "./producer-turn"
 import {
@@ -68,6 +81,10 @@ import { researchEvidenceRefsForArtifactLocators } from "@/research/evidence-ref
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { classifyArchitectReferenceIntegrity } from "@/architect/reference-integrity"
+import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
+import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 
 type EngineDatabaseConnection = Parameters<Parameters<typeof Database.transaction>[0]>[0]
 
@@ -139,26 +156,128 @@ export function persistRequirementSet(
   db: Database.TxOrDb,
   input: {
     taskID: string
+    sessionID: string
+    finalMessageID: string
+    dispatchID: string
     requirementSet: RequirementSet
-    observedArtifactLocators?: ArtifactReadLocator[]
-    sourceArtifactLocators?: ArtifactReadLocator[]
+    finalization?: unknown
     now: number
   },
-) {
+): {
+  locator: EngineArtifactLocator
+  deliveryStatus: "complete" | "incomplete"
+} {
+  const descriptor = WorkerTurnDescriptor.findForDispatch({
+    sessionID: input.sessionID,
+    dispatchID: input.dispatchID,
+  })
+  if (!descriptor) {
+    throw new Error(
+      `Requirements dispatch ${input.dispatchID} has no Worker Turn descriptor in Session ${input.sessionID}.`,
+    )
+  }
+  if (descriptor.payload.lifecycle.taskID !== input.taskID) {
+    throw new Error(
+      `Requirements Worker Turn ${descriptor.id} belongs to Task ${descriptor.payload.lifecycle.taskID}, not ${input.taskID}.`,
+    )
+  }
+  const lineage = findDispatchLineageByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+  if (!lineage || lineage.payload.child_session_id !== input.sessionID) {
+    throw new Error(`Requirements dispatch ${input.dispatchID} has no exact child Session lineage for ${input.sessionID}.`)
+  }
+  const producer = assertTaskAssistantProducerMessage({
+    taskID: input.taskID,
+    sessionID: input.sessionID,
+    messageID: input.finalMessageID,
+    expectedSessionKind: "requirements",
+    requireCompleted: true,
+  })
+  if (producer.parentID !== descriptor.payload.messageAuthority.user_message_id) {
+    throw new Error(
+      `Requirements final Message ${input.finalMessageID} is not the completed Turn for dispatch ${input.dispatchID}.`,
+    )
+  }
+  const task = db
+    .select({ request: EngineTaskTable.request })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, input.taskID))
+    .get()
+  if (!task) throw new Error(`Requirements Task not found: ${input.taskID}`)
+  const requirementSet = RequirementSetSchema.parse(input.requirementSet)
+  const provenance = artifactProvenanceForAgentTurn(input.sessionID, input.finalMessageID)
+  const declaration = input.finalization === undefined
+    ? null
+    : RequirementCoverageDeclarationSchema.parse(input.finalization)
+  const requestSHA256 = taskRequestSHA256(task.request)
+  const requirementIDs = requirementSet.requirements.map((requirement) => requirement.id).sort()
+  const sourceLocators = [...provenance.sourceArtifactLocators].sort((left, right) =>
+    JSON.stringify(left).localeCompare(JSON.stringify(right)),
+  )
+  const declaredRequirementIDs = [...(declaration?.requirement_ids ?? [])].sort()
+  const declaredSourceLocators = [...(declaration?.source_artifact_locators ?? [])].sort((left, right) =>
+    JSON.stringify(left).localeCompare(JSON.stringify(right)),
+  )
+  const durableSourceIdentities = new Set(sourceLocators.map((locator) => JSON.stringify(locator)))
+  const requirementEvidenceMatchesTurn = requirementSet.requirements.every((requirement) =>
+    requirement.evidence_refs.every((locator) => durableSourceIdentities.has(JSON.stringify(locator))),
+  )
+  const issues: RequirementCoverageIssue[] = []
+  if (!declaration) issues.push("finalization_missing")
+  if (declaration?.status === "incomplete") issues.push("declared_incomplete")
+  if (requirementIDs.length === 0) issues.push("no_requirements_registered")
+  if (declaration && declaration.request_sha256 !== requestSHA256) issues.push("request_identity_mismatch")
+  if (declaration && !isDeepStrictEqual(declaredRequirementIDs, requirementIDs)) {
+    issues.push("requirement_identity_mismatch")
+  }
+  if (declaration && !isDeepStrictEqual(declaredSourceLocators, sourceLocators)) {
+    issues.push("source_identity_mismatch")
+  }
+  if (!requirementEvidenceMatchesTurn) issues.push("requirement_evidence_identity_mismatch")
+  if ((declaration?.unresolved.length ?? 0) > 0) issues.push("unresolved_items")
+  const deliveryStatus = issues.length === 0 ? "complete" : "incomplete"
+  const coverageReceipt = RequirementCoverageReceiptSchema.parse({
+    status: deliveryStatus,
+    request_sha256: requestSHA256,
+    requirement_ids: requirementIDs,
+    source_artifact_locators: sourceLocators,
+    unresolved: declaration?.unresolved ?? [],
+    issues,
+    declaration,
+  })
   const id = Identifier.ascending("artifact")
-  const provenance = artifactConsumptionProvenance(input)
   insertEngineArtifact(db, {
     id,
     taskID: input.taskID,
     kind: "requirement_set",
     label: "RequirementSet",
-    payload: {
-      ...input.requirementSet,
-      ...provenance,
-    },
+    payload: RequirementSetArtifactPayloadSchema.parse({
+      schema_version: 2,
+      ...requirementSet,
+      producer: {
+        session_id: input.sessionID,
+        final_message_id: input.finalMessageID,
+      },
+      coverage_receipt: coverageReceipt,
+      observed_artifact_locators: provenance.observedArtifactLocators,
+      source_artifact_locators: provenance.sourceArtifactLocators,
+    }),
     timeCreated: input.now,
   })
-  return id
+  const row = db
+    .select({ revision: EngineArtifactTable.catalog_revision, sha256: EngineArtifactTable.payload_sha256 })
+    .from(EngineArtifactTable)
+    .where(eq(EngineArtifactTable.id, id))
+    .get()
+  if (!row) throw new Error(`RequirementSet Artifact ${id} was not persisted`)
+  return {
+    locator: {
+      source: "engine_artifact",
+      artifact_id: id,
+      catalog_revision: row.revision,
+      expected_sha256: row.sha256,
+    },
+    deliveryStatus,
+  }
 }
 
 export function persistIntentAnalysisArtifact(
@@ -1315,36 +1434,6 @@ export function applyGoalGraphMutationInTransaction(
   }
 }
 
-export function persistGoalWorkloadForDomainRefs(
-  db: Database.TxOrDb,
-  input: {
-    taskID: string
-    sessionID: string
-    finalMessageID: string
-    observedArtifactLocators?: ArtifactReadLocator[]
-    sourceArtifactLocators?: ArtifactReadLocator[]
-    briefs: WorkloadBrief[]
-    now: number
-  },
-) {
-  const id = Identifier.ascending("artifact")
-  const provenance = artifactConsumptionProvenance(input)
-  insertEngineArtifact(db, {
-    id,
-    taskID: input.taskID,
-    kind: "goal_workload",
-    label: "WorkloadBrief",
-    payload: {
-      briefs: input.briefs,
-      session_id: input.sessionID,
-      final_message_id: input.finalMessageID,
-      ...provenance,
-    },
-    timeCreated: input.now,
-  })
-  return id
-}
-
 export function persistResearchBrief(
   db: Database.TxOrDb,
   input: {
@@ -1597,6 +1686,30 @@ export function persistTaskResearchPartial(input: {
   })
 }
 
+function insertOrReuseExactEngineArtifact(
+  db: Database.TxOrDb,
+  input: Parameters<typeof insertEngineArtifact>[1] & { id: string },
+): { id: string; inserted: boolean } {
+  const existing = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.id)).get()
+  if (!existing) return { id: insertEngineArtifact(db, input), inserted: true }
+  assertEngineArtifactPayloadIdentity({
+    id: existing.id,
+    kind: existing.kind,
+    payload: existing.payload,
+    payloadSHA256: existing.payload_sha256,
+    payloadBytes: existing.payload_bytes,
+  })
+  if (
+    existing.task_id !== input.taskID ||
+    existing.kind !== input.kind ||
+    existing.label !== input.label ||
+    !isDeepStrictEqual(existing.payload, input.payload)
+  ) {
+    throw new Error(`Engine Artifact ${input.id} exact publication identity drift`)
+  }
+  return { id: existing.id, inserted: false }
+}
+
 export function recordTaskLevelBuildHostObservation(input: {
   id: string
   taskID: string
@@ -1634,12 +1747,7 @@ export function recordTaskLevelBuildHostObservation(input: {
     input.executionMode === "current_project" ? input.contributionCommitRef : input.publishedCommitRef
   const observationID = Identifier.schema("artifact").parse(input.id)
   const provenance = artifactConsumptionProvenance(input)
-  recordEngineArtifact({
-    id: observationID,
-    taskID: input.taskID,
-    kind: "build_host_observation",
-    label: "git-workspace",
-    payload: {
+  const payload = {
       task_id: input.taskID,
       session_id: input.sessionID ?? null,
       final_message_id: input.finalMessageID ?? null,
@@ -1652,8 +1760,35 @@ export function recordTaskLevelBuildHostObservation(input: {
       diff_head_ref: input.diffHeadRef ?? null,
       diffs: input.diffs ?? [],
       ...provenance,
-    },
-    timeCreated: now,
+    }
+  Database.transaction((db) => {
+    insertOrReuseExactEngineArtifact(db, {
+      id: observationID,
+      taskID: input.taskID,
+      kind: "build_host_observation",
+      label: "git-workspace",
+      payload,
+      timeCreated: now,
+    })
+    db
+      .update(EngineBuildObservationCleanupTable)
+      .set({ status: "retained", last_error: null, time_updated: now })
+      .where(
+        and(
+          eq(EngineBuildObservationCleanupTable.observation_id, observationID),
+          eq(EngineBuildObservationCleanupTable.task_id, input.taskID),
+          eq(EngineBuildObservationCleanupTable.status, "active"),
+        ),
+      )
+      .run()
+    const cleanup = db
+      .select({ status: EngineBuildObservationCleanupTable.status })
+      .from(EngineBuildObservationCleanupTable)
+      .where(eq(EngineBuildObservationCleanupTable.observation_id, observationID))
+      .get()
+    if (cleanup?.status !== "retained") {
+      throw new Error(`Build observation cleanup owner ${observationID} is missing for durable observation publication`)
+    }
   })
   return observationID
 }
@@ -1811,6 +1946,7 @@ export function recordOrchestratorStreamError(input: {
 /** Persist a Host/runtime/tooling failure without converting it into an
  * expert, Session, Goal, or Task business conclusion. */
 export type TaskInfrastructureErrorInput = {
+  id?: string
   taskID: string
   component: string
   operation: string
@@ -1823,7 +1959,9 @@ export type TaskInfrastructureErrorInput = {
 
 export function recordTaskInfrastructureErrorInTransaction(db: Database.TxOrDb, input: TaskInfrastructureErrorInput) {
   const now = input.now ?? Date.now()
-  const artifactID = insertEngineArtifact(db, {
+  const artifactID = input.id ?? Identifier.ascending("artifact")
+  const publication = insertOrReuseExactEngineArtifact(db, {
+    id: artifactID,
     taskID: input.taskID,
     kind: "task-infrastructure-error",
     label: input.component,
@@ -1846,33 +1984,35 @@ export function recordTaskInfrastructureErrorInTransaction(db: Database.TxOrDb, 
     .where(eq(EngineArtifactTable.id, artifactID))
     .get()
   if (!artifact) throw new Error(`Task infrastructure error Artifact ${artifactID} was not persisted`)
-  EngineProtocol.emitInTransaction(
-    Event.TaskInfrastructureFailed,
-    {
-      taskID: input.taskID,
-      component: input.component,
-      operation: input.operation,
-      summary: `${input.component} infrastructure failure`,
-      details: input.reason,
-      errorName: input.errorName,
-      evidenceLocators: [
-        {
-          source: "engine_artifact",
-          artifact_id: artifactID,
-          catalog_revision: artifact.catalogRevision,
-          expected_sha256: artifact.digest,
-        },
-      ],
-    },
-    {
-      taskID: input.taskID,
-      sessionID: input.sessionID,
-      source: "host",
-      target: "operator",
-      causationID: artifactID,
-      correlationID: artifactID,
-    },
-  )
+  if (publication.inserted) {
+    EngineProtocol.emitInTransaction(
+      Event.TaskInfrastructureFailed,
+      {
+        taskID: input.taskID,
+        component: input.component,
+        operation: input.operation,
+        summary: `${input.component} infrastructure failure`,
+        details: input.reason,
+        errorName: input.errorName,
+        evidenceLocators: [
+          {
+            source: "engine_artifact",
+            artifact_id: artifactID,
+            catalog_revision: artifact.catalogRevision,
+            expected_sha256: artifact.digest,
+          },
+        ],
+      },
+      {
+        taskID: input.taskID,
+        sessionID: input.sessionID,
+        source: "host",
+        target: "operator",
+        causationID: artifactID,
+        correlationID: artifactID,
+      },
+    )
+  }
   return artifactID
 }
 

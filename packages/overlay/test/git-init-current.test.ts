@@ -20,7 +20,6 @@ mock.module("../src/services/config", () => ({
   getTaskOperatorModelContext: async () => ({}),
   syncAgentPromptLocale: async () => {},
   updateConfig: async () => ({}),
-  scaffoldProjectConfig: async () => {},
   reloadProjectScope: async () => {
     reloadCalls += 1
   },
@@ -30,9 +29,10 @@ const { configure } = await import("../src/services/api")
 const { appStore, setAppStore } = await import("../src/store/app")
 const { boardStore, setBoardStore } = await import("../src/store/board")
 const { setSettingsStore } = await import("../src/store/settings")
+const { initializeProjectDirectoryGit } = await import("../src/services/project-git")
 const { initGitCurrent, initializeActiveDirectoryGit } = await import("../src/utils/git")
 
-type Responder = (req: TransportRequest) => TransportResponse<unknown>
+type Responder = (req: TransportRequest) => TransportResponse<unknown> | Promise<TransportResponse<unknown>>
 
 function fakeTransport(responder: Responder): HostTransport {
   return {
@@ -42,7 +42,7 @@ function fakeTransport(responder: Responder): HostTransport {
       ui: { projectEditors: [] },
     },
     async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
-      return responder(req) as TransportResponse<T>
+      return (await responder(req)) as TransportResponse<T>
     },
     openStream() {
       throw new Error("openStream not used")
@@ -92,6 +92,7 @@ describe("Git initialization utilities", () => {
     expect(requests[0]?.method).toBe("POST")
     expect(requests[0]?.path).toBe("project/current/init-git")
     expect(requests[0]?.query?.directory).toBe("C:/tmp/opencorvus-new-project")
+    expect(requests[0]?.timeoutMilliseconds).toBeNull()
     expect(reloadCalls).toBe(0)
   })
 
@@ -117,6 +118,39 @@ describe("Git initialization utilities", () => {
     expect(requests[0]?.method).toBe("POST")
     expect(requests[0]?.path).toBe("project/current/init-git")
     expect(requests[0]?.query?.directory).toBe("C:/tmp/opencorvus-new-project")
+    expect(requests[0]?.timeoutMilliseconds).toBeNull()
     expect(reloadCalls).toBe(1)
+  })
+
+  test("preserves explicit caller cancellation while waiting for Git initialization settlement", async () => {
+    const requests: TransportRequest[] = []
+    const controller = new AbortController()
+    let markRequestStarted!: () => void
+    const requestStarted = new Promise<void>((resolve) => {
+      markRequestStarted = resolve
+    })
+    __setHostTransportForTest(
+      fakeTransport((req) => {
+        requests.push(req)
+        markRequestStarted()
+        return new Promise((_resolve, reject) => {
+          const signal = req.signal
+          if (!signal) return reject(new Error("Git initialization request missing caller signal"))
+          if (signal.aborted) return reject(signal.reason)
+          signal.addEventListener("abort", () => reject(signal.reason), { once: true })
+        })
+      }),
+    )
+
+    const reason = new DOMException("Project selection superseded", "AbortError")
+    const operation = initializeProjectDirectoryGit("C:/tmp/opencorvus-new-project", { signal: controller.signal })
+    await requestStarted
+    controller.abort(reason)
+
+    await expect(operation).rejects.toBe(reason)
+
+    expect(requests).toHaveLength(1)
+    expect(requests[0]?.timeoutMilliseconds).toBeNull()
+    expect(requests[0]?.signal).toBe(controller.signal)
   })
 })

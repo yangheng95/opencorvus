@@ -357,6 +357,14 @@ export namespace SessionCompaction {
           part.source?.type ?? "attachment",
           "</file>",
         ].join("")
+      case "source-url":
+        return `<source-url id="${escapeTranscriptText(part.sourceId)}" url="${escapeTranscriptText(part.url)}">${transcriptText(part.title ?? part.url)}</source-url>`
+      case "source-document":
+        return `<source-document id="${escapeTranscriptText(part.sourceId)}" media-type="${escapeTranscriptText(part.mediaType)}">${transcriptText(part.title)}</source-document>`
+      case "source-file": {
+        const range = part.range ? ` lines="${part.range.startLine}-${part.range.endLine}"` : ""
+        return `<source-file id="${escapeTranscriptText(part.sourceId)}" path="${escapeTranscriptText(part.path)}"${range}>${transcriptText(part.title)}</source-file>`
+      }
       case "patch":
         return `<patch>${transcriptText(Snapshot.formatPatchEvidence(part))}</patch>`
       case "tool": {
@@ -965,7 +973,7 @@ export namespace SessionCompaction {
     processor.message.summary = true
     await Session.publishCompactionCheckpoint({ info: processor.message, part: marker })
 
-    Bus.publish(Event.Compacted, { sessionID: input.sessionID })
+    await Bus.publish(Event.Compacted, { sessionID: input.sessionID })
 
     return input.auto ? "continue" : "stop"
   }
@@ -996,9 +1004,9 @@ export namespace SessionCompaction {
       kind: input.auto ? "compaction_request" : "manual_summarize",
       payload: {
         source_user_message_id: input.source.id,
-        model: input.model,
+        ...(input.model !== undefined ? { model: input.model } : {}),
         overflow: input.overflow === true,
-        focus: input.focus,
+        ...(input.focus !== undefined ? { focus: input.focus } : {}),
       },
     })
   }

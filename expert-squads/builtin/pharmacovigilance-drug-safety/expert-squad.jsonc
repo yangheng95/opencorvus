@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "pharmacovigilance-drug-safety",
+  "name": "Pharmacovigilance Drug Safety",
+  "label": "Pharmacovigilance Drug Safety",
+  "description": "Evidence-bounded case-quality, aggregate-signal, and risk-plan trace review joined for qualified pharmacovigilance assessment without medical, reporting, or regulatory authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded pharmacovigilance case, aggregate signal, and risk-management evidence review.",
+    "selection_guidance": "Select when work requires case version and duplicate controls, adverse-event aggregate calculations, reference-safety-information traceability, or signal lifecycle evidence. Do not select for patient care, medical judgment, reportability decisions, submissions, or label changes.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "pharmacovigilance-drug-safety/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "pv-case-intake-quality-analyst": {
+        "label": "PV Case Intake Quality Analyst",
+        "description": "Builds a source-bound case, follow-up, duplicate, and data-quality ledger without making case judgments.",
+        "base_role": "explore",
+        "prompt": "agents/pv-case-intake-quality-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "pharmacovigilance-drug-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "pv-aggregate-signal-analyst": {
+        "label": "PV Aggregate Signal Analyst",
+        "description": "Computes auditable descriptive disproportionality and documents limitations without declaring a signal or incidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/pv-aggregate-signal-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "pharmacovigilance-drug-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "pv-risk-management-compliance-trace-analyst": {
+        "label": "PV Risk Management Compliance Trace Analyst",
+        "description": "Traces reference-safety-information, risk-plan, signal-stage, action, and accountable-review evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/pv-risk-management-compliance-trace-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "pharmacovigilance-drug-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "pharmacovigilance-safety-review-owner": {
+        "label": "Pharmacovigilance Safety Review Owner",
+        "description": "Joins case, aggregate, and risk-trace branches into a qualified-review pack while preserving unresolved decisions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/pharmacovigilance-safety-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "pharmacovigilance-drug-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "pharmacovigilance-drug-safety-review": {
+        "label": "Pharmacovigilance Drug Safety Review",
+        "description": "Three independent evidence branches converge into one controlled safety review pack.",
+        "nodes": {
+          "pv-case-intake-quality-analyst": {
+            "agent_id": "pv-case-intake-quality-analyst",
+            "description": "Audits case source, version, follow-up, duplicate, and completeness evidence.",
+            "depends_on": []
+          },
+          "pv-aggregate-signal-analyst": {
+            "agent_id": "pv-aggregate-signal-analyst",
+            "description": "Produces descriptive aggregate signal measures and limitations.",
+            "depends_on": []
+          },
+          "pv-risk-management-compliance-trace-analyst": {
+            "agent_id": "pv-risk-management-compliance-trace-analyst",
+            "description": "Traces RSI, risk-plan, signal stages, actions, and qualified ownership.",
+            "depends_on": []
+          },
+          "pharmacovigilance-safety-review-owner": {
+            "agent_id": "pharmacovigilance-safety-review-owner",
+            "description": "Joins all branches without medical, case-processing, submission, or regulatory authority.",
+            "depends_on": [
+              "pv-aggregate-signal-analyst",
+              "pv-case-intake-quality-analyst",
+              "pv-risk-management-compliance-trace-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

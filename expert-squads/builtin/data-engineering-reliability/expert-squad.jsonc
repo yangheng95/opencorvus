@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "data-engineering-reliability",
+  "name": "Data Engineering Reliability",
+  "label": "Data Engineering Reliability",
+  "description": "Contract, replay-safety, and observability analysis joined into an evidence-backed data product release pack.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for reliable data-product and pipeline release planning.",
+    "selection_guidance": "Select when data contracts, replay safety, quality, lineage, observability, and release ownership must be proven together.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "data-engineering-reliability/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "data-contract-analyst": {
+        "label": "Data Contract Analyst",
+        "description": "Defines source, output, lineage, and compatibility contracts.",
+        "base_role": "requirements",
+        "prompt": "agents/data-contract-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-engineering-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-pipeline-resilience-analyst": {
+        "label": "Pipeline Resilience Analyst",
+        "description": "Analyzes idempotency, replay, backfill, ordering, and rollback.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-pipeline-resilience-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-engineering-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-observability-analyst": {
+        "label": "Data Observability Analyst",
+        "description": "Defines quality evidence, service indicators, alerts, and ownership.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-observability-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-engineering-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "data-release-integrator": {
+        "label": "Data Release Integrator",
+        "description": "Joins contracts, resilience, and observability into one release pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/data-release-integrator/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "data-engineering-reliability/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "data-product-release-pack": {
+        "label": "Data Product Release Pack",
+        "description": "Three independent reliability branches converge into one controlled release pack.",
+        "nodes": {
+          "data-contract-analyst": {
+            "agent_id": "data-contract-analyst",
+            "description": "Defines contracts and consumers.",
+            "depends_on": []
+          },
+          "data-pipeline-resilience-analyst": {
+            "agent_id": "data-pipeline-resilience-analyst",
+            "description": "Analyzes replay and failure behavior.",
+            "depends_on": []
+          },
+          "data-observability-analyst": {
+            "agent_id": "data-observability-analyst",
+            "description": "Defines observability and quality evidence.",
+            "depends_on": []
+          },
+          "data-release-integrator": {
+            "agent_id": "data-release-integrator",
+            "description": "Joins all branches into the release pack.",
+            "depends_on": [
+              "data-contract-analyst",
+              "data-observability-analyst",
+              "data-pipeline-resilience-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

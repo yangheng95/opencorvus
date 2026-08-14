@@ -10,6 +10,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { FormatError } from "./cli/error"
 import { EOL } from "os"
 import { installProcessErrorLogging } from "./util/process-error-logging"
+import { errorDiagnostic } from "./util/error-diagnostics"
 
 installProcessErrorLogging()
 
@@ -17,6 +18,10 @@ const [{ McpCommand }, { DefaultServeCommand, ServeCommand }] = await Promise.al
   import("./cli/cmd/mcp"),
   import("./cli/cmd/serve"),
 ])
+const WorkArtifactAcceptanceDebugCommand =
+  process.argv[2] === "debug"
+    ? (await import("./cli/cmd/debug/work-artifact")).WorkArtifactAcceptanceDebugCommand
+    : undefined
 
 const cli = yargs(hideBin(process.argv))
   .parserConfiguration({ "populate--": true })
@@ -51,6 +56,7 @@ const cli = yargs(hideBin(process.argv))
     })
   })
 cli.command(DefaultServeCommand).command(ServeCommand).command(McpCommand)
+if (WorkArtifactAcceptanceDebugCommand) cli.command(WorkArtifactAcceptanceDebugCommand)
 
 cli
   .fail((msg, err) => {
@@ -79,12 +85,7 @@ try {
   }
 
   if (e instanceof Error) {
-    Object.assign(data, {
-      name: e.name,
-      message: e.message,
-      cause: e.cause?.toString(),
-      stack: e.stack,
-    })
+    Object.assign(data, errorDiagnostic(e))
   }
 
   if (e instanceof ResolveMessage) {

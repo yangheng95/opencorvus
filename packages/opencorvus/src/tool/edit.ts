@@ -6,21 +6,17 @@
 import z from "zod"
 import * as path from "path"
 import { Tool } from "./tool"
-import { LSP } from "../lsp"
 import { createTwoFilesPatch, diffLines } from "diff"
 import DESCRIPTION from "./edit.txt"
 import { File } from "../file"
 import { FileWatcher } from "../file/watcher"
 import { Bus } from "../bus"
 import { FileTime } from "../file/time"
-import { Filesystem } from "../util/filesystem"
 import { Instance } from "../project/instance"
 import { Snapshot } from "@/snapshot"
 import { assertBuildWriteDirectory, assertExternalDirectory } from "./external-directory"
 import { Patch } from "../patch"
 import { executionFiles, executionProcessAuthority } from "./execution-files"
-
-const MAX_DIAGNOSTICS_PER_FILE = 20
 
 function normalizeLineEndings(text: string): string {
   return text.replaceAll("\r\n", "\n")
@@ -70,15 +66,6 @@ export const EditTool = Tool.define("edit", {
         if (existing) throw new Error(`apply_patch verification failed: Add File target already exists: ${filePath}`)
         contentNew = params.newString
         diff = trimDiff(createTwoFilesPatch(filePath, filePath, contentOld, contentNew))
-        await ctx.ask({
-          permission: "edit",
-          patterns: [path.relative(Instance.worktree, filePath)],
-          always: ["*"],
-          metadata: {
-            filepath: filePath,
-            diff,
-          },
-        })
         await files.mkdir(path.dirname(filePath), { recursive: true })
         await files.writeFile(filePath, params.newString, { encoding: "utf-8", flag: "wx" })
         await Bus.publish(File.Event.Edited, {
@@ -106,15 +93,6 @@ export const EditTool = Tool.define("edit", {
       diff = trimDiff(
         createTwoFilesPatch(filePath, filePath, normalizeLineEndings(contentOld), normalizeLineEndings(contentNew)),
       )
-      await ctx.ask({
-        permission: "edit",
-        patterns: [path.relative(Instance.worktree, filePath)],
-        always: ["*"],
-        metadata: {
-          filepath: filePath,
-          diff,
-        },
-      })
 
       await files.writeFile(filePath, contentNew)
       await Bus.publish(File.Event.Edited, {
@@ -148,31 +126,16 @@ export const EditTool = Tool.define("edit", {
       metadata: {
         diff,
         filediff,
-        diagnostics: {},
       },
     })
 
-    let output = "Edit applied successfully."
-    await LSP.touchFile(filePath, true, processAuthority)
-    const diagnostics = await LSP.diagnostics(processAuthority)
-    const normalizedFilePath = Filesystem.normalizePath(filePath)
-    const issues = diagnostics[normalizedFilePath] ?? []
-    const errors = issues.filter((item) => item.severity === 1)
-    if (errors.length > 0) {
-      const limited = errors.slice(0, MAX_DIAGNOSTICS_PER_FILE)
-      const suffix =
-        errors.length > MAX_DIAGNOSTICS_PER_FILE ? `\n... and ${errors.length - MAX_DIAGNOSTICS_PER_FILE} more` : ""
-      output += `\n\nLSP errors detected in this file, please fix:\n<diagnostics file="${filePath}">\n${limited.map(LSP.Diagnostic.pretty).join("\n")}${suffix}\n</diagnostics>`
-    }
-
     return {
       metadata: {
-        diagnostics,
         diff,
         filediff,
       },
       title: `${path.relative(Instance.worktree, filePath)}`,
-      output,
+      output: "Edit applied successfully.",
     }
   },
 })

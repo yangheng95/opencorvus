@@ -54,6 +54,7 @@ import { rightDockOpen } from "../store/right-dock"
 import { layoutTokenPx } from "../utils/layout-tokens"
 
 const directoryMemo = () => activeDirectory()
+const WORKTREE_PROJECTION_RETRY_MS = 3_000
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
@@ -179,6 +180,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [deletingWorktrees, setDeletingWorktrees] = createSignal(new Set<string>())
   const [bulkDeleteOperationDirectory, setBulkDeleteOperationDirectory] = createSignal("")
   const [refreshingWorktreeDirectory, setRefreshingWorktreeDirectory] = createSignal("")
+  let worktreeProjectionRetryTimer: ReturnType<typeof setTimeout> | undefined
+  let worktreeProjectionGeneration = 0
   const visibleWorktrees = createMemo(() => worktrees().filter((item) => item.status !== "primary"))
   const removableWorktrees = createMemo(() => visibleWorktrees().filter((item) => item.removable))
   const bulkDeleteBusy = createMemo(() => bulkDeleteBusyFor(worktreeDirectory()))
@@ -691,6 +694,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           },
         ],
         onDismiss: () => setLocalMenuOpen(false),
+        onError: (error) => reportError({
+          id: "project-runtime-local-menu:close",
+          title: t("common.error"),
+          message: errorMessage(error),
+          details: formatErrorDetails(error),
+        }),
         onAction: (itemID) => {
           if (itemID === "local-open") {
             void openDirectory(dir())
@@ -766,6 +775,15 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         maxHeight: document.documentElement.clientHeight * 0.5,
         groups: [{ items }],
         onDismiss: () => setBranchMenuOpen(false),
+        onError: (error) => {
+          setBranchError(errorMessage(error))
+          reportError({
+            id: "project-runtime-branch-menu:close",
+            title: t("common.error"),
+            message: errorMessage(error),
+            details: formatErrorDetails(error),
+          })
+        },
         onAction: (itemID) => {
           if (itemID === "branch-retry") {
             setBranchError("")
@@ -820,28 +838,66 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   async function syncWorktrees(options: { requireFresh?: boolean } = {}): Promise<void> {
     const projectDirectory = dir().trim()
     if (!appStore.connected || !projectDirectory) {
+      invalidateWorktreeProjection()
       setWorktrees([])
       setWorktreeDirectory("")
       setError("")
       return
     }
+    clearWorktreeProjectionRetry()
+    const requestGeneration = ++worktreeProjectionGeneration
     try {
       const items = await loadProjectWorktrees(projectDirectory)
-      if (dir().trim() !== projectDirectory) return
+      if (!ownsWorktreeProjection(requestGeneration, projectDirectory)) return
       setWorktrees(items)
       setWorktreeDirectory(projectDirectory)
+      if (error()) {
+        AppLog.info("ui", "Project worktree projection recovered", { directory: projectDirectory })
+      }
       setError("")
     } catch (err) {
-      if (dir().trim() !== projectDirectory) return
+      if (!ownsWorktreeProjection(requestGeneration, projectDirectory)) return
       const message = err instanceof Error ? err.message : String(err)
       if (worktreeDirectory() !== projectDirectory) {
         setWorktrees([])
         setWorktreeDirectory("")
       }
-      setError(message)
-      AppLog.warn("ui", "Failed to load project worktrees", { error: message })
+      if (error() !== message) {
+        setError(message)
+        AppLog.warn("ui", "Failed to load project worktrees", { directory: projectDirectory, error: message })
+      }
+      scheduleWorktreeProjectionRetry(requestGeneration, projectDirectory)
       if (options.requireFresh) throw err
     }
+  }
+
+  function clearWorktreeProjectionRetry(): void {
+    if (worktreeProjectionRetryTimer === undefined) return
+    clearTimeout(worktreeProjectionRetryTimer)
+    worktreeProjectionRetryTimer = undefined
+  }
+
+  function invalidateWorktreeProjection(): void {
+    worktreeProjectionGeneration += 1
+    clearWorktreeProjectionRetry()
+  }
+
+  function ownsWorktreeProjection(generation: number, projectDirectory: string): boolean {
+    return (
+      generation === worktreeProjectionGeneration &&
+      appStore.connected &&
+      dir().trim() === projectDirectory
+    )
+  }
+
+  function scheduleWorktreeProjectionRetry(generation: number, projectDirectory: string): void {
+    if (!ownsWorktreeProjection(generation, projectDirectory)) return
+    if (worktreeProjectionRetryTimer !== undefined) return
+    worktreeProjectionRetryTimer = setTimeout(() => {
+      worktreeProjectionRetryTimer = undefined
+      if (!ownsWorktreeProjection(generation, projectDirectory)) return
+      void syncWorktrees()
+    }, WORKTREE_PROJECTION_RETRY_MS)
   }
 
   function ownsWorktreeOperation(projectDirectory: string): boolean {
@@ -892,6 +948,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       message: t("worktree.delete_confirm", { path: item.directory }),
       cancel: true,
       okLabel: t("common.delete"),
+      okTone: "danger",
     })
     if (!confirmed.confirmed) return
     if (dir().trim() !== projectDirectory || worktreeDirectory() !== projectDirectory) return
@@ -940,6 +997,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       message: t("worktree.delete_all_confirm", { count: targets.length }),
       cancel: true,
       okLabel: t("common.delete"),
+      okTone: "danger",
     })
     if (!confirmed.confirmed) return
     if (dir().trim() !== projectDirectory || worktreeDirectory() !== projectDirectory) return
@@ -993,6 +1051,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   createEffect(() => {
     const connected = appStore.connected
     dir()
+    invalidateWorktreeProjection()
     setLocalMenuOpen(false)
     setBranchMenuOpen(false)
     setBranches([])
@@ -1011,6 +1070,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       setError("")
     }
   })
+
+  onCleanup(invalidateWorktreeProjection)
 
   createEffect(() => {
     if (!props.anchorVisible) closeRuntimePanel()
@@ -1519,7 +1580,14 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         }}
         onClose={() => closeLocalEnvironmentEditor()}
       >
-        <div class="project-runtime-local-environment-dialog" data-ui="project-runtime-local-environment-dialog">
+        <form
+          class="project-runtime-local-environment-dialog"
+          data-ui="project-runtime-local-environment-dialog"
+          onSubmit={(event) => {
+            event.preventDefault()
+            void saveLocalEnvironment()
+          }}
+        >
           <p class="project-runtime-local-environment-description">
             {t("project_runtime.local_environment_description")}
           </p>
@@ -1638,18 +1706,17 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               {t("common.cancel")}
             </Button>
             <Button
-              type="button"
+              type="submit"
               variant="solid"
               size="md"
               tone="accent"
               data-ui="project-runtime-local-environment-save"
               disabled={localEnvironmentBusy()}
-              onClick={() => void saveLocalEnvironment()}
             >
               {localEnvironmentBusy() ? t("common.saving") : t("common.save")}
             </Button>
           </div>
-        </div>
+        </form>
       </Dialog>
       <Dialog
         id="projectRuntimeGitDialog"

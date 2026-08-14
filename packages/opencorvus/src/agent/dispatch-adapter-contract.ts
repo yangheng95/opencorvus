@@ -9,6 +9,8 @@ export interface DispatchAdapterContract {
   readonly inputSchema: z.ZodObject<any>
   readonly sessionKind: SessionKind
   readonly privateStageToolIDs: readonly string[]
+  /** Explicit effectful subset. Every other private stage Tool is a pure in-memory collector/control Tool. */
+  readonly permissionBearingStageToolIDs: readonly string[]
   readonly coordinationHandoffToolID: "request_orchestrator_decision"
 }
 
@@ -18,13 +20,15 @@ const contracts = {
     inputSchema: DispatchAdapterInputSchemas.delegated_worker,
     sessionKind: "delegated-worker",
     privateStageToolIDs: [],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   requirements: {
     abiVersion: 1,
     inputSchema: DispatchAdapterInputSchemas.requirements,
     sessionKind: "requirements",
-    privateStageToolIDs: ["register_requirement", "register_decision"],
+    privateStageToolIDs: ["register_requirement", "register_decision", "finalize_requirements"],
+    permissionBearingStageToolIDs: ["register_decision"],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   architect: {
@@ -39,6 +43,7 @@ const contracts = {
       "register_assembly_owner",
       "register_contract",
     ],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   frontend_design: {
@@ -66,6 +71,7 @@ const contracts = {
       "update_frontend_question",
       "inspect_frontend_result_status",
     ],
+    permissionBearingStageToolIDs: ["capture_frontend_visual_evidence"],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   frontend_research: {
@@ -97,6 +103,7 @@ const contracts = {
       "update_research_citation",
       "inspect_research_result_status",
     ],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   deep_research: {
@@ -128,6 +135,7 @@ const contracts = {
       "update_research_citation",
       "inspect_research_result_status",
     ],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   visual_qa: {
@@ -147,6 +155,7 @@ const contracts = {
       "set_visual_qa_reference_parity",
       "update_visual_qa_judgment",
     ],
+    permissionBearingStageToolIDs: ["register_visual_qa_problem_dom_region"],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   workload_analysis: {
@@ -154,6 +163,7 @@ const contracts = {
     inputSchema: DispatchAdapterInputSchemas.workload_analysis,
     sessionKind: "goal-workload-analyst",
     privateStageToolIDs: ["register_workload_brief"],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   analyze_intent: {
@@ -161,6 +171,7 @@ const contracts = {
     inputSchema: DispatchAdapterInputSchemas.analyze_intent,
     sessionKind: "intent-analysis",
     privateStageToolIDs: ["extract_slot", "flag_missing_info", "ask_clarification", "record_intent_analysis"],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   fact_check: {
@@ -168,6 +179,7 @@ const contracts = {
     inputSchema: DispatchAdapterInputSchemas.fact_check,
     sessionKind: "fact-check",
     privateStageToolIDs: ["record_fact_check_review"],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   build: {
@@ -175,6 +187,7 @@ const contracts = {
     inputSchema: DispatchAdapterInputSchemas.build,
     sessionKind: "build",
     privateStageToolIDs: ["merge_back"],
+    permissionBearingStageToolIDs: ["merge_back"],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   explore: {
@@ -182,6 +195,7 @@ const contracts = {
     inputSchema: DispatchAdapterInputSchemas.explore,
     sessionKind: "explore",
     privateStageToolIDs: [],
+    permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
   integrity: {
@@ -206,6 +220,7 @@ const contracts = {
       "register_integrity_fact_check_item",
       "update_integrity_judgment",
     ],
+    permissionBearingStageToolIDs: ["run_command"],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },
 } as const satisfies Record<string, DispatchAdapterContract>
@@ -217,7 +232,12 @@ for (const [id, contract] of Object.entries(contracts)) {
   if (contract.privateStageToolIDs.some((toolID) => toolID.trim().length === 0)) {
     throw new Error(`Dispatch adapter ${id} contains an empty private stage tool ID`)
   }
+  const privateIDs = new Set<string>(contract.privateStageToolIDs)
+  if (contract.permissionBearingStageToolIDs.some((toolID) => !privateIDs.has(toolID))) {
+    throw new Error(`Dispatch adapter ${id} declares a permission-bearing Tool outside its private stage surface`)
+  }
   Object.freeze(contract.privateStageToolIDs)
+  Object.freeze(contract.permissionBearingStageToolIDs)
   Object.freeze(contract)
 }
 Object.freeze(contracts)
@@ -257,6 +277,10 @@ export namespace DispatchAdapterContractRegistry {
 
   export function privateStageToolIDSet(id: string): ReadonlySet<string> {
     return new Set(get(id).privateStageToolIDs)
+  }
+
+  export function permissionBearingStageToolIDSet(id: string): ReadonlySet<string> {
+    return new Set(get(id).permissionBearingStageToolIDs)
   }
 
   export function coordinationHandoffToolID(id: string): "request_orchestrator_decision" {

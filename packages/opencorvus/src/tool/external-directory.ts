@@ -77,17 +77,4 @@ export async function assertExternalDirectory(ctx: Tool.Context, target?: string
 
   if (await projectContainsResolvedPath(target)) return
 
-  const kind = options?.kind ?? "file"
-  const parentDir = kind === "directory" ? target : path.dirname(target)
-  const glob = path.join(parentDir, "*").replaceAll("\\", "/")
-
-  await ctx.ask({
-    permission: "external_directory",
-    patterns: [glob],
-    always: [glob],
-    metadata: {
-      filepath: target,
-      parentDir,
-    },
-  })
 }

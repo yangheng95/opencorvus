@@ -23,6 +23,7 @@ import { Database, eq, sql } from "@/storage/db"
 import { activityFromTaskLifecycle } from "@/status/task-status-snapshot"
 import { rightSidebarConversationExperience } from "@/chat/session"
 import { TaskQueueService } from "@/scheduler/task-queue-service"
+import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 
 export {
   WorkLedgerArchiveList,
@@ -102,15 +103,16 @@ function workLedgerTaskFromMissionTask(
     description: task.description,
     directory: task.directory,
     created: task.created,
-    started: task.started ?? null,
+    started: task.started,
+    completed: task.completed,
     updated: task.updated,
     pinned: task.pinned,
     lifecycleStatus: task.lifecycleStatus,
+    cancellationStatus: task.cancellationStatus,
     activityStatus: task.activityStatus,
     priority: task.priority,
     source: task.source,
     productPillar: task.productPillar,
-    queueOrder: task.queueOrder,
     pendingInteractions: pendingInteractions.get(task.id) ?? 0,
     missionID: mission.missionID,
     missionSessionID: mission.sessionID,
@@ -132,14 +134,20 @@ function workLedgerArchivedTaskFromTaskID(taskID: string, pendingInteractions: R
     directory: item.directory,
     created: task.time_created,
     started: task.time_started,
+    completed: task.time_completed ?? undefined,
     updated: task.time_updated,
     pinned: task.time_pinned !== null,
     lifecycleStatus,
+    cancellationStatus:
+      lifecycleStatus === "cancelled"
+        ? "cancelled"
+        : pendingTaskCancellationProjection(task.id)
+          ? "cancelling"
+          : "none",
     activityStatus: activityFromTaskLifecycle(lifecycleStatus),
     priority: task.priority,
     source: task.source,
     productPillar: task.product_pillar,
-    queueOrder: task.queue_order,
     pendingInteractions: pendingInteractions.get(task.id) ?? 0,
     archived: task.time_archived ?? undefined,
     ...(binding

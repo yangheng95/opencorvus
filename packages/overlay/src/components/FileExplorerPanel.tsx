@@ -861,6 +861,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       input: true,
       inputLabel: type === "file" ? t("explorer.file_name") : t("explorer.folder_name"),
       inputPlaceholder: type === "file" ? t("explorer.file_name_placeholder") : t("explorer.folder_name_placeholder"),
+      inputRequired: true,
+      inputRequiredMessage: t("explorer.name_required"),
       okLabel: type === "file" ? t("explorer.create_file") : t("explorer.create_folder"),
       cancel: true,
     })
@@ -911,6 +913,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       input: true,
       inputLabel: t("explorer.new_name"),
       inputValue: item.name,
+      inputRequired: true,
+      inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.rename"),
       cancel: true,
     })
@@ -946,6 +950,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       input: true,
       inputLabel: t("explorer.destination_path"),
       inputValue: item.path,
+      inputRequired: true,
+      inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.move"),
       cancel: true,
     })
@@ -984,6 +990,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       input: true,
       inputLabel: t("explorer.destination_directory"),
       inputPlaceholder: "src",
+      inputRequired: true,
+      inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.move"),
       cancel: true,
     })
@@ -1044,6 +1052,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       input: true,
       inputLabel: t("explorer.destination_path"),
       inputValue: joinExplorerPath(parentPath(item.path), copyNameSuggestion(item.path)),
+      inputRequired: true,
+      inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.copy"),
       cancel: true,
     })
@@ -1085,6 +1095,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       input: true,
       inputLabel: t("explorer.destination_directory"),
       inputPlaceholder: "src",
+      inputRequired: true,
+      inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.copy"),
       cancel: true,
     })
@@ -1158,6 +1170,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           ? t("explorer.delete_message", { path: items[0]?.path ?? "" })
           : t("explorer.delete_many_message", { count: items.length }),
       okLabel: t("explorer.confirm_delete"),
+      okTone: "danger",
       cancel: true,
     })
     if (!result.confirmed) return

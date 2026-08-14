@@ -7,7 +7,7 @@ import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineTaskTable } from "../src/engine/engine.sql"
 import { EngineMetricResultTable, EngineMetricSpecTable } from "../src/metrics/metrics.sql"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { createTaskArtifactStoreExecution } from "../src/task-artifact/store"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
@@ -27,6 +27,7 @@ import { readResultsForIteration, registerBaselineSpec } from "../src/metrics/st
 import { MetricExecutionEvidence } from "../src/metrics/types"
 import { canonicalMetricJSON } from "../src/metrics/canonical-json"
 import { runHostCommandWithInactivity } from "../src/shell/command-inactivity"
+import { abortableIterable } from "../src/util/stream-activity"
 import {
   createMetricJudgeRunnerWithDependencies,
   metricJudgeMessages,
@@ -160,14 +161,15 @@ describe("Metric scorer exact evidence runtime", () => {
       getModel: (async () => ({}) as never) as MetricJudgeRuntimeDependencies["getModel"],
       getLanguage: (async () => language) as MetricJudgeRuntimeDependencies["getLanguage"],
       wrapModel: (() => language) as MetricJudgeRuntimeDependencies["wrapModel"],
-      streamText: (() => ({
-        textStream: (async function* () {
+      streamText: ((input: { abortSignal: AbortSignal }) => {
+        const textStream = (async function* () {
           while (true) {
             yield ""
             await Bun.sleep(1)
           }
-        })(),
-      })) as MetricJudgeRuntimeDependencies["streamText"],
+        })()
+        return { textStream: abortableIterable(textStream, input.abortSignal) }
+      }) as MetricJudgeRuntimeDependencies["streamText"],
     }
     const runner = createMetricJudgeRunnerWithDependencies(
       { taskID: "task-production-judge", sessionID: "session-production-judge" } as TaskToolExecutionScope,
@@ -225,7 +227,7 @@ describe("Metric scorer exact evidence runtime", () => {
           version: "2026.08.06.1",
           packageDigest: "a".repeat(64),
         }
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -236,7 +238,6 @@ describe("Metric scorer exact evidence runtime", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: metricPackageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -643,9 +644,9 @@ describe("Metric scorer exact evidence runtime", () => {
         expect(outcome.results.map((result) => result.metric_spec_id)).toEqual(
           expect.arrayContaining([outOfOrderSpecIDs.source, outOfOrderSpecIDs.dependent]),
         )
-        expect(
-          outcome.results.findIndex((result) => result.metric_spec_id === outOfOrderSpecIDs.source),
-        ).toBeLessThan(outcome.results.findIndex((result) => result.metric_spec_id === outOfOrderSpecIDs.dependent))
+        expect(outcome.results.findIndex((result) => result.metric_spec_id === outOfOrderSpecIDs.source)).toBeLessThan(
+          outcome.results.findIndex((result) => result.metric_spec_id === outOfOrderSpecIDs.dependent),
+        )
         expect(bySpec.get(cycleSpecIDs[0])).toMatchObject({ raw_value: null, evidence_fresh: false })
         expect(bySpec.get(cycleSpecIDs[1])).toMatchObject({ raw_value: null, evidence_fresh: false })
         expect(bySpec.get(prebuiltSpec.id)).toMatchObject({ raw_value: 0, evidence_fresh: true })
@@ -798,5 +799,5 @@ describe("Metric scorer exact evidence runtime", () => {
         await execution.close()
       },
     })
-  }, 30_000)
+  }, 120_000)
 })

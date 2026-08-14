@@ -1,6 +1,5 @@
-import { createMemo, createSignal, For, Show } from "solid-js"
-import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
-import type { ExpertSquadOption } from "../services/expert-squad"
+import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
+import type { ExpertSquadMarketIndexItem } from "../services/expert-squad"
 import { MISSION_BOARD_LANES, type MissionBoardLane, type MissionRecord } from "../services/mission"
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
 import { projectDirectoryLabel } from "../utils/project-directory"
@@ -13,6 +12,7 @@ import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { SelectControl } from "./ui/SelectControl"
 import { TextField } from "./ui/TextField"
+import { appStore } from "../store/app"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
@@ -22,13 +22,16 @@ type ProjectOption = { value: string; label: string }
 export interface MissionBoardProps {
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
-  productPillar: ProductPillar
-  expertSquads: readonly ExpertSquadOption[]
-  activeExpertSquadID: string
+  onInstallMoreExpertSquads?: (projectDirectory: string) => void
+  onMarketExpertSquadQuery?: (projectDirectory: string, query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
+  onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
+  canOpenMarketWebPage?: boolean
   onOpenMission: (mission: MissionRecord) => void | Promise<void>
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
+  onConfirmDeleteMission: (mission: MissionRecord) => Promise<boolean>
   onDeleteMission: (mission: MissionRecord) => Promise<boolean>
 }
 
@@ -65,16 +68,13 @@ function MissionBoardCard(props: {
   mission: MissionRecord
   dispatching: boolean
   deleting: boolean
+  actionBusy: boolean
   onOpen: () => void
   onDispatch: () => void
   onDelete: () => void
 }) {
   const terminalTasks = createMemo(() => props.mission.tasks.filter(taskIsTerminal).length)
-  const activeTasks = createMemo(
-    () =>
-      props.mission.tasks.filter((task) => task.lifecycleStatus === "queued" || task.lifecycleStatus === "active")
-        .length,
-  )
+  const activeTasks = createMemo(() => props.mission.tasks.filter((task) => task.lifecycleStatus === "active").length)
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
 
   return (
@@ -95,7 +95,7 @@ function MissionBoardCard(props: {
           class="mission-board-card__open"
           title={props.mission.title}
           aria-label={t("mission_board.open_mission", { title: props.mission.title })}
-          disabled={props.deleting}
+          disabled={props.actionBusy}
           onClick={props.onOpen}
         >
           <span class="mission-board-card__identity">
@@ -171,7 +171,7 @@ function MissionBoardCard(props: {
               size="sm"
               tone="accent"
               data-ui="mission-board-dispatch"
-              disabled={props.dispatching || props.deleting}
+              disabled={props.actionBusy}
               onClick={props.onDispatch}
             >
               <Icon name={props.dispatching ? "loading" : "send"} size="compact" />
@@ -185,7 +185,7 @@ function MissionBoardCard(props: {
           <ContextMenu.Item
             class="mission-board-card-menu__delete"
             data-ui="mission-board-card-delete"
-            disabled={props.deleting}
+            disabled={props.actionBusy}
             onSelect={props.onDelete}
           >
             <Icon name={props.deleting ? "loading" : "delete"} size="compact" />
@@ -201,8 +201,12 @@ export function MissionBoard(props: MissionBoardProps) {
   const [search, setSearch] = createSignal("")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [createOpen, setCreateOpen] = createSignal(false)
-  const [dispatchingMissionID, setDispatchingMissionID] = createSignal("")
-  const [deletingMissionID, setDeletingMissionID] = createSignal("")
+  const [pendingAction, setPendingAction] = createSignal<{ kind: "dispatch" | "delete"; missionID: string } | null>(
+    null,
+  )
+  const [actionError, setActionError] = createSignal("")
+  let searchInput: HTMLInputElement | undefined
+  let actionGeneration = 0
 
   const projectOptions = createMemo<ProjectOption[]>(() => {
     const directories = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].sort(
@@ -219,6 +223,10 @@ export function MissionBoard(props: MissionBoardProps) {
   const selectedProject = createMemo(
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? projectOptions()[0] ?? null,
   )
+  createEffect(() => {
+    const directory = projectDirectory()
+    if (directory && !projectOptions().some((option) => option.value === directory)) setProjectDirectory("")
+  })
   const visibleMissions = createMemo(() => {
     const query = search().trim().toLocaleLowerCase()
     const directory = projectDirectory()
@@ -230,27 +238,50 @@ export function MissionBoard(props: MissionBoardProps) {
       )
     })
   })
+  const filtersActive = createMemo(() => Boolean(search().trim() || projectDirectory()))
+  const resetFilters = (): void => {
+    setSearch("")
+    setProjectDirectory("")
+    queueMicrotask(() => searchInput?.focus())
+  }
   const laneMissions = (lane: MissionBoardLane) => visibleMissions().filter((mission) => mission.boardLane === lane)
-  const visibleLanes = createMemo(() =>
-    MISSION_BOARD_LANES.filter((lane) => lane !== "attention" || laneMissions(lane).length > 0),
-  )
 
   async function dispatchMission(mission: MissionRecord): Promise<void> {
-    setDispatchingMissionID(mission.missionID)
+    if (pendingAction()) return
+    const generation = ++actionGeneration
+    setActionError("")
+    setPendingAction({ kind: "dispatch", missionID: mission.missionID })
     try {
       await props.onDispatchMission(mission)
+    } catch (nextError) {
+      if (generation === actionGeneration) {
+        setActionError(nextError instanceof Error ? nextError.message : String(nextError))
+      }
     } finally {
-      setDispatchingMissionID("")
+      if (generation === actionGeneration) setPendingAction(null)
     }
   }
 
   async function deleteMission(mission: MissionRecord): Promise<void> {
-    if (deletingMissionID()) return
-    setDeletingMissionID(mission.missionID)
+    if (pendingAction()) return
+    setActionError("")
+    try {
+      if (!(await props.onConfirmDeleteMission(mission))) return
+    } catch (nextError) {
+      setActionError(nextError instanceof Error ? nextError.message : String(nextError))
+      return
+    }
+    if (pendingAction()) return
+    const generation = ++actionGeneration
+    setPendingAction({ kind: "delete", missionID: mission.missionID })
     try {
       await props.onDeleteMission(mission)
+    } catch (nextError) {
+      if (generation === actionGeneration) {
+        setActionError(nextError instanceof Error ? nextError.message : String(nextError))
+      }
     } finally {
-      setDeletingMissionID("")
+      if (generation === actionGeneration) setPendingAction(null)
     }
   }
 
@@ -262,7 +293,9 @@ export function MissionBoard(props: MissionBoardProps) {
             <Icon name="tasks" size="medium" />
           </span>
           <div>
-            <h1 id="missionBoardTitle">{t("mission_board.title")}</h1>
+            <h1 id="missionBoardTitle" tabIndex={-1}>
+              {t("mission_board.title")}
+            </h1>
             <p>{t("mission_board.subtitle")}</p>
           </div>
         </div>
@@ -273,6 +306,7 @@ export function MissionBoard(props: MissionBoardProps) {
             size="sm"
             tone="accent"
             data-ui="mission-board-create"
+            disabled={Boolean(pendingAction())}
             onClick={() => setCreateOpen(true)}
           >
             <Icon name="plus" size="compact" />
@@ -281,6 +315,9 @@ export function MissionBoard(props: MissionBoardProps) {
           <TextField.Root class="mission-board__search" size="sm" variant="search">
             <Icon name="search" size="compact" />
             <TextField.Input
+              ref={(element) => {
+                searchInput = element
+              }}
               value={search()}
               placeholder={t("mission_board.search_placeholder")}
               aria-label={t("mission_board.search_placeholder")}
@@ -314,14 +351,14 @@ export function MissionBoard(props: MissionBoardProps) {
         </div>
       </header>
 
-      <Show when={missionBoardStore.error}>
+      <Show when={actionError()}>
         <div class="mission-board__error" role="alert">
           <span>
-            <strong>{t("mission_board.load_failed")}</strong>
-            <small>{missionBoardStore.error}</small>
+            <strong>{t("mission_board.action_failed")}</strong>
+            <small>{actionError()}</small>
           </span>
-          <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void reloadMissionBoard()}>
-            {t("common.retry")}
+          <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setActionError("")}>
+            {t("common.dismiss")}
           </Button>
         </div>
       </Show>
@@ -336,60 +373,105 @@ export function MissionBoard(props: MissionBoardProps) {
         }
       >
         <Show
-          when={visibleMissions().length > 0}
+          when={!missionBoardStore.error && appStore.connected}
           fallback={
-            <div class="mission-board__state">
-              <Icon name="tasks" size="large" />
-              <strong>{t("mission_board.empty")}</strong>
-              <span>{t("mission_board.empty_description")}</span>
+            <div class="mission-board__state" role="alert">
+              <Icon name="error-reason" size="large" />
+              <strong>{t("mission_board.load_failed")}</strong>
+              <span>{missionBoardStore.error || t("connection.banner_backend_offline")}</span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                onClick={() => void reloadMissionBoard()}
+              >
+                {t("common.retry")}
+              </Button>
             </div>
           }
         >
-          <div
-            class="mission-board__lanes"
-            data-ui="mission-board-lanes"
-            style={`--mission-board-lane-count: ${visibleLanes().length}`}
+          <Show
+            when={visibleMissions().length > 0}
+            fallback={
+              <div class="mission-board__state">
+                <Icon name="tasks" size="large" />
+                <Show
+                  when={missionBoardStore.records.length > 0 && filtersActive()}
+                  fallback={
+                    <>
+                      <strong>{t("mission_board.empty_true")}</strong>
+                      <span>{t("mission_board.empty_true_description")}</span>
+                      <Button type="button" variant="solid" size="sm" tone="accent" onClick={() => setCreateOpen(true)}>
+                        <Icon name="plus" size="compact" />
+                        {t("mission_board.create.action")}
+                      </Button>
+                    </>
+                  }
+                >
+                  <strong>{t("mission_board.empty_filtered")}</strong>
+                  <span>
+                    {t("mission_board.empty_filtered_description", {
+                      search: search().trim() || t("mission_board.filter_none"),
+                      project: selectedProject()?.label ?? t("mission_board.all_projects"),
+                    })}
+                  </span>
+                  <Button type="button" variant="outline" size="sm" tone="neutral" onClick={resetFilters}>
+                    {t("mission_board.reset_filters")}
+                  </Button>
+                </Show>
+              </div>
+            }
           >
-            <For each={visibleLanes()}>
-              {(lane) => (
-                <section class="mission-board-lane" data-lane={lane} aria-labelledby={`missionBoardLane-${lane}`}>
-                  <header class="mission-board-lane__header">
-                    <span class="mission-board-lane__indicator" aria-hidden="true" />
-                    <h2 id={`missionBoardLane-${lane}`}>{t(`mission_board.lane.${lane}`)}</h2>
-                    <Badge size="sm" tone="muted">
-                      {laneMissions(lane).length}
-                    </Badge>
-                  </header>
-                  <div class="mission-board-lane__cards">
-                    <For
-                      each={laneMissions(lane)}
-                      fallback={<div class="mission-board-lane__empty">{t("mission_board.lane_empty")}</div>}
-                    >
-                      {(mission) => (
-                        <MissionBoardCard
-                          mission={mission}
-                          dispatching={dispatchingMissionID() === mission.missionID}
-                          deleting={deletingMissionID() === mission.missionID}
-                          onOpen={() => void props.onOpenMission(mission)}
-                          onDispatch={() => void dispatchMission(mission)}
-                          onDelete={() => void deleteMission(mission)}
-                        />
-                      )}
-                    </For>
-                  </div>
-                </section>
-              )}
-            </For>
-          </div>
+            <div class="mission-board__lanes" data-ui="mission-board-lanes">
+              <For each={MISSION_BOARD_LANES}>
+                {(lane) => (
+                  <section class="mission-board-lane" data-lane={lane} aria-labelledby={`missionBoardLane-${lane}`}>
+                    <header class="mission-board-lane__header">
+                      <span class="mission-board-lane__indicator" aria-hidden="true" />
+                      <h2 id={`missionBoardLane-${lane}`}>{t(`mission_board.lane.${lane}`)}</h2>
+                      <Badge size="sm" tone="muted">
+                        {laneMissions(lane).length}
+                      </Badge>
+                    </header>
+                    <div class="mission-board-lane__cards">
+                      <For
+                        each={laneMissions(lane)}
+                        fallback={<div class="mission-board-lane__empty">{t("mission_board.lane_empty")}</div>}
+                      >
+                        {(mission) => (
+                          <MissionBoardCard
+                            mission={mission}
+                            dispatching={
+                              pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID
+                            }
+                            deleting={
+                              pendingAction()?.kind === "delete" && pendingAction()?.missionID === mission.missionID
+                            }
+                            actionBusy={Boolean(pendingAction())}
+                            onOpen={() => void props.onOpenMission(mission)}
+                            onDispatch={() => void dispatchMission(mission)}
+                            onDelete={() => void deleteMission(mission)}
+                          />
+                        )}
+                      </For>
+                    </div>
+                  </section>
+                )}
+              </For>
+            </div>
+          </Show>
         </Show>
       </Show>
       <MissionCreateDialog
         open={createOpen()}
         projectDirectories={props.projectDirectories}
         defaultProjectDirectory={props.defaultProjectDirectory}
-        productPillar={props.productPillar}
-        expertSquads={props.expertSquads}
-        activeExpertSquadID={props.activeExpertSquadID}
+        onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
+        onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
+        onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
+        onOpenMarketExpertSquad={props.onOpenMarketExpertSquad}
+        canOpenMarketWebPage={props.canOpenMarketWebPage}
         onClose={() => setCreateOpen(false)}
         onCreateManual={props.onCreateManual}
         onCreateWithAI={props.onCreateWithAI}

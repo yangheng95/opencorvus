@@ -43,6 +43,7 @@ const TREE_WRITER_NOOP_TYPES = new Set([
   "mcp.prompts.changed",
   "mcp.resources.changed",
   "task-queue.completed",
+  "scheduler.message",
   "file.watcher.updated",
   "file.watcher.failed",
   "vcs.branch.updated",
@@ -94,6 +95,7 @@ const TREE_WRITER_PROJECTED_EXACT_TYPES = new Set([
   "question.rejected",
   "message.updated",
   "message.part.updated",
+  "message.moved",
   "message.removed",
   "message.part.removed",
   "review.stream.started",
@@ -115,6 +117,7 @@ const BOARD_INVALIDATING_EXACT_TYPES = new Set([
   "task.infrastructure.failed",
   "task.cancelled",
   "task.blocked",
+  "mission.execution.closure",
   "artifact.persisted",
   "agent.execution.lifecycle",
   "session.error",
@@ -135,6 +138,7 @@ const ROUTER_CONSUMED_NOOP_TYPES = new Set([
   "message.injected",
   "mission.handoff",
   "session.diff",
+  "scheduler.message",
 ])
 
 export function isTreeWriterNoopEventType(type: string): boolean {

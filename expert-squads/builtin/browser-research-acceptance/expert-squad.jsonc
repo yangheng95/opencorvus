@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "browser-research-acceptance",
+  "name": "Browser Research & Acceptance",
+  "label": "Browser Research & Acceptance",
+  "description": "Plans bounded browser research, then runs independent real-page observation and criterion-level acceptance workers in parallel.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use when a result depends on current rendered pages, observable browser interaction, and evidence-backed acceptance.",
+    "selection_guidance": "Select this package for browser research or UI acceptance that must inspect a real page, preserve source and screenshot evidence, and reconcile content and interaction findings.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "browser-research-acceptance/shared/browser-evidence-acceptance"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "browser-research-planner": {
+        "label": "Browser Research Planner",
+        "description": "Defines the observable goal, page boundary, evidence matrix, interaction scenarios, and stopping conditions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/browser-research-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "browser-research-acceptance/shared/browser-evidence-acceptance"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "browser-evidence-observer": {
+        "label": "Browser Evidence Observer",
+        "description": "Inspects real pages and records dated claims, visible state, source locators, and screenshots against the research matrix.",
+        "base_role": "frontend-research",
+        "prompt": "agents/browser-evidence-observer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "browser-research-acceptance/shared/browser-evidence-acceptance"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "browser-acceptance-reviewer": {
+        "label": "Browser Acceptance Reviewer",
+        "description": "Independently executes the planned acceptance partition and publishes criterion-level pass, fail, blocked, or unverified decisions.",
+        "base_role": "fact-check",
+        "prompt": "agents/browser-acceptance-reviewer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "browser-research-acceptance/shared/browser-evidence-acceptance"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "browser-evidence-acceptance": {
+        "label": "Planned Parallel Browser Evidence Acceptance",
+        "description": "One Planner fixes the page journey and evidence boundary before observation and acceptance workers execute in parallel.",
+        "nodes": {
+          "browser-research-planner": {
+            "agent_id": "browser-research-planner",
+            "description": "Publishes the exact page journey, viewport, interaction, and evidence acceptance allocation.",
+            "depends_on": []
+          },
+          "browser-evidence-observer": {
+            "agent_id": "browser-evidence-observer",
+            "description": "Captures the planned real-page states, interactions, diagnostics, and screenshots.",
+            "depends_on": [
+              "browser-research-planner"
+            ]
+          },
+          "browser-acceptance-reviewer": {
+            "agent_id": "browser-acceptance-reviewer",
+            "description": "Independently checks the requested browser claims against the planned evidence contract.",
+            "depends_on": [
+              "browser-research-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

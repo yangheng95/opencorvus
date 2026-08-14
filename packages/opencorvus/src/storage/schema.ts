@@ -1,7 +1,9 @@
-export { ControlAccountTable } from "../control/control.sql"
-export { DatabaseAuthorityTable } from "./database.sql"
-export { ChannelIngressReceiptTable } from "../channel/channel.sql"
-export {
+import type { AnySQLiteTable } from "drizzle-orm/sqlite-core"
+import { ControlAccountTable } from "../control/control.sql"
+import { DatabaseAuthorityTable } from "./database.sql"
+import { BusPublicationDeliveryTable, BusPublicationOutboxTable } from "../bus/bus.sql"
+import { ChannelIngressReceiptTable } from "../channel/channel.sql"
+import {
   SessionTable,
   MessageTable,
   PartTable,
@@ -10,19 +12,21 @@ export {
   WorkerTurnDescriptorTable,
   TodoTable,
   TodoSnapshotTable,
-  PermissionTable,
 } from "../session/session.sql"
-export { SessionShareTable } from "../share/share.sql"
-export { ProjectTable } from "../project/project.sql"
-export { WorkspaceTable } from "../workspace/workspace.sql"
-export { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
-export { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "../scheduler/automation.sql"
-export { EventJobTable } from "../scheduler/event.sql"
-export { TaskQueueTable } from "../scheduler/task-queue.sql"
-export { TaskPlanTable } from "../memory/task-plan.sql"
-export { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
-export {
+import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "../permission/permission.sql"
+import { SessionShareTable } from "../share/share.sql"
+import { ProjectTable } from "../project/project.sql"
+import { WorkspaceTable } from "../workspace/workspace.sql"
+import { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
+import { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "../scheduler/automation.sql"
+import { EventJobFireTable, EventJobTable } from "../scheduler/event.sql"
+import { TaskQueueTable } from "../scheduler/task-queue.sql"
+import { TaskPlanTable } from "../memory/task-plan.sql"
+import { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
+import {
   EngineTaskTable,
+  EngineTaskCancellationAuthorityTable,
+  EngineBuildObservationCleanupTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,
@@ -33,7 +37,116 @@ export {
   EngineProgressSnapshotTable,
   EngineChannelBindingTable,
 } from "../engine/engine.sql"
-export { ProtocolEventTable, ProtocolInboxTable } from "../protocol/protocol.sql"
-export { QuickNoteTable } from "../quicknote/quicknote.sql"
-export { DecisionLogTable } from "../decision-log/schema"
-export { EngineMetricSpecTable, EngineMetricResultTable, EngineIterationTable } from "../metrics/metrics.sql"
+import { ProtocolAggregateSequenceTable, ProtocolEventTable, ProtocolInboxTable } from "../protocol/protocol.sql"
+import { QuickNoteTable } from "../quicknote/quicknote.sql"
+import { DecisionLogTable } from "../decision-log/schema"
+import { EngineMetricSpecTable, EngineMetricResultTable, EngineIterationTable } from "../metrics/metrics.sql"
+import { ProviderUsageEventTable } from "../usage/usage.sql"
+
+export {
+  ControlAccountTable,
+  DatabaseAuthorityTable,
+  BusPublicationDeliveryTable,
+  BusPublicationOutboxTable,
+  ChannelIngressReceiptTable,
+  SessionTable,
+  MessageTable,
+  PartTable,
+  InteractiveArtifactTable,
+  SessionControlRecordTable,
+  WorkerTurnDescriptorTable,
+  TodoTable,
+  TodoSnapshotTable,
+  PermissionExecutionResultTable,
+  PermissionLedgerTable,
+  PermissionPolicyTable,
+  SessionShareTable,
+  ProjectTable,
+  WorkspaceTable,
+  MemoryFileTable,
+  MemoryChunkTable,
+  MemoryEmbeddingTable,
+  AutomationProjectTargetTable,
+  AutomationRunTable,
+  AutomationTable,
+  EventJobFireTable,
+  EventJobTable,
+  TaskQueueTable,
+  TaskPlanTable,
+  WorkbenchBriefSnapshotTable,
+  EngineTaskTable,
+  EngineTaskCancellationAuthorityTable,
+  EngineBuildObservationCleanupTable,
+  EngineGoalTable,
+  EngineInteractionRequestTable,
+  EngineArtifactTable,
+  EngineWorkflowNodeOccurrenceTable,
+  EngineBrowserPreviewTargetIdentityTable,
+  EngineArtifactCatalogRevisionTable,
+  EngineArtifactVersionTable,
+  EngineProgressSnapshotTable,
+  EngineChannelBindingTable,
+  ProtocolAggregateSequenceTable,
+  ProtocolEventTable,
+  ProtocolInboxTable,
+  QuickNoteTable,
+  DecisionLogTable,
+  EngineMetricSpecTable,
+  EngineMetricResultTable,
+  EngineIterationTable,
+  ProviderUsageEventTable,
+}
+
+export const ApplicationSchema = {
+  ControlAccountTable,
+  DatabaseAuthorityTable,
+  BusPublicationDeliveryTable,
+  BusPublicationOutboxTable,
+  ChannelIngressReceiptTable,
+  SessionTable,
+  MessageTable,
+  PartTable,
+  InteractiveArtifactTable,
+  SessionControlRecordTable,
+  WorkerTurnDescriptorTable,
+  TodoTable,
+  TodoSnapshotTable,
+  PermissionExecutionResultTable,
+  PermissionLedgerTable,
+  PermissionPolicyTable,
+  SessionShareTable,
+  ProjectTable,
+  WorkspaceTable,
+  MemoryFileTable,
+  MemoryChunkTable,
+  MemoryEmbeddingTable,
+  AutomationProjectTargetTable,
+  AutomationRunTable,
+  AutomationTable,
+  EventJobFireTable,
+  EventJobTable,
+  TaskQueueTable,
+  TaskPlanTable,
+  WorkbenchBriefSnapshotTable,
+  EngineTaskTable,
+  EngineTaskCancellationAuthorityTable,
+  EngineBuildObservationCleanupTable,
+  EngineGoalTable,
+  EngineInteractionRequestTable,
+  EngineArtifactTable,
+  EngineWorkflowNodeOccurrenceTable,
+  EngineBrowserPreviewTargetIdentityTable,
+  EngineArtifactCatalogRevisionTable,
+  EngineArtifactVersionTable,
+  EngineProgressSnapshotTable,
+  EngineChannelBindingTable,
+  ProtocolAggregateSequenceTable,
+  ProtocolEventTable,
+  ProtocolInboxTable,
+  QuickNoteTable,
+  DecisionLogTable,
+  EngineMetricSpecTable,
+  EngineMetricResultTable,
+  EngineIterationTable,
+  ProviderUsageEventTable,
+} as const satisfies Record<string, AnySQLiteTable>

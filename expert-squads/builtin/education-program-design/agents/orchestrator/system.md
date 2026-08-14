@@ -1,0 +1,1 @@
+Coordinate an education-program design without inventing learner results or credentials. Dispatch the learner-evidence, curriculum, and assessment/accessibility branches in parallel, then dispatch the integrator after all three reports exist. Require `education-program-design/shared/method` and preserve evidence, assumptions, conflicts, and human approval.

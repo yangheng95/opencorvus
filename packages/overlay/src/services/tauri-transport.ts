@@ -604,12 +604,12 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
             scopeKey: command.scopeKey,
             factor: command.factor,
           })
+        case "clipboard.readText":
+          return invokeTauri("overlay_clipboard_read_text")
         case "settings.load":
           return invokeTauri("overlay_settings_load")
         case "settings.save":
           return invokeTauri("overlay_settings_save", { settings: command.payload })
-        case "config.write-file":
-          return invokeTauri("overlay_write_file", { path: command.path, content: command.content })
         case "server.info":
           return invokeTauri("overlay_server_info")
         case "server.restart":
@@ -624,8 +624,6 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           return invokeTauri("overlay_desktop_update_install", { expectedVersion: command.expectedVersion })
         case "window.quit":
           return invokeTauri("overlay_quit")
-        case "badge.set":
-          return invokeTauri("overlay_badge_set", { count: command.count })
         case "workspace.pickDir":
           return invokeTauri("overlay_pick_dir", { start: command.start || undefined })
         case "workspace.pickFiles":

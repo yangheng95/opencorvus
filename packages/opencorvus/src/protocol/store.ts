@@ -1,11 +1,11 @@
 import { Identifier } from "@/id/id"
-import { Database, and, asc, desc, eq, gt, lte, or } from "@/storage/db"
+import { Database, and, asc, desc, eq, gt, lte, or, sql } from "@/storage/db"
 import { Context } from "@/util/context"
 import { withKeyedLock } from "@/util/lock"
 import { Log } from "@/util/log"
 import { runOutsideInstanceContext } from "@/project/instance"
 import { SessionTable } from "@/session/session.sql"
-import { ProtocolEventTable } from "./protocol.sql"
+import { ProtocolAggregateSequenceTable, ProtocolEventTable } from "./protocol.sql"
 import type { ProtocolAggregate, ProtocolKind } from "./schema"
 import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
 
@@ -16,6 +16,7 @@ type Payload = Record<string, unknown>
 export type TaskLiveReplayResult = { expired: false; events: EventView[] } | { expired: true; event: EventView }
 
 export type EventInput = {
+  id?: string
   kind: ProtocolKind
   type: string
   aggregate: ProtocolAggregate
@@ -99,7 +100,7 @@ function persistedEventOrderKey(input: EventInput, seq: number, now: number, id:
 }
 
 function insertProtocolEvent(input: EventInput, seq: number, now: number): EventView {
-  const id = Identifier.ascending("protocol_event")
+  const id = Identifier.ascending("protocol_event", input.id)
   const orderKey = persistedEventOrderKey(input, seq, now, id)
   Database.use((db) => {
     if (
@@ -224,7 +225,10 @@ function eventView(row: EventRow) {
     type: row.type,
     aggregate: row.aggregate_type,
     aggregateID: row.aggregate_id,
-    taskID: row.task_id ?? undefined,
+    // Task aggregate identity is immutable protocol authority. `task_id` is
+    // only a nullable relational projection and may be detached on physical
+    // Task deletion without breaking replay or live Task subscriptions.
+    taskID: row.aggregate_type === "task" ? row.aggregate_id : (row.task_id ?? undefined),
     sessionID: row.session_id ?? undefined,
     interactionID: row.interaction_id ?? undefined,
     streamID: row.stream_id ?? undefined,
@@ -427,6 +431,24 @@ export namespace ProtocolStore {
     return row ? eventView(row) : undefined
   }
 
+  export function latestSessionOccurrenceEvent(sessionID: string, type: string, inputMessageID: string) {
+    const row = Database.use((db) =>
+      db
+        .select()
+        .from(ProtocolEventTable)
+        .where(
+          and(
+            eq(ProtocolEventTable.session_id, sessionID),
+            eq(ProtocolEventTable.type, type),
+            sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID') = ${inputMessageID}`,
+          ),
+        )
+        .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
+        .get(),
+    )
+    return row ? eventView(row) : undefined
+  }
+
   export async function appendEvent(input: EventInput) {
     const now = input.emitted_at ?? Date.now()
     const insert = (seq: number) => {
@@ -435,23 +457,23 @@ export namespace ProtocolStore {
       return event
     }
 
-    if (typeof input.seq === "number" && input.seq > 0) {
-      return insert(input.seq)
-    }
-
     return withKeyedLock(eventLocks, eventKey(input), async () =>
-      insert(nextAggregateSequence(input.aggregate, input.aggregate_id)),
+      Database.transaction(() => {
+        const sequence =
+          typeof input.seq === "number" && input.seq > 0
+            ? reserveExplicitAggregateSequence(input.aggregate, input.aggregate_id, input.seq)
+            : nextAggregateSequence(input.aggregate, input.aggregate_id)
+        return insert(sequence)
+      }),
     )
   }
 
   export function appendEventInTransaction(input: EventInput) {
-    if (!Database.hasActiveContext()) {
-      throw new Error("ProtocolStore.appendEventInTransaction requires an active Database transaction")
-    }
+    Database.requireActiveTransaction("ProtocolStore.appendEventInTransaction")
     const now = input.emitted_at ?? Date.now()
     const seq =
       typeof input.seq === "number" && input.seq > 0
-        ? input.seq
+        ? reserveExplicitAggregateSequence(input.aggregate, input.aggregate_id, input.seq)
         : nextAggregateSequence(input.aggregate, input.aggregate_id)
     const event = insertProtocolEvent(input, seq, now)
     Database.effect(() => publishEventSideEffects(input, event))
@@ -461,7 +483,7 @@ export namespace ProtocolStore {
   export function listTaskEventsAfter(taskID: string, sequence: number, opts?: { until?: number; limit?: number }) {
     const conditions = [
       eq(ProtocolEventTable.aggregate_type, "task"),
-      eq(ProtocolEventTable.task_id, taskID),
+      eq(ProtocolEventTable.aggregate_id, taskID),
       gt(ProtocolEventTable.seq, sequence),
     ]
     if (typeof opts?.until === "number") {
@@ -509,7 +531,7 @@ export namespace ProtocolStore {
       db
         .select({ seq: ProtocolEventTable.seq })
         .from(ProtocolEventTable)
-        .where(and(eq(ProtocolEventTable.aggregate_type, "task"), eq(ProtocolEventTable.task_id, taskID)))
+        .where(and(eq(ProtocolEventTable.aggregate_type, "task"), eq(ProtocolEventTable.aggregate_id, taskID)))
         .orderBy(desc(ProtocolEventTable.seq))
         .get(),
     )
@@ -673,13 +695,41 @@ export namespace ProtocolStore {
 }
 
 function nextAggregateSequence(aggregate: ProtocolAggregate, aggregateID: string) {
+  Database.requireActiveTransaction("ProtocolStore.nextAggregateSequence")
   const row = Database.use((db) =>
     db
-      .select({ seq: ProtocolEventTable.seq })
-      .from(ProtocolEventTable)
-      .where(and(eq(ProtocolEventTable.aggregate_type, aggregate), eq(ProtocolEventTable.aggregate_id, aggregateID)))
-      .orderBy(desc(ProtocolEventTable.seq))
+      .insert(ProtocolAggregateSequenceTable)
+      .values({ aggregate_type: aggregate, aggregate_id: aggregateID, next_seq: 1 })
+      .onConflictDoUpdate({
+        target: [ProtocolAggregateSequenceTable.aggregate_type, ProtocolAggregateSequenceTable.aggregate_id],
+        set: { next_seq: sql`${ProtocolAggregateSequenceTable.next_seq} + 1` },
+      })
+      .returning({ sequence: ProtocolAggregateSequenceTable.next_seq })
       .get(),
   )
-  return (row?.seq ?? 0) + 1
+  if (!row) throw new Error(`Protocol aggregate sequence allocation failed for ${aggregate}:${aggregateID}`)
+  return row.sequence
+}
+
+function reserveExplicitAggregateSequence(aggregate: ProtocolAggregate, aggregateID: string, sequence: number) {
+  Database.requireActiveTransaction("ProtocolStore.reserveExplicitAggregateSequence")
+  const row = Database.use((db) =>
+    db
+      .insert(ProtocolAggregateSequenceTable)
+      .values({ aggregate_type: aggregate, aggregate_id: aggregateID, next_seq: sequence })
+      .onConflictDoUpdate({
+        target: [ProtocolAggregateSequenceTable.aggregate_type, ProtocolAggregateSequenceTable.aggregate_id],
+        set: {
+          next_seq: sql`max(${ProtocolAggregateSequenceTable.next_seq}, ${sequence})`,
+        },
+      })
+      .returning({ sequence: ProtocolAggregateSequenceTable.next_seq })
+      .get(),
+  )
+  if (!row || row.sequence !== sequence) {
+    throw new Error(
+      `Protocol aggregate ${aggregate}:${aggregateID} explicit sequence ${sequence} conflicts with reserved ${row?.sequence ?? "missing"}`,
+    )
+  }
+  return sequence
 }

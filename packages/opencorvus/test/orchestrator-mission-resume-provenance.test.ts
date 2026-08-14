@@ -1,9 +1,19 @@
-import { expect, test } from "bun:test"
-import { currentWakeControlProjection, renderWakeProvenanceNotice } from "@/orchestrator/agent"
+import { afterEach, expect, spyOn, test } from "bun:test"
+import {
+  currentOrchestratorControlMessage,
+  isCurrentWakeIngress,
+  renderWakeProvenanceNotice,
+} from "@/orchestrator/agent"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { authorizedTaskRootMessagesForWake } from "@/orchestrator/interaction-tools"
+import { ProtocolStore } from "@/protocol/store"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 
-test("Mission acceptance resume projects one current read and real-decision obligation", () => {
+afterEach(() => {
+  ;(ProtocolStore.requireEvent as { mockRestore?: () => void }).mockRestore?.()
+})
+
+test("Mission acceptance resume projects current message authority and real-decision obligation", () => {
   const messageID = "msg_mission_acceptance_gap"
   const event = OrchestratorEventSchema.parse({
     missionAcceptanceResume: {
@@ -29,35 +39,16 @@ test("Mission acceptance resume projects one current read and real-decision obli
     },
   })
 
-  const notice = renderWakeProvenanceNotice(event, "tsk_current_acceptance")
+  const notice = renderWakeProvenanceNotice(event, "tsk_current_acceptance", "art_current_acceptance_wake")
 
-  expect(notice).toContain(`read_task_message(message_id="${messageID}"`)
+  expect(notice).toContain("Current durable wake occurrence=art_current_acceptance_wake")
+  expect(notice).toContain("mission_id=mission-current-acceptance")
+  expect(notice).toContain("reviewed_terminal_event=pev_reviewed_terminal_occurrence")
+  expect(notice).toContain(`message_id=${messageID}`)
+  expect(notice).toContain("Use the real Message identified above when deciding")
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
-  expect(notice).toContain("a prose-only response")
-
-  const control = currentWakeControlProjection({
-    taskID: "tsk_current_acceptance",
-    event,
-    wakeID: "art_current_acceptance_wake",
-  })
-  expect(control).toMatchObject({
-    messageID: "msg_current_acceptance_wake",
-    author: "mission",
-    wakeReason: {
-      source: "mission.acceptance_resume",
-      wakeID: "art_current_acceptance_wake",
-      taskID: "tsk_current_acceptance",
-      missionAcceptanceResume: event.missionAcceptanceResume,
-    },
-  })
-  expect(control?.text).toContain("# Mission Acceptance Repair Control")
-  expect(control?.text).toContain(`read_task_message(message_id="${messageID}"`)
-  expect(control?.text).toContain("matching real tool call")
-  expect(control?.text).toContain("proves only that the Host accepted a prior request to reopen the Task")
-  expect(control?.text).toContain("not Mission acceptance of deliverables")
-  expect(control?.text).toContain("missionSessionID identifies the originating Mission")
-  expect(control?.text).toContain("actual Task-root Session authority")
+  expect(isCurrentWakeIngress(event)).toBe(true)
 
   expect(authorizedTaskRootMessagesForWake(event)).toEqual([
     {
@@ -67,17 +58,86 @@ test("Mission acceptance resume projects one current read and real-decision obli
     },
   ])
 
-  const retryControl = currentWakeControlProjection({
-    taskID: "tsk_current_acceptance",
-    event: OrchestratorEventSchema.parse({
+  const retryNotice = renderWakeProvenanceNotice(
+    OrchestratorEventSchema.parse({
       taskIntent: {
         kind: "retry",
         actor: "operator",
         supersededOperatorMessageIDs: [],
       },
     }),
-    wakeID: "art_current_retry_wake",
+    "tsk_current_acceptance",
+    "art_current_retry_wake",
+  )
+  expect(retryNotice).toContain("Current durable wake occurrence=art_current_retry_wake")
+  expect(retryNotice).toContain("Current taskIntent=retry; actor=operator")
+  expect(retryNotice).toContain("requested a fresh scheduling decision for the same Task")
+})
+
+test("agent lifecycle delivery projects its exact current occurrence", () => {
+  const requireEvent = spyOn(ProtocolStore, "requireEvent").mockReturnValue({
+    id: "pev_worker_terminal_delivery",
+    kind: "event",
+    type: "agent.execution.lifecycle",
+    aggregate: "session",
+    aggregateID: "ses_worker_terminal_delivery",
+    taskID: "tsk_lifecycle_delivery",
+    sessionID: "ses_worker_terminal_delivery",
+    source: "session.status",
+    sequence: 1,
+    orderKey: "session:0000000000001:msg_worker_terminal_delivery",
+    summary: "Worker completed exact inspection",
+    payload: {
+      sessionID: "ses_worker_terminal_delivery",
+      inputMessageID: "msg_worker_terminal_delivery",
+      status: { type: "terminal", reason: "completed" },
+    },
+    time: { emitted: 1, created: 1, updated: 1 },
+  } as ReturnType<typeof ProtocolStore.requireEvent>)
+  const notice = renderWakeProvenanceNotice(
+    OrchestratorEventSchema.parse({
+      agentLifecycleDelivery: {
+        eventID: "pev_worker_terminal_delivery",
+        sessionID: "ses_worker_terminal_delivery",
+        dispatchID: "dispatch_worker_terminal_delivery",
+      },
+    }),
+    "tsk_lifecycle_delivery",
+    "art_lifecycle_delivery_wake",
+  )
+
+  expect(notice).toContain("Current durable wake occurrence=art_lifecycle_delivery_wake")
+  expect(notice).toContain("CURRENT LIFECYCLE CONTROL FACT")
+  expect(notice).toContain("event_id=pev_worker_terminal_delivery")
+  expect(notice).toContain("session_id=ses_worker_terminal_delivery")
+  expect(notice).toContain("dispatch_id=dispatch_worker_terminal_delivery")
+  expect(notice).toContain("input_message_id=msg_worker_terminal_delivery")
+  expect(notice).toContain("authoritative_status=terminal/completed")
+  expect(notice).toContain("physical_turn_state=settled")
+  expect(notice).toContain("Any earlier assistant text or wait reason")
+  expect(notice).toContain("this terminal fact satisfies that wait")
+  const control = currentOrchestratorControlMessage(
+    OrchestratorEventSchema.parse({
+      agentLifecycleDelivery: {
+        eventID: "pev_worker_terminal_delivery",
+        sessionID: "ses_worker_terminal_delivery",
+        dispatchID: "dispatch_worker_terminal_delivery",
+      },
+    }),
+    "tsk_lifecycle_delivery",
+    "art_lifecycle_delivery_wake",
+  )!
+  expect(control).toMatchObject({
+    ...orchestratorControlOccurrenceIdentity("art_lifecycle_delivery_wake"),
+    extra: {
+      orchestrator_control_ingress: {
+        wake_id: "art_lifecycle_delivery_wake",
+        source_kind: "agent_lifecycle_delivery",
+        fact_id: "pev_worker_terminal_delivery",
+      },
+    },
   })
-  expect(retryControl?.text).toContain("proves only that the Host accepted a prior request to reopen the Task")
-  expect(retryControl?.text).toContain("not Mission acceptance of deliverables")
+  expect(control.text).toContain("CURRENT LIFECYCLE CONTROL FACT")
+  expect(control.text).toContain("authoritative_status=terminal/completed")
+  expect(requireEvent).toHaveBeenCalledWith("pev_worker_terminal_delivery")
 })

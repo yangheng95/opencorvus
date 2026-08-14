@@ -1,0 +1,179 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import { publicPath, type PublicLocale } from "../content/public-market"
+import { generatedExpertSquadDistribution } from "../content/expert-squad-distribution.generated"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: "专家团可信机制 · OpenCorvus",
+        description: "OpenCorvus 当前签名资源包从发布指针、目录、下载字节到客户端安装的真实验证边界。",
+        languageHref: publicPath("root", "/trust/"),
+        eyebrow: "信任来自可重复检查",
+        heading: "不是“相信这个徽章”，而是每一步都能拒绝错误内容。",
+        lead: `当前公开发布包含 ${generatedExpertSquadDistribution.total} 个专家团资源。网页先验证签名目录和下载字节；客户端安装时再次验证能力包。任何一步失败，都不会静默换成另一个文件。`,
+        chainTitle: "当前下载与安装证据链",
+        stages: [
+          ["固定发布身份", "发布指针声明协议版本、发布版本、过期时间、资源数量和精确摘要。"],
+          ["验证 OpenCorvus 发布签名", "浏览器使用内置受信公钥验证 Ed25519 签名；未知 key ID 不计入受信阈值，阈值不足、过期或回滚时拒绝目录。"],
+          ["验证下载字节", "下载按钮只在签名目录通过后启用；ZIP 下载完成后，浏览器重算 SHA-256 并与内容寻址记录比较。"],
+          ["客户端再次严格校验", "导入时重新检查 archive、manifest、身份、路径、引用闭包、工作流拓扑和内容摘要。"],
+          ["安装与激活分离", "Manager 在明确 scope 下原子写入并返回 receipt；安装完成不会自动选择或激活专家团。"],
+        ],
+        current: "当前生效",
+        failureTitle: "校验失败时，保护什么？",
+        failures: [
+          ["网页不会提供未签名替代下载", "签名、版本、过期时间或资源计数不成立时，完整资源包按钮保持禁用。"],
+          ["错误字节不会进入安装", "目录摘要或 ZIP 摘要不一致时立即拒绝，不把“差不多相同”的内容当成同一版本。"],
+          ["现有安装保持不变", "严格校验在原子安装提交或替换前完成；失败不会用半份目录覆盖本地已安装版本。"],
+          ["运行时不会被下载动作改变", "下载不是安装，安装也不是激活；最终选择始终由用户明确完成。"],
+        ],
+        boundaryEyebrow: "当前边界",
+        boundaryTitle: "这证明发布内容来自 OpenCorvus，不等于第三方作者已经被认证。",
+        boundaryBody: "当前签名回答的是“这份目录和资源包是否由 OpenCorvus 发布、传输中是否保持完整”。第三方 namespace 注册、发布者身份认证、独立审核记录和公共撤回服务尚未开放。市场中的精选条目来自仓库当前源码；不要把 OpenCorvus 发布签名误读为对所有未来第三方作者的背书。",
+        catalog: "查看专家团市场",
+        build: "了解如何构建专家团",
+      }
+    : {
+        title: "Expert Squad trust model · OpenCorvus",
+        description: "The real OpenCorvus verification boundary from signed publication pointer and catalog to downloaded bytes and client installation.",
+        languageHref: publicPath("zh-cn", "/trust/"),
+        eyebrow: "Trust comes from repeatable checks",
+        heading: "Do not trust a badge. Make every step able to reject the wrong bytes.",
+        lead: `The current public release contains ${generatedExpertSquadDistribution.total} Expert Squad resources. The page verifies the signed catalog and downloaded bytes first; the client validates each package again during installation. No failed step silently substitutes another file.`,
+        chainTitle: "Current download and installation evidence chain",
+        stages: [
+          ["Bind publication identity", "The pointer declares protocol version, publication version, expiry, resource counts, and exact digests."],
+          ["Verify the OpenCorvus publication signature", "The browser uses an embedded trust root to verify Ed25519 signatures. Unknown key IDs do not count toward the trusted threshold; an insufficient threshold, expiry, or rollback is rejected."],
+          ["Verify downloaded bytes", "The download action enables only after the signed catalog passes. After download, the browser recomputes SHA-256 and compares it with the content-addressed record."],
+          ["Repeat strict validation in the client", "Import rechecks the archive, manifest, identity, paths, reference closure, workflow topology, and content digest."],
+          ["Keep install separate from activation", "The Manager writes atomically under an explicit scope and returns a receipt. Installation never selects or activates the Squad automatically."],
+        ],
+        current: "In force now",
+        failureTitle: "What remains protected when verification fails?",
+        failures: [
+          ["The page offers no unsigned fallback", "The complete-bundle action stays disabled when signature, version, expiry, or resource counts do not match."],
+          ["Wrong bytes never enter installation", "A catalog or ZIP digest mismatch is rejected instead of treating similar content as the same revision."],
+          ["The existing install remains intact", "Strict validation finishes before the atomic install commit or replacement. A failure cannot replace the local revision with a partial directory."],
+          ["A download cannot change runtime behavior", "Download is not install, and install is not activation. Final selection remains explicit."],
+        ],
+        boundaryEyebrow: "Current boundary",
+        boundaryTitle: "This proves OpenCorvus publication integrity. It does not certify a future third-party author.",
+        boundaryBody:
+          "The current signature answers whether the catalog and bundle were published by OpenCorvus and arrived intact. Third-party namespace enrollment, publisher identity, independent review records, and a public withdrawal service are not open yet. Featured market entries come from the current repository source; do not read the OpenCorvus publication signature as an endorsement of every future third-party author.",
+        catalog: "View the Expert Squad market",
+        build: "Learn how to build a Squad",
+      }
+---
+
+<PublicSiteLayout
+  {locale}
+  current="trust"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main trust-page">
+    <section class="utility-intro" aria-labelledby="trust-title">
+      <div><p class="eyebrow">{copy.eyebrow}</p><h1 id="trust-title">{copy.heading}</h1></div>
+      <p class="section-lead">{copy.lead}</p>
+    </section>
+
+    <section class="utility-section" aria-labelledby="trust-chain-title">
+      <p class="eyebrow">{copy.chainTitle}</p>
+      <h2 id="trust-chain-title">{copy.chainTitle}</h2>
+      <ol class="trust-chain trust-chain-current">
+        {copy.stages.map(([title, description], index) => (
+          <li>
+            <span class="chain-number">0{index + 1}</span>
+            <h3>{title}</h3>
+            <p>{description}</p>
+            <span class="status-label">{copy.current}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="utility-section" aria-labelledby="failure-title">
+      <div class="landing-band-header">
+        <h2 id="failure-title">{copy.failureTitle}</h2>
+        <p class="section-lead">{locale === "zh-cn" ? "失败不是一个模糊状态，而是一条不会跨越的边界。" : "Failure is not a vague status. It is a boundary the workflow will not cross."}</p>
+      </div>
+      <div class="state-grid trust-failure-grid">
+        {copy.failures.map(([title, description]) => (
+          <article><h3>{title}</h3><p>{description}</p></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="utility-section trust-boundary" aria-labelledby="trust-boundary-title">
+      <div>
+        <p class="eyebrow">{copy.boundaryEyebrow}</p>
+        <h2 id="trust-boundary-title">{copy.boundaryTitle}</h2>
+      </div>
+      <div>
+        <p class="section-lead">{copy.boundaryBody}</p>
+        <div class="hero-actions">
+          <a class="primary-action" href={publicPath(locale, "/market/")}>{copy.catalog}</a>
+          <a class="secondary-action" href={publicPath(locale, "/publish/")}>{copy.build}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</PublicSiteLayout>
+
+<style>
+  .trust-chain-current {
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 44px;
+  }
+
+  .trust-failure-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .trust-failure-grid h3 {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .trust-boundary {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 72px;
+    background: var(--clay-wash);
+  }
+
+  .trust-boundary .section-lead {
+    margin-top: 0;
+    color: #47352d;
+  }
+
+  @media (max-width: 1099px) {
+    .trust-page .trust-chain-current,
+    .trust-page .trust-failure-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .trust-page .trust-boundary {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .trust-page .trust-chain-current,
+    .trust-page .trust-failure-grid,
+    :global(.trust-page .trust-chain li) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global(.trust-page .trust-chain li) {
+      gap: 10px;
+      min-height: 0;
+      padding: 22px 18px;
+    }
+  }
+</style>

@@ -12,7 +12,7 @@ import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon, type IconName } from "../ui/Icon"
-import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from "./layout"
+import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow, SettingsState } from "./layout"
 
 const ARCHIVE_PAGE_SIZE = 100
 const DELETE_CONFIRM_WINDOW_MS = 3_000
@@ -233,10 +233,8 @@ export default function ArchivePanel() {
 
   return (
     <SettingsPanel ref={panelElement} data-ui="archive-panel" aria-busy={loading() || !!busyID() ? "true" : undefined}>
-      <Show when={error()}>
-        <div class="provider-form-error" role="alert">
-          {error()}
-        </div>
+      <Show when={error() && rows().length > 0}>
+        <SettingsState tone="error">{error()}</SettingsState>
       </Show>
       <SettingsDetailSection
         title={
@@ -247,10 +245,14 @@ export default function ArchivePanel() {
         description={t("archive.description")}
         actions={<Badge tone="muted">{rows().length}</Badge>}
       >
-        <Show
-          when={rows().length > 0}
-          fallback={<SettingsEmpty>{loading() ? t("common.loading") : t("archive.empty")}</SettingsEmpty>}
-        >
+        <Show when={!error() || rows().length > 0} fallback={
+          <SettingsState tone="error" actions={
+            <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void load(false)}>
+              <Icon name="refresh" />{t("common.retry")}
+            </Button>
+          }>{error()}</SettingsState>
+        }>
+        <Show when={rows().length > 0} fallback={<SettingsEmpty>{loading() ? t("common.loading") : t("archive.empty")}</SettingsEmpty>}>
           <For each={rows()}>
             {(row) => (
               <SettingsRow
@@ -315,6 +317,7 @@ export default function ArchivePanel() {
               />
             )}
           </For>
+        </Show>
         </Show>
       </SettingsDetailSection>
       <Show when={nextCursor()}>

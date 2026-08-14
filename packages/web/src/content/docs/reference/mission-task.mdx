@@ -83,7 +83,6 @@ Common fields:
 | `title`         | Task title shown in the UI. The system generates one when omitted.                                   |
 | `promptProfile` | Exact expert-squad package ID to activate for the task; omitted means the configured active package. |
 | `priority`      | `critical`, `high`, `normal`, or `low`.                                                              |
-| `queue`         | `true` enters the directory queue; `false` attempts immediate start.                                 |
 | `attachments`   | Files such as images, PDFs, and text inputs.                                                         |
 | `checks`        | Build, test, visual, and other acceptance checks.                                                    |
 | `metadata`      | Caller-owned metadata.                                                                               |
@@ -124,14 +123,14 @@ curl http://127.0.0.1:7878/task/task_.../status
 
 The response has two status layers:
 
-| Field                | Meaning                                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------------------------- |
-| `status`             | Binary activity state: `running` or `inactive`.                                                           |
-| `lifecycleStatus`    | Diagnostic lifecycle fact: `queued`, `active`, `completed`, `failed`, or `cancelled`.                     |
-| `progress`           | Binary Task activity counts: total, running, inactive, and percent running.                               |
-| `goals[]`            | Stable Delivery Slice identity, current revision contract, and read-only execution/evidence/review/settlement progress. |
-| `sessionInvocationTopology` | Visible parent/child worker-Session invocation topology.                                                     |
-| `error`              | Failure or cancellation details.                                                                          |
+| Field                       | Meaning                                                                                                                 |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `status`                    | Binary activity state: `running` or `inactive`.                                                                         |
+| `lifecycleStatus`           | Diagnostic lifecycle fact: `active`, `completed`, `failed`, or `cancelled`.                                             |
+| `progress`                  | Binary Task activity counts: total, running, inactive, and percent running.                                             |
+| `goals[]`                   | Stable Delivery Slice identity, current revision contract, and read-only execution/evidence/review/settlement progress. |
+| `sessionInvocationTopology` | Visible parent/child worker-Session invocation topology.                                                                |
+| `error`                     | Failure or cancellation details.                                                                                        |
 
 Polling example:
 
@@ -174,12 +173,11 @@ await client.task.message({
 
 `source` is required and should identify the caller, such as `api`, `github-action`, or your integration name. For direct controls, use the explicit routes:
 
-| Action                | Route                                                    |
-| --------------------- | -------------------------------------------------------- |
-| Cancel                | `POST /task/{taskID}/cancel` with `surface` and `reason` |
-| Retry task execution  | `POST /task/{taskID}/retry`                              |
-| Replan                | `POST /task/{taskID}/replan`                             |
-| Start queued task now | `POST /task/{taskID}/start-now`                          |
+| Action               | Route                                                    |
+| -------------------- | -------------------------------------------------------- |
+| Cancel               | `POST /task/{taskID}/cancel` with `surface` and `reason` |
+| Retry task execution | `POST /task/{taskID}/retry`                              |
+| Replan               | `POST /task/{taskID}/replan`                             |
 
 ```typescript
 await client.task.cancel({
@@ -290,12 +288,12 @@ console.log(snapshot.data.status, snapshot.data.taskCounts)
 
 `mission.status` returns the aggregate view of all Tasks under the Mission:
 
-| Field        | Meaning                                     |
-| ------------ | ------------------------------------------- |
-| `status`     | `running` or `inactive`.                    |
-| `taskCounts` | Total, running, and inactive counts.        |
+| Field        | Meaning                                      |
+| ------------ | -------------------------------------------- |
+| `status`     | `running` or `inactive`.                     |
+| `taskCounts` | Total, running, and inactive counts.         |
 | `progress`   | Aggregate activity with the percent running. |
-| `tasks`      | One `TaskStatusDetail` per Task.            |
+| `tasks`      | One `TaskStatusDetail` per Task.             |
 
 ## Download Mission Project
 

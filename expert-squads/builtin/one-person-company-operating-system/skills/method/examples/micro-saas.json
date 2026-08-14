@@ -1,0 +1,299 @@
+{
+  "schema_version": "2020-12/opc-1",
+  "profile_id": "opc-micro-saas-commercial",
+  "profile_version": "2026.08.11.1",
+  "business_model": "micro_saas",
+  "company": {
+    "legal_name": "OPERATOR_SUPPLIED_LEGAL_NAME",
+    "trading_name": "OPERATOR_SUPPLIED_PRODUCT_NAME",
+    "entity_type": "OPERATOR_AND_COUNSEL_SUPPLIED_ENTITY_TYPE",
+    "registration_jurisdictions": ["OPERATOR_SUPPLIED_REGISTRATION_JURISDICTION"],
+    "tax_jurisdictions": ["OPERATOR_AND_TAX_PROFESSIONAL_SUPPLIED_TAX_JURISDICTION"],
+    "tax_professional_ref": "qualified-review/tax-professional"
+  },
+  "owner": {
+    "owner_id": "owner/primary",
+    "approval_identity_ref": "identity/owner-explicit-approval",
+    "self_review": true,
+    "qualified_reviewer_refs": [
+      "qualified-review/legal",
+      "qualified-review/accounting-tax",
+      "qualified-review/security-privacy"
+    ]
+  },
+  "localization": {
+    "time_zone": "Asia/Shanghai",
+    "tzdb_version": "OPERATOR_SUPPLIED_TZDB_VERSION",
+    "functional_currency": "CNY",
+    "display_currencies": ["CNY", "USD"],
+    "locale": "zh-CN",
+    "fiscal_year_start": "01-01"
+  },
+  "operating_state": "validation",
+  "review_cadence": { "frequency": "weekly", "day": "Monday", "local_time": "09:00", "owner": "owner/primary" },
+  "data_sources": [
+    {
+      "source_id": "billing-events",
+      "system_of_record": "billing-provider-export",
+      "locator": "operator-controlled/billing/events",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "secret-ref/billing-readonly",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "invoice_id+payment_id",
+      "data_class": "restricted-commercial",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "subscription-entitlement",
+      "system_of_record": "subscription-and-entitlement-store",
+      "locator": "operator-controlled/product/subscriptions",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "secret-ref/product-readonly",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "customer_id+subscription_id",
+      "data_class": "restricted-customer",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "product-support-telemetry",
+      "system_of_record": "analytics-support-observability",
+      "locator": "operator-controlled/product/evidence",
+      "connector_or_import": "read-only-snapshot",
+      "auth_ref": "secret-ref/telemetry-readonly",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "account_id+event_id",
+      "data_class": "restricted-customer-technical",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "bank-accounting-export",
+      "system_of_record": "bank-and-accounting-controlled-exports",
+      "locator": "operator-controlled/finance/reconciliation",
+      "connector_or_import": "manual-signed-export",
+      "auth_ref": "approval-ref/finance-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "payment_id+amount+currency",
+      "data_class": "highly-restricted-financial",
+      "owner": "owner/primary"
+    }
+  ],
+  "secret_refs": [
+    {
+      "provider": "operator-secret-manager",
+      "alias": "billing-readonly",
+      "scope": "billing-export-readonly",
+      "owner": "owner/primary"
+    },
+    {
+      "provider": "operator-secret-manager",
+      "alias": "product-readonly",
+      "scope": "subscription-entitlement-readonly",
+      "owner": "owner/primary"
+    },
+    {
+      "provider": "operator-secret-manager",
+      "alias": "telemetry-readonly",
+      "scope": "analytics-support-observability-readonly",
+      "owner": "owner/primary"
+    }
+  ],
+  "offer_portfolio": [
+    {
+      "offer_id": "saas-primary-plan",
+      "version": "OPERATOR_SUPPLIED_PLAN_VERSION",
+      "customer_definition": "OPERATOR_SUPPLIED_IDEAL_CUSTOMER_PROFILE",
+      "channel_ids": ["product-site", "owner-led-sales"],
+      "price_currency": "CNY",
+      "approval_required": true
+    }
+  ],
+  "customer_channels": [
+    {
+      "channel_id": "product-site",
+      "channel_type": "owned-web",
+      "system_of_record_ref": "product-support-telemetry",
+      "owner": "owner/primary"
+    },
+    {
+      "channel_id": "owner-led-sales",
+      "channel_type": "direct-conversation",
+      "system_of_record_ref": "subscription-entitlement",
+      "owner": "owner/primary"
+    }
+  ],
+  "pipeline": {
+    "unit": "qualified-account",
+    "stage_definitions": [
+      {
+        "stage_id": "qualified",
+        "entry_rule": "Matches the operator-controlled qualification definition with source evidence",
+        "denominator": "all assessed accounts in the frozen window"
+      },
+      {
+        "stage_id": "activated",
+        "entry_rule": "Meets the operator-controlled activation event definition",
+        "denominator": "qualified accounts eligible for activation"
+      },
+      {
+        "stage_id": "paying",
+        "entry_rule": "Has reconciled subscription, invoice, payment, and entitlement evidence",
+        "denominator": "activated accounts offered the frozen plan version"
+      }
+    ],
+    "source_id": "subscription-entitlement",
+    "owner": "owner/primary"
+  },
+  "delivery_capacity": {
+    "delivery_unit": "supported-active-account",
+    "available_capacity_formula": "owner_supported_account_capacity minus current_supported_accounts minus reserved_migration_and_incident_capacity",
+    "source_id": "product-support-telemetry",
+    "owner": "owner/primary",
+    "uncertainty": "Support and incident demand are variable; use observed window and preserve range"
+  },
+  "cash_controls": {
+    "system_of_record_refs": ["billing-events", "bank-accounting-export"],
+    "reconciliation_key": "invoice_id+payment_id+amount+currency",
+    "functional_currency": "CNY",
+    "owner": "owner/primary",
+    "professional_review_ref": "qualified-review/accounting-tax"
+  },
+  "metric_definitions": [
+    {
+      "metric_id": "reconciled-recurring-revenue",
+      "business_definition": "Recurring amount supported by active subscription, invoice, payment, entitlement, and currency evidence for the cutoff",
+      "formula_version": "opc-1",
+      "numerator": "sum of reconciled recurring amounts",
+      "denominator": "one frozen reporting period",
+      "unit": "CNY/period",
+      "source_id": "billing-events",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Excludes unresolved refunds, disputes, currency conversion, and outcome-unknown events"
+    },
+    {
+      "metric_id": "activation-rate",
+      "business_definition": "Eligible accounts reaching the frozen activation definition",
+      "formula_version": "opc-1",
+      "numerator": "unique activated eligible accounts",
+      "denominator": "unique eligible accounts with complete observation window",
+      "unit": "ratio",
+      "source_id": "product-support-telemetry",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Definition, reporting lag, cohort, and observation-window sensitive"
+    },
+    {
+      "metric_id": "support-backlog-per-active-account",
+      "business_definition": "Open support items per supported active account",
+      "formula_version": "opc-1",
+      "numerator": "open support items at cutoff",
+      "denominator": "supported active accounts at cutoff",
+      "unit": "items/account",
+      "source_id": "product-support-telemetry",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Ticket deduplication and account linkage may be incomplete"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow_id": "release-evidence-draft",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "No external effect; output is a versioned local draft",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "production-deployment-and-data-migration",
+      "owner": "owner/primary"
+    },
+    {
+      "workflow_id": "billing-entitlement-reconciliation",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Read-only event join; no charge, refund, or entitlement mutation",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "payment-refund-entitlement",
+      "owner": "owner/primary"
+    }
+  ],
+  "approval_policy": [
+    {
+      "action_class": "public-claim-and-price",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "contract-terms-and-privacy",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "payment-refund-entitlement",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "production-deployment-and-data-migration",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "customer-data-export-deletion-and-permission",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    }
+  ],
+  "observability": {
+    "signals": ["logs", "metrics", "traces", "business_events"],
+    "event_schema": "opc-observability-event-v1",
+    "correlation_id_required": true,
+    "input_digest_required": true,
+    "approval_ref_required": true,
+    "external_effect_required": true,
+    "outcome_unknown_supported": true,
+    "owner": "owner/primary"
+  },
+  "retention_policy_ref": "operator-and-qualified-professional-controlled/record-retention-policy",
+  "continuity": {
+    "owner": "owner/primary",
+    "critical_source_refs": ["billing-events", "subscription-entitlement", "bank-accounting-export"],
+    "recovery_evidence_ref": "operator-controlled/continuity/recovery-evidence",
+    "manual_workaround_ref": "operator-controlled/continuity/manual-workaround",
+    "last_reviewed": "2026-08-11",
+    "uncertainty": "Recovery objectives and test status require operator evidence"
+  },
+  "uncertainty": [
+    "All targets, thresholds, jurisdictions, prices, taxes, obligations, and service promises require operator or qualified-professional sources"
+  ],
+  "applicability": ["Owner-operated subscription software business using reconciled read-only evidence"],
+  "stop_conditions": [
+    "Plaintext credential or unauthorized source",
+    "Unknown jurisdiction or approval owner",
+    "Unreconciled payment, refund, entitlement, deployment, or deletion outcome",
+    "Request for live external action"
+  ]
+}

@@ -1,33 +1,41 @@
-# Security, Permission, and Metric-Evaluator Boundaries
+# Security and Permission Boundaries
 
-## Recall
+## Current authority
 
-- User request: the repository was largely AI-authored and likely contains unprofessional architecture abstractions. The user requested multiple-agent investigation, a high-quality solution, review, then repair in an isolated worktree.
-- Acceptance indicators: P0 security and permission defects from the remediation plan are fixed on a branch-local worktree; current architecture authority exists under `specs/current/architecture/**`; focused tests cover the repaired behavior; an independent read-only review finds no unresolved issues.
-- Hard constraints: do not preserve fallback or compatibility paths; do not use host workflow gates to teach LLM flow; all LLM calls remain streaming; messages and logs must not synthesize or leak hidden sensitive content; no UI automation applies to this backend-only batch.
-- Read materials: `specs/records/2026-08/2026-08-09-architecture-debt-remediation-plan.md`, `packages/opencorvus/src/permission/next.ts`, `packages/opencorvus/src/session/llm.ts`, `packages/opencorvus/src/mcp/**`, `packages/opencorvus/src/server/error-handler.ts`, `packages/opencorvus/src/metrics/**`, `packages/plugin/src/metric-evaluation.ts`, and the Evolution Lab scorer contract artifacts.
-- Whole-repository search results: security-sensitive findings were located in permission approval merging, LLM telemetry options, MCP OAuth logging, server unknown-error responses, and raw SQL metric query evaluators. No earlier `specs/current/architecture/**` authority existed in the isolated worktree before this repair.
-- Independent agent feedback: three read-only reviews of the first P0 implementation found no unresolved issue at that time. A later whole-repository rescan found reachable bypasses and regressions; the P0.1 contract below supersedes the incomplete first-batch closure. Three P0.1 reviews found callback-validation, credential-output, control-flow-test, ignored-spec-delivery, malformed-callback-lifecycle, database-order evidence, and early callback-rejection handling gaps. All findings were corrected; the fourth independent review reported zero unresolved findings.
+1. Operator authorization has exactly two modes: `full_access` (shown as **Full access**, the default) and `ask` (shown as **Ask me**). The effective mode is persisted per Session at its first permission-bearing invocation, so a config reload cannot silently change an active Session's authority.
+2. Tool installation, agent assignment, Skill enablement, per-message switches, and Session Tool projection are capability controls. They use `CapabilityRules` (`allow | deny`) and are not operator authorization.
+3. Every executable built-in, plugin, Skill, Model Context Protocol (MCP), MCP App, Browser, Computer, projected, scheduled, or external provider crosses `withTaskToolInvocation`, which delegates to `PermissionAuthority.authorizeAndExecute` before the physical effect. Each `batch` child crosses the boundary separately.
+4. `Ask me` pauses concrete write, process, network, external-effect, credential-release, or destructive invocations. Ordinary canonical reads inside the exact project and host-owned observation/control-plane operations do not prompt. Reads outside the project become permission-bearing.
+5. `Full access` bypasses OpenCorvus authorization prompts for every Tool and MCP invocation, but it does not bypass identity, authentication, canonical-path, stale-runtime, Task ownership, or data-integrity checks.
 
-## Authority
+## Exact scope and decisions
 
-1. Current request rules are the highest permission authority. Persistent user approvals are lower-priority grants and cannot override a current `deny` or `ask` rule.
-2. LLM telemetry may record operational metadata by default. Prompt, message, response, and tool content capture is disabled unless a future explicit product contract introduces a separate opt-in authority.
-3. OAuth logs may record flow phase, MCP server identity, authorization host, callback path, booleans, error code strings, and pending counts. Logs must not record full authorization URLs, OAuth `state`, authorization `code`, token values, or lists of pending states.
-4. Public unknown HTTP errors return a stable `UnknownError` body with a generic message. The request identifier is exposed through `x-opencorvus-request-id` and logged server-side with the full diagnostic.
-5. Query metric evaluators are typed named projections, not arbitrary SQL. They may emit a constant measurement or read a declared column from an existing metric result for a relative iteration.
+The invocation descriptor binds provider kind and identity, provider/config digest, Tool identity, effect class, redacted normalized arguments, an exact argument hash, and a scope-schema version. Any material change produces a new fingerprint and therefore a new request.
 
-## P0.1 Closure
+`Ask me` can offer:
 
-1. Pending permission requests retain the current ruleset used at admission. Direct requests and `always` propagation use the same evaluator; persisted approvals cannot settle a request whose current decision is `ask` or `deny`.
-2. Public error identity is determined by typed error identity, not HTTP status alone. `UnknownError` and unclassified exceptions receive the generic response; other typed errors preserve their public name at status 500.
-3. Same-iteration metric dependencies read only results produced by the current evaluation occurrence and follow a deterministic dependency order. Cross-iteration dependencies read durable history. Cycles settle as typed unavailable measurements without historical fallback.
-4. YAML frontmatter parse and stringify use the same explicit js-yaml v4 engine.
-5. Credential diagnostics expose presence and expiry only. Streaming error events expose a generic public message and request id while private logs retain the exception.
-6. OAuth correlation identifiers are random flow metadata independent of OAuth state and are present in start and callback diagnostics without exposing authorization secrets.
+- `allow_once`: the exact invocation;
+- `allow_task`: the exact typed scope within the owning Task;
+- `allow_project`: the exact typed scope within the project, only for canonical built-in local reads and a normalized built-in `webfetch` endpoint;
+- `deny`: the exact request.
 
-## Non-Goals
+Destructive, credential-release, and general external-effect operations cannot receive project-wide grants. Revocation appends a ledger fact and prevents later grant use.
 
-- This document does not define every server route or metric kind.
-- This batch does not rewrite historical dated records.
-- This batch does not alter UI behavior or UI validation.
+## Durable ledger and recovery
+
+`permission_policy` freezes the Session mode and revision. `permission_ledger` is the append-only single source of truth for requests, decisions, grant creation/use/revocation, Full-access admission, execution starts, terminal outcomes, and unknown outcomes. Unique decision, execution-start, and outcome slots enforce compare-and-set settlement and at-most-once execution admission.
+
+The ledger stores redacted scope plus hashes; it must not store tokens, cookies, passwords, authorization headers, OAuth secrets, secret environment values, or complete sensitive content.
+
+Pending requests survive process release and project restart. A later client can settle the same durable request. A started attempt without a terminal result becomes `outcome_unknown`; the same attempt is not blindly replayed. Engine interaction rows are presentation projections that reference the ledger request rather than a second approval authority.
+
+## Transport contract
+
+The Overlay, Application Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.
+
+## Adjacent security boundaries
+
+- Large Language Model telemetry may record operational metadata; prompt, message, response, and Tool content capture remains disabled without a separate opt-in contract.
+- OAuth diagnostics may record server/host/correlation metadata but never authorization URLs, state, code, token values, or pending-state lists.
+- Public unknown HTTP errors use a generic body and a request identifier; full diagnostics remain server-side.
+- Query metric evaluators remain typed named projections rather than arbitrary Structured Query Language (SQL).

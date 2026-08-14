@@ -1,13 +1,17 @@
 import { createHash, randomUUID } from "node:crypto"
-import { readFile } from "node:fs/promises"
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises"
+import path from "node:path"
 import type { ToolContext, ToolHost } from "@opencorvus-ai/plugin"
-import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
+import { resolveBrowserNodeSidecarRuntime } from "@/browser/runtime/node-sidecar"
+import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
 import { ExecutionCapsuleRuntimeUnavailableError, activeExecutionCapsuleRuntimeFact } from "@/execution-capsule/runtime"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { which } from "@/util/which"
 import type { PackageToolBundle } from "./package-tool-bundle"
 
 // RPC means Remote Procedure Call. JSON means JavaScript Object Notation.
 const RPC_PREFIX = "\u001eopencorvus-package-tool-rpc-v1:"
+const NATIVE_PACKAGE_TOOL_INACTIVITY_MS = 300_000
 
 type CapsuleContext = Pick<
   ToolContext,
@@ -223,6 +227,24 @@ process.stdout.write = process.stderr.write.bind(process.stderr);
 const send = (message) => rpcWrite(prefix + JSON.stringify(message) + "\n");
 const pending = new Map();
 let callSequence = 0;
+let terminalSent = false;
+
+function releaseTerminalInput() {
+  lines.close();
+  process.stdin.pause();
+  if (typeof process.stdin.unref === "function") process.stdin.unref();
+}
+function sendTerminal(message) {
+  if (terminalSent) return Promise.resolve();
+  terminalSent = true;
+  return new Promise((resolve, reject) => {
+    rpcWrite(prefix + JSON.stringify(message) + "\n", (error) => {
+      releaseTerminalInput();
+      if (error) reject(error);
+      else resolve();
+    });
+  });
+}
 
 function fileTypes(types) {
   return Object.fromEntries(Object.entries(types).map(([name, value]) => [name, () => value === true]));
@@ -290,12 +312,36 @@ async function loadDefinition(start) {
   const bytes = Buffer.from(start.bundle, "base64");
   const actual = crypto.createHash("sha256").update(bytes).digest("hex");
   if (actual !== start.bundleSHA256) throw new Error("Package tool compiled bundle digest mismatch inside Task Capsule");
-  const location = path.join("/tmp", "opencorvus-package-tool-" + start.bundleSHA256 + ".mjs");
-  await fs.writeFile(location, bytes, { flag: "wx" }).catch(async (error) => {
-    if (!error || error.code !== "EEXIST") throw error;
-    const existing = await fs.readFile(location);
-    if (crypto.createHash("sha256").update(existing).digest("hex") !== start.bundleSHA256) throw error;
+  const location = path.join(start.workerRuntimeDirectory, "opencorvus-package-tool-" + start.bundleSHA256 + ".mjs");
+  const existing = await fs.readFile(location).catch((error) => {
+    if (error && error.code === "ENOENT") return undefined;
+    throw error;
   });
+  if (existing) {
+    if (crypto.createHash("sha256").update(existing).digest("hex") !== start.bundleSHA256) {
+      throw new Error("Package tool materialized bundle cache digest mismatch");
+    }
+  } else {
+    const temporary = location + "." + process.pid + "." + crypto.randomUUID() + ".tmp";
+    try {
+      await fs.writeFile(temporary, bytes, { flag: "wx" });
+      try {
+        await fs.rename(temporary, location);
+      } catch (error) {
+        const target = await fs.readFile(location).catch((readError) => {
+          if (readError && readError.code === "ENOENT") return undefined;
+          throw readError;
+        });
+        if (!target || crypto.createHash("sha256").update(target).digest("hex") !== start.bundleSHA256) throw error;
+      }
+    } finally {
+      await fs.rm(temporary, { force: true });
+    }
+  }
+  const materialized = await fs.readFile(location);
+  if (crypto.createHash("sha256").update(materialized).digest("hex") !== start.bundleSHA256) {
+    throw new Error("Package tool materialized bundle cache digest mismatch");
+  }
   const imported = await import(pathToFileURL(location).href);
   const definition = imported.default;
   if (!definition || typeof definition !== "object" || typeof definition.introspect !== "function" || typeof definition.execute !== "function") {
@@ -312,7 +358,7 @@ async function main(start) {
     if (!result || typeof result.description !== "string" || !result.inputSchema || typeof result.inputSchema !== "object") {
       throw new Error("Package tool introspection returned an invalid description or JSON Schema");
     }
-    send({ kind: "result", value: await encode(result) });
+    await sendTerminal({ kind: "result", value: await encode(result) });
     return;
   }
   let title = "";
@@ -325,18 +371,25 @@ async function main(start) {
       if (update && update.metadata !== undefined) metadata = { ...metadata, ...update.metadata };
     },
   };
-  const output = await definition.execute(decode(start.args), context);
+  const args = definition.inputSchema.parse(decode(start.args));
+  const output = await definition.execute(args, context);
   if (typeof output !== "string") throw new Error("Package tool returned non-string output");
-  send({ kind: "result", value: await encode({ output, title, metadata }) });
+  await sendTerminal({ kind: "result", value: await encode({ output, title, metadata }) });
 }
 const lines = readline.createInterface({ input: process.stdin, crlfDelay: Infinity });
 let started = false;
 lines.on("line", (line) => {
   let message;
-  try { message = JSON.parse(line); } catch (error) { send({ kind: "failure", error: { name: error.name, message: error.message } }); return; }
+  try { message = JSON.parse(line); } catch (error) {
+    void sendTerminal({ kind: "failure", error: { name: error.name, message: error.message } }).catch(() => { process.exitCode = 1; });
+    return;
+  }
   if (!started) {
     started = true;
-    void main(message).catch((error) => send({ kind: "failure", error: { name: error && error.name, message: error && error.message || String(error), code: error && error.code, path: error && error.path, syscall: error && error.syscall } }));
+    void main(message).catch((error) =>
+      sendTerminal({ kind: "failure", error: { name: error && error.name, message: error && error.message || String(error), code: error && error.code, path: error && error.path, syscall: error && error.syscall } })
+        .catch(() => { process.exitCode = 1; })
+    );
     return;
   }
   if (message.kind === "host_result" || message.kind === "host_failure") {
@@ -349,6 +402,66 @@ lines.on("line", (line) => {
 });
 `
 
+const nativeWorkerPublications = new Map<string, Promise<string>>()
+
+async function nativePackageToolWorkerPath(prepared: PackageToolBundle.Prepared): Promise<string> {
+  const worker = Buffer.from(WORKER_SOURCE, "utf8")
+  const digest = sha256(worker)
+  const file = path.join(path.dirname(prepared.bundlePath), `package-tool-worker-${digest}.cjs`)
+  const active = nativeWorkerPublications.get(digest)
+  if (active) return active
+  const publication = (async () => {
+    const existing = await readFile(file).catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return undefined
+      throw error
+    })
+    if (existing) {
+      if (sha256(existing) !== digest) {
+        throw new ExecutionCapsuleRuntimeUnavailableError(
+          "Package tool native worker digest does not match its runtime source",
+        )
+      }
+      return file
+    }
+
+    await mkdir(path.dirname(file), { recursive: true })
+    const temporary = path.join(path.dirname(file), `.${digest}.${process.pid}.${randomUUID()}.tmp`)
+    try {
+      await writeFile(temporary, worker, { flag: "wx" })
+      await rename(temporary, file)
+    } catch (error) {
+      const target = await readFile(file).catch((readError: NodeJS.ErrnoException) => {
+        if (readError.code === "ENOENT") return undefined
+        throw readError
+      })
+      if (!target || sha256(target) !== digest) throw error
+    } finally {
+      await rm(temporary, { force: true })
+    }
+    if (sha256(await readFile(file)) !== digest) {
+      throw new ExecutionCapsuleRuntimeUnavailableError(
+        "Package tool native worker digest does not match its runtime source",
+      )
+    }
+    return file
+  })()
+  nativeWorkerPublications.set(digest, publication)
+  try {
+    return await publication
+  } finally {
+    nativeWorkerPublications.delete(digest)
+  }
+}
+
+export function nativePackageToolEnvironment(): NodeJS.ProcessEnv {
+  if (process.platform !== "win32") return {}
+  const systemRoot = process.env.SystemRoot ?? process.env.SYSTEMROOT
+  if (!systemRoot) {
+    throw new ExecutionCapsuleRuntimeUnavailableError("Native Windows package tools require the SystemRoot runtime fact")
+  }
+  return { SystemRoot: systemRoot }
+}
+
 async function runCapsule(input: {
   prepared: PackageToolBundle.Prepared
   taskID: string
@@ -360,8 +473,24 @@ async function runCapsule(input: {
   abort?: AbortSignal
 }): Promise<unknown> {
   if (input.abort?.aborted) throw input.abort.reason
-  const runtime = await activeExecutionCapsuleRuntimeFact()
-  if (!runtime) throw new ExecutionCapsuleRuntimeUnavailableError("Package tool requires an active Task Capsule runtime")
+  const execution = await resolveTaskProcessExecution({ taskID: input.taskID, cwd: input.cwd })
+  const capsuleRuntime = execution.kind === "task_capsule" ? await activeExecutionCapsuleRuntimeFact() : undefined
+  if (execution.kind === "task_capsule" && !capsuleRuntime) {
+    throw new ExecutionCapsuleRuntimeUnavailableError("Package tool Task Capsule runtime is unavailable")
+  }
+  const nativeNode =
+    execution.kind === "task_native" ? (await resolveBrowserNodeSidecarRuntime()).nodeExecutable : undefined
+  const executable =
+    capsuleRuntime?.nodePath ??
+    (nativeNode && (path.isAbsolute(nativeNode) ? nativeNode : which(nativeNode))) ??
+    undefined
+  if (!executable) {
+    throw new ExecutionCapsuleRuntimeUnavailableError("Package tool native Node runtime is unavailable")
+  }
+  const inactivityMs = capsuleRuntime?.packageToolInactivityMs ?? NATIVE_PACKAGE_TOOL_INACTIVITY_MS
+  const nativeWorker = execution.kind === "task_native" ? await nativePackageToolWorkerPath(input.prepared) : undefined
+  const args = nativeWorker ? [nativeWorker] : ["-e", WORKER_SOURCE]
+  const workerRuntimeDirectory = nativeWorker ? path.dirname(nativeWorker) : "/tmp"
   const bundle = await readFile(input.prepared.bundlePath)
   if (sha256(bundle) !== input.prepared.snapshot.compiledBundleSHA256) {
     throw new ExecutionCapsuleRuntimeUnavailableError(
@@ -369,9 +498,9 @@ async function runCapsule(input: {
     )
   }
   const handle = await ProcessSupervisor.spawnTaskCommand({ taskID: input.taskID, cwd: input.cwd }, {
-    executable: runtime.nodePath,
-    args: ["-e", WORKER_SOURCE],
-    env: {},
+    executable,
+    args,
+    env: execution.kind === "task_capsule" ? {} : nativePackageToolEnvironment(),
     stdin: "pipe",
     owner: `package-tool:${input.prepared.snapshot.ref}`,
   })
@@ -390,10 +519,10 @@ async function runCapsule(input: {
     inactivityTimer = setTimeout(() => {
       rejectResult(
         new ExecutionCapsuleRuntimeUnavailableError(
-          `Package tool ${input.prepared.snapshot.ref} produced no process or RPC activity for ${runtime.packageToolInactivityMs}ms`,
+          `Package tool ${input.prepared.snapshot.ref} produced no process or RPC activity for ${inactivityMs}ms`,
         ),
       )
-    }, runtime.packageToolInactivityMs)
+    }, inactivityMs)
   }
   handle.stderr?.setEncoding("utf8")
   handle.stderr?.on("data", (chunk) => {
@@ -461,11 +590,13 @@ async function runCapsule(input: {
     invocationID: randomUUID(),
     bundle: bundle.toString("base64"),
     bundleSHA256: input.prepared.snapshot.compiledBundleSHA256,
+    workerRuntimeDirectory,
     managedRuntimeDirectory: input.host?.managedRuntimeDirectory,
     context: await encode(input.context),
     args: await encode(input.args),
   })
-  const exited = handle.exited.then((exitCode) => {
+  const exited = handle.exited.then(async (exitCode) => {
+    await (handle.outputSettled ?? Promise.resolve())
     if (!settled) {
       rejectResult(
         new ExecutionCapsuleRuntimeUnavailableError(

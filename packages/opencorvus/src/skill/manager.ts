@@ -6,7 +6,7 @@ import { Config } from "@/config/config"
 import { ConfigMarkdown } from "@/config/markdown"
 import { updateGlobalConfigPatchAtomic } from "@/config/update-global"
 import { Global } from "@/global"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Instance } from "@/project/instance"
 import { Filesystem } from "@/util/filesystem"
 import { Glob } from "@/util/glob"
@@ -25,7 +25,7 @@ import { createInstanceState } from "@/project/instance-state"
 const MANIFEST = ".opencorvus-skill-source.json"
 const log = Log.create({ service: "skill-manager" })
 export namespace SkillManager {
-  export const Policy = PermissionNext.Action
+  export const Policy = CapabilityRules.Action
   export const Trust = z.enum(["builtin", "official", "curated", "community", "local", "external", "unknown"])
   export const Risk = z.object({
     level: z.enum(["low", "medium", "high"]),
@@ -148,7 +148,7 @@ export namespace SkillManager {
       source: "https://github.com/openai/skills.git",
       install_kind: "git",
       trust: "official",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Installable as a Git source; review individual skills before allowing always.",
     },
     {
@@ -160,7 +160,7 @@ export namespace SkillManager {
       source: "https://github.com/anthropics/skills.git",
       install_kind: "git",
       trust: "official",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Official source, but still prefer ask-by-default for script-bearing skills.",
     },
     {
@@ -171,7 +171,7 @@ export namespace SkillManager {
       homepage: "https://skills.sh",
       install_kind: "manual",
       trust: "curated",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Best used to discover repo URLs, then install via Git source in OpenCorvus.",
     },
     {
@@ -182,7 +182,7 @@ export namespace SkillManager {
       homepage: "https://skillstore.io",
       install_kind: "manual",
       trust: "curated",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Useful discovery surface; installation method depends on the linked repository.",
     },
     {
@@ -193,42 +193,15 @@ export namespace SkillManager {
       homepage: "https://skills.pub",
       install_kind: "manual",
       trust: "community",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Community directory only; import the referenced repo or path after review.",
     },
   ]
 
-  /**
-   * 返回市场条目：内置默认 + 从配置的 registry URL 动态拉取。
-   * registry URL 应返回不含 installed 的市场条目 JSON 数组；installed 由服务端根据真实安装来源计算。
-   */
+  /** Returns the built-in market catalog with live installation projection. */
   export async function market() {
     const entries = [...BUILTIN_MARKET]
     const global = await Config.getGlobal()
-    const registries = ((global?.skills as Record<string, unknown> | undefined)?.registries ?? []) as string[]
-    const seenIDs = new Set(entries.map((e) => e.id))
-
-    // 并行拉取所有配置的 registry
-    const fetched = await Promise.all(
-      registries.map(async (url: string) => {
-        try {
-          const resp = await fetch(url, { signal: AbortSignal.timeout(10_000) })
-          if (!resp.ok) return []
-          const data = await resp.json()
-          return MarketListing.array().parse(data)
-        } catch {
-          return []
-        }
-      }),
-    )
-    for (const list of fetched) {
-      for (const entry of list) {
-        if (!seenIDs.has(entry.id)) {
-          entries.push(entry)
-          seenIDs.add(entry.id)
-        }
-      }
-    }
 
     return MarketEntry.array().parse(
       await Promise.all(
@@ -253,13 +226,16 @@ export namespace SkillManager {
       return await Promise.all(
         (await Skill.all()).map(async (skill) => {
           const dir = skill.builtin ? undefined : path.dirname(skill.location)
+          const remoteSource = dir ? await Discovery.publishedSnapshotSource(dir) : undefined
           const manifest = !skill.builtin && dir ? await readManifest(dir, root, cache) : undefined
           const sourceType = skill.builtin
             ? "builtin"
+            : remoteSource
+              ? "config_url"
             : dir
               ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
               : "builtin"
-          const trust = trustFor(skill, manifest?.source)
+          const trust = trustFor(skill, remoteSource ?? manifest?.source)
           const risk = skill.builtin
             ? Skill.builtinRisk(skill.name)
             : dir
@@ -281,6 +257,7 @@ export namespace SkillManager {
                   ? ("config_url" as const)
                   : sourceType,
             source:
+              remoteSource ??
               manifest?.source ??
               (sourceType === "config_path"
                 ? configuredPaths.find((item) => Filesystem.contains(item, dir!))
@@ -290,7 +267,7 @@ export namespace SkillManager {
             risk,
             recommended_policy: recommendedPolicy(trust, risk),
             managed: !!dir && Filesystem.contains(root, dir),
-            writable: !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
+            writable: !remoteSource && !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
           }
         }),
       )
@@ -306,12 +283,12 @@ export namespace SkillManager {
 
   export async function installed() {
     const global = await Config.getGlobal()
-    const rules = PermissionNext.fromConfig(global.permission ?? {})
+    const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
 
     return Installed.array().parse(
       (await installedInventoryState()).map((skill) => ({
         ...skill,
-        policy: PermissionNext.evaluate("skill", skill.name, rules).action,
+        policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
       })),
     )
   }
@@ -359,15 +336,6 @@ export namespace SkillManager {
         throw new Error(`No skills discovered from ${value}`)
       }
       const definitions = (await Promise.all(pulled.map(validateSkillDirectory))).flat()
-      await Promise.all(
-        pulled.map((dir) =>
-          Filesystem.writeJson(path.join(dir, MANIFEST), {
-            kind: "url",
-            source: value,
-            installed_at: Date.now(),
-          }),
-        ),
-      )
       await patchGlobal((next) => {
         next.skills = next.skills || {}
         next.skills.urls = dedupe([...(next.skills.urls ?? []), value])
@@ -685,7 +653,7 @@ async function patchGlobal(mutator: (next: z.infer<typeof Config.Info>) => void)
     mutator(next)
     return {
       skills: next.skills,
-      permission: next.permission,
+      skill_policy: next.skill_policy,
     }
   })
 }
@@ -701,21 +669,17 @@ function applyPolicyToConfig(
   names: string[],
   policy: z.infer<typeof SkillManager.Policy>,
 ) {
-  if (typeof next.permission !== "object" || !next.permission) next.permission = {}
-  const current = next.permission.skill
-  const table: Record<string, Config.PermissionAction> =
-    typeof current === "string" ? { "*": current } : current && typeof current === "object" ? { ...current } : {}
+  const table: Record<string, Config.PermissionAction> = { ...(next.skill_policy ?? {}) }
   for (const name of new Set(names)) {
     table[name] = policy
   }
-  next.permission.skill = table
+  next.skill_policy = table
 }
 
-function sourceTypeFor(dir: string, configuredPaths: string[], cache: string, kind?: string) {
+function sourceTypeFor(dir: string, configuredPaths: string[], _cache: string, kind?: string) {
   if (kind === "git") return "managed_git"
   if (kind === "url") return "config_url"
   if (Filesystem.contains(SkillManager.managedRoot(), dir)) return "managed_git"
-  if (Filesystem.contains(cache, dir)) return "config_url"
   if (configuredPaths.some((item) => Filesystem.contains(item, dir))) return "config_path"
   if (
     dir.includes(`${path.sep}.claude${path.sep}`) ||
@@ -730,11 +694,7 @@ function sourceTypeFor(dir: string, configuredPaths: string[], cache: string, ki
 
 function trustFor(skill: Skill.Info, source?: string) {
   if (skill.builtin) return "builtin" as const
-  if (source?.includes("github.com/openai/skills")) return "official" as const
-  if (source?.includes("github.com/anthropics/skills")) return "official" as const
-  if (source?.includes("skills.sh")) return "curated" as const
-  if (source?.includes("skillstore.io")) return "curated" as const
-  if (source?.includes("skills.pub")) return "community" as const
+  if (source !== undefined) return trustForSource(source)
   if (
     skill.location.includes(`${path.sep}.claude${path.sep}`) ||
     skill.location.includes(`${path.sep}.agents${path.sep}`) ||
@@ -746,6 +706,74 @@ function trustFor(skill: Skill.Info, source?: string) {
   }
   if (skill.location !== "builtin") return "local" as const
   return "unknown" as const
+}
+
+const TRUSTED_GITHUB_REPOSITORIES: ReadonlyMap<string, "official"> = new Map([
+  ["openai/skills", "official"],
+  ["anthropics/skills", "official"],
+] as const)
+
+const TRUSTED_HTTPS_HOSTS: ReadonlyMap<string, "curated" | "community"> = new Map([
+  ["skills.sh", "curated"],
+  ["skillstore.io", "curated"],
+  ["skills.pub", "community"],
+] as const)
+
+function trustForSource(source: string): z.infer<typeof SkillManager.Trust> {
+  if (source !== source.trim()) return "unknown"
+
+  const scp = /^git@github\.com:([a-z0-9_.-]+)\/([a-z0-9_.-]+?)(?:\.git)?\/?$/i.exec(source)
+  if (scp) return trustForGitHubRepository(scp[1]!, scp[2]!)
+
+  const authorityStart = source.indexOf("://") + 3
+  const authorityEnd = [source.indexOf("/", authorityStart), source.indexOf("?", authorityStart), source.indexOf("#", authorityStart)]
+    .filter((index) => index !== -1)
+    .sort((left, right) => left - right)[0]
+  const authority = source.slice(authorityStart, authorityEnd)
+  const exactGitHubSshAuthority = /^git@github\.com(?::22)?$/i.test(authority)
+  if (source.includes("?") || source.includes("#") || (authority.includes("@") && !exactGitHubSshAuthority)) {
+    return "unknown"
+  }
+  const rawPath = authorityEnd === undefined ? "" : source.slice(authorityEnd).split(/[?#]/, 1)[0]!
+  try {
+    if (rawPath.split("/").some((segment) => [".", ".."].includes(decodeURIComponent(segment)))) return "unknown"
+  } catch {
+    return "unknown"
+  }
+
+  let url: URL
+  try {
+    url = new URL(source)
+  } catch {
+    return "unknown"
+  }
+  if (url.password || url.search || url.hash) return "unknown"
+
+  if (url.protocol === "ssh:") {
+    if (url.username !== "git" || url.hostname.toLowerCase() !== "github.com" || (url.port && url.port !== "22")) {
+      return "unknown"
+    }
+    const repository = githubRepositoryFromPath(url.pathname)
+    return repository ? trustForGitHubRepository(repository.owner, repository.repo) : "unknown"
+  }
+
+  if (url.protocol !== "https:" || url.username || url.port) return "unknown"
+  const hostname = url.hostname.toLowerCase()
+  if (hostname === "github.com") {
+    const repository = githubRepositoryFromPath(url.pathname)
+    return repository ? trustForGitHubRepository(repository.owner, repository.repo) : "unknown"
+  }
+  return TRUSTED_HTTPS_HOSTS.get(hostname) ?? "unknown"
+}
+
+function githubRepositoryFromPath(pathname: string) {
+  const match = /^\/([a-z0-9_.-]+)\/([a-z0-9_.-]+?)(?:\.git)?\/?$/i.exec(pathname)
+  if (!match) return undefined
+  return { owner: match[1]!, repo: match[2]! }
+}
+
+function trustForGitHubRepository(owner: string, repo: string): z.infer<typeof SkillManager.Trust> {
+  return TRUSTED_GITHUB_REPOSITORIES.get(`${owner.toLowerCase()}/${repo.toLowerCase()}`) ?? "unknown"
 }
 
 async function riskFor(dir: string, trust: z.infer<typeof SkillManager.Trust>) {
@@ -793,9 +821,9 @@ async function riskFor(dir: string, trust: z.infer<typeof SkillManager.Trust>) {
 
 function recommendedPolicy(trust: z.infer<typeof SkillManager.Trust>, risk: z.infer<typeof SkillManager.Risk>) {
   if (trust === "builtin") return "allow" as const
-  if (risk.level === "high") return "ask" as const
-  if (trust === "community" || trust === "unknown" || trust === "external") return "ask" as const
-  return "ask" as const
+  if (risk.level === "high") return "deny" as const
+  if (trust === "community" || trust === "unknown" || trust === "external") return "deny" as const
+  return "deny" as const
 }
 
 async function readManifest(dir: string, ...roots: string[]) {

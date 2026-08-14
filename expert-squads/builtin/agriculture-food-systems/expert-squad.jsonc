@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "agriculture-food-systems",
+  "name": "Agriculture and Food Systems",
+  "label": "Agriculture and Food Systems",
+  "description": "Production context, resource constraints, and market and biosecurity evidence joined into a bounded seasonal system plan.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for evidence-backed agriculture and food-system planning.",
+    "selection_guidance": "Select for seasonal production planning, resource constraints, input traceability, market evidence, biosecurity risks, or food-system coordination without prescribing regulated inputs, veterinary care, certification, or transactions.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "agriculture-food-systems/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "agriculture-production-context-analyst": {
+        "label": "Production Context Analyst",
+        "description": "Maps crop, livestock, climate, soil, water, and seasonal evidence.",
+        "base_role": "explore",
+        "prompt": "agents/agriculture-production-context-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "agriculture-food-systems/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "agriculture-resource-input-analyst": {
+        "label": "Resource and Input Analyst",
+        "description": "Maps labor, equipment, input, water, storage, and traceability constraints.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/agriculture-resource-input-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "agriculture-food-systems/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "agriculture-market-biosecurity-analyst": {
+        "label": "Market and Biosecurity Analyst",
+        "description": "Maps demand, logistics, food-safety, biosecurity, and market risks.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/agriculture-market-biosecurity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "agriculture-food-systems/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "food-system-plan-owner": {
+        "label": "Food-System Plan Owner",
+        "description": "Joins the branches into a bounded season and food-system plan.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/food-system-plan-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "agriculture-food-systems/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "season-food-system-plan": {
+        "label": "Season and Food-System Plan",
+        "description": "Three independent evidence branches converge into one accountable review pack.",
+        "nodes": {
+          "agriculture-production-context-analyst": {
+            "agent_id": "agriculture-production-context-analyst",
+            "description": "Maps crop, livestock, climate, soil, water, and seasonal evidence.",
+            "depends_on": []
+          },
+          "agriculture-resource-input-analyst": {
+            "agent_id": "agriculture-resource-input-analyst",
+            "description": "Maps labor, equipment, input, water, storage, and traceability constraints.",
+            "depends_on": []
+          },
+          "agriculture-market-biosecurity-analyst": {
+            "agent_id": "agriculture-market-biosecurity-analyst",
+            "description": "Maps demand, logistics, food-safety, biosecurity, and market risks.",
+            "depends_on": []
+          },
+          "food-system-plan-owner": {
+            "agent_id": "food-system-plan-owner",
+            "description": "Joins the branches into a bounded season and food-system plan.",
+            "depends_on": [
+              "agriculture-market-biosecurity-analyst",
+              "agriculture-production-context-analyst",
+              "agriculture-resource-input-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

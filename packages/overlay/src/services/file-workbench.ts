@@ -57,20 +57,28 @@ export interface FileOperationScope {
   directory: string
 }
 
+export interface FileEditorLineRange {
+  startLine: number
+  endLine: number
+}
+
 export interface FileEditorTarget extends FileOperationScope {
   path: string
+  range?: FileEditorLineRange
+  sourceAbsolutePath?: string
 }
 
 const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarget | null>(null)
 const [fileWorkbenchOpen, setFileWorkbenchOpen] = createSignal(false)
 const [fileWorkbenchRevision, setFileWorkbenchRevision] = createSignal(0)
+const [fileEditorRevealRevision, setFileEditorRevealRevision] = createSignal(0)
 type FileEditorBeforeNavigate = () => Promise<boolean>
 let fileEditorBeforeNavigate: FileEditorBeforeNavigate | undefined
 let fileEditorNavigationGeneration = 0
 
 const selectedFilePath = () => selectedFileTarget()?.path ?? ""
 
-export { selectedFilePath, selectedFileTarget, fileWorkbenchOpen, fileWorkbenchRevision }
+export { selectedFilePath, selectedFileTarget, fileWorkbenchOpen, fileWorkbenchRevision, fileEditorRevealRevision }
 
 export function bumpFileWorkbenchRevision(): void {
   setFileWorkbenchRevision((current) => current + 1)
@@ -99,27 +107,87 @@ function descendantSuffix(path: string, base: string): string | null {
   return normalizedPath.startsWith(prefix) ? normalizedPath.slice(prefix.length) : null
 }
 
-function normalizeFileEditorTarget(path: string, scope: FileOperationScope): FileEditorTarget {
+function normalizeFileEditorRange(range?: FileEditorLineRange): FileEditorLineRange | undefined {
+  if (!range) return undefined
+  if (
+    !Number.isInteger(range.startLine) ||
+    !Number.isInteger(range.endLine) ||
+    range.startLine < 1 ||
+    range.endLine < range.startLine
+  ) {
+    throw new Error("openFileEditor: range must be a positive inclusive line range")
+  }
+  return { startLine: range.startLine, endLine: range.endLine }
+}
+
+function normalizeFileEditorTarget(
+  path: string,
+  scope: FileOperationScope,
+  range?: FileEditorLineRange,
+): FileEditorTarget {
   const next = String(path || "").trim()
   const directory = scope.directory.trim()
   if (!next || !directory) throw new Error("openFileEditor: path and directory are required")
   return {
     path: normalizeWorkbenchPath(next),
     directory,
+    ...(range ? { range: normalizeFileEditorRange(range) } : {}),
   }
 }
 
+function normalizeSourceFileEditorTarget(
+  absolutePath: string,
+  scope: FileOperationScope,
+  range?: FileEditorLineRange,
+): FileEditorTarget {
+  const sourceAbsolutePath = String(absolutePath || "").trim()
+  const directory = scope.directory.trim()
+  if (!sourceAbsolutePath || !directory) {
+    throw new Error("openSourceFileEditor: absolutePath and directory are required")
+  }
+  if (!/^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/.test(sourceAbsolutePath)) {
+    throw new Error("openSourceFileEditor: source path must be absolute")
+  }
+  return {
+    path: sourceAbsolutePath,
+    directory,
+    sourceAbsolutePath,
+    ...(range ? { range: normalizeFileEditorRange(range) } : {}),
+  }
+}
+
+function sameFileEditorResource(left: FileEditorTarget | null, right: FileEditorTarget | null): boolean {
+  return (
+    left?.path === right?.path &&
+    left?.directory === right?.directory &&
+    left?.sourceAbsolutePath === right?.sourceAbsolutePath
+  )
+}
+
 function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTarget | null): boolean {
-  return left?.path === right?.path && left?.directory === right?.directory
+  return (
+    sameFileEditorResource(left, right) &&
+    left?.range?.startLine === right?.range?.startLine &&
+    left?.range?.endLine === right?.range?.endLine
+  )
 }
 
 function commitFileEditorTarget(target: FileEditorTarget | null): void {
   setSelectedFileTarget(target)
   setFileWorkbenchOpen(!!target)
+  if (target?.range) setFileEditorRevealRevision((current) => current + 1)
 }
 
 async function requestFileEditorTarget(target: FileEditorTarget | null): Promise<boolean> {
-  if (sameFileEditorTarget(selectedFileTarget(), target)) return true
+  const current = selectedFileTarget()
+  if (sameFileEditorTarget(current, target)) {
+    if (target?.range) setFileEditorRevealRevision((revision) => revision + 1)
+    return true
+  }
+  if (current && target && sameFileEditorResource(current, target)) {
+    commitFileEditorTarget(target)
+    return true
+  }
   const generation = ++fileEditorNavigationGeneration
   if (fileEditorBeforeNavigate && !(await fileEditorBeforeNavigate())) return false
   if (generation !== fileEditorNavigationGeneration) return false
@@ -137,8 +205,20 @@ export function registerFileEditorBeforeNavigate(handler: FileEditorBeforeNaviga
   }
 }
 
-export function openFileEditor(path: string, scope: FileOperationScope): Promise<boolean> {
-  return requestFileEditorTarget(normalizeFileEditorTarget(path, scope))
+export function openFileEditor(
+  path: string,
+  scope: FileOperationScope,
+  range?: FileEditorLineRange,
+): Promise<boolean> {
+  return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range))
+}
+
+export function openSourceFileEditor(
+  absolutePath: string,
+  scope: FileOperationScope,
+  range?: FileEditorLineRange,
+): Promise<boolean> {
+  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range))
 }
 
 export function closeFileEditor(): Promise<boolean> {
@@ -147,7 +227,7 @@ export function closeFileEditor(): Promise<boolean> {
 
 export function updateOpenFilePathAfterMove(previousPath: string, nextPath: string, scope: FileOperationScope): void {
   const target = selectedFileTarget()
-  if (!target || target.directory !== scope.directory.trim()) return
+  if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
   const suffix = descendantSuffix(target.path, previousPath)
   if (suffix === null) return
   setSelectedFileTarget({

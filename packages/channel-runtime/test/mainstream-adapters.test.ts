@@ -1007,6 +1007,13 @@ describe("mainstream adapters", () => {
     expect(payload["m.relates_to"]?.["m.in_reply_to"]?.event_id).toBe("$root-1")
   })
 
+  test("matrix start requires an authenticated physical identity", async () => {
+    globalThis.fetch = (async () => new Response("denied", { status: 401 })) as unknown as typeof globalThis.fetch
+    const adapter = new MatrixAdapter({ homeserver: "https://matrix.example.com", token: "invalid" })
+
+    await expect(adapter.start()).rejects.toThrow("Matrix whoami failed: 401")
+  })
+
   test("mattermost maps inbound and posts outbound", async () => {
     const s = stub()
     const adapter = new MattermostAdapter({
@@ -1138,6 +1145,13 @@ describe("mainstream adapters", () => {
     expect(body.number).toBe("+15550001")
     expect(body.recipients).toEqual(["+15550002"])
     expect(body.message).toBe("done")
+  })
+
+  test("signal start requires an initial successful receive response", async () => {
+    globalThis.fetch = (async () => new Response("unavailable", { status: 503 })) as unknown as typeof globalThis.fetch
+    const adapter = new SignalAdapter({ service: "http://127.0.0.1:8080", account: "+15550001" })
+
+    await expect(adapter.start()).rejects.toThrow("Signal receive failed: 503 unavailable")
   })
 
   test("wecom maps inbound xml and sends outbound", async () => {

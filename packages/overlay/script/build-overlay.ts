@@ -28,6 +28,8 @@ import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
 import { generateOpencorvusGeneratedBuildArtifacts } from "../../opencorvus/script/generate-build-artifacts"
+import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
+import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 
 import {
   overlayArchFromTriple,
@@ -186,6 +188,14 @@ await $`bun run build --overlay-server`.cwd(opencorvus)
 if (!(await exists(distServer))) {
   throw new Error(`opencorvus binary still not found at ${distServer}`)
 }
+await finalizeWorkArtifactPackage({
+  root: distServerDir,
+  target: {
+    os: triplePlatform === "windows" ? "win32" : triplePlatform,
+    arch: tripleArch,
+  },
+})
+await writeOverlayPayloadStamp(distServerDir)
 
 // Clean previous build artifacts that may be locked by Windows
 const builtOverlay = path.join(release, overlayFile)

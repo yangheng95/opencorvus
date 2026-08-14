@@ -4,15 +4,37 @@ import path from "node:path"
 import { PrimaryAssistantRegistry } from "../src/agent/primary-assistant-registry"
 import { sessionRuntimeFromNativeAgent } from "../src/agent/session-agent-runtime"
 import { Config } from "../src/config/config"
+import { Bus } from "../src/bus"
 import { Identifier } from "../src/id/id"
+import { PermissionAuthority } from "../src/permission/authority"
 import { Instance } from "../src/project/instance"
-import type { Provider } from "../src/provider/provider"
+import { Provider } from "../src/provider/provider"
 import { Session } from "../src/session"
 import { LLM } from "../src/session/llm"
 import { SessionLoop } from "../src/session/loop"
 import { MessageStore } from "../src/session/message-store"
 import { SessionProcessor } from "../src/session/processor"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
+import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
+import { SessionRuntimeContractStore } from "../src/session/runtime-contract"
+import { createAgentContextTools } from "../src/agent/context-tools"
+import { createAgentCoordinationRuntimeTools } from "../src/agent/coordination-runtime-tools"
+import { filterAgentTools } from "../src/agent/filter-tools"
+import { sessionRuntimeWithResolvedModel } from "../src/agent/session-agent-runtime"
+import { composeProjectedWorkerSystemPrompt } from "../src/agent/projected-worker-system-prompt"
+import { RuntimeTemplateRegistry } from "../src/agent/runtime-template-registry"
+import { RuntimeTemplateID } from "../src/agent/runtime-template-id"
+import { DispatchAdapterContractRegistry } from "../src/agent/dispatch-adapter-contract"
+import { coordinationHandoffPrompt } from "../src/prompt/fragments/coordination-handoff"
+import { textSHA256 } from "../src/expert-squad/projection-hash"
+import { MCP } from "../src/mcp"
+import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
+import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
+import { createRequirementsOutputTools } from "../src/requirements/output-tools"
+import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/agent/stage-tool-materializer"
+import { createDecisionLog } from "../src/decision-log"
 
 function providerModel(): Provider.Model {
   return {
@@ -20,7 +42,7 @@ function providerModel(): Provider.Model {
     providerID: "authority-integration-provider",
     name: "Authority Integration Model",
     limit: { context: 1_000_000, input: 900_000, output: 4_096 },
-    cost: { input: 0, output: 0, cache: { read: 0, write: 0 } },
+    cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
     capabilities: {
       toolcall: true,
       attachment: false,
@@ -45,6 +67,7 @@ describe("SessionLoop Tool execution authority integration", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "full_access" })
         const model = providerModel()
         const config = await Config.get()
         const nativeAgent = await PrimaryAssistantRegistry.get("coding", { config })
@@ -163,4 +186,895 @@ describe("SessionLoop Tool execution authority integration", () => {
       },
     })
   }, 30_000)
+
+  test("resumes the same persisted Ask-me Tool call after restart and records one execution", async () => {
+    await using project = await memoryProject()
+    const model = providerModel()
+    const evidencePath = path.join(project.path, "restarted-permission-evidence.txt")
+    const toolCallID = "call_restarted_permission"
+    const toolInput = { filePath: evidencePath, content: "restarted-permission-continuation\n" }
+    const created = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask" })
+        const config = await Config.get()
+        const nativeAgent = await PrimaryAssistantRegistry.get("coding", { config })
+        const agent = sessionRuntimeFromNativeAgent(nativeAgent)
+        const session = await Session.create({ kind: "assistant", title: "Restarted Ask-me continuation" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          time: { created: Date.now() },
+          agent: "coding",
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Write the restart-safe permission evidence file.",
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const tools = await SessionLoop.resolveTools({
+          agent,
+          agentID: "coding",
+          model,
+          session,
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+        })
+        let resolveAsked!: (request: PermissionAuthority.Request) => void
+        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
+        const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
+        const pending = tools.write!.execute!(toolInput, {
+          toolCallId: toolCallID,
+          messages: [],
+          abortSignal: abort,
+        }).catch((error) => error)
+        const request = await asked
+        stopAsked()
+        return { sessionID: session.id, assistantID: assistant.id, request, pending }
+      },
+    })
+
+    await Instance.disposeAll()
+    expect(await created.pending).toBeInstanceOf(PermissionAuthority.PermissionPausedError)
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const modelSpy = spyOn(Provider, "getModel").mockRejectedValue(new Error("fixture recovery unavailable"))
+        try {
+          await expect(
+            PermissionAuthority.reply({
+              requestID: created.request.id,
+              decision: "allow_once",
+              actorID: "test-operator",
+            }),
+          ).rejects.toThrow("fixture recovery unavailable")
+        } finally {
+          modelSpy.mockRestore()
+        }
+      },
+    })
+    await Instance.disposeAll()
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(model)
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(
+          async () =>
+            ({
+              fullStream: (async function* () {
+                yield { type: "start" }
+                yield {
+                  type: "finish-step",
+                  finishReason: "stop",
+                  usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
+                }
+                yield {
+                  type: "finish",
+                  finishReason: "stop",
+                  totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
+                }
+              })(),
+            }) as Awaited<ReturnType<typeof LLM.stream>>,
+        )
+        try {
+          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(1)
+          await PermissionAuthority.reply({
+            requestID: created.request.id,
+            decision: "allow_once",
+            actorID: "test-operator-retry",
+          })
+        } finally {
+          streamSpy.mockRestore()
+          modelSpy.mockRestore()
+        }
+        const assistant = await MessageStore.get({ sessionID: created.sessionID, messageID: created.assistantID })
+        const toolPart = assistant.parts.find((part) => part.type === "tool" && part.callID === toolCallID)
+        const history = await PermissionAuthority.history()
+        expect({
+          file: await fs.readFile(evidencePath, "utf8"),
+          toolPart,
+          starts: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_started",
+          ).length,
+          successes: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_succeeded",
+          ).length,
+        }).toMatchObject({
+          file: "restarted-permission-continuation\n",
+          toolPart: { type: "tool", state: { status: "completed", input: toolInput } },
+          starts: 1,
+          successes: 1,
+        })
+      },
+    })
+  }, 30_000)
+
+  test("reconstructs a descriptor-bound projected worker Tool surface after restart", async () => {
+    await using project = await memoryProject()
+    const model = providerModel()
+    const evidencePath = path.join(project.path, "projected-worker-restart-evidence.txt")
+    const toolCallID = "call_projected_worker_restart"
+    const toolInput = { filePath: evidencePath, content: "projected-worker-recovered-once\n" }
+    const created = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask", prompt_profile: { active: "base" } })
+        const config = await Config.get()
+        const packageRevision = await PromptProfileResolver.resolveActivePackageRevision({
+          projectDirectory: project.path,
+          config,
+        })
+        const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "base-planner",
+          packageRevision,
+        })
+        const taskID = Identifier.ascending("task")
+        const root = await Session.create({
+          kind: "root",
+          title: "Projected permission root",
+          metadata: { configOverlay: { prompt_profile: { active: "base" } } },
+        })
+        const now = Date.now()
+        persistTask({
+          taskID,
+          sessionID: root.id,
+          now,
+          title: "Projected permission root",
+          request: "Prove projected permission recovery",
+          productPillar: "work",
+          metadata: {},
+          projectID: Instance.project.id,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: project.path,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        const session = await Session.create({
+          kind: "delegated-worker",
+          parentID: root.id,
+          title: "Projected permission worker",
+        })
+        const runtimeTemplate = RuntimeTemplateRegistry.get("delegated-worker")
+        const coordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID(
+          projection.workerCapability.identity.dispatchAdapterID,
+        )
+        const system = await composeProjectedWorkerSystemPrompt({
+          taskID,
+          baseRole: RuntimeTemplateID.get(projection.workerCapability.identity.baseRole),
+          core: `${runtimeTemplate.corePromptSeed}\n\n${coordinationHandoffPrompt(coordinationToolID)}`,
+          projectDirectory: project.path,
+          capability: projection.workerCapability,
+        })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: Date.now() },
+          agent: projection.workerCapability.identity.agentID,
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const userPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Write the projected restart evidence file.",
+        })
+        const contextTools = await filterAgentTools(
+          {
+            ...createAgentContextTools(),
+            ...(await createAgentCoordinationRuntimeTools({
+              agentID: projection.workerCapability.identity.agentID,
+              taskID,
+            })),
+          },
+          "delegated-worker",
+          { taskID, sessionID: root.id },
+        )
+        const owner = MCP.createScopedConnectionOwner(
+          computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
+        )
+        const projectedTools = await PromptProfileResolver.projectWorkerTools(
+          contextTools,
+          projection.workerCapability,
+          {
+            taskID,
+            projectDirectory: project.path,
+            toolDirectory: project.path,
+            stageOwnedToolIDs: [],
+            connectionOwner: owner,
+          },
+        )
+        const descriptor = WorkerTurnDescriptor.create({
+          sessionID: session.id,
+          payload: {
+            identity: projection.workerCapability.identity,
+            expertSquadID: projection.workerCapability.expertSquadID,
+            packageRevision,
+            model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
+            prompt: { systemMode: "complete", systemSha256: textSHA256(system.prompt) },
+            tools: {
+              enabled: Object.keys(projectedTools.projectedTools).sort(),
+              stageOwned: [],
+              stageMaterializers: {},
+            },
+            output: { format: "text", resultMode: "reply" },
+            lifecycle: { taskID, workScope: { kind: "task" } },
+            messageAuthority: {
+              user_message_id: user.id,
+              control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
+            },
+          },
+        })
+        await Session.updateMessage({
+          ...user,
+          extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: projection.workerCapability.identity.agentID,
+          agent: projection.workerCapability.identity.agentID,
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        SessionRuntimeContractStore.set(session.id, {
+          identity: {
+            identityKind: "projected-worker",
+            sessionID: session.id,
+            ...projection.workerCapability.identity,
+            expertSquadID: projection.workerCapability.expertSquadID,
+            packageRevision,
+            workerTurnDescriptorID: descriptor.id,
+            workerTurnDescriptorHash: descriptor.hash,
+            taskID,
+            workScope: { kind: "task" },
+            contractKind: "stage-attempt",
+            installedAt: Date.now(),
+          },
+          runtime: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          projectedTools: projectedTools.projectedTools,
+          stageTools: {},
+          system: [system.prompt],
+          systemMode: "complete",
+          includeMcpTools: projection.workerCapability.includeMcpTools,
+          exactTools: runtimeTemplate.exactRuntimeContract,
+          projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
+          skillProjection: projection.skillProjection,
+          harnessProjection: PromptProfileResolver.workerHarnessProjection({
+            taskID,
+            capability: projection.workerCapability,
+          }),
+          projectDirectory: project.path,
+          resources: { mcp: owner },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const tools = await SessionLoop.resolveTools({
+          agent: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          agentID: projection.workerCapability.identity.agentID,
+          model,
+          session,
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+        })
+        let resolveAsked!: (request: PermissionAuthority.Request) => void
+        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
+        const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
+        const pending = tools.write!.execute!(toolInput, {
+          toolCallId: toolCallID,
+          messages: [],
+          abortSignal: abort,
+        }).catch((error) => error)
+        const request = await asked
+        stopAsked()
+        return { request, pending, sessionID: session.id, assistantID: assistant.id }
+      },
+    })
+    await SessionRuntimeContractStore.dispose(created.sessionID)
+    await Instance.disposeAll()
+    expect(await created.pending).toBeInstanceOf(PermissionAuthority.PermissionPausedError)
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(model)
+        try {
+          await PermissionAuthority.reply({
+            requestID: created.request.id,
+            decision: "allow_once",
+            actorID: "projected-restart-test",
+          })
+        } finally {
+          modelSpy.mockRestore()
+        }
+        const persisted = await MessageStore.get({ sessionID: created.sessionID, messageID: created.assistantID })
+        const history = await PermissionAuthority.history()
+        expect({
+          content: await fs.readFile(evidencePath, "utf8"),
+          part: persisted.parts.find((part) => part.type === "tool" && part.callID === toolCallID),
+          starts: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_started",
+          ).length,
+          successes: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_succeeded",
+          ).length,
+        }).toMatchObject({
+          content: "projected-worker-recovered-once\n",
+          part: { type: "tool", state: { status: "completed", input: toolInput } },
+          starts: 1,
+          successes: 1,
+        })
+        expect(SessionRuntimeContractStore.get(created.sessionID)).toBeUndefined()
+      },
+    })
+  }, 60_000)
+
+  test("reconstructs and executes the same effectful requirements stage Tool after Ask-me restart", async () => {
+    await using project = await memoryProject()
+    const model = providerModel()
+    const toolCallID = "call_requirements_decision_restart"
+    const toolInput = { key: "runtime", value: "Bun", reason: "persisted requirements evidence" }
+    const created = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask", prompt_profile: { active: "advanced" } })
+        const config = await Config.get()
+        const packageRevision = await PromptProfileResolver.resolveActivePackageRevision({
+          projectDirectory: project.path,
+          config,
+        })
+        const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "requirement-engineer",
+          packageRevision,
+        })
+        const taskID = Identifier.ascending("task")
+        const root = await Session.create({
+          kind: "root",
+          title: "Requirements stage permission root",
+          metadata: { configOverlay: { prompt_profile: { active: "advanced" } } },
+        })
+        const now = Date.now()
+        persistTask({
+          taskID,
+          sessionID: root.id,
+          now,
+          title: "Requirements stage permission root",
+          request: "Persist one requirements decision",
+          productPillar: "work",
+          metadata: {},
+          projectID: Instance.project.id,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: project.path,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        const session = await Session.create({ kind: "requirements", parentID: root.id, title: "Requirements worker" })
+        const runtimeTemplate = RuntimeTemplateRegistry.get("requirements")
+        const coordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID("requirements")
+        const system = await composeProjectedWorkerSystemPrompt({
+          taskID,
+          baseRole: "requirements",
+          core: `${runtimeTemplate.corePromptSeed}\n\n${coordinationHandoffPrompt(coordinationToolID)}`,
+          projectDirectory: project.path,
+          capability: projection.workerCapability,
+        })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: Date.now() },
+          agent: projection.workerCapability.identity.agentID,
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const userPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Register the persisted runtime decision.",
+        })
+        const outputTools = createRequirementsOutputTools({ taskID })
+        bindInternalStageTool(outputTools.tools.register_requirement as object, {
+          adapterID: "requirements",
+          toolName: "register_requirement",
+        })
+        const contextTools = await filterAgentTools(
+          {
+            ...createAgentContextTools(),
+            ...(await createAgentCoordinationRuntimeTools({
+              agentID: projection.workerCapability.identity.agentID,
+              taskID,
+            })),
+          },
+          "requirements",
+          { taskID, sessionID: root.id },
+        )
+        Object.assign(contextTools, outputTools.tools)
+        const owner = MCP.createScopedConnectionOwner(
+          computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
+        )
+        const stageOwned = ["register_requirement", "register_decision"]
+        const projectedTools = await PromptProfileResolver.projectWorkerTools(
+          contextTools,
+          projection.workerCapability,
+          {
+            taskID,
+            projectDirectory: project.path,
+            toolDirectory: project.path,
+            stageOwnedToolIDs: stageOwned,
+            connectionOwner: owner,
+          },
+        )
+        const materializer = stageToolMaterializerBindingOf(projectedTools.stageTools.register_decision as object)
+        if (!materializer) throw new Error("requirements decision Tool has no materializer")
+        const enabled = [
+          ...Object.keys(projectedTools.projectedTools),
+          ...Object.keys(projectedTools.stageTools),
+        ].sort()
+        const descriptor = WorkerTurnDescriptor.create({
+          sessionID: session.id,
+          payload: {
+            identity: projection.workerCapability.identity,
+            expertSquadID: projection.workerCapability.expertSquadID,
+            packageRevision,
+            model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
+            prompt: { systemMode: "complete", systemSha256: textSHA256(system.prompt) },
+            tools: {
+              enabled,
+              stageOwned,
+              stageMaterializers: { register_decision: materializer },
+            },
+            output: { format: "text", resultMode: "reply" },
+            lifecycle: { taskID, workScope: { kind: "task" }, attemptID: "requirements-attempt-1" },
+            messageAuthority: {
+              user_message_id: user.id,
+              control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
+            },
+          },
+        })
+        await Session.updateMessage({
+          ...user,
+          extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: projection.workerCapability.identity.agentID,
+          agent: projection.workerCapability.identity.agentID,
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        SessionRuntimeContractStore.set(session.id, {
+          identity: {
+            identityKind: "projected-worker",
+            sessionID: session.id,
+            ...projection.workerCapability.identity,
+            expertSquadID: projection.workerCapability.expertSquadID,
+            packageRevision,
+            workerTurnDescriptorID: descriptor.id,
+            workerTurnDescriptorHash: descriptor.hash,
+            taskID,
+            workScope: { kind: "task" },
+            attemptID: "requirements-attempt-1",
+            contractKind: "stage-attempt",
+            installedAt: Date.now(),
+          },
+          runtime: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          projectedTools: projectedTools.projectedTools,
+          stageTools: projectedTools.stageTools,
+          system: [system.prompt],
+          systemMode: "complete",
+          includeMcpTools: projection.workerCapability.includeMcpTools,
+          exactTools: runtimeTemplate.exactRuntimeContract,
+          projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
+          skillProjection: projection.skillProjection,
+          harnessProjection: PromptProfileResolver.workerHarnessProjection({
+            taskID,
+            capability: projection.workerCapability,
+          }),
+          projectDirectory: project.path,
+          resources: { mcp: owner },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const tools = await SessionLoop.resolveTools({
+          agent: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          agentID: projection.workerCapability.identity.agentID,
+          model,
+          session,
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+        })
+        let resolveAsked!: (request: PermissionAuthority.Request) => void
+        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
+        const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
+        const pending = tools.register_decision!.execute!(toolInput, {
+          toolCallId: toolCallID,
+          messages: [],
+          abortSignal: abort,
+        }).catch((error) => error)
+        const request = await asked
+        stopAsked()
+        return { request, pending, taskID, sessionID: session.id, assistantID: assistant.id }
+      },
+    })
+    await SessionRuntimeContractStore.dispose(created.sessionID)
+    await Instance.disposeAll()
+    expect(await created.pending).toBeInstanceOf(PermissionAuthority.PermissionPausedError)
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(model)
+        try {
+          await PermissionAuthority.reply({
+            requestID: created.request.id,
+            decision: "allow_once",
+            actorID: "requirements-stage-restart-test",
+          })
+        } finally {
+          modelSpy.mockRestore()
+        }
+        const history = await PermissionAuthority.history()
+        const persisted = await MessageStore.get({ sessionID: created.sessionID, messageID: created.assistantID })
+        expect({
+          decisions: createDecisionLog(created.taskID)
+            .read()
+            .map(({ phase, key, value, reason }) => ({ phase, key, value, reason })),
+          part: persisted.parts.find((part) => part.type === "tool" && part.callID === toolCallID),
+          starts: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_started",
+          ).length,
+          successes: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_succeeded",
+          ).length,
+        }).toMatchObject({
+          decisions: [{ phase: "requirements", ...toolInput }],
+          part: { type: "tool", state: { status: "completed", input: toolInput } },
+          starts: 1,
+          successes: 1,
+        })
+      },
+    })
+  }, 60_000)
+
+  test("recovers the approved effectful stage Tool in a fresh operating-system process", async () => {
+    await using project = await memoryProject()
+    const model = providerModel()
+    const toolCallID = "call_requirements_process_restart"
+    const toolInput = { key: "runtime-process", value: "Bun", reason: "fresh process evidence" }
+    const created = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask", prompt_profile: { active: "advanced" } })
+        const config = await Config.get()
+        const packageRevision = await PromptProfileResolver.resolveActivePackageRevision({
+          projectDirectory: project.path,
+          config,
+        })
+        const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "requirement-engineer",
+          packageRevision,
+        })
+        const taskID = Identifier.ascending("task")
+        const root = await Session.create({
+          kind: "root",
+          title: "Process stage root",
+          metadata: { configOverlay: { prompt_profile: { active: "advanced" } } },
+        })
+        const now = Date.now()
+        persistTask({
+          taskID,
+          sessionID: root.id,
+          now,
+          title: "Process stage root",
+          request: "process stage",
+          productPillar: "work",
+          metadata: {},
+          projectID: Instance.project.id,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: project.path,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        const session = await Session.create({
+          kind: "requirements",
+          parentID: root.id,
+          title: "Process requirements worker",
+        })
+        const runtimeTemplate = RuntimeTemplateRegistry.get("requirements")
+        const system = await composeProjectedWorkerSystemPrompt({
+          taskID,
+          baseRole: "requirements",
+          core: `${runtimeTemplate.corePromptSeed}\n\n${coordinationHandoffPrompt("request_orchestrator_decision")}`,
+          projectDirectory: project.path,
+          capability: projection.workerCapability,
+        })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: now },
+          agent: projection.workerCapability.identity.agentID,
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const userPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "process restart decision",
+        })
+        const outputTools = createRequirementsOutputTools({ taskID })
+        bindInternalStageTool(outputTools.tools.register_requirement as object, {
+          adapterID: "requirements",
+          toolName: "register_requirement",
+        })
+        const contextTools = await filterAgentTools(
+          {
+            ...createAgentContextTools(),
+            ...(await createAgentCoordinationRuntimeTools({
+              agentID: projection.workerCapability.identity.agentID,
+              taskID,
+            })),
+          },
+          "requirements",
+          { taskID, sessionID: root.id },
+        )
+        Object.assign(contextTools, outputTools.tools)
+        const owner = MCP.createScopedConnectionOwner(
+          computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
+        )
+        const stageOwned = ["register_requirement", "register_decision"]
+        const projected = await PromptProfileResolver.projectWorkerTools(contextTools, projection.workerCapability, {
+          taskID,
+          projectDirectory: project.path,
+          toolDirectory: project.path,
+          stageOwnedToolIDs: stageOwned,
+          connectionOwner: owner,
+        })
+        const materializer = stageToolMaterializerBindingOf(projected.stageTools.register_decision as object)
+        if (!materializer) throw new Error("missing process materializer")
+        const descriptor = WorkerTurnDescriptor.create({
+          sessionID: session.id,
+          payload: {
+            identity: projection.workerCapability.identity,
+            expertSquadID: projection.workerCapability.expertSquadID,
+            packageRevision,
+            model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
+            prompt: { systemMode: "complete", systemSha256: textSHA256(system.prompt) },
+            tools: {
+              enabled: [...Object.keys(projected.projectedTools), ...Object.keys(projected.stageTools)].sort(),
+              stageOwned,
+              stageMaterializers: { register_decision: materializer },
+            },
+            output: { format: "text", resultMode: "reply" },
+            lifecycle: { taskID, workScope: { kind: "task" }, attemptID: "process-attempt" },
+            messageAuthority: {
+              user_message_id: user.id,
+              control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
+            },
+          },
+        })
+        await Session.updateMessage({
+          ...user,
+          extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: projection.workerCapability.identity.agentID,
+          agent: projection.workerCapability.identity.agentID,
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: now },
+        })
+        SessionRuntimeContractStore.set(session.id, {
+          identity: {
+            identityKind: "projected-worker",
+            sessionID: session.id,
+            ...projection.workerCapability.identity,
+            expertSquadID: projection.workerCapability.expertSquadID,
+            packageRevision,
+            workerTurnDescriptorID: descriptor.id,
+            workerTurnDescriptorHash: descriptor.hash,
+            taskID,
+            workScope: { kind: "task" },
+            attemptID: "process-attempt",
+            contractKind: "stage-attempt",
+            installedAt: now,
+          },
+          runtime: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          projectedTools: projected.projectedTools,
+          stageTools: projected.stageTools,
+          system: [system.prompt],
+          systemMode: "complete",
+          includeMcpTools: projection.workerCapability.includeMcpTools,
+          exactTools: runtimeTemplate.exactRuntimeContract,
+          projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
+          skillProjection: projection.skillProjection,
+          harnessProjection: PromptProfileResolver.workerHarnessProjection({
+            taskID,
+            capability: projection.workerCapability,
+          }),
+          projectDirectory: project.path,
+          resources: { mcp: owner },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const tools = await SessionLoop.resolveTools({
+          agent: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          agentID: projection.workerCapability.identity.agentID,
+          model,
+          session,
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+        })
+        let resolveAsked!: (request: PermissionAuthority.Request) => void
+        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
+        const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
+        const pending = tools.register_decision!.execute!(toolInput, {
+          toolCallId: toolCallID,
+          messages: [],
+          abortSignal: abort,
+        }).catch((error) => error)
+        const request = await asked
+        stop()
+        return { request, pending, taskID, sessionID: session.id, assistantID: assistant.id }
+      },
+    })
+    await SessionRuntimeContractStore.dispose(created.sessionID)
+    await Instance.disposeAll()
+    expect(await created.pending).toBeInstanceOf(PermissionAuthority.PermissionPausedError)
+    const processState = path.join(project.path, "stage-process-state.json")
+    await fs.writeFile(processState, JSON.stringify({ requestID: created.request.id }))
+    const childEnv = {
+      ...process.env,
+      OPENCORVUS_STAGE_PROCESS_PROJECT: project.path,
+      OPENCORVUS_STAGE_PROCESS_STATE: processState,
+    }
+    for (const phase of ["approve", "recover"] as const) {
+      const child = Bun.spawn([process.execPath, "test/fixture/stage-permission-process-worker.ts", phase], {
+        cwd: import.meta.dir + "/..",
+        env: childEnv,
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+      const [exitCode, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      expect({ phase, exitCode, stdout, stderr }).toMatchObject({ phase, exitCode: 0 })
+    }
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const history = await PermissionAuthority.history()
+        const persisted = await MessageStore.get({ sessionID: created.sessionID, messageID: created.assistantID })
+        expect({
+          decisions: createDecisionLog(created.taskID)
+            .read()
+            .filter((entry) => entry.key === toolInput.key).length,
+          part: persisted.parts.find((part) => part.type === "tool" && part.callID === toolCallID),
+          starts: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_started",
+          ).length,
+          successes: history.filter(
+            (event) => event.request_id === created.request.id && event.event_type === "execution_succeeded",
+          ).length,
+        }).toMatchObject({
+          decisions: 1,
+          part: { type: "tool", state: { status: "completed", input: toolInput } },
+          starts: 1,
+          successes: 1,
+        })
+      },
+    })
+  }, 120_000)
 })

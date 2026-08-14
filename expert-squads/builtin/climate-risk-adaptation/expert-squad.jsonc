@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "climate-risk-adaptation",
+  "name": "Climate Risk Adaptation",
+  "label": "Climate Risk Adaptation",
+  "description": "Climate hazard, exposure-vulnerability, and adaptation-pathway evidence joined into a scenario-explicit review pack without engineering, actuarial, legal, or capital authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded climate-risk evidence and adaptation-pathway review.",
+    "selection_guidance": "Select for physical or transition climate-risk framing, hazard-scenario provenance, exposure and vulnerability analysis, cascading dependencies, adaptation options, pathways, triggers, residual risk, or maladaptation review without inventing projections, losses, disclosures, engineering designs, or capital decisions.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "climate-risk-adaptation/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "climate-hazard-scenario-analyst": {
+        "label": "Climate Hazard and Scenario Analyst",
+        "description": "Traces physical and transition hazards to source versions, scenarios, horizons, models, baselines, and uncertainty.",
+        "base_role": "explore",
+        "prompt": "agents/climate-hazard-scenario-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "climate-risk-adaptation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "exposure-vulnerability-consequence-analyst": {
+        "label": "Exposure, Vulnerability, and Consequence Analyst",
+        "description": "Maps assets, populations, services, dependencies, sensitivity, adaptive capacity, equity, and consequence evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/exposure-vulnerability-consequence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "climate-risk-adaptation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "adaptation-options-pathways-analyst": {
+        "label": "Adaptation Options and Pathways Analyst",
+        "description": "Structures adaptation options, dependencies, lead times, triggers, residual risks, co-benefits, and maladaptation evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/adaptation-options-pathways-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "climate-risk-adaptation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "climate-risk-adaptation-owner": {
+        "label": "Climate Risk Adaptation Owner",
+        "description": "Joins scenario, exposure-vulnerability, and pathway evidence into a qualified decision pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/climate-risk-adaptation-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "climate-risk-adaptation/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "climate-risk-adaptation-review": {
+        "label": "Climate Risk Adaptation Review",
+        "description": "Three independent climate-risk branches converge into one scenario-explicit adaptation review pack.",
+        "nodes": {
+          "climate-hazard-scenario-analyst": {
+            "agent_id": "climate-hazard-scenario-analyst",
+            "description": "Traces hazards, scenarios, horizons, models, baselines, and uncertainty.",
+            "depends_on": []
+          },
+          "exposure-vulnerability-consequence-analyst": {
+            "agent_id": "exposure-vulnerability-consequence-analyst",
+            "description": "Maps exposure, vulnerability, consequences, dependencies, and equity.",
+            "depends_on": []
+          },
+          "adaptation-options-pathways-analyst": {
+            "agent_id": "adaptation-options-pathways-analyst",
+            "description": "Structures options, pathways, triggers, co-benefits, residual risk, and maladaptation.",
+            "depends_on": []
+          },
+          "climate-risk-adaptation-owner": {
+            "agent_id": "climate-risk-adaptation-owner",
+            "description": "Joins all three branches without issuing engineering, actuarial, legal, disclosure, or capital decisions.",
+            "depends_on": [
+              "adaptation-options-pathways-analyst",
+              "climate-hazard-scenario-analyst",
+              "exposure-vulnerability-consequence-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

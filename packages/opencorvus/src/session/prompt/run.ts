@@ -1,5 +1,5 @@
 import { clearRewindCursorForSession } from "@/engine/rewind"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { provideInitializedProjectExecution } from "../../project/independent-project-owner"
 import { Session } from ".."
 import { SessionContext } from "../context"
@@ -20,7 +20,8 @@ import type { Message } from "../message"
 import { setSessionTitleFromFirstUserMessage } from "../first-message-title"
 
 export type PromptRuntimeHooks = UserMessagePersistenceHooks & {
-  beforeLoop?: () => void | Promise<void>
+  beforeLoop?: (signal?: AbortSignal) => void | Promise<void>
+  signal?: AbortSignal
   runtimeClaim?: PreparedUserMessageRuntimeClaim
 }
 
@@ -45,7 +46,7 @@ async function continueUserMessage(
     })
     await Session.touch(input.sessionID)
 
-    const permissions: PermissionNext.Ruleset = []
+    const permissions: CapabilityRules.Ruleset = []
     for (const [tool, enabled] of Object.entries(input.tools ?? {})) {
       permissions.push({
         permission: tool,
@@ -62,10 +63,13 @@ async function continueUserMessage(
       return message
     }
 
-    const beforeLoop = runtime.beforeLoop?.()
+    runtime.signal?.throwIfAborted()
+    const beforeLoop = runtime.beforeLoop?.(runtime.signal)
     if (beforeLoop) await beforeLoop
+    runtime.signal?.throwIfAborted()
     return provideInitializedProjectExecution({
       directory: session.directory,
+      signal: runtime.signal,
       fn: () => runtime.loop({ sessionID: input.sessionID, reply_to_message_id: message.info.id }),
     })
   })

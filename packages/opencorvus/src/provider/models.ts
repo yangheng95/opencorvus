@@ -14,7 +14,6 @@ import bootstrapCatalogText from "./models-bootstrap.json" with { type: "text" }
 export namespace ModelsDev {
   const log = Log.create({ service: "models.dev" })
   const KILO_API_URL = "https://api.kilo.ai/api/gateway"
-  const OMITTED_PRODUCT_PROVIDER_IDS = new Set(["opencorvus"])
 
   const ExperimentalModeCost = z
     .object({
@@ -98,6 +97,15 @@ export namespace ModelsDev {
   }).passthrough()
   export type Model = z.infer<typeof Model>
 
+  /** Authoritative live metadata has no persisted-catalog defaults or extension fields. */
+  export const LiveModelInfo = Model.strict()
+    .safeExtend({
+      temperature: z.boolean(),
+      options: z.record(z.string(), z.any()),
+    })
+    .strict()
+  export type LiveModelInfo = z.infer<typeof LiveModelInfo>
+
   export const Provider = z
     .object({
       api: z.string().optional(),
@@ -153,10 +161,24 @@ export namespace ModelsDev {
     }
   }
 
-  export function withLocalProviders(input: Record<string, Provider>): Record<string, Provider> {
-    const catalog = withoutOmittedProductProviders(input)
+  function opencorvusProvider(input?: Provider): Provider {
+    const bundled = bootstrapCatalogSource().opencorvus
+    if (!bundled) throw new Error("Bundled model catalog is missing required provider opencorvus")
+    return input ?? bundled
+  }
+
+  export function migrateDefaultCatalog(input: Record<string, Provider>): Record<string, Provider> {
+    if (input.opencorvus) return input
     return {
-      ...catalog,
+      ...input,
+      opencorvus: opencorvusProvider(),
+    }
+  }
+
+  export function withLocalProviders(input: Record<string, Provider>): Record<string, Provider> {
+    return {
+      ...input,
+      opencorvus: opencorvusProvider(input.opencorvus),
       kilo: kiloProvider(input.kilo),
     }
   }
@@ -165,20 +187,14 @@ export namespace ModelsDev {
     return Flag.OPENCORVUS_MODELS_URL || "https://models.dev"
   }
 
-  const LOCAL_PROVIDER_IDS = ["kilo"] as const
+  const LOCAL_PROVIDER_IDS = ["opencorvus", "kilo"] as const
   const catalogWriterLocks = new Map<string, Promise<unknown>>()
-
-  function withoutOmittedProductProviders(input: Record<string, Provider>): Record<string, Provider> {
-    return Object.fromEntries(
-      Object.entries(input).filter(([providerID]) => !OMITTED_PRODUCT_PROVIDER_IDS.has(providerID)),
-    )
-  }
 
   export function catalogPath(): string {
     return path.resolve(Flag.OPENCORVUS_MODELS_PATH ?? path.join(Global.Path.data, "models.json"))
   }
 
-  function bootstrapCatalog(): Record<string, Provider> {
+  function bootstrapCatalogSource(): Record<string, Provider> {
     let input: unknown
     try {
       input = JSON.parse(bootstrapCatalogText as unknown as string)
@@ -187,8 +203,11 @@ export namespace ModelsDev {
         `Bundled model catalog is invalid JSON: ${error instanceof Error ? error.message : String(error)}`,
       )
     }
-    const remote = parseCatalog(input, "bundled bootstrap", false)
-    return parseCatalog(withLocalProviders(remote), "bundled bootstrap")
+    return parseCatalog(input, "bundled bootstrap", false)
+  }
+
+  function bootstrapCatalog(): Record<string, Provider> {
+    return parseCatalog(withLocalProviders(bootstrapCatalogSource()), "bundled bootstrap")
   }
 
   async function provisionDefaultCatalog(): Promise<void> {
@@ -200,11 +219,29 @@ export namespace ModelsDev {
     if (created) log.info("provisioned bundled model catalog", { source })
   }
 
+  export async function migrateDefaultCatalogFile(source = catalogPath()): Promise<boolean> {
+    if (source === catalogPath() && Flag.OPENCORVUS_MODELS_PATH) return false
+    await fs.mkdir(path.dirname(source), { recursive: true })
+    return withKeyedLock(catalogWriterLocks, source, async () => {
+      const release = await lockfile.lock(source, { realpath: false })
+      try {
+        const current = parseCatalog(await Filesystem.readJson<unknown>(source), source, false)
+        if (current.opencorvus) return false
+        const next = parseCatalog(migrateDefaultCatalog(current), source)
+        await Filesystem.writeAtomic(source, JSON.stringify(next, null, 2), 0o600)
+        return true
+      } finally {
+        await release()
+      }
+    })
+  }
+
   async function writeCatalogTransaction(
     update: (current: Record<string, Provider>) => Record<string, Provider>,
   ): Promise<Record<string, Provider>> {
     const source = catalogPath()
     await provisionDefaultCatalog()
+    await migrateDefaultCatalogFile()
     await fs.mkdir(path.dirname(source), { recursive: true })
     return withKeyedLock(catalogWriterLocks, source, async () => {
       const release = await lockfile.lock(source, { realpath: false })
@@ -229,7 +266,7 @@ export namespace ModelsDev {
         .join("; ")
       throw new Error(`Model catalog ${source} is invalid: ${details}`)
     }
-    const catalog = withoutOmittedProductProviders(parsed.data)
+    const catalog = parsed.data
     if (requireLocalProviders) {
       for (const providerID of LOCAL_PROVIDER_IDS) {
         if (!catalog[providerID]) {
@@ -240,9 +277,14 @@ export namespace ModelsDev {
     return catalog
   }
 
+  export function validateExplicitCatalog(input: unknown): Record<string, Provider> {
+    return parseCatalog(input, "explicit model catalog")
+  }
+
   export const Data = lazy(async () => {
     const source = catalogPath()
     await provisionDefaultCatalog()
+    await migrateDefaultCatalogFile()
     let input: unknown
     try {
       input = await Filesystem.readJson(source)
@@ -255,6 +297,22 @@ export namespace ModelsDev {
   export async function get() {
     const result = await Data()
     return result as Record<string, Provider>
+  }
+
+  export async function replaceProviderModels(providerID: string, models: Record<string, Model>): Promise<Provider> {
+    const parsedModels = z.record(z.string(), Model).parse(models)
+    const next = await writeCatalogTransaction((current) => {
+      const provider = current[providerID]
+      if (!provider) throw new Error(`Model catalog is missing provider ${providerID}`)
+      return {
+        ...current,
+        [providerID]: {
+          ...provider,
+          models: parsedModels,
+        },
+      }
+    })
+    return next[providerID]!
   }
 
   /**

@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "automotive-functional-safety",
+  "name": "Automotive Functional Safety",
+  "label": "Automotive Functional Safety",
+  "description": "Item, HARA, safety-requirement, failure-analysis, verification and lifecycle evidence joined into a qualified functional-safety-case review pack.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for bounded road-vehicle E/E functional-safety evidence.",
+    "selection_guidance": "Select for item/HARA/safety-goal, requirements, HW/SW analysis, verification, configuration, change and confirmation evidence without ASIL, design, qualification, release or compliance authority.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "automotive-functional-safety/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "item-definition-hara-evidence-analyst": {
+        "label": "Item Definition and HARA Evidence Analyst",
+        "description": "Traces item boundaries, situations, hazardous events, classifications and supplied safety goals.",
+        "base_role": "explore",
+        "prompt": "agents/item-definition-hara-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "automotive-functional-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "safety-concept-requirement-trace-analyst": {
+        "label": "Safety Concept and Requirement Trace Analyst",
+        "description": "Traces safety goals through functional, technical, system, hardware and software requirements and tests.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/safety-concept-requirement-trace-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "automotive-functional-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "hardware-software-safety-analysis-verification-analyst": {
+        "label": "Hardware, Software and Verification Analyst",
+        "description": "Reviews supplied failure analyses, metrics, dependent failures, verification and validation evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/hardware-software-safety-analysis-verification-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "automotive-functional-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "functional-safety-lifecycle-assurance-analyst": {
+        "label": "Functional Safety Lifecycle Assurance Analyst",
+        "description": "Traces plans, responsibility interfaces, configuration, changes, anomalies, qualification and confirmation evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/functional-safety-lifecycle-assurance-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "automotive-functional-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "automotive-functional-safety-case-owner": {
+        "label": "Automotive Functional Safety Case Owner",
+        "description": "Joins four branches into a claim-evidence-gap register for qualified assessment.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/automotive-functional-safety-case-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "automotive-functional-safety/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "automotive-functional-safety-case-review": {
+        "label": "Automotive Functional Safety Case Review",
+        "description": "Four independent functional-safety branches converge into one qualified-review pack.",
+        "nodes": {
+          "item-definition-hara-evidence-analyst": {
+            "agent_id": "item-definition-hara-evidence-analyst",
+            "description": "Traces item and HARA evidence.",
+            "depends_on": []
+          },
+          "safety-concept-requirement-trace-analyst": {
+            "agent_id": "safety-concept-requirement-trace-analyst",
+            "description": "Traces safety concepts and requirements.",
+            "depends_on": []
+          },
+          "hardware-software-safety-analysis-verification-analyst": {
+            "agent_id": "hardware-software-safety-analysis-verification-analyst",
+            "description": "Traces failure analysis and V&V evidence.",
+            "depends_on": []
+          },
+          "functional-safety-lifecycle-assurance-analyst": {
+            "agent_id": "functional-safety-lifecycle-assurance-analyst",
+            "description": "Traces lifecycle assurance evidence.",
+            "depends_on": []
+          },
+          "automotive-functional-safety-case-owner": {
+            "agent_id": "automotive-functional-safety-case-owner",
+            "description": "Joins all branches without approving safety or release.",
+            "depends_on": [
+              "functional-safety-lifecycle-assurance-analyst",
+              "hardware-software-safety-analysis-verification-analyst",
+              "item-definition-hara-evidence-analyst",
+              "safety-concept-requirement-trace-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

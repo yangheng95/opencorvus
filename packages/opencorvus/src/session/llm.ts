@@ -25,7 +25,7 @@ import { sessionLifecycleOrderKey } from "./status"
 import { Plugin } from "@/plugin"
 import { SystemPrompt } from "./system"
 import { Flag } from "@/flag/flag"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Auth } from "@/auth"
 import { AgentTrace } from "@/trace"
 import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
@@ -35,7 +35,10 @@ export namespace LLM {
   export const OUTPUT_TOKEN_MAX = ProviderTransform.OUTPUT_TOKEN_MAX
 
   export type StreamInput = {
-    user: Message.User
+    /** Real transcript user message when this stream belongs to a conversation turn. */
+    user?: Message.User
+    /** Real non-message occurrence identity for an internal, tool-free participant request. */
+    requestID?: string
     sessionID: string
     model: Provider.Model
     agentID: string
@@ -82,7 +85,7 @@ export namespace LLM {
     agent: SessionAgentRuntime
     model: Provider.Model
     system: string[]
-    user: Message.User
+    user?: Message.User
     sessionID?: string
     runtimeSystemMode?: "complete"
   }) {
@@ -110,6 +113,8 @@ export namespace LLM {
   }
 
   export async function stream(input: StreamInput): Promise<StreamResult> {
+    const requestID = input.user?.id ?? input.requestID
+    if (!requestID) throw new Error("LLM.stream requires a real user Message or request occurrence identity")
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     const agent = input.agent
     const l = log
@@ -148,7 +153,7 @@ export namespace LLM {
     }
 
     const variant =
-      !input.small && input.model.variants && input.user.variant ? input.model.variants[input.user.variant] : {}
+      !input.small && input.model.variants && input.user?.variant ? input.model.variants[input.user.variant] : {}
     const base = input.small
       ? ProviderTransform.smallOptions(input.model)
       : ProviderTransform.options({
@@ -167,39 +172,32 @@ export namespace LLM {
     }
 
     const maxOutputTokens = ProviderTransform.maxOutputTokens(input.model)
-    const params = await Plugin.trigger(
-      "chat.params",
-      {
-        sessionID: input.sessionID,
-        agent,
-        model: input.model,
-        provider,
-        message: input.user,
-      },
-      {
-        temperature: input.model.capabilities.temperature
-          ? (agent.temperature ?? ProviderTransform.temperature(input.model))
-          : undefined,
-        topP: agent.topP ?? ProviderTransform.topP(input.model),
-        topK: ProviderTransform.topK(input.model),
-        maxOutputTokens,
-        options,
-      },
-    )
+    const baseParams = {
+      temperature: input.model.capabilities.temperature
+        ? (agent.temperature ?? ProviderTransform.temperature(input.model))
+        : undefined,
+      topP: agent.topP ?? ProviderTransform.topP(input.model),
+      topK: ProviderTransform.topK(input.model),
+      maxOutputTokens,
+      options,
+    }
+    const params = input.user
+      ? await Plugin.trigger(
+          "chat.params",
+          { sessionID: input.sessionID, agent, model: input.model, provider, message: input.user },
+          baseParams,
+        )
+      : baseParams
 
-    const { headers } = await Plugin.trigger(
-      "chat.headers",
-      {
-        sessionID: input.sessionID,
-        agent,
-        model: input.model,
-        provider,
-        message: input.user,
-      },
-      {
-        headers: {},
-      },
-    )
+    const headers = input.user
+      ? (
+          await Plugin.trigger(
+            "chat.headers",
+            { sessionID: input.sessionID, agent, model: input.model, provider, message: input.user },
+            { headers: {} },
+          )
+        ).headers
+      : {}
 
     const tools = await resolveTools({ ...input, agent })
     const toolChoice = input.toolChoice
@@ -212,7 +210,7 @@ export namespace LLM {
         ? {
             "x-opencorvus-project": Instance.project.id,
             "x-opencorvus-session": input.sessionID,
-            "x-opencorvus-request": input.user.id,
+            "x-opencorvus-request": requestID,
             "x-opencorvus-client": Flag.OPENCORVUS_CLIENT,
           }
         : ProviderLLM.baseHeaders(input.model, input.sessionID)),
@@ -234,7 +232,7 @@ export namespace LLM {
           model: { providerID: input.model.providerID, modelID: input.model.id },
           small: input.small,
           toolChoice,
-          requestMessageID: input.user.id,
+          requestMessageID: requestID,
           tools: Object.keys(tools),
         })
       }
@@ -244,7 +242,7 @@ export namespace LLM {
       onError(event) {
         void input.stream?.onError?.(event)
         const error = Message.fromError(event.error, { providerID: input.model.providerID })
-        Bus.publish(SessionEvents.Error, {
+        Bus.publishOwned(SessionEvents.Error, {
           sessionID: input.sessionID,
           orderKey: sessionLifecycleOrderKey(input.sessionID),
           error,
@@ -272,6 +270,7 @@ export namespace LLM {
       // idle/timeout authority and composes its own abort signal into
       // `input.abort`. A second timeout here would race it.
       timeoutMs: false,
+      usagePurpose: "session",
       headers: requestHeaders,
       maxRetries: input.retries ?? 0,
       stopWhen: input.stopWhen,
@@ -287,9 +286,9 @@ export namespace LLM {
   }
 
   async function resolveTools(input: Pick<StreamInput, "tools" | "agent" | "user">) {
-    const disabled = PermissionNext.disabled(Object.keys(input.tools), input.agent.permission)
+    const disabled = CapabilityRules.disabled(Object.keys(input.tools), input.agent.permission)
     for (const tool of Object.keys(input.tools)) {
-      if (input.user.tools?.[tool] === false || disabled.has(tool)) {
+      if (input.user?.tools?.[tool] === false || disabled.has(tool)) {
         delete input.tools[tool]
       }
     }

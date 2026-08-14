@@ -3,12 +3,12 @@ import { bootstrap } from "../../bootstrap"
 import { cmd } from "../cmd"
 import { ConfigCommand } from "./config"
 import { FileCommand } from "./file"
-import { LSPCommand } from "./lsp"
 import { RipgrepCommand } from "./ripgrep"
 import { ScrapCommand } from "./scrap"
 import { SkillCommand } from "./skill"
 import { SnapshotCommand } from "./snapshot"
 import { GcCommand } from "./gc"
+import { WorkArtifactLifecycleCommand } from "./work-artifact"
 
 export const DebugCommand = cmd({
   command: "debug",
@@ -16,13 +16,13 @@ export const DebugCommand = cmd({
   builder: (yargs) =>
     yargs
       .command(ConfigCommand)
-      .command(LSPCommand)
       .command(RipgrepCommand)
       .command(FileCommand)
       .command(ScrapCommand)
       .command(SkillCommand)
       .command(SnapshotCommand)
       .command(GcCommand)
+      .command(WorkArtifactLifecycleCommand)
       .command(PathsCommand)
       .command({
         command: "wait",

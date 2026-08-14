@@ -2,29 +2,10 @@
 import Default from '@astrojs/starlight/components/Head.astro'
 import config from '../../config.mjs'
 
-const {
-  entry: {
-    slug,
-    data: { title },
-  },
-  head,
-} = Astro.locals.starlightRoute;
-const t = Astro.locals.t as (key: string) => string
-const titleSuffix = t("app.head.titleSuffix")
-const isHome = slug === "" || slug === "zh-cn"
 const ogImage = `${config.url}/social-share.png`
 ---
 
-{isHome ? (
-  <>
-    {head.filter(({ tag }) => tag !== "title").map(({ tag: Tag, attrs, content }) => (
-      <Tag {...attrs} set:html={content} />
-    ))}
-    <title>{title} | {titleSuffix}</title>
-  </>
-) : (
-  <Default {...Astro.props}><slot /></Default>
-)}
+<Default {...Astro.props}><slot /></Default>
 
 <meta property="og:image" content={ogImage} />
 <meta property="twitter:image" content={ogImage} />

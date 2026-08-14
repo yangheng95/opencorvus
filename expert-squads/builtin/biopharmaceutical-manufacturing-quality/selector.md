@@ -1,0 +1,3 @@
+Select this Squad for biopharmaceutical GMP manufacturing batch execution, material/lot/equipment genealogy, electronic records/audit trails, yield reconciliation, deviations/OOS/OOT, investigations/CAPA, process-validation lifecycle, CQA/CPP/control-strategy traceability, continued process verification, and applicable cleaning/contamination-control evidence.
+
+Do not select it for regulatory pathway strategy, clinical-trial conduct, or laboratory method approval. Never use it to mutate records, change process parameters, decide root cause/impact/disposition, close deviation/OOS/OOT/CAPA, validate a result, approve protocol/report, release equipment/area/batch, claim quality/sterility/GMP compliance, submit to an authority or provide patient advice.

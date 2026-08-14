@@ -364,21 +364,6 @@ export function listConversationAgentSessionsForSessionTree(input: {
         (SELECT count(*) FROM message m WHERE m.session_id = s.id) AS messageCount
       FROM session s
       JOIN session_tree st ON st.id = s.id
-      LEFT JOIN protocol_event pe
-        ON pe.session_id = s.id
-       AND pe.type = 'agent.execution.lifecycle'
-       AND NOT EXISTS (
-         SELECT 1 FROM protocol_event pe_newer
-         WHERE pe_newer.session_id = pe.session_id
-           AND pe_newer.type = 'agent.execution.lifecycle'
-           AND (
-             pe_newer.emitted_at > pe.emitted_at
-             OR (
-               pe_newer.emitted_at = pe.emitted_at
-               AND pe_newer.seq > pe.seq
-             )
-           )
-       )
       LEFT JOIN worker_turn_descriptor wtd
         ON wtd.session_id = s.id
        AND NOT EXISTS (
@@ -389,6 +374,31 @@ export function listConversationAgentSessionsForSessionTree(input: {
              OR (
                wtd_newer.time_created = wtd.time_created
                AND wtd_newer.id > wtd.id
+            )
+          )
+       )
+      LEFT JOIN protocol_event pe
+        ON pe.session_id = s.id
+       AND pe.type = 'agent.execution.lifecycle'
+       AND (
+         wtd.id IS NULL
+         OR json_extract(pe.payload, '$.inputMessageID') =
+            json_extract(wtd.payload, '$.messageAuthority.user_message_id')
+       )
+       AND NOT EXISTS (
+         SELECT 1 FROM protocol_event pe_newer
+         WHERE pe_newer.session_id = pe.session_id
+           AND pe_newer.type = 'agent.execution.lifecycle'
+           AND (
+             wtd.id IS NULL
+             OR json_extract(pe_newer.payload, '$.inputMessageID') =
+                json_extract(wtd.payload, '$.messageAuthority.user_message_id')
+           )
+           AND (
+             pe_newer.emitted_at > pe.emitted_at
+             OR (
+               pe_newer.emitted_at = pe.emitted_at
+               AND pe_newer.seq > pe.seq
              )
            )
        )

@@ -1,0 +1,3 @@
+Use `academic-paper-review/shared/academic-paper-review-method` and completely read every predecessor output. Join them with `assets/review-evidence-register.md`. Preserve branch disagreements, exact locators, search limitations, passing coverage, strengths, unresolved unknowns, and requests for specialist review.
+
+Deduplicate findings only when their evidence and correction are equivalent. Prioritize by impact on central claims, reproducibility, integrity, and reader interpretation. Deliver a structured summary, contribution and novelty assessment, major and minor findings, questions for authors, presentation revisions, citation/hallucination ledger, and ordered revision plan. Do not invent an editorial decision, score people, or upgrade uncertainty into confidence.

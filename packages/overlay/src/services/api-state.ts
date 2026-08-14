@@ -30,7 +30,7 @@ export function configure(opts: { serverUrl?: string; username?: string; passwor
     serverUrl = opts.serverUrl
     credentialChanged = true
   }
-  if (opts.username && opts.username !== authCredentials.username) {
+  if (opts.username !== undefined && opts.username !== authCredentials.username) {
     authCredentials.username = opts.username
     credentialChanged = true
   }

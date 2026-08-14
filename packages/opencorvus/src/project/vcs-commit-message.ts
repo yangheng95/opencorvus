@@ -102,6 +102,7 @@ export async function streamCommitMessage(input: CommitMessageInput): Promise<st
   ]
   const result = streamText({
     model: language,
+    usagePurpose: "vcs-commit-message",
     temperature: model.providerID.startsWith("moonshotai") ? 1 : 0,
     messages,
     abortSignal: input.signal,

@@ -17,6 +17,7 @@ import {
   ResourceListChangedNotificationSchema,
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js"
+import { PermissionAuthority } from "@/permission/authority"
 import { ReadBuffer, serializeMessage } from "@modelcontextprotocol/sdk/shared/stdio.js"
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js"
 import { AsyncLocalStorage } from "node:async_hooks"
@@ -47,6 +48,7 @@ import { Env } from "@/runtime/env"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createHash } from "node:crypto"
 import { isToolVisibilityAppOnly } from "@modelcontextprotocol/ext-apps/app-bridge"
+import { createLocalMcpProcessDiagnostics, type LocalMcpProcessDiagnostics } from "./local-process-diagnostics"
 import {
   assertTaskNetworkCapability,
   readTaskProcessBinding,
@@ -163,7 +165,13 @@ export namespace MCP {
     resourceURI: string
     withClient?: <T>(run: (client: MCPClient, timeout: number) => Promise<T>) => Promise<T>
   }
+  export type ToolAuthorityBinding = {
+    serverID: string
+    configDigest: string
+    toolDigest: string
+  }
   const appToolBindings = new WeakMap<object, AppToolBinding>()
+  const toolAuthorityBindings = new WeakMap<object, ToolAuthorityBinding>()
   const appToolResults = new WeakMap<object, CallToolResult>()
 
   function stableToolUiResourceUri(tool: MCPToolDef): string | undefined {
@@ -316,15 +324,18 @@ export namespace MCP {
       inputSchema: jsonSchema(schema),
       execute: async (args: unknown) => {
         assertMcpCapability(`MCP ${source.serverID}/${mcpTool.name}`, source.type, source.processAuthority)
-        return client.callTool(
-          {
-            name: mcpTool.name,
-            arguments: (args || {}) as Record<string, unknown>,
-          },
-          CallToolResultSchema,
-          mcpRequestOptions(timeout),
-        )
+        return callToolWithTaskRecovery({
+          client,
+          tool: mcpTool,
+          args: (args || {}) as Record<string, unknown>,
+          timeout,
+        })
       },
+    })
+    toolAuthorityBindings.set(tool, {
+      serverID: source.serverID,
+      configDigest: source.configDigest,
+      toolDigest: toolDefinitionDigest(mcpTool),
     })
     const resourceURI = stableToolUiResourceUri(mcpTool)
     if (resourceURI) {
@@ -341,9 +352,19 @@ export namespace MCP {
     return appToolBindings.get(tool)
   }
 
+  export function toolAuthorityBinding(tool: object): ToolAuthorityBinding | undefined {
+    return toolAuthorityBindings.get(tool)
+  }
+
+  export function toolDefinitionDigest(tool: MCPToolDef): string {
+    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(tool))).digest("hex")
+  }
+
   export function copyAppToolBinding(source: object, target: object): void {
     const binding = appToolBindings.get(source)
     if (binding) appToolBindings.set(target, binding)
+    const authority = toolAuthorityBindings.get(source)
+    if (authority) toolAuthorityBindings.set(target, authority)
   }
 
   export function bindAppToolResult<T extends object>(output: T, result: CallToolResult): T {
@@ -644,6 +665,11 @@ export namespace MCP {
           args: (args || {}) as Record<string, unknown>,
         }),
     })
+    toolAuthorityBindings.set(tool, {
+      serverID: input.key,
+      configDigest: mcpConfigDigest(input.mcp),
+      toolDigest: toolDefinitionDigest(mcpTool),
+    })
     const resourceURI = stableToolUiResourceUri(mcpTool)
     if (resourceURI) {
       appToolBindings.set(tool, {
@@ -671,17 +697,11 @@ export namespace MCP {
     assertMcpCapability(`MCP ${input.key}/${input.toolName}`, input.mcp.type, input.processAuthority)
     return withScopedClient(
       input,
-      async (client, timeout) =>
-        CallToolResultSchema.parse(
-          await client.callTool(
-            {
-              name: input.toolName,
-              arguments: input.args,
-            },
-            undefined,
-            mcpRequestOptions(timeout),
-          ),
-        ),
+      async (client, timeout, connection) => {
+        const tool = connection.tools.find((item) => item.name === input.toolName)
+        if (!tool) throw new Error(`Scoped MCP server ${input.key} does not expose tool ${input.toolName}`)
+        return callToolWithTaskRecovery({ client, tool, args: input.args, timeout })
+      },
       { skipToolListVerification: true },
     )
   }
@@ -1103,6 +1123,91 @@ export namespace MCP {
       resetTimeoutOnProgress: true,
       timeout,
     }
+  }
+
+  function terminalTaskStatus(status: PermissionAuthority.McpTask["status"]): boolean {
+    return status === "completed" || status === "failed" || status === "cancelled"
+  }
+
+  async function recoverMcpTask(
+    client: MCPClient,
+    task: PermissionAuthority.McpTask,
+    timeout: number,
+    signal?: AbortSignal,
+  ): Promise<CallToolResult> {
+    let current = task
+    while (!terminalTaskStatus(current.status)) {
+      if (current.status === "input_required") {
+        return CallToolResultSchema.parse(
+          await client.experimental.tasks.getTaskResult(current.taskId, CallToolResultSchema, {
+            ...mcpRequestOptions(timeout),
+            signal,
+          }),
+        )
+      }
+      const pollInterval = current.pollInterval ?? 1_000
+      await new Promise<void>((resolve, reject) => {
+        const finish = () => {
+          if (signal) signal.removeEventListener("abort", aborted)
+          resolve()
+        }
+        const timer = setTimeout(finish, pollInterval)
+        const aborted = () => {
+          clearTimeout(timer)
+          reject(signal?.reason ?? new Error("MCP task recovery was aborted"))
+        }
+        if (signal?.aborted) aborted()
+        else signal?.addEventListener("abort", aborted, { once: true })
+      })
+      current = PermissionAuthority.recordMcpTask(
+        await client.experimental.tasks.getTask(current.taskId, { ...mcpRequestOptions(timeout), signal }),
+      )
+    }
+    if (current.status === "completed") {
+      return CallToolResultSchema.parse(
+        await client.experimental.tasks.getTaskResult(current.taskId, CallToolResultSchema, {
+          ...mcpRequestOptions(timeout),
+          signal,
+        }),
+      )
+    }
+    throw new Error(`MCP task ${current.taskId} ended as ${current.status}: ${current.statusMessage ?? "no status message"}`)
+  }
+
+  /** Execute one MCP Tool only from inside PermissionAuthority, resuming its protocol Task when present. */
+  export async function callToolWithTaskRecovery(input: {
+    client: MCPClient
+    tool: MCPToolDef
+    args: Record<string, unknown>
+    timeout: number
+    signal?: AbortSignal
+  }): Promise<CallToolResult> {
+    const execution = PermissionAuthority.requireMcpExecutionContext()
+    if (execution.task) return recoverMcpTask(input.client, execution.task, input.timeout, input.signal)
+    const params = { name: input.tool.name, arguments: input.args }
+    const taskSupport = input.tool.execution?.taskSupport
+    if (taskSupport !== "optional" && taskSupport !== "required") {
+      return CallToolResultSchema.parse(
+        await input.client.callTool(params, CallToolResultSchema, {
+          ...mcpRequestOptions(input.timeout),
+          signal: input.signal,
+        }),
+      )
+    }
+    const stream = input.client.experimental.tasks.callToolStream(params, CallToolResultSchema, {
+      ...mcpRequestOptions(input.timeout),
+      signal: input.signal,
+      task: {},
+    })
+    for await (const message of stream) {
+      if (message.type === "taskCreated" || message.type === "taskStatus") {
+        PermissionAuthority.recordMcpTask(message.task)
+        continue
+      }
+      if (message.type === "result") return CallToolResultSchema.parse(message.result)
+      throw message.error
+    }
+    throw new Error(`MCP task Tool ${input.tool.name} ended without a result`)
   }
 
   export function mcpFetchRequestInit(timeout: number): RequestInit {
@@ -2584,6 +2689,8 @@ export namespace MCP {
     let mcpTransport: ClosableTransport | undefined
     let connectionCwd: string | undefined
     let status: Status | undefined = undefined
+    let localDiagnostics: LocalMcpProcessDiagnostics | undefined
+    let localFailure: ((error: unknown) => Extract<Status, { status: "failed" }>) | undefined
 
     if (mcp.type === "remote") {
       // OAuth is enabled by default for remote servers unless explicitly disabled with oauth: false
@@ -2671,18 +2778,18 @@ export namespace MCP {
               status: "needs_client_registration" as const,
               error: "Server does not support dynamic client registration. Please provide clientId in config.",
             }
-            Bus.publish(AuthRequired, {
+            Bus.publishOwned(AuthRequired, {
               name: key,
               message: `Server "${key}" requires a pre-registered client ID. Add clientId to your config.`,
               reason: "needs_client_registration",
-            }).catch((e) => log.debug("failed to publish MCP auth notice", { error: e }))
+            })
           } else {
             status = { status: "needs_auth" as const }
-            Bus.publish(AuthRequired, {
+            Bus.publishOwned(AuthRequired, {
               name: key,
               message: `Server "${key}" requires authentication. Run: opencorvus mcp auth ${key}`,
               reason: "needs_auth",
-            }).catch((e) => log.debug("failed to publish MCP auth notice", { error: e }))
+            })
           }
           try {
             await closeClientAndTransport(key, client, transport)
@@ -2720,38 +2827,62 @@ export namespace MCP {
     if (mcp.type === "local") {
       const [configuredCommand, ...configuredArgs] = mcp.command
       const baseEnvironment = localMcpBaseEnvironment(configuredCommand, mcp)
-      const processPlan = builtinBrowser
-        ? await BrowserMCPBuiltin.resolveStdioProcess({
-            env: await browserMcpBridgeEnvironment(baseEnvironment),
+      const diagnosticID = crypto.randomUUID()
+      const initializeLocalDiagnostics = (environment: Readonly<Record<string, string>>) => {
+        const diagnostics = createLocalMcpProcessDiagnostics({
+          environment,
+          onDiagnostic: (diagnostic) => log.info("local mcp stderr", { key, diagnostic }),
+        })
+        const failure = (error: unknown): Extract<Status, { status: "failed" }> => {
+          diagnostics.finish()
+          const safeError = diagnostics.sanitize(errorMessage(error))
+          log.error("local mcp startup failed", {
+            key,
+            diagnosticID,
+            cwd: directory,
+            error: safeError,
+            stderr: diagnostics.tail(),
           })
-        : {
-            executable: configuredCommand,
-            args: configuredArgs,
-            env: baseEnvironment,
+          return {
+            status: "failed",
+            error: `Local MCP startup failed (diagnostic ID: ${diagnosticID})`,
           }
-      const cmd = processPlan.executable
-      const args = processPlan.args
-      const cwd = directory
-      connectionCwd = cwd
-      const env = Object.fromEntries(
-        Object.entries(processPlan.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
-      )
-      const transport = new SupervisedStdioClientTransport({
-        stderr: "pipe",
-        command: cmd,
-        args,
-        cwd,
-        env,
-      }, options.processAuthority)
-      let stderrText = ""
-      transport.stderr?.on("data", (chunk: Buffer) => {
-        const text = chunk.toString()
-        stderrText = (stderrText + text).slice(-4_000)
-        log.info(`mcp stderr: ${text}`, { key })
-      })
-
+        }
+        return { diagnostics, failure }
+      }
+      let transport: SupervisedStdioClientTransport | undefined
       let client: Client | undefined
       try {
+        const processPlan = builtinBrowser
+          ? await BrowserMCPBuiltin.resolveStdioProcess({
+              env: await browserMcpBridgeEnvironment(baseEnvironment),
+            })
+          : {
+              executable: configuredCommand,
+              args: configuredArgs,
+              env: baseEnvironment,
+            }
+        const cwd = directory
+        connectionCwd = cwd
+        const env = Object.fromEntries(
+          Object.entries(processPlan.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+        )
+        const initialized = initializeLocalDiagnostics(env)
+        localDiagnostics = initialized.diagnostics
+        localFailure = initialized.failure
+        const diagnostics = initialized.diagnostics
+        transport = new SupervisedStdioClientTransport(
+          {
+            stderr: "pipe",
+            command: processPlan.executable,
+            args: processPlan.args,
+            cwd,
+            env,
+          },
+          options.processAuthority,
+        )
+        transport.stderr?.on("data", (chunk: Buffer) => diagnostics.write(chunk))
+        transport.stderr?.once("end", () => diagnostics.finish())
         client = new Client({
           name: "opencorvus",
           version: Installation.VERSION,
@@ -2764,26 +2895,33 @@ export namespace MCP {
           status: "connected",
         }
       } catch (error) {
-        log.error("local mcp startup failed", {
-          key,
-          command: mcp.command,
-          cwd,
-          error: error instanceof Error ? error.message : String(error),
-          stderr: stderrText,
-        })
-        const message = error instanceof Error ? error.message : String(error)
-        const detail = stderrText.trim()
-        status = {
-          status: "failed" as const,
-          error: detail ? `${message}\n${detail}` : message,
+        let diagnostics = localDiagnostics
+        let failure = localFailure
+        if (!diagnostics || !failure) {
+          const initialized = initializeLocalDiagnostics(
+            Object.fromEntries(
+              Object.entries(baseEnvironment).filter(
+                (entry): entry is [string, string] => typeof entry[1] === "string",
+              ),
+            ),
+          )
+          diagnostics = initialized.diagnostics
+          failure = initialized.failure
+          localDiagnostics = diagnostics
+          localFailure = failure
         }
+        let cleanupError: unknown
         try {
           await closeClientAndTransport(key, client, transport)
-        } catch (cleanupError) {
+        } catch (error) {
+          cleanupError = error
+        }
+        status = failure(error)
+        if (cleanupError) {
           throw new McpCreateCleanupError(
             cleanupConnection(key, mcp, client, transport, connectionCwd),
             status,
-            cleanupError,
+            new Error(diagnostics.sanitize(errorMessage(cleanupError))),
           )
         }
       }
@@ -2810,31 +2948,31 @@ export namespace MCP {
       try {
         result = await mcpClient.listTools(undefined, mcpRequestOptions(requestTimeout))
       } catch (err) {
-        listToolsError = errorMessage(err)
+        listToolsError = localDiagnostics?.sanitize(errorMessage(err)) ?? errorMessage(err)
         log.error("failed to get tools from client", { key, error: listToolsError })
       }
     }
     if (!result && !options.skipToolListVerification) {
       const failureMessage = listToolsError || "MCP listTools returned no result"
-      status = {
-        status: "failed",
-        error: failureMessage,
-      }
+      let cleanupError: unknown
       try {
         await closeClientAndTransport(key, mcpClient, mcpTransport)
-      } catch (cleanupError) {
+      } catch (error) {
+        cleanupError = error
+      }
+      status = localFailure ? localFailure(failureMessage) : { status: "failed", error: failureMessage }
+      if (cleanupError) {
         throw new McpCreateCleanupError(
           cleanupConnection(key, mcp, mcpClient, mcpTransport, connectionCwd),
           status,
-          cleanupError,
+          localDiagnostics ? new Error(localDiagnostics.sanitize(errorMessage(cleanupError))) : cleanupError,
         )
       }
       return {
         mcpClient: undefined,
         mcpConnection: undefined,
         status: {
-          status: "failed" as const,
-          error: failureMessage,
+          ...status,
         },
       }
     }
@@ -3574,7 +3712,7 @@ export namespace MCP {
       // Browser opening failed (e.g., in remote/headless sessions like SSH, devcontainers)
       // Emit event so CLI can display the URL for manual opening
       log.warn("failed to open browser, user must open URL manually", { mcpName, error })
-      Bus.publish(BrowserOpenFailed, { mcpName, url: authorizationUrl })
+      Bus.publishOwned(BrowserOpenFailed, { mcpName, url: authorizationUrl })
     }
 
     // Wait for callback using the already-registered promise
@@ -3745,23 +3883,6 @@ export namespace MCP {
   // Scoped MCP capability projections consumed by package and host tool surfaces.
   // ---------------------------------------------------------------------------
 
-  export async function serverTools() {
-    const toolsMap = await tools({ kind: "host", cwd: Instance.directory })
-    return Object.entries(toolsMap).map(([key, tool]) => ({
-      key,
-      name: key,
-      description: tool.description ?? "",
-      inputSchema: (tool as { inputSchema?: Record<string, unknown> }).inputSchema ?? {
-        type: "object" as const,
-        properties: {},
-      },
-      annotations: (tool as { annotations?: Record<string, unknown> }).annotations,
-      client: key.split("_")[0] ?? key,
-      execute: (tool as { execute?: (args: unknown) => unknown }).execute,
-      _tool: tool,
-    }))
-  }
-
   export async function serverPrompts() {
     const promptsMap = await prompts()
     return Object.entries(promptsMap).map(([key, prompt]) => ({
@@ -3787,12 +3908,4 @@ export namespace MCP {
     }))
   }
 
-  export async function callTool(input: { key: string; args: Record<string, unknown> }) {
-    const toolsMap = await tools({ kind: "host", cwd: Instance.directory })
-    const tool = toolsMap[input.key]
-    if (!tool) throw new Error(`MCP tool not found: ${input.key}`)
-    const execute = (tool as { execute?: (args: unknown) => unknown }).execute
-    if (typeof execute !== "function") throw new Error(`MCP tool ${input.key} is not executable`)
-    return execute(input.args)
-  }
 }

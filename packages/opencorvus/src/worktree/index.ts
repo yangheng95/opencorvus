@@ -23,7 +23,7 @@ import { InternalGitCommitSubject } from "@/engine/internal-git-commit-subject"
 import { SessionPromptState } from "@/session/prompt/state"
 import { ProjectGitLock } from "@/worktree/git-lock"
 import { WorktreeOwnershipCriticalSection } from "@/worktree/ownership-critical-section"
-import { taskProcessBindingOwnsDirectory } from "@/engine/task-execution-capsule-binding"
+import { activeTaskProcessBindingRoots } from "@/engine/task-execution-capsule-binding"
 import { Ownership } from "@/engine/ownership"
 import { findTask } from "@/engine/store"
 import { isTaskTerminal } from "@/engine/task-status"
@@ -998,7 +998,7 @@ export namespace Worktree {
     if (!result.removed) {
       throw new RemoveFailedError({ message: `Worktree is actively owned: ${target.directory}` })
     }
-    return target
+    return { target, receipt: result.receipt }
   })
 
   export const resetProjectWorktree = fn(ResetInput, async (input) => {
@@ -1022,51 +1022,125 @@ export namespace Worktree {
     projectID?: string
     directory: string
     releaseSandboxOwnership?: boolean
-  }): Promise<{ directory: string; removed: boolean }> {
-    const directory = await canonical(input.directory)
+  }): Promise<{
+      directory: string
+      removed: boolean
+      proof?: "owned" | "ownerless"
+      receipt?: import("@opencorvus-ai/transport-protocol").ProjectWorktreeDeleteReceipt
+  }> {
     const projectID = input.projectID ?? Instance.project.id
     return withGitLock(async () => {
-      const primaryEntry = (await listRegisteredWorktrees(Instance.worktree))[0]
+      const registered = await listRegisteredWorktrees(Instance.worktree)
+      const primaryEntry = registered[0]
       const primary = primaryEntry?.path ?? Instance.worktree
-      if (!(await isManagedWorktreeDirectory(primary, directory))) {
+      const primaryIdentity = await Ownership.Worktree.observeIdentity(primary, "resolve-primary-worktree")
+      const directoryIdentity = await Ownership.Worktree.observeIdentity(input.directory, "resolve-target-worktree")
+      const managedRoot = ProjectRuntimePaths.isManagedWorktreePath(primaryIdentity.key, directoryIdentity.key)
+      if (!managedRoot) {
         throw new RemoveFailedError({ message: `Refusing to remove unmanaged project worktree: ${input.directory}` })
       }
+      let registeredTarget: RegisteredWorktreeEntry | undefined
+      for (const entry of registered) {
+        if (
+          (await Ownership.Worktree.compareIdentity(directoryIdentity, entry.path, "compare-registered-worktree")) ===
+          "same"
+        ) {
+          registeredTarget = entry
+          break
+        }
+      }
+      const matchedSandboxes: string[] = []
+      let sandboxAuthority: ReturnType<typeof Project.exactSandboxAuthority>
       const result = await WorktreeOwnershipCriticalSection.remove({
-        directory,
+        directory: directoryIdentity.key,
         proveOwnerless: async () => {
-          if (taskProcessBindingOwnsDirectory({ projectID, directory })) return false
-          if (
-            await Ownership.Worktree.hasLiveOwner({
-              primaryWorktreeDir: primary,
-              worktreeDir: directory,
-              isTaskOwner: (taskID) => {
-                const task = findTask(taskID)
-                return Boolean(task && !isTaskTerminal(task))
-              },
-            })
-          ) {
-            return false
-          }
-          const project = Project.get(projectID)
-          if (!project) return true
-          for (const sandbox of project.sandboxes) {
-            if ((await canonical(sandbox)) === directory && !input.releaseSandboxOwnership && (await exists(directory))) {
-              return false
+          for (const binding of activeTaskProcessBindingRoots({ projectID, diagnosticRoot: primaryIdentity.requested })) {
+            if (
+              (await Ownership.Worktree.compareIdentity(
+                directoryIdentity,
+                binding.directory,
+                "compare-process-binding-owner",
+              )) === "same"
+            ) {
+              return WorktreeOwnershipCriticalSection.owned()
             }
           }
-          return true
-        },
-        remove: async () => {
-          await removePhysical({ directory: input.directory })
-          await Project.removeSandbox(projectID, input.directory)
-          await Ownership.Worktree.releaseDirectoryOwners({
-            primaryWorktreeDir: primary,
-            worktreeDir: input.directory,
+          const markerProof = await Ownership.Worktree.proveOwnerless({
+            primaryWorktreeDir: primaryIdentity.requested,
+            worktreeDir: directoryIdentity.requested,
+            canReleaseDeadOwner: (taskID) => {
+              const task = findTask(taskID)
+              return !task || isTaskTerminal(task)
+            },
           })
+          if (markerProof.status === "owned") return WorktreeOwnershipCriticalSection.owned()
+          sandboxAuthority = Project.exactSandboxAuthority(projectID)
+          for (const sandbox of sandboxAuthority?.sandboxes ?? []) {
+            if ((await Ownership.Worktree.compareIdentity(directoryIdentity, sandbox, "compare-sandbox-owner")) === "same") {
+              if (!input.releaseSandboxOwnership) return WorktreeOwnershipCriticalSection.owned()
+              matchedSandboxes.push(sandbox)
+            }
+          }
+          return WorktreeOwnershipCriticalSection.ownerless(markerProof)
+        },
+        remove: async (proof) => {
+          await removePhysical({
+            directory: directoryIdentity,
+            primary: primaryIdentity,
+            registered: registeredTarget,
+          })
+          const preservationErrors: InstanceType<typeof Ownership.Worktree.ObservationError>[] = []
+          try {
+            if (!sandboxAuthority) throw new Error(`Project sandbox authority disappeared: ${projectID}`)
+            await Project.removeExactSandboxes(projectID, matchedSandboxes, sandboxAuthority)
+          } catch (error) {
+            preservationErrors.push(
+              Ownership.observationFailure({
+                operation: "release-project-sandbox",
+                code: "SANDBOX_RELEASE_FAILED",
+                scope: "worktree-cleanup",
+                diagnosticPath: input.directory,
+                cause: error,
+                message: "Worktree was removed but cleanup remains preserved",
+              }),
+            )
+          }
+          const markerCleanup = await Ownership.Worktree.settleOwnerlessProof(proof.evidence)
+          if (markerCleanup.integrity.status !== "complete") preservationErrors.push(...markerCleanup.integrity.errors)
+          return preservationErrors
         },
       })
-      return { directory: input.directory, removed: result.status === "removed" }
+      if (result.status === "owned") return { directory: input.directory, removed: false, proof: "owned" }
+      return {
+        directory: input.directory,
+        removed: true,
+        proof: "ownerless",
+        receipt: result.value.length
+          ? {
+              ok: true,
+              status: "removed_with_preservation",
+              preservations: result.value.map((preservation) => ({
+                operation: preservation.data.operation,
+                code: preservation.data.code,
+                scope: "worktree-cleanup" as const,
+                message: preservation.data.message,
+              })),
+            }
+          : { ok: true, status: "removed" },
+      }
     })
+  }
+
+  /** Hold one exact physical-directory occurrence across sandbox admission
+   * and the durable Task process-binding publication that makes it owned. */
+  export async function withSandboxAdmission<T>(directory: string, admit: () => Promise<T>): Promise<T> {
+    const identity = await Ownership.Worktree.observeIdentity(directory, "resolve-sandbox-admission")
+    const acquisition = WorktreeOwnershipCriticalSection.acquire(identity.key)
+    try {
+      return await withGitLock(() => admit())
+    } finally {
+      acquisition[Symbol.dispose]()
+    }
   }
 
   export async function renewManagedWorktreeOwner(input: {
@@ -1097,17 +1171,25 @@ export namespace Worktree {
     primaryWorktreeDir: string
     directory: string
     sessionID: string
-  }): Promise<void> {
-    await releaseManagedSessionOwner(input)
+  }): Promise<Ownership.ReleaseReceipt> {
+    return releaseManagedSessionOwner(input)
   }
 
-  export async function releaseManagedWorktreeTaskOwners(taskID: string): Promise<void> {
-    await withGitLock(() =>
-      Ownership.Worktree.releaseTaskOwners({ primaryWorktreeDir: Instance.project.worktree, taskID }),
-    )
+  export async function releaseManagedWorktreeTaskOwners(
+    taskID: string,
+    options?: { signal?: AbortSignal },
+  ): Promise<void> {
+    options?.signal?.throwIfAborted()
+    await withGitLock(async () => {
+      options?.signal?.throwIfAborted()
+      Ownership.Worktree.requireCompleteRelease(
+        await Ownership.Worktree.releaseTaskOwners({ primaryWorktreeDir: Instance.project.worktree, taskID }),
+      )
+      options?.signal?.throwIfAborted()
+    })
   }
 
-  export async function reconcileOrphanWorktreeOwners(): Promise<number> {
+  export async function reconcileOrphanWorktreeOwners(): Promise<Ownership.Worktree.ReconcileReceipt> {
     return withGitLock(async () => {
       const primaryWorktreeDir = Instance.project.worktree
       const result = await Ownership.Worktree.reconcileOrphans({
@@ -1117,7 +1199,7 @@ export namespace Worktree {
           return !task || isTaskTerminal(task)
         },
       })
-      return result.released
+      return result
     })
   }
 
@@ -1731,8 +1813,8 @@ export namespace Worktree {
       // All git operations serialized to prevent concurrent corruption
       await Worktree.withGitLock(async () => {
         if (base) info = await reclaimInfo(intendedInfo)
-        // CONTRACT: project opening always commits the baseline .gitignore
-        // first (see engine/git.ts ensureGitignore), so HEAD is non-empty by
+        // CONTRACT: project opening always commits the baseline Git metadata
+        // first (see engine/git-project-metadata.ts), so HEAD is non-empty by
         // the time any worktree is requested. If we still see no HEAD here,
         // bootstrap broke earlier — fail loud rather than paper over with a
         // `git add -A` "initial scaffold" empty commit that historically
@@ -1748,9 +1830,9 @@ export namespace Worktree {
           throw new CreateFailedError({
             message:
               `Worktree create requires HEAD to exist on the primary repo (${primaryDir}). ` +
-              `The project bootstrap path (Instance.provide → Project.initGit → ensureGitignore) ` +
-              `must seed the baseline .gitignore commit before any worktree dispatch — investigate ` +
-              `why ensureGitignore did not land a first commit instead of patching here.`,
+              `The project bootstrap path (Instance.provide → Project.initGit → ensureGitProjectMetadata) ` +
+              `must seed the baseline metadata commit before any worktree dispatch — investigate ` +
+              `why project metadata did not land a first commit instead of patching here.`,
           })
         }
 
@@ -1889,12 +1971,18 @@ export namespace Worktree {
     return { status: "recovered", directory: input.directory, branch: input.branch }
   }
 
-  const removePhysical = fn(RemoveInput, async (input) => {
+  async function removePhysical(input: {
+    directory: Ownership.StrictIdentity
+    primary: Ownership.StrictIdentity
+    registered?: RegisteredWorktreeEntry
+  }): Promise<void> {
     if (!Project.isGitRepo(Instance.directory)) {
       throw new NotGitError({ message: "Worktrees are only supported for git projects" })
     }
 
-    const directory = await canonical(input.directory)
+    if ((await Ownership.Worktree.compareIdentity(input.primary, input.directory.requested, "compare-primary-target")) === "same") {
+      throw new RemoveFailedError({ message: "Cannot remove the primary workspace" })
+    }
 
     const clean = (target: string) =>
       fs
@@ -1910,7 +1998,6 @@ export namespace Worktree {
         })
 
     const stop = async (target: string) => {
-      if (!(await exists(target))) return
       await runGit(["fsmonitor--daemon", "stop"], { cwd: target, timeoutProfile: "fast" })
     }
 
@@ -1924,25 +2011,20 @@ export namespace Worktree {
         throw new RemoveFailedError({ message: errorText(list) || "Failed to read git worktrees" })
       }
 
-      const primaryEntry = parseWorktreeList(list.stdout)[0]
-      const primary = primaryEntry ? await canonical(primaryEntry.path) : undefined
-      if (primary && directory === primary) {
-        throw new RemoveFailedError({ message: "Cannot remove the primary workspace" })
-      }
-
-      const entry = await findWorktreeEntry(list.stdout, directory)
+      const entry = input.registered
 
       if (!entry?.path) {
-        const directoryExists = await exists(directory)
-        if (directoryExists) {
-          await stop(directory)
-          await clean(directory)
+        if (input.directory.status === "present") {
+          await stop(input.directory.requested)
+          await clean(input.directory.requested)
         }
-        return true
+        return
       }
 
-      await stop(entry.path)
-      await clean(entry.path)
+      if (input.directory.status === "present") {
+        await stop(entry.path)
+        await clean(entry.path)
+      }
 
       const pruned = await runGit(["worktree", "prune"], {
         cwd: Instance.worktree,
@@ -1962,7 +2044,23 @@ export namespace Worktree {
           message: errorText(next) || "Failed to read git worktrees after prune",
         })
       }
-      const stale = await findWorktreeEntry(next.stdout, directory)
+      // The filesystem occurrence may no longer exist after the deletion. At
+      // this point the exact Git registry row captured before deletion is the
+      // authority, so compare its stored path key instead of re-observing the
+      // now-missing target as a filesystem identity.
+      const registryPathKey = async (value: string) => {
+        const normalized = path.normalize(path.resolve(value))
+        return (await isCaseInsensitiveFilesystem(normalized)) ? normalized.toLowerCase() : normalized
+      }
+      const removedRegistryKey = await registryPathKey(entry.path)
+      let stale: RegisteredWorktreeEntry | undefined
+      for (const candidate of parseWorktreeList(next.stdout)) {
+        const candidateRegistryKey = await registryPathKey(candidate.path)
+        if (candidateRegistryKey === removedRegistryKey) {
+          stale = candidate
+          break
+        }
+      }
       if (stale?.path) {
         throw new RemoveFailedError({
           message: `Git worktree registry still lists ${entry.path} after prune`,
@@ -1980,9 +2078,9 @@ export namespace Worktree {
         }
       }
 
-      return true
+      return
     })
-  })
+  }
 
   export const remove = fn(RemoveInput, async (input) => {
     const result = await removeManagedProjectWorktreeDirectory({

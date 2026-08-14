@@ -7,6 +7,7 @@ import { ResearchArtifactContractError } from "@/engine/persist"
 import { recordTaskInfrastructureErrorBestEffort } from "./infrastructure-observation"
 import z from "zod"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
 
 function issuePathSegment(segment: PropertyKey): string | number {
   return typeof segment === "number" || typeof segment === "string"
@@ -37,17 +38,25 @@ export function persistResearchArtifactBestEffort(input: {
   dispatchID: string
   component: "deep-research" | "frontend-research"
   operation: "persist-research-brief" | "persist-partial-research-brief"
+  delivery: "complete" | "incomplete"
   sessionID: string
   finalMessageID: string
   persist: () => string
   recordInfrastructure?: typeof recordTaskInfrastructureErrorBestEffort
 }): DispatchOutcomeResult {
   try {
-    input.persist()
-    return DispatchOutcome.terminal({
-      sessionID: input.sessionID,
-      finalMessageID: input.finalMessageID,
-    })
+    const artifactID = input.persist()
+    return input.delivery === "incomplete"
+      ? DispatchOutcome.domainIncomplete({
+          sessionID: input.sessionID,
+          finalMessageID: input.finalMessageID,
+          domain: input.component.replaceAll("-", "_"),
+          domainArtifact: exactEngineArtifactLocator({ taskID: input.taskID, artifactID }),
+        })
+      : DispatchOutcome.terminal({
+          sessionID: input.sessionID,
+          finalMessageID: input.finalMessageID,
+        })
   } catch (error) {
     const failureIssues = deterministicContractIssues(error)
     const reason = error instanceof Error ? error.message : String(error)

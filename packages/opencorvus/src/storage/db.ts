@@ -1,5 +1,5 @@
 import { Database as BunDatabase } from "bun:sqlite"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { drizzle, type SQLiteBunDatabase } from "drizzle-orm/bun-sqlite"
 import { type SQLiteTransaction } from "drizzle-orm/sqlite-core"
 export * from "drizzle-orm"
@@ -13,23 +13,20 @@ import path from "path"
 import * as fsSync from "fs"
 import * as fsPromises from "fs/promises"
 import { randomUUID } from "crypto"
-import * as schema from "./schema"
+import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
-import {
-  SchemaMigrationError,
-  createSchemaMigrationBackup,
-  findSchemaDrift,
-  hasApplicationSchema,
-  migrateDatabaseFile,
-  planSchemaMigration,
-  schemaObjectFingerprint,
-} from "./schema-migration"
+import { findSchemaDrift, hasApplicationSchema, schemaObjectFingerprint } from "./schema-contract"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { Identifier } from "@/id/id"
 import {
   TASK_CANCELLED_EVENT_TYPE,
   projectTaskCancellationEventChain,
   type TaskCancellationProtocolEvent,
 } from "@/engine/cancellation-origin"
+import { EngineArtifactTable } from "@/engine/engine.sql"
+import { assertEngineArtifactPayloadIdentity } from "@/engine/artifact-catalog-metadata"
+import { GoalWorkloadArtifactSchema } from "@/goal-workload-analyst/types"
+import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/publication"
 
 export const NotFoundError = NamedError.create(
   "NotFoundError",
@@ -75,6 +72,14 @@ export const DatabaseResetTargetRemovalError = NamedError.create(
     ),
   }),
 )
+
+export class DatabaseEffectAdmissionClosedError extends Error {
+  override readonly name = "DatabaseEffectAdmissionClosedError"
+
+  constructor(public readonly operation: string) {
+    super(`${operation} rejected because database effect admission is closed during runtime settlement`)
+  }
+}
 
 const log = Log.create({ service: "db" })
 
@@ -239,7 +244,433 @@ function cancellationEventView(
  * exact same pure event-chain projection used by normal Task reads before the
  * database becomes available to any route.
  */
-function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
+function assertGoalWorkloadCoverageIntegrity(
+  db: SQLiteBunDatabase<typeof ApplicationSchema>,
+  dbPath: string,
+): void {
+  const rows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(eq(EngineArtifactTable.kind, "goal_workload"))
+    .orderBy(EngineArtifactTable.catalog_revision, EngineArtifactTable.id)
+    .all()
+  for (const row of rows) {
+    try {
+      assertEngineArtifactPayloadIdentity({
+        id: row.id,
+        kind: row.kind,
+        payload: row.payload,
+        payloadSHA256: row.payload_sha256,
+        payloadBytes: row.payload_bytes,
+      })
+      const payload = GoalWorkloadArtifactSchema.parse(row.payload)
+      validateGoalWorkloadArtifactRelationalIntegrity({ db, row, payload })
+    } catch (cause) {
+      throw new DatabaseUnavailableError({
+        message: `OpenCorvus database contains an invalid Goal Workload coverage Artifact ${row.id} at ${dbPath}; reset this pre-release database. ${cause instanceof Error ? cause.message : String(cause)}`,
+        path: dbPath,
+        operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
+        code: "DATA_RESET_REQUIRED",
+      })
+    }
+  }
+}
+
+function assertCurrentDataIntegrity(
+  sqlite: BunDatabase,
+  db: SQLiteBunDatabase<typeof ApplicationSchema>,
+  dbPath: string,
+): void {
+  const legacyProject = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM project
+     WHERE length(id) > ${Identifier.MAX_LENGTH}
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyProject) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Project ${legacyProject.id} at ${dbPath}. ` +
+        "Its relational identity belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactProjectIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyIdempotentArtifact = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'expert_output'
+       AND id GLOB 'art_idempotent_*'
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyIdempotentArtifact) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded idempotent Artifact ${legacyIdempotentArtifact.id} at ${dbPath}. ` +
+        "Its immutable locator provenance belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyProjectMemory = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM memory_file
+     WHERE length(id) > ${Identifier.MAX_LENGTH}
+       AND (kind = 'user_message' OR (kind = 'project_context' AND key = 'project-memory-document'))
+     UNION ALL
+     SELECT memory_chunk.id
+     FROM memory_chunk
+     INNER JOIN memory_file ON memory_file.id = memory_chunk.file_id
+     WHERE length(memory_chunk.id) > ${Identifier.MAX_LENGTH}
+       AND (
+         memory_file.kind = 'user_message'
+         OR (memory_file.kind = 'project_context' AND memory_file.key = 'project-memory-document')
+       )
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyProjectMemory) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Project Memory identity ${legacyProjectMemory.id} at ${dbPath}. ` +
+        "Its file and chunk references belong to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyRecoverableToolControl = queryAllFinalized<{ attempt_id: string }>(
+    sqlite,
+    `SELECT result.attempt_id
+     FROM permission_execution_result AS result
+     INNER JOIN part
+       ON part.id = result.tool_part_id
+      AND part.session_id = result.session_id
+     WHERE CASE
+       WHEN json_valid(part.data) = 0 OR json_valid(result.result) = 0 THEN 0
+       WHEN json_extract(part.data, '$.type') <> 'tool' THEN 0
+       WHEN json_extract(part.data, '$.state.status') NOT IN ('pending', 'running') THEN 0
+       WHEN json_extract(result.result, '$.value.metadata.opencorvusParkAfterToolResult') IS NOT 1 THEN 0
+       WHEN json_type(result.result, '$.value.metadata.opencorvusToolResultControl') IS NOT NULL THEN 0
+       ELSE 1
+     END = 1
+     ORDER BY result.attempt_id
+     LIMIT 1`,
+  )[0]
+  if (legacyRecoverableToolControl) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains a pre-protocol recoverable Tool result ${legacyRecoverableToolControl.attempt_id} at ${dbPath}. ` +
+        "Its immutable turn-control result cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.toolResultControl",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyPermissionIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id FROM permission_ledger WHERE length(id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT request_id AS id FROM permission_ledger WHERE length(request_id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT attempt_id AS id FROM permission_ledger
+     WHERE attempt_id IS NOT NULL AND length(attempt_id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT source_event_id AS id FROM permission_ledger
+     WHERE source_event_id IS NOT NULL AND length(source_event_id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT decision_slot AS id FROM permission_ledger
+     WHERE decision_slot IS NOT NULL AND length(decision_slot) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT outcome_slot AS id FROM permission_ledger
+     WHERE outcome_slot IS NOT NULL AND length(outcome_slot) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT attempt_id AS id
+     FROM permission_execution_result
+     WHERE length(attempt_id) > ${Identifier.MAX_LENGTH}
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyPermissionIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Permission identity ${legacyPermissionIdentity.id} at ${dbPath}. ` +
+        "Its authorization and execution references belong to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactPermissionIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacySchedulerDeliveryIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT protocol_event.id AS id
+     FROM protocol_event
+     WHERE protocol_event.type = 'scheduler.message'
+       AND length(protocol_event.id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT protocol_inbox.id AS id
+     FROM protocol_inbox
+     INNER JOIN protocol_event ON protocol_event.id = protocol_inbox.envelope_id
+     WHERE protocol_event.type = 'scheduler.message'
+       AND length(protocol_inbox.id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT message.id AS id
+     FROM message
+     INNER JOIN protocol_event
+       ON protocol_event.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.eventID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.eventID')
+       )
+     INNER JOIN protocol_inbox
+       ON protocol_inbox.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.inboxID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.inboxID')
+       )
+      AND protocol_inbox.envelope_id = protocol_event.id
+     WHERE length(message.id) > ${Identifier.MAX_LENGTH}
+       AND protocol_event.type = 'scheduler.message'
+       AND (
+         json_extract(message.data, '$.extra.wake_reason.source') = 'scheduler.message'
+         OR json_type(message.data, '$.extra.task_root_message.schedulerDelivery.eventID') = 'text'
+       )
+     UNION ALL
+     SELECT part.id AS id
+     FROM part
+     INNER JOIN message ON message.id = part.message_id
+     INNER JOIN protocol_event
+       ON protocol_event.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.eventID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.eventID')
+       )
+     INNER JOIN protocol_inbox
+       ON protocol_inbox.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.inboxID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.inboxID')
+       )
+      AND protocol_inbox.envelope_id = protocol_event.id
+     WHERE length(part.id) > ${Identifier.MAX_LENGTH}
+       AND protocol_event.type = 'scheduler.message'
+       AND (
+         json_extract(message.data, '$.extra.wake_reason.source') = 'scheduler.message'
+         OR json_type(message.data, '$.extra.task_root_message.schedulerDelivery.eventID') = 'text'
+       )
+     UNION ALL
+     SELECT session_control_record.id AS id
+     FROM session_control_record
+     INNER JOIN protocol_event
+       ON protocol_event.id = json_extract(session_control_record.payload, '$.wake_reason.eventID')
+     INNER JOIN protocol_inbox
+       ON protocol_inbox.id = json_extract(session_control_record.payload, '$.wake_reason.inboxID')
+      AND protocol_inbox.envelope_id = protocol_event.id
+     WHERE length(session_control_record.id) > ${Identifier.MAX_LENGTH}
+       AND session_control_record.kind = 'wake_reason'
+       AND session_control_record.owner = 'scheduler.message'
+       AND protocol_event.type = 'scheduler.message'
+       AND json_extract(session_control_record.payload, '$.wake_reason.source') = 'scheduler.message'
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacySchedulerDeliveryIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded scheduler delivery identity ${legacySchedulerDeliveryIdentity.id} at ${dbPath}. ` +
+        "Its atomic protocol and conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactSchedulerDeliveryIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyOrchestratorControlIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT message.id AS id
+     FROM message
+     WHERE length(message.id) > ${Identifier.MAX_LENGTH}
+       AND message.id GLOB 'msg_orchestrator_control_*'
+       AND json_type(message.data, '$.extra.orchestrator_control_ingress.wake_id') = 'text'
+     UNION ALL
+     SELECT part.id AS id
+     FROM part
+     INNER JOIN message ON message.id = part.message_id
+     WHERE length(part.id) > ${Identifier.MAX_LENGTH}
+       AND part.id GLOB 'prt_orchestrator_control_*'
+       AND json_type(message.data, '$.extra.orchestrator_control_ingress.wake_id') = 'text'
+       AND json_extract(part.data, '$.metadata.wake_id') =
+         json_extract(message.data, '$.extra.orchestrator_control_ingress.wake_id')
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyOrchestratorControlIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Orchestrator control identity ${legacyOrchestratorControlIdentity.id} at ${dbPath}. ` +
+        "Its terminal wake conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactOrchestratorControlIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyMissionCallerReceiptIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT message.id AS id
+     FROM message
+     INNER JOIN part
+       ON part.message_id = message.id
+      AND part.session_id = message.session_id
+     INNER JOIN session AS mission_session
+       ON mission_session.id = json_extract(part.data, '$.metadata.mission_session_id')
+     WHERE length(message.id) > ${Identifier.MAX_LENGTH}
+       AND message.id GLOB 'msg_mission_receipt_*'
+       AND json_extract(message.data, '$.role') = 'assistant'
+       AND json_extract(message.data, '$.author') = 'mission'
+       AND json_extract(message.data, '$.agent') = 'mission'
+       AND json_extract(part.data, '$.type') = 'text'
+       AND json_extract(part.data, '$.source') = 'system'
+       AND json_extract(part.data, '$.metadata.source') = 'right-sidebar-conversation'
+       AND json_extract(mission_session.metadata, '$.mission.receipt.message_id') = message.id
+       AND json_extract(mission_session.metadata, '$.mission.receipt.part_id') = part.id
+     UNION ALL
+     SELECT part.id AS id
+     FROM part
+     INNER JOIN message
+       ON message.id = part.message_id
+      AND message.session_id = part.session_id
+     INNER JOIN session AS mission_session
+       ON mission_session.id = json_extract(part.data, '$.metadata.mission_session_id')
+     WHERE length(part.id) > ${Identifier.MAX_LENGTH}
+       AND part.id GLOB 'prt_mission_receipt_*'
+       AND json_extract(message.data, '$.role') = 'assistant'
+       AND json_extract(message.data, '$.author') = 'mission'
+       AND json_extract(message.data, '$.agent') = 'mission'
+       AND json_extract(part.data, '$.type') = 'text'
+       AND json_extract(part.data, '$.source') = 'system'
+       AND json_extract(part.data, '$.metadata.source') = 'right-sidebar-conversation'
+       AND json_extract(mission_session.metadata, '$.mission.receipt.message_id') = message.id
+       AND json_extract(mission_session.metadata, '$.mission.receipt.part_id') = part.id
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyMissionCallerReceiptIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Mission caller receipt identity ${legacyMissionCallerReceiptIdentity.id} at ${dbPath}. ` +
+        "Its terminal conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactMissionCallerReceiptIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyRequirementSet = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'requirement_set'
+       AND CASE
+         WHEN json_valid(payload) = 0 THEN 1
+         WHEN json_extract(payload, '$.schema_version') IS NOT 2 THEN 1
+         ELSE 0
+       END = 1
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyRequirementSet) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains pre-coverage RequirementSet Artifact ${legacyRequirementSet.id} at ${dbPath}. ` +
+        "Its immutable producer and coverage receipt cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.requirementSetCoverage",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const malformedGoalWorkload = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'goal_workload'
+       AND json_valid(payload) = 0
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (malformedGoalWorkload) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains malformed Goal Workload Artifact ${malformedGoalWorkload.id} at ${dbPath}. ` +
+        "Its immutable coverage receipt cannot be validated; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacySchedulerMessage = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM protocol_event
+     WHERE type = 'scheduler.message'
+       AND CASE
+         WHEN json_valid(payload) = 0 THEN 1
+         WHEN json_extract(payload, '$.protocol') IS NOT 'scheduler-message-v2' THEN 1
+         WHEN json_type(payload, '$.invocation_id') IS NOT 'text' THEN 1
+         WHEN json_type(payload, '$.source_task_occurrence_started_at') IS NULL THEN 1
+         WHEN json_type(payload, '$.target_task_occurrence_started_at') IS NULL THEN 1
+         ELSE 0
+       END = 1
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacySchedulerMessage) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains scheduler Message ${legacySchedulerMessage.id} from the prior Task occurrence epoch at ${dbPath}. ` +
+        "Its source and target execution occurrences cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.schedulerMessageOccurrenceEpoch",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyTaskIngress = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'queued_operator_wake'
+       AND CASE
+         WHEN json_valid(payload) = 0 THEN 1
+         WHEN json_type(payload, '$.task_occurrence_started_at') IS NULL THEN 1
+         ELSE 0
+       END = 1
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyTaskIngress) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains root ingress ${legacyTaskIngress.id} from the prior Task occurrence epoch at ${dbPath}. ` +
+        "Its admitted execution occurrence cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.taskIngressOccurrenceEpoch",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  assertGoalWorkloadCoverageIntegrity(db, dbPath)
+
   const tasks = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id
@@ -298,7 +729,6 @@ function configureSqlite(sqlite: BunDatabase) {
   sqlite.run("PRAGMA auto_vacuum = INCREMENTAL")
   sqlite.run("PRAGMA journal_mode = WAL")
   sqlite.run("PRAGMA synchronous = NORMAL")
-  sqlite.run("PRAGMA busy_timeout = 5000")
   sqlite.run("PRAGMA cache_size = -64000")
   sqlite.run("PRAGMA foreign_keys = ON")
   // Cap WAL file size on disk — anything above the limit is truncated at
@@ -362,10 +792,18 @@ export namespace Database {
   export function Path() {
     return path.join(Global.Path.data, "opencorvus.db")
   }
-  type Schema = typeof schema
+  type Schema = typeof ApplicationSchema
   export type Transaction = SQLiteTransaction<"sync", void, Schema>
 
   type Client = SQLiteBunDatabase<Schema>
+  export type TxOrDb = Transaction | Client
+
+  const ctx = Context.create<{
+    tx: TxOrDb
+    effects: (() => void | Promise<void>)[]
+    closed: boolean
+    transactionDepth: number
+  }>("database")
 
   const state = {
     sqlite: undefined as BunDatabase | undefined,
@@ -384,6 +822,12 @@ export namespace Database {
   const effectOwnerContext = Context.create<EffectOwner>("database-effect-owner")
   const activeEffects = new Map<EffectOwner, Promise<void>>()
   let lifecycleOwner: LifecycleOwner | undefined
+  let effectSettlementGate: symbol | undefined
+  let effectSettlementAcquiring = false
+
+  function assertEffectAdmission(operation: string): void {
+    if (effectSettlementGate) throw new DatabaseEffectAdmissionClosedError(operation)
+  }
 
   function lifecycleConflict(operation: string, owner: LifecycleOwner) {
     return new Error(`${operation} rejected because Database.${owner.label} owns the database lifecycle`)
@@ -412,6 +856,12 @@ export namespace Database {
 
   function assertDatabaseAccess(operation: string) {
     assertInheritedOwnersOpen(operation)
+    if (effectSettlementGate) {
+      const acceptedEffectOwner = effectOwnerContext.tryUse()
+      if (!acceptedEffectOwner || acceptedEffectOwner.closed || !activeEffects.has(acceptedEffectOwner)) {
+        throw new DatabaseEffectAdmissionClosedError(operation)
+      }
+    }
     const owner = lifecycleOwner
     if (!owner) return
     const effectOwner = effectOwnerContext.tryUse()
@@ -514,32 +964,24 @@ export namespace Database {
     const sqlite = new BunDatabase(dbPath, { create: true })
     state.sqlite = sqlite
     state.rollbackRequired = false
+    // Install the connection's busy handler before even inspecting schema.
+    // Independent OpenCorvus processes can open the same database while
+    // another opener is confirming WAL, auto-vacuum, or schema state.
+    sqlite.run("PRAGMA busy_timeout = 5000")
     if (options.configure) configureSqlite(sqlite)
     return sqlite
   }
 
-  function schemaMigrationRequired(dbPath: string, reason: string, fingerprint: string) {
+  function schemaResetRequired(dbPath: string, reason: string, fingerprint: string) {
     return new DatabaseUnavailableError({
       message:
-        `OpenCorvus database schema does not match the current DDL at ${dbPath}: ${reason}. ` +
-        `No registered migration starts from schema fingerprint ${fingerprint}. ` +
-        "The database was not modified; add and verify the exact migration before using this version.",
+        `OpenCorvus database schema does not match the pre-0.1.0 canonical DDL at ${dbPath}: ${reason}. ` +
+        `Received schema fingerprint ${fingerprint}. ` +
+        "The database was not modified; reset it because pre-release builds do not patch older schemas.",
       path: dbPath,
       operation: "Database.Client.schemaValidation",
-      code: "SCHEMA_MIGRATION_REQUIRED",
+      code: "SCHEMA_RESET_REQUIRED",
     })
-  }
-
-  function schemaMigrationUnavailable(dbPath: string, error: SchemaMigrationError) {
-    return new DatabaseUnavailableError(
-      {
-        message: error.message,
-        path: dbPath,
-        operation: "Database.Client.schemaMigration",
-        code: error.code,
-      },
-      { cause: error },
-    )
   }
 
   function recordUnavailable(error: unknown, operation: string) {
@@ -626,49 +1068,22 @@ export namespace Database {
         const drift = findSchemaDrift(sqlite)
         if (drift) {
           const fingerprint = schemaObjectFingerprint(sqlite)
-          const plan = planSchemaMigration(sqlite)
-          if (!plan || plan.migrations.length === 0) {
-            throw schemaMigrationRequired(dbPath, drift, fingerprint)
-          }
-          let backup
-          try {
-            backup = createSchemaMigrationBackup(dbPath, plan)
-          } catch (error) {
-            if (error instanceof SchemaMigrationError) throw schemaMigrationUnavailable(dbPath, error)
-            throw error
-          }
-          sqlite.close(true)
-          state.sqlite = undefined
-          state.rollbackRequired = false
-          let result
-          try {
-            result = migrateDatabaseFile(dbPath, plan, backup)
-          } catch (error) {
-            if (error instanceof SchemaMigrationError) throw schemaMigrationUnavailable(dbPath, error)
-            throw error
-          }
-          log.info("database schema migrated", {
-            path: dbPath,
-            fromFingerprint: result.fromFingerprint,
-            toFingerprint: result.toFingerprint,
-            migrations: result.migrationIDs,
-            backupDirectory: result.backupDirectory,
-          })
-          sqlite = openOwnedSqlite(dbPath, { configure: false })
-          const migratedDrift = findSchemaDrift(sqlite)
-          if (migratedDrift) {
-            throw schemaMigrationRequired(dbPath, migratedDrift, schemaObjectFingerprint(sqlite))
-          }
+          throw schemaResetRequired(dbPath, drift, fingerprint)
         }
         configureSqlite(sqlite)
-        assertCurrentDataIntegrity(sqlite, dbPath)
+        const integrityDB = drizzle({ client: sqlite, schema: ApplicationSchema })
+        provideDatabaseContext(
+          { effects: [], tx: integrityDB, closed: false, transactionDepth: 0 },
+          "Database.Client.dataIntegrity",
+          () => assertCurrentDataIntegrity(sqlite, integrityDB, dbPath),
+        )
       } else {
         configureSqlite(sqlite)
         createCurrentSchema(sqlite, dbPath)
       }
       log.info("schema applied")
 
-      const db = drizzle({ client: sqlite, schema })
+      const db = drizzle({ client: sqlite, schema: ApplicationSchema })
 
       return db
     } catch (error) {
@@ -690,18 +1105,18 @@ export namespace Database {
   export function Identity(): string {
     assertDatabaseAccess("Database.Identity")
     return Client().transaction((db) => {
-      db.insert(schema.DatabaseAuthorityTable)
+      db.insert(DatabaseAuthorityTable)
         .values({
           key: "primary",
           instance_id: randomUUID(),
           time_created: Date.now(),
         })
-        .onConflictDoNothing({ target: schema.DatabaseAuthorityTable.key })
+        .onConflictDoNothing({ target: DatabaseAuthorityTable.key })
         .run()
       const row = db
-        .select({ instanceID: schema.DatabaseAuthorityTable.instance_id })
-        .from(schema.DatabaseAuthorityTable)
-        .where(eq(schema.DatabaseAuthorityTable.key, "primary"))
+        .select({ instanceID: DatabaseAuthorityTable.instance_id })
+        .from(DatabaseAuthorityTable)
+        .where(eq(DatabaseAuthorityTable.key, "primary"))
         .get()
       if (!row?.instanceID) throw new Error("Database authority identity was not persisted")
       return row.instanceID
@@ -962,13 +1377,13 @@ export namespace Database {
     }
   }
 
-  export type TxOrDb = Transaction | Client
+  export class ActiveDatabaseTransactionRequiredError extends Error {
+    override readonly name = "ActiveDatabaseTransactionRequiredError"
 
-  const ctx = Context.create<{
-    tx: TxOrDb
-    effects: (() => void | Promise<void>)[]
-    closed: boolean
-  }>("database")
+    constructor(public readonly operation: string) {
+      super(`${operation} requires an active Database transaction`)
+    }
+  }
 
   const effectLog = Log.create({ service: "db-effect" })
   const EFFECT_FAILURE_SAMPLE_LIMIT = 32
@@ -1020,6 +1435,7 @@ export namespace Database {
   }
 
   function runEffect(fn: () => void | Promise<void>) {
+    assertEffectAdmission("Database.effect")
     const owner: EffectOwner = { closed: false }
     const finish = registerEffect(owner)
     let result: void | Promise<void>
@@ -1047,6 +1463,7 @@ export namespace Database {
     const normalizedLabel = label.trim()
     if (!normalizedLabel) return Promise.reject(new Error("Database.runLifecycleActivity requires a label"))
     const operationLabel = `Database.runLifecycleActivity(${normalizedLabel})`
+    if (effectSettlementGate) return Promise.reject(new DatabaseEffectAdmissionClosedError(operationLabel))
     const inheritedFailure = inheritedOwnerFailure(operationLabel)
     if (inheritedFailure) return Promise.reject(inheritedFailure)
     const databaseOwner = ctx.tryUse()
@@ -1079,7 +1496,7 @@ export namespace Database {
   }
 
   function provideDatabaseContext<T>(
-    owner: { tx: TxOrDb; effects: (() => void | Promise<void>)[]; closed: boolean },
+    owner: { tx: TxOrDb; effects: (() => void | Promise<void>)[]; closed: boolean; transactionDepth: number },
     operation: string,
     callback: () => T,
   ): T {
@@ -1109,7 +1526,7 @@ export namespace Database {
     try {
       throwIfUnavailable()
       const db = Client()
-      const owner = { effects: [] as (() => void | Promise<void>)[], tx: db, closed: false }
+      const owner = { effects: [] as (() => void | Promise<void>)[], tx: db, closed: false, transactionDepth: 0 }
       const result = provideDatabaseContext(owner, "Database.use", () => callback(db))
       drainEffects(owner.effects)
       return result
@@ -1128,6 +1545,7 @@ export namespace Database {
   }
 
   export function effect(fn: () => any | Promise<any>) {
+    assertEffectAdmission("Database.effect")
     assertLifecycleUnowned("Database.effect")
     const active = ctx.tryUse()
     if (active) {
@@ -1136,6 +1554,20 @@ export namespace Database {
       return
     }
     runEffect(fn)
+  }
+
+  export class EffectSettlementInactivityError extends Error {
+    override readonly name = "DatabaseEffectSettlementInactivityError"
+
+    constructor(
+      public readonly activeEffectCount: number,
+      public readonly inactivityTimeoutMilliseconds: number,
+    ) {
+      super(
+        `Database effect settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+          `${activeEffectCount} lifecycle effect(s) remain`,
+      )
+    }
   }
 
   export function awaitEffectIdle(idleTimeoutMs: number): Promise<void> {
@@ -1165,9 +1597,7 @@ export namespace Database {
 
         const remaining = idleDeadline - Date.now()
         if (remaining <= 0) {
-          throw new Error(
-            `Database.awaitEffectIdle: ${activeEffects.size} post-commit effect(s) still active after ${idleTimeoutMs}ms without effect activity`,
-          )
+          throw new EffectSettlementInactivityError(activeEffects.size, idleTimeoutMs)
         }
 
         const snapshot = [...activeEffects.values()]
@@ -1197,9 +1627,87 @@ export namespace Database {
     return owner
   }
 
+  export async function acquireEffectSettlementGate(idleTimeoutMs: number): Promise<Disposable> {
+    if (effectSettlementGate || effectSettlementAcquiring) {
+      throw new Error("Database effect settlement is already in progress")
+    }
+    effectSettlementAcquiring = true
+    try {
+      for (;;) {
+        await awaitEffectIdle(idleTimeoutMs)
+        if (activeEffects.size > 0) continue
+        const token = Symbol("database-effect-settlement")
+        effectSettlementGate = token
+        return {
+          [Symbol.dispose]() {
+            if (effectSettlementGate === token) effectSettlementGate = undefined
+          },
+        }
+      }
+    } finally {
+      effectSettlementAcquiring = false
+    }
+  }
+
   export function hasActiveContext() {
     const active = ctx.tryUse()
     return active !== undefined && !active.closed
+  }
+
+  export function hasActiveTransaction() {
+    const active = ctx.tryUse()
+    return active !== undefined && !active.closed && active.transactionDepth > 0
+  }
+
+  export function requireActiveTransaction(operation: string): void {
+    if (!hasActiveTransaction()) throw new ActiveDatabaseTransactionRequiredError(operation)
+  }
+
+  let savepointSequence = 0
+
+  function runSavepoint<T>(db: TxOrDb, callback: () => T, operation: string): T {
+    const active = ctx.tryUse()
+    if (!active || active.closed || active.tx !== db) {
+      throw new ActiveDatabaseTransactionRequiredError(operation)
+    }
+    const name = `database_savepoint_${process.pid}_${++savepointSequence}`
+    const effectStart = active.effects.length
+    db.run(sql.raw(`SAVEPOINT "${name}"`))
+    try {
+      const result = assertSynchronousResult(
+        provideDatabaseContext(
+          {
+            tx: db,
+            effects: active.effects,
+            closed: false,
+            transactionDepth: active.transactionDepth + 1,
+          },
+          operation,
+          callback,
+        ),
+        operation,
+      )
+      db.run(sql.raw(`RELEASE SAVEPOINT "${name}"`))
+      return result
+    } catch (cause) {
+      active.effects.splice(effectStart)
+      try {
+        db.run(sql.raw(`ROLLBACK TO SAVEPOINT "${name}"`))
+      } finally {
+        db.run(sql.raw(`RELEASE SAVEPOINT "${name}"`))
+      }
+      throw cause
+    }
+  }
+
+  /** Create an exact nested SQLite transaction while preserving the Database
+   * context's transaction depth and post-commit effect ownership. */
+  export function savepoint<T>(
+    db: TxOrDb,
+    callback: () => T,
+    ..._synchronousOnly: T extends PromiseLike<unknown> ? [never] : []
+  ): T {
+    return runSavepoint(db, callback, "Database.savepoint")
   }
 
   export function transaction<T>(
@@ -1209,18 +1717,50 @@ export namespace Database {
     assertDatabaseAccess("Database.transaction")
     throwIfUnavailable()
     const active = ctx.tryUse()
-    if (active) return assertSynchronousResult(callback(active.tx), "Database.transaction")
+    if (active) return runSavepoint(active.tx, () => callback(active.tx), "Database.transaction")
 
     try {
       throwIfUnavailable()
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction((tx) => {
-        return provideDatabaseContext({ tx, effects, closed: false }, "Database.transaction", () => callback(tx))
+        return provideDatabaseContext({ tx, effects, closed: false, transactionDepth: 1 }, "Database.transaction", () =>
+          callback(tx),
+        )
       })
       drainEffects(effects)
       return result
     } catch (error) {
       throwNormalized(error, "Database.transaction")
+    }
+  }
+
+  /** Acquire SQLite's cross-process writer reservation before the first read.
+   * Use for find-or-create authorities whose losing caller must observe the
+   * winner instead of racing a deferred read transaction into SQLITE_BUSY. */
+  export function immediateTransaction<T>(
+    callback: (tx: TxOrDb) => T,
+    ..._synchronousOnly: T extends PromiseLike<unknown> ? [never] : []
+  ): T {
+    assertDatabaseAccess("Database.immediateTransaction")
+    throwIfUnavailable()
+    const active = ctx.tryUse()
+    if (active) return runSavepoint(active.tx, () => callback(active.tx), "Database.immediateTransaction")
+
+    try {
+      const effects: (() => void | Promise<void>)[] = []
+      const result = Client().transaction(
+        (tx) =>
+          provideDatabaseContext(
+            { tx, effects, closed: false, transactionDepth: 1 },
+            "Database.immediateTransaction",
+            () => callback(tx),
+          ),
+        { behavior: "immediate" },
+      )
+      drainEffects(effects)
+      return result
+    } catch (error) {
+      throwNormalized(error, "Database.immediateTransaction")
     }
   }
 }

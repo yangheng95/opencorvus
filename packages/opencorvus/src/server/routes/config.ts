@@ -12,7 +12,7 @@ import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-life
 import { PromptCatalog } from "../../config/prompt-catalog"
 import { Instance } from "@/project/instance"
 import { mapValues } from "remeda"
-import { badRequestBody, errors, namedErrorResponse } from "../error"
+import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
 import { Log } from "../../util/log"
 import { lazy } from "../../util/lazy"
 import { testNetworkProxy } from "../../util/network-proxy-test"
@@ -65,6 +65,7 @@ export const ConfigRoutes = lazy(() =>
             },
           },
           409: namedErrorResponse("Non-canonical configuration file", "NonCanonicalConfigFileError"),
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {
@@ -89,6 +90,7 @@ export const ConfigRoutes = lazy(() =>
           },
           ...errors(400),
           409: namedErrorResponse("Non-canonical configuration file", "NonCanonicalConfigFileError"),
+          503: AuthReadUnavailableResponse,
         },
       }),
       // RFC 7396 patches can contain null deletion sentinels, so validate the
@@ -180,6 +182,7 @@ export const ConfigRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -219,6 +222,7 @@ export const ConfigRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {

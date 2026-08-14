@@ -125,8 +125,8 @@ if (adapters.names.length === 0) {
 }
 console.log(`[ChannelRuntime] Registered chat channels: ${adapters.names.join(", ")}`)
 
-await runtime.start()
-console.log("Channel runtime is running")
+const receipt = await runtime.start()
+console.log(`Channel runtime is running: ${receipt.channels.join(", ")}`)
 
 // Auto-inject test prompt if TEST_PROMPT env var is set
 if (process.env.TEST_PROMPT) {

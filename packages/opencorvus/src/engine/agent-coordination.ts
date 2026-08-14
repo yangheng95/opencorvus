@@ -1543,16 +1543,19 @@ type CancelPendingAgentCoordinationRequestsInput = {
   reason: string
   filter?: (row: AgentCoordinationRequestRow) => boolean
   now?: number
+  signal?: AbortSignal
 }
 
 export function cancelPendingAgentCoordinationRequestsInTransaction(
   db: Database.TxOrDb,
   input: CancelPendingAgentCoordinationRequestsInput,
 ): number {
+  input.signal?.throwIfAborted()
   const pending = listPendingAgentCoordinationRequests(input.taskID, db).filter((row) => input.filter?.(row) ?? true)
   const now = input.now ?? Date.now()
   let cancelled = 0
   for (const request of pending) {
+    input.signal?.throwIfAborted()
     const payload: AgentCoordinationRequestPayload = {
       ...request.payload,
       status: "cancelled",
@@ -1632,6 +1635,7 @@ export async function cancelPendingAgentCoordinationRequestsForTask(input: {
   taskID: string
   reason: string
   now?: number
+  signal?: AbortSignal
 }): Promise<number> {
   return await cancelPendingAgentCoordinationRequests(input)
 }

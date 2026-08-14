@@ -1,5 +1,5 @@
 import z from "zod"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import type { Tool } from "@/tool/tool"
 import { CapabilityRef, CapabilityRefCodec } from "./ref"
 
@@ -59,18 +59,12 @@ export async function executeProviderAction<T>(input: {
     throw new Error("Provider action execution requires exact Agent and Session permission layers.")
   }
   for (const pattern of plan.patterns) {
-    const inherited = PermissionNext.evaluate(plan.permission, pattern, agentRules)
+    const inherited = CapabilityRules.evaluate(plan.permission, pattern, agentRules)
     if (inherited.action === "deny") {
-      throw new PermissionNext.DeniedError(
-        agentRules.filter((rule) => PermissionNext.matches(plan.permission, pattern, rule)),
+      throw new CapabilityRules.DeniedError(
+        agentRules.filter((rule) => CapabilityRules.matches(plan.permission, pattern, rule)),
       )
     }
   }
-  await input.context.ask({
-    permission: plan.permission,
-    patterns: plan.patterns,
-    always: plan.always,
-    metadata: plan.metadata,
-  })
   return input.execute()
 }

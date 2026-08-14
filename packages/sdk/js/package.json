@@ -1,11 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@opencorvus-ai/sdk",
-  "version": "0.0.38-beta",
+  "version": "0.0.43-beta",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "pretest": "bun ../../opencorvus/script/prepare-test-process-supervisor.ts",
     "test": "bun ../../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 test",
     "build": "bun ./script/build.ts",
     "prepack": "bun run build",
@@ -51,6 +52,12 @@
       "types": "./dist/expert-squad-manifest-v1.d.ts",
       "import": "./dist/expert-squad-manifest-v1.js",
       "default": "./dist/expert-squad-manifest-v1.js"
+    },
+    "./expert-squad-package-contract": {
+      "source": "./src/expert-squad-package-contract.ts",
+      "types": "./dist/expert-squad-package-contract.d.ts",
+      "import": "./dist/expert-squad-package-contract.js",
+      "default": "./dist/expert-squad-package-contract.js"
     },
     "./project-path": {
       "source": "./src/project-path.ts",

@@ -11,6 +11,7 @@ import {
   ProjectWorktreeList,
   PtyOutputStreamEvent,
   WorkLedgerActionEvent,
+  WorkLedgerArchiveList,
   WorkLedgerEvent,
   WorkLedgerList,
   base64ToUint8,
@@ -39,22 +40,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
     })
   })
 
-  test("parses each canonical mailbox event branch", () => {
-    expect(
-      MailboxChangeStreamEvent.parse({
-        type: "mailbox.connected",
-        sourceType: "mailbox.connected",
-        messageID: null,
-        taskID: null,
-        sequence: 0,
-      }),
-    ).toEqual({
-      type: "mailbox.connected",
-      sourceType: "mailbox.connected",
-      messageID: null,
-      taskID: null,
-      sequence: 0,
-    })
+  test("parses the canonical mailbox notification branch", () => {
     expect(
       MailboxChangeStreamEvent.parse({
         type: "mailbox.changed",
@@ -114,6 +100,21 @@ describe("canonical Server-Sent Events payload contracts", () => {
         sequence: 0,
       }),
     ).toEqual({ type: "work-ledger.heartbeat", sourceType: "work-ledger.heartbeat", sequence: 0 })
+    expect(
+      WorkLedgerEvent.parse({
+        type: "mailbox.changed",
+        sourceType: "task.completed",
+        messageID: "message-1",
+        taskID: "task-1",
+        sequence: 20,
+      }),
+    ).toEqual({
+      type: "mailbox.changed",
+      sourceType: "task.completed",
+      messageID: "message-1",
+      taskID: "task-1",
+      sequence: 20,
+    })
   })
 })
 
@@ -126,14 +127,14 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       description: "Description",
       directory: "/repo",
       created: 1,
-      started: null,
+      started: 1,
       updated: 2,
       pinned: false,
       lifecycleStatus: "active",
       activityStatus: "running",
+      cancellationStatus: "none",
       priority: "normal",
       source: "operator",
-      queueOrder: 0,
       productPillar: "code",
       pendingInteractions: 0,
       missionID: "mission-1",
@@ -160,6 +161,87 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
     expect(WorkLedgerList.parse(value)).toEqual(value)
   })
 
+  test("preserves terminal Task timing in one Work Ledger snapshot", () => {
+    const task = {
+      kind: "task",
+      id: "task-terminal",
+      title: "Terminal Task",
+      description: "Completed Task timing",
+      directory: "/repo",
+      created: 1,
+      started: 2,
+      completed: 2,
+      updated: 2,
+      pinned: false,
+      lifecycleStatus: "completed" as const,
+      activityStatus: "inactive",
+      cancellationStatus: "none",
+      priority: "normal",
+      source: "operator",
+      productPillar: "code",
+      pendingInteractions: 0,
+      missionID: "mission-1",
+      missionSessionID: "session-1",
+    }
+    for (const lifecycleStatus of ["completed", "failed", "cancelled"] as const) {
+      const terminalTask = { ...task, lifecycleStatus }
+      const mission = {
+        kind: "mission",
+        id: "mission-1",
+        missionID: "mission-1",
+        sessionID: "session-1",
+        title: "Mission",
+        directory: "/repo",
+        created: 1,
+        started: 1,
+        updated: 2,
+        pinned: false,
+        interruptible: false,
+        productPillar: "code",
+        taskStats: { total: 1, running: 0, inactive: 1 },
+        pendingInteractions: 0,
+        tasks: [terminalTask],
+      }
+      expect(WorkLedgerList.parse({ rows: [mission], nextCursor: null }).rows[0]).toMatchObject({
+        tasks: [{ id: "task-terminal", lifecycleStatus, started: 2, completed: 2 }],
+      })
+    }
+  })
+
+  test("maps malformed archived terminal Task timing to the canonical completed-field error", () => {
+    const parsed = WorkLedgerArchiveList.safeParse({
+      rows: [
+        {
+          kind: "task",
+          id: "task-archived-terminal",
+          title: "Archived terminal Task",
+          description: "Missing terminal completion time",
+          directory: "/repo",
+          created: 1,
+          started: 2,
+          updated: 3,
+          pinned: false,
+          archived: 3,
+          lifecycleStatus: "failed",
+          activityStatus: "inactive",
+          cancellationStatus: "none",
+          priority: "normal",
+          source: "operator",
+          productPillar: "code",
+          pendingInteractions: 0,
+        },
+      ],
+      nextCursor: null,
+    })
+    expect(parsed.success).toBe(false)
+    if (parsed.success) throw new Error("Expected archived terminal timing validation error")
+    expect(parsed.error.issues[0]).toMatchObject({
+      code: "custom",
+      path: ["rows", 0, "completed"],
+      message: "Terminal Work Ledger Task lifecycle failed requires completed >= started",
+    })
+  })
+
   test("accepts the Task-and-Session-owned worktree list and deletion receipt", () => {
     const worktree = {
       name: "session-1",
@@ -169,7 +251,10 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       removable: true,
     }
     expect(ProjectWorktreeList.parse([worktree])).toEqual([worktree])
-    expect(ProjectWorktreeDeleteReceipt.parse({ ok: true })).toEqual({ ok: true })
+    expect(ProjectWorktreeDeleteReceipt.parse({ ok: true, status: "removed" })).toEqual({
+      ok: true,
+      status: "removed",
+    })
   })
 })
 
@@ -249,6 +334,10 @@ describe("native command validation", () => {
     desktopNotifications: true,
   }
 
+  test("accepts an explicit empty username for a server without Basic Auth", () => {
+    expect(isOverlayPersistedSettings({ ...persistedSettings, username: "" })).toBe(true)
+  })
+
   test("accepts every canonical native command payload", () => {
     const valid = [
       { kind: "open-url", url: "https://example.com" },
@@ -298,6 +387,7 @@ describe("native command validation", () => {
           },
         },
       },
+      { kind: "clipboard.readText" },
       { kind: "settings.save", payload: persistedSettings },
       { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace" },
     ] satisfies NativeCommand[]
@@ -362,6 +452,7 @@ describe("route directory policy", () => {
       expect(routeRequiresProjectDirectory(path)).toBe(true)
     }
     expect(routeRequiresProjectDirectory("/project/current", "DELETE")).toBe(true)
+    expect(routeRequiresProjectDirectory("/task/abc", "DELETE")).toBe(true)
     expect(routeRequiresProjectDirectory("/project/current", "PATCH")).toBe(true)
     expect(routeRequiresProjectDirectory("/task/abc/project-archive", "GET")).toBe(true)
     expect(routeRequiresProjectDirectory("/task/abc/browser-preview", "GET")).toBe(true)

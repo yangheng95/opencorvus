@@ -57,6 +57,7 @@ export async function translateScenarioToStepsWithDependencies(
   const language = ProviderLLM.wrapModel(await dependencies.getLanguage(model, input), model, {})
   const result = dependencies.stream({
     model: language,
+    usagePurpose: "acceptance-translation",
     prompt: [
       "Convert this Gherkin acceptance scenario into browser walkthrough steps.",
       'Reply with one visible JSON object using exactly this shape: {"steps":[...]}',

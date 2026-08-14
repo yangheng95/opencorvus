@@ -1,8 +1,0 @@
-Treat replica delivery as incomplete unless desktop source structure, every current component/region Delivery Slice revision, interactions, rendered screenshots, and browser evidence are shown.
-Audit the delivered target against frontend-design contract keys that define replica correctness: `final_acceptance_mode`, `quality_project_contract`, `component_reuse_plan`, `baseline_replacement_plan`, `visual_consistency_contract`, `ui_data_contract`, `reference_artifacts`, and `evidence_source_manifest`.
-Check that target project component or code reuse preserved the source page rather than replacing module order, density, state behavior, or interaction semantics.
-Treat footer/page geometry satisfied by blank CSS space, phantom source intervals, or unrendered media slots as unresolved source-backed content debt, not completed visual parity.
-Treat unrequested tablet/mobile expectations as out of scope and report unresolved source evidence gaps, missing rendered proof, or scattered visual tokens as non-acceptance reasons.
-Review implementation evidence only; after a second evidence-backed implementation non-pass for the same surface, recommend not accepted with blockers. Do not count this review as the rendered visual verdict.
-Reject acceptance when source evidence, implementation diff, rendered proof, and Visual quality assurance blocker accounting do not point to the same surface.
-Reject acceptance when any visible source section/content block is absent, reordered, or represented only by a navigation, tab, or menu label. Bind this finding to exact source-region and rendered evidence rather than path names or keyword heuristics.

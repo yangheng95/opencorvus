@@ -28,6 +28,7 @@ import {
   createArtifactReadAiTool,
   createArtifactSearchAiTool,
   createArtifactSelectAiTool,
+  createArtifactSnapshotAiTool,
 } from "@/tool/artifact-catalog"
 import type { DecisionEntry } from "@/decision-log"
 import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
@@ -46,22 +47,20 @@ import {
   resolveAgentCoordinationSessionLineage,
   AgentCoordinationRedispatchBindingSchema,
   type AgentCoordinationRedispatchBinding,
+  type AgentCoordinationDecision,
   type AgentCoordinationRequestRow,
   type AgentCoordinationSessionLineageSource,
 } from "@/engine/agent-coordination"
 import {
   createDispatchLineageOrigin,
+  resolveDispatchContinuationSourceID,
   findDispatchLineageByArtifactID,
   findDispatchLineageByDispatchID,
   findDispatchLineageBySession,
+  findDispatchLineageByToolExecution,
   recordDispatchLineage,
 } from "@/engine/dispatch-lineage"
-import {
-  EngineArtifactTable,
-  EngineGoalTable,
-  EngineInteractionRequestTable,
-  EngineTaskTable,
-} from "@/engine/engine.sql"
+import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
@@ -79,9 +78,14 @@ import { Identifier } from "@/id/id"
 import { publishFailedAgentCoordinationTurnStatus } from "@/orchestrator/agent-coordination-session-lifecycle"
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { Instance } from "@/project/instance"
+import { owningMissionSchedulerEndpoint, taskSchedulerEndpoint } from "@/protocol/delivery"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
+import {
+  runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
+} from "@/project/independent-project-owner"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
-import { AutomationTable } from "@/scheduler/automation.sql"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { SessionPrompt } from "@/session/prompt"
@@ -91,8 +95,9 @@ import {
   type ProjectedWorkerRuntimeContract,
 } from "@/session/runtime-contract"
 import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
-import { TOOL_RESULT_PARK_METADATA_KEY } from "@/session/tool-result-control"
-import { and, Database, eq, NotFoundError, sql } from "@/storage/db"
+import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
+import { bindToolExecutionMode, toolExecutionModeOf } from "@/tool/execution-mode"
+import { and, Database, eq, NotFoundError } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
 import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
@@ -117,10 +122,12 @@ import {
 import {
   bindDispatchAdapterExecutors,
   createDispatchAgentTool,
+  DispatchAgentToolTestHooks,
   type DispatchAgentExecute,
   type OpenDispatchAgentLineage,
 } from "./dispatch-agent-tool"
-import { DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
+
+import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
 import { createExploreTool } from "./explore-tool"
 import { createDelegatedWorkerTool } from "./delegated-worker-tool"
 import { createFactCheckTool } from "./fact-check-tool"
@@ -143,11 +150,6 @@ import { createReadAgentMessageTool } from "./read-agent-message-tool"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
 import { createRuntimeRepairTools } from "./runtime-repair-tools"
 import { stageInputDigest } from "./stage-input-digest"
-import {
-  isOrchestratorNoDecisionObservationToolName,
-  ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY,
-  type OrchestratorDecisionEffect,
-} from "./stateful-tool-names"
 import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
 import { createSubagentCancellationTool } from "./subagent-cancellation-tool"
 import {
@@ -173,6 +175,16 @@ import {
   taskRequestSHA256,
   type TaskAuthorityAnchor,
 } from "./dispatch-turn-projection"
+
+const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+
+export const OrchestratorToolsTestHooks = Object.freeze({
+  openDispatchLineage(surface: object): OpenDispatchAgentLineage {
+    const openLineage = orchestratorToolLineageHooks.get(surface)
+    if (!openLineage) throw new Error("Orchestrator Tools lineage hook is unavailable")
+    return openLineage
+  },
+})
 
 const log = Log.create({ service: "task-tools" })
 
@@ -442,15 +454,6 @@ const MANAGE_TASK_ACTION_FIELDS = Object.fromEntries(
     Object.keys(ManageTaskActionInputSchemas[action].shape).sort((left, right) => left.localeCompare(right)),
   ]),
 ) as Record<keyof typeof ManageTaskActionInputSchemas, string[]>
-
-const MANAGE_TASK_ACTION_EFFECT = {
-  complete_task: "derive",
-  fail_task: "derive",
-  cancel_task: "derive",
-  add_goal: "continuation",
-  modify_goal: "continuation",
-  delete_goal: "continuation",
-} as const satisfies Record<keyof typeof ManageTaskActionInputSchemas, "derive" | "continuation">
 
 const ManageTaskInputSchema = z.discriminatedUnion(
   "action",
@@ -859,9 +862,21 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
 
-export function assertProjectedSchedulerReadPermission(request: { permission: string }): void {
-  if (request.permission === "read") return
-  throw new Error(`scheduler read rejected permission ${request.permission}`)
+const TERMINAL_TASK_TOOL_CAPABILITIES = {
+  skill: "read_only",
+  read: "read_only",
+  read_context: "read_only",
+  read_agent_message: "read_only",
+  read_task_message: "read_only",
+  capability_search: "read_only",
+  artifact_search: "read_only",
+  artifact_read: "read_only",
+  multica_catalog: "read_only",
+  multica_preview: "read_only",
+} as const satisfies Record<string, "read_only">
+
+function terminalTaskToolCapability(name: string): "read_only" | "mutation" {
+  return name in TERMINAL_TASK_TOOL_CAPABILITIES ? "read_only" : "mutation"
 }
 
 // Re-export the stateful-tool registry (defined in a dependency-free module
@@ -881,7 +896,7 @@ export function createOrchestratorTools(input: {
   dispatchAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
   rootMessage?: {
     messageID: string
-    kind: "operator" | "orchestrator"
+    kind: "operator" | "orchestrator" | "mission"
   }
   taskIntent?: {
     kind: "retry" | "replan"
@@ -897,6 +912,7 @@ export function createOrchestratorTools(input: {
     throw new Error("createOrchestratorTools requires the exact turn-owned dynamic-agent projection.")
   }
   const { taskID } = input
+  const taskProjectDirectory = taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.project.id })
 
   async function requireCurrentTaskRootSessionLineage(): Promise<TaskWithRootSession> {
     const task = requireTask(taskID)
@@ -927,78 +943,6 @@ export function createOrchestratorTools(input: {
   // Agents that need to ask the user a question do so directly via
   // `Question.ask`. Workflow steps never pause for input here.
 
-  function taskDecisionSignature() {
-    return Database.use((db) => {
-      const aggregate = (table: { task_id: unknown; time_updated: unknown }) =>
-        db
-          .select({
-            count: sql<number>`count(*)`,
-            updated: sql<number | null>`max(${table.time_updated})`,
-          })
-          .from(table as never)
-          .where(eq(table.task_id as never, taskID))
-          .get()
-      const task = db
-        .select({
-          time_updated: EngineTaskTable.time_updated,
-          time_completed: EngineTaskTable.time_completed,
-          error: EngineTaskTable.error,
-        })
-        .from(EngineTaskTable)
-        .where(eq(EngineTaskTable.id, taskID))
-        .get()
-      return JSON.stringify({
-        task,
-        artifacts: aggregate(EngineArtifactTable),
-        goals: aggregate(EngineGoalTable),
-        interactions: aggregate(EngineInteractionRequestTable),
-        automations: aggregate(AutomationTable),
-      })
-    })
-  }
-
-  function normalizeOrchestratorToolResult(result: unknown): { output: string; title: string; metadata: object } {
-    if (typeof result === "string") return { output: result, title: "", metadata: {} }
-    if (result && typeof result === "object") {
-      const record = result as Record<string, unknown>
-      const output =
-        typeof record.output === "string"
-          ? record.output
-          : typeof record.text === "string"
-            ? record.text
-            : JSON.stringify(record.output ?? record)
-      return {
-        ...record,
-        output,
-        title: typeof record.title === "string" ? record.title : "",
-        metadata: record.metadata && typeof record.metadata === "object" ? record.metadata : {},
-      } as { output: string; title: string; metadata: object }
-    }
-    return { output: String(result ?? ""), title: "", metadata: {} }
-  }
-
-  function explicitDecisionEffectFromMetadata(metadata: object): OrchestratorDecisionEffect | undefined {
-    const raw = (metadata as Record<string, unknown>)[ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]
-    return raw === "decision" || raw === "continuation" || raw === "observation" || raw === "none" ? raw : undefined
-  }
-
-  function withExplicitDecisionEffectMetadata(result: unknown, effect: OrchestratorDecisionEffect): unknown {
-    const normalized = normalizeOrchestratorToolResult(result)
-    return {
-      ...normalized,
-      metadata: {
-        ...normalized.metadata,
-        [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: effect,
-      },
-    }
-  }
-
-  function decisionEffectForTool(name: string, before: string, after: string): OrchestratorDecisionEffect {
-    if (isOrchestratorNoDecisionObservationToolName(name)) return "observation"
-    if (before !== after) return "decision"
-    return "none"
-  }
-
   function terminalTaskToolRefusal(name: string, task: TaskRow) {
     const status = deriveTaskStatus(task)
     return {
@@ -1006,9 +950,7 @@ export function createOrchestratorTools(input: {
         `Task ${task.id} is terminal (status=${status}); ${name} was not executed. ` +
         "Task-level scheduler tools may act only while the task is active. Use an explicit operator Retry or Replan to reopen this same Task when its scope remains recoverable; create a separate Task only for separate scope.",
       title: "Task is terminal",
-      metadata: {
-        [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "observation" satisfies OrchestratorDecisionEffect,
-      },
+      metadata: {},
     }
   }
 
@@ -1019,9 +961,7 @@ export function createOrchestratorTools(input: {
         `the current Task status is ${deriveTaskStatus(task)}. This conversation-only Turn cannot dispatch work, wait, ` +
         "ask a new question, or change lifecycle. Recoverable execution requires explicit operator Retry/Replan.",
       title: "Terminal conversation authority",
-      metadata: {
-        [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "observation" satisfies OrchestratorDecisionEffect,
-      },
+      metadata: {},
     }
   }
 
@@ -1036,6 +976,31 @@ export function createOrchestratorTools(input: {
     if (!isTaskTerminal(task)) return false
     const currentReference = requireCurrentTerminalLifecycleReference(task.id)
     return sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)
+  }
+
+  function isAuthorizedTerminalConversationMessageRead(name: string, args: unknown, task: TaskRow): boolean {
+    const authority = input.terminalConversationAuthority
+    if (!authority || authority.ingressKind !== "operator_message" || name !== "read_task_message") return false
+    if (!args || typeof args !== "object" || Array.isArray(args)) return false
+    if (authority.taskID !== task.id || !isTaskTerminal(task)) return false
+    const messageID = (args as Record<string, unknown>).message_id
+    if (messageID !== input.rootMessage?.messageID) return false
+    const currentReference = requireCurrentTerminalLifecycleReference(task.id)
+    return sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)
+  }
+
+  function isAuthorizedTerminalRead(name: string, args: unknown, task: TaskRow): boolean {
+    if (terminalTaskToolCapability(name) !== "read_only") return false
+    const authority = input.terminalConversationAuthority
+    if (authority) {
+      if (authority.taskID !== task.id || !isTaskTerminal(task)) return false
+      const currentReference = requireCurrentTerminalLifecycleReference(task.id)
+      if (!sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)) return false
+    }
+    if (name === "read_task_message") {
+      return isAuthorizedTerminalConversationMessageRead(name, args, task)
+    }
+    return true
   }
 
   function isTerminalAgentCoordinationFailTaskReplay(name: string, args: unknown, task: TaskRow): boolean {
@@ -1067,39 +1032,32 @@ export function createOrchestratorTools(input: {
     return action.payload.status === "pending" || action.payload.status === "completed"
   }
 
-  function withDecisionEffectMetadata(name: string, raw: unknown): unknown {
+  function withTerminalTaskAuthority(name: string, raw: unknown): unknown {
     const toolDef = raw as { execute?: (args: unknown, options: unknown) => Promise<unknown> }
     if (typeof toolDef.execute !== "function") return raw
     const execute = toolDef.execute
-    return {
+    return bindToolExecutionMode({
       ...(raw as object),
       execute: async (args: unknown, options: unknown) => {
         const currentTask = requireTask(taskID)
-        if (input.terminalConversationAuthority && !isTerminalConversationAcknowledgement(name, args, currentTask)) {
+        if (
+          input.terminalConversationAuthority &&
+          !isTerminalConversationAcknowledgement(name, args, currentTask) &&
+          !isAuthorizedTerminalRead(name, args, currentTask)
+        ) {
           return terminalConversationToolRefusal(name, currentTask)
         }
         if (
           isTaskTerminal(currentTask) &&
           !isTerminalAgentCoordinationFailTaskReplay(name, args, currentTask) &&
-          !isTerminalConversationAcknowledgement(name, args, currentTask)
+          !isTerminalConversationAcknowledgement(name, args, currentTask) &&
+          !isAuthorizedTerminalRead(name, args, currentTask)
         ) {
           return terminalTaskToolRefusal(name, currentTask)
         }
-        const before = taskDecisionSignature()
-        const result = await execute(args, options)
-        const after = taskDecisionSignature()
-        const normalized = normalizeOrchestratorToolResult(result)
-        const effect =
-          explicitDecisionEffectFromMetadata(normalized.metadata) ?? decisionEffectForTool(name, before, after)
-        return {
-          ...normalized,
-          metadata: {
-            ...normalized.metadata,
-            [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: effect,
-          },
-        }
+        return execute(args, options)
       },
-    }
+    }, toolExecutionModeOf(raw as object))
   }
 
   const dispatchArchitectStage = createArchitectStageDispatcher({
@@ -1131,6 +1089,56 @@ export function createOrchestratorTools(input: {
   })
 
   const tools = {
+    scheduler_message: tool({
+      description:
+        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically.",
+      inputSchema: z
+        .object({
+          kind: z.enum(["request", "reply", "notification"]),
+          target: z
+            .discriminatedUnion("kind", [
+              z.object({ kind: z.literal("mission") }).strict(),
+              z.object({ kind: z.literal("task"), task_id: z.string().min(1) }).strict(),
+            ])
+            .optional(),
+          reply_to: z.string().startsWith("pev").optional(),
+          subject: z.string().min(1).max(500),
+          message: z.string().min(1),
+        })
+        .strict()
+        .superRefine((value, context) => {
+          if (value.kind === "reply") {
+            if (!value.reply_to) context.addIssue({ code: "custom", message: "reply requires reply_to" })
+            if (value.target) context.addIssue({ code: "custom", message: "reply target is derived from reply_to" })
+          } else {
+            if (!value.target) context.addIssue({ code: "custom", message: `${value.kind} requires target` })
+            if (value.reply_to) context.addIssue({ code: "custom", message: "only reply may set reply_to" })
+          }
+        }),
+      execute: async (messageInput, options) => {
+        const execution = await requireTaskOrchestratorToolExecutionContext(options, "scheduler_message", {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        })
+        const source = taskSchedulerEndpoint(taskID)
+        const target =
+          messageInput.target?.kind === "mission"
+            ? owningMissionSchedulerEndpoint(taskID)
+            : messageInput.target?.kind === "task"
+              ? taskSchedulerEndpoint(messageInput.target.task_id)
+              : undefined
+        return sendSchedulerMessage({
+          invocationID: `scheduler-message:${execution.orchestratorSessionID}:${execution.orchestratorMessageID}:${execution.toolCallID}`,
+          kind: messageInput.kind,
+          source,
+          target,
+          replyTo: messageInput.reply_to,
+          subject: messageInput.subject,
+          sourceMessageID: execution.orchestratorMessageID,
+          sourcePartID: execution.toolPartID,
+        })
+      },
+    }),
     skill: tool({
       description:
         "Search/load surface for production skills granted to the Task's immutable Orchestrator scheduler projection. The session loop replaces this placeholder with the exact turn-scoped scheduler SkillTool before the model can call it.",
@@ -1177,9 +1185,6 @@ export function createOrchestratorTools(input: {
           executionSurface: Tool.executionSurface(["read"], []),
           extra: { taskID },
           metadata() {},
-          async ask(request) {
-            assertProjectedSchedulerReadPermission(request)
-          },
         })
       },
     }),
@@ -1495,17 +1500,20 @@ export function createOrchestratorTools(input: {
     ...createReadContextTool({ taskID }),
     ...createReadAgentMessageTool({ taskID }),
 
-    respond_agent_coordination: tool({
+    respond_agent_coordination: bindToolExecutionMode(tool({
       description:
         "Answer one pending worker/operator-to-orchestrator coordination request. This is the only orchestrator path for scheduler guidance that continues/cancels a worker, asks the user through a real interaction, fails the task through a terminal lifecycle event, or acknowledges an exact terminal occurrence during a host-authorized terminal conversation; it requires request_id and writes visible request/response/action artifacts before executing the bound side effect.",
       inputSchema: z
         .object({
           request_id: z.string().min(1).describe("Pending agent_coordination_request artifact id."),
-          decision: z
-            .enum(["cancel_worker", "redispatch", "fail_task", "ask_user", "acknowledge_terminal"])
-            .describe(
-              "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only in the host-authorized terminal conversation for this exact request and terminal occurrence.",
-            ),
+          decision: (input.terminalConversationAuthority
+            ? z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user", "acknowledge_terminal"])
+            : z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user"])
+          ).describe(
+            input.terminalConversationAuthority
+              ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
+              : "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
+          ) as z.ZodType<AgentCoordinationDecision>,
           message: z
             .string()
             .optional()
@@ -1611,7 +1619,14 @@ export function createOrchestratorTools(input: {
             ...(guidance ? { message: guidance } : {}),
           })
           const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
-          if (replayResult) return replayResult
+          if (replayResult) {
+            if (decision !== "fail_task") return replayResult
+            return {
+              title: "Task Failure Replayed",
+              output: replayResult,
+              metadata: withImmediateParkToolResultControl({}),
+            }
+          }
         }
 
         if (decision === "redispatch") {
@@ -2099,7 +2114,13 @@ export function createOrchestratorTools(input: {
             ...(guidance ? { message: guidance } : {}),
           })
           const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
-          if (replayResult) return replayResult
+          if (replayResult) {
+            return {
+              title: "Task Failure Replayed",
+              output: replayResult,
+              metadata: withImmediateParkToolResultControl({}),
+            }
+          }
           const errorText = guidance && guidance.length > 0 ? guidance : reason
           const errorMessage = `A2A request ${request.payload.request_id}: ${errorText}`
           try {
@@ -2111,9 +2132,7 @@ export function createOrchestratorTools(input: {
               !requestDescriptor ||
               requestDescriptor.hash !== request.payload.worker_binding.workerTurnDescriptorHash
             ) {
-              throw new Error(
-                `A2A request ${request.payload.request_id} has no exact Worker Turn descriptor authority`,
-              )
+              throw new Error(`A2A request ${request.payload.request_id} has no exact Worker Turn descriptor authority`)
             }
             await publishFailedAgentCoordinationTurnStatus({
               taskID,
@@ -2142,7 +2161,7 @@ export function createOrchestratorTools(input: {
                 `Responded to coordination request ${request.payload.request_id} with fail_task. ` +
                 `response=${response.payload.response_id}; action=${response.payload.action_id}; task=${taskID} failed.` +
                 `${recoveredTerminalFailure ? " Recovered existing terminal task failure." : ""}`,
-              metadata: { [TOOL_RESULT_PARK_METADATA_KEY]: true },
+              metadata: withImmediateParkToolResultControl({}),
             }
           } catch (error) {
             await failAgentCoordinationAction({
@@ -2156,7 +2175,7 @@ export function createOrchestratorTools(input: {
           }
         }
       },
-    }),
+    }), "turn_control_exclusive"),
 
     ...createBuildTool({
       inputSchema: BuildInputSchema,
@@ -2204,6 +2223,16 @@ export function createOrchestratorTools(input: {
     projectedAgents: input.dispatchAgents,
     executors: dispatchAdapterExecutors,
     signal: input.signal,
+    runDetached: (run) =>
+      runWithInitializedIndependentProject({
+        directory: taskProjectDirectory,
+        fn: run,
+      }),
+    runDetachedRecovery: (run) =>
+      runWithIndependentProjectIdentity({
+        directory: taskProjectDirectory,
+        fn: run,
+      }),
     runInWorktree: async ({ taskID: worktreeTaskID, sessionID, existingSessionID, targetAgentID, dispatchID, run }) => {
       const { Worktree } = await import("@/worktree")
       const { Instance } = await import("@/project/instance")
@@ -2252,6 +2281,58 @@ export function createOrchestratorTools(input: {
         taskID: ownershipTaskID,
         agentSessionID: input.agentSessionID,
       })
+      const replayLineage = findDispatchLineageByToolExecution({
+        taskID: ownershipTaskID,
+        toolPartID: toolExecution.toolPartID,
+        toolCallID: toolExecution.toolCallID,
+      })
+      if (replayLineage) {
+        if (
+          replayLineage.payload.target_agent_id !== targetAgentID ||
+          !isDeepStrictEqual(replayLineage.payload.work_scope, workScope)
+        ) {
+          throw new Error(
+            `dispatch_agent exact tool occurrence ${toolExecution.toolPartID}/${toolExecution.toolCallID} input drift`,
+          )
+        }
+        const descriptor = WorkerTurnDescriptor.findForDispatch({
+          sessionID: replayLineage.payload.child_session_id,
+          dispatchID: replayLineage.dispatchID,
+        })
+        const turn = descriptor?.payload.dispatchTurn
+        if (!descriptor || !turn) {
+          throw new Error(`dispatch_agent exact tool occurrence ${replayLineage.dispatchID} has no durable Turn`)
+        }
+        const settlement = findDispatchSettlementByDispatchID({
+          taskID: ownershipTaskID,
+          dispatchID: replayLineage.dispatchID,
+        })
+        const replayOutcome =
+          settlement?.payload.outcome ??
+          DispatchOutcome.accepted({
+            sessionID: replayLineage.payload.child_session_id,
+            dispatchLineageID: replayLineage.artifactID,
+          })
+        return {
+          dispatchID: replayLineage.dispatchID,
+          deliverySliceRevisionIDs: [...replayLineage.payload.delivery_slice_revision_ids],
+          existingSessionID: replayLineage.payload.child_session_id,
+          turn,
+          adapterInput: Object.freeze({ ...replayLineage.payload.adapter_input }),
+          replayOutcome,
+          observeSession(sessionID: string) {
+            if (sessionID !== replayLineage.payload.child_session_id) {
+              throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
+            }
+          },
+          commitSession(sessionID: string) {
+            if (sessionID !== replayLineage.payload.child_session_id) {
+              throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
+            }
+            return { artifactID: replayLineage.artifactID }
+          },
+        }
+      }
       if (signal?.aborted) {
         throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
       }
@@ -2341,6 +2422,10 @@ export function createOrchestratorTools(input: {
       } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
         throw new Error(`dispatch_agent ${targetAgentID} initial dispatch has no workflow binding`)
       }
+      const sourceDispatchID = resolveDispatchContinuationSourceID({
+        continuationDispatchID,
+        coordinationSourceDispatchID: coordinationBinding?.sourceDispatchID,
+      })
       const origin = createDispatchLineageOrigin({
         taskID: ownershipTaskID,
         orchestratorSessionID: toolExecution.orchestratorSessionID,
@@ -2355,7 +2440,7 @@ export function createOrchestratorTools(input: {
         workflowNodeID: exactWorkflowNodeID,
         ...(exactWorkflowOccurrenceID ? { workflowOccurrenceID: exactWorkflowOccurrenceID } : {}),
         ...(coordinationActionID ? { coordinationActionID } : {}),
-        ...(continuationDispatchID ? { continuationOfDispatchID: continuationDispatchID } : {}),
+        ...(sourceDispatchID ? { continuationOfDispatchID: sourceDispatchID } : {}),
         adapterInput: exactAdapterInput,
       })
       const task = await assertTaskRootSessionLineageForConfig(requireTask(ownershipTaskID))
@@ -2369,7 +2454,7 @@ export function createOrchestratorTools(input: {
           ? {
               kind: "continuation",
               current_dispatch_id: origin.dispatchID,
-              source_dispatch_id: continuationDispatchID ?? coordinationBinding?.sourceDispatchID,
+              source_dispatch_id: sourceDispatchID,
               child_session_id: existingSessionID,
               workflow_binding: origin.workflowBinding,
               workflow_node_id: origin.workflowNodeID,
@@ -2567,7 +2652,7 @@ export function createOrchestratorTools(input: {
     }) satisfies OpenDispatchAgentLineage,
   })
 
-  const manageTaskTool = tool({
+  const manageTaskTool = bindToolExecutionMode(tool({
     description:
       "Single scheduler task-management tool. Use action to select Task lifecycle or Delivery Slice contract behavior, then provide action-specific fields. Slice mutations never create, retry, cancel, or complete workers, worktrees, workflow nodes, or lifecycle. " +
       `Exact action fields: ${MANAGE_TASK_ACTION_NAMES.map(
@@ -2588,11 +2673,9 @@ export function createOrchestratorTools(input: {
         actionInput,
         optionsWithVisibleOrchestratorToolName(options, "manage_task"),
       )
-      return MANAGE_TASK_ACTION_EFFECT[action] === "continuation"
-        ? withExplicitDecisionEffectMetadata(result, "continuation")
-        : result
+      return result
     },
-  })
+  }), "turn_control_exclusive")
 
   const publicTools: Record<string, unknown> = {
     ...tools,
@@ -2608,6 +2691,7 @@ export function createOrchestratorTools(input: {
     artifact_search: createArtifactSearchAiTool(input.taskID),
     artifact_read: createArtifactReadAiTool(input.taskID),
     artifact_select: createArtifactSelectAiTool(input.taskID),
+    artifact_snapshot: createArtifactSnapshotAiTool(input.taskID),
     publish_interactive_artifact: createPublishInteractiveArtifactAiTool(),
     dispatch_agent: dispatchAgentTool,
     manage_task: manageTaskTool,
@@ -2616,10 +2700,12 @@ export function createOrchestratorTools(input: {
     delete publicTools[hidden]
   }
 
-  const toolsWithDecisionMetadata = Object.fromEntries(
-    Object.entries(publicTools).map(([name, raw]) => [name, withDecisionEffectMetadata(name, raw)]),
+  const toolsWithTerminalTaskAuthority = Object.fromEntries(
+    Object.entries(publicTools).map(([name, raw]) => [name, withTerminalTaskAuthority(name, raw)]),
   )
-  return {
-    tools: toolsWithDecisionMetadata,
+  const surface = {
+    tools: toolsWithTerminalTaskAuthority,
   }
+  orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentTool))
+  return surface
 }

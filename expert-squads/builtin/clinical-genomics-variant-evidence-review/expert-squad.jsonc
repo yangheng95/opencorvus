@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "clinical-genomics-variant-evidence-review",
+  "name": "Clinical Genomics Variant Evidence Review",
+  "label": "Clinical Genomics Variant Evidence Review",
+  "description": "Source-versioned clinical genomics variant evidence review across case identity, population and computational evidence, functional and segregation evidence, and classification provenance without diagnosis or classification authority.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for qualified, source-bound review of clinical sequence-variant evidence and unresolved conflicts.",
+    "selection_guidance": "Select for variant/build identity, transcript and HGVS normalization, database provenance, population frequency, computational evidence, functional evidence, segregation, phenotype fit, criteria trace, or classification discrepancy review. Do not select for diagnosis, patient-specific classification, treatment, report sign-out, or genetic counseling.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "clinical-genomics-variant-evidence-review/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "genomic-case-build-identity-analyst": {
+        "label": "Genomic Case and Build Identity Analyst",
+        "description": "Freezes case, specimen, phenotype, gene-disease, build, transcript and normalized variant identity.",
+        "base_role": "explore",
+        "prompt": "agents/genomic-case-build-identity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-genomics-variant-evidence-review/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "population-computational-evidence-analyst": {
+        "label": "Population and Computational Evidence Analyst",
+        "description": "Builds versioned population-frequency and computational-evidence observations without clinical interpretation.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/population-computational-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-genomics-variant-evidence-review/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "functional-segregation-evidence-analyst": {
+        "label": "Functional and Segregation Evidence Analyst",
+        "description": "Traces assay, case, segregation, de novo, allelic and phenotype evidence with independence and quality limits.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/functional-segregation-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-genomics-variant-evidence-review/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "variant-classification-provenance-analyst": {
+        "label": "Variant Classification Provenance Analyst",
+        "description": "Maps existing criteria and classifications to controlled specifications, evidence IDs, dates and conflict questions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/variant-classification-provenance-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-genomics-variant-evidence-review/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "clinical-genomics-variant-evidence-review-owner": {
+        "label": "Clinical Genomics Variant Evidence Review Owner",
+        "description": "Joins identity, population/computational, functional/segregation and criteria-provenance branches into a qualified review pack.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/clinical-genomics-variant-evidence-review-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "clinical-genomics-variant-evidence-review/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "qualified-review": {
+        "label": "Clinical Genomics Variant Evidence Review Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Clinical Genomics Variant Evidence Review review.",
+        "nodes": {
+          "genomic-case-build-identity-analyst": {
+            "agent_id": "genomic-case-build-identity-analyst",
+            "description": "Freezes case, specimen, phenotype, gene-disease, build, transcript and normalized variant identity.",
+            "depends_on": []
+          },
+          "population-computational-evidence-analyst": {
+            "agent_id": "population-computational-evidence-analyst",
+            "description": "Builds versioned population-frequency and computational-evidence observations without clinical interpretation.",
+            "depends_on": []
+          },
+          "functional-segregation-evidence-analyst": {
+            "agent_id": "functional-segregation-evidence-analyst",
+            "description": "Traces assay, case, segregation, de novo, allelic and phenotype evidence with independence and quality limits.",
+            "depends_on": []
+          },
+          "variant-classification-provenance-analyst": {
+            "agent_id": "variant-classification-provenance-analyst",
+            "description": "Maps existing criteria and classifications to controlled specifications, evidence IDs, dates and conflict questions.",
+            "depends_on": []
+          },
+          "clinical-genomics-variant-evidence-review-owner": {
+            "agent_id": "clinical-genomics-variant-evidence-review-owner",
+            "description": "Joins identity, population/computational, functional/segregation and criteria-provenance branches into a qualified review pack.",
+            "depends_on": [
+              "functional-segregation-evidence-analyst",
+              "genomic-case-build-identity-analyst",
+              "population-computational-evidence-analyst",
+              "variant-classification-provenance-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

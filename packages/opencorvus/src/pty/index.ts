@@ -128,14 +128,14 @@ export namespace Pty {
             pendingExit = payload
             return
           }
-          void Bus.publish(Event.Exited, payload)
+          Bus.publishOwned(Event.Exited, payload)
         },
       })
       const mapped = fromHost(info)
       if (!mapped) throw new Error("PTY session was not created")
-      void Bus.publish(Event.Created, { info: mapped })
+      await Bus.publish(Event.Created, { info: mapped })
       created = true
-      if (pendingExit) void Bus.publish(Event.Exited, pendingExit)
+      if (pendingExit) await Bus.publish(Event.Exited, pendingExit)
       return mapped
     } catch (error) {
       if (error instanceof CreateFailedError) throw error
@@ -154,14 +154,14 @@ export namespace Pty {
     if (input.title !== undefined) info = PtyHost.rename({ id, title: input.title })
     if (input.size) info = PtyHost.resizePty({ id, ...input.size })
     const mapped = fromHost(info ?? PtyHost.get(id))
-    if (mapped) void Bus.publish(Event.Updated, { info: mapped })
+    if (mapped) await Bus.publish(Event.Updated, { info: mapped })
     return mapped
   }
 
   export async function remove(id: string) {
     if (!get(id)) return
     await PtyHost.remove({ id })
-    void Bus.publish(Event.Deleted, { id })
+    await Bus.publish(Event.Deleted, { id })
   }
 
   export function input(id: string, data: string) {

@@ -72,10 +72,11 @@ export function interactionRequestText(interaction: any): string {
   return [title, body].filter(Boolean).join("\n\n")
 }
 
-/** Label for a permission reply value (mirrors app.js interactionReplyLabel). */
-export function interactionReplyLabel(reply: string): string {
-  if (reply === "always") return t("interaction.always_allow")
-  if (reply === "reject") return t("interaction.reject")
+/** Label for a durable permission decision. */
+export function interactionReplyLabel(decision: string): string {
+  if (decision === "allow_project") return t("interaction.allow_project")
+  if (decision === "allow_task") return t("interaction.allow_task")
+  if (decision === "deny") return t("interaction.reject")
   return t("interaction.allow_once")
 }
 
@@ -134,7 +135,7 @@ export function interactionResponseText(interaction: any): string {
   if (interaction?.type === "permission") {
     if (interaction.status === "rejected") return prefix + t("interaction.reject")
     const response = record(interaction?.response) ? interaction.response : null
-    return prefix + interactionReplyLabel(typeof response?.reply === "string" ? response.reply : "once")
+    return prefix + interactionReplyLabel(typeof response?.decision === "string" ? response.decision : "allow_once")
   }
   if (interaction?.status === "rejected") return prefix + t("interaction.skip")
   const answers = interactionAnswerLines(interaction)

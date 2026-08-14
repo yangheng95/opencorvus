@@ -1,7 +1,7 @@
 import { ProjectedAgentWorkScopeSchema, type ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import { ProjectedWorkerIdentitySchema, type ProjectedWorkerIdentity } from "@/agent/projected-worker-identity"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable, type EngineMetadata } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
@@ -14,6 +14,8 @@ import {
   assertWorkflowNodeOccurrenceLineageInTransaction,
   bindWorkflowNodeOccurrenceLineageInTransaction,
 } from "./workflow-node-occurrence"
+import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
+import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
 
 export interface DispatchLineagePayload extends EngineMetadata {
   dispatch_id: string
@@ -43,6 +45,19 @@ export interface DispatchLineageRow {
   dispatchID: string
   payload: DispatchLineagePayload
   timeCreated: number
+}
+
+export class TaskDispatchAdmissionClosedError extends Error {
+  override readonly name = "TaskDispatchAdmissionClosedError"
+  readonly code = "TASK_DISPATCH_ADMISSION_CLOSED"
+
+  constructor(
+    readonly taskID: string,
+    readonly timeCompleted: number,
+    readonly dispatchID: string,
+  ) {
+    super(`Task ${taskID} completed at ${timeCompleted}; dispatch ${dispatchID} admission is closed`)
+  }
 }
 
 export interface DispatchLineageOrigin {
@@ -97,6 +112,22 @@ function deepFreeze<T>(value: T): T {
 export function freezeDispatchAdapterInput(input: Record<string, unknown>): Readonly<Record<string, unknown>> {
   const parsed = z.record(z.string(), z.unknown()).parse(input)
   return deepFreeze(structuredClone(parsed))
+}
+
+export function resolveDispatchContinuationSourceID(input: {
+  continuationDispatchID?: string
+  coordinationSourceDispatchID?: string
+}): string | undefined {
+  if (
+    input.continuationDispatchID &&
+    input.coordinationSourceDispatchID &&
+    input.continuationDispatchID !== input.coordinationSourceDispatchID
+  ) {
+    throw new Error(
+      `Dispatch continuation source ${input.continuationDispatchID} conflicts with coordination source ${input.coordinationSourceDispatchID}`,
+    )
+  }
+  return input.continuationDispatchID ?? input.coordinationSourceDispatchID
 }
 
 export function createDispatchLineageOrigin(
@@ -178,6 +209,25 @@ export function recordDispatchLineage(input: {
     artifactID,
   )
   Database.transaction((db) => {
+    const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
+      db,
+      input.origin.taskID,
+      `dispatch_agent ${input.origin.targetAgentID} lineage commit`,
+    )
+    if (cancellation) throw cancellation
+    const task = db
+      .select({ timeCompleted: EngineTaskTable.time_completed })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, input.origin.taskID))
+      .get()
+    if (!task) throw new Error(`Dispatch Task ${input.origin.taskID} does not exist`)
+    if (task.timeCompleted !== null) {
+      throw new TaskDispatchAdmissionClosedError(input.origin.taskID, task.timeCompleted, input.origin.dispatchID)
+    }
+    const completionClosure = taskCompletionClosureInTransaction(db, input.origin.taskID)
+    if (completionClosure) {
+      throw new TaskCompletionClosureConflictError(input.origin.taskID, completionClosure.owner_id)
+    }
     assertTaskWorkflowBindingInTransaction({
       db,
       taskID: input.origin.taskID,
@@ -248,7 +298,27 @@ export function findDispatchLineageByDispatchID(input: {
   taskID: string
   dispatchID: string
 }): DispatchLineageRow | undefined {
-  const matches = listDispatchLineage(input.taskID).filter((lineage) => lineage.dispatchID === input.dispatchID)
+  return Database.use((db) => findDispatchLineageByDispatchIDInTransaction({ db, ...input }))
+}
+
+export function findDispatchLineageByDispatchIDInTransaction(input: {
+  db: Database.TxOrDb
+  taskID: string
+  dispatchID: string
+}): DispatchLineageRow | undefined {
+  const matches = input.db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "dispatch_lineage"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
+      ),
+    )
+    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
+    .all()
+    .map(dispatchLineageRow)
   if (matches.length > 1) {
     throw new Error(`Dispatch identity ${input.dispatchID} has ${matches.length} lineages in Task ${input.taskID}`)
   }
@@ -341,7 +411,7 @@ export function parseDispatchLineagePayload(payload: unknown, artifactID: string
   }) as DispatchLineagePayload
 }
 
-function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect): DispatchLineageRow {
+export function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect): DispatchLineageRow {
   const payload = parseDispatchLineagePayload(row.payload, row.id)
   return {
     artifactID: row.id,

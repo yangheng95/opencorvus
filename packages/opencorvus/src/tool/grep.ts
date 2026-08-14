@@ -8,6 +8,7 @@ import { ProcessSupervisor } from "@/shell/process-supervisor"
 import DESCRIPTION from "./grep.txt"
 import { Instance } from "../project/instance"
 import path from "path"
+import fs from "node:fs/promises"
 import { assertExternalDirectory } from "./external-directory"
 import { redactInlinePayloads } from "../util/inline-base64"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
@@ -23,7 +24,10 @@ export const SearchCodeTool = Tool.define("search_code", {
       .describe(
         'Required regex pattern to search for in file contents. This field is named "pattern"; do not use "query".',
       ),
-    path: z.string().optional().describe("The directory to search in. Defaults to the current working directory."),
+    path: z
+      .string()
+      .optional()
+      .describe("The file or directory to search. Defaults to the current working directory."),
     include: z.string().optional().describe('File pattern to include in the search (e.g. "*.js", "*.{ts,tsx}")'),
   }),
   async execute(params, ctx) {
@@ -31,20 +35,16 @@ export const SearchCodeTool = Tool.define("search_code", {
       throw new Error("pattern is required")
     }
 
-    await ctx.ask({
-      permission: "search_code",
-      patterns: [params.pattern],
-      always: ["*"],
-      metadata: {
-        pattern: params.pattern,
-        path: params.path,
-        include: params.include,
-      },
-    })
-
     let searchPath = params.path ?? Instance.directory
     searchPath = path.isAbsolute(searchPath) ? searchPath : path.resolve(Instance.directory, searchPath)
-    await assertExternalDirectory(ctx, searchPath, { kind: "directory" })
+    await assertExternalDirectory(ctx, searchPath)
+    const searchStat = await fs.stat(searchPath)
+    const commandCwd = searchStat.isDirectory()
+      ? searchPath
+      : searchStat.isFile()
+        ? path.dirname(searchPath)
+        : undefined
+    if (!commandCwd) throw new Error(`Search path is not a file or directory: ${searchPath}`)
 
     const executionAuthority = Tool.requireExecutionAuthority(ctx)
     const rgPath = executionAuthority.kind === "task"
@@ -59,10 +59,10 @@ export const SearchCodeTool = Tool.define("search_code", {
     const processOptions = { executable: rgPath, args, owner: "search-code" }
     const proc = executionAuthority.kind === "task"
       ? await ProcessSupervisor.spawnTaskCommand(
-          { taskID: executionAuthority.taskID, cwd: searchPath },
+          { taskID: executionAuthority.taskID, cwd: commandCwd },
           processOptions,
         )
-      : await ProcessSupervisor.spawnHostCommand({ ...processOptions, cwd: searchPath })
+      : await ProcessSupervisor.spawnHostCommand({ ...processOptions, cwd: commandCwd })
     const abort = () => void proc.terminate().catch(() => undefined)
     ctx.abort.addEventListener("abort", abort, { once: true })
 

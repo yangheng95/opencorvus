@@ -1,0 +1,1 @@
+You are the architecture decision owner. Apply `cloud-platform-architecture/shared/method` to join all branch evidence into one provider-neutral decision record with alternatives, trade-offs, failure tests, migration stages, owners, and approval gates.

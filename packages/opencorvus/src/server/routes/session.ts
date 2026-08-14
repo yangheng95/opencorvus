@@ -34,16 +34,27 @@ import { EngineService } from "@/task-api"
 import { Snapshot } from "@/snapshot"
 import { TaskQueueService } from "@/scheduler/task-queue-service"
 import { Log } from "../../util/log"
-import { badRequestBody, errors, namedErrorResponse } from "../error"
+import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import { ProjectMemory } from "@/memory/project-memory"
 import { NotFoundError } from "../../storage/db"
 import { lazy } from "../../util/lazy"
 import { ProtocolStore } from "@/protocol/store"
-import { enrichStandaloneSessionTranscript, mapSessionBusEvent } from "@/protocol/session-mirror"
+import {
+  enrichStandaloneSessionTranscript,
+  mapSessionBusEvent,
+  pendingPermissionSessionEvent,
+} from "@/protocol/session-mirror"
+import { PermissionAuthority } from "@/permission/authority"
 import { listConversationAgentSessionsForSessionTree, taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { BusEvent } from "@/bus/bus-event"
-import { ConversationTurnArtifactSummary, SessionConversationHydration, SessionEvent } from "@/engine/model"
+import {
+  ConversationTurnArtifactSummary,
+  SessionConversationHistoryPage,
+  SessionConversationHydration,
+  SessionEvent,
+} from "@/engine/model"
 import {
   applyRightSidebarConversationPromptOverlay,
   isRightSidebarConversationSession,
@@ -55,11 +66,19 @@ import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/orde
 import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { resolveSessionActivityStatus, resolveSessionLifecycleSnapshot } from "@/session/lifecycle"
 import { assertActiveProjectSession, getActiveProjectSession } from "../active-project-session"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { applyMissionControlPromptOverlay } from "@/mission/session"
 import { Question } from "@/question"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
 import { visibleComposerReferences } from "@opencorvus-ai/transport-protocol"
+import {
+  CONVERSATION_HISTORY_PAGE_LIMIT,
+  CONVERSATION_TAIL_MESSAGE_LIMIT,
+  ConversationHistoryQuery,
+  ConversationHydrationQuery,
+  conversationHistoryWindow,
+} from "@/conversation/history-window"
 
 const log = Log.create({ service: "server" })
 
@@ -137,6 +156,13 @@ async function preparePublicSessionPrompt(sessionID: string, prompt: SessionProm
   const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
     ...prompt,
     author: "user",
+    extra: ProjectMemory.userInputExtra({
+      surface: "session.prompt",
+      literalText: prompt.parts
+        .filter((part): part is Extract<(typeof prompt.parts)[number], { type: "text" }> => part.type === "text")
+        .map((part) => part.text)
+        .join("\n\n"),
+    }),
   }
   const overlaidPrompt =
     session.kind === "mission"
@@ -233,6 +259,26 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
     sequence: 0,
     summary: mapped.summary,
     payload: mapped.payload,
+  }
+}
+
+function pendingPermissionProtocolSessionEvent(request: PermissionAuthority.Request): z.output<typeof SessionEvent> {
+  const orderKey = timelineOrderKey({
+    domain: "interaction",
+    time: request.timeCreated,
+    id: request.id,
+  })
+  const mapped = pendingPermissionSessionEvent(request)
+  return {
+    event_id: `pending-permission-${request.id}`,
+    session_id: request.sessionID,
+    orderKey,
+    type: mapped.type,
+    emittedAt: request.timeCreated,
+    timestamp: request.timeCreated,
+    sequence: 0,
+    summary: mapped.summary!,
+    payload: { ...mapped.payload!, orderKey },
   }
 }
 
@@ -464,6 +510,7 @@ export const SessionRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(SessionConfigResponse) } },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -494,6 +541,7 @@ export const SessionRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(SessionConfigResponse) } },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
           409: namedErrorResponse(
             "Task creation binding owns the root expert-squad profile",
             "TaskPromptProfileImmutableError",
@@ -570,7 +618,7 @@ export const SessionRoutes = lazy(() =>
           sessionID,
           projectID: Instance.project.id,
         })
-        const view = projectConversationView(transcript, [], agentSessions)
+        const view = projectConversationView({ transcript, ledgerSessions: agentSessions })
         return c.json(await projectMissionTurnArtifacts({ transcript, view }))
       },
     )
@@ -599,14 +647,22 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
+      validator("query", ConversationHydrationQuery),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
+        const query = c.req.valid("query")
         const session = await getActiveProjectSession(sessionID)
         const sessionIDs = await Session.treeInProject({ sessionID, projectID: Instance.project.id })
-        const messages = (await Promise.all(sessionIDs.map((id) => Session.messages({ sessionID: id }))))
-          .flat()
+        const tailLimit = query.tail_limit ?? CONVERSATION_TAIL_MESSAGE_LIMIT
+        const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
+        const truncated = latestMessages.length > tailLimit
+        const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
+        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+          .filter(conversationMessageHasDisplay)
           .sort(conversationTranscriptMessageOrder)
-        const transcript = enrichStandaloneSessionTranscript(messages).filter(conversationMessageHasDisplay)
+        const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
+        const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+        const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
         const pendingQuestions = (await Question.list())
           .filter((request) => sessionIDSet.has(request.sessionID))
@@ -622,7 +678,7 @@ export const SessionRoutes = lazy(() =>
           kind: "session" as const,
           sessionID,
           status: session.time.archived ? "archived" : resolveSessionActivityStatus(sessionID),
-          composerReferences: conversationLaunchReferences(messages),
+          composerReferences: conversationLaunchReferences(rootMessages),
           title: session.title ?? null,
           directory: session.directory ?? null,
           changes: await SessionSummary.diff({ sessionID }),
@@ -647,11 +703,14 @@ export const SessionRoutes = lazy(() =>
               }
             : entry,
         )
-        const view = projectConversationView(transcript, [], hydratedAgentSessions)
+        const view = projectConversationView({
+          transcript: historyWindow.transcript,
+          ledgerSessions: hydratedAgentSessions,
+        })
         const turnArtifacts =
           session.kind === "mission"
             ? await projectMissionTurnArtifacts({
-                transcript,
+                transcript: historyWindow.transcript,
                 view,
               })
             : []
@@ -660,7 +719,7 @@ export const SessionRoutes = lazy(() =>
             ? taskExecutionProjectionForTask(board.selectedTaskID)
             : undefined
         const agentView = projectConversationAgentView(
-          transcript,
+          historyWindow.transcript,
           executionProjection ? executionProjectionLifecycleEvents(executionProjection) : [],
           hydratedAgentSessions,
           new Map(),
@@ -670,18 +729,58 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           board,
           pendingQuestions,
-          transcript,
+          transcript: historyWindow.transcript,
           events: [],
           view,
           turnArtifacts,
           agentView,
-          history: {
-            oldestTimestamp: transcript[0]?.info?.time?.created ?? null,
-            oldestOrderKey: transcript[0]?.info?.orderKey ?? null,
-            oldestMessageID: transcript[0]?.info?.id ?? null,
-            hasMore: false,
-            limit: Math.max(1, transcript.length),
+          history,
+        })
+      },
+    )
+    .get(
+      "/:sessionID/conversation/history",
+      describeRoute({
+        summary: "Page older session conversation transcript",
+        description: "Return a bounded Mission or conversation transcript slice older than the current hydrate tail.",
+        operationId: "session.conversation.history",
+        responses: {
+          200: {
+            description: "Session conversation history page",
+            content: { "application/json": { schema: resolver(SessionConversationHistoryPage) } },
           },
+          ...errors(404),
+        },
+      }),
+      validator("param", z.object({ sessionID: z.string().min(1) })),
+      validator("query", ConversationHistoryQuery),
+      async (c) => {
+        const sessionID = c.req.valid("param").sessionID
+        const query = c.req.valid("query")
+        await getActiveProjectSession(sessionID)
+        const sessionIDs = await Session.treeInProject({ sessionID, projectID: Instance.project.id })
+        const messages = await MessageStore.latestAcrossSessionsBefore({
+          sessionIDs,
+          before: query.before,
+          beforeID: query.before_id,
+          limit: query.limit + 1,
+        })
+        const truncated = messages.length > query.limit
+        const visibleMessages = truncated ? messages.slice(messages.length - query.limit) : messages
+        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+          .filter(conversationMessageHasDisplay)
+          .sort(conversationTranscriptMessageOrder)
+        const historyWindow = conversationHistoryWindow(transcript, { tailLimit: query.limit })
+        const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+        const agentSessions = listConversationAgentSessionsForSessionTree({
+          sessionID,
+          projectID: Instance.project.id,
+        })
+        return c.json({
+          transcript: historyWindow.transcript,
+          events: [],
+          view: projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions }),
+          history,
         })
       },
     )
@@ -762,6 +861,9 @@ export const SessionRoutes = lazy(() =>
           // interaction projection intentionally upserts idempotently.
           for (const request of readPendingQuestions().filter((item) => item.sessionID === sessionID)) {
             await writeData(JSON.stringify(pendingQuestionSessionEvent(request)))
+          }
+          for (const request of (await PermissionAuthority.list()).filter((item) => item.sessionID === sessionID)) {
+            await writeData(JSON.stringify(pendingPermissionProtocolSessionEvent(request)))
           }
           await writeData(
             JSON.stringify({
@@ -956,9 +1058,11 @@ export const SessionRoutes = lazy(() =>
       ),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
-        await assertActiveProjectSession(sessionID)
+        const projectID = PersistedProjectContext.currentProject().id
+        await Session.getInProject({ sessionID, projectID })
         await EngineService.deleteSession(sessionID, {
           deleteTasks: c.req.valid("query").deleteTasks === true,
+          projectID,
           cancellationOrigin: {
             actor: "user",
             source: "session.delete",
@@ -1101,7 +1205,7 @@ export const SessionRoutes = lazy(() =>
           reason: "session aborted",
           targetSessionID: session.id,
         })
-        cancelSessionPromptInScope({ session, origin })
+        cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
         TaskQueueService.cancelSessionPrompts({
           sessionIDs: [sessionID],
           reason: "session aborted",
@@ -1306,7 +1410,10 @@ export const SessionRoutes = lazy(() =>
       ),
       async (c) => {
         const params = c.req.valid("param")
-        await assertActiveProjectSession(params.sessionID)
+        await Session.getInProject({
+          sessionID: params.sessionID,
+          projectID: PersistedProjectContext.currentProject().id,
+        })
         SessionPrompt.assertNoOwnedPrompt(params.sessionID)
         await Session.removeMessage({ sessionID: params.sessionID, messageID: params.messageID })
         return c.json(true)
@@ -1335,7 +1442,10 @@ export const SessionRoutes = lazy(() =>
       ),
       async (c) => {
         const params = c.req.valid("param")
-        await assertActiveProjectSession(params.sessionID)
+        await Session.getInProject({
+          sessionID: params.sessionID,
+          projectID: PersistedProjectContext.currentProject().id,
+        })
         await Session.removePart({
           sessionID: params.sessionID,
           messageID: params.messageID,
@@ -1402,6 +1512,7 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -1446,6 +1557,7 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(

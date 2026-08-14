@@ -126,27 +126,6 @@
   background: var(--chat-canvas);
 }
 
-.task-queue-notice {
-  display: flex;
-  align-items: center;
-  gap: calc(8px * var(--ui-scale));
-  width: min(100%, var(--conversation-message-content-width));
-  max-width: 100%;
-  margin: calc(16px * var(--ui-scale)) auto 0;
-  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
-  box-sizing: border-box;
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
-  border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--surface-inset) 72%, transparent);
-  color: var(--text-soft);
-  font-size: var(--ui-font-meta);
-  line-height: var(--ui-line-height-normal);
-}
-
-.task-queue-notice + .chat-composer-stack {
-  margin-top: calc(6px * var(--ui-scale));
-}
-
 .chat[data-empty-chat-home="true"] .chat-home-composition {
   --chat-home-wide-content-width: calc(900px * var(--ui-scale));
   --chat-home-composition-width: min(100%, var(--chat-home-wide-content-width));
@@ -835,7 +814,7 @@
   overflow: hidden;
   box-sizing: border-box;
   background: color-mix(in srgb, var(--surface) 84%, var(--chat-canvas));
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .conversation-artifact-summary__header {
@@ -873,14 +852,14 @@
 .conversation-artifact-summary__eyebrow {
   flex-basis: 100%;
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
   line-height: 1.2;
 }
 
 .conversation-artifact-summary__identity strong {
   overflow: hidden;
   color: var(--text-strong);
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-small);
   line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -888,7 +867,7 @@
 
 .conversation-artifact-summary__file-total {
   color: var(--text-muted);
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-small);
   line-height: 1.3;
 }
 
@@ -921,28 +900,28 @@
   gap: calc(3px * var(--ui-scale));
   padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
   line-height: 1.4;
 }
 
 .conversation-artifact-summary__outcome strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-small);
 }
 
 .conversation-artifact-summary__outcome[data-status="failed"] {
-  color: var(--status-danger-text);
+  color: var(--bad);
   background: color-mix(in srgb, var(--bad) 8%, transparent);
 }
 
 .conversation-artifact-summary__outcome[data-status="failed"] strong {
-  color: var(--status-danger-text);
+  color: var(--bad);
 }
 
 .conversation-artifact-summary__empty {
   padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-small);
   line-height: 1.4;
 }
 
@@ -955,7 +934,7 @@
 .conversation-artifact-summary__section-label {
   padding: calc(9px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(4px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
   line-height: 1.2;
 }
 
@@ -989,6 +968,28 @@
   background: color-mix(in srgb, var(--accent) 10%, var(--surface));
 }
 
+.conversation-artifact-summary__declared-output {
+  min-height: calc(43px * var(--ui-scale));
+}
+
+.conversation-artifact-summary__records {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+  background: color-mix(in srgb, var(--surface-inset) 48%, transparent);
+}
+
+.conversation-artifact-summary__records-disclosure {
+  width: 100%;
+  justify-content: space-between;
+  min-height: calc(34px * var(--ui-scale));
+  padding-inline: calc(12px * var(--ui-scale));
+  border-radius: 0;
+}
+
+.conversation-artifact-summary__record-list {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--surface);
+}
+
 .conversation-artifact-summary__artifact-item {
   min-width: 0;
 }
@@ -1007,14 +1008,14 @@
 .conversation-artifact-inspector__status {
   padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
   border: var(--oc-border-width) solid var(--divider-soft);
-  border-radius: var(--oc-radius-md);
+  border-radius: var(--oc-radius-large);
   color: var(--text-muted);
   background: var(--surface-inset);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
 }
 
 .conversation-artifact-inspector__status[role="alert"] {
-  color: var(--status-danger-text);
+  color: var(--bad);
   border-color: color-mix(in srgb, var(--bad) 36%, var(--divider-soft));
   background: color-mix(in srgb, var(--bad) 8%, var(--surface));
 }
@@ -1036,7 +1037,7 @@
   flex-wrap: wrap;
   gap: calc(5px * var(--ui-scale)) calc(9px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
 }
 
 .conversation-artifact-inspector__metadata code {
@@ -1051,7 +1052,7 @@
   justify-content: space-between;
   gap: calc(10px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
 }
 
 .conversation-artifact-inspector__toolbar .oc-search-field {
@@ -1062,7 +1063,7 @@
   max-height: calc(220px * var(--ui-scale));
   overflow: auto;
   border: var(--oc-border-width) solid var(--divider-soft);
-  border-radius: var(--oc-radius-md);
+  border-radius: var(--oc-radius-large);
   background: var(--surface-inset);
 }
 
@@ -1101,7 +1102,7 @@
 .conversation-artifact-inspector__resource-copy span,
 .conversation-artifact-inspector__resource > span:last-child {
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
 }
 
 .conversation-artifact-inspector__binary {
@@ -1111,7 +1112,7 @@
   gap: calc(8px * var(--ui-scale));
   padding: calc(12px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
 }
 
 .conversation-artifact-inspector__binary .oc-button {
@@ -1142,15 +1143,15 @@
 
 .conversation-artifact-summary__artifact-copy strong {
   color: var(--text);
-  font-size: var(--ui-font-size-sm);
-  font-weight: var(--ui-font-weight-semibold);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
   line-height: 1.3;
 }
 
 .conversation-artifact-summary__artifact-copy span,
 .conversation-artifact-summary__artifact-meta {
   color: var(--text-muted);
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-tiny);
   line-height: 1.25;
 }
 
@@ -1167,7 +1168,7 @@
   flex: 1 1 auto;
   overflow: hidden;
   color: var(--text);
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-small);
   line-height: 1.35;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1175,7 +1176,7 @@
 
 .conversation-artifact-summary__file-stats {
   flex: 0 0 auto;
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-small);
 }
 
 .conversation-artifact-summary__errors {
@@ -1183,8 +1184,8 @@
   gap: calc(4px * var(--ui-scale));
   padding: calc(9px * var(--ui-scale)) calc(12px * var(--ui-scale));
   border-block-start: var(--oc-border-width) solid var(--divider-soft);
-  color: var(--status-danger-text);
-  font-size: var(--ui-font-size-xs);
+  color: var(--bad);
+  font-size: var(--ui-font-tiny);
   line-height: 1.35;
 }
 
@@ -1260,7 +1261,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  cursor: copy;
 }
 
 .chat-title-usage-trigger[data-copy-feedback="copied"] {
@@ -1269,12 +1269,6 @@
 
 .chat-title-usage-trigger[data-copy-feedback="failed"] {
   color: var(--bad);
-}
-
-.chat-title-usage-trigger:focus-visible {
-  outline: var(--oc-border-width) solid var(--accent);
-  outline-offset: calc(2px * var(--ui-scale));
-  border-radius: var(--oc-radius-soft);
 }
 
 .chat-title-usage-tooltip {
@@ -1293,6 +1287,28 @@
   font-variant-numeric: tabular-nums;
   font-weight: var(--ui-font-weight-strong);
   white-space: nowrap;
+}
+
+.chat-title-usage-tooltip__debug-hint {
+  grid-column: 1 / -1;
+  max-width: calc(320px * var(--ui-scale));
+  color: var(--text-muted);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.chat-title-copy-feedback-a11y {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .chat-header-status {
@@ -2410,7 +2426,7 @@
   border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-xl) var(--oc-radius-xl) 0 0;
   background: var(--chat-canvas);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   backdrop-filter: none;
   overflow: hidden;
 }
@@ -3170,7 +3186,7 @@
 }
 
 .subagent-progress-event > svg {
-  color: var(--text-subtle);
+  color: var(--text-muted);
 }
 
 .subagent-progress-event[data-kind="error"],
@@ -3203,7 +3219,7 @@
 
 .subagent-progress-card__waiting {
   margin: auto 0;
-  color: var(--text-subtle);
+  color: var(--text-muted);
   font-size: var(--ui-font-small);
 }
 
@@ -3264,7 +3280,7 @@
 }
 
 .todo-progress--subagent .todo-progress__current--tooltip {
-  border-radius: var(--oc-radius-small);
+  border-radius: var(--oc-radius-soft);
   cursor: default;
 }
 
@@ -3287,7 +3303,7 @@
   gap: calc(10px * var(--ui-scale));
   padding: calc(12px * var(--ui-scale));
   border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
-  border-radius: var(--oc-radius-medium);
+  border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
 }
 
@@ -3311,7 +3327,7 @@
 .computer-control-surface__identity strong {
   overflow: hidden;
   color: var(--text);
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: var(--ui-font-small);
   font-weight: var(--ui-font-weight-medium);
   text-overflow: ellipsis;
@@ -3348,7 +3364,7 @@
 .computer-control-surface__error,
 .computer-control-surface__notice {
   padding: calc(8px * var(--ui-scale));
-  border-radius: var(--oc-radius-small);
+  border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-small);
   line-height: 1.45;
 }

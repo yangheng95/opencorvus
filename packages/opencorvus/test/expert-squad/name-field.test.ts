@@ -4,26 +4,16 @@ import { builtInPackageSources } from "../../src/expert-squad/builtin"
 import { catalogSummaryFromPackage } from "../../src/expert-squad/catalog-profile"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 
-const expectedNames = new Map([
-  ["base", "Base"],
-  ["advanced", "Advanced"],
-  ["research-studio", "Research Studio"],
-  ["deep-research", "Deep Research"],
-  ["equity-research", "Equity Research"],
-  ["evolution-lab", "Evolution Lab"],
-  ["frontend-innovate", "Frontend Innovate"],
-  ["frontend-replica", "Frontend Replica"],
-  ["review-debug", "Review & Debug"],
-  ["squad-sdk", "Generate Agent Squads"],
-])
-
 test("every shipped Expert Squad projects its declared human-readable name", () => {
-  const loaded = [...builtInPackageSources, ...payloadPackageSources].map((source) =>
-    ExpertSquadRegistry.loadEmbeddedPackage(source),
+  const sources = [...builtInPackageSources, ...payloadPackageSources]
+  const expectedNames = new Map(
+    sources.map((source) => [source.id, ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source).manifest.name]),
   )
+  const loaded = sources.map((source) => ExpertSquadRegistry.loadEmbeddedPackage(source))
 
-  expect(new Map(loaded.map((pkg) => [pkg.id, pkg.manifest.name]))).toEqual(expectedNames)
+  expect(expectedNames.size).toBe(sources.length)
   for (const pkg of loaded) {
+    expect(pkg.manifest.name).toBe(expectedNames.get(pkg.id))
     expect(pkg.name).toBe(expectedNames.get(pkg.id))
     expect(catalogSummaryFromPackage({ pkg, builtIn: true }).name).toBe(expectedNames.get(pkg.id))
   }

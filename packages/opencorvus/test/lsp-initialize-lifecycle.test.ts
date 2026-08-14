@@ -12,7 +12,7 @@ import { afterAll } from "bun:test"
 import { SessionContext } from "../src/session/context"
 import { Session } from "../src/session"
 import { Identifier } from "../src/id/id"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { ProcessSupervisor } from "../src/shell/process-supervisor"
 
@@ -46,7 +46,7 @@ describe("Language Server Protocol initialization lifecycle", () => {
           version: "2026.08.07.1",
           packageDigest: "a".repeat(64),
         }
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now,
@@ -57,7 +57,6 @@ describe("Language Server Protocol initialization lifecycle", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

@@ -9,11 +9,11 @@ import {
   GLOBAL_TOOL_IDS,
   GLOBAL_TOOL_ID_SET,
   PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
-  TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+  TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
   WORKER_COMMUNICATION_TOOL_IDS,
 } from "@/tool/tool-id-catalog"
 import { VISUAL_QA_STATIC_TOOL_IDS } from "@/visual-qa/static-tools"
-import { OFFICE_ARTIFACT_TOOL_IDS } from "@/work/harness"
+import { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
 import type { AgentRoleID } from "./role-contract"
 import type { RuntimeTemplateID } from "./runtime-template-id"
 
@@ -44,6 +44,7 @@ const STAGE_CONTEXT_GLOBAL_TOOL_IDS = [
 ] as const
 
 const ORCHESTRATOR_PRIVATE_TOOL_IDS = [
+  "scheduler_message",
   "dispatch_agent",
   "manage_task",
   "explore",
@@ -64,6 +65,7 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
   "skill",
   "question",
+  "scheduler_message",
   "read_context",
   "dispatch_agent",
   "manage_task",
@@ -71,7 +73,7 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   "read_task_message",
   "respond_agent_coordination",
   "cancel_subagent",
-  ...TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+  ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
   "publish_interactive_artifact",
 ] as const
 
@@ -91,6 +93,10 @@ export const PACKAGE_PROJECTABLE_DEFAULT_HOST_TOOL_IDS: Partial<Record<RuntimeTe
   "frontend-design": FRONTEND_DESIGN_EXPERT_DEFAULT_TOOL_IDS,
   "frontend-research": WEBPAGE_EVIDENCE_DEFAULT_HOST_TOOL_IDS,
   "visual-qa": VISUAL_QA_EXPERT_DEFAULT_TOOL_IDS,
+}
+
+export const PACKAGE_PROJECTABLE_BUILT_IN_TOOL_IDS: Partial<Record<RuntimeTemplateID, readonly string[]>> = {
+  build: WORK_ARTIFACT_TOOL_IDS,
 }
 
 export function uniqueToolIDs(input: readonly string[]): string[] {
@@ -143,7 +149,6 @@ const primaryExecutionGlobal = [
   "schedule",
   "planner",
   "mission_state",
-  "lsp",
   "batch",
 ] as const
 
@@ -175,7 +180,6 @@ const delegatedWorkerGlobal = [
   "skill",
   "apply_patch",
   "memory",
-  "lsp",
   "batch",
   ...WORKER_COMMUNICATION_TOOL_IDS,
 ] as const
@@ -201,7 +205,6 @@ export const runtimeTemplateAssignments = Object.freeze({
       "glob",
       "search_code",
       "external_code_search",
-      "lsp",
       "webfetch",
       "websearch",
       "panel",
@@ -266,10 +269,11 @@ export const runtimeTemplateAssignments = Object.freeze({
 export const roleAssignments = Object.freeze({
   coding: createToolPool({ global: codingGlobal }),
   chat: createToolPool({ global: [...codingGlobal, "panel"] }),
-  work: createToolPool({ global: [...codingGlobal, "panel", ...OFFICE_ARTIFACT_TOOL_IDS] }),
+  work: createToolPool({ global: [...codingGlobal, "panel", ...WORK_ARTIFACT_TOOL_IDS] }),
   compaction: createToolPool({}),
   title: createToolPool({}),
   summary: createToolPool({}),
+  memory: createToolPool({}),
   control: createToolPool({ global: ["panel"] }),
   orchestrator: createToolPool({
     global: [
@@ -287,7 +291,7 @@ export const roleAssignments = Object.freeze({
     private: ORCHESTRATOR_PRIVATE_TOOL_IDS,
   }),
   mission: createToolPool({
-    global: [...primaryExecutionGlobal, "mission_skill", "panel", "wait"],
+    global: [...primaryExecutionGlobal, "mission_skill", "panel", "scheduler_message", "wait"],
   }),
 } satisfies Record<AgentRoleID, ToolPoolAssignment>)
 

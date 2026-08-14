@@ -60,6 +60,8 @@ export const AutomationProjectTargetTable = sqliteTable(
   ],
 )
 
+export const AutomationRunOutcomes = ["running", "retry_wait", "succeeded", "failed"] as const
+
 export const AutomationRunTable = sqliteTable(
   "automation_run",
   {
@@ -72,7 +74,7 @@ export const AutomationRunTable = sqliteTable(
     project_id: text().references(() => ProjectTable.id, { onDelete: "set null" }),
     owner: text().notNull(),
     session_id: text().references(() => SessionTable.id, { onDelete: "set null" }),
-    outcome: text({ enum: ["running", "succeeded", "failed"] }).notNull(),
+    outcome: text({ enum: AutomationRunOutcomes }).notNull(),
     started_at: integer().notNull(),
     completed_at: integer(),
     error: text(),

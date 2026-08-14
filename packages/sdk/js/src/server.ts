@@ -1,6 +1,7 @@
 import { spawn, execSync, type ChildProcess } from "node:child_process"
 import { type ConfigGetResponse } from "./gen/types.gen.js"
 import { DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from "./defaults.js"
+import { StartupOutputObserver } from "./server-startup-observer.js"
 
 type Config = ConfigGetResponse
 const SERVER_PROCESS_TERMINATE_GRACE_MS = 2_000
@@ -59,64 +60,70 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
   }
 
   const url = await new Promise<string>((resolve, reject) => {
-    let startupFinished = false
-    let startupStopReason: Error | undefined
-    const id = setTimeout(() => {
-      startupStopReason = new Error(`Timeout waiting for server to start after ${options.timeout}ms`)
-      void stopProcess().then(
-        () => failStartup(startupStopReason),
-        reject,
-      )
-    }, options.timeout)
-    let output = ""
+    let state: "pending" | "stopping_failure" | "ready" | "failed" = "pending"
+    const observer = new StartupOutputObserver()
+    const drainOutput = () => {
+      proc.stdout?.resume()
+      proc.stderr?.resume()
+    }
     const cleanupStartup = () => {
       clearTimeout(id)
       if (abortListener) options.signal?.removeEventListener("abort", abortListener)
+      proc.stdout?.removeListener("data", onStdout)
+      proc.stderr?.removeListener("data", onStderr)
     }
     const failStartup = (error: unknown) => {
-      if (startupFinished) return
-      startupFinished = true
+      if (state === "failed" || state === "ready") return
+      state = "failed"
       cleanupStartup()
+      drainOutput()
       reject(error)
     }
     const failStartupAfterCleanup = (error: Error) => {
-      if (startupFinished) return
-      startupStopReason = error
+      if (state !== "pending") return
+      state = "stopping_failure"
+      cleanupStartup()
+      drainOutput()
       void stopProcess().then(
         () => failStartup(error),
         (cleanupError) => failStartup(cleanupError),
       )
     }
     const finishStartup = (serverUrl: string) => {
-      if (startupFinished) return
-      startupFinished = true
-      clearTimeout(id)
+      if (state !== "pending") return
+      state = "ready"
+      cleanupStartup()
+      observer.clear()
+      drainOutput()
       resolve(serverUrl)
     }
-    let abortListener: (() => void) | undefined
-    proc.stdout?.on("data", (chunk) => {
-      output += chunk.toString()
-      const lines = output.split("\n")
-      for (const line of lines) {
-        if (line.includes("server listening")) {
-          const match = line.match(/on\s+(https?:\/\/[^\s]+)/)
-          if (!match) {
-            failStartupAfterCleanup(new Error(`Failed to parse server url from output: ${line}`))
-            return
-          }
-          finishStartup(match[1]!)
+    const onStdout = (chunk: Buffer) => {
+      for (const line of observer.appendStdout(chunk)) {
+        if (!line.includes("server listening")) continue
+        const match = line.match(/on\s+(https?:\/\/[^\s]+)/)
+        if (!match) {
+          failStartupAfterCleanup(new Error(`Failed to parse server url from output: ${line}`))
           return
         }
+        finishStartup(match[1]!)
+        return
       }
-    })
-    proc.stderr?.on("data", (chunk) => {
-      output += chunk.toString()
-    })
+    }
+    const onStderr = (chunk: Buffer) => observer.appendStderr(chunk)
+    let abortListener: (() => void) | undefined
+    const id = setTimeout(() => {
+      failStartupAfterCleanup(new Error(`Timeout waiting for server to start after ${options.timeout}ms`))
+    }, options.timeout)
+    proc.stdout?.on("data", onStdout)
+    proc.stderr?.on("data", onStderr)
     proc.on("exit", (code) => {
-      if (startupStopReason) return
+      if (state !== "pending") return
+      const diagnostic = observer.diagnostics.snapshot()
       let msg = `Server exited with code ${code}`
-      if (output.trim()) {
-        msg += `\nServer output: ${output}`
+      if (diagnostic.text.trim()) {
+        msg += diagnostic.truncated
+          ? `\nServer output (truncated=true, retained_bytes=${diagnostic.retainedBytes}): ${diagnostic.text}`
+          : `\nServer output: ${diagnostic.text}`
       }
       failStartupAfterCleanup(new Error(msg))
     })

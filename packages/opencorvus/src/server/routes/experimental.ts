@@ -9,6 +9,8 @@ import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"
 import { TaskPlan } from "../../memory/task-plan"
 import { SessionMemory } from "../../memory/session-memory"
+import { ProjectMemory } from "../../memory/project-memory"
+import { ProjectMemoryOrganizer } from "../../memory/project-memory-organizer"
 import { EventService } from "../../scheduler/event-service"
 import { Session } from "../../session"
 import { zodToJsonSchema } from "zod-to-json-schema"
@@ -16,6 +18,8 @@ import { errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
 import { NotFoundError } from "../../storage/db"
 import { assertActiveProjectSession } from "../active-project-session"
+import { Database } from "../../storage/db"
+import { ProjectWorktreeDeleteReceipt } from "@opencorvus-ai/transport-protocol"
 
 // Workspace shape for the workspace sub-tree (mounted at /workspace)
 const WorkspaceRoutes = lazy(() =>
@@ -250,16 +254,16 @@ export const ExperimentalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Worktree removed",
-            content: { "application/json": { schema: resolver(z.boolean()) } },
+            content: { "application/json": { schema: resolver(ProjectWorktreeDeleteReceipt) } },
           },
-          ...errors(400, 404),
+          ...errors(400, 404, 503),
         },
       }),
       validator("json", Worktree.remove.schema),
       async (c) => {
         const body = c.req.valid("json")
-        await Worktree.removeProjectWorktree(body)
-        return c.json(true)
+        const result = await Worktree.removeProjectWorktree(body)
+        return c.json(ProjectWorktreeDeleteReceipt.parse(result.receipt))
       },
     )
     .post(
@@ -419,6 +423,76 @@ export const ExperimentalRoutes = lazy(() =>
           timeCreated: document?.timeCreated ?? null,
           timeUpdated: document?.timeUpdated ?? null,
         })
+      },
+    )
+    .get(
+      "/project-memory",
+      describeRoute({
+        summary: "Get the organized Project MEMORY.MD context",
+        operationId: "experimental.projectMemory.get",
+        responses: {
+          200: {
+            description: "Project MEMORY.MD",
+            content: {
+              "application/json": {
+                schema: resolver(
+                  z.object({
+                    filename: z.literal("MEMORY.MD"),
+                    scope: z.literal("project"),
+                    content: z.string(),
+                    revision: z.number().int().nonnegative(),
+                    tokenCount: z.number().int().nonnegative(),
+                    status: z.string(),
+                    pendingCount: z.number().int().nonnegative(),
+                    droppedPendingCount: z.number().int().nonnegative(),
+                    notice: z.unknown().optional(),
+                    timeCreated: z.number(),
+                    timeUpdated: z.number(),
+                  }),
+                ),
+              },
+            },
+          },
+        },
+      }),
+      async (c) => c.json(ProjectMemory.read(Instance.project.id)),
+    )
+    .post(
+      "/project-memory/organize",
+      describeRoute({
+        summary: "Request Project MEMORY.MD organization",
+        operationId: "experimental.projectMemory.organize",
+        responses: {
+          200: {
+            description: "Memory Organizer result",
+            content: { "application/json": { schema: resolver(z.object({ result: z.unknown(), document: z.unknown() })) } },
+          },
+        },
+      }),
+      async (c) => {
+        const result = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+        return c.json({ result, document: ProjectMemory.read(Instance.project.id) })
+      },
+    )
+    .post(
+      "/project-memory/notice/acknowledge",
+      describeRoute({
+        summary: "Acknowledge a Project MEMORY.MD notice",
+        operationId: "experimental.projectMemory.acknowledgeNotice",
+        responses: {
+          200: {
+            description: "Notice acknowledgement",
+            content: { "application/json": { schema: resolver(z.object({ acknowledged: z.boolean() })) } },
+          },
+        },
+      }),
+      validator("json", z.object({ generation: z.string().min(1) })),
+      async (c) => {
+        const { generation } = c.req.valid("json")
+        const acknowledged = Database.transaction((db) =>
+          ProjectMemory.acknowledgeNoticeInTransaction(db, { projectID: Instance.project.id, generation }),
+        )
+        return c.json({ acknowledged })
       },
     )
     // === MCP resources ===

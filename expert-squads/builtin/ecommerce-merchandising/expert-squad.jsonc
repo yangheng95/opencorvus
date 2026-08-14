@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "ecommerce-merchandising",
+  "name": "Ecommerce Merchandising",
+  "label": "Ecommerce Merchandising",
+  "description": "Catalog, demand and pricing, and experience and operations evidence joined into a reversible merchandising test plan.",
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for evidence-backed ecommerce merchandising experiments.",
+    "selection_guidance": "Select for catalog, assortment, pricing-hypothesis, placement, promotion, or conversion planning without storefront mutation.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "ecommerce-merchandising/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "merchandising-catalog-evidence-analyst": {
+        "label": "Catalog Evidence Analyst",
+        "description": "Maps catalog quality, taxonomy, attributes, availability, and provenance.",
+        "base_role": "explore",
+        "prompt": "agents/merchandising-catalog-evidence-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "merchandising-demand-pricing-analyst": {
+        "label": "Demand and Pricing Analyst",
+        "description": "Tests demand, price, promotion, margin, and seasonality assumptions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/merchandising-demand-pricing-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "merchandising-experience-operations-analyst": {
+        "label": "Experience and Operations Analyst",
+        "description": "Maps journey, fulfillment, returns, inventory, accessibility, and customer safeguards.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/merchandising-experience-operations-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "merchandising-plan-owner": {
+        "label": "Merchandising Plan Owner",
+        "description": "Joins all branches into a guarded and reversible test plan.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/merchandising-plan-owner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "merchandising-test-plan": {
+        "label": "Merchandising Test Plan",
+        "description": "Three independent merchandising branches converge into one guarded experiment plan.",
+        "nodes": {
+          "merchandising-catalog-evidence-analyst": {
+            "agent_id": "merchandising-catalog-evidence-analyst",
+            "description": "Maps catalog evidence.",
+            "depends_on": []
+          },
+          "merchandising-demand-pricing-analyst": {
+            "agent_id": "merchandising-demand-pricing-analyst",
+            "description": "Tests demand and pricing assumptions.",
+            "depends_on": []
+          },
+          "merchandising-experience-operations-analyst": {
+            "agent_id": "merchandising-experience-operations-analyst",
+            "description": "Maps experience and operations constraints.",
+            "depends_on": []
+          },
+          "merchandising-plan-owner": {
+            "agent_id": "merchandising-plan-owner",
+            "description": "Joins the completed branch reports.",
+            "depends_on": [
+              "merchandising-catalog-evidence-analyst",
+              "merchandising-demand-pricing-analyst",
+              "merchandising-experience-operations-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

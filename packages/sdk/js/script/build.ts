@@ -244,6 +244,7 @@ const generate = async (input: string, output: string) =>
       path: output,
       tsConfigPath: path.join(dir, "tsconfig.json"),
       clean: true,
+      fileName: { suffix: ".gen" },
     },
     plugins: [
       {

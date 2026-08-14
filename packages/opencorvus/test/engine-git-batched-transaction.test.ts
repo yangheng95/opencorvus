@@ -55,6 +55,10 @@ describe("Engine Git batched repository transaction", () => {
       await Instance.provide({
         directory: project.path,
         fn: async () => {
+          const gitignorePath = path.join(project.path, ".gitignore")
+          const gitattributesPath = path.join(project.path, ".gitattributes")
+          await fs.writeFile(gitignorePath, Buffer.from("user-cache/\r\n", "utf8"))
+          await fs.writeFile(gitattributesPath, Buffer.from("*.json text eol=lf\r\n", "utf8"))
           const taskID = await createEngineGitCheckpointTask({
             projectPath: project.path,
             title: "Engine Git final lease recovery",
@@ -69,11 +73,11 @@ describe("Engine Git batched repository transaction", () => {
           )
             .text()
             .trim()
-          const gitignorePath = path.join(project.path, ".gitignore")
           const predecessor = {
             head: await head(project.path),
             index: await digest(indexPath),
             gitignore: await optionalBytes(gitignorePath),
+            gitattributes: await optionalBytes(gitattributesPath),
           }
 
           const originalWithGitLock = Worktree.withGitLock
@@ -99,6 +103,7 @@ describe("Engine Git batched repository transaction", () => {
             head: await head(project.path),
             index: await digest(indexPath),
             gitignore: await optionalBytes(gitignorePath),
+            gitattributes: await optionalBytes(gitattributesPath),
           }).toEqual(predecessor)
         },
       })
@@ -253,6 +258,7 @@ describe("Engine Git batched repository transaction", () => {
               commit: updatedUninitializedCommit,
             }),
             rootProjection: [
+              { mode: "100644", path: ".gitattributes" },
               { mode: "100644", path: ".gitignore" },
               { mode: "160000", path: "child" },
               { mode: "100644", path: "root.txt" },

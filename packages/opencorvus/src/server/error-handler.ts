@@ -41,7 +41,9 @@ export function requestID(c: { req: { header(name: string): string | undefined }
 
 export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "NotFoundError") return 404
+  if (err.name === "WorktreeOwnershipObservationError") return 503
   if (err.name === "DatabaseUnavailableError") return 503
+  if (err.name === "AuthReadError") return 503
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400
   if (err.name === "DirectoryRequiredError") return 400
@@ -51,6 +53,11 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "AnonymousProjectPromotionError") return 400
   if (err.name === "InvalidDirectoryError") return 400
   if (err.name === "ProjectDirectoryIntegrityError") return 400
+  if (err.name === "ProjectRegisteredDirectoryConflictError") return 409
+  if (err.name === "ProjectDuplicateWorktreeIdentityError") return 409
+  if (err.name === "ProjectDurableAdmissionClosedError") return 409
+  if (err.name === "ProjectDeletePendingError") return 409
+  if (err.name === "ProjectDeletionCleanupDatabaseMismatchError") return 409
   if (err.name === "ChildSessionConfigError") return 400
   if (err.name === "WorktreeNotGitError") return 412
   if (err.name === "VcsPrerequisiteError") return 412
@@ -64,6 +71,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "TaskGlobalProjectBindingError") return 409
   if (err.name === "TaskChannelBindingProjectConflictError") return 409
   if (err.name === "TaskCancellationIncompleteError") return 409
+  if (err.name === "MissionExecutionClosingError") return 409
   if (err.name === "TaskBoundSessionDeletionError") return 409
   if (err.name === "TaskPackageRevisionBindingError") return 409
   if (err.name === "TaskExpectedPackageDigestConflictError") return 409

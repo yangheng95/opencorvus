@@ -175,6 +175,14 @@ export namespace ProjectRuntimePaths {
     return path.join(sessionRoot(projectDir, taskID, sessionID), "tool-output")
   }
 
+  /** Short, Task-owned root for ephemeral Work Artifact runtime workspaces.
+   * Office runtimes also place their isolated HOME/cache/temp directories
+   * below this root, so it intentionally omits the Session segment that makes
+   * ordinary retained tool-output paths exceed Windows runtime path limits. */
+  export function taskWorkArtifactRuntimeRoot(projectDir: string, taskID: string): string {
+    return taskAbsolute(projectDir, taskID, "work-artifacts")
+  }
+
   export function sessionTraceIndexPathFromRuntimeRoot(runtimeRoot: string, sessionID: string): string {
     return path.join(
       runtimeRoot,
@@ -193,6 +201,20 @@ export namespace ProjectRuntimePaths {
       typedIdentitySegment("session", sessionID),
       "tool-output",
     )
+  }
+
+  export function rootSessionWorkArtifactRuntimeRoot(projectDir: string, sessionID: string): string {
+    return path.join(
+      projectRuntimeRoot(projectDir),
+      "conversations",
+      typedIdentitySegment("session", sessionID),
+      "work-artifacts",
+    )
+  }
+
+  /** Current runtime-layout file patterns owned by tool-output retention. */
+  export function toolOutputFilePatterns(): readonly string[] {
+    return ["tasks/*/sessions/*/tool-output/tool_*", "conversations/*/tool-output/tool_*"]
   }
 
   export function intentPaths(projectDir: string, taskID: string): { relative: string; absolute: string } {

@@ -1,0 +1,68 @@
+---
+import { segmentPublicMarketText, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
+
+type Props = {
+  record: PublicSquadRecord
+  locale: PublicLocale
+  expanded?: boolean
+}
+
+const { record, locale, expanded = false } = Astro.props
+const nodeCount = record.workflows.reduce((total, workflow) => total + workflow.nodes.length, 0)
+const copy =
+  locale === "zh-cn"
+    ? {
+        caption: `固定 revision · ${record.workflows.length} 条工作流 · ${nodeCount} 个节点 · ${record.agents.length} 个 Agent`,
+        revision: "固定 revision",
+        output: "证据输出",
+        root: "起点",
+        nodes: "个节点",
+      }
+    : {
+        caption: `Bound revision · ${record.workflows.length} workflows · ${nodeCount} nodes · ${record.agents.length} Agents`,
+        revision: "Bound revision",
+        output: "Evidence output",
+        root: "root",
+        nodes: "nodes",
+      }
+---
+
+<figure class:list={["workflow-topology", { "workflow-topology-expanded": expanded }]}>
+  <figcaption>{copy.caption}</figcaption>
+  <div class="topology-graph">
+    <div class="topology-seal" title={`${record.identity.namespace}/${record.identity.id}@${record.identity.version}`}>
+      <span>{copy.revision}</span>
+      <code lang="en">{record.identity.digest.slice(0, 8)}</code>
+    </div>
+    <div class="topology-workflows">
+      {record.workflows.map((workflow, workflowIndex) => (
+        <section class="topology-workflow" aria-labelledby={`topology-${record.identity.id}-${workflow.id}`}>
+          <header>
+            <span>{String(workflowIndex + 1).padStart(2, "0")}</span>
+            <strong id={`topology-${record.identity.id}-${workflow.id}`}>
+              {segmentPublicMarketText(locale, workflow.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}
+            </strong>
+            <code>{workflow.nodes.length} {copy.nodes}</code>
+          </header>
+          <ol>
+            {workflow.nodes.map((node, nodeIndex) => (
+              <li>
+                <span class="topology-node-index">{String(nodeIndex + 1).padStart(2, "0")}</span>
+                <span class="topology-node-mark" aria-hidden="true"></span>
+                <span class="topology-node-copy">
+                  <strong lang="en">{node.agentID}</strong>
+                  {expanded && <small>{segmentPublicMarketText(locale, node.localizedDescription[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</small>}
+                  <code lang={node.dependsOn.length === 0 ? undefined : "en"}>{node.dependsOn.length === 0 ? copy.root : `← ${node.dependsOn.join(" + ")}`}</code>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+    <div class="topology-output">
+      <span>{copy.output}</span>
+      <b>{record.workflows.length}</b>
+    </div>
+  </div>
+</figure>

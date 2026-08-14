@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { resolveSessionExecutionAuthority } from "../src/engine/task-session-lineage"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -47,7 +47,7 @@ describe("conversation Tool execution authority", () => {
           packageDigest: "b".repeat(64),
         }
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: taskSession.id,
           now,
@@ -56,7 +56,6 @@ describe("conversation Tool execution authority", () => {
           productPillar: "code",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -171,7 +170,7 @@ describe("conversation Tool execution authority", () => {
           tool.execute({ pattern: "authority-fixture.txt", path: project.path }, context),
         )
         const search = await SearchCodeTool.init().then((tool) =>
-          tool.execute({ pattern: "conversation-authority-value", path: project.path }, context),
+          tool.execute({ pattern: "conversation-authority-value", path: file }, context),
         )
         const listed = await ListTool.init().then((tool) => tool.execute({ path: project.path }, context))
         const executable = JSON.stringify(process.execPath)

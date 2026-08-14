@@ -13,7 +13,12 @@ import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
-import { applyDirectory, beginWorkspaceSelection, ownsWorkspaceSelection } from "./workspace"
+import {
+  applyDirectory,
+  beginWorkspaceSelection,
+  ownsWorkspaceSelection,
+  supersedePendingWorkspaceSelection,
+} from "./workspace"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "./diagnostics"
 import type { WorkLedgerStreamEvent } from "./sse"
@@ -250,7 +255,7 @@ async function createConversationSessionFromPath(options: {
   signal?: AbortSignal
   body?: Record<string, unknown>
 }): Promise<string> {
-  const selectionEpoch = beginWorkspaceSelection()
+  const selectionEpoch = supersedePendingWorkspaceSelection()
   assertNotAborted(options.signal)
   const response = (await apiJson(options.path, {
     method: "POST",
@@ -356,6 +361,7 @@ export async function selectConversationSession(options: SelectConversationSessi
       restoreWorkspace: false,
       preserveSelection: true,
       selectionEpoch,
+      signal: options.signal,
     })
     if (!applied || stale()) throw new DOMException("Coding assistant selection superseded", "AbortError")
     assertNotAborted(options.signal)

@@ -1,6 +1,6 @@
 import { t } from "./i18n"
 
-export const TASK_LIFECYCLE_STATUSES = ["queued", "active", "completed", "failed", "cancelled"] as const
+export const TASK_LIFECYCLE_STATUSES = ["active", "completed", "failed", "cancelled"] as const
 export type TaskLifecycleStatus = (typeof TASK_LIFECYCLE_STATUSES)[number]
 
 const taskLifecycleStatusSet = new Set<string>(TASK_LIFECYCLE_STATUSES)

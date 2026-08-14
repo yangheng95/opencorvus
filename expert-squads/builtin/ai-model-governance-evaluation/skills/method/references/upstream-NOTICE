@@ -1,0 +1,180 @@
+NeMo Platform
+Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Licensed under the Apache License, Version 2.0.
+
+================================================================================
+Third-Party / Vendored and Distributed Components
+================================================================================
+
+This repository includes vendored and distributed third-party components listed
+below. Each component retains its original license, which can be found in the
+respective directory or package metadata.
+
+--------------------------------------------------------------------------------
+packages/garak_api/
+  Garak v0.14.1 — LLM vulnerability scanner
+  Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  License: Apache-2.0
+  Home: https://github.com/NVIDIA/garak
+
+  The following files are vendored from the upstream garak project and
+  modified for standalone use within NeMo Platform:
+
+    garakapi/_config.py        — from garak/_config.py (v0.14.1)
+    garakapi/_plugins.py       — from garak/_plugins.py (v0.14.1)
+    garakapi/exception.py      — from garak/exception.py (v0.14.1)
+    garakapi/resources/plugin_cache.json — from garak/resources/plugin_cache.json (v0.14.1)
+
+  These files carry "Portions Copyright" SPDX headers and are licensed
+  under Apache-2.0 by the upstream garak project.
+
+--------------------------------------------------------------------------------
+plugins/nemo-switchyard/vendor/switchyard/
+  Switchyard vendored snapshot at commit 9407922
+  Home: https://github.com/NVIDIA-dev/switchyard
+  License: Apache-2.0
+
+  This repository vendors a subset of the upstream Switchyard project for
+  use by the `nemo-switchyard` plugin. The vendored package metadata records
+  this as version `0.1.0+vendored.9407922`.
+
+  Only `switchyard.lib` and `switchyard.telemetry` are included here. The
+  upstream CLI, server, and experimental subpackages are intentionally
+  omitted because NeMo Platform does not depend on them.
+
+  The vendored snapshot retains its own LICENSE and NOTICE files in:
+    plugins/nemo-switchyard/vendor/switchyard/
+
+--------------------------------------------------------------------------------
+services/guardrails/callouts/internal/server/
+  callout_server.go and callout_server_test.go
+  Copyright 2024 Google LLC
+  License: Apache-2.0
+  Modifications by NVIDIA: Added OpenTelemetry instrumentation and minor edits.
+
+  Originally derived from Google's Envoy external processing examples.
+  Both files retain the original Google Apache-2.0 header with an
+  additional NVIDIA modification header.
+
+--------------------------------------------------------------------------------
+services/auditor/third-party/
+  Garak v0.14.1 — LLM vulnerability scanner
+  License: Apache-2.0
+  Home: https://github.com/NVIDIA/garak
+
+  This directory contains a pyproject.toml and lockfile used to collect
+  Garak and its transitive dependencies for license auditing. No vendored
+  source code is present; Garak is installed at build time from PyPI.
+
+--------------------------------------------------------------------------------
+cyrus-sasl2 / Cyrus SASL
+  License: BSD-4-Clause
+  Copyright (c) 1998-2003 Carnegie Mellon University. All rights reserved.
+  Home: https://www.cyrusimap.org/sasl/
+
+  Redistributions of any form whatsoever must retain the following
+  acknowledgment:
+  "This product includes software developed by Computing Services
+   at Carnegie Mellon University (http://www.cmu.edu/computing/)."
+
+--------------------------------------------------------------------------------
+Ray-bundled JAXB runtime dependencies
+  Scope: Unmodified transitive dependencies distributed in container images as
+  part of the Ray runtime environment.
+  License election: CDDL-1.1
+  Alternate upstream license not elected: GPL-2.0-only WITH
+  Classpath-exception-2.0
+  License text: LICENSES/CDDL-1.1.txt
+
+  Components:
+    com.sun.istack:istack-commons-runtime 3.0.5
+      Source archive:
+        https://repo1.maven.org/maven2/com/sun/istack/istack-commons-runtime/3.0.5/istack-commons-runtime-3.0.5-sources.jar
+    com.sun.mail:mailapi 1.6.2
+      Source archive:
+        https://repo1.maven.org/maven2/com/sun/mail/mailapi/1.6.2/mailapi-1.6.2-sources.jar
+    com.sun.xml.bind:jaxb-core 2.3.0
+      Source archive:
+        https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-core/2.3.0/jaxb-core-2.3.0-sources.jar
+    com.sun.xml.bind:jaxb-impl 2.3.0
+      Source archive:
+        https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-impl/2.3.0/jaxb-impl-2.3.0-sources.jar
+    javax.xml.bind:jaxb-api 2.3.0
+      Source archive:
+        https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0-sources.jar
+    org.glassfish.jaxb:jaxb-core 2.3.0
+      Source archive:
+        https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-core/2.3.0/jaxb-core-2.3.0-sources.jar
+    org.glassfish.jaxb:jaxb-runtime 2.3.0
+      Source archive:
+        https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-runtime/2.3.0/jaxb-runtime-2.3.0-sources.jar
+    org.glassfish.jaxb:txw2 2.3.0
+      Source archive:
+        https://repo1.maven.org/maven2/org/glassfish/jaxb/txw2/2.3.0/txw2-2.3.0-sources.jar
+
+  These components are distributed unmodified. NeMo Platform does not elect the
+  GPL-2.0-only WITH Classpath-exception-2.0 branch for these components.
+  Preserve the notices shipped in the upstream jars. Source code for the
+  CDDL-covered components is available from the versioned upstream source
+  archives listed for each artifact.
+
+--------------------------------------------------------------------------------
+wandb-core MPL-2.0 Go dependencies
+  Scope: Unmodified Go module dependencies linked into the wandb-core
+  executable distributed with the wandb Python package in container images.
+  wandb package version: 0.28.1
+  wandb source distribution:
+    https://files.pythonhosted.org/packages/92/fb/8d3f96a8b143060d6fa145462d0785981373e04694e4152555ccb5d23939/wandb-0.28.1.tar.gz
+  wandb upstream source:
+    https://github.com/wandb/wandb
+  wandb-core source at reported build commit:
+    https://github.com/wandb/wandb/tree/v0.28.1
+  License: MPL-2.0
+  License text: LICENSES/MPL-2.0.txt
+
+  Components:
+    github.com/NimbleMarkets/pixterm v0.0.0-20260501211346-dc18ac6c1a0f
+      Source: https://github.com/NimbleMarkets/pixterm/tree/dc18ac6c1a0f
+      Module source archive:
+        https://proxy.golang.org/github.com/!nimble!markets/pixterm/@v/v0.0.0-20260501211346-dc18ac6c1a0f.zip
+    github.com/hashicorp/go-cleanhttp v0.5.2
+      Source: https://github.com/hashicorp/go-cleanhttp/tree/v0.5.2
+      Module source archive:
+        https://proxy.golang.org/github.com/hashicorp/go-cleanhttp/@v/v0.5.2.zip
+    github.com/hashicorp/go-retryablehttp v0.7.8
+      Source: https://github.com/hashicorp/go-retryablehttp/tree/v0.7.8
+      Module source archive:
+        https://proxy.golang.org/github.com/hashicorp/go-retryablehttp/@v/v0.7.8.zip
+    github.com/hashicorp/golang-lru v1.0.2
+      Source: https://github.com/hashicorp/golang-lru/tree/v1.0.2
+      Module source archive:
+        https://proxy.golang.org/github.com/hashicorp/golang-lru/@v/v1.0.2.zip
+
+  These components are distributed unmodified as linked dependencies in the
+  wandb-core executable. The MPL-2.0 obligations apply to the MPL-covered source
+  files for those modules and do not require NeMo Platform, the rest of
+  wandb-core, or the container image to be licensed under MPL-2.0. Preserve
+  upstream notices and make the source for the exact module versions above
+  available to recipients through the listed source locations or an equivalent
+  archived source bundle.
+
+--------------------------------------------------------------------------------
+web/packages/studio/src/generated/styles.css
+  Generated stylesheet copied from NVIDIA Kaizen UI Foundations CDN assets:
+    https://webassets.nvidia.com/kaizen-ui-foundations/0.607.4/base-external.css
+    https://webassets.nvidia.com/kaizen-ui-foundations/0.607.4/components.css
+
+  The base-external.css portion includes Lucide icon CSS/SVG data mapped to
+  NVIDIA icon class names.
+
+  Lucide Icons CSS
+  Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022
+  as part of Feather (MIT). All other copyright (c) for Lucide are held
+  by Lucide Contributors 2022.
+  License: ISC
+  Home: https://lucide.dev
+
+  This generated file includes Lucide icon definitions with names remapped
+  to NVIDIA icon names. The original ISC license notice is preserved inline.
+  The file is regenerated by scripts/fetch-styles.ts from upstream CDN sources.

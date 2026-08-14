@@ -71,6 +71,31 @@ function errorMessage(error: unknown): string {
   return String(error)
 }
 
+type ProjectEventSSEInput = {
+  directory?: string
+  payload?: { type?: string }
+}
+
+export function createProjectEventSSEListener(input: {
+  directory: string
+  write(data: string): Promise<unknown>
+  closeAfterDelivery(): void
+}): (event: ProjectEventSSEInput) =>
+  | { status: "ignored" }
+  | { status: "accepted"; eventType: string } {
+  let writes: Promise<unknown> | undefined
+  return (event) => {
+    if (event.directory !== input.directory || !event.payload) return { status: "ignored" }
+    const eventType = typeof event.payload.type === "string" ? event.payload.type : ""
+    const data = JSON.stringify(event.payload)
+    writes = writes ? writes.then(() => input.write(data)) : Promise.resolve(input.write(data))
+    if (eventType === Bus.InstanceDisposed.type) {
+      void writes.then(() => input.closeAfterDelivery())
+    }
+    return { status: "accepted", eventType }
+  }
+}
+
 const LogReadResponse = z.object({
   directory: z.string(),
   path: z.string(),
@@ -547,8 +572,8 @@ export function AppRoutes(root: Hono) {
     .post(
       "/log",
       describeRoute({
-        summary: "Write log",
-        description: "Write a log entry to the server logs with specified level and metadata.",
+        summary: "Write log batch",
+        description: "Write one bounded ordered batch of log entries to the server logs.",
         operationId: "app.log",
         responses: {
           200: {
@@ -564,33 +589,44 @@ export function AppRoutes(root: Hono) {
       }),
       validator(
         "json",
-        z.object({
-          service: z.string().meta({ description: "Service name for the log entry" }),
-          level: z.enum(["debug", "info", "error", "warn"]).meta({ description: "Log level" }),
-          message: z.string().meta({ description: "Log message" }),
-          extra: z
-            .record(z.string(), z.unknown())
-            .optional()
-            .meta({ description: "Additional metadata for the log entry" }),
-        }),
+        z
+          .object({
+            entries: z
+              .array(
+                z
+                  .object({
+                    service: z.string().meta({ description: "Service name for the log entry" }),
+                    level: z.enum(["debug", "info", "error", "warn"]).meta({ description: "Log level" }),
+                    message: z.string().meta({ description: "Log message" }),
+                    extra: z
+                      .record(z.string(), z.unknown())
+                      .optional()
+                      .meta({ description: "Additional metadata for the log entry" }),
+                  })
+                  .strict(),
+              )
+              .min(1)
+              .max(50),
+          })
+          .strict(),
       ),
       async (c) => {
-        const { service, level, message, extra } = c.req.valid("json")
-        const logger = Log.create({ service })
-
-        switch (level) {
-          case "debug":
-            logger.debug(message, extra)
-            break
-          case "info":
-            logger.info(message, extra)
-            break
-          case "error":
-            logger.error(message, extra)
-            break
-          case "warn":
-            logger.warn(message, extra)
-            break
+        for (const { service, level, message, extra } of c.req.valid("json").entries) {
+          const logger = Log.create({ service })
+          switch (level) {
+            case "debug":
+              logger.debug(message, extra)
+              break
+            case "info":
+              logger.info(message, extra)
+              break
+            case "error":
+              logger.error(message, extra)
+              break
+            case "warn":
+              logger.warn(message, extra)
+              break
+          }
         }
 
         return c.json(true)
@@ -732,7 +768,7 @@ export function AppRoutes(root: Hono) {
       "/lsp",
       describeRoute({
         summary: "Get LSP status",
-        description: "Get LSP server status",
+        description: "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
         operationId: "lsp.status",
         responses: {
           200: {
@@ -823,13 +859,13 @@ export function AppRoutes(root: Hono) {
               })
             return writes
           }
-          const listener = bind(async (event: { directory?: string; payload?: { type?: string } }) => {
-            if (event.directory !== directory || !event.payload) return
-            await writeData(JSON.stringify(event.payload))
-            if (event.payload.type === Bus.InstanceDisposed.type) {
-              cleanup({ closeStream: true })
-            }
-          })
+          const listener = bind(
+            createProjectEventSSEListener({
+              directory,
+              write: writeData,
+              closeAfterDelivery: () => cleanup({ closeStream: true }),
+            }),
+          )
           GlobalBus.on("event", listener)
           unsub = () => GlobalBus.off("event", listener)
 

@@ -4,7 +4,7 @@ import z from "zod"
 import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { Auth } from "@/auth"
 import { Provider } from "@/provider/provider"
-import { errors } from "../error"
+import { AuthReadUnavailableResponse, errors } from "../error"
 import { lazy } from "../../util/lazy"
 import { settleProviderRefreshInvalidation } from "../provider-refresh"
 
@@ -33,6 +33,7 @@ export const AuthRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -69,6 +70,7 @@ export const AuthRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(

@@ -1,7 +1,12 @@
 import { randomUUID } from "node:crypto"
 import fs from "node:fs/promises"
+import { createReadStream, createWriteStream } from "node:fs"
 import path from "node:path"
+import { pipeline } from "node:stream/promises"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import type { RuntimeProcessOccurrenceObserver } from "@/server/runtime-server-ownership"
+import { Project } from "@/project/project"
 
 const CHECK_WORKSPACE_EXCLUDED_NAMES = new Set([
   ".git",
@@ -23,13 +28,73 @@ export type IsolatedProjectCheckWorkspace = {
   dispose: () => Promise<void>
 }
 
-const removeIsolatedWorkspaceRoot = (root: string) =>
-  fs.rm(root, {
+const cleanupOwners = new Map<string, Promise<void>>()
+const ISOLATED_CLEANUP_TIMEOUT_MS = 5_000
+const ISOLATED_OWNER_FILE = "owner.json"
+
+type IsolatedWorkspaceOwner = {
+  protocol: 1
+  workspace_id: string
+  owner_pid: number
+  owner_process_instance_id: string
+  runtime_occurrence_id: string
+}
+
+function parseWorkspaceOwner(value: unknown): IsolatedWorkspaceOwner | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
+  const owner = value as Record<string, unknown>
+  const keys = Object.keys(owner).sort()
+  const expected = ["owner_pid", "owner_process_instance_id", "protocol", "runtime_occurrence_id", "workspace_id"]
+  if (keys.length !== expected.length || keys.some((key, index) => key !== expected[index])) return undefined
+  if (
+    owner.protocol !== 1 ||
+    !Number.isInteger(owner.owner_pid) ||
+    Number(owner.owner_pid) <= 0 ||
+    typeof owner.workspace_id !== "string" ||
+    owner.workspace_id.length === 0 ||
+    typeof owner.owner_process_instance_id !== "string" ||
+    owner.owner_process_instance_id.length === 0 ||
+    typeof owner.runtime_occurrence_id !== "string" ||
+    owner.runtime_occurrence_id.length === 0
+  ) {
+    return undefined
+  }
+  return owner as IsolatedWorkspaceOwner
+}
+
+const removeIsolatedWorkspaceRoot = (root: string) => {
+  const current = cleanupOwners.get(root)
+  if (current) return current
+  const cleanup = fs.rm(root, {
     recursive: true,
     force: true,
     maxRetries: 5,
     retryDelay: 100,
   })
+  cleanupOwners.set(root, cleanup)
+  void cleanup.finally(() => cleanupOwners.delete(root)).catch(() => undefined)
+  return cleanup
+}
+
+async function awaitIsolatedCleanup(root: string, cleanup: Promise<void>): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  try {
+    await Promise.race([
+      cleanup,
+      new Promise<never>((_resolve, reject) => {
+        timer = setTimeout(
+          () =>
+            reject(
+              new Error(`isolated workspace cleanup did not settle within ${ISOLATED_CLEANUP_TIMEOUT_MS}ms: ${root}`),
+            ),
+          ISOLATED_CLEANUP_TIMEOUT_MS,
+        )
+      }),
+    ])
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
+}
 
 export async function disposeIsolatedProjectCheckWorkspaceAfterFailure(
   isolated: IsolatedProjectCheckWorkspace,
@@ -37,7 +102,7 @@ export async function disposeIsolatedProjectCheckWorkspaceAfterFailure(
   operation: string,
 ): Promise<never> {
   try {
-    await isolated.dispose()
+    await awaitIsolatedCleanup(isolated.root, isolated.dispose())
   } catch (cleanupError) {
     throw new AggregateError(
       [failure, cleanupError],
@@ -51,31 +116,171 @@ export async function createIsolatedProjectCheckWorkspace(input: {
   projectDir: string
   sourceCwd: string
   taskID?: string
+  signal?: AbortSignal
 }): Promise<IsolatedProjectCheckWorkspace> {
+  input.signal?.throwIfAborted()
   const scratchParent = input.taskID
     ? ProjectRuntimePaths.acceptancePaths(input.projectDir, input.taskID).checkWorkspaces
     : ProjectRuntimePaths.tasklessAcceptancePaths(input.sourceCwd).checkWorkspaces
   await fs.mkdir(scratchParent, { recursive: true })
+  input.signal?.throwIfAborted()
   const root = await fs.mkdtemp(path.join(scratchParent, `${randomUUID()}-`))
   const workspace = path.join(root, "workspace")
   try {
-    await copyTreeIntoCheckWorkspace(path.resolve(input.sourceCwd), workspace, path.resolve(input.sourceCwd), new Set())
-  } catch (error) {
-    try {
-      await removeIsolatedWorkspaceRoot(root)
-    } catch (cleanupError) {
-      throw new AggregateError(
-        [error, cleanupError],
-        `isolated workspace initialization and cleanup failed: ${root}`,
-      )
+    const runtimeOwner = RuntimeServerOwnership.currentProcessOccurrence()
+    const owner: IsolatedWorkspaceOwner = {
+      protocol: 1,
+      workspace_id: path.basename(root),
+      owner_pid: runtimeOwner.pid,
+      owner_process_instance_id: runtimeOwner.processInstanceID,
+      runtime_occurrence_id: runtimeOwner.occurrenceID,
     }
-    throw error
+    await fs.writeFile(path.join(root, ISOLATED_OWNER_FILE), JSON.stringify(owner), { encoding: "utf8", flag: "wx" })
+    await copyTreeIntoCheckWorkspace(
+      path.resolve(input.sourceCwd),
+      workspace,
+      path.resolve(input.sourceCwd),
+      new Set(),
+      input.signal,
+    )
+  } catch (error) {
+    let failure = error
+    try {
+      input.signal?.throwIfAborted()
+    } catch (abortReason) {
+      failure = abortReason
+    }
+    try {
+      await awaitIsolatedCleanup(root, removeIsolatedWorkspaceRoot(root))
+    } catch (cleanupError) {
+      throw new AggregateError([failure, cleanupError], `isolated workspace initialization and cleanup failed: ${root}`)
+    }
+    throw failure
   }
   return {
     root,
     workspace,
     dispose: () => removeIsolatedWorkspaceRoot(root),
   }
+}
+
+export type IsolatedWorkspaceRecoveryResult = {
+  inspected: number
+  removed: number
+  retainedCurrent: number
+  retainedLive: number
+  retainedUnknown: number
+}
+
+export class IsolatedWorkspaceArtifactUnknownError extends Error {
+  override readonly name = "IsolatedWorkspaceArtifactUnknownError"
+
+  constructor(
+    readonly artifactPath: string,
+    cause: unknown,
+  ) {
+    super(`Isolated check-workspace artifact cannot be reconciled: ${artifactPath}`, { cause })
+  }
+}
+
+export class IsolatedWorkspaceRecoveryBlockedError extends AggregateError {
+  override readonly name = "IsolatedWorkspaceRecoveryBlockedError"
+
+  constructor(
+    errors: IsolatedWorkspaceArtifactUnknownError[],
+    readonly result: IsolatedWorkspaceRecoveryResult,
+  ) {
+    super(errors, `Isolated check-workspace recovery retained ${errors.length} unknown artifact occurrence(s)`)
+  }
+}
+
+async function listDirectories(root: string): Promise<string[]> {
+  const entries = await fs.readdir(root, { withFileTypes: true }).catch((error) => {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return []
+    throw error
+  })
+  return entries.filter((entry) => entry.isDirectory()).map((entry) => path.join(root, entry.name))
+}
+
+async function projectCheckWorkspaceRoots(projectDir: string): Promise<string[]> {
+  const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(projectDir)
+  const roots = [ProjectRuntimePaths.tasklessAcceptancePaths(projectDir).checkWorkspaces]
+  for (const taskRoot of await listDirectories(path.join(runtimeRoot, "tasks"))) {
+    roots.push(path.join(taskRoot, "acceptance", "check-workspaces"))
+  }
+  const candidates = await Promise.all(roots.map(listDirectories))
+  return candidates.flat()
+}
+
+/** Remove only exact prior/dead workspace occurrences. Missing or malformed
+ * owner facts are retained as unknown and never upgraded to orphan proof. */
+export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
+  currentOccurrenceID: string
+  observeProcessOccurrence?: RuntimeProcessOccurrenceObserver
+}): Promise<IsolatedWorkspaceRecoveryResult> {
+  const result: IsolatedWorkspaceRecoveryResult = {
+    inspected: 0,
+    removed: 0,
+    retainedCurrent: 0,
+    retainedLive: 0,
+    retainedUnknown: 0,
+  }
+  if (process.platform !== "win32") return result
+  const observeProcessOccurrence =
+    input.observeProcessOccurrence ?? RuntimeServerOwnership.cachedProcessOccurrenceObserver()
+  const unknownArtifacts: IsolatedWorkspaceArtifactUnknownError[] = []
+  const projectDirectories = new Set<string>()
+  for (const project of Project.list()) {
+    projectDirectories.add(project.worktree)
+    for (const sandbox of project.sandboxes) projectDirectories.add(sandbox)
+  }
+  for (const projectDir of [...projectDirectories].sort()) {
+    let roots: string[]
+    try {
+      roots = await projectCheckWorkspaceRoots(projectDir)
+    } catch (error) {
+      result.retainedUnknown += 1
+      unknownArtifacts.push(new IsolatedWorkspaceArtifactUnknownError(projectDir, error))
+      continue
+    }
+    for (const root of roots) {
+      result.inspected += 1
+      let owner: IsolatedWorkspaceOwner | undefined
+      let ownerFailure: unknown
+      try {
+        owner = parseWorkspaceOwner(JSON.parse(await fs.readFile(path.join(root, ISOLATED_OWNER_FILE), "utf8")))
+      } catch (error) {
+        ownerFailure = error
+      }
+      if (!owner || owner.workspace_id !== path.basename(root)) {
+        result.retainedUnknown += 1
+        unknownArtifacts.push(
+          new IsolatedWorkspaceArtifactUnknownError(
+            root,
+            ownerFailure ?? new Error("owner.json is malformed, foreign, or identifies another workspace"),
+          ),
+        )
+        continue
+      }
+      if (owner.runtime_occurrence_id === input.currentOccurrenceID) {
+        result.retainedCurrent += 1
+        continue
+      }
+      const observation = observeProcessOccurrence({
+        pid: owner.owner_pid,
+        processInstanceID: owner.owner_process_instance_id,
+        occurrenceID: owner.runtime_occurrence_id,
+      })
+      if (observation !== "dead_or_reused") {
+        result.retainedLive += 1
+        continue
+      }
+      await awaitIsolatedCleanup(root, removeIsolatedWorkspaceRoot(root))
+      result.removed += 1
+    }
+  }
+  if (unknownArtifacts.length > 0) throw new IsolatedWorkspaceRecoveryBlockedError(unknownArtifacts, result)
+  return result
 }
 
 export async function withIsolatedProjectCheckWorkspace<T>(
@@ -99,16 +304,19 @@ async function copyTreeIntoCheckWorkspace(
   destination: string,
   sourceRoot: string,
   activeDirectories: Set<string>,
+  signal?: AbortSignal,
 ): Promise<void> {
+  signal?.throwIfAborted()
   if (!shouldCopyIntoCheckWorkspace(sourceRoot, source)) return
   const stat = await fs.lstat(source)
+  signal?.throwIfAborted()
   if (stat.isSymbolicLink()) {
     const target = await fs.readlink(source)
     const resolvedTarget = path.resolve(path.dirname(source), target)
     if (!isInsideOrSamePath(sourceRoot, resolvedTarget)) {
       throw new Error(`isolated check workspace refuses symlink outside source root: ${source} -> ${target}`)
     }
-    await copyTreeIntoCheckWorkspace(resolvedTarget, destination, sourceRoot, activeDirectories)
+    await copyTreeIntoCheckWorkspace(resolvedTarget, destination, sourceRoot, activeDirectories, signal)
     return
   }
   if (stat.isDirectory()) {
@@ -121,7 +329,13 @@ async function copyTreeIntoCheckWorkspace(
     try {
       const entries = await fs.readdir(source)
       for (const entry of entries) {
-        await copyTreeIntoCheckWorkspace(path.join(source, entry), path.join(destination, entry), sourceRoot, activeDirectories)
+        await copyTreeIntoCheckWorkspace(
+          path.join(source, entry),
+          path.join(destination, entry),
+          sourceRoot,
+          activeDirectories,
+          signal,
+        )
       }
     } finally {
       activeDirectories.delete(real)
@@ -130,7 +344,8 @@ async function copyTreeIntoCheckWorkspace(
   }
   if (stat.isFile()) {
     await fs.mkdir(path.dirname(destination), { recursive: true })
-    await fs.copyFile(source, destination)
+    signal?.throwIfAborted()
+    await pipeline(createReadStream(source), createWriteStream(destination, { flags: "wx" }), { signal })
   }
 }
 

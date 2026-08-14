@@ -5,9 +5,11 @@ import { createRightSidebarConversationSession, type ConversationExperience } fr
 import { Config } from "@/config/config"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
 import { Session } from "@/session"
+import { deleteProject } from "@/project/delete"
+import { randomUUID } from "node:crypto"
 
 export namespace GlobalConversationService {
-  export async function create(input: { experience: ConversationExperience; model?: string }) {
+  export async function create(input: { experience: ConversationExperience; model?: string; sessionID?: string }) {
     const carryingProject = await ImplicitProject.create()
     try {
       return await Instance.provide({
@@ -20,7 +22,7 @@ export namespace GlobalConversationService {
             const preview = Config.previewOverlayUpdate(base, {}, overlay)
             await validateConfigModelReferences(preview.effective, "globalConversation.configOverlay")
           }
-          const session = await createRightSidebarConversationSession(input.experience)
+          const session = await createRightSidebarConversationSession(input.experience, { id: input.sessionID })
           if (input.model) {
             await Session.mergeConfigOverlayInProject({
               sessionID: session.id,
@@ -32,7 +34,13 @@ export namespace GlobalConversationService {
         },
       })
     } catch (error) {
-      await carryingProject.discard()
+      await deleteProject(carryingProject.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: randomUUID(),
+        reason: "Discard failed global conversation Project creation",
+      })
       throw error
     }
   }

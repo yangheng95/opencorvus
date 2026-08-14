@@ -33,7 +33,7 @@ function providerModel(): ProviderType.Model {
     providerID: model.providerID,
     name: "Memory Test",
     limit: { context: 1_000_000, input: 900_000, output: 4_096 },
-    cost: { input: 0, output: 0, cache: { read: 0, write: 0 } },
+    cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
     capabilities: {
       toolcall: true,
       attachment: false,
@@ -113,6 +113,45 @@ afterEach(async () => {
 })
 
 describe("Session MEMORY.MD compaction checkpoint", () => {
+  test("persists automatic compaction control in canonical JSON form", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "root", title: "Canonical compaction control" })
+        const source = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() },
+          agent: "user",
+          model,
+        })
+
+        await SessionCompaction.create({
+          sessionID: session.id,
+          source,
+          auto: true,
+          overflow: true,
+        })
+
+        const controls = SessionControl.pending(session.id)
+        expect(controls).toHaveLength(1)
+        expect(controls[0]).toMatchObject({
+          sessionID: session.id,
+          kind: "compaction_request",
+          status: "pending",
+          payload: {
+            source_user_message_id: source.id,
+            overflow: true,
+          },
+        })
+        expect(controls[0]?.payload).toEqual({ source_user_message_id: source.id, overflow: true })
+      },
+    })
+  })
+
   test("reconstructs, advances, and projects the latest successful compaction exactly once", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -1044,10 +1083,12 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         sessionID = session.id
         const tool = await MemoryTool.init()
         const toolSchema = z.toJSONSchema(tool.parameters) as {
-          anyOf: Array<{ properties: { action: { const: string } } }>
+          oneOf: Array<{ properties: { action: { const: string } } }>
         }
-        expect(toolSchema.anyOf.map((entry) => entry.properties.action.const)).toEqual([
+        expect(toolSchema.oneOf.map((entry) => entry.properties.action.const)).toEqual([
           "session_read",
+          "project_read",
+          "project_organize",
           "search",
           "get",
           "write",
@@ -1057,7 +1098,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         const result = await tool.execute({ action: "session_read" }, memoryToolContext(session.id))
         expect({ title: result.title, payload: JSON.parse(result.output) }).toEqual({
           title: "Session memory empty",
-          payload: { document: null },
+          payload: { scope: "session", document: null },
         })
       },
     })
@@ -1169,6 +1210,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         expect({ title: result.title, payload: JSON.parse(result.output) }).toEqual({
           title: "MEMORY.MD",
           payload: {
+            scope: "session",
             document: expect.objectContaining({
               filename: "MEMORY.MD",
               sourceMessageID: summary.id,

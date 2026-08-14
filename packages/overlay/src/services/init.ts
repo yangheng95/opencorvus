@@ -8,9 +8,9 @@
 // - Restore last workspace
 // - Set up a periodic reconnect loop
 
-import { configure as configureApi, apiJsonWithTimeout } from "./api"
+import { configure as configureApi } from "./api"
 import { checkConnection as checkServerConnection, startConnectionMonitor, stopConnectionMonitor } from "./connection"
-import { startTaskListSSE, startWorkLedgerSSE, stopSSE, stopTaskListSSE, stopWorkLedgerSSE } from "./sse"
+import { startWorkLedgerSSE, stopSSE, stopWorkLedgerSSE } from "./sse"
 import { loadAllLocales, setLocale } from "../utils/i18n"
 import {
   loadSettings,
@@ -32,6 +32,7 @@ import { CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadConfigInfo } from "./config-
 import { initializeActiveDirectoryGit } from "../utils/git"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
+import { refreshProjectMemory } from "./project-memory"
 
 // ── Types ──
 
@@ -106,14 +107,10 @@ async function loadInitialData(
   // Instance/project_id. Initializing later can force an identity refresh
   // behind a live Chat or Mission lease and block conversation hydration.
   if (settingsStore.initGit) await initializeActiveDirectoryGit()
-  const localeResult = await Promise.allSettled([
-    apiJsonWithTimeout("config", CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ locale: settingsStore.locale }),
-    }),
-  ])
   const [tasksResult, metaResult] = await Promise.allSettled([loadTasks(), loadMeta()])
+  void refreshProjectMemory().catch((error) =>
+    AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
+  )
   if (settingsStore.directory.trim() !== directory) return { loaded: false }
   const issues: ProjectLoadIssue[] = []
   const appendFailure = (resource: ProjectLoadIssue["resource"], result: PromiseSettledResult<unknown>) => {
@@ -124,7 +121,6 @@ async function loadInitialData(
       })
     }
   }
-  appendFailure("locale", localeResult[0]!)
   appendFailure("tasks", tasksResult)
   appendFailure("meta", metaResult)
   setAppStore("projectLoadIssues", issues)
@@ -229,7 +225,6 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     void initialData.reconcileCapabilities?.()
     await onConnected?.()
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded) startTaskListSSE()
   }
 
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
@@ -247,7 +242,6 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     void initialData.reconcileCapabilities?.()
     await onReconnect?.()
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded) startTaskListSSE()
   }, reconnectInterval)
 }
 
@@ -274,7 +268,6 @@ export function teardownApp(): void {
   initLifecycleGeneration += 1
   stopConnectionMonitor()
   stopSSE()
-  stopTaskListSSE()
   stopWorkLedgerSSE()
 }
 
@@ -291,7 +284,7 @@ export function persistAndSyncSettings(): void {
 
 // ── Workspace restoration ──
 
-const RESTORABLE_RUNNING_TASK_STATUSES = new Set(["active", "queued"])
+const RESTORABLE_RUNNING_TASK_STATUSES = new Set(["active"])
 
 function taskIDFromItem(item: any): string {
   const id = item?.task?.id ?? item?.id

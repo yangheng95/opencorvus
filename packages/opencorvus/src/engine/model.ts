@@ -1,13 +1,17 @@
 import z from "zod"
+import { InteractionUserInput } from "@/memory/project-memory"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import {
   ArtifactCatalogEntrySchema,
   ArtifactCatalogProviderErrorSchema,
-  CrossTaskArtifactImportListSchema,
+  ArtifactProducerSchema,
+  ArtifactReadLocatorSchema,
+  CrossTaskArtifactSourceListSchema,
   ArtifactReadLocatorListSchema,
   EngineArtifactLocatorSchema,
   EvidenceLocatorListSchema,
 } from "@opencorvus-ai/plugin/artifact-catalog"
+import { TaskArtifactRefSchema } from "@opencorvus-ai/plugin/task-artifact"
 import {
   COMPOSER_FILE_ATTACHMENT_LIMIT,
   COMPOSER_FOLDER_ATTACHMENT_LIMIT,
@@ -24,7 +28,7 @@ import {
 import { ENGINE_ARTIFACT_KINDS } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { Message } from "@/session/message"
-import { Reply as PermissionReply } from "@/permission/types"
+import { PermissionAuthority } from "@/permission/authority"
 import { Answer as QuestionAnswer, Request as QuestionRequest } from "@/question/types"
 import { isModelReference } from "@/provider/model-ref"
 import { decodeRawBase64Payload } from "@/session/text-mime"
@@ -254,7 +258,7 @@ export const UserUploadList = UserUploadInput.array()
 /**
  * Persisted attachment reference. Once the bytes live in AttachmentStore
  * (`<projectDir>/.opencorvus/.r/project/attachments/<sha>.<ext>`), every downstream layer
- * — queue table row, task loop, orchestrator, frontend-design, requirements — only
+ * — Provider execution row, task loop, orchestrator, frontend-design, requirements — only
  * carries this small, URL-addressable reference. Agents that need the raw
  * bytes for multimodal LLM input read them back through AttachmentStore.
  *
@@ -287,7 +291,7 @@ export const CreateTaskInput = z
      */
     directory: z.string().trim().min(1).optional(),
     requestID: z.string().optional(),
-    artifactImports: CrossTaskArtifactImportListSchema.optional(),
+    artifactSources: CrossTaskArtifactSourceListSchema.optional(),
     source: z.string().optional(),
     productPillar: ProductPillarSchema,
     model: z
@@ -303,19 +307,14 @@ export const CreateTaskInput = z
      *  callers may still submit raw base64, which is materialized once at this
      *  boundary; every downstream layer uses references. */
     attachments: UserUploadList.optional(),
-    // Priority levels (highest first):
-    //  - "critical": repair-shaped follow-ups proposed by the Orchestrator —
-    //                jump the queued serial queue ahead of normal/high. Never
-    //                preempts an already-active task in the same project; only
-    //                takes the next queued slot.
-    //  - "high"/"normal"/"low": user-facing levels; also used by iteration /
-    //                recommendation follow-ups from the Orchestrator.
+    // User-facing priority metadata. It affects Work Ledger presentation; it
+    // does not grant Host scheduling authority over Task execution.
     priority: z.enum(["critical", "high", "normal", "low"]).optional(),
-    /** Queue preference. false starts immediately; true leaves the task queued
-     *  until a later queue advance. */
-    queue: z.boolean().default(false),
     promptProfile: z.string().min(1).optional(),
-    expectedPackageDigest: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    expectedPackageDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     budget: Budget.optional(),
     checks: CheckConfig.optional(),
     channelBinding: ChannelBinding.optional(),
@@ -334,17 +333,11 @@ export const Task = z.object({
   productPillar: ProductPillarSchema,
   title: z.string(),
   request: z.string(),
-  status: z.enum(["queued", "active", "completed", "failed", "cancelled"]),
+  status: z.enum(["active", "completed", "failed", "cancelled"]),
   terminalReason: z.enum(["completed", "failed", "cancelled", "interrupted"]).optional(),
   cancellation: TaskCancellationProjection.optional(),
   priority: z.enum(["critical", "high", "normal", "low"]),
   packageRevisionBinding: ExpertSquadPackageRevisionBindingSchema,
-  queue: z
-    .object({
-      order: z.number(),
-      revision: z.string().optional(),
-    })
-    .optional(),
   blockingReason: z.string().optional(),
   error: z.string().optional(),
   completionDecision: z
@@ -368,7 +361,7 @@ export const Task = z.object({
   time: z.object({
     created: z.number(),
     updated: z.number(),
-    started: z.number().optional(),
+    started: z.number(),
     completed: z.number().optional(),
     archived: z.number().optional(),
   }),
@@ -388,7 +381,6 @@ export const TaskListTask = Task.pick({
   terminalReason: true,
   priority: true,
   packageRevisionBinding: true,
-  queue: true,
   time: true,
 })
 
@@ -465,7 +457,7 @@ export const OwnedPromptSession = z.object({
 })
 
 export const ReplyInteractionInput = z.object({
-  reply: PermissionReply.optional(),
+  decision: PermissionAuthority.Decision.optional(),
   autoReply: z.boolean(),
   message: z.string().optional(),
   answers: z.array(QuestionAnswer).optional(),
@@ -474,6 +466,14 @@ export const ReplyInteractionInput = z.object({
 export const RejectInteractionInput = z.object({
   autoReply: z.boolean(),
   message: z.string().optional(),
+})
+
+export const UserReplyInteractionInput = ReplyInteractionInput.omit({ autoReply: true }).extend({
+  userInput: InteractionUserInput,
+})
+
+export const UserRejectInteractionInput = RejectInteractionInput.omit({ autoReply: true }).extend({
+  userInput: InteractionUserInput,
 })
 
 export const UpdateGoalTitleInput = z
@@ -561,8 +561,10 @@ const MessageVisibleWithPartsArray = z.lazy(() => Message.VisibleWithParts.array
 
 export const TaskMessageResult = z.object({
   message: z.string(),
-  wake_status: z.enum(["started", "queued", "not_woken"]),
-  should_resume: z.boolean(),
+  wake_status: z.enum(["accepted", "queued", "not_woken"]),
+  ingress_id: Identifier.schema("artifact").optional(),
+  queue_position: z.number().int().positive().optional(),
+  current_owner_ingress_id: Identifier.schema("artifact").optional(),
   /** The persisted user `Message` row + parts the server just wrote.
    *  Returned so the overlay can insert the real message into its store
    *  immediately (no client-side synthetic placeholder; rule 22). The
@@ -1006,6 +1008,17 @@ export const ConversationTurnArtifactSummary = z
         reason: z.string().optional(),
       })
       .strict(),
+    declaredOutputs: z.array(
+      z
+        .object({
+          declarationLocator: ArtifactReadLocatorSchema,
+          producer: ArtifactProducerSchema.nullable(),
+          label: z.string(),
+          artifactType: z.string().optional(),
+          resources: TaskArtifactRefSchema.array(),
+        })
+        .strict(),
+    ),
     entries: ArtifactCatalogEntrySchema.array(),
     catalogComplete: z.boolean(),
     providerErrors: ArtifactCatalogProviderErrorSchema.array(),
@@ -1089,6 +1102,13 @@ export const SessionConversationHydration = z.object({
   turnArtifacts: ConversationTurnArtifactSummary.array(),
 })
 
+export const SessionConversationHistoryPage = z.object({
+  transcript: MessageVisibleWithPartsArray,
+  events: SessionEvent.array(),
+  view: TaskConversationView,
+  history: TaskConversationHistoryState,
+})
+
 export const TaskConversationEventPage = z.object({
   events: TaskEvent.array(),
   eventReplay: TaskConversationEventReplay,
@@ -1118,7 +1138,7 @@ export const AgentSessionOperatorSteerResult = z.object({
   task_id: Identifier.schema("task"),
   session_id: Identifier.schema("session"),
   request_id: Identifier.schema("artifact"),
-  wake_status: z.enum(["started", "queued"]),
+  wake_status: z.enum(["accepted", "queued"]),
 })
 
 export const AgentSessionCancelResult = z.object({

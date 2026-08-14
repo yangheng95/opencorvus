@@ -14,12 +14,12 @@ import {
   type EngineArtifactPublishRequest,
   type EngineArtifactPublishResult,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
-import { createHash, randomUUID } from "node:crypto"
+import { TaskArtifactRefSchema, type TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
+import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import fuzzysort from "fuzzysort"
-import { insertEngineArtifact, recordEngineArtifact, type EngineArtifactRow } from "@/engine/artifact"
+import { insertEngineArtifact, type EngineArtifactRow } from "@/engine/artifact"
 import {
   ENGINE_ARTIFACT_CATALOG_LABEL_INDEX_CODE_POINTS,
   engineArtifactCatalogLabelIndex,
@@ -34,6 +34,7 @@ import {
   EngineArtifactCatalogRevisionTable,
   EngineArtifactTable,
   EngineArtifactVersionTable,
+  EngineTaskTable,
   type EngineArtifactKind,
 } from "@/engine/engine.sql"
 import { requireTask } from "@/engine/store"
@@ -51,6 +52,7 @@ import {
 } from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { Identifier } from "@/id/id"
 
 type EngineCatalogRow = Readonly<{
   id: string
@@ -68,6 +70,7 @@ type EngineCatalogRow = Readonly<{
   importSourceTaskID: string | null
   resourceCount: number
   resourceMediaTypes: string[]
+  resourceRefsJSON: string | null
   catalogSearchText: string
   catalogSearchTextTruncated: boolean
   catalogMetadataSHA256: string
@@ -103,7 +106,8 @@ const CATALOG_LABEL_PREVIEW_CHARS = 512
 const CATALOG_DIAGNOSTIC_PREVIEW_CHARS = 2_048
 const CATALOG_ENTRY_MEDIA_TYPE_LIMIT = 64
 const CATALOG_FACET_VALUE_LIMIT = 100
-const ARTIFACT_SEARCH_ABI_VERSION = 1
+const ARTIFACT_SEARCH_ABI_VERSION = 2
+const ARTIFACT_CURSOR_AUTHORITY_KEY = randomBytes(32)
 const ARTIFACT_FUZZY_SCORE_MINIMUM = 0.1
 const CATALOG_SOURCE_ORDER: Record<ArtifactCatalogEntry["source"], number> = {
   engine_artifact: 0,
@@ -135,7 +139,7 @@ type CatalogSourceSnapshot = Readonly<{
 }>
 
 type CatalogCursor = Readonly<{
-  version: 8
+  version: 9
   searchABIVersion: number
   authoritySHA256: string
   filtersSHA256: string
@@ -152,7 +156,7 @@ type CatalogCursor = Readonly<{
 type CatalogSourceCode = 0 | 1
 
 type CatalogCursorPayloadWire = readonly [
-  version: 8,
+  version: 9,
   searchABIVersion: number,
   authoritySHA256: string,
   filtersSHA256: string,
@@ -166,7 +170,7 @@ type CatalogCursorPayloadWire = readonly [
   afterSortTuple: readonly (string | number)[],
 ]
 
-type CatalogCursorWire = readonly [...CatalogCursorPayloadWire, integritySHA256: string]
+type CatalogCursorWire = readonly [...CatalogCursorPayloadWire, authenticityHMACSHA256: string]
 
 export type ArtifactReadResult = Readonly<{
   chunk: ArtifactReadChunk
@@ -264,13 +268,17 @@ function expandCursorDigest(digest: string): string | undefined {
   return bytes.toString("hex")
 }
 
+function cursorAuthenticity(payload: CatalogCursorPayloadWire): Buffer {
+  return createHmac("sha256", ARTIFACT_CURSOR_AUTHORITY_KEY).update(stableJSON(payload)).digest()
+}
+
 function encodeCursor(cursor: CatalogCursor): string {
   const availableSourceMask = cursor.availableSources.reduce(
     (mask, source) => mask | (source === "engine_artifact" ? 1 : 2),
     0,
   )
   const payload: CatalogCursorPayloadWire = [
-    8,
+    9,
     cursor.searchABIVersion,
     compactCursorDigest(cursor.authoritySHA256),
     compactCursorDigest(cursor.filtersSHA256),
@@ -287,7 +295,7 @@ function encodeCursor(cursor: CatalogCursor): string {
     cursor.providerErrors.map((error) => [catalogSourceCode(error.source), error.message]),
     cursor.afterSortTuple,
   ]
-  const wire: CatalogCursorWire = [...payload, compactCursorDigest(sha256(stableJSON(payload)))]
+  const wire: CatalogCursorWire = [...payload, cursorAuthenticity(payload).toString("base64url")]
   return Buffer.from(stableJSON(wire), "utf8").toString("base64url")
 }
 
@@ -300,13 +308,23 @@ function decodeCursor(input: string): CatalogCursor {
   }
   if (!Array.isArray(decoded)) throw new Error("artifact_search cursor must be a compact tuple")
   const value = decoded as unknown as Partial<CatalogCursorWire>
-  const integritySHA256 = typeof value[12] === "string" ? expandCursorDigest(value[12]) : undefined
-  if (value.length !== 13 || value[0] !== 8 || !integritySHA256) {
+  const suppliedAuthenticity =
+    typeof value[12] === "string" && /^[A-Za-z0-9_-]{43}$/.test(value[12])
+      ? Buffer.from(value[12], "base64url")
+      : undefined
+  if (
+    value.length !== 13 ||
+    value[0] !== 9 ||
+    !suppliedAuthenticity ||
+    suppliedAuthenticity.byteLength !== 32 ||
+    suppliedAuthenticity.toString("base64url") !== value[12]
+  ) {
     throw new Error("artifact_search cursor has an invalid shape")
   }
   const payload = value.slice(0, 12) as unknown as CatalogCursorPayloadWire
-  if (sha256(stableJSON(payload)) !== integritySHA256) {
-    throw new Error("artifact_search cursor integrity check failed")
+  const expectedAuthenticity = cursorAuthenticity(payload)
+  if (!timingSafeEqual(suppliedAuthenticity, expectedAuthenticity)) {
+    throw new Error("artifact_search cursor authenticity check failed")
   }
   const sourceSnapshots = value[8]
   const availableSourceMask = value[9]
@@ -364,7 +382,7 @@ function decodeCursor(input: string): CatalogCursor {
     throw new Error("artifact_search cursor has an invalid shape")
   }
   const cursor: CatalogCursor = {
-    version: 8,
+    version: 9,
     searchABIVersion: value[1],
     authoritySHA256,
     filtersSHA256,
@@ -439,6 +457,11 @@ const currentEngineCatalogSelection = {
   importSourceTaskID: EngineArtifactTable.catalog_import_source_task_id,
   resourceCount: EngineArtifactTable.catalog_resource_count,
   resourceMediaTypes: EngineArtifactTable.catalog_resource_media_types,
+  resourceRefsJSON: sql<string | null>`CASE
+    WHEN json_valid(${EngineArtifactTable.payload})
+    THEN json_extract(${EngineArtifactTable.payload}, '$.resources')
+    ELSE NULL
+  END`,
   catalogSearchText: EngineArtifactTable.catalog_search_text,
   catalogSearchTextTruncated: EngineArtifactTable.catalog_search_text_truncated,
   catalogMetadataSHA256: EngineArtifactTable.catalog_metadata_sha256,
@@ -467,6 +490,11 @@ const priorEngineCatalogSelection = {
   importSourceTaskID: EngineArtifactVersionTable.catalog_import_source_task_id,
   resourceCount: EngineArtifactVersionTable.catalog_resource_count,
   resourceMediaTypes: EngineArtifactVersionTable.catalog_resource_media_types,
+  resourceRefsJSON: sql<string | null>`CASE
+    WHEN json_valid(${EngineArtifactVersionTable.payload})
+    THEN json_extract(${EngineArtifactVersionTable.payload}, '$.resources')
+    ELSE NULL
+  END`,
   catalogSearchText: EngineArtifactVersionTable.catalog_search_text,
   catalogSearchTextTruncated: EngineArtifactVersionTable.catalog_search_text_truncated,
   catalogMetadataSHA256: EngineArtifactVersionTable.catalog_metadata_sha256,
@@ -594,6 +622,51 @@ function engineCandidate(row: EngineCatalogRow): CatalogCandidate {
   }
 }
 
+function engineCatalogResourceRefs(row: EngineCatalogRow): readonly TaskArtifactRef[] {
+  if (row.resourceCount === 0) return []
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(row.resourceRefsJSON ?? "null")
+  } catch (cause) {
+    throw new Error(
+      `Engine Artifact ${row.id} revision ${row.catalogRevision} has invalid catalog resource identity JSON`,
+      { cause },
+    )
+  }
+  const resources = TaskArtifactRefSchema.array().parse(parsed)
+  if (resources.length !== row.resourceCount) {
+    throw new Error(
+      `Engine Artifact ${row.id} revision ${row.catalogRevision} catalog resource identity count is corrupt`,
+    )
+  }
+  const mediaTypes = sortedMediaTypes(resources)
+  if (
+    mediaTypes.length !== row.resourceMediaTypes.length ||
+    mediaTypes.some((mediaType, index) => mediaType !== row.resourceMediaTypes[index])
+  ) {
+    throw new Error(
+      `Engine Artifact ${row.id} revision ${row.catalogRevision} catalog resource media types are corrupt`,
+    )
+  }
+  return resources
+}
+
+function snapshotIdentityKey(identity: TaskArtifactRef["snapshot"]): string {
+  return [
+    identity.schema_version,
+    identity.project_id,
+    identity.task_id,
+    identity.snapshot_id,
+    identity.manifest_sha256,
+  ].join("\u0000")
+}
+
+function referencedEngineResourceSnapshotKeys(rows: readonly EngineCatalogRow[]): ReadonlySet<string> {
+  return new Set(
+    rows.flatMap((row) => engineCatalogResourceRefs(row).map((resource) => snapshotIdentityKey(resource.snapshot))),
+  )
+}
+
 function boundedCatalogText(value: string, maxChars: number): { value: string; truncated: boolean } {
   if (value.length <= maxChars) return { value, truncated: false }
   return { value: value.slice(0, maxChars), truncated: true }
@@ -661,6 +734,61 @@ function snapshotCandidate(record: TaskArtifactSnapshotRecord): CatalogCandidate
     snapshotSequence: record.manifest.publication_sequence,
     searchMetadataTruncated: searchable.truncated,
   }
+}
+
+function resourceCandidate(record: TaskArtifactSnapshotRecord, resource: TaskArtifactRef): CatalogCandidate {
+  const label = boundedCatalogText(resource.path, CATALOG_LABEL_PREVIEW_CHARS)
+  const entry: ArtifactCatalogEntry = {
+    source: "task_artifact",
+    locator: { source: "task_artifact_resource", ref: resource },
+    kind: "task_artifact_resource",
+    schema_diagnostic_truncated: false,
+    label: label.value,
+    label_truncated: label.truncated,
+    goal_id: null,
+    import_source_task_id: null,
+    producer: record.manifest.producer,
+    created_at_ms: record.manifest.created_at_ms,
+    bytes: resource.bytes,
+    sha256: resource.sha256,
+    resource_count: 1,
+    resource_media_types: [resource.media_type],
+    resource_media_types_truncated: false,
+    version: {
+      state: "immutable",
+      publication_sequence: record.manifest.publication_sequence,
+    },
+  }
+  const fullIdentity = [
+    record.identity.snapshot_id,
+    record.identity.manifest_sha256,
+    resource.tree,
+    resource.path,
+    resource.media_type,
+    resource.bytes,
+    resource.sha256,
+  ]
+  const identitySearchText = fullIdentity.join("\n").normalize("NFKC").toLowerCase()
+  return {
+    entry,
+    exactLabel: resource.path,
+    stableID: `${record.manifest.publication_sequence}\u0000${fullIdentity.join("\u0000")}`,
+    identitySearchText,
+    labelSearchText: entry.label.normalize("NFKC").toLowerCase(),
+    searchText: [entry.kind, resource.tree, resource.path, resource.media_type, resource.sha256]
+      .join("\n")
+      .normalize("NFKC")
+      .toLowerCase(),
+    resourceMediaTypes: [resource.media_type],
+    engineCatalogRevision: null,
+    snapshotSequence: record.manifest.publication_sequence,
+    searchMetadataTruncated: false,
+  }
+}
+
+function snapshotCandidates(record: TaskArtifactSnapshotRecord): CatalogCandidate[] {
+  const resources = taskArtifactSnapshotResourceRefs(record).map((resource) => resourceCandidate(record, resource))
+  return record.manifest.snapshot_kind === "catalog" ? [snapshotCandidate(record), ...resources] : resources
 }
 
 const MATCH_MODE_RANK: Record<NonNullable<ArtifactCatalogEntry["match"]>["tier"], number> = {
@@ -1061,19 +1189,32 @@ export async function searchTaskArtifacts(input: {
   const previousProviderErrors = cursor?.providerErrors ?? []
   const activeSources = cursor?.availableSources ?? requestedSources
   const engineCatalogRevisionUpper = cursor?.engineCatalogRevisionUpper ?? latestEngineCatalogRevision()
+  let catalogEngineRows: readonly EngineCatalogRow[] | undefined
+  const loadCatalogEngineRows = () =>
+    (catalogEngineRows ??= engineRows(input.authority.taskID, engineCatalogRevisionUpper, parsed.version_scope))
+  let resourceReferenceRows: readonly EngineCatalogRow[] | undefined
+  const loadResourceReferenceRows = () =>
+    (resourceReferenceRows ??= loadCatalogEngineRows().filter((row) => row.resourceCount > 0))
   const providerResults = await Promise.all(
     activeSources.map(async (source) => {
       try {
         return source === "engine_artifact"
           ? ({
               source,
-              engine: engineRows(input.authority.taskID, engineCatalogRevisionUpper, parsed.version_scope),
+              engine: loadCatalogEngineRows(),
               snapshots: [],
             } as const)
           : ({
               source,
               engine: [],
-              snapshots: parsed.version_scope === "historical" ? [] : await listTaskArtifactSnapshots(input.authority),
+              snapshots: await listTaskArtifactSnapshots(input.authority).then((records) => {
+                const referenced = referencedEngineResourceSnapshotKeys(loadResourceReferenceRows())
+                return records.filter((record) =>
+                  record.manifest.snapshot_kind === "catalog"
+                    ? parsed.version_scope !== "historical"
+                    : referenced.has(snapshotIdentityKey(record.identity)),
+                )
+              }),
             } as const)
       } catch (cause) {
         const rawMessage = cause instanceof Error ? cause.message : String(cause)
@@ -1091,12 +1232,9 @@ export async function searchTaskArtifacts(input: {
   for (const result of providerResults) {
     if ("error" in result) continue
     engine.push(...result.engine)
-    snapshots.push(...result.snapshots.filter((record) => record.manifest.snapshot_kind === "catalog"))
+    snapshots.push(...result.snapshots)
   }
-  const allCandidates = [
-    ...engine.map(engineCandidate),
-    ...snapshots.map(snapshotCandidate),
-  ]
+  const allCandidates = [...engine.map(engineCandidate), ...snapshots.flatMap(snapshotCandidates)]
   const snapshotSequenceUpper =
     cursor?.snapshotSequenceUpper ?? Math.max(0, ...snapshots.map((record) => record.manifest.publication_sequence))
   const frozenCandidates = allCandidates.filter(
@@ -1148,8 +1286,7 @@ export async function searchTaskArtifacts(input: {
   const filteredTotal = cursor?.filteredTotal ?? filtered.length
   const afterIndex = cursor
     ? filtered.findIndex(
-        (candidate) =>
-          stableJSON(candidateSortTuple(candidate, parsed.sort!)) === stableJSON(cursor.afterSortTuple),
+        (candidate) => stableJSON(candidateSortTuple(candidate, parsed.sort!)) === stableJSON(cursor.afterSortTuple),
       )
     : -1
   if (cursor && afterIndex < 0 && membershipDriftErrors.length === 0) {
@@ -1179,7 +1316,7 @@ export async function searchTaskArtifacts(input: {
     next_cursor:
       hasMore && last
         ? encodeCursor({
-            version: 8,
+            version: 9,
             searchABIVersion: ARTIFACT_SEARCH_ABI_VERSION,
             authoritySHA256: scopeSHA256,
             filtersSHA256: filterSHA256,
@@ -2008,8 +2145,41 @@ function idempotentExpertPublicationIdentity(input: {
   }
   const canonical = stableJSON(semantic)
   return {
-    artifactID: `art_idempotent_${sha256(canonical)}`,
+    artifactID: Identifier.deterministic("artifact", canonical),
     canonical,
+  }
+}
+
+export class EngineArtifactIdentityCollisionError extends Error {
+  override readonly name = "EngineArtifactIdentityCollisionError"
+  readonly code = "ENGINE_ARTIFACT_IDENTITY_COLLISION"
+
+  constructor(readonly artifactID: string) {
+    super(`Compact Engine Artifact identity ${artifactID} is already bound to different canonical material`)
+  }
+}
+
+export class TaskArtifactPublicationClosedError extends Error {
+  override readonly name = "TaskArtifactPublicationClosedError"
+  readonly code = "TASK_ARTIFACT_PUBLICATION_CLOSED"
+
+  constructor(
+    readonly taskID: string,
+    readonly timeCompleted: number,
+  ) {
+    super(`Task ${taskID} completed at ${timeCompleted}; new expert Artifact publication is closed`)
+  }
+}
+
+function assertExpertArtifactPublicationOpenInTransaction(db: Database.TxOrDb, taskID: string): void {
+  const task = db
+    .select({ id: EngineTaskTable.id, timeCompleted: EngineTaskTable.time_completed })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, taskID))
+    .get()
+  if (!task) throw new Error(`engineArtifacts.publish Task ${taskID} does not exist`)
+  if (task.timeCompleted !== null) {
+    throw new TaskArtifactPublicationClosedError(taskID, task.timeCompleted)
   }
 }
 
@@ -2077,47 +2247,56 @@ export async function publishExpertArtifact(input: {
     observed_artifact_locators: observedArtifactLocators,
     source_artifact_locators: sourceArtifactLocators,
   })
-  const artifactID = artifact.idempotent
-    ? Database.transaction((db) => {
-        const identity = idempotentExpertPublicationIdentity({
-          taskID: input.scope.taskID,
-          label: artifact.label,
-          envelope,
-        })
-        const existing = db
-          .select()
-          .from(EngineArtifactTable)
-          .where(eq(EngineArtifactTable.id, identity.artifactID))
-          .get()
-        if (existing) {
-          if (existing.task_id !== input.scope.taskID || existing.kind !== "expert_output") {
-            throw new Error("idempotent Engine Artifact identity resolved to a foreign partition")
-          }
-          const existingEnvelope = EngineArtifactEnvelopeSchema.parse(existing.payload)
-          const existingIdentity = idempotentExpertPublicationIdentity({
-            taskID: existing.task_id,
-            label: existing.label,
-            envelope: existingEnvelope,
-          })
-          if (existingIdentity.canonical !== identity.canonical) {
-            throw new Error("idempotent Engine Artifact identity collision")
-          }
-          return existing.id
-        }
-        return insertEngineArtifact(db, {
-          id: identity.artifactID,
-          taskID: input.scope.taskID,
-          kind: "expert_output",
-          label: artifact.label,
-          payload: envelope,
-        })
+  const artifactID = Database.transaction((db) => {
+    if (artifact.idempotent) {
+      const identity = idempotentExpertPublicationIdentity({
+        taskID: input.scope.taskID,
+        label: artifact.label,
+        envelope,
       })
-    : recordEngineArtifact({
+      const existing = db
+        .select()
+        .from(EngineArtifactTable)
+        .where(eq(EngineArtifactTable.id, identity.artifactID))
+        .get()
+      if (existing) {
+        let exactReplay = false
+        if (existing.task_id === input.scope.taskID && existing.kind === "expert_output") {
+          try {
+            const existingEnvelope = EngineArtifactEnvelopeSchema.parse(existing.payload)
+            const existingIdentity = idempotentExpertPublicationIdentity({
+              taskID: existing.task_id,
+              label: existing.label,
+              envelope: existingEnvelope,
+            })
+            exactReplay = existingIdentity.canonical === identity.canonical
+          } catch {
+            exactReplay = false
+          }
+        }
+        if (!exactReplay) {
+          throw new EngineArtifactIdentityCollisionError(identity.artifactID)
+        }
+        return existing.id
+      }
+      assertExpertArtifactPublicationOpenInTransaction(db, input.scope.taskID)
+      return insertEngineArtifact(db, {
+        id: identity.artifactID,
         taskID: input.scope.taskID,
         kind: "expert_output",
         label: artifact.label,
         payload: envelope,
       })
+    }
+    assertExpertArtifactPublicationOpenInTransaction(db, input.scope.taskID)
+    return insertEngineArtifact(db, {
+      id: Identifier.ascending("artifact"),
+      taskID: input.scope.taskID,
+      kind: "expert_output",
+      label: artifact.label,
+      payload: envelope,
+    })
+  })
   const locator = exactEngineArtifactLocator({ taskID: input.scope.taskID, artifactID })
   return {
     locator,

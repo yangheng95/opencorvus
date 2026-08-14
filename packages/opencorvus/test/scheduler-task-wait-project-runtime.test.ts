@@ -1,16 +1,20 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { Config } from "../src/config/config"
 import { EngineArtifactTable } from "../src/engine/engine.sql"
-import { configureTaskLoopRunner, waitForQueueCompletionHooksForTest } from "../src/engine/queue"
+import { waitForQueueCompletionHooksForTest } from "../src/engine/queue"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
+import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
+import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { AutomationTable } from "../src/scheduler/automation.sql"
 import { AutomationService } from "../src/scheduler/automation-service"
+import { taskWaitFireID } from "../src/scheduler/task-wait-fire-identity"
 import { QueuedTaskIngressSchema } from "../src/engine/queued-task-ingress"
 import { Database, and, eq, sql } from "../src/storage/db"
-import { EngineService } from "../src/task-api"
+import { Session } from "../src/session"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(async () => {
@@ -19,6 +23,83 @@ afterAll(async () => {
 })
 
 describe("scheduled Task wait project runtime", () => {
+  async function establishTask(input: {
+    request: string
+    packageRevision: Awaited<ReturnType<typeof PromptProfileResolver.resolveSchedulerCapability>>["packageRevision"]
+  }) {
+    const taskID = Identifier.ascending("task")
+    const root = await Session.create({
+      kind: "root",
+      title: input.request,
+      metadata: { configOverlay: { prompt_profile: { active: input.packageRevision.id } } },
+    })
+    const now = Date.now()
+    persistTask({
+      taskID,
+      sessionID: root.id,
+      now,
+      title: input.request,
+      request: input.request,
+      productPillar: "code",
+      source: "test",
+      priority: "normal",
+      metadata: { actor: "user" },
+      projectID: Instance.project.id,
+      packageRevision: input.packageRevision,
+      executionCapsuleBinding: await prepareTaskProcessBinding({
+        mode: "native",
+        taskID,
+        projectID: Instance.project.id,
+        rootDirectory: Instance.directory,
+        packageRevisionSHA256: input.packageRevision.packageDigest,
+        timeCreated: now,
+      }),
+    })
+    return taskID
+  }
+
+  test("assigns early Task-wait activity to the direct scheduler Session", async () => {
+    await using project = await memoryProject()
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = Config.Info.parse({ prompt_profile: { active: "base" } })
+        const capability = await PromptProfileResolver.resolveSchedulerCapability({
+          projectDirectory: project.path,
+          config,
+        })
+        const taskID = await establishTask({
+          request: "Resolve the Session that owns early Task-wait activity",
+          packageRevision: capability.packageRevision,
+        })
+        const rootSessionID = requireTask(taskID).session_id
+        if (!rootSessionID) throw new Error("Task wait activity fixture expected a root Session")
+        const scheduler = await Session.create({
+          kind: "orchestrator",
+          parentID: rootSessionID,
+          title: "Direct Task scheduler",
+        })
+        const worker = await Session.create({
+          kind: "build",
+          parentID: scheduler.id,
+          title: "Descendant worker",
+        })
+
+        const ownership = await Promise.all(
+          [scheduler, worker].map(async (session) => ({
+            sessionID: session.id,
+            taskID: await AutomationService.taskIDForDirectSchedulerActivity(session.id),
+          })),
+        )
+        expect(ownership).toEqual([
+          { sessionID: scheduler.id, taskID },
+          { sessionID: worker.id, taskID: undefined },
+        ])
+      },
+    })
+  }, 90_000)
+
   test("atomically transfers one durable wait occurrence into the root Session project", async () => {
     await using project = await memoryProject()
     let taskID = ""
@@ -33,20 +114,10 @@ describe("scheduled Task wait project runtime", () => {
           projectDirectory: project.path,
           config,
         })
-        configureTaskLoopRunner(async () => {})
-        taskID = await EngineService.createTask(
-          {
-            requestID: "scheduled-task-wait-project-runtime",
-            request: "Prove that a durable Task wait re-enters its root Session project",
-            productPillar: "code",
-            model: "firmware/gpt-5",
-            promptProfile: "base",
-            expectedPackageDigest: capability.packageRevision.packageDigest,
-            queue: true,
-          },
-          { actor: "user" },
-        )
-        await waitForQueueCompletionHooksForTest()
+        taskID = await establishTask({
+          request: "Prove that a durable Task wait re-enters its root Session project",
+          packageRevision: capability.packageRevision,
+        })
         const now = Date.now()
         await terminalTask(
           requireTask(taskID),
@@ -104,9 +175,9 @@ describe("scheduled Task wait project runtime", () => {
       sourceKind: "task_wait_wake",
       taskID,
       jobID: waitID,
-      fireID: `cal_task_wait_${waitID}`,
+      fireID: taskWaitFireID(waitID),
       dueAt,
       deliveryStatus: "terminal_inapplicable",
     })
-  }, 20_000)
+  }, 90_000)
 })

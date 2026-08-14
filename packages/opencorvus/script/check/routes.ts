@@ -1,8 +1,11 @@
 #!/usr/bin/env bun
 import path from "node:path"
 import fs from "node:fs"
-import { Server } from "../../src/server/server"
-import { generateOpenApiSpec, serializeOpenApiSpec } from "../../src/cli/cmd/generate"
+import {
+  bootstrapIsolatedTestRuntime,
+  isolatedTestChildEnvironment,
+  removeIsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
 import { extractSdkRoutesFromText } from "./sdk-route-extractor"
 
 const ROOT = path.resolve(import.meta.dir, "..", "..")
@@ -113,6 +116,7 @@ function normalizeRuntimePath(input: string) {
 }
 
 async function runtimeRoutes() {
+  const { Server } = await import("../../src/server/server")
   const app = (await Server.routeInventoryApp()) as unknown as {
     routes: Array<{ method: string; path: string }>
   }
@@ -169,7 +173,11 @@ function minimalDiff(label: string, expected: string, actual: string): string {
   return out.join("\n")
 }
 
-export function compareOpenApiSpecs(generated: unknown, tracked: unknown): InventoryViolation[] {
+export function compareOpenApiSpecs(
+  generated: unknown,
+  tracked: unknown,
+  serializeOpenApiSpec: (value: unknown) => string,
+): InventoryViolation[] {
   const generatedText = serializeOpenApiSpec(generated)
   const trackedText = serializeOpenApiSpec(tracked)
   if (generatedText === trackedText) return []
@@ -186,6 +194,7 @@ export function collectInventoryViolations(input: {
   generated: OpenApiSpec
   tracked: OpenApiSpec
   sdk: Set<string>
+  serializeOpenApiSpec: (value: unknown) => string
 }): InventoryViolation[] {
   const generatedOpenapi = openapiRoutes(input.generated)
   const trackedOpenapi = openapiRoutes(input.tracked)
@@ -215,17 +224,18 @@ export function collectInventoryViolations(input: {
       rule: "sdk-route-missing-openapi",
       entries: difference(input.sdk, trackedOpenapi),
     },
-    ...compareOpenApiSpecs(input.generated, input.tracked),
+    ...compareOpenApiSpecs(input.generated, input.tracked, input.serializeOpenApiSpec),
   ].filter((violation) => violation.entries.length > 0)
 }
 
 async function scanInventory(): Promise<InventoryViolation[]> {
+  const { generateOpenApiSpec, serializeOpenApiSpec } = await import("../../src/cli/cmd/generate")
   const generated = await generateOpenApiSpec()
   const tracked = readJsonFile(SDK_OPENAPI) as OpenApiSpec
   const runtime = await runtimeRoutes()
   const generatedSdk = sdkRoutes()
 
-  return collectInventoryViolations({ runtime, generated, tracked, sdk: generatedSdk })
+  return collectInventoryViolations({ runtime, generated, tracked, sdk: generatedSdk, serializeOpenApiSpec })
 }
 
 async function main() {
@@ -235,7 +245,7 @@ async function main() {
     console.log(
       `api:routes-check ok — ${RULES.length} rules and route inventory clean across ${listFiles(ROUTES_DIR).length} files`,
     )
-    process.exit(0)
+    return
   }
 
   if (violations.length > 0) {
@@ -259,9 +269,15 @@ async function main() {
       for (const entry of violation.entries) console.error(`    ${entry}`)
     }
   }
-  process.exit(1)
+  process.exitCode = 1
 }
 
 if (import.meta.main) {
-  await main()
+  const runtime = await bootstrapIsolatedTestRuntime("runner")
+  try {
+    Object.assign(process.env, isolatedTestChildEnvironment(runtime))
+    await main()
+  } finally {
+    await removeIsolatedTestRuntime(runtime)
+  }
 }

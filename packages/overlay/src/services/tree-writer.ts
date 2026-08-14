@@ -487,6 +487,7 @@ export function resetWriter(
   pendingPartFirstMessages.clear()
   latestTimelineMessage = undefined
   runningReviews.clear()
+  terminalReviewOrderKeys.clear()
   pendingSessionStatus.clear()
   standaloneQuestionInteractions.clear()
   // Drop every key explicitly — plain assignment on a store merges instead of
@@ -532,21 +533,73 @@ export function hasProjectedPart(sessionID: string, partID: string): boolean {
   return sessions.get(sessionID)?.partIndex.has(partID) === true
 }
 
+export type ProjectionPrerequisiteEntity = "session" | "message" | "part"
+
+export class ProjectionPrerequisiteError extends Error {
+  readonly code = "projection_prerequisite_missing" as const
+  readonly eventType: string
+  readonly missingEntity: ProjectionPrerequisiteEntity
+  readonly missingID: string
+  readonly sessionID?: string
+
+  constructor(input: {
+    eventType: string
+    missingEntity: ProjectionPrerequisiteEntity
+    missingID: string
+    sessionID?: string
+  }) {
+    super(
+      `${input.eventType}: missing ${input.missingEntity} projection ${input.missingID}` +
+        (input.sessionID ? ` in session ${input.sessionID}` : ""),
+    )
+    this.name = "ProjectionPrerequisiteError"
+    this.eventType = input.eventType
+    this.missingEntity = input.missingEntity
+    this.missingID = input.missingID
+    this.sessionID = input.sessionID
+  }
+}
+
+export function isProjectionPrerequisiteError(error: unknown): error is ProjectionPrerequisiteError {
+  return error instanceof ProjectionPrerequisiteError && error.code === "projection_prerequisite_missing"
+}
+
 function requireSessionProjection(sessionID: string, eventType: string): SessionInfo {
   const session = sessions.get(sessionID)
-  if (!session) throw new Error(`${eventType}: unknown session ${sessionID}`)
+  if (!session) {
+    throw new ProjectionPrerequisiteError({
+      eventType,
+      missingEntity: "session",
+      missingID: sessionID,
+      sessionID,
+    })
+  }
   return session
 }
 
 function requirePartProjection(session: SessionInfo, partID: string, eventType: string): PartTarget {
   const target = session.partIndex.get(partID)
-  if (!target) throw new Error(`${eventType}: unknown part ${partID} in session ${session.sessionID}`)
+  if (!target) {
+    throw new ProjectionPrerequisiteError({
+      eventType,
+      missingEntity: "part",
+      missingID: partID,
+      sessionID: session.sessionID,
+    })
+  }
   return target
 }
 
 function requireMessageCardProjection(session: SessionInfo, messageID: string, eventType: string): string {
   const cardID = session.messageCardIDs.get(messageID)
-  if (!cardID) throw new Error(`${eventType}: unknown message ${messageID} in session ${session.sessionID}`)
+  if (!cardID) {
+    throw new ProjectionPrerequisiteError({
+      eventType,
+      missingEntity: "message",
+      missingID: messageID,
+      sessionID: session.sessionID,
+    })
+  }
   return cardID
 }
 
@@ -649,6 +702,7 @@ export function applyEvent(event: any): void {
   flushBufferedPartDeltas()
 
   // ── Message stream ──
+  if (type === "message.moved") return applyVisibleCardTreeEvent(() => handleMessageMoved(event))
   if (type === "message.updated") return applyVisibleCardTreeEvent(() => handleMessageUpdated(event))
   if (type === "message.part.updated") return applyVisibleCardTreeEvent(() => handlePartUpdated(event))
   if (type === "message.removed") return applyVisibleCardTreeEvent(() => handleMessageRemoved(event))
@@ -1395,6 +1449,42 @@ function handleMessageRemoved(event: any): void {
   syncSessionTopLevelVisibility(session)
 }
 
+function handleMessageMoved(event: any): void {
+  const p = propsOf(event)
+  const sourceSessionID = String(p.sourceSessionID || "")
+  const info = p.info
+  const parts = Array.isArray(p.parts) ? p.parts : undefined
+  const messageID = String(info?.id || "")
+  const targetSessionID = String(info?.sessionID || "")
+  if (!sourceSessionID || !messageID || !targetSessionID || !parts) {
+    throw new Error("message.moved missing sourceSessionID, target info, or parts")
+  }
+  if (sourceSessionID === targetSessionID) {
+    throw new Error(`message.moved ${messageID} source and target Session must differ`)
+  }
+
+  const existing = messages.get(messageID)
+  if (existing?.sessionID === sourceSessionID) {
+    handleMessageRemoved({
+      type: "message.removed",
+      properties: { sessionID: sourceSessionID, messageID },
+    })
+  } else if (existing && existing.sessionID !== targetSessionID) {
+    throw new Error(
+      `message.moved ${messageID} existing owner ${existing.sessionID} is neither source ${sourceSessionID} nor target ${targetSessionID}`,
+    )
+  }
+
+  handleMessageUpdated({ ...event, type: "message.updated", properties: { ...p, info } })
+  for (const part of parts) {
+    handlePartUpdated({
+      ...event,
+      type: "message.part.updated",
+      properties: { ...p, orderKey: info.orderKey, part },
+    })
+  }
+}
+
 function handlePartRemoved(event: any): void {
   const p = propsOf(event)
   const sessionID = String(p.sessionID || "")
@@ -1520,6 +1610,11 @@ function handleSessionStatus(event: any): void {
     "session",
   )
   const projected = projectSessionStatus(event)
+  if (projected.terminalReason) {
+    const reviewID = `integrity:${sessionID}`
+    runningReviews.delete(reviewID)
+    terminalReviewOrderKeys.set(reviewID, lifecycleOrderKey)
+  }
   const info = ensureLifecycleSessionProjection(event, sessionID)
   const occurrenceOwnerCardID = info?.occurrenceCardIDs.get(inputMessageID)
   if (info) advanceActiveOccurrence(info, inputMessageID, lifecycleOrderKey, occurrenceOwnerCardID)
@@ -1819,6 +1914,21 @@ interface RunningReviewPayload {
   summary?: string
 }
 const runningReviews = new Map<string, RunningReviewPayload>()
+/** Canonical Session lifecycle terminal tombstones. They prevent delayed
+ * review-stream events from recreating a running review after its occurrence
+ * has ended; a genuinely later review.started opens the next occurrence. */
+const terminalReviewOrderKeys = new Map<string, string>()
+
+function acceptReviewEvent(reviewID: string, orderKey: string, opensOccurrence = false): boolean {
+  const terminalOrderKey = terminalReviewOrderKeys.get(reviewID)
+  if (terminalOrderKey) {
+    if (!opensOccurrence) return false
+    if (compareTimelineOrderKeys(orderKey, terminalOrderKey, `review ${reviewID} terminal`) <= 0) return false
+    terminalReviewOrderKeys.delete(reviewID)
+  }
+  const active = runningReviews.get(reviewID)
+  return !active || compareTimelineOrderKeys(orderKey, active.orderKey, `review ${reviewID} active`) >= 0
+}
 
 function normalizeReviewPhase(raw: string): ReviewStreamPhase {
   if (raw === "integrity") return raw
@@ -1924,13 +2034,15 @@ function handleReviewStreamStarted(event: any): void {
   const agentID = requireExactReviewAgentID(props.agentID, reviewID)
   if (phase === "integrity" && !sessionID)
     throw new Error(`review.stream.started integrity missing sessionID (taskID=${taskID})`)
+  const orderKey = requireTimelineOrderKey(event?.orderKey, `review.stream.started ${reviewID}`)
+  if (!acceptReviewEvent(reviewID, orderKey, true)) return
   const payload: RunningReviewPayload = {
     taskID,
     reviewID,
     phase,
     sessionID,
     agentID,
-    orderKey: requireTimelineOrderKey(event?.orderKey, `review.stream.started ${reviewID}`),
+    orderKey,
     startedAt: eventEmittedAt(event, `review.stream.started ${reviewID}`),
     attempt: 0,
     elapsedMs: 0,
@@ -1953,6 +2065,8 @@ function handleReviewStreamProgress(event: any): void {
   const attempt = Number(props.attempt || 0)
   const elapsedMs = Number(props.elapsedMs || props.elapsed_ms || 0)
   const agentID = requireExactReviewAgentID(props.agentID, reviewID)
+  const orderKey = requireTimelineOrderKey(event?.orderKey, `review.stream.progress ${reviewID}`)
+  if (!acceptReviewEvent(reviewID, orderKey)) return
   const existing = ensureIntegrityReviewProjection({
     taskID,
     reviewID,
@@ -1970,6 +2084,7 @@ function handleReviewStreamProgress(event: any): void {
     taskID,
     reviewID,
     phase,
+    orderKey,
     startedAt: existing.startedAt,
     attempt,
     elapsedMs,
@@ -1994,6 +2109,8 @@ function handleReviewStreamChunk(event: any): void {
   const delta = String(props.delta || "")
   const attempt = Number(props.attempt || 1)
   const agentID = requireExactReviewAgentID(props.agentID, reviewID)
+  const orderKey = requireTimelineOrderKey(event?.orderKey, `review.stream.chunk ${reviewID}`)
+  if (!acceptReviewEvent(reviewID, orderKey)) return
   if (kind !== "reasoning") {
     throw new Error(`review.stream.chunk unexpected kind: ${kind}`)
   }

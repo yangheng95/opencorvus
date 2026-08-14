@@ -8,6 +8,7 @@ import {
   DispatchOccurrenceAuthoritySchema,
   type DispatchOccurrenceAuthority,
 } from "@/engine/dispatch-occurrence-authority"
+import { Identifier } from "@/id/id"
 
 const IdentifierSchema = z.string().min(1).max(512)
 const MESSAGE_LIMIT = 4_096
@@ -32,10 +33,7 @@ function normalizeIdentifier(value: string, fallback: string): string {
 
 function normalizeInfrastructureMessage(value: string): string {
   const normalized = value.trim()
-  return (normalized.length > 0 ? normalized : "Unknown infrastructure failure").slice(
-    0,
-    MESSAGE_LIMIT,
-  )
+  return (normalized.length > 0 ? normalized : "Unknown infrastructure failure").slice(0, MESSAGE_LIMIT)
 }
 
 function normalizeFailureIssues(
@@ -43,9 +41,7 @@ function normalizeFailureIssues(
 ): DispatchFailureIssue[] | undefined {
   if (!issues || issues.length === 0) return undefined
   return issues.map((issue) => ({
-    ...(issue.code
-      ? { code: normalizeIdentifier(issue.code, "infrastructure_failure") }
-      : {}),
+    ...(issue.code ? { code: normalizeIdentifier(issue.code, "infrastructure_failure") } : {}),
     path: [...issue.path],
     message: normalizeInfrastructureMessage(issue.message),
   }))
@@ -67,10 +63,68 @@ const WorkerTurnSettlementEvidenceSchema = z
   })
   .strict()
 
+export const DispatchInfrastructureFailureOutcomeSchema = z
+  .object({
+    kind: z.literal("infrastructure_failure"),
+    operation: IdentifierSchema,
+    message: z.string().min(1).max(MESSAGE_LIMIT),
+    recovery_authority: DispatchOccurrenceAuthoritySchema,
+    session_id: IdentifierSchema.optional(),
+    final_message_id: IdentifierSchema.optional().describe(
+      "Visible final specialist message when the failed operation happened after a real terminal worker Turn.",
+    ),
+    error_name: IdentifierSchema.optional(),
+    failure_issues: z
+      .array(DispatchFailureIssueSchema)
+      .min(1)
+      .optional()
+      .describe(
+        "Typed contract or validation issues supplied by the thrown error. Absence means no exact structured issue evidence was available.",
+      ),
+    infrastructure_error: EngineArtifactLocatorSchema.optional(),
+    worker_turn: WorkerTurnSettlementEvidenceSchema.optional(),
+  })
+  .strict()
+  .describe(
+    "A dispatch or post-Turn operation failed. failure_issues, when present, are typed deterministic contract evidence; this terminal outcome never authorizes an automatic retry.",
+  )
+
 export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("accepted"),
+      session_id: IdentifierSchema,
+      dispatch_lineage_id: IdentifierSchema,
+    })
+    .strict()
+    .describe("The worker Turn has a durable lineage and is running independently of the root Orchestrator Turn."),
   TerminalSessionSchema.extend({
     kind: z.literal("terminal_success"),
   }).strict(),
+  TerminalSessionSchema.extend({
+    kind: z.literal("domain_incomplete"),
+    domain: IdentifierSchema,
+    domain_artifact: EngineArtifactLocatorSchema,
+  })
+    .strict()
+    .describe(
+      "The worker Turn and its domain Artifact are durable, but the domain's required completion contract is incomplete. This final non-success outcome never opens workflow successors.",
+    ),
+  TerminalSessionSchema.extend({
+    kind: z.literal("domain_blocked"),
+    domain: IdentifierSchema,
+    domain_artifact: EngineArtifactLocatorSchema,
+    blocking_question: z
+      .object({
+        request_id: Identifier.schema("question"),
+        status: z.enum(["rejected", "expired"]),
+      })
+      .strict(),
+  })
+    .strict()
+    .describe(
+      "The worker Turn and its domain Artifact are durable, but one exact blocker Question settled without an answer. This final non-success outcome never opens workflow successors.",
+    ),
   z
     .object({
       kind: z.literal("coordination"),
@@ -88,31 +142,7 @@ export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
     .describe(
       "A real terminal worker Turn exists, but a required post-Turn operation did not complete without typed deterministic contract-failure evidence.",
     ),
-  z
-    .object({
-      kind: z.literal("infrastructure_failure"),
-      operation: IdentifierSchema,
-      message: z.string().min(1).max(MESSAGE_LIMIT),
-      recovery_authority: DispatchOccurrenceAuthoritySchema,
-      session_id: IdentifierSchema.optional(),
-      final_message_id: IdentifierSchema.optional().describe(
-        "Visible final specialist message when the failed operation happened after a real terminal worker Turn.",
-      ),
-      error_name: IdentifierSchema.optional(),
-      failure_issues: z
-        .array(DispatchFailureIssueSchema)
-        .min(1)
-        .optional()
-        .describe(
-          "Typed contract or validation issues supplied by the thrown error. Absence means no exact structured issue evidence was available.",
-        ),
-      infrastructure_error: EngineArtifactLocatorSchema.optional(),
-      worker_turn: WorkerTurnSettlementEvidenceSchema.optional(),
-    })
-    .strict()
-    .describe(
-      "A dispatch or post-Turn operation failed. failure_issues, when present, are typed deterministic contract evidence; this terminal outcome never authorizes an automatic retry.",
-    ),
+  DispatchInfrastructureFailureOutcomeSchema,
 ])
 
 export type DispatchOutcome = z.infer<typeof DispatchOutcomeSchema>
@@ -127,14 +157,55 @@ export namespace DispatchOutcome {
     return DispatchOutcomeSchema.parse(input)
   }
 
-  export function terminal(input: {
-    sessionID: string
-    finalMessageID: string
-  }): DispatchOutcome {
+  export function accepted(input: { sessionID: string; dispatchLineageID: string }): DispatchOutcome {
+    return parse({
+      kind: "accepted",
+      session_id: input.sessionID,
+      dispatch_lineage_id: input.dispatchLineageID,
+    })
+  }
+
+  export function terminal(input: { sessionID: string; finalMessageID: string }): DispatchOutcome {
     return parse({
       kind: "terminal_success",
       session_id: input.sessionID,
       final_message_id: input.finalMessageID,
+    })
+  }
+
+  export function domainIncomplete(input: {
+    sessionID: string
+    finalMessageID: string
+    domain: string
+    domainArtifact: EngineArtifactLocator
+  }): DispatchOutcome {
+    return parse({
+      kind: "domain_incomplete",
+      session_id: input.sessionID,
+      final_message_id: input.finalMessageID,
+      domain: normalizeIdentifier(input.domain, "domain_delivery"),
+      domain_artifact: input.domainArtifact,
+    })
+  }
+
+  export function domainBlocked(input: {
+    sessionID: string
+    finalMessageID: string
+    domain: string
+    domainArtifact: EngineArtifactLocator
+    questionID: string
+    questionStatus: "rejected" | "expired"
+  }): DispatchOutcome {
+    return parse({
+      kind: "domain_blocked",
+      session_id: input.sessionID,
+      final_message_id: input.finalMessageID,
+      domain: normalizeIdentifier(input.domain, "domain_delivery"),
+      domain_artifact: input.domainArtifact,
+      blocking_question: {
+        request_id: input.questionID,
+        status: input.questionStatus,
+      },
     })
   }
 
@@ -193,9 +264,7 @@ export namespace DispatchOutcome {
       recovery_authority: DispatchOccurrenceAuthoritySchema.parse(input.recoveryAuthority),
       ...(input.sessionID ? { session_id: input.sessionID } : {}),
       ...(input.finalMessageID ? { final_message_id: input.finalMessageID } : {}),
-      ...(input.errorName
-        ? { error_name: normalizeIdentifier(input.errorName, "Error") }
-        : {}),
+      ...(input.errorName ? { error_name: normalizeIdentifier(input.errorName, "Error") } : {}),
       ...(failureIssues ? { failure_issues: failureIssues } : {}),
       ...(input.infrastructureError ? { infrastructure_error: input.infrastructureError } : {}),
       ...(input.workerTurn
