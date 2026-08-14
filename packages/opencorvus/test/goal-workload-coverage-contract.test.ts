@@ -1836,6 +1836,7 @@ describe("Goal Workload coverage contract", () => {
         )
       },
     })
+    await Database.awaitEffectIdle(30_000)
     await Bus.TestHooks.disposeOwnedState()
   }, 30_000)
 
