@@ -3169,3 +3169,114 @@ and production dispatch remains outside an ordinary push unless separately autho
 
 R19 ended with `outcome=failed`, PID 24200 absent, listener stopped, Instances and database settled, isolated auth
 removed, and the exact failure/result receipts retained. It does not count toward the three required successes.
+
+### 2026-08-14: complete removal of the Host Task Queue
+
+#### Recall
+
+- User requirement: the earlier removal of the business Task admission queue was incomplete. Remove the Host Task
+  Queue completely. Serial versus parallel Task creation is model-owned; Host code must not retain a project-level
+  queue, priority policy, capacity policy, aging policy, queue status API, or renamed equivalent.
+- Acceptance: `TaskQueueService`, `TaskQueueTable`, `a2a_task_queue`, `TaskQueueEvent`,
+  `OPENCORVUS_TASK_QUEUE_CONCURRENCY`, `task_queue_run_timeout_ms`, async prompt queue submission/status routes and
+  their generated Software Development Kit surface are deleted. Different Sessions begin Provider execution
+  independently without Host ranking or a project concurrency cap. The existing Session prompt owner remains the
+  sole same-Session writer and returns its typed busy contract when a second direct caller races it.
+- Preserved integrity boundary: the already-persisted Task-root Message delivery occurrence remains the single
+  durable recovery fact for Task/Mission execution, but the reset-required epoch renames it from
+  `queued_operator_wake` to `task_root_ingress`. Its lifecycle is `pending -> delivering -> delivered` or one typed
+  terminal disposition. Per-root-Session causal ownership prevents two model turns from concurrently mutating one
+  conversation. It may not select among Tasks, expose a queue position, inspect project directories, rank priority,
+  or cap cross-Session execution. No replacement Provider queue table, compatibility reader, shadow status or
+  renamed priority scheduler is permitted.
+- Hard constraints: all model calls remain streaming; no UI automation test is added, modified or run; public API
+  removal is regenerated through OpenAPI and the JavaScript SDK; canonical database drift follows the repository's
+  reset-required contract instead of a legacy dual reader; user-owned processes and unrelated worktrees remain
+  untouched.
+- Sources read: `scheduler/task-queue-service.ts`, `scheduler/task-queue.sql.ts`, Session prompt state/run/wake,
+  Task-root ingress and dispatch, project bootstrap/delete, Task and Session destructive convergence, server
+  shutdown settlement, Work Ledger projection/SSE, Session routes, Engine/config, storage schema/reset policy,
+  transport/OpenAPI/SDK generation, current task-control-plane/data architecture and all production callers found by
+  repository search.
+- Repository search: the retained queue owns synchronous prompt wrappers, async prompt persistence/status,
+  compaction execution, per-project capacity 100, one-running-row-per-Session admission, priority aging, inactivity
+  recovery, cancellation/idle joins, bootstrap draining, process-settlement gates, Work Ledger activity events and
+  one canonical SQLite table. The business Engine Task lifecycle is already only `active`, `completed`, `failed` or
+  `cancelled`; it has no `queue_order` or start-now route. Overlay has no business Task queue controls, but generated
+  SDK types still expose the async Provider queue and Task Queue events.
+- Independent Agent: one uninvolved read-only reviewer audited the full removal and replacement boundary,
+  restart/destructive-path risks and positive acceptance matrix. It found that direct `SessionPrompt.prompt` reuses
+  one existing same-Session owner and attaches an exact reply callback rather than returning Busy; inventing a 409
+  would contradict the real FIFO conversation contract. It also found that retaining `queued_operator_wake`,
+  `engine/queue.ts`, queue position and `wake_status=queued` would leave a second visible Task Queue after deleting
+  `a2a_task_queue`. Both findings are adopted here. The same reviewer remains read-only for final delivery review.
+
+#### Problem depth and impact
+
+The observable contradiction is real, not stale UI or an old build. The shipped branch still exports
+`TaskQueueService`, creates `a2a_task_queue`, exposes `/session/{sessionID}/prompt_async` plus queue-status lookup, and
+publishes Task Queue events. Its claim query admits at most 100 running rows per project, chooses by priority plus
+bounded aging, and prohibits two running rows for the same Session. Therefore the Host still decides physical
+Provider admission even though the model owns the business Task graph. The previous phase called this a harmless
+"Provider capacity queue" and intentionally retained it; that scope decision, rather than an incomplete file delete,
+is why the queue survived.
+
+Removing only the table or service name would break synchronous prompts, compaction, right-sidebar cancellation,
+Task/Session/project deletion, startup recovery, shutdown settlement and Work Ledger activity. Keeping its claim
+algorithm under another name would preserve the forbidden policy. Conversely, deleting the existing Session prompt
+owner or Task-root durable ingress would allow concurrent writes to one conversation or lose accepted Task Messages
+after a process interruption. The repair must separate these responsibilities instead of deleting safety with
+scheduling.
+
+The public compatibility impact is intentional. The async queue submission/status endpoints and their generated
+types disappear in the same release. Existing databases contain a canonical table that the new schema no longer
+contains; the repository already rejects canonical schema drift and requires reset for pre-release databases, so no
+legacy queue migration or fallback is added. Synchronous standalone prompts and compaction remain supported, but
+execute immediately under the Session prompt owner. Task/Mission unattended work continues through the existing
+durable Task-root ingress and Session wake recovery.
+
+#### Frozen replacement design
+
+1. Direct standalone prompt and compaction routes validate the exact project Session, acquire the existing
+   `SessionPromptState` owner and enter the streaming loop immediately. A same-Session overlap reuses that sole owner
+   and attaches the caller to its exact `reply_to_message_id`; different Sessions have no shared admission, capacity
+   counter, priority or ordering policy.
+2. Delete async queue submission and status routes. No durable Provider execution row replaces them. Product-owned
+   unattended execution must use the existing durable Session wake or Task-root ingress contract, which persists the
+   real user/Mission/orchestrator Message before activation and resumes that exact occurrence after restart.
+3. Destructive Task, Session and Project operations cancel and await exact `SessionPromptState` owners and durable
+   wake owners directly. Shutdown settles Session prompt/wake/runtime owners without a `task_queue` settlement kind
+   or queue handoff gate. Work Ledger activity derives from Session prompt ownership and durable Task facts, not a
+   Provider queue event.
+4. Delete queue DDL, service, bootstrap registration, priority/aging/recovery timers, progress multiplexing,
+   queue-specific configuration, public transport events and generated SDK contracts. Update current architecture
+   to describe immediate cross-Session execution plus same-Session ownership; do not leave the old provider-capacity
+   prose as a second source.
+5. Replace the old `queued_operator_wake` epoch with `task_root_ingress`; rename `engine/queue.ts`, TaskQueue errors,
+   root-wake queue APIs, projected-worker turn queue ownership, runtime `engine_queue_completion`, response fields,
+   UI projection and prose that preserve the old concept. The current schema change already requires reset, so no
+   dual reader or immutable-history exception justifies keeping the retired name. The new ingress remains causal
+   Session delivery and must never become a cross-Task claim queue.
+
+#### Positive verification matrix
+
+- A production-shaped non-UI contract starts two real prompt executions for different Sessions behind barriers and
+  observes both owners active concurrently without a project admission row. Two same-Session calls retain one owner
+  and each resolve only from the assistant reply bound to its exact input Message.
+- Direct synchronous prompt and direct compaction each produce one real assistant result through the streaming loop.
+  Task creation plus its durable root ingress still reaches an exact assistant settlement; successor-runtime recovery
+  resumes the same ingress identity. Task/Mission/Session/project cancellation and deletion wait for their exact live
+  prompt/wake owners and leave no execution owner.
+- Server stop closes new Session execution admission, cancels active prompt/wake owners, waits for physical
+  settlement, then releases Instance/database ownership. A failed listener stop rolls back the same non-queue
+  settlement boundary and a retry succeeds.
+- Storage schema/reset checks, focused Session/Task/runtime tests, package typechecks, route inventory, docs check,
+  OpenAPI generation and JavaScript SDK imports pass. Repository search finds no production or generated
+  `TaskQueueService`, `TaskQueueTable`, `a2a_task_queue`, `queued_operator_wake`, `engine/queue.ts`, Task Queue event,
+  async prompt queue route, queue position, `wake_status=queued`, queue priority, queue capacity, `task_queue` or
+  `engine_queue_completion` runtime settlement kind.
+- After focused verification, an uninvolved read-only Agent reviews the complete diff and evidence. A real isolated
+  dev backend then uses a random port, project, home and SQLite database to submit independent Task work through the
+  Web UI and visibly confirms model-owned parallel Task creation, stable same-Session conversation ordering and clean
+  terminal settlement. This is control-plane acceptance and does not substitute for the three still-required full
+  Evolution successes.
