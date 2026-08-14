@@ -476,7 +476,7 @@
   overflow-y: auto;
   padding: var(--ui-gap-sm);
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-medium);
+  border-radius: var(--oc-radius-large);
   background: var(--surface);
 }
 
