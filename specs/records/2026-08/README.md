@@ -1,5 +1,13 @@
 # August 2026 Records
 
+- [2026-08-14-mission-wake-activation-fence-p0.md](2026-08-14-mission-wake-activation-fence-p0.md) closes the bounded handoff between Mission lifecycle admission and physical prompt ownership across operator, scheduler, and startup-recovery wakes without changing retry policy.
+
+- [2026-08-14-v0.0.43-beta-release.md](2026-08-14-v0.0.43-beta-release.md) records the current-main convergence, canonical release-family bump, native Release publication, beta updater promotion, and production website verification for `v0.0.43-beta`.
+
+- [2026-08-14-mission-closure-recovery-convergence-p0.md](2026-08-14-mission-closure-recovery-convergence-p0.md) makes Mission closure atomically terminalize already-materialized unanswered scheduler wakes and fences standalone process recovery without changing Provider retry policy.
+
+- [2026-08-13-browser-mcp-live-view.md](2026-08-13-browser-mcp-live-view.md) makes the canonical Browser MCP visible by default and publishes one loopback, same-Playwright-session Live View from both stdio and HTTP transports without introducing a second browser runtime.
+
 - [2026-08-13-compact-identities-and-host-references.md](2026-08-13-compact-identities-and-host-references.md) caps newly issued OpenCorvus identities and model/UI control references at 24 characters while keeping full cryptographic digests inside the Host integrity boundary.
 
 - [2026-08-13-evolution-attribution-source-integrity.md](2026-08-13-evolution-attribution-source-integrity.md) makes a failure attribution's exact selected opportunity predecessor a typed publication invariant so Campaign provenance cannot depend on repair redispatch.

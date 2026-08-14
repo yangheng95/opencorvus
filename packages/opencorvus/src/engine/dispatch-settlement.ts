@@ -182,3 +182,20 @@ export function recordDispatchSettlement(input: {
     return { artifactID, payload }
   })
 }
+
+/** Pipeline settlement is first-committer-wins. Unlike the strict direct
+ * writer, callers use this authority when startup recovery and normal adapter
+ * completion may race for the same immutable occurrence. */
+export function settleDispatchOrReturnExisting(input: {
+  taskID: string
+  dispatchID: string
+  outcome: DispatchOutcome
+  now?: number
+}): DispatchSettlementRow {
+  if (input.outcome.kind === "accepted") throw new Error(`Dispatch ${input.dispatchID} accepted outcome is not final`)
+  return Database.immediateTransaction(() => {
+    const existing = findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+    if (existing) return existing
+    return recordDispatchSettlement(input)
+  })
+}

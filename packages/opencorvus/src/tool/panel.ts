@@ -34,6 +34,7 @@ import { SessionWake } from "@/session/wake"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveConfiguredModelRef } from "@/agent/model"
 import { attachMissionCaller, publishMissionHandoff } from "@/mission/caller-receipt"
+import { openMissionExecutionWithWake } from "@/mission/execution-closure"
 import { MulticaExpertSquadImport } from "@/expert-squad/multica-import"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
@@ -52,6 +53,7 @@ import {
   mintArtifactLocatorReference,
   mintArtifactReadReference,
 } from "@opencorvus-ai/plugin/artifact-catalog"
+
 import {
   completeArtifactReadsBeforePanelAction,
   resolvePanelArtifactLocatorReferenceBeforeRead,
@@ -74,6 +76,20 @@ import {
   PanelTaskFailureResult,
   PanelTaskResult,
 } from "@/panel/task-query"
+
+let missionWakeForTest: typeof SessionWake.wakeWithReceipt | undefined
+
+export const PanelToolTestHooks = {
+  installMissionWakeExecutor(executor: typeof SessionWake.wakeWithReceipt): Disposable {
+    if (missionWakeForTest) throw new Error("Panel Mission wake executor is already installed")
+    missionWakeForTest = executor
+    return {
+      [Symbol.dispose]() {
+        if (missionWakeForTest === executor) missionWakeForTest = undefined
+      },
+    }
+  },
+}
 
 const localOnly = (ctx: Tool.Context) => {
   const surface = resolvePanelSurface(ctx)
@@ -1037,17 +1053,24 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           callerSession,
           callerMessageID,
         })
-        await SessionWake.wake({
+        await openMissionExecutionWithWake({
+          missionID,
           sessionID: missionSession.id,
-          prompt: params.request,
-          author: ctx.agent,
-          agent: "mission",
-          surface: "panel",
-          parts: callerFileParts,
-          reason: {
-            source: "mission.operator",
-            missionID,
-          },
+          source: "mission.wake",
+          requestID: ctx.callID || callerMessageID,
+          wake: () =>
+            (missionWakeForTest ?? SessionWake.wakeWithReceipt)({
+              sessionID: missionSession.id,
+              prompt: params.request,
+              author: ctx.agent,
+              agent: "mission",
+              surface: "panel",
+              parts: callerFileParts,
+              reason: {
+                source: "mission.operator",
+                missionID,
+              },
+            }),
         })
         await publishMissionHandoff(attachedMissionSession)
         return {

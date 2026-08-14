@@ -27,8 +27,11 @@ import {
   setViewport,
   snapshotPerf,
   updateToolCall,
+  trackPendingBrowserMcpPage,
+  withBrowserMcpOperation,
   withSessionOperationLock,
   type BrowserDiagnostics,
+  resolveBrowserMcpConnectionConfig,
 } from "./sessions.js"
 import { formatPerfText } from "./perf.js"
 import { clickGuardProfile, doubleClickGuardProfile, runPointGuard, type GuardResult } from "./guard.js"
@@ -102,43 +105,45 @@ const traced =
     fn: (args: T) => Promise<{ isError?: boolean; content: unknown[] }>,
   ) =>
   async (args: T) => {
-    const start = Date.now()
-    let snap: ReturnType<typeof snapshotPerf> = null
-    if (args.sessionId) {
-      recordToolCall(args.sessionId, {
-        tool,
-        at: start,
-        ms: 0,
-        status: "running",
-        args: summarizeArgs(args as Record<string, unknown>),
-      })
-    }
-    try {
-      const run = () => {
-        snap = args.sessionId ? snapshotPerf(args.sessionId) : null
-        return fn(args)
-      }
-      const result = args.sessionId ? await withSessionOperationLock(args.sessionId, run) : await run()
+    return withBrowserMcpOperation(async () => {
+      const start = Date.now()
+      let snap: ReturnType<typeof snapshotPerf> = null
       if (args.sessionId) {
-        updateToolCall(args.sessionId, start, {
-          ms: Date.now() - start,
-          status: (result as { isError?: boolean }).isError ? "error" : "ok",
+        recordToolCall(args.sessionId, {
+          tool,
+          at: start,
+          ms: 0,
+          status: "running",
+          args: summarizeArgs(args as Record<string, unknown>),
         })
-        if (snap) {
-          const perfText = diffPerfText(args.sessionId, snap, tool)
-          if (perfText) result.content.push({ type: "text" as const, text: perfText })
+      }
+      try {
+        const run = () => {
+          snap = args.sessionId ? snapshotPerf(args.sessionId) : null
+          return fn(args)
         }
+        const result = args.sessionId ? await withSessionOperationLock(args.sessionId, run) : await run()
+        if (args.sessionId) {
+          updateToolCall(args.sessionId, start, {
+            ms: Date.now() - start,
+            status: (result as { isError?: boolean }).isError ? "error" : "ok",
+          })
+          if (snap) {
+            const perfText = diffPerfText(args.sessionId, snap, tool)
+            if (perfText) result.content.push({ type: "text" as const, text: perfText })
+          }
+        }
+        return result
+      } catch (e) {
+        if (args.sessionId) {
+          updateToolCall(args.sessionId, start, {
+            ms: Date.now() - start,
+            status: "error",
+          })
+        }
+        throw e
       }
-      return result
-    } catch (e) {
-      if (args.sessionId) {
-        updateToolCall(args.sessionId, start, {
-          ms: Date.now() - start,
-          status: "error",
-        })
-      }
-      throw e
-    }
+    })
   }
 
 // ─── 辅助函数 ───────────────────────────────────────────────────────────────
@@ -446,26 +451,45 @@ const withBrowserMcpInactivity = async <T>(
 const detectOpenedPage = async <T>(
   session: ReturnType<typeof getSession>,
   action: () => Promise<T>,
-): Promise<{ result: T; openedPage?: Awaited<ReturnType<typeof getTabInfo>> }> => {
-  const before = new Set(session.page.context().pages())
-  const pagePromise = session.page
-    .context()
-    .waitForEvent("page", { timeout: 750 })
+  liveViewUrl: (sessionId: string) => string,
+): Promise<{ result: T; openedPage?: Awaited<ReturnType<typeof getTabInfo>> & { liveViewUrl: string } }> => {
+  const popupPromise = session.page
+    .waitForEvent("popup", { timeout: 750 })
+    .then((page) => ({ page, release: trackPendingBrowserMcpPage(page) }))
     .catch(() => null)
-  const popupPromise = session.page.waitForEvent("popup", { timeout: 750 }).catch(() => null)
-  const result = await action()
-  const page =
-    session.page
-      .context()
-      .pages()
-      .find((candidate) => !before.has(candidate)) ?? (await Promise.race([popupPromise, pagePromise]))
-  if (!page) return { result }
-  await page.waitForLoadState("domcontentloaded", { timeout: 5_000 }).catch(() => {})
-  const adopted = await adoptPage(session.profileId, page, {
-    virtualCursor: session.virtualCursor,
-    perfMode: session.perfMode,
-  })
-  return { result, openedPage: await getTabInfo(adopted.sessionId, adopted.sessionId) }
+  let result: T
+  try {
+    result = await action()
+  } catch (error) {
+    const pending = await popupPromise
+    if (pending) {
+      await pending.page.close().catch(() => {})
+      pending.release()
+    }
+    throw error
+  }
+  const pending = await popupPromise
+  if (!pending) return { result }
+  const { page, release } = pending
+  try {
+    await page.waitForLoadState("domcontentloaded", { timeout: 5_000 }).catch(() => {})
+    const adopted = await adoptPage(session.profileId, page, {
+      virtualCursor: session.virtualCursor,
+      perfMode: session.perfMode,
+    })
+    release()
+    return {
+      result,
+      openedPage: {
+        ...(await getTabInfo(adopted.sessionId, adopted.sessionId)),
+        liveViewUrl: liveViewUrl(adopted.sessionId),
+      },
+    }
+  } catch (error) {
+    await page.close().catch(() => {})
+    release()
+    throw error
+  }
 }
 
 const safeDownloadFilename = (input: string) => {
@@ -499,7 +523,18 @@ const frameTarget = (page: ReturnType<typeof getSession>["page"], frameSelector:
 const frameLocator = (page: ReturnType<typeof getSession>["page"], frameSelector: string, selector: string) =>
   frameTarget(page, frameSelector).locator(selector)
 
-export const registerTools = (server: McpServer) => {
+export type BrowserMcpToolOptions = {
+  liveViewOrigin: string
+}
+
+export const browserMcpLiveViewUrl = (origin: string, sessionId: string): string => {
+  const url = new URL("/monitor", origin)
+  url.searchParams.set("session", sessionId)
+  return url.toString()
+}
+
+export const registerTools = (server: McpServer, options: BrowserMcpToolOptions) => {
+  const sessionLiveViewUrl = (sessionId: string) => browserMcpLiveViewUrl(options.liveViewOrigin, sessionId)
   // 拦截所有 registerTool 调用，自动注入 tracing
   const origRegister = server.registerTool.bind(server)
   ;(server as { registerTool: typeof server.registerTool }).registerTool = (
@@ -519,7 +554,7 @@ export const registerTools = (server: McpServer) => {
     "session_create",
     {
       description:
-        "创建浏览器 session（Page/tab），返回 sessionId 和 profileId。User Profile 代表一个已登录用户环境（BrowserContext）；同一 profileId 下创建的多个 session 像同一浏览器的多个 tab，会共享 Cookie、Storage 和登录状态。需要登录态的测试应先创建 session 并完成一次登录，保存返回的 profileId；后续测试同一用户、同一登录态、多个模块或并行 sub-agent 时，都应把这个 profileId 传给 session_create，避免重复登录。不传 profileId 时会创建全新的用户环境；传入不存在或已过期的 profileId 会报错，不会静默创建空 profile。",
+        "创建浏览器 session（Page/tab），返回 sessionId 和 profileId。User Profile 代表一个浏览器用户环境（BrowserContext）；同一 profileId 下创建的多个 session 像同一浏览器的多个 tab，会共享 Cookie、Storage 和登录状态。默认 Chrome CDP 模式下，不传 profileId 会在当前已登录 Chrome 环境中创建 MCP 管理的新 tab；isolated 模式下，不传 profileId 会创建新的隔离用户环境。后续复用同一环境时应传回 profileId；不存在或已过期的 profileId 会报错。",
       inputSchema: {
         profileId: z
           .string()
@@ -528,8 +563,11 @@ export const registerTools = (server: McpServer) => {
             "要复用的 User Profile ID。用于打开同一已登录用户环境中的新 tab。适用于同一用户继续测试、多个模块共享登录态、或把已登录 profile 分发给并行 sub-agent。不存在或已过期时会报错。",
           ),
         viewport: z.object({ width: z.number(), height: z.number() }).optional().describe("视口尺寸，默认 1280×720"),
-        userAgent: z.string().optional().describe("自定义 User-Agent"),
-        baseURL: z.string().optional().describe("导航相对路径时的 base URL"),
+        userAgent: z.string().optional().describe("isolated 模式的自定义 User-Agent；当前 Chrome CDP 模式不支持。"),
+        baseURL: z
+          .string()
+          .optional()
+          .describe("isolated 模式导航相对路径时使用的 base URL；当前 Chrome CDP 模式不支持。"),
         proxy: z
           .object({
             server: z.string().describe("代理地址，如 http://127.0.0.1:7890"),
@@ -538,12 +576,14 @@ export const registerTools = (server: McpServer) => {
             password: z.string().optional(),
           })
           .optional()
-          .describe("HTTP 代理配置。未设置时使用 network.proxy.webResearch；该配置未启用时不使用代理。"),
+          .describe(
+            "isolated 模式的 HTTP 代理配置。未设置时使用 network.proxy.webResearch；该配置未启用时不使用代理。当前 Chrome CDP 模式不支持按 session 修改代理。",
+          ),
         hosts: z
           .record(z.string(), z.string())
           .optional()
           .describe(
-            "域名到 IP 的映射，如 { 'example.com': '192.168.1.1' }。仅对 HTTP 可靠；HTTPS 需目标 IP 的证书包含原域名。",
+            "isolated 模式的域名到 IP 映射，如 { 'example.com': '192.168.1.1' }。仅对 HTTP 可靠；HTTPS 需目标 IP 的证书包含原域名。当前 Chrome CDP 模式不支持。",
           ),
         virtualCursor: z.boolean().optional().describe("是否注入虚拟光标，默认 true。设为 false 可关闭光标跟踪。"),
         perf: z
@@ -554,7 +594,9 @@ export const registerTools = (server: McpServer) => {
           ),
         storageState: storageStateSchema
           .optional()
-          .describe("Playwright storageState JSON for explicit cookie/localStorage import."),
+          .describe(
+            "isolated 模式用于显式导入 cookie/localStorage 的 Playwright storageState JSON；当前 Chrome CDP 模式直接使用 Chrome 现有登录态，不支持导入。",
+          ),
       },
       outputSchema: {
         sessionId: z.string().describe("会话唯一标识符，后续所有操作均需传入"),
@@ -563,23 +605,34 @@ export const registerTools = (server: McpServer) => {
           .describe(
             "User Profile ID，代表当前用户环境。登录成功后应保留该值；后续 session_create 传入该值可复用登录态并打开同一用户环境中的新 tab。",
           ),
+        liveViewUrl: z.string().url().describe("在本机浏览器打开此地址，可实时旁观该 session 的页面和工具调用。"),
+        browserMode: z.enum(["cdp", "isolated"]).describe("浏览器连接模式：当前 Chrome CDP 或独立未登录浏览器。"),
+        browserProduct: z.string().describe("当前实际浏览器产品，例如 Google Chrome。"),
       },
     },
-    async (args) => ok(await createSession({ ...args, proxy: await resolveBrowserMcpSessionProxy(args.proxy) })),
+    async (args) => {
+      const proxy =
+        args.proxy ??
+        (resolveBrowserMcpConnectionConfig().mode === "isolated"
+          ? await resolveBrowserMcpSessionProxy(undefined)
+          : undefined)
+      const created = await createSession({ ...args, proxy })
+      return ok({ ...created, liveViewUrl: sessionLiveViewUrl(created.sessionId) })
+    },
   )
 
   server.registerTool(
     "session_destroy",
     {
       description:
-        "销毁浏览器 session（Page/tab）。如果它是 profile 下最后一个 session，默认同步销毁 profile，登录态也随之释放；如果后续还要用同一登录用户继续测试、分发给其他 sub-agent、或稍后打开新 tab，应传 preserveProfile，并明确指定保留时长。",
+        "销毁浏览器 session（Page/tab）。如果它是 profile 下最后一个 session，默认释放 MCP 持有的 profile：isolated 模式会销毁隔离环境及其登录态；当前 Chrome CDP 模式只关闭 MCP 创建的 tab，不会清除 Chrome 自身的登录态。后续仍需用同一 MCP profile 时，应传 preserveProfile 并明确指定保留时长。",
       inputSchema: {
         sessionId: z.string(),
         preserveProfile: z
           .enum(["30s", "30min", "2h", "1d"])
           .optional()
           .describe(
-            '保留当前 session 所属 profile 的明确时长，便于后续继续复用登录态。仅支持 "30s"、"30min"、"2h"、"1d"；仅在销毁最后一个 session 时生效。不传则最后一个 session 关闭时立即销毁 profile。',
+            '保留当前 session 所属 MCP profile handle 的明确时长，便于后续继续复用环境。仅支持 "30s"、"30min"、"2h"、"1d"；仅在销毁最后一个 session 时生效。不传则立即释放该 handle；Chrome CDP 模式下不会清除 Chrome 自身登录态。',
           ),
       },
       outputSchema: {
@@ -622,13 +675,19 @@ export const registerTools = (server: McpServer) => {
     url: z.string(),
     title: z.string(),
     active: z.boolean(),
+    liveViewUrl: z.string().url().optional(),
+  })
+
+  const tabWithLiveView = <T extends { sessionId: string }>(tab: T) => ({
+    ...tab,
+    liveViewUrl: sessionLiveViewUrl(tab.sessionId),
   })
 
   server.registerTool(
     "tabs",
     {
       description:
-        '管理当前 profile 下的浏览器 tab/page。action="list" 列出所有 tab；"new" 新建 tab 并可导航到 url；"select" 返回指定 index 的 sessionId，后续工具应使用该 sessionId；"close" 关闭当前或指定 index 的 tab。',
+        '管理当前 profile 下由 MCP 创建或采用的 tab/page；不会列出或操作用户原有的 Chrome tab。action="list" 按连续 index 列出 MCP tab；"new" 新建 tab 并可导航到 url；"select" 返回指定 index 的 sessionId，后续工具应使用该 sessionId；"close" 关闭当前或指定 index 的 MCP tab。',
       inputSchema: {
         sessionId: z.string(),
         action: z.enum(["list", "new", "select", "close"]),
@@ -644,7 +703,8 @@ export const registerTools = (server: McpServer) => {
       },
     },
     async ({ sessionId, action, index, url }) => {
-      if (action === "list") return ok({ ok: true, tabs: await listTabs(sessionId) })
+      if (action === "list")
+        return ok({ ok: true, tabs: (await listTabs(sessionId)).map((tab) => tabWithLiveView(tab)) })
       if (action === "new") {
         const tab = await createTab(sessionId)
         if (url) {
@@ -655,9 +715,9 @@ export const registerTools = (server: McpServer) => {
             BROWSER_MCP_DEFAULT_INACTIVITY_TIMEOUT_MS,
             () => created.page.goto(url, { waitUntil: "domcontentloaded", timeout: 0 }),
           )
-          return ok({ ok: true, tab: await getTabInfo(tab.sessionId, tab.sessionId) })
+          return ok({ ok: true, tab: tabWithLiveView(await getTabInfo(tab.sessionId, tab.sessionId)) })
         }
-        return ok({ ok: true, tab })
+        return ok({ ok: true, tab: tabWithLiveView(tab) })
       }
       if (action === "select") {
         if (index === undefined)
@@ -666,14 +726,19 @@ export const registerTools = (server: McpServer) => {
         return ok({
           ok: true,
           selectedSessionId,
-          tab: await getTabInfo(selectedSessionId, selectedSessionId),
-          tabs: await listTabs(selectedSessionId),
+          tab: tabWithLiveView(await getTabInfo(selectedSessionId, selectedSessionId)),
+          tabs: (await listTabs(selectedSessionId)).map((tab) => tabWithLiveView(tab)),
         })
       }
       const targetSessionId = index === undefined ? sessionId : getTabByIndex(sessionId, index)
       const closed = await getTabInfo(targetSessionId, sessionId)
       await destroySession(targetSessionId)
-      return ok({ ok: true, closed, tabs: targetSessionId === sessionId ? undefined : await listTabs(sessionId) })
+      return ok({
+        ok: true,
+        closed,
+        tabs:
+          targetSessionId === sessionId ? undefined : (await listTabs(sessionId)).map((tab) => tabWithLiveView(tab)),
+      })
     },
   )
 
@@ -804,7 +869,8 @@ export const registerTools = (server: McpServer) => {
   server.registerTool(
     "storage_state_export",
     {
-      description: "Export the current profile storageState JSON, including cookies and localStorage origins.",
+      description:
+        "Export cookies and localStorage from an MCP-owned isolated profile. Current Chrome CDP mode deliberately refuses export so the user's full signed-in Chrome credentials are not exposed; set OPENCORVUS_BROWSER_MODE=isolated when export is required.",
       inputSchema: { sessionId: z.string() },
       outputSchema: {
         sessionId: z.string(),
@@ -818,7 +884,8 @@ export const registerTools = (server: McpServer) => {
   server.registerTool(
     "storage_state_import",
     {
-      description: "Create a new session/profile from an explicit Playwright storageState JSON.",
+      description:
+        "Create a new isolated session/profile from an explicit Playwright storageState JSON. Requires OPENCORVUS_BROWSER_MODE=isolated; current Chrome CDP mode uses Chrome's existing signed-in state and does not support import.",
       inputSchema: {
         storageState: storageStateSchema,
         viewport: z.object({ width: z.number(), height: z.number() }).optional(),
@@ -830,9 +897,15 @@ export const registerTools = (server: McpServer) => {
       outputSchema: {
         sessionId: z.string(),
         profileId: z.string(),
+        liveViewUrl: z.string().url(),
+        browserMode: z.enum(["cdp", "isolated"]),
+        browserProduct: z.string(),
       },
     },
-    async (args) => ok(await createSession(args)),
+    async (args) => {
+      const created = await createSession(args)
+      return ok({ ...created, liveViewUrl: sessionLiveViewUrl(created.sessionId) })
+    },
   )
 
   server.registerTool(
@@ -1164,7 +1237,7 @@ export const registerTools = (server: McpServer) => {
       const { page } = session
       try {
         if (selector) {
-          const action = await detectOpenedPage(session, async () => page.locator(selector).click())
+          const action = await detectOpenedPage(session, async () => page.locator(selector).click(), sessionLiveViewUrl)
           return ok({
             ok: true,
             clicked: true,
@@ -1178,7 +1251,7 @@ export const registerTools = (server: McpServer) => {
           const guard = await runPointGuard(page, point, clickGuardProfile, force ?? false)
           if (guard.decision === "block") return guardBlocked("coord", point, guard)
           const info = await elementInfoAt(page, x, y).catch(() => null)
-          const action = await detectOpenedPage(session, async () => page.mouse.click(x, y))
+          const action = await detectOpenedPage(session, async () => page.mouse.click(x, y), sessionLiveViewUrl)
           return ok({
             ok: true,
             clicked: true,
@@ -1228,7 +1301,11 @@ export const registerTools = (server: McpServer) => {
       const { page } = session
       try {
         if (selector) {
-          const action = await detectOpenedPage(session, async () => page.locator(selector).dblclick())
+          const action = await detectOpenedPage(
+            session,
+            async () => page.locator(selector).dblclick(),
+            sessionLiveViewUrl,
+          )
           return ok({
             ok: true,
             clicked: true,
@@ -1241,7 +1318,7 @@ export const registerTools = (server: McpServer) => {
           await page.mouse.move(x, y)
           const guard = await runPointGuard(page, point, doubleClickGuardProfile, force ?? false)
           if (guard.decision === "block") return guardBlocked("coord", point, guard)
-          const action = await detectOpenedPage(session, async () => page.mouse.dblclick(x, y))
+          const action = await detectOpenedPage(session, async () => page.mouse.dblclick(x, y), sessionLiveViewUrl)
           return ok({
             ok: true,
             clicked: true,
@@ -1855,8 +1932,8 @@ export const registerTools = (server: McpServer) => {
   )
 }
 
-export const createMcpServer = () => {
+export const createMcpServer = (options: BrowserMcpToolOptions) => {
   const server = new McpServer({ name: "browser", version: "0.1.0" })
-  registerTools(server)
+  registerTools(server, options)
   return server
 }

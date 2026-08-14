@@ -72,7 +72,8 @@ jobs:
 
       - name: Install Windows runtime dependencies
         if: runner.os == 'Windows'
-        run: choco install ripgrep --yes --no-progress
+        shell: pwsh
+        run: ./script/install-windows-ripgrep.ps1
 
       - uses: dtolnay/rust-toolchain@stable
 

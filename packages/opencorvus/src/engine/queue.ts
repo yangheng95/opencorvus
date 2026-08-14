@@ -39,6 +39,7 @@ import {
 import { createInstanceState } from "@/project/instance-state"
 import { requireTaskWakeRuntime } from "@/scheduler/task-wake-runtime"
 import { SessionPromptState } from "@/session/prompt/state"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { TaskQueueError, taskRootDirectory } from "./task-directory"
 import { isAgentInvocationSession, listTaskConversationAgentSessions } from "@/orchestrator/task-event"
@@ -64,7 +65,7 @@ import {
   listDispatchLineage,
   resolveDispatchOccurrenceAuthority,
 } from "./dispatch-lineage"
-import { findDispatchSettlementByDispatchID, recordDispatchSettlement } from "./dispatch-settlement"
+import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "./dispatch-settlement"
 import {
   RuntimeExecutionAdmissionClosedError,
   RuntimeExecutionSettlement,
@@ -1133,7 +1134,7 @@ function reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string)
   ) {
     return false
   }
-  const controlMessageID = `msg_orchestrator_control_${wakeID}`
+  const controlMessageID = orchestratorControlOccurrenceIdentity(wakeID).messageID
   const control = Database.use((db) =>
     db
       .select({ sessionID: MessageTable.session_id })
@@ -1613,11 +1614,11 @@ async function assistantMessagesForWakeSettlement(input: {
   }
   if (
     ["agent_lifecycle_delivery", "dispatch_infrastructure_failure"].includes(wake.ingress.source_kind) &&
-    row.parentID !== `msg_orchestrator_control_${input.wakeID}`
+    row.parentID !== orchestratorControlOccurrenceIdentity(input.wakeID).messageID
   ) {
     throw new QueuedWakeSettlementError(
       `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} parent ${row.parentID} ` +
-        `does not match exact control Message msg_orchestrator_control_${input.wakeID}`,
+        `does not match exact control Message ${orchestratorControlOccurrenceIdentity(input.wakeID).messageID}`,
     )
   }
   const messageIDs = Database.use((db) =>
@@ -1818,22 +1819,40 @@ function attachLoopCompletion(taskID: string, wakeID: string, cwd: string, launc
   let completionHook: Promise<void>
   try {
     const loopPromise = launch()
-    completionHook = Database.runOutsideContext(() =>
+    const settlementHook = Database.runOutsideContext(() =>
       runOutsideInstanceContext(() =>
         loopPromise.then(
           async () => {
             // Yield once so same-Session FIFO re-entry does not stack
             // synchronously while the completion remains observable.
             await Promise.resolve()
-            await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
+            return await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
           },
           async () => {
             await Promise.resolve()
-            await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
+            return await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
           },
         ),
       ),
     )
+    completionHook = settlementHook.then(async (disposition) => {
+      if (disposition !== "exact_ingress_retry_attached" && disposition !== "same_task_wake_pending") return
+      // The retry is durably pending, but it could not acquire physical
+      // ownership while this exact wake's previous completion was still in
+      // taskLoopCompletionOperations. This includes a retry admitted by a
+      // concurrent publisher before completion reconciliation observes the
+      // failed row. Release that owner before draining the accepted retry so
+      // its next attempt receives a fresh completion hook.
+      if (taskLoopCompletionOperations.get(completionKey) === completionHook) {
+        taskLoopCompletionOperations.delete(completionKey)
+      }
+      await runWithInitializedIndependentProject({
+        directory: cwd,
+        fn: async () => {
+          if (hasQueuedTaskEvent(taskID)) await drainQueuedTaskEvent(taskID)
+        },
+      })
+    })
   } catch (error) {
     authority.settle()
     throw error
@@ -1923,19 +1942,18 @@ async function settleTaskLoopCompletion(input: {
   wakeID: string
   cwd: string
   authority: RuntimeExecutionReservation
-}): Promise<void> {
+}): Promise<TaskLoopCompletionDisposition> {
   let attempt = 0
   for (;;) {
     attempt += 1
     try {
-      if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return
-      await runTaskLoopCompletionAttempt(input)
-      return
+      if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return "runtime_handoff"
+      return await runTaskLoopCompletionAttempt(input)
     } catch (cause) {
       let error = Database.normalizeError(cause, "engine.queue.loopCompletion")
       if (input.authority.signal.aborted) {
         try {
-          if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return
+          if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return "runtime_handoff"
         } catch (handoffCause) {
           const handoffError = Database.normalizeError(handoffCause, "engine.queue.loopCompletionHandoff")
           error = new AggregateError(
@@ -3221,7 +3239,7 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
         .get(),
     )
     if (!finalMessage) return "nonterminal"
-    recordDispatchSettlement({
+    settleDispatchOrReturnExisting({
       taskID: input.taskID,
       dispatchID: input.dispatchID,
       outcome: DispatchOutcome.partial({

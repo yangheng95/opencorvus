@@ -104,9 +104,20 @@ function storageDir(projectDir: string): string {
 const log = Log.create({ service: "attachment-store" })
 const publicationLocks = new Map<string, Promise<unknown>>()
 const authorityLocks = new Map<string, Promise<unknown>>()
+const AUTHORITY_LOCK_WAIT_MS = 30_000
+const AUTHORITY_LOCK_RETRY_MS = 25
 
 async function withAuthorityFileLock<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
-  const release = await lockfile.lock(filePath, { realpath: false })
+  const release = await lockfile.lock(filePath, {
+    realpath: false,
+    retries: {
+      retries: Math.ceil(AUTHORITY_LOCK_WAIT_MS / AUTHORITY_LOCK_RETRY_MS),
+      factor: 1,
+      minTimeout: AUTHORITY_LOCK_RETRY_MS,
+      maxTimeout: AUTHORITY_LOCK_RETRY_MS,
+      randomize: false,
+    },
+  })
   try {
     return await operation()
   } finally {
@@ -621,7 +632,12 @@ export namespace AttachmentStore {
     return { reference, bytes }
   }
 
-  export async function requireReference(input: { projectID: string; url: string; mime?: string; maxBytes?: number }): Promise<Reference> {
+  export async function requireReference(input: {
+    projectID: string
+    url: string
+    mime?: string
+    maxBytes?: number
+  }): Promise<Reference> {
     return (await readVerifiedReference(input)).reference
   }
 

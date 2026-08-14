@@ -18,7 +18,11 @@ import {
   type ProtocolAggregate,
 } from "./schema"
 import { ProtocolStore } from "./store"
-import { requireMissionExecutionClosureEvent } from "@/mission/execution-closure"
+import { currentMissionExecutionClosure, requireMissionExecutionClosureEvent } from "@/mission/execution-closure"
+import {
+  schedulerWakeMessageMatchesInTransaction,
+  successfulSchedulerWakeReplyExistsInTransaction,
+} from "./session-wake-state"
 
 const SCHEDULER_MESSAGE_EVENT_TYPE = "scheduler.message"
 const ENDPOINT_PREFIX = "scheduler-endpoint:"
@@ -590,54 +594,50 @@ function requireDeliveryResultOccurrence(
   result: z.infer<typeof ProtocolInboxDeliveryResult>,
 ) {
   if (result.kind === "dead_letter") return
-  if (result.kind === "mission_closed" || result.kind === "mission_wake_closed") {
+  if (result.kind === "mission_closed") {
     const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
+    const currentClosure = currentMissionExecutionClosure(inbox.actor_id)
     if (
       inbox.actor !== "session" ||
       closure.sessionID !== inbox.actor_id ||
-      (closure.state !== "closing" && closure.state !== "closed")
+      (closure.state !== "closing" && closure.state !== "closed") ||
+      currentClosure?.operationID !== closure.operationID
     ) {
       throw new SchedulerMessageConflictError({
         message: `Scheduler inbox ${inbox.id} mission_closed result does not name an active closure for its recipient Mission Session.`,
         eventID: inbox.envelope_id,
       })
     }
+    return
+  }
+  if (result.kind === "session_wake" || result.kind === "mission_wake_closed") {
+    if (
+      inbox.actor !== "session" ||
+      !schedulerWakeMessageMatchesInTransaction(db, {
+        sessionID: inbox.actor_id,
+        messageID: result.message_id,
+        eventID: inbox.envelope_id,
+        inboxID: inbox.id,
+      })
+    ) {
+      throw new SchedulerMessageConflictError({
+        message: `Scheduler inbox ${inbox.id} ${result.kind} result does not name its exact Message occurrence in the recipient Session.`,
+        eventID: inbox.envelope_id,
+      })
+    }
     if (result.kind === "mission_wake_closed") {
-      const previous = ProtocolInboxDeliveryResult.safeParse(inbox.delivery_result)
+      const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
+      const currentClosure = currentMissionExecutionClosure(inbox.actor_id)
       if (
-        !previous.success ||
-        previous.data.kind !== "session_wake" ||
-        previous.data.message_id !== result.message_id
+        closure.sessionID !== inbox.actor_id ||
+        (closure.state !== "closing" && closure.state !== "closed") ||
+        currentClosure?.operationID !== closure.operationID
       ) {
         throw new SchedulerMessageConflictError({
-          message: `Scheduler inbox ${inbox.id} mission_wake_closed result does not preserve its exact delivered Mission wake Message.`,
+          message: `Scheduler inbox ${inbox.id} mission_wake_closed result does not name an active closure for its recipient Mission Session.`,
           eventID: inbox.envelope_id,
         })
       }
-    }
-    return
-  }
-  if (result.kind === "session_wake") {
-    const message = db
-      .select({ id: MessageTable.id, data: MessageTable.data })
-      .from(MessageTable)
-      .where(and(eq(MessageTable.id, result.message_id), eq(MessageTable.session_id, inbox.actor_id)))
-      .get()
-    const messageData = message?.data as
-      | { extra?: { wake_reason?: { source?: string; eventID?: string; inboxID?: string } } }
-      | undefined
-    const reason = messageData?.extra?.wake_reason
-    if (
-      inbox.actor !== "session" ||
-      !message ||
-      reason?.source !== "scheduler.message" ||
-      reason.eventID !== inbox.envelope_id ||
-      reason.inboxID !== inbox.id
-    ) {
-      throw new SchedulerMessageConflictError({
-        message: `Scheduler inbox ${inbox.id} session_wake result does not name its exact Message occurrence in the recipient Session.`,
-        eventID: inbox.envelope_id,
-      })
     }
     return
   }
@@ -1002,38 +1002,6 @@ export function settleSchedulerDeliveryInTransaction(
     .get()
   if (!updated) throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
   return parseDeliveryRow(updated)
-}
-
-export function settleUnansweredSchedulerMissionWakeForClosure(input: {
-  inboxID: string
-  messageID: string
-  closureEventID: string
-  now?: number
-}) {
-  const now = input.now ?? Date.now()
-  return Database.immediateTransaction((db) => {
-    const current = db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, input.inboxID)).get()
-    if (!current) throw new Error(`Scheduler delivery not found: ${input.inboxID}`)
-    const result = ProtocolInboxDeliveryResult.parse({
-      kind: "mission_wake_closed",
-      message_id: input.messageID,
-      closure_event_id: input.closureEventID,
-    })
-    requireDeliveryResultOccurrence(db, current, result)
-    const updated = db
-      .update(ProtocolInboxTable)
-      .set({
-        delivery_result: result,
-        time_completed: now,
-        last_error: null,
-        time_updated: now,
-      })
-      .where(and(eq(ProtocolInboxTable.id, input.inboxID), eq(ProtocolInboxTable.status, "delivered")))
-      .returning()
-      .get()
-    if (!updated) throw new Error(`Scheduler Mission wake ${input.inboxID} is not delivered`)
-    return parseDeliveryRow(updated)
-  })
 }
 
 export function renewSchedulerDeliveryLease(input: {
@@ -1418,6 +1386,48 @@ export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
           : []
       }),
   )
+}
+
+export function schedulerSessionWakeNeedsRecovery(input: {
+  inboxID: string
+  sessionID: string
+  messageID: string
+}): boolean {
+  return Database.use((db) => {
+    const row = db
+      .select({
+        actor: ProtocolInboxTable.actor,
+        actorID: ProtocolInboxTable.actor_id,
+        status: ProtocolInboxTable.status,
+        eventID: ProtocolInboxTable.envelope_id,
+        deliveryResult: ProtocolInboxTable.delivery_result,
+      })
+      .from(ProtocolInboxTable)
+      .where(eq(ProtocolInboxTable.id, input.inboxID))
+      .get()
+    if (!row || row.actor !== "session" || row.actorID !== input.sessionID || row.status !== "delivered") return false
+    const result = row.deliveryResult ? ProtocolInboxDeliveryResult.safeParse(row.deliveryResult) : undefined
+    if (!result?.success || result.data.kind !== "session_wake" || result.data.message_id !== input.messageID) {
+      return false
+    }
+    if (
+      !schedulerWakeMessageMatchesInTransaction(db, {
+        sessionID: input.sessionID,
+        messageID: input.messageID,
+        eventID: row.eventID,
+        inboxID: input.inboxID,
+      })
+    ) {
+      throw new SchedulerMessageConflictError({
+        message: `Scheduler inbox ${input.inboxID} recovery does not name its exact Message occurrence.`,
+        eventID: row.eventID,
+      })
+    }
+    return !successfulSchedulerWakeReplyExistsInTransaction(db, {
+      sessionID: input.sessionID,
+      messageID: input.messageID,
+    })
+  })
 }
 
 export const SchedulerMessageProtocol = {

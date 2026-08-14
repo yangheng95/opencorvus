@@ -323,7 +323,7 @@ describe("Commercial Legal Expert Squad", () => {
           priority: "normal",
           metadata: {
             actor: "mission",
-            mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") },
+            mission: { id: `mission-${Identifier.uuid4First8()}`, session_id: Identifier.ascending("session") },
           },
           projectID: Instance.project.id,
           packageRevision: {

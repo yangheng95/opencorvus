@@ -1,4 +1,7 @@
 import { describe, expect, test } from "bun:test"
+import { mkdtemp, rm } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import { ChannelRuntime } from "../src/core"
 import type { ChannelAdapter, MessageHandler } from "../src/adapter"
 import type { AudioSource, STTResult } from "../src/stt/types"
@@ -23,42 +26,54 @@ class FakeAdapter implements ChannelAdapter {
   }
 }
 
-function audio(reads: { count: number }): AudioSource {
+function audio(): AudioSource {
   return {
     mime: "audio/ogg",
     size: 12,
     async read() {
-      reads.count += 1
       return Buffer.alloc(12)
     },
   }
 }
 
+async function startedRuntime(adapter: FakeAdapter): Promise<{ runtime: ChannelRuntime; directory: string }> {
+  const directory = await mkdtemp(join(tmpdir(), "opencorvus-channel-stt-"))
+  const runtime = new ChannelRuntime({ baseUrl: "http://127.0.0.1:1", directory })
+  runtime.register(adapter)
+  await runtime.start()
+  return { runtime, directory }
+}
+
 describe("channel runtime STT handling", () => {
-  test("does not read audio when STT is disabled", async () => {
+  test("returns the configured-provider notice for an unsupported voice message", async () => {
     const adapter = new FakeAdapter()
-    const runtime = new ChannelRuntime()
-    const reads = { count: 0 }
-    runtime.register(adapter)
+    const { runtime, directory } = await startedRuntime(adapter)
+    try {
+      await adapter.handler!({
+        platform: "fake",
+        channel: "C1",
+        thread: "T1",
+        user: "U1",
+        text: "",
+        audio: audio(),
+      })
 
-    await runtime.handleMessage({
-      platform: "fake",
-      channel: "C1",
-      thread: "T1",
-      user: "U1",
-      text: "",
-      audio: audio(reads),
-    })
-
-    expect(reads.count).toBe(0)
-    expect(adapter.sent).toHaveLength(1)
-    expect(adapter.sent[0].text).toContain("no STT provider configured")
+      expect(adapter.sent).toEqual([
+        {
+          channel: "C1",
+          thread: "T1",
+          text: "Voice messages are not supported (no STT provider configured).",
+        },
+      ])
+    } finally {
+      await runtime.stop()
+      await rm(directory, { recursive: true, force: true })
+    }
   })
 
-  test("does not submit text-only fallback after STT failure", async () => {
+  test("returns the transcription error notice when voice decoding fails", async () => {
     const adapter = new FakeAdapter()
-    const runtime = new ChannelRuntime()
-    runtime.register(adapter)
+    const { runtime, directory } = await startedRuntime(adapter)
     runtime.setSTT({
       isAvailable: true,
       transcribe: async (): Promise<STTResult> => {
@@ -66,16 +81,26 @@ describe("channel runtime STT handling", () => {
       },
     } as any)
 
-    await runtime.handleMessage({
-      platform: "fake",
-      channel: "C1",
-      thread: "T1",
-      user: "U1",
-      text: "typed fallback",
-      audio: audio({ count: 0 }),
-    })
+    try {
+      await adapter.handler!({
+        platform: "fake",
+        channel: "C1",
+        thread: "T1",
+        user: "U1",
+        text: "typed fallback",
+        audio: audio(),
+      })
 
-    expect(adapter.sent).toHaveLength(1)
-    expect(adapter.sent[0].text).toContain("Failed to transcribe voice message")
+      expect(adapter.sent).toEqual([
+        {
+          channel: "C1",
+          thread: "T1",
+          text: "Failed to transcribe voice message: Error: audio too large",
+        },
+      ])
+    } finally {
+      await runtime.stop()
+      await rm(directory, { recursive: true, force: true })
+    }
   })
 })

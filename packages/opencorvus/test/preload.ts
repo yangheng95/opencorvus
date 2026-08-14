@@ -54,7 +54,12 @@ export function registerTestRuntimeCleanup(): void {
       }
       try {
         if (!isolatedRuntime) throw new Error("Test preload isolated runtime is missing")
-        await removeIsolatedTestRuntime(isolatedRuntime)
+        // An inherited test process cannot prove that Windows has released
+        // every handle it owns until that process exits. Its outer runner is
+        // the sole physical owner of ownerRoot and removes the exact subtree
+        // after every child has exited; standalone test processes still own
+        // and remove their root here.
+        if (isolatedRuntime.ownsOwnerRoot) await removeIsolatedTestRuntime(isolatedRuntime)
       } catch (error) {
         failures.push(error)
       }

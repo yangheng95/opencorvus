@@ -37,6 +37,7 @@ import {
   type DispatchAdapterExecutors,
 } from "@/orchestrator/dispatch-agent-tool"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { Instance } from "@/project/instance"
 import {
   runWithIndependentProjectIdentity,
@@ -499,7 +500,7 @@ async function verifyDetachedDispatchLifecycle(input: {
             title: "Managed lifecycle root delivery",
           })
           const now = Date.now()
-          const controlMessageID = `msg_orchestrator_control_${loopInput.wakeID}`
+          const controlMessageID = orchestratorControlOccurrenceIdentity(loopInput.wakeID).messageID
           await Session.persistMessage({
             info: {
               id: controlMessageID,
@@ -874,11 +875,13 @@ async function verifyDetachedDispatchLifecycle(input: {
                   .where(
                     and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
                   )
-                  .get(),
-              )!
+                  .all(),
+              )
+                .map((wake) => ({ ...wake, ingress: QueuedTaskIngressSchema.parse(wake.payload) }))
+                .find((wake) => wake.ingress.infrastructure_fact_id === typedError.infrastructureArtifactID)!
               expect({
                 label: recovered.label,
-                ingress: QueuedTaskIngressSchema.parse(recovered.payload),
+                ingress: recovered.ingress,
               }).toMatchObject({
                 label: "drained",
                 ingress: { delivery_attempt: 3, delivery_runtime_id: "successor-runtime", delivery_runtime_attempt: 1 },
@@ -1245,7 +1248,7 @@ test(
 
 test("startup reconstructs and delivers an accepted infrastructure fact for a terminal Task", async () => {
   await using project = await memoryProject()
-  await Instance.provide({
+  const recovery = await Instance.provide({
     directory: project.path,
     fn: async () => {
       const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -1326,31 +1329,46 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
         "Terminalized after the accepted dispatch infrastructure fact",
       )
       expect(await reconcileUndeliveredDispatchInfrastructureFacts()).toBe(1)
-      await waitForQueueCompletionHooksForTest()
+      return { taskID, infrastructureFactID, dispatchID, lineageArtifactID: lineage.artifactID }
+    },
+  })
+  // The recovered delivery owns a fresh initialized project lease. Release
+  // the setup lease before joining its physical queue completion.
+  await waitForQueueCompletionHooksForTest()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
       const exactWake = Database.use((db) =>
         db
           .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
           .from(EngineArtifactTable)
-          .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
-          .get(),
-      )!
-      expect({ label: exactWake.label, ingress: QueuedTaskIngressSchema.parse(exactWake.payload) }).toMatchObject({
+          .where(
+            and(
+              eq(EngineArtifactTable.task_id, recovery.taskID),
+              eq(EngineArtifactTable.kind, "queued_operator_wake"),
+            ),
+          )
+          .all(),
+      )
+        .map((wake) => ({ ...wake, ingress: QueuedTaskIngressSchema.parse(wake.payload) }))
+        .find((wake) => wake.ingress.infrastructure_fact_id === recovery.infrastructureFactID)!
+      expect({ label: exactWake.label, ingress: exactWake.ingress }).toMatchObject({
         label: "drained",
         ingress: {
           source_kind: "dispatch_infrastructure_failure",
-          infrastructure_fact_id: infrastructureFactID,
+          infrastructure_fact_id: recovery.infrastructureFactID,
           delivery_result: {
             status: "terminal_inapplicable",
             reason: "dispatch_infrastructure_failure carries no terminal conversation authority",
           },
           event: {
             dispatchInfrastructureFailure: {
-              infrastructureFactID,
+              infrastructureFactID: recovery.infrastructureFactID,
               outcome: {
                 recovery_authority: {
                   occurrence_status: "occurrence_committed",
-                  dispatch_lineage_id: lineage.artifactID,
-                  dispatch_id: dispatchID,
+                  dispatch_lineage_id: recovery.lineageArtifactID,
+                  dispatch_id: recovery.dispatchID,
                 },
               },
             },

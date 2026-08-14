@@ -63,6 +63,7 @@ import {
   currentMissionExecutionClosure,
   MissionExecutionClosingError,
   openMissionExecution,
+  openMissionExecutionWithWake,
 } from "@/mission/execution-closure"
 
 afterEach(resetMemoryDatabase)
@@ -2873,6 +2874,380 @@ describe("durable scheduler.message delivery", () => {
         expect({ opened, current: currentMissionExecutionClosure(mission.id) }).toEqual({
           opened: expect.objectContaining({ missionID, sessionID: mission.id, state: "opened" }),
           current: opened,
+        })
+      },
+    })
+  })
+
+  test("holds scheduler materialization and recovery admission through exact wake activation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-scheduler-activation-gate"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Scheduler activation gate Mission",
+          metadata: {
+            mission: missionLaunchMetadata(missionID, project.path),
+            configOverlay: { model: "openai/gpt-5.6-sol" },
+          },
+        })
+        await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "scheduler-activation-open",
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Scheduler activation source" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Scheduler activation source",
+              request: "Prove materialization and recovery activation admission",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const sourceMessageID = "msg_scheduler_activation_source"
+        const sourcePartID = "prt_scheduler_activation_source"
+        persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, "Activation-gated scheduler wake")
+        const queued = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "scheduler-activation-gate",
+            kind: "notification",
+            source: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: taskRoot.id,
+            },
+            target: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            subject: "Activation gate",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        const events: string[] = []
+        const activationEntered: Array<Promise<void>> = []
+        const markEntered: Array<() => void> = []
+        const activationRelease: Array<Promise<void>> = []
+        const releaseActivation: Array<() => void> = []
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          activationEntered.push(new Promise<void>((resolve) => markEntered.push(resolve)))
+          activationRelease.push(new Promise<void>((resolve) => releaseActivation.push(resolve)))
+        }
+        let activationAttempt = 0
+        using _activation = SessionWake.TestHooks.installBeforeWakeLoopActivation(async () => {
+          const attempt = activationAttempt
+          activationAttempt += 1
+          events.push(attempt === 0 ? "materialization_waiting" : "recovery_waiting")
+          markEntered[attempt]!()
+          await activationRelease[attempt]
+          events.push(attempt === 0 ? "materialization_activated" : "recovery_activated")
+        })
+        let loopAttempt = 0
+        using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async () => {
+          loopAttempt += 1
+          events.push(`wake_loop_${loopAttempt}`)
+          if (loopAttempt === 1) throw new Error("injected first scheduler reply interruption")
+        })
+
+        const materialization = drainSchedulerMessagesForCurrentProject()
+        await activationEntered[0]
+        releaseActivation[0]!()
+        await materialization
+        expect(requireSchedulerDelivery(queued.inboxID)).toMatchObject({
+          status: "delivered",
+          deliveryResult: { kind: "session_wake" },
+        })
+
+        const recovery = drainSchedulerMessagesForCurrentProject()
+        await activationEntered[1]
+        let closingEventID = ""
+        const closing = closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "scheduler-activation-close",
+          close: async () => {
+            const current = currentMissionExecutionClosure(mission.id)!
+            closingEventID = current.eventID
+            events.push(`close_${current.state}`)
+          },
+        })
+        releaseActivation[1]!()
+        const [, closure] = await Promise.all([recovery, closing])
+        expect({ events, delivery: requireSchedulerDelivery(queued.inboxID), closure }).toMatchObject({
+          events: [
+            "materialization_waiting",
+            "materialization_activated",
+            "wake_loop_1",
+            "recovery_waiting",
+            "recovery_activated",
+            "wake_loop_2",
+            "close_closing",
+          ],
+          delivery: {
+            status: "delivered",
+            deliveryResult: {
+              kind: "mission_wake_closed",
+              closure_event_id: closingEventID,
+            },
+          },
+          closure: { eventID: closure.eventID, missionID, sessionID: mission.id, state: "closed" },
+        })
+      },
+    })
+  })
+
+  test("publishes physical wake activation before concurrent Mission close enters closing", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-wake-activation-handoff"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Wake activation handoff Mission",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const events: string[] = []
+        let markActivationWaiting!: () => void
+        let releaseActivation!: () => void
+        const executionOwner = new AbortController().signal
+        const activationWaiting = new Promise<void>((resolve) => {
+          markActivationWaiting = resolve
+        })
+        const activationGate = new Promise<void>((resolve) => {
+          releaseActivation = resolve
+        })
+        const admitted = openMissionExecutionWithWake({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "request-wake-activation-handoff",
+          wake: async () => {
+            events.push("wake_prepared")
+            markActivationWaiting()
+            return {
+              activation: activationGate.then(() => {
+                events.push("prompt_owner_published")
+                return { owner: executionOwner }
+              }),
+              completion: Promise.resolve({ ok: true as const }),
+            }
+          },
+        })
+        await activationWaiting
+        const closing = closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-close-after-activation",
+          close: async () => {
+            events.push(`close_${currentMissionExecutionClosure(mission.id)?.state}`)
+          },
+        })
+        releaseActivation()
+        const receipt = await admitted
+        const [activation, closed] = await Promise.all([receipt.activation, closing])
+        expect({
+          events,
+          activationOwner: activation.owner,
+          closed,
+          completion: await receipt.completion,
+        }).toEqual({
+          events: ["wake_prepared", "prompt_owner_published", "close_closing"],
+          activationOwner: executionOwner,
+          closed: expect.objectContaining({ missionID, sessionID: mission.id, state: "closed" }),
+          completion: { ok: true },
+        })
+      },
+    })
+  })
+
+  test("reports a pre-activation wake failure through activation and completion receipts", async () => {
+    const failure = new Error("injected prompt-owner activation failure")
+    using _activation = SessionWake.TestHooks.installBeforeWakeLoopActivation(() => {
+      throw failure
+    })
+    using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+    const receipt = SessionWake.resumePersistedWakeWithReceipt({
+      sessionID: Identifier.ascending("session"),
+      messageID: Identifier.ascending("message"),
+      directory: process.cwd(),
+    })
+    const activation = receipt.activation.then(
+      () => ({ status: "activated" as const }),
+      (error) => ({ status: "failed" as const, error }),
+    )
+    expect({ activation: await activation, completion: await receipt.completion }).toEqual({
+      activation: { status: "failed", error: failure },
+      completion: { ok: false, error: failure.message },
+    })
+  })
+
+  test("atomically closes materialized unanswered Mission wakes before physical cancellation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-materialized-wake-close"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Materialized wake close Mission",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Materialized wake source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "work",
+              title: "Close materialized Mission wakes",
+              request: "Verify closure settlement",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const source = {
+          kind: "task_scheduler" as const,
+          project_id: Instance.project.id,
+          task_id: taskID,
+          root_session_id: taskRoot.id,
+        }
+        const target = {
+          kind: "mission_scheduler" as const,
+          project_id: Instance.project.id,
+          mission_id: missionID,
+          session_id: mission.id,
+        }
+        const materialize = async (suffix: string, answered: boolean) => {
+          const sourceMessageID = `msg_close_source_${suffix}`
+          const sourcePartID = `prt_close_source_${suffix}`
+          persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, `Closure message ${suffix}`)
+          const delivery = Database.transaction((db) =>
+            enqueueSchedulerMessageInTransaction(db, {
+              invocationID: `closure-message-${suffix}`,
+              kind: "notification",
+              source,
+              target,
+              subject: `Closure ${suffix}`,
+              sourceMessageID,
+              sourcePartID,
+            }),
+          )
+          const ownerID = `closure-owner-${suffix}`
+          expect(
+            claimNextSchedulerDelivery({
+              actor: "session",
+              actorID: mission.id,
+              ownerID,
+              leaseMilliseconds: 60_000,
+            })?.id,
+          ).toBe(delivery.inboxID)
+          const occurrence = schedulerTargetOccurrenceIdentity(delivery.inboxID)
+          Database.transaction((db) => {
+            db.insert(MessageTable)
+              .values({
+                id: occurrence.messageID,
+                session_id: mission.id,
+                data: {
+                  role: "user",
+                  author: "orchestrator",
+                  extra: {
+                    wake_reason: {
+                      source: "scheduler.message",
+                      eventID: delivery.eventID,
+                      inboxID: delivery.inboxID,
+                    },
+                  },
+                } as never,
+                time_created: Date.now(),
+                time_updated: Date.now(),
+              })
+              .run()
+            settleSchedulerDeliveryInTransaction(db, {
+              inboxID: delivery.inboxID,
+              ownerID,
+              result: { kind: "session_wake", message_id: occurrence.messageID },
+            })
+          })
+          if (answered) {
+            await Session.updateMessage({
+              id: Identifier.ascending("message"),
+              sessionID: mission.id,
+              role: "assistant",
+              author: "mission",
+              parentID: occurrence.messageID,
+              time: { created: Date.now(), completed: Date.now() },
+              agent: "mission",
+              providerID: "test",
+              modelID: "test-model",
+              path: { cwd: project.path, root: project.path },
+              cost: 0,
+              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+              finish: "stop",
+            })
+          }
+          return { ...delivery, messageID: occurrence.messageID }
+        }
+
+        const answered = await materialize("answered", true)
+        const unanswered = await materialize("unanswered", false)
+        let callbackObserved = false
+        const closed = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-materialized-wake-close",
+          close: async () => {
+            callbackObserved = true
+            const closing = currentMissionExecutionClosure(mission.id)!
+            expect(closing.state).toBe("closing")
+            expect(requireSchedulerDelivery(answered.inboxID)).toMatchObject({
+              status: "delivered",
+              deliveryResult: { kind: "session_wake", message_id: answered.messageID },
+            })
+            expect(requireSchedulerDelivery(unanswered.inboxID)).toMatchObject({
+              status: "delivered",
+              deliveryResult: {
+                kind: "mission_wake_closed",
+                message_id: unanswered.messageID,
+                closure_event_id: closing.eventID,
+              },
+            })
+          },
+        })
+        expect({ callbackObserved, closed }).toEqual({
+          callbackObserved: true,
+          closed: expect.objectContaining({ missionID, sessionID: mission.id, state: "closed" }),
         })
       },
     })

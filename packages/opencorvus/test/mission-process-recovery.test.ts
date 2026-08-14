@@ -1,12 +1,23 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { Identifier } from "@/id/id"
 import { recoverMissionProcessSession } from "@/mission/process-recovery"
-import { ensureMissionSession, listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
+import {
+  ensureMissionSession,
+  listGlobalMissionProcessRecoveryCandidates,
+  listMissionSessions,
+} from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { SessionControl } from "@/session/control"
-import type { SessionWake } from "@/session/wake"
+import { SessionWake } from "@/session/wake"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { closeMissionExecutionOperation, currentMissionExecutionClosure } from "@/mission/execution-closure"
+import { Database, eq } from "@/storage/db"
+import { SessionControlRecordTable } from "@/session/session.sql"
+import { createRightSidebarConversationSession } from "@/chat/session"
+import { Question } from "@/question"
+import { PanelTool, PanelToolTestHooks } from "@/tool/panel"
+import { Tool } from "@/tool/tool"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -14,6 +25,247 @@ afterEach(async () => {
 })
 
 describe("standalone Mission process recovery", () => {
+  const activation = () => Promise.resolve({ owner: new AbortController().signal })
+
+  test("holds panel Mission handoff admission until its exact wake activation is published", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const createdCaller = await createRightSidebarConversationSession("work")
+        const caller = await Session.mergeMetadata({
+          sessionID: createdCaller.id,
+          patch: { configOverlay: { model: "test/panel-mission-activation" } },
+        })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: caller.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "work",
+          model: { providerID: "test", modelID: "panel-mission-activation" },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: caller.id,
+          role: "assistant",
+          author: "work",
+          parentID: user.id,
+          time: { created: now + 1 },
+          agent: "work",
+          providerID: "test",
+          modelID: "panel-mission-activation",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const question = spyOn(Question, "askAndFormat").mockResolvedValue({
+          status: "answered",
+          output: "User answered yes",
+          answers: [["yes"]],
+        })
+        const events: string[] = []
+        let markActivationWaiting!: () => void
+        let releaseActivation!: () => void
+        const activationWaiting = new Promise<void>((resolve) => (markActivationWaiting = resolve))
+        const activationGate = new Promise<void>((resolve) => (releaseActivation = resolve))
+        using _wake = PanelToolTestHooks.installMissionWakeExecutor(async (input) => {
+          events.push("panel_wake_waiting")
+          markActivationWaiting()
+          return {
+            sessionID: input.sessionID!,
+            messageID: Identifier.ascending("message"),
+            activation: activationGate.then(() => {
+              events.push("panel_wake_activated")
+              return { owner: new AbortController().signal }
+            }),
+            completion: Promise.resolve({ ok: true as const }),
+          }
+        })
+        try {
+          const panel = await PanelTool.init({ agentID: "work" })
+          const execution = panel.execute(
+            {
+              action: "wake_mission",
+              request: "Run a durable activation-fenced Mission",
+              reason: "This request needs a durable Mission. Continue?",
+            },
+            {
+              sessionID: caller.id,
+              messageID: assistant.id,
+              callID: "call_panel_mission_activation",
+              agent: "work",
+              abort: new AbortController().signal,
+              messages: [],
+              executionSurface: Tool.executionSurface(["panel"], []),
+              extra: { surface: "right-sidebar" },
+              metadata() {},
+            },
+          )
+          await activationWaiting
+          const missions = []
+          for await (const mission of listMissionSessions()) missions.push(mission)
+          const mission = missions[0]
+          if (!mission) throw new Error("Panel Mission activation fixture did not create its Mission")
+          const closing = closeMissionExecutionOperation({
+            missionID: mission.missionID,
+            sessionID: mission.id,
+            source: "mission.abort",
+            requestID: "panel-mission-activation-close",
+            close: async () => {
+              events.push(`close_${currentMissionExecutionClosure(mission.id)?.state}`)
+            },
+          })
+          releaseActivation()
+          const [result, closure] = await Promise.all([execution, closing])
+          expect({ result: JSON.parse(result.output), events, closure }).toMatchObject({
+            result: { kind: "mission_wake", mission_id: mission.missionID, session_id: mission.id },
+            events: ["panel_wake_waiting", "panel_wake_activated", "close_closing"],
+            closure: { missionID: mission.missionID, sessionID: mission.id, state: "closed" },
+          })
+        } finally {
+          question.mockRestore()
+        }
+      },
+    })
+  }, 30_000)
+
+  test("settles a pending recovery occurrence against the active Mission closing event", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "process-recovery-closure"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "operator",
+          time: { created: now },
+          agent: "mission",
+          model: { providerID: "test", modelID: "test-model" },
+        })
+        await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 1 },
+          agent: "mission",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const activationEvents: string[] = []
+        let markWakePrepared!: () => void
+        let releaseActivation!: () => void
+        const wakePrepared = new Promise<void>((resolve) => {
+          markWakePrepared = resolve
+        })
+        const activationGate = new Promise<void>((resolve) => {
+          releaseActivation = resolve
+        })
+        const firstRecovery = recoverMissionProcessSession(mission.id, {
+          wake: async (input) => {
+            activationEvents.push("wake_prepared")
+            markWakePrepared()
+            return {
+              sessionID: mission.id,
+              messageID: input.messageID!,
+              activation: activationGate.then(() => {
+                activationEvents.push("prompt_owner_published")
+                return { owner: new AbortController().signal }
+              }),
+            }
+          },
+        })
+        await wakePrepared
+        releaseActivation()
+        const first = await firstRecovery
+        activationEvents.push(`result_${first.status}`)
+        expect(activationEvents).toEqual(["wake_prepared", "prompt_owner_published", "result_woken"])
+        expect(first).toMatchObject({ status: "woken", sessionID: mission.id })
+        if (first.status !== "woken") throw new Error("expected Mission recovery wake")
+        const interruptedRecovery = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: first.wakeMessageID,
+          time: { created: now + 2 },
+          agent: "mission",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        let settled: Awaited<ReturnType<typeof recoverMissionProcessSession>> | undefined
+        let closingEventID: string | undefined
+        await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-process-recovery-close",
+          close: async () => {
+            const closing = currentMissionExecutionClosure(mission.id)!
+            expect(closing.state).toBe("closing")
+            closingEventID = closing.eventID
+            settled = await recoverMissionProcessSession(mission.id, {
+              wake: async (input) => ({
+                sessionID: mission.id,
+                messageID: input.messageID!,
+                activation: activation(),
+              }),
+            })
+          },
+        })
+        const closure = currentMissionExecutionClosure(mission.id)!
+        expect({ settled, closingEventID, closedState: closure.state }).toEqual({
+          settled: {
+            status: "closure_settled",
+            sessionID: mission.id,
+            closureEventID: closingEventID,
+            occurrenceID: first.occurrenceID,
+          },
+          closingEventID: expect.any(String),
+          closedState: "closed",
+        })
+        expect(
+          (await Session.messages({ sessionID: mission.id })).find(
+            (message) => message.info.id === interruptedRecovery.id,
+          )?.info,
+        ).toMatchObject({ finish: "error" })
+        const marker = Database.use((db) =>
+          db
+            .select({ status: SessionControlRecordTable.status, payload: SessionControlRecordTable.payload })
+            .from(SessionControlRecordTable)
+            .where(eq(SessionControlRecordTable.id, first.occurrenceID))
+            .get(),
+        )
+        expect(marker).toMatchObject({
+          status: "failed",
+          payload: {
+            terminal: { kind: "mission_closed", closureEventID: closingEventID },
+            error: expect.stringContaining(closingEventID!),
+          },
+        })
+      },
+    })
+  }, 30_000)
+
   test("terminalizes interrupted tools, reuses a reply-free attempt, and rotates interrupted or failed replies", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -82,7 +334,7 @@ describe("standalone Mission process recovery", () => {
         const wakes: SessionWake.WakeInput[] = []
         const wake = async (input: SessionWake.WakeInput) => {
           wakes.push(input)
-          return { sessionID: mission.id, messageID: input.messageID! }
+          return { sessionID: mission.id, messageID: input.messageID!, activation: activation() }
         }
         let recoveryControlWakeCount = 0
         const unsubscribeControlWake = SessionControl.subscribeWake(mission.id, () => {

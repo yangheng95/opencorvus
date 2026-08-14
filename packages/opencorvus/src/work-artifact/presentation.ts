@@ -65,9 +65,15 @@ declare const OPENCORVUS_LIBC: string | undefined
 const execFileAsync = promisify(execFile)
 let windowsUserSid: Promise<string> | undefined
 
+function windowsSystemExecutable(name: "whoami.exe" | "icacls.exe"): string {
+  const systemRoot = process.env.SystemRoot ?? process.env.SYSTEMROOT
+  if (!systemRoot) throw new Error(`Windows ${name} requires the SystemRoot runtime fact`)
+  return path.join(systemRoot, "System32", name)
+}
+
 async function currentWindowsUserSid(): Promise<string> {
   if (!windowsUserSid) {
-    windowsUserSid = execFileAsync("whoami.exe", ["/user", "/fo", "csv", "/nh"], {
+    windowsUserSid = execFileAsync(windowsSystemExecutable("whoami.exe"), ["/user", "/fo", "csv", "/nh"], {
       timeout: 10_000,
       windowsHide: true,
     }).then(({ stdout }) => {
@@ -85,7 +91,7 @@ export async function secureWorkArtifactPrivateDirectory(directory: string): Pro
     return
   }
   const sid = await currentWindowsUserSid()
-  await execFileAsync("icacls.exe", [directory, "/inheritance:r", "/grant:r", `*${sid}:(OI)(CI)F`], {
+  await execFileAsync(windowsSystemExecutable("icacls.exe"), [directory, "/inheritance:r", "/grant:r", `*${sid}:(OI)(CI)F`], {
     timeout: 10_000,
     windowsHide: true,
   })

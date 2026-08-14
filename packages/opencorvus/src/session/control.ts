@@ -169,8 +169,14 @@ export namespace SessionControl {
     })
   }
 
-  export function fail(input: { id: string; sessionID: string; error: string }): Record | undefined {
+  export function fail(input: {
+    id: string
+    sessionID: string
+    error: string
+    payload?: z.input<typeof PersistedPayload>
+  }): Record | undefined {
     const now = Date.now()
+    const replacementPayload = input.payload ? PersistedPayload.parse(input.payload) : undefined
     return Database.transaction((db) => {
       const current = db
         .select()
@@ -184,7 +190,7 @@ export namespace SessionControl {
         )
         .get()
       if (!current) return undefined
-      const payload = { ...current.payload, error: input.error }
+      const payload = { ...(replacementPayload ?? current.payload), error: input.error }
       db.update(SessionControlRecordTable)
         .set({ status: "failed", payload, time_updated: now })
         .where(

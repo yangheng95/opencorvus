@@ -8,18 +8,18 @@ import {
 } from "../src/engine/dispatch-lineage"
 import { describeTask } from "../src/engine/describe"
 import { recordDispatchSettlement } from "../src/engine/dispatch-settlement"
-import { configureTaskLoopRunner, waitForQueueCompletionHooksForTest } from "../src/engine/queue"
 import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
+import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
 import { Instance } from "../src/project/instance"
-import { EngineService } from "../src/task-api"
+import { Session } from "../src/session"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(async () => {
-  await waitForQueueCompletionHooksForTest()
   await resetMemoryDatabase()
 })
 
@@ -44,19 +44,35 @@ describe("dispatch occurrence recovery authority", () => {
           packageRevision: scheduler.packageRevision,
           agentID: "base-developer",
         })
-        configureTaskLoopRunner(async () => {})
-        const taskID = await EngineService.createTask(
-          {
-            requestID: "dispatch-occurrence-recovery-authority",
-            request: "Prove the immutable authority boundary for dispatch recovery",
-            productPillar: "code",
-            model: "firmware/gpt-5",
-            promptProfile: "base",
-            expectedPackageDigest: scheduler.packageRevision.packageDigest,
-          },
-          { actor: "user" },
-        )
-        await waitForQueueCompletionHooksForTest()
+        const taskID = Identifier.ascending("task")
+        const request = "Prove the immutable authority boundary for dispatch recovery"
+        const root = await Session.create({
+          kind: "root",
+          title: "Dispatch occurrence recovery authority",
+          metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
+        })
+        const now = Date.now()
+        persistTask({
+          taskID,
+          sessionID: root.id,
+          now,
+          title: "Dispatch occurrence recovery authority",
+          request,
+          productPillar: "code",
+          source: "test",
+          priority: "normal",
+          metadata: {},
+          projectID: Instance.project.id,
+          packageRevision: scheduler.packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: scheduler.packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
 
         const dispatchID = Identifier.ascending("artifact")
         const beforeCommit = resolveDispatchOccurrenceAuthority({ taskID, dispatchID })

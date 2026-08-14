@@ -95,7 +95,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           packageRevision,
           virtualWorkflows: scheduler.virtualWorkflows,
         },
-        workflowID: "composite-delivery",
+        workflowID: "planner-parallel-delivery",
       })
       const taskID = Identifier.ascending("task")
       const taskRequest = "Publish the bounded research charter"
@@ -305,10 +305,11 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         })
         const blockerTaskID = Identifier.ascending("task")
         const blockerRoot = await Session.create({ kind: "root", title: "Occupied root queue owner" })
+        const blockerTimeCreated = Date.now()
         persistTask({
           taskID: blockerTaskID,
           sessionID: blockerRoot.id,
-          now: Date.now(),
+          now: blockerTimeCreated,
           title: "Occupied root queue owner",
           request: "Keep the root queue occupied while lifecycle delivery is accepted",
           productPillar: "work",
@@ -323,13 +324,12 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
             projectID: Instance.project.id,
             rootDirectory: Instance.directory,
             packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: Date.now(),
+            timeCreated: blockerTimeCreated,
           }),
         })
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("delivered")
-        await waitForQueueCompletionHooksForTest()
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("already_delivered")
@@ -344,8 +344,9 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           .filter((row) => row.ingress.lifecycle_event_id === lifecycle!.id)
         expect(lifecycleWakes).toMatchObject([
           {
-            label: "pending",
+            label: "running",
             ingress: {
+              delivery_attempt: 1,
               lifecycle_event_id: lifecycle!.id,
               event: {
                 agentLifecycleDelivery: {
@@ -433,4 +434,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
       }
     },
   })
+  // The accepted lifecycle delivery owns an independent project lease. Join
+  // it only after the setup/contract assertion lease has been released.
+  await waitForQueueCompletionHooksForTest()
 }, 60_000)

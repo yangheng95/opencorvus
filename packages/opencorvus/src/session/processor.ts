@@ -32,7 +32,7 @@ import {
   type ProcessorObservationFailure,
   type ToolFailureCause,
 } from "./tool-failure-cause"
-import { shouldParkAfterToolResult, toolResultControl, type ToolResultControl } from "./tool-result-control"
+import { toolResultControl, toolResultDisposition, type ToolResultControl } from "./tool-result-control"
 import { parsePartialJson } from "ai"
 import type { McpAppToolLifecycleController } from "@/interactive-artifact/mcp-app-lifecycle"
 import {
@@ -272,8 +272,9 @@ export namespace SessionProcessor {
         }
       },
       onPartCreated: (partID: string) => void = () => {},
-    ): Promise<void> => {
+    ): Promise<ToolResultControl | undefined> => {
       const metadata = value.output.metadata
+      const control = toolResultControl(metadata)
       const displayParts = Array.isArray(value.output.display) ? value.output.display : []
       const sourcePayloads = Array.isArray(value.output.sources)
         ? value.output.sources.map((source) => Message.SourcePayload.parse(source))
@@ -324,6 +325,7 @@ export namespace SessionProcessor {
         }
       })
       mcpAppCalls.delete(value.toolCallId)
+      return control
     }
 
     let snapshot: string | undefined
@@ -389,7 +391,7 @@ export namespace SessionProcessor {
           sources?: unknown
         }
       }) {
-        await completeToolPart({
+        return completeToolPart({
           toolCallId: input.toolCallID,
           input: input.toolInput,
           output: input.output,
@@ -809,7 +811,7 @@ export namespace SessionProcessor {
                       run.resume(toolPauseOwner(value.toolCallId))
                       const output = normalizeToolResult(value.output)
                       const metadata = output.metadata
-                      await completeToolPart(
+                      const control = await completeToolPart(
                         {
                           toolCallId: value.toolCallId,
                           input: value.input,
@@ -826,8 +828,11 @@ export namespace SessionProcessor {
                         },
                         (partID) => trackCreatedPart(run.attempt, partID),
                       )
-                      const control = toolResultControl(metadata)
-                      if (control?.kind === "handoff_drain") {
+                      const disposition = toolResultDisposition(control)
+                      if (disposition === "handoff") {
+                        if (!control || control.kind !== "handoff_drain") {
+                          throw new Error("Coordination handoff disposition has no handoff control")
+                        }
                         if (
                           coordinationHandoff &&
                           (coordinationHandoff.request_id !== control.request_id ||
@@ -837,7 +842,7 @@ export namespace SessionProcessor {
                         }
                         coordinationHandoff = control
                         input.assistantMessage.finish = "tool-calls"
-                      } else if (shouldParkAfterToolResult(metadata)) {
+                      } else if (disposition === "park") {
                         input.assistantMessage.finish = "tool-calls"
                         parkAfterToolResult = true
                       }

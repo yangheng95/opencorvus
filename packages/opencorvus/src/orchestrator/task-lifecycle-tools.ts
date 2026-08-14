@@ -5,8 +5,9 @@ import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { terminalTask } from "@/engine/state"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Instance } from "@/project/instance"
-import { TOOL_RESULT_PARK_METADATA_KEY } from "@/session/tool-result-control"
+import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import type { OrchestratorToolExecutionContext } from "./tool-execution-context"
+import { bindToolExecutionMode } from "@/tool/execution-mode"
 import {
   allocateTaskCompletionDecisionTime,
   findTaskCompletionDecisionForTerminalTime,
@@ -89,7 +90,7 @@ export function createTaskLifecycleTools(input: {
   requireExecutionContext: (options: unknown, toolName: string) => Promise<OrchestratorToolExecutionContext>
 }) {
   return {
-    complete_task: tool({
+    complete_task: bindToolExecutionMode(tool({
       description:
         "Terminal task lifecycle decision: mark the task completed from the Orchestrator's current task evidence and explicit summary. " +
         "IntegrityReview, VisualReview, Host build observations, tests, and persisted task-root conversation messages are evidence inputs; none of them is a host-side completion lock. " +
@@ -188,7 +189,7 @@ export function createTaskLifecycleTools(input: {
           return {
             title: "Task Completed",
             output: `Task ${input.taskID} completed: ${terminalSummary}.`,
-            metadata: { [TOOL_RESULT_PARK_METADATA_KEY]: true },
+            metadata: withImmediateParkToolResultControl({}),
           }
         } finally {
           if (!completionCommitted) {
@@ -201,9 +202,9 @@ export function createTaskLifecycleTools(input: {
           }
         }
       },
-    }),
+    }), "turn_control_exclusive"),
 
-    fail_task: tool({
+    fail_task: bindToolExecutionMode(tool({
       description:
         "Exceptional force-majeure stop, never a normal Task outcome. A Task has only running and inactive public states and must remain under the same owner through every recoverable finding or interruption until accepted evidence supports completion. " +
         "Use only when the exact affected lineage proves completion requires unavailable external authority, refused destructive approval, a different fixed Squad, an irreducible operator product decision, or an external platform condition the Task cannot change or wait through. Preserve the exact evidence, closure result, and affected Delivery Slice revision IDs in the error.",
@@ -217,10 +218,10 @@ export function createTaskLifecycleTools(input: {
         return {
           title: "Task Stopped",
           output: `Task ${input.taskID} became inactive because of force majeure: ${error}`,
-          metadata: { [TOOL_RESULT_PARK_METADATA_KEY]: true },
+          metadata: withImmediateParkToolResultControl({}),
         }
       },
-    }),
+    }), "turn_control_exclusive"),
 
     cancel_task: tool({
       description:

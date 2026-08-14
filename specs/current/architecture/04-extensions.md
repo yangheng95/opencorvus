@@ -466,7 +466,27 @@ fallback。项目与 user-global Mission Skill 继续通过同一严格 catalog 
 
 OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并把 active projection
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
-内部 projected-agent runtime。
+内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
+本地运行默认连接用户已打开的稳定版 Google Chrome。BrowserRuntime 读取其默认 profile 发布的
+`DevToolsActivePort`，经 Chrome DevTools Protocol (CDP) 连接 default context，并仅创建和关闭 MCP 自己的 Page。
+若 Chrome 尚未授权，runtime 返回包含 `chrome://inspect/#remote-debugging` 的稳定操作指引，由用户在正在使用的
+Chrome 中打开并勾选 “Allow remote debugging for this browser instance”；runtime 不会启动 Chrome 来打开该地址，
+因为多 profile 环境会进入错误的 Profile Picker。它不会静默获得权限，也不会隐式降级到未登录浏览器。连接后
+Browser MCP 复用当前 Chrome 的账号、Cookie、网站登录态和扩展；shutdown 只断开 Playwright 并关闭 MCP 自己的
+Page，不关闭 Chrome、BrowserContext 或无关 tab。
+已附着的 Chrome 可在页面内正常使用既有登录态，但 `storage_state_export` 不会导出 default context 的 Cookie
+或 localStorage；需要导入或导出 storageState 时必须明确选择 MCP 自有的 `isolated` profile。
+
+设置 `OPENCORVUS_BROWSER_MODE=isolated` 时，Browser MCP 通过同一个 BrowserRuntime 启动独立、未登录的系统
+Chrome；桌面默认 headed 可见，无图形显示的 Linux 自动 headless，也可用 `BROWSER_HEADLESS=true` 显式选择。
+该模式为明确配置而非 CDP 授权失败后的 fallback，profile 随进程结束，不承诺跨运行保存登录态。
+
+设置 `OPENCORVUS_BROWSER_CDP_ENDPOINT` 时，runtime 不再解析 Chrome channel 或 launch，而是经 Chrome DevTools Protocol
+(CDP) 显式附着已有 Chromium 系浏览器的 default context，并只新建、关闭 MCP 自己的 Page；shutdown 只断开
+Playwright transport，不关闭外部 Chrome 或其 BrowserContext。`session_create` 返回 `browserMode`、
+`browserProduct` 和 session 绑定的 `liveViewUrl`；`browserMode` 为 `cdp` 或 `isolated`。stdio 与 HTTP transport 都在 loopback monitor 上投影同一
+Page 的只读 Live View；Live View 不创建第二个 Browser、BrowserContext、Page 或可变状态，也不复用 Task
+Browser Preview WebView。
 
 ### Computer Use
 

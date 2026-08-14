@@ -94,7 +94,11 @@ describe("Shell absolute deadline authority", () => {
     try {
       const startedAt = performance.now()
       const result = await Shell.runHost("deadline-contract", { timeoutMs: 200 })
-      expect({ exitCode: result.exitCode, timedOut: result.timedOut, elapsedUnderOneSecond: performance.now() - startedAt < 1_000 }).toEqual({
+      expect({
+        exitCode: result.exitCode,
+        timedOut: result.timedOut,
+        elapsedUnderOneSecond: performance.now() - startedAt < 1_000,
+      }).toEqual({
         exitCode: 143,
         timedOut: true,
         elapsedUnderOneSecond: true,
@@ -147,7 +151,9 @@ describe("Shell absolute deadline authority", () => {
       })
       const creationCode = await creation.exited
       const creationError = await new Response(creation.stderr).text()
-      expect({ creationCode, creationError }).toEqual({ creationCode: 0, creationError: "" })
+      if (creationCode !== 0) {
+        throw new Error(`virtual environment creation failed with exit code ${creationCode}:\n${creationError}`)
+      }
       const output = await runGuardedHostCommand({
         command: `.venv/Scripts/python.exe -c "print('relative-venv-executed')"`,
         projectDir: project,

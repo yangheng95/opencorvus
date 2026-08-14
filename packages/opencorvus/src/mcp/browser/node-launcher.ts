@@ -12,6 +12,22 @@ import { ProcessSupervisor } from "@/shell/process-supervisor"
 
 export namespace BrowserMCPNodeLauncher {
   const CHILD_CLEANUP_TIMEOUT_MS = 2_000
+  export const STDIN_GRACEFUL_SHUTDOWN_TIMEOUT_MS = 310_000
+
+  export async function closeChildAfterHostStdin(input: {
+    endStdin: () => void
+    exited: Promise<number>
+    terminate: () => Promise<void>
+    timeoutMs?: number
+  }): Promise<void> {
+    input.endStdin()
+    const exitedGracefully = await ProcessSupervisor.awaitWithTimeout(
+      input.exited.then(() => true),
+      input.timeoutMs ?? STDIN_GRACEFUL_SHUTDOWN_TIMEOUT_MS,
+      "Browser MCP node did not exit after stdin close",
+    ).catch(() => false)
+    if (!exitedGracefully) await input.terminate()
+  }
 
   export async function serveHostStdio() {
     await serve("stdio")
@@ -72,11 +88,19 @@ export namespace BrowserMCPNodeLauncher {
     const sigterm = () => {
       terminateForSignal("SIGTERM", 143)
     }
+    let stdinCloseOperation: Promise<void> | undefined
     const stdinClosed = () => {
-      void terminate().catch((error) => {
-          logLauncherError("stdin close terminate failed", error)
-          process.exitCode = 1
-        })
+      if (stdinCloseOperation) return
+      process.stdin.unpipe(child.stdin ?? undefined)
+      stdinCloseOperation = closeChildAfterHostStdin({
+        endStdin: () => child.stdin?.end(),
+        exited: child.exited,
+        terminate,
+      })
+      void stdinCloseOperation.catch((error) => {
+        logLauncherError("stdin close cleanup failed", error)
+        process.exitCode = 1
+      })
     }
     process.once("SIGINT", sigint)
     process.once("SIGTERM", sigterm)
@@ -84,6 +108,7 @@ export namespace BrowserMCPNodeLauncher {
     process.stdin.once("close", stdinClosed)
     try {
       const code = await child.exited
+      await stdinCloseOperation?.catch(() => undefined)
       await ProcessSupervisor.disposeAndWaitForExit(child, `browser MCP node ${transport} process tree`)
       if (code !== 0 && !termination) {
         throw new Error(`browser MCP node ${transport} process exited with code ${code}`)
@@ -113,10 +138,7 @@ export namespace BrowserMCPNodeLauncher {
       const browserRuntime = await resolveBrowserNodeSidecarRuntime(runtime)
       return {
         node: browserRuntime.nodeExecutable,
-        bundle: await resolveSourceBundle(
-          runtime.transport ?? "stdio",
-          runtime.sourceCacheDirectory,
-        ),
+        bundle: await resolveSourceBundle(runtime.transport ?? "stdio", runtime.sourceCacheDirectory),
         packaged: false,
       }
     }
@@ -140,10 +162,7 @@ export namespace BrowserMCPNodeLauncher {
     }
   }
 
-  async function resolveSourceBundle(
-    transport: "http" | "stdio",
-    sourceCacheDirectory?: string,
-  ) {
+  async function resolveSourceBundle(transport: "http" | "stdio", sourceCacheDirectory?: string) {
     return buildSourceBundle(transport, sourceCacheDirectory)
   }
 
@@ -164,15 +183,11 @@ export namespace BrowserMCPNodeLauncher {
     return env
   }
 
-  async function buildSourceBundle(
-    transport: "http" | "stdio",
-    sourceCacheDirectory?: string,
-  ) {
+  async function buildSourceBundle(transport: "http" | "stdio", sourceCacheDirectory?: string) {
     if (typeof Bun === "undefined") {
       throw new Error("Browser MCP node bundle is missing and this runtime cannot build it.")
     }
-    const outdir =
-      sourceCacheDirectory ?? path.join(Global.Path.cache, "browser-mcp-node")
+    const outdir = sourceCacheDirectory ?? path.join(Global.Path.cache, "browser-mcp-node")
     await fs.mkdir(outdir, { recursive: true })
     const staging = path.join(outdir, `.${transport}-${process.pid}-${randomUUID()}.mjs`)
     const child = await ProcessSupervisor.spawnHostCommand({

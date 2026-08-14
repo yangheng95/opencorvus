@@ -483,7 +483,7 @@ describe("Project directory integrity", () => {
         .run()
       db.insert(DecisionLogTable)
         .values({
-          id: Identifier.ascending("decision"),
+          id: Identifier.ascending("decision_log"),
           task_id: taskID,
           phase: "delete",
           key: "preexisting_authority",
@@ -928,6 +928,41 @@ describe("Project directory integrity", () => {
     })
   }, 90_000)
 
+  test("commits cleanup after the quarantined root parent is already absent", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    await fs.mkdir(source, { recursive: true })
+    const plan = await createProjectDeletionCleanupPlan({
+      projectID: registered.project.id,
+      directory: project.path,
+      sources: [source],
+    })
+    await fs.rename(source, plan.manifest.targets[0]!.quarantine)
+    await fs.rm(project.path, { recursive: true, force: true })
+    Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
+
+    const actualSyncDirectoryMetadata = Filesystem.syncDirectoryMetadata.bind(Filesystem)
+    const syncDirectoryMetadata = spyOn(Filesystem, "syncDirectoryMetadata").mockImplementation(async (directory) => {
+      if (path.resolve(directory) === path.resolve(project.path)) {
+        throw Object.assign(new Error(`missing cleanup parent: ${directory}`), { code: "ENOENT" })
+      }
+      return actualSyncDirectoryMetadata(directory)
+    })
+    try {
+      await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    } finally {
+      syncDirectoryMetadata.mockRestore()
+    }
+
+    expect({
+      active: await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? [] : Promise.reject(error))),
+      completed: await fs.readdir(ProjectDeletionCleanupTestHooks.completedRoot()),
+    }).toEqual({ active: [], completed: [path.basename(plan.manifestPath)] })
+  }, 90_000)
+
   test("recovers a completed cleanup ledger after the canonical database identity changes", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
@@ -1240,10 +1275,11 @@ describe("Project directory integrity", () => {
 
   test("rolls back anonymous promotion when its missing destination is registered to another Project", async () => {
     const carrying = await ImplicitProject.create()
-    const destinationParent = path.join(path.dirname(carrying.directory), "promotion-targets")
-    const destination = path.join(destinationParent, "claimed-project")
+    const destinationParentInput = path.join(path.dirname(carrying.directory), "promotion-targets")
     const conflictingProjectID = "project_claiming_missing_promotion_destination"
-    await fs.mkdir(destinationParent)
+    await fs.mkdir(destinationParentInput)
+    const destinationParent = await fs.realpath(destinationParentInput)
+    const destination = path.join(destinationParent, "claimed-project")
     const now = Date.now()
     Database.use((db) =>
       db
@@ -1265,6 +1301,7 @@ describe("Project directory integrity", () => {
         name: "claimed-project",
         beforeMove: () => Instance.disposeAll(),
       }).catch((cause) => cause)
+      expect(error).toMatchObject({ name: "ProjectRegisteredDirectoryConflictError" })
       const sourceState = await fs
         .stat(carrying.directory)
         .then((info) => (info.isDirectory() ? "restored" : "invalid"))

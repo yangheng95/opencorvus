@@ -42,7 +42,6 @@ import {
   type GoalGraphMutationProducer,
   type GoalGraphProjectionConflict,
 } from "./goal-graph-projection"
-import type { WorkloadBrief } from "@/goal-workload-analyst/types"
 import {
   ResearchBriefSchema,
   validateResearchBriefIntegrity,
@@ -1433,36 +1432,6 @@ export function applyGoalGraphMutationInTransaction(
     supersedeOf,
     goalGraphProjectionArtifactLocator,
   }
-}
-
-export function persistGoalWorkloadForDomainRefs(
-  db: Database.TxOrDb,
-  input: {
-    taskID: string
-    sessionID: string
-    finalMessageID: string
-    observedArtifactLocators?: ArtifactReadLocator[]
-    sourceArtifactLocators?: ArtifactReadLocator[]
-    briefs: WorkloadBrief[]
-    now: number
-  },
-) {
-  const id = Identifier.ascending("artifact")
-  const provenance = artifactConsumptionProvenance(input)
-  insertEngineArtifact(db, {
-    id,
-    taskID: input.taskID,
-    kind: "goal_workload",
-    label: "WorkloadBrief",
-    payload: {
-      briefs: input.briefs,
-      session_id: input.sessionID,
-      final_message_id: input.finalMessageID,
-      ...provenance,
-    },
-    timeCreated: input.now,
-  })
-  return id
 }
 
 export function persistResearchBrief(

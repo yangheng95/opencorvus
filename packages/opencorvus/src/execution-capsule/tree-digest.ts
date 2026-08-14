@@ -55,12 +55,15 @@ function sourcePaths(output: Buffer, root: string): string[] {
   return output.subarray(0, -1).toString().split("\0").filter(ProjectRuntimePaths.isSourceEnumerationAllowed).toSorted()
 }
 
-function sameFilesystemPath(left: string, right: string): boolean {
-  const resolvedLeft = path.resolve(left)
-  const resolvedRight = path.resolve(right)
-  return process.platform === "win32"
-    ? resolvedLeft.toLocaleLowerCase("en-US") === resolvedRight.toLocaleLowerCase("en-US")
-    : resolvedLeft === resolvedRight
+async function sameFilesystemPath(left: string, right: string): Promise<boolean> {
+  try {
+    const [resolvedLeft, resolvedRight] = await Promise.all([realpath(left), realpath(right)])
+    return process.platform === "win32"
+      ? resolvedLeft.toLocaleLowerCase("en-US") === resolvedRight.toLocaleLowerCase("en-US")
+      : resolvedLeft === resolvedRight
+  } catch {
+    return false
+  }
 }
 
 function canonicalPathOrder(left: string, right: string): number {
@@ -313,7 +316,7 @@ async function selectedTreeSnapshot(
     if (stat.isDirectory()) {
       const captured = await captureDirectory(stableRoot, absolute, stat)
       const topLevel = await EngineGitProcess.topLevel(absolute)
-      if (topLevel.exitCode !== 0 || !sameFilesystemPath(topLevel.text().trim(), absolute)) {
+      if (topLevel.exitCode !== 0 || !(await sameFilesystemPath(topLevel.text().trim(), absolute))) {
         await assertDirectoryStable(stableRoot, absolute, captured.stat, captured.real)
         continue
       }
@@ -329,7 +332,7 @@ async function selectedTreeSnapshot(
       const finalListed = await EngineGitProcess.sourceSnapshotPaths(absolute)
       if (
         finalTopLevel.exitCode !== 0 ||
-        !sameFilesystemPath(finalTopLevel.text().trim(), absolute) ||
+        !(await sameFilesystemPath(finalTopLevel.text().trim(), absolute)) ||
         finalListed.exitCode !== 0
       ) {
         inspectionConflict(absolute, "source_enumeration_changed")
