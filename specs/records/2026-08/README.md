@@ -1,7 +1,5 @@
 # August 2026 Records
 
-- [2026-08-15-opencorvus-promotion-video-production-script.md](2026-08-15-opencorvus-promotion-video-production-script.md) defines the complete 33-shot recording, voice-over, placeholder-data, Expert Squad protocol-diagram, and production-acceptance playbook for the OpenCorvus promotion video.
-
 - [2026-08-14-agent-tool-block-projection-plan.md](2026-08-14-agent-tool-block-projection-plan.md) defines one every-Agent, occurrence-scoped MCP Tool-block discovery/load projection, with Browser and Computer as the first default-available blocks and all concrete calls retained under the durable permission authority.
 
 - [2026-08-14-default-browser-computer-capabilities.md](2026-08-14-default-browser-computer-capabilities.md) makes Browser and Computer the default native Chat and Work MCP assignments while preserving explicit Project-local opt-outs and measuring the model-context cost.
