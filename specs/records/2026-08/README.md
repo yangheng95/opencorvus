@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-14-agent-tool-block-projection-plan.md](2026-08-14-agent-tool-block-projection-plan.md) defines one every-Agent, occurrence-scoped MCP Tool-block discovery/load projection, with Browser and Computer as the first default-available blocks and all concrete calls retained under the durable permission authority.
+
 - [2026-08-14-default-browser-computer-capabilities.md](2026-08-14-default-browser-computer-capabilities.md) makes Browser and Computer the default native Chat and Work MCP assignments while preserving explicit Project-local opt-outs and measuring the model-context cost.
 
 - [2026-08-14-session-message-projection-e2e.md](2026-08-14-session-message-projection-e2e.md) makes public Session prompt responses use the same canonical message projection as live events and records the real conversation acceptance.

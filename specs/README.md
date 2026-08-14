@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest every-Agent on-demand MCP Tool-block projection and permission plan: [`2026-08-14-agent-tool-block-projection-plan.md`](records/2026-08/2026-08-14-agent-tool-block-projection-plan.md).
+
 Latest default Browser and Computer native-conversation capability: [`2026-08-14-default-browser-computer-capabilities.md`](records/2026-08/2026-08-14-default-browser-computer-capabilities.md).
 
 Latest public Session message projection and end-to-end repair: [`2026-08-14-session-message-projection-e2e.md`](records/2026-08/2026-08-14-session-message-projection-e2e.md).
