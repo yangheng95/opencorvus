@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest `v0.0.44-beta` application and website release: [`2026-08-14-v0.0.44-beta-release.md`](records/2026-08/2026-08-14-v0.0.44-beta-release.md).
+
 Latest Task cancellation and Workload identity convergence repair: [accepted cancellation owns an independent initialized Project Instance](records/2026-08/2026-08-14-task-cancellation-independent-instance-convergence.md).
 
 Latest Mission submit selection-supersession settlement: [`2026-08-14-mission-submit-selection-supersession.md`](records/2026-08/2026-08-14-mission-submit-selection-supersession.md).

@@ -3176,10 +3176,17 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
 export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<DispatchTaskLoopResult> {
   const task = findTask(input.taskID)
   if (!task) throw new TaskRootIngressError(`Task ${input.taskID} does not exist`, "task_not_found", input.taskID)
-  const persistedWakeID = persistTaskIngressEvent(
-    task,
-    OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }),
-  )
+  const event = OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" })
+  const infrastructureOutcome = event.dispatchInfrastructureFailure?.outcome
+  const infrastructureAuthority = infrastructureOutcome?.recovery_authority
+  if (infrastructureOutcome?.session_id && infrastructureAuthority?.occurrence_status === "occurrence_committed") {
+    settleDispatchOrReturnExisting({
+      taskID: task.id,
+      dispatchID: infrastructureAuthority.dispatch_id,
+      outcome: infrastructureOutcome,
+    })
+  }
+  const persistedWakeID = persistTaskIngressEvent(task, event)
   if (findTaskRootIngressByID(task.id, persistedWakeID)?.label === "terminal_inapplicable") {
     return "ignored"
   }

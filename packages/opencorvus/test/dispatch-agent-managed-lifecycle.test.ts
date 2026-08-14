@@ -10,6 +10,7 @@ import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
 import { EngineArtifactTable, EngineTaskCancellationAuthorityTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineGit } from "@/engine/git"
 import { Event } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { recordTaskInfrastructureError } from "@/engine/persist"
@@ -29,6 +30,9 @@ import { terminalTask } from "@/engine/state"
 import { requireTask } from "@/engine/store"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
+import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
+import { taskOrchestratorSession } from "@/orchestrator/task-session"
+import { createOrchestratorTools } from "@/orchestrator/tools"
 import {
   createDispatchAgentTool,
   acquireDetachedDispatchSettlementGate,
@@ -475,6 +479,8 @@ async function verifyDetachedDispatchLifecycle(input: {
             timeCreated: now,
           }),
         })
+        const baseline = await EngineGit.prepare(requireTask(taskID))
+        if (baseline.error) throw new Error(`managed lifecycle baseline failed: ${baseline.error}`)
         loopSpy = spyOn(OrchestratorLoop, "runTaskLoop").mockImplementation(async (loopInput) => {
           rootAttempts += 1
           rootEvents.push(loopInput.event)
@@ -484,73 +490,122 @@ async function verifyDetachedDispatchLifecycle(input: {
           ) {
             throw new Error("transient root lifecycle delivery failure")
           }
-          if (!loopInput.wakeID) throw new Error("managed lifecycle root delivery has no durable ingress ID")
-          const wake = Database.use((db) =>
-            db
-              .select({ payload: EngineArtifactTable.payload })
-              .from(EngineArtifactTable)
-              .where(eq(EngineArtifactTable.id, loopInput.wakeID!))
-              .get(),
-          )
-          if (!wake) throw new Error(`managed lifecycle ingress ${loopInput.wakeID} disappeared`)
-          const ingress = TaskRootIngressSchema.parse(wake.payload)
-          const orchestrator = await Session.create({
-            kind: "orchestrator",
-            parentID: root.id,
-            title: "Managed lifecycle root delivery",
-          })
+          if (!loopInput.wakeID || !loopInput.event) {
+            throw new Error("managed lifecycle root delivery has no durable ingress identity")
+          }
+          const orchestrator = await taskOrchestratorSession(requireTask(taskID))
+          const control = currentOrchestratorControlMessage(loopInput.event, taskID, loopInput.wakeID)
+          if (!control) throw new Error(`managed lifecycle wake ${loopInput.wakeID} has no control occurrence`)
           const now = Date.now()
-          const controlMessageID = orchestratorControlOccurrenceIdentity(loopInput.wakeID).messageID
           await Session.persistMessage({
             info: {
-              id: controlMessageID,
+              id: control.messageID,
               sessionID: orchestrator.id,
               role: "user",
               author: "orchestrator",
               time: { created: now },
               agent: "orchestrator",
               model,
+              extra: control.extra,
             },
             parts: [
               {
-                id: Identifier.ascending("part"),
+                id: control.partID,
                 sessionID: orchestrator.id,
-                messageID: controlMessageID,
+                messageID: control.messageID,
                 type: "text",
-                text: "Exact durable root control occurrence",
+                text: control.text,
+                kind: "control",
+                source: "system",
+                metadata: control.partMetadata,
               },
             ],
           })
           const finalMessageID = Identifier.ascending("message")
+          const stepStartPartID = Identifier.ascending("part")
+          const toolPartID = Identifier.ascending("part")
+          const toolCallID = Identifier.ascending("call")
+          const manageTaskInput = {
+            action: "complete_task",
+            summary: `Accepted exact ${control.partMetadata.source_kind} settlement ${loopInput.wakeID}`,
+            evidence_locators: [],
+            deliverable_artifact_locators: [],
+            accepted_delivery_slice_revision_ids: [],
+            workflow_id: null,
+          }
           const assistant: Message.Assistant = {
             id: finalMessageID,
             sessionID: orchestrator.id,
-            parentID: controlMessageID,
+            parentID: control.messageID,
             role: "assistant",
             author: "orchestrator",
-            time: { created: now, completed: now + 1 },
+            time: { created: now },
             agent: "orchestrator",
-            providerID: "test",
-            modelID: "managed-dispatch-lifecycle",
+            providerID: model.providerID,
+            modelID: model.modelID,
             path: { cwd: Instance.directory, root: Instance.project.worktree },
             cost: 0,
             tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-            finish: "stop",
-            taskIngress: { id: loopInput.wakeID, kind: ingress.source_kind },
+            taskIngress: { id: loopInput.wakeID, kind: control.partMetadata.source_kind },
           }
           await Session.persistMessage({
             info: assistant,
             parts: [
               {
-                id: Identifier.ascending("part"),
+                id: stepStartPartID,
                 sessionID: orchestrator.id,
                 messageID: finalMessageID,
-                type: "text",
-                text: "Durable root delivery completed",
-                time: { start: now, end: now + 1 },
+                type: "step-start",
+              },
+              {
+                id: toolPartID,
+                sessionID: orchestrator.id,
+                messageID: finalMessageID,
+                type: "tool",
+                callID: toolCallID,
+                tool: "manage_task",
+                state: { status: "running", input: manageTaskInput, time: { start: now } },
               },
             ],
           })
+          const manageTask = (
+            createOrchestratorTools({
+              taskID,
+              agentSessionID: orchestrator.id,
+              dispatchAgents: skillProjection.projectedAgents,
+            }).tools as Record<string, { execute?: (args: unknown, options: unknown) => Promise<unknown> }>
+          ).manage_task
+          if (!manageTask?.execute) throw new Error("Managed lifecycle manage_task producer has no executor")
+          const decision = await manageTask.execute(manageTaskInput, {
+            toolCallId: toolCallID,
+            opencorvus: {
+              sessionID: orchestrator.id,
+              messageID: finalMessageID,
+              toolCallID,
+              toolPartID,
+              visibleToolName: "manage_task",
+            },
+          } as never)
+          await Session.updatePart({
+            id: toolPartID,
+            sessionID: orchestrator.id,
+            messageID: finalMessageID,
+            type: "tool",
+            callID: toolCallID,
+            tool: "manage_task",
+            state: {
+              status: "completed",
+              input: manageTaskInput,
+              output: JSON.stringify(decision),
+              title: "Task completed",
+              metadata: {},
+              time: { start: now, end: Date.now() },
+            },
+          })
+          assistant.finish = "stop"
+          assistant.time.completed = Date.now()
+          await Session.updateMessage(assistant)
+          await Database.awaitEffectIdle(30_000)
           return { finalMessageID }
         })
         const executors = Object.fromEntries(
@@ -791,12 +846,9 @@ async function verifyDetachedDispatchLifecycle(input: {
           }),
         },
       })
-      expect(rootEvents).toEqual(
-        Array.from(
-          { length: input.retryRootFailure || input.exhaustRootFailure ? 2 : 1 },
-          () => exactInfrastructureEvent,
-        ),
-      )
+      const expectedInfrastructureAttempts = input.retryRootFailure || input.exhaustRootFailure ? 2 : 1
+      expect(rootEvents).toEqual(Array.from({ length: expectedInfrastructureAttempts }, () => exactInfrastructureEvent))
+      expect(rootAttempts).toBe(expectedInfrastructureAttempts)
       await Instance.provide({
         directory: project.path,
         fn: async () => {
@@ -840,9 +892,7 @@ async function verifyDetachedDispatchLifecycle(input: {
               db
                 .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
-                .where(
-                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
-                )
+                .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
                 .all(),
             )
               .map((wake) => ({ ...wake, ingress: TaskRootIngressSchema.parse(wake.payload) }))
@@ -852,7 +902,7 @@ async function verifyDetachedDispatchLifecycle(input: {
               label: input.exhaustRootFailure ? "delivery_failed" : "delivered",
               ingress: expect.objectContaining({
                 infrastructure_fact_id: typedError.infrastructureArtifactID,
-                delivery_attempt: input.retryRootFailure || input.exhaustRootFailure ? 2 : 1,
+                delivery_attempt: expectedInfrastructureAttempts,
                 event: expect.objectContaining({
                   dispatchInfrastructureFailure: expect.objectContaining({
                     infrastructureFactID: typedError.infrastructureArtifactID,
@@ -884,7 +934,12 @@ async function verifyDetachedDispatchLifecycle(input: {
                 ingress: recovered.ingress,
               }).toMatchObject({
                 label: "delivered",
-                ingress: { delivery_attempt: 3, delivery_runtime_id: "successor-runtime", delivery_runtime_attempt: 1 },
+                ingress: {
+                  delivery_attempt: 3,
+                  delivery_runtime_id: "successor-runtime",
+                  delivery_runtime_attempt: 1,
+                  delivery_result: { status: "completed" },
+                },
               })
               expect(rootAttempts).toBe(3)
               return
@@ -903,9 +958,7 @@ async function verifyDetachedDispatchLifecycle(input: {
             Database.use((db) =>
               db
                 .delete(EngineArtifactTable)
-                .where(
-                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
-                )
+                .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
                 .run(),
             )
             expect(await reconcileUndeliveredDispatchInfrastructureFacts()).toBe(1)
@@ -914,9 +967,7 @@ async function verifyDetachedDispatchLifecycle(input: {
               db
                 .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
-                .where(
-                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
-                )
+                .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
                 .get(),
             )!
             expect({
@@ -975,9 +1026,7 @@ async function verifyDetachedDispatchLifecycle(input: {
             .map((row) => ({ ...row, ingress: TaskRootIngressSchema.parse(row.payload) }))
             .find((row) => row.ingress.event.agentLifecycleDelivery?.sessionID === workerSessionID)
           const expectedLabel = input.exhaustRootFailure ? "delivery_failed" : "delivered"
-          const expectedAttempt = input.retryRootFailure || input.exhaustRootFailure ? 2 : 1
-          if (lifecycleWake?.label === expectedLabel && lifecycleWake.ingress.delivery_attempt === expectedAttempt)
-            break
+          if (lifecycleWake?.label === expectedLabel) break
           await Bun.sleep(20)
         }
         const descriptor = WorkerTurnDescriptor.latestForSession(workerSessionID)!
@@ -1000,9 +1049,7 @@ async function verifyDetachedDispatchLifecycle(input: {
             },
           },
         })
-        expect(rootAttempts).toBe(
-          input.pipelineOwnerCleanupFailure ? 2 : input.retryRootFailure || input.exhaustRootFailure ? 2 : 1,
-        )
+        expect(rootAttempts).toBe(input.retryRootFailure || input.exhaustRootFailure ? 2 : 1)
         if (input.exhaustRootFailure) {
           expect(
             await reconcileTerminalAgentLifecycleDelivery({
@@ -1037,16 +1084,15 @@ async function verifyDetachedDispatchLifecycle(input: {
                 .where(eq(EngineArtifactTable.id, lifecycleWake!.id))
                 .get(),
             )!
-            expect({ label: recovered.label, ingress: TaskRootIngressSchema.parse(recovered.payload) }).toMatchObject(
-              {
-                label: "delivered",
-                ingress: {
-                  delivery_attempt: 3,
-                  delivery_runtime_id: "successor-lifecycle-runtime",
-                  delivery_runtime_attempt: 1,
-                },
+            expect({ label: recovered.label, ingress: TaskRootIngressSchema.parse(recovered.payload) }).toMatchObject({
+              label: "delivered",
+              ingress: {
+                delivery_attempt: 3,
+                delivery_runtime_id: "successor-lifecycle-runtime",
+                delivery_runtime_attempt: 1,
+                delivery_result: { status: "completed" },
               },
-            )
+            })
             expect(rootAttempts).toBe(3)
             return
           }
@@ -1076,19 +1122,40 @@ async function verifyDetachedDispatchLifecycle(input: {
           ).toBe("already_delivered")
         }
         if (input.pipelineOwnerCleanupFailure) {
-          const cleanupEvent = rootEvents.find(
-            (event) => event?.dispatchInfrastructureFailure,
-          )?.dispatchInfrastructureFailure
-          expect(cleanupEvent).toMatchObject({
-            infrastructureFactID: expect.any(String),
-            outcome: {
-              kind: "infrastructure_failure",
-              operation: "settle-detached-pipeline-owner",
-              session_id: workerSessionID,
-              error_name: "Error",
-              message: "injected detached pipeline owner cleanup failure",
-              recovery_authority: expect.objectContaining({ occurrence_status: "occurrence_committed" }),
-              infrastructure_error: expect.objectContaining({ artifact_id: expect.any(String) }),
+          const cleanupWake = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_root_ingress")))
+              .all(),
+          )
+            .map((wake) => ({ ...wake, ingress: TaskRootIngressSchema.parse(wake.payload) }))
+            .find(
+              (wake) =>
+                wake.ingress.event.dispatchInfrastructureFailure?.outcome.operation ===
+                "settle-detached-pipeline-owner",
+            )!
+          expect({ label: cleanupWake.label, ingress: cleanupWake.ingress }).toMatchObject({
+            label: "delivered",
+            ingress: {
+              delivery_result: {
+                status: "terminal_inapplicable",
+                reason: "dispatch_infrastructure_failure carries no terminal conversation authority",
+              },
+              event: {
+                dispatchInfrastructureFailure: {
+                  infrastructureFactID: expect.any(String),
+                  outcome: {
+                    kind: "infrastructure_failure",
+                    operation: "settle-detached-pipeline-owner",
+                    session_id: workerSessionID,
+                    error_name: "Error",
+                    message: "injected detached pipeline owner cleanup failure",
+                    recovery_authority: expect.objectContaining({ occurrence_status: "occurrence_committed" }),
+                    infrastructure_error: expect.objectContaining({ artifact_id: expect.any(String) }),
+                  },
+                },
+              },
             },
           })
           expect(
@@ -1343,10 +1410,7 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
           .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
           .from(EngineArtifactTable)
           .where(
-            and(
-              eq(EngineArtifactTable.task_id, recovery.taskID),
-              eq(EngineArtifactTable.kind, "task_root_ingress"),
-            ),
+            and(eq(EngineArtifactTable.task_id, recovery.taskID), eq(EngineArtifactTable.kind, "task_root_ingress")),
           )
           .all(),
       )
@@ -1403,7 +1467,7 @@ test(
 )
 
 test(
-  "delivers detached pipeline owner cleanup failure through its own typed ingress",
+  "settles detached pipeline owner cleanup through its typed terminal-inapplicable result",
   () =>
     verifyDetachedDispatchLifecycle({
       useWorktree: false,
