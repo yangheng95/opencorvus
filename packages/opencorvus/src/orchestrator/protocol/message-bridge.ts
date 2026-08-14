@@ -1,6 +1,7 @@
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
-import { Instance, runOutsideInstanceContext } from "@/project/instance"
+import { Instance, runOutsideInstanceContext, type ProjectDeletionAdmission } from "@/project/instance"
+import { runWithProjectDeletionIdentity } from "@/project/independent-project-owner"
 import { ProtocolStore } from "@/protocol/store"
 import { SessionEvents } from "@/session/events"
 import { Message } from "@/session/message"
@@ -22,12 +23,23 @@ import {
   resolveMissionCallerReceiptParticipant,
 } from "@/mission/caller-participant"
 import { rightSidebarConversationAgentID } from "@/chat/session"
+import { Context } from "@/util/context"
 
 const log = Log.create({ service: "task-message-protocol-bridge" })
 let globalRelayInitialized = false
 const initializedLocalDirectories = new Set<string>()
 let crossInstanceBridgeQueue = Promise.resolve()
 let crossInstanceBridgeFailures: unknown[] = []
+const projectDeletionBridgeAdmission = Context.create<ProjectDeletionAdmission>(
+  "task-message-protocol-bridge-project-deletion-admission",
+)
+
+export function provideTaskMessageProtocolBridgeProjectDeletionAdmission<R>(
+  admission: ProjectDeletionAdmission,
+  fn: () => R,
+): R {
+  return projectDeletionBridgeAdmission.provide(admission, fn)
+}
 
 export async function awaitTaskMessageProtocolBridgeIdle() {
   while (true) {
@@ -1061,16 +1073,23 @@ function enqueueCrossInstanceBridge(
   handler: (props: Record<string, unknown>) => Promise<void>,
 ): Promise<void> {
   let queued: Promise<void> | undefined
+  const deletionAdmission = projectDeletionBridgeAdmission.tryUse()
+  const provideHostIdentity = async (fn: () => Promise<void>): Promise<void> => {
+    if (deletionAdmission) {
+      await runWithProjectDeletionIdentity({
+        directory: hostDirectory,
+        projectDeletionAdmission: deletionAdmission,
+        fn,
+      })
+      return
+    }
+    await runOutsideInstanceContext(() => Instance.provideProjectIdentity({ directory: hostDirectory, fn }))
+  }
   Database.runOutsideContext(() => {
     const operation = crossInstanceBridgeQueue
       .then(() =>
         Database.runLifecycleActivity(`cross-instance message bridge ${type}`, () =>
-          runOutsideInstanceContext(() =>
-            Instance.provideProjectIdentity({
-              directory: hostDirectory,
-              fn: async () => await handler(props),
-            }),
-          ),
+          provideHostIdentity(async () => await handler(props)),
         ),
       )
       .catch(async (err) => {
@@ -1078,18 +1097,15 @@ function enqueueCrossInstanceBridge(
         try {
           await Database.runOutsideContext(() =>
             Database.runLifecycleActivity(`cross-instance message bridge diagnostic ${type}`, () =>
-              runOutsideInstanceContext(() =>
-                Instance.provideProjectIdentity({
-                  directory: hostDirectory,
-                  fn: async () =>
-                    await appendBridgePreparationFailure({
-                      type,
-                      properties: bridgeDiagnosticPropertiesForType(type, props, {
-                        ...(sourceDirectory ? { sourceDirectory } : {}),
-                      }),
-                      error,
+              provideHostIdentity(
+                async () =>
+                  await appendBridgePreparationFailure({
+                    type,
+                    properties: bridgeDiagnosticPropertiesForType(type, props, {
+                      ...(sourceDirectory ? { sourceDirectory } : {}),
                     }),
-                }),
+                    error,
+                  }),
               ),
             ),
           )

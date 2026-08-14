@@ -16,7 +16,7 @@ import { Filesystem } from "@/util/filesystem"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { ImplicitProject } from "./implicit-project"
-import { Instance } from "./instance"
+import { Instance, type ProjectDeletionAdmission } from "./instance"
 import { Project } from "./project"
 import { closeProjectDeletionRegistryAdmission, type ProjectDeletionRegistryAdmission } from "./deletion-registry"
 import { ProjectTable } from "./project.sql"
@@ -154,9 +154,23 @@ function projectPromptSessions(projectID: string): ProjectPromptSession[] {
   )
 }
 
+function projectDeletionInstanceDirectories(project: Project.Info): string[] {
+  const roots = [project.worktree, ...project.sandboxes].map((directory) => Filesystem.resolve(directory))
+  const directories = new Set(roots)
+  for (const session of projectPromptSessions(project.id)) {
+    const directory = Filesystem.resolve(session.directory)
+    if (!roots.some((root) => Filesystem.contains(root, directory))) {
+      throw new Error(`Project ${project.id} Session ${session.id} directory escapes its registered roots: ${directory}`)
+    }
+    directories.add(directory)
+  }
+  return [...directories]
+}
+
 async function cancelRemainingProjectSessionPrompts(
   projectID: string,
   cancellationOrigin: TaskCancellationOrigin,
+  projectDeletionAdmission: ProjectDeletionAdmission,
 ): Promise<void> {
   const sessions = projectPromptSessions(projectID)
   const sessionIDs = sessions.map((session) => session.id)
@@ -210,6 +224,7 @@ async function cancelRemainingProjectSessionPrompts(
     sessions: cancelledSessions,
     failures,
     handle: "ProjectDelete.SessionPrompt.cancel",
+    projectDeletionAdmission,
   })
 }
 
@@ -242,7 +257,7 @@ export async function deleteProject(
   const directory = currentProject.worktree
   using admission = await Instance.closeProjectAdmission({
     projectID,
-    directories: [currentProject.worktree, ...currentProject.sandboxes],
+    directories: projectDeletionInstanceDirectories(currentProject),
   })
   let taskIDs: string[] = []
   let cleanupPlan: ProjectDeletionCleanupPlan | undefined
@@ -263,7 +278,7 @@ export async function deleteProject(
       })
     }
 
-    await cancelRemainingProjectSessionPrompts(projectID, cancellationOrigin)
+    await cancelRemainingProjectSessionPrompts(projectID, cancellationOrigin, admission)
     await Instance.disposeProjectEntries(projectID, CANCEL_QUEUE_SETTLE_INACTIVITY_MS)
     stage = "filesystem-quarantine"
     const rootPlans = await projectRootRemovalPlans(directory)

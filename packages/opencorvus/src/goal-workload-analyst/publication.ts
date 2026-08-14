@@ -6,7 +6,7 @@ import { resolveDeliverySliceRevisionIdentity } from "@/engine/delivery-slice"
 import { resolveGoalGraphMembershipBeforeCatalogRevision } from "@/engine/delivery-slice-membership-facts"
 import { findDispatchLineageByDispatchIDInTransaction } from "@/engine/dispatch-lineage"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable, EngineGoalTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineGoalTable } from "@/engine/engine.sql"
 import { assertTaskAssistantProducerMessage } from "@/engine/producer-turn"
 import { MessageTable, SessionTable } from "@/session/session.sql"
 import { Message } from "@/session/message"
@@ -113,12 +113,24 @@ export function validateGoalWorkloadArtifactRelationalIntegrity(input: {
   ) {
     throw new Error(`Goal Workload ${input.row.id} producer Session is inconsistent`)
   }
-  const task = input.db
-    .select({ rootSessionID: EngineTaskTable.session_id })
-    .from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, input.row.task_id))
-    .get()
-  if (!task || task.rootSessionID !== lineage.payload.orchestrator_session_id) {
+  const orchestratorInTaskTree = input.db.get<{ id: string }>(sql`
+    WITH RECURSIVE session_tree(id, project_id) AS (
+      SELECT session_id, project_id
+      FROM engine_task
+      WHERE id = ${input.row.task_id} AND session_id IS NOT NULL
+      UNION
+      SELECT session.id, session.project_id
+      FROM session
+      JOIN session_tree
+        ON session.parent_id = session_tree.id
+       AND session.project_id = session_tree.project_id
+    )
+    SELECT id
+    FROM session_tree
+    WHERE id = ${lineage.payload.orchestrator_session_id}
+    LIMIT 1
+  `)
+  if (!orchestratorInTaskTree) {
     throw new Error(`Goal Workload ${input.row.id} producer Session does not descend from its Task root`)
   }
   const descriptor = WorkerTurnDescriptor.findForDispatchInDatabase(input.db, {

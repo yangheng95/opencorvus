@@ -114,6 +114,22 @@ export function freezeDispatchAdapterInput(input: Record<string, unknown>): Read
   return deepFreeze(structuredClone(parsed))
 }
 
+export function resolveDispatchContinuationSourceID(input: {
+  continuationDispatchID?: string
+  coordinationSourceDispatchID?: string
+}): string | undefined {
+  if (
+    input.continuationDispatchID &&
+    input.coordinationSourceDispatchID &&
+    input.continuationDispatchID !== input.coordinationSourceDispatchID
+  ) {
+    throw new Error(
+      `Dispatch continuation source ${input.continuationDispatchID} conflicts with coordination source ${input.coordinationSourceDispatchID}`,
+    )
+  }
+  return input.continuationDispatchID ?? input.coordinationSourceDispatchID
+}
+
 export function createDispatchLineageOrigin(
   input: Omit<DispatchLineageOrigin, "dispatchID"> & { dispatchID?: string },
 ): DispatchLineageOrigin {

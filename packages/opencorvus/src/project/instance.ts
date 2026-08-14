@@ -197,6 +197,9 @@ let convergenceRequested = false
 let scheduledMaximumRetained = 1
 let scheduledConvergence: Promise<void> | undefined
 const pendingEvictions = new Set<CacheEntry>()
+let beforeConvergenceDisposalForTest:
+  | ((input: { directory: string; projectID?: string }) => void | Promise<void>)
+  | undefined
 const closedProjectAdmissions = new Map<
   string,
   { directories: string[]; token: symbol; discoveries: Map<Promise<void>, string> }
@@ -262,6 +265,21 @@ function createCacheEntry(contextPromise: Promise<Context>, identityKnown: Promi
       waiters: [],
     },
   }
+}
+
+function seedProjectDeletionIdentity(directory: string, project: Project.Info): void {
+  const resolved = Filesystem.resolve(directory)
+  const key = instanceCacheKey(resolved)
+  if (cache.has(key)) return
+  const context: Context = {
+    directory: resolved,
+    worktree: resolved,
+    project,
+    git: Project.isGitRepo(project.worktree),
+  }
+  const entry = createCacheEntry(Promise.resolve(context), Promise.resolve())
+  entry.projectID = project.id
+  cache.set(key, entry)
 }
 
 function pumpLock(entry: CacheEntry) {
@@ -1172,12 +1190,14 @@ export const Instance: InstanceApi = {
     if (inheritedLease?.key === key) {
       if (inheritedLease.entry !== entry) return undefined
       if (entry.rollback) throw rollbackError(entry.rollback)
-      if (!entry.initialized) return undefined
+      // Deletion-owned identities intentionally skip capability bootstrap;
+      // they exist only to settle durable lifecycle facts under the closed gate.
+      if (!entry.initialized && !deletionAdmission) return undefined
       const ctx = await entry.context
       if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
         throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
       }
-      assertContextHealthy(entry)
+      if (entry.initialized) assertContextHealthy(entry)
       return await input.fn()
     }
     const release = await acquireLock(entry, "read")
@@ -1185,13 +1205,13 @@ export const Instance: InstanceApi = {
     try {
       if (cache.get(key) !== entry) return undefined
       if (entry.rollback) throw rollbackError(entry.rollback)
-      if (!entry.initialized) return undefined
+      if (!entry.initialized && !deletionAdmission) return undefined
       const ctx = await entry.context
       if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
         throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
       }
       if (cache.get(key) !== entry) return undefined
-      assertContextHealthy(entry)
+      if (entry.initialized) assertContextHealthy(entry)
       return await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, async () => input.fn()))
     } finally {
       await closeLease(lease)
@@ -1241,14 +1261,23 @@ export const Instance: InstanceApi = {
         .filter(([, entry]) => !entry.projectID)
         .map(([key, entry]) => [entry.identityKnown, key] as const),
     )
+    const directories = input.directories.map((directory) => Filesystem.resolve(directory))
     closedProjectAdmissions.set(input.projectID, {
       token,
-      directories: input.directories.map((directory) => Filesystem.resolve(directory)),
+      directories,
       discoveries,
     })
     for (const discovery of discoveries.keys()) {
       void discovery.finally(() => discoveries.delete(discovery)).catch(() => undefined)
     }
+    await Promise.allSettled(discoveries.keys())
+    await Promise.resolve()
+    const project = Project.get(input.projectID)
+    if (!project) {
+      closedProjectAdmissions.delete(input.projectID)
+      throw new Error(`Project ${input.projectID} disappeared while closing deletion admission`)
+    }
+    for (const directory of directories) seedProjectDeletionIdentity(directory, project)
     const authority: ProjectDeletionAdmission = {
       projectID: input.projectID,
       [Symbol.dispose]() {
@@ -1454,6 +1483,7 @@ export const Instance: InstanceApi = {
       for (const [key, entry] of candidates) {
         if (cache.size - pendingEvictions.size <= maximumRetained) break
         if (cache.get(key) !== entry || pendingEvictions.has(entry)) continue
+        if (entry.projectID && closedProjectAdmissions.has(entry.projectID)) continue
         const release = tryAcquireIdleWriteLock(entry)
         if (!release) continue
         pendingEvictions.add(entry)
@@ -1477,6 +1507,10 @@ export const Instance: InstanceApi = {
             }
             const ctx = await entry.context
             if (cache.get(key) !== entry) return { status: "replaced" as const, directory }
+            await beforeConvergenceDisposalForTest?.({ directory: ctx.directory, projectID: entry.projectID })
+            if (entry.projectID && closedProjectAdmissions.has(entry.projectID)) {
+              return { status: "retained" as const, directory: ctx.directory }
+            }
             await leaseContext.provide(lease, () =>
               provideLeaseContext(lease, ctx, () =>
                 runLeaseLifecycle(lease, "instance cache convergence", () => disposeEntry(key, entry, ctx)),
@@ -1653,6 +1687,20 @@ export const Instance: InstanceApi = {
 }
 
 export const InstanceTestHooks = {
+  installBeforeConvergenceDisposal(
+    hook: (input: { directory: string; projectID?: string }) => void | Promise<void>,
+  ): Disposable {
+    if (beforeConvergenceDisposalForTest) throw new Error("Instance convergence disposal hook is already installed")
+    beforeConvergenceDisposalForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeConvergenceDisposalForTest === hook) beforeConvergenceDisposalForTest = undefined
+      },
+    }
+  },
+  isProjectAdmissionClosed(projectID: string): boolean {
+    return closedProjectAdmissions.has(projectID)
+  },
   async acquireCacheWriteLock(directory: string): Promise<Disposable> {
     const key = instanceCacheKey(Filesystem.resolve(directory))
     const entry = cache.get(key)

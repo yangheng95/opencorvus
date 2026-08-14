@@ -53,6 +53,7 @@ import {
 } from "@/engine/agent-coordination"
 import {
   createDispatchLineageOrigin,
+  resolveDispatchContinuationSourceID,
   findDispatchLineageByArtifactID,
   findDispatchLineageByDispatchID,
   findDispatchLineageBySession,
@@ -121,9 +122,11 @@ import {
 import {
   bindDispatchAdapterExecutors,
   createDispatchAgentTool,
+  DispatchAgentToolTestHooks,
   type DispatchAgentExecute,
   type OpenDispatchAgentLineage,
 } from "./dispatch-agent-tool"
+
 import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
 import { createExploreTool } from "./explore-tool"
 import { createDelegatedWorkerTool } from "./delegated-worker-tool"
@@ -172,6 +175,16 @@ import {
   taskRequestSHA256,
   type TaskAuthorityAnchor,
 } from "./dispatch-turn-projection"
+
+const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+
+export const OrchestratorToolsTestHooks = Object.freeze({
+  openDispatchLineage(surface: object): OpenDispatchAgentLineage {
+    const openLineage = orchestratorToolLineageHooks.get(surface)
+    if (!openLineage) throw new Error("Orchestrator Tools lineage hook is unavailable")
+    return openLineage
+  },
+})
 
 const log = Log.create({ service: "task-tools" })
 
@@ -2409,6 +2422,10 @@ export function createOrchestratorTools(input: {
       } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
         throw new Error(`dispatch_agent ${targetAgentID} initial dispatch has no workflow binding`)
       }
+      const sourceDispatchID = resolveDispatchContinuationSourceID({
+        continuationDispatchID,
+        coordinationSourceDispatchID: coordinationBinding?.sourceDispatchID,
+      })
       const origin = createDispatchLineageOrigin({
         taskID: ownershipTaskID,
         orchestratorSessionID: toolExecution.orchestratorSessionID,
@@ -2423,7 +2440,7 @@ export function createOrchestratorTools(input: {
         workflowNodeID: exactWorkflowNodeID,
         ...(exactWorkflowOccurrenceID ? { workflowOccurrenceID: exactWorkflowOccurrenceID } : {}),
         ...(coordinationActionID ? { coordinationActionID } : {}),
-        ...(continuationDispatchID ? { continuationOfDispatchID: continuationDispatchID } : {}),
+        ...(sourceDispatchID ? { continuationOfDispatchID: sourceDispatchID } : {}),
         adapterInput: exactAdapterInput,
       })
       const task = await assertTaskRootSessionLineageForConfig(requireTask(ownershipTaskID))
@@ -2437,7 +2454,7 @@ export function createOrchestratorTools(input: {
           ? {
               kind: "continuation",
               current_dispatch_id: origin.dispatchID,
-              source_dispatch_id: continuationDispatchID ?? coordinationBinding?.sourceDispatchID,
+              source_dispatch_id: sourceDispatchID,
               child_session_id: existingSessionID,
               workflow_binding: origin.workflowBinding,
               workflow_node_id: origin.workflowNodeID,
@@ -2686,7 +2703,9 @@ export function createOrchestratorTools(input: {
   const toolsWithTerminalTaskAuthority = Object.fromEntries(
     Object.entries(publicTools).map(([name, raw]) => [name, withTerminalTaskAuthority(name, raw)]),
   )
-  return {
+  const surface = {
     tools: toolsWithTerminalTaskAuthority,
   }
+  orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentTool))
+  return surface
 }

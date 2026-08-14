@@ -2,9 +2,10 @@ import {
   awaitTaskMessageProtocolBridgeIdle,
   ensureTaskMessageProtocolBridge,
   persistTaskSessionLifecycle,
+  provideTaskMessageProtocolBridgeProjectDeletionAdmission,
 } from "@/orchestrator/protocol/message-bridge"
-import { Instance } from "@/project/instance"
-import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
+import { Instance, type ProjectDeletionAdmission } from "@/project/instance"
+import { runWithIndependentProjectIdentity, runWithProjectDeletionIdentity } from "@/project/independent-project-owner"
 import type { Session } from "@/session"
 import { executionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { awaitWithAbort } from "@/util/abort"
@@ -26,20 +27,32 @@ type SettledSessionTerminalStatusInput = {
 export async function publishSessionStatus(
   session: Pick<Session.Info, "id" | "directory">,
   status: SessionStatus.Info,
-  options?: { promptGenerationOwner?: AbortSignal; inputMessageID?: string; taskID?: string; signal?: AbortSignal },
+  options?: {
+    promptGenerationOwner?: AbortSignal
+    inputMessageID?: string
+    taskID?: string
+    signal?: AbortSignal
+    projectDeletionAdmission?: ProjectDeletionAdmission
+  },
 ): Promise<void> {
   options?.signal?.throwIfAborted()
-  await awaitWithAbort(
-    runWithIndependentProjectIdentity({
-      directory: session.directory,
-      fn: () => {
-        options?.signal?.throwIfAborted()
-        ensureTaskMessageProtocolBridge()
-        return SessionStatus.set(session.id, status, options)
-      },
-    }),
-    options?.signal,
-  )
+  const publishStatus = () => {
+    options?.signal?.throwIfAborted()
+    ensureTaskMessageProtocolBridge()
+    return SessionStatus.set(session.id, status, options)
+  }
+  const publish = () =>
+    options?.projectDeletionAdmission
+      ? provideTaskMessageProtocolBridgeProjectDeletionAdmission(options.projectDeletionAdmission, publishStatus)
+      : publishStatus()
+  const publication = options?.projectDeletionAdmission
+    ? runWithProjectDeletionIdentity({
+        directory: session.directory,
+        projectDeletionAdmission: options.projectDeletionAdmission,
+        fn: publish,
+      })
+    : runWithIndependentProjectIdentity({ directory: session.directory, fn: publish })
+  await awaitWithAbort(publication, options?.signal)
   options?.signal?.throwIfAborted()
   if (options?.taskID) await awaitWithAbort(awaitTaskMessageProtocolBridgeIdle(), options.signal)
 }
@@ -78,7 +91,9 @@ async function persistSettledSessionTerminalStatus(
     })
   }
   input.signal?.throwIfAborted()
-  const terminal = isCurrentOccurrence ? SessionStatus.getExecution(input.session.id, input.inputMessageID) : input.status
+  const terminal = isCurrentOccurrence
+    ? SessionStatus.getExecution(input.session.id, input.inputMessageID)
+    : input.status
   if (terminal.type !== "terminal") {
     throw new Error(`settled Session ${input.session.id} did not acquire a terminal lifecycle fact`)
   }

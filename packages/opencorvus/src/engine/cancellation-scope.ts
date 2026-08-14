@@ -5,10 +5,18 @@ import { publishSessionStatus } from "@/session/status-publication"
 import { AwaitTimeoutError } from "@/util/await-with-timeout"
 import { createTaskCancellationIncomplete } from "./cancellation-error"
 import type { ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import type { ProjectDeletionAdmission } from "@/project/instance"
 
 type SessionInfo = Awaited<ReturnType<typeof Session.get>>
 type PromptSession = Pick<SessionInfo, "id" | "directory">
 export type TaskAgentPromptSession = PromptSession
+export type ProjectDeletionAdmissionSource = ProjectDeletionAdmission | (() => ProjectDeletionAdmission | undefined)
+
+function resolveProjectDeletionAdmission(
+  source: ProjectDeletionAdmissionSource | undefined,
+): ProjectDeletionAdmission | undefined {
+  return typeof source === "function" ? source() : source
+}
 
 const DEFAULT_PROMPT_SETTLE_INACTIVITY_MS = 5_000
 
@@ -55,6 +63,7 @@ export async function awaitSessionPromptFinishedInScope(input: {
   handle?: string
   inactivityTimeoutMs?: number
   signal?: AbortSignal
+  projectDeletionAdmission?: ProjectDeletionAdmissionSource
 }): Promise<boolean> {
   input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.finish"
@@ -74,7 +83,11 @@ export async function awaitSessionPromptFinishedInScope(input: {
       await publishSessionStatus(
         input.session,
         { type: "terminal", reason: "aborted", error: receipt.error.message },
-        { promptGenerationOwner: receipt.owner, signal: input.signal },
+        {
+          promptGenerationOwner: receipt.owner,
+          signal: input.signal,
+          projectDeletionAdmission: resolveProjectDeletionAdmission(input.projectDeletionAdmission),
+        },
       )
       input.signal?.throwIfAborted()
       SessionPromptState.clearCancellationReceipt(input.session.id, receipt.owner)
@@ -153,6 +166,7 @@ export async function assertSessionPromptSubtreeFinished(input: {
   handle?: string
   inactivityTimeoutMs?: number
   signal?: AbortSignal
+  projectDeletionAdmission?: ProjectDeletionAdmissionSource
 }): Promise<void> {
   input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.cancel"
@@ -165,6 +179,7 @@ export async function assertSessionPromptSubtreeFinished(input: {
         handle: `${handle}.finish`,
         inactivityTimeoutMs: input.inactivityTimeoutMs,
         signal: input.signal,
+        projectDeletionAdmission: input.projectDeletionAdmission,
       }),
     ),
   )

@@ -1030,7 +1030,7 @@ describe("Goal Workload coverage contract", () => {
     })
   })
 
-  test("publishes one strict no-GoalGraph receipt and reuses its exact occurrence identity", async () => {
+  test("publishes from a production-shaped nested Orchestrator and reuses its exact occurrence identity", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -1065,9 +1065,14 @@ describe("Goal Workload coverage contract", () => {
             timeCreated: now,
           }),
         })
+        const orchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: root.id,
+          title: "Task Orchestrator",
+        })
         const child = await Session.create({
           kind: "goal-workload-analyst",
-          parentID: root.id,
+          parentID: orchestrator.id,
           title: "Workload Analyst",
         })
         const parent = await Session.updateMessage({
@@ -1103,7 +1108,7 @@ describe("Goal Workload coverage contract", () => {
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,
-            orchestratorSessionID: root.id,
+            orchestratorSessionID: orchestrator.id,
             orchestratorMessageID: Identifier.ascending("message"),
             toolPartID: Identifier.ascending("part"),
             toolCallID: Identifier.ascending("call"),

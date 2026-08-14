@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
-import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import {
+  createDispatchLineageOrigin,
+  listDispatchLineage,
+  recordDispatchLineage,
+  resolveDispatchContinuationSourceID,
+} from "@/engine/dispatch-lineage"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
@@ -132,6 +137,13 @@ async function commitInitialSession(input: {
 }
 
 describe("workflow node occurrence authority", () => {
+  test("projects the coordination redispatch source as the continuation source", () => {
+    const sourceDispatchID = Identifier.ascending("artifact")
+    expect(
+      resolveDispatchContinuationSourceID({ coordinationSourceDispatchID: sourceDispatchID }),
+    ).toBe(sourceDispatchID)
+  })
+
   test("binds one initial node and reuses its exact occurrence and Session for continuation", async () => {
     await using project = await memoryProject()
     await Instance.provide({
