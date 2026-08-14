@@ -2890,6 +2890,11 @@ button.s-row:focus-visible {
   line-height: 1.5;
 }
 
+.conversation-capability-scope-path,
+.conversation-capability-scope-notice {
+  overflow-wrap: anywhere;
+}
+
 .conversation-capability-sections {
   display: grid;
   gap: calc(24px * var(--ui-scale));

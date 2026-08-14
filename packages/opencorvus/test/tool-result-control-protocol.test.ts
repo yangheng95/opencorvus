@@ -15,7 +15,7 @@ import { Config } from "../src/config/config"
 import { requireTask } from "../src/engine/store"
 import { deriveTaskStatus } from "../src/engine/task-status"
 import { terminalTask } from "../src/engine/state"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "../src/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "../src/engine/dispatch-lineage"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import {
   findAgentCoordinationRequest,
@@ -29,7 +29,8 @@ import { PermissionAuthority } from "../src/permission/authority"
 import { Identifier } from "../src/id/id"
 import { MCP } from "../src/mcp"
 import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
-import { createOrchestratorTools } from "../src/orchestrator/tools"
+import { createOrchestratorTools, OrchestratorToolsTestHooks } from "../src/orchestrator/tools"
+import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { Provider } from "../src/provider/provider"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -874,6 +875,174 @@ describe("single Tool-result turn-control protocol", () => {
           },
         })
         await SessionRuntimeContractStore.dispose(fixture.session.id)
+      },
+    })
+  }, 120_000)
+
+  test("persists one production coordination source in lineage and the Worker Turn descriptor", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
+        const requestResult = await worker.executeWorkerTool(
+          "request_orchestrator_decision",
+          {
+            summary: "Continue the same worker occurrence",
+            details: "The scheduler must redispatch this exact production worker Session.",
+            blocking: true,
+            requested_decision: "Redispatch this worker with incremental guidance",
+            evidence_locators: [],
+            severity: "blocked",
+          },
+          "call_coordination_continuation_request",
+        )
+        const requestControl = toolResultControl((requestResult as any).metadata)
+        if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
+        const sourceDescriptor = WorkerTurnDescriptor.latestForSession(worker.session.id)
+        if (!sourceDescriptor) throw new Error("Source worker descriptor was not persisted")
+        WorkerTurnDescriptor.create({
+          sessionID: worker.session.id,
+          payload: {
+            ...sourceDescriptor.payload,
+            dispatchTurn: {
+              kind: "initial",
+              current_dispatch_id: worker.dispatchLineage.dispatchID,
+              workflow_binding: worker.dispatchLineage.payload.workflow_binding,
+              workflow_node_id: worker.dispatchLineage.payload.workflow_node_id,
+              workflow_occurrence_id: worker.dispatchLineage.payload.workflow_occurrence_id,
+              delivery_slice_revision_ids: worker.dispatchLineage.payload.delivery_slice_revision_ids,
+              evidence_locators: [],
+              task_authority: {
+                task_id: worker.taskID,
+                root_session_id: worker.root.id,
+                request_sha256: taskRequestSHA256(requireTask(worker.taskID).request),
+                initial_user_message_id: sourceDescriptor.payload.messageAuthority.user_message_id,
+                initial_control_text_parts: sourceDescriptor.payload.messageAuthority.control_text_parts,
+              },
+            },
+          },
+        })
+        const orchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: worker.root.id,
+          title: "Coordination continuation scheduler",
+        })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: orchestrator.id,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() },
+          agent: "orchestrator",
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: orchestrator.id,
+          role: "assistant",
+          author: "orchestrator",
+          agent: "orchestrator",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const dispatchAgents = [
+          ...worker.scheduler.skillProjection.schedulerOnlyAgents,
+          ...worker.scheduler.skillProjection.projectedAgents,
+        ]
+        const surface = createOrchestratorTools({
+          taskID: worker.taskID,
+          agentSessionID: orchestrator.id,
+          dispatchAgents,
+        })
+        const runTool = async (toolName: "respond_agent_coordination" | "dispatch_agent", callID: string, args: any) => {
+          const part = await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: orchestrator.id,
+            messageID: assistant.id,
+            type: "tool",
+            callID,
+            tool: toolName,
+            state: { status: "running", input: args, time: { start: Date.now() } },
+          })
+          return {
+            part,
+            options: {
+              toolCallId: callID,
+              messages: [],
+              abortSignal: new AbortController().signal,
+              opencorvus: {
+                sessionID: orchestrator.id,
+                messageID: assistant.id,
+                toolCallID: callID,
+                toolPartID: part.id,
+                visibleToolName: toolName,
+              },
+            },
+          }
+        }
+        const responseExecution = await runTool("respond_agent_coordination", "call_coordination_redispatch", {})
+        const respond = (surface.tools as Record<string, any>).respond_agent_coordination
+        await respond.execute(
+          {
+            request_id: requestControl.request_id,
+            decision: "redispatch",
+            message: "Continue with the scheduler's exact incremental guidance.",
+            reason: "The existing worker owns the same Task-scoped occurrence.",
+          },
+          responseExecution.options,
+        )
+        const action = listAgentCoordinationActions(worker.taskID)[0]
+        if (!action) throw new Error("Coordination redispatch action was not persisted")
+        const target = dispatchAgents.find(
+          (candidate) => candidate.identity.agentID === worker.projection.workerCapability.identity.agentID,
+        )
+        if (!target) throw new Error("Coordination redispatch target was not projected")
+        const dispatchExecution = await runTool("dispatch_agent", "call_coordination_dispatch", {})
+        const lineageHandle = await OrchestratorToolsTestHooks.openDispatchLineage(surface)({
+          taskID: worker.taskID,
+          targetAgentID: target.identity.agentID,
+          projectedAgent: target,
+          workScope: { kind: "task" },
+          deliverySliceRevisionIDs: [],
+          coordinationActionID: action.payload.action_id,
+          toolOptions: dispatchExecution.options,
+          adapterInput: {},
+          continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
+          evidenceLocators: [],
+        })
+        const previous = WorkerTurnDescriptor.latestForSession(worker.session.id)
+        if (!previous) throw new Error("Coordination source descriptor was not persisted")
+        const descriptor = WorkerTurnDescriptor.create({
+          sessionID: worker.session.id,
+          payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
+        })
+        lineageHandle.commitSession(worker.session.id, descriptor)
+        const continuation = listDispatchLineage(worker.taskID).find(
+          (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
+        )
+        const persistedDescriptor = continuation
+          ? WorkerTurnDescriptor.findForDispatch({
+              sessionID: continuation.payload.child_session_id,
+              dispatchID: continuation.dispatchID,
+            })
+          : undefined
+        expect({
+          lineageSource: continuation?.payload.continuation_of_dispatch_id,
+          descriptorSource:
+            persistedDescriptor?.payload.dispatchTurn?.kind === "continuation"
+              ? persistedDescriptor.payload.dispatchTurn.source_dispatch_id
+              : undefined,
+        }).toEqual({
+          lineageSource: worker.dispatchLineage.dispatchID,
+          descriptorSource: worker.dispatchLineage.dispatchID,
+        })
+        await SessionRuntimeContractStore.dispose(worker.session.id)
       },
     })
   }, 120_000)

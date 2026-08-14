@@ -1,6 +1,6 @@
 import { Database } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
-import { Instance, runOutsideInstanceContext } from "./instance"
+import { Instance, runOutsideInstanceContext, type ProjectDeletionAdmission } from "./instance"
 
 /**
  * Run asynchronous project work under a fresh project lease without
@@ -12,9 +12,35 @@ export async function runWithIndependentProjectIdentity<R>(input: {
   directory: string
   fn: () => R
 }): Promise<Awaited<R>> {
-  return await Database.runOutsideContext(() =>
-    runOutsideInstanceContext(() => Instance.provideProjectIdentity(input)),
+  return await Database.runOutsideContext(() => runOutsideInstanceContext(() => Instance.provideProjectIdentity(input)))
+}
+
+/**
+ * Publish or persist deletion-settlement facts through the exact Project
+ * deletion authority. Deletion may reuse an initialized entry or the
+ * identity-only entry seeded when admission closes, but must never reopen
+ * ordinary discovery or capability initialization.
+ */
+export async function runWithProjectDeletionIdentity<R>(input: {
+  directory: string
+  projectDeletionAdmission: ProjectDeletionAdmission
+  fn: () => R
+}): Promise<Awaited<R>> {
+  const result = await Database.runOutsideContext(() =>
+    runOutsideInstanceContext(() =>
+      Instance.tryProvideActive({
+        directory: input.directory,
+        projectDeletionAdmission: input.projectDeletionAdmission,
+        fn: async () => ({ value: await input.fn() }),
+      }),
+    ),
   )
+  if (result === undefined) {
+    throw new Error(
+      `Project ${input.projectDeletionAdmission.projectID} deletion requires its admitted identity for ${Filesystem.resolve(input.directory)}`,
+    )
+  }
+  return result.value
 }
 
 export async function provideInitializedProjectExecution<R>(input: {

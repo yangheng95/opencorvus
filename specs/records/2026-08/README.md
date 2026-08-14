@@ -1,5 +1,13 @@
 # August 2026 Records
 
+- [2026-08-14-task-cancellation-independent-instance-convergence.md](2026-08-14-task-cancellation-independent-instance-convergence.md) keeps accepted Task cancellation convergence inside its own initialized Project Instance lease and aligns production Workload ancestry plus coordination identities.
+
+- [2026-08-14-mission-submit-selection-supersession.md](2026-08-14-mission-submit-selection-supersession.md) keeps a committed Mission submit successful when newer operator navigation supersedes only its automatic page selection.
+
+- [2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md](2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md) routes cancelled Session terminal publication through the existing Project-deletion admission and makes Browser/Computer capability settings expose their exact Project plus Chat/Work scope.
+
+- [2026-08-14-message-source-file-layout-repair.md](2026-08-14-message-source-file-layout-repair.md) keeps exact cited-line selection while preventing CodeMirror center alignment from scrolling the Right Dock ancestor and displacing the full File pane.
+
 - [2026-08-14-mission-wake-activation-fence-p0.md](2026-08-14-mission-wake-activation-fence-p0.md) closes the bounded handoff between Mission lifecycle admission and physical prompt ownership across operator, scheduler, and startup-recovery wakes without changing retry policy.
 
 - [2026-08-14-v0.0.43-beta-release.md](2026-08-14-v0.0.43-beta-release.md) records the current-main convergence, canonical release-family bump, native Release publication, beta updater promotion, and production website verification for `v0.0.43-beta`.

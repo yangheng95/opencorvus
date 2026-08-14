@@ -1,5 +1,13 @@
 # Specs Storage Index
 
+Latest Task cancellation and Workload identity convergence repair: [accepted cancellation owns an independent initialized Project Instance](records/2026-08/2026-08-14-task-cancellation-independent-instance-convergence.md).
+
+Latest Mission submit selection-supersession settlement: [`2026-08-14-mission-submit-selection-supersession.md`](records/2026-08/2026-08-14-mission-submit-selection-supersession.md).
+
+Latest Computer Use scope and Project-delete settlement repair: [`2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md`](records/2026-08/2026-08-14-computer-use-scope-and-project-delete-settlement-repair.md).
+
+Latest message-source File layout repair: [`2026-08-14-message-source-file-layout-repair.md`](records/2026-08/2026-08-14-message-source-file-layout-repair.md).
+
 Latest Mission wake activation fence P0: [`2026-08-14-mission-wake-activation-fence-p0.md`](records/2026-08/2026-08-14-mission-wake-activation-fence-p0.md).
 
 Latest `v0.0.43-beta` application and website release: [`2026-08-14-v0.0.43-beta-release.md`](records/2026-08/2026-08-14-v0.0.43-beta-release.md).

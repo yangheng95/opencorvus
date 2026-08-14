@@ -25,17 +25,20 @@ export default function ConversationCapabilityPanel(props: {
   let mutationGeneration = 0
   let mutationScope = ""
 
-  const productLabel = () => (props.experience === "chat" ? "Code" : "Work")
+  const productLabel = () => (props.experience === "chat" ? "Chat" : "Work")
 
   function directory() {
     return String(typeof props.directory === "function" ? props.directory() : props.directory || "").trim()
   }
 
+  function scopeDirectory() {
+    return settings()?.scope.directory || directory()
+  }
+
   function scopeLabel() {
-    const value = directory()
+    const value = scopeDirectory()
     if (!value) return t("settings.product.project_required")
-    const normalized = value.replaceAll("\\", "/").replace(/\/+$/, "")
-    return normalized.split("/").pop() || value
+    return value.replaceAll("\\", "/").replace(/\/+$/, "") || value
   }
 
   createEffect(() => {
@@ -146,11 +149,16 @@ export default function ConversationCapabilityPanel(props: {
         description={t("settings.product.capability_intro", { product: productLabel() })}
         actions={
           <Badge tone={directory() ? "neutral" : "warn"}>
-            {t("settings.product.scope_badge", { project: scopeLabel() })}
+            <span class="conversation-capability-scope-path" title={scopeDirectory()}>
+              {t("settings.product.scope_badge", { project: scopeLabel(), product: productLabel() })}
+            </span>
           </Badge>
         }
         contentInset
       >
+        <p class="conversation-capability-model-owner conversation-capability-scope-notice">
+          {t("settings.product.scope_notice", { project: scopeLabel(), product: productLabel() })}
+        </p>
         <p class="conversation-capability-model-owner">{t("settings.product.model_owner")}</p>
         <Show
           when={!!directory()}

@@ -26,7 +26,7 @@ import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
 import { TaskRootIngressSchema } from "@/engine/task-root-ingress"
 import { Event } from "@/engine/model"
 import { TASK_CANCELLED_EVENT_TYPE, TASK_CANCELLATION_REQUESTED_EVENT_TYPE } from "@/engine/cancellation-origin"
-import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
+import { pendingTaskCancellationProjection, taskCancellationProjection } from "@/engine/cancellation-projection"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { EngineProtocol } from "@/engine/protocol"
 import { deriveTaskStatus } from "@/engine/task-status"
@@ -900,6 +900,172 @@ describe.serial("active operator wake settlement", () => {
         ).toEqual({ label: "terminal_inapplicable" })
         await waitForCancelledCheckpoint(taskID)
       },
+    })
+  }, 0)
+
+  test("converges an accepted cancellation after the accepting Instance lease closes", async () => {
+    await using project = await memoryProject()
+    let releaseLateStage!: () => void
+    const lateStageRelease = new Promise<void>((resolve) => {
+      releaseLateStage = resolve
+    })
+    let reachedLateStage = false
+    using _lateStage = TaskCancellationConvergenceTestHooks.installBeforeLateStage(async () => {
+      reachedLateStage = true
+      await lateStageRelease
+    })
+
+    let taskID = ""
+    const receipt = await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        taskID = (
+          await createActiveTask({
+            title: "Accepted cancellation independent Instance",
+            request: "Finish cancellation after the accepting request lease has closed",
+          })
+        ).taskID
+        return await EngineService.requestTaskCancellation(taskID, {
+          origin: {
+            actor: "user",
+            source: "task.cancel",
+            surface: "overlay.composer_stop",
+            requestID: "accepted-cancellation-independent-instance",
+            reason: "operator requested cancellation",
+          },
+        })
+      },
+    })
+
+    const lateStageDeadline = Date.now() + 3_000
+    while (!reachedLateStage && Date.now() < lateStageDeadline) await Bun.sleep(10)
+    expect({ receipt, reachedLateStage }).toMatchObject({
+      receipt: {
+        status: "cancelling",
+        requestID: "accepted-cancellation-independent-instance",
+      },
+      reachedLateStage: true,
+    })
+
+    releaseLateStage()
+    const terminalDeadline = Date.now() + 5_000
+    while (deriveTaskStatus(requireTask(taskID)) !== "cancelled" && Date.now() < terminalDeadline) {
+      await Bun.sleep(10)
+    }
+    expect(deriveTaskStatus(requireTask(taskID))).toBe("cancelled")
+    await waitForCancelledCheckpoint(taskID)
+  }, 0)
+
+  test("converges a pending cancellation during cold Instance bootstrap", async () => {
+    await using project = await memoryProject()
+    let taskID = ""
+    await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        taskID = (
+          await createActiveTask({
+            title: "Cold bootstrap pending cancellation",
+            request: "Recover the durable cancellation while initializing an empty Instance cache",
+          })
+        ).taskID
+        const requested = await EngineProtocol.emit(
+          Event.TaskCancellationRequested,
+          {
+            taskID,
+            actor: "user",
+            surface: "overlay.composer_stop",
+            reason: "operator requested cancellation",
+            summary: "Cancellation requested before cold Instance bootstrap",
+          },
+          { source: "task.cancel", correlationID: "cold-bootstrap-pending-cancellation" },
+        )
+        Database.use((db) =>
+          db
+            .insert(EngineTaskCancellationAuthorityTable)
+            .values({ task_id: taskID, request_event_id: requested.id })
+            .run(),
+        )
+      },
+    })
+    await Instance.disposeAll()
+
+    const recovered = await provideTestInstance({
+      directory: project.path,
+      fn: () => ({
+        taskStatus: deriveTaskStatus(requireTask(taskID)),
+        cancellation: taskCancellationProjection(taskID),
+      }),
+    })
+
+    expect(recovered).toMatchObject({
+      taskStatus: "cancelled",
+      cancellation: {
+        status: "cancelled",
+        requestID: "cold-bootstrap-pending-cancellation",
+      },
+    })
+    await waitForCancelledCheckpoint(taskID)
+  }, 0)
+
+  test("promotes an in-flight operator cancellation when Project deletion joins after admission closes", async () => {
+    await using project = await memoryProject()
+    let taskID = ""
+    let rootSessionID = ""
+    let projectID = ""
+    let promptOwner!: AbortSignal
+    let promptCancelled!: () => void
+    const promptCancellation = new Promise<void>((resolve) => {
+      promptCancelled = resolve
+    })
+
+    const receipt = await provideTestInstance({
+      directory: project.path,
+      fn: async () => {
+        const task = await createActiveTask({
+          title: "Project deletion joins operator cancellation",
+          request: "Converge one cancellation when destructive authority arrives after the operator request",
+        })
+        taskID = task.taskID
+        rootSessionID = task.rootSessionID
+        projectID = Instance.project.id
+        promptOwner = SessionPromptState.start(rootSessionID, project.path)!
+        promptOwner.addEventListener("abort", promptCancelled, { once: true })
+        return EngineService.requestTaskCancellation(taskID, {
+          origin: {
+            actor: "user",
+            source: "task.cancel",
+            surface: "overlay.composer_stop",
+            requestID: "operator-cancel-before-project-delete",
+            reason: "operator requested cancellation before Project deletion",
+          },
+        })
+      },
+    })
+
+    await promptCancellation
+    using deletionAdmission = await Instance.closeProjectAdmission({
+      projectID,
+      directories: [project.path],
+    })
+    const joined = EngineService.cancelTask(taskID, {
+      origin: {
+        actor: "system",
+        source: "project.delete",
+        surface: "project-api",
+        requestID: "project-delete-joins-operator-cancel",
+        reason: "Project deletion is settling the in-flight Task cancellation",
+      },
+      projectDeletionAdmission: deletionAdmission,
+    })
+    await SessionPromptState.finish(rootSessionID, promptOwner, project.path)
+
+    expect({ receipt, joined: await joined, status: deriveTaskStatus(requireTask(taskID)) }).toMatchObject({
+      receipt: {
+        status: "cancelling",
+        requestID: "operator-cancel-before-project-delete",
+      },
+      joined: true,
+      status: "cancelled",
     })
   }, 0)
 
@@ -2244,6 +2410,7 @@ describe.serial("active operator wake settlement", () => {
         }
       },
     })
+    await waitForQueueCompletionHooksForTest()
   }, 120_000)
 
   test("converges a historical non-tail failed ingress into one visible recovery occurrence", async () => {

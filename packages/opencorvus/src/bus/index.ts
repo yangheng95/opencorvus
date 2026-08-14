@@ -181,7 +181,10 @@ export namespace Bus {
     let result: Promise<void>
     let reservation: RuntimeExecutionReservation | undefined
     try {
-      reservation = RuntimeExecutionSettlement.reserve("protocol_publication", `${payload.type}:${payload.occurrenceID}`)
+      reservation = RuntimeExecutionSettlement.reserve(
+        "protocol_publication",
+        `${payload.type}:${payload.occurrenceID}`,
+      )
       result = executePublication(payload, directory, subscriptions, reservation.signal)
       reservation.settleWith(result)
     } catch (error) {
@@ -275,29 +278,32 @@ export namespace Bus {
         })
       }
     }
-    entry.retryTimer = setTimeout(() => {
-      Database.runOutsideContext(() =>
-        runOutsideInstanceContext(() => {
-          if (entry.retryEpoch !== retryEpoch || ownedPublicationOwners.get(entry.occurrenceID) !== entry) return
-          entry.retryTimer = undefined
-          if (entry.pending || entry.error === undefined) return
-          try {
-            if (entry.durable) {
-              if (!durableOutboxExists(entry.occurrenceID)) {
-                ownedPublicationOwners.delete(entry.occurrenceID)
+    entry.retryTimer = setTimeout(
+      () => {
+        Database.runOutsideContext(() =>
+          runOutsideInstanceContext(() => {
+            if (entry.retryEpoch !== retryEpoch || ownedPublicationOwners.get(entry.occurrenceID) !== entry) return
+            entry.retryTimer = undefined
+            if (entry.pending || entry.error === undefined) return
+            try {
+              if (entry.durable) {
+                if (!durableOutboxExists(entry.occurrenceID)) {
+                  ownedPublicationOwners.delete(entry.occurrenceID)
+                  return
+                }
+                trackOwnedPublication(entry, executeDurableOccurrence(entry.occurrenceID))
                 return
               }
-              trackOwnedPublication(entry, executeDurableOccurrence(entry.occurrenceID))
-              return
+              trackOwnedPublication(entry, entry.current.retry())
+            } catch (error) {
+              entry.error = error
+              scheduleOwnedPublicationRetry(entry)
             }
-            trackOwnedPublication(entry, entry.current.retry())
-          } catch (error) {
-            entry.error = error
-            scheduleOwnedPublicationRetry(entry)
-          }
-        }),
-      )
-    }, Math.min(2_147_483_647, Math.max(0, retryAt - Date.now())))
+          }),
+        )
+      },
+      Math.min(2_147_483_647, Math.max(0, retryAt - Date.now())),
+    )
     entry.retryTimer.unref()
   }
 
@@ -452,9 +458,7 @@ export namespace Bus {
                 if (entry?.pending) {
                   publication = entry.current
                 } else {
-                  publication = captured.durable
-                    ? executeDurableOccurrence(occurrenceID)
-                    : captured.current.retry()
+                  publication = captured.durable ? executeDurableOccurrence(occurrenceID) : captured.current.retry()
                   entry = entry ?? {
                     occurrenceID,
                     directory: captured.directory,
@@ -710,7 +714,10 @@ export namespace Bus {
     const refreshed = durableRow(row.occurrence_id)
     if (refreshed?.exact_settled && refreshed.wildcard_settled && refreshed.global_settled) {
       Database.use((db) =>
-        db.delete(BusPublicationOutboxTable).where(eq(BusPublicationOutboxTable.occurrence_id, row.occurrence_id)).run(),
+        db
+          .delete(BusPublicationOutboxTable)
+          .where(eq(BusPublicationOutboxTable.occurrence_id, row.occurrence_id))
+          .run(),
       )
     }
     if (failures.length === 1) throw failures[0]
@@ -826,7 +833,13 @@ export namespace Bus {
       const publication = executeDurableOccurrence(row.id)
       const entry =
         existing ??
-        ({ occurrenceID: row.id, directory, current: publication, retryEpoch: 0, durable: true } satisfies OwnedPublication)
+        ({
+          occurrenceID: row.id,
+          directory,
+          current: publication,
+          retryEpoch: 0,
+          durable: true,
+        } satisfies OwnedPublication)
       ownedPublicationOwners.set(row.id, entry)
       trackOwnedPublication(entry, publication)
     }
@@ -931,18 +944,13 @@ export namespace Bus {
 
   export function subscribe<Definition extends BusEvent.Definition>(
     def: Definition,
-    callback: (
-      event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>,
-    ) => unknown | Promise<unknown>,
+    callback: (event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>) => unknown | Promise<unknown>,
     options?: { durableID: string },
   ) {
     return raw(def.type, callback, options)
   }
 
-  export function subscribeAll(
-    callback: (event: any) => unknown | Promise<unknown>,
-    options?: { durableID: string },
-  ) {
+  export function subscribeAll(callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string }) {
     return raw("*", callback, options)
   }
 
@@ -959,11 +967,11 @@ export namespace Bus {
   export namespace TestHooks {
     export function ownedPublications() {
       return [...ownedPublicationOwners.entries()].map(([id, entry]) => ({
-          directory: entry.directory,
-          id,
-          pending: Boolean(entry.pending),
-          failed: entry.error !== undefined,
-        }))
+        directory: entry.directory,
+        id,
+        pending: Boolean(entry.pending),
+        failed: entry.error !== undefined,
+      }))
     }
 
     export function ownedPublicationRetryScheduled(occurrenceID: string): boolean {
@@ -985,8 +993,11 @@ export namespace Bus {
     }
 
     export async function disposeOwnedState() {
-      const pending = [...ownedPublicationOwners.values()].flatMap((entry) => (entry.pending ? [entry.pending] : []))
-      if (pending.length > 0) await Promise.allSettled(pending)
+      for (;;) {
+        const pending = [...ownedPublicationOwners.values()].flatMap((entry) => (entry.pending ? [entry.pending] : []))
+        if (pending.length === 0) break
+        await Promise.allSettled(pending)
+      }
       const failures = [...ownedPublicationOwners.values()].flatMap((entry) =>
         entry.error === undefined ? [] : [entry.error],
       )
@@ -1023,9 +1034,7 @@ export namespace Bus {
 
   export function once<Definition extends BusEvent.Definition>(
     def: Definition,
-    callback: (
-      event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>,
-    ) => unknown | Promise<unknown>,
+    callback: (event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>) => unknown | Promise<unknown>,
   ) {
     const unsub = raw(def.type, async (event) => {
       const result = await callback(event)
@@ -1034,11 +1043,7 @@ export namespace Bus {
     return unsub
   }
 
-  function raw(
-    type: string,
-    callback: (event: any) => unknown | Promise<unknown>,
-    options?: { durableID: string },
-  ) {
+  function raw(type: string, callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string }) {
     log.debug("subscribing", { type })
     if (isBusTraceEnabled()) {
       const stack = new Error().stack
@@ -1070,7 +1075,13 @@ export namespace Bus {
       callback,
       id: options?.durableID ?? `runtime:${runtimeSubscriptionID}:${++subscriptionSequence}`,
       durable: options !== undefined,
-      source: isBusTraceEnabled() ? new Error().stack?.split("\n").slice(2, 6).map((x) => x.trim()).join(" | ") : undefined,
+      source: isBusTraceEnabled()
+        ? new Error().stack
+            ?.split("\n")
+            .slice(2, 6)
+            .map((x) => x.trim())
+            .join(" | ")
+        : undefined,
     }
     if (durableKey) current.durableSubscriptions.set(durableKey, subscription)
     let match = subscriptions.get(type) ?? []
@@ -1079,16 +1090,16 @@ export namespace Bus {
 
     function createUnsubscribe(target: Subscription) {
       return () => {
-      log.debug("unsubscribing", { type })
-      const match = subscriptions.get(type)
-      if (!match) return
-      const index = match.indexOf(target)
-      if (index === -1) return
-      match.splice(index, 1)
-      if (durableKey && current.durableSubscriptions.get(durableKey) === target) {
-        current.durableSubscriptions.delete(durableKey)
-      }
-      if (match.length === 0) subscriptions.delete(type)
+        log.debug("unsubscribing", { type })
+        const match = subscriptions.get(type)
+        if (!match) return
+        const index = match.indexOf(target)
+        if (index === -1) return
+        match.splice(index, 1)
+        if (durableKey && current.durableSubscriptions.get(durableKey) === target) {
+          current.durableSubscriptions.delete(durableKey)
+        }
+        if (match.length === 0) subscriptions.delete(type)
       }
     }
     return createUnsubscribe(subscription)

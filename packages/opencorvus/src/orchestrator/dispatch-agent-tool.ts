@@ -333,6 +333,16 @@ export function bindDispatchAdapterExecutors(
   return Object.freeze({ ...input })
 }
 
+const dispatchAgentToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+
+export const DispatchAgentToolTestHooks = Object.freeze({
+  openLineage(tool: object): OpenDispatchAgentLineage {
+    const openLineage = dispatchAgentToolLineageHooks.get(tool)
+    if (!openLineage) throw new Error("Dispatch Agent Tool lineage hook is unavailable")
+    return openLineage
+  },
+})
+
 export function createDispatchAgentTool(input: {
   taskID: string
   projectedAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
@@ -455,7 +465,7 @@ export function createDispatchAgentTool(input: {
     })
     .strict()
 
-  return tool({
+  const dispatchTool = tool({
     description:
       "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
       "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
@@ -901,4 +911,6 @@ export function createDispatchAgentTool(input: {
       }
     },
   })
+  dispatchAgentToolLineageHooks.set(dispatchTool, input.openLineage)
+  return dispatchTool
 }

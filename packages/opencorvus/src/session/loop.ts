@@ -2326,10 +2326,21 @@ export namespace SessionLoop {
         }
       } catch (e) {
         SessionRuntimeContractStore.failConsumedWake(sessionID, e)
-        const terminalPublished =
-          SessionStatus.get(sessionID).type === "terminal"
-            ? true
-            : await lifecycle.reenter({ directory, fn: () => publishTerminal(e) })
+        const executionCancelled = isExecutionCancellationError(e) || isExecutionCancellationError(abort.reason)
+        let terminalPublished = executionCancelled || SessionStatus.get(sessionID).type === "terminal"
+        if (!terminalPublished) {
+          try {
+            terminalPublished = (await lifecycle.reenter({ directory, fn: () => publishTerminal(e) })) === true
+          } catch (publicationError) {
+            SessionRuntimeContractStore.failConsumedWake(sessionID, publicationError)
+            log.error("session prompt terminal status publication failed during loop settlement", {
+              sessionID,
+              directory,
+              error: publicationError instanceof Error ? publicationError.message : String(publicationError),
+              originalError: e instanceof Error ? e.message : String(e),
+            })
+          }
+        }
         rejectCallbacks(e)
         if (terminalPublished !== true) {
           log.error("session prompt terminal status could not re-enter released instance", {
@@ -2352,7 +2363,14 @@ export namespace SessionLoop {
           })
         }
       }
-    })()
+    })().catch((error) => {
+      SessionRuntimeContractStore.failConsumedWake(sessionID, error)
+      log.error("detached session prompt loop failed to converge", {
+        sessionID,
+        directory,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    })
 
     return firstResult
   })

@@ -15,6 +15,7 @@ import { Database, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const ReceiptEvent = BusEvent.define("test.bus.durable-receipt", z.object({ value: z.string() }))
+const DerivedReceiptEvent = BusEvent.define("test.bus.derived-durable-receipt", z.object({ value: z.string() }))
 
 async function waitFor(condition: () => boolean, timeoutMs = 5_000) {
   const deadline = Date.now() + timeoutMs
@@ -29,6 +30,59 @@ afterEach(async () => {
 })
 
 describe("durable Bus publication outbox", () => {
+  test("settles durable publications created by an owned subscriber before disposing test state", async () => {
+    await using project = await memoryProject()
+    let releaseSource!: () => void
+    const sourceBlocked = new Promise<void>((resolve) => (releaseSource = resolve))
+    let markSourceStarted!: () => void
+    const sourceStarted = new Promise<void>((resolve) => (markSourceStarted = resolve))
+    let releaseDerived!: () => void
+    const derivedBlocked = new Promise<void>((resolve) => (releaseDerived = resolve))
+    let markDerivedStarted!: () => void
+    const derivedStarted = new Promise<void>((resolve) => (markDerivedStarted = resolve))
+    let stopSource!: () => void
+    let stopDerived!: () => void
+    const provision = Instance.provide({
+      directory: project.path,
+      fn: () => {
+        stopSource = Bus.subscribe(
+          ReceiptEvent,
+          async ({ properties }) => {
+            markSourceStarted()
+            await sourceBlocked
+            Bus.publishOwned(DerivedReceiptEvent, { value: properties.value })
+          },
+          { durableID: "test.derived-publication-source" },
+        )
+        stopDerived = Bus.subscribe(
+          DerivedReceiptEvent,
+          async () => {
+            markDerivedStarted()
+            await derivedBlocked
+          },
+          { durableID: "test.derived-publication-target" },
+        )
+        Bus.publishOwned(ReceiptEvent, { value: "derived" })
+      },
+    })
+
+    await sourceStarted
+    let disposed = false
+    const disposal = Bus.TestHooks.disposeOwnedState().then(() => {
+      disposed = true
+    })
+    releaseSource()
+    await derivedStarted
+    await Bun.sleep(25)
+    expect(disposed).toBe(false)
+    releaseDerived()
+    await provision
+    await disposal
+    expect(Bus.TestHooks.outbox()).toEqual([])
+    stopDerived()
+    stopSource()
+  })
+
   test("scopes one durable subscriber identity independently to each live Project Instance", async () => {
     await using first = await memoryProject()
     await using second = await memoryProject()

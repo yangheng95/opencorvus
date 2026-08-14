@@ -63,7 +63,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     const head = editor.state.doc.line(endLine).to
     editor.dispatch({
       selection: EditorSelection.single(anchor, head),
-      effects: EditorView.scrollIntoView(anchor, { y: "center" }),
+      effects: EditorView.scrollIntoView(anchor, { y: "nearest" }),
     })
     editor.focus()
     appliedLineRangeIdentity = identity

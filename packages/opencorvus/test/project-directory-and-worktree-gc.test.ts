@@ -2,12 +2,18 @@ import { afterAll, afterEach, beforeAll, describe, expect, spyOn, test } from "b
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Instance, InstanceTestHooks } from "@/project/instance"
+import { InstanceBootstrap } from "@/project/bootstrap"
 import { Project } from "@/project/project"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Server } from "@/server/server"
 import { namedErrorStatus, serverErrorResponse } from "@/server/error-handler"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
+import { SessionPromptState } from "@/session/prompt/state"
+import { SessionPrompt } from "@/session/prompt"
+import { isExecutionCancellationError } from "@/session/prompt/cancellation"
+import { SessionProcessor } from "@/session/processor"
+import { SessionStatus } from "@/session/status"
 import { Database, eq } from "@/storage/db"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { DecisionLogTable } from "@/decision-log/schema"
@@ -31,6 +37,10 @@ import { insertEngineTask } from "@/engine/task"
 import { insertTaskProcessBinding, prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { DatabaseAuthorityTable } from "@/storage/database.sql"
+import { GlobalBus } from "@/bus/global"
+import { Provider } from "@/provider/provider"
+import type { Provider as ProviderType } from "@/provider/provider"
+import { ProtocolStore } from "@/protocol/store"
 
 let rejectDeletionProbeDisposal = false
 let holdDeletionProbeDisposal: Promise<void> | undefined
@@ -44,6 +54,39 @@ const deletionProbeState = Instance.state(
   },
   "project-deletion-bounded-disposal-probe",
 )
+
+const sessionLoopDeletionModel = {
+  providerID: "test",
+  modelID: "project-deletion-session-loop",
+}
+
+function sessionLoopDeletionProviderModel(): ProviderType.Model {
+  return {
+    id: sessionLoopDeletionModel.modelID,
+    providerID: sessionLoopDeletionModel.providerID,
+    name: "Project deletion SessionLoop",
+    limit: { context: 1_000_000, input: 900_000, output: 4_096 },
+    cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
+    capabilities: {
+      toolcall: true,
+      attachment: false,
+      reasoning: false,
+      temperature: true,
+      interleaved: false,
+      input: { text: true, image: false, audio: false, video: false, pdf: false },
+      output: { text: true, image: false, audio: false, video: false, pdf: false },
+    },
+    api: {
+      id: sessionLoopDeletionModel.modelID,
+      url: "https://project-deletion-session-loop.test.invalid",
+      npm: "@ai-sdk/anthropic",
+    },
+    options: {},
+    headers: {},
+    status: "active",
+    release_date: "2026-08-14",
+  } as ProviderType.Model
+}
 
 beforeAll(() => {
   runtimeOwnership = Server.acquireRuntimeOwnershipForStartup()
@@ -237,6 +280,552 @@ describe("Project directory integrity", () => {
       managedState: "missing",
       projects: 0,
       tasks: 0,
+    })
+  }, 90_000)
+
+  test("commits Project deletion after its real SessionLoop and attached prompt settle", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const taskID = Identifier.ascending("task")
+    let processorStarted!: () => void
+    const processorRunning = new Promise<void>((resolve) => (processorStarted = resolve))
+    let processorCancelled!: (reason: unknown) => void
+    const processorCancellation = new Promise<unknown>((resolve) => (processorCancelled = resolve))
+    const provider = spyOn(Provider, "getModel").mockResolvedValue(sessionLoopDeletionProviderModel())
+    const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
+      const assistant = input.assistantMessage
+      return {
+        message: assistant,
+        partFromToolCall() {
+          return undefined
+        },
+        async process() {
+          processorStarted()
+          await new Promise<never>((_resolve, reject) => {
+            const cancel = () => {
+              processorCancelled(input.abort.reason)
+              reject(input.abort.reason)
+            }
+            if (input.abort.aborted) cancel()
+            else input.abort.addEventListener("abort", cancel, { once: true })
+          })
+        },
+      } as any
+    })
+    holdDeletionProbeDisposal = new Promise<void>((resolve) => (releaseDeletionProbeDisposal = resolve))
+    let deletion: Promise<Awaited<ReturnType<typeof deleteProject>>> | undefined
+    let setup: Promise<void> | undefined
+    try {
+      let publishSession!: (value: {
+        created: Session.Info
+        firstInputMessageID: string
+        firstPrompt: ReturnType<typeof SessionPrompt.prompt>
+      }) => void
+      let rejectSession!: (error: unknown) => void
+      const sessionReady = new Promise<{
+        created: Session.Info
+        firstInputMessageID: string
+        firstPrompt: ReturnType<typeof SessionPrompt.prompt>
+      }>((resolve, reject) => {
+        publishSession = resolve
+        rejectSession = reject
+      })
+      setup = Instance.provide({
+        directory: project.path,
+        init: InstanceBootstrap,
+        fn: async () => {
+          deletionProbeState()
+          const created = await Session.create({ kind: "root", title: "Project deletion cancellation" })
+          const firstPrompt = SessionPrompt.prompt({
+            sessionID: created.id,
+            author: "user",
+            agent: "chat",
+            model: sessionLoopDeletionModel,
+            parts: [{ type: "text", text: "Run until Project deletion cancels this physical loop." }],
+          })
+          await Promise.race([
+            processorRunning,
+            Bun.sleep(5_000).then(() => {
+              throw new Error("Project deletion SessionLoop processor did not start")
+            }),
+          ])
+          const firstInputMessageID = SessionStatus.executionOccurrence(created.id)?.inputMessageID
+          if (!firstInputMessageID) throw new Error("Project deletion SessionLoop has no durable input occurrence")
+          const now = Date.now()
+          Database.use((db) =>
+            db
+              .insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: registered.project.id,
+                session_id: created.id,
+                source: "test",
+                product_pillar: "work",
+                title: "Project deletion cancellation",
+                request: "Cancel the active SessionLoop through Project deletion authority.",
+                metadata: { actor: "user" },
+                time_started: now,
+                time_created: now,
+                time_updated: now,
+              })
+              .run(),
+          )
+          publishSession({ created, firstInputMessageID, firstPrompt })
+        },
+      }).catch((error) => {
+        rejectSession(error)
+        throw error
+      })
+      const session = await sessionReady
+
+      deletion = deleteProject(registered.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_delete_project_active_session_loop",
+        reason: "Delete Project after its active physical SessionLoop settles",
+      })
+      const cancellationReason = await Promise.race([
+        processorCancellation,
+        Bun.sleep(10_000).then(() => {
+          throw new Error("Project deletion did not cancel the physical SessionLoop processor")
+        }),
+      ])
+      const promptFailure = await Promise.race([
+        session.firstPrompt.then(
+          () => undefined,
+          (cause) => cause,
+        ),
+        Bun.sleep(10_000).then(() => {
+          throw new Error("Project deletion SessionLoop prompt did not expose its cancellation settlement")
+        }),
+      ])
+      const lifecycleDeadline = Date.now() + 5_000
+      let terminalLifecycle = ProtocolStore.listTaskEvents(taskID).find(
+        (event) => event.type === "agent.execution.lifecycle" && event.payload.status?.type === "terminal",
+      )
+      while (!terminalLifecycle && Date.now() < lifecycleDeadline) {
+        await Bun.sleep(10)
+        terminalLifecycle = ProtocolStore.listTaskEvents(taskID).find(
+          (event) => event.type === "agent.execution.lifecycle" && event.payload.status?.type === "terminal",
+        )
+      }
+      expect({
+        cancellation: isExecutionCancellationError(cancellationReason)
+          ? {
+              name: cancellationReason.name,
+              source: cancellationReason.source,
+              origin: cancellationReason.origin.source,
+              sessionID: cancellationReason.sessionID,
+            }
+          : cancellationReason,
+        promptCancellation: isExecutionCancellationError(promptFailure)
+          ? { name: promptFailure.name, origin: promptFailure.origin.source, sessionID: promptFailure.sessionID }
+          : promptFailure,
+        lifecycle: terminalLifecycle,
+      }).toMatchObject({
+        cancellation: {
+          name: "ExecutionCancellationError",
+          source: "session_prompt",
+          origin: "project.delete",
+          sessionID: session.created.id,
+        },
+        promptCancellation: {
+          name: "ExecutionCancellationError",
+          origin: "project.delete",
+          sessionID: session.created.id,
+        },
+        lifecycle: {
+          type: "agent.execution.lifecycle",
+          taskID,
+          sessionID: session.created.id,
+          payload: {
+            inputMessageID: session.firstInputMessageID,
+            status: { type: "terminal", reason: "aborted" },
+          },
+        },
+      })
+      releaseDeletionProbeDisposal?.()
+      const result = await Promise.race([
+        deletion,
+        Bun.sleep(10_000).then(() => {
+          throw new Error("Project deletion did not settle after its held State disposer was released")
+        }),
+      ])
+      await setup
+
+      expect({
+        result,
+        projects: Project.list().length,
+        sessions: Database.use(
+          (db) => db.select().from(SessionTable).where(eq(SessionTable.project_id, registered.project.id)).all().length,
+        ),
+        promptResources: SessionPromptState.TestHooks.promptResourceSnapshot(session.created.id),
+      }).toEqual({
+        result: {
+          ok: true,
+          status: "committed",
+          projectID: registered.project.id,
+          directory: project.path,
+          deletedTaskCount: 1,
+          residue: [],
+        },
+        projects: 0,
+        sessions: 0,
+        promptResources: {
+          promptOwners: 0,
+          messageOwnerRegistries: 0,
+          startReservations: 0,
+          cancellationReceipts: 0,
+        },
+      })
+    } finally {
+      releaseDeletionProbeDisposal?.()
+      if (deletion) {
+        await Promise.race([deletion.catch(() => undefined), Bun.sleep(2_000)])
+      }
+      if (setup) await Promise.race([setup.catch(() => undefined), Bun.sleep(2_000)])
+      processor.mockRestore()
+      provider.mockRestore()
+    }
+  }, 90_000)
+
+  test("commits Project deletion for a persisted nonterminal Task after its Instance cache entry converges", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const taskID = Identifier.ascending("task")
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const session = await Session.create({ kind: "root", title: "Restarted Project deletion cancellation" })
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: registered.project.id,
+              session_id: session.id,
+              source: "test",
+              product_pillar: "work",
+              title: "Restarted Project deletion cancellation",
+              request: "Cancel the persisted nonterminal Task without a retained Instance cache entry.",
+              metadata: { actor: "user" },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+      },
+    })
+    const cacheSandbox = path.join(project.path, "deletion-cache-sandbox")
+    await fs.mkdir(cacheSandbox)
+    await Project.addSandbox(registered.project.id, cacheSandbox)
+    await Instance.provide({ directory: cacheSandbox, init: InstanceBootstrap, fn: () => undefined })
+    const convergence = await Instance.converge({ maximumRetained: 1 })
+    expect(convergence.disposed).toContain(project.path)
+
+    const result = await deleteProject(registered.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_restarted_nonterminal_task",
+      reason: "Delete Project after its Task Instance cache entry converged",
+    })
+
+    expect({ result, projects: Project.list().length }).toEqual({
+      result: {
+        ok: true,
+        status: "committed",
+        projectID: registered.project.id,
+        directory: project.path,
+        deletedTaskCount: 1,
+        residue: [],
+      },
+      projects: 0,
+    })
+  }, 90_000)
+
+  test("commits Project deletion for a converged Task Session in an exact repository subdirectory", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const sessionDirectory = path.join(project.path, "nested-task-directory")
+    await fs.mkdir(sessionDirectory)
+    const taskID = Identifier.ascending("task")
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const session = await Session.create({ kind: "root", title: "Nested restarted Project deletion" })
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: registered.project.id,
+              session_id: session.id,
+              source: "test",
+              product_pillar: "work",
+              title: "Nested restarted Project deletion",
+              request: "Cancel a persisted Task whose exact Session directory cache entry has converged.",
+              metadata: { actor: "user" },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        Database.use((db) =>
+          db.update(SessionTable).set({ directory: sessionDirectory }).where(eq(SessionTable.id, session.id)).run(),
+        )
+      },
+    })
+    const cacheSandbox = path.join(project.path, "nested-session-cache-sandbox")
+    await fs.mkdir(cacheSandbox)
+    await Project.addSandbox(registered.project.id, cacheSandbox)
+    await Instance.provide({ directory: cacheSandbox, init: InstanceBootstrap, fn: () => undefined })
+    const convergence = await Instance.converge({ maximumRetained: 1 })
+    expect(convergence.disposed).toContain(project.path)
+
+    const result = await deleteProject(registered.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_nested_restarted_task",
+      reason: "Delete Project after its nested Task Session Instance converged",
+    })
+
+    expect(result).toEqual({
+      ok: true,
+      status: "committed",
+      projectID: registered.project.id,
+      directory: project.path,
+      deletedTaskCount: 1,
+      residue: [],
+    })
+  }, 90_000)
+
+  test("commits Project deletion when cache convergence selected its identity before admission closed", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    await Instance.provide({ directory: project.path, init: InstanceBootstrap, fn: () => undefined })
+    const cacheSandbox = path.join(project.path, "concurrent-convergence-sandbox")
+    await fs.mkdir(cacheSandbox)
+    await Project.addSandbox(registered.project.id, cacheSandbox)
+    await Instance.provide({ directory: cacheSandbox, init: InstanceBootstrap, fn: () => undefined })
+
+    let selected!: () => void
+    const selectedPromise = new Promise<void>((resolve) => (selected = resolve))
+    let release!: () => void
+    const releasePromise = new Promise<void>((resolve) => (release = resolve))
+    await using _hook = InstanceTestHooks.installBeforeConvergenceDisposal(async (input) => {
+      if (!Project.samePath(input.directory, project.path)) return
+      selected()
+      await releasePromise
+    })
+    const convergence = Instance.converge({ maximumRetained: 1 })
+    await selectedPromise
+    const deletion = deleteProject(registered.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_during_convergence",
+      reason: "Delete Project while its cache identity is selected for convergence",
+    })
+    const admissionDeadline = Date.now() + 5_000
+    while (!InstanceTestHooks.isProjectAdmissionClosed(registered.project.id)) {
+      if (Date.now() >= admissionDeadline) throw new Error("Project deletion admission did not close")
+      await Bun.sleep(5)
+    }
+    release()
+    await convergence
+    const result = await deletion
+
+    expect(result).toEqual({
+      ok: true,
+      status: "committed",
+      projectID: registered.project.id,
+      directory: project.path,
+      deletedTaskCount: 0,
+      residue: [],
+    })
+  }, 90_000)
+
+  test("reopens Project admission after an in-flight convergence settlement times out", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    await Instance.provide({ directory: project.path, init: InstanceBootstrap, fn: () => undefined })
+    const cacheSandbox = path.join(project.path, "convergence-timeout-sandbox")
+    await fs.mkdir(cacheSandbox)
+    await Project.addSandbox(registered.project.id, cacheSandbox)
+    await Instance.provide({ directory: cacheSandbox, init: InstanceBootstrap, fn: () => undefined })
+
+    let selected!: () => void
+    const selectedPromise = new Promise<void>((resolve) => (selected = resolve))
+    let release!: () => void
+    const releasePromise = new Promise<void>((resolve) => (release = resolve))
+    const timeoutName = "OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS"
+    const originalTimeout = process.env[timeoutName]
+    process.env[timeoutName] = "25"
+    try {
+      await using _hook = InstanceTestHooks.installBeforeConvergenceDisposal(async (input) => {
+        if (!Project.samePath(input.directory, project.path)) return
+        selected()
+        await releasePromise
+      })
+      const convergence = Instance.converge({ maximumRetained: 1 })
+      await selectedPromise
+      const error = await Instance.closeProjectAdmission({
+        projectID: registered.project.id,
+        directories: [project.path, cacheSandbox],
+      }).catch((cause) => cause)
+
+      expect({
+        name: error.name,
+        labels: error.labels,
+        admissionClosed: InstanceTestHooks.isProjectAdmissionClosed(registered.project.id),
+      }).toEqual({
+        name: "InstanceSettlementInactivityError",
+        labels: [`project-convergence:${registered.project.id}`],
+        admissionClosed: false,
+      })
+
+      release()
+      await convergence
+      const entered = await Instance.provideProjectIdentity({
+        directory: project.path,
+        fn: () => Instance.project.id,
+      })
+      expect(entered).toBe(registered.project.id)
+    } finally {
+      release()
+      if (originalTimeout === undefined) delete process.env[timeoutName]
+      else process.env[timeoutName] = originalTimeout
+    }
+  }, 90_000)
+
+  test("commits Project deletion after a sandbox Session relays its terminal lifecycle", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const taskID = Identifier.ascending("task")
+    const root = await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const created = await Session.create({ kind: "root", title: "Sandbox deletion lifecycle host" })
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: registered.project.id,
+              session_id: created.id,
+              source: "test",
+              product_pillar: "work",
+              title: "Sandbox deletion lifecycle host",
+              request: "Relay the sandbox terminal lifecycle through Project deletion authority.",
+              time_started: now,
+              time_completed: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        return created
+      },
+    })
+    const sandbox = path.join(project.path, "deletion-lifecycle-sandbox")
+    await fs.mkdir(sandbox)
+    await Project.addSandbox(registered.project.id, sandbox)
+    const child = await Instance.provide({
+      directory: sandbox,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const created = await Session.create({
+          kind: "assistant",
+          parentID: root.id,
+          title: "Sandbox deletion lifecycle",
+        })
+        const input = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          role: "user",
+          sessionID: created.id,
+          author: "user",
+          time: { created: Date.now() },
+          agent: "assistant",
+          model: { providerID: "test", modelID: "test" },
+        })
+        const owner = SessionPromptState.start(created.id, created.directory)
+        if (!owner) throw new Error("Expected a fresh sandbox prompt owner")
+        SessionStatus.beginExecutionOccurrence(created.id, input.id, owner)
+        await SessionStatus.set(
+          created.id,
+          { type: "streaming" },
+          { publish: false, inputMessageID: input.id, promptGenerationOwner: owner },
+        )
+        return { created, owner }
+      },
+    })
+    await Instance.provideProjectIdentity({ directory: sandbox, fn: () => undefined })
+    const convergence = await Instance.converge({ maximumRetained: 1 })
+    expect(convergence.disposed).toContain(project.path)
+    const promptSettled = new Promise<void>((resolve, reject) => {
+      child.owner.addEventListener(
+        "abort",
+        () => {
+          void SessionPromptState.release(child.created.id).then(resolve, reject)
+        },
+        { once: true },
+      )
+    })
+    const disposedDirectories: string[] = []
+    const observeDisposal = (event: { directory?: string; payload: { type?: string } }) => {
+      if (event.payload.type === "server.instance.disposed" && event.directory) {
+        disposedDirectories.push(event.directory)
+      }
+    }
+    GlobalBus.on("event", observeDisposal)
+
+    let result: Awaited<ReturnType<typeof deleteProject>>
+    try {
+      result = await deleteProject(registered.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_delete_project_sandbox_session",
+        reason: "Delete Project after sandbox Session lifecycle settlement",
+      })
+      await promptSettled
+    } finally {
+      GlobalBus.off("event", observeDisposal)
+    }
+
+    expect({
+      result,
+      disposedDirectories: disposedDirectories.sort(),
+      projects: Project.list().length,
+      promptResources: SessionPromptState.TestHooks.promptResourceSnapshot(child.created.id),
+    }).toEqual({
+      result: {
+        ok: true,
+        status: "committed",
+        projectID: registered.project.id,
+        directory: project.path,
+        deletedTaskCount: 1,
+        residue: [],
+      },
+      disposedDirectories: [project.path, sandbox].sort(),
+      projects: 0,
+      promptResources: {
+        promptOwners: 0,
+        messageOwnerRegistries: 0,
+        startReservations: 0,
+        cancellationReceipts: 0,
+      },
     })
   }, 90_000)
 
@@ -459,6 +1048,8 @@ describe("Project directory integrity", () => {
   test("keeps the Project row when its state directory cannot be inspected", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
+    const nestedSessionDirectory = path.join(project.path, "delete-retry-session")
+    await fs.mkdir(nestedSessionDirectory)
     const taskID = Identifier.ascending("task")
     const session = await Instance.provide({
       directory: project.path,
@@ -466,6 +1057,7 @@ describe("Project directory integrity", () => {
     })
     const now = Date.now()
     Database.use((db) => {
+      db.update(SessionTable).set({ directory: nestedSessionDirectory }).where(eq(SessionTable.id, session.id)).run()
       db.insert(EngineTaskTable)
         .values({
           id: taskID,
@@ -534,6 +1126,40 @@ describe("Project directory integrity", () => {
     } finally {
       lstat.mockRestore()
     }
+    const ordinaryEntry = await Instance.provide({
+      directory: nestedSessionDirectory,
+      init: InstanceBootstrap,
+      fn: () => ({
+        projectID: Instance.project.id,
+        directory: Instance.directory,
+        worktree: Instance.worktree,
+        registeredSandboxes: Project.get(registered.project.id)?.sandboxes,
+      }),
+    })
+    await Instance.disposeAll()
+    const retry = await deleteProject(registered.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_project_delete_eacces_retry",
+      reason: "Retry the same Project deletion after restoring filesystem inspection",
+    })
+    expect({ ordinaryEntry, retry }).toEqual({
+      ordinaryEntry: {
+        projectID: registered.project.id,
+        directory: nestedSessionDirectory,
+        worktree: nestedSessionDirectory,
+        registeredSandboxes: [],
+      },
+      retry: {
+        ok: true,
+        status: "committed",
+        projectID: registered.project.id,
+        directory: project.path,
+        deletedTaskCount: 1,
+        residue: [],
+      },
+    })
   }, 90_000)
 
   test("deletes the current registered Project root when the caller supplies a stale Project snapshot", async () => {

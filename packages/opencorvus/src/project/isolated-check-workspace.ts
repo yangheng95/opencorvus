@@ -44,13 +44,7 @@ function parseWorkspaceOwner(value: unknown): IsolatedWorkspaceOwner | undefined
   if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
   const owner = value as Record<string, unknown>
   const keys = Object.keys(owner).sort()
-  const expected = [
-    "owner_pid",
-    "owner_process_instance_id",
-    "protocol",
-    "runtime_occurrence_id",
-    "workspace_id",
-  ]
+  const expected = ["owner_pid", "owner_process_instance_id", "protocol", "runtime_occurrence_id", "workspace_id"]
   if (keys.length !== expected.length || keys.some((key, index) => key !== expected[index])) return undefined
   if (
     owner.protocol !== 1 ||
@@ -89,7 +83,10 @@ async function awaitIsolatedCleanup(root: string, cleanup: Promise<void>): Promi
       cleanup,
       new Promise<never>((_resolve, reject) => {
         timer = setTimeout(
-          () => reject(new Error(`isolated workspace cleanup did not settle within ${ISOLATED_CLEANUP_TIMEOUT_MS}ms: ${root}`)),
+          () =>
+            reject(
+              new Error(`isolated workspace cleanup did not settle within ${ISOLATED_CLEANUP_TIMEOUT_MS}ms: ${root}`),
+            ),
           ISOLATED_CLEANUP_TIMEOUT_MS,
         )
       }),
@@ -147,15 +144,18 @@ export async function createIsolatedProjectCheckWorkspace(input: {
       input.signal,
     )
   } catch (error) {
+    let failure = error
+    try {
+      input.signal?.throwIfAborted()
+    } catch (abortReason) {
+      failure = abortReason
+    }
     try {
       await awaitIsolatedCleanup(root, removeIsolatedWorkspaceRoot(root))
     } catch (cleanupError) {
-      throw new AggregateError(
-        [error, cleanupError],
-        `isolated workspace initialization and cleanup failed: ${root}`,
-      )
+      throw new AggregateError([failure, cleanupError], `isolated workspace initialization and cleanup failed: ${root}`)
     }
-    throw error
+    throw failure
   }
   return {
     root,

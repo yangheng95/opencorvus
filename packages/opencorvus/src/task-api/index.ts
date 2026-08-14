@@ -45,6 +45,10 @@ import { ensureGitProjectMetadata } from "@/engine/git-project-metadata"
 import { Instance } from "@/project/instance"
 import type { ProjectDeletionAdmission } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
+import {
+  runWithInitializedIndependentProject,
+  runWithProjectDeletionIdentity,
+} from "@/project/independent-project-owner"
 import { Project } from "@/project/project"
 import { Worktree } from "@/worktree"
 import { Question } from "@/question"
@@ -494,7 +498,7 @@ async function settleTaskSessionWork(
     handle: string
     origin: Omit<ExecutionCancellationOrigin, "targetSessionID">
   },
-  options?: TaskCancellationSettlementOptions,
+  options?: DestructiveTaskOptions,
 ): Promise<string[]> {
   const lifecycle = await requestTaskAgentLifecycleCancellation({
     task,
@@ -508,6 +512,7 @@ async function settleTaskSessionWork(
     taskID: task.id,
     handle: input.handle,
     inactivityTimeoutMs: options?.promptSettleInactivityMs,
+    projectDeletionAdmission: options?.projectDeletionAdmission,
   })
   await publishTaskAgentCancellationStatusesAfterSettlement({
     task,
@@ -715,9 +720,15 @@ export interface TaskCancellationSettlementOptions {
 
 export interface CancelTaskOptions extends TaskCancellationSettlementOptions {
   origin: TaskCancellationOriginValue
+  projectDeletionAdmission?: ProjectDeletionAdmission
 }
 
-const cancellationOperations = new Map<string, Promise<boolean>>()
+type TaskCancellationOperation = {
+  promise: Promise<boolean>
+  options: CancelTaskOptions
+}
+
+const cancellationOperations = new Map<string, TaskCancellationOperation>()
 const cancellationConvergenceOwnerID = `cancellation-owner:${randomUUID()}`
 const CANCELLATION_CONVERGENCE_LEASE_MS = 10_000
 const CANCELLATION_CONVERGENCE_HEARTBEAT_MS = 2_000
@@ -2677,7 +2688,7 @@ export namespace EngineService {
         lifecycle,
       })
     }
-    const operation = cancelTask(taskID, options)
+    const operation = cancelTaskWithIndependentProjectOwner(taskID, options)
     let convergenceFailure: unknown
     void operation.catch((error) => {
       convergenceFailure = error
@@ -2733,17 +2744,47 @@ export namespace EngineService {
   }
 
   export function cancelTask(taskID: string, options: CancelTaskOptions): Promise<boolean> {
+    return joinTaskCancellation(taskID, options, (operationOptions) =>
+      operationOptions.projectDeletionAdmission
+        ? runWithProjectDeletionIdentity({
+            directory: taskCwd(taskID),
+            projectDeletionAdmission: operationOptions.projectDeletionAdmission,
+            fn: () => cancelTaskOnce(taskID, operationOptions),
+          })
+        : cancelTaskOnce(taskID, operationOptions),
+    )
+  }
+
+  function cancelTaskWithIndependentProjectOwner(taskID: string, options: CancelTaskOptions): Promise<boolean> {
+    return joinTaskCancellation(taskID, options, (operationOptions) =>
+      runWithInitializedIndependentProject({
+        directory: taskCwd(taskID),
+        fn: () => cancelTaskOnce(taskID, operationOptions),
+      }),
+    )
+  }
+
+  function joinTaskCancellation(
+    taskID: string,
+    options: CancelTaskOptions,
+    start: (operationOptions: CancelTaskOptions) => Promise<boolean>,
+  ): Promise<boolean> {
     const task = requireTaskInCurrentProject(taskID)
     if (isTaskCancelled(task)) return Promise.resolve(true)
     const existing = cancellationOperations.get(taskID)
-    if (existing) return existing
+    if (existing) {
+      if (options.projectDeletionAdmission) existing.options.projectDeletionAdmission = options.projectDeletionAdmission
+      return existing.promise
+    }
+    const operationOptions = { ...options }
     const authority = RuntimeExecutionSettlement.reserve("task_cancellation", `task-cancellation:${taskID}`)
-    const operation = cancelTaskOnce(taskID, options)
+    const operation = start(operationOptions)
+    const joined = { promise: operation, options: operationOptions }
     authority.settleWith(operation)
-    cancellationOperations.set(taskID, operation)
+    cancellationOperations.set(taskID, joined)
     void operation
       .finally(() => {
-        if (cancellationOperations.get(taskID) === operation) cancellationOperations.delete(taskID)
+        if (cancellationOperations.get(taskID) === joined) cancellationOperations.delete(taskID)
       })
       .catch(() => undefined)
     return operation
@@ -2894,6 +2935,7 @@ export namespace EngineService {
         taskID,
         inactivityTimeoutMs: promptSettleInactivityMs,
         signal: convergenceOwner.signal,
+        projectDeletionAdmission: () => options.projectDeletionAdmission,
       })
       logConvergenceStage("session_prompts_settled")
       const { SessionLoop } = await import("@/session/loop")
@@ -2910,6 +2952,7 @@ export namespace EngineService {
           }
         },
         convergenceOwner.signal,
+        options.projectDeletionAdmission,
       )
       logConvergenceStage("incomplete_assistants_terminalized")
       convergenceOwner.assertActive()
