@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-14-default-browser-computer-capabilities.md](2026-08-14-default-browser-computer-capabilities.md) makes Browser and Computer the default native Chat and Work MCP assignments while preserving explicit Project-local opt-outs and measuring the model-context cost.
+
 - [2026-08-14-session-message-projection-e2e.md](2026-08-14-session-message-projection-e2e.md) makes public Session prompt responses use the same canonical message projection as live events and records the real conversation acceptance.
 
 - [2026-08-14-v0.0.44-beta-release.md](2026-08-14-v0.0.44-beta-release.md) records the remote convergence, canonical version bump, immutable application Release, beta updater promotion, automatic website deployment, and public reduced-navigation verification for `v0.0.44-beta`.

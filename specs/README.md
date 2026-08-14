@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest default Browser and Computer native-conversation capability: [`2026-08-14-default-browser-computer-capabilities.md`](records/2026-08/2026-08-14-default-browser-computer-capabilities.md).
+
 Latest public Session message projection and end-to-end repair: [`2026-08-14-session-message-projection-e2e.md`](records/2026-08/2026-08-14-session-message-projection-e2e.md).
 
 Latest `v0.0.44-beta` application and website release: [`2026-08-14-v0.0.44-beta-release.md`](records/2026-08/2026-08-14-v0.0.44-beta-release.md).

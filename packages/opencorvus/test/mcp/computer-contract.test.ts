@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test"
 import type { CuaDriverLike, ToolResult } from "@trycua/cua-driver"
 import { PNG } from "pngjs"
 import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
+import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import {
   CuaComputerBackend,
   type ComputerBackend,
@@ -424,6 +425,11 @@ describe("Computer Use exact control contract", () => {
       await Instance.provide({
         directory: project.path,
         fn: async () => {
+          await ConversationCapability.update("work", {
+            kind: "mcp_server",
+            ref: BrowserMCPBuiltin.ServerName,
+            assigned: false,
+          })
           const settings = await ConversationCapability.update("work", {
             kind: "mcp_server",
             ref: ComputerMCPBuiltin.ServerName,
