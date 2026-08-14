@@ -17,6 +17,7 @@ import { Database, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const ReceiptEvent = BusEvent.define("test.bus.durable-receipt", z.object({ value: z.string() }))
+const DerivedReceiptEvent = BusEvent.define("test.bus.derived-durable-receipt", z.object({ value: z.string() }))
 
 async function waitFor(condition: () => boolean, timeoutMs = 5_000) {
   const deadline = Date.now() + timeoutMs
@@ -31,6 +32,59 @@ afterEach(async () => {
 })
 
 describe("durable Bus publication outbox", () => {
+  test("settles durable publications created by an owned subscriber before disposing test state", async () => {
+    await using project = await memoryProject()
+    let releaseSource!: () => void
+    const sourceBlocked = new Promise<void>((resolve) => (releaseSource = resolve))
+    let markSourceStarted!: () => void
+    const sourceStarted = new Promise<void>((resolve) => (markSourceStarted = resolve))
+    let releaseDerived!: () => void
+    const derivedBlocked = new Promise<void>((resolve) => (releaseDerived = resolve))
+    let markDerivedStarted!: () => void
+    const derivedStarted = new Promise<void>((resolve) => (markDerivedStarted = resolve))
+    let stopSource!: () => void
+    let stopDerived!: () => void
+    const provision = Instance.provide({
+      directory: project.path,
+      fn: () => {
+        stopSource = Bus.subscribe(
+          ReceiptEvent,
+          async ({ properties }) => {
+            markSourceStarted()
+            await sourceBlocked
+            Bus.publishOwned(DerivedReceiptEvent, { value: properties.value })
+          },
+          { durableID: "test.derived-publication-source" },
+        )
+        stopDerived = Bus.subscribe(
+          DerivedReceiptEvent,
+          async () => {
+            markDerivedStarted()
+            await derivedBlocked
+          },
+          { durableID: "test.derived-publication-target" },
+        )
+        Bus.publishOwned(ReceiptEvent, { value: "derived" })
+      },
+    })
+
+    await sourceStarted
+    let disposed = false
+    const disposal = Bus.TestHooks.disposeOwnedState().then(() => {
+      disposed = true
+    })
+    releaseSource()
+    await derivedStarted
+    await Bun.sleep(25)
+    expect(disposed).toBe(false)
+    releaseDerived()
+    await provision
+    await disposal
+    expect(Bus.TestHooks.outbox()).toEqual([])
+    stopDerived()
+    stopSource()
+  })
+
   test("scopes one durable subscriber identity independently to each live Project Instance", async () => {
     await using first = await memoryProject()
     await using second = await memoryProject()
@@ -40,21 +94,17 @@ describe("durable Bus publication outbox", () => {
     await Instance.provide({
       directory: first.path,
       fn: () => {
-        stopFirst = Bus.subscribe(
-          ReceiptEvent,
-          (event) => received.first.push(event.properties.value),
-          { durableID: "test.same-project-local-receipt" },
-        )
+        stopFirst = Bus.subscribe(ReceiptEvent, (event) => received.first.push(event.properties.value), {
+          durableID: "test.same-project-local-receipt",
+        })
       },
     })
     await Instance.provide({
       directory: second.path,
       fn: () => {
-        stopSecond = Bus.subscribe(
-          ReceiptEvent,
-          (event) => received.second.push(event.properties.value),
-          { durableID: "test.same-project-local-receipt" },
-        )
+        stopSecond = Bus.subscribe(ReceiptEvent, (event) => received.second.push(event.properties.value), {
+          durableID: "test.same-project-local-receipt",
+        })
       },
     })
     try {
@@ -157,9 +207,7 @@ describe("durable Bus publication outbox", () => {
     }).toEqual({
       observedAbort: "durable Bus subscriber handoff",
       outbox: [publication.occurrenceID],
-      deliveries: expect.arrayContaining([
-        { subscriberID: "test.shutdown-replay", settled: false },
-      ]),
+      deliveries: expect.arrayContaining([{ subscriberID: "test.shutdown-replay", settled: false }]),
     })
 
     let replayed = ""
@@ -218,9 +266,7 @@ describe("durable Bus publication outbox", () => {
         const source = Database.use((db) =>
           db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, messageID)).get(),
         )
-        const publication = Bus.TestHooks.outbox().find(
-          (row) => row.event_type === Message.Event.Created.type,
-        )
+        const publication = Bus.TestHooks.outbox().find((row) => row.event_type === Message.Event.Created.type)
         expect(source).toEqual({ id: messageID })
         expect(publication).toBeDefined()
         occurrenceID = publication!.occurrence_id
@@ -414,11 +460,9 @@ describe("durable Bus publication outbox", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const unsubscribe = Bus.subscribe(
-          TaskQueueEvent.Completed,
-          (event) => received.push(event.occurrenceID),
-          { durableID: "test.task-queue.completed-recovery" },
-        )
+        const unsubscribe = Bus.subscribe(TaskQueueEvent.Completed, (event) => received.push(event.occurrenceID), {
+          durableID: "test.task-queue.completed-recovery",
+        })
         try {
           expect(TaskQueueService.getStatusByID(taskID)).toMatchObject({ sessionID, status: "completed" })
           Bus.resumeDurablePublications()
@@ -487,7 +531,12 @@ describe("durable Bus publication outbox", () => {
           changed: rows.find((row) => row.event_type === TaskQueueEvent.Changed.type)?.properties,
           lifecycle: rows.find((row) => row.event_type === SessionStatus.Event.Status.type)?.properties,
         }).toEqual({
-          task: expect.objectContaining({ taskID, sessionID: session.id, status: "failed", error: "injected terminal failure" }),
+          task: expect.objectContaining({
+            taskID,
+            sessionID: session.id,
+            status: "failed",
+            error: "injected terminal failure",
+          }),
           eventTypes: [Session.Event.Error.type, SessionStatus.Event.Status.type, TaskQueueEvent.Changed.type].sort(),
           changed: {
             queueTaskID: taskID,
@@ -524,7 +573,9 @@ describe("durable Bus publication outbox", () => {
         try {
           expect(TaskQueueService.getStatusByID(taskID)).toMatchObject({ sessionID, status: "failed" })
           Bus.resumeDurablePublications()
-          await waitFor(() => occurrenceIDs.every((id) => !Bus.TestHooks.outbox().some((row) => row.occurrence_id === id)))
+          await waitFor(() =>
+            occurrenceIDs.every((id) => !Bus.TestHooks.outbox().some((row) => row.occurrence_id === id)),
+          )
           expect(received.sort()).toEqual([...occurrenceIDs].sort())
           expect(SessionStatus.getExecution(sessionID, inputMessageID)).toEqual({
             type: "terminal",
@@ -615,7 +666,12 @@ describe("durable Bus publication outbox", () => {
           const first = accepted.retry()
           const second = accepted.retry()
           await observed
-          expect({ sameOwner: first === second, calls, maxConcurrent, owned: Bus.TestHooks.ownedPublications() }).toEqual({
+          expect({
+            sameOwner: first === second,
+            calls,
+            maxConcurrent,
+            owned: Bus.TestHooks.ownedPublications(),
+          }).toEqual({
             sameOwner: true,
             calls: 1,
             maxConcurrent: 1,
@@ -689,9 +745,7 @@ describe("durable Bus publication outbox", () => {
         GlobalBus.on("event", transient, { durableID: "test.global.transient" })
         try {
           const publication = Bus.publishOwned(ReceiptEvent, { value: "global-occurrence" })
-          await waitFor(
-            () => !Bus.TestHooks.outbox().some((row) => row.occurrence_id === publication.occurrenceID),
-          )
+          await waitFor(() => !Bus.TestHooks.outbox().some((row) => row.occurrence_id === publication.occurrenceID))
           expect({ settledCalls, transientCalls }).toEqual({ settledCalls: 1, transientCalls: 2 })
         } finally {
           GlobalBus.off("event", settled)
@@ -716,7 +770,11 @@ describe("durable Bus publication outbox", () => {
           await accepted
           const deadline = Date.now() + 5_000
           while (Bus.TestHooks.outbox().length > 0 && Date.now() < deadline) await Bun.sleep(10)
-          expect({ outbox: Bus.TestHooks.outbox(), owners: Bus.TestHooks.ownedPublications(), projectionCalls }).toEqual({
+          expect({
+            outbox: Bus.TestHooks.outbox(),
+            owners: Bus.TestHooks.ownedPublications(),
+            projectionCalls,
+          }).toEqual({
             outbox: [],
             owners: [],
             projectionCalls: 1,
