@@ -303,35 +303,50 @@ export namespace ProjectMemoryOrganizer {
   export function init() {
     const state = lifecycle()
     if (state.unsub) return
-    state.unsub = Bus.subscribe(
-      ProjectMemory.Event.OrganizationRequested,
-      ({ properties, signal }) =>
-        run({ projectID: properties.projectID, sessionID: properties.sessionID, abort: signal }),
-      { durableID: "project-memory.organizer" },
-    )
-    const configUnsub = Bus.subscribe(Session.Event.ConfigChanged, ({ properties }) =>
-      Database.transaction((db) => {
-        ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID: Instance.project.id })
-        ProjectMemory.requestOrganizationInTransaction(db, {
-          projectID: Instance.project.id,
-          sessionID: properties.sessionID,
-        })
-      }),
-    )
-    const projectConfigListener = (event: { directory?: string; payload?: { type?: string } }) => {
-      if (event.directory !== Instance.directory || event.payload?.type !== "config.changed") return
-      Database.transaction((db) => {
-        ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID: Instance.project.id })
-        ProjectMemory.requestOrganizationInTransaction(db, { projectID: Instance.project.id })
-      })
+    const directory = Instance.directory
+    const projectID = Instance.project.id
+    const unsubs: Array<() => void> = []
+    let disposed = false
+    const dispose = () => {
+      if (disposed) return
+      disposed = true
+      for (const unsub of unsubs.reverse()) unsub()
     }
-    GlobalBus.on("event", projectConfigListener)
-    Database.transaction((db) => ProjectMemory.requestOrganizationInTransaction(db, { projectID: Instance.project.id }))
-    const currentUnsub = state.unsub
-    state.unsub = () => {
-      currentUnsub()
-      configUnsub()
-      GlobalBus.off("event", projectConfigListener)
+    state.unsub = dispose
+    try {
+      unsubs.push(
+        Bus.subscribe(
+          ProjectMemory.Event.OrganizationRequested,
+          ({ properties, signal }) =>
+            run({ projectID: properties.projectID, sessionID: properties.sessionID, abort: signal }),
+          { durableID: "project-memory.organizer" },
+        ),
+      )
+      unsubs.push(
+        Bus.subscribe(Session.Event.ConfigChanged, ({ properties }) =>
+          Database.transaction((db) => {
+            ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
+            ProjectMemory.requestOrganizationInTransaction(db, {
+              projectID,
+              sessionID: properties.sessionID,
+            })
+          }),
+        ),
+      )
+      const projectConfigListener = (event: { directory?: string; payload?: { type?: string } }) => {
+        if (event.directory !== directory || event.payload?.type !== "config.changed") return
+        Database.transaction((db) => {
+          ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
+          ProjectMemory.requestOrganizationInTransaction(db, { projectID })
+        })
+      }
+      GlobalBus.on("event", projectConfigListener)
+      unsubs.push(() => GlobalBus.off("event", projectConfigListener))
+      Database.transaction((db) => ProjectMemory.requestOrganizationInTransaction(db, { projectID }))
+    } catch (error) {
+      if (state.unsub === dispose) state.unsub = undefined
+      dispose()
+      throw error
     }
   }
 }

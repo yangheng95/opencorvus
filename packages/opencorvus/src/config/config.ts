@@ -1868,20 +1868,25 @@ export namespace Config {
           async onWritten(merged) {
             await state.reset()
             global.reset()
-            GlobalBus.emit("event", {
-              directory: projectDirectory,
-              payload: {
-                type: "config.changed",
-                properties: merged,
-              },
-            })
-            if (transition) {
-              const { MCP } = await import("@/mcp")
-              try {
-                await MCP.reconcileProjectConfig(transition)
-              } catch (error) {
-                throw new ProjectConfigCommittedReconcileError([error], transition.after)
-              }
+            const committedTransition = transition
+            if (!committedTransition) {
+              throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
+            }
+            const projections = await Promise.allSettled([
+              GlobalBus.emitAndWait("event", {
+                directory: projectDirectory,
+                payload: {
+                  type: "config.changed",
+                  properties: merged,
+                },
+              }),
+              import("@/mcp").then(({ MCP }) => MCP.reconcileProjectConfig(committedTransition)),
+            ])
+            const failures = projections.flatMap((result) =>
+              result.status === "rejected" ? [result.reason] : [],
+            )
+            if (failures.length > 0) {
+              throw new ProjectConfigCommittedReconcileError(failures, committedTransition.after)
             }
           },
         })

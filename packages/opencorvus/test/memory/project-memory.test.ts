@@ -32,6 +32,7 @@ import { EffectiveConfig } from "../../src/config/effective"
 import { LLM } from "../../src/session/llm"
 import { MemoryInjection } from "../../src/memory/injection"
 import { RuntimeExecutionSettlement } from "../../src/runtime/execution-settlement"
+import { GlobalBus } from "../../src/bus/global"
 
 const model = { providerID: "test", modelID: "project-memory" }
 const packageRevision = {
@@ -717,6 +718,138 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
           }),
         )
         expect(replacement).toMatchObject({ id: "post-config-change", availabilityGeneration: 1 })
+      },
+    })
+  })
+
+  test("routes global project config invalidation to each Organizer registration identity", async () => {
+    await using projectA = await memoryProject()
+    await using projectB = await memoryProject()
+    let projectAID = ""
+    let projectBID = ""
+    await Instance.provide({
+      directory: projectA.path,
+      fn: async () => {
+        projectAID = Instance.project.id
+        ProjectMemoryOrganizer.init()
+      },
+    })
+    await Instance.provide({
+      directory: projectB.path,
+      fn: async () => {
+        projectBID = Instance.project.id
+        ProjectMemoryOrganizer.init()
+        await GlobalBus.emitAndWait("event", {
+          directory: projectA.path,
+          payload: { type: "config.changed" },
+        })
+      },
+    })
+
+    const projectALease = Database.transaction((db) =>
+      ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+        projectID: projectAID,
+        leaseID: "project-a-after-config",
+        expectedRevision: 0,
+      }),
+    )
+    const projectBLease = Database.transaction((db) =>
+      ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+        projectID: projectBID,
+        leaseID: "project-b-unchanged",
+        expectedRevision: 0,
+      }),
+    )
+    expect(projectALease).toMatchObject({ availabilityGeneration: 1 })
+    expect(projectBLease).toMatchObject({ availabilityGeneration: 0 })
+  })
+
+  test("reinitializes one Organizer subscription set after its initial request transaction fails", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectID = Instance.project.id
+        const requestSpy = spyOn(ProjectMemory, "requestOrganizationInTransaction").mockImplementationOnce(() => {
+          throw new Error("injected initial Project Memory request failure")
+        })
+        try {
+          expect(() => ProjectMemoryOrganizer.init()).toThrow("injected initial Project Memory request failure")
+        } finally {
+          requestSpy.mockRestore()
+        }
+
+        ProjectMemoryOrganizer.init()
+        await GlobalBus.emitAndWait("event", {
+          directory: project.path,
+          payload: { type: "config.changed" },
+        })
+        const lease = Database.transaction((db) =>
+          ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+            projectID,
+            leaseID: "reinitialized-organizer",
+            expectedRevision: 0,
+          }),
+        )
+        expect(lease).toMatchObject({ availabilityGeneration: 1 })
+      },
+    })
+  })
+
+  test("reports a committed project config projection failure and advances the Organizer barrier on retry", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectID = Instance.project.id
+        ProjectMemoryOrganizer.init()
+        const originalLease = Database.transaction((db) =>
+          ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+            projectID,
+            leaseID: "pre-config-projection-failure",
+            expectedRevision: 0,
+          }),
+        )
+        expect(originalLease).toMatchObject({ availabilityGeneration: 0 })
+
+        const { MCP } = await import("../../src/mcp")
+        const invalidateSpy = spyOn(
+          ProjectMemory,
+          "invalidateOrganizerAvailabilityInTransaction",
+        ).mockImplementationOnce(() => {
+          throw new Error("injected Organizer config projection failure")
+        })
+        const mcpSpy = spyOn(MCP, "reconcileProjectConfig").mockRejectedValueOnce(
+          new Error("injected MCP config reconciliation failure"),
+        )
+        let committedError: Config.ProjectConfigCommittedReconcileError | undefined
+        try {
+          try {
+            await Config.updateProjectPatch({ permission_mode: "ask" })
+          } catch (error) {
+            expect(error).toBeInstanceOf(Config.ProjectConfigCommittedReconcileError)
+            committedError = error as Config.ProjectConfigCommittedReconcileError
+          }
+          expect(mcpSpy).toHaveBeenCalledTimes(1)
+        } finally {
+          invalidateSpy.mockRestore()
+          mcpSpy.mockRestore()
+        }
+        expect(committedError).toMatchObject({
+          committed: true,
+          config: { permission_mode: "ask" },
+          errors: [expect.any(AggregateError), expect.any(Error)],
+        })
+
+        await Config.updateProjectPatch({ permission_mode: "ask" })
+        const replacementLease = Database.transaction((db) =>
+          ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+            projectID,
+            leaseID: "post-config-projection-retry",
+            expectedRevision: 0,
+          }),
+        )
+        expect(replacementLease).toMatchObject({ availabilityGeneration: 1 })
       },
     })
   })

@@ -3144,6 +3144,19 @@ windows are more dangerous because the wrong identity can duplicate or permanent
 directory and project ID at initialization and use them in its local listener, global listener and initial request.
 The Bus settlement policy and lease guard remain unchanged.
 
+The Organizer now captures that exact registration directory and project ID before it installs any subscription.
+Its Session config callback, global `config.changed` callback and initial organization request all use the captured
+identity; the global callback first filters by the captured directory. The listener lifecycle still belongs to the
+existing per-Instance state and removes the exact callback on disposal, so no parallel registry or fallback was
+introduced. Initialization installs one shared reverse disposer before registration; any subscription or initial
+request failure rolls back the complete set and permits one clean reinitialization. Project configuration now awaits
+GlobalBus projection and combines its failure with Model Context Protocol reconciliation in the existing explicit
+`ProjectConfigCommittedReconcileError`, so a committed configuration projection failure is visible and an exact retry
+advances the Organizer generation barrier. The complete Project Memory non-UI suite passed `19` tests / `114`
+assertions. Its positive multi-Instance
+case initializes independent A and B Organizers, emits A's global configuration change while B owns the ambient
+Instance context, then observes A's availability generation advance from `0` to `1` while B remains at `0`.
+
 Finally, public Expert Squad distribution is not current even though R19's in-client Market was current. The signed
 public pointer remains publication 35001 from commit `7bcba8806`: all 119 public package revisions and digests differ
 from the current catalog, and 81 manifests fail the current SDK because an Integrity role now requires an explicit
