@@ -12,6 +12,7 @@ import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import {
   ArtifactReferenceAmbiguityError,
+  ArtifactReferenceResolutionError,
   completeArtifactReadsBeforePublication,
   resolveArtifactLocatorReferenceBeforeRead,
   resolveArtifactReadReferenceBeforeSelection,
@@ -34,7 +35,7 @@ afterEach(async () => {
 })
 
 async function assistantMessage(input: { sessionID: string; parentID: string; created: number; projectPath: string }) {
-  return Session.updateMessage({
+  const message = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: input.sessionID,
     parentID: input.parentID,
@@ -48,6 +49,13 @@ async function assistantMessage(input: { sessionID: string; parentID: string; cr
     cost: 0,
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
   })
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: input.sessionID,
+    messageID: message.id,
+    type: "step-start",
+  })
+  return message
 }
 
 async function completedToolPart(input: {
@@ -57,6 +65,7 @@ async function completedToolPart(input: {
   tool: string
   toolInput: unknown
   output: unknown
+  completeAssistant?: boolean
 }) {
   const part = await Session.updatePart({
     id: Identifier.ascending("part"),
@@ -74,14 +83,37 @@ async function completedToolPart(input: {
       time: { start: input.created, end: input.created + 1 },
     },
   })
-  const message = await MessageStore.get({ sessionID: input.sessionID, messageID: input.messageID })
-  if (message.info.role !== "assistant") throw new Error(`Tool Part parent ${input.messageID} is not an assistant`)
-  await Session.updateMessage({
-    ...message.info,
-    finish: "tool-calls",
-    time: { ...message.info.time, completed: input.created + 2 },
-  })
+  if (input.completeAssistant !== false) {
+    const message = await MessageStore.get({ sessionID: input.sessionID, messageID: input.messageID })
+    if (message.info.role !== "assistant") throw new Error(`Tool Part parent ${input.messageID} is not an assistant`)
+    await Session.updateMessage({
+      ...message.info,
+      finish: "tool-calls",
+      time: { ...message.info.time, completed: input.created + 2 },
+    })
+  }
   return part
+}
+
+async function actionBoundary(input: {
+  sessionID: string
+  messageID: string
+  created: number
+  tool: string
+}) {
+  return Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: input.sessionID,
+    messageID: input.messageID,
+    type: "tool",
+    callID: Identifier.ascending("tool"),
+    tool: input.tool,
+    state: {
+      status: "running",
+      input: {},
+      time: { start: input.created },
+    },
+  })
 }
 
 describe("provider Artifact references", () => {
@@ -158,6 +190,79 @@ describe("provider Artifact references", () => {
       source_selection_refs: [selectionRef],
     })
   })
+
+  test("resolves an earlier completed catalog fact inside the same retained assistant", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "orchestrator", title: "Retained Artifact causality" })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: now },
+          agent: "orchestrator",
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+        })
+        const assistant = await assistantMessage({
+          sessionID: session.id,
+          parentID: user.id,
+          created: now + 1,
+          projectPath: project.path,
+        })
+        const locator = ArtifactReadLocatorSchema.parse({
+          source: "engine_artifact",
+          artifact_id: "art_retained_catalog_fact",
+          catalog_revision: 1,
+          expected_sha256: "a".repeat(64),
+        })
+        const reference = mintArtifactLocatorReference()
+        const earlyRead = await actionBoundary({
+          sessionID: session.id,
+          messageID: assistant.id,
+          created: now + 2,
+          tool: "artifact_read",
+        })
+        await completedToolPart({
+          sessionID: session.id,
+          messageID: assistant.id,
+          created: now + 2,
+          tool: "artifact_search",
+          toolInput: {},
+          output: { entries: [{ locator, artifact_locator_ref: reference }] },
+          completeAssistant: false,
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: assistant.id,
+          type: "step-start",
+        })
+        const read = await actionBoundary({
+          sessionID: session.id,
+          messageID: assistant.id,
+          created: now + 3,
+          tool: "artifact_read",
+        })
+
+        expect(() => resolveArtifactLocatorReferenceBeforeRead({
+          sessionID: session.id,
+          assistantMessageID: assistant.id,
+          toolPartID: earlyRead.id,
+          reference,
+        })).toThrow(ArtifactReferenceResolutionError)
+        expect(resolveArtifactLocatorReferenceBeforeRead({
+          sessionID: session.id,
+          assistantMessageID: assistant.id,
+          toolPartID: read.id,
+          reference,
+        })).toEqual(locator)
+      },
+    })
+  }, 0)
 
   test("resolves paginated read and explicit selection references to one canonical publication locator", async () => {
     await using project = await memoryProject()
@@ -249,10 +354,17 @@ describe("provider Artifact references", () => {
           created: now + 3,
           projectPath: project.path,
         })
+        const firstReadBoundary = await actionBoundary({
+          sessionID: session.id,
+          messageID: firstReadMessage.id,
+          created: now + 3,
+          tool: "artifact_read",
+        })
         expect(
           resolveArtifactLocatorReferenceBeforeRead({
             sessionID: session.id,
             assistantMessageID: firstReadMessage.id,
+            toolPartID: firstReadBoundary.id,
             reference: locatorRef,
           }),
         ).toEqual(locator)
@@ -326,10 +438,17 @@ describe("provider Artifact references", () => {
           created: now + 7,
           projectPath: project.path,
         })
+        const selectBoundary = await actionBoundary({
+          sessionID: session.id,
+          messageID: selectMessage.id,
+          created: now + 7,
+          tool: "artifact_select",
+        })
         expect(
           resolveArtifactReadReferenceBeforeSelection({
             sessionID: session.id,
             assistantMessageID: selectMessage.id,
+            toolPartID: selectBoundary.id,
             reference: readRef,
           }),
         ).toEqual(locator)
@@ -364,21 +483,30 @@ describe("provider Artifact references", () => {
           created: now + 9,
           projectPath: project.path,
         })
+        const publishBoundary = await actionBoundary({
+          sessionID: session.id,
+          messageID: publishMessage.id,
+          created: now + 9,
+          tool: "artifact_publish",
+        })
         expect(
           completeArtifactReadsBeforePublication({
             sessionID: session.id,
             assistantMessageID: publishMessage.id,
+            toolPartID: publishBoundary.id,
           }),
         ).toEqual([locator])
         const sourceLocators = resolveArtifactSelectionReferencesBeforePublication({
           sessionID: session.id,
           assistantMessageID: publishMessage.id,
+          toolPartID: publishBoundary.id,
           references: [selectionRef, duplicateSelectionRef],
         })
         expect(sourceLocators).toEqual([locator])
         const observedLocators = completeArtifactReadsBeforePublication({
           sessionID: session.id,
           assistantMessageID: publishMessage.id,
+          toolPartID: publishBoundary.id,
         })
         const published = await publishExpertArtifact({
           scope: {
@@ -480,16 +608,24 @@ describe("provider Artifact references", () => {
           created: now + 15,
           projectPath: project.path,
         })
+        const auditBoundary = await actionBoundary({
+          sessionID: session.id,
+          messageID: auditMessage.id,
+          created: now + 15,
+          tool: "artifact_publish",
+        })
         expect(
           completeArtifactReadsBeforePublication({
             sessionID: session.id,
             assistantMessageID: auditMessage.id,
+            toolPartID: auditBoundary.id,
           }),
         ).toEqual([legacyLocator, locator])
         expect(
           selectedArtifactLocatorsBeforePublication({
             sessionID: session.id,
             assistantMessageID: auditMessage.id,
+            toolPartID: auditBoundary.id,
           }),
         ).toEqual([legacyLocator, locator])
       },
@@ -588,11 +724,18 @@ describe("provider Artifact references", () => {
           created: now + 10,
           projectPath: project.path,
         })
+        const publishBoundary = await actionBoundary({
+          sessionID: session.id,
+          messageID: publishMessage.id,
+          created: now + 10,
+          tool: "artifact_publish",
+        })
         let failure: unknown
         try {
           resolveArtifactSelectionReferencesBeforePublication({
             sessionID: session.id,
             assistantMessageID: publishMessage.id,
+            toolPartID: publishBoundary.id,
             references: [collision],
           })
         } catch (cause) {

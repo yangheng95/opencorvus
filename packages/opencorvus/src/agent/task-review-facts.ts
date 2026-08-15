@@ -2,16 +2,17 @@ import { Database, and, asc, eq, or, sql } from "@/storage/db"
 import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { PanelQueryTaskOutput } from "@/panel/task-query"
-import { assistantTurnFactScope } from "./artifact-read-facts"
+import { assistantActionFactScope } from "./artifact-read-facts"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 
 export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   taskID: string
 }): TerminalLifecycleReference {
-  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   const rows = Database.use((db) =>
     db
       .select({ id: PartTable.id, request: PartTable.data, outcome: ToolPartOutcomeTable.data })
@@ -23,11 +24,8 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
           eq(MessageTable.session_id, input.sessionID),
           sql`json_extract(${MessageTable.data}, '$.parentID') = ${scope.turnParentMessageID}`,
           or(
-            sql`${MessageTable.time_created} < ${scope.message.timeCreated}`,
-            and(
-              eq(MessageTable.time_created, scope.message.timeCreated),
-              sql`${MessageTable.id} < ${scope.message.messageID}`,
-            ),
+            sql`${PartTable.time_created} < ${scope.before.timeCreated}`,
+            and(eq(PartTable.time_created, scope.before.timeCreated), sql`${PartTable.id} < ${scope.before.partID}`),
           ),
           sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') = 'panel'`,

@@ -464,7 +464,7 @@ async function panelMutationIdentity(
     throw new Error(`panel.${operation} panel_ui authority requires a server-created panel-ui-request context.`)
   }
   const cancellationActor = panelCancellationActor(actor)
-  const toolIdentity = await requirePanelMutationToolIdentity(ctx, operation)
+  const toolIdentity = await requirePanelToolIdentity(ctx, operation)
   if (cancellationActor === "control_agent") {
     const requestID = nonEmptyString(controlContext(ctx).requestID)
     if (!requestID) {
@@ -492,9 +492,9 @@ async function panelMutationIdentity(
   }
 }
 
-async function requirePanelMutationToolIdentity(
+async function requirePanelToolIdentity(
   ctx: Tool.Context,
-  operation: "cancel_task" | "complete_mission" | "delete_session" | "resume_task",
+  operation: "cancel_task" | "complete_mission" | "delete_session" | "read_task_artifact" | "resume_task",
 ) {
   const callID = nonEmptyString(ctx.callID)
   if (!callID) {
@@ -759,6 +759,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const resolvedReference = resolvePanelArtifactLocatorReferenceBeforeRead({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
+          toolPartID: (await requirePanelToolIdentity(ctx, "read_task_artifact")).toolPartID,
           taskID,
           reference: transport.artifact_locator_ref,
         })
@@ -818,7 +819,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           throw new Error(`panel.complete_mission is only available to a real Mission.`)
         }
         const mission = await requireMissionSession(ctx.sessionID)
-        const identity = await requirePanelMutationToolIdentity(ctx, "complete_mission")
+        const identity = await requirePanelToolIdentity(ctx, "complete_mission")
         const missionTasks = listMissionTasks({
           projectID: mission.projectID,
           missionID: mission.missionID,
@@ -846,6 +847,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           const reviewedReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
             sessionID: ctx.sessionID,
             assistantMessageID: ctx.messageID,
+            toolPartID: identity.toolPartID,
             taskID: acceptance.task_id,
           })
           if (
@@ -859,6 +861,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
             sessionID: ctx.sessionID,
             assistantMessageID: ctx.messageID,
+            toolPartID: identity.toolPartID,
             taskID: acceptance.task_id,
             terminalLifecycleReference: reviewedReference,
             references: acceptance.evidence_read_refs,
@@ -1246,15 +1249,17 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           throw new Error(`panel.resume_task is only available to a real Mission.`)
         }
         const mission = await requireMissionSession(ctx.sessionID)
-        const identity = await requirePanelMutationToolIdentity(ctx, "resume_task")
+        const identity = await requirePanelToolIdentity(ctx, "resume_task")
         const reviewedTerminalLifecycleReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
+          toolPartID: identity.toolPartID,
           taskID: params.taskID,
         })
         const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
+          toolPartID: identity.toolPartID,
           taskID: params.taskID,
           terminalLifecycleReference: reviewedTerminalLifecycleReference,
           references: params.evidence_read_refs,

@@ -30,8 +30,9 @@ export namespace SessionMemory {
     for await (const message of MessageStore.stream(sessionID)) {
       if (message.info.role !== "assistant") continue
       if (message.info.summary !== true || message.info.time.completed === undefined) continue
+      if (!message.parts.some((part) => part.type === "compaction")) continue
       const parent = await MessageStore.get({ sessionID, messageID: message.info.parentID })
-      if (parent.info.role !== "user" || !parent.parts.some((part) => part.type === "compaction")) continue
+      if (parent.info.role !== "user") continue
       return {
         filename,
         sourceMessageID: message.info.id,

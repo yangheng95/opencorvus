@@ -289,6 +289,7 @@ export async function withTaskScopedPluginToolHost<T>(
     for (const locator of completeArtifactReadsBeforePublication({
       sessionID: scope.sessionID,
       assistantMessageID: scope.messageID,
+      toolPartID: scope.toolPartID,
     })) {
       locators.set(artifactReadLocatorKey(locator), locator)
     }
@@ -304,6 +305,7 @@ export async function withTaskScopedPluginToolHost<T>(
     for (const locator of selectedArtifactLocatorsBeforePublication({
       sessionID: scope.sessionID,
       assistantMessageID: scope.messageID,
+      toolPartID: scope.toolPartID,
     })) {
       locators.set(artifactReadLocatorKey(locator), locator)
     }

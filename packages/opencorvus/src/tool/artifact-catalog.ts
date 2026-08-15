@@ -364,11 +364,13 @@ async function readArtifactForTool(taskID: string, input: ArtifactReadInput) {
 function resolveArtifactReadInput(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   transport: ArtifactReadReferenceInput
 }): ArtifactReadInput {
   const locator = resolveArtifactLocatorReferenceBeforeRead({
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
+    toolPartID: input.toolPartID,
     reference: input.transport.artifact_locator_ref,
   })
   return ArtifactReadInputSchema.parse({
@@ -448,6 +450,7 @@ export const ArtifactReadTool = Tool.define("artifact_read", {
     const read = resolveArtifactReadInput({
       sessionID: ctx.sessionID,
       assistantMessageID: ctx.messageID,
+      toolPartID: requireArtifactToolPartID(ctx.extra?.toolPartID, "artifact_read"),
       transport: args,
     })
     return resultForRead(await readArtifactForTool(taskID, read), args.artifact_locator_ref)
@@ -457,12 +460,14 @@ export const ArtifactReadTool = Tool.define("artifact_read", {
 function selectArtifactForSession(
   sessionID: string,
   assistantMessageID: string,
+  toolPartID: string,
   input: ArtifactSelectReferenceInput,
 ) {
   const selected = ArtifactSelectReferenceInputSchema.parse(input)
   const locator = resolveArtifactReadReferenceBeforeSelection({
     sessionID,
     assistantMessageID,
+    toolPartID,
     reference: selected.artifact_read_ref,
   })
   const selection = ArtifactSelectOutputSchema.parse({ locator, purpose: selected.purpose })
@@ -486,7 +491,12 @@ export const ArtifactSelectTool = Tool.define("artifact_select", {
   parameters: ArtifactSelectReferenceInputSchema,
   async execute(args, ctx) {
     taskIDForToolSession(ctx.sessionID, "artifact_select")
-    return selectArtifactForSession(ctx.sessionID, ctx.messageID, args)
+    return selectArtifactForSession(
+      ctx.sessionID,
+      ctx.messageID,
+      requireArtifactToolPartID(ctx.extra?.toolPartID, "artifact_select"),
+      args,
+    )
   },
 })
 
@@ -580,6 +590,7 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
     const sourceArtifactLocators = resolveArtifactSelectionReferencesBeforePublication({
       sessionID: scope.sessionID,
       assistantMessageID: scope.messageID,
+      toolPartID: scope.toolPartID,
       references: source_selection_refs,
     })
     const artifact = EngineArtifactPublishInputSchema.parse({
@@ -592,6 +603,7 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
     const observedArtifactLocators = completeArtifactReadsBeforePublication({
       sessionID: scope.sessionID,
       assistantMessageID: scope.messageID,
+      toolPartID: scope.toolPartID,
     })
     const published = await publishExpertArtifact({
       scope,
@@ -600,6 +612,7 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
       selectedArtifactLocators: selectedArtifactLocatorsBeforePublication({
         sessionID: scope.sessionID,
         assistantMessageID: scope.messageID,
+        toolPartID: scope.toolPartID,
       }),
     })
     return {
@@ -628,10 +641,18 @@ function orchestratorSessionIdentity(options: unknown, toolName: string) {
   const meta = (options as { opencorvus?: Record<string, unknown> } | undefined)?.opencorvus
   const sessionID = typeof meta?.sessionID === "string" ? meta.sessionID : ""
   const messageID = typeof meta?.messageID === "string" ? meta.messageID : ""
-  if (!sessionID || !messageID) {
-    throw new Error(`${toolName}: missing persisted Orchestrator Session or message identity`)
+  const toolPartID = typeof meta?.toolPartID === "string" ? meta.toolPartID : ""
+  if (!sessionID || !messageID || !toolPartID) {
+    throw new Error(`${toolName}: missing persisted Orchestrator Session, message, or Tool Part identity`)
   }
-  return { sessionID, messageID }
+  return { sessionID, messageID, toolPartID }
+}
+
+function requireArtifactToolPartID(value: unknown, toolName: string): string {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(`${toolName}: missing persisted Tool Part identity`)
+  }
+  return value
 }
 
 export function createArtifactSearchAiTool(taskID: string) {
@@ -655,6 +676,7 @@ export function createArtifactReadAiTool(taskID: string) {
       const read = resolveArtifactReadInput({
         sessionID: identity.sessionID,
         assistantMessageID: identity.messageID,
+        toolPartID: identity.toolPartID,
         transport: args,
       })
       return resultForRead(await readArtifactForTool(exactTaskID, read), args.artifact_locator_ref)
@@ -669,7 +691,7 @@ export function createArtifactSelectAiTool(taskID: string) {
     execute: async (args: ArtifactSelectReferenceInput, options) => {
       orchestratorTaskID({ taskID, options, toolName: "artifact_select" })
       const identity = orchestratorSessionIdentity(options, "artifact_select")
-      return selectArtifactForSession(identity.sessionID, identity.messageID, args)
+      return selectArtifactForSession(identity.sessionID, identity.messageID, identity.toolPartID, args)
     },
   })
 }

@@ -19,7 +19,12 @@ import {
   type ArtifactSelectionReference,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
-import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable } from "@/session/session.sql"
+import {
+  MessageTable,
+  PartTable as SessionPartTable,
+  ToolPartRequestTable as PartTable,
+  ToolPartOutcomeTable,
+} from "@/session/session.sql"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import {
@@ -94,6 +99,7 @@ export class ArtifactReferenceAmbiguityError extends Error {
 
 type ArtifactFactScope = {
   after?: { timeCreated: number; partID: string }
+  before?: { timeCreated: number; partID: string }
   turnParentMessageID?: string
   excludeMessageID?: string
   beforeMessage?: { timeCreated: number; messageID: string }
@@ -107,6 +113,14 @@ function factScopeConditions(scope: ArtifactFactScope | undefined) {
           or(
             gt(PartTable.time_created, scope.after.timeCreated),
             and(eq(PartTable.time_created, scope.after.timeCreated), gt(PartTable.id, scope.after.partID)),
+          )!,
+        ]
+      : []),
+    ...(scope?.before !== undefined
+      ? [
+          or(
+            sql`${PartTable.time_created} < ${scope.before.timeCreated}`,
+            and(eq(PartTable.time_created, scope.before.timeCreated), sql`${PartTable.id} < ${scope.before.partID}`),
           )!,
         ]
       : []),
@@ -149,13 +163,59 @@ export function assistantTurnFactScope(sessionID: string, assistantMessageID: st
   }
 }
 
+export function assistantActionFactScope(sessionID: string, assistantMessageID: string, toolPartID: string) {
+  const scope = assistantTurnFactScope(sessionID, assistantMessageID)
+  const part = Database.use((db) =>
+    db
+      .select({ messageID: PartTable.message_id, timeCreated: PartTable.time_created })
+      .from(PartTable)
+      .where(and(eq(PartTable.id, toolPartID), eq(PartTable.message_id, assistantMessageID)))
+      .get(),
+  )
+  if (!part || part.messageID !== assistantMessageID) {
+    throw new Error(
+      `Artifact provenance requires persisted Tool Part ${toolPartID} on assistant ${assistantMessageID} in Session ${sessionID}.`,
+    )
+  }
+  const stepStart = Database.use((db) =>
+    db
+      .select({ id: SessionPartTable.id, timeCreated: SessionPartTable.time_created })
+      .from(SessionPartTable)
+      .where(
+        and(
+          eq(SessionPartTable.message_id, assistantMessageID),
+          sql`json_extract(${SessionPartTable.data}, '$.type') = 'step-start'`,
+          or(
+            sql`${SessionPartTable.time_created} < ${part.timeCreated}`,
+            and(
+              eq(SessionPartTable.time_created, part.timeCreated),
+              sql`${SessionPartTable.id} < ${toolPartID}`,
+            ),
+          ),
+        ),
+      )
+      .orderBy(desc(SessionPartTable.time_created), desc(SessionPartTable.id))
+      .get(),
+  )
+  if (!stepStart) {
+    throw new Error(
+      `Artifact provenance requires a persisted Provider step boundary before Tool Part ${toolPartID} on assistant ${assistantMessageID}.`,
+    )
+  }
+  return {
+    turnParentMessageID: scope.turnParentMessageID,
+    before: { timeCreated: stepStart.timeCreated, partID: stepStart.id },
+  }
+}
+
 function completedToolOutputValuesBeforeAction(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   toolNames: readonly string[]
   acceptInput?: (input: unknown) => boolean
 }): unknown[] {
-  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   const rows = Database.use((db) =>
     db
       .select({ id: PartTable.id, request: PartTable.data, outcome: ToolPartOutcomeTable.data })
@@ -167,7 +227,7 @@ function completedToolOutputValuesBeforeAction(input: {
           eq(MessageTable.session_id, input.sessionID),
           ...factScopeConditions({
             turnParentMessageID: scope.turnParentMessageID,
-            beforeMessage: scope.message,
+            before: scope.before,
           }),
           sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') IN (${sql.join(
@@ -217,11 +277,13 @@ function collectArtifactLocatorReferences(value: unknown, found: Map<string, Art
 function artifactReadReferenceLocatorsBeforeAction(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
 }): Map<string, ArtifactReadLocator> {
   const found = new Map<string, ArtifactReadLocator>()
   for (const value of completedToolOutputValuesBeforeAction({
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
+    toolPartID: input.toolPartID,
     toolNames: ["artifact_read"],
   })) {
     const parsed = ArtifactReadReferenceChunkSchema.safeParse(value)
@@ -241,12 +303,14 @@ function artifactReadReferenceLocatorsBeforeAction(input: {
 export function resolveArtifactLocatorReferenceBeforeRead(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   reference: string
 }): ArtifactReadLocator {
   const found = new Map<string, ArtifactReadLocator>()
   for (const value of completedToolOutputValuesBeforeAction({
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
+    toolPartID: input.toolPartID,
     toolNames: ["artifact_search", "artifact_snapshot"],
   })) {
     collectArtifactLocatorReferences(value, found)
@@ -264,6 +328,7 @@ export function resolveArtifactLocatorReferenceBeforeRead(input: {
 export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   taskID: string
   reference: string
 }): { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference } {
@@ -274,6 +339,7 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
   for (const value of completedToolOutputValuesBeforeAction({
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
+    toolPartID: input.toolPartID,
     toolNames: ["panel"],
     acceptInput: (rawInput) => {
       const parsed = MissionPanelActionSchema.safeParse(
@@ -319,6 +385,7 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
 function panelArtifactReadReferenceLocatorsBeforeAction(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   taskID: string
 }): Map<string, { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference }> {
   const found = new Map<
@@ -328,6 +395,7 @@ function panelArtifactReadReferenceLocatorsBeforeAction(input: {
   for (const value of completedToolOutputValuesBeforeAction({
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
+    toolPartID: input.toolPartID,
     toolNames: ["panel"],
     acceptInput: (rawInput) => {
       const parsed = MissionPanelActionSchema.safeParse(
@@ -583,13 +651,10 @@ export function selectedArtifactFactsForSession(
       }
     }
     const key = locatorKey(canonical.locator)
-    const selectionMessageScope = assistantTurnFactScope(sessionID, row.messageID)
+    const selectionMessageScope = assistantActionFactScope(sessionID, row.messageID, row.id)
     const completedBeforeSelection = completeArtifactReadLocatorsForSession(sessionID, {
       turnParentMessageID: selectionMessageScope.turnParentMessageID,
-      beforeMessage: {
-        timeCreated: row.messageTimeCreated,
-        messageID: row.messageID,
-      },
+      before: selectionMessageScope.before,
     })
     if (!completedBeforeSelection.some((locator) => locatorKey(locator) === key)) {
       throw new Error(
@@ -600,6 +665,7 @@ export function selectedArtifactFactsForSession(
       const priorReadLocator = artifactReadReferenceLocatorsBeforeAction({
         sessionID,
         assistantMessageID: row.messageID,
+        toolPartID: row.id,
       }).get(readReference)
       if (!priorReadLocator || locatorKey(priorReadLocator) !== key) {
         throw new Error(`Completed artifact_select tool part ${row.id} does not reference its canonical prior read.`)
@@ -651,17 +717,19 @@ export function artifactProvenanceForAgentTurn(sessionID: string, finalAssistant
 export function completeArtifactReadsBeforePublication(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
 }): ArtifactReadLocator[] {
-  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   return completeArtifactReadLocatorsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
-    beforeMessage: scope.message,
+    before: scope.before,
   })
 }
 
 export function resolveArtifactReadReferenceBeforeSelection(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   reference: string
 }): ArtifactReadLocator {
   const locator = artifactReadReferenceLocatorsBeforeAction(input).get(input.reference)
@@ -678,12 +746,13 @@ export function resolveArtifactReadReferenceBeforeSelection(input: {
 export function completeArtifactReadsBeforePanelAction(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   taskID: string
 }): ArtifactReadLocator[] {
-  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   return completeArtifactReadLocatorsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
-    beforeMessage: scope.message,
+    before: scope.before,
     panelTaskID: input.taskID,
   })
 }
@@ -691,6 +760,7 @@ export function completeArtifactReadsBeforePanelAction(input: {
 export function resolvePanelArtifactReadReferencesBeforeAction(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   taskID: string
   terminalLifecycleReference: TerminalLifecycleReference
   references: readonly z.infer<typeof ArtifactReadReferenceSchema>[]
@@ -723,12 +793,13 @@ export function resolvePanelArtifactReadReferencesBeforeAction(input: {
 export function selectedArtifactLocatorsBeforePublication(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
 }): ArtifactReadLocator[] {
-  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   const selected = new Map<string, ArtifactReadLocator>()
   for (const fact of selectedArtifactFactsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
-    beforeMessage: scope.message,
+    before: scope.before,
   })) {
     selected.set(locatorKey(fact.locator), fact.locator)
   }
@@ -738,12 +809,13 @@ export function selectedArtifactLocatorsBeforePublication(input: {
 export function resolveArtifactSelectionReferencesBeforePublication(input: {
   sessionID: string
   assistantMessageID: string
+  toolPartID: string
   references: readonly string[]
 }): ArtifactReadLocator[] {
-  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   const facts = selectedArtifactFactsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
-    beforeMessage: scope.message,
+    before: scope.before,
   })
   const byReference = new Map<string, ArtifactReadLocator>()
   for (const fact of facts) {

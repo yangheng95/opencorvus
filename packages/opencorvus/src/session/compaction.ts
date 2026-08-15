@@ -446,13 +446,13 @@ export namespace SessionCompaction {
     for (let i = 0; i < messages.length; i++) {
       const msg = messages[i]
       if (msg.info.role !== "user") continue
-      if (!msg.parts.some((part) => part.type === "compaction")) continue
       users.set(msg.info.id, i)
     }
 
     return messages.flatMap((msg, assistantIndex): CompletedCompaction[] => {
       if (msg.info.role !== "assistant") return []
       if (!CompactionHandoff.isValidSummaryMessage(msg.info)) return []
+      if (!msg.parts.some((part) => part.type === "compaction")) return []
       const userIndex = users.get(msg.info.parentID)
       if (userIndex === undefined) return []
       return [{ userIndex, assistantIndex }]
@@ -529,7 +529,7 @@ export namespace SessionCompaction {
       const msg = messages[i]
       // Turn boundaries follow real conversation starts and assistant step starts,
       // which keeps long dispatcher-owned build sessions compactable without a kind branch.
-      const isUserBoundary = msg.info.role === "user" && !msg.parts.some((part) => part.type === "compaction")
+      const isUserBoundary = msg.info.role === "user"
       const isAssistantStepBoundary =
         msg.info.role === "assistant" && msg.parts.some((part) => part.type === "step-start")
       if (!isUserBoundary && !isAssistantStepBoundary) continue
@@ -558,7 +558,7 @@ export namespace SessionCompaction {
   }): Promise<SelectedCompactionInput> {
     const limit = input.config.compaction?.tail_turns ?? ContextBudget.DEFAULT_TAIL_TURNS
     const firstUserIdx = input.messages.findIndex(
-      (msg) => msg.info.role === "user" && !msg.parts.some((part) => part.type === "compaction"),
+      (msg) => msg.info.role === "user",
     )
     if (firstUserIdx < 0) return { head: [] }
     const anchor_id = input.messages[firstUserIdx].info.id
@@ -649,16 +649,14 @@ export namespace SessionCompaction {
       } {
     const latest = completedCompactions(messages).at(-1)
     if (!latest) return { status: "never_compacted" }
-    const marker = messages[latest.userIndex]
+    const marker = messages[latest.assistantIndex]
     const markerPart = marker?.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
     if (!marker || !markerPart) {
       return { status: "invalid_boundary", reason: "completed compaction is missing its marker" }
     }
     const anchorIndex = markerPart.anchor_id
       ? messages.findIndex((message) => message.info.id === markerPart.anchor_id)
-      : messages.findIndex(
-          (message) => message.info.role === "user" && !message.parts.some((part) => part.type === "compaction"),
-        )
+        : messages.findIndex((message) => message.info.role === "user")
     if (anchorIndex < 0) {
       return { status: "invalid_boundary", reason: "compaction anchor message is missing" }
     }
@@ -671,7 +669,8 @@ export namespace SessionCompaction {
         return { status: "invalid_boundary", reason: "compaction tail boundary is missing or is not a user message" }
       }
     }
-    const markerOnAnchor = markerPart.anchor_id === marker.info.id
+    const markerOnAnchor =
+      marker.info.role === "assistant" && markerPart.anchor_id === marker.info.parentID
     const endIndex = tailIndex >= 0 ? tailIndex : markerOnAnchor ? latest.assistantIndex : latest.userIndex
     if (endIndex <= anchorIndex + 1) return { status: "no_covered_history" }
     return {
@@ -796,15 +795,20 @@ export namespace SessionCompaction {
       throw new Error(`Compaction parent must be a user message: ${input.parentID}`)
     }
     const userMessage = parent.info as Message.User
-    const compactionPart = parent.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
+    const compactionPart = input.messages.findLast(
+      (message): message is Message.WithParts & { info: Message.Assistant } =>
+        message.info.role === "assistant" &&
+        message.info.parentID === input.parentID &&
+        CompactionHandoff.isValidSummaryMessage(message.info) &&
+        message.parts.some((part) => part.type === "compaction"),
+    )?.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     const agent = await HelperAgentRegistry.get("compaction", { config })
     if (!agent.steps) throw new Error("Compaction helper must declare a positive provider-step limit")
     const model = input.model
       ? await Provider.getModel(input.model.providerID, input.model.modelID, { config })
       : await resolveAgentModel(agent.name, { sessionID: input.sessionID })
-    const history =
-      compactionPart && input.messages.at(-1)?.info.id === input.parentID ? input.messages.slice(0, -1) : input.messages
+    const history = input.messages
     const selected =
       repeatedCompactionInput(history, input.parentID) ??
       (await selectCompactionInput({
@@ -963,26 +967,17 @@ export namespace SessionCompaction {
     if (processor.message.error) {
       return { status: "failed", error: processFailureError(processor.message.error) } satisfies ProcessFailure
     }
-    const marker = compactionPart
-      ? {
-        ...compactionPart,
-        auto: input.auto,
-        overflow: input.overflow ?? compactionPart.overflow,
-        focus: input.focus ?? compactionPart.focus,
-        tail_start_id: selected.tail_start_id,
-        anchor_id: selected.anchor_id,
-      }
-      : ({
-        id: Identifier.ascending("part"),
-        messageID: userMessage.id,
-        sessionID: input.sessionID,
-        type: "compaction",
-        auto: input.auto,
-        overflow: input.overflow,
-        focus: input.focus,
-        tail_start_id: selected.tail_start_id,
-        anchor_id: selected.anchor_id,
-      } satisfies Message.CompactionPart)
+    const marker = {
+      id: Identifier.ascending("part"),
+      messageID: processor.message.id,
+      sessionID: input.sessionID,
+      type: "compaction",
+      auto: input.auto,
+      overflow: input.overflow ?? compactionPart?.overflow,
+      focus: input.focus ?? compactionPart?.focus,
+      tail_start_id: selected.tail_start_id,
+      anchor_id: selected.anchor_id,
+    } satisfies Message.CompactionPart
 
     await Session.publishCompactionCheckpoint({ info: processor.message, part: marker })
 

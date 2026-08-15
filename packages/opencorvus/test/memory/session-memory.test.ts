@@ -4,6 +4,10 @@ import z from "zod"
 import { Auth } from "../../src/auth"
 import { Bus } from "../../src/bus"
 import { EffectiveConfig } from "../../src/config/effective"
+import { EngineControlActivationLeaseTable, EngineTaskTable } from "../../src/engine/engine.sql"
+import { acquireControlLease } from "../../src/engine/control-lease"
+import { acceptTaskRootIngressInTransaction } from "../../src/engine/task-root-fact-store"
+import { appendTaskOpenedInTransaction } from "../../src/engine/task-lifecycle"
 import { Identifier } from "../../src/id/id"
 import { SessionMemory } from "../../src/memory/session-memory"
 import { TaskPlan } from "../../src/memory/task-plan"
@@ -20,7 +24,7 @@ import { SessionLoop } from "../../src/session/loop"
 import { Message } from "../../src/session/message"
 import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
-import { Database } from "../../src/storage/db"
+import { Database, and, eq } from "../../src/storage/db"
 import { MemoryTool } from "../../src/tool/memory"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -50,23 +54,21 @@ function providerModel(): ProviderType.Model {
   } as ProviderType.Model
 }
 
-async function createCompactionCheckpoint(sessionID: string, content: string) {
-  const source = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID,
-    role: "user",
-    author: "user",
-    time: { created: Date.now() },
-    agent: "user",
-    model,
-  })
-  await Session.updatePart({
-    id: Identifier.ascending("part"),
-    sessionID,
-    messageID: source.id,
-    type: "compaction",
-    auto: true,
-  })
+async function createCompactionCheckpoint(sessionID: string, content: string, sourceMessageID?: string) {
+  const source = sourceMessageID
+    ? await MessageStore.get({ sessionID, messageID: sourceMessageID }).then((message) => {
+        if (message.info.role !== "user") throw new Error(`Compaction source ${sourceMessageID} is not a user Message`)
+        return message.info
+      })
+    : await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID,
+        role: "user",
+        author: "user",
+        time: { created: Date.now() },
+        agent: "user",
+        model,
+      })
   const summary = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID,
@@ -89,11 +91,22 @@ async function createCompactionCheckpoint(sessionID: string, content: string) {
     type: "text",
     text: content,
   })
-  return Session.updateMessage({
+  const completed = await Session.updateMessage({
     ...summary,
     time: { ...summary.time, completed: Date.now() },
     finish: "stop",
   })
+  await Session.publishCompactionCheckpoint({
+    info: completed,
+    part: {
+      id: Identifier.ascending("part"),
+      sessionID,
+      messageID: completed.id,
+      type: "compaction",
+      auto: true,
+    },
+  })
+  return completed
 }
 
 function memoryToolContext(sessionID: string) {
@@ -154,6 +167,88 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
     })
   })
 
+  test("parks a contended compaction control until its durable lease expires and recovers it once", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Compaction lease standby" })
+        const control = SessionControl.create({
+          sessionID: session.id,
+          kind: "compaction_request",
+          payload: { source_user_message_id: Identifier.ascending("message") },
+        })
+        const oldOwner = "old-process-compaction-owner"
+        const oldLease = acquireControlLease({
+          target: "session_control",
+          targetID: control.id,
+          ownerOccurrenceID: oldOwner,
+          now: Date.now(),
+          leaseMilliseconds: 500,
+        })
+        if (!oldLease.acquired) throw new Error("Failed to establish the old process compaction lease")
+        let executions = 0
+        const first = await SessionLoop.TestHooks.executeCompactionControl({
+          control,
+          sessionID: session.id,
+          run: async () => {
+            executions++
+            return "continue"
+          },
+        })
+        if (typeof first !== "object") throw new Error("Contended compaction did not enter lease standby")
+        const executionsBeforeExpiry = executions
+
+        await SessionLoop.TestHooks.waitForUserMessage(
+          session.id,
+          AbortSignal.timeout(2_000),
+          "",
+          { ignoredActionableControlID: control.id, wakeAt: first.expiresAt },
+        )
+        const second = await SessionLoop.TestHooks.executeCompactionControl({
+          control,
+          sessionID: session.id,
+          run: async () => {
+            executions++
+            return "continue"
+          },
+        })
+        const leases = Database.use((db) =>
+          db
+            .select()
+            .from(EngineControlActivationLeaseTable)
+            .where(
+              and(
+                eq(EngineControlActivationLeaseTable.target, "session_control"),
+                eq(EngineControlActivationLeaseTable.target_id, control.id),
+              ),
+            )
+            .all(),
+        )
+
+        expect({
+          first,
+          executionsBeforeExpiry,
+          second,
+          executions,
+          status: SessionControl.get(control.id)?.status,
+          leaseCount: leases.length,
+          oldOwnerCount: leases.filter((lease) => lease.owner_occurrence_id === oldOwner).length,
+          successorOwnerCount: leases.filter((lease) => lease.owner_occurrence_id !== oldOwner).length,
+        }).toEqual({
+          first: { status: "leased", expiresAt: oldLease.lease.expires_at },
+          executionsBeforeExpiry: 0,
+          second: "continue",
+          executions: 1,
+          status: "consumed",
+          leaseCount: 2,
+          oldOwnerCount: 1,
+          successorOwnerCount: 1,
+        })
+      },
+    })
+  })
+
   test("reconstructs, advances, and projects the latest successful compaction exactly once", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -191,6 +286,26 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           text: message.parts.filter((part) => part.type === "text").map((part) => part.text).join("\n\n"),
         }))).toEqual([{ id: second.id, text: secondDocument.content }])
 
+        const repeatedSource = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() + 1 },
+          agent: "user",
+          model,
+        })
+        await createCompactionCheckpoint(session.id, "# Repeated checkpoint one", repeatedSource.id)
+        const repeatedLatest = await createCompactionCheckpoint(
+          session.id,
+          "# Repeated checkpoint two",
+          repeatedSource.id,
+        )
+        const repeatedProjection = await Message.filterCompacted(MessageStore.stream(session.id))
+        expect(repeatedProjection
+          .filter((message) => message.info.role === "assistant" && message.info.summary === true)
+          .map((message) => message.info.id)).toEqual([repeatedLatest.id])
+
         const plan = TaskPlan.add({ sessionID: session.id, goal: "Verify checkpoint projection" })
         const dynamicContext = await SessionLoop.TestHooks.sessionStateContext({
           projectID: Instance.project.id,
@@ -220,7 +335,28 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Compaction memory integration" })
+        const session = await Session.create({ kind: "root", title: "Compaction memory integration" })
+        const taskID = Identifier.ascending("task")
+        const taskCreated = Date.now()
+        Database.immediateTransaction((db) => {
+          db.insert(EngineTaskTable).values({
+            id: taskID,
+            project_id: Instance.project.id,
+            session_id: session.id,
+            source: "test",
+            product_pillar: "code",
+            title: "Compaction memory integration",
+            request: "Preserve accepted ingress during compaction",
+            time_created: taskCreated,
+          }).run()
+          appendTaskOpenedInTransaction({
+            db,
+            taskID,
+            sessionID: session.id,
+            now: taskCreated,
+            source: "test.compaction",
+          })
+        })
         const source = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
@@ -279,6 +415,17 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           type: "text",
           text: "Continue from the verified checkpoint.",
         })
+        Database.immediateTransaction((db) =>
+          acceptTaskRootIngressInTransaction(db, {
+            taskID,
+            executionEpoch: 1,
+            source: "message",
+            sourceID: compactSource.id,
+            semanticTurnLimit: 3,
+            activationLimit: 4,
+            now: taskCreated + 3,
+          }),
+        )
 
         const providerSpy = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
         const configSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({
@@ -347,6 +494,16 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           expect(SessionCompaction.buildPrompt({ context: [], runtime: nextCompactionContext })).toContain(
             "Exclude credentials, application programming interface (API) keys, tokens, passwords, private keys, and other secrets.",
           )
+          const storedMessages = await Session.messages({ sessionID: session.id })
+          const storedSource = storedMessages.find((message) => message.info.id === compactSource.id)
+          const storedSummary = storedMessages.find((message) => message.info.id === document?.sourceMessageID)
+          expect({
+            sourcePartTypes: storedSource?.parts.map((part) => part.type),
+            summaryPartTypes: storedSummary?.parts.map((part) => part.type),
+          }).toEqual({
+            sourcePartTypes: ["text"],
+            summaryPartTypes: ["text", "compaction"],
+          })
         } finally {
           processorSpy.mockRestore()
           providerSpy.mockRestore()
@@ -574,9 +731,12 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           reasoning: summary.parts.find((part) => part.type === "reasoning")?.text,
           readerOutput: reader && reader.type === "tool" && reader.state.status === "completed" ? reader.state.output : undefined,
           visibleTexts: summary.parts.filter((part) => part.type === "text").map((part) => part.text),
-          markerCount: messages
-            .find((message) => message.info.id === compactSource.id)
-            ?.parts.filter((part) => part.type === "compaction").length,
+          checkpointParts: {
+            source: messages
+              .find((message) => message.info.id === compactSource.id)
+              ?.parts.filter((part) => part.type === "compaction").length,
+            summary: summary.parts.filter((part) => part.type === "compaction").length,
+          },
           memory: await SessionMemory.read(session.id),
           providerProjection: providerProjection.map((message) => ({
             role: message.role,
@@ -597,7 +757,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           reasoning: "Read the authoritative result.",
           readerOutput: expect.stringContaining(`"partID":"${sourceToolPartID}"`),
           visibleTexts: ["I will read the authoritative result before writing the checkpoint.", checkpoint],
-          markerCount: 1,
+          checkpointParts: { source: 0, summary: 1 },
           memory: { filename: "MEMORY.MD", sourceMessageID: summary.info.id, content: checkpoint },
           providerProjection: [{ role: "assistant", content: [{ type: "text", text: checkpoint }] }],
           transcriptProjection: [
@@ -1018,7 +1178,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             part: {
               id: Identifier.ascending("part"),
               sessionID: session.id,
-              messageID: source.id,
+              messageID: summary.id,
               type: "compaction",
               auto: true,
             },
@@ -1034,7 +1194,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             part: {
               id: foreignPart.id,
               sessionID: session.id,
-              messageID: source.id,
+              messageID: completedSummary.id,
               type: "compaction",
               auto: true,
             },
@@ -1130,13 +1290,6 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           time: { created: Date.now() + 10 },
           agent: "user",
           model,
-        })
-        await Session.updatePart({
-          id: Identifier.ascending("part"),
-          sessionID: session.id,
-          messageID: failedSource.id,
-          type: "compaction",
-          auto: true,
         })
         const incomplete = await Session.updateMessage({
           id: Identifier.ascending("message"),

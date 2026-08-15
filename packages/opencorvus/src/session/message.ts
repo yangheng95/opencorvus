@@ -1474,7 +1474,8 @@ export namespace Message {
 
   export async function filterCompacted(stream: AsyncIterable<Message.WithParts>) {
     const result = [] as Message.WithParts[]
-    const completed = new Set<string>()
+    const completed = new Map<string, { part: Message.CompactionPart; summaryID: string }>()
+    let projectedCheckpointID: string | undefined
     let retain:
       | {
           tailID?: string
@@ -1510,13 +1511,15 @@ export namespace Message {
       }
       result.push(msg)
       if (msg.info.role === "user" && completed.has(msg.info.id)) {
-        const part = msg.parts.find((item): item is Message.CompactionPart => item.type === "compaction")
-        if (!part) continue
+        const checkpoint = completed.get(msg.info.id)!
+        const part = checkpoint.part
+        projectedCheckpointID = checkpoint.summaryID
         if (part.anchor_id === msg.info.id) {
           const markerIndex = result.length - 1
           const summaryIndex = result.findIndex(
             (candidate) =>
               candidate.info.role === "assistant" &&
+              candidate.info.id === checkpoint.summaryID &&
               candidate.info.parentID === msg.info.id &&
               CompactionHandoff.isValidSummaryMessage(candidate.info),
           )
@@ -1535,43 +1538,47 @@ export namespace Message {
           result.splice(0, result.length, ...newer, summary, msg)
           break
         }
-        if (!part.tail_start_id && !part.anchor_id) break
+        if (!part.tail_start_id && !part.anchor_id) {
+          const summaryIndex = result.findIndex((candidate) => candidate.info.id === checkpoint.summaryID)
+          if (summaryIndex < 0) break
+          const newer = result.slice(0, summaryIndex)
+          result.splice(0, result.length, ...newer, result[summaryIndex]!, msg)
+          break
+        }
         retain = {
           tailID: part.tail_start_id,
           anchorID: part.anchor_id,
           afterCompactionIndex: result.length,
           tailSatisfied: !part.tail_start_id,
         }
-        if (!part.tail_start_id && !part.anchor_id) break
         continue
       }
-      if (msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info))
-        completed.add(msg.info.parentID)
+      if (msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info)) {
+        const part = msg.parts.find((item): item is Message.CompactionPart => item.type === "compaction")
+        if (part && !completed.has(msg.info.parentID)) {
+          completed.set(msg.info.parentID, { part, summaryID: msg.info.id })
+        }
+      }
     }
     if (retain && !retain.tailSatisfied) result.splice(retain.afterCompactionIndex)
     result.reverse()
-    const markerIndex = result.findIndex((msg) =>
-      msg.parts.some((part): part is Message.CompactionPart => part.type === "compaction" && !!part.anchor_id),
-    )
+    const markerIndex = projectedCheckpointID
+      ? result.findIndex((msg) => msg.info.id === projectedCheckpointID)
+      : -1
     if (markerIndex >= 0) {
       const marker = result[markerIndex]
       const part = marker.parts.find((item): item is Message.CompactionPart => item.type === "compaction")
       const anchorIndex = part?.anchor_id ? result.findIndex((msg) => msg.info.id === part.anchor_id) : -1
-      if (anchorIndex >= 0 && markerIndex > anchorIndex) {
-        let markerBlockEnd = markerIndex + 1
-        while (markerBlockEnd < result.length) {
-          const candidate = result[markerBlockEnd]
-          if (candidate.info.role !== "assistant") break
-          if (candidate.info.parentID !== marker.info.id) break
-          if (!CompactionHandoff.isValidSummaryMessage(candidate.info)) break
-          markerBlockEnd++
-        }
-        // The marker user is also the live request that triggered automatic
-        // compaction. Keep it after the preserved tail so the Session loop
-        // cannot mistake an older finished tail assistant for its reply. Only
-        // the maintenance summary moves beside the durable dispatch anchor.
-        const summaryBlock = result.splice(markerIndex + 1, markerBlockEnd - markerIndex - 1)
-        result.splice(anchorIndex + 1, 0, ...summaryBlock)
+      if (
+        anchorIndex >= 0 &&
+        markerIndex > anchorIndex &&
+        marker.info.role === "assistant" &&
+        CompactionHandoff.isValidSummaryMessage(marker.info)
+      ) {
+        // The source user remains at its chronological request position. Move
+        // only the append-only summary checkpoint beside the preserved anchor.
+        const [summary] = result.splice(markerIndex, 1)
+        result.splice(anchorIndex + 1, 0, summary!)
       }
       const anchorID = part?.anchor_id
       const projectedAnchorIndex = anchorID ? result.findIndex((message) => message.info.id === anchorID) : -1

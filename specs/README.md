@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Task-root compaction, Orchestrator `no_action`, and retained-assistant Artifact causality convergence: [`2026-08-15-task-root-compaction-and-artifact-causality-convergence.md`](records/2026-08/2026-08-15-task-root-compaction-and-artifact-causality-convergence.md).
+
 Latest `v0.0.45-beta` branch and canonical version baseline: [`2026-08-15-v0.0.45-beta-branch-bump.md`](records/2026-08/2026-08-15-v0.0.45-beta-branch-bump.md).
 
 Latest Task-root in-activation decision repair and internal stage Tool identity convergence: [`2026-08-15-task-root-decision-repair-and-stage-tool-identity.md`](records/2026-08/2026-08-15-task-root-decision-repair-and-stage-tool-identity.md).

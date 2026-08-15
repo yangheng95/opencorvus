@@ -7,7 +7,7 @@ export function assertArchitectOutputToolTurnIdentity(input: {
   taskID: string
   toolName: string
   options: unknown
-}): { sessionID: string; messageID: string } {
+}): { sessionID: string; messageID: string; toolPartID: string } {
   const options = input.options as
     | {
         toolCallId?: unknown
@@ -50,5 +50,5 @@ export function assertArchitectOutputToolTurnIdentity(input: {
     toolCallID,
     visibleToolName: input.toolName,
   })
-  return { sessionID, messageID }
+  return { sessionID, messageID, toolPartID }
 }

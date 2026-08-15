@@ -44,6 +44,7 @@ const STAGE_CONTEXT_GLOBAL_TOOL_IDS = [
 ] as const
 
 const ORCHESTRATOR_PRIVATE_TOOL_IDS = [
+  "no_action",
   "scheduler_message",
   "dispatch_agent",
   "manage_task",
@@ -65,6 +66,7 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
   "skill",
   "question",
+  "no_action",
   "scheduler_message",
   "read_context",
   "dispatch_agent",

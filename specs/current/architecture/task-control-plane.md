@@ -96,7 +96,7 @@ An operating-system process loss remains a real physical-attempt boundary, not a
 
 The Orchestrator inactivity observer is part of the physical prompt owner, not detached diagnostic work. Prompt settlement clears future polls and joins any observation tick already reading the Session tree before project ownership may be released. An in-flight observer therefore cannot reopen or read a disposed project after the owning prompt has completed.
 
-Artifact locator/read/selection references remain capability-like facts scoped to the exact control parent and physical Turn. Same-activation repair therefore preserves prior references naturally. A later independent ingress or genuinely new physical Turn must search/read/select again; the Host never broadens a reference to compensate for a scheduler retry.
+Artifact locator/read/selection references remain capability-like facts scoped to the exact control parent and physical Turn. The exact current Tool Part identifies its persisted Provider step, whose `step-start` Part is the exclusive causal read boundary: only completed producer Parts from prior Provider steps are visible, so same-step parallel siblings cannot leak forward regardless of execution order. Same-activation repair therefore preserves prior-step references naturally. A later independent ingress or genuinely new physical Turn must search/read/select again; the Host never broadens a reference to compensate for a scheduler retry.
 
 The activation is consumed only at a final non-Tool-call assistant boundary with zero outstanding activities, or at a wait/provider-failure boundary with zero outstanding activities. An intermediate Provider step or one completed sibling Tool does not release the activation.
 

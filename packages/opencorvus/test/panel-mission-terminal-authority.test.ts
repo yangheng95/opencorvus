@@ -342,17 +342,34 @@ describe("Mission terminal Task authority", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
+        const readInput = {
+          action: "read_task_artifact" as const,
+          taskID,
+          artifact_transport_version: 2 as const,
+          artifact_locator_ref: entries[0]!.artifact_locator_ref,
+          byte_offset: 0,
+          max_bytes: 65_536,
+          delivery: "inline" as const,
+        }
+        const readCallID = "read-terminal-artifact"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: readMessage.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: readMessage.id,
+          type: "tool",
+          callID: readCallID,
+          tool: "panel",
+          state: { status: "running", input: readInput, time: { start: now + 37 } },
+        })
         const read = await panel.execute(
-          {
-            action: "read_task_artifact",
-            taskID,
-            artifact_transport_version: 2,
-            artifact_locator_ref: entries[0]!.artifact_locator_ref,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
-          },
-          { ...context, messageID: readMessage.id },
+          readInput,
+          { ...context, messageID: readMessage.id, callID: readCallID },
         )
         expect(JSON.parse(read.output)).toEqual(
           expect.objectContaining({
@@ -385,19 +402,27 @@ describe("Mission terminal Task authority", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
+        const staleReadCallID = "read-stale-terminal-artifact"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: staleReadMessage.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: staleReadMessage.id,
+          type: "tool",
+          callID: staleReadCallID,
+          tool: "panel",
+          state: { status: "running", input: readInput, time: { start: now + 40 } },
+        })
         let staleReadError: unknown
         try {
           await panel.execute(
-            {
-              action: "read_task_artifact",
-              taskID,
-              artifact_transport_version: 2,
-              artifact_locator_ref: entries[0]!.artifact_locator_ref,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-            },
-            { ...context, messageID: staleReadMessage.id },
+            readInput,
+            { ...context, messageID: staleReadMessage.id, callID: staleReadCallID },
           )
         } catch (error) {
           staleReadError = error
@@ -582,14 +607,6 @@ describe("Mission terminal Task authority", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "tool-calls",
         })
-        expect(
-          reviewedTerminalLifecycleReferenceBeforePanelAction({
-            sessionID: mission.id,
-            assistantMessageID: mutationMessage.id,
-            taskID,
-          }),
-        ).toEqual(initialReference)
-
         const missionSchema = panelActionSchemaForAgent("mission")
         expect(
           missionSchema.parse({
@@ -623,6 +640,12 @@ describe("Mission terminal Task authority", () => {
 
         const completionCallID = "complete-terminal-mission"
         const completionPartID = Identifier.ascending("part")
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: mutationMessage.id,
+          type: "step-start",
+        })
         await Session.updatePart({
           id: completionPartID,
           sessionID: mission.id,
@@ -707,6 +730,7 @@ describe("Mission terminal Task authority", () => {
           reviewed: reviewedTerminalLifecycleReferenceBeforePanelAction({
             sessionID: mission.id,
             assistantMessageID: mutationMessage.id,
+            toolPartID: completionPartID,
             taskID,
           }),
           current: currentReference,
@@ -772,6 +796,12 @@ describe("Mission terminal Task authority", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         const staleCompletionCallID = "complete-with-prior-terminal-read"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: staleCompletionMessage.id,
+          type: "step-start",
+        })
         await Session.updatePart({
           id: Identifier.ascending("part"),
           sessionID: mission.id,

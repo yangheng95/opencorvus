@@ -135,20 +135,35 @@ describe("Artifact read facts from provider Tool input", () => {
           parentID: user.id,
           role: "assistant",
           author: "mission",
-          time: { created: now + 3, completed: now + 4 },
+          time: { created: now + 3 },
           agent: "mission",
           providerID: "openai",
           modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "tool-calls",
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: mutationMessage.id,
+          type: "step-start",
+        })
+        const mutationPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: mutationMessage.id,
+          type: "tool",
+          callID: "complete-panel-action",
+          tool: "panel",
+          state: { status: "running", input: {}, time: { start: now + 4 } },
         })
 
         expect(
           completeArtifactReadsBeforePanelAction({
             sessionID: session.id,
             assistantMessageID: mutationMessage.id,
+            toolPartID: mutationPart.id,
             taskID,
           }),
         ).toEqual([locator])

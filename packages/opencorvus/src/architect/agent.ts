@@ -132,6 +132,7 @@ export namespace ArchitectAgent {
         const sourceArtifactLocators = selectedArtifactLocatorsBeforePublication({
           sessionID: turn.sessionID,
           assistantMessageID: turn.messageID,
+          toolPartID: turn.toolPartID,
         })
         const roles = resolveArchitectSelectedArtifactRoles({
           taskID: input.taskID,

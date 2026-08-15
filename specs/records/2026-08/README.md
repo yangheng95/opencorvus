@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-15-task-root-compaction-and-artifact-causality-convergence.md](2026-08-15-task-root-compaction-and-artifact-causality-convergence.md) moves compaction checkpoints onto their completed summary Messages, restores `no_action` to the production Orchestrator Tool projection, and gives retained assistants strict Provider-step Artifact causality.
+
 - [2026-08-15-v0.0.45-beta-branch-bump.md](2026-08-15-v0.0.45-beta-branch-bump.md) creates the `v0.0.45beta` development branch from the reviewed Task-root recovery baseline and synchronizes every canonical release-family version projection to `0.0.45-beta` without publishing a tag or Release.
 
 - [2026-08-15-task-root-decision-repair-and-stage-tool-identity.md](2026-08-15-task-root-decision-repair-and-stage-tool-identity.md) keeps decision repair inside one Task-root activation and restores persisted execution identity for every internal projected-worker stage Tool.

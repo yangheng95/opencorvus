@@ -1332,8 +1332,8 @@ export namespace Session {
     if (input.info.time.completed === undefined || !CompactionHandoff.isValidSummaryMessage(input.info)) {
       throw new Error(`Compaction checkpoint assistant ${input.info.id} must be a valid completed summary`)
     }
-    if (input.part.sessionID !== input.info.sessionID || input.part.messageID !== input.info.parentID) {
-      throw new Error(`Compaction checkpoint ${input.info.id} marker does not belong to its parent user message`)
+    if (input.part.sessionID !== input.info.sessionID || input.part.messageID !== input.info.id) {
+      throw new Error(`Compaction checkpoint ${input.info.id} marker does not belong to its summary assistant`)
     }
     let info: Message.VisibleInfo | undefined
     let part: Message.CompactionPart | undefined
@@ -1345,6 +1345,19 @@ export namespace Session {
         .get()
       if (!parent || parent.data.role !== "user") {
         throw new Error(`Compaction checkpoint ${input.info.id} parent must be a user message`)
+      }
+      const existingCheckpoint = db
+        .select({ id: PartTable.id })
+        .from(PartTable)
+        .where(
+          and(
+            eq(PartTable.message_id, input.info.id),
+            sql`json_extract(${PartTable.data}, '$.type') = 'compaction'`,
+          ),
+        )
+        .get()
+      if (existingCheckpoint && existingCheckpoint.id !== input.part.id) {
+        throw new Error(`Compaction checkpoint assistant ${input.info.id} already owns checkpoint ${existingCheckpoint.id}`)
       }
       const continuationParts = db
         .select()
@@ -1360,7 +1373,8 @@ export namespace Session {
         throw new Error(`Compaction checkpoint assistant ${input.info.id} must contain final-step visible text`)
       }
       info = upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
-      part = updatePartRow(input.part, { publish: true }, db).outputPart as Message.CompactionPart
+      part = updatePartRow(input.part, { publish: true, completedCompactionCheckpoint: true }, db)
+        .outputPart as Message.CompactionPart
     })
     if (!info || !part) throw new Error(`Compaction checkpoint ${input.info.id} was not persisted`)
     return { info, part }
@@ -1677,7 +1691,7 @@ export namespace Session {
 
   function updatePartRow(
     part: Message.Part,
-    options: { publish: boolean },
+    options: { publish: boolean; completedCompactionCheckpoint?: boolean },
     transaction?: Database.TxOrDb,
   ): { outputPart: Message.Part; wrotePart: boolean } {
     assertPartHasNoInlineBase64(part)
@@ -1859,7 +1873,11 @@ export namespace Session {
       if (existingPart && JSON.stringify(existingPart.data) === JSON.stringify(data)) return
       const parent = message.data as { role?: string; time?: { completed?: number } }
       if (parent.role === "assistant" && parent.time?.completed !== undefined) {
-        throw new Error(`Part ${id} is immutable after assistant completion`)
+        const isCheckpointAppend =
+          options.completedCompactionCheckpoint === true &&
+          part.type === "compaction" &&
+          existingPart === undefined
+        if (!isCheckpointAppend) throw new Error(`Part ${id} is immutable after assistant completion`)
       }
       if (existingPart) {
         const current = existingPart.data as { type?: string }

@@ -160,6 +160,7 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
             evidence_locators: resolvePanelArtifactReadReferencesBeforeAction({
               sessionID: session.id,
               assistantMessageID: row.messageID,
+              toolPartID: row.part.id,
               taskID: acceptance.task_id,
               terminalLifecycleReference: receiptAcceptance.terminal_lifecycle_reference,
               references: acceptance.evidence_read_refs,

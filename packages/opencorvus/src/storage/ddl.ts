@@ -1000,6 +1000,11 @@ WHEN EXISTS (
   WHERE id=NEW.message_id
     AND json_extract(data,'$.role')='assistant'
     AND json_type(data,'$.time.completed') IN ('integer','real')
+    AND NOT (
+      json_extract(NEW.data,'$.type')='compaction'
+      AND json_extract(data,'$.summary')=1
+      AND json_extract(data,'$.author')='compaction'
+    )
 )
 BEGIN
   SELECT RAISE(ABORT, 'part: completed assistant content is immutable');

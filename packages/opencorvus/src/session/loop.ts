@@ -383,7 +383,7 @@ export namespace SessionLoop {
     control: SessionControl.Record
     sessionID: string
     run: (leaseSignal: AbortSignal) => Promise<Awaited<ReturnType<typeof SessionCompaction.process>>>
-  }): Promise<"continue" | "stop"> {
+  }): Promise<"continue" | "stop" | { status: "leased"; expiresAt: number }> {
     const ownerOccurrenceID = Identifier.ascending("call")
     const leaseMilliseconds = 120_000
     const acquired = acquireControlLease({
@@ -393,7 +393,7 @@ export namespace SessionLoop {
       now: Date.now(),
       leaseMilliseconds,
     })
-    if (!acquired.acquired) return "continue"
+    if (!acquired.acquired) return { status: "leased", expiresAt: acquired.lease.expires_at }
     let renewalFailure: unknown
     const leaseAbort = new AbortController()
     const heartbeat = setInterval(() => {
@@ -1122,12 +1122,6 @@ export namespace SessionLoop {
     let lastUser: Message.User | undefined
     let lastAssistant: Message.Assistant | undefined
     let lastFinished: Message.Assistant | undefined
-    const compactions: Message.CompactionPart[] = []
-    const completedCompactionSourceIDs = new Set(
-      msgs.flatMap((msg) =>
-        msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info) ? [msg.info.parentID] : [],
-      ),
-    )
     for (let i = msgs.length - 1; i >= 0; i--) {
       const msg = msgs[i]
       if (!lastUser && msg.info.role === "user") lastUser = msg.info as Message.User
@@ -1135,17 +1129,9 @@ export namespace SessionLoop {
       if (!lastFinished && msg.info.role === "assistant" && msg.info.finish)
         lastFinished = msg.info as Message.Assistant
       if (lastUser && lastFinished) break
-      if (!lastFinished) {
-        compactions.push(
-          ...msg.parts.filter(
-            (part): part is Message.CompactionPart =>
-              part.type === "compaction" && !completedCompactionSourceIDs.has(msg.info.id),
-          ),
-        )
-      }
     }
     if (!lastUser) throw new Error("No user message found in stream. This should never happen.")
-    return { lastUser, lastAssistant, lastFinished, compactions }
+    return { lastUser, lastAssistant, lastFinished }
   }
 
   /** Keep later persisted inputs out of the active provider turn. */
@@ -1217,18 +1203,12 @@ export namespace SessionLoop {
     messages: Message.WithParts[],
     sourceUserMessageID: string,
   ): Message.WithParts | undefined {
-    const source = messages.find(
-      (msg) =>
-        msg.info.id === sourceUserMessageID &&
-        msg.info.role === "user" &&
-        msg.parts.some((part) => part.type === "compaction"),
-    )
-    if (!source) return
     return messages.findLast(
       (msg) =>
         msg.info.role === "assistant" &&
         msg.info.parentID === sourceUserMessageID &&
-        CompactionHandoff.isValidSummaryMessage(msg.info),
+        CompactionHandoff.isValidSummaryMessage(msg.info) &&
+        msg.parts.some((part) => part.type === "compaction"),
     )
   }
 
@@ -1273,11 +1253,20 @@ export namespace SessionLoop {
     })
   }
 
-  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterOrderKey: string }) {
+  async function beginStandby(input: {
+    sessionID: string
+    abort: AbortSignal
+    afterOrderKey: string
+    ignoredActionableControlID?: string
+    wakeAt?: number
+  }) {
     await SessionCompaction.prune({ sessionID: input.sessionID })
     log.info("entering standby", { sessionID: input.sessionID })
     touch(input.sessionID)
-    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterOrderKey)
+    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterOrderKey, {
+      ignoredActionableControlID: input.ignoredActionableControlID,
+      wakeAt: input.wakeAt,
+    })
     await SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
     SessionRuntimeContractStore.settleConsumedWake(input.sessionID)
     return { waitForWake }
@@ -2186,7 +2175,7 @@ export namespace SessionLoop {
                 (message) => message.info.role === "user" && attachedTargets.has(message.info.id),
               )?.info.id
               const msgs = promptMessagePrefix(durableMessages, replyTarget)
-              const { lastUser, lastAssistant, lastFinished, compactions } = collectLoopState(msgs)
+              const { lastUser, lastAssistant, lastFinished } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
                 if (isActionableSessionControl(control) || control.kind === "mission_process_recovery") continue
@@ -2236,7 +2225,6 @@ export namespace SessionLoop {
               const compactionControl = controls.find(
                 (item) => item.kind === "compaction_request" || item.kind === "manual_summarize",
               )
-              const compaction = compactions.pop()
 
               if (compactionControl) {
                 const sourceUserMessageID = compactionControl.payload.source_user_message_id
@@ -2300,6 +2288,17 @@ export namespace SessionLoop {
                       { prepareProviderTool, createStructuredOutputTool, structuredOutputToolChoice },
                     ),
                 })
+                if (typeof result === "object") {
+                  const standbyAfter = lastAssistant ?? lastUser
+                  const { waitForWake } = await beginStandby({
+                    sessionID,
+                    abort,
+                    afterOrderKey: timelineMessageOrderKey({ info: standbyAfter }),
+                    ignoredActionableControlID: compactionControl.id,
+                    wakeAt: result.expiresAt,
+                  })
+                  return { type: "standby" as const, waitForWake }
+                }
                 if (result === "stop") {
                   const completedMessages: Message.WithParts[] = []
                   for await (const message of MessageStore.stream(sessionID)) completedMessages.push(message)
@@ -2312,33 +2311,6 @@ export namespace SessionLoop {
                   flushCallbacks(sessionID, completedSummary, directory, "summary")
                   break
                 }
-                continue
-              }
-
-              if (compaction) {
-                const taskSourceUser = msgs.find((message) => message.info.id === compaction.messageID)?.info
-                if (!taskSourceUser || taskSourceUser.role !== "user") {
-                  await Session.removePart({
-                    sessionID,
-                    messageID: compaction.messageID,
-                    partID: compaction.id,
-                  })
-                  continue
-                }
-                const result = await SessionCompaction.process(
-                  {
-                    messages: msgs,
-                    parentID: taskSourceUser.id,
-                    abort,
-                    sessionID,
-                    auto: compaction.auto,
-                    overflow: compaction.overflow,
-                    focus: compaction.focus,
-                  },
-                  { prepareProviderTool, createStructuredOutputTool, structuredOutputToolChoice },
-                )
-                if (typeof result === "object") throw result.error
-                if (result === "stop") break
                 continue
               }
 
@@ -2528,7 +2500,12 @@ export namespace SessionLoop {
     return firstResult
   })
 
-  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterOrderKey: string): Promise<void> {
+  function waitForUserMessage(
+    sessionID: string,
+    abort: AbortSignal,
+    afterOrderKey: string,
+    options?: { ignoredActionableControlID?: string; wakeAt?: number },
+  ): Promise<void> {
     return new Promise<void>((resolve) => {
       if (abort.aborted) {
         resolve()
@@ -2539,6 +2516,7 @@ export namespace SessionLoop {
       let unsubscribeMessage = () => {}
       let unsubscribeRuntimeWake = () => {}
       let unsubscribeControlWake = () => {}
+      let wakeTimer: ReturnType<typeof setTimeout> | undefined
       const onAbort = () => settle()
       const settle = () => {
         if (settled) return
@@ -2546,6 +2524,7 @@ export namespace SessionLoop {
         unsubscribeMessage()
         unsubscribeRuntimeWake()
         unsubscribeControlWake()
+        if (wakeTimer !== undefined) clearTimeout(wakeTimer)
         abort.removeEventListener("abort", onAbort)
         resolve()
       }
@@ -2562,13 +2541,19 @@ export namespace SessionLoop {
       unsubscribeRuntimeWake = SessionRuntimeContractStore.subscribeWake(sessionID, settle)
       unsubscribeControlWake = SessionControl.subscribeWake(sessionID, settle)
       abort.addEventListener("abort", onAbort, { once: true })
+      if (options?.wakeAt !== undefined) {
+        wakeTimer = setTimeout(settle, Math.max(0, options.wakeAt - Date.now()))
+      }
 
       // Re-read both durable wake sources after subscribing so a control
       // committed between the loop's standby decision and this subscription
       // cannot leave the prompt owner asleep.
       if (
         shouldRunRuntimeContractTurn(sessionID) ||
-        SessionControl.pending(sessionID).some(isActionableSessionControl)
+        SessionControl.pending(sessionID).some(
+          (control) =>
+            isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
+        )
       ) {
         settle()
         return

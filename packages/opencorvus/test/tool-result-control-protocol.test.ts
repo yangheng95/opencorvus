@@ -430,6 +430,38 @@ afterEach(async () => {
 })
 
 describe("single Tool-result turn-control protocol", () => {
+  test("projects the typed no_action receipt on the production scheduler Tool surface", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await projectedSchedulerSurface({
+          projectPath: project.path,
+          permissionMode: "full_access",
+        })
+        const projected = fixture.tools.no_action
+        if (!projected?.execute) throw new Error("Production scheduler projection omitted no_action")
+        const result = await projected.execute(
+          { reason: "Lifecycle evidence is reconciled." },
+          { toolCallId: "call_projected_no_action", messages: [], abortSignal: fixture.abort },
+        )
+        expect({
+          toolNames: Object.keys(fixture.tools),
+          result,
+          control: toolResultControl((result as { metadata: Record<string, unknown> }).metadata),
+        }).toEqual({
+          toolNames: expect.arrayContaining(["no_action"]),
+          result: {
+            title: "Current Ingress Reconciled",
+            output: "Lifecycle evidence is reconciled.",
+            metadata: expect.any(Object),
+          },
+          control: { kind: "immediate_park" },
+        })
+      },
+    })
+  }, 0)
+
   test("treats a completed immediate-park Tool outcome as the durable reply boundary", () => {
     const userMessageID = "message:parked-input"
     expect(SessionLoop.TestHooks.isSettledReplyToUserMessage({
