@@ -784,10 +784,21 @@ export function ingestPersistedConversationMessage(input: { info: any; parts: an
 
 function propsOf(event: any): Record<string, any> {
   const p = event?.properties
-  if (p && typeof p === "object" && !Array.isArray(p)) return p
-  const q = event?.payload
-  if (q && typeof q === "object" && !Array.isArray(q)) return q
-  return {}
+  const base =
+    p && typeof p === "object" && !Array.isArray(p)
+      ? p
+      : event?.payload && typeof event.payload === "object" && !Array.isArray(event.payload)
+        ? event.payload
+        : {}
+  const envelopeSessionID = typeof event?.session_id === "string" ? event.session_id : ""
+  if (!envelopeSessionID) return base
+  const payloadSessionID = typeof base.sessionID === "string" ? base.sessionID : ""
+  if (payloadSessionID && payloadSessionID !== envelopeSessionID) {
+    throw new Error(
+      `protocol event session identity conflict: envelope=${envelopeSessionID} payload=${payloadSessionID}`,
+    )
+  }
+  return { ...base, sessionID: envelopeSessionID }
 }
 
 /** Dedicated, message-turn-less card id. Only the integrity review uses

@@ -1134,12 +1134,18 @@ export namespace SessionLoop {
     message: Message.WithParts,
     userMessageID: string,
   ): message is Message.WithParts & { info: Message.Assistant } {
+    const committedTurnControl = message.parts.some(
+      (part) =>
+        part.type === "tool" &&
+        part.state.status === "completed" &&
+        toolResultControl(part.state.metadata) !== undefined,
+    )
     return (
       message.info.role === "assistant" &&
       message.info.parentID === userMessageID &&
       message.info.time.completed !== undefined &&
       Boolean(message.info.finish) &&
-      message.info.finish !== "tool-calls" &&
+      (message.info.finish !== "tool-calls" || committedTurnControl) &&
       message.info.summary !== true
     )
   }
@@ -3846,6 +3852,7 @@ export namespace SessionLoop {
     collectLoopState,
     consumeCompletedCompactionControl,
     executeCompactionControl,
+    isSettledReplyToUserMessage,
     sessionStateContext,
     waitForUserMessage,
     resolveToolExecutionAuthority,

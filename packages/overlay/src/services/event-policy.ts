@@ -109,6 +109,10 @@ const TREE_WRITER_PROJECTED_EXACT_TYPES = new Set([
 ])
 
 const BOARD_INVALIDATING_EXACT_TYPES = new Set([
+  "task.execution.opened",
+  "task.execution.reopened",
+  "task.close.requested",
+  "task.closed",
   "task.created",
   "task.updated",
   "task.completed",

@@ -7,7 +7,8 @@ import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicy
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { Database } from "@/storage/db"
+import { ToolPartOutcomeTable } from "@/session/session.sql"
+import { Database, eq } from "@/storage/db"
 import { randomUUID } from "node:crypto"
 import { mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
@@ -618,6 +619,101 @@ describe("two-mode permission authority", () => {
           },
         })
         expect(JSON.stringify(outcome)).not.toContain("durable result")
+      },
+    })
+  })
+
+  test("projects a structured Permission result through the canonical Tool output boundary", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const now = Date.now()
+        const session = await Session.create({ kind: "assistant", title: "Structured Permission Tool result" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "build",
+          model: { providerID: "test", modelID: "permission-result" },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "assistant",
+          author: "build",
+          parentID: user.id,
+          time: { created: now + 1 },
+          agent: "build",
+          providerID: "test",
+          modelID: "permission-result",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const callID = "structured-permission-result"
+        const partID = Identifier.ascending("part")
+        const running = await Session.updatePart({
+          id: partID,
+          sessionID: session.id,
+          messageID: assistant.id,
+          type: "tool",
+          callID,
+          tool: "dispatch_agent",
+          state: {
+            status: "running",
+            input: { target: "request-interpreter" },
+            time: { start: now + 2 },
+          },
+        })
+        const result = { kind: "accepted", session_id: "ses_structured", dispatch_lineage_id: "art_structured" }
+        await PermissionAuthority.authorizeAndExecute(
+          {
+            projectID: Instance.project.id,
+            sessionID: session.id,
+            messageID: assistant.id,
+            toolCallID: callID,
+            toolPartID: partID,
+            providerKind: "projected",
+            providerID: "dispatch_agent",
+            providerDigest: "projection:dispatch-agent",
+            toolName: "dispatch_agent",
+            args: running.state.input,
+          },
+          async () => result,
+        )
+        const completed = await Session.updatePart({
+          ...running,
+          state: {
+            status: "completed",
+            input: running.state.input,
+            output: JSON.stringify(result),
+            title: "Accepted dispatch",
+            metadata: {},
+            time: { start: now + 2, end: now + 3 },
+          },
+        })
+        const receipt = Database.use((db) => db.select().from(ToolPartOutcomeTable)
+          .where(eq(ToolPartOutcomeTable.request_part_id, partID)).get())!
+        expect({ completed, receipt }).toMatchObject({
+          completed: {
+            state: {
+              status: "completed",
+              output: JSON.stringify(result),
+              title: "Accepted dispatch",
+            },
+          },
+          receipt: {
+            request_part_id: partID,
+            data: {
+              outcome: "completed",
+              resultAttemptID: expect.stringMatching(/^per_/),
+              title: "Accepted dispatch",
+            },
+          },
+        })
       },
     })
   })

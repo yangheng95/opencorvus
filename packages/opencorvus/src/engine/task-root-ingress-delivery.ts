@@ -27,6 +27,7 @@ import {
   ProviderActivityRequestTable,
   ToolPartOutcomeTable,
   ToolPartRequestTable,
+  SessionTable,
 } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Database, and, asc, eq, inArray, sql } from "@/storage/db"
@@ -369,7 +370,7 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
   const assistantIDs = new Set<string>()
   const activationAssistants = new Map<string, string>()
   const continuationAssistants = new Map<string, string>()
-  const task = db.select({ sessionID: EngineTaskTable.session_id }).from(EngineTaskTable)
+  const task = db.select({ sessionID: EngineTaskTable.session_id, projectID: EngineTaskTable.project_id }).from(EngineTaskTable)
     .where(eq(EngineTaskTable.id, ingress.task_id)).get()
   if (!task?.sessionID) throw new Error(`Task-root ingress ${ingress.id} has no root Session authority`)
   for (const row of assistantRows) {
@@ -377,7 +378,15 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
     assistantIDs.add(assistant.id)
     if (!assistant.activationID) continue
     const priorAssistant = activationAssistants.get(assistant.activationID)
-    if (row.session_id !== task.sessionID || (priorAssistant && priorAssistant !== assistant.id)) {
+    const session = db.select({ parentID: SessionTable.parent_id, projectID: SessionTable.project_id, kind: SessionTable.kind })
+      .from(SessionTable).where(eq(SessionTable.id, row.session_id)).get()
+    if (
+      !session ||
+      session.parentID !== task.sessionID ||
+      session.projectID !== task.projectID ||
+      session.kind !== "orchestrator" ||
+      (priorAssistant && priorAssistant !== assistant.id)
+    ) {
       throw new Error(`Task-root activation ${assistant.activationID} has conflicting assistant authority`)
     }
     activationAssistants.set(assistant.activationID, assistant.id)
@@ -386,11 +395,12 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       throw new Error(`Task-root continuation ${assistant.parentID} has multiple assistant Messages`)
     }
     continuationAssistants.set(assistant.parentID, assistant.id)
-    const parent = db.select({ data: MessageTable.data }).from(MessageTable)
+    const parent = db.select({ data: MessageTable.data, sessionID: MessageTable.session_id }).from(MessageTable)
       .where(eq(MessageTable.id, assistant.parentID)).get()
     const control = (parent?.data as { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } } | undefined)
       ?.extra?.orchestrator_control_ingress
     if (
+      parent?.sessionID !== row.session_id ||
       control?.ingress_id !== ingress.id ||
       typeof control.predecessor_id !== "string" ||
       orchestratorControlOccurrenceIdentity(ingress.id, control.predecessor_id).messageID !== assistant.parentID

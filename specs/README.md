@@ -1855,6 +1855,8 @@ Latest Composer conversation context flags: [`2026-07-29-composer-conversation-c
 
 ## Storage Model
 
+Latest Mission Task publication and first-render convergence repair: [`2026-08-15-mission-task-publication-convergence-repair.md`](records/2026-08/2026-08-15-mission-task-publication-convergence-repair.md).
+
 Latest large MySQL transfer statement closure: [`2026-08-05-large-mysql-transfer-statement-closure.md`](records/2026-08/2026-08-05-large-mysql-transfer-statement-closure.md).
 
 Latest Task follow-up Orchestrator model convergence repair: [`2026-08-04-task-follow-up-orchestrator-model-convergence.md`](records/2026-08/2026-08-04-task-follow-up-orchestrator-model-convergence.md).

@@ -70,6 +70,7 @@ import {
 } from "@/engine/task-root-fact-store"
 import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { normalizeToolResult } from "./tool-result-normalization"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
@@ -1224,6 +1225,7 @@ export namespace Session {
         .where(eq(MessageTable.id, msg.id))
         .get()
       const persistedMessage = messageWithPersistedCreated(msg, existing?.time_created ?? msg.time.created)
+      let allowAcceptedActivitySettlement = false
       if (existing) {
         const prior = Message.Info.parse({
           ...existing.data,
@@ -1239,6 +1241,8 @@ export namespace Session {
           return
         }
         if (prior.role === "assistant" && persistedMessage.role === "assistant") {
+          allowAcceptedActivitySettlement =
+            prior.time.completed === undefined && persistedMessage.time.completed !== undefined
           const effectBound = Boolean(prior.activationID) || Boolean(
             db.select({ id: ProviderActivityRequestTable.id })
               .from(ProviderActivityRequestTable)
@@ -1288,6 +1292,7 @@ export namespace Session {
             parentID: persistedMessage.parentID,
             activationID: persistedMessage.activationID,
           },
+          allowAcceptedActivitySettlement,
         })
       }
       persisted = persistedMessage
@@ -1776,14 +1781,11 @@ export namespace Session {
             : undefined
           if (resultReceipt) {
             const stored = resultReceipt.result as { kind?: string; value?: unknown }
-            const value = stored?.kind === "json" ? stored.value : undefined
             const projected = stored?.kind === "undefined"
               ? ""
-              : typeof value === "string"
-                ? value
-                : value && typeof value === "object" && !Array.isArray(value) && typeof (value as { output?: unknown }).output === "string"
-                  ? (value as { output: string }).output
-                  : undefined
+              : stored?.kind === "json"
+                ? normalizeToolResult(stored.value).output
+                : undefined
             if (projected !== part.state.output) {
               throw new Error(`Tool outcome Part ${id} conflicts with Permission result ${resultReceipt.attempt_id}`)
             }

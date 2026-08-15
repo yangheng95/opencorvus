@@ -6,11 +6,13 @@ import {
   TestHooks as TaskControlTestHooks,
 } from "@/engine/task-root-ingress-delivery"
 import {
+  acquireTaskRootIngressLease,
   acceptTaskRootIngressInTransaction,
   listTaskRootIngresses,
   projectTaskRootIngress,
 } from "@/engine/task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
+import { writeTaskUpdateInTransaction } from "@/engine/state"
 import {
   currentOrchestratorControlMessage,
 } from "@/orchestrator/agent"
@@ -34,6 +36,11 @@ describe("Task-control reconciliation", () => {
       fn: async () => {
         const taskID = Identifier.ascending("task")
         const root = await Session.create({ kind: "root", title: "Fact-reduced continuation" })
+        const orchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: root.id,
+          title: "Fact-reduced continuation scheduler",
+        })
         const now = Date.now()
         const ingress = Database.immediateTransaction((db) => {
           db.insert(EngineTaskTable).values({
@@ -69,7 +76,7 @@ describe("Task-control reconciliation", () => {
             await Session.persistMessage({
               info: {
                 id: control.messageID,
-                sessionID: root.id,
+                sessionID: orchestrator.id,
                 role: "user",
                 author: "orchestrator",
                 time: { created: Date.now() },
@@ -79,7 +86,7 @@ describe("Task-control reconciliation", () => {
               },
               parts: [{
                 id: control.partID,
-                sessionID: root.id,
+                sessionID: orchestrator.id,
                 messageID: control.messageID,
                 type: "text",
                 text: control.text,
@@ -89,7 +96,7 @@ describe("Task-control reconciliation", () => {
             })
             const assistantInput: Message.Assistant = {
               id: Identifier.ascending("message"),
-              sessionID: root.id,
+              sessionID: orchestrator.id,
               parentID: control.messageID,
               role: "assistant",
               author: "orchestrator",
@@ -108,7 +115,7 @@ describe("Task-control reconciliation", () => {
             if (calls.length === 1) return { finalMessageID: assistant.id }
             const request = await Session.updatePart({
               id: Identifier.ascending("part"),
-              sessionID: root.id,
+              sessionID: orchestrator.id,
               messageID: assistant.id,
               type: "tool",
               callID: "call_manage_task_decision",
@@ -152,6 +159,133 @@ describe("Task-control reconciliation", () => {
           leaseIDs: leases.map((lease) => lease.id),
           projection: { state: "resolved", decisionID: expect.any(String) },
         })
+      },
+    })
+  })
+
+  test("settles the accepted assistant activity after its Task terminal fact commits", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = Identifier.ascending("task")
+        const root = await Session.create({ kind: "root", title: "Terminal settlement root" })
+        const orchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: root.id,
+          title: "Terminal settlement scheduler",
+        })
+        const now = Date.now()
+        const ingress = Database.immediateTransaction((db) => {
+          db.insert(EngineTaskTable).values({
+            id: taskID,
+            project_id: Instance.project.id,
+            session_id: root.id,
+            source: "test",
+            product_pillar: "code",
+            title: "Terminal settlement",
+            request: "Commit one terminal decision and its exact assistant boundary",
+            metadata: { actor: "user" },
+            time_created: now,
+          }).run()
+          appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.terminal-settlement" })
+          return acceptTaskRootIngressInTransaction(db, {
+            taskID,
+            executionEpoch: 1,
+            source: "inline",
+            sourceID: "terminal-settlement-source",
+            inlinePayload: { note: "complete exactly once" },
+            semanticTurnLimit: 2,
+            activationLimit: 2,
+            now: now + 1,
+          })
+        })
+        const lease = acquireTaskRootIngressLease({
+          ingressID: ingress.id,
+          ownerOccurrenceID: "terminal-settlement-owner",
+          now: now + 2,
+          leaseMilliseconds: 60_000,
+        })
+        if (!lease.acquired) throw new Error("Expected terminal-settlement activation lease")
+        const control = currentOrchestratorControlMessage(
+          { taskCreation: { taskID } },
+          taskID,
+          ingress.id,
+          ingress.id,
+        )
+        if (!control) throw new Error("Expected terminal-settlement control occurrence")
+        await Session.persistMessage({
+          info: {
+            id: control.messageID,
+            sessionID: orchestrator.id,
+            role: "user",
+            author: "orchestrator",
+            time: { created: now + 3 },
+            agent: "orchestrator",
+            model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+            extra: control.extra,
+          },
+          parts: [{
+            id: control.partID,
+            sessionID: orchestrator.id,
+            messageID: control.messageID,
+            type: "text",
+            text: control.text,
+            kind: "control",
+            source: "system",
+          } satisfies Message.TextPart],
+        })
+        let assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: orchestrator.id,
+          parentID: control.messageID,
+          role: "assistant",
+          author: "orchestrator",
+          time: { created: now + 4 },
+          agent: "orchestrator",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          finish: "tool-calls",
+          activationID: lease.activationID,
+        })
+        const request = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: orchestrator.id,
+          messageID: assistant.id,
+          type: "tool",
+          callID: "call_complete_terminal_settlement",
+          tool: "manage_task",
+          state: { status: "running", input: { action: "complete_task" }, time: { start: now + 5 } },
+        })
+        await Session.updatePart({
+          ...request,
+          state: {
+            status: "completed",
+            input: { action: "complete_task" },
+            output: "Task completed from accepted activity",
+            title: "Task Completed",
+            metadata: {},
+            time: { start: request.state.time.start, end: now + 6 },
+          },
+        })
+        Database.transaction((db) => writeTaskUpdateInTransaction({
+          db,
+          taskID,
+          values: { status: "completed" },
+          summary: "Terminal settlement committed",
+          now: now + 7,
+        }))
+        assistant = await Session.updateMessage({
+          ...assistant,
+          time: { ...assistant.time, completed: now + 8 },
+        })
+        expect({
+          completed: assistant.time.completed,
+          outcome: Database.use((db) => readTaskRootIngressEvidence(db, ingress).activityOutcomes[0]?.outcome),
+        }).toEqual({ completed: now + 8, outcome: "completed" })
       },
     })
   })

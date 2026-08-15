@@ -7,6 +7,7 @@ import {
   ProviderActivityRequestTable,
   ToolPartOutcomeTable,
   ToolPartRequestTable,
+  SessionTable,
 } from "@/session/session.sql"
 import { Database, and, asc, desc, eq, gt, lt, sql } from "@/storage/db"
 import {
@@ -452,7 +453,7 @@ export function renewTaskRootIngressLease(input: {
 
 export function assertTaskRootActivationLeaseFenceInTransaction(
   db: Database.TxOrDb,
-  input: { activationID: string; now: number },
+  input: { activationID: string; now: number; allowAcceptedActivitySettlement?: boolean },
 ): { ingressID: string; taskID: string; ownerOccurrenceID: string; expiresAt: number } {
   const lease = db
     .select()
@@ -532,11 +533,11 @@ export function assertTaskRootActivationLeaseFenceInTransaction(
     lifecycle.terminalAt !== undefined && lifecycle.terminalAt < ingress.time_accepted
   if (
     latest?.id !== lease.id ||
-    lease.expires_at <= input.now ||
-    (policy.absoluteDeadline !== null && input.now >= policy.absoluteDeadline) ||
+    (!input.allowAcceptedActivitySettlement && lease.expires_at <= input.now) ||
+    (!input.allowAcceptedActivitySettlement && policy.absoluteDeadline !== null && input.now >= policy.absoluteDeadline) ||
     activationConsumed ||
     lifecycle.epoch !== ingress.execution_epoch ||
-    (lifecycle.status !== "active" && !terminalConversation)
+    (lifecycle.status !== "active" && !terminalConversation && !input.allowAcceptedActivitySettlement)
   ) {
     throw new Error(
       `Task-root activation fence rejected ${input.activationID}; ` +
@@ -557,6 +558,7 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
     assistantMessageID: string
     now: number
     candidate?: { sessionID: string; parentID: string; activationID: string }
+    allowAcceptedActivitySettlement?: boolean
   },
 ): void {
   const message = db
@@ -572,19 +574,43 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
   if (typeof activationID !== "string" || !activationID) {
     throw new Error(`Assistant Message ${input.assistantMessageID} has invalid Task-root activation identity`)
   }
-  const fence = assertTaskRootActivationLeaseFenceInTransaction(db, { activationID, now: input.now })
-  const task = db.select({ sessionID: EngineTaskTable.session_id }).from(EngineTaskTable)
+  let acceptedActivitySettlementRequired = false
+  let fence: ReturnType<typeof assertTaskRootActivationLeaseFenceInTransaction>
+  try {
+    fence = assertTaskRootActivationLeaseFenceInTransaction(db, { activationID, now: input.now })
+  } catch (strictFenceError) {
+    if (!input.allowAcceptedActivitySettlement) throw strictFenceError
+    fence = assertTaskRootActivationLeaseFenceInTransaction(db, {
+      activationID,
+      now: input.now,
+      allowAcceptedActivitySettlement: true,
+    })
+    acceptedActivitySettlementRequired = true
+  }
+  const task = db.select({ sessionID: EngineTaskTable.session_id, projectID: EngineTaskTable.project_id }).from(EngineTaskTable)
     .where(eq(EngineTaskTable.id, fence.taskID)).get()
   const assistant = input.candidate ?? (message?.data as { parentID?: unknown } | undefined)
   const sessionID = input.candidate?.sessionID ?? message?.sessionID
-  if (!task?.sessionID || sessionID !== task.sessionID || typeof assistant?.parentID !== "string") {
+  const session = typeof sessionID === "string"
+    ? db.select({ parentID: SessionTable.parent_id, projectID: SessionTable.project_id, kind: SessionTable.kind })
+        .from(SessionTable).where(eq(SessionTable.id, sessionID)).get()
+    : undefined
+  if (
+    !task?.sessionID ||
+    !session ||
+    session.parentID !== task.sessionID ||
+    session.projectID !== task.projectID ||
+    session.kind !== "orchestrator" ||
+    typeof assistant?.parentID !== "string"
+  ) {
     throw new Error(`Assistant Message ${input.assistantMessageID} is outside Task-root activation ${activationID}`)
   }
-  const parent = db.select({ data: MessageTable.data }).from(MessageTable)
+  const parent = db.select({ data: MessageTable.data, sessionID: MessageTable.session_id }).from(MessageTable)
     .where(eq(MessageTable.id, assistant.parentID)).get()
   const control = (parent?.data as { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } } | undefined)
     ?.extra?.orchestrator_control_ingress
   if (
+    parent?.sessionID !== sessionID ||
     control?.ingress_id !== fence.ingressID ||
     typeof control.predecessor_id !== "string" ||
     orchestratorControlOccurrenceIdentity(fence.ingressID, control.predecessor_id).messageID !== assistant.parentID
@@ -601,6 +627,27 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
     .all()
   if (siblingAssistants.some((peer) => peer.id !== input.assistantMessageID)) {
     throw new Error(`Task-root continuation ${assistant.parentID} has multiple assistant Messages`)
+  }
+  if (acceptedActivitySettlementRequired) {
+    const providerRequests = db.select({ id: ProviderActivityRequestTable.id })
+      .from(ProviderActivityRequestTable)
+      .where(eq(ProviderActivityRequestTable.assistant_message_id, input.assistantMessageID)).all()
+    const toolRequests = db.select({ id: ToolPartRequestTable.id })
+      .from(ToolPartRequestTable)
+      .where(eq(ToolPartRequestTable.message_id, input.assistantMessageID)).all()
+    const providerSettled = providerRequests.every((request) => Boolean(
+      db.select({ id: ProviderActivityOutcomeTable.id }).from(ProviderActivityOutcomeTable)
+        .where(eq(ProviderActivityOutcomeTable.request_id, request.id)).get(),
+    ))
+    const toolsSettled = toolRequests.every((request) => Boolean(
+      db.select({ id: ToolPartOutcomeTable.id }).from(ToolPartOutcomeTable)
+        .where(eq(ToolPartOutcomeTable.request_part_id, request.id)).get(),
+    ))
+    if (providerRequests.length + toolRequests.length === 0 || !providerSettled || !toolsSettled) {
+      throw new Error(
+        `Task-root assistant ${input.assistantMessageID} cannot settle before every accepted activity has an exact outcome`,
+      )
+    }
   }
 }
 

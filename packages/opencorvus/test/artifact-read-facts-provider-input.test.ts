@@ -35,8 +35,6 @@ describe("Artifact read facts from provider Tool input", () => {
         const readRef = "ar_1234567890abcdef"
         const terminalReference = {
           terminalEventID: "evt_provider_read_fact",
-          terminalStatus: "completed" as const,
-          timeCompleted: now + 1,
         }
         const locator = {
           source: "engine_artifact" as const,
@@ -59,7 +57,7 @@ describe("Artifact read facts from provider Tool input", () => {
           parentID: user.id,
           role: "assistant",
           author: "mission",
-          time: { created: now + 1, completed: now + 2 },
+          time: { created: now + 1 },
           agent: "mission",
           providerID: "openai",
           modelID: "gpt-5.6-terra",
@@ -125,6 +123,11 @@ describe("Artifact read facts from provider Tool input", () => {
             metadata: { truncated: false },
             time: { start: now + 1, end: now + 2 },
           },
+        })
+        await Session.updateMessage({
+          ...readMessage,
+          time: { ...readMessage.time, completed: now + 2 },
+          finish: "tool-calls",
         })
         const mutationMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),

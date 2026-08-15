@@ -26,7 +26,7 @@ import { Session } from "@/session"
  * Directory layout (relative to the project directory at run time):
  *   .opencorvus/.r/missions/<mission-id>/
  *     frontier.md   — outstanding work + the mission contract
- *     tasks.md      — engine_task IDs the mission has dispatched + status
+ *     tasks.md      — authored stage-to-engine_task bindings; live status is derived from Task facts
  *     handoff.md    — brief for the next wake of this same mission
  *     notes.md      — free-form scratchpad
  *
@@ -153,7 +153,9 @@ export const MissionStateTool = Tool.define("mission_state", {
     "The mission is resolved automatically from your session — you do NOT pass a missionID.",
     "All I/O is confined to `.opencorvus/.r/missions/<this-mission-id>/` with a fixed",
     "file-name vocabulary: frontier.md, tasks.md, handoff.md, notes.md.",
-    "Use this to carry mission progress across wake cycles — do NOT use read/write/glob.",
+    "Use this for authored Mission contracts, stage bindings, decisions, and next-wake notes — do NOT copy live Task status into it.",
+    "Read current Mission-owned Task identity and status through panel.view_tasks/query_task.",
+    "Use this to carry mission reasoning across wake cycles — do NOT use read/write/glob.",
     "",
     "Actions:",
     "  read   { file } → returns the file content as a string (empty when not yet created).",

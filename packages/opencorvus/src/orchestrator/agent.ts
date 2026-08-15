@@ -757,22 +757,6 @@ export namespace Orchestrator {
       let runtimeWakeArmed = false
       let promptInvocationStarted = false
       try {
-        if (materializeCreatorBeforeTypedControl) {
-          if (SessionPrompt.hasGeneration(agentSession.id)) {
-            throw new Error(
-              `Fresh Orchestrator creator Message cannot be materialized while Session ${agentSession.id} has a prompt owner`,
-            )
-          }
-          await SessionPrompt.prompt({
-            sessionID: agentSession.id,
-            author: taskCreator.actor,
-            model: { providerID: model.providerID, modelID: model.api.id },
-            agent: "orchestrator",
-            byteMaterializationProjectID: agentSession.projectID,
-            noReply: true,
-            parts: creatorPartsWithIds,
-          })
-        }
         installedRuntimeContract = SessionPrompt.setSessionRuntimeContract(
           agentSession.id,
           {
@@ -818,6 +802,22 @@ export namespace Orchestrator {
           throw new Error(`Orchestrator Session ${agentSession.id} runtime contract was not installed`)
         }
         const runtimeContract = installedRuntimeContract
+        if (materializeCreatorBeforeTypedControl) {
+          if (SessionPrompt.hasGeneration(agentSession.id)) {
+            throw new Error(
+              `Fresh Orchestrator creator Message cannot be materialized while Session ${agentSession.id} has a prompt owner`,
+            )
+          }
+          await SessionPrompt.prompt({
+            sessionID: agentSession.id,
+            author: taskCreator.actor,
+            model: { providerID: model.providerID, modelID: model.api.id },
+            agent: "orchestrator",
+            byteMaterializationProjectID: agentSession.projectID,
+            noReply: true,
+            parts: creatorPartsWithIds,
+          })
+        }
         schedulerMcpOwnerTransferred = true
         promptInFlight = true
         if (currentControlMessage) {

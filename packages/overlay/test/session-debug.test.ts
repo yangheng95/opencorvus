@@ -5,9 +5,9 @@ import {
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
   debugCopyFailureMessage,
-  DebugNamedProjectRequiredError,
+  DebugProjectDirectoryUnavailableError,
   formatDebugTime,
-  requireNamedDebugProjectDirectory,
+  requireDebugProjectDirectory,
 } from "../src/utils/debug-info"
 import { boundedDebugText, normalizeDebugDirectory } from "../src/utils/debug-text"
 
@@ -87,19 +87,18 @@ function projection(input: {
 }
 
 describe("persisted chat debug bundle", () => {
-  test("maps unsupported debug scope to the named-Project requirement", () => {
-    const message = "This feature requires a named project to be open."
-    expect(requireNamedDebugProjectDirectory(" C:/work/opencorvus ", message)).toBe("C:/work/opencorvus")
-    const missingDirectory = () => requireNamedDebugProjectDirectory("", message)
-    const anonymousDirectory = () =>
-      requireNamedDebugProjectDirectory(
-        "C:/Users/test/AppData/Local/opencorvus/projects/2026/08/11/123e4567-e89b-42d3-a456-426614174000",
+  test("accepts named and anonymous persisted project directories for diagnostic collection", () => {
+    const message = "Debug information requires a persisted project directory."
+    expect(requireDebugProjectDirectory(" C:/work/opencorvus ", message)).toBe("C:/work/opencorvus")
+    expect(
+      requireDebugProjectDirectory(
+        "C:/Users/test/AppData/Local/opencorvus/data/projects/2026/08/11/123e4567-e89b-42d3-a456-426614174000",
         message,
-      )
+      ),
+    ).toBe("C:/Users/test/AppData/Local/opencorvus/data/projects/2026/08/11/123e4567-e89b-42d3-a456-426614174000")
+    const missingDirectory = () => requireDebugProjectDirectory("", message)
     expect(missingDirectory).toThrow(message)
-    expect(missingDirectory).toThrow(DebugNamedProjectRequiredError)
-    expect(anonymousDirectory).toThrow(message)
-    expect(anonymousDirectory).toThrow(DebugNamedProjectRequiredError)
+    expect(missingDirectory).toThrow(DebugProjectDirectoryUnavailableError)
     try {
       missingDirectory()
     } catch (error) {

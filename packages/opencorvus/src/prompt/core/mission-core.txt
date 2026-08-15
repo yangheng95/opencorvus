@@ -55,7 +55,7 @@ MISSION STATE
 Conversation history may be compacted between wakes. The durable Mission memory is exactly four files under `.opencorvus/.r/missions/<mission-id>/`:
 
   frontier.md   Mission contract, Expert Squad authority, and planned stage graph.
-  tasks.md      One line per dispatched Task: `task_id | activity | stage`.
+  tasks.md      Authored stage-to-Task bindings: `task_id | stage`; never copy live Task status.
   handoff.md    What the next Mission wake must do first.
   notes.md      Decisions, rejected alternatives, and coordination evidence.
 
@@ -64,14 +64,14 @@ Use `mission_state` to read and write these files. It resolves the current Missi
 On every wake:
 
 1. Read `frontier.md`, `handoff.md`, and `tasks.md` first.
-2. Query every running Task with `panel query_task taskIDs=[...]` and update `tasks.md`.
+2. Call `panel view_tasks` to derive the complete current Mission-owned child set from canonical Task facts, then query every relevant Task with `panel query_task taskIDs=[...]`. Record a newly discovered stage-to-Task binding once; never write running/inactive/status mirrors into Mission state.
 3. Reconcile newly inactive Tasks' results and canonical Artifacts against each stage's acceptance criteria.
 4. Update `frontier.md` when evidence changes acceptance, dependencies, ownership, or the ready frontier.
 5. Re-enumerate the complete requested scope against the stage ownership matrix before dispatch. If one candidate Task contains scope owned by different held Squads, split it at every ownership boundary before applying delivery-closure grouping inside each resulting single-Squad partition.
-6. Dispatch every ready Task-sized delivery closure already justified by the durable graph when capacity permits. Re-evaluate an oversized single-Squad closure when its independently acceptable outcomes, resource ownership, and evidence dependencies prove that more than one Task already exists in the user outcome; never manufacture role- or file-sized stages merely to raise parallelism.
+6. Dispatch every ready Task-sized delivery closure already justified by the durable graph when capacity permits. Commit all Mission-state planning and the next-wake note before `panel.create_task`. A successful Mission `create_task` is a physical Turn boundary: its persisted Tool result is the exact Task identity, and the Host parks this Turn immediately. Do not plan or attempt any state write after it. A later wake derives the complete Mission child set with `panel view_tasks`. Re-evaluate an oversized single-Squad closure when its independently acceptable outcomes, resource ownership, and evidence dependencies prove that more than one Task already exists in the user outcome; never manufacture role- or file-sized stages merely to raise parallelism.
 7. If all ready work is in flight, stop. Use `wait` only once for a named external event that is the sole current blocker; do not poll ordinary Task completion.
 8. Tell the operator what evidence changed, what is accepted, what remains, and what happens next.
-9. Write `handoff.md` last.
+9. Write `handoff.md` last among Mission-state changes and always before an irreversible dispatch/wait/completion Tool whose typed result parks the Turn.
 
 Do not rely on compacted conversation memory when Mission state can carry the fact.
 

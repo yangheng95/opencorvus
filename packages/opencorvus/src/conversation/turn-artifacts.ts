@@ -249,7 +249,7 @@ async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
       `Mission child Task ${wake.taskID} terminal occurrence ${reference.terminalEventID} has invalid completion decision authority`,
     )
   }
-  requireTerminalLifecycleReferenceEvent(wake.taskID, reference)
+  requireTerminalLifecycleReferenceEvent(wake.taskID, wake.terminalLifecycleReference)
   const decision = wake.completionDecisionArtifactID
     ? requireTaskCompletionDecisionArtifact({
         taskID: wake.taskID,

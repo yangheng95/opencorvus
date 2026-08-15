@@ -2391,22 +2391,8 @@ export function protocolTaskEvent(event: ReturnType<typeof ProtocolStore.listTas
   const source = typeof event.source === "string" && event.source.length > 0 ? event.source : undefined
   if (!source) throw new Error(`protocolTaskEvent: event ${event.id} (${event.type}) missing source`)
   const payload = event.payload || {}
-  const payloadOrderKey =
-    typeof payload.orderKey === "string"
-      ? payload.orderKey
-      : event.type.startsWith("message.") && payload.info && typeof payload.info === "object"
-        ? (payload.info as Record<string, unknown>).orderKey
-        : undefined
-  if (typeof payloadOrderKey === "string" && payloadOrderKey.length > 0 && payloadOrderKey !== orderKey) {
-    throw new Error(`protocolTaskEvent: event ${event.id} (${event.type}) orderKey drift between envelope and payload`)
-  }
   if (event.type === "agent.execution.lifecycle" || event.type === "session.error") {
     requireTimelineOrderKeyDomain(orderKey, `protocolTaskEvent: event ${event.id} (${event.type}) envelope`, "session")
-    requireTimelineOrderKeyDomain(
-      payloadOrderKey,
-      `protocolTaskEvent: event ${event.id} (${event.type}) payload`,
-      "session",
-    )
   }
   return {
     event_id: event.id,

@@ -149,6 +149,7 @@ export interface ChatComposerProps {
     attachments: ChatAttachment[],
     webSearch: boolean,
     directives: ComposerSubmitDirectives,
+    markDispatched: () => void,
   ) => void | Promise<void>
   /** Resolve and activate the Project that owns a real attachment upload. */
   resolveAttachmentDirectory: () => Promise<string>
@@ -1058,23 +1059,35 @@ export function ChatComposer(props: ChatComposerProps) {
     setSubmitting(true)
     try {
       const directives = resolveComposerMentionDirectives(trimmed, mentionCatalog())
-      await props.onSubmit(trimmed, sentAttachments, false, {
-        expertSquadIDs: directives.squadIDs,
-        missionSkillNames: directives.missionSkillNames,
-      })
-      setText("")
-      setCaretPosition(0)
-      resetMentionInteraction()
-      clearComposerDraft(submittedDraftKey)
-      setAttachments([])
-      if (textareaRef) {
-        textareaRef.value = ""
-        try {
-          textareaRef.setSelectionRange(0, 0)
-        } catch {
-          /* selection APIs may throw if the element has been detached */
+      let dispatched = false
+      const markDispatched = () => {
+        if (dispatched) return
+        dispatched = true
+        setText("")
+        setCaretPosition(0)
+        resetMentionInteraction()
+        clearComposerDraft(submittedDraftKey)
+        setAttachments([])
+        if (textareaRef) {
+          textareaRef.value = ""
+          try {
+            textareaRef.setSelectionRange(0, 0)
+          } catch {
+            /* selection APIs may throw if the element has been detached */
+          }
         }
       }
+      await props.onSubmit(
+        trimmed,
+        sentAttachments,
+        false,
+        {
+          expertSquadIDs: directives.squadIDs,
+          missionSkillNames: directives.missionSkillNames,
+        },
+        markDispatched,
+      )
+      if (!dispatched) throw new Error("Composer submission completed without crossing the dispatch boundary")
     } catch (error) {
       console.error("[ChatComposer] submit failed", error)
       showComposerMessage("send-failed", t("chat.send_failed", { error: submitErrorMessage(error) }), {

@@ -201,6 +201,7 @@ export async function promptSessionMessage(input: {
   metadata?: Record<string, unknown>
   promptProfile?: string
   model?: { providerID: string; modelID: string }
+  onDispatch?: () => void
 }): Promise<any> {
   const requestID = crypto.randomUUID()
   const controller = new AbortController()
@@ -219,6 +220,7 @@ export async function promptSessionMessage(input: {
     if (input.promptProfile) {
       await setSessionExpertSquadActive(input.sessionID, input.promptProfile, input.directory)
     }
+    input.onDispatch?.()
     const result = await apiJson(
       directoryScopedPath(
         `session/${encodeURIComponent(input.sessionID)}/message`,
@@ -249,6 +251,7 @@ export async function panelMessage(
   text: string,
   attachmentsOrMeta: any[] | Record<string, any> = [],
   metadata: any = {},
+  onDispatch?: () => void,
 ): Promise<any> {
   const attachments = Array.isArray(attachmentsOrMeta) ? attachmentsOrMeta : []
   const meta = Array.isArray(attachmentsOrMeta) ? metadata : attachmentsOrMeta
@@ -273,6 +276,7 @@ export async function panelMessage(
       metadata: requestMetadata,
       promptProfile,
       model: currentOpenCorvusPromptModel(),
+      onDispatch,
     })
   }
 
@@ -294,6 +298,7 @@ export async function panelMessage(
     // send message directly to the task. Status is display/audit context, not
     // a routing gate; users sending a follow-up to any task expect the same
     // conversation to continue, not a brand-new task.
+    onDispatch?.()
     const result = await apiJson(taskScopedPath(taskID, directory, "/message"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -430,6 +430,26 @@ afterEach(async () => {
 })
 
 describe("single Tool-result turn-control protocol", () => {
+  test("treats a completed immediate-park Tool outcome as the durable reply boundary", () => {
+    const userMessageID = "message:parked-input"
+    expect(SessionLoop.TestHooks.isSettledReplyToUserMessage({
+      info: {
+        id: "message:parked-assistant",
+        role: "assistant",
+        parentID: userMessageID,
+        time: { created: 1, completed: 2 },
+        finish: "tool-calls",
+      },
+      parts: [{
+        type: "tool",
+        state: {
+          status: "completed",
+          metadata: withImmediateParkToolResultControl({ jobID: "automation:parked-reply" }),
+        },
+      }],
+    } as any, userMessageID)).toBe(true)
+  })
+
   test("a live typed park completes its visible ToolPart and stops the current stream", async () => {
     await using project = await memoryProject()
     await Instance.provide({

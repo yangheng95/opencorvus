@@ -201,7 +201,7 @@ import {
   buildChatDebugBlob,
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
-  requireNamedDebugProjectDirectory,
+  requireDebugProjectDirectory,
   writeDebugClipboard,
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
@@ -1219,10 +1219,10 @@ async function copyActiveConversationDebug(): Promise<void> {
   const selectedTaskFailure =
     selectedSource?.kind === "task" && taskSelectionError?.taskID === selectedSource.id ? taskSelectionError : null
   if (!selectedSource) throw new Error("No active Task or Chat")
-  selectedSource.directory = requireNamedDebugProjectDirectory(
+  selectedSource.directory = requireDebugProjectDirectory(
     String(selectedSource.directory ?? "").trim() ||
       (selectedSource.kind === "session" ? (optionalConversationSourceDirectory(selectedSource) ?? "") : ""),
-    t("chat.debug_copy_named_project_required"),
+    t("chat.debug_copy_project_directory_unavailable"),
   )
   assertDebugSelectionCurrent(selectedSource)
   const persistedChat =
@@ -2281,7 +2281,7 @@ function OverlayRoot() {
             }
             return directory
           }}
-          onSubmit={async (text, attachments, webSearch, directives) => {
+          onSubmit={async (text, attachments, webSearch, directives, markDispatched) => {
             const submitRoute = resolveComposerSubmitRoute(directives)
             const intentRoute = resolveComposerIntentRoute(composerIntent(), submitRoute.kind === "mission")
             const metadata = webSearch ? { web_search: true } : {}
@@ -2290,6 +2290,7 @@ function OverlayRoot() {
               try {
                 const { directory, model } = await resolveGlobalComposerSubmissionContext()
                 const selectionEpoch = supersedePendingWorkspaceSelection()
+                markDispatched()
                 const result = await wakeMission({
                   directory,
                   text,
@@ -2322,7 +2323,7 @@ function OverlayRoot() {
                     experience,
                     model: appStore.composerModel || undefined,
                   })
-                const result = await panelMessage(text, attachments, metadata)
+                const result = await panelMessage(text, attachments, metadata, markDispatched)
                 const source = boardStore.selectedSource
                 if (
                   source?.kind === "session" &&
@@ -2338,7 +2339,7 @@ function OverlayRoot() {
               }
             }
             const refreshMissionLedger = isMissionSessionSource()
-            const result = await panelMessage(text, attachments, metadata)
+            const result = await panelMessage(text, attachments, metadata, markDispatched)
             if (refreshMissionLedger) setMissionSharedRefreshToken((value) => value + 1)
             return result
           }}

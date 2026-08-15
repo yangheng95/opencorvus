@@ -8,23 +8,22 @@ import type {
 } from "../services/session-debug"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { boundedDebugText, normalizeDebugDirectory } from "./debug-text"
-import { isImplicitProjectDirectory } from "./project-directory"
 
 type RuntimeDebugPaths = { database?: string | null } | null | undefined
 
 const DEBUG_BUNDLE_SCHEMA = "opencorvus.debug.v2"
 
-export class DebugNamedProjectRequiredError extends Error {
-  override readonly name = "DebugNamedProjectRequiredError"
+export class DebugProjectDirectoryUnavailableError extends Error {
+  override readonly name = "DebugProjectDirectoryUnavailableError"
 }
 
 export function debugCopyFailureMessage(error: unknown, fallback: string): string {
-  return error instanceof DebugNamedProjectRequiredError ? error.message : fallback
+  return error instanceof DebugProjectDirectoryUnavailableError ? error.message : fallback
 }
 
-export function requireNamedDebugProjectDirectory(directory: string, errorMessage: string): string {
+export function requireDebugProjectDirectory(directory: string, errorMessage: string): string {
   const candidate = directory.trim()
-  if (!candidate || isImplicitProjectDirectory(candidate)) throw new DebugNamedProjectRequiredError(errorMessage)
+  if (!candidate) throw new DebugProjectDirectoryUnavailableError(errorMessage)
   return candidate
 }
 

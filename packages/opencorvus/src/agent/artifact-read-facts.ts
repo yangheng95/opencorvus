@@ -153,6 +153,7 @@ function completedToolOutputValuesBeforeAction(input: {
   sessionID: string
   assistantMessageID: string
   toolNames: readonly string[]
+  acceptInput?: (input: unknown) => boolean
 }): unknown[] {
   const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
   const rows = Database.use((db) =>
@@ -179,13 +180,15 @@ function completedToolOutputValuesBeforeAction(input: {
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
       .all(),
   )
-  return rows.map((row) => {
+  return rows.flatMap((row) => {
+    const requestInput = (row.request as { input?: unknown }).input
+    if (input.acceptInput && !input.acceptInput(requestInput)) return []
     const output = (row.outcome as { output?: unknown }).output
     if (typeof output !== "string") {
       throw new Error(`Completed Artifact locator-producing tool part ${row.id} has no canonical string output.`)
     }
     try {
-      return JSON.parse(output)
+      return [JSON.parse(output)]
     } catch (cause) {
       throw new Error(`Completed Artifact locator-producing tool part ${row.id} output is not JSON.`, { cause })
     }
@@ -272,6 +275,12 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
     toolNames: ["panel"],
+    acceptInput: (rawInput) => {
+      const parsed = MissionPanelActionSchema.safeParse(
+        materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
+      )
+      return parsed.success && parsed.data.action === "query_task_artifacts"
+    },
   })) {
     const page = PanelArtifactReferencePageFactSchema.safeParse(value)
     if (!page.success || page.data.taskID !== input.taskID) continue
@@ -320,6 +329,12 @@ function panelArtifactReadReferenceLocatorsBeforeAction(input: {
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
     toolNames: ["panel"],
+    acceptInput: (rawInput) => {
+      const parsed = MissionPanelActionSchema.safeParse(
+        materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
+      )
+      return parsed.success && parsed.data.action === "read_task_artifact"
+    },
   })) {
     const chunk = PanelArtifactReadReferenceFactSchema.safeParse(value)
     if (!chunk.success || chunk.data.taskID !== input.taskID) continue

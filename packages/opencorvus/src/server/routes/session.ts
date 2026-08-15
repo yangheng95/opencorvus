@@ -334,26 +334,10 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
   if (!orderKey) {
     throw new Error(`protocolSessionEvent: event ${event.id} (${event.type}) missing orderKey`)
   }
-  const payloadOrderKey =
-    typeof payload.orderKey === "string"
-      ? payload.orderKey
-      : event.type.startsWith("message.") && payload.info && typeof payload.info === "object"
-        ? (payload.info as Record<string, unknown>).orderKey
-        : undefined
-  if (typeof payloadOrderKey === "string" && payloadOrderKey.length > 0 && payloadOrderKey !== orderKey) {
-    throw new Error(
-      `protocolSessionEvent: event ${event.id} (${event.type}) orderKey drift between envelope and payload`,
-    )
-  }
   if (event.type === "agent.execution.lifecycle" || event.type === "session.error") {
     requireTimelineOrderKeyDomain(
       orderKey,
       `protocolSessionEvent: event ${event.id} (${event.type}) envelope`,
-      "session",
-    )
-    requireTimelineOrderKeyDomain(
-      payloadOrderKey,
-      `protocolSessionEvent: event ${event.id} (${event.type}) payload`,
       "session",
     )
   }

@@ -199,7 +199,7 @@
   "chat.message_copy_unavailable": "剪贴板访问不可用。",
   "chat.debug_copy_hint": "在对话菜单中复制诊断信息，然后粘贴到 AI 中分析。",
   "chat.debug_copy_action": "复制诊断信息",
-  "chat.debug_copy_named_project_required": "该功能需要打开已命名项目。",
+  "chat.debug_copy_project_directory_unavailable": "无法获取调试信息：当前会话没有持久化的项目目录。",
   "chat.debug_copy_success": "已复制，请粘贴到 AI 中分析",
   "chat.turn_usage_aria": "查看本轮模型用量：{{value}}",
   "chat.turn_usage_title": "本轮模型用量",

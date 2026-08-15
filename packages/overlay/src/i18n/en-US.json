@@ -199,7 +199,7 @@
   "chat.message_copy_unavailable": "Clipboard access is unavailable.",
   "chat.debug_copy_hint": "Open the conversation menu to copy diagnostics, then paste them into AI for analysis.",
   "chat.debug_copy_action": "Copy diagnostics",
-  "chat.debug_copy_named_project_required": "This feature requires a named project to be open.",
+  "chat.debug_copy_project_directory_unavailable": "Debug information is unavailable because this conversation has no persisted project directory.",
   "chat.debug_copy_success": "Copied — paste into AI to analyze",
   "chat.turn_usage_aria": "View model usage for this turn: {{value}}",
   "chat.turn_usage_title": "Model usage for this turn",

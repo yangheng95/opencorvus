@@ -39,6 +39,7 @@ import { MulticaExpertSquadImport } from "@/expert-squad/multica-import"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
+import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 
 import { ChannelId } from "@/channel/catalog"
 import { ControlPromptContext } from "@/control/prompt"
@@ -596,6 +597,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
   description:
     "Operate the OpenCorvus control plane: inspect plans/boards, manage task state, reply to interactions, and manage sessions.",
   parameters: panelActionSchemaForAgent(initCtx?.agentID),
+  executionMode: initCtx?.agentID === "mission" ? "turn_control_exclusive" : "ordinary",
   async execute(params, ctx) {
     const actor = await resolvePanelActor(ctx)
     const surface = resolvePanelSurface(ctx)
@@ -699,6 +701,27 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
       }
       case "view_tasks": {
+        if (actor === "mission") {
+          const mission = await requireMissionSession(ctx.sessionID)
+          const tasks = listMissionTasks({
+            projectID: mission.projectID,
+            missionID: mission.missionID,
+            sessionID: mission.id,
+          })
+          const boards = await Promise.all(tasks.map((task) => EngineService.getBoard(task.id)))
+          return {
+            title: "Mission Tasks",
+            output:
+              boards.length === 0
+                ? "No Mission-owned tasks found."
+                : boards
+                    .map((board, index) =>
+                      `${index + 1}. ${board.task.title} [${board.task.status}] (${board.task.id})`,
+                    )
+                    .join("\n"),
+            metadata: { missionID: mission.missionID, count: boards.length },
+          }
+        }
         const board = await EngineService.getProjectBoard({ limit: 8 })
         return {
           title: "Tasks",
@@ -970,7 +993,10 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
             message: `Task accepted: \`${taskID}\``,
           }),
-          metadata: {},
+          metadata:
+            actor === "mission"
+              ? withImmediateParkToolResultControl({})
+              : {},
         }
       }
       case "wake_mission": {

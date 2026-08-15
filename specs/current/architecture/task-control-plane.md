@@ -89,9 +89,13 @@ accepted ingress
   -> same ingress, new physical lease
 ```
 
-The initial continuation predecessor is the ingress identity. Later predecessors are the prior assistant Message. `(ingress_id, predecessor_id)` is unique. Assistant Messages store only the physical `activationID`; their parent Message supplies the ingress continuation identity. The completed assistant chain derives semantic Turn count. No prose is parsed for scheduling intent.
+The initial continuation predecessor is the ingress identity. Later predecessors are the prior assistant Message. `(ingress_id, predecessor_id)` is unique. The control and assistant Messages live in the same immutable `kind=orchestrator` child Session of the Task root Session; that existing Session parent edge supplies Task ownership and must match the Task project. Assistant Messages store only the physical `activationID`; their parent Message supplies the ingress continuation identity. The completed assistant chain derives semantic Turn count. No prose is parsed for scheduling intent.
 
 The activation is consumed only at a final non-Tool-call assistant boundary with zero outstanding activities, or at a wait/provider-failure boundary with zero outstanding activities. An intermediate Provider step or one completed sibling Tool does not release the activation.
+
+Lifecycle cancellation or a terminal Task decision fences every new Provider/Tool request immediately. It does not erase an activity accepted before that boundary: the latest matching activation may append the exact outstanding outcomes and then the immutable completed assistant boundary after every accepted activity is settled. Lease expiry and absolute deadline do not convert that exact settlement into a new request; a newer activation, epoch mismatch, causal-parent mismatch, or any outstanding outcome still rejects it.
+
+A completed exclusive Tool outcome whose metadata carries the typed `immediate_park` control is itself the durable reply boundary for that assistant Turn, even though the Provider finish reason remains `tool-calls`. Session completion and recovery reduce that persisted outcome control; they do not infer reply completion from prose or require a synthetic follow-up assistant message.
 
 ## Physical leases
 

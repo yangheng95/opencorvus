@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-15-mission-task-publication-convergence-repair.md](2026-08-15-mission-task-publication-convergence-repair.md) makes successful Mission Task creation a typed Turn boundary and installs the Orchestrator runtime contract before the first creator/control Messages so accepted Tasks enter a renderable streamed execution.
+
 - [2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md](2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md) repairs the canonical Tool-fact bridge used by live events and history hydration, and routes diagnostic clipboard writes through HostTransport.
 
 - [2026-08-15-task-root-fact-reduction-kernel.md](2026-08-15-task-root-fact-reduction-kernel.md) defines zero redundant durable control state: immutable ingress/domain/activity/lifecycle facts, exceptional dispositions, one expiring physical lease and one reconciler.

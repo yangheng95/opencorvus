@@ -2,6 +2,7 @@ import { Identifier } from "@/id/id"
 import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import { Database, eq } from "@/storage/db"
 import { Message } from "./message"
+import { normalizeToolResult } from "./tool-result-normalization"
 import {
   PartTable,
   MessageTable,
@@ -44,15 +45,10 @@ export function projectToolPartInTransaction(
         }
         const stored = receipt.result as { kind?: string; value?: unknown }
         if (stored?.kind === "undefined") return ""
-        const output = typeof stored.value === "string"
-          ? stored.value
-          : stored.value && typeof stored.value === "object" && !Array.isArray(stored.value)
-            ? (stored.value as { output?: unknown }).output
-            : undefined
-        if (stored?.kind !== "json" || typeof output !== "string") {
-          throw new Error(`Permission result ${receipt.attempt_id} is not a Tool output string`)
+        if (stored?.kind !== "json") {
+          throw new Error(`Permission result ${receipt.attempt_id} has an invalid durable result envelope`)
         }
-        return output
+        return normalizeToolResult(stored.value).output
       })()
     : outcome?.data.outcome === "completed" ? outcome.data.output : undefined
   const state: Message.ToolPart["state"] = !outcome

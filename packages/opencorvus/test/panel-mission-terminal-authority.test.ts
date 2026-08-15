@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
 import { recordEngineArtifact } from "@/engine/artifact"
@@ -20,6 +20,8 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Tool } from "@/tool/tool"
 import { PanelTool } from "@/tool/panel"
+import { toolResultControl } from "@/session/tool-result-control"
+import { EngineService } from "@/task-api"
 import { ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -44,6 +46,114 @@ afterEach(async () => {
 })
 
 describe("Mission terminal Task authority", () => {
+  test("projects Mission panel calls as exclusive turn control", async () => {
+    const missionPanel = await PanelTool.init({ agentID: "mission" })
+    const ordinaryPanel = await PanelTool.init({ agentID: "base" })
+
+    expect({ mission: missionPanel.executionMode, ordinary: ordinaryPanel.executionMode }).toEqual({
+      mission: "turn_control_exclusive",
+      ordinary: "ordinary",
+    })
+  })
+
+  test("returns an immediate parked turn boundary after a Mission Task is accepted", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const mission = await ensureMissionSession({
+          missionID: "mission-create-task-boundary",
+          defaultCwd: project.path,
+          productPillar: "work",
+          heldExpertSquadIDs: ["base"],
+        })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "mission",
+          model: { providerID: "test", modelID: "mission-create-boundary" },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 1 },
+          agent: "mission",
+          providerID: "test",
+          modelID: "mission-create-boundary",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const callID = "create-one-mission-task"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: assistant.id,
+          type: "tool",
+          callID,
+          tool: "panel",
+          state: {
+            status: "running",
+            input: {
+              action: "create_task",
+              title: "Build one bounded game",
+              request: "Build one bounded game",
+            },
+            time: { start: now + 1 },
+          },
+        })
+        const taskID = Identifier.ascending("task")
+        const createSpy = spyOn(EngineService, "createTask").mockResolvedValue(taskID)
+        const mappingSpy = spyOn(EngineService, "getCrossTaskArtifactImportMappings").mockReturnValue([])
+        try {
+          const panel = await PanelTool.init({ agentID: "mission" })
+          const result = await panel.execute(
+            {
+              action: "create_task",
+              title: "Build one bounded game",
+              request: "Build one bounded game",
+              model: "firmware/gpt-5",
+              promptProfile: "base",
+            },
+            {
+              sessionID: mission.id,
+              messageID: assistant.id,
+              callID,
+              agent: "mission",
+              abort: new AbortController().signal,
+              messages: [],
+              executionSurface: Tool.executionSurface(["panel"], []),
+              extra: { surface: "panel" },
+              metadata() {},
+              async ask() {},
+            },
+          )
+
+          expect({ output: JSON.parse(result.output), control: toolResultControl(result.metadata) }).toEqual({
+            output: {
+              kind: "created",
+              task_id: taskID,
+              artifact_import_mappings: [],
+              message: `Task accepted: \`${taskID}\``,
+            },
+            control: { kind: "immediate_park" },
+          })
+          expect(createSpy).toHaveBeenCalledTimes(1)
+        } finally {
+          mappingSpy.mockRestore()
+          createSpy.mockRestore()
+        }
+      },
+    })
+  })
+
   test("enumerates a terminal child catalog through Host-backed numbered pages", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -128,6 +238,27 @@ describe("Mission terminal Task authority", () => {
           metadata() {},
           async ask() {},
         }
+        const missionTasks = await panel.execute({ action: "view_tasks" }, context)
+        expect({ output: missionTasks.output, metadata: missionTasks.metadata }).toEqual({
+          output: `1. Paged terminal child [completed] (${taskID})`,
+          metadata: { missionID: mission.missionID, count: 1, truncated: false },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: caller.id,
+          type: "tool",
+          callID: "view-mission-tasks-before-artifact-catalog",
+          tool: "panel",
+          state: {
+            status: "completed",
+            input: { action: "view_tasks" },
+            output: missionTasks.output,
+            title: missionTasks.title,
+            metadata: missionTasks.metadata,
+            time: { start: now + 36, end: now + 37 },
+          },
+        })
         const entries: Array<{ locator: unknown; artifact_locator_ref: string }> = []
         const visitedPageNumbers: number[] = []
         let pageNumber: number | null = 1
@@ -336,7 +467,7 @@ describe("Mission terminal Task authority", () => {
           role: "assistant",
           author: "mission",
           parentID: user.id,
-          time: { created: now + 3, completed: now + 4 },
+          time: { created: now + 3 },
           agent: "mission",
           providerID: "openai",
           modelID: "gpt-5.6-terra",
@@ -430,6 +561,11 @@ describe("Mission terminal Task authority", () => {
             time: { start: now + 4, end: now + 5 },
           },
         })
+        await Session.updateMessage({
+          ...queryMessage,
+          time: { ...queryMessage.time, completed: now + 5 },
+          finish: "tool-calls",
+        })
 
         const mutationMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -437,7 +573,7 @@ describe("Mission terminal Task authority", () => {
           role: "assistant",
           author: "mission",
           parentID: user.id,
-          time: { created: now + 5, completed: now + 6 },
+          time: { created: now + 5 },
           agent: "mission",
           providerID: "openai",
           modelID: "gpt-5.6-terra",
@@ -546,6 +682,11 @@ describe("Mission terminal Task authority", () => {
             metadata: completion.metadata,
             time: { start: now + 5, end: now + 6 },
           },
+        })
+        await Session.updateMessage({
+          ...mutationMessage,
+          time: { ...mutationMessage.time, completed: now + 6 },
+          finish: "tool-calls",
         })
         expect(
           missionBoardProjection(mission, {

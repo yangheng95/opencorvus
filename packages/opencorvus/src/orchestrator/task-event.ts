@@ -129,7 +129,8 @@ export function taskMessageWatermarkCursor(taskID: string): { watermark: number;
       part_watermark(value) AS (
         SELECT max(p.time_updated)
         FROM part p
-        JOIN session_tree st ON st.id = p.session_id
+        JOIN message pm ON pm.id = p.message_id
+        JOIN session_tree st ON st.id = pm.session_id
       )
       SELECT max(value) AS watermark FROM (
         SELECT value FROM message_watermark
@@ -160,7 +161,8 @@ export function taskMessageWatermarkCursor(taskID: string): { watermark: number;
         UNION ALL
         SELECT 'part:' || p.id || ':' || coalesce(cast(p.data AS TEXT), '') AS member
         FROM part p
-        JOIN session_tree st ON st.id = p.session_id
+        JOIN message pm ON pm.id = p.message_id
+        JOIN session_tree st ON st.id = pm.session_id
         WHERE p.time_updated = ${watermark}
       )
       ORDER BY member
