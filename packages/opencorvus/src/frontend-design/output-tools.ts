@@ -72,7 +72,7 @@ type VisualEvidenceValidationResult =
     }
 
 const StaticHtmlScreenshotScript = String.raw`
-const { chromium } = require(process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH || "playwright");
+const { chromium } = require(process.argv[3]);
 
 function opencorvusActivityLabel(event, payload) {
   if (payload && typeof payload.url === "function") return event + " " + payload.url();
@@ -94,6 +94,12 @@ function opencorvusIsBrowserInactivityError(error) {
   return Boolean(error && error.opencorvusBrowserInactivity === true);
 }
 
+function opencorvusTaggedPageValidationError(message) {
+  const error = new Error(message);
+  error.opencorvusPageValidation = true;
+  return error;
+}
+
 function installOpencorvusBrowserFailureTracker(page, label) {
   const failures = [];
   const listeners = [];
@@ -112,7 +118,7 @@ function installOpencorvusBrowserFailureTracker(page, label) {
   on("pageerror", (payload) => record(opencorvusActivityLabel("pageerror", payload)));
   return {
     assertNoFailures(stage) {
-      if (failures.length > 0) throw new Error(label + " browser failure before " + stage + ": " + failures.join("; "));
+      if (failures.length > 0) throw opencorvusTaggedPageValidationError(label + " browser failure before " + stage + ": " + failures.join("; "));
     },
     dispose() {
       for (const [event, handler] of listeners) page.off(event, handler);
@@ -145,7 +151,7 @@ async function opencorvusWithBrowserInactivity(page, label, inactivityTimeoutMs,
     if (settled) return;
     lastActivity = source;
     clearTimer();
-    rejectInactive(new Error(label + " browser failure before evidence capture: " + source));
+    rejectInactive(opencorvusTaggedPageValidationError(label + " browser failure before evidence capture: " + source));
   };
   const on = (event, handler) => {
     page.on(event, handler);
@@ -173,7 +179,7 @@ async function opencorvusWithBrowserInactivity(page, label, inactivityTimeoutMs,
 }
 
 function decodePayload() {
-  const raw = Buffer.from(process.env.OPENCORVUS_FRONTEND_RENDER_PAYLOAD || "", "base64").toString("utf8");
+  const raw = Buffer.from(process.argv[2], "base64").toString("utf8");
   return JSON.parse(raw);
 }
 
@@ -217,7 +223,11 @@ function decodePayload() {
     }
     process.stdout.write(JSON.stringify({ ok: true, screenshotBase64: bytes.toString("base64") }));
   } catch (error) {
-    process.stdout.write(JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    process.stdout.write(JSON.stringify({
+      ok: false,
+      kind: error && error.opencorvusPageValidation === true ? "page_validation" : "toolchain",
+      error: error instanceof Error ? error.message : String(error),
+    }));
   } finally {
     if (browser) await browser.close().catch(() => {});
   }
@@ -1671,7 +1681,7 @@ export async function renderVisualHtmlSkeletonScreenshotForValidation(input: {
   const url = pathToFileURL(input.entrypointFile)
   url.hash = input.locationHash ?? ""
   const sidecar = await runTaskBrowserNodeSidecar<
-    { ok: true; screenshotBase64: string } | { ok: false; error: string }
+    { ok: true; screenshotBase64: string } | { ok: false; kind: "toolchain" | "page_validation"; error: string }
   >(input.processIdentity, {
     script: StaticHtmlScreenshotScript,
     payload: {
@@ -1686,9 +1696,50 @@ export async function renderVisualHtmlSkeletonScreenshotForValidation(input: {
     label: "frontend visual baseline static render",
   })
   if (!sidecar.result.ok) {
+    if (sidecar.result.kind === "page_validation") {
+      throw new FrontendVisualEvidencePageValidationError(sidecar.result.error)
+    }
     throw new Error(`frontend visual baseline static render failed: ${sidecar.result.error}`)
   }
   return Buffer.from(sidecar.result.screenshotBase64, "base64")
+}
+
+export class FrontendVisualEvidencePageValidationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "FrontendVisualEvidencePageValidationError"
+  }
+}
+
+export function frontendVisualEvidencePageValidationFailureResult(error: unknown): string {
+  const message = error instanceof Error ? error.message : String(error)
+  return JSON.stringify({
+    ok: false,
+    error: {
+      code: "frontend_visual_evidence_page_validation_failed",
+      message,
+      retry: "correct_page_then_retry",
+      next:
+        "Correct the reported page, request, or runtime defect, then retry capture. This is page validation evidence, not a renderer-toolchain outage.",
+    },
+  })
+}
+
+export function frontendVisualEvidenceToolchainFailureResult(error: unknown): string {
+  const name = error instanceof Error ? error.name : "Error"
+  const message = error instanceof Error ? error.message : String(error)
+  const signature = createHash("sha256").update(`${name}\0${message}`, "utf8").digest("hex").slice(0, 16)
+  return JSON.stringify({
+    ok: false,
+    error: {
+      code: "frontend_visual_evidence_toolchain_unavailable",
+      signature,
+      message,
+      retry: "retry_once_after_concrete_correction",
+      next:
+        "Retry only after one concrete input or toolchain correction. If the same signature returns again, preserve the current design facts, record the blocker, and finish the Turn so partial/domain-incomplete settlement can proceed. Do not install renderer dependencies into the user project or inspect private Host binaries.",
+    },
+  })
 }
 
 function collectVisualBaselineText(design: FrontendDesignPayload): string {
@@ -1774,6 +1825,9 @@ const FrontendCaptureMaterializerInput = z
 export function materializeFrontendCaptureVisualEvidenceTool(
   raw: Record<string, unknown>,
   onEvidence?: (evidence: VisualValidationEvidence) => "registered" | "overwritten",
+  dependencies: {
+    renderScreenshot?: typeof renderVisualHtmlSkeletonScreenshotForValidation
+  } = {},
 ) {
   const context = FrontendCaptureMaterializerInput.parse(raw)
   const mode = context.mode
@@ -1808,13 +1862,21 @@ export function materializeFrontendCaptureVisualEvidenceTool(
         return "Error: source_reference_artifact must resolve to a readable raster image under the real task artifact root."
       }
     }
-    const rendered = await renderVisualHtmlSkeletonScreenshotForValidation({
-      processIdentity,
-      entrypointFile: verifiedEntrypoint,
-      viewport: { width: input.viewport.width, height: input.viewport.height },
-      captureMode: input.capture_mode,
-      locationHash: input.location_hash,
-    })
+    let rendered: Buffer
+    try {
+      rendered = await (dependencies.renderScreenshot ?? renderVisualHtmlSkeletonScreenshotForValidation)({
+        processIdentity,
+        entrypointFile: verifiedEntrypoint,
+        viewport: { width: input.viewport.width, height: input.viewport.height },
+        captureMode: input.capture_mode,
+        locationHash: input.location_hash,
+      })
+    } catch (error) {
+      if (error instanceof FrontendVisualEvidencePageValidationError) {
+        return frontendVisualEvidencePageValidationFailureResult(error)
+      }
+      return frontendVisualEvidenceToolchainFailureResult(error)
+    }
     await Filesystem.writeAtomic(screenshot.absolutePath, rendered)
     const screenshotSha256 = createHash("sha256").update(rendered).digest("hex")
     const base = {

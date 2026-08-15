@@ -491,11 +491,11 @@ function escapeXml(input: string): string {
 const BROWSER_PREVIEW_SCROLL_SLICE_SCRIPT = `
 const fs = require("node:fs/promises");
 const path = require("node:path");
-const playwrightRequirePath = process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH;
-if (!playwrightRequirePath) throw new Error("OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH is required.");
+const playwrightRequirePath = process.argv[3];
+if (!playwrightRequirePath) throw new Error("Browser Node sidecar argv[3] Playwright module path is required.");
 const { chromium } = require(playwrightRequirePath);
 
-const input = JSON.parse(Buffer.from(process.env.OPENCORVUS_BROWSER_PREVIEW_SCROLL_SLICE_INPUT || "", "base64").toString("utf8"));
+const input = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
 
 function browserActivityLabel(event, payload) {
   if (payload && typeof payload.url === "function") return event + " " + payload.url();

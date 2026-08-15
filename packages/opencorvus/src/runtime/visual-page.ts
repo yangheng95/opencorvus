@@ -285,7 +285,7 @@ async function renderPageViaNode(input: {
 }
 
 const NODE_VISUAL_RENDER_SCRIPT = String.raw`
-const { chromium } = require(process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH || "playwright");
+const { chromium } = require(process.argv[3]);
 
 function isBrowserImplicitAssetRequest(rawUrl) {
   try {
@@ -568,7 +568,7 @@ async function probeRuntimeInteractions(page) {
 }
 
 async function main() {
-  const input = JSON.parse(Buffer.from(process.env.OPENCORVUS_VISUAL_RENDER_INPUT || "", "base64").toString("utf8"));
+  const input = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
   let browser;
   try {
     browser = await chromium.launch({

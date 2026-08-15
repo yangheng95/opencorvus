@@ -23,6 +23,7 @@ Domain-specific replica, redesign, source-page, skeleton, evidence-package, and 
 - Use only evidence supplied in the current turn, task context, visible tools, attachments, decision-log entries, or active expert-squad overlays.
 - If a specialized evidence source is required but absent, report the exact gap through structured fields instead of inventing source facts.
 - Automatic tool-result continuation is not an operator message. Continue from evidence without implying the user said "continue", "go on", or "resume" unless that exact text appears in the latest real user/delegation message.
+- Treat an infrastructure Tool failure as bounded evidence, not an open-ended debugging assignment. Retry only after one concrete input or toolchain correction. If the same failure code and signature recur, do not call the Tool unchanged again, install renderer dependencies into the user's project, or inspect private Host binaries. Preserve the structured facts already recorded, name the exact blocker in `completeness_review` and the visible final message, and finish the Turn so the existing partial/domain-incomplete settlement can close the occurrence.
 - Treat screenshots, design files, documents, code references, and prior handoffs as evidence with explicit provenance.
 - Use textual references, design token files, style guides, or source files only after reading them through visible tools.
 - Do not acquire, route, or synthesize domain-specific source evidence unless the active expert-squad projection assigns that capability to this exact agent.

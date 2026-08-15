@@ -345,7 +345,7 @@ function browserCaptureRuntimeState(args: { id: string; label: string; screensho
 
 const NODE_RUNTIME_STATE_SCRIPT = String.raw`
 const path = require("node:path");
-const { chromium } = require(process.argv[3] || "playwright");
+const { chromium } = require(process.argv[3]);
 
 function opencorvusActivityLabel(event, payload) {
   if (payload && typeof payload.url === "function") return event + " " + payload.url();
@@ -501,7 +501,7 @@ async function opencorvusWithBrowserInactivity(page, pageUrl, label, inactivityT
 }
 
 async function main() {
-  const input = JSON.parse(Buffer.from(process.argv[2] || "", "base64").toString("utf8"));
+  const input = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
   const captureRuntimeState = eval("(" + input.captureFunctionSource + ")");
   let browser;
   let phase = "launch";

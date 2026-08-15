@@ -732,12 +732,12 @@ function round(value: number): number {
 }
 
 const BROWSER_PREVIEW_LAYOUT_GEOMETRY_SCRIPT = String.raw`
-const playwrightRequirePath = process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH;
-if (!playwrightRequirePath) throw new Error("OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH is required.");
+const playwrightRequirePath = process.argv[3];
+if (!playwrightRequirePath) throw new Error("Browser Node sidecar argv[3] Playwright module path is required.");
 const { chromium } = require(playwrightRequirePath);
 
 function decodePayload() {
-  return JSON.parse(Buffer.from(process.env.OPENCORVUS_BROWSER_PREVIEW_LAYOUT_GEOMETRY_INPUT || "", "base64").toString("utf8"));
+  return JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
 }
 
 function routeUrl(baseUrl, route) {

@@ -194,7 +194,7 @@ async function runWalkthroughViaNode(input: {
 }
 
 const NODE_WALKTHROUGH_SCRIPT = String.raw`
-const { chromium } = require(process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH || "playwright");
+const { chromium } = require(process.argv[3]);
 
 function isResourceLoadConsoleError(text) {
   return String(text || "").trimStart().startsWith("Failed to load resource:");
@@ -310,7 +310,7 @@ async function executeStep(page, baseUrl, step, browserInactivityTimeoutMs) {
 }
 
 async function main() {
-  const input = JSON.parse(Buffer.from(process.env.OPENCORVUS_WALKTHROUGH_INPUT || "", "base64").toString("utf8"));
+  const input = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
   let browser;
   try {
     browser = await chromium.launch({

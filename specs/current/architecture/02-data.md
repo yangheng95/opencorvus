@@ -437,6 +437,19 @@ raster row 通过 `related_entries` 双向绑定，raster 的 task artifact path
 仍是 byte store，PNG 只是 HTML authority 的可查看/可比较投影。投影失败必须暴露为
 materialization/toolchain error，禁止改走 `greenfield_original`。
 
+Browser Node sidecar 的唯一脚本输入协议是 `argv[2]` 中的 base64 JSON payload 与
+`argv[3]` 中的精确 Playwright module path；Frontend Design 静态渲染、runtime visual
+render、acceptance walkthrough、Browser webpage extract/render/runtime-state 与 Browser
+Preview evidence/region/layout/scroll render 均消费这两个参数，不读取平行环境变量、空值
+fallback 或从用户项目解析运行依赖。
+`capture_frontend_visual_evidence` 仅对 sidecar transport/toolchain 失败返回稳定 error code、
+signature 与 `retry_once_after_concrete_correction` disposition。Frontend Design Agent 仅能在
+一次具体修正后重试；相同 signature 再现时保留当前 facts、记录 blocker 并自然结束 Turn，
+由既有 partial Artifact / `domain_incomplete` settlement 收敛，不能在用户项目安装 renderer
+依赖或继续探查 Host 私有二进制。页面 request/page/runtime validation 失败使用独立
+`frontend_visual_evidence_page_validation_failed` 契约，要求修复页面后重试，不得误分类为
+基础设施阻塞。
+
 ## Build Input Evidence
 
 Build 输入由 Orchestrator 从 Task、Delivery Slice revision、Artifact、Finding、Attachment 和可见

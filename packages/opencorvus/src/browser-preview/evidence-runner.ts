@@ -810,8 +810,8 @@ function requireExactBrowserPreviewEvidenceCaptureSet(input: {
 }
 
 const BROWSER_PREVIEW_BATCH_SCRIPT = String.raw`
-const playwrightRequirePath = process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH;
-if (!playwrightRequirePath) throw new Error("OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH is required.");
+const playwrightRequirePath = process.argv[3];
+if (!playwrightRequirePath) throw new Error("Browser Node sidecar argv[3] Playwright module path is required.");
 const { chromium } = require(playwrightRequirePath);
 
 function isBrowserImplicitAssetRequest(rawUrl) {
@@ -1163,7 +1163,7 @@ async function captureViewport(browser, input, viewport) {
 }
 
 async function main() {
-  const input = JSON.parse(Buffer.from(process.env.OPENCORVUS_BROWSER_PREVIEW_EVIDENCE_INPUT || "", "base64").toString("utf8"));
+  const input = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
   let browser;
   try {
     browser = await chromium.launch({
@@ -1195,8 +1195,8 @@ main();
 const BROWSER_PREVIEW_REGION_COMPARISON_SCRIPT = String.raw`
 const fs = require("node:fs/promises");
 const path = require("node:path");
-const playwrightRequirePath = process.env.OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH;
-if (!playwrightRequirePath) throw new Error("OPENCORVUS_PLAYWRIGHT_REQUIRE_PATH is required.");
+const playwrightRequirePath = process.argv[3];
+if (!playwrightRequirePath) throw new Error("Browser Node sidecar argv[3] Playwright module path is required.");
 const { chromium } = require(playwrightRequirePath);
 
 function isBrowserImplicitAssetRequest(rawUrl) {
@@ -1429,7 +1429,7 @@ function toBox(rect) {
 }
 
 async function main() {
-  const input = JSON.parse(Buffer.from(process.env.OPENCORVUS_BROWSER_PREVIEW_REGION_COMPARISON_INPUT || "", "base64").toString("utf8"));
+  const input = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
   let browser;
   try {
     browser = await chromium.launch({
