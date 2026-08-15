@@ -1,89 +1,198 @@
 # Task control plane
 
-This chapter is the current authority for Task operator ingress, root control ownership, detached agent execution, cancellation, process settlement, and recovery.
+This chapter is the current authority for Task execution input, lifecycle, physical activation, external-effect settlement, Session continuation, scheduler delivery, cancellation, closure, and restart recovery.
 
-## Durable ingress authority
+## Authority rule
 
-`task_root_ingress` is the only current durable Task-root ingress occurrence. A Task message is committed once with its exact message identity and ingress in one database transaction. Its lifecycle is `accepted -> delivering -> delivered`, or a typed `delivery_failed` / `terminal_inapplicable` disposition. The current schema has no legacy ingress reader or writer; databases from the previous protocol epoch require reset.
+The control plane persists only facts that cannot be reconstructed after process loss:
 
-Each root Session has one physical Turn owner. The public receipt reports `accepted`; durable Artifact and Server-Sent Events projection report the later `delivering` and `delivered` transitions. Multiple accepted inputs for the same Session retain causal first-in-first-out order and attach to that single owner, while distinct Sessions start independently. This is a single-writer integrity rule, not business scheduling: the Host does not compare Tasks, directories, priorities, or dependency graphs and exposes no position or current-owner projection.
+- immutable accepted inputs and their causal identities;
+- immutable business decisions and explicit Interaction requests/outcomes;
+- immutable write-ahead external-effect requests and exact outcomes;
+- immutable Task and Mission lifecycle events;
+- immutable policy/deadline choices;
+- append-only, expiring physical activation leases.
 
-A visible progress or status answer settles an operator ingress when the Orchestrator reads the exact message and durably emits the real assistant output. A scheduler mutation is not required. Large Language Model output remains streaming and uses activity-resetting inactivity limits rather than a fixed external-network deadline.
+Every public `status`, `running`, `waiting`, `attempt`, `answered`, `completed`, `retry_at`, `last_error`, queue position, owner, recovery progress, Task timestamp, Mission closure state, Automation/Event execution state, Protocol delivery state, Tool state, and Provider state is a reducer projection. No projection is written back into its input row.
 
-Every active Task ingress kind, including lifecycle, coordination, wait, recovery, and infrastructure delivery, must finish with a durable assistant Message carrying the exact `taskIngress` Artifact ID and source kind. A returned `void`, a closed prior Prompt generation, or an assistant Message from another invocation is a typed delivery failure rather than successful delivery. Startup recovery first reconciles that exact completed assistant anchor before deciding whether the same ingress must run again. `accepted -> delivering`, failure, and delivery writes are conditional on the current ingress state, so a late execution error cannot overwrite cancellation's `terminal_inapplicable` disposition or a committed result.
+The canonical equation is:
 
-Mission and Task schedulers communicate through one `scheduler.message` protocol. `protocol_event` is the immutable request, reply, or notification envelope; `protocol_inbox` is its one recipient delivery occurrence. The envelope stores typed source and target endpoint identities, thread/correlation/reply lineage, subject, and the exact source Message/Part or terminal-event locator. Every Task endpoint also freezes its active `time_started` occurrence identity. A Task source Message must carry its exact assistant `taskIngress` receipt, whose persisted root ingress supplies that immutable occurrence; wall-clock Message ordering is not occurrence authority. A reply must exactly reverse both Task occurrence identities of its request. Materialization compares the target identity with the current active Task in the same transaction before writing the Message and root ingress. The root ingress retains that occurrence and compares it again in the atomic `accepted -> delivering` transition, including startup recovery. A terminal conversation may still run against its unchanged occurrence, but a Task that terminalized and reopened receives a new monotonic start identity; an older inbox or materialized ingress is dead-lettered or settled `terminal_inapplicable` instead of crossing the lifecycle boundary. `scheduler-message-v2` and occurrence-bearing root ingress are a single pre-release data epoch; startup requires an explicit data reset for older persisted shapes rather than parsing them later or adding a compatibility path. This is a data-integrity fence, not a Host serial/parallel scheduling policy. The body remains in that real source occurrence and is never copied into a second transport fact. Recipient order is allocated transactionally in SQLite. Producer replay returns the same deterministic event and inbox, while a conflicting replay or second reply to one request is a typed conflict.
+```text
+Projection = Reduce(immutable facts, immutable policy, valid leases, current time)
+Queue       = Hint(unresolved projection)
+```
 
-A Mission endpoint may address only its persisted child Tasks. A Task endpoint may address its owning Mission or a sibling Task under the same Mission and project. Replies must exactly reverse the request endpoints and retain its correlation and thread. Cross-project, foreign-lineage, terminal-Task reopen, missing source occurrence, and mismatched receipt attempts fail before a partial write. `scheduler_message` is the sole model-facing communication tool for both Mission and Task Orchestrator schedulers; the panel's operator message action remains operator ingress and is not exposed as a Mission communication path.
+A hint may be lost or duplicated. Reconciliation always rereads facts before execution or commit.
 
-Mission execution close is one persisted, joinable operation per current execution occurrence. Abort, archive and delete establish its `closing` event before cancelling the Mission prompt or any child Task; a later `closed` event proves the physical prompt and child cancellation work settled. Scheduler delivery and Mission wake admission share one keyed admission boundary with that durable event. Every operator, scheduler-materialization, scheduler-recovery, Automation, Event, and process-recovery wake targeting a Mission retains this boundary until Session wake publishes its exact physical prompt owner; assistant completion is a separate Promise and is never awaited while holding lifecycle admission. Operator ingress alone may open or reopen an occurrence. Automation and Event targets that resolve to a Mission use the same non-operator admission check, never reopen, and require the current occurrence state to be `opened`; a draft or otherwise missing occurrence returns `MissionExecutionWakeNotOpenedError`, while `closing|closed` persists the existing typed failure outcome with the exact closure event. A claimed inbox targeting a closing or closed Mission is settled with the exact `mission_closed` closure-event disposition and never starts a new wake. The same transaction that first appends `closing` converts every already-materialized, unanswered scheduler wake to `mission_wake_closed`, retaining the exact Message and closure-event identities; answered wakes remain immutable history. Scheduler wake recovery re-reads that receipt, while startup Mission process recovery reads the same durable closure authority under the shared admission boundary, so neither an old delivered wake nor an interrupted Assistant projection can create another Turn after closure. Concurrent close callers join the same operation. A persisted `closing` occurrence survives process failure and rejects explicit operator dispatch or wake with a typed conflict until abort, archive or delete resumes the same operation to `closed`; only then may a later explicit operator action publish a new `opened` occurrence. Reusable in-memory Session status is not Mission close authority, and pending inbox exclusion, timeout extension, retry, shutdown bypass or process termination cannot substitute for this closure.
+## Task lifecycle and execution epoch
 
-Both recipient kinds claim the database-sequenced FIFO inbox head before materialization. Task recipients atomically commit one real Task-root Message (`author=mission` or `author=orchestrator`), its sequence-bearing `task_root_ingress`, and the exact delivery receipt. Mission recipients atomically commit one real scheduler wake Message and receipt. The source body is always re-read from the envelope's exact Message/Part or terminal-event locator and checked against its digest; no caller argument is a parallel body source. Delivered means the durable recipient ingress exists, not that the model has answered. Startup discovers every incomplete row, including future-visible and live-leased rows, and rebuilds its next due-time delivery; post-commit signals are only latency hints. A Task terminal transition creates its owning-Mission notification inbox in the same terminal transaction, so process-local protocol subscribers are never delivery authority. Physical recipient deletion writes a typed dead letter and detaches retained audit events before Task or Session rows can cascade.
+`protocol_event` is the sole Task lifecycle authority. Task aggregate identity is stored once as `(aggregate_type='task', aggregate_id=task_id)`; `protocol_event.task_id` is `NULL` for Task aggregate events and is reserved for correlation from non-Task aggregates.
 
-Task creation has no Host scheduling policy and no queued Task lifecycle. The current Task occurrence, its active start time, immutable bindings, and its `task_creation` root ingress are committed in one SQLite transaction. Idempotent request or channel replay resolves and dispatches that same ingress identity. The Mission and its models express serial work by creating a dependent Task only when its prerequisites are ready, and express parallel work by creating independent ready Tasks together. Host code preserves ingress delivery, single-Session prompt ownership, physical execution ownership, data integrity, and cancellation; it does not infer or override dependency order from the project directory.
+The lifecycle event family is:
 
-The root Session owner releases one durable occurrence only after its exact runtime wake has been consumed through all tool-result continuation turns and reached standby. The first assistant callback is not a settlement boundary. This prevents a later Mission or scheduler ingress from replacing the prior runtime contract and falsely inheriting its assistant continuation.
+```text
+task.execution.opened(epoch)
+task.cancellation.requested(epoch)
+task.close.requested(epoch)
+task.cancelled(epoch) | task.closed(epoch) | task.completed(epoch) | task.failed(epoch)
+task.execution.reopened(epoch + 1)
+task.deleted(epoch)
+```
 
-Root-ingress launch, loop completion, terminal-ingress delivery and delayed terminal retry are executable project lifecycles. Their detached owners re-enter through a fully initialized Project Instance so cache reconstruction restores the canonical Task runner and project capabilities before another durable ingress is attached. Identity-only owners remain limited to persistence and publication callbacks that do not execute a Task, prompt or terminal conversation.
+One epoch has one open boundary, at most one cancellation/close request boundary, and one mutually exclusive terminal boundary. `engine_task` contains durable Task definition/input fields only; lifecycle status, start/completion time, terminal error, cancellation metadata, and rewind cursors are reduced from Protocol Events.
 
-## Detached agent execution
+A late activation, decision, or effect request carries its exact epoch and is rejected after a newer epoch opens. An already-requested external effect may still append or reconcile its exact outcome after cancellation, because discarding an unknown outcome would permit duplicate side effects.
 
-`dispatch_agent` returns an accepted receipt only after the worker Session descriptor and dispatch-lineage artifact are committed. The receipt carries that artifact's identity, not the logical dispatch ID. The root Orchestrator does not await the worker's terminal result. Worker execution continues under its own Session and cancellation ownership, with a fresh initialized project Instance lease that does not inherit the closing root-Turn lease. Current-project and managed-worktree dispatches share this detached ownership boundary.
+`task.deleted` is an explicit operator retention boundary after terminal convergence, not another execution status. It hides the Task from ordinary lists and fences every new ingress, lease, reopen, scheduler, Artifact, and activity write while preserving the Task definition, root Session, Messages, accepted ingress, lifecycle, decision, and effect facts as one replayable audit graph. Repeating the same explicit deletion is idempotent.
 
-`agent.execution.lifecycle` is the only child lifecycle truth. A worker reserves its exact prompt generation across the physical-cleanup-to-durable-publication handoff, first settles its exact prompt owner and managed-worktree Session ownership, and only then publishes a terminal lifecycle before releasing generation admission. Cleanup failure therefore cannot leave a false `completed`, `coordinated`, or `aborted` fact, while a replacement generation cannot silently suppress the old occurrence's terminal append. Publication is required: preparation or durable append failure propagates as typed settlement evidence while preserving the physical outcome, so a completed Turn cannot be rewritten as `error`. Runtime resources and managed-worktree ownership retain their exact cleanup authority until close/release succeeds.
+Deleting a Task-root or Mission Session tree uses `session.deleted` on each Session aggregate and, when requested, `task.deleted` on each bound Task in the same transaction. Those tombstones hide the public aggregates and fence new work; they do not physically cascade through immutable causal Messages, Parts, Protocol Events, or receipts. A standalone Session without Task/Mission fact ownership may still cross the existing physical-retention boundary after all runtimes and scheduler deliveries converge.
 
-Session lifecycle and domain delivery are separate facts. Every exact `dispatch_agent` lineage has at most one durable `dispatch_settlement`, written only after its adapter has produced a final typed outcome. Workflow projection derives `terminal_success` exclusively from that settlement, never from a completed Session alone. Replaying the same parent Tool occurrence returns the existing settlement, or its accepted lineage while settlement is still pending, without starting a second worker. If a runtime crashes after the exact assistant completion but before domain settlement, startup records one fail-closed `partial` settlement against the same dispatch and assistant Message; it cannot promote missing review or implementation evidence to success.
+## Task-root ingress
 
-Requirements completion is owned by the canonical RequirementSet publisher, not by array non-emptiness or the worker's prose. The worker may declare coverage once, but the publisher binds the current dispatch lineage and Worker Turn descriptor to its exact input and completed assistant Message, reconstructs that Turn's selected Artifact provenance, hashes the current durable Task request, compares the actual Requirement identities and unresolved items, persists the recomputed coverage receipt with its producer identity, and returns the delivery status. Registration Tools and publication share one field schema. Empty, decisions-only, missing, incomplete, stale-Turn, or identity-drifted coverage remains a durable `domain_incomplete` RequirementSet and cannot open Architect; only a non-empty exact receipt with no unresolved item becomes `terminal_success`. Current RequirementSet payloads use schema version 2. A pre-coverage immutable payload cannot acquire truthful producer/coverage facts, so database startup reports reset-required under the pre-0.1 data policy; runtime readers do not retain a legacy protocol.
+`engine_task_root_ingress` is an immutable accepted input:
 
-Workload completion is owned by one per-dispatch `goal_workload` publisher. Immutable dispatch lineage supplies the selected Delivery Slice revision set; the successful GoalGraph projection tip visible before the Workload Artifact's catalog revision supplies publication-time currency. Ordered brief submissions remain exact evidence, including missing, extra, duplicate, stale, empty-selection, and no-GoalGraph cases. Only non-empty one-to-one coverage of current selected revisions maps to `terminal_success`; every other canonical receipt maps to `domain_incomplete`, so workflow projection cannot open System Integrity Review. The strict version-2 row binds producer Turn, dispatch lineage, workflow occurrence, selected subjects, GoalGraph locator and derived coverage arrays. Startup applies the same row-local and as-of relational validators and reports reset-required for unauthentic legacy or corrupted rows. Publication and dispatch settlement are separate immutable facts: if lifecycle recovery wins after publication but before settlement, that dispatch stays `partial`; remediation creates a new continuation dispatch in the same workflow occurrence rather than rewriting it.
+```text
+IngressAccepted {
+  id, task_id, execution_epoch, sequence,
+  source: task | message | protocol_event | automation_run | engine_artifact | inline,
+  source_id, inline_payload?, policy_id, time_accepted
+}
+```
 
-Tool-result turn control has one strict metadata protocol. `immediate_park` and `handoff_drain` are host-owned discriminated values validated before ToolPart completion; runtime hooks may neither remove nor change them before a permission result is persisted. Completed ToolPart metadata is the recovery authority for assistant finish after a crash, and a pre-protocol succeeded permission result attached to an open Part makes pre-release database startup reset-required rather than enabling a legacy reader. Tools capable of turn control are excluded from batch and share one assistant-occurrence execution coordinator: earlier ordinary calls settle first, an exclusive call then executes alone, and its successful control result seals the occurrence against later sibling effects.
+The source locator is validated in the acceptance transaction. A Message source must belong to the Task root Session. A Protocol source must be a Task aggregate event for that Task. Inline input uses the ingress identity as its producer identity. The same normalized source can be accepted only once across all epochs.
 
-A physical Build result has one dispatch-derived terminal-fact publication identity. The Build publisher chooses exactly one durable fact: a complete `build_host_observation`, or one typed `task-infrastructure-error` when Host collection is incomplete. It never attempts the other writer as a fallback. The same physical occurrence may retry its selected writer a bounded two times with the exact same input before it returns to the adapter; dispatch settlement can report Build `terminal_success` only after that publication owner returns an exact observation locator. Before the first private ref write, the Build creates one durable `active` cleanup owner keyed by that observation identity and bound to the canonical Git directory plus a process-instance UUID. Only a successful `build_host_observation` atomically changes that owner to `retained`; infrastructure partial, exhausted publication, Turn failure, handoff, and provenance failure must settle the owner before returning. A cleanup failure changes the same owner to `pending`, preserves its exact error, and blocks the Build outcome. Project bootstrap resumes every pending owner plus active owners left by a prior process instance; Task deletion resolves all owners before deleting the Task row and never runs a parallel legacy ref scanner. Missing Git metadata is a cleanup failure, never an absence receipt. Replaying a persisted publication identity with the same payload returns the original Artifact and catalog revision, while identity drift fails before a second fact is written.
+`sequence` is the immutable FIFO order inside an epoch. Lease acquisition itself verifies that every prior ingress is resolved or terminal-inapplicable; no caller-local queue check is trusted.
 
-One reconciliation contract owns every exact root delivery occurrence. Normal detached completion, active and terminal Task delivery, a bounded same-runtime retry, and startup recovery all revive the same `task_root_ingress`; they never create a replacement event. Durable `delivery_attempt` records history, while `delivery_runtime_id` and `delivery_runtime_attempt` bound one runtime occurrence. A second same-runtime failure stays `delivery_failed`; a successor runtime may atomically claim one recovery attempt on the same ingress. Lifecycle delivery is keyed by lifecycle event ID. Physical-settlement failure uses one typed `dispatch_infrastructure_failure` keyed by its infrastructure fact. Startup reconstructs a missing typed ingress from that accepted fact, and neither path degrades to a generic note or a second recovery fact. The detached supervisor and every delivery/recovery owner remain in the production settlement registry until an exact durable receipt exists; callback persistence failure cannot be logged as successful completion.
+The ingress reducer is a total order:
 
-## Cancellation authority and ordering
+1. `blocked` for conflicting immutable facts;
+2. `terminal_inapplicable` for a cancelled, closed, or superseded epoch;
+3. `resolved` for exactly one valid decision receipt and no conflict;
+4. `leased` for one still-valid, unconsumed activation;
+5. `reconcile_required` for a write-ahead external request whose outcome is unknown;
+6. `waiting` for one unresolved explicit Interaction/deadline decision;
+7. `cancelling` or `closing` for the active lifecycle fence;
+8. `exhausted` when immutable semantic/physical budget or deadline is exhausted;
+9. `ready` otherwise.
 
-Every public runtime, including the listening server and the in-process Command Line Interface bootstrap, must first acquire the repository's cross-process `RuntimeServerOwnership` lock for the exact canonical database path. The owner record binds both its process identifier and an operating-system process-start fingerprint. A second public runtime conflicts even inside the same process because process-global scheduler and settlement state define one lifecycle owner, not reference-counted listeners. A second backend cannot serve that database or run project recovery while that exact process instance remains alive; an expired filesystem heartbeat alone is not takeover proof, while reuse of the numeric process identifier by a different process cannot retain the stale claim. An in-process Command Line Interface callback releases its Project Instance lease before it starts process-wide settlement; otherwise the Instance settlement gate would wait on the caller's own lease. Exact Instance disposal then runs under the process-wide disposal authority. The callback outcome and settlement outcome are retained independently: when both fail, the public error preserves the operation failure first and the cleanup failure second while the same runtime occurrence remains recoverable.
+There is no persisted ingress disposition, delivery result, semantic attempt, activation attempt, retry owner, current owner, or blocker row. `exhausted` is a terminal reducer result derived from policy plus facts; it permits the FIFO to admit a later explicit operator input without pretending that the exhausted ingress gained a decision receipt.
 
-Listener quiescence alone never releases ownership. Shutdown first closes new Prompt, cancellation, and ingress-delivery admission, then requests cancellation of every physical Session Turn owner, root-ingress delivery owner, and detached worker owner. It disposes global schedulers, waits for those exact owners, closes Engine completion admission after its producers stop, drains canonical Project Git leases, and finally acquires the mandatory-process gate. All gates remain held through database ownership release. Successful handoff commits the scheduler and runtime gates and retains an occurrence-specific pending-handoff barrier until asynchronous post-release cleanup settles; no successor may produce work across that boundary. Failed pre-release settlement restores the captured scheduler registrations plus durable-owner scans while the same runtime still owns the database. In-process CLI execution records operation, process settlement, and ownership release/rollback as three ordered outcomes. It preserves every failure, and an incomplete rollback is retained as the exact startup-cleanup authority; retained-owner recovery cannot run until that receipt completes. Initial startup and restart restoration recover accepted or interrupted Task ingress before binding a listener. Only then may a successor acquire ownership and run recovery, preventing an old completion pipeline from writing beside the new backend.
+## Prose-only continuation
 
-Provider execution ownership is the Session Turn owner itself and extends through its durable assistant result, failure, or runtime-handoff disposition. A transient persistence failure retains that exact owner while it retries the same occurrence with bounded delay. Persistent storage failure remains fail-closed at the runtime inactivity boundary rather than leaving an ownerless Turn. There is no process-wide Provider execution queue or Task admission table. The Mission and its models own serial-versus-parallel Task creation; available runtime resources affect latency only.
+A prose-only assistant Turn is a real visible Message, not a business completion. It remains under the same ingress:
 
-The first cancellation request uses an immediate SQLite writer transaction to atomically claim the Task's one row in `engine_task_cancellation_authority` and create one durable `task.cancellation.requested` occurrence. That row also owns one renewable convergence lease. Concurrent calls, repeated clicks, and restart recovery serialize before the first read and reuse the request occurrence; only the current lease owner within the database-owning runtime may execute the mandatory barrier, and the terminal transaction verifies the same unexpired owner. Before version `0.1.0`, this authority is part of the one canonical fresh-database DDL; older local schemas are reset rather than patched. While the authority is incomplete the Task projects `cancelling`; after the mandatory barrier it projects `cancelled` from exactly one linked terminal event.
+```text
+accepted ingress
+  -> Orchestrator control/participant Message
+  -> streaming assistant Message without decision
+  -> successor control Message linked to that assistant
+  -> same ingress, new physical lease
+```
 
-Project bootstrap is not reported ready while started-Task recovery contains any failed durable item. Recovery isolates failures by Task/Artifact identity so one malformed item does not prevent valid peers from reconciling, then returns an aggregate startup contract error instead of logging and serving with dormant work. Historical terminal lifecycle publication addresses its exact occurrence without replacing a newer live Session occurrence.
+The initial continuation predecessor is the ingress identity. Later predecessors are the prior assistant Message. `(ingress_id, predecessor_id)` is unique. Assistant Messages store only the physical `activationID`; their parent Message supplies the ingress continuation identity. The completed assistant chain derives semantic Turn count. No prose is parsed for scheduling intent.
 
-The process supervisor assigns every Task process a typed cancellation role. Cancellation first holds the root destructive scope while it stops root and descendant prompts, tools, and scheduled wakes. It then reserves the Task process write lease, stops every `mandatory` process and the Task execution capsule, acquires that lease, and proves no mandatory process remains. In the same terminal transaction, every accepted or delivering ingress receives a causally linked `terminal_inapplicable` disposition. Only this complete barrier gates the atomic `task.cancelled` commit.
+The activation is consumed only at a final non-Tool-call assistant boundary with zero outstanding activities, or at a wait/provider-failure boundary with zero outstanding activities. An intermediate Provider step or one completed sibling Tool does not release the activation.
 
-Worker lifecycle cancellation is occurrence-scoped, not Session-scoped. For every reusable Worker Session, cancellation selects the latest committed Worker Turn descriptor, uses its input Message as the authority, and reads or publishes only that exact occurrence's terminal lifecycle. A terminal status from an older Turn cannot suppress `terminal/aborted` for a newer prepared continuation.
+## Physical leases
 
-Git checkpointing and auxiliary-service cleanup cannot gate or reverse terminal cancellation. Cancellation commits independent durable `task_checkpoint_settlement` and `task_auxiliary_settlement` receipts in `pending` state in the same transaction as the terminal event. Each receipt has an atomic `running` owner lease with heartbeat. A current retry runner observes a live lease and takes over after expiry; claim, operation, or final-write failure schedules another attempt in the same runtime, while completion verifies the same owner. This avoids overlap and also prevents a receipt from being stranded by a transient persistence failure or by an old backend exiting after replacement startup. Each final payload preserves the cancellation request identity and the exact `task.cancellation.requested` event emission time. Checkpoint settlement independently releases the managed worktree, while auxiliary cleanup cannot delay it. Startup resumes pending cancellation occurrences and both settlement kinds.
+`engine_control_activation_lease` is the only durable physical owner coordinate. Targets include Task ingress, lifecycle operation, Interaction deadline, domain effect, Protocol delivery, Bus delivery, Automation definition/run, Event fire, Session control, and build cleanup.
 
-## Process settlement
+Each row contains one activation identity, target identity, owner occurrence, activation time, and expiry. A successor inserts a new row only when no latest valid lease exists. Renewal changes only `expires_at` for the same activation and owner. Lease history derives physical attempt count.
 
-The process supervisor separates root control events from physical-tree and output settlement. On Windows, a managed command is atomically assigned to a non-breakaway Job and `exited` resolves only after the target root exits and the Job reaches active-process-zero. Timeout and abort write an occurrence-local control marker; the native helper, rather than Node, terminates its Job, observes active-process-zero, and only then exits. The helper is spawned as an independent Windows process group so ordinary owner-process death does not synchronously destroy the only process capable of querying the Job and publishing the exact active-zero marker. The helper also owns an exact owner-process handle: owner death triggers Job termination and marker publication without waiting for successor recovery. A ChildProcess `error` is control failure evidence and never substitutes for that physical proof. `outputSettled` proves stdout/stderr streams have closed or failed, while `settled` joins physical exit, output settlement, and supervisor-request cleanup. Managed registry and Task process leases remain owned through `settled`; commands that consume output use one absolute deadline across setup, execution, termination, bounded drain, and cleanup. Windows request files contain launch coordinates only: the target environment is inherited from the helper process and is never serialized into the request payload.
+Before an external effect or resolution append, the worker rereads the exact lease, epoch, deadline, and unresolved facts. Lease validity never proves business completion. Process-local owner maps and runtime settlement registries are performance and shutdown primitives only.
 
-Every supervisor request and isolated check workspace persists the owning runtime occurrence. A supervisor request directory is deleted only after its public physical-exit authority has validated the exact ready and active-zero settlement markers; raw helper exit, disposal, output failure, or startup failure cannot erase unproved recovery evidence. After a successor acquires runtime ownership and before Automation initialization, started-Task recovery, or listener bind, it reconciles supervisor requests first and workspaces second with one cached tri-state process-occurrence observer. Current and exact-live occurrences remain. Prior/dead supervisor requests are removed only after their exact ready and active-zero settlement markers validate; prior/dead workspaces are removed only after request reconciliation. Missing, malformed, unreadable, foreign, or physically unproved artifacts are typed unknowns that block bind rather than being treated as absent. A simultaneously terminated owner and helper may therefore require external recovery when no active-zero marker exists; safety remains fail-closed and no successor targets a numeric PID without exact occurrence authority.
+## Tool and Provider effects
 
-Every output-settlement Promise receives a rejection observer when its process handle is created. A full-output consumer still awaits and surfaces that rejection. A bounded consumer that deliberately terminates after obtaining its result waits for physical exit and consumes the now-irrelevant output failure, so a Windows pipe abort cannot become an unhandled process-level rejection.
+Mutable Tool Part state is not stored. A Tool effect uses:
 
-Standalone Mission recovery is independent from started-Task discovery. Its interrupted frontier is exactly the incomplete assistant set after the latest user message, matching the canonical terminalizer; historical orphan rows do not create new recovery work. Before terminalizing that frontier, the runtime persists one pending `mission_process_recovery` Session Control occurrence containing the exact interrupted assistant IDs and the current visible wake message, Part, and control-record IDs. A crash before any reply reuses that attempt's IDs. A settled error or newly interrupted recovery reply keeps the same occurrence, advances its attempt, and reserves new wake IDs so failed-reply deduplication cannot suppress execution. Only a durable successful assistant reply consumes the occurrence. The independent control row cannot race with nested Mission metadata receipts or pending operator input. The recovery wake is a typed, visible runtime-authored user message; recovery never invents a hidden assistant acknowledgement or duplicates a successful wake.
+```text
+tool_part_request(id, message_id, request_data, time_created)
+tool_part_outcome(request_part_id, outcome_data, time_created)
+```
 
-## Scheduler occurrence ownership
+The public `ToolPart.state` is projected from those two facts. Pending streamed input drafts are transport only and are not durable evidence that an effect started.
 
-Post-commit protocol publication uses one durable outbox. The source mutation and `bus_publication_outbox` occurrence are written in the same transaction with a stable occurrence ID, payload, causation, and project/directory ownership. `bus_publication_delivery` records each stable exact, wildcard, or durable Global subscriber independently; retries execute only unsettled subscriber identities. EventService owns the stable wildcard identity `scheduler.event-service`. Transient user-interface and Server-Sent Events listeners receive one observed attempt and are not scheduling authorities. Startup restores project Event subscriptions before draining pending publication rows, preserving the same occurrence across process crash and partial Instance-disposal rollback.
+A Provider call uses:
 
-An Event Job accepts the Bus publisher's exact event occurrence identity and persists one unique fire for `(event_job_id, event_occurrence_id)` before executing a wake. The fire contains its causal ancestry, lease, retry state, and result Message identity. Re-entering the same job in that ancestry terminalizes the derived fire with the `causal_cycle` disposition; cooldown and disabled decisions are also durable dispositions. Transient execution failure remains retryable on the same fire, startup reconciles an already-persisted exact wake before producing an effect, and Event Service disposal aborts and joins all admitted fire owners before releasing the Instance. A renewable database lease proves only current ownership. A separate activity-resetting inactivity fence is refreshed at real durable execution boundaries, requests physical abort when progress stops, and keeps the lease and runtime reservation fail-closed until the physical operation actually settles.
+```text
+provider_activity_request(id, assistant_message_id, time_created)
+provider_activity_outcome(request_id, outcome_data, time_created)
+```
 
-An Automation's persisted `next_run` is its scheduled occurrence identity. Fire, target run, generated Session, Message, and primary Part identities are deterministic projections of the Automation ID, scheduled due time, and target. Lease renewal is a fence: zero-row renewal or renewal failure aborts the physical owner. Target resolution, reservation, each physical target completion, and durable fire settlement are the only inactivity-fence progress boundaries; a live timer cannot substitute for them. Message commit validates the exact Automation and target-run owner in the same transaction. A successor owner resumes the same nonterminal run and reconciles its deterministic Message; only the winning fenced transaction marks all runs succeeded and advances recurrence once.
+The parent Message uniquely supplies Session identity, so Part, Tool request, and Provider request tables do not repeat `session_id`. An unreceipted request projects `reconcile_required`; replay is allowed only with the same provider idempotency key or after an authoritative outcome query.
 
-A direct Session prompt commits one real user Message with a stable caller-supplied identity before acquiring its Session Turn owner. Exact retry reuses that Message and its assistant reply; conflicting reuse returns a typed identity error. A root ingress likewise references one already-persisted Message occurrence and never rematerializes raw prompt input. Execution-progress inactivity is refreshed by the exact root assistant generation whose parent is that input Message, plus child Sessions whose durable delegation metadata references an assistant Message already admitted to the same causal tree. Creation time is never a causal identity. Historical descendants and unrelated children created after ownership cannot keep a physical execution occurrence alive. Instance disposal requests cancellation and joins the exact Session and worker ownership Promises; it never removes an owner as a proxy for completion.
+Git, filesystem, dispatch, build cleanup, Permission, Channel ingress, Interaction, and Bus effects follow the same request/outcome rule using their domain-specific sole fact types. In particular:
 
-Instance disposal is part of runtime settlement rather than an unbounded finalizer. Once Instance admission is closed, the settlement gate snapshots every exact read/write lease and its tracked activity count, applies the runtime inactivity boundary, and reports the owning project/mode when no authority settles. Failure retains `RuntimeServerOwnership` and reopens admissions for the same runtime; it never skips a live Instance or releases ownership on an unknown state.
+- `engine_git_checkpoint_request` is written before repository publication and `engine_git_checkpoint_outcome` is its only result authority. Task metadata and progress rows project Git evidence at read time and never store a second copy. An unreceipted request is not replayed; an authoritative repository query or explicit operator reconciliation appends its exact result.
+- `channel_ingress_accepted` requires the caller's stable `request_id`; an ingress without that causal identity is rejected before execution. Every production Channel adapter maps its provider event/message identity into that field; synthetic injection uses the exact newly-created provider message identity. Its envelope columns own `platform` and `request_id`, while the JSON payload excludes both. `channel_ingress_outcome` owns the result. If execution completed before the outcome commit, ordinary replay returns the typed unknown-outcome contract until exact downstream evidence reconciles it.
+- one `permission_ledger(requested)` row owns authorization input. Decision/execution rows contain only their branch delta. The canonical Tool result is stored once as `(attempt_id, result, time_created)` in `permission_execution_result`; Session and Tool identities are derived through the attempt/request chain, and Tool outcome points to that attempt identity instead of copying the payload or its hash.
 
-## Projection contract
+Build cleanup acquires its activation before the first private ref is created, renews that same activation throughout the physical Build, and appends retained, failed, or complete only under its fence; restart reconciliation can take over only an expired or receipt-consumed activation. A generic completion receipt is prohibited when a canonical domain receipt already exists.
 
-Server-Sent Events and read models project the durable facts above. Message receipts and board artifacts expose only accepted, delivering, delivered, or typed terminal ingress state; they expose no position or Host scheduling status. The Overlay disables a Task cancellation action while `cancellationStatus` is `cancelling` and does not invent an assistant acknowledgement or a parallel Task lifecycle. Failures remain typed durable receipts available for diagnostics and recovery.
+## Protocol delivery and scheduler inputs
+
+`protocol_event` is the immutable envelope. `protocol_inbox` is one immutable recipient occurrence. Delivery attempts use generic control leases. `protocol_delivery_receipt` stores one discriminated `receipt` JSON fact per settlement:
+
+```text
+retry_wait(visible_at, error)
+task_ingress(message_id, ingress_id)
+session_wake(message_id)
+mission_wake_closed(message_id, closure_event_id)
+mission_closed(closure_event_id)
+dead_letter(error_name, message)
+```
+
+Delivery `status`, owner, lease expiry, attempt count, visibility, last error, result, update time, and completion time are projections. The receipt does not repeat these as independent columns.
+
+Scheduler messages freeze exact source and target Task execution epochs. Materialization revalidates the target epoch before committing a real Message, Task ingress, Session control, or terminal receipt. The source body is reread from its exact Message/Part or terminal-event locator and never copied into a second authority.
+
+## Automation, Event, Bus, and Session control
+
+Automation and Event configuration changes append immutable definition revisions or tombstones. Execution is immutable and references the exact definition revision:
+
+- Automation: `automation_run` input plus ordered `automation_run_receipt` facts and leases;
+- Event: `event_job_fire` input plus ordered `event_job_fire_receipt` facts and leases;
+- Bus: publication/delivery inputs plus phase, attempt, and delivery receipts;
+- Session control: `session_control_record` input plus amendment/consumed/failed events.
+
+Their legacy running, lease, attempt, failure-count, next-run, last-error, completion, and recovery columns do not exist. Public views reduce inputs, receipts, current time, and generic leases.
+
+## Mission closure
+
+Mission occurrence closure is an append-only Session aggregate Protocol Event family:
+
+```text
+mission.execution.opened
+mission.execution.closing
+mission.execution.closed
+```
+
+The payload contains only `missionID` and `requestID`. Session identity, operation identity, source, state, and event time come from the Protocol envelope and event type; they are not repeated in payload. Close callers join one process-local operation while the durable event remains authoritative across restart.
+
+When closing starts, unanswered scheduler wakes receive exact closure receipts. Non-operator wake admission cannot open or reopen a Mission occurrence. A draft, closing, or closed occurrence produces its typed domain outcome without a parallel Mission status row.
+
+## Reconciliation and recovery
+
+Project reconciliation is the only Task-control recovery algorithm:
+
+1. enumerate Tasks whose lifecycle projection is open, cancelling, or closing;
+2. read epoch ingresses in sequence order;
+3. reduce the FIFO head from immutable facts and valid leases;
+4. reconcile exact unknown effects before ordinary replay;
+5. acquire and hint only `ready` work;
+6. stop at waiting, lifecycle fence, blocker, or unknown effect;
+7. continue after an exact receipt changes the projection.
+
+Normal acceptance, prose-only completion, retry deadline, startup, process rollback, and receipt completion invoke this same reconciler. Startup does not persist scanner progress. Runtime queues, timers, pending Promises, and owner maps may accelerate a wake but cannot change reducer output.
+
+Historical databases cross this boundary through one atomic migration. It rebuilds current tables, translates classifiable legacy dispositions into immutable facts/receipts, normalizes Task aggregate identity and lifecycle payloads, validates exact ingress sources, and rolls back the whole transaction on ambiguity. No compatibility reader or dual writer remains after commit.
+
+## Verification authority
+
+The following gates define the maintained control-plane proof:
+
+- `bun run check:control-state-redundancy` inventories every scoped persisted field and rejects derived or unclassified columns plus known cross-table functional dependencies;
+- focused reducer, migration, Task continuation, lifecycle, Tool/Provider, Protocol delivery, Scheduler, Bus, Mission, runtime ownership, and terminal closure tests assert positive fact/projection contracts;
+- storage schema-contract tests prove canonical SQLite Data Definition Language, schema fingerprint, and MySQL transfer shape equality;
+- `bun run typecheck`, `bun run docs:check`, and `git diff --check` remain required;
+- the real streaming Provider checker is run only when credential and exact model projection use is explicitly authorized.

@@ -3,11 +3,6 @@ import os from "node:os"
 import path from "node:path"
 import { mkdtemp, rm } from "node:fs/promises"
 import {
-  acquireCancelledTaskSettlementGate,
-  CancelledTaskSettlementInactivityError,
-  CancelledTaskSettlementTestHooks,
-} from "@/engine/state"
-import {
   RuntimeExecutionAdmissionClosedError,
   RuntimeExecutionSettlement,
   RuntimeExecutionSettlementInactivityError,
@@ -137,47 +132,6 @@ describe("runtime execution settlement authority", () => {
     expect(observedReason).toBe("durable subscriber runtime handoff")
   })
 
-  test("bounds cancelled settlement inactivity and converges after the physical operation exits", async () => {
-    const events: string[] = []
-    let releaseOperation!: () => void
-    const operation = new Promise<void>((resolve) => {
-      releaseOperation = () => {
-        events.push("operation:released")
-        resolve()
-      }
-    })
-    using _operation = CancelledTaskSettlementTestHooks.trackSettlementOperation(
-      "cancelled-settlement-held-operation",
-      operation,
-    )
-    const firstGate = acquireCancelledTaskSettlementGate()
-    try {
-      await expect(firstGate.waitForIdle(50)).rejects.toBeInstanceOf(CancelledTaskSettlementInactivityError)
-      events.push("gate:timed-out")
-      const resume = firstGate.rollback()
-      firstGate[Symbol.dispose]()
-      await resume()
-
-      releaseOperation()
-      await operation
-      const retryGate = acquireCancelledTaskSettlementGate()
-      await retryGate.waitForIdle(50)
-      retryGate.commit()
-      retryGate[Symbol.dispose]()
-      events.push("gate:retried")
-
-      expect(events).toEqual(["gate:timed-out", "operation:released", "gate:retried"])
-    } finally {
-      releaseOperation()
-      try {
-        firstGate.rollback()
-      } catch {}
-      try {
-        firstGate[Symbol.dispose]()
-      } catch {}
-    }
-  })
-
   test("bounds Project Git lock inactivity and admits settlement after the held lifecycle exits", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-git-settlement-"))
     const events: string[] = []
@@ -248,7 +202,7 @@ describe("runtime execution settlement authority", () => {
     const ownerSettlement = new Promise<void>((resolve) => {
       releaseOwner = resolve
     })
-    const reservation = RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "timing-contract")
+    const reservation = RuntimeExecutionSettlement.reserve("task_control_activation", "timing-contract")
     reservation.onCancel((reason) => {
       events.push(`cancel:${reason instanceof Error ? reason.message : String(reason)}`)
     })
@@ -259,9 +213,9 @@ describe("runtime execution settlement authority", () => {
     )
 
     using gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_root_ingress_delivery"])
-    gate.requestCancellation(["task_root_ingress_delivery"], new Error("runtime handoff"))
-    const gateSettlement = gate.waitForIdle(["task_root_ingress_delivery"]).then(() => {
+    gate.closeAdmission(["task_control_activation"])
+    gate.requestCancellation(["task_control_activation"], new Error("runtime handoff"))
+    const gateSettlement = gate.waitForIdle(["task_control_activation"]).then(() => {
       events.push("gate:settled")
     })
     releaseOwner()
@@ -290,13 +244,13 @@ describe("runtime execution settlement authority", () => {
 
   test("reopens admission under the same gate token and starts the registered durable rescan", () => {
     const events: string[] = []
-    using _reopen = RuntimeExecutionSettlement.onAdmissionReopened("task_root_ingress_delivery", () => {
+    using _reopen = RuntimeExecutionSettlement.onAdmissionReopened("task_control_activation", () => {
       events.push("admission:reopened")
-      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "durable-rescan").settle()
+      RuntimeExecutionSettlement.reserve("task_control_activation", "durable-rescan").settle()
       events.push("rescan:accepted")
     })
     const gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_root_ingress_delivery"])
+    gate.closeAdmission(["task_control_activation"])
     events.push("admission:closed")
     gate[Symbol.dispose]()
 
@@ -305,7 +259,7 @@ describe("runtime execution settlement authority", () => {
 
   test("restores every owned admission and reports an aggregate when one reopen listener fails", () => {
     const events: string[] = []
-    using _failing = RuntimeExecutionSettlement.onAdmissionReopened("task_root_ingress_delivery", () => {
+    using _failing = RuntimeExecutionSettlement.onAdmissionReopened("task_control_activation", () => {
       events.push("task-ingress:reopened")
       throw new Error("injected Task ingress rescan failure")
     })
@@ -313,14 +267,14 @@ describe("runtime execution settlement authority", () => {
       events.push("task-cancellation:reopened")
     })
     const gate = RuntimeExecutionSettlement.acquireSettlementGate()
-    gate.closeAdmission(["task_root_ingress_delivery", "task_cancellation"])
+    gate.closeAdmission(["task_control_activation", "task_cancellation"])
     let releaseError: unknown
     try {
       gate[Symbol.dispose]()
     } catch (error) {
       releaseError = error
     }
-    RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "post-failure-ingress-admission").settle()
+    RuntimeExecutionSettlement.reserve("task_control_activation", "post-failure-ingress-admission").settle()
     RuntimeExecutionSettlement.reserve("task_cancellation", "post-failure-cancellation-admission").settle()
     events.push("post-failure:admitted")
 
@@ -580,7 +534,7 @@ describe("runtime execution settlement authority", () => {
       releaseBridge()
       await trackedBridge
       await awaitTaskMessageProtocolBridgeIdle()
-      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "late-bridge-rollback-admission").settle()
+      RuntimeExecutionSettlement.reserve("task_control_activation", "late-bridge-rollback-admission").settle()
 
       expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(occurrenceID)
     } finally {

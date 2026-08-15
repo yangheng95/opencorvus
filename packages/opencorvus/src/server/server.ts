@@ -238,13 +238,6 @@ export namespace Server {
       | (Disposable & { waitForIdle(inactivityTimeoutMilliseconds: number): Promise<void> })
       | undefined
     let globalSchedulerSettlementGate: (Disposable & { commit(): void }) | undefined
-    let cancelledTaskSettlementGate:
-      | (Disposable & {
-          waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void>
-          commit(): void
-          rollback(): () => Promise<void>
-        })
-      | undefined
     let eventFireSettlementGate:
       | (Disposable & {
           commit(): void
@@ -257,7 +250,7 @@ export namespace Server {
           rollback(): () => Promise<void>
         })
       | undefined
-    let resumeTaskRootIngresses: (() => Promise<void>) | undefined
+    let reconcileTaskControl: (() => Promise<void>) | undefined
     try {
       runtimeExecutionGate.closeAdmission([
         "scheduler_event_fire",
@@ -287,14 +280,10 @@ export namespace Server {
       settlementGates.push(SessionPromptState.acquireProcessSettlementGate())
       globalSchedulerSettlementGate = Scheduler.acquireGlobalSettlementGate()
       settlementGates.push(globalSchedulerSettlementGate)
-      const { acquireCancelledTaskSettlementGate } = await import("../engine/state")
-      cancelledTaskSettlementGate = acquireCancelledTaskSettlementGate()
-      settlementGates.push(cancelledTaskSettlementGate)
       const { EventService } = await import("../scheduler/event-service")
       eventFireSettlementGate = EventService.acquireProcessSettlementGate()
       settlementGates.push(eventFireSettlementGate)
     } catch (error) {
-      const resumeCancelledTaskSettlements = cancelledTaskSettlementGate?.rollback()
       const resumeEventFires = eventFireSettlementGate?.rollback()
       const resumeBusPublications = busSettlementGate?.rollback()
       const rollbackFailures: unknown[] = []
@@ -305,7 +294,7 @@ export namespace Server {
       }
       try {
         await awaitRollbackReceipts(
-          [resumeCancelledTaskSettlements, resumeEventFires, resumeBusPublications],
+          [resumeEventFires, resumeBusPublications],
           "Runtime settlement admission rollback failed",
         )
       } catch (rollbackError) {
@@ -351,16 +340,15 @@ export namespace Server {
       )
       await detachedDispatchGate!.waitForIdle()
       const taskRootIngressDelivery = await import("../engine/task-root-ingress-delivery")
-      const taskIngressRecoveryDirectories = taskRootIngressDelivery.snapshotTaskIngressRecoveryDirectories()
-      resumeTaskRootIngresses =
-        taskIngressRecoveryDirectories.length === 0
+      const taskControlDirectories = taskRootIngressDelivery.snapshotTaskControlReconciliationDirectories()
+      reconcileTaskControl =
+        taskControlDirectories.length === 0
           ? undefined
           : () =>
-              taskRootIngressDelivery.recoverTaskRootIngressesAfterRuntimeRollback(taskIngressRecoveryDirectories)
-      runtimeExecutionGate.closeAdmission(["task_root_ingress_delivery"])
-      runtimeExecutionGate.requestCancellation(["task_root_ingress_delivery"], new Error(reason))
-      await runtimeExecutionGate.waitForIdle(["task_root_ingress_delivery"], settlementInactivityTimeoutMilliseconds)
-      await cancelledTaskSettlementGate!.waitForIdle(settlementInactivityTimeoutMilliseconds)
+              taskRootIngressDelivery.reconcileTaskControlAfterRuntimeRollback(taskControlDirectories)
+      runtimeExecutionGate.closeAdmission(["task_control_activation"])
+      runtimeExecutionGate.requestCancellation(["task_control_activation"], new Error(reason))
+      await runtimeExecutionGate.waitForIdle(["task_control_activation"], settlementInactivityTimeoutMilliseconds)
       const { awaitTaskMessageProtocolBridgeIdle } = await import("../orchestrator/protocol/message-bridge")
       await Database.awaitEffectIdle(settlementInactivityTimeoutMilliseconds)
       await awaitTaskMessageProtocolBridgeIdle()
@@ -386,7 +374,6 @@ export namespace Server {
           if (!commit && commitDecisionApplied) {
             throw new Error("Committed runtime handoff cleanup must resume through its exact commit receipt")
           }
-          const resumeCancelledTaskSettlements = commit ? undefined : cancelledTaskSettlementGate!.rollback()
           const resumeEventFires = commit ? undefined : eventFireSettlementGate!.rollback()
           const resumeBusPublications = commit ? undefined : busSettlementGate!.rollback()
           if (commit) {
@@ -395,7 +382,6 @@ export namespace Server {
                 runtimeHandoffCommitFailuresForTest -= 1
                 throw new Error("injected runtime handoff commit cleanup failure")
               }
-              cancelledTaskSettlementGate!.commit()
               eventFireSettlementGate!.commit()
               busSettlementGate!.commit()
               globalSchedulerSettlementGate!.commit()
@@ -444,7 +430,7 @@ export namespace Server {
             attempt(() => settledExecution.releaseHandoff())
             try {
               await awaitRollbackReceipts(
-                [resumeCancelledTaskSettlements, resumeEventFires, resumeBusPublications, resumeTaskRootIngresses],
+                [resumeEventFires, resumeBusPublications, reconcileTaskControl],
                 "Runtime handoff rollback recovery failed",
               )
             } catch (error) {
@@ -455,7 +441,6 @@ export namespace Server {
         },
       }
     } catch (error) {
-      const resumeCancelledTaskSettlements = cancelledTaskSettlementGate?.rollback()
       const resumeEventFires = eventFireSettlementGate?.rollback()
       const resumeBusPublications = busSettlementGate?.rollback()
       const rollbackFailures: unknown[] = []
@@ -474,7 +459,7 @@ export namespace Server {
       attempt(() => terminated?.releaseHandoff())
       try {
         await awaitRollbackReceipts(
-          [resumeCancelledTaskSettlements, resumeEventFires, resumeBusPublications, resumeTaskRootIngresses],
+          [resumeEventFires, resumeBusPublications, reconcileTaskControl],
           "Runtime settlement admission rollback failed",
         )
       } catch (rollbackError) {

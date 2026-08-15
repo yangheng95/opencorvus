@@ -319,7 +319,7 @@ export namespace ProjectMemoryOrganizer {
           ProjectMemory.Event.OrganizationRequested,
           ({ properties, signal }) =>
             run({ projectID: properties.projectID, sessionID: properties.sessionID, abort: signal }),
-          { durableID: "project-memory.organizer" },
+          { durableID: "project-memory.organizer", effect: "idempotent_by_occurrence" },
         ),
       )
       unsubs.push(

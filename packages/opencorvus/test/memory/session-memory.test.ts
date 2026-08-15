@@ -20,8 +20,7 @@ import { SessionLoop } from "../../src/session/loop"
 import { Message } from "../../src/session/message"
 import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
-import { Database, eq } from "../../src/storage/db"
-import { SessionControlRecordTable } from "../../src/session/session.sql"
+import { Database } from "../../src/storage/db"
 import { MemoryTool } from "../../src/tool/memory"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -73,7 +72,7 @@ async function createCompactionCheckpoint(sessionID: string, content: string) {
     sessionID,
     role: "assistant",
     author: "compaction",
-    time: { created: Date.now(), completed: Date.now() },
+    time: { created: Date.now() },
     parentID: source.id,
     modelID: model.modelID,
     providerID: model.providerID,
@@ -82,7 +81,6 @@ async function createCompactionCheckpoint(sessionID: string, content: string) {
     summary: true,
     cost: 0,
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-    finish: "stop",
   })
   await Session.updatePart({
     id: Identifier.ascending("part"),
@@ -91,7 +89,11 @@ async function createCompactionCheckpoint(sessionID: string, content: string) {
     type: "text",
     text: content,
   })
-  return summary
+  return Session.updateMessage({
+    ...summary,
+    time: { ...summary.time, completed: Date.now() },
+    finish: "stop",
+  })
 }
 
 function memoryToolContext(sessionID: string) {
@@ -241,14 +243,13 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           role: "assistant",
           author: "build",
           parentID: source.id,
-          time: { created: Date.now() + 1, completed: Date.now() + 1 },
+          time: { created: Date.now() + 1 },
           agent: "build",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
           modelID: model.modelID,
           providerID: model.providerID,
-          finish: "stop",
         })
         await Session.updatePart({
           id: Identifier.ascending("part"),
@@ -256,6 +257,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           messageID: prior.id,
           type: "text",
           text: `Verified implementation evidence.\n${"evidence ".repeat(20_000)}`,
+        })
+        await Session.updateMessage({
+          ...prior,
+          time: { ...prior.time, completed: prior.time.created },
+          finish: "stop",
         })
         const compactSource = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -292,7 +298,10 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
                 type: "text",
                 text: "# Generated checkpoint\n\n- implementation verified\n- next: inspect release evidence",
               })
+              assistant.finish = "stop"
+              await input.beforeAssistantCompletion?.(assistant)
               assistant.time.completed = Date.now()
+              await Session.updateMessage(assistant)
               return "stop"
             },
           } as any
@@ -375,14 +384,13 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           role: "assistant",
           author: "build",
           parentID: source.id,
-          time: { created: Date.now() + 1, completed: Date.now() + 1 },
+          time: { created: Date.now() + 1 },
           agent: "build",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
           modelID: model.modelID,
           providerID: model.providerID,
-          finish: "stop",
         })
         const sourceToolPartID = Identifier.ascending("part")
         const sourceToolOutput = `verified-reader-evidence\n${"evidence-row\n".repeat(400)}`
@@ -401,6 +409,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             metadata: {},
             time: { start: Date.now(), end: Date.now() + 1 },
           },
+        })
+        await Session.updateMessage({
+          ...prior,
+          time: { ...prior.time, completed: prior.time.created },
+          finish: "stop",
         })
         const compactSource = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -574,13 +587,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             content: projectedContent(message.content),
           })),
           compactedEvents,
-          controlStatus: Database.use((db) =>
-            db
-              .select({ status: SessionControlRecordTable.status })
-              .from(SessionControlRecordTable)
-              .where(eq(SessionControlRecordTable.id, control.id))
-              .get(),
-          ),
+          controlStatus: SessionControl.get(control.id),
         }).toMatchObject({
           providerSteps: 2,
           secondProviderPrompt: expect.stringContaining("verified-reader-evidence"),
@@ -646,14 +653,13 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           role: "assistant",
           author: "build",
           parentID: source.id,
-          time: { created: Date.now() + 21, completed: Date.now() + 21 },
+          time: { created: Date.now() + 21 },
           agent: "build",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
           modelID: model.modelID,
           providerID: model.providerID,
-          finish: "stop",
         })
         await Session.updatePart({
           id: Identifier.ascending("part"),
@@ -661,6 +667,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           messageID: prior.id,
           type: "text",
           text: "Current evidence is complete.",
+        })
+        await Session.updateMessage({
+          ...prior,
+          time: { ...prior.time, completed: prior.time.created },
+          finish: "stop",
         })
         const compactSource = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -763,13 +774,10 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           typed: Message.CompactionContinuationMissingError.isInstance(observed),
           assistant: failed.info,
           reasoning: failed.parts.find((part) => part.type === "reasoning")?.text,
-          control: Database.use((db) =>
-            db
-              .select({ status: SessionControlRecordTable.status, payload: SessionControlRecordTable.payload })
-              .from(SessionControlRecordTable)
-              .where(eq(SessionControlRecordTable.id, control.id))
-              .get(),
-          ),
+          control: (() => {
+            const row = SessionControl.get(control.id)
+            return row ? { status: row.status, payload: row.payload } : undefined
+          })(),
           memory: await SessionMemory.read(session.id),
         }).toMatchObject({
           typed: true,
@@ -835,13 +843,10 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             observed instanceof Error
               ? { name: observed.name, message: observed.message, cause: observed.cause }
               : observed,
-          control: Database.use((db) =>
-            db
-              .select({ status: SessionControlRecordTable.status, payload: SessionControlRecordTable.payload })
-              .from(SessionControlRecordTable)
-              .where(eq(SessionControlRecordTable.id, control.id))
-              .get(),
-          ),
+          control: (() => {
+            const row = SessionControl.get(control.id)
+            return row ? { status: row.status, payload: row.payload } : undefined
+          })(),
         }).toEqual({
           throwable: {
             name: "ProviderAuthenticationError",
@@ -905,19 +910,10 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
 
         expect({
           observations,
-          controls: Database.use((db) =>
-            db
-              .select({
-                id: SessionControlRecordTable.id,
-                status: SessionControlRecordTable.status,
-                payload: SessionControlRecordTable.payload,
-              })
-              .from(SessionControlRecordTable)
-              .where(eq(SessionControlRecordTable.session_id, session.id))
-              .all()
-              .filter((row) => row.id === failedWinner.id || row.id === consumedWinner.id)
-              .sort((a, b) => a.id.localeCompare(b.id)),
-          ),
+          controls: SessionControl.list(session.id)
+            .filter((row) => row.id === failedWinner.id || row.id === consumedWinner.id)
+            .map((row) => ({ id: row.id, status: row.status, payload: row.payload }))
+            .sort((a, b) => a.id.localeCompare(b.id)),
         }).toEqual({
           observations: [
             {
@@ -971,15 +967,14 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           role: "assistant",
           author: "compaction",
           parentID: source.id,
-          time: { created: Date.now() + 1, completed: Date.now() + 1 },
+          time: { created: Date.now() + 1 },
           agent: "compaction",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
           modelID: model.modelID,
           providerID: model.providerID,
-          finish: "stop",
-          summary: false,
+          summary: true,
         })
         await Session.updatePart({
           id: Identifier.ascending("part"),
@@ -993,6 +988,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           messageID: summary.id,
           type: "text",
           text: "# Atomic checkpoint",
+        })
+        const completedSummary = await Session.updateMessage({
+          ...summary,
+          time: { ...summary.time, completed: summary.time.created },
+          finish: "stop",
         })
         const foreign = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -1014,7 +1014,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         let invalidPublication: unknown
         try {
           await Session.publishCompactionCheckpoint({
-            info: { ...summary, time: { created: summary.time.created }, summary: true },
+            info: { ...summary, time: { created: summary.time.created } },
             part: {
               id: Identifier.ascending("part"),
               sessionID: session.id,
@@ -1030,7 +1030,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         let transactionError: unknown
         try {
           await Session.publishCompactionCheckpoint({
-            info: { ...summary, summary: true },
+            info: completedSummary,
             part: {
               id: foreignPart.id,
               sessionID: session.id,
@@ -1065,7 +1065,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             message: `Compaction checkpoint assistant ${summary.id} must be a valid completed summary`,
           },
           error: { name: "NotFoundError", message: `NotFoundError: Part not found: ${foreignPart.id}` },
-          summary: { id: summary.id, summary: false, finish: "stop" },
+          summary: { id: summary.id, summary: true, finish: "stop" },
           sourceParts: [{ id: sourceText.id, type: "text", text: "Source checkpoint request" }],
           foreignParts: [{ id: foreignPart.id, type: "text", text: "Foreign transaction sentinel" }],
         })

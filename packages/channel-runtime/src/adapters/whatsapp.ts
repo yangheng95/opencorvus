@@ -203,6 +203,7 @@ export class WhatsappAdapter implements ChannelAdapter {
       const text = item.text?.body?.trim() ?? ""
       if (!text) continue
       await this.handler({
+        id: item.id,
         platform: this.platform,
         channel: item.from,
         thread: item.context?.id ?? item.id,

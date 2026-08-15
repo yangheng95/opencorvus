@@ -2179,6 +2179,9 @@
             "$ref": "#/components/schemas/Event.task.created"
           },
           {
+            "$ref": "#/components/schemas/Event.task.deleted"
+          },
+          {
             "$ref": "#/components/schemas/Event.task.failed"
           },
           {
@@ -2519,7 +2522,6 @@
                   "dispatch_lineage",
                   "dispatch_settlement",
                   "mission_acceptance_resume_receipt",
-                  "task_root_ingress",
                   "task_checkpoint_settlement",
                   "task_auxiliary_settlement",
                   "exploration",
@@ -4940,6 +4942,11 @@
                 ],
                 "type": "string"
               },
+              "execution_epoch": {
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
+              },
               "messageID": {
                 "pattern": "^msg.*",
                 "type": "string"
@@ -5002,10 +5009,6 @@
                 ],
                 "type": "string"
               },
-              "taskID": {
-                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                "type": "string"
-              },
               "toolCallID": {
                 "minLength": 1,
                 "type": "string"
@@ -5016,7 +5019,7 @@
               }
             },
             "required": [
-              "taskID",
+              "execution_epoch",
               "actor",
               "surface",
               "reason",
@@ -5044,9 +5047,10 @@
                 "minLength": 1,
                 "type": "string"
               },
-              "status": {
-                "const": "cancelled",
-                "type": "string"
+              "execution_epoch": {
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
               },
               "summary": {
                 "minLength": 1,
@@ -5055,19 +5059,13 @@
               "taskID": {
                 "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
-              },
-              "timeCompleted": {
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991,
-                "type": "integer"
               }
             },
             "required": [
-              "taskID",
-              "status",
+              "execution_epoch",
               "summary",
               "error",
-              "timeCompleted"
+              "taskID"
             ],
             "type": "object"
           },
@@ -5087,9 +5085,10 @@
           "properties": {
             "additionalProperties": false,
             "properties": {
-              "status": {
-                "const": "completed",
-                "type": "string"
+              "execution_epoch": {
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
               },
               "summary": {
                 "type": "string"
@@ -5097,18 +5096,12 @@
               "taskID": {
                 "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
-              },
-              "timeCompleted": {
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991,
-                "type": "integer"
               }
             },
             "required": [
               "taskID",
-              "status",
-              "summary",
-              "timeCompleted"
+              "execution_epoch",
+              "summary"
             ],
             "type": "object"
           },
@@ -5127,14 +5120,40 @@
         "properties": {
           "properties": {
             "properties": {
-              "status": {
-                "enum": [
-                  "active",
-                  "completed",
-                  "failed",
-                  "cancelled"
-                ],
+              "summary": {
                 "type": "string"
+              },
+              "taskID": {
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "taskID",
+              "summary"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "task.created",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.task.deleted": {
+        "properties": {
+          "properties": {
+            "additionalProperties": false,
+            "properties": {
+              "executionEpoch": {
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
               },
               "summary": {
                 "type": "string"
@@ -5146,13 +5165,13 @@
             },
             "required": [
               "taskID",
-              "status",
+              "executionEpoch",
               "summary"
             ],
             "type": "object"
           },
           "type": {
-            "const": "task.created",
+            "const": "task.deleted",
             "type": "string"
           }
         },
@@ -5171,9 +5190,10 @@
                 "minLength": 1,
                 "type": "string"
               },
-              "status": {
-                "const": "failed",
-                "type": "string"
+              "execution_epoch": {
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
               },
               "summary": {
                 "type": "string"
@@ -5185,19 +5205,13 @@
               "terminalReason": {
                 "const": "interrupted",
                 "type": "string"
-              },
-              "timeCompleted": {
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991,
-                "type": "integer"
               }
             },
             "required": [
               "taskID",
-              "status",
+              "execution_epoch",
               "summary",
-              "error",
-              "timeCompleted"
+              "error"
             ],
             "type": "object"
           },
@@ -5576,11 +5590,6 @@
               "reason": {
                 "type": "string"
               },
-              "rewindCount": {
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "type": "integer"
-              },
               "taskID": {
                 "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
@@ -5589,7 +5598,6 @@
             "required": [
               "taskID",
               "cursorTime",
-              "rewindCount",
               "anchorKind"
             ],
             "type": "object"
@@ -5609,15 +5617,6 @@
         "properties": {
           "properties": {
             "properties": {
-              "status": {
-                "enum": [
-                  "active",
-                  "completed",
-                  "failed",
-                  "cancelled"
-                ],
-                "type": "string"
-              },
               "summary": {
                 "type": "string"
               },
@@ -5628,7 +5627,6 @@
             },
             "required": [
               "taskID",
-              "status",
               "summary"
             ],
             "type": "object"
@@ -7701,9 +7699,6 @@
           "time": {
             "properties": {
               "archived": {
-                "type": "number"
-              },
-              "compacting": {
                 "type": "number"
               },
               "created": {
@@ -15277,9 +15272,6 @@
               "archived": {
                 "type": "number"
               },
-              "compacting": {
-                "type": "number"
-              },
               "created": {
                 "type": "number"
               },
@@ -17460,6 +17452,10 @@
           },
           {
             "properties": {
+              "activationID": {
+                "minLength": 1,
+                "type": "string"
+              },
               "agent": {
                 "type": "string"
               },
@@ -17670,24 +17666,6 @@
               "structured": {},
               "summary": {
                 "type": "boolean"
-              },
-              "taskIngress": {
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
-                  "kind": {
-                    "minLength": 1,
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "id",
-                  "kind"
-                ],
-                "type": "object"
               },
               "time": {
                 "properties": {
@@ -20033,6 +20011,7 @@
                     "type": "string"
                   },
                   "request_id": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "source": {
@@ -20056,7 +20035,8 @@
                   "platform",
                   "channel",
                   "thread",
-                  "text"
+                  "text",
+                  "request_id"
                 ],
                 "type": "object"
               }
@@ -54156,6 +54136,7 @@
                     "type": "string"
                   },
                   "request_id": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "source": {
@@ -54178,7 +54159,8 @@
                 "required": [
                   "channel",
                   "thread",
-                  "text"
+                  "text",
+                  "request_id"
                 ],
                 "type": "object"
               }
@@ -54697,36 +54679,13 @@
                         "additionalProperties": false,
                         "description": "Exact current terminal occurrence returned by panel.query_task for this source Task.",
                         "properties": {
-                          "terminalError": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
                           "terminalEventID": {
                             "minLength": 1,
                             "type": "string"
-                          },
-                          "terminalReason": {
-                            "const": "interrupted",
-                            "type": "string"
-                          },
-                          "terminalStatus": {
-                            "enum": [
-                              "completed",
-                              "failed",
-                              "cancelled"
-                            ],
-                            "type": "string"
-                          },
-                          "timeCompleted": {
-                            "exclusiveMinimum": 0,
-                            "maximum": 9007199254740991,
-                            "type": "integer"
                           }
                         },
                         "required": [
-                          "terminalEventID",
-                          "terminalStatus",
-                          "timeCompleted"
+                          "terminalEventID"
                         ],
                         "type": "object"
                       },
@@ -76040,6 +75999,10 @@
                   "properties": {
                     "info": {
                       "properties": {
+                        "activationID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
                         "agent": {
                           "type": "string"
                         },
@@ -76250,24 +76213,6 @@
                         "structured": {},
                         "summary": {
                           "type": "boolean"
-                        },
-                        "taskIngress": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "id": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "kind": {
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "kind"
-                          ],
-                          "type": "object"
                         },
                         "time": {
                           "properties": {
@@ -82328,6 +82273,10 @@
                   "properties": {
                     "info": {
                       "properties": {
+                        "activationID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
                         "agent": {
                           "type": "string"
                         },
@@ -82560,24 +82509,6 @@
                         "structured": {},
                         "summary": {
                           "type": "boolean"
-                        },
-                        "taskIngress": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "id": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "kind": {
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "kind"
-                          ],
-                          "type": "object"
                         },
                         "time": {
                           "properties": {
@@ -83296,6 +83227,10 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "activationID": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
                     "agent": {
                       "type": "string"
                     },
@@ -83506,24 +83441,6 @@
                     "structured": {},
                     "summary": {
                       "type": "boolean"
-                    },
-                    "taskIngress": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "id": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "kind": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "kind"
-                      ],
-                      "type": "object"
                     },
                     "time": {
                       "properties": {
@@ -90893,7 +90810,6 @@
                               "dispatch_lineage",
                               "dispatch_settlement",
                               "mission_acceptance_resume_receipt",
-                              "task_root_ingress",
                               "task_checkpoint_settlement",
                               "task_auxiliary_settlement",
                               "exploration",
@@ -97780,7 +97696,6 @@
                                   "dispatch_lineage",
                                   "dispatch_settlement",
                                   "mission_acceptance_resume_receipt",
-                                  "task_root_ingress",
                                   "task_checkpoint_settlement",
                                   "task_auxiliary_settlement",
                                   "exploration",

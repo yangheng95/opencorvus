@@ -23,6 +23,7 @@ import { deriveTaskStatus } from "./task-status"
 import { ToolFailureCause, renderToolFailureCause } from "@/session/tool-failure-cause"
 import { SessionStatus } from "@/session/status"
 import { AutomationTable } from "@/scheduler/automation.sql"
+import { projectAutomationInTransaction } from "@/scheduler/automation-projection"
 import { Database, and, asc, desc, eq, isNotNull, or, sql } from "@/storage/db"
 import { listAgentCoordinationResponses, listPendingAgentCoordinationRequests } from "./agent-coordination"
 import { listRecentTaskMailboxMessages, type MailboxSchedulerMessage } from "./mailbox"
@@ -50,7 +51,8 @@ import {
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { AgentRoleContract } from "@/agent/role-contract"
 import { MessageTable, SessionTable } from "@/session/session.sql"
-import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { ProtocolEventTable, protocolEventBelongsToTask } from "@/protocol/protocol.sql"
+import { taskRewindCursor } from "./rewind"
 
 /** Cap recent stream-failure entries surfaced into the orchestrator prompt.
  *  A chronically failing provider can write an artifact every wake; older
@@ -131,7 +133,7 @@ export function describeProcessRecoveryFact(taskID: string, factID: string) {
           .where(
             and(
               eq(ProtocolEventTable.id, lifecycleEventID),
-              eq(ProtocolEventTable.task_id, taskID),
+              protocolEventBelongsToTask(taskID),
               eq(ProtocolEventTable.session_id, subject.session_id),
               eq(ProtocolEventTable.type, SessionStatus.Event.Status.type),
             ),
@@ -424,46 +426,29 @@ export interface TaskDesc {
 }
 
 function describeTaskScheduledWaits(taskID: string, floor: number): TaskScheduledWaitDesc[] {
-  const rows = Database.use((db) =>
-    db
-      .select({
-        id: AutomationTable.id,
-        name: AutomationTable.name,
-        reason: AutomationTable.prompt,
-        status: AutomationTable.status,
-        nextRun: AutomationTable.next_run,
-        lastRun: AutomationTable.last_run,
-        failureCount: AutomationTable.failure_count,
-        lastError: AutomationTable.last_error,
-      })
+  const persisted = Database.use((db) => db
+      .select()
       .from(AutomationTable)
-      .where(
-        and(
-          eq(AutomationTable.task_id, taskID),
-          eq(AutomationTable.kind, "delay"),
-          or(eq(AutomationTable.status, "active"), isNotNull(AutomationTable.last_error)),
-        ),
-      )
-      .orderBy(
-        sql`CASE WHEN ${AutomationTable.status} = 'active' THEN 0 ELSE 1 END`,
-        AutomationTable.next_run,
-        desc(AutomationTable.last_run),
-        desc(AutomationTable.id),
-      )
-      .limit(TASK_SCHEDULED_WAIT_PROMPT_CAP)
-      .all(),
-  )
+      .where(and(eq(AutomationTable.task_id, taskID), eq(AutomationTable.kind, "delay")))
+      .orderBy(AutomationTable.definition_id, desc(AutomationTable.revision), desc(AutomationTable.id)).all())
+  const latest = new Map<string, (typeof persisted)[number]>()
+  for (const row of persisted) if (!latest.has(row.definition_id)) latest.set(row.definition_id, row)
+  const rows = [...latest.values()]
+    .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
+    .filter((row) => row.status === "active" || row.last_error !== null)
+    .sort((left, right) => Number(right.status === "active") - Number(left.status === "active") || left.next_run - right.next_run || (right.last_run ?? 0) - (left.last_run ?? 0) || right.id.localeCompare(left.id))
+    .slice(0, TASK_SCHEDULED_WAIT_PROMPT_CAP)
   return rows.map((row) => ({
     job_id: row.id,
     name: row.name,
-    reason: row.reason,
-    expression: `until ${new Date(row.nextRun).toISOString()}`,
+    reason: row.prompt,
+    expression: `until ${new Date(row.next_run).toISOString()}`,
     enabled: row.status === "active",
     one_shot: true,
-    next_run: row.nextRun,
-    last_run: row.lastRun ?? undefined,
-    failure_count: row.failureCount,
-    last_error: row.lastError ?? undefined,
+    next_run: row.next_run,
+    last_run: row.last_run ?? undefined,
+    failure_count: row.failure_count,
+    last_error: row.last_error ?? undefined,
   }))
 }
 
@@ -492,17 +477,18 @@ function listOpenToolCallsWithoutCurrentOwner(task: TaskRow): OpenToolCallDesc[]
       )
       SELECT
         p.time_created AS time_created,
-        p.session_id AS session_id,
+        m.session_id AS session_id,
         st.kind AS session_kind,
         p.message_id AS message_id,
         p.id AS part_id,
         json_extract(p.data, '$.tool') AS tool_name,
         json_extract(p.data, '$.callID') AS call_id,
-        json_extract(p.data, '$.state.status') AS status
-      FROM part p
-      JOIN session_tree st ON st.id = p.session_id
-      WHERE json_extract(p.data, '$.type') = 'tool'
-        AND json_extract(p.data, '$.state.status') NOT IN ('completed', 'error')
+        'running' AS status
+      FROM tool_part_request p
+      JOIN message m ON m.id = p.message_id
+      JOIN session_tree st ON st.id = m.session_id
+      LEFT JOIN tool_part_outcome o ON o.request_part_id = p.id
+      WHERE o.id IS NULL
       ORDER BY p.time_created DESC, p.id DESC
     `),
   )
@@ -544,17 +530,18 @@ function listCompletedToolCallRefs(task: TaskRow): CompletedToolCallRefDesc[] {
       )
       SELECT
         p.time_created AS time_created,
-        p.session_id AS session_id,
+        m.session_id AS session_id,
         st.kind AS session_kind,
         p.message_id AS message_id,
         p.id AS part_id,
         json_extract(p.data, '$.tool') AS tool_name,
         json_extract(p.data, '$.callID') AS call_id
-      FROM part p
-      JOIN session_tree st ON st.id = p.session_id
+      FROM tool_part_request p
+      JOIN message m ON m.id = p.message_id
+      JOIN session_tree st ON st.id = m.session_id
+      JOIN tool_part_outcome o ON o.request_part_id = p.id
       WHERE st.kind NOT IN ('root', 'orchestrator', 'mission', 'system')
-        AND json_extract(p.data, '$.type') = 'tool'
-        AND json_extract(p.data, '$.state.status') = 'completed'
+        AND json_extract(o.data, '$.outcome') = 'completed'
       ORDER BY p.time_created, p.id
     `),
   ).filter((row) => Boolean(row.tool_name && row.call_id))
@@ -838,7 +825,7 @@ export async function describeTask(taskID: string): Promise<TaskDesc> {
 async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   // Rewind is conversation visibility only. Current Delivery Slice contracts
   // and immutable Task workflow facts remain authoritative on every wake.
-  const rewindCursor = task.rewind_cursor_time ?? null
+  const rewindCursor = taskRewindCursor(task.id)
 
   const goalContexts = resolveCurrentGoalMembershipContext(task.id).goals
   const currentProcessPromptOwners = currentProcessPromptOwnersForTask(task.id)

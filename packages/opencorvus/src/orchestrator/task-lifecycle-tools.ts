@@ -24,7 +24,6 @@ import { Database } from "@/storage/db"
 import {
   acquireTaskCompletionClosureInTransaction,
   assertTaskCompletionClosureOwnerInTransaction,
-  releaseTaskCompletionClosureInTransaction,
 } from "@/engine/task-completion-closure"
 
 export const CompleteTaskInputSchema = z
@@ -77,7 +76,7 @@ export async function failTaskLifecycle(input: {
   if (!recoveredTerminalFailure) {
     await terminalTask(
       task,
-      { status: "failed", error: input.error, time_completed: Date.now() },
+      { status: "failed", error: input.error },
       `Failed: ${input.error}`,
     )
   }
@@ -117,22 +116,9 @@ export function createTaskLifecycleTools(input: {
         const terminalSummary = summary.trim()
         if (!terminalSummary) return "complete_task rejected: summary is required."
         const closureOwnerID = `complete-task:${execution.toolPartID}`
-        Database.transaction((db) =>
-          acquireTaskCompletionClosureInTransaction(db, {
-            taskID: input.taskID,
-            ownerID: closureOwnerID,
-            orchestratorSessionID: execution.orchestratorSessionID,
-            orchestratorMessageID: execution.orchestratorMessageID,
-            toolCallID: execution.toolCallID,
-            toolPartID: execution.toolPartID,
-            timeAcquired: Date.now(),
-          }),
-        )
-        let completionCommitted = false
-        try {
-          const closureTask = requireTask(input.taskID)
-          const completedAt = allocateTaskCompletionDecisionTime(input.taskID)
-          const preparedDecision = await prepareTaskCompletionDecision({
+        const closureTask = requireTask(input.taskID)
+        const completedAt = allocateTaskCompletionDecisionTime(input.taskID)
+        const preparedDecision = await prepareTaskCompletionDecision({
             taskID: input.taskID,
             payload: {
               orchestrator_session_id: execution.orchestratorSessionID,
@@ -149,17 +135,27 @@ export function createTaskLifecycleTools(input: {
               time_recorded: completedAt,
             },
             visibleToolName: execution.visibleToolName,
-          })
-          const terminalResult = await terminalTask(
+        })
+        Database.transaction((db) =>
+          acquireTaskCompletionClosureInTransaction(db, {
+            taskID: input.taskID,
+            ownerID: closureOwnerID,
+            orchestratorSessionID: execution.orchestratorSessionID,
+            orchestratorMessageID: execution.orchestratorMessageID,
+            toolCallID: execution.toolCallID,
+            toolPartID: execution.toolPartID,
+            timeAcquired: Date.now(),
+          }),
+        )
+        const terminalResult = await terminalTask(
             closureTask,
             {
               status: "completed",
-              error: null,
-              time_completed: completedAt,
             },
             terminalSummary,
             {
               projectDir: taskPrimaryProjectRoot(input.taskID, { activeProjectID: Instance.project.id }),
+              terminalAt: completedAt,
               transactionEffect: (db, terminalTask) => {
                 assertTaskCompletionClosureOwnerInTransaction(db, {
                   taskID: input.taskID,
@@ -169,37 +165,26 @@ export function createTaskLifecycleTools(input: {
                 insertPreparedTaskCompletionDecision(db, preparedDecision, terminalTask)
               },
             },
-          )
-          const actualStatus = deriveTaskStatus(terminalResult)
-          const matchingDecision =
+        )
+        const actualStatus = deriveTaskStatus(terminalResult)
+        const matchingDecision =
             actualStatus === "completed" && terminalResult.time_completed === completedAt
               ? findTaskCompletionDecisionForTerminalTime({
                   taskID: input.taskID,
                   timeCompleted: completedAt,
                 })
               : undefined
-          if (
+        if (
             actualStatus !== "completed" ||
             terminalResult.time_completed !== completedAt ||
             matchingDecision?.id !== preparedDecision.artifactID
-          ) {
-            return `complete_task rejected: task ${input.taskID} became terminal with status=${actualStatus}; this call recorded no completion decision.`
-          }
-          completionCommitted = true
-          return {
-            title: "Task Completed",
-            output: `Task ${input.taskID} completed: ${terminalSummary}.`,
-            metadata: withImmediateParkToolResultControl({}),
-          }
-        } finally {
-          if (!completionCommitted) {
-            Database.transaction((db) =>
-              releaseTaskCompletionClosureInTransaction(db, {
-                taskID: input.taskID,
-                ownerID: closureOwnerID,
-              }),
-            )
-          }
+        ) {
+          return `complete_task rejected: task ${input.taskID} became terminal with status=${actualStatus}; this call recorded no completion decision.`
+        }
+        return {
+          title: "Task Completed",
+          output: `Task ${input.taskID} completed: ${terminalSummary}.`,
+          metadata: withImmediateParkToolResultControl({}),
         }
       },
     }), "turn_control_exclusive"),

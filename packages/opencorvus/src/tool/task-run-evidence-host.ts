@@ -12,7 +12,7 @@ import { EngineArtifactVersionTable, EngineTaskTable } from "@/engine/engine.sql
 import { deriveTaskStatus } from "@/engine/task-status"
 import { Event } from "@/engine/model"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
-import { terminalLifecycleReferenceMatchesTaskRow } from "@/engine/terminal-lifecycle-reference"
+import { resolveTerminalLifecycleReference, terminalLifecycleReferenceMatchesTaskRow } from "@/engine/terminal-lifecycle-reference"
 import { WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { withTaskArtifactSnapshotCatalog } from "@/task-artifact/store"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
@@ -21,7 +21,7 @@ import { SelectedWorkflowBindingSchema } from "@/engine/workflow-binding"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { readTaskDurableActivityScope } from "@/engine/durable-activity"
 import { TaskProcessBindingPayloadSchema } from "@/engine/task-execution-capsule-binding"
-import { requireTask } from "@/engine/store"
+import { projectInteractionRowInTransaction, projectTaskRowInTransaction, requireTask } from "@/engine/store"
 import { EngineGit } from "@/engine/git"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-digest"
@@ -73,8 +73,9 @@ export async function collectTaskRunEvidence(input: {
   }
   if (!durableTask.session_id) throw new Error(`Task ${request.taskID} has no root Session identity`)
   const taskProjectDirectory = taskPrimaryProjectRoot(request.taskID, { activeProjectID: input.projectID })
+  const projectedTask = EngineGit.project(durableTask)
   const gitMetadata = z.record(z.string(), z.unknown()).parse(
-    z.record(z.string(), z.unknown()).parse(durableTask.metadata).git,
+    z.record(z.string(), z.unknown()).parse(projectedTask.metadata).git,
   )
   const baselineMetadata = z.record(z.string(), z.unknown()).parse(gitMetadata.baseline)
   const terminalOccurrence = request.terminalOccurrence.status === "completed" ||
@@ -99,15 +100,17 @@ export async function collectTaskRunEvidence(input: {
     { projectID: input.projectID, projectDirectory: taskProjectDirectory, taskID: request.taskID },
     (taskArtifactRecords) =>
       Database.transaction((db) => {
-        const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, request.taskID)).get()
-        if (!task || task.project_id !== input.projectID) {
+        const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, request.taskID)).get()
+        if (!persistedTask || persistedTask.project_id !== input.projectID) {
           throw new Error(`Task ${request.taskID} is not owned by Project ${input.projectID}`)
         }
+        const task = projectTaskRowInTransaction(db, persistedTask)
         const status = deriveTaskStatus(task)
         if (!task.session_id) throw new Error(`Task ${request.taskID} has no root Session identity`)
 
         const durableActivity = readTaskDurableActivityScope(db, task)
-        const { sessions, messages, parts, artifacts: currentArtifacts, interactions } = durableActivity
+        const { sessions, messages, visibleParts: parts, artifacts: currentArtifacts } = durableActivity
+        const interactions = durableActivity.interactions.map((row) => projectInteractionRowInTransaction(db, row))
         const sessionIDs = sessions.map((session) => session.id)
         const partsByMessage = new Map<string, typeof parts>()
         for (const part of parts) {
@@ -196,7 +199,10 @@ export async function collectTaskRunEvidence(input: {
         const runtimeSnapshotDigests = [...descriptorRuntimeDigests, ...taskArtifactRuntimeDigests]
         const occurrence = request.terminalOccurrence
         if (occurrence.status === "completed" || occurrence.status === "failed" || occurrence.status === "cancelled") {
-          const lifecycle = TerminalLifecycleReferenceSchema.parse(occurrence.lifecycle)
+          const lifecycle = TerminalLifecycleReferenceSchema.parse({
+            terminalEventID: occurrence.lifecycle.terminalEventID,
+          })
+          const resolvedLifecycle = resolveTerminalLifecycleReference(task.id, lifecycle)
           if (!terminalLifecycleReferenceMatchesTaskRow(lifecycle, task)) {
             throw new Error(`Task ${task.id} terminal lifecycle reference is not its current terminal occurrence`)
           }
@@ -210,18 +216,16 @@ export async function collectTaskRunEvidence(input: {
             completed: Event.TaskCompleted.type,
             failed: Event.TaskFailed.type,
             cancelled: Event.TaskCancelled.type,
-          }[lifecycle.terminalStatus]
+          }[resolvedLifecycle.terminalStatus]
           if (
             !event ||
             event.aggregate_type !== "task" ||
             event.aggregate_id !== task.id ||
-            event.task_id !== task.id ||
+            event.task_id !== null ||
             event.type !== eventType ||
-            payload.taskID !== task.id ||
-            payload.status !== lifecycle.terminalStatus ||
-            payload.timeCompleted !== lifecycle.timeCompleted ||
-            payload.error !== lifecycle.terminalError ||
-            payload.terminalReason !== lifecycle.terminalReason
+            event.emitted_at !== resolvedLifecycle.timeCompleted ||
+            payload.error !== resolvedLifecycle.terminalError ||
+            payload.terminalReason !== resolvedLifecycle.terminalReason
           ) {
             throw new Error(
               `Task ${task.id} terminal lifecycle reference conflicts with event ${lifecycle.terminalEventID}`,
@@ -233,7 +237,11 @@ export async function collectTaskRunEvidence(input: {
           const decision = currentArtifacts.find(
             (artifact) => artifact.id === completionDecisionID && artifact.kind === "task_completion_decision",
           )
-          if (!decision || decision.time_created !== occurrence.lifecycle.timeCompleted) {
+          const lifecycle = resolveTerminalLifecycleReference(
+            task.id,
+            TerminalLifecycleReferenceSchema.parse({ terminalEventID: occurrence.lifecycle.terminalEventID }),
+          )
+          if (!decision || decision.time_created !== lifecycle.timeCompleted) {
             throw new Error(`Task ${task.id} completion decision Artifact is not exact for this terminal occurrence`)
           }
         }

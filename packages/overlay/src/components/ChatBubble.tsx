@@ -1,7 +1,7 @@
 import { For, Match, Show, Switch, createMemo } from "solid-js"
 
 import type { CardNode } from "../store/card-tree"
-import { rootTaskSessionID, activeTaskID, boardStore } from "../store/board"
+import { rootTaskSessionID, activeTaskID } from "../store/board"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 import {
   collapsedActivityPreviewText,
@@ -26,25 +26,6 @@ import { storeCardNode } from "./StoreCardNode"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ConversationTurnControl } from "./ConversationTurnControl"
-import { Badge, type BadgeTone } from "./ui/Badge"
-
-type OperatorIngressPresentation = { label: string; tone: BadgeTone; state: string; title?: string }
-
-function operatorIngressPresentation(messageID: string | undefined): OperatorIngressPresentation | undefined {
-  if (!messageID || boardStore.selectedSource?.kind !== "task") return undefined
-  const artifact = boardStore.board?.artifacts.find(
-    (item: any) => item.kind === "task_root_ingress" && item.payload?.message_id === messageID,
-  )
-  if (!artifact) return undefined
-  if (artifact.label === "accepted") return { label: t("task.ingress.accepted"), tone: "muted", state: "accepted" }
-  if (artifact.label === "delivering") return { label: t("task.ingress.delivering"), tone: "accent", state: "delivering" }
-  if (artifact.label === "delivered") return { label: t("task.ingress.delivered"), tone: "ok", state: "delivered" }
-  if (artifact.label === "terminal_inapplicable") {
-    return { label: t("task.ingress.cancelled"), tone: "muted", state: "cancelled" }
-  }
-  if (artifact.label === "delivery_failed") return { label: t("task.ingress.failed"), tone: "bad", state: "failed" }
-  return undefined
-}
 
 function UnsupportedChatBubbleChild(props: { child: CardNode; parentID: string }): null {
   throw new Error(`ChatBubble: unsupported child kind "${props.child.kind}" for ${props.parentID}`)
@@ -192,7 +173,6 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
   const align = () => bubbleAlign(props.node)
   const normalizedRole = () => normalizeAgentRole(props.node.role || props.node.stage || "")
   const isUser = () => normalizedRole() === "user"
-  const ingress = createMemo(() => (isUser() ? operatorIngressPresentation(props.node.messageID) : undefined))
   const collapsible = () => !isUser() && props.collapsible !== false
   const defaultExpanded = () => defaultExpandedForNode(props.node)
   const expanded = () => isUser() || !collapsible() || cardExpanded(props.node.id, defaultExpanded())
@@ -324,19 +304,6 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
             <Show when={errorReason()}>{(reason) => <CardErrorReasonIndicator reason={reason()} />}</Show>
             <Show when={errorReason()}>
               <CardDurationChip node={props.node} />
-            </Show>
-            <Show when={ingress()}>
-              {(item) => (
-                <Badge
-                  tone={item().tone}
-                  size="sm"
-                  data-ui="operator-ingress-state"
-                  data-state={item().state}
-                  title={item().title}
-                >
-                  {item().label}
-                </Badge>
-              )}
             </Show>
           </div>
           <Show when={expanded()}>

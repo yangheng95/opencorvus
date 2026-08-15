@@ -10,7 +10,10 @@ import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } f
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
-import { requireCurrentTerminalLifecycleReference } from "../src/engine/terminal-lifecycle-reference"
+import {
+  requireCurrentTerminalLifecycleReference,
+  resolveTerminalLifecycleReference,
+} from "../src/engine/terminal-lifecycle-reference"
 import { recordEngineArtifact } from "../src/engine/artifact"
 import { collectTaskRunEvidence } from "../src/tool/task-run-evidence-host"
 import { createExpertSquadPackageHost } from "../src/tool/expert-squad-package-host"
@@ -53,6 +56,7 @@ import rehydrateEvolutionResourcesTool from "../../../expert-squads/builtin/evol
 import { prepareTaskProcessBinding, readTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { requireTaskPackageRevisionBinding } from "../src/engine/task-package-revision-binding"
 import { insertPreparedTaskCompletionDecision, prepareTaskCompletionDecision } from "../src/engine/completion-decision"
+import { writeTaskUpdateInTransaction } from "../src/engine/state"
 import { EngineGit, ensureGitProjectMetadata } from "../src/engine/git"
 import { Worktree } from "../src/worktree"
 import {
@@ -161,14 +165,14 @@ async function completeFixtureTaskWithDeliverables(input: {
     },
   })
   Database.transaction((db) => {
-    const terminal = db
-      .update(EngineTaskTable)
-      .set({ time_completed: input.completedAt, error: null, time_updated: input.completedAt })
-      .where(eq(EngineTaskTable.id, input.taskID))
-      .returning()
-      .get()
-    if (!terminal) throw new Error(`Fixture Task ${input.taskID} does not exist`)
-    insertPreparedTaskCompletionDecision(db, prepared, terminal)
+    const terminal = writeTaskUpdateInTransaction({
+      db,
+      taskID: input.taskID,
+      values: { status: "completed", error: null },
+      summary: "Fixture Task completed with exact deliverable evidence",
+      now: input.completedAt,
+    })
+    insertPreparedTaskCompletionDecision(db, prepared, terminal.task)
   })
 }
 
@@ -725,7 +729,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const missionID = "evolution-abi-chain"
-        const missionSessionID = Identifier.ascending("session")
+        const missionSession = await Session.create({
+          kind: "mission",
+          title: "Evolution typed ABI chain Mission",
+          metadata: {
+            mission: {
+              id: missionID,
+              channelKey: `mission:${missionID}`,
+              cwd: project.path,
+              productPillar: "code",
+              visibleExpertSquadIDs: ["evolution-lab"],
+            },
+          },
+        })
+        const missionSessionID = missionSession.id
         persistTask({
           taskID,
           sessionID: session.id,
@@ -1364,7 +1381,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 },
                 "Exact baseline Trial reached a terminal fixture outcome",
               )
-              const trialLifecycle = requireCurrentTerminalLifecycleReference(trialTaskID)
+              const trialLifecycle = resolveTerminalLifecycleReference(
+                trialTaskID,
+                requireCurrentTerminalLifecycleReference(trialTaskID),
+              )
+              const terminalTrialTask = requireTask(trialTaskID)
               const terminalOccurrence = {
                 status: "failed" as const,
                 lifecycle: trialLifecycle,
@@ -1373,8 +1394,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               return {
                 trialSession,
                 trialTaskID,
-                trialStarted,
-                trialCompleted,
+                trialStarted: terminalTrialTask.time_started,
+                trialCompleted: trialLifecycle.timeCompleted,
                 trialUser,
                 trialAssistant,
                 terminalOccurrence,
@@ -2018,7 +2039,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Evolution package fixture" })
         const taskID = Identifier.ascending("task")
         const missionID = "evolution-candidate-chain"
-        const missionSessionID = Identifier.ascending("session")
+        const missionSession = await Session.create({
+          kind: "mission",
+          title: "Evolution candidate chain",
+          metadata: {
+            mission: {
+              id: missionID,
+              channelKey: `mission:${missionID}`,
+              cwd: project.path,
+              productPillar: "code",
+              visibleExpertSquadIDs: ["evolution-lab"],
+            },
+          },
+        })
+        const missionSessionID = missionSession.id
         const timeCreated = Date.now()
         persistTask({
           taskID,
@@ -2800,7 +2834,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sessionID: session.id,
           role: "assistant",
           author: "worker",
-          time: { created: started, completed: started + 1 },
+          time: { created: started },
           parentID: message.id,
           modelID: "test",
           providerID: "test",
@@ -2808,7 +2842,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
         })
         await Session.updatePart({
           id: Identifier.ascending("part"),
@@ -2826,13 +2859,22 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             time: { start: started, end: started + 1 },
           },
         })
+        await Session.updateMessage({
+          ...assistant,
+          time: { ...assistant.time, completed: started + 1 },
+          finish: "stop",
+        })
         const completed = started + 1
         await terminalTask(
           requireTask(taskID),
           { status: "failed", time_started: started, time_completed: completed, error: "fixture failure" },
           "Fixture failure",
         )
-        const lifecycle = requireCurrentTerminalLifecycleReference(taskID)
+        const terminalTaskRow = requireTask(taskID)
+        const lifecycle = resolveTerminalLifecycleReference(
+          taskID,
+          requireCurrentTerminalLifecycleReference(taskID),
+        )
 
         const evidence = await collectTaskRunEvidence({
           projectID: Instance.project.id,
@@ -2854,8 +2896,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           project_id: Instance.project.id,
           session_id: session.id,
           status: "failed",
-          time_started: started,
-          time_completed: completed,
+          time_started: terminalTaskRow.time_started,
+          time_completed: terminalTaskRow.time_completed,
           error: "fixture failure",
         })
         expect(evidence.terminal_occurrence).toEqual({
@@ -2886,8 +2928,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         expect(evidence.engine_artifacts.map((artifact) => artifact.kind)).toEqual([
           "task_package_revision_binding",
           "task_execution_capsule_binding",
-          "task_root_ingress",
-          "task_root_ingress",
           "dispatch_lineage",
         ])
         expect(evidence.revision_facts).toEqual({
@@ -2970,13 +3010,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "stop",
         })
-        Database.use((db) =>
-          db
-            .update(EngineTaskTable)
-            .set({ time_started: completed + 1 })
-            .where(eq(EngineTaskTable.id, evidenceOwnerTaskID))
-            .run(),
-        )
         const evidenceOwnerExecution = createTaskArtifactStoreExecution({
           kind: "task",
           projectID: Instance.project.id,
@@ -3075,6 +3108,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             workerTurnDescriptorHash: "f".repeat(64),
           },
         } satisfies TaskToolExecutionScope
+        const evidenceTerminalTime = evidence.terminal_occurrence.status === "failed"
+          ? evidence.terminal_occurrence.lifecycle.timeCompleted
+          : completed
+        const evidenceActivityDuration = evidence.task.time_started === null
+          ? null
+          : evidenceTerminalTime - evidence.task.time_started
         await withTaskScopedPluginToolHost(evidencePublisherScope, async (host) => {
           await expect(
             executePublishEvolutionArtifact(
@@ -3088,14 +3127,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   run_evidence_sha256: runEvidenceReceipt.resource.sha256,
                   run_evidence_resource: runEvidenceReceipt.resource,
                   task_id: taskID,
-                  terminal_time: completed,
+                  terminal_time: evidenceTerminalTime,
                   model: "provider/model",
                   environment_digest: "a".repeat(64),
                   token_usage: 0,
                   cost: 0,
-                  last_activity_at: new Date(completed).toISOString(),
+                  last_activity_at: new Date(evidenceTerminalTime).toISOString(),
                   outcome: "failure",
-                  activity_duration_ms: completed - started,
+                  activity_duration_ms: evidenceActivityDuration,
                   revision_equality: {
                     installed: "c".repeat(64),
                     expected: "c".repeat(64),
@@ -3122,14 +3161,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   run_evidence_sha256: runEvidenceReceipt.resource.sha256,
                   run_evidence_resource: runEvidenceReceipt.resource,
                   task_id: taskID,
-                  terminal_time: completed,
+                  terminal_time: evidenceTerminalTime,
                   model: "provider/model",
                   environment_digest: "a".repeat(64),
                   token_usage: 0,
                   cost: 0,
-                  last_activity_at: new Date(completed).toISOString(),
+                  last_activity_at: new Date(evidenceTerminalTime).toISOString(),
                   outcome: "failure",
-                  activity_duration_ms: completed - started,
+                  activity_duration_ms: evidenceActivityDuration,
                   revision_equality: {
                     installed: "a".repeat(64),
                     expected: "a".repeat(64),
@@ -3147,13 +3186,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(runArtifactReceipt.artifact_type).toBe("evolution-lab/run-evidence-bundle")
         })
 
-        Database.use((db) =>
-          db
-            .update(EngineTaskTable)
-            .set({ time_started: completed + 1, time_completed: null, error: null })
-            .where(eq(EngineTaskTable.id, taskID))
-            .run(),
-        )
+        Database.transaction((db) => {
+          writeTaskUpdateInTransaction({
+            db,
+            taskID,
+            values: { status: "active" },
+            summary: "Reopen the Trial after preserving its exact terminal evidence",
+            now: completed + 1,
+          })
+        })
         const retained = await readTaskArtifactSnapshotManifest({
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -3244,7 +3285,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const interactionID = Identifier.ascending("interaction")
         const activityTime = started + 100_000
         Database.use((db) => {
-          db.update(EngineTaskTable).set({ time_started: started }).where(eq(EngineTaskTable.id, taskID)).run()
           db.insert(EngineInteractionRequestTable)
             .values({
               id: interactionID,

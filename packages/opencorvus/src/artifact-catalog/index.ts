@@ -37,7 +37,7 @@ import {
   EngineTaskTable,
   type EngineArtifactKind,
 } from "@/engine/engine.sql"
-import { requireTask } from "@/engine/store"
+import { projectTaskRowInTransaction, requireTask } from "@/engine/store"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { isDecodableText } from "@/session/text-mime"
 import { Database, and, desc, eq, lte, sql } from "@/storage/db"
@@ -2172,14 +2172,15 @@ export class TaskArtifactPublicationClosedError extends Error {
 }
 
 function assertExpertArtifactPublicationOpenInTransaction(db: Database.TxOrDb, taskID: string): void {
-  const task = db
-    .select({ id: EngineTaskTable.id, timeCompleted: EngineTaskTable.time_completed })
+  const persisted = db
+    .select()
     .from(EngineTaskTable)
     .where(eq(EngineTaskTable.id, taskID))
     .get()
-  if (!task) throw new Error(`engineArtifacts.publish Task ${taskID} does not exist`)
-  if (task.timeCompleted !== null) {
-    throw new TaskArtifactPublicationClosedError(taskID, task.timeCompleted)
+  if (!persisted) throw new Error(`engineArtifacts.publish Task ${taskID} does not exist`)
+  const task = projectTaskRowInTransaction(db, persisted)
+  if (task.time_completed !== null) {
+    throw new TaskArtifactPublicationClosedError(taskID, task.time_completed)
   }
 }
 

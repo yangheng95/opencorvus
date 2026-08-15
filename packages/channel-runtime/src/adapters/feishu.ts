@@ -215,6 +215,7 @@ export class FeishuAdapter implements ChannelAdapter {
     const thread = msg.root_id ?? msg.parent_id ?? msg.message_id
 
     await this.handler({
+      id: msg.message_id,
       platform: this.platform,
       channel: msg.chat_id,
       thread,

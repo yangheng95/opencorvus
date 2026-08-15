@@ -162,12 +162,13 @@ export class MSTeamsAdapter implements ChannelAdapter {
     const user = body.from?.id
     const thread = body.replyToId ?? body.id
     const text = (body.text ?? "").trim()
-    if (!channel || !serviceUrl || !user || !thread || !text) return Response.json({ ok: true })
+    if (!body.id || !channel || !serviceUrl || !user || !thread || !text) return Response.json({ ok: true })
     if (user === this.appId) return Response.json({ ok: true })
 
     this.session.set(channel, { serviceUrl, conversationId: channel })
 
     await this.handler({
+      id: body.id,
       platform: this.platform,
       channel,
       thread,

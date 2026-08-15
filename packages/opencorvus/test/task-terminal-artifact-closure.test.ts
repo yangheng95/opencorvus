@@ -30,8 +30,7 @@ import { TaskCompletionEvidenceIncompleteError } from "@/engine/completion-decis
 import { EngineGit } from "@/engine/git"
 import {
   acquireTaskCompletionClosureInTransaction,
-  recoverAbandonedTaskCompletionClosures,
-  taskCompletionClosureFromMetadata,
+  taskCompletionClosureInTransaction,
   TaskCompletionClosureConflictError,
 } from "@/engine/task-completion-closure"
 import { insertTaskProcessBinding, prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
@@ -50,6 +49,7 @@ import { createTaskLifecycleTools } from "@/orchestrator/task-lifecycle-tools"
 import { terminalTask } from "@/engine/state"
 import { requireTask } from "@/engine/store"
 import { openTaskForOperatorIntentInTransaction } from "@/engine/task-intent-open"
+import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import {
   publishImportedTaskArtifactResources,
   publishTaskArtifactProjectFiles,
@@ -108,11 +108,16 @@ async function taskFixture(directory: string) {
           actor: "mission",
           mission: { id: missionID, session_id: missionSessionID },
         },
-        time_started: now,
         time_created: now,
-        time_updated: now,
       })
       .run()
+    appendTaskOpenedInTransaction({
+      db,
+      taskID,
+      sessionID: session.id,
+      now,
+      source: "test.task-terminal-artifact-closure",
+    })
     insertTaskPackageRevisionBinding({ db, taskID, packageRevision, timeCreated: now })
     insertTaskProcessBinding({ db, payload: processBinding })
   })
@@ -283,12 +288,11 @@ test("keeps the exact terminal expert Artifact immutable while preserving an ide
       expect(accepted.locator.artifact_id).toHaveLength(Identifier.MAX_LENGTH)
       expect(accepted.locator.expected_sha256).toHaveLength(64)
       const completedAt = Date.now()
-      Database.use((db) =>
-        db
-          .update(EngineTaskTable)
-          .set({ time_completed: completedAt, time_updated: completedAt })
-          .where(eq(EngineTaskTable.id, task.taskID))
-          .run(),
+      await terminalTask(
+        requireTask(task.taskID),
+        { status: "completed" },
+        "Terminal publication fixture completed",
+        { projectDir: project.path, terminalAt: completedAt },
       )
 
       expect(await publishExpertArtifact({ scope: task.scope, artifact: publication })).toEqual(accepted)
@@ -628,17 +632,12 @@ test("closes continuation admission before the real completion checkpoint and im
         code: "TASK_COMPLETION_CLOSURE_CONFLICT",
         taskID: task.taskID,
       })
-      const terminalTask = Database.use((db) =>
-        db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, task.taskID)).get(),
-      )!
+      const terminalTask = requireTask(task.taskID)
       const decision = findTaskCompletionDecisionForTerminalTime({
         taskID: task.taskID,
         timeCompleted: terminalTask.time_completed!,
       })!
-      expect(taskCompletionClosureFromMetadata(terminalTask.metadata)).toMatchObject({
-        protocol: "task-completion-closure-v1",
-        owner_id: `complete-task:${completionPart.id}`,
-      })
+      expect(Database.use((db) => taskCompletionClosureInTransaction(db, task.taskID))).toBeUndefined()
       expect(decision.payload.deliverable_artifact_locators).toEqual([canonical.locator, canonicalSupplement.locator])
       expect(listDispatchLineage(task.taskID).map((item) => item.dispatchID)).toEqual([lineage.dispatchID])
       const terminalGit = structuredClone((terminalTask.metadata as Record<string, any>).git)
@@ -724,14 +723,16 @@ test("closes continuation admission before the real completion checkpoint and im
       )
       const reopenedTask = requireTask(task.taskID)
       expect({
-        completionClosure: taskCompletionClosureFromMetadata(reopenedTask.metadata),
+        completionClosure: Database.use((db) => taskCompletionClosureInTransaction(db, task.taskID)),
         git: (reopenedTask.metadata as Record<string, any>).git,
       }).toEqual({ completionClosure: undefined, git: terminalGit })
       const continuationBaseline = await EngineGit.prepare(reopenedTask)
+      const continuationGit = (continuationBaseline.task.metadata as Record<string, any>).git
       expect({
         error: "error" in continuationBaseline ? continuationBaseline.error : undefined,
-        git: (continuationBaseline.task.metadata as Record<string, any>).git,
-      }).toEqual({ error: undefined, git: terminalGit })
+        baselineMode: continuationGit?.baseline?.mode,
+        priorResultMode: continuationGit?.result_history?.at(-1)?.mode,
+      }).toEqual({ error: undefined, baselineMode: "recorded_head", priorResultMode: "recorded_head" })
       const reopenedLineage = recordDispatchLineage({
         origin: lateOrigin,
         childSessionID: Identifier.ascending("session"),
@@ -1081,13 +1082,14 @@ test("projects exact referenced cross-Task resources through frozen Catalog memb
   })
 }, 60_000)
 
-test("recovers an abandoned nonterminal completion closure before accepting a new completion owner", async () => {
+test("admits a successor completion owner after the immutable activation lease expires", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       const task = await taskFixture(project.path)
-      const firstOwnerID = "complete-task:abandoned-owner"
+      const firstOwnerID = "complete-task:expired-owner"
+      const now = Date.now()
       Database.transaction((db) =>
         acquireTaskCompletionClosureInTransaction(db, {
           taskID: task.taskID,
@@ -1096,11 +1098,10 @@ test("recovers an abandoned nonterminal completion closure before accepting a ne
           orchestratorMessageID: Identifier.ascending("message"),
           toolCallID: "call_abandoned_completion",
           toolPartID: Identifier.ascending("part"),
-          timeAcquired: Date.now(),
+          timeAcquired: now - 130_000,
         }),
       )
 
-      expect(recoverAbandonedTaskCompletionClosures(Instance.project.id)).toBe(1)
       const recoveredOwner = Database.transaction((db) =>
         acquireTaskCompletionClosureInTransaction(db, {
           taskID: task.taskID,
@@ -1109,12 +1110,13 @@ test("recovers an abandoned nonterminal completion closure before accepting a ne
           orchestratorMessageID: Identifier.ascending("message"),
           toolCallID: "call_recovered_completion",
           toolPartID: Identifier.ascending("part"),
-          timeAcquired: Date.now(),
+          timeAcquired: now,
         }),
       )
       expect(recoveredOwner).toMatchObject({
-        protocol: "task-completion-closure-v1",
         owner_id: "complete-task:recovered-owner",
+        activation_id: expect.any(String),
+        expires_at: now + 120_000,
       })
     },
   })
@@ -1229,10 +1231,9 @@ test("imports an exact Artifact from a failed same-Mission Task under its termin
         {
           status: "failed",
           error: "fixture failure with importable evidence",
-          time_completed: Date.now(),
         },
         "Failed Task retained exact recovery evidence",
-        { preExecutionInfrastructureFailure: true },
+        { preExecutionInfrastructureFailure: true, terminalAt: Date.now() },
       )
 
       const target = await taskFixture(project.path)

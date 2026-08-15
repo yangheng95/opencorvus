@@ -53,7 +53,8 @@ export type SessionRuntimeContractIdentity =
         expertSquadID: string
         taskID: string
         taskIngressID?: string
-        taskIngressKind?: string
+        taskIngressActivationID?: string
+        taskIngressPredecessorID?: string
         inputMessageID?: string
         workerTurnDescriptorID?: never
         workerTurnDescriptorHash?: never
@@ -304,8 +305,12 @@ export namespace SessionRuntimeContractStore {
       if (typeof identity.taskID !== "string" || !identity.taskID.trim()) {
         throw new Error("Projected scheduler runtime contract requires taskID")
       }
-      if (Boolean(schedulerIdentity.taskIngressID) !== Boolean(schedulerIdentity.taskIngressKind)) {
-        throw new Error("Projected scheduler Task ingress identity requires both ID and kind")
+      const hasIngress = Boolean(schedulerIdentity.taskIngressID)
+      if (
+        hasIngress !== Boolean(schedulerIdentity.taskIngressActivationID) ||
+        hasIngress !== Boolean(schedulerIdentity.taskIngressPredecessorID)
+      ) {
+        throw new Error("Projected scheduler Task ingress identity requires activation and predecessor identities")
       }
       assertHarnessProjection(identity, contract)
       const owner = assertProjectedSkillSurface(

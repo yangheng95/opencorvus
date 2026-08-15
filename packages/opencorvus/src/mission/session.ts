@@ -367,7 +367,11 @@ export function listGlobalMissionProcessRecoveryCandidates(input?: {
               FROM ${SessionControlRecordTable}
               WHERE ${SessionControlRecordTable.session_id} = ${SessionTable.id}
                 AND ${SessionControlRecordTable.kind} = 'mission_process_recovery'
-                AND ${SessionControlRecordTable.status} = 'pending'
+                AND NOT EXISTS (
+                  SELECT 1 FROM session_control_event
+                  WHERE session_control_event.control_id = ${SessionControlRecordTable.id}
+                    AND session_control_event.kind IN ('consumed', 'failed')
+                )
             )
             OR EXISTS (
               SELECT 1

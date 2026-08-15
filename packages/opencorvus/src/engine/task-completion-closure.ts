@@ -1,66 +1,37 @@
-import z from "zod"
-import { EngineTaskTable } from "./engine.sql"
-import { assertTaskDispatchesSettledInTransaction } from "./dispatch-settlement"
-import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
-import { Database, eq, isNull } from "@/storage/db"
-import { setEngineTaskMetadata } from "./task"
+import { Identifier } from "@/id/id"
+import { Database, and, desc, eq } from "@/storage/db"
+import { EngineControlActivationLeaseTable } from "./engine.sql"
+import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 
-const COMPLETION_CLOSURE_METADATA_KEY = "task_completion_closure"
+const COMPLETION_LEASE_MS = 120_000
 
-export const TaskCompletionClosureSchema = z
-  .object({
-    protocol: z.literal("task-completion-closure-v1"),
-    owner_id: z.string().min(1),
-    orchestrator_session_id: z.string().min(1),
-    orchestrator_message_id: z.string().min(1),
-    tool_call_id: z.string().min(1),
-    tool_part_id: z.string().min(1),
-    time_acquired: z.number().int().nonnegative(),
-  })
-  .strict()
-
-export type TaskCompletionClosure = z.infer<typeof TaskCompletionClosureSchema>
+export type TaskCompletionClosure = { owner_id: string; activation_id: string; expires_at: number }
 
 export class TaskCompletionClosureConflictError extends Error {
   override readonly name = "TaskCompletionClosureConflictError"
   readonly code = "TASK_COMPLETION_CLOSURE_CONFLICT"
-
-  constructor(
-    readonly taskID: string,
-    readonly ownerID: string,
-  ) {
-    super(`Task ${taskID} is closing under completion authority ${ownerID}`)
+  constructor(readonly taskID: string, readonly ownerID: string) {
+    super(`Task ${taskID} completion is physically owned by ${ownerID}`)
   }
 }
 
-function taskMetadata(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {}
-  return { ...(value as Record<string, unknown>) }
-}
-
-export function taskCompletionClosureFromMetadata(value: unknown): TaskCompletionClosure | undefined {
-  const metadata = taskMetadata(value)
-  const closure = metadata[COMPLETION_CLOSURE_METADATA_KEY]
-  return closure === undefined ? undefined : TaskCompletionClosureSchema.parse(closure)
-}
-
-export function metadataWithoutTaskCompletionClosure(value: unknown): Record<string, unknown> {
-  const metadata = taskMetadata(value)
-  delete metadata[COMPLETION_CLOSURE_METADATA_KEY]
-  return metadata
+function targetID(db: Database.TxOrDb, taskID: string): string {
+  const lifecycle = taskLifecycleProjectionInTransaction(db, taskID)
+  return `task-completion:${taskID}:${lifecycle.epoch}`
 }
 
 export function taskCompletionClosureInTransaction(
   db: Database.TxOrDb,
   taskID: string,
+  now = Date.now(),
 ): TaskCompletionClosure | undefined {
-  const row = db
-    .select({ metadata: EngineTaskTable.metadata })
-    .from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, taskID))
-    .get()
-  if (!row) throw new Error(`Task ${taskID} does not exist`)
-  return taskCompletionClosureFromMetadata(row.metadata)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, taskID)
+  const target = `task-completion:${taskID}:${lifecycle.epoch}`
+  const lease = db.select().from(EngineControlActivationLeaseTable)
+    .where(and(eq(EngineControlActivationLeaseTable.target, "lifecycle"), eq(EngineControlActivationLeaseTable.target_id, target)))
+    .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id)).get()
+  if (!lease || lease.expires_at <= now || lifecycle.status !== "active") return undefined
+  return { owner_id: lease.owner_occurrence_id, activation_id: lease.id, expires_at: lease.expires_at }
 }
 
 export function acquireTaskCompletionClosureInTransaction(
@@ -75,103 +46,40 @@ export function acquireTaskCompletionClosureInTransaction(
     timeAcquired: number
   },
 ): TaskCompletionClosure {
-  const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
-    db,
-    input.taskID,
-    `complete_task ${input.toolCallID} closure acquisition`,
-  )
-  if (cancellation) throw cancellation
-  const task = db
-    .select({ metadata: EngineTaskTable.metadata, timeCompleted: EngineTaskTable.time_completed })
-    .from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .get()
-  if (!task) throw new Error(`Task ${input.taskID} does not exist`)
-  if (task.timeCompleted !== null) {
-    throw new Error(`Task ${input.taskID} is already terminal at ${task.timeCompleted}`)
-  }
-  const existing = taskCompletionClosureFromMetadata(task.metadata)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+  if (lifecycle.status !== "active") throw new Error(`Task ${input.taskID} is already ${lifecycle.status}`)
+  const existing = taskCompletionClosureInTransaction(db, input.taskID, input.timeAcquired)
   if (existing) {
     if (existing.owner_id === input.ownerID) return existing
     throw new TaskCompletionClosureConflictError(input.taskID, existing.owner_id)
   }
-  assertTaskDispatchesSettledInTransaction(db, input.taskID)
-  const closure = TaskCompletionClosureSchema.parse({
-    protocol: "task-completion-closure-v1",
-    owner_id: input.ownerID,
-    orchestrator_session_id: input.orchestratorSessionID,
-    orchestrator_message_id: input.orchestratorMessageID,
-    tool_call_id: input.toolCallID,
-    tool_part_id: input.toolPartID,
-    time_acquired: input.timeAcquired,
-  })
-  setEngineTaskMetadata(db, {
-    taskID: input.taskID,
-    metadata: { ...taskMetadata(task.metadata), [COMPLETION_CLOSURE_METADATA_KEY]: closure },
-    timeUpdated: input.timeAcquired,
-  })
-  return closure
+  const activationID = Identifier.ascending("activity")
+  const expiresAt = input.timeAcquired + COMPLETION_LEASE_MS
+  db.insert(EngineControlActivationLeaseTable).values({
+    id: activationID,
+    target: "lifecycle",
+    target_id: targetID(db, input.taskID),
+    owner_occurrence_id: input.ownerID,
+    time_activated: input.timeAcquired,
+    expires_at: expiresAt,
+  }).run()
+  return { owner_id: input.ownerID, activation_id: activationID, expires_at: expiresAt }
 }
 
 export function assertTaskCompletionClosureOwnerInTransaction(
   db: Database.TxOrDb,
   input: { taskID: string; ownerID: string },
 ): TaskCompletionClosure {
-  const closure = taskCompletionClosureInTransaction(db, input.taskID)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+  const target = `task-completion:${input.taskID}:${lifecycle.epoch}`
+  const lease = db.select().from(EngineControlActivationLeaseTable)
+    .where(and(eq(EngineControlActivationLeaseTable.target, "lifecycle"), eq(EngineControlActivationLeaseTable.target_id, target)))
+    .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id)).get()
+  const closure = !lease || lease.expires_at <= Date.now()
+    ? undefined
+    : { owner_id: lease.owner_occurrence_id, activation_id: lease.id, expires_at: lease.expires_at }
   if (!closure || closure.owner_id !== input.ownerID) {
     throw new TaskCompletionClosureConflictError(input.taskID, closure?.owner_id ?? "none")
   }
   return closure
-}
-
-export function releaseTaskCompletionClosureInTransaction(
-  db: Database.TxOrDb,
-  input: { taskID: string; ownerID: string },
-): boolean {
-  const task = db
-    .select({ metadata: EngineTaskTable.metadata })
-    .from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .get()
-  if (!task) return false
-  const closure = taskCompletionClosureFromMetadata(task.metadata)
-  if (!closure || closure.owner_id !== input.ownerID) return false
-  const metadata = metadataWithoutTaskCompletionClosure(task.metadata)
-  setEngineTaskMetadata(db, {
-    taskID: input.taskID,
-    metadata: Object.keys(metadata).length > 0 ? metadata : {},
-  })
-  return true
-}
-
-/**
- * A newly exclusive database runtime has no predecessor prompt that can still
- * own an active completion checkpoint. Clear only nonterminal closures before
- * Task execution recovery; completed rows retain their closure receipt.
- */
-export function recoverAbandonedTaskCompletionClosures(projectID: string): number {
-  return Database.transaction((db) => {
-    const rows = db
-      .select({ id: EngineTaskTable.id, metadata: EngineTaskTable.metadata })
-      .from(EngineTaskTable)
-      .where(isNull(EngineTaskTable.time_completed))
-      .all()
-      .filter((row) => taskCompletionClosureFromMetadata(row.metadata) !== undefined)
-    let recovered = 0
-    for (const row of rows) {
-      const task = db
-        .select({ projectID: EngineTaskTable.project_id, metadata: EngineTaskTable.metadata })
-        .from(EngineTaskTable)
-        .where(eq(EngineTaskTable.id, row.id))
-        .get()
-      if (!task || task.projectID !== projectID) continue
-      const metadata = metadataWithoutTaskCompletionClosure(task.metadata)
-      setEngineTaskMetadata(db, {
-        taskID: row.id,
-        metadata: Object.keys(metadata).length > 0 ? metadata : {},
-      })
-      recovered += 1
-    }
-    return recovered
-  })
 }

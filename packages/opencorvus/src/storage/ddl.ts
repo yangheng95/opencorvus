@@ -54,6 +54,13 @@ function renderForeignKey(foreignKey: ReturnType<typeof getTableConfig>["foreign
   return pieces.join(" ")
 }
 
+function renderCheck(
+  config: ReturnType<typeof getTableConfig>,
+  check: ReturnType<typeof getTableConfig>["checks"][number],
+) {
+  return `CONSTRAINT ${quoteIdentifier(check.name)} CHECK (${renderIndexSql(check.value, config.name)})`
+}
+
 function renderSql(value: SQL) {
   const query = dialect.sqlToQuery(value)
   if (query.params.length > 0) {
@@ -99,6 +106,10 @@ function renderTable(table: unknown) {
 
   for (const foreignKey of config.foreignKeys) {
     definitions.push(renderForeignKey(foreignKey))
+  }
+
+  for (const check of config.checks) {
+    definitions.push(renderCheck(config, check))
   }
 
   const tableSql = [
@@ -727,6 +738,571 @@ WHEN
 BEGIN
   SELECT RAISE(ABORT, 'engine_goal: supersede_of must reference an existing Goal in the same Task');
 END;
+
+CREATE TRIGGER IF NOT EXISTS automation_definition_revision_no_update
+BEFORE UPDATE ON automation
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'automation: definition revisions are immutable; append a revision');
+END;
+
+CREATE TRIGGER IF NOT EXISTS automation_definition_revision_no_delete
+BEFORE DELETE ON automation
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'automation: definition revisions are immutable; append a tombstone revision');
+END;
+
+CREATE TRIGGER IF NOT EXISTS automation_definition_tombstone_no_update
+BEFORE UPDATE ON automation_definition_tombstone FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_definition_tombstone: immutable deletion fact'); END;
+CREATE TRIGGER IF NOT EXISTS automation_definition_tombstone_no_delete
+BEFORE DELETE ON automation_definition_tombstone FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_definition_tombstone: immutable deletion fact'); END;
+
+CREATE TRIGGER IF NOT EXISTS automation_run_no_update
+BEFORE UPDATE ON automation_run
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'automation_run: execution input is immutable; append a receipt');
+END;
+
+CREATE TRIGGER IF NOT EXISTS automation_run_no_delete
+BEFORE DELETE ON automation_run
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'automation_run: execution history is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS task_root_source_message_no_update
+BEFORE UPDATE ON message
+FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='message' AND source_id=OLD.id)
+  OR EXISTS (SELECT 1 FROM protocol_event WHERE json_extract(payload,'$.inputMessageID')=OLD.id)
+BEGIN
+  SELECT RAISE(ABORT, 'message: accepted Task-root causal facts are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_no_update
+BEFORE UPDATE ON engine_task FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=OLD.id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'engine_task: deleted aggregate is immutable'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_protocol_no_insert
+BEFORE INSERT ON protocol_event FOR EACH ROW
+WHEN NEW.aggregate_type='task' AND NEW.type<>'task.deleted'
+  AND EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.aggregate_id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'protocol_event: deleted Task rejects new lifecycle facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_ingress_no_insert
+BEFORE INSERT ON engine_task_root_ingress FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress: deleted Task rejects new input'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_artifact_no_insert
+BEFORE INSERT ON engine_artifact FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'engine_artifact: deleted Task rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_interaction_no_insert
+BEFORE INSERT ON engine_interaction_request FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
+  OR (
+    NEW.source_kind='permission_request' AND EXISTS (
+      SELECT 1 FROM permission_ledger
+      JOIN protocol_event ON protocol_event.aggregate_type='task'
+        AND protocol_event.aggregate_id=permission_ledger.task_id
+        AND protocol_event.type='task.deleted'
+      WHERE permission_ledger.id=NEW.source_id
+    )
+  )
+  OR (
+    NEW.source_kind='bus_question' AND EXISTS (
+      WITH RECURSIVE source_session(id,parent_id) AS (
+        SELECT session.id,session.parent_id
+        FROM bus_publication_outbox
+        JOIN session ON session.id=json_extract(bus_publication_outbox.properties,'$.sessionID')
+        WHERE bus_publication_outbox.occurrence_id=NEW.source_id
+        UNION ALL
+        SELECT session.id,session.parent_id FROM session
+        JOIN source_session ON session.id=source_session.parent_id
+      )
+      SELECT 1 FROM source_session
+      JOIN engine_task ON engine_task.session_id=source_session.id
+      JOIN protocol_event ON protocol_event.aggregate_type='task'
+        AND protocol_event.aggregate_id=engine_task.id
+        AND protocol_event.type='task.deleted'
+    )
+  )
+BEGIN SELECT RAISE(ABORT, 'engine_interaction_request: deleted Task rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_progress_no_insert
+BEFORE INSERT ON engine_progress_snapshot FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'engine_progress_snapshot: deleted Task rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_workflow_no_insert
+BEFORE INSERT ON engine_workflow_node_occurrence FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'engine_workflow_node_occurrence: deleted Task rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_task_goal_no_insert
+BEFORE INSERT ON engine_goal FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
+BEGIN SELECT RAISE(ABORT, 'engine_goal: deleted Task rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_no_update
+BEFORE UPDATE ON session FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='session' AND aggregate_id=OLD.id AND type='session.deleted')
+BEGIN SELECT RAISE(ABORT, 'session: deleted aggregate is immutable'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_protocol_no_insert
+BEFORE INSERT ON protocol_event FOR EACH ROW
+WHEN NEW.aggregate_type='session' AND NEW.type<>'session.deleted'
+  AND EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='session' AND aggregate_id=NEW.aggregate_id AND type='session.deleted')
+BEGIN SELECT RAISE(ABORT, 'protocol_event: deleted Session rejects new lifecycle facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_message_no_insert
+BEFORE INSERT ON message FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='session' AND aggregate_id=NEW.session_id AND type='session.deleted')
+BEGIN SELECT RAISE(ABORT, 'message: deleted Session rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_message_no_update
+BEFORE UPDATE ON message FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='session' AND aggregate_id=OLD.session_id AND type='session.deleted')
+BEGIN SELECT RAISE(ABORT, 'message: deleted Session facts are immutable'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_part_no_insert
+BEFORE INSERT ON part FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message JOIN protocol_event
+    ON protocol_event.aggregate_type='session'
+   AND protocol_event.aggregate_id=message.session_id
+   AND protocol_event.type='session.deleted'
+  WHERE message.id=NEW.message_id
+)
+BEGIN SELECT RAISE(ABORT, 'part: deleted Session rejects new facts'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_part_no_update
+BEFORE UPDATE ON part FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message JOIN protocol_event
+    ON protocol_event.aggregate_type='session'
+   AND protocol_event.aggregate_id=message.session_id
+   AND protocol_event.type='session.deleted'
+  WHERE message.id=OLD.message_id
+)
+BEGIN SELECT RAISE(ABORT, 'part: deleted Session facts are immutable'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_tool_request_no_insert
+BEFORE INSERT ON tool_part_request FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message JOIN protocol_event
+    ON protocol_event.aggregate_type='session'
+   AND protocol_event.aggregate_id=message.session_id
+   AND protocol_event.type='session.deleted'
+  WHERE message.id=NEW.message_id
+)
+BEGIN SELECT RAISE(ABORT, 'tool_part_request: deleted Session rejects new effects'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_provider_request_no_insert
+BEFORE INSERT ON provider_activity_request FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message JOIN protocol_event
+    ON protocol_event.aggregate_type='session'
+   AND protocol_event.aggregate_id=message.session_id
+   AND protocol_event.type='session.deleted'
+  WHERE message.id=NEW.assistant_message_id
+)
+BEGIN SELECT RAISE(ABORT, 'provider_activity_request: deleted Session rejects new effects'); END;
+
+CREATE TRIGGER IF NOT EXISTS deleted_session_control_no_insert
+BEFORE INSERT ON session_control_record FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='session' AND aggregate_id=NEW.session_id AND type='session.deleted')
+BEGIN SELECT RAISE(ABORT, 'session_control_record: deleted Session rejects new controls'); END;
+
+CREATE TRIGGER IF NOT EXISTS assistant_effect_identity_immutable
+BEFORE UPDATE ON message
+FOR EACH ROW
+WHEN json_extract(OLD.data,'$.role')='assistant'
+  AND (
+    json_type(OLD.data,'$.activationID')='text'
+    OR EXISTS (SELECT 1 FROM provider_activity_request WHERE assistant_message_id=OLD.id)
+    OR EXISTS (SELECT 1 FROM tool_part_request WHERE message_id=OLD.id)
+  )
+  AND (
+    OLD.session_id IS NOT NEW.session_id
+    OR json_extract(OLD.data,'$.role') IS NOT json_extract(NEW.data,'$.role')
+    OR json_extract(OLD.data,'$.author') IS NOT json_extract(NEW.data,'$.author')
+    OR json_extract(OLD.data,'$.parentID') IS NOT json_extract(NEW.data,'$.parentID')
+    OR json_extract(OLD.data,'$.activationID') IS NOT json_extract(NEW.data,'$.activationID')
+    OR json_extract(OLD.data,'$.agent') IS NOT json_extract(NEW.data,'$.agent')
+    OR json_extract(OLD.data,'$.modelID') IS NOT json_extract(NEW.data,'$.modelID')
+    OR json_extract(OLD.data,'$.providerID') IS NOT json_extract(NEW.data,'$.providerID')
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'message: assistant effect causal/model identity is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS completed_assistant_message_immutable
+BEFORE UPDATE ON message
+FOR EACH ROW
+WHEN json_extract(OLD.data,'$.role')='assistant'
+  AND json_type(OLD.data,'$.time.completed') IN ('integer','real')
+  AND OLD.data <> NEW.data
+BEGIN
+  SELECT RAISE(ABORT, 'message: completed assistant is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS task_root_source_message_no_delete
+BEFORE DELETE ON message
+FOR EACH ROW
+WHEN (
+  EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='message' AND source_id=OLD.id)
+  OR json_type(OLD.data, '$.activationID')='text'
+  OR EXISTS (SELECT 1 FROM protocol_event WHERE json_extract(payload,'$.inputMessageID')=OLD.id)
+  OR EXISTS (SELECT 1 FROM message child WHERE json_extract(child.data,'$.parentID')=OLD.id AND json_extract(child.data,'$.role')='assistant')
+)
+  AND EXISTS (SELECT 1 FROM session WHERE id=OLD.session_id)
+BEGIN
+  SELECT RAISE(ABORT, 'message: Task-root causal facts are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS task_root_source_part_no_insert
+BEFORE INSERT ON part
+FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='message' AND source_id=NEW.message_id)
+  OR EXISTS (SELECT 1 FROM protocol_event WHERE json_extract(payload,'$.inputMessageID')=NEW.message_id)
+BEGIN
+  SELECT RAISE(ABORT, 'part: accepted Task-root input bundle is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS task_root_causal_part_no_delete
+BEFORE DELETE ON part
+FOR EACH ROW
+WHEN (
+  EXISTS (SELECT 1 FROM message WHERE id=OLD.message_id AND json_type(data,'$.activationID')='text')
+  OR EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='message' AND source_id=OLD.message_id)
+  OR EXISTS (SELECT 1 FROM protocol_event WHERE json_extract(payload,'$.inputMessageID')=OLD.message_id)
+)
+  AND EXISTS (
+    SELECT 1 FROM message JOIN session ON session.id=message.session_id WHERE message.id=OLD.message_id
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'part: Task-root causal facts are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS completed_assistant_part_no_insert
+BEFORE INSERT ON part
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message
+  WHERE id=NEW.message_id
+    AND json_extract(data,'$.role')='assistant'
+    AND json_type(data,'$.time.completed') IN ('integer','real')
+)
+BEGIN
+  SELECT RAISE(ABORT, 'part: completed assistant content is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS completed_assistant_part_no_update
+BEFORE UPDATE ON part
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message
+  WHERE id=OLD.message_id
+    AND json_extract(data,'$.role')='assistant'
+    AND json_type(data,'$.time.completed') IN ('integer','real')
+)
+  AND OLD.data <> NEW.data
+BEGIN
+  SELECT RAISE(ABORT, 'part: completed assistant content is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS completed_assistant_tool_request_no_insert
+BEFORE INSERT ON tool_part_request
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message
+  WHERE id=NEW.message_id
+    AND json_extract(data,'$.role')='assistant'
+    AND json_type(data,'$.time.completed') IN ('integer','real')
+)
+BEGIN
+  SELECT RAISE(ABORT, 'tool_part_request: cannot append after assistant completion');
+END;
+
+CREATE TRIGGER IF NOT EXISTS task_root_source_artifact_no_update
+BEFORE UPDATE ON engine_artifact
+FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='engine_artifact' AND source_id=OLD.id)
+  AND EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: accepted Task-root source is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS task_root_source_artifact_no_delete
+BEFORE DELETE ON engine_artifact
+FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='engine_artifact' AND source_id=OLD.id)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: accepted Task-root source is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS tool_part_request_no_update
+BEFORE UPDATE ON tool_part_request FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'tool_part_request: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS tool_part_request_no_delete
+BEFORE DELETE ON tool_part_request FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message JOIN session ON session.id=message.session_id WHERE message.id=OLD.message_id
+)
+BEGIN SELECT RAISE(ABORT, 'tool_part_request: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS tool_part_outcome_no_update
+BEFORE UPDATE ON tool_part_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'tool_part_outcome: immutable outcome fact'); END;
+CREATE TRIGGER IF NOT EXISTS tool_part_outcome_no_delete
+BEFORE DELETE ON tool_part_outcome FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM tool_part_request
+  JOIN message ON message.id=tool_part_request.message_id
+  JOIN session ON session.id=message.session_id
+  WHERE tool_part_request.id=OLD.request_part_id
+)
+BEGIN SELECT RAISE(ABORT, 'tool_part_outcome: immutable outcome fact'); END;
+CREATE TRIGGER IF NOT EXISTS provider_activity_request_no_update
+BEFORE UPDATE ON provider_activity_request FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'provider_activity_request: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS provider_activity_request_no_delete
+BEFORE DELETE ON provider_activity_request FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM message JOIN session ON session.id=message.session_id WHERE message.id=OLD.assistant_message_id
+)
+BEGIN SELECT RAISE(ABORT, 'provider_activity_request: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS provider_activity_outcome_no_update
+BEFORE UPDATE ON provider_activity_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'provider_activity_outcome: immutable outcome fact'); END;
+CREATE TRIGGER IF NOT EXISTS provider_activity_outcome_no_delete
+BEFORE DELETE ON provider_activity_outcome FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM provider_activity_request
+  JOIN message ON message.id=provider_activity_request.assistant_message_id
+  JOIN session ON session.id=message.session_id
+  WHERE provider_activity_request.id=OLD.request_id
+)
+BEGIN SELECT RAISE(ABORT, 'provider_activity_outcome: immutable outcome fact'); END;
+
+CREATE TRIGGER IF NOT EXISTS permission_policy_no_update
+BEFORE UPDATE ON permission_policy FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'permission_policy: immutable policy fact'); END;
+CREATE TRIGGER IF NOT EXISTS permission_policy_no_delete
+BEFORE DELETE ON permission_policy FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'permission_policy: immutable policy fact'); END;
+CREATE TRIGGER IF NOT EXISTS permission_ledger_no_update
+BEFORE UPDATE ON permission_ledger FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'permission_ledger: immutable authorization fact'); END;
+CREATE TRIGGER IF NOT EXISTS permission_ledger_no_delete
+BEFORE DELETE ON permission_ledger FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'permission_ledger: immutable authorization fact'); END;
+CREATE TRIGGER IF NOT EXISTS permission_execution_result_no_update
+BEFORE UPDATE ON permission_execution_result FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'permission_execution_result: immutable effect receipt'); END;
+CREATE TRIGGER IF NOT EXISTS permission_execution_result_no_delete
+BEFORE DELETE ON permission_execution_result FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'permission_execution_result: immutable effect receipt'); END;
+
+CREATE TRIGGER IF NOT EXISTS channel_ingress_accepted_no_update
+BEFORE UPDATE ON channel_ingress_accepted FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'channel_ingress_accepted: immutable input fact'); END;
+CREATE TRIGGER IF NOT EXISTS channel_ingress_accepted_no_delete
+BEFORE DELETE ON channel_ingress_accepted FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'channel_ingress_accepted: immutable input fact'); END;
+CREATE TRIGGER IF NOT EXISTS channel_ingress_outcome_no_update
+BEFORE UPDATE ON channel_ingress_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'channel_ingress_outcome: immutable effect receipt'); END;
+CREATE TRIGGER IF NOT EXISTS channel_ingress_outcome_no_delete
+BEFORE DELETE ON channel_ingress_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'channel_ingress_outcome: immutable effect receipt'); END;
+
+CREATE TRIGGER IF NOT EXISTS engine_git_checkpoint_request_no_update
+BEFORE UPDATE ON engine_git_checkpoint_request FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_git_checkpoint_request: immutable effect request'); END;
+CREATE TRIGGER IF NOT EXISTS engine_git_checkpoint_request_no_delete
+BEFORE DELETE ON engine_git_checkpoint_request FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN SELECT RAISE(ABORT, 'engine_git_checkpoint_request: immutable effect request'); END;
+CREATE TRIGGER IF NOT EXISTS engine_git_checkpoint_outcome_no_update
+BEFORE UPDATE ON engine_git_checkpoint_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_git_checkpoint_outcome: immutable effect receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_git_checkpoint_outcome_no_delete
+BEFORE DELETE ON engine_git_checkpoint_outcome FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_git_checkpoint_request WHERE id=OLD.request_id)
+BEGIN SELECT RAISE(ABORT, 'engine_git_checkpoint_outcome: immutable effect receipt'); END;
+
+CREATE TRIGGER IF NOT EXISTS event_job_definition_revision_no_update
+BEFORE UPDATE ON event_job FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job: definition revisions are immutable; append a revision'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_definition_revision_no_delete
+BEFORE DELETE ON event_job FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job: definition revisions are immutable; append a tombstone revision'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_definition_tombstone_no_update
+BEFORE UPDATE ON event_job_definition_tombstone FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job_definition_tombstone: immutable deletion fact'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_definition_tombstone_no_delete
+BEFORE DELETE ON event_job_definition_tombstone FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job_definition_tombstone: immutable deletion fact'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_no_update
+BEFORE UPDATE ON event_job_fire FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job_fire: occurrence input is immutable; append a receipt'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_no_delete
+BEFORE DELETE ON event_job_fire FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job_fire: occurrence history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS event_occurrence_no_update
+BEFORE UPDATE ON event_occurrence FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_occurrence: input fact is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS event_occurrence_no_delete
+BEFORE DELETE ON event_occurrence FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_occurrence: input history is immutable'); END;
+
+CREATE TRIGGER IF NOT EXISTS bus_publication_outbox_no_update
+BEFORE UPDATE ON bus_publication_outbox FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_outbox: publication input is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_outbox_no_delete
+BEFORE DELETE ON bus_publication_outbox FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_outbox: publication history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_delivery_no_update
+BEFORE UPDATE ON bus_publication_delivery FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_delivery: effect request is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_delivery_no_delete
+BEFORE DELETE ON bus_publication_delivery FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_delivery: effect request history is immutable'); END;
+
+CREATE TRIGGER IF NOT EXISTS protocol_event_no_update
+BEFORE UPDATE ON protocol_event FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'protocol_event: immutable domain fact'); END;
+CREATE TRIGGER IF NOT EXISTS protocol_event_no_delete
+BEFORE DELETE ON protocol_event FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'protocol_event: immutable domain fact'); END;
+CREATE TRIGGER IF NOT EXISTS protocol_inbox_no_update
+BEFORE UPDATE ON protocol_inbox FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'protocol_inbox: immutable delivery request'); END;
+CREATE TRIGGER IF NOT EXISTS protocol_inbox_no_delete
+BEFORE DELETE ON protocol_inbox FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'protocol_inbox: immutable delivery request'); END;
+CREATE TRIGGER IF NOT EXISTS protocol_delivery_receipt_no_update
+BEFORE UPDATE ON protocol_delivery_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'protocol_delivery_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS protocol_delivery_receipt_no_delete
+BEFORE DELETE ON protocol_delivery_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'protocol_delivery_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_run_receipt_no_update
+BEFORE UPDATE ON automation_run_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_run_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_run_receipt_no_delete
+BEFORE DELETE ON automation_run_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_run_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_receipt_no_update
+BEFORE UPDATE ON event_job_fire_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_receipt_no_delete
+BEFORE DELETE ON event_job_fire_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_root_ingress_no_update
+BEFORE UPDATE ON engine_task_root_ingress FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress: immutable input fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_root_ingress_no_delete
+BEFORE DELETE ON engine_task_root_ingress FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id = OLD.task_id)
+BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress: immutable input fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_root_ingress_policy_no_update
+BEFORE UPDATE ON engine_task_root_ingress_policy FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress_policy: immutable policy fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_root_ingress_policy_no_delete
+BEFORE DELETE ON engine_task_root_ingress_policy FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress_policy: immutable policy fact'); END;
+
+CREATE TRIGGER IF NOT EXISTS automation_project_target_no_update
+BEFORE UPDATE ON automation_project_target FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_project_target: immutable definition input'); END;
+CREATE TRIGGER IF NOT EXISTS automation_project_target_no_delete
+BEFORE DELETE ON automation_project_target FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_project_target: immutable definition input'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_delivery_receipt_no_update
+BEFORE UPDATE ON bus_publication_delivery_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_delivery_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_delivery_receipt_no_delete
+BEFORE DELETE ON bus_publication_delivery_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_delivery_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_phase_receipt_no_update
+BEFORE UPDATE ON bus_publication_phase_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_phase_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_phase_receipt_no_delete
+BEFORE DELETE ON bus_publication_phase_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_phase_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_attempt_receipt_no_update
+BEFORE UPDATE ON bus_publication_attempt_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_attempt_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_attempt_receipt_no_delete
+BEFORE DELETE ON bus_publication_attempt_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_attempt_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_interaction_request_no_update
+BEFORE UPDATE ON engine_interaction_request FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_interaction_request: immutable input fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_interaction_request_no_delete
+BEFORE DELETE ON engine_interaction_request FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_interaction_request: immutable input fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_interaction_outcome_no_update
+BEFORE UPDATE ON engine_interaction_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_interaction_outcome: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_interaction_outcome_no_delete
+BEFORE DELETE ON engine_interaction_outcome FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_interaction_outcome: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_build_observation_cleanup_no_update
+BEFORE UPDATE ON engine_build_observation_cleanup FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_build_observation_cleanup: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_build_observation_cleanup_no_delete
+BEFORE DELETE ON engine_build_observation_cleanup FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id = OLD.task_id)
+BEGIN SELECT RAISE(ABORT, 'engine_build_observation_cleanup: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_build_observation_cleanup_receipt_no_update
+BEFORE UPDATE ON engine_build_observation_cleanup_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_build_observation_cleanup_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_build_observation_cleanup_receipt_no_delete
+BEFORE DELETE ON engine_build_observation_cleanup_receipt FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_build_observation_cleanup WHERE observation_id = OLD.observation_id)
+BEGIN SELECT RAISE(ABORT, 'engine_build_observation_cleanup_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS session_control_record_no_update
+BEFORE UPDATE ON session_control_record FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'session_control_record: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS session_control_record_no_delete
+BEFORE DELETE ON session_control_record FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM session WHERE id=OLD.session_id)
+BEGIN SELECT RAISE(ABORT, 'session_control_record: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS session_control_event_no_update
+BEFORE UPDATE ON session_control_event FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'session_control_event: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS session_control_event_no_delete
+BEFORE DELETE ON session_control_event FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM session_control_record
+  JOIN session ON session.id=session_control_record.session_id
+  WHERE session_control_record.id=OLD.control_id
+)
+BEGIN SELECT RAISE(ABORT, 'session_control_event: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_workflow_node_occurrence_no_update
+BEFORE UPDATE ON engine_workflow_node_occurrence FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_workflow_node_occurrence: immutable causal fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_workflow_node_occurrence_no_delete
+BEFORE DELETE ON engine_workflow_node_occurrence FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN SELECT RAISE(ABORT, 'engine_workflow_node_occurrence: immutable causal fact'); END;
+CREATE TRIGGER IF NOT EXISTS engine_progress_snapshot_no_update
+BEFORE UPDATE ON engine_progress_snapshot FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_progress_snapshot: immutable authored checkpoint'); END;
+CREATE TRIGGER IF NOT EXISTS engine_progress_snapshot_no_delete
+BEFORE DELETE ON engine_progress_snapshot FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN SELECT RAISE(ABORT, 'engine_progress_snapshot: immutable authored checkpoint'); END;
 `
 
 export const SCHEMA_DDL = `${generatedSchemaDdl()}\n\n${STORAGE_EXTENSION_DDL}`

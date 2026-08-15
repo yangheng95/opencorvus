@@ -680,13 +680,9 @@ export namespace Message {
     structured: z.any().optional(),
     variant: z.string().optional(),
     finish: z.string().optional(),
-    taskIngress: z
-      .object({
-        id: z.string().min(1),
-        kind: z.string().min(1),
-      })
-      .strict()
-      .optional(),
+    /** Physical fencing token only. Business ingress identity is derived from
+     * the exact parent control/participant Message chain. */
+    activationID: z.string().min(1).optional(),
   })
     .superRefine((value, ctx) => {
       const occurrence = value.failureOccurrence

@@ -500,10 +500,10 @@ describe("runtime server database ownership", () => {
       )
       await owner.stop(true)
       owner = undefined
-      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "stopped-runtime-settled").settle()
+      RuntimeExecutionSettlement.reserve("task_control_activation", "stopped-runtime-settled").settle()
 
       successor = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
-      RuntimeExecutionSettlement.reserve("task_root_ingress_delivery", "successor-runtime-recovery").settle()
+      RuntimeExecutionSettlement.reserve("task_control_activation", "successor-runtime-recovery").settle()
       expect(successor.url).toBeInstanceOf(URL)
     } finally {
       if (successor) await successor.stop(true)
@@ -600,14 +600,14 @@ describe("runtime server database ownership", () => {
     const failure = Server.TestHooks.failNextListenerStop(1)
     const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
     const recoveryDirectories: string[][] = []
-    const recoverTaskRootIngressesAfterRuntimeRollback =
-      TaskRootIngressDelivery.recoverTaskRootIngressesAfterRuntimeRollback
+    const reconcileTaskControlAfterRuntimeRollback =
+      TaskRootIngressDelivery.reconcileTaskControlAfterRuntimeRollback
     const recoverTaskIngresses = spyOn(
       TaskRootIngressDelivery,
-      "recoverTaskRootIngressesAfterRuntimeRollback",
+      "reconcileTaskControlAfterRuntimeRollback",
     ).mockImplementation(async (directories) => {
       recoveryDirectories.push([...directories])
-      await recoverTaskRootIngressesAfterRuntimeRollback(directories)
+      await reconcileTaskControlAfterRuntimeRollback(directories)
     })
     try {
       await Instance.provide({ directory: project, init: InstanceBootstrap, fn: async () => undefined })

@@ -1,12 +1,8 @@
 import { Database, and, eq, sql } from "@/storage/db"
-import { randomUUID } from "node:crypto"
 import { Event } from "./model"
 import { EngineProtocol } from "./protocol"
-import { progressStatus } from "./helpers"
-import { EngineArtifactTable, EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
-import { insertEngineProgressSnapshot } from "./progress"
-import { updateEngineTaskState } from "./task"
-import { requireTask, type TaskRow } from "./store"
+import { EngineTaskTable } from "./engine.sql"
+import { projectTaskRowInTransaction, requireTask, type TaskRow } from "./store"
 import { deriveTaskStatus } from "./task-status"
 import { Instance } from "@/project/instance"
 import { Log } from "@/util/log"
@@ -18,13 +14,14 @@ import {
 } from "./cancellation-origin"
 import { requireTaskCancellationRequestEvent } from "./cancellation-projection"
 import { ProtocolStore } from "@/protocol/store"
-import { insertEngineArtifact, patchEngineArtifact } from "./artifact"
 import { Project } from "@/project/project"
 import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { enqueueSchedulerMessageInTransaction } from "@/protocol/delivery"
 import { signalSchedulerMessageDrain } from "@/protocol/scheduler-drain-signal"
+import { appendTaskReopenedInTransaction, taskLifecycleProjectionInTransaction } from "./task-lifecycle"
+import { Bus } from "@/bus"
 
 const log = Log.create({ service: "engine-state" })
 
@@ -47,6 +44,9 @@ export type TaskUpdateOptions = {
 }
 
 export type TerminalTaskOptions = TaskUpdateOptions & {
+  /** Timestamp of the sole terminal lifecycle fact when the decision receipt
+   * has already allocated it. This is not a second persisted Task field. */
+  terminalAt?: number
   /** Physical execution ended without a domain completion decision. This is
    * persisted as the canonical interrupted terminal reason, while `failed`
    * remains the Task event/status family. */
@@ -65,12 +65,14 @@ export type TerminalTaskOptions = TaskUpdateOptions & {
 }
 
 export type TerminalTaskStatus = "completed" | "failed" | "cancelled"
-export type TerminalTaskValues = Omit<Partial<typeof EngineTaskTable.$inferInsert>, "status"> & {
+export type TerminalTaskValues = Partial<typeof EngineTaskTable.$inferInsert> & {
   status: TerminalTaskStatus
+  error?: string | null
 }
 
-type InternalTaskUpdateValues = Omit<Partial<typeof EngineTaskTable.$inferInsert>, "status"> & {
+type InternalTaskUpdateValues = Partial<typeof EngineTaskTable.$inferInsert> & {
   status?: TaskUpdateValues["status"] | TerminalTaskStatus
+  error?: string | null
 }
 
 function isTerminalTaskIntent(status: InternalTaskUpdateValues["status"]): status is TerminalTaskStatus {
@@ -130,534 +132,11 @@ export async function terminalTask(
     const link = TaskCancellationEventLink.parse(options.cancellationRequest)
     cancellationRequest = requireTaskCancellationRequestEvent(terminalRow.id, link.eventID).event
   }
-  let settlementArtifactID: string | undefined
-  let auxiliarySettlementArtifactID: string | undefined
-  const terminalOptions =
-    values.status === "cancelled"
-      ? {
-          ...options,
-          transactionEffect(db: Database.TxOrDb, task: TaskRow) {
-            options?.transactionEffect?.(db, task)
-            settlementArtifactID = insertEngineArtifact(db, {
-              taskID: task.id,
-              kind: "task_checkpoint_settlement",
-              label: "pending",
-              payload: {
-                task_id: task.id,
-                cancellation_request_event_id: options!.cancellationRequest!.eventID,
-                status: "pending",
-                time_requested: cancellationRequest!.time.emitted,
-              },
-              timeCreated: Date.now(),
-            })
-            auxiliarySettlementArtifactID = insertEngineArtifact(db, {
-              taskID: task.id,
-              kind: "task_auxiliary_settlement",
-              label: "pending",
-              payload: {
-                task_id: task.id,
-                cancellation_request_event_id: options!.cancellationRequest!.eventID,
-                status: "pending",
-                time_requested: cancellationRequest!.time.emitted,
-              },
-              timeCreated: Date.now(),
-            })
-          },
-        }
-      : options
-  const result = await applyTaskUpdate(terminalRow, values, summary, terminalOptions, cancellationRequest)
-  if (values.status === "cancelled") {
-    if (!settlementArtifactID) throw new Error(`Cancelled Task ${row.id} did not persist its checkpoint settlement job`)
-    if (!auxiliarySettlementArtifactID) {
-      throw new Error(`Cancelled Task ${row.id} did not persist its auxiliary settlement job`)
-    }
-    scheduleCancelledTaskCheckpointSettlement(result, settlementArtifactID)
-    scheduleCancelledTaskAuxiliarySettlement(result, auxiliarySettlementArtifactID)
-  } else {
-    const { Worktree } = await import("@/worktree")
-    await Worktree.releaseManagedWorktreeTaskOwners(row.id)
-  }
+  const result = await applyTaskUpdate(terminalRow, values, summary, options, cancellationRequest)
+  const { Worktree } = await import("@/worktree")
+  await Worktree.releaseManagedWorktreeTaskOwners(row.id)
   return result
 }
-
-const settlementOperations = new Map<string, Promise<void>>()
-const settlementLeaseFences = new Map<string, AbortController>()
-const settlementRetryTimers = new Map<string, ReturnType<typeof setTimeout>>()
-const settlementFollowups = new Set<string>()
-let settlementAdmissionGate: symbol | undefined
-let beforeCancelledTaskRollbackRecoveryForTest: (() => void | Promise<void>) | undefined
-const settlementOwnerID = `settlement-owner:${randomUUID()}`
-const SETTLEMENT_LEASE_MS = 10_000
-const SETTLEMENT_HEARTBEAT_MS = 2_000
-
-type SettlementClaim = { type: "claimed"; payload: Record<string, unknown> } | { type: "retry" } | { type: "terminal" }
-
-function claimSettlementArtifact(artifactID: string): SettlementClaim {
-  return Database.immediateTransaction((db) => {
-    const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, artifactID)).get()
-    if (!row) return { type: "terminal" } as const
-    const payload = row.payload as Record<string, unknown>
-    if (row.label === "running") {
-      if (payload.owner_id !== settlementOwnerID && Number(payload.lease_expires_at ?? 0) > Date.now()) {
-        return { type: "retry" } as const
-      }
-    } else if (row.label !== "pending") {
-      return { type: "terminal" } as const
-    }
-    const claimed = {
-      ...payload,
-      status: "running",
-      owner_id: settlementOwnerID,
-      owner_process_id: process.pid,
-      owner_started_at: Date.now(),
-      lease_expires_at: Date.now() + SETTLEMENT_LEASE_MS,
-    }
-    patchEngineArtifact(db, { id: artifactID, label: "running", payload: claimed, timeUpdated: Date.now() })
-    return { type: "claimed", payload: claimed } as const
-  })
-}
-
-function renewSettlementLease(artifactID: string): boolean {
-  return Database.immediateTransaction((db) => {
-    const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, artifactID)).get()
-    if (!row || row.label !== "running") return false
-    const payload = row.payload as Record<string, unknown>
-    if (payload.owner_id !== settlementOwnerID) return false
-    patchEngineArtifact(db, {
-      id: artifactID,
-      payload: { ...payload, lease_expires_at: Date.now() + SETTLEMENT_LEASE_MS },
-      timeUpdated: Date.now(),
-    })
-    return true
-  })
-}
-
-function renewSettlementLeaseOrAbort(artifactID: string, fence: AbortController): void {
-  if (fence.signal.aborted) return
-  try {
-    if (renewSettlementLease(artifactID)) return
-    fence.abort(new Error(`Settlement ${artifactID} owner lease is no longer authoritative`))
-  } catch (error) {
-    log.error("cancelled Task settlement heartbeat failed", {
-      artifactID,
-      error: error instanceof Error ? error.message : String(error),
-    })
-    fence.abort(error)
-  }
-}
-
-function completeSettlementArtifact(input: {
-  artifactID: string
-  claimed: Record<string, unknown>
-  payload: Record<string, unknown>
-  completed: number
-}): void {
-  Database.immediateTransaction((db) => {
-    const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get()
-    const current = row?.payload as Record<string, unknown> | undefined
-    if (!row || row.label !== "running" || current?.owner_id !== settlementOwnerID) {
-      throw new Error(`Settlement ${input.artifactID} owner lease is no longer authoritative`)
-    }
-    patchEngineArtifact(db, {
-      id: input.artifactID,
-      label: "completed",
-      payload: { ...input.claimed, ...input.payload, status: "completed", time_completed: input.completed },
-      timeUpdated: input.completed,
-    })
-  })
-}
-
-function deferSettlementArtifact(input: {
-  artifactID: string
-  claimed: Record<string, unknown>
-  failures: Array<{ stage: string; error: string }>
-}): void {
-  Database.immediateTransaction((db) => {
-    const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get()
-    const current = row?.payload as Record<string, unknown> | undefined
-    if (!row || row.label !== "running" || current?.owner_id !== settlementOwnerID) {
-      throw new Error(`Settlement ${input.artifactID} owner lease is no longer authoritative`)
-    }
-    const {
-      owner_id: _ownerID,
-      owner_process_id: _ownerProcessID,
-      owner_started_at: _ownerStartedAt,
-      lease_expires_at: _leaseExpiresAt,
-      time_completed: _timeCompleted,
-      ...retryable
-    } = input.claimed
-    const now = Date.now()
-    patchEngineArtifact(db, {
-      id: input.artifactID,
-      label: "pending",
-      payload: {
-        ...retryable,
-        status: "pending",
-        attempt: Number(input.claimed.attempt ?? 0) + 1,
-        last_failure: input.failures,
-        time_last_failed: now,
-      },
-      timeUpdated: now,
-    })
-  })
-}
-
-function throwSettlementFailures(kind: string, failures: Array<{ stage: string; error: string }>): never {
-  throw new AggregateError(
-    failures.map((failure) => new Error(`${failure.stage}: ${failure.error}`)),
-    `${kind} requires retry after ${failures.length} failed operation(s)`,
-  )
-}
-
-type SettlementOperation = (claimed: Record<string, unknown>, signal: AbortSignal) => Promise<void>
-
-function scheduleSettlementRetry(artifactID: string, directory: string, run: SettlementOperation): void {
-  if (settlementAdmissionGate) return
-  if (settlementRetryTimers.has(artifactID)) return
-  const timer = setTimeout(() => {
-    settlementRetryTimers.delete(artifactID)
-    runSettlementOperation(artifactID, directory, run)
-  }, 1_000)
-  timer.unref?.()
-  settlementRetryTimers.set(artifactID, timer)
-}
-
-function runSettlementOperation(artifactID: string, directory: string, run: SettlementOperation): void {
-  if (settlementAdmissionGate) return
-  const existingOperation = settlementOperations.get(artifactID)
-  if (existingOperation) {
-    if (settlementFollowups.has(artifactID)) return
-    settlementFollowups.add(artifactID)
-    const resume = () => {
-      settlementFollowups.delete(artifactID)
-      if (!settlementAdmissionGate) runSettlementOperation(artifactID, directory, run)
-    }
-    void existingOperation.then(resume, resume)
-    return
-  }
-  let claim: SettlementClaim
-  try {
-    claim = claimSettlementArtifact(artifactID)
-  } catch (error) {
-    log.error("cancelled Task settlement claim failed", {
-      artifactID,
-      error: error instanceof Error ? error.message : String(error),
-    })
-    scheduleSettlementRetry(artifactID, directory, run)
-    return
-  }
-  if (claim.type === "terminal") return
-  if (claim.type === "retry") {
-    scheduleSettlementRetry(artifactID, directory, run)
-    return
-  }
-  const claimed = claim.payload
-  const leaseFence = new AbortController()
-  settlementLeaseFences.set(artifactID, leaseFence)
-  const heartbeat = setInterval(() => renewSettlementLeaseOrAbort(artifactID, leaseFence), SETTLEMENT_HEARTBEAT_MS)
-  heartbeat.unref?.()
-  // Settlement outlives the request or startup lease that admitted it. Run
-  // every attempt under a fresh project identity so timer retries and
-  // bootstrap-launched work cannot inherit a closed Instance cache lease.
-  const operation = runWithIndependentProjectIdentity({
-    directory,
-    fn: () => run(claimed, leaseFence.signal),
-  }).finally(() => {
-    clearInterval(heartbeat)
-    if (settlementLeaseFences.get(artifactID) === leaseFence) settlementLeaseFences.delete(artifactID)
-    settlementOperations.delete(artifactID)
-  })
-  settlementOperations.set(artifactID, operation)
-  void operation.catch((error) => {
-    log.error("cancelled Task settlement operation crashed", {
-      artifactID,
-      error: error instanceof Error ? error.message : String(error),
-    })
-    scheduleSettlementRetry(artifactID, directory, run)
-  })
-}
-
-type CancelledTaskSettlementGate = Disposable & {
-  waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void>
-  commit(): void
-  rollback(): () => Promise<void>
-}
-
-export class CancelledTaskSettlementInactivityError extends Error {
-  override readonly name = "CancelledTaskSettlementInactivityError"
-
-  constructor(
-    public readonly artifactIDs: readonly string[],
-    public readonly inactivityTimeoutMilliseconds: number,
-  ) {
-    super(
-      `Cancelled Task settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
-        `${artifactIDs.length} artifact(s) remain: ${artifactIDs.join(", ")}`,
-    )
-  }
-}
-
-async function resumeCancelledTaskSettlementsByProject(): Promise<void> {
-  await beforeCancelledTaskRollbackRecoveryForTest?.()
-  const projectIDs = Database.use((db) =>
-    db
-      .selectDistinct({ projectID: EngineTaskTable.project_id })
-      .from(EngineArtifactTable)
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineArtifactTable.task_id))
-      .where(
-        and(
-          sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
-          sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
-        ),
-      )
-      .all(),
-  )
-  const failures: unknown[] = []
-  for (const { projectID } of projectIDs) {
-    const project = Project.get(projectID)
-    if (!project) {
-      failures.push(new Error(`Cancelled Task settlement references missing project ${projectID}`))
-      continue
-    }
-    try {
-      await runWithIndependentProjectIdentity({
-        directory: project.worktree,
-        fn: () => {
-          if (Instance.project.id !== projectID) {
-            throw new Error(
-              `Cancelled Task settlement rollback resolved project ${Instance.project.id}, expected ${projectID}`,
-            )
-          }
-          reconcilePendingCancelledTaskSettlements()
-        },
-      })
-    } catch (error) {
-      failures.push(error)
-    }
-  }
-  if (failures.length > 0) {
-    throw new AggregateError(failures, "Failed to resume cancelled Task settlements after runtime rollback")
-  }
-}
-
-export function acquireCancelledTaskSettlementGate(): CancelledTaskSettlementGate {
-  if (settlementAdmissionGate) throw new Error("Cancelled Task settlement is already quiescing")
-  const token = Symbol("cancelled-task-settlement")
-  settlementAdmissionGate = token
-  for (const timer of settlementRetryTimers.values()) clearTimeout(timer)
-  settlementRetryTimers.clear()
-  let decision: "pending" | "commit" | "rollback" = "pending"
-  let disposed = false
-  let rollbackCompleted = false
-  let rollbackOperation: Promise<void> | undefined
-  return {
-    async waitForIdle(inactivityTimeoutMilliseconds) {
-      if (inactivityTimeoutMilliseconds === undefined) {
-        while (settlementOperations.size > 0) await Promise.allSettled([...settlementOperations.values()])
-        return
-      }
-      await waitForRuntimeSettlementIdle({
-        snapshot: () => [...settlementOperations].map(([artifactID, settled]) => ({ label: artifactID, settled })),
-        inactivityTimeoutMilliseconds,
-        inactivityError: (artifactIDs) =>
-          new CancelledTaskSettlementInactivityError(artifactIDs, inactivityTimeoutMilliseconds),
-      })
-    },
-    commit() {
-      if (decision === "rollback") throw new Error("Cancelled Task settlement rollback is already authoritative")
-      decision = "commit"
-    },
-    rollback() {
-      if (decision === "commit") throw new Error("Cancelled Task settlement commit is already authoritative")
-      decision = "rollback"
-      return async () => {
-        if (!disposed) {
-          throw new Error("Cancelled Task settlement rollback can resume only after all admission gates reopen")
-        }
-        if (rollbackCompleted) return
-        if (rollbackOperation) return await rollbackOperation
-        rollbackOperation = resumeCancelledTaskSettlementsByProject().then(() => {
-          rollbackCompleted = true
-        })
-        try {
-          await rollbackOperation
-        } finally {
-          rollbackOperation = undefined
-        }
-      }
-    },
-    [Symbol.dispose]() {
-      if (settlementAdmissionGate !== token) return
-      if (decision === "pending") {
-        throw new Error("Cancelled Task settlement gate requires an explicit commit or rollback decision")
-      }
-      settlementAdmissionGate = undefined
-      disposed = true
-    },
-  }
-}
-
-function scheduleCancelledTaskAuxiliarySettlement(task: TaskRow, settlementArtifactID: string): void {
-  const directory = taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id })
-  runSettlementOperation(settlementArtifactID, directory, async (claimed, signal) => {
-    const failures: Array<{ stage: string; error: string }> = []
-    try {
-      signal.throwIfAborted()
-      const { ProcessSupervisor } = await import("@/shell/process-supervisor")
-      await ProcessSupervisor.settleTaskAuxiliaryProcesses(task.id, { signal })
-      signal.throwIfAborted()
-    } catch (error) {
-      signal.throwIfAborted()
-      failures.push({
-        stage: "auxiliary_process_settlement",
-        error: error instanceof Error ? error.message : String(error),
-      })
-    }
-    signal.throwIfAborted()
-    if (failures.length > 0) {
-      deferSettlementArtifact({ artifactID: settlementArtifactID, claimed, failures })
-      throwSettlementFailures("Cancelled Task auxiliary settlement", failures)
-    }
-    const completed = Date.now()
-    completeSettlementArtifact({
-      artifactID: settlementArtifactID,
-      claimed,
-      payload: {},
-      completed,
-    })
-  })
-}
-
-function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArtifactID: string): void {
-  const directory = taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id })
-  runSettlementOperation(settlementArtifactID, directory, async (claimed, signal) => {
-    const currentTask = requireTask(task.id)
-    let checkpoint: Record<string, unknown> | undefined
-    const failures: Array<{ stage: string; error: string }> = []
-    try {
-      signal.throwIfAborted()
-      const existing = ((currentTask.metadata as Record<string, any>)?.git?.result ?? undefined) as
-        | Record<string, unknown>
-        | undefined
-      if (existing) {
-        checkpoint = existing
-      } else {
-        const { EngineGit } = await import("./git")
-        const baseline = await EngineGit.prepare(currentTask)
-        signal.throwIfAborted()
-        if (baseline.error) {
-          log.error("cancelled Task baseline checkpoint settlement failed", { taskID: task.id, error: baseline.error })
-          failures.push({ stage: "baseline", error: baseline.error })
-        } else {
-          const result = await EngineGit.complete(baseline.task)
-          signal.throwIfAborted()
-          if (result.error) {
-            log.error("cancelled Task result checkpoint settlement failed", { taskID: task.id, error: result.error })
-            failures.push({ stage: "result", error: result.error })
-          } else {
-            checkpoint = ((result.task.metadata as Record<string, any>)?.git?.result ?? {}) as Record<string, unknown>
-          }
-        }
-      }
-    } catch (error) {
-      signal.throwIfAborted()
-      log.error("cancelled Task checkpoint settlement crashed", {
-        taskID: task.id,
-        error: error instanceof Error ? error.message : String(error),
-        errorName: error instanceof Error ? error.name : undefined,
-      })
-      failures.push({ stage: "checkpoint", error: error instanceof Error ? error.message : String(error) })
-    }
-    try {
-      signal.throwIfAborted()
-      const { Worktree } = await import("@/worktree")
-      await Worktree.releaseManagedWorktreeTaskOwners(task.id, { signal })
-      signal.throwIfAborted()
-    } catch (error) {
-      signal.throwIfAborted()
-      log.error("cancelled Task worktree settlement failed", {
-        taskID: task.id,
-        error: error instanceof Error ? error.message : String(error),
-        errorName: error instanceof Error ? error.name : undefined,
-      })
-      failures.push({ stage: "worktree_release", error: error instanceof Error ? error.message : String(error) })
-    }
-    signal.throwIfAborted()
-    if (failures.length > 0) {
-      deferSettlementArtifact({ artifactID: settlementArtifactID, claimed, failures })
-      throwSettlementFailures("Cancelled Task checkpoint settlement", failures)
-    }
-    const completed = Date.now()
-    completeSettlementArtifact({
-      artifactID: settlementArtifactID,
-      claimed,
-      payload: {
-        ...(checkpoint ? { checkpoint } : {}),
-      },
-      completed,
-    })
-  })
-}
-
-export function reconcilePendingCancelledTaskSettlements(): number {
-  const pending = Database.use((db) =>
-    db
-      .select({ artifactID: EngineArtifactTable.id, kind: EngineArtifactTable.kind, task: EngineTaskTable })
-      .from(EngineArtifactTable)
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineArtifactTable.task_id))
-      .where(
-        and(
-          sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
-          sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
-          eq(EngineTaskTable.project_id, Instance.project.id),
-        ),
-      )
-      .all(),
-  )
-  for (const row of pending) {
-    if (row.kind === "task_auxiliary_settlement") {
-      scheduleCancelledTaskAuxiliarySettlement(row.task, row.artifactID)
-    } else {
-      scheduleCancelledTaskCheckpointSettlement(row.task, row.artifactID)
-    }
-  }
-  return pending.length
-}
-
-export const CancelledTaskSettlementTestHooks = {
-  installBeforeRollbackRecovery(hook: () => void | Promise<void>): Disposable {
-    if (beforeCancelledTaskRollbackRecoveryForTest) {
-      throw new Error("Cancelled Task rollback recovery test hook is already installed")
-    }
-    beforeCancelledTaskRollbackRecoveryForTest = hook
-    return {
-      [Symbol.dispose]() {
-        if (beforeCancelledTaskRollbackRecoveryForTest === hook) {
-          beforeCancelledTaskRollbackRecoveryForTest = undefined
-        }
-      },
-    }
-  },
-  trackSettlementOperation(artifactID: string, operation: Promise<void>): Disposable {
-    if (settlementOperations.has(artifactID)) throw new Error(`Settlement ${artifactID} is already active`)
-    const tracked = Promise.resolve(operation).finally(() => {
-      if (settlementOperations.get(artifactID) === tracked) settlementOperations.delete(artifactID)
-    })
-    settlementOperations.set(artifactID, tracked)
-    void tracked.catch(() => undefined)
-    return {
-      [Symbol.dispose]() {
-        if (settlementOperations.get(artifactID) === tracked) settlementOperations.delete(artifactID)
-      },
-    }
-  },
-  renewLeaseNow(artifactID: string): void {
-    const fence = settlementLeaseFences.get(artifactID)
-    if (!fence) throw new Error(`Settlement ${artifactID} has no live lease fence`)
-    renewSettlementLeaseOrAbort(artifactID, fence)
-  },
-}
-
 function nonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0
 }
@@ -665,86 +144,25 @@ function nonEmptyString(value: unknown): value is string {
 function resolveTaskUpdateValues(
   current: TaskRow,
   values: InternalTaskUpdateValues,
-  now: number,
-  options?: TerminalTaskOptions,
 ): {
   intent: InternalTaskUpdateValues["status"]
   resolved: Partial<typeof EngineTaskTable.$inferInsert>
   nextError: string | null
   noOp: boolean
 } {
-  const { status: intent, ...rest } = values
-
-  // Resolve every logical verb from the row read inside the writer
-  // transaction. A caller may hold an older Task snapshot while retry/replan
-  // reopens the durable row, so caller-owned facts cannot decide no-op or
-  // lifecycle predecessor semantics.
-  const resolved: Partial<typeof EngineTaskTable.$inferInsert> = { ...rest }
-  const existingMetadata: Record<string, unknown> =
-    current.metadata && typeof current.metadata === "object" && !Array.isArray(current.metadata)
-      ? { ...(current.metadata as Record<string, unknown>) }
-      : {}
-  const metaBase: Record<string, unknown> =
-    typeof rest.metadata === "object" && rest.metadata !== null && !Array.isArray(rest.metadata)
-      ? { ...(rest.metadata as Record<string, unknown>) }
-      : rest.metadata === undefined
-        ? existingMetadata
-        : {}
-  let metaMutated = rest.metadata !== undefined
-  const clearTerminalReasonFlags = () => {
-    const hadFlag = "cancelled" in metaBase || "interrupted" in metaBase
-    delete metaBase.cancelled
-    delete metaBase.interrupted
-    if (hadFlag) metaMutated = true
+  const { status: intent, error, ...persisted } = values
+  const resolved = { ...persisted }
+  if (resolved.metadata && typeof resolved.metadata === "object") {
+    const metadata = { ...(resolved.metadata as Record<string, unknown>) }
+    delete metadata.cancelled
+    delete metadata.interrupted
+    resolved.metadata = metadata
   }
-  switch (intent) {
-    case "active":
-      clearTerminalReasonFlags()
-      if (resolved.time_started === undefined && current.time_completed != null) {
-        resolved.time_started = Math.max(now, current.time_started + 1)
-      }
-      if (resolved.time_completed === undefined && current.time_completed != null) {
-        resolved.time_completed = null
-      }
-      break
-    case "completed":
-      clearTerminalReasonFlags()
-      if (resolved.time_completed === undefined) resolved.time_completed = now
-      if (resolved.error === undefined) resolved.error = null
-      break
-    case "failed":
-      clearTerminalReasonFlags()
-      if (options?.terminalReason === "interrupted") {
-        metaBase.interrupted = true
-        metaMutated = true
-      }
-      if (resolved.time_completed === undefined) resolved.time_completed = now
-      break
-    case "cancelled":
-      delete metaBase.interrupted
-      if (resolved.time_completed === undefined) resolved.time_completed = now
-      metaBase.cancelled = true
-      metaMutated = true
-      break
-    case undefined:
-      break
-  }
-  if (metaMutated) resolved.metadata = metaBase
-
-  const nextError = resolved.error === undefined ? current.error : resolved.error
-  const nextStarted = resolved.time_started === undefined ? current.time_started : resolved.time_started
-  const nextCompleted = resolved.time_completed === undefined ? current.time_completed : resolved.time_completed
-  const guardedKeys = new Set(["error", "time_started", "time_completed"])
-  const hasOtherWrite = Object.keys(resolved).some((key) => !guardedKeys.has(key))
   return {
     intent,
     resolved,
-    nextError,
-    noOp:
-      !hasOtherWrite &&
-      nextError === current.error &&
-      nextStarted === current.time_started &&
-      nextCompleted === current.time_completed,
+    nextError: error === undefined ? current.error : error,
+    noOp: Object.keys(resolved).length === 0 && !intent,
   }
 }
 
@@ -764,44 +182,56 @@ export function writeTaskUpdateInTransaction(input: {
 }): TaskUpdateTransactionResult {
   const { db, taskID, values, summary, now, options, cancellationRequest } = input
   const terminalIntent = isTerminalTaskIntent(values.status)
-  const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-  if (!current) throw new Error(`task ${taskID} not found during updateTask`)
-  if (
-    current.time_completed == null &&
-    (values.status === "completed" || values.status === "failed") &&
-    db
-      .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
-      .from(EngineTaskCancellationAuthorityTable)
-      .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
-      .get()?.requestEventID
-  ) {
+  const currentRow = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+  if (!currentRow) throw new Error(`task ${taskID} not found during updateTask`)
+  const current = projectTaskRowInTransaction(db, currentRow)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, taskID)
+  if (values.status === "active" && ["completed", "failed", "cancelled"].includes(lifecycle.status)) {
+    if (!current.session_id) throw new Error(`Task ${taskID} cannot reopen without its root Session identity`)
+    appendTaskReopenedInTransaction({
+      db,
+      taskID,
+      sessionID: current.session_id,
+      now,
+      source: "state.task",
+    })
+  }
+  if (terminalIntent && ["completed", "failed", "cancelled"].includes(lifecycle.status)) {
+    return { kind: "existing_terminal", task: current }
+  }
+  if ((values.status === "completed" || values.status === "failed") && lifecycle.status === "cancelling") {
     throw new Error(`Task ${taskID} has an accepted cancellation; ${values.status} cannot supersede it.`)
   }
-  const resolution = resolveTaskUpdateValues(current, values, now, options)
-  if (resolution.noOp) return { kind: "unchanged", task: current }
-  const updated = updateEngineTaskState(db, {
-    taskID,
-    values: resolution.resolved,
-    timeUpdated: now,
-    onlyWhenIncomplete: terminalIntent,
-  })
-  if (!updated) {
-    const concurrent = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-    if (terminalIntent && concurrent?.time_completed != null) {
-      return { kind: "existing_terminal", task: concurrent }
-    }
-    throw new Error(`task ${taskID} not found during updateTask`)
+  if (values.status === "cancelled" && lifecycle.requestEventID !== cancellationRequest?.id) {
+    throw new Error(`Task ${taskID} cancellation terminal fact must cause from its exact request event`)
   }
-  if (terminalIntent) options?.transactionEffect?.(db, updated)
-  const nextStatus = deriveTaskStatus(updated)
-  insertEngineProgressSnapshot(db, {
-    taskID,
-    status: progressStatus(nextStatus),
-    summary,
-    payload: { status: nextStatus, error: resolution.nextError },
-    timeCreated: now,
-  })
-  const prevStatus = deriveTaskStatus(current)
+  const resolution = resolveTaskUpdateValues(current, values)
+  const persisted = { ...resolution.resolved } as Record<string, unknown>
+  delete persisted.status
+  delete persisted.error
+  delete persisted.time_started
+  delete persisted.time_completed
+  if (persisted.metadata && typeof persisted.metadata === "object") {
+    const metadata = { ...(persisted.metadata as Record<string, unknown>) }
+    delete metadata.cancelled
+    delete metadata.interrupted
+    persisted.metadata = metadata
+  }
+  if (Object.keys(persisted).length > 0) {
+    db.update(EngineTaskTable)
+      .set(persisted as Partial<typeof EngineTaskTable.$inferInsert>)
+      .where(eq(EngineTaskTable.id, taskID))
+      .run()
+  }
+  if (!terminalIntent) {
+    const updatedRow = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!
+    const updated = projectTaskRowInTransaction(db, updatedRow)
+    return resolution.noOp && Object.keys(persisted).length === 0
+      ? { kind: "unchanged", task: updated }
+      : { kind: "updated", task: updated }
+  }
+  const nextStatus = values.status
+  const completionTime = now
   const cancellationMeta =
     nextStatus === "cancelled" && cancellationRequest
       ? {
@@ -811,45 +241,63 @@ export function writeTaskUpdateInTransaction(input: {
           causationID: cancellationRequest.id,
         }
       : { source: "state.task" }
-  EngineProtocol.emitInTransaction(Event.TaskUpdated, { taskID, status: nextStatus, summary }, cancellationMeta)
   let terminalEvent: ReturnType<typeof EngineProtocol.emitInTransaction> | undefined
-  if (prevStatus !== nextStatus && nextStatus === "completed") {
+  if (nextStatus === "completed") {
     terminalEvent = EngineProtocol.emitInTransaction(
       Event.TaskCompleted,
       {
         taskID,
-        status: nextStatus,
+        execution_epoch: lifecycle.epoch,
         summary,
-        timeCompleted: updated.time_completed!,
       },
-      { source: "state.task" },
+      { source: "state.task", taskID, emittedAt: completionTime },
     )
-  } else if (prevStatus !== nextStatus && nextStatus === "failed") {
+    Bus.publishOwnedInTransaction(Event.TaskCompleted, {
+      taskID,
+      execution_epoch: lifecycle.epoch,
+      summary,
+    })
+  } else if (nextStatus === "failed") {
     terminalEvent = EngineProtocol.emitInTransaction(
       Event.TaskFailed,
       {
         taskID,
-        status: nextStatus,
+        execution_epoch: lifecycle.epoch,
         summary,
         error: resolution.nextError!,
-        timeCompleted: updated.time_completed!,
         ...(options?.terminalReason === "interrupted" ? { terminalReason: "interrupted" as const } : {}),
       },
-      { source: "state.task" },
+      { source: "state.task", taskID, emittedAt: completionTime },
     )
-  } else if (prevStatus !== nextStatus && nextStatus === "cancelled") {
+    Bus.publishOwnedInTransaction(Event.TaskFailed, {
+      taskID,
+      execution_epoch: lifecycle.epoch,
+      summary,
+      error: resolution.nextError!,
+      ...(options?.terminalReason === "interrupted" ? { terminalReason: "interrupted" as const } : {}),
+    })
+  } else if (nextStatus === "cancelled") {
     terminalEvent = EngineProtocol.emitInTransaction(
       Event.TaskCancelled,
       {
         taskID,
-        status: nextStatus,
+        execution_epoch: lifecycle.epoch,
         summary,
         error: resolution.nextError!,
-        timeCompleted: updated.time_completed!,
       },
-      cancellationMeta,
+      { ...cancellationMeta, taskID, emittedAt: completionTime },
     )
+    Bus.publishOwnedInTransaction(Event.TaskCancelled, {
+      taskID,
+      execution_epoch: lifecycle.epoch,
+      summary,
+      error: resolution.nextError!,
+    })
   }
+  if (!terminalEvent) throw new Error(`Task ${taskID} terminal lifecycle event was not appended`)
+  const updatedRow = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!
+  const updated = projectTaskRowInTransaction(db, updatedRow)
+  options?.transactionEffect?.(db, updated)
   if (terminalEvent) {
     const creator = TaskCreatorMetadata.parse(updated.metadata)
     const cancellationOrigin =
@@ -899,7 +347,7 @@ async function applyTaskUpdate(
       taskID: row.id,
       values,
       summary,
-      now: Date.now(),
+      now: options?.terminalAt ?? Date.now(),
       options,
       cancellationRequest,
     }),

@@ -1,7 +1,8 @@
 import { taskIDForSession } from "./task-session-lineage"
 import { Database, and, eq } from "@/storage/db"
 import { Message } from "@/session/message"
-import { MessageTable, PartTable, SessionTable, type SessionKind } from "@/session/session.sql"
+import { MessageTable, ToolPartRequestTable, SessionTable, type SessionKind } from "@/session/session.sql"
+import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 
 type TaskAssistantProducerMessageInput = {
   taskID: string
@@ -67,32 +68,18 @@ export function assertTaskAssistantProducerToolPart(
   },
 ): void {
   assertTaskAssistantProducerMessage(input)
-  const row = Database.use((db) =>
-    db
-      .select({
-        messageID: PartTable.message_id,
-        sessionID: PartTable.session_id,
-        data: PartTable.data,
-      })
-      .from(PartTable)
-      .where(
-        and(
-          eq(PartTable.id, input.toolPartID),
-          eq(PartTable.message_id, input.messageID),
-          eq(PartTable.session_id, input.sessionID),
-        ),
-      )
-      .get(),
-  )
+  const row = Database.use((db) => {
+    const persisted = db
+      .select()
+      .from(ToolPartRequestTable)
+      .where(and(eq(ToolPartRequestTable.id, input.toolPartID), eq(ToolPartRequestTable.message_id, input.messageID)))
+      .get()
+    return persisted ? projectToolPartInTransaction(db, persisted) : undefined
+  })
   if (!row) {
     throw new Error(`Producer tool part ${input.toolPartID} does not exist on assistant message ${input.messageID}.`)
   }
-  const part = Message.ToolPart.safeParse({
-    ...row.data,
-    id: input.toolPartID,
-    sessionID: row.sessionID,
-    messageID: row.messageID,
-  })
+  const part = Message.ToolPart.safeParse(row)
   if (!part.success || part.data.callID !== input.toolCallID || part.data.tool !== input.visibleToolName) {
     throw new Error(
       `Producer tool part ${input.toolPartID} does not match tool=${input.visibleToolName} callID=${input.toolCallID}.`,

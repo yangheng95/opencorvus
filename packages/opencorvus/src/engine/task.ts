@@ -1,4 +1,4 @@
-import { Database, and, eq, inArray, isNull, sql } from "@/storage/db"
+import { Database, and, eq, inArray, isNull } from "@/storage/db"
 import { EngineTaskTable, type EngineMetadata } from "./engine.sql"
 import { Project } from "@/project/project"
 
@@ -20,9 +20,7 @@ export function insertEngineTask(
     priority: EngineTaskInsert["priority"]
     budget?: EngineTaskInsert["budget"]
     metadata: EngineMetadata
-    timeStarted: number
     timeCreated: number
-    timeUpdated: number
   },
 ): void {
   Project.assertDurableAdmissionOpen(input.projectID)
@@ -40,42 +38,9 @@ export function insertEngineTask(
       priority: input.priority,
       budget: input.budget,
       metadata: input.metadata,
-      time_started: input.timeStarted,
       time_created: input.timeCreated,
-      time_updated: input.timeUpdated,
     })
     .run()
-}
-
-export function touchEngineTask(db: Database.TxOrDb, input: { taskID: string; timeUpdated?: number }): void {
-  db.update(EngineTaskTable)
-    .set({ time_updated: input.timeUpdated ?? Date.now() })
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .run()
-}
-
-export function updateEngineTaskState(
-  db: Database.TxOrDb,
-  input: {
-    taskID: string
-    values: Partial<EngineTaskInsert>
-    timeUpdated: number
-    onlyWhenIncomplete?: boolean
-  },
-): EngineTaskSelect | undefined {
-  return db
-    .update(EngineTaskTable)
-    .set({
-      ...input.values,
-      time_updated: input.timeUpdated,
-    })
-    .where(
-      input.onlyWhenIncomplete
-        ? and(eq(EngineTaskTable.id, input.taskID), isNull(EngineTaskTable.time_completed))
-        : eq(EngineTaskTable.id, input.taskID),
-    )
-    .returning()
-    .get()
 }
 
 export function setEngineTaskBudget(
@@ -93,50 +58,12 @@ export function setEngineTaskArchived(
   db: Database.TxOrDb,
   input: { taskID: string; timeArchived: number | null; timeUpdated: number },
 ): void {
-  db.update(EngineTaskTable)
-    .set({ time_archived: input.timeArchived, time_updated: input.timeUpdated })
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .run()
+  db.update(EngineTaskTable).set({ time_archived: input.timeArchived }).where(eq(EngineTaskTable.id, input.taskID)).run()
 }
 
 export function setEngineTaskPinned(db: Database.TxOrDb, input: { taskID: string; timePinned: number | null }): void {
   db.update(EngineTaskTable)
-    .set({
-      time_pinned: input.timePinned,
-      time_updated: sql`${EngineTaskTable.time_updated}`,
-    })
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .run()
-}
-
-export function setEngineTaskRewindCursor(
-  db: Database.TxOrDb,
-  input: {
-    taskID: string
-    cursorTime: number
-    anchorEventID?: string | null
-    rewindCount: number
-    timeUpdated: number
-  },
-): void {
-  db.update(EngineTaskTable)
-    .set({
-      rewind_cursor_time: input.cursorTime,
-      rewind_cursor_event_id: input.anchorEventID ?? null,
-      rewind_count: input.rewindCount,
-      time_updated: input.timeUpdated,
-    })
-    .where(eq(EngineTaskTable.id, input.taskID))
-    .run()
-}
-
-export function clearEngineTaskRewindCursor(db: Database.TxOrDb, input: { taskID: string; timeUpdated: number }): void {
-  db.update(EngineTaskTable)
-    .set({
-      rewind_cursor_time: null,
-      rewind_cursor_event_id: null,
-      time_updated: input.timeUpdated,
-    })
+    .set({ time_pinned: input.timePinned })
     .where(eq(EngineTaskTable.id, input.taskID))
     .run()
 }
@@ -161,7 +88,6 @@ export function setEngineTaskMetadata(
   db.update(EngineTaskTable)
     .set({
       metadata: input.metadata,
-      time_updated: input.timeUpdated ?? Date.now(),
     })
     .where(eq(EngineTaskTable.id, input.taskID))
     .run()
@@ -188,7 +114,6 @@ export function mergeEngineTaskMetadata(
   db.update(EngineTaskTable)
     .set({
       metadata,
-      time_updated: input.timeUpdated ?? Date.now(),
     })
     .where(eq(EngineTaskTable.id, input.taskID))
     .run()

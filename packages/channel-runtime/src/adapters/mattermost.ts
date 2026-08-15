@@ -158,9 +158,10 @@ export class MattermostAdapter implements ChannelAdapter {
     const user = body.user_id
     const thread = body.root_id ?? body.post_id
     const text = (body.text ?? "").trim()
-    if (!channel || !user || !thread || !text) return Response.json({ ok: true })
+    if (!channel || !user || !body.post_id || !thread || !text) return Response.json({ ok: true })
 
     await this.handler({
+      id: body.post_id,
       platform: this.platform,
       channel,
       thread,

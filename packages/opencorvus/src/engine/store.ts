@@ -1,4 +1,6 @@
 import { ProjectTable } from "@/project/project.sql"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { PermissionLedgerTable } from "@/permission/permission.sql"
 import { isDeepStrictEqual } from "node:util"
 import { SessionTable } from "@/session/session.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
@@ -25,6 +27,7 @@ import {
   EngineArtifactTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
+  EngineInteractionOutcomeTable,
   EngineProgressSnapshotTable,
   EngineTaskTable,
   type EngineBudget,
@@ -72,10 +75,34 @@ import { type ArchitectContractGraph } from "@/architect/contract-graph"
 import { requireTaskPackageRevisionBinding } from "./task-package-revision-binding"
 import { parseFrontendResearchBriefArtifactEnvelope } from "@/research/frontend-research-artifact"
 import { resolveDeliverySliceRevisionIdentity, type DeliverySliceRevisionIdentity } from "./delivery-slice"
+import { taskLifecycleProjectionAtInTransaction, taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 
-export type TaskRow = typeof EngineTaskTable.$inferSelect
+type PersistedTaskRow = typeof EngineTaskTable.$inferSelect
+export type TaskRow = PersistedTaskRow & {
+  /** Read-only lifecycle projections retained in the service ABI. */
+  time_started: number
+  time_completed: number | null
+  time_updated: number
+  error: string | null
+  lifecycle_status: "active" | "cancelling" | "closing" | "completed" | "failed" | "cancelled"
+  terminal_reason?: "interrupted"
+}
 export type GoalRow = typeof EngineGoalTable.$inferSelect
-export type InteractionRow = typeof EngineInteractionRequestTable.$inferSelect
+type PersistedInteractionRow = typeof EngineInteractionRequestTable.$inferSelect
+export type InteractionRow = Omit<PersistedInteractionRow, "task_id" | "session_id" | "external_id" | "request_type" | "title" | "body" | "payload" | "time_created"> & {
+  task_id: string
+  session_id: string
+  external_id: string
+  request_type: import("./engine.sql").EngineInteractionType
+  title: string
+  body: string
+  payload: EngineMetadata
+  time_created: number
+  status: import("./engine.sql").EngineInteractionStatus
+  response: EngineMetadata | null
+  time_resolved: number | null
+  time_updated: number
+}
 export type ArtifactRow = typeof EngineArtifactTable.$inferSelect
 export type RequirementSetArtifactRow = Omit<ArtifactRow, "kind" | "payload"> & {
   kind: "requirement_set"
@@ -116,6 +143,15 @@ export type BuildHostObservationRow = {
   time_updated: number
 }
 export type ProgressRow = typeof EngineProgressSnapshotTable.$inferSelect
+
+export class TaskDeletedError extends Error {
+  readonly taskID: string
+  constructor(taskID: string) {
+    super(`Task ${taskID} was deleted and no longer admits commands or projections.`)
+    this.name = "TaskDeletedError"
+    this.taskID = taskID
+  }
+}
 
 function exactGoalArtifactLocator(input: {
   goal: GoalRow
@@ -189,7 +225,40 @@ export function requireInteraction(interactionID: string) {
 }
 
 export function findTask(taskID: string) {
-  return Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get())
+  return Database.use((db) => {
+    const row = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+    return row && !taskDeletedInTransaction(db, taskID) ? projectTaskRowInTransaction(db, row) : undefined
+  })
+}
+
+export function taskDeletedInTransaction(db: Database.TxOrDb, taskID: string): boolean {
+  return Boolean(db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
+    eq(ProtocolEventTable.aggregate_type, "task"),
+    eq(ProtocolEventTable.aggregate_id, taskID),
+    eq(ProtocolEventTable.type, "task.deleted"),
+  )).get())
+}
+
+export function assertTaskNotDeletedInTransaction(db: Database.TxOrDb, taskID: string): void {
+  if (taskDeletedInTransaction(db, taskID)) throw new TaskDeletedError(taskID)
+}
+
+export function projectTaskRowInTransaction(db: Database.TxOrDb, row: PersistedTaskRow): TaskRow {
+  assertTaskNotDeletedInTransaction(db, row.id)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, row.id)
+  return {
+    ...row,
+    time_started: lifecycle.openedAt,
+    time_completed: lifecycle.terminalAt ?? null,
+    time_updated: Math.max(row.time_created, lifecycle.terminalAt ?? lifecycle.openedAt),
+    error: lifecycle.status === "failed" || lifecycle.status === "cancelled" ? (lifecycle.terminalError ?? lifecycle.status) : null,
+    lifecycle_status: lifecycle.status,
+    ...(lifecycle.terminalReason ? { terminal_reason: lifecycle.terminalReason } : {}),
+  }
+}
+
+export function projectTaskRowsInTransaction(db: Database.TxOrDb, rows: readonly PersistedTaskRow[]): TaskRow[] {
+  return rows.filter((row) => !taskDeletedInTransaction(db, row.id)).map((row) => projectTaskRowInTransaction(db, row))
 }
 
 // Resolve a task into the set of session IDs that belong to it (root +
@@ -226,35 +295,32 @@ function missionTaskConditions(input: { projectID: string; missionID: string; se
 }
 
 export function listAllMissionTasks(input: { projectID: string; missionID: string; sessionID: string }): TaskRow[] {
-  return Database.use((db) =>
-    db
+  return Database.use((db) => projectTaskRowsInTransaction(db, db
       .select()
       .from(EngineTaskTable)
       .where(and(...missionTaskConditions(input)))
-      .orderBy(desc(EngineTaskTable.time_updated), desc(EngineTaskTable.id))
-      .all(),
-  )
+      .orderBy(desc(EngineTaskTable.time_created), desc(EngineTaskTable.id))
+      .all()))
 }
 
 export function listMissionTasks(input: { projectID: string; missionID: string; sessionID: string }): TaskRow[] {
-  return Database.use((db) =>
-    db
+  return Database.use((db) => projectTaskRowsInTransaction(db, db
       .select()
       .from(EngineTaskTable)
       .where(and(...missionTaskConditions(input), isNull(EngineTaskTable.time_archived)))
-      .orderBy(desc(EngineTaskTable.time_updated), desc(EngineTaskTable.id))
-      .all(),
-  )
+      .orderBy(desc(EngineTaskTable.time_created), desc(EngineTaskTable.id))
+      .all()))
 }
 
 export function findTaskByRequest(projectID: string, requestID: string) {
-  return Database.use((db) =>
-    db
+  return Database.use((db) => {
+    const row = db
       .select()
       .from(EngineTaskTable)
       .where(and(eq(EngineTaskTable.project_id, projectID), eq(EngineTaskTable.request_id, requestID)))
-      .get(),
-  )
+      .get()
+    return row && !taskDeletedInTransaction(db, row.id) ? projectTaskRowInTransaction(db, row) : undefined
+  })
 }
 
 export function parseContractGraphArtifact(row: ArtifactRow): ContractGraphArtifactRow {
@@ -492,20 +558,183 @@ function parseResearchBriefArtifactRow(row: ArtifactRow, taskID: string): Resear
 // ---------------------------------------------------------------------------
 
 export function findInteraction(interactionID: string) {
-  return Database.use((db) =>
-    db.select().from(EngineInteractionRequestTable).where(eq(EngineInteractionRequestTable.id, interactionID)).get(),
-  )
+  return Database.use((db) => {
+    const row = db.select().from(EngineInteractionRequestTable).where(eq(EngineInteractionRequestTable.id, interactionID)).get()
+    return row ? projectInteractionRowInTransaction(db, row) : undefined
+  })
 }
 
 export function findInteractionByExternal(externalID: string) {
-  return Database.use((db) =>
-    db
-      .select()
+  return Database.use((db) => {
+    const row = db
+      .select({ interaction: EngineInteractionRequestTable })
       .from(EngineInteractionRequestTable)
-      .where(eq(EngineInteractionRequestTable.external_id, externalID))
-      .orderBy(desc(EngineInteractionRequestTable.time_created))
-      .get(),
-  )
+      .leftJoin(BusPublicationOutboxTable, and(eq(EngineInteractionRequestTable.source_kind, "bus_question"), eq(BusPublicationOutboxTable.occurrence_id, EngineInteractionRequestTable.source_id)))
+      .leftJoin(PermissionLedgerTable, and(eq(EngineInteractionRequestTable.source_kind, "permission_request"), eq(PermissionLedgerTable.id, EngineInteractionRequestTable.source_id)))
+      .where(sql`COALESCE(${EngineInteractionRequestTable.external_id}, json_extract(${BusPublicationOutboxTable.properties}, '$.id'), ${PermissionLedgerTable.request_id}) = ${externalID}`)
+      .get()
+    return row ? projectInteractionRowInTransaction(db, row.interaction) : undefined
+  })
+}
+
+export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: PersistedInteractionRow): InteractionRow {
+  const source = row.source_kind === "bus_question" && row.source_id
+    ? db.select().from(BusPublicationOutboxTable).where(eq(BusPublicationOutboxTable.occurrence_id, row.source_id)).get()
+    : undefined
+  const properties = source?.properties && typeof source.properties === "object" && !Array.isArray(source.properties)
+    ? source.properties as Record<string, unknown>
+    : undefined
+  let request = row.source_id ? undefined : {
+    sessionID: row.session_id,
+    externalID: row.external_id,
+    requestType: row.request_type,
+    title: row.title,
+    body: row.body,
+    payload: row.payload,
+    timeCreated: row.time_created,
+  }
+  if (source?.event_type === "question.asked" && properties) {
+    const questions = Array.isArray(properties.questions) ? properties.questions as Array<Record<string, unknown>> : []
+    const title = questions.map((item) => typeof item.header === "string" ? item.header : "").filter(Boolean).join(" / ") || "Question"
+    request = {
+      sessionID: typeof properties.sessionID === "string" ? properties.sessionID : null,
+      externalID: typeof properties.id === "string" ? properties.id : null,
+      requestType: "question",
+      title,
+      body: questions.map((item) => typeof item.question === "string" ? item.question : "").join("\n\n"),
+      payload: {
+        questions: properties.questions,
+        tool: properties.tool,
+        ...(properties.automatic ? { automatic: properties.automatic } : {}),
+        ...(properties.expiry ? { expiry: properties.expiry } : {}),
+      },
+      timeCreated: typeof properties.timeCreated === "number" ? properties.timeCreated : null,
+    }
+  }
+  const permission = row.source_kind === "permission_request" && row.source_id
+    ? db.select().from(PermissionLedgerTable).where(and(
+        eq(PermissionLedgerTable.id, row.source_id),
+        eq(PermissionLedgerTable.event_type, "requested"),
+      )).get()
+    : undefined
+  if (permission) {
+    request = {
+      sessionID: permission.session_id,
+      externalID: permission.request_id,
+      requestType: "permission",
+      title: `Permission: ${permission.tool_name}`,
+      body: `${permission.summary}\n\n${JSON.stringify(permission.scope, null, 2)}`,
+      payload: {
+        mode: permission.mode,
+        policyRevision: permission.policy_revision,
+        providerKind: permission.provider_kind,
+        providerID: permission.provider_id,
+        providerDigest: permission.provider_digest,
+        toolName: permission.tool_name,
+        effectClass: permission.effect_class,
+        scopeVersion: permission.scope_version,
+        scope: permission.scope,
+        fingerprint: permission.fingerprint,
+        choices: Array.isArray(permission.metadata?.choices)
+          ? permission.metadata.choices
+          : ["allow_once", "allow_task", "allow_project", "deny"],
+        tool: { messageID: permission.message_id, callID: permission.tool_call_id },
+      },
+      timeCreated: permission.time_created,
+    }
+  }
+  if (!request?.sessionID || !request.externalID || !request.requestType || !request.title || request.body === null || !request.payload || !request.timeCreated) {
+    throw new Error(`Interaction ${row.id} has incomplete immutable request authority`)
+  }
+  let taskID = row.task_id ?? permission?.task_id ?? undefined
+  let ancestorSessionID: string | null | undefined = request.sessionID
+  const visited = new Set<string>()
+  while (!taskID && ancestorSessionID) {
+    if (visited.has(ancestorSessionID)) throw new Error(`Interaction ${row.id} Session lineage contains a cycle`)
+    visited.add(ancestorSessionID)
+    taskID = db.select({ id: EngineTaskTable.id }).from(EngineTaskTable).where(eq(EngineTaskTable.session_id, ancestorSessionID)).get()?.id
+    if (!taskID) ancestorSessionID = db.select({ parentID: SessionTable.parent_id }).from(SessionTable).where(eq(SessionTable.id, ancestorSessionID)).get()?.parentID
+  }
+  if (!taskID) throw new Error(`Interaction ${row.id} has no immutable Task owner`)
+  const exactTaskID = taskID
+  const outcome = db.select().from(EngineInteractionOutcomeTable)
+    .where(eq(EngineInteractionOutcomeTable.interaction_id, row.id)).get()
+  const outcomeSource = outcome?.source_occurrence_id
+    ? db.select().from(BusPublicationOutboxTable)
+        .where(eq(BusPublicationOutboxTable.occurrence_id, outcome.source_occurrence_id)).get()
+    : undefined
+  if (outcome?.source_occurrence_id && !outcomeSource) {
+    throw new Error(`Interaction ${row.id} references missing terminal Question occurrence ${outcome.source_occurrence_id}`)
+  }
+  const outcomeProperties = outcomeSource?.properties && typeof outcomeSource.properties === "object" && !Array.isArray(outcomeSource.properties)
+    ? outcomeSource.properties as Record<string, unknown>
+    : undefined
+  if (outcomeSource && (
+    !outcomeProperties ||
+    outcomeProperties.requestID !== request.externalID ||
+    outcomeProperties.sessionID !== request.sessionID
+  )) {
+    throw new Error(`Interaction ${row.id} terminal Question occurrence changed causal identity`)
+  }
+  const sourcedOutcome = outcomeSource ? (() => {
+    const timeResolved = outcomeProperties!.timeResolved
+    if (!Number.isSafeInteger(timeResolved) || Number(timeResolved) <= 0) {
+      throw new Error(`Interaction ${row.id} terminal Question occurrence has no exact resolution time`)
+    }
+    if (outcomeSource.event_type === "question.replied") {
+      return {
+        status: "answered" as const,
+        response: {
+          answers: outcomeProperties!.answers,
+          ...(outcomeProperties!.automatic === true ? { auto_reply: true } : {}),
+        },
+        timeResolved: Number(timeResolved),
+      }
+    }
+    if (outcomeSource.event_type === "question.rejected") {
+      return { status: "rejected" as const, response: { origin: outcomeProperties!.origin }, timeResolved: Number(timeResolved) }
+    }
+    if (outcomeSource.event_type === "question.expired") {
+      return {
+        status: "expired" as const,
+        response: { origin: outcomeProperties!.origin, time_expires: outcomeProperties!.timeExpires },
+        timeResolved: Number(timeResolved),
+      }
+    }
+    if (outcomeSource.event_type === "question.abandoned") {
+      return { status: "expired" as const, response: { origin: "infrastructure" }, timeResolved: Number(timeResolved) }
+    }
+    throw new Error(`Interaction ${row.id} references non-terminal Question occurrence ${outcomeSource.event_type}`)
+  })() : undefined
+  const permissionDecision = permission
+    ? db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.decision_slot, permission.request_id)).get()
+    : undefined
+  if (permissionDecision && outcome) throw new Error(`Permission Interaction ${row.id} has duplicate terminal authorities`)
+  const permissionRejected = permissionDecision && ["denied", "cancelled", "stale"].includes(permissionDecision.event_type)
+  const permissionDecisionValue = permissionDecision
+    ? permissionRejected
+      ? "deny"
+      : permissionDecision.decision_scope === "task"
+        ? "allow_task"
+        : permissionDecision.decision_scope === "project"
+          ? "allow_project"
+          : "allow_once"
+    : undefined
+  return {
+    ...row,
+    task_id: exactTaskID,
+    session_id: request.sessionID,
+    external_id: request.externalID,
+    request_type: request.requestType,
+    title: request.title,
+    body: request.body,
+    payload: request.payload,
+    time_created: request.timeCreated,
+    status: permissionDecision ? (permissionRejected ? "rejected" : "answered") : (sourcedOutcome?.status ?? outcome?.outcome ?? "pending"),
+    response: permissionDecision ? { decision: permissionDecisionValue } : (sourcedOutcome?.response ?? outcome?.response ?? null),
+    time_resolved: permissionDecision?.time_created ?? sourcedOutcome?.timeResolved ?? outcome?.time_created ?? null,
+    time_updated: permissionDecision?.time_created ?? sourcedOutcome?.timeResolved ?? outcome?.time_created ?? request.timeCreated,
+  }
 }
 
 export function findBuildHostObservationsForTask(taskID: string): BuildHostObservationRow[] {
@@ -1001,79 +1230,40 @@ export function listTaskRows(rows: TaskRow[]) {
   return taskRows(rows)
 }
 
-export function listProjectTasks(projectID: string, limit = 50) {
+export function listProjectTasks(projectID: string, limit = 50): TaskRow[] {
   return Database.use((db) =>
-    db
-      .select()
-      .from(EngineTaskTable)
-      .where(and(eq(EngineTaskTable.project_id, projectID), isNull(EngineTaskTable.time_archived)))
-      .orderBy(desc(EngineTaskTable.time_updated))
-      .limit(limit)
-      .all(),
+    projectTaskRowsInTransaction(
+      db,
+      db.select().from(EngineTaskTable)
+        .where(and(eq(EngineTaskTable.project_id, projectID), isNull(EngineTaskTable.time_archived)))
+        .orderBy(desc(EngineTaskTable.time_created), desc(EngineTaskTable.id))
+        .all(),
+    ).toSorted((a, b) => b.time_updated - a.time_updated || b.id.localeCompare(a.id)).slice(0, limit),
   )
 }
 
 export function listStartedIncompleteTaskIDs(input?: { projectID?: string }): string[] {
-  const conditions: SQL[] = [isNull(EngineTaskTable.time_archived), isNull(EngineTaskTable.time_completed)]
-  if (input?.projectID) conditions.unshift(eq(EngineTaskTable.project_id, input.projectID))
-  return Database.use((db) =>
-    db
-      .select({ id: EngineTaskTable.id })
-      .from(EngineTaskTable)
-      .where(and(...conditions))
+  return Database.use((db) => {
+    const rows = db.select().from(EngineTaskTable)
+      .where(and(isNull(EngineTaskTable.time_archived), ...(input?.projectID ? [eq(EngineTaskTable.project_id, input.projectID)] : [])))
       .all()
-      .map((row) => row.id),
-  )
+    return projectTaskRowsInTransaction(db, rows).filter((task) => task.lifecycle_status === "active" || task.lifecycle_status === "cancelling" || task.lifecycle_status === "closing").map((task) => task.id)
+  })
 }
 
-/** 按关键词和/或状态搜索 project 内的 task */
-export function searchProjectTasks(projectID: string, opts: { query?: string; status?: string; limit?: number }) {
-  const conditions = [eq(EngineTaskTable.project_id, projectID), isNull(EngineTaskTable.time_archived)]
-  if (opts.status) {
-    conditions.push(taskStatusCondition(opts.status))
-  }
-  if (opts.query) {
-    conditions.push(like(EngineTaskTable.title, `%${opts.query}%`))
-  }
-  return Database.use((db) =>
-    db
-      .select()
-      .from(EngineTaskTable)
-      .where(and(...conditions))
-      .orderBy(desc(EngineTaskTable.time_updated))
-      .limit(opts.limit ?? 50)
-      .all(),
-  )
+function matchesTaskStatus(task: TaskRow, status: string): boolean {
+  return status === "active"
+    ? task.lifecycle_status === "active" || task.lifecycle_status === "cancelling" || task.lifecycle_status === "closing"
+    : task.lifecycle_status === status
 }
 
-/**
- * Translate a logical task-status filter (active / completed / failed /
- * cancelled) into a fact-field SQL condition now that the status
- * column is gone. Unknown statuses resolve to `1=0` so a caller's typo
- * returns zero rows rather than all rows.
- */
-function taskStatusCondition(status: string): SQL {
-  const cancelledMark = sql`json_extract(${EngineTaskTable.metadata}, '$.cancelled') = 1`
-  switch (status) {
-    case "active":
-      return isNull(EngineTaskTable.time_completed)
-    case "completed":
-      return and(
-        isNotNull(EngineTaskTable.time_completed),
-        isNull(EngineTaskTable.error),
-        sql`(${cancelledMark}) IS NOT TRUE`,
-      )!
-    case "failed":
-      return and(
-        isNotNull(EngineTaskTable.time_completed),
-        isNotNull(EngineTaskTable.error),
-        sql`(${cancelledMark}) IS NOT TRUE`,
-      )!
-    case "cancelled":
-      return cancelledMark
-    default:
-      return sql`1 = 0`
-  }
+/** 按关键词和/或状态搜索 project 内的 task. */
+export function searchProjectTasks(projectID: string, opts: { query?: string; status?: string; limit?: number }): TaskRow[] {
+  const query = opts.query?.toLocaleLowerCase()
+  return listProjectTasks(projectID, Number.MAX_SAFE_INTEGER)
+    .filter((task) => !opts.status || matchesTaskStatus(task, opts.status))
+    .filter((task) => !query || task.title.toLocaleLowerCase().includes(query))
+    .slice(0, opts.limit ?? 50)
 }
 
 export function listGlobalTasks(input?: {
@@ -1084,65 +1274,47 @@ export function listGlobalTasks(input?: {
   status?: string
   limit?: number
 }) {
-  const conditions: SQL[] = [isNull(EngineTaskTable.time_archived)]
-
-  if (input?.directory) {
-    conditions.push(eq(SessionTable.directory, input.directory))
-  }
-  if (input?.cursor && input.cursorTaskID) {
-    conditions.push(sql`(
-      ${EngineTaskTable.time_updated} < ${input.cursor}
-      OR (${EngineTaskTable.time_updated} = ${input.cursor} AND ${EngineTaskTable.id} < ${input.cursorTaskID})
-    )`)
-  } else if (input?.cursor) {
-    conditions.push(lt(EngineTaskTable.time_updated, input.cursor))
-  }
-  if (input?.status) {
-    conditions.push(taskStatusCondition(input.status))
-  }
-  if (input?.query) {
-    conditions.push(like(EngineTaskTable.title, `%${input.query}%`))
-  }
-
   const rows = Database.use((db) => {
-    const query = db
-      .select({ task: EngineTaskTable })
+    const persisted = db.select({ task: EngineTaskTable, directory: SessionTable.directory })
       .from(EngineTaskTable)
       .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
-    return (conditions.length > 0 ? query.where(and(...conditions)) : query)
-      .orderBy(desc(EngineTaskTable.time_updated), desc(EngineTaskTable.id))
-      .limit(input?.limit ?? 100)
+      .where(isNull(EngineTaskTable.time_archived))
       .all()
-      .map((item) => item.task)
+      .filter((item) => !input?.directory || item.directory === input.directory)
+      .filter((item) => !taskDeletedInTransaction(db, item.task.id))
+      .map((item) => projectTaskRowInTransaction(db, item.task))
+    const query = input?.query?.toLocaleLowerCase()
+    return persisted
+      .filter((task) => !input?.status || matchesTaskStatus(task, input.status))
+      .filter((task) => !query || task.title.toLocaleLowerCase().includes(query))
+      .filter((task) => {
+        if (input?.cursor === undefined) return true
+        if (task.time_updated < input.cursor) return true
+        return task.time_updated === input.cursor && Boolean(input.cursorTaskID && task.id < input.cursorTaskID)
+      })
+      .toSorted((a, b) => b.time_updated - a.time_updated || b.id.localeCompare(a.id))
+      .slice(0, input?.limit ?? 100)
   })
-
   return taskRows(rows)
 }
 
 export function listInteractions(taskID: string) {
-  return Database.use((db) =>
-    db
-      .select()
-      .from(EngineInteractionRequestTable)
-      .where(eq(EngineInteractionRequestTable.task_id, taskID))
-      .orderBy(desc(EngineInteractionRequestTable.time_created))
-      .all(),
-  )
+  return Database.use((db) => db.select().from(EngineInteractionRequestTable).all()
+    .map((row) => projectInteractionRowInTransaction(db, row))
+    .filter((row) => row.task_id === taskID)
+    .toSorted((left, right) => right.time_created - left.time_created || right.id.localeCompare(left.id)))
 }
 
 export function pendingInteractionCounts(taskIDs?: string[]): ReadonlyMap<string, number> {
-  if (taskIDs?.length === 0) return new Map()
-  const conditions = [eq(EngineInteractionRequestTable.status, "pending")]
-  if (taskIDs) conditions.push(inArray(EngineInteractionRequestTable.task_id, taskIDs))
-  const rows = Database.use((db) =>
-    db
-      .select({ taskID: EngineInteractionRequestTable.task_id, count: sql<number>`count(*)` })
-      .from(EngineInteractionRequestTable)
-      .where(and(...conditions))
-      .groupBy(EngineInteractionRequestTable.task_id)
-      .all(),
-  )
-  return new Map(rows.map((row) => [row.taskID, row.count]))
+  const selected = taskIDs ? new Set(taskIDs) : undefined
+  const counts = new Map<string, number>()
+  Database.use((db) => {
+    for (const row of db.select().from(EngineInteractionRequestTable).all().map((entry) => projectInteractionRowInTransaction(db, entry))) {
+      if (row.status !== "pending" || (selected && !selected.has(row.task_id))) continue
+      counts.set(row.task_id, (counts.get(row.task_id) ?? 0) + 1)
+    }
+  })
+  return counts
 }
 
 export function listSnapshots(taskID: string) {
@@ -1323,15 +1495,19 @@ export function viewArtifact(row: ArtifactRow) {
 }
 
 export function viewSnapshot(row: ProgressRow) {
+  const lifecycle = Database.use((db) => taskLifecycleProjectionAtInTransaction(db, row.task_id, row.time_created))
   return {
     id: row.id,
     taskID: row.task_id,
-    status: row.status,
+    status: deriveTaskStatus({
+      lifecycle_status: lifecycle.status,
+      terminal_reason: lifecycle.terminalReason,
+    }),
     summary: row.summary,
     payload: row.payload ?? undefined,
     time: {
       created: row.time_created,
-      updated: row.time_updated,
+      updated: row.time_created,
     },
   }
 }

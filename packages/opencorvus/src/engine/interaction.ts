@@ -12,39 +12,40 @@ import {
   type EngineInteractionStatus,
 } from "./engine.sql"
 import { insertEngineInteractionRequest, resolveEngineInteractionRequest } from "./interaction-request"
-import { findInteractionByExternal, type InteractionRow } from "./store"
+import { findInteractionByExternal, projectInteractionRowInTransaction, type InteractionRow } from "./store"
 import { taskIDForSession } from "./task-session-lineage"
 import z from "zod"
 import { ProjectMemory, type InteractionUserInput } from "@/memory/project-memory"
+import { PermissionLedgerTable } from "@/permission/permission.sql"
 
 export namespace EngineInteraction {
   export function subscribe() {
-    Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => upsertPermission(properties), {
-      durableID: "engine.interaction.permission-asked",
+    Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties, occurrenceID }) => upsertPermission(properties, occurrenceID), {
+      durableID: "engine.interaction.permission-asked", effect: "idempotent_by_occurrence",
     })
     Bus.subscribe(PermissionAuthority.Event.Replied, ({ properties }) => resolvePermission(properties), {
-      durableID: "engine.interaction.permission-replied",
+      durableID: "engine.interaction.permission-replied", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(Question.Event.Asked, ({ properties }) => upsertQuestion(properties), {
-      durableID: "engine.interaction.question-asked",
+    Bus.subscribe(Question.Event.Asked, ({ properties, occurrenceID }) => upsertQuestion(properties, occurrenceID), {
+      durableID: "engine.interaction.question-asked", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(Question.Event.Replied, ({ properties }) => resolveQuestion(properties), {
-      durableID: "engine.interaction.question-replied",
+    Bus.subscribe(Question.Event.Replied, ({ properties, occurrenceID }) => resolveQuestion(properties, occurrenceID), {
+      durableID: "engine.interaction.question-replied", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(Question.Event.Rejected, ({ properties }) => rejectQuestion(properties), {
-      durableID: "engine.interaction.question-rejected",
+    Bus.subscribe(Question.Event.Rejected, ({ properties, occurrenceID }) => rejectQuestion(properties, occurrenceID), {
+      durableID: "engine.interaction.question-rejected", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(Question.Event.Expired, ({ properties }) => expireQuestion(properties), {
-      durableID: "engine.interaction.question-expired",
+    Bus.subscribe(Question.Event.Expired, ({ properties, occurrenceID }) => expireQuestion(properties, occurrenceID), {
+      durableID: "engine.interaction.question-expired", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(Question.Event.Abandoned, ({ properties }) => abandonQuestion(properties), {
-      durableID: "engine.interaction.question-abandoned",
+    Bus.subscribe(Question.Event.Abandoned, ({ properties, occurrenceID }) => abandonQuestion(properties, occurrenceID), {
+      durableID: "engine.interaction.question-abandoned", effect: "idempotent_by_occurrence",
     })
   }
 
   export async function reconcileRecoveredPendingWaiters(input: { projectID: string; timeResolved: number }): Promise<{
     abandoned: Array<{ interactionID: string; externalID: string; type: "question" | "permission" }>
-    retainedRecoverableQuestions: Array<{ interactionID: string; externalID: string; actionID: string }>
+    retainedRecoverableQuestions: Array<{ interactionID: string; externalID: string; actionID?: string }>
     retainedRecoverablePermissions: Array<{ interactionID: string; externalID: string }>
   }> {
     if (input.projectID !== Instance.project.id) {
@@ -54,15 +55,12 @@ export namespace EngineInteraction {
     }
     const pending = Database.use((db) =>
       db
-        .select({ interaction: EngineInteractionRequestTable })
+        .select()
         .from(EngineInteractionRequestTable)
-        .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineInteractionRequestTable.task_id))
-        .where(
-          and(eq(EngineTaskTable.project_id, input.projectID), eq(EngineInteractionRequestTable.status, "pending")),
-        )
         .orderBy(EngineInteractionRequestTable.time_created, EngineInteractionRequestTable.id)
         .all()
-        .map((row) => row.interaction),
+        .map((row) => projectInteractionRowInTransaction(db, row))
+        .filter((row) => row.status === "pending" && db.select({ projectID: EngineTaskTable.project_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, row.task_id)).get()?.projectID === input.projectID),
     )
     const abandoned: Array<{
       interactionID: string
@@ -72,7 +70,7 @@ export namespace EngineInteraction {
     const retainedRecoverableQuestions: Array<{
       interactionID: string
       externalID: string
-      actionID: string
+      actionID?: string
     }> = []
     const retainedRecoverablePermissions: Array<{ interactionID: string; externalID: string }> = []
 
@@ -81,6 +79,21 @@ export namespace EngineInteraction {
         throw new Error(`Pending interaction ${interaction.id} has no Session identity during project recovery`)
       }
       if (interaction.request_type === "question") {
+        const payload = interaction.payload as {
+          questions?: unknown
+          tool?: unknown
+          automatic?: unknown
+          expiry?: unknown
+        }
+        await Question.restore(Question.Request.parse({
+          id: interaction.external_id,
+          sessionID: interaction.session_id,
+          timeCreated: interaction.time_created,
+          questions: payload.questions,
+          ...(payload.tool ? { tool: payload.tool } : {}),
+          ...(payload.automatic ? { automatic: payload.automatic } : {}),
+          ...(payload.expiry ? { expiry: payload.expiry } : {}),
+        }))
         const recoverableAction = await recoverableAgentCoordinationQuestion(interaction)
         if (recoverableAction) {
           retainedRecoverableQuestions.push({
@@ -90,12 +103,10 @@ export namespace EngineInteraction {
           })
           continue
         }
-        await Question.abandonRecovered({
-          sessionID: interaction.session_id,
-          requestID: interaction.external_id,
-          timeResolved: input.timeResolved,
+        retainedRecoverableQuestions.push({
+          interactionID: interaction.id,
+          externalID: interaction.external_id,
         })
-        abandoned.push({ interactionID: interaction.id, externalID: interaction.external_id, type: "question" })
         continue
       }
       if (interaction.request_type === "permission") {
@@ -115,31 +126,22 @@ type RecoveredAbandonment = {
   timeResolved: number
 }
 
-async function abandonQuestion(input: RecoveredAbandonment) {
-  await abandonPendingInteraction(input, "question")
+async function abandonQuestion(input: RecoveredAbandonment, sourceOccurrenceID: string) {
+  await abandonPendingInteraction(input, "question", sourceOccurrenceID)
 }
 
-async function abandonPendingInteraction(input: RecoveredAbandonment, requestType: "question" | "permission") {
+async function abandonPendingInteraction(input: RecoveredAbandonment, requestType: "question" | "permission", sourceOccurrenceID: string) {
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
   requireInteractionSession(interaction, input.sessionID, requestType, "abandonment")
-  Database.transaction((db) => {
-    const deleted = db
-      .delete(EngineInteractionRequestTable)
-      .where(
-        and(
-          eq(EngineInteractionRequestTable.id, interaction.id),
-          eq(EngineInteractionRequestTable.external_id, input.requestID),
-          eq(EngineInteractionRequestTable.session_id, input.sessionID),
-          eq(EngineInteractionRequestTable.status, "pending"),
-        ),
-      )
-      .returning({ id: EngineInteractionRequestTable.id })
-      .get()
-    if (!deleted) {
-      throw new Error(`${requestType} abandonment lost pending interaction ownership: ${interaction.id}`)
-    }
-  })
+  Database.transaction((db) => resolveEngineInteractionRequest(db, {
+    row: interaction,
+    status: "expired",
+    response: { origin: "infrastructure" },
+    eventSource: `interaction.${requestType}.abandoned`,
+    timeResolved: input.timeResolved,
+    sourceOccurrenceID,
+  }))
 }
 
 function requireInteractionSession(
@@ -228,10 +230,15 @@ async function recoverableAgentCoordinationQuestion(interaction: InteractionRow)
   return action.artifactID
 }
 
-async function upsertPermission(request: PermissionAuthority.Request) {
+async function upsertPermission(request: PermissionAuthority.Request, _sourceOccurrenceID: string) {
   const owner = resolveOwner(request.sessionID)
   if (!owner) return
   if (findInteractionByExternal(request.id)) return
+  const source = Database.use((db) => db.select({ id: PermissionLedgerTable.id }).from(PermissionLedgerTable).where(and(
+    eq(PermissionLedgerTable.request_id, request.id),
+    eq(PermissionLedgerTable.event_type, "requested"),
+  )).get())
+  if (!source) throw new Error(`Permission ${request.id} has no immutable requested ledger fact`)
   Database.transaction((db) => {
     insertEngineInteractionRequest(db, {
       taskID: owner.taskID,
@@ -257,6 +264,7 @@ async function upsertPermission(request: PermissionAuthority.Request) {
       eventSource: "interaction.permission",
       eventSummary: `Permission requested: ${request.toolName}`,
       timeCreated: request.timeCreated,
+      source: { kind: "permission_request", id: source.id },
     })
   })
 }
@@ -270,21 +278,13 @@ async function resolvePermission(input: {
 }) {
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
-  const response: EngineMetadata = {
-    decision: input.decision,
-    ...(input.autoReply ? { auto_reply: true } : {}),
-  }
-  if (interaction.status !== "pending") return assertResolvedReplay(interaction, input.userInput)
-  await resolveInteraction(
-    interaction,
-    input.decision === "deny" ? "rejected" : "answered",
-    response,
-    Date.now(),
-    input.userInput,
-  )
+  // The Permission ledger decision is already the one terminal authority.
+  // This subscriber only projects/captures optional authored user evidence.
+  if (interaction.status === "pending") throw new Error(`Permission ${input.requestID} reply has no authoritative ledger decision`)
+  assertResolvedReplay(interaction, input.userInput)
 }
 
-async function upsertQuestion(request: Question.Request) {
+async function upsertQuestion(request: Question.Request, sourceOccurrenceID: string) {
   const owner = resolveOwner(request.sessionID)
   if (!owner) return
   if (findInteractionByExternal(request.id)) return
@@ -309,6 +309,7 @@ async function upsertQuestion(request: Question.Request) {
       eventSource: "interaction.question",
       eventSummary: title,
       timeCreated: request.timeCreated,
+      source: { kind: "bus_question", id: sourceOccurrenceID },
     })
   })
 }
@@ -326,7 +327,7 @@ async function resolveQuestion(input: {
   timeResolved: number
   automatic?: boolean
   userInput?: InteractionUserInput
-}) {
+}, sourceOccurrenceID: string) {
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
   requireInteractionSession(interaction, input.sessionID, "question", "answer")
@@ -337,6 +338,7 @@ async function resolveQuestion(input: {
     { answers: input.answers, ...(input.automatic ? { auto_reply: true } : {}) },
     input.timeResolved,
     input.userInput,
+    sourceOccurrenceID,
   )
 }
 
@@ -346,12 +348,12 @@ async function rejectQuestion(input: {
   origin: "operator"
   timeResolved: number
   userInput?: InteractionUserInput
-}) {
+}, sourceOccurrenceID: string) {
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
   requireInteractionSession(interaction, input.sessionID, "question", "rejection")
   if (interaction.status !== "pending") return assertResolvedReplay(interaction, input.userInput)
-  await resolveInteraction(interaction, "rejected", { origin: input.origin }, input.timeResolved, input.userInput)
+  await resolveInteraction(interaction, "rejected", { origin: input.origin }, input.timeResolved, input.userInput, sourceOccurrenceID)
 }
 
 async function expireQuestion(input: {
@@ -360,7 +362,7 @@ async function expireQuestion(input: {
   origin: "deadline"
   timeExpires: number
   timeResolved: number
-}) {
+}, sourceOccurrenceID: string) {
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
   requireInteractionSession(interaction, input.sessionID, "question", "expiry")
@@ -369,6 +371,8 @@ async function expireQuestion(input: {
     "expired",
     { origin: input.origin, time_expires: input.timeExpires },
     input.timeResolved,
+    undefined,
+    sourceOccurrenceID,
   )
 }
 
@@ -378,6 +382,7 @@ async function resolveInteraction(
   response: EngineMetadata,
   timeResolved: number,
   userInput?: InteractionUserInput,
+  sourceOccurrenceID?: string,
 ) {
   Database.transaction((db) => {
     resolveEngineInteractionRequest(db, {
@@ -386,6 +391,7 @@ async function resolveInteraction(
       response,
       eventSource: "interaction.resolve",
       timeResolved,
+      sourceOccurrenceID,
     })
     if (userInput) {
       const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, interaction.task_id)).get()

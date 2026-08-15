@@ -1200,13 +1200,18 @@ export const ReviewStreamStep = z.enum(["manifest", "runtime", "visual", "specia
 export const Event = {
   TaskCreated: BusEvent.define(
     "task.created",
-    z.object({ taskID: Identifier.schema("task"), status: Task.shape.status, summary: z.string() }),
+    z.object({ taskID: Identifier.schema("task"), summary: z.string() }),
     { tier: 3 },
   ),
   TaskUpdated: BusEvent.define(
     "task.updated",
-    z.object({ taskID: Identifier.schema("task"), status: Task.shape.status, summary: z.string() }),
+    z.object({ taskID: Identifier.schema("task"), summary: z.string() }),
     { tier: 3 },
+  ),
+  TaskDeleted: BusEvent.define(
+    "task.deleted",
+    z.object({ taskID: Identifier.schema("task"), executionEpoch: z.number().int().positive(), summary: z.string() }).strict(),
+    { tier: 2 },
   ),
   ArtifactPersisted: BusEvent.define(
     "artifact.persisted",
@@ -1232,9 +1237,8 @@ export const Event = {
     z
       .object({
         taskID: Identifier.schema("task"),
-        status: z.literal("completed"),
+        execution_epoch: z.number().int().positive(),
         summary: z.string(),
-        timeCompleted: z.number().int().positive(),
       })
       .strict(),
     { tier: 2 },
@@ -1244,16 +1248,19 @@ export const Event = {
     z
       .object({
         taskID: Identifier.schema("task"),
-        status: z.literal("failed"),
+        execution_epoch: z.number().int().positive(),
         summary: z.string(),
         error: z.string().min(1),
-        timeCompleted: z.number().int().positive(),
         terminalReason: z.literal("interrupted").optional(),
       })
       .strict(),
     { tier: 1, badge: true },
   ),
-  TaskCancelled: BusEvent.define("task.cancelled", TaskCancelledPayload, { tier: 2 }),
+  TaskCancelled: BusEvent.define(
+    "task.cancelled",
+    TaskCancelledPayload.extend({ taskID: Identifier.schema("task") }),
+    { tier: 2 },
+  ),
   TaskInfrastructureFailed: BusEvent.define(
     "task.infrastructure.failed",
     z.object({
@@ -1277,7 +1284,6 @@ export const Event = {
       cursorTime: z.number().int().nonnegative(),
       anchorEventID: z.string().optional(),
       reason: z.string().optional(),
-      rewindCount: z.number().int().nonnegative(),
       anchorKind: z.enum(["cursorTime", "message"]),
     }),
   ),

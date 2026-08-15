@@ -50,6 +50,7 @@ describe("channel runtime STT handling", () => {
     const { runtime, directory } = await startedRuntime(adapter)
     try {
       await adapter.handler!({
+        id: "fake-voice-event-1",
         platform: "fake",
         channel: "C1",
         thread: "T1",
@@ -83,6 +84,7 @@ describe("channel runtime STT handling", () => {
 
     try {
       await adapter.handler!({
+        id: "fake-voice-event-2",
         platform: "fake",
         channel: "C1",
         thread: "T1",

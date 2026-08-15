@@ -29,7 +29,7 @@ import { insertEngineArtifact } from "./artifact"
 import { deriveEngineArtifactCatalogMetadata, serializeEngineArtifactPayload } from "./artifact-catalog-metadata"
 import { EngineArtifactTable, EngineTaskTable, type EngineArtifactKind, type EngineMetadata } from "./engine.sql"
 import { isTaskTerminal } from "./task-status"
-import { requireTask } from "./store"
+import { projectTaskRowInTransaction, requireTask } from "./store"
 import { deriveTaskStatus } from "./task-status"
 import {
   findTaskCompletionDecisionForTerminalTime,
@@ -330,10 +330,11 @@ function assertCrossTaskArtifactSourceAuthorityCurrent(
     sourceAuthority: CrossTaskArtifactSourceAuthority
   }>,
 ): void {
-  const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, item.sourceTaskID)).get()
-  if (!task) {
+  const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, item.sourceTaskID)).get()
+  if (!persistedTask) {
     throw new CrossTaskArtifactDeliveryAuthorityError(item.sourceTaskID, item.sourceLocator, [])
   }
+  const task = projectTaskRowInTransaction(db, persistedTask)
   if (item.sourceAuthority.kind === "completion_decision") {
     const decision =
       deriveTaskStatus(task) === "completed" && task.time_completed === item.sourceAuthority.timeCompleted

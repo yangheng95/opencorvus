@@ -51,9 +51,9 @@ export function requireEvolutionMutationAuthorization(input: {
       .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
       .get()
     const parts = db
-      .select({ id: PartTable.id, sessionID: PartTable.session_id, messageID: PartTable.message_id, data: PartTable.data })
+      .select({ id: PartTable.id, messageID: PartTable.message_id, data: PartTable.data })
       .from(PartTable)
-      .where(and(eq(PartTable.message_id, input.messageID), eq(PartTable.session_id, input.sessionID)))
+      .where(eq(PartTable.message_id, input.messageID))
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
       .all()
     return { message, parts }
@@ -80,7 +80,7 @@ export function requireEvolutionMutationAuthorization(input: {
   const part = Message.TextPart.safeParse({
     ...row.data,
     id: row.id,
-    sessionID: row.sessionID,
+    sessionID: input.sessionID,
     messageID: row.messageID,
   })
   if (!part.success || part.data.kind !== "user_content" || part.data.source !== "user")

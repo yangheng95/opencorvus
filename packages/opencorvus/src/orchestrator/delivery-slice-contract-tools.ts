@@ -124,7 +124,7 @@ export function createDeliverySliceContractTools(input: {
         })
         await EngineProtocol.emit(
           EngineEvent.TaskUpdated,
-          { taskID, status: deriveTaskStatus(requireTask(taskID)), summary: `Goal ${mutation.goalID} added by Orchestrator` },
+          { taskID, summary: `Goal ${mutation.goalID} added by Orchestrator` },
           { source: "orchestrator.add_goal" },
         )
         return mutation
@@ -169,7 +169,6 @@ export function createDeliverySliceContractTools(input: {
           EngineEvent.TaskUpdated,
           {
             taskID,
-            status: deriveTaskStatus(requireTask(taskID)),
             summary: `Goal ${goalID} revised as ${revision.goalID} by Orchestrator`,
           },
           { source: "orchestrator.modify_goal" },
@@ -198,7 +197,7 @@ export function createDeliverySliceContractTools(input: {
         })
         await EngineProtocol.emit(
           EngineEvent.TaskUpdated,
-          { taskID, status: deriveTaskStatus(requireTask(taskID)), summary: `Goal ${goalID} retracted by Orchestrator` },
+          { taskID, summary: `Goal ${goalID} retracted by Orchestrator` },
           { source: "orchestrator.delete_goal" },
         )
         return removal

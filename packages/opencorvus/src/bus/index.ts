@@ -12,9 +12,17 @@ import {
   RuntimeExecutionSettlement,
   type RuntimeExecutionReservation,
 } from "../runtime/execution-settlement"
-import { Database, and, eq } from "../storage/db"
-import { BusPublicationDeliveryTable, BusPublicationOutboxTable } from "./bus.sql"
+import { Database, and, asc, eq, inArray, isNotNull, isNull } from "../storage/db"
+import {
+  BusPublicationAttemptReceiptTable,
+  BusPublicationDeliveryReceiptTable,
+  BusPublicationDeliveryTable,
+  BusPublicationOutboxTable,
+  BusPublicationPhaseReceiptTable,
+} from "./bus.sql"
 import { Instance, runAsInstanceActivity, runOutsideInstanceContext } from "../project/instance"
+import { Identifier } from "@/id/id"
+import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 
 export namespace Bus {
   const log = Log.create({ service: "bus" })
@@ -30,7 +38,6 @@ export namespace Bus {
   export type Causation = {
     source: string
     occurrenceID: string
-    ancestry: Array<{ occurrenceID: string; sourceID: string }>
   }
 
   const causationContext = Context.create<Causation>("bus-causation")
@@ -43,6 +50,7 @@ export namespace Bus {
     callback: (event: Envelope<any>) => unknown | Promise<unknown>
     id: string
     durable: boolean
+    effectContract?: "idempotent_by_occurrence"
     source?: string
   }
   const runtimeSubscriptionID = randomUUID()
@@ -269,7 +277,7 @@ export namespace Bus {
           durableRetryMetadataReadFailuresForTest -= 1
           throw new Error("injected durable Bus retry metadata read failure")
         }
-        retryAt = durableRow(entry.occurrenceID)?.next_attempt_at ?? retryAt
+        retryAt = durableAttemptProjection(entry.occurrenceID)?.retry_at ?? retryAt
       } catch (error) {
         entry.error = error
         log.warn("durable Bus retry schedule metadata read failed", {
@@ -312,27 +320,22 @@ export namespace Bus {
       durableRetryMetadataWriteFailuresForTest -= 1
       throw new Error("injected durable Bus retry metadata write failure")
     }
-    const row = durableRow(entry.occurrenceID)
-    if (!row) return
-    const attempt = row.attempt_count + 1
+    if (!durableRow(entry.occurrenceID)) return
+    const attempt = durableAttemptReceipts(entry.occurrenceID).length + 1
     const exponential = Math.min(30_000, 250 * 2 ** Math.min(16, attempt - 1))
     let jitterHash = attempt >>> 0
     for (let index = 0; index < entry.occurrenceID.length; index += 1) {
       jitterHash = Math.imul(jitterHash ^ entry.occurrenceID.charCodeAt(index), 16_777_619) >>> 0
     }
     const jitter = Math.floor((exponential * (jitterHash % 25)) / 100)
-    Database.use((db) =>
-      db
-        .update(BusPublicationOutboxTable)
-        .set({
-          attempt_count: attempt,
-          next_attempt_at: Date.now() + exponential + jitter,
-          last_error: error instanceof Error ? error.message : String(error),
-          time_updated: Date.now(),
-        })
-        .where(eq(BusPublicationOutboxTable.occurrence_id, entry.occurrenceID))
-        .run(),
-    )
+    const now = Date.now()
+    Database.use((db) => db.insert(BusPublicationAttemptReceiptTable).values({
+      id: Identifier.ascending("call"),
+      occurrence_id: entry.occurrenceID,
+      error: error instanceof Error ? error.message : String(error),
+      retry_at: now + exponential + jitter,
+      time_created: now,
+    }).run())
   }
 
   function cancelOwnedPublicationRetry(entry: OwnedPublication) {
@@ -516,6 +519,7 @@ export namespace Bus {
   type DurableTarget = {
     id: string
     durable: boolean
+    effectContract?: "idempotent_by_occurrence"
     settleFailure?: boolean
     deliver: () => unknown | Promise<unknown>
   }
@@ -538,30 +542,62 @@ export namespace Bus {
     )
   }
 
+  function durableAttemptReceipts(id: string) {
+    return Database.use((db) => db.select().from(BusPublicationAttemptReceiptTable)
+      .where(eq(BusPublicationAttemptReceiptTable.occurrence_id, id))
+      .orderBy(asc(BusPublicationAttemptReceiptTable.time_created), asc(BusPublicationAttemptReceiptTable.id)).all())
+  }
+
+  function durableAttemptProjection(id: string) {
+    return durableAttemptReceipts(id).at(-1)
+  }
+
   function phaseSettled(row: DurableRow, phase: DurablePhase) {
-    if (phase === "exact") return row.exact_settled
-    if (phase === "wildcard") return row.wildcard_settled
-    return row.global_settled
+    return Database.use((db) => Boolean(db.select({ id: BusPublicationPhaseReceiptTable.id })
+      .from(BusPublicationPhaseReceiptTable)
+      .where(and(
+        eq(BusPublicationPhaseReceiptTable.occurrence_id, row.occurrence_id),
+        eq(BusPublicationPhaseReceiptTable.phase, phase),
+      )).get()))
   }
 
   function settlePhase(id: string, phase: DurablePhase) {
-    const field =
-      phase === "exact"
-        ? { exact_settled: true }
-        : phase === "wildcard"
-          ? { wildcard_settled: true }
-          : { global_settled: true }
-    Database.use((db) =>
-      db
-        .update(BusPublicationOutboxTable)
-        .set({ ...field, time_updated: Date.now() })
-        .where(eq(BusPublicationOutboxTable.occurrence_id, id))
-        .run(),
-    )
+    Database.use((db) => db.insert(BusPublicationPhaseReceiptTable).values({
+      id: Identifier.deterministic("call", `bus-phase\0${id}\0${phase}`),
+      occurrence_id: id,
+      phase,
+      time_created: Date.now(),
+    }).onConflictDoNothing().run())
   }
 
   async function dispatchDurableTargets(payload: Envelope<any>, phase: DurablePhase, targets: DurableTarget[]) {
     const activeIDs = new Set(targets.map((target) => target.id))
+    const deliveryOutcome = (subscriberID: string) => Database.use((db) => {
+      const outcomes = db
+      .select({ outcome: BusPublicationDeliveryReceiptTable.outcome })
+      .from(BusPublicationDeliveryReceiptTable)
+      .where(and(
+        eq(BusPublicationDeliveryReceiptTable.occurrence_id, payload.occurrenceID),
+        eq(BusPublicationDeliveryReceiptTable.phase, phase),
+        eq(BusPublicationDeliveryReceiptTable.subscriber_id, subscriberID),
+      ))
+      .orderBy(asc(BusPublicationDeliveryReceiptTable.time_created), asc(BusPublicationDeliveryReceiptTable.id))
+      .all()
+      if (outcomes.some((receipt) => receipt.outcome === "succeeded")) return "succeeded" as const
+      if (outcomes.some((receipt) => receipt.outcome === "ignored")) return "ignored" as const
+      return outcomes.at(-1)?.outcome
+    })
+    const settleDelivery = (subscriberID: string, outcome: "succeeded" | "ignored" | "failed", error?: unknown) =>
+      Database.use((db) => db.insert(BusPublicationDeliveryReceiptTable).values({
+        id: Identifier.ascending("call"),
+        occurrence_id: payload.occurrenceID,
+        phase,
+        subscriber_id: subscriberID,
+        outcome,
+        error: error === undefined ? null : error instanceof Error ? error.message : String(error),
+        retry_at: null,
+        time_created: Date.now(),
+      }).run())
     Database.transaction((db) => {
       const stale = db
         .select()
@@ -570,76 +606,114 @@ export namespace Bus {
           and(
             eq(BusPublicationDeliveryTable.occurrence_id, payload.occurrenceID),
             eq(BusPublicationDeliveryTable.phase, phase),
-            eq(BusPublicationDeliveryTable.durable, false),
-            eq(BusPublicationDeliveryTable.settled, false),
+            isNull(BusPublicationDeliveryTable.effect_contract),
           ),
         )
         .all()
       for (const receipt of stale) {
         if (activeIDs.has(receipt.subscriber_id)) continue
-        db.update(BusPublicationDeliveryTable)
-          .set({ settled: true, time_updated: Date.now() })
-          .where(
-            and(
-              eq(BusPublicationDeliveryTable.occurrence_id, payload.occurrenceID),
-              eq(BusPublicationDeliveryTable.phase, phase),
-              eq(BusPublicationDeliveryTable.subscriber_id, receipt.subscriber_id),
-            ),
-          )
-          .run()
+        const settled = db.select({ outcome: BusPublicationDeliveryReceiptTable.outcome })
+          .from(BusPublicationDeliveryReceiptTable).where(and(
+            eq(BusPublicationDeliveryReceiptTable.occurrence_id, payload.occurrenceID),
+            eq(BusPublicationDeliveryReceiptTable.phase, phase),
+            eq(BusPublicationDeliveryReceiptTable.subscriber_id, receipt.subscriber_id),
+          )).all().some((row) => row.outcome === "succeeded" || row.outcome === "ignored")
+        if (!settled) db.insert(BusPublicationDeliveryReceiptTable).values({
+          id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase,
+          subscriber_id: receipt.subscriber_id, outcome: "ignored", error: null, retry_at: null,
+          time_created: Date.now(),
+        }).run()
       }
       for (const target of targets) {
+        if (target.durable && target.effectContract !== "idempotent_by_occurrence") {
+          throw new Error(`Durable Bus subscriber ${target.id} must declare occurrenceID idempotency`)
+        }
         db.insert(BusPublicationDeliveryTable)
           .values({
             occurrence_id: payload.occurrenceID,
             phase,
             subscriber_id: target.id,
-            durable: target.durable,
-            settled: false,
+            effect_contract: target.effectContract ?? null,
             time_created: Date.now(),
-            time_updated: Date.now(),
           })
           .onConflictDoNothing()
           .run()
+        const request = db.select().from(BusPublicationDeliveryTable).where(and(
+          eq(BusPublicationDeliveryTable.occurrence_id, payload.occurrenceID),
+          eq(BusPublicationDeliveryTable.phase, phase),
+          eq(BusPublicationDeliveryTable.subscriber_id, target.id),
+        )).get()
+        if (!request || (request.effect_contract !== null) !== target.durable || request.effect_contract !== (target.effectContract ?? null)) {
+          throw new Error(`Durable Bus subscriber ${target.id} changed its immutable delivery contract`)
+        }
       }
     })
 
     const failures: unknown[] = []
-    const settleDelivery = (subscriberID: string) =>
-      Database.use((db) =>
-        db
-          .update(BusPublicationDeliveryTable)
-          .set({ settled: true, time_updated: Date.now() })
-          .where(
-            and(
-              eq(BusPublicationDeliveryTable.occurrence_id, payload.occurrenceID),
-              eq(BusPublicationDeliveryTable.phase, phase),
-              eq(BusPublicationDeliveryTable.subscriber_id, subscriberID),
-            ),
-          )
-          .run(),
-      )
     for (const target of targets) {
-      const receipt = Database.use((db) =>
-        db
-          .select({ settled: BusPublicationDeliveryTable.settled })
-          .from(BusPublicationDeliveryTable)
-          .where(
-            and(
-              eq(BusPublicationDeliveryTable.occurrence_id, payload.occurrenceID),
-              eq(BusPublicationDeliveryTable.phase, phase),
-              eq(BusPublicationDeliveryTable.subscriber_id, target.id),
-            ),
-          )
-          .get(),
-      )
-      if (receipt?.settled) continue
+      const prior = deliveryOutcome(target.id)
+      if (prior === "succeeded" || prior === "ignored") continue
+      const deliveryID = `${payload.occurrenceID}\0${phase}\0${target.id}`
+      const ownerID = `bus:${runtimeSubscriptionID}`
+      const now = Date.now()
+      const existingLease = Database.use((db) => currentControlLeaseInTransaction(db, "bus_delivery", deliveryID))
+      const lease = existingLease?.owner_occurrence_id === ownerID && existingLease.expires_at > now
+        ? { acquired: true as const, lease: existingLease }
+        : acquireControlLease({ target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: 30_000 })
+      if (!lease.acquired) {
+        failures.push(new Error(`Durable Bus delivery ${deliveryID} is leased by another runtime`))
+        continue
+      }
+      const renewal = setInterval(() => {
+        try {
+          renewControlLease({ target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: Date.now(), expiresAt: Date.now() + 30_000 })
+        } catch {}
+      }, 10_000)
+      renewal.unref()
       try {
         await target.deliver()
-        settleDelivery(target.id)
+        Database.immediateTransaction((db) => {
+          const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
+          if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= Date.now()) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
+          db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: Date.now() }).run()
+        })
       } catch (error) {
+        const outcome = target.settleFailure ? "ignored" as const : "failed" as const
+        const settled = Database.immediateTransaction((db) => {
+          const terminal = db.select({ outcome: BusPublicationDeliveryReceiptTable.outcome })
+            .from(BusPublicationDeliveryReceiptTable)
+            .where(and(
+              eq(BusPublicationDeliveryReceiptTable.occurrence_id, payload.occurrenceID),
+              eq(BusPublicationDeliveryReceiptTable.phase, phase),
+              eq(BusPublicationDeliveryReceiptTable.subscriber_id, target.id),
+              inArray(BusPublicationDeliveryReceiptTable.outcome, ["succeeded", "ignored"]),
+            )).get()
+          if (terminal) return { kind: "terminal" as const, outcome: terminal.outcome }
+          const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
+          if (
+            !current ||
+            current.id !== lease.lease.id ||
+            current.owner_occurrence_id !== ownerID ||
+            current.expires_at <= Date.now()
+          ) return { kind: "stale" as const }
+          db.insert(BusPublicationDeliveryReceiptTable).values({
+            id: Identifier.ascending("call"),
+            occurrence_id: payload.occurrenceID,
+            phase,
+            subscriber_id: target.id,
+            outcome,
+            error: error instanceof Error ? error.message : String(error),
+            retry_at: null,
+            time_created: Date.now(),
+          }).run()
+          return { kind: "written" as const }
+        })
+        if (settled.kind === "terminal") continue
+        if (settled.kind === "stale") {
+          failures.push(new Error(`Durable Bus delivery ${deliveryID} lost its lease before failure receipt`, { cause: error }))
+          continue
+        }
         if (target.settleFailure) {
-          settleDelivery(target.id)
           log.warn("transient Bus projection failed", {
             occurrenceID: payload.occurrenceID,
             subscriberID: target.id,
@@ -648,9 +722,11 @@ export namespace Bus {
         } else {
           failures.push(error)
         }
+      } finally {
+        clearInterval(renewal)
       }
     }
-    const durablePending = Database.use((db) =>
+    const durableRequests = Database.use((db) =>
       db
         .select({ id: BusPublicationDeliveryTable.subscriber_id })
         .from(BusPublicationDeliveryTable)
@@ -658,12 +734,15 @@ export namespace Bus {
           and(
             eq(BusPublicationDeliveryTable.occurrence_id, payload.occurrenceID),
             eq(BusPublicationDeliveryTable.phase, phase),
-            eq(BusPublicationDeliveryTable.durable, true),
-            eq(BusPublicationDeliveryTable.settled, false),
+            isNotNull(BusPublicationDeliveryTable.effect_contract),
           ),
         )
         .all(),
     )
+    const durablePending = durableRequests.filter((entry) => {
+      const outcome = deliveryOutcome(entry.id)
+      return outcome !== "succeeded" && outcome !== "ignored"
+    })
     if (durablePending.some((entry) => !activeIDs.has(entry.id))) {
       failures.push(new Error(`Durable Bus ${phase} subscriber is unavailable for ${payload.occurrenceID}`))
     }
@@ -689,6 +768,7 @@ export namespace Bus {
           const targets = [...(state().subscriptions.get(key) ?? [])].map((sub) => ({
             id: sub.id,
             durable: sub.durable,
+            effectContract: sub.effectContract,
             settleFailure: !sub.durable,
             deliver: () => sub.callback(payload),
           }))
@@ -703,6 +783,7 @@ export namespace Bus {
         const targets = GlobalBus.deliveryTargets("event").map((target) => ({
           id: target.id,
           durable: target.durable,
+          effectContract: target.effectContract,
           settleFailure: !target.durable,
           deliver: () => target.deliver({ directory: row.directory, payload }),
         }))
@@ -712,13 +793,8 @@ export namespace Bus {
       }
     }
     const refreshed = durableRow(row.occurrence_id)
-    if (refreshed?.exact_settled && refreshed.wildcard_settled && refreshed.global_settled) {
-      Database.use((db) =>
-        db
-          .delete(BusPublicationOutboxTable)
-          .where(eq(BusPublicationOutboxTable.occurrence_id, row.occurrence_id))
-          .run(),
-      )
+    if (refreshed && !(["exact", "wildcard", "global"] as const).every((phase) => phaseSettled(refreshed, phase))) {
+      failures.push(new Error(`Durable Bus publication ${row.occurrence_id} has unresolved phases`))
     }
     if (failures.length === 1) throw failures[0]
     if (failures.length > 1) throw new AggregateError(failures, `Durable Bus publication failed for ${row.event_type}`)
@@ -803,19 +879,18 @@ export namespace Bus {
   export function resumeDurablePublications(directory = currentProjectDirectory()): void {
     const rows = Database.use((db) =>
       db
-        .select({
-          id: BusPublicationOutboxTable.occurrence_id,
-          next_attempt_at: BusPublicationOutboxTable.next_attempt_at,
-          last_error: BusPublicationOutboxTable.last_error,
-        })
+        .select({ id: BusPublicationOutboxTable.occurrence_id })
         .from(BusPublicationOutboxTable)
         .where(eq(BusPublicationOutboxTable.directory, directory))
         .all(),
     )
     for (const row of rows) {
+      const authority = durableRow(row.id)
+      if (!authority || (["exact", "wildcard", "global"] as const).every((phase) => phaseSettled(authority, phase))) continue
       const existing = ownedPublicationOwners.get(row.id)
       if (existing?.pending) continue
-      if (row.next_attempt_at > Date.now()) {
+      const retry = durableAttemptProjection(row.id)
+      if (retry && retry.retry_at > Date.now()) {
         const entry =
           existing ??
           ({
@@ -825,7 +900,7 @@ export namespace Bus {
             retryEpoch: 0,
             durable: true,
           } satisfies OwnedPublication)
-        entry.error = new Error(row.last_error ?? `Durable Bus occurrence ${row.id} is awaiting retry`)
+        entry.error = new Error(retry.error)
         ownedPublicationOwners.set(row.id, entry)
         scheduleOwnedPublicationRetry(entry)
         continue
@@ -872,7 +947,6 @@ export namespace Bus {
           properties: parsed,
           causation,
           time_created: now,
-          time_updated: now,
         })
         .run(),
     )
@@ -897,10 +971,36 @@ export namespace Bus {
   function stageDurablePublication<Definition extends BusEvent.Definition>(
     def: Definition,
     properties: z.output<Definition["properties"]>,
+    exactOccurrenceID?: string,
   ): Publication {
     let publication: Publication | undefined
     Database.transaction(() => {
-      publication = publishOwnedInTransaction(def, properties)
+      if (!exactOccurrenceID) {
+        publication = publishOwnedInTransaction(def, properties)
+        return
+      }
+      const parsed = BusEvent.parseProperties(def, properties)
+      const existing = Database.use((db) => db.select().from(BusPublicationOutboxTable)
+        .where(eq(BusPublicationOutboxTable.occurrence_id, exactOccurrenceID)).get())
+      if (existing) {
+        if (existing.event_type !== def.type || JSON.stringify(existing.properties) !== JSON.stringify(parsed)) {
+          throw new Error(`Durable Bus occurrence ${exactOccurrenceID} has conflicting immutable input`)
+        }
+        publication = dormantDurablePublication(exactOccurrenceID)
+        return
+      }
+      const directory = currentProjectDirectory()
+      const projectID = Instance.project.id
+      Database.use((db) => db.insert(BusPublicationOutboxTable).values({
+        occurrence_id: exactOccurrenceID,
+        project_id: projectID,
+        directory,
+        event_type: def.type,
+        properties: parsed,
+        causation: causationContext.tryUse(),
+        time_created: Date.now(),
+      }).run())
+      publication = dormantDurablePublication(exactOccurrenceID)
     })
     return publication!
   }
@@ -942,15 +1042,25 @@ export namespace Bus {
     return stageDurablePublication(def, properties)
   }
 
+  /** Append or replay one deterministic durable occurrence. The caller owns
+   * the terminal slot identity; a non-equivalent replay fails closed. */
+  export function publishOwnedExact<Definition extends BusEvent.Definition>(
+    def: Definition,
+    properties: z.output<Definition["properties"]>,
+    exactOccurrenceID: string,
+  ): Publication {
+    return stageDurablePublication(def, properties, exactOccurrenceID)
+  }
+
   export function subscribe<Definition extends BusEvent.Definition>(
     def: Definition,
     callback: (event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>) => unknown | Promise<unknown>,
-    options?: { durableID: string },
+    options?: { durableID: string; effect: "idempotent_by_occurrence" },
   ) {
     return raw(def.type, callback, options)
   }
 
-  export function subscribeAll(callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string }) {
+  export function subscribeAll(callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string; effect: "idempotent_by_occurrence" }) {
     return raw("*", callback, options)
   }
 
@@ -1018,16 +1128,36 @@ export namespace Bus {
     }
 
     export function outbox() {
-      return Database.use((db) => db.select().from(BusPublicationOutboxTable).all())
+      return Database.use((db) => db.select().from(BusPublicationOutboxTable).all().filter((row) => {
+        const phases = db.select({ phase: BusPublicationPhaseReceiptTable.phase })
+          .from(BusPublicationPhaseReceiptTable)
+          .where(eq(BusPublicationPhaseReceiptTable.occurrence_id, row.occurrence_id)).all()
+        return new Set(phases.map((item) => item.phase)).size < 3
+      }))
     }
 
     export function deliveries(occurrenceID: string) {
       return Database.use((db) =>
-        db
+        {
+          const completedPhases = db.select({ phase: BusPublicationPhaseReceiptTable.phase })
+            .from(BusPublicationPhaseReceiptTable)
+            .where(eq(BusPublicationPhaseReceiptTable.occurrence_id, occurrenceID)).all()
+          if (new Set(completedPhases.map((item) => item.phase)).size === 3) return []
+          return db
           .select()
           .from(BusPublicationDeliveryTable)
           .where(eq(BusPublicationDeliveryTable.occurrence_id, occurrenceID))
-          .all(),
+          .all()
+          .map((row) => {
+            const outcomes = db.select({ outcome: BusPublicationDeliveryReceiptTable.outcome })
+              .from(BusPublicationDeliveryReceiptTable).where(and(
+                eq(BusPublicationDeliveryReceiptTable.occurrence_id, occurrenceID),
+                eq(BusPublicationDeliveryReceiptTable.phase, row.phase),
+                eq(BusPublicationDeliveryReceiptTable.subscriber_id, row.subscriber_id),
+              )).all()
+            return { ...row, settled: outcomes.some((item) => item.outcome === "succeeded" || item.outcome === "ignored") }
+          })
+        },
       )
     }
   }
@@ -1043,7 +1173,7 @@ export namespace Bus {
     return unsub
   }
 
-  function raw(type: string, callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string }) {
+  function raw(type: string, callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string; effect: "idempotent_by_occurrence" }) {
     log.debug("subscribing", { type })
     if (isBusTraceEnabled()) {
       const stack = new Error().stack
@@ -1075,6 +1205,7 @@ export namespace Bus {
       callback,
       id: options?.durableID ?? `runtime:${runtimeSubscriptionID}:${++subscriptionSequence}`,
       durable: options !== undefined,
+      effectContract: options?.effect,
       source: isBusTraceEnabled()
         ? new Error().stack
             ?.split("\n")

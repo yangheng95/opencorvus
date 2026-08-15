@@ -790,6 +790,7 @@ export type Event =
   | EventTaskCancelled
   | EventTaskCompleted
   | EventTaskCreated
+  | EventTaskDeleted
   | EventTaskFailed
   | EventTaskInfrastructureFailed
   | EventTaskMessage
@@ -893,7 +894,6 @@ export type EventArtifactPersisted = {
       | "dispatch_lineage"
       | "dispatch_settlement"
       | "mission_acceptance_resume_receipt"
-      | "task_root_ingress"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
       | "exploration"
@@ -1538,6 +1538,7 @@ export type EventSessionUpdated = {
 export type EventTaskCancellationRequested = {
   properties: {
     actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+    execution_epoch: number
     messageID?: string
     missionID?: string
     reason: string
@@ -1581,7 +1582,6 @@ export type EventTaskCancellationRequested = {
       | "zalouser"
       | "right-sidebar"
       | "orchestrator"
-    taskID: string
     toolCallID?: string
     toolPartID?: string
   }
@@ -1591,41 +1591,46 @@ export type EventTaskCancellationRequested = {
 export type EventTaskCancelled = {
   properties: {
     error: string
-    status: "cancelled"
+    execution_epoch: number
     summary: string
     taskID: string
-    timeCompleted: number
   }
   type: "task.cancelled"
 }
 
 export type EventTaskCompleted = {
   properties: {
-    status: "completed"
+    execution_epoch: number
     summary: string
     taskID: string
-    timeCompleted: number
   }
   type: "task.completed"
 }
 
 export type EventTaskCreated = {
   properties: {
-    status: "active" | "completed" | "failed" | "cancelled"
     summary: string
     taskID: string
   }
   type: "task.created"
 }
 
+export type EventTaskDeleted = {
+  properties: {
+    executionEpoch: number
+    summary: string
+    taskID: string
+  }
+  type: "task.deleted"
+}
+
 export type EventTaskFailed = {
   properties: {
     error: string
-    status: "failed"
+    execution_epoch: number
     summary: string
     taskID: string
     terminalReason?: "interrupted"
-    timeCompleted: number
   }
   type: "task.failed"
 }
@@ -1716,7 +1721,6 @@ export type EventTaskRewound = {
     anchorKind: "cursorTime" | "message"
     cursorTime: number
     reason?: string
-    rewindCount: number
     taskID: string
   }
   type: "task.rewound"
@@ -1724,7 +1728,6 @@ export type EventTaskRewound = {
 
 export type EventTaskUpdated = {
   properties: {
-    status: "active" | "completed" | "failed" | "cancelled"
     summary: string
     taskID: string
   }
@@ -2212,7 +2215,6 @@ export type GlobalSession = {
   }
   time: {
     archived?: number
-    compacting?: number
     created: number
     pinned?: number
     updated: number
@@ -4488,7 +4490,6 @@ export type Session = {
   }
   time: {
     archived?: number
-    compacting?: number
     created: number
     pinned?: number
     updated: number
@@ -5193,6 +5194,7 @@ export type VisibleMessage =
       variant?: string
     }
   | {
+      activationID?: string
       agent: string
       author: string
       billing?: BillingCoverage
@@ -5247,10 +5249,6 @@ export type VisibleMessage =
       sessionID: string
       structured?: unknown
       summary?: boolean
-      taskIngress?: {
-        id: string
-        kind: string
-      }
       time: {
         completed?: number
         created: number
@@ -6072,7 +6070,7 @@ export type ChannelMessageData = {
       | "twitch"
       | "zalo"
       | "zalouser"
-    request_id?: string
+    request_id: string
     source?: string
     task_id?: string
     text: string
@@ -15147,7 +15145,7 @@ export type GatewayChannelMessageData = {
       | "twitch"
       | "zalo"
       | "zalouser"
-    request_id?: string
+    request_id: string
     source?: string
     task_id?: string
     text: string
@@ -15332,11 +15330,7 @@ export type GatewayControlActionData = {
          * Exact current terminal occurrence returned by panel.query_task for this source Task.
          */
         terminal_lifecycle_reference: {
-          terminalError?: string
           terminalEventID: string
-          terminalReason?: "interrupted"
-          terminalStatus: "completed" | "failed" | "cancelled"
-          timeCompleted: number
         }
         /**
          * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
@@ -23180,6 +23174,7 @@ export type SessionCommandResponses = {
    */
   200: {
     info: {
+      activationID?: string
       agent: string
       author: string
       billing?: BillingCoverage
@@ -23234,10 +23229,6 @@ export type SessionCommandResponses = {
       sessionID: string
       structured?: unknown
       summary?: boolean
-      taskIngress?: {
-        id: string
-        kind: string
-      }
       time: {
         completed?: number
         created: number
@@ -24763,6 +24754,7 @@ export type SessionPromptResponses = {
    */
   200: {
     info: {
+      activationID?: string
       agent: string
       agentID: string
       author: string
@@ -24823,10 +24815,6 @@ export type SessionPromptResponses = {
       sessionID: string
       structured?: unknown
       summary?: boolean
-      taskIngress?: {
-        id: string
-        kind: string
-      }
       time: {
         completed?: number
         created: number
@@ -25122,6 +25110,7 @@ export type SessionShellResponses = {
    * Created message
    */
   200: {
+    activationID?: string
     agent: string
     author: string
     billing?: BillingCoverage
@@ -25176,10 +25165,6 @@ export type SessionShellResponses = {
     sessionID: string
     structured?: unknown
     summary?: boolean
-    taskIngress?: {
-      id: string
-      kind: string
-    }
     time: {
       completed?: number
       created: number
@@ -27318,7 +27303,6 @@ export type TaskBoardResponses = {
         | "dispatch_lineage"
         | "dispatch_settlement"
         | "mission_acceptance_resume_receipt"
-        | "task_root_ingress"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
         | "exploration"
@@ -29346,7 +29330,6 @@ export type TaskConversationResponses = {
           | "dispatch_lineage"
           | "dispatch_settlement"
           | "mission_acceptance_resume_receipt"
-          | "task_root_ingress"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"
           | "exploration"

@@ -162,12 +162,13 @@ export class DingTalkAdapter implements ChannelAdapter {
 
     const channel = body.conversationId
     const user = body.senderStaffId
-    const thread = body.msgId ?? `${Date.now()}`
+    const thread = body.msgId
     const text = (body.text?.content ?? "").trim()
     if (!channel || !user || !thread || !text) return this.encryptedResponse("success", url)
     if (body.sessionWebhook) this.webhooks.set(channel, body.sessionWebhook)
 
     await this.handler({
+      id: thread,
       platform: this.platform,
       channel,
       thread,

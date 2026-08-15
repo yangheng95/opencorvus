@@ -22,6 +22,7 @@ import { SessionCompaction } from "./compaction"
 import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
+import { acquireControlLease, renewControlLease } from "@/engine/control-lease"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
@@ -341,28 +342,63 @@ export namespace SessionLoop {
   async function executeCompactionControl(input: {
     control: SessionControl.Record
     sessionID: string
-    run: () => Promise<Awaited<ReturnType<typeof SessionCompaction.process>>>
+    run: (leaseSignal: AbortSignal) => Promise<Awaited<ReturnType<typeof SessionCompaction.process>>>
   }): Promise<"continue" | "stop"> {
+    const ownerOccurrenceID = Identifier.ascending("call")
+    const leaseMilliseconds = 120_000
+    const acquired = acquireControlLease({
+      target: "session_control",
+      targetID: input.control.id,
+      ownerOccurrenceID,
+      now: Date.now(),
+      leaseMilliseconds,
+    })
+    if (!acquired.acquired) return "continue"
+    let renewalFailure: unknown
+    const leaseAbort = new AbortController()
+    const heartbeat = setInterval(() => {
+      try {
+        const now = Date.now()
+        renewControlLease({
+          target: "session_control",
+          targetID: input.control.id,
+          leaseID: acquired.lease.id,
+          ownerOccurrenceID,
+          now,
+          expiresAt: now + leaseMilliseconds,
+        })
+      } catch (error) {
+        renewalFailure = error
+        leaseAbort.abort(error)
+      }
+    }, 30_000)
+    const settlementLease = () => ({ leaseID: acquired.lease.id, ownerOccurrenceID, now: Date.now() })
     let result: Awaited<ReturnType<typeof SessionCompaction.process>>
     try {
-      result = await input.run()
+      result = await input.run(leaseAbort.signal)
     } catch (error) {
+      clearInterval(heartbeat)
+      if (renewalFailure) throw renewalFailure
       const settled = SessionControl.fail({
         id: input.control.id,
         sessionID: input.sessionID,
         error: compactionControlErrorText(error),
+        lease: settlementLease(),
       })
       if (!settled) {
         throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "failed", cause: error })
       }
       throw error
     }
+    clearInterval(heartbeat)
+    if (renewalFailure) throw renewalFailure
     if (typeof result === "object") {
       const throwable = compactionControlThrowable(result.error)
       const settled = SessionControl.fail({
         id: input.control.id,
         sessionID: input.sessionID,
         error: compactionControlErrorText(result.error),
+        lease: settlementLease(),
       })
       if (!settled) {
         throw compactionControlSettlementConflict({
@@ -373,7 +409,7 @@ export namespace SessionLoop {
       }
       throw throwable
     }
-    const settled = SessionControl.consume({ id: input.control.id, sessionID: input.sessionID })
+    const settled = SessionControl.consume({ id: input.control.id, sessionID: input.sessionID, lease: settlementLease() })
     if (!settled) {
       throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "consumed" })
     }
@@ -1270,7 +1306,10 @@ export namespace SessionLoop {
     const isLastStep = input.step >= maxSteps
     const workerTurnDescriptor = workerTurnDescriptorPayloadForRuntimeContract(runtimeContract, input.sessionID)
     const assistantMessage = (await Session.updateMessage({
-      id: Identifier.ascending("message"),
+      id:
+        runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
+          ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
+          : Identifier.ascending("message"),
       parentID: input.lastUser.id,
       role: "assistant",
       author: input.lastUser.agent,
@@ -1292,10 +1331,7 @@ export namespace SessionLoop {
       providerID: input.model.providerID,
       ...(runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? {
-            taskIngress: {
-              id: runtimeIdentity.taskIngressID,
-              kind: runtimeIdentity.taskIngressKind!,
-            },
+            activationID: runtimeIdentity.taskIngressActivationID,
           }
         : {}),
       time: {
@@ -1414,7 +1450,10 @@ export namespace SessionLoop {
       memoryToolAvailable: Object.prototype.hasOwnProperty.call(tools, "memory"),
     })
 
-    const baseModelMessages = await Message.toModelMessages(input.msgs, input.model)
+    const baseModelMessages = await Message.toModelMessages(
+      SessionCompaction.projectPrunedHistory(input.msgs),
+      input.model,
+    )
     if (dynamicContextText) {
       // Prepend to the LAST user message's text content so the live state sits
       // adjacent to the request the model is responding to. This keeps the
@@ -2118,12 +2157,12 @@ export namespace SessionLoop {
                 const result = await executeCompactionControl({
                   control: compactionControl,
                   sessionID,
-                  run: () =>
+                  run: (leaseSignal) =>
                     SessionCompaction.process(
                       {
                         messages: msgs,
                         parentID: sourceUserMessageID,
-                        abort,
+                        abort: AbortSignal.any([abort, leaseSignal]),
                         sessionID,
                         auto: compactionControl.kind === "compaction_request",
                         overflow: compactionControl.payload.overflow === true,

@@ -5,7 +5,7 @@ import { Database, eq } from "../src/storage/db"
 import { ApplicationSchema } from "../src/storage/schema"
 import { ProjectTable } from "../src/project/project.sql"
 import { QuickNoteTable } from "../src/quicknote/quicknote.sql"
-import { ChannelIngressReceiptTable } from "../src/channel/channel.sql"
+import { ChannelIngressAcceptedTable } from "../src/channel/channel.sql"
 import { Project } from "../src/project/project"
 import { ProjectIdentityConvergence } from "../src/project/identity-convergence"
 import { namedErrorStatus } from "../src/server/error-handler"
@@ -58,9 +58,9 @@ function identityRows(projectIDs: string[]) {
       .all()
       .filter((row) => row.project_id !== null && projectIDs.includes(row.project_id))
       .sort((left, right) => left.id.localeCompare(right.id)),
-    receipts: db
+    acceptedChannelInputs: db
       .select()
-      .from(ChannelIngressReceiptTable)
+      .from(ChannelIngressAcceptedTable)
       .all()
       .filter((row) => projectIDs.includes(row.project_id))
       .sort((left, right) => left.project_id.localeCompare(right.project_id)),
@@ -140,7 +140,10 @@ describe("explicit Project identity convergence", () => {
         commands: repaired.commands,
       },
       duplicate: Project.get(duplicateProjectID),
-      notes: Database.use((db) => db.select().from(QuickNoteTable).where(eq(QuickNoteTable.project_id, canonicalProjectID)).all()),
+      notes: Database.use((db) => db.select({
+        project_id: QuickNoteTable.project_id,
+        content: QuickNoteTable.content,
+      }).from(QuickNoteTable).where(eq(QuickNoteTable.project_id, canonicalProjectID)).all()),
       resolvedProjectID: resolved.project.id,
     }).toEqual({
       receipt: {
@@ -148,14 +151,9 @@ describe("explicit Project identity convergence", () => {
         canonicalProjectID,
         removedProjectIDs: [duplicateProjectID],
         migratedRows: {
-          automation: 0,
-          automation_project_target: 0,
-          automation_run: 0,
           bus_publication_outbox: 0,
-          channel_ingress_receipt: 0,
+          channel_ingress_accepted: 0,
           engine_task: 0,
-          event_job: 0,
-          event_job_fire: 0,
           memory_chunk: 0,
           memory_file: 0,
           permission_ledger: 0,
@@ -173,10 +171,10 @@ describe("explicit Project identity convergence", () => {
       },
       duplicate: undefined,
       notes: [
-        expect.objectContaining({
+        {
           project_id: canonicalProjectID,
           content: "project identity repair fact",
-        }),
+        },
       ],
       resolvedProjectID: canonicalProjectID,
     })
@@ -191,15 +189,22 @@ describe("explicit Project identity convergence", () => {
     const now = Date.now()
     Database.use((db) => {
       for (const projectID of [canonicalProjectID, duplicateProjectID]) {
-        db.insert(ChannelIngressReceiptTable)
+        db.insert(ChannelIngressAcceptedTable)
           .values({
+            id: Identifier.deterministic("call", `channel-ingress\0${projectID}\0matrix\0same-request`),
             project_id: projectID,
             platform: "matrix",
             request_id: "same-request",
-            fingerprint: `fingerprint-${projectID}`,
-            result: { projectID },
+            input: {
+              channel: "room",
+              thread: "thread",
+              text: `project identity ${projectID}`,
+              allow_create: false,
+              allow_session_mutation: false,
+              bind: true,
+              attachments: [],
+            },
             time_created: now,
-            time_updated: now,
           })
           .run()
         }

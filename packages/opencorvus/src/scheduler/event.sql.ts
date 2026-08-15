@@ -1,7 +1,8 @@
-import { sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { check, sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { sql } from "drizzle-orm"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { ProjectTable } from "../project/project.sql"
 import { SessionTable } from "../session/session.sql"
-import { Timestamps } from "@/storage/schema.sql"
 
 type Match = Record<string, string | number | boolean>
 
@@ -14,10 +15,10 @@ export const EventJobTable = sqliteTable(
   "event_job",
   {
     id: text().primaryKey(),
-    project_id: text()
-      .notNull()
-      .references(() => ProjectTable.id, { onDelete: "cascade" }),
-    session_id: text().references(() => SessionTable.id, { onDelete: "set null" }),
+    definition_id: text().notNull(),
+    revision: integer().notNull(),
+    project_id: text().notNull(),
+    session_id: text(),
     name: text().notNull(),
     event_type: text().notNull(),
     match_json: text({ mode: "json" }).$type<Match>(),
@@ -26,16 +27,46 @@ export const EventJobTable = sqliteTable(
     enabled: integer({ mode: "boolean" }).notNull().default(true),
     one_shot: integer({ mode: "boolean" }).notNull().default(false),
     cooldown_ms: integer().notNull().default(0),
-    last_run: integer(),
-    last_event: text(),
-    failure_count: integer().notNull().default(0),
-    last_error: text(),
-    ...Timestamps,
+    time_created: integer().notNull().$default(() => Date.now()),
   },
   (table) => [
+    uniqueIndex("event_job_definition_revision_idx").on(table.definition_id, table.revision),
     index("event_job_project_idx").on(table.project_id),
     index("event_job_type_idx").on(table.event_type),
     index("event_job_enabled_idx").on(table.enabled),
+  ],
+)
+
+/** Minimal immutable deletion boundary; no definition fields are copied. */
+export const EventJobDefinitionTombstoneTable = sqliteTable(
+  "event_job_definition_tombstone",
+  {
+    id: text().primaryKey(),
+    definition_id: text().notNull(),
+    revision: integer().notNull(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("event_job_definition_tombstone_revision_idx").on(table.definition_id, table.revision),
+    index("event_job_definition_tombstone_latest_idx").on(table.definition_id, table.revision),
+  ],
+)
+
+export const EventOccurrenceTable = sqliteTable(
+  "event_occurrence",
+  {
+    id: text().primaryKey(),
+    bus_outbox_id: text().references(() => BusPublicationOutboxTable.occurrence_id, { onDelete: "restrict" }),
+    project_id: text(),
+    event_type: text(),
+    properties: text({ mode: "json" }).$type<unknown>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    check("event_occurrence_owner_shape", sql`
+      (${table.bus_outbox_id} IS NOT NULL AND ${table.project_id} IS NULL AND ${table.event_type} IS NULL AND ${table.properties} IS NULL)
+      OR (${table.bus_outbox_id} IS NULL AND ${table.project_id} IS NOT NULL AND ${table.event_type} IS NOT NULL AND ${table.properties} IS NOT NULL)
+    `),
   ],
 )
 
@@ -43,32 +74,41 @@ export const EventJobFireTable = sqliteTable(
   "event_job_fire",
   {
     id: text().primaryKey(),
-    event_job_id: text().notNull(),
-    project_id: text()
-      .notNull()
-      .references(() => ProjectTable.id, { onDelete: "cascade" }),
-    event_occurrence_id: text().notNull(),
-    event_type: text().notNull(),
+    event_job_revision_id: text().notNull().references(() => EventJobTable.id, { onDelete: "restrict" }),
+    event_occurrence_id: text().notNull().references(() => EventOccurrenceTable.id, { onDelete: "restrict" }),
     causation_fire_id: text(),
-    causation_ancestry: text({ mode: "json" }).notNull().$type<EventJobFireCausationEntry[]>(),
-    status: text({ enum: ["pending", "running", "retry_wait", "succeeded", "disposition"] }).notNull(),
-    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled"] }),
-    target_session_id: text().notNull(),
-    creates_session: integer({ mode: "boolean" }).notNull(),
-    message_id: text(),
-    owner_id: text(),
-    owner_process_id: integer(),
-    lease_until: integer().notNull().default(0),
-    attempt: integer().notNull().default(0),
-    error: text(),
-    time_started: integer(),
-    time_completed: integer(),
-    ...Timestamps,
+    /** Present only when this fire pre-allocates a new Session. Existing
+     * Session targets are owned by the exact definition revision. */
+    created_session_id: text(),
+    time_created: integer().notNull(),
   },
   (table) => [
-    uniqueIndex("event_job_fire_occurrence_idx").on(table.event_job_id, table.event_occurrence_id),
-    index("event_job_fire_project_status_idx").on(table.project_id, table.status),
+    uniqueIndex("event_job_fire_occurrence_idx").on(table.event_job_revision_id, table.event_occurrence_id),
     index("event_job_fire_causation_idx").on(table.causation_fire_id),
-    index("event_job_fire_target_session_idx").on(table.target_session_id),
+    index("event_job_fire_target_session_idx").on(table.created_session_id),
+  ],
+)
+
+export const EventJobFireReceiptTable = sqliteTable(
+  "event_job_fire_receipt",
+  {
+    id: text().primaryKey(),
+    fire_id: text().notNull().references(() => EventJobFireTable.id, { onDelete: "cascade" }),
+    outcome: text({ enum: ["retry_wait", "succeeded", "disposition"] }).notNull(),
+    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled"] }),
+    message_id: text(),
+    retry_at: integer(),
+    error: text(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    index("event_job_fire_receipt_fire_idx").on(table.fire_id, table.time_created),
+    uniqueIndex("event_job_fire_terminal_receipt_idx").on(table.fire_id)
+      .where(sql`${table.outcome} <> 'retry_wait'`),
+    check("event_job_fire_receipt_shape", sql`
+      (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
+      OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.message_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition} IS NOT NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
+    `),
   ],
 )

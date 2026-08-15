@@ -15,7 +15,7 @@ export interface ChannelAdapter {
 
 export interface IncomingMessage {
   /** Stable provider event/message identity used for durable ingress ownership. */
-  id?: string
+  id: string
   platform: string
   channel: string
   thread: string

@@ -52,7 +52,7 @@ describe("durable Bus publication outbox", () => {
             await sourceBlocked
             Bus.publishOwned(DerivedReceiptEvent, { value: properties.value })
           },
-          { durableID: "test.derived-publication-source" },
+          { durableID: "test.derived-publication-source", effect: "idempotent_by_occurrence" },
         )
         stopDerived = Bus.subscribe(
           DerivedReceiptEvent,
@@ -60,7 +60,7 @@ describe("durable Bus publication outbox", () => {
             markDerivedStarted()
             await derivedBlocked
           },
-          { durableID: "test.derived-publication-target" },
+          { durableID: "test.derived-publication-target", effect: "idempotent_by_occurrence" },
         )
         Bus.publishOwned(ReceiptEvent, { value: "derived" })
       },
@@ -95,7 +95,7 @@ describe("durable Bus publication outbox", () => {
         stopFirst = Bus.subscribe(
           ReceiptEvent,
           (event) => received.first.push(event.properties.value),
-          { durableID: "test.same-project-local-receipt" },
+          { durableID: "test.same-project-local-receipt", effect: "idempotent_by_occurrence" },
         )
       },
     })
@@ -105,7 +105,7 @@ describe("durable Bus publication outbox", () => {
         stopSecond = Bus.subscribe(
           ReceiptEvent,
           (event) => received.second.push(event.properties.value),
-          { durableID: "test.same-project-local-receipt" },
+          { durableID: "test.same-project-local-receipt", effect: "idempotent_by_occurrence" },
         )
       },
     })
@@ -140,7 +140,7 @@ describe("durable Bus publication outbox", () => {
             await blocked
             observedProjectID = Instance.project.id
           },
-          { durableID: "test.async-project-lease" },
+          { durableID: "test.async-project-lease", effect: "idempotent_by_occurrence" },
         )
         Bus.publishOwned(ReceiptEvent, { value: "retain-lease" })
       },
@@ -187,7 +187,7 @@ describe("durable Bus publication outbox", () => {
               )
             })
           },
-          { durableID: "test.shutdown-replay" },
+          { durableID: "test.shutdown-replay", effect: "idempotent_by_occurrence" },
         )
         publication = Bus.publishOwned(ReceiptEvent, { value: "shutdown-replay" })
       },
@@ -223,7 +223,7 @@ describe("durable Bus publication outbox", () => {
           ({ properties }) => {
             replayed = properties.value
           },
-          { durableID: "test.shutdown-replay" },
+          { durableID: "test.shutdown-replay", effect: "idempotent_by_occurrence" },
         )
         try {
           await publication.retry()
@@ -289,7 +289,7 @@ describe("durable Bus publication outbox", () => {
           (event) => {
             if (event.properties.info.id === messageID) received.push(event.occurrenceID)
           },
-          { durableID: "test.message-created-successor" },
+          { durableID: "test.message-created-successor", effect: "idempotent_by_occurrence" },
         )
         try {
           Bus.resumeDurablePublications()
@@ -322,7 +322,7 @@ describe("durable Bus publication outbox", () => {
           () => {
             settledCalls += 1
           },
-          { durableID: "test.receipt.already-settled" },
+          { durableID: "test.receipt.already-settled", effect: "idempotent_by_occurrence" },
         )
         const transient = Bus.subscribe(
           ReceiptEvent,
@@ -330,7 +330,7 @@ describe("durable Bus publication outbox", () => {
             transientCalls += 1
             if (transientCalls === 1) throw new Error("injected subscriber receipt failure")
           },
-          { durableID: "test.receipt.transient" },
+          { durableID: "test.receipt.transient", effect: "idempotent_by_occurrence" },
         )
         try {
           const publication = Bus.publishOwned(ReceiptEvent, { value: "one-occurrence" })
@@ -379,7 +379,7 @@ describe("durable Bus publication outbox", () => {
             await blocked
             concurrent -= 1
           },
-          { durableID: "test.receipt.concurrent-manual-retry" },
+          { durableID: "test.receipt.concurrent-manual-retry", effect: "idempotent_by_occurrence" },
         )
         try {
           using _interruption = Bus.TestHooks.suppressAutomaticDurableDrain()
@@ -457,8 +457,8 @@ describe("durable Bus publication outbox", () => {
           transientCalls += 1
           if (transientCalls === 1) throw new Error("injected Global receipt failure")
         }
-        GlobalBus.on("event", settled, { durableID: "test.global.already-settled" })
-        GlobalBus.on("event", transient, { durableID: "test.global.transient" })
+        GlobalBus.on("event", settled, { durableID: "test.global.already-settled", effect: "idempotent_by_occurrence" })
+        GlobalBus.on("event", transient, { durableID: "test.global.transient", effect: "idempotent_by_occurrence" })
         try {
           const publication = Bus.publishOwned(ReceiptEvent, { value: "global-occurrence" })
           await waitFor(

@@ -717,6 +717,24 @@ export namespace SessionCompaction {
     return pruned > PRUNE_MINIMUM ? toPrune : []
   }
 
+  /** Disposable read projection of compaction coverage. The canonical Tool
+   * outcome remains immutable; only the provider-facing transcript sees the
+   * compacted marker derived from the existing compaction boundary. */
+  export function projectPrunedHistory(messages: Message.WithParts[]): Message.WithParts[] {
+    const pruned = new Set(prunableToolParts(messages).map((part) => part.id))
+    if (pruned.size === 0) return messages
+    return messages.map((message) => ({
+      ...message,
+      parts: message.parts.map((part) => {
+        if (part.type !== "tool" || part.state.status !== "completed" || !pruned.has(part.id)) return part
+        return {
+          ...part,
+          state: { ...part.state, time: { ...part.state.time, compacted: part.state.time.end } },
+        }
+      }),
+    }))
+  }
+
   // goes backwards through parts until there are 40_000 tokens worth of tool
   // calls. then erases output of previous tool calls. idea is to throw away old
   // tool calls that are no longer relevant.
@@ -751,15 +769,9 @@ export namespace SessionCompaction {
       anchorID: range.anchorID,
       tailID: range.tailID,
     })
-    for (const part of toPrune) {
-      if (part.state.status === "completed") {
-        part.state.time.compacted = Date.now()
-        await Session.updatePart(part)
-      }
-    }
     if (toPrune.length > 0) {
       pruneMetrics.prunedParts += toPrune.length
-      log.info("pruned", { count: toPrune.length })
+      log.info("projected pruned history", { count: toPrune.length })
     }
   }
 
@@ -850,6 +862,25 @@ export namespace SessionCompaction {
       sessionID: input.sessionID,
       model,
       abort: input.abort,
+      beforeAssistantCompletion: async (assistant) => {
+        if (assistant.error) {
+          assistant.summary = false
+          return
+        }
+        const continuation = SessionMemory.continuationText(await MessageStore.parts(assistant.id))
+        if (!continuation.trim() || assistant.finish === "tool-calls") {
+          const error = new Message.CompactionContinuationMissingError({
+            message: "Compaction provider completed without a final visible continuation summary.",
+            sessionID: input.sessionID,
+            assistantMessageID: assistant.id,
+          })
+          assistant.summary = false
+          assistant.finish = "error"
+          assistant.error = error.toObject()
+          return
+        }
+        assistant.summary = true
+      },
     })
     // Plugins may contribute visible evidence to the temporary projection.
     const compacting = await Plugin.trigger(
@@ -932,23 +963,6 @@ export namespace SessionCompaction {
     if (processor.message.error) {
       return { status: "failed", error: processFailureError(processor.message.error) } satisfies ProcessFailure
     }
-    processor.message.finish = processor.message.finish ?? "stop"
-    await Session.updateMessage(processor.message)
-
-    const continuationSummary = SessionMemory.continuationText(await MessageStore.parts(processor.message.id))
-    if (!continuationSummary.trim() || processor.message.finish === "tool-calls") {
-      const error = new Message.CompactionContinuationMissingError({
-        message: "Compaction provider completed without a final visible continuation summary.",
-        sessionID: input.sessionID,
-        assistantMessageID: processor.message.id,
-      })
-      processor.message.summary = false
-      processor.message.finish = "error"
-      processor.message.error = error.toObject()
-      processor.message.time.completed = processor.message.time.completed ?? Date.now()
-      await Session.updateMessage(processor.message)
-      return { status: "failed", error } satisfies ProcessFailure
-    }
     const marker = compactionPart
       ? {
         ...compactionPart,
@@ -970,7 +984,6 @@ export namespace SessionCompaction {
         anchor_id: selected.anchor_id,
       } satisfies Message.CompactionPart)
 
-    processor.message.summary = true
     await Session.publishCompactionCheckpoint({ info: processor.message, part: marker })
 
     await Bus.publish(Event.Compacted, { sessionID: input.sessionID })

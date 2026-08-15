@@ -151,7 +151,7 @@ describe("workflow node occurrence authority", () => {
       fn: async () => {
         const { taskID, root } = await createBoundTask()
         const initialDispatchID = Identifier.ascending("artifact")
-        const { session: child, lineage: initial } = await commitInitialSession({
+        const { session: child } = await commitInitialSession({
           taskID,
           rootSessionID: root.id,
           dispatchID: initialDispatchID,
@@ -195,12 +195,8 @@ describe("workflow node occurrence authority", () => {
               .get(),
           ),
         ).toMatchObject({
-          state: "bound",
-          workflow_occurrence_id: initialDispatchID,
           initial_dispatch_id: initialDispatchID,
           child_session_id: child.id,
-          dispatch_lineage_artifact_id: initial.artifactID,
-          conflict_lineage_ids: [],
         })
         expect(continuation.payload.continuation_of_dispatch_id).toBe(initialDispatchID)
       },

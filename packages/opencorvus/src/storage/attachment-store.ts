@@ -9,12 +9,13 @@ import {
 import { Project } from "@/project/project"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Database, eq } from "@/storage/db"
-import { InteractiveArtifactTable, MessageTable, PartTable, SessionTable } from "@/session/session.sql"
+import { InteractiveArtifactTable, MessageTable, PartTable, SessionTable, ToolPartOutcomeTable, ToolPartRequestTable } from "@/session/session.sql"
 import {
   EngineArtifactTable,
   EngineArtifactVersionTable,
   EngineChannelBindingTable,
   EngineInteractionRequestTable,
+  EngineInteractionOutcomeTable,
   EngineProgressSnapshotTable,
   EngineTaskTable,
 } from "@/engine/engine.sql"
@@ -24,6 +25,7 @@ import { requireRuntimePackage } from "@/runtime/package-require"
 import { withKeyedLock } from "@/util/lock"
 import { Filesystem } from "@/util/filesystem"
 import lockfile from "proper-lockfile"
+import { projectInteractionRowInTransaction } from "@/engine/store"
 
 const sharp = requireRuntimePackage<typeof import("sharp")>("sharp")
 
@@ -1273,13 +1275,25 @@ export namespace AttachmentStore {
         ? db
             .select({ data: PartTable.data })
             .from(PartTable)
-            .innerJoin(SessionTable, eq(PartTable.session_id, SessionTable.id))
+            .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
+            .innerJoin(SessionTable, eq(MessageTable.session_id, SessionTable.id))
             .where(eq(SessionTable.project_id, projectID))
             .all()
         : db.select({ data: PartTable.data }).from(PartTable).all()
       for (const row of partRows) {
         harvestReferences(row.data, byProject)
       }
+      const toolOutcomeRows = projectID
+        ? db
+            .select({ data: ToolPartOutcomeTable.data })
+            .from(ToolPartOutcomeTable)
+            .innerJoin(ToolPartRequestTable, eq(ToolPartOutcomeTable.request_part_id, ToolPartRequestTable.id))
+            .innerJoin(MessageTable, eq(MessageTable.id, ToolPartRequestTable.message_id))
+            .innerJoin(SessionTable, eq(MessageTable.session_id, SessionTable.id))
+            .where(eq(SessionTable.project_id, projectID))
+            .all()
+        : db.select({ data: ToolPartOutcomeTable.data }).from(ToolPartOutcomeTable).all()
+      for (const row of toolOutcomeRows) harvestReferences(row.data, byProject)
       const interactiveArtifactRows = projectID
         ? db
             .select({ payload: InteractiveArtifactTable.payload })
@@ -1338,27 +1352,9 @@ export namespace AttachmentStore {
           ]
       for (const row of artifactRows) harvestReferences(row.payload, byProject)
 
-      const interactionRows = projectID
-        ? db
-            .select({
-              title: EngineInteractionRequestTable.title,
-              body: EngineInteractionRequestTable.body,
-              payload: EngineInteractionRequestTable.payload,
-              response: EngineInteractionRequestTable.response,
-            })
-            .from(EngineInteractionRequestTable)
-            .innerJoin(EngineTaskTable, eq(EngineInteractionRequestTable.task_id, EngineTaskTable.id))
-            .where(eq(EngineTaskTable.project_id, projectID))
-            .all()
-        : db
-            .select({
-              title: EngineInteractionRequestTable.title,
-              body: EngineInteractionRequestTable.body,
-              payload: EngineInteractionRequestTable.payload,
-              response: EngineInteractionRequestTable.response,
-            })
-            .from(EngineInteractionRequestTable)
-            .all()
+      const interactionRows = db.select().from(EngineInteractionRequestTable).all()
+        .map((row) => projectInteractionRowInTransaction(db, row))
+        .filter((row) => !projectID || db.select({ projectID: EngineTaskTable.project_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, row.task_id)).get()?.projectID === projectID)
       for (const row of interactionRows) {
         harvestReferences(row.title, byProject)
         harvestReferences(row.body, byProject)

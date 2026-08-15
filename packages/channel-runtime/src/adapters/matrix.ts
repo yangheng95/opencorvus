@@ -182,6 +182,7 @@ export class MatrixAdapter implements ChannelAdapter {
             | undefined
           const thread = relates?.["m.in_reply_to"]?.event_id ?? event.event_id
           await this.handler({
+            id: event.event_id,
             platform: this.platform,
             channel,
             thread,

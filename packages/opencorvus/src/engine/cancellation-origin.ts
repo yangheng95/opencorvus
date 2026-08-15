@@ -165,7 +165,7 @@ export const TASK_CANCELLATION_REQUESTED_EVENT_TYPE = "task.cancellation.request
 export const TASK_CANCELLED_EVENT_TYPE = "task.cancelled"
 
 const TaskCancellationRequestedPayloadBase = {
-  taskID: Identifier.schema("task"),
+  execution_epoch: z.number().int().positive(),
   actor: TaskCancellationActor,
   surface: TaskCancellationSurface,
   reason: TaskCancellationReason,
@@ -203,11 +203,9 @@ export const TaskCancellationRequestedPayload = z
 
 export const TaskCancelledPayload = z
   .object({
-    taskID: Identifier.schema("task"),
-    status: z.literal("cancelled"),
+    execution_epoch: z.number().int().positive(),
     summary: z.string().trim().min(1),
     error: z.string().trim().min(1),
-    timeCompleted: z.number().int().positive(),
   })
   .strict()
 
@@ -301,9 +299,6 @@ export function parseTaskCancellationRequestEvent(
     throw new Error(`Cancellation request event ${eventID} is missing its correlation identifier.`)
   }
   const payload = TaskCancellationRequestedPayload.parse(requested.payload)
-  if (payload.taskID !== taskID) {
-    throw new Error(`Cancellation request event ${eventID} payload belongs to task ${payload.taskID}, not ${taskID}.`)
-  }
   const parsedOrigin = TaskCancellationOrigin.safeParse({
     actor: payload.actor,
     source: requested.source,
@@ -352,12 +347,7 @@ export function taskCancellationRequestEventID(
       `Task cancellation data integrity violation: terminal event ${terminal.id} does not belong exactly to task ${taskID}.`,
     )
   }
-  const terminalPayload = TaskCancelledPayload.parse(terminal.payload)
-  if (terminalPayload.taskID !== taskID) {
-    throw new Error(
-      `Task cancellation data integrity violation: terminal event ${terminal.id} payload belongs to task ${terminalPayload.taskID}, not ${taskID}.`,
-    )
-  }
+  TaskCancelledPayload.parse(terminal.payload)
   if (!terminal.causationID) {
     throw new Error(
       `Task cancellation data integrity violation: terminal event ${terminal.id} for task ${taskID} has no causation identifier.`,
@@ -380,6 +370,10 @@ export function projectTaskCancellationEventChain(
   if (!terminal) throw new Error(`Task cancellation terminal validation did not return an event for ${taskID}.`)
   const request = parseTaskCancellationRequestEvent(taskID, requestEventID, requested)
   const requestEvent = request.event
+  const terminalPayload = TaskCancelledPayload.parse(terminal.payload)
+  if (terminalPayload.execution_epoch !== request.payload.execution_epoch) {
+    throw new Error(`Task cancellation event chain ${requestEvent.id} -> ${terminal.id} has execution epoch drift.`)
+  }
   if (!requestEvent.correlationID || terminal.correlationID !== requestEvent.correlationID) {
     throw new Error(`Task cancellation event chain ${requestEvent.id} -> ${terminal.id} has correlation drift.`)
   }

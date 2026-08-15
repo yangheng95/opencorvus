@@ -9,7 +9,6 @@ import {
   awaitTaskMessageProtocolBridgeIdle,
   ensureTaskMessageProtocolBridge,
 } from "@/orchestrator/protocol/message-bridge"
-import { InstanceBootstrap } from "@/project/bootstrap"
 import { Instance } from "@/project/instance"
 import { ProtocolStore } from "@/protocol/store"
 import { EngineRoutes } from "@/server/routes/orchestrator"
@@ -191,8 +190,9 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
               .where(eq(MessageTable.id, messageID))
               .get(),
             parts: db
-              .select({ sessionID: PartTable.session_id })
+              .select({ sessionID: MessageTable.session_id })
               .from(PartTable)
+              .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
               .where(eq(PartTable.message_id, messageID))
               .all(),
           })),
@@ -260,7 +260,9 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
         if (current.info.role === "user") latestUserMessages.push(current.info.id)
       }
       const persistedPartSessions = Database.use((db) =>
-        db.select({ sessionID: PartTable.session_id }).from(PartTable).where(eq(PartTable.message_id, messageID)).all(),
+        db.select({ sessionID: MessageTable.session_id }).from(PartTable)
+          .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
+          .where(eq(PartTable.message_id, messageID)).all(),
       )
       expect({
         delivered,
@@ -438,6 +440,7 @@ test("successor runtime replays one atomic Task-root Message move after register
             parts: [{ messageID, sessionID: orchestrator.id }],
           },
         })
+        Message.Event.Moved.properties.parse(move!.properties)
         moveOccurrenceID = move!.occurrence_id
       } finally {
         automaticDrain[Symbol.dispose]()
@@ -449,7 +452,10 @@ test("successor runtime replays one atomic Task-root Message move after register
   await Instance.disposeAll()
   await Instance.provide({
     directory: project.path,
-    init: InstanceBootstrap,
+    init: async () => {
+      ensureTaskMessageProtocolBridge()
+      Bus.resumeDurablePublications()
+    },
     fn: async () => {
       const deadline = Date.now() + 5_000
       while (Bus.TestHooks.outbox().some((row) => row.occurrence_id === moveOccurrenceID) && Date.now() < deadline) {
@@ -478,71 +484,4 @@ test("successor runtime replays one atomic Task-root Message move after register
       })
     },
   })
-})
-
-test("idempotent Task-root Message delivery validates every target-owned Part", async () => {
-  await using project = await memoryProject()
-  await Instance.provide({
-    directory: project.path,
-    fn: async () => {
-      const taskID = Identifier.ascending("task")
-      const root = await Session.create({ kind: "root", title: "Validate delivered Task-root Message" })
-      const now = Date.now()
-      persistTask({
-        taskID,
-        sessionID: root.id,
-        now,
-        title: "Validate delivered Task-root Message",
-        request: "Validate every Part in an idempotently delivered Task-root Message",
-        productPillar: "work",
-        source: "test",
-        priority: "normal",
-        metadata: {},
-        projectID: Instance.project.id,
-        packageRevision,
-        executionCapsuleBinding: await prepareTaskProcessBinding({
-          mode: "native",
-          taskID,
-          projectID: Instance.project.id,
-          rootDirectory: Instance.directory,
-          packageRevisionSHA256: packageRevision.packageDigest,
-          timeCreated: now,
-        }),
-      })
-      const orchestrator = await Session.create({
-        kind: "orchestrator",
-        parentID: root.id,
-        title: "Validate delivered Task Orchestrator",
-      })
-      const messageID = Identifier.ascending("message")
-      const partID = Identifier.ascending("part")
-      await Session.updateMessage({
-        id: messageID,
-        sessionID: orchestrator.id,
-        role: "user",
-        author: "mission",
-        time: { created: now },
-        agent: "orchestrator",
-        model: { providerID: "openai", modelID: "gpt-5.6-sol" },
-      })
-      await Session.updatePart({
-        id: partID,
-        sessionID: orchestrator.id,
-        messageID,
-        type: "text",
-        text: "Validate the complete target-owned Message tree.",
-      })
-      await Database.awaitEffectIdle(5_000)
-      Database.use((db) => db.update(PartTable).set({ session_id: root.id }).where(eq(PartTable.id, partID)).run())
-
-      await expect(
-        deliverTaskRootMessageToOrchestratorSession({
-          task: { id: taskID, session_id: root.id, project_id: Instance.project.id },
-          messageID,
-          orchestratorSessionID: orchestrator.id,
-        }),
-      ).rejects.toThrow(`Task-root Message ${messageID} is delivered but Part ${partID} remains on Session ${root.id}.`)
-    },
-  })
-  await Bus.TestHooks.disposeOwnedState()
 })

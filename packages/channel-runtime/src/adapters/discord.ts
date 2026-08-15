@@ -53,6 +53,7 @@ export class DiscordAdapter implements ChannelAdapter {
       if (!this.handler) return
 
       await this.handler({
+        id: msg.id,
         platform: this.platform,
         channel: msg.channelId,
         thread: root(msg),

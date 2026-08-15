@@ -1,32 +1,41 @@
 import { randomUUID } from "node:crypto"
 import z from "zod"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
-import { ProtocolEventTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
-import { ProtocolInboxDeliveryResult } from "@/protocol/schema"
+import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
+import { projectProtocolDeliveryInTransaction } from "@/protocol/delivery-projection"
 import {
   schedulerWakeMessageMatchesInTransaction,
   successfulSchedulerWakeReplyExistsInTransaction,
 } from "@/protocol/session-wake-state"
-import { Database, and, eq, sql } from "@/storage/db"
+import { Database, and, eq } from "@/storage/db"
+import { Identifier } from "@/id/id"
 import { withKeyedLock } from "@/util/lock"
 import { NamedError } from "@opencorvus-ai/util/error"
+import {
+  acquireControlLease,
+  assertControlLeaseInTransaction,
+  renewControlLease,
+} from "@/engine/control-lease"
 
-export const MISSION_EXECUTION_CLOSURE_EVENT_TYPE = "mission.execution.closure"
+export const MISSION_EXECUTION_CLOSURE_EVENT_TYPES = {
+  opened: "mission.execution.opened",
+  closing: "mission.execution.closing",
+  closed: "mission.execution.closed",
+} as const
 
 export const MissionExecutionClosurePayload = z
   .object({
-    protocol: z.literal("mission-execution-closure-v1"),
     missionID: z.string().min(1),
-    sessionID: z.string().min(1),
-    operationID: z.string().uuid(),
-    state: z.enum(["opened", "closing", "closed"]),
-    source: z.string().min(1),
     requestID: z.string().min(1),
   })
   .strict()
 
 export type MissionExecutionClosure = z.infer<typeof MissionExecutionClosurePayload> & {
   eventID: string
+  sessionID: string
+  operationID: string
+  state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES
+  source: string
 }
 
 export const MissionExecutionClosingError = NamedError.create(
@@ -76,54 +85,78 @@ export function withMissionExecutionAdmission<T>(sessionID: string, operation: (
 function closureFromEvent(event: ProtocolEventView | undefined): MissionExecutionClosure | undefined {
   if (!event) return undefined
   const payload = MissionExecutionClosurePayload.parse(event.payload)
+  const state = (Object.entries(MISSION_EXECUTION_CLOSURE_EVENT_TYPES) as Array<[
+    keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES,
+    string,
+  ]>).find(([, type]) => type === event.type)?.[0]
   if (
-    event.type !== MISSION_EXECUTION_CLOSURE_EVENT_TYPE ||
+    !state ||
     event.aggregate !== "session" ||
-    event.aggregateID !== payload.sessionID ||
-    event.sessionID !== payload.sessionID
+    event.aggregateID !== event.sessionID ||
+    !event.sessionID ||
+    !event.correlationID
   ) {
     throw new Error(`Mission execution closure event ${event.id} has conflicting Session identity`)
   }
-  return { ...payload, eventID: event.id }
+  return {
+    ...payload,
+    eventID: event.id,
+    sessionID: event.sessionID,
+    operationID: event.correlationID,
+    state,
+    source: event.source,
+  }
 }
 
 export function currentMissionExecutionClosure(sessionID: string): MissionExecutionClosure | undefined {
-  return closureFromEvent(ProtocolStore.latestSessionEvent(sessionID, MISSION_EXECUTION_CLOSURE_EVENT_TYPE))
+  return Database.use((db) => currentMissionExecutionClosureInTransaction(db, sessionID))
+}
+
+function currentMissionExecutionClosureInTransaction(
+  db: Database.TxOrDb,
+  sessionID: string,
+): MissionExecutionClosure | undefined {
+  const row = db.select().from(ProtocolEventTable).where(and(
+    eq(ProtocolEventTable.aggregate_type, "session"),
+    eq(ProtocolEventTable.aggregate_id, sessionID),
+  )).all().filter((event) => Object.values(MISSION_EXECUTION_CLOSURE_EVENT_TYPES).includes(event.type as never))
+    .toSorted((left, right) => right.seq - left.seq || right.id.localeCompare(left.id))[0]
+  return closureFromEvent(row ? ProtocolStore.requireEvent(row.id) : undefined)
 }
 
 async function appendMissionExecutionClosure(
-  input: Omit<z.input<typeof MissionExecutionClosurePayload>, "protocol">,
+  input: z.input<typeof MissionExecutionClosurePayload> & { sessionID: string; operationID: string; state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES; source: string },
 ): Promise<MissionExecutionClosure> {
-  const payload = MissionExecutionClosurePayload.parse({ protocol: "mission-execution-closure-v1", ...input })
+  const payload = MissionExecutionClosurePayload.parse({ missionID: input.missionID, requestID: input.requestID })
   const event = await ProtocolStore.appendEvent({
     kind: "event",
-    type: MISSION_EXECUTION_CLOSURE_EVENT_TYPE,
+    type: MISSION_EXECUTION_CLOSURE_EVENT_TYPES[input.state],
     aggregate: "session",
-    aggregate_id: payload.sessionID,
-    session_id: payload.sessionID,
-    source: payload.source,
-    correlation_id: payload.operationID,
+    aggregate_id: input.sessionID,
+    session_id: null,
+    source: input.source,
+    correlation_id: input.operationID,
     payload,
   })
-  return { ...payload, eventID: event.id }
+  return closureFromEvent(event)!
 }
 
 function appendMissionExecutionClosureInTransaction(
-  input: Omit<z.input<typeof MissionExecutionClosurePayload>, "protocol">,
+  input: z.input<typeof MissionExecutionClosurePayload> & { sessionID: string; operationID: string; state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES; source: string },
 ): MissionExecutionClosure {
   Database.requireActiveTransaction("appendMissionExecutionClosureInTransaction")
-  const payload = MissionExecutionClosurePayload.parse({ protocol: "mission-execution-closure-v1", ...input })
+  const payload = MissionExecutionClosurePayload.parse({ missionID: input.missionID, requestID: input.requestID })
   const event = ProtocolStore.appendEventInTransaction({
     kind: "event",
-    type: MISSION_EXECUTION_CLOSURE_EVENT_TYPE,
+    type: MISSION_EXECUTION_CLOSURE_EVENT_TYPES[input.state],
     aggregate: "session",
-    aggregate_id: payload.sessionID,
-    session_id: payload.sessionID,
-    source: payload.source,
-    correlation_id: payload.operationID,
+    aggregate_id: input.sessionID,
+    session_id: null,
+    source: input.source,
+    correlation_id: input.operationID,
     payload,
   })
-  return { ...payload, eventID: event.id }
+  return closureFromEvent(event)!
 }
 
 export function settleMissionSchedulerWakesForClosureInTransaction(
@@ -136,9 +169,8 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
   }
   const rows = db
     .select({
-      id: ProtocolInboxTable.id,
+      inbox: ProtocolInboxTable,
       eventID: ProtocolInboxTable.envelope_id,
-      deliveryResult: ProtocolInboxTable.delivery_result,
     })
     .from(ProtocolInboxTable)
     .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
@@ -146,7 +178,6 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
       and(
         eq(ProtocolInboxTable.actor, "session"),
         eq(ProtocolInboxTable.actor_id, closure.sessionID),
-        eq(ProtocolInboxTable.status, "delivered"),
         eq(ProtocolEventTable.type, "scheduler.message"),
       ),
     )
@@ -154,17 +185,18 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
   let settled = 0
   const now = Date.now()
   for (const row of rows) {
-    const result = row.deliveryResult ? ProtocolInboxDeliveryResult.parse(row.deliveryResult) : undefined
-    if (!result || result.kind !== "session_wake") continue
+    const delivery = projectProtocolDeliveryInTransaction(db, row.inbox, now)
+    const result = delivery.delivery_result
+    if (delivery.status !== "delivered" || !result || result.kind !== "session_wake") continue
     if (
       !schedulerWakeMessageMatchesInTransaction(db, {
         sessionID: closure.sessionID,
         messageID: result.message_id,
         eventID: row.eventID,
-        inboxID: row.id,
+        inboxID: row.inbox.id,
       })
     ) {
-      throw new Error(`Scheduler inbox ${row.id} session wake Message occurrence is invalid during Mission closure`)
+      throw new Error(`Scheduler inbox ${row.inbox.id} session wake Message occurrence is invalid during Mission closure`)
     }
     if (
       successfulSchedulerWakeReplyExistsInTransaction(db, {
@@ -174,28 +206,39 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
     ) {
       continue
     }
-    const updated = db
-      .update(ProtocolInboxTable)
-      .set({
-        delivery_result: {
+    const receiptID = Identifier.deterministic(
+      "protocol_inbox",
+      `mission-wake-closure-receipt\0${row.inbox.id}\0${closure.eventID}`,
+    )
+    const inserted = db
+      .insert(ProtocolDeliveryReceiptTable)
+      .values({
+        id: receiptID,
+        inbox_id: row.inbox.id,
+        receipt: {
           kind: "mission_wake_closed",
           message_id: result.message_id,
           closure_event_id: closure.eventID,
         },
-        time_completed: now,
-        time_updated: now,
+        time_created: now,
       })
-      .where(
-        and(
-          eq(ProtocolInboxTable.id, row.id),
-          eq(ProtocolInboxTable.status, "delivered"),
-          sql`json_extract(${ProtocolInboxTable.delivery_result}, '$.kind') = 'session_wake'`,
-          sql`json_extract(${ProtocolInboxTable.delivery_result}, '$.message_id') = ${result.message_id}`,
-        ),
-      )
-      .returning({ id: ProtocolInboxTable.id })
+      .onConflictDoNothing({ target: ProtocolDeliveryReceiptTable.id })
+      .returning({ id: ProtocolDeliveryReceiptTable.id })
       .get()
-    if (updated) settled += 1
+    if (inserted) {
+      settled += 1
+      continue
+    }
+    const existing = db.select().from(ProtocolDeliveryReceiptTable)
+      .where(eq(ProtocolDeliveryReceiptTable.id, receiptID)).get()
+    const existingResult = existing?.receipt
+    if (
+      !existing ||
+      existing.inbox_id !== row.inbox.id ||
+      existingResult?.kind !== "mission_wake_closed" ||
+      existingResult.message_id !== result.message_id ||
+      existingResult.closure_event_id !== closure.eventID
+    ) throw new Error(`Mission wake closure receipt ${receiptID} conflicts with the immutable settlement fact`)
   }
   return settled
 }
@@ -210,23 +253,42 @@ async function openMissionExecutionUnderAdmission(input: {
   source: "mission.dispatch" | "mission.wake"
   requestID: string
 }): Promise<MissionExecutionClosure> {
-  const current = currentMissionExecutionClosure(input.sessionID)
-  if (current && current.missionID !== input.missionID) {
-    throw new Error(`Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`)
-  }
-  if (current?.state === "closing") {
-    throw new MissionExecutionClosingError({
-      message: `Mission ${input.missionID} execution is still closing; retry or complete the durable close operation before reopening it.`,
-      missionID: input.missionID,
-      sessionID: input.sessionID,
-      operationID: current.operationID,
-      closureEventID: current.eventID,
+  return Database.immediateTransaction((db) => {
+    const exact = db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
+      eq(ProtocolEventTable.aggregate_type, "session"),
+      eq(ProtocolEventTable.aggregate_id, input.sessionID),
+      eq(ProtocolEventTable.type, MISSION_EXECUTION_CLOSURE_EVENT_TYPES.opened),
+      eq(ProtocolEventTable.source, input.source),
+    )).all().map((row) => closureFromEvent(ProtocolStore.requireEvent(row.id))!)
+      .find((event) => event.requestID === input.requestID)
+    if (exact) {
+      if (exact.missionID !== input.missionID) {
+        throw new Error(`Mission open request ${input.requestID} conflicts with Mission ${exact.missionID}`)
+      }
+      return exact
+    }
+    const current = currentMissionExecutionClosureInTransaction(db, input.sessionID)
+    if (current && current.missionID !== input.missionID) {
+      throw new Error(`Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`)
+    }
+    // An opened Session is already the one live Mission occurrence. A
+    // different dispatch/wake request is another activation of that occurrence,
+    // not authority to mint a second lifecycle boundary.
+    if (current?.state === "opened") return current
+    if (current?.state === "closing") {
+      throw new MissionExecutionClosingError({
+        message: `Mission ${input.missionID} execution is still closing; retry or complete the durable close operation before reopening it.`,
+        missionID: input.missionID,
+        sessionID: input.sessionID,
+        operationID: current.operationID,
+        closureEventID: current.eventID,
+      })
+    }
+    return appendMissionExecutionClosureInTransaction({
+      ...input,
+      operationID: randomUUID(),
+      state: "opened",
     })
-  }
-  return appendMissionExecutionClosure({
-    ...input,
-    operationID: randomUUID(),
-    state: "opened",
   })
 }
 
@@ -305,12 +367,19 @@ export function admitMissionExecutionWake<Receipt extends { activation: Promise<
 
 const activeCloseOperations = new Map<string, Promise<MissionExecutionClosure>>()
 
+export const MissionExecutionClosureTestHooks = {
+  /** Simulates another process, whose process-local owner map is empty. */
+  forgetLocalCloseOwner(sessionID: string) {
+    activeCloseOperations.delete(sessionID)
+  },
+}
+
 export function closeMissionExecutionOperation(input: {
   missionID: string
   sessionID: string
   source: "mission.abort" | "mission.delete" | "mission.archive"
   requestID: string
-  close: () => Promise<void>
+  close: (signal: AbortSignal) => Promise<void>
 }): Promise<MissionExecutionClosure> {
   const active = activeCloseOperations.get(input.sessionID)
   if (active) return active
@@ -341,15 +410,74 @@ export function closeMissionExecutionOperation(input: {
       })
     })
     if (closing.state === "closed") return closing
-    await input.close()
-    return appendMissionExecutionClosure({
-      missionID: closing.missionID,
-      sessionID: closing.sessionID,
-      operationID: closing.operationID,
-      state: "closed",
-      source: closing.source,
-      requestID: closing.requestID,
+    const ownerOccurrenceID = Identifier.ascending("call")
+    const targetID = `mission:${closing.sessionID}`
+    const leaseMilliseconds = 120_000
+    let acquired = acquireControlLease({
+      target: "lifecycle",
+      targetID,
+      ownerOccurrenceID,
+      now: Date.now(),
+      leaseMilliseconds,
     })
+    while (!acquired.acquired) {
+      const current = currentMissionExecutionClosure(closing.sessionID)
+      if (current?.state === "closed") return current
+      const waitMilliseconds = Math.max(10, Math.min(100, acquired.lease.expires_at - Date.now()))
+      await new Promise((resolve) => setTimeout(resolve, waitMilliseconds))
+      acquired = acquireControlLease({
+        target: "lifecycle",
+        targetID,
+        ownerOccurrenceID,
+        now: Date.now(),
+        leaseMilliseconds,
+      })
+    }
+    const owner = new AbortController()
+    let renewalFailure: unknown
+    const renewal = setInterval(() => {
+      if (renewalFailure) return
+      try {
+        const now = Date.now()
+        renewControlLease({
+          target: "lifecycle",
+          targetID,
+          leaseID: acquired.lease.id,
+          ownerOccurrenceID,
+          now,
+          expiresAt: now + leaseMilliseconds,
+        })
+      } catch (error) {
+        renewalFailure = error
+        owner.abort(error)
+      }
+    }, 40_000)
+    renewal.unref()
+    try {
+      await input.close(owner.signal)
+      if (renewalFailure) throw renewalFailure
+      return Database.immediateTransaction((db) => {
+        assertControlLeaseInTransaction(db, {
+          target: "lifecycle",
+          targetID,
+          leaseID: acquired.lease.id,
+          ownerOccurrenceID,
+          now: Date.now(),
+        })
+        const current = currentMissionExecutionClosure(closing.sessionID)
+        if (current?.state === "closed") return current
+        return appendMissionExecutionClosureInTransaction({
+          missionID: closing.missionID,
+          sessionID: closing.sessionID,
+          operationID: closing.operationID,
+          state: "closed",
+          source: closing.source,
+          requestID: closing.requestID,
+        })
+      })
+    } finally {
+      clearInterval(renewal)
+    }
   })()
   activeCloseOperations.set(input.sessionID, operation)
   void operation.then(

@@ -763,16 +763,7 @@ export function createDispatchAgentTool(input: {
                 },
               })
               if (result === "accepted") return
-              const { dispatchInfrastructureFailureWakeDisposition } = await import("@/engine/task-root-ingress-delivery")
-              const disposition = dispatchInfrastructureFailureWakeDisposition({
-                taskID: input.taskID,
-                infrastructureFactID,
-              })
-              // Task cancellation is an exact durable disposition, not a
-              // delivery failure. A delivery_failed receipt remains a failed
-              // detached pipeline and must stay visible to runtime settlement.
-              if (disposition === "terminal_inapplicable") return
-              throw new Error(`Detached dispatch infrastructure ingress is ${disposition} for ${completedSessionID}`)
+              throw new Error(`Detached dispatch infrastructure ingress was not accepted for ${completedSessionID}`)
             }
             const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/task-root-ingress-delivery")
             const result = await reconcileTerminalAgentLifecycleDelivery({

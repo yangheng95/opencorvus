@@ -16,6 +16,7 @@ import { randomUUID } from "crypto"
 import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
 import { findSchemaDrift, hasApplicationSchema, schemaObjectFingerprint } from "./schema-contract"
+import { migrateFactKernelSchema } from "./fact-kernel-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -353,15 +354,14 @@ function assertCurrentDataIntegrity(
     sqlite,
     `SELECT result.attempt_id
      FROM permission_execution_result AS result
-     INNER JOIN part
-       ON part.id = result.tool_part_id
-      AND part.session_id = result.session_id
      WHERE CASE
-       WHEN json_valid(part.data) = 0 OR json_valid(result.result) = 0 THEN 0
-       WHEN json_extract(part.data, '$.type') <> 'tool' THEN 0
-       WHEN json_extract(part.data, '$.state.status') NOT IN ('pending', 'running') THEN 0
+       WHEN json_valid(result.result) = 0 THEN 0
        WHEN json_extract(result.result, '$.value.metadata.opencorvusParkAfterToolResult') IS NOT 1 THEN 0
        WHEN json_type(result.result, '$.value.metadata.opencorvusToolResultControl') IS NOT NULL THEN 0
+       WHEN EXISTS (
+         SELECT 1 FROM tool_part_outcome AS outcome
+         WHERE json_extract(outcome.data, '$.resultAttemptID') = result.attempt_id
+       ) THEN 0
        ELSE 1
      END = 1
      ORDER BY result.attempt_id
@@ -476,7 +476,7 @@ function assertCurrentDataIntegrity(
       AND protocol_inbox.envelope_id = protocol_event.id
      WHERE length(session_control_record.id) > ${Identifier.MAX_LENGTH}
        AND session_control_record.kind = 'wake_reason'
-       AND session_control_record.owner = 'scheduler.message'
+       AND session_control_record.source = 'scheduler.message'
        AND protocol_event.type = 'scheduler.message'
        AND json_extract(session_control_record.payload, '$.wake_reason.source') = 'scheduler.message'
      ORDER BY id
@@ -529,7 +529,6 @@ function assertCurrentDataIntegrity(
      FROM message
      INNER JOIN part
        ON part.message_id = message.id
-      AND part.session_id = message.session_id
      INNER JOIN session AS mission_session
        ON mission_session.id = json_extract(part.data, '$.metadata.mission_session_id')
      WHERE length(message.id) > ${Identifier.MAX_LENGTH}
@@ -547,7 +546,6 @@ function assertCurrentDataIntegrity(
      FROM part
      INNER JOIN message
        ON message.id = part.message_id
-      AND message.session_id = part.session_id
      INNER JOIN session AS mission_session
        ON mission_session.id = json_extract(part.data, '$.metadata.mission_session_id')
      WHERE length(part.id) > ${Identifier.MAX_LENGTH}
@@ -625,10 +623,10 @@ function assertCurrentDataIntegrity(
      WHERE type = 'scheduler.message'
        AND CASE
          WHEN json_valid(payload) = 0 THEN 1
-         WHEN json_extract(payload, '$.protocol') IS NOT 'scheduler-message-v2' THEN 1
+         WHEN json_extract(payload, '$.protocol') IS NOT 'scheduler-message-v3' THEN 1
          WHEN json_type(payload, '$.invocation_id') IS NOT 'text' THEN 1
-         WHEN json_type(payload, '$.source_task_occurrence_started_at') IS NULL THEN 1
-         WHEN json_type(payload, '$.target_task_occurrence_started_at') IS NULL THEN 1
+         WHEN json_type(payload, '$.source_task_execution_epoch') IS NULL THEN 1
+         WHEN json_type(payload, '$.target_task_execution_epoch') IS NULL THEN 1
          ELSE 0
        END = 1
      ORDER BY id
@@ -645,27 +643,21 @@ function assertCurrentDataIntegrity(
     })
   }
 
-  const legacyTaskIngress = queryAllFinalized<{ id: string }>(
+  const malformedTaskIngress = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id
-     FROM engine_artifact
-     WHERE kind = 'task_root_ingress'
-       AND CASE
-         WHEN json_valid(payload) = 0 THEN 1
-         WHEN json_type(payload, '$.task_occurrence_started_at') IS NULL THEN 1
-         ELSE 0
-       END = 1
+     FROM engine_task_root_ingress
+     WHERE execution_epoch <= 0 OR sequence <= 0 OR length(source_id) = 0
      ORDER BY id
      LIMIT 1`,
   )[0]
-  if (legacyTaskIngress) {
+  if (malformedTaskIngress) {
     throw new DatabaseUnavailableError({
       message:
-        `OpenCorvus database contains root ingress ${legacyTaskIngress.id} from the prior Task occurrence epoch at ${dbPath}. ` +
-        "Its admitted execution occurrence cannot be reconstructed; reset this pre-release database.",
+        `OpenCorvus database contains malformed root ingress fact ${malformedTaskIngress.id} at ${dbPath}.`,
       path: dbPath,
       operation: "Database.Client.dataIntegrity.taskIngressOccurrenceEpoch",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_INTEGRITY_RESET_REQUIRED",
     })
   }
 
@@ -1065,6 +1057,7 @@ export namespace Database {
     try {
       let sqlite = openOwnedSqlite(dbPath, { configure: false })
       if (hasApplicationSchema(sqlite)) {
+        migrateFactKernelSchema(sqlite)
         const drift = findSchemaDrift(sqlite)
         if (drift) {
           const fingerprint = schemaObjectFingerprint(sqlite)

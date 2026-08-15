@@ -13,6 +13,7 @@ import {
 import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-digest"
 import { insertEngineArtifact } from "./artifact"
 import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
+import { listStartedIncompleteTaskIDs } from "./store"
 
 const SHA256 = z.string().regex(/^[a-f0-9]{64}$/)
 export const TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL = "task-execution-capsule-binding-v1" as const
@@ -183,20 +184,13 @@ export function activeTaskProcessBindingRoots(input: {
   diagnosticRoot: string
 }): Array<{ taskID: string; directory: string }> {
   const roots: Array<{ taskID: string; directory: string }> = []
-  const { rows, activeTaskIDs } = Database.use((db) => ({
+  const activeTaskIDs = new Set(listStartedIncompleteTaskIDs({ projectID: input.projectID }))
+  const { rows } = Database.use((db) => ({
     rows: db
       .select({ payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
       .where(eq(EngineArtifactTable.kind, "task_execution_capsule_binding"))
       .all(),
-    activeTaskIDs: new Set(
-      db
-        .select({ id: EngineTaskTable.id, timeCompleted: EngineTaskTable.time_completed })
-        .from(EngineTaskTable)
-        .all()
-        .filter((task) => task.timeCompleted === null)
-        .map((task) => task.id),
-    ),
   }))
   for (const row of rows) {
     const parsed = TaskProcessBindingPayloadSchema.safeParse(row.payload)

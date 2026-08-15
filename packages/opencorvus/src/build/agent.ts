@@ -63,7 +63,7 @@ import { type BuildTarget } from "./types"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { Database, eq } from "@/storage/db"
 import { buildObservationRefName, deleteBuildObservationRefs } from "@/engine/build-observation-ref"
-import { PartTable } from "@/session/session.sql"
+import { MessageTable, PartTable } from "@/session/session.sql"
 import { MergeBackToolOutputSchema } from "./merge-back-tool-contract"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import {
@@ -95,6 +95,7 @@ import {
 } from "./terminal-fact-publication"
 import {
   beginBuildObservationCleanup,
+  renewBuildObservationCleanupActivation,
   resolveBuildObservationGitDir,
   settleBuildObservationCleanup,
 } from "@/engine/build-observation-cleanup"
@@ -299,7 +300,8 @@ export async function repairManagedBuildSessionStagedFileParts(input: {
         data: PartTable.data,
       })
       .from(PartTable)
-      .where(eq(PartTable.session_id, input.sessionID))
+      .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
+      .where(eq(MessageTable.session_id, input.sessionID))
       .all(),
   )
   let checked = 0
@@ -774,7 +776,14 @@ export namespace BuildAgent {
         dispatchID: input.dispatchTurn?.current_dispatch_id ?? buildSessionID,
       })
       const observationGitDir = await resolveBuildObservationGitDir(worktreeDir!)
-      beginBuildObservationCleanup({ observationID, taskID: task.id, gitDir: observationGitDir })
+      const cleanupOwner = beginBuildObservationCleanup({ observationID, taskID: task.id, gitDir: observationGitDir })
+      const cleanupActivation = cleanupOwner.activation
+      if (!cleanupActivation) throw new Error(`Build observation cleanup ${observationID} has no physical activation`)
+      const cleanupRenewal = setInterval(() => {
+        renewBuildObservationCleanupActivation(observationID, cleanupActivation)
+      }, 40_000)
+      cleanupRenewal.unref()
+      using _cleanupActivation = { [Symbol.dispose]() { clearInterval(cleanupRenewal) } }
       let out:
         | {
             session: { id: string }
@@ -960,7 +969,7 @@ export namespace BuildAgent {
       const coordinationHandoff = out ? agentCoordinationHandoffResult(out) : undefined
       if (coordinationHandoff) {
         const cleanup = input.terminalFactCleanup ?? settleBuildObservationCleanup
-        await cleanup({ observationID })
+        await cleanup({ observationID, activation: cleanupActivation })
         return coordinationHandoff
       }
       let provenance = { observedArtifactLocators: [], sourceArtifactLocators: [], selections: [] } as ReturnType<
@@ -1006,7 +1015,7 @@ export namespace BuildAgent {
         const cleanup = input.terminalFactCleanup ?? settleBuildObservationCleanup
         // The durable pending owner is the recovery authority. Do not return
         // a final adapter outcome while its private refs remain unsettled.
-        await cleanup({ observationID })
+        await cleanup({ observationID, activation: cleanupActivation })
       }
       if (terminalFactPublication.kind === "publication_failed") {
         log.error("build agent: required terminal fact publication failed", {

@@ -18,6 +18,7 @@ import { SelectedWorkflowBindingSchema } from "./workflow-binding"
 import { deriveTaskStatus } from "./task-status"
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
+import type { TaskRow } from "./store"
 
 export class TaskCompletionEvidenceIncompleteError extends Error {
   override readonly name = "TaskCompletionEvidenceIncompleteError"
@@ -183,13 +184,7 @@ export async function prepareTaskCompletionDecision(input: {
 export function insertPreparedTaskCompletionDecision(
   db: Database.TxOrDb,
   prepared: PreparedTaskCompletionDecision,
-  terminalTask: {
-    id: string
-    time_started: number
-    time_completed: number | null
-    error: string | null
-    metadata: Record<string, unknown> | null
-  },
+  terminalTask: TaskRow,
 ): string {
   const terminalStatus = deriveTaskStatus(terminalTask)
   if (

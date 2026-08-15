@@ -171,11 +171,12 @@ export class WeComAdapter implements ChannelAdapter {
     if (type !== "text") return new Response("success")
     const channel = pick(xml, "FromUserName")
     const user = pick(xml, "FromUserName")
-    const thread = pick(xml, "MsgId") ?? pick(xml, "CreateTime")
+    const thread = pick(xml, "MsgId")
     const text = (pick(xml, "Content") ?? "").trim()
     if (!channel || !user || !thread || !text) return new Response("success")
 
     await this.handler({
+      id: thread,
       platform: this.platform,
       channel,
       thread,

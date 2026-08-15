@@ -18,7 +18,7 @@ export const SchedulerDeliveryReference = z
     inboxID: Identifier.schema("protocol_inbox"),
     sequence: z.number().int().positive(),
     threadID: z.string().min(1),
-    targetTaskOccurrenceStartedAt: z.number().int().positive(),
+    targetTaskExecutionEpoch: z.number().int().positive(),
     replyTo: Identifier.schema("protocol_event").optional(),
   })
   .strict()
@@ -85,23 +85,11 @@ export async function deliverTaskRootMessageToOrchestratorSession(input: {
     if (!current) throw new Error(`Task-root Message ${input.messageID} disappeared before delivery.`)
     const currentParts = db.select().from(PartTable).where(eq(PartTable.message_id, input.messageID)).all()
     if (current.sessionID === input.orchestratorSessionID) {
-      const unexpectedPart = currentParts.find((part) => part.session_id !== input.orchestratorSessionID)
-      if (unexpectedPart) {
-        throw new Error(
-          `Task-root Message ${input.messageID} is delivered but Part ${unexpectedPart.id} remains on Session ${unexpectedPart.session_id}.`,
-        )
-      }
       return
     }
     if (current.sessionID !== sourceSessionID) {
       throw new Error(
         `Task-root Message ${input.messageID} moved from ${sourceSessionID} to unexpected Session ${current.sessionID}.`,
-      )
-    }
-    const unexpectedSourcePart = currentParts.find((part) => part.session_id !== sourceSessionID)
-    if (unexpectedSourcePart) {
-      throw new Error(
-        `Task-root Message ${input.messageID} Part ${unexpectedSourcePart.id} belongs to unexpected Session ${unexpectedSourcePart.session_id}.`,
       )
     }
     const targetFrontier = db
@@ -140,8 +128,8 @@ export async function deliverTaskRootMessageToOrchestratorSession(input: {
       .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, sourceSessionID)))
       .run()
     db.update(PartTable)
-      .set({ session_id: input.orchestratorSessionID, time_created: visibleAt, time_updated: visibleAt })
-      .where(and(eq(PartTable.message_id, input.messageID), eq(PartTable.session_id, sourceSessionID)))
+      .set({ time_created: visibleAt, time_updated: visibleAt })
+      .where(eq(PartTable.message_id, input.messageID))
       .run()
     Bus.publishOwnedInTransaction(Message.Event.Moved, {
       sourceSessionID,

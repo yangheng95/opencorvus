@@ -174,11 +174,8 @@ export function summarizeArtifactFailureTransitions(
   const failures = rows
     .filter((row) => {
       const payload = recordValue(row.payload)
-      const delivery = recordValue(payload.delivery_result)
       return (
-        row.label === "delivery_failed" ||
         row.kind.includes("error") ||
-        delivery.status === "delivery_failed" ||
         payload.status === "failed"
       )
     })
@@ -188,9 +185,8 @@ export function summarizeArtifactFailureTransitions(
     )
     .map((row): ArtifactFailureTransition => {
       const payload = recordValue(row.payload)
-      const delivery = recordValue(payload.delivery_result)
-      const errorName = delivery.error_name ?? payload.error_name ?? payload.errorName
-      const message = delivery.message ?? payload.message ?? payload.reason
+      const errorName = payload.error_name ?? payload.errorName
+      const message = payload.message ?? payload.reason
       return {
         artifact_id: row.artifact_id,
         task_id: row.task_id,

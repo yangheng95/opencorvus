@@ -1,5 +1,5 @@
 import { Database, and, asc, eq, or, sql } from "@/storage/db"
-import { MessageTable, PartTable } from "@/session/session.sql"
+import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { assistantTurnFactScope } from "./artifact-read-facts"
@@ -14,12 +14,13 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
   const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
   const rows = Database.use((db) =>
     db
-      .select({ id: PartTable.id, data: PartTable.data })
+      .select({ id: PartTable.id, request: PartTable.data, outcome: ToolPartOutcomeTable.data })
       .from(PartTable)
+      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
       .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
       .where(
         and(
-          eq(PartTable.session_id, input.sessionID),
+          eq(MessageTable.session_id, input.sessionID),
           sql`json_extract(${MessageTable.data}, '$.parentID') = ${scope.turnParentMessageID}`,
           or(
             sql`${MessageTable.time_created} < ${scope.message.timeCreated}`,
@@ -28,9 +29,9 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
               sql`${MessageTable.id} < ${scope.message.messageID}`,
             ),
           ),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
+          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') = 'panel'`,
-          sql`json_extract(${PartTable.data}, '$.state.status') = 'completed'`,
+          sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
@@ -38,7 +39,10 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
   )
   let reviewed: TerminalLifecycleReference | undefined
   for (const row of rows) {
-    const state = (row.data as { state?: { input?: unknown; output?: unknown } }).state
+    const state = {
+      input: (row.request as { input?: unknown }).input,
+      output: (row.outcome as { output?: unknown }).output,
+    }
     const panelInput = MissionPanelActionSchema.safeParse(
       materializeToolExecutionInput(MissionPanelActionSchema, state?.input),
     )

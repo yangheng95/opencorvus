@@ -2,6 +2,8 @@
 
 - [2026-08-15-task-root-fact-reduction-kernel.md](2026-08-15-task-root-fact-reduction-kernel.md) defines zero redundant durable control state: immutable ingress/domain/activity/lifecycle facts, exceptional dispositions, one expiring physical lease and one reconciler.
 
+- [2026-08-15-task-root-ingress-decision-convergence.md](2026-08-15-task-root-ingress-decision-convergence.md) separates semantic decision attempts from physical Task-root ingress retry, provides finite visible continuation convergence, and decouples debug copying from fresh Board synchronization.
+
 - [2026-08-14-agent-tool-block-projection-plan.md](2026-08-14-agent-tool-block-projection-plan.md) defines one every-Agent, occurrence-scoped MCP Tool-block discovery/load projection, with Browser and Computer as the first default-available blocks and all concrete calls retained under the durable permission authority.
 
 - [2026-08-14-default-browser-computer-capabilities.md](2026-08-14-default-browser-computer-capabilities.md) makes Browser and Computer the default native Chat and Work MCP assignments while preserving explicit Project-local opt-outs and measuring the model-context cost.

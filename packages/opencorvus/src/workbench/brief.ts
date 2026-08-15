@@ -3,13 +3,13 @@ import { Memory } from "@/memory"
 import { parseAcceptanceSpecs, renderSpecsAsText } from "@/acceptance/types"
 import { Database, eq } from "@/storage/db"
 import { EngineGoalTable, EngineTaskTable } from "@/engine"
-import { listCurrentGoals } from "@/engine/store"
+import { findTask, listCurrentGoals, type TaskRow } from "@/engine/store"
 import { WorkbenchBriefSnapshotTable } from "./workbench.sql"
 
 const BRIEF_VERSION = "brief-v2"
 
 export function compileBrief(input: { taskID: string; sessionID?: string }) {
-  const task = Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get())
+  const task = findTask(input.taskID)
   if (!task) throw new Error(`Task not found: ${input.taskID}`)
   const goals = listCurrentGoals(task.id)
   const signature = briefSignature({
@@ -99,7 +99,7 @@ export function compileBrief(input: { taskID: string; sessionID?: string }) {
 }
 
 function briefSignature(input: {
-  task: typeof EngineTaskTable.$inferSelect
+  task: TaskRow
   goals: Array<typeof EngineGoalTable.$inferSelect>
   prefs: unknown[]
 }) {

@@ -80,7 +80,7 @@ import { requireTask, terminalTask } from "@/engine"
 import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
-import { taskRootIngressSourceKind } from "@/engine/task-root-ingress"
+import { taskRootIngressSourceKind, type TaskRootIngressSourceKind } from "@/engine/task-root-ingress-source"
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
@@ -242,8 +242,6 @@ async function settleOrchestratorStartupFailure(input: {
       {
         status: "failed",
         error: input.taskError,
-        time_started: task.time_started,
-        time_completed: now,
       },
       `Orchestrator startup failed: ${input.envelope.message}`,
     )
@@ -281,8 +279,6 @@ async function settleOrchestratorExecutionFailure(input: {
       {
         status: "failed",
         error: input.taskError,
-        time_started: task.time_started,
-        time_completed: now,
       },
       `Orchestrator execution interrupted: ${input.envelope.message}`,
       { terminalReason: "interrupted" },
@@ -440,8 +436,10 @@ export namespace Orchestrator {
     event?: OrchestratorEvent,
     wakeSignal?: AbortSignal,
     wakeID?: string,
+    activationID?: string,
+    predecessorID?: string,
   ): Promise<string | undefined> {
-    return processInvocation(taskID, event, wakeSignal, undefined, wakeID)
+    return processInvocation(taskID, event, wakeSignal, undefined, wakeID, activationID, predecessorID)
   }
 
   export async function processTerminalConversation(input: {
@@ -449,8 +447,18 @@ export namespace Orchestrator {
     event: OrchestratorEvent
     authority: TerminalConversationAuthority
     signal?: AbortSignal
+    activationID: string
+    predecessorID: string
   }): Promise<string> {
-    const messageID = await processInvocation(input.taskID, input.event, input.signal, input.authority)
+    const messageID = await processInvocation(
+      input.taskID,
+      input.event,
+      input.signal,
+      input.authority,
+      input.authority.ingressID,
+      input.activationID,
+      input.predecessorID,
+    )
     if (!messageID) {
       throw new Error(`Terminal conversation ${input.authority.ingressID} completed without an assistant message`)
     }
@@ -463,6 +471,8 @@ export namespace Orchestrator {
     wakeSignal?: AbortSignal,
     terminalConversationAuthority?: TerminalConversationAuthority,
     wakeID?: string,
+    activationID?: string,
+    predecessorID?: string,
   ): Promise<string | undefined> {
     const task = requireTask(taskID)
     const terminalConversation = terminalConversationAuthority !== undefined
@@ -572,12 +582,7 @@ export namespace Orchestrator {
         schedulerProjectDirectory,
       )
       const appendUserMessage = !(await sessionHasCreatorMessage(agentSession.id))
-      const hasTypedControlOccurrence = Boolean(
-        event?.taskIntent ||
-          event?.missionAcceptanceResume ||
-          event?.agentLifecycleDelivery ||
-          event?.dispatchInfrastructureFailure,
-      )
+      const hasTypedControlOccurrence = Boolean(event && wakeID && isCurrentWakeIngress(event) && !event.rootMessage)
       const materializeCreatorBeforeTypedControl = appendUserMessage && hasTypedControlOccurrence
       const appendCreatorMessage = appendUserMessage && !hasTypedControlOccurrence
       const taskCreator = TaskCreatorMetadata.parse(task.metadata)
@@ -601,10 +606,10 @@ export namespace Orchestrator {
       const enrichedUserText = appendCreatorMessage ? userText + inventoryText : ""
       const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
       const hasCurrentWakeIngress = isCurrentWakeIngress(event)
-      const currentControlMessage = currentOrchestratorControlMessage(event, taskID, wakeID)
-      const currentSchedulerInputMessageID = event?.rootMessage?.schedulerDelivery
-        ? event.rootMessage.messageID
+      const currentControlMessage = hasCurrentWakeIngress && wakeID
+        ? currentOrchestratorControlMessage(event, taskID, wakeID, predecessorID)
         : undefined
+      const currentSchedulerInputMessageID = event?.rootMessage ? event.rootMessage.messageID : undefined
       const currentVisibleInputMessageID = currentControlMessage?.messageID ?? currentSchedulerInputMessageID
       const resolveRuntimeSystem = async () => {
         systemContext = await buildSystemParts(
@@ -779,13 +784,12 @@ export namespace Orchestrator {
               packageRevision: schedulerCapability.packageRevision,
               taskID,
               contractKind: "orchestrator-wake",
-              ...(terminalConversation
-                ? {
-                    taskIngressID: terminalConversationAuthority.ingressID,
-                    taskIngressKind: terminalConversationAuthority.ingressKind,
-                  }
-                : wakeID && event
-                  ? { taskIngressID: wakeID, taskIngressKind: taskRootIngressSourceKind(event) }
+              ...(wakeID && event
+                  ? {
+                      taskIngressID: wakeID,
+                      taskIngressActivationID: activationID,
+                      taskIngressPredecessorID: predecessorID,
+                    }
                   : {}),
               ...(currentVisibleInputMessageID ? { inputMessageID: currentVisibleInputMessageID } : {}),
               installedAt: Date.now(),
@@ -1307,15 +1311,9 @@ export type CurrentOrchestratorControlMessage = {
   text: string
   extra: {
     orchestrator_control_ingress: {
-      wake_id: string
-      source_kind: "agent_lifecycle_delivery" | "dispatch_infrastructure_failure"
-      fact_id: string
+      ingress_id: string
+      predecessor_id: string
     }
-  }
-  partMetadata: {
-    wake_id: string
-    source_kind: "agent_lifecycle_delivery" | "dispatch_infrastructure_failure"
-    fact_id: string
   }
 }
 
@@ -1330,30 +1328,26 @@ export function currentOrchestratorControlMessage(
   event?: OrchestratorEvent,
   taskID?: string,
   wakeID?: string,
+  predecessorID?: string,
 ): CurrentOrchestratorControlMessage | undefined {
-  const sourceKind = event?.agentLifecycleDelivery
-    ? ("agent_lifecycle_delivery" as const)
-    : event?.dispatchInfrastructureFailure
-      ? ("dispatch_infrastructure_failure" as const)
-      : undefined
-  if (!sourceKind) return undefined
+  if (!event) return undefined
   const exactWakeID = wakeID?.trim()
-  if (!exactWakeID) throw new Error(`${sourceKind} requires exact durable wake identity`)
-  const factID =
-    sourceKind === "agent_lifecycle_delivery"
-      ? event!.agentLifecycleDelivery!.eventID
-      : event!.dispatchInfrastructureFailure!.infrastructureFactID
+  if (!exactWakeID) throw new Error("Orchestrator control occurrence requires exact durable ingress identity")
+  const predecessor = predecessorID?.trim() || exactWakeID
+  if (event.rootMessage?.messageID === predecessor) return undefined
   const identity = {
-    wake_id: exactWakeID,
-    source_kind: sourceKind,
-    fact_id: factID,
+    ingress_id: exactWakeID,
+    predecessor_id: predecessor,
   }
-  const occurrence = orchestratorControlOccurrenceIdentity(exactWakeID)
+  const occurrence = orchestratorControlOccurrenceIdentity(exactWakeID, predecessor)
   return {
     ...occurrence,
-    text: ["## Orchestrator Control Occurrence", renderWakeProvenanceNotice(event, taskID, exactWakeID)].join("\n\n"),
+    text: [
+      "## Orchestrator Control Occurrence",
+      "Continue the same unresolved durable ingress from the exact preceding assistant Turn.",
+      renderWakeProvenanceNotice(event, taskID, exactWakeID),
+    ].join("\n\n"),
     extra: { orchestrator_control_ingress: identity },
-    partMetadata: identity,
   }
 }
 
@@ -1376,13 +1370,13 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
       part.text === input.control.text &&
       part.kind === "control" &&
       part.source === "system" &&
-      isDeepStrictEqual(part.metadata, input.control.partMetadata)
+      part.metadata === undefined
     if (!valid) {
       throw new OrchestratorControlIdentityConflictError({
         message:
-          `Orchestrator control Message ${input.control.messageID} does not match exact wake ` +
-          `${input.control.partMetadata.wake_id}`,
-        wakeID: input.control.partMetadata.wake_id,
+          `Orchestrator control Message ${input.control.messageID} does not match exact ingress ` +
+          `${input.control.extra.orchestrator_control_ingress.ingress_id}`,
+        wakeID: input.control.extra.orchestrator_control_ingress.ingress_id,
       })
     }
   }
@@ -1403,8 +1397,8 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
       )
       if (!messageRow && !partRow) return
       throw new OrchestratorControlIdentityConflictError({
-        message: `Orchestrator control occurrence for wake ${input.control.partMetadata.wake_id} is already occupied.`,
-        wakeID: input.control.partMetadata.wake_id,
+        message: `Orchestrator control occurrence for ingress ${input.control.extra.orchestrator_control_ingress.ingress_id} is already occupied.`,
+        wakeID: input.control.extra.orchestrator_control_ingress.ingress_id,
       })
     }
     // Reject a known compact-ID occupant before prompt preparation. The same
@@ -1429,7 +1423,6 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
             text: input.control.text,
             kind: "control",
             source: "system",
-            metadata: input.control.partMetadata,
           },
         ],
       },
@@ -1446,7 +1439,8 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
 
 export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
   return Boolean(
-    event?.rootMessage ||
+    event?.taskCreation ||
+      event?.rootMessage ||
       event?.taskIntent ||
       event?.missionAcceptanceResume ||
       event?.coordinationRequest ||
@@ -1454,7 +1448,8 @@ export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
       event?.taskWaitWake ||
       event?.processRecovery ||
       event?.agentLifecycleDelivery ||
-      event?.dispatchInfrastructureFailure,
+      event?.dispatchInfrastructureFailure ||
+      event?.note,
   )
 }
 

@@ -6,17 +6,21 @@ import {
   viewTask,
   viewInteraction,
   viewBuildHostObservationArtifact,
+  findTask,
   type ArtifactRow,
+  type TaskRow,
+  listInteractions,
 } from "@/engine/store"
 import {
   EngineArtifactTable,
   EngineChannelBindingTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
+  EngineInteractionOutcomeTable,
   EngineProgressSnapshotTable,
   EngineTaskTable,
 } from "@/engine"
-import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { ProtocolEventTable, protocolEventBelongsToTask } from "@/protocol/protocol.sql"
 import { Database, and, desc, eq, sql } from "@/storage/db"
 import { timelineOrderKey } from "@/timeline/order"
 import { compileBrief } from "./brief"
@@ -46,7 +50,7 @@ function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
 }
 
 export function compileBoard(input: { taskID: string }) {
-  const task = Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get())
+  const task = findTask(input.taskID)
   if (!task) throw new Error(`Task not found: ${input.taskID}`)
   const tag = boardTagForTask(task)
   const lastSequence = latestTaskProtocolSequence(task.id)
@@ -54,26 +58,19 @@ export function compileBoard(input: { taskID: string }) {
 }
 
 export function boardTag(input: { taskID: string }) {
-  const task = Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get())
+  const task = findTask(input.taskID)
   if (!task) throw new Error(`Task not found: ${input.taskID}`)
   return boardTagForTask(task)
 }
 
 function buildBoard(
-  task: typeof EngineTaskTable.$inferSelect,
+  task: TaskRow,
   snapshotVersion: string,
   directory: string,
   lastSequence = latestTaskProtocolSequence(task.id),
 ) {
   const goals = listCurrentGoals(task.id)
-  const interactions = Database.use((db) =>
-    db
-      .select()
-      .from(EngineInteractionRequestTable)
-      .where(eq(EngineInteractionRequestTable.task_id, task.id))
-      .orderBy(EngineInteractionRequestTable.time_created)
-      .all(),
-  )
+  const interactions = listInteractions(task.id).toReversed()
   const brief = compileBrief({
     taskID: task.id,
     sessionID: task.session_id ?? undefined,
@@ -171,7 +168,7 @@ function buildBoard(
   }
 }
 
-function taskDirectory(task: typeof EngineTaskTable.$inferSelect) {
+function taskDirectory(task: TaskRow) {
   return listTaskRows([task])[0]?.directory ?? ""
 }
 
@@ -181,7 +178,7 @@ function latestTaskProtocolSequence(taskID: string) {
       db
         .select({ seq: sql<number>`coalesce(max(seq), 0)` })
         .from(ProtocolEventTable)
-        .where(eq(ProtocolEventTable.task_id, taskID))
+        .where(protocolEventBelongsToTask(taskID))
         .get()?.seq ?? 0,
   )
 }
@@ -196,7 +193,7 @@ function taskProcessIncidents(taskID: string, executionProjection: ReturnType<ty
         payload: ProtocolEventTable.payload,
       })
       .from(ProtocolEventTable)
-      .where(and(eq(ProtocolEventTable.task_id, taskID), eq(ProtocolEventTable.type, "session.error")))
+      .where(and(protocolEventBelongsToTask(taskID), eq(ProtocolEventTable.type, "session.error")))
       .orderBy(ProtocolEventTable.emitted_at, ProtocolEventTable.seq)
       .all(),
   )
@@ -351,7 +348,7 @@ function taskSessionTreeVersion(taskID: string) {
   )
 }
 
-function boardTagForTask(task: typeof EngineTaskTable.$inferSelect) {
+function boardTagForTask(task: TaskRow) {
   const sessionTree = taskSessionTreeVersion(task.id)
   const goals = Database.use((db) =>
     db
@@ -363,16 +360,11 @@ function boardTagForTask(task: typeof EngineTaskTable.$inferSelect) {
       .where(eq(EngineGoalTable.task_id, task.id))
       .get(),
   )
-  const interactions = Database.use((db) =>
-    db
-      .select({
-        count: sql<number>`count(*)`,
-        updated: sql<number>`coalesce(max(${EngineInteractionRequestTable.time_updated}), 0)`,
-      })
-      .from(EngineInteractionRequestTable)
-      .where(eq(EngineInteractionRequestTable.task_id, task.id))
-      .get(),
-  )
+  const taskInteractions = listInteractions(task.id)
+  const interactions = {
+    count: taskInteractions.length,
+    updated: Math.max(0, ...taskInteractions.map((interaction) => interaction.time_updated)),
+  }
   const artifacts = Database.use((db) =>
     db
       .select({
@@ -397,7 +389,7 @@ function boardTagForTask(task: typeof EngineTaskTable.$inferSelect) {
     db
       .select({
         count: sql<number>`count(*)`,
-        updated: sql<number>`coalesce(max(${EngineProgressSnapshotTable.time_updated}), 0)`,
+        updated: sql<number>`coalesce(max(${EngineProgressSnapshotTable.time_created}), 0)`,
       })
       .from(EngineProgressSnapshotTable)
       .where(eq(EngineProgressSnapshotTable.task_id, task.id))
@@ -496,18 +488,18 @@ function compactBuildObservationPayload(row: typeof EngineArtifactTable.$inferSe
 }
 
 function boardFailure(input: {
-  task: typeof EngineTaskTable.$inferSelect
+  task: TaskRow
   interactions: Array<typeof EngineInteractionRequestTable.$inferSelect>
 }) {
   const interaction = input.interactions[0]
   if (interaction) {
     return {
       source: "interaction" as const,
-      title: interaction.title,
+      title: interaction.title ?? "Interaction requires attention",
       summary:
         input.interactions.length > 1
-          ? `${clipBoard(interaction.body)}\n\n${input.interactions.length} pending interactions need attention.`
-          : clipBoard(interaction.body),
+          ? `${clipBoard(interaction.body ?? "")}\n\n${input.interactions.length} pending interactions need attention.`
+          : clipBoard(interaction.body ?? ""),
       checks: undefined,
     }
   }
@@ -532,7 +524,7 @@ function boardFailure(input: {
 }
 
 function boardOverview(input: {
-  task: typeof EngineTaskTable.$inferSelect
+  task: TaskRow
   pendingInteractions: Array<typeof EngineInteractionRequestTable.$inferSelect>
   currentFailure:
     | {
@@ -688,7 +680,7 @@ function ownedPathContainsFile(ownedPaths: readonly string[], file: string) {
 }
 
 function buildGoalFields(
-  task: typeof EngineTaskTable.$inferSelect,
+  task: TaskRow,
   goals: Array<typeof EngineGoalTable.$inferSelect>,
   artifacts: ArtifactRow[],
   executionProjection: ReturnType<typeof taskExecutionProjectionForTask>,

@@ -179,6 +179,10 @@ export namespace Question {
     return Math.max(parseInt(process.env.OPENCORVUS_QUESTION_TIMEOUT_MS || "300000", 10), QUESTION_MIN_TIMEOUT_MS)
   }
 
+  function terminalOccurrenceID(requestID: string) {
+    return `bus-occurrence:question-terminal:${requestID}`
+  }
+
   function assertSameQuestionRequest(existing: Request, next: Request) {
     if (existing.sessionID !== next.sessionID) {
       throw new Error(`Question request ${next.id} belongs to session ${existing.sessionID}, not ${next.sessionID}`)
@@ -216,6 +220,83 @@ export namespace Question {
         }
       }
     })
+  }
+
+  function armPendingTimer(pending: Record<string, PendingQuestion>, requestID: string) {
+    const entry = pending[requestID]
+    if (!entry) throw new Error(`Question request ${requestID} disappeared before its deadline was armed`)
+    const automatic = entry.info.automatic
+    if (automatic) {
+      entry.timer = setTimeout(() => {
+        const current = takePending(pending, requestID)
+        if (!current) return
+        void (async () => {
+          const timeResolved = Date.now()
+          log.info("automatic answer deadline", { id: requestID, questions: current.info.questions.length })
+          try {
+            const publication = Bus.publishOwnedExact(Event.Replied, {
+              sessionID: current.info.sessionID,
+              requestID: current.info.id,
+              answers: automatic.answers,
+              timeResolved: automatic.timeExpires,
+              automatic: true,
+            }, terminalOccurrenceID(current.info.id))
+            await publication.retry()
+            for (const waiter of current.waiters) waiter.resolve(automatic.answers)
+          } catch (error) {
+            rejectWaiters(current, error)
+          }
+        })()
+      }, Math.max(automatic.timeExpires - Date.now(), 1))
+      return
+    }
+    const expiry = entry.info.expiry
+    if (!expiry) return
+    log.info("question expiry configured", { id: requestID, timeExpires: expiry.timeExpires })
+    entry.timer = setTimeout(() => {
+      const current = takePending(pending, requestID)
+      if (!current) return
+      void (async () => {
+        const timeResolved = Date.now()
+        const deadline = current.info.expiry!
+        log.info("automatic question deadline elapsed", { id: requestID, questions: current.info.questions.length })
+        try {
+          const publication = Bus.publishOwnedExact(Event.Expired, {
+            sessionID: current.info.sessionID,
+            requestID: current.info.id,
+            origin: deadline.origin,
+            timeExpires: deadline.timeExpires,
+            timeResolved: deadline.timeExpires,
+          }, terminalOccurrenceID(current.info.id))
+          await publication.retry()
+          rejectWaiters(
+            current,
+            new ExpiredError({ requestID: current.info.id, timeExpires: deadline.timeExpires, timeResolved }),
+          )
+        } catch (error) {
+          rejectWaiters(current, error)
+        }
+      })()
+    }, Math.max(expiry.timeExpires - Date.now(), 1))
+  }
+
+  /** Restore the physical waiter/timer from the immutable Question input. No
+   * second question.asked fact is emitted: the supplied Request is its owner. */
+  export async function restore(request: Request): Promise<void> {
+    const exact = Request.parse(request)
+    const s = await state()
+    const existing = s.pending[exact.id]
+    if (existing) {
+      assertSameQuestionRequest(existing.info, exact)
+      return
+    }
+    s.pending[exact.id] = {
+      info: exact,
+      durableContinuation: true,
+      waiters: [],
+      timer: undefined,
+    }
+    armPendingTimer(s.pending, exact.id)
   }
 
   export async function ask(input: {
@@ -297,61 +378,7 @@ export namespace Question {
         timer: undefined,
       }
       Bus.publishOwned(Event.Asked, info)
-      if (automatic) {
-        s.pending[id].timer = setTimeout(
-          () => {
-            const entry = takePending(s.pending, id)
-            if (!entry) return
-            void (async () => {
-              const timeResolved = Date.now()
-              log.info("automatic answer deadline", { id, questions: input.questions.length })
-              try {
-                await Bus.publish(Event.Replied, {
-                  sessionID: entry.info.sessionID,
-                  requestID: entry.info.id,
-                  answers: automatic.answers,
-                  timeResolved,
-                  automatic: true,
-                })
-                for (const waiter of entry.waiters) waiter.resolve(automatic.answers)
-              } catch (error) {
-                rejectWaiters(entry, error)
-              }
-            })()
-          },
-          Math.max(automatic.timeExpires - Date.now(), 1),
-        )
-        return
-      }
-      if (!expiry) return
-      log.info("question expiry configured", { id, timeExpires: expiry.timeExpires })
-      s.pending[id].timer = setTimeout(
-        () => {
-          const entry = takePending(s.pending, id)
-          if (!entry) return
-          void (async () => {
-            const timeResolved = Date.now()
-            const deadline = entry.info.expiry!
-            log.info("automatic question deadline elapsed", { id, questions: input.questions.length })
-            try {
-              await Bus.publish(Event.Expired, {
-                sessionID: entry.info.sessionID,
-                requestID: entry.info.id,
-                origin: deadline.origin,
-                timeExpires: deadline.timeExpires,
-                timeResolved,
-              })
-              rejectWaiters(
-                entry,
-                new ExpiredError({ requestID: entry.info.id, timeExpires: deadline.timeExpires, timeResolved }),
-              )
-            } catch (error) {
-              rejectWaiters(entry, error)
-            }
-          })()
-        },
-        Math.max(expiry.timeExpires - Date.now(), 1),
-      )
+      armPendingTimer(s.pending, id)
     })
   }
 
@@ -372,16 +399,21 @@ export namespace Question {
     try {
       let publication: Bus.Publication | undefined
       if (input.userInput) {
-        Database.transaction(() => {
-          publication = Bus.publishOwnedInTransaction(Event.Replied, {
-            sessionID: pending.info.sessionID,
-            requestID: pending.info.id,
-            answers: input.answers,
-            timeResolved,
-            userInput: input.userInput,
-          })
-        })
+        publication = Bus.publishOwnedExact(Event.Replied, {
+          sessionID: pending.info.sessionID,
+          requestID: pending.info.id,
+          answers: input.answers,
+          timeResolved,
+          userInput: input.userInput,
+        }, terminalOccurrenceID(pending.info.id))
         afterUserOutboxCommitForTest?.()
+      } else {
+        publication = Bus.publishOwnedExact(Event.Replied, {
+          sessionID: pending.info.sessionID,
+          requestID: pending.info.id,
+          answers: input.answers,
+          timeResolved,
+        }, terminalOccurrenceID(pending.info.id))
       }
       // Do not claim the in-memory question until the user-authored terminal
       // occurrence is durably committed. A failed source transaction therefore
@@ -389,13 +421,6 @@ export namespace Question {
       existing = takePending(s.pending, input.requestID)
       if (!existing) throw new Error(`Question request ${input.requestID} changed during reply commit`)
       if (publication) await publication.retry()
-      else
-        await Bus.publish(Event.Replied, {
-          sessionID: existing.info.sessionID,
-          requestID: existing.info.id,
-          answers: input.answers,
-          timeResolved,
-        })
       for (const waiter of existing.waiters) waiter.resolve(input.answers)
     } catch (error) {
       if (existing) rejectWaiters(existing, error)
@@ -416,27 +441,25 @@ export namespace Question {
     try {
       let publication: Bus.Publication | undefined
       if (userInput) {
-        Database.transaction(() => {
-          publication = Bus.publishOwnedInTransaction(Event.Rejected, {
-            sessionID: pending.info.sessionID,
-            requestID: pending.info.id,
-            origin: "operator",
-            timeResolved,
-            userInput,
-          })
-        })
+        publication = Bus.publishOwnedExact(Event.Rejected, {
+          sessionID: pending.info.sessionID,
+          requestID: pending.info.id,
+          origin: "operator",
+          timeResolved,
+          userInput,
+        }, terminalOccurrenceID(pending.info.id))
         afterUserOutboxCommitForTest?.()
+      } else {
+        publication = Bus.publishOwnedExact(Event.Rejected, {
+          sessionID: pending.info.sessionID,
+          requestID: pending.info.id,
+          origin: "operator",
+          timeResolved,
+        }, terminalOccurrenceID(pending.info.id))
       }
       existing = takePending(s.pending, requestID)
       if (!existing) throw new Error(`Question request ${requestID} changed during reject commit`)
       if (publication) await publication.retry()
-      else
-        await Bus.publish(Event.Rejected, {
-          sessionID: existing.info.sessionID,
-          requestID: existing.info.id,
-          origin: "operator",
-          timeResolved,
-        })
       rejectWaiters(existing, new RejectedError({ requestID: existing.info.id, timeResolved }))
     } catch (error) {
       if (existing) rejectWaiters(existing, error)
@@ -480,12 +503,13 @@ export namespace Question {
     }
     log.warn("question abandoned by infrastructure", { requestID: input.requestID })
     try {
-      await Bus.publish(Event.Abandoned, {
+      const publication = Bus.publishOwnedExact(Event.Abandoned, {
         sessionID: existing.info.sessionID,
         requestID: existing.info.id,
         origin: "infrastructure",
         timeResolved: Date.now(),
-      })
+      }, terminalOccurrenceID(existing.info.id))
+      await publication.retry()
       rejectWaiters(existing, input.error)
     } catch (error) {
       rejectWaiters(existing, error)
@@ -504,12 +528,13 @@ export namespace Question {
     timeResolved: number
   }): Promise<void> {
     log.warn("recovered question abandoned by infrastructure", { requestID: input.requestID })
-    await Bus.publish(Event.Abandoned, {
+    const publication = Bus.publishOwnedExact(Event.Abandoned, {
       sessionID: input.sessionID,
       requestID: input.requestID,
       origin: "infrastructure",
       timeResolved: input.timeResolved,
-    })
+    }, terminalOccurrenceID(input.requestID))
+    await publication.retry()
   }
 
   export async function list() {

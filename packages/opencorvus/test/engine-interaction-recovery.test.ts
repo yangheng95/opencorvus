@@ -82,7 +82,7 @@ async function waitForTaskInteraction(taskID: string) {
 }
 
 describe("recovered pending interaction ownership", () => {
-  test("retains a durable Permission and reconciles an ordinary durable Question after restart", async () => {
+  test("restores the exact ordinary durable Question and retains a durable Permission after restart", async () => {
     await using project = await memoryProject()
     const created = await Instance.provide({
       directory: project.path,
@@ -142,56 +142,52 @@ describe("recovered pending interaction ownership", () => {
       directory: project.path,
       fn: async () => {
         EngineService.init()
-        const events: Array<{ type: string; requestID: string; timeResolved: number }> = []
-        const stopQuestion = Bus.subscribe(Question.Event.Abandoned, ({ properties }) => {
-          events.push({ type: "question", requestID: properties.requestID, timeResolved: properties.timeResolved })
-        })
         const timeResolved = Date.now()
-        try {
-          expect(
-            await EngineInteraction.reconcileRecoveredPendingWaiters({
-              projectID: created.projectID,
-              timeResolved,
-            }),
-          ).toEqual({
-            abandoned: [
+        expect(
+          await EngineInteraction.reconcileRecoveredPendingWaiters({
+            projectID: created.projectID,
+            timeResolved,
+          }),
+        ).toEqual({
+          abandoned: [],
+          retainedRecoverableQuestions: [
+            {
+              interactionID: created.questionInteractionID,
+              externalID: created.questionID,
+            },
+          ],
+          retainedRecoverablePermissions: [
+            {
+              interactionID: findInteractionByExternal(created.permissionID)!.id,
+              externalID: created.permissionID,
+            },
+          ],
+        })
+        expect((await Question.list()).map((item) => item.id)).toContain(created.questionID)
+        expect({
+          pendingCount: pendingInteractionCounts([created.taskID]).get(created.taskID) ?? 0,
+          secondPass: await EngineInteraction.reconcileRecoveredPendingWaiters({
+            projectID: created.projectID,
+            timeResolved: timeResolved + 1,
+          }),
+        }).toEqual({
+          pendingCount: 2,
+          secondPass: {
+            abandoned: [],
+            retainedRecoverableQuestions: [
               {
                 interactionID: created.questionInteractionID,
                 externalID: created.questionID,
-                type: "question",
               },
             ],
-            retainedRecoverableQuestions: [],
             retainedRecoverablePermissions: [
               {
                 interactionID: findInteractionByExternal(created.permissionID)!.id,
                 externalID: created.permissionID,
               },
             ],
-          })
-          expect(events).toEqual([{ type: "question", requestID: created.questionID, timeResolved }])
-          expect({
-            pendingCount: pendingInteractionCounts([created.taskID]).get(created.taskID) ?? 0,
-            secondPass: await EngineInteraction.reconcileRecoveredPendingWaiters({
-              projectID: created.projectID,
-              timeResolved: timeResolved + 1,
-            }),
-          }).toEqual({
-            pendingCount: 1,
-            secondPass: {
-              abandoned: [],
-              retainedRecoverableQuestions: [],
-              retainedRecoverablePermissions: [
-                {
-                  interactionID: findInteractionByExternal(created.permissionID)!.id,
-                  externalID: created.permissionID,
-                },
-              ],
-            },
-          })
-        } finally {
-          stopQuestion()
-        }
+          },
+        })
       },
     })
   }, 30_000)
@@ -321,19 +317,15 @@ describe("recovered pending interaction ownership", () => {
             },
           ],
         })
+        const recoveredRequest = (await Question.list()).find((item) => item.id === created.questionID)!
         const restored = Question.ask({
-          sessionID: created.rootSessionID,
-          requestID: created.questionID,
-          tool: { messageID: created.messageID, callID: created.callID },
-          questions: [
-            {
-              header: "A2A recovery",
-              question: "Resume the interrupted worker?",
-              options: [{ value: "resume", label: "Resume", description: "Continue the same worker." }],
-            },
-          ],
-          expiry: null,
-          timeCreated: findInteractionByExternal(created.questionID)!.time_created,
+          sessionID: recoveredRequest.sessionID,
+          requestID: recoveredRequest.id,
+          tool: recoveredRequest.tool,
+          questions: recoveredRequest.questions,
+          ...(recoveredRequest.automatic ? { automatic: recoveredRequest.automatic } : {}),
+          expiry: recoveredRequest.expiry ?? null,
+          timeCreated: recoveredRequest.timeCreated,
         })
         expect(
           await EngineService.replyInteraction(created.interactionID, {

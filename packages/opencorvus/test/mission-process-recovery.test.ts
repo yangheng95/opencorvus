@@ -11,9 +11,15 @@ import { Session } from "@/session"
 import { SessionControl } from "@/session/control"
 import { SessionWake } from "@/session/wake"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-import { closeMissionExecutionOperation, currentMissionExecutionClosure } from "@/mission/execution-closure"
+import {
+  closeMissionExecutionOperation,
+  currentMissionExecutionClosure,
+  MissionExecutionClosureTestHooks,
+  openMissionExecution,
+} from "@/mission/execution-closure"
 import { Database, eq } from "@/storage/db"
-import { SessionControlRecordTable } from "@/session/session.sql"
+import { SessionControlEventTable } from "@/session/session.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { createRightSidebarConversationSession } from "@/chat/session"
 import { Question } from "@/question"
 import { PanelTool, PanelToolTestHooks } from "@/tool/panel"
@@ -26,6 +32,98 @@ afterEach(async () => {
 
 describe("standalone Mission process recovery", () => {
   const activation = () => Promise.resolve({ owner: new AbortController().signal })
+
+  test("Session control failure stores only its outcome delta and reduces the complete public payload", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "root", title: "control failure reduction" })
+      const created = SessionControl.create({ sessionID: session.id, kind: "wake_reason", payload: { reason: "operator", attempt: 1 } })
+      const failed = SessionControl.fail({ id: created.id, sessionID: session.id, error: "provider unavailable" })
+      const event = Database.use((db) => db.select().from(SessionControlEventTable).where(eq(SessionControlEventTable.control_id, created.id)).get())
+      expect(event).toMatchObject({ kind: "failed", payload: { error: "provider unavailable" } })
+      expect(failed).toMatchObject({ status: "failed", payload: { reason: "operator", attempt: 1, error: "provider unavailable" } })
+    } })
+  })
+
+  test("distinct wake requests continue the one opened Mission occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const mission = await ensureMissionSession({
+        missionID: "mission-open-fence",
+        defaultCwd: project.path,
+        productPillar: "code",
+        heldExpertSquadIDs: ["base"],
+      })
+      const first = await openMissionExecution({ missionID: "mission-open-fence", sessionID: mission.id, source: "mission.dispatch", requestID: "dispatch:1" })
+      const second = await openMissionExecution({ missionID: "mission-open-fence", sessionID: mission.id, source: "mission.wake", requestID: "wake:2" })
+      const opened = Database.use((db) => db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.aggregate_id, mission.id)).all()
+        .filter((event) => event.type === "mission.execution.opened"))
+      expect({ first, second, count: opened.length }).toMatchObject({
+        first: { state: "opened" },
+        second: { state: "opened", operationID: first.operationID, eventID: first.eventID },
+        count: 1,
+      })
+    } })
+  })
+
+  test("fences concurrent process owners to one physical Mission close and one terminal fact", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-close-fence"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const opened = await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "mission-close-fence-open",
+        })
+        expect(opened.state).toBe("opened")
+
+        let closeCalls = 0
+        let enterFirst!: () => void
+        let releaseFirst!: () => void
+        const entered = new Promise<void>((resolve) => (enterFirst = resolve))
+        const release = new Promise<void>((resolve) => (releaseFirst = resolve))
+        const first = closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "mission-close-fence-request",
+          close: async () => {
+            closeCalls++
+            enterFirst()
+            await release
+          },
+        })
+        await entered
+        MissionExecutionClosureTestHooks.forgetLocalCloseOwner(mission.id)
+        const second = closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "mission-close-fence-request",
+          close: async () => {
+            closeCalls++
+          },
+        })
+        releaseFirst()
+        const [firstResult, secondResult] = await Promise.all([first, second])
+        expect({ closeCalls, firstResult, secondResult, current: currentMissionExecutionClosure(mission.id) }).toMatchObject({
+          closeCalls: 1,
+          firstResult: { state: "closed" },
+          secondResult: { state: "closed", operationID: firstResult.operationID },
+          current: { state: "closed", operationID: firstResult.operationID },
+        })
+      },
+    })
+  })
 
   test("holds panel Mission handoff admission until its exact wake activation is published", async () => {
     await using project = await memoryProject()
@@ -250,9 +348,9 @@ describe("standalone Mission process recovery", () => {
         ).toMatchObject({ finish: "error" })
         const marker = Database.use((db) =>
           db
-            .select({ status: SessionControlRecordTable.status, payload: SessionControlRecordTable.payload })
-            .from(SessionControlRecordTable)
-            .where(eq(SessionControlRecordTable.id, first.occurrenceID))
+            .select({ status: SessionControlEventTable.kind, payload: SessionControlEventTable.payload })
+            .from(SessionControlEventTable)
+            .where(eq(SessionControlEventTable.control_id, first.occurrenceID))
             .get(),
         )
         expect(marker).toMatchObject({

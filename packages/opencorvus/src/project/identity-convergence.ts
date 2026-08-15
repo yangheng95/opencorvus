@@ -9,9 +9,9 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "@/scheduler/automation.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
-import { ChannelIngressReceiptTable } from "@/channel/channel.sql"
+import { ChannelIngressAcceptedTable } from "@/channel/channel.sql"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
-import { EventJobFireTable, EventJobTable } from "@/scheduler/event.sql"
+import { EventJobFireTable, EventJobTable, EventOccurrenceTable } from "@/scheduler/event.sql"
 import { MemoryChunkTable, MemoryFileTable } from "@/memory/memory.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { QuickNoteTable } from "@/quicknote/quicknote.sql"
@@ -70,13 +70,7 @@ export namespace ProjectIdentityConvergence {
    * publication outboxes are intentionally absent and handled by blockers.
    */
   const MUTABLE_DOMAIN_MAPPINGS: readonly MutableDomainMapping[] = [
-    mutableDomain("automation", AutomationTable),
-    mutableDomain("automation_project_target", AutomationProjectTargetTable),
-    mutableDomain("automation_run", AutomationRunTable),
-    mutableDomain("channel_ingress_receipt", ChannelIngressReceiptTable),
     mutableDomain("engine_task", EngineTaskTable),
-    mutableDomain("event_job", EventJobTable),
-    mutableDomain("event_job_fire", EventJobFireTable),
     mutableDomain("memory_chunk", MemoryChunkTable),
     mutableDomain("memory_file", MemoryFileTable),
     mutableDomain("permission_policy", PermissionPolicyTable),
@@ -88,7 +82,12 @@ export namespace ProjectIdentityConvergence {
   export const PROJECT_REFERENCE_CONTRACTS = [
     ...MUTABLE_DOMAIN_MAPPINGS.map((mapping) => ({ table: mapping.name, settlement: "migrate" as const })),
     { table: "bus_publication_outbox", settlement: "preserve" as const },
+    { table: "channel_ingress_accepted", settlement: "preserve" as const },
     { table: "permission_ledger", settlement: "preserve" as const },
+    { table: "automation", settlement: "preserve" as const },
+    { table: "automation_project_target", settlement: "preserve" as const },
+    { table: "event_job", settlement: "preserve" as const },
+    { table: "event_occurrence", settlement: "preserve" as const },
   ]
 
   function conflict(input: {
@@ -127,12 +126,28 @@ export namespace ProjectIdentityConvergence {
   }) {
     const blockers = [
       {
+        domain: "immutable Channel ingress facts",
+        count: referencedRows(input.db, ChannelIngressAcceptedTable, input.duplicateProjectIDs),
+      },
+      {
         domain: "append-only permission ledger",
         count: referencedRows(input.db, PermissionLedgerTable, input.duplicateProjectIDs),
       },
       {
         domain: "durable publication outbox",
         count: referencedRows(input.db, BusPublicationOutboxTable, input.duplicateProjectIDs),
+      },
+      {
+        domain: "immutable Automation definitions",
+        count: referencedRows(input.db, AutomationTable, input.duplicateProjectIDs) + referencedRows(input.db, AutomationProjectTargetTable, input.duplicateProjectIDs),
+      },
+      {
+        domain: "immutable Event definitions",
+        count: referencedRows(input.db, EventJobTable, input.duplicateProjectIDs),
+      },
+      {
+        domain: "immutable Event occurrences",
+        count: referencedRows(input.db, EventOccurrenceTable, input.duplicateProjectIDs),
       },
     ]
     for (const blocker of blockers) {
@@ -287,7 +302,11 @@ export namespace ProjectIdentityConvergence {
         assertImmutableDomainFactsAbsent({ worktree, canonicalProjectID, projectIDs: observedProjectIDs, duplicateProjectIDs, db })
         assertNoEmbeddedProjectIDReferences({ worktree, canonicalProjectID, projectIDs: observedProjectIDs, duplicateProjectIDs, db })
 
-        const migratedRows: Record<string, number> = { bus_publication_outbox: 0, permission_ledger: 0 }
+        const migratedRows: Record<string, number> = {
+          bus_publication_outbox: 0,
+          channel_ingress_accepted: 0,
+          permission_ledger: 0,
+        }
         for (const mapping of MUTABLE_DOMAIN_MAPPINGS) {
           migratedRows[mapping.name] = mapping.referencedRows(db, duplicateProjectIDs)
           mapping.migrate(db, canonicalProjectID, duplicateProjectIDs)

@@ -899,6 +899,7 @@ export class ChannelRuntime {
 
     // Treat it as an incoming message — this creates session + sends prompt
     await this.handleMessage({
+      id: `${platform}:${channel}:${ts}`,
       platform,
       channel,
       thread: ts,

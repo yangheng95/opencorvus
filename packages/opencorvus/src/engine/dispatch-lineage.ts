@@ -6,13 +6,12 @@ import { Identifier } from "@/id/id"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
 import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
-import { assertCurrentDeliverySliceRevisionIDs } from "./store"
+import { assertCurrentDeliverySliceRevisionIDs, projectTaskRowInTransaction } from "./store"
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
 import type { DispatchOccurrenceAuthority } from "./dispatch-occurrence-authority"
 import {
   assertWorkflowNodeOccurrenceLineageInTransaction,
-  bindWorkflowNodeOccurrenceLineageInTransaction,
 } from "./workflow-node-occurrence"
 import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
 import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
@@ -215,14 +214,15 @@ export function recordDispatchLineage(input: {
       `dispatch_agent ${input.origin.targetAgentID} lineage commit`,
     )
     if (cancellation) throw cancellation
-    const task = db
-      .select({ timeCompleted: EngineTaskTable.time_completed })
+    const persistedTask = db
+      .select()
       .from(EngineTaskTable)
       .where(eq(EngineTaskTable.id, input.origin.taskID))
       .get()
-    if (!task) throw new Error(`Dispatch Task ${input.origin.taskID} does not exist`)
-    if (task.timeCompleted !== null) {
-      throw new TaskDispatchAdmissionClosedError(input.origin.taskID, task.timeCompleted, input.origin.dispatchID)
+    if (!persistedTask) throw new Error(`Dispatch Task ${input.origin.taskID} does not exist`)
+    const task = projectTaskRowInTransaction(db, persistedTask)
+    if (task.time_completed !== null) {
+      throw new TaskDispatchAdmissionClosedError(input.origin.taskID, task.time_completed, input.origin.dispatchID)
     }
     const completionClosure = taskCompletionClosureInTransaction(db, input.origin.taskID)
     if (completionClosure) {
@@ -239,16 +239,6 @@ export function recordDispatchLineage(input: {
       deliverySliceRevisionIDs: payload.delivery_slice_revision_ids,
       subject: "Dispatch lineage",
     })
-    const occurrenceCommit = assertWorkflowNodeOccurrenceLineageInTransaction({
-      db,
-      taskID: input.origin.taskID,
-      workflowBinding: input.origin.workflowBinding,
-      workflowNodeID: input.origin.workflowNodeID,
-      dispatchID: input.origin.dispatchID,
-      workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
-      childSessionID: input.childSessionID,
-      continuation: !!input.origin.continuationOfDispatchID || !!input.origin.coordinationActionID,
-    })
     insertEngineArtifact(db, {
       id: artifactID,
       taskID: input.origin.taskID,
@@ -257,11 +247,16 @@ export function recordDispatchLineage(input: {
       payload,
       timeCreated: now,
     })
-    bindWorkflowNodeOccurrenceLineageInTransaction({
+    assertWorkflowNodeOccurrenceLineageInTransaction({
       db,
-      commit: occurrenceCommit,
+      taskID: input.origin.taskID,
+      workflowBinding: input.origin.workflowBinding,
+      workflowNodeID: input.origin.workflowNodeID,
+      dispatchID: input.origin.dispatchID,
+      workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
+      childSessionID: input.childSessionID,
       lineageArtifactID: artifactID,
-      now,
+      continuation: !!input.origin.continuationOfDispatchID || !!input.origin.coordinationActionID,
     })
   })
   return {

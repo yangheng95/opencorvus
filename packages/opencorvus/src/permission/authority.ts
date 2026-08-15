@@ -19,6 +19,7 @@ import {
   PermissionProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
+import { acquireControlLease, assertControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 
 export namespace PermissionAuthority {
   const log = Log.create({ service: "permission-authority" })
@@ -198,40 +199,6 @@ export namespace PermissionAuthority {
     return Identifier.ascending("permission")
   }
 
-  function migrationRequestID(projectID: string, migration: NonNullable<Awaited<ReturnType<typeof Config.get>>["permission_migration"]>): string {
-    return Identifier.deterministic("permission", `migration\0${projectID}\0${JSON.stringify(migration)}`)
-  }
-
-  function assertMigrationIdentity(
-    identity: string,
-    projectID: string,
-    migration: NonNullable<Awaited<ReturnType<typeof Config.get>>["permission_migration"]>,
-  ): void {
-    const existing = decisionFor(identity)
-    if (!existing) return
-    const existingMigration = existing.scope?.migration
-    const parsedMigration = z
-      .object({
-        version: z.literal(1),
-        source_fields: z.array(z.enum(["permission", "tool_permissions"])).min(1),
-        permission_mode: Mode,
-        reason: z.enum(["all_allow", "restricted_or_mixed", "explicit_mode"]),
-      })
-      .strict()
-      .safeParse(existingMigration)
-    if (
-      existing.event_type !== "policy_migrated" ||
-      existing.project_id !== projectID ||
-      existing.request_id !== identity ||
-      existing.decision_slot !== identity ||
-      existing.mode !== migration.permission_mode ||
-      !parsedMigration.success ||
-      JSON.stringify(parsedMigration.data) !== JSON.stringify(migration) ||
-      migrationRequestID(existing.project_id, parsedMigration.data) !== identity
-    )
-      throw new PermissionIdentityCollisionError(identity, "request")
-  }
-
   function policyRevision(projectID: string, sessionID: string, mode: Mode): string {
     return digest({ projectID, sessionID, mode, schema: 1 })
   }
@@ -243,46 +210,6 @@ export namespace PermissionAuthority {
     if (stored) return { mode: stored.mode, revision: stored.revision }
     const config = await Config.get()
     const mode = Mode.parse(config.permission_mode)
-    const migration = config.permission_migration
-    if (migration) {
-      const slot = migrationRequestID(input.projectID, migration)
-      const scope = { migration }
-      assertMigrationIdentity(slot, input.projectID, migration)
-      try {
-        Database.transaction((db) =>
-          db
-            .insert(PermissionLedgerTable)
-            .values({
-              id: ledgerEventID(),
-              request_id: slot,
-              project_id: input.projectID,
-              session_id: input.sessionID,
-              message_id: input.messageID,
-              tool_call_id: input.toolCallID,
-              event_type: "policy_migrated",
-              mode: migration.permission_mode,
-              policy_revision: digest({ slot, mode: migration.permission_mode }),
-              provider_kind: "builtin",
-              provider_id: "config",
-              provider_digest: digest(scope),
-              tool_name: "permission_config_migration",
-              effect_class: "internal",
-              scope_version: "2",
-              scope,
-              fingerprint: digest({ slot, scope }),
-              summary: `Legacy permission configuration migrated to ${migration.permission_mode}`,
-              decision_slot: slot,
-              actor_id: "config-migration",
-              reason: migration.reason,
-              metadata: { source_fields: migration.source_fields },
-              time_created: Date.now(),
-            })
-            .run(),
-        )
-      } catch (error) {
-        if (!decisionFor(slot)) throw error
-      }
-    }
     const revision = policyRevision(input.projectID, input.sessionID, mode)
     Database.immediateTransaction((db) => {
       const current = db
@@ -341,7 +268,8 @@ export namespace PermissionAuthority {
   ): LedgerRow {
     const row: typeof PermissionLedgerTable.$inferInsert = {
       id: ledgerEventID(),
-      ...rowBase(request),
+      request_id: request.id,
+      ...(eventType === "requested" ? rowBase(request) : {}),
       event_type: eventType,
       time_created: Date.now(),
       ...extra,
@@ -350,12 +278,82 @@ export namespace PermissionAuthority {
     return row as LedgerRow
   }
 
+  type EffectLease = {
+    id: string
+    ownerOccurrenceID: string
+    targetID: string
+  }
+
+  function acquireEffectLease(attempt: string): EffectLease | undefined {
+    const ownerOccurrenceID = Identifier.ascending("call")
+    const acquired = acquireControlLease({
+      target: "effect",
+      targetID: attempt,
+      ownerOccurrenceID,
+      now: Date.now(),
+      leaseMilliseconds: 120_000,
+    })
+    return acquired.acquired
+      ? { id: acquired.lease.id, ownerOccurrenceID, targetID: attempt }
+      : undefined
+  }
+
+  async function executeUnderEffectLease<T>(lease: EffectLease, execute: () => Promise<T>): Promise<T> {
+    let renewalFailure: unknown
+    const heartbeat = setInterval(() => {
+      try {
+        const now = Date.now()
+        renewControlLease({
+          target: "effect",
+          targetID: lease.targetID,
+          leaseID: lease.id,
+          ownerOccurrenceID: lease.ownerOccurrenceID,
+          now,
+          expiresAt: now + 120_000,
+        })
+      } catch (error) {
+        renewalFailure ??= error
+      }
+    }, 30_000)
+    try {
+      const result = await execute()
+      if (renewalFailure) throw renewalFailure
+      return result
+    } finally {
+      clearInterval(heartbeat)
+    }
+  }
+
+  function appendEffectOutcome(
+    request: Request,
+    eventType: "execution_failed" | "outcome_unknown" | "execution_reconciled",
+    extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
+    lease?: EffectLease,
+  ): LedgerRow {
+    const row = {
+      id: ledgerEventID(),
+      request_id: request.id,
+      event_type: eventType,
+      time_created: Date.now(),
+      ...extra,
+    } satisfies typeof PermissionLedgerTable.$inferInsert
+    Database.immediateTransaction((db) => {
+      if (lease) assertControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: lease.targetID,
+        leaseID: lease.id,
+        ownerOccurrenceID: lease.ownerOccurrenceID,
+        now: Date.now(),
+      })
+      db.insert(PermissionLedgerTable).values(row).run()
+    })
+    return row as LedgerRow
+  }
+
   type DurableExecutionResult = { kind: "json"; value: unknown } | { kind: "undefined" }
 
   function durableExecutionResult(result: unknown): {
     payload: DurableExecutionResult
-    serialized: string
-    sha256: string
   } {
     const payload: DurableExecutionResult =
       result === undefined ? { kind: "undefined" } : { kind: "json", value: result }
@@ -363,7 +361,7 @@ export namespace PermissionAuthority {
     if (serialized === undefined) {
       throw new Error("Tool result cannot be durably represented")
     }
-    return { payload: JSON.parse(serialized) as DurableExecutionResult, serialized, sha256: digest(serialized) }
+    return { payload: JSON.parse(serialized) as DurableExecutionResult }
   }
 
   function resultFromDurable<T>(stored: unknown): T {
@@ -381,31 +379,29 @@ export namespace PermissionAuthority {
     attempt: string
     toolPartID?: string
     result: T
-    metadata?: Record<string, unknown>
+    lease?: EffectLease
   }): T {
     const durable = durableExecutionResult(input.result)
     const event: typeof PermissionLedgerTable.$inferInsert = {
       id: ledgerEventID(),
-      ...rowBase(input.request),
+      request_id: input.request.id,
       event_type: "execution_succeeded",
       attempt_id: input.attempt,
       outcome_slot: input.attempt,
-      metadata: {
-        result_owner: "session_tool_part",
-        ...(input.toolPartID ? { tool_part_id: input.toolPartID } : {}),
-        result_sha256: durable.sha256,
-        ...input.metadata,
-      },
       time_created: Date.now(),
     }
     Database.immediateTransaction((db) => {
+      if (input.lease) assertControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: input.lease.targetID,
+        leaseID: input.lease.id,
+        ownerOccurrenceID: input.lease.ownerOccurrenceID,
+        now: Date.now(),
+      })
       db.insert(PermissionExecutionResultTable)
         .values({
           attempt_id: input.attempt,
-          session_id: input.request.sessionID,
-          tool_part_id: input.toolPartID ?? input.request.toolCallID,
           result: durable.payload,
-          result_sha256: durable.sha256,
           time_created: Date.now(),
         })
         .onConflictDoNothing()
@@ -416,40 +412,49 @@ export namespace PermissionAuthority {
   }
 
   function requestFromRow(row: LedgerRow): Request {
+    const authority = row.event_type === "requested"
+      ? row
+      : Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
+          eq(PermissionLedgerTable.request_id, row.request_id),
+          eq(PermissionLedgerTable.event_type, "requested"),
+        )).get())
+    if (!authority) throw new Error(`Permission event ${row.id} references missing request ${row.request_id}`)
     const resource =
-      row.scope && typeof row.scope === "object" && !Array.isArray(row.scope)
-        ? (row.scope.resource as Record<string, unknown> | undefined)
+      authority.scope && typeof authority.scope === "object" && !Array.isArray(authority.scope)
+        ? (authority.scope.resource as Record<string, unknown> | undefined)
         : undefined
     const projectGrantEligible =
-      row.scope_version === "2" && resource
+      authority.scope_version === "2" && resource
         ? permissionProjectGrantEligible({
-            providerKind: PermissionProviderKind.parse(row.provider_kind),
-            toolName: row.tool_name,
-            effectClass: row.effect_class as InvocationPermissionDescriptor["effectClass"],
+            providerKind: PermissionProviderKind.parse(authority.provider_kind),
+            toolName: authority.tool_name!,
+            effectClass: authority.effect_class as InvocationPermissionDescriptor["effectClass"],
             resource,
           })
         : false
     return Request.parse({
-      id: row.request_id,
-      projectID: row.project_id,
-      taskID: row.task_id ?? undefined,
-      sessionID: row.session_id,
-      messageID: row.message_id,
-      toolCallID: row.tool_call_id,
-      mode: row.mode,
-      policyRevision: row.policy_revision,
-      providerKind: row.provider_kind,
-      providerID: row.provider_id,
-      providerDigest: row.provider_digest,
-      toolName: row.tool_name,
-      effectClass: row.effect_class,
-      scopeVersion: row.scope_version,
-      scope: row.scope,
-      fingerprint: row.fingerprint,
-      summary: row.summary,
+      id: authority.request_id,
+      projectID: authority.project_id,
+      taskID: authority.task_id ?? undefined,
+      sessionID: authority.session_id,
+      messageID: authority.message_id,
+      toolCallID: authority.tool_call_id,
+      mode: authority.mode,
+      policyRevision: authority.policy_revision,
+      providerKind: authority.provider_kind,
+      providerID: authority.provider_id,
+      providerDigest: authority.provider_digest,
+      toolName: authority.tool_name,
+      effectClass: authority.effect_class,
+      scopeVersion: authority.scope_version,
+      scope: authority.scope,
+      fingerprint: authority.fingerprint,
+      summary: authority.summary,
       projectGrantEligible,
-      choices: choices(projectGrantEligible, Boolean(row.task_id)),
-      timeCreated: row.time_created,
+      choices: Array.isArray(authority.metadata?.choices)
+        ? authority.metadata.choices
+        : choices(projectGrantEligible, Boolean(authority.task_id)),
+      timeCreated: authority.time_created,
     })
   }
 
@@ -470,15 +475,19 @@ export namespace PermissionAuthority {
 
   function assertRequestIdentity(request: Request): void {
     const existing = Database.use((db) =>
-      db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.request_id, request.id)).get(),
+      db.select().from(PermissionLedgerTable).where(and(
+        eq(PermissionLedgerTable.request_id, request.id),
+        eq(PermissionLedgerTable.event_type, "requested"),
+      )).get(),
     )
     if (!existing) return
+    const exact = requestFromRow(existing)
     const existingID = requestIdentity({
-      projectID: existing.project_id,
-      sessionID: existing.session_id,
-      messageID: existing.message_id,
-      toolCallID: existing.tool_call_id,
-      fingerprint: existing.fingerprint,
+      projectID: exact.projectID,
+      sessionID: exact.sessionID,
+      messageID: exact.messageID,
+      toolCallID: exact.toolCallID,
+      fingerprint: exact.fingerprint,
     })
     if (existingID !== request.id) throw new PermissionIdentityCollisionError(request.id, "request")
     if (
@@ -491,7 +500,7 @@ export namespace PermissionAuthority {
       throw new PermissionIdentityCollisionError(request.id, "request")
   }
 
-  function assertAttemptIdentity(request: Request, attempt: string, toolPartID: string): void {
+  function assertAttemptIdentity(request: Request, attempt: string): void {
     const existing = Database.use((db) =>
       db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.attempt_id, attempt)).all(),
     )
@@ -505,7 +514,7 @@ export namespace PermissionAuthority {
     const succeeded = existing.find(
       (row) => row.event_type === "execution_succeeded" && row.outcome_slot === attempt,
     )
-    if (!succeeded || storedResult.session_id !== request.sessionID || storedResult.tool_part_id !== toolPartID) {
+    if (!succeeded) {
       throw new PermissionIdentityCollisionError(attempt, "attempt")
     }
   }
@@ -555,7 +564,7 @@ export namespace PermissionAuthority {
   ): { settled: LedgerRow; won: boolean } {
     const row = {
       id: ledgerEventID(),
-      ...rowBase(request),
+      request_id: request.id,
       event_type: eventType,
       time_created: Date.now(),
       ...extra,
@@ -623,13 +632,7 @@ export namespace PermissionAuthority {
       db
         .select()
         .from(PermissionLedgerTable)
-        .where(
-          and(
-            eq(PermissionLedgerTable.project_id, request.projectID),
-            eq(PermissionLedgerTable.fingerprint, request.fingerprint),
-            eq(PermissionLedgerTable.event_type, "grant_created"),
-          ),
-        )
+        .where(eq(PermissionLedgerTable.event_type, "grant_created"))
         .orderBy(desc(sql`rowid`))
         .all(),
     )
@@ -648,10 +651,13 @@ export namespace PermissionAuthority {
     )
     const inactive = new Set(terminal.map((row) => row.source).filter((value): value is string => Boolean(value)))
     return grants.find(
-      (grant) =>
-        !inactive.has(grant.id) &&
-        (grant.decision_scope === "project" ||
-          (grant.decision_scope === "task" && Boolean(request.taskID) && grant.task_id === request.taskID)),
+      (grant) => {
+        if (inactive.has(grant.id)) return false
+        const owner = requestFromRow(grant)
+        if (owner.projectID !== request.projectID || owner.fingerprint !== request.fingerprint) return false
+        return grant.decision_scope === "project" ||
+          (grant.decision_scope === "task" && Boolean(request.taskID) && owner.taskID === request.taskID)
+      },
     )
   }
 
@@ -682,7 +688,15 @@ export namespace PermissionAuthority {
 
   async function authorize(request: Request): Promise<LedgerRow> {
     assertRequestIdentity(request)
-    if (request.mode === "full_access") return appendEvent(request, "full_access")
+    const pending = pendingRequest(request.id)
+    if (!pending) appendEvent(request, "requested", {
+      metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
+    })
+    if (request.mode === "full_access") {
+      const existing = decisionFor(request.id)
+      if (existing) return existing
+      return settleDecision(request, "allowed_once", { actor_id: "full-access-policy" }).settled
+    }
     const stale = staleFor(request.id)
     if (stale) throw new StaleContinuationError(request.id, stale.reason ?? undefined)
     const exactDecision = decisionFor(request.id)
@@ -694,8 +708,6 @@ export namespace PermissionAuthority {
     const grant = activeGrant(request)
     if (grant)
       return appendEvent(request, "grant_used", { source_event_id: grant.id, decision_scope: grant.decision_scope })
-    const pending = pendingRequest(request.id)
-    if (!pending) appendEvent(request, "requested")
     await waitForDecision(request)
     const settled = decisionFor(request.id)
     if (!settled) throw new Error(`Permission request ${request.id} resumed without a durable decision`)
@@ -839,7 +851,7 @@ export namespace PermissionAuthority {
       throw new StaleContinuationError(expectedRequestID, "The Tool identity or input changed after restart")
     }
     const attempt = attemptID(request.id)
-    assertAttemptIdentity(request, attempt, input.toolPartID ?? request.toolCallID)
+    assertAttemptIdentity(request, attempt)
     const authority = await authorize(request)
     const existingStart = Database.use((db) =>
       db
@@ -857,17 +869,24 @@ export namespace PermissionAuthority {
       if (!outcome) {
         const task = taskFromEvent(mcpTaskEvent(attempt))
         if (task) {
+          const lease = acquireEffectLease(attempt)
+          if (!lease) {
+            await awaitExecutionSettlement(request)
+            return resolveExistingAttempt(start)
+          }
           let result: T
           try {
-            result = await executionContext.run({ request, attemptID: attempt, recovering: true }, execute)
+            result = await executeUnderEffectLease(lease, () =>
+              executionContext.run({ request, attemptID: attempt, recovering: true }, execute),
+            )
           } catch (error) {
             const latest = currentTaskForAttempt(attempt)
             if (latest && ["working", "input_required"].includes(latest.status)) throw error
-            appendEvent(request, "execution_failed", {
+            appendEffectOutcome(request, "execution_failed", {
               attempt_id: attempt,
               outcome_slot: attempt,
               reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-            })
+            }, lease)
             throw error
           }
           return completeExecution({
@@ -875,7 +894,7 @@ export namespace PermissionAuthority {
             attempt,
             toolPartID: input.toolPartID,
             result,
-            metadata: { mcp_task_id: task.taskId },
+            lease,
           })
         }
         throw new OutcomeUnknownError(attempt)
@@ -916,26 +935,36 @@ export namespace PermissionAuthority {
       if (winner) return resolveExistingAttempt(winner)
       throw error
     }
+    const lease = acquireEffectLease(attempt)
+    if (!lease) {
+      await awaitExecutionSettlement(request)
+      return resolveExistingAttempt(existingStart ?? Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
+        eq(PermissionLedgerTable.attempt_id, attempt),
+        eq(PermissionLedgerTable.event_type, "execution_started"),
+      )).get())!)
+    }
     let result: T
     try {
-      result = await executionContext.run({ request, attemptID: attempt, recovering: false }, execute)
+      result = await executeUnderEffectLease(lease, () =>
+        executionContext.run({ request, attemptID: attempt, recovering: false }, execute),
+      )
     } catch (error) {
       const task = currentTaskForAttempt(attempt)
       // Once the server has returned a protocol task identity, transport loss
       // or process shutdown is not a failed external effect. Leave the attempt
       // open so recovery reconnects and queries this exact task.
       if (task && !["completed", "failed", "cancelled"].includes(task.status)) throw error
-      appendEvent(request, "execution_failed", {
+      appendEffectOutcome(request, "execution_failed", {
         attempt_id: attempt,
         outcome_slot: attempt,
         reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-      })
+      }, lease)
       throw error
     }
     // A persistence failure here leaves a start without an outcome. Recovery
     // records outcome_unknown; it must not rewrite an effect that already ran
     // as execution_failed.
-    return completeExecution({ request, attempt, toolPartID: input.toolPartID, result })
+    return completeExecution({ request, attempt, toolPartID: input.toolPartID, result, lease })
   }
 
   function currentTaskForAttempt(attempt: string): McpTask | undefined {
@@ -1103,14 +1132,9 @@ export namespace PermissionAuthority {
   }
 
   export async function history(projectID = Instance.project.id): Promise<LedgerRow[]> {
-    return Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(eq(PermissionLedgerTable.project_id, projectID))
-        .orderBy(desc(sql`rowid`))
-        .all(),
-    )
+    return Database.use((db) => db.select().from(PermissionLedgerTable)
+      .orderBy(desc(sql`rowid`)).all()
+      .filter((row) => requestFromRow(row).projectID === projectID))
   }
 
   export async function grants(projectID = Instance.project.id): Promise<LedgerRow[]> {

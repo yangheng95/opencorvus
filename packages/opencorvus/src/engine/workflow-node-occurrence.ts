@@ -1,10 +1,6 @@
 import { and, asc, eq, sql, Database } from "@/storage/db"
 import { EngineArtifactTable, EngineWorkflowNodeOccurrenceTable } from "./engine.sql"
-import {
-  SelectedWorkflowBindingSchema,
-  sameSelectedWorkflowBinding,
-  type SelectedWorkflowBinding,
-} from "./workflow-binding"
+import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
 
 export type WorkflowNodeOccurrenceLineageReference = Readonly<{
@@ -62,7 +58,7 @@ function virtualWorkflowSubject(
 
 function existingLineageReferences(
   db: Database.TxOrDb,
-  input: { taskID: string; workflowID: string; workflowNodeID: string },
+  input: { taskID: string; workflowID: string; workflowNodeID: string; excludeArtifactID?: string },
 ): WorkflowNodeOccurrenceLineageReference[] {
   return db
     .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
@@ -78,6 +74,7 @@ function existingLineageReferences(
     )
     .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
     .all()
+    .filter((row) => row.id !== input.excludeArtifactID)
     .map((row) => {
       const payload = row.payload as Record<string, unknown>
       const dispatchID = payload.dispatch_id
@@ -131,6 +128,7 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
   dispatchID: string
   workflowOccurrenceID: string
   childSessionID: string
+  lineageArtifactID: string
   continuation: boolean
 }): WorkflowNodeOccurrenceCommit {
   const subject = virtualWorkflowSubject(input.workflowBinding, input.workflowNodeID)
@@ -145,27 +143,10 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
     workflowID: subject.workflowID,
     workflowNodeID: subject.workflowNodeID,
   })
-  if (row && !sameSelectedWorkflowBinding(row.workflow_binding, subject.binding)) {
-    throw new Error(
-      `Task ${input.taskID} workflow ${subject.workflowID} node ${subject.workflowNodeID} occurrence binding drift`,
-    )
-  }
-  if (row?.state === "conflicted") {
-    throw new WorkflowNodeOccurrenceConflictError(
-      input.taskID,
-      subject.workflowID,
-      subject.workflowNodeID,
-      existingLineageReferences(input.db, {
-        taskID: input.taskID,
-        workflowID: subject.workflowID,
-        workflowNodeID: subject.workflowNodeID,
-      }),
-    )
-  }
   if (input.continuation) {
     if (
-      row?.state !== "bound" ||
-      row.workflow_occurrence_id !== input.workflowOccurrenceID ||
+      !row ||
+      row.initial_dispatch_id !== input.workflowOccurrenceID ||
       row.child_session_id !== input.childSessionID
     ) {
       throw new Error(
@@ -196,6 +177,7 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
         taskID: input.taskID,
         workflowID: subject.workflowID,
         workflowNodeID: subject.workflowNodeID,
+        excludeArtifactID: input.lineageArtifactID,
       }),
     )
   }
@@ -206,14 +188,9 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
       task_id: input.taskID,
       workflow_id: subject.workflowID,
       workflow_node_id: subject.workflowNodeID,
-      workflow_binding: subject.binding,
-      state: "bound",
-      workflow_occurrence_id: input.workflowOccurrenceID,
       initial_dispatch_id: input.dispatchID,
       child_session_id: input.childSessionID,
-      conflict_lineage_ids: [],
       time_created: now,
-      time_updated: now,
     })
     .onConflictDoNothing({
       target: [
@@ -229,11 +206,9 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
     workflowNodeID: subject.workflowNodeID,
   })
   if (
-    admitted?.state !== "bound" ||
+    !admitted ||
     admitted.initial_dispatch_id !== input.dispatchID ||
-    admitted.workflow_occurrence_id !== input.workflowOccurrenceID ||
-    admitted.child_session_id !== input.childSessionID ||
-    admitted.dispatch_lineage_artifact_id !== null
+    admitted.child_session_id !== input.childSessionID
   ) {
     throw new WorkflowNodeOccurrenceConflictError(
       input.taskID,
@@ -243,6 +218,7 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
         taskID: input.taskID,
         workflowID: subject.workflowID,
         workflowNodeID: subject.workflowNodeID,
+        excludeArtifactID: input.lineageArtifactID,
       }),
     )
   }
@@ -254,41 +230,5 @@ export function assertWorkflowNodeOccurrenceLineageInTransaction(input: {
     dispatchID: input.dispatchID,
     workflowOccurrenceID: input.workflowOccurrenceID,
     childSessionID: input.childSessionID,
-  }
-}
-
-export function bindWorkflowNodeOccurrenceLineageInTransaction(input: {
-  db: Database.TxOrDb
-  commit: WorkflowNodeOccurrenceCommit
-  lineageArtifactID: string
-  now: number
-}): void {
-  if (input.commit.kind !== "initial") return
-  input.db
-    .update(EngineWorkflowNodeOccurrenceTable)
-    .set({
-      dispatch_lineage_artifact_id: input.lineageArtifactID,
-      time_updated: input.now,
-    })
-    .where(
-      and(
-        eq(EngineWorkflowNodeOccurrenceTable.task_id, input.commit.taskID),
-        eq(EngineWorkflowNodeOccurrenceTable.workflow_id, input.commit.workflowID),
-        eq(EngineWorkflowNodeOccurrenceTable.workflow_node_id, input.commit.workflowNodeID),
-        eq(EngineWorkflowNodeOccurrenceTable.state, "bound"),
-        eq(EngineWorkflowNodeOccurrenceTable.initial_dispatch_id, input.commit.dispatchID),
-        sql`${EngineWorkflowNodeOccurrenceTable.dispatch_lineage_artifact_id} IS NULL`,
-      ),
-    )
-    .run()
-  const bound = occurrenceRow(input.db, input.commit)
-  if (
-    bound?.state !== "bound" ||
-    bound.child_session_id !== input.commit.childSessionID ||
-    bound.dispatch_lineage_artifact_id !== input.lineageArtifactID
-  ) {
-    throw new Error(
-      `Task ${input.commit.taskID} workflow ${input.commit.workflowID} node ${input.commit.workflowNodeID} failed to bind its initial lineage`,
-    )
   }
 }

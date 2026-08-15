@@ -29,9 +29,10 @@ import { Log } from "@/util/log"
 import { Orchestrator } from "@/orchestrator/agent"
 import type { OrchestratorEvent } from "@/orchestrator/event"
 import { findTask } from "@/engine"
-import { terminalTask, updateTask } from "@/engine/state"
+import { terminalTask } from "@/engine/state"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { recordTaskInfrastructureError, recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
+import { createTerminalConversationAuthority } from "./terminal-conversation-authority"
 
 const log = Log.create({ service: "orchestrator-loop" })
 
@@ -40,6 +41,8 @@ export async function runTaskLoop(input: {
   event?: OrchestratorEvent
   signal?: AbortSignal
   wakeID?: string
+  activationID?: string
+  predecessorID?: string
 }) {
   if (input.signal?.aborted) return
   return runTaskLoopInner(input)
@@ -62,8 +65,10 @@ async function runTaskLoopInner(input: {
   event?: OrchestratorEvent
   signal?: AbortSignal
   wakeID?: string
+  activationID?: string
+  predecessorID?: string
 }) {
-  const { taskID, signal, event, wakeID } = input
+  const { taskID, signal, event, wakeID, activationID, predecessorID } = input
   if (signal?.aborted) return
 
   log.info("task loop started", { taskID, note: event?.note })
@@ -76,18 +81,20 @@ async function runTaskLoopInner(input: {
     return
   }
   if (isTaskTerminal(task)) {
-    log.info("terminal task loop ignored", { taskID, status: deriveTaskStatus(task), note: event?.note })
-    return
+    if (!event || !wakeID || !activationID) {
+      log.info("terminal task loop has no admitted conversational ingress", { taskID, status: deriveTaskStatus(task), note: event?.note })
+      return
+    }
+    const finalMessageID = await Orchestrator.processTerminalConversation({
+      taskID,
+      event,
+      authority: createTerminalConversationAuthority({ taskID, ingressID: wakeID, event }),
+      signal,
+      activationID,
+      predecessorID: predecessorID ?? wakeID,
+    })
+    return { finalMessageID }
   }
-  // `error` is the current root-decision-window projection. Entering this
-  // exact non-terminal decision pass makes the previous window historical;
-  // append-only infrastructure and recovery artifacts retain its evidence.
-  // This is deliberately independent of error text and never reopens a
-  // terminal Task.
-  if (task.error) {
-    task = await updateTask(task, { error: null }, "Root decision pass started a new execution window")
-  }
-
   // Attempt to capture the git baseline before the decision. Failure is a
   // visible infrastructure fact, not admission authority for the Orchestrator
   // pass. Exact repository checkpoint operations own their physical baseline.
@@ -135,7 +142,14 @@ async function runTaskLoopInner(input: {
   log.info("decision point", { taskID, note: event?.note })
 
   try {
-    const finalMessageID = await Orchestrator.processTask(taskID, event, signal, wakeID)
+    const finalMessageID = await Orchestrator.processTask(
+      taskID,
+      event,
+      signal,
+      wakeID,
+      activationID,
+      predecessorID,
+    )
     return finalMessageID ? { finalMessageID } : {}
   } catch (err) {
     if (signal?.aborted) return

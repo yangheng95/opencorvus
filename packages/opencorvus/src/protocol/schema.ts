@@ -35,7 +35,7 @@ export type SchedulerMessageKind = z.infer<typeof SchedulerMessageKind>
 
 export const SchedulerMessagePayload = z
   .object({
-    protocol: z.literal("scheduler-message-v2"),
+    protocol: z.literal("scheduler-message-v3"),
     /** Exact caller-owned invocation atom used to derive the compact
      * scheduler delivery identity. Persisting it makes truncated-identity
      * collisions distinguishable from same-material replay. */
@@ -47,11 +47,11 @@ export const SchedulerMessagePayload = z
     source_terminal_event_id: Identifier.schema("protocol_event").optional(),
     /** Immutable execution occurrence of a Task sender. Mission senders use
      * null. Replies must reverse both source and target occurrence identities. */
-    source_task_occurrence_started_at: z.number().int().positive().nullable(),
+    source_task_execution_epoch: z.number().int().positive().nullable(),
     /** Immutable execution occurrence of a Task recipient. Mission recipients
      * use null. The Host compares this with the current Task row before
      * materializing any Message or root ingress. */
-    target_task_occurrence_started_at: z.number().int().positive().nullable(),
+    target_task_execution_epoch: z.number().int().positive().nullable(),
     source_body_sha256: z.string().regex(/^[a-f0-9]{64}$/),
     subject: z.string().min(1).max(500),
   })
@@ -110,6 +110,20 @@ export const ProtocolInboxDeliveryResult = z.discriminatedUnion("kind", [
     .strict(),
 ])
 export type ProtocolInboxDeliveryResult = z.infer<typeof ProtocolInboxDeliveryResult>
+
+/** One immutable delivery settlement fact. Public delivery status, retry
+ * visibility and errors are projections of this single discriminated value. */
+export const ProtocolDeliveryReceipt = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("retry_wait"),
+      visible_at: z.number().int().positive(),
+      error: z.string().min(1),
+    })
+    .strict(),
+  ...ProtocolInboxDeliveryResult.options,
+])
+export type ProtocolDeliveryReceipt = z.infer<typeof ProtocolDeliveryReceipt>
 
 export const ProtocolEnvelope = z.object({
   id: Identifier.schema("protocol_event"),

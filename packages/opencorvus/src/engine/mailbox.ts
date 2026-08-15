@@ -6,9 +6,10 @@ import {
 import { BusEvent } from "@/bus/bus-event"
 import { EngineProtocol } from "@/engine/protocol"
 import { Event } from "@/engine/model"
-import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { ProtocolEventTable, protocolEventBelongsToTask } from "@/protocol/protocol.sql"
+import { protocolTimelineOrderKey } from "@/protocol/store"
 import { ProjectTable } from "@/project/project.sql"
-import { Database, and, desc, eq, inArray } from "@/storage/db"
+import { Database, and, desc, eq, inArray, or } from "@/storage/db"
 import { EngineTaskTable } from "./engine.sql"
 
 export const MailboxCategory = z.enum(["progress", "status", "notification"])
@@ -122,6 +123,17 @@ export const MAILBOX_ACKNOWLEDGEMENT_EVENT_TYPE = Event.MailboxAcknowledged.type
 
 type ProtocolEventRow = typeof ProtocolEventTable.$inferSelect
 
+function protocolEventTaskID(event: ProtocolEventRow): string | undefined {
+  return event.aggregate_type === "task" ? event.aggregate_id : (event.task_id ?? undefined)
+}
+
+function protocolEventTaskJoin() {
+  return or(
+    and(eq(ProtocolEventTable.aggregate_type, "task"), eq(EngineTaskTable.id, ProtocolEventTable.aggregate_id)),
+    eq(EngineTaskTable.id, ProtocolEventTable.task_id),
+  )!
+}
+
 const canonicalMailboxPresentation = {
   "task.completed": { category: "status", attention: false },
   "task.failed": { category: "notification", attention: true },
@@ -203,7 +215,7 @@ function mailboxState(): Map<string, MailboxState> {
     db
       .select({ event: ProtocolEventTable })
       .from(ProtocolEventTable)
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolEventTable.task_id))
+      .innerJoin(EngineTaskTable, protocolEventTaskJoin())
       .where(eq(ProtocolEventTable.type, MAILBOX_ACKNOWLEDGEMENT_EVENT_TYPE))
       .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.id))
       .all(),
@@ -269,7 +281,7 @@ function mailboxItemFromRow(input: { row: MailboxSourceRow; state?: MailboxState
       taskID: message.data.taskID,
       taskTitle,
       taskDirectory: input.row.directory,
-      orderKey: event.order_key,
+      orderKey: protocolTimelineOrderKey(event),
       createdAt: event.emitted_at,
       readAt: input.state?.readAt,
       archivedAt: input.state?.archivedAt,
@@ -289,10 +301,10 @@ function mailboxItemFromRow(input: { row: MailboxSourceRow; state?: MailboxState
     evidenceLocators: evidenceLocatorList(payload, "evidenceLocators"),
     sourceAgentID: agent,
     sessionID: event.session_id ?? textField(payload, "sessionID") ?? textField(payload, "session_id"),
-    taskID: event.task_id ?? event.aggregate_id,
+    taskID: protocolEventTaskID(event),
     taskTitle,
     taskDirectory: input.row.directory,
-    orderKey: event.order_key,
+    orderKey: protocolTimelineOrderKey(event),
     createdAt: event.emitted_at,
     readAt: input.state?.readAt,
     archivedAt: input.state?.archivedAt,
@@ -304,7 +316,7 @@ function allMailboxSourceRows(): MailboxSourceRow[] {
     db
       .select({ event: ProtocolEventTable, taskTitle: EngineTaskTable.title, directory: ProjectTable.worktree })
       .from(ProtocolEventTable)
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolEventTable.task_id))
+      .innerJoin(EngineTaskTable, protocolEventTaskJoin())
       .innerJoin(ProjectTable, eq(ProjectTable.id, EngineTaskTable.project_id))
       .where(inArray(ProtocolEventTable.type, mailboxSourceEventTypes()))
       .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.id))
@@ -362,7 +374,7 @@ export function listRecentTaskMailboxMessages(
     db
       .select({ event: ProtocolEventTable })
       .from(ProtocolEventTable)
-      .where(and(eq(ProtocolEventTable.task_id, taskID), eq(ProtocolEventTable.type, MAILBOX_MESSAGE_EVENT_TYPE)))
+      .where(and(protocolEventBelongsToTask(taskID), eq(ProtocolEventTable.type, MAILBOX_MESSAGE_EVENT_TYPE)))
       .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.id))
       .limit(Math.max(1, limit))
       .all(),
@@ -399,7 +411,7 @@ export function recordMailboxMessage(input: MailboxAgentMessagePayload & { corre
       .where(
         and(
           eq(ProtocolEventTable.type, MAILBOX_MESSAGE_EVENT_TYPE),
-          eq(ProtocolEventTable.task_id, parsed.taskID),
+          protocolEventBelongsToTask(parsed.taskID),
           eq(ProtocolEventTable.session_id, parsed.sessionID),
           eq(ProtocolEventTable.correlation_id, correlationID),
         ),
@@ -432,7 +444,7 @@ function mailboxSourceEvent(messageID: string): ProtocolEventRow | undefined {
       db
         .select({ event: ProtocolEventTable })
         .from(ProtocolEventTable)
-        .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolEventTable.task_id))
+        .innerJoin(EngineTaskTable, protocolEventTaskJoin())
         .where(eq(ProtocolEventTable.id, messageID))
         .get()?.event,
   )
@@ -440,17 +452,18 @@ function mailboxSourceEvent(messageID: string): ProtocolEventRow | undefined {
 }
 
 function emitMailboxAcknowledgement(source: ProtocolEventRow, messageID: string, action: MailboxAction) {
-  if (!source.task_id) throw new Error(`Mailbox source event ${messageID} has no task identity`)
+  const taskID = protocolEventTaskID(source)
+  if (!taskID) throw new Error(`Mailbox source event ${messageID} has no task identity`)
   return EngineProtocol.emitInTransaction(
     Event.MailboxAcknowledged,
     {
-      taskID: source.task_id,
+      taskID,
       messageID,
       action,
       summary: `Mailbox item ${action}`,
     },
     {
-      taskID: source.task_id,
+      taskID,
       sessionID: source.session_id ?? undefined,
       source: "operator",
       target: source.source,
@@ -463,7 +476,7 @@ function emitMailboxAcknowledgement(source: ProtocolEventRow, messageID: string,
 export function acknowledgeMailboxItem(input: { messageID: string; action: MailboxAction }) {
   return Database.transaction(() => {
     const source = mailboxSourceEvent(input.messageID)
-    if (!source?.task_id) throw new MailboxItemNotFoundError(input.messageID)
+    if (!source || !protocolEventTaskID(source)) throw new MailboxItemNotFoundError(input.messageID)
     const state = mailboxState().get(input.messageID)
     const alreadyApplied =
       state?.deletedAt !== undefined ||

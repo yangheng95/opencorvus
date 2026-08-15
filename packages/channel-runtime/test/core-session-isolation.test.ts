@@ -29,6 +29,7 @@ async function tempDir() {
 
 function incoming(thread: string, text: string): IncomingMessage {
   return {
+    id: `slack-event-${thread}-${text}`,
     platform: "slack",
     channel: "C1",
     thread,

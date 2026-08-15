@@ -1,18 +1,19 @@
 import z from "zod"
 import { Identifier } from "../id/id"
 import { Database, NotFoundError, and, desc, eq, inArray, lt, lte, or, sql } from "@/storage/db"
-import { MessageTable, PartTable } from "./session.sql"
+import { MessageTable, PartTable, ToolPartRequestTable } from "./session.sql"
 import { fn } from "@/util/fn"
 import { compareTimelineOrderKeys, timelineOrderKey } from "@/timeline/order"
 import { Message } from "./message"
 import { VISIBLE_PART_TYPE } from "./part-types"
+import { projectToolPartInTransaction } from "./tool-part-facts"
 import {
   CONVERSATION_AGENT_ACTIVITY_LIMIT,
   projectConversationAgentActivityPart,
   type ConversationAgentActivityItem,
 } from "@opencorvus-ai/transport-protocol"
 
-function persistedPartCorruption(row: typeof PartTable.$inferSelect, error: z.ZodError): Message.PartErrorPart {
+function persistedPartCorruption(row: typeof PartTable.$inferSelect, sessionID: string, error: z.ZodError): Message.PartErrorPart {
   const issues = error.issues.map((issue) => ({
     path: issue.path.join(".") || "<root>",
     message: issue.message,
@@ -22,7 +23,7 @@ function persistedPartCorruption(row: typeof PartTable.$inferSelect, error: z.Zo
     row.data && typeof row.data === "object" && !Array.isArray(row.data) ? row.data : {}
   return {
     id: row.id,
-    sessionID: row.session_id,
+    sessionID,
     messageID: row.message_id,
     orderKey: timelineOrderKey({
       domain: "part",
@@ -38,11 +39,14 @@ function persistedPartCorruption(row: typeof PartTable.$inferSelect, error: z.Zo
   }
 }
 
-function persistedPart(row: typeof PartTable.$inferSelect): Message.Part {
+function persistedPart(db: Database.TxOrDb, row: typeof PartTable.$inferSelect): Message.Part {
+  const message = db.select({ sessionID: MessageTable.session_id }).from(MessageTable)
+    .where(eq(MessageTable.id, row.message_id)).get()
+  if (!message) throw new Error(`Part ${row.id} has no parent Message`)
   const part = {
     ...row.data,
     id: row.id,
-    sessionID: row.session_id,
+    sessionID: message.sessionID,
     messageID: row.message_id,
     orderKey: timelineOrderKey({
       domain: "part",
@@ -52,9 +56,50 @@ function persistedPart(row: typeof PartTable.$inferSelect): Message.Part {
   }
   const parsed = Message.VisiblePart.safeParse(part)
   if (!parsed.success) {
-    return persistedPartCorruption(row, parsed.error)
+    return persistedPartCorruption(row, message.sessionID, parsed.error)
   }
   return parsed.data
+}
+
+type LoadedPartRow =
+  | { kind: "part"; row: typeof PartTable.$inferSelect }
+  | { kind: "tool"; row: typeof ToolPartRequestTable.$inferSelect }
+
+function loadPartRows(db: Database.TxOrDb, messageIDs: readonly string[]): LoadedPartRow[] {
+  if (messageIDs.length === 0) return []
+  const parts = db.select().from(PartTable).where(inArray(PartTable.message_id, [...messageIDs])).all()
+    .map((row) => ({ kind: "part" as const, row }))
+  const tools = db.select().from(ToolPartRequestTable)
+    .where(inArray(ToolPartRequestTable.message_id, [...messageIDs])).all()
+    .map((row) => ({ kind: "tool" as const, row }))
+  return [...parts, ...tools].sort((left, right) =>
+    left.row.message_id.localeCompare(right.row.message_id) ||
+    left.row.time_created - right.row.time_created ||
+    left.row.id.localeCompare(right.row.id),
+  )
+}
+
+function loadedPart(db: Database.TxOrDb, loaded: LoadedPartRow): Message.Part {
+  if (loaded.kind === "part") return persistedPart(db, loaded.row)
+  const projected = projectToolPartInTransaction(db, loaded.row)
+  if (!projected) throw new Error(`Tool request Part ${loaded.row.id} could not be projected`)
+  return {
+    ...projected,
+    orderKey: timelineOrderKey({ domain: "part", time: loaded.row.time_created, id: loaded.row.id }),
+  }
+}
+
+function partsByMessageIDs(messageIDs: readonly string[]): Map<string, Message.Part[]> {
+  return Database.use((db) => {
+    const result = new Map<string, Message.Part[]>()
+    for (const loaded of loadPartRows(db, messageIDs)) {
+      const part = loadedPart(db, loaded)
+      const list = result.get(loaded.row.message_id)
+      if (list) list.push(part)
+      else result.set(loaded.row.message_id, [part])
+    }
+    return result
+  })
 }
 
 export namespace MessageStore {
@@ -83,25 +128,7 @@ export namespace MessageStore {
         .all(),
     )
     if (rows.length === 0) return []
-    const partRows = Database.use((db) =>
-      db
-        .select()
-        .from(PartTable)
-        .where(
-          inArray(
-            PartTable.message_id,
-            rows.map((row) => row.id),
-          ),
-        )
-        .orderBy(PartTable.message_id, PartTable.time_created, PartTable.id)
-        .all(),
-    )
-    const partsByMessage = new Map<string, Message.Part[]>()
-    for (const row of partRows) {
-      const list = partsByMessage.get(row.message_id) ?? []
-      list.push(persistedPart(row))
-      partsByMessage.set(row.message_id, list)
-    }
+    const partsByMessage = partsByMessageIDs(rows.map((row) => row.id))
     return rows.map((row) => ({
       info: { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info,
       parts: partsByMessage.get(row.id) ?? [],
@@ -133,23 +160,7 @@ export namespace MessageStore {
       if (rows.length === 0) break
 
       const ids = rows.map((row) => row.id)
-      const partsByMessage = new Map<string, Message.Part[]>()
-      if (ids.length > 0) {
-        const partRows = Database.use((db) =>
-          db
-            .select()
-            .from(PartTable)
-            .where(inArray(PartTable.message_id, ids))
-            .orderBy(PartTable.message_id, PartTable.time_created, PartTable.id)
-            .all(),
-        )
-        for (const row of partRows) {
-          const part = persistedPart(row)
-          const list = partsByMessage.get(row.message_id)
-          if (list) list.push(part)
-          else partsByMessage.set(row.message_id, [part])
-        }
-      }
+      const partsByMessage = partsByMessageIDs(ids)
 
       for (const row of rows) {
         const info = { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info
@@ -183,23 +194,7 @@ export namespace MessageStore {
           .all(),
       )
       const ids = rows.map((row) => row.id)
-      const partsByMessage = new Map<string, Message.Part[]>()
-      if (ids.length > 0) {
-        const partRows = Database.use((db) =>
-          db
-            .select()
-            .from(PartTable)
-            .where(inArray(PartTable.message_id, ids))
-            .orderBy(PartTable.message_id, PartTable.time_created, PartTable.id)
-            .all(),
-        )
-        for (const row of partRows) {
-          const part = persistedPart(row)
-          const list = partsByMessage.get(row.message_id)
-          if (list) list.push(part)
-          else partsByMessage.set(row.message_id, [part])
-        }
-      }
+      const partsByMessage = partsByMessageIDs(ids)
       return rows
         .map((row) => ({
           info: { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info,
@@ -235,23 +230,7 @@ export namespace MessageStore {
           .all(),
       )
       const ids = rows.map((row) => row.id)
-      const partsByMessage = new Map<string, Message.Part[]>()
-      if (ids.length > 0) {
-        const partRows = Database.use((db) =>
-          db
-            .select()
-            .from(PartTable)
-            .where(inArray(PartTable.message_id, ids))
-            .orderBy(PartTable.message_id, PartTable.time_created, PartTable.id)
-            .all(),
-        )
-        for (const row of partRows) {
-          const part = persistedPart(row)
-          const list = partsByMessage.get(row.message_id)
-          if (list) list.push(part)
-          else partsByMessage.set(row.message_id, [part])
-        }
-      }
+      const partsByMessage = partsByMessageIDs(ids)
       return rows
         .map((row) => ({
           info: { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info,
@@ -309,23 +288,36 @@ export namespace MessageStore {
           const page = cursor
             ? sql`AND (p.time_created < ${cursor.timeCreated} OR (p.time_created = ${cursor.timeCreated} AND p.id < ${cursor.id}))`
             : sql.empty()
-          const rows = Database.use((db) =>
-            db.all<typeof PartTable.$inferSelect>(sql`
-              SELECT p.id, p.message_id, p.session_id, p.time_created, p.time_updated, p.data
-              FROM part p
-              JOIN message m ON m.id = p.message_id
-              WHERE p.session_id = ${scope.sessionID}
-                AND json_extract(p.data, '$.type') = ${type}
-                ${occurrence}
-                ${rewind}
-                ${page}
-              ORDER BY p.time_created DESC, p.id DESC
-              LIMIT ${CONVERSATION_AGENT_ACTIVITY_LIMIT}
-            `),
-          )
+          const rows = type === VISIBLE_PART_TYPE.tool
+            ? Database.use((db) => db.all<typeof ToolPartRequestTable.$inferSelect>(sql`
+                SELECT p.id, p.message_id, p.time_created, p.data
+                FROM tool_part_request p
+                JOIN message m ON m.id = p.message_id
+                WHERE m.session_id = ${scope.sessionID}
+                  ${occurrence}
+                  ${rewind}
+                  ${page}
+                ORDER BY p.time_created DESC, p.id DESC
+                LIMIT ${CONVERSATION_AGENT_ACTIVITY_LIMIT}
+              `))
+            : Database.use((db) => db.all<typeof PartTable.$inferSelect>(sql`
+                SELECT p.id, p.message_id, p.time_created, p.time_updated, p.data
+                FROM part p
+                JOIN message m ON m.id = p.message_id
+                WHERE m.session_id = ${scope.sessionID}
+                  AND json_extract(p.data, '$.type') = ${type}
+                  ${occurrence}
+                  ${rewind}
+                  ${page}
+                ORDER BY p.time_created DESC, p.id DESC
+                LIMIT ${CONVERSATION_AGENT_ACTIVITY_LIMIT}
+              `))
           for (const row of rows) {
             const data = typeof row.data === "string" ? JSON.parse(row.data) : row.data
-            const activity = projectConversationAgentActivityPart(persistedPart({ ...row, data }))
+            const part = type === VISIBLE_PART_TYPE.tool
+              ? Database.use((db) => projectToolPartInTransaction(db, { ...row, data } as typeof ToolPartRequestTable.$inferSelect))
+              : Database.use((db) => persistedPart(db, { ...row, data } as typeof PartTable.$inferSelect))
+            const activity = part ? projectConversationAgentActivityPart(part) : undefined
             if (activity) projected.push(activity)
             if (projected.length >= CONVERSATION_AGENT_ACTIVITY_LIMIT) break
           }
@@ -344,15 +336,7 @@ export namespace MessageStore {
   }
 
   export const parts = fn(Identifier.schema("message"), async (messageID) => {
-    const rows = Database.use((db) =>
-      db
-        .select()
-        .from(PartTable)
-        .where(eq(PartTable.message_id, messageID))
-        .orderBy(PartTable.time_created, PartTable.id)
-        .all(),
-    )
-    return rows.map(persistedPart)
+    return partsByMessageIDs([messageID]).get(messageID) ?? []
   })
 
   export const get = fn(

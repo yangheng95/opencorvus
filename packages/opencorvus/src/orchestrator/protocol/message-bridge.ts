@@ -379,7 +379,7 @@ function partOrderKeysForEvent(properties: Record<string, unknown>): { messageOr
     part: db
       .select({ timeCreated: PartTable.time_created })
       .from(PartTable)
-      .where(and(eq(PartTable.id, partID), eq(PartTable.message_id, messageID), eq(PartTable.session_id, sessionID)))
+      .where(and(eq(PartTable.id, partID), eq(PartTable.message_id, messageID)))
       .get(),
   }))
   if (!rows.message) throw new Error(`bridge: message ${messageID} missing persisted row while enriching part event`)
@@ -676,6 +676,19 @@ function bridgeFailureSummary(type: string, error: string) {
   return `Session bridge failed to persist ${type}: ${error}`
 }
 
+function durableBridgePayload(input: Record<string, unknown>): Record<string, unknown> {
+  const payload = structuredClone(input)
+  delete payload.taskID
+  delete payload.sessionID
+  delete payload.interactionID
+  delete payload.orderKey
+  delete payload.channel
+  delete payload.agentID
+  delete payload.resolvedRole
+  delete payload.parentSessionID
+  return payload
+}
+
 function appendBridgePersistFailure(input: {
   taskID: string
   sessionID: string
@@ -689,8 +702,8 @@ function appendBridgePersistFailure(input: {
     type: "session.bridge.persist_failed",
     aggregate: "task",
     aggregate_id: input.taskID,
-    task_id: input.taskID,
-    session_id: null,
+    task_id: null,
+    session_id: input.sessionID,
     interaction_id: null,
     stream_id: null,
     source: "session.bridge",
@@ -700,12 +713,9 @@ function appendBridgePersistFailure(input: {
     reply_to: null,
     emitted_at: now,
     payload: {
-      taskID: input.taskID,
-      sessionID: input.sessionID,
       failed_type: input.type,
       error: input.error,
       summary: bridgeFailureSummary(input.type, input.error),
-      original: input.properties,
     },
   })
 }
@@ -727,7 +737,7 @@ async function appendBridgeEvent(
       type: input.type,
       aggregate: "task",
       aggregate_id: input.taskID,
-      task_id: input.taskID,
+      task_id: null,
       session_id: input.sessionID,
       interaction_id: null,
       stream_id: null,
@@ -738,7 +748,7 @@ async function appendBridgeEvent(
       reply_to: null,
       emitted_at: now,
       order_key: input.orderKey,
-      payload: input.payload,
+      payload: durableBridgePayload(input.payload),
     })
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err)
@@ -941,7 +951,7 @@ export function persistTaskSessionLifecycleInTransaction(type: string, propertie
     type,
     aggregate: "task",
     aggregate_id: taskID,
-    task_id: taskID,
+    task_id: null,
     session_id: sessionID,
     interaction_id: null,
     stream_id: null,
@@ -952,7 +962,7 @@ export function persistTaskSessionLifecycleInTransaction(type: string, propertie
     reply_to: null,
     emitted_at: Date.now(),
     order_key: orderKey,
-    payload,
+    payload: durableBridgePayload(payload),
   })
 }
 
@@ -1197,7 +1207,7 @@ export function ensureTaskMessageProtocolBridge() {
         cacheMessageInfo(event.properties)
         await bridgeMovedEvent(event.properties)
       },
-      { durableID: "task-message-protocol-bridge.message-moved" },
+      { durableID: "task-message-protocol-bridge.message-moved", effect: "idempotent_by_occurrence" },
     )
     Bus.subscribe(Message.Event.Updated, async (event) => {
       cacheMessageInfo(event.properties)

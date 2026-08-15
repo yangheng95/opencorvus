@@ -1,4 +1,4 @@
-import { PartTable } from "@/session/session.sql"
+import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import { Database, and, eq, sql } from "@/storage/db"
 import z from "zod"
 import { WORK_ARTIFACT_VALIDATION_RECEIPT_MIME, WorkArtifactValidationReceiptPayload } from "./presentation"
@@ -24,24 +24,26 @@ export function requireWorkArtifactValidationAuthority(input: {
 }): WorkArtifactValidationReceiptPayload {
   const rows = Database.use((db) =>
     db
-      .select({ id: PartTable.id, data: PartTable.data })
+      .select({ id: PartTable.id, outcome: ToolPartOutcomeTable.data })
       .from(PartTable)
+      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
+      .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
       .where(
         and(
-          eq(PartTable.session_id, input.sessionID),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
+          eq(MessageTable.session_id, input.sessionID),
+          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') = 'work_artifact_validate'`,
-          sql`json_extract(${PartTable.data}, '$.state.status') = 'completed'`,
+          sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
         ),
       )
       .all(),
   )
   for (const row of rows) {
-    const state = (row.data as { state?: { output?: unknown } }).state
-    if (typeof state?.output !== "string") continue
+    const output = (row.outcome as { output?: unknown }).output
+    if (typeof output !== "string") continue
     let decoded: unknown
     try {
-      decoded = JSON.parse(state.output)
+      decoded = JSON.parse(output)
     } catch {
       continue
     }

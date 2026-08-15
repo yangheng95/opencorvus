@@ -2,8 +2,9 @@ import z from "zod"
 import { Database, and, eq } from "@/storage/db"
 import { Budget } from "./model"
 import { EngineConfig } from "./config"
-import { EngineInteractionRequestTable, type EngineBudget, type EngineTaskStatus } from "./engine.sql"
+import { EngineInteractionOutcomeTable, EngineInteractionRequestTable, type EngineBudget, type EngineTaskStatus } from "./engine.sql"
 import type { TaskRow } from "./store"
+import { listInteractions } from "./store"
 
 export const ORCHESTRATOR_POLL_INTERVAL_MS = 500
 export { deriveTitle } from "@/title/derive"
@@ -63,20 +64,9 @@ const CLARIFICATION_MAX_ENTRIES = 30
 const CLARIFICATION_QA_CHAR_CAP = 800
 
 export function clarificationTranscriptSection(taskID: string): string {
-  const rows = Database.use((db) =>
-    db
-      .select()
-      .from(EngineInteractionRequestTable)
-      .where(
-        and(
-          eq(EngineInteractionRequestTable.task_id, taskID),
-          eq(EngineInteractionRequestTable.request_type, "question"),
-          eq(EngineInteractionRequestTable.status, "answered"),
-        ),
-      )
-      .orderBy(EngineInteractionRequestTable.time_resolved)
-      .all(),
-  )
+  const rows = listInteractions(taskID).filter((interaction) => interaction.request_type === "question" && interaction.status === "answered")
+    .map((interaction) => ({ request: interaction, response: interaction.response, resolvedAt: interaction.time_resolved }))
+    .toSorted((left, right) => (left.resolvedAt ?? 0) - (right.resolvedAt ?? 0))
   if (rows.length === 0) return ""
   const entries: string[] = []
   const trim = (s: string) =>
@@ -84,7 +74,7 @@ export function clarificationTranscriptSection(taskID: string): string {
       ? s.slice(0, CLARIFICATION_QA_CHAR_CAP) + `… [${s.length - CLARIFICATION_QA_CHAR_CAP} chars omitted]`
       : s
   for (const row of rows) {
-    const payload = (row.payload ?? {}) as Record<string, unknown>
+    const payload = (row.request.payload ?? {}) as Record<string, unknown>
     const response = (row.response ?? {}) as Record<string, unknown>
     const questions = Array.isArray(payload.questions) ? payload.questions : []
     const rawAnswers = response.answers

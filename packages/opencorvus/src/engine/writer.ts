@@ -5,7 +5,8 @@ import { SessionPromptState } from "@/session/prompt/state"
 import { Instance } from "@/project/instance"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "./cancellation-scope"
 import { taskIDForSession } from "./task-session-lineage"
-import { findTask } from "./store"
+import { findTask, projectTaskRowInTransaction, taskDeletedInTransaction } from "./store"
+import { isTaskActive } from "./task-status"
 import { persistProcessShutdownRecoveryHandoffs } from "./task-root-ingress-delivery"
 import { Database, and, eq, inArray, isNull } from "@/storage/db"
 import { EngineTaskTable } from "./engine.sql"
@@ -122,17 +123,18 @@ export async function terminateCurrentProcessOwnedExecution(input: {
       ? []
       : Database.use((db) =>
           db
-            .select({ sessionID: SessionTable.id })
+            .select({ sessionID: SessionTable.id, task: EngineTaskTable })
             .from(EngineTaskTable)
             .innerJoin(SessionTable, eq(SessionTable.id, EngineTaskTable.session_id))
             .where(
               and(
                 inArray(SessionTable.directory, affectedDirectories),
-                isNull(EngineTaskTable.time_completed),
                 isNull(EngineTaskTable.time_archived),
               ),
             )
             .all()
+            .filter((row) => !taskDeletedInTransaction(db, row.task.id))
+            .filter((row) => isTaskActive(projectTaskRowInTransaction(db, row.task)))
             .map((row) => row.sessionID),
         )
 

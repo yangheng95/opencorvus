@@ -1,11 +1,16 @@
 import { Identifier } from "@/id/id"
 
-/** One durable wake owns one domain-separated visible control occurrence. */
-export function orchestratorControlOccurrenceIdentity(wakeID: string) {
-  const exactWakeID = wakeID.trim()
-  if (!exactWakeID) throw new Error("Orchestrator control occurrence requires an exact wake identity")
+/** One real continuation edge is identified only by its business ingress and
+ * exact predecessor. Ordinals and attempts are derived from the chain. */
+export function orchestratorControlOccurrenceIdentity(ingressID: string, predecessorID: string) {
+  const ingress = ingressID.trim()
+  const predecessor = predecessorID.trim()
+  if (!ingress || !predecessor) {
+    throw new Error("Orchestrator control occurrence requires exact ingress and predecessor identities")
+  }
+  const material = `orchestrator-control-v2\0${ingress}\0${predecessor}`
   return {
-    messageID: Identifier.deterministic("message", `orchestrator-control\0${exactWakeID}`),
-    partID: Identifier.deterministic("part", `orchestrator-control\0${exactWakeID}`),
+    messageID: Identifier.deterministic("message", material),
+    partID: Identifier.deterministic("part", material),
   }
 }

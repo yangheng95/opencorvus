@@ -1,8 +1,6 @@
 import { Identifier } from "@/id/id"
 import { ProtocolStore } from "@/protocol/store"
-import { Database, eq } from "@/storage/db"
-import { EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
-import { isTaskTerminal } from "./task-status"
+import { Database } from "@/storage/db"
 import {
   TASK_CANCELLED_EVENT_TYPE,
   TaskCancellationProjection,
@@ -15,6 +13,7 @@ import {
   ExecutionCancellationError,
   createExecutionCancellationOrigin,
 } from "@/session/prompt/cancellation"
+import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 
 export function taskCancellationAuthorityExecutionError(
   taskID: string,
@@ -28,17 +27,13 @@ export function taskCancellationAuthorityExecutionErrorInTransaction(
   taskID: string,
   operation: string,
 ): ExecutionCancellationError | undefined {
-  const authority = db
-    .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
-    .from(EngineTaskCancellationAuthorityTable)
-    .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
-    .get()
-  if (!authority) return undefined
-  const request = requireTaskCancellationRequestEvent(taskID, authority.requestEventID)
+  const projection = taskLifecycleProjectionInTransaction(db, taskID)
+  if (projection.status !== "cancelling" || !projection.requestEventID) return undefined
+  const request = requireTaskCancellationRequestEvent(taskID, projection.requestEventID)
   const origin = request.origin
   return new ExecutionCancellationError({
     source: "dispatch_preparation",
-    message: `${operation} is inapplicable under Task ${taskID} cancellation ${authority.requestEventID}`,
+    message: `${operation} is inapplicable under Task ${taskID} cancellation ${projection.requestEventID}`,
     origin: createExecutionCancellationOrigin({
       actor: origin.actor,
       source: origin.source,
@@ -50,7 +45,7 @@ export function taskCancellationAuthorityExecutionErrorInTransaction(
       ...(origin.messageID ? { messageID: origin.messageID } : {}),
       ...(origin.toolCallID ? { toolCallID: origin.toolCallID } : {}),
       ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
-      causationEventID: authority.requestEventID,
+      causationEventID: projection.requestEventID,
     }),
   })
 }
@@ -100,19 +95,13 @@ export function pendingTaskCancellationProjection(taskID: string) {
 }
 
 export function findPendingTaskCancellationRequestEvent(taskID: string) {
-  const row = Database.use((db) =>
-    db
-      .select({ task: EngineTaskTable, requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
-      .from(EngineTaskTable)
-      .leftJoin(
-        EngineTaskCancellationAuthorityTable,
-        eq(EngineTaskCancellationAuthorityTable.task_id, EngineTaskTable.id),
-      )
-      .where(eq(EngineTaskTable.id, taskID))
-      .get(),
-  )
-  if (!row?.requestEventID || isTaskTerminal(row.task)) return undefined
-  const requested = ProtocolStore.requireEvent(row.requestEventID)
+  const requestEventID = Database.use((db) => {
+    const projection = taskLifecycleProjectionInTransaction(db, taskID)
+    if (projection.status !== "cancelling") return undefined
+    return projection.requestEventID
+  })
+  if (!requestEventID) return undefined
+  const requested = ProtocolStore.requireEvent(requestEventID)
   const request = parseTaskCancellationRequestEvent(taskID, requested.id, requested)
   return { requested, request }
 }

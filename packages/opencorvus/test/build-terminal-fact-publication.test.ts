@@ -37,6 +37,9 @@ import {
 } from "@/engine/build-observation-cleanup"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { EngineService } from "@/task-api"
+import { writeTaskUpdateInTransaction } from "@/engine/state"
+import { findTask } from "@/engine/store"
+import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
 
@@ -114,7 +117,7 @@ async function createProductionFixture(projectPath: string, title: string) {
     productPillar: "code",
     source: "test",
     priority: "normal",
-    metadata: {},
+    metadata: { actor: "user" },
     projectID: Instance.project.id,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
@@ -187,12 +190,13 @@ function terminalFacts(taskID: string) {
 
 function completeTask(taskID: string) {
   const now = Date.now()
-  Database.use((db) =>
-    db.update(EngineTaskTable)
-      .set({ time_completed: now, time_updated: now })
-      .where(eq(EngineTaskTable.id, taskID))
-      .run(),
-  )
+  Database.transaction((db) => writeTaskUpdateInTransaction({
+    db,
+    taskID,
+    values: { status: "completed" },
+    summary: "Build terminal publication test completed",
+    now,
+  }))
 }
 
 async function createTaskDeletionObservation(input: {
@@ -205,6 +209,7 @@ async function createTaskDeletionObservation(input: {
     observationID,
     taskID: input.taskID,
     gitDir: await resolveBuildObservationGitDir(input.projectPath),
+    activate: false,
   })
   const baseRef = await pinBuildObservationTree({
     worktreeDir: input.projectPath,
@@ -261,8 +266,12 @@ async function executeProductionBuild(input: {
   return { outcome, workflow: (await describeTask(input.fixture.taskID)).workflow_execution }
 }
 
-function installPhysicalBuildSpies() {
-  const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
+  await InstanceBootstrap()
+  const provider = options?.mockProvider === false
+    ? undefined
+    : spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+  const ingressRunner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => {} })
   const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
     const assistant = input.assistantMessage
     return {
@@ -283,14 +292,20 @@ function installPhysicalBuildSpies() {
       },
     } as any
   })
-  return { [Symbol.dispose]() { processor.mockRestore(); provider.mockRestore() } }
+  return {
+    [Symbol.dispose]() {
+      ingressRunner[Symbol.dispose]()
+      processor.mockRestore()
+      provider?.mockRestore()
+    },
+  }
 }
 
 describe.serial("Build terminal-fact publication", () => {
   test("the physical Build retries its exact publication before final settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build publication recovery")
       const attempts: string[] = []
       const settled = await executeProductionBuild({
@@ -324,7 +339,7 @@ describe.serial("Build terminal-fact publication", () => {
   test("an exhausted physical publication settles partial and removes both private refs", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build publication exhausted")
       const settled = await executeProductionBuild({
         fixture,
@@ -351,7 +366,7 @@ describe.serial("Build terminal-fact publication", () => {
   test("the canonical exact identity rejects payload drift after production publication", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build publication drift")
       await executeProductionBuild({ fixture })
       const fact = terminalFacts(fixture.taskID)[0]!
@@ -373,22 +388,17 @@ describe.serial("Build terminal-fact publication", () => {
   test("cleanup failure retains one durable owner and recovery deletes its exact refs before settlement retry", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build cleanup recovery")
       let cleanupAttempts = 0
-      const gitDirectory = path.join(project.path, ".git")
-      const unavailableGitDirectory = path.join(project.path, ".git-unavailable")
       await expect(executeProductionBuild({
         fixture,
         writer() { throw new Error("publication unavailable") },
         async cleanup(input) {
           cleanupAttempts++
-          await fs.rename(gitDirectory, unavailableGitDirectory)
-          try {
-            await settleBuildObservationCleanup(input)
-          } finally {
-            await fs.rename(unavailableGitDirectory, gitDirectory)
-          }
+          await settleBuildObservationCleanup(input, {
+            async deleteRefs() { throw new Error("Git metadata unavailable") },
+          })
         },
       })).rejects.toThrow("remains pending")
       const owner = buildObservationCleanupRowsForTask(fixture.taskID)[0]!
@@ -407,10 +417,52 @@ describe.serial("Build terminal-fact publication", () => {
     } })
   }, 60_000)
 
+  test("lease-renewal loss aborts the stale cleanup executor and lets one successor settle", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+      using _provider = { [Symbol.dispose]() { provider.mockRestore() } }
+      const fixture = await createProductionFixture(project.path, "Build cleanup lease loss")
+      const observationID = await createTaskDeletionObservation({
+        projectPath: project.path,
+        taskID: fixture.taskID,
+        retained: false,
+      })
+      let staleAborted = false
+      await expect(settleBuildObservationCleanup(
+        { observationID },
+        {
+          leaseMilliseconds: 20,
+          renewalMilliseconds: 2,
+          renewLease() { throw new Error("simulated lease fence loss") },
+          deleteRefs: async (_row, signal) => new Promise<void>((_resolve, reject) => {
+            signal.addEventListener("abort", () => {
+              staleAborted = true
+              reject(signal.reason)
+            }, { once: true })
+          }),
+        },
+      )).rejects.toThrow("remains pending")
+      expect({ staleAborted, projection: buildObservationCleanupRowsForTask(fixture.taskID)[0] }).toMatchObject({
+        staleAborted: true,
+        projection: { status: "active", attempts: 0 },
+      })
+      await new Promise((resolve) => setTimeout(resolve, 25))
+      let successorCalls = 0
+      await settleBuildObservationCleanup({ observationID }, {
+        async deleteRefs() { successorCalls++ },
+      })
+      expect({ successorCalls, projection: buildObservationCleanupRowsForTask(fixture.taskID)[0] }).toMatchObject({
+        successorCalls: 1,
+        projection: { status: "complete", attempts: 1, last_error: null },
+      })
+    } })
+  }, 60_000)
+
   test("production provenance failure publishes one typed partial only after private refs are cleaned", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build provenance failure")
       const settled = await executeProductionBuild({
         fixture,
@@ -435,10 +487,12 @@ describe.serial("Build terminal-fact publication", () => {
 
   test("project bootstrap resumes the same pending cleanup owner after project close and reopen", async () => {
     await using project = await memoryProject()
-    using _spies = installPhysicalBuildSpies()
+    const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+    using _provider = { [Symbol.dispose]() { provider.mockRestore() } }
     let taskID = ""
     let observationID = ""
     await Instance.provide({ directory: project.path, fn: async () => {
+      using _spies = await installPhysicalBuildSpies({ mockProvider: false })
       const fixture = await createProductionFixture(project.path, "Build startup cleanup recovery")
       taskID = fixture.taskID
       let movedGit = false
@@ -447,19 +501,15 @@ describe.serial("Build terminal-fact publication", () => {
         writer() { throw new Error("publication unavailable") },
         async cleanup(input) {
           observationID = input.observationID
-          const gitDirectory = path.join(project.path, ".git")
-          const unavailableGitDirectory = path.join(project.path, ".git-unavailable")
-          await fs.rename(gitDirectory, unavailableGitDirectory)
           movedGit = true
-          try {
-            await settleBuildObservationCleanup(input)
-          } finally {
-            await fs.rename(unavailableGitDirectory, gitDirectory)
-          }
+          await settleBuildObservationCleanup(input, {
+            async deleteRefs() { throw new Error("Git metadata unavailable") },
+          })
         },
       })).rejects.toThrow("remains pending")
       expect(movedGit).toBe(true)
       expect(buildObservationCleanupRowsForTask(taskID)[0]).toMatchObject({ status: "pending", attempts: 1 })
+      completeTask(taskID)
     } })
     await Instance.disposeAll()
     await Instance.provide({
@@ -477,10 +527,10 @@ describe.serial("Build terminal-fact publication", () => {
     })
   }, 60_000)
 
-  test("Task deletion settles retained observation refs before deleting their durable owner", async () => {
+  test("Task deletion settles retained observation refs before appending its audit-preserving tombstone", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build retained cleanup deletion")
       await createTaskDeletionObservation({ projectPath: project.path, taskID: fixture.taskID, retained: true })
       const owner = buildObservationCleanupRowsForTask(fixture.taskID)[0]!
@@ -488,17 +538,23 @@ describe.serial("Build terminal-fact publication", () => {
       completeTask(fixture.taskID)
       expect(await EngineService.deleteTask(fixture.taskID)).toBe(true)
       expect({
-        task: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, fixture.taskID)).get()),
+        publicTask: findTask(fixture.taskID),
+        retainedTask: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, fixture.taskID)).get()),
         owners: buildObservationCleanupRowsForTask(fixture.taskID),
         headRef: await gitRef(project.path, buildObservationRefName(owner.observation_id, "head")),
-      }).toEqual({ task: undefined, owners: [], headRef: undefined })
+      }).toMatchObject({
+        publicTask: undefined,
+        retainedTask: { id: fixture.taskID, session_id: fixture.root.id },
+        owners: [{ observation_id: owner.observation_id, status: "complete" }],
+        headRef: undefined,
+      })
     } })
   }, 60_000)
 
   test("Task deletion preserves its Task and owner when Git metadata is missing, then retries the same owner", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
-      using _spies = installPhysicalBuildSpies()
+      using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build deletion cleanup recovery")
       await createTaskDeletionObservation({ projectPath: project.path, taskID: fixture.taskID, retained: false })
       const owner = buildObservationCleanupRowsForTask(fixture.taskID)[0]!
@@ -517,9 +573,14 @@ describe.serial("Build terminal-fact publication", () => {
       }
       expect(await EngineService.deleteTask(fixture.taskID)).toBe(true)
       expect({
-        task: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, fixture.taskID)).get()),
+        publicTask: findTask(fixture.taskID),
+        retainedTask: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, fixture.taskID)).get()),
         owners: buildObservationCleanupRowsForTask(fixture.taskID),
-      }).toEqual({ task: undefined, owners: [] })
+      }).toMatchObject({
+        publicTask: undefined,
+        retainedTask: { id: fixture.taskID },
+        owners: [{ observation_id: owner.observation_id, status: "complete" }],
+      })
     } })
   }, 60_000)
 })

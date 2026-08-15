@@ -387,7 +387,7 @@ function persistedMessage(row: typeof MessageTable.$inferSelect, parts: Array<ty
       ...part.data,
       id: part.id,
       messageID: part.message_id,
-      sessionID: part.session_id,
+      sessionID: row.session_id,
     }),
   )
   return { info, parts: parsedParts }
@@ -421,7 +421,7 @@ function previousContext(
     const parts = db
       .select()
       .from(PartTable)
-      .where(and(eq(PartTable.session_id, sessionID), eq(PartTable.message_id, row.id)))
+      .where(eq(PartTable.message_id, row.id))
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
       .all()
     const message = persistedMessage(row, parts)

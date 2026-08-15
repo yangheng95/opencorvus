@@ -1,10 +1,11 @@
 import { sql } from "drizzle-orm"
-import { sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, integer, index, primaryKey, uniqueIndex, check } from "drizzle-orm/sqlite-core"
 import { ProjectTable } from "../project/project.sql"
 import type { Message } from "./message"
 import type { CapabilityRules } from "@/capability/rules"
 import { Timestamps } from "@/storage/schema.sql"
 import type { InteractiveArtifactPayload } from "@/interactive-artifact/schema"
+import type { ToolFailureCause } from "./tool-failure-cause"
 
 /**
  * SessionKind — the session's role/purpose, fixed at creation time.
@@ -83,7 +84,53 @@ export const SESSION_KINDS = [
 
 export type SessionKind = (typeof SESSION_KINDS)[number]
 
-export type PartData = Omit<Message.Part, "id" | "sessionID" | "messageID" | "orderKey">
+type StripPartIdentity<T> = T extends unknown ? Omit<T, "id" | "sessionID" | "messageID" | "orderKey"> : never
+
+/** Immutable write-ahead Tool effect request. Runtime status is projected from
+ * its optional outcome fact and must never be stored on this row. */
+export type ToolRequestPartData = {
+  type: "tool-request"
+  callID: string
+  tool: string
+  input: Message.ToolInput
+  title?: string
+  metadata?: Record<string, unknown>
+  time: { start: number }
+}
+
+export type ToolOutcomePartData =
+  | {
+      outcome: "completed"
+      output: string
+      resultAttemptID?: never
+      title: string
+      metadata: Record<string, unknown>
+      time: { end: number }
+      attachments?: Message.FilePart[]
+    }
+  | {
+      outcome: "completed"
+      resultAttemptID: string
+      output?: never
+      title: string
+      metadata: Record<string, unknown>
+      time: { end: number }
+      attachments?: Message.FilePart[]
+    }
+  | {
+      outcome: "failed"
+      failure: ToolFailureCause
+      metadata?: Record<string, unknown>
+      time: { end: number }
+    }
+
+export type ProviderActivityOutcomeData = {
+  outcome: "done" | "failed" | "aborted"
+  error_class?: string
+  error?: { name: string; message: string }
+}
+
+export type PartData = StripPartIdentity<Exclude<Message.Part, Message.ToolPart>>
 type InfoData = Omit<Message.Info, "id" | "sessionID">
 
 export const SessionTable = sqliteTable(
@@ -108,7 +155,6 @@ export const SessionTable = sqliteTable(
     /** Free-form per-session metadata. */
     metadata: text({ mode: "json" }).$type<Record<string, unknown>>(),
     ...Timestamps,
-    time_compacting: integer(),
     time_archived: integer(),
     /** User-facing pin timestamp. Pinning changes Work Ledger rank without
      *  rewriting conversational activity time. */
@@ -148,23 +194,109 @@ export const PartTable = sqliteTable(
     message_id: text()
       .notNull()
       .references(() => MessageTable.id, { onDelete: "cascade" }),
-    session_id: text().notNull(),
     ...Timestamps,
     data: text({ mode: "json" }).notNull().$type<PartData>(),
   },
   (table) => [
     index("part_message_idx").on(table.message_id),
-    index("part_session_idx").on(table.session_id),
-    index("part_session_time_idx").on(table.session_id, table.time_created),
-    index("part_session_type_time_idx").on(
-      table.session_id,
+    index("part_message_time_idx").on(table.message_id, table.time_created),
+    index("part_type_time_idx").on(
       sql`json_extract(${table.data}, '$.type')`,
       table.time_created,
       table.id,
     ),
-    uniqueIndex("part_message_tool_call_idx")
-      .on(table.message_id, sql<string>`json_extract(${table.data}, '$.callID')`)
-      .where(sql`json_extract(${table.data}, '$.type') = 'tool'`),
+    check("part_excludes_tool_effect_state", sql`json_extract(${table.data}, '$.type') NOT IN ('tool', 'tool-request', 'tool-outcome')`),
+  ],
+)
+
+export const ToolPartRequestTable = sqliteTable(
+  "tool_part_request",
+  {
+    id: text().primaryKey(),
+    message_id: text().notNull().references(() => MessageTable.id, { onDelete: "cascade" }),
+    data: text({ mode: "json" }).notNull().$type<ToolRequestPartData>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    index("tool_part_request_message_idx").on(table.message_id, table.time_created),
+    uniqueIndex("tool_part_request_call_idx").on(
+      table.message_id,
+      sql<string>`json_extract(${table.data}, '$.callID')`,
+    ),
+    check("tool_part_request_fact_shape", sql`
+      json_extract(${table.data}, '$.type') = 'tool-request'
+      AND json_type(${table.data}, '$.callID') = 'text'
+      AND json_type(${table.data}, '$.tool') = 'text'
+      AND json_type(${table.data}, '$.time.start') IN ('integer', 'real')
+      AND json_type(${table.data}, '$.state') IS NULL
+    `),
+  ],
+)
+
+/** Exactly one immutable outcome Part may settle a Tool request Part. */
+export const ToolPartOutcomeTable = sqliteTable(
+  "tool_part_outcome",
+  {
+    id: text().primaryKey(),
+    request_part_id: text()
+      .notNull()
+      .references(() => ToolPartRequestTable.id, { onDelete: "cascade" }),
+    data: text({ mode: "json" }).notNull().$type<ToolOutcomePartData>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("tool_part_outcome_request_idx").on(table.request_part_id),
+    check("tool_part_outcome_fact_shape", sql`
+      json_type(${table.data}, '$.time.end') IN ('integer', 'real')
+      AND json_type(${table.data}, '$.input') IS NULL AND json_type(${table.data}, '$.status') IS NULL
+      AND (
+        COALESCE((json_extract(${table.data}, '$.outcome')='completed'
+          AND json_type(${table.data}, '$.title')='text'
+          AND json_type(${table.data}, '$.metadata')='object'
+          AND json_type(${table.data}, '$.failure') IS NULL
+          AND ((json_type(${table.data}, '$.output')='text' AND json_type(${table.data}, '$.resultAttemptID') IS NULL)
+            OR (json_type(${table.data}, '$.output') IS NULL AND json_type(${table.data}, '$.resultAttemptID')='text'))),0)
+        OR
+        COALESCE((json_extract(${table.data}, '$.outcome')='failed'
+          AND json_type(${table.data}, '$.failure')='object'
+          AND json_type(${table.data}, '$.output') IS NULL
+          AND json_type(${table.data}, '$.resultAttemptID') IS NULL
+          AND json_type(${table.data}, '$.title') IS NULL),0)
+      )
+    `),
+  ],
+)
+
+/** One immutable write-ahead request per provider activity. The linked
+ * assistant Message supplies the exact model, parent and activation identity. */
+export const ProviderActivityRequestTable = sqliteTable(
+  "provider_activity_request",
+  {
+    id: text().primaryKey(),
+    assistant_message_id: text().notNull().references(() => MessageTable.id, { onDelete: "cascade" }),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("provider_activity_request_message_idx").on(table.assistant_message_id),
+  ],
+)
+
+/** Exactly one immutable provider result settles a provider activity. */
+export const ProviderActivityOutcomeTable = sqliteTable(
+  "provider_activity_outcome",
+  {
+    id: text().primaryKey(),
+    request_id: text().notNull().references(() => ProviderActivityRequestTable.id, { onDelete: "cascade" }),
+    data: text({ mode: "json" }).notNull().$type<ProviderActivityOutcomeData>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("provider_activity_outcome_request_idx").on(table.request_id),
+    check("provider_activity_outcome_fact_shape", sql`
+      json_extract(${table.data}, '$.outcome') IN ('done', 'failed', 'aborted')
+      AND json_type(${table.data}, '$.status') IS NULL
+      AND json_type(${table.data}, '$.attempt') IS NULL
+    `),
   ],
 )
 
@@ -197,16 +329,36 @@ export const SessionControlRecordTable = sqliteTable(
       .notNull()
       .references(() => SessionTable.id, { onDelete: "cascade" }),
     kind: text().notNull().$type<SessionControlKind>(),
-    status: text().notNull().$type<SessionControlStatus>(),
-    owner: text(),
+    source: text(),
     payload: text({ mode: "json" }).notNull().$type<Record<string, unknown>>(),
-    ...Timestamps,
-    time_consumed: integer(),
+    time_created: integer().notNull(),
   },
   (table) => [
     index("session_control_session_idx").on(table.session_id),
-    index("session_control_session_status_idx").on(table.session_id, table.status),
     index("session_control_kind_idx").on(table.kind),
+  ],
+)
+
+/** Immutable amendment or terminal receipt for one Session control input. */
+export const SessionControlEventTable = sqliteTable(
+  "session_control_event",
+  {
+    id: text().primaryKey(),
+    control_id: text().notNull().references(() => SessionControlRecordTable.id, { onDelete: "cascade" }),
+    kind: text({ enum: ["amended", "consumed", "failed"] }).notNull(),
+    payload: text({ mode: "json" }).$type<Record<string, unknown>>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    index("session_control_event_control_idx").on(table.control_id, table.time_created),
+    uniqueIndex("session_control_event_terminal_idx")
+      .on(table.control_id)
+      .where(sql`${table.kind} IN ('consumed', 'failed')`),
+    check("session_control_event_shape", sql`
+      (${table.kind}='amended' AND ${table.payload} IS NOT NULL)
+      OR (${table.kind}='consumed' AND ${table.payload} IS NULL)
+      OR (${table.kind}='failed' AND json_type(${table.payload}, '$.error')='text')
+    `),
   ],
 )
 

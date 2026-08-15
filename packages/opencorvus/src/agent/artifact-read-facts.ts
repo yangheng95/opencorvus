@@ -19,7 +19,7 @@ import {
   type ArtifactSelectionReference,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
-import { MessageTable, PartTable } from "@/session/session.sql"
+import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import {
@@ -157,29 +157,30 @@ function completedToolOutputValuesBeforeAction(input: {
   const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
   const rows = Database.use((db) =>
     db
-      .select({ id: PartTable.id, data: PartTable.data })
+      .select({ id: PartTable.id, request: PartTable.data, outcome: ToolPartOutcomeTable.data })
       .from(PartTable)
+      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
       .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
       .where(
         and(
-          eq(PartTable.session_id, input.sessionID),
+          eq(MessageTable.session_id, input.sessionID),
           ...factScopeConditions({
             turnParentMessageID: scope.turnParentMessageID,
             beforeMessage: scope.message,
           }),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
+          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') IN (${sql.join(
             input.toolNames.map((toolName) => sql`${toolName}`),
             sql`, `,
           )})`,
-          sql`json_extract(${PartTable.data}, '$.state.status') = 'completed'`,
+          sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
       .all(),
   )
   return rows.map((row) => {
-    const output = (row.data as { state?: { output?: unknown } }).state?.output
+    const output = (row.outcome as { output?: unknown }).output
     if (typeof output !== "string") {
       throw new Error(`Completed Artifact locator-producing tool part ${row.id} has no canonical string output.`)
     }
@@ -369,18 +370,20 @@ export function completeArtifactReadLocatorsForSession(
         id: PartTable.id,
         messageID: PartTable.message_id,
         messageTimeCreated: MessageTable.time_created,
-        data: PartTable.data,
+        request: PartTable.data,
+        outcome: ToolPartOutcomeTable.data,
       })
       .from(PartTable)
+      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
       .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
       .where(
         and(
-          eq(PartTable.session_id, sessionID),
+          eq(MessageTable.session_id, sessionID),
           ...(options?.afterTimeCreated !== undefined ? [gt(PartTable.time_created, options.afterTimeCreated)] : []),
           ...factScopeConditions(options),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
+          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'panel')`,
-          sql`json_extract(${PartTable.data}, '$.state.status') = 'completed'`,
+          sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
@@ -388,16 +391,12 @@ export function completeArtifactReadLocatorsForSession(
   )
   const facts: ArtifactReadWindowFact[] = []
   for (const row of rows) {
-    const data = row.data as {
+    const data = row.request as {
       tool?: unknown
-      state?: { input?: unknown; output?: unknown }
+      input?: unknown
     }
-    const state = (
-      row.data as {
-        state?: { input?: unknown; output?: unknown }
-      }
-    ).state
-    const rawInput = state?.input
+    const state = { input: data.input, output: (row.outcome as { output?: unknown }).output }
+    const rawInput = state.input
     if (data.tool === "panel") {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
       const unwrappedInput = unwrapPersistedProviderOperation(rawInput)
@@ -509,17 +508,19 @@ export function selectedArtifactFactsForSession(
         id: PartTable.id,
         messageID: PartTable.message_id,
         messageTimeCreated: MessageTable.time_created,
-        data: PartTable.data,
+        request: PartTable.data,
+        outcome: ToolPartOutcomeTable.data,
       })
       .from(PartTable)
+      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
       .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
       .where(
         and(
-          eq(PartTable.session_id, sessionID),
+          eq(MessageTable.session_id, sessionID),
           ...factScopeConditions(options),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
+          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') = 'artifact_select'`,
-          sql`json_extract(${PartTable.data}, '$.state.status') = 'completed'`,
+          sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
@@ -527,8 +528,11 @@ export function selectedArtifactFactsForSession(
   )
   const facts = new Map<string, ArtifactSelectionFact>()
   for (const row of rows) {
-    const state = (row.data as { state?: { input?: unknown; output?: unknown } }).state
-    if (typeof state?.output !== "string") {
+    const state = {
+      input: (row.request as { input?: unknown }).input,
+      output: (row.outcome as { output?: unknown }).output,
+    }
+    if (typeof state.output !== "string") {
       throw new Error(`Completed artifact_select tool part ${row.id} has no canonical string output.`)
     }
     let decoded: unknown
@@ -765,10 +769,11 @@ export function artifactProvenanceFactHighWatermarkForSession(
     db
       .select({ partID: PartTable.id, timeCreated: PartTable.time_created })
       .from(PartTable)
+      .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
       .where(
         and(
-          eq(PartTable.session_id, sessionID),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
+          eq(MessageTable.session_id, sessionID),
+          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
           sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'artifact_select', 'panel')`,
         ),
       )

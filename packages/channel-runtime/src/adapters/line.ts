@@ -145,6 +145,7 @@ export class LineAdapter implements ChannelAdapter {
       const text = (event.message?.text ?? "").trim()
       if (!channel || !user || !thread || !text) continue
       await this.handler({
+        id: thread,
         platform: this.platform,
         channel,
         thread,

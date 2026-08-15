@@ -25,6 +25,7 @@ import {
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { PermissionExecutionResultTable } from "../src/permission/permission.sql"
+import { ToolPartOutcomeTable } from "../src/session/session.sql"
 import { PermissionAuthority } from "../src/permission/authority"
 import { Identifier } from "../src/id/id"
 import { MCP } from "../src/mcp"
@@ -1467,7 +1468,6 @@ describe("single Tool-result turn-control protocol", () => {
           db
             .select()
             .from(PermissionExecutionResultTable)
-            .where(eq(PermissionExecutionResultTable.session_id, fixture.session.id))
             .all(),
         )
         const durableValue = stored[0]?.result.kind === "json" ? stored[0].result.value : undefined
@@ -1486,12 +1486,12 @@ describe("single Tool-result turn-control protocol", () => {
           partStatus: "running",
           durable: [
             expect.objectContaining({
-              session_id: fixture.session.id,
-              tool_part_id: beforePart?.id,
+              attempt_id: expect.any(String),
               result: expect.objectContaining({
                 kind: "json",
                 value: expect.objectContaining({ metadata: expect.any(Object) }),
               }),
+              time_created: expect.any(Number),
             }),
           ],
           waitEffects: 1,
@@ -1832,8 +1832,6 @@ describe("single Tool-result turn-control protocol", () => {
             .insert(PermissionExecutionResultTable)
             .values({
               attempt_id: "pat_legacy_tool_control",
-              session_id: session.id,
-              tool_part_id: part.id,
               result: {
                 kind: "json",
                 value: {
@@ -1842,7 +1840,6 @@ describe("single Tool-result turn-control protocol", () => {
                   metadata: { opencorvusParkAfterToolResult: true },
                 },
               },
-              result_sha256: "1".repeat(64),
               time_created: Date.now(),
             })
             .run(),
@@ -1891,8 +1888,7 @@ describe("single Tool-result turn-control protocol", () => {
           tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
           modelID: model.id,
           providerID: model.providerID,
-          time: { created: Date.now(), completed: Date.now() },
-          finish: "tool-calls",
+          time: { created: Date.now() },
         })
         const toolStart = Date.now()
         const part = await Session.updatePart({
@@ -1911,33 +1907,14 @@ describe("single Tool-result turn-control protocol", () => {
             time: { start: toolStart, end: toolStart + 1 },
           },
         })
-        const permissionID = Identifier.ascending("permission")
-        Database.transaction((db) =>
-          db
-            .insert(PermissionExecutionResultTable)
-            .values({
-              attempt_id: permissionID,
-              session_id: session.id,
-              tool_part_id: part.id,
-              result: {
-                kind: "json",
-                value: {
-                  title: "Wait Scheduled",
-                  output: "scheduled",
-                  metadata: { opencorvusParkAfterToolResult: true },
-                },
-              },
-              result_sha256: "2".repeat(64),
-              time_created: Date.now(),
-            })
-            .run(),
-        )
+        await Session.updateMessage({
+          ...assistant,
+          time: { ...assistant.time, completed: Date.now() },
+          finish: "tool-calls",
+        })
         Database.close()
         const reopened = Database.Client()
-        expect(reopened.select().from(PermissionExecutionResultTable).get()).toMatchObject({
-          attempt_id: permissionID,
-          tool_part_id: part.id,
-        })
+        expect(reopened.select().from(ToolPartOutcomeTable).get()).toMatchObject({ request_part_id: part.id })
       },
     })
   }, 120_000)

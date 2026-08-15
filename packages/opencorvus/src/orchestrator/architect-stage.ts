@@ -308,7 +308,6 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
                   EngineEvent.TaskUpdated,
                   {
                     taskID,
-                    status: deriveTaskStatus(task),
                     summary: `Projected agent "${dispatch.agentID}" persisted a conflicting ContractGraph fact for Orchestrator judgment`,
                   },
                   { source: "orchestrator.architect" },
@@ -350,7 +349,6 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
                   EngineEvent.TaskUpdated,
                   {
                     taskID,
-                    status: deriveTaskStatus(task),
                     summary: `Projected agent "${dispatch.agentID}" persisted a Delivery Slice graph via the architect adapter`,
                   },
                   { source: "orchestrator.architect" },

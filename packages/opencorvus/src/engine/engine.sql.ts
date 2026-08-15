@@ -1,4 +1,4 @@
-import { foreignKey, integer, sqliteTable, text, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { check, foreignKey, integer, sqliteTable, text, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 import { ProjectTable } from "@/project/project.sql"
 import { SessionTable } from "@/session/session.sql"
@@ -46,7 +46,6 @@ export const ENGINE_ARTIFACT_KINDS = [
   "dispatch_lineage",
   "dispatch_settlement",
   "mission_acceptance_resume_receipt",
-  "task_root_ingress",
   "task_checkpoint_settlement",
   "task_auxiliary_settlement",
   "exploration",
@@ -66,8 +65,6 @@ export const ENGINE_ARTIFACT_KINDS = [
   "expert_output",
 ] as const
 export type EngineArtifactKind = (typeof ENGINE_ARTIFACT_KINDS)[number]
-export type EngineProgressStatus = "created" | "active" | "completed" | "failed" | "cancelled"
-
 export const EngineTaskTable = sqliteTable(
   "engine_task",
   {
@@ -130,62 +127,102 @@ export const EngineTaskTable = sqliteTable(
       >()
       .notNull()
       .default([]),
-    /** Phase-6-f-2: `status` cache column removed. Derive via
-     *  `engine/task-status.ts::deriveTaskStatus` from
-     *  (time_started, time_completed, error, metadata.cancelled). */
+    /** Execution status is reduced from Task lifecycle Protocol Events. */
     priority: text().notNull().$type<EngineTaskPriority>().default("normal"),
-    /** The former task-wide blocker cache is removed. Current blockers are
-     *  explicit interaction or evidence facts, never an execution status. */
-    error: text(),
     budget: text({ mode: "json" }).$type<EngineBudget>(),
     metadata: text({ mode: "json" }).$type<EngineMetadata>(),
-    time_started: integer().notNull(),
-    time_completed: integer(),
     /** User-facing archive timestamp. Archived Tasks remain durable and may be
      *  restored or permanently deleted from Settings. */
     time_archived: integer(),
     /** User-facing pin timestamp. Pinning changes Work Ledger rank without
      *  changing the Task's activity timestamp. */
     time_pinned: integer(),
-    /** Rewind cursor: when non-null, all UI-facing event queries filter events
-     *  with `time_created > rewind_cursor_time` OUT. This is how "rewind to a
-     *  specific message card" works without deleting history — the filter is
-     *  a projection, the underlying append-only log stays intact. Written by
-     *  `rewindTask(taskID, eventID)` which also aborts any in-flight loop.
-     *  When a new user message arrives AFTER a rewind, its session-message
-     *  event is appended normally; the next loop sees "history up to cursor
-     *  + new message beyond cursor" as a merged view per describe layer. */
-    rewind_cursor_time: integer(),
-    /** The event id the user clicked to anchor the rewind. Audit only;
-     *  the cursor time is what actually filters queries. Kept for overlay
-     *  highlighting (which card the user rewound from). */
-    rewind_cursor_event_id: text(),
-    /** Monotonic counter of rewind operations on this task. Useful for
-     *  rate-limiting (overlay can warn on rapid re-rewind) and for
-     *  distinguishing "new events since rewind" in UI diffs. */
-    rewind_count: integer().notNull().default(0),
-    ...Timestamps,
+    time_created: integer().notNull(),
   },
   (table) => [
     index("engine_task_project_idx").on(table.project_id),
-    index("engine_task_time_updated_idx").on(table.time_updated, table.id),
-    index("engine_task_project_time_updated_idx").on(table.project_id, table.time_updated, table.id),
-    index("engine_task_time_completed_idx").on(table.time_completed),
+    index("engine_task_time_created_idx").on(table.time_created, table.id),
+    index("engine_task_project_time_created_idx").on(table.project_id, table.time_created, table.id),
     index("engine_task_time_archived_idx").on(table.time_archived),
     index("engine_task_time_pinned_idx").on(table.time_pinned),
     uniqueIndex("engine_task_project_request_idx").on(table.project_id, table.request_id),
+    check("engine_task_excludes_git_projection", sql`json_type(${table.metadata}, '$.git') IS NULL`),
   ],
 )
 
-export const EngineTaskCancellationAuthorityTable = sqliteTable("engine_task_cancellation_authority", {
-  task_id: text()
-    .primaryKey()
-    .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
-  request_event_id: text().notNull(),
-  convergence_owner_id: text(),
-  convergence_owner_process_id: integer(),
-  convergence_lease_expires_at: integer(),
+/** Immutable policy selected when a Task-root input is accepted. The digest
+ * identity makes historical retry/deadline semantics independent of mutable
+ * configuration. */
+export const EngineTaskRootIngressPolicyTable = sqliteTable("engine_task_root_ingress_policy", {
+  id: text().primaryKey(),
+  semantic_turn_limit: integer().notNull(),
+  activation_limit: integer().notNull(),
+  absolute_deadline: integer(),
+  time_created: integer().notNull(),
 })
+
+export type EngineTaskRootIngressSource = "message" | "protocol_event" | "automation_run" | "engine_artifact" | "task" | "inline"
+
+/** One accepted business input. Readiness and outcome are reduced from its
+ * causal facts; this row never carries a delivery/status/attempt projection. */
+export const EngineTaskRootIngressTable = sqliteTable(
+  "engine_task_root_ingress",
+  {
+    id: text().primaryKey(),
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    execution_epoch: integer().notNull(),
+    sequence: integer().notNull(),
+    source: text({ enum: ["message", "protocol_event", "automation_run", "engine_artifact", "task", "inline"] })
+      .notNull()
+      .$type<EngineTaskRootIngressSource>(),
+    source_id: text().notNull(),
+    inline_payload: text({ mode: "json" }).$type<Record<string, unknown>>(),
+    policy_id: text()
+      .notNull()
+      .references(() => EngineTaskRootIngressPolicyTable.id, { onDelete: "restrict" }),
+    time_accepted: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("engine_task_root_ingress_sequence_idx").on(table.task_id, table.execution_epoch, table.sequence),
+    uniqueIndex("engine_task_root_ingress_source_idx").on(table.task_id, table.source, table.source_id),
+    index("engine_task_root_ingress_epoch_idx").on(table.task_id, table.execution_epoch, table.sequence),
+  ],
+)
+
+export type EngineControlActivationTarget =
+  | "task_root_ingress"
+  | "lifecycle"
+  | "interaction"
+  | "effect"
+  | "automation"
+  | "event_fire"
+  | "build_cleanup"
+  | "protocol_delivery"
+  | "bus_delivery"
+  | "session_control"
+
+/** Append-only physical ownership history. Expiry may be renewed by the same
+ * owner; no business completion or retry state is stored here. */
+export const EngineControlActivationLeaseTable = sqliteTable(
+  "engine_control_activation_lease",
+  {
+    id: text().primaryKey(),
+    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control"] })
+      .notNull()
+      .$type<EngineControlActivationTarget>(),
+    target_id: text().notNull(),
+    owner_occurrence_id: text().notNull(),
+    time_activated: integer().notNull(),
+    expires_at: integer().notNull(),
+  },
+  (table) => [
+    index("engine_control_activation_owner_idx").on(table.target, table.target_id, table.owner_occurrence_id),
+    index("engine_control_activation_target_idx").on(table.target, table.target_id, table.time_activated),
+    index("engine_control_activation_expiry_idx").on(table.expires_at),
+  ],
+)
 
 /** Durable owner for private Git refs created while materializing one Build
  * terminal observation. A row exists before the first ref write, so a crash,
@@ -198,13 +235,21 @@ export const EngineBuildObservationCleanupTable = sqliteTable(
       .notNull()
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
     git_dir: text().notNull(),
-    status: text({ enum: ["active", "pending", "retained", "complete"] }).notNull(),
-    owner_runtime_id: text().notNull(),
-    attempts: integer().notNull().default(0),
-    last_error: text(),
-    ...Timestamps,
+    time_created: integer().notNull(),
   },
-  (table) => [index("engine_build_observation_cleanup_task_status_idx").on(table.task_id, table.status)],
+  (table) => [index("engine_build_observation_cleanup_task_idx").on(table.task_id)],
+)
+
+export const EngineBuildObservationCleanupReceiptTable = sqliteTable(
+  "engine_build_observation_cleanup_receipt",
+  {
+    id: text().primaryKey(),
+    observation_id: text().notNull().references(() => EngineBuildObservationCleanupTable.observation_id, { onDelete: "cascade" }),
+    outcome: text({ enum: ["retained", "failed", "complete"] }).notNull(),
+    error: text(),
+    time_created: integer().notNull(),
+  },
+  (table) => [index("engine_build_observation_cleanup_receipt_idx").on(table.observation_id, table.time_created)],
 )
 
 export const EngineGoalTable = sqliteTable(
@@ -277,22 +322,55 @@ export const EngineInteractionRequestTable = sqliteTable(
   {
     id: text().primaryKey(),
     task_id: text()
-      .notNull()
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    /** Exact owner locator for externally accepted interaction input. */
+    source_kind: text({ enum: ["bus_question", "permission_request"] }),
+    source_id: text(),
     session_id: text().references(() => SessionTable.id, { onDelete: "set null" }),
-    external_id: text().notNull(),
-    request_type: text().notNull().$type<EngineInteractionType>(),
-    status: text().notNull().$type<EngineInteractionStatus>().default("pending"),
-    title: text().notNull(),
-    body: text().notNull(),
-    payload: text({ mode: "json" }).$type<EngineMetadata>().notNull(),
-    response: text({ mode: "json" }).$type<EngineMetadata>(),
-    time_resolved: integer(),
-    ...Timestamps,
+    external_id: text(),
+    request_type: text().$type<EngineInteractionType>(),
+    title: text(),
+    body: text(),
+    payload: text({ mode: "json" }).$type<EngineMetadata>(),
+    time_created: integer(),
   },
   (table) => [
-    index("engine_interaction_external_idx").on(table.external_id),
-    index("engine_interaction_status_idx").on(table.status),
+    uniqueIndex("engine_interaction_external_idx").on(table.external_id).where(sql`${table.external_id} IS NOT NULL`),
+    uniqueIndex("engine_interaction_source_idx").on(table.source_kind, table.source_id).where(sql`${table.source_id} IS NOT NULL`),
+    check("engine_interaction_request_owner_shape", sql`
+      (${table.source_kind} IS NOT NULL AND ${table.source_id} IS NOT NULL AND ${table.task_id} IS NULL AND ${table.session_id} IS NULL AND ${table.external_id} IS NULL
+        AND ${table.request_type} IS NULL AND ${table.title} IS NULL AND ${table.body} IS NULL
+        AND ${table.payload} IS NULL AND ${table.time_created} IS NULL)
+      OR
+      (${table.source_kind} IS NULL AND ${table.source_id} IS NULL AND ${table.task_id} IS NOT NULL AND ${table.session_id} IS NOT NULL AND ${table.external_id} IS NOT NULL
+        AND ${table.request_type} IS NOT NULL AND ${table.title} IS NOT NULL AND ${table.body} IS NOT NULL
+        AND ${table.payload} IS NOT NULL AND ${table.time_created} IS NOT NULL)
+    `),
+  ],
+)
+
+/** Exactly one immutable participant/system outcome for an Interaction
+ * request. Pending/answered/rejected/expired are reducer projections. */
+export const EngineInteractionOutcomeTable = sqliteTable(
+  "engine_interaction_outcome",
+  {
+    id: text().primaryKey(),
+    interaction_id: text().notNull().references(() => EngineInteractionRequestTable.id, { onDelete: "cascade" }),
+    /** Exact terminal Question publication. Inline-only interactions instead
+     * own the minimal outcome fields below. */
+    source_occurrence_id: text(),
+    outcome: text({ enum: ["answered", "rejected", "expired"] }).$type<Exclude<EngineInteractionStatus, "pending">>(),
+    response: text({ mode: "json" }).$type<EngineMetadata>(),
+    time_created: integer(),
+  },
+  (table) => [
+    uniqueIndex("engine_interaction_outcome_request_idx").on(table.interaction_id),
+    uniqueIndex("engine_interaction_outcome_source_idx").on(table.source_occurrence_id).where(sql`${table.source_occurrence_id} IS NOT NULL`),
+    check("engine_interaction_outcome_owner_shape", sql`
+      (${table.source_occurrence_id} IS NOT NULL AND ${table.outcome} IS NULL AND ${table.response} IS NULL AND ${table.time_created} IS NULL)
+      OR
+      (${table.source_occurrence_id} IS NULL AND ${table.outcome} IS NOT NULL AND ${table.response} IS NOT NULL AND ${table.time_created} IS NOT NULL)
+    `),
   ],
 )
 
@@ -372,23 +450,15 @@ export const EngineWorkflowNodeOccurrenceTable = sqliteTable(
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
     workflow_id: text().notNull(),
     workflow_node_id: text().notNull(),
-    workflow_binding: text({ mode: "json" }).$type<SelectedWorkflowBinding>().notNull(),
-    state: text({ enum: ["bound", "conflicted"] }).notNull(),
-    workflow_occurrence_id: text(),
     initial_dispatch_id: text(),
     child_session_id: text().references(() => SessionTable.id, { onDelete: "restrict" }),
-    dispatch_lineage_artifact_id: text().references(() => EngineArtifactTable.id, { onDelete: "restrict" }),
-    conflict_lineage_ids: text({ mode: "json" }).$type<string[]>().notNull().default([]),
-    ...Timestamps,
+    time_created: integer().notNull(),
   },
   (table) => [
     primaryKey({ columns: [table.task_id, table.workflow_id, table.workflow_node_id] }),
     uniqueIndex("engine_workflow_node_occurrence_identity_idx")
-      .on(table.task_id, table.workflow_occurrence_id)
-      .where(sql`${table.workflow_occurrence_id} IS NOT NULL`),
-    uniqueIndex("engine_workflow_node_occurrence_lineage_idx")
-      .on(table.dispatch_lineage_artifact_id)
-      .where(sql`${table.dispatch_lineage_artifact_id} IS NOT NULL`),
+      .on(table.task_id, table.initial_dispatch_id)
+      .where(sql`${table.initial_dispatch_id} IS NOT NULL`),
   ],
 )
 
@@ -470,12 +540,45 @@ export const EngineProgressSnapshotTable = sqliteTable(
     task_id: text()
       .notNull()
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
-    status: text().notNull().$type<EngineProgressStatus>(),
     summary: text().notNull(),
     payload: text({ mode: "json" }).$type<EngineMetadata>(),
-    ...Timestamps,
+    time_created: integer().notNull(),
   },
-  (table) => [index("engine_progress_task_idx").on(table.task_id)],
+  (table) => [
+    index("engine_progress_task_idx").on(table.task_id),
+    check("engine_progress_excludes_git_projection", sql`
+      json_extract(${table.payload}, '$.kind') IS NULL OR json_extract(${table.payload}, '$.kind') <> 'git'
+    `),
+  ],
+)
+
+export type EngineGitCheckpointStage = "baseline" | "result" | "acceptance_round"
+
+/** Exact write-ahead request for one repository-tree checkpoint effect. */
+export const EngineGitCheckpointRequestTable = sqliteTable(
+  "engine_git_checkpoint_request",
+  {
+    id: text().primaryKey(),
+    task_id: text().notNull().references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    stage: text({ enum: ["baseline", "result", "acceptance_round"] }).notNull().$type<EngineGitCheckpointStage>(),
+    operation_key: text().notNull(),
+    input: text({ mode: "json" }).notNull().$type<EngineMetadata>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("engine_git_checkpoint_request_operation_idx").on(table.task_id, table.operation_key),
+    index("engine_git_checkpoint_request_task_time_idx").on(table.task_id, table.time_created),
+  ],
+)
+
+/** Canonical immutable outcome for a repository-tree checkpoint request. */
+export const EngineGitCheckpointOutcomeTable = sqliteTable(
+  "engine_git_checkpoint_outcome",
+  {
+    request_id: text().primaryKey().references(() => EngineGitCheckpointRequestTable.id, { onDelete: "cascade" }),
+    result: text({ mode: "json" }).notNull().$type<EngineMetadata>(),
+    time_created: integer().notNull(),
+  },
 )
 
 export const EngineChannelBindingTable = sqliteTable(

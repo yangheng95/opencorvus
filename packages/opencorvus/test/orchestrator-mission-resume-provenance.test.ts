@@ -25,8 +25,6 @@ test("Mission acceptance resume projects current message authority and real-deci
       toolPartID: "prt_resume_current_acceptance",
       reviewedTerminalLifecycleReference: {
         terminalEventID: "pev_reviewed_terminal_occurrence",
-        terminalStatus: "completed",
-        timeCompleted: 1,
       },
       evidenceLocators: [
         {
@@ -126,14 +124,14 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
     }),
     "tsk_lifecycle_delivery",
     "art_lifecycle_delivery_wake",
+    "msg_prior_lifecycle_turn",
   )!
   expect(control).toMatchObject({
-    ...orchestratorControlOccurrenceIdentity("art_lifecycle_delivery_wake"),
+    ...orchestratorControlOccurrenceIdentity("art_lifecycle_delivery_wake", "msg_prior_lifecycle_turn"),
     extra: {
       orchestrator_control_ingress: {
-        wake_id: "art_lifecycle_delivery_wake",
-        source_kind: "agent_lifecycle_delivery",
-        fact_id: "pev_worker_terminal_delivery",
+        ingress_id: "art_lifecycle_delivery_wake",
+        predecessor_id: "msg_prior_lifecycle_turn",
       },
     },
   })

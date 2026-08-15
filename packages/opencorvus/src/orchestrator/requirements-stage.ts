@@ -4,7 +4,6 @@ import { createDecisionLog } from "@/decision-log"
 import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { listRequirementSetArtifacts, type TaskRow } from "@/engine/store"
-import { touchEngineTask } from "@/engine/task"
 import { updateTask } from "@/engine/state"
 import { deriveTaskStatus } from "@/engine/task-status"
 import { Database } from "@/storage/db"
@@ -98,13 +97,11 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
             finalization: result.finalization,
             now,
           })
-          touchEngineTask(db, { taskID: dependencies.taskID, timeUpdated: now })
           Database.effect(() =>
             EngineProtocol.emit(
               EngineEvent.TaskUpdated,
               {
                 taskID: dependencies.taskID,
-                status: deriveTaskStatus(task),
                 summary: `Projected agent "${dispatch.agentID}" persisted requirements via the requirements adapter`,
               },
               { source: "orchestrator.requirements" },

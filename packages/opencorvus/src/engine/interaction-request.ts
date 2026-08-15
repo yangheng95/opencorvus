@@ -2,6 +2,7 @@ import { Identifier } from "@/id/id"
 import { Database, and, eq } from "@/storage/db"
 import {
   EngineInteractionRequestTable,
+  EngineInteractionOutcomeTable,
   type EngineInteractionStatus,
   type EngineInteractionType,
   type EngineMetadata,
@@ -21,6 +22,7 @@ export interface InsertEngineInteractionRequestInput {
   eventSource: string
   eventSummary: string
   timeCreated?: number
+  source?: { kind: "bus_question" | "permission_request"; id: string }
 }
 
 export function insertEngineInteractionRequest(
@@ -32,16 +34,16 @@ export function insertEngineInteractionRequest(
   db.insert(EngineInteractionRequestTable)
     .values({
       id,
-      task_id: input.taskID,
-      session_id: input.sessionID,
-      external_id: input.externalID,
-      request_type: input.requestType,
-      status: "pending",
-      title: input.title,
-      body: input.body,
-      payload: input.payload,
-      time_created: timeCreated,
-      time_updated: timeCreated,
+      task_id: input.source ? null : input.taskID,
+      source_kind: input.source?.kind ?? null,
+      source_id: input.source?.id ?? null,
+      session_id: input.source ? null : input.sessionID,
+      external_id: input.source ? null : input.externalID,
+      request_type: input.source ? null : input.requestType,
+      title: input.source ? null : input.title,
+      body: input.source ? null : input.body,
+      payload: input.source ? null : input.payload,
+      time_created: input.source ? null : timeCreated,
     })
     .run()
   Database.effect(() =>
@@ -65,6 +67,7 @@ export interface ResolveEngineInteractionRequestInput {
   response: EngineMetadata
   eventSource: string
   timeResolved?: number
+  sourceOccurrenceID?: string
 }
 
 export function resolveEngineInteractionRequest(
@@ -81,28 +84,27 @@ export function resolveEngineInteractionRequest(
     rejected: "Interaction rejected by operator",
     expired: "Interaction deadline expired",
   }
-  const updated = db
-    .update(EngineInteractionRequestTable)
-    .set({
-      status: input.status,
-      response: input.response,
-      time_resolved: timeResolved,
-      time_updated: timeResolved,
-    })
-    .where(
-      and(
-        eq(EngineInteractionRequestTable.id, input.row.id),
-        eq(EngineInteractionRequestTable.external_id, input.row.external_id),
-        eq(EngineInteractionRequestTable.session_id, sessionID),
-        eq(EngineInteractionRequestTable.request_type, requestType),
-        eq(EngineInteractionRequestTable.status, "pending"),
-      ),
-    )
-    .returning({ id: EngineInteractionRequestTable.id })
-    .get()
-  if (!updated) {
-    throw new Error(`Interaction ${input.row.id} terminal resolution lost pending compare-and-set ownership`)
+  const current = db.select().from(EngineInteractionRequestTable)
+    .where(eq(EngineInteractionRequestTable.id, input.row.id)).get()
+  if (!current) throw new Error(`Interaction ${input.row.id} request fact disappeared before outcome append`)
+  const id = Identifier.deterministic("interaction", `interaction-outcome\0${input.row.id}`)
+  const existing = db.select().from(EngineInteractionOutcomeTable).where(eq(EngineInteractionOutcomeTable.interaction_id, input.row.id)).get()
+  if (existing) {
+    if (input.sourceOccurrenceID && existing.source_occurrence_id === input.sourceOccurrenceID) return
+    if (!input.sourceOccurrenceID && existing.source_occurrence_id === null && existing.outcome === input.status && JSON.stringify(existing.response) === JSON.stringify(input.response)) return
+    throw new Error(`Interaction ${input.row.id} has a conflicting immutable outcome ${existing.id}`)
   }
+  if ((current.source_kind === "bus_question") !== Boolean(input.sourceOccurrenceID)) {
+    throw new Error(`Interaction ${input.row.id} outcome does not match its immutable owner branch`)
+  }
+  db.insert(EngineInteractionOutcomeTable).values({
+    id,
+    interaction_id: input.row.id,
+    source_occurrence_id: input.sourceOccurrenceID ?? null,
+    outcome: input.sourceOccurrenceID ? null : input.status,
+    response: input.sourceOccurrenceID ? null : input.response,
+    time_created: input.sourceOccurrenceID ? null : timeResolved,
+  }).run()
   Database.effect(() =>
     EngineProtocol.emit(
       Event.InteractionResolved,

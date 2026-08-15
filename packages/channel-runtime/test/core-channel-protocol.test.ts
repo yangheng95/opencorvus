@@ -43,6 +43,7 @@ function adapter(
 
 function incoming(platform: "slack" | "telegram" | "discord" | "googlechat", text: string): IncomingMessage {
   return {
+    id: `${platform}-event-${text}`,
     platform,
     channel: platform === "telegram" ? "chat-1" : platform === "googlechat" ? "spaces/AAA" : "ch-1",
     thread: platform === "telegram" ? "101" : platform === "googlechat" ? "spaces/AAA/threads/t-1" : "root-1",
@@ -330,6 +331,7 @@ describe("channel runtime channel protocol", () => {
     }
 
     await core.handleMessage({
+      id: "feishu-event-om-1",
       platform: "feishu",
       channel: "oc_1",
       thread: "om_1",
@@ -344,6 +346,7 @@ describe("channel runtime channel protocol", () => {
       thread: "om_1",
       text: "send gui",
       user_id: "ou_1",
+      request_id: "feishu-event-om-1",
       source: "feishu",
       allow_create: true,
     })

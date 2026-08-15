@@ -64,6 +64,7 @@ import { listMissionTasks } from "@/engine/store"
 import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mission/completion"
 import {
   requireCurrentTerminalLifecycleReference,
+  resolveTerminalLifecycleReference,
   sameTerminalLifecycleReference,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
@@ -825,7 +826,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             taskID: acceptance.task_id,
           })
           if (
-            currentReference.terminalStatus !== "completed" ||
+            resolveTerminalLifecycleReference(acceptance.task_id, currentReference).terminalStatus !== "completed" ||
             !sameTerminalLifecycleReference(currentReference, reviewedReference)
           ) {
             throw new Error(

@@ -9,7 +9,11 @@ import { SessionWake } from "@/session/wake"
 import { Wildcard } from "@/util/wildcard"
 import { Identifier } from "@/id/id"
 import { createHash, randomUUID } from "node:crypto"
-import { EventJobFireTable, EventJobTable, type EventJobFireCausationEntry } from "./event.sql"
+import { isDeepStrictEqual } from "node:util"
+import { EventJobDefinitionTombstoneTable, EventJobFireReceiptTable, EventJobFireTable, EventJobTable, EventOccurrenceTable, type EventJobFireCausationEntry } from "./event.sql"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { projectEventFireInTransaction, projectEventJobInTransaction, type EventJobFireRow, type EventJobRow } from "./event-projection"
+import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 import { RuntimeExecutionAdmissionClosedError, RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
@@ -23,8 +27,8 @@ import {
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
-type EventJob = typeof EventJobTable.$inferSelect
-type EventJobFire = typeof EventJobFireTable.$inferSelect
+type EventJob = EventJobRow
+type EventJobFire = EventJobFireRow
 
 export type EventJobView = {
   id: string
@@ -90,6 +94,39 @@ export namespace EventService {
   let beforeProcessRollbackRecoveryForTest: (() => void | Promise<void>) | undefined
   let processSettlementGate: { token: symbol; projectIDs: Set<string> } | undefined
 
+  function latestEventDefinitionInTransaction(db: Database.TxOrDb, definitionID: string) {
+    const row = db.select().from(EventJobTable).where(eq(EventJobTable.definition_id, definitionID))
+      .orderBy(sql`${EventJobTable.revision} DESC`, sql`${EventJobTable.id} DESC`).get()
+    const tombstone = db.select().from(EventJobDefinitionTombstoneTable)
+      .where(eq(EventJobDefinitionTombstoneTable.definition_id, definitionID))
+      .orderBy(sql`${EventJobDefinitionTombstoneTable.revision} DESC`, sql`${EventJobDefinitionTombstoneTable.id} DESC`).get()
+    return row && (!tombstone || row.revision > tombstone.revision) ? row : undefined
+  }
+
+  function currentEventDefinitions(db: Database.TxOrDb) {
+    const latest = new Map<string, typeof EventJobTable.$inferSelect>()
+    for (const row of db.select().from(EventJobTable)
+      .orderBy(EventJobTable.definition_id, sql`${EventJobTable.revision} DESC`, sql`${EventJobTable.id} DESC`).all()) {
+      if (!latest.has(row.definition_id)) latest.set(row.definition_id, row)
+    }
+    return [...latest.values()].filter((row) => {
+      const tombstone = db.select({ revision: EventJobDefinitionTombstoneTable.revision })
+        .from(EventJobDefinitionTombstoneTable)
+        .where(eq(EventJobDefinitionTombstoneTable.definition_id, row.definition_id))
+        .orderBy(sql`${EventJobDefinitionTombstoneTable.revision} DESC`).get()
+      return !tombstone || row.revision > tombstone.revision
+    })
+  }
+
+  function appendEventDefinitionTombstoneInTransaction(db: Database.TxOrDb, row: typeof EventJobTable.$inferSelect, now: number) {
+    db.insert(EventJobDefinitionTombstoneTable).values({
+      id: Identifier.ascending("event_job"),
+      definition_id: row.definition_id,
+      revision: row.revision + 1,
+      time_created: now,
+    }).run()
+  }
+
   const state = createInstanceState(
     () => ({
       unsub: undefined as undefined | (() => void),
@@ -124,7 +161,7 @@ export namespace EventService {
       async (event: EventEnvelope) => {
         await accept(event)
       },
-      { durableID: "scheduler.event-service" },
+      { durableID: "scheduler.event-service", effect: "idempotent_by_occurrence" },
     )
     const directory = Instance.directory
     s.runtimeReopen = RuntimeExecutionSettlement.onAdmissionReopened("scheduler_event_fire", () => {
@@ -184,14 +221,7 @@ export namespace EventService {
     if (processSettlementGate) throw new Error("Event fire process settlement is already in progress")
     const token = Symbol("event-fire-process-settlement")
     const projectIDs = new Set(
-      Database.use((db) =>
-        db
-          .selectDistinct({ projectID: EventJobFireTable.project_id })
-          .from(EventJobFireTable)
-          .where(sql`${EventJobFireTable.status} IN ('pending', 'running', 'retry_wait')`)
-          .all()
-          .map((row) => row.projectID),
-      ),
+      Database.use((db) => db.select().from(EventJobFireTable).all().map((row) => projectEventFireInTransaction(db, row)).filter((row) => ["pending", "running", "retry_wait"].includes(row.status)).map((row) => row.project_id)),
     )
     processSettlementGate = { token, projectIDs }
     let decision: "pending" | "commit" | "rollback" = "pending"
@@ -233,9 +263,9 @@ export namespace EventService {
 
   export function list(projectID: string): EventJobView[] {
     const rows = Database.use((db) =>
-      db.select().from(EventJobTable).where(eq(EventJobTable.project_id, projectID)).all(),
+      currentEventDefinitions(db).filter((row) => row.project_id === projectID),
     )
-    return rows.map((j) => ({
+    return rows.map((row) => Database.use((db) => projectEventJobInTransaction(db, row))).map((j) => ({
       id: j.id,
       name: j.name,
       eventType: j.event_type,
@@ -265,6 +295,8 @@ export namespace EventService {
         .insert(EventJobTable)
         .values({
           id,
+          definition_id: id,
+          revision: 1,
           project_id: input.projectId,
           session_id: input.sessionId,
           name: input.name,
@@ -281,14 +313,12 @@ export namespace EventService {
   }
 
   export function remove(id: string, projectID: string): boolean {
-    const row = Database.use((db) =>
-      db
-        .delete(EventJobTable)
-        .where(and(eq(EventJobTable.id, id), eq(EventJobTable.project_id, projectID)))
-        .returning({ id: EventJobTable.id })
-        .get(),
-    )
-    return !!row
+    return Database.immediateTransaction((db) => {
+      const row = latestEventDefinitionInTransaction(db, id)
+      if (!row || row.project_id !== projectID) return false
+      appendEventDefinitionTombstoneInTransaction(db, row, Date.now())
+      return true
+    })
   }
 
   async function accept(event: EventEnvelope): Promise<void> {
@@ -297,11 +327,9 @@ export namespace EventService {
     if (s.lifecycle.signal.aborted) return
     const now = Date.now()
     const jobs = Database.use((db) =>
-      db
-        .select()
-        .from(EventJobTable)
-        .where(and(eq(EventJobTable.project_id, Instance.project.id), eq(EventJobTable.enabled, true)))
-        .all(),
+      currentEventDefinitions(db)
+        .filter((row) => row.project_id === Instance.project.id && row.enabled)
+        .map((row) => projectEventJobInTransaction(db, row)),
     )
     const matches = jobs.filter((job) => Wildcard.match(event.type, job.event_type) && ok(event, job.match_json ?? {}))
     if (matches.length === 0) return
@@ -311,6 +339,7 @@ export namespace EventService {
     const fires = createFires({
       jobs: matches,
       eventType: event.type,
+      properties: event.properties,
       occurrenceID: event.occurrenceID,
       causation,
       now,
@@ -324,6 +353,7 @@ export namespace EventService {
   function createFires(input: {
     jobs: EventJob[]
     eventType: string
+    properties: unknown
     occurrenceID: string
     causation: FireCausation
     now: number
@@ -333,42 +363,67 @@ export namespace EventService {
       throw new Error("injected Event fire durable insert failure")
     }
     return Database.immediateTransaction((db) =>
-      input.jobs.map((job) => {
+      {
+        const outbox = db.select({ id: BusPublicationOutboxTable.occurrence_id }).from(BusPublicationOutboxTable)
+          .where(eq(BusPublicationOutboxTable.occurrence_id, input.occurrenceID)).get()
+        const occurrence = {
+          id: input.occurrenceID,
+          bus_outbox_id: outbox?.id ?? null,
+          project_id: outbox ? null : Instance.project.id,
+          event_type: outbox ? null : input.eventType,
+          properties: outbox ? null : input.properties,
+          time_created: input.now,
+        }
+        const insertedOccurrence = db.insert(EventOccurrenceTable).values(occurrence).onConflictDoNothing().returning().get()
+        if (!insertedOccurrence) {
+          const existing = db.select().from(EventOccurrenceTable).where(eq(EventOccurrenceTable.id, input.occurrenceID)).get()
+          if (
+            !existing ||
+            existing.bus_outbox_id !== occurrence.bus_outbox_id ||
+            existing.project_id !== occurrence.project_id ||
+            existing.event_type !== occurrence.event_type ||
+            !isDeepStrictEqual(existing.properties, occurrence.properties)
+          ) throw new Error(`Event occurrence ${input.occurrenceID} conflicts with its immutable input fact`)
+        }
+        return input.jobs.map((job) => {
         const fireID = Identifier.ascending("call")
         const cycle = input.causation.ancestry.some((entry) => entry.jobID === job.id)
         const inserted = db
           .insert(EventJobFireTable)
           .values({
             id: fireID,
-            event_job_id: job.id,
-            project_id: job.project_id,
+            event_job_revision_id: job.revision_id,
             event_occurrence_id: input.occurrenceID,
-            event_type: input.eventType,
             causation_fire_id: input.causation.parentFireID,
-            causation_ancestry: input.causation.ancestry,
-            status: cycle ? "disposition" : "pending",
-            disposition: cycle ? "causal_cycle" : null,
-            target_session_id: job.session_id ?? Identifier.ascending("session"),
-            creates_session: job.session_id === null,
-            lease_until: 0,
-            attempt: 0,
-            error: cycle ? `Event Job ${job.id} already occurs in fire causation ancestry` : null,
-            time_completed: cycle ? input.now : null,
+            created_session_id: job.session_id === null ? Identifier.ascending("session") : null,
             time_created: input.now,
-            time_updated: input.now,
           })
           .onConflictDoNothing({
-            target: [EventJobFireTable.event_job_id, EventJobFireTable.event_occurrence_id],
+            target: [EventJobFireTable.event_job_revision_id, EventJobFireTable.event_occurrence_id],
           })
           .returning()
           .get()
-        if (inserted) return inserted
+        if (inserted) {
+          if (cycle) {
+            db.insert(EventJobFireReceiptTable).values({
+              id: Identifier.ascending("call"),
+              fire_id: inserted.id,
+              outcome: "disposition",
+              disposition: "causal_cycle",
+              message_id: null,
+              retry_at: null,
+              error: null,
+              time_created: input.now,
+            }).run()
+          }
+          return projectEventFireInTransaction(db, inserted, input.now)
+        }
         const existing = db
           .select()
           .from(EventJobFireTable)
           .where(
             and(
-              eq(EventJobFireTable.event_job_id, job.id),
+              eq(EventJobFireTable.event_job_revision_id, job.revision_id),
               eq(EventJobFireTable.event_occurrence_id, input.occurrenceID),
             ),
           )
@@ -376,18 +431,15 @@ export namespace EventService {
         if (!existing) {
           throw new Error(`Event occurrence ${input.occurrenceID} conflict has no durable fire for job ${job.id}`)
         }
-        return existing
-      }),
+        return projectEventFireInTransaction(db, existing, input.now)
+        })
+      },
     )
   }
 
   function resolveCausation(event: EventEnvelope): FireCausation {
     if (event.causation?.source === "scheduler.event") {
       const parent = requireParentFire(event.causation.occurrenceID)
-      const current = event.causation.ancestry.at(-1)
-      if (current?.occurrenceID !== parent.id || current.sourceID !== parent.event_job_id) {
-        throw new Error(`Bus causation for Event fire ${parent.id} conflicts with its durable job authority`)
-      }
       return causationFromParent(parent)
     }
     const wakeReason = eventWakeReason(event)
@@ -403,21 +455,10 @@ export namespace EventService {
     if (event.type !== Session.Event.Created.type) return { ancestry: [] }
     const sessionID = eventInfoID(event)
     if (!sessionID) return { ancestry: [] }
-    const parent = Database.use((db) =>
-      db
-        .select()
-        .from(EventJobFireTable)
-        .where(
-          and(
-            eq(EventJobFireTable.project_id, Instance.project.id),
-            eq(EventJobFireTable.target_session_id, sessionID),
-            eq(EventJobFireTable.creates_session, true),
-          ),
-        )
-        .orderBy(sql`${EventJobFireTable.time_created} DESC`, sql`${EventJobFireTable.id} DESC`)
-        .limit(1)
-        .get(),
-    )
+    const parent = Database.use((db) => db.select().from(EventJobFireTable)
+      .where(eq(EventJobFireTable.created_session_id, sessionID))
+      .orderBy(sql`${EventJobFireTable.time_created} DESC`, sql`${EventJobFireTable.id} DESC`).all()
+      .map((row) => projectEventFireInTransaction(db, row)).find((row) => row.project_id === Instance.project.id))
     return parent ? causationFromParent(parent) : { ancestry: [] }
   }
 
@@ -436,14 +477,11 @@ export namespace EventService {
   }
 
   function requireParentFire(fireID: string): EventJobFire {
-    const parent = Database.use((db) =>
-      db
-        .select()
-        .from(EventJobFireTable)
-        .where(and(eq(EventJobFireTable.id, fireID), eq(EventJobFireTable.project_id, Instance.project.id)))
-        .get(),
-    )
-    if (!parent) throw new Error(`Event wake ${fireID} has no durable Event Job fire authority`)
+    const parent = Database.use((db) => {
+      const row = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
+      return row ? projectEventFireInTransaction(db, row) : undefined
+    })
+    if (!parent || parent.project_id !== Instance.project.id) throw new Error(`Event wake ${fireID} has no durable Event Job fire authority`)
     return parent
   }
 
@@ -455,16 +493,8 @@ export namespace EventService {
   }
 
   function recoverProjectFires(): void {
-    const rows = Database.use((db) =>
-      db
-        .select({ id: EventJobFireTable.id, jobID: EventJobFireTable.event_job_id })
-        .from(EventJobFireTable)
-        .where(
-          sql`${EventJobFireTable.project_id} = ${Instance.project.id}
-            AND ${EventJobFireTable.status} IN ('pending', 'running', 'retry_wait')`,
-        )
-        .all(),
-    )
+    const rows = Database.use((db) => db.select().from(EventJobFireTable).all()
+      .map((row) => projectEventFireInTransaction(db, row)).filter((row) => row.project_id === Instance.project.id && ["pending", "running", "retry_wait"].includes(row.status)).map((row) => ({ id: row.id, jobID: row.event_job_id })))
     for (const row of rows) {
       try {
         enqueueFire(row.id, row.jobID)
@@ -546,13 +576,14 @@ export namespace EventService {
       throwIfAborted(signal)
       inactivityFence.touch("wake reconciliation")
       const existingMessageID = findWakeMessageID(claimed)
-      job = Database.use((db) =>
-        db
+      job = Database.use((db) => {
+        const persisted = db
           .select()
           .from(EventJobTable)
-          .where(and(eq(EventJobTable.id, claimed.event_job_id), eq(EventJobTable.project_id, claimed.project_id)))
-          .get(),
-      )
+          .where(and(eq(EventJobTable.id, claimed.event_job_revision_id), eq(EventJobTable.project_id, claimed.project_id)))
+          .get()
+        return persisted ? projectEventJobInTransaction(db, persisted) : undefined
+      })
       inactivityFence.touch("job resolved")
       if (existingMessageID) {
         const session = await Session.get(claimed.target_session_id)
@@ -571,16 +602,11 @@ export namespace EventService {
       }
 
       const activeJob = job
-      const causation = causationFromParent(claimed)
       inactivityFence.touch("wake dispatch")
       const result = await Bus.withCausation(
         {
           source: "scheduler.event",
           occurrenceID: claimed.id,
-          ancestry: causation.ancestry.map((entry) => ({
-            occurrenceID: entry.fireID,
-            sourceID: entry.jobID,
-          })),
         },
         () => (wakeExecutorForTest ?? executeWake)({ fire: claimed, job: activeJob, ownerID: s.ownerID, signal }),
       )
@@ -625,72 +651,31 @@ export namespace EventService {
 
   function claimFire(fireID: string, ownerID: string): EventJobFire | undefined {
     const now = Date.now()
-    return Database.immediateTransaction((db) => {
+    const candidate = Database.use((db) => {
       const candidate = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
       if (!candidate) return undefined
-      const head = db
-        .select({ id: EventJobFireTable.id, leaseUntil: EventJobFireTable.lease_until })
-        .from(EventJobFireTable)
-        .where(
-          sql`${EventJobFireTable.event_job_id} = ${candidate.event_job_id}
-            AND ${EventJobFireTable.status} IN ('pending', 'running', 'retry_wait')`,
-        )
-        .orderBy(EventJobFireTable.time_created, EventJobFireTable.id)
-        .limit(1)
-        .get()
-      if (!head || head.id !== fireID) {
-        if (head && (candidate.status === "pending" || candidate.status === "retry_wait")) {
-          const waitUntil = Math.max(head.leaseUntil, now + 50)
-          db.update(EventJobFireTable)
-            .set({ lease_until: sql`max(${EventJobFireTable.lease_until}, ${waitUntil})`, time_updated: now })
-            .where(eq(EventJobFireTable.id, fireID))
-            .run()
-        }
-        return undefined
-      }
-      return db
-        .update(EventJobFireTable)
-        .set({
-          status: "running",
-          owner_id: ownerID,
-          owner_process_id: process.pid,
-          lease_until: now + FIRE_LEASE_MS,
-          attempt: sql`${EventJobFireTable.attempt} + 1`,
-          time_started: now,
-          time_updated: now,
-        })
-        .where(
-          sql`${EventJobFireTable.id} = ${fireID}
-            AND (
-              (${EventJobFireTable.status} IN ('pending', 'retry_wait') AND ${EventJobFireTable.lease_until} <= ${now})
-              OR (${EventJobFireTable.status} = 'running' AND ${EventJobFireTable.lease_until} <= ${now})
-            )`,
-        )
-        .returning()
-        .get()
+      const projected = projectEventFireInTransaction(db, candidate, now)
+      const projectedCandidate = projectEventFireInTransaction(db, candidate, now)
+      const head = db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all()
+        .map((row) => projectEventFireInTransaction(db, row, now)).find((row) => row.event_job_id === projectedCandidate.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
+      return head?.id === fireID && projected.status === "pending" ? projected : undefined
     })
+    if (!candidate) return undefined
+    const supersedeLeaseID = Database.use((db) => {
+      const lease = currentControlLeaseInTransaction(db, "event_fire", fireID)
+      if (!lease || lease.expires_at <= now) return undefined
+      const latest = db.select().from(EventJobFireReceiptTable).where(eq(EventJobFireReceiptTable.fire_id, fireID))
+        .orderBy(sql`${EventJobFireReceiptTable.time_created} DESC`, sql`${EventJobFireReceiptTable.id} DESC`).get()
+      return latest?.outcome === "retry_wait" && latest.time_created >= lease.time_activated && (latest.retry_at ?? 0) <= now
+        ? lease.id
+        : undefined
+    })
+    const acquired = acquireControlLease({ target: "event_fire", targetID: fireID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: FIRE_LEASE_MS, supersedeLeaseID })
+    return acquired.acquired ? Database.use((db) => projectEventFireInTransaction(db, db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()!, now)) : undefined
   }
 
   function enqueueNextFireForJob(jobID: string): void {
-    const next = Database.immediateTransaction((db) => {
-      const row = db
-        .select({ id: EventJobFireTable.id, status: EventJobFireTable.status })
-        .from(EventJobFireTable)
-        .where(
-          sql`${EventJobFireTable.event_job_id} = ${jobID}
-            AND ${EventJobFireTable.status} IN ('pending', 'running', 'retry_wait')`,
-        )
-        .orderBy(EventJobFireTable.time_created, EventJobFireTable.id)
-        .limit(1)
-        .get()
-      if (row?.status === "pending") {
-        db.update(EventJobFireTable)
-          .set({ lease_until: 0, time_updated: Date.now() })
-          .where(eq(EventJobFireTable.id, row.id))
-          .run()
-      }
-      return row
-    })
+    const next = Database.use((db) => db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all().map((row) => projectEventFireInTransaction(db, row)).find((row) => row.event_job_id === jobID && ["pending", "running", "retry_wait"].includes(row.status)))
     if (next) enqueueFire(next.id, jobID)
   }
 
@@ -699,17 +684,12 @@ export namespace EventService {
     if (s.lifecycle.signal.aborted || s.recoveryTimers.has(fireID)) return
     let row: { jobID: string; status: EventJobFire["status"]; lease: number } | undefined
     try {
-      row = Database.use((db) =>
-        db
-          .select({
-            jobID: EventJobFireTable.event_job_id,
-            status: EventJobFireTable.status,
-            lease: EventJobFireTable.lease_until,
-          })
-          .from(EventJobFireTable)
-          .where(eq(EventJobFireTable.id, fireID))
-          .get(),
-      )
+      row = Database.use((db) => {
+        const persisted = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
+        if (!persisted) return undefined
+        const fire = projectEventFireInTransaction(db, persisted)
+        return { jobID: fire.event_job_id, status: fire.status, lease: fire.retry_at ?? fire.lease_until }
+      })
     } catch (error) {
       log.warn("event fire recovery metadata read failed", { fireID, error: errorMessage(error) })
       scheduleRecoveryControlRetry(s, fireID)
@@ -746,22 +726,10 @@ export namespace EventService {
 
   function renewFireLease(fireID: string, ownerID: string): boolean {
     const now = Date.now()
-    const renewed = Database.use((db) =>
-      db
-        .update(EventJobFireTable)
-        .set({ lease_until: now + FIRE_LEASE_MS, time_updated: now })
-        .where(
-          and(
-            eq(EventJobFireTable.id, fireID),
-            eq(EventJobFireTable.status, "running"),
-            eq(EventJobFireTable.owner_id, ownerID),
-            sql`${EventJobFireTable.lease_until} > ${now}`,
-          ),
-        )
-        .returning({ id: EventJobFireTable.id })
-        .get(),
-    )
-    return !!renewed
+    const lease = Database.use((db) => currentControlLeaseInTransaction(db, "event_fire", fireID))
+    if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
+    renewControlLease({ target: "event_fire", targetID: fireID, leaseID: lease.id, ownerOccurrenceID: ownerID, now, expiresAt: now + FIRE_LEASE_MS })
+    return true
   }
 
   function createEventFireLeaseFence(
@@ -864,23 +832,15 @@ export namespace EventService {
 
   function fenceEventWakeCommit(input: { fireID: string; ownerID: string; sessionID: string }): void {
     const committedAt = Date.now()
-    const authority = Database.use((db) =>
-      db
-        .select({
-          status: EventJobFireTable.status,
-          ownerID: EventJobFireTable.owner_id,
-          leaseUntil: EventJobFireTable.lease_until,
-          sessionID: EventJobFireTable.target_session_id,
-        })
-        .from(EventJobFireTable)
-        .where(eq(EventJobFireTable.id, input.fireID))
-        .get(),
-    )
+    const authority = Database.use((db) => {
+      const row = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, input.fireID)).get()
+      return row ? projectEventFireInTransaction(db, row, committedAt) : undefined
+    })
     if (
       authority?.status !== "running" ||
-      authority.ownerID !== input.ownerID ||
-      authority.leaseUntil <= committedAt ||
-      authority.sessionID !== input.sessionID
+      authority.owner_id !== input.ownerID ||
+      authority.lease_until <= committedAt ||
+      authority.target_session_id !== input.sessionID
     ) {
       throw new Error(`Event fire ${input.fireID} lost its lease before wake Message commit`)
     }
@@ -920,43 +880,15 @@ export namespace EventService {
   ): void {
     const now = Date.now()
     Database.immediateTransaction((db) => {
-      const settled = db
-        .update(EventJobFireTable)
-        .set({
-          status: "succeeded",
-          target_session_id: sessionID,
-          message_id: messageID,
-          owner_id: null,
-          owner_process_id: null,
-          lease_until: 0,
-          error: null,
-          time_completed: now,
-          time_updated: now,
-        })
-        .where(
-          and(
-            eq(EventJobFireTable.id, fire.id),
-            eq(EventJobFireTable.status, "running"),
-            eq(EventJobFireTable.owner_id, ownerID),
-            sql`${EventJobFireTable.lease_until} > ${now}`,
-          ),
-        )
-        .returning({ id: EventJobFireTable.id })
-        .get()
-      if (!settled) throw new Error(`Event fire ${fire.id} owner is no longer authoritative at success`)
-      if (job) {
-        const update = {
-          last_run: now,
-          last_event: fire.event_type,
-          failure_count: 0,
-          last_error: null,
-          ...(job.one_shot ? { enabled: false } : {}),
-        }
-        db.update(EventJobTable)
-          .set(update)
-          .where(and(eq(EventJobTable.id, job.id), eq(EventJobTable.project_id, job.project_id)))
-          .run()
+      const terminal = db.select().from(EventJobFireReceiptTable)
+        .where(and(eq(EventJobFireReceiptTable.fire_id, fire.id), sql`${EventJobFireReceiptTable.outcome} <> 'retry_wait'`)).get()
+      if (terminal) {
+        if (terminal.outcome !== "succeeded" || terminal.message_id !== messageID) throw new Error(`Event fire ${fire.id} conflicts with its immutable terminal receipt`)
+        return
       }
+      const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
+      if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now || fire.target_session_id !== sessionID) throw new Error(`Event fire ${fire.id} owner is no longer authoritative at success`)
+      db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "succeeded", disposition: null, message_id: messageID, retry_at: null, error: null, time_created: now }).run()
     })
     enqueueNextFireForJob(fire.event_job_id)
     log.info("event job fire settled", {
@@ -976,56 +908,23 @@ export namespace EventService {
     error: string,
   ): void {
     const now = Date.now()
-    const settled = Database.use((db) =>
-      db
-        .update(EventJobFireTable)
-        .set({
-          status: "disposition",
-          disposition,
-          owner_id: null,
-          owner_process_id: null,
-          lease_until: 0,
-          error,
-          time_completed: now,
-          time_updated: now,
-        })
-        .where(
-          and(
-            eq(EventJobFireTable.id, fire.id),
-            eq(EventJobFireTable.status, "running"),
-            eq(EventJobFireTable.owner_id, ownerID),
-            sql`${EventJobFireTable.lease_until} > ${now}`,
-          ),
-        )
-        .returning({ id: EventJobFireTable.id })
-        .get(),
-    )
+    const settled = Database.immediateTransaction((db) => {
+      const terminal = db.select().from(EventJobFireReceiptTable)
+        .where(and(eq(EventJobFireReceiptTable.fire_id, fire.id), sql`${EventJobFireReceiptTable.outcome} <> 'retry_wait'`)).get()
+      if (terminal) {
+        if (terminal.outcome !== "disposition" || terminal.disposition !== disposition || terminal.error !== error) throw new Error(`Event fire ${fire.id} conflicts with its immutable terminal receipt`)
+        return true
+      }
+      const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
+      if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
+      db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "disposition", disposition, message_id: null, retry_at: null, error, time_created: now }).run()
+      return true
+    })
     if (settled) enqueueNextFireForJob(fire.event_job_id)
   }
 
   function deferFire(fire: EventJobFire, ownerID: string, error: unknown): void {
-    const now = Date.now()
-    Database.use((db) =>
-      db
-        .update(EventJobFireTable)
-        .set({
-          status: "pending",
-          owner_id: null,
-          owner_process_id: null,
-          lease_until: 0,
-          error: errorMessage(error),
-          time_updated: now,
-        })
-        .where(
-          and(
-            eq(EventJobFireTable.id, fire.id),
-            eq(EventJobFireTable.status, "running"),
-            eq(EventJobFireTable.owner_id, ownerID),
-            sql`${EventJobFireTable.lease_until} > ${now}`,
-          ),
-        )
-        .run(),
-    )
+    log.info("event fire deferred until its immutable lease expires", { fireID: fire.id, ownerID, error: errorMessage(error) })
   }
 
   function scheduleRetry(fire: EventJobFire, job: EventJob | undefined, ownerID: string, error: unknown): void {
@@ -1033,34 +932,9 @@ export namespace EventService {
     const message = errorMessage(error)
     const retryAt = now + Math.min(FIRE_RETRY_MAX_MS, FIRE_RETRY_BASE_MS * 2 ** Math.min(16, fire.attempt - 1))
     const settled = Database.immediateTransaction((db) => {
-      const result = db
-        .update(EventJobFireTable)
-        .set({
-          status: "retry_wait",
-          owner_id: null,
-          owner_process_id: null,
-          lease_until: retryAt,
-          error: message,
-          time_completed: null,
-          time_updated: now,
-        })
-        .where(
-          and(
-            eq(EventJobFireTable.id, fire.id),
-            eq(EventJobFireTable.status, "running"),
-            eq(EventJobFireTable.owner_id, ownerID),
-            sql`${EventJobFireTable.lease_until} > ${now}`,
-          ),
-        )
-        .returning({ id: EventJobFireTable.id })
-        .get()
-      if (!result) return false
-      if (job) {
-        db.update(EventJobTable)
-          .set({ failure_count: sql`${EventJobTable.failure_count} + 1`, last_error: message })
-          .where(and(eq(EventJobTable.id, job.id), eq(EventJobTable.project_id, job.project_id)))
-          .run()
-      }
+      const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
+      if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
+      db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "retry_wait", disposition: null, message_id: null, retry_at: retryAt, error: message, time_created: now }).run()
       return true
     })
     if (settled) scheduleLeaseRecovery(fire.id)
@@ -1183,9 +1057,8 @@ export namespace EventService {
         db
           .select()
           .from(EventJobFireTable)
-          .where(eq(EventJobFireTable.project_id, projectID))
           .orderBy(EventJobFireTable.time_created, EventJobFireTable.id)
-          .all(),
+          .all().map((row) => projectEventFireInTransaction(db, row)).filter((row) => row.project_id === projectID),
       )
     },
   }

@@ -33,6 +33,7 @@ class GlobalEventBus {
     wrapper: (...args: GlobalBusEvents["event"]) => unknown
     id: string
     durable: boolean
+    effectContract?: "idempotent_by_occurrence"
   }>()
   private readonly runtimeID = randomUUID()
   private readonly durableListeners = new Map<string, {
@@ -47,7 +48,7 @@ class GlobalEventBus {
   on(
     eventName: "event",
     listener: (...args: GlobalBusEvents["event"]) => unknown | Promise<unknown>,
-    options?: { durableID: string },
+    options?: { durableID: string; effect: "idempotent_by_occurrence" },
   ): this {
     if (options) {
       const durableKey = `${eventName}\u0000${options.durableID}`
@@ -66,6 +67,7 @@ class GlobalEventBus {
       wrapper: (...args: GlobalBusEvents["event"]) => listener(...args),
       id: options?.durableID ?? `runtime-global:${this.runtimeID}:${++this.sequence}`,
       durable: options !== undefined,
+      effectContract: options?.effect,
     }
     this.registrations.add(registration)
     if (options) this.durableListeners.set(`${eventName}\u0000${options.durableID}`, registration)
@@ -116,6 +118,7 @@ class GlobalEventBus {
       return {
         id: registration.id,
         durable: registration.durable,
+        effectContract: registration.effectContract,
         deliver: (...args: GlobalBusEvents["event"]) => Reflect.apply(registration.callback, this, args),
       }
     })

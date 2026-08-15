@@ -52,7 +52,7 @@ test("exact terminal ingress persists one visible Orchestrator control Message a
         },
       })
       const control = currentOrchestratorControlMessage(event, "tsk_exact_terminal_control", wakeID)!
-      expect(control).toMatchObject(orchestratorControlOccurrenceIdentity(wakeID))
+      expect(control).toMatchObject(orchestratorControlOccurrenceIdentity(wakeID, wakeID))
       expect([control.messageID, control.partID].every((id) => id.length <= Identifier.MAX_LENGTH)).toBe(true)
       const prompt = spyOn(SessionPrompt, "prompt").mockImplementation(async (input: any) => {
         expect(input).toMatchObject({
@@ -102,7 +102,6 @@ test("exact terminal ingress persists one visible Orchestrator control Message a
               text: control.text,
               kind: "control",
               source: "system",
-              metadata: control.partMetadata,
             },
           ],
         })

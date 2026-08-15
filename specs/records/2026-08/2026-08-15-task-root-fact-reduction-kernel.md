@@ -40,7 +40,8 @@ The Task-root slice uses one immutable ingress family, an immutable policy fact,
 ```text
 TaskRootIngressAccepted {
   ingress_id, task_id, execution_epoch, sequence,
-  source: Message(message_id) | ProtocolEvent(event_id) | InlineFact(fact_id, payload),
+  source: Task(task_id) | Message(message_id) | ProtocolEvent(event_id) |
+          AutomationRun(run_id) | EngineArtifact(artifact_id) | InlineFact(fact_id, payload),
   policy_id,
   accepted_at
 }
@@ -62,7 +63,7 @@ ControlActivationLease {
 
 `TaskRootIngressAccepted`, its content-addressed policy and the selected lifecycle events are append-only. A lease row is appended for each activation and only its expiration may be extended while the same owner holds it; expired rows remain the sole physical-attempt history used for an absolute budget. There is no separate activation-attempt fact or counter. Normalized Message/Part, dispatch settlement, coordination action, interaction and Task completion records are the canonical domain/effect facts. There is no parallel generic Activity table and deliberately no generic resolution, budget-exhausted or integrity-failure receipt: all outcomes are deterministic projections of those facts and policy.
 
-An ingress references an already durable Message or Protocol Event instead of copying its payload. Only an input with no other durable owner uses the inline-fact branch, where `ingress_id` is also the deterministic producer/source identity and only the payload is added. The discriminator exists solely to resolve the foreign locator; no separate source kind or identity is stored. Idempotency is unique on `(task_id, normalized source locator)` across every epoch. Acceptance separately verifies that the source targets the current open epoch; replay after reopen returns the old ingress or is fenced, never creates a second accepted fact. `root_session_id` is derived through the immutable Task-execution-to-root-Session binding. Likewise, `execution_epoch` is not copied into leases because their ingress foreign key determines it. The schema review must remove every similar same-row or cross-row restatement.
+An ingress references an already durable Task, Message, Protocol Event, Automation run, or Engine Artifact instead of copying its payload. Only an input with no other durable owner uses the inline-fact branch, where `ingress_id` is also the deterministic producer/source identity and only the payload is added. The source discriminator exists solely to select the locator authority; `source_id` is the sole stored identity for that branch. Idempotency is unique on `(task_id, source, source_id)` across every epoch. Acceptance separately verifies that the source targets the current open epoch; replay after reopen returns the old ingress or is fenced, never creates a second accepted fact. `root_session_id` is derived through the immutable Task-execution-to-root-Session binding. Likewise, `execution_epoch` is not copied into leases because their ingress foreign key determines it. The schema review must remove every similar same-row or cross-row restatement.
 
 The accepted ingress contains no delivery label, attempt, runtime/process identity, prior rejection or terminal result. `sequence` is allocated in the acceptance transaction and is immutable inside `(task_id, execution_epoch)`.
 
@@ -85,7 +86,7 @@ For each ingress, the first matching rule in this total order is the one project
 - `leased` when unresolved and a matching-epoch lease is still valid by expiry and causal Turn/activity consumption;
 - `reconcile_required` when an irreversible activity request has no outcome fact after its activation is no longer valid; this blocks ordinary command replay but permits an exact outcome query or same-key idempotent reconciliation;
 - `waiting` when the latest exact decision receipt creates an unanswered interaction or a future absolute wake deadline;
-- `blocked` when the immutable policy and fact set deterministically prove semantic/physical exhaustion or the absolute deadline has elapsed;
+- `exhausted` when the immutable policy and fact set deterministically prove semantic/physical exhaustion or the absolute deadline has elapsed;
 - `ready` otherwise.
 
 `running`, `idle`, `answered`, `resolved`, queue position, retry scheduled, recovery processed and process owner are views. They are never written back to the accepted ingress and are not stored in a durable projection table.
@@ -115,7 +116,7 @@ After a streaming Turn:
 
 No Host-generated user Message is invented for prose-only output. A non-participant ingress uses one real Orchestrator control Message for the initial fact; later Turns continue from the real preceding assistant Message and an Orchestrator-authored continuation instruction that refers to the same persisted fact. An operator-authored input follows the same rule: a prose response is visible conversation evidence but not execution completion. A status-only conversational request must produce an explicit typed `wait`/`no_action` decision receipt rather than relying on prose as a second completion authority.
 
-The semantic budget is evaluated against the ingress's immutable policy as the count of validated, completed assistant Turns that have no decision/wait receipt and no Provider/execution error. Aborted, failed and decision-producing Turns are excluded. Reaching the limit directly projects `blocked`; no exhausted receipt or mutable attempt counter is written. Physical exhaustion is likewise `count(lease rows) >= physical_activation_limit` while unresolved and unleased.
+The semantic budget is evaluated against the ingress's immutable policy as the count of validated, completed assistant Turns that have no decision/wait receipt and no Provider/execution error. Aborted, failed and decision-producing Turns are excluded. Reaching the limit directly projects terminal `exhausted`; no exhausted receipt or mutable attempt counter is written. Physical exhaustion is likewise `count(lease rows) >= physical_activation_limit` while unresolved and unleased.
 
 ## Physical activation and retry
 
@@ -145,12 +146,13 @@ for each open execution epoch:
   if head is resolved: advance to the next sequence
   if head is waiting: stop ordinary FIFO activation for that epoch
   if head is reconcile_required: acquire only the exact effect-reconciliation lease
-  if head is blocked: stop and project the exact blocker
+  if head is exhausted: advance because policy plus immutable facts prove that ingress's terminal budget result
+  if head is blocked by integrity conflict: stop and project the exact conflict
 ```
 
 Normal post-acceptance wakeup, startup, expired-lease recovery, delayed deadline wake and post-receipt continuation all call the same operation. Dedicated scanners may remain only as producers that append their own domain fact (for example, a newly observed worker lifecycle receipt); they may not claim or mutate Task-root delivery state.
 
-An Interaction answer/reject fact is causally attached to the waiting head and is not a new root ingress, so it may unblock that head without bypassing FIFO. Cancellation and closure lifecycle requests are out-of-band epoch fences and may preempt a waiting head. Unrelated operator or lifecycle inputs remain later FIFO facts. An absolute `resume_at` deadline becomes ready from the policy/decision timestamp and the current clock; no redundant “deadline elapsed” fact is appended. A semantic/physical-exhaustion or integrity blocker freezes the epoch until an explicit `Reopened(epoch + 1)` fact; later ordinary ingress cannot bypass it.
+An Interaction answer/reject fact is causally attached to the waiting head and is not a new root ingress, so it may unblock that head without bypassing FIFO. Cancellation and closure lifecycle requests are out-of-band epoch fences and may preempt a waiting head. Unrelated operator or lifecycle inputs remain later FIFO facts. An absolute `resume_at` deadline becomes ready from the policy/decision timestamp and the current clock; no redundant “deadline elapsed” fact is appended. An integrity conflict freezes the epoch until repaired or superseded by an explicit lifecycle boundary. A semantic/physical/deadline exhaustion is itself a deterministic terminal reducer result, so a later explicit operator ingress may proceed without inventing an exhaustion receipt or mutating the exhausted ingress.
 
 Reconciliation is project-partitioned, reentrant and idempotent. One project failure is an exact result for that project and does not suppress other projects. Terminal Tasks use the same reducer; terminal conversation authority changes which decisions are valid, not how ingress is stored or activated.
 
@@ -274,5 +276,48 @@ Legacy `delivery_attempt` and runtime-attempt values are never converted to acti
 
 ## Implementation evidence
 
-- Design and repository impact audit complete.
-- Production cutover, migration, focused verification, independent review and delivery are pending.
+- Design and repository-wide impact audit complete. The audit covered every production acceptance path, Task/Mission/Session occurrence, normal and terminal settlement, retry/restart recovery, concurrent and multi-project execution, public projections, storage transfer schema and historical migration.
+- The production storage cutover is implemented: Task-root inputs and policies, lifecycle boundaries, Session control requests/receipts, Workflow occurrence facts, Mission closure facts, Automation/Event fire facts, Protocol inbox/delivery receipts, Bus publication receipts, Provider activity request/outcome facts and Tool request/outcome facts are immutable authorities. `control_activation_lease` is the only persisted physical ownership primitive.
+- Durable derived authorities were removed rather than mirrored: mutable ingress/delivery labels and attempts, mutable Task lifecycle fields, Session occurrence status, Interaction status, rewind state, scheduler fire status, protocol delivery status/result/error projections, Provider/Tool mutable completion state, process owner recovery state and subsystem-specific retry owners/scanners no longer participate in the canonical schema.
+- Historical databases are rebuilt inside the schema migration transaction before drift validation. The migration normalizes Task lifecycle Protocol Events to aggregate identity, converts known legacy control rows to immutable facts, reconstructs immutable request/outcome receipts, drops superseded columns/tables/indexes, and fails closed on contradictory or unresolvable facts.
+- `bun run check:control-state-redundancy` machine-checks the closed control-plane table inventory, forbidden functional dependencies, JSON identity duplication, append-only triggers and exact terminal receipt constraints. The current inventory covers 43 tables in seven allowed fact classes and reports zero derived or unclassified durable fields, including Channel ingress, Git checkpoints and Permission request/decision/execution facts.
+- Focused positive verification covers reducer total ordering and conflicts, prose continuation/FIFO leases, stale activation fencing, reconciliation-required effects, lifecycle closure, reopen/rewind facts, Protocol sequence/delivery projection, Provider/Tool fact storage, Automation/Event fact projections, durable Bus recovery, immutable Interaction and Workflow occurrence recovery, Build cleanup activation/restart, schema migration and storage schema parity. The current main-agent matrix passed 191 unique focused tests across 36 files with zero failures, including real temporary databases, restart recovery, runtime ownership transfer and terminal closure.
+- Terminal Task notification is an explicit request/outcome effect rather than a second lifecycle fact: the Protocol payload stores only epoch/result under its Task aggregate identity, while the durable Bus delivery request carries the transient consumer locator. A positive storage test proves both shapes.
+- `bun run typecheck`, `bun run docs:check`, `bun run api:routes-check`, the OpenCorvus production build, Overlay Vite production build, SDK generation/build, Overlay i18n check, `git diff --check`, schema parity and all affected focused tests pass. The documentation check also exercises the repaired lazy Session overlay schema boundary, eliminating its prior import-cycle failure. An isolated real OpenCorvus page at `http://127.0.0.1:4096/ui/` was opened, captured and manually inspected after removing the obsolete ingress Artifact badge path; the main conversation shell, project navigation and composer remained visually coherent without a shadow-state placeholder.
+- The authorized real streaming Provider checker remains intentionally unexecuted because this task has no explicit credential/model-use authorization; its `TASK_CONTROL_CHECK_ALLOW_REAL_PROVIDER=1` boundary remains intact and no credential was read.
+- Final independent review found five valid closure gaps. Review-driven repair made Channel `request_id` mandatory and removed its JSON identity mirrors, reduced Permission execution results to their sole attempt/payload receipt, made completed Git operation keys absorb migrated outcomes before exact-input comparison, migrated the Project identity convergence test to current Channel facts, and restored its closed immutable-domain inventory. The affected OpenCorvus matrix passed 34 tests, the Channel Runtime matrix passed 19 tests, and the control-state checker passed all 43 tables across seven fact classes. The same uninvolved agent then performed a second read-only review and reported no unresolved findings; only the scoped commit and upstream push remain pending.
+
+## Execution Goal and benchmark
+
+### Task definition
+
+Implement the complete zero-redundancy execution control cutover. The benchmark is not satisfied by a reducer unit test or by deleting the incident's fields alone: the current SQLite Data Definition Language (DDL), JSON contracts, production writers/readers, recovery entry points and real Task-control path must all use facts plus physical leases without a durable derived status.
+
+### Input and qualified output
+
+- Input: a fresh canonical SQLite database; historical pre-cutover Task-root rows covering every legacy disposition; Task, Session, Mission, Event and Automation commands; simulated process loss at each effect/receipt boundary; and an optional authorized real streaming Provider/model projection.
+- Qualified output: every accepted input has one cross-epoch source identity; all public status is reproducible from immutable facts, immutable policy and the current clock; an empty or duplicated hint queue rebuilds the same ready frontier; stale activations cannot commit; unknown effects cannot replay; prose-only Turns continue the same ingress; and the schema inventory reports zero derived or unclassified persisted control fields.
+
+### Environment and entry points
+
+- Runtime/dependencies: repository Bun runtime and packages declared by the root and `packages/opencorvus/package.json`.
+- Database: isolated temporary OpenCorvus roots created by the existing test/checker primitives; user databases are never modified by benchmark runs.
+- Real Provider: existing `packages/opencorvus/script/task-control-check.ts`; credentials and exact model projection are loaded only when `TASK_CONTROL_CHECK_ALLOW_REAL_PROVIDER=1` is explicitly authorized. The checker must independently verify credentials, projected model catalog and requested model identity before launch.
+- Primary static/runtime gate: `bun run check:control-state-redundancy` from the repository root.
+- Focused integration gate: the repository inactivity runner around the exact control-plane test files; no unbounded root `bun test`.
+
+### Inactivity timeouts
+
+- Static inventory, typecheck and focused in-process tests: 120 seconds without output/activity.
+- Process/restart integration: 120 seconds without durable Message, Part, Protocol Event, lease or effect-receipt progress.
+- Real streaming Provider Task-control check: retain its activity-resetting inactivity window; do not impose a total wall-clock deadline while durable/model activity continues.
+- Long benchmark phases are polled by bounded periodic wakeups rather than continuously tailing logs.
+
+### Executable acceptance
+
+1. The DDL/contract inventory enumerates every persisted field in the execution-control scope and exits zero only when each is classified as input, causal identity/order, immutable policy, immutable request/outcome/lifecycle fact, or physical lease coordinate. Derived/unclassified fields are a hard failure.
+2. Fresh schema construction, schema fingerprint and MySQL transfer schema agree on the one new model; no compatibility reader or dual writer exists.
+3. Focused positive tests cover the full matrix above with explicit reducer outputs, facts and typed errors. UI automation is neither created nor run.
+4. `bun run typecheck`, `bun run docs:check`, `git diff --check` and the affected package checks pass.
+5. `bun run check:task-control-real` passes when credential/model use is authorized; otherwise its exact authorization boundary is recorded as unexecuted rather than reported as a pass.
+6. After all implementation and main-agent verification pass, one uninvolved read-only agent reviews the full diff, benchmark evidence, migration and deleted paths. Every valid finding is repaired and the affected gates rerun before completion.

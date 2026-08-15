@@ -10,6 +10,7 @@ import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { Plugin } from "@/plugin"
 import type { Provider } from "@/provider/provider"
 import { LLM } from "./llm"
+import { recordProviderActivityEvent } from "./provider-activity-facts"
 import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "@/engine/config"
 import { CompactionOverflow } from "./compaction-overflow"
@@ -100,6 +101,9 @@ export namespace SessionProcessor {
     sessionID: string
     model: Provider.Model
     abort: AbortSignal
+    /** Final host classification performed after all streamed Parts settle but
+     * before the one immutable assistant completion write. */
+    beforeAssistantCompletion?: (message: Message.Assistant) => void | Promise<void>
   }) {
     const toolcalls: Record<string, Message.ToolPart> = {}
     const mcpAppToolLifecycles = new Map<string, McpAppToolLifecycleController>()
@@ -1088,6 +1092,7 @@ export namespace SessionProcessor {
                 }
               },
               (event: LLMActivityEvent) => {
+                recordProviderActivityEvent(input.assistantMessage.id, event)
                 // Translate retry events directly into SessionStatus retry
                 // updates. The activity runner is the single source of
                 // truth for "I tried, hit a transient class, will retry
@@ -1250,6 +1255,8 @@ export namespace SessionProcessor {
               throw error
             }
           }
+          input.assistantMessage.finish ??= "stop"
+          await input.beforeAssistantCompletion?.(input.assistantMessage)
           input.assistantMessage.time.completed = Date.now()
           await Session.updateMessage(input.assistantMessage)
           if (failureOccurrence && input.assistantMessage.error) {

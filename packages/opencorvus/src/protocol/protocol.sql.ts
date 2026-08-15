@@ -1,11 +1,9 @@
-import { integer, index, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core"
-import { sql } from "drizzle-orm"
+import { check, integer, index, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { and, eq, or, sql } from "drizzle-orm"
 import { Identifier } from "@/id/id"
-import { EngineInteractionRequestTable, EngineTaskTable } from "@/engine/engine.sql"
-import { Timestamps } from "@/storage/schema.sql"
 import type {
   ProtocolAggregate,
-  ProtocolInboxDeliveryResult,
+  ProtocolDeliveryReceipt,
   ProtocolInboxStatus,
   ProtocolKind,
 } from "./schema"
@@ -22,12 +20,15 @@ export const ProtocolEventTable = sqliteTable(
     type: text().notNull(),
     aggregate_type: text().notNull().$type<ProtocolAggregate>(),
     aggregate_id: text().notNull(),
-    task_id: text().references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    /** Immutable causal correlation. This is deliberately not an ownership
+     * foreign key: deleting a mutable Task projection must not rewrite facts. */
+    task_id: text(),
     /** Optional immutable Session correlation identity. Protocol audit facts
      * outlive the Session row they describe, so this is deliberately not an
      * ownership foreign key and must never be nulled by Session deletion. */
     session_id: text(),
-    interaction_id: text().references(() => EngineInteractionRequestTable.id, { onDelete: "set null" }),
+    /** Immutable causal correlation, not ownership. */
+    interaction_id: text(),
     stream_id: text(),
     source: text().notNull(),
     target: text(),
@@ -35,21 +36,55 @@ export const ProtocolEventTable = sqliteTable(
     correlation_id: text(),
     reply_to: text(),
     seq: integer().notNull(),
-    order_key: text().notNull(),
     deadline_ms: integer(),
     emitted_at: integer().notNull(),
     payload: text({ mode: "json" }).$type<ProtocolPayload>(),
-    ...Timestamps,
   },
   (table) => [
     uniqueIndex("protocol_event_aggregate_seq_idx").on(table.aggregate_type, table.aggregate_id, table.seq),
     uniqueIndex("protocol_event_mailbox_invocation_idx")
-      .on(table.type, table.task_id, table.session_id, table.correlation_id)
+      .on(table.type, table.aggregate_id, table.session_id, table.correlation_id)
       .where(sql`${table.type} = 'mailbox.message'`),
     uniqueIndex("protocol_event_scheduler_reply_idx")
       .on(table.reply_to)
       .where(sql`${table.type} = 'scheduler.message' AND ${table.kind} = 'reply' AND ${table.reply_to} IS NOT NULL`),
+    uniqueIndex("protocol_event_task_epoch_open_idx")
+      .on(table.aggregate_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`)
+      .where(
+        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.execution.opened', 'task.execution.reopened')`,
+      ),
+    uniqueIndex("protocol_event_task_epoch_terminal_idx")
+      .on(table.aggregate_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`)
+      .where(
+        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancelled', 'task.closed', 'task.completed', 'task.failed')`,
+      ),
+    uniqueIndex("protocol_event_task_epoch_boundary_request_idx")
+      .on(table.aggregate_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`)
+      .where(
+        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancellation.requested', 'task.close.requested')`,
+      ),
+    uniqueIndex("protocol_event_task_deleted_idx")
+      .on(table.aggregate_id)
+      .where(sql`${table.aggregate_type} = 'task' AND ${table.type} = 'task.deleted'`),
+    uniqueIndex("protocol_event_session_deleted_idx")
+      .on(table.aggregate_id)
+      .where(sql`${table.aggregate_type} = 'session' AND ${table.type} = 'session.deleted'`),
+    uniqueIndex("protocol_event_mission_operation_boundary_idx")
+      .on(table.aggregate_id, table.correlation_id, table.type)
+      .where(
+        sql`${table.aggregate_type} = 'session' AND ${table.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed') AND ${table.correlation_id} IS NOT NULL`,
+      ),
     index("protocol_event_task_idx").on(table.task_id, table.seq),
+    check("protocol_event_task_identity_shape", sql`${table.aggregate_type} <> 'task' OR ${table.task_id} IS NULL`),
+    check("protocol_event_session_identity_shape", sql`${table.aggregate_type} <> 'session' OR ${table.session_id} IS NULL`),
+    check("protocol_event_payload_envelope_shape", sql`
+      json_type(${table.payload}, '$.taskID') IS NULL
+      AND json_type(${table.payload}, '$.sessionID') IS NULL
+      AND json_type(${table.payload}, '$.interactionID') IS NULL
+      AND json_type(${table.payload}, '$.orderKey') IS NULL
+      AND (${table.type} <> 'task.updated' OR json_type(${table.payload}, '$.status') IS NULL)
+      AND (${table.type} NOT IN ('task.completed','task.failed','task.cancelled') OR json_type(${table.payload}, '$.timeCompleted') IS NULL)
+    `),
     index("protocol_event_session_idx").on(table.session_id, table.seq),
     index("protocol_event_interaction_idx").on(table.interaction_id, table.seq),
     index("protocol_event_stream_idx").on(table.stream_id, table.seq),
@@ -65,15 +100,12 @@ export const ProtocolEventTable = sqliteTable(
   ],
 )
 
-export const ProtocolAggregateSequenceTable = sqliteTable(
-  "protocol_aggregate_sequence",
-  {
-    aggregate_type: text().notNull().$type<ProtocolAggregate>(),
-    aggregate_id: text().notNull(),
-    next_seq: integer().notNull(),
-  },
-  (table) => [uniqueIndex("protocol_aggregate_sequence_identity_idx").on(table.aggregate_type, table.aggregate_id)],
-)
+export function protocolEventBelongsToTask(taskID: string) {
+  return or(
+    and(eq(ProtocolEventTable.aggregate_type, "task"), eq(ProtocolEventTable.aggregate_id, taskID)),
+    eq(ProtocolEventTable.task_id, taskID),
+  )!
+}
 
 export const ProtocolInboxTable = sqliteTable(
   "protocol_inbox",
@@ -86,19 +118,27 @@ export const ProtocolInboxTable = sqliteTable(
       .references(() => ProtocolEventTable.id, { onDelete: "cascade" }),
     actor: text().notNull().$type<ProtocolAggregate>(),
     actor_id: text().notNull(),
-    status: text().notNull().$type<ProtocolInboxStatus>().default("pending"),
-    lease_owner: text(),
-    lease_until: integer(),
-    attempt: integer().notNull().default(0),
     visible_at: integer().notNull(),
-    last_error: text(),
-    delivery_result: text({ mode: "json" }).$type<ProtocolInboxDeliveryResult>(),
-    time_completed: integer(),
-    ...Timestamps,
+    time_created: integer().notNull(),
   },
   (table) => [
     uniqueIndex("protocol_inbox_envelope_actor_idx").on(table.envelope_id, table.actor, table.actor_id),
-    index("protocol_inbox_visible_idx").on(table.actor, table.actor_id, table.status, table.visible_at, table.envelope_id),
-    index("protocol_inbox_lease_idx").on(table.actor, table.lease_until),
+    index("protocol_inbox_visible_idx").on(table.actor, table.actor_id, table.visible_at, table.envelope_id),
+  ],
+)
+
+export const ProtocolDeliveryReceiptTable = sqliteTable(
+  "protocol_delivery_receipt",
+  {
+    id: text().primaryKey(),
+    inbox_id: text().notNull().references(() => ProtocolInboxTable.id, { onDelete: "cascade" }),
+    receipt: text({ mode: "json" }).notNull().$type<ProtocolDeliveryReceipt>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    index("protocol_delivery_receipt_inbox_idx").on(table.inbox_id, table.time_created),
+    uniqueIndex("protocol_delivery_receipt_terminal_idx")
+      .on(table.inbox_id)
+      .where(sql`json_extract(${table.receipt}, '$.kind') <> 'retry_wait'`),
   ],
 )

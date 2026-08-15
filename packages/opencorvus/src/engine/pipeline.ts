@@ -13,7 +13,6 @@ import { budgetRow } from "./helpers"
 import { CreateTaskInput, Event } from "./model"
 import { EngineProtocol } from "./protocol"
 import { insertEngineChannelBinding } from "./channel-binding"
-import { insertEngineProgressSnapshot } from "./progress"
 import { insertEngineTask } from "./task"
 import { EngineTaskTable } from "./engine.sql"
 import { TaskGlobalProjectBindingError } from "./task-project-error"
@@ -31,7 +30,8 @@ import {
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { SessionTable } from "@/session/session.sql"
 import { ProjectMemory } from "@/memory/project-memory"
-import { persistTaskRootIngressInTransaction } from "./task-root-ingress-delivery"
+import { acceptTaskRootIngressInTransaction, DEFAULT_TASK_ROOT_INGRESS_POLICY } from "./task-root-fact-store"
+import { appendTaskOpenedInTransaction } from "./task-lifecycle"
 
 const log = Log.create({ service: "engine-pipeline" })
 
@@ -85,7 +85,6 @@ export function persistTask(input: {
       projectID: input.projectID,
     })
   }
-  const taskStatus = "active" as const
   const summary = "Task started"
   const source = "pipeline.active"
   return Database.transaction((db) => {
@@ -114,9 +113,7 @@ export function persistTask(input: {
       priority: input.priority ?? "normal",
       budget: budgetRow(input.budget),
       metadata: input.metadata,
-      timeStarted: input.now,
       timeCreated: input.now,
-      timeUpdated: input.now,
     })
     if (input.metadata.actor === "user") {
       ProjectMemory.captureOccurrenceInTransaction(db, {
@@ -155,42 +152,28 @@ export function persistTask(input: {
         timeCreated: input.now,
       })
     }
-    insertEngineProgressSnapshot(db, {
-      taskID: input.taskID,
-      status: "active",
-      summary,
-      payload: { sessionID: input.sessionID },
-      timeCreated: input.now,
-    })
     const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
     if (!task) throw new Error(`Task ${input.taskID} disappeared during active occurrence creation`)
-    const initialIngressID = persistTaskRootIngressInTransaction(
+    appendTaskOpenedInTransaction({
       db,
-      task,
-      {
-        note: "Task created",
-        taskCreation: { taskID: input.taskID, ...(input.requestID ? { requestID: input.requestID } : {}) },
-      },
-      { taskCreationID: input.taskID },
-      input.now,
-    )
+      taskID: input.taskID,
+      sessionID: input.sessionID,
+      now: input.now,
+      source: "engine.pipeline",
+    })
+    const initialIngressID = acceptTaskRootIngressInTransaction(db, {
+      taskID: input.taskID,
+      executionEpoch: 1,
+      source: "task",
+      sourceID: input.taskID,
+      ...DEFAULT_TASK_ROOT_INGRESS_POLICY,
+      now: input.now,
+    }).id
     Database.effect(() =>
       EngineProtocol.emit(
         Event.TaskCreated,
         {
           taskID: input.taskID,
-          status: taskStatus,
-          summary,
-        },
-        { source },
-      ),
-    )
-    Database.effect(() =>
-      EngineProtocol.emit(
-        Event.TaskUpdated,
-        {
-          taskID: input.taskID,
-          status: taskStatus,
           summary,
         },
         { source },

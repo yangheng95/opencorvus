@@ -205,56 +205,54 @@ describe("random Expert Squad evolution controller contracts", () => {
     expect(positiveIntegerSetting(" 42000 ", 1_800_000, "ACTION_MS")).toBe(42_000)
   })
 
-  test("retains the first typed Artifact failure across later current-row settlement", () => {
+  test("retains the first immutable Artifact failure receipt across later receipts", () => {
     expect(
       summarizeArtifactFailureTransitions([
         {
-          artifact_id: "art_wake",
+          artifact_id: "art_failure",
           task_id: "tsk_1",
-          kind: "task_root_ingress",
-          label: "delivery_failed",
+          kind: "effect_error_receipt",
+          label: "fact",
           catalog_revision: 43,
           time_updated: 43_000,
           payload: {
-            delivery_result: {
-              status: "delivery_failed",
-              error_name: "TaskRootIngressSettlementError",
-              message: "completed without a final assistant message",
-            },
+            status: "failed",
+            error_name: "EffectSettlementError",
+            message: "effect outcome requires reconciliation",
           },
         },
         {
-          artifact_id: "art_wake",
+          artifact_id: "art_success",
           task_id: "tsk_1",
-          kind: "task_root_ingress",
-          label: "delivered",
+          kind: "effect_receipt",
+          label: "fact",
           catalog_revision: 45,
           time_updated: 45_000,
-          payload: { delivery_result: { status: "terminal_inapplicable" } },
+          payload: { status: "completed" },
         },
       ]),
     ).toEqual({
       count: 1,
       first: {
-        artifact_id: "art_wake",
+        artifact_id: "art_failure",
         task_id: "tsk_1",
-        kind: "task_root_ingress",
-        label: "delivery_failed",
+        kind: "effect_error_receipt",
+        label: "fact",
         catalog_revision: 43,
         time_updated: 43_000,
-        error_name: "TaskRootIngressSettlementError",
-        message: "completed without a final assistant message",
+        error_name: "EffectSettlementError",
+        message: "effect outcome requires reconciliation",
       },
       tail: [
         {
-          artifact_id: "art_wake",
+          artifact_id: "art_failure",
           task_id: "tsk_1",
-          kind: "task_root_ingress",
-          label: "delivery_failed",
+          kind: "effect_error_receipt",
+          label: "fact",
           catalog_revision: 43,
           time_updated: 43_000,
-          error_name: "TaskRootIngressSettlementError",
-          message: "completed without a final assistant message",
+          error_name: "EffectSettlementError",
+          message: "effect outcome requires reconciliation",
         },
       ],
     })

@@ -1,10 +1,14 @@
 import { Database, NotFoundError, and, desc, eq, inArray, isNull, ne, or, sql } from "@/storage/db"
 import {
+  AutomationDefinitionTombstoneTable,
   AutomationProjectTargetTable,
+  AutomationRunReceiptTable,
   AutomationRunOutcomes,
   AutomationRunTable,
   AutomationTable,
 } from "./automation.sql"
+import { projectAutomationInTransaction, projectAutomationRunInTransaction, type AutomationRow } from "./automation-projection"
+import { acquireControlLease, assertControlLeaseInTransaction, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 import { Recurrence } from "./recurrence"
 import { Scheduler } from "./index"
 import { Session } from "@/session"
@@ -13,6 +17,7 @@ import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
 import { taskWaitFireID } from "./task-wait-fire-identity"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { persistTaskWaitIngressInTransaction } from "@/engine/task-root-ingress-delivery"
+import { findTask } from "@/engine/store"
 import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
@@ -170,6 +175,42 @@ export namespace AutomationService {
   )
   let globalRunning = false
 
+  function latestAutomationDefinitionInTransaction(db: Database.TxOrDb, definitionID: string) {
+    const row = db.select().from(AutomationTable)
+      .where(eq(AutomationTable.definition_id, definitionID))
+      .orderBy(desc(AutomationTable.revision), desc(AutomationTable.id)).get()
+    const tombstone = db.select().from(AutomationDefinitionTombstoneTable)
+      .where(eq(AutomationDefinitionTombstoneTable.definition_id, definitionID))
+      .orderBy(desc(AutomationDefinitionTombstoneTable.revision), desc(AutomationDefinitionTombstoneTable.id)).get()
+    return row && (!tombstone || row.revision > tombstone.revision) ? row : undefined
+  }
+
+  function currentAutomationDefinitions(db: Database.TxOrDb) {
+    const latest = new Map<string, typeof AutomationTable.$inferSelect>()
+    for (const row of db.select().from(AutomationTable)
+      .orderBy(AutomationTable.definition_id, desc(AutomationTable.revision), desc(AutomationTable.id)).all()) {
+      if (!latest.has(row.definition_id)) latest.set(row.definition_id, row)
+    }
+    return [...latest.values()].filter((row) => {
+      const tombstone = db.select({ revision: AutomationDefinitionTombstoneTable.revision })
+        .from(AutomationDefinitionTombstoneTable)
+        .where(eq(AutomationDefinitionTombstoneTable.definition_id, row.definition_id))
+        .orderBy(desc(AutomationDefinitionTombstoneTable.revision)).get()
+      return !tombstone || row.revision > tombstone.revision
+    })
+  }
+
+  function appendAutomationTombstoneInTransaction(db: Database.TxOrDb, row: typeof AutomationTable.$inferSelect, now: number) {
+    const id = Identifier.ascending("automation")
+    db.insert(AutomationDefinitionTombstoneTable).values({
+      id,
+      definition_id: row.definition_id,
+      revision: row.revision + 1,
+      time_created: now,
+    }).run()
+    return id
+  }
+
   export function init() {
     initGlobal()
     installActivitySubscriptions()
@@ -192,14 +233,8 @@ export namespace AutomationService {
   }
 
   export function list(): AutomationView[] {
-    const rows = Database.use((db) =>
-      db
-        .select()
-        .from(AutomationTable)
-        .where(ne(AutomationTable.kind, "delay"))
-        .orderBy(AutomationTable.next_run, AutomationTable.id)
-        .all(),
-    )
+    const rows = Database.use((db) => currentAutomationDefinitions(db).filter((row) => row.kind !== "delay"))
+      .map((row) => Database.use((db) => projectAutomationInTransaction(db, row))).sort((left, right) => left.next_run - right.next_run || left.id.localeCompare(right.id))
     return rows.map(view)
   }
 
@@ -209,64 +244,53 @@ export namespace AutomationService {
   }
 
   function listRunsForAutomation(id: string, fireID?: string): AutomationRunView[] {
-    return Database.use((db) =>
+    const rows = Database.use((db) =>
       db
-        .select({
-          id: AutomationRunTable.id,
-          automationId: AutomationRunTable.automation_id,
-          fireId: AutomationRunTable.fire_id,
-          targetScope: AutomationRunTable.target_scope,
-          targetProjectId: AutomationRunTable.project_id,
-          outcome: AutomationRunTable.outcome,
-          startedAt: AutomationRunTable.started_at,
-          completedAt: AutomationRunTable.completed_at,
-          error: AutomationRunTable.error,
-          sessionID: SessionTable.id,
-          sessionTitle: SessionTable.title,
-          sessionDirectory: SessionTable.directory,
-          sessionKind: SessionTable.kind,
-          sessionMetadata: SessionTable.metadata,
-        })
+        .select({ run: AutomationRunTable })
         .from(AutomationRunTable)
-        .leftJoin(SessionTable, eq(SessionTable.id, AutomationRunTable.session_id))
+        .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationRunTable.automation_revision_id))
         .where(
           fireID
-            ? and(eq(AutomationRunTable.automation_id, id), eq(AutomationRunTable.fire_id, fireID))
-            : eq(AutomationRunTable.automation_id, id),
+            ? and(eq(AutomationTable.definition_id, id), eq(AutomationRunTable.fire_id, fireID))
+            : eq(AutomationTable.definition_id, id),
         )
         .orderBy(desc(AutomationRunTable.started_at), desc(AutomationRunTable.id))
         .all(),
-    ).map((row) => ({
-      id: row.id,
-      automationId: row.automationId,
-      fireId: row.fireId,
-      targetScope: row.targetScope,
-      targetProjectId: row.targetProjectId ?? null,
-      session: row.sessionID
+    )
+    return rows.map((row) => {
+      const run = Database.use((db) => projectAutomationRunInTransaction(db, row.run))
+      const session = run.session_id ? Database.use((db) => db.select().from(SessionTable).where(eq(SessionTable.id, run.session_id!)).get()) : undefined
+      return ({
+      id: run.id,
+      automationId: run.automation_id,
+      fireId: run.fire_id,
+      targetScope: run.target_scope,
+      targetProjectId: run.project_id ?? null,
+      session: session
         ? {
-            id: row.sessionID,
-            title: row.sessionTitle!,
-            directory: row.sessionDirectory!,
-            kind: row.sessionKind!,
+            id: session.id,
+            title: session.title,
+            directory: session.directory,
+            kind: session.kind,
             experience:
               rightSidebarConversationExperience({
-                kind: row.sessionKind!,
-                metadata: row.sessionMetadata,
+                kind: session.kind,
+                metadata: session.metadata,
               }) ?? null,
             productPillar:
-              row.sessionKind === "mission"
-                ? missionProductPillar({ metadata: row.sessionMetadata ?? undefined })
+              session.kind === "mission"
+                ? missionProductPillar({ metadata: session.metadata ?? undefined })
                 : null,
           }
         : null,
-      outcome: row.outcome,
-      startedAt: row.startedAt,
-      completedAt: row.completedAt ?? null,
-      error: row.error ?? null,
-    }))
+      outcome: run.outcome,
+      startedAt: run.started_at,
+      completedAt: run.completed_at,
+      error: run.error,
+    })})
   }
 
-  function view(row: typeof AutomationTable.$inferSelect): AutomationView {
+  function view(row: AutomationRow): AutomationView {
     if (row.kind === "delay" || !row.recurrence) {
       throw new Error(`Automation ${row.id} is not a public recurring automation`)
     }
@@ -296,7 +320,7 @@ export namespace AutomationService {
         db
           .select({ projectID: AutomationProjectTargetTable.project_id })
           .from(AutomationProjectTargetTable)
-          .where(eq(AutomationProjectTargetTable.automation_id, row.id))
+          .where(eq(AutomationProjectTargetTable.automation_revision_id, row.id))
           .orderBy(AutomationProjectTargetTable.position, AutomationProjectTargetTable.project_id)
           .all(),
       ).map((target) => target.projectID)
@@ -312,17 +336,11 @@ export namespace AutomationService {
   }
 
   async function assertTaskRootSessionInProject(input: { taskId: string; projectId: string }) {
-    const task = Database.use((db) =>
-      db
-        .select({ id: EngineTaskTable.id, sessionID: EngineTaskTable.session_id })
-        .from(EngineTaskTable)
-        .where(and(eq(EngineTaskTable.id, input.taskId), eq(EngineTaskTable.project_id, input.projectId)))
-        .get(),
-    )
-    if (!task) throw new NotFoundError({ message: `Task not found: ${input.taskId}` })
-    if (!task.sessionID) throw new Error(`Task ${input.taskId} has no root session; cannot schedule task wake.`)
-    const rootSession = await Session.assertLineageInProject({ sessionID: task.sessionID, projectID: input.projectId })
-    return { ...task, rootSession }
+    const task = findTask(input.taskId)
+    if (!task || task.project_id !== input.projectId) throw new NotFoundError({ message: `Task not found: ${input.taskId}` })
+    if (!task.session_id) throw new Error(`Task ${input.taskId} has no root session; cannot schedule task wake.`)
+    const rootSession = await Session.assertLineageInProject({ sessionID: task.session_id, projectID: input.projectId })
+    return { ...task, sessionID: task.session_id, rootSession }
   }
 
   export async function create(input: CreateAutomationInput): Promise<{ id: string; name: string; nextRun: number }> {
@@ -335,6 +353,8 @@ export namespace AutomationService {
       tx.insert(AutomationTable)
         .values({
           id,
+          definition_id: id,
+          revision: 1,
           project_id: null,
           session_id: input.target.scope === "session" ? input.target.sessionId : null,
           name: input.name,
@@ -347,14 +367,13 @@ export namespace AutomationService {
           reasoning_effort: input.reasoningEffort,
           prompt: input.prompt,
           status: "active",
-          next_run: nextRun,
         })
         .run()
       if (input.target.scope === "project") {
         tx.insert(AutomationProjectTargetTable)
           .values(
             input.target.projectIds.map((projectID, position) => ({
-              automation_id: id,
+              automation_revision_id: id,
               project_id: projectID,
               position,
             })),
@@ -402,15 +421,20 @@ export namespace AutomationService {
       reasoningEffort: next.reasoningEffort,
       prompt: next.prompt,
     })
-    const nextRun =
-      next.status === "active" && (input.recurrence !== undefined || current.status === "paused")
-        ? Recurrence.nextRun(next.recurrence, Date.now())
-        : current.next_run
+    const nextRun = next.status === "active" ? Recurrence.nextRun(next.recurrence, Date.now()) : current.next_run
     const committedAt = Date.now()
-    const row = Database.transaction((tx) => {
-      const updated = tx
-        .update(AutomationTable)
-        .set({
+    const row = Database.immediateTransaction((tx) => {
+      const latest = latestAutomationDefinitionInTransaction(tx, input.id)
+      const lease = currentControlLeaseInTransaction(tx, "automation", input.id)
+      if (!latest || latest.kind === "delay" || (lease && lease.expires_at > committedAt)) return undefined
+      if (latest.revision !== current.revision) return undefined
+      const revisionID = Identifier.ascending("automation")
+      tx.insert(AutomationTable)
+        .values({
+          ...latest,
+          id: revisionID,
+          definition_id: input.id,
+          revision: latest.revision + 1,
           name: next.name,
           kind: "recurring",
           scope: next.target.scope,
@@ -422,31 +446,22 @@ export namespace AutomationService {
           prompt: next.prompt,
           session_id: next.target.scope === "session" ? next.target.sessionId : null,
           status: next.status,
-          next_run: nextRun,
-          last_error: input.recurrence !== undefined ? null : current.last_error,
-          failure_count: input.recurrence !== undefined ? 0 : current.failure_count,
+          time_created: committedAt,
         })
-        .where(
-          sql`${AutomationTable.id} = ${input.id}
-            AND ${AutomationTable.kind} != 'delay'
-            AND (${AutomationTable.lease_until} <= ${committedAt} OR ${AutomationTable.lease_owner} IS NULL)`,
-        )
-        .returning()
-        .get()
-      if (!updated) return undefined
-      tx.delete(AutomationProjectTargetTable).where(eq(AutomationProjectTargetTable.automation_id, input.id)).run()
+        .run()
       if (next.target.scope === "project") {
         tx.insert(AutomationProjectTargetTable)
           .values(
             next.target.projectIds.map((projectID, position) => ({
-              automation_id: input.id,
+              automation_revision_id: revisionID,
               project_id: projectID,
               position,
             })),
           )
           .run()
       }
-      return updated
+      const updated = tx.select().from(AutomationTable).where(eq(AutomationTable.id, revisionID)).get()!
+      return projectAutomationInTransaction(tx, updated)
     })
     if (!row) {
       assertPublicAutomation(input.id)
@@ -465,7 +480,7 @@ export namespace AutomationService {
   async function runNowWithExecutor(
     id: string,
     executeFire: (
-      job: typeof AutomationTable.$inferSelect,
+      job: AutomationRow,
       owner: string,
       now: number,
       reschedule: boolean,
@@ -484,18 +499,7 @@ export namespace AutomationService {
     }
     const now = Date.now()
     const owner = `manual:${process.pid}:${now}`
-    const row = Database.use((db) =>
-      db
-        .update(AutomationTable)
-        .set({ lease_owner: owner, lease_until: now + LEASE_MS })
-        .where(
-          sql`${AutomationTable.id} = ${id}
-            AND ${AutomationTable.kind} != 'delay'
-            AND (${AutomationTable.lease_until} <= ${now} OR ${AutomationTable.lease_owner} IS NULL)`,
-        )
-        .returning()
-        .get(),
-    )
+    const row = claim(id, owner, now, true)
     if (!row) {
       throw new AutomationRunningConflictError({
         message: `Automation ${id} is already running`,
@@ -517,7 +521,7 @@ export namespace AutomationService {
       now: number
       runtimeSignal?: AbortSignal
     }) {
-      return execute(input.job, input.owner, input.now, true, input.runtimeSignal ?? new AbortController().signal)
+      return execute(Database.use((db) => projectAutomationInTransaction(db, input.job)), input.owner, input.now, true, input.runtimeSignal ?? new AbortController().signal)
     },
     createLeaseFence: createAutomationLeaseFence,
     installLeaseRenewTimerFactory(factory: LeaseRenewTimerFactory): Disposable {
@@ -552,15 +556,10 @@ export namespace AutomationService {
   }
 
   function assertPublicAutomation(id: string) {
-    const row = Database.use((db) =>
-      db
-        .select()
-        .from(AutomationTable)
-        .where(and(eq(AutomationTable.id, id), ne(AutomationTable.kind, "delay")))
-        .get(),
-    )
+    const row = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
+    if (!row || row.kind === "delay") throw new NotFoundError({ message: `Automation not found: ${id}` })
     if (!row) throw new NotFoundError({ message: `Automation not found: ${id}` })
-    return row
+    return Database.use((db) => projectAutomationInTransaction(db, row))
   }
 
   async function assertPublicInput(input: CreateAutomationInput) {
@@ -649,6 +648,8 @@ export namespace AutomationService {
         .insert(AutomationTable)
         .values({
           id,
+          definition_id: id,
+          revision: 1,
           project_id: input.projectId,
           session_id: input.sessionId,
           name: input.name,
@@ -656,7 +657,7 @@ export namespace AutomationService {
           surface: input.surface ? PanelSurface.parse(input.surface) : undefined,
           prompt: input.prompt,
           status: "active",
-          next_run: nextRun,
+          due_at: nextRun,
         })
         .run(),
     )
@@ -676,13 +677,15 @@ export namespace AutomationService {
         .insert(AutomationTable)
         .values({
           id,
+          definition_id: id,
+          revision: 1,
           project_id: input.projectId,
           task_id: input.taskId,
           name: input.name,
           kind: "delay",
           prompt: input.reason,
           status: "active",
-          next_run: nextRun,
+          due_at: nextRun,
         })
         .run(),
     )
@@ -698,19 +701,13 @@ export namespace AutomationService {
         automationID: id,
       })
     }
-    const row = Database.use((db) =>
-      db
-        .delete(AutomationTable)
-        .where(
-          and(
-            eq(AutomationTable.id, id),
-            ne(AutomationTable.kind, "delay"),
-            or(isNull(AutomationTable.lease_owner), sql`${AutomationTable.lease_until} <= ${now}`),
-          ),
-        )
-        .returning({ id: AutomationTable.id, name: AutomationTable.name })
-        .get(),
-    )
+    const row = Database.immediateTransaction((db) => {
+      const latest = latestAutomationDefinitionInTransaction(db, id)
+      const lease = currentControlLeaseInTransaction(db, "automation", id)
+      if (!latest || latest.kind === "delay" || (lease && lease.expires_at > now)) return undefined
+      appendAutomationTombstoneInTransaction(db, latest, now)
+      return { id, name: latest.name }
+    })
     if (!row) {
       throw new AutomationRunningConflictError({
         message: `Automation ${id} began running before it could be deleted`,
@@ -727,39 +724,15 @@ export namespace AutomationService {
     now?: number
   }): Promise<ConsumedAutomationWaits> {
     const now = input.now ?? Date.now()
-    const pending = Database.use((db) =>
-      db
-        .select({ id: AutomationTable.id })
-        .from(AutomationTable)
-        .where(
-          and(
-            eq(AutomationTable.project_id, input.projectId),
-            eq(AutomationTable.task_id, input.taskId),
-            eq(AutomationTable.status, "active"),
-            eq(AutomationTable.kind, "delay"),
-            or(isNull(AutomationTable.lease_owner), sql`${AutomationTable.lease_until} <= ${now}`),
-          ),
-        )
-        .all(),
-    )
+    const pending = pendingDelays(now).filter((row) => row.project_id === input.projectId && row.task_id === input.taskId)
     if (pending.length === 0) return { jobIDs: [] }
     await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
-    const rows = Database.use((db) =>
-      db
-        .delete(AutomationTable)
-        .where(
-          and(
-            eq(AutomationTable.project_id, input.projectId),
-            eq(AutomationTable.task_id, input.taskId),
-            eq(AutomationTable.status, "active"),
-            eq(AutomationTable.kind, "delay"),
-            or(isNull(AutomationTable.lease_owner), sql`${AutomationTable.lease_until} <= ${now}`),
-          ),
-        )
-        .returning({ id: AutomationTable.id })
-        .all(),
-    )
-    const jobIDs = rows.map((row) => row.id)
+    const jobIDs = Database.immediateTransaction((db) => pending.flatMap((row) => {
+      const latest = latestAutomationDefinitionInTransaction(db, row.id)
+      if (!latest || latest.id !== row.revision_id) return []
+      appendAutomationTombstoneInTransaction(db, latest, now)
+      return [row.id]
+    }))
     if (jobIDs.length > 0) {
       log.info("pending task wait consumed", {
         taskID: input.taskId,
@@ -779,23 +752,13 @@ export namespace AutomationService {
   }): Promise<ConsumedAutomationWaits> {
     await Session.assertLineageInProject({ sessionID: input.sessionId, projectID: input.projectId })
     const now = input.now ?? Date.now()
-    const rows = Database.use((db) =>
-      db
-        .delete(AutomationTable)
-        .where(
-          and(
-            eq(AutomationTable.project_id, input.projectId),
-            eq(AutomationTable.session_id, input.sessionId),
-            isNull(AutomationTable.task_id),
-            eq(AutomationTable.kind, "delay"),
-            eq(AutomationTable.status, "active"),
-            or(isNull(AutomationTable.lease_owner), sql`${AutomationTable.lease_until} <= ${now}`),
-          ),
-        )
-        .returning({ id: AutomationTable.id })
-        .all(),
-    )
-    const jobIDs = rows.map((row) => row.id)
+    const pending = pendingDelays(now).filter((row) => row.project_id === input.projectId && row.session_id === input.sessionId && row.task_id === null)
+    const jobIDs = pending.length === 0 ? [] : Database.immediateTransaction((db) => pending.flatMap((row) => {
+      const latest = latestAutomationDefinitionInTransaction(db, row.id)
+      if (!latest || latest.id !== row.revision_id) return []
+      appendAutomationTombstoneInTransaction(db, latest, now)
+      return [row.id]
+    }))
     if (jobIDs.length > 0) {
       log.info("pending session wait consumed", {
         sessionID: input.sessionId,
@@ -847,18 +810,15 @@ export namespace AutomationService {
       for (const job of claimed) await fail(job, owner, error)
       throw error
     }
-    Database.use((db) =>
-      db
-        .delete(AutomationTable)
-        .where(
-          and(
-            eq(AutomationTable.project_id, input.projectId),
-            eq(AutomationTable.task_id, input.taskId),
-            eq(AutomationTable.lease_owner, owner),
-          ),
-        )
-        .run(),
-    )
+    Database.transaction((db) => {
+      for (const job of claimed) {
+        const lease = currentControlLeaseInTransaction(db, "automation", job.id)
+        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) throw new AutomationRunningConflictError({ message: `Automation ${job.id} lost its activity lease`, automationID: job.id })
+        const latest = latestAutomationDefinitionInTransaction(db, job.id)
+        if (!latest || latest.id !== job.revision_id) throw new AutomationRunningConflictError({ message: `Automation ${job.id} definition changed during activity delivery`, automationID: job.id })
+        appendAutomationTombstoneInTransaction(db, latest, Date.now())
+      }
+    })
     log.info("pending task wait triggered early from activity", {
       taskID: input.taskId,
       projectID: input.projectId,
@@ -876,42 +836,16 @@ export namespace AutomationService {
     now?: number
   }) {
     const now = input.now ?? Date.now()
-    const pending = Database.use((db) =>
-      db
-        .select({ id: AutomationTable.id })
-        .from(AutomationTable)
-        .where(
-          and(
-            eq(AutomationTable.project_id, input.projectId),
-            eq(AutomationTable.task_id, input.taskId),
-            eq(AutomationTable.status, "active"),
-            eq(AutomationTable.kind, "delay"),
-            or(isNull(AutomationTable.lease_owner), sql`${AutomationTable.lease_until} <= ${now}`),
-          ),
-        )
-        .all(),
-    )
+    const pending = pendingDelays(now).filter((row) => row.project_id === input.projectId && row.task_id === input.taskId)
     if (pending.length === 0) return []
     await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
-    return Database.use((db) =>
-      db
-        .update(AutomationTable)
-        .set({
-          lease_until: now + LEASE_MS,
-          lease_owner: input.owner,
-        })
-        .where(
-          and(
-            eq(AutomationTable.project_id, input.projectId),
-            eq(AutomationTable.task_id, input.taskId),
-            eq(AutomationTable.status, "active"),
-            eq(AutomationTable.kind, "delay"),
-            or(isNull(AutomationTable.lease_owner), sql`${AutomationTable.lease_until} <= ${now}`),
-          ),
-        )
-        .returning()
-        .all(),
-    )
+    return pending.flatMap((job) => acquireControlLease({ target: "automation", targetID: job.id, ownerOccurrenceID: input.owner, now, leaseMilliseconds: LEASE_MS }).acquired ? [job] : [])
+  }
+
+  function pendingDelays(now: number): AutomationRow[] {
+    return Database.use((db) => currentAutomationDefinitions(db).filter((row) => row.kind === "delay" && row.status === "active"))
+      .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
+      .filter((row) => row.lease_until <= now)
   }
 
   async function poll(signal?: AbortSignal): Promise<void> {
@@ -995,18 +929,10 @@ export namespace AutomationService {
   async function run(now: number, signal?: AbortSignal): Promise<void> {
     signal?.throwIfAborted()
     const owner = `${process.pid}:${now}`
-    const due = Database.use((db) =>
-      db
-        .select({ id: AutomationTable.id })
-        .from(AutomationTable)
-        .where(
-          sql`${AutomationTable.status} = 'active'
-            AND ${AutomationTable.next_run} <= ${now}
-            AND (${AutomationTable.lease_until} <= ${now} OR ${AutomationTable.lease_until} IS NULL)`,
-        )
-        .orderBy(AutomationTable.next_run, AutomationTable.id)
-        .all(),
-    )
+    const due = Database.use((db) => currentAutomationDefinitions(db).filter((row) => row.status === "active"))
+      .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
+      .filter((row) => row.next_run <= now && row.lease_until <= now)
+      .sort((left, right) => left.next_run - right.next_run || left.id.localeCompare(right.id))
 
     if (due.length === 0) return
     log.info("found due automations", { count: due.length })
@@ -1039,31 +965,15 @@ export namespace AutomationService {
   }
 
   async function validateDueAutomationBeforeClaim(id: string, now: number) {
-    const job = Database.use((db) =>
-      db
-        .select()
-        .from(AutomationTable)
-        .where(
-          sql`${AutomationTable.id} = ${id}
-            AND ${AutomationTable.status} = 'active'
-            AND ${AutomationTable.next_run} <= ${now}
-            AND (${AutomationTable.lease_until} <= ${now} OR ${AutomationTable.lease_until} IS NULL)`,
-        )
-        .get(),
-    )
-    if (!job) return undefined
+    const persisted = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
+    if (persisted?.status !== "active") return undefined
+    const job = Database.use((db) => projectAutomationInTransaction(db, persisted))
+    if (job.next_run > now || job.lease_until > now) return undefined
     if (
       job.scope === "session" &&
       job.session_id &&
       ["streaming", "retry"].includes(SessionStatus.get(job.session_id).type)
     ) {
-      Database.use((db) =>
-        db
-          .update(AutomationTable)
-          .set({ lease_until: now + HEARTBEAT_BUSY_RETRY_MS, lease_owner: null })
-          .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.status, "active")))
-          .run(),
-      )
       log.info("session automation delayed while its conversation is busy", {
         automationID: job.id,
         sessionID: job.session_id,
@@ -1080,7 +990,7 @@ export namespace AutomationService {
     }
   }
 
-  async function assertAutomationLineage(job: typeof AutomationTable.$inferSelect): Promise<void> {
+  async function assertAutomationLineage(job: AutomationRow): Promise<void> {
     if (job.task_id) {
       if (!job.project_id) throw new Error(`Delayed task wake ${job.id} has no project owner`)
       await assertTaskRootSessionInProject({ taskId: job.task_id, projectId: job.project_id })
@@ -1112,34 +1022,20 @@ export namespace AutomationService {
     return Math.min(Math.floor(value), CONCURRENCY_MAX)
   }
 
-  function claim(id: string, owner: string, now: number) {
-    Database.use((db) =>
-      db
-        .update(AutomationTable)
-        .set({
-          lease_until: now + LEASE_MS,
-          lease_owner: owner,
-        })
-        .where(
-          sql`${AutomationTable.id} = ${id}
-            AND ${AutomationTable.status} = 'active'
-            AND ${AutomationTable.next_run} <= ${now}
-            AND (${AutomationTable.lease_until} <= ${now} OR ${AutomationTable.lease_until} IS NULL)`,
-        )
-        .run(),
-    )
-
-    return Database.use((db) =>
-      db
-        .select()
-        .from(AutomationTable)
-        .where(and(eq(AutomationTable.id, id), eq(AutomationTable.lease_owner, owner)))
-        .get(),
-    )
+  function claim(id: string, owner: string, now: number, force = false) {
+    const persisted = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
+    if (!persisted || persisted.status !== "active") return undefined
+    const projected = Database.use((db) => projectAutomationInTransaction(db, persisted))
+    if (!force && projected.next_run > now) return undefined
+    const acquired = acquireControlLease({ target: "automation", targetID: id, ownerOccurrenceID: owner, now, leaseMilliseconds: LEASE_MS })
+    if (!acquired.acquired) return undefined
+    const claimed = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
+    if (!claimed || claimed.id !== persisted.id || claimed.status !== "active") return undefined
+    return Database.use((db) => projectAutomationInTransaction(db, claimed))
   }
 
   async function execute(
-    job: typeof AutomationTable.$inferSelect,
+    job: AutomationRow,
     owner: string,
     now: number,
     reschedule: boolean,
@@ -1164,16 +1060,37 @@ export namespace AutomationService {
 
     try {
       if (job.kind === "delay") {
+        const runID = deterministicAutomationID("atr", fireID, "delay")
+        Database.immediateTransaction((db) => {
+          const lease = currentControlLeaseInTransaction(db, "automation", job.id)
+          if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) {
+            throw new AutomationRunningConflictError({ message: `Automation ${job.id} lost its lease before delay reservation`, automationID: job.id })
+          }
+          db.insert(AutomationRunTable).values({
+            id: runID,
+            automation_revision_id: job.revision_id,
+            fire_id: fireID,
+            target_project_id: null,
+            started_at: now,
+          }).onConflictDoNothing().run()
+        })
         inactivityFence.touch("delayed wake dispatch")
-        const outcome = await executeDelayedWake(job, fireID, owner, executionSignal)
+        const outcome = await executeDelayedWake(job, fireID, runID, owner, executionSignal)
+        const completedAt = Date.now()
+        Database.immediateTransaction((db) => {
+          const existing = db.select().from(AutomationRunReceiptTable).where(eq(AutomationRunReceiptTable.run_id, runID)).all()
+            .find((receipt) => receipt.outcome === "succeeded")
+          if (!existing) db.insert(AutomationRunReceiptTable).values({ id: Identifier.ascending("automation"), run_id: runID, outcome: "succeeded", time_created: completedAt }).run()
+        })
         if (!outcome.automationConsumed) {
-          const consumed = Database.use((db) =>
-            db
-              .delete(AutomationTable)
-              .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
-              .returning({ id: AutomationTable.id })
-              .get(),
-          )
+          const consumed = Database.transaction((db) => {
+            const lease = currentControlLeaseInTransaction(db, "automation", job.id)
+            if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) return undefined
+            const latest = latestAutomationDefinitionInTransaction(db, job.id)
+            if (!latest || latest.id !== job.revision_id) return undefined
+            appendAutomationTombstoneInTransaction(db, latest, Date.now())
+            return { id: job.id }
+          })
           if (!consumed) {
             throw new AutomationRunningConflictError({
               message: `Automation ${job.id} lost its execution lease before one-shot completion`,
@@ -1196,12 +1113,8 @@ export namespace AutomationService {
       const targets = await executionTargets(job)
       const runIDs = targets.map((target) => deterministicAutomationID("atr", fireID, automationTargetIdentity(target)))
       Database.immediateTransaction((db) => {
-        const lease = db
-          .select({ owner: AutomationTable.lease_owner })
-          .from(AutomationTable)
-          .where(eq(AutomationTable.id, job.id))
-          .get()
-        if (lease?.owner !== owner) {
+        const lease = currentControlLeaseInTransaction(db, "automation", job.id)
+        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) {
           throw new AutomationRunningConflictError({
             message: `Automation ${job.id} lost its execution lease before fire reservation`,
             automationID: job.id,
@@ -1211,36 +1124,20 @@ export namespace AutomationService {
           .values(
             targets.map((target, index) => ({
               id: runIDs[index],
-              automation_id: job.id,
+              automation_revision_id: job.revision_id,
               fire_id: fireID,
-              target_scope: target.scope,
-              project_id: target.projectID,
-              owner,
-              outcome: "running" as const,
+              target_project_id: target.scope === "project" ? target.projectID : null,
               started_at: now,
             })),
           )
           .onConflictDoNothing()
           .run()
-        for (const runID of runIDs) {
-          db.update(AutomationRunTable)
-            .set({ owner, outcome: "running", completed_at: null, error: null, started_at: now })
-            .where(and(eq(AutomationRunTable.id, runID), ne(AutomationRunTable.outcome, "succeeded")))
-            .run()
-        }
       })
       inactivityFence.touch("target occurrences reserved")
       const reservedRuns = new Map(
-        Database.use((db) =>
-          db
-            .select({
-              id: AutomationRunTable.id,
-              outcome: AutomationRunTable.outcome,
-              sessionID: AutomationRunTable.session_id,
-            })
-            .from(AutomationRunTable)
+        Database.use((db) => db.select().from(AutomationRunTable)
             .where(inArray(AutomationRunTable.id, runIDs))
-            .all(),
+            .all().map((run) => projectAutomationRunInTransaction(db, run)),
         ).map((run) => [run.id, run] as const),
       )
       let results: PromiseSettledResult<{ sessionID: string }>[] = []
@@ -1249,9 +1146,9 @@ export namespace AutomationService {
           try {
             const reserved = reservedRuns.get(runIDs[index]!)
             if (reserved?.outcome === "succeeded") {
-              if (!reserved.sessionID)
+              if (!reserved.session_id)
                 throw new Error(`Succeeded Automation run ${reserved.id} has no Session authority`)
-              return { sessionID: reserved.sessionID }
+              return { sessionID: reserved.session_id }
             }
             const existing = findAutomationWake(job.id, fireID, target)
             if (existing) return { sessionID: await resumeAutomationWake(existing) }
@@ -1274,58 +1171,29 @@ export namespace AutomationService {
         .filter((failure): failure is { index: number; message: string } => !!failure)
       const error = failures.length > 0 ? failures.map((failure) => failure.message).join("; ") : null
       const retryAt = error ? automationRetryAt(job.failure_count + 1, committedAt) : 0
-      const nextRun = error ? job.next_run : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
+      const nextRun = error ? retryAt : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
       inactivityFence.touch("durable fire settlement")
       Database.transaction((tx) => {
-        const automation = tx
-          .update(AutomationTable)
-          .set({
-            last_run: committedAt,
-            next_run: nextRun,
-            failure_count: error ? sql`${AutomationTable.failure_count} + 1` : 0,
-            last_error: error,
-            lease_until: retryAt,
-            lease_owner: null,
-          })
-          .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
-          .returning({ id: AutomationTable.id })
-          .get()
-        if (!automation) {
+        const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
+        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= committedAt) {
           throw new AutomationRunningConflictError({
             message: `Automation ${job.id} lost its execution lease before completion`,
             automationID: job.id,
           })
         }
         results.forEach((result, index) => {
-          const prior = tx
-            .select({ outcome: AutomationRunTable.outcome, sessionID: AutomationRunTable.session_id })
-            .from(AutomationRunTable)
-            .where(eq(AutomationRunTable.id, runIDs[index]))
-            .get()
+          const persisted = tx.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runIDs[index])).get()
+          const prior = persisted ? projectAutomationRunInTransaction(tx, persisted) : undefined
           if (prior?.outcome === "succeeded") return
-          const run = tx
-            .update(AutomationRunTable)
-            .set({
-              session_id: result.status === "fulfilled" ? result.value.sessionID : (prior?.sessionID ?? null),
-              outcome: result.status === "fulfilled" ? "succeeded" : "retry_wait",
-              completed_at: result.status === "fulfilled" ? committedAt : null,
-              error:
-                result.status === "rejected"
-                  ? result.reason instanceof Error
-                    ? result.reason.message
-                    : String(result.reason)
-                  : null,
-            })
-            .where(
-              and(
-                eq(AutomationRunTable.id, runIDs[index]),
-                eq(AutomationRunTable.owner, owner),
-                eq(AutomationRunTable.outcome, "running"),
-              ),
-            )
-            .returning({ id: AutomationRunTable.id })
-            .get()
-          if (!run) throw new Error(`Automation run ${runIDs[index]} was not running for lease owner ${owner}`)
+          if (!prior) throw new Error(`Automation run ${runIDs[index]} was not reserved`)
+          tx.insert(AutomationRunReceiptTable).values({
+            id: Identifier.ascending("automation"),
+            run_id: prior.id,
+            outcome: result.status === "fulfilled" ? "succeeded" : "retry_wait",
+            retry_at: result.status === "rejected" ? retryAt : null,
+            error: result.status === "rejected" ? (result.reason instanceof Error ? result.reason.message : String(result.reason)) : null,
+            time_created: committedAt,
+          }).run()
         })
       })
       log.info("automation fire completed", {
@@ -1344,7 +1212,7 @@ export namespace AutomationService {
   }
 
   function executeWithRuntimeSettlement(
-    job: typeof AutomationTable.$inferSelect,
+    job: AutomationRow,
     owner: string,
     now: number,
     reschedule: boolean,
@@ -1454,7 +1322,7 @@ export namespace AutomationService {
     return row ? { sessionID: row.sessionID, messageID: row.id } : undefined
   }
 
-  async function executionTargets(job: typeof AutomationTable.$inferSelect): Promise<ExecutionTarget[]> {
+  async function executionTargets(job: AutomationRow): Promise<ExecutionTarget[]> {
     const target = targetForRow(job)
     if (target.scope === "session") {
       const session = await Session.get(target.sessionId)
@@ -1469,7 +1337,7 @@ export namespace AutomationService {
   }
 
   async function executePublicWake(
-    job: typeof AutomationTable.$inferSelect,
+    job: AutomationRow,
     target: ExecutionTarget,
     fireID: string,
     runID: string,
@@ -1545,7 +1413,7 @@ export namespace AutomationService {
   }
 
   async function wakeSession(
-    job: typeof AutomationTable.$inferSelect,
+    job: AutomationRow,
     fireID: string,
     sessionID: string,
     identityID: string,
@@ -1601,32 +1469,19 @@ export namespace AutomationService {
     sessionID: string
   }): void {
     Database.use((db) => {
-      const lease = db
-        .select({ owner: AutomationTable.lease_owner })
-        .from(AutomationTable)
-        .where(eq(AutomationTable.id, input.automationID))
-        .get()
-      if (lease?.owner !== input.owner) {
+      const lease = currentControlLeaseInTransaction(db, "automation", input.automationID)
+      if (!lease || lease.owner_occurrence_id !== input.owner || lease.expires_at <= Date.now()) {
         throw new AutomationRunningConflictError({
           message: `Automation ${input.automationID} lost its lease before wake Message commit`,
           automationID: input.automationID,
         })
       }
       if (!input.runID) return
-      const run = db
-        .update(AutomationRunTable)
-        .set({ session_id: input.sessionID })
-        .where(
-          and(
-            eq(AutomationRunTable.id, input.runID),
-            eq(AutomationRunTable.automation_id, input.automationID),
-            eq(AutomationRunTable.owner, input.owner),
-            eq(AutomationRunTable.outcome, "running"),
-          ),
-        )
-        .returning({ id: AutomationRunTable.id })
-        .get()
-      if (!run) {
+      const persisted = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, input.runID)).get()
+      const definition = persisted ? db.select({ definitionID: AutomationTable.definition_id }).from(AutomationTable).where(eq(AutomationTable.id, persisted.automation_revision_id)).get() : undefined
+      if (definition?.definitionID !== input.automationID) throw new AutomationRunningConflictError({ message: `Automation run ${input.runID} belongs to another definition`, automationID: input.automationID })
+      const run = persisted ? projectAutomationRunInTransaction(db, persisted) : undefined
+      if (!run || run.outcome !== "running" || run.session_id !== input.sessionID) {
         throw new AutomationRunningConflictError({
           message: `Automation run ${input.runID} lost ownership before wake Message commit`,
           automationID: input.automationID,
@@ -1636,8 +1491,9 @@ export namespace AutomationService {
   }
 
   async function executeDelayedWake(
-    job: typeof AutomationTable.$inferSelect,
+    job: AutomationRow,
     fireID: string,
+    runID: string,
     owner: string,
     signal: AbortSignal,
   ): Promise<{
@@ -1658,28 +1514,19 @@ export namespace AutomationService {
           const committedAt = Date.now()
           const wakeID = Database.transaction((tx) => {
             const persistedWakeID = persistTaskWaitIngressInTransaction(tx, {
-              taskID: job.task_id!,
-              projectID: job.project_id!,
+              task,
               jobID: job.id,
               fireID,
+              runID,
               dueAt: job.next_run,
-              note: renderTaskWaitWakeNote(job, fireID),
               now: committedAt,
             })
-            const consumed = tx
-              .delete(AutomationTable)
-              .where(
-                and(
-                  eq(AutomationTable.id, job.id),
-                  eq(AutomationTable.project_id, job.project_id!),
-                  eq(AutomationTable.task_id, job.task_id!),
-                  eq(AutomationTable.kind, "delay"),
-                  eq(AutomationTable.status, "active"),
-                  eq(AutomationTable.lease_owner, owner),
-                ),
-              )
-              .returning({ id: AutomationTable.id })
-              .get()
+            const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
+            if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= committedAt) throw new AutomationRunningConflictError({ message: `Automation ${job.id} lost its execution lease before Task wait ownership transfer`, automationID: job.id })
+            const latest = latestAutomationDefinitionInTransaction(tx, job.id)
+            const consumed = latest && latest.id === job.revision_id && latest.kind === "delay" && latest.status === "active"
+              ? (appendAutomationTombstoneInTransaction(tx, latest, committedAt), { id: job.id })
+              : undefined
             if (!consumed) {
               throw new AutomationRunningConflictError({
                 message: `Automation ${job.id} lost its execution lease before Task wait ownership transfer`,
@@ -1755,16 +1602,11 @@ export namespace AutomationService {
   }
 
   function renew(id: string, owner: string): boolean {
-    return !!Database.use((db) =>
-      db
-        .update(AutomationTable)
-        .set({
-          lease_until: Date.now() + LEASE_MS,
-        })
-        .where(and(eq(AutomationTable.id, id), eq(AutomationTable.lease_owner, owner)))
-        .returning({ id: AutomationTable.id })
-        .get(),
-    )
+    const now = Date.now()
+    const lease = Database.use((db) => currentControlLeaseInTransaction(db, "automation", id))
+    if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= now) return false
+    renewControlLease({ target: "automation", targetID: id, leaseID: lease.id, ownerOccurrenceID: owner, now, expiresAt: now + LEASE_MS })
+    return true
   }
 
   function createAutomationLeaseFence(automationID: string, owner: string, fireID: string) {
@@ -1819,7 +1661,7 @@ export namespace AutomationService {
     return now + Math.min(MAX_BACKOFF_MS, 1000 * 2 ** Math.min(step, 30))
   }
 
-  async function fail(job: typeof AutomationTable.$inferSelect, owner: string, err: unknown): Promise<void> {
+  async function fail(job: AutomationRow, owner: string, err: unknown): Promise<void> {
     await failurePersistenceHookForTest?.("before")
     const now = Date.now()
     const step = job.failure_count + 1
@@ -1827,36 +1669,9 @@ export namespace AutomationService {
     const msg = err instanceof Error ? err.message : String(err)
 
     const finalized = Database.transaction((tx) => {
-      const automation = tx
-        .update(AutomationTable)
-        .set({
-          failure_count: sql`${AutomationTable.failure_count} + 1`,
-          last_error: msg,
-          lease_until: retryAt,
-          lease_owner: null,
-        })
-        .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
-        .returning({ id: AutomationTable.id })
-        .get()
-      if (!automation) return false
-      if (job.kind !== "delay") {
-        const runs = tx
-          .update(AutomationRunTable)
-          .set({
-            outcome: "retry_wait",
-            completed_at: null,
-            error: msg,
-          })
-          .where(
-            and(
-              eq(AutomationRunTable.automation_id, job.id),
-              eq(AutomationRunTable.owner, owner),
-              eq(AutomationRunTable.outcome, "running"),
-            ),
-          )
-          .returning({ id: AutomationRunTable.id })
-          .all()
-      }
+      const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
+      if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= now) return false
+      appendAutomationFailureReceipts(tx, job, msg, retryAt, now)
       return true
     })
 
@@ -1871,27 +1686,13 @@ export namespace AutomationService {
     await failurePersistenceHookForTest?.("after")
   }
 
-  async function failBeforeLease(job: typeof AutomationTable.$inferSelect, err: unknown): Promise<void> {
+  async function failBeforeLease(job: AutomationRow, err: unknown): Promise<void> {
     const now = Date.now()
     const step = job.failure_count + 1
     const retryAt = automationRetryAt(step, now)
     const msg = err instanceof Error ? err.message : String(err)
 
-    Database.use((db) =>
-      db
-        .update(AutomationTable)
-        .set({
-          failure_count: sql`${AutomationTable.failure_count} + 1`,
-          last_error: msg,
-          lease_until: retryAt,
-          lease_owner: null,
-        })
-        .where(
-          sql`${AutomationTable.id} = ${job.id}
-            AND (${AutomationTable.lease_until} <= ${now} OR ${AutomationTable.lease_until} IS NULL)`,
-        )
-        .run(),
-    )
+    Database.transaction((db) => appendAutomationFailureReceipts(db, job, msg, retryAt, now))
 
     log.error("automation rejected before lease", {
       jobId: job.id,
@@ -1901,13 +1702,47 @@ export namespace AutomationService {
     })
   }
 
+  function appendAutomationFailureReceipts(
+    db: Database.TxOrDb,
+    job: AutomationRow,
+    message: string,
+    retryAt: number,
+    now: number,
+  ): void {
+    const revisions = db.select({ id: AutomationTable.id }).from(AutomationTable).where(eq(AutomationTable.definition_id, job.id)).all().map((row) => row.id)
+    let runs = revisions.length === 0 ? [] : db.select().from(AutomationRunTable).where(inArray(AutomationRunTable.automation_revision_id, revisions)).all()
+      .map((run) => projectAutomationRunInTransaction(db, run)).filter((run) => run.outcome === "running")
+    if (runs.length === 0) {
+      const id = deterministicAutomationID("atr", job.id, `failure:${job.next_run}`)
+      db.insert(AutomationRunTable).values({
+        id,
+        automation_revision_id: job.revision_id,
+        fire_id: deterministicAutomationID("cal", job.id, String(job.next_run)),
+        target_project_id: null,
+        started_at: now,
+      }).onConflictDoNothing().run()
+      const persisted = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, id)).get()
+      if (persisted) runs = [projectAutomationRunInTransaction(db, persisted)]
+    }
+    for (const run of runs) {
+      db.insert(AutomationRunReceiptTable).values({
+        id: Identifier.ascending("automation"),
+        run_id: run.id,
+        outcome: "retry_wait",
+        retry_at: retryAt,
+        error: message,
+        time_created: now,
+      }).run()
+    }
+  }
+
   function assertDuration(durationMs: number) {
     if (!Number.isInteger(durationMs) || durationMs <= 0) {
       throw new Error(`Invalid delay duration: ${durationMs}`)
     }
   }
 
-  function renderTaskWaitWakeNote(job: typeof AutomationTable.$inferSelect, fireID: string) {
+  function renderTaskWaitWakeNote(job: AutomationRow, fireID: string) {
     return [
       "This is a scheduled task wait wake, not a user-authored message.",
       `wait_job_id=${job.id}`,

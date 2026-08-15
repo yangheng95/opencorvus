@@ -4,8 +4,8 @@ import { Context } from "@/util/context"
 import { withKeyedLock } from "@/util/lock"
 import { Log } from "@/util/log"
 import { runOutsideInstanceContext } from "@/project/instance"
-import { SessionTable } from "@/session/session.sql"
-import { ProtocolAggregateSequenceTable, ProtocolEventTable } from "./protocol.sql"
+import { MessageTable, SessionTable, WorkerTurnDescriptorTable } from "@/session/session.sql"
+import { ProtocolEventTable } from "./protocol.sql"
 import type { ProtocolAggregate, ProtocolKind } from "./schema"
 import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
 
@@ -74,38 +74,71 @@ function explicitPayloadOrderKey(payload: Payload | null | undefined): string {
 function persistedEventOrderKey(input: EventInput, seq: number, now: number, id: string): string {
   const explicit = typeof input.order_key === "string" ? input.order_key.trim() : ""
   const payloadOrderKey = explicitPayloadOrderKey(input.payload)
-  if (protocolEventRequiresPayloadOrderKey(input.type) && !payloadOrderKey) {
-    throw new Error(`ProtocolStore.appendEvent ${input.type} missing payload.orderKey`)
+  if (protocolEventRequiresPayloadOrderKey(input.type) && !explicit) {
+    throw new Error(`ProtocolStore.appendEvent ${input.type} missing envelope order_key`)
   }
-  if (protocolEventRequiresPayloadOrderKey(input.type)) {
+  if (protocolEventRequiresPayloadOrderKey(input.type) && explicit) {
     requireTimelineOrderKeyDomain(
-      payloadOrderKey,
-      `ProtocolStore.appendEvent ${input.type} payload.orderKey`,
+      explicit,
+      `ProtocolStore.appendEvent ${input.type} order_key`,
       "session",
     )
+    const derived = input.type === "agent.execution.lifecycle"
+      ? (() => {
+          const inputMessageID = input.payload && typeof input.payload.inputMessageID === "string" ? input.payload.inputMessageID : ""
+          if (!inputMessageID) throw new Error(`ProtocolStore.appendEvent ${input.type} missing immutable input Message identity`)
+          const message = Database.use((db) => db.select({ timeCreated: MessageTable.time_created }).from(MessageTable)
+            .where(eq(MessageTable.id, inputMessageID)).get())
+          if (!message) throw new Error(`ProtocolStore.appendEvent ${input.type} references missing input Message ${inputMessageID}`)
+          return timelineOrderKey({ domain: "session", time: message.timeCreated, id: inputMessageID })
+        })()
+      : (() => {
+          const sessionID = input.aggregate === "session" ? input.aggregate_id : input.session_id
+          if (!sessionID) throw new Error(`ProtocolStore.appendEvent ${input.type} missing immutable Session identity`)
+          const session = Database.use((db) => db.select({ timeCreated: SessionTable.time_created }).from(SessionTable)
+            .where(eq(SessionTable.id, sessionID)).get())
+          if (!session) throw new Error(`ProtocolStore.appendEvent ${input.type} references missing Session ${sessionID}`)
+          return timelineOrderKey({ domain: "session", time: session.timeCreated, id: sessionID })
+        })()
+    if (explicit !== derived) throw new Error(`ProtocolStore.appendEvent ${input.type} order_key conflicts with its immutable input Message`)
   }
+  if (payloadOrderKey) throw new Error(`ProtocolStore.appendEvent ${input.type} payload must not duplicate order_key`)
   if (explicit) {
-    if (protocolEventRequiresPayloadOrderKey(input.type)) {
-      requireTimelineOrderKeyDomain(explicit, `ProtocolStore.appendEvent ${input.type} order_key`, "session")
-    }
-    if (payloadOrderKey && payloadOrderKey !== explicit) {
-      throw new Error(`ProtocolStore.appendEvent ${input.type} order_key drift between input and payload`)
-    }
     return explicit
   }
-  if (payloadOrderKey) {
-    throw new Error(`ProtocolStore.appendEvent ${input.type} payload has orderKey but input.order_key is missing`)
-  }
   return timelineOrderKey({ domain: "protocol", time: now, sequence: seq, id })
+}
+
+export function protocolTimelineOrderKey(row: Pick<EventRow, "id" | "type" | "aggregate_type" | "aggregate_id" | "session_id" | "seq" | "emitted_at" | "payload">): string {
+  if (row.type === "agent.execution.lifecycle") {
+    const inputMessageID = row.payload && typeof row.payload.inputMessageID === "string" ? row.payload.inputMessageID : ""
+    if (!inputMessageID) throw new Error(`protocol_event ${row.id} missing immutable input Message identity`)
+    const message = Database.use((db) => db.select({ timeCreated: MessageTable.time_created }).from(MessageTable)
+      .where(eq(MessageTable.id, inputMessageID)).get())
+    if (!message) throw new Error(`protocol_event ${row.id} references missing input Message ${inputMessageID}`)
+    return timelineOrderKey({ domain: "session", time: message.timeCreated, id: inputMessageID })
+  }
+  if (row.type === "session.error") {
+    const sessionID = row.aggregate_type === "session" ? row.aggregate_id : row.session_id
+    if (!sessionID) throw new Error(`protocol_event ${row.id} missing immutable Session identity`)
+    const session = Database.use((db) => db.select({ timeCreated: SessionTable.time_created }).from(SessionTable)
+      .where(eq(SessionTable.id, sessionID)).get())
+    if (!session) throw new Error(`protocol_event ${row.id} references missing Session ${sessionID}`)
+    return timelineOrderKey({ domain: "session", time: session.timeCreated, id: sessionID })
+  }
+  return timelineOrderKey({ domain: "protocol", time: row.emitted_at, sequence: row.seq, id: row.id })
 }
 
 function insertProtocolEvent(input: EventInput, seq: number, now: number): EventView {
   const id = Identifier.ascending("protocol_event", input.id)
   const orderKey = persistedEventOrderKey(input, seq, now, id)
+  const relatedTaskID = input.aggregate === "task" ? null : (input.task_id ?? null)
+  const relatedSessionID = input.aggregate === "session" ? null : (input.session_id ?? null)
+  const sessionReferenceID = input.aggregate === "session" ? input.aggregate_id : relatedSessionID
   Database.use((db) => {
     if (
-      input.session_id &&
-      !db.select({ id: SessionTable.id }).from(SessionTable).where(eq(SessionTable.id, input.session_id)).get()
+      sessionReferenceID &&
+      !db.select({ id: SessionTable.id }).from(SessionTable).where(eq(SessionTable.id, sessionReferenceID)).get()
     ) {
       throw new Error(`Protocol event ${input.type} references missing Session ${input.session_id}`)
     }
@@ -116,8 +149,8 @@ function insertProtocolEvent(input: EventInput, seq: number, now: number): Event
         type: input.type,
         aggregate_type: input.aggregate,
         aggregate_id: input.aggregate_id,
-        task_id: input.task_id ?? null,
-        session_id: input.session_id ?? null,
+        task_id: relatedTaskID,
+        session_id: relatedSessionID,
         interaction_id: input.interaction_id ?? null,
         stream_id: input.stream_id ?? null,
         source: input.source,
@@ -126,12 +159,9 @@ function insertProtocolEvent(input: EventInput, seq: number, now: number): Event
         correlation_id: input.correlation_id ?? null,
         reply_to: input.reply_to ?? null,
         seq,
-        order_key: orderKey,
         deadline_ms: input.deadline_ms ?? null,
         emitted_at: now,
         payload: input.payload ?? null,
-        time_created: now,
-        time_updated: now,
       })
       .run()
   })
@@ -141,8 +171,8 @@ function insertProtocolEvent(input: EventInput, seq: number, now: number): Event
     type: input.type,
     aggregate_type: input.aggregate,
     aggregate_id: input.aggregate_id,
-    task_id: input.task_id ?? null,
-    session_id: input.session_id ?? null,
+    task_id: relatedTaskID,
+    session_id: relatedSessionID,
     interaction_id: input.interaction_id ?? null,
     stream_id: input.stream_id ?? null,
     source: input.source,
@@ -151,12 +181,9 @@ function insertProtocolEvent(input: EventInput, seq: number, now: number): Event
     correlation_id: input.correlation_id ?? null,
     reply_to: input.reply_to ?? null,
     seq,
-    order_key: orderKey,
     deadline_ms: input.deadline_ms ?? null,
     emitted_at: now,
     payload: input.payload ?? null,
-    time_created: now,
-    time_updated: now,
   })
 }
 
@@ -217,19 +244,35 @@ async function dispatchEvent(event: EventView) {
 }
 
 function eventView(row: EventRow) {
-  const orderKey = typeof row.order_key === "string" && row.order_key.length > 0 ? row.order_key : ""
-  if (!orderKey) throw new Error(`protocol_event ${row.id} missing order_key`)
+  const orderKey = protocolTimelineOrderKey(row)
+  const sessionID = row.aggregate_type === "session" ? row.aggregate_id : row.session_id
+  const projectedPayload = (() => {
+    if (!sessionID || !["agent.execution.lifecycle", "session.error"].includes(row.type)) return row.payload
+    const session = Database.use((db) => db.select({ kind: SessionTable.kind, parentID: SessionTable.parent_id })
+      .from(SessionTable).where(eq(SessionTable.id, sessionID)).get())
+    if (!session) return row.payload
+    const descriptor = Database.use((db) => db.select({ agent: WorkerTurnDescriptorTable.agent })
+      .from(WorkerTurnDescriptorTable).where(eq(WorkerTurnDescriptorTable.session_id, sessionID))
+      .orderBy(desc(WorkerTurnDescriptorTable.time_created), desc(WorkerTurnDescriptorTable.id)).get())
+    const agentID = descriptor?.agent ?? session.kind
+    return {
+      ...(row.payload ?? {}),
+      channel: session.kind === "root" ? "main" : session.kind,
+      agentID,
+      ...(session.kind === "root" ? {} : { resolvedRole: agentID }),
+      ...(session.parentID ? { parentSessionID: session.parentID } : {}),
+    }
+  })()
   return {
     id: row.id,
     kind: row.kind,
     type: row.type,
     aggregate: row.aggregate_type,
     aggregateID: row.aggregate_id,
-    // Task aggregate identity is immutable protocol authority. `task_id` is
-    // only a nullable relational projection and may be detached on physical
-    // Task deletion without breaking replay or live Task subscriptions.
+    // Aggregate identity is immutable protocol authority; typed correlations
+    // are immutable non-owning locators for other aggregates.
     taskID: row.aggregate_type === "task" ? row.aggregate_id : (row.task_id ?? undefined),
-    sessionID: row.session_id ?? undefined,
+    sessionID: sessionID ?? undefined,
     interactionID: row.interaction_id ?? undefined,
     streamID: row.stream_id ?? undefined,
     source: row.source,
@@ -243,11 +286,11 @@ function eventView(row: EventRow) {
     liveEpoch: undefined as number | undefined,
     deadlineMs: row.deadline_ms ?? undefined,
     summary: payloadText(row.payload, "summary") ?? row.type,
-    payload: row.payload ?? undefined,
+    payload: projectedPayload ?? undefined,
     time: {
       emitted: row.emitted_at,
-      created: row.time_created,
-      updated: row.time_updated,
+      created: row.emitted_at,
+      updated: row.emitted_at,
     },
   }
 }
@@ -424,7 +467,10 @@ export namespace ProtocolStore {
       db
         .select()
         .from(ProtocolEventTable)
-        .where(and(eq(ProtocolEventTable.session_id, sessionID), eq(ProtocolEventTable.type, type)))
+        .where(and(or(
+          and(eq(ProtocolEventTable.aggregate_type, "session"), eq(ProtocolEventTable.aggregate_id, sessionID)),
+          eq(ProtocolEventTable.session_id, sessionID),
+        ), eq(ProtocolEventTable.type, type)))
         .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
         .get(),
     )
@@ -438,7 +484,10 @@ export namespace ProtocolStore {
         .from(ProtocolEventTable)
         .where(
           and(
-            eq(ProtocolEventTable.session_id, sessionID),
+            or(
+              and(eq(ProtocolEventTable.aggregate_type, "session"), eq(ProtocolEventTable.aggregate_id, sessionID)),
+              eq(ProtocolEventTable.session_id, sessionID),
+            ),
             eq(ProtocolEventTable.type, type),
             sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID') = ${inputMessageID}`,
           ),
@@ -696,39 +745,18 @@ export namespace ProtocolStore {
 
 function nextAggregateSequence(aggregate: ProtocolAggregate, aggregateID: string) {
   Database.requireActiveTransaction("ProtocolStore.nextAggregateSequence")
-  const row = Database.use((db) =>
-    db
-      .insert(ProtocolAggregateSequenceTable)
-      .values({ aggregate_type: aggregate, aggregate_id: aggregateID, next_seq: 1 })
-      .onConflictDoUpdate({
-        target: [ProtocolAggregateSequenceTable.aggregate_type, ProtocolAggregateSequenceTable.aggregate_id],
-        set: { next_seq: sql`${ProtocolAggregateSequenceTable.next_seq} + 1` },
-      })
-      .returning({ sequence: ProtocolAggregateSequenceTable.next_seq })
-      .get(),
-  )
-  if (!row) throw new Error(`Protocol aggregate sequence allocation failed for ${aggregate}:${aggregateID}`)
-  return row.sequence
+  return Database.use((db) => db.select({ sequence: sql<number>`coalesce(max(${ProtocolEventTable.seq}), 0) + 1` })
+    .from(ProtocolEventTable)
+    .where(and(eq(ProtocolEventTable.aggregate_type, aggregate), eq(ProtocolEventTable.aggregate_id, aggregateID)))
+    .get()!.sequence)
 }
 
 function reserveExplicitAggregateSequence(aggregate: ProtocolAggregate, aggregateID: string, sequence: number) {
   Database.requireActiveTransaction("ProtocolStore.reserveExplicitAggregateSequence")
-  const row = Database.use((db) =>
-    db
-      .insert(ProtocolAggregateSequenceTable)
-      .values({ aggregate_type: aggregate, aggregate_id: aggregateID, next_seq: sequence })
-      .onConflictDoUpdate({
-        target: [ProtocolAggregateSequenceTable.aggregate_type, ProtocolAggregateSequenceTable.aggregate_id],
-        set: {
-          next_seq: sql`max(${ProtocolAggregateSequenceTable.next_seq}, ${sequence})`,
-        },
-      })
-      .returning({ sequence: ProtocolAggregateSequenceTable.next_seq })
-      .get(),
-  )
-  if (!row || row.sequence !== sequence) {
+  const current = nextAggregateSequence(aggregate, aggregateID) - 1
+  if (sequence <= current) {
     throw new Error(
-      `Protocol aggregate ${aggregate}:${aggregateID} explicit sequence ${sequence} conflicts with reserved ${row?.sequence ?? "missing"}`,
+      `Protocol aggregate ${aggregate}:${aggregateID} explicit sequence ${sequence} conflicts with current ${current}`,
     )
   }
   return sequence

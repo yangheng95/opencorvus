@@ -305,7 +305,7 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           COALESCE(task_session.directory, ${ProjectTable.worktree}, '') AS directory,
           ${EngineTaskTable.title} AS title,
           ${EngineTaskTable.time_created} AS created,
-          ${EngineTaskTable.time_updated} AS updated
+          ${EngineTaskTable.time_created} AS updated
           ,CASE WHEN ${EngineTaskTable.time_pinned} IS NULL THEN 0 ELSE 1 END AS pinned
         FROM ${EngineTaskTable}
         LEFT JOIN ${SessionTable} AS task_session ON ${EngineTaskTable.session_id} = task_session.id

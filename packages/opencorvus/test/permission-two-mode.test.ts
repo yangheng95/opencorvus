@@ -3,14 +3,12 @@ import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { PermissionAuthority } from "@/permission/authority"
 import { permissionDescriptor } from "@/permission/invocation"
-import { PermissionLedgerTable } from "@/permission/permission.sql"
-import { PermissionExecutionResultTable } from "@/permission/permission.sql"
+import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { Database, DatabaseUnavailableError, eq } from "@/storage/db"
+import { Database } from "@/storage/db"
 import { randomUUID } from "node:crypto"
-import { createHash } from "node:crypto"
 import { mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
@@ -104,7 +102,8 @@ describe("two-mode permission authority", () => {
         expect(history.map((row) => row.event_type)).toEqual([
           "execution_succeeded",
           "execution_started",
-          "full_access",
+          "allowed_once",
+          "requested",
         ])
         const identities =
           history.flatMap((row) =>
@@ -113,14 +112,15 @@ describe("two-mode permission authority", () => {
             ),
           )
         expect(identities.every((id) => id.length <= Identifier.MAX_LENGTH && Identifier.isCanonical("permission", id))).toBe(true)
-        expect(history.map((row) => [row.policy_revision, row.provider_digest, row.fingerprint]).flat().every(
-          (value) => value.length === 64,
+        const request = history.find((row) => row.event_type === "requested")!
+        expect([request.policy_revision, request.provider_digest, request.fingerprint].every(
+          (value) => value?.length === 64,
         )).toBe(true)
       },
     })
   })
 
-  test("legacy migration produces one durable queryable policy audit fact", async () => {
+  test("legacy configuration is captured once by the Session permission policy fact", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -137,17 +137,13 @@ describe("two-mode permission authority", () => {
         const session = await Session.create({ kind: "assistant", title: "Migrated permission config" })
         await PermissionAuthority.authorizeAndExecute(invocation(session.id, "migration-first"), async () => "one")
         await PermissionAuthority.authorizeAndExecute(invocation(session.id, "migration-second"), async () => "two")
-        const migrations = (await PermissionAuthority.history()).filter((row) => row.event_type === "policy_migrated")
-        expect(migrations).toHaveLength(1)
-        expect(migrations[0]).toMatchObject({
+        const policies = Database.use((db) => db.select().from(PermissionPolicyTable).all())
+        expect(policies).toHaveLength(1)
+        expect(policies[0]).toMatchObject({
           mode: "full_access",
-          actor_id: "config-migration",
-          reason: "all_allow",
-          metadata: { source_fields: ["permission"] },
+          session_id: session.id,
+          project_id: Instance.project.id,
         })
-        expect([migrations[0].id, migrations[0].request_id, migrations[0].decision_slot].every(
-          (id) => Boolean(id) && id!.length <= Identifier.MAX_LENGTH && Identifier.isCanonical("permission", id!),
-        )).toBe(true)
         await Config.updateProjectPatch({ permission_mode: "ask" })
         const changed = await Session.create({ kind: "assistant", title: "Changed permission mode" })
         const pending = await nextRequest(() =>
@@ -160,51 +156,7 @@ describe("two-mode permission authority", () => {
           autoReply: false,
         })
         await expect(pending.execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
-        const afterModeChange = (await PermissionAuthority.history()).filter((row) => row.event_type === "policy_migrated")
-        expect(afterModeChange).toHaveLength(1)
-        expect(afterModeChange[0]).toMatchObject({
-          mode: "full_access",
-          summary: "Legacy permission configuration migrated to full_access",
-        })
-      },
-    })
-  })
-
-  test("rejects compact migration identity occupancy by different canonical audit material", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        await Config.updateProjectPatch({
-          permission_mode: "full_access",
-          permission_migration: {
-            version: 1,
-            source_fields: ["permission"],
-            permission_mode: "full_access",
-            reason: "all_allow",
-          },
-        })
-        const first = await Session.create({ kind: "assistant", title: "Migration collision source" })
-        await PermissionAuthority.authorizeAndExecute(invocation(first.id, "migration-collision-source"), async () => 1)
-        const migration = (await PermissionAuthority.history()).find((row) => row.event_type === "policy_migrated")!
-        Database.use((db) =>
-          db
-            .update(PermissionLedgerTable)
-            .set({ scope: { migration: { ...(migration.scope.migration as object), reason: "explicit_mode" } } })
-            .where(eq(PermissionLedgerTable.id, migration.id))
-            .run(),
-        )
-        const before = await PermissionAuthority.history()
-        const second = await Session.create({ kind: "assistant", title: "Migration collision target" })
-        let effects = 0
-        await expect(
-          PermissionAuthority.authorizeAndExecute(invocation(second.id, "migration-collision-target"), async () => {
-            effects += 1
-            return 2
-          }),
-        ).rejects.toBeInstanceOf(PermissionAuthority.PermissionIdentityCollisionError)
-        expect(effects).toBe(0)
-        expect(await PermissionAuthority.history()).toHaveLength(before.length)
+        expect(Database.use((db) => db.select().from(PermissionPolicyTable).all())).toHaveLength(2)
       },
     })
   })
@@ -259,128 +211,12 @@ describe("two-mode permission authority", () => {
           "execution_succeeded",
           "execution_started",
           "grant_used",
+          "requested",
           "execution_succeeded",
           "execution_started",
           "grant_created",
           "requested",
         ])
-      },
-    })
-  })
-
-  test("rejects compact request identity occupancy by different canonical invocation material", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        await Config.updateProjectPatch({ permission_mode: "ask" })
-        const session = await Session.create({ kind: "assistant", title: "Permission collision" })
-        const pending = await nextRequest(() =>
-          PermissionAuthority.authorizeAndExecute(invocation(session.id, "collision"), async () => "original"),
-        )
-        Database.use((db) =>
-          db
-            .update(PermissionLedgerTable)
-            .set({ message_id: "msg_foreign-canonical-material" })
-            .where(eq(PermissionLedgerTable.request_id, pending.request.id))
-            .run(),
-        )
-        const collision = PermissionAuthority.authorizeAndExecute(
-          invocation(session.id, "collision"),
-          async () => "must-not-run",
-        )
-        await expect(collision).rejects.toBeInstanceOf(PermissionAuthority.PermissionIdentityCollisionError)
-        await PermissionAuthority.reply({
-          requestID: pending.request.id,
-          decision: "deny",
-          actorID: "test-operator",
-          autoReply: false,
-        })
-        await expect(pending.execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
-      },
-    })
-  })
-
-  test("rejects compact attempt identity occupancy by a different Permission request", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Attempt collision" })
-        const input = invocation(session.id, "attempt-collision")
-        await PermissionAuthority.authorizeAndExecute(input, async () => "first")
-        const before = await PermissionAuthority.history()
-        const start = before.find((row) => row.event_type === "execution_started")!
-        Database.use((db) =>
-          db
-            .update(PermissionLedgerTable)
-            .set({ request_id: Identifier.deterministic("permission", "foreign-request") })
-            .where(eq(PermissionLedgerTable.id, start.id))
-            .run(),
-        )
-        let effects = 0
-        await expect(
-          PermissionAuthority.authorizeAndExecute(input, async () => {
-            effects += 1
-            return "must-not-run"
-          }),
-        ).rejects.toBeInstanceOf(PermissionAuthority.PermissionIdentityCollisionError)
-        expect(effects).toBe(0)
-        expect(await PermissionAuthority.history()).toHaveLength(before.length)
-      },
-    })
-  })
-
-  test("rejects compact attempt result occupancy without its matching successful execution", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Attempt result collision" })
-        const input = invocation(session.id, "attempt-result-collision")
-        await PermissionAuthority.authorizeAndExecute(input, async () => "first")
-        const before = await PermissionAuthority.history()
-        const outcome = before.find((row) => row.event_type === "execution_succeeded")!
-        Database.use((db) => db.delete(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, outcome.id)).run())
-        let effects = 0
-        await expect(
-          PermissionAuthority.authorizeAndExecute(input, async () => {
-            effects += 1
-            return "must-not-run"
-          }),
-        ).rejects.toBeInstanceOf(PermissionAuthority.PermissionIdentityCollisionError)
-        expect(effects).toBe(0)
-        expect(await PermissionAuthority.history()).toHaveLength(before.length - 1)
-      },
-    })
-  })
-
-  test("rejects compact attempt result occupancy by a different Session ToolPart", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Attempt ToolPart collision" })
-        const input = { ...invocation(session.id, "attempt-part-collision"), toolPartID: "prt_expected-owner" }
-        await PermissionAuthority.authorizeAndExecute(input, async () => "first")
-        const before = await PermissionAuthority.history()
-        const result = Database.use((db) => db.select().from(PermissionExecutionResultTable).get())!
-        Database.use((db) =>
-          db
-            .update(PermissionExecutionResultTable)
-            .set({ tool_part_id: "prt_foreign-owner" })
-            .where(eq(PermissionExecutionResultTable.attempt_id, result.attempt_id))
-            .run(),
-        )
-        let effects = 0
-        await expect(
-          PermissionAuthority.authorizeAndExecute(input, async () => {
-            effects += 1
-            return "must-not-run"
-          }),
-        ).rejects.toBeInstanceOf(PermissionAuthority.PermissionIdentityCollisionError)
-        expect(effects).toBe(0)
-        expect(await PermissionAuthority.history()).toHaveLength(before.length)
       },
     })
   })
@@ -409,10 +245,12 @@ describe("two-mode permission authority", () => {
           [
             "execution_succeeded",
             "execution_started",
-            "full_access",
+            "allowed_once",
+            "requested",
             "execution_succeeded",
             "execution_started",
-            "full_access",
+            "allowed_once",
+            "requested",
           ].sort(),
         )
       },
@@ -768,74 +606,20 @@ describe("two-mode permission authority", () => {
           (row) => row.event_type === "execution_succeeded",
         )!
         const stored = Database.use((db) => db.select().from(PermissionExecutionResultTable).get())!
-        expect({ first, replay, effects, metadata: outcome.metadata, stored: stored.result }).toEqual({
+        expect({ first, replay, effects, metadata: outcome.metadata, stored }).toEqual({
           first: { output: "durable result" },
           replay: { output: "durable result" },
           effects: 0,
-          metadata: { result_owner: "session_tool_part", result_sha256: expect.any(String) },
-          stored: { kind: "json", value: { output: "durable result" } },
+          metadata: null,
+          stored: {
+            attempt_id: expect.any(String),
+            result: { kind: "json", value: { output: "durable result" } },
+            time_created: expect.any(Number),
+          },
         })
-        const serializedResult = JSON.stringify({ kind: "json", value: { output: "durable result" } })
-        expect(stored.result_sha256).toBe(createHash("sha256").update(JSON.stringify(serializedResult)).digest("hex"))
-        expect(outcome.metadata?.result_sha256).toBe(stored.result_sha256)
-        expect(stored.result_sha256).toMatch(/^[0-9a-f]{64}$/)
         expect(JSON.stringify(outcome)).not.toContain("durable result")
       },
     })
   })
 
-  for (const legacyField of [
-    "id",
-    "request_id",
-    "attempt_id",
-    "source_event_id",
-    "decision_slot",
-    "outcome_slot",
-    "execution_result",
-  ] as const)
-    test(`requires a pre-release reset for an expanded Permission ${legacyField} identity`, async () => {
-      await using project = await memoryProject()
-      await Instance.provide({
-        directory: project.path,
-        fn: async () => {
-          const session = await Session.create({ kind: "assistant", title: "Legacy Permission identity" })
-          await PermissionAuthority.authorizeAndExecute(invocation(session.id, `legacy-${legacyField}`), async () => ({
-            field: legacyField,
-          }))
-          const outcome = (await PermissionAuthority.history()).find(
-            (row) => row.event_type === "execution_succeeded",
-          )!
-          const expanded = `permission_${legacyField}_${"a".repeat(64)}`
-          Database.use((db) => {
-            if (legacyField === "execution_result") {
-              db.update(PermissionExecutionResultTable)
-                .set({ attempt_id: expanded })
-                .where(eq(PermissionExecutionResultTable.attempt_id, outcome.attempt_id!))
-                .run()
-              return
-            }
-            db.update(PermissionLedgerTable)
-              .set({ [legacyField]: expanded })
-              .where(eq(PermissionLedgerTable.id, outcome.id))
-              .run()
-          })
-          await Database.awaitEffectIdle(30_000)
-          Database.close()
-
-          let observed: unknown
-          try {
-            Database.Client()
-          } catch (error) {
-            observed = error
-          }
-          expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-            code: "DATA_RESET_REQUIRED",
-            operation: "Database.Client.dataIntegrity.compactPermissionIdentity",
-            message: expect.stringContaining(expanded),
-          })
-          await Database.resetFiles(Database.Path())
-          Database.Client()
-        },
-      })
-    }, 60_000)
 })

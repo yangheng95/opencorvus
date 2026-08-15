@@ -1,7 +1,8 @@
 import { Instance } from "@/project/instance"
-import { Database, desc, eq, and, isNotNull, isNull, like, sql } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import { EngineTaskTable, EngineGoalTable } from "@/engine"
 import { deriveTaskStatus, isTaskActive, isTaskCompleted, isTaskFailed } from "@/engine/task-status"
+import { listProjectTasks, searchProjectTasks } from "@/engine/store"
 import { Tool } from "./tool"
 import z from "zod"
 
@@ -37,9 +38,7 @@ export const AnalyticsTool = Tool.define("analytics", {
     const projectID = Instance.project.id
 
     if (args.action === "summary") {
-      const tasks = Database.use((db) =>
-        db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).all(),
-      )
+      const tasks = listProjectTasks(projectID, Number.MAX_SAFE_INTEGER)
       const total = tasks.length
       const completed = tasks.filter(isTaskCompleted).length
       const failed = tasks.filter(isTaskFailed).length
@@ -75,41 +74,11 @@ export const AnalyticsTool = Tool.define("analytics", {
     }
 
     if (args.action === "search") {
-      const limit = args.limit
-      const conditions = [eq(EngineTaskTable.project_id, projectID)]
-      if (args.status) {
-        // Phase-6-f-2: status column gone; translate to fact conditions.
-        const cancelledMark = sql`json_extract(${EngineTaskTable.metadata}, '$.cancelled') = 1`
-        switch (args.status) {
-          case "active":
-            conditions.push(isNull(EngineTaskTable.time_completed))
-            break
-          case "completed":
-            conditions.push(isNotNull(EngineTaskTable.time_completed))
-            conditions.push(isNull(EngineTaskTable.error))
-            conditions.push(sql`(${cancelledMark}) IS NOT TRUE`)
-            break
-          case "failed":
-            conditions.push(isNotNull(EngineTaskTable.time_completed))
-            conditions.push(isNotNull(EngineTaskTable.error))
-            conditions.push(sql`(${cancelledMark}) IS NOT TRUE`)
-            break
-          case "cancelled":
-            conditions.push(cancelledMark)
-            break
-        }
-      }
-      if (args.query) conditions.push(like(EngineTaskTable.title, `%${args.query}%`))
-
-      const tasks = Database.use((db) =>
-        db
-          .select()
-          .from(EngineTaskTable)
-          .where(and(...conditions))
-          .orderBy(desc(EngineTaskTable.time_updated))
-          .limit(limit)
-          .all(),
-      )
+      const tasks = searchProjectTasks(projectID, {
+        query: args.query,
+        status: args.status,
+        limit: args.limit,
+      })
 
       const results = tasks.map((t) => ({
         id: t.id,

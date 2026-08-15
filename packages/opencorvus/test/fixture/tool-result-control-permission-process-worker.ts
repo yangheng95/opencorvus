@@ -72,7 +72,7 @@ async function snapshot(state: State) {
   const part = message.parts.find((candidate) => candidate.type === "tool" && candidate.callID === state.callID)
   const history = await PermissionAuthority.history()
   const results = Database.use((db) =>
-    db.select().from(PermissionExecutionResultTable).where(eq(PermissionExecutionResultTable.session_id, state.sessionID)).all(),
+    db.select().from(PermissionExecutionResultTable).all(),
   )
   const durableValue = results[0]?.result.kind === "json" ? results[0].result.value : undefined
   return {

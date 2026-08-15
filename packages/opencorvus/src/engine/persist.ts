@@ -6,6 +6,7 @@ import { Event } from "./model"
 import {
   EngineArtifactTable,
   EngineBuildObservationCleanupTable,
+  EngineBuildObservationCleanupReceiptTable,
   EngineGoalTable,
   EngineTaskTable,
   type EngineArtifactKind,
@@ -1770,25 +1771,21 @@ export function recordTaskLevelBuildHostObservation(input: {
       payload,
       timeCreated: now,
     })
-    db
-      .update(EngineBuildObservationCleanupTable)
-      .set({ status: "retained", last_error: null, time_updated: now })
-      .where(
-        and(
-          eq(EngineBuildObservationCleanupTable.observation_id, observationID),
-          eq(EngineBuildObservationCleanupTable.task_id, input.taskID),
-          eq(EngineBuildObservationCleanupTable.status, "active"),
-        ),
-      )
-      .run()
     const cleanup = db
-      .select({ status: EngineBuildObservationCleanupTable.status })
+      .select({ id: EngineBuildObservationCleanupTable.observation_id })
       .from(EngineBuildObservationCleanupTable)
-      .where(eq(EngineBuildObservationCleanupTable.observation_id, observationID))
+      .where(and(eq(EngineBuildObservationCleanupTable.observation_id, observationID), eq(EngineBuildObservationCleanupTable.task_id, input.taskID)))
       .get()
-    if (cleanup?.status !== "retained") {
+    if (!cleanup) {
       throw new Error(`Build observation cleanup owner ${observationID} is missing for durable observation publication`)
     }
+    db.insert(EngineBuildObservationCleanupReceiptTable).values({
+      id: Identifier.deterministic("artifact", `build-cleanup-retained\0${observationID}`),
+      observation_id: observationID,
+      outcome: "retained",
+      error: null,
+      time_created: now,
+    }).onConflictDoNothing().run()
   })
   return observationID
 }

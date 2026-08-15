@@ -1,12 +1,12 @@
 import { asc, Database, eq, inArray } from "@/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "./engine.sql"
-import { listAllMissionTasks } from "./store"
-import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
+import { listAllMissionTasks, projectInteractionRowInTransaction, projectTaskRowInTransaction, type TaskRow } from "./store"
+import { MessageTable, PartTable, SessionTable, ToolPartOutcomeTable, ToolPartRequestTable } from "@/session/session.sql"
 import { DurableActivityCursorSchema, type DurableActivityCursor } from "@opencorvus-ai/plugin"
 import z from "zod"
 import { createHash } from "node:crypto"
+import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 
-type TaskRow = typeof EngineTaskTable.$inferSelect
 type ActivityRow = DurableActivityCursor & { revision: string }
 
 function revisionDigest(value: unknown) {
@@ -82,7 +82,29 @@ function readSessionTree(db: Database.TxOrDb, input: { projectID: string; rootSe
         .orderBy(asc(PartTable.time_created), asc(PartTable.id))
         .all()
     : []
-  return { sessions, messages, parts }
+  const toolRequests = messageIDs.length
+    ? db.select().from(ToolPartRequestTable).where(inArray(ToolPartRequestTable.message_id, messageIDs))
+        .orderBy(asc(ToolPartRequestTable.time_created), asc(ToolPartRequestTable.id)).all()
+    : []
+  const toolOutcomes = toolRequests.length
+    ? db.select().from(ToolPartOutcomeTable)
+        .where(inArray(ToolPartOutcomeTable.request_part_id, toolRequests.map((part) => part.id)))
+        .orderBy(asc(ToolPartOutcomeTable.time_created), asc(ToolPartOutcomeTable.id)).all()
+    : []
+  const projectedToolParts = toolRequests.map((request) => {
+    const projected = projectToolPartInTransaction(db, request)
+    if (!projected) throw new Error(`Tool request ${request.id} could not be projected`)
+    const { id, messageID, sessionID: _sessionID, orderKey: _orderKey, ...data } = projected
+    const outcome = toolOutcomes.find((candidate) => candidate.request_part_id === request.id)
+    return {
+      id,
+      message_id: messageID,
+      time_created: request.time_created,
+      time_updated: outcome?.time_created ?? request.time_created,
+      data,
+    }
+  })
+  return { sessions, messages, parts, visibleParts: [...parts, ...projectedToolParts], toolRequests, toolOutcomes }
 }
 
 export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow) {
@@ -97,9 +119,8 @@ export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow)
   const interactions = db
     .select()
     .from(EngineInteractionRequestTable)
-    .where(eq(EngineInteractionRequestTable.task_id, task.id))
     .orderBy(asc(EngineInteractionRequestTable.time_created), asc(EngineInteractionRequestTable.id))
-    .all()
+    .all().map((row) => projectInteractionRowInTransaction(db, row)).filter((row) => row.task_id === task.id)
   const activity: ActivityRow[] = [
     {
       source: "task",
@@ -110,7 +131,7 @@ export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow)
         time_started: task.time_started,
         time_completed: task.time_completed,
         error: task.error,
-        cancelled: (task.metadata as { cancelled?: unknown } | null)?.cancelled ?? null,
+        lifecycle_status: task.lifecycle_status,
       }),
     },
     ...sessionTree.sessions.map((session) => ({
@@ -130,6 +151,18 @@ export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow)
       id: part.id,
       time_updated: part.time_updated,
       revision: revisionDigest(part.data),
+    })),
+    ...sessionTree.toolRequests.map((request) => ({
+      source: "part" as const,
+      id: request.id,
+      time_updated: request.time_created,
+      revision: revisionDigest(request.data),
+    })),
+    ...sessionTree.toolOutcomes.map((outcome) => ({
+      source: "part" as const,
+      id: outcome.id,
+      time_updated: outcome.time_created,
+      revision: revisionDigest(outcome.data),
     })),
     ...artifacts.map((artifact) => ({
       source: "engine_artifact" as const,
@@ -152,10 +185,11 @@ export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow)
 
 export function readTaskDurableActivity(input: { projectID: string; taskID: string }): DurableActivityCursor {
   return Database.transaction((db) => {
-    const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
-    if (!task || task.project_id !== input.projectID) {
+    const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
+    if (!persistedTask || persistedTask.project_id !== input.projectID) {
       throw new Error(`Task ${input.taskID} is not owned by Project ${input.projectID}`)
     }
+    const task = projectTaskRowInTransaction(db, persistedTask)
     return readTaskDurableActivityScope(db, task).latest
   })
 }

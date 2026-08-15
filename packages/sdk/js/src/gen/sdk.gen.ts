@@ -1087,7 +1087,7 @@ export class Channel extends HeyApiClient {
         | "twitch"
         | "zalo"
         | "zalouser"
-      request_id?: string
+      request_id: string
       source?: string
       task_id?: string
       text: string
@@ -4484,7 +4484,7 @@ export class Channel2 extends HeyApiClient {
         | "twitch"
         | "zalo"
         | "zalouser"
-      request_id?: string
+      request_id: string
       source?: string
       task_id?: string
       text: string
@@ -4663,11 +4663,7 @@ export class Control extends HeyApiClient {
              * Exact current terminal occurrence returned by panel.query_task for this source Task.
              */
             terminal_lifecycle_reference: {
-              terminalError?: string
               terminalEventID: string
-              terminalReason?: "interrupted"
-              terminalStatus: "completed" | "failed" | "cancelled"
-              timeCompleted: number
             }
             /**
              * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.

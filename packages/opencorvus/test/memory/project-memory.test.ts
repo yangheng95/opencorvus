@@ -1384,6 +1384,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
           channel: "memory-channel",
           thread: "memory-thread",
           text: "channel answer password=channel-secret",
+          request_id: `channel-memory-${requestID}`,
           allow_create: false,
         })
         expect(result.kind).toBe("interaction")

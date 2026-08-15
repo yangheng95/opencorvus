@@ -460,7 +460,6 @@ export function persistBrowserPreviewTarget(input: {
     Event.TaskUpdated,
     {
       taskID: input.taskID,
-      status: deriveTaskStatus(requireTask(input.taskID)),
       summary: "Browser preview target updated",
     },
     { source: "browser-preview.target" },
@@ -488,7 +487,6 @@ export function promoteBrowserPreviewTarget(input: {
     Event.TaskUpdated,
     {
       taskID: input.taskID,
-      status: deriveTaskStatus(requireTask(input.taskID)),
       summary: "Browser preview target updated",
     },
     { source: "browser-preview.target" },
@@ -817,7 +815,6 @@ export async function persistBrowserPreviewEvidenceBatch(
           Event.TaskUpdated,
           {
             taskID,
-            status: deriveTaskStatus(requireTask(taskID)),
             summary: "Browser preview evidence updated",
           },
           { source: "browser-preview.evidence" },

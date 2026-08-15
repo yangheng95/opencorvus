@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import { Database as BunDatabase } from "bun:sqlite"
 import { ApplicationSchemaRegistryError, collectTables, SCHEMA_DDL, tableName } from "../../src/storage/ddl"
 import { ApplicationSchema, ProjectTable } from "../../src/storage/schema"
+import { PermissionExecutionResultTable } from "../../src/permission/permission.sql"
 import {
   currentSchemaFingerprint,
   findSchemaDrift,
@@ -27,14 +28,18 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
       "bus_publication_delivery",
       "bus_publication_outbox",
       "engine_browser_preview_target_identity",
-      "engine_task_cancellation_authority",
+      "engine_control_activation_lease",
+      "engine_task_root_ingress",
       "engine_workflow_node_occurrence",
       "event_job_fire",
       "permission_execution_result",
+      "protocol_delivery_receipt",
       "project_generation_idx",
       "project_generation_immutable_update",
       "project_generation_required_insert",
       "provider_usage_event",
+      "provider_activity_request",
+      "tool_part_request",
     ]
     expect(
       sqlite
@@ -155,7 +160,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("5492a41b0788675adf49594dd7246ea414a6be122c75b39fd7acbd7df5babad6")
+    expect(mysqlSchemaFingerprint()).toBe("4ba0a886bf5bcf03f3215285ade1f8a2f5db59de590d02072eb6ae144f4ccd73")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )
@@ -188,24 +193,13 @@ test("reports invalid and duplicate application schema declarations", () => {
   )
 })
 
-test("returns the reset-required database contract for an older schema", async () => {
-  const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
+test("restores a missing canonical fact table before opening the database", async () => {
+  const { Database } = await import("../../src/storage/db")
   try {
     rebuildTestDatabase()
     Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
-    let captured: unknown
-    try {
-      Database.Client()
-    } catch (error) {
-      captured = error
-    }
-    expect(DatabaseUnavailableError.isInstance(captured)).toBe(true)
-    if (!DatabaseUnavailableError.isInstance(captured)) return
-    expect(captured.data).toMatchObject({
-      operation: "Database.Client.schemaValidation",
-      code: "SCHEMA_RESET_REQUIRED",
-    })
-    expect(captured.data.message).toContain("pre-release builds do not patch older schemas")
+    Database.Client()
+    expect(Database.use((db) => db.select().from(PermissionExecutionResultTable).all())).toEqual([])
   } finally {
     rebuildTestDatabase()
   }

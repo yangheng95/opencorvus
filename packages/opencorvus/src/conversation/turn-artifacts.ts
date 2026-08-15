@@ -13,7 +13,7 @@ import { EngineService } from "@/task-api"
 import { conversationMessageHasDisplay, type ConversationView } from "./view"
 import { ConversationTurnArtifactSummary } from "@/engine/model"
 import { requireTaskCompletionDecisionArtifact } from "@/engine/completion-decision"
-import { requireTerminalLifecycleReferenceEvent } from "@/engine/terminal-lifecycle-reference"
+import { requireTerminalLifecycleReferenceEvent, resolveTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { artifactCatalogAuthority, requireEngineArtifactByLocator } from "@/artifact-catalog"
 import { readTaskArtifactSnapshotManifest, taskArtifactSnapshotResourceRefs } from "@/task-artifact/store"
 import { engineArtifactUsesTransportEnvelope } from "@/engine/artifact-catalog-metadata"
@@ -238,7 +238,7 @@ type MissionChildTaskResultWake = {
 }
 
 async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
-  const reference = wake.terminalLifecycleReference
+  const reference = resolveTerminalLifecycleReference(wake.taskID, wake.terminalLifecycleReference)
   if (wake.taskStatus !== reference.terminalStatus) {
     throw new Error(
       `Mission child Task ${wake.taskID} status ${wake.taskStatus} conflicts with terminal occurrence ${reference.terminalEventID}`,
@@ -263,6 +263,7 @@ async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
   if (locators.length === 0) {
     return {
       wake,
+      terminalReference: reference,
       locators,
       entries: [] as ArtifactCatalogEntry[],
       catalogComplete: true,
@@ -271,7 +272,7 @@ async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
   }
   const catalog = await completeTaskCatalog(wake.taskID)
   const entries = resolveCompletionArtifactEntries(wake.taskID, locators, catalog.entries)
-  return { wake, locators, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
+  return { wake, terminalReference: reference, locators, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
 }
 
 export function resolveCompletionArtifactEntries(
@@ -325,30 +326,33 @@ export function missionChildResultWake(message: any): MissionChildTaskResultWake
   }
   const terminalEvent = ProtocolStore.requireEvent(deliveryPayload.source_terminal_event_id)
   const payload = terminalEvent.payload ?? {}
-  if (!terminalEvent.taskID || payload.taskID !== terminalEvent.taskID) return undefined
+  if (!terminalEvent.taskID) return undefined
+  const terminalStatus = terminalEvent.type === "task.completed"
+    ? "completed"
+    : terminalEvent.type === "task.failed"
+      ? "failed"
+      : terminalEvent.type === "task.cancelled"
+        ? "cancelled"
+        : undefined
+  if (!terminalStatus) return undefined
   // The scheduler notification names one immutable terminal occurrence. Never
   // reinterpret it through the Task's current row: the Task may have resumed
   // into a later lifecycle or been physically deleted before Mission drain.
-  const reference = TerminalLifecycleReferenceSchema.parse({
-    terminalEventID: terminalEvent.id,
-    terminalStatus: payload.status,
-    timeCompleted: payload.timeCompleted,
-    ...(typeof payload.error === "string" ? { terminalError: payload.error } : {}),
-    ...(payload.terminalReason === "interrupted" ? { terminalReason: "interrupted" } : {}),
-  })
+  const reference = TerminalLifecycleReferenceSchema.parse({ terminalEventID: terminalEvent.id })
+  const resolvedReference = resolveTerminalLifecycleReference(terminalEvent.taskID, reference)
   requireTerminalLifecycleReferenceEvent(terminalEvent.taskID, reference)
   const task = findTask(terminalEvent.taskID)
   const completionDecision =
-    reference.terminalStatus === "completed"
+    resolvedReference.terminalStatus === "completed"
       ? findTaskCompletionDecisionForTerminalTime({
           taskID: terminalEvent.taskID,
-          timeCompleted: reference.timeCompleted,
+          timeCompleted: resolvedReference.timeCompleted,
         })
       : undefined
   return {
     taskID: terminalEvent.taskID,
     taskTitle: task?.title ?? `Task ${terminalEvent.taskID}`,
-    taskStatus: reference.terminalStatus,
+    taskStatus: resolvedReference.terminalStatus,
     terminalLifecycleReference: reference,
     ...(completionDecision ? { completionDecisionArtifactID: completionDecision.id } : {}),
   }
@@ -365,8 +369,8 @@ export async function projectMissionTurnArtifacts(input: { transcript: readonly 
           id: delivery.wake.taskID,
           title: delivery.wake.taskTitle,
           status: delivery.wake.taskStatus,
-          ...(delivery.wake.taskStatus !== "completed" && delivery.wake.terminalLifecycleReference.terminalError
-            ? { reason: delivery.wake.terminalLifecycleReference.terminalError }
+          ...(delivery.wake.taskStatus !== "completed" && delivery.terminalReference.terminalError
+            ? { reason: delivery.terminalReference.terminalError }
             : {}),
         },
         declaredOutputs: await projectDeclaredTurnOutputs({

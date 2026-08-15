@@ -178,6 +178,7 @@ export class GoogleChatAdapter implements ChannelAdapter {
     if (!channel || !message || !thread || !user || !text) return Response.json({ ok: true })
 
     await this.handler({
+      id: message,
       platform: this.platform,
       channel,
       thread,

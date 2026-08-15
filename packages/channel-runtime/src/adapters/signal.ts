@@ -137,10 +137,11 @@ export class SignalAdapter implements ChannelAdapter {
         const source = envelope.source ?? envelope.sourceNumber ?? envelope.sourceUuid
         const text = (envelope.dataMessage?.message ?? "").trim()
         if (!source || !text) continue
-        const thread = String(
-          envelope.dataMessage?.quote?.id ?? envelope.dataMessage?.timestamp ?? envelope.timestamp ?? Date.now(),
-        )
+        const occurrence = envelope.dataMessage?.timestamp ?? envelope.timestamp
+        if (occurrence === undefined || occurrence === null) continue
+        const thread = String(envelope.dataMessage?.quote?.id ?? occurrence)
         await this.handler({
+          id: `${source}:${occurrence}`,
           platform: this.platform,
           channel: source,
           thread,

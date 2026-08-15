@@ -1,9 +1,7 @@
 import { Database, eq } from "@/storage/db"
-import { EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
-import { writeTaskUpdateInTransaction } from "./state"
-import { isTaskTerminal } from "./task-status"
-import type { TaskRow } from "./store"
-import { metadataWithoutTaskCompletionClosure } from "./task-completion-closure"
+import { EngineTaskTable } from "./engine.sql"
+import { projectTaskRowInTransaction, type TaskRow } from "./store"
+import { appendTaskReopenedInTransaction, taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 
 export function openTaskForContinuationInTransaction(input: {
   db: Database.TxOrDb
@@ -13,29 +11,19 @@ export function openTaskForContinuationInTransaction(input: {
 }): TaskRow {
   const current = input.db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
   if (!current) throw new Error(`task ${input.taskID} not found during continuation open`)
-  if (!isTaskTerminal(current)) {
+  const lifecycle = taskLifecycleProjectionInTransaction(input.db, input.taskID)
+  if (lifecycle.status === "active" || lifecycle.status === "cancelling" || lifecycle.status === "closing") {
     throw new Error(`task ${input.taskID} must be terminal before continuation open`)
   }
-  const metadata = metadataWithoutTaskCompletionClosure(current.metadata)
-  delete metadata.cancelled
-  delete metadata.interrupted
-  // A continuation is another terminal occurrence of the same Task and the
-  // same immutable creation workspace, not a newly-created Task. Keep the
-  // original baseline and the prior result checkpoint so EngineGit.prepare
-  // does not compare a post-result workspace with the creation capsule as if
-  // no execution had ever occurred. EngineGit.complete owns appending the
-  // prior result to result_history when this continuation closes.
-  input.db
-    .delete(EngineTaskCancellationAuthorityTable)
-    .where(eq(EngineTaskCancellationAuthorityTable.task_id, input.taskID))
-    .run()
-  return writeTaskUpdateInTransaction({
+  if (!current.session_id) throw new Error(`task ${input.taskID} has no root Session`)
+  appendTaskReopenedInTransaction({
     db: input.db,
     taskID: input.taskID,
-    values: { status: "active", error: null, metadata },
-    summary: input.summary,
+    sessionID: current.session_id,
     now: input.now,
-  }).task
+    source: "engine.task-intent-open",
+  })
+  return projectTaskRowInTransaction(input.db, current)
 }
 
 export function openTaskForOperatorIntentInTransaction(input: {

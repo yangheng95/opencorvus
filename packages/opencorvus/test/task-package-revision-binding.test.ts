@@ -25,7 +25,7 @@ import {
   requireTaskCreationIngressID,
   waitForIngressDeliveryHooksForTest,
 } from "../src/engine/task-root-ingress-delivery"
-import { TaskRootIngressSchema } from "../src/engine/task-root-ingress"
+import { EngineTaskRootIngressTable } from "../src/engine/engine.sql"
 import {
   resolvePinnedTaskSchedulerTurnProjection,
   taskPackageRevisionForSession,
@@ -324,23 +324,19 @@ describe("Task package revision binding", () => {
         ])
         const firstCreationIngress = Database.use((db) =>
           db
-            .select({ payload: EngineArtifactTable.payload })
-            .from(EngineArtifactTable)
-            .where(eq(EngineArtifactTable.id, firstCreationIngressID))
+            .select()
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.id, firstCreationIngressID))
             .get(),
         )
         expect({
           status: viewTask(firstTask).status,
           timeStarted: firstTask.time_started,
-          ingress: TaskRootIngressSchema.parse(firstCreationIngress?.payload),
+          ingress: firstCreationIngress,
         }).toMatchObject({
           status: "active",
           timeStarted: expect.any(Number),
-          ingress: {
-            source_kind: "task_creation",
-            task_creation_id: firstTaskID,
-            event: { taskCreation: { taskID: firstTaskID, requestID } },
-          },
+          ingress: { source: "task", source_id: firstTaskID, inline_payload: null },
         })
         expect(requireTaskPackageRevisionBinding(firstTaskID).package_digest).toBe(resolved.packageDigest)
         for (const conflictingInput of [

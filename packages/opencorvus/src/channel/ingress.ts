@@ -4,11 +4,13 @@ import { EngineService } from "@/task-api"
 import { ControlMessage, controlFinalMessageText } from "@/control/message"
 import { ControlMessageInput, ControlMessageResult } from "@/control/message-schema"
 import { Database, and, eq } from "@/storage/db"
+import { Identifier } from "@/id/id"
+import { acquireControlLease, assertControlLeaseInTransaction } from "@/engine/control-lease"
 import { Instance } from "@/project/instance"
 import z from "zod"
 import { ChannelId } from "./catalog"
 import { isModelReference } from "@/provider/model-ref"
-import { ChannelIngressReceiptTable } from "./channel.sql"
+import { ChannelIngressAcceptedTable, ChannelIngressOutcomeTable } from "./channel.sql"
 
 export const MessageAttachmentInput = z.object({
   filename: z.string().trim().min(1),
@@ -25,7 +27,7 @@ export const ChannelIngressInput = z
     text: z.string(),
     task_id: z.string().optional(),
     user_id: z.string().optional(),
-    request_id: z.string().optional(),
+    request_id: z.string().min(1),
     source: z.string().optional(),
     model: z
       .string()
@@ -53,43 +55,116 @@ const ChannelDirectResult = z
 export const ChannelIngressResult = z.union([ControlMessageResult, ChannelDirectResult])
 
 export namespace ChannelIngress {
+  let afterEffectBeforeOutcome: (() => void) | undefined
+
   export async function message(raw: z.input<typeof ChannelIngressInput>) {
     const input = ChannelIngressInput.parse(raw)
-    if (!input.request_id) return executeMessage(input)
+    return executeOwnedMessage(input)
+  }
 
-    const current = await requestOwners()
-    const key = `${input.platform}\u0000${input.request_id}`
-    const existing = current.get(key)
-    if (existing) return existing
-
-    const operation = executeOwnedMessage(input)
-    current.set(key, operation)
-    try {
-      return await operation
-    } finally {
-      if (current.get(key) === operation) current.delete(key)
-    }
+  function payload(input: z.output<typeof ChannelIngressInput>): Record<string, unknown> {
+    const { platform: _platform, request_id: _requestID, ...owned } = input
+    return owned
   }
 
   async function executeOwnedMessage(input: z.output<typeof ChannelIngressInput>) {
-    const fingerprint = JSON.stringify(input)
-    const receipt = findReceipt(input.platform, input.request_id!)
-    if (receipt) return receiptResult(receipt, fingerprint, input.request_id!)
-
-    const result = await executeMessage(input)
-    Database.use((db) =>
-      db
-        .insert(ChannelIngressReceiptTable)
-        .values({
-          project_id: Instance.project.id,
-          platform: input.platform,
-          request_id: input.request_id!,
-          fingerprint,
-          result,
-        })
-        .run(),
+    const acceptedID = Identifier.deterministic(
+      "call",
+      `channel-ingress\0${Instance.project.id}\0${input.platform}\0${input.request_id}`,
     )
+    const serialized = JSON.stringify(payload(input))
+    const accepted = Database.immediateTransaction((db) => {
+      const current = db.select().from(ChannelIngressAcceptedTable)
+        .where(eq(ChannelIngressAcceptedTable.id, acceptedID)).get()
+      if (current) {
+        if (JSON.stringify(current.input) !== serialized) {
+          throw new Error(`Channel ingress request ${input.request_id} replay changed its payload`)
+        }
+        return { row: current, created: false }
+      }
+      const row = {
+        id: acceptedID,
+        project_id: Instance.project.id,
+        platform: input.platform,
+        request_id: input.request_id,
+        input: JSON.parse(serialized) as Record<string, unknown>,
+        time_created: Date.now(),
+      }
+      db.insert(ChannelIngressAcceptedTable).values(row).run()
+      return { row, created: true }
+    })
+    const outcome = findOutcome(accepted.row.id)
+    if (outcome) return ChannelIngressResult.parse(outcome.result)
+    if (!accepted.created) throw new ChannelIngressOutcomeUnknownError(input.request_id)
+    const owner = Identifier.ascending("call")
+    const now = Date.now()
+    const lease = acquireControlLease({
+      target: "effect",
+      targetID: accepted.row.id,
+      ownerOccurrenceID: owner,
+      now,
+      leaseMilliseconds: 120_000,
+    })
+    if (!lease.acquired) throw new ChannelIngressOutcomeUnknownError(input.request_id)
+    const result = await executeMessage(input)
+    afterEffectBeforeOutcome?.()
+    Database.immediateTransaction((db) => {
+      assertControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: accepted.row.id,
+        leaseID: lease.lease.id,
+        ownerOccurrenceID: owner,
+        now: Date.now(),
+      })
+      db.insert(ChannelIngressOutcomeTable).values({
+        request_id: accepted.row.id,
+        result,
+        time_created: Date.now(),
+      }).run()
+    })
     return result
+  }
+
+  export function reconcile(input: {
+    platform: z.output<typeof ChannelId>
+    requestID: string
+    result: z.input<typeof ChannelIngressResult>
+  }): z.output<typeof ChannelIngressResult> {
+    const accepted = Database.use((db) => db.select().from(ChannelIngressAcceptedTable).where(and(
+      eq(ChannelIngressAcceptedTable.project_id, Instance.project.id),
+      eq(ChannelIngressAcceptedTable.platform, input.platform),
+      eq(ChannelIngressAcceptedTable.request_id, input.requestID),
+    )).get())
+    if (!accepted) throw new Error(`Channel ingress request not found: ${input.requestID}`)
+    const result = ChannelIngressResult.parse(input.result)
+    Database.immediateTransaction((db) => {
+      const existing = db.select().from(ChannelIngressOutcomeTable)
+        .where(eq(ChannelIngressOutcomeTable.request_id, accepted.id)).get()
+      if (existing) {
+        if (JSON.stringify(existing.result) !== JSON.stringify(result)) {
+          throw new Error(`Channel ingress request ${input.requestID} reconciliation changed its result`)
+        }
+        return
+      }
+      db.insert(ChannelIngressOutcomeTable).values({
+        request_id: accepted.id,
+        result,
+        time_created: Date.now(),
+      }).run()
+    })
+    return result
+  }
+
+  export namespace TestHooks {
+    export function replaceAfterEffectBeforeOutcome(fn: () => void) {
+      const previous = afterEffectBeforeOutcome
+      afterEffectBeforeOutcome = fn
+      return {
+        [Symbol.dispose]() {
+          afterEffectBeforeOutcome = previous
+        },
+      }
+    }
   }
 
   async function executeMessage(input: z.output<typeof ChannelIngressInput>) {
@@ -206,40 +281,17 @@ export namespace ChannelIngress {
   }
 }
 
-const requestOwners = Instance.state(
-  () => new Map<string, Promise<z.infer<typeof ChannelIngressResult>>>(),
-  async (current) => {
-    await Promise.allSettled(current.values())
-    current.clear()
-  },
-  "channel-ingress-request",
-)
-
-function findReceipt(platform: string, requestID: string) {
+function findOutcome(requestID: string) {
   return Database.use((db) =>
-    db
-      .select()
-      .from(ChannelIngressReceiptTable)
-      .where(
-        and(
-          eq(ChannelIngressReceiptTable.project_id, Instance.project.id),
-          eq(ChannelIngressReceiptTable.platform, platform),
-          eq(ChannelIngressReceiptTable.request_id, requestID),
-        ),
-      )
-      .get(),
+    db.select().from(ChannelIngressOutcomeTable).where(eq(ChannelIngressOutcomeTable.request_id, requestID)).get(),
   )
 }
 
-function receiptResult(
-  receipt: typeof ChannelIngressReceiptTable.$inferSelect,
-  fingerprint: string,
-  requestID: string,
-) {
-  if (receipt.fingerprint !== fingerprint) {
-    throw new Error(`Channel ingress request ${requestID} replay changed its payload`)
+export class ChannelIngressOutcomeUnknownError extends Error {
+  constructor(readonly requestID: string) {
+    super(`Channel ingress request ${requestID} has an unknown outcome and requires reconciliation`)
+    this.name = "ChannelIngressOutcomeUnknownError"
   }
-  return ChannelIngressResult.parse(receipt.result)
 }
 
 async function tryReplyInteraction(

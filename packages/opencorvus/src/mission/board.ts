@@ -1,7 +1,8 @@
 import z from "zod"
 import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq } from "@/storage/db"
-import { MessageTable, PartTable } from "@/session/session.sql"
+import { MessageTable, ToolPartRequestTable as PartTable } from "@/session/session.sql"
+import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Message } from "@/session/message"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
@@ -104,31 +105,23 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
   const parts = Database.use((db) =>
     db
       .select({
-        id: PartTable.id,
+        part: PartTable,
         messageID: PartTable.message_id,
         messageTimeCreated: MessageTable.time_created,
         messageData: MessageTable.data,
-        data: PartTable.data,
       })
       .from(PartTable)
-      .innerJoin(
-        MessageTable,
-        and(eq(PartTable.message_id, MessageTable.id), eq(PartTable.session_id, MessageTable.session_id)),
-      )
-      .where(and(eq(PartTable.session_id, session.id), eq(MessageTable.session_id, session.id)))
+      .innerJoin(MessageTable, eq(PartTable.message_id, MessageTable.id))
+      .where(eq(MessageTable.session_id, session.id))
       .orderBy(desc(MessageTable.time_created), desc(MessageTable.id), desc(PartTable.time_created), desc(PartTable.id))
-      .all(),
+      .all()
+      .map((row) => ({ ...row, projected: projectToolPartInTransaction(db, row.part) })),
   )
 
   for (const row of parts) {
     if (row.messageData.role !== "assistant") continue
     if (latestUser && !orderedAfter({ id: row.messageID, timeCreated: row.messageTimeCreated }, latestUser)) continue
-    const part = Message.ToolPart.safeParse({
-      ...row.data,
-      id: row.id,
-      messageID: row.messageID,
-      sessionID: session.id,
-    })
+    const part = Message.ToolPart.safeParse(row.projected)
     if (!part.success || part.data.tool !== "panel" || part.data.state.status !== "completed") continue
     const currentInput = MissionCompletionActionInput.safeParse(
       materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
@@ -179,7 +172,7 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
       receipt.data.mission_session_id !== session.id ||
       receipt.data.assistant_message_id !== row.messageID ||
       receipt.data.tool_call_id !== part.data.callID ||
-      receipt.data.tool_part_id !== row.id ||
+      receipt.data.tool_part_id !== row.part.id ||
       receipt.data.summary !== input.summary ||
       !isDeepStrictEqual(receiptInputAcceptances, canonicalInputAcceptances)
     ) {
@@ -188,7 +181,7 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     return MissionCompletionFact.parse({
       messageID: row.messageID,
       toolCallID: part.data.callID,
-      toolPartID: row.id,
+      toolPartID: row.part.id,
       summary: receipt.data.summary,
       timeRecorded: receipt.data.time_recorded,
     })

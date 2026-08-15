@@ -1,6 +1,5 @@
 import z from "zod"
 import { randomUUID } from "node:crypto"
-import { lstat } from "node:fs/promises"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
@@ -22,6 +21,7 @@ import { parseAcceptanceSpecs, renderSpecsAsText } from "@/acceptance/types"
 import { CapabilityRules } from "@/capability/rules"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import {
   assertSchedulerTargetOccurrenceAvailableInTransaction,
   enqueueSchedulerMessageInTransaction,
@@ -66,13 +66,15 @@ import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
   EngineArtifactTable,
-  EngineTaskCancellationAuthorityTable,
+  EngineControlActivationLeaseTable,
   EngineChannelBindingTable,
   EngineGoalTable,
   EngineTaskTable,
+  EngineTaskRootIngressTable,
   type EngineInteractionStatus,
   type EngineMetadata,
 } from "@/engine/engine.sql"
+import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { buildObservationCleanupRowsForTask, settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
 import {
@@ -87,7 +89,6 @@ import {
 } from "@/engine/task-execution-capsule-binding"
 import { deleteEngineChannelBindingsForTask } from "@/engine/channel-binding"
 import { resolveEngineInteractionRequest } from "@/engine/interaction-request"
-import { insertEngineProgressSnapshot } from "@/engine/progress"
 import {
   deleteEngineTask,
   deleteEngineTasksForProjectSessions,
@@ -95,9 +96,8 @@ import {
   setEngineTaskBudget,
   setEngineTaskPinned,
   setEngineTaskTitle,
-  touchEngineTask,
-  clearEngineTaskRewindCursor,
 } from "@/engine/task"
+import { appendTaskRewindClearedInTransaction } from "@/engine/rewind"
 import {
   Budget,
   CreateTaskInput,
@@ -120,7 +120,6 @@ import { writeTaskChecks } from "@/engine/checks"
 import {
   deliverTaskRootIngress,
   discardTaskRootIngress,
-  terminalizeTaskRootIngressesForCancellationInTransaction,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
   persistTaskRootIntentIngressInTransaction,
@@ -200,8 +199,6 @@ import {
   resolveAgentCoordinationSessionLineage,
 } from "@/engine/agent-coordination"
 import { createDecisionLog } from "@/decision-log"
-import { DecisionLogBundle } from "@/decision-log/bundle"
-import { EngineEventLog } from "@/engine/event-log"
 import { OperatorSteerTargetError } from "@/orchestrator/operator-steer"
 import { projectPersistedTaskMessage, type ProjectedTaskMessage } from "@/orchestrator/protocol/message-bridge"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
@@ -228,6 +225,9 @@ import {
   type TaskListRow,
   type TaskRow,
   type InteractionRow,
+  projectTaskRowInTransaction,
+  projectTaskRowsInTransaction,
+  taskDeletedInTransaction,
 } from "@/engine/store"
 import { Identifier } from "@/id/id"
 import { AttachmentStore } from "@/storage/attachment-store"
@@ -535,54 +535,47 @@ async function cancelPendingPermissionsForSessions(sessionIDs: readonly string[]
   }
 }
 
-async function recordTaskPhysicalDeleteBreadcrumb(
-  task: TaskRow,
-  origin: "EngineService.deleteTask" | "EngineService.deleteSession.deleteTasks",
-  detail: Record<string, unknown> = {},
-  projectDiskProjection = true,
-) {
-  const status = deriveTaskStatus(task)
-  const value = {
+function appendTaskDeletedBoundaryInTransaction(db: Database.TxOrDb, task: TaskRow): void {
+  const existing = db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
+    eq(ProtocolEventTable.aggregate_type, "task"),
+    eq(ProtocolEventTable.aggregate_id, task.id),
+    eq(ProtocolEventTable.type, Event.TaskDeleted.type),
+  )).get()
+  if (existing) return
+  const lifecycle = taskLifecycleProjectionInTransaction(db, task.id)
+  EngineProtocol.emitInTransaction(
+    Event.TaskDeleted,
+    { taskID: task.id, executionEpoch: lifecycle.epoch, summary: "Task deleted by explicit operator action" },
+    { source: "task.delete", taskID: task.id },
+  )
+  Bus.publishOwnedInTransaction(Event.TaskDeleted, {
     taskID: task.id,
-    projectID: task.project_id,
-    sessionID: task.session_id,
-    origin,
-    statusBeforeDelete: status,
-    ...detail,
-  }
-  createDecisionLog(task.id).append({
-    phase: "delete",
-    key: "task_physical_delete_breadcrumb",
-    value: JSON.stringify(value),
-    reason:
-      "Task row is about to be physically deleted; this breadcrumb distinguishes explicit deletion from cancellation.",
+    executionEpoch: lifecycle.epoch,
+    summary: "Task deleted by explicit operator action",
   })
-  if (!projectDiskProjection) return
-  const projectRoot = taskPrimaryProjectRoot(task.id)
-  let projectRootInfo
-  try {
-    projectRootInfo = await lstat(projectRoot)
-  } catch (error) {
-    const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
-    if (code === "ENOENT" || code === "ENOTDIR") return
-    throw error
-  }
-  if (!projectRootInfo.isDirectory()) {
-    throw new Error(`Cannot project Task deletion breadcrumb into non-directory root: ${projectRoot}`)
-  }
-  EngineEventLog.appendPhysicalDeleteBreadcrumb(task.id, {
-    origin,
-    projectID: task.project_id,
-    sessionID: task.session_id ?? undefined,
-    status,
-    detail,
+}
+
+function appendSessionDeletedBoundaryInTransaction(db: Database.TxOrDb, sessionID: string): void {
+  const existing = db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
+    eq(ProtocolEventTable.aggregate_type, "session"),
+    eq(ProtocolEventTable.aggregate_id, sessionID),
+    eq(ProtocolEventTable.type, "session.deleted"),
+  )).get()
+  if (existing) return
+  ProtocolStore.appendEventInTransaction({
+    kind: "event",
+    type: "session.deleted",
+    aggregate: "session",
+    aggregate_id: sessionID,
+    source: "session.delete",
+    payload: null,
   })
-  await DecisionLogBundle.write(projectRoot, task.id)
 }
 
 function assertTasksRemainTerminalForPhysicalDelete(db: Database.TxOrDb, tasks: readonly TaskRow[]): void {
   for (const expected of tasks) {
-    const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, expected.id)).get()
+    const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, expected.id)).get()
+    const current = persisted ? projectTaskRowInTransaction(db, persisted) : undefined
     if (
       !current ||
       current.project_id !== expected.project_id ||
@@ -606,16 +599,7 @@ async function deleteRowsThenTaskArtifacts(tasks: readonly TaskRow[], deleteRows
       cleanupOwners: buildObservationCleanupRowsForTask(task.id),
     }))
     .sort((left, right) => left.taskID.localeCompare(right.taskID))
-  // Cleanup owners are durable only while their Task row exists. Resolve all
-  // pending/retained ref ownership before the cascading physical delete.
-  for (const target of cleanupTargets) {
-    for (const owner of target.cleanupOwners) {
-      await settleBuildObservationCleanup({
-        observationID: owner.observation_id,
-        releaseRetained: true,
-      })
-    }
-  }
+  await settleTaskCleanupOwners(cleanupTargets)
   deleteRows()
   const cleanupFailures: unknown[] = []
   const residuePaths: string[] = []
@@ -644,6 +628,25 @@ async function deleteRowsThenTaskArtifacts(tasks: readonly TaskRow[], deleteRows
       },
       { cause },
     )
+  }
+}
+
+async function settleTaskCleanupOwners(
+  cleanupTargets: ReadonlyArray<{
+    taskID: string
+    projectDirectory: string
+    cleanupOwners: ReturnType<typeof buildObservationCleanupRowsForTask>
+  }>,
+): Promise<void> {
+  // Cleanup owners remain immutable facts after a Task tombstone. Resolve all
+  // pending/retained physical ref ownership before recording that boundary.
+  for (const target of cleanupTargets) {
+    for (const owner of target.cleanupOwners) {
+      await settleBuildObservationCleanup({
+        observationID: owner.observation_id,
+        releaseRetained: true,
+      })
+    }
   }
 }
 
@@ -729,54 +732,12 @@ type TaskCancellationOperation = {
 }
 
 const cancellationOperations = new Map<string, TaskCancellationOperation>()
-const cancellationConvergenceOwnerID = `cancellation-owner:${randomUUID()}`
 const CANCELLATION_CONVERGENCE_LEASE_MS = 10_000
 const CANCELLATION_CONVERGENCE_HEARTBEAT_MS = 2_000
 let cancellationConvergenceHeartbeatFailureForTest: "zero-row" | "exception" | undefined
 let beforeLateCancellationStageForTest:
   | ((input: { signal: AbortSignal; failHeartbeat(mode: "zero-row" | "exception"): void }) => void | Promise<void>)
   | undefined
-
-function renewCancellationConvergenceLease(taskID: string): boolean {
-  const injectedFailure = cancellationConvergenceHeartbeatFailureForTest
-  cancellationConvergenceHeartbeatFailureForTest = undefined
-  if (injectedFailure === "exception") throw new Error("injected Task cancellation convergence heartbeat failure")
-  return Database.immediateTransaction((db) =>
-    Boolean(
-      db
-        .update(EngineTaskCancellationAuthorityTable)
-        .set({ convergence_lease_expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
-        .where(
-          and(
-            eq(EngineTaskCancellationAuthorityTable.task_id, taskID),
-            eq(
-              EngineTaskCancellationAuthorityTable.convergence_owner_id,
-              injectedFailure === "zero-row"
-                ? `${cancellationConvergenceOwnerID}:stale`
-                : cancellationConvergenceOwnerID,
-            ),
-          ),
-        )
-        .returning({ taskID: EngineTaskCancellationAuthorityTable.task_id })
-        .get(),
-    ),
-  )
-}
-
-function renewCancellationConvergenceLeaseOrFence(taskID: string, fence: AbortController): void {
-  if (fence.signal.aborted) return
-  try {
-    if (renewCancellationConvergenceLease(taskID)) return
-    fence.abort(new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`))
-  } catch (error) {
-    log.error("Task cancellation convergence heartbeat failed", {
-      taskID,
-      ownerID: cancellationConvergenceOwnerID,
-      error: error instanceof Error ? error.message : String(error),
-    })
-    fence.abort(error)
-  }
-}
 
 export const TaskCancellationConvergenceTestHooks = {
   failNextHeartbeat(mode: "zero-row" | "exception"): Disposable {
@@ -805,43 +766,78 @@ export const TaskCancellationConvergenceTestHooks = {
 
 async function acquireCancellationConvergence(taskID: string) {
   for (;;) {
-    const task = requireTaskInCurrentProject(taskID)
-    if (isTaskCancelled(task)) return undefined
     const now = Date.now()
     const claimed = Database.immediateTransaction((db) => {
-      const authority = db
-        .select()
-        .from(EngineTaskCancellationAuthorityTable)
-        .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
-        .get()
-      if (!authority) throw new Error(`Task ${taskID} has no durable cancellation authority to converge`)
-      if (
-        authority.convergence_owner_id &&
-        authority.convergence_owner_id !== cancellationConvergenceOwnerID &&
-        (authority.convergence_lease_expires_at ?? 0) > now
-      ) {
-        return false
+      const lifecycle = taskLifecycleProjectionInTransaction(db, taskID)
+      if (lifecycle.status === "cancelled") return undefined
+      if (lifecycle.status !== "cancelling" || !lifecycle.requestEventID) {
+        throw new Error(`Task ${taskID} has no durable cancellation request to converge`)
       }
-      db.update(EngineTaskCancellationAuthorityTable)
-        .set({
-          convergence_owner_id: cancellationConvergenceOwnerID,
-          convergence_owner_process_id: process.pid,
-          convergence_lease_expires_at: now + CANCELLATION_CONVERGENCE_LEASE_MS,
+      const current = db
+        .select()
+        .from(EngineControlActivationLeaseTable)
+        .where(
+          and(
+            eq(EngineControlActivationLeaseTable.target, "lifecycle"),
+            eq(EngineControlActivationLeaseTable.target_id, lifecycle.requestEventID),
+          ),
+        )
+        .orderBy(sql`${EngineControlActivationLeaseTable.time_activated} DESC`, sql`${EngineControlActivationLeaseTable.id} DESC`)
+        .get()
+      if (current && current.expires_at > now) return false
+      const activationID = Identifier.ascending("activity")
+      const ownerOccurrenceID = `task-cancellation:${process.pid}:${randomUUID()}`
+      db.insert(EngineControlActivationLeaseTable)
+        .values({
+          id: activationID,
+          target: "lifecycle",
+          target_id: lifecycle.requestEventID,
+          owner_occurrence_id: ownerOccurrenceID,
+          time_activated: now,
+          expires_at: now + CANCELLATION_CONVERGENCE_LEASE_MS,
         })
-        .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
         .run()
-      return true
+      return { activationID, ownerOccurrenceID, requestEventID: lifecycle.requestEventID }
     })
+    if (claimed === undefined) return undefined
     if (claimed) {
       const leaseFence = new AbortController()
+      const renew = () => {
+        if (leaseFence.signal.aborted) return
+        const injectedFailure = cancellationConvergenceHeartbeatFailureForTest
+        cancellationConvergenceHeartbeatFailureForTest = undefined
+        try {
+          if (injectedFailure === "exception") throw new Error("injected Task cancellation convergence heartbeat failure")
+          const renewed = Database.immediateTransaction((db) =>
+            Boolean(
+              db
+                .update(EngineControlActivationLeaseTable)
+                .set({ expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
+                .where(
+                  and(
+                    eq(EngineControlActivationLeaseTable.id, claimed.activationID),
+                    eq(
+                      EngineControlActivationLeaseTable.owner_occurrence_id,
+                      injectedFailure === "zero-row" ? `${claimed.ownerOccurrenceID}:stale` : claimed.ownerOccurrenceID,
+                    ),
+                    eq(EngineControlActivationLeaseTable.target_id, claimed.requestEventID),
+                  ),
+                )
+                .returning({ id: EngineControlActivationLeaseTable.id })
+                .get(),
+            ),
+          )
+          if (!renewed) throw new Error(`Task ${taskID} cancellation activation ${claimed.activationID} is fenced`)
+        } catch (error) {
+          leaseFence.abort(error)
+        }
+      }
       const heartbeat = setInterval(
-        () => renewCancellationConvergenceLeaseOrFence(taskID, leaseFence),
+        renew,
         CANCELLATION_CONVERGENCE_HEARTBEAT_MS,
       )
       heartbeat.unref?.()
-      if (cancellationConvergenceHeartbeatFailureForTest) {
-        renewCancellationConvergenceLeaseOrFence(taskID, leaseFence)
-      }
+      if (cancellationConvergenceHeartbeatFailureForTest) renew()
       return {
         signal: leaseFence.signal,
         failHeartbeatForTest(mode: "zero-row" | "exception") {
@@ -849,21 +845,21 @@ async function acquireCancellationConvergence(taskID: string) {
             throw new Error("Task cancellation convergence heartbeat failure is already armed")
           }
           cancellationConvergenceHeartbeatFailureForTest = mode
-          renewCancellationConvergenceLeaseOrFence(taskID, leaseFence)
+          renew()
         },
         assertActive() {
           leaseFence.signal.throwIfAborted()
-          const authority = Database.use((db) =>
+          const lease = Database.use((db) =>
             db
               .select({
-                ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id,
-                leaseExpiresAt: EngineTaskCancellationAuthorityTable.convergence_lease_expires_at,
+                ownerID: EngineControlActivationLeaseTable.owner_occurrence_id,
+                leaseExpiresAt: EngineControlActivationLeaseTable.expires_at,
               })
-              .from(EngineTaskCancellationAuthorityTable)
-              .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+              .from(EngineControlActivationLeaseTable)
+              .where(eq(EngineControlActivationLeaseTable.id, claimed.activationID))
               .get(),
           )
-          if (authority?.ownerID !== cancellationConvergenceOwnerID || (authority.leaseExpiresAt ?? 0) <= Date.now()) {
+          if (lease?.ownerID !== claimed.ownerOccurrenceID || (lease.leaseExpiresAt ?? 0) <= Date.now()) {
             const error = new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
             leaseFence.abort(error)
             throw error
@@ -871,35 +867,20 @@ async function acquireCancellationConvergence(taskID: string) {
         },
         assertInTransaction(db: Database.TxOrDb) {
           leaseFence.signal.throwIfAborted()
-          const authority = db
+          const lease = db
             .select({
-              ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id,
-              leaseExpiresAt: EngineTaskCancellationAuthorityTable.convergence_lease_expires_at,
+              ownerID: EngineControlActivationLeaseTable.owner_occurrence_id,
+              leaseExpiresAt: EngineControlActivationLeaseTable.expires_at,
             })
-            .from(EngineTaskCancellationAuthorityTable)
-            .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+            .from(EngineControlActivationLeaseTable)
+            .where(eq(EngineControlActivationLeaseTable.id, claimed.activationID))
             .get()
-          if (authority?.ownerID !== cancellationConvergenceOwnerID || (authority.leaseExpiresAt ?? 0) <= Date.now()) {
+          if (lease?.ownerID !== claimed.ownerOccurrenceID || (lease.leaseExpiresAt ?? 0) <= Date.now()) {
             throw new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
           }
         },
         close() {
           clearInterval(heartbeat)
-          Database.immediateTransaction((db) => {
-            db.update(EngineTaskCancellationAuthorityTable)
-              .set({
-                convergence_owner_id: null,
-                convergence_owner_process_id: null,
-                convergence_lease_expires_at: null,
-              })
-              .where(
-                and(
-                  eq(EngineTaskCancellationAuthorityTable.task_id, taskID),
-                  eq(EngineTaskCancellationAuthorityTable.convergence_owner_id, cancellationConvergenceOwnerID),
-                ),
-              )
-              .run()
-          })
         },
       }
     }
@@ -1091,8 +1072,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
   const persisted = await Session.persistMessageWithCommit(bundle, () => {
     Database.use((db) => {
       const now = bundle.info.time.created
-      touchEngineTask(db, { taskID: task.id, timeUpdated: now })
-      clearEngineTaskRewindCursor(db, { taskID: task.id, timeUpdated: now })
+      appendTaskRewindClearedInTransaction(task.id, now, "service.message")
       EngineProtocol.emitInTransaction(
         Event.TaskMessageRecorded,
         { taskID: task.id, source, summary: "Operator message recorded", messageID: bundle.info.id },
@@ -1293,14 +1273,7 @@ async function prepareProject(project?: string) {
   throw new Error(`project mismatch: expected ${Instance.project.id}, got ${project}`)
 }
 
-function taskSummary(
-  rows: Array<{
-    time_started: number
-    time_completed: number | null
-    error?: string | null
-    metadata?: Record<string, unknown> | null
-  }>,
-) {
+function taskSummary(rows: TaskRow[]) {
   const completed = rows
     .filter((row) => typeof row.time_completed === "number")
     .map((row) => (row.time_completed ?? 0) - row.time_started)
@@ -1453,16 +1426,22 @@ export namespace EngineService {
     const task = requireTaskInCurrentProject(target.task_id)
     const occurrenceIDs = schedulerTargetOccurrenceIdentity(delivery.id)
     const rootKind = delivery.source.kind === "mission_scheduler" ? "mission" : "orchestrator"
-    const expectedStartedAt = delivery.message.target_task_occurrence_started_at
-    if (expectedStartedAt === null) {
+    const expectedEpoch = delivery.message.target_task_execution_epoch
+    if (expectedEpoch === null) {
       throw new Error(`Scheduler Task delivery ${delivery.id} has no target Task occurrence.`)
+    }
+    const currentEpoch = Database.use((db) => taskLifecycleProjectionInTransaction(db, task.id).epoch)
+    if (currentEpoch !== expectedEpoch) {
+      throw new Error(
+        `Scheduler Task delivery ${delivery.id} targets epoch ${expectedEpoch}, current Task epoch is ${currentEpoch}.`,
+      )
     }
     const deliveryReference = SchedulerDeliveryReference.parse({
       eventID: delivery.event.id,
       inboxID: delivery.id,
       sequence: delivery.event.sequence,
       threadID: delivery.message.thread_id,
-      targetTaskOccurrenceStartedAt: expectedStartedAt,
+      targetTaskExecutionEpoch: expectedEpoch,
       ...(delivery.event.replyTo ? { replyTo: delivery.event.replyTo } : {}),
     })
     const bundle = await buildTaskSessionMessageBundle(
@@ -1490,18 +1469,20 @@ export namespace EngineService {
     let ingressID: string | undefined
     await Session.persistMessageWithCommit(bundle, () => {
       Database.use((db) => {
-        const currentTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, task.id)).get()
+        const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, task.id)).get()
+        const currentTask = persistedTask ? projectTaskRowInTransaction(db, persistedTask) : undefined
         if (!currentTask || !isTaskActive(currentTask) || currentTask.session_id !== target.root_session_id) {
           throw new Error(
             `Scheduler delivery ${delivery.id} cannot materialize into Task ${task.id} after its active root changed.`,
           )
         }
-        if (currentTask.time_started !== expectedStartedAt) {
+        const committedEpoch = taskLifecycleProjectionInTransaction(db, task.id).epoch
+        if (committedEpoch !== expectedEpoch) {
           throw new SchedulerTargetOccurrenceStaleError({
-            message: `Scheduler delivery ${delivery.id} targets stale Task ${task.id} occurrence ${expectedStartedAt}; current occurrence is ${currentTask.time_started}.`,
+            message: `Scheduler delivery ${delivery.id} targets stale Task ${task.id} epoch ${expectedEpoch}; current epoch is ${committedEpoch}.`,
             taskID: task.id,
-            expectedStartedAt,
-            currentStartedAt: currentTask.time_started,
+            expectedEpoch,
+            currentEpoch: committedEpoch,
           })
         }
         const currentBody = schedulerSourceBodyInTransaction(db, {
@@ -2263,6 +2244,17 @@ export namespace EngineService {
   }
 
   export async function deleteTask(taskID: string, options?: DestructiveTaskOptions) {
+    const deleted = Database.use((db) => {
+      const row = db.select({ projectID: EngineTaskTable.project_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+      return row && taskDeletedInTransaction(db, taskID) ? row : undefined
+    })
+    if (deleted) {
+      const currentProjectID = Instance.current()?.project.id
+      if ((options?.projectID && deleted.projectID !== options.projectID) || (currentProjectID && deleted.projectID !== currentProjectID)) {
+        throw new NotFoundError({ message: `Task not found: ${taskID}` })
+      }
+      return true
+    }
     let task = requireTaskInCurrentProject(taskID)
     if (options?.projectID && task.project_id !== options.projectID) {
       throw new NotFoundError({ message: `Task not found: ${taskID}` })
@@ -2305,40 +2297,31 @@ export namespace EngineService {
         options,
       )
       await cancelPendingPermissionsForSessions(settledSessionIDs, "Task deleted before the Tool invocation ran")
-      await recordTaskPhysicalDeleteBreadcrumb(task, "EngineService.deleteTask", {}, !options?.projectDeletionAdmission)
       if (options?.projectDeletionAdmission) return true
-      // Delete the settled ingress audit rows, session tree, and task row in one
-      // transaction. Snapshot disk reclaim is intentionally NOT triggered here:
-      // every tree object emitted by this task's `Snapshot.track()` is dangling
-      // (no ref), so `git gc --prune=now` would also collect snapshots that other
-      // Tasks or Sessions in the same project still reference. Whole-project
-      // reclaim is owned by ProjectGC (rm of `snapshot/<id>`).
-      const deleteRows = () => {
-        Database.transaction((db) => {
+      // Explicit Task deletion is an immutable tombstone boundary. The Task
+      // creation input, Session/Message graph, effects, lifecycle, interactions,
+      // progress and Artifacts remain one replayable fact graph; ordinary
+      // queries hide the aggregate by reducing the tombstone.
+      const cleanupTargets = [{
+        taskID: task.id,
+        projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
+        cleanupOwners: buildObservationCleanupRowsForTask(task.id),
+      }]
+      await settleTaskCleanupOwners(cleanupTargets)
+      Database.immediateTransaction((db) => {
           assertTasksRemainTerminalForPhysicalDelete(db, [task])
           deadLetterSchedulerTaskDeliveriesInTransaction(db, {
             taskIDs: [task.id],
             errorName: "SchedulerRecipientDeletedError",
-            message: `Recipient Task ${task.id} was deleted.`,
+            message: `Recipient Task ${task.id} was tombstoned.`,
           })
           deadLetterSchedulerSourceDeliveriesInTransaction(db, {
             sessionIDs: settledSessionIDs,
             errorName: "SchedulerSourceDeletedError",
-            message: `Source Session tree for Task ${task.id} was deleted.`,
+            message: `Source Session tree for tombstoned Task ${task.id} no longer admits scheduler work.`,
           })
-          detachProtocolEventsFromDeletedTasksInTransaction(db, [task.id])
-          if (task.session_id) {
-            deleteSettledSessionTreeRows(db, {
-              sessionID: task.session_id,
-              projectID: task.project_id,
-              expectedSessionIDs: settledSessionIDs,
-            })
-          }
-          deleteEngineTask(db, { taskID })
-          Database.effect(() => Database.incrementalVacuum())
-        })
-      }
-      await deleteRowsThenTaskArtifacts([task], deleteRows)
+          appendTaskDeletedBoundaryInTransaction(db, task)
+      })
       return true
     } finally {
       destructiveScope.close()
@@ -2393,7 +2376,6 @@ export namespace EngineService {
           })
           publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
             taskID,
-            status: deriveTaskStatus(task),
             summary: "Task archived",
           })
         })
@@ -2410,7 +2392,6 @@ export namespace EngineService {
         })
         publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
           taskID,
-          status: deriveTaskStatus(task),
           summary: "Task restored",
         })
       })
@@ -2427,7 +2408,6 @@ export namespace EngineService {
       setEngineTaskBudget(db, { taskID, budget: parsed })
       publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
         taskID,
-        status: deriveTaskStatus(task),
         summary: "Task budget updated",
       })
     })
@@ -2442,7 +2422,6 @@ export namespace EngineService {
       setEngineTaskTitle(db, { taskID, title })
       publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
         taskID,
-        status: deriveTaskStatus(task),
         summary: "Task title updated",
       })
     })
@@ -2461,7 +2440,6 @@ export namespace EngineService {
       })
       publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
         taskID,
-        status: deriveTaskStatus(task),
         summary: pinned ? "Task pinned" : "Task unpinned",
       })
     })
@@ -2618,7 +2596,20 @@ export namespace EngineService {
     if (row.request_type === "question") {
       const answers = input.answers ?? answersFromMessage(input.message)
       if (!answers) throw new Error("answers or message are required for question replies")
-      await Question.reply({ requestID: row.external_id, answers })
+      if ((row.payload as { activity_reconciliation?: unknown }).activity_reconciliation) {
+        if (answers.length !== 1 || answers[0]?.length !== 1 || answers[0][0] !== "acknowledge_unknown") {
+          throw new Error("Activity reconciliation requires the exact acknowledge_unknown answer")
+        }
+        Database.transaction((db) => resolveEngineInteractionRequest(db, {
+          row,
+          status: "answered",
+          response: { answers },
+          eventSource: "task-control.activity-reconciliation",
+        }))
+        await deliverTaskRootIngress(row.task_id)
+      } else {
+        await Question.reply({ requestID: row.external_id, answers })
+      }
     }
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
   }
@@ -2656,7 +2647,20 @@ export namespace EngineService {
     if (row.request_type === "question") {
       const answers = input.answers ?? answersFromMessage(input.message)
       if (!answers) throw new Error("answers or message are required for question replies")
-      await Question.reply({ requestID: row.external_id, answers, userInput: input.userInput })
+      if ((row.payload as { activity_reconciliation?: unknown }).activity_reconciliation) {
+        if (answers.length !== 1 || answers[0]?.length !== 1 || answers[0][0] !== "acknowledge_unknown") {
+          throw new Error("Activity reconciliation requires the exact acknowledge_unknown answer")
+        }
+        Database.transaction((db) => resolveEngineInteractionRequest(db, {
+          row,
+          status: "answered",
+          response: { answers, user_input: input.userInput },
+          eventSource: "task-control.activity-reconciliation",
+        }))
+        await deliverTaskRootIngress(row.task_id)
+      } else {
+        await Question.reply({ requestID: row.external_id, answers, userInput: input.userInput })
+      }
     }
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
   }
@@ -2711,13 +2715,9 @@ export namespace EngineService {
   }
 
   export async function reconcilePendingTaskCancellations(): Promise<number> {
-    const rows = Database.use((db) =>
-      db
-        .select({ id: EngineTaskTable.id })
-        .from(EngineTaskTable)
-        .where(and(eq(EngineTaskTable.project_id, Instance.project.id), isNull(EngineTaskTable.time_completed)))
-        .all(),
-    )
+    const rows = listProjectTasks(Instance.project.id, Number.MAX_SAFE_INTEGER)
+      .filter((task) => isTaskActive(task))
+      .map((task) => ({ id: task.id }))
     const operations: Promise<void>[] = []
     for (const row of rows) {
       const pending = findPendingTaskCancellationRequestEvent(row.id)
@@ -2803,37 +2803,26 @@ export namespace EngineService {
     const cancellationRequest = Database.immediateTransaction((db) => {
       const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
       if (!current) throw new NotFoundError({ message: `Task not found: ${taskID}` })
-      if (current.time_completed != null && !isTaskCancelled(current)) {
-        const lifecycle = deriveTaskStatus(current)
+      const lifecycle = taskLifecycleProjectionInTransaction(db, taskID)
+      if (lifecycle.status === "completed" || lifecycle.status === "failed") {
         throw new TaskCancellationLifecycleConflictError({
-          message: `Task ${taskID} is already ${lifecycle}; cancellation accepts only a nonterminal or cancelled Task.`,
+          message: `Task ${taskID} is already ${lifecycle.status}; cancellation accepts only an open or cancelled Task.`,
           taskID,
-          lifecycle: lifecycle as "completed" | "failed",
+          lifecycle: lifecycle.status,
         })
       }
-      const existingAuthority = db
-        .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
-        .from(EngineTaskCancellationAuthorityTable)
-        .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
-        .get()
-      if (existingAuthority) {
-        if (current.time_completed == null) {
-          terminalizeTaskRootIngressesForCancellationInTransaction(db, {
-            taskID,
-            cancellationRequestEventID: existingAuthority.requestEventID,
-            now: Date.now(),
-          })
-        }
-        return ProtocolStore.requireEvent(existingAuthority.requestEventID)
+      if (lifecycle.status === "cancelled") return ProtocolStore.latestTaskEvent(taskID, "task.cancelled")!
+      if (lifecycle.status === "cancelling" && lifecycle.requestEventID) {
+        return ProtocolStore.requireEvent(lifecycle.requestEventID)
       }
       const requested = EngineProtocol.emitInTransaction(
         Event.TaskCancellationRequested,
         {
-          taskID,
           actor: origin.actor,
           surface: origin.surface,
           reason: origin.reason,
           summary: `Cancellation requested: ${origin.reason}`,
+          execution_epoch: lifecycle.epoch,
           ...(origin.messageID ? { messageID: origin.messageID } : {}),
           ...(origin.toolCallID ? { toolCallID: origin.toolCallID } : {}),
           ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
@@ -2841,17 +2830,11 @@ export namespace EngineService {
         },
         {
           source: origin.source,
+          taskID,
           sessionID: origin.sessionID,
           correlationID: origin.requestID,
         },
       )
-      db.insert(EngineTaskCancellationAuthorityTable).values({ task_id: taskID, request_event_id: requested.id }).run()
-      terminalizeTaskRootIngressesForCancellationInTransaction(db, {
-        taskID,
-        cancellationRequestEventID: requested.id,
-        now: requested.time.emitted,
-      })
-      touchEngineTask(db, { taskID, timeUpdated: requested.time.emitted })
       return requested
     })
     const parsedCancellation = findPendingTaskCancellationRequestEvent(taskID)
@@ -3016,7 +2999,6 @@ export namespace EngineService {
             {
               status: "cancelled",
               error: "task cancelled",
-              time_completed: Date.now(),
             },
             "Task cancelled",
             {
@@ -3025,11 +3007,6 @@ export namespace EngineService {
               transactionEffect(db) {
                 convergenceOwner.assertInTransaction(db)
                 deleteEngineChannelBindingsForTask(db, taskID)
-                terminalizeTaskRootIngressesForCancellationInTransaction(db, {
-                  taskID,
-                  cancellationRequestEventID: cancellationRequest.id,
-                  now: Date.now(),
-                })
               },
             },
           ),
@@ -3080,12 +3057,11 @@ export namespace EngineService {
         ? await Session.getInProject({ sessionID, projectID: current.project.id })
         : await Session.get(sessionID)
     const sessionIDs = await Session.treeInProject({ sessionID, projectID: root.projectID })
-    const readBoundTasks = (db: Database.TxOrDb) =>
-      db
+    const readBoundTasks = (db: Database.TxOrDb) => projectTaskRowsInTransaction(db, db
         .select()
         .from(EngineTaskTable)
         .where(and(eq(EngineTaskTable.project_id, root.projectID), inArray(EngineTaskTable.session_id, sessionIDs)))
-        .all()
+        .all())
     const bindingConflict = (tasks: TaskRow[], reason?: string) => {
       const taskIDs = tasks.map((task) => task.id)
       return new TaskBoundSessionDeletionError({
@@ -3142,14 +3118,37 @@ export namespace EngineService {
       for (const item of tasksForDelete) {
         await awaitTaskRootIngressSettled(item, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
       }
-      for (const item of tasksForDelete) {
-        await recordTaskPhysicalDeleteBreadcrumb(item, "EngineService.deleteSession.deleteTasks", {
-          rootSessionID: sessionID,
-          sessionIDs: ids,
-        })
-      }
     }
     await cancelPendingPermissionsForSessions(ids, "Session tree deleted before the Tool invocation ran")
+    if (tasksForDelete.length > 0 || root.kind === "mission") {
+      await settleTaskCleanupOwners(tasksForDelete.map((task) => ({
+        taskID: task.id,
+        projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
+        cleanupOwners: buildObservationCleanupRowsForTask(task.id),
+      })))
+      Database.immediateTransaction((db) => {
+        assertTasksRemainTerminalForPhysicalDelete(db, tasksForDelete)
+        deadLetterSchedulerSessionDeliveriesInTransaction(db, {
+          sessionIDs: ids,
+          errorName: "SchedulerRecipientDeletedError",
+          message: `Recipient Session tree ${sessionID} was tombstoned.`,
+        })
+        deadLetterSchedulerTaskDeliveriesInTransaction(db, {
+          taskIDs: tasksForDelete.map((task) => task.id),
+          errorName: "SchedulerRecipientDeletedError",
+          message: `Recipient Task tree for Session ${sessionID} was tombstoned.`,
+        })
+        deadLetterSchedulerSourceDeliveriesInTransaction(db, {
+          sessionIDs: ids,
+          errorName: "SchedulerSourceDeletedError",
+          message: `Source Session tree ${sessionID} was tombstoned.`,
+        })
+        for (const task of tasksForDelete) appendTaskDeletedBoundaryInTransaction(db, task)
+        for (const id of ids) appendSessionDeletedBoundaryInTransaction(db, id)
+        Database.effect(() => Bus.publish(Session.Event.Deleted, { info: root }))
+      })
+      return true
+    }
     await deleteRowsThenTaskArtifacts(tasksForDelete, () => {
       Database.transaction((db) => {
         const currentBoundTasks = readBoundTasks(db)
@@ -3348,8 +3347,9 @@ export namespace EngineService {
           }
           const persisted = await Session.persistMessageWithCommit(bundle, () => {
             Database.use((db) => {
-              const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
-              if (!current) throw new NotFoundError({ message: `Task not found: ${input.taskID}` })
+              const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
+              if (!persisted) throw new NotFoundError({ message: `Task not found: ${input.taskID}` })
+              const current = projectTaskRowInTransaction(db, persisted)
               if (!isTaskTerminal(current)) throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
               const transactionReference = requireCurrentTerminalLifecycleReference(input.taskID)
               if (!sameTerminalLifecycleReference(reviewed, transactionReference)) {
@@ -3362,7 +3362,7 @@ export namespace EngineService {
                 summary: "Mission acceptance repair requested",
                 now,
               })
-              clearEngineTaskRewindCursor(db, { taskID: input.taskID, timeUpdated: now })
+              appendTaskRewindClearedInTransaction(input.taskID, now, "mission.acceptance_resume")
               const ingressArtifactID = persistMissionAcceptanceResumeIngressInTransaction(db, {
                 task: openedTask,
                 event,
@@ -3432,8 +3432,9 @@ export namespace EngineService {
       wakeID: Identifier.ascending("artifact"),
       run: async () => {
         Database.transaction((db) => {
-          const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-          if (!current) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+          const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+          if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+          const current = projectTaskRowInTransaction(db, persisted)
           if (!isTaskTerminal(current)) {
             const lifecycle = "active"
             throw new TaskControlIntentLifecycleConflictError({
@@ -3537,13 +3538,13 @@ export namespace EngineService {
       const ingressID = Database.use(
         (db) =>
           db
-            .select({ id: EngineArtifactTable.id })
-            .from(EngineArtifactTable)
+            .select({ id: EngineTaskRootIngressTable.id })
+            .from(EngineTaskRootIngressTable)
             .where(
               and(
-                eq(EngineArtifactTable.task_id, taskID),
-                eq(EngineArtifactTable.kind, "task_root_ingress"),
-                sql`json_extract(${EngineArtifactTable.payload}, '$.message_id') = ${note.user_message.info.id}`,
+                eq(EngineTaskRootIngressTable.task_id, taskID),
+                eq(EngineTaskRootIngressTable.source, "message"),
+                eq(EngineTaskRootIngressTable.source_id, note.user_message.info.id),
               ),
             )
             .get()?.id,

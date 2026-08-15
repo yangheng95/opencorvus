@@ -190,6 +190,7 @@ describe("ChannelRuntime adapter startup settlement", () => {
         startCount += 1
         for (const [index, text] of (behavior?.startupTexts ?? []).entries()) {
           await handler?.({
+            id: `${platform}-startup-${index + 1}`,
             platform,
             channel: `${platform}-channel`,
             thread: `${index + 1}`,
@@ -237,7 +238,7 @@ describe("ChannelRuntime adapter startup settlement", () => {
           thread: "1",
           text: "first",
           user_id: "slack-user",
-          request_id: undefined,
+          request_id: "slack-startup-1",
           source: "slack",
           allow_create: true,
         },
@@ -247,7 +248,7 @@ describe("ChannelRuntime adapter startup settlement", () => {
           thread: "2",
           text: "second",
           user_id: "slack-user",
-          request_id: undefined,
+          request_id: "slack-startup-2",
           source: "slack",
           allow_create: true,
         },
@@ -347,6 +348,7 @@ describe("ChannelRuntime adapter startup settlement", () => {
       platform: "slack",
       async start() {
         await readyHandler?.({
+          id: "slack-ready",
           platform: "slack",
           channel: "slack-channel",
           thread: "ready",
@@ -372,6 +374,7 @@ describe("ChannelRuntime adapter startup settlement", () => {
     const starting = runtime.start()
     await delivered
     await readyHandler!({
+      id: "slack-live",
       platform: "slack",
       channel: "slack-channel",
       thread: "live",

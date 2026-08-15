@@ -2,6 +2,7 @@ import { Slug } from "@opencorvus-ai/util/slug"
 import { BusEvent } from "@/bus/bus-event"
 import { Bus } from "@/bus"
 import { Decimal } from "decimal.js"
+import { isDeepStrictEqual } from "node:util"
 import z from "zod"
 import { type LanguageModelUsage, type ProviderMetadata } from "ai"
 import { Config } from "../config/config"
@@ -11,7 +12,17 @@ import { Installation } from "../installation"
 
 import { Database, NotFoundError, eq, and, gte, isNull, desc, like, inArray, or, sql } from "../storage/db"
 import type { SQL } from "../storage/db"
-import { SessionTable, MessageTable, PartTable, SESSION_KINDS, type PartData, type SessionKind } from "./session.sql"
+import {
+  SessionTable,
+  MessageTable,
+  PartTable,
+  ProviderActivityRequestTable,
+  ToolPartRequestTable,
+  ToolPartOutcomeTable,
+  SESSION_KINDS,
+  type PartData,
+  type SessionKind,
+} from "./session.sql"
 import { ProjectTable } from "../project/project.sql"
 import { Project } from "../project/project"
 import { Log } from "../util/log"
@@ -37,12 +48,28 @@ import { CompactionHandoff } from "./compaction-handoff"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
 import { PermissionAuthority } from "@/permission/authority"
+import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
 import {
   TaskPromptProfileImmutableError,
   requireTaskPackageRevisionBinding,
   requireTaskResolvedPackageRevision,
 } from "@/engine/task-package-revision-binding"
 import { ProjectMemory } from "@/memory/project-memory"
+import {
+  equivalentToolOutcome,
+  equivalentToolRequest,
+  isToolRequestPartData,
+  projectToolPartInTransaction,
+  projectPartInTransaction,
+  toolOutcomeData,
+  toolOutcomePartIdentity,
+  toolRequestData,
+} from "./tool-part-facts"
+import {
+  assertTaskRootAssistantActivationFenceInTransaction,
+} from "@/engine/task-root-fact-store"
+import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
@@ -61,6 +88,14 @@ export namespace Session {
   }
 
   type SessionRow = typeof SessionTable.$inferSelect
+
+  export function deletedInTransaction(db: Database.TxOrDb, sessionID: string): boolean {
+    return Boolean(db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
+      eq(ProtocolEventTable.aggregate_type, "session"),
+      eq(ProtocolEventTable.aggregate_id, sessionID),
+      eq(ProtocolEventTable.type, "session.deleted"),
+    )).get())
+  }
 
   export function fromRow(row: SessionRow): Info {
     const summary =
@@ -88,7 +123,6 @@ export namespace Session {
       time: {
         created: row.time_created,
         updated: row.time_updated,
-        compacting: row.time_compacting ?? undefined,
         archived: row.time_archived ?? undefined,
         pinned: row.time_pinned ?? undefined,
       },
@@ -155,7 +189,6 @@ export namespace Session {
       permission: info.permission,
       time_created: info.time.created,
       time_updated: info.time.updated,
-      time_compacting: info.time.compacting,
       time_archived: info.time.archived,
       time_pinned: info.time.pinned,
     }
@@ -201,7 +234,6 @@ export namespace Session {
       time: z.object({
         created: z.number(),
         updated: z.number(),
-        compacting: z.number().optional(),
         archived: z.number().optional(),
         pinned: z.number().optional(),
       }),
@@ -312,22 +344,22 @@ export namespace Session {
 
         const parentID = msg.info.role === "assistant" && msg.info.parentID ? idMap.get(msg.info.parentID) : undefined
         const { orderKey: _clonedMessageOrderKey, ...messageInfo } = msg.info
-        const cloned = await updateMessage({
+        const clonedInfo = {
           ...messageInfo,
           sessionID: session.id,
           id: newID,
           ...(parentID && { parentID }),
-        })
-
-        for (const part of msg.parts) {
+        } as Message.Info
+        const clonedParts = msg.parts.map((part) => {
           const { orderKey: _clonedPartOrderKey, ...partInfo } = part
-          await updatePart({
+          return {
             ...partInfo,
             id: Identifier.ascending("part"),
-            messageID: cloned.id,
+            messageID: clonedInfo.id,
             sessionID: session.id,
-          })
-        }
+          } as Message.Part
+        })
+        await persistMessage({ info: clonedInfo, parts: clonedParts })
       }
       return session
     },
@@ -437,13 +469,14 @@ export namespace Session {
   }
 
   export const getInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
-    const row = Database.use((db) =>
-      db
+    const row = Database.use((db) => {
+      const persisted = db
         .select()
         .from(SessionTable)
         .where(and(eq(SessionTable.id, sessionID), eq(SessionTable.project_id, projectID)))
-        .get(),
-    )
+        .get()
+      return persisted && !deletedInTransaction(db, sessionID) ? persisted : undefined
+    })
     if (!row) throw new NotFoundError({ message: `Session not found: ${sessionID}` })
     return fromRow(row)
   })
@@ -453,7 +486,10 @@ export namespace Session {
   })
 
   export const get = fn(Identifier.schema("session"), async (id) => {
-    const row = Database.use((db) => db.select().from(SessionTable).where(eq(SessionTable.id, id)).get())
+    const row = Database.use((db) => {
+      const persisted = db.select().from(SessionTable).where(eq(SessionTable.id, id)).get()
+      return persisted && !deletedInTransaction(db, id) ? persisted : undefined
+    })
     if (!row) throw new NotFoundError({ message: `Session not found: ${id}` })
     return fromRow(row)
   })
@@ -555,7 +591,7 @@ export namespace Session {
 
   const MergeConfigOverlayInput = z.object({
     sessionID: Identifier.schema("session"),
-    patch: Config.Overlay,
+    patch: z.lazy(() => Config.Overlay),
   })
 
   const configOverlayLocks = new Map<string, Promise<unknown>>()
@@ -893,7 +929,7 @@ export namespace Session {
         .where(and(...conditions))
         .orderBy(desc(SessionTable.time_updated))
         .limit(limit)
-        .all(),
+        .all().filter((row) => !deletedInTransaction(db, row.id)),
     )
     for (const row of rows) {
       yield fromRow(row)
@@ -952,6 +988,7 @@ export namespace Session {
               .where(and(...conditions))
           : db.select().from(SessionTable)
       return query.orderBy(desc(SessionTable.time_updated), desc(SessionTable.id)).limit(limit).all()
+        .filter((row) => !deletedInTransaction(db, row.id))
     })
 
     const ids = [...new Set(rows.map((row) => row.project_id))]
@@ -989,7 +1026,7 @@ export namespace Session {
         .where(and(eq(SessionTable.project_id, project.id), eq(SessionTable.parent_id, parentID)))
         .all(),
     )
-    return rows.map(fromRow)
+    return rows.filter((row) => !Database.use((db) => deletedInTransaction(db, row.id))).map(fromRow)
   })
 
   // Flat list of session IDs in the subtree rooted at `sessionID`, parent
@@ -1038,6 +1075,9 @@ export namespace Session {
         .orderBy(SessionTable.time_created, SessionTable.id)
         .all(),
     )
+    if (Database.use((db) => deletedInTransaction(db, sessionID))) {
+      throw new NotFoundError({ message: `Session not found: ${sessionID}` })
+    }
     return treeIDsFromRows(rows, sessionID)
   })
 
@@ -1055,6 +1095,9 @@ export namespace Session {
       throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
     }
     const currentSessionIDs = treeIDsFromRows(rows, input.sessionID)
+    const taskOwner = tx.select({ id: EngineTaskTable.id }).from(EngineTaskTable)
+      .where(inArray(EngineTaskTable.session_id, currentSessionIDs)).get()
+    if (taskOwner) throw new Error(`Session tree ${input.sessionID} is immutable while owned by Task ${taskOwner.id}`)
     const expectedSessionIDs = [...new Set(input.expectedSessionIDs)]
     if (expectedSessionIDs.length !== input.expectedSessionIDs.length) {
       throw new Error(`Session deletion settlement contains duplicate session identifiers for ${input.sessionID}`)
@@ -1103,7 +1146,7 @@ export namespace Session {
           .where(and(eq(SessionTable.project_id, projectID), eq(SessionTable.parent_id, parentID)))
           .all(),
       )
-      return rows.map(fromRow)
+      return rows.filter((row) => !Database.use((db) => deletedInTransaction(db, row.id))).map(fromRow)
     },
   )
 
@@ -1119,6 +1162,9 @@ export namespace Session {
     await PermissionAuthority.cancelPendingForSession(sessionID, "Session deleted before the Tool invocation ran")
     // CASCADE delete handles messages and parts automatically
     Database.transaction((db) => {
+      const taskOwner = db.select({ id: EngineTaskTable.id }).from(EngineTaskTable)
+        .where(eq(EngineTaskTable.session_id, sessionID)).get()
+      if (taskOwner) throw new Error(`Task-root Session ${sessionID} is immutable while owned by Task ${taskOwner.id}`)
       db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
       Database.effect(() => Database.incrementalVacuum())
       Database.effect(async () => {
@@ -1159,6 +1205,10 @@ export namespace Session {
     return { ...persisted, orderKey } as Message.VisibleInfo
   }
 
+  function jsonEquivalent(left: unknown, right: unknown) {
+    return isDeepStrictEqual(JSON.parse(JSON.stringify(left)), JSON.parse(JSON.stringify(right)))
+  }
+
   function upsertMessageRow(
     msg: Message.Info,
     options: {
@@ -1169,11 +1219,77 @@ export namespace Session {
     let persisted: Message.VisibleInfo | undefined
     Database.transaction((db) => {
       const existing = db
-        .select({ time_created: MessageTable.time_created })
+        .select({ time_created: MessageTable.time_created, data: MessageTable.data })
         .from(MessageTable)
         .where(eq(MessageTable.id, msg.id))
         .get()
       const persistedMessage = messageWithPersistedCreated(msg, existing?.time_created ?? msg.time.created)
+      if (existing) {
+        const prior = Message.Info.parse({
+          ...existing.data,
+          id: msg.id,
+          sessionID: msg.sessionID,
+        })
+        if (prior.role === "assistant" && prior.time.completed !== undefined) {
+          const { id: _id, sessionID: _sessionID, ...nextData } = persistedMessage
+          if (!jsonEquivalent(existing.data, nextData)) {
+            throw new Error(`Completed assistant Message ${msg.id} is immutable`)
+          }
+          persisted = messageWithPersistedCreated(prior, existing.time_created)
+          return
+        }
+        if (prior.role === "assistant" && persistedMessage.role === "assistant") {
+          const effectBound = Boolean(prior.activationID) || Boolean(
+            db.select({ id: ProviderActivityRequestTable.id })
+              .from(ProviderActivityRequestTable)
+              .where(eq(ProviderActivityRequestTable.assistant_message_id, msg.id))
+              .get(),
+          ) || Boolean(
+            db.select({ id: ToolPartRequestTable.id })
+              .from(ToolPartRequestTable)
+              .where(eq(ToolPartRequestTable.message_id, msg.id))
+              .get(),
+          )
+          const priorIdentity = {
+            sessionID: prior.sessionID,
+            role: prior.role,
+            author: prior.author,
+            parentID: prior.parentID,
+            activationID: prior.activationID,
+            agent: prior.agent,
+            modelID: prior.modelID,
+            providerID: prior.providerID,
+          }
+          const nextIdentity = {
+            sessionID: persistedMessage.sessionID,
+            role: persistedMessage.role,
+            author: persistedMessage.author,
+            parentID: persistedMessage.parentID,
+            activationID: persistedMessage.activationID,
+            agent: persistedMessage.agent,
+            modelID: persistedMessage.modelID,
+            providerID: persistedMessage.providerID,
+          }
+          if (effectBound && !jsonEquivalent(priorIdentity, nextIdentity)) {
+            throw new Error(`Assistant Message ${msg.id} effect causal/model identity is immutable`)
+          }
+        }
+        const { id: _id, sessionID: _sessionID, ...nextData } = persistedMessage
+        if (!jsonEquivalent(existing.data, nextData) && prior.role === "user") {
+          assertTaskRootMessageMutable(db, msg.id)
+        }
+      }
+      if (persistedMessage.role === "assistant" && persistedMessage.activationID) {
+        assertTaskRootAssistantActivationFenceInTransaction(db, {
+          assistantMessageID: persistedMessage.id,
+          now: Date.now(),
+          candidate: {
+            sessionID: persistedMessage.sessionID,
+            parentID: persistedMessage.parentID,
+            activationID: persistedMessage.activationID,
+          },
+        })
+      }
       persisted = persistedMessage
       const time_created = persistedMessage.time.created
       const { id, sessionID, ...data } = persistedMessage
@@ -1227,17 +1343,10 @@ export namespace Session {
       const continuationParts = db
         .select()
         .from(PartTable)
-        .where(and(eq(PartTable.message_id, input.info.id), eq(PartTable.session_id, input.info.sessionID)))
+        .where(eq(PartTable.message_id, input.info.id))
         .orderBy(PartTable.time_created, PartTable.id)
         .all()
-        .map((row) =>
-          Message.Part.parse({
-            ...row.data,
-            id: row.id,
-            sessionID: row.session_id,
-            messageID: row.message_id,
-          }),
-        )
+        .map((row) => projectPartInTransaction(db, row))
       const continuation = Message.compactionContinuationTextParts(continuationParts)
         .map((item) => item.text)
         .join("\n\n")
@@ -1305,15 +1414,39 @@ export namespace Session {
     }
     Database.transaction((db) => {
       preflightBundle?.()
-      const existing = db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.info.id)).get()
-      upsertMessageRow(input.info, { publishCreated: false, publishUpdated: false })
+      const existing = db
+        .select({ id: MessageTable.id, timeCreated: MessageTable.time_created })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.info.id))
+        .get()
+      let initialInfo = input.info
+      if (!existing && input.info.role === "assistant" && input.info.time.completed !== undefined) {
+        const { completed: _completed, ...initialTime } = input.info.time
+        const { finish: _finish, error: _error, ...initialAssistant } = input.info
+        initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
+      }
+      upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
       beforeVisibilityEffects?.()
       if (!existing) {
         const createdInfo = messageWithPersistedCreated(input.info, input.info.time.created)
         Bus.publishOwnedInTransaction(Message.Event.Created, { info: createdInfo })
       }
+      const writtenParts: Message.Part[] = []
+      for (const part of input.parts) {
+        const written = updatePartRow(part, { publish: false })
+        if (written.wrotePart) writtenParts.push(written.outputPart)
+      }
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
-      for (const part of input.parts) updatePartRow(part, { publish: true })
+      const messageOrderKey = messageWithPersistedCreated(
+        input.info,
+        existing?.timeCreated ?? input.info.time.created,
+      ).orderKey
+      for (const part of writtenParts) {
+        Bus.publishOwnedInTransaction(Message.Event.PartUpdated, {
+          orderKey: messageOrderKey,
+          part: part as Message.VisiblePart,
+        })
+      }
       ProjectMemory.captureMessageInTransaction(db, { info: input.info, parts: input.parts })
       for (const control of input.controls ?? []) SessionControl.createInTransaction(db, control)
       for (const patch of input.metadataPatches ?? []) mergeMetadataInTransaction(db, patch)
@@ -1389,6 +1522,7 @@ export namespace Session {
     async (input) => {
       // CASCADE delete handles parts automatically
       Database.transaction((db) => {
+        assertTaskRootMessageMutable(db, input.messageID)
         const removed = db
           .delete(MessageTable)
           .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
@@ -1412,18 +1546,27 @@ export namespace Session {
     }),
     async (input) => {
       Database.transaction((db) => {
+        const message = db.select({ id: MessageTable.id }).from(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID))).get()
+        if (!message) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+        assertTaskRootMessageMutable(db, input.messageID)
         const removed = db
           .delete(PartTable)
           .where(
             and(
               eq(PartTable.id, input.partID),
-              eq(PartTable.session_id, input.sessionID),
               eq(PartTable.message_id, input.messageID),
             ),
           )
           .returning({ id: PartTable.id })
           .get()
-        if (!removed) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
+        const removedTool = removed
+          ? undefined
+          : db.delete(ToolPartRequestTable).where(and(
+              eq(ToolPartRequestTable.id, input.partID),
+              eq(ToolPartRequestTable.message_id, input.messageID),
+            )).returning({ id: ToolPartRequestTable.id }).get()
+        if (!removed && !removedTool) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
         Bus.publishOwnedInTransaction(Message.Event.PartRemoved, {
           sessionID: input.sessionID,
           messageID: input.messageID,
@@ -1435,17 +1578,6 @@ export namespace Session {
   )
 
   const UpdatePartInput = Message.Part
-
-  type ToolStatus = Message.ToolPart["state"]["status"]
-  const TOOL_STATUS_RANK: Record<ToolStatus, number> = { pending: 0, running: 1, completed: 2, error: 2 }
-  const TERMINAL_TOOL_STATUS: ReadonlySet<ToolStatus> = new Set(["completed", "error"])
-
-  function shouldSkipToolStatusUpdate(previousStatus: ToolStatus, nextStatus: ToolStatus): boolean {
-    const oldRank = TOOL_STATUS_RANK[previousStatus]
-    const newRank = TOOL_STATUS_RANK[nextStatus]
-    if (newRank < oldRank) return true
-    return oldRank === newRank && previousStatus !== nextStatus && TERMINAL_TOOL_STATUS.has(previousStatus)
-  }
 
   /** Detector for inline base64 image / pdf / audio / video data URLs inside
    *  a part's serialized data. Single source for the write-boundary guard
@@ -1506,14 +1638,34 @@ export namespace Session {
 
   export const updatePartData = fn(UpdatePartDataInput, async (input) => {
     assertPartDataHasNoInlineBase64(input.partID, input.data)
-    const row = Database.use((db) =>
-      db
-        .update(PartTable)
-        .set({ data: input.data, time_updated: Date.now() })
-        .where(eq(PartTable.id, input.partID))
-        .returning({ id: PartTable.id })
-        .get(),
-    )
+    const row = Database.use((db) => {
+      const toolRequest = db.select({ id: ToolPartRequestTable.id }).from(ToolPartRequestTable)
+        .where(eq(ToolPartRequestTable.id, input.partID)).get()
+      if (toolRequest) {
+        throw new Error(`Tool request Part ${input.partID} is immutable; append its exact outcome fact instead`)
+      }
+      const existing = db.select().from(PartTable).where(eq(PartTable.id, input.partID)).get()
+      if (!existing) return undefined
+      if (jsonEquivalent(existing.data, input.data)) return { id: existing.id }
+      assertAcceptedIngressMessageMutable(db, existing.message_id)
+      const current = existing.data as { type?: string }
+      const next = input.data as { type?: string }
+      if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === next.type)) {
+        throw new Error(`Non-streaming Part ${input.partID} is immutable`)
+      }
+      const parent = db.select({ data: MessageTable.data }).from(MessageTable)
+        .where(eq(MessageTable.id, existing.message_id)).get()
+      const parentData = parent?.data as { role?: string; time?: { completed?: number } } | undefined
+      if (parentData?.role === "assistant" && parentData.time?.completed !== undefined) {
+        throw new Error(`Part ${input.partID} is immutable after assistant completion`)
+      }
+      assertTaskRootAssistantActivationFenceInTransaction(db, {
+        assistantMessageID: existing.message_id,
+        now: Date.now(),
+      })
+      return db.update(PartTable).set({ data: input.data, time_updated: Date.now() })
+        .where(eq(PartTable.id, input.partID)).returning({ id: PartTable.id }).get()
+    })
     if (!row) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
   })
 
@@ -1542,7 +1694,7 @@ export namespace Session {
     let wrotePart = false
     const write = (db: Database.TxOrDb) => {
       const message = db
-        .select({ id: MessageTable.id, timeCreated: MessageTable.time_created })
+        .select({ id: MessageTable.id, timeCreated: MessageTable.time_created, data: MessageTable.data })
         .from(MessageTable)
         .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
         .get()
@@ -1556,51 +1708,155 @@ export namespace Session {
       const existingPart = db
         .select({
           data: PartTable.data,
-          sessionID: PartTable.session_id,
           messageID: PartTable.message_id,
           timeCreated: PartTable.time_created,
         })
         .from(PartTable)
         .where(eq(PartTable.id, id))
         .get()
-      if (existingPart && (existingPart.sessionID !== sessionID || existingPart.messageID !== messageID)) {
+      const existingToolRequest = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, id)).get()
+      if (existingPart && existingPart.messageID !== messageID) {
         throw new NotFoundError({ message: `Part not found: ${id}` })
       }
-      // Tool status monotonicity: never regress a tool part's status
-      if (part.type === "tool" && part.state?.status) {
-        if (existingPart?.data) {
-          const prev = existingPart.data as any
-          if (prev.type === "tool" && prev.state?.status) {
-            if (shouldSkipToolStatusUpdate(prev.state.status, part.state.status)) {
-              const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingPart.timeCreated })
-              assertProvidedPartOrderKey(canonicalOrderKey)
-              outputPart = {
-                ...prev,
-                id,
-                sessionID,
-                messageID,
-                orderKey: canonicalOrderKey,
-              } as Message.Part
-              return
+      if (existingToolRequest && existingToolRequest.message_id !== messageID) {
+        throw new NotFoundError({ message: `Part not found: ${id}` })
+      }
+      if (part.type === "tool") {
+        // A pending provider input draft is stream transport, not evidence that
+        // an external operation may have started. Persist only the complete
+        // write-ahead request and its separate terminal outcome fact.
+        if (part.state.status === "pending") {
+          if (!existingToolRequest) return
+          const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingToolRequest.time_created })
+          assertProvidedPartOrderKey(canonicalOrderKey)
+          outputPart = { ...projectToolPartInTransaction(db, existingToolRequest)!, orderKey: canonicalOrderKey }
+          return
+        }
+        const request = toolRequestData(part)
+        const parent = message.data as { role?: string; time?: { completed?: number } }
+        if (!existingToolRequest && parent.role === "assistant" && parent.time?.completed !== undefined) {
+          throw new Error(`Tool request Part ${id} cannot be appended after assistant completion`)
+        }
+        if (existingPart) throw new Error(`Tool request Part identity ${id} is occupied by a non-Tool fact`)
+        if (!existingToolRequest) {
+          assertTaskRootAssistantActivationFenceInTransaction(db, {
+            assistantMessageID: messageID,
+            now: time,
+          })
+        }
+        if (existingToolRequest) {
+          if (!equivalentToolRequest(existingToolRequest.data, request)) {
+            throw new Error(`Tool request Part ${id} conflicts with its immutable request fact`)
+          }
+        } else {
+          db.insert(ToolPartRequestTable).values({
+            id,
+            message_id: messageID,
+            time_created: time,
+            data: request,
+          }).run()
+          wrotePart = true
+        }
+        let outcome = toolOutcomeData(part)
+        if (outcome?.outcome === "completed" && part.state.status === "completed") {
+          const permissionRequest = db.select({ requestID: PermissionLedgerTable.request_id })
+            .from(PermissionLedgerTable)
+            .where(and(
+              eq(PermissionLedgerTable.event_type, "requested"),
+              eq(PermissionLedgerTable.session_id, sessionID),
+              eq(PermissionLedgerTable.message_id, messageID),
+              eq(PermissionLedgerTable.tool_call_id, part.callID),
+            )).get()
+          const resultAttemptID = permissionRequest
+            ? Identifier.deterministic("permission", `attempt\0${permissionRequest.requestID}`)
+            : undefined
+          const resultReceipt = resultAttemptID
+            ? db.select().from(PermissionExecutionResultTable)
+              .where(eq(PermissionExecutionResultTable.attempt_id, resultAttemptID)).get()
+            : undefined
+          if (resultReceipt) {
+            const stored = resultReceipt.result as { kind?: string; value?: unknown }
+            const value = stored?.kind === "json" ? stored.value : undefined
+            const projected = stored?.kind === "undefined"
+              ? ""
+              : typeof value === "string"
+                ? value
+                : value && typeof value === "object" && !Array.isArray(value) && typeof (value as { output?: unknown }).output === "string"
+                  ? (value as { output: string }).output
+                  : undefined
+            if (projected !== part.state.output) {
+              throw new Error(`Tool outcome Part ${id} conflicts with Permission result ${resultReceipt.attempt_id}`)
+            }
+            outcome = {
+              outcome: "completed",
+              resultAttemptID: resultReceipt.attempt_id,
+              title: outcome.title,
+              metadata: outcome.metadata,
+              time: outcome.time,
+              ...(outcome.attachments ? { attachments: outcome.attachments } : {}),
             }
           }
         }
+        if (outcome) {
+          const outcomeID = toolOutcomePartIdentity(id)
+          const existingOutcome = db.select().from(ToolPartOutcomeTable)
+            .where(eq(ToolPartOutcomeTable.request_part_id, id)).get()
+          if (existingOutcome) {
+            if (existingOutcome.id !== outcomeID || !equivalentToolOutcome(existingOutcome.data, outcome)) {
+              throw new Error(`Tool outcome Part ${outcomeID} conflicts with its immutable receipt`)
+            }
+          } else {
+            db.insert(ToolPartOutcomeTable).values({
+              id: outcomeID,
+              request_part_id: id,
+              data: outcome,
+              time_created: time,
+            }).run()
+            wrotePart = true
+          }
+        }
+        const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingToolRequest?.time_created ?? time })
+        assertProvidedPartOrderKey(canonicalOrderKey)
+        outputPart = projectToolPartInTransaction(
+          db,
+          existingToolRequest ?? db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, id)).get()!,
+        )!
+        outputPart = { ...outputPart, orderKey: canonicalOrderKey }
+        if (wrotePart && publishAfterCommit) publishPartUpdated()
+        return
       }
+      if (existingToolRequest) throw new Error(`Part identity ${id} is occupied by an immutable Tool request fact`)
+      const parentData = message.data as { role?: string }
+      if (parentData.role === "user") assertAcceptedIngressMessageMutable(db, messageID)
       const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingPart?.timeCreated ?? time })
       assertProvidedPartOrderKey(canonicalOrderKey)
       outputPart = {
         ...part,
         orderKey: canonicalOrderKey,
       } as Message.Part
+      if (existingPart && JSON.stringify(existingPart.data) === JSON.stringify(data)) return
+      const parent = message.data as { role?: string; time?: { completed?: number } }
+      if (parent.role === "assistant" && parent.time?.completed !== undefined) {
+        throw new Error(`Part ${id} is immutable after assistant completion`)
+      }
+      if (existingPart) {
+        const current = existingPart.data as { type?: string }
+        if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === part.type)) {
+          throw new Error(`Non-streaming Part ${id} is immutable`)
+        }
+      }
+      assertTaskRootAssistantActivationFenceInTransaction(db, {
+        assistantMessageID: messageID,
+        now: time,
+      })
       db.insert(PartTable)
         .values({
           id,
           message_id: messageID,
-          session_id: sessionID,
           time_created: time,
-          data,
+          data: data as PartData,
         })
-        .onConflictDoUpdate({ target: PartTable.id, set: { data } })
+        .onConflictDoUpdate({ target: PartTable.id, set: { data: data as PartData } })
         .run()
       wrotePart = true
       if (publishAfterCommit) publishPartUpdated()
@@ -1685,7 +1941,15 @@ export namespace Session {
             ...msg.info,
             sessionID: input.info.id,
           } as Message.Info & { orderKey?: string }
-          upsertMessageRow(messageInfo, { publishCreated: false, publishUpdated: false })
+          const existing = db.select({ id: MessageTable.id }).from(MessageTable)
+            .where(eq(MessageTable.id, messageInfo.id)).get()
+          let initialInfo = messageInfo
+          if (!existing && messageInfo.role === "assistant" && messageInfo.time.completed !== undefined) {
+            const { completed: _completed, ...initialTime } = messageInfo.time
+            const { finish: _finish, error: _error, ...initialAssistant } = messageInfo
+            initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
+          }
+          upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
           for (const part of msg.parts) {
             const { orderKey: _partOrderKey, ...partInfo } = {
               ...part,
@@ -1694,6 +1958,7 @@ export namespace Session {
             } as Message.Part & { orderKey?: string }
             updatePartRow(partInfo as Message.Part, { publish: false })
           }
+          upsertMessageRow(messageInfo, { publishCreated: false, publishUpdated: false })
         }
       })
     },
@@ -1815,3 +2080,34 @@ export namespace Session {
 export { Message } from "./message"
 export { Todo } from "./todo"
 export { SessionStatus } from "./status"
+  function acceptedIngressMessage(db: Database.TxOrDb, messageID: string): boolean {
+    return Boolean(db.select({ id: EngineTaskRootIngressTable.id }).from(EngineTaskRootIngressTable)
+      .where(and(eq(EngineTaskRootIngressTable.source, "message"), eq(EngineTaskRootIngressTable.source_id, messageID))).get())
+  }
+
+  function protocolCausalMessage(db: Database.TxOrDb, messageID: string): boolean {
+    return Boolean(db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable)
+      .where(eq(sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID')`, messageID)).get())
+  }
+
+  function taskRootMessageIsImmutable(db: Database.TxOrDb, messageID: string): boolean {
+    if (acceptedIngressMessage(db, messageID) || protocolCausalMessage(db, messageID)) return true
+    const row = db.select({ data: MessageTable.data }).from(MessageTable).where(eq(MessageTable.id, messageID)).get()
+    const data = row?.data as { activationID?: unknown } | undefined
+    if (typeof data?.activationID === "string" && data.activationID) return true
+    return Boolean(db.select({ id: MessageTable.id }).from(MessageTable)
+      .where(sql`json_extract(${MessageTable.data}, '$.role') = 'assistant' AND json_extract(${MessageTable.data}, '$.parentID') = ${messageID}`).get())
+  }
+
+  function assertTaskRootMessageMutable(db: Database.TxOrDb, messageID: string): void {
+    if (taskRootMessageIsImmutable(db, messageID)) {
+      throw new Error(`Task-root causal Message ${messageID} is immutable`)
+    }
+  }
+
+
+  function assertAcceptedIngressMessageMutable(db: Database.TxOrDb, messageID: string): void {
+    if (acceptedIngressMessage(db, messageID) || protocolCausalMessage(db, messageID)) {
+      throw new Error(`Accepted ingress Message ${messageID} is immutable`)
+    }
+  }

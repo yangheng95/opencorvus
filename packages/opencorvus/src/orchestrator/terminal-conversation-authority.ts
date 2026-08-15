@@ -1,8 +1,9 @@
 import z from "zod"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
-import type { TaskRootIngress } from "@/engine/task-root-ingress"
+import { OrchestratorEventSchema, type OrchestratorEvent } from "./event"
 import {
   requireCurrentTerminalLifecycleReference,
+  resolveTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
 } from "@/engine/terminal-lifecycle-reference"
 
@@ -24,7 +25,7 @@ export const TerminalConversationAuthoritySchema = z
       })
     }
     if (
-      authority.terminalLifecycleReference.terminalStatus !== "completed" &&
+      resolveTerminalLifecycleReference(authority.taskID, authority.terminalLifecycleReference).terminalStatus !== "completed" &&
       authority.completionDecisionArtifactID
     ) {
       context.addIssue({
@@ -39,24 +40,32 @@ export type TerminalConversationAuthority = z.infer<typeof TerminalConversationA
 export function createTerminalConversationAuthority(input: {
   taskID: string
   ingressID: string
-  ingress: Extract<TaskRootIngress, { source_kind: "operator_message" | "coordination_request" }>
+  event: OrchestratorEvent
 }): TerminalConversationAuthority {
+  const event = OrchestratorEventSchema.parse(input.event)
+  const ingressKind = event.rootMessage?.kind === "operator"
+    ? "operator_message" as const
+    : event.coordinationRequest
+      ? "coordination_request" as const
+      : undefined
+  if (!ingressKind) throw new Error(`Terminal conversation ingress ${input.ingressID} is not operator or coordination input`)
   const terminalLifecycleReference = requireCurrentTerminalLifecycleReference(input.taskID)
+  const terminal = resolveTerminalLifecycleReference(input.taskID, terminalLifecycleReference)
   const completionDecision =
-    terminalLifecycleReference.terminalStatus === "completed"
+    terminal.terminalStatus === "completed"
       ? findTaskCompletionDecisionForTerminalTime({
           taskID: input.taskID,
-          timeCompleted: terminalLifecycleReference.timeCompleted,
+          timeCompleted: terminal.timeCompleted,
         })
       : undefined
   return TerminalConversationAuthoritySchema.parse({
     taskID: input.taskID,
     ingressID: input.ingressID,
-    ingressKind: input.ingress.source_kind,
+    ingressKind,
     terminalLifecycleReference,
     ...(completionDecision ? { completionDecisionArtifactID: completionDecision.id } : {}),
-    ...(input.ingress.source_kind === "coordination_request"
-      ? { coordinationRequestID: input.ingress.request_id }
+    ...(ingressKind === "coordination_request"
+      ? { coordinationRequestID: event.coordinationRequest!.requestID }
       : {}),
   })
 }

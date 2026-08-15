@@ -20,6 +20,7 @@ export {
   EngineWorkflowNodeOccurrenceTable,
   EngineProgressSnapshotTable,
   EngineInteractionRequestTable,
+  EngineInteractionOutcomeTable,
   EngineChannelBindingTable,
 } from "./engine.sql"
 export type {

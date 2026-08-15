@@ -2575,7 +2575,7 @@ export function createOrchestratorTools(input: {
               db
                 .select({ id: PartTable.id, data: PartTable.data })
                 .from(PartTable)
-                .where(and(eq(PartTable.message_id, messageID), eq(PartTable.session_id, sessionID)))
+                .where(eq(PartTable.message_id, messageID))
                 .all()
                 .filter((part) => part.data.type === "text"),
             )

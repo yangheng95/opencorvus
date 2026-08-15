@@ -25,6 +25,7 @@ export class TelegramAdapter implements ChannelAdapter {
       const user = String(ctx.from.id)
 
       await this.handler({
+        id: `${channel}:${ctx.message.message_id}`,
         platform: this.platform,
         channel,
         thread,
@@ -51,6 +52,7 @@ export class TelegramAdapter implements ChannelAdapter {
       )
 
       await this.handler({
+        id: `${channel}:${ctx.message.message_id}`,
         platform: this.platform,
         channel,
         thread,
@@ -78,6 +80,7 @@ export class TelegramAdapter implements ChannelAdapter {
       )
 
       await this.handler({
+        id: `${channel}:${ctx.message.message_id}`,
         platform: this.platform,
         channel,
         thread,
