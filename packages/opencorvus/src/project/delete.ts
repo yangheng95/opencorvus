@@ -222,6 +222,14 @@ function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectI
     }
     deleteDecisionLogsForTasks(taskIDs, db)
     deleteProjectNotes({ projectID }, db)
+    // Task rows must go before the Project row. Both the Task subtree and the
+    // Session subtree reach engine_workflow_node_occurrence, whose
+    // child_session_id restricts Session deletion so a live workflow node can
+    // never lose the Session it admitted. SQLite picks its own order among a
+    // parent's cascade branches, so leaving both branches to one cascade lets
+    // the Session branch run first and hit that restriction. Retiring the Task
+    // subtree first removes the occurrence rows through their own owner.
+    db.delete(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).run()
     db.delete(ProjectTable).where(eq(ProjectTable.id, admission.projectID)).run()
   })
 }

@@ -50,6 +50,7 @@ import {
   runWithProjectDeletionIdentity,
 } from "@/project/independent-project-owner"
 import { Project } from "@/project/project"
+import { ProjectTable } from "@/project/project.sql"
 import { Worktree } from "@/worktree"
 import { Question } from "@/question"
 import { Session } from "@/session"
@@ -548,11 +549,21 @@ function appendTaskDeletedBoundaryInTransaction(db: Database.TxOrDb, task: TaskR
     { taskID: task.id, executionEpoch: lifecycle.epoch, summary: "Task deleted by explicit operator action" },
     { source: "task.delete", taskID: task.id },
   )
-  Bus.publishOwnedInTransaction(Event.TaskDeleted, {
-    taskID: task.id,
-    executionEpoch: lifecycle.epoch,
-    summary: "Task deleted by explicit operator action",
-  })
+  const project = db
+    .select({ id: ProjectTable.id, directory: ProjectTable.worktree })
+    .from(ProjectTable)
+    .where(eq(ProjectTable.id, task.project_id))
+    .get()
+  if (!project) throw new Error(`Task ${task.id} Project ${task.project_id} is missing during deletion publication`)
+  Bus.publishProjectOwnedInTransaction(
+    Event.TaskDeleted,
+    {
+      taskID: task.id,
+      executionEpoch: lifecycle.epoch,
+      summary: "Task deleted by explicit operator action",
+    },
+    { projectID: project.id, directory: Filesystem.resolve(project.directory) },
+  )
 }
 
 function appendSessionDeletedBoundaryInTransaction(db: Database.TxOrDb, sessionID: string): void {
@@ -3145,7 +3156,16 @@ export namespace EngineService {
         })
         for (const task of tasksForDelete) appendTaskDeletedBoundaryInTransaction(db, task)
         for (const id of ids) appendSessionDeletedBoundaryInTransaction(db, id)
-        Database.effect(() => Bus.publish(Session.Event.Deleted, { info: root }))
+        // The durable session.deleted Protocol fact above is the deletion
+        // authority. The Session Bus event is only an in-process projection for
+        // a retained runtime; deleting a persisted Session whose repository is
+        // absent must not fabricate an Instance merely to notify no listeners.
+        Database.effect(() =>
+          Instance.tryProvideActive({
+            directory: root.directory,
+            fn: () => Bus.publish(Session.Event.Deleted, { info: root }),
+          }),
+        )
       })
       return true
     }

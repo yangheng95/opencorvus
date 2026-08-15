@@ -15,7 +15,8 @@ import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { SessionProcessor } from "@/session/processor"
 import { SessionStatus } from "@/session/status"
 import { Database, eq } from "@/storage/db"
-import { EngineTaskTable } from "@/engine/engine.sql"
+import { EngineTaskTable, EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
+import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { DecisionLogTable } from "@/decision-log/schema"
 import { EngineService } from "@/task-api"
 import { Identifier } from "@/id/id"
@@ -34,6 +35,7 @@ import { Ownership } from "@/engine/ownership"
 import { Filesystem } from "@/util/filesystem"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { insertEngineTask } from "@/engine/task"
+import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { insertTaskProcessBinding, prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { DatabaseAuthorityTable } from "@/storage/database.sql"
@@ -58,6 +60,35 @@ const deletionProbeState = Instance.state(
 const sessionLoopDeletionModel = {
   providerID: "test",
   modelID: "project-deletion-session-loop",
+}
+
+function appendFixtureTaskLifecycle(input: {
+  taskID: string
+  sessionID: string
+  now: number
+  terminal: boolean
+}) {
+  Database.transaction((db) => {
+    appendTaskOpenedInTransaction({
+      db,
+      taskID: input.taskID,
+      sessionID: input.sessionID,
+      now: input.now,
+      source: "test",
+    })
+    if (!input.terminal) return
+    ProtocolStore.appendEventInTransaction({
+      kind: "event",
+      type: "task.completed",
+      aggregate: "task",
+      aggregate_id: input.taskID,
+      task_id: null,
+      session_id: input.sessionID,
+      source: "test",
+      emitted_at: input.now,
+      payload: { execution_epoch: 1 },
+    })
+  })
 }
 
 function sessionLoopDeletionProviderModel(): ProviderType.Model {
@@ -242,13 +273,11 @@ describe("Project directory integrity", () => {
               product_pillar: "work",
               title: "Project-owned terminal Task",
               request: "Delete through the Project authority without recreating managed state.",
-              time_started: now,
-              time_completed: now,
               time_created: now,
-              time_updated: now,
             })
             .run(),
         )
+        appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: true })
       },
     })
     const result = await deleteProject(registered.project, {
@@ -280,6 +309,170 @@ describe("Project directory integrity", () => {
       managedState: "missing",
       projects: 0,
       tasks: 0,
+    })
+  }, 90_000)
+
+  test("commits Project deletion through immutable permission evidence and an admitted workflow node", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const projectID = registered.project.id
+    const taskID = Identifier.ascending("task")
+    let policySessionID!: string
+    let childSessionID!: string
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Permission evidence host" })
+        const child = await Session.create({
+          kind: "delegated-worker",
+          parentID: root.id,
+          title: "Workflow node child Session",
+        })
+        policySessionID = root.id
+        childSessionID = child.id
+        const now = Date.now()
+        Database.transaction((db) => {
+          insertEngineTask(db, {
+            taskID,
+            projectID,
+            sessionID: root.id,
+            source: "test",
+            productPillar: "work",
+            title: "Workflow node owner",
+            request: "Retire immutable permission evidence together with its Project.",
+            priority: 0,
+            metadata: {},
+            timeCreated: now,
+          })
+          appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test" })
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: taskID,
+            task_id: null,
+            session_id: root.id,
+            source: "test",
+            emitted_at: now,
+            payload: { execution_epoch: 1 },
+          })
+          db.insert(PermissionPolicyTable)
+            .values({
+              session_id: root.id,
+              project_id: projectID,
+              mode: "ask",
+              revision: "revision-1",
+              time_created: now,
+            })
+            .run()
+          const permissionRequestID = Identifier.ascending("permission")
+          db.insert(PermissionLedgerTable)
+            .values({
+              id: Identifier.ascending("permission"),
+              request_id: permissionRequestID,
+              project_id: projectID,
+              session_id: root.id,
+              message_id: Identifier.ascending("message"),
+              tool_call_id: "tool-call-1",
+              event_type: "requested",
+              mode: "ask",
+              policy_revision: "revision-1",
+              provider_kind: "builtin",
+              provider_id: "test",
+              provider_digest: "digest",
+              tool_name: "bash",
+              effect_class: "write",
+              scope_version: "1",
+              scope: {},
+              fingerprint: "fingerprint-1",
+              summary: "Permission evidence that outlives its Session",
+              time_created: now,
+            })
+            .run()
+          // Settled evidence: an undecided request would leave the Project with
+          // a live permission waiter, which is a different deletion path.
+          db.insert(PermissionLedgerTable)
+            .values({
+              id: Identifier.ascending("permission"),
+              request_id: permissionRequestID,
+              decision_slot: permissionRequestID,
+              event_type: "denied",
+              decision_scope: "invocation",
+              actor_id: "system",
+              reason: "Settled before Project deletion",
+              time_created: now,
+            })
+            .run()
+          db.insert(EngineWorkflowNodeOccurrenceTable)
+            .values({
+              task_id: taskID,
+              workflow_id: "workflow-1",
+              workflow_node_id: "node-1",
+              initial_dispatch_id: Identifier.ascending("call"),
+              child_session_id: child.id,
+              time_created: now,
+            })
+            .run()
+        })
+      },
+    })
+
+    const evidenceHeldWhileProjectLives = (() => {
+      try {
+        Database.transaction((db) =>
+          db.delete(PermissionPolicyTable).where(eq(PermissionPolicyTable.session_id, policySessionID)).run(),
+        )
+        return "deleted" as const
+      } catch (error) {
+        return error instanceof Error && error.message.includes("immutable policy fact")
+          ? ("rejected" as const)
+          : Promise.reject(error)
+      }
+    })()
+
+    const result = await deleteProject(registered.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_permission_evidence",
+      reason: "Delete Project carrying immutable permission evidence",
+    })
+
+    expect({
+      evidenceHeldWhileProjectLives,
+      result,
+      projects: Project.list().length,
+      remaining: Database.use((db) => ({
+        tasks: db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).all().length,
+        sessions: db.select().from(SessionTable).where(eq(SessionTable.project_id, projectID)).all().length,
+        policies: db
+          .select()
+          .from(PermissionPolicyTable)
+          .where(eq(PermissionPolicyTable.project_id, projectID))
+          .all().length,
+        ledger: db
+          .select()
+          .from(PermissionLedgerTable)
+          .where(eq(PermissionLedgerTable.project_id, projectID))
+          .all().length,
+        occurrences: db
+          .select()
+          .from(EngineWorkflowNodeOccurrenceTable)
+          .where(eq(EngineWorkflowNodeOccurrenceTable.child_session_id, childSessionID))
+          .all().length,
+      })),
+    }).toEqual({
+      evidenceHeldWhileProjectLives: "rejected",
+      result: {
+        ok: true,
+        status: "committed",
+        projectID,
+        directory: project.path,
+        deletedTaskCount: 1,
+        residue: [],
+      },
+      projects: 0,
+      remaining: { tasks: 0, sessions: 0, policies: 0, ledger: 0, occurrences: 0 },
     })
   }, 90_000)
 
@@ -364,12 +557,11 @@ describe("Project directory integrity", () => {
                 title: "Project deletion cancellation",
                 request: "Cancel the active SessionLoop through Project deletion authority.",
                 metadata: { actor: "user" },
-                time_started: now,
                 time_created: now,
-                time_updated: now,
               })
               .run(),
           )
+          appendFixtureTaskLifecycle({ taskID, sessionID: created.id, now, terminal: false })
           publishSession({ created, firstInputMessageID, firstPrompt })
         },
       }).catch((error) => {
@@ -512,12 +704,11 @@ describe("Project directory integrity", () => {
               title: "Restarted Project deletion cancellation",
               request: "Cancel the persisted nonterminal Task without a retained Instance cache entry.",
               metadata: { actor: "user" },
-              time_started: now,
               time_created: now,
-              time_updated: now,
             })
             .run(),
         )
+        appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: false })
       },
     })
     const cacheSandbox = path.join(project.path, "deletion-cache-sandbox")
@@ -572,12 +763,11 @@ describe("Project directory integrity", () => {
               title: "Nested restarted Project deletion",
               request: "Cancel a persisted Task whose exact Session directory cache entry has converged.",
               metadata: { actor: "user" },
-              time_started: now,
               time_created: now,
-              time_updated: now,
             })
             .run(),
         )
+        appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: false })
         Database.use((db) =>
           db.update(SessionTable).set({ directory: sessionDirectory }).where(eq(SessionTable.id, session.id)).run(),
         )
@@ -728,13 +918,11 @@ describe("Project directory integrity", () => {
               product_pillar: "work",
               title: "Sandbox deletion lifecycle host",
               request: "Relay the sandbox terminal lifecycle through Project deletion authority.",
-              time_started: now,
-              time_completed: now,
               time_created: now,
-              time_updated: now,
             })
             .run(),
         )
+        appendFixtureTaskLifecycle({ taskID, sessionID: created.id, now, terminal: true })
         return created
       },
     })
@@ -865,13 +1053,11 @@ describe("Project directory integrity", () => {
               product_pillar: "work",
               title: "Persisted missing-repository Task deletion",
               request: "Delete the terminal Task from persisted database authority.",
-              time_started: now,
-              time_completed: now,
               time_created: now,
-              time_updated: now,
             })
             .run(),
         )
+        appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: true })
       },
     })
     await Instance.disposeAll()
@@ -916,13 +1102,11 @@ describe("Project directory integrity", () => {
               product_pillar: "work",
               title: "Persisted Session Task cascade",
               request: "Delete the terminal Task through Session deletion.",
-              time_started: now,
-              time_completed: now,
               time_created: now,
-              time_updated: now,
             })
             .run(),
         )
+        appendFixtureTaskLifecycle({ taskID, sessionID: root.id, now, terminal: true })
         return root
       },
     })
@@ -1067,10 +1251,7 @@ describe("Project directory integrity", () => {
           product_pillar: "work",
           title: "Project delete atomicity",
           request: "Retain all database authority when filesystem staging fails.",
-          time_started: now,
-          time_completed: now,
           time_created: now,
-          time_updated: now,
         })
         .run()
       db.insert(DecisionLogTable)
@@ -1085,6 +1266,7 @@ describe("Project directory integrity", () => {
         })
         .run()
     })
+    appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: true })
     await Instance.disposeAll()
     const stateRoot = ProjectRuntimePaths.projectConfigRoot(project.path)
     const actualLstat = fs.lstat.bind(fs)
@@ -2127,6 +2309,7 @@ describe("Worktree GC uncertainty preservation", () => {
             timeCreated: now,
             timeUpdated: now,
           })
+          appendTaskOpenedInTransaction({ db, taskID, sessionID: session.id, now, source: "test" })
           insertTaskProcessBinding({ db, payload: binding })
         })
 

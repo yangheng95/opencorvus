@@ -1092,17 +1092,26 @@ WHEN EXISTS (
 )
 BEGIN SELECT RAISE(ABORT, 'provider_activity_outcome: immutable outcome fact'); END;
 
+-- Permission evidence is immutable for as long as the Project it describes
+-- exists. Both tables cascade from project, so the delete guards must yield to
+-- that cascade the way provider_activity_outcome does: without the parent
+-- probe the trigger aborts Project deletion itself and the row becomes
+-- undeletable evidence of an unreachable Project. Ledger rows carrying no
+-- project_id are outcome facts that no cascade ever reaches, so they stay
+-- unconditionally immutable.
 CREATE TRIGGER IF NOT EXISTS permission_policy_no_update
 BEFORE UPDATE ON permission_policy FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'permission_policy: immutable policy fact'); END;
 CREATE TRIGGER IF NOT EXISTS permission_policy_no_delete
 BEFORE DELETE ON permission_policy FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM project WHERE id=OLD.project_id)
 BEGIN SELECT RAISE(ABORT, 'permission_policy: immutable policy fact'); END;
 CREATE TRIGGER IF NOT EXISTS permission_ledger_no_update
 BEFORE UPDATE ON permission_ledger FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'permission_ledger: immutable authorization fact'); END;
 CREATE TRIGGER IF NOT EXISTS permission_ledger_no_delete
 BEFORE DELETE ON permission_ledger FOR EACH ROW
+WHEN OLD.project_id IS NULL OR EXISTS (SELECT 1 FROM project WHERE id=OLD.project_id)
 BEGIN SELECT RAISE(ABORT, 'permission_ledger: immutable authorization fact'); END;
 CREATE TRIGGER IF NOT EXISTS permission_execution_result_no_update
 BEFORE UPDATE ON permission_execution_result FOR EACH ROW

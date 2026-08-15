@@ -7,6 +7,7 @@ import {
   currentSchemaFingerprint,
   findSchemaDrift,
   hasApplicationSchema,
+  reconcileSchemaTriggers,
   schemaObjectFingerprint,
 } from "../../src/storage/schema-contract"
 import { rebuildTestDatabase } from "../fixture/db"
@@ -130,6 +131,61 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
     }
     expect(uppercaseMaxGeneration).toBeInstanceOf(Error)
     expect(String((uppercaseMaxGeneration as Error).message)).toContain("project: generation must be a UUID")
+  } finally {
+    sqlite.close(true)
+  }
+})
+
+test("reconciles a stale immutable-evidence trigger before Project deletion", () => {
+  const sqlite = new BunDatabase(":memory:")
+  try {
+    sqlite.exec(SCHEMA_DDL)
+    sqlite.exec(`
+      PRAGMA foreign_keys=ON;
+      DROP TRIGGER permission_policy_no_delete;
+      CREATE TRIGGER permission_policy_no_delete
+      BEFORE DELETE ON permission_policy FOR EACH ROW
+      BEGIN SELECT RAISE(ABORT, 'permission_policy: immutable policy fact'); END;
+      INSERT INTO project
+        (id,worktree,name,icon_url,icon_color,time_created,time_updated,time_pinned,time_initialized,sandboxes,commands,generation)
+      VALUES ('project:trigger-upgrade','D:/trigger-upgrade','trigger upgrade',NULL,NULL,1,1,NULL,NULL,'[]',NULL,'6d68d8c3-d9d2-40fb-bef1-a41d6fd58e7e');
+      INSERT INTO permission_policy(session_id,project_id,mode,revision,time_created)
+      VALUES ('session:trigger-upgrade','project:trigger-upgrade','ask','revision:trigger-upgrade',2);
+    `)
+
+    const reconciled = reconcileSchemaTriggers(sqlite)
+    sqlite.run(`DELETE FROM project WHERE id='project:trigger-upgrade'`)
+    expect({
+      reconciled,
+      drift: findSchemaDrift(sqlite),
+      remaining: sqlite
+        .query<{ projects: number; policies: number }, []>(`
+          SELECT
+            (SELECT count(*) FROM project) AS projects,
+            (SELECT count(*) FROM permission_policy) AS policies
+        `)
+        .get(),
+    }).toEqual({
+      reconciled: ["permission_policy_no_delete"],
+      drift: undefined,
+      remaining: { projects: 0, policies: 0 },
+    })
+  } finally {
+    sqlite.close(true)
+  }
+})
+
+test("keeps a partial structural schema on the reset-required path before trigger reconciliation", () => {
+  const sqlite = new BunDatabase(":memory:")
+  try {
+    sqlite.exec(`CREATE TABLE project(id TEXT PRIMARY KEY)`)
+    expect({
+      reconciled: reconcileSchemaTriggers(sqlite),
+      drift: findSchemaDrift(sqlite),
+    }).toEqual({
+      reconciled: [],
+      drift: expect.stringMatching(/^missing schema object (index|table):/),
+    })
   } finally {
     sqlite.close(true)
   }

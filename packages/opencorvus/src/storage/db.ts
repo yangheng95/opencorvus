@@ -15,7 +15,12 @@ import * as fsPromises from "fs/promises"
 import { randomUUID } from "crypto"
 import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
-import { findSchemaDrift, hasApplicationSchema, schemaObjectFingerprint } from "./schema-contract"
+import {
+  findSchemaDrift,
+  hasApplicationSchema,
+  reconcileSchemaTriggers,
+  schemaObjectFingerprint,
+} from "./schema-contract"
 import { migrateFactKernelSchema } from "./fact-kernel-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
@@ -1058,6 +1063,10 @@ export namespace Database {
       let sqlite = openOwnedSqlite(dbPath, { configure: false })
       if (hasApplicationSchema(sqlite)) {
         migrateFactKernelSchema(sqlite)
+        const reconciledTriggers = reconcileSchemaTriggers(sqlite)
+        if (reconciledTriggers.length > 0) {
+          log.info("schema triggers reconciled", { path: dbPath, triggers: reconciledTriggers })
+        }
         const drift = findSchemaDrift(sqlite)
         if (drift) {
           const fingerprint = schemaObjectFingerprint(sqlite)

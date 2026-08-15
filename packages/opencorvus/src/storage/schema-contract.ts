@@ -56,6 +56,22 @@ function expectedSchemaObjectShape(): SchemaObjectShape {
   }
 }
 
+function findShapeDrift(
+  expected: SchemaObjectShape,
+  actual: SchemaObjectShape,
+  include: (objectKey: string) => boolean = () => true,
+): string | undefined {
+  for (const objectKey of actual.keys()) {
+    if (include(objectKey) && !expected.has(objectKey)) return `unexpected schema object ${objectKey}`
+  }
+  for (const [objectKey, expectedSql] of expected) {
+    if (!include(objectKey)) continue
+    const actualSql = actual.get(objectKey)
+    if (actualSql === undefined) return `missing schema object ${objectKey}`
+    if (actualSql !== expectedSql) return `schema object ${objectKey} differs from current DDL`
+  }
+}
+
 export function currentSchemaFingerprint(): string {
   const sqlite = new BunDatabase(":memory:")
   try {
@@ -67,18 +83,70 @@ export function currentSchemaFingerprint(): string {
 }
 
 export function findSchemaDrift(sqlite: BunDatabase): string | undefined {
-  const expected = expectedSchemaObjectShape()
-  const actual = readSchemaObjectShape(sqlite)
-  for (const objectKey of actual.keys()) {
-    if (!expected.has(objectKey)) return `unexpected schema object ${objectKey}`
-  }
-  for (const [objectKey, expectedSql] of expected) {
-    const actualSql = actual.get(objectKey)
-    if (actualSql === undefined) return `missing schema object ${objectKey}`
-    if (actualSql !== expectedSql) return `schema object ${objectKey} differs from current DDL`
-  }
+  return findShapeDrift(expectedSchemaObjectShape(), readSchemaObjectShape(sqlite))
 }
 
 export function hasApplicationSchema(sqlite: BunDatabase): boolean {
   return readSchemaObjectShape(sqlite).size > 0
+}
+
+function quoteIdentifier(name: string): string {
+  return `"${name.replaceAll('"', '""')}"`
+}
+
+function readTriggerDefinitions(sqlite: BunDatabase): Map<string, string> {
+  return new Map(
+    queryAllFinalized<{ name: string; sql: string | null }>(
+      sqlite,
+      `SELECT name, sql
+       FROM sqlite_schema
+       WHERE type = 'trigger' AND name NOT LIKE 'sqlite_%'
+       ORDER BY name`,
+    ).map((row) => [row.name, row.sql === null ? "" : row.sql.trim()]),
+  )
+}
+
+/**
+ * Replace an existing database's triggers with the current DDL's definitions.
+ *
+ * A trigger owns no rows: it is a guard derived entirely from the DDL, so a
+ * stale definition can be rewritten in place instead of forcing the reset that
+ * schema drift otherwise demands. Table, column, and index drift is untouched
+ * and still resets, because those carry data whose reinterpretation is not
+ * mechanical. Returns the names that were rewritten or removed.
+ */
+export function reconcileSchemaTriggers(sqlite: BunDatabase): string[] {
+  const reference = new BunDatabase(":memory:")
+  let expected: Map<string, string>
+  let expectedShape: SchemaObjectShape
+  try {
+    reference.exec(SCHEMA_DDL)
+    expected = readTriggerDefinitions(reference)
+    expectedShape = readSchemaObjectShape(reference)
+  } finally {
+    reference.close(true)
+  }
+  const actualShape = readSchemaObjectShape(sqlite)
+  if (findShapeDrift(expectedShape, actualShape, (objectKey) => !objectKey.startsWith("trigger:"))) return []
+  const actual = readTriggerDefinitions(sqlite)
+  const reconciled: string[] = []
+  sqlite.run("BEGIN IMMEDIATE")
+  try {
+    for (const [name, definition] of expected) {
+      if (actual.get(name) === definition) continue
+      if (actual.has(name)) sqlite.run(`DROP TRIGGER ${quoteIdentifier(name)}`)
+      sqlite.exec(definition)
+      reconciled.push(name)
+    }
+    for (const name of actual.keys()) {
+      if (expected.has(name)) continue
+      sqlite.run(`DROP TRIGGER ${quoteIdentifier(name)}`)
+      reconciled.push(name)
+    }
+    sqlite.run("COMMIT")
+  } catch (error) {
+    sqlite.run("ROLLBACK")
+    throw error
+  }
+  return reconciled
 }

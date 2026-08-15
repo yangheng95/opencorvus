@@ -920,15 +920,15 @@ export namespace Bus {
     }
   }
 
-  export function publishOwnedInTransaction<Definition extends BusEvent.Definition>(
+  function publishForProjectInTransaction<Definition extends BusEvent.Definition>(
     def: Definition,
     properties: z.output<Definition["properties"]>,
+    owner: { projectID: string; directory: string },
+    operation: string,
   ): Publication {
-    Database.requireActiveTransaction("Bus.publishOwnedInTransaction")
+    Database.requireActiveTransaction(operation)
     const id = occurrenceID()
     const parsed = BusEvent.parseProperties(def, properties)
-    const directory = currentProjectDirectory()
-    const projectID = Instance.project.id
     const causation = causationContext.tryUse()
     const accepted = Promise.resolve() as Publication
     Object.defineProperties(accepted, {
@@ -941,8 +941,8 @@ export namespace Bus {
         .insert(BusPublicationOutboxTable)
         .values({
           occurrence_id: id,
-          project_id: projectID,
-          directory,
+          project_id: owner.projectID,
+          directory: owner.directory,
           event_type: def.type,
           properties: parsed,
           causation,
@@ -956,7 +956,7 @@ export namespace Bus {
         const publication = executeDurableOccurrence(id)
         const entry = {
           occurrenceID: id,
-          directory,
+          directory: owner.directory,
           current: publication,
           retryEpoch: 0,
           durable: true,
@@ -966,6 +966,28 @@ export namespace Bus {
       })
     })
     return accepted
+  }
+
+  export function publishOwnedInTransaction<Definition extends BusEvent.Definition>(
+    def: Definition,
+    properties: z.output<Definition["properties"]>,
+  ): Publication {
+    return publishForProjectInTransaction(
+      def,
+      properties,
+      { projectID: Instance.project.id, directory: currentProjectDirectory() },
+      "Bus.publishOwnedInTransaction",
+    )
+  }
+
+  /** Publish from durable Project authority when no live Instance exists, for
+   * example while deleting a Task whose registered repository is absent. */
+  export function publishProjectOwnedInTransaction<Definition extends BusEvent.Definition>(
+    def: Definition,
+    properties: z.output<Definition["properties"]>,
+    owner: { projectID: string; directory: string },
+  ): Publication {
+    return publishForProjectInTransaction(def, properties, owner, "Bus.publishProjectOwnedInTransaction")
   }
 
   function stageDurablePublication<Definition extends BusEvent.Definition>(
