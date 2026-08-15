@@ -24,6 +24,7 @@ import {
   type ActivityRequestFact,
   type AssistantTurnFact,
   type DecisionFact,
+  type DecisionGapFact,
   type InteractionFact,
   type TaskLifecycleFact,
   type TaskRootIngressFacts,
@@ -36,6 +37,7 @@ import { TaskDeletedError, taskDeletedInTransaction } from "./store"
 export type TaskRootIngressEvidence = {
   turns: readonly AssistantTurnFact[]
   decisions: readonly DecisionFact[]
+  decisionGaps: readonly DecisionGapFact[]
   interactions: readonly InteractionFact[]
   activityRequests: readonly ActivityRequestFact[]
   activityOutcomes: readonly ActivityOutcomeFact[]
@@ -49,6 +51,7 @@ export type TaskRootIngressEvidenceReader = (
 const EMPTY_EVIDENCE: TaskRootIngressEvidence = {
   turns: [],
   decisions: [],
+  decisionGaps: [],
   interactions: [],
   activityRequests: [],
   activityOutcomes: [],

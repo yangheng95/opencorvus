@@ -19,7 +19,7 @@ export namespace SessionEvents {
         channel: z.string().optional(),
         resolvedRole: z.string().optional(),
         parentSessionID: z.string().optional(),
-        error: Message.Assistant.shape.error.unwrap(),
+        error: z.lazy(() => Message.Assistant.shape.error.unwrap()),
         failureOccurrence: FailureOccurrenceAnchor.optional(),
         convergenceFailure: ToolPersistenceConvergenceFailure.optional(),
         observationFailures: z.array(ProcessorObservationFailure).optional(),

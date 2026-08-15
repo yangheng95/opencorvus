@@ -1,6 +1,7 @@
 import { Identifier } from "@/id/id"
 import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import { Database, eq } from "@/storage/db"
+import { isDeepStrictEqual } from "node:util"
 import { Message } from "./message"
 import { normalizeToolResult } from "./tool-result-normalization"
 import {
@@ -140,11 +141,10 @@ export function toolOutcomeData(part: Message.ToolPart): ToolOutcomePartData | u
 export function equivalentToolRequest(left: ToolRequestPartData, right: ToolRequestPartData): boolean {
   return left.callID === right.callID &&
     left.tool === right.tool &&
-    left.time.start === right.time.start &&
-    JSON.stringify(left.input) === JSON.stringify(right.input) &&
-    JSON.stringify(left.metadata) === JSON.stringify(right.metadata)
+    isDeepStrictEqual(left.input, right.input) &&
+    isDeepStrictEqual(left.metadata, right.metadata)
 }
 
 export function equivalentToolOutcome(left: ToolOutcomePartData, right: ToolOutcomePartData): boolean {
-  return JSON.stringify(left) === JSON.stringify(right)
+  return isDeepStrictEqual(left, right)
 }

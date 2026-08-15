@@ -77,19 +77,26 @@ The ingress reducer is a total order:
 
 There is no persisted ingress disposition, delivery result, semantic attempt, activation attempt, retry owner, current owner, or blocker row. `exhausted` is an exceptional terminal reducer result derived from policy plus facts; it permits the FIFO to admit a later explicit operator input when malformed or repeatedly undecided output reaches its finite fence. Normal quiescence never uses exhaustion: the Orchestrator records the real non-mutating `no_action` decision receipt.
 
-## Prose-only continuation
+## Decision-gap continuation
 
-A prose-only assistant Turn is a real visible Message, not a business completion. It remains under the same ingress:
+A prose-only Provider step is visible content, not a business completion. While the current live activation is otherwise safe to continue, it remains inside the same assistant Message and activation:
 
 ```text
 accepted ingress
   -> Orchestrator control/participant Message
-  -> streaming assistant Message without decision
-  -> successor control Message linked to that assistant
-  -> same ingress, new physical lease
+  -> streaming assistant Message, Provider step without decision
+  -> ephemeral decision-repair context
+  -> next streamed Provider step in the same assistant Message
+  -> valid decision receipt or immutable semantic limit
 ```
 
-The initial continuation predecessor is the ingress identity. Later predecessors are the prior assistant Message. `(ingress_id, predecessor_id)` is unique. The control and assistant Messages live in the same immutable `kind=orchestrator` child Session of the Task root Session; that existing Session parent edge supplies Task ownership and must match the Task project. Assistant Messages store only the physical `activationID`; their parent Message supplies the ingress continuation identity. The completed assistant chain derives semantic Turn count. No prose is parsed for scheduling intent.
+The control and assistant Messages live in the same immutable `kind=orchestrator` child Session of the Task root Session; that existing Session parent edge supplies Task ownership and must match the Task project. The assistant stores only its physical `activationID`; its parent Message supplies the ingress identity. Every non-`tool-calls` `StepFinishPart` is an immutable decision-gap attempt. The ingress's immutable semantic limit bounds same-assistant repair; the final bounded step completes the assistant and projects `exhausted/semantic_limit`. Historical completed prose-only assistant Messages without StepFinish evidence remain legacy attempt facts, but current execution never mints a successor activation merely to ask for the missing decision. No prose is parsed and the Host never chooses or synthesizes a decision.
+
+An operating-system process loss remains a real physical-attempt boundary, not a same-assistant continuation. On reconciler entry, after an append-only lease fence expires, recovery terminalizes the exact abandoned open assistant before reducing exhaustion or acquiring a successor. The lease expiry is the deterministic terminal timestamp, so concurrent reconcilers converge on one byte-equivalent completion instead of conflicting over wall-clock time. The resulting completed provider-error Turn is therefore the predecessor of any successor activation; deterministic control and assistant identities cannot collide with the abandoned physical attempt. At the semantic limit the same recovery boundary terminalizes the abandoned assistant and converges directly to `exhausted/semantic_limit` without another Provider activation. Recovery never treats a persisted `StepFinishPart` alone as proof that the corresponding Provider activity has a unique successful outcome: missing outcomes still project the existing explicit activity-reconciliation path. It never broadens or reuses physical-Turn Artifact references across that recovery boundary.
+
+The Orchestrator inactivity observer is part of the physical prompt owner, not detached diagnostic work. Prompt settlement clears future polls and joins any observation tick already reading the Session tree before project ownership may be released. An in-flight observer therefore cannot reopen or read a disposed project after the owning prompt has completed.
+
+Artifact locator/read/selection references remain capability-like facts scoped to the exact control parent and physical Turn. Same-activation repair therefore preserves prior references naturally. A later independent ingress or genuinely new physical Turn must search/read/select again; the Host never broadens a reference to compensate for a scheduler retry.
 
 The activation is consumed only at a final non-Tool-call assistant boundary with zero outstanding activities, or at a wait/provider-failure boundary with zero outstanding activities. An intermediate Provider step or one completed sibling Tool does not release the activation.
 
@@ -126,6 +133,8 @@ provider_activity_outcome(request_id, outcome_data, time_created)
 ```
 
 The parent Message uniquely supplies Session identity, so Part, Tool request, and Provider request tables do not repeat `session_id`. An unreceipted request projects `reconcile_required`; replay is allowed only with the same provider idempotency key or after an authoritative outcome query.
+
+The first Tool request row owns its transport timestamp and display metadata. Re-observation from the Provider stream and the execution wrapper is the same immutable request when call identity, Tool identity, input and metadata are structurally equal; JSON object property insertion order is not semantic identity. A genuine value change fails with the explicit immutable-request conflict before execution.
 
 Git, filesystem, dispatch, build cleanup, Permission, Channel ingress, Interaction, and Bus effects follow the same request/outcome rule using their domain-specific sole fact types. In particular:
 

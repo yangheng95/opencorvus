@@ -5,17 +5,16 @@ import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"
 import { RangeSchema } from "../lsp/schema"
-import { Snapshot } from "@/snapshot"
+import { formatPatchEvidence } from "@/snapshot/types"
 import { SnapshotEmptyTreeError, SnapshotIntegrityError } from "@/snapshot/errors"
 import { fn } from "@/util/fn"
 import { ProviderError } from "@/provider/error"
 import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 import { type SystemError } from "bun"
 import type { Provider } from "@/provider/provider"
-import { ProviderTransform } from "@/provider/transform"
 import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./text-mime"
 import { STATEFUL_SNAPSHOT_TOOL_NAMES, statefulSnapshotToolKey } from "@/orchestrator/stateful-tool-names"
-import { AttachmentStore } from "@/storage/attachment-store"
+import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
 import {
   FailureOccurrenceAnchor,
@@ -936,7 +935,7 @@ export namespace Message {
       }
     }
 
-    const located = AttachmentStore.nameFromUrl(attachment.url)
+    const located = attachmentNameFromUrl(attachment.url)
     if (!located) {
       throw new Error(
         `Tool-result attachment ${attachment.filename ?? attachment.mime} must use a valid base64 data URL or canonical AttachmentStore URL`,
@@ -944,6 +943,7 @@ export namespace Message {
     }
 
     try {
+      const { AttachmentStore } = await import("@/storage/attachment-store")
       const reference = await AttachmentStore.requireReference({
         projectID: located.projectID,
         url: attachment.url,
@@ -1033,6 +1033,7 @@ export namespace Message {
         ].join("\n"),
       )
       .join("\n\n")
+    const { ProviderTransform } = await import("@/provider/transform")
     const transports = binaryAttachments.map((attachment) => ({
       attachment,
       transport: ProviderTransform.toolResultAttachmentTransport(model, attachment.mime),
@@ -1161,12 +1162,13 @@ export namespace Message {
       url: string
       filename?: string
     }): Promise<{ url: string; note?: string }> => {
-      const located = AttachmentStore.nameFromUrl(part.url)
+      const located = attachmentNameFromUrl(part.url)
       if (!located) {
         throw new Error(
           `Persisted file part ${part.filename ?? part.mime} must use a canonical AttachmentStore URL; received ${part.url}`,
         )
       }
+      const { AttachmentStore } = await import("@/storage/attachment-store")
       const bytes = await AttachmentStore.read(located.projectID, located.name)
       const prepared = await prepareModelBoundImage({
         mime: part.mime,
@@ -1222,7 +1224,7 @@ export namespace Message {
           if (
             part.type === "file" &&
             part.presentation === "attachment-index" &&
-            AttachmentStore.nameFromUrl(part.url)
+            attachmentNameFromUrl(part.url)
           ) {
             userMessage.parts.push({
               type: "text",
@@ -1236,7 +1238,7 @@ export namespace Message {
           // Canonical text attachments remain concise refs for the historical
           // API path. Noncanonical text inputs are handled by SessionPrompt.
           if (part.type === "file" && isDecodableText(part.mime, part.filename)) {
-            if (AttachmentStore.nameFromUrl(part.url)) {
+            if (attachmentNameFromUrl(part.url)) {
               userMessage.parts.push({
                 type: "text",
                 text: `[Attached ${part.mime}: ${part.filename ?? "file"} (${part.url})]`,
@@ -1411,7 +1413,7 @@ export namespace Message {
             // restatement of <patch> evidence.
             assistantMessage.parts.push({
               type: "text",
-              text: `<patch>${Snapshot.formatPatchEvidence(part)}</patch>`,
+              text: `<patch>${formatPatchEvidence(part)}</patch>`,
             })
           }
         }

@@ -1,8 +1,7 @@
 import { ProtocolStore } from "@/protocol/store"
 import { findTask, type TaskRow } from "./store"
 import { isTaskTerminal } from "./task-status"
-import { Event } from "./model"
-import { taskLifecycleProjection } from "./task-lifecycle"
+import { TASK_TERMINAL_EVENT_TYPES, taskLifecycleProjection } from "./task-lifecycle"
 import {
   TerminalLifecycleReferenceSchema,
   type TerminalLifecycleReference,
@@ -25,7 +24,7 @@ export function terminalLifecycleReferenceMatchesTaskRow(
   return taskLifecycleProjection(task.id).terminalEventID === reference.terminalEventID
 }
 
-const terminalTypes = new Set<string>([Event.TaskCompleted.type, Event.TaskFailed.type, Event.TaskCancelled.type])
+const terminalTypes = new Set<string>(TASK_TERMINAL_EVENT_TYPES.filter((type) => type !== "task.closed"))
 
 export function requireTerminalLifecycleReferenceEvent(taskID: string, input: TerminalLifecycleReference) {
   const reference = TerminalLifecycleReferenceSchema.parse(input)
@@ -53,9 +52,9 @@ export function resolveTerminalLifecycleReference(
   input: TerminalLifecycleReference,
 ): ResolvedTerminalLifecycleReference {
   const event = requireTerminalLifecycleReferenceEvent(taskID, input)
-  const terminalStatus = event.type === Event.TaskCompleted.type
+  const terminalStatus = event.type === "task.completed"
     ? "completed"
-    : event.type === Event.TaskFailed.type
+    : event.type === "task.failed"
       ? "failed"
       : "cancelled"
   return {

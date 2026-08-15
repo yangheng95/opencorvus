@@ -16,7 +16,7 @@ import type {
   Option as _OptionType,
   Request as _RequestType,
 } from "./types"
-import { InteractionUserInput } from "@/memory/project-memory"
+import { InteractionUserInput } from "@/memory/interaction-user-input"
 
 export namespace Question {
   let afterUserOutboxCommitForTest: (() => void) | undefined

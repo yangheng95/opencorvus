@@ -30981,6 +30981,7 @@ export type TaskDebugTaskRootIngressesResponses = {
             expiresAt: number
             ownerOccurrenceID: string
           }>
+          decisionGapStepIDs: Array<string>
           decisions: Array<{
             assistantMessageID: string
             command: string
@@ -31031,6 +31032,7 @@ export type TaskDebugTaskRootIngressesResponses = {
             | {
                 state: "ready"
               }
+          semanticAttemptIDs: Array<string>
           semanticTurnIDs: Array<string>
           sequence: number
           source: "message" | "protocol_event" | "automation_run" | "engine_artifact" | "task" | "inline"

@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from "node:async_hooks"
 import { createToolExecutionSurface, type ToolExecutionSurface } from "./execution-surface"
 import { PermissionAuthority } from "@/permission/authority"
-import type { PermissionProviderKind } from "@/permission/invocation"
+import type { ToolInvocationProviderKind } from "@/permission/invocation"
 
 export type TaskToolInvocationIdentity = Readonly<{
   projectID: string
@@ -10,7 +10,7 @@ export type TaskToolInvocationIdentity = Readonly<{
   toolCallID: string
   toolPartID: string
   providerName: string
-  providerKind: PermissionProviderKind
+  providerKind: ToolInvocationProviderKind
   providerID: string
   providerDigest?: string
   args: unknown

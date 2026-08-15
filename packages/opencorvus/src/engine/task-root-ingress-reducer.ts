@@ -43,6 +43,12 @@ export type DecisionFact = {
   command: string
 }
 
+export type DecisionGapFact = {
+  id: string
+  activationID: string
+  assistantMessageID: string
+}
+
 export type InteractionFact = {
   id: string
   ingressID: string
@@ -72,6 +78,7 @@ export type TaskRootIngressFacts = {
   leases: readonly ActivationLeaseFact[]
   turns: readonly AssistantTurnFact[]
   decisions: readonly DecisionFact[]
+  decisionGaps: readonly DecisionGapFact[]
   interactions: readonly InteractionFact[]
   activityRequests: readonly ActivityRequestFact[]
   activityOutcomes: readonly ActivityOutcomeFact[]
@@ -163,6 +170,15 @@ export function taskRootIngressSemanticTurnIDs(facts: TaskRootIngressFacts): str
     .map((turn) => turn.id)
 }
 
+/** Immutable Provider boundaries are the canonical semantic-attempt counter
+ * for current data. Completed legacy Turns without StepFinish evidence remain
+ * countable so restart and existing databases keep their prior budget. */
+export function taskRootIngressSemanticAttemptIDs(facts: TaskRootIngressFacts): string[] {
+  const gapAssistantIDs = new Set(facts.decisionGaps.map((gap) => gap.assistantMessageID))
+  const legacyTurnIDs = taskRootIngressSemanticTurnIDs(facts).filter((id) => !gapAssistantIDs.has(id))
+  return [...facts.decisionGaps.map((gap) => gap.id), ...legacyTurnIDs]
+}
+
 /** Total reduction over durable facts. Its order is part of the public
  * correctness contract: conflicts win before any apparent completion. */
 export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: number): TaskRootIngressProjection {
@@ -243,8 +259,8 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
       ...(waiting[0].resumeAt === undefined ? {} : { resumeAt: waiting[0].resumeAt }),
     }
 
-  const semanticTurns = taskRootIngressSemanticTurnIDs(facts).length
-  if (semanticTurns >= facts.policy.semanticTurnLimit) return { state: "exhausted", reason: "semantic_limit" }
+  const semanticAttempts = taskRootIngressSemanticAttemptIDs(facts).length
+  if (semanticAttempts >= facts.policy.semanticTurnLimit) return { state: "exhausted", reason: "semantic_limit" }
   if (facts.leases.filter((lease) => lease.targetID === facts.ingress.id).length >= facts.policy.activationLimit) {
     return { state: "exhausted", reason: "activation_limit" }
   }

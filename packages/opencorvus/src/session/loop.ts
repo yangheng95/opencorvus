@@ -122,8 +122,13 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-handoff"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
+import { taskRootIngressSemanticTurnLimit } from "@/engine/task-root-ingress-policy-read"
 import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
+import {
+  isOrchestratorDecisionToolName,
+  orchestratorDecisionToolCompletionEffect,
+} from "@/orchestrator/decision-tool-names"
 import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
 import {
   bindToolExecutionMode,
@@ -141,6 +146,41 @@ muteAISdkWarnings()
 
 const STRUCTURED_OUTPUT_DESCRIPTION =
   "Record structured data matching the requested schema when it is useful; also summarize the turn in the visible assistant message."
+
+function taskRootDecisionGapStepIDs(message: Message.WithParts): string[] {
+  return message.parts
+    .filter(
+      (part): part is Message.StepFinishPart =>
+        part.type === "step-finish" && part.reason !== "tool-calls",
+    )
+    .map((part) => part.id)
+}
+
+function taskRootAssistantHasDecisionReceipt(message: Message.WithParts): boolean {
+  return message.parts.some((part) => {
+    if (
+      part.type !== "tool" ||
+      part.state.status !== "completed" ||
+      !isOrchestratorDecisionToolName(part.tool)
+    ) {
+      return false
+    }
+    return (
+      orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input }) !==
+      "requires_followup_decision"
+    )
+  })
+}
+
+function taskRootDecisionRepairPrompt(input: { attempt: number; limit: number }): string {
+  return [
+    "<task-root-decision-repair>",
+    `The previous streamed Provider step ended without a valid Task-root decision receipt (attempt ${input.attempt} of ${input.limit}).`,
+    "Continue the same visible assistant Turn and now call exactly one valid current decision Tool, or one valid parallel dispatch_agent set.",
+    "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
+    "</task-root-decision-repair>",
+  ].join("\n")
+}
 
 function visibleChatSkillNames(messages: readonly Message.WithParts[]): string[] {
   const currentUserMessage = messages.findLast((message) => message.info.role === "user")
@@ -1324,6 +1364,13 @@ export namespace SessionLoop {
             message.info.time.completed === undefined,
         )
       : undefined
+    const taskRootDecisionGapCount = openTaskRootAssistant
+      ? taskRootDecisionGapStepIDs(openTaskRootAssistant).length
+      : 0
+    const taskRootSemanticTurnLimit =
+      taskRootActivation && runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
+        ? taskRootIngressSemanticTurnLimit(runtimeIdentity.taskIngressID)
+        : undefined
     if (
       openTaskRootAssistant &&
       (openTaskRootAssistant.info.sessionID !== input.sessionID ||
@@ -1374,6 +1421,17 @@ export namespace SessionLoop {
       model: input.model,
       abort: input.abort,
       retainAssistantOnToolContinuation: Boolean(taskRootActivation),
+      retainAssistantForNextProviderStep:
+        taskRootActivation && taskRootSemanticTurnLimit !== undefined
+          ? async () => {
+              const persisted = await MessageStore.get({
+                sessionID: input.sessionID,
+                messageID: assistantMessage.id,
+              })
+              if (taskRootAssistantHasDecisionReceipt(persisted)) return false
+              return taskRootDecisionGapStepIDs(persisted).length < taskRootSemanticTurnLimit
+            }
+          : undefined,
     })
     using _ = defer(() => InstructionPrompt.clear(processor.message.id))
 
@@ -1457,6 +1515,19 @@ export namespace SessionLoop {
     ]
     if (isLastStep) {
       system.push(MAX_STEPS)
+    }
+    if (
+      openTaskRootAssistant &&
+      taskRootDecisionGapCount > 0 &&
+      taskRootSemanticTurnLimit !== undefined &&
+      !taskRootAssistantHasDecisionReceipt(openTaskRootAssistant)
+    ) {
+      system.push(
+        taskRootDecisionRepairPrompt({
+          attempt: Math.min(taskRootDecisionGapCount + 1, taskRootSemanticTurnLimit),
+          limit: taskRootSemanticTurnLimit,
+        }),
+      )
     }
 
     const memoryQuery = (input.msgs.find((message) => message.info.id === input.lastUser.id)?.parts ?? [])
@@ -1904,21 +1975,35 @@ export namespace SessionLoop {
   export async function terminalizeRecoveredIncompleteAssistant(
     sessionID: string,
     signal?: AbortSignal,
+    exactMessages?: readonly { messageID: string; completedAt: number }[],
   ): Promise<boolean> {
     signal?.throwIfAborted()
-    const candidates: Message.WithParts[] = []
-    for await (const message of MessageStore.stream(sessionID)) {
-      signal?.throwIfAborted()
-      if (message.info.role === "user") break
-      if (message.info.role !== "assistant") continue
-      if (message.info.time.completed === undefined) candidates.push(message)
+    const candidates: Array<{ message: Message.WithParts; completedAt?: number }> = []
+    if (exactMessages) {
+      const exactByID = new Map(exactMessages.map((candidate) => [candidate.messageID, candidate.completedAt]))
+      for (const [messageID, completedAt] of exactByID) {
+        signal?.throwIfAborted()
+        const message = await MessageStore.get({ sessionID, messageID })
+        if (message.info.role !== "assistant") {
+          throw new Error(`Recovered incomplete Message ${messageID} in Session ${sessionID} is not an assistant`)
+        }
+        if (message.info.time.completed === undefined) candidates.push({ message, completedAt })
+      }
+    } else {
+      for await (const message of MessageStore.stream(sessionID)) {
+        signal?.throwIfAborted()
+        if (message.info.role === "user") break
+        if (message.info.role !== "assistant") continue
+        if (message.info.time.completed === undefined) candidates.push({ message })
+      }
     }
     if (candidates.length === 0) return false
 
-    const now = Date.now()
-    for (const candidate of candidates) {
+    const defaultCompletedAt = Date.now()
+    for (const { message: candidate, completedAt } of candidates) {
       signal?.throwIfAborted()
       if (candidate.info.role !== "assistant") continue
+      const now = completedAt ?? defaultCompletedAt
       const interruption = new Error(
         `Previous process ended before Session ${sessionID} completed assistant message ${candidate.info.id}`,
       )
@@ -3696,7 +3781,6 @@ export namespace SessionLoop {
       ) {
         throw new Error(`Internal stage Tool ${name} has an invalid dispatch-adapter effect binding`)
       }
-      return raw
     }
     let projectedBinding = projectedTaskToolRuntimeBindingOf(raw as object)
     const runtimeContract = SessionRuntimeContractStore.get(ctx.sessionID)
@@ -3734,7 +3818,8 @@ export namespace SessionLoop {
       !computerPermissionKey &&
       !mcpAuthorityBinding &&
       !projectedBinding &&
-      !stageMaterializerBinding
+      !stageMaterializerBinding &&
+      !internalStageBinding
     ) {
       throw new Error(`Projected Tool ${name} is missing its immutable authorization binding`)
     }
@@ -3787,9 +3872,15 @@ export namespace SessionLoop {
               ? ("computer" as const)
               : ctx.mcpAppLifecycle
                 ? ("mcp_app" as const)
+                : internalStageBinding
+                  ? ("internal" as const)
                 : ("projected" as const),
           providerID:
-            mcpAuthorityBinding?.serverID ?? stageMaterializerBinding?.id ?? projectedBinding?.providerName ?? name,
+            mcpAuthorityBinding?.serverID ??
+            stageMaterializerBinding?.id ??
+            projectedBinding?.providerName ??
+            internalStageBinding?.toolName ??
+            name,
           providerDigest: mcpAuthorityBinding
             ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
             : stageMaterializerBinding

@@ -33,6 +33,8 @@ import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { createRequirementsOutputTools } from "../src/requirements/output-tools"
+import { createArchitectOutputTools } from "../src/architect/output-tools"
+import { assertArchitectOutputToolTurnIdentity } from "../src/architect/output-tool-turn-identity"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/agent/stage-tool-materializer"
 import { createDecisionLog } from "../src/decision-log"
 
@@ -574,7 +576,7 @@ describe("SessionLoop Tool execution authority integration", () => {
     })
   }, 60_000)
 
-  test("reconstructs and executes the same effectful requirements stage Tool after Ask-me restart", async () => {
+  test("executes the real Architect identity boundary and recovers an effectful requirements Tool", async () => {
     await using project = await memoryProject()
     const model = providerModel()
     const toolCallID = "call_requirements_decision_restart"
@@ -592,6 +594,12 @@ describe("SessionLoop Tool execution authority integration", () => {
           projectDirectory: project.path,
           config,
           agentID: "requirement-engineer",
+          packageRevision,
+        })
+        const architectProjection = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "solution-architect",
           packageRevision,
         })
         const taskID = Identifier.ascending("task")
@@ -620,6 +628,179 @@ describe("SessionLoop Tool execution authority integration", () => {
             timeCreated: now,
           }),
         })
+        const architectSession = await Session.create({
+          kind: "architect",
+          parentID: root.id,
+          title: "Architect internal Tool authority",
+        })
+        const architectRuntimeTemplate = RuntimeTemplateRegistry.get("architect")
+        const architectCoordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID("architect")
+        const architectSystem = await composeProjectedWorkerSystemPrompt({
+          taskID,
+          baseRole: "architect",
+          core: `${architectRuntimeTemplate.corePromptSeed}\n\n${coordinationHandoffPrompt(architectCoordinationToolID)}`,
+          projectDirectory: project.path,
+          capability: architectProjection.workerCapability,
+        })
+        const architectUser = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: architectSession.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: Date.now() },
+          agent: architectProjection.workerCapability.identity.agentID,
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const architectUserPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: architectSession.id,
+          messageID: architectUser.id,
+          type: "text",
+          text: "Inspect the current Architect draft through persisted Tool authority.",
+        })
+        const architectOutputTools = createArchitectOutputTools({
+          selectedExistingGoals(options, toolName) {
+            assertArchitectOutputToolTurnIdentity({ taskID, toolName, options })
+            return undefined
+          },
+        })
+        for (const [toolName, runtimeTool] of Object.entries(architectOutputTools.tools)) {
+          bindInternalStageTool(runtimeTool as object, { adapterID: "architect", toolName })
+        }
+        const architectContextTools = await filterAgentTools(
+          {
+            ...createAgentContextTools(),
+            ...(await createAgentCoordinationRuntimeTools({
+              agentID: architectProjection.workerCapability.identity.agentID,
+              taskID,
+            })),
+          },
+          "architect",
+          { taskID, sessionID: root.id },
+        )
+        Object.assign(architectContextTools, architectOutputTools.tools)
+        const architectOwner = MCP.createScopedConnectionOwner(
+          computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: architectSession.id }),
+        )
+        const architectStageOwned = Object.keys(architectOutputTools.tools)
+        const architectProjectedTools = await PromptProfileResolver.projectWorkerTools(
+          architectContextTools,
+          architectProjection.workerCapability,
+          {
+            taskID,
+            projectDirectory: project.path,
+            toolDirectory: project.path,
+            stageOwnedToolIDs: architectStageOwned,
+            connectionOwner: architectOwner,
+          },
+        )
+        const architectEnabled = [
+          ...Object.keys(architectProjectedTools.projectedTools),
+          ...Object.keys(architectProjectedTools.stageTools),
+        ].sort()
+        const architectDescriptor = WorkerTurnDescriptor.create({
+          sessionID: architectSession.id,
+          payload: {
+            identity: architectProjection.workerCapability.identity,
+            expertSquadID: architectProjection.workerCapability.expertSquadID,
+            packageRevision,
+            model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
+            prompt: { systemMode: "complete", systemSha256: textSHA256(architectSystem.prompt) },
+            tools: { enabled: architectEnabled, stageOwned: architectStageOwned, stageMaterializers: {} },
+            output: { format: "text", resultMode: "reply" },
+            lifecycle: { taskID, workScope: { kind: "task" }, attemptID: "architect-attempt-1" },
+            messageAuthority: {
+              user_message_id: architectUser.id,
+              control_text_parts: [
+                { part_id: architectUserPart.id, text_sha256: textSHA256(architectUserPart.text) },
+              ],
+            },
+          },
+        })
+        await Session.updateMessage({
+          ...architectUser,
+          extra: { workerTurnDescriptor: { id: architectDescriptor.id, hash: architectDescriptor.hash } },
+        })
+        const architectAssistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: architectUser.id,
+          sessionID: architectSession.id,
+          role: "assistant",
+          author: architectProjection.workerCapability.identity.agentID,
+          agent: architectProjection.workerCapability.identity.agentID,
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        SessionRuntimeContractStore.set(architectSession.id, {
+          identity: {
+            identityKind: "projected-worker",
+            sessionID: architectSession.id,
+            ...architectProjection.workerCapability.identity,
+            expertSquadID: architectProjection.workerCapability.expertSquadID,
+            packageRevision,
+            workerTurnDescriptorID: architectDescriptor.id,
+            workerTurnDescriptorHash: architectDescriptor.hash,
+            taskID,
+            workScope: { kind: "task" },
+            attemptID: "architect-attempt-1",
+            contractKind: "stage-attempt",
+            installedAt: Date.now(),
+          },
+          runtime: sessionRuntimeWithResolvedModel(architectProjection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          projectedTools: architectProjectedTools.projectedTools,
+          stageTools: architectProjectedTools.stageTools,
+          system: [architectSystem.prompt],
+          systemMode: "complete",
+          includeMcpTools: architectProjection.workerCapability.includeMcpTools,
+          exactTools: architectRuntimeTemplate.exactRuntimeContract,
+          projectedRegistryToolIDs: architectProjection.workerCapability.builtInToolIDs,
+          skillProjection: architectProjection.skillProjection,
+          harnessProjection: PromptProfileResolver.workerHarnessProjection({
+            taskID,
+            capability: architectProjection.workerCapability,
+          }),
+          projectDirectory: project.path,
+          resources: { mcp: architectOwner },
+        })
+        const architectAbort = new AbortController().signal
+        const architectProcessor = SessionProcessor.create({
+          assistantMessage: architectAssistant,
+          sessionID: architectSession.id,
+          model,
+          abort: architectAbort,
+        })
+        const architectTools = await SessionLoop.resolveTools({
+          agent: sessionRuntimeWithResolvedModel(architectProjection.workerCapability.runtime, {
+            providerID: model.providerID,
+            modelID: model.id,
+          }),
+          agentID: architectProjection.workerCapability.identity.agentID,
+          model,
+          session: architectSession,
+          processor: architectProcessor,
+          messages: await Session.messages({ sessionID: architectSession.id }),
+          config,
+        })
+        const architectToolCallID = "call_architect_draft_identity"
+        const architectResult = await architectTools.view_architect_draft!.execute!({}, {
+          toolCallId: architectToolCallID,
+          messages: [],
+          abortSignal: architectAbort,
+        })
+        const architectMessage = await MessageStore.get({
+          sessionID: architectSession.id,
+          messageID: architectAssistant.id,
+        })
+        const architectPart = architectMessage.parts.find(
+          (part) => part.type === "tool" && part.callID === architectToolCallID,
+        )
         const session = await Session.create({ kind: "requirements", parentID: root.id, title: "Requirements worker" })
         const runtimeTemplate = RuntimeTemplateRegistry.get("requirements")
         const coordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID("requirements")
@@ -781,12 +962,33 @@ describe("SessionLoop Tool execution authority integration", () => {
         }).catch((error) => error)
         const request = await asked
         stopAsked()
-        return { request, pending, taskID, sessionID: session.id, assistantID: assistant.id }
+        return {
+          request,
+          pending,
+          taskID,
+          sessionID: session.id,
+          assistantID: assistant.id,
+          architectSessionID: architectSession.id,
+          architectResult,
+          architectPart,
+        }
       },
     })
+    await SessionRuntimeContractStore.dispose(created.architectSessionID)
     await SessionRuntimeContractStore.dispose(created.sessionID)
     await Instance.disposeAll()
     expect(await created.pending).toBeInstanceOf(PermissionAuthority.PermissionPausedError)
+    expect({ result: created.architectResult, part: created.architectPart }).toMatchObject({
+      result: expect.objectContaining({
+        output: expect.stringContaining('"goals":[]'),
+      }),
+      part: {
+        type: "tool",
+        tool: "view_architect_draft",
+        callID: "call_architect_draft_identity",
+        state: { status: "running", input: {} },
+      },
+    })
     await Instance.provide({
       directory: project.path,
       fn: async () => {

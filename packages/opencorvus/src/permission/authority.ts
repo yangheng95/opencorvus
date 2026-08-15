@@ -10,16 +10,18 @@ import { Log } from "@/util/log"
 import { createHash } from "node:crypto"
 import { AsyncLocalStorage } from "node:async_hooks"
 import z from "zod"
-import { InteractionUserInput } from "@/memory/project-memory"
+import { InteractionUserInput } from "@/memory/interaction-user-input"
 import { Identifier } from "@/id/id"
 import {
   permissionDescriptor,
   permissionProjectGrantEligible,
   type InvocationPermissionDescriptor,
   PermissionProviderKind,
+  ToolInvocationProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
 import { acquireControlLease, assertControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { PermissionDecision } from "./decision"
 // Type-only: the value import stays dynamic so the runtime module cycle with
 // SessionLoop is never created.
 import type { SessionLoop } from "@/session/loop"
@@ -37,9 +39,7 @@ export namespace PermissionAuthority {
   export const Mode = z.enum(["full_access", "ask"]).meta({ ref: "PermissionMode" })
   export type Mode = z.infer<typeof Mode>
 
-  export const Decision = z.enum(["allow_once", "allow_task", "allow_project", "deny"]).meta({
-    ref: "PermissionDecision",
-  })
+  export const Decision = PermissionDecision
   export type Decision = z.infer<typeof Decision>
 
   export const Request = z
@@ -727,7 +727,7 @@ export namespace PermissionAuthority {
     messageID: string
     toolCallID: string
     toolPartID?: string
-    providerKind: z.infer<typeof PermissionProviderKind>
+    providerKind: z.infer<typeof ToolInvocationProviderKind>
     providerID: string
     providerDigest?: string
     toolName: string

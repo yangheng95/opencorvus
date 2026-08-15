@@ -7,6 +7,7 @@
 3. Every executable built-in, plugin, Skill, Model Context Protocol (MCP), MCP App, Browser, Computer, projected, scheduled, or external provider crosses `withTaskToolInvocation`, which delegates to `PermissionAuthority.authorizeAndExecute` before the physical effect. Each `batch` child crosses the boundary separately.
 4. `Ask me` pauses concrete write, process, network, external-effect, credential-release, or destructive invocations. Ordinary canonical reads inside the exact project and host-owned observation/control-plane operations do not prompt. Reads outside the project become permission-bearing.
 5. `Full access` bypasses OpenCorvus authorization prompts for every Tool and MCP invocation, but it does not bypass identity, authentication, canonical-path, stale-runtime, Task ownership, or data-integrity checks.
+6. Host-native non-effectful stage Tools use the explicit `internal` provider kind. They still cross the shared persisted Tool invocation wrapper and receive exact project/Session/Message/call/part/Tool authority, but `PermissionAuthority` returns no permission descriptor and therefore never turns an internal collector/read operation into an operator authorization request. Effectful materialized stage Tools retain their projected provider binding and ordinary permission classification.
 
 ## Exact scope and decisions
 

@@ -1,6 +1,6 @@
 import z from "zod"
 import { redactInlinePayloads } from "@/util/inline-base64"
-import { redactToolDiagnosticValue } from "@/tool/result-attachment-materialization"
+import { redactToolDiagnosticValue } from "@/tool/diagnostic-value"
 import type { Message } from "./message"
 
 export const FailureOccurrenceAnchor = z

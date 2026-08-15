@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Task-root in-activation decision repair and internal stage Tool identity convergence: [`2026-08-15-task-root-decision-repair-and-stage-tool-identity.md`](records/2026-08/2026-08-15-task-root-decision-repair-and-stage-tool-identity.md).
+
 Latest Task mailbox envelope projection convergence repair: [`2026-08-15-task-mailbox-envelope-projection-convergence.md`](records/2026-08/2026-08-15-task-mailbox-envelope-projection-convergence.md).
 
 Latest Task-root no-action convergence repair: [`2026-08-15-task-root-no-action-convergence.md`](records/2026-08/2026-08-15-task-root-no-action-convergence.md).

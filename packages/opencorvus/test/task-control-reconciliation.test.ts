@@ -21,6 +21,7 @@ import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
+import { recordProviderActivityEvent } from "@/session/provider-activity-facts"
 import { Database, asc, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -28,6 +29,133 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
+
+async function createExpiredDecisionGapFixture(input: {
+  projectPath: string
+  semanticTurnLimit: number
+  label: string
+}) {
+  const taskID = Identifier.ascending("task")
+  const root = await Session.create({ kind: "root", title: `${input.label} root` })
+  const orchestrator = await Session.create({
+    kind: "orchestrator",
+    parentID: root.id,
+    title: `${input.label} scheduler`,
+  })
+  const startedAt = Date.now() - 10_000
+  const ingress = Database.immediateTransaction((db) => {
+    db.insert(EngineTaskTable)
+      .values({
+        id: taskID,
+        project_id: Instance.project.id,
+        session_id: root.id,
+        source: "test",
+        product_pillar: "code",
+        title: input.label,
+        request: "Recover an exact decision gap after process loss",
+        time_created: startedAt,
+      })
+      .run()
+    appendTaskOpenedInTransaction({
+      db,
+      taskID,
+      sessionID: root.id,
+      now: startedAt,
+      source: "test.expired-decision-gap",
+    })
+    return acceptTaskRootIngressInTransaction(db, {
+      taskID,
+      executionEpoch: 1,
+      source: "inline",
+      sourceID: `${input.label}-source`,
+      inlinePayload: { note: "provider completed before assistant settlement" },
+      semanticTurnLimit: input.semanticTurnLimit,
+      activationLimit: 3,
+      now: startedAt + 1,
+    })
+  })
+  const lease = acquireTaskRootIngressLease({
+    ingressID: ingress.id,
+    ownerOccurrenceID: `${input.label}-dead-owner`,
+    now: startedAt + 2,
+    leaseMilliseconds: 60_000,
+  })
+  if (!lease.acquired) throw new Error("Expected an expired Task-root lease fixture")
+  const control = currentOrchestratorControlMessage({ taskCreation: { taskID } }, taskID, ingress.id, ingress.id)
+  if (!control) throw new Error("Expected an initial Task-root control occurrence")
+  await Session.persistMessage({
+    info: {
+      id: control.messageID,
+      sessionID: orchestrator.id,
+      role: "user",
+      author: "orchestrator",
+      time: { created: startedAt + 3 },
+      agent: "orchestrator",
+      model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+      extra: control.extra,
+    },
+    parts: [
+      {
+        id: control.partID,
+        sessionID: orchestrator.id,
+        messageID: control.messageID,
+        type: "text",
+        text: control.text,
+        kind: "control",
+        source: "system",
+      } satisfies Message.TextPart,
+    ],
+  })
+  const assistantID = Identifier.deterministic("message", `task-root-assistant-v1\0${control.messageID}`)
+  await Session.updateMessage({
+    id: assistantID,
+    sessionID: orchestrator.id,
+    parentID: control.messageID,
+    role: "assistant",
+    author: "orchestrator",
+    time: { created: startedAt + 4 },
+    agent: "orchestrator",
+    providerID: "openai",
+    modelID: "gpt-5.6-terra",
+    path: { cwd: input.projectPath, root: input.projectPath },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+    activationID: lease.activationID,
+  })
+  const decisionGapStepID = Identifier.ascending("part")
+  await Session.updatePart({
+    id: decisionGapStepID,
+    sessionID: orchestrator.id,
+    messageID: assistantID,
+    type: "step-finish",
+    reason: "stop",
+    cost: 0,
+    tokens: { input: 1, output: 1, reasoning: 0, total: 2, cache: { read: 0, write: 0 } },
+  })
+  const providerRequestID = Identifier.ascending("part")
+  recordProviderActivityEvent(assistantID, {
+    type: "started",
+    id: providerRequestID,
+    ts: startedAt + 5,
+    sessionID: orchestrator.id,
+    provider: "openai",
+    model: "gpt-5.6-terra",
+  })
+  recordProviderActivityEvent(assistantID, {
+    type: "terminal",
+    id: providerRequestID,
+    ts: startedAt + 6,
+    outcome: "done",
+  })
+  Database.use((db) =>
+    db
+      .update(EngineControlActivationLeaseTable)
+      .set({ expires_at: startedAt + 1_000 })
+      .where(eq(EngineControlActivationLeaseTable.id, lease.activationID))
+      .run(),
+  )
+  return { taskID, orchestrator, ingress, lease, assistantID, providerRequestID, decisionGapStepID }
+}
 
 describe("Task-control reconciliation", () => {
   test("resolves a visible no-action answer once and advances the FIFO to the next ingress", async () => {
@@ -480,6 +608,245 @@ describe("Task-control reconciliation", () => {
           activatedIngresses: [first.id, second.id],
           first: { state: "resolved", decisionIDs: [expect.any(String), expect.any(String), expect.any(String)] },
           second: { state: "resolved", decisionIDs: [expect.any(String)] },
+        })
+      },
+    })
+  })
+
+  test("concurrent reconcilers terminalize one crashed assistant before one successor physical activation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await createExpiredDecisionGapFixture({
+          projectPath: project.path,
+          semanticTurnLimit: 2,
+          label: "recover-below-limit",
+        })
+        let successor:
+          | { activationID: string; predecessorID: string; controlID: string; assistantID: string }
+          | undefined
+        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-crash-successor")
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async ({ event, wakeID, activationID, predecessorID }) => {
+            if (!event || !wakeID || !activationID || !predecessorID) {
+              throw new Error("Missing recovered activation identity")
+            }
+            const control = currentOrchestratorControlMessage(
+              event,
+              fixture.taskID,
+              wakeID,
+              predecessorID,
+            )
+            if (!control) throw new Error("Expected a successor Task-root control occurrence")
+            await Session.persistMessage({
+              info: {
+                id: control.messageID,
+                sessionID: fixture.orchestrator.id,
+                role: "user",
+                author: "orchestrator",
+                time: { created: Date.now() },
+                agent: "orchestrator",
+                model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+                extra: control.extra,
+              },
+              parts: [
+                {
+                  id: control.partID,
+                  sessionID: fixture.orchestrator.id,
+                  messageID: control.messageID,
+                  type: "text",
+                  text: control.text,
+                  kind: "control",
+                  source: "system",
+                } satisfies Message.TextPart,
+              ],
+            })
+            const assistantID = Identifier.deterministic("message", `task-root-assistant-v1\0${control.messageID}`)
+            let assistant = await Session.updateMessage({
+              id: assistantID,
+              sessionID: fixture.orchestrator.id,
+              parentID: control.messageID,
+              role: "assistant",
+              author: "orchestrator",
+              time: { created: Date.now() },
+              agent: "orchestrator",
+              providerID: "openai",
+              modelID: "gpt-5.6-terra",
+              path: { cwd: project.path, root: project.path },
+              cost: 0,
+              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+              finish: "tool-calls",
+              activationID,
+            })
+            const request = await Session.updatePart({
+              id: Identifier.ascending("part"),
+              sessionID: fixture.orchestrator.id,
+              messageID: assistant.id,
+              type: "tool",
+              callID: "call_recovered_manage_task",
+              tool: "manage_task",
+              state: { status: "running", input: { action: "inspect" }, time: { start: Date.now() } },
+            })
+            await Session.updatePart({
+              ...request,
+              state: {
+                status: "completed",
+                input: { action: "inspect" },
+                output: "recovered decision committed",
+                title: "Manage Task",
+                metadata: {},
+                time: { start: request.state.time.start, end: Date.now() },
+              },
+            })
+            assistant = await Session.updateMessage({
+              ...assistant,
+              time: { ...assistant.time, completed: Date.now() },
+            })
+            successor = { activationID, predecessorID, controlID: control.messageID, assistantID }
+            return { finalMessageID: assistant.id }
+          },
+        })
+
+        const recoveryResults = await Promise.all([
+          reconcileTaskControlPlane(fixture.taskID),
+          reconcileTaskControlPlane(fixture.taskID),
+        ])
+        const sessionMessages = await Session.messages({ sessionID: fixture.orchestrator.id })
+        const oldAssistant = sessionMessages.find(
+          (message) => message.info.id === fixture.assistantID,
+        )
+        const assistantIDs = sessionMessages.flatMap((message) =>
+          message.info.role === "assistant" ? [message.info.id] : [],
+        )
+        const controlIDs = sessionMessages.flatMap((message) => {
+          if (message.info.role !== "user") return []
+          const control = message.info.extra?.orchestrator_control_ingress
+          return control?.ingress_id === fixture.ingress.id ? [message.info.id] : []
+        })
+        const evidence = Database.use((db) => readTaskRootIngressEvidence(db, fixture.ingress))
+        const leases = Database.use((db) =>
+          db
+            .select()
+            .from(EngineControlActivationLeaseTable)
+            .where(eq(EngineControlActivationLeaseTable.target_id, fixture.ingress.id))
+            .orderBy(asc(EngineControlActivationLeaseTable.time_activated), asc(EngineControlActivationLeaseTable.id))
+            .all(),
+        )
+        const expectedSuccessorControl = currentOrchestratorControlMessage(
+          { taskCreation: { taskID: fixture.taskID } },
+          fixture.taskID,
+          fixture.ingress.id,
+          fixture.assistantID,
+        )!
+        expect({
+          recoveryResults: recoveryResults.toSorted(),
+          oldBoundary: oldAssistant?.info.role === "assistant" ? oldAssistant.info.finish : undefined,
+          oldError: oldAssistant?.info.role === "assistant" ? oldAssistant.info.error?.name : undefined,
+          oldErrorMessage:
+            oldAssistant?.info.role === "assistant" && oldAssistant.info.error?.name === "UnknownError"
+              ? oldAssistant.info.error.data.message
+              : undefined,
+          oldCompleted: oldAssistant?.info.time.completed,
+          successor,
+          assistantIDs,
+          controlIDs,
+          leaseIDs: leases.map((lease) => lease.id),
+          activity: {
+            requestCount: evidence.activityRequests.length,
+            outcomes: evidence.activityOutcomes.map((outcome) => outcome.outcome).toSorted(),
+          },
+          projection: projectTaskRootIngress(fixture.ingress.id, Date.now(), readTaskRootIngressEvidence),
+        }).toEqual({
+          recoveryResults: [0, 1],
+          oldBoundary: "error",
+          oldError: "UnknownError",
+          oldErrorMessage: expect.stringContaining("ProcessExecutionInterruptedError"),
+          oldCompleted: expect.any(Number),
+          successor: {
+            activationID: leases[1]!.id,
+            predecessorID: fixture.assistantID,
+            controlID: expectedSuccessorControl.messageID,
+            assistantID: Identifier.deterministic(
+              "message",
+              `task-root-assistant-v1\0${expectedSuccessorControl.messageID}`,
+            ),
+          },
+          assistantIDs: [
+            fixture.assistantID,
+            Identifier.deterministic("message", `task-root-assistant-v1\0${expectedSuccessorControl.messageID}`),
+          ],
+          controlIDs: [
+            currentOrchestratorControlMessage(
+              { taskCreation: { taskID: fixture.taskID } },
+              fixture.taskID,
+              fixture.ingress.id,
+              fixture.ingress.id,
+            )!.messageID,
+            expectedSuccessorControl.messageID,
+          ],
+          leaseIDs: [fixture.lease.activationID, leases[1]!.id],
+          activity: { requestCount: 2, outcomes: ["completed", "completed"] },
+          projection: { state: "resolved", decisionIDs: [expect.any(String)] },
+        })
+      },
+    })
+  })
+
+  test("terminalizes a crashed decision-gap assistant at the semantic limit and converges exhausted", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await createExpiredDecisionGapFixture({
+          projectPath: project.path,
+          semanticTurnLimit: 1,
+          label: "recover-at-limit",
+        })
+        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-crash-exhausted")
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async () => {
+            throw new Error("An exhausted crash recovery must not start another Provider activation")
+          },
+        })
+
+        expect(await reconcileTaskControlPlane(fixture.taskID)).toBe(0)
+        const oldAssistant = (await Session.messages({ sessionID: fixture.orchestrator.id })).find(
+          (message) => message.info.id === fixture.assistantID,
+        )
+        const evidence = Database.use((db) => readTaskRootIngressEvidence(db, fixture.ingress))
+        const debug = taskRootIngressDebugProjection(fixture.taskID)[0]
+        const leases = Database.use((db) =>
+          db
+            .select()
+            .from(EngineControlActivationLeaseTable)
+            .where(eq(EngineControlActivationLeaseTable.target_id, fixture.ingress.id))
+            .all(),
+        )
+        expect({
+          oldBoundary: oldAssistant?.info.role === "assistant" ? oldAssistant.info.finish : undefined,
+          oldError: oldAssistant?.info.role === "assistant" ? oldAssistant.info.error?.name : undefined,
+          oldErrorMessage:
+            oldAssistant?.info.role === "assistant" && oldAssistant.info.error?.name === "UnknownError"
+              ? oldAssistant.info.error.data.message
+              : undefined,
+          oldCompleted: oldAssistant?.info.time.completed,
+          leaseIDs: leases.map((lease) => lease.id),
+          providerActivity: {
+            requests: evidence.activityRequests.map((request) => request.id),
+            outcomes: evidence.activityOutcomes.map((outcome) => outcome.outcome),
+          },
+          semanticAttemptIDs: debug?.semanticAttemptIDs,
+          projection: projectTaskRootIngress(fixture.ingress.id, Date.now(), readTaskRootIngressEvidence),
+        }).toEqual({
+          oldBoundary: "error",
+          oldError: "UnknownError",
+          oldErrorMessage: expect.stringContaining("ProcessExecutionInterruptedError"),
+          oldCompleted: expect.any(Number),
+          leaseIDs: [fixture.lease.activationID],
+          providerActivity: { requests: [fixture.providerRequestID], outcomes: ["completed"] },
+          semanticAttemptIDs: [fixture.decisionGapStepID],
+          projection: { state: "exhausted", reason: "semantic_limit" },
         })
       },
     })

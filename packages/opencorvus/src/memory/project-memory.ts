@@ -12,6 +12,7 @@ import { deriveTitle } from "@/title/derive"
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import { Identifier } from "@/id/id"
+export { InteractionUserInput } from "./interaction-user-input"
 
 const EXTRA_KEY = "project_memory_user_input"
 const SEMANTIC_VERSION = 1 as const
@@ -127,15 +128,6 @@ const DocumentEnvelope = z.object({
   timeUpdated: z.number().int().nonnegative(),
 })
 export type DocumentEnvelope = z.infer<typeof DocumentEnvelope>
-
-export const InteractionUserInput = z
-  .object({
-    surface: z.string().min(1),
-    text: z.string(),
-    structured: z.record(z.string(), z.any()).optional(),
-  })
-  .strict()
-export type InteractionUserInput = z.infer<typeof InteractionUserInput>
 
 export const ProjectMemoryInvariantError = NamedError.create(
   "ProjectMemoryInvariantError",

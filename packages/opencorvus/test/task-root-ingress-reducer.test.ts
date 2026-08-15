@@ -12,6 +12,7 @@ function facts(overrides: Partial<TaskRootIngressFacts> = {}): TaskRootIngressFa
     leases: [],
     turns: [],
     decisions: [],
+    decisionGaps: [],
     interactions: [],
     activityRequests: [],
     activityOutcomes: [],
@@ -128,6 +129,28 @@ describe("Task-root fact reducer", () => {
 
     expect(reduceTaskRootIngressFacts(semantic, 31)).toEqual({ state: "exhausted", reason: "semantic_limit" })
     expect(reduceTaskRootIngressFacts(reopened, 41)).toEqual({ state: "terminal_inapplicable", boundary: "reopened" })
+  })
+
+  test("exhausts repeated decision gaps inside one completed activation without double-counting its Turn", () => {
+    const belowLimit = facts({
+      policy: { id: "pol_1", semanticTurnLimit: 3, activationLimit: 4 },
+      leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],
+      turns: [{ id: "msg_repair", activationID: "act_1", predecessorID: "ing_1", timeCompleted: 30, boundary: "final" }],
+      decisionGaps: [
+        { id: "step_stop_1", activationID: "act_1", assistantMessageID: "msg_repair" },
+        { id: "step_stop_2", activationID: "act_1", assistantMessageID: "msg_repair" },
+      ],
+    })
+    const atLimit = facts({
+      ...belowLimit,
+      decisionGaps: [
+        ...belowLimit.decisionGaps,
+        { id: "step_stop_3", activationID: "act_1", assistantMessageID: "msg_repair" },
+      ],
+    })
+
+    expect(reduceTaskRootIngressFacts(belowLimit, 31)).toEqual({ state: "ready" })
+    expect(reduceTaskRootIngressFacts(atLimit, 31)).toEqual({ state: "exhausted", reason: "semantic_limit" })
   })
 
   test("admits a same-epoch conversation accepted after the terminal boundary", () => {

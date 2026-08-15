@@ -15,7 +15,8 @@ import { insertEngineInteractionRequest, resolveEngineInteractionRequest } from 
 import { findInteractionByExternal, projectInteractionRowInTransaction, type InteractionRow } from "./store"
 import { taskIDForSession } from "./task-session-lineage"
 import z from "zod"
-import { ProjectMemory, type InteractionUserInput } from "@/memory/project-memory"
+import { ProjectMemory } from "@/memory/project-memory"
+import type { InteractionUserInput } from "@/memory/interaction-user-input"
 import { PermissionLedgerTable } from "@/permission/permission.sql"
 
 export namespace EngineInteraction {

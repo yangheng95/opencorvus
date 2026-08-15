@@ -3,7 +3,7 @@ import {
   ArtifactReadLocatorSchema,
   ArtifactReadReferenceSchema,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
+import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 
 export const MissionCompletionTaskAcceptanceInput = z
   .object({

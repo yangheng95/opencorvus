@@ -26,6 +26,7 @@ import { withKeyedLock } from "@/util/lock"
 import { Filesystem } from "@/util/filesystem"
 import lockfile from "proper-lockfile"
 import { projectInteractionRowInTransaction } from "@/engine/store"
+import { ATTACHMENT_ROUTE_PREFIX, attachmentNameFromUrl } from "./attachment-reference"
 
 const sharp = requireRuntimePackage<typeof import("sharp")>("sharp")
 
@@ -128,7 +129,7 @@ async function withAuthorityFileLock<T>(filePath: string, operation: () => Promi
 }
 
 export namespace AttachmentStore {
-  export const ROUTE_PREFIX = "/attachment"
+  export const ROUTE_PREFIX = ATTACHMENT_ROUTE_PREFIX
   export const SCREENSHOT_BROWSER_THUMBNAIL_VARIANT = SHARED_SCREENSHOT_BROWSER_THUMBNAIL_VARIANT
   export const SCREENSHOT_BROWSER_THUMBNAIL_MIME = "image/webp"
   const SCREENSHOT_BROWSER_THUMBNAIL_WIDTH = 360
@@ -1148,17 +1149,7 @@ export namespace AttachmentStore {
   }
 
   /** Extract the stored filename (`<sha>.<ext>`) from a reference URL. */
-  export function nameFromUrl(url: string): { projectID: string; name: string } | undefined {
-    const prefix = `${ROUTE_PREFIX}/`
-    if (!url.startsWith(prefix)) return undefined
-    const rest = url.slice(prefix.length)
-    const slash = rest.indexOf("/")
-    if (slash <= 0) return undefined
-    const projectID = rest.slice(0, slash)
-    const name = rest.slice(slash + 1)
-    if (!projectID || !name || /[/\\?#]/.test(name)) return undefined
-    return { projectID, name }
-  }
+  export const nameFromUrl = attachmentNameFromUrl
 
   // ── Garbage collection ────────────────────────────────────────────────
   //

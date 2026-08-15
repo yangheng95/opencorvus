@@ -171,3 +171,106 @@ test("one activation completes one assistant Turn containing every streamed Prov
     },
   })
 })
+
+test("one activation retains a clean decision gap for a bounded owned Provider continuation", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "orchestrator", title: "Task-root decision repair" })
+      const user = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: session.id,
+        role: "user",
+        author: "orchestrator",
+        time: { created: Date.now() },
+        agent: "orchestrator",
+        model: { providerID: model.providerID, modelID: model.id },
+      })
+      const assistant = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        parentID: user.id,
+        sessionID: session.id,
+        role: "assistant",
+        author: "orchestrator",
+        agent: "orchestrator",
+        path: { cwd: project.path, root: project.path },
+        cost: 0,
+        tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+        modelID: model.id,
+        providerID: model.providerID,
+        time: { created: Date.now() },
+      })
+      let providerStep = 0
+      const stream = spyOn(LLM, "stream").mockImplementation(async () => {
+        providerStep += 1
+        const text = providerStep === 1 ? "Evidence inspected." : "Still no decision."
+        return {
+          fullStream: (async function* () {
+            yield { type: "start" }
+            yield { type: "text-start", id: `text-${providerStep}` }
+            yield { type: "text-delta", id: `text-${providerStep}`, text }
+            yield { type: "text-end", id: `text-${providerStep}` }
+            yield {
+              type: "finish-step",
+              finishReason: "stop",
+              usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
+            }
+            yield {
+              type: "finish",
+              finishReason: "stop",
+              totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
+            }
+          })(),
+        } as Awaited<ReturnType<typeof LLM.stream>>
+      })
+      const abort = new AbortController().signal
+      const process = async (message: Message.Assistant) =>
+        await SessionProcessor.create({
+          assistantMessage: message,
+          sessionID: session.id,
+          model,
+          abort,
+          retainAssistantOnToolContinuation: true,
+          retainAssistantForNextProviderStep: async () => {
+            const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+            return persisted.parts.filter((part) => part.type === "step-finish" && part.reason === "stop").length < 2
+          },
+        }).process({
+          user,
+          agentID: "orchestrator",
+          agent: { name: "orchestrator", mode: "primary", permission: [], options: {} } as any,
+          abort,
+          sessionID: session.id,
+          system: [],
+          messages: [],
+          tools: {},
+          model,
+        })
+      try {
+        expect(await process(assistant)).toBe("continue")
+        const retained = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        expect(retained.info.time.completed).toBeUndefined()
+        if (retained.info.role !== "assistant") throw new Error("Expected retained assistant")
+        expect(await process(retained.info)).toBe("continue")
+      } finally {
+        stream.mockRestore()
+      }
+
+      const completed = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+      expect({
+        providerStep,
+        assistantID: completed.info.id,
+        activationID: completed.info.role === "assistant" ? completed.info.activationID : undefined,
+        completedAt: completed.info.time.completed,
+        stopSteps: completed.parts.filter((part) => part.type === "step-finish" && part.reason === "stop").length,
+      }).toEqual({
+        providerStep: 2,
+        assistantID: assistant.id,
+        activationID: undefined,
+        completedAt: expect.any(Number),
+        stopSteps: 2,
+      })
+    },
+  })
+})

@@ -109,6 +109,11 @@ export namespace SessionProcessor {
      * persists its Parts and usage but leaves that Message open for the next
      * streamed step under the same activation. */
     retainAssistantOnToolContinuation?: boolean
+    /** Allow the owning runtime to keep the same assistant Message open after
+     * a clean non-Tool Provider boundary. The callback runs only after all
+     * streamed Parts and Tool outcomes are durable and only while the Turn is
+     * otherwise safe to continue. */
+    retainAssistantForNextProviderStep?: (message: Message.Assistant) => boolean | Promise<boolean>
   }) {
     const toolcalls: Record<string, Message.ToolPart> = {}
     const mcpAppToolLifecycles = new Map<string, McpAppToolLifecycleController>()
@@ -1261,15 +1266,24 @@ export namespace SessionProcessor {
             }
           }
           input.assistantMessage.finish ??= "stop"
-          const retainAssistantForNextProviderStep =
-            input.retainAssistantOnToolContinuation === true &&
-            input.assistantMessage.finish.includes("tool") &&
+          const continuationIsSafe =
             !failureOccurrence &&
             !needsCompaction &&
             !blocked &&
             !parkAfterToolResult &&
             !coordinationHandoff &&
             !input.assistantMessage.error
+          const retainAssistantForToolContinuation =
+            input.retainAssistantOnToolContinuation === true &&
+            input.assistantMessage.finish.includes("tool") &&
+            continuationIsSafe
+          const retainAssistantForOwnedContinuation =
+            continuationIsSafe &&
+            !retainAssistantForToolContinuation &&
+            input.retainAssistantForNextProviderStep !== undefined &&
+            (await input.retainAssistantForNextProviderStep(input.assistantMessage))
+          const retainAssistantForNextProviderStep =
+            retainAssistantForToolContinuation || retainAssistantForOwnedContinuation
           if (!retainAssistantForNextProviderStep) {
             await input.beforeAssistantCompletion?.(input.assistantMessage)
             input.assistantMessage.time.completed = Date.now()

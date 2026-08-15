@@ -22,6 +22,7 @@ import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Session } from "@/session"
+import { MessageStore } from "@/session/message-store"
 import { Database, eq } from "@/storage/db"
 import { createToolExecutionSurface } from "@/tool/execution-surface"
 import { ArtifactPublishTool, ArtifactReadTool, ArtifactSelectTool } from "@/tool/artifact-catalog"
@@ -39,14 +40,13 @@ async function assistantMessage(input: { sessionID: string; parentID: string; cr
     parentID: input.parentID,
     role: "assistant",
     author: "worker",
-    time: { created: input.created, completed: input.created + 1 },
+    time: { created: input.created },
     agent: "worker",
     providerID: "openai",
     modelID: "gpt-5.6-terra",
     path: { cwd: input.projectPath, root: input.projectPath },
     cost: 0,
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-    finish: "tool-calls",
   })
 }
 
@@ -58,7 +58,7 @@ async function completedToolPart(input: {
   toolInput: unknown
   output: unknown
 }) {
-  return Session.updatePart({
+  const part = await Session.updatePart({
     id: Identifier.ascending("part"),
     sessionID: input.sessionID,
     messageID: input.messageID,
@@ -74,6 +74,14 @@ async function completedToolPart(input: {
       time: { start: input.created, end: input.created + 1 },
     },
   })
+  const message = await MessageStore.get({ sessionID: input.sessionID, messageID: input.messageID })
+  if (message.info.role !== "assistant") throw new Error(`Tool Part parent ${input.messageID} is not an assistant`)
+  await Session.updateMessage({
+    ...message.info,
+    finish: "tool-calls",
+    time: { ...message.info.time, completed: input.created + 2 },
+  })
+  return part
 }
 
 describe("provider Artifact references", () => {

@@ -33,6 +33,7 @@ import { Instance } from "../project/instance"
 import path from "path"
 import { fn } from "@/util/fn"
 import { Snapshot } from "@/snapshot"
+import { FileDiff as SnapshotFileDiff } from "@/snapshot/types"
 import { Filesystem } from "@/util/filesystem"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 
@@ -286,7 +287,7 @@ export namespace Session {
       "session.diff",
       z.object({
         sessionID: z.string(),
-        diff: Snapshot.FileDiff.array(),
+        diff: SnapshotFileDiff.array(),
       }),
     ),
     ConfigChanged: BusEvent.define(

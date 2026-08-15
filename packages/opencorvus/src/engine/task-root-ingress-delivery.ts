@@ -23,6 +23,7 @@ import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/
 import { Message } from "@/session/message"
 import {
   MessageTable,
+  PartTable,
   ProviderActivityOutcomeTable,
   ProviderActivityRequestTable,
   ToolPartOutcomeTable,
@@ -60,10 +61,15 @@ import type {
   ActivityRequestFact,
   AssistantTurnFact,
   DecisionFact,
+  DecisionGapFact,
   InteractionFact,
   TaskRootIngressProjection,
 } from "./task-root-ingress-reducer"
-import { reduceTaskRootIngressFacts, taskRootIngressSemanticTurnIDs } from "./task-root-ingress-reducer"
+import {
+  reduceTaskRootIngressFacts,
+  taskRootIngressSemanticAttemptIDs,
+  taskRootIngressSemanticTurnIDs,
+} from "./task-root-ingress-reducer"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -453,7 +459,14 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
     .all()
     .map((row) => row.id)
   if (leaseIDs.length === 0)
-    return { turns: [], decisions: [], interactions: [], activityRequests: [], activityOutcomes: [] }
+    return {
+      turns: [],
+      decisions: [],
+      decisionGaps: [],
+      interactions: [],
+      activityRequests: [],
+      activityOutcomes: [],
+    }
   const assistantRows = db
     .select()
     .from(MessageTable)
@@ -467,6 +480,7 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
     .all()
   const turns: AssistantTurnFact[] = []
   const decisions: DecisionFact[] = []
+  const decisionGaps: DecisionGapFact[] = []
   const activityRequests: ActivityRequestFact[] = []
   const activityOutcomes: ActivityOutcomeFact[] = []
   const assistantIDs = new Set<string>()
@@ -553,6 +567,22 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
         decisions.push({ id: part.id, assistantMessageID: assistant.id, command: part.tool })
       }
     }
+    const stepFinishRows = db
+      .select({ id: PartTable.id, data: PartTable.data })
+      .from(PartTable)
+      .where(eq(PartTable.message_id, assistant.id))
+      .orderBy(asc(PartTable.time_created), asc(PartTable.id))
+      .all()
+    for (const step of stepFinishRows) {
+      const data = step.data as { type?: unknown; reason?: unknown }
+      if (data.type !== "step-finish" || typeof data.reason !== "string") continue
+      if (data.reason === "tool-calls") continue
+      decisionGaps.push({
+        id: step.id,
+        activationID: assistant.activationID,
+        assistantMessageID: assistant.id,
+      })
+    }
     if (!assistant.time.completed) continue
     const predecessorID = control.predecessor_id
     const outstanding = toolParts.some((part) => part.state.status === "running")
@@ -610,7 +640,7 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       })
     }
   }
-  return { turns, decisions, interactions, activityRequests, activityOutcomes }
+  return { turns, decisions, decisionGaps, interactions, activityRequests, activityOutcomes }
 }
 
 function ensureActivityReconciliationInteractions(
@@ -709,6 +739,72 @@ function evidenceFor(ingressID: string): TaskRootIngressEvidence {
   })
 }
 
+/** Terminalize exact assistants abandoned behind expired Task-root leases
+ * before reduction chooses exhaustion or a successor activation. This is
+ * physical crash recovery only; it never starts a Provider step. */
+async function terminalizeExpiredTaskRootAssistants(ingressID: string, now: number): Promise<number> {
+  const candidates = Database.use((db) => {
+    const ingress = db
+      .select()
+      .from(EngineTaskRootIngressTable)
+      .where(eq(EngineTaskRootIngressTable.id, ingressID))
+      .get()
+    if (!ingress) throw new Error(`Task-root ingress not found: ${ingressID}`)
+    readTaskRootIngressEvidence(db, ingress)
+    const expiredLeases = db
+      .select({ id: EngineControlActivationLeaseTable.id, expiresAt: EngineControlActivationLeaseTable.expires_at })
+      .from(EngineControlActivationLeaseTable)
+      .where(
+        and(
+          eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
+          eq(EngineControlActivationLeaseTable.target_id, ingressID),
+          sql`${EngineControlActivationLeaseTable.expires_at} <= ${now}`,
+        ),
+      )
+      .all()
+    const expiredByID = new Map(expiredLeases.map((lease) => [lease.id, lease.expiresAt]))
+    if (expiredLeases.length === 0) return []
+    return db
+      .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
+      .from(MessageTable)
+      .where(
+        sql`json_extract(${MessageTable.data}, '$.activationID') IN (${sql.join(
+          expiredLeases.map((lease) => sql`${lease.id}`),
+          sql`, `,
+        )})`,
+      )
+      .all()
+      .flatMap((row) => {
+        const assistant = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
+        if (assistant.time.completed !== undefined || !assistant.activationID) return []
+        const completedAt = expiredByID.get(assistant.activationID)
+        if (completedAt === undefined) {
+          throw new Error(`Expired Task-root assistant ${assistant.id} has no matching activation lease`)
+        }
+        return [{ sessionID: row.sessionID, messageID: row.id, completedAt }]
+      })
+  })
+  if (candidates.length === 0) return 0
+  const bySession = new Map<string, typeof candidates>()
+  for (const candidate of candidates) {
+    bySession.set(candidate.sessionID, [...(bySession.get(candidate.sessionID) ?? []), candidate])
+  }
+  const { SessionLoop } = await import("@/session/loop")
+  let terminalized = 0
+  for (const [sessionID, messages] of bySession) {
+    if (
+      await SessionLoop.terminalizeRecoveredIncompleteAssistant(
+        sessionID,
+        undefined,
+        messages.map((message) => ({ messageID: message.messageID, completedAt: message.completedAt })),
+      )
+    ) {
+      terminalized += messages.length
+    }
+  }
+  return terminalized
+}
+
 async function activate(input: { taskID: string; ingressID: string }): Promise<boolean> {
   let reservation: RuntimeExecutionReservation | undefined
   let bound = false
@@ -799,6 +895,7 @@ export async function reconcileTaskControlPlane(taskID?: string): Promise<number
       let stopTask = false
       for (;;) {
         const now = Date.now()
+        if ((await terminalizeExpiredTaskRootAssistants(ingress.id, now)) > 0) continue
         const projection = projectTaskRootIngress(ingress.id, now, readTaskRootIngressEvidence)
         if (projection.state === "resolved" || projection.state === "terminal_inapplicable") break
         if (projection.state === "exhausted") break
@@ -925,6 +1022,8 @@ export function taskRootIngressDebugProjection(taskID: string, now = Date.now())
             expiresAt: lease.expiresAt,
           })),
           semanticTurnIDs: taskRootIngressSemanticTurnIDs(facts),
+          decisionGapStepIDs: facts.decisionGaps.map((gap) => gap.id),
+          semanticAttemptIDs: taskRootIngressSemanticAttemptIDs(facts),
           decisions: facts.decisions.map((decision) => ({
             receiptID: decision.id,
             assistantMessageID: decision.assistantMessageID,

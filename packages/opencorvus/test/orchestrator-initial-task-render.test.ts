@@ -1,7 +1,10 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
-import { Orchestrator } from "@/orchestrator/agent"
+import { Orchestrator, OrchestratorTestHooks } from "@/orchestrator/agent"
+import { EngineConfig } from "@/engine"
+import { Bus } from "@/bus"
 import {
   TestHooks as TaskControlTestHooks,
+  taskRootIngressDebugProjection,
   waitForIngressDeliveryHooksForTest,
 } from "@/engine/task-root-ingress-delivery"
 import { requireTask } from "@/engine/store"
@@ -16,6 +19,7 @@ import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { SessionPrompt } from "@/session/prompt"
 import { EngineService } from "@/task-api"
 import { Identifier } from "@/id/id"
+import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const model = { providerID: "test", modelID: "orchestrator-initial-render" }
@@ -49,7 +53,65 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+test("joins an in-flight inactivity observation before prompt completion settles", async () => {
+  using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "orchestrator", title: "Inactivity observation ownership" })
+      let markTreeStarted!: () => void
+      const treeStarted = new Promise<void>((resolve) => {
+        markTreeStarted = resolve
+      })
+      let releaseTree!: () => void
+      const treeReleased = new Promise<void>((resolve) => {
+        releaseTree = resolve
+      })
+      let markRunReturned!: () => void
+      const runReturned = new Promise<void>((resolve) => {
+        markRunReturned = resolve
+      })
+      const configSpy = spyOn(EngineConfig, "get").mockResolvedValue({
+        activity: { execution_progress_idle_ms: 100 },
+      } as never)
+      const treeSpy = spyOn(Session, "tree").mockImplementation(async () => {
+        markTreeStarted()
+        await treeReleased
+        return []
+      })
+      const lifecycle: string[] = []
+      try {
+        const monitored = OrchestratorTestHooks.runPromptWithInactivity({
+          taskID: Identifier.ascending("task"),
+          session,
+          run: async () => {
+            await treeStarted
+            lifecycle.push("prompt-returned")
+            markRunReturned()
+            return "prompt-complete"
+          },
+        }).then((value) => {
+          lifecycle.push("monitor-settled")
+          return value
+        })
+        await runReturned
+        lifecycle.push("observation-released")
+        releaseTree()
+        expect(await monitored).toBe("prompt-complete")
+        expect(lifecycle).toEqual(["prompt-returned", "observation-released", "monitor-settled"])
+      } finally {
+        releaseTree()
+        await Database.awaitEffectIdle(30_000)
+        treeSpy.mockRestore()
+        configSpy.mockRestore()
+      }
+    },
+  })
+})
+
 test("a fresh typed Task ingress installs runtime authority before creator and control Messages", async () => {
+  using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -78,6 +140,8 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
         | undefined
       const assistantMessageIDs: string[] = []
       const retainAssistantOnToolContinuation: boolean[] = []
+      const retainedDecisionGaps: boolean[] = []
+      const decisionRepairPrompts: boolean[] = []
       let providerSteps = 0
       const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
         const assistant = input.assistantMessage as Message.Assistant
@@ -88,8 +152,11 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           partFromToolCall() {
             return undefined
           },
-          async process() {
+          async process(processInput: { system: string[] }) {
             providerSteps += 1
+            decisionRepairPrompts.push(
+              processInput.system.some((part) => part.includes("<task-root-decision-repair>")),
+            )
             const messages = await Session.messages({ sessionID: assistant.sessionID })
             observed = {
               sessionID: assistant.sessionID,
@@ -107,8 +174,18 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
                   : "The Task evidence is inspected and ready for a scheduling decision.",
             })
             if (providerSteps === 1) {
-              assistant.finish = "tool-calls"
+              await Session.updatePart({
+                id: Identifier.ascending("part"),
+                sessionID: assistant.sessionID,
+                messageID: assistant.id,
+                type: "step-finish",
+                reason: "stop",
+                cost: 0,
+                tokens: { total: 1, input: 1, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+              })
+              assistant.finish = "stop"
               await Session.updateMessage(assistant)
+              retainedDecisionGaps.push(await input.retainAssistantForNextProviderStep(assistant))
               return "continue"
             }
             const decisionPartID = Identifier.ascending("part")
@@ -168,11 +245,20 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
         const child = (await Session.children(task.session_id!)).find((session) => session.kind === "orchestrator")
         expect(child).toBeDefined()
         const messages = await Session.messages({ sessionID: child!.id })
+        const ingressDebug = taskRootIngressDebugProjection(taskID)
         expect({
           taskError: task.error,
           providerSteps,
           assistantMessageIDs,
           retainAssistantOnToolContinuation,
+          retainedDecisionGaps,
+          decisionRepairPrompts,
+          ingressDebug: ingressDebug.map((entry) => ({
+            activationCount: entry.activationIDs.length,
+            decisionGapCount: entry.decisionGapStepIDs.length,
+            semanticAttemptCount: entry.semanticAttemptIDs.length,
+            state: entry.projection.state,
+          })),
           observed: {
             sessionID: observed?.sessionID,
             runtimeTaskID: observed?.runtimeTaskID,
@@ -190,6 +276,9 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           providerSteps: 2,
           assistantMessageIDs: [expect.any(String), expect.any(String)],
           retainAssistantOnToolContinuation: [true, true],
+          retainedDecisionGaps: [true],
+          decisionRepairPrompts: [false, true],
+          ingressDebug: [{ activationCount: 1, decisionGapCount: 1, semanticAttemptCount: 1, state: "resolved" }],
           observed: {
             sessionID: child!.id,
             runtimeTaskID: taskID,
@@ -198,12 +287,13 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           persisted: [
             expect.objectContaining({ role: "user", author: "user", parts: 1 }),
             expect.objectContaining({ role: "user", author: "orchestrator", parts: 1 }),
-            expect.objectContaining({ role: "assistant", author: "orchestrator", parts: 3 }),
+            expect.objectContaining({ role: "assistant", author: "orchestrator", parts: 4 }),
           ],
         })
         expect(new Set(assistantMessageIDs).size).toBe(1)
         await SessionPrompt.waitForFinish(child!.id, project.path)
       } finally {
+        await Database.awaitEffectIdle(30_000)
         gitCompleteSpy.mockRestore()
         gitPrepareSpy.mockRestore()
         processorSpy.mockRestore()
@@ -213,4 +303,5 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
   })
   await waitForIngressDeliveryHooksForTest()
   await Instance.disposeAll()
+  await Database.awaitEffectIdle(30_000)
 }, 60_000)

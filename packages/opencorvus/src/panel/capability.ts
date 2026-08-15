@@ -1,7 +1,7 @@
 import z from "zod"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { AcceptanceSpecSchema } from "@/acceptance/types"
-import { CheckConfig } from "@/engine/model"
+import { CheckConfig } from "@/engine/check-config"
 import { ChannelId, ChannelSurface as SharedChannelSurface } from "@/channel/catalog"
 import { ExpertSquadIDSchema } from "@/expert-squad/id"
 import { isModelReference } from "@/provider/model-ref"

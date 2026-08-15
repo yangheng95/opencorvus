@@ -307,6 +307,7 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
 
   const pollMs = Math.min(1_000, Math.max(50, Math.floor(timeout / 20)))
   let timer: ReturnType<typeof setTimeout> | undefined
+  let tickInFlight: Promise<void> | undefined
   let settled = false
   let lastSignature = ""
   let idleDeadline = Date.now() + timeout
@@ -339,6 +340,7 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
     const tick = async () => {
       if (settled) return
       const activity = await activitySignature()
+      if (settled) return
       if (activity.signature !== lastSignature || activity.pausedTool) {
         lastSignature = activity.signature
         idleDeadline = Date.now() + timeout
@@ -373,9 +375,16 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
         )
         return
       }
-      timer = setTimeout(() => void tick(), pollMs)
+      timer = setTimeout(runTick, pollMs)
     }
-    timer = setTimeout(() => void tick(), pollMs)
+    function runTick() {
+      const active = tick().catch(reject)
+      tickInFlight = active
+      void active.then(() => {
+        if (tickInFlight === active) tickInFlight = undefined
+      })
+    }
+    timer = setTimeout(runTick, pollMs)
   })
 
   try {
@@ -383,6 +392,7 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
   } finally {
     settled = true
     if (timer) clearTimeout(timer)
+    await tickInFlight
   }
 }
 

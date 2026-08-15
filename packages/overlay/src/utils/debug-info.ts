@@ -206,11 +206,15 @@ function debugTaskRootIngress(ingress: any): string[] {
   const activationIDs = Array.isArray(ingress?.activationIDs) ? ingress.activationIDs : undefined
   const activations = Array.isArray(ingress?.activations) ? ingress.activations : undefined
   const semanticTurnIDs = Array.isArray(ingress?.semanticTurnIDs) ? ingress.semanticTurnIDs : undefined
+  const decisionGapStepIDs = Array.isArray(ingress?.decisionGapStepIDs) ? ingress.decisionGapStepIDs : undefined
+  const semanticAttemptIDs = Array.isArray(ingress?.semanticAttemptIDs) ? ingress.semanticAttemptIDs : undefined
   const decisions = Array.isArray(ingress?.decisions) ? ingress.decisions : undefined
   return [
     `  ingress=${String(ingress?.ingressID ?? "?")} source=${String(ingress?.source ?? "unknown")}:${String(ingress?.sourceID ?? "unknown")}; epoch=${String(ingress?.executionEpoch ?? "unknown")}; sequence=${String(ingress?.sequence ?? "unknown")}; accepted=${formatDebugTime(ingress?.acceptedAt)}`,
     `    activations=${activationIDs ? activationIDs.length : "unknown"}; activation_ids=${activationIDs ? activationIDs.join(",") || "none" : "unknown"}; activated_at=${activations ? activations.map((activation: any) => formatDebugTime(activation?.activatedAt)).join(",") || "none" : "unknown"}`,
     `    semantic_turns=${semanticTurnIDs ? semanticTurnIDs.length : "unknown"}; semantic_turn_ids=${semanticTurnIDs ? semanticTurnIDs.join(",") || "none" : "unknown"}`,
+    `    decision_gaps=${decisionGapStepIDs ? decisionGapStepIDs.length : "unknown"}; decision_gap_step_ids=${decisionGapStepIDs ? decisionGapStepIDs.join(",") || "none" : "unknown"}`,
+    `    semantic_attempts=${semanticAttemptIDs ? semanticAttemptIDs.length : "unknown"}; semantic_attempt_ids=${semanticAttemptIDs ? semanticAttemptIDs.join(",") || "none" : "unknown"}`,
     `    decisions=${decisions ? decisions.map((decision: any) => `${String(decision?.receiptID ?? "?")}:${String(decision?.command ?? "unknown")}`).join(",") || "none" : "unknown"}`,
     `    projection=${debugIngressProjection(ingress?.projection)}`,
   ]

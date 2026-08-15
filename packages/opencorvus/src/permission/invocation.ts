@@ -21,9 +21,10 @@ export const PermissionProviderKind = z.enum([
   "external",
 ])
 export type PermissionProviderKind = z.infer<typeof PermissionProviderKind>
+export const ToolInvocationProviderKind = z.union([z.literal("internal"), PermissionProviderKind])
+export type ToolInvocationProviderKind = z.infer<typeof ToolInvocationProviderKind>
 
 export const PermissionEffectClass = z.enum([
-  "internal",
   "read_local",
   "write_local",
   "process",
@@ -338,12 +339,13 @@ function externalReadEffect(toolName: string, args: unknown): PermissionEffectCl
 }
 
 export async function permissionDescriptor(input: {
-  providerKind: PermissionProviderKind
+  providerKind: ToolInvocationProviderKind
   providerID: string
   providerDigest?: string
   toolName: string
   args: unknown
 }): Promise<InvocationPermissionDescriptor | undefined> {
+  if (input.providerKind === "internal") return undefined
   if (input.providerKind !== "builtin" && !input.providerDigest) {
     throw new Error(
       `Permission provider binding is required for ${input.providerKind}:${input.providerID}:${input.toolName}`,

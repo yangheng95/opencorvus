@@ -104420,6 +104420,12 @@
                                 },
                                 "type": "array"
                               },
+                              "decisionGapStepIDs": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
                               "decisions": {
                                 "items": {
                                   "properties": {
@@ -104643,6 +104649,12 @@
                                   }
                                 ]
                               },
+                              "semanticAttemptIDs": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
                               "semanticTurnIDs": {
                                 "items": {
                                   "type": "string"
@@ -104679,6 +104691,8 @@
                               "activationIDs",
                               "activations",
                               "semanticTurnIDs",
+                              "decisionGapStepIDs",
+                              "semanticAttemptIDs",
                               "decisions",
                               "projection"
                             ],
