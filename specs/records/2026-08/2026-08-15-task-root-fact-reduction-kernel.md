@@ -82,7 +82,7 @@ Reduce(accepted ingress facts,
 For each ingress, the first matching rule in this total order is the one projection, so states cannot overlap:
 
 - `blocked` when exact immutable facts conflict;
-- `resolved` when exactly one valid domain decision or lifecycle boundary proves the ingress outcome and no conflict exists;
+- `resolved` when exactly one valid assistant-owned domain decision set or lifecycle boundary proves the ingress outcome and no conflict exists; one completed assistant Turn may own multiple sibling `dispatch_agent` receipts as one atomic set, while every other set contains exactly one receipt;
 - `leased` when unresolved and a matching-epoch lease is still valid by expiry and causal Turn/activity consumption;
 - `reconcile_required` when an irreversible activity request has no outcome fact after its activation is no longer valid; this blocks ordinary command replay but permits an exact outcome query or same-key idempotent reconciliation;
 - `waiting` when the latest exact decision receipt creates an unanswered interaction or a future absolute wake deadline;
@@ -91,7 +91,7 @@ For each ingress, the first matching rule in this total order is the one project
 
 `running`, `idle`, `answered`, `resolved`, queue position, retry scheduled, recovery processed and process owner are views. They are never written back to the accepted ingress and are not stored in a durable projection table.
 
-The reducer fails closed on multiple non-equivalent decision receipts, an epoch mismatch, a receipt whose assistant parent is outside the ingress continuation chain, or an external-effect receipt with conflicting causal identity. Integrity failure is the conflict projection itself; appending a second blocker fact is prohibited.
+The reducer fails closed on decision receipts owned by multiple assistant Turns, multiple receipts in one Turn when any receipt is not `dispatch_agent`, an epoch mismatch, a receipt whose assistant parent is outside the ingress continuation chain, or an external-effect receipt with conflicting causal identity. Multiple sibling `dispatch_agent` receipts owned by the same completed assistant Turn are one atomic scheduler decision set, not a conflict. Integrity failure is the conflict projection itself; appending a second blocker fact is prohibited.
 
 ## Continuation semantics
 

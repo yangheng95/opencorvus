@@ -81,7 +81,7 @@ export type TaskRootIngressProjection =
   | { state: "blocked"; reason: "integrity_conflict" }
   | { state: "exhausted"; reason: "semantic_limit" | "activation_limit" | "deadline" }
   | { state: "terminal_inapplicable"; boundary: "cancelled" | "closed" | "reopened" | "deleted" }
-  | { state: "resolved"; decisionID: string }
+  | { state: "resolved"; decisionIDs: readonly string[] }
   | { state: "leased"; activationID: string; ownerOccurrenceID: string; expiresAt: number }
   | { state: "reconcile_required"; requestIDs: readonly string[] }
   | { state: "waiting"; interactionID: string; resumeAt?: number }
@@ -109,6 +109,16 @@ function activityOutcomeByRequest(facts: TaskRootIngressFacts): Map<string, read
   return grouped
 }
 
+function validDecisionSet(facts: TaskRootIngressFacts): readonly DecisionFact[] | undefined {
+  const completedTurnIDs = new Set(facts.turns.map((turn) => turn.id))
+  const decisions = facts.decisions.filter((decision) => completedTurnIDs.has(decision.assistantMessageID))
+  if (decisions.length === 0) return undefined
+  const assistantMessageIDs = new Set(decisions.map((decision) => decision.assistantMessageID))
+  if (assistantMessageIDs.size !== 1) return undefined
+  if (decisions.length > 1 && decisions.some((decision) => decision.command !== "dispatch_agent")) return undefined
+  return decisions.toSorted((left, right) => left.id.localeCompare(right.id))
+}
+
 function activationConsumed(facts: TaskRootIngressFacts, activationID: string): boolean {
   const outcomes = activityOutcomeByRequest(facts)
   const outstanding = facts.activityRequests.some(
@@ -134,8 +144,9 @@ function conflict(facts: TaskRootIngressFacts): boolean {
     (fact) => fact.epoch === facts.ingress.executionEpoch && (fact.kind === "cancelled" || fact.kind === "closed"),
   )
   if (terminal.length > 1) return true
-  const decisions = facts.decisions.filter((decision) => facts.turns.some((turn) => turn.id === decision.assistantMessageID))
-  if (decisions.length > 1) return true
+  const completedTurnIDs = new Set(facts.turns.map((turn) => turn.id))
+  const decisions = facts.decisions.filter((decision) => completedTurnIDs.has(decision.assistantMessageID))
+  if (decisions.length > 0 && !validDecisionSet(facts)) return true
   const outcomes = activityOutcomeByRequest(facts)
   if ([...outcomes.values()].some((rows) => rows.length > 1)) return true
   return facts.turns.some((turn) => !facts.leases.some((lease) => lease.id === turn.activationID))
@@ -159,10 +170,8 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
     return { state: "terminal_inapplicable", boundary: terminal.kind === "cancelled" ? "cancelled" : "closed" }
   }
 
-  const decision = exactlyOne(
-    facts.decisions.filter((candidate) => facts.turns.some((turn) => turn.id === candidate.assistantMessageID)),
-  )
-  if (decision) return { state: "resolved", decisionID: decision.id }
+  const decisions = validDecisionSet(facts)
+  if (decisions) return { state: "resolved", decisionIDs: decisions.map((decision) => decision.id) }
 
   const latest = latestLease(facts)
   if (latest && latest.expiresAt > now && !activationConsumed(facts, latest.id)) {

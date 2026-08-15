@@ -8,6 +8,7 @@ import { MessageTable, SessionTable, WorkerTurnDescriptorTable } from "@/session
 import { ProtocolEventTable } from "./protocol.sql"
 import type { ProtocolAggregate, ProtocolKind } from "./schema"
 import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
+import { projectLifecycleProperties } from "./lifecycle-projection"
 
 const eventLocks = new Map<string, Promise<void>>()
 const log = Log.create({ service: "protocol.store" })
@@ -247,7 +248,11 @@ function eventView(row: EventRow) {
   const orderKey = protocolTimelineOrderKey(row)
   const sessionID = row.aggregate_type === "session" ? row.aggregate_id : row.session_id
   const projectedPayload = (() => {
-    if (!sessionID || !["agent.execution.lifecycle", "session.error"].includes(row.type)) return row.payload
+    if (row.type === "agent.execution.lifecycle") {
+      if (!sessionID) throw new Error(`Protocol event ${row.id} (${row.type}) has no Session identity`)
+      return projectLifecycleProperties(row.payload ?? {}, sessionID, { orderKey })
+    }
+    if (!sessionID || row.type !== "session.error") return row.payload
     const session = Database.use((db) => db.select({ kind: SessionTable.kind, parentID: SessionTable.parent_id })
       .from(SessionTable).where(eq(SessionTable.id, sessionID)).get())
     if (!session) return row.payload

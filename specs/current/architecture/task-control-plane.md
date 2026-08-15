@@ -67,7 +67,7 @@ The ingress reducer is a total order:
 
 1. `blocked` for conflicting immutable facts;
 2. `terminal_inapplicable` for a cancelled, closed, or superseded epoch;
-3. `resolved` for exactly one valid decision receipt and no conflict;
+3. `resolved` for exactly one valid assistant-owned decision set and no conflict; one completed assistant Turn may own multiple sibling `dispatch_agent` receipts, while every other decision set contains exactly one receipt;
 4. `leased` for one still-valid, unconsumed activation;
 5. `reconcile_required` for a write-ahead external request whose outcome is unknown;
 6. `waiting` for one unresolved explicit Interaction/deadline decision;

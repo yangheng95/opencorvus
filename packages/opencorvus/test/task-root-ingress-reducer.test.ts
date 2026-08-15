@@ -30,14 +30,31 @@ describe("Task-root fact reducer", () => {
     expect(input.ingress.id).toBe("ing_1")
   })
 
-  test("resolves only from one exact decision receipt", () => {
+  test("resolves one assistant-owned decision set", () => {
     const input = facts({
       leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],
       turns: [{ id: "msg_decision", activationID: "act_1", predecessorID: "ing_1", timeCompleted: 30, boundary: "final" }],
       decisions: [{ id: "dec_1", assistantMessageID: "msg_decision", command: "dispatch" }],
     })
 
-    expect(reduceTaskRootIngressFacts(input, 31)).toEqual({ state: "resolved", decisionID: "dec_1" })
+    expect(reduceTaskRootIngressFacts(input, 31)).toEqual({ state: "resolved", decisionIDs: ["dec_1"] })
+  })
+
+  test("resolves parallel dispatch receipts from one completed assistant Turn as one atomic decision set", () => {
+    const input = facts({
+      leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],
+      turns: [{ id: "msg_parallel_dispatch", activationID: "act_1", predecessorID: "ing_1", timeCompleted: 30, boundary: "final" }],
+      decisions: [
+        { id: "dec_3", assistantMessageID: "msg_parallel_dispatch", command: "dispatch_agent" },
+        { id: "dec_1", assistantMessageID: "msg_parallel_dispatch", command: "dispatch_agent" },
+        { id: "dec_2", assistantMessageID: "msg_parallel_dispatch", command: "dispatch_agent" },
+      ],
+    })
+
+    expect(reduceTaskRootIngressFacts(input, 31)).toEqual({
+      state: "resolved",
+      decisionIDs: ["dec_1", "dec_2", "dec_3"],
+    })
   })
 
   test("conflict wins over an apparent decision receipt", () => {
@@ -45,12 +62,28 @@ describe("Task-root fact reducer", () => {
       leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],
       turns: [{ id: "msg_decision", activationID: "act_1", predecessorID: "ing_1", timeCompleted: 30, boundary: "final" }],
       decisions: [
-        { id: "dec_1", assistantMessageID: "msg_decision", command: "dispatch" },
-        { id: "dec_2", assistantMessageID: "msg_decision", command: "close" },
+        { id: "dec_1", assistantMessageID: "msg_decision", command: "dispatch_agent" },
+        { id: "dec_2", assistantMessageID: "msg_decision", command: "manage_task" },
       ],
     })
 
     expect(reduceTaskRootIngressFacts(input, 31)).toEqual({ state: "blocked", reason: "integrity_conflict" })
+  })
+
+  test("blocks decision receipts owned by different assistant Turns", () => {
+    const input = facts({
+      leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],
+      turns: [
+        { id: "msg_first", activationID: "act_1", predecessorID: "ing_1", timeCompleted: 30, boundary: "final" },
+        { id: "msg_second", activationID: "act_1", predecessorID: "msg_first", timeCompleted: 31, boundary: "final" },
+      ],
+      decisions: [
+        { id: "dec_1", assistantMessageID: "msg_first", command: "dispatch_agent" },
+        { id: "dec_2", assistantMessageID: "msg_second", command: "dispatch_agent" },
+      ],
+    })
+
+    expect(reduceTaskRootIngressFacts(input, 32)).toEqual({ state: "blocked", reason: "integrity_conflict" })
   })
 
   test("does not consume an activation at an intermediate tool-call boundary", () => {

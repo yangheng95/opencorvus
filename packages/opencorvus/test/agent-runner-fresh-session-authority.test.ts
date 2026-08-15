@@ -70,55 +70,54 @@ afterEach(async () => {
 
 test("fresh delegated worker commits Session, input authority, lineage, and occurrence before provider processing", async () => {
   await using project = await memoryProject()
-  using _ingressRunner = IngressTestHooks.replaceTaskIngressRunner({
-    directory: project.path,
-    runner: async ({ taskID, wakeID }) => {
-      if (!wakeID) throw new Error("Lifecycle delivery requires its exact Task ingress identity")
-      const task = requireTask(taskID)
-      if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
-      const orchestrator = await Session.create({
-        kind: "orchestrator",
-        parentID: task.session_id,
-        title: "Fresh worker lifecycle receiver",
-      })
-      const now = Date.now()
-      const parentID = orchestratorControlOccurrenceIdentity(wakeID).messageID
-      await Session.persistMessage({
-        info: {
-          id: parentID,
-          sessionID: orchestrator.id,
-          role: "user",
-          author: "orchestrator",
-          time: { created: now },
-          agent: "orchestrator",
-          model,
-        },
-        parts: [],
-      })
-      const finalMessageID = Identifier.ascending("message")
-      const assistant: Message.Assistant = {
-        id: finalMessageID,
-        sessionID: orchestrator.id,
-        parentID,
-        role: "assistant",
-        author: "orchestrator",
-        time: { created: now, completed: now + 1 },
-        agent: "orchestrator",
-        providerID: model.providerID,
-        modelID: model.modelID,
-        path: { cwd: project.path, root: project.path },
-        cost: 0,
-        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        finish: "stop",
-        taskIngress: { id: wakeID, kind: "agent_lifecycle_delivery" },
-      }
-      await Session.persistMessage({ info: assistant, parts: [] })
-      return { finalMessageID }
-    },
-  })
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      using _ingressRunner = IngressTestHooks.replaceTaskIngressRunner({
+        runner: async ({ taskID, wakeID, predecessorID }) => {
+          if (!wakeID || !predecessorID) throw new Error("Lifecycle delivery requires its exact Task ingress identity")
+          const task = requireTask(taskID)
+          if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
+          const orchestrator = await Session.create({
+            kind: "orchestrator",
+            parentID: task.session_id,
+            title: "Fresh worker lifecycle receiver",
+          })
+          const now = Date.now()
+          const parentID = orchestratorControlOccurrenceIdentity(wakeID, predecessorID).messageID
+          await Session.persistMessage({
+            info: {
+              id: parentID,
+              sessionID: orchestrator.id,
+              role: "user",
+              author: "orchestrator",
+              time: { created: now },
+              agent: "orchestrator",
+              model,
+            },
+            parts: [],
+          })
+          const finalMessageID = Identifier.ascending("message")
+          const assistant: Message.Assistant = {
+            id: finalMessageID,
+            sessionID: orchestrator.id,
+            parentID,
+            role: "assistant",
+            author: "orchestrator",
+            time: { created: now, completed: now + 1 },
+            agent: "orchestrator",
+            providerID: model.providerID,
+            modelID: model.modelID,
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+            finish: "stop",
+            taskIngress: { id: wakeID, kind: "agent_lifecycle_delivery" },
+          }
+          await Session.persistMessage({ info: assistant, parts: [] })
+          return { finalMessageID }
+        },
+      })
       const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
         prompt_profile: { active: "base" },
       })
@@ -331,11 +330,11 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
                   .get(),
               ),
             ).toMatchObject({
-              state: "bound",
-              workflow_occurrence_id: dispatchID,
+              task_id: taskID,
+              workflow_id: workflowBinding.kind === "virtual_workflow" ? workflowBinding.workflow_id : undefined,
+              workflow_node_id: "base-planner",
               initial_dispatch_id: dispatchID,
               child_session_id: sessionID,
-              dispatch_lineage_artifact_id: lineageArtifactID,
             })
           },
         })

@@ -532,7 +532,8 @@ export function taskExecutionProjectionForTask(taskID: string): TaskExecutionPro
         emitted_at AS emittedAt
         , seq AS sequence
       FROM protocol_event
-      WHERE task_id = ${taskID}
+      WHERE aggregate_type = 'task'
+        AND aggregate_id = ${taskID}
         AND type = 'agent.execution.lifecycle'
       ORDER BY emitted_at, seq
     `),

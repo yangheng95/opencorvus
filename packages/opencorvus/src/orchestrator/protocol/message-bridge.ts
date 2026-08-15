@@ -3,6 +3,7 @@ import { GlobalBus } from "@/bus/global"
 import { Instance, runOutsideInstanceContext, type ProjectDeletionAdmission } from "@/project/instance"
 import { runWithProjectDeletionIdentity } from "@/project/independent-project-owner"
 import { ProtocolStore } from "@/protocol/store"
+import { projectLifecycleProperties } from "@/protocol/lifecycle-projection"
 import { SessionEvents } from "@/session/events"
 import { Message } from "@/session/message"
 import { Todo } from "@/session/todo"
@@ -604,41 +605,9 @@ export function enrichLifecycleProperties(
   sessionID: string,
   input?: { orderKey?: string },
 ): Record<string, unknown> {
-  const kind = sessionRole(sessionID)
-  if (!kind) {
-    throw new Error(
-      `bridge: lifecycle event for session ${sessionID} has no kind in the database. ` +
-        `Every lifecycle event must target a persisted Session row.`,
-    )
-  }
-  const parentSessionID = sessionParentID(sessionID)
-  const inputMessageID = typeof properties.inputMessageID === "string" ? properties.inputMessageID.trim() : ""
-  if (!inputMessageID) throw new Error(`bridge: lifecycle event for session ${sessionID} has no input message identity`)
-  const row = Database.use((db) =>
-    db.select({ metadata: SessionTable.metadata }).from(SessionTable).where(eq(SessionTable.id, sessionID)).get(),
-  )
-  if (!row) throw new Error(`bridge: lifecycle event for session ${sessionID} has no persisted Session row`)
-  const agentID = persistedSessionAgentID({
-    sessionID,
-    sessionKind: kind,
-    metadata: row.metadata,
-    projectedIdentity: WorkerTurnDescriptor.findForMessageAuthority({ sessionID, inputMessageID })?.payload.identity,
-  })
-  const enriched: Record<string, unknown> = {
-    ...properties,
-    channel: kind === "root" ? "main" : kind,
-    agentID,
-  }
-  if (input?.orderKey) {
-    const provided = typeof properties.orderKey === "string" ? properties.orderKey.trim() : ""
-    if (provided && provided !== input.orderKey) {
-      throw new Error(`bridge: lifecycle event for session ${sessionID} orderKey drift between input and session row`)
-    }
-    enriched.orderKey = input.orderKey
-  }
-  if (kind !== "root") enriched.resolvedRole = agentID
-  if (parentSessionID) enriched.parentSessionID = parentSessionID
-  return enriched
+  const orderKey = input?.orderKey ?? (typeof properties.orderKey === "string" ? properties.orderKey.trim() : "")
+  if (!orderKey) throw new Error(`bridge: lifecycle event for session ${sessionID} has no orderKey`)
+  return projectLifecycleProperties(properties, sessionID, { orderKey })
 }
 
 /**

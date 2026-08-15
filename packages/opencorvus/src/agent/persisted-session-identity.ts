@@ -1,7 +1,7 @@
 import type { ProjectedWorkerIdentity } from "./projected-worker-identity"
 import { RuntimeTemplateRegistry } from "./runtime-template-registry"
 import type { SessionKind } from "@/session/session.sql"
-import { rightSidebarConversationAgentID } from "@/chat/session"
+import { rightSidebarConversationAgentID } from "@/chat/identity"
 
 export function persistedSessionAgentID(input: {
   sessionID: string
