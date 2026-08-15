@@ -9,7 +9,7 @@ import { Todo } from "@/session/todo"
 import { executionLifecycleOrderKey, SessionStatus, sessionLifecycleOrderKey } from "@/session/status"
 import { Log } from "@/util/log"
 import { Database, and, eq } from "@/storage/db"
-import { MessageTable, PartTable, SessionTable, type SessionKind } from "@/session/session.sql"
+import { MessageTable, PartTable, SessionTable, ToolPartRequestTable, type SessionKind } from "@/session/session.sql"
 import { taskIDForSession, taskSession, sessionRole, sessionParentID } from "@/engine/task-session-lineage"
 import { timelineMessageOrderKey, timelineOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
@@ -370,18 +370,33 @@ function partOrderKeysForEvent(properties: Record<string, unknown>): { messageOr
   if (!partID || !messageID || !sessionID) {
     throw new Error("bridge: part event missing part id/messageID/sessionID while enriching event")
   }
-  const rows = Database.use((db) => ({
-    message: db
-      .select({ timeCreated: MessageTable.time_created })
-      .from(MessageTable)
-      .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
-      .get(),
-    part: db
-      .select({ timeCreated: PartTable.time_created })
+  const rows = Database.use((db) => {
+    const genericPart = db
+      .select({ messageID: PartTable.message_id, timeCreated: PartTable.time_created })
       .from(PartTable)
-      .where(and(eq(PartTable.id, partID), eq(PartTable.message_id, messageID)))
-      .get(),
-  }))
+      .where(eq(PartTable.id, partID))
+      .get()
+    const toolRequest = db
+      .select({ messageID: ToolPartRequestTable.message_id, timeCreated: ToolPartRequestTable.time_created })
+      .from(ToolPartRequestTable)
+      .where(eq(ToolPartRequestTable.id, partID))
+      .get()
+    if (genericPart && toolRequest) {
+      throw new Error(`bridge: part ${partID} has conflicting persisted owners`)
+    }
+    const part = genericPart ?? toolRequest
+    if (part && part.messageID !== messageID) {
+      throw new Error(`bridge: part ${partID} belongs to message ${part.messageID}, not ${messageID}`)
+    }
+    return {
+      message: db
+        .select({ timeCreated: MessageTable.time_created })
+        .from(MessageTable)
+        .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
+        .get(),
+      part,
+    }
+  })
   if (!rows.message) throw new Error(`bridge: message ${messageID} missing persisted row while enriching part event`)
   if (!rows.part) throw new Error(`bridge: part ${partID} missing persisted row while enriching event`)
   const messageOrderKey = timelineMessageOrderKey({

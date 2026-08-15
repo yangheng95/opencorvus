@@ -388,6 +388,7 @@ describe("native command validation", () => {
         },
       },
       { kind: "clipboard.readText" },
+      { kind: "clipboard.writeText", text: "debug bundle" },
       { kind: "settings.save", payload: persistedSettings },
       { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace" },
     ] satisfies NativeCommand[]

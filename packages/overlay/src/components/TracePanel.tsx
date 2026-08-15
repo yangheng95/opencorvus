@@ -32,6 +32,7 @@ import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { t } from "../utils/i18n"
 import { createVisibilityInterval } from "../utils/visibility-interval"
+import { writeDebugClipboard } from "../utils/debug-info"
 
 type TracePanelProps =
   | { sessionID: string; taskID?: never; directory: string; onClose?: () => void }
@@ -208,7 +209,7 @@ export function TracePanel(props: TracePanelProps) {
       copiedAt: Date.now(),
     }
     try {
-      await navigator.clipboard.writeText(JSON.stringify(dump, null, 2))
+      await writeDebugClipboard(JSON.stringify(dump, null, 2))
       setCopyState("ok")
     } catch {
       setCopyState("err")

@@ -19,6 +19,7 @@ function message(input: {
   completed?: number
   finish?: string
   errorName?: string
+  userInput?: string
   parts?: Array<Record<string, unknown>>
 }) {
   const sessionID = input.sessionID ?? "session-debug"
@@ -30,6 +31,17 @@ function message(input: {
       time: { created: input.created, ...(input.completed ? { completed: input.completed } : {}) },
       ...(input.finish ? { finish: input.finish } : {}),
       ...(input.errorName ? { error: { name: input.errorName } } : {}),
+      ...(input.userInput !== undefined
+        ? {
+            extra: {
+              project_memory_user_input: {
+                version: 1,
+                surface: "session.prompt",
+                literalText: input.userInput,
+              },
+            },
+          }
+        : {}),
     },
     parts: (input.parts ?? []).map((part, index) => ({
       id: `${input.id}-part-${index}`,
@@ -98,7 +110,16 @@ describe("persisted chat debug bundle", () => {
 
   test("counts validated lifecycle facts and keeps bounded Tool identities", () => {
     const stats = summarizePersistedChatMessages([
-      message({ id: "user-1", role: "user", created: 1 }),
+      message({
+        id: "user-1",
+        role: "user",
+        created: 1,
+        userInput: "Build a Sokoban game",
+        parts: [
+          { type: "text", text: "Build a Sokoban game", source: "user" },
+          { type: "text", text: "private MCP resource body" },
+        ],
+      }),
       message({
         id: "assistant-running",
         role: "assistant",
@@ -149,6 +170,11 @@ describe("persisted chat debug bundle", () => {
       tools: { total: 4, pending: 1, running: 1, completed: 1, error: 1, other: 0 },
     })
     expect(stats.sessionIDs).toEqual(["session-debug"])
+    expect(stats.recentMessages[0]).toMatchObject({
+      messageID: "user-1",
+      role: "user",
+      userTextPreview: "Build a Sokoban game",
+    })
     expect(stats.recentTools[0]).toMatchObject({
       messageID: "assistant-running",
       tool: "glob",
@@ -159,6 +185,26 @@ describe("persisted chat debug bundle", () => {
       failureKind: "process-execution-interrupted",
       failure: "token=[redacted] diagnostic",
     })
+  })
+
+  test("keeps an attachment-only user marker available without copying Host context", () => {
+    const summary = summarizePersistedChatMessages([
+      message({
+        id: "attachment-only-user",
+        role: "user",
+        created: 1,
+        userInput: "",
+        parts: [{ type: "text", text: "Host-injected attachment contents" }],
+      }),
+    ])
+
+    expect(summary.recentMessages).toEqual([
+      expect.objectContaining({
+        messageID: "attachment-only-user",
+        role: "user",
+        userTextPreview: null,
+      }),
+    ])
   })
 
   test("maps malformed and cross-Session records to explicit contract errors", () => {
@@ -175,8 +221,8 @@ describe("persisted chat debug bundle", () => {
           role: "user",
           created: 1,
           parts: [
-            { id: "duplicate-part", type: "text" },
-            { id: "duplicate-part", type: "text" },
+            { id: "duplicate-part", type: "text", text: "first" },
+            { id: "duplicate-part", type: "text", text: "second" },
           ],
         }),
       ]),
@@ -212,7 +258,13 @@ describe("persisted chat debug bundle", () => {
 
   test("separates root, Session-tree, and rendered scopes and embeds the AI handoff", () => {
     const root = summarizePersistedChatMessages([
-      message({ id: "root-user", role: "user", created: 1 }),
+      message({
+        id: "root-user",
+        role: "user",
+        created: 1,
+        userInput: "Ship the repair",
+        parts: [{ type: "text", text: "Host-injected file contents" }],
+      }),
       message({
         id: "root-assistant",
         role: "assistant",
@@ -230,6 +282,7 @@ describe("persisted chat debug bundle", () => {
       }),
       message({ id: "child-assistant", sessionID: "child-session", role: "assistant", created: 4 }),
     ])
+    expect(root.recentMessages[0]?.userTextPreview).toBe("Ship the repair")
     const blob = buildChatDebugBlob(
       { sessionID: "session-debug", title: "Debug", status: "idle", directory: "C:/project" },
       { kind: "session", id: "session-debug", directory: "C:/project" },
@@ -241,6 +294,7 @@ describe("persisted chat debug bundle", () => {
     expect(blob).toContain("Persisted root Session (raw messages only):")
     expect(blob).toContain("Persisted Session tree (visible conversation transcript):")
     expect(blob).toContain("sessions:              child-session, session-debug")
+    expect(blob).toContain("user.text: Ship the repair")
     expect(blob).toContain("tool=glob; status=running")
     expect(blob).toContain("Rendered Overlay snapshot (local, non-atomic with persisted reads):")
   })
@@ -310,7 +364,15 @@ describe("persisted chat debug bundle", () => {
   test("redacts and bounds every free-form clipboard failure plane", () => {
     const rawSecret = "sk-proj-abcdefghijklmnop"
     const githubSecret = "ghp_abcdefghijklmnopqrstuvwxyz123456" // secret-scan: ignore -- deliberate redaction fixture
-    const root = summarizePersistedChatMessages([])
+    const root = summarizePersistedChatMessages([
+      message({
+        id: "secret-user",
+        role: "user",
+        created: 1,
+        userInput: `Please use ${rawSecret}`,
+        parts: [{ type: "text", text: `Please use ${rawSecret}` }],
+      }),
+    ])
     const chatBlob = buildChatDebugBlob(
       { sessionID: "session-debug", title: rawSecret, status: "idle", directory: "C:/project" },
       { kind: "session", id: "session-debug", directory: "C:/project" },

@@ -109,6 +109,7 @@ function ChatViewTitle(props: {
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           id="chatViewTitle"
           data-copy-feedback={copyFeedback()?.kind}
+          onDblClick={() => void copyDebugInfo()}
         >
           {copyFeedbackText() || props.title()}
         </Tooltip.Trigger>

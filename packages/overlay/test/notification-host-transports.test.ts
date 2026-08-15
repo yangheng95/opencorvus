@@ -3,12 +3,14 @@ import { createTauriTransport } from "../src/services/tauri-transport"
 
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window")
 const originalNotification = Object.getOwnPropertyDescriptor(globalThis, "Notification")
+const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, "navigator")
 
 type Permission = "default" | "denied" | "granted"
 
 function installNotificationHost(
   permission: Permission,
   invokeResult: (command: string, args?: Record<string, unknown>) => Promise<unknown> = async () => true,
+  clipboardWrite: (text: string) => Promise<void> = async () => {},
 ) {
   const delivered: Array<{ title: string; options?: NotificationOptions }> = []
   const invocations: Array<{ command: string; args?: Record<string, unknown> }> = []
@@ -24,6 +26,10 @@ function installNotificationHost(
   }
 
   Object.defineProperty(globalThis, "Notification", { configurable: true, value: HostNotification })
+  Object.defineProperty(globalThis, "navigator", {
+    configurable: true,
+    value: { clipboard: { writeText: clipboardWrite } },
+  })
   Object.defineProperty(globalThis, "window", {
     configurable: true,
     value: {
@@ -41,7 +47,10 @@ function installNotificationHost(
   return { HostNotification, delivered, invocations }
 }
 
-function restoreGlobal(name: "window" | "Notification", descriptor: PropertyDescriptor | undefined): void {
+function restoreGlobal(
+  name: "window" | "Notification" | "navigator",
+  descriptor: PropertyDescriptor | undefined,
+): void {
   if (descriptor) Object.defineProperty(globalThis, name, descriptor)
   else Reflect.deleteProperty(globalThis, name)
 }
@@ -49,9 +58,42 @@ function restoreGlobal(name: "window" | "Notification", descriptor: PropertyDesc
 afterEach(() => {
   restoreGlobal("window", originalWindow)
   restoreGlobal("Notification", originalNotification)
+  restoreGlobal("navigator", originalNavigator)
 })
 
 describe("notification host transports", () => {
+  test("browser clipboard writes the exact diagnostic text through the browser host", async () => {
+    const writes: string[] = []
+    installNotificationHost("granted", undefined, async (text) => {
+      writes.push(text)
+    })
+    const transport = createTauriTransport("browser")
+
+    await transport.native({ kind: "clipboard.writeText", text: "bridge diagnostic" })
+    expect(writes).toEqual(["bridge diagnostic"])
+  })
+
+  test("Tauri clipboard maps exact text to the registered native command and propagates native failure", async () => {
+    let rejectClipboard = false
+    const { invocations } = installNotificationHost("granted", async (command) => {
+      if (command === "overlay_clipboard_write_text" && rejectClipboard) {
+        throw new Error("native clipboard unavailable")
+      }
+      return true
+    })
+    const transport = createTauriTransport("tauri")
+
+    expect(await transport.native({ kind: "clipboard.writeText", text: "bridge diagnostic" })).toBe(true)
+    rejectClipboard = true
+    await expect(transport.native({ kind: "clipboard.writeText", text: "second diagnostic" })).rejects.toThrow(
+      "native clipboard unavailable",
+    )
+    expect(invocations).toEqual([
+      { command: "overlay_clipboard_write_text", args: { text: "bridge diagnostic" } },
+      { command: "overlay_clipboard_write_text", args: { text: "second diagnostic" } },
+    ])
+  })
+
   test("browser reports accepted delivery only while Web Notification permission remains granted", async () => {
     const { HostNotification, delivered } = installNotificationHost("granted")
     const transport = createTauriTransport("browser")

@@ -39,6 +39,7 @@ export type PersistedChatMessageFact = {
   sessionID: string
   messageID: string
   role: string
+  userTextPreview: string | null
   created: number | null
   completed: number | null
   finish: string | null
@@ -123,6 +124,22 @@ function optionalTime(value: unknown, label: string): number | null {
 function boundedDiagnosticText(value: unknown): string | null {
   const text = boundedDebugText(value)
   return text || null
+}
+
+function userAuthoredTextPreview(info: Record<string, unknown>, messageID: string, role: string): string | null {
+  if (role !== "user" || info.extra === undefined) return null
+  const extra = object(info.extra, `Session message ${messageID}.info.extra`)
+  const rawMarker = extra.project_memory_user_input
+  if (rawMarker === undefined) return null
+  const marker = object(rawMarker, `Session message ${messageID}.info.extra.project_memory_user_input`)
+  if (marker.version !== 1) {
+    throw new Error(`Session message ${messageID}.info.extra.project_memory_user_input.version must be 1`)
+  }
+  requiredString(marker.surface, `Session message ${messageID}.info.extra.project_memory_user_input.surface`)
+  if (typeof marker.literalText !== "string") {
+    throw new Error(`Session message ${messageID}.info.extra.project_memory_user_input.literalText must be a string`)
+  }
+  return boundedDiagnosticText(marker.literalText)
 }
 
 function failureFact(
@@ -247,6 +264,7 @@ export function summarizePersistedChatMessages(
       sessionID,
       messageID,
       role,
+      userTextPreview: userAuthoredTextPreview(info, messageID, role),
       created,
       completed,
       finish,

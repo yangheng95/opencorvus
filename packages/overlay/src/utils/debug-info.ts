@@ -6,6 +6,7 @@ import type {
   PersistedChatDebugProjection,
   PersistedChatDebugSummary,
 } from "../services/session-debug"
+import { getHostTransport } from "../services/host-transport-runtime"
 import { boundedDebugText, normalizeDebugDirectory } from "./debug-text"
 import { isImplicitProjectDirectory } from "./project-directory"
 
@@ -355,6 +356,7 @@ function debugPersistedSummary(summary: PersistedChatDebugSummary): string[] {
     lines.push(
       `    ${message.messageID} session=${message.sessionID}; role=${message.role}; created=${formatDebugTime(message.created)}; completed=${formatDebugTime(message.completed)}; finish=${message.finish ?? "-"}; error=${message.errorName ?? "-"}; parts=${message.partCount}; tools=${message.toolCount}`,
     )
+    if (message.userTextPreview) lines.push(`      user.text: ${message.userTextPreview}`)
   }
   lines.push(`  recent tools (${summary.recentTools.length}; omitted older=${summary.omittedTools}):`)
   if (summary.recentTools.length === 0) lines.push(`    (validated empty)`)
@@ -467,6 +469,5 @@ export function buildChatDebugBlob(
 
 export async function writeDebugClipboard(text: string): Promise<void> {
   if (!text) throw new Error("debug clipboard text is empty")
-  if (!navigator.clipboard?.writeText) throw new Error("navigator.clipboard.writeText is unavailable")
-  await navigator.clipboard.writeText(text)
+  await getHostTransport().native({ kind: "clipboard.writeText", text })
 }

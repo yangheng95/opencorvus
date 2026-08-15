@@ -1743,6 +1743,13 @@ fn overlay_clipboard_read_text<R: Runtime>(app: AppHandle<R>) -> Result<String, 
 }
 
 #[tauri::command]
+fn overlay_clipboard_write_text<R: Runtime>(app: AppHandle<R>, text: String) -> Result<(), String> {
+    app.clipboard()
+        .write_text(text)
+        .map_err(|error| format!("cannot write system clipboard text: {error}"))
+}
+
+#[tauri::command]
 fn overlay_settings_load<R: Runtime>(app: AppHandle<R>) -> Result<Option<OverlaySettings>, String> {
     let path = overlay_settings_path(&app)?;
     if !path.exists() {
@@ -5595,6 +5602,7 @@ fn main() {
         overlay_settings_load,
         overlay_settings_save,
         overlay_clipboard_read_text,
+        overlay_clipboard_write_text,
         overlay_expert_squad_install_handoff_take,
         overlay_server_info,
         overlay_server_restart,
@@ -5627,6 +5635,7 @@ fn main() {
         overlay_settings_load,
         overlay_settings_save,
         overlay_clipboard_read_text,
+        overlay_clipboard_write_text,
         overlay_expert_squad_install_handoff_take,
         overlay_server_info,
         overlay_server_restart,
@@ -5740,7 +5749,10 @@ fn main() {
                     "dark" => OVERLAY_STARTUP_SURFACE_DARK,
                     "vscode-dark" => OVERLAY_STARTUP_SURFACE_VSCODE_DARK,
                     "light" => OVERLAY_STARTUP_SURFACE_LIGHT,
-                    _ if window.theme().is_ok_and(|theme| theme == tauri::Theme::Dark) => {
+                    _ if window
+                        .theme()
+                        .is_ok_and(|theme| theme == tauri::Theme::Dark) =>
+                    {
                         OVERLAY_STARTUP_SURFACE_DARK
                     }
                     _ => OVERLAY_STARTUP_SURFACE_LIGHT,

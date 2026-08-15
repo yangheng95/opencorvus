@@ -7,6 +7,7 @@ import { cardDurationMs } from "../utils/card-timing"
 import { formatCostUSD, formatTokenCount } from "../utils/format-usage"
 import { t } from "../utils/i18n"
 import { formatDuration, stamp } from "../utils/time"
+import { writeDebugClipboard } from "../utils/debug-info"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { CardOverflowMenu } from "./CardOverflowMenu"
@@ -17,11 +18,8 @@ function stopMetaClick(event: MouseEvent): void {
 
 async function writeClipboard(text: string): Promise<boolean> {
   if (!text) return false
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text)
-    return true
-  }
-  return false
+  await writeDebugClipboard(text)
+  return true
 }
 
 export function CardErrorReasonIndicator(props: { reason: string }) {

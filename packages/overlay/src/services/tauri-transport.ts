@@ -540,6 +540,11 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
             return loadBrowserOverlaySettings()
           case "settings.save":
             return saveBrowserOverlaySettings(command.payload)
+          case "clipboard.writeText":
+            if (!navigator.clipboard?.writeText) {
+              throw new Error("navigator.clipboard.writeText is unavailable")
+            }
+            return navigator.clipboard.writeText(command.text)
           case "notification.permission":
             return webNotificationPermission()
           case "notification.requestPermission":
@@ -606,6 +611,8 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           })
         case "clipboard.readText":
           return invokeTauri("overlay_clipboard_read_text")
+        case "clipboard.writeText":
+          return invokeTauri("overlay_clipboard_write_text", { text: command.text })
         case "settings.load":
           return invokeTauri("overlay_settings_load")
         case "settings.save":

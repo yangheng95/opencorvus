@@ -1224,9 +1224,6 @@ async function copyActiveConversationDebug(): Promise<void> {
       (selectedSource.kind === "session" ? (optionalConversationSourceDirectory(selectedSource) ?? "") : ""),
     t("chat.debug_copy_named_project_required"),
   )
-  if (selectedSource.kind !== "session" && !selectedTaskFailure) {
-    await loadBoard({ sync: true, requireFresh: true })
-  }
   assertDebugSelectionCurrent(selectedSource)
   const persistedChat =
     selectedSource.kind === "session"
