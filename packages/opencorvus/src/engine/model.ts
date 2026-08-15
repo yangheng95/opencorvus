@@ -28,6 +28,7 @@ import {
 import { ENGINE_ARTIFACT_KINDS } from "@/engine/engine.sql"
 import { AGENT_COORDINATION_DECISIONS } from "@/engine/agent-coordination-decision"
 import { Identifier } from "@/id/id"
+import { MailboxAcknowledgementPayload, MailboxAgentMessagePayload } from "@/engine/mailbox-event"
 import { Message } from "@/session/message"
 import { PermissionAuthority } from "@/permission/authority"
 import { Answer as QuestionAnswer, Request as QuestionRequest } from "@/question/types"
@@ -799,6 +800,62 @@ export const TaskExecutionProjection = z.object({
   occurrences: AgentExecutionOccurrence.array(),
 })
 
+export const TaskRootIngressReducerProjection = z.union([
+  z.object({ state: z.literal("blocked"), reason: z.literal("integrity_conflict") }),
+  z.object({
+    state: z.literal("exhausted"),
+    reason: z.enum(["semantic_limit", "activation_limit", "deadline"]),
+  }),
+  z.object({
+    state: z.literal("terminal_inapplicable"),
+    boundary: z.enum(["cancelled", "closed", "reopened", "deleted"]),
+  }),
+  z.object({ state: z.literal("resolved"), decisionIDs: z.array(z.string()) }),
+  z.object({
+    state: z.literal("leased"),
+    activationID: z.string(),
+    ownerOccurrenceID: z.string(),
+    expiresAt: z.number().int(),
+  }),
+  z.object({ state: z.literal("reconcile_required"), requestIDs: z.array(z.string()) }),
+  z.object({ state: z.literal("waiting"), interactionID: z.string(), resumeAt: z.number().int().optional() }),
+  z.object({ state: z.literal("cancelling"), requestEventID: z.string() }),
+  z.object({ state: z.literal("closing"), requestEventID: z.string() }),
+  z.object({ state: z.literal("ready") }),
+])
+
+export const TaskRootIngressDebugEntry = z.object({
+  ingressID: z.string(),
+  source: z.enum(["message", "protocol_event", "automation_run", "engine_artifact", "task", "inline"]),
+  sourceID: z.string(),
+  executionEpoch: z.number().int().positive(),
+  sequence: z.number().int().positive(),
+  acceptedAt: z.number().int(),
+  activationIDs: z.array(z.string()),
+  activations: z.array(
+    z.object({
+      activationID: z.string(),
+      ownerOccurrenceID: z.string(),
+      activatedAt: z.number().int(),
+      expiresAt: z.number().int(),
+    }),
+  ),
+  semanticTurnIDs: z.array(z.string()),
+  decisions: z.array(
+    z.object({
+      receiptID: z.string(),
+      assistantMessageID: z.string(),
+      command: z.string(),
+    }),
+  ),
+  projection: TaskRootIngressReducerProjection,
+})
+
+export const TaskRootIngressDebugProjection = z.discriminatedUnion("status", [
+  z.object({ status: z.literal("available"), entries: TaskRootIngressDebugEntry.array() }),
+  z.object({ status: z.literal("unavailable"), error: z.string().min(1) }),
+])
+
 // ---------------------------------------------------------------------------
 // TaskBoard — full board projection
 // ---------------------------------------------------------------------------
@@ -1198,19 +1255,17 @@ export const ReviewStreamPhase = z.literal("integrity")
 export const ReviewStreamStep = z.enum(["manifest", "runtime", "visual", "specialist", "agent", "post_repair"])
 
 export const Event = {
-  TaskCreated: BusEvent.define(
-    "task.created",
-    z.object({ taskID: Identifier.schema("task"), summary: z.string() }),
-    { tier: 3 },
-  ),
-  TaskUpdated: BusEvent.define(
-    "task.updated",
-    z.object({ taskID: Identifier.schema("task"), summary: z.string() }),
-    { tier: 3 },
-  ),
+  TaskCreated: BusEvent.define("task.created", z.object({ taskID: Identifier.schema("task"), summary: z.string() }), {
+    tier: 3,
+  }),
+  TaskUpdated: BusEvent.define("task.updated", z.object({ taskID: Identifier.schema("task"), summary: z.string() }), {
+    tier: 3,
+  }),
   TaskDeleted: BusEvent.define(
     "task.deleted",
-    z.object({ taskID: Identifier.schema("task"), executionEpoch: z.number().int().positive(), summary: z.string() }).strict(),
+    z
+      .object({ taskID: Identifier.schema("task"), executionEpoch: z.number().int().positive(), summary: z.string() })
+      .strict(),
     { tier: 2 },
   ),
   ArtifactPersisted: BusEvent.define(
@@ -1256,11 +1311,9 @@ export const Event = {
       .strict(),
     { tier: 1, badge: true },
   ),
-  TaskCancelled: BusEvent.define(
-    "task.cancelled",
-    TaskCancelledPayload.extend({ taskID: Identifier.schema("task") }),
-    { tier: 2 },
-  ),
+  TaskCancelled: BusEvent.define("task.cancelled", TaskCancelledPayload.extend({ taskID: Identifier.schema("task") }), {
+    tier: 2,
+  }),
   TaskInfrastructureFailed: BusEvent.define(
     "task.infrastructure.failed",
     z.object({
@@ -1324,33 +1377,10 @@ export const Event = {
       summary: z.string(),
     }),
   ),
-  MailboxMessage: BusEvent.define(
-    "mailbox.message",
-    z.object({
-      taskID: Identifier.schema("task"),
-      sessionID: Identifier.schema("session"),
-      agentID: z.string().min(1),
-      expertSquadID: z.string().min(1),
-      category: z.enum(["progress", "status", "notification"]),
-      subject: z.string().min(1),
-      body: z.string().min(1),
-      attention: z.boolean(),
-      progress: z.number().min(0).max(1).optional(),
-      evidenceLocators: EvidenceLocatorListSchema,
-      summary: z.string().min(1),
-    }),
-    (payload) => (payload.attention || payload.category === "notification" ? { tier: 2 } : { tier: 3 }),
+  MailboxMessage: BusEvent.define("mailbox.message", MailboxAgentMessagePayload, (payload) =>
+    payload.attention || payload.category === "notification" ? { tier: 2 } : { tier: 3 },
   ),
-  MailboxAcknowledged: BusEvent.define(
-    "mailbox.acknowledged",
-    z.object({
-      taskID: Identifier.schema("task"),
-      messageID: Identifier.schema("protocol_event"),
-      action: z.enum(["read", "archive", "restore", "delete"]),
-      summary: z.string().min(1),
-    }),
-    { tier: 3 },
-  ),
+  MailboxAcknowledged: BusEvent.define("mailbox.acknowledged", MailboxAcknowledgementPayload, { tier: 3 }),
   AgentCoordinationRequested: BusEvent.define(
     "agent.coordination.requested",
     z.object({

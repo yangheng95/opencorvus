@@ -51,6 +51,7 @@ import {
   listTaskRootIngresses,
   projectTaskRootIngress,
   renewTaskRootIngressLease,
+  taskRootIngressFactsInTransaction,
   type TaskRootIngressEvidence,
   type TaskRootIngressEvidenceReader,
 } from "./task-root-fact-store"
@@ -62,6 +63,7 @@ import type {
   InteractionFact,
   TaskRootIngressProjection,
 } from "./task-root-ingress-reducer"
+import { reduceTaskRootIngressFacts, taskRootIngressSemanticTurnIDs } from "./task-root-ingress-reducer"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -136,7 +138,9 @@ export function configureTaskIngressRunner(next: TaskIngressRunner): void {
 }
 
 function stableInlineSource(event: OrchestratorEvent): string {
-  return createHash("sha256").update(JSON.stringify(OrchestratorEventSchema.parse(event))).digest("hex")
+  return createHash("sha256")
+    .update(JSON.stringify(OrchestratorEventSchema.parse(event)))
+    .digest("hex")
 }
 
 function sourceForEvent(event: OrchestratorEvent, identity: Record<string, string | undefined>) {
@@ -146,15 +150,14 @@ function sourceForEvent(event: OrchestratorEvent, identity: Record<string, strin
   if (lifecycleEventID) return { source: "protocol_event" as const, sourceID: lifecycleEventID }
   const automationRunID = identity.automationRunID?.trim()
   if (automationRunID) return { source: "automation_run" as const, sourceID: automationRunID }
-  const artifactID = identity.infrastructureFactID?.trim() || identity.recoveryFactID?.trim() || identity.requestID?.trim()
+  const artifactID =
+    identity.infrastructureFactID?.trim() || identity.recoveryFactID?.trim() || identity.requestID?.trim()
   if (artifactID) return { source: "engine_artifact" as const, sourceID: artifactID }
   const taskCreationID = identity.taskCreationID?.trim()
   if (taskCreationID) return { source: "task" as const, sourceID: taskCreationID }
   return {
     source: "inline" as const,
-    sourceID:
-      identity.waitJobID?.trim() ||
-      stableInlineSource(event),
+    sourceID: identity.waitJobID?.trim() || stableInlineSource(event),
     inlinePayload: OrchestratorEventSchema.parse(event) as Record<string, unknown>,
   }
 }
@@ -175,7 +178,8 @@ export function persistTaskRootIngressInTransaction(
   },
   now = Date.now(),
 ): string {
-  if (!task.session_id) throw new TaskRootIngressError(`Task ${task.id} has no root Session`, "session_not_bound", task.id)
+  if (!task.session_id)
+    throw new TaskRootIngressError(`Task ${task.id} has no root Session`, "session_not_bound", task.id)
   const lifecycle = taskLifecycleProjectionInTransaction(db, task.id)
   const sourceKind = taskRootIngressSourceKind(event)
   const terminalConversation = sourceKind === "operator_message" || sourceKind === "coordination_request"
@@ -203,7 +207,13 @@ export function persistTaskRootIntentIngressInTransaction(
   return persistTaskRootIngressInTransaction(
     db,
     input.task,
-    { taskIntent: { kind: input.intent, actor: "operator", supersededOperatorMessageIDs: input.supersededOperatorMessageIDs } },
+    {
+      taskIntent: {
+        kind: input.intent,
+        actor: "operator",
+        supersededOperatorMessageIDs: input.supersededOperatorMessageIDs,
+      },
+    },
     {},
     input.now,
   )
@@ -222,7 +232,13 @@ export function persistTaskRootMessageIngressInTransaction(
   return persistTaskRootIngressInTransaction(
     db,
     input.task,
-    { rootMessage: { messageID: input.messageID, kind: input.kind, ...(input.schedulerDelivery ? { schedulerDelivery: input.schedulerDelivery } : {}) } },
+    {
+      rootMessage: {
+        messageID: input.messageID,
+        kind: input.kind,
+        ...(input.schedulerDelivery ? { schedulerDelivery: input.schedulerDelivery } : {}),
+      },
+    },
     { messageID: input.messageID },
     input.now,
   )
@@ -244,7 +260,10 @@ export function persistTaskWaitIngressInTransaction(
   return persistTaskRootIngressInTransaction(
     db,
     input.task,
-    { note: `Task wait ${input.jobID} became due`, taskWaitWake: { jobID: input.jobID, fireID: input.fireID, dueAt: input.dueAt } },
+    {
+      note: `Task wait ${input.jobID} became due`,
+      taskWaitWake: { jobID: input.jobID, fireID: input.fireID, dueAt: input.dueAt },
+    },
     { automationRunID: input.runID },
     input.now,
   )
@@ -255,7 +274,8 @@ export function persistCoordinationIngressInTransaction(
   input: { taskID: string; rootSessionID: string; requestID: string; now?: number },
 ): string {
   const task = findTask(input.taskID)
-  if (!task || task.session_id !== input.rootSessionID) throw new Error(`Coordination request ${input.requestID} has no exact Task root Session`)
+  if (!task || task.session_id !== input.rootSessionID)
+    throw new Error(`Coordination request ${input.requestID} has no exact Task root Session`)
   return persistTaskRootIngressInTransaction(
     db,
     task,
@@ -268,34 +288,85 @@ export function persistCoordinationIngressInTransaction(
 function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect): OrchestratorEvent {
   if (ingress.source === "inline") return OrchestratorEventSchema.parse(ingress.inline_payload)
   if (ingress.source === "task") {
-    const task = Database.use((db) => db.select({ id: EngineTaskTable.id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, ingress.source_id)).get())
-    if (!task || task.id !== ingress.task_id) throw new Error(`Task-root ingress ${ingress.id} references missing Task creation ${ingress.source_id}`)
+    const task = Database.use((db) =>
+      db
+        .select({ id: EngineTaskTable.id })
+        .from(EngineTaskTable)
+        .where(eq(EngineTaskTable.id, ingress.source_id))
+        .get(),
+    )
+    if (!task || task.id !== ingress.task_id)
+      throw new Error(`Task-root ingress ${ingress.id} references missing Task creation ${ingress.source_id}`)
     return OrchestratorEventSchema.parse({ taskCreation: { taskID: task.id } })
   }
   if (ingress.source === "automation_run") {
-    const row = Database.use((db) => db.select({ run: AutomationRunTable, definition: AutomationTable }).from(AutomationRunTable)
-      .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationRunTable.automation_revision_id))
-      .where(eq(AutomationRunTable.id, ingress.source_id)).get())
-    if (!row || row.definition.task_id !== ingress.task_id || row.definition.kind !== "delay" || row.definition.due_at == null) {
+    const row = Database.use((db) =>
+      db
+        .select({ run: AutomationRunTable, definition: AutomationTable })
+        .from(AutomationRunTable)
+        .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationRunTable.automation_revision_id))
+        .where(eq(AutomationRunTable.id, ingress.source_id))
+        .get(),
+    )
+    if (
+      !row ||
+      row.definition.task_id !== ingress.task_id ||
+      row.definition.kind !== "delay" ||
+      row.definition.due_at == null
+    ) {
       throw new Error(`Task-root ingress ${ingress.id} references invalid Automation run ${ingress.source_id}`)
     }
-    return OrchestratorEventSchema.parse({ note: `Task wait ${row.definition.definition_id} became due`, taskWaitWake: { jobID: row.definition.definition_id, fireID: row.run.fire_id, dueAt: row.definition.due_at } })
+    return OrchestratorEventSchema.parse({
+      note: `Task wait ${row.definition.definition_id} became due`,
+      taskWaitWake: { jobID: row.definition.definition_id, fireID: row.run.fire_id, dueAt: row.definition.due_at },
+    })
   }
   if (ingress.source === "engine_artifact") {
-    const artifact = Database.use((db) => db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, ingress.source_id)).get())
-    if (!artifact || artifact.task_id !== ingress.task_id) throw new Error(`Task-root ingress ${ingress.id} references invalid Engine Artifact ${ingress.source_id}`)
-    if (artifact.kind === "agent_coordination_request") return OrchestratorEventSchema.parse({ coordinationRequest: { requestID: artifact.id } })
+    const artifact = Database.use((db) =>
+      db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, ingress.source_id)).get(),
+    )
+    if (!artifact || artifact.task_id !== ingress.task_id)
+      throw new Error(`Task-root ingress ${ingress.id} references invalid Engine Artifact ${ingress.source_id}`)
+    if (artifact.kind === "agent_coordination_request")
+      return OrchestratorEventSchema.parse({ coordinationRequest: { requestID: artifact.id } })
     if (artifact.kind === "task-infrastructure-error") {
-      const payload = artifact.payload as { operation?: string; reason?: string; errorName?: string; sessionID?: string; context?: { dispatchID?: string } }
+      const payload = artifact.payload as {
+        operation?: string
+        reason?: string
+        errorName?: string
+        sessionID?: string
+        context?: { dispatchID?: string }
+      }
       const dispatchID = payload.context?.dispatchID
-      if (!payload.operation || !payload.reason || !dispatchID) return OrchestratorEventSchema.parse({ processRecovery: { recoveryFactID: artifact.id } })
-      return OrchestratorEventSchema.parse({ dispatchInfrastructureFailure: { infrastructureFactID: artifact.id, outcome: DispatchOutcome.infrastructureFailure({ operation: payload.operation, message: payload.reason, errorName: payload.errorName, sessionID: payload.sessionID, recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: ingress.task_id, dispatchID }), infrastructureError: { source: "engine_artifact", artifact_id: artifact.id, catalog_revision: artifact.catalog_revision, expected_sha256: artifact.payload_sha256 } }) } })
+      if (!payload.operation || !payload.reason || !dispatchID)
+        return OrchestratorEventSchema.parse({ processRecovery: { recoveryFactID: artifact.id } })
+      return OrchestratorEventSchema.parse({
+        dispatchInfrastructureFailure: {
+          infrastructureFactID: artifact.id,
+          outcome: DispatchOutcome.infrastructureFailure({
+            operation: payload.operation,
+            message: payload.reason,
+            errorName: payload.errorName,
+            sessionID: payload.sessionID,
+            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: ingress.task_id, dispatchID }),
+            infrastructureError: {
+              source: "engine_artifact",
+              artifact_id: artifact.id,
+              catalog_revision: artifact.catalog_revision,
+              expected_sha256: artifact.payload_sha256,
+            },
+          }),
+        },
+      })
     }
     return OrchestratorEventSchema.parse({ processRecovery: { recoveryFactID: artifact.id } })
   }
   if (ingress.source === "protocol_event") {
-    const event = Database.use((db) => db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, ingress.source_id)).get())
-    if (!event) throw new Error(`Task-root ingress ${ingress.id} references missing Protocol Event ${ingress.source_id}`)
+    const event = Database.use((db) =>
+      db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, ingress.source_id)).get(),
+    )
+    if (!event)
+      throw new Error(`Task-root ingress ${ingress.id} references missing Protocol Event ${ingress.source_id}`)
     if (event.type === "agent.execution.lifecycle") {
       const payload = event.payload as Record<string, unknown>
       const sessionID = event.session_id
@@ -315,10 +386,17 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
     }
     return OrchestratorEventSchema.parse({ note: `Protocol occurrence ${event.id}` })
   }
-  const row = Database.use((db) => db.select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data }).from(MessageTable).where(eq(MessageTable.id, ingress.source_id)).get())
+  const row = Database.use((db) =>
+    db
+      .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
+      .from(MessageTable)
+      .where(eq(MessageTable.id, ingress.source_id))
+      .get(),
+  )
   if (!row) throw new Error(`Task-root ingress ${ingress.id} references missing Message ${ingress.source_id}`)
   const message = Message.Info.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
-  if (message.role !== "user") throw new Error(`Task-root ingress ${ingress.id} source Message is not participant-authored input`)
+  if (message.role !== "user")
+    throw new Error(`Task-root ingress ${ingress.id} source Message is not participant-authored input`)
   const provenance = TaskRootMessageProvenance.parse(message.extra?.task_root_message)
   return OrchestratorEventSchema.parse({
     note: `Task-root Message ${message.id}`,
@@ -331,38 +409,62 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
 }
 
 function interactionFacts(db: Database.TxOrDb, ingressID: string, assistantIDs: Set<string>): InteractionFact[] {
-  return db.select().from(EngineInteractionRequestTable).all().map((row) => projectInteractionRowInTransaction(db, row)).flatMap((row) => {
-    const payload = row.payload as {
-      tool?: { messageID?: string }
-      expiry?: { timeExpires?: number }
-      activity_reconciliation?: { ingress_id?: string; request_id?: string; assistant_message_id?: string }
-    }
-    const reconciliation = payload.activity_reconciliation
-    const assistantMessageID = reconciliation?.ingress_id === ingressID
-      ? reconciliation.assistant_message_id
-      : payload.tool?.messageID
-    if (!assistantMessageID || !assistantIDs.has(assistantMessageID)) return []
-    return [{
-      id: row.id,
-      ingressID,
-      assistantMessageID,
-      ...(row.status === "pending" ? {} : { outcome: row.status as "answered" | "rejected" | "expired" }),
-      ...(Number.isSafeInteger(payload.expiry?.timeExpires) ? { resumeAt: payload.expiry!.timeExpires } : {}),
-      ...(reconciliation?.request_id ? { activityRequestID: reconciliation.request_id } : {}),
-    }]
-  })
+  return db
+    .select()
+    .from(EngineInteractionRequestTable)
+    .all()
+    .map((row) => projectInteractionRowInTransaction(db, row))
+    .flatMap((row) => {
+      const payload = row.payload as {
+        tool?: { messageID?: string }
+        expiry?: { timeExpires?: number }
+        activity_reconciliation?: { ingress_id?: string; request_id?: string; assistant_message_id?: string }
+      }
+      const reconciliation = payload.activity_reconciliation
+      const assistantMessageID =
+        reconciliation?.ingress_id === ingressID ? reconciliation.assistant_message_id : payload.tool?.messageID
+      if (!assistantMessageID || !assistantIDs.has(assistantMessageID)) return []
+      return [
+        {
+          id: row.id,
+          ingressID,
+          assistantMessageID,
+          ...(row.status === "pending" ? {} : { outcome: row.status as "answered" | "rejected" | "expired" }),
+          ...(Number.isSafeInteger(payload.expiry?.timeExpires) ? { resumeAt: payload.expiry!.timeExpires } : {}),
+          ...(reconciliation?.request_id ? { activityRequestID: reconciliation.request_id } : {}),
+        },
+      ]
+    })
 }
 
 /** Read canonical conversation/effect facts. Mutable transport rows are
  * interpreted only at their terminal immutable boundary; the Tool storage
  * normalization in the same cutover replaces the remaining transport shape. */
 export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, ingress) => {
-  const leaseIDs = db.select({ id: EngineControlActivationLeaseTable.id }).from(EngineControlActivationLeaseTable)
-    .where(and(eq(EngineControlActivationLeaseTable.target, "task_root_ingress"), eq(EngineControlActivationLeaseTable.target_id, ingress.id))).all().map((row) => row.id)
-  if (leaseIDs.length === 0) return { turns: [], decisions: [], interactions: [], activityRequests: [], activityOutcomes: [] }
-  const assistantRows = db.select().from(MessageTable)
-    .where(sql`json_extract(${MessageTable.data}, '$.activationID') IN (${sql.join(leaseIDs.map((id) => sql`${id}`), sql`, `)})`)
-    .orderBy(asc(MessageTable.time_created), asc(MessageTable.id)).all()
+  const leaseIDs = db
+    .select({ id: EngineControlActivationLeaseTable.id })
+    .from(EngineControlActivationLeaseTable)
+    .where(
+      and(
+        eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
+        eq(EngineControlActivationLeaseTable.target_id, ingress.id),
+      ),
+    )
+    .all()
+    .map((row) => row.id)
+  if (leaseIDs.length === 0)
+    return { turns: [], decisions: [], interactions: [], activityRequests: [], activityOutcomes: [] }
+  const assistantRows = db
+    .select()
+    .from(MessageTable)
+    .where(
+      sql`json_extract(${MessageTable.data}, '$.activationID') IN (${sql.join(
+        leaseIDs.map((id) => sql`${id}`),
+        sql`, `,
+      )})`,
+    )
+    .orderBy(asc(MessageTable.time_created), asc(MessageTable.id))
+    .all()
   const turns: AssistantTurnFact[] = []
   const decisions: DecisionFact[] = []
   const activityRequests: ActivityRequestFact[] = []
@@ -370,16 +472,22 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
   const assistantIDs = new Set<string>()
   const activationAssistants = new Map<string, string>()
   const continuationAssistants = new Map<string, string>()
-  const task = db.select({ sessionID: EngineTaskTable.session_id, projectID: EngineTaskTable.project_id }).from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, ingress.task_id)).get()
+  const task = db
+    .select({ sessionID: EngineTaskTable.session_id, projectID: EngineTaskTable.project_id })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, ingress.task_id))
+    .get()
   if (!task?.sessionID) throw new Error(`Task-root ingress ${ingress.id} has no root Session authority`)
   for (const row of assistantRows) {
     const assistant = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.session_id })
     assistantIDs.add(assistant.id)
     if (!assistant.activationID) continue
     const priorAssistant = activationAssistants.get(assistant.activationID)
-    const session = db.select({ parentID: SessionTable.parent_id, projectID: SessionTable.project_id, kind: SessionTable.kind })
-      .from(SessionTable).where(eq(SessionTable.id, row.session_id)).get()
+    const session = db
+      .select({ parentID: SessionTable.parent_id, projectID: SessionTable.project_id, kind: SessionTable.kind })
+      .from(SessionTable)
+      .where(eq(SessionTable.id, row.session_id))
+      .get()
     if (
       !session ||
       session.parentID !== task.sessionID ||
@@ -395,10 +503,16 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       throw new Error(`Task-root continuation ${assistant.parentID} has multiple assistant Messages`)
     }
     continuationAssistants.set(assistant.parentID, assistant.id)
-    const parent = db.select({ data: MessageTable.data, sessionID: MessageTable.session_id }).from(MessageTable)
-      .where(eq(MessageTable.id, assistant.parentID)).get()
-    const control = (parent?.data as { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } } | undefined)
-      ?.extra?.orchestrator_control_ingress
+    const parent = db
+      .select({ data: MessageTable.data, sessionID: MessageTable.session_id })
+      .from(MessageTable)
+      .where(eq(MessageTable.id, assistant.parentID))
+      .get()
+    const control = (
+      parent?.data as
+        | { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } }
+        | undefined
+    )?.extra?.orchestrator_control_ingress
     if (
       parent?.sessionID !== row.session_id ||
       control?.ingress_id !== ingress.id ||
@@ -407,16 +521,31 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
     ) {
       throw new Error(`Assistant Message ${assistant.id} is outside ingress ${ingress.id} continuation chain`)
     }
-    const requests = db.select().from(ToolPartRequestTable)
+    const requests = db
+      .select()
+      .from(ToolPartRequestTable)
       .where(eq(ToolPartRequestTable.message_id, assistant.id))
-      .orderBy(asc(ToolPartRequestTable.time_created), asc(ToolPartRequestTable.id)).all()
+      .orderBy(asc(ToolPartRequestTable.time_created), asc(ToolPartRequestTable.id))
+      .all()
     const toolParts = requests.map((part) => projectToolPartInTransaction(db, part)!)
     for (const part of toolParts) {
-      activityRequests.push({ id: part.id, activationID: assistant.activationID, assistantMessageID: assistant.id, idempotency: "query_required" })
-      const outcome = db.select().from(ToolPartOutcomeTable)
-        .where(eq(ToolPartOutcomeTable.request_part_id, part.id)).get()
+      activityRequests.push({
+        id: part.id,
+        activationID: assistant.activationID,
+        assistantMessageID: assistant.id,
+        idempotency: "query_required",
+      })
+      const outcome = db
+        .select()
+        .from(ToolPartOutcomeTable)
+        .where(eq(ToolPartOutcomeTable.request_part_id, part.id))
+        .get()
       if (outcome) {
-        activityOutcomes.push({ id: outcome.id, requestID: part.id, outcome: outcome.data.outcome === "completed" ? "completed" : "failed" })
+        activityOutcomes.push({
+          id: outcome.id,
+          requestID: part.id,
+          outcome: outcome.data.outcome === "completed" ? "completed" : "failed",
+        })
       }
       if (outcome?.data.outcome !== "completed" || !isOrchestratorDecisionToolName(part.tool)) continue
       const effect = orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input })
@@ -432,11 +561,20 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       : assistant.finish?.includes("tool") || outstanding
         ? "tool_calls"
         : "final"
-    turns.push({ id: assistant.id, activationID: assistant.activationID, predecessorID, timeCompleted: assistant.time.completed, boundary })
+    turns.push({
+      id: assistant.id,
+      activationID: assistant.activationID,
+      predecessorID,
+      timeCompleted: assistant.time.completed,
+      boundary,
+    })
   }
   if (assistantIDs.size > 0) {
-    const providerRequests = db.select().from(ProviderActivityRequestTable)
-      .where(inArray(ProviderActivityRequestTable.assistant_message_id, [...assistantIDs])).all()
+    const providerRequests = db
+      .select()
+      .from(ProviderActivityRequestTable)
+      .where(inArray(ProviderActivityRequestTable.assistant_message_id, [...assistantIDs]))
+      .all()
     for (const request of providerRequests) {
       activityRequests.push({
         id: request.id,
@@ -448,8 +586,11 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
         assistantMessageID: request.assistant_message_id,
         idempotency: "query_required",
       })
-      const outcome = db.select().from(ProviderActivityOutcomeTable)
-        .where(eq(ProviderActivityOutcomeTable.request_id, request.id)).get()
+      const outcome = db
+        .select()
+        .from(ProviderActivityOutcomeTable)
+        .where(eq(ProviderActivityOutcomeTable.request_id, request.id))
+        .get()
       if (outcome) {
         activityOutcomes.push({
           id: outcome.id,
@@ -479,19 +620,31 @@ function ensureActivityReconciliationInteractions(
   now: number,
 ): number {
   return Database.immediateTransaction((db) => {
-    const task = db.select({ sessionID: EngineTaskTable.session_id }).from(EngineTaskTable)
-      .where(eq(EngineTaskTable.id, taskID)).get()
+    const task = db
+      .select({ sessionID: EngineTaskTable.session_id })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, taskID))
+      .get()
     if (!task?.sessionID) throw new Error(`Task ${taskID} has no root Session for activity reconciliation`)
     let created = 0
     for (const requestID of requestIDs) {
       const externalID = `task-root-activity-reconciliation-v1:${requestID}`
-      const existing = db.select({ id: EngineInteractionRequestTable.id }).from(EngineInteractionRequestTable)
-        .where(eq(EngineInteractionRequestTable.external_id, externalID)).get()
+      const existing = db
+        .select({ id: EngineInteractionRequestTable.id })
+        .from(EngineInteractionRequestTable)
+        .where(eq(EngineInteractionRequestTable.external_id, externalID))
+        .get()
       if (existing) continue
-      const tool = db.select({ assistantMessageID: ToolPartRequestTable.message_id }).from(ToolPartRequestTable)
-        .where(eq(ToolPartRequestTable.id, requestID)).get()
-      const provider = db.select({ assistantMessageID: ProviderActivityRequestTable.assistant_message_id })
-        .from(ProviderActivityRequestTable).where(eq(ProviderActivityRequestTable.id, requestID)).get()
+      const tool = db
+        .select({ assistantMessageID: ToolPartRequestTable.message_id })
+        .from(ToolPartRequestTable)
+        .where(eq(ToolPartRequestTable.id, requestID))
+        .get()
+      const provider = db
+        .select({ assistantMessageID: ProviderActivityRequestTable.assistant_message_id })
+        .from(ProviderActivityRequestTable)
+        .where(eq(ProviderActivityRequestTable.id, requestID))
+        .get()
       if (Boolean(tool) === Boolean(provider)) {
         throw new Error(`Task-root activity request ${requestID} has ambiguous or missing canonical storage`)
       }
@@ -509,11 +662,19 @@ function ensureActivityReconciliationInteractions(
             request_id: requestID,
             assistant_message_id: assistantMessageID,
           },
-          questions: [{
-            header: "结果确认",
-            question: "是否确认该外部操作的最终结果无法从权威来源确定，并允许会话以“结果未知”继续？",
-            options: [{ value: "acknowledge_unknown", label: "确认结果未知", description: "不会重放外部操作；保留未知结果事实并继续决策。" }],
-          }],
+          questions: [
+            {
+              header: "结果确认",
+              question: "是否确认该外部操作的最终结果无法从权威来源确定，并允许会话以“结果未知”继续？",
+              options: [
+                {
+                  value: "acknowledge_unknown",
+                  label: "确认结果未知",
+                  description: "不会重放外部操作；保留未知结果事实并继续决策。",
+                },
+              ],
+            },
+          ],
         },
         eventSource: "task-control.activity-reconciliation",
         eventSummary: "External activity outcome requires operator reconciliation",
@@ -525,14 +686,24 @@ function ensureActivityReconciliationInteractions(
   })
 }
 
-function predecessorFor(projection: TaskRootIngressProjection, ingressID: string, evidence: TaskRootIngressEvidence): string {
+function predecessorFor(
+  projection: TaskRootIngressProjection,
+  ingressID: string,
+  evidence: TaskRootIngressEvidence,
+): string {
   if (projection.state !== "ready") return ingressID
-  return evidence.turns.toSorted((a, b) => b.timeCompleted - a.timeCompleted || b.id.localeCompare(a.id))[0]?.id ?? ingressID
+  return (
+    evidence.turns.toSorted((a, b) => b.timeCompleted - a.timeCompleted || b.id.localeCompare(a.id))[0]?.id ?? ingressID
+  )
 }
 
 function evidenceFor(ingressID: string): TaskRootIngressEvidence {
   return Database.use((db) => {
-    const ingress = db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, ingressID)).get()
+    const ingress = db
+      .select()
+      .from(EngineTaskRootIngressTable)
+      .where(eq(EngineTaskRootIngressTable.id, ingressID))
+      .get()
     if (!ingress) throw new Error(`Task-root ingress not found: ${ingressID}`)
     return readTaskRootIngressEvidence(db, ingress)
   })
@@ -610,9 +781,16 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<b
 
 /** One project-partitioned recovery/activation algorithm. */
 export async function reconcileTaskControlPlane(taskID?: string): Promise<number> {
-  const tasks = Database.use((db) => db.select({ id: EngineTaskTable.id }).from(EngineTaskTable)
-    .where(and(eq(EngineTaskTable.project_id, Instance.project.id), ...(taskID ? [eq(EngineTaskTable.id, taskID)] : []))).all()
-    .filter((task) => !taskDeletedInTransaction(db, task.id)))
+  const tasks = Database.use((db) =>
+    db
+      .select({ id: EngineTaskTable.id })
+      .from(EngineTaskTable)
+      .where(
+        and(eq(EngineTaskTable.project_id, Instance.project.id), ...(taskID ? [eq(EngineTaskTable.id, taskID)] : [])),
+      )
+      .all()
+      .filter((task) => !taskDeletedInTransaction(db, task.id)),
+  )
   let activated = 0
   for (const task of tasks) {
     const lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, task.id))
@@ -680,16 +858,27 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
 }
 
 export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, operation: string): void {
-  const completion = dispatchTaskLoop(input).then(() => undefined).catch((error) => {
-    log.error("background Task-root reconciliation failed", { taskID: input.taskID, operation, error })
-  }).finally(() => completionHooks.delete(completion))
+  const completion = dispatchTaskLoop(input)
+    .then(() => undefined)
+    .catch((error) => {
+      log.error("background Task-root reconciliation failed", { taskID: input.taskID, operation, error })
+    })
+    .finally(() => completionHooks.delete(completion))
   completionHooks.add(completion)
 }
 
-export async function dispatchPersistedTaskLoop(taskID: string, expectedWakeID?: string): Promise<DispatchTaskLoopResult> {
+export async function dispatchPersistedTaskLoop(
+  taskID: string,
+  expectedWakeID?: string,
+): Promise<DispatchTaskLoopResult> {
   if (expectedWakeID) {
-    const exists = Database.use((db) => db.select({ id: EngineTaskRootIngressTable.id }).from(EngineTaskRootIngressTable)
-      .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.id, expectedWakeID))).get())
+    const exists = Database.use((db) =>
+      db
+        .select({ id: EngineTaskRootIngressTable.id })
+        .from(EngineTaskRootIngressTable)
+        .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.id, expectedWakeID)))
+        .get(),
+    )
     if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
   }
   await reconcileTaskControlPlane(taskID)
@@ -697,14 +886,70 @@ export async function dispatchPersistedTaskLoop(taskID: string, expectedWakeID?:
 }
 
 export function taskRootIngressStats(taskID?: string) {
-  const rows = Database.use((db) => db.select({ taskID: EngineTaskRootIngressTable.task_id }).from(EngineTaskRootIngressTable)
-    .where(taskID ? eq(EngineTaskRootIngressTable.task_id, taskID) : undefined).all())
+  const rows = Database.use((db) =>
+    db
+      .select({ taskID: EngineTaskRootIngressTable.task_id })
+      .from(EngineTaskRootIngressTable)
+      .where(taskID ? eq(EngineTaskRootIngressTable.task_id, taskID) : undefined)
+      .all(),
+  )
   return { tasks: new Set(rows.map((row) => row.taskID)).size, events: rows.length }
 }
 
+export function taskRootIngressDebugProjection(taskID: string, now = Date.now()) {
+  return Database.use((db) =>
+    db
+      .select()
+      .from(EngineTaskRootIngressTable)
+      .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+      .orderBy(
+        asc(EngineTaskRootIngressTable.execution_epoch),
+        asc(EngineTaskRootIngressTable.sequence),
+        asc(EngineTaskRootIngressTable.id),
+      )
+      .all()
+      .map((ingress) => {
+        const facts = taskRootIngressFactsInTransaction(db, ingress.id, readTaskRootIngressEvidence)
+        return {
+          ingressID: ingress.id,
+          source: ingress.source,
+          sourceID: ingress.source_id,
+          executionEpoch: ingress.execution_epoch,
+          sequence: ingress.sequence,
+          acceptedAt: ingress.time_accepted,
+          activationIDs: facts.leases.map((lease) => lease.id),
+          activations: facts.leases.map((lease) => ({
+            activationID: lease.id,
+            ownerOccurrenceID: lease.ownerOccurrenceID,
+            activatedAt: lease.timeActivated,
+            expiresAt: lease.expiresAt,
+          })),
+          semanticTurnIDs: taskRootIngressSemanticTurnIDs(facts),
+          decisions: facts.decisions.map((decision) => ({
+            receiptID: decision.id,
+            assistantMessageID: decision.assistantMessageID,
+            command: decision.command,
+          })),
+          projection: reduceTaskRootIngressFacts(facts, now),
+        }
+      }),
+  )
+}
+
 export function requireTaskCreationIngressID(taskID: string): string {
-  const ingress = Database.use((db) => db.select().from(EngineTaskRootIngressTable)
-    .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.source, "task"), eq(EngineTaskRootIngressTable.source_id, taskID))).get())
+  const ingress = Database.use((db) =>
+    db
+      .select()
+      .from(EngineTaskRootIngressTable)
+      .where(
+        and(
+          eq(EngineTaskRootIngressTable.task_id, taskID),
+          eq(EngineTaskRootIngressTable.source, "task"),
+          eq(EngineTaskRootIngressTable.source_id, taskID),
+        ),
+      )
+      .get(),
+  )
   if (!ingress) throw new Error(`Task ${taskID} has no durable creation ingress`)
   return ingress.id
 }
@@ -714,9 +959,19 @@ export function retirePendingTaskRootIngressesForOperatorIntentInTransaction(
   input: { taskID: string; now: number },
 ): string[] {
   const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
-  return db.select({ sourceID: EngineTaskRootIngressTable.source_id }).from(EngineTaskRootIngressTable)
-    .where(and(eq(EngineTaskRootIngressTable.task_id, input.taskID), eq(EngineTaskRootIngressTable.execution_epoch, lifecycle.epoch), eq(EngineTaskRootIngressTable.source, "message")))
-    .orderBy(asc(EngineTaskRootIngressTable.sequence)).all().map((row) => row.sourceID)
+  return db
+    .select({ sourceID: EngineTaskRootIngressTable.source_id })
+    .from(EngineTaskRootIngressTable)
+    .where(
+      and(
+        eq(EngineTaskRootIngressTable.task_id, input.taskID),
+        eq(EngineTaskRootIngressTable.execution_epoch, lifecycle.epoch),
+        eq(EngineTaskRootIngressTable.source, "message"),
+      ),
+    )
+    .orderBy(asc(EngineTaskRootIngressTable.sequence))
+    .all()
+    .map((row) => row.sourceID)
 }
 
 /** Ingress facts are immutable. Explicit Task deletion cascades them; ordinary
@@ -752,41 +1007,101 @@ export function persistProcessShutdownRecoveryHandoffs(input: {
   now?: number
 }): Array<{ taskID: string; recoveryFactID: string; wakeID: string }> {
   const now = input.now ?? Date.now()
-  return Database.transaction((db) => input.tasks.flatMap((item) => {
-    const task = findTask(item.taskID)
-    if (!task || item.ownedSessionIDs.length === 0) return []
-    const recoveryFactID = recordTaskInfrastructureErrorInTransaction(db, {
-      taskID: item.taskID,
-      component: "process-recovery",
-      operation: "handoff-process-owned-task-execution",
-      reason: input.reason,
-      context: { owned_session_ids: item.ownedSessionIDs.toSorted() },
-      now,
-    })
-    const wakeID = persistTaskRootIngressInTransaction(db, task, { processRecovery: { recoveryFactID } }, { recoveryFactID }, now)
-    return [{ taskID: item.taskID, recoveryFactID, wakeID }]
-  }))
+  return Database.transaction((db) =>
+    input.tasks.flatMap((item) => {
+      const task = findTask(item.taskID)
+      if (!task || item.ownedSessionIDs.length === 0) return []
+      const recoveryFactID = recordTaskInfrastructureErrorInTransaction(db, {
+        taskID: item.taskID,
+        component: "process-recovery",
+        operation: "handoff-process-owned-task-execution",
+        reason: input.reason,
+        context: { owned_session_ids: item.ownedSessionIDs.toSorted() },
+        now,
+      })
+      const wakeID = persistTaskRootIngressInTransaction(
+        db,
+        task,
+        { processRecovery: { recoveryFactID } },
+        { recoveryFactID },
+        now,
+      )
+      return [{ taskID: item.taskID, recoveryFactID, wakeID }]
+    }),
+  )
 }
 
-export type TerminalAgentLifecycleDeliveryReconciliation = "missing_lineage" | "missing_descriptor" | "nonterminal" | "already_delivered" | "delivered"
-export async function reconcileTerminalAgentLifecycleDelivery(input: { taskID: string; sessionID: string; dispatchID: string }): Promise<TerminalAgentLifecycleDeliveryReconciliation> {
-  const lineage = listDispatchLineage(input.taskID).find((row) => row.dispatchID === input.dispatchID && row.payload.child_session_id === input.sessionID)
+export type TerminalAgentLifecycleDeliveryReconciliation =
+  | "missing_lineage"
+  | "missing_descriptor"
+  | "nonterminal"
+  | "already_delivered"
+  | "delivered"
+export async function reconcileTerminalAgentLifecycleDelivery(input: {
+  taskID: string
+  sessionID: string
+  dispatchID: string
+}): Promise<TerminalAgentLifecycleDeliveryReconciliation> {
+  const lineage = listDispatchLineage(input.taskID).find(
+    (row) => row.dispatchID === input.dispatchID && row.payload.child_session_id === input.sessionID,
+  )
   if (!lineage) return "missing_lineage"
   const descriptor = WorkerTurnDescriptor.findForDispatch({ sessionID: input.sessionID, dispatchID: input.dispatchID })
   if (!descriptor) return "missing_descriptor"
-  const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(input.sessionID, "agent.execution.lifecycle", descriptor.payload.messageAuthority.user_message_id)
-  if (!lifecycle || (lifecycle.payload?.status as { type?: string } | undefined)?.type !== "terminal") return "nonterminal"
+  const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+    input.sessionID,
+    "agent.execution.lifecycle",
+    descriptor.payload.messageAuthority.user_message_id,
+  )
+  if (!lifecycle || (lifecycle.payload?.status as { type?: string } | undefined)?.type !== "terminal")
+    return "nonterminal"
   if (!findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })) {
-    const final = Database.use((db) => db.select({ id: MessageTable.id }).from(MessageTable)
-      .where(and(eq(MessageTable.session_id, input.sessionID), sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`, sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`))
-      .orderBy(sql`${MessageTable.time_created} DESC`, sql`${MessageTable.id} DESC`).get())
+    const final = Database.use((db) =>
+      db
+        .select({ id: MessageTable.id })
+        .from(MessageTable)
+        .where(
+          and(
+            eq(MessageTable.session_id, input.sessionID),
+            sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+            sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
+          ),
+        )
+        .orderBy(sql`${MessageTable.time_created} DESC`, sql`${MessageTable.id} DESC`)
+        .get(),
+    )
     if (!final) return "nonterminal"
-    settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID: input.dispatchID, outcome: DispatchOutcome.partial({ sessionID: input.sessionID, finalMessageID: final.id, failedOperation: "recover_dispatch_domain_settlement" }) })
+    settleDispatchOrReturnExisting({
+      taskID: input.taskID,
+      dispatchID: input.dispatchID,
+      outcome: DispatchOutcome.partial({
+        sessionID: input.sessionID,
+        finalMessageID: final.id,
+        failedOperation: "recover_dispatch_domain_settlement",
+      }),
+    })
   }
-  const existed = Database.use((db) => db.select({ id: EngineTaskRootIngressTable.id }).from(EngineTaskRootIngressTable)
-    .where(and(eq(EngineTaskRootIngressTable.task_id, input.taskID), eq(EngineTaskRootIngressTable.source, "protocol_event"), eq(EngineTaskRootIngressTable.source_id, lifecycle.id))).get())
+  const existed = Database.use((db) =>
+    db
+      .select({ id: EngineTaskRootIngressTable.id })
+      .from(EngineTaskRootIngressTable)
+      .where(
+        and(
+          eq(EngineTaskRootIngressTable.task_id, input.taskID),
+          eq(EngineTaskRootIngressTable.source, "protocol_event"),
+          eq(EngineTaskRootIngressTable.source_id, lifecycle.id),
+        ),
+      )
+      .get(),
+  )
   if (existed) return "already_delivered"
-  await dispatchTaskLoop({ taskID: input.taskID, event: { note: `Worker Session ${input.sessionID} completed dispatch ${input.dispatchID}.`, agentLifecycleDelivery: { eventID: lifecycle.id, sessionID: input.sessionID, dispatchID: input.dispatchID } } })
+  await dispatchTaskLoop({
+    taskID: input.taskID,
+    event: {
+      note: `Worker Session ${input.sessionID} completed dispatch ${input.dispatchID}.`,
+      agentLifecycleDelivery: { eventID: lifecycle.id, sessionID: input.sessionID, dispatchID: input.dispatchID },
+    },
+  })
   return "delivered"
 }
 
@@ -798,13 +1113,21 @@ export const TestHooks = {
   replaceTerminalIngressDeliveryRuntime(value: string): Disposable {
     const prior = runtimeOccurrenceOverrideForTest
     runtimeOccurrenceOverrideForTest = value
-    return { [Symbol.dispose]() { runtimeOccurrenceOverrideForTest = prior } }
+    return {
+      [Symbol.dispose]() {
+        runtimeOccurrenceOverrideForTest = prior
+      },
+    }
   },
   replaceTaskIngressRunner(input: { runner: TaskIngressRunner }): Disposable {
     const state = runtimeState()
     const prior = state.runnerOverrideForTest
     state.runnerOverrideForTest = input.runner
-    return { [Symbol.dispose]() { state.runnerOverrideForTest = prior } }
+    return {
+      [Symbol.dispose]() {
+        state.runnerOverrideForTest = prior
+      },
+    }
   },
   replaceLeaseTiming(input: { leaseMilliseconds: number; renewalMilliseconds: number }): Disposable {
     if (

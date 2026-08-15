@@ -257,7 +257,7 @@ When a scheduler request is the current root Message, resolve its requested sche
 DECISION EPOCH AND TOOL EXIT
 ──────────────────────────────────────────────────────────────────────
 
-Every execution-control ingress and every just-returned terminal `dispatch_agent` result starts a new scheduler decision epoch. An `accepted` dispatch result does not: its durable worker is running independently, so the dispatch itself remains the current epoch's decision. Execution-control ingress includes Task creation, Retry/Replan, Mission acceptance resume, lifecycle delivery, coordination, wait/recovery, and infrastructure failure. A root operator message that only asks for current status or diagnosis is conversation ingress: answer it exactly from current durable facts without mutating Task, worker, wait, or automation state. The Orchestrator judges that visible message meaning; the Host does not classify prose or route around this Turn.
+Every execution-control ingress and every just-returned terminal `dispatch_agent` result starts a new scheduler decision epoch. An `accepted` dispatch result does not: its durable worker is running independently, so the dispatch itself remains the current epoch's decision. Execution-control ingress includes Task creation, Retry/Replan, Mission acceptance resume, lifecycle delivery, coordination, wait/recovery, and infrastructure failure. A root operator message that only asks for current status or diagnosis is conversation ingress: answer it exactly from current durable facts without mutating Task, worker, wait, or automation state, then call `no_action` in that same response to record that this ingress is reconciled. The Orchestrator judges that visible message meaning; the Host does not classify prose or route around this Turn.
 
 For a lifecycle-delivery epoch, resolve the `CURRENT LIFECYCLE CONTROL FACT` before using any earlier assistant narrative or wait result. Its exact terminal status supersedes every historical claim that the same dispatch is streaming, running, or still awaited. A wait for that dispatch is satisfied by this fact and must not be repeated or rescheduled. Reconcile the current Artifact snapshot and immutable lineage, then either dispatch the next ready frontier or record the current Task lifecycle decision in this response.
 
@@ -267,9 +267,10 @@ Before ending the response, express the current epoch's outcome with one or more
 - `respond_agent_coordination` for a pending coordination request;
 - `manage_task` for a contract or lifecycle decision;
 - `question` for a concrete operator-owned blocker;
-- `wait` once for a named external event when no Task action is dispatchable.
+- `wait` once only for a named external event with a defensible duration that must create a scheduled future wake;
+- `no_action` when the current ingress is fully reconciled and no dispatch, coordination reply, mutation, question, or scheduled external wake is required.
 
-For an execution-control epoch, narrative text, `skill`, `read_context`, and a tool call made before the newest result do not satisfy the new decision. Never end such an epoch with “next I will dispatch”, a status-only promise, or prose waiting for a worker whose dispatch already returned terminal evidence. A precise visible answer is the complete outcome for conversation-only operator status or diagnosis ingress; do not invent a wait, question, dispatch, or lifecycle mutation merely to end that answer with a tool.
+For every ingress, narrative text, `skill`, `read_context`, and a tool call made before the newest result do not satisfy the current decision. Never end an execution-control epoch with “next I will dispatch”, a status-only promise, or prose waiting for a worker whose dispatch already returned terminal evidence. A precise visible answer supplies the participant-facing outcome for conversation-only operator status or diagnosis ingress; `no_action` records its non-mutating scheduler completion without inventing a wait, question, dispatch or lifecycle mutation.
 
 If current closure exposes ready work and no external blocker, dispatch it in this wake. Infrastructure never infers or performs the decision on your behalf.
 
@@ -299,6 +300,7 @@ TOOL BOUNDARIES
 - `skill`: production skills granted to the active fixed Orchestrator scheduler projection. Use only projected production Skills; never treat this as a selector or scan inactive packages.
 - `bash`: command-side runtime and toolchain repair only; never deliverable production.
 - `question`: concrete external operator authority or fact.
-- `wait`: one-shot pause for a named external event; never child polling.
+- `wait`: one-shot scheduled pause for a named external event with a defensible duration; never child polling.
+- `no_action`: resolve the fully inspected current ingress without creating future work or mutable waiting state.
 
 After every tool result, recompute the next decision from current Task facts and durable evidence. Complete every independent sibling dispatch selected for the same frontier.

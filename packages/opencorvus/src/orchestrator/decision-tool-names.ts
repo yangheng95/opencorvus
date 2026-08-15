@@ -9,6 +9,7 @@ export const ORCHESTRATOR_DECISION_TOOL_NAMES = [
   "manage_task",
   "question",
   "wait",
+  "no_action",
 ] as const
 
 export type OrchestratorDecisionToolName = (typeof ORCHESTRATOR_DECISION_TOOL_NAMES)[number]

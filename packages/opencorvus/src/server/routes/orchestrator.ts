@@ -26,6 +26,7 @@ import {
   UserRejectInteractionInput,
   UserReplyInteractionInput,
   TaskBoard,
+  TaskRootIngressDebugProjection,
   TaskBrief,
   TaskConversationEventPage,
   TaskConversationHistoryPage,
@@ -1339,6 +1340,22 @@ export const EngineRoutes = lazy(() =>
         c.header("ETag", etag)
         return c.json(await EngineService.getBoard(taskID, { sync: false }))
       },
+    )
+    .get(
+      "/task/:taskID/debug/task-root-ingresses",
+      describeRoute({
+        summary: "Get Task-root ingress debug projection",
+        operationId: "task.debug.taskRootIngresses",
+        responses: {
+          200: {
+            description: "Task-root ingress debug projection",
+            content: { "application/json": { schema: resolver(TaskRootIngressDebugProjection) } },
+          },
+          ...errors(404),
+        },
+      }),
+      validator("param", z.object({ taskID: Task.shape.id })),
+      async (c) => c.json(await EngineService.getTaskRootIngressDebug(c.req.valid("param").taskID)),
     )
     .get(
       "/task/:taskID/transcript",

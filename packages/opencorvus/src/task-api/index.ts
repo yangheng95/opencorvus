@@ -127,6 +127,7 @@ import {
   persistTaskRootMessageIngressInTransaction,
   persistMissionAcceptanceResumeIngressInTransaction,
   requireTaskCreationIngressID,
+  taskRootIngressDebugProjection,
   taskRootIngressStats,
   retirePendingTaskRootIngressesForOperatorIntentInTransaction,
   type DispatchTaskLoopResult,
@@ -2021,6 +2022,18 @@ export namespace EngineService {
     // Read-only — poll loop handles state advancement asynchronously.
     requireTaskInCurrentProject(taskID)
     return compileBoard({ taskID })
+  }
+
+  export async function getTaskRootIngressDebug(taskID: string) {
+    requireTaskInCurrentProject(taskID)
+    try {
+      return { status: "available" as const, entries: taskRootIngressDebugProjection(taskID) }
+    } catch (error) {
+      return {
+        status: "unavailable" as const,
+        error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+      }
+    }
   }
 
   export async function searchArtifactCatalog(taskID: string, search: ArtifactSearchRequest) {

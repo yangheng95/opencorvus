@@ -4,6 +4,7 @@ import { OrchestratorEventSchema, type OrchestratorEvent } from "./event"
 import {
   requireCurrentTerminalLifecycleReference,
   resolveTerminalLifecycleReference,
+  sameTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
 } from "@/engine/terminal-lifecycle-reference"
 
@@ -25,7 +26,8 @@ export const TerminalConversationAuthoritySchema = z
       })
     }
     if (
-      resolveTerminalLifecycleReference(authority.taskID, authority.terminalLifecycleReference).terminalStatus !== "completed" &&
+      resolveTerminalLifecycleReference(authority.taskID, authority.terminalLifecycleReference).terminalStatus !==
+        "completed" &&
       authority.completionDecisionArtifactID
     ) {
       context.addIssue({
@@ -37,18 +39,44 @@ export const TerminalConversationAuthoritySchema = z
 
 export type TerminalConversationAuthority = z.infer<typeof TerminalConversationAuthoritySchema>
 
+export function isAuthorizedTerminalConversationDecision(input: {
+  authority: TerminalConversationAuthority
+  taskID: string
+  currentTerminalLifecycleReference: z.infer<typeof TerminalLifecycleReferenceSchema>
+  toolName: string
+  toolInput: unknown
+}): boolean {
+  if (
+    input.authority.taskID !== input.taskID ||
+    !sameTerminalLifecycleReference(input.currentTerminalLifecycleReference, input.authority.terminalLifecycleReference)
+  ) {
+    return false
+  }
+  if (input.toolName === "no_action") return input.authority.ingressKind === "operator_message"
+  if (input.toolName !== "respond_agent_coordination") return false
+  if (!input.toolInput || typeof input.toolInput !== "object" || Array.isArray(input.toolInput)) return false
+  const record = input.toolInput as Record<string, unknown>
+  return (
+    input.authority.ingressKind === "coordination_request" &&
+    record.decision === "acknowledge_terminal" &&
+    record.request_id === input.authority.coordinationRequestID
+  )
+}
+
 export function createTerminalConversationAuthority(input: {
   taskID: string
   ingressID: string
   event: OrchestratorEvent
 }): TerminalConversationAuthority {
   const event = OrchestratorEventSchema.parse(input.event)
-  const ingressKind = event.rootMessage?.kind === "operator"
-    ? "operator_message" as const
-    : event.coordinationRequest
-      ? "coordination_request" as const
-      : undefined
-  if (!ingressKind) throw new Error(`Terminal conversation ingress ${input.ingressID} is not operator or coordination input`)
+  const ingressKind =
+    event.rootMessage?.kind === "operator"
+      ? ("operator_message" as const)
+      : event.coordinationRequest
+        ? ("coordination_request" as const)
+        : undefined
+  if (!ingressKind)
+    throw new Error(`Terminal conversation ingress ${input.ingressID} is not operator or coordination input`)
   const terminalLifecycleReference = requireCurrentTerminalLifecycleReference(input.taskID)
   const terminal = resolveTerminalLifecycleReference(input.taskID, terminalLifecycleReference)
   const completionDecision =
@@ -64,8 +92,6 @@ export function createTerminalConversationAuthority(input: {
     ingressKind,
     terminalLifecycleReference,
     ...(completionDecision ? { completionDecisionArtifactID: completionDecision.id } : {}),
-    ...(ingressKind === "coordination_request"
-      ? { coordinationRequestID: event.coordinationRequest!.requestID }
-      : {}),
+    ...(ingressKind === "coordination_request" ? { coordinationRequestID: event.coordinationRequest!.requestID } : {}),
   })
 }

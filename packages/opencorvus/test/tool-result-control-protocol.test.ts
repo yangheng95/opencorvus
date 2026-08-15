@@ -825,27 +825,23 @@ describe("single Tool-result turn-control protocol", () => {
         )
         const manageTask = fixture.tools.manage_task
         if (!manageTask?.execute) throw new Error("Projected scheduler manage_task is unavailable")
-        const result = await manageTask.execute(
-          {
-            action: "complete_task",
-            summary: "Must reuse the existing terminal authority",
-            evidence_locators: [],
-            deliverable_artifact_locators: [],
-            accepted_delivery_slice_revision_ids: [],
-            workflow_id: null,
-          },
-          { toolCallId: "call_rejected_completion", messages: [], abortSignal: fixture.abort },
-        )
-        expect({ result, status: deriveTaskStatus(requireTask(fixture.taskID)) }).toEqual({
-          result: {
-            title: "Task is terminal",
-            output:
-              `Task ${fixture.taskID} is terminal (status=failed); manage_task was not executed. ` +
-              "Task-level scheduler tools may act only while the task is active. Use an explicit operator Retry or Replan to reopen this same Task when its scope remains recoverable; create a separate Task only for separate scope.",
-            metadata: {},
-          },
-          status: "failed",
+        await expect(
+          manageTask.execute(
+            {
+              action: "complete_task",
+              summary: "Must reuse the existing terminal authority",
+              evidence_locators: [],
+              deliverable_artifact_locators: [],
+              accepted_delivery_slice_revision_ids: [],
+              workflow_id: null,
+            },
+            { toolCallId: "call_rejected_completion", messages: [], abortSignal: fixture.abort },
+          ),
+        ).rejects.toMatchObject({
+          name: "TerminalToolAuthorityError",
+          code: "TERMINAL_TOOL_AUTHORITY_DENIED",
         })
+        expect(deriveTaskStatus(requireTask(fixture.taskID))).toBe("failed")
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },
     })

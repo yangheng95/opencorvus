@@ -75,7 +75,7 @@ The ingress reducer is a total order:
 8. `exhausted` when immutable semantic/physical budget or deadline is exhausted;
 9. `ready` otherwise.
 
-There is no persisted ingress disposition, delivery result, semantic attempt, activation attempt, retry owner, current owner, or blocker row. `exhausted` is a terminal reducer result derived from policy plus facts; it permits the FIFO to admit a later explicit operator input without pretending that the exhausted ingress gained a decision receipt.
+There is no persisted ingress disposition, delivery result, semantic attempt, activation attempt, retry owner, current owner, or blocker row. `exhausted` is an exceptional terminal reducer result derived from policy plus facts; it permits the FIFO to admit a later explicit operator input when malformed or repeatedly undecided output reaches its finite fence. Normal quiescence never uses exhaustion: the Orchestrator records the real non-mutating `no_action` decision receipt.
 
 ## Prose-only continuation
 
@@ -96,6 +96,8 @@ The activation is consumed only at a final non-Tool-call assistant boundary with
 Lifecycle cancellation or a terminal Task decision fences every new Provider/Tool request immediately. It does not erase an activity accepted before that boundary: the latest matching activation may append the exact outstanding outcomes and then the immutable completed assistant boundary after every accepted activity is settled. Lease expiry and absolute deadline do not convert that exact settlement into a new request; a newer activation, epoch mismatch, causal-parent mismatch, or any outstanding outcome still rejects it.
 
 A completed exclusive Tool outcome whose metadata carries the typed `immediate_park` control is itself the durable reply boundary for that assistant Turn, even though the Provider finish reason remains `tool-calls`. Session completion and recovery reduce that persisted outcome control; they do not infer reply completion from prose or require a synthetic follow-up assistant message.
+
+`no_action({reason})` is the sole non-mutating Orchestrator decision. Its completed assistant-owned Tool request/outcome resolves only the current ingress and uses `immediate_park` to close the physical Turn. It creates no timer, Automation, Interaction, worker action, Task lifecycle fact, future wake, or durable waiting state. A lifecycle ingress with no newly ready frontier and a status/diagnosis reply both use this receipt after the visible reasoning or answer. Scheduled `wait` remains a distinct decision that names an external event, carries a defensible duration, and creates the future Automation ingress; it is never child polling or an alias for `no_action`.
 
 ## Physical leases
 
@@ -149,6 +151,8 @@ dead_letter(error_name, message)
 Delivery `status`, owner, lease expiry, attempt count, visibility, last error, result, update time, and completion time are projections. The receipt does not repeat these as independent columns.
 
 Scheduler messages freeze exact source and target Task execution epochs. Materialization revalidates the target epoch before committing a real Message, Task ingress, Session control, or terminal receipt. The source body is reread from its exact Message/Part or terminal-event locator and never copied into a second authority.
+
+Mailbox Protocol events follow the same envelope/body boundary. `mailbox.message` stores Task identity in the Task aggregate and Session identity in the envelope correlation; `mailbox.acknowledged` stores Task identity in the aggregate. Their strict durable bodies contain no repeated envelope identity. One shared EventView projector reconstructs the full public Mailbox properties for direct mailbox reads, idempotent replay, Orchestrator description, notification resolution and SSE delivery. Consumers never parse the raw body as the original ingress object and never patch persisted payloads.
 
 ## Automation, Event, Bus, and Session control
 

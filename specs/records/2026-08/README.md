@@ -1,5 +1,9 @@
 # August 2026 Records
 
+- [2026-08-15-task-mailbox-envelope-projection-convergence.md](2026-08-15-task-mailbox-envelope-projection-convergence.md) gives Mailbox messages and acknowledgements one shared envelope-aware EventView projection so scheduler reads and SSE replay consume current-schema durable facts without identity duplication.
+
+- [2026-08-15-task-root-no-action-convergence.md](2026-08-15-task-root-no-action-convergence.md) adds one visible typed non-mutating Orchestrator decision receipt so lifecycle and status ingresses resolve once without scheduled wakes or mutable idle state.
+
 - [2026-08-15-full-worktree-batched-delivery.md](2026-08-15-full-worktree-batched-delivery.md) classifies the complete dirty worktree into reviewed Permission recovery, Project/schema convergence, binary-attribute, release-evidence, Task-root lock-convergence, and delivery-record commits, with isolated validation and normal upstream push boundaries.
 
 - [2026-08-15-task-root-multistep-assistant-convergence.md](2026-08-15-task-root-multistep-assistant-convergence.md) keeps all streamed Provider steps and Tool results for one Task-root activation inside its single immutable assistant Turn, preventing Mission-created and direct Tasks from failing after their first ordinary Tool call.

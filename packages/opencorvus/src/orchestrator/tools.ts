@@ -138,6 +138,7 @@ import { createFactCheckTool } from "./fact-check-tool"
 import { createFrontendDesignTool } from "./frontend-design-tool"
 import { createFrontendResearchStageDispatcher } from "./frontend-research-stage"
 import { createMulticaImportTools } from "./multica-import-tools"
+import { createNoActionTool } from "./no-action-tool"
 import { createExpertSquadAuthorAiTool } from "@/tool/expert-squad-author"
 import {
   AddGoalInputSchema,
@@ -148,7 +149,10 @@ import {
 import { createIntegrityReviewStage } from "./integrity-review-stage"
 import { createIntegrityReviewRunner, createIntegrityTool } from "./integrity-tool"
 import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "./interaction-tools"
-import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
+import {
+  isAuthorizedTerminalConversationDecision,
+  type TerminalConversationAuthority,
+} from "./terminal-conversation-authority"
 import { createReadContextTool } from "./read-context-tool"
 import { createReadAgentMessageTool } from "./read-agent-message-tool"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
@@ -182,6 +186,11 @@ import {
 } from "./dispatch-turn-projection"
 
 const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+
+export class TerminalToolAuthorityError extends Error {
+  override readonly name = "TerminalToolAuthorityError"
+  readonly code = "TERMINAL_TOOL_AUTHORITY_DENIED"
+}
 
 export const OrchestratorToolsTestHooks = Object.freeze({
   openDispatchLineage(surface: object): OpenDispatchAgentLineage {
@@ -950,37 +959,31 @@ export function createOrchestratorTools(input: {
 
   function terminalTaskToolRefusal(name: string, task: TaskRow) {
     const status = deriveTaskStatus(task)
-    return {
-      output:
+    throw new TerminalToolAuthorityError(
         `Task ${task.id} is terminal (status=${status}); ${name} was not executed. ` +
         "Task-level scheduler tools may act only while the task is active. Use an explicit operator Retry or Replan to reopen this same Task when its scope remains recoverable; create a separate Task only for separate scope.",
-      title: "Task is terminal",
-      metadata: {},
-    }
+    )
   }
 
   function terminalConversationToolRefusal(name: string, task: TaskRow) {
-    return {
-      output:
+    throw new TerminalToolAuthorityError(
         `Terminal conversation ingress ${input.terminalConversationAuthority!.ingressID} did not authorize ${name}; ` +
         `the current Task status is ${deriveTaskStatus(task)}. This conversation-only Turn cannot dispatch work, wait, ` +
         "ask a new question, or change lifecycle. Recoverable execution requires explicit operator Retry/Replan.",
-      title: "Terminal conversation authority",
-      metadata: {},
-    }
+    )
   }
 
   function isTerminalConversationAcknowledgement(name: string, args: unknown, task: TaskRow): boolean {
     const authority = input.terminalConversationAuthority
-    if (!authority || name !== "respond_agent_coordination") return false
-    if (!args || typeof args !== "object" || Array.isArray(args)) return false
-    const record = args as Record<string, unknown>
-    if (record.decision !== "acknowledge_terminal") return false
-    if (record.request_id !== authority.coordinationRequestID) return false
-    if (authority.taskID !== task.id || authority.ingressKind !== "coordination_request") return false
-    if (!isTaskTerminal(task)) return false
+    if (!authority || authority.taskID !== task.id || !isTaskTerminal(task)) return false
     const currentReference = requireCurrentTerminalLifecycleReference(task.id)
-    return sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)
+    return isAuthorizedTerminalConversationDecision({
+      authority,
+      taskID: task.id,
+      currentTerminalLifecycleReference: currentReference,
+      toolName: name,
+      toolInput: args,
+    })
   }
 
   function isAuthorizedTerminalConversationMessageRead(name: string, args: unknown, task: TaskRow): boolean {
@@ -1504,6 +1507,7 @@ export function createOrchestratorTools(input: {
 
     ...createReadContextTool({ taskID }),
     ...createReadAgentMessageTool({ taskID }),
+    ...createNoActionTool(),
 
     respond_agent_coordination: bindToolExecutionMode(tool({
       description:

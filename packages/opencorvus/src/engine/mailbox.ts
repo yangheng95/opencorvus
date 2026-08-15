@@ -1,8 +1,4 @@
-import z from "zod"
-import {
-  EvidenceLocatorListSchema,
-  type EvidenceLocator,
-} from "@opencorvus-ai/plugin/artifact-catalog"
+import { EvidenceLocatorListSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { BusEvent } from "@/bus/bus-event"
 import { EngineProtocol } from "@/engine/protocol"
 import { Event } from "@/engine/model"
@@ -11,44 +7,24 @@ import { protocolTimelineOrderKey } from "@/protocol/store"
 import { ProjectTable } from "@/project/project.sql"
 import { Database, and, desc, eq, inArray, or } from "@/storage/db"
 import { EngineTaskTable } from "./engine.sql"
+import {
+  MailboxAgentMessagePayload,
+  MailboxAction,
+  MailboxCategory,
+  MailboxProgress,
+  projectMailboxAcknowledgementPayload,
+  projectMailboxAgentMessagePayload,
+  type MailboxAgentMessagePayload as MailboxAgentMessagePayloadType,
+} from "./mailbox-event"
+import z from "zod"
 
-export const MailboxCategory = z.enum(["progress", "status", "notification"])
-export type MailboxCategory = z.infer<typeof MailboxCategory>
+export { MailboxAction, MailboxAgentMessagePayload, MailboxCategory, MailboxProgress } from "./mailbox-event"
 
 export const MailboxView = z.enum(["active", "archived"])
 export type MailboxView = z.infer<typeof MailboxView>
 
-export const MailboxAction = z.enum(["read", "archive", "restore", "delete"])
-export type MailboxAction = z.infer<typeof MailboxAction>
-
 export const MailboxUpdateAction = MailboxAction.exclude(["delete"])
 export type MailboxUpdateAction = z.infer<typeof MailboxUpdateAction>
-
-export const MailboxProgress = z.number().min(0).max(1)
-
-export const MailboxAgentMessagePayload = z
-  .object({
-    taskID: z.string().min(1),
-    sessionID: z.string().min(1),
-    agentID: z.string().min(1),
-    expertSquadID: z.string().min(1),
-    category: MailboxCategory,
-    subject: z.string().min(1),
-    body: z.string().min(1),
-    attention: z.boolean(),
-    progress: MailboxProgress.optional(),
-    evidenceLocators: EvidenceLocatorListSchema.default([]),
-    summary: z.string().min(1),
-  })
-  .strict()
-export type MailboxAgentMessagePayload = z.infer<typeof MailboxAgentMessagePayload>
-
-const MailboxAcknowledgementPayload = z.object({
-  taskID: z.string().min(1),
-  messageID: z.string().min(1),
-  action: MailboxAction,
-  summary: z.string().min(1),
-})
 
 export const MailboxItem = z.object({
   id: z.string().min(1),
@@ -222,16 +198,15 @@ function mailboxState(): Map<string, MailboxState> {
   )
   const state = new Map<string, MailboxState>()
   for (const row of rows) {
-    const parsed = MailboxAcknowledgementPayload.safeParse(row.event.payload)
-    if (!parsed.success) throw new Error(`Malformed mailbox acknowledgement event ${row.event.id}`)
-    const current = state.get(parsed.data.messageID) ?? { archiveResolved: false }
-    if (parsed.data.action === "delete" && current.deletedAt === undefined) current.deletedAt = row.event.emitted_at
-    if (parsed.data.action === "read" && current.readAt === undefined) current.readAt = row.event.emitted_at
-    if (!current.archiveResolved && (parsed.data.action === "archive" || parsed.data.action === "restore")) {
+    const parsed = projectMailboxAcknowledgementPayload(row.event)
+    const current = state.get(parsed.messageID) ?? { archiveResolved: false }
+    if (parsed.action === "delete" && current.deletedAt === undefined) current.deletedAt = row.event.emitted_at
+    if (parsed.action === "read" && current.readAt === undefined) current.readAt = row.event.emitted_at
+    if (!current.archiveResolved && (parsed.action === "archive" || parsed.action === "restore")) {
       current.archiveResolved = true
-      if (parsed.data.action === "archive") current.archivedAt = row.event.emitted_at
+      if (parsed.action === "archive") current.archivedAt = row.event.emitted_at
     }
-    state.set(parsed.data.messageID, current)
+    state.set(parsed.messageID, current)
   }
   return state
 }
@@ -264,21 +239,20 @@ function mailboxItemFromRow(input: { row: MailboxSourceRow; state?: MailboxState
   const { event, taskTitle } = input.row
   const payload = payloadRecord(event.payload)
   if (event.type === MAILBOX_MESSAGE_EVENT_TYPE) {
-    const message = MailboxAgentMessagePayload.safeParse(payload)
-    if (!message.success) throw new Error(`Malformed mailbox message event ${event.id}`)
+    const message = projectMailboxAgentMessagePayload(event)
     return MailboxItem.parse({
       id: event.id,
       eventType: event.type,
-      category: message.data.category,
-      attention: message.data.attention,
-      subject: message.data.subject,
-      body: message.data.body,
-      evidenceLocators: message.data.evidenceLocators,
-      progress: message.data.progress,
-      sourceAgentID: message.data.agentID,
-      expertSquadID: message.data.expertSquadID,
-      sessionID: message.data.sessionID,
-      taskID: message.data.taskID,
+      category: message.category,
+      attention: message.attention,
+      subject: message.subject,
+      body: message.body,
+      evidenceLocators: message.evidenceLocators,
+      progress: message.progress,
+      sourceAgentID: message.agentID,
+      expertSquadID: message.expertSquadID,
+      sessionID: message.sessionID,
+      taskID: message.taskID,
       taskTitle,
       taskDirectory: input.row.directory,
       orderKey: protocolTimelineOrderKey(event),
@@ -379,7 +353,7 @@ export function listRecentTaskMailboxMessages(
       .limit(Math.max(1, limit))
       .all(),
   ).map(({ event }) => {
-    const payload = MailboxAgentMessagePayload.parse(event.payload)
+    const payload = projectMailboxAgentMessagePayload(event)
     if (payload.taskID !== taskID) {
       throw new Error(`Mailbox event ${event.id} payload task ${payload.taskID} does not match indexed task ${taskID}`)
     }
@@ -400,10 +374,10 @@ export function listRecentTaskMailboxMessages(
   })
 }
 
-export function recordMailboxMessage(input: MailboxAgentMessagePayload & { correlationID: string }) {
+export function recordMailboxMessage(input: MailboxAgentMessagePayloadType & { correlationID: string }) {
   const { correlationID, ...payloadInput } = input
   const parsed = MailboxAgentMessagePayload.parse(payloadInput)
-  let result: { id: string; createdNow: boolean; payload: MailboxAgentMessagePayload } | undefined
+  let result: { id: string; createdNow: boolean; payload: MailboxAgentMessagePayloadType } | undefined
   Database.transaction((db) => {
     const existing = db
       .select()
@@ -418,7 +392,7 @@ export function recordMailboxMessage(input: MailboxAgentMessagePayload & { corre
       )
       .get()
     if (existing) {
-      const payload = MailboxAgentMessagePayload.parse(existing.payload)
+      const payload = projectMailboxAgentMessagePayload(existing)
       if (JSON.stringify(payload) !== JSON.stringify(parsed)) {
         throw new Error(`Mailbox invocation ${correlationID} replay payload drift`)
       }
@@ -509,7 +483,7 @@ export function deleteMailboxItems(input: { messageIDs: string[] }): MailboxDele
   return Database.transaction(() => {
     const sources = messageIDs.map((messageID) => {
       const source = mailboxSourceEvent(messageID)
-      if (!source?.task_id) throw new MailboxItemNotFoundError(messageID)
+      if (!source || !protocolEventTaskID(source)) throw new MailboxItemNotFoundError(messageID)
       return { messageID, source }
     })
     const state = mailboxState()

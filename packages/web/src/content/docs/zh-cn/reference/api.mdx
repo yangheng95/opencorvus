@@ -155,6 +155,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/task/{taskID}/conversation/events` | Page task conversation replay events 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.conversation.events` |
 | GET | `/task/{taskID}/conversation/history` | Page older task conversation transcript 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.conversation.history` |
 | GET | `/task/{taskID}/conversation/session/{sessionID}` | Get one task conversation session transcript 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.conversation.session` |
+| GET | `/task/{taskID}/debug/task-root-ingresses` | Get Task-root ingress debug projection 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.debug.taskRootIngresses` |
 | GET | `/task/{taskID}/events` | Subscribe to task events | `task.events` |
 | POST | `/task/{taskID}/inject` | Inject message into running task 请求体: `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.inject` |
 | GET | `/task/{taskID}/interactions` | List task interactions 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.interactions` |

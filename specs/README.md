@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+Latest Task mailbox envelope projection convergence repair: [`2026-08-15-task-mailbox-envelope-projection-convergence.md`](records/2026-08/2026-08-15-task-mailbox-envelope-projection-convergence.md).
+
+Latest Task-root no-action convergence repair: [`2026-08-15-task-root-no-action-convergence.md`](records/2026-08/2026-08-15-task-root-no-action-convergence.md).
+
 Latest full-worktree batched delivery, including the Task-root parallel-decision lock repair: [`2026-08-15-full-worktree-batched-delivery.md`](records/2026-08/2026-08-15-full-worktree-batched-delivery.md).
 
 Latest Task-root multi-step assistant convergence repair: [`2026-08-15-task-root-multistep-assistant-convergence.md`](records/2026-08/2026-08-15-task-root-multistep-assistant-convergence.md).

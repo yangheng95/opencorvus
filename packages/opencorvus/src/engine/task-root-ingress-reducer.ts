@@ -152,12 +152,26 @@ function conflict(facts: TaskRootIngressFacts): boolean {
   return facts.turns.some((turn) => !facts.leases.some((lease) => lease.id === turn.activationID))
 }
 
+export function taskRootIngressSemanticTurnIDs(facts: TaskRootIngressFacts): string[] {
+  return facts.turns
+    .filter(
+      (turn) =>
+        turn.boundary === "final" &&
+        !facts.decisions.some((decision) => decision.assistantMessageID === turn.id) &&
+        !facts.interactions.some((interaction) => interaction.assistantMessageID === turn.id),
+    )
+    .map((turn) => turn.id)
+}
+
 /** Total reduction over durable facts. Its order is part of the public
  * correctness contract: conflicts win before any apparent completion. */
 export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: number): TaskRootIngressProjection {
   if (conflict(facts)) return { state: "blocked", reason: "integrity_conflict" }
 
-  const currentEpoch = Math.max(0, ...facts.lifecycle.filter((fact) => fact.kind === "opened" || fact.kind === "reopened").map((fact) => fact.epoch))
+  const currentEpoch = Math.max(
+    0,
+    ...facts.lifecycle.filter((fact) => fact.kind === "opened" || fact.kind === "reopened").map((fact) => fact.epoch),
+  )
   if (currentEpoch > facts.ingress.executionEpoch) return { state: "terminal_inapplicable", boundary: "reopened" }
   const deleted = exactlyOne(facts.lifecycle.filter((fact) => fact.kind === "deleted"))
   if (deleted) return { state: "terminal_inapplicable", boundary: "deleted" }
@@ -175,7 +189,12 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
 
   const latest = latestLease(facts)
   if (latest && latest.expiresAt > now && !activationConsumed(facts, latest.id)) {
-    return { state: "leased", activationID: latest.id, ownerOccurrenceID: latest.ownerOccurrenceID, expiresAt: latest.expiresAt }
+    return {
+      state: "leased",
+      activationID: latest.id,
+      ownerOccurrenceID: latest.ownerOccurrenceID,
+      expiresAt: latest.expiresAt,
+    }
   }
 
   const outcomes = activityOutcomeByRequest(facts)
@@ -190,10 +209,13 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
       !pendingReconciliationRequests.has(request.id) &&
       (!latest || latest.expiresAt <= now || activationConsumed(facts, request.activationID)),
   )
-  if (unknown.length > 0) return { state: "reconcile_required", requestIDs: unknown.map((request) => request.id).toSorted() }
+  if (unknown.length > 0)
+    return { state: "reconcile_required", requestIDs: unknown.map((request) => request.id).toSorted() }
 
   const cancellationRequest = exactlyOne(
-    facts.lifecycle.filter((fact) => fact.epoch === facts.ingress.executionEpoch && fact.kind === "cancellation_requested"),
+    facts.lifecycle.filter(
+      (fact) => fact.epoch === facts.ingress.executionEpoch && fact.kind === "cancellation_requested",
+    ),
   )
   if (cancellationRequest) return { state: "cancelling", requestEventID: cancellationRequest.id }
   const closeRequest = exactlyOne(
@@ -206,17 +228,22 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
   }
 
   const waiting = facts.interactions
-    .filter((interaction) => interaction.ingressID === facts.ingress.id && !interaction.outcome && (interaction.resumeAt === undefined || interaction.resumeAt > now))
+    .filter(
+      (interaction) =>
+        interaction.ingressID === facts.ingress.id &&
+        !interaction.outcome &&
+        (interaction.resumeAt === undefined || interaction.resumeAt > now),
+    )
     .toSorted((left, right) => left.id.localeCompare(right.id))
   if (waiting.length > 1) return { state: "blocked", reason: "integrity_conflict" }
-  if (waiting[0]) return { state: "waiting", interactionID: waiting[0].id, ...(waiting[0].resumeAt === undefined ? {} : { resumeAt: waiting[0].resumeAt }) }
+  if (waiting[0])
+    return {
+      state: "waiting",
+      interactionID: waiting[0].id,
+      ...(waiting[0].resumeAt === undefined ? {} : { resumeAt: waiting[0].resumeAt }),
+    }
 
-  const semanticTurns = facts.turns.filter(
-    (turn) =>
-      turn.boundary === "final" &&
-      !facts.decisions.some((decision) => decision.assistantMessageID === turn.id) &&
-      !facts.interactions.some((interaction) => interaction.assistantMessageID === turn.id),
-  ).length
+  const semanticTurns = taskRootIngressSemanticTurnIDs(facts).length
   if (semanticTurns >= facts.policy.semanticTurnLimit) return { state: "exhausted", reason: "semantic_limit" }
   if (facts.leases.filter((lease) => lease.targetID === facts.ingress.id).length >= facts.policy.activationLimit) {
     return { state: "exhausted", reason: "activation_limit" }

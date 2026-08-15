@@ -1233,7 +1233,23 @@ async function copyActiveConversationDebug(): Promise<void> {
         })
       : undefined
   assertDebugSelectionCurrent(selectedSource)
-  const debugBoard = selectedSource.kind === "session" ? { ...boardStore.board } : boardStore.board
+  const taskRootIngressDebug =
+    selectedSource.kind === "task"
+      ? await apiJson<{ status: "available"; entries: any[] } | { status: "unavailable"; error: string }>(
+          taskScopedPath(selectedSource.id, String(selectedSource.directory), "/debug/task-root-ingresses"),
+        )
+      : undefined
+  assertDebugSelectionCurrent(selectedSource)
+  const debugBoard =
+    selectedSource.kind === "session"
+      ? { ...boardStore.board }
+      : {
+          ...boardStore.board,
+          ...(taskRootIngressDebug?.status === "available" ? { taskRootIngresses: taskRootIngressDebug.entries } : {}),
+          ...(taskRootIngressDebug?.status === "unavailable"
+            ? { taskRootIngressDebugError: taskRootIngressDebug.error }
+            : {}),
+        }
   const debugCardTree =
     selectedSource.kind === "session"
       ? ({ cards: { ...cardTreeStore.cards }, order: [...cardTreeStore.order] } as typeof cardTreeStore)
@@ -1331,10 +1347,7 @@ async function openMissionSession(
     return true
   } catch (error) {
     if (!ownsWorkspaceSelection(selectionEpoch)) return false
-    if (
-      boardStore.selectedSource?.kind === "session" &&
-      boardStore.selectedSource.id === result.sessionID
-    ) {
+    if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === result.sessionID) {
       batch(() => {
         resetConversationProjection({ scrollIntent: "bottom", cause: "mission-session-switch-failed" })
         clearBoard()

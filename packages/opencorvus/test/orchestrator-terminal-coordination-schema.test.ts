@@ -1,7 +1,9 @@
 import { afterAll, expect, test } from "bun:test"
 import { EngineTaskTable } from "../src/engine/engine.sql"
+import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
 import { createOrchestratorTools } from "../src/orchestrator/tools"
+import { isAuthorizedTerminalConversationDecision } from "../src/orchestrator/terminal-conversation-authority"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database } from "../src/storage/db"
@@ -19,9 +21,8 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
       const taskID = Identifier.ascending("task")
       const root = await Session.create({ kind: "root", title: "Terminal coordination schema" })
       const now = Date.now()
-      Database.use((db) =>
-        db
-          .insert(EngineTaskTable)
+      Database.immediateTransaction((db) => {
+        db.insert(EngineTaskTable)
           .values({
             id: taskID,
             project_id: Instance.project.id,
@@ -34,8 +35,9 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
             time_created: now,
             time_updated: now,
           })
-          .run(),
-      )
+          .run()
+        appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.terminal-schema" })
+      })
 
       const requestID = Identifier.ascending("artifact")
       const { tools } = createOrchestratorTools({
@@ -95,4 +97,24 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
       })
     },
   })
+})
+
+test("authorizes no_action only for the exact terminal operator conversation", () => {
+  const taskID = Identifier.ascending("task")
+  const terminalLifecycleReference = { terminalEventID: Identifier.ascending("protocol_event") }
+  const authority = {
+    taskID,
+    ingressID: Identifier.ascending("artifact"),
+    ingressKind: "operator_message" as const,
+    terminalLifecycleReference,
+  }
+  expect(
+    isAuthorizedTerminalConversationDecision({
+      authority,
+      taskID,
+      currentTerminalLifecycleReference: terminalLifecycleReference,
+      toolName: "no_action",
+      toolInput: { reason: "The terminal status was reported without mutation." },
+    }),
+  ).toBe(true)
 })

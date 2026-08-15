@@ -41,12 +41,26 @@ type StreamEvent = {
 }
 
 type BoardArtifact = { id: string; kind: string; label: string; payload?: Record<string, unknown> }
+type TaskRootIngress = {
+  ingressID: string
+  sourceID: string
+  sequence: number
+  activations: Array<{ activationID: string; activatedAt: number }>
+  decisions: Array<{ receiptID: string; command: string }>
+  projection: { state: string }
+}
 type Board = {
   task: { status: string; cancellation?: { requestEventID?: string } }
   artifacts: BoardArtifact[]
   executionProjection: {
     occurrences: Array<{ sessionID: string; agent?: string; kind?: string; latest?: { status?: { type?: string } } }>
   }
+}
+
+function activeTaskRootIngresses(ingresses: TaskRootIngress[]): TaskRootIngress[] {
+  return ingresses.filter((ingress) =>
+    ["ready", "leased", "reconcile_required", "waiting", "cancelling", "closing"].includes(ingress.projection.state),
+  )
 }
 
 type Checkpoint = {
@@ -68,7 +82,7 @@ type Checkpoint = {
   cancellationRequestEventID?: string
   cancellationRequestEventEmittedAt?: number
   cancellationRequestedAt?: number
-  recoveryCompletionTimes?: number[]
+  recoveryActivationTimes?: number[]
   cancellationWorkerProcess?: { live: number; owners: Record<string, { count: number; pids: number[] }> }
   inheritedProcessPIDs?: number[]
 }
@@ -404,6 +418,15 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     return (await response.json()) as T
   }
   const board = () => json<Board>(taskUrl("/board"))
+  const debugProjection = async () => {
+    const projection = await json<
+      { status: "available"; entries: TaskRootIngress[] } | { status: "unavailable"; error: string }
+    >(taskUrl("/debug/task-root-ingresses"))
+    if (projection.status !== "available") {
+      throw new Error(`Task-root ingress debug projection unavailable: ${projection.error}`)
+    }
+    return projection.entries
+  }
   const openStream = async () => {
     const response = await fetch(taskUrl("/events"), { signal: abortStream.signal })
     if (!response.ok) throw new Error(`Task SSE connection failed ${response.status}`)
@@ -478,20 +501,16 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
               (event.payload.status as { type?: unknown; reason?: unknown }).reason === "completed",
           )
           if (!lifecycle) return undefined
-          const wake = current.artifacts.find(
-            (artifact) =>
-              artifact.kind === "task_root_ingress" &&
-              artifact.label === "drained" &&
-              artifact.payload?.lifecycle_event_id === lifecycle.id,
+          const ingresses = await debugProjection()
+          const wake = ingresses.find(
+            (ingress) => ingress.sourceID === lifecycle.id && ingress.projection.state === "resolved",
           )
           if (!wake) return undefined
           if (current.task.status !== "completed") {
             const root = current.executionProjection.occurrences.find(
               (occurrence) => occurrence.sessionID !== childSessionID && occurrence.kind === "orchestrator",
             )
-            const pendingWake = current.artifacts.some(
-              (artifact) => artifact.kind === "task_root_ingress" && ["pending", "running"].includes(artifact.label),
-            )
+            const pendingWake = activeTaskRootIngresses(ingresses).length > 0
             const allWorkersTerminal = current.executionProjection.occurrences
               .filter((occurrence) => occurrence.kind !== "orchestrator")
               .every((occurrence) => occurrence.latest?.status?.type === "terminal")
@@ -502,7 +521,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
               !pendingWake
             ) {
               throw new Error(
-                `Terminal lifecycle wake ${wake.id} drained while Task ${taskID} remained active with an idle Orchestrator`,
+                `Terminal lifecycle ingress ${wake.ingressID} resolved while Task ${taskID} remained active with an idle Orchestrator`,
               )
             }
             return undefined
@@ -513,7 +532,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
             taskID,
             childSessionID,
             lifecycleEventID: lifecycle.id,
-            wakeID: wake.id,
+            wakeID: wake.ingressID,
             lifecycleEmittedAt: lifecycle.time.emitted,
             taskCompletedAt: completed.time.emitted,
           }
@@ -542,9 +561,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         const child = current.executionProjection.occurrences.find(
           (occurrence) => occurrence.sessionID === childSessionID,
         )
-        const activeIngress = current.artifacts.some(
-          (artifact) => artifact.kind === "task_root_ingress" && ["pending", "running"].includes(artifact.label),
-        )
+        const activeIngress = activeTaskRootIngresses(await debugProjection()).length > 0
         return lineage && child && child.latest?.status?.type !== "terminal" && !activeIngress
           ? { childSessionID: childSessionID! }
           : undefined
@@ -556,16 +573,21 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       const progressRunning = await stream.waitFor(
         "operator ingress running projection",
         async () => {
-          const ingress = (await board()).artifacts.find((artifact) => artifact.id === progress.ingress_id)
-          return ingress?.label === "delivering" || ingress?.label === "delivered" ? ingress : undefined
+          const ingress = (await debugProjection()).find((entry) => entry.ingressID === progress.ingress_id)
+          return ingress && ["leased", "resolved"].includes(ingress.projection.state) ? ingress : undefined
         },
         2_000,
       )
       const progressRunningWithinMs = performance.now() - progressStartedAt
       await stream.waitFor("progress response while child remains live", async () => {
         const current = await board()
-        const ingress = current.artifacts.find(
-          (artifact) => artifact.id === progress.ingress_id && artifact.label === "delivered",
+        const ingress = (await debugProjection()).find(
+          (entry) =>
+            entry.ingressID === progress.ingress_id &&
+            entry.projection.state === "resolved" &&
+            entry.activations.length === 1 &&
+            entry.decisions.length === 1 &&
+            entry.decisions[0]?.command === "no_action",
         )
         const child = current.executionProjection.occurrences.find(
           (occurrence) => occurrence.sessionID === dispatched.childSessionID,
@@ -582,8 +604,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         throw new Error(`FIFO recovery seed failed: ${JSON.stringify({ firstRecovery, secondRecovery })}`)
       }
       await stream.waitFor("running ingress before abrupt restart", async () => {
-        const ingress = (await board()).artifacts.find((artifact) => artifact.id === firstRecovery.ingress_id)
-        return ingress?.label === "delivering" ? ingress : undefined
+        const ingress = (await debugProjection()).find((entry) => entry.ingressID === firstRecovery.ingress_id)
+        return ingress?.projection.state === "leased" ? ingress : undefined
       })
       const checkpoint: Checkpoint = {
         taskID,
@@ -608,15 +630,12 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     if (phase === "seed-cancellation") {
       if (!stream) throw new Error("Cancellation seed requires the real Task event stream")
       const recovered = await stream.waitFor("FIFO ingress recovery after backend restart", async () => {
-        const current = await board()
-        const ingresses = checkpoint.recoveryIngressIDs.map((id) =>
-          current.artifacts.find((artifact) => artifact.id === id),
-        )
-        if (!ingresses.every((ingress) => ingress?.label === "drained")) return undefined
-        const completionTimes = ingresses.map((ingress) =>
-          Number(ingress?.payload?.delivery_result?.time_completed ?? 0),
-        )
-        return completionTimes[0]! > 0 && completionTimes[0]! <= completionTimes[1]! ? completionTimes : undefined
+        await board()
+        const debug = await debugProjection()
+        const ingresses = checkpoint.recoveryIngressIDs.map((id) => debug.find((ingress) => ingress.ingressID === id))
+        if (!ingresses.every((ingress) => ingress?.projection.state === "resolved")) return undefined
+        const activationTimes = ingresses.map((ingress) => ingress?.activations.at(-1)?.activatedAt ?? 0)
+        return activationTimes[0]! > 0 && activationTimes[0]! <= activationTimes[1]! ? activationTimes : undefined
       })
       const inherited = await ProcessSupervisor.spawnTaskCommand(
         { taskID, cwd: projectDirectory },
@@ -660,7 +679,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         checkpointPath,
         JSON.stringify({
           ...checkpoint,
-          recoveryCompletionTimes: recovered,
+          recoveryActivationTimes: recovered,
           cancellationAcceptedWithinMs,
           cancellationRequestEventID: receipt.requestEventID,
           cancellationRequestEventEmittedAt,
@@ -763,7 +782,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         lifecycleConvergence: checkpoint.lifecycleConvergence,
         progressIngressID: checkpoint.progressIngressID,
         recoveryIngressIDs: checkpoint.recoveryIngressIDs,
-        recoveryCompletionTimes: checkpoint.recoveryCompletionTimes,
+        recoveryActivationTimes: checkpoint.recoveryActivationTimes,
         childSessionID: checkpoint.childSessionID,
         progressRunningWithinMs: checkpoint.progressRunningWithinMs,
         workerProcess: checkpoint.workerProcess,

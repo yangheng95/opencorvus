@@ -193,6 +193,29 @@ function debugAgentActivityNode(node: any): string {
   )
 }
 
+function debugIngressProjection(projection: any): string {
+  if (!projection || typeof projection !== "object" || typeof projection.state !== "string") return "unknown"
+  const details = Object.entries(projection)
+    .filter(([key]) => key !== "state")
+    .map(([key, value]) => `${key}=${Array.isArray(value) ? value.join(",") || "none" : String(value)}`)
+    .join("; ")
+  return `${projection.state}${details ? `; ${details}` : ""}`
+}
+
+function debugTaskRootIngress(ingress: any): string[] {
+  const activationIDs = Array.isArray(ingress?.activationIDs) ? ingress.activationIDs : undefined
+  const activations = Array.isArray(ingress?.activations) ? ingress.activations : undefined
+  const semanticTurnIDs = Array.isArray(ingress?.semanticTurnIDs) ? ingress.semanticTurnIDs : undefined
+  const decisions = Array.isArray(ingress?.decisions) ? ingress.decisions : undefined
+  return [
+    `  ingress=${String(ingress?.ingressID ?? "?")} source=${String(ingress?.source ?? "unknown")}:${String(ingress?.sourceID ?? "unknown")}; epoch=${String(ingress?.executionEpoch ?? "unknown")}; sequence=${String(ingress?.sequence ?? "unknown")}; accepted=${formatDebugTime(ingress?.acceptedAt)}`,
+    `    activations=${activationIDs ? activationIDs.length : "unknown"}; activation_ids=${activationIDs ? activationIDs.join(",") || "none" : "unknown"}; activated_at=${activations ? activations.map((activation: any) => formatDebugTime(activation?.activatedAt)).join(",") || "none" : "unknown"}`,
+    `    semantic_turns=${semanticTurnIDs ? semanticTurnIDs.length : "unknown"}; semantic_turn_ids=${semanticTurnIDs ? semanticTurnIDs.join(",") || "none" : "unknown"}`,
+    `    decisions=${decisions ? decisions.map((decision: any) => `${String(decision?.receiptID ?? "?")}:${String(decision?.command ?? "unknown")}`).join(",") || "none" : "unknown"}`,
+    `    projection=${debugIngressProjection(ingress?.projection)}`,
+  ]
+}
+
 export function buildTaskDebugBlob(
   board: any,
   source: Extract<BoardSource, { kind: "task" }>,
@@ -209,6 +232,9 @@ export function buildTaskDebugBlob(
   const goals: any[] = Array.isArray(board?.goals) ? board.goals : []
   const activity = taskAgentActivity(board)
   const processIncidents = taskProcessIncidents(board)
+  const taskRootIngresses: any[] | undefined = Array.isArray(board?.taskRootIngresses)
+    ? board.taskRootIngresses
+    : undefined
   const lines: string[] = []
   const push = (...l: string[]) => lines.push(...l)
 
@@ -279,6 +305,16 @@ export function buildTaskDebugBlob(
     push(`    (none)`)
   } else {
     for (const incident of processIncidents) push(`    ${debugProcessIncident(incident)}`)
+  }
+  push(``, `Task-root ingress reductions (${taskRootIngresses ? taskRootIngresses.length : "unknown"}):`)
+  if (!taskRootIngresses) {
+    push(
+      `  unavailable; ingress and activation counts are unknown, not zero; error=${debugText(board?.taskRootIngressDebugError, "unknown")}`,
+    )
+  } else if (taskRootIngresses.length === 0) {
+    push(`  (validated empty)`)
+  } else {
+    for (const ingress of taskRootIngresses) push(...debugTaskRootIngress(ingress))
   }
   push(``, `Goals (${goals.length}):`)
   if (goals.length === 0) {
