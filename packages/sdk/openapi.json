@@ -3049,6 +3049,7 @@
       "Event.mailbox.acknowledged": {
         "properties": {
           "properties": {
+            "additionalProperties": false,
             "properties": {
               "action": {
                 "enum": [
@@ -3094,6 +3095,7 @@
       "Event.mailbox.message": {
         "properties": {
           "properties": {
+            "additionalProperties": false,
             "properties": {
               "agentID": {
                 "minLength": 1,
@@ -3115,6 +3117,7 @@
                 "type": "string"
               },
               "evidenceLocators": {
+                "default": [],
                 "items": {
                   "oneOf": [
                     {
@@ -3401,7 +3404,6 @@
               "subject",
               "body",
               "attention",
-              "evidenceLocators",
               "summary"
             ],
             "type": "object"
@@ -104339,6 +104341,442 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.conversation2.session({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/task/{taskID}/debug/task-root-ingresses": {
+      "get": {
+        "operationId": "task.debug.taskRootIngresses",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "taskID",
+            "required": true,
+            "schema": {
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "entries": {
+                          "items": {
+                            "properties": {
+                              "acceptedAt": {
+                                "maximum": 9007199254740991,
+                                "minimum": -9007199254740991,
+                                "type": "integer"
+                              },
+                              "activationIDs": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "activations": {
+                                "items": {
+                                  "properties": {
+                                    "activatedAt": {
+                                      "maximum": 9007199254740991,
+                                      "minimum": -9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "activationID": {
+                                      "type": "string"
+                                    },
+                                    "expiresAt": {
+                                      "maximum": 9007199254740991,
+                                      "minimum": -9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "ownerOccurrenceID": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "activationID",
+                                    "ownerOccurrenceID",
+                                    "activatedAt",
+                                    "expiresAt"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "decisions": {
+                                "items": {
+                                  "properties": {
+                                    "assistantMessageID": {
+                                      "type": "string"
+                                    },
+                                    "command": {
+                                      "type": "string"
+                                    },
+                                    "receiptID": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "receiptID",
+                                    "assistantMessageID",
+                                    "command"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "executionEpoch": {
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991,
+                                "type": "integer"
+                              },
+                              "ingressID": {
+                                "type": "string"
+                              },
+                              "projection": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "reason": {
+                                        "const": "integrity_conflict",
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "const": "blocked",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "reason"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "reason": {
+                                        "enum": [
+                                          "semantic_limit",
+                                          "activation_limit",
+                                          "deadline"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "const": "exhausted",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "reason"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "boundary": {
+                                        "enum": [
+                                          "cancelled",
+                                          "closed",
+                                          "reopened",
+                                          "deleted"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "const": "terminal_inapplicable",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "boundary"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "decisionIDs": {
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "type": "array"
+                                      },
+                                      "state": {
+                                        "const": "resolved",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "decisionIDs"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "activationID": {
+                                        "type": "string"
+                                      },
+                                      "expiresAt": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": -9007199254740991,
+                                        "type": "integer"
+                                      },
+                                      "ownerOccurrenceID": {
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "const": "leased",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "activationID",
+                                      "ownerOccurrenceID",
+                                      "expiresAt"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "requestIDs": {
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "type": "array"
+                                      },
+                                      "state": {
+                                        "const": "reconcile_required",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "requestIDs"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "interactionID": {
+                                        "type": "string"
+                                      },
+                                      "resumeAt": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": -9007199254740991,
+                                        "type": "integer"
+                                      },
+                                      "state": {
+                                        "const": "waiting",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "interactionID"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "requestEventID": {
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "const": "cancelling",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "requestEventID"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "requestEventID": {
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "const": "closing",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state",
+                                      "requestEventID"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "state": {
+                                        "const": "ready",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "state"
+                                    ],
+                                    "type": "object"
+                                  }
+                                ]
+                              },
+                              "semanticTurnIDs": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "sequence": {
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991,
+                                "type": "integer"
+                              },
+                              "source": {
+                                "enum": [
+                                  "message",
+                                  "protocol_event",
+                                  "automation_run",
+                                  "engine_artifact",
+                                  "task",
+                                  "inline"
+                                ],
+                                "type": "string"
+                              },
+                              "sourceID": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "ingressID",
+                              "source",
+                              "sourceID",
+                              "executionEpoch",
+                              "sequence",
+                              "acceptedAt",
+                              "activationIDs",
+                              "activations",
+                              "semanticTurnIDs",
+                              "decisions",
+                              "projection"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "status": {
+                          "const": "available",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "entries"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "status": {
+                          "const": "unavailable",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "error"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Task-root ingress debug projection"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Get Task-root ingress debug projection",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.debug.taskRootIngresses({\n  ...\n})"
           }
         ]
       }

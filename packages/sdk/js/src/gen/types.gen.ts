@@ -1057,7 +1057,7 @@ export type EventMailboxMessage = {
     attention: boolean
     body: string
     category: "progress" | "status" | "notification"
-    evidenceLocators: Array<
+    evidenceLocators?: Array<
       | {
           artifact_id: string
           catalog_revision: number
@@ -30930,6 +30930,122 @@ export type TaskConversationSessionResponses = {
 }
 
 export type TaskConversationSessionResponse = TaskConversationSessionResponses[keyof TaskConversationSessionResponses]
+
+export type TaskDebugTaskRootIngressesData = {
+  body?: never
+  path: {
+    taskID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/task/{taskID}/debug/task-root-ingresses"
+}
+
+export type TaskDebugTaskRootIngressesErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type TaskDebugTaskRootIngressesError = TaskDebugTaskRootIngressesErrors[keyof TaskDebugTaskRootIngressesErrors]
+
+export type TaskDebugTaskRootIngressesResponses = {
+  /**
+   * Task-root ingress debug projection
+   */
+  200:
+    | {
+        entries: Array<{
+          acceptedAt: number
+          activationIDs: Array<string>
+          activations: Array<{
+            activatedAt: number
+            activationID: string
+            expiresAt: number
+            ownerOccurrenceID: string
+          }>
+          decisions: Array<{
+            assistantMessageID: string
+            command: string
+            receiptID: string
+          }>
+          executionEpoch: number
+          ingressID: string
+          projection:
+            | {
+                reason: "integrity_conflict"
+                state: "blocked"
+              }
+            | {
+                reason: "semantic_limit" | "activation_limit" | "deadline"
+                state: "exhausted"
+              }
+            | {
+                boundary: "cancelled" | "closed" | "reopened" | "deleted"
+                state: "terminal_inapplicable"
+              }
+            | {
+                decisionIDs: Array<string>
+                state: "resolved"
+              }
+            | {
+                activationID: string
+                expiresAt: number
+                ownerOccurrenceID: string
+                state: "leased"
+              }
+            | {
+                requestIDs: Array<string>
+                state: "reconcile_required"
+              }
+            | {
+                interactionID: string
+                resumeAt?: number
+                state: "waiting"
+              }
+            | {
+                requestEventID: string
+                state: "cancelling"
+              }
+            | {
+                requestEventID: string
+                state: "closing"
+              }
+            | {
+                state: "ready"
+              }
+          semanticTurnIDs: Array<string>
+          sequence: number
+          source: "message" | "protocol_event" | "automation_run" | "engine_artifact" | "task" | "inline"
+          sourceID: string
+        }>
+        status: "available"
+      }
+    | {
+        error: string
+        status: "unavailable"
+      }
+}
+
+export type TaskDebugTaskRootIngressesResponse =
+  TaskDebugTaskRootIngressesResponses[keyof TaskDebugTaskRootIngressesResponses]
 
 export type TaskEventsData = {
   body?: never

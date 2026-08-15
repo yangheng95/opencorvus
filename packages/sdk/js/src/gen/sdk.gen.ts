@@ -524,6 +524,8 @@ import type {
   TaskConversationSessionResponses,
   TaskCreateErrors,
   TaskCreateResponses,
+  TaskDebugTaskRootIngressesErrors,
+  TaskDebugTaskRootIngressesResponses,
   TaskDeleteErrors,
   TaskDeleteResponses,
   TaskEventsResponse,
@@ -6925,6 +6927,40 @@ export class Conversation extends HeyApiClient {
   }
 }
 
+export class Debug extends HeyApiClient {
+  /**
+   * Get Task-root ingress debug projection
+   */
+  public taskRootIngresses<ThrowOnError extends boolean = false>(
+    parameters: {
+      taskID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "taskID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      TaskDebugTaskRootIngressesResponses,
+      TaskDebugTaskRootIngressesErrors,
+      ThrowOnError
+    >({
+      url: "/task/{taskID}/debug/task-root-ingresses",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Session3 extends HeyApiClient {
   /**
    * Cancel a task agent session
@@ -8166,6 +8202,11 @@ export class Task extends HeyApiClient {
   private _conversation?: Conversation
   get conversation2(): Conversation {
     return (this._conversation ??= new Conversation({ client: this.client }))
+  }
+
+  private _debug?: Debug
+  get debug(): Debug {
+    return (this._debug ??= new Debug({ client: this.client }))
   }
 
   private _session?: Session3
