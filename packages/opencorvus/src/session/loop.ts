@@ -1311,46 +1311,69 @@ export namespace SessionLoop {
     const maxSteps = agent.steps ?? Infinity
     const isLastStep = input.step >= maxSteps
     const workerTurnDescriptor = workerTurnDescriptorPayloadForRuntimeContract(runtimeContract, input.sessionID)
-    const assistantMessage = (await Session.updateMessage({
-      id:
-        runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
+    const taskRootActivation =
+      runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
+        ? runtimeIdentity.taskIngressActivationID
+        : undefined
+    const openTaskRootAssistant = taskRootActivation
+      ? input.msgs.findLast(
+          (message): message is Message.WithParts & { info: Message.Assistant } =>
+            message.info.role === "assistant" &&
+            message.info.parentID === input.lastUser.id &&
+            message.info.activationID === taskRootActivation &&
+            message.info.time.completed === undefined,
+        )
+      : undefined
+    if (
+      openTaskRootAssistant &&
+      (openTaskRootAssistant.info.sessionID !== input.sessionID ||
+        openTaskRootAssistant.info.author !== input.lastUser.agent ||
+        openTaskRootAssistant.info.agent !== input.lastUser.agent ||
+        openTaskRootAssistant.info.modelID !== input.model.id ||
+        openTaskRootAssistant.info.providerID !== input.model.providerID)
+    ) {
+      throw new Error(
+        `Task-root activation ${taskRootActivation} open assistant ${openTaskRootAssistant.info.id} identity changed before its next Provider step`,
+      )
+    }
+    const assistantMessage =
+      openTaskRootAssistant?.info ??
+      ((await Session.updateMessage({
+        id: taskRootActivation
           ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
           : Identifier.ascending("message"),
-      parentID: input.lastUser.id,
-      role: "assistant",
-      author: input.lastUser.agent,
-      agent: input.lastUser.agent,
-      variant: input.lastUser.variant,
-      path: {
-        cwd: Instance.directory,
-        root: Instance.worktree,
-      },
-      cost: 0,
-      tokens: {
-        total: 0,
-        input: 0,
-        output: 0,
-        reasoning: 0,
-        cache: { read: 0, write: 0 },
-      },
-      modelID: input.model.id,
-      providerID: input.model.providerID,
-      ...(runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
-        ? {
-            activationID: runtimeIdentity.taskIngressActivationID,
-          }
-        : {}),
-      time: {
-        created: Date.now(),
-      },
-      sessionID: input.sessionID,
-    })) as Message.Assistant
+        parentID: input.lastUser.id,
+        role: "assistant",
+        author: input.lastUser.agent,
+        agent: input.lastUser.agent,
+        variant: input.lastUser.variant,
+        path: {
+          cwd: Instance.directory,
+          root: Instance.worktree,
+        },
+        cost: 0,
+        tokens: {
+          total: 0,
+          input: 0,
+          output: 0,
+          reasoning: 0,
+          cache: { read: 0, write: 0 },
+        },
+        modelID: input.model.id,
+        providerID: input.model.providerID,
+        ...(taskRootActivation ? { activationID: taskRootActivation } : {}),
+        time: {
+          created: Date.now(),
+        },
+        sessionID: input.sessionID,
+      })) as Message.Assistant)
     SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
     const processor = SessionProcessor.create({
       assistantMessage,
       sessionID: input.sessionID,
       model: input.model,
       abort: input.abort,
+      retainAssistantOnToolContinuation: Boolean(taskRootActivation),
     })
     using _ = defer(() => InstructionPrompt.clear(processor.message.id))
 

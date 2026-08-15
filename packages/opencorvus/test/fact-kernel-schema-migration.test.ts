@@ -88,6 +88,48 @@ function insertLegacyArtifact(sqlite: SQLite, input: {
 }
 
 describe("fact-kernel schema migration", () => {
+  test("upgrades the Provider activity index for multiple streamed steps in one assistant Turn", () => {
+    const sqlite = new SQLite(":memory:")
+    try {
+      sqlite.exec(SCHEMA_DDL)
+      sqlite.exec(`
+        DROP INDEX provider_activity_request_message_idx;
+        CREATE UNIQUE INDEX provider_activity_request_message_idx
+          ON provider_activity_request (assistant_message_id);
+        INSERT INTO project
+          (id,worktree,name,icon_url,icon_color,time_created,time_updated,time_pinned,time_initialized,sandboxes,commands,generation)
+        VALUES ('project:provider-steps','D:/provider-steps','provider steps',NULL,NULL,1,1,NULL,NULL,'[]',NULL,'generation:provider-steps');
+        INSERT INTO session
+          (id,project_id,parent_id,slug,directory,title,version,kind,time_created,time_updated)
+        VALUES ('session:provider-steps','project:provider-steps',NULL,'provider-steps','D:/provider-steps','provider steps','1','assistant',2,2);
+        INSERT INTO message(id,session_id,time_created,time_updated,data)
+        VALUES ('message:provider-steps','session:provider-steps',3,3,'{"role":"assistant","author":"assistant","time":{"created":3}}');
+      `)
+
+      expect(migrateFactKernelSchema(sqlite)).toBe(true)
+      sqlite.exec(`
+        INSERT INTO provider_activity_request(id,assistant_message_id,time_created)
+        VALUES ('activity:step-1','message:provider-steps',4),
+               ('activity:step-2','message:provider-steps',5);
+      `)
+      expect({
+        drift: findSchemaDrift(sqlite),
+        activities: all<{ id: string; assistant_message_id: string; time_created: number }>(sqlite, `
+          SELECT id,assistant_message_id,time_created
+          FROM provider_activity_request ORDER BY time_created,id
+        `),
+      }).toEqual({
+        drift: undefined,
+        activities: [
+          { id: "activity:step-1", assistant_message_id: "message:provider-steps", time_created: 4 },
+          { id: "activity:step-2", assistant_message_id: "message:provider-steps", time_created: 5 },
+        ],
+      })
+    } finally {
+      sqlite.close(true)
+    }
+  })
+
   test("atomically replaces the mutable control schema with the canonical fact schema", () => {
     const sqlite = new SQLite(":memory:")
     try {

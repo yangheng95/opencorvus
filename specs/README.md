@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Task-root multi-step assistant convergence repair: [`2026-08-15-task-root-multistep-assistant-convergence.md`](records/2026-08/2026-08-15-task-root-multistep-assistant-convergence.md).
+
 Latest normalized Tool Part bridge and diagnostic-copy repair: [`2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md`](records/2026-08/2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md).
 
 Latest zero-redundancy Task-root fact-reduction kernel design: [`2026-08-15-task-root-fact-reduction-kernel.md`](records/2026-08/2026-08-15-task-root-fact-reduction-kernel.md).

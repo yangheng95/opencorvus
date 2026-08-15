@@ -13,7 +13,7 @@ afterEach(async () => {
 })
 
 describe("Provider activity fact storage", () => {
-  test("streams one effect-bound assistant with fixed causal/model identity into one terminal receipt", async () => {
+  test("streams multiple Provider steps into one effect-bound assistant with fixed causal/model identity", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -21,18 +21,45 @@ describe("Provider activity fact storage", () => {
         const session = await Session.create({ kind: "assistant", title: "Provider fact storage" })
         const now = Date.now()
         const user = await Session.updateMessage({
-          id: Identifier.ascending("message"), sessionID: session.id, role: "user", author: "user",
-          time: { created: now }, agent: "assistant", model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "assistant",
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
         })
         const assistant = await Session.updateMessage({
-          id: Identifier.ascending("message"), sessionID: session.id, parentID: user.id, role: "assistant",
-          author: "assistant", time: { created: now + 1 }, agent: "assistant", providerID: "openai",
-          modelID: "gpt-5.6-terra", path: { cwd: project.path, root: project.path }, cost: 0,
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          parentID: user.id,
+          role: "assistant",
+          author: "assistant",
+          time: { created: now + 1 },
+          agent: "assistant",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         const activityID = Identifier.ascending("activity")
         recordProviderActivityEvent(assistant.id, {
-          type: "started", id: activityID, ts: now + 2, sessionID: session.id, provider: "openai", model: "gpt-5.6-terra",
+          type: "started",
+          id: activityID,
+          ts: now + 2,
+          sessionID: session.id,
+          provider: "openai",
+          model: "gpt-5.6-terra",
+        })
+        const secondActivityID = Identifier.ascending("activity")
+        recordProviderActivityEvent(assistant.id, {
+          type: "started",
+          id: secondActivityID,
+          ts: now + 3,
+          sessionID: session.id,
+          provider: "openai",
+          model: "gpt-5.6-terra",
         })
         const streamed = await Session.updateMessage({
           ...assistant,
@@ -49,25 +76,32 @@ describe("Provider activity fact storage", () => {
         await expect(Session.updateMessage({ ...streamed, modelID: "different-model" })).rejects.toThrow(
           `Assistant Message ${assistant.id} effect causal/model identity is immutable`,
         )
-        recordProviderActivityEvent(assistant.id, { type: "terminal", id: activityID, ts: now + 3, outcome: "done" })
         recordProviderActivityEvent(assistant.id, { type: "terminal", id: activityID, ts: now + 4, outcome: "done" })
+        recordProviderActivityEvent(assistant.id, {
+          type: "terminal",
+          id: secondActivityID,
+          ts: now + 5,
+          outcome: "done",
+        })
         const completed = await Session.updateMessage({
           ...streamed,
           finish: "stop",
-          time: { ...streamed.time, completed: now + 4 },
+          time: { ...streamed.time, completed: now + 6 },
         })
-        expect(completed.time.completed).toBe(now + 4)
+        expect(completed.time.completed).toBe(now + 6)
 
         const facts = Database.use((db) => ({
           requests: db.select().from(ProviderActivityRequestTable).all(),
           outcomes: db.select().from(ProviderActivityOutcomeTable).all(),
         }))
-        expect(facts.requests).toEqual([{
-          id: activityID, assistant_message_id: assistant.id, time_created: now + 2,
-        }])
-        expect(facts.outcomes).toEqual([{
-          id: expect.any(String), request_id: activityID, data: { outcome: "done" }, time_created: now + 3,
-        }])
+        expect(facts.requests).toEqual([
+          { id: activityID, assistant_message_id: assistant.id, time_created: now + 2 },
+          { id: secondActivityID, assistant_message_id: assistant.id, time_created: now + 3 },
+        ])
+        expect(facts.outcomes).toEqual([
+          { id: expect.any(String), request_id: activityID, data: { outcome: "done" }, time_created: now + 4 },
+          { id: expect.any(String), request_id: secondActivityID, data: { outcome: "done" }, time_created: now + 5 },
+        ])
       },
     })
   })

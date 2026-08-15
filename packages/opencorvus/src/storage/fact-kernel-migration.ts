@@ -193,6 +193,36 @@ function hasIndex(db: RawDatabase, name: string): boolean {
   return Boolean(rows<{ name: string }>(db, `SELECT name FROM sqlite_schema WHERE type='index' AND name=${literal(name)}`)[0])
 }
 
+/** The first fact-kernel cutover accidentally made assistant Message ->
+ * Provider activity one-to-one even though one Task-root activation may
+ * contain several streamed Provider steps. Replace only that derived index;
+ * request/outcome rows and their immutable identities remain unchanged. */
+function migrateProviderActivityFanoutIndex(db: RawDatabase): boolean {
+  const name = "provider_activity_request_message_idx"
+  const definition = rows<{ sql: string | null }>(
+    db,
+    `SELECT sql FROM sqlite_schema WHERE type='index' AND name=${literal(name)}`,
+  )[0]?.sql
+  if (!definition || !/^CREATE\s+UNIQUE\s+INDEX\b/i.test(definition.trim())) return false
+  const reference = currentSchema()
+  const currentDefinition = rows<{ sql: string }>(
+    reference,
+    `SELECT sql FROM sqlite_schema WHERE type='index' AND name=${literal(name)}`,
+  )[0]?.sql
+  reference.close(true)
+  if (!currentDefinition) throw new Error(`Current schema is missing index ${name}`)
+  db.exec("BEGIN IMMEDIATE")
+  try {
+    db.exec(`DROP INDEX ${quote(name)}`)
+    db.exec(currentDefinition)
+    db.exec("COMMIT")
+    return true
+  } catch (error) {
+    db.exec("ROLLBACK")
+    throw error
+  }
+}
+
 function currentSchema(): RawDatabase {
   const db = new SQLite(":memory:")
   db.exec(SCHEMA_DDL)
@@ -917,7 +947,7 @@ export function migrateFactKernelSchema(sqlite: RawDatabase): boolean {
     !columns(sqlite, "event_job").includes("tombstone") &&
     exists(sqlite, "event_job_definition_tombstone") &&
     !exists(sqlite, "protocol_aggregate_sequence")
-  if (alreadyCurrent) return false
+  if (alreadyCurrent) return migrateProviderActivityFanoutIndex(sqlite)
 
   const reference = currentSchema()
   sqlite.exec("PRAGMA legacy_alter_table=ON")

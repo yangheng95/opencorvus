@@ -104,6 +104,11 @@ export namespace SessionProcessor {
     /** Final host classification performed after all streamed Parts settle but
      * before the one immutable assistant completion write. */
     beforeAssistantCompletion?: (message: Message.Assistant) => void | Promise<void>
+    /** A projected Task scheduler owns one assistant Message for the whole
+     * physical activation. An ordinary Tool-call Provider step therefore
+     * persists its Parts and usage but leaves that Message open for the next
+     * streamed step under the same activation. */
+    retainAssistantOnToolContinuation?: boolean
   }) {
     const toolcalls: Record<string, Message.ToolPart> = {}
     const mcpAppToolLifecycles = new Map<string, McpAppToolLifecycleController>()
@@ -1256,9 +1261,20 @@ export namespace SessionProcessor {
             }
           }
           input.assistantMessage.finish ??= "stop"
-          await input.beforeAssistantCompletion?.(input.assistantMessage)
-          input.assistantMessage.time.completed = Date.now()
-          await Session.updateMessage(input.assistantMessage)
+          const retainAssistantForNextProviderStep =
+            input.retainAssistantOnToolContinuation === true &&
+            input.assistantMessage.finish.includes("tool") &&
+            !failureOccurrence &&
+            !needsCompaction &&
+            !blocked &&
+            !parkAfterToolResult &&
+            !coordinationHandoff &&
+            !input.assistantMessage.error
+          if (!retainAssistantForNextProviderStep) {
+            await input.beforeAssistantCompletion?.(input.assistantMessage)
+            input.assistantMessage.time.completed = Date.now()
+            await Session.updateMessage(input.assistantMessage)
+          }
           if (failureOccurrence && input.assistantMessage.error) {
             await Bus.publish(Session.Event.Error, {
               sessionID: input.assistantMessage.sessionID,

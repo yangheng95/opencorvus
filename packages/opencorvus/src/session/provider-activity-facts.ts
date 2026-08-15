@@ -13,15 +13,15 @@ export function recordProviderActivityEvent(assistantMessageID: string, event: L
         now: event.ts,
       })
       const existing = db.select().from(ProviderActivityRequestTable)
-        .where(eq(ProviderActivityRequestTable.assistant_message_id, assistantMessageID)).get()
+        .where(eq(ProviderActivityRequestTable.id, event.id)).get()
       const message = db.select({ sessionID: MessageTable.session_id }).from(MessageTable)
         .where(eq(MessageTable.id, assistantMessageID)).get()
       if (!message || message.sessionID !== event.sessionID) {
         throw new Error(`Provider activity ${event.id} does not belong to assistant Message ${assistantMessageID}.`)
       }
       if (existing) {
-        if (existing.id !== event.id) {
-          throw new Error(`Assistant Message ${assistantMessageID} already names a different provider activity.`)
+        if (existing.assistant_message_id !== assistantMessageID) {
+          throw new Error(`Provider activity ${event.id} already belongs to a different assistant Message.`)
         }
         return
       }

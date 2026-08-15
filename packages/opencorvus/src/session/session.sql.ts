@@ -277,7 +277,7 @@ export const ProviderActivityRequestTable = sqliteTable(
     time_created: integer().notNull(),
   },
   (table) => [
-    uniqueIndex("provider_activity_request_message_idx").on(table.assistant_message_id),
+    index("provider_activity_request_message_idx").on(table.assistant_message_id, table.time_created, table.id),
   ],
 )
 

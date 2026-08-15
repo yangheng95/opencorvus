@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-15-task-root-multistep-assistant-convergence.md](2026-08-15-task-root-multistep-assistant-convergence.md) keeps all streamed Provider steps and Tool results for one Task-root activation inside its single immutable assistant Turn, preventing Mission-created and direct Tasks from failing after their first ordinary Tool call.
+
 - [2026-08-15-mission-task-publication-convergence-repair.md](2026-08-15-mission-task-publication-convergence-repair.md) makes successful Mission Task creation a typed Turn boundary and installs the Orchestrator runtime contract before the first creator/control Messages so accepted Tasks enter a renderable streamed execution.
 
 - [2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md](2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md) repairs the canonical Tool-fact bridge used by live events and history hydration, and routes diagnostic clipboard writes through HostTransport.

@@ -76,14 +76,20 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
             runtimeTaskID: string | undefined
           }
         | undefined
+      const assistantMessageIDs: string[] = []
+      const retainAssistantOnToolContinuation: boolean[] = []
+      let providerSteps = 0
       const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
         const assistant = input.assistantMessage as Message.Assistant
+        assistantMessageIDs.push(assistant.id)
+        retainAssistantOnToolContinuation.push(input.retainAssistantOnToolContinuation)
         return {
           message: assistant,
           partFromToolCall() {
             return undefined
           },
           async process() {
+            providerSteps += 1
             const messages = await Session.messages({ sessionID: assistant.sessionID })
             observed = {
               sessionID: assistant.sessionID,
@@ -95,8 +101,16 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
               sessionID: assistant.sessionID,
               messageID: assistant.id,
               type: "text",
-              text: "The Task is visible and ready for dispatch.",
+              text:
+                providerSteps === 1
+                  ? "The Task is visible; inspect the available delivery evidence."
+                  : "The Task evidence is inspected and ready for a scheduling decision.",
             })
+            if (providerSteps === 1) {
+              assistant.finish = "tool-calls"
+              await Session.updateMessage(assistant)
+              return "continue"
+            }
             const decisionPartID = Identifier.ascending("part")
             const decisionStartedAt = Date.now()
             await Session.updatePart({
@@ -156,6 +170,9 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
         const messages = await Session.messages({ sessionID: child!.id })
         expect({
           taskError: task.error,
+          providerSteps,
+          assistantMessageIDs,
+          retainAssistantOnToolContinuation,
           observed: {
             sessionID: observed?.sessionID,
             runtimeTaskID: observed?.runtimeTaskID,
@@ -170,6 +187,9 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           })),
         }).toEqual({
           taskError: null,
+          providerSteps: 2,
+          assistantMessageIDs: [expect.any(String), expect.any(String)],
+          retainAssistantOnToolContinuation: [true, true],
           observed: {
             sessionID: child!.id,
             runtimeTaskID: taskID,
@@ -178,9 +198,10 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           persisted: [
             expect.objectContaining({ role: "user", author: "user", parts: 1 }),
             expect.objectContaining({ role: "user", author: "orchestrator", parts: 1 }),
-            expect.objectContaining({ role: "assistant", author: "orchestrator", parts: 2 }),
+            expect.objectContaining({ role: "assistant", author: "orchestrator", parts: 3 }),
           ],
         })
+        expect(new Set(assistantMessageIDs).size).toBe(1)
         await SessionPrompt.waitForFinish(child!.id, project.path)
       } finally {
         gitCompleteSpy.mockRestore()
