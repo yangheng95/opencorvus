@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-15-v0.0.45-beta-branch-bump.md](2026-08-15-v0.0.45-beta-branch-bump.md) creates the `v0.0.45beta` development branch from the reviewed Task-root recovery baseline and synchronizes every canonical release-family version projection to `0.0.45-beta` without publishing a tag or Release.
+
 - [2026-08-15-task-root-decision-repair-and-stage-tool-identity.md](2026-08-15-task-root-decision-repair-and-stage-tool-identity.md) keeps decision repair inside one Task-root activation and restores persisted execution identity for every internal projected-worker stage Tool.
 
 - [2026-08-15-task-mailbox-envelope-projection-convergence.md](2026-08-15-task-mailbox-envelope-projection-convergence.md) gives Mailbox messages and acknowledgements one shared envelope-aware EventView projection so scheduler reads and SSE replay consume current-schema durable facts without identity duplication.

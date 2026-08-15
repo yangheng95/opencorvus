@@ -32,7 +32,7 @@
     },
     "packages/channel-config": {
       "name": "@opencorvus-ai/channel-config",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "zod": "catalog:",
       },
@@ -43,7 +43,7 @@
     },
     "packages/channel-runtime": {
       "name": "@opencorvus-ai/channel-runtime",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "@opencorvus-ai/channel-config": "workspace:*",
         "@opencorvus-ai/sdk": "workspace:*",
@@ -71,7 +71,7 @@
     },
     "packages/opencorvus": {
       "name": "opencorvus",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "bin": {
         "opencorvus": "./bin/opencorvus",
       },
@@ -196,7 +196,7 @@
     },
     "packages/overlay": {
       "name": "@opencorvus-ai/overlay",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "@codemirror/autocomplete": "^6.20.3",
         "@codemirror/commands": "^6.10.4",
@@ -260,7 +260,7 @@
     },
     "packages/plugin": {
       "name": "@opencorvus-ai/plugin",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "@opencorvus-ai/sdk": "workspace:*",
         "hono": "catalog:",
@@ -282,7 +282,7 @@
     },
     "packages/sdk/js": {
       "name": "@opencorvus-ai/sdk",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "zod": "catalog:",
       },
@@ -296,7 +296,7 @@
     },
     "packages/transport-protocol": {
       "name": "@opencorvus-ai/transport-protocol",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "@opencorvus-ai/sdk": "workspace:*",
         "zod": "catalog:",
@@ -308,7 +308,7 @@
     },
     "packages/util": {
       "name": "@opencorvus-ai/util",
-      "version": "0.0.44-beta.1",
+      "version": "0.0.45-beta",
       "dependencies": {
         "zod": "catalog:",
       },

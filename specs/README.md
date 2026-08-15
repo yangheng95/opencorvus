@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest `v0.0.45-beta` branch and canonical version baseline: [`2026-08-15-v0.0.45-beta-branch-bump.md`](records/2026-08/2026-08-15-v0.0.45-beta-branch-bump.md).
+
 Latest Task-root in-activation decision repair and internal stage Tool identity convergence: [`2026-08-15-task-root-decision-repair-and-stage-tool-identity.md`](records/2026-08/2026-08-15-task-root-decision-repair-and-stage-tool-identity.md).
 
 Latest Task mailbox envelope projection convergence repair: [`2026-08-15-task-mailbox-envelope-projection-convergence.md`](records/2026-08/2026-08-15-task-mailbox-envelope-projection-convergence.md).
