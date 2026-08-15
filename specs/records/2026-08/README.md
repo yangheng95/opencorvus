@@ -1,6 +1,10 @@
 # August 2026 Records
 
+- [2026-08-15-full-worktree-batched-delivery.md](2026-08-15-full-worktree-batched-delivery.md) classifies the complete dirty worktree into reviewed Permission recovery, Project/schema convergence, binary-attribute, release-evidence, Task-root lock-convergence, and delivery-record commits, with isolated validation and normal upstream push boundaries.
+
 - [2026-08-15-task-root-multistep-assistant-convergence.md](2026-08-15-task-root-multistep-assistant-convergence.md) keeps all streamed Provider steps and Tool results for one Task-root activation inside its single immutable assistant Turn, preventing Mission-created and direct Tasks from failing after their first ordinary Tool call.
+
+- [2026-08-15-permission-continuation-recovery-fault-isolation.md](2026-08-15-permission-continuation-recovery-fault-isolation.md) stops one unresumable Permission continuation from failing every project-scoped route: recovery is fault-isolated, project-scoped, retires what it cannot run, and the durable Permission receipt becomes the sole authority for permission-bearing Tool output.
 
 - [2026-08-15-mission-task-publication-convergence-repair.md](2026-08-15-mission-task-publication-convergence-repair.md) makes successful Mission Task creation a typed Turn boundary and installs the Orchestrator runtime contract before the first creator/control Messages so accepted Tasks enter a renderable streamed execution.
 
@@ -9,6 +13,7 @@
 - [2026-08-15-task-root-fact-reduction-kernel.md](2026-08-15-task-root-fact-reduction-kernel.md) defines zero redundant durable control state: immutable ingress/domain/activity/lifecycle facts, exceptional dispositions, one expiring physical lease and one reconciler.
 
 - [2026-08-15-task-root-ingress-decision-convergence.md](2026-08-15-task-root-ingress-decision-convergence.md) separates semantic decision attempts from physical Task-root ingress retry, provides finite visible continuation convergence, and decouples debug copying from fresh Board synchronization.
+- [2026-08-15-task-root-parallel-decision-lock-convergence.md](2026-08-15-task-root-parallel-decision-lock-convergence.md) repairs the Task-root FIFO deadlock caused by treating one parallel dispatch Turn as conflicting decisions and restores current lifecycle projection identity.
 
 - [2026-08-14-agent-tool-block-projection-plan.md](2026-08-14-agent-tool-block-projection-plan.md) defines one every-Agent, occurrence-scoped MCP Tool-block discovery/load projection, with Browser and Computer as the first default-available blocks and all concrete calls retained under the durable permission authority.
 

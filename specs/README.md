@@ -1,12 +1,18 @@
 # Specs Storage Index
 
+Latest full-worktree batched delivery, including the Task-root parallel-decision lock repair: [`2026-08-15-full-worktree-batched-delivery.md`](records/2026-08/2026-08-15-full-worktree-batched-delivery.md).
+
 Latest Task-root multi-step assistant convergence repair: [`2026-08-15-task-root-multistep-assistant-convergence.md`](records/2026-08/2026-08-15-task-root-multistep-assistant-convergence.md).
+
+Latest Permission continuation recovery fault isolation: [`2026-08-15-permission-continuation-recovery-fault-isolation.md`](records/2026-08/2026-08-15-permission-continuation-recovery-fault-isolation.md).
 
 Latest normalized Tool Part bridge and diagnostic-copy repair: [`2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md`](records/2026-08/2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md).
 
 Latest zero-redundancy Task-root fact-reduction kernel design: [`2026-08-15-task-root-fact-reduction-kernel.md`](records/2026-08/2026-08-15-task-root-fact-reduction-kernel.md).
 
 Latest Task-root ingress decision convergence repair: [`2026-08-15-task-root-ingress-decision-convergence.md`](records/2026-08/2026-08-15-task-root-ingress-decision-convergence.md).
+
+Latest Task-root parallel-decision lock convergence repair: [`2026-08-15-task-root-parallel-decision-lock-convergence.md`](records/2026-08/2026-08-15-task-root-parallel-decision-lock-convergence.md).
 
 Latest every-Agent on-demand MCP Tool-block projection and permission plan: [`2026-08-14-agent-tool-block-projection-plan.md`](records/2026-08/2026-08-14-agent-tool-block-projection-plan.md).
 
