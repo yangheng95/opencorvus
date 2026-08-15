@@ -1780,14 +1780,33 @@ export namespace Session {
               .where(eq(PermissionExecutionResultTable.attempt_id, resultAttemptID)).get()
             : undefined
           if (resultReceipt) {
+            // The receipt is the sole authority for a permission-bearing Tool
+            // output: the outcome fact below stores no `output`, and reads
+            // project it back from this receipt. The caller's `part.state.output`
+            // reached here through the Session normalization pipeline instead,
+            // so the two strings are independently derived and may legitimately
+            // differ. Recording the divergence keeps it diagnosable; raising it
+            // would destroy an external effect that already succeeded, for a
+            // value this write discards anyway.
             const stored = resultReceipt.result as { kind?: string; value?: unknown }
-            const projected = stored?.kind === "undefined"
-              ? ""
-              : stored?.kind === "json"
-                ? normalizeToolResult(stored.value).output
-                : undefined
+            const projected = (() => {
+              try {
+                if (stored?.kind === "undefined") return ""
+                if (stored?.kind === "json") return normalizeToolResult(stored.value).output
+              } catch {
+                // A receipt this write cannot project is still the authority;
+                // reads surface the real projection failure at their own site.
+              }
+              return undefined
+            })()
             if (projected !== part.state.output) {
-              throw new Error(`Tool outcome Part ${id} conflicts with Permission result ${resultReceipt.attempt_id}`)
+              log.warn("tool outcome diverges from its Permission result", {
+                partID: id,
+                attemptID: resultReceipt.attempt_id,
+                tool: part.tool,
+                projectedLength: projected?.length,
+                persistedLength: part.state.output.length,
+              })
             }
             outcome = {
               outcome: "completed",

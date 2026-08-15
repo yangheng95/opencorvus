@@ -20,6 +20,11 @@ import {
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
 import { acquireControlLease, assertControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+// Type-only: the value import stays dynamic so the runtime module cycle with
+// SessionLoop is never created.
+import type { SessionLoop } from "@/session/loop"
+
+type SessionLoopContinuationOutcome = SessionLoop.PermissionContinuationOutcome
 
 export namespace PermissionAuthority {
   const log = Log.create({ service: "permission-authority" })
@@ -1078,17 +1083,77 @@ export namespace PermissionAuthority {
     return requested ? requestFromRow(requested) : undefined
   }
 
-  async function resumeRequest(request: Request): Promise<void> {
+  async function resumeRequest(request: Request): Promise<SessionLoopContinuationOutcome> {
     const { SessionLoop } = await import("@/session/loop")
-    await exactContinuation.run(request.id, () => SessionLoop.resumePermissionContinuation(request))
+    const outcome = await exactContinuation.run(request.id, () =>
+      SessionLoop.resumePermissionContinuation(request),
+    )
+    if (outcome === "unresumable") {
+      retireContinuation(request, "The persisted ToolPart is already terminal; no continuation can advance it")
+    }
+    return outcome
   }
 
+  /**
+   * Append the terminal ledger fact that closes a continuation which can never
+   * run again. Retirement is what keeps recovery convergent: without it the
+   * same dead request is rescanned by every later bootstrap.
+   */
+  function retireContinuation(request: Request, reason: string): void {
+    try {
+      if (staleFor(request.id)) return
+      appendEvent(request, "stale", { reason })
+    } catch (error) {
+      log.error("permission continuation retirement failed", {
+        requestID: request.id,
+        sessionID: request.sessionID,
+        error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+      })
+    }
+  }
+
+  /**
+   * Recovery is deliberately fault-isolated: one continuation that cannot run
+   * must leave the remaining continuations — and the project bootstrap that
+   * triggered recovery — intact.
+   *
+   * Only `unresumable`, a determinate fact about persisted state, retires the
+   * request. A thrown fault is recorded and left open, because recovery cannot
+   * tell a permanent fault from a transient one and must never discard a
+   * continuation that a later attempt could still complete.
+   */
+  async function recoverContinuation(request: Request): Promise<boolean> {
+    try {
+      return (await resumeRequest(request)) === "resumed"
+    } catch (error) {
+      log.error("permission continuation recovery failed", {
+        requestID: request.id,
+        sessionID: request.sessionID,
+        toolName: request.toolName,
+        error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+      })
+      return false
+    }
+  }
+
+  /**
+   * Replay every approved continuation owned by the active project. The scan is
+   * project-scoped because a ledger request only means anything inside the
+   * project that produced it; a foreign project's evidence must never be
+   * replayed here, and must never decide whether this project can open.
+   */
   export async function resumeApprovedContinuations(): Promise<number> {
+    const projectID = Instance.project.id
     const requested = Database.use((db) =>
       db
         .select()
         .from(PermissionLedgerTable)
-        .where(eq(PermissionLedgerTable.event_type, "requested"))
+        .where(
+          and(
+            eq(PermissionLedgerTable.event_type, "requested"),
+            eq(PermissionLedgerTable.project_id, projectID),
+          ),
+        )
         .orderBy(asc(sql`rowid`))
         .all(),
     )
@@ -1115,18 +1180,15 @@ export namespace PermissionAuthority {
           db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get(),
         )
         if (outcome?.event_type === "execution_succeeded") {
-          await resumeRequest(requestFromRow(row))
-          resumed += 1
+          if (await recoverContinuation(requestFromRow(row))) resumed += 1
           continue
         }
         if (!outcome && currentTaskForAttempt(attempt)) {
-          await resumeRequest(requestFromRow(row))
-          resumed += 1
+          if (await recoverContinuation(requestFromRow(row))) resumed += 1
         }
         continue
       }
-      await resumeRequest(requestFromRow(row))
-      resumed += 1
+      if (await recoverContinuation(requestFromRow(row))) resumed += 1
     }
     return resumed
   }

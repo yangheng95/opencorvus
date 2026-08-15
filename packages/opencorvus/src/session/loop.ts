@@ -3183,12 +3183,22 @@ export namespace SessionLoop {
   }
 
   /**
+   * `resumed` means the continuation was carried to its persisted conclusion.
+   * `unresumable` means the persisted ToolPart already holds a terminal fact
+   * that no continuation can advance, so the ledger request must be retired
+   * rather than replayed again.
+   */
+  export type PermissionContinuationOutcome = "resumed" | "unresumable"
+
+  /**
    * Resume the exact persisted Tool invocation after an Ask-me decision was
    * committed in a later process. This deliberately rebuilds the ordinary
    * SessionLoop Tool surface; it does not call a registry or MCP executor
    * directly.
    */
-  export async function resumePermissionContinuation(request: PermissionAuthority.Request): Promise<void> {
+  export async function resumePermissionContinuation(
+    request: PermissionAuthority.Request,
+  ): Promise<PermissionContinuationOutcome> {
     const session = await Session.get(request.sessionID)
     const persistedAssistant = await MessageStore.get({
       sessionID: request.sessionID,
@@ -3210,9 +3220,10 @@ export namespace SessionLoop {
     const completedToolControl =
       toolPart.state.status === "completed" ? toolResultControl(toolPart.state.metadata) : undefined
     const assistantWasCompleted = assistant.time.completed !== undefined
-    if (toolPart.state.status === "error") {
-      throw new Error(`Permission continuation ${request.id} ToolPart is already terminal with an error`)
-    }
+    // A terminal Tool error is a legitimate persisted conclusion, not a broken
+    // invariant. The invocation can never continue from here, so recovery
+    // reports it as unresumable and the caller retires the ledger request.
+    if (toolPart.state.status === "error") return "unresumable"
     if (!assistant.parentID) {
       throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
     }
@@ -3222,7 +3233,7 @@ export namespace SessionLoop {
         assistant.time.completed = Date.now()
         await Session.updateMessage(assistant)
       }
-      return
+      return "resumed"
     }
     const persistedUser = await MessageStore.get({ sessionID: request.sessionID, messageID: assistant.parentID })
     if (persistedUser.info.role !== "user") {
@@ -3247,7 +3258,7 @@ export namespace SessionLoop {
       ) {
         await loop({ sessionID: request.sessionID })
       }
-      return
+      return "resumed"
     }
     const model = await Provider.getModel(assistant.providerID, assistant.modelID, { config })
     const messageIdentity = await resolveSessionMessageIdentity({
@@ -3336,6 +3347,7 @@ export namespace SessionLoop {
     if (!recoveredRuntimeContract && toolResultDisposition(recoveredControl) === "continue") {
       await loop({ sessionID: request.sessionID })
     }
+    return "resumed"
   }
 
   async function reconstructProjectedPermissionRuntime(input: {

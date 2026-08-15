@@ -1115,12 +1115,20 @@ export const Instance: InstanceApi = {
             return await provideLeaseContext(lease, ctx, async () => {
               if (input.init && !entry.permissionRecoveryStarted) {
                 const { PermissionAuthority } = await import("@/permission/authority")
+                // Continuation recovery converges durable evidence; it is not a
+                // precondition for serving this project. Marking the attempt
+                // before it runs keeps a deterministic recovery fault from
+                // re-running on every later admission, and swallowing it keeps
+                // one unrecoverable ledger request from failing every
+                // project-scoped route.
+                entry.permissionRecoveryStarted = true
                 try {
                   await PermissionAuthority.resumeApprovedContinuations()
-                  entry.permissionRecoveryStarted = true
                 } catch (error) {
-                  entry.permissionRecoveryStarted = false
-                  throw error
+                  Log.Default.error("permission continuation recovery failed", {
+                    directory: key,
+                    error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+                  })
                 }
               }
               return input.fn()
