@@ -33,6 +33,7 @@ import {
 import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { TaskDeletedError, taskDeletedInTransaction } from "./store"
+import { Project } from "@/project/project"
 
 export type TaskRootIngressEvidence = {
   turns: readonly AssistantTurnFact[]
@@ -359,6 +360,13 @@ export function acquireTaskRootIngressLease(input: {
   }
   return Database.immediateTransaction((db) => {
     const facts = taskRootIngressFactsInTransaction(db, input.ingressID, input.readEvidence)
+    const task = db
+      .select({ projectID: EngineTaskTable.project_id })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, facts.ingress.taskID))
+      .get()
+    if (!task) throw new Error(`Task-root ingress ${input.ingressID} references a missing Task`)
+    Project.assertDurableAdmissionOpen(db, task.projectID)
     const projection = reduceTaskRootIngressFacts(facts, input.now)
     if (projection.state !== "ready") return { acquired: false, projection }
     const prior = db
@@ -411,6 +419,14 @@ export function renewTaskRootIngressLease(input: {
 }): void {
   if (input.expiresAt <= input.now) throw new Error("Task-root lease renewal must extend into the future")
   Database.immediateTransaction((db) => {
+    const ingress = db
+      .select({ projectID: EngineTaskTable.project_id })
+      .from(EngineTaskRootIngressTable)
+      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineTaskRootIngressTable.task_id))
+      .where(eq(EngineTaskRootIngressTable.id, input.ingressID))
+      .get()
+    if (!ingress) throw new Error(`Task-root ingress ${input.ingressID} has no Project authority`)
+    Project.assertDurableAdmissionOpen(db, ingress.projectID)
     const fence = assertTaskRootActivationLeaseFenceInTransaction(db, {
       activationID: input.activationID,
       now: input.now,

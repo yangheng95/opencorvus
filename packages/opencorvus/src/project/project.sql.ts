@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, integer, uniqueIndex, index } from "drizzle-orm/sqlite-core"
 import { Timestamps } from "@/storage/schema.sql"
 import { randomUUID } from "node:crypto"
 
@@ -25,3 +25,19 @@ export const ProjectTable = sqliteTable("project", {
     .notNull()
     .$defaultFn(() => randomUUID()),
 }, (table) => [uniqueIndex("project_generation_idx").on(table.generation)])
+
+export const ProjectMaintenanceFenceTable = sqliteTable("project_maintenance_fence", {
+  project_id: text()
+    .primaryKey()
+    .references(() => ProjectTable.id, { onDelete: "cascade" }),
+  project_generation: text().notNull(),
+  operation_id: text().notNull(),
+  kind: text({ enum: ["delete", "identity_convergence"] }).notNull(),
+  owner_occurrence_id: text().notNull(),
+  owner_pid: integer().notNull(),
+  owner_process_instance_id: text().notNull(),
+  time_created: integer().notNull(),
+}, (table) => [
+  index("project_maintenance_fence_operation_idx").on(table.operation_id),
+  index("project_maintenance_fence_owner_idx").on(table.owner_occurrence_id),
+])

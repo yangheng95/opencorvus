@@ -23,7 +23,7 @@ export function insertEngineTask(
     timeCreated: number
   },
 ): void {
-  Project.assertDurableAdmissionOpen(input.projectID)
+  Project.assertDurableAdmissionOpen(db, input.projectID)
   db.insert(EngineTaskTable)
     .values({
       id: input.taskID,

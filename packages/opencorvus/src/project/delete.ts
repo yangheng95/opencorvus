@@ -10,7 +10,6 @@ import { deleteProjectNotes } from "@/quicknote/service"
 import { SessionTable } from "@/session/session.sql"
 import { CANCEL_INGRESS_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { Filesystem } from "@/util/filesystem"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
@@ -18,7 +17,7 @@ import { ImplicitProject } from "./implicit-project"
 import { Instance, type ProjectDeletionAdmission } from "./instance"
 import { Project } from "./project"
 import { closeProjectDeletionRegistryAdmission, type ProjectDeletionRegistryAdmission } from "./deletion-registry"
-import { ProjectTable } from "./project.sql"
+import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
 import { ProjectRuntimePaths } from "./runtime-paths"
 import {
   cleanupCommittedProjectDeletion,
@@ -210,6 +209,19 @@ async function cancelRemainingProjectSessionPrompts(
 
 function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectID: string, taskIDs: string[]): void {
   Database.transaction((db) => {
+    const fence = db
+      .select()
+      .from(ProjectMaintenanceFenceTable)
+      .where(eq(ProjectMaintenanceFenceTable.project_id, admission.projectID))
+      .get()
+    if (
+      !fence ||
+      fence.operation_id !== admission.operationID ||
+      fence.project_generation !== admission.snapshot.generation ||
+      fence.kind !== "delete"
+    ) {
+      throw new Error(`Project ${admission.projectID} deletion fence changed before commit`)
+    }
     const current = db.select().from(ProjectTable).where(eq(ProjectTable.id, admission.projectID)).get()
     const expected = admission.snapshot
     if (
@@ -219,6 +231,15 @@ function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectI
       JSON.stringify(current.sandboxes) !== JSON.stringify(expected.sandboxes)
     ) {
       throw new Error(`Project ${admission.projectID} registry identity changed during deletion`)
+    }
+    const currentTaskIDs = db
+      .select({ id: EngineTaskTable.id })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.project_id, projectID))
+      .all()
+      .map((row) => row.id)
+    if (currentTaskIDs.length !== taskIDs.length || currentTaskIDs.some((taskID) => !taskIDs.includes(taskID))) {
+      throw new Error(`Project ${projectID} Task ownership changed before deletion commit`)
     }
     deleteDecisionLogsForTasks(taskIDs, db)
     deleteProjectNotes({ projectID }, db)
@@ -238,7 +259,6 @@ export async function deleteProject(
   project: Project.Info,
   cancellationOrigin: TaskCancellationOrigin,
 ): Promise<ProjectDeleteResult> {
-  RuntimeServerOwnership.assertCurrentProcessOwnsDatabase(Database.Path())
   const projectID = project.id
   using registryAdmission = closeProjectDeletionRegistryAdmission(projectID)
   const currentProject = Project.fromRow(registryAdmission.snapshot)
@@ -275,6 +295,7 @@ export async function deleteProject(
         projectID,
         directory,
         sources: rootPlans.map((plan) => plan.source),
+        operationID: registryAdmission.operationID,
       })
       for (const plan of cleanupPlan.manifest.targets) {
         if (await stageProjectRootRemoval(plan)) stagedPlans.push(plan)

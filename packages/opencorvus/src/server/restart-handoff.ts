@@ -1,12 +1,26 @@
 import { randomUUID } from "node:crypto"
 import { Env } from "@/runtime/env"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
-import { RuntimeServerOwnershipHandoffPendingError } from "./runtime-server-ownership"
 
 const RESTART_HANDOFF_ENV = "OPENCORVUS_RESTART_HANDOFF"
 const RESTART_HANDOFF_PREFIX = "OPENCORVUS_RESTART:"
 const RESTART_HANDOFF_TIMEOUT_MS = 15_000
 const RESTART_BIND_PROBE_INTERVAL_MS = 25
+const SUPERVISOR_OWNED_RESTART_ENV = [
+  "OPENCORVUS_PROCESS_OCCURRENCE_ID",
+  "OPENCORVUS_PROCESS_OCCURRENCE_PATH",
+  "OPENCORVUS_PREDECESSOR_PROCESS_OCCURRENCE_PATH",
+  "OPENCORVUS_PROCESS_SHUTDOWN_REQUEST_PATH",
+] as const
+
+export function restartReplacementEnvironment(
+  base: Record<string, string>,
+  overrides?: Record<string, string>,
+): Record<string, string> {
+  const environment = { ...base, ...overrides }
+  for (const name of SUPERVISOR_OWNED_RESTART_ENV) delete environment[name]
+  return environment
+}
 
 export interface RestartHandoff {
   token: string
@@ -125,7 +139,7 @@ export async function beginRestartHandoff(input: {
   port: number
   quiesceListener: () => Promise<void>
   settleExecution: () => Promise<void>
-  releaseRuntimeOwnership: () => Promise<void> | void
+  releaseRuntimeState: () => Promise<void> | void
   restoreListener: () => Promise<void>
   command?: string[]
   environment?: Record<string, string>
@@ -142,7 +156,7 @@ export async function beginRestartHandoff(input: {
     drained = input.quiesceListener()
     await drained
     await input.settleExecution()
-    await input.releaseRuntimeOwnership()
+    await input.releaseRuntimeState()
     await waitForReleasedListener(input.hostname, input.port)
 
     child = await ProcessSupervisor.spawnHostCommand({
@@ -150,8 +164,7 @@ export async function beginRestartHandoff(input: {
       args,
       cwd: process.cwd(),
       env: {
-        ...Env.snapshot(),
-        ...input.environment,
+        ...restartReplacementEnvironment(Env.snapshot(), input.environment),
         [RESTART_HANDOFF_ENV]: JSON.stringify(handoff),
       },
       stdin: "pipe",
@@ -207,7 +220,7 @@ export async function beginRestartHandoff(input: {
         error = ProcessSupervisor.combineFailures("Restart replacement and cleanup failed", [error, cleanupError])
       }
     }
-    if (listenerQuiesceStarted && restartFailureDisposition(error) === "restore-listener") {
+    if (listenerQuiesceStarted) {
       try {
         await input.restoreListener()
       } catch (restoreError) {
@@ -219,8 +232,4 @@ export async function beginRestartHandoff(input: {
     }
     throw error
   }
-}
-
-export function restartFailureDisposition(error: unknown): "remain-quiesced" | "restore-listener" {
-  return error instanceof RuntimeServerOwnershipHandoffPendingError ? "remain-quiesced" : "restore-listener"
 }

@@ -30,6 +30,13 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 （Write-Ahead Log，预写日志）/SHM（Shared Memory，共享内存）文件只能在进程完全退出后
 由用户明确授权的 maintenance 操作整体处置；普通启动和本路径重构不迁移或重建数据库。
 
+SQLite 数据库与 data root 不拥有单后端启动锁；不同监听端口的多个后端可以同时打开同一
+数据库。物理执行由各领域的 durable lease 协调。破坏性 Project 删除和 identity convergence
+仅通过 `project_maintenance_fence` 隔离其涉及的 Project occurrence：fence 与 Project generation、
+维护 operation 和拥有它的 PID/进程启动指纹绑定，Task/Session 新建及 Task-root lease 的取得/续租
+在各自写事务内读取该 fence。启动恢复只在物理观察证明 owner occurrence 已死亡或 PID 已复用后
+删除对应 Project fence；它不得升级为 database path 或 data root 的排他 owner。
+
 ## engine 域
 
 ### 业务身份与完整性摘要

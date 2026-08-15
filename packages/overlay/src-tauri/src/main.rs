@@ -4619,8 +4619,6 @@ fn start_prepared_server<R: Runtime>(
         .arg(LOCAL_SERVER_HOST)
         .arg("--port")
         .arg(port.to_string())
-        .arg("--managed-scope")
-        .arg(&sidecar_cwd)
         .arg("--parent-pid")
         .arg(std::process::id().to_string())
         .env("OPENCORVUS_VERSION", env!("CARGO_PKG_VERSION"))
@@ -6919,7 +6917,7 @@ mod tests {
         let root = unique_sidecar_test_dir("oc-sidecar-terminal-evidence");
         std::fs::create_dir_all(&root).expect("test root should be created");
         let log_path = root.join("sidecar.log");
-        let captured_output = "OpenCorvus database C:\\opencorvus\\data\\opencorvus.db is owned by server runtime process identifier 23620\n";
+        let captured_output = "backend startup failed after database initialization\n";
         std::fs::write(&log_path, captured_output)
             .expect("captured startup output should be written");
 
@@ -6944,7 +6942,7 @@ mod tests {
         let root = unique_sidecar_test_dir("oc-sidecar-terminal-observation");
         std::fs::create_dir_all(&root).expect("test root should be created");
         let log_path = root.join("sidecar.log");
-        std::fs::write(&log_path, "runtime ownership conflict\n")
+        std::fs::write(&log_path, "backend startup failure detail\n")
             .expect("captured startup output should be written");
         let mut child =
             Command::new(std::env::current_exe().expect("test executable should resolve"))
@@ -6981,7 +6979,7 @@ mod tests {
         assert!(failure
             .message
             .starts_with("managed backend exited before becoming healthy:"));
-        assert!(failure.message.ends_with("runtime ownership conflict"));
+        assert!(failure.message.ends_with("backend startup failure detail"));
         std::fs::remove_dir_all(&root).expect("test root should be removed");
     }
 

@@ -2,67 +2,48 @@ import { AutomationService } from "@/scheduler/automation-service"
 import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 import { Server } from "@/server/server"
 import {
-  RuntimeServerOwnership,
-  RuntimeServerOwnershipHandoffPendingError,
-  RuntimeServerStartupCleanupPendingError,
-} from "@/server/runtime-server-ownership"
+  cachedRuntimeProcessOccurrenceObserver,
+  currentRuntimeProcessOccurrence,
+  type RuntimeProcessOccurrenceInfo,
+} from "@/runtime/process-occurrence"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
 import { recoverProjectDeletionCleanup } from "@/project/deletion-cleanup"
+import { recoverProjectMaintenanceFences } from "@/project/deletion-registry"
 
-export async function acquireServerRuntimeAfterRecovery(input: {
+/** Run every process-local recovery barrier before a listener is published.
+ * Durable leases and idempotent facts coordinate concurrent backends; a
+ * database-path-wide host lock is neither acquired nor consulted. */
+export async function prepareServerRuntimeAfterRecovery(input: {
   recover(): Promise<void>
   disposeInstances(): Promise<void>
-}): Promise<{ ownership: RuntimeServerOwnership.Handle; recovery: Promise<void> }> {
-  let ownership: RuntimeServerOwnership.Handle
-  try {
-    ownership = Server.acquireRuntimeOwnershipForStartup()
-  } catch (error) {
-    if (!(error instanceof RuntimeServerStartupCleanupPendingError)) throw error
-    await error.complete()
-    ownership = Server.acquireRuntimeOwnershipForStartup()
-  }
+}): Promise<{ occurrence: RuntimeProcessOccurrenceInfo; recovery: Promise<void> }> {
+  const occurrence = currentRuntimeProcessOccurrence()
   const recovery = Promise.resolve().then(async () => {
-    const observeProcessOccurrence = RuntimeServerOwnership.cachedProcessOccurrenceObserver()
+    const observeProcessOccurrence = cachedRuntimeProcessOccurrenceObserver()
     await ProcessSupervisor.recoverOrphanedWindowsRequests({
-      currentOccurrenceID: ownership.owner.occurrenceID,
+      currentOccurrenceID: occurrence.occurrenceID,
       observeProcessOccurrence,
     })
     await recoverOrphanedIsolatedCheckWorkspaces({
-      currentOccurrenceID: ownership.owner.occurrenceID,
+      currentOccurrenceID: occurrence.occurrenceID,
       observeProcessOccurrence,
     })
-    await recoverProjectDeletionCleanup(ownership)
+    await recoverProjectDeletionCleanup(observeProcessOccurrence)
+    recoverProjectMaintenanceFences(observeProcessOccurrence)
     AutomationService.initGlobal()
     await input.recover()
     SchedulerMessageDeliveryService.initGlobal()
   })
   try {
     await recovery
-    return { ownership, recovery }
+    return { occurrence, recovery }
   } catch (recoveryError) {
-    let terminated: Awaited<ReturnType<typeof Server.settleCurrentProcessExecution>> | undefined
-    let cleanupFailure: unknown
-    const cleanup = RuntimeServerOwnership.retainStartupCleanup({
-      handle: ownership,
-      async complete() {
-        if (cleanupFailure instanceof RuntimeServerOwnershipHandoffPendingError) {
-          await cleanupFailure.complete()
-          return
-        }
-        terminated ??= await Server.settleCurrentProcessExecution("Started Task recovery failed before listener bind", {
-          disposeInstances: input.disposeInstances,
-        })
-        try {
-          await RuntimeServerOwnership.releaseWithRetry(ownership, () => terminated!.releaseHandoff(true))
-        } catch (error) {
-          cleanupFailure = error
-          throw error
-        }
-      },
-    })
     try {
-      await cleanup.complete()
+      const terminated = await Server.settleCurrentProcessExecution("Started Task recovery failed before listener bind", {
+        disposeInstances: input.disposeInstances,
+      })
+      await Server.releaseRuntimeHandoff(terminated.releaseHandoff)
     } catch (cleanupError) {
       throw new AggregateError([recoveryError, cleanupError], "Started Task recovery and runtime cleanup failed")
     }
@@ -75,13 +56,13 @@ export async function listenWithRecoveredServerRuntime(input: {
   recover(): Promise<void>
   disposeInstances(): Promise<void>
 }): Promise<{
-  server: ReturnType<typeof Server.listenWithOwnedRuntime>
-  ownership: RuntimeServerOwnership.Handle
+  server: ReturnType<typeof Server.listenPrepared>
+  occurrence: RuntimeProcessOccurrenceInfo
   recovery: Promise<void>
 }> {
-  const prepared = await acquireServerRuntimeAfterRecovery(input)
+  const prepared = await prepareServerRuntimeAfterRecovery(input)
   return {
-    server: Server.listenWithOwnedRuntime(input.options, prepared.ownership),
+    server: Server.listenPrepared(input.options),
     ...prepared,
   }
 }

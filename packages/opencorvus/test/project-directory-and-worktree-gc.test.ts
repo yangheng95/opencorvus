@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, describe, expect, spyOn, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Instance, InstanceTestHooks } from "@/project/instance"
@@ -37,7 +37,6 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { insertEngineTask } from "@/engine/task"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { insertTaskProcessBinding, prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { DatabaseAuthorityTable } from "@/storage/database.sql"
 import { GlobalBus } from "@/bus/global"
 import { Provider } from "@/provider/provider"
@@ -47,7 +46,6 @@ import { ProtocolStore } from "@/protocol/store"
 let rejectDeletionProbeDisposal = false
 let holdDeletionProbeDisposal: Promise<void> | undefined
 let releaseDeletionProbeDisposal: (() => void) | undefined
-let runtimeOwnership: RuntimeServerOwnership.Handle
 const deletionProbeState = Instance.state(
   () => ({ initialized: true as const }),
   async () => {
@@ -119,14 +117,6 @@ function sessionLoopDeletionProviderModel(): ProviderType.Model {
   } as ProviderType.Model
 }
 
-beforeAll(() => {
-  runtimeOwnership = Server.acquireRuntimeOwnershipForStartup()
-})
-
-afterAll(() => {
-  runtimeOwnership.release()
-})
-
 afterEach(async () => {
   rejectDeletionProbeDisposal = false
   holdDeletionProbeDisposal = undefined
@@ -137,9 +127,6 @@ afterEach(async () => {
 })
 
 describe("Project directory integrity", () => {
-  async function withRuntimeOwnership<T>(run: (ownership: RuntimeServerOwnership.Handle) => Promise<T>) {
-    return run(runtimeOwnership)
-  }
   test("binds an existing directory and returns typed missing and file-path errors through the HTTP boundary", async () => {
     await using project = await memoryProject()
     const bound = await Project.fromDirectory(project.path)
@@ -1643,7 +1630,7 @@ describe("Project directory integrity", () => {
       sources: [source],
     })
     await fs.rename(source, plan.manifest.targets[0]!.quarantine)
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await Promise.all(Array.from({ length: 8 }, () => recoverProjectDeletionCleanup()))
 
     expect({
       source: await fs.readFile(path.join(source, "authority.txt"), "utf8"),
@@ -1654,53 +1641,33 @@ describe("Project directory integrity", () => {
     }).toEqual({ source: "retained", manifest: "missing" })
   }, 90_000)
 
-  test("requires the live canonical runtime owner for Project deletion and cleanup recovery", async () => {
+  test("preserves a live backend's in-flight Project deletion during startup recovery", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
     const source = ProjectRuntimePaths.projectConfigRoot(project.path)
     await fs.mkdir(source, { recursive: true })
+    await fs.writeFile(path.join(source, "authority.txt"), "live-deletion")
+    const admission = closeProjectDeletionRegistryAdmission(registered.project.id)
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
       sources: [source],
+      operationID: admission.operationID,
     })
-    runtimeOwnership.release()
-    const deleteError = await deleteProject(registered.project, {
-      actor: "user",
-      source: "project.delete",
-      surface: "api",
-      requestID: "request_runtime_owner_required",
-      reason: "Prove live deletion uses startup ownership authority",
-    }).catch((cause) => cause)
-    const recoveryError = await recoverProjectDeletionCleanup(runtimeOwnership).catch((cause) => cause)
-    runtimeOwnership = Server.acquireRuntimeOwnershipForStartup()
-    await recoverProjectDeletionCleanup(runtimeOwnership)
+    const quarantine = plan.manifest.targets[0]!.quarantine
+    await fs.rename(source, quarantine)
+    try {
+      await recoverProjectDeletionCleanup(() => "exact_live")
+      expect({
+        manifest: await fs.readFile(plan.manifestPath, "utf8").then(() => "retained" as const),
+        quarantine: await fs.readFile(path.join(quarantine, "authority.txt"), "utf8"),
+      }).toEqual({ manifest: "retained", quarantine: "live-deletion" })
+    } finally {
+      admission[Symbol.dispose]()
+    }
 
-    expect({
-      delete: deleteError.name,
-      recovery: recoveryError.name,
-      project: Project.get(registered.project.id)?.id,
-      source: await fs.stat(source).then(() => "present"),
-    }).toEqual({
-      delete: "RuntimeServerOwnershipConflictError",
-      recovery: "RuntimeServerOwnershipConflictError",
-      project: registered.project.id,
-      source: "present",
-    })
-  }, 90_000)
-
-  test("rejects cleanup recovery with a live owner for another database", async () => {
-    const otherOwnership = {
-      database: path.join(path.dirname(Database.Path()), "other-runtime.db"),
-      owner: runtimeOwnership.owner,
-      release: () => undefined,
-      retainForRecovery: () => undefined,
-    } as RuntimeServerOwnership.Handle
-    const error = await recoverProjectDeletionCleanup(otherOwnership).catch((cause) => cause)
-    expect({ name: error.name, database: Database.Path() }).toEqual({
-      name: "RuntimeServerOwnershipDatabaseMismatchError",
-      database: runtimeOwnership.database,
-    })
+    await recoverProjectDeletionCleanup()
+    expect(await fs.readFile(path.join(source, "authority.txt"), "utf8")).toBe("live-deletion")
   }, 90_000)
 
   test("cleans a committed Project quarantine from the durable deletion cleanup manifest", async () => {
@@ -1716,7 +1683,7 @@ describe("Project directory integrity", () => {
     const quarantine = plan.manifest.targets[0]!.quarantine
     await fs.rename(source, quarantine)
     Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await Promise.all(Array.from({ length: 8 }, () => recoverProjectDeletionCleanup()))
 
     const cleanupRoot = ProjectDeletionCleanupTestHooks.root()
     const completedRoot = ProjectDeletionCleanupTestHooks.completedRoot()
@@ -1758,7 +1725,7 @@ describe("Project directory integrity", () => {
       return actualSyncDirectoryMetadata(directory)
     })
     try {
-      await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+      await recoverProjectDeletionCleanup()
     } finally {
       syncDirectoryMetadata.mockRestore()
     }
@@ -1784,7 +1751,7 @@ describe("Project directory integrity", () => {
     const quarantine = plan.manifest.targets[0]!.quarantine
     await fs.rename(source, quarantine)
     Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await recoverProjectDeletionCleanup()
     await fs.mkdir(quarantine, { recursive: true })
     await fs.writeFile(path.join(quarantine, "power-loss-residue.txt"), "reappeared namespace entry")
     const replacementDatabaseInstanceID = crypto.randomUUID()
@@ -1796,7 +1763,7 @@ describe("Project directory integrity", () => {
         .run(),
     )
 
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await recoverProjectDeletionCleanup()
 
     expect({
       databaseInstanceID: Database.Identity(),
@@ -1842,7 +1809,7 @@ describe("Project directory integrity", () => {
     })
     await fs.mkdir(source, { recursive: true })
     await fs.writeFile(path.join(source, "authority.txt"), "new-generation")
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await recoverProjectDeletionCleanup()
 
     expect({
       source: await fs.readFile(path.join(source, "authority.txt"), "utf8"),
@@ -1877,9 +1844,7 @@ describe("Project directory integrity", () => {
     await fs.rename(source, plan.manifest.targets[0]!.quarantine)
     const mismatched = { ...plan.manifest, databaseInstanceID: crypto.randomUUID() }
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(mismatched, null, 2)}\n`)
-    const error = await withRuntimeOwnership((ownership) =>
-      recoverProjectDeletionCleanup(ownership).catch((cause) => cause),
-    )
+    const error = await recoverProjectDeletionCleanup().catch((cause) => cause)
 
     expect({
       outer: error.name,
@@ -1893,7 +1858,7 @@ describe("Project directory integrity", () => {
       quarantine: "present",
     })
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(plan.manifest, null, 2)}\n`)
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await recoverProjectDeletionCleanup()
   }, 90_000)
 
   test("rejects a cleanup manifest whose target escapes the exact Project-owned root", async () => {
@@ -1912,9 +1877,7 @@ describe("Project directory integrity", () => {
       targets: [{ source: escapedSource, quarantine: `${escapedSource}.deleting-${plan.manifest.operationID}-0` }],
     }
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(escaped, null, 2)}\n`)
-    const error = await withRuntimeOwnership((ownership) =>
-      recoverProjectDeletionCleanup(ownership).catch((cause) => cause),
-    )
+    const error = await recoverProjectDeletionCleanup().catch((cause) => cause)
 
     expect({
       outer: error.name,
@@ -1928,7 +1891,7 @@ describe("Project directory integrity", () => {
       manifest: "present",
     })
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(plan.manifest, null, 2)}\n`)
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await recoverProjectDeletionCleanup()
   }, 90_000)
 
   test("returns a committed cleanup receipt and converges its durable residue on recovery", async () => {
@@ -1957,7 +1920,7 @@ describe("Project directory integrity", () => {
       rm.mockRestore()
     }
     const pending = await fs.readdir(ProjectDeletionCleanupTestHooks.root())
-    await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    await recoverProjectDeletionCleanup()
     const recovered = await fs
       .readdir(ProjectDeletionCleanupTestHooks.root())
       .catch((error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? [] : Promise.reject(error)))

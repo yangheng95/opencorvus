@@ -89,6 +89,23 @@ export class DatabaseEffectAdmissionClosedError extends Error {
 
 const log = Log.create({ service: "db" })
 
+function migrateProjectMaintenanceFenceSchema(sqlite: BunDatabase): void {
+  sqlite.exec(`
+CREATE TABLE IF NOT EXISTS "project_maintenance_fence" (
+  "project_id" text PRIMARY KEY NOT NULL,
+  "project_generation" text NOT NULL,
+  "operation_id" text NOT NULL,
+  "kind" text NOT NULL,
+  "owner_occurrence_id" text NOT NULL,
+  "owner_pid" integer NOT NULL,
+  "owner_process_instance_id" text NOT NULL,
+  "time_created" integer NOT NULL,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS "project_maintenance_fence_operation_idx" ON "project_maintenance_fence" ("operation_id");
+CREATE INDEX IF NOT EXISTS "project_maintenance_fence_owner_idx" ON "project_maintenance_fence" ("owner_occurrence_id");`)
+}
+
 const SQLITE_UNAVAILABLE_CODE_PREFIXES = ["SQLITE_IOERR", "SQLITE_CANTOPEN", "SQLITE_CORRUPT", "SQLITE_READONLY"]
 const SQLITE_UNAVAILABLE_CODES = new Set(["SQLITE_NOTADB", "SQLITE_FULL"])
 
@@ -1062,6 +1079,7 @@ export namespace Database {
     try {
       let sqlite = openOwnedSqlite(dbPath, { configure: false })
       if (hasApplicationSchema(sqlite)) {
+        migrateProjectMaintenanceFenceSchema(sqlite)
         migrateFactKernelSchema(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)
         if (reconciledTriggers.length > 0) {

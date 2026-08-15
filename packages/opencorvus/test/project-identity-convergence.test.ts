@@ -9,7 +9,6 @@ import { ChannelIngressAcceptedTable } from "../src/channel/channel.sql"
 import { Project } from "../src/project/project"
 import { ProjectIdentityConvergence } from "../src/project/identity-convergence"
 import { namedErrorStatus } from "../src/server/error-handler"
-import { RuntimeServerOwnership } from "../src/server/runtime-server-ownership"
 import { PermissionLedgerTable } from "../src/permission/permission.sql"
 import { BusPublicationOutboxTable } from "../src/bus/bus.sql"
 import fs from "node:fs/promises"
@@ -67,13 +66,8 @@ function identityRows(projectIDs: string[]) {
   }))
 }
 
-async function convergeWithRuntimeOwnership(input: { worktree: string; canonicalProjectID: string }) {
-  const ownership = RuntimeServerOwnership.acquire({ database: Database.Path() })
-  try {
-    return await ProjectIdentityConvergence.converge(input)
-  } finally {
-    await RuntimeServerOwnership.releaseWithRetry(ownership)
-  }
+async function convergeProjectIdentity(input: { worktree: string; canonicalProjectID: string }) {
+  return ProjectIdentityConvergence.converge(input)
 }
 
 describe("explicit Project identity convergence", () => {
@@ -128,7 +122,7 @@ describe("explicit Project identity convergence", () => {
       rows: before,
     })
 
-    const receipt = await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+    const receipt = await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     const repaired = Project.get(canonicalProjectID)
     const resolved = await Project.fromDirectory(fixture.path)
     expect({
@@ -212,7 +206,7 @@ describe("explicit Project identity convergence", () => {
     const before = identityRows([canonicalProjectID, duplicateProjectID])
     let conflict: unknown
     try {
-      await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     } catch (cause) {
       conflict = cause
     }
@@ -274,16 +268,14 @@ describe("explicit Project identity convergence", () => {
     }
   })
 
-  test("explicit convergence requires exact runtime ownership", async () => {
+  test("explicit convergence commits the canonical Project transaction", async () => {
     await using fixture = await memoryProject()
     const canonicalProjectID = `project_${crypto.randomUUID()}`
     const duplicateProjectID = `project_${crypto.randomUUID()}`
     insertProject({ id: canonicalProjectID, worktree: fixture.path })
     insertProject({ id: duplicateProjectID, worktree: fixture.path })
-    const conflict = await ProjectIdentityConvergence.converge({ worktree: fixture.path, canonicalProjectID }).catch(
-      (cause) => cause,
-    )
-    expect(conflict).toMatchObject({ name: "RuntimeServerOwnershipConflictError" })
+    const receipt = await ProjectIdentityConvergence.converge({ worktree: fixture.path, canonicalProjectID })
+    expect(receipt).toMatchObject({ canonicalProjectID, removedProjectIDs: [duplicateProjectID] })
   })
 
   test("an immutable Task process binding preserves the duplicate Project occurrence", async () => {
@@ -323,7 +315,7 @@ describe("explicit Project identity convergence", () => {
     })
     let conflict: unknown
     try {
-      await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     } catch (cause) {
       conflict = cause
     }
@@ -353,7 +345,7 @@ describe("explicit Project identity convergence", () => {
     await fs.writeFile(`${attachmentRoot}/.authority.json`, JSON.stringify(authority, null, 2))
     let conflict: unknown
     try {
-      await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     } catch (cause) {
       conflict = cause
     }
@@ -402,7 +394,7 @@ describe("explicit Project identity convergence", () => {
 
     let conflict: unknown
     try {
-      await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     } catch (cause) {
       conflict = cause
     }
@@ -452,7 +444,7 @@ describe("explicit Project identity convergence", () => {
     )
     let conflict: unknown
     try {
-      await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     } catch (cause) {
       conflict = cause
     }
@@ -490,7 +482,7 @@ describe("explicit Project identity convergence", () => {
     )
     let conflict: unknown
     try {
-      await convergeWithRuntimeOwnership({ worktree: fixture.path, canonicalProjectID })
+      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
     } catch (cause) {
       conflict = cause
     }

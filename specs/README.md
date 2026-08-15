@@ -449,7 +449,7 @@ Latest Generate Expert Squads project-generation trace design: [`2026-08-07-squa
 
 Latest Task resume, queue occurrence, and Overlay recovery repair: [`2026-08-04-task-resume-occurrence-and-overlay-recovery.md`](records/2026-08/2026-08-04-task-resume-occurrence-and-overlay-recovery.md).
 
-Latest single-runtime database ownership and same-Task phase-closure recovery repair: [`2026-08-04-single-runtime-owner-and-phase-closure-recovery.md`](records/2026-08/2026-08-04-single-runtime-owner-and-phase-closure-recovery.md).
+Latest shared-database multi-backend startup restoration: [`2026-08-16-shared-database-multi-backend-startup-restoration.md`](records/2026-08/2026-08-16-shared-database-multi-backend-startup-restoration.md).
 
 Latest Work Ledger hover-action focus release: [`2026-08-04-work-ledger-hover-action-focus-release.md`](records/2026-08/2026-08-04-work-ledger-hover-action-focus-release.md).
 

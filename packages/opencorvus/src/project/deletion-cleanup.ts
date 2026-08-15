@@ -8,9 +8,10 @@ import { Global } from "@/global"
 import { Database, eq } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
 import { ProjectTable } from "./project.sql"
+import { ProjectMaintenanceFenceTable } from "./project.sql"
+import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 import { ImplicitProject } from "./implicit-project"
 import { ProjectRuntimePaths } from "./runtime-paths"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 
 const CleanupTarget = z.object({
   source: z.string().min(1),
@@ -114,10 +115,27 @@ async function pathState(target: string): Promise<"present" | "absent"> {
   }
 }
 
+function sameManifest(left: ProjectDeletionCleanupManifest, right: ProjectDeletionCleanupManifest): boolean {
+  return JSON.stringify(left) === JSON.stringify(right)
+}
+
+async function completedManifestMatches(plan: ProjectDeletionCleanupPlan, completedPath: string): Promise<boolean> {
+  if ((await pathState(plan.manifestPath)) !== "absent") return false
+  try {
+    const completed = parseManifest(JSON.parse(await fs.readFile(completedPath, "utf8")), completedPath, "completed")
+    return sameManifest(completed, plan.manifest)
+  } catch (error) {
+    const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
+    if (code === "ENOENT" || code === "ENOTDIR") return false
+    throw error
+  }
+}
+
 export async function createProjectDeletionCleanupPlan(input: {
   projectID: string
   directory: string
   sources: string[]
+  operationID?: string
 }): Promise<ProjectDeletionCleanupPlan> {
   if (input.sources.length !== 1) throw new Error("Project deletion cleanup must own exactly one root")
   const authority = Database.use((db) =>
@@ -129,7 +147,7 @@ export async function createProjectDeletionCleanupPlan(input: {
   )
   if (!authority) throw new Error(`Cannot create deletion cleanup authority for missing Project ${input.projectID}`)
   if (!authority.generation) throw new Error(`Project ${input.projectID} has no durable generation`)
-  const operationID = randomUUID()
+  const operationID = input.operationID ?? randomUUID()
   const targets = input.sources.map((source, index) => ({
     source: path.resolve(source),
     quarantine: `${path.resolve(source)}.deleting-${operationID}-${index}`,
@@ -190,16 +208,32 @@ export async function cleanupCommittedProjectDeletion(
       await Filesystem.mkdirDurable(completedRoot)
       await Filesystem.renameDurableNoReplace(plan.manifestPath, completedPath)
     } catch (error) {
-      residue.push({
-        path: plan.manifestPath,
-        message: error instanceof Error ? error.message : String(error),
-      })
+      if (!(await completedManifestMatches(plan, completedPath))) {
+        residue.push({
+          path: plan.manifestPath,
+          message: error instanceof Error ? error.message : String(error),
+        })
+      }
     }
   return residue
 }
 
-async function recoverManifest(manifestPath: string, state: "active" | "completed"): Promise<void> {
-  const manifest = parseManifest(JSON.parse(await fs.readFile(manifestPath, "utf8")), manifestPath, state)
+async function recoverManifest(
+  manifestPath: string,
+  state: "active" | "completed",
+  observeProcessOccurrence?: RuntimeProcessOccurrenceObserver,
+): Promise<void> {
+  let serialized: string
+  try {
+    serialized = await fs.readFile(manifestPath, "utf8")
+  } catch (error) {
+    const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
+    // Another backend may have completed or rolled back the exact active
+    // operation after this process enumerated it.
+    if (state === "active" && (code === "ENOENT" || code === "ENOTDIR")) return
+    throw error
+  }
+  const manifest = parseManifest(JSON.parse(serialized), manifestPath, state)
   const currentDatabaseInstanceID = Database.Identity()
   if (state === "active" && currentDatabaseInstanceID !== manifest.databaseInstanceID) {
     throw new ProjectDeletionCleanupDatabaseMismatchError({
@@ -224,6 +258,29 @@ async function recoverManifest(manifestPath: string, state: "active" | "complete
         )
       : undefined
   if (state === "active" && project?.generation === manifest.projectGeneration) {
+    const projectFence = Database.use((db) =>
+      db
+        .select()
+        .from(ProjectMaintenanceFenceTable)
+        .where(eq(ProjectMaintenanceFenceTable.project_id, manifest.projectID))
+        .get(),
+    )
+    if (projectFence) {
+      if (
+        projectFence.operation_id !== manifest.operationID ||
+        projectFence.project_generation !== manifest.projectGeneration ||
+        projectFence.kind !== "delete"
+      ) {
+        return
+      }
+      if (!observeProcessOccurrence) return
+      const owner = observeProcessOccurrence({
+        pid: projectFence.owner_pid,
+        processInstanceID: projectFence.owner_process_instance_id,
+        occurrenceID: projectFence.owner_occurrence_id,
+      })
+      if (owner !== "dead_or_reused") return
+    }
     for (const target of manifest.targets.toReversed()) {
       const [sourceState, quarantineState] = await Promise.all([pathState(target.source), pathState(target.quarantine)])
       if (sourceState === "present" && quarantineState === "present") {
@@ -232,7 +289,15 @@ async function recoverManifest(manifestPath: string, state: "active" | "complete
         )
       }
       if (sourceState === "absent" && quarantineState === "present") {
-        await Filesystem.renameDurableNoReplace(target.quarantine, target.source)
+        try {
+          await Filesystem.renameDurableNoReplace(target.quarantine, target.source)
+        } catch (error) {
+          const [settledSource, settledQuarantine] = await Promise.all([
+            pathState(target.source),
+            pathState(target.quarantine),
+          ])
+          if (settledSource !== "present" || settledQuarantine !== "absent") throw error
+        }
       }
     }
     await removeProjectDeletionCleanupPlan({ manifest, manifestPath })
@@ -248,8 +313,9 @@ async function recoverManifest(manifestPath: string, state: "active" | "complete
   }
 }
 
-export async function recoverProjectDeletionCleanup(ownership: RuntimeServerOwnership.Handle): Promise<void> {
-  RuntimeServerOwnership.assertHandleForDatabase(ownership, Database.Path())
+export async function recoverProjectDeletionCleanup(
+  observeProcessOccurrence?: RuntimeProcessOccurrenceObserver,
+): Promise<void> {
   const failures: unknown[] = []
   const recoverRoot = async (root: string, state: "active" | "completed") => {
     let names: string[]
@@ -262,7 +328,7 @@ export async function recoverProjectDeletionCleanup(ownership: RuntimeServerOwne
     }
     for (const name of names.filter((candidate) => candidate.endsWith(".json")).sort()) {
       try {
-        await recoverManifest(path.join(root, name), state)
+        await recoverManifest(path.join(root, name), state, observeProcessOccurrence)
       } catch (error) {
         failures.push(error)
       }
@@ -278,6 +344,8 @@ export async function recoverProjectDeletionCleanup(ownership: RuntimeServerOwne
     databaseRoots = []
   }
   for (const entry of databaseRoots.sort((left, right) => left.name.localeCompare(right.name))) {
+    const temporaryTarget = Filesystem.durableDirectoryTemporaryTargetName(entry.name)
+    if (temporaryTarget && z.string().uuid().safeParse(temporaryTarget).success) continue
     if (!entry.isDirectory() || !z.string().uuid().safeParse(entry.name).success) {
       failures.push(new Error(`Invalid completed Project deletion cleanup database directory: ${entry.name}`))
       continue

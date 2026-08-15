@@ -11,7 +11,7 @@ import { spawn } from "node:child_process"
 import { randomUUID } from "node:crypto"
 import net from "node:net"
 import { pathToFileURL } from "node:url"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Global } from "@/global"
 
 describe("ProcessSupervisor control-plane authority", () => {
@@ -124,7 +124,7 @@ describe("ProcessSupervisor control-plane authority", () => {
       active_processes: 0,
     })
     const recovery = await ProcessSupervisor.recoverOrphanedWindowsRequests({
-      currentOccurrenceID: RuntimeServerOwnership.currentProcessOccurrence().occurrenceID,
+      currentOccurrenceID: currentRuntimeProcessOccurrence().occurrenceID,
     })
     expect(recovery.removed).toBeGreaterThanOrEqual(1)
   }, 60_000)

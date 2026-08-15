@@ -216,7 +216,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("4ba0a886bf5bcf03f3215285ade1f8a2f5db59de590d02072eb6ae144f4ccd73")
+    expect(mysqlSchemaFingerprint()).toBe("456af36fb51c2c4cdcff68616ec9675ca7eca93e6f010606e8e8292afdd93f8f")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )
@@ -256,6 +256,19 @@ test("restores a missing canonical fact table before opening the database", asyn
     Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
     Database.Client()
     expect(Database.use((db) => db.select().from(PermissionExecutionResultTable).all())).toEqual([])
+  } finally {
+    rebuildTestDatabase()
+  }
+})
+
+test("adds the Project maintenance fence to an existing current database", async () => {
+  const { Database } = await import("../../src/storage/db")
+  const { ProjectMaintenanceFenceTable } = await import("../../src/project/project.sql")
+  try {
+    rebuildTestDatabase()
+    Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "project_maintenance_fence"'))
+    Database.Client()
+    expect(Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all())).toEqual([])
   } finally {
     rebuildTestDatabase()
   }

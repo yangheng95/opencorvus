@@ -27,16 +27,16 @@ export namespace Project {
     }),
   )
 
-  export function assertDurableAdmissionOpen(projectID: string): void {
-    if (assertProjectDurableAdmissionOpen(projectID)) return
+  export function assertDurableAdmissionOpen(db: Database.TxOrDb, projectID: string): void {
+    if (assertProjectDurableAdmissionOpen(db, projectID)) return
     throw new DurableAdmissionClosedError({
       projectID,
       message: `Project ${projectID} durable admission is closed during deletion`,
     })
   }
 
-  function assertRegistryAdmissionOpen(projectID: string) {
-    if (!assertProjectDurableAdmissionOpen(projectID)) {
+  function assertRegistryAdmissionOpen(db: Database.TxOrDb, projectID: string) {
+    if (!assertProjectDurableAdmissionOpen(db, projectID)) {
       throw new DurableAdmissionClosedError({
         projectID,
         message: `Project ${projectID} registry admission is closed during deletion`,
@@ -478,11 +478,11 @@ export namespace Project {
         message: `Project ${data.id} discovery was admitted while deletion was in progress`,
       })
     }
-    assertRegistryAdmissionOpen(data.id)
+    Database.use((db) => assertRegistryAdmissionOpen(db, data.id))
     await beforeDiscoveryCommit?.({ projectID: data.id, directory, proposedSandbox })
 
     const committed = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(data.id)
+      assertRegistryAdmissionOpen(db, data.id)
       const currentRow = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
       const resolvedAt = Date.now()
       const current: Info = currentRow
@@ -605,7 +605,7 @@ export namespace Project {
     },
     db: Database.TxOrDb,
   ) {
-    assertRegistryAdmissionOpen(input.projectID)
+    assertRegistryAdmissionOpen(db, input.projectID)
     const projects = db
       .select()
       .from(ProjectTable)
@@ -890,7 +890,7 @@ export namespace Project {
 
   function addSandboxRow(id: string, target: string) {
     const result = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(id)
+      assertRegistryAdmissionOpen(db, id)
       const rows = db.select().from(ProjectTable).all()
       const row = rows.find((candidate) => candidate.id === id)
       if (!row) throw new Error(`Project not found: ${id}`)
@@ -950,7 +950,7 @@ export namespace Project {
   export async function removeSandbox(id: string, directory: string) {
     const target = Filesystem.windowsPath(path.resolve(directory))
     const result = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(id)
+      assertRegistryAdmissionOpen(db, id)
       const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
       if (!row) throw new Error(`Project not found: ${id}`)
       const sandboxes = row.sandboxes.filter((s) => Filesystem.windowsPath(path.resolve(s)) !== target)
@@ -984,7 +984,7 @@ export namespace Project {
       return project
     }
     const result = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(id)
+      assertRegistryAdmissionOpen(db, id)
       const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
       if (!row) throw new Error(`Project not found: ${id}`)
       if (

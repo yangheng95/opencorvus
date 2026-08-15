@@ -16,8 +16,11 @@ import {
 import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
 import { Lock } from "@/util/lock"
 import { awaitWithAbort } from "@/util/abort"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
-import type { RuntimeProcessOccurrenceObserver } from "@/server/runtime-server-ownership"
+import {
+  cachedRuntimeProcessOccurrenceObserver,
+  currentRuntimeProcessOccurrence,
+} from "@/runtime/process-occurrence"
+import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 
 const SIGKILL_TIMEOUT_MS = 200
 
@@ -427,7 +430,7 @@ export namespace ProcessSupervisor {
   }
 
   /** Stops every Task-owned mutating process before this backend relinquishes
-   * its exclusive database runtime ownership. Prompt/tool settlement runs
+   * its exact physical process occurrence. Prompt/tool settlement runs
    * first, so no new mandatory spawn may be admitted while this proof runs. */
   export async function acquireRuntimeMandatorySettlementGate(): Promise<Disposable> {
     const reservation = Lock.reserveWrite(RUNTIME_MANDATORY_SPAWN_LEASE_KEY)
@@ -630,7 +633,7 @@ export namespace ProcessSupervisor {
     }
     if (process.platform !== "win32") return result
     const observeProcessOccurrence =
-      input.observeProcessOccurrence ?? RuntimeServerOwnership.cachedProcessOccurrenceObserver()
+      input.observeProcessOccurrence ?? cachedRuntimeProcessOccurrenceObserver()
     const unknownArtifacts: WindowsOrphanRequestArtifactUnknownError[] = []
     const entries = await fs.readdir(Global.Path.temporary, { withFileTypes: true }).catch((error) => {
       if (errorCode(error) === "ENOENT") return []
@@ -1218,7 +1221,7 @@ export namespace ProcessSupervisor {
     const cancelPath = path.join(requestDir, "cancel")
     const settledPath = path.join(requestDir, "settled.json")
     const requestID = randomUUID()
-    const runtimeOwner = RuntimeServerOwnership.currentProcessOccurrence()
+    const runtimeOwner = currentRuntimeProcessOccurrence()
     try {
       const request = {
         ...opts.request(readyPath, requestID),

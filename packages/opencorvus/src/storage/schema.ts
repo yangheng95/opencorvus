@@ -20,7 +20,7 @@ import {
 } from "../session/session.sql"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "../permission/permission.sql"
 import { SessionShareTable } from "../share/share.sql"
-import { ProjectTable } from "../project/project.sql"
+import { ProjectMaintenanceFenceTable, ProjectTable } from "../project/project.sql"
 import { WorkspaceTable } from "../workspace/workspace.sql"
 import { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
 import { AutomationDefinitionTombstoneTable, AutomationProjectTargetTable, AutomationRunReceiptTable, AutomationRunTable, AutomationTable } from "../scheduler/automation.sql"
@@ -81,6 +81,7 @@ export {
   PermissionPolicyTable,
   SessionShareTable,
   ProjectTable,
+  ProjectMaintenanceFenceTable,
   WorkspaceTable,
   MemoryFileTable,
   MemoryChunkTable,
@@ -154,6 +155,7 @@ export const ApplicationSchema = {
   PermissionPolicyTable,
   SessionShareTable,
   ProjectTable,
+  ProjectMaintenanceFenceTable,
   WorkspaceTable,
   MemoryFileTable,
   MemoryChunkTable,

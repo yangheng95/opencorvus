@@ -435,7 +435,7 @@ export namespace Session {
    * operations may reserve a writer and call it without opening a second
    * transaction around their identity read. */
   export function persistPreparedNextInTransaction(db: Database.TxOrDb, result: Info): Info {
-    Project.assertDurableAdmissionOpen(result.projectID)
+    Project.assertDurableAdmissionOpen(db, result.projectID)
     db.insert(SessionTable).values(toRow(result)).run()
     log.info("created", result)
     Bus.publishOwnedInTransaction(Event.Created, { info: result })
@@ -1968,7 +1968,7 @@ export namespace Session {
     }),
     async (input) => {
       Database.transaction((db) => {
-        Project.assertDurableAdmissionOpen(input.info.projectID)
+        Project.assertDurableAdmissionOpen(db, input.info.projectID)
         const sessionRow = toRow(input.info)
         const { id: _sessionID, ...sessionSet } = sessionRow
         db.insert(SessionTable)

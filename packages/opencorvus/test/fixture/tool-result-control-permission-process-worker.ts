@@ -25,7 +25,6 @@ import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { toolResultControl } from "@/session/tool-result-control"
 import { Database, eq } from "@/storage/db"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { persistEstablishedTask } from "./engine-task"
 
 type State = {
@@ -302,7 +301,6 @@ async function recover(state: State) {
   })
 }
 
-const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
 try {
   if (mode === "init") await initializeCut()
   const state = JSON.parse(await fs.readFile(stateFile, "utf8")) as State
@@ -311,7 +309,6 @@ try {
   if (mode !== "recover") throw new Error(`Unknown Tool-result permission process mode ${mode}`)
   const output = await recover(state)
   await Instance.disposeAll()
-  await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership)
   Database.close()
   process.stdout.write(JSON.stringify(output))
 } catch (error) {

@@ -1,4 +1,5 @@
 import { lstatSync } from "node:fs"
+import { randomUUID } from "node:crypto"
 import path from "node:path"
 import z from "zod"
 import { and, inArray, type AnyColumn } from "drizzle-orm"
@@ -6,7 +7,6 @@ import type { AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Database, eq } from "@/storage/db"
 import { AttachmentStore } from "@/storage/attachment-store"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "@/scheduler/automation.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { ChannelIngressAcceptedTable } from "@/channel/channel.sql"
@@ -20,6 +20,10 @@ import { WorkspaceTable } from "@/workspace/workspace.sql"
 import { ProjectRuntimePaths } from "./runtime-paths"
 import { ProjectTable } from "./project.sql"
 import { Project } from "./project"
+import {
+  acquireProjectMaintenanceFencesInTransaction,
+  releaseProjectMaintenanceFencesInTransaction,
+} from "./deletion-registry"
 
 export namespace ProjectIdentityConvergence {
   export const ConflictError = NamedError.create(
@@ -88,6 +92,7 @@ export namespace ProjectIdentityConvergence {
     { table: "automation_project_target", settlement: "preserve" as const },
     { table: "event_job", settlement: "preserve" as const },
     { table: "event_occurrence", settlement: "preserve" as const },
+    { table: "project_maintenance_fence", settlement: "maintenance_fence" as const },
   ]
 
   function conflict(input: {
@@ -250,7 +255,6 @@ export namespace ProjectIdentityConvergence {
   export async function converge(input: { worktree: string; canonicalProjectID: string }): Promise<Receipt> {
     const worktree = path.resolve(input.worktree)
     const canonicalProjectID = input.canonicalProjectID.trim()
-    RuntimeServerOwnership.assertCurrentProcessOwnsDatabase(Database.Path())
     if (!canonicalProjectID) {
       conflict({ worktree, canonicalProjectID, projectIDs: ["<missing>", "<missing>"], message: "Canonical Project ID is required" })
     }
@@ -289,7 +293,12 @@ export namespace ProjectIdentityConvergence {
             message: `Expected one unchanged duplicate Project occurrence set for ${worktree}`,
           })
         }
-        for (const projectID of observedProjectIDs) Project.assertDurableAdmissionOpen(projectID)
+        const maintenanceOperationID = randomUUID()
+        acquireProjectMaintenanceFencesInTransaction(db, {
+          projectRows: matches,
+          operationID: maintenanceOperationID,
+          kind: "identity_convergence",
+        })
         const duplicates = matches.filter((row) => row.id !== canonicalProjectID)
         const duplicateProjectIDs = duplicates.map((row) => row.id)
         const sandboxes = assertDirectoryAuthorityAvailable({
@@ -326,6 +335,7 @@ export namespace ProjectIdentityConvergence {
         for (const duplicateProjectID of duplicateProjectIDs) {
           db.delete(ProjectTable).where(eq(ProjectTable.id, duplicateProjectID)).run()
         }
+        releaseProjectMaintenanceFencesInTransaction(db, { operationID: maintenanceOperationID })
         return Receipt.parse({ worktree, canonicalProjectID, removedProjectIDs: duplicateProjectIDs.sort(), migratedRows })
       })
     } catch (cause) {

@@ -9,7 +9,6 @@ import { browserMcpPermissionKeyOf } from "../../src/mcp/browser/permission-plan
 import { Instance } from "../../src/project/instance"
 import { EngineService } from "../../src/task-api"
 import { Database } from "../../src/storage/db"
-import { RuntimeServerOwnership } from "../../src/server/runtime-server-ownership"
 import { buildExpertSquadAuthorDefinition } from "../../src/tool/expert-squad-author"
 import { memoryProject } from "../fixture/memory"
 
@@ -19,7 +18,6 @@ describe("Browser MCP projection contract", () => {
     { timeout: 180_000 },
     async () => {
       await using project = await memoryProject()
-      const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
       try {
         await Instance.provide({
           directory: project.path,
@@ -113,7 +111,6 @@ describe("Browser MCP projection contract", () => {
           },
         })
       } finally {
-        await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership)
       }
     },
   )

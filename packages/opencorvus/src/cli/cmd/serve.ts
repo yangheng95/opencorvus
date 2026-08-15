@@ -18,19 +18,14 @@ import {
 } from "../../server/restart-handoff"
 import { clearServerRestartHandler, registerServerRestartHandler } from "../../server/restart"
 import { stopServerWithTimeout } from "../../server/stop"
-import { ManagedServerOwnership } from "../../server/managed-server-ownership"
-import {
-  RuntimeServerOwnership,
-  RuntimeServerOwnershipHandoffPendingError,
-} from "../../server/runtime-server-ownership"
-import { Database } from "../../storage/db"
+import { ManagedServerLifecycle } from "../../server/managed-server-lifecycle"
 import {
   assertStartedTaskProjectRecoverySucceeded,
   recoverStartedTaskExecutions,
 } from "../../engine/host-recovery"
 import { Instance } from "../../project/instance"
 import type { ArgumentsCamelCase } from "yargs"
-import { acquireServerRuntimeAfterRecovery, listenWithRecoveredServerRuntime } from "../server-runtime"
+import { listenWithRecoveredServerRuntime } from "../server-runtime"
 
 /** Hide the console window on Windows using Win32 API. */
 function hideConsoleWindow() {
@@ -52,31 +47,10 @@ function hideConsoleWindow() {
 
 type ServeOptions = NetworkOptions & {
   "project-dir"?: string
-  "managed-scope"?: string
   "parent-pid"?: number
   "watchdog-interval-ms"?: number
 }
 const SERVE_STOP_TIMEOUT_MILLISECONDS = 5000
-
-export async function releaseServeRuntimeOwnership(input: {
-  database: string
-  occurrenceID: string
-  releaseOwnership(afterRelease: () => void | Promise<void>): Promise<void>
-  commit(): void | Promise<void>
-  rollback(): void | Promise<void>
-}): Promise<void> {
-  try {
-    await input.releaseOwnership(input.commit)
-  } catch (error) {
-    if (
-      !(error instanceof RuntimeServerOwnershipHandoffPendingError) &&
-      RuntimeServerOwnership.currentOccurrenceID(input.database) === input.occurrenceID
-    ) {
-      await input.rollback()
-    }
-    throw error
-  }
-}
 
 const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
   withNetworkOptions(yargs)
@@ -84,31 +58,21 @@ const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
       type: "string",
       describe: "default project directory for all task operations (sandbox)",
     })
-    .option("managed-scope", {
-      type: "string",
-      describe: "exclusive managed-server ownership scope (requires --parent-pid)",
-    })
     .option("parent-pid", {
       type: "number",
-      describe: "owning host process identifier (requires --managed-scope)",
+      describe: "managed host process identifier",
     })
     .option("watchdog-interval-ms", {
       type: "number",
       describe: "managed parent watchdog interval in milliseconds",
     })
 
-function managedOwnershipInput(args: ArgumentsCamelCase<ServeOptions>) {
-  const rawScope = args["managed-scope"]
+function managedLifecycleInput(args: ArgumentsCamelCase<ServeOptions>) {
   const rawParentPid = args["parent-pid"]
-  const hasScope = typeof rawScope === "string" && rawScope.trim().length > 0
-  const hasParentPid = rawParentPid !== undefined
-  if (!hasScope && !hasParentPid) return undefined
-  if (!hasScope || !Number.isInteger(rawParentPid) || rawParentPid! <= 0) {
-    throw new Error("Managed serve requires both --managed-scope and a positive --parent-pid")
-  }
+  if (rawParentPid === undefined) return undefined
+  if (!Number.isInteger(rawParentPid) || rawParentPid <= 0) throw new Error("Managed serve requires a positive --parent-pid")
   return {
-    scope: path.resolve(rawScope!),
-    parentPid: rawParentPid!,
+    parentPid: rawParentPid,
     watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
   }
 }
@@ -123,7 +87,7 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
   if (!Flag.OPENCORVUS_SERVER_PASSWORD) {
     console.log("Warning: OPENCORVUS_SERVER_PASSWORD is not set; server is unsecured.")
   }
-  const managed = managedOwnershipInput(args)
+  const managed = managedLifecycleInput(args)
   const resolvedOptions = await resolveNetworkOptions(args)
   const childHandoff = childRestartHandoff()
   const opts = childHandoff
@@ -168,8 +132,6 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
     }
     throw recoveryError
   }
-  const startupRuntimeOwnership = preparedRuntime.ownership
-  let runtimeOccurrenceID = startupRuntimeOwnership.owner.occurrenceID
   let startedTaskRecovery: Promise<void> = preparedRuntime.recovery
 
   let server = preparedRuntime.server
@@ -183,7 +145,7 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
   let processExecutionSettlement: Promise<void> | undefined
   let releaseProcessExecutionHandoff: ((commit?: boolean) => void | Promise<void>) | undefined
   let runtimeTransfer: Server.RuntimeTransferHandle | undefined
-  let ownership: ManagedServerOwnership.Handle | undefined
+  let managedLifecycle: ManagedServerLifecycle.Handle | undefined
   let listenerTransferred = false
   const settleCurrentProcessExecution = (request: ServerShutdownRequest) => {
     if (processExecutionSettlement) return processExecutionSettlement
@@ -226,22 +188,9 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
         listenerTransferred = true
       }
       await settleCurrentProcessExecution(request)
-      try {
-        if (runtimeTransfer) {
-          await releaseServeRuntimeOwnership({
-            database: Database.Path(),
-            occurrenceID: runtimeOccurrenceID,
-            releaseOwnership: (afterRelease) => runtimeTransfer!.releaseOwnership(afterRelease),
-            commit: () => releaseProcessExecutionHandoff?.(true),
-            rollback: () => releaseProcessExecutionHandoff?.(false),
-          })
-        }
-        releaseProcessExecutionHandoff = undefined
-      } catch (error) {
-        releaseProcessExecutionHandoff = undefined
-        throw error
-      }
-      ownership?.release()
+      if (releaseProcessExecutionHandoff) await Server.releaseRuntimeHandoff(releaseProcessExecutionHandoff)
+      releaseProcessExecutionHandoff = undefined
+      managedLifecycle?.release()
     })()
     shutdownPromise = shutdown
     void shutdown.then(
@@ -262,10 +211,8 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
 
   if (managed) {
     try {
-      ownership = ManagedServerOwnership.acquire({
+      managedLifecycle = ManagedServerLifecycle.start({
         ...managed,
-        port: server.port!,
-        hostname: opts.hostname,
         onParentExit: (reason) => {
           void requestShutdown({ source: "managed-parent-watchdog", reason })
         },
@@ -296,56 +243,27 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
         console.log("[serve] restart settling process-owned execution")
         await settleCurrentProcessExecution({ source: "http-client", reason })
       },
-      releaseRuntimeOwnership: async () => {
-        const release = () =>
-          releaseServeRuntimeOwnership({
-            database: Database.Path(),
-            occurrenceID: runtimeOccurrenceID,
-            releaseOwnership: (afterRelease) => runtimeTransfer!.releaseOwnership(afterRelease),
-            commit: () => releaseProcessExecutionHandoff?.(true),
-            rollback: () => releaseProcessExecutionHandoff?.(false),
-          })
-        try {
-          if (runtimeTransfer) await release()
-          releaseProcessExecutionHandoff = undefined
-        } catch (error) {
-          if (error instanceof RuntimeServerOwnershipHandoffPendingError) {
-            await release()
-            releaseProcessExecutionHandoff = undefined
-          } else {
-            releaseProcessExecutionHandoff = undefined
-            processExecutionSettlement = undefined
-            throw error
-          }
-        }
-        ownership?.release()
-        ownership = undefined
+      releaseRuntimeState: async () => {
+        const release = releaseProcessExecutionHandoff
+        if (release) await Server.releaseRuntimeHandoff(release)
+        releaseProcessExecutionHandoff = undefined
+        managedLifecycle?.release()
+        managedLifecycle = undefined
       },
       restoreListener: async () => {
         await waitForReleasedListener(actualHostname, actualPort)
         const listenOptions = { ...opts, hostname: actualHostname, port: actualPort, randomPort: false }
-        const retainedOccurrenceID = RuntimeServerOwnership.currentOccurrenceID(Database.Path())
-        let restoredServer: ReturnType<typeof Server.listen>
-        if (retainedOccurrenceID === runtimeOccurrenceID) {
-          startedTaskRecovery = recoverStartedTasks()
-          await startedTaskRecovery
-          restoredServer = runtimeTransfer!.restoreListener(listenOptions)
-        } else {
-          const prepared = await listenWithRecoveredServerRuntime({
-            options: listenOptions,
-            recover: () => recoverStartedTasks(),
-            disposeInstances: () => Instance.disposeAll(),
-          })
-          startedTaskRecovery = prepared.recovery
-          runtimeOccurrenceID = prepared.ownership.owner.occurrenceID
-          restoredServer = prepared.server
-        }
+        const prepared = await listenWithRecoveredServerRuntime({
+          options: listenOptions,
+          recover: () => recoverStartedTasks(),
+          disposeInstances: () => Instance.disposeAll(),
+        })
+        startedTaskRecovery = prepared.recovery
+        const restoredServer = prepared.server
         try {
-          if (managed && !ownership) {
-            ownership = ManagedServerOwnership.acquire({
+          if (managed && !managedLifecycle) {
+            managedLifecycle = ManagedServerLifecycle.start({
               ...managed,
-              port: actualPort,
-              hostname: actualHostname,
               onParentExit: (parentReason) => {
                 void requestShutdown({ source: "managed-parent-watchdog", reason: parentReason })
               },
@@ -353,12 +271,11 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
           }
         } catch (error) {
           await restoredServer.stop(true).catch((stopError) => {
-            throw new AggregateError([error, stopError], "Managed ownership restore and listener cleanup failed")
+            throw new AggregateError([error, stopError], "Managed lifecycle restore and listener cleanup failed")
           })
           throw error
         }
         server = restoredServer
-        runtimeOccurrenceID = RuntimeServerOwnership.currentOccurrenceID(Database.Path()) ?? runtimeOccurrenceID
         listenerTransferred = false
         runtimeTransfer = undefined
         processExecutionSettlement = undefined

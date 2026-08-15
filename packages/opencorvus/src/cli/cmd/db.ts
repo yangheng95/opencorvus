@@ -3,7 +3,6 @@ import { Database } from "../../storage/db"
 import { Database as BunDatabase } from "bun:sqlite"
 import { Instance } from "../../project/instance"
 import { ProjectIdentityConvergence } from "../../project/identity-convergence"
-import { RuntimeServerOwnership } from "../../server/runtime-server-ownership"
 import { UI } from "../ui"
 import { cmd } from "./cmd"
 
@@ -150,17 +149,12 @@ const ConvergeProjectIdentitiesCommand = cmd({
       process.exitCode = 1
       return
     }
-    const ownership = RuntimeServerOwnership.acquire({ database: Database.Path() })
-    try {
-      await Instance.disposeAll()
-      const receipt = await ProjectIdentityConvergence.converge({
-        worktree: args.worktree,
-        canonicalProjectID: args.canonicalProjectId,
-      })
-      console.log(JSON.stringify(receipt, null, 2))
-    } finally {
-      await RuntimeServerOwnership.releaseWithRetry(ownership)
-    }
+    await Instance.disposeAll()
+    const receipt = await ProjectIdentityConvergence.converge({
+      worktree: args.worktree,
+      canonicalProjectID: args.canonicalProjectId,
+    })
+    console.log(JSON.stringify(receipt, null, 2))
   },
 })
 

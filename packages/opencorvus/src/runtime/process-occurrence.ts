@@ -1,4 +1,7 @@
+import { randomUUID } from "node:crypto"
+import { execFileSync } from "node:child_process"
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import z from "zod"
 import { ProcessRecoveryPhysicalEvidence } from "@/engine/process-recovery-fact"
@@ -40,6 +43,123 @@ type ProcessOccurrenceEnvelope = z.infer<typeof ProcessOccurrenceEnvelope>
 export type ProcessRecoveryPhysicalEvidence = z.infer<typeof ProcessRecoveryPhysicalEvidence>
 
 const UNKNOWN_REASON = "No managed sidecar supervisor occurrence evidence is available for this backend process"
+
+export interface RuntimeProcessOccurrenceInfo {
+  pid: number
+  processInstanceID: string
+  occurrenceID: string
+}
+
+export type RuntimeProcessOccurrenceObservation = "exact_live" | "dead_or_reused" | "unknown_live"
+export type RuntimeProcessOccurrenceObserver = (
+  owner: RuntimeProcessOccurrenceInfo,
+) => RuntimeProcessOccurrenceObservation
+
+let runtimeProcessOccurrence: RuntimeProcessOccurrenceInfo | undefined
+
+function isProcessAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "EPERM"
+  }
+}
+
+function windowsProcessInstanceID(pid: number): string | undefined {
+  const { dlopen, FFIType, ptr } = require("bun:ffi") as typeof import("bun:ffi")
+  const kernel32 = dlopen("kernel32.dll", {
+    OpenProcess: { args: [FFIType.u32, FFIType.u32, FFIType.u32], returns: FFIType.ptr },
+    GetProcessTimes: {
+      args: [FFIType.ptr, FFIType.ptr, FFIType.ptr, FFIType.ptr, FFIType.ptr],
+      returns: FFIType.u32,
+    },
+    CloseHandle: { args: [FFIType.ptr], returns: FFIType.u32 },
+  })
+  const processHandle = kernel32.symbols.OpenProcess(0x1000, 0, pid)
+  if (!processHandle) {
+    kernel32.close()
+    return undefined
+  }
+  try {
+    const creationTime = Buffer.alloc(8)
+    const exitTime = Buffer.alloc(8)
+    const kernelTime = Buffer.alloc(8)
+    const userTime = Buffer.alloc(8)
+    const succeeded = kernel32.symbols.GetProcessTimes(
+      processHandle,
+      ptr(creationTime),
+      ptr(exitTime),
+      ptr(kernelTime),
+      ptr(userTime),
+    )
+    const dotNetEpochOffset = 504_911_232_000_000_000n
+    return succeeded ? `win32:${creationTime.readBigUInt64LE() + dotNetEpochOffset}` : undefined
+  } finally {
+    kernel32.symbols.CloseHandle(processHandle)
+    kernel32.close()
+  }
+}
+
+function processInstanceID(pid: number): string | undefined {
+  try {
+    if (process.platform === "linux") {
+      const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")
+      const fields = stat
+        .slice(stat.lastIndexOf(")") + 2)
+        .trim()
+        .split(/\s+/)
+      const startTicks = fields[19]
+      return startTicks ? `linux:${startTicks}` : undefined
+    }
+    if (process.platform === "win32") return windowsProcessInstanceID(pid)
+    const value = execFileSync("ps", ["-o", "lstart=", "-p", String(pid)], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim()
+    return value ? `${os.platform()}:${value}` : undefined
+  } catch {
+    return undefined
+  }
+}
+
+/** Exact process-lifetime identity used by durable execution leases and orphan
+ * recovery. It is independent of every database path and listener. */
+export function currentRuntimeProcessOccurrence(): RuntimeProcessOccurrenceInfo {
+  if (!runtimeProcessOccurrence) {
+    const instanceID = processInstanceID(process.pid)
+    if (!instanceID) throw new Error(`Cannot establish runtime process-instance identity for PID ${process.pid}`)
+    runtimeProcessOccurrence = {
+      pid: process.pid,
+      processInstanceID: instanceID,
+      occurrenceID: randomUUID(),
+    }
+  }
+  return { ...runtimeProcessOccurrence }
+}
+
+export function observeRuntimeProcessOccurrence(
+  owner: RuntimeProcessOccurrenceInfo,
+): RuntimeProcessOccurrenceObservation {
+  const observedInstanceID = processInstanceID(owner.pid)
+  if (observedInstanceID === owner.processInstanceID) return "exact_live"
+  if (observedInstanceID !== undefined) return "dead_or_reused"
+  return isProcessAlive(owner.pid) ? "unknown_live" : "dead_or_reused"
+}
+
+export function cachedRuntimeProcessOccurrenceObserver(
+  observe: RuntimeProcessOccurrenceObserver = observeRuntimeProcessOccurrence,
+): RuntimeProcessOccurrenceObserver {
+  const observations = new Map<string, RuntimeProcessOccurrenceObservation>()
+  return (owner) => {
+    const key = `${owner.pid}\0${owner.processInstanceID}`
+    const cached = observations.get(key)
+    if (cached) return cached
+    const observation = observe(owner)
+    observations.set(key, observation)
+    return observation
+  }
+}
 
 export type ProcessOccurrenceEvidenceErrorReason =
   | "path_not_absolute"

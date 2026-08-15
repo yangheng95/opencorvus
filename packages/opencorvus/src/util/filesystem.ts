@@ -27,6 +27,10 @@ function temporaryPath(target: string, operation: string) {
 }
 
 export namespace Filesystem {
+  export function durableDirectoryTemporaryTargetName(candidate: string): string | undefined {
+    const match = /^\.(.+)\.\d+\.\d+\.\d+\.durable-directory\.tmp$/.exec(candidate)
+    return match?.[1]
+  }
   /**
    * Thrown by `Filesystem.resolve` when the input string is a path
    * shaped for the wrong OS (e.g. a Windows `C:\foo` reaches a darwin

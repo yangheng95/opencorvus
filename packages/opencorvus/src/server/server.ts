@@ -23,7 +23,6 @@ import { muteAISdkWarnings } from "@/runtime/shims"
 import { OverlayUI, freezeDefaultOverlayUiSource, type FrozenOverlayUiSource } from "./overlay-ui"
 import { DEFAULT_SERVER_PORT } from "./defaults"
 import { requestID, serverErrorResponse } from "./error-handler"
-import { RuntimeServerOwnership, RuntimeServerOwnershipHandoffPendingError } from "./runtime-server-ownership"
 import { Database } from "@/storage/db"
 import { configureCorsOrigins, isAllowedCorsOrigin, isAllowedRequestOrigin } from "./cors"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
@@ -46,6 +45,7 @@ export namespace Server {
   const DEFAULT_RUNTIME_SETTLEMENT_INACTIVITY_TIMEOUT_MILLISECONDS = 60_000
   let runtimeSettlementInactivityTimeoutMilliseconds = DEFAULT_RUNTIME_SETTLEMENT_INACTIVITY_TIMEOUT_MILLISECONDS
   let runtimeHandoffCommitFailuresForTest = 0
+  let runtimeHandoffPostCommitFailuresForTest = 0
   let listenerStopFailuresForTest = 0
   type PendingRuntimeRollbackReceipt = {
     label: string
@@ -112,8 +112,6 @@ export namespace Server {
     object,
     {
       quiesce(): Promise<void>
-      releaseOwnership(afterRelease?: () => void | Promise<void>): Promise<void>
-      restoreListener(options: ListenOptions): ReturnType<typeof Bun.serve>
     }
   >()
   const inProcessApp = {
@@ -142,8 +140,6 @@ export namespace Server {
 
   export interface RuntimeTransferHandle {
     quiesced: Promise<void>
-    releaseOwnership(afterRelease?: () => void | Promise<void>): Promise<void>
-    restoreListener(options: ListenOptions): ReturnType<typeof Bun.serve>
   }
 
   export async function settleCurrentProcessExecution(
@@ -392,6 +388,10 @@ export namespace Server {
               mandatorySpawnGate[Symbol.dispose]()
               mandatorySpawnGateReleased = true
             }
+            if (runtimeHandoffPostCommitFailuresForTest > 0) {
+              runtimeHandoffPostCommitFailuresForTest -= 1
+              throw new Error("injected runtime handoff post-commit cleanup failure")
+            }
             if (!settlementGatesReleased) {
               try {
                 releaseSettlementGates()
@@ -472,6 +472,29 @@ export namespace Server {
     }
   }
 
+  /** Complete the exact settlement receipt through cleanup failures.
+   * Production callers retain and retry the same receipt until it converges;
+   * no successor settlement or database owner can replace a partial commit. */
+  export async function releaseRuntimeHandoff(
+    release: (commit?: boolean) => void | Promise<void>,
+    commit = true,
+    options: { attempts?: number; delayMilliseconds?: number } = {},
+  ): Promise<void> {
+    const attempts = options.attempts
+    const delayMilliseconds = options.delayMilliseconds ?? 25
+    let failure: unknown
+    for (let attempt = 1; attempts === undefined || attempt <= attempts; attempt += 1) {
+      try {
+        await release(commit)
+        return
+      } catch (error) {
+        failure = error
+        if (attempts === undefined || attempt < attempts) await Bun.sleep(delayMilliseconds)
+      }
+    }
+    throw failure
+  }
+
   export const TestHooks = {
     installBeforeRequest(hook: (request: Request) => void | Promise<void>): Disposable {
       if (beforeRequestForTest) throw new Error("Server request test hook is already installed")
@@ -500,6 +523,15 @@ export namespace Server {
         },
       }
     },
+    failNextRuntimeHandoffPostCommit(attempts: number): Disposable {
+      const previous = runtimeHandoffPostCommitFailuresForTest
+      runtimeHandoffPostCommitFailuresForTest = attempts
+      return {
+        [Symbol.dispose]() {
+          runtimeHandoffPostCommitFailuresForTest = previous
+        },
+      }
+    },
     failNextListenerStop(attempts: number): Disposable {
       const previous = listenerStopFailuresForTest
       listenerStopFailuresForTest = attempts
@@ -523,15 +555,12 @@ export namespace Server {
     },
   }
 
-  /** Stop request admission while retaining the database runtime lease until
-   * every process-owned execution has durably settled. */
+  /** Stop request admission while process-owned execution settles. */
   export function beginRuntimeTransfer(server: ReturnType<typeof Bun.serve>): RuntimeTransferHandle {
     const transfer = runtimeTransfers.get(server)
     if (!transfer) throw new Error("Server runtime transfer state is unavailable")
     return {
       quiesced: transfer.quiesce(),
-      releaseOwnership: transfer.releaseOwnership,
-      restoreListener: transfer.restoreListener,
     }
   }
 
@@ -912,20 +941,18 @@ export namespace Server {
     }
   }
 
-  function bindWithRuntimeOwnership(opts: ListenOptions, retainedRuntimeOwnership?: RuntimeServerOwnership.Handle) {
+  function bind(opts: ListenOptions, initializeGlobalServices: boolean) {
     /**
      * When true, port=0 maps directly to OS-assigned random port without
      * first attempting DEFAULT_SERVER_PORT. Required by independently
      * managed server instances so they never collide on the default port.
      */
-    const runtimeOwnership = retainedRuntimeOwnership ?? RuntimeServerOwnership.acquire({ database: Database.Path() })
-    RuntimeServerOwnership.assertHandleForDatabase(runtimeOwnership, Database.Path())
     let boundServer: ReturnType<typeof Bun.serve> | undefined
     let runtimeStopInstalled = false
     try {
       bindOverlayUiSource(opts.overlayUiSource)
       configureCorsOrigins(opts.cors)
-      if (!retainedRuntimeOwnership) {
+      if (initializeGlobalServices) {
         AutomationService.initGlobal()
         SchedulerMessageDeliveryService.initGlobal()
       }
@@ -983,22 +1010,9 @@ export namespace Server {
       const runtimeMemoryMetrics = ServeRuntimeMemoryMetrics.start()
       const originalStop = server.stop.bind(server)
       let listenerStopped = false
-      let ownershipReleased = false
       let quiesceOperation: Promise<void> | undefined
       let stopOperation: Promise<void> | undefined
       let cleanupFailures: unknown[] = []
-      const releaseOwnership = async (afterRelease?: () => void | Promise<void>) => {
-        if (ownershipReleased) return
-        try {
-          await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership, afterRelease)
-          ownershipReleased = true
-        } catch (error) {
-          ownershipReleased =
-            RuntimeServerOwnership.currentOccurrenceID(runtimeOwnership.database) !==
-            runtimeOwnership.owner.occurrenceID
-          throw error
-        }
-      }
       const quiesce = (closeActiveConnections = true) => {
         if (quiesceOperation) return quiesceOperation
         const operation = (async () => {
@@ -1052,8 +1066,6 @@ export namespace Server {
       }
       runtimeTransfers.set(server, {
         quiesce,
-        releaseOwnership,
-        restoreListener: (options) => bindWithRuntimeOwnership(options, runtimeOwnership),
       })
       server.stop = (closeActiveConnections?: boolean) => {
         if (stopOperation) return stopOperation
@@ -1085,14 +1097,7 @@ export namespace Server {
               : new AggregateError(failures, "Server listener quiesce and runtime settlement rollback failed")
           }
           const terminated = await termination
-          try {
-            await releaseOwnership(() => terminated.releaseHandoff(true))
-          } catch (error) {
-            if (!ownershipReleased && !(error instanceof RuntimeServerOwnershipHandoffPendingError)) {
-              await terminated.releaseHandoff(false)
-            }
-            throw error
-          }
+          await releaseRuntimeHandoff(terminated.releaseHandoff)
           if (cleanupFailures.length === 1) throw cleanupFailures[0]
           if (cleanupFailures.length > 1) {
             throw new AggregateError(cleanupFailures, "Server cleanup failed after listener stopped")
@@ -1100,7 +1105,7 @@ export namespace Server {
         })()
         stopOperation = operation
         void operation.catch(() => {
-          if (!ownershipReleased && stopOperation === operation) stopOperation = undefined
+          if (stopOperation === operation) stopOperation = undefined
         })
         return operation
       }
@@ -1110,54 +1115,32 @@ export namespace Server {
     } catch (error) {
       let listenerCleanupComplete = boundServer === undefined
       let terminated: Awaited<ReturnType<typeof settleCurrentProcessExecution>> | undefined
-      let cleanupFailure: unknown
-      const cleanup = RuntimeServerOwnership.retainStartupCleanup({
-        handle: runtimeOwnership,
-        async complete() {
-          if (cleanupFailure instanceof RuntimeServerOwnershipHandoffPendingError) {
-            await cleanupFailure.complete()
-            return
-          }
-          if (runtimeStopInstalled) {
-            try {
-              await boundServer!.stop(true)
-              return
-            } catch (error) {
-              cleanupFailure = error
-              throw error
-            }
-          }
-          if (!listenerCleanupComplete && boundServer) {
-            await boundServer.stop(true)
-            listenerCleanupComplete = true
-          }
-          terminated ??= await settleCurrentProcessExecution("Server.listen initialization failure", {
-            disposeInstances: () => Instance.disposeAll(),
-          })
-          try {
-            await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership, () => terminated!.releaseHandoff(true))
-          } catch (error) {
-            cleanupFailure = error
-            throw error
-          }
-        },
-      })
-      void cleanup.complete().catch((cleanupError) => {
-        log.error("server startup cleanup failed; exact recovery authority retained", { error: cleanupError })
+      const cleanup = async () => {
+        if (runtimeStopInstalled) {
+          await boundServer!.stop(true)
+          return
+        }
+        if (!listenerCleanupComplete && boundServer) {
+          await boundServer.stop(true)
+          listenerCleanupComplete = true
+        }
+        terminated ??= await settleCurrentProcessExecution("Server.listen initialization failure", {
+          disposeInstances: () => Instance.disposeAll(),
+        })
+        await releaseRuntimeHandoff(terminated.releaseHandoff)
+      }
+      void cleanup().catch((cleanupError) => {
+        log.error("server startup cleanup failed", { error: cleanupError })
       })
       throw error
     }
   }
 
   export function listen(opts: ListenOptions) {
-    return bindWithRuntimeOwnership(opts)
+    return bind(opts, true)
   }
 
-  export function acquireRuntimeOwnershipForStartup(): RuntimeServerOwnership.Handle {
-    return RuntimeServerOwnership.acquire({ database: Database.Path() })
-  }
-
-  export function listenWithOwnedRuntime(opts: ListenOptions, ownership: RuntimeServerOwnership.Handle) {
-    return bindWithRuntimeOwnership(opts, ownership)
+  export function listenPrepared(opts: ListenOptions) {
+    return bind(opts, false)
   }
 }

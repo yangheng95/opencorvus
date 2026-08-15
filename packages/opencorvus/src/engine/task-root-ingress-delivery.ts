@@ -18,7 +18,7 @@ import { runWithInitializedIndependentProject } from "@/project/independent-proj
 import { createInstanceState } from "@/project/instance-state"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/runtime/execution-settlement"
 import { Message } from "@/session/message"
 import {
@@ -118,16 +118,7 @@ const runtimeState = createInstanceState(
 )
 
 function ownerOccurrenceID(): string {
-  const occurrence = RuntimeServerOwnership.currentOccurrenceID(Database.Path()) ?? runtimeOccurrenceOverrideForTest
-  if (!occurrence) throw new RuntimeServerOwnershipRequiredError(Database.Path())
-  return occurrence
-}
-
-export class RuntimeServerOwnershipRequiredError extends Error {
-  override readonly name = "RuntimeServerOwnershipRequiredError"
-  constructor(public readonly database: string) {
-    super(`Task-root activation requires RuntimeServerOwnership for ${database}`)
-  }
+  return runtimeOccurrenceOverrideForTest ?? currentRuntimeProcessOccurrence().occurrenceID
 }
 
 function runner(): TaskIngressRunner {

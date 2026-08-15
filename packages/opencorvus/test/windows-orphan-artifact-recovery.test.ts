@@ -8,7 +8,10 @@ import {
   recoverOrphanedIsolatedCheckWorkspaces,
 } from "@/project/isolated-check-workspace"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import {
+  cachedRuntimeProcessOccurrenceObserver,
+  currentRuntimeProcessOccurrence,
+} from "@/runtime/process-occurrence"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -24,13 +27,12 @@ test("successor recovery removes only exact prior/dead request and workspace occ
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const ownership = RuntimeServerOwnership.acquire({ database: Database.Path() })
-      const current = RuntimeServerOwnership.currentProcessOccurrence()
+      const current = currentRuntimeProcessOccurrence()
       const deadPID = 2_000_000_000
       const deadOccurrence = "prior-dead-runtime-occurrence"
       const liveOccurrence = "foreign-live-runtime-occurrence"
       let physicalOwnerObservations = 0
-      const observeProcessOccurrence = RuntimeServerOwnership.cachedProcessOccurrenceObserver((owner) => {
+      const observeProcessOccurrence = cachedRuntimeProcessOccurrenceObserver((owner) => {
         physicalOwnerObservations += 1
         return owner.pid === deadPID ? "dead_or_reused" : "exact_live"
       })
@@ -106,11 +108,11 @@ test("successor recovery removes only exact prior/dead request and workspace occ
         await createWorkspace(workspaceRoots.live, { ...current, occurrenceID: liveOccurrence })
 
         const requests = await ProcessSupervisor.recoverOrphanedWindowsRequests({
-          currentOccurrenceID: ownership.owner.occurrenceID,
+          currentOccurrenceID: current.occurrenceID,
           observeProcessOccurrence,
         })
         const workspaces = await recoverOrphanedIsolatedCheckWorkspaces({
-          currentOccurrenceID: ownership.owner.occurrenceID,
+          currentOccurrenceID: current.occurrenceID,
           observeProcessOccurrence,
         })
         expect({ requests, workspaces }).toMatchObject({
@@ -124,7 +126,7 @@ test("successor recovery removes only exact prior/dead request and workspace occ
         requestRoots.push(unknownRequestRoot)
         await fs.mkdir(unknownRequestRoot, { recursive: true })
         const requestFailure = await ProcessSupervisor.recoverOrphanedWindowsRequests({
-          currentOccurrenceID: ownership.owner.occurrenceID,
+          currentOccurrenceID: current.occurrenceID,
           observeProcessOccurrence,
         }).catch((error) => error)
         expect(requestFailure).toBeInstanceOf(ProcessSupervisor.WindowsOrphanRequestRecoveryBlockedError)
@@ -137,7 +139,7 @@ test("successor recovery removes only exact prior/dead request and workspace occ
         const unknownWorkspaceRoot = path.join(workspaceParent, "workspace-unknown-owner")
         await fs.mkdir(path.join(unknownWorkspaceRoot, "workspace"), { recursive: true })
         const workspaceFailure = await recoverOrphanedIsolatedCheckWorkspaces({
-          currentOccurrenceID: ownership.owner.occurrenceID,
+          currentOccurrenceID: current.occurrenceID,
           observeProcessOccurrence,
         }).catch((error) => error)
         expect(workspaceFailure).toBeInstanceOf(IsolatedWorkspaceRecoveryBlockedError)
@@ -150,13 +152,12 @@ test("successor recovery removes only exact prior/dead request and workspace occ
         await fs.rm(project.path, { recursive: true, force: true })
         expect(
           await recoverOrphanedIsolatedCheckWorkspaces({
-            currentOccurrenceID: ownership.owner.occurrenceID,
+            currentOccurrenceID: current.occurrenceID,
             observeProcessOccurrence,
           }),
         ).toEqual({ inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 })
       } finally {
         await Promise.all(requestRoots.map((root) => fs.rm(root, { recursive: true, force: true })))
-        await RuntimeServerOwnership.releaseWithRetry(ownership)
       }
     },
   })

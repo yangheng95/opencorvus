@@ -209,7 +209,7 @@ Historical databases cross this boundary through one atomic migration. It rebuil
 The following gates define the maintained control-plane proof:
 
 - `bun run check:control-state-redundancy` inventories every scoped persisted field and rejects derived or unclassified columns plus known cross-table functional dependencies;
-- focused reducer, migration, Task continuation, lifecycle, Tool/Provider, Protocol delivery, Scheduler, Bus, Mission, runtime ownership, and terminal closure tests assert positive fact/projection contracts;
+- focused reducer, migration, Task continuation, lifecycle, Tool/Provider, Protocol delivery, Scheduler, Bus, Mission, process-occurrence/physical-lease, and terminal closure tests assert positive fact/projection contracts;
 - storage schema-contract tests prove canonical SQLite Data Definition Language, schema fingerprint, and MySQL transfer shape equality;
 - `bun run typecheck`, `bun run docs:check`, and `git diff --check` remain required;
 - the real streaming Provider checker is run only when credential and exact model projection use is explicitly authorized.

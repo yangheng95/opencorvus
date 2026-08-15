@@ -7,7 +7,7 @@ import {
   RuntimeExecutionSettlement,
   RuntimeExecutionSettlementInactivityError,
 } from "@/runtime/execution-settlement"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Server } from "@/server/server"
 import {
   awaitTaskMessageProtocolBridgeIdle,
@@ -168,9 +168,8 @@ describe("runtime execution settlement authority", () => {
     }
   })
 
-  test("retains runtime ownership across protocol inactivity and converges after late settlement", async () => {
-    const ownership = RuntimeServerOwnership.acquire({ database: Database.Path() })
-    const occurrenceID = ownership.owner.occurrenceID
+  test("retains process occurrence across protocol inactivity and converges after late settlement", async () => {
+    const occurrenceID = currentRuntimeProcessOccurrence().occurrenceID
     const publication = RuntimeExecutionSettlement.reserve("protocol_publication", "late-protocol-subscriber")
     const firstGate = RuntimeExecutionSettlement.acquireSettlementGate()
     firstGate.closeAdmission(["protocol_publication"])
@@ -178,7 +177,7 @@ describe("runtime execution settlement authority", () => {
       await expect(firstGate.waitForIdle(["protocol_publication"], 50)).rejects.toBeInstanceOf(
         RuntimeExecutionSettlementInactivityError,
       )
-      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(occurrenceID)
+      expect(currentRuntimeProcessOccurrence().occurrenceID).toBe(occurrenceID)
       firstGate[Symbol.dispose]()
 
       publication.settle()
@@ -188,11 +187,10 @@ describe("runtime execution settlement authority", () => {
       retryGate.commit()
       retryGate[Symbol.dispose]()
 
-      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(occurrenceID)
+      expect(currentRuntimeProcessOccurrence().occurrenceID).toBe(occurrenceID)
     } finally {
       firstGate[Symbol.dispose]()
       publication.settle()
-      await RuntimeServerOwnership.releaseWithRetry(ownership)
     }
   })
 
@@ -499,7 +497,7 @@ describe("runtime execution settlement authority", () => {
 
           using gate = RuntimeExecutionSettlement.acquireSettlementGate()
           gate.closeAdmission(["session_wake_loop"])
-          gate.requestCancellation(["session_wake_loop"], new Error("runtime ownership handoff"))
+          gate.requestCancellation(["session_wake_loop"], new Error("runtime process handoff"))
           await gate.waitForIdle(["session_wake_loop"])
           events.push("runtime-gate:settled")
         },
@@ -518,9 +516,8 @@ describe("runtime execution settlement authority", () => {
     ])
   })
 
-  test("bounds a held Message bridge lifecycle and restores the retained owner after late settlement", async () => {
-    const ownership = RuntimeServerOwnership.acquire({ database: Database.Path() })
-    const occurrenceID = ownership.owner.occurrenceID
+  test("bounds a held Message bridge lifecycle and retains the process occurrence after late settlement", async () => {
+    const occurrenceID = currentRuntimeProcessOccurrence().occurrenceID
     let releaseBridge!: () => void
     const bridgeOperation = new Promise<void>((resolve) => (releaseBridge = resolve))
     const trackedBridge = TaskMessageProtocolBridgeTestHooks.trackLifecycle(bridgeOperation)
@@ -529,19 +526,18 @@ describe("runtime execution settlement authority", () => {
       await expect(
         Server.settleCurrentProcessExecution("held Message bridge lifecycle", { disposeInstances: async () => {} }),
       ).rejects.toBeInstanceOf(Database.EffectSettlementInactivityError)
-      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(occurrenceID)
+      expect(currentRuntimeProcessOccurrence().occurrenceID).toBe(occurrenceID)
 
       releaseBridge()
       await trackedBridge
       await awaitTaskMessageProtocolBridgeIdle()
       RuntimeExecutionSettlement.reserve("task_control_activation", "late-bridge-rollback-admission").settle()
 
-      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(occurrenceID)
+      expect(currentRuntimeProcessOccurrence().occurrenceID).toBe(occurrenceID)
     } finally {
       releaseBridge()
       await trackedBridge.catch(() => undefined)
       await awaitTaskMessageProtocolBridgeIdle().catch(() => undefined)
-      await RuntimeServerOwnership.releaseWithRetry(ownership)
     }
   })
 })

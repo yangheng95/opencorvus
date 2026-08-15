@@ -18,7 +18,6 @@ import { executionLifecycleOrderKey } from "@/session/status"
 import { Database, count, eq } from "@/storage/db"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { persistEstablishedTask } from "./engine-task"
 import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
 
@@ -340,7 +339,6 @@ async function result() {
       },
     })
   }
-  const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
   try {
     return await Instance.provide({
       directory: projectDirectory,
@@ -364,7 +362,6 @@ async function result() {
       },
     })
   } finally {
-    if (runtimeOwnership) await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership)
   }
 }
 

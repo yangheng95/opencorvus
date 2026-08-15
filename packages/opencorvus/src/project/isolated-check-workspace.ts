@@ -4,8 +4,11 @@ import { createReadStream, createWriteStream } from "node:fs"
 import path from "node:path"
 import { pipeline } from "node:stream/promises"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
-import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
-import type { RuntimeProcessOccurrenceObserver } from "@/server/runtime-server-ownership"
+import {
+  cachedRuntimeProcessOccurrenceObserver,
+  currentRuntimeProcessOccurrence,
+} from "@/runtime/process-occurrence"
+import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 import { Project } from "@/project/project"
 
 const CHECK_WORKSPACE_EXCLUDED_NAMES = new Set([
@@ -127,7 +130,7 @@ export async function createIsolatedProjectCheckWorkspace(input: {
   const root = await fs.mkdtemp(path.join(scratchParent, `${randomUUID()}-`))
   const workspace = path.join(root, "workspace")
   try {
-    const runtimeOwner = RuntimeServerOwnership.currentProcessOccurrence()
+    const runtimeOwner = currentRuntimeProcessOccurrence()
     const owner: IsolatedWorkspaceOwner = {
       protocol: 1,
       workspace_id: path.basename(root),
@@ -227,7 +230,7 @@ export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
   }
   if (process.platform !== "win32") return result
   const observeProcessOccurrence =
-    input.observeProcessOccurrence ?? RuntimeServerOwnership.cachedProcessOccurrenceObserver()
+    input.observeProcessOccurrence ?? cachedRuntimeProcessOccurrenceObserver()
   const unknownArtifacts: IsolatedWorkspaceArtifactUnknownError[] = []
   const projectDirectories = new Set<string>()
   for (const project of Project.list()) {
