@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-16-backend-recovery-readiness-convergence.md](2026-08-16-backend-recovery-readiness-convergence.md) separates bounded process recovery from durable Task/Mission/Session convergence so health is published before model work completes, and records the repaired Windows desktop package.
+
 - [2026-08-16-frontend-visual-sidecar-and-retry-convergence.md](2026-08-16-frontend-visual-sidecar-and-retry-convergence.md) repairs the canonical visual-evidence sidecar argument protocol and gives Frontend Design a bounded identical-infrastructure-failure convergence contract.
 
 - [2026-08-16-shared-database-multi-backend-startup-restoration.md](2026-08-16-shared-database-multi-backend-startup-restoration.md) removes the database-path-wide server-runtime startup gate, separates physical process occurrence from SQLite ownership, and restores two independent backends sharing one database.

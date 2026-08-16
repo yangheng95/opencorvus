@@ -25,7 +25,7 @@ import {
 } from "../../engine/host-recovery"
 import { Instance } from "../../project/instance"
 import type { ArgumentsCamelCase } from "yargs"
-import { listenWithRecoveredServerRuntime } from "../server-runtime"
+import { listenWithRecoveredServerRuntime, settleRecoveringServerRuntime } from "../server-runtime"
 
 /** Hide the console window on Windows using Win32 API. */
 function hideConsoleWindow() {
@@ -132,7 +132,13 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
     }
     throw recoveryError
   }
-  let startedTaskRecovery: Promise<void> = preparedRuntime.recovery
+  const observeStartedTaskRecovery = (recovery: Promise<void>) => {
+    void recovery.catch((error) => {
+      console.error("[serve] runtime project recovery failed after listener bind:", error)
+    })
+    return recovery
+  }
+  let startedTaskRecovery: Promise<void> = observeStartedTaskRecovery(preparedRuntime.recovery)
 
   let server = preparedRuntime.server
   const serverUrl = `http://${server.hostname}:${server.port}`
@@ -151,8 +157,11 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
     if (processExecutionSettlement) return processExecutionSettlement
     const reason = `Server shutdown source=${request.source} reason=${request.reason}`
     const settlement = (async () => {
-      await startedTaskRecovery
-      const terminated = await Server.settleCurrentProcessExecution(reason, {
+      // Settlement requests cancellation from the Session/Task owners that can
+      // be holding recovery. Joining recovery first would deadlock restart.
+      const terminated = await settleRecoveringServerRuntime({
+        reason,
+        recovery: startedTaskRecovery,
         disposeInstances: () => Instance.disposeAll(),
       })
       releaseProcessExecutionHandoff = terminated.releaseHandoff
@@ -258,7 +267,7 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
           recover: () => recoverStartedTasks(),
           disposeInstances: () => Instance.disposeAll(),
         })
-        startedTaskRecovery = prepared.recovery
+        startedTaskRecovery = observeStartedTaskRecovery(prepared.recovery)
         const restoredServer = prepared.server
         try {
           if (managed && !managedLifecycle) {

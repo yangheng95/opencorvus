@@ -87,7 +87,7 @@ await initializeProject()
 await copyAuthority()
 
 const [
-  { listenWithRecoveredServerRuntime },
+  { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
   { recoverStartedTaskExecutions, assertStartedTaskProjectRecoverySucceeded },
   { Instance },
   { Database, eq },
@@ -106,11 +106,11 @@ const [
   import("@/shell/process-supervisor"),
 ])
 
-const prepared = await listenWithRecoveredServerRuntime({
+const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
   options: { hostname: "127.0.0.1", port: 0, randomPort: true },
   recover: async () => assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions()),
   disposeInstances: () => Instance.disposeAll(),
-})
+}))
 const server = prepared.server
 const base = server.url.toString().replace(/\/$/, "")
 const missionURL = new URL(`${base}/mission/wake`)

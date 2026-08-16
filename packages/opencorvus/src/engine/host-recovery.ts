@@ -97,26 +97,25 @@ export async function recoverStartedTaskProjects(input: {
   directories: string[]
   initializeProject: (directory: string) => Promise<void>
 }): Promise<StartedTaskProjectRecoveryResult> {
-  const failures: StartedTaskProjectRecoveryFailure[] = []
-  let initialized = 0
-  for (const directory of input.directories) {
+  const outcomes = await Promise.all(input.directories.map(async (directory) => {
     try {
       await input.initializeProject(directory)
-      initialized += 1
+      return { initialized: true as const, directory }
     } catch (error) {
-      failures.push({
+      return {
+        initialized: false as const,
         directory,
         error: error instanceof Error ? error.message : String(error),
-      })
+      }
     }
-  }
+  }))
   return {
     attempted: input.directories.length,
-    initialized,
+    initialized: outcomes.filter((outcome) => outcome.initialized).length,
     missionAttempted: 0,
     missionWoken: 0,
     missionCompleted: 0,
-    failures,
+    failures: outcomes.flatMap((outcome) => outcome.initialized ? [] : [{ directory: outcome.directory, error: outcome.error }]),
   }
 }
 

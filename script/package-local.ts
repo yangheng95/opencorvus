@@ -39,15 +39,25 @@ export function localTauriBundleConfig() {
   }
 }
 
+export function localCargoTarget(repoRoot: string, env: NodeJS.ProcessEnv = process.env): string {
+  const configured = env.CARGO_TARGET_DIR?.trim()
+  return configured
+    ? path.resolve(repoRoot, configured)
+    : path.join(repoRoot, "packages", "overlay", "src-tauri", "target")
+}
+
 async function main() {
+  const nativeTarget = localCargoTarget(repo)
+  const nativeBundle = path.join(nativeTarget, "release", "bundle")
+  const nativeEnvironment = { ...process.env, CARGO_TARGET_DIR: nativeTarget }
   // ── 1. overlay — current platform (native) ─────────────────────────────────
   if (!skipNative) {
     console.log(`\n=== overlay ${process.platform}-${process.arch} (native) ===`)
-    await $`bun run build:overlay --skip-dist-copy`.cwd(overlay)
-    await $`bun run tauri bundle --bundles ${localBundleTargets()} --config ${JSON.stringify(localTauriBundleConfig())}`.cwd(
-      overlay,
-    )
-    console.log("  overlay native done -> packages/overlay/src-tauri/target/release/bundle/")
+    await $`bun run build:overlay --skip-dist-copy`.cwd(overlay).env(nativeEnvironment)
+    await $`bun run tauri bundle --bundles ${localBundleTargets()} --config ${JSON.stringify(localTauriBundleConfig())}`
+      .cwd(overlay)
+      .env(nativeEnvironment)
+    console.log(`  overlay native done -> ${nativeBundle}`)
   } else {
     console.log("  [skip] overlay native (--skip-native)")
   }
@@ -77,7 +87,7 @@ async function main() {
   // ── Summary ─────────────────────────────────────────────────────────────────
   console.log(`
 === Package complete ===
-  overlay (native):    packages/overlay/src-tauri/target/release/bundle/
+  overlay (native):    ${nativeBundle}
   overlay (linux):     packages/overlay/dist-artifacts/{linux-x64,linux-arm64}/
   overlay (darwin):    — requires macOS machine —
 `)

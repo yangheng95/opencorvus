@@ -1,7 +1,7 @@
 import { Database as BunDatabase } from "bun:sqlite"
 import { randomUUID } from "node:crypto"
 import { createInterface } from "node:readline"
-import { listenWithRecoveredServerRuntime } from "../../src/cli/server-runtime"
+import { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime } from "../../src/cli/server-runtime"
 import { Instance } from "../../src/project/instance"
 import { Database } from "../../src/storage/db"
 import { ManagedServerLifecycle } from "../../src/server/managed-server-lifecycle"
@@ -13,11 +13,11 @@ import {
 } from "../../src/project/deletion-registry"
 
 const managedLifecycle = ManagedServerLifecycle.start({ parentPid: process.ppid, onParentExit: () => process.exit(1) })
-const runtime = await listenWithRecoveredServerRuntime({
+const runtime = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
   options: { hostname: "127.0.0.1", port: 0, randomPort: true },
   recover: async () => {},
   disposeInstances: () => Instance.disposeAll(),
-})
+}))
 const sqlite = new BunDatabase(Database.Path(), { readonly: true })
 const schema = sqlite
   .query("SELECT count(*) AS count FROM sqlite_master WHERE type = 'table'")

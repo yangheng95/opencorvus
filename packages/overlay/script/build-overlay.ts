@@ -89,7 +89,8 @@ const distServer = path.join(distServerDir, serverFile)
 const distRoot = path.join(dir, "dist", packageName)
 const packagedOverlay = path.join(distRoot, overlayFile)
 
-const target = path.join(tauri, "target")
+const configuredCargoTarget = process.env.CARGO_TARGET_DIR?.trim()
+const target = configuredCargoTarget ? path.resolve(configuredCargoTarget) : path.join(tauri, "target")
 // `--target` is only forwarded to cargo when the operator explicitly passed
 // it (cross-compile / matrix CI). For host builds we let cargo use its
 // default host triple and write to `target/release` — this preserves the

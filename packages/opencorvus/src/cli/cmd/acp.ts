@@ -6,7 +6,7 @@ import { ACP } from "@/acp/agent"
 import { Server } from "@/server/server"
 import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
 import { withNetworkOptions, resolveNetworkOptions } from "../network"
-import { listenWithRecoveredServerRuntime } from "../server-runtime"
+import { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime } from "../server-runtime"
 import { assertStartedTaskProjectRecoverySucceeded, recoverStartedTaskExecutions } from "@/engine/host-recovery"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
@@ -14,14 +14,14 @@ import { InstanceBootstrap } from "@/project/bootstrap"
 const log = Log.create({ service: "acp-command" })
 
 export async function listenForAcp(options: Server.ListenOptions) {
-  const prepared = await listenWithRecoveredServerRuntime({
+  const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
     options,
     recover: async () => {
       const result = await recoverStartedTaskExecutions()
       assertStartedTaskProjectRecoverySucceeded(result)
     },
     disposeInstances: () => Instance.disposeAll(),
-  })
+  }))
   return prepared.server
 }
 

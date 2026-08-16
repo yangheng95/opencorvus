@@ -365,7 +365,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
   if (process.env[CONFIG_SOURCE]?.trim()) process.env.OPENCORVUS_CONFIG = path.resolve(process.env[CONFIG_SOURCE]!)
 
   const [
-    { listenWithRecoveredServerRuntime },
+    { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
     { assertStartedTaskProjectRecoverySucceeded, recoverStartedTaskExecutions },
     { Database },
     { Instance },
@@ -385,13 +385,13 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/engine/task-root-ingress-delivery"),
     import("@/engine/store"),
   ])
-  const preparedServer = await listenWithRecoveredServerRuntime({
+  const preparedServer = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
     options: { hostname: "127.0.0.1", port: 0, randomPort: true },
     recover: async () => {
       assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions())
     },
     disposeInstances: () => Instance.disposeAll(),
-  })
+  }))
   process.stdout.write(`[task-control phase] ${phase} production recovery ready\n`)
   const server = preparedServer.server
   const base = server.url.toString().replace(/\/$/, "")

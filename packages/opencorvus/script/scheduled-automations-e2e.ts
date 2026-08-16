@@ -231,7 +231,7 @@ const findings: string[] = []
 const requestFacts: Array<{ method: string; route: string; status: number; durationMs: number }> = []
 try {
   const [
-    { listenWithRecoveredServerRuntime },
+    { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
     { Instance },
     { Database, eq },
     { AutomationTable },
@@ -244,11 +244,11 @@ try {
     import("../src/runtime/task-process-deployment"),
   ])
   declareNativeTaskProcessDeployment()
-  const prepared = await listenWithRecoveredServerRuntime({
+  const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
     options: { hostname: "127.0.0.1", port: 0, randomPort: true },
     recover: async () => {},
     disposeInstances: () => Instance.disposeAll(),
-  })
+  }))
   backend = prepared.server
   const origin = `http://127.0.0.1:${backend.port}`
   async function request(route: string, init: RequestInit = {}, directory = projectOne) {
