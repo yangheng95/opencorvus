@@ -1,4 +1,7 @@
 import { deriveTaskStatus, isTaskActive, taskTerminalReason } from "@/engine/task-status"
+import { Log } from "@/util/log"
+
+const log = Log.create({ service: "workbench.board" })
 import {
   listCurrentGoals,
   listTaskRows,
@@ -239,28 +242,50 @@ function taskProcessIncidents(taskID: string, executionProjection: ReturnType<ty
   const infrastructureIncidents = infrastructureRows.map((row) => {
     const payload = artifactPayloadRecord(row.payload)
     const operation = typeof payload.operation === "string" ? payload.operation : "infrastructure"
-    const isRecovery =
-      operation === "handoff-process-owned-task-execution" || operation === "recover-interrupted-task-execution"
-    const recovery = isRecovery ? parseProcessRecoveryFactContext(payload.context, row.id) : undefined
-    const affectedExecutions = recovery?.affected_subjects.map((subject) => {
-      if (subject.kind !== "affected_created_session") recoveryInputMessageIDs.add(subject.input_message_id)
-      return {
-        sessionID: subject.session_id,
-        ...(subject.kind !== "affected_created_session" ? { inputMessageID: subject.input_message_id } : {}),
-      }
-    })
     const errorName = typeof payload.errorName === "string" ? payload.errorName : "InfrastructureError"
-    return {
+    const base = {
       id: row.id,
       source: "infrastructure" as const,
       ...(typeof payload.sessionID === "string" ? { sessionID: payload.sessionID } : {}),
-      ...(recovery?.physical_evidence.kind === "managed_process_occurrence"
-        ? { processOccurrenceID: recovery.physical_evidence.process_occurrence_id }
-        : {}),
-      ...(affectedExecutions ? { affectedExecutions } : {}),
       errorName,
       message: typeof payload.reason === "string" ? `${operation}: ${payload.reason}` : operation,
       emittedAt: row.timeCreated,
+    }
+    // The board is a read-only rendering of history. One artifact this build
+    // cannot interpret — an older writer's shape, a future writer's shape —
+    // must degrade to a plain incident row, never take the whole Task view
+    // down: an uninterpretable detail is information, an HTTP 500 is a
+    // locked-out Task.
+    try {
+      const isRecovery =
+        operation === "handoff-process-owned-task-execution" || operation === "recover-interrupted-task-execution"
+      const parsed = isRecovery ? parseProcessRecoveryFactContext(payload.context, row.id) : undefined
+      const recovery = parsed?.kind === "v1" ? parsed.context : undefined
+      const affectedExecutions = recovery?.affected_subjects.map((subject) => {
+        if (subject.kind !== "affected_created_session") recoveryInputMessageIDs.add(subject.input_message_id)
+        return {
+          sessionID: subject.session_id,
+          ...(subject.kind !== "affected_created_session" ? { inputMessageID: subject.input_message_id } : {}),
+        }
+      })
+      return {
+        ...base,
+        ...(recovery?.physical_evidence.kind === "managed_process_occurrence"
+          ? { processOccurrenceID: recovery.physical_evidence.process_occurrence_id }
+          : {}),
+        ...(affectedExecutions ? { affectedExecutions } : {}),
+      }
+    } catch (error) {
+      log.warn("Task incident artifact could not be interpreted; rendering it degraded", {
+        taskID,
+        artifactID: row.id,
+        error,
+      })
+      return {
+        ...base,
+        errorName: "UnparseableIncidentArtifact",
+        message: `${base.message} (context not interpretable by this build)`,
+      }
     }
   })
   const lifecycleIncidents = executionProjection.occurrences.flatMap((occurrence) => {

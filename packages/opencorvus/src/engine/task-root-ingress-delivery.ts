@@ -8,6 +8,7 @@
  * reconciler below.
  */
 import { createHash } from "node:crypto"
+import { Identifier } from "@/id/id"
 import { OrchestratorEventSchema, type OrchestratorEvent } from "@/orchestrator/event"
 import {
   isOrchestratorDecisionToolName,
@@ -15,10 +16,11 @@ import {
 } from "@/orchestrator/decision-tool-names"
 import { Instance } from "@/project/instance"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
+import { reenterActiveInstance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
-import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
+import { currentRuntimeOccurrenceID, replaceRuntimeOccurrenceIDForTest } from "@/runtime/process-occurrence"
 import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/runtime/execution-settlement"
 import { Message } from "@/session/message"
 import {
@@ -66,16 +68,32 @@ import type {
   TaskRootIngressProjection,
 } from "./task-root-ingress-reducer"
 import {
+  CANCELLATION_RECONCILE_WAKE_MS,
+  classifyTaskRootIngressWake,
   reduceTaskRootIngressFacts,
   taskRootIngressSemanticAttemptIDs,
   taskRootIngressSemanticTurnIDs,
 } from "./task-root-ingress-reducer"
+import { TaskControlDriver, type TaskControlScanContext, type TaskControlScanResult } from "./task-control-driver"
+import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
+import {
+  assertProcessLivenessLease,
+  expireProcessLivenessLease,
+  isProcessOccurrenceLive,
+  PROCESS_LIVENESS_LEASE_MS,
+  PROCESS_LIVENESS_RENEWAL_MS,
+} from "./process-liveness"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "./dispatch-settlement"
+import {
+  findDispatchSettlementByDispatchID,
+  settleDispatchOrReturnExisting,
+  type DispatchSettlementRow,
+} from "./dispatch-settlement"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
-import { recordTaskInfrastructureErrorInTransaction } from "./persist"
+import { recordTaskInfrastructureError, recordTaskInfrastructureErrorInTransaction } from "./persist"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { taskRootIngressSourceKind } from "./task-root-ingress-source"
 import { insertEngineInteractionRequest } from "./interaction-request"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
@@ -89,7 +107,6 @@ let leaseMilliseconds = 120_000
 let leaseRenewalMilliseconds = 40_000
 const completionHooks = new Set<Promise<void>>()
 const activeProjectDirectories = new Set<string>()
-let runtimeOccurrenceOverrideForTest: string | undefined
 
 export type TaskIngressRunResult = { finalMessageID?: string }
 type TaskIngressRunner = (input: {
@@ -101,6 +118,10 @@ type TaskIngressRunner = (input: {
   predecessorID?: string
 }) => Promise<TaskIngressRunResult | void>
 
+/** Drives one Task's requested cancellation to convergence. Injected because
+ * the Task API owns cancellation and the engine may not depend on it. */
+type TaskCancellationReconciler = (taskID: string) => Promise<void>
+
 const runtimeState = createInstanceState(
   () => {
     const directory = Filesystem.resolve(Instance.directory)
@@ -109,6 +130,26 @@ const runtimeState = createInstanceState(
       directory,
       runner: undefined as TaskIngressRunner | undefined,
       runnerOverrideForTest: undefined as TaskIngressRunner | undefined,
+      cancellationReconciler: undefined as TaskCancellationReconciler | undefined,
+      /**
+       * Ingresses this process has already reduced to an absorbing state
+       * (`resolved`, `terminal_inapplicable`, `exhausted`). Those states are
+       * monotone in the durable facts — appends to a resolved activation are
+       * fenced off, epochs only advance, budgets only fill — so a memoized
+       * verdict can never silently become wrong. Pure performance cache: it is
+       * reconstructible by one reduction, holds no authority, and its loss on
+       * restart costs exactly one re-verification per ingress. Without it every
+       * heartbeat re-reads full evidence for the entire settled history of
+       * every open Task, which is quadratic-by-time load on the event loop.
+       */
+      settledIngressIDs: new Set<string>(),
+      /**
+       * Dispatches whose settlement is durably delivered (or durably
+       * suppressed). Same cache discipline as above; without it every sweep
+       * replays the terminal-lifecycle delivery check for every historical
+       * dispatch of every open Task.
+       */
+      closedDispatchIDs: new Set<string>(),
     }
   },
   async (state) => {
@@ -118,7 +159,7 @@ const runtimeState = createInstanceState(
 )
 
 function ownerOccurrenceID(): string {
-  return runtimeOccurrenceOverrideForTest ?? currentRuntimeProcessOccurrence().occurrenceID
+  return currentRuntimeOccurrenceID()
 }
 
 function runner(): TaskIngressRunner {
@@ -132,6 +173,20 @@ export function configureTaskIngressRunner(next: TaskIngressRunner): void {
   const state = runtimeState()
   if (state.runner && state.runner !== next) throw new Error("Task-root fact runner is already configured")
   state.runner = next
+}
+
+export function configureTaskCancellationReconciler(next: TaskCancellationReconciler): void {
+  const state = runtimeState()
+  if (state.cancellationReconciler && state.cancellationReconciler !== next) {
+    throw new Error("Task cancellation reconciler is already configured")
+  }
+  state.cancellationReconciler = next
+}
+
+/** Undefined before the Task API is wired, which is the case in engine-only
+ * unit tests; a `cancelling` Task then simply keeps its periodic wake. */
+function cancellationReconciler(): TaskCancellationReconciler | undefined {
+  return runtimeState().cancellationReconciler
 }
 
 function stableInlineSource(event: OrchestratorEvent): string {
@@ -273,13 +328,19 @@ export function persistCoordinationIngressInTransaction(
   const task = findTask(input.taskID)
   if (!task || task.session_id !== input.rootSessionID)
     throw new Error(`Coordination request ${input.requestID} has no exact Task root Session`)
-  return persistTaskRootIngressInTransaction(
+  const ingressID = persistTaskRootIngressInTransaction(
     db,
     task,
     { coordinationRequest: { requestID: input.requestID } },
     { requestID: input.requestID },
     input.now ?? Date.now(),
   )
+  // Callers persist this inside their own transaction and do not all request a
+  // scan afterwards, which left an operator steer or a worker handoff waiting
+  // for the heartbeat. The hint is idempotent, so signalling here is safe even
+  // where the caller also signals.
+  Database.effect(() => requestTaskControlScanInBackground(input.taskID, "engine.agent-coordination.request"))
+  return ingressID
 }
 
 function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect): OrchestratorEvent {
@@ -293,7 +354,10 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
         .get(),
     )
     if (!task || task.id !== ingress.task_id)
-      throw new Error(`Task-root ingress ${ingress.id} references missing Task creation ${ingress.source_id}`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root ingress ${ingress.id} references missing Task creation ${ingress.source_id}`,
+      )
     return OrchestratorEventSchema.parse({ taskCreation: { taskID: task.id } })
   }
   if (ingress.source === "automation_run") {
@@ -311,7 +375,10 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
       row.definition.kind !== "delay" ||
       row.definition.due_at == null
     ) {
-      throw new Error(`Task-root ingress ${ingress.id} references invalid Automation run ${ingress.source_id}`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root ingress ${ingress.id} references invalid Automation run ${ingress.source_id}`,
+      )
     }
     return OrchestratorEventSchema.parse({
       note: `Task wait ${row.definition.definition_id} became due`,
@@ -323,7 +390,10 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
       db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, ingress.source_id)).get(),
     )
     if (!artifact || artifact.task_id !== ingress.task_id)
-      throw new Error(`Task-root ingress ${ingress.id} references invalid Engine Artifact ${ingress.source_id}`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root ingress ${ingress.id} references invalid Engine Artifact ${ingress.source_id}`,
+      )
     if (artifact.kind === "agent_coordination_request")
       return OrchestratorEventSchema.parse({ coordinationRequest: { requestID: artifact.id } })
     if (artifact.kind === "task-infrastructure-error") {
@@ -363,18 +433,27 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
       db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, ingress.source_id)).get(),
     )
     if (!event)
-      throw new Error(`Task-root ingress ${ingress.id} references missing Protocol Event ${ingress.source_id}`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root ingress ${ingress.id} references missing Protocol Event ${ingress.source_id}`,
+      )
     if (event.type === "agent.execution.lifecycle") {
       const payload = event.payload as Record<string, unknown>
       const sessionID = event.session_id
       const inputMessageID = typeof payload.inputMessageID === "string" ? payload.inputMessageID : undefined
       if (!sessionID || !inputMessageID) {
-        throw new Error(`Agent lifecycle Protocol Event ${event.id} has no exact Session/input Message authority`)
+        throw new TaskRootIngressIntegrityError(
+          ingress.id,
+          `Agent lifecycle Protocol Event ${event.id} has no exact Session/input Message authority`,
+        )
       }
       const descriptor = WorkerTurnDescriptor.findForMessageAuthority({ sessionID, inputMessageID })
       const dispatchID = descriptor?.payload.dispatchTurn?.current_dispatch_id
       if (!descriptor || descriptor.payload.lifecycle.taskID !== ingress.task_id || !dispatchID) {
-        throw new Error(`Agent lifecycle Protocol Event ${event.id} has no exact Worker Turn dispatch authority`)
+        throw new TaskRootIngressIntegrityError(
+          ingress.id,
+          `Agent lifecycle Protocol Event ${event.id} has no exact Worker Turn dispatch authority`,
+        )
       }
       return OrchestratorEventSchema.parse({
         note: `Agent lifecycle ${event.id}`,
@@ -390,11 +469,24 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
       .where(eq(MessageTable.id, ingress.source_id))
       .get(),
   )
-  if (!row) throw new Error(`Task-root ingress ${ingress.id} references missing Message ${ingress.source_id}`)
+  if (!row)
+    throw new TaskRootIngressIntegrityError(
+      ingress.id,
+      `Task-root ingress ${ingress.id} references missing Message ${ingress.source_id}`,
+    )
   const message = Message.Info.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
   if (message.role !== "user")
-    throw new Error(`Task-root ingress ${ingress.id} source Message is not participant-authored input`)
-  const provenance = TaskRootMessageProvenance.parse(message.extra?.task_root_message)
+    throw new TaskRootIngressIntegrityError(
+      ingress.id,
+      `Task-root ingress ${ingress.id} source Message is not participant-authored input`,
+    )
+  const parsedProvenance = TaskRootMessageProvenance.safeParse(message.extra?.task_root_message)
+  if (!parsedProvenance.success)
+    throw new TaskRootIngressIntegrityError(
+      ingress.id,
+      `Task-root ingress ${ingress.id} source Message ${message.id} has no well-formed Task-root provenance`,
+    )
+  const provenance = parsedProvenance.data
   return OrchestratorEventSchema.parse({
     note: `Task-root Message ${message.id}`,
     rootMessage: {
@@ -405,10 +497,29 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
   })
 }
 
-function interactionFacts(db: Database.TxOrDb, ingressID: string, assistantIDs: Set<string>): InteractionFact[] {
+function interactionFacts(
+  db: Database.TxOrDb,
+  ingress: typeof EngineTaskRootIngressTable.$inferSelect,
+  assistantIDs: Set<string>,
+): InteractionFact[] {
+  const ingressID = ingress.id
+  const rootSessionID = db
+    .select({ sessionID: EngineTaskTable.session_id })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, ingress.task_id))
+    .get()?.sessionID
   return db
     .select()
     .from(EngineInteractionRequestTable)
+    // Direct rows carry the Task they gate. Source-owned rows (a Question, a
+    // permission request) hold no Task by schema, and the orchestrator
+    // `question` Tool arrives as one of those — but it always carries the
+    // asking Session, and only rows asked from this Task's root Session tree
+    // can name an assistant this evidence read accepts. Enumerating every
+    // other Task's questions here made each reduction O(all interactions).
+    .where(
+      sql`${EngineInteractionRequestTable.task_id} = ${ingress.task_id} OR (${EngineInteractionRequestTable.task_id} IS NULL AND ${EngineInteractionRequestTable.session_id} IN (SELECT ${SessionTable.id} FROM ${SessionTable} WHERE ${SessionTable.parent_id} = ${rootSessionID ?? ""} OR ${SessionTable.id} = ${rootSessionID ?? ""}))`,
+    )
     .all()
     .map((row) => projectInteractionRowInTransaction(db, row))
     .flatMap((row) => {
@@ -482,9 +593,17 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
     .from(EngineTaskTable)
     .where(eq(EngineTaskTable.id, ingress.task_id))
     .get()
-  if (!task?.sessionID) throw new Error(`Task-root ingress ${ingress.id} has no root Session authority`)
+  if (!task?.sessionID)
+    throw new TaskRootIngressIntegrityError(ingress.id, `Task-root ingress ${ingress.id} has no root Session authority`)
   for (const row of assistantRows) {
-    const assistant = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.session_id })
+    const parsedAssistant = Message.Assistant.safeParse({ ...row.data, id: row.id, sessionID: row.session_id })
+    if (!parsedAssistant.success) {
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root assistant Message ${row.id} is not a well-formed assistant Message`,
+      )
+    }
+    const assistant = parsedAssistant.data
     assistantIDs.add(assistant.id)
     if (!assistant.activationID) continue
     const priorAssistant = activationAssistants.get(assistant.activationID)
@@ -500,12 +619,18 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       session.kind !== "orchestrator" ||
       (priorAssistant && priorAssistant !== assistant.id)
     ) {
-      throw new Error(`Task-root activation ${assistant.activationID} has conflicting assistant authority`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root activation ${assistant.activationID} has conflicting assistant authority`,
+      )
     }
     activationAssistants.set(assistant.activationID, assistant.id)
     const priorContinuationAssistant = continuationAssistants.get(assistant.parentID)
     if (priorContinuationAssistant && priorContinuationAssistant !== assistant.id) {
-      throw new Error(`Task-root continuation ${assistant.parentID} has multiple assistant Messages`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Task-root continuation ${assistant.parentID} has multiple assistant Messages`,
+      )
     }
     continuationAssistants.set(assistant.parentID, assistant.id)
     const parent = db
@@ -524,7 +649,10 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       typeof control.predecessor_id !== "string" ||
       orchestratorControlOccurrenceIdentity(ingress.id, control.predecessor_id).messageID !== assistant.parentID
     ) {
-      throw new Error(`Assistant Message ${assistant.id} is outside ingress ${ingress.id} continuation chain`)
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Assistant Message ${assistant.id} is outside ingress ${ingress.id} continuation chain`,
+      )
     }
     const requests = db
       .select()
@@ -621,7 +749,7 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       }
     }
   }
-  const interactions = interactionFacts(db, ingress.id, assistantIDs)
+  const interactions = interactionFacts(db, ingress, assistantIDs)
   for (const interaction of interactions) {
     if (interaction.activityRequestID && interaction.outcome === "answered") {
       activityOutcomes.push({
@@ -741,7 +869,6 @@ async function terminalizeExpiredTaskRootAssistants(ingressID: string, now: numb
       .where(eq(EngineTaskRootIngressTable.id, ingressID))
       .get()
     if (!ingress) throw new Error(`Task-root ingress not found: ${ingressID}`)
-    readTaskRootIngressEvidence(db, ingress)
     const expiredLeases = db
       .select({ id: EngineControlActivationLeaseTable.id, expiresAt: EngineControlActivationLeaseTable.expires_at })
       .from(EngineControlActivationLeaseTable)
@@ -770,7 +897,10 @@ async function terminalizeExpiredTaskRootAssistants(ingressID: string, now: numb
         if (assistant.time.completed !== undefined || !assistant.activationID) return []
         const completedAt = expiredByID.get(assistant.activationID)
         if (completedAt === undefined) {
-          throw new Error(`Expired Task-root assistant ${assistant.id} has no matching activation lease`)
+          throw new TaskRootIngressIntegrityError(
+            ingressID,
+            `Expired Task-root assistant ${assistant.id} has no matching activation lease`,
+          )
         }
         return [{ sessionID: row.sessionID, messageID: row.id, completedAt }]
       })
@@ -796,7 +926,12 @@ async function terminalizeExpiredTaskRootAssistants(ingressID: string, now: numb
   return terminalized
 }
 
-async function activate(input: { taskID: string; ingressID: string }): Promise<boolean> {
+type ActivationAttempt =
+  | { activated: true }
+  /** The exact projection that refused activation, for wake-instant pacing. */
+  | { activated: false; projection: TaskRootIngressProjection }
+
+async function activate(input: { taskID: string; ingressID: string }): Promise<ActivationAttempt> {
   let reservation: RuntimeExecutionReservation | undefined
   let bound = false
   reservation = RuntimeExecutionSettlement.reserve(
@@ -805,11 +940,31 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<b
   )
   try {
     const now = Date.now()
-    const evidence = evidenceFor(input.ingressID)
     const projection = projectTaskRootIngress(input.ingressID, now, readTaskRootIngressEvidence)
     if (projection.state !== "ready") {
       reservation.settle()
-      return false
+      return { activated: false, projection }
+    }
+    // Everything derived from immutable sources is computed before the lease
+    // is taken. An integrity violation here is a durable `blocked` value, and
+    // reaching it after acquisition would burn one of only 4 activations per
+    // ingress on every heartbeat.
+    const blocked: ActivationAttempt = {
+      activated: false,
+      projection: { state: "blocked", reason: "integrity_conflict" },
+    }
+    let evidence: TaskRootIngressEvidence
+    let event: OrchestratorEvent
+    const ingress = Database.use((db) =>
+      db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, input.ingressID)).get(),
+    )!
+    try {
+      evidence = evidenceFor(input.ingressID)
+      event = eventForIngress(ingress)
+    } catch (error) {
+      if (!(error instanceof TaskRootIngressIntegrityError)) throw error
+      reservation.settle()
+      return blocked
     }
     const ownerID = ownerOccurrenceID()
     const acquired = acquireTaskRootIngressLease({
@@ -821,14 +976,14 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<b
     })
     if (!acquired.acquired) {
       reservation.settle()
-      return false
+      // The acquisition transaction reread the facts; its projection is newer
+      // than the one this caller reduced, so pacing must use it. A stale
+      // `ready` would arm no timer at all and strand the Task.
+      return { activated: false, projection: acquired.projection }
     }
-    const ingress = Database.use((db) =>
-      db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, input.ingressID)).get(),
-    )!
     const operation = runner()({
       taskID: input.taskID,
-      event: eventForIngress(ingress),
+      event,
       signal: reservation.signal,
       wakeID: ingress.id,
       activationID: acquired.activationID,
@@ -837,9 +992,16 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<b
     reservation.settleWith(operation)
     bound = true
     let renewalFailure: unknown
+    // Every durable append re-asserts this activation against its lease, so a
+    // renewal that fails cannot corrupt anything — it only risks losing the
+    // activation at expiry. A transient fault (SQLITE_BUSY, a momentarily
+    // unavailable database) is therefore retried on the next tick while the
+    // current lease still leaves room for one, instead of destroying a live
+    // Provider Turn and burning a semantic attempt against a budget of 3.
+    let currentExpiry = acquired.expiresAt
     const renewal = setInterval(() => {
+      const renewalNow = Date.now()
       try {
-        const renewalNow = Date.now()
         renewTaskRootIngressLease({
           ingressID: ingress.id,
           activationID: acquired.activationID,
@@ -847,7 +1009,18 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<b
           now: renewalNow,
           expiresAt: renewalNow + leaseMilliseconds,
         })
+        currentExpiry = renewalNow + leaseMilliseconds
       } catch (error) {
+        if (renewalNow + leaseRenewalMilliseconds < currentExpiry) {
+          log.warn("Task-root lease renewal failed; retrying before expiry", {
+            taskID: input.taskID,
+            ingressID: ingress.id,
+            activationID: acquired.activationID,
+            expiresAt: currentExpiry,
+            error,
+          })
+          return
+        }
         renewalFailure = error
         reservation?.cancel(error)
       }
@@ -859,16 +1032,15 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<b
       clearInterval(renewal)
     }
     if (renewalFailure) throw renewalFailure
-    return true
+    return { activated: true }
   } catch (error) {
     if (!bound) reservation.settle()
     throw error
   }
 }
 
-/** One project-partitioned recovery/activation algorithm. */
-export async function reconcileTaskControlPlane(taskID?: string): Promise<number> {
-  const tasks = Database.use((db) =>
+function currentProjectTaskIDs(taskID?: string): string[] {
+  return Database.use((db) =>
     db
       .select({ id: EngineTaskTable.id })
       .from(EngineTaskTable)
@@ -876,49 +1048,683 @@ export async function reconcileTaskControlPlane(taskID?: string): Promise<number
         and(eq(EngineTaskTable.project_id, Instance.project.id), ...(taskID ? [eq(EngineTaskTable.id, taskID)] : [])),
       )
       .all()
-      .filter((task) => !taskDeletedInTransaction(db, task.id)),
+      .filter((task) => !taskDeletedInTransaction(db, task.id))
+      .map((task) => task.id),
   )
-  let activated = 0
-  for (const task of tasks) {
-    const lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, task.id))
-    const ingresses = listTaskRootIngresses(task.id, lifecycle.epoch)
-    for (const ingress of ingresses) {
-      let stopTask = false
-      for (;;) {
-        const now = Date.now()
-        if ((await terminalizeExpiredTaskRootAssistants(ingress.id, now)) > 0) continue
-        const projection = projectTaskRootIngress(ingress.id, now, readTaskRootIngressEvidence)
-        if (projection.state === "resolved" || projection.state === "terminal_inapplicable") break
-        if (projection.state === "exhausted") break
-        if (projection.state === "reconcile_required") {
-          if (ensureActivityReconciliationInteractions(task.id, ingress.id, projection.requestIDs, now) > 0) continue
-          stopTask = true
-          break
+}
+
+/**
+ * Tasks a level-triggered sweep must cover: those whose lifecycle can still
+ * enable an ingress.
+ *
+ * That is not only the open ones. A terminal Task absorbs ordinary ingress,
+ * but acceptance deliberately keeps admitting `operator_message` and
+ * `coordination_request` there — the post-completion conversation — and those
+ * rely on the same wake edges as everything else. A terminal Task with an
+ * ingress accepted at-or-after its terminal instant therefore stays in the
+ * sweep until this process has verified that ingress settled; excluding it is
+ * exactly the lost-wake class the sweep exists to close. The settled memo
+ * bounds the cost: one verification per ingress per process lifetime.
+ */
+function currentSweepProjectTaskIDs(): string[] {
+  const settledIngressIDs = runtimeState().settledIngressIDs
+  return Database.use((db) =>
+    currentProjectTaskIDs().filter((id) => {
+      try {
+        const lifecycle = taskLifecycleProjectionInTransaction(db, id)
+        if (lifecycle.status === "active" || lifecycle.status === "cancelling" || lifecycle.status === "closing") {
+          return true
         }
-        if (projection.state === "ready") {
-          if (await activate({ taskID: task.id, ingressID: ingress.id })) {
-            activated += 1
-            continue
+        if (lifecycle.terminalAt === undefined) return false
+        return db
+          .select({ id: EngineTaskRootIngressTable.id })
+          .from(EngineTaskRootIngressTable)
+          .where(
+            and(
+              eq(EngineTaskRootIngressTable.task_id, id),
+              eq(EngineTaskRootIngressTable.execution_epoch, lifecycle.epoch),
+              sql`${EngineTaskRootIngressTable.time_accepted} >= ${lifecycle.terminalAt}`,
+            ),
+          )
+          .all()
+          .some((ingress) => !settledIngressIDs.has(ingress.id))
+      } catch (error) {
+        log.error("Task-control sweep could not project a Task lifecycle", { taskID: id, error })
+        return false
+      }
+    }),
+  )
+}
+
+/**
+ * Make an operator-gated rest state visible.
+ *
+ * `blocked` and `exhausted` are legal places for an ingress to stop, but no
+ * timer and no fact append can leave them: only an operator can. An unsurfaced
+ * gate is therefore indistinguishable from a deadlock — which is exactly how
+ * these states have been presenting. One deterministic artifact per
+ * (ingress, state, reason) makes the gate durable and operator-visible while
+ * staying idempotent across the heartbeat's repeated observations.
+ */
+function surfaceOperatorGatedTaskRootIngress(input: {
+  taskID: string
+  ingressID: string
+  projection: TaskRootIngressProjection
+  now: number
+}): void {
+  const reason =
+    input.projection.state === "blocked" || input.projection.state === "exhausted" ? input.projection.reason : "unknown"
+  try {
+    // A gate without a named exit still reads as a deadlock to the operator.
+    // `blocked` holds the whole FIFO; `exhausted` releases it. Both are left
+    // only by an explicit operator act, so the artifact says which one.
+    const exit =
+      input.projection.state === "blocked"
+        ? `Exit: every later ingress is held behind it; reopen the Task (retry/replan) to supersede this epoch, ` +
+          `or repair the conflicting evidence it names.`
+        : `Exit: later ingresses continue past it; send a new operator message to redo the abandoned work, ` +
+          `or reopen the Task (retry/replan) for a fresh budget.`
+    recordTaskInfrastructureError({
+      id: Identifier.deterministic(
+        "artifact",
+        `task-control-operator-gate-v2\0${input.ingressID}\0${input.projection.state}\0${reason}`,
+      ),
+      taskID: input.taskID,
+      component: "task-control",
+      operation: "surface-operator-gated-ingress",
+      reason:
+        `Task-root ingress ${input.ingressID} rests in ${input.projection.state} (${reason}); ` +
+        `automatic scheduling cannot resume it. ${exit}`,
+      context: { ingressID: input.ingressID, state: input.projection.state, gateReason: reason },
+      now: input.now,
+    })
+  } catch (error) {
+    // Surfacing is an observability obligation, not a scheduling one. Losing
+    // it must not convert a resting Task into a faulting one.
+    log.error("Could not surface an operator-gated Task-root ingress", {
+      taskID: input.taskID,
+      ingressID: input.ingressID,
+      error,
+    })
+  }
+}
+
+/**
+ * Name a lifecycle boundary this runtime cannot converge.
+ *
+ * `cancelling` and `closing` are non-absorbing by design: an owner is expected
+ * to finish them. When no converger is wired for the boundary, the periodic
+ * wake degenerates into a silent poll — progress-free, log-free, invisible.
+ * The deterministic artifact turns that into a durable operator-visible fact;
+ * repeated observation reuses it.
+ */
+function surfaceUnconvergedTaskBoundary(input: {
+  taskID: string
+  epoch: number
+  status: "cancelling" | "closing"
+  now: number
+}): void {
+  try {
+    recordTaskInfrastructureError({
+      id: Identifier.deterministic(
+        "artifact",
+        `task-control-unconverged-boundary-v1\0${input.taskID}\0${input.epoch}\0${input.status}`,
+      ),
+      taskID: input.taskID,
+      component: "task-control",
+      operation: "surface-unconverged-boundary",
+      reason:
+        `Task epoch ${input.epoch} rests in ${input.status} with no converger available in this runtime; ` +
+        `the control plane re-checks periodically but cannot finish the boundary itself. ` +
+        `Exit: complete the ${input.status === "cancelling" ? "cancellation" : "close"} from the Task API, ` +
+        `or reopen the Task (retry/replan) to supersede this epoch.`,
+      context: { epoch: input.epoch, status: input.status },
+      now: input.now,
+    })
+  } catch (error) {
+    log.error("Could not surface an unconverged Task boundary", {
+      taskID: input.taskID,
+      status: input.status,
+      error,
+    })
+  }
+}
+
+/**
+ * Settle dispatches whose delivery owner no longer exists.
+ *
+ * A dispatch decision resolves its ingress the moment the worker is accepted;
+ * from then on the only thing that can wake the Orchestrator is the owner's
+ * in-process completion callback. If that owner dies — crash, kill, OOM — the
+ * Task holds an empty ready set, no lease, and no timer: a stall no ingress
+ * projection can express, because the missing fact is the worker's outcome.
+ *
+ * Two cases are settled here, and only these two, because only these two are
+ * provable from durable evidence:
+ *
+ *   1. the worker reached a terminal lifecycle but its delivery was lost — the
+ *      outcome exists, so replaying delivery is idempotent gap-closing;
+ *   2. the worker has no terminal lifecycle and no owner in this process — the
+ *      run is abandoned, so its interruption is recorded as an infrastructure
+ *      outcome and handed back to the Orchestrator as a real fact.
+ *
+ * Liveness of the owner is decided from durable evidence, never from this
+ * process's memory: a peer backend sharing this database owns dispatches whose
+ * pipelines are absent from every local registry here, and settling those would
+ * terminalize live workers on each sweep. Local registries remain as a fast
+ * path for this process's own lineages.
+ */
+async function reconcileAbandonedDispatches(taskID: string): Promise<number> {
+  const settled = new Set(
+    Database.use((db) =>
+      db
+        .select({ payload: EngineArtifactTable.payload })
+        .from(EngineArtifactTable)
+        .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_settlement")))
+        .all()
+        .map((row) => (row.payload as { dispatch_id?: string }).dispatch_id)
+        .filter((id): id is string => typeof id === "string"),
+    ),
+  )
+  const lineages = listDispatchLineage(taskID)
+  const closedDispatchIDs = runtimeState().closedDispatchIDs
+  let recovered = 0
+  for (const lineage of lineages) {
+    const childSessionID = lineage.payload.child_session_id
+    // A dispatch this process has verified as settled-and-delivered (or
+    // deliberately suppressed) is finished history; without the memo every
+    // sweep replays its delivery check against the protocol store.
+    if (closedDispatchIDs.has(lineage.dispatchID)) continue
+    if (await dispatchDeliveryOwnerIsLive(lineage, Date.now())) continue
+    try {
+      if (settled.has(lineage.dispatchID)) {
+        recovered += await recoverSettledUndeliveredDispatch({ taskID, lineage })
+        // Reaching here without a throw means the settlement is delivered,
+        // just delivered now, or durably suppressed — all closed.
+        closedDispatchIDs.add(lineage.dispatchID)
+        continue
+      }
+      const delivery = await reconcileTerminalAgentLifecycleDelivery({
+        taskID,
+        sessionID: childSessionID,
+        dispatchID: lineage.dispatchID,
+      })
+      if (delivery === "delivered") {
+        recovered += 1
+        continue
+      }
+      if (delivery === "already_delivered") continue
+      if (await settleAbandonedDispatch({ taskID, lineage })) recovered += 1
+    } catch (error) {
+      // One unrecoverable dispatch must not stop the sweep: its siblings and
+      // the rest of this Task's frontier are independent.
+      log.error("abandoned dispatch reconciliation failed", {
+        taskID,
+        dispatchID: lineage.dispatchID,
+        sessionID: childSessionID,
+        error,
+      })
+    }
+  }
+  return recovered
+}
+
+/**
+ * Close the gap between a dispatch's settlement and its delivery.
+ *
+ * The outcome is recorded before it is handed to the Orchestrator, so a failure
+ * in between leaves a dispatch that is settled — invisible to abandonment
+ * recovery, which by definition looks for unsettled work — yet never woke
+ * anything. Every ingress reduces to `resolved`, no timer is owed, and the Task
+ * rests forever with a database that looks entirely healthy. This is the only
+ * sweep that can observe that state.
+ */
+async function recoverSettledUndeliveredDispatch(input: {
+  taskID: string
+  lineage: { artifactID: string; dispatchID: string; payload: { child_session_id: string } }
+}): Promise<number> {
+  const settlement = findDispatchSettlementByDispatchID({
+    taskID: input.taskID,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (!settlement) return 0
+  if (dispatchSettlementDelivered({ taskID: input.taskID, settlement })) return 0
+  // The canonical replay is idempotent and produces the ordinary lifecycle
+  // ingress, so it is always preferred over a synthetic recovery wake.
+  const replay = await reconcileTerminalAgentLifecycleDelivery({
+    taskID: input.taskID,
+    sessionID: input.lineage.payload.child_session_id,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (replay === "delivered") return 1
+  if (replay === "already_delivered") return 0
+  // No terminal lifecycle to replay: wake the Orchestrator on the settlement
+  // itself, keyed so the ingress source index makes the replay idempotent.
+  //
+  // An infrastructure settlement must re-enter through the same gate its
+  // original wake would have used. Routing it as `processRecovery` would slip
+  // past the epoch's infrastructure-failure budget — the exact loop the budget
+  // terminates would continue at one wake per crash cycle, just under a
+  // different event name.
+  const outcome = settlement.payload.outcome
+  const infrastructureFactID = outcome.kind === "infrastructure_failure" ? outcome.infrastructure_error?.artifact_id : undefined
+  const result = await dispatchTaskLoop({
+    taskID: input.taskID,
+    event:
+      outcome.kind === "infrastructure_failure" && infrastructureFactID
+        ? {
+            note: `Dispatch ${input.lineage.dispatchID} settled as infrastructure failure without reaching the Orchestrator`,
+            dispatchInfrastructureFailure: { infrastructureFactID, outcome },
           }
-        }
+        : {
+            note: `Dispatch ${input.lineage.dispatchID} settled without reaching the Orchestrator`,
+            processRecovery: { recoveryFactID: settlement.artifactID },
+          },
+  })
+  if (result === "suppressed_budget_exhausted") {
+    // The budget already surfaced its own durable gate; this dispatch is
+    // deliberately, permanently quiet.
+    return 0
+  }
+  log.warn("recovered a settled dispatch that never reached the Orchestrator", {
+    taskID: input.taskID,
+    dispatchID: input.lineage.dispatchID,
+    settlementArtifactID: settlement.artifactID,
+  })
+  return 1
+}
+
+/** Whether some accepted ingress already carries this settlement's outcome. */
+function dispatchSettlementDelivered(input: { taskID: string; settlement: DispatchSettlementRow }): boolean {
+  const outcome = input.settlement.payload.outcome
+  const sourceIDs = [
+    input.settlement.artifactID,
+    outcome.kind === "infrastructure_failure" ? outcome.infrastructure_error?.artifact_id : undefined,
+  ].filter((id): id is string => typeof id === "string")
+  return Database.use((db) => {
+    const artifactSourced =
+      sourceIDs.length > 0 &&
+      db
+        .select({ id: EngineTaskRootIngressTable.id })
+        .from(EngineTaskRootIngressTable)
+        .where(
+          and(
+            eq(EngineTaskRootIngressTable.task_id, input.taskID),
+            eq(EngineTaskRootIngressTable.source, "engine_artifact"),
+            inArray(EngineTaskRootIngressTable.source_id, sourceIDs),
+          ),
+        )
+        .get() !== undefined
+    return artifactSourced
+  })
+}
+
+/**
+ * Whether the process responsible for delivering this dispatch still exists.
+ *
+ * The order matters. This process's own registries are authoritative for its
+ * own lineages and answer without a query. For a lineage another process
+ * claimed, only that process's liveness lease can answer — its absence from
+ * local memory means nothing. A lineage written before the claim existed gets
+ * one lease period of grace from its commit, which is the longest a live owner
+ * could plausibly have gone unrecorded.
+ */
+async function dispatchDeliveryOwnerIsLive(
+  lineage: { artifactID: string; payload: { child_session_id: string; owner_process_occurrence_id?: string } },
+  now: number,
+  timeCreated?: number,
+): Promise<boolean> {
+  const { hasLiveDetachedDispatchPipeline } = await import("@/orchestrator/dispatch-agent-tool")
+  const { SessionPrompt } = await import("@/session/prompt")
+  if (hasLiveDetachedDispatchPipeline(lineage.artifactID)) return true
+  if (SessionPrompt.hasGeneration(lineage.payload.child_session_id)) return true
+  const owner = lineage.payload.owner_process_occurrence_id
+  if (owner === undefined) {
+    const created = timeCreated ?? lineageTimeCreated(lineage.artifactID)
+    return created !== undefined && created + PROCESS_LIVENESS_LEASE_MS > now
+  }
+  // This process claimed it and neither registry holds it: the work is gone,
+  // and our own memory is the authority on that.
+  if (owner === ownerOccurrenceID()) return false
+  return Database.use((db) => isProcessOccurrenceLive(db, owner, now))
+}
+
+function lineageTimeCreated(artifactID: string): number | undefined {
+  return Database.use(
+    (db) =>
+      db
+        .select({ timeCreated: EngineArtifactTable.time_created })
+        .from(EngineArtifactTable)
+        .where(eq(EngineArtifactTable.id, artifactID))
+        .get()?.timeCreated,
+  )
+}
+
+/** Record the interruption of one abandoned worker as its durable outcome and
+ * hand it back to the Orchestrator as an ordinary accepted ingress. */
+async function settleAbandonedDispatch(input: {
+  taskID: string
+  lineage: { artifactID: string; dispatchID: string; payload: { child_session_id: string; target_agent_id: string } }
+}): Promise<boolean> {
+  const childSessionID = input.lineage.payload.child_session_id
+  const { SessionLoop } = await import("@/session/loop")
+  await SessionLoop.terminalizeRecoveredIncompleteAssistant(childSessionID)
+  const reason =
+    `Worker Session ${childSessionID} for dispatch ${input.lineage.dispatchID} lost its delivery owner ` +
+    `before any terminal lifecycle was recorded`
+  const infrastructureFactID = recordTaskInfrastructureError({
+    // Deterministic in the dispatch it recovers: a crash between this
+    // settlement and its ingress replays to the same artifact, which the
+    // ingress source index then dedupes. A fresh id each time would mint a
+    // second wake carrying a second full retry budget.
+    id: Identifier.deterministic("artifact", `abandoned-dispatch-v1\0${input.taskID}\0${input.lineage.dispatchID}`),
+    taskID: input.taskID,
+    component: "dispatch-agent",
+    operation: "recover-abandoned-dispatch",
+    reason,
+    errorName: "AbandonedDispatchError",
+    sessionID: childSessionID,
+    context: { target: input.lineage.payload.target_agent_id, dispatchID: input.lineage.dispatchID },
+    now: Date.now(),
+  })
+  const outcome = DispatchOutcome.infrastructureFailure({
+    operation: "recover-abandoned-dispatch",
+    message: reason,
+    errorName: "AbandonedDispatchError",
+    sessionID: childSessionID,
+    recoveryAuthority: resolveDispatchOccurrenceAuthority({
+      taskID: input.taskID,
+      dispatchID: input.lineage.dispatchID,
+    }),
+    infrastructureError: exactEngineArtifactLocator({
+      taskID: input.taskID,
+      artifactID: infrastructureFactID,
+    }),
+  })
+  if (outcome.kind !== "infrastructure_failure") {
+    throw new Error("Abandoned dispatch recovery constructed a non-infrastructure outcome")
+  }
+  settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID: input.lineage.dispatchID, outcome })
+  await dispatchTaskLoop({
+    taskID: input.taskID,
+    event: {
+      note: `Worker Session ${childSessionID} was abandoned before completing dispatch ${input.lineage.dispatchID}`,
+      dispatchInfrastructureFailure: { infrastructureFactID, outcome },
+    },
+  })
+  return true
+}
+
+/**
+ * Bound on ingress steps inside one scan. Every `continue` below must be
+ * justified by a strictly decreasing well-founded measure — an abandoned
+ * assistant terminalized, a reconciliation Interaction created, an activation
+ * consumed against its immutable budget. The bound is a guard against a
+ * measure that stops decreasing: exceeding it paces the Task on a timer
+ * instead of spinning the reconciler hot.
+ */
+const MAX_INGRESS_STEPS_PER_SCAN = 32
+
+/**
+ * One pass of the project-partitioned recovery/activation algorithm for one
+ * Task. The epoch ingress list is re-read on every pass, so an ingress
+ * accepted while this Task was blocked in a long activation is visible to the
+ * next pass; the driver guarantees that pass exists.
+ */
+async function scanTaskControlPlane(
+  taskID: string,
+  context: TaskControlScanContext = { pass: 0 },
+): Promise<TaskControlScanResult> {
+  if (!currentProjectTaskIDs(taskID).includes(taskID)) return { activated: 0 }
+  let lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
+  if ((lifecycle.status === "cancelling" || lifecycle.status === "closing") && context.pass === 0) {
+    // A boundary request that failed midway leaves a status no fact append can
+    // leave, and every ingress under it reduces to the same. Re-attempting
+    // convergence here is what makes the escape independent of a restart; a
+    // throw becomes an ordinary scan fault and is paced by the driver.
+    const reconcile = cancellationReconciler()
+    if (reconcile && lifecycle.status === "cancelling") await reconcile(taskID)
+    lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
+    if (lifecycle.status === "cancelling" || lifecycle.status === "closing") {
+      if (lifecycle.status === "closing" || !reconcile) {
+        // No converger exists for this boundary in this runtime. The periodic
+        // wake alone would poll it silently forever — an invisible stall, the
+        // exact condition operator gates exist to name. Surfacing is
+        // deterministic per (task, epoch, status), so repeated observation
+        // reuses one artifact.
+        surfaceUnconvergedTaskBoundary({ taskID, epoch: lifecycle.epoch, status: lifecycle.status, now: Date.now() })
+      }
+      return { activated: 0, wakeAt: Date.now() + CANCELLATION_RECONCILE_WAKE_MS }
+    }
+  }
+  // Worker completion is delivered by an in-process callback owned by the
+  // dispatching runtime. That owner can vanish (crash, kill, OOM) after the
+  // dispatch decision resolved its ingress, leaving the Task with an empty
+  // ready set and no pending timer — a permanent stall no ingress projection
+  // can see. Settling abandoned dispatches is therefore part of every scan,
+  // but once per scan: the sweep's own effects re-enter the fixpoint, so
+  // running it per pass would rescan the artifact tables for no new evidence.
+  const recovered = context.pass === 0 ? await reconcileAbandonedDispatches(taskID) : 0
+  const ingresses = listTaskRootIngresses(taskID, lifecycle.epoch)
+  const settledIngressIDs = runtimeState().settledIngressIDs
+  let activated = 0
+  for (const ingress of ingresses) {
+    // Absorbing verdicts this process already reduced are skipped without a
+    // fresh evidence read; see the memo's declaration for why that is sound.
+    if (settledIngressIDs.has(ingress.id)) continue
+    let stopTask = false
+    let wakeAt: number | undefined
+    let noProgress = false
+    const absoluteDeadline = Database.use(
+      (db) => taskRootIngressFactsInTransaction(db, ingress.id).policy.absoluteDeadline,
+    )
+    /**
+     * Classify where this ingress comes to rest and honour the obligation that
+     * class carries: a finite wake is returned for the driver to arm, and an
+     * operator gate that only an infrastructure fact can express is surfaced
+     * durably. Every arm is covered by construction, so no state can rest with
+     * neither a timer nor a trace.
+     */
+    const settle = (projection: TaskRootIngressProjection): number | undefined => {
+      const classification = classifyTaskRootIngressWake(projection, absoluteDeadline, Date.now())
+      if (classification.class === "finite_wake") return classification.wakeAt
+      if (classification.class === "operator_gated" && classification.surface === "infrastructure_fact") {
+        surfaceOperatorGatedTaskRootIngress({ taskID, ingressID: ingress.id, projection, now: Date.now() })
+      }
+      // `interaction` gates are already surfaced by their pending Interaction
+      // row, and `fifo_deferred`/`absorbing` owe nothing.
+      return undefined
+    }
+    for (let step = 0; ; step += 1) {
+      const now = Date.now()
+      if (step >= MAX_INGRESS_STEPS_PER_SCAN) {
+        log.warn("Task-root ingress made no reducible progress within one scan", { taskID, ingressID: ingress.id })
+        noProgress = true
         stopTask = true
         break
       }
-      if (stopTask) break
+      if ((await terminalizeExpiredTaskRootAssistants(ingress.id, now)) > 0) continue
+      const projection = projectTaskRootIngress(ingress.id, now, readTaskRootIngressEvidence)
+      if (projection.state === "resolved" || projection.state === "terminal_inapplicable") {
+        settledIngressIDs.add(ingress.id)
+        break
+      }
+      if (projection.state === "exhausted") {
+        // Absorbing for this ingress but not for the Task: later ingresses may
+        // still run. The gate is surfaced so the abandoned work is visible,
+        // and only a surfaced gate may be memoized.
+        settle(projection)
+        settledIngressIDs.add(ingress.id)
+        break
+      }
+      if (projection.state === "reconcile_required") {
+        if (ensureActivityReconciliationInteractions(taskID, ingress.id, projection.requestIDs, now) > 0) continue
+        wakeAt = settle(projection)
+        stopTask = true
+        break
+      }
+      if (projection.state === "ready") {
+        const attempt = await activate({ taskID, ingressID: ingress.id })
+        if (attempt.activated) {
+          activated += 1
+          continue
+        }
+        // Pace on what the acquisition actually saw, never on the stale
+        // `ready` that led here.
+        wakeAt = settle(attempt.projection)
+        stopTask = true
+        break
+      }
+      wakeAt = settle(projection)
+      stopTask = true
+      break
     }
+    if (stopTask) {
+      return {
+        activated: activated + recovered,
+        ...(wakeAt === undefined ? {} : { wakeAt }),
+        ...(noProgress ? { noProgress: true } : {}),
+      }
+    }
+  }
+  return { activated: activated + recovered }
+}
+
+const driverState = createInstanceState(
+  () => {
+    const directory = Filesystem.resolve(Instance.directory)
+    const claimLiveness = () => {
+      try {
+        assertProcessLivenessLease(ownerOccurrenceID())
+      } catch (error) {
+        log.error("Could not renew this runtime's liveness lease", { error })
+      }
+    }
+    // Recovery in every process reads this row to decide whether our
+    // dispatches are still owned, so the claim exists before any scan can run.
+    claimLiveness()
+    const livenessTimer = setInterval(() => {
+      void reenterActiveInstance({ directory, fn: async () => claimLiveness() }).catch((error) => {
+        log.error("Runtime liveness renewal could not re-enter its project", { error })
+      })
+    }, PROCESS_LIVENESS_RENEWAL_MS)
+    ;(livenessTimer as { unref?: () => void }).unref?.()
+    return {
+      driver: new TaskControlDriver({
+        scan: scanTaskControlPlane,
+        liveTasks: () => {
+          try {
+            return currentSweepProjectTaskIDs()
+          } catch (error) {
+            log.error("Task-control heartbeat could not enumerate live Tasks", { error })
+            return []
+          }
+        },
+        reenter: async (fn) => {
+          await reenterActiveInstance({ directory, fn })
+        },
+      }),
+      livenessTimer,
+    }
+  },
+  async (state) => {
+    clearInterval(state.livenessTimer)
+    try {
+      // Release the claim so peers can recover this process's work at once
+      // instead of waiting out the full lease.
+      expireProcessLivenessLease(ownerOccurrenceID())
+    } catch (error) {
+      log.warn("Could not expire this runtime's liveness lease on shutdown", { error })
+    }
+    state.driver.dispose()
+  },
+  "task-control-driver",
+)
+
+/**
+ * One project-partitioned recovery/activation algorithm.
+ *
+ * A single-Task request reports its owner's first-pass fault; a project-wide
+ * request isolates each Task so one faulted Task cannot starve the rest.
+ */
+export async function reconcileTaskControlPlane(taskID?: string): Promise<number> {
+  const driver = driverState().driver
+  if (taskID) return driver.request(taskID, { propagateFailure: true })
+  // A project-wide request only has to *start* every Task. Awaiting them in
+  // sequence would make each Task's whole Orchestrator Turn a prerequisite of
+  // the next Task's first scan — at startup that serializes recovery for the
+  // entire project behind one Provider call, and it is the reason project open
+  // could block for minutes. Faults stay isolated per Task inside the driver.
+  const results = await Promise.allSettled(currentSweepProjectTaskIDs().map((id) => driver.request(id)))
+  let activated = 0
+  for (const result of results) {
+    if (result.status === "fulfilled") activated += result.value
+    else log.error("project Task-control reconciliation faulted", { error: result.reason })
   }
   return activated
 }
 
-export async function deliverTaskRootIngress(taskID: string): Promise<boolean> {
-  return (await reconcileTaskControlPlane(taskID)) > 0
+/** Pending Task-control re-arms and faults, for diagnostics only. */
+export function taskControlDriverSnapshot() {
+  return driverState().driver.snapshot()
+}
+
+/**
+ * Request one Task's scan and report the activations *this call* owned.
+ *
+ * Zero does not mean no drain will happen: when another caller already owns
+ * this Task's scan, the demand is recorded in its revision and this call
+ * returns immediately rather than joining. Callers deciding whether work is
+ * pending must consult the durable ingress state, not this number.
+ */
+export async function deliverTaskRootIngress(taskID: string): Promise<number> {
+  return reconcileTaskControlPlane(taskID)
 }
 
 export async function deliverPendingTaskRootIngresses(): Promise<number> {
   return reconcileTaskControlPlane()
 }
 
-export type DispatchTaskLoopResult = "accepted" | "ignored"
+/**
+ * How many infrastructure-failure wakes one epoch may auto-retry.
+ *
+ * Retry budgets are frozen per ingress, but an infrastructure failure *mints a
+ * new ingress*, and each one arrives with a full budget. A worker that fails
+ * the same way every time therefore has no bound at all: each cycle costs a
+ * whole Orchestrator Turn and produces the next cycle. The budget must be
+ * quantified over something the retry cannot create, and the epoch is that
+ * thing — it changes only when an operator reopens the Task.
+ */
+export const TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET = 5
+
+/** Ingresses in this epoch that were minted by a dispatch infrastructure
+ * failure. Exactly the set `eventForIngress` classifies as
+ * `dispatchInfrastructureFailure`. */
+function countInfrastructureFailureIngressesInTransaction(db: Database.TxOrDb, taskID: string, epoch: number): number {
+  return db
+    .select({ id: EngineTaskRootIngressTable.id })
+    .from(EngineTaskRootIngressTable)
+    .innerJoin(
+      EngineArtifactTable,
+      and(
+        eq(EngineArtifactTable.id, EngineTaskRootIngressTable.source_id),
+        eq(EngineArtifactTable.kind, "task-infrastructure-error"),
+      ),
+    )
+    .where(
+      and(
+        eq(EngineTaskRootIngressTable.task_id, taskID),
+        eq(EngineTaskRootIngressTable.execution_epoch, epoch),
+        eq(EngineTaskRootIngressTable.source, "engine_artifact"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.context.dispatchID') IS NOT NULL`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.operation') IS NOT NULL`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.reason') IS NOT NULL`,
+      ),
+    )
+    .all().length
+}
+
+export type DispatchTaskLoopResult = "accepted" | "ignored" | "suppressed_budget_exhausted"
 export type DispatchTaskLoopAcceptedWake = { taskID: string; result: "accepted" }
 export type DispatchTaskLoopInput = {
   taskID: string
@@ -939,14 +1745,81 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
     lifecycleEventID: event.agentLifecycleDelivery?.eventID,
     taskCreationID: event.taskCreation?.taskID,
   }
-  Database.transaction((db) => persistTaskRootIngressInTransaction(db, task, event, identity))
+  const accepted = Database.transaction((db) => {
+    if (event.dispatchInfrastructureFailure) {
+      const epoch = taskLifecycleProjectionInTransaction(db, task.id).epoch
+      if (
+        countInfrastructureFailureIngressesInTransaction(db, task.id, epoch) >=
+        TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET
+      ) {
+        // The failure stays recorded and visible; only the automatic retry
+        // stops. Suppressing the wake is what makes the measure well-founded.
+        recordTaskInfrastructureErrorInTransaction(db, {
+          id: Identifier.deterministic("artifact", `task-control-infra-budget-v1\0${task.id}\0${epoch}`),
+          taskID: task.id,
+          component: "task-control",
+          operation: "infrastructure-failure-budget-exhausted",
+          reason:
+            `Task epoch ${epoch} consumed its infrastructure-failure retry budget ` +
+            `(${TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET}); further failures are recorded but no longer re-dispatched`,
+          // Identity and payload are both keyed to the epoch alone, so every
+          // later suppression reuses this exact artifact. Naming the specific
+          // suppressed fact here would make the payload differ under a
+          // deterministic id and be rejected as publication drift; those facts
+          // are each recorded as artifacts in their own right.
+          context: { epoch },
+          now: Date.now(),
+        })
+        log.warn("suppressed an infrastructure-failure wake; epoch retry budget is spent", {
+          taskID: task.id,
+          epoch,
+          suppressedInfrastructureFactID: event.dispatchInfrastructureFailure.infrastructureFactID,
+        })
+        return false
+      }
+    }
+    persistTaskRootIngressInTransaction(db, task, event, identity)
+    return true
+  })
+  if (!accepted) return "suppressed_budget_exhausted"
   await input.beforeAcceptedWake?.({ taskID: task.id, result: "accepted" })
   await reconcileTaskControlPlane(task.id)
   return "accepted"
 }
 
+/**
+ * Re-scan one Task without accepting any new ingress.
+ *
+ * Answering an Interaction, for example, changes an existing ingress from
+ * `waiting` to `ready` by appending a fact the reducer already reads — there is
+ * nothing new to accept, only something new to observe. The scan is detached
+ * because the caller (a Bus subscriber, an HTTP reply handler) must not block
+ * on the Orchestrator Turn its own edge just enabled.
+ */
+/** Detach `run` from the caller's instance lease before letting it float.
+ *
+ * A background completion outlives the request that spawned it, but the
+ * request's instance cache lease does not: the detached work would keep the
+ * closed lease in its async context and fault on its next database access.
+ * Re-entering acquires a fresh lease held exactly for the work's duration; a
+ * project disposed in the meantime drops the work instead of faulting it. */
+function runDetachedFromCallerLease(run: () => Promise<unknown>): Promise<unknown> {
+  const directory = runtimeState().directory
+  return reenterActiveInstance({ directory, fn: run })
+}
+
+export function requestTaskControlScanInBackground(taskID: string, operation: string): void {
+  const completion = runDetachedFromCallerLease(() => reconcileTaskControlPlane(taskID))
+    .then(() => undefined)
+    .catch((error) => {
+      log.error("background Task-control scan failed", { taskID, operation, error })
+    })
+    .finally(() => completionHooks.delete(completion))
+  completionHooks.add(completion)
+}
+
 export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, operation: string): void {
-  const completion = dispatchTaskLoop(input)
+  const completion = runDetachedFromCallerLease(() => dispatchTaskLoop(input))
     .then(() => undefined)
     .catch((error) => {
       log.error("background Task-root reconciliation failed", { taskID: input.taskID, operation, error })
@@ -955,10 +1828,12 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
   completionHooks.add(completion)
 }
 
+/** Re-scan for an already-persisted ingress. It accepts no event, so it can
+ * never meet the infrastructure-failure budget gate. */
 export async function dispatchPersistedTaskLoop(
   taskID: string,
   expectedWakeID?: string,
-): Promise<DispatchTaskLoopResult> {
+): Promise<"accepted" | "ignored"> {
   if (expectedWakeID) {
     const exists = Database.use((db) =>
       db
@@ -1101,12 +1976,40 @@ export function persistProcessShutdownRecoveryHandoffs(input: {
     input.tasks.flatMap((item) => {
       const task = findTask(item.taskID)
       if (!task || item.ownedSessionIDs.length === 0) return []
+      // Write the same v1 context the readers parse. The v1 reader contract
+      // shipped without this writer following it, so every graceful shutdown
+      // minted a fact the next build refused — and refused as HTTP 500 for
+      // the whole Task view. Readers keep a legacy branch for rows written
+      // before this; the writer must never widen that set again.
+      const affectedSubjects = item.ownedSessionIDs
+        .toSorted()
+        .flatMap((sessionID) => {
+          const session = db
+            .select({ timeCreated: SessionTable.time_created })
+            .from(SessionTable)
+            .where(eq(SessionTable.id, sessionID))
+            .get()
+          if (!session) return []
+          return [
+            {
+              kind: "affected_created_session" as const,
+              session_id: sessionID,
+              session_created_at: session.timeCreated,
+            },
+          ]
+        })
+      if (affectedSubjects.length === 0) return []
       const recoveryFactID = recordTaskInfrastructureErrorInTransaction(db, {
         taskID: item.taskID,
         component: "process-recovery",
         operation: "handoff-process-owned-task-execution",
         reason: input.reason,
-        context: { owned_session_ids: item.ownedSessionIDs.toSorted() },
+        context: {
+          schema_version: 1,
+          origin: "process_shutdown",
+          physical_evidence: { kind: "unmanaged_process_cause_unknown", reason: input.reason },
+          affected_subjects: affectedSubjects,
+        },
         now,
       })
       const wakeID = persistTaskRootIngressInTransaction(
@@ -1201,11 +2104,10 @@ export async function waitForIngressDeliveryHooksForTest(): Promise<void> {
 
 export const TestHooks = {
   replaceTerminalIngressDeliveryRuntime(value: string): Disposable {
-    const prior = runtimeOccurrenceOverrideForTest
-    runtimeOccurrenceOverrideForTest = value
+    const prior = replaceRuntimeOccurrenceIDForTest(value)
     return {
       [Symbol.dispose]() {
-        runtimeOccurrenceOverrideForTest = prior
+        replaceRuntimeOccurrenceIDForTest(prior)
       },
     }
   },

@@ -515,11 +515,16 @@ export namespace ProcessSupervisor {
     removed: number
     retainedCurrent: number
     retainedLive: number
+    /** Unreconcilable artifacts that also could not be quarantined; left in place. */
     retainedUnknown: number
+    /** Unreconcilable artifacts moved aside so they can never gate a startup again. */
+    quarantined: number
+    unreconciled: WindowsOrphanRequestArtifactUnknownError[]
   }
 
   export class WindowsOrphanRequestArtifactUnknownError extends Error {
     override readonly name = "WindowsOrphanRequestArtifactUnknownError"
+    quarantineFailure: unknown
 
     constructor(
       readonly requestDirectory: string,
@@ -531,18 +536,9 @@ export namespace ProcessSupervisor {
     }
   }
 
-  export class WindowsOrphanRequestRecoveryBlockedError extends AggregateError {
-    override readonly name = "WindowsOrphanRequestRecoveryBlockedError"
-
-    constructor(
-      errors: WindowsOrphanRequestArtifactUnknownError[],
-      readonly result: WindowsOrphanRequestRecoveryResult,
-    ) {
-      super(errors, `Windows supervisor request recovery retained ${errors.length} unknown artifact occurrence(s)`)
-    }
-  }
-
   type DurableWindowsRequest = {
+    kind: "shell" | "command"
+    detached?: boolean
     request_id: string
     ready_file: string
     launch_failed_file: string
@@ -616,12 +612,39 @@ export namespace ProcessSupervisor {
     }
   }
 
+  const ORPHAN_RECOVERY_TOTAL_BUDGET_MS = 10_000
+  const RECOVERY_QUARANTINE_DIRECTORY = "quarantine"
+
+  async function readWindowsHelperMarker(
+    requestDir: string,
+    request: DurableWindowsRequest,
+  ): Promise<WindowsHelperMarker | undefined> {
+    const raw = await readJsonFile(path.join(requestDir, "helper.json"))
+    if (raw === undefined) return undefined
+    return parseWindowsHelperMarker({
+      text: JSON.stringify(raw),
+      requestID: request.request_id,
+      runtimeOccurrenceID: request.runtime_occurrence_id,
+    })
+  }
+
+  async function quarantineRequestArtifact(requestDir: string): Promise<void> {
+    const root = path.join(Global.Path.temporary, RECOVERY_QUARANTINE_DIRECTORY)
+    await fs.mkdir(root, { recursive: true })
+    await fs.rename(requestDir, path.join(root, `${path.basename(requestDir)}-${Date.now()}`))
+  }
+
   /** Reconcile only exact prior/dead Windows request occurrences. Recovery
-   * never targets a numeric PID; it writes the request's own cancel authority
-   * and requires the helper's exact active-zero marker before removal. */
+   * never targets a numeric PID: an artifact is removed only when the helper's
+   * durable process-instance identity proves the helper occurrence dead (its
+   * kill-on-close job makes non-detached target death structural), or when the
+   * helper answers the request's own cancel authority with an exact
+   * active-zero marker. Artifacts that prove neither are quarantined and
+   * reported — an unreconcilable artifact must never gate startup again. */
   export async function recoverOrphanedWindowsRequests(input: {
     currentOccurrenceID: string
     timeoutMilliseconds?: number
+    totalBudgetMilliseconds?: number
     observeProcessOccurrence?: RuntimeProcessOccurrenceObserver
   }): Promise<WindowsOrphanRequestRecoveryResult> {
     const result: WindowsOrphanRequestRecoveryResult = {
@@ -630,11 +653,13 @@ export namespace ProcessSupervisor {
       retainedCurrent: 0,
       retainedLive: 0,
       retainedUnknown: 0,
+      quarantined: 0,
+      unreconciled: [],
     }
     if (process.platform !== "win32") return result
     const observeProcessOccurrence =
       input.observeProcessOccurrence ?? cachedRuntimeProcessOccurrenceObserver()
-    const unknownArtifacts: WindowsOrphanRequestArtifactUnknownError[] = []
+    const budgetDeadline = Date.now() + (input.totalBudgetMilliseconds ?? ORPHAN_RECOVERY_TOTAL_BUDGET_MS)
     const entries = await fs.readdir(Global.Path.temporary, { withFileTypes: true }).catch((error) => {
       if (errorCode(error) === "ENOENT") return []
       throw error
@@ -660,12 +685,54 @@ export namespace ProcessSupervisor {
           result.retainedLive += 1
           continue
         }
+        const helper = await readWindowsHelperMarker(requestDir, request)
+        if (
+          helper &&
+          observeProcessOccurrence({
+            pid: helper.helper_pid,
+            processInstanceID: helper.helper_process_instance_id,
+            occurrenceID: request.runtime_occurrence_id,
+          }) === "dead_or_reused"
+        ) {
+          // The helper occurrence is proven dead. Non-detached targets share
+          // its kill-on-close job, so their death is structural; a detached
+          // target intentionally outlives it and is verified by its own
+          // durable instance identity from the ready marker.
+          if (request.kind === "command" && request.detached === true) {
+            const rawReady = await readJsonFile(request.ready_file)
+            if (rawReady !== undefined) {
+              const ready = parseWindowsReadyMarker({
+                text: JSON.stringify(rawReady),
+                requestID: request.request_id,
+                runtimeOccurrenceID: request.runtime_occurrence_id,
+                helperPID: helper.helper_pid,
+              })
+              const targetObservation = observeProcessOccurrence({
+                pid: ready.target_pid,
+                processInstanceID: ready.target_process_instance_id,
+                occurrenceID: request.runtime_occurrence_id,
+              })
+              if (targetObservation !== "dead_or_reused") {
+                result.retainedLive += 1
+                continue
+              }
+            }
+          }
+          await fs.rm(requestDir, { recursive: true, force: true })
+          result.removed += 1
+          continue
+        }
+        // The helper may still be alive, or predates durable helper identity:
+        // hand it the request's own cancel authority and wait for its proof.
         await fs.writeFile(request.cancel_file, request.request_id, "utf8")
-        const deadline = Date.now() + (input.timeoutMilliseconds ?? TERMINATION_CLEANUP_TIMEOUT_MS)
+        const deadline = Math.min(
+          Date.now() + (input.timeoutMilliseconds ?? TERMINATION_CLEANUP_TIMEOUT_MS),
+          budgetDeadline,
+        )
         let ready: WindowsReadyMarker | undefined
         let settlement: WindowsSettlementMarker | undefined
         let preTargetSettlement: WindowsPreTargetSettlementMarker | undefined
-        while (Date.now() <= deadline) {
+        for (;;) {
           const rawPreTargetSettlement = await readJsonFile(request.launch_failed_file)
           if (rawPreTargetSettlement) {
             const rawReady = await readJsonFile(request.ready_file)
@@ -699,6 +766,7 @@ export namespace ProcessSupervisor {
               break
             }
           }
+          if (Date.now() >= deadline) break
           await new Promise((resolve) => setTimeout(resolve, 20))
         }
         if (!preTargetSettlement && (!ready || !settlement)) {
@@ -707,11 +775,17 @@ export namespace ProcessSupervisor {
         await fs.rm(requestDir, { recursive: true, force: true })
         result.removed += 1
       } catch (error) {
-        result.retainedUnknown += 1
-        unknownArtifacts.push(new WindowsOrphanRequestArtifactUnknownError(requestDir, error))
+        const unknown = new WindowsOrphanRequestArtifactUnknownError(requestDir, error)
+        result.unreconciled.push(unknown)
+        try {
+          await quarantineRequestArtifact(requestDir)
+          result.quarantined += 1
+        } catch (quarantineError) {
+          unknown.quarantineFailure = quarantineError
+          result.retainedUnknown += 1
+        }
       }
     }
-    if (unknownArtifacts.length > 0) throw new WindowsOrphanRequestRecoveryBlockedError(unknownArtifacts, result)
     return result
   }
 
@@ -1726,15 +1800,31 @@ export namespace ProcessSupervisor {
     }
   }
 
+  type WindowsHelperMarker = {
+    protocol: 1
+    request_id: string
+    helper_pid: number
+    helper_process_instance_id: string
+    runtime_occurrence_id: string
+  }
+
   type WindowsReadyMarker = {
+    protocol: 2
+    request_id: string
+    helper_pid: number
+    target_pid: number
+    target_process_instance_id: string
+    runtime_occurrence_id: string
+  }
+
+  type WindowsSettlementMarker = {
     protocol: 1
     request_id: string
     helper_pid: number
     target_pid: number
+    active_processes: 0
     runtime_occurrence_id: string
   }
-
-  type WindowsSettlementMarker = WindowsReadyMarker & { active_processes: 0 }
 
   type WindowsPreTargetSettlementMarker = {
     protocol: 1
@@ -1786,6 +1876,42 @@ export namespace ProcessSupervisor {
     return marker as WindowsPreTargetSettlementMarker
   }
 
+  function parseWindowsHelperMarker(input: {
+    text: string
+    requestID: string
+    runtimeOccurrenceID: string
+  }): WindowsHelperMarker {
+    let value: unknown
+    try {
+      value = JSON.parse(input.text)
+    } catch (error) {
+      throw new Error(`Windows process supervisor helper marker is not valid JSON: ${errorMessage(error)}`)
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error("Windows process supervisor helper marker must be an object")
+    }
+    const marker = value as Record<string, unknown>
+    const keys = Object.keys(marker).sort()
+    const expectedKeys = ["helper_pid", "helper_process_instance_id", "protocol", "request_id", "runtime_occurrence_id"]
+    if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
+      throw new Error("Windows process supervisor helper marker has unexpected fields")
+    }
+    if (marker.protocol !== 1) throw new Error("Windows process supervisor helper marker has invalid protocol")
+    if (marker.request_id !== input.requestID) {
+      throw new Error("Windows process supervisor helper marker request identity does not match")
+    }
+    if (marker.runtime_occurrence_id !== input.runtimeOccurrenceID) {
+      throw new Error("Windows process supervisor helper marker runtime occurrence does not match")
+    }
+    if (!Number.isInteger(marker.helper_pid) || (marker.helper_pid as number) <= 0) {
+      throw new Error("Windows process supervisor helper marker has invalid helper process id")
+    }
+    if (typeof marker.helper_process_instance_id !== "string" || marker.helper_process_instance_id.length === 0) {
+      throw new Error("Windows process supervisor helper marker has invalid helper process instance identity")
+    }
+    return marker as WindowsHelperMarker
+  }
+
   function parseWindowsReadyMarker(input: {
     text: string
     requestID: string
@@ -1803,11 +1929,18 @@ export namespace ProcessSupervisor {
     }
     const marker = value as Record<string, unknown>
     const keys = Object.keys(marker).sort()
-    const expectedKeys = ["helper_pid", "protocol", "request_id", "runtime_occurrence_id", "target_pid"]
+    const expectedKeys = [
+      "helper_pid",
+      "protocol",
+      "request_id",
+      "runtime_occurrence_id",
+      "target_pid",
+      "target_process_instance_id",
+    ]
     if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
       throw new Error("Windows process supervisor ready marker has unexpected fields")
     }
-    if (marker.protocol !== 1) throw new Error("Windows process supervisor ready marker has invalid protocol")
+    if (marker.protocol !== 2) throw new Error("Windows process supervisor ready marker has invalid protocol")
     if (marker.request_id !== input.requestID) {
       throw new Error("Windows process supervisor ready marker request identity does not match")
     }
@@ -1822,6 +1955,9 @@ export namespace ProcessSupervisor {
     }
     if (!Number.isInteger(marker.target_pid) || (marker.target_pid as number) <= 0) {
       throw new Error("Windows process supervisor ready marker has invalid target process id")
+    }
+    if (typeof marker.target_process_instance_id !== "string" || marker.target_process_instance_id.length === 0) {
+      throw new Error("Windows process supervisor ready marker has invalid target process instance identity")
     }
     return marker as WindowsReadyMarker
   }

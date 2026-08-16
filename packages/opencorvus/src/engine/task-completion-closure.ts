@@ -66,6 +66,36 @@ export function acquireTaskCompletionClosureInTransaction(
   return { owner_id: input.ownerID, activation_id: activationID, expires_at: expiresAt }
 }
 
+/**
+ * Give up a completion closure this owner can no longer use.
+ *
+ * The closure is committed before the terminal transaction runs, and that
+ * transaction can refuse — an unsettled dispatch is the common case. Without a
+ * release the Task then rejects every `complete_task` until the lease expires,
+ * while the model retries into that window: the closure conflict and the retry
+ * feed each other. Expiring early is the same mutation class as renewal.
+ *
+ * Returns whether a lease was actually released.
+ */
+export function releaseTaskCompletionClosureInTransaction(
+  db: Database.TxOrDb,
+  input: { taskID: string; ownerID: string; now?: number },
+): boolean {
+  const now = input.now ?? Date.now()
+  const closure = taskCompletionClosureInTransaction(db, input.taskID, now)
+  if (!closure || closure.owner_id !== input.ownerID) return false
+  db.update(EngineControlActivationLeaseTable)
+    .set({ expires_at: now })
+    .where(
+      and(
+        eq(EngineControlActivationLeaseTable.id, closure.activation_id),
+        eq(EngineControlActivationLeaseTable.owner_occurrence_id, input.ownerID),
+      ),
+    )
+    .run()
+  return true
+}
+
 export function assertTaskCompletionClosureOwnerInTransaction(
   db: Database.TxOrDb,
   input: { taskID: string; ownerID: string },

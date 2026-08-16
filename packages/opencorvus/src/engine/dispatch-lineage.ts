@@ -3,6 +3,7 @@ import { ProjectedWorkerIdentitySchema, type ProjectedWorkerIdentity } from "@/a
 import { insertEngineArtifact } from "@/engine/artifact"
 import { EngineArtifactTable, EngineTaskTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
+import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
 import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
@@ -34,6 +35,10 @@ export interface DispatchLineagePayload extends EngineMetadata {
   workflow_occurrence_id: string
   coordination_action_id?: string
   continuation_of_dispatch_id?: string
+  /** The runtime process that owns in-process delivery for this dispatch.
+   * Recovery reads it to decide, from durable evidence alone, whether the
+   * owner still exists. Absent on lineages written before the claim existed. */
+  owner_process_occurrence_id?: string
   adapter_input: Record<string, unknown>
   time_created: number
 }
@@ -97,6 +102,7 @@ const DispatchLineagePayloadSchema = z
     workflow_occurrence_id: z.string().min(1),
     coordination_action_id: z.string().min(1).optional(),
     continuation_of_dispatch_id: z.string().min(1).optional(),
+    owner_process_occurrence_id: z.string().min(1).optional(),
     adapter_input: z.record(z.string(), z.unknown()),
     time_created: z.number().positive(),
   })
@@ -172,9 +178,24 @@ export function createDispatchLineageOrigin(
 export function recordDispatchLineage(input: {
   origin: DispatchLineageOrigin
   childSessionID: string
+  /** Overrides the owning process claim; tests use it to stand in for a peer
+   * backend sharing this database, or `null` for a lineage written before the
+   * claim existed. */
+  ownerProcessOccurrenceID?: string | null
   now?: number
 }): DispatchLineageRow {
   const now = input.now ?? Date.now()
+  const ownerProcessOccurrenceID = (() => {
+    if (input.ownerProcessOccurrenceID === null) return undefined
+    if (input.ownerProcessOccurrenceID) return input.ownerProcessOccurrenceID
+    try {
+      return currentRuntimeOccurrenceID()
+    } catch {
+      // A dispatch must not fail because process identity is unavailable;
+      // recovery falls back to a commit-time grace window for such lineages.
+      return undefined
+    }
+  })()
   const artifactID = Identifier.ascending("artifact")
   const deliverySliceRevisionIDs = assertCurrentDeliverySliceRevisionIDs({
     taskID: input.origin.taskID,
@@ -202,6 +223,7 @@ export function recordDispatchLineage(input: {
       ...(input.origin.continuationOfDispatchID
         ? { continuation_of_dispatch_id: input.origin.continuationOfDispatchID }
         : {}),
+      ...(ownerProcessOccurrenceID ? { owner_process_occurrence_id: ownerProcessOccurrenceID } : {}),
       adapter_input: input.origin.adapterInput,
       time_created: now,
     },

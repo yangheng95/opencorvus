@@ -642,6 +642,8 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           return invokeTauri("overlay_open_project_editor", {
             editor: command.editor,
             path: command.path,
+            line: command.line,
+            column: command.column,
           })
         case "notification.permission": {
           const granted = await tauriIsNotificationPermissionGranted()

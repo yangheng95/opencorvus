@@ -44,6 +44,7 @@
 import ORCHESTRATOR_CORE from "@/prompt/core/orchestrator-core.txt"
 import z from "zod"
 import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-narrative"
+import { withParticipantMessageLanguage } from "@/prompt/fragments/participant-message-language"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
@@ -103,6 +104,10 @@ import { assertTaskRootSessionLineage, taskOrchestratorSession } from "./task-se
 import { orchestratorControlOccurrenceIdentity } from "./control-message-identity"
 
 const log = Log.create({ service: "orchestrator" })
+
+/** Name carried by `TaskRootIngressIntegrityError` envelopes. Compared as a
+ * string so this module keeps no engine-internal import. */
+const TASK_ROOT_INTEGRITY_ERROR_NAME = "TaskRootIngressIntegrityError"
 
 export const OrchestratorControlIdentityConflictError = NamedError.create(
   "OrchestratorControlIdentityConflictError",
@@ -236,16 +241,28 @@ async function settleOrchestratorStartupFailure(input: {
     now,
   })
   const task = requireTask(input.taskID)
-  if (!isTaskTerminal(task)) {
-    await terminalTask(
-      task,
-      {
-        status: "failed",
-        error: input.taskError,
-      },
-      `Orchestrator startup failed: ${input.envelope.message}`,
-    )
+  if (isTaskTerminal(task)) return
+  if (input.envelope.errorName === TASK_ROOT_INTEGRITY_ERROR_NAME) {
+    // Same rule as the execution-failure path below: an integrity conflict is
+    // a durable condition the control plane reduces to `blocked` and surfaces
+    // as an operator gate. Startup was the asymmetric hole — the first
+    // activation's failure kept the Task open, then the lease-expiry retry hit
+    // the identical conflict *here* and terminally failed it after all.
+    log.error("Task-root integrity conflict blocked Orchestrator startup; the Task stays open for repair", {
+      taskID: input.taskID,
+      sessionID: input.session?.id,
+      reason,
+    })
+    return
   }
+  await terminalTask(
+    task,
+    {
+      status: "failed",
+      error: input.taskError,
+    },
+    `Orchestrator startup failed: ${input.envelope.message}`,
+  )
 }
 
 async function settleOrchestratorExecutionFailure(input: {
@@ -273,17 +290,29 @@ async function settleOrchestratorExecutionFailure(input: {
     })
   }
   const task = requireTask(input.taskID)
-  if (!isTaskTerminal(task)) {
-    await terminalTask(
-      task,
-      {
-        status: "failed",
-        error: input.taskError,
-      },
-      `Orchestrator execution interrupted: ${input.envelope.message}`,
-      { terminalReason: "interrupted" },
-    )
+  if (isTaskTerminal(task)) return
+  if (input.envelope.errorName === TASK_ROOT_INTEGRITY_ERROR_NAME) {
+    // A Task-root integrity conflict is a durable, absorbing condition the
+    // control plane already models: its ingress reduces to `blocked` and the
+    // scan surfaces an operator gate. Terminally failing the Task on top of
+    // that destroys the only states an operator can repair and resume from,
+    // and it is what turned one refused assistant append into a dead Task.
+    log.error("Task-root integrity conflict ended an Orchestrator Turn; the Task stays open for repair", {
+      taskID: input.taskID,
+      sessionID: input.session?.id,
+      reason,
+    })
+    return
   }
+  await terminalTask(
+    task,
+    {
+      status: "failed",
+      error: input.taskError,
+    },
+    `Orchestrator execution interrupted: ${input.envelope.message}`,
+    { terminalReason: "interrupted" },
+  )
 }
 
 class OrchestratorPromptInactiveError extends Error {
@@ -1505,7 +1534,9 @@ function renderCurrentOccurrenceDecisionObligation(): string {
 // ---------------------------------------------------------------------------
 
 /** Static instructions that never change between invocations. */
-const ORCHESTRATOR_INSTRUCTIONS = withObservableWorkNarrative(ORCHESTRATOR_CORE)
+export const ORCHESTRATOR_INSTRUCTIONS = withParticipantMessageLanguage(
+  withObservableWorkNarrative(ORCHESTRATOR_CORE),
+)
 
 /**
  * Build the orchestrator system prompt as a two-part array:

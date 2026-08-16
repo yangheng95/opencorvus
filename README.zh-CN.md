@@ -1,5 +1,27 @@
 <p align="center">
-  <strong>OpenCorvus</strong>
+  <img src="assets/readme-head.png" alt="OpenCorvus" width="440" />
+</p>
+
+<h3 align="center">开源多 Agent Harness 平台</h3>
+
+<p align="center">
+  <strong>开箱即用的完整 Harness —— 而每一层都可以由你重建。</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/yangheng95/opencorvus/releases"><img alt="最新版本" src="https://img.shields.io/github/v/release/yangheng95/opencorvus?include_prereleases&sort=semver&style=for-the-badge&label=release&color=2946d3" /></a>
+  <a href="./LICENSE"><img alt="许可证" src="https://img.shields.io/github/license/yangheng95/opencorvus?style=for-the-badge&color=2946d3" /></a>
+  <img alt="项目状态：Beta" src="https://img.shields.io/badge/status-beta-e04b22?style=for-the-badge" />
+  <a href="https://github.com/yangheng95/opencorvus/actions/workflows/typecheck.yml"><img alt="类型检查" src="https://img.shields.io/github/actions/workflow/status/yangheng95/opencorvus/typecheck.yml?branch=main&style=for-the-badge&label=typecheck" /></a>
+  <a href="https://github.com/yangheng95/opencorvus/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/yangheng95/opencorvus/codeql.yml?branch=main&style=for-the-badge&label=codeql" /></a>
+</p>
+
+<p align="center">
+  <a href="https://opencorvus.com/zh-cn/"><img alt="文档" src="https://img.shields.io/badge/docs-opencorvus.com-111310?style=for-the-badge&logo=readthedocs&logoColor=white" /></a>
+  <a href="https://bun.sh"><img alt="运行时：Bun" src="https://img.shields.io/badge/runtime-Bun%201.3-111310?style=for-the-badge&logo=bun&logoColor=white" /></a>
+  <img alt="87 个模型供应商" src="https://img.shields.io/badge/model%20providers-87-2946d3?style=for-the-badge" />
+  <img alt="119 个专家团" src="https://img.shields.io/badge/expert%20squads-119-2946d3?style=for-the-badge" />
+  <img alt="13 个聊天渠道" src="https://img.shields.io/badge/chat%20channels-13-2946d3?style=for-the-badge" />
 </p>
 
 <p align="center">
@@ -7,31 +29,26 @@
 </p>
 
 <p align="center">
-  <strong>面向长程任务的开源 Agent 工作台。</strong>
-</p>
-
-<p align="center">
   <a href="https://opencorvus.com/zh-cn/">官方网站</a> ·
-  <a href="https://opencorvus.com/zh-cn/mission/">Mission</a> ·
-  <a href="https://opencorvus.com/zh-cn/use-with-agents/">Agent 接入</a> ·
-  <a href="https://opencorvus.com/zh-cn/market/">专家团</a> ·
+  <a href="https://opencorvus.com/zh-cn/start/quickstart/">快速开始</a> ·
   <a href="https://opencorvus.com/zh-cn/download/">下载</a> ·
-  <a href="https://opencorvus.com/zh-cn/start/quickstart/">快速开始</a>
+  <a href="https://opencorvus.com/zh-cn/market/">专家团</a> ·
+  <a href="https://opencorvus.com/zh-cn/mission/">Mission</a> ·
+  <a href="https://opencorvus.com/zh-cn/use-with-agents/">Agent 接入</a>
 </p>
 
-OpenCorvus 让你围绕真实工作定制 Agent 工作台：连接工作区，选择需要的 Skill、工具、
-模型、已连接服务与权限规则，再配置一支可检查的专家团，而不是接受匿名 Agent 池。
-每个 Task 从首次指令到经过复核的交付，始终固定使用同一精确版本的专家团及已选工作流。
-当一个结果需要多个 Task 或专家团时，Mission 会连接它们的依赖，同时保留清晰责任。
+---
 
-你可以从桌面应用、超文本传输协议（Hypertext Transfer Protocol，HTTP）应用程序编程
-接口（Application Programming Interface，API）或已连接的频道运行这些工作。
-OpenCorvus 会流式呈现执行过程，并让消息、工具结果、带类型的 Artifact、宿主观察、
-决策与完成证据始终可见。
+**Agent Harness** 是把模型变成 Agent 的运行层：循环、工具路由、上下文管理、记忆、
+权限执行与故障恢复。多数项目只给你一个框架，剩下的自己搭。
 
-**OpenCorvus Harness** 是这条路径背后一层容易记住的运行界面：它把已选工作区、模型、
-工具、Skills、权限与证据绑定到当前 Chat、Work 对话、Mission、scheduler 或 worker。
-它不是第二个运行时对象，也不会取代工作台、Task 或 Mission 模型。
+OpenCorvus 直接交付一套已经组装好的 Harness。安装之后你立刻拥有：覆盖五个主要角色的
+流式 Agent 循环、42 个内置工具、87 个模型供应商、持久化的权限授权、项目与会话记忆、
+自动上下文压缩、可在重启后恢复的编排，以及包含 119 个可检查专家团的目录 —— 首次启动
+即可运行。
+
+而下面的每一层都是配置面：换模型、收窄工具集、收紧权限规则、替换整支专家团，或者
+直接用 SDK 驱动整个 Harness。
 
 <table>
   <tr>
@@ -49,39 +66,34 @@ OpenCorvus 会流式呈现执行过程，并让消息、工具结果、带类型
 > 可访问的数据源、已安装能力和本次运行取得的证据。无人值守任务只会在本地或托管的
 > OpenCorvus 运行时在线时执行。
 
-## 从工作台到 Mission
+## 首次启动即可运行
 
-README 与[公开主页](https://opencorvus.com/zh-cn/)描述的是同一条从配置到长程交付的路径：
+| 能力           | 内置内容                                                                                                        |
+| -------------- | --------------------------------------------------------------------------------------------------------------- |
+| **模型供应商** | 从一个内置目录解析 87 个供应商、2,579 个模型，并支持本地运行时。                                                |
+| **工具**       | 42 个内置工具，浏览器与计算机控制作为默认能力块提供。                                                           |
+| **专家团**     | 公开目录中共 119 个 —— 4 个已内置可直接使用，115 个可导入。                                                     |
+| **Agent 角色** | 五个主要角色：`coding`、`chat`、`work`、`control`、`mission`。                                                  |
+| **聊天渠道**   | Slack、Discord、Telegram、飞书、钉钉、企业微信、WhatsApp、Line、Signal、Matrix、Mattermost、Microsoft Teams、Google Chat。 |
+| **接入界面**   | 桌面应用、带服务器发送事件（SSE）的 HTTP API，以及定时自动化。                                                  |
 
-| 阶段                  | 由你控制                                                                         | OpenCorvus 保持明确的内容                                                  |
-| --------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| **01 · 定制工作台**   | 连接真实工作目录、文件、终端与服务，选择能力和模型，并配置允许、询问或拒绝规则。 | 一套可见的工作环境与审查界面，而不是第二个运行时对象。                     |
-| **02 · 配置专家团**   | 选择或构建可检查用途、具名角色、工作流、Skill、工具、版本与摘要的专家团。        | 一个精确能力包，而不是匿名 Agent 池。                                      |
-| **03 · 推进长程任务** | 为一项项目内交付启动 Task；当结果需要多个 Task 或专家团时使用 Mission。          | 每个 Task 固定的专家团版本、带类型的交接、依赖、生命周期决策与可审查证据。 |
-| **04 · 加入开放社区** | 封装专业知识，用开放 SDK 验证，通过源码仓库讨论和贡献。                          | 社区审查仍是发布路径的一部分；自助上架尚未开放。                           |
+## Harness 逐层可见
 
-可以从[工作台快速开始](https://opencorvus.com/zh-cn/start/quickstart/)，
-[探索专家团](https://opencorvus.com/zh-cn/market/)，了解
-[Mission 如何保留 Task 责任](https://opencorvus.com/zh-cn/mission/)，或接入
-[OpenClaw、Hermes Agent 与其他兼容宿主](https://opencorvus.com/zh-cn/use-with-agents/)。
+每一层在安装后立即运行，同时每一层也都是配置面。
 
-## 核心模型
-
-| 对象         | 作用                                                                               |
-| ------------ | ---------------------------------------------------------------------------------- |
-| Mission      | 协调由多个 Task 组成的目标，并记录 Task 之间的依赖关系。                           |
-| Task         | 管理一项项目内工作、一个固定的专家团、已选工作流、相关 Session，以及生命周期决策。 |
-| Expert Squad | 把 Agent 阵容、指令、Skill、工具、模型上下文协议（MCP）访问和已声明的工作流打包。  |
-| Workflow     | 声明一个 Task 要运行的 Agent 及其依赖顺序。                                        |
-| Artifact     | 保存带来源信息的类型化输出或文件快照，供其他 Agent 或 Task 读取同一份结果。        |
-| 宿主观察     | 独立记录文件改动、命令结果等事实，不依赖 Agent 的文字总结。                        |
-
-一个 Task 选定专家团后不会中途更换；如果选了工作流，工作流也保持不变。Worker 以流式
-方式发送消息和工具调用，在契约要求时发布 Artifact，并把精确的 Artifact 引用交给下游
-Worker。Orchestrator 根据这些记录和宿主观察处理生命周期决策。未解决的限制和 blocker
-保留在 Agent 的可见消息中。
-
-![Mission 与 Expert Squad 执行流程](assets/agent-teams-workflow.png)
+| 层             | 开箱运行                                                                    | 可替换为                                |
+| -------------- | --------------------------------------------------------------------------- | --------------------------------------- |
+| **Agent 循环** | 五个主要角色运行在带类型工具结果的流式循环上。                              | `agent`、提示词覆盖                     |
+| **工具**       | 42 个内置工具，外加模型上下文协议（MCP）服务与语言服务器协议（LSP）。       | `tools`、`mcp`、`lsp`、`plugin`         |
+| **模型**       | 87 个供应商、2,579 个模型，统一来自一个内置目录。                           | `model`、`small_model`、`provider`      |
+| **上下文**     | 自动压缩与逐轮上下文预算，让长程运行始终留在窗口内。                        | 模型与预算配置                          |
+| **记忆**       | 项目与会话记忆，具备检索、组织与显式注入能力。                              | `instructions`、记忆配置                |
+| **权限**       | 每一次副作用执行前，都要经过一道持久化的允许／询问／拒绝授权。              | `permission` 规则、shell 作用域         |
+| **专家团**     | 119 个可检查的专家团；任务锁定一个精确版本，不会静默切换。                  | `expert_squads`、自行编写               |
+| **持久化执行** | 进程租约、事件日志与协调器，在重启后恢复已归属的工作。                      | 平台保证                                |
+| **校验**       | 完整性复核、事实核查与视觉 QA 作为具名阶段运行。                            | 验收配置                                |
+| **证据**       | 宿主观测独立记录文件变更与命令结果，不依赖 Agent 的自述总结。               | 平台保证                                |
+| **接入界面**   | 桌面端、带 SSE 的 HTTP API、13 个聊天渠道、定时自动化。                     | SDK、插件 API、Agent Client Protocol    |
 
 ## 快速开始
 
@@ -106,7 +118,7 @@ Worker。Orchestrator 根据这些记录和宿主观察处理生命周期决策�
 x64 平台同时提供适用于不支持高级矢量扩展 2（Advanced Vector Extensions 2，AVX2）
 处理器的 `-baseline.tar.gz` 版本。
 
-把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.38-beta`。只需下载实际要
+把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.44-beta.1`。只需下载实际要
 安装的那一个文件。
 
 ### 从源码安装
@@ -153,6 +165,32 @@ curl -N http://127.0.0.1:7878/task/<task_id>/events
 > [!TIP]
 > 如果要在本机之外暴露 `opencorvus serve`，请先设置
 > `OPENCORVUS_SERVER_PASSWORD`。
+
+## 定制成你自己的
+
+内置默认值只是起点，不是边界。配置集中在一个项目文件中，以下全部是可选项。
+
+| 你想要…                | 配置项                                          |
+| ---------------------- | ----------------------------------------------- |
+| 换模型或供应商         | `model`、`small_model`、`provider`              |
+| 增加或收窄能力         | `tools`、`mcp`、`lsp`、`plugin`                 |
+| 改变谁可以做什么       | `permission` 规则（允许／询问／拒绝）与 shell 作用域 |
+| 重新定义某个 Agent     | `agent` 配合 `prompt` 或 `prompt_append`        |
+| 替换或覆盖专家团       | `expert_squads`                                 |
+| 补充项目上下文与规范   | `instructions`                                  |
+| 增加可复用操作         | `command`、`formatter`、`keybinds`              |
+
+除配置之外，还有三条扩展路径让 Harness 本身保持开放：
+
+- **JavaScript SDK** —— [`packages/sdk/js`](./packages/sdk/js)，并提供
+  [OpenAPI 描述](./packages/sdk/openapi.json)，用于在你自己的代码中驱动 Task。
+- **插件 API** —— [`packages/plugin`](./packages/plugin)，用于自定义工具、产物生成器
+  与证据来源。
+- **开放协议** —— 用 Model Context Protocol 服务扩展能力，用 Agent Client Protocol
+  把 OpenCorvus 嵌入其他客户端。
+
+你也可以把专业知识封装成可检查的专家团 —— 角色、工作流、Skills、工具、选择说明、
+版本与摘要一起交付 —— 并通过仓库贡献。参见[专家团作者路径](https://opencorvus.com/zh-cn/publish/)。
 
 ## 让 Hermes Agent 或 OpenClaw 通过 Skill 控制 OpenCorvus
 
@@ -201,6 +239,24 @@ Skill 被调用后，助理会选择包内对应 reference，并通过 OpenCorvu
 Artifact 和真实阻塞。宿主专用安装细节、PowerShell 命令、安全凭据处理与完整操作
 示例见 [`skill-installation`](./skills/opencorvus/references/skill-installation.md) 和
 [`operations`](./skills/opencorvus/references/operations.md)。
+
+## 核心模型
+
+| 对象         | 作用                                                                               |
+| ------------ | ---------------------------------------------------------------------------------- |
+| Mission      | 协调由多个 Task 组成的目标，并记录 Task 之间的依赖关系。                           |
+| Task         | 管理一项项目内工作、一个固定的专家团、已选工作流、相关 Session，以及生命周期决策。 |
+| Expert Squad | 把 Agent 阵容、指令、Skill、工具、模型上下文协议（MCP）访问和已声明的工作流打包。  |
+| Workflow     | 声明一个 Task 要运行的 Agent 及其依赖顺序。                                        |
+| Artifact     | 保存带来源信息的类型化输出或文件快照，供其他 Agent 或 Task 读取同一份结果。        |
+| 宿主观察     | 独立记录文件改动、命令结果等事实，不依赖 Agent 的文字总结。                        |
+
+一个 Task 选定专家团后不会中途更换；如果选了工作流，工作流也保持不变。Worker 以流式
+方式发送消息和工具调用，在契约要求时发布 Artifact，并把精确的 Artifact 引用交给下游
+Worker。Orchestrator 根据这些记录和宿主观察处理生命周期决策。未解决的限制和 blocker
+保留在 Agent 的可见消息中。
+
+![Mission 与 Expert Squad 执行流程](assets/agent-teams-workflow.png)
 
 ## 平台入口
 

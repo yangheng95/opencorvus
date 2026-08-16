@@ -15,6 +15,26 @@ import { fileSource } from "./source"
 
 const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
 
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
 function isMissingPathError(error: unknown): boolean {
   return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
 }
@@ -198,7 +218,7 @@ export const ReadTool = Tool.define("read", {
         fileSource({
           path: filepath,
           title,
-          ...(page.lines > 0 ? { range: { startLine: page.offset, endLine: page.lastReadLine } } : {}),
+          ...(citedReadRange(page) ?? {}),
           provider: "opencorvus-read",
         }),
       ],

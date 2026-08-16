@@ -524,11 +524,17 @@ function deleteSettledSessionTreeRows(
 }
 
 function appendTaskDeletedBoundaryInTransaction(db: Database.TxOrDb, task: TaskRow): void {
-  const existing = db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
-    eq(ProtocolEventTable.aggregate_type, "task"),
-    eq(ProtocolEventTable.aggregate_id, task.id),
-    eq(ProtocolEventTable.type, Event.TaskDeleted.type),
-  )).get()
+  const existing = db
+    .select({ id: ProtocolEventTable.id })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "task"),
+        eq(ProtocolEventTable.aggregate_id, task.id),
+        eq(ProtocolEventTable.type, Event.TaskDeleted.type),
+      ),
+    )
+    .get()
   if (existing) return
   const lifecycle = taskLifecycleProjectionInTransaction(db, task.id)
   EngineProtocol.emitInTransaction(
@@ -554,11 +560,17 @@ function appendTaskDeletedBoundaryInTransaction(db: Database.TxOrDb, task: TaskR
 }
 
 function appendSessionDeletedBoundaryInTransaction(db: Database.TxOrDb, sessionID: string): void {
-  const existing = db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
-    eq(ProtocolEventTable.aggregate_type, "session"),
-    eq(ProtocolEventTable.aggregate_id, sessionID),
-    eq(ProtocolEventTable.type, "session.deleted"),
-  )).get()
+  const existing = db
+    .select({ id: ProtocolEventTable.id })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, sessionID),
+        eq(ProtocolEventTable.type, "session.deleted"),
+      ),
+    )
+    .get()
   if (existing) return
   ProtocolStore.appendEventInTransaction({
     kind: "event",
@@ -763,6 +775,10 @@ export const TaskCancellationConvergenceTestHooks = {
 }
 
 async function acquireCancellationConvergence(taskID: string) {
+  // The durable lease guarantees some process eventually acquires, so waiting
+  // forever only hides a stuck owner. Past this deadline the caller fails, the
+  // control-plane scan paces the Task under backoff, and a later scan retries.
+  const deadline = Date.now() + 3 * CANCELLATION_CONVERGENCE_LEASE_MS
   for (;;) {
     const now = Date.now()
     const claimed = Database.immediateTransaction((db) => {
@@ -780,7 +796,10 @@ async function acquireCancellationConvergence(taskID: string) {
             eq(EngineControlActivationLeaseTable.target_id, lifecycle.requestEventID),
           ),
         )
-        .orderBy(sql`${EngineControlActivationLeaseTable.time_activated} DESC`, sql`${EngineControlActivationLeaseTable.id} DESC`)
+        .orderBy(
+          sql`${EngineControlActivationLeaseTable.time_activated} DESC`,
+          sql`${EngineControlActivationLeaseTable.id} DESC`,
+        )
         .get()
       if (current && current.expires_at > now) return false
       const activationID = Identifier.ascending("activity")
@@ -805,7 +824,8 @@ async function acquireCancellationConvergence(taskID: string) {
         const injectedFailure = cancellationConvergenceHeartbeatFailureForTest
         cancellationConvergenceHeartbeatFailureForTest = undefined
         try {
-          if (injectedFailure === "exception") throw new Error("injected Task cancellation convergence heartbeat failure")
+          if (injectedFailure === "exception")
+            throw new Error("injected Task cancellation convergence heartbeat failure")
           const renewed = Database.immediateTransaction((db) =>
             Boolean(
               db
@@ -830,10 +850,7 @@ async function acquireCancellationConvergence(taskID: string) {
           leaseFence.abort(error)
         }
       }
-      const heartbeat = setInterval(
-        renew,
-        CANCELLATION_CONVERGENCE_HEARTBEAT_MS,
-      )
+      const heartbeat = setInterval(renew, CANCELLATION_CONVERGENCE_HEARTBEAT_MS)
       heartbeat.unref?.()
       if (cancellationConvergenceHeartbeatFailureForTest) renew()
       return {
@@ -881,6 +898,12 @@ async function acquireCancellationConvergence(taskID: string) {
           clearInterval(heartbeat)
         },
       }
+    }
+    if (Date.now() >= deadline) {
+      throw new Error(
+        `Task ${taskID} cancellation convergence is held by another owner that did not release within ` +
+          `${3 * CANCELLATION_CONVERGENCE_LEASE_MS}ms`,
+      )
     }
     await Bun.sleep(100)
   }
@@ -1465,62 +1488,67 @@ export namespace EngineService {
       },
     )
     let ingressID: string | undefined
-    await Session.persistMessageWithCommit(bundle, () => {
-      Database.use((db) => {
-        const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, task.id)).get()
-        const currentTask = persistedTask ? projectTaskRowInTransaction(db, persistedTask) : undefined
-        if (!currentTask || !isTaskActive(currentTask) || currentTask.session_id !== target.root_session_id) {
-          throw new Error(
-            `Scheduler delivery ${delivery.id} cannot materialize into Task ${task.id} after its active root changed.`,
-          )
-        }
-        const committedEpoch = taskLifecycleProjectionInTransaction(db, task.id).epoch
-        if (committedEpoch !== expectedEpoch) {
-          throw new SchedulerTargetOccurrenceStaleError({
-            message: `Scheduler delivery ${delivery.id} targets stale Task ${task.id} epoch ${expectedEpoch}; current epoch is ${committedEpoch}.`,
-            taskID: task.id,
-            expectedEpoch,
-            currentEpoch: committedEpoch,
+    await Session.persistMessageWithCommit(
+      bundle,
+      () => {
+        Database.use((db) => {
+          const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, task.id)).get()
+          const currentTask = persistedTask ? projectTaskRowInTransaction(db, persistedTask) : undefined
+          if (!currentTask || !isTaskActive(currentTask) || currentTask.session_id !== target.root_session_id) {
+            throw new Error(
+              `Scheduler delivery ${delivery.id} cannot materialize into Task ${task.id} after its active root changed.`,
+            )
+          }
+          const committedEpoch = taskLifecycleProjectionInTransaction(db, task.id).epoch
+          if (committedEpoch !== expectedEpoch) {
+            throw new SchedulerTargetOccurrenceStaleError({
+              message: `Scheduler delivery ${delivery.id} targets stale Task ${task.id} epoch ${expectedEpoch}; current epoch is ${committedEpoch}.`,
+              taskID: task.id,
+              expectedEpoch,
+              currentEpoch: committedEpoch,
+            })
+          }
+          const currentBody = schedulerSourceBodyInTransaction(db, {
+            source: delivery.source,
+            sourceMessageID: delivery.message.source_message_id,
+            sourcePartID: delivery.message.source_part_id,
+            sourceTerminalEventID: delivery.message.source_terminal_event_id,
           })
-        }
-        const currentBody = schedulerSourceBodyInTransaction(db, {
-          source: delivery.source,
-          sourceMessageID: delivery.message.source_message_id,
-          sourcePartID: delivery.message.source_part_id,
-          sourceTerminalEventID: delivery.message.source_terminal_event_id,
+          if (currentBody !== input.message) {
+            throw new Error(`Scheduler delivery ${delivery.id} source body changed before Task materialization.`)
+          }
+          // Every root ingress uses EngineArtifact catalog_revision as
+          // its durable monotonic causal ordinal, independent of wall clock and
+          // participant kind. Protocol sequence determines scheduler claim order;
+          // this shared ordinal preserves causal order for one root Session.
+          const now = Date.now()
+          ingressID = persistTaskRootMessageIngressInTransaction(db, {
+            task: currentTask,
+            messageID: bundle.info.id,
+            kind: rootKind,
+            schedulerDelivery: deliveryReference,
+            now,
+          })
+          settleSchedulerDeliveryInTransaction(db, {
+            inboxID: delivery.id,
+            ownerID: input.ownerID,
+            result: { kind: "task_ingress", message_id: bundle.info.id, ingress_id: ingressID },
+            now,
+          })
         })
-        if (currentBody !== input.message) {
-          throw new Error(`Scheduler delivery ${delivery.id} source body changed before Task materialization.`)
-        }
-        // Every root ingress uses EngineArtifact catalog_revision as
-        // its durable monotonic causal ordinal, independent of wall clock and
-        // participant kind. Protocol sequence determines scheduler claim order;
-        // this shared ordinal preserves causal order for one root Session.
-        const now = Date.now()
-        ingressID = persistTaskRootMessageIngressInTransaction(db, {
-          task: currentTask,
-          messageID: bundle.info.id,
-          kind: rootKind,
-          schedulerDelivery: deliveryReference,
-          now,
-        })
-        settleSchedulerDeliveryInTransaction(db, {
-          inboxID: delivery.id,
-          ownerID: input.ownerID,
-          result: { kind: "task_ingress", message_id: bundle.info.id, ingress_id: ingressID },
-          now,
-        })
-      })
-    }, undefined, () => {
-      Database.use((db) =>
-        assertSchedulerTargetOccurrenceAvailableInTransaction(db, {
-          inboxID: delivery.id,
-          messageID: occurrenceIDs.messageID,
-          textPartID: occurrenceIDs.textPartID,
-          controlID: occurrenceIDs.controlID,
-        }),
-      )
-    })
+      },
+      undefined,
+      () => {
+        Database.use((db) =>
+          assertSchedulerTargetOccurrenceAvailableInTransaction(db, {
+            inboxID: delivery.id,
+            messageID: occurrenceIDs.messageID,
+            textPartID: occurrenceIDs.textPartID,
+            controlID: occurrenceIDs.controlID,
+          }),
+        )
+      },
+    )
     if (!ingressID) throw new Error(`Scheduler Task delivery ${delivery.id} did not commit its ingress.`)
     const dispatch = await dispatchPersistedTaskLoop(task.id, ingressID)
     return {
@@ -2255,12 +2283,19 @@ export namespace EngineService {
 
   export async function deleteTask(taskID: string, options?: DestructiveTaskOptions) {
     const deleted = Database.use((db) => {
-      const row = db.select({ projectID: EngineTaskTable.project_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+      const row = db
+        .select({ projectID: EngineTaskTable.project_id })
+        .from(EngineTaskTable)
+        .where(eq(EngineTaskTable.id, taskID))
+        .get()
       return row && taskDeletedInTransaction(db, taskID) ? row : undefined
     })
     if (deleted) {
       const currentProjectID = Instance.current()?.project.id
-      if ((options?.projectID && deleted.projectID !== options.projectID) || (currentProjectID && deleted.projectID !== currentProjectID)) {
+      if (
+        (options?.projectID && deleted.projectID !== options.projectID) ||
+        (currentProjectID && deleted.projectID !== currentProjectID)
+      ) {
         throw new NotFoundError({ message: `Task not found: ${taskID}` })
       }
       return true
@@ -2293,10 +2328,7 @@ export namespace EngineService {
           throw new NotFoundError({ message: `Task not found: ${taskID}` })
         }
       }
-      await awaitTaskRootIngressSettled(
-        task,
-        options?.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS,
-      )
+      await awaitTaskRootIngressSettled(task, options?.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
       const settledSessionIDs = await settleTaskSessionWork(
         task,
         {
@@ -2311,25 +2343,27 @@ export namespace EngineService {
       // creation input, Session/Message graph, effects, lifecycle, interactions,
       // progress and Artifacts remain one replayable fact graph; ordinary
       // queries hide the aggregate by reducing the tombstone.
-      const cleanupTargets = [{
-        taskID: task.id,
-        projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
-        cleanupOwners: buildObservationCleanupRowsForTask(task.id),
-      }]
+      const cleanupTargets = [
+        {
+          taskID: task.id,
+          projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
+          cleanupOwners: buildObservationCleanupRowsForTask(task.id),
+        },
+      ]
       await settleTaskCleanupOwners(cleanupTargets)
       Database.immediateTransaction((db) => {
-          assertTasksRemainTerminalForPhysicalDelete(db, [task])
-          deadLetterSchedulerTaskDeliveriesInTransaction(db, {
-            taskIDs: [task.id],
-            errorName: "SchedulerRecipientDeletedError",
-            message: `Recipient Task ${task.id} was tombstoned.`,
-          })
-          deadLetterSchedulerSourceDeliveriesInTransaction(db, {
-            sessionIDs: settledSessionIDs,
-            errorName: "SchedulerSourceDeletedError",
-            message: `Source Session tree for tombstoned Task ${task.id} no longer admits scheduler work.`,
-          })
-          appendTaskDeletedBoundaryInTransaction(db, task)
+        assertTasksRemainTerminalForPhysicalDelete(db, [task])
+        deadLetterSchedulerTaskDeliveriesInTransaction(db, {
+          taskIDs: [task.id],
+          errorName: "SchedulerRecipientDeletedError",
+          message: `Recipient Task ${task.id} was tombstoned.`,
+        })
+        deadLetterSchedulerSourceDeliveriesInTransaction(db, {
+          sessionIDs: settledSessionIDs,
+          errorName: "SchedulerSourceDeletedError",
+          message: `Source Session tree for tombstoned Task ${task.id} no longer admits scheduler work.`,
+        })
+        appendTaskDeletedBoundaryInTransaction(db, task)
       })
       return true
     } finally {
@@ -2365,7 +2399,7 @@ export namespace EngineService {
         }
         await awaitTaskRootIngressSettled(
           task,
-        options?.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS,
+          options?.ingressSettleInactivityMs ?? CANCEL_INGRESS_SETTLE_INACTIVITY_MS,
         )
         await settleTaskSessionWork(
           task,
@@ -2556,9 +2590,9 @@ export namespace EngineService {
         errorName: error instanceof Error ? error.name : undefined,
         now: Date.now(),
       })
-      let directDrainStarted = false
+      let directActivations = 0
       try {
-        directDrainStarted = await deliverTaskRootIngress(task.id)
+        directActivations = await deliverTaskRootIngress(task.id)
       } catch (drainError) {
         const drainReason =
           drainError instanceof Error ? `${drainError.name}: ${drainError.message}` : String(drainError)
@@ -2571,9 +2605,9 @@ export namespace EngineService {
           now: Date.now(),
         })
       }
-      if (directDrainStarted) {
-        dispatchResult = "accepted"
-      } else if (taskRootIngressStats(task.id).events > 0) {
+      // The durable record is the authority: a scan owned elsewhere activates
+      // nothing here yet still guarantees the wake is queued.
+      if (taskRootIngressStats(task.id).events > 0 || directActivations > 0) {
         dispatchResult = "accepted"
       } else {
         throw new Error(
@@ -2609,12 +2643,14 @@ export namespace EngineService {
         if (answers.length !== 1 || answers[0]?.length !== 1 || answers[0][0] !== "acknowledge_unknown") {
           throw new Error("Activity reconciliation requires the exact acknowledge_unknown answer")
         }
-        Database.transaction((db) => resolveEngineInteractionRequest(db, {
-          row,
-          status: "answered",
-          response: { answers },
-          eventSource: "task-control.activity-reconciliation",
-        }))
+        Database.transaction((db) =>
+          resolveEngineInteractionRequest(db, {
+            row,
+            status: "answered",
+            response: { answers },
+            eventSource: "task-control.activity-reconciliation",
+          }),
+        )
         await deliverTaskRootIngress(row.task_id)
       } else {
         await Question.reply({ requestID: row.external_id, answers })
@@ -2636,9 +2672,29 @@ export namespace EngineService {
       })
     }
     if (row.request_type === "question") {
+      assertInteractionIsRejectable(row, interactionID)
       await Question.reject(row.external_id)
     }
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
+  }
+
+  /**
+   * Activity-reconciliation gates cannot be rejected.
+   *
+   * They are inserted directly rather than registered with the Question
+   * subsystem, so `Question.reject` throws `NotFoundError` and leaves the row
+   * pending — the Task then waits on an Interaction nothing can resolve.
+   * Rejecting it "successfully" would be worse: only an answered outcome
+   * synthesizes the unknown-activity result, so a rejected gate returns the
+   * ingress to `reconcile_required` with no pending Interaction at all, which
+   * is a stall with no surface. The gate has exactly one exit.
+   */
+  function assertInteractionIsRejectable(row: { payload: unknown }, interactionID: string): void {
+    if (!(row.payload as { activity_reconciliation?: unknown }).activity_reconciliation) return
+    throw new Error(
+      `Interaction ${interactionID} reconciles an external effect of unknown outcome and cannot be rejected. ` +
+        `Answer it with acknowledge_unknown to let the Task continue.`,
+    )
   }
 
   export async function replyUserInteraction(interactionID: string, raw: z.input<typeof UserReplyInteractionInput>) {
@@ -2660,12 +2716,14 @@ export namespace EngineService {
         if (answers.length !== 1 || answers[0]?.length !== 1 || answers[0][0] !== "acknowledge_unknown") {
           throw new Error("Activity reconciliation requires the exact acknowledge_unknown answer")
         }
-        Database.transaction((db) => resolveEngineInteractionRequest(db, {
-          row,
-          status: "answered",
-          response: { answers, user_input: input.userInput },
-          eventSource: "task-control.activity-reconciliation",
-        }))
+        Database.transaction((db) =>
+          resolveEngineInteractionRequest(db, {
+            row,
+            status: "answered",
+            response: { answers, user_input: input.userInput },
+            eventSource: "task-control.activity-reconciliation",
+          }),
+        )
         await deliverTaskRootIngress(row.task_id)
       } else {
         await Question.reply({ requestID: row.external_id, answers, userInput: input.userInput })
@@ -2686,7 +2744,10 @@ export namespace EngineService {
         userInput: input.userInput,
       })
     }
-    if (row.request_type === "question") await Question.reject(row.external_id, input.userInput)
+    if (row.request_type === "question") {
+      assertInteractionIsRejectable(row, interactionID)
+      await Question.reject(row.external_id, input.userInput)
+    }
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
   }
 
@@ -2723,6 +2784,23 @@ export namespace EngineService {
     throw new Error(`Task ${taskID} cancellation did not persist an accepted receipt within 1000ms`)
   }
 
+  /**
+   * Drive one Task's requested cancellation to convergence.
+   *
+   * A cancellation that fails midway leaves the Task in `cancelling`, where
+   * every ingress reduces to a state no fact append can leave. Running this
+   * only at project bootstrap made a restart the sole escape; the control-plane
+   * scan calls it on every pass over a `cancelling` Task instead.
+   *
+   * Returns whether a pending request existed.
+   */
+  export async function reconcilePendingTaskCancellation(taskID: string): Promise<boolean> {
+    const pending = findPendingTaskCancellationRequestEvent(taskID)
+    if (!pending) return false
+    await cancelTask(taskID, { origin: pending.request.origin })
+    return true
+  }
+
   export async function reconcilePendingTaskCancellations(): Promise<number> {
     const rows = listProjectTasks(Instance.project.id, Number.MAX_SAFE_INTEGER)
       .filter((task) => isTaskActive(task))
@@ -2746,10 +2824,16 @@ export namespace EngineService {
     }
     const settled = await Promise.allSettled(operations)
     const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    // Each failure is already recorded per Task above. Rethrowing here would
+    // discard that isolation and let one stuck cancellation fail project open,
+    // which strands every other Task in the Project behind it.
     if (failures.length > 0) {
-      throw new AggregateError(failures, `Failed to recover ${failures.length} pending Task cancellation(s)`)
+      log.error("pending Task cancellations remain unconverged after recovery", {
+        failed: failures.length,
+        attempted: operations.length,
+      })
     }
-    return operations.length
+    return operations.length - failures.length
   }
 
   export function cancelTask(taskID: string, options: CancelTaskOptions): Promise<boolean> {
@@ -3034,11 +3118,15 @@ export namespace EngineService {
         ? await Session.getInProject({ sessionID, projectID: current.project.id })
         : await Session.get(sessionID)
     const sessionIDs = await Session.treeInProject({ sessionID, projectID: root.projectID })
-    const readBoundTasks = (db: Database.TxOrDb) => projectTaskRowsInTransaction(db, db
-        .select()
-        .from(EngineTaskTable)
-        .where(and(eq(EngineTaskTable.project_id, root.projectID), inArray(EngineTaskTable.session_id, sessionIDs)))
-        .all())
+    const readBoundTasks = (db: Database.TxOrDb) =>
+      projectTaskRowsInTransaction(
+        db,
+        db
+          .select()
+          .from(EngineTaskTable)
+          .where(and(eq(EngineTaskTable.project_id, root.projectID), inArray(EngineTaskTable.session_id, sessionIDs)))
+          .all(),
+      )
     const bindingConflict = (tasks: TaskRow[], reason?: string) => {
       const taskIDs = tasks.map((task) => task.id)
       return new TaskBoundSessionDeletionError({
@@ -3098,11 +3186,13 @@ export namespace EngineService {
       }
     }
     if (tasksForDelete.length > 0 || root.kind === "mission") {
-      await settleTaskCleanupOwners(tasksForDelete.map((task) => ({
-        taskID: task.id,
-        projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
-        cleanupOwners: buildObservationCleanupRowsForTask(task.id),
-      })))
+      await settleTaskCleanupOwners(
+        tasksForDelete.map((task) => ({
+          taskID: task.id,
+          projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
+          cleanupOwners: buildObservationCleanupRowsForTask(task.id),
+        })),
+      )
       Database.immediateTransaction((db) => {
         assertTasksRemainTerminalForPhysicalDelete(db, tasksForDelete)
         deadLetterSchedulerSessionDeliveriesInTransaction(db, {

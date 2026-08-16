@@ -9,6 +9,9 @@ import {
   currentControlLeaseInTransaction,
   renewControlLease,
 } from "./control-lease"
+import { Log } from "@/util/log"
+
+const log = Log.create({ service: "engine.build-observation-cleanup" })
 
 export class BuildObservationCleanupPendingError extends Error {
   constructor(
@@ -302,11 +305,18 @@ export async function reconcileBuildObservationCleanups(input: { projectID: stri
     row.status === "pending" ||
     (row.status === "active" && (!lease || lease.expires_at <= now)),
   ).map(({ row }) => row))
+  // Each observation is independent and its row survives a failed pass for the
+  // next attempt. This runs inside project open, so propagating one failure
+  // would let a single stuck observation keep the Project from opening at all.
   for (const row of pending) {
     try {
       await settleBuildObservationCleanup({ observationID: row.observation_id })
     } catch (error) {
-      if (!(error instanceof BuildObservationCleanupPendingError)) throw error
+      if (error instanceof BuildObservationCleanupPendingError) continue
+      log.error("build observation cleanup could not be settled during recovery", {
+        observationID: row.observation_id,
+        error: error instanceof Error ? error.message : String(error),
+      })
     }
   }
   return pending.length

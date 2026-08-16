@@ -1,6 +1,7 @@
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import { Config } from "@/config/config"
+import { TaskRootActivationSupersededError } from "@/engine/task-root-ingress-integrity"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
@@ -1090,7 +1091,16 @@ export namespace PermissionAuthority {
     )
     if (outcome === "unresumable") {
       retireContinuation(request, "The persisted ToolPart is already terminal; no continuation can advance it")
+      return outcome
     }
+    // `resumed` means the continuation reached its persisted conclusion, so it
+    // is as finished as `unresumable` is and must be retired for the same
+    // reason. Without this the request stays a replay candidate forever: every
+    // later project open re-derives the same conclusion and writes nothing,
+    // which is a non-convergent recovery whose cost is linear in the project's
+    // whole approved history. A replay interrupted before its conclusion throws
+    // instead of returning, and is left open on purpose.
+    retireContinuation(request, "The continuation reached its persisted conclusion")
     return outcome
   }
 
@@ -1117,19 +1127,31 @@ export namespace PermissionAuthority {
    * must leave the remaining continuations — and the project bootstrap that
    * triggered recovery — intact.
    *
-   * Only `unresumable`, a determinate fact about persisted state, retires the
-   * request. A thrown fault is recorded and left open, because recovery cannot
-   * tell a permanent fault from a transient one and must never discard a
-   * continuation that a later attempt could still complete.
+   * Every conclusion retires the request, because every conclusion is a
+   * determinate fact about persisted state: `resumed` carried the continuation
+   * to its end, `unresumable` says the ToolPart already holds a terminal fact,
+   * and a stale continuation says the Tool surface, identity, classification or
+   * input no longer matches what was approved, which nothing later can undo.
+   * Leaving any of them open made recovery non-convergent: every project open
+   * replayed the whole concluded backlog serially, and a few hundred of them
+   * hold the first project-scoped request — the one the UI makes to open a
+   * Task — for minutes.
+   *
+   * Any other fault is recorded and left open, because recovery cannot tell a
+   * permanent fault from a transient one and must never discard a continuation
+   * that a later attempt could still complete.
    */
   async function recoverContinuation(request: Request): Promise<boolean> {
     try {
       return (await resumeRequest(request)) === "resumed"
     } catch (error) {
+      const stale = error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError
+      if (stale) retireContinuation(request, (error as Error).message)
       log.error("permission continuation recovery failed", {
         requestID: request.id,
         sessionID: request.sessionID,
         toolName: request.toolName,
+        retired: stale,
         error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
       })
       return false
@@ -1141,8 +1163,15 @@ export namespace PermissionAuthority {
    * project-scoped because a ledger request only means anything inside the
    * project that produced it; a foreign project's evidence must never be
    * replayed here, and must never decide whether this project can open.
+   *
+   * Project open awaits this scan, so its cost is the first project-scoped
+   * request's latency. Retirement is what bounds it: a converged ledger replays
+   * nothing. The summary below is the observable that says whether it converged
+   * — a `replayed` count that does not fall to zero across restarts is the
+   * signature of a continuation class that concludes without being retired.
    */
   export async function resumeApprovedContinuations(): Promise<number> {
+    const scanStarted = Date.now()
     const projectID = Instance.project.id
     const requested = Database.use((db) =>
       db
@@ -1158,6 +1187,11 @@ export namespace PermissionAuthority {
         .all(),
     )
     let resumed = 0
+    let replayed = 0
+    const replay = async (row: LedgerRow) => {
+      replayed += 1
+      if (await recoverContinuation(requestFromRow(row))) resumed += 1
+    }
     for (const row of requested) {
       if (staleFor(row.request_id)) continue
       const decision = decisionFor(row.request_id)
@@ -1180,16 +1214,21 @@ export namespace PermissionAuthority {
           db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get(),
         )
         if (outcome?.event_type === "execution_succeeded") {
-          if (await recoverContinuation(requestFromRow(row))) resumed += 1
+          await replay(row)
           continue
         }
-        if (!outcome && currentTaskForAttempt(attempt)) {
-          if (await recoverContinuation(requestFromRow(row))) resumed += 1
-        }
+        if (!outcome && currentTaskForAttempt(attempt)) await replay(row)
         continue
       }
-      if (await recoverContinuation(requestFromRow(row))) resumed += 1
+      await replay(row)
     }
+    log.info("permission continuation recovery", {
+      projectID,
+      requested: requested.length,
+      replayed,
+      resumed,
+      duration: Date.now() - scanStarted,
+    })
     return resumed
   }
 
@@ -1326,21 +1365,32 @@ export namespace PermissionAuthority {
       db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.event_type, "execution_started")).all(),
     )
     let reconciled = 0
+    // One malformed or unreadable ledger row degrades its own attempt only.
+    // This runs inside project open, so throwing here would let a single bad
+    // row keep the whole Project permanently unopenable.
     for (const start of starts) {
-      if (!start.attempt_id) throw new Error(`Permission execution start ${start.id} has no attempt identity`)
-      const outcome = Database.use((db) =>
-        db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, start.attempt_id!)).get(),
-      )
-      if (outcome) continue
-      if (currentTaskForAttempt(start.attempt_id)) continue
-      appendEvent(requestFromRow(start), "outcome_unknown", {
-        attempt_id: start.attempt_id,
-        outcome_slot: start.attempt_id,
-        source_event_id: start.id,
-        reason: "Runtime restarted before a terminal Tool outcome was recorded",
-      })
-      log.warn("permission execution outcome unknown after recovery", { attemptID: start.attempt_id })
-      reconciled += 1
+      try {
+        if (!start.attempt_id) throw new Error(`Permission execution start ${start.id} has no attempt identity`)
+        const outcome = Database.use((db) =>
+          db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, start.attempt_id!)).get(),
+        )
+        if (outcome) continue
+        if (currentTaskForAttempt(start.attempt_id)) continue
+        appendEvent(requestFromRow(start), "outcome_unknown", {
+          attempt_id: start.attempt_id,
+          outcome_slot: start.attempt_id,
+          source_event_id: start.id,
+          reason: "Runtime restarted before a terminal Tool outcome was recorded",
+        })
+        log.warn("permission execution outcome unknown after recovery", { attemptID: start.attempt_id })
+        reconciled += 1
+      } catch (error) {
+        log.error("permission execution attempt could not be reconciled after recovery", {
+          eventID: start.id,
+          attemptID: start.attempt_id ?? "<missing>",
+          error: error instanceof Error ? error.message : String(error),
+        })
+      }
     }
     return reconciled
   }

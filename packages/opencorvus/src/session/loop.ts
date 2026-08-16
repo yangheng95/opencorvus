@@ -132,7 +132,9 @@ import {
 import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
 import {
   bindToolExecutionMode,
+  copyToolCoordinationBindings,
   ToolTurnExecutionCoordinator,
+  toolDecisionDeclarationOf,
   toolExecutionModeOf,
   type ToolExecutionMode,
 } from "@/tool/execution-mode"
@@ -266,13 +268,28 @@ export namespace SessionLoop {
       const execute = current.execute
       if (!execute) continue
       const mode = toolExecutionModeOf(current as object)
+      const declaration = toolDecisionDeclarationOf(current as object)
       const coordinated = {
         ...current,
         execute(args: unknown, options: ToolExecutionOptions) {
-          return surface.coordinator.run(mode, () => execute(args, options))
+          const decision = declaration
+            ? {
+                command: declaration.command,
+                // A declaration that cannot classify its own input is not a
+                // committed decision; the call will fail on its own terms.
+                commits: (() => {
+                  try {
+                    return declaration.commits(args)
+                  } catch {
+                    return false
+                  }
+                })(),
+              }
+            : undefined
+          return surface.coordinator.run(mode, () => execute(args, options), decision)
         },
       } as AITool
-      bindToolExecutionMode(coordinated as object, mode)
+      copyToolCoordinationBindings(current as object, coordinated as object)
       surface.coordinatedTools.add(coordinated as object)
       tools[name] = coordinated
     }
@@ -865,7 +882,7 @@ export namespace SessionLoop {
             toModelOutput: (args: unknown) => Message.toolResultToModelOutput(args, input.model),
           }),
     } as AITool
-    bindToolExecutionMode(prepared as object, toolExecutionModeOf(input.tool as object))
+    copyToolCoordinationBindings(input.tool as object, prepared as object)
     if (log.enabled("DEBUG")) {
       const schemaPayload = asSchema((prepared as { inputSchema?: unknown }).inputSchema as never).jsonSchema
       const rootType =
@@ -1118,20 +1135,45 @@ export namespace SessionLoop {
     )
   }
 
+  /**
+   * The context the *next* request will actually carry, read from the last
+   * finished turn's final provider step.
+   *
+   * The assistant Message's own `tokens` accumulate across every step and
+   * retry of the turn — that is deliberate, it is the billing record — so a
+   * six-step turn reports ~6× its real context and a retry storm reports
+   * physically impossible totals (a 6.9M-token "usage" was observed on a 1M
+   * model). Judging the compaction threshold against that number compacts
+   * Sessions whose real context is nowhere near the line, and multi-step
+   * Orchestrator turns triggered it constantly. The final `step-finish` part
+   * carries the last single request's usage, which is the number the
+   * threshold is defined over.
+   */
+  export function lastRequestTokenUsage(message: Message.WithParts): Message.Assistant["tokens"] | undefined {
+    for (let i = message.parts.length - 1; i >= 0; i--) {
+      const part = message.parts[i]
+      if (part.type === "step-finish") return part.tokens
+    }
+    return undefined
+  }
+
   function collectLoopState(msgs: Message.WithParts[]) {
     let lastUser: Message.User | undefined
     let lastAssistant: Message.Assistant | undefined
     let lastFinished: Message.Assistant | undefined
+    let lastFinishedRequestTokens: Message.Assistant["tokens"] | undefined
     for (let i = msgs.length - 1; i >= 0; i--) {
       const msg = msgs[i]
       if (!lastUser && msg.info.role === "user") lastUser = msg.info as Message.User
       if (!lastAssistant && msg.info.role === "assistant") lastAssistant = msg.info as Message.Assistant
-      if (!lastFinished && msg.info.role === "assistant" && msg.info.finish)
+      if (!lastFinished && msg.info.role === "assistant" && msg.info.finish) {
         lastFinished = msg.info as Message.Assistant
+        lastFinishedRequestTokens = lastRequestTokenUsage(msg)
+      }
       if (lastUser && lastFinished) break
     }
     if (!lastUser) throw new Error("No user message found in stream. This should never happen.")
-    return { lastUser, lastAssistant, lastFinished }
+    return { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens }
   }
 
   /** Keep later persisted inputs out of the active provider turn. */
@@ -2175,7 +2217,7 @@ export namespace SessionLoop {
                 (message) => message.info.role === "user" && attachedTargets.has(message.info.id),
               )?.info.id
               const msgs = promptMessagePrefix(durableMessages, replyTarget)
-              const { lastUser, lastAssistant, lastFinished } = collectLoopState(msgs)
+              const { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
                 if (isActionableSessionControl(control) || control.kind === "mission_process_recovery") continue
@@ -2363,7 +2405,15 @@ export namespace SessionLoop {
                 if (
                   lastFinished &&
                   lastFinished.summary !== true &&
-                  (await CompactionOverflow.isOverflow({ tokens: lastFinished.tokens, model, sessionID }))
+                  // Judge the threshold on the last single request's usage,
+                  // never on the turn's accumulated billing total; a legacy
+                  // Message without step-finish evidence keeps the old
+                  // message-level reading as its only available proxy.
+                  (await CompactionOverflow.isOverflow({
+                    tokens: lastFinishedRequestTokens ?? lastFinished.tokens,
+                    model,
+                    sessionID,
+                  }))
                 ) {
                   // A same-source summary covers only history through its own
                   // checkpoint. New tool/reasoning material after that checkpoint
@@ -3297,7 +3347,17 @@ export namespace SessionLoop {
     if (!assistant.parentID) {
       throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
     }
-    if (toolPart.state.status === "completed" && toolResultDisposition(completedToolControl) !== "continue") {
+    // A completed ToolPart leaves nothing to advance once either the disposition
+    // ends the Turn or the assistant Message is already completed: both cases
+    // below reduce to "resumed" without writing anything. Deciding that here,
+    // before the parent read and the projected-runtime reconstruction, keeps
+    // recovery off the expensive path — reconstructing a Worker Turn projection
+    // per request is what let a few hundred already-concluded continuations hold
+    // project open, and with it the first project-scoped request, for minutes.
+    if (
+      toolPart.state.status === "completed" &&
+      (assistantWasCompleted || toolResultDisposition(completedToolControl) !== "continue")
+    ) {
       if (!assistantWasCompleted) {
         assistant.finish = "tool-calls"
         assistant.time.completed = Date.now()
@@ -3918,7 +3978,7 @@ export namespace SessionLoop {
         }
       },
     } as AITool
-    bindToolExecutionMode(wrappedTool as object, toolExecutionModeOf(raw as object))
+    copyToolCoordinationBindings(raw as object, wrappedTool as object)
     return wrappedTool
   }
 

@@ -302,7 +302,21 @@ function refreshComposerModelAfterSelectedStreamConnect(eventType: "task.connect
   })
 }
 
-const RECONNECT_DELAY_MS = 3000
+/**
+ * Failure backoff: how long to wait before reopening a stream that dropped for
+ * a reason we do not understand — transport error, server restart, watchdog
+ * stall. Exported because components/ConnectionBanner.tsx derives its grace
+ * period from it: a banner that fires faster than one scheduled reconnect
+ * would paint a disconnected state on every routine reopen.
+ */
+export const STREAM_RECONNECT_DELAY_MS = 3000
+/**
+ * A `task.live_replay_expired` close is not a failure: the server is up, it
+ * answered us, and it asked us to reopen with a reset live cursor. Paying the
+ * failure backoff for a handshake the server itself directed leaves the live
+ * stream dark for three seconds with nothing wrong.
+ */
+export const LIVE_REPLAY_REOPEN_DELAY_MS = 0
 export const SELECTED_TASK_STREAM_STALL_MS = 35_000
 
 export function performSessionSseReconnect(input: {
@@ -379,7 +393,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
           isCurrent: () => streamGeneration === selectedTaskStreamGeneration,
           restart: startSSE,
         })
-      }, RECONNECT_DELAY_MS)
+      }, STREAM_RECONNECT_DELAY_MS)
       return
     }
     if (sseRetryTimer) clearTimeout(sseRetryTimer)
@@ -405,10 +419,12 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
               fn()
             }, ms)
           },
-          retryDelayMs: RECONNECT_DELAY_MS,
+          // A restart that *fails* still backs off: at that point we no longer
+          // know the server is healthy.
+          retryDelayMs: STREAM_RECONNECT_DELAY_MS,
         }),
       )
-    }, RECONNECT_DELAY_MS)
+    }, liveReplayExpiredClose ? LIVE_REPLAY_REOPEN_DELAY_MS : STREAM_RECONNECT_DELAY_MS)
   }
   const handle = transport.openStream(
     {

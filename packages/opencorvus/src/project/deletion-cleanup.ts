@@ -313,9 +313,16 @@ async function recoverManifest(
   }
 }
 
+export type ProjectDeletionCleanupRecoveryResult = {
+  /** Manifests this pass could not converge. They stay on disk for the next
+   * attempt and are reported; deletion cleanup is deferrable work and must
+   * never keep the runtime from starting. */
+  unreconciled: unknown[]
+}
+
 export async function recoverProjectDeletionCleanup(
   observeProcessOccurrence?: RuntimeProcessOccurrenceObserver,
-): Promise<void> {
+): Promise<ProjectDeletionCleanupRecoveryResult> {
   const failures: unknown[] = []
   const recoverRoot = async (root: string, state: "active" | "completed") => {
     let names: string[]
@@ -324,7 +331,8 @@ export async function recoverProjectDeletionCleanup(
     } catch (error) {
       const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
       if (code === "ENOENT" || code === "ENOTDIR") return
-      throw error
+      failures.push(error)
+      return
     }
     for (const name of names.filter((candidate) => candidate.endsWith(".json")).sort()) {
       try {
@@ -340,7 +348,7 @@ export async function recoverProjectDeletionCleanup(
     databaseRoots = await fs.readdir(completedCleanupBaseRoot(), { withFileTypes: true })
   } catch (error) {
     const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
-    if (code !== "ENOENT" && code !== "ENOTDIR") throw error
+    if (code !== "ENOENT" && code !== "ENOTDIR") failures.push(error)
     databaseRoots = []
   }
   for (const entry of databaseRoots.sort((left, right) => left.name.localeCompare(right.name))) {
@@ -352,9 +360,7 @@ export async function recoverProjectDeletionCleanup(
     }
     await recoverRoot(path.join(completedCleanupBaseRoot(), entry.name), "completed")
   }
-  if (failures.length > 0) {
-    throw new AggregateError(failures, "Project deletion cleanup recovery failed")
-  }
+  return { unreconciled: failures }
 }
 
 export const ProjectDeletionCleanupTestHooks = {

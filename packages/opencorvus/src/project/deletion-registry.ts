@@ -49,26 +49,45 @@ export function acquireProjectMaintenanceFencesInTransaction(
   }
 }
 
-export function recoverProjectMaintenanceFences(observe: RuntimeProcessOccurrenceObserver): void {
-  Database.immediateTransaction((db) => {
+export type ProjectMaintenanceFenceRecoveryResult = {
+  released: number
+  /** Fences whose owner could not be observed. They stay held — a retained
+   * fence only defers maintenance, while aborting the pass would keep the
+   * runtime from starting at all. */
+  unreconciled: unknown[]
+}
+
+export function recoverProjectMaintenanceFences(
+  observe: RuntimeProcessOccurrenceObserver,
+): ProjectMaintenanceFenceRecoveryResult {
+  const unreconciled: unknown[] = []
+  const released = Database.immediateTransaction((db) => {
     const fences = db.select().from(ProjectMaintenanceFenceTable).all()
+    let count = 0
     for (const fence of fences) {
-      const observation = observe({
-        pid: fence.owner_pid,
-        processInstanceID: fence.owner_process_instance_id,
-        occurrenceID: fence.owner_occurrence_id,
-      })
-      if (observation !== "dead_or_reused") continue
-      db.delete(ProjectMaintenanceFenceTable)
-        .where(
-          and(
-            eq(ProjectMaintenanceFenceTable.project_id, fence.project_id),
-            eq(ProjectMaintenanceFenceTable.operation_id, fence.operation_id),
-          ),
-        )
-        .run()
+      try {
+        const observation = observe({
+          pid: fence.owner_pid,
+          processInstanceID: fence.owner_process_instance_id,
+          occurrenceID: fence.owner_occurrence_id,
+        })
+        if (observation !== "dead_or_reused") continue
+        db.delete(ProjectMaintenanceFenceTable)
+          .where(
+            and(
+              eq(ProjectMaintenanceFenceTable.project_id, fence.project_id),
+              eq(ProjectMaintenanceFenceTable.operation_id, fence.operation_id),
+            ),
+          )
+          .run()
+        count += 1
+      } catch (error) {
+        unreconciled.push(error)
+      }
     }
+    return count
   })
+  return { released, unreconciled }
 }
 
 export function releaseProjectMaintenanceFencesInTransaction(

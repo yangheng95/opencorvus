@@ -1707,7 +1707,15 @@ export namespace EngineGit {
         ? processBinding.workspace.initial_tree_sha256
         : processBinding.initial_tree_sha256
     const executionBaselineTreeSHA256 = await executionCapsuleSourceTreeDigest(taskRootDirectory(task))
-    if (executionBaselineTreeSHA256 !== initialTreeSHA256) {
+    // The guard is what its message says: the workspace must not be swapped
+    // between task creation and the task's *first* execution. Checkpoints are
+    // keyed per epoch, so a reopened Task finds no baseline for its new epoch
+    // and reaches this comparison — where its own prior output is guaranteed
+    // to differ from the creation digest. Enforcing it there would terminally
+    // fail every reopen of a Task that produced anything, which is precisely
+    // the recovery path an operator reaches for after a failure.
+    const firstExecution = executionEpoch(task.id) <= 1
+    if (firstExecution && executionBaselineTreeSHA256 !== initialTreeSHA256) {
       const summary = `Task ${task.id} workspace changed between creation and first execution`
       return {
         task,

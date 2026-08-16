@@ -9,6 +9,8 @@ export const OBSERVABLE_WORK_NARRATIVE = [
   "",
   "Continue with brief evidence-based progress notes after a meaningful group of investigation, implementation, or verification results; when an assumption, direction, or blocker changes; and before and after a long validation step. Each note should say what is now confirmed, what you are doing next, and any blocker that affects delivery. Do not emit empty heartbeat messages or narrate every trivial tool call.",
   "",
+  "Write each note in the language of the task itself. Runtime state names, internal outcome values, Host identifiers, and tool names belong to your reasoning and tool calls, not to the note the reader sees.",
+  "",
   "Narrative is an ordinary visible assistant text part. It never replaces required tool calls, durable domain facts, tests, or the final result.",
 ].join("\n")
 

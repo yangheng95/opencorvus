@@ -2,6 +2,8 @@ import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { insertEngineArtifact } from "@/engine/artifact"
+import { insertEngineInteractionRequest } from "@/engine/interaction-request"
+import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 import { agentCoordinationQuestionID } from "@/engine/agent-coordination"
 import { EngineInteraction } from "@/engine/interaction"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -162,6 +164,8 @@ describe("recovered pending interaction ownership", () => {
               externalID: created.permissionID,
             },
           ],
+          retainedControlPlaneGates: [],
+          unreconciled: [],
         })
         expect((await Question.list()).map((item) => item.id)).toContain(created.questionID)
         expect({
@@ -186,6 +190,8 @@ describe("recovered pending interaction ownership", () => {
                 externalID: created.permissionID,
               },
             ],
+            retainedControlPlaneGates: [],
+            unreconciled: [],
           },
         })
       },
@@ -316,6 +322,8 @@ describe("recovered pending interaction ownership", () => {
               actionID: created.actionID,
             },
           ],
+          retainedControlPlaneGates: [],
+          unreconciled: [],
         })
         const recoveredRequest = (await Question.list()).find((item) => item.id === created.questionID)!
         const restored = Question.ask({
@@ -341,6 +349,92 @@ describe("recovered pending interaction ownership", () => {
           response: { answers: [["resume"]] },
         })
         expect(await restored).toEqual([["resume"]])
+      },
+    })
+  }, 30_000)
+
+  test("opens a project holding an activity-reconciliation gate and answers it after recovery", async () => {
+    await using project = await memoryProject()
+    const created = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        EngineService.init()
+        const { root, taskID, now } = await createTaskFixture("activity reconciliation gate")
+        // The Task-root control plane inserts this gate directly: its external
+        // identity is a durable locator, never a Question ID.
+        const externalID = `task-root-activity-reconciliation-v1:${Identifier.ascending("artifact")}`
+        const interactionID = Database.transaction((db) =>
+          insertEngineInteractionRequest(db, {
+            taskID,
+            sessionID: root.id,
+            externalID,
+            requestType: "question",
+            title: "外部操作结果待确认",
+            body: "外部操作已发出，但进程在结果收据落盘前中断。",
+            payload: {
+              activity_reconciliation: {
+                ingress_id: Identifier.ascending("artifact"),
+                request_id: Identifier.ascending("artifact"),
+                assistant_message_id: Identifier.ascending("message"),
+              },
+              questions: [
+                {
+                  header: "结果确认",
+                  question: "是否确认该外部操作的最终结果无法从权威来源确定？",
+                  options: [
+                    {
+                      value: "acknowledge_unknown",
+                      label: "确认结果未知",
+                      description: "不会重放外部操作。",
+                    },
+                  ],
+                },
+              ],
+            },
+            eventSource: "task-control.activity-reconciliation",
+            eventSummary: "External activity outcome requires operator reconciliation",
+            timeCreated: now,
+          }),
+        )
+        return { projectID: Instance.project.id, taskID, externalID, interactionID }
+      },
+    })
+
+    await Instance.disposeAll()
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        EngineService.init()
+        // Recovery must neither restore this as a Question nor fail the pass:
+        // a poisoned pass is what made project open permanently unreachable.
+        expect(
+          await EngineInteraction.reconcileRecoveredPendingWaiters({
+            projectID: created.projectID,
+            timeResolved: Date.now(),
+          }),
+        ).toEqual({
+          abandoned: [],
+          retainedRecoverableQuestions: [],
+          retainedRecoverablePermissions: [],
+          retainedControlPlaneGates: [
+            { interactionID: created.interactionID, externalID: created.externalID },
+          ],
+          unreconciled: [],
+        })
+        expect((await Question.list()).map((item) => item.id)).not.toContain(created.externalID)
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        expect(
+          await EngineService.replyInteraction(created.interactionID, {
+            answers: [["acknowledge_unknown"]],
+            autoReply: false,
+          }),
+        ).toMatchObject({
+          id: created.interactionID,
+          externalID: created.externalID,
+          type: "question",
+          status: "answered",
+        })
       },
     })
   }, 30_000)

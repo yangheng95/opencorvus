@@ -250,7 +250,7 @@ describe("ProcessSupervisor control-plane authority", () => {
     }
   })
 
-  test("retains the exact durable request when the Windows helper exits before settlement proof", async () => {
+  test("reclaims the exact durable request when the dead helper's kill-on-close job proves settlement", async () => {
     if (process.platform !== "win32") return
     let request: Record<string, unknown> | undefined
     const restore = ProcessSupervisor.setWindowsRequestObserverForTest((value) => {
@@ -270,14 +270,20 @@ describe("ProcessSupervisor control-plane authority", () => {
       process.kill(ready.helper_pid, "SIGKILL")
 
       await expect(handle.settled).rejects.toThrow("exited without a physical settlement marker")
-      expect(await readdir(requestDirectory)).toEqual(expect.arrayContaining(["ready.json", "request.json"]))
+      expect(await readdir(requestDirectory)).toEqual(
+        expect.arrayContaining(["helper.json", "ready.json", "request.json"]),
+      )
+      // The durable helper identity proves the helper occurrence dead, and its
+      // kill-on-close job makes the non-detached target's death structural, so
+      // the successor reclaims the artifact without a settlement handshake.
       await expect(
         ProcessSupervisor.recoverOrphanedWindowsRequests({
           currentOccurrenceID: "successor-runtime-occurrence",
           timeoutMilliseconds: 50,
           observeProcessOccurrence: () => "dead_or_reused",
         }),
-      ).rejects.toBeInstanceOf(ProcessSupervisor.WindowsOrphanRequestRecoveryBlockedError)
+      ).resolves.toMatchObject({ removed: 1, retainedUnknown: 0, quarantined: 0, unreconciled: [] })
+      await expect(readdir(requestDirectory)).rejects.toMatchObject({ code: "ENOENT" })
     } finally {
       handle?.unref()
       restore()
@@ -308,7 +314,15 @@ describe("ProcessSupervisor control-plane authority", () => {
           timeoutMilliseconds: 50,
           observeProcessOccurrence: () => "dead_or_reused",
         }),
-      ).toEqual({ inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 })
+      ).toEqual({
+        inspected: 0,
+        removed: 0,
+        retainedCurrent: 0,
+        retainedLive: 0,
+        retainedUnknown: 0,
+        quarantined: 0,
+        unreconciled: [],
+      })
     } finally {
       restore()
     }

@@ -1823,6 +1823,32 @@ impl ProjectEditor {
         }
     }
 
+    /// Command-line arguments that open `path` with the caret on a cited line.
+    ///
+    /// The opener plugin can only hand a path to an application, so a citation
+    /// that names a line has to drive the editor's own launcher instead. Each
+    /// family spells the location differently.
+    fn line_arguments(self, path: &str, line: u32, column: Option<u32>) -> Vec<String> {
+        match self {
+            Self::Vscode | Self::Cursor => {
+                let location = match column {
+                    Some(column) => format!("{}:{}:{}", path, line, column),
+                    None => format!("{}:{}", path, line),
+                };
+                vec!["--goto".to_string(), location]
+            }
+            Self::Pycharm | Self::Webstorm | Self::Intellij => {
+                let mut arguments = vec!["--line".to_string(), line.to_string()];
+                if let Some(column) = column {
+                    arguments.push("--column".to_string());
+                    arguments.push(column.to_string());
+                }
+                arguments.push(path.to_string());
+                arguments
+            }
+        }
+    }
+
     fn opener_application(self) -> &'static str {
         #[cfg(windows)]
         {
@@ -1857,15 +1883,66 @@ impl ProjectEditor {
     }
 }
 
+/// Launch the editor's own CLI so a cited location survives the hop.
+///
+/// Returns `Err` when the launcher could not be started at all, which is the
+/// signal for the caller to fall back to the plain path open — a missing `code`
+/// on PATH must degrade to "file opens at the top", never to "nothing happens".
+fn spawn_project_editor_at_line(
+    editor: ProjectEditor,
+    path: &str,
+    line: u32,
+    column: Option<u32>,
+) -> Result<(), String> {
+    let program = editor.opener_application();
+    // Windows resolves `.cmd` launchers (`code.cmd`, `cursor.cmd`) through the
+    // shell; CreateProcess cannot execute a batch file directly.
+    #[cfg(windows)]
+    let mut command = {
+        let mut command = Command::new("cmd");
+        command.arg("/C").arg(program);
+        command
+    };
+    #[cfg(not(windows))]
+    let mut command = Command::new(program);
+
+    command
+        .args(editor.line_arguments(path, line, column))
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null());
+    #[cfg(windows)]
+    command.creation_flags(CREATE_NO_WINDOW);
+
+    command.spawn().map(|_| ()).map_err(|err| err.to_string())
+}
+
 #[tauri::command]
 fn overlay_open_project_editor<R: Runtime>(
     app: AppHandle<R>,
     editor: ProjectEditor,
     path: String,
+    line: Option<u32>,
+    column: Option<u32>,
 ) -> Result<bool, String> {
     let path = path.trim();
     if path.is_empty() {
         return Ok(false);
+    }
+
+    if let Some(line) = line.filter(|line| *line >= 1) {
+        match spawn_project_editor_at_line(editor, path, line, column.filter(|column| *column >= 1)) {
+            Ok(()) => return Ok(true),
+            Err(err) => {
+                eprintln!(
+                    "[overlay] {} could not be launched at {}:{} ({}); opening the file instead",
+                    editor.label(),
+                    path,
+                    line,
+                    err
+                );
+            }
+        }
     }
 
     app.opener()

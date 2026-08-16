@@ -13,8 +13,8 @@ mod windows_helper {
     };
     use windows_sys::Win32::{
         Foundation::{
-            CloseHandle, GetLastError, ERROR_INVALID_PARAMETER, ERROR_NO_MORE_FILES, HANDLE,
-            INVALID_HANDLE_VALUE, WAIT_OBJECT_0, WAIT_TIMEOUT,
+            CloseHandle, GetLastError, ERROR_INVALID_PARAMETER, ERROR_NO_MORE_FILES, FILETIME,
+            HANDLE, INVALID_HANDLE_VALUE, WAIT_OBJECT_0, WAIT_TIMEOUT,
         },
         System::{
             Console::{GetStdHandle, STD_ERROR_HANDLE, STD_INPUT_HANDLE, STD_OUTPUT_HANDLE},
@@ -30,9 +30,10 @@ mod windows_helper {
                 JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
             },
             Threading::{
-                CreateProcessW, DeleteProcThreadAttributeList, GetCurrentProcessId,
-                GetExitCodeProcess, InitializeProcThreadAttributeList, OpenProcess, ResumeThread,
-                Sleep, TerminateProcess, UpdateProcThreadAttribute, WaitForSingleObject,
+                CreateProcessW, DeleteProcThreadAttributeList, GetCurrentProcess,
+                GetCurrentProcessId, GetExitCodeProcess, GetProcessTimes,
+                InitializeProcThreadAttributeList, OpenProcess, ResumeThread, Sleep,
+                TerminateProcess, UpdateProcThreadAttribute, WaitForSingleObject,
                 CREATE_BREAKAWAY_FROM_JOB, CREATE_NO_WINDOW, CREATE_SUSPENDED,
                 CREATE_UNICODE_ENVIRONMENT, EXTENDED_STARTUPINFO_PRESENT, PROCESS_INFORMATION,
                 PROCESS_SYNCHRONIZE, PROCESS_TERMINATE, PROC_THREAD_ATTRIBUTE_JOB_LIST,
@@ -90,11 +91,21 @@ mod windows_helper {
     }
 
     #[derive(Serialize)]
+    struct HelperMarker<'a> {
+        protocol: u32,
+        request_id: &'a str,
+        helper_pid: u32,
+        helper_process_instance_id: &'a str,
+        runtime_occurrence_id: &'a str,
+    }
+
+    #[derive(Serialize)]
     struct ReadyMarker<'a> {
         protocol: u32,
         request_id: &'a str,
         helper_pid: u32,
         target_pid: u32,
+        target_process_instance_id: &'a str,
         runtime_occurrence_id: &'a str,
     }
 
@@ -336,6 +347,26 @@ mod windows_helper {
         std::path::Path::new(cancel_file).exists()
     }
 
+    /// Creation-time process identity in the exact format the runtime's
+    /// process-occurrence observer computes, so a successor process can prove
+    /// this process dead without any live settlement handshake.
+    fn process_instance_id(process: HANDLE) -> Result<String, String> {
+        let mut creation: FILETIME = unsafe { std::mem::zeroed() };
+        let mut exit: FILETIME = unsafe { std::mem::zeroed() };
+        let mut kernel: FILETIME = unsafe { std::mem::zeroed() };
+        let mut user: FILETIME = unsafe { std::mem::zeroed() };
+        let queried = unsafe {
+            GetProcessTimes(process, &mut creation, &mut exit, &mut kernel, &mut user)
+        };
+        if queried == 0 {
+            let error = unsafe { GetLastError() };
+            return Err(format!("GetProcessTimes failed (win32={error})"));
+        }
+        let filetime = ((creation.dwHighDateTime as u64) << 32) | creation.dwLowDateTime as u64;
+        const DOTNET_EPOCH_OFFSET: u64 = 504_911_232_000_000_000;
+        Ok(format!("win32:{}", filetime + DOTNET_EPOCH_OFFSET))
+    }
+
     fn terminate_job_once(job: HANDLE, cancellation_applied: &mut bool) -> Result<(), String> {
         if *cancellation_applied {
             return Ok(());
@@ -529,6 +560,8 @@ mod windows_helper {
             return Err("runtime owner occurrence identity is missing".into());
         }
         let helper_pid = unsafe { GetCurrentProcessId() };
+        let helper_instance_id = process_instance_id(unsafe { GetCurrentProcess() })?;
+        publish_helper_marker(&request, helper_pid, &helper_instance_id)?;
         let helper_parent_pid = snapshot_processes()?
             .into_iter()
             .find(|process| process.pid == helper_pid)
@@ -562,11 +595,17 @@ mod windows_helper {
             }
         };
 
+        let target_instance_id = match process_instance_id(target.process.0) {
+            Ok(value) => value,
+            Err(error) => return Err(settle_target_after_failure(error, &request, &target)),
+        };
+
         if let Err(error) = publish_ready_marker(
             &request.ready_file,
             &request.request_id,
             &request.runtime_occurrence_id,
             target.pid,
+            &target_instance_id,
         ) {
             return Err(settle_target_after_failure(error, &request, &target));
         }
@@ -629,19 +668,62 @@ mod windows_helper {
         Ok(code)
     }
 
+    fn helper_marker_file(ready_file: &str) -> String {
+        std::path::Path::new(ready_file)
+            .with_file_name("helper.json")
+            .to_string_lossy()
+            .into_owned()
+    }
+
+    /// Published before any target exists so a successor can always prove this
+    /// helper occurrence dead, even when the helper is killed mid-request.
+    fn publish_helper_marker(
+        request: &LaunchRequest,
+        helper_pid: u32,
+        helper_process_instance_id: &str,
+    ) -> Result<(), String> {
+        let helper_file = helper_marker_file(&request.ready_file);
+        let temporary_file = format!("{helper_file}.{helper_pid}.tmp");
+        let marker = HelperMarker {
+            protocol: 1,
+            request_id: &request.request_id,
+            helper_pid,
+            helper_process_instance_id,
+            runtime_occurrence_id: &request.runtime_occurrence_id,
+        };
+        let mut file = fs::File::create(&temporary_file)
+            .map_err(|error| format!("create helper marker failed: {error}"))?;
+        if let Err(error) = serde_json::to_writer(&mut file, &marker) {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!("serialize helper marker failed: {error}"));
+        }
+        if let Err(error) = file.sync_all() {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!("flush helper marker failed: {error}"));
+        }
+        drop(file);
+        if let Err(error) = fs::rename(&temporary_file, &helper_file) {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!("publish helper marker failed: {error}"));
+        }
+        Ok(())
+    }
+
     fn publish_ready_marker(
         ready_file: &str,
         request_id: &str,
         runtime_occurrence_id: &str,
         target_pid: u32,
+        target_process_instance_id: &str,
     ) -> Result<(), String> {
         let helper_pid = unsafe { GetCurrentProcessId() };
         let temporary_file = format!("{ready_file}.{helper_pid}.tmp");
         let marker = ReadyMarker {
-            protocol: 1,
+            protocol: 2,
             request_id,
             helper_pid,
             target_pid,
+            target_process_instance_id,
             runtime_occurrence_id,
         };
         let mut file = fs::File::create(&temporary_file)
@@ -885,6 +967,7 @@ mod windows_helper {
                 cwd: None,
                 cancel_file: String::new(),
                 ready_file: String::new(),
+                launch_failed_file: String::new(),
                 settled_file: String::new(),
                 request_id: "native-job-ownership-test".into(),
                 owner_pid: unsafe { GetCurrentProcessId() },
@@ -922,6 +1005,7 @@ mod windows_helper {
                 cwd: None,
                 cancel_file: String::new(),
                 ready_file: String::new(),
+                launch_failed_file: String::new(),
                 settled_file: String::new(),
                 request_id: "native-job-root-test".into(),
                 owner_pid: unsafe { GetCurrentProcessId() },
@@ -935,6 +1019,7 @@ mod windows_helper {
                 cwd: None,
                 cancel_file: String::new(),
                 ready_file: String::new(),
+                launch_failed_file: String::new(),
                 settled_file: String::new(),
                 request_id: "native-job-descendant-test".into(),
                 owner_pid: unsafe { GetCurrentProcessId() },

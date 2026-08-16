@@ -73,7 +73,15 @@ describe("runtime startup recovery", () => {
       expect(input.currentOccurrenceID).toBe(currentRuntimeProcessOccurrence().occurrenceID)
       sharedOccurrenceObserver = input.observeProcessOccurrence
       order.push("orphan-requests-recovered")
-      return { inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 }
+      return {
+        inspected: 0,
+        removed: 0,
+        retainedCurrent: 0,
+        retainedLive: 0,
+        retainedUnknown: 0,
+        quarantined: 0,
+        unreconciled: [],
+      }
     })
     const workspaces = spyOn(
       IsolatedCheckWorkspace,
@@ -82,7 +90,15 @@ describe("runtime startup recovery", () => {
       expect(input.currentOccurrenceID).toBe(currentRuntimeProcessOccurrence().occurrenceID)
       expect(input.observeProcessOccurrence).toBe(sharedOccurrenceObserver)
       order.push("orphan-workspaces-recovered")
-      return { inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 }
+      return {
+        inspected: 0,
+        removed: 0,
+        retainedCurrent: 0,
+        retainedLive: 0,
+        retainedUnknown: 0,
+        quarantined: 0,
+        unreconciled: [],
+      }
     })
     const scheduler = spyOn(SchedulerMessage.SchedulerMessageDeliveryService, "initGlobal").mockImplementation(() => {
       order.push("scheduler-poller-started")

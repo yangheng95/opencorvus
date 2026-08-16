@@ -349,18 +349,12 @@ code .file-link:focus-visible {
   border-right: var(--oc-border-width) solid var(--border);
 }
 
-.file-editor-code .cm-activeLine,
-.file-editor-code .cm-activeLineGutter {
-  background: var(--ui-highlight-tone);
-}
+/* Caret, selection, active line and the citation band are owned by the shared
+   CodeMirror theme in components/ui/code-editor-theme.ts — theme rules beat the
+   library's light-only base theme, which plain CSS here could not reliably do. */
 
 .file-editor-code .cm-focused {
   outline: none;
-}
-
-.file-editor-code .cm-selectionBackground,
-.file-editor-code .cm-focused .cm-selectionBackground {
-  background: color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
 .file-editor-empty {

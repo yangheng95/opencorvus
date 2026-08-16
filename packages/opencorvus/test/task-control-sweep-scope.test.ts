@@ -1,0 +1,163 @@
+import { afterEach, describe, expect, test } from "bun:test"
+import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
+import { eq } from "@/storage/db"
+import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
+import { acceptTaskRootIngressInTransaction } from "@/engine/task-root-fact-store"
+import {
+  reconcileTaskControlPlane,
+  taskControlDriverSnapshot,
+  TestHooks as TaskControlTestHooks,
+} from "@/engine/task-root-ingress-delivery"
+import { Identifier } from "@/id/id"
+import { Instance } from "@/project/instance"
+import { ProtocolStore } from "@/protocol/store"
+import { Session } from "@/session"
+import { Database } from "@/storage/db"
+import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+afterEach(async () => {
+  await Instance.disposeAll()
+  await resetMemoryDatabase()
+})
+
+function seedTask(input: {
+  rootSessionID: string
+  title: string
+  terminal?: boolean
+  postTerminalIngress?: boolean
+}) {
+  const taskID = Identifier.ascending("task")
+  const now = Date.now()
+  Database.immediateTransaction((db) => {
+    db.insert(EngineTaskTable)
+      .values({
+        id: taskID,
+        project_id: Instance.project.id,
+        session_id: input.rootSessionID,
+        source: "test",
+        product_pillar: "code",
+        title: input.title,
+        request: input.title,
+        time_created: now,
+      })
+      .run()
+    appendTaskOpenedInTransaction({ db, taskID, sessionID: input.rootSessionID, now, source: "test.sweep" })
+    acceptTaskRootIngressInTransaction(db, {
+      taskID,
+      executionEpoch: 1,
+      source: "inline",
+      sourceID: `head-${taskID}`,
+      inlinePayload: { note: input.title },
+      semanticTurnLimit: 3,
+      activationLimit: 4,
+      now: now + 1,
+    })
+    if (input.terminal) {
+      ProtocolStore.appendEventInTransaction({
+        kind: "event",
+        type: "task.completed",
+        aggregate: "task",
+        aggregate_id: taskID,
+        task_id: null,
+        session_id: input.rootSessionID,
+        source: "test.sweep",
+        emitted_at: now + 2,
+        payload: { execution_epoch: 1 },
+      })
+    }
+    if (input.postTerminalIngress) {
+      // The terminal-conversation carve-out: acceptance admits operator input
+      // after the terminal boundary, and it relies on the same wake edges as
+      // ordinary ingress.
+      acceptTaskRootIngressInTransaction(db, {
+        taskID,
+        executionEpoch: 1,
+        source: "inline",
+        sourceID: `post-terminal-${taskID}`,
+        inlinePayload: { note: `${input.title} follow-up` },
+        semanticTurnLimit: 3,
+        activationLimit: 4,
+        now: now + 3,
+      })
+    }
+  })
+  return taskID
+}
+
+describe("Task-control sweep scope", () => {
+  test("sweeps only Tasks whose lifecycle can still enable an ingress", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Sweep root" })
+        const open = seedTask({ rootSessionID: root.id, title: "Open Task" })
+        const finished = seedTask({ rootSessionID: root.id, title: "Finished Task", terminal: true })
+
+        const activated: string[] = []
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async ({ taskID }) => {
+            activated.push(taskID)
+          },
+        })
+
+        await reconcileTaskControlPlane()
+
+        // A terminal Task whose history is settled absorbs every further fact,
+        // so scanning it can only cost a full evidence read per heartbeat. It
+        // must not be swept.
+        expect({
+          swept: taskControlDriverSnapshot()
+            .map((entry) => entry.taskID)
+            .toSorted(),
+          activated,
+        }).toEqual({ swept: [open], activated: [open] })
+      },
+    })
+  })
+
+  test("keeps sweeping a terminal Task that holds an unsettled post-terminal ingress", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Terminal conversation root" })
+        const finished = seedTask({
+          rootSessionID: root.id,
+          title: "Finished Task with follow-up",
+          terminal: true,
+          postTerminalIngress: true,
+        })
+
+        const activatedIngressSources: string[] = []
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async ({ wakeID }) => {
+            const source = Database.use((db) =>
+              db
+                .select({ sourceID: EngineTaskRootIngressTable.source_id })
+                .from(EngineTaskRootIngressTable)
+                .where(eq(EngineTaskRootIngressTable.id, wakeID!))
+                .get(),
+            )
+            if (source) activatedIngressSources.push(source.sourceID)
+          },
+        })
+
+        // The project-wide sweep — not a direct single-Task request — must
+        // find it: this is the recovery path after the acceptance-time edge
+        // was lost to a crash, where no direct request will ever arrive.
+        await reconcileTaskControlPlane()
+
+        expect({
+          swept: taskControlDriverSnapshot().map((entry) => entry.taskID),
+          activatedIngressSources,
+        }).toEqual({
+          swept: [finished],
+          // The pre-terminal head ingress reduced to terminal_inapplicable, so
+          // the post-terminal conversation is the activated frontier.
+          activatedIngressSources: [`post-terminal-${finished}`],
+        })
+      },
+    })
+  })
+})

@@ -95,6 +95,8 @@ export type RunDetachedDispatch = <T>(run: () => Promise<T>) => Promise<T>
 const detachedDispatchPipelines = new Set<Promise<void>>()
 const detachedDispatchPipelineFailures = new Map<string, { generation: number; error: unknown }>()
 const detachedDispatchPipelineGenerations = new Map<string, number>()
+/** Lineages whose delivery pipeline is still running in this process. */
+const detachedDispatchPipelinesInFlight = new Set<string>()
 let detachedDispatchPipelineGeneration = 0
 let detachedDispatchSettlementGate: symbol | undefined
 
@@ -117,7 +119,10 @@ function reserveDetachedDispatchPipeline(): (input: { pipeline: Promise<void>; d
     if (committed) throw new Error("Detached dispatch pipeline reservation was already committed")
     committed = true
     const generation = ++detachedDispatchPipelineGeneration
-    if (dispatchLineageID) detachedDispatchPipelineGenerations.set(dispatchLineageID, generation)
+    if (dispatchLineageID) {
+      detachedDispatchPipelineGenerations.set(dispatchLineageID, generation)
+      detachedDispatchPipelinesInFlight.add(dispatchLineageID)
+    }
     void reservation
       .then(
         () => {
@@ -132,9 +137,22 @@ function reserveDetachedDispatchPipeline(): (input: { pipeline: Promise<void>; d
           }
         },
       )
-      .finally(() => detachedDispatchPipelines.delete(reservation))
+      .finally(() => {
+        detachedDispatchPipelines.delete(reservation)
+        if (dispatchLineageID) detachedDispatchPipelinesInFlight.delete(dispatchLineageID)
+      })
     settle(pipeline)
   }
+}
+
+/**
+ * Whether this process still owns a detached delivery pipeline for the exact
+ * dispatch lineage. Abandonment recovery consults it before settling a
+ * dispatch on the owner's behalf: a committed lineage whose pipeline is still
+ * registered here is live work, not an orphan.
+ */
+export function hasLiveDetachedDispatchPipeline(dispatchLineageID: string): boolean {
+  return detachedDispatchPipelinesInFlight.has(dispatchLineageID)
 }
 
 /**
@@ -763,6 +781,10 @@ export function createDispatchAgentTool(input: {
                 },
               })
               if (result === "accepted") return
+              // A suppressed wake is a deliberate, surfaced stop: this epoch
+              // has spent its infrastructure-failure retry budget. Escalating
+              // it would only re-enter the loop the budget exists to end.
+              if (result === "suppressed_budget_exhausted") return
               throw new Error(`Detached dispatch infrastructure ingress was not accepted for ${completedSessionID}`)
             }
             const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/task-root-ingress-delivery")

@@ -303,6 +303,8 @@ The Artifact contains:
 - validation evidence, limitations, blockers, and unresolved operator choices;
 - the critical path and any real parallel branches.
 
+Label every element of that Artifact by the work it represents: each stage by the outcome it delivered, each owner by the kind of work it performed, each deliverable by what it is for the operator. Exact locator references stay in the Artifact because the operator needs them to open the evidence, but each one sits beside a plain description of its contents and never stands in for that description. Raw lifecycle values, stage keys, and internal identifiers are not the labels.
+
 Prefer a visual renderer when it materially improves review:
 
 - `diagram@1` for stage and dependency topology;
@@ -325,6 +327,8 @@ Update the operator when the Mission contract and stage graph are established, w
 - what is now accepted;
 - what remains or is blocked;
 - what Mission will do next.
+
+Write every one of those updates in the operator's own task language, under `## Participant message language`. Stage keys, Task IDs, held Squad identifiers, `promptProfile` values, Artifact locators, Mission state filenames, and raw lifecycle values are coordination internals: use them in Mission state and tool calls, and describe the same fact to the operator by the work it represents — which piece of their outcome is finished, what proves it, and which piece is still open.
 
 The Mission is complete only when every `Done when` claim is backed by accepted stage results and required durable evidence and the final interactive Artifact has been published. Task completion count alone is not Mission acceptance. After that publication succeeds, call `query_task` for every accepted child Task and then `panel.complete_mission` in the same physical Turn with the complete current child-Task set and only the `artifact_read_ref` values for evidence completely read for each Task earlier in that Turn, supplied as `evidence_read_refs`. Host resolves those short references to canonical locators, binds each reviewed terminal occurrence from the persisted query receipts, and rejects stale lifecycle state. A bounded Mission with no child Task supplies an empty `task_acceptances` list. The visible Tool result is the durable acceptance fact; final prose, inactivity, and archive state are not.
 

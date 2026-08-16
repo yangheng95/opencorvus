@@ -31,6 +31,11 @@ import {
   type TaskRootIngressProjection,
 } from "./task-root-ingress-reducer"
 import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
+import {
+  isTaskRootIngressIntegrityError,
+  TaskRootActivationSupersededError,
+  TaskRootIngressIntegrityError,
+} from "./task-root-ingress-integrity"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { TaskDeletedError, taskDeletedInTransaction } from "./store"
 import { Project } from "@/project/project"
@@ -297,8 +302,17 @@ export function taskRootIngressFactsInTransaction(
     .where(eq(EngineTaskRootIngressPolicyTable.id, ingress.policy_id))
     .get()
   if (!policy) throw new Error(`Task-root ingress ${ingressID} references missing policy ${ingress.policy_id}`)
-  const evidence = readEvidence(db, ingress)
+  let evidence: TaskRootIngressEvidence
+  let integrityViolation: { message: string } | undefined
+  try {
+    evidence = readEvidence(db, ingress)
+  } catch (error) {
+    if (!isTaskRootIngressIntegrityError(error)) throw error
+    evidence = EMPTY_EVIDENCE
+    integrityViolation = { message: error.message }
+  }
   return {
+    ...(integrityViolation ? { integrityViolation } : {}),
     ingress: {
       id: ingress.id,
       taskID: ingress.task_id,
@@ -558,10 +572,16 @@ export function assertTaskRootActivationLeaseFenceInTransaction(
     lifecycle.epoch !== ingress.execution_epoch ||
     (lifecycle.status !== "active" && !terminalConversation && !input.allowAcceptedActivitySettlement)
   ) {
-    throw new Error(
+    // A superseded epoch, a consumed activation and a terminal Task are all
+    // permanent: no later attempt can make this activation current again.
+    // Typing the rejection lets recovery retire the continuations that hold
+    // it, instead of replaying a dead backlog on every project open.
+    const permanent =
+      activationConsumed || lifecycle.epoch !== ingress.execution_epoch || latest?.id !== lease.id
+    const detail =
       `Task-root activation fence rejected ${input.activationID}; ` +
-        `latest=${latest?.id ?? "none"} expiry=${lease.expires_at} deadline=${policy.absoluteDeadline ?? "none"} consumed=${activationConsumed} epoch=${lifecycle.epoch}/${ingress.execution_epoch} status=${lifecycle.status}`,
-    )
+      `latest=${latest?.id ?? "none"} expiry=${lease.expires_at} deadline=${policy.absoluteDeadline ?? "none"} consumed=${activationConsumed} epoch=${lifecycle.epoch}/${ingress.execution_epoch} status=${lifecycle.status}`
+    throw permanent ? new TaskRootActivationSupersededError(ingress.id, detail) : new Error(detail)
   }
   return {
     ingressID: ingress.id,
@@ -636,16 +656,41 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
   ) {
     throw new Error(`Assistant Message ${input.assistantMessageID} has invalid Task-root continuation parent`)
   }
+  // These reject the write, which is the safety half and must stay. They are
+  // typed so the Orchestrator can tell an integrity conflict — a durable,
+  // operator-gated condition the control plane already reduces to `blocked` —
+  // apart from an ordinary execution fault, and therefore stop terminally
+  // failing the whole Task over one refused append.
   const peers = db.select({ id: MessageTable.id }).from(MessageTable)
     .where(sql`json_extract(${MessageTable.data}, '$.activationID') = ${activationID}`).all()
   if (peers.some((peer) => peer.id !== input.assistantMessageID)) {
-    throw new Error(`Task-root activation ${activationID} has multiple assistant Messages`)
+    throw new TaskRootIngressIntegrityError(
+      fence.ingressID,
+      `Task-root activation ${activationID} has multiple assistant Messages`,
+    )
   }
+  // A compaction summary is a legitimate system-authored sibling: the
+  // compaction writer parents it under the newest user Message, which in an
+  // Orchestrator Session is the just-written control occurrence. It carries no
+  // activation, no decisions and no Tool requests, so it cannot be the second
+  // *turn* this conflict exists to refuse. Counting it here rejected the real
+  // activation assistant — killing the Turn — while the summary itself passed
+  // unfenced (no activationID), which inverted the guarantee: every Session
+  // long enough to compact lost its Task to this check.
+  // `IS` rather than `=`: a sibling missing its author field entirely must
+  // stay counted, and under three-valued logic `NULL = 'compaction'` would
+  // drop the whole row from the conflict instead of failing the exemption.
   const siblingAssistants = db.select({ id: MessageTable.id }).from(MessageTable)
-    .where(sql`json_extract(${MessageTable.data}, '$.role') = 'assistant' AND json_extract(${MessageTable.data}, '$.parentID') = ${assistant.parentID}`)
+    .where(
+      sql`json_extract(${MessageTable.data}, '$.role') = 'assistant' AND json_extract(${MessageTable.data}, '$.parentID') = ${assistant.parentID}
+        AND NOT (json_extract(${MessageTable.data}, '$.author') IS 'compaction' AND json_extract(${MessageTable.data}, '$.activationID') IS NULL)`,
+    )
     .all()
   if (siblingAssistants.some((peer) => peer.id !== input.assistantMessageID)) {
-    throw new Error(`Task-root continuation ${assistant.parentID} has multiple assistant Messages`)
+    throw new TaskRootIngressIntegrityError(
+      fence.ingressID,
+      `Task-root continuation ${assistant.parentID} has multiple assistant Messages`,
+    )
   }
   if (acceptedActivitySettlementRequired) {
     const providerRequests = db.select({ id: ProviderActivityRequestTable.id })

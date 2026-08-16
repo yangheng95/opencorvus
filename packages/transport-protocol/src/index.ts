@@ -1062,12 +1062,16 @@ export type NativeCommand =
   | { kind: "window.quit" }
   | { kind: "workspace.pickDir"; start?: string }
   | { kind: "workspace.pickFiles"; start?: string; multiple?: boolean }
-  | { kind: "workspace.openProjectEditor"; editor: ProjectEditorID; path: string }
+  | { kind: "workspace.openProjectEditor"; editor: ProjectEditorID; path: string; line?: number; column?: number }
   | { kind: "notification.permission" }
   | { kind: "notification.requestPermission" }
   | { kind: "notification.send"; title: string; body?: string; tag?: string }
 
 export type NativeCommandKind = NativeCommand["kind"]
+
+function isOptionalPositiveInteger(value: unknown): boolean {
+  return value === undefined || (typeof value === "number" && Number.isSafeInteger(value) && value >= 1)
+}
 
 function isNonBlankString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0
@@ -1291,7 +1295,12 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
       )
     case "workspace.openProjectEditor":
       return (
-        (PROJECT_EDITOR_IDS as readonly string[]).includes(obj["editor"] as string) && typeof obj["path"] === "string"
+        (PROJECT_EDITOR_IDS as readonly string[]).includes(obj["editor"] as string) &&
+        typeof obj["path"] === "string" &&
+        isOptionalPositiveInteger(obj["line"]) &&
+        isOptionalPositiveInteger(obj["column"]) &&
+        // A column without a line cannot be honoured by any editor launcher.
+        (obj["column"] === undefined || obj["line"] !== undefined)
       )
     case "notification.send":
       return (

@@ -172,11 +172,16 @@ export type IsolatedWorkspaceRecoveryResult = {
   removed: number
   retainedCurrent: number
   retainedLive: number
+  /** Unreconcilable workspaces that also could not be quarantined; left in place. */
   retainedUnknown: number
+  /** Unreconcilable workspaces moved aside so they can never gate a startup again. */
+  quarantined: number
+  unreconciled: IsolatedWorkspaceArtifactUnknownError[]
 }
 
 export class IsolatedWorkspaceArtifactUnknownError extends Error {
   override readonly name = "IsolatedWorkspaceArtifactUnknownError"
+  quarantineFailure: unknown
 
   constructor(
     readonly artifactPath: string,
@@ -186,16 +191,7 @@ export class IsolatedWorkspaceArtifactUnknownError extends Error {
   }
 }
 
-export class IsolatedWorkspaceRecoveryBlockedError extends AggregateError {
-  override readonly name = "IsolatedWorkspaceRecoveryBlockedError"
-
-  constructor(
-    errors: IsolatedWorkspaceArtifactUnknownError[],
-    readonly result: IsolatedWorkspaceRecoveryResult,
-  ) {
-    super(errors, `Isolated check-workspace recovery retained ${errors.length} unknown artifact occurrence(s)`)
-  }
-}
+const WORKSPACE_QUARANTINE_DIRECTORY = ".quarantine"
 
 async function listDirectories(root: string): Promise<string[]> {
   const entries = await fs.readdir(root, { withFileTypes: true }).catch((error) => {
@@ -212,11 +208,18 @@ async function projectCheckWorkspaceRoots(projectDir: string): Promise<string[]>
     roots.push(path.join(taskRoot, "acceptance", "check-workspaces"))
   }
   const candidates = await Promise.all(roots.map(listDirectories))
-  return candidates.flat()
+  return candidates.flat().filter((candidate) => path.basename(candidate) !== WORKSPACE_QUARANTINE_DIRECTORY)
+}
+
+async function quarantineWorkspaceArtifact(root: string): Promise<void> {
+  const quarantineRoot = path.join(path.dirname(root), WORKSPACE_QUARANTINE_DIRECTORY)
+  await fs.mkdir(quarantineRoot, { recursive: true })
+  await fs.rename(root, path.join(quarantineRoot, `${path.basename(root)}-${Date.now()}`))
 }
 
 /** Remove only exact prior/dead workspace occurrences. Missing or malformed
- * owner facts are retained as unknown and never upgraded to orphan proof. */
+ * owner facts are never upgraded to orphan proof: they are quarantined beside
+ * their workspace root and reported, never allowed to gate startup. */
 export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
   currentOccurrenceID: string
   observeProcessOccurrence?: RuntimeProcessOccurrenceObserver
@@ -227,11 +230,23 @@ export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
     retainedCurrent: 0,
     retainedLive: 0,
     retainedUnknown: 0,
+    quarantined: 0,
+    unreconciled: [],
   }
   if (process.platform !== "win32") return result
   const observeProcessOccurrence =
     input.observeProcessOccurrence ?? cachedRuntimeProcessOccurrenceObserver()
-  const unknownArtifacts: IsolatedWorkspaceArtifactUnknownError[] = []
+  const quarantineUnknown = async (artifactPath: string, cause: unknown) => {
+    const unknown = new IsolatedWorkspaceArtifactUnknownError(artifactPath, cause)
+    result.unreconciled.push(unknown)
+    try {
+      await quarantineWorkspaceArtifact(artifactPath)
+      result.quarantined += 1
+    } catch (quarantineError) {
+      unknown.quarantineFailure = quarantineError
+      result.retainedUnknown += 1
+    }
+  }
   const projectDirectories = new Set<string>()
   for (const project of Project.list()) {
     projectDirectories.add(project.worktree)
@@ -243,7 +258,7 @@ export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
       roots = await projectCheckWorkspaceRoots(projectDir)
     } catch (error) {
       result.retainedUnknown += 1
-      unknownArtifacts.push(new IsolatedWorkspaceArtifactUnknownError(projectDir, error))
+      result.unreconciled.push(new IsolatedWorkspaceArtifactUnknownError(projectDir, error))
       continue
     }
     for (const root of roots) {
@@ -256,12 +271,9 @@ export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
         ownerFailure = error
       }
       if (!owner || owner.workspace_id !== path.basename(root)) {
-        result.retainedUnknown += 1
-        unknownArtifacts.push(
-          new IsolatedWorkspaceArtifactUnknownError(
-            root,
-            ownerFailure ?? new Error("owner.json is malformed, foreign, or identifies another workspace"),
-          ),
+        await quarantineUnknown(
+          root,
+          ownerFailure ?? new Error("owner.json is malformed, foreign, or identifies another workspace"),
         )
         continue
       }
@@ -278,11 +290,15 @@ export async function recoverOrphanedIsolatedCheckWorkspaces(input: {
         result.retainedLive += 1
         continue
       }
-      await awaitIsolatedCleanup(root, removeIsolatedWorkspaceRoot(root))
-      result.removed += 1
+      try {
+        await awaitIsolatedCleanup(root, removeIsolatedWorkspaceRoot(root))
+        result.removed += 1
+      } catch (error) {
+        result.retainedUnknown += 1
+        result.unreconciled.push(new IsolatedWorkspaceArtifactUnknownError(root, error))
+      }
     }
   }
-  if (unknownArtifacts.length > 0) throw new IsolatedWorkspaceRecoveryBlockedError(unknownArtifacts, result)
   return result
 }
 

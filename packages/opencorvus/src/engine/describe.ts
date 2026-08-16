@@ -34,7 +34,7 @@ import { type SelectedWorkflowBinding } from "./workflow-binding"
 import { readTaskWorkflowBinding } from "./workflow-binding-facts"
 import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
-import { parseProcessRecoveryFactContext } from "./process-recovery-fact"
+import { parseProcessRecoveryFactContext, type ProcessRecoveryFactContext } from "./process-recovery-fact"
 import { validateProcessPhysicalEvidence } from "@/runtime/process-occurrence"
 
 import { effectiveMaxAgentParallelism, clarificationTranscriptSection } from "./helpers"
@@ -88,7 +88,22 @@ export function describeProcessRecoveryFact(taskID: string, factID: string) {
   ) {
     throw new Error(`Task ${taskID} artifact ${factID} is not a process execution recovery occurrence`)
   }
-  const context = parseProcessRecoveryFactContext(payload.context, factID)
+  const parsed = parseProcessRecoveryFactContext(payload.context, factID)
+  if (parsed.kind === "legacy_shutdown_handoff") {
+    // Pre-v1 facts carry only the owned Session list. Nothing per-subject is
+    // verifiable, and nothing needs to be: the description exists to tell the
+    // Orchestrator what this wake is about, not to re-litigate old evidence.
+    return {
+      schema_version: 1,
+      origin: "process_shutdown",
+      physical_evidence: {
+        kind: "unmanaged_process_cause_unknown",
+        reason: `legacy shutdown handoff (pre-v1 context); owned sessions: ${parsed.ownedSessionIDs.join(", ") || "none"}`,
+      },
+      affected_subjects: [],
+    } satisfies ProcessRecoveryFactContext
+  }
+  const context = parsed.context
   validateProcessPhysicalEvidence(context.physical_evidence)
   for (const subject of context.affected_subjects) {
     const session = Database.use((db) =>

@@ -24,7 +24,11 @@ import { Database } from "@/storage/db"
 import {
   acquireTaskCompletionClosureInTransaction,
   assertTaskCompletionClosureOwnerInTransaction,
+  releaseTaskCompletionClosureInTransaction,
 } from "@/engine/task-completion-closure"
+import { Log } from "@/util/log"
+
+const log = Log.create({ service: "orchestrator.task-lifecycle-tools" })
 
 export const CompleteTaskInputSchema = z
   .object({
@@ -147,25 +151,43 @@ export function createTaskLifecycleTools(input: {
             timeAcquired: Date.now(),
           }),
         )
-        const terminalResult = await terminalTask(
-            closureTask,
-            {
-              status: "completed",
-            },
-            terminalSummary,
-            {
-              projectDir: taskPrimaryProjectRoot(input.taskID, { activeProjectID: Instance.project.id }),
-              terminalAt: completedAt,
-              transactionEffect: (db, terminalTask) => {
-                assertTaskCompletionClosureOwnerInTransaction(db, {
-                  taskID: input.taskID,
-                  ownerID: closureOwnerID,
-                })
-                assertTaskDispatchesSettledInTransaction(db, input.taskID)
-                insertPreparedTaskCompletionDecision(db, preparedDecision, terminalTask)
+        let terminalResult: Awaited<ReturnType<typeof terminalTask>>
+        try {
+          terminalResult = await terminalTask(
+              closureTask,
+              {
+                status: "completed",
               },
-            },
-        )
+              terminalSummary,
+              {
+                projectDir: taskPrimaryProjectRoot(input.taskID, { activeProjectID: Instance.project.id }),
+                terminalAt: completedAt,
+                transactionEffect: (db, terminalTask) => {
+                  assertTaskCompletionClosureOwnerInTransaction(db, {
+                    taskID: input.taskID,
+                    ownerID: closureOwnerID,
+                  })
+                  assertTaskDispatchesSettledInTransaction(db, input.taskID)
+                  insertPreparedTaskCompletionDecision(db, preparedDecision, terminalTask)
+                },
+              },
+          )
+        } catch (error) {
+          // The closure was committed in its own transaction, so a refusal
+          // here would otherwise hold the Task uncompletable for the whole
+          // lease while the model retries into that window.
+          try {
+            Database.transaction((db) =>
+              releaseTaskCompletionClosureInTransaction(db, { taskID: input.taskID, ownerID: closureOwnerID }),
+            )
+          } catch (releaseError) {
+            log.error("could not release the Task completion closure; it expires on its own", {
+              taskID: input.taskID,
+              error: releaseError,
+            })
+          }
+          throw error
+        }
         const actualStatus = deriveTaskStatus(terminalResult)
         const matchingDecision =
             actualStatus === "completed" && terminalResult.time_completed === completedAt

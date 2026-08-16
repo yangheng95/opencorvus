@@ -18,6 +18,13 @@ import langBash from "highlight.js/lib/languages/bash"
 import langSQL from "highlight.js/lib/languages/sql"
 import langMD from "highlight.js/lib/languages/markdown"
 import langDiff from "highlight.js/lib/languages/diff"
+import {
+  fileReferenceHtmlAttributes,
+  parseFileReference,
+  FILE_REFERENCE_PATH_ATTRIBUTE,
+  PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE,
+  type FileReference,
+} from "./file-reference"
 import { iconHtml } from "./icon-html"
 import { imagePreviewTriggerHtmlAttributes } from "./image-preview-trigger"
 import { localeTag, t } from "./i18n"
@@ -170,10 +177,10 @@ marked.use({
     codespan({ text }: { text: string }) {
       // `text` is the raw codespan content (before HTML escaping). Always
       // escape before emitting — the default renderer does the same.
-      const path = extractFilePath(text)
-      if (path) {
-        const { display, target } = path
-        return `<code><a class="file-link" href="#" data-file-path="${escapeAttr(target)}">${escapeHtml(display)}</a></code>`
+      const reference = extractFileReference(text)
+      if (reference) {
+        const attributes = fileReferenceHtmlAttributes(FILE_REFERENCE_PATH_ATTRIBUTE, reference.reference, escapeAttr)
+        return `<code><a class="file-link" href="#"${attributes}>${escapeHtml(reference.display)}</a></code>`
       }
       return `<code>${escapeHtml(text)}</code>`
     },
@@ -182,10 +189,11 @@ marked.use({
     },
     link(this: any, token: { href: string; title?: string | null; tokens?: any[]; text?: string }) {
       const label = token.tokens ? this.parser.parseInline(token.tokens) : escapeHtml(token.text || token.href || "")
-      const projectFilePath = markdownProjectFilePath(token.href)
-      if (projectFilePath) {
+      const projectFile = markdownProjectFileReference(token.href)
+      if (projectFile) {
+        const attributes = fileReferenceHtmlAttributes(PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE, projectFile, escapeAttr)
         const title = token.title ? ` title="${escapeAttr(token.title)}"` : ""
-        return `<a href="#" data-project-file-path="${escapeAttr(projectFilePath)}"${title}>${label}</a>`
+        return `<a href="#"${attributes}${title}>${label}</a>`
       }
       const href = safeMarkdownHref(token.href)
       if (!href) return label
@@ -286,8 +294,11 @@ function browserPreviewAttrs(raw: string): string {
 const FILE_EXT_RE =
   /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs|json|jsonc|md|mdx|css|scss|less|html|htm|xml|svg|yaml|yml|toml|py|pyi|rs|go|java|c|h|cpp|cc|cxx|hpp|sh|bash|zsh|sql|rb|php|lua|kt|swift|dart|vue|astro|conf|ini|env|lock|txt|pdf|csv|tsv|xls|xlsx|xlsm|ods|doc|docx|odt|ppt|pptx|odp)$/i
 
-function markdownProjectFilePath(raw: string): string | null {
-  const value = String(raw || "").trim()
+function markdownProjectFileReference(raw: string): FileReference | null {
+  // Split the cited location off first: `src/a.ts:42` has to clear the
+  // `scheme:` guard and the end-anchored extension test on its path half alone.
+  const reference = parseFileReference(String(raw || "").trim())
+  const value = reference.path
   if (!value || /[\u0000-\u001f\u007f]/.test(value)) return null
   if (value.startsWith("#") || value.startsWith("//") || /^\/attachment(?:\/|$)/i.test(value)) return null
   const windowsAbsolutePath = /^[A-Za-z]:[\\/]/.test(value)
@@ -299,16 +310,17 @@ function markdownProjectFilePath(raw: string): string | null {
   } catch {
     return null
   }
-  return FILE_EXT_RE.test(decoded) ? decoded : null
+  return FILE_EXT_RE.test(decoded) ? { ...reference, path: decoded } : null
 }
 
 /**
- * Decide whether a codespan's text is a file path reference. Returns the
- * path to open in the preferred IDE (stripped of trailing ":line[:col]") and the display label
- * (original text). Returns null for non-path content (commands, identifiers,
- * URLs, etc.).
+ * Decide whether a codespan's text is a file path reference. Returns the cited
+ * reference — path plus the optional `:line[:col]` location, which is what
+ * makes the click land on the cited line rather than the top of the file — and
+ * the display label (original text). Returns null for non-path content
+ * (commands, identifiers, URLs, etc.).
  */
-function extractFilePath(text: string): { display: string; target: string } | null {
+function extractFileReference(text: string): { display: string; reference: FileReference } | null {
   const s = text.trim()
   if (!s) return null
   // Reject URLs and protocol-ish strings.
@@ -316,9 +328,9 @@ function extractFilePath(text: string): { display: string; target: string } | nu
   // Reject whitespace (multi-word commands) and shell flags.
   if (/\s/.test(s)) return null
   if (s.startsWith("-")) return null
-  // Strip trailing :line[:col] for the target path.
-  const locMatch = s.match(/^(.+?)(:\d+(?::\d+)?)$/)
-  const pathPart = locMatch ? locMatch[1] : s
+  // Split the trailing :line[:col] off; the guards below judge the path half.
+  const reference = parseFileReference(s)
+  const pathPart = reference.path
   // Must look like a valid file token (letters/digits/underscore/dot/dash
   // plus path separators and optional './' or '../' prefix).
   if (!/^[\w./\\@~-]+$/.test(pathPart)) return null
@@ -329,7 +341,7 @@ function extractFilePath(text: string): { display: string; target: string } | nu
   if (!hasSlash && !hasFileExt) return null
   // Reject isolated extensions like ".ts".
   if (/^\.\w+$/.test(pathPart)) return null
-  return { display: s, target: pathPart }
+  return { display: s, reference }
 }
 
 // ── Core rendering functions ──

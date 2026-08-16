@@ -123,6 +123,29 @@ function processInstanceID(pid: number): string | undefined {
   }
 }
 
+let occurrenceOverrideForTest: string | undefined
+
+/**
+ * The occurrence identity every durable owner claim in this process writes.
+ *
+ * Owner claims are compared across processes — a dispatch lineage names the
+ * process that must deliver it, and recovery asks whether that process is
+ * still alive — so every writer has to derive its identity from this one
+ * accessor. Two sources would let a claim and its liveness check disagree
+ * about who "we" are.
+ */
+export function currentRuntimeOccurrenceID(): string {
+  return occurrenceOverrideForTest ?? currentRuntimeProcessOccurrence().occurrenceID
+}
+
+/** Stand in for a different runtime process. Tests use it to model a peer
+ * backend sharing one database. Returns the prior value. */
+export function replaceRuntimeOccurrenceIDForTest(value: string | undefined): string | undefined {
+  const prior = occurrenceOverrideForTest
+  occurrenceOverrideForTest = value
+  return prior
+}
+
 /** Exact process-lifetime identity used by durable execution leases and orphan
  * recovery. It is independent of every database path and listener. */
 export function currentRuntimeProcessOccurrence(): RuntimeProcessOccurrenceInfo {

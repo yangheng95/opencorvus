@@ -2,19 +2,23 @@
 // Floating banner that separately surfaces sustained backend and Server-Sent
 // Events (SSE) failures instead of describing every outage as stream setup.
 //
-// Hide rules: the banner only appears once the offline state has lasted
-// more than `OFFLINE_GRACE_MS` so transient reconnects (the SSE retry loop
-// in services/sse.ts:79 pings every 2s) don't flash a banner on every blip.
+// Hide rules: the banner only appears once the offline state has outlived one
+// full scheduled reconnect, so a stream that reopens on its own never paints a
+// failure. The grace is derived from services/sse.ts rather than restated: a
+// literal shorter than STREAM_RECONNECT_DELAY_MS guarantees a red banner on
+// every single reconnect, which is how a routine reopen ended up looking like
+// a backend outage on every task switch.
 
 import { Show, createMemo, createEffect, onCleanup } from "solid-js"
 import { messageStore } from "../store/messages"
 import { appStore } from "../store/app"
 import { openConfigDialog } from "../services/config-dialog-control"
+import { STREAM_RECONNECT_DELAY_MS } from "../services/sse"
 import { t } from "../utils/i18n"
 import { useDisclosure } from "../solid/disclosure"
 import { Button } from "./ui/Button"
 
-const OFFLINE_GRACE_MS = 2500
+const OFFLINE_GRACE_MS = STREAM_RECONNECT_DELAY_MS + 2000
 
 export function ConnectionBanner() {
   const problem = createMemo(() => {

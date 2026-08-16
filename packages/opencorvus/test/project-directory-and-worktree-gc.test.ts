@@ -60,12 +60,7 @@ const sessionLoopDeletionModel = {
   modelID: "project-deletion-session-loop",
 }
 
-function appendFixtureTaskLifecycle(input: {
-  taskID: string
-  sessionID: string
-  now: number
-  terminal: boolean
-}) {
+function appendFixtureTaskLifecycle(input: { taskID: string; sessionID: string; now: number; terminal: boolean }) {
   Database.transaction((db) => {
     appendTaskOpenedInTransaction({
       db,
@@ -432,16 +427,10 @@ describe("Project directory integrity", () => {
       remaining: Database.use((db) => ({
         tasks: db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).all().length,
         sessions: db.select().from(SessionTable).where(eq(SessionTable.project_id, projectID)).all().length,
-        policies: db
-          .select()
-          .from(PermissionPolicyTable)
-          .where(eq(PermissionPolicyTable.project_id, projectID))
-          .all().length,
-        ledger: db
-          .select()
-          .from(PermissionLedgerTable)
-          .where(eq(PermissionLedgerTable.project_id, projectID))
-          .all().length,
+        policies: db.select().from(PermissionPolicyTable).where(eq(PermissionPolicyTable.project_id, projectID)).all()
+          .length,
+        ledger: db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.project_id, projectID)).all()
+          .length,
         occurrences: db
           .select()
           .from(EngineWorkflowNodeOccurrenceTable)
@@ -1838,16 +1827,17 @@ describe("Project directory integrity", () => {
     await fs.rename(source, plan.manifest.targets[0]!.quarantine)
     const mismatched = { ...plan.manifest, databaseInstanceID: crypto.randomUUID() }
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(mismatched, null, 2)}\n`)
-    const error = await recoverProjectDeletionCleanup().catch((cause) => cause)
+    // Fails closed: the foreign-database manifest is reported and both it and
+    // its quarantine are retained for manual recovery. The pass still returns,
+    // so one such manifest can never keep the runtime from starting.
+    const recovery = await recoverProjectDeletionCleanup()
 
     expect({
-      outer: error.name,
-      inner: error.errors?.[0]?.name,
+      reported: (recovery.unreconciled[0] as Error | undefined)?.name,
       manifest: await fs.stat(plan.manifestPath).then(() => "present"),
       quarantine: await fs.stat(plan.manifest.targets[0]!.quarantine).then(() => "present"),
     }).toEqual({
-      outer: "AggregateError",
-      inner: "ProjectDeletionCleanupDatabaseMismatchError",
+      reported: "ProjectDeletionCleanupDatabaseMismatchError",
       manifest: "present",
       quarantine: "present",
     })
@@ -1871,15 +1861,15 @@ describe("Project directory integrity", () => {
       targets: [{ source: escapedSource, quarantine: `${escapedSource}.deleting-${plan.manifest.operationID}-0` }],
     }
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(escaped, null, 2)}\n`)
-    const error = await recoverProjectDeletionCleanup().catch((cause) => cause)
+    // The escaping manifest is refused and reported, never acted on, and the
+    // pass still returns so a bad manifest cannot block runtime startup.
+    const recovery = await recoverProjectDeletionCleanup()
 
     expect({
-      outer: error.name,
-      message: error.errors?.[0]?.message,
+      message: (recovery.unreconciled[0] as Error | undefined)?.message,
       source: await fs.stat(source).then(() => "present"),
       manifest: await fs.stat(plan.manifestPath).then(() => "present"),
     }).toEqual({
-      outer: "AggregateError",
       message: expect.stringContaining("outside the exact Project-owned root"),
       source: "present",
       manifest: "present",

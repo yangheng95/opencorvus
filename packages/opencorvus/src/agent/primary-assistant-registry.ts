@@ -9,6 +9,7 @@ import PROMPT_CODING from "@/agent/prompt/coding.txt"
 import MISSION_CORE from "@/prompt/core/mission-core.txt"
 import { CHAT_INTERACTIVE_ARTIFACT_GUIDANCE } from "@/prompt/fragments/interactive-artifact-guidance"
 import { TASK_REQUEST_SCOPE_GUIDANCE } from "@/prompt/fragments/task-request-scope"
+import { withParticipantMessageLanguage } from "@/prompt/fragments/participant-message-language"
 import PROMPT_SYSTEM from "@/session/prompt/system.txt"
 import { WORK_RUNTIME_PROMPT } from "@/work/harness"
 import { NativeAgentRegistryCache } from "@/agent/native-agent-registry-cache"
@@ -78,7 +79,7 @@ const definitions: Record<PrimaryAssistantID, NativeAgentInfo> = {
   },
   mission: {
     name: "mission",
-    prompt: [MISSION_CORE, TASK_REQUEST_SCOPE_GUIDANCE].join("\n\n"),
+    prompt: withParticipantMessageLanguage([MISSION_CORE, TASK_REQUEST_SCOPE_GUIDANCE].join("\n\n")),
     permission: undefined,
     steps: 1000,
     options: {},

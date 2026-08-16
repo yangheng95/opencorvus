@@ -179,6 +179,11 @@ export function persistTask(input: {
         { source },
       ),
     )
+    // No scan is requested here on purpose. Task creation is not complete at
+    // this commit — the Orchestrator Session and its runtime authority are
+    // established afterwards — and the creation ingress is woken by the Task
+    // API once they exist. Signalling here would race the activation ahead of
+    // the authority it needs.
     return initialIngressID
   })
 }

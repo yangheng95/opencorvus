@@ -4,7 +4,13 @@
 
 - [2026-08-16-backend-recovery-readiness-convergence.md](2026-08-16-backend-recovery-readiness-convergence.md) separates bounded process recovery from durable Task/Mission/Session convergence so health is published before model work completes, and records the repaired Windows desktop package.
 
+- [2026-08-16-harness-first-public-positioning.md](2026-08-16-harness-first-public-positioning.md) rebuilds the landing page and both READMEs around the open-source multi-agent harness claim, proves it with an eleven-layer `ships working / replace via` table, binds every advertised count to a verified repository authority, and adds an evidence-checked README badge block.
+
+- [2026-08-16-task-control-liveness-axioms.md](2026-08-16-task-control-liveness-axioms.md) states the Task-control liveness contract as six axioms and repairs every reachable violation: integrity violations reduce to `blocked` instead of faulting forever, every resting state carries a finite wake or a durable operator surface, dispatch abandonment is judged from durable process leases rather than process-local memory, infrastructure retry is bounded per epoch, and cancellation converges without a restart.
+
 - [2026-08-16-frontend-visual-sidecar-and-retry-convergence.md](2026-08-16-frontend-visual-sidecar-and-retry-convergence.md) repairs the canonical visual-evidence sidecar argument protocol and gives Frontend Design a bounded identical-infrastructure-failure convergence contract.
+
+- [2026-08-16-task-control-liveness-convergence.md](2026-08-16-task-control-liveness-convergence.md) repairs the lost Task-root wake that stranded completed worker results behind a resolved FIFO head, giving the reconciler a revision fixpoint, a re-read work set, deterministic time re-arm, and per-Task fault isolation.
 
 - [2026-08-16-shared-database-multi-backend-startup-restoration.md](2026-08-16-shared-database-multi-backend-startup-restoration.md) removes the database-path-wide server-runtime startup gate, separates physical process occurrence from SQLite ownership, and restores two independent backends sharing one database.
 

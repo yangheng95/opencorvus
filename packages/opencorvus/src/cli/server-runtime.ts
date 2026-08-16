@@ -10,6 +10,38 @@ import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
 import { recoverProjectDeletionCleanup } from "@/project/deletion-cleanup"
 import { recoverProjectMaintenanceFences } from "@/project/deletion-registry"
+import { Log } from "@/util/log"
+
+const log = Log.create({ service: "startup-recovery" })
+
+function reportUnreconciledArtifacts(
+  subject: string,
+  result: {
+    quarantined: number
+    retainedUnknown: number
+    unreconciled: ReadonlyArray<Error & { quarantineFailure?: unknown }>
+  },
+) {
+  for (const unknown of result.unreconciled) {
+    log.error(`${subject} artifact could not be reconciled`, {
+      detail: unknown.message,
+      cause: String(unknown.cause ?? ""),
+      disposition: unknown.quarantineFailure === undefined ? "quarantined" : "retained",
+      ...(unknown.quarantineFailure === undefined ? {} : { quarantineFailure: String(unknown.quarantineFailure) }),
+    })
+  }
+}
+
+export function reportUnreconciledFailures(subject: string, failures: ReadonlyArray<unknown>) {
+  for (const failure of failures) {
+    log.error(`${subject} could not be reconciled`, {
+      detail: failure instanceof Error ? failure.message : String(failure),
+      ...(failure instanceof AggregateError
+        ? { causes: failure.errors.map((item) => (item instanceof Error ? item.message : String(item))) }
+        : {}),
+    })
+  }
+}
 
 /** Complete bounded process-local integrity work before publishing a listener.
  * Task, Mission, and Session convergence is deliberately excluded: it may run
@@ -20,16 +52,20 @@ export async function prepareServerRuntimeForListener(input: {
   const occurrence = currentRuntimeProcessOccurrence()
   try {
     const observeProcessOccurrence = cachedRuntimeProcessOccurrenceObserver()
-    await ProcessSupervisor.recoverOrphanedWindowsRequests({
+    const requestRecovery = await ProcessSupervisor.recoverOrphanedWindowsRequests({
       currentOccurrenceID: occurrence.occurrenceID,
       observeProcessOccurrence,
     })
-    await recoverOrphanedIsolatedCheckWorkspaces({
+    reportUnreconciledArtifacts("windows supervisor request", requestRecovery)
+    const workspaceRecovery = await recoverOrphanedIsolatedCheckWorkspaces({
       currentOccurrenceID: occurrence.occurrenceID,
       observeProcessOccurrence,
     })
-    await recoverProjectDeletionCleanup(observeProcessOccurrence)
-    recoverProjectMaintenanceFences(observeProcessOccurrence)
+    reportUnreconciledArtifacts("isolated check-workspace", workspaceRecovery)
+    const deletionRecovery = await recoverProjectDeletionCleanup(observeProcessOccurrence)
+    reportUnreconciledFailures("project deletion cleanup", deletionRecovery.unreconciled)
+    const fenceRecovery = recoverProjectMaintenanceFences(observeProcessOccurrence)
+    reportUnreconciledFailures("project maintenance fence", fenceRecovery.unreconciled)
     AutomationService.initGlobal()
     return { occurrence }
   } catch (preparationError) {

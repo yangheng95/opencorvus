@@ -3,10 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { Global } from "@/global"
 import { Instance } from "@/project/instance"
-import {
-  IsolatedWorkspaceRecoveryBlockedError,
-  recoverOrphanedIsolatedCheckWorkspaces,
-} from "@/project/isolated-check-workspace"
+import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import {
   cachedRuntimeProcessOccurrenceObserver,
@@ -125,29 +122,36 @@ test("successor recovery removes only exact prior/dead request and workspace occ
         const unknownRequestRoot = path.join(Global.Path.temporary, "supervisor-unknown-owner")
         requestRoots.push(unknownRequestRoot)
         await fs.mkdir(unknownRequestRoot, { recursive: true })
-        const requestFailure = await ProcessSupervisor.recoverOrphanedWindowsRequests({
+        const unknownRequestRecovery = await ProcessSupervisor.recoverOrphanedWindowsRequests({
           currentOccurrenceID: current.occurrenceID,
           observeProcessOccurrence,
-        }).catch((error) => error)
-        expect(requestFailure).toBeInstanceOf(ProcessSupervisor.WindowsOrphanRequestRecoveryBlockedError)
-        expect((requestFailure as ProcessSupervisor.WindowsOrphanRequestRecoveryBlockedError).result).toMatchObject({
+        })
+        expect(unknownRequestRecovery).toMatchObject({
           retainedCurrent: 1,
           retainedLive: 1,
-          retainedUnknown: 1,
+          retainedUnknown: 0,
+          quarantined: 1,
         })
+        expect(String(unknownRequestRecovery.unreconciled[0]?.cause)).toContain("request.json is missing")
+        const temporaryEntries = await fs.readdir(Global.Path.temporary)
+        expect(temporaryEntries).not.toContain("supervisor-unknown-owner")
+        expect(temporaryEntries).toContain("quarantine")
 
         const unknownWorkspaceRoot = path.join(workspaceParent, "workspace-unknown-owner")
         await fs.mkdir(path.join(unknownWorkspaceRoot, "workspace"), { recursive: true })
-        const workspaceFailure = await recoverOrphanedIsolatedCheckWorkspaces({
+        const unknownWorkspaceRecovery = await recoverOrphanedIsolatedCheckWorkspaces({
           currentOccurrenceID: current.occurrenceID,
           observeProcessOccurrence,
-        }).catch((error) => error)
-        expect(workspaceFailure).toBeInstanceOf(IsolatedWorkspaceRecoveryBlockedError)
-        expect((workspaceFailure as IsolatedWorkspaceRecoveryBlockedError).result).toMatchObject({
+        })
+        expect(unknownWorkspaceRecovery).toMatchObject({
           retainedCurrent: 1,
           retainedLive: 1,
-          retainedUnknown: 1,
+          retainedUnknown: 0,
+          quarantined: 1,
         })
+        const workspaceEntries = await fs.readdir(workspaceParent)
+        expect(workspaceEntries).not.toContain("workspace-unknown-owner")
+        expect(workspaceEntries).toContain(".quarantine")
 
         await fs.rm(project.path, { recursive: true, force: true })
         expect(
@@ -155,8 +159,17 @@ test("successor recovery removes only exact prior/dead request and workspace occ
             currentOccurrenceID: current.occurrenceID,
             observeProcessOccurrence,
           }),
-        ).toEqual({ inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 })
+        ).toEqual({
+          inspected: 0,
+          removed: 0,
+          retainedCurrent: 0,
+          retainedLive: 0,
+          retainedUnknown: 0,
+          quarantined: 0,
+          unreconciled: [],
+        })
       } finally {
+        requestRoots.push(path.join(Global.Path.temporary, "quarantine"))
         await Promise.all(requestRoots.map((root) => fs.rm(root, { recursive: true, force: true })))
       }
     },
@@ -235,20 +248,20 @@ test("successor recovery rejects conflicting and wrongly identified pre-target s
         if ("ready" in item) await fs.writeFile(path.join(root, "ready.json"), JSON.stringify(item.ready))
 
         try {
-          const error = await ProcessSupervisor.recoverOrphanedWindowsRequests({
+          const { unreconciled, ...counts } = await ProcessSupervisor.recoverOrphanedWindowsRequests({
             currentOccurrenceID: "current",
             timeoutMilliseconds: 20,
             observeProcessOccurrence: () => "dead_or_reused",
-          }).catch((cause) => cause)
-          expect(error).toBeInstanceOf(ProcessSupervisor.WindowsOrphanRequestRecoveryBlockedError)
-          expect({ result: error.result, detail: String(error.errors[0]?.cause) }).toEqual({
-            result: { inspected: 1, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 1 },
+          })
+          expect({ counts, detail: String(unreconciled[0]?.cause) }).toEqual({
+            counts: { inspected: 1, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0, quarantined: 1 },
             detail: expect.stringContaining(item.message),
           })
         } finally {
           await fs.rm(root, { recursive: true, force: true })
         }
       }
+      await fs.rm(path.join(Global.Path.temporary, "quarantine"), { recursive: true, force: true })
     },
   })
 }, 60_000)

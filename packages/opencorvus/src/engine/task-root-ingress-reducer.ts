@@ -72,6 +72,11 @@ export type ActivityOutcomeFact = {
 }
 
 export type TaskRootIngressFacts = {
+  /** Set when reading durable evidence observed a violation of the persisted
+   * integrity contract. The reduction is total over persisted facts, so a
+   * violation is a `blocked` value here rather than an exception at the
+   * reader; see `TaskRootIngressIntegrityError`. */
+  integrityViolation?: { message: string }
   ingress: TaskRootIngressAcceptedFact
   policy: TaskRootIngressPolicyFact
   lifecycle: readonly TaskLifecycleFact[]
@@ -179,10 +184,117 @@ export function taskRootIngressSemanticAttemptIDs(facts: TaskRootIngressFacts): 
   return [...facts.decisionGaps.map((gap) => gap.id), ...legacyTurnIDs]
 }
 
+/** How long a Task may rest in `cancelling`/`closing` before the control plane
+ * re-attempts convergence. Neither state is absorbing — an owner is expected
+ * to finish it — so both must carry a finite wake rather than depend on a
+ * restart. */
+export const CANCELLATION_RECONCILE_WAKE_MS = 15_000
+
+/**
+ * Why this projection may rest, and until when.
+ *
+ * - `absorbing`: no further transition is possible; no wake is owed.
+ * - `finite_wake`: the projection changes at `wakeAt` with no new fact.
+ * - `operator_gated`: a legal resting state that only an operator (or the
+ *   surfaced gate's resolution) can leave. `surface` names the durable
+ *   artifact that must make it visible, because an unsurfaced rest state is
+ *   indistinguishable from a deadlock.
+ * - `fifo_deferred`: activation of this ingress is owned by the scan's FIFO
+ *   walk, not by a timer.
+ *
+ * Totality is the point: every arm of `TaskRootIngressProjection` maps to
+ * exactly one class, checked at compile time. A state with neither a wake nor
+ * a surface is a silent permanent stall, which is the defect this replaces.
+ */
+export type TaskRootIngressWakeClassification =
+  | { class: "absorbing" }
+  | { class: "finite_wake"; wakeAt: number }
+  | { class: "operator_gated"; surface: "infrastructure_fact" | "interaction" }
+  | { class: "fifo_deferred" }
+
+function minDefined(left: number | undefined, right: number | undefined): number | undefined {
+  if (left === undefined) return right
+  if (right === undefined) return left
+  return Math.min(left, right)
+}
+
+function finiteWake(instant: number, absoluteDeadline: number | undefined): TaskRootIngressWakeClassification {
+  return { class: "finite_wake", wakeAt: minDefined(instant, absoluteDeadline)! }
+}
+
+function deadlineOr(
+  absoluteDeadline: number | undefined,
+  fallback: TaskRootIngressWakeClassification,
+): TaskRootIngressWakeClassification {
+  return absoluteDeadline === undefined ? fallback : { class: "finite_wake", wakeAt: absoluteDeadline }
+}
+
+function assertNever(value: never): never {
+  throw new Error(`Unhandled Task-root ingress projection: ${JSON.stringify(value)}`)
+}
+
+/**
+ * Classify when — or whether — this projection can next change.
+ *
+ * `reduceTaskRootIngressFacts` reads `now` only through a lease expiry, an
+ * Interaction resume deadline and the immutable absolute deadline, so the
+ * projection is piecewise-constant in time between those finitely many
+ * instants. A reconciler that re-scans at the returned instant therefore
+ * observes every time-triggered transition; every other transition is a fact
+ * append, which its producer signals.
+ *
+ * `blocked` and `exhausted` deliberately ignore `absoluteDeadline`: both are
+ * absorbing under the reduction above, so a timer would only re-derive the
+ * same value. Their exit is the surfaced gate, not the clock.
+ */
+export function classifyTaskRootIngressWake(
+  projection: TaskRootIngressProjection,
+  absoluteDeadline: number | undefined,
+  now: number,
+): TaskRootIngressWakeClassification {
+  switch (projection.state) {
+    case "resolved":
+    case "terminal_inapplicable":
+      return { class: "absorbing" }
+    case "leased":
+      return finiteWake(projection.expiresAt, absoluteDeadline)
+    case "waiting":
+      return projection.resumeAt !== undefined
+        ? finiteWake(projection.resumeAt, absoluteDeadline)
+        : deadlineOr(absoluteDeadline, { class: "operator_gated", surface: "interaction" })
+    case "cancelling":
+    case "closing":
+      return finiteWake(now + CANCELLATION_RECONCILE_WAKE_MS, absoluteDeadline)
+    case "reconcile_required":
+      return deadlineOr(absoluteDeadline, { class: "operator_gated", surface: "interaction" })
+    case "blocked":
+      return { class: "operator_gated", surface: "infrastructure_fact" }
+    case "exhausted":
+      return { class: "operator_gated", surface: "infrastructure_fact" }
+    case "ready":
+      return deadlineOr(absoluteDeadline, { class: "fifo_deferred" })
+    default:
+      return assertNever(projection)
+  }
+}
+
+/** The finite instant this projection changes on its own, if any. Thin
+ * projection of `classifyTaskRootIngressWake` for callers that only arm
+ * timers; an operator-gated rest state returns `undefined` here and must be
+ * surfaced by the caller instead. */
+export function taskRootIngressWakeInstant(
+  projection: TaskRootIngressProjection,
+  absoluteDeadline?: number,
+  now: number = Date.now(),
+): number | undefined {
+  const classification = classifyTaskRootIngressWake(projection, absoluteDeadline, now)
+  return classification.class === "finite_wake" ? classification.wakeAt : undefined
+}
+
 /** Total reduction over durable facts. Its order is part of the public
  * correctness contract: conflicts win before any apparent completion. */
 export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: number): TaskRootIngressProjection {
-  if (conflict(facts)) return { state: "blocked", reason: "integrity_conflict" }
+  if (facts.integrityViolation || conflict(facts)) return { state: "blocked", reason: "integrity_conflict" }
 
   const currentEpoch = Math.max(
     0,

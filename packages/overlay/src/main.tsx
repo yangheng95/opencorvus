@@ -83,6 +83,11 @@ import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
 import { renderMarkdown } from "./utils/markdown"
 import {
+  elementFileReference,
+  FILE_REFERENCE_PATH_ATTRIBUTE,
+  PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE,
+} from "./utils/file-reference"
+import {
   applyTheme,
   applyZoom,
   handleZoomHotkey,
@@ -1555,20 +1560,20 @@ document.addEventListener(
       openImagePreview(src, alt)
       return
     }
-    const link = target.closest<HTMLElement>("[data-file-path]")
+    const link = target.closest<HTMLElement>(`[${FILE_REFERENCE_PATH_ATTRIBUTE}]`)
     if (link) {
-      const path = link.getAttribute("data-file-path")
-      if (!path) return
+      const reference = elementFileReference(link, FILE_REFERENCE_PATH_ATTRIBUTE)
+      if (!reference) return
       ev.preventDefault()
-      runMainAsync("workspace.open-file-link", () => openPathInSelectedEditor(path))
+      runMainAsync("workspace.open-file-link", () => openPathInSelectedEditor(reference.path, reference))
       return
     }
-    const projectFileLink = target.closest<HTMLElement>("[data-project-file-path]")
+    const projectFileLink = target.closest<HTMLElement>(`[${PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE}]`)
     if (!projectFileLink) return
-    const projectFilePath = projectFileLink.getAttribute("data-project-file-path")
-    if (!projectFilePath) return
+    const projectFile = elementFileReference(projectFileLink, PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE)
+    if (!projectFile) return
     ev.preventDefault()
-    runMainAsync("workspace.open-project-file", () => openProjectFile(projectFilePath))
+    runMainAsync("workspace.open-project-file", () => openProjectFile(projectFile.path, projectFile))
   },
   listenerOpts,
 )
@@ -1579,7 +1584,7 @@ document.addEventListener(
     const target = ev.target as HTMLElement | null
     if (!target) return
     const anchor = target.closest<HTMLAnchorElement>("a[href]")
-    if (!anchor || anchor.hasAttribute("data-file-path")) return
+    if (!anchor || anchor.hasAttribute(FILE_REFERENCE_PATH_ATTRIBUTE)) return
     const previewUrl = anchor.getAttribute("data-browser-preview-url") || ""
     const href = previewUrl || anchor.getAttribute("href") || ""
     if (!/^https?:\/\//i.test(href)) return
@@ -2609,6 +2614,31 @@ function OverlayRoot() {
   )
 }
 
+/**
+ * Wait for the frame that paints the mounted application, but never longer
+ * than one deadline. `requestAnimationFrame` is only guaranteed to fire while
+ * the surface is compositing: a hidden window, a background tab, or a
+ * non-displayed embedded pane starves it indefinitely. This await sits in
+ * top-level module evaluation, so a starved frame suspends the module before
+ * `initApp` is ever reached — the overlay renders its shell, never connects,
+ * and reports itself Offline forever with no error to show for it. Showing one
+ * frame early is a cosmetic concern; booting at all is not.
+ */
+function firstPaintedFrame(): Promise<void> {
+  const FRAME_DEADLINE_MS = 250
+  return new Promise<void>((resolve) => {
+    let settled = false
+    const settle = () => {
+      if (settled) return
+      settled = true
+      clearTimeout(timer)
+      resolve()
+    }
+    const timer = setTimeout(settle, FRAME_DEADLINE_MS)
+    requestAnimationFrame(settle)
+  })
+}
+
 const overlayAppHost = document.getElementById("overlayAppHost")
 if (!overlayAppHost) throw new Error("Overlay application host is missing from index.html")
 const startupReady = (window as Window & { __opencorvusStartupReady?: Promise<void> }).__opencorvusStartupReady
@@ -2619,7 +2649,7 @@ await startupReady
 // remove that one pre-mount child before the application takes ownership.
 overlayAppHost.replaceChildren()
 disposers.push(render(() => <OverlayRoot />, overlayAppHost))
-await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+await firstPaintedFrame()
 await showOverlayWindow()
 disposers.push(await installExpertSquadInstallHandoffBridge())
 const clipboardApiKeyPrompt = installClipboardApiKeyPrompt()

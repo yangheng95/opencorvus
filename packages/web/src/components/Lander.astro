@@ -25,15 +25,18 @@ const galleryImages = {
   mission: MissionHarness,
   squads: ExpertSquadsHarness,
 } as const
+const repositoryHref = "https://github.com/yangheng95/opencorvus"
 const metadata =
   locale === "zh-cn"
     ? {
-        title: "OpenCorvus | 面向编码智能体的工程基础设施",
-        description: "定制你的 Agent 工作台，配置专家团，让长程任务从首次指令走到可审查交付。",
+        title: "OpenCorvus | 开源多 Agent Harness 平台",
+        description:
+          "开箱即用的完整多 Agent Harness：Agent 循环、工具、权限、记忆、持久化编排与专家团目录首次启动即可运行，每一层都可以替换。",
       }
     : {
-        title: "OpenCorvus | Engineering infrastructure for coding agents",
-        description: "Customize your Agent Workbench, configure Expert Squads, and carry long-horizon work from first instruction to reviewable delivery.",
+        title: "OpenCorvus | Open-source multi-agent harness platform",
+        description:
+          "A complete multi-agent harness that works out of the box — agent loop, tools, permissions, memory, durable orchestration, and an inspectable expert-squad catalog — with every layer yours to rebuild.",
       }
 ---
 
@@ -56,16 +59,16 @@ const metadata =
         <p>{content.hero.description}</p>
         <div class="hero-actions">
           <a class="primary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.primary}</a>
-          <a class="secondary-action" href={publicPath(locale, "/market/")}>{content.hero.secondary}</a>
+          <a class="secondary-action" href={repositoryHref}>{content.hero.secondary}</a>
         </div>
       </div>
 
-      <aside class="hero-principles" aria-label={content.proof.label}>
-        <p class="eyebrow">{content.proof.eyebrow}</p>
+      <aside class="hero-principles" aria-label={content.runtime.label}>
+        <p class="eyebrow">{content.runtime.eyebrow}</p>
         <div class="hero-principle-list">
-          {content.proof.items.map(([title, description], index) => (
+          {content.runtime.items.map(([value, title, description]) => (
             <article>
-              <span>0{index + 1}</span>
+              <b>{value}</b>
               <div><h2>{title}</h2><p>{description}</p></div>
             </article>
           ))}
@@ -73,6 +76,37 @@ const metadata =
       </aside>
 
       <p class="hero-boundary">{content.hero.boundary}</p>
+    </section>
+
+    <section class="landing-band" aria-labelledby="layers-title">
+      <div class="landing-band-header">
+        <div>
+          <p class="eyebrow">{content.layers.eyebrow}</p>
+          <h2 id="layers-title" class="section-heading">{content.layers.title}</h2>
+        </div>
+        <p class="section-lead">{content.layers.description}</p>
+      </div>
+      <div class="layer-table-scroll">
+      <table class="layer-table">
+        <thead>
+          <tr>
+            <th scope="col">{content.layers.layerLabel}</th>
+            <th scope="col">{content.layers.shipsLabel}</th>
+            <th scope="col">{content.layers.swapLabel}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {content.layers.items.map((item) => (
+            <tr>
+              <th scope="row"><span>{item.index}</span>{item.name}</th>
+              <td>{item.ships}</td>
+              <td class="layer-swap">{item.swap}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
+      <p class="layer-footer">{content.layers.footer}</p>
     </section>
 
     <section class="harness-showcase" aria-labelledby="harness-showcase-title">
@@ -123,27 +157,6 @@ const metadata =
           </div>
         ))}
       </figure>
-    </section>
-
-    <section class="landing-band" aria-labelledby="workbench-title">
-      <div class="landing-band-header">
-        <div>
-          <p class="eyebrow">{content.workbench.eyebrow}</p>
-          <h2 id="workbench-title" class="section-heading">{content.workbench.title}</h2>
-        </div>
-        <p class="section-lead">{content.workbench.description}</p>
-      </div>
-      <div class="work-mode-grid">
-        {content.workbench.items.map((item) => (
-          <article>
-            <span class="mode-index">{item.index}</span>
-            <p class="mode-use">{item.use}</p>
-            <h3>{item.name}</h3>
-            <p>{item.description}</p>
-            <strong>{item.output}</strong>
-          </article>
-        ))}
-      </div>
     </section>
 
     <section class="landing-band" aria-labelledby="expert-squads-title">
@@ -294,17 +307,22 @@ const metadata =
 
   .hero-principle-list article {
     display: grid;
-    grid-template-columns: 34px minmax(0, 1fr);
-    gap: 16px;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 18px;
     align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid var(--ink);
   }
 
-  .hero-principle-list article > span {
+  .hero-principle-list article > b {
     align-self: start;
     color: var(--cobalt);
-    font: 500 10px/1.4 var(--mono);
+    font-family: var(--display);
+    font-size: 42px;
+    font-weight: 760;
+    line-height: 0.88;
+    letter-spacing: -0.055em;
+    font-variant-numeric: tabular-nums;
   }
 
   .public-landing .hero-principle-list h2 {
@@ -465,63 +483,77 @@ const metadata =
     font: 400 11px/1.45 var(--mono);
   }
 
-  .work-mode-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  .layer-table-scroll {
+    overflow-x: auto;
+  }
+
+  .layer-table {
+    width: 100%;
+    border-collapse: collapse;
     border-top: 2px solid var(--ink);
-    border-left: 2px solid var(--ink);
+    text-align: left;
   }
 
-  .work-mode-grid article {
-    min-height: 330px;
-    padding: 26px;
-    border-right: 2px solid var(--ink);
+  .public-landing .layer-table thead th {
+    padding: 12px 20px 12px 0;
     border-bottom: 2px solid var(--ink);
-    background: var(--paper-raised);
-  }
-
-  .work-mode-grid article:nth-child(2) {
-    background: var(--cobalt-wash);
-  }
-
-  .mode-index,
-  .mode-use {
-    font-family: var(--mono);
-    font-size: 11px;
-  }
-
-  .mode-index {
-    color: var(--cobalt);
-  }
-
-  .mode-use {
-    min-height: 36px;
-    margin: 36px 0 0;
-    color: var(--muted);
+    color: var(--muted) !important;
+    font: 700 10px/1.2 var(--mono) !important;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  .public-landing .work-mode-grid h3 {
-    margin: 8px 0 18px;
-    font-family: var(--display);
+  .layer-table tbody th,
+  .layer-table tbody td {
+    padding: 20px 20px 20px 0;
+    border-bottom: 1px solid var(--ink);
+    vertical-align: baseline;
+  }
+
+  .public-landing .layer-table tbody th {
+    width: 21%;
     color: var(--ink) !important;
-    font-size: 42px !important;
+    font-family: var(--display);
+    font-size: 23px !important;
     font-weight: 700 !important;
-    line-height: 1 !important;
-    letter-spacing: -0.055em;
+    line-height: 1.15 !important;
+    letter-spacing: -0.035em;
   }
 
-  .work-mode-grid article > p:not(.mode-use) {
-    min-height: 92px;
-    margin: 0 0 24px;
-    color: var(--muted);
-  }
-
-  .work-mode-grid strong {
+  .layer-table tbody th span {
     display: block;
-    padding-top: 16px;
-    border-top: 1px solid var(--ink);
+    margin-bottom: 6px;
+    color: var(--cobalt);
+    font: 500 10px/1.4 var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  .layer-table tbody td {
+    width: 46%;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .layer-table td.layer-swap {
+    width: 33%;
+    padding-right: 0;
+    color: var(--cobalt-deep);
+    font: 400 12px/1.5 var(--mono);
+  }
+
+  .layer-table tbody tr:hover {
+    background: var(--cobalt-wash);
+  }
+
+  .layer-footer {
+    margin: 26px 0 0;
+    padding: 18px 22px;
+    border-left: 8px solid var(--cobalt);
+    background: var(--cobalt-wash);
+    color: #353b56;
     font-size: 13px;
+    line-height: 1.5;
   }
 
   .squad-story-grid {
@@ -675,29 +707,8 @@ const metadata =
       white-space: normal;
     }
 
-    .public-landing .proof-strip,
-    .public-landing .work-mode-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .public-landing .proof-strip article,
-    .public-landing .proof-strip article:last-child {
-      min-height: 0;
-      border-right: 0;
-      border-bottom: 1px solid var(--ink);
-    }
-
-    .work-mode-grid article {
-      min-height: 0;
-    }
-
-    .work-mode-grid article > p:not(.mode-use),
-    .mode-use {
-      min-height: 0;
-    }
-
-    .mode-use {
-      margin-top: 24px;
+    .layer-table {
+      min-width: 720px;
     }
 
     .public-landing .squad-story-grid,

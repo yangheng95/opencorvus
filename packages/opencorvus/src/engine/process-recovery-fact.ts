@@ -77,10 +77,30 @@ export function resolveProcessRecoveryInputAuthority(input: {
   return input.preparedWorkerInputMessageID ?? input.lifecycleInputMessageID
 }
 
-export function parseProcessRecoveryFactContext(input: unknown, factID: string): ProcessRecoveryFactContext {
+/** Shape written by every shutdown handoff before the v1 context existed.
+ * These rows are immutable audit facts in real databases; a reader that
+ * refuses them refuses to render every Task that ever survived a shutdown. */
+const LegacyShutdownHandoffContext = z
+  .object({ owned_session_ids: z.string().min(1).array() })
+  .strict()
+
+export type ProcessRecoveryFactContextCompat =
+  | { kind: "v1"; context: ProcessRecoveryFactContext }
+  | { kind: "legacy_shutdown_handoff"; ownedSessionIDs: readonly string[] }
+
+/**
+ * Parse a recovery fact context, current or historical.
+ *
+ * The v1 schema shipped as a reader-side contract with no writer producing it,
+ * so every real database holds only the legacy shape — and the strict parse
+ * threw, which propagated out of Task description and returned HTTP 500 for
+ * the whole conversation view. Immutable history can never be re-written to
+ * satisfy a newer reader; the reader carries the compatibility.
+ */
+export function parseProcessRecoveryFactContext(input: unknown, factID: string): ProcessRecoveryFactContextCompat {
   const parsed = ProcessRecoveryFactContext.safeParse(input)
-  if (!parsed.success) {
-    throw new Error(`Process recovery fact ${factID} has invalid context: ${parsed.error.message}`)
-  }
-  return parsed.data
+  if (parsed.success) return { kind: "v1", context: parsed.data }
+  const legacy = LegacyShutdownHandoffContext.safeParse(input)
+  if (legacy.success) return { kind: "legacy_shutdown_handoff", ownedSessionIDs: legacy.data.owned_session_ids }
+  throw new Error(`Process recovery fact ${factID} has invalid context: ${parsed.error.message}`)
 }

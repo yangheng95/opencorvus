@@ -391,8 +391,20 @@ describe("native command validation", () => {
       { kind: "clipboard.writeText", text: "debug bundle" },
       { kind: "settings.save", payload: persistedSettings },
       { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace" },
+      { kind: "workspace.openProjectEditor", editor: "cursor", path: "D:/workspace/a.ts", line: 42 },
+      { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace/a.ts", line: 42, column: 7 },
     ] satisfies NativeCommand[]
     for (const command of valid) expect(isNativeCommand(command)).toBe(true)
+  })
+
+  test("rejects an editor location that no launcher could honour", () => {
+    const editorCommand = { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace/a.ts" }
+    expect(isNativeCommand({ ...editorCommand, line: 0 })).toBe(false)
+    expect(isNativeCommand({ ...editorCommand, line: -3 })).toBe(false)
+    expect(isNativeCommand({ ...editorCommand, line: 12.5 })).toBe(false)
+    expect(isNativeCommand({ ...editorCommand, line: "12" })).toBe(false)
+    // A column is meaningless without the line it sits on.
+    expect(isNativeCommand({ ...editorCommand, column: 7 })).toBe(false)
   })
 })
 

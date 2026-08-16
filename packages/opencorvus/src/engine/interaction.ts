@@ -12,12 +12,16 @@ import {
   type EngineInteractionStatus,
 } from "./engine.sql"
 import { insertEngineInteractionRequest, resolveEngineInteractionRequest } from "./interaction-request"
+import { requestTaskControlScanInBackground } from "./task-root-ingress-delivery"
 import { findInteractionByExternal, projectInteractionRowInTransaction, type InteractionRow } from "./store"
 import { taskIDForSession } from "./task-session-lineage"
 import z from "zod"
 import { ProjectMemory } from "@/memory/project-memory"
 import type { InteractionUserInput } from "@/memory/interaction-user-input"
 import { PermissionLedgerTable } from "@/permission/permission.sql"
+import { Log } from "@/util/log"
+
+const log = Log.create({ service: "engine.interaction" })
 
 export namespace EngineInteraction {
   export function subscribe() {
@@ -44,10 +48,24 @@ export namespace EngineInteraction {
     })
   }
 
+  /** Interactions inserted directly by the Task-root control plane rather than
+   * registered with the Question subsystem. Their external identity is a
+   * durable locator, not a Question ID, and they are answered through the
+   * Task API's activity-reconciliation branch — restoring them as Questions
+   * would reject the locator and fail the whole recovery pass. */
+  function isDirectControlPlaneGate(interaction: InteractionRow): boolean {
+    const payload = interaction.payload as { activity_reconciliation?: unknown } | null
+    return Boolean(payload && typeof payload === "object" && payload.activity_reconciliation)
+  }
+
   export async function reconcileRecoveredPendingWaiters(input: { projectID: string; timeResolved: number }): Promise<{
     abandoned: Array<{ interactionID: string; externalID: string; type: "question" | "permission" }>
     retainedRecoverableQuestions: Array<{ interactionID: string; externalID: string; actionID?: string }>
     retainedRecoverablePermissions: Array<{ interactionID: string; externalID: string }>
+    retainedControlPlaneGates: Array<{ interactionID: string; externalID: string }>
+    /** Rows this pass could not reconcile. They stay pending and are reported;
+     * one unreconcilable row must never keep the whole project from opening. */
+    unreconciled: Array<{ interactionID: string; externalID: string; error: string }>
   }> {
     if (input.projectID !== Instance.project.id) {
       throw new Error(
@@ -74,49 +92,84 @@ export namespace EngineInteraction {
       actionID?: string
     }> = []
     const retainedRecoverablePermissions: Array<{ interactionID: string; externalID: string }> = []
+    const retainedControlPlaneGates: Array<{ interactionID: string; externalID: string }> = []
+    const unreconciled: Array<{ interactionID: string; externalID: string; error: string }> = []
 
     for (const interaction of pending) {
-      if (!interaction.session_id) {
-        throw new Error(`Pending interaction ${interaction.id} has no Session identity during project recovery`)
-      }
-      if (interaction.request_type === "question") {
-        const payload = interaction.payload as {
-          questions?: unknown
-          tool?: unknown
-          automatic?: unknown
-          expiry?: unknown
+      try {
+        if (!interaction.session_id) {
+          throw new Error(`Pending interaction ${interaction.id} has no Session identity during project recovery`)
         }
-        await Question.restore(Question.Request.parse({
-          id: interaction.external_id,
-          sessionID: interaction.session_id,
-          timeCreated: interaction.time_created,
-          questions: payload.questions,
-          ...(payload.tool ? { tool: payload.tool } : {}),
-          ...(payload.automatic ? { automatic: payload.automatic } : {}),
-          ...(payload.expiry ? { expiry: payload.expiry } : {}),
-        }))
-        const recoverableAction = await recoverableAgentCoordinationQuestion(interaction)
-        if (recoverableAction) {
-          retainedRecoverableQuestions.push({
+        if (isDirectControlPlaneGate(interaction)) {
+          retainedControlPlaneGates.push({
             interactionID: interaction.id,
             externalID: interaction.external_id,
-            actionID: recoverableAction,
           })
           continue
         }
-        retainedRecoverableQuestions.push({
+        if (interaction.request_type === "question") {
+          const payload = interaction.payload as {
+            questions?: unknown
+            tool?: unknown
+            automatic?: unknown
+            expiry?: unknown
+          }
+          await Question.restore(Question.Request.parse({
+            id: interaction.external_id,
+            sessionID: interaction.session_id,
+            timeCreated: interaction.time_created,
+            questions: payload.questions,
+            ...(payload.tool ? { tool: payload.tool } : {}),
+            ...(payload.automatic ? { automatic: payload.automatic } : {}),
+            ...(payload.expiry ? { expiry: payload.expiry } : {}),
+          }))
+          const recoverableAction = await recoverableAgentCoordinationQuestion(interaction)
+          if (recoverableAction) {
+            retainedRecoverableQuestions.push({
+              interactionID: interaction.id,
+              externalID: interaction.external_id,
+              actionID: recoverableAction,
+            })
+            continue
+          }
+          retainedRecoverableQuestions.push({
+            interactionID: interaction.id,
+            externalID: interaction.external_id,
+          })
+          continue
+        }
+        if (interaction.request_type === "permission") {
+          retainedRecoverablePermissions.push({ interactionID: interaction.id, externalID: interaction.external_id })
+          continue
+        }
+        throw new Error(`Pending interaction ${interaction.id} has unsupported type ${interaction.request_type}`)
+      } catch (error) {
+        // The row keeps its pending fact: this pass has no proof of any
+        // terminal outcome, and inventing one would discard a real waiter.
+        // It is reported instead, so a single unreconcilable row degrades one
+        // Task rather than making the project permanently unopenable.
+        const message = error instanceof Error ? error.message : String(error)
+        unreconciled.push({
           interactionID: interaction.id,
           externalID: interaction.external_id,
+          error: message,
         })
-        continue
+        log.error("pending interaction could not be reconciled during project recovery", {
+          interactionID: interaction.id,
+          externalID: interaction.external_id,
+          requestType: interaction.request_type ?? "unknown",
+          taskID: interaction.task_id,
+          error: message,
+        })
       }
-      if (interaction.request_type === "permission") {
-        retainedRecoverablePermissions.push({ interactionID: interaction.id, externalID: interaction.external_id })
-        continue
-      }
-      throw new Error(`Pending interaction ${interaction.id} has unsupported type ${interaction.request_type}`)
     }
-    return { abandoned, retainedRecoverableQuestions, retainedRecoverablePermissions }
+    return {
+      abandoned,
+      retainedRecoverableQuestions,
+      retainedRecoverablePermissions,
+      retainedControlPlaneGates,
+      unreconciled,
+    }
   }
 }
 
@@ -143,6 +196,7 @@ async function abandonPendingInteraction(input: RecoveredAbandonment, requestTyp
     timeResolved: input.timeResolved,
     sourceOccurrenceID,
   }))
+  requestTaskControlScanInBackground(interaction.task_id, `interaction.${requestType}.abandoned`)
 }
 
 function requireInteractionSession(
@@ -410,6 +464,10 @@ async function resolveInteraction(
       })
     }
   })
+  // A resolved Interaction turns its ingress from `waiting` into `ready`, but
+  // the reducer only observes that inside a scan. Without this edge the Task
+  // waits for the heartbeat — or, before the heartbeat existed, forever.
+  requestTaskControlScanInBackground(interaction.task_id, `interaction.${status}`)
 }
 
 function assertResolvedReplay(interaction: InteractionRow, userInput?: InteractionUserInput) {

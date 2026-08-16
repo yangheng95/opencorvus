@@ -1292,20 +1292,37 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
       if (!priorTurn || priorTurn.workflow_occurrence_id !== dispatchTurn.workflow_occurrence_id) {
         throw new AgentRunError(
           kind,
-          `existing session ${session.id} continuation occurrence does not match its descriptor`,
+          `existing session ${session.id} continuation occurrence does not match its descriptor: ` +
+            `expected ${priorTurn?.workflow_occurrence_id ?? "a recorded descriptor"}, ` +
+            `received ${dispatchTurn.workflow_occurrence_id}`,
         )
       }
       if (dispatchTurn.child_session_id !== session.id) {
-        throw new AgentRunError(kind, `existing session ${session.id} continuation child authority does not match`)
+        throw new AgentRunError(
+          kind,
+          `existing session ${session.id} continuation child authority does not match: ` +
+            `expected ${session.id}, received ${dispatchTurn.child_session_id}`,
+        )
       }
+      // Naming both identities is load-bearing: the caller chooses this source
+      // and cannot correct a stale choice from a bare mismatch, so an opaque
+      // message turns one wrong continuation into an unbounded retry loop.
       if (dispatchTurn.source_dispatch_id !== priorTurn.current_dispatch_id) {
-        throw new AgentRunError(kind, `existing session ${session.id} continuation source dispatch does not match`)
+        throw new AgentRunError(
+          kind,
+          `existing session ${session.id} continuation source dispatch does not match: ` +
+            `expected ${priorTurn.current_dispatch_id}, received ${dispatchTurn.source_dispatch_id}`,
+        )
       }
       if (JSON.stringify(priorTurn.workflow_binding) !== JSON.stringify(dispatchTurn.workflow_binding)) {
         throw new AgentRunError(kind, `existing session ${session.id} continuation workflow binding does not match`)
       }
       if (priorTurn.workflow_node_id !== dispatchTurn.workflow_node_id) {
-        throw new AgentRunError(kind, `existing session ${session.id} continuation workflow node does not match`)
+        throw new AgentRunError(
+          kind,
+          `existing session ${session.id} continuation workflow node does not match: ` +
+            `expected ${priorTurn.workflow_node_id}, received ${dispatchTurn.workflow_node_id}`,
+        )
       }
       if (JSON.stringify(priorTurn.task_authority) !== JSON.stringify(dispatchTurn.task_authority)) {
         throw new AgentRunError(

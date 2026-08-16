@@ -16,6 +16,7 @@ import { boardStore, setBoardStore, activeTaskID, clearTasksForMissingDirectory 
 import { abortChatRequest } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
+import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-reference"
 import { AppLog } from "../utils/log"
 import { t } from "../utils/i18n"
 import { apiJson, ApiError, configure as configureApi, serverSettledRequest } from "./api"
@@ -880,7 +881,11 @@ export async function openDirectoryInEditor(editor: ProjectEditorID, target?: st
  * Open a project path (directory or file) in the selected IDE.
  * Relative paths are resolved against the active project directory.
  */
-export async function openProjectPathInEditor(editor: ProjectEditorID, target?: string): Promise<void> {
+export async function openProjectPathInEditor(
+  editor: ProjectEditorID,
+  target?: string,
+  location?: Partial<FileReferenceLocation>,
+): Promise<void> {
   const rawTarget = typeof target === "string" ? target.trim() : ""
   if (!rawTarget) return
   const baseDirectory = activeDirectory()
@@ -891,6 +896,8 @@ export async function openProjectPathInEditor(editor: ProjectEditorID, target?: 
       kind: "workspace.openProjectEditor",
       editor,
       path: resolvedTarget,
+      ...(location?.line === undefined ? {} : { line: location.line }),
+      ...(location?.line === undefined || location.column === undefined ? {} : { column: location.column }),
     })
   } catch (e) {
     const label = PROJECT_EDITORS.find((item) => item.id === editor)?.label ?? editor
@@ -906,7 +913,7 @@ export async function openProjectPathInEditor(editor: ProjectEditorID, target?: 
   }
 }
 
-export async function openPathInSelectedEditor(target: string): Promise<void> {
+export async function openPathInSelectedEditor(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
   const path = editorTargetPath(target)
   if (!path) {
     if (typeof target === "string" && target.trim()) {
@@ -918,13 +925,13 @@ export async function openPathInSelectedEditor(target: string): Promise<void> {
     return
   }
   if (!getHostTransport().capabilities.nativeCommands["workspace.openProjectEditor"]) {
-    await openProjectPathInWorkbench(target)
+    await openProjectPathInWorkbench(target, location)
     return
   }
-  await openDirectoryInEditor(settingsStore.projectEditor, path)
+  await openProjectPathInEditor(settingsStore.projectEditor, path, location)
 }
 
-export async function openProjectFile(target: string): Promise<void> {
+export async function openProjectFile(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
   const path = editorTargetPath(target)
   if (!path) {
     if (typeof target === "string" && target.trim()) {
@@ -935,23 +942,26 @@ export async function openProjectFile(target: string): Promise<void> {
     }
     return
   }
-  if (!getHostTransport().capabilities.nativeCommands["open-path"]) {
-    await openProjectPathInWorkbench(target)
+  // A cited line has no meaning to the OS file association, so a located
+  // reference goes to the workbench, which can actually honour it.
+  if (location?.line !== undefined || !getHostTransport().capabilities.nativeCommands["open-path"]) {
+    await openProjectPathInWorkbench(target, location)
     return
   }
   await nativeOpen(path)
 }
 
-async function openProjectPathInWorkbench(target: string): Promise<void> {
+async function openProjectPathInWorkbench(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
   const directory = activeDirectory().trim()
   const rawTarget = typeof target === "string" ? target.trim() : ""
   if (!directory || !rawTarget) return
   const { openFileEditor, openSourceFileEditor } = await import("./file-workbench")
+  const range = fileReferenceRange(location)
   if (isAbsoluteEditorPath(rawTarget)) {
-    await openSourceFileEditor(rawTarget, { directory })
+    await openSourceFileEditor(rawTarget, { directory }, range)
     return
   }
-  await openFileEditor(rawTarget, { directory })
+  await openFileEditor(rawTarget, { directory }, range)
 }
 
 function isAbsoluteEditorPath(path: string): boolean {

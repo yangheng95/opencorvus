@@ -24,6 +24,7 @@ import { TerminalProfile } from "@/system-terminal/profile"
 import { ensureMissionCallerReceiptBridge } from "@/mission/caller-receipt"
 import { ProjectOpenLifecycle } from "./open-lifecycle"
 import {
+  configureTaskCancellationReconciler,
   configureTaskIngressRunner,
   reconcileTaskControlPlane,
 } from "@/engine/task-root-ingress-delivery"
@@ -103,6 +104,12 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   // Interaction subscribers own the Question/Permission → Interaction
   // locator materialization and therefore must be registered before replay.
   EngineService.init()
+  // The control-plane scan re-attempts a stalled cancellation on every pass
+  // over a `cancelling` Task, so convergence no longer depends on reaching the
+  // bootstrap stage below.
+  configureTaskCancellationReconciler(async (taskID) => {
+    await EngineService.reconcilePendingTaskCancellation(taskID)
+  })
   Bus.resumeDurablePublications()
   await ProjectOpenLifecycle.stage("build-observation.reconcile-cleanup", lifecycleContext, () =>
     reconcileBuildObservationCleanups({ projectID: Instance.project.id }),
@@ -120,14 +127,44 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   await ProjectOpenLifecycle.stage("permission.reconcile-interrupted-attempts", lifecycleContext, async () => {
     PermissionAuthority.reconcileInterruptedAttempts()
   })
+  // Recovery stays inside project open. Detaching it would let a scan outlive
+  // the project it reads: disposal cancels driver timers but does not join an
+  // in-flight scan, so a detached startup pass can reach a removed project
+  // directory. Startup Tasks are recovered concurrently rather than in
+  // sequence, which is what made this stage slow; the remaining cost is that
+  // one recovered Orchestrator Turn still delays open.
   await ProjectOpenLifecycle.stage("task-control.reconcile", lifecycleContext, () =>
     reconcileTaskControlPlane().then(() => undefined),
   )
-  await ProjectOpenLifecycle.stage("terminal-profile.ensure-default", lifecycleContext, () =>
-    TerminalProfile.ensureProjectDefaultProfile(),
-  )
+  // The terminal profile and the managed channel runtime are optional
+  // subsystems: each protects a real invariant by refusing to start on bad
+  // config, but neither is required to open a Project. Letting either failure
+  // propagate would mean an uninstalled shell or a broken channel adapter
+  // makes the whole Project permanently unopenable.
+  // The terminal profile and the managed channel runtime are optional
+  // subsystems: each protects a real invariant by refusing to start on bad
+  // config, but neither is required to open a Project. Letting either failure
+  // propagate would mean an uninstalled shell or a broken channel adapter
+  // makes the whole Project permanently unopenable.
+  await ProjectOpenLifecycle.stage("terminal-profile.ensure-default", lifecycleContext, async () => {
+    try {
+      await TerminalProfile.ensureProjectDefaultProfile()
+    } catch (error) {
+      Log.Default.error("default terminal profile unavailable; Project opens without one", {
+        ...lifecycleContext,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
+  })
   await ProjectOpenLifecycle.stage("channel-supervisor.sync", lifecycleContext, async () => {
-    await ChannelSupervisor.sync(await Config.get())
+    try {
+      await ChannelSupervisor.sync(await Config.get())
+    } catch (error) {
+      Log.Default.error("managed channel runtime sync failed; Project opens without it", {
+        ...lifecycleContext,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
   })
   Bus.subscribe(Command.Event.Executed, async (payload) => {
     if (payload.properties.name === Command.Default.INIT) {

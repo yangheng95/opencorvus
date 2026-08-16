@@ -100,7 +100,7 @@ import {
 } from "@/session/runtime-contract"
 import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
-import { bindToolExecutionMode, toolExecutionModeOf } from "@/tool/execution-mode"
+import { bindToolDecisionDeclaration, bindToolExecutionMode, toolExecutionModeOf } from "@/tool/execution-mode"
 import { and, Database, eq, NotFoundError } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
@@ -176,7 +176,7 @@ import {
 } from "./tool-execution-context"
 import { createVisualQaStageDispatcher } from "./visual-qa-stage"
 import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
-import { ORCHESTRATOR_DECISION_TOOL_NAMES } from "./decision-tool-names"
+import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect } from "./decision-tool-names"
 import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
 import {
   DispatchTurnSchema,
@@ -2706,9 +2706,27 @@ export function createOrchestratorTools(input: {
     manage_task: manageTaskTool,
   }
   for (const decisionToolName of ORCHESTRATOR_DECISION_TOOL_NAMES) {
-    if (!(decisionToolName in publicTools)) {
+    const decisionTool = publicTools[decisionToolName]
+    if (!decisionTool) {
       throw new Error(`Orchestrator decision Tool ${decisionToolName} is absent from the public Tool surface`)
     }
+    // The reduction accepts a `dispatch_agent` fan-out or exactly one other
+    // decision per assistant turn; a mixed set is an absorbing integrity
+    // conflict. Declaring the contract here lets the turn coordinator refuse
+    // the combination while it is still only a call.
+    bindToolDecisionDeclaration(decisionTool as object, {
+      command: decisionToolName,
+      commits: (args) => {
+        try {
+          return (
+            orchestratorDecisionToolCompletionEffect({ tool: decisionToolName, stateInput: args }) !==
+            "requires_followup_decision"
+          )
+        } catch {
+          return false
+        }
+      },
+    })
   }
   for (const hidden of [...DispatchAdapterContractRegistry.ids, ...MANAGE_TASK_ACTION_NAMES]) {
     delete publicTools[hidden]
