@@ -64,6 +64,8 @@ export async function awaitSessionPromptFinishedInScope(input: {
   inactivityTimeoutMs?: number
   signal?: AbortSignal
   projectDeletionAdmission?: ProjectDeletionAdmissionSource
+  /** Retention controls preserve historical lifecycle facts instead of making status publication a veto. */
+  publishTerminalStatus?: boolean
 }): Promise<boolean> {
   input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.finish"
@@ -80,15 +82,17 @@ export async function awaitSessionPromptFinishedInScope(input: {
     })
     if (receipt) {
       input.signal?.throwIfAborted()
-      await publishSessionStatus(
-        input.session,
-        { type: "terminal", reason: "aborted", error: receipt.error.message },
-        {
-          promptGenerationOwner: receipt.owner,
-          signal: input.signal,
-          projectDeletionAdmission: resolveProjectDeletionAdmission(input.projectDeletionAdmission),
-        },
-      )
+      if (input.publishTerminalStatus !== false) {
+        await publishSessionStatus(
+          input.session,
+          { type: "terminal", reason: "aborted", error: receipt.error.message },
+          {
+            promptGenerationOwner: receipt.owner,
+            signal: input.signal,
+            projectDeletionAdmission: resolveProjectDeletionAdmission(input.projectDeletionAdmission),
+          },
+        )
+      }
       input.signal?.throwIfAborted()
       SessionPromptState.clearCancellationReceipt(input.session.id, receipt.owner)
     }
@@ -167,6 +171,7 @@ export async function assertSessionPromptSubtreeFinished(input: {
   inactivityTimeoutMs?: number
   signal?: AbortSignal
   projectDeletionAdmission?: ProjectDeletionAdmissionSource
+  publishTerminalStatus?: boolean
 }): Promise<void> {
   input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.cancel"
@@ -180,6 +185,7 @@ export async function assertSessionPromptSubtreeFinished(input: {
         inactivityTimeoutMs: input.inactivityTimeoutMs,
         signal: input.signal,
         projectDeletionAdmission: input.projectDeletionAdmission,
+        publishTerminalStatus: input.publishTerminalStatus,
       }),
     ),
   )

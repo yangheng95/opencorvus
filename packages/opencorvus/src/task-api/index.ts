@@ -191,12 +191,8 @@ import {
   pendingTaskCancellationProjection,
   taskCancellationProjection,
 } from "@/engine/cancellation-projection"
+import { requestTaskAgentLifecycleCancellation } from "@/engine/task-agent-lifecycle"
 import {
-  publishTaskAgentCancellationStatusesAfterSettlement,
-  requestTaskAgentLifecycleCancellation,
-} from "@/engine/task-agent-lifecycle"
-import {
-  cancelPendingAgentCoordinationRequestsForTask,
   createOperatorSteerCoordinationRequest,
   resolveAgentCoordinationSessionLineage,
 } from "@/engine/agent-coordination"
@@ -515,12 +511,8 @@ async function settleTaskSessionWork(
     handle: input.handle,
     inactivityTimeoutMs: options?.promptSettleInactivityMs,
     projectDeletionAdmission: options?.projectDeletionAdmission,
+    publishTerminalStatus: false,
   })
-  await publishTaskAgentCancellationStatusesAfterSettlement({
-    task,
-    reason: input.reason,
-  })
-  await cancelPendingAgentCoordinationRequestsForTask({ taskID: task.id, reason: input.reason })
   return lifecycle.sessionIDs
 }
 
@@ -529,12 +521,6 @@ function deleteSettledSessionTreeRows(
   input: { sessionID: string; projectID: string; expectedSessionIDs: string[] },
 ): void {
   Session.deleteExactTreeInProject(tx, input)
-}
-
-async function cancelPendingPermissionsForSessions(sessionIDs: readonly string[], reason: string): Promise<void> {
-  for (const sessionID of sessionIDs) {
-    await PermissionAuthority.cancelPendingForSession(sessionID, reason)
-  }
 }
 
 function appendTaskDeletedBoundaryInTransaction(db: Database.TxOrDb, task: TaskRow): void {
@@ -2320,7 +2306,6 @@ export namespace EngineService {
         },
         options,
       )
-      await cancelPendingPermissionsForSessions(settledSessionIDs, "Task deleted before the Tool invocation ran")
       if (options?.projectDeletionAdmission) return true
       // Explicit Task deletion is an immutable tombstone boundary. The Task
       // creation input, Session/Message graph, effects, lifecycle, interactions,
@@ -2943,56 +2928,24 @@ export namespace EngineService {
         inactivityTimeoutMs: promptSettleInactivityMs,
         signal: convergenceOwner.signal,
         projectDeletionAdmission: () => options.projectDeletionAdmission,
+        publishTerminalStatus: false,
       })
       logConvergenceStage("session_prompts_settled")
-      const { SessionLoop } = await import("@/session/loop")
-      let interruptedAssistantSessions = 0
-      await provideActiveTaskRootSessionInstance(
-        task,
-        async () => {
-          for (const sessionID of lifecycle.sessionIDs) {
-            convergenceOwner.assertActive()
-            if (sessionID === task.session_id) continue
-            if (await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID, convergenceOwner.signal)) {
-              interruptedAssistantSessions += 1
-            }
-          }
-        },
-        convergenceOwner.signal,
-        options.projectDeletionAdmission,
-      )
-      logConvergenceStage("incomplete_assistants_terminalized")
       convergenceOwner.assertActive()
-      const convergedAgentSessionIDs = await publishTaskAgentCancellationStatusesAfterSettlement({
-        task,
-        reason: "task cancelled",
-        signal: convergenceOwner.signal,
-      })
-      logConvergenceStage("agent_lifecycle_published")
-      convergenceOwner.assertActive()
-      const pendingCoordinationRequestsCancelled = await cancelPendingAgentCoordinationRequestsForTask({
-        taskID,
-        reason: "task cancelled",
-        signal: convergenceOwner.signal,
-      })
-      logConvergenceStage("coordination_cancelled")
       decisions.append({
         phase: "cancel",
-        key: "agent_lifecycle_report",
+        key: "physical_lifecycle_report",
         value: JSON.stringify({
           taskID,
           cancellationRequestEventID: cancellationRequest.id,
           sessionIDs: lifecycle.sessionIDs,
           promptCancellations: lifecycle.cancelledSessions.map((session) => session.id),
-          convergedAgentSessionIDs,
-          pendingCoordinationRequestsCancelled,
-          interruptedAssistantSessions,
           cancellationFailures: lifecycle.cancellationFailures.map((error) =>
             error instanceof Error ? error.message : String(error),
           ),
         }),
         reason:
-          "Task cancellation collected and cancelled every task-owned agent lifecycle handle before terminal status.",
+          "Task cancellation proved every task-owned physical prompt handle stopped before terminal status; historical lifecycle and coordination facts are not retention gates.",
       })
       convergenceOwner.assertActive()
       if (beforeLateCancellationStageForTest) {
@@ -3119,6 +3072,7 @@ export namespace EngineService {
       sessions: requested.cancelledSessions,
       failures: requested.failures,
       handle: "EngineService.deleteSession",
+      publishTerminalStatus: false,
     })
     await Instance.tryProvideActive({
       directory: root.directory,
@@ -3143,7 +3097,6 @@ export namespace EngineService {
         await awaitTaskRootIngressSettled(item, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
       }
     }
-    await cancelPendingPermissionsForSessions(ids, "Session tree deleted before the Tool invocation ran")
     if (tasksForDelete.length > 0 || root.kind === "mission") {
       await settleTaskCleanupOwners(tasksForDelete.map((task) => ({
         taskID: task.id,

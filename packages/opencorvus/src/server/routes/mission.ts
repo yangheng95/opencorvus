@@ -64,7 +64,6 @@ import {
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
 import { closeMissionExecutionOperation, openMissionExecutionWithWake } from "@/mission/execution-closure"
-import { drainSchedulerMessagesForProject } from "@/protocol/scheduler-message"
 
 function newMissionID(): string {
   return randomBytes(8).toString("hex")
@@ -245,16 +244,10 @@ async function closeMissionExecution(
         await awaitSessionPromptFinishedInScope({
           session,
           handle,
+          publishTerminalStatus: handle === "mission.abort",
         })
       } catch (error) {
         failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-      }
-      try {
-        await drainSchedulerMessagesForProject()
-      } catch (error) {
-        failures.push(
-          `mission ${session.missionID} scheduler inbox: ${error instanceof Error ? error.message : String(error)}`,
-        )
       }
       if (failures.length > 0) {
         throw createTaskCancellationIncomplete({

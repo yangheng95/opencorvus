@@ -92,6 +92,7 @@ async function closeRightSidebarConversationSession(
   handle: string,
   source: "right_sidebar.abort" | "right_sidebar.archive",
   requestID: string,
+  publishTerminalStatus: boolean,
 ): Promise<void> {
   const reason = `${experienceLabel(experience)} stopped`
   const origin = createExecutionCancellationOrigin({
@@ -103,7 +104,8 @@ async function closeRightSidebarConversationSession(
     targetSessionID: session.id,
   })
   cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
-  await awaitSessionPromptFinishedInScope({ session, handle })
+  await awaitSessionPromptFinishedInScope({ session, handle, publishTerminalStatus: false })
+  if (!publishTerminalStatus) return
   const occurrence = SessionStatus.executionOccurrence(session.id)
   if (occurrence && SessionStatus.getExecution(session.id, occurrence.inputMessageID).type !== "terminal") {
     await publishSessionStatus(
@@ -292,6 +294,7 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
             `${operation}.session.setArchived`,
             "right_sidebar.archive",
             resolveRequestID(c),
+            false,
           )
         }
         return c.json({
@@ -330,6 +333,7 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
           `${operation}.session.abort`,
           "right_sidebar.abort",
           resolveRequestID(c),
+          true,
         )
         return c.json(true)
       },

@@ -580,14 +580,10 @@ describe("Project directory integrity", () => {
         }),
       ])
       const lifecycleDeadline = Date.now() + 5_000
-      let terminalLifecycle = ProtocolStore.listTaskEvents(taskID).find(
-        (event) => event.type === "agent.execution.lifecycle" && event.payload.status?.type === "terminal",
-      )
+      let terminalLifecycle = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.cancelled")
       while (!terminalLifecycle && Date.now() < lifecycleDeadline) {
         await Bun.sleep(10)
-        terminalLifecycle = ProtocolStore.listTaskEvents(taskID).find(
-          (event) => event.type === "agent.execution.lifecycle" && event.payload.status?.type === "terminal",
-        )
+        terminalLifecycle = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.cancelled")
       }
       expect({
         cancellation: isExecutionCancellationError(cancellationReason)
@@ -615,12 +611,10 @@ describe("Project directory integrity", () => {
           sessionID: session.created.id,
         },
         lifecycle: {
-          type: "agent.execution.lifecycle",
+          type: "task.cancelled",
           taskID,
-          sessionID: session.created.id,
           payload: {
-            inputMessageID: session.firstInputMessageID,
-            status: { type: "terminal", reason: "aborted" },
+            execution_epoch: 1,
           },
         },
       })

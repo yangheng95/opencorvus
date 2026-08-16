@@ -243,6 +243,8 @@ Latest Expert Squad roadmap checklist and saved-Skill completeness repair: [`202
 
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
 
+Latest destructive-control event-independence repair: [`2026-08-16-destructive-control-event-independence.md`](records/2026-08/2026-08-16-destructive-control-event-independence.md).
+
 Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).
 
 Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).
