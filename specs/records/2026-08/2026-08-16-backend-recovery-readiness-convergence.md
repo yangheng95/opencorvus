@@ -70,8 +70,8 @@
 - Shared-database regression proof: `test/shared-database-multi-backend.test.ts` passed 1/1 with 11 assertions. Two independent backend processes remained healthy on one exact SQLite database, so listener-first application recovery did not recreate a database-wide owner or break Project fence recovery.
 - Packaging toolchain proof: the first local package attempt identified the user's running default-target client, PID 40968, as the Windows image-lock owner. After explicit user authorization that exact client was stopped; backend PID 30440 was preserved. Both Overlay build paths now honor an explicit `CARGO_TARGET_DIR`, and `script/package-local.test.ts` passed 2/2 including the exact isolated-target projection.
 - TypeScript typecheck passed across the repository. `docs:check` passed with 333 operations in 25 groups. `git diff --check` passed.
-- The unsigned local Windows package completed from the final reviewed source in the isolated Cargo target `packages/overlay/src-tauri/target-codex-repaired`. Embedded backend `--version` returned `0.0.0-v0.0.45beta-202608161219`.
-- MSI: `OpenCorvus_0.0.45-beta_x64_en-US.msi`, 190,255,104 bytes, SHA-256 `5A316F006D4AD8DFF339DA8159DA04D5A4E9AE34BEA26B2077F92CA1D682A0C8`.
-- NSIS: `OpenCorvus_0.0.45-beta_x64-setup.exe`, 189,007,732 bytes, SHA-256 `B9BFD5F1D6A8F6E86E5623AAEC0471BCF4FD986D24557770E759BC88E6F37A67`.
-- Bare Overlay executable: 199,671,808 bytes, SHA-256 `B06D7E01E926E8CFC08AF1F0D432BCC39760556F76A0EA78C6BE5D63C9739375`.
+- The unsigned local Windows package completed from the final reviewed source in the isolated Cargo target, then the three delivery files were copied to the ignored stable directory `packages/overlay/dist-artifacts/windows-x64`. The hashes below were computed from that stable copy. Embedded backend `--version` returned `0.0.0-v0.0.45beta-202608161234`.
+- MSI: `OpenCorvus_0.0.45-beta_x64_en-US.msi`, 190,251,008 bytes, SHA-256 `0AC1FA85A2A32499D109FCFEB32E9D9DF3F8CC0FD32ED9F2D65CDB7FD1607EFB`.
+- NSIS: `OpenCorvus_0.0.45-beta_x64-setup.exe`, 189,004,920 bytes, SHA-256 `1891971DB1A57719D14A0B9EF34EC88054827219C1C55D53F4BB1C06328FB6C0`.
+- Bare Overlay executable: 199,671,808 bytes, SHA-256 `DD576B33D207262FAAD37A12C6C1851DDF4CC0AE556C570C8044DE24B0E3729D`.
 - Signed release-matrix packaging was intentionally not fabricated: its protected updater public key was absent. The repository's local packaging contract disables updater artifacts and produced both native installer formats without credentials.
