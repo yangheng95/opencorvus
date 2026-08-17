@@ -202,7 +202,10 @@ export namespace SessionPromptState {
       priorCancellation.reuse()
       cancellationReceipts.delete(sessionID)
     }
-    if (priorCancellation && priorCancellation.outcome !== "succeeded") throw new BusyError(sessionID)
+    if (priorCancellation && priorCancellation.outcome !== "succeeded") {
+      if (!hasAdoptableRetainedCleanup(priorCancellation)) throw new BusyError(sessionID)
+      adoptRetainedCleanup(sessionID, priorCancellation)
+    }
     if (priorCancellation?.settlementRequired) throw new BusyError(sessionID)
     const existing = existingStateEntryBySessionID(sessionID)?.promptState[sessionID]
     if (existing?.terminating) throw new BusyError(sessionID)
@@ -398,7 +401,13 @@ export namespace SessionPromptState {
         continue
       }
       const receipt = cancellationReceipts.get(input.sessionID)
-      if (receipt?.directory === directoryKey(input.directory)) {
+      if (
+        receipt?.directory === directoryKey(input.directory) &&
+        !(!input.resumeExisting && hasAdoptableRetainedCleanup(receipt))
+      ) {
+        // A retained-cleanup receipt must reach start(), which adopts it and
+        // re-attempts the release; waiting on it here would park this entry
+        // until a background retry happens to succeed.
         await receipt.reusable
         continue
       }
@@ -672,6 +681,34 @@ export namespace SessionPromptState {
     return cancellationReceipt(sessionID, directory)?.finished ?? Promise.resolve()
   }
 
+  /**
+   * A receipt whose only unfinished obligation is the retained physical
+   * worktree-owner release. Everything else about the cancelled prompt has
+   * already terminated, so the retained failure is recovery evidence and must
+   * not gate new prompt admission.
+   */
+  function hasAdoptableRetainedCleanup(receipt: CancellationReceipt): boolean {
+    return receipt.outcome !== "succeeded" && !receipt.settlementRequired && receipt.retryCleanup !== undefined
+  }
+
+  /**
+   * Exit for the retained-cleanup quarantine, tied to the ordinary next
+   * prompt start: re-attempt the release now and let the receipt settle (and
+   * clear) on success, instead of refusing admission until a restart.
+   */
+  function adoptRetainedCleanup(sessionID: string, receipt: CancellationReceipt): void {
+    log.warn("retrying retained cancellation cleanup on prompt start", {
+      sessionID,
+      directory: receipt.directory,
+    })
+    cancellationReceipts.delete(sessionID)
+    if (receipt.retryTimer) {
+      clearTimeout(receipt.retryTimer)
+      receipt.retryTimer = undefined
+    }
+    startCancellationReceiptRetry(sessionID, receipt)
+  }
+
   function startCancellationReceiptRetry(sessionID: string, receipt: CancellationReceipt): void {
     if (receipt.outcome !== "failed" || !receipt.retryCleanup || receipt.retryRunning || receipt.retryTimer) return
     const retry = receipt.retryCleanup
@@ -736,9 +773,10 @@ export namespace SessionPromptState {
 
   export function clearCancellationReceipt(sessionID: string, owner: AbortSignal): void {
     const receipt = cancellationReceipts.get(sessionID)
-    // A failed cleanup is process-local quarantine evidence. It must remain
-    // visible to every later cancellation barrier and prevent a new prompt
-    // generation from overwriting the owner until the runtime is restarted.
+    // A failed cleanup stays visible to later cancellation barriers until its
+    // retained release succeeds — through the background retry or through
+    // adoption by the next prompt start — so an explicit clear only applies
+    // to receipts that already settled successfully.
     if (receipt?.owner !== owner || receipt.outcome !== "succeeded") return
     receipt.reuse()
     cancellationReceipts.delete(sessionID)
