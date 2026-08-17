@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-17-sparse-candlestick-visibility-repair.md](2026-08-17-sparse-candlestick-visibility-repair.md) makes first-sized chart fitting explicit and caps sparse bar spacing so one-point K-line Artifacts render visibly on first live insertion and remain recognizably candle-shaped.
+
 - [2026-08-17-mission-message-origin-projection-repair.md](2026-08-17-mission-message-origin-projection-repair.md) restores Mission operator provenance across hydrate, live, and synchronous message projection so direct user turns render separately from scheduler and Agent context.
 
 - [2026-08-17-overlay-home-task-layout-convergence.md](2026-08-17-overlay-home-task-layout-convergence.md) makes actual launcher-content presence the single home-layout authority and prevents retained Task context from mounting the launcher composition.

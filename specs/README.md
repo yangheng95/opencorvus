@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest sparse candlestick first-sized-layout and bar-spacing repair: [`2026-08-17-sparse-candlestick-visibility-repair.md`](records/2026-08/2026-08-17-sparse-candlestick-visibility-repair.md).
+
 Latest Mission message-origin projection repair: [`2026-08-17-mission-message-origin-projection-repair.md`](records/2026-08/2026-08-17-mission-message-origin-projection-repair.md).
 
 Latest Overlay launcher/Task layout convergence repair: [`2026-08-17-overlay-home-task-layout-convergence.md`](records/2026-08/2026-08-17-overlay-home-task-layout-convergence.md).

@@ -14,6 +14,8 @@ import { ArtifactFrame } from "./ArtifactFrame"
 
 type CandlestickPayload = Extract<InteractiveArtifactPayload, { renderer: "candlestick@1" }>
 
+const MAX_CANDLE_BAR_SPACING = 32
+
 function requiredThemeColor(styles: CSSStyleDeclaration, token: string): string {
   // CSS means Cascading Style Sheets. The active theme is the only chart palette owner.
   const value = styles.getPropertyValue(token).trim()
@@ -40,8 +42,8 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
     }
     const initial = theme()
     const chart = createChart(container, {
-      width: container.clientWidth,
-      height: container.clientHeight,
+      width: Math.max(1, container.clientWidth),
+      height: Math.max(1, container.clientHeight),
       layout: {
         background: { type: ColorType.Solid, color: initial.backgroundColor },
         textColor: initial.textColor,
@@ -54,7 +56,11 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
         borderColor: initial.scaleBorderColor,
         scaleMargins: { top: 0.08, bottom: 0.18 },
       },
-      timeScale: { borderColor: initial.scaleBorderColor, timeVisible: true },
+      timeScale: {
+        borderColor: initial.scaleBorderColor,
+        timeVisible: true,
+        maxBarSpacing: MAX_CANDLE_BAR_SPACING,
+      },
     })
     const candles = chart.addSeries(CandlestickSeries, {
       upColor: initial.upColor,
@@ -113,15 +119,22 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
         })) as HistogramData<UTCTimestamp>[],
       )
     })
-    chart.timeScale().fitContent()
+    let fitPending = true
     const resizeObserver = new ResizeObserver(([entry]) => {
+      const width = Math.floor(entry.contentRect.width)
+      const height = Math.floor(entry.contentRect.height)
+      if (width <= 0 || height <= 0) return
       chart.applyOptions({
-        width: Math.floor(entry.contentRect.width),
-        height: Math.floor(entry.contentRect.height),
+        width,
+        height,
       })
+      if (fitPending) {
+        chart.timeScale().fitContent()
+        fitPending = false
+        container.dataset.ready = "true"
+      }
     })
     resizeObserver.observe(container)
-    container.dataset.ready = "true"
     onCleanup(() => {
       stopThemeObserver()
       resizeObserver.disconnect()
