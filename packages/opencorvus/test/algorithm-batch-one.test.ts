@@ -191,6 +191,49 @@ describe("worktree ownership critical section", () => {
     }
   })
 
+  test("treats an owner marker for a missing directory as a different worktree instead of failing observation", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-stale-"))
+    const taskID = Identifier.ascending("task")
+    const sessionID = Identifier.ascending("session")
+    const staleTaskID = Identifier.ascending("task")
+    const staleSessionID = Identifier.ascending("session")
+    const presentWorktree = path.join(root, "present-worktree")
+    const missingWorktree = path.join(root, "missing-worktree")
+    try {
+      await mkdir(presentWorktree)
+      await Ownership.Worktree.record({ primaryWorktreeDir: root, worktreeDir: presentWorktree, taskID, sessionID })
+      await Ownership.Worktree.record({
+        primaryWorktreeDir: root,
+        worktreeDir: missingWorktree,
+        taskID: staleTaskID,
+        sessionID: staleSessionID,
+      })
+
+      const presentIdentity = await Ownership.Worktree.observeIdentity(presentWorktree, "observe-present-target")
+      expect(await Ownership.Worktree.compareIdentity(presentIdentity, missingWorktree, "compare-missing-target")).toBe(
+        "different",
+      )
+
+      const release = Ownership.Worktree.requireCompleteRelease(
+        await Ownership.Worktree.releaseSessionOwner({
+          primaryWorktreeDir: root,
+          worktreeDir: presentWorktree,
+          sessionID,
+        }),
+      )
+      expect(release.released).toEqual([{ taskID, sessionID, worktreeDir: presentWorktree }])
+
+      const proof = await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir: presentWorktree })
+      expect(proof.status).toBe("ownerless")
+
+      expect(
+        (await validWorktreeOwners(root)).map((entry) => entry.marker.sessionID),
+      ).toEqual([staleSessionID])
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  })
+
   test("returns a typed observation error when an owned target cannot be inspected", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-target-"))
     const taskID = Identifier.ascending("task")
@@ -600,6 +643,69 @@ describe("prompt ownership termination", () => {
             attempts: 2,
             outcome: "succeeded",
           })
+        } finally {
+          release.mockRestore()
+        }
+      },
+    })
+  })
+
+  test("readmits a Session prompt after a deterministic owner-release failure by retrying the retained cleanup on start", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = Identifier.ascending("task")
+        const sessionID = Identifier.ascending("session")
+        const worktree = await Worktree.create({ name: `sticky-owner-${taskID.slice(-8)}`, taskID, sessionID })
+        SessionPromptState.start(sessionID, worktree.directory)
+        const owner = SessionPromptState.promptOwner(sessionID)!
+        const receipt = SessionPromptState.cancelOwned(sessionID, worktree.directory, owner, {
+          origin: createExecutionCancellationOrigin({
+            actor: "runtime",
+            source: "runtime.prompt_owner",
+            surface: "agent",
+            requestID: sessionID,
+            reason: "quarantine managed worktree cleanup",
+            targetSessionID: sessionID,
+            taskID,
+          }),
+        })!
+        const releaseOwner = ManagedSessionOwner.releaseManagedWorktreeSessionOwner
+        let deterministicFailure = true
+        let attempts = 0
+        const release = spyOn(ManagedSessionOwner, "releaseManagedWorktreeSessionOwner").mockImplementation(
+          async (authority) => {
+            attempts += 1
+            if (deterministicFailure) throw new Error("injected deterministic managed owner release failure")
+            await releaseOwner(authority)
+          },
+        )
+        try {
+          await expect(SessionPromptState.finish(sessionID, owner, worktree.directory)).rejects.toThrow(
+            "injected deterministic managed owner release failure",
+          )
+          while (receipt.outcome !== "failed" || receipt.retryRunning) {
+            await Bun.sleep(5)
+          }
+          // The next ordinary start is the quarantine's exit: it re-attempts
+          // the retained release instead of refusing until a restart.
+          const nextOwner = SessionPromptState.start(sessionID, worktree.directory)
+          deterministicFailure = false
+          expect(nextOwner).toBeInstanceOf(AbortSignal)
+          expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID).cancellationReceipts).toBe(0)
+          await receipt.finished
+          const settledOutcome: string = receipt.outcome
+          expect({ outcome: settledOutcome, retriedOnStart: attempts >= 3 }).toEqual({
+            outcome: "succeeded",
+            retriedOnStart: true,
+          })
+          await SessionPromptState.release(sessionID)
+          expect(
+            (await validWorktreeOwners(Instance.project.worktree)).filter(
+              (entry) => entry.marker.cwd === worktree.directory,
+            ),
+          ).toEqual([])
         } finally {
           release.mockRestore()
         }

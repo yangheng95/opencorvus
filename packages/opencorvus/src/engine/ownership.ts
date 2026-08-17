@@ -388,14 +388,11 @@ export namespace Ownership {
 
   async function sameWorktree(left: string, right: string, operation: string): Promise<boolean> {
     const [a, b] = await Promise.all([strictIdentity(left, operation), strictIdentity(right, operation)])
-    if (a.status !== b.status) {
-      throw observationError({
-        operation,
-        code: "IDENTITY_UNCERTAIN",
-        diagnosticPath: left,
-        cause: new Error("Worktree identity status differs"),
-      })
-    }
+    // A present directory and an absent path cannot be the same physical
+    // worktree at observation time, so status divergence answers the
+    // comparison; treating it as an observation failure would let one stale
+    // owner marker fail every release and proof in the project.
+    if (a.status !== b.status) return false
     return a.key === b.key
   }
 
@@ -488,14 +485,11 @@ export namespace Ownership {
       operation: string,
     ): Promise<"same" | "different"> {
       const right = await strictIdentity(rightPath, operation)
-      if (left.status !== right.status) {
-        throw observationError({
-          operation,
-          code: "IDENTITY_UNCERTAIN",
-          diagnosticPath: left.requested,
-          cause: new Error("Worktree identity status differs"),
-        })
-      }
+      // Status divergence is a difference, not an uncertainty: a candidate
+      // path that vanished (or appeared) since the left identity was captured
+      // is not the same living worktree, and a fatal error here would block
+      // an unrelated removal on any stale registration.
+      if (left.status !== right.status) return "different"
       return left.key === right.key ? "same" : "different"
     }
 
