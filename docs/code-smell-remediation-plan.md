@@ -2,6 +2,8 @@
 
 > 配套文档：[code-smell-report.md](code-smell-report.md)（441 条编号问题）。本文件是"怎么修"，报告是"有什么问题"。每个整改项引用报告里的问题 ID。
 > 生成：2026-08-16 · 修订：优先级调整为**框架架构债优先**。
+>
+> **Host 范围校准（2026-08-17）**：本文件保留为问题库存和非 Host 模块的整改参考；Host/session/orchestrator/task-control/project-instance 的唯一正式计划是 [`2026-08-17-minimal-host-reform-plan-calibration.md`](../specs/records/2026-08/2026-08-17-minimal-host-reform-plan-calibration.md)，[host-reform-plan.md](host-reform-plan.md) 仅为说明稿。不得为了本文件的分层、通用 primitive 或防复发门禁，保留已被证明无真实边界的 Host gate，也不得建立平行实现。
 
 ## 优先级定调：架构债是主线
 
@@ -16,7 +18,7 @@
 ## 执行原则（贯穿所有阶段）
 
 1. **动结构之前先有测试网**：大规模挪代码/拆文件/断依赖必然有回归风险。当前测试 runner 首败即停（TST-01），未修好之前"测试通过"不可信——这是阶段 0 的前置硬条件。
-2. **每个 PR 可独立回滚**：一次一类问题，风险改动挂 flag。架构类 PR 尤其要小步——一次断一个环、拆一个文件。
+2. **每个交付切片可独立验证和审查**：一次一类问题，小步删除并同步更新当前契约；不使用 feature flag、fallback 或兼容层保留新旧两套 Host 实现。
 3. **每消除一类结构问题，配一条自动化防线**：断一处循环依赖就加一条 no-restricted-imports，删一处 `ForTest` 就加一条禁止生产代码出现 ForTest 的规则。否则 AI 迭代会把同样的问题再写回来（这是本仓最需要的机制）。
 4. **架构 PR 顺手收割**：动到的模块里若有报告已记的真 bug / 性能 / 测试污染，在同一批次一并修，PR 里注明收割了哪些 ID。
 5. **改动伴随度量**：依赖环用 SCC 规模度量（只降不升）；性能改造前后记查询次数。
@@ -40,7 +42,7 @@
 ## 0.1 恢复测试信任（0.5 天）
 
 **问题** TST-01：`packages/opencorvus/script/run-tests.ts:43-46` 首个失败文件即 `break`，配合预存失败 `algorithm-batch-one`（记忆 [[preexisting-worktree-ownership-test-failure]]），其后所有测试从不执行。
-**方案**：改为收集全部结果统一判定退出码，默认跑完全部，保留 `--bail` 显式开关；`algorithm-batch-one` 的预存失败先用 allowlist 标为已知失败（它其实是 HST-01 worktree 互斥的表现，阶段 1 修完复验）；TST-25 的 `--timeout=0` 改为合理每用例上限。
+**方案**：改为收集全部结果统一判定退出码并跑完所选测试；不保留 `--bail` 作为正式验收路径，不用 allowlist 合法化已知失败。`algorithm-batch-one` 失败须修复当前契约或根因后再计入通过；TST-25 的 `--timeout=0` 改为有证据的每用例上限。
 **验证**：`bun run test`（记忆 [[no-bare-bun-test]]：必须走 `bun run test`）跑完全部 ~275 文件并汇总失败清单。
 
 ## 0.2 确立目标分层模型（1~2 天，纸面工作）

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest minimal-Host reform plan calibration: [`2026-08-17-minimal-host-reform-plan-calibration.md`](records/2026-08/2026-08-17-minimal-host-reform-plan-calibration.md).
+
 Latest Project MEMORY.MD model-authority convergence: [`2026-08-17-project-memory-model-authority-convergence.md`](records/2026-08/2026-08-17-project-memory-model-authority-convergence.md).
 
 Latest Project deletion duplicate-request and admission-conflict repair: [`2026-08-17-project-delete-conflict-contract.md`](records/2026-08/2026-08-17-project-delete-conflict-contract.md).
