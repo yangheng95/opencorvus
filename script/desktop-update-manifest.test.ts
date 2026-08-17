@@ -6,6 +6,19 @@ import { desktopUpdateChannel, desktopUpdateChannelTag, desktopUpdateEndpoint } 
 import { generateDesktopUpdateManifest } from "./generate-desktop-update-manifest"
 
 describe("desktop update publication contract", () => {
+  test("checked-in desktop client uses the published trust root and synchronized beta endpoint", async () => {
+    const tauriConfig = JSON.parse(
+      await fs.readFile(path.resolve("packages/overlay/src-tauri/tauri.conf.json"), "utf8"),
+    ) as { version: string; plugins: { updater: { pubkey: string; endpoints: string[]; windows: { installMode: string } } } }
+
+    expect(tauriConfig.plugins.updater).toEqual({
+      pubkey:
+        "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk0QUIwNTE1MjY3MTZBRTIKUldUaWFuRW1GUVdybExYQmhlUDlUQzY2TGs5cG8zUk5TZ3lnenQ3Q3M4eHhoNHl0dm0rREl0SzAK",
+      endpoints: [desktopUpdateEndpoint("yangheng95/opencorvus", tauriConfig.version)],
+      windows: { installMode: "passive" },
+    })
+  })
+
   test("maps semantic release versions to exact immutable channel endpoints", () => {
     expect({
       beta: {

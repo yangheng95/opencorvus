@@ -47,8 +47,11 @@
       }
     },
     "updater": {
-      "pubkey": "development-build-has-no-update-trust-root",
-      "endpoints": []
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk0QUIwNTE1MjY3MTZBRTIKUldUaWFuRW1GUVdybExYQmhlUDlUQzY2TGs5cG8zUk5TZ3lnenQ3Q3M4eHhoNHl0dm0rREl0SzAK",
+      "endpoints": ["https://github.com/yangheng95/opencorvus/releases/download/desktop-update-beta/latest.json"],
+      "windows": {
+        "installMode": "passive"
+      }
     }
   },
   "bundle": {

@@ -5,7 +5,6 @@ import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
 import { copyReleaseFile } from "../../../script/copy-release-file"
-import { desktopUpdateEndpoint } from "../../../script/desktop-update-channel"
 import { runTimedStage } from "../../../script/timed-stage"
 import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
@@ -54,31 +53,6 @@ async function cargoPath() {
   return [dir, ...list].join(path.delimiter)
 }
 
-const rootManifest = JSON.parse(await fs.readFile(path.join(repo, "package.json"), "utf8")) as {
-  repository?: { url?: string }
-}
-
-function repositorySlug(): string {
-  const configured = rootManifest.repository?.url?.trim() ?? ""
-  const match = /^https:\/\/github\.com\/([^/]+\/[^/]+?)(?:\.git)?$/.exec(configured)
-  if (!match) throw new Error(`OpenCorvus GitHub repository URL is invalid: ${configured || "missing"}`)
-  return match[1]!
-}
-
-function updaterBuildConfig() {
-  const version = process.env.OPENCORVUS_VERSION?.trim().replace(/^v(?=\d)/, "")
-  if (!version) throw new Error("OPENCORVUS_VERSION is required for signed desktop packaging")
-  const publicKey = process.env.OPENCORVUS_UPDATER_PUBLIC_KEY?.trim()
-  if (!publicKey) throw new Error("OPENCORVUS_UPDATER_PUBLIC_KEY is required for signed desktop packaging")
-  return {
-    pubkey: publicKey,
-    endpoints: [desktopUpdateEndpoint(repositorySlug(), version)],
-    windows: { installMode: "passive" },
-  }
-}
-
-const updaterConfig = updaterBuildConfig()
-
 function tauriArgs() {
   return [
     "--config",
@@ -88,7 +62,6 @@ function tauriArgs() {
         resources: [],
         windows: { nsis: { compression: "zlib" } },
       },
-      plugins: { updater: updaterConfig },
     }),
   ]
 }

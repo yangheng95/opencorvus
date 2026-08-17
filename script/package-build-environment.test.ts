@@ -42,7 +42,6 @@ test("package builds retain an explicit runtime root and signing environment", a
       guiInstallerBuildEnvironment(
         {
           OPENCORVUS_HOME: explicitRoot,
-          OPENCORVUS_UPDATER_PUBLIC_KEY: "test-public-key",
           TAURI_SIGNING_PRIVATE_KEY: "test-private-key",
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: "test-password",
         },
@@ -57,7 +56,6 @@ test("package builds retain an explicit runtime root and signing environment", a
     expect(env.TMPDIR).toBe(expectedTemporary)
     expect(env.CI).toBe("true")
     expect(env.OPENCORVUS_VERSION).toBe("0.0.37-beta")
-    expect(env.OPENCORVUS_UPDATER_PUBLIC_KEY).toBe("test-public-key")
     expect(env.TAURI_SIGNING_PRIVATE_KEY).toBe("test-private-key")
     expect(env.TAURI_SIGNING_PRIVATE_KEY_PASSWORD).toBe("test-password")
     expect((await fs.stat(expectedTemporary)).isDirectory()).toBe(true)

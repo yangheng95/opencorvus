@@ -1,4 +1,4 @@
-import { releaseVersionMetadata } from "./sync-version"
+import { releaseVersionMetadata } from "./release-version"
 
 export type DesktopUpdateChannel = "beta" | "stable"
 

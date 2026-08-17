@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-17-desktop-updater-trust-and-sidebar-entry.md](2026-08-17-desktop-updater-trust-and-sidebar-entry.md) makes the published desktop trust root and version-derived channel complete for every build path and places the shared update action in the left sidebar footer.
+
 - [2026-08-17-minimal-host-reform-plan-calibration.md](2026-08-17-minimal-host-reform-plan-calibration.md) calibrates the Host reform around real participant facts, occurrence-local Host faults, minimal irreversible boundaries, and deletion-led convergence instead of another layered Host architecture.
 - [2026-08-17-project-memory-model-authority-convergence.md](2026-08-17-project-memory-model-authority-convergence.md) makes the pending FIFO head's owning root Session `model` the Memory Organizer's only model authority across automatic, manual, Tool, retry, and recovery triggers.
 

@@ -1,11 +1,13 @@
 #!/usr/bin/env bun
 
 import path from "path"
+import { desktopUpdateEndpoint } from "./desktop-update-channel"
+import { normalizeReleaseVersion, releaseVersionMetadata } from "./release-version"
+
+export { normalizeReleaseVersion, releaseVersionMetadata } from "./release-version"
 
 const root = path.resolve(import.meta.dir, "..")
 const canonicalPackage = "packages/opencorvus/package.json"
-const semverPattern = /^\d+\.\d+\.\d+(?:-([0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*))?$/
-const compactPrereleasePattern = /^(\d+\.\d+\.\d+)([A-Za-z][0-9A-Za-z]*(?:[.-][0-9A-Za-z]+)*)$/
 
 export const releasePackageTargets = [
   "packages/channel-config/package.json",
@@ -51,28 +53,37 @@ export function windowsMsiVersion(version: string) {
   return `${fields.join(".")}.${numericPrerelease}`
 }
 
-export function normalizeReleaseVersion(input?: string) {
-  const value = input?.trim()
-  if (!value) return undefined
-  const unprefixed = value.replace(/^v(?=\d)/, "")
-  const compact = unprefixed.match(compactPrereleasePattern)
-  const version = compact ? `${compact[1]}-${compact[2]}` : unprefixed
-  if (!semverPattern.test(version)) {
-    throw new Error(`Invalid version: ${value}. Use x.y.z, x.y.z-tag, x.y.ztag, or the same value prefixed with v.`)
-  }
-  return version
-}
-
-export function releaseVersionMetadata(input?: string) {
-  const version = normalizeReleaseVersion(input)
-  if (!version) throw new Error("Release version is required")
-  const parsed = version.match(semverPattern)
-  if (!parsed) throw new Error(`Cannot derive release metadata from invalid version: ${version}`)
-  return { version, prerelease: parsed[1] !== undefined }
-}
-
 function absolute(relative: string) {
   return path.join(root, relative)
+}
+
+function githubRepositorySlug(pkg: Record<string, unknown>) {
+  const repository = pkg.repository
+  const url =
+    typeof repository === "string"
+      ? repository
+      : typeof repository === "object" && repository !== null
+        ? (repository as Record<string, unknown>).url
+        : undefined
+  const match = typeof url === "string" ? url.match(/github\.com[/:]([^/]+\/[^/.]+)(?:\.git)?$/) : null
+  if (!match) throw new Error("package.json repository must be a GitHub owner/repository URL")
+  return match[1]
+}
+
+export function synchronizeTauriConfig(text: string, version: string, repository: string) {
+  const tauri = JSON.parse(text) as Record<string, unknown>
+  const tauriBundle = tauri.bundle as Record<string, unknown> | undefined
+  const tauriWindows = tauriBundle?.windows as Record<string, unknown> | undefined
+  const tauriWix = tauriWindows?.wix as Record<string, unknown> | undefined
+  const tauriPlugins = tauri.plugins as Record<string, unknown> | undefined
+  const tauriUpdater = tauriPlugins?.updater as Record<string, unknown> | undefined
+  if (!tauriWix) throw new Error(`${tauriConfigTarget} is missing bundle.windows.wix`)
+  if (!tauriUpdater) throw new Error(`${tauriConfigTarget} is missing plugins.updater`)
+
+  tauri.version = version
+  tauriWix.version = windowsMsiVersion(version)
+  tauriUpdater.endpoints = [desktopUpdateEndpoint(repository, version)]
+  return JSON.stringify(tauri, null, 2) + "\n"
 }
 
 async function readPackageVersion(relative: string) {
@@ -112,6 +123,8 @@ function updateBunWorkspaceVersion(text: string, workspace: string, version: str
 
 export async function synchronizeVersions(input: { version?: string; check: boolean }) {
   const canonical = await readPackageVersion(canonicalPackage)
+  const rootPackage = (await Bun.file(absolute("package.json")).json()) as Record<string, unknown>
+  const repository = githubRepositorySlug(rootPackage)
   const version = normalizeReleaseVersion(input.version ?? canonical.version)
   if (!version) throw new Error(`${canonicalPackage} is missing its canonical version`)
 
@@ -123,6 +136,10 @@ export async function synchronizeVersions(input: { version?: string; check: bool
   const tauriBundle = tauri.bundle as Record<string, unknown> | undefined
   const tauriWindows = tauriBundle?.windows as Record<string, unknown> | undefined
   const tauriWix = tauriWindows?.wix as Record<string, unknown> | undefined
+  const tauriPlugins = tauri.plugins as Record<string, unknown> | undefined
+  const tauriUpdater = tauriPlugins?.updater as Record<string, unknown> | undefined
+  const updaterEndpoints = tauriUpdater?.endpoints
+  const updaterEndpoint = desktopUpdateEndpoint(repository, version)
   const msiVersion = windowsMsiVersion(version)
   const cargos = await Promise.all(
     cargoManifestTargets.map(async (target) => ({
@@ -143,6 +160,12 @@ export async function synchronizeVersions(input: { version?: string; check: bool
   if (String(tauri.version ?? "") !== version) drift.push([tauriConfigTarget, String(tauri.version ?? "")])
   if (String(tauriWix?.version ?? "") !== msiVersion) {
     drift.push([`${tauriConfigTarget}#bundle.windows.wix.version`, String(tauriWix?.version ?? "")])
+  }
+  if (!Array.isArray(updaterEndpoints) || updaterEndpoints.length !== 1 || updaterEndpoints[0] !== updaterEndpoint) {
+    drift.push([
+      `${tauriConfigTarget}#plugins.updater.endpoints`,
+      Array.isArray(updaterEndpoints) ? JSON.stringify(updaterEndpoints) : "<missing>",
+    ])
   }
   for (const target of cargos) {
     const manifestVersion = cargoManifestVersion(target.manifestText)
@@ -168,15 +191,7 @@ export async function synchronizeVersions(input: { version?: string; check: bool
     target.pkg.version = version
     await Bun.write(absolute(target.relative), JSON.stringify(target.pkg, null, 2) + "\n")
   }
-  const tauriWithVersion = tauriText.replace(/("version"\s*:\s*")[^"]+("\s*,)/, `$1${version}$2`)
-  const tauriWithMsiVersion = tauriWithVersion.replace(
-    /("wix"\s*:\s*\{\s*"version"\s*:\s*")[^"]+("\s*[,}])/,
-    `$1${msiVersion}$2`,
-  )
-  if (tauriWithMsiVersion === tauriWithVersion && String(tauriWix?.version ?? "") !== msiVersion) {
-    throw new Error(`${tauriConfigTarget} is missing bundle.windows.wix.version`)
-  }
-  await Bun.write(absolute(tauriConfigTarget), tauriWithMsiVersion)
+  await Bun.write(absolute(tauriConfigTarget), synchronizeTauriConfig(tauriText, version, repository))
 
   let updatedBunLock = bunLock
   for (const target of packages) {

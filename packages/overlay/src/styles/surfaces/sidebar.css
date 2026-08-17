@@ -238,6 +238,23 @@ body .sidebar-header.oc-surface-header {
   flex: 0 0 auto;
 }
 
+.sidebar-update.oc-button {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+
+  flex: 0 0 auto;
+  width: calc(28px * var(--ui-scale));
+  font-size: var(--ui-font-small);
+}
+
+.sidebar-update__icon {
+  display: inline-flex;
+}
+
+.sidebar-update[data-busy="true"] .sidebar-update__icon {
+  animation: oc-spin var(--ui-duration-loop-spin) linear infinite;
+}
+
 .conn-badge[data-ui="connection-badge"] {
   --conn-badge-dot: var(--text-muted);
 

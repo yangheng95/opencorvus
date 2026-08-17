@@ -137,6 +137,13 @@ describe("GitHub Actions workflow contract", () => {
       shell: "pwsh",
       run: "./script/install-windows-ripgrep.ps1",
     })
+    expect(
+      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env,
+    ).toEqual({
+      OPENCORVUS_VERSION: "${{ steps.version.outputs.version }}",
+      TAURI_SIGNING_PRIVATE_KEY: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}",
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}",
+    })
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
       path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\npackages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json\n",
@@ -164,7 +171,6 @@ describe("GitHub Actions workflow contract", () => {
     expect(jobs["package-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env).toEqual({
       OPENCORVUS_VERSION: "${{ needs.prepare.outputs.version }}",
       OPENCORVUS_CHANNEL: "latest",
-      OPENCORVUS_UPDATER_PUBLIC_KEY: "${{ secrets.OPENCORVUS_UPDATER_PUBLIC_KEY }}",
       TAURI_SIGNING_PRIVATE_KEY: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}",
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}",
     })

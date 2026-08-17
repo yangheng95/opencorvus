@@ -96,9 +96,15 @@ points at a draft or partial installer set. Windows uses the signed NSIS
 (Nullsoft Scriptable Install System) setup executable, macOS uses Tauri's signed
 application archive, and Linux uses the signed AppImage.
 
+The updater's Minisign-compatible public verification key is committed in
+`packages/overlay/src-tauri/tauri.conf.json`, because it is the client trust
+root already embedded in every published application. `sync-version.ts` keeps
+that configuration on the beta or stable channel derived from the synchronized
+semantic version, so release, local installer, host-bound, and development
+builds consume one updater configuration.
+
 Release packaging requires these protected GitHub Actions secrets:
 
-- `OPENCORVUS_UPDATER_PUBLIC_KEY`: the complete Minisign-compatible public key compiled into every updater-enabled application;
 - `TAURI_SIGNING_PRIVATE_KEY`: the complete encrypted private key used only by native packaging jobs;
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: the private-key password.
 

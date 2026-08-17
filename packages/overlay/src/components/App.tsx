@@ -12,6 +12,7 @@ import { Icon } from "./ui/Icon"
 import { ImagePreviewHost } from "./ImagePreview"
 import { InteractionDialogHost } from "./InteractionDialogHost"
 import { SidebarVersionLabel } from "./SidebarVersionLabel"
+import { SidebarUpdateButton } from "./SidebarUpdateButton"
 import { SessionDialogHost } from "./SessionDialogHost"
 import { TaskStatusHeader } from "./TaskStatusHeader"
 import { TitlebarBrand } from "./titlebar/TitlebarBrand"
@@ -424,6 +425,7 @@ export function App(props: AppProps) {
                       <SidebarVersionLabel />
                     </span>
                   </span>
+                  <SidebarUpdateButton />
                   <span class="sidebar-connection" id="solidConnBadge">
                     <ConnectionBadge />
                   </span>
