@@ -15,17 +15,11 @@ import { hostGit as git } from "../util/git"
 import { Glob } from "../util/glob"
 import { which } from "@/util/which"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { assertProjectDurableAdmissionOpen } from "./deletion-registry"
+import { assertProjectDurableAdmissionOpen, ProjectDurableAdmissionClosedError } from "./deletion-registry"
 import { Identifier } from "@/id/id"
 
 export namespace Project {
-  export const DurableAdmissionClosedError = NamedError.create(
-    "ProjectDurableAdmissionClosedError",
-    z.object({
-      projectID: z.string(),
-      message: z.string(),
-    }),
-  )
+  export const DurableAdmissionClosedError = ProjectDurableAdmissionClosedError
 
   export function assertDurableAdmissionOpen(db: Database.TxOrDb, projectID: string): void {
     if (assertProjectDurableAdmissionOpen(db, projectID)) return

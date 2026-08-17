@@ -1,12 +1,19 @@
 import { randomUUID } from "node:crypto"
-import {
-  currentRuntimeProcessOccurrence,
-  type RuntimeProcessOccurrenceObserver,
-} from "@/runtime/process-occurrence"
+import z from "zod"
+import { NamedError } from "@opencorvus-ai/util/error"
+import { currentRuntimeProcessOccurrence, type RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 import { Database, and, eq } from "@/storage/db"
 import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
 
 type Snapshot = typeof ProjectTable.$inferSelect
+
+export const ProjectDurableAdmissionClosedError = NamedError.create(
+  "ProjectDurableAdmissionClosedError",
+  z.object({
+    projectID: z.string(),
+    message: z.string(),
+  }),
+)
 
 export interface ProjectDeletionRegistryAdmission extends Disposable {
   readonly projectID: string
@@ -32,7 +39,10 @@ export function acquireProjectMaintenanceFencesInTransaction(
   const owner = currentRuntimeProcessOccurrence()
   for (const project of input.projectRows) {
     if (!assertProjectDurableAdmissionOpen(db, project.id)) {
-      throw new Error(`Project ${project.id} durable maintenance admission is already closed`)
+      throw new ProjectDurableAdmissionClosedError({
+        projectID: project.id,
+        message: `Project ${project.id} durable maintenance admission is already closed`,
+      })
     }
     db.insert(ProjectMaintenanceFenceTable)
       .values({
@@ -100,7 +110,12 @@ export function releaseProjectMaintenanceFencesInTransaction(
 }
 
 export function closeProjectDeletionRegistryAdmission(projectID: string): ProjectDeletionRegistryAdmission {
-  if (admissions.has(projectID)) throw new Error(`Project ${projectID} registry admission is already closed`)
+  if (admissions.has(projectID)) {
+    throw new ProjectDurableAdmissionClosedError({
+      projectID,
+      message: `Project ${projectID} registry admission is already closed`,
+    })
+  }
   const token = Symbol(projectID)
   const operationID = randomUUID()
   try {

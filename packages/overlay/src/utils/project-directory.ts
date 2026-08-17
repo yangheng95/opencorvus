@@ -26,7 +26,38 @@ export function implicitProjectSuffix(directory: string): string {
 }
 
 export function projectDirectoryKey(directory: string): string {
-  return directory || "__opencorvus_unassigned_project__"
+  const input = directory.trim()
+  if (!input) return "__opencorvus_unassigned_project__"
+  const normalized = input.replaceAll("\\", "/")
+  const drive = /^([a-z]):(\/)?(.*)$/i.exec(normalized)
+  const unc = !drive && /^\/{2,}([^/]+)\/+([^/]+)(?:\/+|$)(.*)$/.exec(normalized)
+  const absolute = Boolean(drive?.[2] || unc || normalized.startsWith("/"))
+  const root = drive
+    ? `${drive[1]!.toLowerCase()}:${drive[2] ? "/" : ""}`
+    : unc
+      ? `//${unc[1]}/${unc[2]}`
+      : normalized.startsWith("/")
+        ? "/"
+        : ""
+  const remainder = drive ? drive[3]! : unc ? unc[3]! : normalized.replace(/^\/+/, "")
+  const segments: string[] = []
+  for (const segment of remainder.split(/\/+/)) {
+    if (!segment || segment === ".") continue
+    if (segment === "..") {
+      if (segments.length > 0 && segments.at(-1) !== "..") segments.pop()
+      else if (!absolute) segments.push(segment)
+      continue
+    }
+    segments.push(segment)
+  }
+  const suffix = segments.join("/")
+  const driveRelative = Boolean(drive && !drive[2])
+  const resolved = driveRelative
+    ? `${root}${suffix}`
+    : root.endsWith("/") || !root
+      ? `${root}${suffix}`
+      : `${root}${suffix ? "/" : ""}${suffix}`
+  return drive || unc ? resolved.toLowerCase() : resolved
 }
 
 export function projectDirectoryLabel(

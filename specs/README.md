@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Project deletion duplicate-request and admission-conflict repair: [`2026-08-17-project-delete-conflict-contract.md`](records/2026-08/2026-08-17-project-delete-conflict-contract.md).
+
 Latest backend startup recovery/readiness convergence and rebuilt Windows desktop package: [`2026-08-16-backend-recovery-readiness-convergence.md`](records/2026-08/2026-08-16-backend-recovery-readiness-convergence.md).
 
 Latest Task-root compaction, Orchestrator `no_action`, and retained-assistant Artifact causality convergence: [`2026-08-15-task-root-compaction-and-artifact-causality-convergence.md`](records/2026-08/2026-08-15-task-root-compaction-and-artifact-causality-convergence.md).

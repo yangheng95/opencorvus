@@ -17,6 +17,7 @@ import { abortChatRequest } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
 import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-reference"
+import { projectDirectoryKey } from "../utils/project-directory"
 import { AppLog } from "../utils/log"
 import { t } from "../utils/i18n"
 import { apiJson, ApiError, configure as configureApi, serverSettledRequest } from "./api"
@@ -354,6 +355,8 @@ export type ProjectDeleteOutcome =
   | { status: "deleted"; result: ProjectDeleteResult }
   | { status: "already_absent"; directory: string }
 
+const projectDeletionOperations = new Map<string, Promise<ProjectDeleteOutcome>>()
+
 export interface ProjectRenameResult {
   id: string
   worktree: string
@@ -432,49 +435,61 @@ export async function deleteProjectState(
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error("deleteProjectState requires a project directory")
   const body = TaskCancellationRequestBody.parse(provenance)
-  const query = new URLSearchParams({ directory: projectDirectory })
-  let result: unknown
-  try {
-    result = await apiJson(
-      `project/current?${query.toString()}`,
-      serverSettledRequest({
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      }),
-    )
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 404) {
-      return { status: "already_absent", directory: projectDirectory }
-    }
-    throw error
-  }
-  if (
-    !result ||
-    typeof result !== "object" ||
-    (result as Record<string, unknown>).ok !== true ||
-    typeof (result as Record<string, unknown>).projectID !== "string" ||
-    typeof (result as Record<string, unknown>).directory !== "string" ||
-    !["committed", "committed_with_residue"].includes(String((result as Record<string, unknown>).status)) ||
-    (() => {
-      const residue = (result as Record<string, unknown>).residue
-      return (
-        !Array.isArray(residue) ||
-        residue.some(
-          (item) =>
-            !item ||
-            typeof item !== "object" ||
-            typeof (item as Record<string, unknown>).path !== "string" ||
-            typeof (item as Record<string, unknown>).message !== "string",
-        )
+  const operationKey = projectDirectoryKey(projectDirectory)
+  const existing = projectDeletionOperations.get(operationKey)
+  if (existing) return existing
+
+  const operation = (async (): Promise<ProjectDeleteOutcome> => {
+    const query = new URLSearchParams({ directory: projectDirectory })
+    let result: unknown
+    try {
+      result = await apiJson(
+        `project/current?${query.toString()}`,
+        serverSettledRequest({
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
       )
-    })() ||
-    !Number.isInteger((result as Record<string, unknown>).deletedTaskCount) ||
-    Number((result as Record<string, unknown>).deletedTaskCount) < 0
-  ) {
-    throw new Error("DELETE project/current returned an invalid ProjectDeleteResult")
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return { status: "already_absent", directory: projectDirectory }
+      }
+      throw error
+    }
+    if (
+      !result ||
+      typeof result !== "object" ||
+      (result as Record<string, unknown>).ok !== true ||
+      typeof (result as Record<string, unknown>).projectID !== "string" ||
+      typeof (result as Record<string, unknown>).directory !== "string" ||
+      !["committed", "committed_with_residue"].includes(String((result as Record<string, unknown>).status)) ||
+      (() => {
+        const residue = (result as Record<string, unknown>).residue
+        return (
+          !Array.isArray(residue) ||
+          residue.some(
+            (item) =>
+              !item ||
+              typeof item !== "object" ||
+              typeof (item as Record<string, unknown>).path !== "string" ||
+              typeof (item as Record<string, unknown>).message !== "string",
+          )
+        )
+      })() ||
+      !Number.isInteger((result as Record<string, unknown>).deletedTaskCount) ||
+      Number((result as Record<string, unknown>).deletedTaskCount) < 0
+    ) {
+      throw new Error("DELETE project/current returned an invalid ProjectDeleteResult")
+    }
+    return { status: "deleted", result: result as ProjectDeleteResult }
+  })()
+  projectDeletionOperations.set(operationKey, operation)
+  try {
+    return await operation
+  } finally {
+    if (projectDeletionOperations.get(operationKey) === operation) projectDeletionOperations.delete(operationKey)
   }
-  return { status: "deleted", result: result as ProjectDeleteResult }
 }
 
 // ── enterEmptyWorkspace ──

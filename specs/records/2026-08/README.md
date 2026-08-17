@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-17-project-delete-conflict-contract.md](2026-08-17-project-delete-conflict-contract.md) makes repeated Overlay Project deletion one in-flight request and maps maintenance-admission collisions to the canonical typed HTTP 409 contract instead of unknown 500.
+
 - [2026-08-16-destructive-control-event-independence.md](2026-08-16-destructive-control-event-independence.md) makes archive/delete independent of unresolved Provider, Tool, queue, ingress, Task, Mission, and Session event facts while preserving exact audit history and physical process-settlement safety.
 
 - [2026-08-16-backend-recovery-readiness-convergence.md](2026-08-16-backend-recovery-readiness-convergence.md) separates bounded process recovery from durable Task/Mission/Session convergence so health is published before model work completes, and records the repaired Windows desktop package.
