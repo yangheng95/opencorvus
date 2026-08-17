@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-17-mission-message-origin-projection-repair.md](2026-08-17-mission-message-origin-projection-repair.md) restores Mission operator provenance across hydrate, live, and synchronous message projection so direct user turns render separately from scheduler and Agent context.
+
 - [2026-08-17-overlay-home-task-layout-convergence.md](2026-08-17-overlay-home-task-layout-convergence.md) makes actual launcher-content presence the single home-layout authority and prevents retained Task context from mounting the launcher composition.
 
 - [2026-08-17-overlay-stream-state-and-task-switch-latency.md](2026-08-17-overlay-stream-state-and-task-switch-latency.md) separates first connection from failure reconnect and bounds selected child-transcript refresh work so Task switching no longer paints a false outage or amplifies streamed events into request bursts.

@@ -82,6 +82,7 @@ import {
 } from "@/engine/task-session-lineage"
 import {
   ensureTaskMessageProtocolBridge,
+  originSourceFromMessageExtra,
   overlayMeta,
   projectPersistedTaskMessage,
 } from "@/orchestrator/protocol/message-bridge"
@@ -2275,7 +2276,7 @@ function annotateTaskTranscriptMessages(messages: Array<{ info: Record<string, a
     ;(msg.info as any).channel = meta.channel
     ;(msg.info as any).agentID = meta.agentID
     ;(msg.info as any).sessionAgentID = meta.sessionAgentID
-    ;(msg.info as any).originSource = String(msg.info.extra?.source ?? "")
+    ;(msg.info as any).originSource = originSourceFromMessageExtra(msg.info.extra)
     const parentSessionID = sessionParentID(sid)
     if (parentSessionID) (msg.info as any).parentSessionID = parentSessionID
     ;(msg.info as any).orderKey = timelineMessageOrderKey(msg)

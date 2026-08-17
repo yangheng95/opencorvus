@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Mission message-origin projection repair: [`2026-08-17-mission-message-origin-projection-repair.md`](records/2026-08/2026-08-17-mission-message-origin-projection-repair.md).
+
 Latest Overlay launcher/Task layout convergence repair: [`2026-08-17-overlay-home-task-layout-convergence.md`](records/2026-08/2026-08-17-overlay-home-task-layout-convergence.md).
 
 Latest Overlay stream-state and Task-switch latency repair: [`2026-08-17-overlay-stream-state-and-task-switch-latency.md`](records/2026-08/2026-08-17-overlay-stream-state-and-task-switch-latency.md).

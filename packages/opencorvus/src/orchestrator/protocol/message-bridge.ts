@@ -274,8 +274,14 @@ function rememberMessageInfo(messageID: string, info: MessageEventIdentity) {
 
 export function originSourceFromMessageExtra(extra: unknown): string {
   if (!extra || typeof extra !== "object" || Array.isArray(extra)) return ""
-  const source = (extra as { source?: unknown }).source
-  return typeof source === "string" ? source : ""
+  const record = extra as { source?: unknown; wake_reason?: unknown }
+  const directSource = typeof record.source === "string" ? record.source : ""
+  const wakeReason =
+    record.wake_reason && typeof record.wake_reason === "object" && !Array.isArray(record.wake_reason)
+      ? (record.wake_reason as { source?: unknown })
+      : undefined
+  const wakeSource = typeof wakeReason?.source === "string" ? wakeReason.source : ""
+  return directSource || wakeSource
 }
 
 function cacheMessageInfo(properties: Record<string, unknown>) {
