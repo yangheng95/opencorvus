@@ -33,6 +33,8 @@ import { LLM } from "../../src/session/llm"
 import { MemoryInjection } from "../../src/memory/injection"
 import { RuntimeExecutionSettlement } from "../../src/runtime/execution-settlement"
 import { GlobalBus } from "../../src/bus/global"
+import { EngineTaskTable } from "../../src/engine/engine.sql"
+import { SessionTable } from "../../src/session/session.sql"
 
 const model = { providerID: "test", modelID: "project-memory" }
 const packageRevision = {
@@ -72,8 +74,13 @@ async function taskFixture(
   title: string,
   actor: "user" | "mission" = "mission",
   channelBinding?: { platform: "slack"; channel: string; thread: string },
+  configOverlay?: Config.Overlay,
 ) {
-  const root = await Session.create({ kind: "root", title })
+  const root = await Session.create({
+    kind: "root",
+    title,
+    ...(configOverlay ? { metadata: { configOverlay } } : {}),
+  })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
   persistTask({
@@ -191,7 +198,12 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Chat" })
+        const organizerConfigSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({} as never)
+        const session = await Session.create({
+          kind: "assistant",
+          title: "Chat",
+          metadata: { configOverlay: { model: null } },
+        })
         const marker = ProjectMemory.userInputExtra({ surface: "test.prompt", literalText: "Initial request" })
         const first = userMessage(session.id, "Initial request", 1_000, marker)
         await Session.persistMessage(first)
@@ -310,6 +322,8 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
           expect(ProjectMemory.readInTransaction(db, Instance.project.id).pendingCount).toBe(3)
         })
 
+        await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+        organizerConfigSpy.mockRestore()
         const beforeCommit = ProjectMemory.read(Instance.project.id)
         const covered = ProjectMemory.pending(Instance.project.id).map((entry) => entry.occurrenceID)
         const commitLease = Database.transaction((db) =>
@@ -929,6 +943,395 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     })
   })
 
+  test("manual organize route uses the pending FIFO owner's canonical Session model", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const automaticDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
+        const { root: session } = await taskFixture(
+          "Manual Organizer model authority",
+          "user",
+          undefined,
+          { model: `${model.providerID}/${model.modelID}` },
+        )
+        await Session.persistMessage(
+          userMessage(
+            session.id,
+            "Keep the Memory Organizer on the pending owner's configured model.",
+            19_000,
+            ProjectMemory.userInputExtra({
+              surface: "test.organizer.manual-route",
+              literalText: "Keep the Memory Organizer on the pending owner's configured model.",
+            }),
+          ),
+        )
+        const pending = ProjectMemory.pending(Instance.project.id)
+        const candidate = JSON.stringify({
+          baseRevision: 0,
+          coveredOccurrenceIDs: pending.map((entry) => entry.occurrenceID),
+          disposition: "organized",
+          markdown: "# Project context\n\nThe pending owner's canonical model organizes Project MEMORY.MD.",
+        })
+        const resolvedModel = organizerModel()
+        const modelRequests: Array<{ providerID: string; modelID: string }> = []
+        const modelSpy = spyOn(Provider, "getModel").mockImplementation(async (providerID, modelID) => {
+          modelRequests.push({ providerID, modelID })
+          return resolvedModel
+        })
+        const streamCalls: Parameters<typeof LLM.stream>[0][] = []
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
+          streamCalls.push(input)
+          return {
+            text: Promise.resolve(candidate),
+            textStream: (async function* () {
+              yield candidate
+            })(),
+          } as never
+        })
+        try {
+          const response = await Server.App().request("/experimental/project-memory/organize", {
+            method: "POST",
+            headers: { "x-opencorvus-directory": project.path },
+          })
+          expect(response.status).toBe(200)
+          const body = (await response.json()) as {
+            result: { status: string; revision: number }
+            document: { status: string; revision: number; pendingCount: number; content: string }
+          }
+          expect(body).toMatchObject({
+            result: { status: "idle", revision: 1 },
+            document: { status: "idle", revision: 1, pendingCount: 0 },
+          })
+          expect(body.document.content).toContain("pending owner's canonical model")
+          expect(modelRequests).toContainEqual(model)
+          expect(streamCalls.length).toBeGreaterThanOrEqual(1)
+          for (const call of streamCalls) {
+            expect(call).toMatchObject({
+              agentID: "memory",
+              sessionID: session.id,
+              model: { providerID: model.providerID, id: model.modelID },
+              config: { model: `${model.providerID}/${model.modelID}` },
+            })
+          }
+          automaticDrain[Symbol.dispose]()
+          Bus.resumeDurablePublications()
+          await waitFor(
+            () => Bus.TestHooks.outbox().length === 0,
+            "Manual Organizer publication receipt did not settle",
+          )
+        } finally {
+          automaticDrain[Symbol.dispose]()
+          streamSpy.mockRestore()
+          modelSpy.mockRestore()
+        }
+      },
+    })
+  }, 15_000)
+
+  test("uses the oldest pending Task as the canonical model owner across Tasks", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const firstModel = { providerID: "test", modelID: "fifo-first" }
+        const secondModel = { providerID: "test", modelID: "fifo-second" }
+        const first = await taskFixture("First FIFO owner", "mission", undefined, {
+          model: `${firstModel.providerID}/${firstModel.modelID}`,
+        })
+        const second = await taskFixture("Second FIFO owner", "mission", undefined, {
+          model: `${secondModel.providerID}/${secondModel.modelID}`,
+        })
+        const modelRequests: Array<{ providerID: string; modelID: string }> = []
+        const modelSpy = spyOn(Provider, "getModel").mockImplementation(async (providerID, modelID) => {
+          modelRequests.push({ providerID, modelID })
+          return { ...organizerModel(), providerID, id: modelID }
+        })
+        const streamCalls: Parameters<typeof LLM.stream>[0][] = []
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
+          streamCalls.push(input)
+          const candidate = JSON.stringify({
+            baseRevision: ProjectMemory.read(Instance.project.id).revision,
+            coveredOccurrenceIDs: ProjectMemory.pending(Instance.project.id).map((entry) => entry.occurrenceID),
+            disposition: "organized",
+            markdown: "# Project context\n\nThe oldest pending Task owns the cross-Task Organizer model.",
+          })
+          return {
+            text: Promise.resolve(candidate),
+            textStream: (async function* () {
+              yield candidate
+            })(),
+          } as never
+        })
+        try {
+          Database.transaction((db) => {
+            ProjectMemory.captureOccurrenceInTransaction(db, {
+              occurrenceKind: "interaction_reply",
+              occurrenceID: "fifo-owner-first",
+              projectID: Instance.project.id,
+              taskID: first.taskID,
+              sessionID: first.root.id,
+              surface: "test.organizer.fifo-owner",
+              timeCreated: 19_300,
+              text: "First Task owns this Organizer batch.",
+            })
+            ProjectMemory.captureOccurrenceInTransaction(db, {
+              occurrenceKind: "interaction_reply",
+              occurrenceID: "fifo-owner-second",
+              projectID: Instance.project.id,
+              taskID: second.taskID,
+              sessionID: second.root.id,
+              surface: "test.organizer.fifo-owner",
+              timeCreated: 19_301,
+              text: "Second Task follows in the same Organizer batch.",
+            })
+          })
+          const result = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+          expect(result).toMatchObject({ status: "idle", revision: 1 })
+          expect(modelRequests).toEqual([firstModel])
+          expect(streamCalls).toHaveLength(1)
+          expect(streamCalls[0]).toMatchObject({
+            sessionID: first.root.id,
+            model: { providerID: firstModel.providerID, id: firstModel.modelID },
+            config: { model: `${firstModel.providerID}/${firstModel.modelID}` },
+          })
+          expect(ProjectMemory.read(Instance.project.id)).toMatchObject({
+            status: "idle",
+            revision: 1,
+            pendingCount: 0,
+          })
+        } finally {
+          streamSpy.mockRestore()
+          modelSpy.mockRestore()
+        }
+      },
+    })
+  }, 15_000)
+
+  test("advances unavailable FIFO proof one owner at a time before organizing the next configured Task", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const first = await taskFixture("First unavailable FIFO owner", "mission")
+        const second = await taskFixture("Second unavailable FIFO owner", "mission")
+        const configured = await taskFixture("Configured FIFO successor", "mission")
+        const configuredSnapshot = {
+          model: `${model.providerID}/${model.modelID}`,
+          experimental: { memory: { pending_availability_limit: 10 } },
+        } as Config.Info
+        const unavailableSnapshot = {
+          experimental: { memory: { pending_availability_limit: 10 } },
+        } as Config.Info
+        const configSpy = spyOn(EffectiveConfig, "effective").mockImplementation(async (scope) =>
+          scope?.taskID === configured.taskID ? configuredSnapshot : unavailableSnapshot,
+        )
+        const modelRequests: Array<{ providerID: string; modelID: string }> = []
+        const modelSpy = spyOn(Provider, "getModel").mockImplementation(async (providerID, modelID) => {
+          modelRequests.push({ providerID, modelID })
+          return organizerModel()
+        })
+        const streamCalls: Parameters<typeof LLM.stream>[0][] = []
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
+          streamCalls.push(input)
+          const candidate = JSON.stringify({
+            baseRevision: 0,
+            coveredOccurrenceIDs: ProjectMemory.pending(Instance.project.id).map((entry) => entry.occurrenceID),
+            disposition: "organized",
+            markdown: "# Project context\n\nThe configured FIFO successor organized after unavailable heads settled.",
+          })
+          return {
+            text: Promise.resolve(candidate),
+            textStream: (async function* () {
+              yield candidate
+            })(),
+          } as never
+        })
+        try {
+          Database.transaction((db) => {
+            const owners = [first, second, ...Array.from({ length: 10 }, () => configured)]
+            for (const [index, task] of owners.entries()) {
+              ProjectMemory.captureOccurrenceInTransaction(db, {
+                occurrenceKind: "interaction_reply",
+                occurrenceID: `owner-scoped-unavailable-${index + 1}`,
+                projectID: Instance.project.id,
+                taskID: task.taskID,
+                sessionID: task.root.id,
+                surface: "test.organizer.owner-scoped-unavailable",
+                timeCreated: 19_400 + index,
+                text: `Owner-scoped pending input ${index + 1}`,
+              })
+            }
+          })
+
+          const firstAttempt = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+          expect(firstAttempt).toMatchObject({ status: "unavailable", droppedOccurrenceIDs: [] })
+          const firstSettlement = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+          expect(firstSettlement).toMatchObject({
+            status: "unavailable",
+            droppedOccurrenceIDs: ["owner-scoped-unavailable-1"],
+          })
+          const firstGeneration = ProjectMemory.read(Instance.project.id).notice!.generation
+
+          const secondAttempt = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+          expect(secondAttempt).toMatchObject({ status: "unavailable", droppedOccurrenceIDs: [] })
+          expect(ProjectMemory.read(Instance.project.id)).toMatchObject({ pendingCount: 11, droppedPendingCount: 1 })
+          expect(ProjectMemory.read(Instance.project.id).notice!.generation).not.toBe(firstGeneration)
+          const secondSettlement = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+          expect(secondSettlement).toMatchObject({
+            status: "unavailable",
+            droppedOccurrenceIDs: ["owner-scoped-unavailable-2"],
+          })
+
+          const organized = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+          expect(organized).toMatchObject({ status: "idle", revision: 1 })
+          expect(modelRequests).toEqual([model])
+          expect(streamCalls).toHaveLength(1)
+          expect(streamCalls[0]).toMatchObject({
+            sessionID: configured.root.id,
+            config: configuredSnapshot,
+          })
+          expect(ProjectMemory.read(Instance.project.id)).toMatchObject({
+            status: "idle",
+            revision: 1,
+            pendingCount: 0,
+            droppedPendingCount: 2,
+          })
+        } finally {
+          streamSpy.mockRestore()
+          modelSpy.mockRestore()
+          configSpy.mockRestore()
+        }
+      },
+    })
+  }, 15_000)
+
+  test("settles a pending Task without a bound root Session as durable unavailable", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const task = await taskFixture("Missing Organizer owner", "mission", undefined, { model: null })
+        await Session.persistMessage(
+          userMessage(
+            task.root.id,
+            "Keep this pending input until its owning Task has a canonical model scope.",
+            19_100,
+            ProjectMemory.userInputExtra({
+              surface: "test.organizer.missing-owner",
+              literalText: "Keep this pending input until its owning Task has a canonical model scope.",
+            }),
+          ),
+        )
+        await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+        Database.transaction((db) => {
+          db.update(EngineTaskTable).set({ session_id: null }).where(eq(EngineTaskTable.id, task.taskID)).run()
+          ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID: Instance.project.id })
+        })
+
+        const result = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+
+        expect(result).toMatchObject({ status: "unavailable", revision: 0, applied: true })
+        expect(ProjectMemory.read(Instance.project.id)).toMatchObject({
+          status: "unavailable",
+          revision: 0,
+          pendingCount: 1,
+          notice: {
+            acknowledged: false,
+            message: `Project MEMORY.MD pending Task ${task.taskID} has no bound root Session model configuration.`,
+          },
+        })
+      },
+    })
+  })
+
+  test("revokes an Organizer attempt whose single effective configuration snapshot becomes stale", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const task = await taskFixture("Organizer configuration snapshot", "mission", undefined, { model: null })
+        await Session.persistMessage(
+          userMessage(
+            task.root.id,
+            "Organize this input from one coherent configuration generation.",
+            19_200,
+            ProjectMemory.userInputExtra({
+              surface: "test.organizer.config-snapshot",
+              literalText: "Organize this input from one coherent configuration generation.",
+            }),
+          ),
+        )
+        await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+        Database.use((db) =>
+          db
+            .update(SessionTable)
+            .set({ metadata: { configOverlay: { model: `${model.providerID}/${model.modelID}` } } })
+            .where(eq(SessionTable.id, task.root.id))
+            .run(),
+        )
+        const configSnapshot = {
+          model: `${model.providerID}/${model.modelID}`,
+          experimental: {
+            memory: {
+              enabled: true,
+              document_token_limit: 10_000,
+              organizer_input_token_budget: 32_000,
+              pending_availability_limit: 500,
+            },
+          },
+        } as Config.Info
+        let effectiveReads = 0
+        const configSpy = spyOn(EffectiveConfig, "effective").mockImplementation(async () => {
+          effectiveReads += 1
+          if (effectiveReads === 1) {
+            Database.transaction((db) =>
+              ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID: Instance.project.id }),
+            )
+          }
+          return configSnapshot
+        })
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(organizerModel())
+        const streamCalls: Parameters<typeof LLM.stream>[0][] = []
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
+          streamCalls.push(input)
+          const candidate = JSON.stringify({
+            baseRevision: 0,
+            coveredOccurrenceIDs: ProjectMemory.pending(Instance.project.id).map((entry) => entry.occurrenceID),
+            disposition: "organized",
+            markdown: "# Project context\n\nOne coherent Organizer configuration snapshot.",
+          })
+          return {
+            text: Promise.resolve(candidate),
+            textStream: (async function* () {
+              yield candidate
+            })(),
+          } as never
+        })
+        try {
+          await expect(ProjectMemoryOrganizer.run({ projectID: Instance.project.id })).rejects.toBeInstanceOf(
+            ProjectMemoryInvariantError,
+          )
+          expect(effectiveReads).toBe(1)
+          expect(streamCalls).toHaveLength(1)
+          expect(streamCalls[0]!.config).toBe(configSnapshot)
+          const replacement = Database.transaction((db) =>
+            ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+              projectID: Instance.project.id,
+              leaseID: "coherent-config-replacement",
+              expectedRevision: 0,
+            }),
+          )
+          expect(replacement).toMatchObject({ id: "coherent-config-replacement", availabilityGeneration: 1 })
+        } finally {
+          streamSpy.mockRestore()
+          modelSpy.mockRestore()
+          configSpy.mockRestore()
+        }
+      },
+    })
+  })
+
   test("consumes the abortable memory-agent text stream and commits its semantic replacement envelope", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -988,7 +1391,6 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         try {
           const result = await ProjectMemoryOrganizer.run({
             projectID: Instance.project.id,
-            sessionID: session.id,
           })
           expect(result).toMatchObject({ status: "idle", revision: 1 })
           expect(streamCalls).toHaveLength(1)

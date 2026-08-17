@@ -138,23 +138,27 @@ export async function resolveProjectedWorkerModel(
 }
 
 /**
- * Resolve a model ref from config (session overlay over project base) without
- * going through an agent — e.g. the overlay settings panel asking "what's the
- * effective default?". Same single-source precedence as resolveAgentModel for
- * the non-agent levels. Throws when no `model` anywhere (no fallback).
- *
- * This is also the ONLY "configured default model" entrypoint — Provider's old
- * parallel defaultModel() (duplicate cfg.model→parse→throw, rule 8) is removed
- * and delegates here.
+ * Resolve a model ref from one already-materialized effective config snapshot.
+ * This is the canonical pure primitive for consumers that must bind model and
+ * adjacent settings to the same fenced snapshot.
  */
-export async function resolveConfiguredModelRef(opts?: { taskID?: string; sessionID?: string }): Promise<ModelRef> {
-  const overlay = await EffectiveConfig.overlay(opts)
-  if (overlay?.model) return Provider.parseModel(overlay.model)
-  const cfg = await EffectiveConfig.base(opts)
-  if (cfg.model) return Provider.parseModel(cfg.model)
+export function configuredDefaultModelRef(config: { model?: string }): ModelRef {
+  if (config.model) return Provider.parseModel(config.model)
   throw new MissingModelConfigError({
     message:
       "No `model` configured (session overlay or opencorvus.jsonc). " +
       "The project must declare a default model — fallbacks are not allowed.",
   })
+}
+
+/**
+ * Load the effective config for one scope, then resolve its canonical default
+ * model without going through an agent.
+ *
+ * Provider's old parallel defaultModel() is removed; callers that already own
+ * an effective snapshot use `configuredDefaultModelRef`, while other callers
+ * use this scoped loader.
+ */
+export async function resolveConfiguredModelRef(opts?: { taskID?: string; sessionID?: string }): Promise<ModelRef> {
+  return configuredDefaultModelRef(await EffectiveConfig.effective(opts))
 }

@@ -92,7 +92,6 @@ export const MemoryTool = Tool.define("memory", {
       case "project_organize": {
         const result = await ProjectMemoryOrganizer.run({
           projectID: projectId,
-          sessionID: ctx.sessionID,
           abort: ctx.abort,
         })
         return {

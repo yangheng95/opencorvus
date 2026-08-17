@@ -287,7 +287,7 @@ export type Config = {
     coding?: NativeAgentOverride
     compaction?: NativeAgentOverride
     control?: NativeAgentOverride
-    memory?: NativeAgentOverride
+    memory?: MemoryAgentOverride
     mission?: NativeAgentOverride
     orchestrator?: NativeAgentOverride
     summary?: NativeAgentOverride
@@ -1289,7 +1289,6 @@ export type EventProjectMemoryNoticeChanged = {
 export type EventProjectMemoryOrganizeRequested = {
   properties: {
     projectID: string
-    sessionID?: string
   }
   type: "project.memory.organize.requested"
 }
@@ -3343,6 +3342,36 @@ export type McpResource = {
   mimeType?: string
   name: string
   uri: string
+}
+
+export type MemoryAgentOverride = {
+  /**
+   * Hex color code (e.g., #FF5733) or theme color (e.g., primary)
+   */
+  color?: string | "primary" | "secondary" | "accent" | "success" | "warning" | "error" | "info"
+  /**
+   * Description of when to use the agent
+   */
+  description?: string
+  options?: {
+    [key: string]: unknown
+  }
+  permission?: PermissionConfig
+  prompt?: string
+  /**
+   * Additional instructions appended after a code-owned stage-agent core prompt.
+   */
+  prompt_append?: string
+  /**
+   * Maximum number of agentic iterations before forcing text-only response
+   */
+  steps?: number
+  temperature?: number
+  top_p?: number
+  /**
+   * Default model variant for this agent (applies only when using the agent's configured model).
+   */
+  variant?: string
 }
 
 export type MessageAbortedError = {

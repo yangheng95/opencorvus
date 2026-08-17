@@ -979,7 +979,7 @@
                 "$ref": "#/components/schemas/NativeAgentOverride"
               },
               "memory": {
-                "$ref": "#/components/schemas/NativeAgentOverride"
+                "$ref": "#/components/schemas/MemoryAgentOverride"
               },
               "mission": {
                 "$ref": "#/components/schemas/NativeAgentOverride"
@@ -4003,9 +4003,6 @@
             "properties": {
               "projectID": {
                 "minLength": 1,
-                "type": "string"
-              },
-              "sessionID": {
                 "type": "string"
               }
             },
@@ -11804,6 +11801,70 @@
           "uri",
           "client"
         ],
+        "type": "object"
+      },
+      "MemoryAgentOverride": {
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "anyOf": [
+              {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "primary",
+                  "secondary",
+                  "accent",
+                  "success",
+                  "warning",
+                  "error",
+                  "info"
+                ],
+                "type": "string"
+              }
+            ],
+            "description": "Hex color code (e.g., #FF5733) or theme color (e.g., primary)"
+          },
+          "description": {
+            "description": "Description of when to use the agent",
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "permission": {
+            "$ref": "#/components/schemas/PermissionConfig"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "prompt_append": {
+            "description": "Additional instructions appended after a code-owned stage-agent core prompt.",
+            "type": "string"
+          },
+          "steps": {
+            "description": "Maximum number of agentic iterations before forcing text-only response",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "type": "integer"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "variant": {
+            "description": "Default model variant for this agent (applies only when using the agent's configured model).",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "MessageAbortedError": {

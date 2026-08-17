@@ -1,7 +1,7 @@
 import type { ModelMessage } from "ai"
 import z from "zod"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
-import { resolveAgentModel } from "@/agent/model"
+import { configuredDefaultModelRef } from "@/agent/model"
 import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
 import { EffectiveConfig } from "@/config/effective"
 import { Instance } from "@/project/instance"
@@ -18,6 +18,7 @@ import { createInstanceState } from "@/project/instance-state"
 import { MissingModelConfigError } from "@/config/model-resolution-error"
 import { GlobalBus } from "@/bus/global"
 import { randomUUID } from "node:crypto"
+import { findTask } from "@/engine/store"
 
 const log = Log.create({ service: "memory.organizer" })
 const PROTOCOL_RESERVE_TOKENS = 2_000
@@ -119,13 +120,19 @@ function generation(input: { projectID: string; revision: number; pending: Entry
 function unavailableGeneration(input: {
   projectID: string
   availabilityGeneration: number
-  config: Awaited<ReturnType<typeof EffectiveConfig.effective>>
+  head: Entry
+  reason: string
+  model?: string
 }) {
   return JSON.stringify({
     projectID: input.projectID,
     availabilityGeneration: input.availabilityGeneration,
-    model: input.config.model ?? null,
-    memoryAgent: input.config.agent?.memory ?? null,
+    headOccurrenceID: input.head.occurrenceID,
+    owner: input.head.taskID
+      ? { kind: "task", id: input.head.taskID }
+      : { kind: "session", id: input.head.sessionID ?? input.head.ownerID },
+    reason: input.reason,
+    model: input.model ?? null,
   })
 }
 
@@ -134,10 +141,32 @@ function unavailableMessage(error: unknown) {
   return error instanceof Error ? error.message : String(error)
 }
 
+function organizerOwner(entry: Entry) {
+  if (entry.taskID) {
+    const task = findTask(entry.taskID)
+    if (!task) {
+      throw new MissingModelConfigError({
+        message: `Project MEMORY.MD pending occurrence ${entry.occurrenceID} belongs to missing Task ${entry.taskID}.`,
+      })
+    }
+    const rootSessionID = task.session_id
+    if (!rootSessionID) {
+      throw new MissingModelConfigError({
+        message: `Project MEMORY.MD pending Task ${entry.taskID} has no bound root Session model configuration.`,
+      })
+    }
+    return { scope: { taskID: entry.taskID }, sessionID: entry.sessionID ?? rootSessionID }
+  }
+  if (entry.sessionID) return { scope: { sessionID: entry.sessionID }, sessionID: entry.sessionID }
+  throw new MissingModelConfigError({
+    message: `Project MEMORY.MD pending occurrence ${entry.occurrenceID} has no owning Session model configuration.`,
+  })
+}
+
 export namespace ProjectMemoryOrganizer {
   export const protocolReserveTokens = PROTOCOL_RESERVE_TOKENS
 
-  export async function run(input?: { projectID?: string; sessionID?: string; abort?: AbortSignal }) {
+  export async function run(input?: { projectID?: string; abort?: AbortSignal }) {
     const projectID = input?.projectID ?? Instance.project.id
     return withKeyedLock(
       organizerLocks,
@@ -148,7 +177,7 @@ export namespace ProjectMemoryOrganizer {
     )
   }
 
-  async function runUnlocked(input: { projectID: string; sessionID?: string; abort?: AbortSignal }) {
+  async function runUnlocked(input: { projectID: string; abort?: AbortSignal }) {
     const checkpoint = () => input.abort?.throwIfAborted()
     checkpoint()
     const projectID = input.projectID
@@ -156,12 +185,6 @@ export namespace ProjectMemoryOrganizer {
     const pending = ProjectMemory.pending(projectID)
     if (pending.length === 0) return { status: "idle" as const, revision: snapshot.revision }
 
-    const config = await EffectiveConfig.effective(input?.sessionID ? { sessionID: input.sessionID } : undefined)
-    checkpoint()
-    const memoryConfig = config.experimental?.memory
-    const documentTokenLimit = memoryConfig?.document_token_limit ?? ProjectMemory.documentTokenLimit
-    const configuredInputBudget = memoryConfig?.organizer_input_token_budget ?? 32_000
-    const pendingAvailabilityLimit = memoryConfig?.pending_availability_limit ?? 500
     const leaseID = randomUUID()
     checkpoint()
     const lease = Database.transaction((db) =>
@@ -175,19 +198,29 @@ export namespace ProjectMemoryOrganizer {
     const releaseLease = () =>
       Database.transaction((db) => ProjectMemory.releaseOrganizerAttemptInTransaction(db, { projectID, leaseID }))
     try {
-      let helper: Awaited<ReturnType<typeof HelperAgentRegistry.get>>
-      let model: Provider.Model
+      let owner!: ReturnType<typeof organizerOwner>
+      let config: Awaited<ReturnType<typeof EffectiveConfig.effective>> | undefined
+      let helper!: Awaited<ReturnType<typeof HelperAgentRegistry.get>>
+      let model!: Provider.Model
       try {
+        owner = organizerOwner(pending[0]!)
+        config = await EffectiveConfig.effective(owner.scope)
+        checkpoint()
         helper = await HelperAgentRegistry.get("memory", { config })
-        model = await resolveAgentModel("memory", input?.sessionID ? { sessionID: input.sessionID } : undefined)
+        const modelRef = configuredDefaultModelRef(config)
+        model = await Provider.getModel(modelRef.providerID, modelRef.modelID, { config })
       } catch (error) {
         if (!(error instanceof MissingModelConfigError)) throw error
+        const message = unavailableMessage(error)
         const unavailableKey = unavailableGeneration({
           projectID,
           availabilityGeneration: lease.availabilityGeneration,
-          config,
+          head: pending[0]!,
+          reason: message,
+          model: config?.model,
         })
         const expectedOccurrenceIDs = pending.map((entry) => entry.occurrenceID)
+        const pendingAvailabilityLimit = config?.experimental?.memory?.pending_availability_limit ?? 500
         checkpoint()
         const unavailable = Database.transaction((db) =>
           ProjectMemory.markUnavailableAndTrimInTransaction(db, {
@@ -198,7 +231,7 @@ export namespace ProjectMemoryOrganizer {
             expectedOccurrenceIDs,
             pendingAvailabilityLimit,
             allowTrim: snapshot.status === "unavailable" && snapshot.notice?.generation === unavailableKey,
-            message: unavailableMessage(error),
+            message,
           }),
         )
         if (!unavailable.applied) {
@@ -206,6 +239,9 @@ export namespace ProjectMemoryOrganizer {
         }
         return { status: "unavailable" as const, revision: snapshot.revision, ...unavailable }
       }
+      const memoryConfig = config.experimental?.memory
+      const documentTokenLimit = memoryConfig?.document_token_limit ?? ProjectMemory.documentTokenLimit
+      const configuredInputBudget = memoryConfig?.organizer_input_token_budget ?? 32_000
       const selected = selectPrefix({
         pending,
         documentTokens: snapshot.tokenCount,
@@ -240,8 +276,7 @@ export namespace ProjectMemoryOrganizer {
         documentTokenLimit,
         pending: selected.entries,
       })
-      const sessionID = input?.sessionID ?? pending.find((entry) => entry.sessionID)?.sessionID
-      if (!sessionID) throw new Error("Memory Organizer requires a real source Session identity")
+      const sessionID = owner.sessionID
       const user = await sourceUser(sessionID)
       const messages: ModelMessage[] = [{ role: "user", content: prompt }]
       const result = await LLM.stream({
@@ -254,6 +289,7 @@ export namespace ProjectMemoryOrganizer {
         model,
         abort: input?.abort ?? new AbortController().signal,
         sessionID,
+        config,
         retries: 0,
         messages,
         toolChoice: "none",
@@ -317,19 +353,15 @@ export namespace ProjectMemoryOrganizer {
       unsubs.push(
         Bus.subscribe(
           ProjectMemory.Event.OrganizationRequested,
-          ({ properties, signal }) =>
-            run({ projectID: properties.projectID, sessionID: properties.sessionID, abort: signal }),
+          ({ properties, signal }) => run({ projectID: properties.projectID, abort: signal }),
           { durableID: "project-memory.organizer", effect: "idempotent_by_occurrence" },
         ),
       )
       unsubs.push(
-        Bus.subscribe(Session.Event.ConfigChanged, ({ properties }) =>
+        Bus.subscribe(Session.Event.ConfigChanged, () =>
           Database.transaction((db) => {
             ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
-            ProjectMemory.requestOrganizationInTransaction(db, {
-              projectID,
-              sessionID: properties.sessionID,
-            })
+            ProjectMemory.requestOrganizationInTransaction(db, { projectID })
           }),
         ),
       )

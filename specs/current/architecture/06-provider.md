@@ -228,6 +228,7 @@ API key，仍显示 `requires_configuration` 以说明账户、项目或订阅�
 
 精确 worker 覆盖 runtime template，runtime template 覆盖全局默认。`base_role` 只选择模板，不是 agent identity。
 所有 Task worker 都使用这条统一流式 Provider 链路；人类显式启动的 coding CLI 不构成 Task worker。
+Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 不提供 `agent.memory.model`。它只读取待整理 FIFO 队首证据所属 Task/Session 的有效顶层 `model`，请求入口不携带或覆盖模型所有权。
 
 ## 核心文件
 

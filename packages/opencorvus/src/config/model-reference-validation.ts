@@ -9,7 +9,7 @@ function collectModelReferences(input: Config.Info, root: string): Array<{ path:
   add(`${root}.model`, input.model)
   add(`${root}.small_model`, input.small_model)
   for (const [agentID, agent] of Object.entries(input.agent ?? {})) {
-    add(`${root}.agent.${agentID}.model`, agent.model)
+    add(`${root}.agent.${agentID}.model`, "model" in agent ? agent.model : undefined)
   }
   for (const [templateID, runtime] of Object.entries(input.runtime_templates ?? {})) {
     add(`${root}.runtime_templates.${templateID}.model`, runtime?.model)

@@ -23,7 +23,7 @@ const ORGANIZER_LEASE_TTL_MS = 15 * 60_000
 
 const OrganizationRequested = BusEvent.define(
   "project.memory.organize.requested",
-  z.object({ projectID: z.string().min(1), sessionID: z.string().optional() }),
+  z.object({ projectID: z.string().min(1) }),
 )
 
 const NoticeChanged = BusEvent.define(
@@ -535,10 +535,7 @@ function insert(db: Database.TxOrDb, entry: Entry) {
     })
   }
   if (!existed) {
-    Bus.publishOwnedInTransaction(OrganizationRequested, {
-      projectID: entry.projectID,
-      ...(entry.sessionID ? { sessionID: entry.sessionID } : {}),
-    })
+    Bus.publishOwnedInTransaction(OrganizationRequested, { projectID: entry.projectID })
   }
   return { classification: "user_input" as const, fileID: id, occurrenceID: entry.occurrenceID }
 }
@@ -666,7 +663,7 @@ export namespace ProjectMemory {
 
   export function requestOrganizationInTransaction(
     db: Database.TxOrDb,
-    input: { projectID: string; sessionID?: string },
+    input: { projectID: string },
   ) {
     if (pendingRows(db, input.projectID).length === 0) return false
     Bus.publishOwnedInTransaction(OrganizationRequested, input)
@@ -860,7 +857,9 @@ export namespace ProjectMemory {
     ) {
       return { applied: false as const, droppedOccurrenceIDs: [] as string[] }
     }
-    const excess = input.allowTrim ? Math.max(0, pending.length - input.pendingAvailabilityLimit) : 0
+    // One unavailable generation proves only the current FIFO head's owner and
+    // configuration. Never use that proof to discard a later owner's evidence.
+    const excess = input.allowTrim && pending.length > input.pendingAvailabilityLimit ? 1 : 0
     const dropped = pending.slice(0, excess)
     const droppedOccurrenceIDs = dropped.map((item) => item.entry.occurrenceID)
     const message =

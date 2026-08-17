@@ -52,7 +52,7 @@ function removalPatch(current: Config.Info, providerID: string): Config.ProjectM
 
   const agentPatch: Record<string, unknown> = {}
   for (const [agentID, agent] of Object.entries(current.agent ?? {})) {
-    if (!modelBelongsToProvider(agent.model, providerID)) continue
+    if (!("model" in agent) || !modelBelongsToProvider(agent.model, providerID)) continue
     agentPatch[agentID] = Object.keys(agent).length === 1 ? null : { model: null }
   }
   if (Object.keys(agentPatch).length > 0) patch.agent = agentPatch

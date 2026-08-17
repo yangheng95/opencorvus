@@ -15,6 +15,7 @@ import type { TextHooks } from "@/llm/api"
 import { mergeDeep, pipe } from "remeda"
 import { ProviderTransform } from "@/provider/transform"
 import { EffectiveConfig } from "@/config/effective"
+import type { Config } from "@/config/config"
 import { Instance } from "@/project/instance"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
@@ -40,6 +41,8 @@ export namespace LLM {
     /** Real non-message occurrence identity for an internal, tool-free participant request. */
     requestID?: string
     sessionID: string
+    /** Reuse an already-resolved effective snapshot for one coherent internal attempt. */
+    config?: Config.Info
     model: Provider.Model
     agentID: string
     agent: SessionAgentRuntime
@@ -115,7 +118,7 @@ export namespace LLM {
   export async function stream(input: StreamInput): Promise<StreamResult> {
     const requestID = input.user?.id ?? input.requestID
     if (!requestID) throw new Error("LLM.stream requires a real user Message or request occurrence identity")
-    const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
+    const config = input.config ?? (await EffectiveConfig.effective({ sessionID: input.sessionID }))
     const agent = input.agent
     const l = log
       .clone()

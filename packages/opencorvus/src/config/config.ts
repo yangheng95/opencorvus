@@ -780,6 +780,9 @@ export namespace Config {
     })
   export type NativeAgentOverride = z.infer<typeof NativeAgentOverride>
 
+  export const MemoryAgentOverride = NativeAgentOverride.omit({ model: true }).meta({ ref: "MemoryAgentOverride" })
+  export type MemoryAgentOverride = z.infer<typeof MemoryAgentOverride>
+
   // Session overlay: the EXACT subset of config a session may override
   // (decision §6-1, widest set). `.strict()` is the pinned-invariant guard
   // (design principle 5): any key NOT listed here — permission, tools, mcp,
@@ -1309,7 +1312,7 @@ export namespace Config {
           title: NativeAgentOverride.optional(),
           summary: NativeAgentOverride.optional(),
           compaction: NativeAgentOverride.optional(),
-          memory: NativeAgentOverride.optional(),
+          memory: MemoryAgentOverride.optional(),
           orchestrator: NativeAgentOverride.optional(),
         })
         .strict()

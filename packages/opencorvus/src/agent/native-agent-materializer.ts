@@ -19,7 +19,7 @@ export function materializeNativeAgentDefinitions(input: {
     const role = AgentRoleContract.get(key)
     const item = result[key]
     if (!item) throw new Error(`Native agent override ${key} has no fixed registry definition`)
-    if (value.model) item.model = Provider.parseModel(value.model)
+    if ("model" in value && value.model) item.model = Provider.parseModel(value.model)
     item.variant = value.variant ?? item.variant
     const promptConfigMode = role.promptConfigMode
     if (promptConfigMode === "append" && value.prompt !== undefined) {

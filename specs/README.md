@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Project MEMORY.MD model-authority convergence: [`2026-08-17-project-memory-model-authority-convergence.md`](records/2026-08/2026-08-17-project-memory-model-authority-convergence.md).
+
 Latest Project deletion duplicate-request and admission-conflict repair: [`2026-08-17-project-delete-conflict-contract.md`](records/2026-08/2026-08-17-project-delete-conflict-contract.md).
 
 Latest backend startup recovery/readiness convergence and rebuilt Windows desktop package: [`2026-08-16-backend-recovery-readiness-convergence.md`](records/2026-08/2026-08-16-backend-recovery-readiness-convergence.md).
