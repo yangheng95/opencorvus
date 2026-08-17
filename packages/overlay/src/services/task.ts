@@ -360,6 +360,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions = {}
       if (stale()) return
 
       selectedDirectory = taskOwningDirectory(nextTaskID)
+      startSSE({ kind: "task", id: nextTaskID }, lastSequence, { directory: selectedDirectory })
       const rootSessionID = rootTaskSessionID()
       if (!rootSessionID) throw new Error(`selectTask: task ${nextTaskID} has no root session`)
       await projectComposerModelFromSession(
@@ -367,10 +368,10 @@ export async function selectTask(taskID: string, options: SelectTaskOptions = {}
         () => ownsWorkspaceSelection(epoch) && activeTaskID() === nextTaskID,
       )
       if (stale()) return
-      startSSE({ kind: "task", id: nextTaskID }, lastSequence, { directory: selectedDirectory })
     } catch (error) {
       if (stale() && isAbortError(error)) return
       if (!stale()) {
+        stopSSE()
         batch(() => {
           clearBoard()
           resetConversationProjection({ scrollIntent: "bottom", cause: "task-switch-failed" })

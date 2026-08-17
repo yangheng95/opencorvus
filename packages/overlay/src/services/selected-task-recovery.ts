@@ -14,6 +14,7 @@ import {
 } from "./refresh-diagnostics"
 import { formatErrorDetails } from "./diagnostics"
 import { AppLog } from "../utils/log"
+import type { SseConnectionStatus } from "../store/messages"
 
 let recoveryGeneration = 0
 let recoveryAbort: AbortController | null = null
@@ -27,7 +28,11 @@ export interface SelectedTaskRecoveryOptions {
 export type RestartSelectedTaskStream = (
   source: { kind: "task"; id: string },
   after: number,
-  options: { replayLive?: boolean; directory: string },
+  options: {
+    replayLive?: boolean
+    directory: string
+    connectionStatus?: Extract<SseConnectionStatus, "connecting" | "reconnecting">
+  },
 ) => void
 
 export interface SelectedTaskRecoveryScheduler {
@@ -140,7 +145,11 @@ export async function recoverSelectedTaskConversation(
       await mergeLatestConversationTail(taskID, { directory, signal: controller.signal })
       assertCurrentRecovery(taskID, generation, controller.signal)
     }
-    restartStream({ kind: "task", id: taskID }, sequence, { replayLive, directory })
+    restartStream({ kind: "task", id: taskID }, sequence, {
+      replayLive,
+      directory,
+      connectionStatus: replayLive ? "reconnecting" : "connecting",
+    })
     recordConversationRecoverySucceeded({
       channel: "selected-task-recovery",
       reason,
@@ -212,7 +221,7 @@ export async function recoverSelectedTaskAfterRewindClear(
         directory,
       })
       assertCurrentRecovery(taskID, generation, controller.signal)
-      restartStream({ kind: "task", id: taskID }, sequence, { directory })
+      restartStream({ kind: "task", id: taskID }, sequence, { directory, connectionStatus: "connecting" })
       recordConversationRecoverySucceeded({
         channel: "rewind-clear",
         reason,

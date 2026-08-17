@@ -4,9 +4,11 @@ import type { HostTransport, TransportRequest, TransportResponse } from "../src/
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import enUS from "../src/i18n/en-US.json"
 import {
+  createSubagentTranscriptRefreshController,
   loadSubagentConversation,
   mergeSubagentConversation,
   projectSubagentConversationCard,
+  subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
 } from "../src/services/subagent-conversation"
 import { setLocaleData } from "../src/utils/i18n"
@@ -163,8 +165,82 @@ test("transcript revision follows only exact selected-session transcript facts",
   ).toBe('["child-session",201]')
 })
 
+test("bursty transcript revisions coalesce into one refresh", async () => {
+  let refreshes = 0
+  const controller = createSubagentTranscriptRefreshController(() => {
+    refreshes += 1
+  }, 10)
+
+  controller.observe("task/one/session/child", "1")
+  controller.observe("task/one/session/child", "2")
+  controller.observe("task/one/session/child", "3")
+  controller.observe("task/one/session/child", "4")
+  await new Promise((resolve) => setTimeout(resolve, 25))
+
+  expect(refreshes).toBe(1)
+  controller.dispose()
+})
+
+test("a revision received during refresh schedules one trailing refresh", async () => {
+  let refreshes = 0
+  let releaseFirst: (() => void) | undefined
+  const controller = createSubagentTranscriptRefreshController(async () => {
+    refreshes += 1
+    if (refreshes === 1) await new Promise<void>((resolve) => (releaseFirst = resolve))
+  }, 5)
+
+  controller.observe("task/one/session/child", "1")
+  controller.observe("task/one/session/child", "2")
+  await new Promise((resolve) => setTimeout(resolve, 15))
+  controller.observe("task/one/session/child", "3")
+  controller.observe("task/one/session/child", "4")
+  releaseFirst?.()
+  await new Promise((resolve) => setTimeout(resolve, 15))
+
+  expect(refreshes).toBe(2)
+  controller.dispose()
+})
+
+test("queued revisions refresh once when the immediate target load settles", async () => {
+  let refreshes = 0
+  const controller = createSubagentTranscriptRefreshController(() => {
+    refreshes += 1
+  }, 5)
+
+  controller.observe("task/one/session/child", "1", false)
+  controller.observe("task/one/session/child", "2", false)
+  controller.observe("task/one/session/child", "3", false)
+  await new Promise((resolve) => setTimeout(resolve, 15))
+
+  controller.observe("task/one/session/child", "3", true)
+  await new Promise((resolve) => setTimeout(resolve, 15))
+  expect(refreshes).toBe(1)
+  controller.dispose()
+})
+
+test("a new transcript target owns a fresh initial observation and refresh cadence", async () => {
+  let refreshes = 0
+  const controller = createSubagentTranscriptRefreshController(() => {
+    refreshes += 1
+  }, 5)
+
+  controller.observe("task/one/session/child-a", "1")
+  controller.observe("task/one/session/child-a", "2")
+  controller.observe("task/one/session/child-b", "8")
+  controller.observe("task/one/session/child-b", "9")
+  await new Promise((resolve) => setTimeout(resolve, 15))
+
+  expect(refreshes).toBe(1)
+  controller.dispose()
+})
+
 test("task transcript delta replaces changed messages and removes deleted messages", () => {
   const current = {
+    targetKey: subagentConversationTargetKey({
+      source: { kind: "task", id: "task-one" },
+      sessionID: "child-session",
+      directory: "/repo-one",
+    }),
     sessionID: "child-session",
     lastLiveSequence: 12,
     liveEpoch: 1779000000000,
@@ -176,6 +252,11 @@ test("task transcript delta replaces changed messages and removes deleted messag
     ],
   } as any
   const delta = {
+    targetKey: subagentConversationTargetKey({
+      source: { kind: "task", id: "task-one" },
+      sessionID: "child-session",
+      directory: "/repo-one",
+    }),
     sessionID: "child-session",
     lastLiveSequence: 15,
     liveEpoch: 1779000000000,
@@ -197,6 +278,11 @@ test("task transcript delta replaces changed messages and removes deleted messag
 
 test("task transcript snapshot replaces the prior live epoch", () => {
   const current = {
+    targetKey: subagentConversationTargetKey({
+      source: { kind: "task", id: "task-one" },
+      sessionID: "child-session",
+      directory: "/repo-one",
+    }),
     sessionID: "child-session",
     lastLiveSequence: 91,
     liveEpoch: 1779000000000,
@@ -205,6 +291,11 @@ test("task transcript snapshot replaces the prior live epoch", () => {
     messages: [{ messageID: "stale-message", orderKey: orderKey(100, "stale-message") }],
   } as any
   const snapshot = {
+    targetKey: subagentConversationTargetKey({
+      source: { kind: "task", id: "task-one" },
+      sessionID: "child-session",
+      directory: "/repo-one",
+    }),
     sessionID: "child-session",
     lastLiveSequence: 0,
     liveEpoch: 1779000001000,
@@ -219,5 +310,39 @@ test("task transcript snapshot replaces the prior live epoch", () => {
     transcriptMode: "snapshot",
     removedMessageIDs: [],
     messages: [{ messageID: "current-message" }],
+  })
+})
+
+test("a same-named session in another project replaces the prior target transcript", () => {
+  const current = {
+    targetKey: subagentConversationTargetKey({
+      source: { kind: "task", id: "task-one" },
+      sessionID: "child-session",
+      directory: "/repo-one",
+    }),
+    sessionID: "child-session",
+    lastLiveSequence: 40,
+    liveEpoch: 100,
+    transcriptMode: "delta",
+    removedMessageIDs: [],
+    messages: [{ messageID: "project-one-message", orderKey: orderKey(100, "project-one-message") }],
+  } as any
+  const nextProject = {
+    targetKey: subagentConversationTargetKey({
+      source: { kind: "task", id: "task-two" },
+      sessionID: "child-session",
+      directory: "/repo-two",
+    }),
+    sessionID: "child-session",
+    lastLiveSequence: 2,
+    liveEpoch: 200,
+    transcriptMode: "delta",
+    removedMessageIDs: [],
+    messages: [{ messageID: "project-two-message", orderKey: orderKey(200, "project-two-message") }],
+  } as any
+
+  expect(mergeSubagentConversation(current, nextProject)).toMatchObject({
+    targetKey: nextProject.targetKey,
+    messages: [{ messageID: "project-two-message" }],
   })
 })

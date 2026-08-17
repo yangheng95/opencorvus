@@ -10,21 +10,18 @@ export interface ChatRequestState {
   target: ChatAbortTarget
 }
 
+export type SseConnectionStatus = "idle" | "connecting" | "connected" | "reconnecting"
+
 const [store, setStore] = createStore({
-  sseConnected: false,
-  sseExpected: false,
+  sseStatus: "idle" as SseConnectionStatus,
   chatRequest: null as ChatRequestState | null,
   chatAttachments: [] as any[],
 })
 
 export { store as messageStore }
 
-export function setSseConnected(connected: boolean) {
-  setStore("sseConnected", connected)
-}
-
-export function setSseExpected(expected: boolean) {
-  setStore("sseExpected", expected)
+export function setSseStatus(status: SseConnectionStatus): void {
+  setStore("sseStatus", status)
 }
 
 export function setChatRequest(req: ChatRequestState | null): void {

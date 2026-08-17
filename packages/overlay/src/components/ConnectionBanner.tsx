@@ -2,12 +2,9 @@
 // Floating banner that separately surfaces sustained backend and Server-Sent
 // Events (SSE) failures instead of describing every outage as stream setup.
 //
-// Hide rules: the banner only appears once the offline state has outlived one
-// full scheduled reconnect, so a stream that reopens on its own never paints a
-// failure. The grace is derived from services/sse.ts rather than restated: a
-// literal shorter than STREAM_RECONNECT_DELAY_MS guarantees a red banner on
-// every single reconnect, which is how a routine reopen ended up looking like
-// a backend outage on every task switch.
+// Hide rules: initial stream setup is ordinary loading and never a warning.
+// Only an established stream that dropped enters `reconnecting`, and that
+// state must outlive one full scheduled reconnect before the banner appears.
 
 import { Show, createMemo, createEffect, onCleanup } from "solid-js"
 import { messageStore } from "../store/messages"
@@ -31,7 +28,7 @@ export function ConnectionBanner() {
             : t("connection.banner_backend_offline"),
       } as const
     }
-    if (messageStore.sseExpected && !messageStore.sseConnected) {
+    if (messageStore.sseStatus === "reconnecting") {
       return { kind: "stream", text: t("connection.banner_stream_connecting") } as const
     }
     return undefined
@@ -39,18 +36,28 @@ export function ConnectionBanner() {
 
   const banner = useDisclosure()
   let timer: any = null
+  let problemKind: "backend" | "stream" | undefined
 
   createEffect(() => {
     const current = problem()
-    if (timer) {
-      clearTimeout(timer)
-      timer = null
-    }
     if (!current) {
+      if (timer) clearTimeout(timer)
+      timer = null
+      problemKind = undefined
       banner.close()
       return
     }
-    timer = setTimeout(() => banner.openIt(), OFFLINE_GRACE_MS)
+    if (current.kind !== problemKind) {
+      if (timer) clearTimeout(timer)
+      timer = null
+      problemKind = current.kind
+      banner.close()
+    }
+    if (banner.open() || timer) return
+    timer = setTimeout(() => {
+      timer = null
+      banner.openIt()
+    }, OFFLINE_GRACE_MS)
   })
 
   onCleanup(() => {

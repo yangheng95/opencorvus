@@ -33,8 +33,8 @@ export function ConnectionBadge(props: ConnectionBadgeProps) {
   // kept in sync by the ( setConnectionStatus).
   const status = createMemo<ConnectionStatus>(() => {
     if (props.status) return props.status
-    // Also reflect sseConnected from messageStore: if SSE is live, we are online.
-    if (messageStore.sseConnected) return "online"
+    // A live event stream is direct evidence that the backend is online.
+    if (messageStore.sseStatus === "connected") return "online"
     return appStore.connectionStatus as ConnectionStatus
   })
 

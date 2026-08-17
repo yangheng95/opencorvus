@@ -16,7 +16,7 @@ import {
   WorkLedgerEvent,
   type WorkLedgerActionEvent as WorkLedgerStreamEvent,
 } from "@opencorvus-ai/transport-protocol"
-import { messageStore, setSseConnected, setSseExpected } from "../store/messages"
+import { messageStore, setSseStatus, type SseConnectionStatus } from "../store/messages"
 import { boardStore, activeTaskID, type BoardSource } from "../store/board"
 import { routeSSEEvent, handleEventStreamEvent, handleTaskListNotification } from "./events"
 import { createSelectedTaskRecoveryScheduler } from "./selected-task-recovery"
@@ -67,6 +67,7 @@ export interface SseReconnectDeps {
   scheduleRetry: (fn: () => void, ms: number) => void
   retryDelayMs: number
   replayLive?: boolean
+  connectionStatus?: Extract<SseConnectionStatus, "connecting" | "reconnecting">
   beforeRestart?: (taskID: string, sequence: number) => void | Promise<void>
   afterRestart?: (taskID: string, sequence: number) => void | Promise<void>
 }
@@ -74,6 +75,7 @@ export interface SseReconnectDeps {
 export interface SseStartOptions {
   replayLive?: boolean
   directory?: string
+  connectionStatus?: Extract<SseConnectionStatus, "connecting" | "reconnecting">
 }
 
 function ssePayloadSample(data: string): string {
@@ -236,7 +238,9 @@ export async function performSseReconnect(deps: SseReconnectDeps): Promise<void>
     deps.restart(
       { kind: "task", id: deps.taskID },
       nextSequence,
-      deps.replayLive === false ? { replayLive: false, directory } : { directory },
+      deps.replayLive === false
+        ? { replayLive: false, directory, connectionStatus: deps.connectionStatus ?? "reconnecting" }
+        : { directory, connectionStatus: deps.connectionStatus ?? "reconnecting" },
     )
     await deps.afterRestart?.(deps.taskID, nextSequence)
   } catch (err) {
@@ -322,11 +326,15 @@ export const SELECTED_TASK_STREAM_STALL_MS = 35_000
 export function performSessionSseReconnect(input: {
   source: Extract<BoardSource, { kind: "session" }>
   directory?: string
+  connectionStatus?: Extract<SseConnectionStatus, "connecting" | "reconnecting">
   isCurrent: () => boolean
   restart: typeof startSSE
 }): void {
   if (!input.isCurrent()) return
-  input.restart(input.source, 0, { directory: input.directory })
+  input.restart(input.source, 0, {
+    directory: input.directory,
+    connectionStatus: input.connectionStatus ?? "reconnecting",
+  })
 }
 
 function clearSelectedStreamWatchdog(): void {
@@ -336,7 +344,7 @@ function clearSelectedStreamWatchdog(): void {
 }
 
 export function isSelectedTaskSSEConnected(taskID: string): boolean {
-  return !!taskID && sseTaskID === taskID && sseHandle !== null && messageStore.sseConnected
+  return !!taskID && sseTaskID === taskID && sseHandle !== null && messageStore.sseStatus === "connected"
 }
 
 const selectedTaskRecoveryScheduler = createSelectedTaskRecoveryScheduler(startSSE)
@@ -344,7 +352,7 @@ const selectedTaskRecoveryScheduler = createSelectedTaskRecoveryScheduler(startS
 export function startSSE(source: BoardSource, after = 0, options: SseStartOptions = {}) {
   stopSSE()
   const streamGeneration = ++selectedTaskStreamGeneration
-  setSseConnected(false)
+  setSseStatus(options.connectionStatus ?? "connecting")
   sseSource = source
   const taskID = source.kind === "task" ? source.id : ""
   sseTaskID = taskID
@@ -359,12 +367,15 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
   // of replaying from zero on every reconnect.
   const transport = getHostTransport()
   let liveReplayExpiredClose = false
+  let opened = false
+  const failureStatus = (): Extract<SseConnectionStatus, "connecting" | "reconnecting"> =>
+    opened || options.connectionStatus === "reconnecting" ? "reconnecting" : "connecting"
   const armWatchdog = (handle: StreamHandle) => {
     clearSelectedStreamWatchdog()
     sseWatchdogTimer = setTimeout(() => {
       if (handle !== sseHandle) return
       console.warn("[sse] selected task stream stalled; reconnecting", { taskID })
-      setSseConnected(false)
+      setSseStatus(failureStatus())
       handle.close("watchdog")
       if (handle === sseHandle) handleClosed("watchdog-stalled")
     }, SELECTED_TASK_STREAM_STALL_MS)
@@ -379,7 +390,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
     if (streamGeneration !== selectedTaskStreamGeneration || handle !== sseHandle) return
     clearSelectedStreamWatchdog()
     pauseSelectedTaskSseStreamActivity(taskID)
-    setSseConnected(false)
+    setSseStatus(liveReplayExpiredClose ? "connecting" : failureStatus())
     sseHandle = null
     sseTaskID = ""
     sseSource = null
@@ -390,6 +401,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
         performSessionSseReconnect({
           source,
           directory,
+          connectionStatus: failureStatus(),
           isCurrent: () => streamGeneration === selectedTaskStreamGeneration,
           restart: startSSE,
         })
@@ -410,6 +422,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
           resumeAfter: () => boardStore.taskSequence,
           restart: startSSE,
           replayLive: liveReplayExpiredClose ? false : replayLive,
+          connectionStatus: liveReplayExpiredClose ? "connecting" : failureStatus(),
           beforeRestart: liveReplayExpiredClose
             ? (restartedTaskID) => mergeLatestConversationTail(restartedTaskID, { directory })
             : undefined,
@@ -438,7 +451,8 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
     {
       onOpen: () => {
         if (handle !== sseHandle) return
-        setSseConnected(true)
+        opened = true
+        setSseStatus("connected")
         armWatchdog(handle)
       },
       onEvent: (data) => {
@@ -492,7 +506,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
         // the current persisted sequence without clearing the mounted
         // conversation.
         if (handle !== sseHandle) return
-        setSseConnected(false)
+        setSseStatus(failureStatus())
         handle.close("transport-error")
       },
       onClose: (_reason) => {
@@ -501,7 +515,6 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
     },
   )
   sseHandle = handle
-  setSseExpected(true)
   armWatchdog(handle)
 }
 
@@ -519,8 +532,7 @@ export function stopSSE() {
   sseTaskID = ""
   sseSource = null
   if (handle) handle.close("consumer-dispose")
-  setSseConnected(false)
-  setSseExpected(false)
+  setSseStatus("idle")
 }
 
 // ── Unified Work Ledger change stream ──

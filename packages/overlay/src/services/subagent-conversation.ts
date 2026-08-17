@@ -20,12 +20,107 @@ export interface SubagentTranscriptMessage {
 }
 
 export interface SubagentConversationTranscript {
+  targetKey: string
   sessionID: string
   messages: SubagentTranscriptMessage[]
   lastLiveSequence: number
   liveEpoch: number
   transcriptMode: "snapshot" | "delta"
   removedMessageIDs: string[]
+}
+
+export function subagentConversationTargetKey(input: {
+  source: BoardSource
+  sessionID: string
+  directory: string
+}): string {
+  return JSON.stringify({
+    source: input.source,
+    sessionID: input.sessionID.trim(),
+    directory: input.directory.trim(),
+  })
+}
+
+export const SUBAGENT_TRANSCRIPT_REFRESH_INTERVAL_MS = 120
+
+export interface SubagentTranscriptRefreshController {
+  observe(target: string, revision: string, ready?: boolean): void
+  dispose(): void
+}
+
+/**
+ * Convert bursty transcript revisions into bounded refresh work. The first
+ * observation for a target belongs to the resource's immediate initial load;
+ * later revisions share one timer, one in-flight refresh, and at most one
+ * trailing refresh when more revisions arrive during that request.
+ */
+export function createSubagentTranscriptRefreshController(
+  refresh: () => unknown | Promise<unknown>,
+  intervalMs = SUBAGENT_TRANSCRIPT_REFRESH_INTERVAL_MS,
+): SubagentTranscriptRefreshController {
+  let target = ""
+  let revision = ""
+  let generation = 0
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let inFlight = false
+  let pending = false
+  let disposed = false
+
+  const clearTimer = () => {
+    if (timer === undefined) return
+    clearTimeout(timer)
+    timer = undefined
+  }
+
+  const schedule = () => {
+    if (disposed || !target || timer !== undefined || inFlight) return
+    const scheduledGeneration = generation
+    timer = setTimeout(() => {
+      timer = undefined
+      if (disposed || scheduledGeneration !== generation || !target) return
+      inFlight = true
+      pending = false
+      void Promise.resolve(refresh())
+        .catch(() => undefined)
+        .finally(() => {
+          if (disposed || scheduledGeneration !== generation) return
+          inFlight = false
+          if (!pending) return
+          schedule()
+        })
+    }, Math.max(0, intervalMs))
+  }
+
+  return {
+    observe(nextTarget, nextRevision, ready = true) {
+      if (disposed) return
+      if (nextTarget !== target) {
+        generation += 1
+        clearTimer()
+        target = nextTarget
+        revision = nextRevision
+        inFlight = false
+        pending = false
+        return
+      }
+      if (!target) return
+      if (nextRevision !== revision) {
+        revision = nextRevision
+        pending = true
+      }
+      if (!pending || !ready || inFlight) return
+      schedule()
+    },
+    dispose() {
+      disposed = true
+      generation += 1
+      clearTimer()
+      target = ""
+      revision = ""
+      inFlight = false
+      pending = false
+    },
+  }
 }
 
 /** Exact selected-session transcript revision.
@@ -223,14 +318,26 @@ export async function loadSubagentConversation(input: {
     payload.removedMessageIDs ?? [],
     `subagent conversation ${sessionID} removedMessageIDs`,
   ).map((value) => String(value || "")).filter(Boolean)
-  return { sessionID, messages, lastLiveSequence, liveEpoch, transcriptMode, removedMessageIDs }
+  return {
+    targetKey: subagentConversationTargetKey({
+      source: input.source,
+      sessionID,
+      directory: input.directory,
+    }),
+    sessionID,
+    messages,
+    lastLiveSequence,
+    liveEpoch,
+    transcriptMode,
+    removedMessageIDs,
+  }
 }
 
 export function mergeSubagentConversation(
   current: SubagentConversationTranscript,
   delta: SubagentConversationTranscript,
 ): SubagentConversationTranscript {
-  if (current.sessionID !== delta.sessionID) return delta
+  if (current.targetKey !== delta.targetKey) return delta
   if (
     delta.transcriptMode === "snapshot" ||
     current.liveEpoch !== delta.liveEpoch ||
@@ -245,6 +352,7 @@ export function mergeSubagentConversation(
     compareTimelineOrderKeys(left.orderKey, right.orderKey, `subagent conversation ${current.sessionID}`),
   )
   return {
+    targetKey: current.targetKey,
     sessionID: current.sessionID,
     messages,
     lastLiveSequence: delta.lastLiveSequence,

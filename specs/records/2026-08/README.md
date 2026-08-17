@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-17-overlay-stream-state-and-task-switch-latency.md](2026-08-17-overlay-stream-state-and-task-switch-latency.md) separates first connection from failure reconnect and bounds selected child-transcript refresh work so Task switching no longer paints a false outage or amplifies streamed events into request bursts.
+
 - [2026-08-17-desktop-updater-trust-and-sidebar-entry.md](2026-08-17-desktop-updater-trust-and-sidebar-entry.md) makes the published desktop trust root and version-derived channel complete for every build path and places the shared update action in the left sidebar footer.
 
 - [2026-08-17-minimal-host-reform-plan-calibration.md](2026-08-17-minimal-host-reform-plan-calibration.md) calibrates the Host reform around real participant facts, occurrence-local Host faults, minimal irreversible boundaries, and deletion-led convergence instead of another layered Host architecture.

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Overlay stream-state and Task-switch latency repair: [`2026-08-17-overlay-stream-state-and-task-switch-latency.md`](records/2026-08/2026-08-17-overlay-stream-state-and-task-switch-latency.md).
+
 Latest desktop updater trust-root, channel, and sidebar-entry repair: [`2026-08-17-desktop-updater-trust-and-sidebar-entry.md`](records/2026-08/2026-08-17-desktop-updater-trust-and-sidebar-entry.md).
 
 Latest minimal-Host reform plan calibration: [`2026-08-17-minimal-host-reform-plan-calibration.md`](records/2026-08/2026-08-17-minimal-host-reform-plan-calibration.md).

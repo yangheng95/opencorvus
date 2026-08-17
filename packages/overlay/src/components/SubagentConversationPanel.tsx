@@ -13,9 +13,11 @@ import {
 import { boardStore, type BoardSource } from "../store/board"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import {
+  createSubagentTranscriptRefreshController,
   loadSubagentConversation,
   mergeSubagentConversation,
   projectSubagentConversationCard,
+  subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
   type SubagentConversationTranscript,
 } from "../services/subagent-conversation"
@@ -152,11 +154,10 @@ export function SubagentConversationPanel(props: {
     if (!source || !sessionID || !directory) return null
     const record = selectedRecord()
     if (!record) return null
-    return JSON.stringify({
+    return subagentConversationTargetKey({
       source: { ...source },
       sessionID,
       directory,
-      revision: subagentConversationTranscriptRevision(record),
     })
   })
   let transcriptAbort: AbortController | undefined
@@ -170,14 +171,13 @@ export function SubagentConversationPanel(props: {
       transcriptAbort?.abort()
       const controller = new AbortController()
       transcriptAbort = controller
-      const { revision: _revision, ...target } = JSON.parse(serialized) as {
+      const target = JSON.parse(serialized) as {
         source: BoardSource
         sessionID: string
         directory: string
-        revision: string
       }
       try {
-        const previous = context.value?.sessionID === target.sessionID ? context.value : undefined
+        const previous = context.value?.targetKey === serialized ? context.value : undefined
         const delta = await loadSubagentConversation({
           ...target,
           afterSequence: target.source.kind === "task" ? previous?.lastLiveSequence : undefined,
@@ -190,7 +190,20 @@ export function SubagentConversationPanel(props: {
       }
     },
   )
-  onCleanup(() => transcriptAbort?.abort())
+  const transcriptRefresh = createSubagentTranscriptRefreshController(() => refetch())
+  createEffect(() => {
+    const target = requestKey() ?? ""
+    const record = selectedRecord()
+    transcriptRefresh.observe(
+      target,
+      record ? subagentConversationTranscriptRevision(record) : "",
+      !conversation.loading,
+    )
+  })
+  onCleanup(() => {
+    transcriptRefresh.dispose()
+    transcriptAbort?.abort()
+  })
   const status = () => selectedRecord()?.status || "pending"
 
   return (

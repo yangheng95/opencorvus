@@ -10,6 +10,7 @@ import type {
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { STREAM_RECONNECT_DELAY_MS, startSSE, stopSSE } from "../src/services/sse"
 import { setBoardStore } from "../src/store/board"
+import { messageStore } from "../src/store/messages"
 
 const TASK_ID = "tsk_live_replay_reopen"
 const CONVERSATION_TAIL_PATH = `task/${TASK_ID}/conversation`
@@ -53,6 +54,7 @@ test("a live-replay-expired close reopens immediately instead of paying the fail
   setBoardStore("selectedSource", { kind: "task", id: TASK_ID })
 
   startSSE({ kind: "task", id: TASK_ID }, 12, { directory: "/tmp/live-replay-project" })
+  expect(messageStore.sseStatus).toBe("connecting")
   expect(opens).toHaveLength(1)
   // A freshly selected task presents no live cursor. The server contract is
   // that this means "consumed nothing yet", not "resuming from a stale point".
@@ -74,4 +76,84 @@ test("a live-replay-expired close reopens immediately instead of paying the fail
   // failure backoff must not apply — waiting it out is what left the live
   // stream dark long enough to paint the disconnected banner.
   expect(Date.now() - closedAt).toBeLessThan(STREAM_RECONNECT_DELAY_MS)
+})
+
+test("selected stream lifecycle distinguishes initial connection from failure reconnect", () => {
+  const opens: Array<{ request: StreamOpenRequest; handlers: StreamHandlers }> = []
+  const transport: HostTransport = {
+    kind: "browser",
+    capabilities: HOST_CAPABILITIES.browser,
+    async request() {
+      throw new Error("not used")
+    },
+    openStream(request, handlers) {
+      opens.push({ request, handlers })
+      return { close() {} }
+    },
+    async native() {
+      throw new Error("not used")
+    },
+  }
+  __setHostTransportForTest(transport)
+  setBoardStore("selectedSource", { kind: "task", id: TASK_ID })
+
+  startSSE({ kind: "task", id: TASK_ID }, 0, { directory: "/tmp/stream-status-project" })
+  expect(messageStore.sseStatus).toBe("connecting")
+
+  opens[0]!.handlers.onOpen?.()
+  expect(messageStore.sseStatus).toBe("connected")
+
+  opens[0]!.handlers.onError(new Error("transport dropped"))
+  expect(messageStore.sseStatus).toBe("reconnecting")
+})
+
+test("an initial stream error remains initial connection work until a stream has opened", () => {
+  const opens: Array<{ request: StreamOpenRequest; handlers: StreamHandlers }> = []
+  const transport: HostTransport = {
+    kind: "browser",
+    capabilities: HOST_CAPABILITIES.browser,
+    async request() {
+      throw new Error("not used")
+    },
+    openStream(request, handlers) {
+      opens.push({ request, handlers })
+      return { close() {} }
+    },
+    async native() {
+      throw new Error("not used")
+    },
+  }
+  __setHostTransportForTest(transport)
+  setBoardStore("selectedSource", { kind: "task", id: TASK_ID })
+
+  startSSE({ kind: "task", id: TASK_ID }, 0, { directory: "/tmp/initial-stream-status-project" })
+  opens[0]!.handlers.onError(new Error("initial open timed out"))
+
+  expect(messageStore.sseStatus).toBe("connecting")
+})
+
+test("an initial stream close retries as initial connection work", async () => {
+  const opens: Array<{ request: StreamOpenRequest; handlers: StreamHandlers }> = []
+  const transport: HostTransport = {
+    kind: "browser",
+    capabilities: HOST_CAPABILITIES.browser,
+    async request() {
+      throw new Error("not used")
+    },
+    openStream(request, handlers) {
+      opens.push({ request, handlers })
+      return { close() {} }
+    },
+    async native() {
+      throw new Error("not used")
+    },
+  }
+  __setHostTransportForTest(transport)
+  setBoardStore("selectedSource", { kind: "task", id: TASK_ID })
+
+  startSSE({ kind: "task", id: TASK_ID }, 0, { directory: "/tmp/initial-stream-retry-project" })
+  opens[0]!.handlers.onClose?.("initial-open-failed")
+  await waitFor(() => opens.length === 2, STREAM_RECONNECT_DELAY_MS + 1000)
+
+  expect(messageStore.sseStatus).toBe("connecting")
 })

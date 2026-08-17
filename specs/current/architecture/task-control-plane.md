@@ -277,6 +277,12 @@ Every `continue` inside a scan is justified by a strictly decreasing well-founde
 
 Historical databases cross this boundary through one atomic migration. It rebuilds current tables, translates classifiable legacy dispositions into immutable facts/receipts, normalizes Task aggregate identity and lifecycle payloads, validates exact ingress sources, and rolls back the whole transaction on ambiguity. No compatibility reader or dual writer remains after commit.
 
+## Overlay live-delivery ownership
+
+The Overlay projects one selected conversation through a single explicit SSE lifecycle: `idle`, initial `connecting`, `connected`, or failure `reconnecting`. Task selection, Project selection, and server-directed live-cursor reset are initial connection work and cannot become an outage warning. Only an established stream that closes unexpectedly or stalls enters `reconnecting`; successful open is the only transition to `connected`, and explicit disposal returns to `idle`.
+
+The selected child Session transcript keeps its backend route as the transcript authority, but streamed transcript revisions are invalidations rather than request identities. The Overlay performs the initial target load immediately, coalesces later revisions on a short cadence, permits one refresh in flight, and retains at most one trailing refresh. Target identity includes the exact source, Session, and Project directory, and changing it disposes all pending work for the old target.
+
 ## Verification authority
 
 The following gates define the maintained control-plane proof:
