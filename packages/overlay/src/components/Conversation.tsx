@@ -432,6 +432,8 @@ export function Conversation(props: {
     const failure = boardStore.taskSelectionError
     return failure?.taskID === currentTaskID() ? failure : null
   }
+  const homeContentActive = () =>
+    props.homeActive && !taskContextID() && !selectedTaskLoadError() && !hasItems()
   const retryTaskLoad = () => {
     void retrySelectedTaskSelection().catch(() => undefined)
   }
@@ -703,7 +705,7 @@ export function Conversation(props: {
           </div>
         </div>
       </Show>
-      <Show when={props.homeActive ? homePromptMount() : null} keyed>
+      <Show when={homeContentActive() ? homePromptMount() : null} keyed>
         {(mount) => (
           <Portal mount={mount}>
             <div class="chat-home-prompt">
@@ -716,7 +718,7 @@ export function Conversation(props: {
           </Portal>
         )}
       </Show>
-      <Show when={props.homeActive ? homeAfterMount() : null} keyed>
+      <Show when={homeContentActive() ? homeAfterMount() : null} keyed>
         {(mount) => (
           <Portal mount={mount}>
             <div class="chat-home-after" aria-label={t("chat.home_suggestions_label")}>

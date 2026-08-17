@@ -126,7 +126,9 @@
   background: var(--chat-canvas);
 }
 
-.chat[data-empty-chat-home="true"] .chat-home-composition {
+/* The portaled prompt is the committed home-layout fact. Intent metadata can
+   change before or after Portal disposal, so it must not own layout mode. */
+.chat:has(#solidChatHomePromptMount:not(:empty)) .chat-home-composition {
   --chat-home-wide-content-width: calc(900px * var(--ui-scale));
   --chat-home-composition-width: min(100%, var(--chat-home-wide-content-width));
   --chat-home-compact-width: 84%;
@@ -280,11 +282,11 @@
   white-space: nowrap;
 }
 
-.chat[data-empty-chat-home="true"] .chat-header.oc-surface-header {
+.chat:has(#solidChatHomePromptMount:not(:empty)) .chat-header.oc-surface-header {
   display: none;
 }
 
-.chat[data-empty-chat-home="true"] #solidChatComposer {
+.chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer {
   position: relative;
   inset: auto;
   grid-column: auto;
@@ -302,17 +304,17 @@
   background: transparent;
 }
 
-.chat[data-empty-chat-home="true"] #solidChatComposer > .chat-composer-stack {
+.chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer > .chat-composer-stack {
   grid-column: auto;
   grid-row: auto;
 }
 
-.chat[data-empty-chat-home="true"] #solidChatComposer::before,
-.chat[data-empty-chat-home="true"] #solidChatComposer::after {
+.chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer::before,
+.chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer::after {
   display: none;
 }
 
-.chat[data-empty-chat-home="true"] #solidChatComposer .chat-composer-stack {
+.chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer .chat-composer-stack {
   width: var(--chat-home-composition-width);
   max-width: var(--chat-home-composition-width);
   margin-block: 0;
@@ -320,7 +322,7 @@
 
 @container chat-workbench (width < 1200px) {
   /* breakpoint: --ui-breakpoint-xl */
-  .chat[data-empty-chat-home="true"] .chat-home-composition {
+  .chat:has(#solidChatHomePromptMount:not(:empty)) .chat-home-composition {
     --chat-home-composition-width: min(var(--chat-home-compact-width), var(--chat-home-wide-content-width));
   }
 }
@@ -448,7 +450,7 @@
   }
 }
 
-.chat[data-empty-chat-home="true"] .conversation-scroll-shell::before {
+.chat:has(#solidChatHomePromptMount:not(:empty)) .conversation-scroll-shell::before {
   display: none;
 }
 .conversation-scroll-bottom {
