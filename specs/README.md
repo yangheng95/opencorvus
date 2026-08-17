@@ -4,6 +4,8 @@ Latest Mission message-origin projection repair: [`2026-08-17-mission-message-or
 
 Latest Overlay launcher/Task layout convergence repair: [`2026-08-17-overlay-home-task-layout-convergence.md`](records/2026-08/2026-08-17-overlay-home-task-layout-convergence.md).
 
+Latest sub-agent dock live-follow repair: [`2026-08-17-subagent-dock-live-follow-repair.md`](records/2026-08/2026-08-17-subagent-dock-live-follow-repair.md).
+
 Latest Overlay stream-state and Task-switch latency repair: [`2026-08-17-overlay-stream-state-and-task-switch-latency.md`](records/2026-08/2026-08-17-overlay-stream-state-and-task-switch-latency.md).
 
 Latest desktop updater trust-root, channel, and sidebar-entry repair: [`2026-08-17-desktop-updater-trust-and-sidebar-entry.md`](records/2026-08/2026-08-17-desktop-updater-trust-and-sidebar-entry.md).

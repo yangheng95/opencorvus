@@ -4,9 +4,12 @@ import type { HostTransport, TransportRequest, TransportResponse } from "../src/
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import enUS from "../src/i18n/en-US.json"
 import {
+  createSubagentConversationLiveProjection,
   createSubagentTranscriptRefreshController,
   loadSubagentConversation,
   mergeSubagentConversation,
+  observeSubagentConversationLiveEvent,
+  projectSubagentConversationLive,
   projectSubagentConversationCard,
   subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
@@ -121,6 +124,123 @@ test("task child transcript uses the exact task/session route and canonical orde
     "message-early",
     "message-late",
   ])
+})
+
+test("persisted child transcript projects exact live Part snapshots and later deltas", async () => {
+  __setHostTransportForTest(transport([], payload()))
+  const persisted = await loadSubagentConversation({
+    source: { kind: "task", id: "task-one" },
+    sessionID: "child-session",
+    directory: "D:/repo",
+  })
+  let live = createSubagentConversationLiveProjection("child-session")
+  live = observeSubagentConversationLiveEvent(
+    live,
+    {
+      type: "message.part.delta",
+      payload: {
+        sessionID: "child-session",
+        messageID: "message-late",
+        partID: "late-text",
+        field: "text",
+        delta: " live",
+      },
+    },
+    persisted,
+  )
+  expect(projectSubagentConversationLive(persisted, live).messages.at(-1)?.parts[0]?.text).toBe("Done live")
+
+  const refreshed = structuredClone(persisted)
+  refreshed.messages.at(-1)!.parts[0]!.text = "Done live"
+  expect(projectSubagentConversationLive(refreshed, live).messages.at(-1)?.parts[0]?.text).toBe("Done live")
+
+  live = observeSubagentConversationLiveEvent(live, {
+    type: "message.part.updated",
+    payload: {
+      sessionID: "child-session",
+      messageID: "message-late",
+      part: {
+        id: "late-text",
+        sessionID: "child-session",
+        messageID: "message-late",
+        type: "text",
+        text: "Done persisted",
+      },
+    },
+  })
+  live = observeSubagentConversationLiveEvent(live, {
+    type: "message.part.delta",
+    payload: {
+      sessionID: "child-session",
+      messageID: "message-late",
+      partID: "late-text",
+      field: "text",
+      delta: " again",
+    },
+  })
+
+  const projected = projectSubagentConversationLive(persisted, live)
+  expect(projected.messages.at(-1)?.parts[0]?.text).toBe("Done persisted again")
+  expect(projectSubagentConversationCard(projected, "running")?.parts.at(-1)?.text).toBe("Done persisted again")
+})
+
+test("a new live child message projects before the persisted transcript refreshes", () => {
+  const response = payload()
+  const base = {
+    targetKey: "task/task-one/session/child-session",
+    sessionID: "child-session",
+    messages: [],
+    lastLiveSequence: 0,
+    liveEpoch: response.liveEpoch,
+    transcriptMode: "snapshot" as const,
+    removedMessageIDs: [],
+  }
+  let live = createSubagentConversationLiveProjection("child-session")
+  live = observeSubagentConversationLiveEvent(live, {
+    type: "message.updated",
+    orderKey: orderKey(300, "message-new"),
+    payload: {
+      info: {
+        id: "message-new",
+        sessionID: "child-session",
+        agentID: "build-agent",
+        sessionAgentID: "build-agent",
+        role: "assistant",
+        author: "build-agent",
+        channel: "build",
+        originSource: "agent",
+        orderKey: orderKey(300, "message-new"),
+        time: { created: 300 },
+      },
+    },
+  })
+  live = observeSubagentConversationLiveEvent(live, {
+    type: "message.part.updated",
+    payload: {
+      part: {
+        id: "new-text",
+        sessionID: "child-session",
+        messageID: "message-new",
+        type: "text",
+        text: "Working",
+      },
+    },
+  })
+  live = observeSubagentConversationLiveEvent(live, {
+    type: "message.part.delta",
+    payload: {
+      sessionID: "child-session",
+      messageID: "message-new",
+      partID: "new-text",
+      field: "text",
+      delta: " now",
+    },
+  })
+
+  const projected = projectSubagentConversationLive(base, live)
+  expect(projected.messages.map((message) => message.messageID)).toEqual(["message-new"])
+  expect(projected.messages[0]).toMatchObject({ agentID: "build-agent", stage: "build", time: 300 })
+  expect(projected.messages[0]?.parts[0]?.text).toBe("Working now")
 })
 
 test("standalone child transcript is rooted at the selected session", async () => {
@@ -262,9 +382,7 @@ test("task transcript delta replaces changed messages and removes deleted messag
     liveEpoch: 1779000000000,
     transcriptMode: "delta",
     removedMessageIDs: ["message-early", "message-late"],
-    messages: [
-      { messageID: "message-late", orderKey: orderKey(200, "message-late"), info: { error: "updated" } },
-    ],
+    messages: [{ messageID: "message-late", orderKey: orderKey(200, "message-late"), info: { error: "updated" } }],
   } as any
 
   expect(mergeSubagentConversation(current, delta)).toMatchObject({

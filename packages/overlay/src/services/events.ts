@@ -26,10 +26,8 @@ import { refreshActiveComposerModelFromSession } from "./composer-model"
 import { markExpertSquadCatalogStale } from "./expert-squad"
 import { applyEvent as applyTreeWriterEvent, isProjectionPrerequisiteError } from "./tree-writer"
 import { refreshConversationTurnArtifacts, scheduleLatestConversationTailMerge } from "./conversation"
-import {
-  isBrowserPreviewUpdateEvent,
-  observeBrowserPreviewUpdateEvent,
-} from "./browser-preview"
+import { publishSubagentConversationLiveEvent } from "./subagent-conversation"
+import { isBrowserPreviewUpdateEvent, observeBrowserPreviewUpdateEvent } from "./browser-preview"
 import { bumpFileWorkbenchRevision } from "./file-workbench"
 import { conversationEventOwner, isBoardInvalidatingEventType, isRouterConsumedNoopEventType } from "./event-policy"
 import { markSelectedLiveEventConsumed } from "./selected-stream-cursor"
@@ -46,6 +44,7 @@ function writeSelectedMessageToTree(event: any, sourceEvent: any = event): void 
   writeToTree(event)
   const sourceKey = selectedConversationAgentSourceKey(sourceEvent)
   if (!sourceKey) return
+  publishSubagentConversationLiveEvent(event)
   if (event?.type === "message.updated") {
     applyLiveConversationAgentMessageUpdated(sourceKey, event)
   } else if (event?.type === "message.part.updated") {

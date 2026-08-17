@@ -77,6 +77,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let expectedTop = el.scrollTop
   let programScrollTarget: number | null = null
   let pointerScrollIntent = false
+  let upwardInputIntentUntil = 0
   let touchStartY: number | null = null
   let observedContentElements = new Set<Element>()
 
@@ -93,19 +94,17 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     observedContentElements = nextElements
   }
 
-  function releaseFollowForUpwardInput() {
-    if (!opts.isTracking()) return
-    opts.onUserScrollUp()
-    syncFollowLockAttribute()
+  function rememberUpwardInputIntent() {
+    upwardInputIntentUntil = performance.now() + 250
   }
 
   function onWheel(event: WheelEvent) {
-    if (event.deltaY < 0) releaseFollowForUpwardInput()
+    if (event.deltaY < 0) rememberUpwardInputIntent()
   }
 
   function onKeyDown(event: KeyboardEvent) {
     if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") {
-      releaseFollowForUpwardInput()
+      rememberUpwardInputIntent()
     }
   }
 
@@ -124,7 +123,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   function onTouchMove(event: TouchEvent) {
     const nextY = event.touches[0]?.clientY ?? null
     if (touchStartY !== null && nextY !== null && nextY > touchStartY) {
-      releaseFollowForUpwardInput()
+      rememberUpwardInputIntent()
     }
     touchStartY = nextY
   }
@@ -160,12 +159,17 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     }
     const movedUp = delta < -PROGRAM_TOLERANCE
     expectedTop = nextTop
-    if (opts.isTracking() && movedUp && pointerScrollIntent && bottomDistance > BOTTOM_TOLERANCE) {
+    const ownsUpwardMovement = pointerScrollIntent || performance.now() <= upwardInputIntentUntil
+    if (opts.isTracking() && movedUp && ownsUpwardMovement && bottomDistance > BOTTOM_TOLERANCE) {
+      upwardInputIntentUntil = 0
       opts.onUserScrollUp()
       syncFollowLockAttribute()
       return
     }
-    if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
+    if (bottomDistance <= BOTTOM_TOLERANCE) {
+      upwardInputIntentUntil = 0
+      opts.onAtBottom?.()
+    }
     syncFollowLockAttribute()
   }
 

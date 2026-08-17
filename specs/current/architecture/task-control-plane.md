@@ -283,6 +283,8 @@ The Overlay projects one selected conversation through a single explicit SSE lif
 
 The selected child Session transcript keeps its backend route as the transcript authority, but streamed transcript revisions are invalidations rather than request identities. The Overlay performs the initial target load immediately, coalesces later revisions on a short cadence, permits one refresh in flight, and retains at most one trailing refresh. Target identity includes the exact source, Session, and Project directory, and changing it disposes all pending work for the old target.
 
+Persisted child transcript hydration and live delivery are consecutive phases of that same transcript. The selected Task SSE is the live authority: the dock applies exact selected-Session full-Part snapshots, Part deltas, and removals over its persisted base in process, without polling or opening another stream. A full Part snapshot supersedes earlier deltas for that Part; later deltas append by exact field. The projection is disposed on target change. Its reactive growth feeds the shared conversation scroll owner, which suspends follow only after an operator input produces actual upward movement away from the bottom and restores follow when the viewport returns to the bottom.
+
 ## Verification authority
 
 The following gates define the maintained control-plane proof:

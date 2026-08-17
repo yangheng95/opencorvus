@@ -13,9 +13,13 @@ import {
 import { boardStore, type BoardSource } from "../store/board"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import {
+  createSubagentConversationLiveProjection,
   createSubagentTranscriptRefreshController,
+  listenSubagentConversationLiveEvents,
   loadSubagentConversation,
   mergeSubagentConversation,
+  observeSubagentConversationLiveEvent,
+  projectSubagentConversationLive,
   projectSubagentConversationCard,
   subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
@@ -23,6 +27,7 @@ import {
 } from "../services/subagent-conversation"
 import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
+import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { t } from "../utils/i18n"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { Avatar } from "./Avatar"
@@ -190,6 +195,34 @@ export function SubagentConversationPanel(props: {
       }
     },
   )
+  const [liveProjection, setLiveProjection] = createSignal(createSubagentConversationLiveProjection(props.sessionID()))
+  let pendingLiveProjection: ReturnType<typeof createSubagentConversationLiveProjection> | undefined
+  const flushLiveProjection = createAnimationFrameScheduler(() => {
+    if (!pendingLiveProjection) return
+    setLiveProjection(pendingLiveProjection)
+    pendingLiveProjection = undefined
+  })
+  createEffect(
+    on(requestKey, (target) => {
+      flushLiveProjection.cancel()
+      pendingLiveProjection = undefined
+      const sessionID = target ? (JSON.parse(target) as { sessionID: string }).sessionID : ""
+      setLiveProjection(createSubagentConversationLiveProjection(sessionID))
+    }),
+  )
+  const stopLiveProjection = listenSubagentConversationLiveEvents((event) => {
+    if (!requestKey()) return
+    pendingLiveProjection = observeSubagentConversationLiveEvent(
+      pendingLiveProjection ?? liveProjection(),
+      event,
+      conversation(),
+    )
+    flushLiveProjection.schedule()
+  })
+  const displayedConversation = createMemo(() => {
+    const base = conversation()
+    return base ? projectSubagentConversationLive(base, liveProjection()) : undefined
+  })
   const transcriptRefresh = createSubagentTranscriptRefreshController(() => refetch())
   createEffect(() => {
     const target = requestKey() ?? ""
@@ -201,6 +234,8 @@ export function SubagentConversationPanel(props: {
     )
   })
   onCleanup(() => {
+    stopLiveProjection()
+    flushLiveProjection.cancel()
     transcriptRefresh.dispose()
     transcriptAbort?.abort()
   })
@@ -334,7 +369,7 @@ export function SubagentConversationPanel(props: {
                 }
               >
                 <Show
-                  when={conversation()}
+                  when={displayedConversation()}
                   fallback={<div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>}
                 >
                   {(data) => (
