@@ -10,6 +10,7 @@ import { updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError } from "../../services/api"
 import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
+import { matchesSearchParts } from "../../services/text-search"
 import { activeDirectory } from "../../services/workspace"
 import {
   authenticateSelectedProvider,
@@ -393,21 +394,13 @@ export default function ProvidersPanel() {
     return Array.isArray(cat?.all) ? cat.all : []
   }
 
-  function normalizeSearch(value: unknown): string {
-    return String(value ?? "")
-      .trim()
-      .toLowerCase()
-  }
-
   function providerModelIds(models: Record<string, unknown> | undefined): string[] {
     if (!models || typeof models !== "object" || Array.isArray(models)) return []
     return Object.keys(models)
   }
 
   function providerMatchesSearch(parts: Array<unknown>): boolean {
-    const q = normalizeSearch(providerSearch())
-    if (!q) return true
-    return parts.some((part) => normalizeSearch(part).includes(q))
+    return matchesSearchParts(providerSearch(), parts)
   }
 
   function resetForm() {

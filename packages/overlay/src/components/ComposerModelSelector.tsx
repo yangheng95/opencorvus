@@ -23,7 +23,7 @@ import { connectedModelOptions, providerAccountUsageCapability, providerLabel } 
 import { localeTag, t } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
-import { fuzzySearch } from "../services/fuzzy-search"
+import { matchesSearchParts } from "../services/text-search"
 import { selectComposerModel } from "../services/composer-model"
 import { requestProviderModelsRefresh } from "../services/provider-refresh"
 
@@ -322,7 +322,9 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
     return groups()
       .map((group) => ({
         ...group,
-        models: fuzzySearch(group.models, search, (modelID) => `${modelID} ${group.providerID} ${group.providerName}`),
+        models: group.models.filter((modelID) =>
+          matchesSearchParts(search, [modelID, group.providerID, group.providerName]),
+        ),
       }))
       .filter((group) => group.models.length > 0)
   })
