@@ -293,17 +293,24 @@ describe("GitHub Actions workflow contract", () => {
         prepare_sdk: "true",
       })
     }
+    // Every apt install in CI is bounded. The v0.0.47-beta release build held
+    // `Install Linux system dependencies` for over an hour, never reached the
+    // compiler, and published nothing: `-y` stops neither a debconf prompt nor
+    // the runner's own unattended-upgrades holding the lock.
+    const boundedApt = (run: string) => ({ "timeout-minutes": 15, env: { DEBIAN_FRONTEND: "noninteractive" }, run })
+    const aptRipgrep =
+      "sudo apt-get -o DPkg::Lock::Timeout=300 update\nsudo apt-get -o DPkg::Lock::Timeout=300 install -y ripgrep\n"
     expect(
       buildJobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"),
     ).toEqual({
       name: "Install critical build runtime dependencies",
-      run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
+      ...boundedApt(aptRipgrep),
     })
     expect(jobs.unit?.steps?.filter(({ name }) => name?.startsWith("Install "))).toEqual([
       {
         name: "Install Linux test runtime dependencies",
         if: "runner.os == 'Linux'",
-        run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
+        ...boundedApt(aptRipgrep),
       },
       {
         name: "Install macOS test runtime dependencies",

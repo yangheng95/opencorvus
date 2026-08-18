@@ -89,9 +89,20 @@ jobs:
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
+        # A release build must not be able to wait forever here. Observed on
+        # v0.0.47-beta: this step held `in_progress` for over an hour on
+        # linux-x64 while linux-arm64 finished the same install, so the run
+        # never reached Setup Rust and no Release could publish. apt blocks
+        # indefinitely on two things a plain `-y` does not cover — a debconf
+        # prompt, and the runner's own unattended-upgrades holding the lock —
+        # so the frontend is pinned, the lock is waited on with a bound, and
+        # the step fails instead of hanging.
+        timeout-minutes: 15
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get -o DPkg::Lock::Timeout=300 update
+          sudo apt-get -o DPkg::Lock::Timeout=300 install -y \
             libwebkit2gtk-4.1-dev \
             libssl-dev \
             libgtk-3-dev \
