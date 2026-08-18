@@ -12,6 +12,7 @@ import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import {
+  discoverExpertSquadPayloadPackages,
   renderExpertSquadPayloadModule,
   resolveExpertSquadPayloadModulePath,
 } from "../script/generate-expert-squad-payload"
@@ -35,5 +36,19 @@ describe("generated Expert Squad payload", () => {
       )
     }
     expect(rendered).toBe(current)
+  }, 120_000)
+
+  /**
+   * The authoring root holds repository tooling beside the packages —
+   * `expert-squads/tsconfig.json`, so the behavior tests can name what they
+   * import. Discovery required every tracked path to be
+   * `<namespace>/<id>/<file>`, so the moment that file was tracked, generation
+   * threw and both the typecheck and build-critical jobs went red on a release
+   * tag. A short path at the root is tooling; a short path deeper is a mistake.
+   */
+  test("passes over repository tooling at the authoring root", async () => {
+    const packages = await discoverExpertSquadPayloadPackages(repoRoot)
+    expect(packages.length).toBeGreaterThan(0)
+    expect(packages.every((entry) => entry.namespace && entry.id)).toBe(true)
   }, 120_000)
 })
