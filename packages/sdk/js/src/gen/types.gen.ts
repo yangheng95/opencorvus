@@ -8495,6 +8495,16 @@ export type ExpertSquadEvolutionAuthorizationData = {
           }
           restorePackageDigest: string
         }
+      | {
+          candidateRevisionLocator: {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+          expectedCurrentPackageDigest: string
+          operation: "feedback_revision"
+        }
     sessionID: string
     taskID: string
   }
@@ -8609,6 +8619,263 @@ export type ExpertSquadEvolutionHistoryResponses = {
           }
     }
     catalog_revision_upper: number
+    feedback_revisions: Array<{
+      acceptance_intent: {
+        confirmation_text: string
+        operation: "feedback_revision"
+        request: {
+          candidateRevisionLocator: {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+          expectedCurrentPackageDigest: string
+          operation: "feedback_revision"
+        }
+      } | null
+      artifact: {
+        artifact_type:
+          | "evolution-lab/opportunity"
+          | "evolution-lab/campaign-spec"
+          | "evolution-lab/failure-attribution"
+          | "evolution-lab/candidate-revision"
+          | "evolution-lab/run-evidence-bundle"
+          | "evolution-lab/evaluation-result"
+          | "evolution-lab/integrity-review"
+          | "evolution-lab/comparison-recommendation"
+          | "evolution-lab/promotion-receipt"
+        locator: {
+          artifact_id: string
+          catalog_revision: number
+          expected_sha256: string
+          source: "engine_artifact"
+        }
+        partition: "current" | "historical"
+        producer:
+          | {
+              agent_id: string
+              expert_squad_id: string
+              message_id: string
+              owner_kind: "projected-scheduler" | "projected-worker"
+              package_revision: {
+                id: string
+                namespace: string
+                package_digest: string
+                project_id: string | null
+                scope: "built_in" | "project" | "global"
+                version: string
+              }
+              projection_hash: string
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              message_id: string
+              mission_id: string
+              owner_kind: "mission"
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              component_id: string
+              operation_id: string
+              owner_kind: "core"
+            }
+        root_session_id: string
+        schema_version: 1
+        task_id: string
+        time_created: number
+        time_updated: number
+      }
+      candidate_revision: {
+        id: string
+        namespace: string
+        package_digest: string
+        version: string
+      }
+      changed_paths: Array<string>
+      diff_sha256: string
+      feedback: string
+      hypothesis: string
+      installed: boolean
+      parent_revision: {
+        id: string
+        namespace: string
+        package_digest: string
+        version: string
+      }
+      receipts: Array<{
+        artifact: {
+          artifact_type:
+            | "evolution-lab/opportunity"
+            | "evolution-lab/campaign-spec"
+            | "evolution-lab/failure-attribution"
+            | "evolution-lab/candidate-revision"
+            | "evolution-lab/run-evidence-bundle"
+            | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
+            | "evolution-lab/comparison-recommendation"
+            | "evolution-lab/promotion-receipt"
+          locator: {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+          partition: "current" | "historical"
+          producer:
+            | {
+                agent_id: string
+                expert_squad_id: string
+                message_id: string
+                owner_kind: "projected-scheduler" | "projected-worker"
+                package_revision: {
+                  id: string
+                  namespace: string
+                  package_digest: string
+                  project_id: string | null
+                  scope: "built_in" | "project" | "global"
+                  version: string
+                }
+                projection_hash: string
+                session_id: string
+                tool_call_id: string
+              }
+            | {
+                message_id: string
+                mission_id: string
+                owner_kind: "mission"
+                session_id: string
+                tool_call_id: string
+              }
+            | {
+                component_id: string
+                operation_id: string
+                owner_kind: "core"
+              }
+          root_session_id: string
+          schema_version: 1
+          task_id: string
+          time_created: number
+          time_updated: number
+        }
+        receipt: {
+          after_digest: string
+          authorization: {
+            message_id: string
+            message_sha256: string
+            project_id: string
+            session_id: string
+            task_id: string
+            time_created: number
+          }
+          before_digest: string
+          evidence: Array<
+            | {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }
+            | {
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                source: "task_artifact_snapshot"
+              }
+            | {
+                ref: {
+                  bytes: number
+                  media_type: string
+                  path: string
+                  sha256: string
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  tree: string
+                }
+                source: "task_artifact_resource"
+              }
+          >
+          expected_current_digest: string
+          manager_receipt:
+            | {
+                after: {
+                  id: string
+                  installationScope: "project" | "global"
+                  namespace: string
+                  packageDigest: string
+                  projectDirectory: string | null
+                  targetRoot: string
+                  version: string | null
+                }
+                before: null
+                operation: "installed"
+              }
+            | {
+                after: {
+                  id: string
+                  installationScope: "project" | "global"
+                  namespace: string
+                  packageDigest: string
+                  projectDirectory: string | null
+                  targetRoot: string
+                  version: string | null
+                }
+                before: {
+                  id: string
+                  installationScope: "project" | "global"
+                  namespace: string
+                  packageDigest: string
+                  projectDirectory: string | null
+                  targetRoot: string
+                  version: string | null
+                }
+                operation: "unchanged" | "replaced" | "restored"
+              }
+          operation: "promotion" | "restoration" | "feedback_revision"
+          target:
+            | {
+                id: string
+                namespace: string
+                project_directory: string
+                project_id: string
+                scope: "project"
+              }
+            | {
+                id: string
+                namespace: string
+                project_directory: null
+                project_id: null
+                scope: "global"
+              }
+        }
+      }>
+      restoration_intents: Array<{
+        confirmation_text: string
+        operation: "restoration"
+        request: {
+          expectedCurrentPackageDigest: string
+          operation: "restoration"
+          priorReceiptLocator: {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+          restorePackageDigest: string
+        }
+      }>
+    }>
     integrity_issues: Array<
       | {
           catalog_artifact_type:
@@ -9395,7 +9662,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                     }
                     operation: "unchanged" | "replaced" | "restored"
                   }
-              operation: "promotion" | "restoration"
+              operation: "promotion" | "restoration" | "feedback_revision"
               target:
                 | {
                     id: string
@@ -10319,6 +10586,46 @@ export type ExpertSquadEvolutionHistoryResponses = {
         time_updated: number
       }>
     }>
+    revisions: Array<{
+      authorization_root: {
+        root_session_id: string
+        task_id: string
+      } | null
+      installed: boolean
+      package_digest: string
+      switch_intent:
+        | {
+            confirmation_text: string
+            operation: "restoration"
+            request: {
+              expectedCurrentPackageDigest: string
+              operation: "restoration"
+              priorReceiptLocator: {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }
+              restorePackageDigest: string
+            }
+          }
+        | {
+            confirmation_text: string
+            operation: "feedback_revision"
+            request: {
+              candidateRevisionLocator: {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }
+              expectedCurrentPackageDigest: string
+              operation: "feedback_revision"
+            }
+          }
+        | null
+      version: string | null
+    }>
   }
 }
 
@@ -11196,7 +11503,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                     }
                     operation: "unchanged" | "replaced" | "restored"
                   }
-              operation: "promotion" | "restoration"
+              operation: "promotion" | "restoration" | "feedback_revision"
               target:
                 | {
                     id: string
@@ -12522,6 +12829,21 @@ export type ExpertSquadEvolutionMutationData = {
         }
         restorePackageDigest: string
       }
+    | {
+        authorization: {
+          messageID: string
+          sessionID: string
+          taskID: string
+        }
+        candidateRevisionLocator: {
+          artifact_id: string
+          catalog_revision: number
+          expected_sha256: string
+          source: "engine_artifact"
+        }
+        expectedCurrentPackageDigest: string
+        operation: "feedback_revision"
+      }
   path?: never
   query?: {
     /**
@@ -12649,7 +12971,7 @@ export type ExpertSquadEvolutionMutationResponses = {
             }
             operation: "unchanged" | "replaced" | "restored"
           }
-      operation: "promotion" | "restoration"
+      operation: "promotion" | "restoration" | "feedback_revision"
       target:
         | {
             id: string
@@ -28537,10 +28859,8 @@ export type BrowserPreviewCaptureTaskTargetResponse =
 export type BrowserPreviewCompareTaskTargetRegionsData = {
   body: {
     inlineBindings: Array<{
-      acceptance_refs?: Array<string>
       crop_intent: "full-region" | "content-well"
       implementation: {
-        component_files?: Array<string>
         locator:
           | {
               kind: "test-id"
@@ -28563,7 +28883,6 @@ export type BrowserPreviewCompareTaskTargetRegionsData = {
         route?: string
       }
       region_id: string
-      region_scope: "page-section" | "card" | "content" | "title" | "chart" | "table" | "control" | "navigation"
       source: {
         bbox: {
           height: number
@@ -28585,9 +28904,6 @@ export type BrowserPreviewCompareTaskTargetRegionsData = {
           }
           tree: string
         }
-        semantic_role: string
-        source_refs?: Array<string>
-        text_anchors?: Array<string>
       }
       state_id?: string
       viewport_id: "desktop" | "tablet" | "mobile"
@@ -28689,11 +29005,11 @@ export type BrowserPreviewCompareTaskTargetRegionsResponses = {
       }
       content?: {
         implementation: {
-          non_white_pixel_ratio: number
+          content_pixel_ratio: number
           unique_color_count: number
         }
         source: {
-          non_white_pixel_ratio: number
+          content_pixel_ratio: number
           unique_color_count: number
         }
       }

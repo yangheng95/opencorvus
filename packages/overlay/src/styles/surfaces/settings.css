@@ -2375,6 +2375,89 @@ button.s-row:focus-visible {
   align-items: start;
 }
 
+.expert-squad-evolution-revisions {
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+}
+
+.expert-squad-evolution-revisions > header {
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+  min-width: 0;
+}
+
+.expert-squad-evolution-revisions > header strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+}
+
+.expert-squad-evolution-revisions > header span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.expert-squad-evolution-revision {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: calc(8px * var(--ui-scale));
+  align-items: center;
+  padding: calc(7px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border: 1px solid var(--border-subtle);
+  border-radius: calc(7px * var(--ui-scale));
+  min-width: 0;
+}
+
+.expert-squad-evolution-revision[data-installed="true"] {
+  border-color: var(--accent-border, var(--border-strong));
+}
+
+.expert-squad-evolution-revision strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+}
+
+.expert-squad-evolution-revision code {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.expert-squad-evolution-feedback {
+  display: grid;
+  gap: calc(8px * var(--ui-scale));
+  min-width: 0;
+}
+
+.expert-squad-evolution-feedback > header {
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+  min-width: 0;
+}
+
+.expert-squad-evolution-feedback > header strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+}
+
+.expert-squad-evolution-feedback > header span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.expert-squad-evolution-feedback .expert-squad-evolution-record {
+  display: grid;
+  gap: calc(7px * var(--ui-scale));
+  padding: calc(11px * var(--ui-scale));
+}
+
+.expert-squad-evolution-feedback .expert-squad-evolution-record > span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  overflow-wrap: anywhere;
+}
+
 .expert-squad-evolution-records,
 .expert-squad-evolution-slot-list {
   display: grid;

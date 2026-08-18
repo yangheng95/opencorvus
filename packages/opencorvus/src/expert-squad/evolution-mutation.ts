@@ -22,6 +22,7 @@ import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Instance } from "@/project/instance"
 import { EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
+import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
 import { ExpertSquadPackageManager } from "./manager"
 import {
   requireEvolutionMutationAuthorization,
@@ -38,6 +39,26 @@ const CandidateMutationFactsSchema = z.object({
   parent_revision: EvolutionExactRevisionSchema,
   candidate_revision: EvolutionExactRevisionSchema,
 })
+const FeedbackCandidateMutationFactsSchema = CandidateMutationFactsSchema.extend({
+  feedback: z.string().min(1).nullable(),
+})
+
+/**
+ * The installable target of a revision that has no Campaign to declare one.
+ *
+ * A built-in package is installed into the current Project, which is the only
+ * scope a feedback revision can reach: promoting into the built-in set would
+ * change bytes the published registry already pins.
+ */
+function installableTargetForRevision(revision: z.infer<typeof EvolutionExactRevisionSchema>) {
+  return EvolutionInstallableTargetSchema.parse({
+    scope: "project",
+    project_id: Instance.project.id,
+    project_directory: Instance.project.worktree,
+    namespace: revision.namespace,
+    id: revision.id,
+  })
+}
 const ComparisonMutationFactsSchema = z.object({
   baseline_revision: EvolutionExactRevisionSchema,
   candidate_revision: EvolutionExactRevisionSchema,
@@ -57,13 +78,23 @@ function exactArtifact(input: {
   taskID: string
   locator: EngineArtifactLocator
   artifactType: string
+  /**
+   * The Core component that must have authored this Artifact, when the Host
+   * authored it itself rather than projecting Evolution Lab.
+   */
+  coreComponentID?: string
 }): ExactArtifact {
   const row = requireEngineArtifactByLocator({ taskID: input.taskID, locator: input.locator })
   const envelope = EngineArtifactEnvelopeSchema.parse(row.payload)
   if (envelope.artifact_type !== input.artifactType || envelope.schema_version !== 1)
     throw new Error(`Evolution mutation locator must identify ${input.artifactType}@1`)
-  if (input.artifactType !== "evolution-lab/promotion-receipt") {
-    const producer = envelope.producer
+  const producer = envelope.producer
+  if (input.coreComponentID !== undefined) {
+    if (producer.owner_kind !== "core" || producer.component_id !== input.coreComponentID)
+      throw new Error(
+        `Evolution mutation evidence ${input.artifactType} must be produced by Core ${input.coreComponentID}`,
+      )
+  } else if (input.artifactType !== "evolution-lab/promotion-receipt") {
     if (producer.owner_kind !== "projected-scheduler" && producer.owner_kind !== "projected-worker")
       throw new Error(`Evolution mutation evidence ${input.artifactType} must be produced by Evolution Lab`)
     if (producer.expert_squad_id !== EVOLUTION_LAB_EXPERT_SQUAD_ID)
@@ -89,6 +120,15 @@ type PreparedEvolutionMutation =
       operation: "restoration"
       intent: Extract<EvolutionMutationIntentRequest, { operation: "restoration" }>
       target: z.infer<typeof EvolutionInstallableTargetSchema>
+      beforeDigest: string
+      afterDigest: string
+      evidence: EngineArtifactLocator[]
+    }
+  | {
+      operation: "feedback_revision"
+      intent: Extract<EvolutionMutationIntentRequest, { operation: "feedback_revision" }>
+      target: z.infer<typeof EvolutionInstallableTargetSchema>
+      feedback: string
       beforeDigest: string
       afterDigest: string
       evidence: EngineArtifactLocator[]
@@ -130,7 +170,17 @@ export function prepareEvolutionPackageMutation(input: {
     )
       throw new Error("Evolution promotion evidence does not share one exact baseline and candidate revision pair")
     if (comparison.required_unavailable_dimensions.length > 0 || comparison.recommendation !== "promote")
-      throw new Error("Evolution promotion requires a complete deterministic promote recommendation")
+      // Naming the two facts that decide this: the message used to state the
+      // rule and nothing about the Comparison in hand, so an operator looking
+      // at a Campaign that could never promote had no way to see which half
+      // failed or which dimension went unavailable.
+      throw new Error(
+        "Evolution promotion requires a complete deterministic promote recommendation. " +
+          `received: ${JSON.stringify({
+            recommendation: comparison.recommendation,
+            required_unavailable_dimensions: comparison.required_unavailable_dimensions,
+          })}, expected: ${JSON.stringify({ recommendation: "promote", required_unavailable_dimensions: [] })}.`,
+      )
     if (intent.expectedCurrentPackageDigest !== campaign.baseline_revision.package_digest)
       throw new Error("Evolution promotion CAS digest must equal the frozen Campaign baseline")
     if (
@@ -148,6 +198,35 @@ export function prepareEvolutionPackageMutation(input: {
     }
   }
 
+  if (intent.operation === "feedback_revision") {
+    const candidateArtifact = exactArtifact({
+      taskID: input.taskID,
+      locator: intent.candidateRevisionLocator,
+      artifactType: "evolution-lab/candidate-revision",
+      // Only the Host saw the Message this revision was written from, so only
+      // the Host can attest it. A projected Squad minting its own "feedback"
+      // candidate would be routing around the comparison gate.
+      coreComponentID: FEEDBACK_REVISION_COMPONENT_ID,
+    })
+    const candidate = FeedbackCandidateMutationFactsSchema.parse(candidateArtifact.envelope.payload)
+    if (candidate.feedback === null)
+      throw new Error("Evolution feedback revision requires a candidate authored from exact user feedback")
+    if (intent.expectedCurrentPackageDigest !== candidate.parent_revision.package_digest)
+      throw new Error("Evolution feedback revision CAS digest must equal the exact candidate parent revision")
+    return {
+      operation: "feedback_revision",
+      intent,
+      // The installable target is proven from the candidate's own parent
+      // revision rather than restated: a feedback revision has no Campaign to
+      // carry a declared target.
+      target: installableTargetForRevision(candidate.parent_revision),
+      feedback: candidate.feedback,
+      beforeDigest: candidate.parent_revision.package_digest,
+      afterDigest: candidate.candidate_revision.package_digest,
+      evidence: [intent.candidateRevisionLocator],
+    }
+  }
+
   const priorArtifact = exactArtifact({
     taskID: input.taskID,
     locator: intent.priorReceiptLocator,
@@ -159,11 +238,23 @@ export function prepareEvolutionPackageMutation(input: {
   )
     throw new Error("Evolution restoration requires a Core-owned prior mutation receipt")
   const priorReceipt = EvolutionPromotionReceiptSchema.parse(priorArtifact.envelope.payload)
-  if (
-    intent.expectedCurrentPackageDigest !== priorReceipt.after_digest ||
-    intent.restorePackageDigest !== priorReceipt.before_digest
+  // The receipt is provenance for a revision, not the one step to walk back: it
+  // proves this exact digest was installed on this target under an operator
+  // authorization. Which revision it is safe to leave is a separate fact, and
+  // the Manager decides it by comparing the CAS digest against what is actually
+  // installed. Pinning both ends to a single receipt is what made this an undo
+  // button instead of a way to reach any revision the target has had.
+  const witnessed = [priorReceipt.before_digest, priorReceipt.after_digest].filter(
+    (digest): digest is string => typeof digest === "string",
   )
-    throw new Error("Evolution restoration must exactly undo the selected prior mutation receipt")
+  if (!witnessed.includes(intent.restorePackageDigest))
+    throw new Error(
+      `Evolution restoration target must be a revision the cited receipt witnessed; expected one of ${witnessed.join(", ")}, received ${intent.restorePackageDigest}`,
+    )
+  if (intent.restorePackageDigest === intent.expectedCurrentPackageDigest)
+    throw new Error(
+      `Evolution restoration must change the installed revision; expected a digest other than ${intent.expectedCurrentPackageDigest}, received ${intent.restorePackageDigest}`,
+    )
   return {
     operation: "restoration",
     intent,
@@ -182,6 +273,7 @@ function preparedConfirmation(prepared: PreparedEvolutionMutation) {
     afterDigest: prepared.afterDigest,
     evidenceSHA256s: prepared.evidence.map((locator) => locator.expected_sha256),
     operation: prepared.operation,
+    ...(prepared.operation === "feedback_revision" ? { feedback: prepared.feedback } : {}),
   })
 }
 
@@ -201,7 +293,7 @@ export async function authorizeEvolutionPackageMutation(rawInput: EvolutionMutat
     source: "expert_squad.evolution_authorization",
   })
   const persisted = recorded.user_message
-  const verified = requireEvolutionMutationAuthorization({
+  const verified = await requireEvolutionMutationAuthorization({
     projectID: Instance.project.id,
     taskID: input.taskID,
     sessionID: input.sessionID,
@@ -225,15 +317,22 @@ export function evolutionMutationConfirmationText(input: {
   beforeDigest: string
   afterDigest: string
   evidenceSHA256s: readonly string[]
-  operation: "promotion" | "restoration"
+  operation: "promotion" | "restoration" | "feedback_revision"
+  /** Verbatim user feedback a feedback revision was authored from. */
+  feedback?: string
 }) {
-  const verb = input.operation === "promotion" ? "提升" : "恢复"
+  const verb = input.operation === "restoration" ? "恢复" : "提升"
   return [
     `确认将 project:${input.projectID} 的 ${input.target.namespace}/${input.target.id}`,
     `从 ${input.beforeDigest} ${verb}到 ${input.afterDigest}。`,
     ...(input.target.id === EVOLUTION_LAB_EXPERT_SQUAD_ID
       ? [`注意：该目标是进化机制自身，本次${verb}将改变后续每一次进化的证据校验与授权行为。`]
       : []),
+    // A feedback revision has no measured comparison behind it, so the thing
+    // the user confirms against is their own words, not a score.
+    ...(input.feedback === undefined
+      ? []
+      : [`本次修订依据你的反馈撰写，未经过对照试验：`, input.feedback, `不满意可按本次回执撤回。`]),
     ...input.evidenceSHA256s.map((digest, index) => `证据${index + 1}：${digest}`),
   ].join("\n")
 }
@@ -303,26 +402,17 @@ function persistReceipt(input: {
 
 export async function executeEvolutionPackageMutation(rawInput: EvolutionMutationRequest) {
   const input = EvolutionMutationRequestSchema.parse(rawInput)
-  const intent = EvolutionMutationIntentRequestSchema.parse(
-    input.operation === "promotion"
-      ? {
-          operation: input.operation,
-          campaignSpecLocator: input.campaignSpecLocator,
-          candidateRevisionLocator: input.candidateRevisionLocator,
-          comparisonResultLocator: input.comparisonResultLocator,
-          expectedCurrentPackageDigest: input.expectedCurrentPackageDigest,
-        }
-      : {
-          operation: input.operation,
-          priorReceiptLocator: input.priorReceiptLocator,
-          restorePackageDigest: input.restorePackageDigest,
-          expectedCurrentPackageDigest: input.expectedCurrentPackageDigest,
-        },
-  )
+  // The request is the intent plus its authorization; removing that one field
+  // yields the intent for every operation, so adding an operation does not
+  // require restating its fields here.
+  const { authorization: _authorization, ...intentFields } = input
+  const intent = EvolutionMutationIntentRequestSchema.parse(intentFields)
   const prepared = prepareEvolutionPackageMutation({ taskID: input.authorization.taskID, intent })
   const confirmation = preparedConfirmation(prepared)
-  if (prepared.operation === "promotion" && input.operation === "promotion") {
-    const authorization = requireEvolutionMutationAuthorization({
+  // A feedback revision installs exactly as a promotion does — the difference
+  // is what authorized it, which the receipt records — so both take this path.
+  if (prepared.operation !== "restoration" && input.operation !== "restoration") {
+    const authorization = await requireEvolutionMutationAuthorization({
       projectID: Instance.project.id,
       ...input.authorization,
       expectedText: confirmation,
@@ -356,7 +446,7 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
         identity: { taskID: input.authorization.taskID, artifactID },
         commit: async (managerReceipt) => {
           receipt = EvolutionPromotionReceiptSchema.parse({
-            operation: "promotion",
+            operation: prepared.operation,
             authorization,
             target: prepared.target,
             expected_current_digest: input.expectedCurrentPackageDigest,
@@ -373,7 +463,7 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
   }
   if (prepared.operation !== "restoration" || input.operation !== "restoration")
     throw new Error("Evolution mutation preparation operation drift")
-  const authorization = requireEvolutionMutationAuthorization({
+  const authorization = await requireEvolutionMutationAuthorization({
     projectID: Instance.project.id,
     ...input.authorization,
     expectedText: confirmation,

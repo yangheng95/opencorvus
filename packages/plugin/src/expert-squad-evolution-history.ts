@@ -169,6 +169,20 @@ const PromotionIntentSchema = z
   })
   .strict()
 
+const FeedbackAcceptanceIntentSchema = z
+  .object({
+    operation: z.literal("feedback_revision"),
+    confirmation_text: z.string().min(1),
+    request: z
+      .object({
+        operation: z.literal("feedback_revision"),
+        candidateRevisionLocator: EngineArtifactLocatorSchema,
+        expectedCurrentPackageDigest: ArtifactSHA256Schema,
+      })
+      .strict(),
+  })
+  .strict()
+
 const RestorationIntentSchema = z
   .object({
     operation: z.literal("restoration"),
@@ -282,11 +296,75 @@ export const EvolutionHistoryListQuerySchema = z
       })
   })
 
+/**
+ * One revision written from what the operator said, with no Campaign behind it.
+ *
+ * It carries no comparison because nothing was measured: the operator's own
+ * acceptance was the verdict. What it must carry instead is their exact words,
+ * so they can recognize the change months later, and the way back.
+ */
+export const EvolutionFeedbackRevisionRecordSchema = z
+  .object({
+    artifact: EvolutionHistoryArtifactIdentitySchema,
+    feedback: z.string().min(1),
+    hypothesis: z.string().min(1),
+    parent_revision: EvolutionExactRevisionSchema,
+    candidate_revision: EvolutionExactRevisionSchema,
+    changed_paths: z.array(z.string().min(1)).min(1),
+    diff_sha256: ArtifactSHA256Schema,
+    installed: z.boolean(),
+    receipts: z.array(EvolutionHistoryReceiptSchema),
+    // A staged revision installs nothing until the operator accepts it, so the
+    // acceptance has to be reachable from the same place the undo is. Present
+    // only while this revision is still the pending next step.
+    acceptance_intent: FeedbackAcceptanceIntentSchema.nullable(),
+    restoration_intents: z.array(RestorationIntentSchema),
+  })
+  .strict()
+
+/**
+ * One revision this target provably had, and the way to make it the installed one.
+ *
+ * The operator thinks in versions, not in hops. Offering only "accept" and
+ * "undo" answers a question they are not asking: what they want from a history
+ * is to put a named revision back, whichever one it is. Every entry therefore
+ * carries its own way in, and the installed entry carries none because there is
+ * nowhere to go. A digest is the identity here; the version is a label the
+ * revision may not have left behind.
+ */
+export const EvolutionRevisionChoiceSchema = z
+  .object({
+    package_digest: ArtifactSHA256Schema,
+    version: z.string().min(1).nullable(),
+    installed: z.boolean(),
+    // An authorization is spoken inside the Task whose root Session records the
+    // operator's confirmation, so a switch is only offerable from the Task that
+    // holds this revision's evidence. The Host names it here rather than
+    // leaving a caller to guess: it is the only side that saw which Task that
+    // was. Present exactly when a switch is.
+    authorization_root: z
+      .object({ task_id: z.string().min(1), root_session_id: z.string().min(1) })
+      .strict()
+      .nullable(),
+    switch_intent: z.union([RestorationIntentSchema, FeedbackAcceptanceIntentSchema]).nullable(),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if ((value.switch_intent === null) !== (value.authorization_root === null))
+      context.addIssue({
+        code: "custom",
+        path: ["authorization_root"],
+        message: "Evolution revision switch must carry exactly one authorization root",
+      })
+  })
+
 export const EvolutionHistoryListResponseSchema = z
   .object({
     authority: EvolutionHistoryAuthoritySchema,
     catalog_revision_upper: z.number().int().nonnegative(),
     records: z.array(EvolutionCampaignHistoryRecordSchema),
+    feedback_revisions: z.array(EvolutionFeedbackRevisionRecordSchema),
+    revisions: z.array(EvolutionRevisionChoiceSchema),
     integrity_issues: z.array(EvolutionUnlinkedIssueSchema),
     next_cursor: HistoryCursorSchema.nullable(),
   })
