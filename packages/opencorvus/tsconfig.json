@@ -8,7 +8,10 @@
     "noUncheckedIndexedAccess": false,
     "customConditions": ["browser"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      // Built-in Expert Squad packages, so their behavior tests name what they
+      // import instead of counting `../` segments up out of this workspace.
+      "@squads/*": ["../../expert-squads/builtin/*"]
     }
   },
   "exclude": ["script/**/*", "test/**/*", "src/skill/builtin/**/*"]
