@@ -17,6 +17,7 @@ export * from "./files"
 export * from "./workspace-tree"
 export * from "./expert-squad-evolution"
 export * from "./expert-squad-evolution-artifact"
+export * from "./expert-squad-evolution-integrity"
 export * from "./expert-squad-evolution-history"
 
 export type ToolCommandRunInput = {
@@ -103,6 +104,13 @@ export function tool<Args extends z.ZodRawShape>(input: {
       withToolFiles(context.host.files, () => input.execute(args, context)),
   }
 }
-tool.schema = z
+// Packages reach zod through `tool.schema` in BOTH value positions
+// (`tool.schema.object({...})`) and type positions
+// (`tool.schema.infer<typeof S>`). A property assignment only satisfies
+// the former, so the alias is declared as a namespace merged onto the
+// function — one declaration serving both.
+export namespace tool {
+  export import schema = z
+}
 
 export type ToolDefinition = ReturnType<typeof tool>

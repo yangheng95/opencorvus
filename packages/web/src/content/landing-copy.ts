@@ -23,6 +23,16 @@ export type LandingCopy = {
     readonly titleLines: readonly [string, string]
     readonly description: string
     readonly ctas: readonly LandingCta[]
+    /** The hero's download control. Labels only — the assets come from the release manifest. */
+    readonly download: {
+      readonly label: string
+      /** Prefixed to the detected platform so the button still reads as an action. */
+      readonly verb: string
+      readonly detecting: string
+      readonly menuLabel: string
+      readonly allPlatforms: string
+      readonly releaseNote: string
+    }
     readonly terminalLabel: string
     readonly terminals: readonly { readonly id: string; readonly label: string; readonly lines: readonly string[] }[]
   }
@@ -75,7 +85,8 @@ export type LandingCopy = {
     readonly desktopTitle: string
     readonly desktopBody: string
     readonly desktopCta: string
-    readonly detecting: string
+    /** Must match an install path README.md actually documents. */
+    readonly serveCommand: string
     readonly copy: string
     readonly copied: string
     readonly trustTitle: string
@@ -112,11 +123,18 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       titleLines: ["自动化地优化", "你的每日工作流"],
       description: "把每天重复的那些流程交给 Agent。模型、工具、权限、专家团，都能换。",
       ctas: [
-        { label: "开始使用", href: "#start", variant: "primary" },
         { label: "查看源码", href: GITHUB, variant: "secondary" },
         { label: "读文档", href: "/start/quickstart/", variant: "secondary" },
         { label: "专家团", href: "/market/", variant: "secondary" },
       ],
+      download: {
+        label: "下载桌面端",
+        verb: "下载",
+        detecting: "识别平台中…",
+        menuLabel: "选择平台",
+        allPlatforms: "全部平台与格式",
+        releaseNote: "从 GitHub Release 下载",
+      },
       terminalLabel: "两条路",
       terminals: [
         {
@@ -211,10 +229,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       cliTitle: "源码构建",
       cliBody: "装好 Bun，克隆、构建、自检。",
       cliCommand: "git clone https://github.com/yangheng95/opencorvus.git",
-      desktopTitle: "桌面端",
-      desktopBody: "已识别你的平台，下载即可运行。",
-      desktopCta: "查看全部平台",
-      detecting: "正在识别平台…",
+      desktopTitle: "已经装好了？",
+      desktopBody: "在你的仓库里起服务，工作台开在本地。",
+      desktopCta: "读快速开始",
+      serveCommand: 'bun "$OPENCORVUS_SOURCE" serve',
       copy: "复制",
       copied: "已复制",
       trustTitle: "三条边界",
@@ -278,11 +296,18 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       titleLines: ["Automate the workflow", "you repeat every day"],
       description: "Hand the repeat work to an Agent. Models, tools, permissions, squads — all replaceable.",
       ctas: [
-        { label: "Get started", href: "#start", variant: "primary" },
         { label: "View source", href: GITHUB, variant: "secondary" },
         { label: "Read the docs", href: "/start/quickstart/", variant: "secondary" },
         { label: "Expert Squads", href: "/market/", variant: "secondary" },
       ],
+      download: {
+        label: "Download",
+        verb: "Download",
+        detecting: "Detecting platform…",
+        menuLabel: "Choose a platform",
+        allPlatforms: "All platforms and formats",
+        releaseNote: "Served from the GitHub Release",
+      },
       terminalLabel: "Two ways in",
       terminals: [
         {
@@ -377,10 +402,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       cliTitle: "Build from source",
       cliBody: "With Bun installed, clone the repository, build, and self-check.",
       cliCommand: "git clone https://github.com/yangheng95/opencorvus.git",
-      desktopTitle: "Desktop",
-      desktopBody: "Your platform is detected below. Download and run.",
-      desktopCta: "All platforms",
-      detecting: "Detecting your platform…",
+      desktopTitle: "Already installed?",
+      desktopBody: "Start the server inside your repository; the workbench opens locally.",
+      desktopCta: "Read the quickstart",
+      serveCommand: 'bun "$OPENCORVUS_SOURCE" serve',
       copy: "Copy",
       copied: "Copied",
       trustTitle: "Three boundaries",

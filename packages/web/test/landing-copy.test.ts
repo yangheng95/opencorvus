@@ -163,6 +163,7 @@ describe("landing copy integrity", () => {
     for (const locale of ["zh-cn", "root"] as const) {
       const copy = landingCopy[locale]
       expect(readme).toContain(copy.start.cliCommand)
+      expect(readme).toContain(copy.start.serveCommand)
 
       const commands = copy.hero.terminals
         .flatMap((terminal) => terminal.lines)

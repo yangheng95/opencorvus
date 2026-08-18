@@ -273,7 +273,12 @@ export type TaskArtifactHost = Readonly<{
   publish(
     stage: TaskArtifactStage,
     input: {
-      snapshot_kind: "catalog"
+      /**
+       * Mirrors the manifest enum the Host actually stores. `engine_resource`
+       * snapshots are the ones reachability collection may reclaim once no
+       * Engine Artifact references them.
+       */
+      snapshot_kind: "catalog" | "engine_resource"
       files: readonly TaskArtifactPublicationFile[]
     },
   ): Promise<TaskArtifactPublication>

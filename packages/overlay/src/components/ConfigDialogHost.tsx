@@ -87,7 +87,7 @@ const CONFIG_TAB_BY_ID = new Map(CONFIG_TABS.map((tab) => [tab.id, tab] as const
 const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
   {
     labelKey: "settings.nav.application",
-    tabs: ["general", "appearance", "network"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
+    tabs: ["general", "appearance", "network", "usage"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
   {
     labelKey: "settings.nav.product",
@@ -111,7 +111,7 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
   },
   {
     labelKey: "settings.nav.data",
-    tabs: ["usage", "archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
+    tabs: ["archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
 ]
 const ABOUT_CONFIG_TAB = CONFIG_TABS.find((tab) => tab.id === "about") as ConfigTabDef

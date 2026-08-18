@@ -1710,6 +1710,33 @@ async function refreshExpertSquads(
   await promise
 }
 
+/**
+ * The Squad Market, reachable from the box the operator is already typing in.
+ *
+ * Installing writes into the current Project, which is the only scope this
+ * composer can speak for: a global reference catalog has no directory to
+ * install into, so the market simply is not offered there rather than
+ * installing somewhere the operator did not choose.
+ */
+async function searchComposerMarketExpertSquads(query: string): Promise<readonly ExpertSquadMarketIndexItem[]> {
+  const scope = composerReferenceCatalogScope()
+  if (scope.kind !== "project" && scope.kind !== "session") return []
+  const page = await loadExpertSquadMarket(scope.directory, {
+    query: query.trim().slice(0, 500),
+    availability: "available",
+    productPillar: composerIntent().productPillar,
+    limit: 3,
+  })
+  return page.entries
+}
+
+async function installComposerMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+  const scope = composerReferenceCatalogScope()
+  if (scope.kind !== "project" && scope.kind !== "session")
+    throw new Error(t("chat.references.market_install_scope_unavailable"))
+  await installExpertSquadMarketPackage(scope.directory, item.id, "project")
+}
+
 async function searchComposerExpertSquads(
   query: string,
   selectedExpertSquadIDs: readonly string[] = [],
@@ -2215,6 +2242,8 @@ function OverlayRoot() {
           referenceCatalogError={composerExpertSquadCatalog().error}
           expertSquads={composerExpertSquadCatalog().squads}
           onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
+          onMarketExpertSquadQuery={searchComposerMarketExpertSquads}
+          onInstallMarketExpertSquad={installComposerMarketExpertSquad}
           onInstallMoreExpertSquads={() =>
             void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject())
           }

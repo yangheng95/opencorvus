@@ -6,7 +6,12 @@ import {
   ArtifactSchemaLimits,
   ArtifactSHA256Schema,
 } from "./artifact-producer"
-import { TaskArtifactMediaTypeSchema, TaskArtifactRefSchema, TaskArtifactSnapshotIdentitySchema } from "./task-artifact"
+import {
+  TaskArtifactMediaTypeSchema,
+  type TaskArtifactRef,
+  TaskArtifactRefSchema,
+  TaskArtifactSnapshotIdentitySchema,
+} from "./task-artifact"
 
 export {
   ArtifactIdentifierSchema,
@@ -948,7 +953,19 @@ export type ArtifactReadChunk = z.infer<typeof ArtifactReadChunkSchema>
 export type ArtifactReadReferenceChunk = z.infer<typeof ArtifactReadReferenceChunkSchema>
 export type EngineArtifactPublishInput = z.infer<typeof EngineArtifactPublishInputSchema>
 export type EngineArtifactPublishRequest = z.input<typeof EngineArtifactPublishInputSchema>
-export type PackageEngineArtifactPublishRequest = Omit<EngineArtifactPublishRequest, "idempotent">
+/**
+ * Package-facing publish request. Host readers hand back `readonly` arrays
+ * (`taskArtifacts.resources`), so the package-facing shape accepts them
+ * directly rather than making every publisher copy the list to satisfy a
+ * mutability the Host never needs.
+ */
+export type PackageEngineArtifactPublishRequest = Omit<
+  EngineArtifactPublishRequest,
+  "idempotent" | "resources" | "source_artifact_locators"
+> & {
+  resources?: readonly TaskArtifactRef[]
+  source_artifact_locators?: readonly ArtifactReadLocator[]
+}
 export type EngineArtifactEnvelope = z.infer<typeof EngineArtifactEnvelopeSchema>
 export type EngineArtifactPublishResult = z.infer<typeof EngineArtifactPublishResultSchema>
 

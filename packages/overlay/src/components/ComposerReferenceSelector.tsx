@@ -1,6 +1,6 @@
-import { createMemo, createSignal, For, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, onCleanup, Show } from "solid-js"
 import type { VisibleComposerReferences } from "@opencorvus-ai/transport-protocol"
-import type { ExpertSquadOption } from "../services/expert-squad"
+import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
 import { setComposerMentionDirectiveSelected, type ComposerMentionKind } from "../services/composer-mention"
 import { fuzzySearch } from "../services/fuzzy-search"
 import { t } from "../utils/i18n"
@@ -40,6 +40,11 @@ export interface ComposerReferenceSelectorProps {
   expertSquads: readonly ExpertSquadOption[]
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onInstallMoreExpertSquads?: () => void
+  // Searching only what is installed answers "which of mine fits" when the
+  // question is usually "is there one for this". The catalog the operator has
+  // not installed yet is reachable from the same box they are already typing in.
+  onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   activeExpertSquad?: ExpertSquadOption
   launchReferences: VisibleComposerReferences
   readOnly: boolean
@@ -135,10 +140,76 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     )
   })
 
+  const [marketItems, setMarketItems] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
+  const [marketLoading, setMarketLoading] = createSignal(false)
+  const [marketError, setMarketError] = createSignal("")
+  const [marketInstallingID, setMarketInstallingID] = createSignal("")
+  let marketSequence = 0
+
+  // A Squad already installed is offered by the list above; showing it again
+  // under "install" would invite an operator to install what they have.
+  const marketOffers = createMemo(() => {
+    const installed = new Set(props.expertSquads.map((squad) => squad.id))
+    return marketItems().filter((item) => !installed.has(item.id))
+  })
+
+  createEffect(() => {
+    const opened = open()
+    const search = props.onMarketExpertSquadQuery
+    const text = query().trim().slice(0, 500)
+    const sequence = ++marketSequence
+    if (!opened || !search || text.length < 2) {
+      setMarketItems([])
+      setMarketLoading(false)
+      setMarketError("")
+      return
+    }
+    setMarketLoading(true)
+    setMarketError("")
+    const timer = window.setTimeout(() => {
+      void search(text)
+        .then((items) => {
+          if (sequence !== marketSequence) return
+          setMarketItems(items)
+        })
+        .catch((error) => {
+          if (sequence !== marketSequence) return
+          setMarketItems([])
+          setMarketError(error instanceof Error ? error.message : String(error))
+        })
+        .finally(() => {
+          if (sequence === marketSequence) setMarketLoading(false)
+        })
+    }, 280)
+    onCleanup(() => window.clearTimeout(timer))
+  })
+
+  async function installFromMarket(item: ExpertSquadMarketIndexItem): Promise<void> {
+    const install = props.onInstallMarketExpertSquad
+    if (!install || marketInstallingID()) return
+    setMarketInstallingID(item.id)
+    setMarketError("")
+    try {
+      await install(item)
+      // The installed list is the parent's, so ask it to reread rather than
+      // guessing what the install produced.
+      props.onExpertSquadQuery?.(query(), props.launchReferences.expertSquadIDs)
+      setMarketItems((current) => current.filter((entry) => entry.id !== item.id))
+    } catch (error) {
+      setMarketError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setMarketInstallingID("")
+    }
+  }
+
   function updateOpen(next: boolean): void {
     setOpen(next)
     if (!next) {
       setQuery("")
+      marketSequence += 1
+      setMarketItems([])
+      setMarketLoading(false)
+      setMarketError("")
       props.onExpertSquadQuery?.("", props.launchReferences.expertSquadIDs)
       return
     }
@@ -339,8 +410,51 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                   }}
                 />
               </Show>
-              <Show when={editableGroups().length === 0}>
+              <Show when={editableGroups().length === 0 && marketOffers().length === 0 && !marketLoading()}>
                 <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
+              </Show>
+              <Show when={marketLoading() || marketError() || marketOffers().length > 0}>
+                <div class="composer-reference-market" data-ui="composer-reference-market">
+                  <div class="composer-reference-market-head">
+                    <span>{t("chat.references.market_results")}</span>
+                    <Show when={marketLoading()}>
+                      <Icon name="loading" size="compact" />
+                    </Show>
+                  </div>
+                  <Show when={marketError()}>
+                    <div class="composer-reference-market-error">{marketError()}</div>
+                  </Show>
+                  <For each={marketOffers()}>
+                    {(item) => (
+                      <div class="composer-reference-option" data-reference-kind="market">
+                        <span class="composer-reference-option-selection" aria-hidden="true" />
+                        <span class="composer-reference-option-icon" data-reference-kind="market" aria-hidden="true">
+                          <Icon name="expert-squad-catalog" size="compact" />
+                        </span>
+                        <span class="composer-reference-option-copy">
+                          <span class="composer-reference-option-heading">
+                            <span class="composer-reference-option-name">{item.name}</span>
+                            <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
+                          </span>
+                          <span class="composer-reference-option-description">{item.description}</span>
+                        </span>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          tone="accent"
+                          disabled={Boolean(marketInstallingID())}
+                          onClick={() => void installFromMarket(item)}
+                        >
+                          <Show when={marketInstallingID() === item.id}>
+                            <Icon name="loading" size="compact" />
+                          </Show>
+                          {t("chat.references.market_install")}
+                        </Button>
+                      </div>
+                    )}
+                  </For>
+                </div>
               </Show>
               <Button
                 type="button"

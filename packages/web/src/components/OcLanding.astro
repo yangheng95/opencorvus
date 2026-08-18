@@ -4,7 +4,9 @@ import OcHeroBackdrop from "./OcHeroBackdrop.astro"
 import { landingCopy } from "../content/landing-copy"
 import { platformFacts } from "../content/platform-facts"
 import { publicPath, type PublicLocale } from "../content/public-market"
+import config from "../../config.mjs"
 import type { FeaturedSquad } from "../lib/landing-featured-squads"
+import { readDownloadManifest, formatBytes } from "../lib/landing-downloads"
 
 type Props = {
   locale: PublicLocale
@@ -24,6 +26,7 @@ const resolve = (href: string) => (href.startsWith("/") ? publicPath(locale, hre
 const plural = (count: number, one: string, other: string) => (count === 1 ? one : other)
 
 const marketHref = publicPath(locale, "/market/")
+const downloads = readDownloadManifest()
 
 // Only generated facts are allowed to be the largest thing on the page. See platform-facts.ts.
 const featurableSquadTotal = platformFacts.squadTotal
@@ -56,6 +59,64 @@ const featurableSquadTotal = platformFacts.squadTotal
           {copy.hero.description}
         </p>
         <div class="oc-btn-group oc-enter" style="--oc-enter-y: 16px; animation-delay: 360ms">
+          {/*
+            The download is the first thing on the page and the menu is rendered server-side, so
+            every installer is a real link before any script runs. Detection only swaps the default
+            target; with JavaScript off the reader still gets the full list rather than a button
+            that does nothing.
+          */}
+          <div class="oc-download" data-oc-download data-download-verb={copy.hero.download.verb}>
+            <a
+              class="oc-btn oc-btn-primary oc-btn-m oc-download-primary"
+              href={downloads?.releaseUrl ?? config.github}
+              data-oc-download-primary
+            >
+              <span data-oc-download-label>{copy.hero.download.label}</span>
+            </a>
+
+            {
+              downloads && (
+                <details class="oc-download-menu" data-oc-download-menu>
+                  <summary
+                    class="oc-btn oc-btn-primary oc-btn-m oc-download-toggle"
+                    aria-label={copy.hero.download.menuLabel}
+                    title={copy.hero.download.menuLabel}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                  </summary>
+
+                  <div class="oc-glass-dropdown oc-download-panel">
+                    <p class="oc-eyebrow oc-download-panel-title">{copy.hero.download.allPlatforms}</p>
+                    {
+                      downloads.groups.map((group) => (
+                        <section class="oc-download-group">
+                          <p class="oc-download-group-name">{group.label}</p>
+                          <ul>
+                            {group.assets.map((asset) => (
+                              <li>
+                                <a href={asset.url} data-oc-download-asset={`${asset.platform}-${asset.architecture}`}>
+                                  <span>{asset.architecture} · {asset.format}</span>
+                                  <span class="oc-download-size">{formatBytes(asset.bytes)}</span>
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      ))
+                    }
+                    <p class="oc-text-xs oc-text-description oc-download-note">
+                      {copy.hero.download.releaseNote}
+                      {downloads.version && ` · ${downloads.version}`}
+                    </p>
+                  </div>
+                </details>
+              )
+            }
+          </div>
+
           {
             copy.hero.ctas.map((cta) => (
               <a class={`oc-btn oc-btn-${cta.variant} oc-btn-m`} href={resolve(cta.href)}>
@@ -260,19 +321,22 @@ const featurableSquadTotal = platformFacts.squadTotal
           </div>
         </div>
 
+        {/*
+          The installer download moved into the hero, so this card no longer duplicates it — and
+          must not, because it also carried a second [data-oc-download-primary], which would have
+          fought the hero control for the same selector.
+        */}
         <div class="oc-card-raised oc-reveal" style="transition-delay: 70ms">
           <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.start.desktopTitle}</h3>
           <p class="oc-text-caption oc-text-description oc-start-body">{copy.start.desktopBody}</p>
-          {/*
-            Server-rendered as a link to every platform, then narrowed by script to the detected
-            one. Rendering the detected build only would leave anyone without JS with no download
-            at all. Plan 期 4 exit criteria.
-          */}
-          <div class="oc-btn-group">
-            <a class="oc-btn oc-btn-primary oc-btn-m" href={marketHref} data-oc-download-primary hidden>
-              <span data-oc-download-label>{copy.start.detecting}</span>
-            </a>
-            <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/start/install/")}>
+          <div class="oc-code">
+            <code>{copy.start.serveCommand}</code>
+            <button class="oc-copy-btn" type="button" data-oc-copy={copy.start.serveCommand} data-copied={copy.start.copied}>
+              {copy.start.copy}
+            </button>
+          </div>
+          <div class="oc-btn-group oc-start-actions">
+            <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/start/quickstart/")}>
               {copy.start.desktopCta}
             </a>
           </div>
@@ -356,7 +420,9 @@ const featurableSquadTotal = platformFacts.squadTotal
     min-height: 100svh;
     padding-top: var(--oc-space-11);
     padding-bottom: var(--oc-space-9);
-    overflow: hidden;
+    /* Deliberately not `overflow: hidden`. It used to be, for the backdrop — but the backdrop
+       clips itself, and the hero's copy cut 304px off the bottom of the download menu, hiding the
+       Linux builds entirely. A section that contains a popover cannot also clip. */
   }
 
   @media (min-width: 768px) {
@@ -397,6 +463,147 @@ const featurableSquadTotal = platformFacts.squadTotal
 
   .oc-hero-lede {
     max-width: 44ch;
+  }
+
+  /* ------------------------------------------------------- download */
+
+  /* A split control: the link carries the detected build, the disclosure carries every build. They
+     read as one pill, so the seam between them is a hairline rather than a gap. */
+  .oc-download {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+  }
+
+  .oc-download-primary {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-right: var(--oc-space-4);
+  }
+
+  /* Flush against the primary, with the divider drawn inside the pill. The previous 1px margin let
+     the page background through and read as a crack across the button rather than a seam between
+     two halves of one control. */
+  .oc-download-toggle {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-inline: var(--oc-space-3);
+    border-left: 1px solid var(--oc-btn-primary-divider);
+    list-style: none;
+  }
+
+  .oc-download-toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .oc-download-toggle svg {
+    transition: transform 0.2s ease;
+  }
+
+  /* The <details> is the flex item that stretches, but the <summary> inside it does not inherit
+     that height — which left the caret half 5px shorter than the button it is joined to. Making
+     the disclosure a flex container passes the stretch through to its summary. */
+  .oc-download-menu {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .oc-download-menu[open] .oc-download-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .oc-download-panel {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + var(--oc-space-2));
+    left: 0;
+    width: max(100%, 290px);
+    /* Bounded twice: never taller than the viewport allows, and never so tall that it dominates
+       the hero on a big screen. Anything beyond that scrolls inside the panel. */
+    max-height: min(60vh, 420px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--oc-space-4);
+  }
+
+  .oc-download-panel-title {
+    margin-bottom: var(--oc-space-3);
+  }
+
+  .oc-download-group + .oc-download-group {
+    margin-top: var(--oc-space-4);
+  }
+
+  .oc-download-group-name {
+    margin: 0 0 var(--oc-space-2);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-download-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .oc-download-group a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--oc-space-3);
+    padding: var(--oc-space-2) var(--oc-space-3);
+    border-radius: var(--oc-radius-sm);
+    font-size: 14px;
+    color: var(--oc-color-text-secondary);
+    text-decoration: none;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .oc-download-group a:hover {
+    color: var(--oc-color-text-primary);
+    background: var(--oc-color-bg-hover);
+  }
+
+  /* The detected build is marked in the list too, so opening the menu confirms rather than
+     contradicts what the button already says. */
+  .oc-download-group a[data-detected="true"] {
+    color: var(--oc-color-text-primary);
+    background: var(--oc-color-bg-surface-5);
+  }
+
+  .oc-download-size {
+    font-family: var(--oc-font-mono);
+    font-size: 12px;
+    color: var(--oc-color-text-description);
+    white-space: nowrap;
+  }
+
+  .oc-download-note {
+    margin-top: var(--oc-space-4);
+    padding-top: var(--oc-space-3);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  @media (max-width: 448px) {
+    /* The CTA group goes full-width single-column here; the split control has to follow or the
+       disclosure ends up on its own row. */
+    .oc-download {
+      width: 100%;
+    }
+
+    .oc-download-primary {
+      flex: 1;
+    }
+
+    .oc-download-panel {
+      width: 100%;
+    }
   }
 
   /* ---------------------------------------------------------- terminal */
@@ -709,6 +916,10 @@ const featurableSquadTotal = platformFacts.squadTotal
     margin-block: var(--oc-space-3) var(--oc-space-4);
   }
 
+  .oc-start-actions {
+    margin-top: var(--oc-space-4);
+  }
+
   .oc-trust {
     margin-top: var(--oc-space-8);
     padding-top: var(--oc-space-6);
@@ -965,22 +1176,23 @@ const featurableSquadTotal = platformFacts.squadTotal
 
   /* --------------------------------------------------- platform detect */
 
-  const downloadLink = document.querySelector<HTMLAnchorElement>("[data-oc-download-primary]")
-  const downloadLabel = document.querySelector<HTMLElement>("[data-oc-download-label]")
-  if (downloadLink && downloadLabel) {
-    type Asset = {
-      product: string
-      platform: "windows" | "macos" | "linux"
-      architecture: "x64" | "arm64"
-      format: string
-      url: string
-      compatible?: boolean
-    }
+  /*
+   * Detection only picks a default. Every installer is already a link in the server-rendered menu,
+   * so failing to detect costs the reader one extra click, not the download.
+   *
+   * Same principle the retired download page held to: offer a specific build only when the browser
+   * states both platform and architecture. Handing an arm64 Mac an x64 DMG is worse than showing
+   * the list, so a guess is not an improvement.
+   */
+  const downloadRoot = document.querySelector<HTMLElement>("[data-oc-download]")
+  if (downloadRoot) {
+    const primary = downloadRoot.querySelector<HTMLAnchorElement>("[data-oc-download-primary]")
+    const label = downloadRoot.querySelector<HTMLElement>("[data-oc-download-label]")
+    const menu = downloadRoot.querySelector<HTMLDetailsElement>("[data-oc-download-menu]")
 
-    // Same principle the retiring download page held to: offer a specific build only when the
-    // browser states both platform and architecture. An arm64 Mac handed an x64 DMG is a worse
-    // outcome than being shown the platform list, so a guess is not an improvement here.
-    async function resolveTarget(): Promise<{ platform: Asset["platform"]; architecture: Asset["architecture"] } | null> {
+    const PLATFORM_LABEL: Record<string, string> = { windows: "Windows", macos: "macOS", linux: "Linux" }
+
+    async function detect(): Promise<{ platform: string; architecture: string } | null> {
       const uaData = (
         navigator as Navigator & {
           userAgentData?: {
@@ -989,8 +1201,9 @@ const featurableSquadTotal = platformFacts.squadTotal
           }
         }
       ).userAgentData
+      if (!uaData?.getHighEntropyValues) return null
 
-      const namePlatform = (value: string | undefined): Asset["platform"] | null => {
+      const named = (value: string | undefined) => {
         const text = (value ?? "").toLowerCase()
         if (text.includes("win")) return "windows"
         if (text.includes("mac")) return "macos"
@@ -998,10 +1211,9 @@ const featurableSquadTotal = platformFacts.squadTotal
         return null
       }
 
-      if (!uaData?.getHighEntropyValues) return null
       try {
         const hints = await uaData.getHighEntropyValues(["platform", "architecture", "bitness"])
-        const platform = namePlatform(hints.platform ?? uaData.platform)
+        const platform = named(hints.platform ?? uaData.platform)
         if (!platform) return null
         if (hints.architecture === "arm") return { platform, architecture: "arm64" }
         if (hints.architecture === "x86" && hints.bitness === "64") return { platform, architecture: "x64" }
@@ -1011,44 +1223,33 @@ const featurableSquadTotal = platformFacts.squadTotal
       }
     }
 
-    /** Desktop installer preference per platform, most-wanted first. */
-    const FORMAT_ORDER: Record<Asset["platform"], string[]> = {
-      windows: ["EXE", "MSI"],
-      macos: ["DMG"],
-      linux: ["AppImage", "DEB", "RPM"],
-    }
+    void (async () => {
+      const target = await detect()
+      if (!target || !primary || !label) return
 
-    const PLATFORM_LABEL: Record<Asset["platform"], string> = {
-      windows: "Windows",
-      macos: "macOS",
-      linux: "Linux",
-    }
+      // The menu is ordered most-wanted-first per platform, so the first match is the right default.
+      const match = downloadRoot.querySelector<HTMLAnchorElement>(
+        `[data-oc-download-asset="${target.platform}-${target.architecture}"]`,
+      )
+      if (!match) return
 
-    const load = async () => {
-      const target = await resolveTarget()
-      if (!target) return
-      try {
-        const response = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/downloads/latest.json`)
-        if (!response.ok) return
-        const manifest = (await response.json()) as { assets?: Asset[] }
-        const candidates = (manifest.assets ?? []).filter(
-          (asset) =>
-            asset.product === "desktop" &&
-            asset.platform === target.platform &&
-            asset.architecture === target.architecture &&
-            !asset.compatible,
-        )
-        const order = FORMAT_ORDER[target.platform]
-        const asset = candidates.sort((a, b) => order.indexOf(a.format) - order.indexOf(b.format))[0]
-        if (!asset?.url) return
-        downloadLink.href = asset.url
-        downloadLabel.textContent = `${PLATFORM_LABEL[target.platform]} · ${target.architecture} · ${asset.format}`
-        downloadLink.hidden = false
-      } catch {
-        // Leave the all-platforms link as the only path. Better than a dead primary button.
-      }
-    }
+      const verb = downloadRoot.dataset.downloadVerb ?? ""
+      primary.href = match.href
+      label.textContent = `${verb} ${PLATFORM_LABEL[target.platform] ?? target.platform} · ${target.architecture}`.trim()
+      match.dataset.detected = "true"
+    })()
 
-    void load()
+    // A disclosure stays open until it is clicked again, which is wrong for a menu.
+    if (menu) {
+      document.addEventListener("click", (event) => {
+        if (menu.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false
+      })
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && menu.open) {
+          menu.open = false
+          menu.querySelector("summary")?.focus()
+        }
+      })
+    }
   }
 </script>

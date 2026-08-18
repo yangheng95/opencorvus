@@ -83,7 +83,10 @@ export const EvolutionMutationAuthorizationSchema = z
 
 export const EvolutionPromotionReceiptSchema = z
   .object({
-    operation: z.enum(["promotion", "restoration"]),
+    // A feedback revision replaces the installed revision exactly as a
+    // promotion does; it is recorded as its own operation so the receipt states
+    // what actually authorized it — user acceptance, not a measured comparison.
+    operation: z.enum(["promotion", "restoration", "feedback_revision"]),
     authorization: EvolutionMutationAuthorizationSchema,
     target: EvolutionInstallableTargetSchema,
     expected_current_digest: ArtifactSHA256Schema,
@@ -94,7 +97,7 @@ export const EvolutionPromotionReceiptSchema = z
   })
   .strict()
   .superRefine((value, context) => {
-    const expectedManagerOperation = value.operation === "promotion" ? "replaced" : "restored"
+    const expectedManagerOperation = value.operation === "restoration" ? "restored" : "replaced"
     if (value.manager_receipt.operation !== expectedManagerOperation)
       context.addIssue({
         code: "custom",
@@ -155,6 +158,19 @@ export const EvolutionMutationIntentRequestSchema = z.discriminatedUnion("operat
       expectedCurrentPackageDigest: ArtifactSHA256Schema,
     })
     .strict(),
+  // Installing a revision authored from one piece of user feedback. There is no
+  // Campaign and no comparison: a single piece of feedback has nothing to
+  // measure, so the user's own confirmation is the authority — which is where
+  // every shipped self-improving system puts the promotion decision. The
+  // resulting receipt is the same shape a Campaign promotion produces, so the
+  // restoration path reverts it without knowing the difference.
+  z
+    .object({
+      operation: z.literal("feedback_revision"),
+      candidateRevisionLocator: EngineArtifactLocatorSchema,
+      expectedCurrentPackageDigest: ArtifactSHA256Schema,
+    })
+    .strict(),
 ])
 
 export const EvolutionMutationRequestSchema = z.discriminatedUnion("operation", [
@@ -162,6 +178,9 @@ export const EvolutionMutationRequestSchema = z.discriminatedUnion("operation", 
     authorization: EvolutionMutationAuthorizationLocatorSchema,
   }),
   EvolutionMutationIntentRequestSchema.options[1].safeExtend({
+    authorization: EvolutionMutationAuthorizationLocatorSchema,
+  }),
+  EvolutionMutationIntentRequestSchema.options[2].safeExtend({
     authorization: EvolutionMutationAuthorizationLocatorSchema,
   }),
 ])
