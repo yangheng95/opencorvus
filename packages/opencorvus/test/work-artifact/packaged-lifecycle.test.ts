@@ -69,13 +69,16 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
         projectID: Instance.project.id,
         directory: project.path,
       }
-      const assistant = await Session.updateMessage({
+      // Mirrors src/work-artifact/packaged-acceptance.ts: the assistant stays in flight until its
+      // Tool Parts are written, because a completed assistant may not receive a new Tool request.
+      const assistant = {
         id: Identifier.ascending("message"), sessionID: session.id, parentID: "msg_packaged_work_artifact_user",
-        role: "assistant", author: "orchestrator", time: { created: Date.now(), completed: Date.now() },
+        role: "assistant" as const, author: "orchestrator", time: { created: Date.now() },
         agent: "orchestrator", providerID: "qualification", modelID: "qualification",
         path: { cwd: project.path, root: project.path }, cost: 0,
-        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } }, finish: "tool-calls",
-      })
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+      }
+      await Session.updateMessage(assistant)
       const tools = createWorkArtifactTools(dependencies)
       const context: Tool.Context = {
         sessionID: session.id, messageID: assistant.id, callID: "call_packaged_work_artifact", agent: "orchestrator",
@@ -122,6 +125,7 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
         validation_receipt_sha: validation.validation_receipt.sha,
         slides: [{ slide: 1, title: "Packaged qualification", markdown: "Real packaged runtime evidence." }],
       }, context))
+      await Session.updateMessage({ ...assistant, time: { ...assistant.time, completed: Date.now() }, finish: "tool-calls" })
       expect({
         sourceSha: source.sha,
         inspectedSha: JSON.parse(inspected.output).source.sha,

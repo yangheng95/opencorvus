@@ -27,13 +27,17 @@ export async function runPackagedWorkArtifactAcceptance(): Promise<{
     role: "user", author: "user", time: { created: Date.now() }, agent: "orchestrator",
     model: { providerID: "qualification", modelID: "qualification" },
   })
-  const assistant = await Session.updateMessage({
+  // The assistant stays in flight for the whole lifecycle, exactly as a real turn does. Its Tool
+  // Parts are the Artifact's provenance, and a completed assistant may not receive a new Tool
+  // request Part, so completion is the last thing that happens rather than the first.
+  const assistant = {
     id: Identifier.ascending("message"), sessionID: session.id, parentID: user.id,
-    role: "assistant", author: "orchestrator", time: { created: Date.now(), completed: Date.now() },
+    role: "assistant" as const, author: "orchestrator", time: { created: Date.now() },
     agent: "orchestrator", providerID: "qualification", modelID: "qualification",
     path: { cwd: Instance.project.worktree, root: Instance.project.worktree }, cost: 0,
-    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } }, finish: "tool-calls",
-  })
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+  }
+  await Session.updateMessage(assistant)
   const tools = createWorkArtifactTools()
   const context: Tool.Context = {
     sessionID: session.id, messageID: assistant.id, callID: "call_packaged_work_artifact_acceptance", agent: "orchestrator",
@@ -76,6 +80,7 @@ export async function runPackagedWorkArtifactAcceptance(): Promise<{
     validation_receipt_sha: validation.validation_receipt.sha,
     slides: [{ slide: 1, title: "Packaged qualification", markdown: "Compiled package acceptance." }],
   }, context))
+  await Session.updateMessage({ ...assistant, time: { ...assistant.time, completed: Date.now() }, finish: "tool-calls" })
   const deliveredSource = JSON.parse(delivered.output).source as { sha: string }
   const receiptDigest = createHash("sha256").update(JSON.stringify(validation.validation_receipt_payload)).digest("hex")
   if (receiptDigest !== validation.validation_receipt.sha || deliveredSource.sha !== source.sha) {
