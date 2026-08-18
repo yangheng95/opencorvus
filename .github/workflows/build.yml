@@ -101,8 +101,8 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get -o DPkg::Lock::Timeout=300 update
-          sudo apt-get -o DPkg::Lock::Timeout=300 install -y \
+          sudo apt-get -o DPkg::Lock::Timeout=300 -o Acquire::Retries=5 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o DPkg::Lock::Timeout=300 -o Acquire::Retries=5 -o Acquire::http::Timeout=20 install -y \
             libwebkit2gtk-4.1-dev \
             libssl-dev \
             libgtk-3-dev \
