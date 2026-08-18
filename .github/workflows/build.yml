@@ -260,9 +260,19 @@ jobs:
       - prepare
       - package-overlay
       - package-cli
+    # One platform must not discard the others. A stalled apt mirror on a single
+    # runner used to skip this job outright, throwing away nine finished builds
+    # and leaving nothing to re-run against. Whatever built is staged onto the
+    # draft Release; the draft is only published once the matrix is complete, so
+    # a partial run costs a re-run of the one leg that failed rather than all of
+    # them, and never ships a Release missing a platform.
+    if: ${{ !cancelled() && needs.prepare.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      complete: ${{ steps.completeness.outputs.complete }}
+      missing: ${{ steps.completeness.outputs.missing }}
     defaults:
       run:
         shell: bash
@@ -310,15 +320,66 @@ jobs:
           fi
           gh release upload "v${VERSION}" "${FILES[@]}" --clobber --repo "$GITHUB_REPOSITORY"
 
+      - name: Report matrix completeness
+        id: completeness
+        env:
+          OVERLAY_RESULT: ${{ needs.package-overlay.result }}
+          CLI_RESULT: ${{ needs.package-cli.result }}
+        run: |
+          MISSING=()
+          test "$OVERLAY_RESULT" = "success" || MISSING+=("overlay ($OVERLAY_RESULT)")
+          test "$CLI_RESULT" = "success" || MISSING+=("cli ($CLI_RESULT)")
+          if test "${#MISSING[@]}" -eq 0; then
+            echo "complete=true" >> "$GITHUB_OUTPUT"
+            echo "missing=" >> "$GITHUB_OUTPUT"
+            echo "Every platform built."
+            exit 0
+          fi
+          JOINED="$(IFS=", "; echo "${MISSING[*]}")"
+          echo "complete=false" >> "$GITHUB_OUTPUT"
+          echo "missing=${JOINED}" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Release v${{ needs.prepare.outputs.version }} publishes without every platform"
+            echo
+            echo "These matrix legs did not succeed:"
+            for entry in "${MISSING[@]}"; do echo "- $entry"; done
+            echo
+            echo "The assets that did build are on the Release. Re-running a failed job adds its assets with --clobber."
+          } >> "$GITHUB_STEP_SUMMARY"
+
   publish-release:
     name: publish release
     needs:
       - prepare
       - publish-release-assets
+    if: ${{ !cancelled() && needs.publish-release-assets.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      # A missing platform is a gap in the download table, not a reason to ship
+      # nothing. The Release publishes with whatever built and says on its own
+      # page which platforms are absent, so the ones that did build reach users
+      # today and a later re-run fills the rest in with --clobber.
+      - name: Record the platforms this Release is missing
+        if: ${{ needs.publish-release-assets.outputs.complete != 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          MISSING: ${{ needs.publish-release-assets.outputs.missing }}
+        run: |
+          echo "::warning::Release v${VERSION} publishes without: ${MISSING}"
+          gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" --json body --jq .body > /tmp/release-body.md
+          {
+            cat <<NOTICE
+          > **Incomplete platform coverage.** This release was published without: ${MISSING}.
+          > Re-running the failed build job adds those assets to this same release.
+          NOTICE
+            echo
+            cat /tmp/release-body.md
+          } > /tmp/release-notes.md
+          gh release edit "v${VERSION}" --repo "$GITHUB_REPOSITORY" --notes-file /tmp/release-notes.md
+
       - name: Publish verified draft
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
