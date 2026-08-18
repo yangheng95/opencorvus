@@ -1,6 +1,3 @@
-import { createInstanceState } from "../project/instance-state"
-import { ProjectInstanceContext } from "../project/instance-context"
-import { InstanceLifecycleContext, type InstanceLifecycleCapabilities } from "../project/instance-lifecycle-context"
 import { Log } from "../util/log"
 import { SchedulerTaskOwner } from "./task-owner"
 
@@ -8,12 +5,11 @@ export class SchedulerDisposalInactivityError extends Error {
   override readonly name = "SchedulerDisposalInactivityError"
 
   constructor(
-    public readonly scope: "instance" | "global",
     public readonly taskIDs: readonly string[],
     public readonly inactivityTimeoutMilliseconds: number,
   ) {
     super(
-      `${scope} scheduler made no disposal progress for ${inactivityTimeoutMilliseconds}ms; ` +
+      `scheduler made no disposal progress for ${inactivityTimeoutMilliseconds}ms; ` +
         `${taskIDs.length} task(s) remain active: ${taskIDs.join(", ")}`,
     )
   }
@@ -27,11 +23,10 @@ export namespace Scheduler {
     interval: number
     runAtStart: boolean
     run: (signal: AbortSignal) => Promise<void>
-    scope?: "instance" | "global"
   }
 
   type Timer = ReturnType<typeof setInterval>
-  type EntryBase = {
+  type Entry = {
     tasks: Map<string, Task>
     timers: Map<string, Timer>
     active: Map<Promise<void>, string>
@@ -39,13 +34,11 @@ export namespace Scheduler {
     starting: Map<string, Promise<void>>
     coalesced: Set<string>
     lifecycle: AbortController
-    runtime?: InstanceLifecycleCapabilities
     disposal?: Promise<void>
     disposalFailed: boolean
   }
-  type Entry = (EntryBase & { scope: "global" }) | (EntryBase & { scope: "instance"; directory: string })
 
-  const createBase = (): EntryBase => {
+  const createEntry = (): Entry => {
     const tasks = new Map<string, Task>()
     const timers = new Map<string, Timer>()
     const active = new Map<Promise<void>, string>()
@@ -60,39 +53,28 @@ export namespace Scheduler {
       disposalFailed: false,
     }
   }
-  const createGlobal = (): Entry => ({ ...createBase(), scope: "global" })
-  const createInstance = (): Entry => ({
-    ...createBase(),
-    scope: "instance",
-    directory: ProjectInstanceContext.use().directory,
-    runtime: InstanceLifecycleContext.use(),
-  })
 
-  let shared = createGlobal()
+  let shared = createEntry()
   let globalSettlementGate: symbol | undefined
 
-  const state = createInstanceState(
-    () => createInstance(),
-    async (entry) => {
-      await disposeEntry(entry)
-    },
-    "scheduler",
-  )
-
+  /**
+   * Register one recurring task.
+   *
+   * There used to be an optional `scope` selecting between this registry and a
+   * per-project-instance one, with opposite semantics for a repeated id —
+   * silently ignored here, silently replaced there. Every registration in the
+   * repository passed `"global"`, so the instance registry could never hold a
+   * task; it and its disposal path are gone.
+   */
   export function register(task: Task) {
-    const scope = task.scope ?? "instance"
-    if (scope === "global" && globalSettlementGate) {
-      throw new Error(`Cannot register scheduled task "${task.id}" while the global scheduler is settling`)
+    if (globalSettlementGate) {
+      throw new Error(`Cannot register scheduled task "${task.id}" while the scheduler is settling`)
     }
-    const entry = scope === "global" ? shared : state()
-    if (scope === "instance") entry.runtime ??= InstanceLifecycleContext.use()
+    const entry = shared
     if (entry.lifecycle.signal.aborted) {
-      throw new Error(`Cannot register scheduled task "${task.id}" while its scheduler scope is disposing`)
+      throw new Error(`Cannot register scheduled task "${task.id}" while the scheduler is disposing`)
     }
-    const current = entry.timers.get(task.id)
-    if (current && scope === "global") return
-    if (current) clearInterval(current)
-
+    if (entry.timers.has(task.id)) return
     install(entry, task, task.runAtStart)
   }
 
@@ -112,7 +94,7 @@ export namespace Scheduler {
     SchedulerTaskOwner.assertCanStartLifecycleDisposal("global scheduler disposal")
     const entry = shared
     await disposeEntry(entry, options?.inactivityTimeoutMilliseconds)
-    if (shared === entry && !globalSettlementGate) shared = createGlobal()
+    if (shared === entry && !globalSettlementGate) shared = createEntry()
   }
 
   export function acquireGlobalSettlementGate(): Disposable & { commit(): void } {
@@ -135,7 +117,7 @@ export namespace Scheduler {
           if (globalSettlementGate !== token) return
           globalSettlementGate = undefined
           if (shared !== entry || !entry.lifecycle.signal.aborted) return
-          shared = createGlobal()
+          shared = createEntry()
           if (!committed) {
             for (const task of registeredTasks) install(shared, task, false)
           }
@@ -159,15 +141,9 @@ export namespace Scheduler {
       return
     }
     entry.coalesced.delete(task.id)
-    let request!: Promise<void>
-    request =
-      entry.scope === "instance"
-        ? requiredRuntime(entry)
-            .reenter({ directory: entry.directory, fn: () => start(entry, task) })
-            .then(() => undefined)
-        : import("../project/instance").then(({ runOutsideInstanceContext }) =>
-            runOutsideInstanceContext(() => start(entry, task)),
-          )
+    const request: Promise<void> = import("../project/instance").then(({ runOutsideInstanceContext }) =>
+      runOutsideInstanceContext(() => start(entry, task)),
+    )
     entry.starting.set(task.id, request)
     void request
       .catch((error) => {
@@ -176,11 +152,6 @@ export namespace Scheduler {
       .finally(() => {
         if (entry.starting.get(task.id) === request) entry.starting.delete(task.id)
       })
-  }
-
-  function requiredRuntime(entry: Entry): InstanceLifecycleCapabilities {
-    if (!entry.runtime) throw new Error(`Scheduler ${entry.scope} runtime capabilities were not registered`)
-    return entry.runtime
   }
 
   function start(entry: Entry, task: Task): Promise<void> {
@@ -214,12 +185,12 @@ export namespace Scheduler {
   }
 
   function disposeEntry(entry: Entry, inactivityTimeoutMilliseconds = DEFAULT_DISPOSAL_INACTIVITY_TIMEOUT_MILLISECONDS): Promise<void> {
-    SchedulerTaskOwner.assertCanStartLifecycleDisposal(`${entry.scope} scheduler disposal`)
+    SchedulerTaskOwner.assertCanStartLifecycleDisposal("scheduler disposal")
     if (!Number.isInteger(inactivityTimeoutMilliseconds) || inactivityTimeoutMilliseconds <= 0) {
       throw new Error(`Invalid scheduler disposal inactivity timeout ${inactivityTimeoutMilliseconds}`)
     }
     if (!entry.disposal) {
-      entry.lifecycle.abort(new Error(`${entry.scope} scheduler is disposing`))
+      entry.lifecycle.abort(new Error("scheduler is disposing"))
       for (const timer of entry.timers.values()) {
         clearInterval(timer)
       }
@@ -255,7 +226,7 @@ export namespace Scheduler {
           ...(inactivityTimeoutMilliseconds === undefined ? [] : [new Promise<void>((_, reject) => {
             timer = setTimeout(() => {
               const taskIDs = [...new Set([...entry.starting.keys(), ...entry.active.values()])]
-              reject(new SchedulerDisposalInactivityError(entry.scope, taskIDs, inactivityTimeoutMilliseconds))
+              reject(new SchedulerDisposalInactivityError(taskIDs, inactivityTimeoutMilliseconds))
             }, inactivityTimeoutMilliseconds)
           })]),
         ])
@@ -271,11 +242,5 @@ export namespace Scheduler {
       if (signal.aborted && error === signal.reason) return
       log.error("run failed", { id: task.id, error })
     })
-  }
-
-  export const TestHooks = {
-    disposeCurrent(): Promise<void> {
-      return disposeEntry(state())
-    },
   }
 }

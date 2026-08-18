@@ -14,18 +14,15 @@ export class SchedulerExecutionInactivityError extends Error {
   }
 }
 
-let timeoutForTest: number | undefined
-
 export async function createSchedulerExecutionInactivityFence(input: {
   occurrence: string
   signals: readonly AbortSignal[]
   initialPhase: string
   configurationOwner: "global" | "project"
 }) {
-  const configured =
-    timeoutForTest ??
-    (await (input.configurationOwner === "global" ? EngineConfig.getGlobal() : EngineConfig.get())).activity
-      .execution_progress_idle_ms
+  const configured = (
+    await (input.configurationOwner === "global" ? EngineConfig.getGlobal() : EngineConfig.get())
+  ).activity.execution_progress_idle_ms
   if (!Number.isInteger(configured) || configured <= 0) {
     throw new Error(`Invalid scheduler execution inactivity timeout ${configured}`)
   }
@@ -51,20 +48,4 @@ export async function createSchedulerExecutionInactivityFence(input: {
       timer = undefined
     },
   }
-}
-
-export const SchedulerExecutionInactivityTestHooks = {
-  installTimeout(milliseconds: number): Disposable {
-    if (!Number.isInteger(milliseconds) || milliseconds <= 0) {
-      throw new Error(`Invalid scheduler execution inactivity test timeout ${milliseconds}`)
-    }
-    if (timeoutForTest !== undefined)
-      throw new Error("Scheduler execution inactivity test timeout is already installed")
-    timeoutForTest = milliseconds
-    return {
-      [Symbol.dispose]() {
-        if (timeoutForTest === milliseconds) timeoutForTest = undefined
-      },
-    }
-  },
 }

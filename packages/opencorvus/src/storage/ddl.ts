@@ -774,11 +774,27 @@ BEGIN
   SELECT RAISE(ABORT, 'automation_run: execution history is immutable');
 END;
 
+-- An accepted Task-root Message is frozen in content, not in place. Delivery
+-- moves it from the Task-root Session into the Orchestrator Session, which
+-- rewrites only its Session, its timeline position, and the matching \`time\`
+-- and \`orderKey\` inside \`data\` -- not one word of what was said. Freezing
+-- the row outright made that move impossible, so a Message accepted before it
+-- was delivered could never be delivered at all: every wake replayed the same
+-- refused relocation and the Task died holding it. The exemption is therefore
+-- exactly one shape -- a relocation that leaves the causal content identical --
+-- and every other update, including a bare timestamp bump in place, still aborts.
 CREATE TRIGGER IF NOT EXISTS task_root_source_message_no_update
 BEFORE UPDATE ON message
 FOR EACH ROW
-WHEN EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='message' AND source_id=OLD.id)
-  OR EXISTS (SELECT 1 FROM protocol_event WHERE json_extract(payload,'$.inputMessageID')=OLD.id)
+WHEN (
+    EXISTS (SELECT 1 FROM engine_task_root_ingress WHERE source='message' AND source_id=OLD.id)
+    OR EXISTS (SELECT 1 FROM protocol_event WHERE json_extract(payload,'$.inputMessageID')=OLD.id)
+  )
+  AND NOT (
+    NEW.id = OLD.id
+    AND NEW.session_id <> OLD.session_id
+    AND json_remove(NEW.data, '$.time', '$.orderKey') IS json_remove(OLD.data, '$.time', '$.orderKey')
+  )
 BEGIN
   SELECT RAISE(ABORT, 'message: accepted Task-root causal facts are immutable');
 END;

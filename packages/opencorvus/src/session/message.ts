@@ -13,7 +13,6 @@ import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 import { type SystemError } from "bun"
 import type { Provider } from "@/provider/provider"
 import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./text-mime"
-import { STATEFUL_SNAPSHOT_TOOL_NAMES, statefulSnapshotToolKey } from "@/orchestrator/stateful-tool-names"
 import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
 import {
@@ -817,21 +816,6 @@ export namespace Message {
     })
   export type VisibleWithParts = z.infer<typeof VisibleWithParts>
 
-  /**
-   * Tools whose output is a snapshot of current task state (no side effects,
-   * no delta value once superseded). Older calls' outputs are projected to a
-   * short "superseded" note when a later call to the same tool exists in the
-   * same session â€” this prevents tool results from piling up in the prompt
-   * as the orchestrator reads state every turn. DB rows are NOT modified;
-   * projection runs only at prompt-assembly time so UI / audit keeps full
-   * fidelity.
-   *
-   * The source-of-truth for membership is `STATEFUL_SNAPSHOT_TOOL_NAMES` in
-   * `orchestrator/tools.ts`, co-located with the tool definitions so adding
-   * or renaming a stateful tool forces the developer to look at this list.
-   * We import it (rather than re-declaring) so the two cannot drift apart.
-   */
-  export const STATEFUL_SNAPSHOT_TOOLS: ReadonlySet<string> = new Set(STATEFUL_SNAPSHOT_TOOL_NAMES)
 
   export interface ToModelMessagesOptions {
     stripMedia?: boolean
@@ -1117,37 +1101,6 @@ export namespace Message {
     const result: UIMessage[] = []
     const toolNames = new Set<string>()
 
-    // Pre-pass: for each stateful-snapshot tool, find the callID of its
-    // latest invocation. Any earlier invocation's output will be projected
-    // to a short "[superseded by later call]" note below, keeping only the
-    // live snapshot's full text in the prompt. Walking in reverse lets us
-    // short-circuit once we have the latest for every tool we've seen.
-    // Both completed and error states are treated as "a call happened" â€”
-    // an older error result is just as obsolete as an older success once a
-    // newer call exists, and leaving it in the prompt encourages the model
-    // to reason about stale failures.
-    const latestStatefulCallIDs = new Set<string>()
-    const seenStatefulKeys = new Set<string>()
-    for (let i = input.length - 1; i >= 0; i--) {
-      const msg = input[i]
-      const parts =
-        msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info)
-          ? compactionContinuationTextParts(msg.parts)
-          : msg.parts
-      for (let j = parts.length - 1; j >= 0; j--) {
-        const p = parts[j]
-        const statefulKey = p.type === "tool" ? statefulSnapshotToolKey(p.tool, p.state.input) : undefined
-        if (
-          p.type === "tool" &&
-          statefulKey &&
-          (p.state.status === "completed" || p.state.status === "error") &&
-          !seenStatefulKeys.has(statefulKey)
-        ) {
-          seenStatefulKeys.add(statefulKey)
-          latestStatefulCallIDs.add(p.callID)
-        }
-      }
-    }
     // AI SDK v6 invokes tool.toModelOutput with an args object
     // ({ toolCallId, input, output }), not a raw output. v5 passed `output`
     // directly. Reading the wrapped argument as if it were the output gave
@@ -1350,19 +1303,13 @@ export namespace Message {
             toolNames.add(part.tool)
             if (part.state.status === "completed") {
               let outputText: string
-              const statefulKey = statefulSnapshotToolKey(part.tool, part.state.input)
-              const isSupersededStatefulSnapshot = statefulKey !== undefined && !latestStatefulCallIDs.has(part.callID)
               if (part.state.time.compacted) {
                 outputText = "[Old tool result content cleared]"
-              } else if (isSupersededStatefulSnapshot) {
-                outputText = `[${statefulKey} snapshot superseded by a later call in this session]`
               } else {
                 outputText = compactToolOutput(part.state.output, options.toolOutputMaxChars)
               }
               const attachments =
-                part.state.time.compacted || isSupersededStatefulSnapshot || options.stripMedia
-                  ? []
-                  : (part.state.attachments ?? [])
+                part.state.time.compacted || options.stripMedia ? [] : (part.state.attachments ?? [])
 
               const output =
                 attachments.length > 0
@@ -1382,11 +1329,7 @@ export namespace Message {
               })
             }
             if (part.state.status === "error") {
-              const statefulKey = statefulSnapshotToolKey(part.tool, part.state.input)
-              const isSupersededStatefulError = statefulKey !== undefined && !latestStatefulCallIDs.has(part.callID)
-              const errorText = isSupersededStatefulError
-                ? `[${statefulKey} error superseded by a later call in this session]`
-                : renderToolFailureCause(part.state.failure)
+              const errorText = renderToolFailureCause(part.state.failure)
               assistantMessage.parts.push({
                 type: ("tool-" + part.tool) as `tool-${string}`,
                 state: "output-error",

@@ -151,6 +151,19 @@ export namespace SessionWake {
   }
 
   /**
+   * JSON path to one wake-reason field inside a persisted Message row.
+   *
+   * `reasonExtra` is the only encoder, so the shape it produces is stated here
+   * too rather than copied into SQL string literals in other modules. Callers
+   * bind the returned path as a `json_extract` argument; the field name is
+   * checked against the union so a renamed discriminant fails to compile
+   * instead of silently matching nothing.
+   */
+  export function reasonJSONPath(field: WakeReason extends infer R ? (R extends object ? keyof R : never) : never) {
+    return `$.extra.wake_reason.${String(field)}`
+  }
+
+  /**
    * Wake a session by appending the scheduled prompt.
    * Returns the session ID (existing or newly created).
    */

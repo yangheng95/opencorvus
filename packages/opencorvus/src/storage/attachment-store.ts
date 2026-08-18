@@ -1,4 +1,5 @@
 import crypto, { randomUUID } from "node:crypto"
+import { acquireProcessLock } from "@/util/process-lock"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
@@ -24,7 +25,6 @@ import { Log } from "@/util/log"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import { withKeyedLock } from "@/util/lock"
 import { Filesystem } from "@/util/filesystem"
-import lockfile from "proper-lockfile"
 import { projectInteractionRowInTransaction } from "@/engine/store"
 import { ATTACHMENT_ROUTE_PREFIX, attachmentNameFromUrl } from "./attachment-reference"
 
@@ -111,7 +111,7 @@ const AUTHORITY_LOCK_WAIT_MS = 30_000
 const AUTHORITY_LOCK_RETRY_MS = 25
 
 async function withAuthorityFileLock<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
-  const release = await lockfile.lock(filePath, {
+  const release = await acquireProcessLock(filePath, {
     realpath: false,
     retries: {
       retries: Math.ceil(AUTHORITY_LOCK_WAIT_MS / AUTHORITY_LOCK_RETRY_MS),

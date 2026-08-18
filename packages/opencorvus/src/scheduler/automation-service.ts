@@ -16,7 +16,11 @@ import { SessionWake } from "@/session/wake"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
 import { taskWaitFireID } from "./task-wait-fire-identity"
 import { EngineTaskTable } from "@/engine/engine.sql"
-import { persistTaskWaitIngressInTransaction } from "@/engine/task-root-ingress-delivery"
+import {
+  dispatchPersistedTaskLoop,
+  dispatchTaskLoop,
+  persistTaskWaitIngressInTransaction,
+} from "@/engine/task-root-ingress-delivery"
 import { findTask } from "@/engine/store"
 import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
@@ -26,7 +30,6 @@ import { Bus } from "@/bus"
 import { Message } from "@/session/message"
 import { TaskRootMessageProvenance } from "@/task-api/task-root-message"
 import { taskIDForSession } from "@/engine/task-session-lineage"
-import { requireTaskWakeRuntime } from "./task-wake-runtime"
 import { SessionStatus } from "@/session/status"
 import { Worktree } from "@/worktree"
 import { PanelSurface } from "@/panel/capability"
@@ -223,7 +226,6 @@ export namespace AutomationService {
       interval: POLL_INTERVAL_MS,
       runAtStart: true,
       run: poll,
-      scope: "global",
     })
     log.info("global automation service initialized")
   }
@@ -790,7 +792,7 @@ export namespace AutomationService {
       dispatchResult = await runInTargetProject({
         directory: task.rootSession.directory,
         fn: () =>
-          requireTaskWakeRuntime().dispatchTaskLoop({
+          dispatchTaskLoop({
             taskID: input.taskId,
             event: {
               note: renderTaskWaitEarlyActivityNote({
@@ -915,10 +917,10 @@ export namespace AutomationService {
   }
 
   function isSchedulerWakeMessage(info: Message.User): boolean {
-    const reason = info.extra?.wake_reason
-    if (!reason || typeof reason !== "object" || Array.isArray(reason)) return false
-    const source = (reason as Record<string, unknown>).source
-    return typeof source === "string" && source.startsWith("scheduler.")
+    // Decoded by the same schema `event-service.ts` uses; the hand-rolled
+    // shape check this replaced accepted reasons the schema rejects.
+    const parsed = SessionWake.WakeReason.safeParse(info.extra?.wake_reason)
+    return parsed.success && parsed.data.source.startsWith("scheduler.")
   }
 
   function isTaskOperatorMessage(info: Message.User): boolean {
@@ -1312,9 +1314,9 @@ export namespace AutomationService {
           and(
             eq(MessageTable.id, input.messageID),
             eq(MessageTable.session_id, input.sessionID),
-            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.source') = 'scheduler.automation'`,
-            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.jobID') = ${input.jobID}`,
-            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.fireID') = ${input.fireID}`,
+            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("source")}) = 'scheduler.automation'`,
+            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("jobID")}) = ${input.jobID}`,
+            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("fireID")}) = ${input.fireID}`,
           ),
         )
         .get(),
@@ -1536,7 +1538,7 @@ export namespace AutomationService {
             return persistedWakeID
           })
           try {
-            const dispatchResult = await requireTaskWakeRuntime().dispatchPersistedTaskLoop(job.task_id!)
+            const dispatchResult = await dispatchPersistedTaskLoop(job.task_id!)
             return { taskID: job.task_id!, wakeID, dispatchResult, automationConsumed: true as const }
           } catch (error) {
             const dispatchError = error instanceof Error ? error.message : String(error)

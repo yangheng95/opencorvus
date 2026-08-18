@@ -41,7 +41,6 @@ export namespace ProjectGC {
       id: "project.gc",
       interval: GC_INTERVAL_MS,
       runAtStart: true,
-      scope: "global",
       run: async (signal) => {
         const plan = await inspect(signal)
         signal.throwIfAborted()

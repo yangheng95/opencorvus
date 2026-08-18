@@ -4,7 +4,6 @@
  * This is the single read-path the orchestrator LLM uses to see "what's going
  * on." It composes an LLM-readable snapshot from durable facts:
  *   - engine_goal (immutable Delivery Slice contract revisions)
- *   - engine_iteration (metric observation trajectory)
  *   - engine_artifact  (domain artifacts and Host observations)
  *   - decision_log     (operator + agent decisions)
  *   - answered clarifications
@@ -18,7 +17,6 @@ import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import z from "zod"
 import { createDecisionLog, type DecisionEntry } from "@/decision-log"
 import { renderUserRequestSection } from "@/intent/request-prompt"
-import { readIterationHistory as readHistory } from "@/metrics/store"
 import { deriveTaskStatus } from "./task-status"
 import { ToolFailureCause, renderToolFailureCause } from "@/session/tool-failure-cause"
 import { SessionStatus } from "@/session/status"
@@ -437,7 +435,6 @@ export interface TaskDesc {
    *  durable task evidence for the next natural scheduler wake, not a wake
    *  trigger, lifecycle transition, or pending decision request. */
   recent_mailbox_messages?: MailboxSchedulerMessage[]
-  iterations_count: number
 }
 
 function describeTaskScheduledWaits(taskID: string, floor: number): TaskScheduledWaitDesc[] {
@@ -849,7 +846,6 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
 
   const maxExecutorGroups = await effectiveMaxAgentParallelism(task)
 
-  const history = readHistory(task.id)
   // Surface recent orchestrator stream errors so the LLM can read them on
   // the next user-driven wake and decide retry / restart / fail. Runtime
   // restart must not auto-wake active tasks: the overlay restores the task
@@ -997,7 +993,6 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
     pending_agent_coordination_truncated:
       allPendingAgentCoordination.length > pendingAgentCoordination.length ? true : undefined,
     recent_mailbox_messages: recentMailboxMessages.length > 0 ? recentMailboxMessages : undefined,
-    iterations_count: history.length,
   }
 }
 
@@ -1216,7 +1211,7 @@ export function renderTaskDescription(desc: TaskDesc): string {
   )
   if (desc.error) lines.push(`Error: ${desc.error}`)
   lines.push(
-    `Runtime facts: ${desc.iterations_count} acceptance iteration(s), agent_parallelism=${desc.budget.max_executor_groups}.`,
+    `Runtime facts: agent_parallelism=${desc.budget.max_executor_groups}.`,
   )
 
   const workflowExecutionLines = renderTaskWorkflowExecution(desc.workflow_execution)

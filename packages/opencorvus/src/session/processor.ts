@@ -511,8 +511,9 @@ export namespace SessionProcessor {
         // session/retry.ts SessionRetry namespace and the outer while-true
         // loop that used to wrap this block. Retries are now invisible to
         // the processor â€” withLLMActivity rethrows LLMActivityError only
-        // after exhausting its retry budget OR hitting a non-retryable class
-        // (client_4xx, request_timeout, payload_too_large, context_overflow).
+        // after exhausting its retry budget OR hitting a class the policy
+        // never granted retryability to (client_4xx, request_timeout,
+        // payload_too_large, context_overflow, host_fault, unknown).
         // Aborts from the external signal raise LLMActivityAbortedError,
         // also a single-attempt terminal.
         const activityPolicy: LLMActivityPolicy = {
@@ -1257,6 +1258,9 @@ export namespace SessionProcessor {
               },
               {
                 beforeRetry: async ({ event, error }) => cleanupAttemptBeforeRetry(event, error),
+                // The Session owns its own activity registry; the retry layer
+                // only reports the monitor it built.
+                publishActivityMonitor: (monitor) => SessionStatus.registerActivityMonitor(input.sessionID, monitor),
               },
             )
           } catch (e: any) {

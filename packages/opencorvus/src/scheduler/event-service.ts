@@ -221,7 +221,7 @@ export namespace EventService {
     if (processSettlementGate) throw new Error("Event fire process settlement is already in progress")
     const token = Symbol("event-fire-process-settlement")
     const projectIDs = new Set(
-      Database.use((db) => db.select().from(EventJobFireTable).all().map((row) => projectEventFireInTransaction(db, row)).filter((row) => ["pending", "running", "retry_wait"].includes(row.status)).map((row) => row.project_id)),
+      Database.use((db) => db.select().from(EventJobFireTable).all().map((row) => projectEventFireInTransaction(db, row, Date.now())).filter((row) => ["pending", "running", "retry_wait"].includes(row.status)).map((row) => row.project_id)),
     )
     processSettlementGate = { token, projectIDs }
     let decision: "pending" | "commit" | "rollback" = "pending"
@@ -265,7 +265,7 @@ export namespace EventService {
     const rows = Database.use((db) =>
       currentEventDefinitions(db).filter((row) => row.project_id === projectID),
     )
-    return rows.map((row) => Database.use((db) => projectEventJobInTransaction(db, row))).map((j) => ({
+    return rows.map((row) => Database.use((db) => projectEventJobInTransaction(db, row, Date.now()))).map((j) => ({
       id: j.id,
       name: j.name,
       eventType: j.event_type,
@@ -329,7 +329,7 @@ export namespace EventService {
     const jobs = Database.use((db) =>
       currentEventDefinitions(db)
         .filter((row) => row.project_id === Instance.project.id && row.enabled)
-        .map((row) => projectEventJobInTransaction(db, row)),
+        .map((row) => projectEventJobInTransaction(db, row, Date.now())),
     )
     const matches = jobs.filter((job) => Wildcard.match(event.type, job.event_type) && ok(event, job.match_json ?? {}))
     if (matches.length === 0) return
@@ -458,7 +458,7 @@ export namespace EventService {
     const parent = Database.use((db) => db.select().from(EventJobFireTable)
       .where(eq(EventJobFireTable.created_session_id, sessionID))
       .orderBy(sql`${EventJobFireTable.time_created} DESC`, sql`${EventJobFireTable.id} DESC`).all()
-      .map((row) => projectEventFireInTransaction(db, row)).find((row) => row.project_id === Instance.project.id))
+      .map((row) => projectEventFireInTransaction(db, row, Date.now())).find((row) => row.project_id === Instance.project.id))
     return parent ? causationFromParent(parent) : { ancestry: [] }
   }
 
@@ -479,7 +479,7 @@ export namespace EventService {
   function requireParentFire(fireID: string): EventJobFire {
     const parent = Database.use((db) => {
       const row = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
-      return row ? projectEventFireInTransaction(db, row) : undefined
+      return row ? projectEventFireInTransaction(db, row, Date.now()) : undefined
     })
     if (!parent || parent.project_id !== Instance.project.id) throw new Error(`Event wake ${fireID} has no durable Event Job fire authority`)
     return parent
@@ -494,7 +494,7 @@ export namespace EventService {
 
   function recoverProjectFires(): void {
     const rows = Database.use((db) => db.select().from(EventJobFireTable).all()
-      .map((row) => projectEventFireInTransaction(db, row)).filter((row) => row.project_id === Instance.project.id && ["pending", "running", "retry_wait"].includes(row.status)).map((row) => ({ id: row.id, jobID: row.event_job_id })))
+      .map((row) => projectEventFireInTransaction(db, row, Date.now())).filter((row) => row.project_id === Instance.project.id && ["pending", "running", "retry_wait"].includes(row.status)).map((row) => ({ id: row.id, jobID: row.event_job_id })))
     for (const row of rows) {
       try {
         enqueueFire(row.id, row.jobID)
@@ -582,7 +582,7 @@ export namespace EventService {
           .from(EventJobTable)
           .where(and(eq(EventJobTable.id, claimed.event_job_revision_id), eq(EventJobTable.project_id, claimed.project_id)))
           .get()
-        return persisted ? projectEventJobInTransaction(db, persisted) : undefined
+        return persisted ? projectEventJobInTransaction(db, persisted, Date.now()) : undefined
       })
       inactivityFence.touch("job resolved")
       if (existingMessageID) {
@@ -675,7 +675,7 @@ export namespace EventService {
   }
 
   function enqueueNextFireForJob(jobID: string): void {
-    const next = Database.use((db) => db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all().map((row) => projectEventFireInTransaction(db, row)).find((row) => row.event_job_id === jobID && ["pending", "running", "retry_wait"].includes(row.status)))
+    const next = Database.use((db) => db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all().map((row) => projectEventFireInTransaction(db, row, Date.now())).find((row) => row.event_job_id === jobID && ["pending", "running", "retry_wait"].includes(row.status)))
     if (next) enqueueFire(next.id, jobID)
   }
 
@@ -687,7 +687,7 @@ export namespace EventService {
       row = Database.use((db) => {
         const persisted = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
         if (!persisted) return undefined
-        const fire = projectEventFireInTransaction(db, persisted)
+        const fire = projectEventFireInTransaction(db, persisted, Date.now())
         return { jobID: fire.event_job_id, status: fire.status, lease: fire.retry_at ?? fire.lease_until }
       })
     } catch (error) {
@@ -859,8 +859,8 @@ export namespace EventService {
         .where(
           and(
             eq(MessageTable.session_id, fire.target_session_id),
-            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.source') = 'scheduler.event'`,
-            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.fireID') = ${fire.id}`,
+            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("source")}) = 'scheduler.event'`,
+            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("fireID")}) = ${fire.id}`,
           ),
         )
         .orderBy(MessageTable.time_created, MessageTable.id)
@@ -1058,7 +1058,7 @@ export namespace EventService {
           .select()
           .from(EventJobFireTable)
           .orderBy(EventJobFireTable.time_created, EventJobFireTable.id)
-          .all().map((row) => projectEventFireInTransaction(db, row)).filter((row) => row.project_id === projectID),
+          .all().map((row) => projectEventFireInTransaction(db, row, Date.now())).filter((row) => row.project_id === projectID),
       )
     },
   }

@@ -25,7 +25,13 @@ export type EventJobFireRow = typeof EventJobFireTable.$inferSelect & {
   retry_at: number | null
 }
 
-export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof EventJobFireTable.$inferSelect, now = Date.now()): EventJobFireRow {
+/**
+ * `now` is required. It decides `retry_wait` versus `running` versus
+ * `pending`, and it used to default to `Date.now()` per call — so projecting a
+ * job's fires re-read the clock once per fire and two fires in one projection
+ * could land on opposite sides of a lease expiry.
+ */
+export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof EventJobFireTable.$inferSelect, now: number): EventJobFireRow {
   const definition = db.select({ definitionID: EventJobTable.definition_id, sessionID: EventJobTable.session_id }).from(EventJobTable)
     .where(eq(EventJobTable.id, row.event_job_revision_id)).get()
   const occurrence = db.select().from(EventOccurrenceTable).where(eq(EventOccurrenceTable.id, row.event_occurrence_id)).get()
@@ -95,11 +101,11 @@ export type EventJobRow = typeof EventJobTable.$inferSelect & {
   last_error: string | null
 }
 
-export function projectEventJobInTransaction(db: Database.TxOrDb, row: typeof EventJobTable.$inferSelect): EventJobRow {
+export function projectEventJobInTransaction(db: Database.TxOrDb, row: typeof EventJobTable.$inferSelect, now: number): EventJobRow {
   const revisions = db.select({ id: EventJobTable.id }).from(EventJobTable).where(eq(EventJobTable.definition_id, row.definition_id)).all().map((entry) => entry.id)
   const fires = revisions.length === 0 ? [] : db.select().from(EventJobFireTable).where(inArray(EventJobFireTable.event_job_revision_id, revisions))
     .orderBy(asc(EventJobFireTable.time_created), asc(EventJobFireTable.id)).all()
-    .map((fire) => projectEventFireInTransaction(db, fire))
+    .map((fire) => projectEventFireInTransaction(db, fire, now))
   const latest = fires.at(-1)
   let failures = 0
   for (const fire of fires.toReversed()) {

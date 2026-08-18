@@ -256,7 +256,7 @@ export namespace LLM {
       },
       // Tool-call repair (name-normalization + discriminated-union legal-value
       // enumeration) is installed once at the `@/llm/api` streamText wrapper —
-      // single source for every caller (see session/repair-hint.ts
+      // single source for every caller (see llm/repair-hint.ts
       // createToolCallRepair). Do not re-add a per-call repair here.
       temperature: params.temperature,
       topP: params.topP,

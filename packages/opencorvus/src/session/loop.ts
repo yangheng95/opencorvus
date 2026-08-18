@@ -5,6 +5,7 @@ import { Identifier } from "../id/id"
 import { Message } from "./message"
 import { normalizeToolResult } from "./tool-result-normalization"
 import { MessageStore } from "./message-store"
+import { settleAbandonedProviderActivity } from "./provider-activity-facts"
 import { NotFoundError } from "@/storage/db"
 import { Session } from "."
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -174,12 +175,44 @@ function taskRootAssistantHasDecisionReceipt(message: Message.WithParts): boolea
   })
 }
 
-function taskRootDecisionRepairPrompt(input: { attempt: number; limit: number }): string {
+/**
+ * Mechanism escalation for a Task-root Turn that streamed a Provider step
+ * without committing a decision.
+ *
+ * Prose alone is not a lever: re-sending the same request with an extra
+ * paragraph draws from the same distribution, so attempts 2 and 3 of a
+ * `semanticTurnLimit: 3` budget were near-identical repeats of attempt 1 and
+ * the Turn reached `exhausted` having never been constrained once. Each rung
+ * below removes one degree of freedom the previous rung left open:
+ *
+ *  - rung 0 (no gap yet): unconstrained.
+ *  - rung 1: `toolChoice: "required"` — the step cannot end as prose.
+ *  - rung 2 and beyond: also narrow the visible surface to the decision Tools,
+ *    so "call some tool" cannot be satisfied by another read-only inspection.
+ *
+ * Narrowing is conditional on the decision Tools actually being present in the
+ * resolved surface, so a runtime that never installed them keeps the weaker
+ * rung instead of being handed an empty tool set.
+ */
+export type TaskRootDecisionRepairRung = { toolChoice: "required"; restrictToDecisionTools: boolean }
+
+export function taskRootDecisionRepairRung(gapCount: number): TaskRootDecisionRepairRung | undefined {
+  if (gapCount <= 0) return undefined
+  return { toolChoice: "required", restrictToDecisionTools: gapCount >= 2 }
+}
+
+function taskRootDecisionRepairPrompt(input: {
+  attempt: number
+  limit: number
+  rung: TaskRootDecisionRepairRung
+}): string {
   return [
     "<task-root-decision-repair>",
     `The previous streamed Provider step ended without a valid Task-root decision receipt (attempt ${input.attempt} of ${input.limit}).`,
     "Continue the same visible assistant Turn and now call exactly one valid current decision Tool, or one valid parallel dispatch_agent set.",
-    "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
+    input.rung.restrictToDecisionTools
+      ? "This step is restricted to the decision Tools; inspection Tools are not offered on it. Decide from the facts already in this Turn."
+      : "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
     "</task-root-decision-repair>",
   ].join("\n")
 }
@@ -623,13 +656,18 @@ export namespace SessionLoop {
    * surface alone overruns the model, we fail fast rather than retry an
    * impossible turn. Override via env `OPENCORVUS_TOOL_SCHEMA_BUDGET_RATIO`.
    *
-   * `COMPACTION_MIN_RESIDUE_CHARS` — even after a perfect compaction the
+   * `COMPACTION_MIN_RESIDUE_TOKENS` — even after a perfect compaction the
    * request still carries the active user message + a minimum-viable
-   * summary in the message body. We use ~6 KB as a conservative residue
-   * estimate (≈ 1.5 K tokens) for the post-compaction sizing check.
+   * summary in the message body. Expressed in tokens rather than characters
+   * because the summary is written in the conversation's own language, and a
+   * character floor would silently mean three different things across scripts.
+   * Deliberately a low estimate: this floor only ever pushes the decision
+   * toward the unrecoverable `fail-prompt-budget` exit, so erring small keeps
+   * a doomed request on the recoverable path (attempt compaction, let the
+   * provider reject) instead of terminating the turn on an estimate.
    */
   const TOOL_SCHEMA_BUDGET_RATIO_DEFAULT = 0.5
-  const COMPACTION_MIN_RESIDUE_CHARS = 6_000
+  const COMPACTION_MIN_RESIDUE_TOKENS = 1_500
 
   function toolSchemaBudgetRatio(): number {
     const raw = Number(Env.get("OPENCORVUS_TOOL_SCHEMA_BUDGET_RATIO") ?? "")
@@ -671,35 +709,31 @@ export namespace SessionLoop {
     totalTokensEst: number
     limit: number
     usableBudget: number
-    systemChars: number
-    toolSchemaChars: number
-    messagePayloadChars: number
+    systemTokensEst: number
+    toolSchemaTokensEst: number
+    messagePayloadTokensEst: number
     mediaTokensEst: number
     toolSchemaBudgetRatio: number
-    minResidueChars?: number
+    minResidueTokens?: number
     lastFinishedSummary: boolean
   }): PredictiveCompactionDecision {
     if (input.usableBudget === 0) return { kind: "skip" }
     if (input.lastFinishedSummary) return { kind: "skip" }
     if (input.totalTokensEst <= input.limit) return { kind: "skip" }
 
-    const toolSchemaTokensEst = Token.estimateCharacters(input.toolSchemaChars)
-    if (toolSchemaTokensEst > input.usableBudget * input.toolSchemaBudgetRatio) {
+    if (input.toolSchemaTokensEst > input.usableBudget * input.toolSchemaBudgetRatio) {
       return { kind: "fail-tool-schema" }
     }
 
-    const minResidueChars = input.minResidueChars ?? COMPACTION_MIN_RESIDUE_CHARS
-    const nonCompressibleChars = input.systemChars + input.toolSchemaChars
-    const postCompactionMinTokens =
-      Token.estimateCharacters(nonCompressibleChars + minResidueChars) + input.mediaTokensEst
+    const minResidueTokens = input.minResidueTokens ?? COMPACTION_MIN_RESIDUE_TOKENS
+    const nonCompressibleTokens = input.systemTokensEst + input.toolSchemaTokensEst
+    const postCompactionMinTokens = nonCompressibleTokens + minResidueTokens + input.mediaTokensEst
     if (postCompactionMinTokens > input.limit) {
       return { kind: "fail-prompt-budget", reason: "post-compaction-still-over" }
     }
 
     const overflowTokens = input.totalTokensEst - input.limit
-    const compressibleTokens = Token.estimateCharacters(input.messagePayloadChars)
-    const minResidueTokens = Token.estimateCharacters(minResidueChars)
-    if (compressibleTokens < overflowTokens + minResidueTokens) {
+    if (input.messagePayloadTokensEst < overflowTokens + minResidueTokens) {
       return { kind: "fail-prompt-budget", reason: "nothing-to-compress" }
     }
 
@@ -790,26 +824,32 @@ export namespace SessionLoop {
    * transform and only unwraps the already-normalised schema via
    * `asSchema(...)`.
    */
-  export function estimateToolPayloadChars(tools: Record<string, AITool>): number {
-    let total = 0
+  export function estimateToolPayload(tools: Record<string, AITool>): { chars: number; tokensEst: number } {
+    let chars = 0
+    let tokensEst = 0
     for (const [name, item] of Object.entries(tools)) {
       const description =
         typeof (item as { description?: unknown }).description === "string"
-          ? (item as { description: string }).description.length
-          : 0
-      let schemaChars = 0
+          ? (item as { description: string }).description
+          : ""
+      let schemaText = ""
       const inputSchema = (item as { inputSchema?: unknown }).inputSchema
       if (inputSchema !== undefined && inputSchema !== null) {
         try {
           const jsonSchemaPayload = asSchema(inputSchema as never).jsonSchema
-          schemaChars = JSON.stringify(jsonSchemaPayload ?? {}).length
+          schemaText = JSON.stringify(jsonSchemaPayload ?? {})
         } catch {
-          schemaChars = 0
+          schemaText = ""
         }
       }
-      total += name.length + description + schemaChars
+      chars += name.length + description.length + schemaText.length
+      tokensEst += Token.estimate(name) + Token.estimate(description) + Token.estimate(schemaText)
     }
-    return total
+    return { chars, tokensEst }
+  }
+
+  export function estimateToolPayloadChars(tools: Record<string, AITool>): number {
+    return estimateToolPayload(tools).chars
   }
 
   export type ProviderToolSource = "registry" | "mcp" | "extra" | "structured"
@@ -1003,6 +1043,9 @@ export namespace SessionLoop {
 
   export type ModelMessagePayloadEstimate = {
     messagePayloadChars: number
+    /** Script-aware token estimate for the same serialized payload. `chars` stays
+     *  for operator-facing diagnostics; every budget comparison uses this. */
+    messagePayloadTokensEst: number
     mediaCounts: Record<MediaKind, number>
     mediaTokensEst: number
   }
@@ -1094,10 +1137,14 @@ export namespace SessionLoop {
     }
 
     let messagePayloadChars = 0
+    let messagePayloadTokensEst = 0
     try {
-      messagePayloadChars = JSON.stringify(sanitize(messages)).length
+      const serialized = JSON.stringify(sanitize(messages))
+      messagePayloadChars = serialized.length
+      messagePayloadTokensEst = Token.estimate(serialized)
     } catch {
       messagePayloadChars = 0
+      messagePayloadTokensEst = 0
     }
 
     const mediaTokensEst = Object.entries(mediaCounts).reduce(
@@ -1105,7 +1152,7 @@ export namespace SessionLoop {
       0,
     )
 
-    return { messagePayloadChars, mediaCounts, mediaTokensEst }
+    return { messagePayloadChars, messagePayloadTokensEst, mediaCounts, mediaTokensEst }
   }
 
   export async function materializeToolResultAttachments(attachments: unknown): Promise<unknown> {
@@ -1341,13 +1388,11 @@ export namespace SessionLoop {
   async function sessionStateContext(input: {
     projectID: string
     sessionID: string
-    query: string
     memoryToolAvailable: boolean
   }) {
     const projectMemory = await MemoryInjection.systemPromptSection({
       projectID: input.projectID,
       sessionID: input.sessionID,
-      query: input.query,
       memoryToolAvailable: input.memoryToolAvailable,
     })
     const taskPlan = TaskPlan.toMarkdown(input.sessionID)
@@ -1571,27 +1616,43 @@ export namespace SessionLoop {
     if (isLastStep) {
       system.push(MAX_STEPS)
     }
-    if (
+    const decisionRepairRung =
       openTaskRootAssistant &&
-      taskRootDecisionGapCount > 0 &&
       taskRootSemanticTurnLimit !== undefined &&
       !taskRootAssistantHasDecisionReceipt(openTaskRootAssistant)
-    ) {
+        ? taskRootDecisionRepairRung(taskRootDecisionGapCount)
+        : undefined
+    if (decisionRepairRung && taskRootSemanticTurnLimit !== undefined) {
       system.push(
         taskRootDecisionRepairPrompt({
           attempt: Math.min(taskRootDecisionGapCount + 1, taskRootSemanticTurnLimit),
           limit: taskRootSemanticTurnLimit,
+          rung: decisionRepairRung,
         }),
       )
+      if (decisionRepairRung.restrictToDecisionTools) {
+        const decisionTools = Object.fromEntries(
+          Object.entries(tools).filter(([name]) => isOrchestratorDecisionToolName(name)),
+        )
+        if (Object.keys(decisionTools).length > 0) {
+          log.info("task-root-decision-repair-restricting-tool-surface", {
+            sessionID: input.sessionID,
+            gapCount: taskRootDecisionGapCount,
+            from: Object.keys(tools).length,
+            to: Object.keys(decisionTools).length,
+          })
+          tools = decisionTools
+        } else {
+          log.warn("task-root-decision-repair-has-no-decision-tools", {
+            sessionID: input.sessionID,
+            gapCount: taskRootDecisionGapCount,
+          })
+        }
+      }
     }
 
-    const memoryQuery = (input.msgs.find((message) => message.info.id === input.lastUser.id)?.parts ?? [])
-      .filter((part): part is Message.TextPart => part.type === "text")
-      .map((part) => part.text)
-      .join(" ")
-      .trim()
-    // Live session-state blocks. These change between turns (project-memory hits
-    // depend on the query and taskplan tracks progress). Until 2026-04
+    // Live session-state blocks. These change between turns (the project MEMORY.MD
+    // document and its notices are re-read, and taskplan tracks progress). Until 2026-04
     // they were pushed onto `system` after the cached entries (env, runtime context), but
     // applyCaching only puts cache_control on the first 2 system messages —
     // anything after lives inside the second cache breakpoint, which spans
@@ -1601,7 +1662,6 @@ export namespace SessionLoop {
     const dynamicContextText = await sessionStateContext({
       projectID: Instance.project.id,
       sessionID: input.sessionID,
-      query: memoryQuery || input.session.title || input.lastUser.id,
       memoryToolAvailable: Object.prototype.hasOwnProperty.call(tools, "memory"),
     })
 
@@ -1639,7 +1699,7 @@ export namespace SessionLoop {
     const modelMessages = baseModelMessages
 
     const systemChars = system.reduce((sum, s) => sum + s.length, 0)
-    const systemTokensEst = Token.estimateCharacters(systemChars)
+    const systemTokensEst = system.reduce((sum, s) => sum + Token.estimate(s), 0)
     const toolCount = Object.keys(tools).length
     let userMsgCount = 0
     let assistantMsgCount = 0
@@ -1663,9 +1723,12 @@ export namespace SessionLoop {
     // prompt input; system is estimated separately above.
     const payloadEstimate = estimateModelMessagePayload(modelMessages)
     const messagePayloadChars = payloadEstimate.messagePayloadChars
-    const toolSchemaChars = estimateToolPayloadChars(tools)
+    const toolPayloadEstimate = estimateToolPayload(tools)
+    const toolSchemaChars = toolPayloadEstimate.chars
+    const toolSchemaTokensEst = toolPayloadEstimate.tokensEst
+    const messagePayloadTokensEst = payloadEstimate.messagePayloadTokensEst
     const totalContentChars = messagePayloadChars + toolSchemaChars
-    const contentTokensEst = Token.estimateCharacters(totalContentChars)
+    const contentTokensEst = messagePayloadTokensEst + toolSchemaTokensEst
     const mediaTokensEst = payloadEstimate.mediaTokensEst
     const mediaCount = Object.values(payloadEstimate.mediaCounts).reduce((sum, count) => sum + count, 0)
     const totalTokensEst = systemTokensEst + contentTokensEst + mediaTokensEst
@@ -1725,16 +1788,15 @@ export namespace SessionLoop {
         totalTokensEst,
         limit: predictiveBudget.limit,
         usableBudget: predictiveBudget.usableBudget,
-        systemChars,
-        toolSchemaChars,
-        messagePayloadChars,
+        systemTokensEst,
+        toolSchemaTokensEst,
+        messagePayloadTokensEst,
         mediaTokensEst,
         toolSchemaBudgetRatio: ratio,
         lastFinishedSummary: input.lastFinished?.summary === true,
       })
       const toolNames = Object.keys(tools).join(",")
       if (decision.kind === "fail-tool-schema") {
-        const toolSchemaTokensEst = Token.estimateCharacters(toolSchemaChars)
         log.error("predictive-compaction-fail-tool-schema", {
           step: input.step,
           toolSchemaChars,
@@ -1855,7 +1917,7 @@ export namespace SessionLoop {
       messages: modelMessages,
       tools,
       model: input.model,
-      toolChoice: undefined,
+      toolChoice: decisionRepairRung?.toolChoice,
       stream: runtimeContract?.stream,
       runtimeSystemMode: messagePromptProjection?.systemMode ?? runtimeContract?.systemMode,
     })
@@ -2110,6 +2172,21 @@ export namespace SessionLoop {
           },
         })
         signal?.throwIfAborted()
+      }
+      // The Provider half of the same abandonment. Without it the settlement
+      // fence refuses the completion below forever, and the Task stops
+      // accepting operator Messages entirely.
+      const abandonedProviderActivity = settleAbandonedProviderActivity({
+        assistantMessageID: candidate.info.id,
+        now,
+        reason: interruption.message,
+      })
+      if (abandonedProviderActivity.length > 0) {
+        log.warn("settled Provider activity abandoned by a previous process", {
+          sessionID,
+          messageID: candidate.info.id,
+          requestIDs: abandonedProviderActivity,
+        })
       }
       candidate.info.error = Message.fromError(interruption, { providerID: candidate.info.providerID })
       candidate.info.finish = "error"

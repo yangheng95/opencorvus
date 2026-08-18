@@ -1812,6 +1812,8 @@ export function recordIntegrityReview(input: {
    *  has produced observable implementation evidence by the review time. */
   phase: "pre_build" | "post_build"
   review: IntegrityReview
+  /** Structural gaps the Host found while snapshotting this review. */
+  completenessFindings: string[]
   now?: number
 }): string {
   assertTaskAssistantProducerMessage({
@@ -1896,6 +1898,7 @@ export function recordIntegrityReview(input: {
       reviewNumber,
       review: input.review,
       timeRecorded: now,
+      completenessFindings: input.completenessFindings,
     })
     insertEngineArtifact(db, {
       id,
