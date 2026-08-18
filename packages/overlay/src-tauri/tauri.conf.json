@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/refs/heads/v2/crates/tauri-cli/schema.json",
   "productName": "OpenCorvus",
-  "version": "0.0.45-beta",
+  "version": "0.0.46-beta",
   "identifier": "ai.opencorvus.overlay",
   "build": {
     "frontendDist": "../dist-vite",
@@ -24,7 +24,10 @@
         "decorations": true,
         "hiddenTitle": true,
         "titleBarStyle": "Overlay",
-        "trafficLightPosition": { "x": 10, "y": 20 },
+        "trafficLightPosition": {
+          "x": 10,
+          "y": 20
+        },
         "transparent": true,
         "alwaysOnTop": false,
         "skipTaskbar": false,
@@ -43,12 +46,16 @@
     },
     "deep-link": {
       "desktop": {
-        "schemes": ["opencorvus"]
+        "schemes": [
+          "opencorvus"
+        ]
       }
     },
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk0QUIwNTE1MjY3MTZBRTIKUldUaWFuRW1GUVdybExYQmhlUDlUQzY2TGs5cG8zUk5TZ3lnenQ3Q3M4eHhoNHl0dm0rREl0SzAK",
-      "endpoints": ["https://github.com/yangheng95/opencorvus/releases/download/desktop-update-beta/latest.json"],
+      "endpoints": [
+        "https://github.com/yangheng95/opencorvus/releases/download/desktop-update-beta/latest.json"
+      ],
       "windows": {
         "installMode": "passive"
       }
@@ -58,11 +65,19 @@
     "active": true,
     "createUpdaterArtifacts": true,
     "targets": "all",
-    "resources": ["resources/*"],
-    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "resources": [
+      "resources/*"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
     "windows": {
       "wix": {
-        "version": "0.0.45.0"
+        "version": "0.0.46.0"
       },
       "webviewInstallMode": {
         "type": "embedBootstrapper"

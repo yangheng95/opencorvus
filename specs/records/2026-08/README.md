@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-18-v0.0.46-beta-release.md](2026-08-18-v0.0.46-beta-release.md) records the accumulated work integration, canonical version bump to `0.0.46-beta`, tagged application Release across the GUI installer and portable CLI matrices, and the opencorvus.com deployment driven from the same tagged source.
+
 - [2026-08-18-operator-message-is-the-only-resume.md](2026-08-18-operator-message-is-the-only-resume.md) makes an operator message reopen every terminal Task including cancelled, deletes the Retry intent end to end, and fences reopen on deletion instead.
 
 - [2026-08-17-task-root-host-fault-releases-head-of-line.md](2026-08-17-task-root-host-fault-releases-head-of-line.md) replaces the absorbing `blocked/integrity_conflict` ingress with a per-ingress `host_fault` settlement that names its broken invariant and releases the Task's FIFO.
