@@ -16086,6 +16086,9 @@
           "originSource": {
             "type": "string"
           },
+          "pendingDelivery": {
+            "type": "boolean"
+          },
           "resolvedRole": {
             "minLength": 1,
             "type": "string"
@@ -17458,6 +17461,9 @@
               "orderKey": {
                 "minLength": 1,
                 "type": "string"
+              },
+              "pendingDelivery": {
+                "type": "boolean"
               },
               "role": {
                 "const": "user",
@@ -26430,6 +26436,7 @@
                                   "evolution-lab/candidate-revision",
                                   "evolution-lab/run-evidence-bundle",
                                   "evolution-lab/evaluation-result",
+                                  "evolution-lab/integrity-review",
                                   "evolution-lab/comparison-recommendation",
                                   "evolution-lab/promotion-receipt"
                                 ],
@@ -26506,6 +26513,7 @@
                                       "evolution-lab/candidate-revision",
                                       "evolution-lab/run-evidence-bundle",
                                       "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
                                       "evolution-lab/comparison-recommendation",
                                       "evolution-lab/promotion-receipt"
                                     ],
@@ -26820,6 +26828,7 @@
                                       "evolution-lab/candidate-revision",
                                       "evolution-lab/run-evidence-bundle",
                                       "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
                                       "evolution-lab/comparison-recommendation",
                                       "evolution-lab/promotion-receipt"
                                     ],
@@ -27237,6 +27246,7 @@
                                         "evolution-lab/candidate-revision",
                                         "evolution-lab/run-evidence-bundle",
                                         "evolution-lab/evaluation-result",
+                                        "evolution-lab/integrity-review",
                                         "evolution-lab/comparison-recommendation",
                                         "evolution-lab/promotion-receipt"
                                       ],
@@ -27557,6 +27567,7 @@
                                               "evolution-lab/candidate-revision",
                                               "evolution-lab/run-evidence-bundle",
                                               "evolution-lab/evaluation-result",
+                                              "evolution-lab/integrity-review",
                                               "evolution-lab/comparison-recommendation",
                                               "evolution-lab/promotion-receipt"
                                             ],
@@ -27989,6 +28000,7 @@
                                                         "evolution-lab/candidate-revision",
                                                         "evolution-lab/run-evidence-bundle",
                                                         "evolution-lab/evaluation-result",
+                                                        "evolution-lab/integrity-review",
                                                         "evolution-lab/comparison-recommendation",
                                                         "evolution-lab/promotion-receipt"
                                                       ],
@@ -28260,6 +28272,7 @@
                                                         "evolution-lab/candidate-revision",
                                                         "evolution-lab/run-evidence-bundle",
                                                         "evolution-lab/evaluation-result",
+                                                        "evolution-lab/integrity-review",
                                                         "evolution-lab/comparison-recommendation",
                                                         "evolution-lab/promotion-receipt"
                                                       ],
@@ -28547,6 +28560,7 @@
                                                         "evolution-lab/candidate-revision",
                                                         "evolution-lab/run-evidence-bundle",
                                                         "evolution-lab/evaluation-result",
+                                                        "evolution-lab/integrity-review",
                                                         "evolution-lab/comparison-recommendation",
                                                         "evolution-lab/promotion-receipt"
                                                       ],
@@ -29029,6 +29043,7 @@
                                                         "evolution-lab/candidate-revision",
                                                         "evolution-lab/run-evidence-bundle",
                                                         "evolution-lab/evaluation-result",
+                                                        "evolution-lab/integrity-review",
                                                         "evolution-lab/comparison-recommendation",
                                                         "evolution-lab/promotion-receipt"
                                                       ],
@@ -29572,6 +29587,7 @@
                                                     "evolution-lab/candidate-revision",
                                                     "evolution-lab/run-evidence-bundle",
                                                     "evolution-lab/evaluation-result",
+                                                    "evolution-lab/integrity-review",
                                                     "evolution-lab/comparison-recommendation",
                                                     "evolution-lab/promotion-receipt"
                                                   ],
@@ -30900,6 +30916,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -31202,6 +31219,7 @@
                                                   "evolution-lab/candidate-revision",
                                                   "evolution-lab/run-evidence-bundle",
                                                   "evolution-lab/evaluation-result",
+                                                  "evolution-lab/integrity-review",
                                                   "evolution-lab/comparison-recommendation",
                                                   "evolution-lab/promotion-receipt"
                                                 ],
@@ -31473,6 +31491,7 @@
                                                   "evolution-lab/candidate-revision",
                                                   "evolution-lab/run-evidence-bundle",
                                                   "evolution-lab/evaluation-result",
+                                                  "evolution-lab/integrity-review",
                                                   "evolution-lab/comparison-recommendation",
                                                   "evolution-lab/promotion-receipt"
                                                 ],
@@ -31760,6 +31779,7 @@
                                                   "evolution-lab/candidate-revision",
                                                   "evolution-lab/run-evidence-bundle",
                                                   "evolution-lab/evaluation-result",
+                                                  "evolution-lab/integrity-review",
                                                   "evolution-lab/comparison-recommendation",
                                                   "evolution-lab/promotion-receipt"
                                                 ],
@@ -32242,6 +32262,7 @@
                                                   "evolution-lab/candidate-revision",
                                                   "evolution-lab/run-evidence-bundle",
                                                   "evolution-lab/evaluation-result",
+                                                  "evolution-lab/integrity-review",
                                                   "evolution-lab/comparison-recommendation",
                                                   "evolution-lab/promotion-receipt"
                                                 ],
@@ -32548,6 +32569,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -32811,6 +32833,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -33275,6 +33298,7 @@
                                             "evolution-lab/candidate-revision",
                                             "evolution-lab/run-evidence-bundle",
                                             "evolution-lab/evaluation-result",
+                                            "evolution-lab/integrity-review",
                                             "evolution-lab/comparison-recommendation",
                                             "evolution-lab/promotion-receipt"
                                           ],
@@ -33546,6 +33570,7 @@
                                             "evolution-lab/candidate-revision",
                                             "evolution-lab/run-evidence-bundle",
                                             "evolution-lab/evaluation-result",
+                                            "evolution-lab/integrity-review",
                                             "evolution-lab/comparison-recommendation",
                                             "evolution-lab/promotion-receipt"
                                           ],
@@ -33833,6 +33858,7 @@
                                             "evolution-lab/candidate-revision",
                                             "evolution-lab/run-evidence-bundle",
                                             "evolution-lab/evaluation-result",
+                                            "evolution-lab/integrity-review",
                                             "evolution-lab/comparison-recommendation",
                                             "evolution-lab/promotion-receipt"
                                           ],
@@ -34315,6 +34341,7 @@
                                             "evolution-lab/candidate-revision",
                                             "evolution-lab/run-evidence-bundle",
                                             "evolution-lab/evaluation-result",
+                                            "evolution-lab/integrity-review",
                                             "evolution-lab/comparison-recommendation",
                                             "evolution-lab/promotion-receipt"
                                           ],
@@ -34589,6 +34616,7 @@
                                     "evolution-lab/candidate-revision",
                                     "evolution-lab/run-evidence-bundle",
                                     "evolution-lab/evaluation-result",
+                                    "evolution-lab/integrity-review",
                                     "evolution-lab/comparison-recommendation",
                                     "evolution-lab/promotion-receipt"
                                   ],
@@ -35197,6 +35225,7 @@
                                   "evolution-lab/candidate-revision",
                                   "evolution-lab/run-evidence-bundle",
                                   "evolution-lab/evaluation-result",
+                                  "evolution-lab/integrity-review",
                                   "evolution-lab/comparison-recommendation",
                                   "evolution-lab/promotion-receipt"
                                 ],
@@ -35273,6 +35302,7 @@
                                       "evolution-lab/candidate-revision",
                                       "evolution-lab/run-evidence-bundle",
                                       "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
                                       "evolution-lab/comparison-recommendation",
                                       "evolution-lab/promotion-receipt"
                                     ],
@@ -35559,6 +35589,7 @@
                                     "evolution-lab/candidate-revision",
                                     "evolution-lab/run-evidence-bundle",
                                     "evolution-lab/evaluation-result",
+                                    "evolution-lab/integrity-review",
                                     "evolution-lab/comparison-recommendation",
                                     "evolution-lab/promotion-receipt"
                                   ],
@@ -35976,6 +36007,7 @@
                                       "evolution-lab/candidate-revision",
                                       "evolution-lab/run-evidence-bundle",
                                       "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
                                       "evolution-lab/comparison-recommendation",
                                       "evolution-lab/promotion-receipt"
                                     ],
@@ -36296,6 +36328,7 @@
                                             "evolution-lab/candidate-revision",
                                             "evolution-lab/run-evidence-bundle",
                                             "evolution-lab/evaluation-result",
+                                            "evolution-lab/integrity-review",
                                             "evolution-lab/comparison-recommendation",
                                             "evolution-lab/promotion-receipt"
                                           ],
@@ -36728,6 +36761,7 @@
                                                       "evolution-lab/candidate-revision",
                                                       "evolution-lab/run-evidence-bundle",
                                                       "evolution-lab/evaluation-result",
+                                                      "evolution-lab/integrity-review",
                                                       "evolution-lab/comparison-recommendation",
                                                       "evolution-lab/promotion-receipt"
                                                     ],
@@ -36999,6 +37033,7 @@
                                                       "evolution-lab/candidate-revision",
                                                       "evolution-lab/run-evidence-bundle",
                                                       "evolution-lab/evaluation-result",
+                                                      "evolution-lab/integrity-review",
                                                       "evolution-lab/comparison-recommendation",
                                                       "evolution-lab/promotion-receipt"
                                                     ],
@@ -37286,6 +37321,7 @@
                                                       "evolution-lab/candidate-revision",
                                                       "evolution-lab/run-evidence-bundle",
                                                       "evolution-lab/evaluation-result",
+                                                      "evolution-lab/integrity-review",
                                                       "evolution-lab/comparison-recommendation",
                                                       "evolution-lab/promotion-receipt"
                                                     ],
@@ -37768,6 +37804,7 @@
                                                       "evolution-lab/candidate-revision",
                                                       "evolution-lab/run-evidence-bundle",
                                                       "evolution-lab/evaluation-result",
+                                                      "evolution-lab/integrity-review",
                                                       "evolution-lab/comparison-recommendation",
                                                       "evolution-lab/promotion-receipt"
                                                     ],
@@ -38311,6 +38348,7 @@
                                                   "evolution-lab/candidate-revision",
                                                   "evolution-lab/run-evidence-bundle",
                                                   "evolution-lab/evaluation-result",
+                                                  "evolution-lab/integrity-review",
                                                   "evolution-lab/comparison-recommendation",
                                                   "evolution-lab/promotion-receipt"
                                                 ],
@@ -39639,6 +39677,7 @@
                                         "evolution-lab/candidate-revision",
                                         "evolution-lab/run-evidence-bundle",
                                         "evolution-lab/evaluation-result",
+                                        "evolution-lab/integrity-review",
                                         "evolution-lab/comparison-recommendation",
                                         "evolution-lab/promotion-receipt"
                                       ],
@@ -39941,6 +39980,7 @@
                                                 "evolution-lab/candidate-revision",
                                                 "evolution-lab/run-evidence-bundle",
                                                 "evolution-lab/evaluation-result",
+                                                "evolution-lab/integrity-review",
                                                 "evolution-lab/comparison-recommendation",
                                                 "evolution-lab/promotion-receipt"
                                               ],
@@ -40212,6 +40252,7 @@
                                                 "evolution-lab/candidate-revision",
                                                 "evolution-lab/run-evidence-bundle",
                                                 "evolution-lab/evaluation-result",
+                                                "evolution-lab/integrity-review",
                                                 "evolution-lab/comparison-recommendation",
                                                 "evolution-lab/promotion-receipt"
                                               ],
@@ -40499,6 +40540,7 @@
                                                 "evolution-lab/candidate-revision",
                                                 "evolution-lab/run-evidence-bundle",
                                                 "evolution-lab/evaluation-result",
+                                                "evolution-lab/integrity-review",
                                                 "evolution-lab/comparison-recommendation",
                                                 "evolution-lab/promotion-receipt"
                                               ],
@@ -40981,6 +41023,7 @@
                                                 "evolution-lab/candidate-revision",
                                                 "evolution-lab/run-evidence-bundle",
                                                 "evolution-lab/evaluation-result",
+                                                "evolution-lab/integrity-review",
                                                 "evolution-lab/comparison-recommendation",
                                                 "evolution-lab/promotion-receipt"
                                               ],
@@ -41287,6 +41330,7 @@
                                         "evolution-lab/candidate-revision",
                                         "evolution-lab/run-evidence-bundle",
                                         "evolution-lab/evaluation-result",
+                                        "evolution-lab/integrity-review",
                                         "evolution-lab/comparison-recommendation",
                                         "evolution-lab/promotion-receipt"
                                       ],
@@ -41550,6 +41594,7 @@
                                         "evolution-lab/candidate-revision",
                                         "evolution-lab/run-evidence-bundle",
                                         "evolution-lab/evaluation-result",
+                                        "evolution-lab/integrity-review",
                                         "evolution-lab/comparison-recommendation",
                                         "evolution-lab/promotion-receipt"
                                       ],
@@ -42014,6 +42059,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -42285,6 +42331,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -42572,6 +42619,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -43054,6 +43102,7 @@
                                           "evolution-lab/candidate-revision",
                                           "evolution-lab/run-evidence-bundle",
                                           "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
                                           "evolution-lab/comparison-recommendation",
                                           "evolution-lab/promotion-receipt"
                                         ],
@@ -43328,6 +43377,7 @@
                                   "evolution-lab/candidate-revision",
                                   "evolution-lab/run-evidence-bundle",
                                   "evolution-lab/evaluation-result",
+                                  "evolution-lab/integrity-review",
                                   "evolution-lab/comparison-recommendation",
                                   "evolution-lab/promotion-receipt"
                                 ],
@@ -43677,6 +43727,7 @@
                                       "evolution-lab/candidate-revision",
                                       "evolution-lab/run-evidence-bundle",
                                       "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
                                       "evolution-lab/comparison-recommendation",
                                       "evolution-lab/promotion-receipt"
                                     ],
@@ -43947,6 +43998,182 @@
                                     },
                                     "type": "array"
                                   },
+                                  "arm": {
+                                    "enum": [
+                                      "baseline",
+                                      "candidate"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "case_id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "evaluation_result_locator": {
+                                    "oneOf": [
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "artifact_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "catalog_revision": {
+                                            "exclusiveMinimum": 0,
+                                            "maximum": 9007199254740991,
+                                            "type": "integer"
+                                          },
+                                          "expected_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "source": {
+                                            "const": "engine_artifact",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "source",
+                                          "artifact_id",
+                                          "catalog_revision",
+                                          "expected_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "snapshot": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "manifest_sha256": {
+                                                "pattern": "^[a-f0-9]{64}$",
+                                                "type": "string"
+                                              },
+                                              "project_id": {
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "schema_version": {
+                                                "const": 2,
+                                                "type": "number"
+                                              },
+                                              "snapshot_id": {
+                                                "format": "uuid",
+                                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                                "type": "string"
+                                              },
+                                              "task_id": {
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "schema_version",
+                                              "project_id",
+                                              "task_id",
+                                              "snapshot_id",
+                                              "manifest_sha256"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "source": {
+                                            "const": "task_artifact_snapshot",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "source",
+                                          "snapshot"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "ref": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "bytes": {
+                                                "maximum": 9007199254740991,
+                                                "minimum": 0,
+                                                "type": "integer"
+                                              },
+                                              "media_type": {
+                                                "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                                "type": "string"
+                                              },
+                                              "path": {
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "sha256": {
+                                                "pattern": "^[a-f0-9]{64}$",
+                                                "type": "string"
+                                              },
+                                              "snapshot": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                  "manifest_sha256": {
+                                                    "pattern": "^[a-f0-9]{64}$",
+                                                    "type": "string"
+                                                  },
+                                                  "project_id": {
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "schema_version": {
+                                                    "const": 2,
+                                                    "type": "number"
+                                                  },
+                                                  "snapshot_id": {
+                                                    "format": "uuid",
+                                                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                                    "type": "string"
+                                                  },
+                                                  "task_id": {
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "schema_version",
+                                                  "project_id",
+                                                  "task_id",
+                                                  "snapshot_id",
+                                                  "manifest_sha256"
+                                                ],
+                                                "type": "object"
+                                              },
+                                              "tree": {
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "snapshot",
+                                              "tree",
+                                              "path",
+                                              "media_type",
+                                              "bytes",
+                                              "sha256"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "source": {
+                                            "const": "task_artifact_resource",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "source",
+                                          "ref"
+                                        ],
+                                        "type": "object"
+                                      }
+                                    ]
+                                  },
                                   "findings": {
                                     "items": {
                                       "additionalProperties": false,
@@ -44178,6 +44405,11 @@
                                     },
                                     "type": "array"
                                   },
+                                  "repetition": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
                                   "status": {
                                     "enum": [
                                       "reviewed",
@@ -44194,6 +44426,10 @@
                                   }
                                 },
                                 "required": [
+                                  "case_id",
+                                  "arm",
+                                  "repetition",
+                                  "evaluation_result_locator",
                                   "status",
                                   "findings",
                                   "accepted_limitations",
@@ -44211,6 +44447,274 @@
                             "minimum": 0,
                             "type": "integer"
                           },
+                          "review": {
+                            "anyOf": [
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "artifact_type": {
+                                    "enum": [
+                                      "evolution-lab/opportunity",
+                                      "evolution-lab/campaign-spec",
+                                      "evolution-lab/failure-attribution",
+                                      "evolution-lab/candidate-revision",
+                                      "evolution-lab/run-evidence-bundle",
+                                      "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
+                                      "evolution-lab/comparison-recommendation",
+                                      "evolution-lab/promotion-receipt"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "locator": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "artifact_id": {
+                                        "maxLength": 512,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "catalog_revision": {
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 9007199254740991,
+                                        "type": "integer"
+                                      },
+                                      "expected_sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "source": {
+                                        "const": "engine_artifact",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "source",
+                                      "artifact_id",
+                                      "catalog_revision",
+                                      "expected_sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "partition": {
+                                    "enum": [
+                                      "current",
+                                      "historical"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "producer": {
+                                    "oneOf": [
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "agent_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "expert_squad_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "message_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "owner_kind": {
+                                            "enum": [
+                                              "projected-scheduler",
+                                              "projected-worker"
+                                            ],
+                                            "type": "string"
+                                          },
+                                          "package_revision": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "namespace": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "package_digest": {
+                                                "pattern": "^[a-f0-9]{64}$",
+                                                "type": "string"
+                                              },
+                                              "project_id": {
+                                                "anyOf": [
+                                                  {
+                                                    "maxLength": 512,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  {
+                                                    "type": "null"
+                                                  }
+                                                ]
+                                              },
+                                              "scope": {
+                                                "enum": [
+                                                  "built_in",
+                                                  "project",
+                                                  "global"
+                                                ],
+                                                "type": "string"
+                                              },
+                                              "version": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "scope",
+                                              "project_id",
+                                              "namespace",
+                                              "id",
+                                              "version",
+                                              "package_digest"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "projection_hash": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "session_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "tool_call_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "owner_kind",
+                                          "expert_squad_id",
+                                          "package_revision",
+                                          "agent_id",
+                                          "projection_hash",
+                                          "session_id",
+                                          "message_id",
+                                          "tool_call_id"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "message_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "mission_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "owner_kind": {
+                                            "const": "mission",
+                                            "type": "string"
+                                          },
+                                          "session_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "tool_call_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "owner_kind",
+                                          "mission_id",
+                                          "session_id",
+                                          "message_id",
+                                          "tool_call_id"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "component_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "operation_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "owner_kind": {
+                                            "const": "core",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "owner_kind",
+                                          "component_id",
+                                          "operation_id"
+                                        ],
+                                        "type": "object"
+                                      }
+                                    ]
+                                  },
+                                  "root_session_id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "schema_version": {
+                                    "const": 1,
+                                    "type": "number"
+                                  },
+                                  "task_id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "time_created": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "time_updated": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "task_id",
+                                  "root_session_id",
+                                  "locator",
+                                  "artifact_type",
+                                  "schema_version",
+                                  "producer",
+                                  "time_created",
+                                  "time_updated",
+                                  "partition"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
                           "run": {
                             "anyOf": [
                               {
@@ -44224,6 +44728,7 @@
                                       "evolution-lab/candidate-revision",
                                       "evolution-lab/run-evidence-bundle",
                                       "evolution-lab/evaluation-result",
+                                      "evolution-lab/integrity-review",
                                       "evolution-lab/comparison-recommendation",
                                       "evolution-lab/promotion-receipt"
                                     ],
@@ -44894,6 +45399,7 @@
                           "expected_revision_digest",
                           "run",
                           "evaluation",
+                          "review",
                           "scorer_results",
                           "integrity_review"
                         ],
@@ -48576,6 +49082,17 @@
           },
           {
             "in": "query",
+            "name": "productPillar",
+            "schema": {
+              "enum": [
+                "code",
+                "work"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "cursor",
             "schema": {
               "minLength": 1,
@@ -48644,6 +49161,18 @@
                             "minLength": 1,
                             "type": "string"
                           },
+                          "product_pillars": {
+                            "items": {
+                              "enum": [
+                                "code",
+                                "work"
+                              ],
+                              "type": "string"
+                            },
+                            "maxItems": 2,
+                            "minItems": 1,
+                            "type": "array"
+                          },
                           "version": {
                             "maxLength": 80,
                             "minLength": 1,
@@ -48656,6 +49185,7 @@
                           "name",
                           "label",
                           "version",
+                          "product_pillars",
                           "installation_scopes"
                         ],
                         "type": "object"
@@ -48850,6 +49380,18 @@
                       "pattern": "^[a-f0-9]{64}$",
                       "type": "string"
                     },
+                    "product_pillars": {
+                      "items": {
+                        "enum": [
+                          "code",
+                          "work"
+                        ],
+                        "type": "string"
+                      },
+                      "maxItems": 2,
+                      "minItems": 1,
+                      "type": "array"
+                    },
                     "selector_summary": {
                       "type": "string"
                     },
@@ -48873,6 +49415,7 @@
                     "name",
                     "label",
                     "version",
+                    "product_pillars",
                     "package_digest",
                     "selector_summary",
                     "agents",
@@ -55639,42 +56182,6 @@
                     "required": [
                       "action",
                       "interactionID"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
-                        "const": "retry_task",
-                        "type": "string"
-                      },
-                      "taskID": {
-                        "description": "Task ID for the retry request.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action",
-                      "taskID"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
-                        "const": "replan_task",
-                        "type": "string"
-                      },
-                      "taskID": {
-                        "description": "Task ID for the replan request.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action",
-                      "taskID"
                     ],
                     "type": "object"
                   },
@@ -91875,17 +92382,9 @@
                           "properties": {
                             "canCancel": {
                               "type": "boolean"
-                            },
-                            "canReplan": {
-                              "type": "boolean"
-                            },
-                            "canRetry": {
-                              "type": "boolean"
                             }
                           },
                           "required": [
-                            "canRetry",
-                            "canReplan",
                             "canCancel"
                           ],
                           "type": "object"
@@ -91924,8 +92423,6 @@
                             "kind": {
                               "enum": [
                                 "resolve_blocker",
-                                "retry",
-                                "replan",
                                 "observe",
                                 "review_acceptance",
                                 "message"
@@ -98761,17 +99258,9 @@
                               "properties": {
                                 "canCancel": {
                                   "type": "boolean"
-                                },
-                                "canReplan": {
-                                  "type": "boolean"
-                                },
-                                "canRetry": {
-                                  "type": "boolean"
                                 }
                               },
                               "required": [
-                                "canRetry",
-                                "canReplan",
                                 "canCancel"
                               ],
                               "type": "object"
@@ -98810,8 +99299,6 @@
                                 "kind": {
                                   "enum": [
                                     "resolve_blocker",
-                                    "retry",
-                                    "replan",
                                     "observe",
                                     "review_acceptance",
                                     "message"
@@ -104522,11 +105009,18 @@
                                   {
                                     "properties": {
                                       "reason": {
-                                        "const": "integrity_conflict",
+                                        "enum": [
+                                          "evidence_violation",
+                                          "policy_drift",
+                                          "decision_ambiguous",
+                                          "outcome_ambiguous",
+                                          "turn_without_activation",
+                                          "interaction_ambiguous"
+                                        ],
                                         "type": "string"
                                       },
                                       "state": {
-                                        "const": "blocked",
+                                        "const": "host_fault",
                                         "type": "string"
                                       }
                                     },
@@ -104671,22 +105165,6 @@
                                       },
                                       "state": {
                                         "const": "cancelling",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "state",
-                                      "requestEventID"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "properties": {
-                                      "requestEventID": {
-                                        "type": "string"
-                                      },
-                                      "state": {
-                                        "const": "closing",
                                         "type": "string"
                                       }
                                     },
@@ -107918,2558 +108396,6 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.projectArchive({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/task/{taskID}/replan": {
-      "post": {
-        "operationId": "task.replan",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "taskID",
-            "required": true,
-            "schema": {
-              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "attachments": {
-                      "items": {
-                        "properties": {
-                          "filename": {
-                            "type": "string"
-                          },
-                          "intent": {
-                            "const": "task_input",
-                            "type": "string"
-                          },
-                          "mime": {
-                            "type": "string"
-                          },
-                          "sha": {
-                            "type": "string"
-                          },
-                          "size": {
-                            "maximum": 9007199254740991,
-                            "minimum": 0,
-                            "type": "integer"
-                          },
-                          "source": {
-                            "const": "user-upload",
-                            "type": "string"
-                          },
-                          "url": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "sha",
-                          "url",
-                          "mime",
-                          "size",
-                          "intent",
-                          "source"
-                        ],
-                        "type": "object"
-                      },
-                      "type": "array"
-                    },
-                    "blockingReason": {
-                      "type": "string"
-                    },
-                    "budget": {
-                      "properties": {
-                        "maxExecutorGroups": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "cancellation": {
-                      "oneOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
-                              ],
-                              "type": "string"
-                            },
-                            "status": {
-                              "const": "cancelling",
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "requestedAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason",
-                            "status"
-                          ],
-                          "type": "object"
-                        },
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
-                              ],
-                              "type": "string"
-                            },
-                            "status": {
-                              "const": "cancelled",
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "terminalAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "terminalEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "requestedAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason",
-                            "status",
-                            "terminalEventID",
-                            "terminalAt"
-                          ],
-                          "type": "object"
-                        }
-                      ]
-                    },
-                    "completionDecision": {
-                      "properties": {
-                        "acceptedDeliverySliceRevisionIDs": {
-                          "items": {
-                            "pattern": "^gol.*",
-                            "type": "string"
-                          },
-                          "type": "array"
-                        },
-                        "artifactLocator": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "artifact_id": {
-                              "maxLength": 512,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "catalog_revision": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "expected_sha256": {
-                              "pattern": "^[a-f0-9]{64}$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "const": "engine_artifact",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "source",
-                            "artifact_id",
-                            "catalog_revision",
-                            "expected_sha256"
-                          ],
-                          "type": "object"
-                        },
-                        "deliverableArtifactLocators": {
-                          "items": {
-                            "oneOf": [
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "artifact_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "catalog_revision": {
-                                    "exclusiveMinimum": 0,
-                                    "maximum": 9007199254740991,
-                                    "type": "integer"
-                                  },
-                                  "expected_sha256": {
-                                    "pattern": "^[a-f0-9]{64}$",
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "engine_artifact",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "artifact_id",
-                                  "catalog_revision",
-                                  "expected_sha256"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "snapshot": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "manifest_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "project_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "schema_version": {
-                                        "const": 2,
-                                        "type": "number"
-                                      },
-                                      "snapshot_id": {
-                                        "format": "uuid",
-                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                        "type": "string"
-                                      },
-                                      "task_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "schema_version",
-                                      "project_id",
-                                      "task_id",
-                                      "snapshot_id",
-                                      "manifest_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_snapshot",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "snapshot"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "ref": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "bytes": {
-                                        "maximum": 9007199254740991,
-                                        "minimum": 0,
-                                        "type": "integer"
-                                      },
-                                      "media_type": {
-                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                        "type": "string"
-                                      },
-                                      "path": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "tree": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "snapshot",
-                                      "tree",
-                                      "path",
-                                      "media_type",
-                                      "bytes",
-                                      "sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_resource",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "ref"
-                                ],
-                                "type": "object"
-                              }
-                            ]
-                          },
-                          "type": "array"
-                        },
-                        "evidenceLocators": {
-                          "items": {
-                            "oneOf": [
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "artifact_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "catalog_revision": {
-                                    "exclusiveMinimum": 0,
-                                    "maximum": 9007199254740991,
-                                    "type": "integer"
-                                  },
-                                  "expected_sha256": {
-                                    "pattern": "^[a-f0-9]{64}$",
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "engine_artifact",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "artifact_id",
-                                  "catalog_revision",
-                                  "expected_sha256"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "snapshot": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "manifest_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "project_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "schema_version": {
-                                        "const": 2,
-                                        "type": "number"
-                                      },
-                                      "snapshot_id": {
-                                        "format": "uuid",
-                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                        "type": "string"
-                                      },
-                                      "task_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "schema_version",
-                                      "project_id",
-                                      "task_id",
-                                      "snapshot_id",
-                                      "manifest_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_snapshot",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "snapshot"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "ref": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "bytes": {
-                                        "maximum": 9007199254740991,
-                                        "minimum": 0,
-                                        "type": "integer"
-                                      },
-                                      "media_type": {
-                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                        "type": "string"
-                                      },
-                                      "path": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "tree": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "snapshot",
-                                      "tree",
-                                      "path",
-                                      "media_type",
-                                      "bytes",
-                                      "sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_resource",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "ref"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "session_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "session",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "session_id"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "message_id": {
-                                    "description": "Exact Message ID stored in the paired session_id.",
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "session_id": {
-                                    "description": "Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.",
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "session_message",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "session_id",
-                                  "message_id"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "goal_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "goal_revision",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "goal_id"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "request_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "coordination_request",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "request_id"
-                                ],
-                                "type": "object"
-                              }
-                            ]
-                          },
-                          "type": "array"
-                        },
-                        "orchestratorMessageID": {
-                          "pattern": "^msg.*",
-                          "type": "string"
-                        },
-                        "orchestratorSessionID": {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        "timeRecorded": {
-                          "type": "number"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "pattern": "^prt.*",
-                          "type": "string"
-                        },
-                        "workflowBinding": {
-                          "oneOf": [
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "kind": {
-                                  "const": "direct",
-                                  "type": "string"
-                                },
-                                "package_revision": {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "namespace": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "package_digest": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "project_id": {
-                                      "anyOf": [
-                                        {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        {
-                                          "type": "null"
-                                        }
-                                      ]
-                                    },
-                                    "scope": {
-                                      "enum": [
-                                        "built_in",
-                                        "project",
-                                        "global"
-                                      ],
-                                      "type": "string"
-                                    },
-                                    "version": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "scope",
-                                    "project_id",
-                                    "namespace",
-                                    "id",
-                                    "version",
-                                    "package_digest"
-                                  ],
-                                  "type": "object"
-                                }
-                              },
-                              "required": [
-                                "kind",
-                                "package_revision"
-                              ],
-                              "type": "object"
-                            },
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "kind": {
-                                  "const": "virtual_workflow",
-                                  "type": "string"
-                                },
-                                "nodes": {
-                                  "items": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "agent_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "depends_on": {
-                                        "items": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "type": "array"
-                                      },
-                                      "node_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "node_id",
-                                      "agent_id",
-                                      "depends_on"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "minItems": 1,
-                                  "type": "array"
-                                },
-                                "package_revision": {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "namespace": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "package_digest": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "project_id": {
-                                      "anyOf": [
-                                        {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        {
-                                          "type": "null"
-                                        }
-                                      ]
-                                    },
-                                    "scope": {
-                                      "enum": [
-                                        "built_in",
-                                        "project",
-                                        "global"
-                                      ],
-                                      "type": "string"
-                                    },
-                                    "version": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "scope",
-                                    "project_id",
-                                    "namespace",
-                                    "id",
-                                    "version",
-                                    "package_digest"
-                                  ],
-                                  "type": "object"
-                                },
-                                "workflow_id": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "kind",
-                                "workflow_id",
-                                "package_revision",
-                                "nodes"
-                              ],
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "artifactLocator",
-                        "orchestratorSessionID",
-                        "orchestratorMessageID",
-                        "toolCallID",
-                        "toolPartID",
-                        "evidenceLocators",
-                        "deliverableArtifactLocators",
-                        "acceptedDeliverySliceRevisionIDs",
-                        "workflowBinding",
-                        "timeRecorded"
-                      ],
-                      "type": "object"
-                    },
-                    "directory": {
-                      "type": "string"
-                    },
-                    "error": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                      "type": "string"
-                    },
-                    "metadata": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "orderKey": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "packageRevisionBinding": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "id": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "namespace": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "package_digest": {
-                          "pattern": "^[a-f0-9]{64}$",
-                          "type": "string"
-                        },
-                        "project_id": {
-                          "anyOf": [
-                            {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "scope": {
-                          "enum": [
-                            "built_in",
-                            "project",
-                            "global"
-                          ],
-                          "type": "string"
-                        },
-                        "version": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "scope",
-                        "project_id",
-                        "namespace",
-                        "id",
-                        "version",
-                        "package_digest"
-                      ],
-                      "type": "object"
-                    },
-                    "priority": {
-                      "enum": [
-                        "critical",
-                        "high",
-                        "normal",
-                        "low"
-                      ],
-                      "type": "string"
-                    },
-                    "productPillar": {
-                      "enum": [
-                        "code",
-                        "work"
-                      ],
-                      "type": "string"
-                    },
-                    "projectID": {
-                      "type": "string"
-                    },
-                    "request": {
-                      "type": "string"
-                    },
-                    "requestID": {
-                      "type": "string"
-                    },
-                    "sessionID": {
-                      "anyOf": [
-                        {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "source": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "enum": [
-                        "active",
-                        "completed",
-                        "failed",
-                        "cancelled"
-                      ],
-                      "type": "string"
-                    },
-                    "terminalReason": {
-                      "enum": [
-                        "completed",
-                        "failed",
-                        "cancelled",
-                        "interrupted"
-                      ],
-                      "type": "string"
-                    },
-                    "time": {
-                      "properties": {
-                        "archived": {
-                          "type": "number"
-                        },
-                        "completed": {
-                          "type": "number"
-                        },
-                        "created": {
-                          "type": "number"
-                        },
-                        "started": {
-                          "type": "number"
-                        },
-                        "updated": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "created",
-                        "updated",
-                        "started"
-                      ],
-                      "type": "object"
-                    },
-                    "title": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "orderKey",
-                    "projectID",
-                    "source",
-                    "productPillar",
-                    "title",
-                    "request",
-                    "status",
-                    "priority",
-                    "packageRevisionBinding",
-                    "time"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Task replan accepted"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                }
-              }
-            },
-            "description": "Not found"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "TaskControlIntentLifecycleConflictError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Task replan conflicts with the current lifecycle"
-          }
-        },
-        "summary": "Replan task",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.replan({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/task/{taskID}/retry": {
-      "post": {
-        "operationId": "task.retry",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "taskID",
-            "required": true,
-            "schema": {
-              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "attachments": {
-                      "items": {
-                        "properties": {
-                          "filename": {
-                            "type": "string"
-                          },
-                          "intent": {
-                            "const": "task_input",
-                            "type": "string"
-                          },
-                          "mime": {
-                            "type": "string"
-                          },
-                          "sha": {
-                            "type": "string"
-                          },
-                          "size": {
-                            "maximum": 9007199254740991,
-                            "minimum": 0,
-                            "type": "integer"
-                          },
-                          "source": {
-                            "const": "user-upload",
-                            "type": "string"
-                          },
-                          "url": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "sha",
-                          "url",
-                          "mime",
-                          "size",
-                          "intent",
-                          "source"
-                        ],
-                        "type": "object"
-                      },
-                      "type": "array"
-                    },
-                    "blockingReason": {
-                      "type": "string"
-                    },
-                    "budget": {
-                      "properties": {
-                        "maxExecutorGroups": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "cancellation": {
-                      "oneOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
-                              ],
-                              "type": "string"
-                            },
-                            "status": {
-                              "const": "cancelling",
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "requestedAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason",
-                            "status"
-                          ],
-                          "type": "object"
-                        },
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
-                              ],
-                              "type": "string"
-                            },
-                            "status": {
-                              "const": "cancelled",
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "terminalAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "terminalEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "requestedAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason",
-                            "status",
-                            "terminalEventID",
-                            "terminalAt"
-                          ],
-                          "type": "object"
-                        }
-                      ]
-                    },
-                    "completionDecision": {
-                      "properties": {
-                        "acceptedDeliverySliceRevisionIDs": {
-                          "items": {
-                            "pattern": "^gol.*",
-                            "type": "string"
-                          },
-                          "type": "array"
-                        },
-                        "artifactLocator": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "artifact_id": {
-                              "maxLength": 512,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "catalog_revision": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "expected_sha256": {
-                              "pattern": "^[a-f0-9]{64}$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "const": "engine_artifact",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "source",
-                            "artifact_id",
-                            "catalog_revision",
-                            "expected_sha256"
-                          ],
-                          "type": "object"
-                        },
-                        "deliverableArtifactLocators": {
-                          "items": {
-                            "oneOf": [
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "artifact_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "catalog_revision": {
-                                    "exclusiveMinimum": 0,
-                                    "maximum": 9007199254740991,
-                                    "type": "integer"
-                                  },
-                                  "expected_sha256": {
-                                    "pattern": "^[a-f0-9]{64}$",
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "engine_artifact",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "artifact_id",
-                                  "catalog_revision",
-                                  "expected_sha256"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "snapshot": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "manifest_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "project_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "schema_version": {
-                                        "const": 2,
-                                        "type": "number"
-                                      },
-                                      "snapshot_id": {
-                                        "format": "uuid",
-                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                        "type": "string"
-                                      },
-                                      "task_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "schema_version",
-                                      "project_id",
-                                      "task_id",
-                                      "snapshot_id",
-                                      "manifest_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_snapshot",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "snapshot"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "ref": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "bytes": {
-                                        "maximum": 9007199254740991,
-                                        "minimum": 0,
-                                        "type": "integer"
-                                      },
-                                      "media_type": {
-                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                        "type": "string"
-                                      },
-                                      "path": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "tree": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "snapshot",
-                                      "tree",
-                                      "path",
-                                      "media_type",
-                                      "bytes",
-                                      "sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_resource",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "ref"
-                                ],
-                                "type": "object"
-                              }
-                            ]
-                          },
-                          "type": "array"
-                        },
-                        "evidenceLocators": {
-                          "items": {
-                            "oneOf": [
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "artifact_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "catalog_revision": {
-                                    "exclusiveMinimum": 0,
-                                    "maximum": 9007199254740991,
-                                    "type": "integer"
-                                  },
-                                  "expected_sha256": {
-                                    "pattern": "^[a-f0-9]{64}$",
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "engine_artifact",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "artifact_id",
-                                  "catalog_revision",
-                                  "expected_sha256"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "snapshot": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "manifest_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "project_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "schema_version": {
-                                        "const": 2,
-                                        "type": "number"
-                                      },
-                                      "snapshot_id": {
-                                        "format": "uuid",
-                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                        "type": "string"
-                                      },
-                                      "task_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "schema_version",
-                                      "project_id",
-                                      "task_id",
-                                      "snapshot_id",
-                                      "manifest_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_snapshot",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "snapshot"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "ref": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "bytes": {
-                                        "maximum": 9007199254740991,
-                                        "minimum": 0,
-                                        "type": "integer"
-                                      },
-                                      "media_type": {
-                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                        "type": "string"
-                                      },
-                                      "path": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "tree": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "snapshot",
-                                      "tree",
-                                      "path",
-                                      "media_type",
-                                      "bytes",
-                                      "sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "source": {
-                                    "const": "task_artifact_resource",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "ref"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "session_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "session",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "session_id"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "message_id": {
-                                    "description": "Exact Message ID stored in the paired session_id.",
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "session_id": {
-                                    "description": "Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.",
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "session_message",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "session_id",
-                                  "message_id"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "goal_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "goal_revision",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "goal_id"
-                                ],
-                                "type": "object"
-                              },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "request_id": {
-                                    "maxLength": 512,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "source": {
-                                    "const": "coordination_request",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "source",
-                                  "request_id"
-                                ],
-                                "type": "object"
-                              }
-                            ]
-                          },
-                          "type": "array"
-                        },
-                        "orchestratorMessageID": {
-                          "pattern": "^msg.*",
-                          "type": "string"
-                        },
-                        "orchestratorSessionID": {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        "timeRecorded": {
-                          "type": "number"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "pattern": "^prt.*",
-                          "type": "string"
-                        },
-                        "workflowBinding": {
-                          "oneOf": [
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "kind": {
-                                  "const": "direct",
-                                  "type": "string"
-                                },
-                                "package_revision": {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "namespace": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "package_digest": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "project_id": {
-                                      "anyOf": [
-                                        {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        {
-                                          "type": "null"
-                                        }
-                                      ]
-                                    },
-                                    "scope": {
-                                      "enum": [
-                                        "built_in",
-                                        "project",
-                                        "global"
-                                      ],
-                                      "type": "string"
-                                    },
-                                    "version": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "scope",
-                                    "project_id",
-                                    "namespace",
-                                    "id",
-                                    "version",
-                                    "package_digest"
-                                  ],
-                                  "type": "object"
-                                }
-                              },
-                              "required": [
-                                "kind",
-                                "package_revision"
-                              ],
-                              "type": "object"
-                            },
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "kind": {
-                                  "const": "virtual_workflow",
-                                  "type": "string"
-                                },
-                                "nodes": {
-                                  "items": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "agent_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "depends_on": {
-                                        "items": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "type": "array"
-                                      },
-                                      "node_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "node_id",
-                                      "agent_id",
-                                      "depends_on"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "minItems": 1,
-                                  "type": "array"
-                                },
-                                "package_revision": {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "namespace": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "package_digest": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "project_id": {
-                                      "anyOf": [
-                                        {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        {
-                                          "type": "null"
-                                        }
-                                      ]
-                                    },
-                                    "scope": {
-                                      "enum": [
-                                        "built_in",
-                                        "project",
-                                        "global"
-                                      ],
-                                      "type": "string"
-                                    },
-                                    "version": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "scope",
-                                    "project_id",
-                                    "namespace",
-                                    "id",
-                                    "version",
-                                    "package_digest"
-                                  ],
-                                  "type": "object"
-                                },
-                                "workflow_id": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "kind",
-                                "workflow_id",
-                                "package_revision",
-                                "nodes"
-                              ],
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "artifactLocator",
-                        "orchestratorSessionID",
-                        "orchestratorMessageID",
-                        "toolCallID",
-                        "toolPartID",
-                        "evidenceLocators",
-                        "deliverableArtifactLocators",
-                        "acceptedDeliverySliceRevisionIDs",
-                        "workflowBinding",
-                        "timeRecorded"
-                      ],
-                      "type": "object"
-                    },
-                    "directory": {
-                      "type": "string"
-                    },
-                    "error": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                      "type": "string"
-                    },
-                    "metadata": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "orderKey": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "packageRevisionBinding": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "id": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "namespace": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "package_digest": {
-                          "pattern": "^[a-f0-9]{64}$",
-                          "type": "string"
-                        },
-                        "project_id": {
-                          "anyOf": [
-                            {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "scope": {
-                          "enum": [
-                            "built_in",
-                            "project",
-                            "global"
-                          ],
-                          "type": "string"
-                        },
-                        "version": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "scope",
-                        "project_id",
-                        "namespace",
-                        "id",
-                        "version",
-                        "package_digest"
-                      ],
-                      "type": "object"
-                    },
-                    "priority": {
-                      "enum": [
-                        "critical",
-                        "high",
-                        "normal",
-                        "low"
-                      ],
-                      "type": "string"
-                    },
-                    "productPillar": {
-                      "enum": [
-                        "code",
-                        "work"
-                      ],
-                      "type": "string"
-                    },
-                    "projectID": {
-                      "type": "string"
-                    },
-                    "request": {
-                      "type": "string"
-                    },
-                    "requestID": {
-                      "type": "string"
-                    },
-                    "sessionID": {
-                      "anyOf": [
-                        {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "source": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "enum": [
-                        "active",
-                        "completed",
-                        "failed",
-                        "cancelled"
-                      ],
-                      "type": "string"
-                    },
-                    "terminalReason": {
-                      "enum": [
-                        "completed",
-                        "failed",
-                        "cancelled",
-                        "interrupted"
-                      ],
-                      "type": "string"
-                    },
-                    "time": {
-                      "properties": {
-                        "archived": {
-                          "type": "number"
-                        },
-                        "completed": {
-                          "type": "number"
-                        },
-                        "created": {
-                          "type": "number"
-                        },
-                        "started": {
-                          "type": "number"
-                        },
-                        "updated": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "created",
-                        "updated",
-                        "started"
-                      ],
-                      "type": "object"
-                    },
-                    "title": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "orderKey",
-                    "projectID",
-                    "source",
-                    "productPillar",
-                    "title",
-                    "request",
-                    "status",
-                    "priority",
-                    "packageRevisionBinding",
-                    "time"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Task retry accepted"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                }
-              }
-            },
-            "description": "Not found"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "TaskControlIntentLifecycleConflictError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Task retry conflicts with the current lifecycle"
-          }
-        },
-        "summary": "Retry task",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.retry({\n  ...\n})"
           }
         ]
       }

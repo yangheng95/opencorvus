@@ -50,10 +50,6 @@ function workLedgerArchiveLabel(row: WorkLedgerItemRow): string {
   return t("task.archive_button_title")
 }
 
-function isTerminalTaskRow(row: WorkLedgerItemRow): row is WorkLedgerTaskRow {
-  return row.kind === "task" && ["completed", "failed", "cancelled"].includes(row.lifecycleStatus)
-}
-
 function ChatViewTitle(props: {
   title: () => string
   item: () => WorkLedgerItemRow | null
@@ -61,14 +57,8 @@ function ChatViewTitle(props: {
   onPinnedChange: (row: WorkLedgerItemRow, pinned: boolean) => void | Promise<void>
   onRename: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchive: (row: WorkLedgerItemRow) => void | Promise<void>
-  onRetryTask: (row: WorkLedgerTaskRow) => void | Promise<void>
-  onReplanTask: (row: WorkLedgerTaskRow) => void | Promise<void>
 }) {
   const usageText = createMemo(() => formatUsageStrip(cardTreeStore.usageAggregate))
-  const terminalTask = createMemo(() => {
-    const item = props.item()
-    return item && isTerminalTaskRow(item) ? item : null
-  })
   const [copyFeedback, setCopyFeedback] = createSignal<
     { kind: "copied" } | { kind: "failed"; message?: string } | null
   >(null)
@@ -184,30 +174,6 @@ function ChatViewTitle(props: {
                   <Icon name="archive" size="medium" />
                   <span>{workLedgerArchiveLabel(item())}</span>
                 </DropdownMenu.Item>
-                <Show when={terminalTask()} keyed>
-                  {(task) => (
-                    <>
-                      <DropdownMenu.Item
-                        as="button"
-                        type="button"
-                        data-ui="chat-title-task-retry"
-                        onSelect={() => props.onRetryTask(task)}
-                      >
-                        <Icon name="refresh" size="medium" />
-                        <span>{t("task.retry_button_title")}</span>
-                      </DropdownMenu.Item>
-                      <DropdownMenu.Item
-                        as="button"
-                        type="button"
-                        data-ui="chat-title-task-replan"
-                        onSelect={() => props.onReplanTask(task)}
-                      >
-                        <Icon name="git-branch" size="medium" />
-                        <span>{t("task.replan_button_title")}</span>
-                      </DropdownMenu.Item>
-                    </>
-                  )}
-                </Show>
               </DropdownMenu.Content>
             </DropdownMenu.Portal>
           </DropdownMenu.Root>
@@ -241,8 +207,6 @@ export interface AppProps {
   onConversationPinnedChange: (row: WorkLedgerItemRow, pinned: boolean) => void | Promise<void>
   onRenameConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchiveConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
-  onRetryTask: (row: WorkLedgerTaskRow) => void | Promise<void>
-  onReplanTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onOpenAutomationSession: (session: AutomationRunSession) => Promise<void>
 }
 
@@ -487,8 +451,6 @@ export function App(props: AppProps) {
                               onPinnedChange={props.onConversationPinnedChange}
                               onRename={props.onRenameConversationItem}
                               onArchive={props.onArchiveConversationItem}
-                              onRetryTask={props.onRetryTask}
-                              onReplanTask={props.onReplanTask}
                             />
                             <div class="chat-header-status" id="solidTaskStatusMount">
                               <TaskStatusHeader />

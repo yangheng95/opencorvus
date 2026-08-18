@@ -196,7 +196,7 @@
       },
       "evolution-safety-auditor": {
         "label": "Evolution Safety Auditor",
-        "description": "Audits permissions, leakage, reward hacking, evidence lineage, frozen inputs, and experiment drift as a domain evaluation worker.",
+        "description": "Publishes the independent integrity review of each exact evaluation result, covering permissions, leakage, reward hacking, evidence lineage, frozen inputs, and experiment drift.",
         "base_role": "delegated-worker",
         "prompt": "agents/evolution-safety-auditor/system.md",
         "inherit_base_tools": true,
@@ -267,25 +267,18 @@
       },
       "evolution-campaign-evaluation": {
         "label": "Evolution Campaign Evaluation",
-        "description": "The Experiment Planner freezes comparison inputs; metric and safety workers evaluate in parallel; the recommendation owner then publishes the deterministic comparison.",
+        "description": "The Evaluator computes metric evidence from the already frozen imported Campaign and Candidate; the Safety Auditor independently reviews each exact result; the recommendation owner then publishes the deterministic comparison.",
         "nodes": {
-          "evolution-experiment-planner": {
-            "agent_id": "evolution-experiment-planner",
-            "description": "Freezes baseline/candidate run identities, Case identity, metrics, and recommendation rule.",
-            "depends_on": []
-          },
           "evolution-evaluator": {
             "agent_id": "evolution-evaluator",
-            "description": "Computes the metric evidence for both frozen Trials.",
-            "depends_on": [
-              "evolution-experiment-planner"
-            ]
+            "description": "Computes the metric evidence for both frozen Trials from the exact imported Campaign and Candidate.",
+            "depends_on": []
           },
           "evolution-safety-auditor": {
             "agent_id": "evolution-safety-auditor",
-            "description": "Audits safety, permissions, leakage, lineage, and experiment drift independently.",
+            "description": "Independently reviews each exact evaluation result and publishes its own integrity review of safety, permissions, leakage, lineage, and experiment drift.",
             "depends_on": [
-              "evolution-experiment-planner"
+              "evolution-evaluator"
             ]
           },
           "evolution-recommendation-owner": {

@@ -38,7 +38,11 @@ export interface MissionCreateDialogProps {
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
   onInstallMoreExpertSquads?: (projectDirectory: string) => void
-  onMarketExpertSquadQuery?: (projectDirectory: string, query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onMarketExpertSquadQuery?: (
+    projectDirectory: string,
+    query: string,
+    productPillar: ProductPillar,
+  ) => Promise<readonly ExpertSquadMarketIndexItem[]>
   onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
   onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   canOpenMarketWebPage?: boolean
@@ -209,6 +213,40 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     }
   }
 
+  // A freshly installed Squad has to become selectable in the same breath as the install. The catalog
+  // ranks names and descriptions only, so the market request that surfaced this Squad is not guaranteed
+  // to find it again; the exact identity lookup is what closes that seam.
+  async function refreshSquadsAfterInstall(
+    directory: string,
+    pillar: ProductPillar,
+    query: string,
+    installedID: string,
+  ): Promise<void> {
+    const generation = dialogGeneration
+    const sequence = ++expertSquadRequestSequence
+    setExpertSquadLoading(true)
+    setExpertSquadError("")
+    try {
+      const [page, exact] = await Promise.all([
+        searchExpertSquads({ directory, productPillar: pillar, query, limit: 20 }),
+        searchExpertSquads({ directory, productPillar: pillar, query: installedID, limit: 20 }),
+      ])
+      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      const installed = exact.entries.find((entry) => entry.id === installedID)
+      const selectedIDs = installed ? [...new Set([...expertSquadIDs(), installed.id])] : expertSquadIDs()
+      const entries = installed
+        ? [installed, ...page.entries.filter((entry) => entry.id !== installed.id)]
+        : page.entries
+      setExpertSquads(mergeSquadOptions(entries, expertSquads(), selectedIDs))
+      setExpertSquadIDs(selectedIDs)
+    } catch (nextError) {
+      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
+    } finally {
+      if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
+    }
+  }
+
   function changeProject(directory: string): void {
     expertSquadRequestSequence += 1
     setProjectDirectory(directory)
@@ -302,10 +340,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   createEffect(() => {
     const open = props.open
     const directory = projectDirectory().trim()
+    const pillar = productPillar()
     const query = expertSquadQuery().trim().slice(0, 500)
     const search = props.onMarketExpertSquadQuery
     const sequence = ++marketSearchSequence
-    if (!open || !directory || query.length < 2 || !search) {
+    if (!open || !directory || !pillar || query.length < 2 || !search) {
       setMarketRecommendations([])
       setMarketLoading(false)
       setMarketError("")
@@ -315,7 +354,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setMarketRecommendations([])
     setMarketError("")
     const timer = window.setTimeout(() => {
-      void search(directory, query)
+      void search(directory, query, pillar)
         .then((items) => {
           if (sequence !== marketSearchSequence) return
           setMarketRecommendations(items)
@@ -346,8 +385,9 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   async function installMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
     const install = props.onInstallMarketExpertSquad
     const directory = projectDirectory().trim()
+    const pillar = productPillar()
     const loadMarket = props.onMarketExpertSquadQuery
-    if (!install || !loadMarket || !directory || marketInstallingID()) return
+    if (!install || !loadMarket || !directory || !pillar || marketInstallingID()) return
     const lifecycle = ++installLifecycleSequence
     marketSearchSequence += 1
     setMarketLoading(false)
@@ -360,8 +400,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       const query = expertSquadQuery().trim().slice(0, 500)
       const marketSequence = ++marketSearchSequence
       const [, market] = await Promise.all([
-        searchSquads(query),
-        query.length >= 2 ? loadMarket(directory, query) : Promise.resolve([]),
+        refreshSquadsAfterInstall(directory, pillar, query, item.id),
+        query.length >= 2 ? loadMarket(directory, query, pillar) : Promise.resolve([]),
       ])
       if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
       if (marketSequence === marketSearchSequence) {

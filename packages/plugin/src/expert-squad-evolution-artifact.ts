@@ -396,27 +396,30 @@ export const EvolutionArtifactSchemas = {
       candidate_revision_locator: ArtifactReadLocatorSchema.nullable(),
       run_evidence_locator: ArtifactReadLocatorSchema,
       metric_receipt_resource: taskArtifactResourceIdentity,
-      integrity_review: z
-        .object({
-          status: z.enum(["reviewed", "unavailable"]),
-          findings: z.array(
-            z
-              .object({
-                category: z.enum(["evidence_integrity", "reward_hacking", "permission", "side_effect", "security"]),
-                invariant: z.string().min(1),
-                outcome: z.enum(["passed", "failed", "unavailable"]),
-                evidence,
-                severity: z.enum(["info", "warning", "blocker"]),
-                owner: z.string().min(1),
-                correction: z.string().min(1).nullable(),
-              })
-              .strict(),
-          ),
-          accepted_limitations: z.array(z.string().min(1)),
-          unknowns,
-        })
-        .strict()
-        .nullable(),
+    })
+    .strict(),
+  "evolution-lab/integrity-review": z
+    .object({
+      case_id: portableIdentity,
+      arm: z.enum(["baseline", "candidate"]),
+      repetition: z.number().int().nonnegative(),
+      evaluation_result_locator: ArtifactReadLocatorSchema,
+      status: z.enum(["reviewed", "unavailable"]),
+      findings: z.array(
+        z
+          .object({
+            category: z.enum(["evidence_integrity", "reward_hacking", "permission", "side_effect", "security"]),
+            invariant: z.string().min(1),
+            outcome: z.enum(["passed", "failed", "unavailable"]),
+            evidence,
+            severity: z.enum(["info", "warning", "blocker"]),
+            owner: z.string().min(1),
+            correction: z.string().min(1).nullable(),
+          })
+          .strict(),
+      ),
+      accepted_limitations: z.array(z.string().min(1)),
+      unknowns,
     })
     .strict(),
   "evolution-lab/comparison-recommendation": z
@@ -533,6 +536,10 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
   z.object({
     artifact_type: z.literal("evolution-lab/evaluation-result"),
     payload: EvolutionArtifactSchemas["evolution-lab/evaluation-result"],
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/integrity-review"),
+    payload: EvolutionArtifactSchemas["evolution-lab/integrity-review"],
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/comparison-recommendation"),

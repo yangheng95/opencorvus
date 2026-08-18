@@ -1,21 +1,15 @@
-import { Database } from "../../src/storage/db"
 import { persistTask } from "../../src/engine/pipeline"
-import { retirePendingTaskRootIngressesForOperatorIntentInTransaction } from "../../src/engine/task-root-ingress-delivery"
 
 /**
  * Establish a Task fixture whose creation ingress is outside the test's scope.
  *
- * Production Task creation always commits `task_creation` ingress atomically.
- * Tests for later lifecycle slices use this helper to start from an already
- * established Task without allowing that unrelated ingress to become their
- * root-Session FIFO head.
+ * This used to also call a `retirePendingTaskRootIngressesForOperatorIntent...`
+ * helper, whose name promised to keep the creation ingress out of the FIFO head.
+ * That function only ever *read* rows — it mutated nothing and its return value
+ * was discarded here — so the call was a no-op, and the tests that rely on this
+ * helper have always been passing without it. It went with the Retry intent it
+ * was written for.
  */
 export function persistEstablishedTask(input: Parameters<typeof persistTask>[0]): void {
   persistTask(input)
-  Database.transaction((db) => {
-    retirePendingTaskRootIngressesForOperatorIntentInTransaction(db, {
-      taskID: input.taskID,
-      now: Date.now(),
-    })
-  })
 }

@@ -13,6 +13,7 @@ import { ExpertSquadCleanup } from "./cleanup"
 import { ExpertSquadInstallLock } from "./install-lock"
 import { ExpertSquadPackageLocations } from "./locations"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
+import { expertSquadSearchLocalizations } from "../../generated/expert-squad-search-localization"
 import { ExpertSquadRegistry } from "./registry"
 import { ExpertSquadArchive } from "./archive"
 import { writeExpertSquadInstallationMetadata, type ExpertSquadGenerationMetadata } from "./installation-metadata"
@@ -21,9 +22,10 @@ import z from "zod"
 import { Log } from "@/util/log"
 import { EngineArtifactEnvelopeSchema, EvolutionPromotionReceiptSchema } from "@opencorvus-ai/plugin"
 import { EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS } from "@opencorvus-ai/sdk/expert-squad-package-contract"
+import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Database, eq } from "@/storage/db"
-import { scoreDiscoveryFields } from "@/capability/fuzzy"
+import { scoreDiscoveryFields, scoreDocumentField } from "@/capability/fuzzy"
 import { ExpertSquadIDSchema, ExpertSquadNamespaceSchema } from "./id"
 
 export namespace ExpertSquadPackageManager {
@@ -225,6 +227,7 @@ export namespace ExpertSquadPackageManager {
     label: string
     description?: string
     version: string
+    productPillars: ProductPillar[]
     packageDigest: string
     selectorSummary: string
     agents: PayloadMarketAgent[]
@@ -246,6 +249,7 @@ export namespace ExpertSquadPackageManager {
     label: string
     description?: string
     version: string
+    productPillars: ProductPillar[]
     installationScopes: ExpertSquadPackageLocations.InstallationScope[]
   }
 
@@ -383,7 +387,21 @@ export namespace ExpertSquadPackageManager {
     }
   }
 
-  type PackagePathState = { kind: "absent" } | { kind: "package"; packageDigest: string } | { kind: "partial" }
+  type PackagePathState =
+    | { kind: "absent" }
+    | { kind: "package"; packageDigest: string }
+    | { kind: "partial" }
+    | { kind: "undetermined" }
+
+  // A package whose own content proves it incomplete is disposable. A package the
+  // environment merely refused to read is not: treating a permission, lock, or
+  // device fault as "incomplete" would let recovery discard or overwrite a valid
+  // installed revision. Only a missing member is content-level incompleteness.
+  function packageInspectionProvesIncomplete(error: unknown) {
+    const code = (error as NodeJS.ErrnoException | undefined)?.code
+    if (typeof code !== "string") return true
+    return code === "ENOENT" || code === "ENOTDIR"
+  }
 
   async function packageStateAt(root: string): Promise<PackagePathState> {
     const state = await lstat(root).catch((error: NodeJS.ErrnoException) => {
@@ -398,8 +416,10 @@ export namespace ExpertSquadPackageManager {
         kind: "package",
         packageDigest: (await ExpertSquadRegistry.loadCatalogPackage(root, { canonicalFolder: false })).packageDigest,
       }
-    } catch {
-      return { kind: "partial" }
+    } catch (error) {
+      if (packageInspectionProvesIncomplete(error)) return { kind: "partial" }
+      log.warn("expert squad package state is undetermined", { root, error })
+      return { kind: "undetermined" }
     }
   }
 
@@ -1445,6 +1465,7 @@ export namespace ExpertSquadPackageManager {
   const payloadMarketDeclarations = payloadPackageSources.map((source) =>
     ExpertSquadRegistry.loadEmbeddedCatalogDeclaration(source),
   )
+  const MARKET_SELECTOR_SEARCH_LIMIT = 2_400
   const MARKET_SKILL_SEARCH_LIMIT = 8_000
   const MARKET_PROMPT_SEARCH_LIMIT = 14_000
 
@@ -1477,6 +1498,14 @@ export namespace ExpertSquadPackageManager {
     payloadPackageSources.map((source) => [
       `${source.namespace}/${source.id}`,
       {
+        // The selector document is the package's own statement of when it should be chosen, so it is
+        // the highest-signal discovery text a package owns. It is short enough to score as identity.
+        selector: boundedPayloadSearchText(
+          source,
+          (relativePath) => relativePath === "selector.md",
+          MARKET_SELECTOR_SEARCH_LIMIT,
+          MARKET_SELECTOR_SEARCH_LIMIT,
+        ),
         skills: boundedPayloadSearchText(
           source,
           (relativePath) => /^skills\/.+\/SKILL\.md$/u.test(relativePath),
@@ -1492,6 +1521,31 @@ export namespace ExpertSquadPackageManager {
       },
     ]),
   )
+  function payloadMarketScore(input: {
+    query: string
+    entry: (typeof payloadMarketDeclarations)[number]
+    packageFields: { selector: string; skills: string; prompts: string } | undefined
+    localization: { primary: readonly string[]; detail: readonly string[] } | undefined
+  }): number | undefined {
+    const identity = scoreDiscoveryFields(input.query, [
+      { text: input.entry.id, weight: 1 },
+      { text: input.entry.name, weight: 1 },
+      { text: input.entry.label, weight: 0.96 },
+      { text: input.entry.description ?? "", weight: 0.9 },
+      { text: input.entry.manifest.selector.summary, weight: 0.82 },
+      { text: input.entry.manifest.selector.selection_guidance, weight: 0.72 },
+      ...(input.localization?.primary ?? []).map((text) => ({ text, weight: 0.94 })),
+      ...(input.localization?.detail ?? []).map((text) => ({ text, weight: 0.8 })),
+    ])
+    const body = Math.max(
+      scoreDocumentField(input.query, input.packageFields?.selector ?? "") * 0.9,
+      scoreDocumentField(input.query, input.packageFields?.skills ?? "") * 0.84,
+      scoreDocumentField(input.query, input.packageFields?.prompts ?? "") * 0.76,
+    )
+    if (identity === undefined && body <= 0) return undefined
+    return Math.max(identity ?? 0, body)
+  }
+
   const payloadMarketSnapshotCache = new Map<
     string,
     {
@@ -1538,14 +1592,16 @@ export namespace ExpertSquadPackageManager {
     projectDirectory: string
     query?: string
     availability?: PayloadMarketAvailability
+    productPillar?: ProductPillar
     cursor?: string
     limit?: number
   }): Promise<PayloadMarketPage> {
     const snapshot = await payloadMarketSnapshot(input.projectDirectory)
     const query = input.query?.trim() ?? ""
     const availability = input.availability ?? "all"
+    const productPillar = input.productPillar
     const queryFingerprint = createHash("sha256")
-      .update(JSON.stringify({ query: query.toLowerCase(), availability }))
+      .update(JSON.stringify({ query: query.toLowerCase(), availability, product_pillar: productPillar ?? null }))
       .digest("hex")
     let ranked = snapshot.ranked.get(queryFingerprint)
     if (!ranked) {
@@ -1556,19 +1612,15 @@ export namespace ExpertSquadPackageManager {
           if (availability === "installed") return installed
           return true
         })
+        .filter((entry) => !productPillar || entry.manifest.product_pillars.includes(productPillar))
         .flatMap((entry) => {
           if (!query) return [{ entry, score: null as number | null }]
-          const packageFields = payloadMarketPackageSearchFields.get(`${entry.namespace}/${entry.id}`)
-          const score = scoreDiscoveryFields(query, [
-            { text: entry.id, weight: 1 },
-            { text: entry.name, weight: 1 },
-            { text: entry.label, weight: 0.96 },
-            { text: entry.description ?? "", weight: 0.9 },
-            { text: entry.manifest.selector.summary, weight: 0.82 },
-            { text: entry.manifest.selector.selection_guidance, weight: 0.72 },
-            { text: packageFields?.skills ?? "", weight: 0.84 },
-            { text: packageFields?.prompts ?? "", weight: 0.76 },
-          ])
+          const score = payloadMarketScore({
+            query,
+            entry,
+            packageFields: payloadMarketPackageSearchFields.get(`${entry.namespace}/${entry.id}`),
+            localization: expertSquadSearchLocalizations[`${entry.namespace}/${entry.id}`],
+          })
           return score === undefined ? [] : [{ entry, score }]
         })
         .sort((left, right) => {
@@ -1612,6 +1664,7 @@ export namespace ExpertSquadPackageManager {
         label: entry.label.slice(0, 160),
         ...(entry.description?.length ? { description: entry.description.slice(0, 1_000) } : {}),
         version: entry.version.slice(0, 80),
+        productPillars: [...entry.manifest.product_pillars],
         installationScopes: snapshot.installationScopes.get(entry.id) ?? [],
       })),
       nextCursor:
@@ -1671,6 +1724,7 @@ export namespace ExpertSquadPackageManager {
       label: loaded.label,
       description: loaded.description,
       version: loaded.version,
+      productPillars: [...loaded.manifest.product_pillars],
       packageDigest: loaded.packageDigest,
       selectorSummary: loaded.selector.summary,
       agents: Object.entries(loaded.manifest.capability_projection.agents).map(([agentID, projection]) => ({
@@ -1814,28 +1868,35 @@ export namespace ExpertSquadPackageManager {
       for (const entry of entries) {
         if (!entry.isFile() || !entry.name.endsWith(".json")) continue
         const file = path.join(scratch, entry.name)
-        if (entry.name.startsWith(".evolution-mutation-")) {
-          const journal = EvolutionMutationJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
-          if (
-            Filesystem.normalizePath(file) !==
-            Filesystem.normalizePath(evolutionMutationJournalPath(location, journal.id))
-          )
-            throw new Error(`Expert squad mutation journal filename does not equal its manifest ID: ${file}`)
-          await ExpertSquadInstallLock.run(journal.id, () =>
-            reconcileEvolutionMutationJournal({ location, id: journal.id }),
-          )
-          continue
-        }
-        if (entry.name.startsWith(".package-replacement-")) {
-          const journal = PackageReplacementJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
-          if (
-            Filesystem.normalizePath(file) !==
-            Filesystem.normalizePath(packageReplacementJournalPath(location, journal.id))
-          )
-            throw new Error(`Expert squad replacement journal filename does not equal its manifest ID: ${file}`)
-          await ExpertSquadInstallLock.run(journal.id, () =>
-            reconcilePackageReplacementJournal({ location, id: journal.id }),
-          )
+        // Background reconciliation runs while a project or catalog opens. One
+        // unreconcilable journal is retained and reported so a later explicit
+        // reconciliation can resolve it; it never blocks the surrounding open.
+        try {
+          if (entry.name.startsWith(".evolution-mutation-")) {
+            const journal = EvolutionMutationJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
+            if (
+              Filesystem.normalizePath(file) !==
+              Filesystem.normalizePath(evolutionMutationJournalPath(location, journal.id))
+            )
+              throw new Error(`Expert squad mutation journal filename does not equal its manifest ID: ${file}`)
+            await ExpertSquadInstallLock.run(journal.id, () =>
+              reconcileEvolutionMutationJournal({ location, id: journal.id }),
+            )
+            continue
+          }
+          if (entry.name.startsWith(".package-replacement-")) {
+            const journal = PackageReplacementJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
+            if (
+              Filesystem.normalizePath(file) !==
+              Filesystem.normalizePath(packageReplacementJournalPath(location, journal.id))
+            )
+              throw new Error(`Expert squad replacement journal filename does not equal its manifest ID: ${file}`)
+            await ExpertSquadInstallLock.run(journal.id, () =>
+              reconcilePackageReplacementJournal({ location, id: journal.id }),
+            )
+          }
+        } catch (error) {
+          log.error("expert squad package mutation journal was retained unreconciled", { file, error })
         }
       }
     }

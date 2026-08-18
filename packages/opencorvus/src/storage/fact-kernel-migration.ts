@@ -689,7 +689,7 @@ function migrateLifecycleAndIngress(db: RawDatabase): void {
     const currentEpoch = epochByStarted.get(task.time_started) ?? ordered.length
     const terminal = rows<{ id: string }>(db,
       `SELECT id FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=${literal(task.id)}
-        AND type IN ('task.completed','task.failed','task.cancelled','task.closed')
+        AND type IN ('task.completed','task.failed','task.cancelled')
         AND CAST(json_extract(payload,'$.execution_epoch') AS INTEGER)=${currentEpoch}
         ORDER BY seq DESC LIMIT 1`,
     )[0]
@@ -762,7 +762,11 @@ function migrateLifecycleAndIngress(db: RawDatabase): void {
         if (run.length !== 1) throw new Error(`Legacy Task wait ingress ${row.id} cannot resolve one Automation run for fire ${fireID}`)
         source = "automation_run"
         sourceID = run[0]!.id
-      } else if (["operator_intent", "task_wait_activity", "orchestrator_event"].includes(sourceKind)) {
+        // `operator_intent` is deliberately absent: the Retry intent it named is
+        // deleted, so its event payload no longer parses and there is nothing to
+        // map it onto. Such a row reaches the unsupported-source_kind error below
+        // and the database is reset rather than carried.
+      } else if (["task_wait_activity", "orchestrator_event"].includes(sourceKind)) {
         source = "inline"
         sourceID = row.id
       } else {
@@ -873,8 +877,7 @@ function normalizeSchedulerPayloads(db: RawDatabase): void {
 
 function normalizeLifecyclePayloads(db: RawDatabase): void {
   const lifecycleTypes = new Set([
-    "task.cancellation.requested", "task.close.requested", "task.cancelled",
-    "task.closed", "task.completed", "task.failed",
+    "task.cancellation.requested", "task.cancelled", "task.completed", "task.failed",
   ])
   for (const row of rows<{ id: string; aggregate_type: string; aggregate_id: string; type: string; emitted_at: number; payload: string | null }>(db, `
     SELECT id,aggregate_type,aggregate_id,type,emitted_at,payload FROM protocol_event

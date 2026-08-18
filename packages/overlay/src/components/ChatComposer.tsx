@@ -57,6 +57,7 @@ import {
 import type { ExpertSquadOption } from "../services/expert-squad"
 import { currentUIScale } from "../utils/layout-tokens"
 import { ComposerModelSelector } from "./ComposerModelSelector"
+import { ComposerPermissionControl } from "./ComposerPermissionControl"
 import { appStore } from "../store/app"
 import { currentProjectConfigRequestOptions, patchConfig } from "../services/config"
 import {
@@ -1605,6 +1606,11 @@ export function ChatComposer(props: ChatComposerProps) {
                 />
               </div>
             </Show>
+            {/* Right of the expert-squad selector in both branches. Authorization
+             * mode stays switchable while a task runs: each task freezes the mode
+             * it started with, so the control only governs what is dispatched
+             * next. */}
+            <ComposerPermissionControl disabled={!props.enabled} />
           </div>
           <div class="chat-compose-meta-right">
             <ComposerModelSelector onModelAvailabilityChange={setModelAvailable} />

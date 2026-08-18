@@ -252,25 +252,6 @@ export function persistTaskRootIngressInTransaction(
   }).id
 }
 
-export function persistTaskRootIntentIngressInTransaction(
-  db: Database.TxOrDb,
-  input: { task: TaskRow; intent: "retry" | "replan"; supersededOperatorMessageIDs: string[]; now: number },
-): string {
-  return persistTaskRootIngressInTransaction(
-    db,
-    input.task,
-    {
-      taskIntent: {
-        kind: input.intent,
-        actor: "operator",
-        supersededOperatorMessageIDs: input.supersededOperatorMessageIDs,
-      },
-    },
-    {},
-    input.now,
-  )
-}
-
 export function persistTaskRootMessageIngressInTransaction(
   db: Database.TxOrDb,
   input: {
@@ -946,12 +927,12 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<A
       return { activated: false, projection }
     }
     // Everything derived from immutable sources is computed before the lease
-    // is taken. An integrity violation here is a durable `blocked` value, and
-    // reaching it after acquisition would burn one of only 4 activations per
-    // ingress on every heartbeat.
-    const blocked: ActivationAttempt = {
+    // is taken. An integrity violation here is a durable `host_fault` value,
+    // and reaching it after acquisition would burn one of only 4 activations
+    // per ingress on every heartbeat.
+    const faulted: ActivationAttempt = {
       activated: false,
-      projection: { state: "blocked", reason: "integrity_conflict" },
+      projection: { state: "host_fault", reason: "evidence_violation" },
     }
     let evidence: TaskRootIngressEvidence
     let event: OrchestratorEvent
@@ -964,7 +945,7 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<A
     } catch (error) {
       if (!(error instanceof TaskRootIngressIntegrityError)) throw error
       reservation.settle()
-      return blocked
+      return faulted
     }
     const ownerID = ownerOccurrenceID()
     const acquired = acquireTaskRootIngressLease({
@@ -1072,7 +1053,7 @@ function currentSweepProjectTaskIDs(): string[] {
     currentProjectTaskIDs().filter((id) => {
       try {
         const lifecycle = taskLifecycleProjectionInTransaction(db, id)
-        if (lifecycle.status === "active" || lifecycle.status === "cancelling" || lifecycle.status === "closing") {
+        if (lifecycle.status === "active" || lifecycle.status === "cancelling") {
           return true
         }
         if (lifecycle.terminalAt === undefined) return false
@@ -1097,14 +1078,15 @@ function currentSweepProjectTaskIDs(): string[] {
 }
 
 /**
- * Make an operator-gated rest state visible.
+ * Make a settled rest state visible.
  *
- * `blocked` and `exhausted` are legal places for an ingress to stop, but no
- * timer and no fact append can leave them: only an operator can. An unsurfaced
- * gate is therefore indistinguishable from a deadlock — which is exactly how
- * these states have been presenting. One deterministic artifact per
- * (ingress, state, reason) makes the gate durable and operator-visible while
- * staying idempotent across the heartbeat's repeated observations.
+ * `host_fault` and `exhausted` are legal places for one ingress to stop, and
+ * neither can be left by a timer or a fact append. Both release the Task's
+ * FIFO, so the Task keeps making progress and this artifact is the only trace
+ * the abandoned ingress leaves — an unsurfaced settlement is indistinguishable
+ * from silently dropping the input. One deterministic artifact per
+ * (ingress, state, reason) stays idempotent across the heartbeat's repeated
+ * observations.
  */
 function surfaceOperatorGatedTaskRootIngress(input: {
   taskID: string
@@ -1113,17 +1095,18 @@ function surfaceOperatorGatedTaskRootIngress(input: {
   now: number
 }): void {
   const reason =
-    input.projection.state === "blocked" || input.projection.state === "exhausted" ? input.projection.reason : "unknown"
+    input.projection.state === "host_fault" || input.projection.state === "exhausted"
+      ? input.projection.reason
+      : "unknown"
   try {
-    // A gate without a named exit still reads as a deadlock to the operator.
-    // `blocked` holds the whole FIFO; `exhausted` releases it. Both are left
-    // only by an explicit operator act, so the artifact says which one.
+    // A settlement without a named exit still reads as a deadlock to the
+    // operator, so the artifact says what would move it.
     const exit =
-      input.projection.state === "blocked"
-        ? `Exit: every later ingress is held behind it; reopen the Task (retry/replan) to supersede this epoch, ` +
-          `or repair the conflicting evidence it names.`
+      input.projection.state === "host_fault"
+        ? `Exit: later ingresses continue past it, and this Turn executed no effect; repair the Host invariant ` +
+          `it names, then send a new operator message to redo this work.`
         : `Exit: later ingresses continue past it; send a new operator message to redo the abandoned work, ` +
-          `or reopen the Task (retry/replan) for a fresh budget.`
+          `or retry the Task for a fresh budget.`
     recordTaskInfrastructureError({
       id: Identifier.deterministic(
         "artifact",
@@ -1152,16 +1135,16 @@ function surfaceOperatorGatedTaskRootIngress(input: {
 /**
  * Name a lifecycle boundary this runtime cannot converge.
  *
- * `cancelling` and `closing` are non-absorbing by design: an owner is expected
- * to finish them. When no converger is wired for the boundary, the periodic
- * wake degenerates into a silent poll — progress-free, log-free, invisible.
- * The deterministic artifact turns that into a durable operator-visible fact;
- * repeated observation reuses it.
+ * `cancelling` is non-absorbing by design: an owner is expected to finish it.
+ * When no converger is wired for the boundary, the periodic wake degenerates
+ * into a silent poll — progress-free, log-free, invisible. The deterministic
+ * artifact turns that into a durable operator-visible fact; repeated
+ * observation reuses it.
  */
 function surfaceUnconvergedTaskBoundary(input: {
   taskID: string
   epoch: number
-  status: "cancelling" | "closing"
+  status: "cancelling"
   now: number
 }): void {
   try {
@@ -1176,8 +1159,8 @@ function surfaceUnconvergedTaskBoundary(input: {
       reason:
         `Task epoch ${input.epoch} rests in ${input.status} with no converger available in this runtime; ` +
         `the control plane re-checks periodically but cannot finish the boundary itself. ` +
-        `Exit: complete the ${input.status === "cancelling" ? "cancellation" : "close"} from the Task API, ` +
-        `or reopen the Task (retry/replan) to supersede this epoch.`,
+        `Exit: complete the cancellation from the Task API, ` +
+        `or retry the Task to supersede this epoch.`,
       context: { epoch: input.epoch, status: input.status },
       now: input.now,
     })
@@ -1477,16 +1460,16 @@ async function scanTaskControlPlane(
 ): Promise<TaskControlScanResult> {
   if (!currentProjectTaskIDs(taskID).includes(taskID)) return { activated: 0 }
   let lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
-  if ((lifecycle.status === "cancelling" || lifecycle.status === "closing") && context.pass === 0) {
+  if (lifecycle.status === "cancelling" && context.pass === 0) {
     // A boundary request that failed midway leaves a status no fact append can
     // leave, and every ingress under it reduces to the same. Re-attempting
     // convergence here is what makes the escape independent of a restart; a
     // throw becomes an ordinary scan fault and is paced by the driver.
     const reconcile = cancellationReconciler()
-    if (reconcile && lifecycle.status === "cancelling") await reconcile(taskID)
+    if (reconcile) await reconcile(taskID)
     lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
-    if (lifecycle.status === "cancelling" || lifecycle.status === "closing") {
-      if (lifecycle.status === "closing" || !reconcile) {
+    if (lifecycle.status === "cancelling") {
+      if (!reconcile) {
         // No converger exists for this boundary in this runtime. The periodic
         // wake alone would poll it silently forever — an invisible stall, the
         // exact condition operator gates exist to name. Surfacing is
@@ -1555,6 +1538,21 @@ async function scanTaskControlPlane(
         // and only a surfaced gate may be memoized.
         settle(projection)
         settledIngressIDs.add(ingress.id)
+        break
+      }
+      if (projection.state === "host_fault") {
+        // A Host fault is local to this ingress. It executed no effect — the
+        // reduction returns it before any decision can be read as one — so the
+        // FIFO continues to the next ingress instead of holding every later
+        // operator message behind the Host's own broken write. Each later
+        // ingress reads its own evidence, so nothing runs under the violation.
+        //
+        // Deliberately not memoized, unlike `exhausted`: the invariant this
+        // names can be repaired by a later append, and a process-local memo
+        // would make this process blind to the repair until it restarts. The
+        // surfaced artifact is deterministic, so re-observing costs one
+        // evidence read and no duplicate fact.
+        settle(projection)
         break
       }
       if (projection.state === "reconcile_required") {
@@ -1917,26 +1915,6 @@ export function requireTaskCreationIngressID(taskID: string): string {
   )
   if (!ingress) throw new Error(`Task ${taskID} has no durable creation ingress`)
   return ingress.id
-}
-
-export function retirePendingTaskRootIngressesForOperatorIntentInTransaction(
-  db: Database.TxOrDb,
-  input: { taskID: string; now: number },
-): string[] {
-  const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
-  return db
-    .select({ sourceID: EngineTaskRootIngressTable.source_id })
-    .from(EngineTaskRootIngressTable)
-    .where(
-      and(
-        eq(EngineTaskRootIngressTable.task_id, input.taskID),
-        eq(EngineTaskRootIngressTable.execution_epoch, lifecycle.epoch),
-        eq(EngineTaskRootIngressTable.source, "message"),
-      ),
-    )
-    .orderBy(asc(EngineTaskRootIngressTable.sequence))
-    .all()
-    .map((row) => row.sourceID)
 }
 
 /** Ingress facts are immutable. Explicit Task deletion cascades them; ordinary

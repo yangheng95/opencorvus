@@ -4,7 +4,7 @@
 // - Delete a task
 // - Create a task (direct API)
 // - Submit a message to the current task (direct API)
-// - Retry / replan / cancel / interrupt a task (direct API)
+// - Retry / cancel / interrupt a task (direct API)
 // This module owns no render-side effects. Callers are responsible for
 // driving UI updates through reactive Solid stores.
 
@@ -834,30 +834,6 @@ export async function createTask(options: CreateTaskOptions): Promise<CreateTask
     throw new Error(`${path} returned an invalid task/project identity`)
   }
   return { taskID, projectID, directory }
-}
-
-// ── Public: retryTask ──
-
-/**
- * Retry a terminal task. Direct operator API call, no LLM involvement.
- */
-export async function retryTask(taskID: string): Promise<void> {
-  if (!taskID) return
-  await apiJson(taskPath(taskID, "/retry"), {
-    method: "POST",
-  })
-}
-
-// ── Public: replanTask ──
-
-/**
- * Trigger a replan for a terminal task. Direct operator API call, no LLM involvement.
- */
-export async function replanTask(taskID: string): Promise<void> {
-  if (!taskID) return
-  await apiJson(taskPath(taskID, "/replan"), {
-    method: "POST",
-  })
 }
 
 // ── Public: sendOperatorSteer ──

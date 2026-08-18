@@ -46,9 +46,15 @@ const POLL_INTERVAL_MS = positiveIntegerSetting(
   2_000,
   "EXPERT_SQUAD_EVOLUTION_POLL_MS",
 )
+/**
+ * Deliberately wider than `LLMActivityPolicy.maxPauseMs` (15 minutes), so a
+ * stalled stream is named by the Host that owns it rather than pre-empted by
+ * this controller. A controller abort reports only "no durable activity", which
+ * says nothing about why; the Host's own bound reports the exact paused stream.
+ */
 const INACTIVITY_WINDOW_MS = positiveIntegerSetting(
   process.env.EXPERT_SQUAD_EVOLUTION_INACTIVITY_MS,
-  600_000,
+  1_200_000,
   "EXPERT_SQUAD_EVOLUTION_INACTIVITY_MS",
 )
 const USER_ACTION_TIMEOUT_MS = positiveIntegerSetting(

@@ -60,7 +60,9 @@ import {
   catalogInspectionFromPackage as catalogInspectionFromCapabilityPackage,
   catalogSummaryFromPackage as catalogSummaryFromCapabilityPackage,
 } from "./catalog-profile"
-import { scoreDiscoveryFields } from "@/capability/fuzzy"
+import { scoreDiscoveryFields, type DiscoverySearchField } from "@/capability/fuzzy"
+import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "./id"
+import { expertSquadSearchLocalizations } from "../../generated/expert-squad-search-localization"
 import {
   defaultMcpPromptProviderName as defaultMcpPromptProviderNameFromRef,
   defaultMcpResourceProviderName as defaultMcpResourceProviderNameFromRef,
@@ -3785,6 +3787,19 @@ export namespace PromptProfileResolver {
       : `${entry.source.installation_scope}:${entry.source.namespace}:${entry.id}`
   }
 
+  // Installed packages keep their English source bytes, so discovery has to reach the same reviewed
+  // localized projection the market search uses. Otherwise a request that finds a Squad in the market
+  // stops finding it the moment that Squad is installed.
+  function catalogLocalizedSearchFields(entry: ExpertSquadCatalogIndexEntry): DiscoverySearchField[] {
+    const namespace = entry.source.kind === "built_in" ? BUILTIN_EXPERT_SQUAD_NAMESPACE : entry.source.namespace
+    const localization = expertSquadSearchLocalizations[`${namespace}/${entry.id}`]
+    if (!localization) return []
+    return [
+      ...localization.primary.map((text) => ({ text, weight: 0.94 })),
+      ...localization.detail.map((text) => ({ text, weight: 0.8 })),
+    ]
+  }
+
   export async function searchCatalog(input: {
     projectDirectory?: string
     view?: "effective" | "installations"
@@ -3820,6 +3835,7 @@ export namespace PromptProfileResolver {
             { text: row.index.name, weight: 1 },
             { text: row.index.display_label, weight: 0.96 },
             { text: row.index.description ?? "", weight: 0.9 },
+            ...catalogLocalizedSearchFields(row.index),
           ])
           return score === undefined ? [] : [{ index: row.index, score }]
         })

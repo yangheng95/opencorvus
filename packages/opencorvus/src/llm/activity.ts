@@ -32,6 +32,7 @@ import { withStreamActivity, type StreamActivityMonitor } from "@/util/stream-ac
 import { APICallError } from "ai"
 import { ProviderError } from "@/provider/error"
 import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
+import { isHostProcessingFault } from "./host-fault"
 
 /**
  * Mutually exclusive error categories. Priority (high → low) when multiple
@@ -56,6 +57,7 @@ export type ErrorClass =
   | "payload_too_large"
   | "context_overflow"
   | "auth_required"
+  | "host_fault"
   | "unknown"
 
 /**
@@ -191,6 +193,11 @@ export interface LLMActivityPolicy {
   /** Mid-stream silence threshold. Started lazily on first heartbeat;
    *  before that the first-byte timer is responsible. */
   idleMs: number
+  /** Upper bound on one continuous idle-monitor pause. A tool that never
+   *  returns must not disarm liveness forever; the bound is deliberately far
+   *  above any legitimate tool runtime so it eliminates the unbounded state
+   *  without tightening normal timeouts. */
+  maxPauseMs: number
 
   /** Maximum gap between request dispatch and first heartbeat. Once any
    *  heartbeat is observed, this timer is cleared and idle monitoring takes over. */
@@ -269,6 +276,9 @@ function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
       return cause
     }
   }
+  // A Host-origin fault is deterministic and never a transient provider
+  // condition; it must not fall through to the retryable "unknown" default.
+  if (isHostProcessingFault(err)) return "host_fault"
   if (ProviderAuthRequiredError.isInstance(err)) return "auth_required"
 
   // HTTP status — APICallError carries it directly; ctx.httpStatus is the
@@ -341,7 +351,8 @@ function isRetryable(cls: ErrorClass): boolean {
     cls === "request_timeout" ||
     cls === "payload_too_large" ||
     cls === "context_overflow" ||
-    cls === "auth_required"
+    cls === "auth_required" ||
+    cls === "host_fault"
   )
 }
 
@@ -367,6 +378,7 @@ function backoffMs(cls: ErrorClass, attempt: number, remainingTotalMs: number): 
 export const DefaultLLMActivityPolicy: LLMActivityPolicy = {
   totalMs: 60 * 60_000,
   idleMs: 180_000,
+  maxPauseMs: 15 * 60_000,
   firstByteMs: 5 * 60_000,
   maxRetries: { default: 5, rate_limit: 15 },
   classify,
@@ -583,7 +595,12 @@ export async function withLLMActivity<T>(
 
       const startIdleMonitor = () => {
         if (idleHolder.monitor) return
-        const monitor = withStreamActivity({ idleMs: policy.idleMs, label: `act:${id}` })
+        const monitor = withStreamActivity({
+          idleMs: policy.idleMs,
+          maxPauseMs: policy.maxPauseMs,
+          label: `act:${id}`,
+          describePause: () => Array.from(pauseOwners).join(", "),
+        })
         idleHolder.monitor = monitor
         unregisterActivityMonitor = SessionStatus.registerActivityMonitor(ctx.sessionID, monitor)
         monitor.signal.addEventListener("abort", () => {

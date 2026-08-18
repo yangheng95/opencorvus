@@ -857,22 +857,20 @@ describe("single Tool-result turn-control protocol", () => {
         )
         const manageTask = fixture.tools.manage_task
         if (!manageTask?.execute) throw new Error("Projected scheduler manage_task is unavailable")
-        await expect(
-          manageTask.execute(
-            {
-              action: "complete_task",
-              summary: "Must reuse the existing terminal authority",
-              evidence_locators: [],
-              deliverable_artifact_locators: [],
-              accepted_delivery_slice_revision_ids: [],
-              workflow_id: null,
-            },
-            { toolCallId: "call_rejected_completion", messages: [], abortSignal: fixture.abort },
-          ),
-        ).rejects.toMatchObject({
-          name: "TerminalToolAuthorityError",
-          code: "TERMINAL_TOOL_AUTHORITY_DENIED",
-        })
+        // No per-call authority wrapper: the lifecycle Tool's own invariant
+        // answers with a model-visible rejection and the durable status holds.
+        const rejection = await manageTask.execute(
+          {
+            action: "complete_task",
+            summary: "Must reuse the existing terminal authority",
+            evidence_locators: [],
+            deliverable_artifact_locators: [],
+            accepted_delivery_slice_revision_ids: [],
+            workflow_id: null,
+          },
+          { toolCallId: "call_rejected_completion", messages: [], abortSignal: fixture.abort },
+        )
+        expect(JSON.stringify(rejection)).toContain("already terminal with status=failed")
         expect(deriveTaskStatus(requireTask(fixture.taskID))).toBe("failed")
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },

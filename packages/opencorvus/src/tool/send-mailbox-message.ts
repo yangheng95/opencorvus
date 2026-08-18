@@ -1,6 +1,6 @@
 import z from "zod"
-import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
-import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
+import { EvidenceLocatorInputListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import { resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
 import { recordMailboxMessage } from "@/engine/mailbox"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { Session } from "@/session"
@@ -25,10 +25,10 @@ const SendMailboxMessageInput = z
     .max(1)
     .optional()
     .describe("Optional completion ratio from 0 to 1 for a progress update."),
-  evidence_locators: EvidenceLocatorListSchema
+  evidence_locators: EvidenceLocatorInputListSchema
     .optional()
     .describe(
-      "Exact typed evidence locators supporting the update. Raw IDs, file paths, log labels, and artifact:<id> display strings are invalid.",
+      "Exact typed evidence locators supporting the update. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. Raw IDs, file paths, log labels, and artifact:<id> display strings are invalid.",
     ),
   })
   .strict()
@@ -61,7 +61,7 @@ export async function executeSendMailboxMessage(params: SendMailboxMessageParams
     throw new Error(`send_mailbox_message session ${ctx.sessionID} belongs to task ${owningTask}, not ${taskID}`)
   }
 
-  const evidenceLocators = await assertTaskEvidenceLocators({
+  const evidenceLocators = await resolveTaskEvidenceLocators({
     taskID,
     evidenceLocators: input.evidence_locators ?? [],
   })

@@ -75,7 +75,8 @@ function executePublishEvolutionArtifact(
     "evolution-lab/campaign-spec": "evolution-experiment-planner",
     "evolution-lab/candidate-revision": "evolution-candidate-author",
     "evolution-lab/run-evidence-bundle": "evolution-evaluator",
-    "evolution-lab/evaluation-result": "evolution-safety-auditor",
+    "evolution-lab/evaluation-result": "evolution-evaluator",
+    "evolution-lab/integrity-review": "evolution-safety-auditor",
     "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
   } as const
   return publishEvolutionArtifactTool.execute(
@@ -189,7 +190,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       "evolution-lab/campaign-spec": "evolution-experiment-planner",
       "evolution-lab/candidate-revision": "evolution-candidate-author",
       "evolution-lab/run-evidence-bundle": "evolution-evaluator",
-      "evolution-lab/evaluation-result": "evolution-safety-auditor",
+      "evolution-lab/evaluation-result": "evolution-evaluator",
+      "evolution-lab/integrity-review": "evolution-safety-auditor",
       "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
     })
     expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer")).not.toThrow()
@@ -257,7 +259,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     )
   })
 
-  test("parses all eight package-owned evolution Artifact ABI values", () => {
+  test("parses all nine package-owned evolution Artifact ABI values", () => {
     const digest = "b".repeat(64)
     const revision = { namespace: "acme", id: "target", version: "2026.08.06.1", package_digest: digest }
     const target = {
@@ -429,7 +431,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         candidate_revision_locator: null,
         run_evidence_locator: locator,
         metric_receipt_resource: resource,
-        integrity_review: null,
+      },
+      "evolution-lab/integrity-review": {
+        case_id: "case-1",
+        arm: "baseline",
+        repetition: 0,
+        evaluation_result_locator: locator,
+        status: "reviewed",
+        findings: [],
+        accepted_limitations: [],
+        unknowns: [],
       },
       "evolution-lab/comparison-recommendation": {
         baseline_revision: revision,
@@ -504,7 +515,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       Object.entries(values).map(([type, value]) =>
         EvolutionArtifactSchemas[type as keyof typeof EvolutionArtifactSchemas].parse(value),
       ),
-    ).toHaveLength(8)
+    ).toHaveLength(9)
     expect(
       EvolutionArtifactSchemas["evolution-lab/opportunity"].parse({
         ...values["evolution-lab/opportunity"],
@@ -785,7 +796,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sessionID: session.id,
           role: "assistant",
           author: "evolution-failure-analyst",
-          time: { created: started, completed: started + 1 },
+          time: { created: started },
           parentID: userMessage.id,
           modelID: "test",
           providerID: "test",
@@ -808,6 +819,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           version: loaded.manifest.version,
           package_digest: loaded.packageDigest,
         }
+        await Session.updatePart({
+          id: "part--step-evolution-abi-chain",
+          sessionID: session.id,
+          messageID: "message-evolution-abi-chain",
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-evolution-abi-chain",
+          sessionID: session.id,
+          messageID: "message-evolution-abi-chain",
+          type: "tool",
+          callID: "call-evolution-abi-chain",
+          tool: "publish-evolution-artifact",
+          state: { status: "running", input: {}, time: { start: started + 2 } },
+        })
         const scope: TaskToolExecutionScope = {
           kind: "task" as const,
           projectID: Instance.project.id,
@@ -1570,7 +1596,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   candidate_revision_locator: metricOutcome.receipt.candidate_revision_locator,
                   run_evidence_locator: metricOutcome.receipt.run_evidence_locator,
                   metric_receipt_resource: metricReceiptResource,
-                  integrity_review: null,
                 },
                 resource_set: metricReceiptResourceSet,
                 source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
@@ -1594,7 +1619,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   candidate_revision_locator: metricOutcome.receipt.candidate_revision_locator,
                   run_evidence_locator: metricOutcome.receipt.run_evidence_locator,
                   metric_receipt_resource: metricReceiptResource,
-                  integrity_review: null,
                 },
                 resource_set: metricReceiptResourceSet,
                 source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
@@ -1617,39 +1641,31 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             purpose: "Measured evaluation result for independent integrity review",
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          const reviewedEvaluationReceipt = JSON.parse(
+          const integrityReviewReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
-                artifact_type: "evolution-lab/evaluation-result",
+                artifact_type: "evolution-lab/integrity-review",
                 payload: {
                   case_id: metricOutcome.receipt.case_id,
                   arm: metricOutcome.receipt.arm,
                   repetition: metricOutcome.receipt.repetition,
-                  scorers: metricOutcome.receipt.scorers,
-                  trial_task_id: metricOutcome.receipt.trial_task_id,
-                  trial_revision_digest: metricOutcome.receipt.trial_revision_digest,
-                  campaign_spec_locator: metricOutcome.receipt.campaign_spec_locator,
-                  candidate_revision_locator: metricOutcome.receipt.candidate_revision_locator,
-                  run_evidence_locator: metricOutcome.receipt.run_evidence_locator,
-                  metric_receipt_resource: metricReceiptResource,
-                  integrity_review: {
-                    status: "reviewed",
-                    findings: [
-                      {
-                        category: "evidence_integrity",
-                        invariant: "Frozen query scorer returned fresh immutable evidence",
-                        outcome: "passed",
-                        evidence: [metricEvidenceLocator, evaluationReceipt.locator],
-                        severity: "info",
-                        owner: "evolution-safety-auditor",
-                        correction: null,
-                      },
-                    ],
-                    accepted_limitations: [],
-                    unknowns: ["candidate arm remains a separate immutable Trial"],
-                  },
+                  evaluation_result_locator: evaluationReceipt.locator,
+                  status: "reviewed",
+                  findings: [
+                    {
+                      category: "evidence_integrity",
+                      invariant: "Frozen query scorer returned fresh immutable evidence",
+                      outcome: "passed",
+                      evidence: [metricEvidenceLocator, evaluationReceipt.locator],
+                      severity: "info",
+                      owner: "evolution-safety-auditor",
+                      correction: null,
+                    },
+                  ],
+                  accepted_limitations: [],
+                  unknowns: ["candidate arm remains a separate immutable Trial"],
                 },
-                resource_set: metricReceiptResourceSet,
+                resource_set: null,
                 source_artifact_locators: [evaluationReceipt.locator, metricEvidenceLocator],
               },
               { host } as never,
@@ -1658,7 +1674,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(
             (
               await host.engineArtifacts.read({
-                locator: reviewedEvaluationReceipt.locator,
+                locator: integrityReviewReceipt.locator,
                 byte_offset: 0,
                 max_bytes: 65_536,
                 delivery: "inline",
@@ -1666,8 +1682,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ).chunk.complete,
           ).toBe(true)
           await host.engineArtifacts.select({
-            locator: reviewedEvaluationReceipt.locator,
-            purpose: "Reviewed evaluation result for comparison recommendation",
+            locator: integrityReviewReceipt.locator,
+            purpose: "Independent integrity review for comparison recommendation",
           })
           const candidateDigest = "c".repeat(64)
           const candidateRevision = { ...revision, version: "2026.08.06.2", package_digest: candidateDigest }
@@ -1744,7 +1760,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   campaignReceipt.locator,
                   candidateSource.locator,
                   runReceipt.locator,
-                  reviewedEvaluationReceipt.locator,
+                  evaluationReceipt.locator,
+                  integrityReviewReceipt.locator,
                 ],
               },
               { host } as never,
@@ -1845,7 +1862,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sessionID: importedSession.id,
           role: "assistant",
           author: "evolution-evaluator",
-          time: { created: sourceCompleted + 1, completed: sourceCompleted + 2 },
+          time: { created: sourceCompleted + 1 },
           parentID: importedUser.id,
           modelID: "test",
           providerID: "test",
@@ -1854,6 +1871,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "stop",
+        })
+        await Session.updatePart({
+          id: "part--step-imported-campaign-evaluation",
+          sessionID: importedSession.id,
+          messageID: importedAssistant.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-imported-campaign-evaluation",
+          sessionID: importedSession.id,
+          messageID: importedAssistant.id,
+          type: "tool",
+          callID: "call-imported-campaign-evaluation",
+          tool: "rehydrate-evolution-resources",
+          state: { status: "running", input: {}, time: { start: sourceCompleted + 2 } },
         })
         const importedScope = {
           kind: "task" as const,
@@ -2333,7 +2365,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sessionID: session.id,
           role: "assistant",
           author: "evolution-candidate-author",
-          time: { created: Date.now(), completed: Date.now() + 1 },
+          time: { created: Date.now() },
           parentID: candidateUserMessage.id,
           modelID: "test",
           providerID: "test",
@@ -2342,6 +2374,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "stop",
+        })
+        await Session.updatePart({
+          id: "part--step-candidate-publisher",
+          sessionID: session.id,
+          messageID: candidateAssistantMessage.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-candidate-publisher",
+          sessionID: session.id,
+          messageID: candidateAssistantMessage.id,
+          type: "tool",
+          callID: "call-candidate-publisher",
+          tool: "publish-evolution-artifact",
+          state: { status: "running", input: {}, time: { start: Date.now() } },
         })
         const candidatePublisherScope = {
           kind: "task" as const,
@@ -2647,7 +2694,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sessionID: importedSession.id,
           role: "assistant",
           author: "evolution-safety-auditor",
-          time: { created: sourceCompleted + 1, completed: sourceCompleted + 2 },
+          time: { created: sourceCompleted + 1 },
           parentID: importedUser.id,
           modelID: "test",
           providerID: "test",
@@ -2656,6 +2703,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "stop",
+        })
+        await Session.updatePart({
+          id: "part--step-rehydrate-candidate",
+          sessionID: importedSession.id,
+          messageID: importedAssistant.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-rehydrate-candidate",
+          sessionID: importedSession.id,
+          messageID: importedAssistant.id,
+          type: "tool",
+          callID: "call-rehydrate-candidate",
+          tool: "rehydrate-evolution-resources",
+          state: { status: "running", input: {}, time: { start: sourceCompleted + 2 } },
         })
         const importedScope = {
           kind: "task" as const,
@@ -3000,7 +3062,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sessionID: evidenceOwnerSession.id,
           role: "assistant",
           author: "evolution-evaluator",
-          time: { created: completed + 1, completed: completed + 2 },
+          time: { created: completed + 1 },
           parentID: evidenceOwnerUserMessageID,
           modelID: "test",
           providerID: "test",
@@ -3080,6 +3142,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await evidenceOwnerExecution.close()
 
+        await Session.updatePart({
+          id: "part--step-evidence-owner-publisher",
+          sessionID: evidenceOwnerSession.id,
+          messageID: evidenceOwnerMessageID,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-evidence-owner-publisher",
+          sessionID: evidenceOwnerSession.id,
+          messageID: evidenceOwnerMessageID,
+          type: "tool",
+          callID: "call-evidence-owner-publisher",
+          tool: "publish-evolution-artifact",
+          state: { status: "running", input: {}, time: { start: Date.now() } },
+        })
         const evidencePublisherScope = {
           kind: "task" as const,
           projectID: Instance.project.id,

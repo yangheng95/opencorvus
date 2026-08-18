@@ -603,7 +603,11 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   const candidates = sources.filter((fact) => fact.artifactType === "evolution-lab/candidate-revision")
   const runs = sources.filter((fact) => fact.artifactType === "evolution-lab/run-evidence-bundle")
   const evaluations = sources.filter((fact) => fact.artifactType === "evolution-lab/evaluation-result")
-  if (sources.length !== campaigns.length + candidates.length + runs.length + evaluations.length) {
+  const reviews = sources.filter((fact) => fact.artifactType === "evolution-lab/integrity-review")
+  if (
+    sources.length !==
+    campaigns.length + candidates.length + runs.length + evaluations.length + reviews.length
+  ) {
     throw new Error("Evolution recommendation contains an undeclared source Artifact type")
   }
   if (campaigns.length !== 1 || candidates.length !== 1) {
@@ -613,9 +617,13 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   requireProducer(candidates[0]!, "evolution-candidate-author")
   for (const run of runs) requireProducer(run, "evolution-evaluator")
   for (const evaluation of evaluations) {
-    requireProducer(evaluation, "evolution-safety-auditor")
-    const payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(evaluation.payload)
-    if (payload.integrity_review?.status !== "reviewed") {
+    requireProducer(evaluation, "evolution-evaluator")
+    EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(evaluation.payload)
+  }
+  for (const review of reviews) {
+    requireProducer(review, "evolution-safety-auditor")
+    const payload = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(review.payload)
+    if (payload.status !== "reviewed") {
       throw new Error("Evolution evaluation requires a completed independent integrity review")
     }
   }
@@ -634,6 +642,10 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
     evaluations: evaluations.map((fact) => ({
       locator: fact.locator,
       value: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(fact.payload),
+    })),
+    reviews: reviews.map((fact) => ({
+      locator: fact.locator,
+      value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(fact.payload),
     })),
   })
   const claimedRecommendation = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(

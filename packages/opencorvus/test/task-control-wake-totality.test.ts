@@ -28,9 +28,15 @@ const FIXTURES: Record<TaskRootIngressProjection["state"], readonly TaskRootIngr
     { state: "waiting", interactionID: "int-2" },
   ],
   cancelling: [{ state: "cancelling", requestEventID: "evt-1" }],
-  closing: [{ state: "closing", requestEventID: "evt-2" }],
   reconcile_required: [{ state: "reconcile_required", requestIDs: ["req-1"] }],
-  blocked: [{ state: "blocked", reason: "integrity_conflict" }],
+  host_fault: [
+    { state: "host_fault", reason: "evidence_violation" },
+    { state: "host_fault", reason: "policy_drift" },
+    { state: "host_fault", reason: "decision_ambiguous" },
+    { state: "host_fault", reason: "outcome_ambiguous" },
+    { state: "host_fault", reason: "turn_without_activation" },
+    { state: "host_fault", reason: "interaction_ambiguous" },
+  ],
   exhausted: [
     { state: "exhausted", reason: "semantic_limit" },
     { state: "exhausted", reason: "activation_limit" },
@@ -61,9 +67,13 @@ describe("Task-root ingress wake classification", () => {
       "waiting:finite(+5000)",
       "waiting:gated(interaction)",
       `cancelling:finite(+${CANCELLATION_RECONCILE_WAKE_MS})`,
-      `closing:finite(+${CANCELLATION_RECONCILE_WAKE_MS})`,
       "reconcile_required:gated(interaction)",
-      "blocked:gated(infrastructure_fact)",
+      "host_fault:gated(infrastructure_fact)",
+      "host_fault:gated(infrastructure_fact)",
+      "host_fault:gated(infrastructure_fact)",
+      "host_fault:gated(infrastructure_fact)",
+      "host_fault:gated(infrastructure_fact)",
+      "host_fault:gated(infrastructure_fact)",
       "exhausted:gated(infrastructure_fact)",
       "exhausted:gated(infrastructure_fact)",
       "exhausted:gated(infrastructure_fact)",
@@ -101,12 +111,16 @@ describe("Task-root ingress wake classification", () => {
       "waiting:1000",
       "waiting:1000",
       "cancelling:1000",
-      "closing:1000",
       "reconcile_required:1000",
-      // Blocked and exhausted are absorbing under the reduction: a deadline
-      // would only re-derive the same value, so the surfaced gate stays the
-      // only exit.
-      "blocked:operator_gated",
+      // Host faults and exhaustion are absorbing for their ingress under the
+      // reduction: a deadline would only re-derive the same value, so the
+      // surfaced fact stays the only trace and the FIFO moves on regardless.
+      "host_fault:operator_gated",
+      "host_fault:operator_gated",
+      "host_fault:operator_gated",
+      "host_fault:operator_gated",
+      "host_fault:operator_gated",
+      "host_fault:operator_gated",
       "exhausted:operator_gated",
       "exhausted:operator_gated",
       "exhausted:operator_gated",
@@ -122,12 +136,12 @@ describe("Task-root ingress wake classification", () => {
         NOW,
       ),
       waitingOpen: taskRootIngressWakeInstant({ state: "waiting", interactionID: "i" }, undefined, NOW),
-      blocked: taskRootIngressWakeInstant({ state: "blocked", reason: "integrity_conflict" }, undefined, NOW),
+      hostFault: taskRootIngressWakeInstant({ state: "host_fault", reason: "policy_drift" }, undefined, NOW),
       cancelling: taskRootIngressWakeInstant({ state: "cancelling", requestEventID: "e" }, undefined, NOW),
     }).toEqual({
       leased: NOW + 42,
       waitingOpen: undefined,
-      blocked: undefined,
+      hostFault: undefined,
       cancelling: NOW + CANCELLATION_RECONCILE_WAKE_MS,
     })
   })

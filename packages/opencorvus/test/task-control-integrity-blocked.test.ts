@@ -20,12 +20,28 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+/** Accept one more operator ingress on the same epoch, behind the corrupt head. */
+function acceptFollowUpIngress(taskID: string, sourceID: string) {
+  return Database.immediateTransaction((db) =>
+    acceptTaskRootIngressInTransaction(db, {
+      taskID,
+      executionEpoch: 1,
+      source: "inline",
+      sourceID,
+      inlinePayload: { note: "operator follow-up behind the corrupt head" },
+      semanticTurnLimit: 3,
+      activationLimit: 4,
+      now: Date.now(),
+    }),
+  ).id
+}
+
 /**
  * Seed one Task whose durable evidence violates the integrity contract: an
  * assistant Message claims the ingress activation while living outside the
  * Task's Orchestrator Session. Before this repair the evidence reader threw,
- * which pre-empted the reduction's designed `blocked` value and left the
- * driver faulting on a 60s backoff for the process lifetime.
+ * which pre-empted the reduction's designed value and left the driver faulting
+ * on a 60s backoff for the process lifetime.
  */
 async function seedCorruptActivation(projectPath: string) {
   const taskID = Identifier.ascending("task")
@@ -102,7 +118,7 @@ async function seedCorruptActivation(projectPath: string) {
 }
 
 describe("Task-control integrity violations", () => {
-  test("reduces a corrupt persisted activation to blocked instead of faulting forever", async () => {
+  test("reduces a corrupt persisted activation to a Host fault instead of faulting forever", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -128,7 +144,7 @@ describe("Task-control integrity violations", () => {
           // timer for a state no retry can change.
           armedTimer: entry?.wakeAt !== undefined,
         }).toEqual({
-          projection: "blocked",
+          projection: "host_fault",
           activated: 0,
           activations: 0,
           failures: 0,
@@ -138,7 +154,45 @@ describe("Task-control integrity violations", () => {
     })
   })
 
-  test("stays blocked across repeated scans without consuming activation budget", async () => {
+  test("lets a later operator ingress run past a Host-faulted head", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, ingressID } = await seedCorruptActivation(project.path)
+        const followUpID = acceptFollowUpIngress(taskID, "operator-follow-up")
+        const ran: (string | undefined)[] = []
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async (input) => {
+            ran.push((input.event as { note?: string } | undefined)?.note)
+          },
+        })
+
+        const activated = await reconcileTaskControlPlane(taskID)
+
+        // This is the defect the slice removes: the corrupt head used to hold
+        // the whole FIFO, so every later operator message queued behind it
+        // forever and the only exits were an epoch-bumping Retry or hand
+        // repair of the database.
+        expect({
+          head: projectTaskRootIngress(ingressID, Date.now(), readTaskRootIngressEvidence).state,
+          followUp: projectTaskRootIngress(followUpID, Date.now(), readTaskRootIngressEvidence).state,
+          activated,
+          ran,
+        }).toEqual({
+          head: "host_fault",
+          followUp: "leased",
+          activated: 1,
+          // Only the follow-up ran: the faulted head never reaches the runner,
+          // so releasing the line does not execute anything under the
+          // violation it names.
+          ran: ["operator follow-up behind the corrupt head"],
+        })
+      },
+    })
+  })
+
+  test("stays settled across repeated scans without consuming activation budget", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -146,7 +200,7 @@ describe("Task-control integrity violations", () => {
         const { taskID, ingressID } = await seedCorruptActivation(project.path)
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async () => {
-            throw new Error("A blocked ingress must never reach the runner")
+            throw new Error("A Host-faulted ingress must never reach the runner")
           },
         })
 
@@ -173,13 +227,14 @@ describe("Task-control integrity violations", () => {
         }))
         expect({
           projection: projectTaskRootIngress(ingressID, Date.now(), readTaskRootIngressEvidence).state,
-          // Only the seeded lease exists: a blocked projection is refused
-          // before acquisition, so repeated scans cannot exhaust the budget.
+          // Only the seeded lease exists: a Host fault is refused before
+          // acquisition, so repeated scans cannot exhaust the budget.
           leases: state.leases,
-          // The gate is durable and operator-visible, and the deterministic
-          // artifact identity keeps repeated observations idempotent.
+          // The settlement is durable and operator-visible, and the
+          // deterministic artifact identity keeps repeated observations
+          // idempotent even though the verdict is deliberately not memoized.
           gates: state.gates,
-        }).toEqual({ projection: "blocked", leases: 1, gates: 1 })
+        }).toEqual({ projection: "host_fault", leases: 1, gates: 1 })
       },
     })
   })

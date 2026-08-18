@@ -40,6 +40,7 @@ type Campaign = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/camp
 type Candidate = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/candidate-revision"]["parse"]>
 type Run = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/run-evidence-bundle"]["parse"]>
 type Evaluation = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/evaluation-result"]["parse"]>
+type Review = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/integrity-review"]["parse"]>
 type Comparison = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/comparison-recommendation"]["parse"]>
 type Receipt = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/promotion-receipt"]["parse"]>
 
@@ -93,6 +94,7 @@ interface ComparisonGraph {
   comparison: FrozenArtifact<Comparison>
   runs: FrozenArtifact<Run>[]
   evaluations: FrozenArtifact<Evaluation>[]
+  reviews: FrozenArtifact<Review>[]
   graphIssues: unknown[]
 }
 
@@ -384,6 +386,7 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
   const direct = directArtifacts(read, comparison)
   const runs: FrozenArtifact<Run>[] = []
   const evaluations: FrozenArtifact<Evaluation>[] = []
+  const reviews: FrozenArtifact<Review>[] = []
   const graphIssues = [...direct.issues]
   for (const artifact of direct.artifacts) {
     if (artifact.envelope.artifact_type === "evolution-lab/run-evidence-bundle") {
@@ -396,8 +399,13 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
       if (evaluation) evaluations.push(evaluation)
       else graphIssues.push(invalidPayloadIssue(artifact))
     }
+    if (artifact.envelope.artifact_type === "evolution-lab/integrity-review") {
+      const review = typedArtifact<Review>(artifact, "evolution-lab/integrity-review")
+      if (review) reviews.push(review)
+      else graphIssues.push(invalidPayloadIssue(artifact))
+    }
   }
-  return { comparison, runs, evaluations, graphIssues }
+  return { comparison, runs, evaluations, reviews, graphIssues }
 }
 
 function completeness(campaign: Campaign, graph: ComparisonGraph) {
@@ -410,9 +418,7 @@ function completeness(campaign: Campaign, graph: ComparisonGraph) {
     expected_scorer_results: expectedSlots * campaign.scorers.length,
     measured_scorer_results: scorerResults.filter((scorer) => scorer.status === "measured").length,
     unavailable_scorer_results: scorerResults.filter((scorer) => scorer.status === "unavailable").length,
-    reviewed_integrity_slots: graph.evaluations.filter(
-      (evaluation) => evaluation.payload!.integrity_review?.status === "reviewed",
-    ).length,
+    reviewed_integrity_slots: graph.reviews.filter((review) => review.payload!.status === "reviewed").length,
     required_unavailable_dimensions: graph.comparison.payload!.required_unavailable_dimensions,
   }
 }
@@ -584,6 +590,7 @@ function buildCampaignRecord(input: {
         item.payload !== undefined &&
         item.envelope.artifact_type !== "evolution-lab/run-evidence-bundle" &&
         item.envelope.artifact_type !== "evolution-lab/evaluation-result" &&
+        item.envelope.artifact_type !== "evolution-lab/integrity-review" &&
         item.envelope.artifact_type !== "evolution-lab/comparison-recommendation",
     )
     return [
@@ -691,6 +698,20 @@ function integrityIssuesForTarget(
       }
     }
   }
+  const reachableEvaluations = read.artifacts.flatMap((artifact) =>
+    reachable.has(exactKey(artifact.catalog.taskID, artifact.locator)) &&
+    artifact.envelope.artifact_type === "evolution-lab/evaluation-result"
+      ? [artifact.locator]
+      : [],
+  )
+  for (const artifact of read.artifacts) {
+    const review = typedArtifact<Review>(artifact, "evolution-lab/integrity-review")
+    if (
+      review &&
+      reachableEvaluations.some((locator) => sameIdentity(review.payload!.evaluation_result_locator, locator))
+    )
+      reachable.add(exactKey(artifact.catalog.taskID, artifact.locator))
+  }
   const receipts = receiptArtifacts(read)
   for (const comparison of comparisons) {
     for (const receipt of receiptsForComparison({ ...comparison, receipts }).receipts) {
@@ -707,6 +728,13 @@ function integrityIssuesForTarget(
   const targetCandidates = read.artifacts.flatMap((artifact) => {
     const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")
     return candidate && candidateTargetsCampaign(candidate) ? [candidate] : []
+  })
+  const targetEvaluationLocators = read.artifacts.flatMap((artifact) => {
+    const evaluation = typedArtifact<Evaluation>(artifact, "evolution-lab/evaluation-result")
+    return evaluation &&
+      targetCampaignLocators.some((locator) => sameIdentity(evaluation.payload!.campaign_spec_locator, locator))
+      ? [evaluation.locator]
+      : []
   })
   const targetRelevant = (artifact: FrozenArtifact) => {
     const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")
@@ -729,6 +757,11 @@ function integrityIssuesForTarget(
     const evaluation = typedArtifact<Evaluation>(artifact, "evolution-lab/evaluation-result")
     if (evaluation)
       return targetCampaignLocators.some((locator) => sameIdentity(evaluation.payload!.campaign_spec_locator, locator))
+    const review = typedArtifact<Review>(artifact, "evolution-lab/integrity-review")
+    if (review)
+      return targetEvaluationLocators.some((locator) =>
+        sameIdentity(review.payload!.evaluation_result_locator, locator),
+      )
     const run = typedArtifact<Run>(artifact, "evolution-lab/run-evidence-bundle")
     if (run) return targetCampaignLocators.some((locator) => sourceIncludes(run.envelope, locator))
     return false
@@ -806,12 +839,19 @@ function detailSlots(input: {
       evaluation,
     ]),
   )
+  const reviews = new Map(
+    input.graph.reviews.map((review) => [
+      slotKey(review.payload!.case_id, review.payload!.arm, review.payload!.repetition),
+      review,
+    ]),
+  )
   return campaign.cases.flatMap((caseID) =>
     Array.from({ length: campaign.repetitions }, (_, repetition) =>
       (["baseline", "candidate"] as const).map((arm) => {
         const key = slotKey(caseID, arm, repetition)
         const run = runs.get(key)
         const evaluation = evaluations.get(key)
+        const review = reviews.get(key)
         return {
           case_id: caseID,
           arm,
@@ -820,11 +860,12 @@ function detailSlots(input: {
             arm === "baseline" ? campaign.baseline_revision.package_digest : candidate.candidate_revision.package_digest,
           run: run ? artifactIdentity(run) : null,
           evaluation: evaluation ? artifactIdentity(evaluation) : null,
+          review: review ? artifactIdentity(review) : null,
           scorer_results: campaign.scorers.map((scorer) => {
             const result = evaluation?.payload!.scorers.find((candidateResult) => candidateResult.scorer_id === scorer.scorer_id)
             return result ?? { status: "missing" as const, scorer_id: scorer.scorer_id }
           }),
-          integrity_review: evaluation?.payload!.integrity_review ?? null,
+          integrity_review: review?.payload ?? null,
         }
       }),
     ).flat(),

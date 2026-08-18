@@ -3,9 +3,13 @@ import {
   PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS,
   PLATFORM_ARTIFACT_TOOL_IDS,
 } from "./platform-artifact-tool-ids"
-import { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
+// Sourced from the profile registry rather than @/work/harness, which only re-exports it. The
+// harness pulls prompt text and default-capability wiring, and that pulled this catalog into an
+// import cycle: loading tool-id-catalog first threw a TDZ error on its own constants. The registry
+// module is pure data with no imports, so the catalog now loads standalone.
+import { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
-export { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
+export { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
 export const BATCH_TOOL_ID = "batch" as const
 export const PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS = ["capability_search"] as const

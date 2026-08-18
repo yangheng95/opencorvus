@@ -66,6 +66,20 @@ export interface StreamActivityOptions {
    * change control flow.
    */
   label?: string
+  /**
+   * Upper bound on one continuous pause region. A pause hands liveness to
+   * another owner; it never means "stop watching forever". If that owner never
+   * resumes — because it hung before recording its own durable fact — the
+   * monitor trips on this bound instead of waiting out the total deadline with
+   * no diagnostic. Must be > 0 when provided; omit to allow unbounded pauses.
+   */
+  maxPauseMs?: number
+  /**
+   * Names the live pause owners for the maxPauseMs trip message. The monitor
+   * itself tracks only depth; the caller owns the owner identities, and the
+   * trip error is the stall's only surviving diagnostic.
+   */
+  describePause?: () => string
 }
 
 export type ReadableStreamActivitySettlement = "eof" | "error" | "cancelled" | "aborted"
@@ -211,6 +225,9 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
   if (!Number.isFinite(options.idleMs) || options.idleMs <= 0) {
     throw new Error(`withStreamActivity: idleMs must be a positive finite number (got ${options.idleMs})`)
   }
+  if (options.maxPauseMs !== undefined && (!Number.isFinite(options.maxPauseMs) || options.maxPauseMs <= 0)) {
+    throw new Error(`withStreamActivity: maxPauseMs must be a positive finite number (got ${options.maxPauseMs})`)
+  }
   const label = options.label ?? "stream"
   const inactivity = new AbortController()
   const manual = new AbortController()
@@ -221,6 +238,7 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
   let last = Date.now()
   let disposed = false
   let timer: ReturnType<typeof setTimeout> | null = null
+  let pauseTimer: ReturnType<typeof setTimeout> | null = null
   /** Pause depth — `pause()` increments, `resume()` decrements. The timer is
    *  scheduled only when depth === 0. Allows nested pause regions (e.g. one
    *  tool dispatched inside another). */
@@ -232,10 +250,33 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
     inactivity.abort(new DOMException(`stream idle > ${options.idleMs}ms (${label})`, "AbortError"))
   }
 
+  const tripPause = () => {
+    if (disposed) return
+    if (inactivity.signal.aborted) return
+    // Name the live pause owners in the trip itself: this error is the only
+    // survivor of the stall, and an anonymous trip forces the next diagnosis
+    // back to guessing which caller paused (luna9 cost a full isolated run to
+    // learn there was no way to know).
+    const owners = options.describePause?.()
+    inactivity.abort(
+      new DOMException(
+        `stream paused > ${options.maxPauseMs}ms without resume (${label}${owners ? `; owners: ${owners}` : ""})`,
+        "AbortError",
+      ),
+    )
+  }
+
   const clear = () => {
     if (timer !== null) {
       clearTimeout(timer)
       timer = null
+    }
+  }
+
+  const clearPause = () => {
+    if (pauseTimer !== null) {
+      clearTimeout(pauseTimer)
+      pauseTimer = null
     }
   }
 
@@ -261,12 +302,19 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
       if (disposed) return
       pauseDepth++
       clear()
+      // Bound the outermost pause region only: nested owners share one handoff
+      // window, and restarting it per owner would let a chain of nested pauses
+      // extend the disarm indefinitely.
+      if (pauseDepth === 1 && options.maxPauseMs !== undefined && pauseTimer === null) {
+        pauseTimer = setTimeout(tripPause, options.maxPauseMs)
+      }
     },
     resume() {
       if (disposed) return
       if (pauseDepth === 0) return
       pauseDepth--
       if (pauseDepth === 0) {
+        clearPause()
         last = Date.now()
         schedule()
       }
@@ -289,6 +337,7 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
       if (disposed) return
       disposed = true
       clear()
+      clearPause()
     },
   }
 }

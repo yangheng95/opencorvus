@@ -17,7 +17,7 @@ export type DerivedTaskStatus = "active" | "completed" | "failed" | "cancelled"
 export type TaskTerminalReason = "completed" | "failed" | "cancelled" | "interrupted"
 
 type TaskStatusFields = {
-  lifecycle_status: "active" | "cancelling" | "closing" | "completed" | "failed" | "cancelled"
+  lifecycle_status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
   terminal_reason?: "interrupted"
 }
 
@@ -42,14 +42,14 @@ export function isTaskFailed(task: TaskStatusFields): boolean {
 }
 
 export function isTaskActive(task: TaskStatusFields): boolean {
-  return task.lifecycle_status === "active" || task.lifecycle_status === "cancelling" || task.lifecycle_status === "closing"
+  return task.lifecycle_status === "active" || task.lifecycle_status === "cancelling"
 }
 
 export function deriveTaskStatus(task: TaskStatusFields): DerivedTaskStatus {
   if (task.lifecycle_status === "cancelled") return "cancelled"
   if (task.lifecycle_status === "failed") return "failed"
   if (task.lifecycle_status === "completed") return "completed"
-  if (task.lifecycle_status === "active" || task.lifecycle_status === "cancelling" || task.lifecycle_status === "closing") return "active"
+  if (task.lifecycle_status === "active" || task.lifecycle_status === "cancelling") return "active"
   throw new Error(`Unknown Task lifecycle projection: ${task.lifecycle_status satisfies never}`)
 }
 

@@ -7,7 +7,7 @@ import {
   schedulerWakeMessageMatchesInTransaction,
   successfulSchedulerWakeReplyExistsInTransaction,
 } from "@/protocol/session-wake-state"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, eq, sql } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { withKeyedLock } from "@/util/lock"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -210,34 +210,44 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
       "protocol_inbox",
       `mission-wake-closure-receipt\0${row.inbox.id}\0${closure.eventID}`,
     )
-    const inserted = db
-      .insert(ProtocolDeliveryReceiptTable)
-      .values({
-        id: receiptID,
-        inbox_id: row.inbox.id,
-        receipt: {
-          kind: "mission_wake_closed",
-          message_id: result.message_id,
-          closure_event_id: closure.eventID,
-        },
-        time_created: now,
-      })
-      .onConflictDoNothing({ target: ProtocolDeliveryReceiptTable.id })
-      .returning({ id: ProtocolDeliveryReceiptTable.id })
+    // The settlement boundary is the inbox, not the minted receipt identity: an
+    // inbox carries at most one non-retry receipt, which is exactly what
+    // `protocol_delivery_receipt_terminal_idx` enforces. That index is partial,
+    // so it cannot serve as an ON CONFLICT target; this restates its predicate
+    // instead. The surrounding transaction is immediate, so the read and the
+    // insert settle atomically.
+    const settledReceipt = db
+      .select()
+      .from(ProtocolDeliveryReceiptTable)
+      .where(
+        and(
+          eq(ProtocolDeliveryReceiptTable.inbox_id, row.inbox.id),
+          sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') <> 'retry_wait'`,
+        ),
+      )
       .get()
-    if (inserted) {
+    if (!settledReceipt) {
+      db.insert(ProtocolDeliveryReceiptTable)
+        .values({
+          id: receiptID,
+          inbox_id: row.inbox.id,
+          receipt: {
+            kind: "mission_wake_closed",
+            message_id: result.message_id,
+            closure_event_id: closure.eventID,
+          },
+          time_created: now,
+        })
+        .run()
       settled += 1
       continue
     }
-    const existing = db.select().from(ProtocolDeliveryReceiptTable)
-      .where(eq(ProtocolDeliveryReceiptTable.id, receiptID)).get()
-    const existingResult = existing?.receipt
+    const existingResult = settledReceipt.receipt
+    // A prior closure of the same wake is a valid settled state; only a receipt
+    // that settles a different Message contradicts the immutable fact.
     if (
-      !existing ||
-      existing.inbox_id !== row.inbox.id ||
       existingResult?.kind !== "mission_wake_closed" ||
-      existingResult.message_id !== result.message_id ||
-      existingResult.closure_event_id !== closure.eventID
+      existingResult.message_id !== result.message_id
     ) throw new Error(`Mission wake closure receipt ${receiptID} conflicts with the immutable settlement fact`)
   }
   return settled

@@ -9,7 +9,6 @@ import {
   type TaskRow,
 } from "@/engine/store"
 import { requireEngineArtifactByLocator } from "@/artifact-catalog"
-import { deriveTaskStatus } from "@/engine/task-status"
 import { Database } from "@/storage/db"
 import { Log } from "@/util/log"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"

@@ -425,6 +425,8 @@ describe("random Expert Squad evolution controller contracts", () => {
       baselineEvaluation: locator("baseline-evaluation", "7"),
       candidateEvaluation: locator("candidate-evaluation", "8"),
       recommendation: locator("recommendation", "9"),
+      baselineReview: locator("baseline-review", "a"),
+      candidateReview: locator("candidate-review", "b"),
     }
     const baselineRevision = {
       namespace: "builtin",
@@ -598,10 +600,22 @@ describe("random Expert Squad evolution controller contracts", () => {
         candidate_revision_locator: arm === "candidate" ? locations.candidate : null,
         run_evidence_locator: runLocator,
         metric_receipt_resource: resource,
-        integrity_review: { status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
+      })
+    const review = (arm: "baseline" | "candidate", evaluationLocator: (typeof locations)["baselineEvaluation"]) =>
+      EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+        case_id: "case-1",
+        arm,
+        repetition: 0,
+        evaluation_result_locator: evaluationLocator,
+        status: "reviewed",
+        findings: [],
+        accepted_limitations: [],
+        unknowns: [],
       })
     const baselineEvaluation = evaluation("baseline", baselineRevision.package_digest, locations.baselineRun, 0.7)
     const candidateEvaluation = evaluation("candidate", candidateRevision.package_digest, locations.candidateRun, 0.9)
+    const baselineReview = review("baseline", locations.baselineEvaluation)
+    const candidateReview = review("candidate", locations.candidateEvaluation)
     const recommendation = deriveComparisonRecommendation({
       campaign,
       campaignLocator: locations.campaign,
@@ -614,6 +628,10 @@ describe("random Expert Squad evolution controller contracts", () => {
       evaluations: [
         { locator: locations.baselineEvaluation, value: baselineEvaluation },
         { locator: locations.candidateEvaluation, value: candidateEvaluation },
+      ],
+      reviews: [
+        { locator: locations.baselineReview, value: baselineReview },
+        { locator: locations.candidateReview, value: candidateReview },
       ],
     })
     const fact = (
@@ -658,6 +676,8 @@ describe("random Expert Squad evolution controller contracts", () => {
       locations.candidateRun,
       locations.baselineEvaluation,
       locations.candidateEvaluation,
+      locations.baselineReview,
+      locations.candidateReview,
     ]
     const facts: EvolutionArtifactFact[] = [
       fact(
@@ -707,13 +727,27 @@ describe("random Expert Squad evolution controller contracts", () => {
         "evolution-lab/evaluation-result",
         locations.baselineEvaluation,
         baselineEvaluation,
-        "evolution-safety-auditor",
+        "evolution-evaluator",
       ),
       fact(
         "evolution-lab/evaluation-result",
         locations.candidateEvaluation,
         candidateEvaluation,
+        "evolution-evaluator",
+      ),
+      fact(
+        "evolution-lab/integrity-review",
+        locations.baselineReview,
+        baselineReview,
         "evolution-safety-auditor",
+        [locations.baselineEvaluation],
+      ),
+      fact(
+        "evolution-lab/integrity-review",
+        locations.candidateReview,
+        candidateReview,
+        "evolution-safety-auditor",
+        [locations.candidateEvaluation],
       ),
       fact(
         "evolution-lab/comparison-recommendation",
@@ -740,6 +774,7 @@ describe("random Expert Squad evolution controller contracts", () => {
         "evolution-lab/candidate-revision": 1,
         "evolution-lab/run-evidence-bundle": 2,
         "evolution-lab/evaluation-result": 2,
+        "evolution-lab/integrity-review": 2,
         "evolution-lab/comparison-recommendation": 1,
       },
       recommendation: {

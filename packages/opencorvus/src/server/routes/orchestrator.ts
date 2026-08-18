@@ -129,7 +129,6 @@ const TASK_LIST_PROJECTION_EVENT_TYPES = new Set([
   "task.completed",
   "task.failed",
   "task.cancelled",
-  "task.blocked",
   "task.rewound",
   "task.deleted",
   "task.archived",
@@ -1660,67 +1659,6 @@ export const EngineRoutes = lazy(() =>
         requireRouteTaskInCurrentProject(taskID)
         await clearRewindCursor(taskID)
         return c.json(true)
-      },
-    )
-    .post(
-      "/task/:taskID/retry",
-      describeRoute({
-        summary: "Retry task",
-        operationId: "task.retry",
-        responses: {
-          200: {
-            description: "Task retry accepted",
-            content: {
-              "application/json": {
-                schema: resolver(Task),
-              },
-            },
-          },
-          ...errors(404),
-          409: namedErrorResponse(
-            "Task retry conflicts with the current lifecycle",
-            "TaskControlIntentLifecycleConflictError",
-          ),
-        },
-      }),
-      validator("param", z.object({ taskID: Task.shape.id })),
-      async (c) => {
-        return c.json(await EngineService.retryTask(c.req.valid("param").taskID))
-      },
-    )
-    .post(
-      "/task/:taskID/replan",
-      describeRoute({
-        summary: "Replan task",
-        operationId: "task.replan",
-        responses: {
-          200: {
-            description: "Task replan accepted",
-            content: {
-              "application/json": {
-                schema: resolver(Task),
-              },
-            },
-          },
-          ...errors(404),
-          409: namedErrorResponse(
-            "Task replan conflicts with the current lifecycle",
-            "TaskControlIntentLifecycleConflictError",
-          ),
-        },
-      }),
-      validator("param", z.object({ taskID: Task.shape.id })),
-      async (c) => {
-        return c.json(
-          await EngineService.replanTask(c.req.valid("param").taskID).catch((error) => {
-            if (error instanceof PlannerFailureError) {
-              throw new HTTPException(503, {
-                message: error.message,
-              })
-            }
-            throw error
-          }),
-        )
       },
     )
     .get(

@@ -25,7 +25,6 @@ import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { requireTask } from "@/engine/store"
-import { isTaskTerminal } from "@/engine/task-status"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
@@ -344,10 +343,18 @@ function assertTaskArtifactReadAuthority(scope: TaskArtifactReadAuthority): void
   }
 }
 
+/**
+ * Re-verify the physical scope a package Tool writes into.
+ *
+ * The boundaries here are the ones an operating system can move under a live
+ * execution: the Task's project ownership, its project root, and its runtime
+ * root. A derived terminal status is deliberately not among them — a completed
+ * Task continues in a new occurrence, and what protects an Artifact is its own
+ * version, ownership, publication sequence, and committed-snapshot
+ * verification, none of which a lifecycle word can stand in for.
+ */
 function assertTaskScope(scope: TaskToolExecutionScope): void {
   assertTaskArtifactReadAuthority(scope)
-  const task = requireTask(scope.taskID)
-  if (isTaskTerminal(task)) throw new Error("TaskArtifactStore: Task is terminal and cannot execute package tools")
   if (
     canonicalDirectory(ProjectRuntimePaths.taskRoot(scope.projectDirectory, scope.taskID)) !==
     canonicalDirectory(scope.taskRuntimeDirectory)

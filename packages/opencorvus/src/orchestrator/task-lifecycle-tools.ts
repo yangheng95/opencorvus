@@ -14,7 +14,11 @@ import {
   insertPreparedTaskCompletionDecision,
   prepareTaskCompletionDecision,
 } from "@/engine/completion-decision"
-import { ArtifactReadLocatorListSchema, EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import {
+  ArtifactReadLocatorInputListSchema,
+  EvidenceLocatorInputListSchema,
+} from "@opencorvus-ai/plugin/artifact-catalog"
+import { resolveTaskArtifactReadLocators, resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
 import { Identifier } from "@/id/id"
 import { selectedWorkflowBinding, type WorkflowProjection } from "@/engine/workflow-binding"
@@ -38,11 +42,11 @@ export const CompleteTaskInputSchema = z
       .describe(
         "Orchestrator-owned task decision summary. Cite the evidence you used, including IntegrityReview or VisualReview artifacts when relevant.",
       ),
-    evidence_locators: EvidenceLocatorListSchema.default([]).describe(
-      "Exact typed durable evidence locators used for this completion decision. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",
+    evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
+      "Exact typed durable evidence locators used for this completion decision. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",
     ),
-    deliverable_artifact_locators: ArtifactReadLocatorListSchema.default([]).describe(
-      "Exact Artifact locators intentionally delivered to the user. Include every user-consumable report, document, screenshot set, structured result, or other published Artifact; use an empty list only when the Task produced no Artifact deliverable. Completion evidence belongs in evidence_locators instead.",
+    deliverable_artifact_locators: ArtifactReadLocatorInputListSchema.default([]).describe(
+      "Exact Artifact locators intentionally delivered to the user, named by exact revision or snapshot path without any content digest. Include every user-consumable report, document, screenshot set, structured result, or other published Artifact; use an empty list only when the Task produced no Artifact deliverable. Completion evidence belongs in evidence_locators instead.",
     ),
     accepted_delivery_slice_revision_ids: z
       .array(Identifier.schema("goal"))
@@ -129,8 +133,14 @@ export function createTaskLifecycleTools(input: {
               orchestrator_message_id: execution.orchestratorMessageID,
               tool_call_id: execution.toolCallID,
               tool_part_id: execution.toolPartID,
-              evidence_locators,
-              deliverable_artifact_locators,
+              evidence_locators: await resolveTaskEvidenceLocators({
+                taskID: input.taskID,
+                evidenceLocators: evidence_locators,
+              }),
+              deliverable_artifact_locators: await resolveTaskArtifactReadLocators({
+                taskID: input.taskID,
+                locators: deliverable_artifact_locators,
+              }),
               accepted_delivery_slice_revision_ids,
               workflow_binding: selectedWorkflowBinding({
                 projection: input.workflowProjection,

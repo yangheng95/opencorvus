@@ -20,19 +20,12 @@ export function authorizedTaskRootMessagesForWake(input: {
     messageID: string
     kind: "operator" | "orchestrator" | "mission"
   }
-  taskIntent?: {
-    supersededOperatorMessageIDs: readonly string[]
-  }
   missionAcceptanceResume?: {
     messageID: string
   }
 }): Array<{ messageID: string; kind: TaskRootMessageKind; expectedSource?: string }> {
   return [
     ...(input.rootMessage ? [input.rootMessage] : []),
-    ...(input.taskIntent?.supersededOperatorMessageIDs.map((messageID) => ({
-      messageID,
-      kind: "operator" as const,
-    })) ?? []),
     ...(input.missionAcceptanceResume
       ? [
           {

@@ -1,16 +1,13 @@
 import { createResource, For, Show } from "solid-js"
-import { appStore, setAppStore } from "../../store/app"
 import { t } from "../../utils/i18n"
-import { patchConfig, patchGlobalConfig } from "../../services/config"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
 import { apiJson } from "../../services/api"
+import { currentPermissionMode, setPermissionMode, type PermissionMode } from "../../services/permission-mode"
 import { directoryScopedPath } from "../../services/task-path"
 import { Button } from "../ui/Button"
 import { SegmentedControl, type SegmentedControlOption } from "../ui/SegmentedControl"
 import { SettingsGroup, SettingsRow } from "./layout"
-
-type PermissionMode = "ask" | "full_access"
 
 type PermissionLedgerEvent = {
   id: string
@@ -28,46 +25,8 @@ function modeOptions(): SegmentedControlOption<PermissionMode>[] {
   ]
 }
 
-function currentMode(): PermissionMode {
-  return (appStore.config as { permission_mode?: PermissionMode } | undefined)?.permission_mode === "ask"
-    ? "ask"
-    : "full_access"
-}
-
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
-}
-
-let permissionWriteTail = Promise.resolve()
-let permissionWriteGeneration = 0
-
-function setPermissionMode(mode: PermissionMode): void {
-  const directory = activeProjectDirectory().trim()
-  const generation = ++permissionWriteGeneration
-  const ownsResponse = () => permissionWriteGeneration === generation && activeProjectDirectory().trim() === directory
-  permissionWriteTail = permissionWriteTail.then(async () => {
-    try {
-      const diff = { permission_mode: mode }
-      if (directory) {
-        await patchConfig(diff, {
-          directory,
-          isCurrentDirectory: (candidate) => activeProjectDirectory().trim() === candidate,
-          ownsResponse,
-        })
-      } else {
-        const saved = await patchGlobalConfig(diff, { ownsResponse })
-        if (ownsResponse()) setAppStore("config", saved)
-      }
-    } catch (error) {
-      if (!ownsResponse()) return
-      reportError({
-        id: "permissions:mode",
-        title: t("permissions.title"),
-        message: errorMessage(error),
-        details: formatErrorDetails(error),
-      })
-    }
-  })
 }
 
 async function permissionRecords(directory: string): Promise<{
@@ -124,13 +83,15 @@ export function PermissionsSettingsGroup() {
         align="center"
         interactive
         title={t("permissions.mode")}
-        desc={currentMode() === "full_access" ? t("permissions.full_access_warning") : t("permissions.ask_desc")}
+        desc={
+          currentPermissionMode() === "full_access" ? t("permissions.full_access_warning") : t("permissions.ask_desc")
+        }
         actions={
           <SegmentedControl
             ariaLabel={t("permissions.mode")}
             size="md"
             options={modeOptions()}
-            value={currentMode()}
+            value={currentPermissionMode()}
             onChange={setPermissionMode}
           />
         }

@@ -22,6 +22,10 @@ import type { TaskToolExecutionScope } from "../src/tool/task-tool-execution-sco
 import { hostGit } from "../src/util/git"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { ArtifactSnapshotTool } from "../src/tool/artifact-catalog"
+import { ProtocolStore } from "../src/protocol/store"
+import { requireTask } from "../src/engine/store"
+import { isTaskTerminal } from "../src/engine/task-status"
+import { Database } from "../src/storage/db"
 import { asSchema } from "ai"
 
 const packageRevision = {
@@ -41,6 +45,126 @@ async function git(directory: string, args: string[]) {
   const result = await hostGit(args, { cwd: directory, timeoutProfile: "default" })
   if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim())
   return result.stdout.toString().trim()
+}
+
+/**
+ * Establish a projected-scheduler snapshot execution over one input file.
+ *
+ * `terminal` appends a real `task.completed` fact for the current epoch, which
+ * is how a continued occurrence presents: the old execution's terminal fact is
+ * history, and the physical publication scope is unchanged by it.
+ */
+async function establishProjectedSchedulerSnapshot(input: {
+  projectPath: string
+  file: string
+  contents: string
+  terminal?: boolean
+}) {
+  await fs.mkdir(path.dirname(path.join(input.projectPath, input.file)), { recursive: true })
+  await fs.writeFile(path.join(input.projectPath, input.file), input.contents)
+
+  const rootSession = await Session.create({ kind: "root", title: "Scheduler snapshot contract" })
+  const taskID = Identifier.ascending("task")
+  const now = Date.now()
+  persistTask({
+    taskID,
+    sessionID: rootSession.id,
+    now,
+    title: "Scheduler snapshot contract",
+    request: "Freeze exact current-project Task inputs before dispatch",
+    productPillar: "work",
+    metadata: { actor: "user" },
+    projectID: Instance.project.id,
+    packageRevision,
+    executionCapsuleBinding: await prepareTaskProcessBinding({
+      mode: "native",
+      taskID,
+      projectID: Instance.project.id,
+      rootDirectory: input.projectPath,
+      packageRevisionSHA256: packageRevision.packageDigest,
+      timeCreated: now,
+    }),
+  })
+  if (input.terminal) {
+    Database.transaction(() => {
+      ProtocolStore.appendEventInTransaction({
+        kind: "event",
+        type: "task.completed",
+        aggregate: "task",
+        aggregate_id: taskID,
+        task_id: null,
+        session_id: rootSession.id,
+        source: "test",
+        emitted_at: now + 5,
+        payload: { execution_epoch: 1 },
+      })
+    })
+  }
+  const messageID = Identifier.ascending("message")
+  const partID = Identifier.ascending("part")
+  const callID = Identifier.ascending("tool")
+  await Session.updateMessage({
+    id: messageID,
+    sessionID: rootSession.id,
+    role: "assistant",
+    author: "orchestrator",
+    time: { created: now + 10 },
+    parentID: Identifier.ascending("message"),
+    modelID: "test",
+    providerID: "test",
+    agent: "orchestrator",
+    path: { cwd: input.projectPath, root: input.projectPath },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+  })
+  await Session.updatePart({
+    id: partID,
+    sessionID: rootSession.id,
+    messageID,
+    type: "tool",
+    callID,
+    tool: "artifact_snapshot",
+    state: {
+      status: "running",
+      input: { files: [{ path: input.file, media_type: "text/markdown" }] },
+      time: { start: now + 20 },
+    },
+  })
+  const scope: TaskToolExecutionScope = Object.freeze({
+    kind: "task",
+    projectID: Instance.project.id,
+    projectDirectory: input.projectPath,
+    taskID,
+    taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(input.projectPath, taskID),
+    sessionID: rootSession.id,
+    messageID,
+    toolCallID: callID,
+    toolPartID: partID,
+    executionSurface: createToolExecutionSurface({ toolIDs: ["artifact_snapshot"], permission: [] }),
+    owner: Object.freeze({
+      kind: "projected-scheduler",
+      expertSquadID: "base",
+      packageRevision,
+      agentID: "orchestrator",
+      projectionHash: "d".repeat(64),
+    }),
+  })
+  const contract = {
+    identity: {
+      identityKind: "projected-scheduler",
+      sessionID: rootSession.id,
+      taskID,
+      agentID: "orchestrator",
+    },
+    stageTools: {},
+    projectedTools: {},
+  } as unknown as SessionRuntimeContract
+  const source = resolveArtifactSnapshotReadAuthorityFromFacts({
+    scope,
+    contract,
+    messages: await Session.messages({ sessionID: rootSession.id }),
+  })
+  return { scope, source, taskID }
 }
 
 describe("Task Artifact immutable Git commit publication", () => {
@@ -75,94 +199,10 @@ describe("Task Artifact immutable Git commit publication", () => {
       fn: async () => {
         const file = "case/input.md"
         const expected = "# Frozen scheduler input\n\nExact Case bytes.\n"
-        await fs.mkdir(path.dirname(path.join(project.path, file)), { recursive: true })
-        await fs.writeFile(path.join(project.path, file), expected)
-
-        const rootSession = await Session.create({ kind: "root", title: "Scheduler snapshot contract" })
-        const taskID = Identifier.ascending("task")
-        const now = Date.now()
-        persistTask({
-          taskID,
-          sessionID: rootSession.id,
-          now,
-          title: "Scheduler snapshot contract",
-          request: "Freeze exact current-project Task inputs before dispatch",
-          productPillar: "work",
-          metadata: { actor: "user" },
-          projectID: Instance.project.id,
-          packageRevision,
-          executionCapsuleBinding: await prepareTaskProcessBinding({
-            mode: "native",
-            taskID,
-            projectID: Instance.project.id,
-            rootDirectory: project.path,
-            packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: now,
-          }),
-        })
-        const messageID = Identifier.ascending("message")
-        const partID = Identifier.ascending("part")
-        const callID = Identifier.ascending("tool")
-        await Session.updateMessage({
-          id: messageID,
-          sessionID: rootSession.id,
-          role: "assistant",
-          author: "orchestrator",
-          time: { created: now + 10 },
-          parentID: Identifier.ascending("message"),
-          modelID: "test",
-          providerID: "test",
-          agent: "orchestrator",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        await Session.updatePart({
-          id: partID,
-          sessionID: rootSession.id,
-          messageID,
-          type: "tool",
-          callID,
-          tool: "artifact_snapshot",
-          state: {
-            status: "running",
-            input: { files: [{ path: file, media_type: "text/markdown" }] },
-            time: { start: now + 20 },
-          },
-        })
-        const scope: TaskToolExecutionScope = Object.freeze({
-          kind: "task",
-          projectID: Instance.project.id,
-          projectDirectory: project.path,
-          taskID,
-          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
-          sessionID: rootSession.id,
-          messageID,
-          toolCallID: callID,
-          toolPartID: partID,
-          executionSurface: createToolExecutionSurface({ toolIDs: ["artifact_snapshot"], permission: [] }),
-          owner: Object.freeze({
-            kind: "projected-scheduler",
-            expertSquadID: "base",
-            packageRevision,
-            agentID: "orchestrator",
-            projectionHash: "d".repeat(64),
-          }),
-        })
-        const contract = {
-          identity: {
-            identityKind: "projected-scheduler",
-            sessionID: rootSession.id,
-            taskID,
-            agentID: "orchestrator",
-          },
-          stageTools: {},
-          projectedTools: {},
-        } as unknown as SessionRuntimeContract
-        const source = resolveArtifactSnapshotReadAuthorityFromFacts({
-          scope,
-          contract,
-          messages: await Session.messages({ sessionID: rootSession.id }),
+        const { scope, source, taskID } = await establishProjectedSchedulerSnapshot({
+          projectPath: project.path,
+          file,
+          contents: expected,
         })
         const publication = await publishTaskArtifactProjectFiles({
           scope,
@@ -191,6 +231,64 @@ describe("Task Artifact immutable Git commit publication", () => {
             owner_kind: "projected-scheduler",
             agent_id: "orchestrator",
           }),
+        })
+      },
+    })
+  })
+
+  test("publishes for a continued occurrence whose previous execution already completed", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const file = "case/continued.md"
+        const expected = "# Continued occurrence\n\nExact bytes after completion.\n"
+        const { scope, source, taskID } = await establishProjectedSchedulerSnapshot({
+          projectPath: project.path,
+          file,
+          contents: expected,
+          terminal: true,
+        })
+        const publication = await publishTaskArtifactProjectFiles({
+          scope,
+          source,
+          files: [{ path: file, mediaType: "text/markdown" }],
+        })
+        const published = Buffer.from(
+          await readTaskArtifactRef({
+            projectID: Instance.project.id,
+            projectDirectory: project.path,
+            taskID,
+            ref: publication.artifacts[0]!,
+          }),
+        ).toString("utf8")
+
+        // The physical scope stays the only publication boundary: a project
+        // root that moved under the execution still refuses, while a terminal
+        // lifecycle word no longer decides anything.
+        const movedRoot = await (async () => {
+          try {
+            await publishTaskArtifactProjectFiles({
+              scope: { ...scope, projectDirectory: path.join(project.path, "moved") },
+              source,
+              files: [{ path: file, mediaType: "text/markdown" }],
+            })
+            return "accepted"
+          } catch (error) {
+            return error instanceof Error ? error.message : String(error)
+          }
+        })()
+
+        expect({
+          terminal: isTaskTerminal(requireTask(taskID)),
+          published,
+          path: publication.artifacts[0]!.path,
+          movedRoot,
+        }).toEqual({
+          terminal: true,
+          published: expected,
+          path: file,
+          movedRoot: "TaskArtifactStore: Task project root changed",
         })
       },
     })

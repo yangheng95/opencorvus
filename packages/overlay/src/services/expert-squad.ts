@@ -353,7 +353,13 @@ export async function releaseExpertSquadPayload(directory: string): Promise<Expe
 
 export async function loadExpertSquadMarket(
   directory: string,
-  input: { query?: string; availability?: "all" | "available" | "installed"; cursor?: string; limit?: number } = {},
+  input: {
+    query?: string
+    availability?: "all" | "available" | "installed"
+    productPillar?: "code" | "work"
+    cursor?: string
+    limit?: number
+  } = {},
 ): Promise<ExpertSquadMarketPage> {
   const params = new URLSearchParams({
     directory: directory.trim(),
@@ -361,6 +367,7 @@ export async function loadExpertSquadMarket(
     availability: input.availability ?? "all",
     limit: String(input.limit ?? 20),
   })
+  if (input.productPillar) params.set("productPillar", input.productPillar)
   if (input.cursor) params.set("cursor", input.cursor)
   const path = `expert-squad/market?${params.toString()}`
   try {

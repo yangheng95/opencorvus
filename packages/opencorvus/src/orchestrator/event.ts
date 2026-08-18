@@ -4,14 +4,6 @@ import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-re
 import { DispatchInfrastructureFailureOutcomeSchema } from "@/agent/dispatch-outcome"
 import { SchedulerDeliveryReference } from "@/task-api/task-root-message"
 
-export const TaskIntentSchema = z
-  .object({
-    kind: z.enum(["retry", "replan"]),
-    actor: z.literal("operator"),
-    supersededOperatorMessageIDs: z.array(z.string().min(1)),
-  })
-  .strict()
-
 export const OrchestratorEventSchema = z
   .object({
     /** Diagnostic wake label only. It is never persisted as a conversation message. */
@@ -47,7 +39,6 @@ export const OrchestratorEventSchema = z
       })
       .strict()
       .optional(),
-    taskIntent: TaskIntentSchema.optional(),
     missionAcceptanceResume: z
       .object({
         missionID: z.string().min(1),

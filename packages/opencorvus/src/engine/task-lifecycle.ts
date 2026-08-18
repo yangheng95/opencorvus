@@ -3,8 +3,8 @@ import { ProtocolStore } from "@/protocol/store"
 import { Database, and, asc, desc, eq, inArray } from "@/storage/db"
 
 export const TASK_OPEN_EVENT_TYPES = ["task.execution.opened", "task.execution.reopened"] as const
-export const TASK_TERMINAL_EVENT_TYPES = ["task.completed", "task.failed", "task.cancelled", "task.closed"] as const
-export const TASK_BOUNDARY_REQUEST_EVENT_TYPES = ["task.cancellation.requested", "task.close.requested"] as const
+export const TASK_TERMINAL_EVENT_TYPES = ["task.completed", "task.failed", "task.cancelled"] as const
+export const TASK_BOUNDARY_REQUEST_EVENT_TYPES = ["task.cancellation.requested"] as const
 
 type Row = typeof ProtocolEventTable.$inferSelect
 
@@ -41,7 +41,7 @@ export type TaskLifecycleProjection = {
   epoch: number
   openedEventID: string
   openedAt: number
-  status: "active" | "cancelling" | "closing" | "completed" | "failed" | "cancelled"
+  status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
   requestEventID?: string
   terminalEventID?: string
   terminalAt?: number
@@ -62,8 +62,14 @@ function reduceTaskLifecycleRows(taskID: string, rows: Row[]): TaskLifecycleProj
   const latestOpen = opened.toSorted((left, right) => epochOf(right) - epochOf(left))[0]!
   const epoch = epochOf(latestOpen)
   const sameEpoch = rows.filter((row) => epochOf(row) === epoch)
-  const terminal = sameEpoch.filter((row) => TASK_TERMINAL_EVENT_TYPES.includes(row.type as (typeof TASK_TERMINAL_EVENT_TYPES)[number]))
-  if (terminal.length > 1) throw new Error(`Task ${taskID} epoch ${epoch} has conflicting terminal lifecycle facts`)
+  // `protocol_event_task_epoch_terminal_idx` is unique on (Task, epoch) across
+  // every terminal type, so a second terminal fact for this epoch cannot be
+  // appended. Re-deriving that predicate here only added a throw on a read path
+  // the whole product projects through — the board, the store, the Task API —
+  // which is how one impossible row used to take out every view of the Task.
+  const terminal = sameEpoch.filter((row) =>
+    TASK_TERMINAL_EVENT_TYPES.includes(row.type as (typeof TASK_TERMINAL_EVENT_TYPES)[number]),
+  )
   if (terminal[0]) {
     const status =
       terminal[0].type === "task.cancelled"
@@ -83,17 +89,19 @@ function reduceTaskLifecycleRows(taskID: string, rows: Row[]): TaskLifecycleProj
       ...(terminal[0].payload?.terminalReason === "interrupted" ? { terminalReason: "interrupted" as const } : {}),
     }
   }
+  // Likewise `protocol_event_task_epoch_boundary_request_idx`: one boundary
+  // request per (Task, epoch) is a durable constraint, not something this
+  // projection has to police.
   const requests = sameEpoch.filter((row) =>
     TASK_BOUNDARY_REQUEST_EVENT_TYPES.includes(row.type as (typeof TASK_BOUNDARY_REQUEST_EVENT_TYPES)[number]),
   )
-  if (requests.length > 1) throw new Error(`Task ${taskID} epoch ${epoch} has conflicting lifecycle requests`)
   if (requests[0]) {
     return {
       taskID,
       epoch,
       openedEventID: latestOpen.id,
       openedAt: latestOpen.emitted_at,
-      status: requests[0].type === "task.cancellation.requested" ? "cancelling" : "closing",
+      status: "cancelling",
       requestEventID: requests[0].id,
     }
   }
@@ -141,7 +149,7 @@ export function appendTaskReopenedInTransaction(input: {
   source: string
 }): TaskLifecycleProjection {
   const current = taskLifecycleProjectionInTransaction(input.db, input.taskID)
-  if (current.status === "active" || current.status === "cancelling" || current.status === "closing") {
+  if (current.status === "active" || current.status === "cancelling") {
     throw new Error(`Task ${input.taskID} epoch ${current.epoch} is not terminal`)
   }
   ProtocolStore.appendEventInTransaction({

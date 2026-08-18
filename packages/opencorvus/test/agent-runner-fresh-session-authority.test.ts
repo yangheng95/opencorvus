@@ -404,10 +404,10 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
             dispatch: {
               target: projection.workerCapability.identity.agentID,
               work_scope: { kind: "task" },
-              use_worktree: false,
               turn: {
                 kind: "initial",
                 workflow_subject: { kind: "direct" },
+                use_worktree: false,
                 input: {
                   goal_ids: [],
                   instruction: "attempt an invalid direct dispatch after virtual workflow selection",

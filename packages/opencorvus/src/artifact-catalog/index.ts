@@ -1952,6 +1952,59 @@ function boundedEngineArtifactTextReadResult(input: {
  * falling back to an ID-only second read. The returned row, digest metadata,
  * and payload belong to one SQLite statement snapshot.
  */
+/**
+ * The immutable payload digest of one exact catalog revision.
+ *
+ * `artifact_id` plus `catalog_revision` already identify exactly one version,
+ * so the digest is derived here instead of being restated by a caller that
+ * would have to transcribe it.
+ */
+export function engineArtifactRevisionDigest(input: {
+  db?: Database.TxOrDb
+  taskID: string
+  artifactID: string
+  catalogRevision: number
+}): string {
+  const query = (db: Database.TxOrDb) => {
+    const current = db
+      .select({ sha256: EngineArtifactTable.payload_sha256, taskID: EngineArtifactTable.task_id })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.id, input.artifactID),
+          eq(EngineArtifactTable.catalog_revision, input.catalogRevision),
+        ),
+      )
+      .get()
+    if (current) return current
+    return db
+      .select({
+        sha256: EngineArtifactVersionTable.payload_sha256,
+        taskID: EngineArtifactVersionTable.task_id,
+      })
+      .from(EngineArtifactVersionTable)
+      .where(
+        and(
+          eq(EngineArtifactVersionTable.artifact_id, input.artifactID),
+          eq(EngineArtifactVersionTable.catalog_revision, input.catalogRevision),
+        ),
+      )
+      .orderBy(desc(EngineArtifactVersionTable.catalog_revision))
+      .limit(1)
+      .get()
+  }
+  const selected = input.db ? query(input.db) : Database.use(query)
+  if (!selected) {
+    throw new Error(
+      `Exact Engine Artifact ${input.artifactID}@revision=${input.catalogRevision} does not exist`,
+    )
+  }
+  if (selected.taskID !== input.taskID) {
+    throw new Error(`Exact Engine Artifact ${input.artifactID} belongs to another Task`)
+  }
+  return selected.sha256
+}
+
 export function requireEngineArtifactByLocator(input: {
   db?: Database.TxOrDb
   taskID: string

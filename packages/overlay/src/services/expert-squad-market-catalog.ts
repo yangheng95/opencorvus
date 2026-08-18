@@ -14,6 +14,7 @@ export function expertSquadMarketIndexFromDetail(detail: ExpertSquadMarketItem):
     label: detail.label,
     description: detail.description,
     version: detail.version,
+    product_pillars: detail.product_pillars,
     installation_scopes: detail.installations.map((installation) => installation.installation_scope),
   }
 }

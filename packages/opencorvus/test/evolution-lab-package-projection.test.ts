@@ -51,9 +51,8 @@ const workflowDependencies = {
     "evolution-observer": ["evolution-experiment-planner"],
   },
   "evolution-campaign-evaluation": {
-    "evolution-experiment-planner": [],
-    "evolution-evaluator": ["evolution-experiment-planner"],
-    "evolution-safety-auditor": ["evolution-experiment-planner"],
+    "evolution-evaluator": [],
+    "evolution-safety-auditor": ["evolution-evaluator"],
     "evolution-recommendation-owner": ["evolution-evaluator", "evolution-safety-auditor"],
   },
 } as const

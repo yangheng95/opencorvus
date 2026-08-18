@@ -123,17 +123,15 @@ import {
   discardTaskRootIngress,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
-  persistTaskRootIntentIngressInTransaction,
   persistTaskRootMessageIngressInTransaction,
   persistMissionAcceptanceResumeIngressInTransaction,
   requireTaskCreationIngressID,
   taskRootIngressDebugProjection,
   taskRootIngressStats,
-  retirePendingTaskRootIngressesForOperatorIntentInTransaction,
   type DispatchTaskLoopResult,
   taskCwd,
 } from "@/engine/task-root-ingress-delivery"
-import { openTaskForContinuationInTransaction, openTaskForOperatorIntentInTransaction } from "@/engine/task-intent-open"
+import { openTaskForContinuationInTransaction } from "@/engine/task-intent-open"
 import {
   applyGoalGraphMutationInTransaction,
   recordTaskInfrastructureError,
@@ -282,16 +280,6 @@ export const TaskArtifactDeletionCommittedError = NamedError.create(
     committed: z.literal(true),
     taskIDs: z.array(z.string()),
     residuePaths: z.array(z.string()),
-  }),
-)
-
-export const TaskControlIntentLifecycleConflictError = NamedError.create(
-  "TaskControlIntentLifecycleConflictError",
-  z.object({
-    message: z.string(),
-    taskID: z.string(),
-    operation: z.enum(["retry", "replan"]),
-    lifecycle: z.literal("active"),
   }),
 )
 
@@ -3432,12 +3420,7 @@ export namespace EngineService {
                 throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
               }
               if (isTaskCancelled(current)) throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
-              const openedTask = openTaskForContinuationInTransaction({
-                db,
-                taskID: input.taskID,
-                summary: "Mission acceptance repair requested",
-                now,
-              })
+              const openedTask = openTaskForContinuationInTransaction({ db, taskID: input.taskID, now })
               appendTaskRewindClearedInTransaction(input.taskID, now, "mission.acceptance_resume")
               const ingressArtifactID = persistMissionAcceptanceResumeIngressInTransaction(db, {
                 task: openedTask,
@@ -3500,57 +3483,55 @@ export namespace EngineService {
     }
   }
 
-  async function wakeTaskForIntent(taskID: string, intent: "retry" | "replan") {
-    const task = requireTaskInCurrentProject(taskID)
-    await assertTaskRootSessionLineageInCurrentProject(task)
-    await SessionPromptState.runTaskRootIngress({
-      rootSessionID: task.session_id!,
-      wakeID: Identifier.ascending("artifact"),
-      run: async () => {
-        Database.transaction((db) => {
-          const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-          if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
-          const current = projectTaskRowInTransaction(db, persisted)
-          if (!isTaskTerminal(current)) {
-            const lifecycle = "active"
-            throw new TaskControlIntentLifecycleConflictError({
-              message: `Task ${taskID} is already ${lifecycle}; ${intent} accepts only a terminal Task.`,
-              taskID,
-              operation: intent,
-              lifecycle,
-            })
-          }
-          const now = Date.now()
-          const supersededOperatorMessageIDs = retirePendingTaskRootIngressesForOperatorIntentInTransaction(db, {
-            taskID,
-            now,
-          })
-          const openedTask = openTaskForOperatorIntentInTransaction({
-            db,
-            taskID,
-            intent,
-            now,
-          })
-          persistTaskRootIntentIngressInTransaction(db, {
-            task: openedTask,
-            intent,
-            supersededOperatorMessageIDs,
-            now,
-          })
-        })
-        await dispatchPersistedTaskLoop(taskID)
-      },
+  /**
+   * An operator message resumes the Task it is addressed to.
+   *
+   * A Task is only terminal to the machinery, never to the operator: the thing
+   * they are looking at is a conversation with an agent, so telling it what to
+   * do next has to be the way to continue it. Before this, a message on a
+   * terminal Task woke a conversation-only Turn — the agent replied and no work
+   * happened — and resuming meant finding a separate control. That reads as the
+   * product being broken, and it is a second vocabulary for what the message
+   * already says.
+   *
+   * Reopening is one durable act: a new execution epoch, with the prior
+   * terminal occurrence left intact as an immutable fact at its old epoch. The
+   * message then lands on the new epoch as ordinary ingress. "Just asking a
+   * question" keeps working without a mode of its own — the Orchestrator already
+   * judges a status-only message as conversation ingress and answers it with
+   * `no_action` (prompt/core/orchestrator-core.txt).
+   *
+   * Cancelled reopens too. Cancellation ends an *occurrence*, which is why the
+   * ingress reduction calls it `terminal_inapplicable` for "a cancelled, closed,
+   * or superseded epoch" — the epoch, not the Task. Excluding it left one
+   * terminal state whose only exit was a dedicated Retry control, which is the
+   * exact shape this reform exists to remove: a state you cannot leave with an
+   * ordinary action. The "stray message" it was guarding against cannot happen —
+   * non-operator delivery can never obtain reopen authority, so the only thing
+   * that reaches here is the operator's own explicit message, and a person
+   * typing into a stopped conversation is asking for it to continue.
+   *
+   * Deletion is the boundary that does fence a reopen, and the tracked contract
+   * says so explicitly: `task.deleted` fences every new ingress, lease, reopen,
+   * scheduler, Artifact, and activity write. Acceptance refuses the ingress a
+   * moment later regardless, so without this guard a deleted Task would take an
+   * epoch bump for a message that is then refused.
+   */
+  function reopenTerminalTaskForOperatorMessage(taskID: string): void {
+    Database.transaction((db) => {
+      const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+      if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+      if (taskDeletedInTransaction(db, taskID)) return
+      const current = projectTaskRowInTransaction(db, persisted)
+      if (!isTaskTerminal(current)) return
+      openTaskForContinuationInTransaction({ db, taskID, now: Date.now() })
     })
-    return viewTask(requireTaskInCurrentProject(taskID))
   }
 
-  export async function retryTask(taskID: string) {
-    return wakeTaskForIntent(taskID, "retry")
-  }
-
-  export async function replanTask(taskID: string) {
-    return wakeTaskForIntent(taskID, "replan")
-  }
+  /** The reopen rule is the whole contract of this change and is asserted
+   *  directly; driving it through the HTTP path would only add model config and
+   *  loop dispatch, neither of which this rule depends on. */
+  export const OperatorMessageResumeTestHooks = { reopenTerminalTaskForOperatorMessage }
 
   export async function handleTaskMessage(taskID: string, raw: z.input<typeof TaskMessageInput>) {
     const input = TaskMessageInput.parse(raw)
@@ -3607,6 +3588,8 @@ export namespace EngineService {
       for (const attachment of attachmentRefs) {
         await appendTaskAttachment(taskID, attachment)
       }
+
+      reopenTerminalTaskForOperatorMessage(taskID)
 
       // Natural-language user messages are recorded once as visible task-root
       // user messages, which are the authoritative follow-up conversation.

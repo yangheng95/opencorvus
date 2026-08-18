@@ -1176,15 +1176,39 @@ export namespace SessionLoop {
     return { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens }
   }
 
-  /** Keep later persisted inputs out of the active provider turn. */
-  function promptMessagePrefix(msgs: Message.WithParts[], replyTarget?: string): Message.WithParts[] {
-    if (!replyTarget) return msgs
-    const activeUserIndex = msgs.findIndex((message) => message.info.role === "user" && message.info.id === replyTarget)
-    if (activeUserIndex < 0) {
-      throw new Error(`Session prompt reply target ${replyTarget} is not a durable user Message`)
+  function isPendingDeliveryUserMessage(message: Message.WithParts): boolean {
+    return message.info.role === "user" && message.info.pendingDelivery === true
+  }
+
+  /**
+   * Split the durable history into the conversation the model sees and the
+   * user Messages still queued for delivery.
+   *
+   * A user Message persisted while another Turn was in flight carries
+   * `pendingDelivery` (set at write time in prompt/parts.ts). While a
+   * delivered reply target is being answered, queued Messages stay out of the
+   * prompt; once no delivered target is in flight — the Turn boundary — every
+   * queued Message is delivered at once. The prompt is otherwise the durable
+   * history verbatim, so within a Turn it only ever grows and the model always
+   * sees its own work. (The predecessor sliced the history around the reply
+   * target at read time; one mid-Turn arrival then cut the Turn's own Messages
+   * out of the prompt, freezing it byte-identical and looping the model on one
+   * Tool call forever — Mission ses_-zUXWiACkzzlEtt8eqES, 2026-08-17.)
+   */
+  function partitionPendingDelivery(
+    msgs: Message.WithParts[],
+    attachedTargets: ReadonlySet<string>,
+  ): { visible: Message.WithParts[]; deliver: Message.WithParts[] } {
+    const pending = msgs.filter(isPendingDeliveryUserMessage)
+    if (pending.length === 0) return { visible: msgs, deliver: [] }
+    const answeringDeliveredTarget = msgs.some(
+      (message) =>
+        message.info.role === "user" && !isPendingDeliveryUserMessage(message) && attachedTargets.has(message.info.id),
+    )
+    if (answeringDeliveredTarget) {
+      return { visible: msgs.filter((message) => !isPendingDeliveryUserMessage(message)), deliver: [] }
     }
-    const laterUserIndex = msgs.findIndex((message, index) => index > activeUserIndex && message.info.role === "user")
-    return laterUserIndex < 0 ? msgs : msgs.slice(0, laterUserIndex)
+    return { visible: msgs, deliver: pending }
   }
 
   function isCompletedReplyToUserMessage(
@@ -2213,10 +2237,16 @@ export namespace SessionLoop {
               if (abort.aborted) break
               const durableMessages = await Message.filterCompacted(MessageStore.stream(sessionID))
               const attachedTargets = new Set(attachedReplyTargets(sessionID, directory))
-              const replyTarget = durableMessages.find(
+              const { visible, deliver } = partitionPendingDelivery(durableMessages, attachedTargets)
+              for (const queued of deliver) {
+                if (queued.info.role !== "user") continue
+                delete queued.info.pendingDelivery
+                await Session.updateMessage(queued.info)
+              }
+              const msgs = visible
+              const replyTarget = msgs.find(
                 (message) => message.info.role === "user" && attachedTargets.has(message.info.id),
               )?.info.id
-              const msgs = promptMessagePrefix(durableMessages, replyTarget)
               const { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
@@ -3307,8 +3337,12 @@ export namespace SessionLoop {
    * `unresumable` means the persisted ToolPart already holds a terminal fact
    * that no continuation can advance, so the ledger request must be retired
    * rather than replayed again.
+   * `live` means the assistant Message is owned by a prompt Turn running in
+   * this process right now, so there is nothing to recover: the owning Turn
+   * is the sole writer and the request must stay open, untouched, for a scan
+   * that runs after the Turn has released ownership.
    */
-  export type PermissionContinuationOutcome = "resumed" | "unresumable"
+  export type PermissionContinuationOutcome = "resumed" | "unresumable" | "live"
 
   /**
    * Resume the exact persisted Tool invocation after an Ask-me decision was
@@ -3319,6 +3353,12 @@ export namespace SessionLoop {
   export async function resumePermissionContinuation(
     request: PermissionAuthority.Request,
   ): Promise<PermissionContinuationOutcome> {
+    // Recovery exists for turns no process owns. An assistant Message bound to
+    // a live in-process prompt owner is mid-Turn: settling it here would stamp
+    // `time.completed` under an active provider stream, fault every later part
+    // write, and kill the Turn (a worktree child project open did exactly that
+    // to its own dispatching Orchestrator, 2026-08-17).
+    if (SessionPromptState.messageOwner(request.sessionID, request.messageID)) return "live"
     const session = await Session.get(request.sessionID)
     const persistedAssistant = await MessageStore.get({
       sessionID: request.sessionID,
@@ -4021,6 +4061,7 @@ export namespace SessionLoop {
 
   export const TestHooks = {
     collectLoopState,
+    partitionPendingDelivery,
     consumeCompletedCompactionControl,
     executeCompactionControl,
     isSettledReplyToUserMessage,

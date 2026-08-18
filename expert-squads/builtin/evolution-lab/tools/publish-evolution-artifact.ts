@@ -212,7 +212,8 @@ export const evolutionArtifactOwner = {
   "evolution-lab/campaign-spec": "evolution-experiment-planner",
   "evolution-lab/candidate-revision": "evolution-candidate-author",
   "evolution-lab/run-evidence-bundle": "evolution-evaluator",
-  "evolution-lab/evaluation-result": "evolution-safety-auditor",
+  "evolution-lab/evaluation-result": "evolution-evaluator",
+  "evolution-lab/integrity-review": "evolution-safety-auditor",
   "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
 } as const
 
@@ -696,6 +697,44 @@ export default tool({
         )
       }
     }
+    if (artifact_type === "evolution-lab/integrity-review") {
+      const review = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(payload)
+      const evaluationLocator = review.evaluation_result_locator
+      if (evaluationLocator.source !== "engine_artifact")
+        throw new EvolutionArtifactIntegrityError(
+          "integrity-review must review an exact Engine Artifact evaluation result",
+        )
+      if (!publication.source_artifact_locators.some((locator) => sameJSON(locator, evaluationLocator)))
+        throw new EvolutionArtifactIntegrityError(
+          "integrity-review must directly source the exact evaluation result it reviews",
+        )
+      const evaluationEnvelope = await readEngineArtifactEnvelope(
+        evaluationLocator,
+        context,
+        "Exact evaluation result under independent integrity review",
+      )
+      if (evaluationEnvelope.artifact_type !== "evolution-lab/evaluation-result")
+        throw new EvolutionArtifactIntegrityError(
+          "integrity-review source must identify an evolution-lab/evaluation-result Artifact",
+        )
+      requireEvolutionWorkerProducer(evaluationEnvelope, "evolution-evaluator")
+      const evaluation = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(evaluationEnvelope.payload)
+      if (
+        review.case_id !== evaluation.case_id ||
+        review.arm !== evaluation.arm ||
+        review.repetition !== evaluation.repetition
+      )
+        throw new EvolutionArtifactIntegrityError(
+          "integrity-review slot identity must equal its exact evaluation result",
+        )
+      const sourceKeys = new Set(publication.source_artifact_locators.map((locator) => JSON.stringify(locator)))
+      for (const finding of review.findings)
+        for (const locator of finding.evidence)
+          if (!sourceKeys.has(JSON.stringify(locator)))
+            throw new EvolutionArtifactIntegrityError(
+              "integrity review finding evidence must be an exact direct source of that Artifact",
+            )
+    }
     if (artifact_type === "evolution-lab/comparison-recommendation") {
       const claimed = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
       if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
@@ -711,6 +750,7 @@ export default tool({
         "evolution-lab/campaign-spec",
         "evolution-lab/candidate-revision",
         "evolution-lab/evaluation-result",
+        "evolution-lab/integrity-review",
         "evolution-lab/run-evidence-bundle",
       ])
       if (envelopes.some((item) => !supportedTypes.has(item.envelope.artifact_type)))
@@ -722,15 +762,17 @@ export default tool({
       requireEvolutionWorkerProducer(campaigns[0]!.envelope, "evolution-experiment-planner")
       requireEvolutionWorkerProducer(candidates[0]!.envelope, "evolution-candidate-author")
       for (const item of envelopes) {
-        if (item.envelope.artifact_type === "evolution-lab/evaluation-result") {
+        if (item.envelope.artifact_type === "evolution-lab/evaluation-result")
+          requireEvolutionWorkerProducer(item.envelope, "evolution-evaluator")
+        if (item.envelope.artifact_type === "evolution-lab/integrity-review") {
           requireEvolutionWorkerProducer(item.envelope, "evolution-safety-auditor")
-          const evaluation = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(item.envelope.payload)
+          const review = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(item.envelope.payload)
           const sourceKeys = new Set(item.envelope.source_artifact_locators.map((locator) => JSON.stringify(locator)))
-          for (const finding of evaluation.integrity_review?.findings ?? [])
+          for (const finding of review.findings)
             for (const locator of finding.evidence)
               if (!sourceKeys.has(JSON.stringify(locator)))
                 throw new EvolutionArtifactIntegrityError(
-                  "reviewed evaluation finding evidence must be an exact direct source of that Artifact",
+                  "integrity review finding evidence must be an exact direct source of that Artifact",
                 )
         }
         if (item.envelope.artifact_type === "evolution-lab/run-evidence-bundle")
@@ -741,6 +783,12 @@ export default tool({
         .map((item) => ({
           locator: item.locator,
           value: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(item.envelope.payload),
+        }))
+      const reviews = envelopes
+        .filter((item) => item.envelope.artifact_type === "evolution-lab/integrity-review")
+        .map((item) => ({
+          locator: item.locator,
+          value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(item.envelope.payload),
         }))
       const runs = envelopes
         .filter((item) => item.envelope.artifact_type === "evolution-lab/run-evidence-bundle")
@@ -754,6 +802,7 @@ export default tool({
         candidate: EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(candidates[0]!.envelope.payload),
         candidateLocator: candidates[0]!.locator,
         evaluations,
+        reviews,
         runs,
       })
       if (!sameJSON(exact, claimed))

@@ -681,7 +681,12 @@
   overflow: hidden;
 }
 
-:is(.composer-context-flag.oc-badge, .composer-model-selector, .composer-reference-selector) {
+:is(
+  .composer-context-flag.oc-badge,
+  .composer-model-selector,
+  .composer-reference-selector,
+  .composer-permission-trigger
+) {
   --composer-pill-height: var(--oc-density-chip-height);
 
   box-sizing: border-box;
@@ -725,7 +730,10 @@
   align-items: center;
 }
 
-.composer-reference-trigger.oc-button {
+/* Borderless pill triggers in the compose-meta row: the reference/expert-squad
+   selector and the authorization-mode control sitting beside it. One recipe, so
+   the pair cannot drift apart in height, padding or glyph tone. */
+:is(.composer-reference-trigger, .composer-permission-trigger).oc-button {
   --oc-button-height: var(--composer-pill-height);
   --oc-button-padding-x: calc(8px * var(--ui-scale));
   --oc-button-gap: calc(5px * var(--ui-scale));
@@ -740,9 +748,13 @@
   border-radius: var(--oc-radius-pill);
 }
 
-.composer-reference-trigger.oc-button:is(:hover, :focus-visible) {
+:is(.composer-reference-trigger, .composer-permission-trigger).oc-button:is(:hover, :focus-visible) {
   --oc-button-bg: var(--ui-list-hover-bg);
   --oc-button-border: 0 solid transparent;
+}
+
+.composer-permission-trigger.oc-button {
+  flex: 0 0 auto;
 }
 
 .composer-reference-trigger-label {

@@ -78,7 +78,6 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "TaskExpectedPackageDigestConflictError") return 409
   if (err.name === "TaskCreationIdempotencyConflictError") return 409
   if (err.name === "TaskPromptProfileImmutableError") return 409
-  if (err.name === "TaskControlIntentLifecycleConflictError") return 409
   if (err.name === "MissingModelConfigError") return 400
   if (err.name === "NonCanonicalConfigFileError") return 409
   if (err.name === "PtyCreateFailedError") return 400

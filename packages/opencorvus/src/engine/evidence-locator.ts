@@ -1,8 +1,13 @@
 import {
+  ArtifactReadLocatorInputListSchema,
+  ArtifactReadLocatorListSchema,
+  EvidenceLocatorInputListSchema,
   EvidenceLocatorListSchema,
+  type ArtifactReadLocator,
   type EvidenceLocator,
+  type EvidenceLocatorInput,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { engineArtifactRevisionDigest, requireEngineArtifactByLocator } from "@/artifact-catalog"
 import { MessageTable } from "@/session/session.sql"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Database, and, eq, sql } from "@/storage/db"
@@ -120,6 +125,103 @@ async function assertTaskEvidenceLocator(input: {
       }
     }
   }
+}
+
+/**
+ * Complete one model-supplied evidence pointer with the Host-owned content
+ * facts of the exact revision or snapshot entry it names.
+ *
+ * The model states which Artifact it means; digests, byte counts, and media
+ * types are read from the Host. They are never transcribed, because a
+ * 64-character hexadecimal digest copied by hand truncates instead of
+ * verifying, and the copy proves nothing the exact revision does not already
+ * prove.
+ */
+async function completeTaskEvidenceLocator(input: {
+  taskID: string
+  locator: EvidenceLocatorInput
+}): Promise<EvidenceLocator> {
+  const { taskID, locator } = input
+  if (locator.source === "engine_artifact") {
+    return {
+      ...locator,
+      expected_sha256: engineArtifactRevisionDigest({
+        taskID,
+        artifactID: locator.artifact_id,
+        catalogRevision: locator.catalog_revision,
+      }),
+    }
+  }
+  if (locator.source === "task_artifact_resource") {
+    const authority = requireTaskArtifactAuthority(
+      taskID,
+      locator.ref.snapshot.task_id,
+      locator.ref.snapshot.project_id,
+    )
+    const record = await readTaskArtifactSnapshotManifest({ ...authority, snapshot: locator.ref.snapshot })
+    const inventory = record.manifest.trees[locator.ref.tree]
+    if (!inventory) {
+      throw new Error(`Evidence snapshot has no tree ${locator.ref.tree}`)
+    }
+    const file = inventory.files.find((entry) => entry.path === locator.ref.path)
+    if (!file) {
+      throw new Error(
+        `Evidence snapshot tree ${locator.ref.tree} has no resource ${locator.ref.path}`,
+      )
+    }
+    return {
+      source: "task_artifact_resource",
+      ref: {
+        snapshot: locator.ref.snapshot,
+        tree: locator.ref.tree,
+        path: locator.ref.path,
+        media_type: file.media_type,
+        bytes: file.bytes,
+        sha256: file.sha256,
+      },
+    }
+  }
+  return locator
+}
+
+/**
+ * Complete every model-supplied evidence pointer with Host-owned content facts,
+ * then prove the resulting exact locators are readable and owned by the
+ * receiving Task.
+ */
+export async function resolveTaskEvidenceLocators(input: {
+  taskID: string
+  evidenceLocators: unknown
+}): Promise<EvidenceLocator[]> {
+  const parsed = EvidenceLocatorInputListSchema.parse(input.evidenceLocators)
+  const completed: EvidenceLocator[] = []
+  for (const locator of parsed) {
+    try {
+      completed.push(await completeTaskEvidenceLocator({ taskID: input.taskID, locator }))
+    } catch (cause) {
+      throw new Error(
+        `Invalid evidence locator ${locatorIdentity(locator as EvidenceLocator)} for Task ${input.taskID}`,
+        { cause },
+      )
+    }
+  }
+  return assertTaskEvidenceLocators({ taskID: input.taskID, evidenceLocators: completed })
+}
+
+/**
+ * The Artifact-only projection of {@link resolveTaskEvidenceLocators}, for
+ * surfaces whose locators are already narrowed to readable Artifacts.
+ */
+export async function resolveTaskArtifactReadLocators(input: {
+  taskID: string
+  locators: unknown
+}): Promise<ArtifactReadLocator[]> {
+  const parsed = ArtifactReadLocatorInputListSchema.parse(input.locators)
+  const resolved = await resolveTaskEvidenceLocators({
+    taskID: input.taskID,
+    evidenceLocators: parsed,
+  })
+  return ArtifactReadLocatorListSchema.parse(resolved)
 }
 
 /**

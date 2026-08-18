@@ -14,7 +14,6 @@ import { BROWSER_PREVIEW_EVIDENCE_ARTIFACT_TYPE } from "@/engine/artifact-catalo
 import { Event } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { requireTask } from "@/engine/store"
-import { deriveTaskStatus } from "@/engine/task-status"
 import { Identifier } from "@/id/id"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Database } from "@/storage/db"

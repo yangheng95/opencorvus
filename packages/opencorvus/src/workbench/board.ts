@@ -564,7 +564,6 @@ function boardOverview(input: {
   const terminalReason = taskTerminalReason(input.task)
   const active = derivedStatus === "active"
   const terminal = derivedStatus === "completed" || derivedStatus === "failed" || derivedStatus === "cancelled"
-  const canRetry = terminal && input.pendingInteractions.length === 0
   const headline =
     input.pendingInteractions.length > 0
       ? "Waiting on human input"
@@ -599,21 +598,21 @@ function boardOverview(input: {
       : derivedStatus === "failed"
         ? terminalReason === "interrupted"
           ? {
-              kind: "retry" as const,
-              title: "Retry after interruption",
-              detail: "The server interrupted this attempt. Retry will continue from the latest durable task context.",
+              kind: "message" as const,
+              title: "Say what to do after the interruption",
+              detail: "The server interrupted this attempt. A message continues from the latest durable task context.",
             }
           : {
-              kind: "replan" as const,
-              title: "Replan from the latest failure",
+              kind: "message" as const,
+              title: "Say what to change after the failure",
               detail:
-                "Review the visible failure and evidence facts, tighten the scope if needed, then replan or retry.",
+                "Review the visible failure and evidence facts, then send a message with the corrected scope; it opens the next occurrence.",
             }
         : derivedStatus === "cancelled"
           ? {
-              kind: "retry" as const,
-              title: "Retry if the task should continue",
-              detail: "The task is cancelled. Retry will resume from the latest durable context.",
+              kind: "message" as const,
+              title: "Say what to do if the task should continue",
+              detail: "The task is cancelled. A message resumes it from the latest durable context.",
             }
           : derivedStatus === "completed"
             ? {
@@ -640,8 +639,6 @@ function boardOverview(input: {
     currentFailure: input.currentFailure,
     nextStep,
     controls: {
-      canRetry,
-      canReplan: canRetry,
       canCancel: isTaskActive(input.task),
     },
   }

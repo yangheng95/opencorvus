@@ -543,7 +543,6 @@ async function executeProductionWorkloadDispatch(input: {
         dispatch: {
           target: workloadIdentity.agentID,
           work_scope: { kind: "task" },
-          use_worktree: false,
           turn: {
             kind: "initial",
             workflow_subject: {
@@ -551,6 +550,7 @@ async function executeProductionWorkloadDispatch(input: {
               workflow_id: workloadWorkflowID,
               node_id: workloadNodeID,
             },
+            use_worktree: false,
             input: { reason: "Verify exact workload coverage", goal_ids: input.selectedGoalIDs },
           },
         },
@@ -1601,17 +1601,20 @@ describe("Goal Workload coverage contract", () => {
         await ProtocolStore.appendEvent({
           kind: "event",
           type: "agent.execution.lifecycle",
-          aggregate: "session",
-          aggregate_id: initial.child.id,
-          task_id: task.taskID,
+          // Same envelope the production session bridge emits: the Task is the
+          // aggregate and the Session is a reference, which is what task-root
+          // ingress accepts as a causal source.
+          aggregate: "task",
+          aggregate_id: task.taskID,
+          task_id: null,
           session_id: initial.child.id,
           source: "goal-workload-coverage-contract-test",
+          // The envelope owns task, session, and order identity; the payload
+          // carries only what is its own
+          // (protocol_event_payload_envelope_shape).
           order_key: orderKey,
           payload: {
-            sessionID: initial.child.id,
             inputMessageID,
-            taskID: task.taskID,
-            orderKey,
             status: { type: "terminal", reason: "completed" },
           },
         })

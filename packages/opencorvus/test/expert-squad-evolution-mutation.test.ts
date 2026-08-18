@@ -432,12 +432,6 @@ describe("authorized expert squad evolution mutation", () => {
               candidate_revision_locator: arm === "candidate" ? candidateArtifact : null,
               run_evidence_locator: run.locator,
               metric_receipt_resource: evolutionResource(`metrics/${arm}.json`, metricDigest),
-              integrity_review: {
-                status: "reviewed",
-                findings: [],
-                accepted_limitations: [],
-                unknowns: [],
-              },
             })
             const locator = recordEvolutionArtifact({
               taskID: operationTask.taskID,
@@ -449,6 +443,27 @@ describe("authorized expert squad evolution mutation", () => {
           }
           const baselineEvaluation = recordEvaluation("baseline", baselineRun, 0.5, digests.baselineMetric)
           const candidateEvaluation = recordEvaluation("candidate", candidateRun, 0.8, digests.candidateMetric)
+          const recordReview = (arm: "baseline" | "candidate", evaluation: typeof baselineEvaluation) => {
+            const payload = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+              case_id: "case-a",
+              arm,
+              repetition: 0,
+              evaluation_result_locator: evaluation.locator,
+              status: "reviewed",
+              findings: [],
+              accepted_limitations: [],
+              unknowns: [],
+            })
+            const locator = recordEvolutionArtifact({
+              taskID: operationTask.taskID,
+              type: "evolution-lab/integrity-review",
+              payload,
+              sources: [evaluation.locator],
+            })
+            return { locator, value: payload }
+          }
+          const baselineReview = recordReview("baseline", baselineEvaluation)
+          const candidateReview = recordReview("candidate", candidateEvaluation)
           const trialEvidenceHistory = await readEvolutionHistory({
             namespace: target.namespace,
             id: target.id,
@@ -470,6 +485,7 @@ describe("authorized expert squad evolution mutation", () => {
             candidate: candidatePayload,
             candidateLocator: candidateArtifact,
             evaluations: [baselineEvaluation, candidateEvaluation],
+            reviews: [baselineReview, candidateReview],
             runs: [baselineRun, candidateRun],
           })
           const comparisonSources = [
@@ -479,6 +495,8 @@ describe("authorized expert squad evolution mutation", () => {
             candidateRun.locator,
             baselineEvaluation.locator,
             candidateEvaluation.locator,
+            baselineReview.locator,
+            candidateReview.locator,
           ]
           const comparison = recordEvolutionArtifact({
             taskID: operationTask.taskID,

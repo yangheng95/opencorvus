@@ -1,5 +1,6 @@
 import path from "path"
 import { generateExpertSquadPayloadModule } from "./generate-expert-squad-payload"
+import { generateExpertSquadSearchLocalizationModule } from "./generate-expert-squad-search-localization"
 import { generateBuiltinSkillPayloadModule } from "./generate-builtin-skill-payload"
 import { generateBuiltinMissionSkillPayloadModule } from "./generate-builtin-mission-skill-payload"
 import { generateWorkArtifactQualificationMatrix } from "./generate-work-artifact-qualification-matrix"
@@ -17,6 +18,8 @@ export async function generateOpencorvusGeneratedBuildArtifacts(
 
   await generateExpertSquadPayloadModule(repoRoot)
   log("Generated expert-squad payload module")
+  await generateExpertSquadSearchLocalizationModule(repoRoot)
+  log("Generated expert-squad search localization module")
   await generateBuiltinSkillPayloadModule(repoRoot)
   log("Generated built-in Skill payload module")
   await generateBuiltinMissionSkillPayloadModule(repoRoot)

@@ -5,7 +5,6 @@ import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { applyGoalGraphMutation } from "@/engine/persist"
 import { requireCurrentGoalContext, requireTask } from "@/engine/store"
-import { deriveTaskStatus } from "@/engine/task-status"
 import { GoalContractFieldsSchema, GoalContractUpdateSchema } from "@/pipeline/goal-contract.schema"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 

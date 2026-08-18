@@ -101,6 +101,7 @@ describe("two-mode permission authority", () => {
         expect(result).toBe("default-result")
         const history = await PermissionAuthority.history()
         expect(history.map((row) => row.event_type)).toEqual([
+          "stale",
           "execution_succeeded",
           "execution_started",
           "allowed_once",
@@ -244,10 +245,12 @@ describe("two-mode permission authority", () => {
         ).toBe(2)
         expect((await PermissionAuthority.history()).map((row) => row.event_type).sort()).toEqual(
           [
+            "stale",
             "execution_succeeded",
             "execution_started",
             "allowed_once",
             "requested",
+            "stale",
             "execution_succeeded",
             "execution_started",
             "allowed_once",

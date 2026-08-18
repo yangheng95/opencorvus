@@ -236,12 +236,11 @@ async function createFixture(label: string, publish = false) {
     task_id: taskID,
     session_id: child.id,
     source: "goal-workload-process-worker",
+    // The envelope owns task, session, and order identity; the payload carries
+    // only what is its own (protocol_event_payload_envelope_shape).
     order_key: orderKey,
     payload: {
-      sessionID: child.id,
       inputMessageID,
-      taskID,
-      orderKey,
       status: { type: "terminal", reason: "completed" },
     },
   })

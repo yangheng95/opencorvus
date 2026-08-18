@@ -56,12 +56,12 @@ export const ProtocolEventTable = sqliteTable(
     uniqueIndex("protocol_event_task_epoch_terminal_idx")
       .on(table.aggregate_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`)
       .where(
-        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancelled', 'task.closed', 'task.completed', 'task.failed')`,
+        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancelled', 'task.completed', 'task.failed')`,
       ),
     uniqueIndex("protocol_event_task_epoch_boundary_request_idx")
       .on(table.aggregate_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`)
       .where(
-        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancellation.requested', 'task.close.requested')`,
+        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancellation.requested')`,
       ),
     uniqueIndex("protocol_event_task_deleted_idx")
       .on(table.aggregate_id)

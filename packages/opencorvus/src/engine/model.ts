@@ -481,7 +481,7 @@ export const TaskBoardFailure = z.object({
 })
 
 export const TaskBoardNextStep = z.object({
-  kind: z.enum(["resolve_blocker", "retry", "replan", "observe", "review_acceptance", "message"]),
+  kind: z.enum(["resolve_blocker", "observe", "review_acceptance", "message"]),
   title: z.string(),
   detail: z.string().optional(),
 })
@@ -492,8 +492,6 @@ export const TaskBoardOverview = z.object({
   currentFailure: TaskBoardFailure.optional(),
   nextStep: TaskBoardNextStep,
   controls: z.object({
-    canRetry: z.boolean(),
-    canReplan: z.boolean(),
     canCancel: z.boolean(),
   }),
 })
@@ -664,7 +662,17 @@ export const TaskExecutionProjection = z.object({
 })
 
 export const TaskRootIngressReducerProjection = z.union([
-  z.object({ state: z.literal("blocked"), reason: z.literal("integrity_conflict") }),
+  z.object({
+    state: z.literal("host_fault"),
+    reason: z.enum([
+      "evidence_violation",
+      "policy_drift",
+      "decision_ambiguous",
+      "outcome_ambiguous",
+      "turn_without_activation",
+      "interaction_ambiguous",
+    ]),
+  }),
   z.object({
     state: z.literal("exhausted"),
     reason: z.enum(["semantic_limit", "activation_limit", "deadline"]),
@@ -683,7 +691,6 @@ export const TaskRootIngressReducerProjection = z.union([
   z.object({ state: z.literal("reconcile_required"), requestIDs: z.array(z.string()) }),
   z.object({ state: z.literal("waiting"), interactionID: z.string(), resumeAt: z.number().int().optional() }),
   z.object({ state: z.literal("cancelling"), requestEventID: z.string() }),
-  z.object({ state: z.literal("closing"), requestEventID: z.string() }),
   z.object({ state: z.literal("ready") }),
 ])
 

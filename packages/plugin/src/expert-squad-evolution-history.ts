@@ -320,8 +320,9 @@ export const EvolutionEvidenceSlotSchema = z
     expected_revision_digest: ArtifactSHA256Schema,
     run: EvolutionHistoryArtifactIdentitySchema.nullable(),
     evaluation: EvolutionHistoryArtifactIdentitySchema.nullable(),
+    review: EvolutionHistoryArtifactIdentitySchema.nullable(),
     scorer_results: z.array(ScorerSlotSchema),
-    integrity_review: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].shape.integrity_review,
+    integrity_review: EvolutionArtifactSchemas["evolution-lab/integrity-review"].nullable(),
   })
   .strict()
 

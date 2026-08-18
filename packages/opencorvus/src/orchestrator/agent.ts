@@ -30,7 +30,7 @@
  *   - Stream errors are persisted as `engine_artifact kind="orchestrator-
  *     stream-error"`. After the canonical LLM Activity retries are exhausted,
  *     the physical Session and Task execution window are terminalized. A
- *     later operator Retry/Replan creates a fresh execution window.
+ *     later operator Retry creates a fresh execution window.
  *   - Per-Session physical ownership and durable Task ingress delivery sit
  *     OUTSIDE any single processTask invocation; the
  *     runner has no analog because workers do not own their own dispatch.
@@ -243,12 +243,14 @@ async function settleOrchestratorStartupFailure(input: {
   const task = requireTask(input.taskID)
   if (isTaskTerminal(task)) return
   if (input.envelope.errorName === TASK_ROOT_INTEGRITY_ERROR_NAME) {
-    // Same rule as the execution-failure path below: an integrity conflict is
-    // a durable condition the control plane reduces to `blocked` and surfaces
-    // as an operator gate. Startup was the asymmetric hole — the first
+    // Same rule as the execution-failure path below: this is a Host fault, and
+    // a Host fault settles on its own ingress — the control plane reduces it to
+    // `host_fault`, surfaces it, and lets the FIFO continue. Terminally failing
+    // the user's Task on top of that would convert the Host's broken write into
+    // the user's dead Task. Startup was the asymmetric hole — the first
     // activation's failure kept the Task open, then the lease-expiry retry hit
-    // the identical conflict *here* and terminally failed it after all.
-    log.error("Task-root integrity conflict blocked Orchestrator startup; the Task stays open for repair", {
+    // the identical fault *here* and terminally failed it after all.
+    log.error("Task-root integrity fault ended Orchestrator startup; the Task stays open", {
       taskID: input.taskID,
       sessionID: input.session?.id,
       reason,
@@ -292,12 +294,12 @@ async function settleOrchestratorExecutionFailure(input: {
   const task = requireTask(input.taskID)
   if (isTaskTerminal(task)) return
   if (input.envelope.errorName === TASK_ROOT_INTEGRITY_ERROR_NAME) {
-    // A Task-root integrity conflict is a durable, absorbing condition the
-    // control plane already models: its ingress reduces to `blocked` and the
-    // scan surfaces an operator gate. Terminally failing the Task on top of
-    // that destroys the only states an operator can repair and resume from,
+    // A Task-root integrity violation is a Host fault, which settles on the
+    // exact ingress that observed it: the reduction returns `host_fault`, the
+    // scan surfaces it and moves to the next ingress. Terminally failing the
+    // Task on top of that invents a durable user state out of a Host defect,
     // and it is what turned one refused assistant append into a dead Task.
-    log.error("Task-root integrity conflict ended an Orchestrator Turn; the Task stays open for repair", {
+    log.error("Task-root integrity fault ended an Orchestrator Turn; the Task stays open", {
       taskID: input.taskID,
       sessionID: input.session?.id,
       reason,
@@ -590,7 +592,6 @@ export namespace Orchestrator {
         signal: executionSignal,
         dispatchAgents: schedulerDispatchAgents,
         rootMessage: event?.rootMessage,
-        taskIntent: event?.taskIntent,
         missionAcceptanceResume: event?.missionAcceptanceResume,
         terminalConversationAuthority,
       })
@@ -607,7 +608,7 @@ export namespace Orchestrator {
       // 4. Build prompt. Each newly constructed Orchestrator child receives
       //    the original task brief once, authored by the durable task creator.
       //    Follow-up operator text remains in its real root message. The wake
-      //    projects its exact identity without prescribing a retrieval tool. Typed Retry/Replan and
+      //    projects its exact identity without prescribing a retrieval tool. Typed Retry and
       //    Mission resume occurrences stay in the system control projection. Exact terminal
       //    occurrences additionally materialize one durable, visible Orchestrator-authored control
       //    Message so the provider and transcript share the same current input.
@@ -670,7 +671,7 @@ export namespace Orchestrator {
         return terminalConversation
           ? [
               ...runtimeParts,
-              `This is a terminal conversation-only Turn for ingress ${terminalConversationAuthority.ingressID}. Answer the visible request or acknowledge the exact coordination request. Keep Task lifecycle unchanged. Do not dispatch product work, create a wait/question, or call Task lifecycle tools. Recoverable follow-up requires the operator's explicit same-Task Retry/Replan control.`,
+              `This is a terminal conversation-only Turn for ingress ${terminalConversationAuthority.ingressID}. Answer the visible request or acknowledge the exact coordination request. Keep Task lifecycle unchanged. Do not dispatch product work, create a wait/question, or call Task lifecycle tools. Recoverable follow-up requires the operator's explicit same-Task Retry control.`,
             ]
           : runtimeParts
       }
@@ -1163,7 +1164,7 @@ export namespace Orchestrator {
       // Orchestrator execution window. Internal LLM Activity retries are
       // already exhausted here; there is no remaining prompt owner and no
       // automatic wake. Persist terminal Session/Task truth and require an
-      // explicit Retry/Replan to open another execution window.
+      // explicit Retry to open another execution window.
       if (!wasCtrlAborted) {
         try {
           await settleOrchestratorExecutionFailure({
@@ -1250,28 +1251,6 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     }
   }
 
-  if (event?.taskIntent) {
-    currentIngressCount += 1
-    const { kind, actor, supersededOperatorMessageIDs } = event.taskIntent
-    lines.push(
-      `Current taskIntent=${kind}; actor=${actor}. This is a ${actor}-issued current wake intent, not user-authored text.`,
-    )
-    if (supersededOperatorMessageIDs.length > 0) {
-      lines.push(
-        `Ordered superseded operator messages=${supersededOperatorMessageIDs.join(",")}. These exact identities preserve real participant ingress that the Retry/Replan transaction retired from delivery; use them in this order without any Host-prescribed tool workflow.`,
-      )
-    }
-    if (kind === "retry") {
-      lines.push(
-        `The ${actor} requested a fresh scheduling decision for the same Task from the latest durable snapshot. This Retry opened a new non-terminal execution occurrence and superseded the prior terminal lifecycle outcome as the current Task state. Historical failure and completion decisions remain evidence, but they are not a lifecycle action in this wake. Retry does not prescribe success or worker dispatch: choose the current evidence-backed outcome. ${renderCurrentOccurrenceDecisionObligation()}`,
-      )
-    } else if (kind === "replan") {
-      lines.push(
-        `The ${actor} requested a fresh planning decision from the latest durable snapshot. This Replan opened a new non-terminal execution occurrence and superseded the prior terminal lifecycle outcome as the current Task state. Re-evaluate the current Goal graph and evidence; change the graph only when that evidence supports it. ${renderCurrentOccurrenceDecisionObligation()}`,
-      )
-    }
-  }
-
   if (event?.missionAcceptanceResume) {
     currentIngressCount += 1
     const resume = event.missionAcceptanceResume
@@ -1337,7 +1316,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     )
   } else {
     lines.push(
-      "Only the current ingress facts listed above authorize this wake. Other historical messages, retry/replan intents, and coordination requests remain audit evidence, not additional current requests.",
+      "Only the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
     )
   }
 
@@ -1480,7 +1459,6 @@ export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
   return Boolean(
     event?.taskCreation ||
       event?.rootMessage ||
-      event?.taskIntent ||
       event?.missionAcceptanceResume ||
       event?.coordinationRequest ||
       event?.taskWaitActivity ||

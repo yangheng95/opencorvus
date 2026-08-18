@@ -566,6 +566,10 @@ export namespace Message {
     time: z.object({
       created: z.number(),
     }),
+    /** Persisted while another Turn was in flight. Excluded from prompt
+     *  assembly until the loop delivers it at the next Turn boundary; every
+     *  other reader (UI, API, exports) sees the Message immediately. */
+    pendingDelivery: z.boolean().optional(),
     format: Format.optional(),
     summary: z
       .object({

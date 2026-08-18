@@ -97,10 +97,17 @@ export async function materializeBrowserPreviewCaptureResult(input: {
   }
 }
 
-export const BrowserPreviewCaptureTool = Tool.define(BrowserPreviewCaptureToolID, {
-  description:
-    "Capture the selected viewports from one persisted task Browser Preview target through the canonical Playwright-backed producer. Returns exact Engine Artifact locators and the same persisted PNG bytes as multimodal attachments for direct inspection.",
+export const BrowserPreviewCaptureToolDescription =
+  "Capture the selected viewports from one persisted task Browser Preview target through the canonical Playwright-backed producer. Returns exact Engine Artifact locators and the same persisted PNG bytes as multimodal attachments for direct inspection."
+
+export const BrowserPreviewCaptureToolStaticDefinition = {
+  description: BrowserPreviewCaptureToolDescription,
   parameters: BrowserPreviewCaptureToolParameters,
+} as const
+
+export const BrowserPreviewCaptureTool = Tool.define(BrowserPreviewCaptureToolID, {
+  description: BrowserPreviewCaptureToolStaticDefinition.description,
+  parameters: BrowserPreviewCaptureToolStaticDefinition.parameters,
   async execute(params, ctx: Tool.Context) {
     const taskID = taskExecutionID(ctx, "browser_preview_capture")
     const verification = await capturePersistedBrowserPreviewTarget({

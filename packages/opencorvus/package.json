@@ -16,6 +16,7 @@
     "check:work-artifact-profile": "bun run script/generate-work-artifact-qualification-matrix.ts --check && bun run script/check-work-artifact-profile.ts --profile office.presentation@1",
     "check:scheduled-automations-e2e": "bun run script/scheduled-automations-e2e.ts",
     "check:mission-task-duplex-e2e": "bun run script/check-mission-task-duplex-e2e.ts",
+    "check:evolution-e2e": "bun run script/expert-squad-evolution-e2e.ts",
     "check:control-state-redundancy": "bun run script/control-state-redundancy-check.ts",
     "dev": "bun ./src/index.ts"
   },

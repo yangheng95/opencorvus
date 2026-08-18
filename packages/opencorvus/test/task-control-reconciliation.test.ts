@@ -1018,33 +1018,23 @@ describe("Task-control reconciliation", () => {
             terminalLifecycleReference: requireCurrentTerminalLifecycleReference(taskID),
           },
         })
-        const noAction = tools.no_action
-        if (!noAction?.execute) throw new Error("Expected terminal no_action Tool")
-        let refusal: unknown
-        try {
-          await noAction.execute(
-            { reason: "This coordination ingress does not authorize no_action." },
-            { toolCallId: "call_rejected_no_action", messages: [], abortSignal: new AbortController().signal },
-          )
-        } catch (error) {
-          refusal = error
-        }
-        expect(refusal).toMatchObject({
-          name: "TerminalToolAuthorityError",
-          code: "TERMINAL_TOOL_AUTHORITY_DENIED",
-        })
+        // Authority by projection: a coordination-only terminal conversation
+        // has no no_action Tool at all, so there is no refusal path to record.
+        expect(tools.no_action).toBeUndefined()
+        expect(tools.dispatch_agent).toBeUndefined()
+        if (!tools.respond_agent_coordination) throw new Error("Expected terminal respond_agent_coordination Tool")
         await Session.updatePart({
           ...rejectedRequest,
           state: {
             status: "error",
             input: { reason: "This coordination ingress does not authorize no_action." },
             failure: {
-              kind: "terminal-tool-authority-denied",
-              name: "TerminalToolAuthorityError",
-              message: "Terminal conversation does not authorize no_action",
-              originSite: "orchestrator.tools.terminalConversationToolRefusal",
+              kind: "tool-execution",
+              name: "Error",
+              message: "no_action is absent from a coordination-only terminal conversation table",
+              originSite: "test.terminal-settlement",
               classification: "tool-execution",
-              data: { code: "TERMINAL_TOOL_AUTHORITY_DENIED" },
+              data: {},
             },
             time: { start: rejectedRequest.state.time.start, end: now + 9 },
           },

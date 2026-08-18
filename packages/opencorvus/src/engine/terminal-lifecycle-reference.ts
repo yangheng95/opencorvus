@@ -24,7 +24,7 @@ export function terminalLifecycleReferenceMatchesTaskRow(
   return taskLifecycleProjection(task.id).terminalEventID === reference.terminalEventID
 }
 
-const terminalTypes = new Set<string>(TASK_TERMINAL_EVENT_TYPES.filter((type) => type !== "task.closed"))
+const terminalTypes = new Set<string>(TASK_TERMINAL_EVENT_TYPES)
 
 export function requireTerminalLifecycleReferenceEvent(taskID: string, input: TerminalLifecycleReference) {
   const reference = TerminalLifecycleReferenceSchema.parse(input)

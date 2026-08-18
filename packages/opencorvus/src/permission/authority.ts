@@ -413,6 +413,24 @@ export namespace PermissionAuthority {
         .onConflictDoNothing()
         .run()
       db.insert(PermissionLedgerTable).values(event).run()
+      // A full-access invocation never has an Ask-me continuation to carry
+      // across processes: the decision was policy-settled inline and the
+      // durable result is committed in this very transaction. Retiring it here
+      // keeps it out of every later recovery scan — an unretired inline
+      // success is exactly what let a project open replay a live Turn's own
+      // Tool calls back onto its still-streaming assistant Message.
+      if (input.request.mode === "full_access") {
+        db.insert(PermissionLedgerTable)
+          .values({
+            id: ledgerEventID(),
+            request_id: input.request.id,
+            event_type: "stale",
+            source_event_id: event.id,
+            reason: "Full-access inline execution committed its durable result",
+            time_created: Date.now(),
+          })
+          .run()
+      }
     })
     return input.result
   }
@@ -1093,6 +1111,11 @@ export namespace PermissionAuthority {
       retireContinuation(request, "The persisted ToolPart is already terminal; no continuation can advance it")
       return outcome
     }
+    // `live` is not a conclusion: the owning in-process Turn is still writing.
+    // The request stays open so a scan after the Turn releases ownership can
+    // settle it; retiring here would discard a continuation the owner may
+    // still need recovered if it dies before persisting the outcome.
+    if (outcome === "live") return outcome
     // `resumed` means the continuation reached its persisted conclusion, so it
     // is as finished as `unresumable` is and must be retired for the same
     // reason. Without this the request stays a replay candidate forever: every
@@ -1141,9 +1164,9 @@ export namespace PermissionAuthority {
    * permanent fault from a transient one and must never discard a continuation
    * that a later attempt could still complete.
    */
-  async function recoverContinuation(request: Request): Promise<boolean> {
+  async function recoverContinuation(request: Request): Promise<SessionLoopContinuationOutcome | "failed"> {
     try {
-      return (await resumeRequest(request)) === "resumed"
+      return await resumeRequest(request)
     } catch (error) {
       const stale = error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError
       if (stale) retireContinuation(request, (error as Error).message)
@@ -1154,7 +1177,7 @@ export namespace PermissionAuthority {
         retired: stale,
         error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
       })
-      return false
+      return "failed"
     }
   }
 
@@ -1169,6 +1192,10 @@ export namespace PermissionAuthority {
    * nothing. The summary below is the observable that says whether it converged
    * — a `replayed` count that does not fall to zero across restarts is the
    * signature of a continuation class that concludes without being retired.
+   * `live` replays are the one intentional exception: a request whose assistant
+   * Message is owned by a prompt Turn running in this process is skipped
+   * without retirement, because the owning Turn — not recovery — is the sole
+   * writer; it converges on the first scan after that Turn releases ownership.
    */
   export async function resumeApprovedContinuations(): Promise<number> {
     const scanStarted = Date.now()
@@ -1188,9 +1215,12 @@ export namespace PermissionAuthority {
     )
     let resumed = 0
     let replayed = 0
+    let live = 0
     const replay = async (row: LedgerRow) => {
       replayed += 1
-      if (await recoverContinuation(requestFromRow(row))) resumed += 1
+      const outcome = await recoverContinuation(requestFromRow(row))
+      if (outcome === "resumed") resumed += 1
+      if (outcome === "live") live += 1
     }
     for (const row of requested) {
       if (staleFor(row.request_id)) continue
@@ -1227,6 +1257,7 @@ export namespace PermissionAuthority {
       requested: requested.length,
       replayed,
       resumed,
+      live,
       duration: Date.now() - scanStarted,
     })
     return resumed

@@ -56,10 +56,15 @@ import {
   requireTaskResolvedPackageRevision,
 } from "@/engine/task-package-revision-binding"
 import { ProjectMemory } from "@/memory/project-memory"
+// Part-write invariant violations are deterministic Host faults: they are
+// raised while the processor persists a streamed chunk, so the LLM activity
+// runner must not treat them as an unknown-but-transient provider condition
+// and retry an attempt whose tools have already executed.
+import { HostProcessingFaultError } from "@/llm/host-fault"
 import {
   equivalentToolOutcome,
-  equivalentToolRequest,
   isToolRequestPartData,
+  reconcileToolRequestFact,
   projectToolPartInTransaction,
   projectPartInTransaction,
   toolOutcomeData,
@@ -1699,7 +1704,7 @@ export namespace Session {
     const assertProvidedPartOrderKey = (canonicalOrderKey: string) => {
       const supplied = typeof providedOrderKey === "string" ? providedOrderKey.trim() : ""
       if (supplied && supplied !== canonicalOrderKey) {
-        throw new Error(`Session.updatePart: part ${id} orderKey drift between input and persisted row`)
+        throw new HostProcessingFaultError(`Session.updatePart: part ${id} orderKey drift between input and persisted row`)
       }
     }
     const time = Date.now()
@@ -1755,9 +1760,9 @@ export namespace Session {
         const request = toolRequestData(part)
         const parent = message.data as { role?: string; time?: { completed?: number } }
         if (!existingToolRequest && parent.role === "assistant" && parent.time?.completed !== undefined) {
-          throw new Error(`Tool request Part ${id} cannot be appended after assistant completion`)
+          throw new HostProcessingFaultError(`Tool request Part ${id} cannot be appended after assistant completion`)
         }
-        if (existingPart) throw new Error(`Tool request Part identity ${id} is occupied by a non-Tool fact`)
+        if (existingPart) throw new HostProcessingFaultError(`Tool request Part identity ${id} is occupied by a non-Tool fact`)
         if (!existingToolRequest) {
           assertTaskRootAssistantActivationFenceInTransaction(db, {
             assistantMessageID: messageID,
@@ -1765,8 +1770,11 @@ export namespace Session {
           })
         }
         if (existingToolRequest) {
-          if (!equivalentToolRequest(existingToolRequest.data, request)) {
-            throw new Error(`Tool request Part ${id} conflicts with its immutable request fact`)
+          const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+          if (reconciled.kind === "conflict") {
+            throw new HostProcessingFaultError(
+              `Tool request Part ${id} conflicts with its immutable request fact — ${reconciled.description}`,
+            )
           }
         } else {
           db.insert(ToolPartRequestTable).values({
@@ -1839,7 +1847,7 @@ export namespace Session {
             .where(eq(ToolPartOutcomeTable.request_part_id, id)).get()
           if (existingOutcome) {
             if (existingOutcome.id !== outcomeID || !equivalentToolOutcome(existingOutcome.data, outcome)) {
-              throw new Error(`Tool outcome Part ${outcomeID} conflicts with its immutable receipt`)
+              throw new HostProcessingFaultError(`Tool outcome Part ${outcomeID} conflicts with its immutable receipt`)
             }
           } else {
             db.insert(ToolPartOutcomeTable).values({
@@ -1861,7 +1869,7 @@ export namespace Session {
         if (wrotePart && publishAfterCommit) publishPartUpdated()
         return
       }
-      if (existingToolRequest) throw new Error(`Part identity ${id} is occupied by an immutable Tool request fact`)
+      if (existingToolRequest) throw new HostProcessingFaultError(`Part identity ${id} is occupied by an immutable Tool request fact`)
       const parentData = message.data as { role?: string }
       if (parentData.role === "user") assertAcceptedIngressMessageMutable(db, messageID)
       const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingPart?.timeCreated ?? time })
@@ -1877,12 +1885,12 @@ export namespace Session {
           options.completedCompactionCheckpoint === true &&
           part.type === "compaction" &&
           existingPart === undefined
-        if (!isCheckpointAppend) throw new Error(`Part ${id} is immutable after assistant completion`)
+        if (!isCheckpointAppend) throw new HostProcessingFaultError(`Part ${id} is immutable after assistant completion`)
       }
       if (existingPart) {
         const current = existingPart.data as { type?: string }
         if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === part.type)) {
-          throw new Error(`Non-streaming Part ${id} is immutable`)
+          throw new HostProcessingFaultError(`Non-streaming Part ${id} is immutable`)
         }
       }
       assertTaskRootAssistantActivationFenceInTransaction(db, {
@@ -2109,6 +2117,16 @@ export namespace Session {
       }
     },
   )
+
+  /**
+   * Whether this Message is already a causal fact — activated, accepted as
+   * task-root ingress, referenced by a protocol event, or continued by a
+   * successor turn. Its persisted Parts are then frozen: continuation appends
+   * new occurrences and never removes or rewrites what other facts cite.
+   */
+  export function isTaskRootCausalMessage(messageID: string): boolean {
+    return Database.use((db) => taskRootMessageIsImmutable(db, messageID))
+  }
 
   export class BusyError extends Error {
     constructor(public readonly sessionID: string) {

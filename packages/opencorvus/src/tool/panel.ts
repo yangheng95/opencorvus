@@ -1323,20 +1323,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           metadata: {},
         }
       }
-      case "retry_task":
-        await EngineService.retryTask(params.taskID)
-        return {
-          title: "Retry accepted",
-          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Retry accepted." }),
-          metadata: {},
-        }
-      case "replan_task":
-        await EngineService.replanTask(params.taskID)
-        return {
-          title: "Replan accepted",
-          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Replan accepted." }),
-          metadata: {},
-        }
       case "cancel_task":
         const cancellationIdentity = await panelMutationIdentity(ctx, actor, "cancel_task")
         await EngineService.cancelTask(params.taskID, {

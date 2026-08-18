@@ -62,6 +62,7 @@ import {
   findDispatchLineageByDispatchID,
   findDispatchLineageBySession,
   findDispatchLineageByToolExecution,
+  listDispatchLineage,
   recordDispatchLineage,
 } from "@/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
@@ -71,7 +72,6 @@ import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { findGoal, findInteractionByExternal, listGoals, requireTask, type TaskRow } from "@/engine/store"
 import { resolveSessionExecutionAuthority, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
-import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import {
   requireCurrentTerminalLifecycleReference,
   sameTerminalLifecycleReference,
@@ -100,11 +100,15 @@ import {
 } from "@/session/runtime-contract"
 import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
-import { bindToolDecisionDeclaration, bindToolExecutionMode, toolExecutionModeOf } from "@/tool/execution-mode"
+import { bindToolDecisionDeclaration, bindToolExecutionMode } from "@/tool/execution-mode"
 import { and, Database, eq, NotFoundError } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
 import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
+import {
+  BrowserPreviewCaptureTool,
+  BrowserPreviewCaptureToolStaticDefinition,
+} from "@/tool/browser-preview-capture"
 import { Log } from "@/util/log"
 import { tool } from "ai"
 import fs from "node:fs/promises"
@@ -149,10 +153,7 @@ import {
 import { createIntegrityReviewStage } from "./integrity-review-stage"
 import { createIntegrityReviewRunner, createIntegrityTool } from "./integrity-tool"
 import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "./interaction-tools"
-import {
-  isAuthorizedTerminalConversationDecision,
-  type TerminalConversationAuthority,
-} from "./terminal-conversation-authority"
+import { type TerminalConversationAuthority } from "./terminal-conversation-authority"
 import { createReadContextTool } from "./read-context-tool"
 import { createReadAgentMessageTool } from "./read-agent-message-tool"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
@@ -186,11 +187,6 @@ import {
 } from "./dispatch-turn-projection"
 
 const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
-
-export class TerminalToolAuthorityError extends Error {
-  override readonly name = "TerminalToolAuthorityError"
-  readonly code = "TERMINAL_TOOL_AUTHORITY_DENIED"
-}
 
 export const OrchestratorToolsTestHooks = Object.freeze({
   openDispatchLineage(surface: object): OpenDispatchAgentLineage {
@@ -893,6 +889,21 @@ function terminalTaskToolCapability(name: string): "read_only" | "mutation" {
   return name in TERMINAL_TASK_TOOL_CAPABILITIES ? "read_only" : "mutation"
 }
 
+/**
+ * The Tool table for a conversation-only Turn: every read-only Tool, plus the
+ * single decision Tool the ingress kind authorizes. Authority by projection —
+ * what the Turn must not do simply is not on its table.
+ */
+export function projectTerminalConversationTools<T>(
+  tools: Record<string, T>,
+  authority: Pick<TerminalConversationAuthority, "ingressKind">,
+): Record<string, T> {
+  const decisionTool = authority.ingressKind === "operator_message" ? "no_action" : "respond_agent_coordination"
+  return Object.fromEntries(
+    Object.entries(tools).filter(([name]) => name === decisionTool || terminalTaskToolCapability(name) === "read_only"),
+  )
+}
+
 // Re-export the stateful-tool registry (defined in a dependency-free module
 // so `session/message.ts` can import it without creating a circular graph
 // through `@/session`). Surfacing it from this module keeps it visible to
@@ -911,11 +922,6 @@ export function createOrchestratorTools(input: {
   rootMessage?: {
     messageID: string
     kind: "operator" | "orchestrator" | "mission"
-  }
-  taskIntent?: {
-    kind: "retry" | "replan"
-    actor: "operator"
-    supersededOperatorMessageIDs: string[]
   }
   missionAcceptanceResume?: {
     messageID: string
@@ -956,117 +962,6 @@ export function createOrchestratorTools(input: {
 
   // Agents that need to ask the user a question do so directly via
   // `Question.ask`. Workflow steps never pause for input here.
-
-  function terminalTaskToolRefusal(name: string, task: TaskRow) {
-    const status = deriveTaskStatus(task)
-    throw new TerminalToolAuthorityError(
-        `Task ${task.id} is terminal (status=${status}); ${name} was not executed. ` +
-        "Task-level scheduler tools may act only while the task is active. Use an explicit operator Retry or Replan to reopen this same Task when its scope remains recoverable; create a separate Task only for separate scope.",
-    )
-  }
-
-  function terminalConversationToolRefusal(name: string, task: TaskRow) {
-    throw new TerminalToolAuthorityError(
-        `Terminal conversation ingress ${input.terminalConversationAuthority!.ingressID} did not authorize ${name}; ` +
-        `the current Task status is ${deriveTaskStatus(task)}. This conversation-only Turn cannot dispatch work, wait, ` +
-        "ask a new question, or change lifecycle. Recoverable execution requires explicit operator Retry/Replan.",
-    )
-  }
-
-  function isTerminalConversationAcknowledgement(name: string, args: unknown, task: TaskRow): boolean {
-    const authority = input.terminalConversationAuthority
-    if (!authority || authority.taskID !== task.id || !isTaskTerminal(task)) return false
-    const currentReference = requireCurrentTerminalLifecycleReference(task.id)
-    return isAuthorizedTerminalConversationDecision({
-      authority,
-      taskID: task.id,
-      currentTerminalLifecycleReference: currentReference,
-      toolName: name,
-      toolInput: args,
-    })
-  }
-
-  function isAuthorizedTerminalConversationMessageRead(name: string, args: unknown, task: TaskRow): boolean {
-    const authority = input.terminalConversationAuthority
-    if (!authority || authority.ingressKind !== "operator_message" || name !== "read_task_message") return false
-    if (!args || typeof args !== "object" || Array.isArray(args)) return false
-    if (authority.taskID !== task.id || !isTaskTerminal(task)) return false
-    const messageID = (args as Record<string, unknown>).message_id
-    if (messageID !== input.rootMessage?.messageID) return false
-    const currentReference = requireCurrentTerminalLifecycleReference(task.id)
-    return sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)
-  }
-
-  function isAuthorizedTerminalRead(name: string, args: unknown, task: TaskRow): boolean {
-    if (terminalTaskToolCapability(name) !== "read_only") return false
-    const authority = input.terminalConversationAuthority
-    if (authority) {
-      if (authority.taskID !== task.id || !isTaskTerminal(task)) return false
-      const currentReference = requireCurrentTerminalLifecycleReference(task.id)
-      if (!sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)) return false
-    }
-    if (name === "read_task_message") {
-      return isAuthorizedTerminalConversationMessageRead(name, args, task)
-    }
-    return true
-  }
-
-  function isTerminalAgentCoordinationFailTaskReplay(name: string, args: unknown, task: TaskRow): boolean {
-    if (name !== "respond_agent_coordination") return false
-    if (deriveTaskStatus(task) !== "failed") return false
-    if (!args || typeof args !== "object" || Array.isArray(args)) return false
-    const record = args as Record<string, unknown>
-    if (record.decision !== "fail_task") return false
-    if (typeof record.request_id !== "string" || record.request_id.length === 0) return false
-    if (typeof record.reason !== "string" || record.reason.length === 0) return false
-    const guidance = typeof record.message === "string" ? record.message.trim() : undefined
-    const expectedError = `A2A request ${record.request_id}: ${
-      guidance && guidance.length > 0 ? guidance : record.reason
-    }`
-    if (task.error !== expectedError) return false
-    const request = findAgentCoordinationRequest({ taskID, requestID: record.request_id })
-    if (!request || request.payload.status !== "responded" || !request.payload.response_id) return false
-    const response = findAgentCoordinationResponse({ taskID, responseID: request.payload.response_id })
-    if (!response) return false
-    if (response.payload.decision !== "fail_task") return false
-    if (response.payload.reason !== record.reason) return false
-    if ((response.payload.message ?? undefined) !== (guidance && guidance.length > 0 ? guidance : undefined)) {
-      return false
-    }
-    const action = findAgentCoordinationAction({ taskID, actionID: response.payload.action_id })
-    if (!action) return false
-    if (action.payload.request_id !== record.request_id) return false
-    if (action.payload.action !== "fail_task") return false
-    return action.payload.status === "pending" || action.payload.status === "completed"
-  }
-
-  function withTerminalTaskAuthority(name: string, raw: unknown): unknown {
-    const toolDef = raw as { execute?: (args: unknown, options: unknown) => Promise<unknown> }
-    if (typeof toolDef.execute !== "function") return raw
-    const execute = toolDef.execute
-    return bindToolExecutionMode({
-      ...(raw as object),
-      execute: async (args: unknown, options: unknown) => {
-        const currentTask = requireTask(taskID)
-        if (
-          input.terminalConversationAuthority &&
-          !isTerminalConversationAcknowledgement(name, args, currentTask) &&
-          !isAuthorizedTerminalRead(name, args, currentTask)
-        ) {
-          return terminalConversationToolRefusal(name, currentTask)
-        }
-        if (
-          isTaskTerminal(currentTask) &&
-          !isTerminalAgentCoordinationFailTaskReplay(name, args, currentTask) &&
-          !isTerminalConversationAcknowledgement(name, args, currentTask) &&
-          !isAuthorizedTerminalRead(name, args, currentTask)
-        ) {
-          return terminalTaskToolRefusal(name, currentTask)
-        }
-        return execute(args, options)
-      },
-    }, toolExecutionModeOf(raw as object))
-  }
 
   const dispatchArchitectStage = createArchitectStageDispatcher({
     taskID,
@@ -1191,6 +1086,41 @@ export function createOrchestratorTools(input: {
           messages: await Session.messages({ sessionID: execution.orchestratorSessionID }),
           executionAuthority,
           executionSurface: Tool.executionSurface(["read"], []),
+          extra: { taskID },
+          metadata() {},
+        })
+      },
+    }),
+    // Independent scheduler visual review: a package may project this so the
+    // Orchestrator itself captures and inspects fresh PNG evidence from a
+    // preview target a worker already persisted, before accepting the Task.
+    // The full Tool result is returned so its image attachments survive into
+    // the model output; returning only `output` would strip the evidence.
+    browser_preview_capture: tool({
+      description: BrowserPreviewCaptureToolStaticDefinition.description,
+      inputSchema: BrowserPreviewCaptureToolStaticDefinition.parameters,
+      execute: async (args, options) => {
+        const execution = await requireTaskOrchestratorToolExecutionContext(options, "browser_preview_capture", {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        })
+        const abort = (options as { abortSignal?: AbortSignal } | undefined)?.abortSignal ?? input.signal
+        if (!abort) throw new Error("browser_preview_capture: missing the current streamed tool-call abort signal")
+        const initialized = await BrowserPreviewCaptureTool.init()
+        const executionAuthority = await resolveSessionExecutionAuthority({
+          sessionID: execution.orchestratorSessionID,
+          projectID: Instance.project.id,
+          expected: { kind: "task", taskID },
+        })
+        return await initialized.execute(args, {
+          sessionID: execution.orchestratorSessionID,
+          messageID: execution.orchestratorMessageID,
+          callID: execution.toolCallID,
+          agent: "orchestrator",
+          abort,
+          messages: [],
+          executionAuthority,
+          executionSurface: Tool.executionSurface(["browser_preview_capture"], []),
           extra: { taskID },
           metadata() {},
         })
@@ -2410,8 +2340,17 @@ export function createOrchestratorTools(input: {
           dispatchID: continuationDispatchID,
         })
         if (!sourceLineage) {
+          // Name the exact continuable dispatches. Without them the caller can
+          // only guess at an opaque identity it has already mistranscribed
+          // once, and every retry repeats the same failure.
+          const continuable = listDispatchLineage(ownershipTaskID)
+            .filter((row) => row.payload.target_agent_id === targetAgentID)
+            .map((row) => row.dispatchID)
           throw new Error(
-            `dispatch_agent continuation source ${continuationDispatchID} does not exist in Task ${ownershipTaskID}`,
+            `dispatch_agent continuation source ${continuationDispatchID} does not exist in Task ${ownershipTaskID}. ` +
+              (continuable.length
+                ? `Exact continuable dispatch identities for ${targetAgentID}: ${continuable.join(", ")}.`
+                : `Task ${ownershipTaskID} has no prior dispatch of ${targetAgentID} to continue; dispatch an initial Turn instead.`),
           )
         }
         assertProjectedWorkerContinuationCompatible({
@@ -2732,11 +2671,19 @@ export function createOrchestratorTools(input: {
     delete publicTools[hidden]
   }
 
-  const toolsWithTerminalTaskAuthority = Object.fromEntries(
-    Object.entries(publicTools).map(([name, raw]) => [name, withTerminalTaskAuthority(name, raw)]),
-  )
+  // A terminal conversation (a cancelled Task, or a coordination request that
+  // reached a Task after it settled) gets a projected Tool table, not a
+  // wrapped one: the read-only surface plus the one decision Tool its ingress
+  // kind authorizes. An absent Tool cannot be called, so there is no refusal
+  // path for the model to loop on — and no re-wrap, so WeakMap-bound
+  // coordination state never needs copying. Everywhere else the Task's status
+  // is a projection, never a per-call gate: a stray lifecycle call lands on
+  // the engine's own existing_terminal invariant and returns a model-visible
+  // rejection with the actual status.
   const surface = {
-    tools: toolsWithTerminalTaskAuthority,
+    tools: input.terminalConversationAuthority
+      ? projectTerminalConversationTools(publicTools, input.terminalConversationAuthority)
+      : publicTools,
   }
   orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentTool))
   return surface

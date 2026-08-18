@@ -20,6 +20,7 @@ import {
 } from "./engine.sql"
 import {
   reduceTaskRootIngressFacts,
+  taskRootIngressReleasesHeadOfLine,
   type ActivityOutcomeFact,
   type ActivityRequestFact,
   type AssistantTurnFact,
@@ -256,9 +257,8 @@ function lifecycleKind(type: string): TaskLifecycleFact["kind"] | undefined {
   if (type === "task.execution.opened") return "opened"
   if (type === "task.execution.reopened") return "reopened"
   if (type === "task.cancellation.requested") return "cancellation_requested"
-  if (type === "task.close.requested") return "close_requested"
   if (type === "task.cancelled") return "cancelled"
-  if (type === "task.closed" || type === "task.completed" || type === "task.failed") return "closed"
+  if (type === "task.completed" || type === "task.failed") return "closed"
   if (type === "task.deleted") return "deleted"
 }
 
@@ -400,11 +400,7 @@ export function acquireTaskRootIngressLease(input: {
         taskRootIngressFactsInTransaction(db, candidate.id, input.readEvidence),
         input.now,
       )
-      if (
-        preceding.state !== "resolved" &&
-        preceding.state !== "terminal_inapplicable" &&
-        preceding.state !== "exhausted"
-      ) {
+      if (!taskRootIngressReleasesHeadOfLine(preceding)) {
         return { acquired: false, projection, blockedByIngressID: candidate.id }
       }
     }

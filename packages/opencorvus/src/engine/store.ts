@@ -84,7 +84,7 @@ export type TaskRow = PersistedTaskRow & {
   time_completed: number | null
   time_updated: number
   error: string | null
-  lifecycle_status: "active" | "cancelling" | "closing" | "completed" | "failed" | "cancelled"
+  lifecycle_status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
   terminal_reason?: "interrupted"
 }
 export type GoalRow = typeof EngineGoalTable.$inferSelect
@@ -843,7 +843,7 @@ function toIntegrityReviewArtifactRow(row: ArtifactRow): IntegrityReviewArtifact
  * watchdog, mid-stream protocol violation) before the orchestrator could
  * make any decision. `recordOrchestratorStreamError` (engine/persist.ts)
  * is the single writer; `describe.ts` is the single reader, surfacing
- * the rows into the orchestrator prompt after an explicit operator Retry/Replan
+ * the rows into the orchestrator prompt after an explicit operator Retry
  * opens a fresh execution window. The Orchestrator can then dispatch, propose
  * follow-up work, or fail the Task from the exact persisted evidence.
  *
@@ -1247,13 +1247,13 @@ export function listStartedIncompleteTaskIDs(input?: { projectID?: string }): st
     const rows = db.select().from(EngineTaskTable)
       .where(and(isNull(EngineTaskTable.time_archived), ...(input?.projectID ? [eq(EngineTaskTable.project_id, input.projectID)] : [])))
       .all()
-    return projectTaskRowsInTransaction(db, rows).filter((task) => task.lifecycle_status === "active" || task.lifecycle_status === "cancelling" || task.lifecycle_status === "closing").map((task) => task.id)
+    return projectTaskRowsInTransaction(db, rows).filter((task) => task.lifecycle_status === "active" || task.lifecycle_status === "cancelling").map((task) => task.id)
   })
 }
 
 function matchesTaskStatus(task: TaskRow, status: string): boolean {
   return status === "active"
-    ? task.lifecycle_status === "active" || task.lifecycle_status === "cancelling" || task.lifecycle_status === "closing"
+    ? task.lifecycle_status === "active" || task.lifecycle_status === "cancelling"
     : task.lifecycle_status === status
 }
 

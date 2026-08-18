@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { normalizeDiscoveryText, scoreDiscoveryFields } from "../../src/capability/fuzzy"
+import { normalizeDiscoveryText, scoreDiscoveryFields, scoreDocumentField } from "../../src/capability/fuzzy"
 
 describe("capability fuzzy relevance", () => {
   test("normalizes Unicode and ranks exact, Chinese phrase, and English typo queries with positive scores", () => {
@@ -14,5 +14,43 @@ describe("capability fuzzy relevance", () => {
     expect(exact).toBe(1)
     expect(chinese).toBeGreaterThan(0.22)
     expect(typo).toBeGreaterThan(0.22)
+  })
+
+  test("scores a conversational Chinese request by its own terms, not by its filler", () => {
+    const relevant = scoreDiscoveryFields("帮我做一份季度财务报表分析", [
+      { text: "把财务报表、科目余额与季度分析证据整合为可复核的财务运营资料包。", weight: 0.94 },
+    ])
+    const fillerOnly = scoreDiscoveryFields("帮我做一份季度财务报表分析", [
+      { text: "为团队做一份可复用的排班表，帮你把一个个班次安排好。", weight: 0.94 },
+    ])
+
+    expect(relevant).toBeGreaterThan(0.4)
+    expect(fillerOnly).toBeUndefined()
+  })
+
+  test("counts whole words, inflections, and prefixes differently from an unrelated word that merely contains the token", () => {
+    const own = scoreDiscoveryFields("plan a product roadmap", [
+      { text: "Product discovery, prioritization, and roadmap choices.", weight: 0.9 },
+    ])
+    const incidental = scoreDiscoveryFields("plan a product roadmap", [
+      { text: "Seasonal production planning and biosecurity evidence.", weight: 0.9 },
+    ])
+    const inflected = scoreDiscoveryFields("translate documentation", [
+      { text: "Translation memory and locale documentation review.", weight: 0.9 },
+    ])
+
+    expect(own).toBeGreaterThan(incidental ?? 0)
+    expect(inflected).toBeGreaterThan(0.22)
+  })
+
+  test("keeps scattered document tokens below a matching phrase in the same document", () => {
+    const document =
+      "Reserving analysis reviews the unpaid claim triangle. Legal counsel signs the contract addendum. " +
+      "Review evidence is retained for the audit."
+    const scattered = scoreDocumentField("review a legal contract", document)
+    const phrase = scoreDocumentField("unpaid claim triangle", document)
+
+    expect(phrase).toBeGreaterThan(scattered)
+    expect(scattered).toBeLessThan(scoreDiscoveryFields("review a legal contract", [{ text: document, weight: 1 }])!)
   })
 })

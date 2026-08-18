@@ -4,6 +4,7 @@ type Campaign = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/camp
 type Candidate = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/candidate-revision"]["parse"]>
 type Evaluation = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/evaluation-result"]["parse"]>
 type RunEvidence = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/run-evidence-bundle"]["parse"]>
+type Review = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/integrity-review"]["parse"]>
 type Comparison = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/comparison-recommendation"]["parse"]>
 type ArtifactLocator = Evaluation["campaign_spec_locator"]
 type Located<T> = { locator: ArtifactLocator; value: T }
@@ -54,6 +55,7 @@ export function deriveComparisonRecommendation(input: {
   candidate: Candidate
   candidateLocator: ArtifactLocator
   evaluations: readonly Located<Evaluation>[]
+  reviews: readonly Located<Review>[]
   runs: readonly Located<RunEvidence>[]
 }): Comparison {
   const { campaign, candidate } = input
@@ -73,6 +75,7 @@ export function deriveComparisonRecommendation(input: {
   const expectedSlotKeys = new Set(expectedSlots.map((slot) => slot.key))
   const expectedScorerIDs = campaign.scorers.map((scorer) => scorer.scorer_id).toSorted()
   const evaluations = new Map<string, Evaluation>()
+  const evaluationLocators = new Map<string, ArtifactLocator>()
   for (const located of input.evaluations) {
     const evaluation = located.value
     const key = slotKey(evaluation.case_id, evaluation.arm, evaluation.repetition)
@@ -95,6 +98,17 @@ export function deriveComparisonRecommendation(input: {
     )
       throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} has the wrong Campaign or Candidate source`)
     evaluations.set(key, evaluation)
+    evaluationLocators.set(key, located.locator)
+  }
+  const reviews = new Map<string, Review>()
+  for (const located of input.reviews) {
+    const review = located.value
+    const key = slotKey(review.case_id, review.arm, review.repetition)
+    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared review slot ${key}`)
+    if (reviews.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate review slot ${key}`)
+    if (!sameLocator(review.evaluation_result_locator, evaluationLocators.get(key) ?? null))
+      throw new EvolutionArtifactIntegrityError(`comparison review slot ${key} does not review its exact evaluation result`)
+    reviews.set(key, review)
   }
   const runs = new Map<string, RunEvidence>()
   const runLocators = new Map<string, ArtifactLocator>()
@@ -129,8 +143,8 @@ export function deriveComparisonRecommendation(input: {
       throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} metric receipt and run Artifact differ`)
     if (!evaluation) requiredUnavailable.add(`evaluation:${slot.key}`)
     if (!run) requiredUnavailable.add(`run:${slot.key}`)
-    if (!evaluation?.integrity_review || evaluation.integrity_review.status === "unavailable")
-      requiredUnavailable.add(`integrity_review:${slot.key}`)
+    const review = reviews.get(slot.key)
+    if (!review || review.status === "unavailable") requiredUnavailable.add(`integrity_review:${slot.key}`)
     for (const scorer of campaign.scorers) {
       const result = evaluation?.scorers.find((item) => item.scorer_id === scorer.scorer_id)
       if (!result || result.status === "unavailable") requiredUnavailable.add(`scorer:${scorer.scorer_id}:${slot.key}`)
@@ -222,15 +236,15 @@ export function deriveComparisonRecommendation(input: {
   const regressions = directionalMeans.filter((item) => item.value < 0).map((item) => item.scorer_id).toSorted()
   const pairedCount = campaign.cases.length * campaign.repetitions
   const confidence = requiredUnavailable.size > 0 ? "low" : pairedCount >= 5 ? "high" : "medium"
-  const reviews = expectedSlots.flatMap((slot) => {
-    const review = evaluations.get(slot.key)?.integrity_review
+  const reviewedSlots = expectedSlots.flatMap((slot) => {
+    const review = reviews.get(slot.key)
     return review?.status === "reviewed" ? [review] : []
   })
-  const derivedUnknowns = [...new Set(reviews.flatMap((review) => [
+  const derivedUnknowns = [...new Set(reviewedSlots.flatMap((review) => [
     ...review.unknowns,
     ...review.accepted_limitations,
   ]))].toSorted()
-  const rewardFindings = reviews.flatMap((review) =>
+  const rewardFindings = reviewedSlots.flatMap((review) =>
     review.findings.filter((finding) => finding.category === "reward_hacking" && finding.outcome === "failed"),
   )
   const rewardHackingReview = {

@@ -1,5 +1,13 @@
 # August 2026 Records
 
+- [2026-08-18-operator-message-is-the-only-resume.md](2026-08-18-operator-message-is-the-only-resume.md) makes an operator message reopen every terminal Task including cancelled, deletes the Retry intent end to end, and fences reopen on deletion instead.
+
+- [2026-08-17-task-root-host-fault-releases-head-of-line.md](2026-08-17-task-root-host-fault-releases-head-of-line.md) replaces the absorbing `blocked/integrity_conflict` ingress with a per-ingress `host_fault` settlement that names its broken invariant and releases the Task's FIFO.
+
+- [2026-08-17-terminal-package-tool-gate-removal.md](2026-08-17-terminal-package-tool-gate-removal.md) removes the derived terminal-status refusal from the Task Artifact execution scope so a continued occurrence publishes, leaving only physical scope and Artifact identity as boundaries.
+
+- [2026-08-17-retired-task-close-lifecycle-vocabulary.md](2026-08-17-retired-task-close-lifecycle-vocabulary.md) deletes the producerless `task.close.requested`/`task.closed` family and every `closing` projection arm, leaving cancellation as the sole Task boundary request.
+
 - [2026-08-17-sparse-candlestick-visibility-repair.md](2026-08-17-sparse-candlestick-visibility-repair.md) makes first-sized chart fitting explicit and caps sparse bar spacing so one-point K-line Artifacts render visibly on first live insertion and remain recognizably candle-shaped.
 
 - [2026-08-17-mission-message-origin-projection-repair.md](2026-08-17-mission-message-origin-projection-repair.md) restores Mission operator provenance across hydrate, live, and synchronous message projection so direct user turns render separately from scheduler and Agent context.
@@ -337,7 +345,7 @@
 
 - [2026-08-07-zapier-mcp-secure-credential-integration.md](2026-08-07-zapier-mcp-secure-credential-integration.md) adds one project-scoped, user-owned static credential path for remote MCP servers, then integrates and validates Zapier without persisting its token in project configuration.
 
-- [2026-08-06-expert-squad-self-evolution-architecture.md](2026-08-06-expert-squad-self-evolution-architecture.md) 记录三路独立审查达成共识后的专家团自进化架构：以 Artifact 和不可变 package revision 为基础，不引入第二 active 来源、host workflow engine 或自动生产晋升。
+- `2026-08-06-expert-squad-self-evolution-architecture.md`（**文件缺失**：既不在工作树也不在 `git log --all` 中，因此不加链接）记录三路独立审查达成共识后的专家团自进化架构：以 Artifact 和不可变 package revision 为基础，不引入第二 active 来源、host workflow engine 或自动生产晋升。这些结论的现行权威来源是 `specs/current/architecture/02-data.md`、Evolution Lab 包自身的 README 与 campaign Skill，以及 `2026-08-17-evolution-evaluation-review-ownership-split.md`。
 - [2026-08-07-computer-use-e2e-root-cause-repair-plan.md](2026-08-07-computer-use-e2e-root-cause-repair-plan.md) traces the failed Luna Computer test, corrects the rejected VM premise, and records the host-native CUA Driver architecture, takeover lifecycle, and real Windows/Luna acceptance boundary.
 - [2026-08-07-mission-board-surface-and-attention-refactor.md](2026-08-07-mission-board-surface-and-attention-refactor.md) aligns the Mission Board with the canonical center-workspace surface, removes full-lane status tinting, and makes the Attention lane present only when operator action exists.
 - Mission Board surface visual evidence: [five lanes with Attention](../../artifacts/mission-board-surface-attention-refactor.png) and [four lanes without Attention](../../artifacts/mission-board-surface-no-attention.png).

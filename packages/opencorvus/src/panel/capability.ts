@@ -479,24 +479,6 @@ export const PanelCapabilityRegistry = list(
     },
   }),
   item({
-    action: "retry_task",
-    description: "Request a retry for a task.",
-    kind: "mutation",
-    surfaces: allProjectSurfaces,
-    params: {
-      taskID: z.string().describe("Task ID for the retry request."),
-    },
-  }),
-  item({
-    action: "replan_task",
-    description: "Request a replan for a task.",
-    kind: "mutation",
-    surfaces: allProjectSurfaces,
-    params: {
-      taskID: z.string().describe("Task ID for the replan request."),
-    },
-  }),
-  item({
     action: "cancel_task",
     description: "Cancel a task.",
     kind: "mutation",

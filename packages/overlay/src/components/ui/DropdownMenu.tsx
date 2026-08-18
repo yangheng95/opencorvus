@@ -25,6 +25,11 @@ function MenuCheckboxItem(props: ComponentProps<typeof KobalteDropdownMenu.Check
   return <KobalteDropdownMenu.CheckboxItem {...rest} class={classes("oc-menu-item", local.class)} />
 }
 
+function MenuRadioItem(props: ComponentProps<typeof KobalteDropdownMenu.RadioItem>): JSX.Element {
+  const [local, rest] = splitProps(props, ["class"])
+  return <KobalteDropdownMenu.RadioItem {...rest} class={classes("oc-menu-item", local.class)} />
+}
+
 function MenuSubTrigger(props: ComponentProps<typeof KobalteDropdownMenu.SubTrigger>): JSX.Element {
   const [local, rest] = splitProps(props, ["class"])
   return <KobalteDropdownMenu.SubTrigger {...rest} class={classes("oc-menu-item", local.class)} />
@@ -47,4 +52,6 @@ export const DropdownMenu = {
   SubTrigger: MenuSubTrigger,
   SubContent: MenuSubContent,
   CheckboxItem: MenuCheckboxItem,
+  RadioGroup: KobalteDropdownMenu.RadioGroup,
+  RadioItem: MenuRadioItem,
 }

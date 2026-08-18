@@ -2,8 +2,7 @@ import { afterAll, expect, test } from "bun:test"
 import { EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
-import { createOrchestratorTools } from "../src/orchestrator/tools"
-import { isAuthorizedTerminalConversationDecision } from "../src/orchestrator/terminal-conversation-authority"
+import { createOrchestratorTools, projectTerminalConversationTools } from "../src/orchestrator/tools"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database } from "../src/storage/db"
@@ -95,26 +94,37 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
         decision: "acknowledge_terminal",
         reason: "Acknowledge the exact terminal occurrence authorized by the Host.",
       })
+
+      // Authority by projection: what a conversation-only Turn must not do is
+      // simply not on its table. There is no wrapped refusal to loop on.
+      expect(tools.dispatch_agent).toBeUndefined()
+      expect(tools.manage_task).toBeUndefined()
+      expect(tools.wait).toBeUndefined()
+      expect(tools.no_action).toBeUndefined()
     },
   })
 })
 
-test("authorizes no_action only for the exact terminal operator conversation", () => {
-  const taskID = Identifier.ascending("task")
-  const terminalLifecycleReference = { terminalEventID: Identifier.ascending("protocol_event") }
-  const authority = {
-    taskID,
-    ingressID: Identifier.ascending("artifact"),
-    ingressKind: "operator_message" as const,
-    terminalLifecycleReference,
+test("projects the decision Tool for the exact terminal ingress kind", () => {
+  const table = {
+    no_action: "no_action",
+    respond_agent_coordination: "respond",
+    dispatch_agent: "dispatch",
+    manage_task: "manage",
+    wait: "wait",
+    read: "read",
+    read_task_message: "read_task_message",
+    artifact_read: "artifact_read",
   }
-  expect(
-    isAuthorizedTerminalConversationDecision({
-      authority,
-      taskID,
-      currentTerminalLifecycleReference: terminalLifecycleReference,
-      toolName: "no_action",
-      toolInput: { reason: "The terminal status was reported without mutation." },
-    }),
-  ).toBe(true)
+
+  const operator = projectTerminalConversationTools(table, { ingressKind: "operator_message" })
+  expect(Object.keys(operator).sort()).toEqual(["artifact_read", "no_action", "read", "read_task_message"])
+
+  const coordination = projectTerminalConversationTools(table, { ingressKind: "coordination_request" })
+  expect(Object.keys(coordination).sort()).toEqual([
+    "artifact_read",
+    "read",
+    "read_task_message",
+    "respond_agent_coordination",
+  ])
 })

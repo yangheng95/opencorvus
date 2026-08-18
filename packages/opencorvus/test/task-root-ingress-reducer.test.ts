@@ -68,7 +68,7 @@ describe("Task-root fact reducer", () => {
       ],
     })
 
-    expect(reduceTaskRootIngressFacts(input, 31)).toEqual({ state: "blocked", reason: "integrity_conflict" })
+    expect(reduceTaskRootIngressFacts(input, 31)).toEqual({ state: "host_fault", reason: "decision_ambiguous" })
   })
 
   test("blocks decision receipts owned by different assistant Turns", () => {
@@ -84,7 +84,7 @@ describe("Task-root fact reducer", () => {
       ],
     })
 
-    expect(reduceTaskRootIngressFacts(input, 32)).toEqual({ state: "blocked", reason: "integrity_conflict" })
+    expect(reduceTaskRootIngressFacts(input, 32)).toEqual({ state: "host_fault", reason: "decision_ambiguous" })
   })
 
   test("does not consume an activation at an intermediate tool-call boundary", () => {
@@ -186,20 +186,12 @@ describe("Task-root fact reducer", () => {
       ],
       interactions: [interaction],
     })
-    const closing = facts({
-      lifecycle: [
-        { id: "evt_open", kind: "opened", epoch: 1, time: 1 },
-        { id: "evt_close", kind: "close_requested", epoch: 1, time: 40 },
-      ],
-      interactions: [interaction],
-    })
     const deadline = facts({
       policy: { id: "pol_1", semanticTurnLimit: 3, activationLimit: 4, absoluteDeadline: 50 },
       interactions: [interaction],
     })
 
     expect(reduceTaskRootIngressFacts(cancelling, 41)).toEqual({ state: "cancelling", requestEventID: "evt_cancel" })
-    expect(reduceTaskRootIngressFacts(closing, 41)).toEqual({ state: "closing", requestEventID: "evt_close" })
     expect(reduceTaskRootIngressFacts(deadline, 51)).toEqual({ state: "exhausted", reason: "deadline" })
   })
 })

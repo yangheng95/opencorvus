@@ -1,5 +1,6 @@
 import z from "zod"
-import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import { EvidenceLocatorInputListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import { resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
 import { createAgentCoordinationRequest } from "@/engine/agent-coordination"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { Session } from "@/session"
@@ -19,10 +20,10 @@ const RequestOrchestratorDecisionInput = z
     .describe(
       "The scheduling question the orchestrator must answer. Do not use response action literals such as redispatch or redispatch_worker here.",
     ),
-  evidence_locators: EvidenceLocatorListSchema
+  evidence_locators: EvidenceLocatorInputListSchema
     .optional()
     .describe(
-      "Exact typed evidence locators. A session_message locator must pair the Message with its actual producing Session; never combine the current worker Session with a Message from another Session. Use Engine/Task Artifact, Session/Message, Delivery Slice revision, or coordination-request locators; raw IDs, paths, and artifact:<id> display strings are invalid.",
+      "Exact typed evidence locators, each naming an Artifact by its exact revision or snapshot path without any content digest; the Host reads the digest, byte count, and media type itself. A session_message locator must pair the Message with its actual producing Session; never combine the current worker Session with a Message from another Session. Use Engine/Task Artifact, Session/Message, Delivery Slice revision, or coordination-request locators; raw IDs, paths, and artifact:<id> display strings are invalid.",
     ),
   severity: z.enum(["info", "blocked", "failure"]).optional(),
   })
@@ -73,7 +74,10 @@ export async function executeRequestOrchestratorDecision(params: RequestOrchestr
     details: params.details,
     blocking: params.blocking,
     requestedDecision: params.requested_decision,
-    evidenceLocators: params.evidence_locators,
+    evidenceLocators: await resolveTaskEvidenceLocators({
+      taskID,
+      evidenceLocators: params.evidence_locators ?? [],
+    }),
     severity: params.severity,
   })
   const dispatchLineageID = row.payload.dispatch_lineage_id

@@ -119,7 +119,17 @@ describe("Evolution Lab deterministic comparison", () => {
         candidate_revision_locator: arm === "candidate" ? locator : null,
         run_evidence_locator: locator,
         metric_receipt_resource: resource,
-        integrity_review: { status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
+      })
+    const review = (arm: "baseline" | "candidate") =>
+      EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+        case_id: "case-1",
+        arm,
+        repetition: 0,
+        evaluation_result_locator: locator,
+        status: "reviewed",
+        findings: [],
+        accepted_limitations: [],
+        unknowns: [],
       })
     const run = (
       arm: "baseline" | "candidate",
@@ -160,6 +170,10 @@ describe("Evolution Lab deterministic comparison", () => {
       evaluations: [
         { locator, value: evaluation("baseline", 0.8, baselineDigest) },
         { locator, value: evaluation("candidate", 0.9, candidateDigest) },
+      ],
+      reviews: [
+        { locator, value: review("baseline") },
+        { locator, value: review("candidate") },
       ],
       runs: [
         { locator, value: run("baseline", baselineDigest, 1, 100, 1_000) },

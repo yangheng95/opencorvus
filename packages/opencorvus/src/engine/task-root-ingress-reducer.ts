@@ -16,7 +16,7 @@ export type TaskRootIngressAcceptedFact = {
 
 export type TaskLifecycleFact = {
   id: string
-  kind: "opened" | "cancellation_requested" | "close_requested" | "cancelled" | "closed" | "reopened" | "deleted"
+  kind: "opened" | "cancellation_requested" | "cancelled" | "closed" | "reopened" | "deleted"
   epoch: number
   time: number
 }
@@ -74,7 +74,7 @@ export type ActivityOutcomeFact = {
 export type TaskRootIngressFacts = {
   /** Set when reading durable evidence observed a violation of the persisted
    * integrity contract. The reduction is total over persisted facts, so a
-   * violation is a `blocked` value here rather than an exception at the
+   * violation is a `host_fault` value here rather than an exception at the
    * reader; see `TaskRootIngressIntegrityError`. */
   integrityViolation?: { message: string }
   ingress: TaskRootIngressAcceptedFact
@@ -89,8 +89,31 @@ export type TaskRootIngressFacts = {
   activityOutcomes: readonly ActivityOutcomeFact[]
 }
 
+/**
+ * Which of the Host's own write invariants this ingress found broken.
+ *
+ * Each reason names one exact invariant rather than one opaque word, because
+ * the surfaced fault has to tell an operator what to look at. None of them is
+ * a user-facing condition: every one describes the Host contradicting itself,
+ * which is why the settlement is local to this ingress and never terminalizes
+ * the Task or holds the Task's FIFO.
+ */
+export type TaskRootIngressHostFaultReason =
+  /** An evidence reader raised `TaskRootIngressIntegrityError`. */
+  | "evidence_violation"
+  /** The policy row read back is not the one this ingress was accepted with. */
+  | "policy_drift"
+  /** Completed-Turn decisions that no single assistant Turn can own. */
+  | "decision_ambiguous"
+  /** One activity request carries more than one outcome. */
+  | "outcome_ambiguous"
+  /** A completed Turn references an activation with no lease fact. */
+  | "turn_without_activation"
+  /** One ingress holds more than one unresolved Interaction. */
+  | "interaction_ambiguous"
+
 export type TaskRootIngressProjection =
-  | { state: "blocked"; reason: "integrity_conflict" }
+  | { state: "host_fault"; reason: TaskRootIngressHostFaultReason }
   | { state: "exhausted"; reason: "semantic_limit" | "activation_limit" | "deadline" }
   | { state: "terminal_inapplicable"; boundary: "cancelled" | "closed" | "reopened" | "deleted" }
   | { state: "resolved"; decisionIDs: readonly string[] }
@@ -98,11 +121,34 @@ export type TaskRootIngressProjection =
   | { state: "reconcile_required"; requestIDs: readonly string[] }
   | { state: "waiting"; interactionID: string; resumeAt?: number }
   | { state: "cancelling"; requestEventID: string }
-  | { state: "closing"; requestEventID: string }
   | { state: "ready" }
 
 function exactlyOne<T>(values: readonly T[]): T | undefined {
   return values.length === 1 ? values[0] : undefined
+}
+
+/**
+ * Has this ingress stopped owning the Task's head-of-line order?
+ *
+ * Head-of-line order exists so one ingress's pending decision cannot be
+ * overtaken by the next one's. An ingress that will never decide anything has
+ * nothing left to protect: `resolved` and `terminal_inapplicable` reached their
+ * verdict, `exhausted` gave up its budget, and `host_fault` executed no effect
+ * and never will, because the reduction returns it before any decision can be
+ * read. Holding the line for such an ingress stalls every later operator
+ * message behind a state that nothing but an operator can change — which is
+ * exactly how one broken Host write used to wedge a whole Task.
+ *
+ * This is the single definition of that release, shared by the durable
+ * acquisition fence and the scan.
+ */
+export function taskRootIngressReleasesHeadOfLine(projection: TaskRootIngressProjection): boolean {
+  return (
+    projection.state === "resolved" ||
+    projection.state === "terminal_inapplicable" ||
+    projection.state === "exhausted" ||
+    projection.state === "host_fault"
+  )
 }
 
 function latestLease(facts: TaskRootIngressFacts): ActivationLeaseFact | undefined {
@@ -144,24 +190,26 @@ function activationConsumed(facts: TaskRootIngressFacts, activationID: string): 
   )
 }
 
-function conflict(facts: TaskRootIngressFacts): boolean {
-  if (facts.policy.id !== facts.ingress.policyID) return true
-  const lifecycleByKindAndEpoch = new Map<string, TaskLifecycleFact[]>()
-  for (const fact of facts.lifecycle) {
-    const key = `${fact.epoch}:${fact.kind}`
-    lifecycleByKindAndEpoch.set(key, [...(lifecycleByKindAndEpoch.get(key) ?? []), fact])
-  }
-  if ([...lifecycleByKindAndEpoch.values()].some((rows) => rows.length > 1)) return true
-  const terminal = facts.lifecycle.filter(
-    (fact) => fact.epoch === facts.ingress.executionEpoch && (fact.kind === "cancelled" || fact.kind === "closed"),
-  )
-  if (terminal.length > 1) return true
+/**
+ * Name the broken Host write invariant, if this ingress's evidence has one.
+ *
+ * Duplicate lifecycle facts are deliberately not checked here. Every lifecycle
+ * kind is already unique per (Task, epoch) in the durable schema — one open per
+ * epoch, one boundary request per epoch, one terminal per epoch across all
+ * terminal types, one deletion per Task — so re-deriving those predicates in
+ * the reducer only restated a guarantee the database already holds, and did it
+ * with a verdict that used to stop the Task.
+ */
+function hostFault(facts: TaskRootIngressFacts): TaskRootIngressHostFaultReason | undefined {
+  if (facts.policy.id !== facts.ingress.policyID) return "policy_drift"
   const completedTurnIDs = new Set(facts.turns.map((turn) => turn.id))
   const decisions = facts.decisions.filter((decision) => completedTurnIDs.has(decision.assistantMessageID))
-  if (decisions.length > 0 && !validDecisionSet(facts)) return true
+  if (decisions.length > 0 && !validDecisionSet(facts)) return "decision_ambiguous"
   const outcomes = activityOutcomeByRequest(facts)
-  if ([...outcomes.values()].some((rows) => rows.length > 1)) return true
-  return facts.turns.some((turn) => !facts.leases.some((lease) => lease.id === turn.activationID))
+  if ([...outcomes.values()].some((rows) => rows.length > 1)) return "outcome_ambiguous"
+  if (facts.turns.some((turn) => !facts.leases.some((lease) => lease.id === turn.activationID))) {
+    return "turn_without_activation"
+  }
 }
 
 export function taskRootIngressSemanticTurnIDs(facts: TaskRootIngressFacts): string[] {
@@ -184,9 +232,9 @@ export function taskRootIngressSemanticAttemptIDs(facts: TaskRootIngressFacts): 
   return [...facts.decisionGaps.map((gap) => gap.id), ...legacyTurnIDs]
 }
 
-/** How long a Task may rest in `cancelling`/`closing` before the control plane
- * re-attempts convergence. Neither state is absorbing — an owner is expected
- * to finish it — so both must carry a finite wake rather than depend on a
+/** How long a Task may rest in `cancelling` before the control plane
+ * re-attempts convergence. The state is not absorbing — an owner is expected
+ * to finish it — so it must carry a finite wake rather than depend on a
  * restart. */
 export const CANCELLATION_RECONCILE_WAKE_MS = 15_000
 
@@ -243,9 +291,10 @@ function assertNever(value: never): never {
  * observes every time-triggered transition; every other transition is a fact
  * append, which its producer signals.
  *
- * `blocked` and `exhausted` deliberately ignore `absoluteDeadline`: both are
- * absorbing under the reduction above, so a timer would only re-derive the
- * same value. Their exit is the surfaced gate, not the clock.
+ * `host_fault` and `exhausted` deliberately ignore `absoluteDeadline`: both are
+ * absorbing for this ingress under the reduction above, so a timer would only
+ * re-derive the same value. Their exit is the surfaced fact, not the clock, and
+ * neither holds the Task's FIFO.
  */
 export function classifyTaskRootIngressWake(
   projection: TaskRootIngressProjection,
@@ -263,11 +312,10 @@ export function classifyTaskRootIngressWake(
         ? finiteWake(projection.resumeAt, absoluteDeadline)
         : deadlineOr(absoluteDeadline, { class: "operator_gated", surface: "interaction" })
     case "cancelling":
-    case "closing":
       return finiteWake(now + CANCELLATION_RECONCILE_WAKE_MS, absoluteDeadline)
     case "reconcile_required":
       return deadlineOr(absoluteDeadline, { class: "operator_gated", surface: "interaction" })
-    case "blocked":
+    case "host_fault":
       return { class: "operator_gated", surface: "infrastructure_fact" }
     case "exhausted":
       return { class: "operator_gated", surface: "infrastructure_fact" }
@@ -292,9 +340,12 @@ export function taskRootIngressWakeInstant(
 }
 
 /** Total reduction over durable facts. Its order is part of the public
- * correctness contract: conflicts win before any apparent completion. */
+ * correctness contract: a Host fault wins before any apparent completion, so
+ * no ambiguous evidence can be read as a decision and executed. */
 export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: number): TaskRootIngressProjection {
-  if (facts.integrityViolation || conflict(facts)) return { state: "blocked", reason: "integrity_conflict" }
+  if (facts.integrityViolation) return { state: "host_fault", reason: "evidence_violation" }
+  const fault = hostFault(facts)
+  if (fault) return { state: "host_fault", reason: fault }
 
   const currentEpoch = Math.max(
     0,
@@ -346,10 +397,6 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
     ),
   )
   if (cancellationRequest) return { state: "cancelling", requestEventID: cancellationRequest.id }
-  const closeRequest = exactlyOne(
-    facts.lifecycle.filter((fact) => fact.epoch === facts.ingress.executionEpoch && fact.kind === "close_requested"),
-  )
-  if (closeRequest) return { state: "closing", requestEventID: closeRequest.id }
 
   if (facts.policy.absoluteDeadline !== undefined && now >= facts.policy.absoluteDeadline) {
     return { state: "exhausted", reason: "deadline" }
@@ -363,7 +410,7 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
         (interaction.resumeAt === undefined || interaction.resumeAt > now),
     )
     .toSorted((left, right) => left.id.localeCompare(right.id))
-  if (waiting.length > 1) return { state: "blocked", reason: "integrity_conflict" }
+  if (waiting.length > 1) return { state: "host_fault", reason: "interaction_ambiguous" }
   if (waiting[0])
     return {
       state: "waiting",

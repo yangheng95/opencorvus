@@ -25,12 +25,14 @@ import { Flag } from "@/flag/flag"
 import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
 import { AwaitTimeoutError, withTimeout } from "@/util/await-with-timeout"
 
-type LockMode = "read" | "write"
-type LockRelease = () => void
+type TurnRelease = () => void
 
-interface LockWaiter {
-  mode: LockMode
-  resolve: (release: LockRelease) => void
+/** A pending teardown (refresh or dispose) that is draining serving handles.
+ *  While registered it gates new admissions, so a continuous admission stream
+ *  cannot starve the teardown; ambient (inherited) chains bypass it because
+ *  the teardown is waiting on exactly those chains to finish. */
+interface TeardownPark {
+  settled: Promise<void>
 }
 
 interface RollbackOwner {
@@ -54,25 +56,29 @@ interface CacheEntry {
   failure?: { error: Error }
   rollback?: RollbackOwner
   abandoned: boolean
-  lock: {
-    readers: number
-    writer: boolean
-    waiters: LockWaiter[]
+  exclusive: {
+    tail: Promise<void>
+    depth: number
   }
+  teardownParks: Set<TeardownPark>
+  servingObservers: Set<() => void>
 }
 
 interface Lease {
   key: string
   entry: CacheEntry
-  mode: LockMode
-  release: LockRelease
-  upgrade?: Promise<void>
+  /** Serving handles run caller `fn`s under the shared context and are what
+   *  teardown drains. Lifecycle leases (serving=false) exist only for context
+   *  provision and settlement snapshots while their owner holds a tail turn. */
+  serving: boolean
+  /** Set while this serving chain is itself parked inside a teardown drain, so
+   *  two ambient teardowns waiting on each other both proceed to the tail. */
+  parkedForTeardown: boolean
   preparationTail: Promise<void>
   lifecycleTail: Promise<void>
   activities: Set<Promise<unknown>>
   closedSignal: Promise<void>
   signalClosed: () => void
-  owned: boolean
   closing: boolean
   closed: boolean
 }
@@ -190,6 +196,12 @@ function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
 const leaseContext = RuntimeContext.create<Lease>("instance-lease")
 const lifecycleContext = RuntimeContext.create<LifecycleScope>("instance-lifecycle")
 const activityContext = RuntimeContext.create<ActivityScope>("instance-activity")
+/** The entry whose exclusive tail turn the current async chain holds. Nested
+ *  lifecycle work started from inside a turn body (a capability preflight that
+ *  provides its instance, an initializer that re-enters) must run directly
+ *  instead of queueing behind its own turn. Detached work runs outside this
+ *  context and queues normally. */
+const entryTurnContext = RuntimeContext.create<CacheEntry>("instance-entry-turn")
 const cache = new Map<string, CacheEntry>()
 let accessSequence = 0
 let convergenceTail = Promise.resolve()
@@ -260,11 +272,12 @@ function createCacheEntry(contextPromise: Promise<Context>, identityKnown: Promi
     healthChecks: new Map(),
     activeLeases: new Set(),
     abandoned: false,
-    lock: {
-      readers: 0,
-      writer: false,
-      waiters: [],
+    exclusive: {
+      tail: Promise.resolve(),
+      depth: 0,
     },
+    teardownParks: new Set(),
+    servingObservers: new Set(),
   }
 }
 
@@ -289,98 +302,191 @@ function seedProjectDeletionIdentity(
   return { key, entry }
 }
 
-function pumpLock(entry: CacheEntry) {
-  const lock = entry.lock
-  if (lock.writer) return
-
-  const grant = (waiter: LockWaiter) => {
+/**
+ * The per-Project exclusive FIFO tail. Every lifecycle mutation — bootstrap,
+ * initializer runs, refresh, rollback cleanup, disposal, capability preflight —
+ * runs as one queued turn. There are no lock modes and no upgrades, so a wait
+ * cycle cannot be constructed: a turn owner never waits on another turn, and
+ * serving handles never hold a turn at all.
+ */
+function acquireEntryTurn(entry: CacheEntry): Promise<TurnRelease> {
+  entry.exclusive.depth += 1
+  const previous = entry.exclusive.tail
+  let finish!: () => void
+  const turn = new Promise<void>((resolve) => {
+    finish = resolve
+  })
+  entry.exclusive.tail = previous.then(() => turn)
+  return previous.then(() => {
     let released = false
-    if (waiter.mode === "write") lock.writer = true
-    else lock.readers++
-    waiter.resolve(() => {
-      if (released) throw new Error("Instance cache lease released more than once")
+    return () => {
+      if (released) throw new Error("Instance exclusive turn released more than once")
       released = true
-      if (waiter.mode === "write") lock.writer = false
-      else lock.readers--
-      pumpLock(entry)
-    })
-  }
+      entry.exclusive.depth -= 1
+      finish()
+    }
+  })
+}
 
-  if (lock.readers > 0) {
-    while (lock.waiters[0]?.mode === "read") grant(lock.waiters.shift()!)
+/** True while any serving handle other than `excluding` is open. Chains that
+ *  are themselves parked inside a teardown drain do not count: they provably
+ *  touch nothing until the tail serializes them, and counting them would let
+ *  two ambient teardowns wait on each other forever. */
+function otherServingOpen(entry: CacheEntry, excluding?: Lease): boolean {
+  for (const lease of entry.activeLeases) {
+    if (!lease.serving || lease.closed) continue
+    if (lease === excluding || lease.parkedForTeardown) continue
+    return true
+  }
+  return false
+}
+
+function notifyServingObservers(entry: CacheEntry) {
+  for (const observer of [...entry.servingObservers]) observer()
+}
+
+function waitForServingDrain(entry: CacheEntry, excluding?: Lease): Promise<void> {
+  if (!otherServingOpen(entry, excluding)) return Promise.resolve()
+  return new Promise((resolve) => {
+    const observer = () => {
+      if (otherServingOpen(entry, excluding)) return
+      entry.servingObservers.delete(observer)
+      resolve()
+    }
+    entry.servingObservers.add(observer)
+  })
+}
+
+function holdsEntryTurn(entry: CacheEntry): boolean {
+  return entryTurnContext.tryUse() === entry
+}
+
+/** Wait until serving handles other than the ambient `chain` are closed. The
+ *  chain is flagged as parked while it waits so two teardowns waiting on each
+ *  other's chains both proceed to the tail. */
+async function drainOtherServing(entry: CacheEntry, chain: Lease | undefined): Promise<void> {
+  while (otherServingOpen(entry, chain)) {
+    if (chain) {
+      chain.parkedForTeardown = true
+      notifyServingObservers(entry)
+    }
+    try {
+      await waitForServingDrain(entry, chain)
+    } finally {
+      if (chain) chain.parkedForTeardown = false
+    }
+  }
+}
+
+/**
+ * Run a teardown-grade operation: acquire a tail turn, and if serving handles
+ * other than the ambient `chain` are still open, release the turn, park until
+ * they drain, and rejoin the tail. The park is registered for the whole call,
+ * so admissions arriving after the teardown began queue behind it instead of
+ * starving it, while the excused ambient chain keeps running to completion.
+ */
+async function runTeardownTurn<T>(entry: CacheEntry, chain: Lease | undefined, fn: () => Promise<T>): Promise<T> {
+  if (holdsEntryTurn(entry)) {
+    // Already inside this entry's turn: the running turn itself gates
+    // admissions, so drain in place and run directly instead of queueing
+    // behind our own turn.
+    await drainOtherServing(entry, chain)
+    return await fn()
+  }
+  let settlePark!: () => void
+  const park: TeardownPark = {
+    settled: new Promise<void>((resolve) => {
+      settlePark = resolve
+    }),
+  }
+  entry.teardownParks.add(park)
+  try {
+    for (;;) {
+      const release = await acquireEntryTurn(entry)
+      if (!otherServingOpen(entry, chain)) {
+        try {
+          return await entryTurnContext.provide(entry, fn)
+        } finally {
+          release()
+        }
+      }
+      release()
+      await drainOtherServing(entry, chain)
+    }
+  } finally {
+    entry.teardownParks.delete(park)
+    settlePark()
+  }
+}
+
+/** Admissions wait here until no teardown is parked and no tail turn is queued
+ *  or running, then re-validate synchronously. Serving is deliberately not a
+ *  condition: serving never blocks serving. */
+async function waitForLifecycleQuiet(entry: CacheEntry): Promise<void> {
+  for (;;) {
+    if (entry.teardownParks.size > 0) {
+      await Promise.all([...entry.teardownParks].map((park) => park.settled))
+      continue
+    }
+    if (entry.exclusive.depth > 0) {
+      await entry.exclusive.tail
+      continue
+    }
     return
   }
-
-  const first = lock.waiters.shift()
-  if (!first) return
-  grant(first)
-  if (first.mode === "read") {
-    while (lock.waiters[0]?.mode === "read") grant(lock.waiters.shift()!)
-  }
 }
 
-function acquireLock(entry: CacheEntry, mode: LockMode): Promise<LockRelease> {
-  return new Promise((resolve) => {
-    entry.lock.waiters.push({ mode, resolve })
-    pumpLock(entry)
-  })
+function lifecycleQuiet(entry: CacheEntry): boolean {
+  return entry.teardownParks.size === 0 && entry.exclusive.depth === 0
 }
 
-function acquireLockWithin(
+/** Acquire a tail turn, bounded. Lifecycle disposers own settlement budgets;
+ *  when the tail does not free up within the budget the caller gets a named
+ *  inactivity error instead of a silent hang. An expired waiter releases its
+ *  turn the moment it is granted so the queue keeps moving. */
+function acquireEntryTurnWithin(
   entry: CacheEntry,
-  mode: LockMode,
   label: string,
   inactivityTimeoutMilliseconds: number,
-): Promise<LockRelease> {
+): Promise<TurnRelease> {
   return new Promise((resolve, reject) => {
     let expired = false
-    let timer: ReturnType<typeof setTimeout> | undefined
-    const waiter: LockWaiter = {
-      mode,
-      resolve(release) {
-        if (expired) {
-          release()
-          return
-        }
-        if (timer) clearTimeout(timer)
-        resolve(release)
-      },
-    }
-    timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       expired = true
-      const index = entry.lock.waiters.indexOf(waiter)
-      if (index >= 0) {
-        entry.lock.waiters.splice(index, 1)
-        pumpLock(entry)
-      }
       reject(new InstanceSettlementInactivityError([label], inactivityTimeoutMilliseconds))
     }, inactivityTimeoutMilliseconds)
-    entry.lock.waiters.push(waiter)
-    pumpLock(entry)
+    void acquireEntryTurn(entry).then((release) => {
+      if (expired) {
+        release()
+        return
+      }
+      clearTimeout(timer)
+      resolve(release)
+    })
   })
 }
 
-function acquireUpgradeLock(entry: CacheEntry): Promise<LockRelease> {
-  return new Promise((resolve) => {
-    entry.lock.waiters.unshift({ mode: "write", resolve })
-    pumpLock(entry)
+/** Claim a tail turn synchronously if this entry is fully idle: no queued or
+ *  running turns, no leases, no parked teardown. Cache convergence uses this
+ *  to dispose only entries that nobody is touching. */
+function tryClaimIdleEntryTurn(entry: CacheEntry): TurnRelease | undefined {
+  if (entry.exclusive.depth > 0 || entry.activeLeases.size > 0 || entry.teardownParks.size > 0) return undefined
+  entry.exclusive.depth += 1
+  let finish!: () => void
+  const turn = new Promise<void>((resolve) => {
+    finish = resolve
   })
-}
-
-function tryAcquireIdleWriteLock(entry: CacheEntry): LockRelease | undefined {
-  const lock = entry.lock
-  if (lock.writer || lock.readers > 0 || lock.waiters.length > 0 || entry.activeLeases.size > 0) return undefined
+  entry.exclusive.tail = entry.exclusive.tail.then(() => turn)
   let released = false
-  lock.writer = true
   return () => {
-    if (released) throw new Error("Instance idle write lock released more than once")
+    if (released) throw new Error("Instance idle exclusive turn released more than once")
     released = true
-    lock.writer = false
-    pumpLock(entry)
+    entry.exclusive.depth -= 1
+    finish()
   }
 }
 
-function createLease(key: string, entry: CacheEntry, mode: LockMode, release: LockRelease): Lease {
+function createLease(key: string, entry: CacheEntry, serving: boolean): Lease {
   let signalClosed!: () => void
   const closedSignal = new Promise<void>((resolve) => {
     signalClosed = resolve
@@ -388,14 +494,13 @@ function createLease(key: string, entry: CacheEntry, mode: LockMode, release: Lo
   const lease: Lease = {
     key,
     entry,
-    mode,
-    release,
+    serving,
+    parkedForTeardown: false,
     preparationTail: Promise.resolve(),
     lifecycleTail: Promise.resolve(),
     activities: new Set(),
     closedSignal,
     signalClosed,
-    owned: true,
     closing: false,
     closed: false,
   }
@@ -416,10 +521,9 @@ async function closeLease(lease: Lease) {
     }
   } finally {
     lease.closed = true
-    lease.owned = false
-    lease.release()
     lease.entry.activeLeases.delete(lease)
     lease.signalClosed()
+    notifyServingObservers(lease.entry)
   }
 }
 
@@ -427,58 +531,9 @@ function abandonLease(lease: Lease): void {
   if (lease.closed) return
   lease.closing = true
   lease.closed = true
-  if (lease.owned) {
-    lease.owned = false
-    lease.release()
-  }
   lease.entry.activeLeases.delete(lease)
   lease.signalClosed()
-}
-
-async function upgradeLease(lease: Lease) {
-  if (lease.mode === "write") return
-  if (lease.closed) throw new Error(`Cannot upgrade a closed instance cache lease: ${lease.key}`)
-  if (lease.closing) {
-    const active = lifecycleContext.tryUse()
-    if (active?.lease !== lease || active.closed) {
-      throw new Error(`Cannot upgrade a closing instance cache lease: ${lease.key}`)
-    }
-  }
-  if (lease.upgrade) return await lease.upgrade
-  const attempt = (async () => {
-    const acquired = acquireUpgradeLock(lease.entry)
-    lease.owned = false
-    lease.release()
-    const release = await acquired
-    lease.mode = "write"
-    lease.release = release
-    lease.owned = true
-  })()
-  lease.upgrade = attempt
-  try {
-    await attempt
-  } finally {
-    if (lease.upgrade === attempt) lease.upgrade = undefined
-  }
-}
-
-async function downgradeLease(lease: Lease) {
-  if (lease.mode === "read") return
-  if (lease.closed) throw new Error(`Cannot downgrade a closed instance cache lease: ${lease.key}`)
-  if (!lease.owned) throw new Error(`Cannot downgrade an unowned instance cache lease: ${lease.key}`)
-  const lock = lease.entry.lock
-  if (!lock.writer) throw new Error(`Cannot downgrade a lease that does not own the write lock: ${lease.key}`)
-  lock.writer = false
-  lock.readers += 1
-  let released = false
-  lease.mode = "read"
-  lease.release = () => {
-    if (released) throw new Error("Instance downgraded read lock released more than once")
-    released = true
-    lock.readers -= 1
-    pumpLock(lease.entry)
-  }
-  pumpLock(lease.entry)
+  notifyServingObservers(lease.entry)
 }
 
 async function runLeaseLifecycle<T>(lease: Lease, label: string, run: () => Promise<T>): Promise<T> {
@@ -549,9 +604,6 @@ async function runLeasePreparation<T>(lease: Lease, run: () => Promise<T>): Prom
 function assertInheritedLeaseOpen(lease: Lease | undefined, operation: string) {
   if (!lease) return
   if (lease.closed) throw new Error(`Cannot ${operation} through a closed instance cache lease: ${lease.key}`)
-  if (!lease.owned) {
-    throw new Error(`Cannot ${operation} while its instance cache lease is waiting for lock ownership: ${lease.key}`)
-  }
   if (!lease.closing) return
   const active = lifecycleContext.tryUse()
   if (active?.lease === lease && !active.closed) return
@@ -735,13 +787,50 @@ async function rollbackContextTransaction(
   throw owner.primaryError
 }
 
-async function prepareContextExclusive(
+const TEARDOWN_REQUIRED = Symbol("instance-teardown-required")
+
+/** Replace this entry's project context in place: tear down State, apply the
+ *  rediscovered project, and re-run every known initializer. Assumes the
+ *  exclusive tail turn is held and serving is drained. */
+async function refreshContextInTurn(
   key: string,
   entry: CacheEntry,
   lease: Lease,
-  init?: InstanceInit,
+  init: InstanceInit | undefined,
 ): Promise<Context> {
-  await upgradeLease(lease)
+  const current = await entry.context
+  const next = await Project.fromDirectory(current.directory)
+  const refreshInitializers = initializers(entry, init)
+  try {
+    await provideLeaseContext(lease, current, () => State.dispose(current.directory))
+  } catch (error) {
+    const owner = retainRollbackOwner(entry, current, error)
+    throw owner.primaryError
+  }
+  entry.initRuns = new Map()
+  entry.capabilityPreflights = new Set()
+  entry.healthChecks = new Map()
+  applyContext(current, next)
+  try {
+    for (const initializer of refreshInitializers) await runCapabilityPreflight(entry, initializer)
+    await provideLeaseContext(lease, current, () => bootstrapContext(current, entry, refreshInitializers))
+    return current
+  } catch (error) {
+    return await rollbackContextTransaction(key, entry, lease, current, error)
+  }
+}
+
+/** Context preparation body. Assumes the exclusive tail turn is held. Returns
+ *  TEARDOWN_REQUIRED when a project refresh is due while serving handles
+ *  outside the ambient `chain` are still open — the caller must then rejoin
+ *  as a teardown turn, which drains serving before re-entering. */
+async function prepareContextInTurn(
+  key: string,
+  entry: CacheEntry,
+  lease: Lease,
+  init: InstanceInit | undefined,
+  chain: Lease | undefined,
+): Promise<Context | typeof TEARDOWN_REQUIRED> {
   assertEntryCurrent(key, entry)
   if (entry.rollback) throw rollbackError(entry.rollback)
   const current = await entry.context
@@ -759,25 +848,8 @@ async function prepareContextExclusive(
 
   if (needsProjectRefresh(current)) {
     SchedulerTaskOwner.assertCanStartLifecycleDisposal("instance refresh")
-    const next = await Project.fromDirectory(current.directory)
-    const refreshInitializers = initializers(entry, init)
-    try {
-      await provideLeaseContext(lease, current, () => State.dispose(current.directory))
-    } catch (error) {
-      const owner = retainRollbackOwner(entry, current, error)
-      throw owner.primaryError
-    }
-    entry.initRuns = new Map()
-    entry.capabilityPreflights = new Set()
-    entry.healthChecks = new Map()
-    applyContext(current, next)
-    try {
-      for (const initializer of refreshInitializers) await runCapabilityPreflight(entry, initializer)
-      await provideLeaseContext(lease, current, () => bootstrapContext(current, entry, refreshInitializers))
-      return current
-    } catch (error) {
-      return await rollbackContextTransaction(key, entry, lease, current, error)
-    }
+    if (otherServingOpen(entry, chain)) return TEARDOWN_REQUIRED
+    return await refreshContextInTurn(key, entry, lease, init)
   }
 
   if (!init || entry.initRuns.has(init)) return current
@@ -789,32 +861,88 @@ async function prepareContextExclusive(
   }
 }
 
-async function prepareContext(key: string, entry: CacheEntry, lease: Lease, init?: InstanceInit): Promise<Context> {
+async function prepareContextExclusive(
+  key: string,
+  entry: CacheEntry,
+  lease: Lease,
+  init: InstanceInit | undefined,
+  chain: Lease | undefined,
+): Promise<Context> {
+  if (holdsEntryTurn(entry)) {
+    // Nested lifecycle work inside our own turn body (a capability preflight
+    // providing its instance, an initializer re-entering) runs directly —
+    // queueing here would wait on the turn this chain already holds.
+    for (;;) {
+      const outcome = await prepareContextInTurn(key, entry, lease, init, chain)
+      if (outcome !== TEARDOWN_REQUIRED) return outcome
+      await drainOtherServing(entry, chain)
+    }
+  }
+  const release = await acquireEntryTurn(entry)
+  let outcome: Context | typeof TEARDOWN_REQUIRED
+  try {
+    outcome = await entryTurnContext.provide(entry, () => prepareContextInTurn(key, entry, lease, init, chain))
+  } finally {
+    release()
+  }
+  if (outcome !== TEARDOWN_REQUIRED) return outcome
+  return await runTeardownTurn(entry, chain, async () => {
+    const prepared = await prepareContextInTurn(key, entry, lease, init, chain)
+    if (prepared === TEARDOWN_REQUIRED) {
+      throw new Error(`Instance refresh found open serving handles after draining: ${key}`)
+    }
+    return prepared
+  })
+}
+
+/** Whether this entry still owes exclusive context preparation. Single source
+ *  for `prepareContext`'s early return and for the admission fast path, so the
+ *  two can never disagree about whether a tail turn is required. */
+function contextPreparationRequired(entry: CacheEntry, current: Context, init?: InstanceInit): boolean {
+  if (entry.rollback) return true
+  if (!entry.initialized) return true
+  if (needsProjectRefresh(current)) return true
+  return Boolean(init) && !entry.initRuns.has(init!)
+}
+
+async function prepareContext(
+  key: string,
+  entry: CacheEntry,
+  lease: Lease,
+  init: InstanceInit | undefined,
+  chain: Lease | undefined,
+): Promise<Context> {
   const current = await entry.context
   if (entry.rollback) throw rollbackError(entry.rollback)
   if (entry.initialized) assertContextHealthy(entry)
-  if (entry.initialized && !needsProjectRefresh(current) && (!init || entry.initRuns.has(init))) return current
-  const prepare = () =>
-    runLeaseLifecycle(lease, "instance context preparation", () => prepareContextExclusive(key, entry, lease, init))
-  return await prepare()
+  if (!contextPreparationRequired(entry, current, init)) return current
+  return await runLeaseLifecycle(lease, "instance context preparation", () =>
+    prepareContextExclusive(key, entry, lease, init, chain),
+  )
 }
 
 async function prepareCapabilityPreflight(key: string, entry: CacheEntry, init: InstanceInit) {
   const preflight = conversationCapabilityInitPreflight(init)
   if (!preflight || entry.capabilityPreflights.has(init)) return
-  const release = await acquireLock(entry, "write")
-  const lease = createLease(key, entry, "write", release)
+  const release = await acquireEntryTurn(entry)
+  const lease = createLease(key, entry, false)
   try {
     assertEntryCurrent(key, entry)
     const current = await entry.context
     if (entry.rollback) throw rollbackError(entry.rollback)
-    await leaseContext.provide(lease, () =>
-      provideLeaseContext(lease, current, () =>
-        runLeaseLifecycle(lease, "instance capability preflight", () => runCapabilityPreflight(entry, init)),
+    await entryTurnContext.provide(entry, () =>
+      leaseContext.provide(lease, () =>
+        provideLeaseContext(lease, current, () =>
+          runLeaseLifecycle(lease, "instance capability preflight", () => runCapabilityPreflight(entry, init)),
+        ),
       ),
     )
   } finally {
-    await closeLease(lease)
+    try {
+      await closeLease(lease)
+    } finally {
+      release()
+    }
   }
 }
 
@@ -838,19 +966,11 @@ async function prepareInheritedCapabilityPreflight(key: string, entry: CacheEntr
     await lease.lifecycleTail
     return
   }
+  // The preflight takes its own tail turn; the inherited serving handle never
+  // blocks the tail, so no release-and-reacquire dance is needed.
   await runLeaseTrackedOperation(lease, "inherited instance capability preflight", async () => {
     if (entry.capabilityPreflights.has(init)) return
-    const inheritedMode = lease.mode
-    lease.owned = false
-    lease.release()
-    try {
-      await prepareCapabilityPreflight(key, entry, init)
-    } finally {
-      const release = await acquireLock(entry, inheritedMode)
-      lease.mode = inheritedMode
-      lease.release = release
-      lease.owned = true
-    }
+    await prepareCapabilityPreflight(key, entry, init)
   })
 }
 
@@ -946,7 +1066,9 @@ async function disposeEntry(key: string, entry: CacheEntry, ctx: Context) {
 
 export function runOutsideInstanceContext<R>(fn: () => R): R {
   return leaseContext.without(() =>
-    lifecycleContext.without(() => activityContext.without(() => withoutProjectInstanceContext(fn))),
+    lifecycleContext.without(() =>
+      activityContext.without(() => entryTurnContext.without(() => withoutProjectInstanceContext(fn))),
+    ),
   )
 }
 
@@ -1003,7 +1125,7 @@ export const Instance: InstanceApi = {
             [...cache.entries()].flatMap(([key, entry]) =>
               [...entry.activeLeases].map((lease) => ({
                 label:
-                  `instance:${key}:${lease.mode}:` +
+                  `instance:${key}:${lease.serving ? "serving" : "exclusive"}:` +
                   `activities=${lease.activities.size}:closing=${String(lease.closing)}`,
                 settled: lease.closedSignal,
               })),
@@ -1032,14 +1154,10 @@ export const Instance: InstanceApi = {
       // A registered instance activity is part of the lease owner and remains
       // valid while closeLease waits for that activity to settle. Detached
       // fire-and-forget callbacks still fail this assertion because they have
-      // neither an active lifecycle nor an active activity scope. A concurrent
-      // same-key call may arrive while another inherited preflight has
-      // temporarily released the lock, so ownership is checked again only
-      // after the tracked lifecycle queue returns it.
+      // neither an active lifecycle nor an active activity scope.
       assertSameKeyReentryAllowed(inheritedLease, "provide an instance")
       return await startLeaseActivity(inheritedLease, async () => {
         const ctx = await runLeasePreparation(inheritedLease, async () => {
-          const inheritedMode = inheritedLease.mode
           const entry = cache.get(key)
           if (entry !== inheritedLease.entry) {
             throw new Error(`Cannot re-enter replaced instance cache entry: ${key}`)
@@ -1048,9 +1166,10 @@ export const Instance: InstanceApi = {
           if (input.init) await prepareInheritedCapabilityPreflight(key, entry, inheritedLease, input.init)
           else await inheritedLease.lifecycleTail
           assertInheritedLeaseOpen(inheritedLease, "prepare an inherited instance")
-          const prepared = await prepareContext(key, entry, inheritedLease, input.init)
+          // The inherited serving handle is the ambient chain: preparation that
+          // must drain serving excuses it, keeping nested provide/refresh live.
+          const prepared = await prepareContext(key, entry, inheritedLease, input.init, inheritedLease)
           assertProjectAdmissionOpen(key, entry, prepared)
-          if (inheritedMode === "read") await downgradeLease(inheritedLease)
           return prepared
         })
         return await provideLeaseContext(inheritedLease, ctx, async () => input.fn())
@@ -1076,66 +1195,86 @@ export const Instance: InstanceApi = {
           throw error
         }
       }
-      const release = await acquireLock(entry, "read")
-      try {
-        assertEntryCurrent(key, entry)
-      } catch (error) {
-        release()
-        if (cache.get(key) !== entry) continue
-        throw error
-      }
+      if (cache.get(key) !== entry) continue
       if (entry.rollback) {
         SchedulerTaskOwner.assertCanStartLifecycleDisposal("instance rollback cleanup")
-        release()
-        const releaseWrite = await acquireLock(entry, "write")
-        const cleanupLease = createLease(key, entry, "write", releaseWrite)
+        const release = await acquireEntryTurn(entry)
+        const cleanupLease = createLease(key, entry, false)
         try {
           assertEntryCurrent(key, entry)
           const owner = entry.rollback
           if (owner) {
-            await leaseContext.provide(cleanupLease, () =>
-              provideLeaseContext(cleanupLease, owner.ctx, () =>
-                runLeaseLifecycle(cleanupLease, "instance rollback cleanup", () =>
-                  retryRollbackCleanup(key, entry, cleanupLease, owner),
+            await entryTurnContext.provide(entry, () =>
+              leaseContext.provide(cleanupLease, () =>
+                provideLeaseContext(cleanupLease, owner.ctx, () =>
+                  runLeaseLifecycle(cleanupLease, "instance rollback cleanup", () =>
+                    retryRollbackCleanup(key, entry, cleanupLease, owner),
+                  ),
                 ),
               ),
             )
           }
         } finally {
-          await closeLease(cleanupLease)
+          try {
+            await closeLease(cleanupLease)
+          } finally {
+            release()
+          }
         }
         continue
       }
-      const lease = createLease(key, entry, "read", release)
+      // Pending teardowns and queued lifecycle turns get the entry to
+      // themselves; admissions wait out the quiet period and re-validate.
+      if (!lifecycleQuiet(entry)) {
+        await waitForLifecycleQuiet(entry)
+        continue
+      }
+      // Every check between here and lease registration is synchronous, so a
+      // lifecycle turn cannot interleave — a turn claimed first flips
+      // lifecycleQuiet, and a handle registered first is what any later
+      // teardown drains. Serving never touches the exclusive tail, so a busy
+      // caller `fn` can never block other admissions.
+      const needsPreparation = contextPreparationRequired(entry, initial, input.init)
+      if (!needsPreparation) assertContextHealthy(entry)
+      const lease = createLease(key, entry, !needsPreparation)
       try {
-        const result = await leaseContext.provide(lease, () =>
+        if (needsPreparation) {
+          await leaseContext.provide(lease, () =>
+            provideLeaseContext(lease, initial, () => prepareContext(key, entry, lease, input.init, undefined)),
+          )
+          // Serve on the freshly prepared context instead of re-deriving the
+          // preparation predicate: a predicate that stays true (a sandbox
+          // directory whose git state can never match its project worktree)
+          // must cost one refresh per admission, not an admission that never
+          // returns. The checks and the serving flip below are synchronous,
+          // so no lifecycle turn can interleave before this handle registers.
+          if (!lifecycleQuiet(entry) || cache.get(key) !== entry || entry.rollback) continue
+          assertContextHealthy(entry)
+          lease.serving = true
+        }
+        return await leaseContext.provide(lease, () =>
           provideLeaseContext(lease, initial, async () => {
-            const ctx = await prepareContext(key, entry, lease, input.init)
-            await downgradeLease(lease)
-            return await provideLeaseContext(lease, ctx, async () => {
-              if (input.init && !entry.permissionRecoveryStarted) {
-                const { PermissionAuthority } = await import("@/permission/authority")
-                // Continuation recovery converges durable evidence; it is not a
-                // precondition for serving this project. Marking the attempt
-                // before it runs keeps a deterministic recovery fault from
-                // re-running on every later admission, and swallowing it keeps
-                // one unrecoverable ledger request from failing every
-                // project-scoped route.
-                entry.permissionRecoveryStarted = true
-                try {
-                  await PermissionAuthority.resumeApprovedContinuations()
-                } catch (error) {
-                  Log.Default.error("permission continuation recovery failed", {
-                    directory: key,
-                    error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-                  })
-                }
+            if (input.init && !entry.permissionRecoveryStarted) {
+              const { PermissionAuthority } = await import("@/permission/authority")
+              // Continuation recovery converges durable evidence; it is not a
+              // precondition for serving this project. Marking the attempt
+              // before it runs keeps a deterministic recovery fault from
+              // re-running on every later admission, and swallowing it keeps
+              // one unrecoverable ledger request from failing every
+              // project-scoped route.
+              entry.permissionRecoveryStarted = true
+              try {
+                await PermissionAuthority.resumeApprovedContinuations()
+              } catch (error) {
+                Log.Default.error("permission continuation recovery failed", {
+                  directory: key,
+                  error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+                })
               }
-              return input.fn()
-            })
+            }
+            return input.fn()
           }),
         )
-        return result
       } finally {
         await closeLease(lease)
       }
@@ -1160,16 +1299,16 @@ export const Instance: InstanceApi = {
       assertNotDisposing(directory)
       const entry = getOrCreateCacheEntry(directory, key)
       entry.lastAccess = ++accessSequence
-      const release = await acquireLock(entry, "read")
-      if (cache.get(key) !== entry) {
-        release()
+      const ctx = await entry.context
+      if (cache.get(key) !== entry) continue
+      if (!lifecycleQuiet(entry)) {
+        await waitForLifecycleQuiet(entry)
         continue
       }
-      const lease = createLease(key, entry, "read", release)
+      if (entry.rollback) throw rollbackError(entry.rollback)
+      assertProjectAdmissionOpen(key, entry, ctx)
+      const lease = createLease(key, entry, true)
       try {
-        if (entry.rollback) throw rollbackError(entry.rollback)
-        const ctx = await entry.context
-        assertProjectAdmissionOpen(key, entry, ctx)
         return await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, async () => input.fn()))
       } finally {
         await closeLease(lease)
@@ -1215,18 +1354,22 @@ export const Instance: InstanceApi = {
       if (entry.initialized) assertContextHealthy(entry)
       return await input.fn()
     }
-    const release = await acquireLock(entry, "read")
-    const lease = createLease(key, entry, "read", release)
+    while (!lifecycleQuiet(entry)) {
+      await waitForLifecycleQuiet(entry)
+      if (cache.get(key) !== entry) return undefined
+    }
+    if (cache.get(key) !== entry) return undefined
+    if (entry.rollback) throw rollbackError(entry.rollback)
+    if (!entry.initialized && !deletionAdmission) return undefined
+    const ctx = await entry.context
+    if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
+      throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
+    }
+    if (cache.get(key) !== entry) return undefined
+    if (!lifecycleQuiet(entry)) return undefined
+    if (entry.initialized) assertContextHealthy(entry)
+    const lease = createLease(key, entry, true)
     try {
-      if (cache.get(key) !== entry) return undefined
-      if (entry.rollback) throw rollbackError(entry.rollback)
-      if (!entry.initialized && !deletionAdmission) return undefined
-      const ctx = await entry.context
-      if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
-        throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
-      }
-      if (cache.get(key) !== entry) return undefined
-      if (entry.initialized) assertContextHealthy(entry)
       return await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, async () => input.fn()))
     } finally {
       await closeLease(lease)
@@ -1250,16 +1393,20 @@ export const Instance: InstanceApi = {
         await provideLeaseContext(inheritedLease, ctx, input.fn)
         continue
       }
-      const release = await acquireLock(entry, "read")
-      const lease = createLease(key, entry, "read", release)
+      while (!lifecycleQuiet(entry)) {
+        await waitForLifecycleQuiet(entry)
+        if (cache.get(key) !== entry) break
+      }
+      if (cache.get(key) !== entry) continue
+      if (entry.rollback) throw rollbackError(entry.rollback)
+      if (!entry.initialized) continue
+      const ctx = await entry.context
+      assertProjectAdmissionOpen(key, entry, ctx)
+      if (cache.get(key) !== entry) continue
+      if (!lifecycleQuiet(entry)) continue
+      assertContextHealthy(entry)
+      const lease = createLease(key, entry, true)
       try {
-        if (cache.get(key) !== entry) continue
-        if (entry.rollback) throw rollbackError(entry.rollback)
-        if (!entry.initialized) continue
-        const ctx = await entry.context
-        assertProjectAdmissionOpen(key, entry, ctx)
-        if (cache.get(key) !== entry) continue
-        assertContextHealthy(entry)
         await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, input.fn))
       } finally {
         await closeLease(lease)
@@ -1364,22 +1511,33 @@ export const Instance: InstanceApi = {
       }
       for (const [key, entry] of targets) {
         processed.add(entry)
-        await waitForRuntimeSettlementIdle({
-          snapshot: () =>
-            [...entry.activeLeases].map((lease) => ({
-              label: `project-instance:${key}:${lease.mode}:activities=${lease.activities.size}`,
-              settled: lease.closedSignal,
-            })),
-          inactivityTimeoutMilliseconds,
-          inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
-        })
-        const release = await acquireLockWithin(
+        const waitForLeaseSettlement = () =>
+          waitForRuntimeSettlementIdle({
+            snapshot: () =>
+              [...entry.activeLeases].map((lease) => ({
+                label:
+                  `project-instance:${key}:${lease.serving ? "serving" : "exclusive"}:` +
+                  `activities=${lease.activities.size}`,
+                settled: lease.closedSignal,
+              })),
+            inactivityTimeoutMilliseconds,
+            inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+          })
+        await waitForLeaseSettlement()
+        let release = await acquireEntryTurnWithin(
           entry,
-          "write",
-          `project-instance-lock:${key}:write`,
+          `project-instance-lock:${key}`,
           inactivityTimeoutMilliseconds,
         )
-        const lease = createLease(key, entry, "write", release)
+        // A serving handle admitted between the settlement wait and the turn
+        // grant still owns the shared context; hand the turn back and wait it
+        // out under the same inactivity budget.
+        while (otherServingOpen(entry)) {
+          release()
+          await waitForLeaseSettlement()
+          release = await acquireEntryTurnWithin(entry, `project-instance-lock:${key}`, inactivityTimeoutMilliseconds)
+        }
+        const lease = createLease(key, entry, false)
         let abandoned = false
         try {
           const ctx = await awaitSettlementPromise({
@@ -1388,12 +1546,14 @@ export const Instance: InstanceApi = {
             inactivityTimeoutMilliseconds,
           })
           if (cache.get(key) !== entry || ctx.project.id !== projectID) continue
-          const disposal = leaseContext.provide(lease, () =>
-            provideLeaseContext(lease, ctx, () =>
-              runLeaseLifecycle(lease, "Project instance disposal", async () => {
-                if (entry.rollback) await retryRollbackCleanup(key, entry, lease, entry.rollback)
-                else await disposeEntry(key, entry, ctx)
-              }),
+          const disposal = entryTurnContext.provide(entry, () =>
+            leaseContext.provide(lease, () =>
+              provideLeaseContext(lease, ctx, () =>
+                runLeaseLifecycle(lease, "Project instance disposal", async () => {
+                  if (entry.rollback) await retryRollbackCleanup(key, entry, lease, entry.rollback)
+                  else await disposeEntry(key, entry, ctx)
+                }),
+              ),
             ),
           )
           try {
@@ -1416,7 +1576,11 @@ export const Instance: InstanceApi = {
         } catch (error) {
           errors.push(error)
         } finally {
-          if (!abandoned) await closeLease(lease)
+          try {
+            if (!abandoned) await closeLease(lease)
+          } finally {
+            release()
+          }
         }
       }
     }
@@ -1446,29 +1610,38 @@ export const Instance: InstanceApi = {
     const inheritedLease = leaseContext.tryUse()
     let lease: Lease
     let owned = false
+    let chain: Lease | undefined
     if (inheritedLease?.key === key) {
       if (inheritedLease.entry !== entry) throw new Error(`Cannot refresh replaced instance cache entry: ${key}`)
       lease = inheritedLease
+      chain = inheritedLease
     } else {
-      const release = await acquireLock(entry, "write")
-      lease = createLease(key, entry, "write", release)
+      lease = createLease(key, entry, false)
       owned = true
     }
+    // Refresh mutates the shared context in place, so it runs as a teardown
+    // turn: serving handles outside the ambient chain drain first, and the
+    // chain itself is excused so an in-callback refresh stays live.
     const run = () =>
-      runLeaseLifecycle(lease, "instance refresh", async () => {
-        await upgradeLease(lease)
-        assertEntryCurrent(key, entry)
-        if (entry.rollback) throw rollbackError(entry.rollback)
-        const current = await entry.context
-        assertContextHealthy(entry)
-        if (needsProjectRefresh(current)) {
-          SchedulerTaskOwner.assertCanStartLifecycleDisposal("instance refresh")
-          return await prepareContextExclusive(key, entry, lease)
-        }
-        const next = await Project.fromDirectory(current.directory)
-        applyContext(current, next)
-        return current
-      })
+      runLeaseLifecycle(lease, "instance refresh", () =>
+        runTeardownTurn(entry, chain, async () => {
+          assertEntryCurrent(key, entry)
+          if (entry.rollback) throw rollbackError(entry.rollback)
+          const current = await entry.context
+          assertContextHealthy(entry)
+          if (needsProjectRefresh(current)) {
+            SchedulerTaskOwner.assertCanStartLifecycleDisposal("instance refresh")
+            const prepared = await prepareContextInTurn(key, entry, lease, undefined, chain)
+            if (prepared === TEARDOWN_REQUIRED) {
+              throw new Error(`Instance refresh found open serving handles after draining: ${key}`)
+            }
+            return prepared
+          }
+          const next = await Project.fromDirectory(current.directory)
+          applyContext(current, next)
+          return current
+        }),
+      )
     try {
       if (owned) {
         const current = await entry.context
@@ -1507,13 +1680,17 @@ export const Instance: InstanceApi = {
     if (inheritedLease.key !== key || inheritedLease.entry !== entry) {
       throw new Error(`Cannot dispose an instance outside its active cache lease: ${key}`)
     }
-    await runLeaseLifecycle(inheritedLease, "instance disposal", async () => {
-      await upgradeLease(inheritedLease)
-      assertEntryCurrent(key, entry)
-      if (entry.rollback) throw rollbackError(entry.rollback)
-      const ctx = await entry.context
-      await disposeEntry(key, entry, ctx)
-    })
+    // Disposal drains every serving handle except its own ambient chain, and
+    // gates new admissions while it waits, so it can neither deadlock on its
+    // caller nor starve behind a continuous admission stream.
+    await runLeaseLifecycle(inheritedLease, "instance disposal", () =>
+      runTeardownTurn(entry, inheritedLease, async () => {
+        assertEntryCurrent(key, entry)
+        if (entry.rollback) throw rollbackError(entry.rollback)
+        const ctx = await entry.context
+        await disposeEntry(key, entry, ctx)
+      }),
+    )
   },
   async converge(input) {
     assertNotDisposing()
@@ -1532,23 +1709,25 @@ export const Instance: InstanceApi = {
         if (cache.size - pendingEvictions.size <= maximumRetained) break
         if (cache.get(key) !== entry || pendingEvictions.has(entry)) continue
         if (entry.projectID && closedProjectAdmissions.has(entry.projectID)) continue
-        const release = tryAcquireIdleWriteLock(entry)
+        const release = tryClaimIdleEntryTurn(entry)
         if (!release) continue
         pendingEvictions.add(entry)
-        const lease = createLease(key, entry, "write", release)
+        const lease = createLease(key, entry, false)
         const directory = entry.rollback?.ctx.directory ?? key
         const disposal = (async () => {
           try {
             if (entry.rollback) {
-              await leaseContext.provide(lease, () =>
-                provideLeaseContext(
-                  lease,
-                  entry.rollback!.ctx,
-                  () =>
-                    runLeaseLifecycle(lease, "instance rollback convergence", () =>
-                      retryRollbackCleanup(key, entry, lease),
-                    ),
-                  { allowRollback: true },
+              await entryTurnContext.provide(entry, () =>
+                leaseContext.provide(lease, () =>
+                  provideLeaseContext(
+                    lease,
+                    entry.rollback!.ctx,
+                    () =>
+                      runLeaseLifecycle(lease, "instance rollback convergence", () =>
+                        retryRollbackCleanup(key, entry, lease),
+                      ),
+                    { allowRollback: true },
+                  ),
                 ),
               )
               return { status: "disposed" as const, directory }
@@ -1559,9 +1738,11 @@ export const Instance: InstanceApi = {
               return { status: "retained" as const, directory: ctx.directory }
             }
             await beforeConvergenceDisposalForTest?.({ directory: ctx.directory, projectID: entry.projectID })
-            await leaseContext.provide(lease, () =>
-              provideLeaseContext(lease, ctx, () =>
-                runLeaseLifecycle(lease, "instance cache convergence", () => disposeEntry(key, entry, ctx)),
+            await entryTurnContext.provide(entry, () =>
+              leaseContext.provide(lease, () =>
+                provideLeaseContext(lease, ctx, () =>
+                  runLeaseLifecycle(lease, "instance cache convergence", () => disposeEntry(key, entry, ctx)),
+                ),
               ),
             )
             return { status: "disposed" as const, directory: ctx.directory }
@@ -1575,6 +1756,7 @@ export const Instance: InstanceApi = {
             try {
               await closeLease(lease)
             } finally {
+              release()
               pendingEvictions.delete(entry)
             }
           }
@@ -1677,8 +1859,16 @@ export const Instance: InstanceApi = {
       const errors: unknown[] = []
       for (const [key, entry] of entries) {
         await Promise.all([...entry.activeLeases].map((lease) => lease.closedSignal))
-        const release = await acquireLock(entry, "write")
-        const lease = createLease(key, entry, "write", release)
+        let release = await acquireEntryTurn(entry)
+        // A lease admitted between the settlement wait and the turn grant is
+        // waited out; global disposal already rejects new admissions, so this
+        // converges.
+        while (entry.activeLeases.size > 0) {
+          release()
+          await Promise.all([...entry.activeLeases].map((lease) => lease.closedSignal))
+          release = await acquireEntryTurn(entry)
+        }
+        const lease = createLease(key, entry, false)
         try {
           let ctx: Context | undefined
           let contextError: unknown
@@ -1690,10 +1880,12 @@ export const Instance: InstanceApi = {
           if (entry.rollback) {
             try {
               const owner = entry.rollback
-              await leaseContext.provide(lease, () =>
-                provideLeaseContext(lease, owner.ctx, () =>
-                  runLeaseLifecycle(lease, "instance rollback disposal", () =>
-                    retryRollbackCleanup(key, entry, lease, owner),
+              await entryTurnContext.provide(entry, () =>
+                leaseContext.provide(lease, () =>
+                  provideLeaseContext(lease, owner.ctx, () =>
+                    runLeaseLifecycle(lease, "instance rollback disposal", () =>
+                      retryRollbackCleanup(key, entry, lease, owner),
+                    ),
                   ),
                 ),
               )
@@ -1717,16 +1909,22 @@ export const Instance: InstanceApi = {
             if (failure) errors.push(failure.error)
             continue
           }
-          await leaseContext.provide(lease, () =>
-            provideLeaseContext(lease, ctx!, () =>
-              runLeaseLifecycle(lease, "global instance disposal", () => disposeEntry(key, entry, ctx!)),
+          await entryTurnContext.provide(entry, () =>
+            leaseContext.provide(lease, () =>
+              provideLeaseContext(lease, ctx!, () =>
+                runLeaseLifecycle(lease, "global instance disposal", () => disposeEntry(key, entry, ctx!)),
+              ),
             ),
           )
         } catch (error) {
           errors.push(error)
           markEntryFailureReported(entry, error)
         } finally {
-          await closeLease(lease)
+          try {
+            await closeLease(lease)
+          } finally {
+            release()
+          }
         }
       }
       try {
@@ -1762,7 +1960,7 @@ export const InstanceTestHooks = {
     const key = instanceCacheKey(Filesystem.resolve(directory))
     const entry = cache.get(key)
     if (!entry) throw new Error(`Cannot acquire a test cache lock for inactive instance: ${directory}`)
-    const release = await acquireLock(entry, "write")
+    const release = await acquireEntryTurn(entry)
     return { [Symbol.dispose]: release }
   },
 }

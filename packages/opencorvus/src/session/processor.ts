@@ -1,5 +1,6 @@
 ﻿import { Message } from "./message"
 import { Log } from "@/util/log"
+import { NotFoundError } from "@/storage/db"
 import { MessageStore } from "./message-store"
 import { Identifier } from "@/id/id"
 import { Session } from "."
@@ -46,6 +47,61 @@ import { normalizeToolResult } from "./tool-result-normalization"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
+
+  /**
+   * Consecutive byte-identical Tool calls tolerated across assistant messages.
+   *
+   * `DOOM_LOOP_THRESHOLD` only inspects parts of the *current* assistant
+   * message, so it never fires for a model that emits one Tool call per
+   * message — which is the common shape. Observed 2026-08-17 on Mission
+   * ses_-zUXWiACkzzlEtt8eqES: 40+ `panel read_task_artifact` calls, alternating
+   * two locators, each returning `complete: true, next_offset: null`, one call
+   * per message, every ~12s until the operator aborted. Every call succeeded,
+   * so nothing failed and nothing surfaced it.
+   *
+   * The bound is deliberately looser than the in-message one: re-reading the
+   * same Artifact once or twice while deciding is legitimate, spinning on it is
+   * not. Tripping it raises a Tool error the model reads, so the loop breaks
+   * with feedback rather than being silently killed.
+   */
+  const REPEATED_CALL_ACROSS_TURNS_THRESHOLD = 6
+
+  /**
+   * A run ends when this long passes without the same call repeating. The run
+   * has to survive assistant-message completion — in the observed loop every
+   * iteration was its own completed message — so elapsed time, not message
+   * boundaries, is what separates a live loop from the same Tool legitimately
+   * being called again much later in a long session.
+   */
+  const REPEATED_CALL_RUN_IDLE_MS = 120_000
+
+  /** Per-session run of consecutive identical calls. Process-local: a loop that
+   *  matters is a live one, and a restart already breaks it. */
+  const repeatedCallRuns = new Map<string, { signature: string; count: number; at: number }>()
+
+  function observeRepeatedToolCall(sessionID: string, toolName: string, input: unknown): number {
+    const signature = `${toolName} :: ${JSON.stringify(input) ?? ""}`
+    const now = Date.now()
+    const current = repeatedCallRuns.get(sessionID)
+    const continues = current?.signature === signature && now - current.at <= REPEATED_CALL_RUN_IDLE_MS
+    const next = { signature, count: continues ? current!.count + 1 : 1, at: now }
+    repeatedCallRuns.set(sessionID, next)
+    return next.count
+  }
+
+  function forgetRepeatedToolCalls(sessionID: string): void {
+    repeatedCallRuns.delete(sessionID)
+  }
+
+  /** The run counter is process-local and reachable only through a live stream,
+   *  so its bound is asserted directly rather than by driving a provider. */
+  export const RepeatedCallTestHooks = {
+    observeRepeatedToolCall,
+    forgetRepeatedToolCalls,
+    REPEATED_CALL_ACROSS_TURNS_THRESHOLD,
+    REPEATED_CALL_RUN_IDLE_MS,
+  }
+
   const log = Log.create({ service: "session.processor" })
 
   export class ProcessorLostPartsError extends Error {
@@ -250,6 +306,30 @@ export namespace SessionProcessor {
       )
     }
 
+    /**
+     * Remove one attempt-created Part during rollback, treating an
+     * already-absent Part as done. Convergence discard and retry cleanup can
+     * both roll back the same draft (luna9: the second removal's NotFoundError
+     * killed the retry itself, and the session died silently 15 minutes into a
+     * recoverable stall), and an absent Part is exactly the state rollback
+     * seeks. Any other failure still propagates.
+     */
+    const removeAttemptPart = async (input: { sessionID: string; messageID: string; partID: string }) => {
+      try {
+        await Session.removePart(input)
+      } catch (error) {
+        if (NotFoundError.isInstance(error)) {
+          log.warn("attempt part rollback found the part already removed", {
+            sessionID: input.sessionID,
+            messageID: input.messageID,
+            partID: input.partID,
+          })
+          return
+        }
+        throw error
+      }
+    }
+
     const discardToolInputDraft = async (part: Message.ToolPart, reason: string): Promise<void> => {
       if (part.state.status !== "pending") {
         throw new Error(`Tool input draft ${part.id} is ${part.state.status}, not pending`)
@@ -259,7 +339,7 @@ export namespace SessionProcessor {
         await lifecycle.cancel(part.callID, part.state.input as Record<string, unknown>, reason)
         mcpAppCalls.delete(part.callID)
       }
-      await Session.removePart({
+      await removeAttemptPart({
         sessionID: part.sessionID,
         messageID: part.messageID,
         partID: part.id,
@@ -561,23 +641,41 @@ export namespace SessionProcessor {
               if (scope.toolExecutionStarted) {
                 throw new ProcessorUnsafeRetryError(failedAttempt, createdPartIDs, cause)
               }
-              const createdParts = new Map(
-                (await MessageStore.parts(input.assistantMessage.id))
-                  .filter((part) => scope.createdPartIDs.has(part.id))
-                  .map((part) => [part.id, part]),
-              )
-              for (const partID of createdPartIDs.reverse()) {
-                const part = createdParts.get(partID)
-                if (part?.type === "tool" && part.state.status === "pending") {
-                  await discardToolInputDraft(part, "Provider activity retried before validated tool input")
-                  continue
-                }
-                await Session.removePart({
+              if (Session.isTaskRootCausalMessage(input.assistantMessage.id)) {
+                // A causal assistant Message (activated, ingress-referenced, or
+                // already continued) forbids Part removal, so the failed
+                // attempt's Parts stay as durable occurrence history and the
+                // retried attempt appends after them. Rolling back here turned
+                // every transient provider error inside an orchestrator turn
+                // into Task death: the fence refused the removal from inside
+                // the retry cleanup, and that refusal replaced the retryable
+                // cause as the terminal Task error.
+                log.warn("retry keeps parts of causal assistant message", {
                   sessionID: input.assistantMessage.sessionID,
                   messageID: input.assistantMessage.id,
-                  partID,
+                  attempt: failedAttempt,
+                  partIDs: createdPartIDs,
                 })
-                reasoningDeltaBuf.delete(partID)
+                for (const partID of createdPartIDs) reasoningDeltaBuf.delete(partID)
+              } else {
+                const createdParts = new Map(
+                  (await MessageStore.parts(input.assistantMessage.id))
+                    .filter((part) => scope.createdPartIDs.has(part.id))
+                    .map((part) => [part.id, part]),
+                )
+                for (const partID of createdPartIDs.reverse()) {
+                  const part = createdParts.get(partID)
+                  if (part?.type === "tool" && part.state.status === "pending") {
+                    await discardToolInputDraft(part, "Provider activity retried before validated tool input")
+                    continue
+                  }
+                  await removeAttemptPart({
+                    sessionID: input.assistantMessage.sessionID,
+                    messageID: input.assistantMessage.id,
+                    partID,
+                  })
+                  reasoningDeltaBuf.delete(partID)
+                }
               }
               for (const toolCallID of scope.toolCallIDs) {
                 delete toolcalls[toolCallID]
@@ -811,6 +909,24 @@ export namespace SessionProcessor {
                       if (exactMatch) {
                         throw new Error(
                           `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
+                        )
+                      }
+
+                      const repeatedRun = observeRepeatedToolCall(
+                        input.sessionID,
+                        value.toolName,
+                        persistedToolInput,
+                      )
+                      if (repeatedRun > REPEATED_CALL_ACROSS_TURNS_THRESHOLD) {
+                        log.warn("repeated identical tool call across turns", {
+                          sessionID: input.sessionID,
+                          tool: value.toolName,
+                          consecutiveCalls: repeatedRun,
+                        })
+                        throw new Error(
+                          `${value.toolName} was called ${repeatedRun} times in a row with byte-identical input and no other Tool call in between. ` +
+                            `The result will not change; repeating it cannot make progress. ` +
+                            `Use the result you already have to take the next decision, or call a different Tool.`,
                         )
                       }
                       semanticChunkAccepted = true
@@ -1299,6 +1415,12 @@ export namespace SessionProcessor {
               ...(observationFailures.length > 0 ? { observationFailures } : {}),
             })
           }
+          // Only a real stop ends the run. Completing one assistant message does
+          // not: in the observed loop every iteration was its own completed
+          // message, so resetting here would make the bound unreachable.
+          const stopping =
+            needsCompaction || blocked || parkAfterToolResult || coordinationHandoff || !!input.assistantMessage.error
+          if (stopping) forgetRepeatedToolCalls(input.sessionID)
           if (needsCompaction) return "compact"
           if (blocked) return "stop"
           if (parkAfterToolResult) return "stop"

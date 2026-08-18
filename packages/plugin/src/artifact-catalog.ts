@@ -51,6 +51,27 @@ export const TaskArtifactResourceLocatorSchema = z
   })
   .strict()
 
+/**
+ * Model-facing locator primitives.
+ *
+ * A content digest, byte count, and media type are Host-owned facts derived
+ * from the exact catalog revision or snapshot manifest entry, so the model
+ * never restates them: transcribing 64 hexadecimal characters truncates
+ * instead of verifying, and the copy proves nothing the exact revision does
+ * not already prove. The Host stamps every derived field while resolving these
+ * inputs into the durable unions above, which keep their complete digests.
+ */
+export const EngineArtifactLocatorInputSchema = EngineArtifactLocatorSchema.omit({
+  expected_sha256: true,
+})
+
+export const TaskArtifactResourceLocatorInputSchema = z
+  .object({
+    source: z.literal("task_artifact_resource"),
+    ref: TaskArtifactRefSchema.omit({ media_type: true, bytes: true, sha256: true }),
+  })
+  .strict()
+
 export const ArtifactLocatorSchema = z.discriminatedUnion("source", [
   EngineArtifactLocatorSchema,
   TaskArtifactSnapshotLocatorSchema,
@@ -83,6 +104,16 @@ function refineUniqueLocatorList(
 
 export const ArtifactReadLocatorListSchema = z
   .array(ArtifactReadLocatorSchema)
+  .superRefine((locators, context) => refineUniqueLocatorList(locators, context, "Artifact read"))
+
+export const ArtifactReadLocatorInputSchema = z.discriminatedUnion("source", [
+  EngineArtifactLocatorInputSchema,
+  TaskArtifactSnapshotLocatorSchema,
+  TaskArtifactResourceLocatorInputSchema,
+])
+
+export const ArtifactReadLocatorInputListSchema = z
+  .array(ArtifactReadLocatorInputSchema)
   .superRefine((locators, context) => refineUniqueLocatorList(locators, context, "Artifact read"))
 
 function artifactReference(prefix: "al" | "ar" | "as"): string {
@@ -319,6 +350,20 @@ export const EvidenceLocatorSchema = z.discriminatedUnion("source", [
 
 export const EvidenceLocatorListSchema = z
   .array(EvidenceLocatorSchema)
+  .superRefine((locators, context) => refineUniqueLocatorList(locators, context, "evidence"))
+
+export const EvidenceLocatorInputSchema = z.discriminatedUnion("source", [
+  EngineArtifactLocatorInputSchema,
+  TaskArtifactSnapshotLocatorSchema,
+  TaskArtifactResourceLocatorInputSchema,
+  SessionEvidenceLocatorSchema,
+  SessionMessageEvidenceLocatorSchema,
+  GoalRevisionEvidenceLocatorSchema,
+  CoordinationRequestEvidenceLocatorSchema,
+])
+
+export const EvidenceLocatorInputListSchema = z
+  .array(EvidenceLocatorInputSchema)
   .superRefine((locators, context) => refineUniqueLocatorList(locators, context, "evidence"))
 
 export const ArtifactCatalogSourceSchema = z.enum(["engine_artifact", "task_artifact"])
@@ -890,6 +935,8 @@ export type SessionMessageEvidenceLocator = z.infer<typeof SessionMessageEvidenc
 export type GoalRevisionEvidenceLocator = z.infer<typeof GoalRevisionEvidenceLocatorSchema>
 export type CoordinationRequestEvidenceLocator = z.infer<typeof CoordinationRequestEvidenceLocatorSchema>
 export type EvidenceLocator = z.infer<typeof EvidenceLocatorSchema>
+export type EvidenceLocatorInput = z.infer<typeof EvidenceLocatorInputSchema>
+export type ArtifactReadLocatorInput = z.infer<typeof ArtifactReadLocatorInputSchema>
 export type ArtifactCatalogEntry = z.infer<typeof ArtifactCatalogEntrySchema>
 export type ArtifactSearchInput = z.infer<typeof ArtifactSearchInputSchema>
 export type ArtifactSearchRequest = z.input<typeof ArtifactSearchInputSchema>

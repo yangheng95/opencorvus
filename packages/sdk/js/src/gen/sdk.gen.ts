@@ -550,10 +550,6 @@ import type {
   TaskProjectArchiveResponses,
   TaskReadConversationArtifactErrors,
   TaskReadConversationArtifactResponses,
-  TaskReplanErrors,
-  TaskReplanResponses,
-  TaskRetryErrors,
-  TaskRetryResponses,
   TaskRewindErrors,
   TaskRewindResponses,
   TaskSessionCancelErrors,
@@ -3562,6 +3558,7 @@ export class ExpertSquad extends HeyApiClient {
       directory?: string
       query?: string
       availability?: "all" | "available" | "installed"
+      productPillar?: "code" | "work"
       cursor?: string
       limit?: number
     },
@@ -3575,6 +3572,7 @@ export class ExpertSquad extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "query", key: "query" },
             { in: "query", key: "availability" },
+            { in: "query", key: "productPillar" },
             { in: "query", key: "cursor" },
             { in: "query", key: "limit" },
           ],
@@ -5026,20 +5024,6 @@ export class Control extends HeyApiClient {
              * Reason shown when rejecting the pending interaction.
              */
             message?: string
-          }
-        | {
-            action: "retry_task"
-            /**
-             * Task ID for the retry request.
-             */
-            taskID: string
-          }
-        | {
-            action: "replan_task"
-            /**
-             * Task ID for the replan request.
-             */
-            taskID: string
           }
         | {
             action: "cancel_task"
@@ -7894,62 +7878,6 @@ export class Task extends HeyApiClient {
     )
     return (options?.client ?? this.client).get<TaskProjectArchiveResponses, TaskProjectArchiveErrors, ThrowOnError>({
       url: "/task/{taskID}/project-archive",
-      ...options,
-      ...params,
-    })
-  }
-
-  /**
-   * Replan task
-   */
-  public replan<ThrowOnError extends boolean = false>(
-    parameters: {
-      taskID: string
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "taskID" },
-            { in: "query", key: "directory" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).post<TaskReplanResponses, TaskReplanErrors, ThrowOnError>({
-      url: "/task/{taskID}/replan",
-      ...options,
-      ...params,
-    })
-  }
-
-  /**
-   * Retry task
-   */
-  public retry<ThrowOnError extends boolean = false>(
-    parameters: {
-      taskID: string
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "taskID" },
-            { in: "query", key: "directory" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).post<TaskRetryResponses, TaskRetryErrors, ThrowOnError>({
-      url: "/task/{taskID}/retry",
       ...options,
       ...params,
     })

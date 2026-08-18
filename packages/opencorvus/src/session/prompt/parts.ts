@@ -30,6 +30,7 @@ import { resolveSessionMessageIdentity } from "../message-identity"
 import type { SessionMessageIdentity } from "../message-identity"
 import type { SessionControl } from "../control"
 import { SessionRuntimeContractStore } from "../runtime-contract"
+import { SessionPromptState } from "./state"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 const log = Log.create({ service: "session.prompt" })
@@ -792,7 +793,21 @@ function consumeMaterializedUserMessageForPersistence(materialized: Materialized
     throw new Error("Unrecognized materialized user message")
   }
   materializedUserMessages.delete(materialized)
+  markPendingDeliveryIfTurnInFlight(materialized.info)
   return { info: materialized.info, parts: materialized.parts }
+}
+
+/**
+ * A user Message persisted while this Session is answering an earlier one is
+ * queued at write time: it stays out of prompt assembly until the loop
+ * delivers it at the next Turn boundary. This is the write-side half of the
+ * contract in SessionLoop.partitionPendingDelivery — the prompt itself is
+ * always the delivered history verbatim, never a sliced view of it.
+ */
+export function markPendingDeliveryIfTurnInFlight(info: Message.Info): void {
+  if (info.role !== "user") return
+  if (!SessionPromptState.hasAttachedPromptWork(info.sessionID)) return
+  info.pendingDelivery = true
 }
 
 function persistedUserMessageReceipt(materialized: MaterializedUserMessage, persisted: Message.WithParts) {

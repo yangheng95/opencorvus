@@ -48,7 +48,7 @@ import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { createTaskLifecycleTools } from "@/orchestrator/task-lifecycle-tools"
 import { terminalTask } from "@/engine/state"
 import { requireTask } from "@/engine/store"
-import { openTaskForOperatorIntentInTransaction } from "@/engine/task-intent-open"
+import { openTaskForContinuationInTransaction } from "@/engine/task-intent-open"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import {
   publishImportedTaskArtifactResources,
@@ -204,11 +204,13 @@ async function completeFixtureTask(
       visibleToolName: "complete_task",
     }),
   })
+  // The model-facing boundary names revisions only; digests are Host-derived.
+  const namedDeliverables = deliverables.map(({ expected_sha256: _digest, ...named }) => named)
   return (tools.complete_task.execute as any)(
     {
       summary: `Complete fixture ${suffix}`,
-      evidence_locators: deliverables,
-      deliverable_artifact_locators: deliverables,
+      evidence_locators: namedDeliverables,
+      deliverable_artifact_locators: namedDeliverables,
       accepted_delivery_slice_revision_ids: [],
       workflow_id: workflow?.id ?? null,
     },
@@ -616,11 +618,16 @@ test("closes continuation admission before the real completion checkpoint and im
           visibleToolName: "complete_task",
         }),
       })
+      // The model-facing boundary names revisions only; digests are Host-derived.
+      const namedLocators = [canonical.locator, canonicalSupplement.locator].map(
+        ({ expected_sha256: _digest, ...named }) => named,
+      )
+      const { expected_sha256: _incidentalDigest, ...namedIncidental } = incidental.locator
       const completion = await (lifecycleTools.complete_task.execute as any)(
         {
           summary: "Freeze one exact terminal deliverable",
-          evidence_locators: [canonical.locator, canonicalSupplement.locator],
-          deliverable_artifact_locators: [canonical.locator, canonicalSupplement.locator],
+          evidence_locators: namedLocators,
+          deliverable_artifact_locators: namedLocators,
           accepted_delivery_slice_revision_ids: [],
           workflow_id: null,
         },
@@ -714,10 +721,9 @@ test("closes continuation admission before the real completion checkpoint and im
 
       _checkpointRace.mockRestore()
       Database.transaction((db) =>
-        openTaskForOperatorIntentInTransaction({
+        openTaskForContinuationInTransaction({
           db,
           taskID: task.taskID,
-          intent: "retry",
           now: Date.now(),
         }),
       )
@@ -813,8 +819,8 @@ test("closes continuation admission before the real completion checkpoint and im
         await (retryTools.complete_task.execute as any)(
           {
             summary: "Complete the reopened Task with the same canonical deliverable",
-            evidence_locators: [canonical.locator, canonicalSupplement.locator, incidental.locator],
-            deliverable_artifact_locators: [canonical.locator, canonicalSupplement.locator, incidental.locator],
+            evidence_locators: [...namedLocators, namedIncidental],
+            deliverable_artifact_locators: [...namedLocators, namedIncidental],
             accepted_delivery_slice_revision_ids: [],
             workflow_id: null,
           },
@@ -1159,10 +1165,9 @@ test("keeps an empty completed-source delivery authority through target preparat
         authorities: 1,
       })
       Database.transaction((db) =>
-        openTaskForOperatorIntentInTransaction({
+        openTaskForContinuationInTransaction({
           db,
           taskID: source.taskID,
-          intent: "retry",
           now: Date.now(),
         }),
       )
@@ -1278,6 +1283,17 @@ test("imports an exact Artifact from a failed same-Mission Task under its termin
           imported_locator: { artifact_id: prepared.imports[0]!.importedArtifactID },
         },
       ])
+      // Evolution predecessor correlation resolves an imported pair purely from
+      // import_lineage, so a failed source Task must retain the same lineage
+      // facts a completed source provides.
+      expect(prepared.imports[0]!.importedEnvelope).toMatchObject({
+        import_lineage: {
+          source_task_id: task.taskID,
+          source_locator: diagnostic.locator,
+          source_producer: { owner_kind: "projected-worker" },
+          source_provenance: { source_artifact_locators: [] },
+        },
+      })
     },
   })
 }, 60_000)

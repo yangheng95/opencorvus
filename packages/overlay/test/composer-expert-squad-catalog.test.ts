@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test"
 import { mergeComposerExpertSquadOptions } from "../src/services/composer-expert-squad-catalog"
-import { reconcileExpertSquadMarketCatalog } from "../src/services/expert-squad-market-catalog"
+import {
+  expertSquadMarketIndexFromDetail,
+  reconcileExpertSquadMarketCatalog,
+} from "../src/services/expert-squad-market-catalog"
 import type { ExpertSquadMarketIndexItem, ExpertSquadMarketItem, ExpertSquadOption } from "../src/services/expert-squad"
 
 function option(id: string): ExpertSquadOption {
@@ -21,6 +24,7 @@ function marketIndex(id: string): ExpertSquadMarketIndexItem {
     name: id,
     label: id,
     version: "1.0.0",
+    product_pillars: ["code"],
     installation_scopes: [],
   }
 }
@@ -42,6 +46,18 @@ function marketDetail(id: string, installationScopes: Array<"project" | "global"
     })),
   }
 }
+
+describe("Expert Squad market index projection", () => {
+  test("carries the product pillars an exact detail declares", () => {
+    const projected = expertSquadMarketIndexFromDetail({
+      ...marketDetail("commercial-legal", ["project"]),
+      product_pillars: ["work"],
+    })
+
+    expect(projected.product_pillars).toEqual(["work"])
+    expect(projected.installation_scopes).toEqual(["project"])
+  })
+})
 
 describe("Composer Expert Squad bounded catalog", () => {
   test("keeps the exact active and selected Squads alongside each bounded search page", () => {

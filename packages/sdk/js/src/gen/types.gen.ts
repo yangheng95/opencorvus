@@ -4769,6 +4769,7 @@ export type TaskMessageUserInfo = {
   }
   orderKey: string
   originSource: string
+  pendingDelivery?: boolean
   resolvedRole: string
   role: "user"
   sessionAgentID: string
@@ -5208,6 +5209,7 @@ export type VisibleMessage =
         providerID: string
       }
       orderKey: string
+      pendingDelivery?: boolean
       role: "user"
       sessionID: string
       summary?: {
@@ -8616,6 +8618,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           code: "UNLINKED_INVALID_ARTIFACT"
@@ -8638,6 +8641,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
               | "evolution-lab/candidate-revision"
               | "evolution-lab/run-evidence-bundle"
               | "evolution-lab/evaluation-result"
+              | "evolution-lab/integrity-review"
               | "evolution-lab/comparison-recommendation"
               | "evolution-lab/promotion-receipt"
             locator: {
@@ -8701,6 +8705,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -8787,6 +8792,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -8850,6 +8856,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
               | "evolution-lab/candidate-revision"
               | "evolution-lab/run-evidence-bundle"
               | "evolution-lab/evaluation-result"
+              | "evolution-lab/integrity-review"
               | "evolution-lab/comparison-recommendation"
               | "evolution-lab/promotion-receipt"
             locator: {
@@ -8936,6 +8943,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -8991,6 +8999,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -9050,6 +9059,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -9148,6 +9158,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -9256,6 +9267,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -9508,6 +9520,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -9570,6 +9583,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -9625,6 +9639,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -9684,6 +9699,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -9782,6 +9798,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -9844,6 +9861,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -9897,6 +9915,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -9982,6 +10001,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -10037,6 +10057,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -10096,6 +10117,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -10194,6 +10216,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -10249,6 +10272,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
           | "evolution-lab/candidate-revision"
           | "evolution-lab/run-evidence-bundle"
           | "evolution-lab/evaluation-result"
+          | "evolution-lab/integrity-review"
           | "evolution-lab/comparison-recommendation"
           | "evolution-lab/promotion-receipt"
         locator: {
@@ -10399,6 +10423,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           code: "UNLINKED_INVALID_ARTIFACT"
@@ -10421,6 +10446,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
               | "evolution-lab/candidate-revision"
               | "evolution-lab/run-evidence-bundle"
               | "evolution-lab/evaluation-result"
+              | "evolution-lab/integrity-review"
               | "evolution-lab/comparison-recommendation"
               | "evolution-lab/promotion-receipt"
             locator: {
@@ -10480,6 +10506,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -10566,6 +10593,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -10629,6 +10657,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
               | "evolution-lab/candidate-revision"
               | "evolution-lab/run-evidence-bundle"
               | "evolution-lab/evaluation-result"
+              | "evolution-lab/integrity-review"
               | "evolution-lab/comparison-recommendation"
               | "evolution-lab/promotion-receipt"
             locator: {
@@ -10715,6 +10744,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -10770,6 +10800,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -10829,6 +10860,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -10927,6 +10959,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                     | "evolution-lab/candidate-revision"
                     | "evolution-lab/run-evidence-bundle"
                     | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
                     | "evolution-lab/comparison-recommendation"
                     | "evolution-lab/promotion-receipt"
                   locator: {
@@ -11035,6 +11068,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -11287,6 +11321,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -11349,6 +11384,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -11404,6 +11440,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -11463,6 +11500,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -11561,6 +11599,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                   | "evolution-lab/candidate-revision"
                   | "evolution-lab/run-evidence-bundle"
                   | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
                   | "evolution-lab/comparison-recommendation"
                   | "evolution-lab/promotion-receipt"
                 locator: {
@@ -11623,6 +11662,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -11676,6 +11716,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
             | "evolution-lab/candidate-revision"
             | "evolution-lab/run-evidence-bundle"
             | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
             | "evolution-lab/comparison-recommendation"
             | "evolution-lab/promotion-receipt"
           locator: {
@@ -11761,6 +11802,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -11816,6 +11858,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -11875,6 +11918,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -11973,6 +12017,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                 | "evolution-lab/candidate-revision"
                 | "evolution-lab/run-evidence-bundle"
                 | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
                 | "evolution-lab/comparison-recommendation"
                 | "evolution-lab/promotion-receipt"
               locator: {
@@ -12028,6 +12073,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
           | "evolution-lab/candidate-revision"
           | "evolution-lab/run-evidence-bundle"
           | "evolution-lab/evaluation-result"
+          | "evolution-lab/integrity-review"
           | "evolution-lab/comparison-recommendation"
           | "evolution-lab/promotion-receipt"
         locator: {
@@ -12097,6 +12143,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
           | "evolution-lab/candidate-revision"
           | "evolution-lab/run-evidence-bundle"
           | "evolution-lab/evaluation-result"
+          | "evolution-lab/integrity-review"
           | "evolution-lab/comparison-recommendation"
           | "evolution-lab/promotion-receipt"
         locator: {
@@ -12145,6 +12192,42 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
       expected_revision_digest: string
       integrity_review: {
         accepted_limitations: Array<string>
+        arm: "baseline" | "candidate"
+        case_id: string
+        evaluation_result_locator:
+          | {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+          | {
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
         findings: Array<{
           category: "evidence_integrity" | "reward_hacking" | "permission" | "side_effect" | "security"
           correction: string | null
@@ -12188,10 +12271,65 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
           owner: string
           severity: "info" | "warning" | "blocker"
         }>
+        repetition: number
         status: "reviewed" | "unavailable"
         unknowns: Array<string>
       } | null
       repetition: number
+      review: {
+        artifact_type:
+          | "evolution-lab/opportunity"
+          | "evolution-lab/campaign-spec"
+          | "evolution-lab/failure-attribution"
+          | "evolution-lab/candidate-revision"
+          | "evolution-lab/run-evidence-bundle"
+          | "evolution-lab/evaluation-result"
+          | "evolution-lab/integrity-review"
+          | "evolution-lab/comparison-recommendation"
+          | "evolution-lab/promotion-receipt"
+        locator: {
+          artifact_id: string
+          catalog_revision: number
+          expected_sha256: string
+          source: "engine_artifact"
+        }
+        partition: "current" | "historical"
+        producer:
+          | {
+              agent_id: string
+              expert_squad_id: string
+              message_id: string
+              owner_kind: "projected-scheduler" | "projected-worker"
+              package_revision: {
+                id: string
+                namespace: string
+                package_digest: string
+                project_id: string | null
+                scope: "built_in" | "project" | "global"
+                version: string
+              }
+              projection_hash: string
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              message_id: string
+              mission_id: string
+              owner_kind: "mission"
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              component_id: string
+              operation_id: string
+              owner_kind: "core"
+            }
+        root_session_id: string
+        schema_version: 1
+        task_id: string
+        time_created: number
+        time_updated: number
+      } | null
       run: {
         artifact_type:
           | "evolution-lab/opportunity"
@@ -12200,6 +12338,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
           | "evolution-lab/candidate-revision"
           | "evolution-lab/run-evidence-bundle"
           | "evolution-lab/evaluation-result"
+          | "evolution-lab/integrity-review"
           | "evolution-lab/comparison-recommendation"
           | "evolution-lab/promotion-receipt"
         locator: {
@@ -13340,6 +13479,7 @@ export type ExpertSquadMarketData = {
     directory?: string
     query?: string
     availability?: "all" | "available" | "installed"
+    productPillar?: "code" | "work"
     cursor?: string
     limit?: number
   }
@@ -13373,6 +13513,7 @@ export type ExpertSquadMarketResponses = {
       label: string
       name: string
       namespace: string
+      product_pillars: Array<"code" | "work">
       version: string
     }>
     next_cursor: string | null
@@ -13442,6 +13583,7 @@ export type ExpertSquadMarketDetailResponses = {
     name: string
     namespace: string
     package_digest: string
+    product_pillars: Array<"code" | "work">
     selector_summary: string
     skill_count: number
     tool_count: number
@@ -15720,20 +15862,6 @@ export type GatewayControlActionData = {
          * Reason shown when rejecting the pending interaction.
          */
         message?: string
-      }
-    | {
-        action: "retry_task"
-        /**
-         * Task ID for the retry request.
-         */
-        taskID: string
-      }
-    | {
-        action: "replan_task"
-        /**
-         * Task ID for the replan request.
-         */
-        taskID: string
       }
     | {
         action: "cancel_task"
@@ -27627,8 +27755,6 @@ export type TaskBoardResponses = {
     overview: {
       controls: {
         canCancel: boolean
-        canReplan: boolean
-        canRetry: boolean
       }
       currentFailure?: {
         source: "task" | "interaction"
@@ -27638,7 +27764,7 @@ export type TaskBoardResponses = {
       headline: string
       nextStep: {
         detail?: string
-        kind: "resolve_blocker" | "retry" | "replan" | "observe" | "review_acceptance" | "message"
+        kind: "resolve_blocker" | "observe" | "review_acceptance" | "message"
         title: string
       }
       summary: string
@@ -29654,8 +29780,6 @@ export type TaskConversationResponses = {
       overview: {
         controls: {
           canCancel: boolean
-          canReplan: boolean
-          canRetry: boolean
         }
         currentFailure?: {
           source: "task" | "interaction"
@@ -29665,7 +29789,7 @@ export type TaskConversationResponses = {
         headline: string
         nextStep: {
           detail?: string
-          kind: "resolve_blocker" | "retry" | "replan" | "observe" | "review_acceptance" | "message"
+          kind: "resolve_blocker" | "observe" | "review_acceptance" | "message"
           title: string
         }
         summary: string
@@ -31020,8 +31144,14 @@ export type TaskDebugTaskRootIngressesResponses = {
           ingressID: string
           projection:
             | {
-                reason: "integrity_conflict"
-                state: "blocked"
+                reason:
+                  | "evidence_violation"
+                  | "policy_drift"
+                  | "decision_ambiguous"
+                  | "outcome_ambiguous"
+                  | "turn_without_activation"
+                  | "interaction_ambiguous"
+                state: "host_fault"
               }
             | {
                 reason: "semantic_limit" | "activation_limit" | "deadline"
@@ -31053,10 +31183,6 @@ export type TaskDebugTaskRootIngressesResponses = {
             | {
                 requestEventID: string
                 state: "cancelling"
-              }
-            | {
-                requestEventID: string
-                state: "closing"
               }
             | {
                 state: "ready"
@@ -32011,734 +32137,6 @@ export type TaskProjectArchiveResponses = {
 }
 
 export type TaskProjectArchiveResponse = TaskProjectArchiveResponses[keyof TaskProjectArchiveResponses]
-
-export type TaskReplanData = {
-  body?: never
-  path: {
-    taskID: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/task/{taskID}/replan"
-}
-
-export type TaskReplanErrors = {
-  /**
-   * Not found
-   */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
-  /**
-   * Task replan conflicts with the current lifecycle
-   */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskControlIntentLifecycleConflictError"
-  }
-}
-
-export type TaskReplanError = TaskReplanErrors[keyof TaskReplanErrors]
-
-export type TaskReplanResponses = {
-  /**
-   * Task replan accepted
-   */
-  200: {
-    attachments?: Array<{
-      filename?: string
-      intent: "task_input"
-      mime: string
-      sha: string
-      size: number
-      source: "user-upload"
-      url: string
-    }>
-    blockingReason?: string
-    budget?: {
-      maxExecutorGroups?: number
-    }
-    cancellation?:
-      | {
-          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-          messageID?: string
-          missionID?: string
-          reason: string
-          requestEventID: string
-          requestID: string
-          requestedAt: number
-          sessionID?: string
-          source:
-            | "task.cancel"
-            | "task.delete"
-            | "task.archive"
-            | "mission.abort"
-            | "mission.archive"
-            | "mission.delete"
-            | "panel.cancel_task"
-            | "orchestrator.cancel_task"
-            | "session.delete"
-            | "project.delete"
-          status: "cancelling"
-          surface:
-            | "api"
-            | "overlay.work_ledger"
-            | "overlay.selected_task"
-            | "overlay.composer_stop"
-            | "overlay.chat_request_stop"
-            | "overlay.interrupt_task"
-            | "overlay.archive_panel"
-            | "panel"
-            | "gateway"
-            | "slack"
-            | "telegram"
-            | "discord"
-            | "feishu"
-            | "whatsapp"
-            | "googlechat"
-            | "msteams"
-            | "line"
-            | "matrix"
-            | "mattermost"
-            | "signal"
-            | "wecom"
-            | "dingtalk"
-            | "clickclack"
-            | "imessage"
-            | "irc"
-            | "nextcloud-talk"
-            | "nostr"
-            | "qqbot"
-            | "raft"
-            | "reef"
-            | "sms"
-            | "synology-chat"
-            | "tlon"
-            | "twitch"
-            | "zalo"
-            | "zalouser"
-            | "right-sidebar"
-            | "orchestrator"
-          toolCallID?: string
-          toolPartID?: string
-        }
-      | {
-          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-          messageID?: string
-          missionID?: string
-          reason: string
-          requestEventID: string
-          requestID: string
-          requestedAt: number
-          sessionID?: string
-          source:
-            | "task.cancel"
-            | "task.delete"
-            | "task.archive"
-            | "mission.abort"
-            | "mission.archive"
-            | "mission.delete"
-            | "panel.cancel_task"
-            | "orchestrator.cancel_task"
-            | "session.delete"
-            | "project.delete"
-          status: "cancelled"
-          surface:
-            | "api"
-            | "overlay.work_ledger"
-            | "overlay.selected_task"
-            | "overlay.composer_stop"
-            | "overlay.chat_request_stop"
-            | "overlay.interrupt_task"
-            | "overlay.archive_panel"
-            | "panel"
-            | "gateway"
-            | "slack"
-            | "telegram"
-            | "discord"
-            | "feishu"
-            | "whatsapp"
-            | "googlechat"
-            | "msteams"
-            | "line"
-            | "matrix"
-            | "mattermost"
-            | "signal"
-            | "wecom"
-            | "dingtalk"
-            | "clickclack"
-            | "imessage"
-            | "irc"
-            | "nextcloud-talk"
-            | "nostr"
-            | "qqbot"
-            | "raft"
-            | "reef"
-            | "sms"
-            | "synology-chat"
-            | "tlon"
-            | "twitch"
-            | "zalo"
-            | "zalouser"
-            | "right-sidebar"
-            | "orchestrator"
-          terminalAt: number
-          terminalEventID: string
-          toolCallID?: string
-          toolPartID?: string
-        }
-    completionDecision?: {
-      acceptedDeliverySliceRevisionIDs: Array<string>
-      artifactLocator: {
-        artifact_id: string
-        catalog_revision: number
-        expected_sha256: string
-        source: "engine_artifact"
-      }
-      deliverableArtifactLocators: Array<
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-      >
-      evidenceLocators: Array<
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-        | {
-            session_id: string
-            source: "session"
-          }
-        | {
-            /**
-             * Exact Message ID stored in the paired session_id.
-             */
-            message_id: string
-            /**
-             * Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.
-             */
-            session_id: string
-            source: "session_message"
-          }
-        | {
-            goal_id: string
-            source: "goal_revision"
-          }
-        | {
-            request_id: string
-            source: "coordination_request"
-          }
-      >
-      orchestratorMessageID: string
-      orchestratorSessionID: string
-      timeRecorded: number
-      toolCallID: string
-      toolPartID: string
-      workflowBinding:
-        | {
-            kind: "direct"
-            package_revision: {
-              id: string
-              namespace: string
-              package_digest: string
-              project_id: string | null
-              scope: "built_in" | "project" | "global"
-              version: string
-            }
-          }
-        | {
-            kind: "virtual_workflow"
-            nodes: Array<{
-              agent_id: string
-              depends_on: Array<string>
-              node_id: string
-            }>
-            package_revision: {
-              id: string
-              namespace: string
-              package_digest: string
-              project_id: string | null
-              scope: "built_in" | "project" | "global"
-              version: string
-            }
-            workflow_id: string
-          }
-    }
-    directory?: string
-    error?: string
-    id: string
-    metadata?: {
-      [key: string]: unknown
-    }
-    orderKey: string
-    packageRevisionBinding: {
-      id: string
-      namespace: string
-      package_digest: string
-      project_id: string | null
-      scope: "built_in" | "project" | "global"
-      version: string
-    }
-    priority: "critical" | "high" | "normal" | "low"
-    productPillar: "code" | "work"
-    projectID: string
-    request: string
-    requestID?: string
-    sessionID?: string | null
-    source: string
-    status: "active" | "completed" | "failed" | "cancelled"
-    terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
-    time: {
-      archived?: number
-      completed?: number
-      created: number
-      started: number
-      updated: number
-    }
-    title: string
-  }
-}
-
-export type TaskReplanResponse = TaskReplanResponses[keyof TaskReplanResponses]
-
-export type TaskRetryData = {
-  body?: never
-  path: {
-    taskID: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/task/{taskID}/retry"
-}
-
-export type TaskRetryErrors = {
-  /**
-   * Not found
-   */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
-  /**
-   * Task retry conflicts with the current lifecycle
-   */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskControlIntentLifecycleConflictError"
-  }
-}
-
-export type TaskRetryError = TaskRetryErrors[keyof TaskRetryErrors]
-
-export type TaskRetryResponses = {
-  /**
-   * Task retry accepted
-   */
-  200: {
-    attachments?: Array<{
-      filename?: string
-      intent: "task_input"
-      mime: string
-      sha: string
-      size: number
-      source: "user-upload"
-      url: string
-    }>
-    blockingReason?: string
-    budget?: {
-      maxExecutorGroups?: number
-    }
-    cancellation?:
-      | {
-          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-          messageID?: string
-          missionID?: string
-          reason: string
-          requestEventID: string
-          requestID: string
-          requestedAt: number
-          sessionID?: string
-          source:
-            | "task.cancel"
-            | "task.delete"
-            | "task.archive"
-            | "mission.abort"
-            | "mission.archive"
-            | "mission.delete"
-            | "panel.cancel_task"
-            | "orchestrator.cancel_task"
-            | "session.delete"
-            | "project.delete"
-          status: "cancelling"
-          surface:
-            | "api"
-            | "overlay.work_ledger"
-            | "overlay.selected_task"
-            | "overlay.composer_stop"
-            | "overlay.chat_request_stop"
-            | "overlay.interrupt_task"
-            | "overlay.archive_panel"
-            | "panel"
-            | "gateway"
-            | "slack"
-            | "telegram"
-            | "discord"
-            | "feishu"
-            | "whatsapp"
-            | "googlechat"
-            | "msteams"
-            | "line"
-            | "matrix"
-            | "mattermost"
-            | "signal"
-            | "wecom"
-            | "dingtalk"
-            | "clickclack"
-            | "imessage"
-            | "irc"
-            | "nextcloud-talk"
-            | "nostr"
-            | "qqbot"
-            | "raft"
-            | "reef"
-            | "sms"
-            | "synology-chat"
-            | "tlon"
-            | "twitch"
-            | "zalo"
-            | "zalouser"
-            | "right-sidebar"
-            | "orchestrator"
-          toolCallID?: string
-          toolPartID?: string
-        }
-      | {
-          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-          messageID?: string
-          missionID?: string
-          reason: string
-          requestEventID: string
-          requestID: string
-          requestedAt: number
-          sessionID?: string
-          source:
-            | "task.cancel"
-            | "task.delete"
-            | "task.archive"
-            | "mission.abort"
-            | "mission.archive"
-            | "mission.delete"
-            | "panel.cancel_task"
-            | "orchestrator.cancel_task"
-            | "session.delete"
-            | "project.delete"
-          status: "cancelled"
-          surface:
-            | "api"
-            | "overlay.work_ledger"
-            | "overlay.selected_task"
-            | "overlay.composer_stop"
-            | "overlay.chat_request_stop"
-            | "overlay.interrupt_task"
-            | "overlay.archive_panel"
-            | "panel"
-            | "gateway"
-            | "slack"
-            | "telegram"
-            | "discord"
-            | "feishu"
-            | "whatsapp"
-            | "googlechat"
-            | "msteams"
-            | "line"
-            | "matrix"
-            | "mattermost"
-            | "signal"
-            | "wecom"
-            | "dingtalk"
-            | "clickclack"
-            | "imessage"
-            | "irc"
-            | "nextcloud-talk"
-            | "nostr"
-            | "qqbot"
-            | "raft"
-            | "reef"
-            | "sms"
-            | "synology-chat"
-            | "tlon"
-            | "twitch"
-            | "zalo"
-            | "zalouser"
-            | "right-sidebar"
-            | "orchestrator"
-          terminalAt: number
-          terminalEventID: string
-          toolCallID?: string
-          toolPartID?: string
-        }
-    completionDecision?: {
-      acceptedDeliverySliceRevisionIDs: Array<string>
-      artifactLocator: {
-        artifact_id: string
-        catalog_revision: number
-        expected_sha256: string
-        source: "engine_artifact"
-      }
-      deliverableArtifactLocators: Array<
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-      >
-      evidenceLocators: Array<
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-        | {
-            session_id: string
-            source: "session"
-          }
-        | {
-            /**
-             * Exact Message ID stored in the paired session_id.
-             */
-            message_id: string
-            /**
-             * Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.
-             */
-            session_id: string
-            source: "session_message"
-          }
-        | {
-            goal_id: string
-            source: "goal_revision"
-          }
-        | {
-            request_id: string
-            source: "coordination_request"
-          }
-      >
-      orchestratorMessageID: string
-      orchestratorSessionID: string
-      timeRecorded: number
-      toolCallID: string
-      toolPartID: string
-      workflowBinding:
-        | {
-            kind: "direct"
-            package_revision: {
-              id: string
-              namespace: string
-              package_digest: string
-              project_id: string | null
-              scope: "built_in" | "project" | "global"
-              version: string
-            }
-          }
-        | {
-            kind: "virtual_workflow"
-            nodes: Array<{
-              agent_id: string
-              depends_on: Array<string>
-              node_id: string
-            }>
-            package_revision: {
-              id: string
-              namespace: string
-              package_digest: string
-              project_id: string | null
-              scope: "built_in" | "project" | "global"
-              version: string
-            }
-            workflow_id: string
-          }
-    }
-    directory?: string
-    error?: string
-    id: string
-    metadata?: {
-      [key: string]: unknown
-    }
-    orderKey: string
-    packageRevisionBinding: {
-      id: string
-      namespace: string
-      package_digest: string
-      project_id: string | null
-      scope: "built_in" | "project" | "global"
-      version: string
-    }
-    priority: "critical" | "high" | "normal" | "low"
-    productPillar: "code" | "work"
-    projectID: string
-    request: string
-    requestID?: string
-    sessionID?: string | null
-    source: string
-    status: "active" | "completed" | "failed" | "cancelled"
-    terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
-    time: {
-      archived?: number
-      completed?: number
-      created: number
-      started: number
-      updated: number
-    }
-    title: string
-  }
-}
-
-export type TaskRetryResponse = TaskRetryResponses[keyof TaskRetryResponses]
 
 export type TaskRewindData = {
   body: {

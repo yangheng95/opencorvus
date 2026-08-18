@@ -194,6 +194,7 @@ const PayloadMarketItem = z
     label: z.string(),
     description: z.string().optional(),
     version: z.string(),
+    product_pillars: z.array(z.enum(["code", "work"])).min(1).max(2),
     package_digest: z.string().regex(/^[a-f0-9]{64}$/),
     selector_summary: z.string(),
     agents: z.array(PayloadMarketAgent),
@@ -221,6 +222,7 @@ const PayloadMarketIndexItem = z
     label: z.string().min(1).max(160),
     description: z.string().min(1).max(1_000).optional(),
     version: z.string().min(1).max(80),
+    product_pillars: z.array(z.enum(["code", "work"])).min(1).max(2),
     installation_scopes: z.array(ExpertSquadPackageLocations.InstallationScopeSchema).max(2),
   })
   .strict()
@@ -636,6 +638,7 @@ export function ExpertSquadRoutes() {
         z.object({
           query: z.string().max(500).default(""),
           availability: z.enum(["all", "available", "installed"]).default("all"),
+          productPillar: z.enum(["code", "work"]).optional(),
           cursor: z.string().min(1).optional(),
           limit: z.coerce.number().int().min(1).max(20).default(20),
         }),
@@ -647,6 +650,7 @@ export function ExpertSquadRoutes() {
             projectDirectory: Instance.project.worktree,
             query: query.query,
             availability: query.availability,
+            productPillar: query.productPillar,
             cursor: query.cursor,
             limit: query.limit,
           }),
@@ -661,6 +665,7 @@ export function ExpertSquadRoutes() {
               label: item.label,
               description: item.description,
               version: item.version,
+              product_pillars: item.productPillars,
               installation_scopes: item.installationScopes,
             })),
             next_cursor: page.nextCursor,
@@ -703,6 +708,7 @@ export function ExpertSquadRoutes() {
             label: item.label,
             description: item.description,
             version: item.version,
+            product_pillars: item.productPillars,
             package_digest: item.packageDigest,
             selector_summary: item.selectorSummary,
             agents: item.agents.map((agent) => ({

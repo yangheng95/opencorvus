@@ -24,7 +24,9 @@ import {
   PartTable as SessionPartTable,
   ToolPartRequestTable as PartTable,
   ToolPartOutcomeTable,
+  type ToolOutcomePartData,
 } from "@/session/session.sql"
+import { completedToolOutcomeOutput } from "@/session/tool-part-facts"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import {
@@ -238,12 +240,20 @@ function completedToolOutputValuesBeforeAction(input: {
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
-      .all(),
+      .all()
+      .map((row) => ({
+        ...row,
+        canonicalOutput: completedToolOutcomeOutput(
+          db,
+          row.outcome as ToolOutcomePartData,
+          () => `Completed Artifact locator-producing tool part ${row.id}`,
+        ),
+      })),
   )
   return rows.flatMap((row) => {
     const requestInput = (row.request as { input?: unknown }).input
     if (input.acceptInput && !input.acceptInput(requestInput)) return []
-    const output = (row.outcome as { output?: unknown }).output
+    const output = row.canonicalOutput
     if (typeof output !== "string") {
       throw new Error(`Completed Artifact locator-producing tool part ${row.id} has no canonical string output.`)
     }
@@ -470,7 +480,15 @@ export function completeArtifactReadLocatorsForSession(
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
-      .all(),
+      .all()
+      .map((row) => ({
+        ...row,
+        canonicalOutput: completedToolOutcomeOutput(
+          db,
+          row.outcome as ToolOutcomePartData,
+          () => `Completed Artifact read tool part ${row.id}`,
+        ),
+      })),
   )
   const facts: ArtifactReadWindowFact[] = []
   for (const row of rows) {
@@ -478,7 +496,7 @@ export function completeArtifactReadLocatorsForSession(
       tool?: unknown
       input?: unknown
     }
-    const state = { input: data.input, output: (row.outcome as { output?: unknown }).output }
+    const state = { input: data.input, output: row.canonicalOutput }
     const rawInput = state.input
     if (data.tool === "panel") {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
@@ -607,13 +625,21 @@ export function selectedArtifactFactsForSession(
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
-      .all(),
+      .all()
+      .map((row) => ({
+        ...row,
+        canonicalOutput: completedToolOutcomeOutput(
+          db,
+          row.outcome as ToolOutcomePartData,
+          () => `Completed artifact_select tool part ${row.id}`,
+        ),
+      })),
   )
   const facts = new Map<string, ArtifactSelectionFact>()
   for (const row of rows) {
     const state = {
       input: (row.request as { input?: unknown }).input,
-      output: (row.outcome as { output?: unknown }).output,
+      output: row.canonicalOutput,
     }
     if (typeof state.output !== "string") {
       throw new Error(`Completed artifact_select tool part ${row.id} has no canonical string output.`)

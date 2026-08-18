@@ -28,6 +28,8 @@ import {
   requireEvolutionMutationRootSession,
 } from "./mutation-authorization"
 
+export const EVOLUTION_LAB_EXPERT_SQUAD_ID = "evolution-lab"
+
 const CampaignMutationFactsSchema = z.object({
   target: EvolutionInstallableTargetSchema,
   baseline_revision: EvolutionExactRevisionSchema,
@@ -64,7 +66,7 @@ function exactArtifact(input: {
     const producer = envelope.producer
     if (producer.owner_kind !== "projected-scheduler" && producer.owner_kind !== "projected-worker")
       throw new Error(`Evolution mutation evidence ${input.artifactType} must be produced by Evolution Lab`)
-    if (producer.expert_squad_id !== "evolution-lab")
+    if (producer.expert_squad_id !== EVOLUTION_LAB_EXPERT_SQUAD_ID)
       throw new Error(`Evolution mutation evidence ${input.artifactType} must be produced by Evolution Lab`)
   }
   return Object.assign(row, { envelope })
@@ -229,6 +231,9 @@ export function evolutionMutationConfirmationText(input: {
   return [
     `确认将 project:${input.projectID} 的 ${input.target.namespace}/${input.target.id}`,
     `从 ${input.beforeDigest} ${verb}到 ${input.afterDigest}。`,
+    ...(input.target.id === EVOLUTION_LAB_EXPERT_SQUAD_ID
+      ? [`注意：该目标是进化机制自身，本次${verb}将改变后续每一次进化的证据校验与授权行为。`]
+      : []),
     ...input.evidenceSHA256s.map((digest, index) => `证据${index + 1}：${digest}`),
   ].join("\n")
 }

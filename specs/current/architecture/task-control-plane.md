@@ -33,15 +33,18 @@ The lifecycle event family is:
 ```text
 task.execution.opened(epoch)
 task.cancellation.requested(epoch)
-task.close.requested(epoch)
-task.cancelled(epoch) | task.closed(epoch) | task.completed(epoch) | task.failed(epoch)
+task.cancelled(epoch) | task.completed(epoch) | task.failed(epoch)
 task.execution.reopened(epoch + 1)
 task.deleted(epoch)
 ```
 
-One epoch has one open boundary, at most one cancellation/close request boundary, and one mutually exclusive terminal boundary. `engine_task` contains durable Task definition/input fields only; lifecycle status, start/completion time, terminal error, cancellation metadata, and rewind cursors are reduced from Protocol Events.
+One epoch has one open boundary, at most one cancellation request boundary, and one mutually exclusive terminal boundary. Cancellation is the only boundary request: a Task is left by completing, failing, or cancelling it, and there is no separate close request or close terminal. `engine_task` contains durable Task definition/input fields only; lifecycle status, start/completion time, terminal error, cancellation metadata, and rewind cursors are reduced from Protocol Events.
 
 A late activation, decision, or effect request carries its exact epoch and is rejected after a newer epoch opens. An already-requested external effect may still append or reconcile its exact outcome after cancellation, because discarding an unknown outcome would permit duplicate side effects.
+
+An explicit operator message is the only thing that opens the next occurrence, and it does so for every terminal state — completed, failed, and cancelled alike. Terminal facts end an *occurrence*, not the Task: the reduction says so itself in calling an ingress `terminal_inapplicable` for "a cancelled, closed, or superseded epoch". The message reopens at `epoch + 1`, the prior occurrence stays intact as an immutable fact at its own epoch, and the message then lands on the new epoch as ordinary ingress. There is no separate retry or replan control, and no terminal-conversation mode: a state whose only exit is dedicated vocabulary is a state the operator cannot leave with an ordinary action. Non-operator arrivals — scheduler delivery, agent coordination, recovery, late outcomes — must match an existing occurrence and can never obtain reopen authority, so the only thing that can reopen a Task is the operator's own message. Asking a question rather than requesting work needs no mode of its own: the Orchestrator judges a status-only message as conversation ingress and answers it with a `no_action` decision receipt.
+
+Deletion is the boundary that does fence a reopen, per the retention rule below; the reopen transaction checks it directly rather than relying on the ingress acceptance that refuses a moment later.
 
 Archive and delete are operator-owned retention controls, not fact-reconciliation decisions. After physical prompt/process owners have stopped, no unresolved Provider, Tool, queue, ingress, Message, Task, Mission, or Session event may veto either control. Cancellation publishes the Task terminal boundary without completing an assistant or inventing an external-effect outcome; the unresolved fact remains part of the immutable audit graph and may receive only its exact outcome later.
 
@@ -63,17 +66,17 @@ IngressAccepted {
 
 The source locator is validated in the acceptance transaction. A Message source must belong to the Task root Session. A Protocol source must be a Task aggregate event for that Task. Inline input uses the ingress identity as its producer identity. The same normalized source can be accepted only once across all epochs.
 
-`sequence` is the immutable FIFO order inside an epoch. Lease acquisition itself verifies that every prior ingress is resolved or terminal-inapplicable; no caller-local queue check is trusted.
+`sequence` is the immutable FIFO order inside an epoch. Lease acquisition itself verifies that every prior ingress has released head-of-line order — `resolved`, `terminal_inapplicable`, `exhausted`, or `host_fault`, the states with no decision left to make; no caller-local queue check is trusted. That release is one predicate shared by the durable fence and the scan, so a state cannot hold the line in one and not the other.
 
 The ingress reducer is a total order:
 
-1. `blocked` for conflicting immutable facts;
+1. `host_fault` for a broken Host write invariant, named by which one;
 2. `terminal_inapplicable` for a cancelled, closed, or superseded epoch;
 3. `resolved` for exactly one valid assistant-owned decision set and no conflict; one completed assistant Turn may own multiple sibling `dispatch_agent` receipts, while every other decision set contains exactly one receipt;
 4. `leased` for one still-valid, unconsumed activation;
 5. `reconcile_required` for a write-ahead external request whose outcome is unknown;
 6. `waiting` for one unresolved explicit Interaction/deadline decision;
-7. `cancelling` or `closing` for the active lifecycle fence;
+7. `cancelling` for the active lifecycle fence;
 8. `exhausted` when immutable semantic/physical budget or deadline is exhausted;
 9. `ready` otherwise.
 
@@ -194,7 +197,7 @@ When closing starts, unanswered scheduler wakes receive exact closure receipts. 
 
 Project reconciliation is the only Task-control recovery algorithm:
 
-1. enumerate Tasks whose lifecycle projection is open, cancelling, or closing;
+1. enumerate Tasks whose lifecycle projection is open or cancelling;
 2. read epoch ingresses in sequence order;
 3. reduce the FIFO head from immutable facts and valid leases;
 4. reconcile exact unknown effects before ordinary replay;
@@ -226,7 +229,7 @@ Those are *edge* obligations distributed across every producer in the program, s
 
 The heartbeat is what makes liveness a property of the control plane instead of a property of caller discipline. For any transition that enlarges `E(t)` — a fact appended by any process, a crossed instant, or an edge that was never wired — some scan begins after it within one heartbeat period. Edges remain, and they are what make the common path immediate; they are no longer what makes it correct.
 
-The sweep covers exactly the Tasks whose lifecycle can still enable an ingress — `active`, `cancelling`, `closing`, and one deliberate exception: a terminal Task holding an ingress accepted at-or-after its terminal instant. Acceptance keeps admitting operator and coordination input after the terminal boundary — the post-completion conversation — and that input relies on the same wake edges as everything else, so excluding its Task from the sweep reintroduces the lost-wake class the sweep exists to close. A terminal Task whose post-terminal ingresses this process has verified settled leaves the sweep; one with none never enters it, because an ordinary terminal Task absorbs every further fact and its dispatches are already settled by the completion gate. Recovery sweeps run once per scan rather than once per fixpoint pass, since their own effects re-enter the fixpoint and a later pass reads no new evidence.
+The sweep covers exactly the Tasks whose lifecycle can still enable an ingress — `active`, `cancelling`, and one deliberate exception: a terminal Task holding an ingress accepted at-or-after its terminal instant. Acceptance keeps admitting operator and coordination input after the terminal boundary — the post-completion conversation — and that input relies on the same wake edges as everything else, so excluding its Task from the sweep reintroduces the lost-wake class the sweep exists to close. A terminal Task whose post-terminal ingresses this process has verified settled leaves the sweep; one with none never enters it, because an ordinary terminal Task absorbs every further fact and its dispatches are already settled by the completion gate. Recovery sweeps run once per scan rather than once per fixpoint pass, since their own effects re-enter the fixpoint and a later pass reads no new evidence.
 
 The scan keeps two process-local absorbing-verdict caches: ingresses reduced to `resolved`, `terminal_inapplicable`, or `exhausted`, and dispatches verified settled-and-delivered or deliberately suppressed. Those verdicts are monotone in the durable facts — appends to a resolved activation are fenced, epochs only advance, budgets only fill — so a cached verdict cannot silently become wrong, and the caches hold no authority: losing one costs exactly one re-verification per entry. Without them each heartbeat re-reads full evidence for the entire settled history of every swept Task, a per-period cost that grows with the Task's lifetime instead of its frontier.
 
@@ -248,12 +251,14 @@ The same scan closes the opposite gap. A dispatch is settled before its outcome 
 
 Every non-terminal projection owes exactly one of two things, and the classification is exhaustive over the projection union by construction:
 
-- **a finite wake instant**, which the scan returns for the driver to arm — `leased` at lease expiry, `waiting` at its resume deadline, `cancelling` and `closing` at a fixed reconciliation period, and anything under an absolute deadline at that deadline;
-- **a durable operator-visible surface**, for the states no timer and no fact append can leave. `waiting` without a deadline and `reconcile_required` are surfaced by the pending Interaction that gates them. `blocked` and `exhausted` have no such row, so the first scan that observes one records a deterministic infrastructure fact naming the ingress, its state, and its reason.
+- **a finite wake instant**, which the scan returns for the driver to arm — `leased` at lease expiry, `waiting` at its resume deadline, `cancelling` at a fixed reconciliation period, and anything under an absolute deadline at that deadline;
+- **a durable operator-visible surface**, for the states no timer and no fact append can leave. `waiting` without a deadline and `reconcile_required` are surfaced by the pending Interaction that gates them. `host_fault` and `exhausted` have no such row, so the first scan that observes one records a deterministic infrastructure fact naming the ingress, its state, and its reason.
 
-A resting state with neither is indistinguishable from a deadlock, and that is precisely how these states used to present: an ingress exhausted after three decision-less Turns, or blocked on an integrity conflict, would stop silently while head-of-line blocking starved every operator message behind it. Surfacing is an observability obligation, not a scheduling one — losing it must never convert a resting Task into a faulting one.
+A resting state with neither is indistinguishable from a deadlock, and that is precisely how these states used to present: an ingress exhausted after three decision-less Turns, or stopped on an integrity conflict, would stop silently while head-of-line blocking starved every operator message behind it. Both now release the line, so the surface is the abandoned ingress's only trace rather than a notice pinned to a stalled Task. Surfacing is an observability obligation, not a scheduling one — losing it must never convert a resting Task into a faulting one.
 
-Reduction is total over persisted facts. An evidence reader that finds a violation of the persisted integrity contract raises a typed integrity error, which the fact store catches at its single boundary and the reduction turns into `blocked`. Untyped throws stay reserved for infrastructure faults, which the driver may retry. Without that separation an immutable violation escapes as a fault forever: the driver retries every sixty seconds, the designed `blocked` value is never reached, and the Task is wedged with no surface. Everything an activation derives from immutable sources is computed before its lease is acquired, so a violation cannot consume one of the ingress's four activations on every heartbeat.
+Reduction is total over persisted facts. An evidence reader that finds a violation of the persisted integrity contract raises a typed integrity error, which the fact store catches at its single boundary and the reduction turns into `host_fault/evidence_violation`. Untyped throws stay reserved for infrastructure faults, which the driver may retry. Without that separation an immutable violation escapes as a fault forever: the driver retries every sixty seconds, the designed value is never reached, and the Task is wedged with no surface. Everything an activation derives from immutable sources is computed before its lease is acquired, so a violation cannot consume one of the ingress's four activations on every heartbeat.
+
+A Host fault is local to the ingress that observed it. It executes nothing — the reduction returns it before any decision set can be read as one — so the Task's FIFO continues to the next ingress, each of which reads its own evidence and therefore never runs under the violation. The Host's broken write costs exactly one abandoned ingress and one durable surfaced fact, not a Task that no ordinary user action can leave. It is deliberately the one settled state the scan does not memoize: the invariant it names can be repaired by a later append, and a process-local memo would blind that process to the repair until it restarted.
 
 ### Well-founded retry
 
@@ -261,15 +266,15 @@ Retry budgets are frozen per ingress, but an infrastructure failure mints a *new
 
 The budget binds every path back in, not just the original wake. A settlement recorded before its wake was suppressed is later observed by the settled-undelivered recovery sweep, and an infrastructure settlement re-entering there is routed through the same infrastructure-failure gate — never as a generic recovery wake, which would continue the exact loop the budget terminates at one wake per crash cycle under a different event name. A suppressed re-entry closes the dispatch: the budget's own surfaced gate is its durable trace, and the sweep stops re-checking it.
 
-`cancelling` and `closing` are non-absorbing rest states that expect an owner to finish them. Where a converger is wired, the scan re-attempts convergence on each pass over the boundary; where none is — `closing` has no engine-side converger, and engine-only runtimes carry none at all — the periodic wake alone would poll silently forever, so the scan surfaces one deterministic unconverged-boundary gate per (Task, epoch, status) naming the exit. Operator-gated ingress surfaces likewise name their exit: `blocked` holds the whole FIFO and is left by reopening the Task or repairing the conflicting evidence; `exhausted` releases the FIFO and is redone by a new operator message or a reopen.
+`cancelling` is a non-absorbing rest state that expects an owner to finish it. Where a converger is wired, the scan re-attempts convergence on each pass over the boundary; where none is — engine-only runtimes carry none — the periodic wake alone would poll silently forever, so the scan surfaces one deterministic unconverged-boundary gate per (Task, epoch, status) naming the exit. Settled ingress surfaces likewise name their exit, and neither holds the line: `host_fault` names the Host invariant to repair and `exhausted` names the spent budget; both are redone by the same ordinary act, a new operator message.
 
 A boundary request that fails midway leaves the Task in `cancelling`, a status no fact append can leave. Convergence is therefore re-attempted by the scan on every pass over such a Task, with a finite wake until it settles; running it only at project bootstrap made a restart the sole escape. Ownership of that convergence is bounded in the same spirit: the durable lease guarantees some process eventually acquires, so waiting forever only hides a stuck owner.
 
 The completion closure is committed before the terminal transaction runs, and that transaction can refuse — an unsettled dispatch is the common case. The closure is released on refusal. Otherwise the Task rejects every completion for the full lease while the model retries into that window, and the conflict and the retry feed each other.
 
-The reduction accepts one assistant turn's decision set only when it is a `dispatch_agent` fan-out or a single other decision; anything mixed is an absorbing integrity conflict. Because a model can emit that combination in ordinary output, the turn coordinator refuses the second, different decision while it is still only a call. A refused call leaves no completed receipt, so the turn may still commit a different decision, and `blocked` survives as the backstop rather than the mechanism.
+The reduction accepts one assistant turn's decision set only when it is a `dispatch_agent` fan-out or a single other decision; anything mixed is `host_fault/decision_ambiguous` — fail-closed for that ingress, never a guess at which decision was meant. Because a model can emit that combination in ordinary output, the turn coordinator refuses the second, different decision while it is still only a call. A refused call leaves no completed receipt, so the turn may still commit a different decision, and the fault verdict survives as the backstop rather than the mechanism.
 
-The one-assistant-per-continuation conflict refuses a second *turn*, not every sibling row. Session compaction parents its summary assistant — authored `compaction`, carrying no activation — under the newest user Message, which in an Orchestrator Session is the just-written control occurrence, so any Session that lives long enough to compact produces exactly this sibling mid-turn. Counting it inverted the guarantee: the fence refused the legitimate activation assistant while the unfenced summary stood. Compaction summaries are therefore exempt from the continuation conflict; every other authored sibling stays fatal. An integrity conflict raised while a Turn is being prepared follows the same rule as one raised while it runs: the Task stays open — the ingress reduces to `blocked` and the surfaced gate is the exit — and is never terminally failed over a refused append, on the startup path or any other.
+The one-assistant-per-continuation conflict refuses a second *turn*, not every sibling row. Session compaction parents its summary assistant — authored `compaction`, carrying no activation — under the newest user Message, which in an Orchestrator Session is the just-written control occurrence, so any Session that lives long enough to compact produces exactly this sibling mid-turn. Counting it inverted the guarantee: the fence refused the legitimate activation assistant while the unfenced summary stood. Compaction summaries are therefore exempt from the continuation conflict; every other authored sibling stays fatal. An integrity violation raised while a Turn is being prepared follows the same rule as one raised while it runs: the Task stays open — the ingress reduces to `host_fault`, the surfaced fact is its trace, and the line moves on — and is never terminally failed over a refused append, on the startup path or any other. A Host defect may not become a durable user Task state.
 
 A request never joins a running scan. A scan may await a whole Orchestrator Turn whose Tools re-enter the control plane; joining would deadlock a caller against its own activation. A non-owner therefore leaves its revision and returns. A hint may still be lost or duplicated; the revision it leaves behind cannot be.
 

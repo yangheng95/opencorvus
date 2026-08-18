@@ -69,8 +69,6 @@ import { rightDockOpen, setRightDockVisible } from "./store/right-dock"
 import {
   selectTask,
   cancelTask,
-  retryTask,
-  replanTask,
   setTaskArchived,
   renameTask,
   downloadTaskProjectArchive,
@@ -122,6 +120,7 @@ import { resolveComposerSubmitRoute } from "./services/composer-submit-route"
 import {
   VisibleComposerReferences as VisibleComposerReferencesSchema,
   visibleComposerReferences,
+  type ProductPillar,
   type VisibleComposerReferences,
 } from "@opencorvus-ai/transport-protocol"
 import { waitForLogDrain, AppLog } from "./utils/log"
@@ -996,69 +995,6 @@ async function cancelWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
-async function confirmCancelledTaskRestart(row: WorkLedgerTaskRow, action: "retry" | "replan"): Promise<boolean> {
-  if (row.lifecycleStatus !== "cancelled") return true
-  const dialog = await showAppDialog({
-    title: t("task.cancelled_restart_confirm_title"),
-    message: t("task.cancelled_restart_confirm_message", {
-      action: t(action === "retry" ? "task.retry_button_title" : "task.replan_button_title"),
-    }),
-    cancel: true,
-    okLabel: t("task.cancelled_restart_confirm_ok"),
-  })
-  return dialog.confirmed
-}
-
-const terminalTaskMutationByID = new Map<string, Promise<void>>()
-
-async function reconcileRestartedTask(row: WorkLedgerTaskRow, action: "retry" | "replan"): Promise<void> {
-  setMissionSharedRefreshToken((value) => value + 1)
-  try {
-    await loadBoard({ requireFresh: true })
-  } catch (error) {
-    reportWarning({
-      id: `task:${action}:refresh:${row.id}`,
-      title: t("task.restart_refresh_failed_title"),
-      message: t("task.restart_refresh_failed_message", { error: runtimeErrorMessage(error) }),
-      details: formatErrorDetails(error),
-      taskID: row.id,
-      taskDirectory: row.directory,
-      taskTitle: row.title,
-    })
-  }
-}
-
-async function runTerminalTaskMutation(row: WorkLedgerTaskRow, action: "retry" | "replan"): Promise<void> {
-  const active = terminalTaskMutationByID.get(row.id)
-  if (active) return active
-  const mutation = (async () => {
-    if (!(await confirmCancelledTaskRestart(row, action))) return
-    if (action === "retry") await retryTask(row.id)
-    else await replanTask(row.id)
-    reportSuccess({
-      id: `task:${action}:committed:${row.id}`,
-      title: t(action === "retry" ? "task.retry_committed_title" : "task.replan_committed_title"),
-      message: row.title || row.id,
-      taskID: row.id,
-      taskDirectory: row.directory,
-      taskTitle: row.title,
-    })
-    await reconcileRestartedTask(row, action)
-  })().finally(() => {
-    if (terminalTaskMutationByID.get(row.id) === mutation) terminalTaskMutationByID.delete(row.id)
-  })
-  terminalTaskMutationByID.set(row.id, mutation)
-  return mutation
-}
-
-async function retryTerminalTask(row: WorkLedgerTaskRow): Promise<void> {
-  return runTerminalTaskMutation(row, "retry")
-}
-
-async function replanTerminalTask(row: WorkLedgerTaskRow): Promise<void> {
-  return runTerminalTaskMutation(row, "replan")
-}
-
 async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   const ok = await downloadTaskProjectArchive({ taskID: row.id, directory: row.directory })
   if (!ok) throw new Error(t("task.download_project_failed", { error: row.id }))
@@ -1195,10 +1131,12 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
 async function searchMissionMarketExpertSquads(
   projectDirectory: string,
   query: string,
+  productPillar: ProductPillar,
 ): Promise<readonly ExpertSquadMarketIndexItem[]> {
   const page = await loadExpertSquadMarket(projectDirectory, {
     query: query.trim().slice(0, 500),
     availability: "available",
+    productPillar,
     limit: 3,
   })
   return page.entries
@@ -2134,8 +2072,6 @@ function OverlayRoot() {
       onArchiveConversationItem={(row) =>
         runMainAsync("work-ledger.header-archive", () => archiveActiveWorkLedgerItem(row))
       }
-      onRetryTask={(row) => runMainAsync("task.header-retry", () => retryTerminalTask(row))}
-      onReplanTask={(row) => runMainAsync("task.header-replan", () => replanTerminalTask(row))}
       onOpenAutomationSession={openAutomationSession}
       sidebarToggle={
         <Button

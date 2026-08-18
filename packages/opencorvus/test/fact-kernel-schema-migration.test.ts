@@ -303,7 +303,6 @@ describe("fact-kernel schema migration", () => {
         ["ingress:recovery", "infrastructure_recovery", { processRecovery: { recoveryFactID: "artifact:recovery" } }, { recovery_fact_id: "artifact:recovery" }],
         ["ingress:dispatch", "dispatch_infrastructure_failure", { dispatchInfrastructureFailure: { infrastructureFactID: "artifact:dispatch", outcome: dispatchOutcome } }, { infrastructure_fact_id: "artifact:dispatch" }],
         ["ingress:wait", "task_wait_wake", { taskWaitWake: { jobID: "automation:source", fireID: "fire:source", dueAt: 150 } }, { wait_job_id: "automation:source" }],
-        ["ingress:intent", "operator_intent", { taskIntent: { kind: "retry", actor: "operator", supersededOperatorMessageIDs: [] } }, {}],
         ["ingress:activity", "task_wait_activity", { taskWaitActivity: { source: "operator", detail: "wait", jobIDs: [] } }, {}],
         ["ingress:event", "orchestrator_event", { note: "exact inline event" }, {}],
       ] as const
@@ -333,7 +332,6 @@ describe("fact-kernel schema migration", () => {
         { id: "ingress:recovery", source: "engine_artifact", source_id: "artifact:recovery", owns_inline: 0 },
         { id: "ingress:dispatch", source: "engine_artifact", source_id: "artifact:dispatch", owns_inline: 0 },
         { id: "ingress:wait", source: "automation_run", source_id: "run:source", owns_inline: 0 },
-        { id: "ingress:intent", source: "inline", source_id: "ingress:intent", owns_inline: 1 },
         { id: "ingress:activity", source: "inline", source_id: "ingress:activity", owns_inline: 1 },
         { id: "ingress:event", source: "inline", source_id: "ingress:event", owns_inline: 1 },
       ])

@@ -27,7 +27,11 @@ import {
 import { Identifier } from "@/id/id"
 import type { DispatchTurn } from "./dispatch-turn-projection"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import path from "node:path"
+import { EvidenceLocatorInputListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import { resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
+import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
+import { Session } from "@/session"
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
 import { taskCancellationAuthorityExecutionError } from "@/engine/cancellation-projection"
@@ -415,11 +419,6 @@ export function createDispatchAgentTool(input: {
             "Put those adapter-specific fields only in turn.input when turn.kind is initial. Every projected workflow node has one logical occurrence per Task. A continuation uses turn.kind=continuation, names one exact lineage authority, reopens its existing Session for another Turn, and reuses that occurrence. When this adapter accepts exact Delivery Slice revision identifiers, they select contract subjects and never create additional logical occurrences.",
         ),
       work_scope: ProjectedAgentWorkScopeSchema,
-      use_worktree: z
-        .boolean()
-        .describe(
-          "Whether this Task-scoped dispatched agent runs in an isolated managed Git worktree. Use true for concurrent write-capable dispatches whose repository ownership requires isolation; read-only or proven-disjoint dispatches may use false.",
-        ),
     } as const
     const continuationAuthoritySchema = z.discriminatedUnion("kind", [
       z
@@ -442,6 +441,11 @@ export function createDispatchAgentTool(input: {
           workflow_subject: DispatchWorkflowSubjectSchema.describe(
             "Exact Task workflow subject for this first logical node occurrence. After any virtual workflow node has committed, every later initial dispatch must name another node from that same selected virtual workflow; direct is valid only before the Task has selected a virtual workflow.",
           ),
+          use_worktree: z
+            .boolean()
+            .describe(
+              "Whether this Task-scoped dispatched agent runs in an isolated managed Git worktree. Use true for concurrent write-capable dispatches whose repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. This choice belongs to the initial Turn alone: it fixes the worker Session's directory, which every continuation of that Session then inherits.",
+            ),
           input: publicAdapterInputSchema.describe(
             `Exact immutable ${agentID} adapter input for the initial worker Turn.`,
           ),
@@ -456,8 +460,8 @@ export function createDispatchAgentTool(input: {
             .trim()
             .min(1)
             .describe("Only new instruction for this successor Turn; original adapter input remains frozen."),
-          evidence_locators: EvidenceLocatorListSchema.default([]).describe(
-            "Exact new durable evidence identities selected for this successor Turn. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
+          evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
+            "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
           ),
         })
         .strict(),
@@ -497,9 +501,13 @@ export function createDispatchAgentTool(input: {
         dispatch: {
           target: string
           work_scope: unknown
-          use_worktree: boolean
           turn:
-            | { kind: "initial"; workflow_subject: unknown; input: Record<string, unknown> }
+            | {
+                kind: "initial"
+                workflow_subject: unknown
+                use_worktree: boolean
+                input: Record<string, unknown>
+              }
             | {
                 kind: "continuation"
                 authority:
@@ -510,7 +518,7 @@ export function createDispatchAgentTool(input: {
               }
         }
       }
-      const { target, work_scope: workScope, use_worktree: useWorktree, turn } = parsed.dispatch
+      const { target, work_scope: workScope, turn } = parsed.dispatch
       const initialTurn = turn.kind === "initial" ? turn : undefined
       const continuationTurn = turn.kind === "continuation" ? turn : undefined
       const coordinationActionID =
@@ -562,7 +570,10 @@ export function createDispatchAgentTool(input: {
           toolOptions: options,
           adapterInput: targetInput,
           continuationGuidance,
-          evidenceLocators: EvidenceLocatorListSchema.parse(continuationEvidenceLocators ?? []),
+          evidenceLocators: await resolveTaskEvidenceLocators({
+            taskID: input.taskID,
+            evidenceLocators: continuationEvidenceLocators ?? [],
+          }),
         })
         if (dispatch.replayOutcome) return dispatch.replayOutcome
         dispatchID = dispatch.dispatchID
@@ -583,6 +594,17 @@ export function createDispatchAgentTool(input: {
             origin,
           })
         }
+        // Worktree placement belongs to the Session, not to this call. The
+        // initial Turn fixed the worker Session's directory; a continuation
+        // reopens that exact Session and inherits it. luna11 showed what
+        // restating it costs: the caller flipped the flag between Turns and
+        // BuildAgent refused with a directory mismatch it could not act on,
+        // after which the caller issued a second initial dispatch and hit the
+        // one-occurrence fence.
+        const useWorktree = dispatch.existingSessionID
+          ? path.resolve((await Session.get(dispatch.existingSessionID)).directory) !==
+            path.resolve(taskPrimaryProjectRoot(input.taskID))
+          : (initialTurn?.use_worktree ?? false)
         const executorTargetInput = structuredClone(dispatch.adapterInput)
         const frozenTargetInput = Object.hasOwn(executorTargetInput, "goal_ids")
           ? { ...executorTargetInput, goal_ids: [...dispatch.deliverySliceRevisionIDs] }

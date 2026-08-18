@@ -2,12 +2,13 @@
  * Integrity violations observed while reading durable Task-root evidence.
  *
  * The control-plane projection must be a total function over persisted facts:
- * a violation is a projected `blocked` value, never an exception. Evidence
+ * a violation is a projected `host_fault` value, never an exception. Evidence
  * readers therefore raise this typed error, the fact store catches exactly
  * this type at its single boundary, and the reducer turns it into
- * `blocked/integrity_conflict`. Untyped throws stay reserved for
- * infrastructure faults (an unavailable Database), which the driver is
- * allowed to retry under backoff.
+ * `host_fault/evidence_violation` — a settlement local to that ingress, which
+ * never executes an effect and never holds the Task's FIFO. Untyped throws
+ * stay reserved for infrastructure faults (an unavailable Database), which the
+ * driver is allowed to retry under backoff.
  *
  * This module intentionally imports nothing so both the evidence readers and
  * the fact store can depend on it without a cycle.

@@ -56,20 +56,18 @@ test("Mission acceptance resume projects current message authority and real-deci
     },
   ])
 
-  const retryNotice = renderWakeProvenanceNotice(
+  // An operator message reopening a terminal Task carries no separate intent
+  // vocabulary: it is an ordinary operator root message, and the reopen is a
+  // durable lifecycle fact rather than something the prompt has to announce.
+  const operatorNotice = renderWakeProvenanceNotice(
     OrchestratorEventSchema.parse({
-      taskIntent: {
-        kind: "retry",
-        actor: "operator",
-        supersededOperatorMessageIDs: [],
-      },
+      rootMessage: { messageID: "msg_operator_resume", kind: "operator" },
     }),
     "tsk_current_acceptance",
-    "art_current_retry_wake",
+    "art_current_operator_wake",
   )
-  expect(retryNotice).toContain("Current durable wake occurrence=art_current_retry_wake")
-  expect(retryNotice).toContain("Current taskIntent=retry; actor=operator")
-  expect(retryNotice).toContain("requested a fresh scheduling decision for the same Task")
+  expect(operatorNotice).toContain("Current durable wake occurrence=art_current_operator_wake")
+  expect(operatorNotice).not.toContain("taskIntent")
 })
 
 test("agent lifecycle delivery projects its exact current occurrence", () => {
