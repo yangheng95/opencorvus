@@ -1,1 +1,1 @@
-export const VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME = "visual-feedback-verification" as const
+export { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME } from "@opencorvus-ai/plugin/tool"

@@ -33,6 +33,11 @@ export const FactCheckItemSchema = z
     claim: z.string().min(20).max(280),
     /** Agent self-assessment. Honest "low" is rewarded; over-claiming
      *  "high" surfaces as a verifier finding. */
+    /**
+     * Self-reported by the reviewing model. Shares its spelling with the
+     * Evolution Lab comparison's `confidence`, which is derived from an
+     * interval width — the two are not comparable and must never be merged.
+     */
     confidence: z.enum(["low", "medium", "high"]),
     /** Routes the verifier toward the right retrieval modality. */
     category: z.enum(["api", "library", "number", "history", "path", "protocol", "other"]),

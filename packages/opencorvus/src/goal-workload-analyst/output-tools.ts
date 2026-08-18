@@ -17,9 +17,20 @@ export interface GoalWorkloadCollector {
   briefs: WorkloadBrief[]
 }
 
-export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[]; knownContractIDs?: string[] }) {
+/**
+ * `knownContractIDs` used to be a second, optional parameter here, guarded by
+ * `knownContracts.size > 0` so an absent set meant "do not complain". No
+ * caller ever passed it, so the contract-reference check it fronted never ran
+ * once — the tool description asked the model for discipline while the code
+ * behind it was inert. Wiring it would mean loading each Goal's
+ * `architect_contract_graph` artifact inside this projection, and Goals
+ * without a contract graph would land right back on the empty set and the
+ * same silent pass. The authoritative check on fabricated contract IDs lives
+ * where contract_audit scorers are authored, in
+ * `architect/reference-integrity.ts`; this one is gone rather than dormant.
+ */
+export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[] }) {
   const knownGoals = new Set(input.knownGoalIDs)
-  const knownContracts = new Set(input.knownContractIDs ?? [])
 
   function emptyCollector(): GoalWorkloadCollector {
     return { briefs: [] }
@@ -45,16 +56,10 @@ export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[]; k
             `Known goals: ${[...knownGoals].join(", ") || "(none)"}. Submission retained as invalid coverage evidence.`
           )
         }
-        const unknownContracts =
-          knownContracts.size > 0 ? brief.references.contract_ids.filter((id) => !knownContracts.has(id)) : []
-        const warn =
-          unknownContracts.length > 0
-            ? `\nWarning: referenced contract id(s) not in the contract graph: ${unknownContracts.join(", ")}.`
-            : ""
         if (repeated) {
-          return `Error: goal_id "${brief.goal_id}" was submitted more than once. Submission retained as duplicate coverage evidence.${warn}`
+          return `Error: goal_id "${brief.goal_id}" was submitted more than once. Submission retained as duplicate coverage evidence.`
         }
-        return `OK: workload brief for "${brief.goal_id}" registered (${collector.briefs.length} total).${warn}`
+        return `OK: workload brief for "${brief.goal_id}" registered (${collector.briefs.length} total).`
       },
     }),
   }

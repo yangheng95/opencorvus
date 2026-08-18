@@ -1,5 +1,6 @@
-import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable } from "@/session/session.sql"
-import { Database, and, eq, sql } from "@/storage/db"
+import { Session } from "@/session"
+import type { Message } from "@/session/message"
+import { WORK_ARTIFACT_VALIDATE_TOOL_ID } from "./profile-registry"
 import z from "zod"
 import { WORK_ARTIFACT_VALIDATION_RECEIPT_MIME, WorkArtifactValidationReceiptPayload } from "./presentation"
 import {
@@ -17,46 +18,59 @@ const AuthorityOutput = z.object({
   validation_receipt_payload: WorkArtifactValidationReceiptPayload,
 })
 
-export function requireWorkArtifactValidationAuthority(input: {
-  sessionID: string
+/**
+ * Decide the authority from Session facts alone.
+ *
+ * This used to query `session.sql` directly and compare JSON keys of the part
+ * `data` column as SQL strings, with the Tool id spelled as a literal inside
+ * that SQL. Any layout change on the Session side would have made every
+ * delivery fail with an error naming the receipt rather than the schema, and
+ * the acceptance script had to hand-write a matching row to get past it.
+ * Reading the same facts through the Session's own API is the pattern
+ * `build/merge-back-publication-authority.ts` already uses.
+ */
+export function requireWorkArtifactValidationAuthorityFromFacts(input: {
+  messages: readonly Message.WithParts[]
   receiptUrl: string
   receiptSha: string
 }): WorkArtifactValidationReceiptPayload {
-  const rows = Database.use((db) =>
-    db
-      .select({ id: PartTable.id, outcome: ToolPartOutcomeTable.data })
-      .from(PartTable)
-      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
-      .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
-      .where(
-        and(
-          eq(MessageTable.session_id, input.sessionID),
-          sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
-          sql`json_extract(${PartTable.data}, '$.tool') = 'work_artifact_validate'`,
-          sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
-        ),
-      )
-      .all(),
-  )
-  for (const row of rows) {
-    const output = (row.outcome as { output?: unknown }).output
-    if (typeof output !== "string") continue
-    let decoded: unknown
-    try {
-      decoded = JSON.parse(output)
-    } catch {
-      continue
-    }
-    const authority = AuthorityOutput.safeParse(decoded)
-    if (!authority.success) continue
-    if (
-      authority.data.validation_receipt.url === input.receiptUrl &&
-      authority.data.validation_receipt.sha === input.receiptSha
-    ) {
-      return authority.data.validation_receipt_payload
+  for (const message of input.messages) {
+    for (const part of message.parts) {
+      if (part.type !== "tool" || part.tool !== WORK_ARTIFACT_VALIDATE_TOOL_ID) continue
+      if (part.state.status !== "completed") continue
+      let decoded: unknown
+      try {
+        decoded = JSON.parse(part.state.output)
+      } catch {
+        continue
+      }
+      const authority = AuthorityOutput.safeParse(decoded)
+      if (!authority.success) continue
+      if (
+        authority.data.validation_receipt.url === input.receiptUrl &&
+        authority.data.validation_receipt.sha === input.receiptSha
+      ) {
+        return authority.data.validation_receipt_payload
+      }
     }
   }
-  throw new Error("validation receipt has no completed host-owned work_artifact_validate authority in this Session")
+  throw new Error(
+    `validation receipt has no completed host-owned ${WORK_ARTIFACT_VALIDATE_TOOL_ID} authority in this Session. ` +
+      `received: url ${JSON.stringify(input.receiptUrl)} sha ${JSON.stringify(input.receiptSha)}, ` +
+      `expected: a receipt published by a completed ${WORK_ARTIFACT_VALIDATE_TOOL_ID} call in the same Session.`,
+  )
+}
+
+export async function requireWorkArtifactValidationAuthority(input: {
+  sessionID: string
+  receiptUrl: string
+  receiptSha: string
+}): Promise<WorkArtifactValidationReceiptPayload> {
+  return requireWorkArtifactValidationAuthorityFromFacts({
+    messages: await Session.messages({ sessionID: input.sessionID }),
+    receiptUrl: input.receiptUrl,
+    receiptSha: input.receiptSha,
+  })
 }
 
 export async function prepareAuthorizedWorkArtifactPresentationDeliverable(input: {
@@ -75,7 +89,7 @@ export async function prepareAuthorizedWorkArtifactPresentationDeliverable(input
     })
     .passthrough()
     .parse(input.raw)
-  const authority = requireWorkArtifactValidationAuthority({
+  const authority = await requireWorkArtifactValidationAuthority({
     sessionID: input.sessionID,
     receiptUrl: raw.validation_receipt_url,
     receiptSha: raw.validation_receipt_sha,

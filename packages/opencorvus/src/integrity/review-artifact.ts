@@ -52,6 +52,17 @@ export const IntegrityReviewArtifactPayloadSchema = ArtifactConsumptionProvenanc
   phase: IntegrityReviewArtifactPhaseSchema,
   review_number: z.number().int().positive(),
   time_recorded: z.number().int().nonnegative(),
+  /**
+   * Structural gaps the Host found in this review: check IDs the graph does
+   * not declare, evidence kinds it cannot support, requirements nothing
+   * covered. They used to be computed and then dropped by the only production
+   * consumer, so the sole place they appeared was a tool result the reviewing
+   * model could read and ignore. `visual_review` and the frontend design
+   * review both carry theirs into their artifact; this is the arm that did
+   * not. Defaulted rather than required so reviews recorded before this field
+   * existed still parse.
+   */
+  completeness_findings: z.array(z.string()).default([]),
 })
 
 export type IntegrityReviewArtifactPayload = z.infer<typeof IntegrityReviewArtifactPayloadSchema>
@@ -73,6 +84,7 @@ export type IntegrityReviewArtifactPayloadInput = {
   reviewNumber: number
   review: IntegrityReview
   timeRecorded: number
+  completenessFindings: string[]
 }
 
 export function createIntegrityReviewArtifactPayload(
@@ -117,6 +129,7 @@ export function createIntegrityReviewArtifactPayload(
     phase: input.phase,
     review_number: input.reviewNumber,
     time_recorded: input.timeRecorded,
+    completeness_findings: input.completenessFindings,
   })
 }
 
