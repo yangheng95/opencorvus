@@ -1,0 +1,315 @@
+/* OpenCorvus public site design tokens.
+ *
+ * Calibration basis: docs/website-restyle-plan.md §2.1 and §6.
+ * Reference values are machine-extracted into qa/restyle/tokens.reference.json (83 tokens).
+ *
+ * Three rules this file exists to enforce:
+ *
+ * 1. Scales are aligned to the reference (spacing, radius, blur). Neutrals are aligned too —
+ *    they are generic. Brand hues are NOT: those stay OpenCorvus cobalt.
+ * 2. Every --oc-color-* is defined in both themes, except the deliberately static ones listed
+ *    under "Static" below. test/tokens.parity.test.ts fails the build otherwise. A colour that
+ *    exists only in the dark block is invisible in light and nobody notices until a screenshot
+ *    lands in a bug report.
+ * 3. Dark is not an inversion. Card elevation flips from three soft drop shadows to a single
+ *    inset highlight, because a drop shadow on near-black reads as nothing.
+ *
+ * SURFACE FAMILIES — read this before picking a surface token.
+ *
+ *   Translucent-white family (surface-1, surface-2, input, input-hover, hero-cta, raised):
+ *     white with alpha. These only read as glass when something is painted BEHIND them — the
+ *     shader hero, a gradient, an image. Put one on the flat page background and it disappears.
+ *   Translucent-ink family (surface-3, surface-4, surface-5, hover, code):
+ *     ink with alpha in light / white with alpha in dark. These are the flat-page surfaces.
+ *
+ *   Consequence: the hero shader is not decoration, it is the substrate the light-mode glass
+ *   depends on. Its static fallback image has to carry enough tonal variation for the same
+ *   panels to still read as glass. See plan §8 期 6.
+ */
+
+:root {
+  /* ---- Spacing scale (13 steps, aligned) ---- */
+  --oc-space-1: 4px;
+  --oc-space-2: 8px;
+  --oc-space-3: 12px;
+  --oc-space-4: 16px;
+  --oc-space-5: 24px;
+  --oc-space-6: 32px;
+  --oc-space-7: 40px;
+  --oc-space-8: 56px;
+  --oc-space-9: 80px;
+  --oc-space-10: 120px;
+  --oc-space-11: 160px;
+  --oc-space-12: 200px;
+  --oc-space-13: 240px;
+
+  /* ---- Radius scale (aligned) ---- */
+  --oc-radius-pill: 100px;
+  --oc-radius-card: 24px;
+  --oc-radius-panel: 16px;
+  --oc-radius-media: 10px;
+  --oc-radius-input: 10px;
+  --oc-radius-sm: 8px;
+
+  /* ---- Type families ---- */
+  --oc-font-body:
+    "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC",
+    "PingFang SC", "Microsoft YaHei", sans-serif;
+  --oc-font-display: "Montserrat", var(--oc-font-body);
+  --oc-font-mono:
+    "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans SC", "PingFang SC",
+    monospace;
+
+  /* ---- Control internals ----
+   * Named --oc-control-* rather than --oc-btn-*: the --oc-btn-* namespace is colour-only and
+   * test/tokens.parity.test.ts requires every member of it to be declared in both themes. Geometry
+   * has no dark variant, so it needs a namespace of its own. (The parity test caught this.)
+   * The reference's button internals do not sit on the spacing ladder: its icon gap is 6px and its
+   * medium button pads 11px/18px. Those are measured values and changing them would alter the
+   * proportions the whole design was calibrated against, so they are named here rather than snapped
+   * to the nearest rung or sprinkled as literals. Naming them keeps the scale-discipline gate honest:
+   * there is exactly one place an off-ladder control value can live. */
+  --oc-control-gap: 6px;
+  --oc-control-padding-block: 11px;
+  --oc-control-padding-inline: 18px;
+
+  /* ---- Effects ---- */
+  --oc-blur-glass: 12px;
+  --oc-shadow-card:
+    0 0 0 1px rgba(15, 23, 42, 0.04), 0 2px 4px rgba(0, 0, 0, 0.05), 0 12px 24px rgba(0, 0, 0, 0.05);
+  --oc-shadow-panel: 0 0 1px 0 rgba(0, 0, 0, 0.2), 0 12px 32px 0 rgba(0, 0, 0, 0.08);
+
+  /* ---- Layout ---- */
+  --oc-container: min(100% - 48px, 1140px);
+
+  /* ---- Text ---- */
+  --oc-color-text-primary: #1e232c;
+  --oc-color-text-secondary: rgba(0, 0, 0, 0.7);
+  --oc-color-text-description: rgba(0, 0, 0, 0.65);
+  /* Reference light placeholder (#8691a1) measures 3.0:1 on this page background — under AA.
+     Darkened to 4.98:1. Plan §6 contrast red line. */
+  --oc-color-text-placeholder: #626d7e;
+  /* Reference leaves its link colour un-themed; #234792 on #0a0a0a is 2.25:1 and unusable in
+     dark. Themed here — this is exactly the gap the parity test guards. */
+  --oc-color-text-link: #1c3a9e;
+
+  /* ---- Brand (intentional divergence — OpenCorvus cobalt, plan §1) ---- */
+  --oc-color-brand: #2946d3;
+  --oc-color-brand-deep: #172b8f;
+  --oc-color-brand-medium: #3558db;
+  --oc-color-brand-light: #8fa6e8;
+  --oc-color-accent: #e04b22;
+
+  /* ---- Surfaces: translucent-white family (needs a substrate behind it) ---- */
+  --oc-color-bg-surface-1: hsla(0, 0%, 100%, 0.3);
+  --oc-color-bg-surface-2: hsla(0, 0%, 100%, 0.2);
+  --oc-color-bg-surface-raised: hsla(0, 0%, 100%, 0.45);
+  --oc-color-bg-hero-cta: hsla(0, 0%, 100%, 0.38);
+  --oc-color-bg-input: hsla(0, 0%, 100%, 0.2);
+  --oc-color-bg-input-hover: hsla(0, 0%, 100%, 0.36);
+
+  /* ---- Surfaces: translucent-ink family (flat page) ---- */
+  --oc-color-bg-page: #f9f8f8;
+  --oc-color-bg-overlay: #ffffff;
+  --oc-color-bg-surface-3: rgba(0, 0, 0, 0.03);
+  --oc-color-bg-surface-4: rgba(0, 0, 0, 0.02);
+  --oc-color-bg-surface-5: rgba(0, 0, 0, 0.05);
+  --oc-color-bg-hover: rgba(0, 0, 0, 0.04);
+  --oc-color-bg-code: rgba(0, 0, 0, 0.05);
+  --oc-color-bg-contrast: #1a1615;
+
+  /* ---- Borders ---- */
+  --oc-color-border-subtle: rgba(0, 0, 0, 0.06);
+  --oc-color-border-default: rgba(0, 0, 0, 0.1);
+  --oc-color-border-divider: rgba(0, 0, 0, 0.08);
+  --oc-color-border-hover: hsla(20, 1%, 45%, 0.2);
+  --oc-color-border-strong: rgba(0, 0, 0, 0.2);
+  --oc-color-border-secondary: rgba(9, 45, 78, 0.14);
+  --oc-color-border-input: hsla(0, 0%, 100%, 0.2);
+  --oc-color-border-input-focus: hsla(0, 0%, 100%, 0.25);
+  --oc-color-scrollbar: rgba(0, 0, 0, 0.15);
+
+  /* ---- Buttons: primary ---- */
+  --oc-btn-primary-bg: #1a1615;
+  --oc-btn-primary-text: #ffffff;
+  --oc-btn-primary-border: transparent;
+  --oc-btn-primary-hover-bg: hsla(0, 0%, 100%, 0.3);
+
+  /* ---- Buttons: secondary (glass) ---- */
+  --oc-btn-secondary-bg: hsla(0, 0%, 100%, 0.4);
+  --oc-btn-secondary-text: #1e232c;
+  --oc-btn-secondary-border: rgba(9, 45, 78, 0.18);
+  --oc-btn-secondary-hover-bg: rgba(0, 0, 0, 0.05);
+  --oc-btn-secondary-hover-border: rgba(9, 45, 78, 0.36);
+
+  /* ---- Buttons: ghost ---- */
+  --oc-btn-ghost-bg: transparent;
+  --oc-btn-ghost-text: #121c31;
+  --oc-btn-ghost-border: transparent;
+  --oc-btn-ghost-hover-bg: rgba(0, 0, 0, 0.04);
+  --oc-btn-ghost-hover-border: hsla(20, 1%, 45%, 0.2);
+
+  /* ---- Buttons: liquid (sits on the shader, hence white-alpha in light) ---- */
+  --oc-btn-liquid-bg: hsla(0, 0%, 100%, 0.4);
+  --oc-btn-liquid-hover-bg: hsla(0, 0%, 100%, 0.6);
+
+  /* ---- Static: theme-independent by design ----
+   * These sit on a fixed-colour substrate (the shader hero, an always-dark panel) so they must
+   * NOT follow the theme. Exempt from the parity test via its allowlist. */
+  --oc-color-static-white: #ffffff;
+  --oc-color-static-black: #0f0f0f;
+  --oc-color-static-black-secondary: rgba(0, 0, 0, 0.6);
+  --oc-color-text-inverse: #ffffff;
+  --oc-btn-ghost-static-bg: transparent;
+  --oc-btn-ghost-static-text: #0f0f0f;
+  --oc-btn-ghost-static-border: rgba(0, 0, 0, 0.2);
+  --oc-btn-ghost-static-hover-bg: rgba(0, 0, 0, 0.05);
+  --oc-btn-ghost-static-hover-border: rgba(9, 45, 78, 0.3);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --oc-container: min(100% - 144px, 1140px);
+  }
+}
+
+@media (min-width: 1560px) {
+  :root {
+    --oc-container: min(100% - 160px, 1280px);
+  }
+}
+
+/* ---- Dark theme ----
+ * Declared twice on purpose:
+ *   [data-theme="dark"]  — the explicit toggle wins in both directions.
+ *   prefers-color-scheme — the "system" default, guarded so an explicit light choice still wins.
+ * Keep the two blocks byte-identical in content. */
+
+:root[data-theme="dark"] {
+  --oc-shadow-card: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.12);
+  --oc-shadow-panel: 0 0 1px 0 rgba(0, 0, 0, 0.6), 0 12px 32px 0 rgba(0, 0, 0, 0.45);
+
+  --oc-color-text-primary: #ffffff;
+  --oc-color-text-secondary: hsla(0, 0%, 100%, 0.8);
+  --oc-color-text-description: hsla(0, 0%, 100%, 0.5);
+  /* Reference dark placeholder is white 30% = 2.6:1. Raised to 48% = 4.98:1. */
+  --oc-color-text-placeholder: hsla(0, 0%, 100%, 0.48);
+  --oc-color-text-link: #9db4ff;
+
+  --oc-color-brand: #6f8dfa;
+  --oc-color-brand-deep: #ffffff;
+  --oc-color-brand-medium: #ffffff;
+  --oc-color-brand-light: #8fa6e8;
+  --oc-color-accent: #ff7a52;
+
+  --oc-color-bg-surface-1: hsla(0, 0%, 100%, 0.06);
+  --oc-color-bg-surface-2: hsla(0, 0%, 100%, 0.04);
+  --oc-color-bg-surface-raised: hsla(0, 0%, 100%, 0.25);
+  --oc-color-bg-hero-cta: hsla(0, 0%, 100%, 0.12);
+  --oc-color-bg-input: hsla(0, 0%, 100%, 0.08);
+  --oc-color-bg-input-hover: hsla(0, 0%, 100%, 0.12);
+
+  --oc-color-bg-page: #0a0a0a;
+  --oc-color-bg-overlay: #262626;
+  --oc-color-bg-surface-3: hsla(0, 0%, 100%, 0.02);
+  --oc-color-bg-surface-4: hsla(0, 0%, 100%, 0.015);
+  --oc-color-bg-surface-5: hsla(0, 0%, 100%, 0.12);
+  --oc-color-bg-hover: hsla(0, 0%, 100%, 0.06);
+  --oc-color-bg-code: rgba(0, 0, 0, 0.35);
+  --oc-color-bg-contrast: #ffffff;
+
+  --oc-color-border-subtle: hsla(0, 0%, 100%, 0.08);
+  --oc-color-border-default: hsla(0, 0%, 100%, 0.06);
+  --oc-color-border-divider: hsla(0, 0%, 100%, 0.25);
+  --oc-color-border-hover: hsla(0, 0%, 100%, 0.2);
+  --oc-color-border-strong: hsla(0, 0%, 100%, 0.24);
+  --oc-color-border-secondary: hsla(0, 0%, 100%, 0.2);
+  --oc-color-border-input: hsla(0, 0%, 100%, 0.2);
+  --oc-color-border-input-focus: hsla(0, 0%, 100%, 0.25);
+  --oc-color-scrollbar: hsla(0, 0%, 100%, 0.2);
+
+  --oc-btn-primary-bg: #ffffff;
+  --oc-btn-primary-text: #0a0a0a;
+  --oc-btn-primary-border: transparent;
+  --oc-btn-primary-hover-bg: rgba(0, 0, 0, 0.2);
+
+  --oc-btn-secondary-bg: hsla(0, 0%, 100%, 0.06);
+  --oc-btn-secondary-text: #ffffff;
+  --oc-btn-secondary-border: hsla(0, 0%, 100%, 0.15);
+  --oc-btn-secondary-hover-bg: hsla(0, 0%, 100%, 0.2);
+  --oc-btn-secondary-hover-border: hsla(0, 0%, 100%, 0.6);
+
+  --oc-btn-ghost-bg: transparent;
+  --oc-btn-ghost-text: #ffffff;
+  --oc-btn-ghost-border: transparent;
+  --oc-btn-ghost-hover-bg: hsla(0, 0%, 100%, 0.08);
+  --oc-btn-ghost-hover-border: hsla(0, 0%, 100%, 0.2);
+
+  --oc-btn-liquid-bg: #ffffff;
+  --oc-btn-liquid-hover-bg: rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --oc-shadow-card: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.12);
+    --oc-shadow-panel: 0 0 1px 0 rgba(0, 0, 0, 0.6), 0 12px 32px 0 rgba(0, 0, 0, 0.45);
+
+    --oc-color-text-primary: #ffffff;
+    --oc-color-text-secondary: hsla(0, 0%, 100%, 0.8);
+    --oc-color-text-description: hsla(0, 0%, 100%, 0.5);
+    --oc-color-text-placeholder: hsla(0, 0%, 100%, 0.48);
+    --oc-color-text-link: #9db4ff;
+
+    --oc-color-brand: #6f8dfa;
+    --oc-color-brand-deep: #ffffff;
+    --oc-color-brand-medium: #ffffff;
+    --oc-color-brand-light: #8fa6e8;
+    --oc-color-accent: #ff7a52;
+
+    --oc-color-bg-surface-1: hsla(0, 0%, 100%, 0.06);
+    --oc-color-bg-surface-2: hsla(0, 0%, 100%, 0.04);
+    --oc-color-bg-surface-raised: hsla(0, 0%, 100%, 0.25);
+    --oc-color-bg-hero-cta: hsla(0, 0%, 100%, 0.12);
+    --oc-color-bg-input: hsla(0, 0%, 100%, 0.08);
+    --oc-color-bg-input-hover: hsla(0, 0%, 100%, 0.12);
+
+    --oc-color-bg-page: #0a0a0a;
+    --oc-color-bg-overlay: #262626;
+    --oc-color-bg-surface-3: hsla(0, 0%, 100%, 0.02);
+    --oc-color-bg-surface-4: hsla(0, 0%, 100%, 0.015);
+    --oc-color-bg-surface-5: hsla(0, 0%, 100%, 0.12);
+    --oc-color-bg-hover: hsla(0, 0%, 100%, 0.06);
+    --oc-color-bg-code: rgba(0, 0, 0, 0.35);
+    --oc-color-bg-contrast: #ffffff;
+
+    --oc-color-border-subtle: hsla(0, 0%, 100%, 0.08);
+    --oc-color-border-default: hsla(0, 0%, 100%, 0.06);
+    --oc-color-border-divider: hsla(0, 0%, 100%, 0.25);
+    --oc-color-border-hover: hsla(0, 0%, 100%, 0.2);
+    --oc-color-border-strong: hsla(0, 0%, 100%, 0.24);
+    --oc-color-border-secondary: hsla(0, 0%, 100%, 0.2);
+    --oc-color-border-input: hsla(0, 0%, 100%, 0.2);
+    --oc-color-border-input-focus: hsla(0, 0%, 100%, 0.25);
+    --oc-color-scrollbar: hsla(0, 0%, 100%, 0.2);
+
+    --oc-btn-primary-bg: #ffffff;
+    --oc-btn-primary-text: #0a0a0a;
+    --oc-btn-primary-border: transparent;
+    --oc-btn-primary-hover-bg: rgba(0, 0, 0, 0.2);
+
+    --oc-btn-secondary-bg: hsla(0, 0%, 100%, 0.06);
+    --oc-btn-secondary-text: #ffffff;
+    --oc-btn-secondary-border: hsla(0, 0%, 100%, 0.15);
+    --oc-btn-secondary-hover-bg: hsla(0, 0%, 100%, 0.2);
+    --oc-btn-secondary-hover-border: hsla(0, 0%, 100%, 0.6);
+
+    --oc-btn-ghost-bg: transparent;
+    --oc-btn-ghost-text: #ffffff;
+    --oc-btn-ghost-border: transparent;
+    --oc-btn-ghost-hover-bg: hsla(0, 0%, 100%, 0.08);
+    --oc-btn-ghost-hover-border: hsla(0, 0%, 100%, 0.2);
+
+    --oc-btn-liquid-bg: #ffffff;
+    --oc-btn-liquid-hover-bg: rgba(0, 0, 0, 0.2);
+  }
+}

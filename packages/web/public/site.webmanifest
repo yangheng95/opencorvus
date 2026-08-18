@@ -1,1 +1,28 @@
-../../ui/src/assets/favicon/site.webmanifest
+{
+  "name": "OpenCorvus",
+  "short_name": "OpenCorvus",
+  "description": "Automate the workflow you repeat every day",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9f8f8",
+  "theme_color": "#f9f8f8",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 ---
-import Lander from "../components/Lander.astro"
+import OcLanding from "../components/OcLanding.astro"
+import { featuredSquadsFor } from "../lib/landing-featured-squads"
+
+const featured = featuredSquadsFor("root")
 ---
 
-<Lander locale="root" />
+<OcLanding locale="root" {featured} />

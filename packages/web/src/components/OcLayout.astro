@@ -1,0 +1,87 @@
+---
+import "../styles/fonts.css"
+import "../styles/tokens.css"
+import "../styles/primitives.css"
+import Favicon from "./Favicon.astro"
+import OcHeadBoot from "./OcHeadBoot.astro"
+import OcHeader from "./OcHeader.astro"
+import OcFooter from "./OcFooter.astro"
+import config from "../../config.mjs"
+import type { PublicLocale } from "../content/public-market"
+
+/**
+ * Layout for every public surface: the landing page, the Expert Squad market, and squad detail.
+ *
+ * It replaced public-site.css, whose 1100px minimum width and print-editorial palette are gone
+ * along with it. Component-local styles are expected to use only the tokens from tokens.css and the
+ * classes from primitives.css — no bare spacing or radius values.
+ */
+
+type Props = {
+  locale: PublicLocale
+  current: "home" | "market" | "squad"
+  title: string
+  description: string
+  languageHref: string
+  socialImage?: string
+}
+
+const { locale, current, title, description, languageHref, socialImage } = Astro.props
+const canonicalUrl = new URL(Astro.url.pathname, config.url).href
+const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
+const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
+---
+
+<!doctype html>
+<html
+  lang={locale === "zh-cn" ? "zh-CN" : "en"}
+  data-public-locale={locale}
+  data-public-surface={current}
+  data-public-language-href={languageHref}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f9f8f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <Favicon />
+    <link rel="manifest" href={`${publicBase}/site.webmanifest`} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang={locale === "zh-cn" ? "en" : "zh-CN"} href={new URL(languageHref, config.url).href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale === "zh-cn" ? "zh_CN" : "en_US"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <title>{title}</title>
+    <OcHeadBoot />
+  </head>
+  <body class="oc-surface">
+    <OcHeader {locale} {current} {languageHref} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <OcFooter {locale} />
+  </body>
+</html>
+
+<style is:global>
+  html {
+    background: var(--oc-color-bg-page);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+</style>

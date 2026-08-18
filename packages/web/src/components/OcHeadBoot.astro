@@ -1,0 +1,150 @@
+---
+/**
+ * Head-time bootstrap shared by every public surface.
+ *
+ * Both scripts must run before first paint, and both must be identical across layouts — a theme
+ * bootstrap that exists on one layout and not another produces a flash of the wrong palette on
+ * exactly the navigations that cross between them. Hence one component, used by both.
+ *
+ * Reads three attributes off <html>: data-public-locale, data-public-surface,
+ * data-public-language-href.
+ */
+---
+
+<script is:inline>
+  // Theme. Applying the stored choice from a deferred script paints the light palette first and
+  // then repaints dark, which reads as a flash of white on every navigation.
+  ;(() => {
+    const root = document.documentElement
+    const storageKey = "opencorvus.public-theme"
+    const isTheme = (value) => value === "light" || value === "dark"
+
+    const read = () => {
+      try {
+        const value = localStorage.getItem(storageKey)
+        return isTheme(value) ? value : null
+      } catch {
+        return null
+      }
+    }
+
+    // A theme-color tag without `media` always matches, and browsers honour the first match. So an
+    // explicit choice needs an un-media'd tag inserted ahead of the two media ones, and returning
+    // to "system" needs that tag removed again.
+    const syncThemeColor = (theme) => {
+      const existing = document.querySelector('meta[name="theme-color"]:not([media])')
+      if (!theme) {
+        existing?.remove()
+        return
+      }
+      const color = theme === "dark" ? "#0a0a0a" : "#f9f8f8"
+      if (existing) {
+        existing.setAttribute("content", color)
+        return
+      }
+      const tag = document.createElement("meta")
+      tag.setAttribute("name", "theme-color")
+      tag.setAttribute("content", color)
+      document.head.prepend(tag)
+    }
+
+    const apply = (theme) => {
+      if (theme) root.dataset.theme = theme
+      else delete root.dataset.theme
+      syncThemeColor(theme)
+    }
+
+    apply(read())
+
+    // What the reader is looking at right now, override or not. The toggle flips away from this,
+    // not from the stored value — those differ whenever the theme is unset.
+    const resolved = () =>
+      isTheme(root.dataset.theme)
+        ? root.dataset.theme
+        : window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+
+    const commit = (next) => {
+      try {
+        if (next) localStorage.setItem(storageKey, next)
+        else localStorage.removeItem(storageKey)
+      } catch {
+        // The in-memory application still holds for this page view.
+      }
+      apply(next)
+    }
+
+    document.addEventListener("click", (event) => {
+      const element = event.target instanceof Element ? event.target : null
+      if (!element) return
+
+      if (element.closest("[data-oc-theme-toggle]")) {
+        commit(resolved() === "dark" ? "light" : "dark")
+        return
+      }
+
+      const target = element.closest("[data-oc-theme-switch]")
+      if (!target) return
+      // "system" clears the override and hands control back to prefers-color-scheme.
+      commit(isTheme(target.dataset.targetTheme) ? target.dataset.targetTheme : null)
+    })
+  })()
+</script>
+
+<script is:inline>
+  // Locale. The URL is authoritative; this only records the reader's choice and, on the landing
+  // page alone, honours a stored or browser preference for Chinese.
+  ;(() => {
+    const root = document.documentElement
+    const locale = root.dataset.publicLocale
+    const surface = root.dataset.publicSurface
+    const languageHref = root.dataset.publicLanguageHref
+    const preferenceKey = "opencorvus.public-locale"
+
+    const readPreference = () => {
+      try {
+        const value = localStorage.getItem(preferenceKey)
+        return value === "root" || value === "zh-cn" ? value : null
+      } catch {
+        return null
+      }
+    }
+    const writePreference = (value) => {
+      try {
+        localStorage.setItem(preferenceKey, value)
+      } catch {
+        // The URL locale remains authoritative when storage is unavailable.
+      }
+    }
+
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target instanceof Element ? event.target.closest("[data-public-locale-switch]") : null
+        const targetLocale = target?.dataset.targetLocale
+        if (targetLocale === "root" || targetLocale === "zh-cn") writePreference(targetLocale)
+      },
+      { capture: true },
+    )
+
+    if (locale === "zh-cn") {
+      writePreference("zh-cn")
+      return
+    }
+    if (surface !== "home") {
+      writePreference("root")
+      return
+    }
+
+    const preference = readPreference()
+    const preferredSupportedLanguage = (
+      navigator.languages?.length ? navigator.languages : [navigator.language]
+    ).find((language) => /^(?:en|zh)(?:-|$)/i.test(language))
+    const browserPrefersChinese = /^zh(?:-|$)/i.test(preferredSupportedLanguage ?? "")
+    if ((preference === "zh-cn" || (preference === null && browserPrefersChinese)) && languageHref) {
+      const target = new URL(languageHref, window.location.href)
+      if (target.pathname !== window.location.pathname) window.location.replace(target.href)
+    }
+  })()
+</script>

@@ -72,6 +72,56 @@ try {
     const response = await fetch(url)
     if (!response.ok || (await response.arrayBuffer()).byteLength === 0) throw new Error(`Packaged route failed: ${url}`)
   }
+
+  /*
+   * Asset integrity.
+   *
+   * A page that returns 200 while its stylesheet 404s looks completely broken and reports as
+   * healthy — the exact symptom that got the squad detail page filed as "崩坏". Every surface here
+   * gets its referenced assets fetched, so a dangling hash fails the build instead of a reader.
+   *
+   * The design-system check is separate on purpose: reaching a stylesheet is not the same as that
+   * stylesheet carrying the tokens, and the failure mode where a surface links only a component
+   * chunk renders unstyled markup with every asset resolving happily.
+   */
+  const surfaces = [
+    `${origin}/`,
+    `${origin}/zh-cn/`,
+    `${origin}/market/`,
+    `${origin}/zh-cn/market/`,
+    `${origin}/market/${identityPath}/`,
+    `${origin}/zh-cn/market/${identityPath}/`,
+  ]
+
+  for (const surface of surfaces) {
+    const html = await (await fetch(surface)).text()
+
+    const referenced = new Set<string>()
+    for (const [, href] of html.matchAll(/(?:href|src)="(\/[^"]+\.(?:css|js|png|svg|gif|webp|woff2|webmanifest))"/g)) {
+      referenced.add(href)
+    }
+    const ogImage = html.match(/property="og:image" content="([^"]+)"/)?.[1]
+    if (ogImage) referenced.add(new URL(ogImage).pathname)
+
+    if (referenced.size === 0) throw new Error(`Surface referenced no assets at all: ${surface}`)
+
+    for (const asset of referenced) {
+      const response = await fetch(`${origin}${asset}`)
+      if (!response.ok) throw new Error(`Surface ${surface} references a missing asset: ${asset} (${response.status})`)
+    }
+
+    const stylesheets = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map((match) => match[1]!)
+    if (stylesheets.length === 0) throw new Error(`Surface served no stylesheet: ${surface}`)
+
+    let carriesDesignSystem = false
+    for (const sheet of stylesheets) {
+      const css = await (await fetch(new URL(sheet, surface).href)).text()
+      if (css.includes("--oc-color-bg-page") && css.includes(".oc-container")) carriesDesignSystem = true
+    }
+    if (!carriesDesignSystem) {
+      throw new Error(`Surface loads stylesheets but none define the design system: ${surface}`)
+    }
+  }
   const visitorRead = await fetch(`${origin}/api/site/v1/visitors`)
   const visitorInitial = await visitorRead.json() as { estimatedParticipatingBrowsers?: number; participating?: boolean }
   if (!visitorRead.ok || visitorInitial.estimatedParticipatingBrowsers !== 0 || visitorInitial.participating !== false || visitorRead.headers.get("set-cookie")) {

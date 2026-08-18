@@ -163,8 +163,6 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/task/{taskID}/operator-model-context` | Get task operator model context 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.operatorModelContext` |
 | GET | `/task/{taskID}/progress` | Get task progress 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.progress` |
 | GET | `/task/{taskID}/project-archive` | Download task project archive 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.projectArchive` |
-| POST | `/task/{taskID}/replan` | Replan task 错误: `LogFileNotFoundError`, `NotFoundError`, `TaskControlIntentLifecycleConflictError`. | `task.replan` |
-| POST | `/task/{taskID}/retry` | Retry task 错误: `LogFileNotFoundError`, `NotFoundError`, `TaskControlIntentLifecycleConflictError`. | `task.retry` |
 | POST | `/task/{taskID}/rewind` | Rewind the visible Task conversation timeline 请求体: `anchor`, `reason`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.rewind` |
 | POST | `/task/{taskID}/rewind/clear` | Clear the Task conversation visibility cursor 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.clearRewindCursor` |
 | POST | `/task/{taskID}/session/{sessionID}/cancel` | Cancel a task agent session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.session.cancel` |

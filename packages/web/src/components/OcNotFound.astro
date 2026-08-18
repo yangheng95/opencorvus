@@ -1,0 +1,63 @@
+---
+import OcLayout from "./OcLayout.astro"
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+/**
+ * Shared not-found body for the on-demand squad detail route.
+ *
+ * The route sets a real 404 status; this only renders the page. Kept as its own component so both
+ * locales say the same thing and neither drifts into the old stylesheet's class names.
+ */
+
+type Props = {
+  locale: PublicLocale
+  languageHref: string
+}
+
+const { locale, languageHref } = Astro.props
+const zh = locale === "zh-cn"
+
+const copy = zh
+  ? {
+      title: "未找到该专家团 · OpenCorvus",
+      description: "请求的专家团不在当前发布中。",
+      heading: "未找到该专家团",
+      body: "请求的身份不在当前数据库发布中。相似的名称不能替代精确身份——版本与 digest 共同标识内容。",
+      back: "返回专家团市场",
+      trust: "了解可信机制",
+    }
+  : {
+      title: "Expert Squad not found · OpenCorvus",
+      description: "The requested Expert Squad is not part of the active publication.",
+      heading: "Expert Squad not found",
+      body: "The requested identity is not part of the active database publication. A similar name never substitutes for exact identity — version and digest identify the content together.",
+      back: "Return to the market",
+      trust: "Read the trust model",
+    }
+---
+
+<OcLayout {locale} current="market" title={copy.title} description={copy.description} {languageHref}>
+  <section class="oc-container oc-notfound">
+    <p class="oc-eyebrow">404</p>
+    <h1 class="oc-text-h1 oc-cjk-spacing">{copy.heading}</h1>
+    <p class="oc-text-body oc-text-description oc-notfound-body">{copy.body}</p>
+    <div class="oc-btn-group">
+      <a class="oc-btn oc-btn-primary oc-btn-m" href={publicPath(locale, "/market/")}>{copy.back}</a>
+      <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/expert-squads/trust/")}>{copy.trust}</a>
+    </div>
+  </section>
+</OcLayout>
+
+<style>
+  .oc-notfound {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-4);
+    padding-block: var(--oc-space-11) var(--oc-space-12);
+    max-width: 58ch;
+  }
+
+  .oc-notfound-body {
+    margin-bottom: var(--oc-space-2);
+  }
+</style>

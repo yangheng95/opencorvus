@@ -1,0 +1,871 @@
+/* OpenCorvus public site primitives.
+ *
+ * Depends on tokens.css. Calibration basis: docs/website-restyle-plan.md §2.2, §2.3, §8 期 2.
+ *
+ * House rules, enforced by review and (from 期 9) by lint:
+ *   - No bare spacing or radius values. Use var(--oc-space-*) / var(--oc-radius-*).
+ *   - Hover fills go on ::after, never on `background`. Animating background-color on an element
+ *     with backdrop-filter forces the filter to re-composite and the glass visibly stutters.
+ *   - Every animation has a prefers-reduced-motion escape at the bottom of this file.
+ */
+
+/* ------------------------------------------------------------------ base */
+
+.oc-surface {
+  background: var(--oc-color-bg-page);
+  color: var(--oc-color-text-primary);
+  font-family: var(--oc-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.oc-surface *,
+.oc-surface *::before,
+.oc-surface *::after {
+  box-sizing: border-box;
+}
+
+.oc-surface ::selection {
+  background: var(--oc-color-brand);
+  color: #fff;
+}
+
+.oc-surface :focus-visible {
+  outline: 2px solid var(--oc-color-brand);
+  outline-offset: 3px;
+  border-radius: var(--oc-radius-sm);
+}
+
+.oc-surface ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.oc-surface ::-webkit-scrollbar-thumb {
+  background: var(--oc-color-scrollbar);
+  border-radius: var(--oc-radius-pill);
+}
+
+.oc-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--oc-space-3);
+  left: var(--oc-space-3);
+  padding: var(--oc-space-3) var(--oc-space-4);
+  border-radius: var(--oc-radius-pill);
+  background: var(--oc-color-bg-contrast);
+  color: var(--oc-color-text-inverse);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.oc-skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ------------------------------------------------------------- container */
+
+.oc-container {
+  width: var(--oc-container);
+  margin-inline: auto;
+}
+
+/* Section rhythm. The reference's sense of pace comes from using the ladder and nothing else —
+   every section pads from the same five rungs. */
+.oc-section {
+  padding-block: var(--oc-space-10);
+}
+
+.oc-section-tight {
+  padding-block: var(--oc-space-9);
+}
+
+.oc-section-wide {
+  padding-block: var(--oc-space-11);
+}
+
+/* ------------------------------------------------------------ typography */
+
+.oc-text-hero,
+.oc-text-h1 {
+  font-family: var(--oc-font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.oc-text-hero {
+  font-size: 42px;
+}
+
+.oc-text-h1 {
+  font-size: 32px;
+  line-height: 1.35;
+}
+
+.oc-text-subtitle,
+.oc-text-title {
+  font-family: var(--oc-font-body);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.oc-text-subtitle {
+  font-size: 22px;
+}
+
+.oc-text-title {
+  font-size: 19px;
+}
+
+.oc-text-body {
+  font-size: 17px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  margin: 0;
+}
+
+.oc-text-caption {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.oc-text-xs {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.oc-text-mono {
+  font-family: var(--oc-font-mono);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.oc-text-secondary {
+  color: var(--oc-color-text-secondary);
+}
+
+.oc-text-description {
+  color: var(--oc-color-text-description);
+}
+
+.oc-eyebrow {
+  font-family: var(--oc-font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--oc-color-text-description);
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .oc-text-hero {
+    font-size: 60px;
+  }
+
+  .oc-text-h1 {
+    font-size: 44px;
+  }
+}
+
+/* Chinese headings need the extra tracking or they read as a solid block. The reference does the
+   same thing, scoped the same way. */
+:lang(zh) .oc-cjk-spacing {
+  letter-spacing: 0.1em;
+}
+
+.oc-link {
+  color: var(--oc-color-text-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.oc-link:hover {
+  color: var(--oc-color-brand);
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.oc-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--oc-control-gap);
+  border-radius: var(--oc-radius-pill);
+  box-sizing: border-box;
+  font-family: var(--oc-font-body);
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  /* Contains the ::after overlay's negative z-index so it cannot slip behind the page. */
+  isolation: isolate;
+  white-space: nowrap;
+}
+
+.oc-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.oc-btn:hover::after {
+  opacity: 1;
+}
+
+.oc-btn-m {
+  font-size: 16px;
+  padding: var(--oc-control-padding-block) var(--oc-control-padding-inline);
+}
+
+.oc-btn-s {
+  font-size: 15px;
+  padding: var(--oc-space-2) var(--oc-space-3);
+}
+
+.oc-btn-primary {
+  background: var(--oc-btn-primary-bg);
+  color: var(--oc-btn-primary-text);
+  border: 1px solid var(--oc-btn-primary-border);
+}
+
+.oc-btn-primary::after {
+  background: var(--oc-btn-primary-hover-bg);
+}
+
+.oc-btn-secondary {
+  background: var(--oc-btn-secondary-bg);
+  color: var(--oc-btn-secondary-text);
+  border: 1px solid var(--oc-btn-secondary-border);
+  -webkit-backdrop-filter: blur(var(--oc-blur-glass));
+  backdrop-filter: blur(var(--oc-blur-glass));
+  transition: border-color 0.35s ease;
+}
+
+.oc-btn-secondary::after {
+  background: var(--oc-btn-secondary-hover-bg);
+}
+
+.oc-btn-secondary:hover {
+  border-color: var(--oc-btn-secondary-hover-border);
+}
+
+.oc-btn-ghost {
+  background: var(--oc-btn-ghost-bg);
+  color: var(--oc-btn-ghost-text);
+  border: 1px solid var(--oc-btn-ghost-border);
+  font-weight: 400;
+  transition: border-color 0.2s ease;
+}
+
+.oc-btn-ghost::after {
+  background: var(--oc-btn-ghost-hover-bg);
+}
+
+.oc-btn-ghost:hover {
+  border-color: var(--oc-btn-ghost-hover-border);
+}
+
+/* "static" variants sit on the shader hero, which keeps its own colour in both themes. */
+.oc-btn-ghost-static {
+  background: var(--oc-btn-ghost-static-bg);
+  color: var(--oc-btn-ghost-static-text);
+  border: 1px solid var(--oc-btn-ghost-static-border);
+  transition: border-color 0.35s ease;
+}
+
+.oc-btn-ghost-static::after {
+  background: var(--oc-btn-ghost-static-hover-bg);
+}
+
+.oc-btn-ghost-static:hover {
+  border-color: var(--oc-btn-ghost-static-hover-border);
+}
+
+.oc-btn-liquid {
+  border: none;
+  background: var(--oc-btn-liquid-bg);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--oc-color-static-black);
+  box-shadow:
+    0 2px 8px rgba(41, 70, 211, 0.1),
+    inset 0 1px 1px hsla(0, 0%, 100%, 0.6);
+  transition: box-shadow 0.2s ease;
+}
+
+.oc-btn-liquid::after {
+  background: var(--oc-btn-liquid-hover-bg);
+}
+
+.oc-btn-text {
+  padding: var(--oc-space-3) var(--oc-space-4);
+  background: transparent;
+  color: var(--oc-color-brand-medium);
+  border: 1px solid transparent;
+  transition:
+    color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.oc-btn-text::after {
+  background: var(--oc-btn-secondary-hover-bg);
+}
+
+.oc-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--oc-space-3);
+  align-items: center;
+}
+
+@media (max-width: 448px) {
+  .oc-btn-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .oc-btn-group > * {
+    width: 100%;
+  }
+}
+
+/* ----------------------------------------------------- cards and panels */
+
+/* Glass card. Reads as glass only over a substrate — see the surface families note in tokens.css. */
+.oc-card {
+  border-radius: var(--oc-radius-card);
+  border: 1px solid var(--oc-color-border-subtle);
+  background: var(--oc-color-bg-surface-3);
+  padding: var(--oc-space-5);
+}
+
+.oc-card-glass {
+  border-radius: var(--oc-radius-card);
+  border: 1px solid var(--oc-color-border-default);
+  background: var(--oc-color-bg-surface-1);
+  -webkit-backdrop-filter: blur(var(--oc-blur-glass));
+  backdrop-filter: blur(var(--oc-blur-glass));
+  padding: var(--oc-space-5);
+  box-shadow: var(--oc-shadow-card);
+}
+
+.oc-card-raised {
+  border-radius: var(--oc-radius-card);
+  border: 1px solid var(--oc-color-border-subtle);
+  background: var(--oc-color-bg-overlay);
+  padding: var(--oc-space-5);
+  box-shadow: var(--oc-shadow-card);
+}
+
+.oc-panel {
+  border-radius: var(--oc-radius-panel);
+  border: 1px solid var(--oc-color-border-subtle);
+  background: var(--oc-color-bg-surface-4);
+  padding: var(--oc-space-4);
+}
+
+.oc-media {
+  border-radius: var(--oc-radius-media);
+  overflow: hidden;
+  border: 1px solid var(--oc-color-border-subtle);
+  background: var(--oc-color-bg-surface-4);
+}
+
+.oc-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.oc-glass-dropdown {
+  background: var(--oc-color-bg-overlay);
+  -webkit-backdrop-filter: blur(var(--oc-blur-glass));
+  backdrop-filter: blur(var(--oc-blur-glass));
+  border: 1px solid var(--oc-color-border-subtle);
+  border-radius: var(--oc-radius-panel);
+  box-shadow: var(--oc-shadow-panel);
+}
+
+/* ---------------------------------------------------------------- header */
+
+.oc-header-wrapper {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+  margin-inline: auto;
+  width: var(--oc-container);
+  padding-top: var(--oc-space-2);
+}
+
+.oc-header-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oc-space-4);
+  margin-inline: auto;
+  padding: var(--oc-space-1) 0;
+  border-radius: var(--oc-radius-pill);
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+/* The glass slab lives on ::before so it can cross-fade without touching the bar's own layout or
+   re-compositing the blur on every scroll frame. `visibility` is delayed on the way out so the
+   fade completes before the layer is dropped. */
+.oc-header-bar::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--oc-color-bg-surface-raised);
+  -webkit-backdrop-filter: blur(var(--oc-blur-glass));
+  backdrop-filter: blur(var(--oc-blur-glass));
+  border: 1px solid var(--oc-color-border-default);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease-in-out,
+    visibility 0s 0.4s;
+}
+
+.oc-header-wrapper[data-scrolled="true"] .oc-header-bar::before {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.4s ease-in-out,
+    visibility 0s;
+}
+
+.oc-header-bar {
+  isolation: isolate;
+}
+
+.oc-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oc-space-2);
+  padding-inline: var(--oc-space-3);
+  min-width: 0;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--oc-color-text-primary);
+  text-decoration: none;
+}
+
+/* The brand marks' own display is owned by OcHeader, which shows one and hides the other by theme.
+ * A global `.oc-brand img { display: block }` used to live here and quietly won that fight: Astro
+ * compiles component rules to `.oc-brand-dark:where(.astro-hash)`, and `:where()` contributes zero
+ * specificity, so (0,1,1) here beat (0,1,0) there and both logos rendered side by side. Anything
+ * this file says about elements a component also styles has to clear that bar deliberately. */
+
+.oc-nav {
+  display: none;
+  align-items: center;
+  gap: var(--oc-space-1);
+  min-width: 0;
+}
+
+/* Chinese labels have no spaces, so the browser is free to break them between any two
+   characters — at 1280px with seven items every label wrapped mid-word ("为什 / 么"). Latin
+   labels never showed it because they break at spaces and these have none. */
+.oc-nav a {
+  padding: var(--oc-space-2) var(--oc-space-3);
+  border-radius: var(--oc-radius-pill);
+  font-size: 15px;
+  white-space: nowrap;
+  color: var(--oc-color-text-secondary);
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.oc-nav a:hover {
+  color: var(--oc-color-text-primary);
+  background: var(--oc-color-bg-hover);
+}
+
+.oc-nav a[aria-current="page"] {
+  color: var(--oc-color-text-primary);
+}
+
+.oc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--oc-space-2);
+  padding-inline: var(--oc-space-1);
+}
+
+@media (min-width: 768px) {
+  .oc-nav {
+    display: flex;
+  }
+}
+
+/* Segmented pill control, shared by the locale switch and the theme switch. */
+.oc-segmented {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 3px;
+  border-radius: var(--oc-radius-pill);
+  border: 1px solid var(--oc-color-border-default);
+}
+
+.oc-segmented > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-inline: var(--oc-space-3);
+  border: 0;
+  border-radius: var(--oc-radius-pill);
+  background: transparent;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--oc-color-text-description);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.oc-segmented > *:hover {
+  color: var(--oc-color-text-primary);
+}
+
+.oc-segmented > [aria-pressed="true"],
+.oc-segmented > [data-active="true"] {
+  background: var(--oc-color-bg-surface-raised);
+  color: var(--oc-color-text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.oc-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: var(--oc-radius-pill);
+  background: transparent;
+  color: var(--oc-color-text-secondary);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.oc-icon-btn:hover {
+  color: var(--oc-color-text-primary);
+  background: var(--oc-color-bg-hover);
+}
+
+.oc-menu-toggle {
+  display: inline-flex;
+}
+
+@media (min-width: 768px) {
+  .oc-menu-toggle {
+    display: none;
+  }
+}
+
+/* ----------------------------------------------------------- mobile menu */
+
+.oc-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  background: var(--oc-color-bg-page);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.oc-mobile-menu[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.oc-mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--oc-space-3) var(--oc-space-5);
+}
+
+.oc-mobile-menu-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--oc-space-3) var(--oc-space-5);
+}
+
+.oc-mobile-menu-item {
+  display: flex;
+  align-items: center;
+  padding-block: var(--oc-space-5);
+  border-bottom: 1px solid var(--oc-color-border-divider);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--oc-color-text-primary);
+  text-decoration: none;
+}
+
+.oc-mobile-menu-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oc-space-3);
+  padding: var(--oc-space-5);
+}
+
+@media (min-width: 768px) {
+  .oc-mobile-menu {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------- grid backdrop */
+
+/* 90px lattice, faded out on all four edges. Two mask layers intersect: the horizontal gradient
+   fades the left and right edges, the vertical one the top and bottom. `mask-composite` has two
+   incompatible spellings, so both ship — the -webkit- pair uses source-in/xor, the standard one
+   uses intersect. */
+.oc-grid-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg, var(--oc-grid-line, rgba(0, 0, 0, 0.025)) 1px, transparent 0),
+    linear-gradient(180deg, var(--oc-grid-line, rgba(0, 0, 0, 0.025)) 1px, transparent 0);
+  background-size: 90px 90px;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, #000 15%, #000 85%, transparent),
+    linear-gradient(180deg, transparent 0, #000 15%, #000 85%, transparent);
+  -webkit-mask-composite: source-in, xor;
+  mask-image:
+    linear-gradient(90deg, transparent 0, #000 15%, #000 85%, transparent),
+    linear-gradient(180deg, transparent 0, #000 15%, #000 85%, transparent);
+  mask-composite: intersect;
+}
+
+:root[data-theme="dark"] .oc-grid-bg {
+  --oc-grid-line: hsla(0, 0%, 100%, 0.045);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .oc-grid-bg {
+    --oc-grid-line: hsla(0, 0%, 100%, 0.045);
+  }
+}
+
+/* ------------------------------------------------------------- CTA block */
+
+/* Registered so the angle can be interpolated; a plain custom property is a string to the
+   animation engine and would step instead of sweep. */
+@property --oc-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes oc-rotating-border {
+  0% {
+    --oc-border-angle: 0deg;
+  }
+
+  100% {
+    --oc-border-angle: 360deg;
+  }
+}
+
+.oc-cta-block {
+  position: relative;
+  border-radius: var(--oc-radius-card);
+  border: 1px solid var(--oc-color-border-input);
+  background: var(--oc-color-bg-hero-cta);
+  -webkit-backdrop-filter: blur(var(--oc-blur-glass));
+  backdrop-filter: blur(var(--oc-blur-glass));
+  padding: var(--oc-space-6);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.oc-cta-block:hover {
+  border-color: transparent;
+}
+
+/* Safari below 16.4 has no @property, so the conic sweep would sit frozen at 0deg. Gate the whole
+   effect on support and let those browsers keep the plain border above. */
+@supports (background: conic-gradient(from var(--oc-border-angle), red, blue)) {
+  .oc-cta-block::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+      from var(--oc-border-angle),
+      rgba(23, 43, 143, 0.15) 0%,
+      rgba(120, 150, 255, 0.7) 25%,
+      rgba(23, 43, 143, 0.15) 50%,
+      rgba(120, 150, 255, 0.7) 75%,
+      rgba(23, 43, 143, 0.15) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: oc-rotating-border 6s linear infinite;
+    pointer-events: none;
+  }
+
+  .oc-cta-block:hover::before {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------- code + copy */
+
+.oc-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oc-space-3);
+  padding: var(--oc-space-3) var(--oc-space-4);
+  border-radius: var(--oc-radius-input);
+  border: 1px solid var(--oc-color-border-subtle);
+  background: var(--oc-color-bg-code);
+  font-family: var(--oc-font-mono);
+  font-size: 14px;
+}
+
+.oc-code code {
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.oc-copy-btn {
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--oc-font-body);
+  font-size: 12px;
+  color: var(--oc-color-text-description);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.oc-copy-btn:hover {
+  color: var(--oc-color-text-primary);
+}
+
+/* -------------------------------------------------------------- motion */
+
+@keyframes oc-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--oc-enter-y, 20px));
+    filter: blur(var(--oc-enter-blur, 0));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* `backwards` holds the 0% frame during animation-delay, which is what makes staggering read as
+   one entrance instead of a queue of separate pop-ins. */
+.oc-enter {
+  animation: oc-enter 0.8s ease-out backwards;
+}
+
+@keyframes oc-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.oc-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: oc-blink 1s step-end infinite;
+}
+
+.oc-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.oc-reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-enter,
+  .oc-caret {
+    animation: none;
+  }
+
+  .oc-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .oc-cta-block::before {
+    animation: none;
+  }
+
+  .oc-surface * {
+    scroll-behavior: auto;
+  }
+}

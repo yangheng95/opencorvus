@@ -1,0 +1,66 @@
+---
+title: How Missions run long-horizon work
+description: How OpenCorvus coordinates fixed-squad Tasks, typed handoffs, evidence, and reopening across a long-horizon outcome.
+---
+
+A Mission turns one long-horizon outcome into a chain of owned, reviewable Tasks.
+
+Mission coordinates the outcome. It is **not** a larger Agent. Each child Task owns one exact Expert
+Squad revision and one selected workflow, while dependencies, messages, Artifacts, evidence, and
+lifecycle decisions all stay visible.
+
+## Coordination stays separate from execution
+
+Mission owns the outcome and the dependency graph. The work, the capability projection, and the
+evidence stay with their real owners.
+
+| Owner | Owns | Detail |
+| ----- | ---- | ------ |
+| Mission | The outcome and its dependencies | Coordinates outcomes across child Tasks and records their dependency graph. |
+| Task | One owned delivery | One project-scoped delivery, one fixed Expert Squad revision, the selected workflow, the related Sessions, and its lifecycle decisions. |
+| Expert Squad | Roles and capability projection | Named agents, instructions, Skills, tools, MCP access, the selector, and declared workflows. |
+| Artifacts and evidence | Exact, reviewable handoff | Typed Artifacts carry provenance and exact references. Host observations record file and command facts independently of any agent's summary. |
+
+## How it runs
+
+1. **Define the outcome.** Record the result wanted, the task boundary, and the acceptance
+   conditions.
+2. **Split into owned Tasks.** Split only when a delivery can be independently owned, accepted, or
+   depended on. Splitting for its own sake produces coordination overhead with no owner.
+3. **Hold the squad identity set.** Mission records which Expert Squad IDs are available when it
+   starts. Capabilities installed later do not silently widen that set.
+4. **Freeze the revision per Task.** When a child Task is created, an admitted squad ID resolves and
+   pins to one exact package revision plus its selected workflow, for the life of that Task.
+5. **Run in-task collaboration.** Named roles stream messages and tool work, then hand off typed
+   Artifact references with visible evidence.
+6. **Read the evidence and decide.** Mission reads the outputs of terminal child Tasks and continues
+   through explicit acceptance or a dependent-Task path.
+
+## Why long-horizon work holds together
+
+- **Persistent organization.** Mission and Task state are persisted. Versioned outcomes and
+  acceptance contracts preserve what is being delivered and judged.
+- **Fixed Task authority.** One exact squad revision and its selected workflow stay fixed for the
+  Task's lifetime. A Task cannot silently switch squads mid-life.
+- **Handoff with evidence.** Typed Artifact references, provenance, complete reads, and host
+  observations let later work inspect exactly what a decision rested on.
+- **Terminal is not final.** A Task that reached `completed`, `failed`, or `cancelled` reopens when
+  real new input arrives — sending a message is the resume. Reopening starts a fresh execution
+  occurrence rather than replaying the old one, and the prior history stays readable. There are no
+  separate retry or replan controls to find.
+
+## The real boundary
+
+Long-horizon is not unlimited execution, and it is not permanent unattended operation.
+
+Unattended work continues only while the local or hosted OpenCorvus runtime is online. Output quality
+depends on the selected model, the reachable sources, the installed capabilities, and the available
+evidence. External effects remain bound by permission rules. Mission coordination does not erase
+Task or agent ownership.
+
+## Related
+
+- [Mission and Task API](../../reference/mission-task/) — the HTTP and SDK integration path
+- [Delivery slices and Tasks](../delivery-slice-task/) — how a delivery is scoped
+- [The agent loop](../agent-loop/) — what happens inside one Task
+- [Expert Squad market](/market/) — the squads a Mission can admit

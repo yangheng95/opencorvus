@@ -1,0 +1,248 @@
+---
+import BrandLightUrl from "../../../overlay/src/opencorvus-logo-light.svg?url"
+import BrandDarkUrl from "../../../overlay/src/opencorvus-logo-dark.svg?url"
+import { publicPath, type PublicLocale } from "../content/public-market"
+import config from "../../config.mjs"
+
+type Props = {
+  locale: PublicLocale
+  /** Which surface is rendering us. Anchors resolve to the landing page when it is not "home". */
+  current: "home" | "market" | "squad"
+  languageHref: string
+}
+
+const { locale, current, languageHref } = Astro.props
+const zh = locale === "zh-cn"
+const home = publicPath(locale)
+const marketHref = publicPath(locale, "/market/")
+const docsHref = publicPath(locale, "/start/quickstart/")
+
+// On the landing page these stay bare fragments so the browser does a same-document scroll. Off it,
+// they have to carry the path or they resolve against the current URL and go nowhere.
+const anchorBase = current === "home" ? "" : home
+// Two anchors, not five. With the market and docs links the header already carries, seven entries
+// left no room to breathe and pushed Chinese labels into wrapping. FAQ and the squad teaser are a
+// scroll away on the only page these anchors apply to.
+const anchors = [
+  { href: `${anchorBase}#why`, label: zh ? "特性" : "Why" },
+  { href: `${anchorBase}#start`, label: zh ? "开始" : "Start" },
+]
+
+const copy = {
+  brand: "OpenCorvus",
+  market: zh ? "专家团" : "Expert Squads",
+  docs: zh ? "文档" : "Docs",
+  menu: zh ? "打开菜单" : "Open menu",
+  close: zh ? "关闭菜单" : "Close menu",
+  theme: zh ? "切换深浅色" : "Toggle colour scheme",
+  skip: zh ? "跳到主要内容" : "Skip to content",
+}
+---
+
+<a class="oc-skip-link" href="#main-content">{copy.skip}</a>
+
+<div class="oc-header-wrapper" data-oc-header>
+  <header class="oc-header-bar" aria-label={zh ? "主导航" : "Primary navigation"}>
+    <a class="oc-brand" href={home} aria-current={current === "home" ? "page" : undefined}>
+      <span class="oc-brand-mark">
+        <img class="oc-brand-light" src={BrandLightUrl} width="28" height="28" alt="" loading="eager" decoding="async" />
+        <img class="oc-brand-dark" src={BrandDarkUrl} width="28" height="28" alt="" loading="eager" decoding="async" />
+      </span>
+      <span>{copy.brand}</span>
+    </a>
+
+    <nav class="oc-nav" aria-label={zh ? "页面章节" : "Sections"}>
+      {anchors.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href={marketHref} aria-current={current === "market" || current === "squad" ? "page" : undefined}
+        >{copy.market}</a
+      >
+      <a href={docsHref}>{copy.docs}</a>
+    </nav>
+
+    <div class="oc-header-actions">
+      <div class="oc-segmented oc-locale-switch" role="group" aria-label={zh ? "语言" : "Language"}>
+        <a href={zh ? languageHref : "#"} data-active={zh ? undefined : "true"} data-public-locale-switch
+          data-target-locale="root" aria-current={zh ? undefined : "true"} hreflang="en" lang="en">EN</a>
+        <a href={zh ? "#" : languageHref} data-active={zh ? "true" : undefined} data-public-locale-switch
+          data-target-locale="zh-cn" aria-current={zh ? "true" : undefined} hreflang="zh-CN" lang="zh-CN">中</a>
+      </div>
+
+      <button class="oc-icon-btn" type="button" data-oc-theme-toggle aria-label={copy.theme} title={copy.theme}>
+        <svg class="oc-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+        <svg class="oc-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"
+          ></path>
+        </svg>
+      </button>
+
+      <a class="oc-icon-btn oc-github-link" href={config.github} aria-label="GitHub" title="GitHub" rel="noopener">
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-2.91-.88-2.91-2.9 0-.68.24-1.24.64-1.68-.06-.2-.28-.83.06-1.72 0 0 .61-.19 2 .74a5.3 5.3 0 0 1 1.42-.19c.48 0 .97.06 1.42.19 1.39-.94 2-.74 2-.74.34.89.12 1.52.06 1.72.4.44.64 1 .64 1.68 0 2.03-1.14 2.7-2.92 2.9.3.26.56.76.56 1.54 0 1.11-.01 2.01-.01 2.29 0 .21.15.46.55.38A7.99 7.99 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+          ></path>
+        </svg>
+      </a>
+
+      <button class="oc-icon-btn oc-menu-toggle" type="button" data-oc-menu-open aria-label={copy.menu}
+        aria-expanded="false" aria-controls="oc-mobile-menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+</div>
+
+<div class="oc-mobile-menu" id="oc-mobile-menu" data-oc-menu data-open="false" aria-hidden="true">
+  <div class="oc-mobile-menu-header">
+    <a class="oc-brand" href={home}>
+      <span class="oc-brand-mark">
+        <img class="oc-brand-light" src={BrandLightUrl} width="28" height="28" alt="" decoding="async" />
+        <img class="oc-brand-dark" src={BrandDarkUrl} width="28" height="28" alt="" decoding="async" />
+      </span>
+      <span>{copy.brand}</span>
+    </a>
+    <button class="oc-icon-btn" type="button" data-oc-menu-close aria-label={copy.close}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="oc-mobile-menu-body">
+    {anchors.map((item) => <a class="oc-mobile-menu-item" href={item.href}>{item.label}</a>)}
+    <a class="oc-mobile-menu-item" href={marketHref}>{copy.market}</a>
+    <a class="oc-mobile-menu-item" href={docsHref}>{copy.docs}</a>
+    <a class="oc-mobile-menu-item" href={config.github} rel="noopener">GitHub</a>
+  </div>
+  <div class="oc-mobile-menu-footer">
+    <a class="oc-btn oc-btn-secondary oc-btn-m" href={languageHref} data-public-locale-switch
+      data-target-locale={zh ? "root" : "zh-cn"}>{zh ? "English" : "简体中文"}</a>
+  </div>
+</div>
+
+<style>
+  .oc-brand-mark {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+  }
+
+  .oc-brand-mark img {
+    display: block;
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Two marks ship and CSS picks one. Swapping the `src` from script would repaint after first
+     paint, which shows as the wrong-contrast logo flashing on every load.
+     The `.oc-brand-mark` prefix is load-bearing: Astro scopes these to
+     `.oc-brand-dark:where(.astro-hash)` and `:where()` adds no specificity, so a bare class here
+     loses to any two-part global selector and both marks render at once. */
+  .oc-brand-mark .oc-brand-dark {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .oc-brand-mark .oc-brand-light {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .oc-brand-mark .oc-brand-dark {
+    display: inline;
+  }
+
+  .oc-icon-sun {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .oc-icon-moon {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .oc-icon-sun {
+    display: block;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .oc-brand-mark .oc-brand-light {
+      display: none;
+    }
+
+    :global(:root:not([data-theme="light"])) .oc-brand-mark .oc-brand-dark {
+      display: inline;
+    }
+
+    :global(:root:not([data-theme="light"])) .oc-icon-moon {
+      display: none;
+    }
+
+    :global(:root:not([data-theme="light"])) .oc-icon-sun {
+      display: block;
+    }
+  }
+
+  .oc-locale-switch a[data-active="true"] {
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .oc-locale-switch,
+    .oc-github-link {
+      display: none;
+    }
+  }
+
+  /* Anchor targets have to clear the fixed header or the heading lands underneath it. */
+  :global(.oc-anchor) {
+    scroll-margin-top: 96px;
+  }
+</style>
+
+<script>
+  // Header glass. A sentinel crossing the viewport top is cheaper and steadier than a scroll
+  // listener: no per-frame work, and no jitter when momentum scrolling overshoots.
+  const header = document.querySelector<HTMLElement>("[data-oc-header]")
+  if (header) {
+    const sentinel = document.createElement("div")
+    sentinel.setAttribute("aria-hidden", "true")
+    Object.assign(sentinel.style, { position: "absolute", top: "0", height: "1px", width: "1px", pointerEvents: "none" })
+    document.body.prepend(sentinel)
+    new IntersectionObserver(
+      ([entry]) => {
+        header.dataset.scrolled = entry.isIntersecting ? "false" : "true"
+      },
+      { threshold: 0 },
+    ).observe(sentinel)
+  }
+
+  const menu = document.querySelector<HTMLElement>("[data-oc-menu]")
+  const opener = document.querySelector<HTMLElement>("[data-oc-menu-open]")
+
+  function setMenu(open: boolean) {
+    if (!menu) return
+    menu.dataset.open = open ? "true" : "false"
+    menu.setAttribute("aria-hidden", open ? "false" : "true")
+    opener?.setAttribute("aria-expanded", open ? "true" : "false")
+    // Locking the document rather than the panel keeps the background from scrolling under the
+    // overlay on iOS, where overflow on a child is not enough.
+    document.documentElement.style.overflow = open ? "hidden" : ""
+    if (open) menu.querySelector<HTMLElement>("[data-oc-menu-close]")?.focus()
+    else opener?.focus()
+  }
+
+  opener?.addEventListener("click", () => setMenu(true))
+  document.querySelector("[data-oc-menu-close]")?.addEventListener("click", () => setMenu(false))
+
+  // Any in-menu navigation closes it, including same-page anchors that fire no navigation event.
+  menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenu(false)))
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.dataset.open === "true") setMenu(false)
+  })
+</script>

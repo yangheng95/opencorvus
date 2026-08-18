@@ -1,0 +1,19 @@
+/* Self-hosted latin subsets only.
+ *
+ * Chinese deliberately falls through to the reader's system font stack
+ * (Noto Sans SC / PingFang SC / Microsoft YaHei). The reference design does the same — it ships
+ * no CJK webfont at all — and a CJK woff2 costs megabytes for a site whose primary locale is
+ * Chinese. See docs/website-restyle-plan.md §2.2.
+ */
+
+/* Display: headings and the hero line. */
+@import "@fontsource/montserrat/latin-500.css";
+@import "@fontsource/montserrat/latin-600.css";
+
+/* Body: everything else. */
+@import "@fontsource/dm-sans/latin-400.css";
+@import "@fontsource/dm-sans/latin-500.css";
+@import "@fontsource/dm-sans/latin-700.css";
+
+/* Mono: terminal demo, code blocks, checksums. */
+@import "@fontsource/fragment-mono/latin-400.css";

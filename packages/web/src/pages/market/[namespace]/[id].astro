@@ -1,6 +1,6 @@
 ---
 import SquadDetailPage from "../../../components/SquadDetailPage.astro"
-import PublicSiteLayout from "../../../components/PublicSiteLayout.astro"
+import OcNotFound from "../../../components/OcNotFound.astro"
 import { getWebsiteRegistry } from "../../../lib/website-registry"
 
 export const prerender = false
@@ -9,8 +9,10 @@ const record = registry.squad(Astro.params.namespace ?? "", Astro.params.id ?? "
 if (!record) Astro.response.status = 404
 ---
 
-{record ? <SquadDetailPage locale="root" {record} /> : (
-  <PublicSiteLayout locale="root" current="market" title="Expert Squad not found · OpenCorvus" description="The requested Expert Squad is not part of the active publication." languageHref="/zh-cn/market/">
-    <main id="main-content" class="public-main"><section class="market-intro"><p class="eyebrow">404</p><h1>Expert Squad not found</h1><p class="section-lead">The requested identity is not part of the active database publication.</p><a class="primary-action" href="/market/">Return to the market</a></section></main>
-  </PublicSiteLayout>
-)}
+{
+  record ? (
+    <SquadDetailPage locale="root" {record} />
+  ) : (
+    <OcNotFound locale="root" languageHref="/zh-cn/market/" />
+  )
+}

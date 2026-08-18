@@ -1,5 +1,5 @@
 ---
-import PublicSiteLayout from "./PublicSiteLayout.astro"
+import OcLayout from "./OcLayout.astro"
 import WorkflowTopology from "./WorkflowTopology.astro"
 import { publicPath, segmentPublicMarketText, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
 
@@ -34,7 +34,7 @@ const copy =
         copyDigest: "复制 digest",
         copied: "已复制",
         tabs: ["概览", "Agent 与工作流", "能力与权限", "版本与来源", "安装要求"],
-        overviewTitle: "适合什么工作",
+        overviewTitle: "适用场景",
         overviewBody: record.selectorSummary[locale],
         facts: [
           ["产品支柱", displayedPillars],
@@ -42,11 +42,11 @@ const copy =
           ["声明工作流", `${record.workflows.length} 条完整职责与依赖图`],
           ["完整能力投影", `${record.projectedCapabilities.skills} 项 Skill · ${record.projectedCapabilities.tools} 项工具 · ${record.projectedCapabilities.mcp} 项 MCP 引用`],
         ],
-        agentsTitle: "职责在运行前就已经声明",
+        agentsTitle: "角色与职责",
         agentsBody: "以下阵容来自这一精确能力包。每个 Agent 的身份与基础角色都会进入实际运行；头像、评分或人设不参与选择。",
-        workflowTitle: "先看责任如何交接，再决定是否选择",
+        workflowTitle: "工作流与交接",
         workflowBody: "下图展示每一步由谁负责、依赖哪一步完成。它解释团队的协作契约，不是正在执行的任务进度，也不会在网页上排程 Agent。",
-        capabilitiesTitle: "安装前公开能力范围",
+        capabilitiesTitle: "能力范围",
         capabilitiesBody: "完整投影包含 built-in、default 与 package-owned 引用；能力包自带子集单独列出，不能拿子集冒充全部权限。",
         capabilityFacts: [
           ["完整 Skill 投影", `${record.projectedCapabilities.skills} 个唯一引用；其中 ${record.packageOwnedCapabilities.skills} 个属于 package-owned 子集`],
@@ -54,7 +54,7 @@ const copy =
           ["完整 MCP 投影", `${record.projectedCapabilities.mcp} 个 server/tool/prompt/resource 引用；其中 ${record.packageOwnedCapabilities.mcp} 个属于 package-owned 子集`],
           ["配置要求", `${record.configuration.fields} 个字段 · ${record.configuration.required} 个必填`],
         ],
-        provenanceTitle: "一个列表项只绑定一个内容 revision",
+        provenanceTitle: "版本与来源",
         provenanceBody: "网站导入发布时，会从签名目录指向的精确 ZIP 重建规范化文件树与完整展示事实。客户端安装时仍会再次验证结构、身份与 digest。",
         demoTitle: "角色与依赖说明",
         demoBody: "这是绑定当前 package digest 的工作流说明，不是正在执行的 Agent、计时器或语言模型输出。真实执行只发生在 OpenCorvus 客户端中。",
@@ -62,7 +62,7 @@ const copy =
         demoEvidence: "每个节点只有在 depends_on 前序证据完成后才具备调度条件；本页面只解释合同，不推进运行状态。",
         proposedTitle: "当前发布状态",
         proposedBody: "这份条目属于当前数据库发布；导入器已逐字段核对它与 OpenCorvus 签名目录、精确 ZIP 和内容 digest。签名私钥不会进入生产服务器；第三方发布者身份与独立审核服务尚未开放。",
-        installTitle: "安装不是激活",
+        installTitle: "安装边界",
         installBody: "当前网页只流式下载这一精确 revision 的内容寻址 ZIP，不会自动打开客户端、安装或激活团队。后续导入由 OpenCorvus 客户端重新校验，并要求明确选择 scope。",
         installSteps: [
           ["01", "网站数据库定位精确 revision，校验 ZIP 字节数与 SHA-256 后开始响应"],
@@ -71,7 +71,7 @@ const copy =
           ["04", "Manager 原子导入并返回 mutation receipt"],
           ["05", "安装后另行选择专家团，运行时行为才会变化"],
         ],
-        dialogTitle: "安装 handoff 的责任边界",
+        dialogTitle: "安装责任边界",
         dialogBody: "真正的 scope 选择发生在后续执行导入的 OpenCorvus 客户端。这里仅解释 project/global 的不同，不会自行提交安装。",
         projectScope: "项目 scope",
         projectScopeBody: "只在当前项目目录生效；同 ID 的项目安装覆盖 global 版本。",
@@ -103,7 +103,7 @@ const copy =
         copyDigest: "Copy digest",
         copied: "Copied",
         tabs: ["Overview", "Agents & workflow", "Capabilities", "Versions & provenance", "Install requirements"],
-        overviewTitle: "When to choose this team",
+        overviewTitle: "Intended scope",
         overviewBody: record.selectorSummary[locale],
         facts: [
           ["Product pillars", displayedPillars],
@@ -111,13 +111,13 @@ const copy =
           ["Declared workflows", `${record.workflows.length} complete responsibility and dependency graphs`],
           ["Full capability projection", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
         ],
-        agentsTitle: "Responsibilities are declared before runtime",
+        agentsTitle: "Roles and ownership",
         agentsBody:
           "This roster comes from the exact package. Agent identity and base role participate in the real runtime; avatars, ratings, and personas do not influence selection.",
-        workflowTitle: "Inspect the handoffs before choosing the team",
+        workflowTitle: "Workflow and handoffs",
         workflowBody:
           "The graph shows who owns each step and which earlier result it depends on. It explains the team's collaboration contract; it is not live task progress and does not schedule Agents from the page.",
-        capabilitiesTitle: "Capability scope is visible before install",
+        capabilitiesTitle: "Capability scope",
         capabilitiesBody:
           "The full projection includes built-in, default, and package-owned references. The package-owned subset is disclosed separately and never presented as the complete permission surface.",
         capabilityFacts: [
@@ -126,7 +126,7 @@ const copy =
           ["Full MCP projection", `${record.projectedCapabilities.mcp} server/tool/prompt/resource references; ${record.packageOwnedCapabilities.mcp} are the package-owned subset`],
           ["Configuration", `${record.configuration.fields} fields · ${record.configuration.required} required`],
         ],
-        provenanceTitle: "One listing binds one content revision",
+        provenanceTitle: "Version and provenance",
         provenanceBody:
           "During publication import, the website reconstructs the canonical file tree and complete display facts from the exact ZIP referenced by the signed catalog. The local Manager validates shape, identity, topology, and digest again during install.",
         demoTitle: "Role and dependency walkthrough",
@@ -138,7 +138,7 @@ const copy =
         proposedTitle: "Current publication status",
         proposedBody:
           "This record belongs to the active database publication. The importer checked it field by field against the OpenCorvus-signed catalog, exact ZIP, and content digest. The signing private key never reaches the production server; third-party publisher identity and independent review services are not open yet.",
-        installTitle: "Installation is not activation",
+        installTitle: "Install boundary",
         installBody:
           "The page streams the content-addressed ZIP for this exact revision. It does not launch the client, install, or activate a team automatically. A later client import repeats validation and requires an explicit scope.",
         installSteps: [
@@ -164,16 +164,15 @@ const copy =
 const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
 ---
 
-<PublicSiteLayout
+<OcLayout
   {locale}
   current="market"
   title={copy.title}
   description={copy.description}
   languageHref={copy.languageHref}
 >
-  <main
-    id="main-content"
-    class="public-main"
+  <div
+    class="oc-container oc-detail"
     data-detail-root
     data-copied-text={copy.copied}
     data-download-preparing={copy.downloadPreparing}
@@ -182,29 +181,29 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
   >
     <section class="detail-hero" aria-labelledby="squad-title">
       <div>
-        <p class="eyebrow">{copy.eyebrow}</p>
-        <span class="status-label">{copy.currentSource}</span>
+        <p class="oc-eyebrow">{copy.eyebrow}</p>
+        <span class="oc-status-label">{copy.currentSource}</span>
         <h1 id="squad-title">{segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</h1>
         <p class="detail-summary">{segmentPublicMarketText(locale, copy.summary).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
         <div class="detail-actions">
-          <button class="secondary-action" type="button" data-open-demo>{copy.demonstrate}</button>
-          <a class="primary-action" href={archiveHref} download={archiveFilename} data-exact-download aria-describedby="exact-download-status">{copy.download}</a>
-          <a class="secondary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
-          <button class="text-button" type="button" data-open-install>{copy.inspect}</button>
+          <button class="oc-btn oc-btn-secondary oc-btn-m" type="button" data-open-demo>{copy.demonstrate}</button>
+          <a class="oc-btn oc-btn-primary oc-btn-m" href={archiveHref} download={archiveFilename} data-exact-download aria-describedby="exact-download-status">{copy.download}</a>
+          <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/expert-squads/trust/")}>{copy.trust}</a>
+          <button class="oc-btn oc-btn-ghost oc-btn-m" type="button" data-open-install>{copy.inspect}</button>
         </div>
         <p id="exact-download-status" class="download-status" role="status" aria-live="polite" data-download-status></p>
       </div>
 
       <aside class="revision-card" aria-label={copy.revision}>
-        <p class="eyebrow">{copy.revision}</p>
+        <p class="oc-eyebrow">{copy.revision}</p>
         <dl>
           <div><dt>{copy.identity}</dt><dd>{record.identity.namespace}/{record.identity.id}</dd></div>
           <div><dt>{copy.version}</dt><dd>{record.identity.version}</dd></div>
           <div><dt>{copy.digest}</dt><dd data-full-digest>{record.identity.digest}</dd></div>
         </dl>
-        <p class="section-lead" style="font-size: 12px; margin-top: 12px;">{copy.digestMeaning}</p>
+        <p class="oc-text-body oc-text-description">{copy.digestMeaning}</p>
         <div class="copy-row">
-          <button class="copy-button" type="button" data-copy-digest>{copy.copyDigest}</button>
+          <button class="oc-copy-btn" type="button" data-copy-digest>{copy.copyDigest}</button>
           <span aria-live="polite" data-copy-status></span>
         </div>
       </aside>
@@ -212,7 +211,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
 
     <section class="detail-topology" aria-labelledby="detail-topology-title">
       <div class="detail-topology-heading">
-        <p class="eyebrow">{locale === "zh-cn" ? "有界执行图" : "Bound execution graph"}</p>
+        <p class="oc-eyebrow">{locale === "zh-cn" ? "有界执行图" : "Bound execution graph"}</p>
         <h2 id="detail-topology-title">{copy.workflowTitle}</h2>
         <p>{copy.workflowBody}</p>
       </div>
@@ -247,9 +246,9 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
 
     <section class="detail-panel" id="panel-agents" role="tabpanel" aria-labelledby="tab-agents" data-detail-panel hidden>
       <div>
-        <div class="detail-grid" style="margin-bottom: 52px;">
+        <div class="detail-grid">
           <div><h2>{copy.agentsTitle}</h2></div>
-          <p class="section-lead" style="margin: 0;">{copy.agentsBody}</p>
+          <p class="oc-text-body oc-text-description">{copy.agentsBody}</p>
         </div>
         <ul class="agent-roster">
           {record.agents.map((agent) => (
@@ -260,13 +259,13 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
             </li>
           ))}
         </ul>
-        <div class="detail-grid" style="margin: 72px 0 36px;">
+        <div class="detail-grid" class="oc-detail-grid-spaced">
           <div><h2>{copy.workflowTitle}</h2></div>
-          <p class="section-lead" style="margin: 0;">{copy.workflowBody}</p>
+          <p class="oc-text-body oc-text-description">{copy.workflowBody}</p>
         </div>
         {record.workflows.map((workflow) => (
           <section class="workflow-contract" aria-labelledby={`workflow-${workflow.id}`}>
-            <p class="eyebrow"><code>{workflow.id}</code></p>
+            <p class="oc-eyebrow"><code>{workflow.id}</code></p>
             <h3 id={`workflow-${workflow.id}`}>
               {segmentPublicMarketText(locale, workflow.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}
             </h3>
@@ -300,9 +299,9 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <div><h2>{copy.provenanceTitle}</h2><p>{copy.provenanceBody}</p></div>
         <div>
           <ul class="fact-list">
-            <li><strong>{copy.identity}</strong><span class="mono">{record.identity.namespace}/{record.identity.id}</span></li>
-            <li><strong>{copy.version}</strong><span class="mono">{record.identity.version}</span></li>
-            <li><strong>{copy.digest}</strong><span class="mono" style="overflow-wrap: anywhere;">{record.identity.digest}</span></li>
+            <li><strong>{copy.identity}</strong><span class="oc-text-mono">{record.identity.namespace}/{record.identity.id}</span></li>
+            <li><strong>{copy.version}</strong><span class="oc-text-mono">{record.identity.version}</span></li>
+            <li><strong>{copy.digest}</strong><span class="oc-text-mono" data-wrap="anywhere">{record.identity.digest}</span></li>
           </ul>
           <div class="concept-notice">
             <strong>{copy.proposedTitle}</strong><br />{copy.proposedBody}
@@ -316,7 +315,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <div><h2>{copy.installTitle}</h2><p>{copy.installBody}</p></div>
         <ol class="workflow-list">
           {copy.installSteps.map(([number, label]) => (
-            <li style="grid-template-columns: 52px 1fr;"><span class="workflow-index">{number}</span><strong>{label}</strong></li>
+            <li data-compact="true"><span class="workflow-index">{number}</span><strong>{label}</strong></li>
           ))}
         </ol>
       </div>
@@ -324,7 +323,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
 
     <dialog class="walkthrough-dialog" data-demo-dialog aria-labelledby="demo-dialog-title">
       <div class="dialog-body">
-        <p class="eyebrow">{copy.demoPinned}</p>
+        <p class="oc-eyebrow">{copy.demoPinned}</p>
         <h2 id="demo-dialog-title" tabindex="-1">{copy.demoTitle}</h2>
         <p>{copy.demoBody}</p>
         <div class="walkthrough-revision">
@@ -335,7 +334,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <div class="walkthrough-workflows">
           {record.workflows.map((workflow) => (
             <section aria-labelledby={`demo-workflow-${workflow.id}`}>
-              <p class="eyebrow"><code>{workflow.id}</code></p>
+              <p class="oc-eyebrow"><code>{workflow.id}</code></p>
               <h3 id={`demo-workflow-${workflow.id}`}>
                 {segmentPublicMarketText(locale, workflow.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}
               </h3>
@@ -352,8 +351,8 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
           ))}
         </div>
         <div class="dialog-actions">
-          <button class="secondary-action" type="button" data-close-demo>{copy.close}</button>
-          <a class="primary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
+          <button class="oc-btn oc-btn-secondary oc-btn-m" type="button" data-close-demo>{copy.close}</button>
+          <a class="oc-btn oc-btn-primary oc-btn-m" href={publicPath(locale, "/expert-squads/trust/")}>{copy.trust}</a>
         </div>
       </div>
     </dialog>
@@ -363,19 +362,19 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <h2 id="install-dialog-title">{copy.dialogTitle}</h2>
         <p>{copy.dialogBody}</p>
         <div class="scope-options" aria-label={locale === "zh-cn" ? "安装 scope 说明" : "Install scope explanation"}>
-          <p class="eyebrow">{locale === "zh-cn" ? "客户端必须明确选择 scope" : "The client requires an explicit scope"}</p>
+          <p class="oc-eyebrow">{locale === "zh-cn" ? "客户端必须明确选择 scope" : "The client requires an explicit scope"}</p>
           <article class="scope-option"><span><b>{copy.projectScope}</b><small>{copy.projectScopeBody}</small></span></article>
           <article class="scope-option"><span><b>{copy.globalScope}</b><small>{copy.globalScopeBody}</small></span></article>
         </div>
         <p class="concept-notice">{copy.noBridge}</p>
         <div class="dialog-actions">
-          <button class="secondary-action" type="button" data-close-install>{copy.close}</button>
-          <a class="primary-action" href={publicPath(locale, "/publish/")}>{copy.guide}</a>
+          <button class="oc-btn oc-btn-secondary oc-btn-m" type="button" data-close-install>{copy.close}</button>
+          <a class="oc-btn oc-btn-primary oc-btn-m" href={publicPath(locale, "/expert-squads/publish/")}>{copy.guide}</a>
         </div>
       </div>
     </dialog>
-  </main>
-</PublicSiteLayout>
+  </div>
+</OcLayout>
 
 <script>
   const detailRoot = document.querySelector<HTMLElement>("[data-detail-root]")
@@ -474,3 +473,549 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     })
   }
 </script>
+
+<style>
+  /* Detail-page styles. Self-contained since public-site.css retired; tokens only. */
+
+  .oc-detail {
+    padding-block: var(--oc-space-9) var(--oc-space-10);
+  }
+
+  .oc-status-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px var(--oc-space-2);
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-pill);
+    font-size: 11px;
+    color: var(--oc-color-text-description);
+  }
+
+  /* ---------------------------------------------------------------- hero */
+
+  .detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-7);
+    align-items: start;
+    padding-bottom: var(--oc-space-8);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+  }
+
+  @media (min-width: 1024px) {
+    .detail-hero {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr);
+      gap: var(--oc-space-8);
+    }
+  }
+
+  .detail-hero h1 {
+    font-family: var(--oc-font-display);
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: var(--oc-space-3) 0 0;
+  }
+
+  @media (min-width: 768px) {
+    .detail-hero h1 {
+      font-size: 40px;
+    }
+  }
+
+  .detail-summary {
+    margin: var(--oc-space-4) 0 0;
+    max-width: 58ch;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--oc-color-text-secondary);
+    text-wrap: pretty;
+  }
+
+  .detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-3);
+    margin-top: var(--oc-space-5);
+  }
+
+  .download-status {
+    margin: var(--oc-space-3) 0 0;
+    font-family: var(--oc-font-mono);
+    font-size: 12px;
+    color: var(--oc-color-text-description);
+  }
+
+  .revision-card {
+    padding: var(--oc-space-5);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-card);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .revision-card dl {
+    margin: var(--oc-space-4) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  .revision-card dt {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--oc-color-text-description);
+  }
+
+  .revision-card dd {
+    margin: var(--oc-space-1) 0 0;
+    font-family: var(--oc-font-mono);
+    font-size: 12px;
+    color: var(--oc-color-text-primary);
+    /* Digests are 64 hex characters with no break opportunity of their own. */
+    overflow-wrap: anywhere;
+  }
+
+  .copy-row {
+    display: flex;
+    align-items: center;
+    gap: var(--oc-space-3);
+    margin-top: var(--oc-space-4);
+    padding-top: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+    font-size: 12px;
+    color: var(--oc-color-text-description);
+  }
+
+  /* ------------------------------------------------------------ topology */
+
+  .detail-topology {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-6);
+    padding-block: var(--oc-space-8);
+  }
+
+  @media (min-width: 1024px) {
+    .detail-topology {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--oc-space-8);
+    }
+  }
+
+  .detail-topology-heading h2 {
+    font-family: var(--oc-font-display);
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: var(--oc-space-3) 0 var(--oc-space-3);
+  }
+
+  .detail-topology-heading p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--oc-color-text-description);
+  }
+
+  /* ---------------------------------------------------------------- tabs */
+
+  .detail-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-2);
+    padding-block: var(--oc-space-5);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .detail-tab {
+    padding: var(--oc-space-2) var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-pill);
+    background: transparent;
+    font-family: var(--oc-font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--oc-color-text-description);
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .detail-tab:hover {
+    color: var(--oc-color-text-primary);
+    border-color: var(--oc-color-border-hover);
+  }
+
+  .detail-tab[aria-selected="true"] {
+    background: var(--oc-color-bg-contrast);
+    border-color: transparent;
+    color: var(--oc-color-text-inverse);
+  }
+
+  .detail-panel {
+    padding-block: var(--oc-space-6) var(--oc-space-8);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-6);
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .detail-grid {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--oc-space-8);
+    }
+  }
+
+  .oc-detail-grid-spaced {
+    margin-block: var(--oc-space-9) var(--oc-space-6);
+  }
+
+  .detail-panel h2 {
+    font-family: var(--oc-font-display);
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--oc-space-3);
+  }
+
+  .detail-panel p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--oc-color-text-description);
+    text-wrap: pretty;
+  }
+
+  /* ----------------------------------------------------------- fact list */
+
+  .fact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fact-list li {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--oc-space-4);
+    padding-block: var(--oc-space-3);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+    font-size: 14px;
+  }
+
+  .fact-list strong {
+    font-weight: 500;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .fact-list span {
+    color: var(--oc-color-text-description);
+  }
+
+  .fact-list [data-wrap="anywhere"] {
+    overflow-wrap: anywhere;
+  }
+
+  /* -------------------------------------------------------- agent roster */
+
+  .agent-roster {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--oc-space-3);
+  }
+
+  .agent-roster li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-panel);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .agent-roster strong {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .agent-roster code {
+    align-self: start;
+    padding: 1px var(--oc-space-2);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-5);
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    color: var(--oc-color-text-description);
+  }
+
+  .agent-roster span {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--oc-color-text-description);
+  }
+
+  /* ------------------------------------------------------------ workflow */
+
+  .workflow-contract {
+    padding: var(--oc-space-5);
+    margin-bottom: var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-card);
+    background: var(--oc-color-bg-surface-4);
+  }
+
+  .workflow-contract h3 {
+    font-family: var(--oc-font-display);
+    font-size: 18px;
+    font-weight: 500;
+    margin: var(--oc-space-2) 0 var(--oc-space-3);
+  }
+
+  .workflow-contract > p {
+    margin: 0 0 var(--oc-space-4);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--oc-color-text-description);
+  }
+
+  .workflow-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+  }
+
+  .workflow-list li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 0.7fr) minmax(0, 1.6fr) minmax(0, 0.7fr);
+    gap: var(--oc-space-3);
+    align-items: start;
+    padding: var(--oc-space-3);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-3);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .workflow-list li[data-compact="true"] {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .workflow-index {
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    color: var(--oc-color-brand);
+  }
+
+  .workflow-list strong {
+    font-family: var(--oc-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--oc-color-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .workflow-list span {
+    color: var(--oc-color-text-description);
+  }
+
+  .workflow-list span[lang="en"]:last-child {
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    color: var(--oc-color-text-placeholder);
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 767px) {
+    .workflow-list li,
+    .workflow-list li[data-compact="true"] {
+      grid-template-columns: 32px minmax(0, 1fr);
+    }
+
+    .workflow-list li > :nth-child(n + 3) {
+      grid-column: 2;
+    }
+  }
+
+  /* ------------------------------------------------------------- notices */
+
+  .concept-notice {
+    margin-top: var(--oc-space-4);
+    padding: var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-default);
+    border-left: 3px solid var(--oc-color-accent);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-3);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--oc-color-text-description);
+  }
+
+  .concept-notice strong {
+    color: var(--oc-color-text-primary);
+  }
+
+  /* ------------------------------------------------------------- dialogs */
+
+  .walkthrough-dialog,
+  .install-dialog {
+    width: min(100% - 32px, 720px);
+    max-height: 84vh;
+    padding: 0;
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-card);
+    background: var(--oc-color-bg-overlay);
+    color: var(--oc-color-text-primary);
+    box-shadow: var(--oc-shadow-panel);
+    overflow: auto;
+  }
+
+  .walkthrough-dialog::backdrop,
+  .install-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  .dialog-body {
+    padding: var(--oc-space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-4);
+  }
+
+  .dialog-body h2 {
+    font-family: var(--oc-font-display);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .dialog-body h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin: var(--oc-space-1) 0 var(--oc-space-2);
+  }
+
+  .dialog-body p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--oc-color-text-description);
+  }
+
+  .dialog-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-3);
+    padding-top: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .walkthrough-revision {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-1);
+    padding: var(--oc-space-3);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-code);
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    color: var(--oc-color-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .walkthrough-evidence {
+    font-size: 13px;
+  }
+
+  .walkthrough-workflows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-4);
+  }
+
+  .walkthrough-workflows ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-1);
+  }
+
+  .walkthrough-workflows li {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: var(--oc-space-2);
+    align-items: baseline;
+    font-size: 12px;
+  }
+
+  .walkthrough-workflows li > span {
+    font-family: var(--oc-font-mono);
+    font-size: 10px;
+    color: var(--oc-color-brand);
+  }
+
+  .walkthrough-workflows strong {
+    font-family: var(--oc-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .walkthrough-workflows small {
+    grid-column: 2;
+    font-family: var(--oc-font-mono);
+    font-size: 10px;
+    color: var(--oc-color-text-placeholder);
+  }
+
+  .scope-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  .scope-option {
+    padding: var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-panel);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .scope-option span {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-1);
+  }
+
+  .scope-option b {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .scope-option small {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--oc-color-text-description);
+  }
+</style>

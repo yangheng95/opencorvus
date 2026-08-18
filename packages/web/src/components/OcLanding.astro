@@ -1,0 +1,1054 @@
+---
+import OcLayout from "./OcLayout.astro"
+import OcHeroBackdrop from "./OcHeroBackdrop.astro"
+import { landingCopy } from "../content/landing-copy"
+import { platformFacts } from "../content/platform-facts"
+import { publicPath, type PublicLocale } from "../content/public-market"
+import type { FeaturedSquad } from "../lib/landing-featured-squads"
+
+type Props = {
+  locale: PublicLocale
+  /** Featured squads, already trimmed by the page. Empty renders the section without cards. */
+  featured?: FeaturedSquad[]
+}
+
+const { locale, featured = [] } = Astro.props
+const zh = locale === "zh-cn"
+const copy = landingCopy[locale]
+const languageHref = zh ? publicPath("root") : publicPath("zh-cn")
+
+/** Copy holds bare hrefs; anything site-local has to be run through the locale-aware base. */
+const resolve = (href: string) => (href.startsWith("/") ? publicPath(locale, href) : href)
+
+/** Chinese passes the same string for both forms, so this is a no-op there by construction. */
+const plural = (count: number, one: string, other: string) => (count === 1 ? one : other)
+
+const marketHref = publicPath(locale, "/market/")
+
+// Only generated facts are allowed to be the largest thing on the page. See platform-facts.ts.
+const featurableSquadTotal = platformFacts.squadTotal
+---
+
+<OcLayout
+  {locale}
+  current="home"
+  title={copy.meta.title}
+  description={copy.meta.description}
+  {languageHref}
+>
+  {/* ------------------------------------------------------------ 1 · hero */}
+  <section class="oc-hero">
+    <OcHeroBackdrop />
+
+    <div class="oc-container oc-hero-inner">
+      <div class="oc-hero-copy">
+        <p class="oc-eyebrow oc-enter" style="--oc-enter-y: 12px">{copy.hero.eyebrow}</p>
+        <h1 class="oc-text-hero oc-cjk-spacing oc-hero-title">
+          {
+            copy.hero.titleLines.map((line, index) => (
+              <span class="oc-enter" style={`--oc-enter-y: 22px; --oc-enter-blur: 6px; animation-delay: ${80 + index * 90}ms`}>
+                {line}
+              </span>
+            ))
+          }
+        </h1>
+        <p class="oc-text-body oc-text-secondary oc-hero-lede oc-enter" style="--oc-enter-y: 18px; animation-delay: 280ms">
+          {copy.hero.description}
+        </p>
+        <div class="oc-btn-group oc-enter" style="--oc-enter-y: 16px; animation-delay: 360ms">
+          {
+            copy.hero.ctas.map((cta) => (
+              <a class={`oc-btn oc-btn-${cta.variant} oc-btn-m`} href={resolve(cta.href)}>
+                {cta.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="oc-hero-terminal oc-enter" style="--oc-enter-y: 24px; animation-delay: 440ms">
+        <div class="oc-terminal" data-oc-terminal>
+          <div class="oc-terminal-tabs" role="tablist" aria-label={copy.hero.terminalLabel}>
+            {
+              copy.hero.terminals.map((terminal, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  class="oc-terminal-tab"
+                  data-oc-terminal-tab={terminal.id}
+                  data-active={index === 0 ? "true" : undefined}
+                  aria-selected={index === 0 ? "true" : "false"}
+                >
+                  {terminal.label}
+                </button>
+              ))
+            }
+          </div>
+
+          <div class="oc-terminal-body">
+            {
+              copy.hero.terminals.map((terminal, index) => (
+                <div
+                  class="oc-terminal-pane"
+                  data-oc-terminal-pane={terminal.id}
+                  data-active={index === 0 ? "true" : undefined}
+                  role="tabpanel"
+                >
+                  {/*
+                    Two stacked <pre> blocks. The hidden one carries the full text so the box is
+                    already its final height before typing starts; without it every character
+                    reflows the section below and the whole page twitches.
+                  */}
+                  <pre class="oc-terminal-text" data-oc-terminal-out aria-hidden="true"></pre>
+                  <pre class="oc-terminal-text oc-terminal-ghost" data-oc-terminal-source>{terminal.lines.join("\n")}</pre>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------- 2 · why */}
+  <section class="oc-section oc-anchor" id="why">
+    <div class="oc-container">
+      <p class="oc-eyebrow oc-reveal">{copy.why.eyebrow}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.why.title}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.why.lead}</p>
+
+      <ul class="oc-pillar-grid">
+        {
+          copy.why.pillars.map((pillar, index) => (
+            <li class="oc-card-raised oc-pillar oc-reveal" style={`transition-delay: ${index * 70}ms`}>
+              <h3 class="oc-text-subtitle oc-cjk-spacing">{pillar.title}</h3>
+              <p class="oc-text-body oc-text-description">{pillar.body}</p>
+              <p class="oc-pillar-evidence">
+                <span class="oc-pillar-evidence-value">{pillar.evidenceValue}</span>
+                <span class="oc-text-xs oc-text-description">{pillar.evidenceLabel}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      {/*
+        Placed under the pillars because "how is this different from X" is the question the pillars
+        raise. Every cell is a checkable fact about a shipped capability, with the source linked —
+        a comparison that argues instead of informs is one a reader has to discount.
+      */}
+      <div class="oc-compare oc-reveal">
+        <div class="oc-compare-head">
+          <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.why.compare.title}</h3>
+          <p class="oc-text-caption oc-text-description">{copy.why.compare.lead}</p>
+        </div>
+
+        <div class="oc-compare-scroll">
+          <table class="oc-compare-table">
+            <thead>
+              <tr>
+                <th scope="col"><span class="oc-visually-hidden">{copy.why.compare.title}</span></th>
+                {
+                  copy.why.compare.columns.map((column) => (
+                    <th scope="col" class={column.self ? "oc-compare-us" : undefined}>
+                      {column.href ? (
+                        <a class="oc-link" href={column.href} rel="noopener nofollow">
+                          {column.label}
+                        </a>
+                      ) : (
+                        column.label
+                      )}
+                    </th>
+                  ))
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {
+                copy.why.compare.rows.map((row) => (
+                  <tr>
+                    <th scope="row">{row.axis}</th>
+                    {
+                      row.cells.map((cell, index) => (
+                        <td
+                          class={copy.why.compare.columns[index]?.self ? "oc-compare-us" : undefined}
+                          data-label={copy.why.compare.columns[index]?.label}
+                        >
+                          {cell}
+                        </td>
+                      ))
+                    }
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+
+        {/*
+          Stated plainly rather than buried: one of these is open source too and traces runs just as
+          well. A comparison table that only ever wins is one a reader stops believing.
+        */}
+        <p class="oc-text-caption oc-text-secondary oc-compare-fairness">{copy.why.compare.fairness}</p>
+        <p class="oc-text-xs oc-text-description oc-compare-note">{copy.why.compare.note}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------------- 3 · squads */}
+  {/*
+    A funnel, not a second market. Six static cards and a link out. The filtering, search and
+    segment browsing all live on /market/ — duplicating them here would mean two implementations
+    of the same behaviour drifting apart. Plan §4.1.
+  */}
+  <section class="oc-section-tight oc-anchor" id="squads">
+    <div class="oc-container">
+      <p class="oc-eyebrow oc-reveal">{copy.squads.eyebrow}</p>
+      <div class="oc-squads-head oc-reveal">
+        <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title">{copy.squads.title}</h2>
+        <a class="oc-btn oc-btn-secondary oc-btn-m" href={marketHref}>{copy.squads.cta}</a>
+      </div>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.squads.lead}</p>
+
+      {
+        featured.length > 0 && (
+          <ul class="oc-squad-grid">
+            {featured.map((squad, index) => (
+              <li class="oc-card oc-squad-card oc-reveal" style={`transition-delay: ${(index % 3) * 70}ms`}>
+                <a href={squad.href}>
+                  <h3 class="oc-text-title oc-cjk-spacing">{squad.label}</h3>
+                  <p class="oc-text-caption oc-text-description oc-squad-body">{squad.description}</p>
+                  <p class="oc-text-xs oc-text-description oc-squad-meta">
+                    <span>{squad.agentCount} {plural(squad.agentCount, copy.squads.agentLabel, copy.squads.agentsLabel)}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>
+                      {squad.workflowCount}{" "}
+                      {plural(squad.workflowCount, copy.squads.workflowLabel, copy.squads.workflowsLabel)}
+                    </span>
+                  </p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+
+  {/* ----------------------------------------------------------- 4 · start */}
+  <section class="oc-section oc-anchor" id="start">
+    <div class="oc-container">
+      <p class="oc-eyebrow oc-reveal">{copy.start.eyebrow}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.start.title}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.start.lead}</p>
+
+      <div class="oc-start-grid">
+        <div class="oc-card-raised oc-reveal">
+          <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.start.cliTitle}</h3>
+          <p class="oc-text-caption oc-text-description oc-start-body">{copy.start.cliBody}</p>
+          {/*
+            The command lives in the copy module so it stays reviewable next to the prose, and the
+            copy button reads the same string. An earlier draft advertised `npx opencorvus@latest`,
+            which the project does not publish — the install paths are a desktop installer or this
+            source build. Keep both in step with README.md.
+          */}
+          <div class="oc-code">
+            <code>{copy.start.cliCommand}</code>
+            <button class="oc-copy-btn" type="button" data-oc-copy={copy.start.cliCommand} data-copied={copy.start.copied}>
+              {copy.start.copy}
+            </button>
+          </div>
+        </div>
+
+        <div class="oc-card-raised oc-reveal" style="transition-delay: 70ms">
+          <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.start.desktopTitle}</h3>
+          <p class="oc-text-caption oc-text-description oc-start-body">{copy.start.desktopBody}</p>
+          {/*
+            Server-rendered as a link to every platform, then narrowed by script to the detected
+            one. Rendering the detected build only would leave anyone without JS with no download
+            at all. Plan 期 4 exit criteria.
+          */}
+          <div class="oc-btn-group">
+            <a class="oc-btn oc-btn-primary oc-btn-m" href={marketHref} data-oc-download-primary hidden>
+              <span data-oc-download-label>{copy.start.detecting}</span>
+            </a>
+            <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/start/install/")}>
+              {copy.start.desktopCta}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="oc-trust oc-reveal">
+        <p class="oc-eyebrow">{copy.start.trustTitle}</p>
+        <ul class="oc-trust-list">
+          {
+            copy.start.trust.map((item) => (
+              <li>
+                <span class="oc-text-title oc-cjk-spacing">{item.title}</span>
+                <span class="oc-text-caption oc-text-description">{item.body}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------- 5 · faq */}
+  {/*
+    Native <details>. An accordion is the one place a section can hold six answers without costing
+    six answers' worth of scroll, and the disclosure widget browsers already ship is keyboard
+    accessible, findable by in-page search when open, and needs no JavaScript at all.
+  */}
+  <section class="oc-section-tight oc-anchor" id="faq">
+    <div class="oc-container oc-faq">
+      <div class="oc-faq-head">
+        <p class="oc-eyebrow oc-reveal">{copy.faq.eyebrow}</p>
+        <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.faq.title}</h2>
+        <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.faq.lead}</p>
+      </div>
+
+      <div class="oc-faq-list">
+        {
+          copy.faq.items.map((item, index) => (
+            <details class="oc-faq-item oc-reveal" style={`transition-delay: ${Math.min(index, 4) * 50}ms`} open={index === 0}>
+              <summary>
+                <span class="oc-text-title oc-cjk-spacing">{item.q}</span>
+                <span class="oc-faq-marker" aria-hidden="true"></span>
+              </summary>
+              <p class="oc-text-body oc-text-description">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------ 6 · join */}
+  <section class="oc-section-tight oc-anchor" id="join">
+    <div class="oc-container">
+      <div class="oc-cta-block oc-join oc-reveal">
+        <p class="oc-eyebrow">{copy.join.eyebrow}</p>
+        <h2 class="oc-text-h1 oc-cjk-spacing">{copy.join.title}</h2>
+        <p class="oc-text-body oc-text-secondary oc-join-lead">{copy.join.lead}</p>
+        <div class="oc-btn-group">
+          {
+            copy.join.ctas.map((cta) => (
+              <a class={`oc-btn oc-btn-${cta.variant} oc-btn-m`} href={resolve(cta.href)}>
+                {cta.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</OcLayout>
+
+<style>
+  /* -------------------------------------------------------------- hero */
+
+  .oc-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    padding-top: var(--oc-space-11);
+    padding-bottom: var(--oc-space-9);
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .oc-hero {
+      min-height: unset;
+      height: 100vh;
+      max-height: 1000px;
+      padding-top: var(--oc-space-9);
+    }
+  }
+
+  .oc-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-8);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .oc-hero-inner {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: var(--oc-space-9);
+    }
+  }
+
+  .oc-hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-5);
+  }
+
+  .oc-hero-title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .oc-hero-lede {
+    max-width: 44ch;
+  }
+
+  /* ---------------------------------------------------------- terminal */
+
+  .oc-terminal {
+    border-radius: var(--oc-radius-card);
+    border: 1px solid var(--oc-color-border-default);
+    background: var(--oc-color-bg-surface-1);
+    -webkit-backdrop-filter: blur(var(--oc-blur-glass));
+    backdrop-filter: blur(var(--oc-blur-glass));
+    box-shadow: var(--oc-shadow-card);
+    overflow: hidden;
+  }
+
+  .oc-terminal-tabs {
+    display: flex;
+    gap: var(--oc-space-1);
+    padding: var(--oc-space-2) var(--oc-space-3) 0;
+  }
+
+  .oc-terminal-tab {
+    padding: var(--oc-space-2) var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-bottom: 0;
+    border-radius: var(--oc-radius-sm) var(--oc-radius-sm) 0 0;
+    background: transparent;
+    font-family: var(--oc-font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--oc-color-text-description);
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .oc-terminal-tab[data-active="true"] {
+    background: var(--oc-color-bg-surface-raised);
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-terminal-body {
+    padding: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-terminal-pane {
+    display: none;
+    /* Both <pre> blocks occupy the same cell; the ghost sets the height, the live one paints. */
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .oc-terminal-pane[data-active="true"] {
+    display: grid;
+  }
+
+  .oc-terminal-text {
+    grid-area: 1 / 1;
+    margin: 0;
+    font-family: var(--oc-font-mono);
+    font-size: 13.5px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-terminal-ghost {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* ------------------------------------------------------------ shared */
+
+  .oc-section-title {
+    margin-top: var(--oc-space-3);
+    max-width: 22ch;
+  }
+
+  .oc-section-lead {
+    margin-top: var(--oc-space-4);
+    max-width: 52ch;
+  }
+
+  /* -------------------------------------------------------------- why */
+
+  .oc-pillar-grid {
+    list-style: none;
+    margin: var(--oc-space-8) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: var(--oc-space-4);
+  }
+
+  .oc-pillar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  .oc-pillar-evidence {
+    margin: auto 0 0;
+    padding-top: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+    display: flex;
+    align-items: baseline;
+    gap: var(--oc-space-2);
+  }
+
+  .oc-pillar-evidence-value {
+    font-family: var(--oc-font-display);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--oc-color-text-primary);
+  }
+
+  /* ---------------------------------------------------------- compare */
+
+  .oc-compare {
+    margin-top: var(--oc-space-8);
+    padding-top: var(--oc-space-6);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-compare-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    max-width: 56ch;
+    margin-bottom: var(--oc-space-5);
+  }
+
+  .oc-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .oc-compare-table th,
+  .oc-compare-table td {
+    padding: var(--oc-space-3) var(--oc-space-4);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+    vertical-align: top;
+    font-weight: 400;
+  }
+
+  .oc-compare-table thead th {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--oc-color-text-description);
+    border-bottom-color: var(--oc-color-border-default);
+  }
+
+  .oc-compare-table tbody th {
+    width: 1%;
+    white-space: nowrap;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-compare-table td {
+    color: var(--oc-color-text-secondary);
+  }
+
+  /* Our column is the one a reader is here to evaluate, so it gets the emphasis and a tint. The
+     other column stays neutral — a comparison that visually punishes the alternative reads as
+     advertising and gets discounted accordingly. */
+  .oc-compare-table .oc-compare-us {
+    color: var(--oc-color-text-primary);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .oc-compare-table thead .oc-compare-us {
+    color: var(--oc-color-text-primary);
+    font-weight: 500;
+  }
+
+  /* Five rows of prose across four columns will not fit a phone; let the table scroll inside its
+     own box rather than pushing the page sideways. */
+  .oc-compare-scroll {
+    overflow-x: auto;
+  }
+
+  .oc-compare-fairness {
+    margin-top: var(--oc-space-5);
+    max-width: 62ch;
+    padding-left: var(--oc-space-4);
+    border-left: 2px solid var(--oc-color-border-default);
+  }
+
+  .oc-compare-note {
+    margin-top: var(--oc-space-3);
+  }
+
+  .oc-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 599px) {
+    /* Three columns of prose do not fit a phone. Each row becomes a labelled pair instead. */
+    .oc-compare-table,
+    .oc-compare-table tbody,
+    .oc-compare-table tr,
+    .oc-compare-table td,
+    .oc-compare-table tbody th {
+      display: block;
+      width: auto;
+    }
+
+    .oc-compare-table thead {
+      display: none;
+    }
+
+    .oc-compare-table tr {
+      padding-block: var(--oc-space-3);
+      border-bottom: 1px solid var(--oc-color-border-subtle);
+    }
+
+    .oc-compare-table tbody th {
+      padding: 0 0 var(--oc-space-2);
+      font-size: 13px;
+    }
+
+    .oc-compare-table td {
+      padding: var(--oc-space-2) var(--oc-space-3);
+      border-bottom: 0;
+      border-radius: var(--oc-radius-sm);
+    }
+
+    .oc-compare-table td::before {
+      content: attr(data-label);
+    }
+  }
+
+  /* ----------------------------------------------------------- squads */
+
+  .oc-squads-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--oc-space-4);
+  }
+
+  .oc-squad-grid {
+    list-style: none;
+    margin: var(--oc-space-7) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--oc-space-4);
+  }
+
+  .oc-squad-card {
+    padding: 0;
+    transition:
+      border-color 0.2s ease,
+      transform 0.3s ease;
+  }
+
+  .oc-squad-card:hover {
+    border-color: var(--oc-color-border-hover);
+    transform: translateY(-2px);
+  }
+
+  .oc-squad-card a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-5);
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+  }
+
+  .oc-squad-body {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .oc-squad-meta {
+    margin-top: auto;
+    padding-top: var(--oc-space-3);
+    display: flex;
+    gap: var(--oc-space-2);
+  }
+
+  /* ------------------------------------------------------------ start */
+
+  .oc-start-grid {
+    margin-top: var(--oc-space-7);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--oc-space-4);
+  }
+
+  .oc-start-body {
+    margin-block: var(--oc-space-3) var(--oc-space-4);
+  }
+
+  .oc-trust {
+    margin-top: var(--oc-space-8);
+    padding-top: var(--oc-space-6);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-trust-list {
+    list-style: none;
+    margin: var(--oc-space-4) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: var(--oc-space-5);
+  }
+
+  .oc-trust-list li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-1);
+  }
+
+  /* -------------------------------------------------------------- faq */
+
+  .oc-faq {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-6);
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .oc-faq {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--oc-space-9);
+    }
+
+    /* The heading column is short and the list is long; pinning it keeps the two visually paired
+       instead of leaving the heading stranded at the top. */
+    .oc-faq-head {
+      position: sticky;
+      top: 128px;
+    }
+  }
+
+  .oc-faq-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-faq-item {
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--oc-space-4);
+    padding-block: var(--oc-space-5);
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.2s ease;
+  }
+
+  /* Safari still paints its own triangle unless this pseudo-element is cleared. */
+  .oc-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .oc-faq-item summary:hover {
+    color: var(--oc-color-brand);
+  }
+
+  /* A plus that becomes a minus. Two spans would need JS to stay in sync with the open state; one
+     element with a rotating cross-bar reads the same and follows `[open]` for free. */
+  .oc-faq-marker {
+    position: relative;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  .oc-faq-marker::before,
+  .oc-faq-marker::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.25s ease;
+  }
+
+  .oc-faq-marker::after {
+    transform: rotate(90deg);
+  }
+
+  .oc-faq-item[open] .oc-faq-marker::after {
+    transform: rotate(0deg);
+  }
+
+  .oc-faq-item > p {
+    padding-bottom: var(--oc-space-5);
+    max-width: 62ch;
+  }
+
+  /* ------------------------------------------------------------- join */
+
+  .oc-join {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--oc-space-4);
+    text-align: center;
+    padding-block: var(--oc-space-9);
+  }
+
+  .oc-join-lead {
+    max-width: 46ch;
+  }
+</style>
+
+<script>
+  /* ------------------------------------------------- scroll reveal (shared) */
+
+  // One observer for every revealed element. Building one per element is the usual way this ends up
+  // costing more than the animation it drives.
+  const revealTargets = document.querySelectorAll<HTMLElement>(".oc-reveal")
+  if (revealTargets.length) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealTargets.forEach((element) => (element.dataset.revealed = "true"))
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue
+            ;(entry.target as HTMLElement).dataset.revealed = "true"
+            observer.unobserve(entry.target)
+          }
+        },
+        { rootMargin: "0px 0px -12% 0px", threshold: 0.05 },
+      )
+      revealTargets.forEach((element) => observer.observe(element))
+    }
+  }
+
+  /* ------------------------------------------------------------- tab groups */
+
+  /** Both tab strips behave identically, so they share one activator. */
+  function wireTabs(root: Element, tabAttribute: string, paneAttribute: string) {
+    const tabs = [...root.querySelectorAll<HTMLElement>(`[${tabAttribute}]`)]
+    const panes = [...root.querySelectorAll<HTMLElement>(`[${paneAttribute}]`)]
+
+    const activate = (id: string) => {
+      for (const tab of tabs) {
+        const active = tab.getAttribute(tabAttribute) === id
+        tab.dataset.active = active ? "true" : ""
+        tab.setAttribute("aria-selected", active ? "true" : "false")
+        if (!active) delete tab.dataset.active
+      }
+      for (const pane of panes) {
+        const active = pane.getAttribute(paneAttribute) === id
+        if (active) pane.dataset.active = "true"
+        else delete pane.dataset.active
+      }
+      return panes.find((pane) => pane.getAttribute(paneAttribute) === id)
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        const pane = activate(tab.getAttribute(tabAttribute) ?? "")
+        root.dispatchEvent(new CustomEvent("oc:tab", { detail: { pane } }))
+      })
+      // Roving arrow keys, which is what the tablist role promises a keyboard user.
+      tab.addEventListener("keydown", (event) => {
+        const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0
+        if (!step) return
+        event.preventDefault()
+        const next = tabs[(index + step + tabs.length) % tabs.length]
+        next.focus()
+        next.click()
+      })
+    })
+
+    return { activate }
+  }
+
+  /* -------------------------------------------------------------- terminal */
+
+  const terminal = document.querySelector("[data-oc-terminal]")
+  if (terminal) {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    let timer = 0
+
+    function type(pane: HTMLElement) {
+      const source = pane.querySelector<HTMLElement>("[data-oc-terminal-source]")
+      const out = pane.querySelector<HTMLElement>("[data-oc-terminal-out]")
+      if (!source || !out) return
+      const text = source.textContent ?? ""
+      window.clearInterval(timer)
+
+      if (reduced) {
+        out.textContent = text
+        return
+      }
+
+      let index = 0
+      out.textContent = ""
+      timer = window.setInterval(() => {
+        index += 1
+        out.textContent = text.slice(0, index)
+        if (index >= text.length) window.clearInterval(timer)
+      }, 26)
+    }
+
+    wireTabs(terminal, "data-oc-terminal-tab", "data-oc-terminal-pane")
+    terminal.addEventListener("oc:tab", (event) => {
+      const pane = (event as CustomEvent<{ pane?: HTMLElement }>).detail.pane
+      if (pane) type(pane)
+    })
+
+    // Hold the typing until the hero is actually on screen, so a deep link into #start does not
+    // burn a timer nobody is watching.
+    const first = terminal.querySelector<HTMLElement>('[data-oc-terminal-pane][data-active="true"]')
+    if (first) {
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          type(first)
+          observer.disconnect()
+        }
+      })
+      observer.observe(terminal)
+    }
+  }
+
+  /* ------------------------------------------------------- copy buttons */
+
+  document.querySelectorAll<HTMLElement>("[data-oc-copy]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const text = button.dataset.ocCopy ?? ""
+      try {
+        await navigator.clipboard.writeText(text)
+      } catch {
+        return
+      }
+      const original = button.textContent
+      button.textContent = button.dataset.copied ?? "Copied"
+      window.setTimeout(() => {
+        button.textContent = original
+      }, 1600)
+    })
+  })
+
+  /* --------------------------------------------------- platform detect */
+
+  const downloadLink = document.querySelector<HTMLAnchorElement>("[data-oc-download-primary]")
+  const downloadLabel = document.querySelector<HTMLElement>("[data-oc-download-label]")
+  if (downloadLink && downloadLabel) {
+    type Asset = {
+      product: string
+      platform: "windows" | "macos" | "linux"
+      architecture: "x64" | "arm64"
+      format: string
+      url: string
+      compatible?: boolean
+    }
+
+    // Same principle the retiring download page held to: offer a specific build only when the
+    // browser states both platform and architecture. An arm64 Mac handed an x64 DMG is a worse
+    // outcome than being shown the platform list, so a guess is not an improvement here.
+    async function resolveTarget(): Promise<{ platform: Asset["platform"]; architecture: Asset["architecture"] } | null> {
+      const uaData = (
+        navigator as Navigator & {
+          userAgentData?: {
+            platform?: string
+            getHighEntropyValues?: (hints: string[]) => Promise<{ platform?: string; architecture?: string; bitness?: string }>
+          }
+        }
+      ).userAgentData
+
+      const namePlatform = (value: string | undefined): Asset["platform"] | null => {
+        const text = (value ?? "").toLowerCase()
+        if (text.includes("win")) return "windows"
+        if (text.includes("mac")) return "macos"
+        if (text.includes("linux") || text.includes("x11") || text.includes("cros")) return "linux"
+        return null
+      }
+
+      if (!uaData?.getHighEntropyValues) return null
+      try {
+        const hints = await uaData.getHighEntropyValues(["platform", "architecture", "bitness"])
+        const platform = namePlatform(hints.platform ?? uaData.platform)
+        if (!platform) return null
+        if (hints.architecture === "arm") return { platform, architecture: "arm64" }
+        if (hints.architecture === "x86" && hints.bitness === "64") return { platform, architecture: "x64" }
+        return null
+      } catch {
+        return null
+      }
+    }
+
+    /** Desktop installer preference per platform, most-wanted first. */
+    const FORMAT_ORDER: Record<Asset["platform"], string[]> = {
+      windows: ["EXE", "MSI"],
+      macos: ["DMG"],
+      linux: ["AppImage", "DEB", "RPM"],
+    }
+
+    const PLATFORM_LABEL: Record<Asset["platform"], string> = {
+      windows: "Windows",
+      macos: "macOS",
+      linux: "Linux",
+    }
+
+    const load = async () => {
+      const target = await resolveTarget()
+      if (!target) return
+      try {
+        const response = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/downloads/latest.json`)
+        if (!response.ok) return
+        const manifest = (await response.json()) as { assets?: Asset[] }
+        const candidates = (manifest.assets ?? []).filter(
+          (asset) =>
+            asset.product === "desktop" &&
+            asset.platform === target.platform &&
+            asset.architecture === target.architecture &&
+            !asset.compatible,
+        )
+        const order = FORMAT_ORDER[target.platform]
+        const asset = candidates.sort((a, b) => order.indexOf(a.format) - order.indexOf(b.format))[0]
+        if (!asset?.url) return
+        downloadLink.href = asset.url
+        downloadLabel.textContent = `${PLATFORM_LABEL[target.platform]} · ${target.architecture} · ${asset.format}`
+        downloadLink.hidden = false
+      } catch {
+        // Leave the all-platforms link as the only path. Better than a dead primary button.
+      }
+    }
+
+    void load()
+  }
+</script>

@@ -1,6 +1,5 @@
 ---
-import PublicSiteLayout from "./PublicSiteLayout.astro"
-import WorkflowTopology from "./WorkflowTopology.astro"
+import OcLayout from "./OcLayout.astro"
 import { publicPath, segmentPublicMarketText, squadPath, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
 import { generatedExpertSquadDistribution } from "../content/expert-squad-distribution.generated"
 import type { WebsitePublicationSummary } from "../lib/website-registry-contract"
@@ -17,8 +16,8 @@ const copy =
         title: "专家团市场 · OpenCorvus",
         description: "按任务适配度、角色、工作流和精确版本选择 OpenCorvus 专家团，并下载经过签名验证的完整资源包。",
         languageHref: publicPath("root", "/market/"),
-        eyebrow: "全部专家团",
-        heading: "先看它能完成什么，再决定要不要把团队带进任务。",
+        eyebrow: "当前数据库发布",
+        heading: "专家团市场",
         lead: `这里展示当前数据库发布中的全部 ${records.length} 个专家团。每个条目都从签名资源包的精确 ZIP 内容重建并核对，说明适用场景、角色、工作流与版本。`,
         bundleKicker: "精确 / 来源 / 修订",
         bundleTitle: `${publication.total} 个资源，一份经过验证的完整包`,
@@ -29,7 +28,7 @@ const copy =
         downloadVerifying: "正在校验资源包字节与 SHA-256…",
         downloadReady: "签名目录与内容寻址资源包已经匹配。",
         downloadUnavailable: "签名、版本、过期时间或资源摘要未通过校验；不会提供未签名替代文件。",
-        chooseTitle: "三步判断一支团队是否适合",
+        chooseTitle: "三步判断适配度",
         chooseSteps: [
           ["01 · 看选择说明", "先确认当前结果是否落在团队边界内，而不是只看名称。"],
           ["02 · 看责任与顺序", "检查需要哪些专家、如何交接，以及哪里会独立复核。"],
@@ -42,7 +41,7 @@ const copy =
         code: "代码与产品",
         work: "知识与业务",
         multi: "跨领域",
-        identityTitle: "为什么显示 identity 和 digest？",
+        identityTitle: "关于 identity 与 digest",
         identityBody: "名称帮助人理解，namespace / id / version / digest 帮助系统确认拿到的是哪一份内容。点击条目可查看完整角色与工作流。",
         snapshot: "全部条目 · 精确事实",
         suffix: "个团队",
@@ -51,15 +50,15 @@ const copy =
         skills: "项 Skill",
         tools: "项工具",
         mcpRefs: "项 MCP 引用",
-        emptyTitle: "没有符合条件的专家团。",
+        emptyTitle: "没有符合条件的专家团",
         emptyBody: "清空搜索或选择其他工作类型；目录不会用相似名称代替精确身份。",
       }
     : {
         title: "Expert Squad market · OpenCorvus",
         description: "Choose an OpenCorvus Expert Squad by task fit, roles, workflow, and exact revision, then download the verified signed resource bundle.",
         languageHref: publicPath("zh-cn", "/market/"),
-        eyebrow: "All Expert Squads",
-        heading: "Understand what the team can finish before bringing it into the mission.",
+        eyebrow: "Active database publication",
+        heading: "Expert Squad market",
         lead: `This page presents all ${records.length} Expert Squads in the active database publication. Every record is reconstructed and checked against its exact ZIP in the signed bundle, then presented with fit, roles, workflow, and version.`,
         bundleKicker: "Exact / source / revision",
         bundleTitle: `${publication.total} resources, one verified bundle`,
@@ -72,7 +71,7 @@ const copy =
         downloadReady: "The signed catalog matches the content-addressed bundle.",
         downloadUnavailable:
           "Signature, version, expiry, or resource digest validation failed. No unsigned fallback will be offered.",
-        chooseTitle: "Three checks for choosing the right team",
+        chooseTitle: "Three checks before choosing",
         chooseSteps: [
           ["01 · Read the selector", "Confirm that the requested outcome falls inside the team's boundary instead of choosing by name."],
           ["02 · Inspect ownership and order", "See which specialists are required, how they hand off work, and where independent review occurs."],
@@ -95,32 +94,33 @@ const copy =
         skills: "Skills",
         tools: "tools",
         mcpRefs: "MCP refs",
-        emptyTitle: "No Expert Squads match these conditions.",
+        emptyTitle: "No Expert Squads match these conditions",
         emptyBody: "Clear the search or choose another work type. Similar names never substitute for exact identity.",
       }
 ---
 
-<PublicSiteLayout
+<OcLayout
   {locale}
   current="market"
   title={copy.title}
   description={copy.description}
   languageHref={copy.languageHref}
 >
-  <main id="main-content" class="public-main" data-market-root>
-    <section class="market-intro" aria-labelledby="market-title">
-      <div class="market-intro-grid">
+  <div data-market-root>
+    <section class="oc-section-tight">
+      <div class="oc-container oc-market-intro">
         <div>
-          <p class="eyebrow">{copy.eyebrow}</p>
-          <h1 id="market-title">{copy.heading}</h1>
-          <p class="section-lead">{copy.lead}</p>
+          <p class="oc-eyebrow">{copy.eyebrow}</p>
+          <h1 class="oc-text-h1 oc-cjk-spacing oc-market-title">{copy.heading}</h1>
+          <p class="oc-text-body oc-text-description oc-market-lead">{copy.lead}</p>
         </div>
-        <aside id="complete-bundle" class="registry-fact">
-          <span class="registry-fact-kicker">{copy.bundleKicker}</span>
-          <strong>{copy.bundleTitle}</strong>
-          <p>{copy.bundleBody}</p>
+
+        <aside id="complete-bundle" class="oc-card-raised oc-bundle">
+          <p class="oc-eyebrow">{copy.bundleKicker}</p>
+          <p class="oc-text-title oc-cjk-spacing">{copy.bundleTitle}</p>
+          <p class="oc-text-caption oc-text-description">{copy.bundleBody}</p>
           <div
-            class="distribution-download"
+            class="oc-bundle-action"
             data-distribution-download
             data-pointer={distributionPointer}
             data-catalog-path={generatedExpertSquadDistribution.catalogPath}
@@ -136,91 +136,128 @@ const copy =
             data-verifying={copy.downloadVerifying}
             data-unavailable={copy.downloadUnavailable}
           >
-            <p>{copy.downloadAllNote}</p>
-            <a class="distribution-download-action" aria-disabled="true" data-distribution-action download>{copy.downloadAll} ↓</a>
-            <span role="status" aria-live="polite" data-distribution-status>{copy.downloadPreparing}</span>
+            <p class="oc-text-xs oc-text-description">{copy.downloadAllNote}</p>
+            {/*
+              Starts disabled and stays that way unless the signed catalog verifies. The gate lives
+              in the script; the styling here must never make a disabled action look pressable.
+            */}
+            <a class="oc-btn oc-btn-primary oc-btn-m" aria-disabled="true" data-distribution-action download
+              >{copy.downloadAll} ↓</a
+            >
+            <span class="oc-text-xs oc-bundle-status" role="status" aria-live="polite" data-distribution-status
+              >{copy.downloadPreparing}</span
+            >
           </div>
         </aside>
       </div>
     </section>
 
-    <section class="market-selection-guide" aria-labelledby="selection-guide-title">
-      <h2 id="selection-guide-title">{copy.chooseTitle}</h2>
-      <div>
-        {copy.chooseSteps.map(([title, description]) => (
-          <article><h3>{title}</h3><p>{description}</p></article>
-        ))}
-      </div>
+    <section class="oc-container oc-guide" aria-labelledby="selection-guide-title">
+      <h2 id="selection-guide-title" class="oc-text-subtitle oc-cjk-spacing">{copy.chooseTitle}</h2>
+      <ul class="oc-guide-list">
+        {
+          copy.chooseSteps.map(([title, description]) => (
+            <li class="oc-panel">
+              <p class="oc-text-caption oc-guide-step">{title}</p>
+              <p class="oc-text-caption oc-text-description">{description}</p>
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
-    <section class="market-workspace" aria-label={copy.heading}>
-      <aside class="market-controls">
-        <label for="market-search">{copy.search}</label>
-        <input id="market-search" class="market-search" type="search" placeholder={copy.placeholder} autocomplete="off" />
+    <section class="oc-container oc-workspace" aria-label={copy.heading}>
+      <aside class="oc-controls">
+        <label class="oc-text-caption oc-controls-label" for="market-search">{copy.search}</label>
+        <input
+          id="market-search"
+          class="oc-input"
+          type="search"
+          placeholder={copy.placeholder}
+          autocomplete="off"
+        />
 
-        <p class="filter-heading">{copy.filter}</p>
-        <div class="market-filter-list" role="group" aria-label={copy.filter}>
-          <button class="market-filter" type="button" data-market-filter="all" aria-pressed="true">{copy.all}</button>
-          <button class="market-filter" type="button" data-market-filter="code" aria-pressed="false">{copy.code}</button>
-          <button class="market-filter" type="button" data-market-filter="work" aria-pressed="false">{copy.work}</button>
-          <button class="market-filter" type="button" data-market-filter="multi" aria-pressed="false">{copy.multi}</button>
+        <p class="oc-eyebrow oc-controls-heading">{copy.filter}</p>
+        <div class="oc-filters" role="group" aria-label={copy.filter}>
+          <button class="oc-chip" type="button" data-market-filter="all" aria-pressed="true">{copy.all}</button>
+          <button class="oc-chip" type="button" data-market-filter="code" aria-pressed="false">{copy.code}</button>
+          <button class="oc-chip" type="button" data-market-filter="work" aria-pressed="false">{copy.work}</button>
+          <button class="oc-chip" type="button" data-market-filter="multi" aria-pressed="false">{copy.multi}</button>
         </div>
 
-        <details class="state-notes">
-          <summary>{copy.identityTitle}</summary>
-          <p>{copy.identityBody}</p>
-          <a class="text-action" href={publicPath(locale, "/trust/")}>{locale === "zh-cn" ? "查看可信机制" : "Read the trust model"} →</a>
+        <details class="oc-note">
+          <summary class="oc-text-caption">{copy.identityTitle}</summary>
+          <p class="oc-text-caption oc-text-description">{copy.identityBody}</p>
+          <a class="oc-link oc-text-caption" href={publicPath(locale, "/expert-squads/trust/")}
+            >{locale === "zh-cn" ? "查看可信机制" : "Read the trust model"} →</a
+          >
         </details>
       </aside>
 
-      <div>
-        <div class="results-toolbar">
+      <div class="oc-results">
+        <div class="oc-results-bar">
           <span
+            class="oc-text-caption"
             role="status"
             aria-live="polite"
             aria-atomic="true"
             data-market-status
             data-count-suffix={copy.suffix}
-            data-empty-status={copy.emptyTitle}
-          >{records.length} {copy.suffix}</span>
-          <span>{copy.snapshot}</span>
+            data-empty-status={copy.emptyTitle}>{records.length} {copy.suffix}</span
+          >
+          <span class="oc-text-xs oc-text-description">{copy.snapshot}</span>
         </div>
-        <div class="market-results">
-          {records.map((record) => (
-            <a
-              class="market-record"
-              href={squadPath(locale, record)}
-              data-market-record
-              data-pillars={record.pillars.join(" ")}
-              data-search={`${record.displayLabel[locale]} ${record.label} ${record.identity.namespace} ${record.identity.id} ${record.description[locale]} ${record.selectorSummary[locale]}`.toLowerCase()}
-            >
-              <div>
-                <span class="squad-identity">{record.identity.namespace}/{record.identity.id}</span>
-                <h2>{segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</h2>
-              </div>
-              <div class="market-record-copy">
-                <p>{segmentPublicMarketText(locale, record.description[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
-                <p class="selector-line">{segmentPublicMarketText(locale, record.selectorSummary[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
-                <WorkflowTopology {record} {locale} />
-              </div>
-              <div class="record-meta">
-                <span>v{record.identity.version}</span>
-                <span>{record.agents.length} {copy.agents} · {record.workflows.length} {copy.workflows}</span>
-                <span>{record.projectedCapabilities.skills} {copy.skills} · {record.projectedCapabilities.tools} {copy.tools}</span>
-                <span>{record.projectedCapabilities.mcp} {copy.mcpRefs}</span>
-                <code>sha256:{record.identity.digest.slice(0, 12)}…</code>
-              </div>
-            </a>
-          ))}
+
+        <div class="oc-record-list">
+          {
+            records.map((record) => (
+              <a
+                class="oc-card oc-record"
+                href={squadPath(locale, record)}
+                data-market-record
+                data-pillars={record.pillars.join(" ")}
+                data-search={`${record.displayLabel[locale]} ${record.label} ${record.identity.namespace} ${record.identity.id} ${record.description[locale]} ${record.selectorSummary[locale]}`.toLowerCase()}
+              >
+                {/*
+                  A catalog entry, not a summary of the whole package. Everything that answers
+                  "which one do I want" stays; everything that answers "exactly what is in it"
+                  moves to the detail page one click away. The workflow topology in particular was
+                  rendering a full agent graph inside every one of 119 cards, which turned a
+                  browse surface into a several-hundred-screen document nobody could scan.
+                */}
+                <h2 class="oc-text-title oc-cjk-spacing oc-record-name">
+                  {segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => (
+                    <span lang={segment.lang}>{segment.text}</span>
+                  ))}
+                </h2>
+
+                <p class="oc-text-caption oc-text-description oc-record-summary">
+                  {segmentPublicMarketText(locale, record.selectorSummary[locale] || record.description[locale]).map(
+                    (segment) => (
+                      <span lang={segment.lang}>{segment.text}</span>
+                    ),
+                  )}
+                </p>
+
+                <div class="oc-record-foot">
+                  <span class="oc-record-counts">
+                    {record.agents.length} {copy.agents} · {record.workflows.length} {copy.workflows}
+                  </span>
+                  <code class="oc-record-identity">{record.identity.id}</code>
+                </div>
+              </a>
+            ))
+          }
         </div>
-        <div class="market-empty" data-market-empty hidden>
-          <h2>{copy.emptyTitle}</h2>
-          <p>{copy.emptyBody}</p>
+
+        <div class="oc-card-raised oc-empty" data-market-empty hidden>
+          <h2 class="oc-text-subtitle oc-cjk-spacing">{copy.emptyTitle}</h2>
+          <p class="oc-text-body oc-text-description">{copy.emptyBody}</p>
         </div>
       </div>
     </section>
-  </main>
-</PublicSiteLayout>
+  </div>
+</OcLayout>
 
 <script>
   import { fetchVerifiedExpertSquadBundle, resolveVerifiedExpertSquadBundle } from "../lib/expert-squad-publication"
@@ -307,117 +344,293 @@ const copy =
   }
 </script>
 
+
 <style>
-  .market-selection-guide {
+  .oc-market-intro {
     display: grid;
-    grid-template-columns: 0.72fr 1.28fr;
-    gap: 56px;
-    padding: 42px 0;
-    border-bottom: 2px solid var(--ink);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-7);
+    align-items: start;
+    padding-top: var(--oc-space-9);
   }
 
-  .market-selection-guide > div {
+  @media (min-width: 1024px) {
+    .oc-market-intro {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+      gap: var(--oc-space-8);
+    }
+  }
+
+  .oc-market-title {
+    margin-top: var(--oc-space-3);
+    max-width: 26ch;
+  }
+
+  .oc-market-lead {
+    margin-top: var(--oc-space-4);
+    max-width: 56ch;
+  }
+
+  .oc-bundle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  .oc-bundle-action {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+    padding-top: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  /* The action is inert until the signature verifies. Make that unmistakable rather than subtle —
+     a download button that looks live but does nothing reads as a broken page. */
+  .oc-bundle-action [data-distribution-action][aria-disabled="true"] {
+    opacity: 0.45;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  .oc-bundle-status {
+    font-family: var(--oc-font-mono);
+    color: var(--oc-color-text-description);
+  }
+
+  /* -------------------------------------------------------------- guide */
+
+  .oc-guide {
+    padding-block: var(--oc-space-8);
+  }
+
+  .oc-guide-list {
+    list-style: none;
+    margin: var(--oc-space-5) 0 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--ink);
-    border-left: 1px solid var(--ink);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: var(--oc-space-3);
   }
 
-  .market-selection-guide h2 {
-    margin: 0;
-    font-family: var(--display);
-    font-size: 38px;
-    line-height: 1;
-    letter-spacing: -0.05em;
+  .oc-guide-step {
+    font-weight: 500;
+    margin-bottom: var(--oc-space-2);
   }
 
-  .market-selection-guide article {
-    padding: 18px;
-    border-right: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
+  /* ---------------------------------------------------------- workspace */
+
+  .oc-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-7);
+    align-items: start;
+    padding-bottom: var(--oc-space-10);
   }
 
-  .market-selection-guide h3 {
-    margin: 0;
-    color: var(--cobalt);
-    font-family: var(--mono);
-    font-size: 10px;
-    line-height: 1.5;
-    text-transform: uppercase;
+  @media (min-width: 1024px) {
+    .oc-workspace {
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: var(--oc-space-8);
+    }
+
+    /* Sticky so the filters stay reachable while scrolling a long result list. Offset clears the
+       fixed pill header. */
+    .oc-controls {
+      position: sticky;
+      top: 96px;
+    }
   }
 
-  .market-selection-guide p {
-    margin: 10px 0 0;
-    color: var(--muted);
+  .oc-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  .oc-controls-label {
+    font-weight: 500;
+  }
+
+  .oc-controls-heading {
+    margin-top: var(--oc-space-3);
+  }
+
+  .oc-input {
+    width: 100%;
+    padding: var(--oc-space-3) var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-input);
+    background: var(--oc-color-bg-surface-3);
+    font-family: var(--oc-font-body);
+    font-size: 14px;
+    color: var(--oc-color-text-primary);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .oc-input::placeholder {
+    color: var(--oc-color-text-placeholder);
+  }
+
+  .oc-input:focus {
+    outline: none;
+    border-color: var(--oc-color-brand);
+    background: var(--oc-color-bg-overlay);
+  }
+
+  .oc-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-2);
+  }
+
+  .oc-chip {
+    padding: var(--oc-space-2) var(--oc-space-3);
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-pill);
+    background: transparent;
+    font-family: var(--oc-font-body);
+    font-size: 13px;
+    color: var(--oc-color-text-description);
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .oc-chip:hover {
+    color: var(--oc-color-text-primary);
+    border-color: var(--oc-color-border-hover);
+  }
+
+  .oc-chip[aria-pressed="true"] {
+    background: var(--oc-color-bg-contrast);
+    border-color: transparent;
+    color: var(--oc-color-text-inverse);
+  }
+
+  .oc-note {
+    margin-top: var(--oc-space-4);
+    padding-top: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+  }
+
+  .oc-note summary {
+    cursor: pointer;
+    color: var(--oc-color-text-secondary);
+  }
+
+  /* ------------------------------------------------------------ results */
+
+  .oc-results {
+    min-width: 0;
+  }
+
+  .oc-results-bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--oc-space-4);
+    padding-bottom: var(--oc-space-3);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+  }
+
+  /* A browse grid, not a stack of documents. Cards are a fixed shape so the eye can move down a
+     column comparing the same field in the same place — the previous three-column row put the
+     name, the prose and the metadata at different heights on every entry. */
+  .oc-record-list {
+    display: grid;
+    /* 240px rather than 300px: inside the 824px results column that is the difference between two
+       404px cards and three 265px ones, and a 119-entry catalog is scanned by comparing many
+       entries at once, not by reading each one. The card content is a name, a clamped line of
+       purpose and two counts — none of it needs 400px. */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    gap: var(--oc-space-4);
+    margin-top: var(--oc-space-5);
+  }
+
+  .oc-record {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .oc-record:hover {
+    border-color: var(--oc-color-border-hover);
+    box-shadow: var(--oc-shadow-card);
+    transform: translateY(-2px);
+  }
+
+  .oc-record-name {
+    min-width: 0;
+  }
+
+  /* Clamped so one long selector cannot make its card twice the height of its neighbours and
+     break the grid's rhythm. The full text is on the detail page. */
+  .oc-record-summary {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  /* Stacked rather than side by side: sharing one row left the identity about 60px, which
+     truncated every entry to "academi…" — present, unreadable, and therefore just noise. On its
+     own row it gets the full card width and truncates only the genuinely long ones. */
+  .oc-record-foot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--oc-space-1);
+    margin-top: auto;
+    padding-top: var(--oc-space-3);
+    border-top: 1px solid var(--oc-color-border-subtle);
+    min-width: 0;
+    width: 100%;
+  }
+
+  .oc-record-counts {
+    font-size: 13px;
+    color: var(--oc-color-text-description);
+    white-space: nowrap;
+  }
+
+  .oc-record-identity {
+    font-family: var(--oc-font-mono);
     font-size: 12px;
-    line-height: 1.55;
+    color: var(--oc-color-brand);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    max-width: 100%;
   }
 
-  @media (max-width: 1099px) {
-    :global([data-market-root] .market-intro-grid),
-    .market-selection-guide,
-    :global([data-market-root] .market-workspace) {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    :global([data-market-root] .market-intro-grid),
-    .market-selection-guide {
-      gap: 28px;
-    }
-
-    .market-selection-guide > div {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    :global([data-market-root] .market-workspace) {
-      gap: 28px;
-      padding-bottom: 54px;
-    }
-
-    :global([data-market-root] .market-controls) {
-      position: static;
-    }
-
-    :global([data-market-root] .market-record) {
-      grid-template-columns: 44px minmax(0, 1fr);
-      gap: 14px 18px;
-      min-height: 0;
-      padding: 22px 18px 22px 0;
-    }
-
-    :global([data-market-root] .market-record::before) {
-      grid-column: 1;
-      grid-row: 1 / span 3;
-    }
-
-    :global([data-market-root] .market-record > div) {
-      grid-column: 2;
-    }
-
-    :global([data-market-root] .record-meta) {
-      justify-items: start;
-      text-align: left;
-    }
-
-    :global([data-market-root] .results-toolbar) {
-      gap: 12px;
-      padding: 10px 14px;
-    }
+  .oc-record-meta code {
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    color: var(--oc-color-text-placeholder);
+    overflow-wrap: anywhere;
   }
 
-  @media (max-width: 720px) {
-    .market-selection-guide > div {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    :global([data-market-root] .registry-fact),
-    :global([data-market-root] .market-controls) {
-      padding: 22px;
-    }
-
-    :global([data-market-root] .results-toolbar) {
-      align-items: flex-start;
-      flex-direction: column;
-    }
+  .oc-empty {
+    margin-top: var(--oc-space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
   }
 </style>

@@ -1,0 +1,528 @@
+{
+  "provenance": {
+    "note": "Machine-extracted from the reference site compiled CSS. Do not hand-edit.",
+    "source": "https://www.deepseek.com/harness/_next/static/css/6f322bb0cffe2c36.css",
+    "capturedOn": "2026-08-17",
+    "sha256": "2917c6f28ecf573272ebaad15468ed078f7978cc94ed9709bfd7eb997f4db30b",
+    "bytes": 44670,
+    "extraction": "regex over ':root{...}' and '[data-theme=dark]{...}', filtered to --ds-* custom properties"
+  },
+  "counts": {
+    "total": 83,
+    "themed": 49,
+    "lightOnly": 34,
+    "byGroup": {
+      "border": 8,
+      "brand": 4,
+      "button": 21,
+      "effect": 2,
+      "font": 4,
+      "other": 1,
+      "radius": 6,
+      "space": 13,
+      "static": 3,
+      "surface": 14,
+      "text": 7
+    }
+  },
+  "tokens": {
+    "--ds-blur-glass": {
+      "group": "effect",
+      "light": "12px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-btn-ghost-bg": {
+      "group": "button",
+      "light": "transparent",
+      "dark": "transparent",
+      "themed": true
+    },
+    "--ds-btn-ghost-border": {
+      "group": "button",
+      "light": "transparent",
+      "dark": "transparent",
+      "themed": true
+    },
+    "--ds-btn-ghost-hover-bg": {
+      "group": "button",
+      "light": "rgba(0,0,0,.04)",
+      "dark": "hsla(0,0%,100%,.08)",
+      "themed": true
+    },
+    "--ds-btn-ghost-hover-border": {
+      "group": "button",
+      "light": "hsla(20,1%,45%,.2)",
+      "dark": "hsla(0,0%,100%,.2)",
+      "themed": true
+    },
+    "--ds-btn-ghost-static-bg": {
+      "group": "button",
+      "light": "transparent",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-btn-ghost-static-border": {
+      "group": "button",
+      "light": "rgba(0,0,0,.2)",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-btn-ghost-static-hover-bg": {
+      "group": "button",
+      "light": "rgba(0,0,0,.05)",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-btn-ghost-static-hover-border": {
+      "group": "button",
+      "light": "rgba(9,45,78,.3)",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-btn-ghost-static-text": {
+      "group": "button",
+      "light": "#0f0f0f",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-btn-ghost-text": {
+      "group": "button",
+      "light": "#121c31",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-btn-liquid-bg": {
+      "group": "button",
+      "light": "hsla(0,0%,100%,.4)",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-btn-liquid-hover-bg": {
+      "group": "button",
+      "light": "hsla(0,0%,100%,.6)",
+      "dark": "rgba(0,0,0,.2)",
+      "themed": true
+    },
+    "--ds-btn-primary-bg": {
+      "group": "button",
+      "light": "#1a1615",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-btn-primary-border": {
+      "group": "button",
+      "light": "transparent",
+      "dark": "transparent",
+      "themed": true
+    },
+    "--ds-btn-primary-hover-bg": {
+      "group": "button",
+      "light": "hsla(0,0%,100%,.3)",
+      "dark": "rgba(0,0,0,.2)",
+      "themed": true
+    },
+    "--ds-btn-primary-text": {
+      "group": "button",
+      "light": "#fff",
+      "dark": "#0a0a0a",
+      "themed": true
+    },
+    "--ds-btn-secondary-bg": {
+      "group": "button",
+      "light": "hsla(0,0%,100%,.4)",
+      "dark": "var(--ds-color-bg-surface-1)",
+      "themed": true
+    },
+    "--ds-btn-secondary-border": {
+      "group": "button",
+      "light": "rgba(9,45,78,.18)",
+      "dark": "hsla(0,0%,100%,.15)",
+      "themed": true
+    },
+    "--ds-btn-secondary-hover-bg": {
+      "group": "button",
+      "light": "rgba(0,0,0,.05)",
+      "dark": "hsla(0,0%,100%,.2)",
+      "themed": true
+    },
+    "--ds-btn-secondary-hover-border": {
+      "group": "button",
+      "light": "rgba(9,45,78,.36)",
+      "dark": "hsla(0,0%,100%,.6)",
+      "themed": true
+    },
+    "--ds-btn-secondary-text": {
+      "group": "button",
+      "light": "#1e232c",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-color-bg-code": {
+      "group": "surface",
+      "light": "rgba(0,0,0,.05)",
+      "dark": "rgba(0,0,0,.35)",
+      "themed": true
+    },
+    "--ds-color-bg-dark": {
+      "group": "surface",
+      "light": "#1a1615",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-color-bg-hero-cta": {
+      "group": "surface",
+      "light": "hsla(0,0%,100%,.38)",
+      "dark": "hsla(0,0%,100%,.12)",
+      "themed": true
+    },
+    "--ds-color-bg-hover": {
+      "group": "surface",
+      "light": "rgba(0,0,0,.04)",
+      "dark": "hsla(0,0%,100%,.06)",
+      "themed": true
+    },
+    "--ds-color-bg-input": {
+      "group": "surface",
+      "light": "hsla(0,0%,100%,.2)",
+      "dark": "hsla(0,0%,100%,.08)",
+      "themed": true
+    },
+    "--ds-color-bg-input-hover": {
+      "group": "surface",
+      "light": "hsla(0,0%,100%,.36)",
+      "dark": "hsla(0,0%,100%,.12)",
+      "themed": true
+    },
+    "--ds-color-bg-overlay": {
+      "group": "surface",
+      "light": "#fff",
+      "dark": "#262626",
+      "themed": true
+    },
+    "--ds-color-bg-page": {
+      "group": "surface",
+      "light": "#f9f8f8",
+      "dark": "#0a0a0a",
+      "themed": true
+    },
+    "--ds-color-bg-surface-1": {
+      "group": "surface",
+      "light": "hsla(0,0%,100%,.3)",
+      "dark": "hsla(0,0%,100%,.06)",
+      "themed": true
+    },
+    "--ds-color-bg-surface-2": {
+      "group": "surface",
+      "light": "hsla(0,0%,100%,.2)",
+      "dark": "hsla(0,0%,100%,.04)",
+      "themed": true
+    },
+    "--ds-color-bg-surface-3": {
+      "group": "surface",
+      "light": "rgba(0,0,0,.03)",
+      "dark": "hsla(0,0%,100%,.02)",
+      "themed": true
+    },
+    "--ds-color-bg-surface-4": {
+      "group": "surface",
+      "light": "rgba(0,0,0,.02)",
+      "dark": "hsla(0,0%,100%,.015)",
+      "themed": true
+    },
+    "--ds-color-bg-surface-5": {
+      "group": "surface",
+      "light": "rgba(0,0,0,.05)",
+      "dark": "hsla(0,0%,100%,.12)",
+      "themed": true
+    },
+    "--ds-color-bg-surface-raised": {
+      "group": "surface",
+      "light": "hsla(0,0%,100%,.45)",
+      "dark": "hsla(0,0%,100%,.25)",
+      "themed": true
+    },
+    "--ds-color-border-default": {
+      "group": "border",
+      "light": "rgba(0,0,0,.1)",
+      "dark": "hsla(0,0%,100%,.06)",
+      "themed": true
+    },
+    "--ds-color-border-divider": {
+      "group": "border",
+      "light": "rgba(0,0,0,.08)",
+      "dark": "hsla(0,0%,100%,.25)",
+      "themed": true
+    },
+    "--ds-color-border-hover": {
+      "group": "border",
+      "light": "hsla(20,1%,45%,.2)",
+      "dark": "hsla(0,0%,100%,.2)",
+      "themed": true
+    },
+    "--ds-color-border-input": {
+      "group": "border",
+      "light": "hsla(0,0%,100%,.2)",
+      "dark": "hsla(0,0%,100%,.2)",
+      "themed": true
+    },
+    "--ds-color-border-input-focus": {
+      "group": "border",
+      "light": "hsla(0,0%,100%,.25)",
+      "dark": "hsla(0,0%,100%,.25)",
+      "themed": true
+    },
+    "--ds-color-border-secondary": {
+      "group": "border",
+      "light": "rgba(9,45,78,.14)",
+      "dark": "hsla(0,0%,100%,.2)",
+      "themed": true
+    },
+    "--ds-color-border-strong": {
+      "group": "border",
+      "light": "rgba(0,0,0,.2)",
+      "dark": "hsla(0,0%,100%,.24)",
+      "themed": true
+    },
+    "--ds-color-border-subtle": {
+      "group": "border",
+      "light": "rgba(0,0,0,.06)",
+      "dark": "hsla(0,0%,100%,.08)",
+      "themed": true
+    },
+    "--ds-color-brand": {
+      "group": "brand",
+      "light": "#4d6bfe",
+      "dark": "#6799fe",
+      "themed": true
+    },
+    "--ds-color-brand-deep": {
+      "group": "brand",
+      "light": "#3a65c2",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-color-brand-light-reverse": {
+      "group": "brand",
+      "light": "#73a3d2",
+      "dark": "#73a3d2",
+      "themed": true
+    },
+    "--ds-color-brand-medium-reverse": {
+      "group": "brand",
+      "light": "#4176e6",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-color-scrollbar": {
+      "group": "other",
+      "light": "rgba(0,0,0,.15)",
+      "dark": "hsla(0,0%,100%,.2)",
+      "themed": true
+    },
+    "--ds-color-static-black": {
+      "group": "static",
+      "light": "#0f0f0f",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-color-static-black-secondary": {
+      "group": "static",
+      "light": "rgba(0,0,0,.6)",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-color-static-white": {
+      "group": "static",
+      "light": "#fff",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-color-text-description": {
+      "group": "text",
+      "light": "rgba(0,0,0,.65)",
+      "dark": "hsla(0,0%,100%,.5)",
+      "themed": true
+    },
+    "--ds-color-text-inverse": {
+      "group": "text",
+      "light": "#fff",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-color-text-link-blue": {
+      "group": "text",
+      "light": "#234792",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-color-text-placeholder": {
+      "group": "text",
+      "light": "#8691a1",
+      "dark": "hsla(0,0%,100%,.3)",
+      "themed": true
+    },
+    "--ds-color-text-primary": {
+      "group": "text",
+      "light": "#1e232c",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-color-text-primary-bluish": {
+      "group": "text",
+      "light": "#121c31",
+      "dark": "#fff",
+      "themed": true
+    },
+    "--ds-color-text-secondary": {
+      "group": "text",
+      "light": "rgba(0,0,0,.7)",
+      "dark": "hsla(0,0%,100%,.8)",
+      "themed": true
+    },
+    "--ds-font-body": {
+      "group": "font",
+      "light": "\"DM Sans\",system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans SC\",\"PingFang SC\",sans-serif",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-font-display": {
+      "group": "font",
+      "light": "\"Host Grotesk\",system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-font-mono": {
+      "group": "font",
+      "light": "\"Fragment Mono\",ui-monospace,SFMono-Regular,Menlo,Consolas,\"Noto Sans SC\",\"PingFang SC\",\"Microsoft YaHei\",monospace",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-font-sans": {
+      "group": "font",
+      "light": "var(--ds-font-body)",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-radius-card": {
+      "group": "radius",
+      "light": "24px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-radius-input": {
+      "group": "radius",
+      "light": "10px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-radius-media": {
+      "group": "radius",
+      "light": "10px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-radius-panel": {
+      "group": "radius",
+      "light": "16px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-radius-pill": {
+      "group": "radius",
+      "light": "100px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-radius-sm": {
+      "group": "radius",
+      "light": "8px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-shadow-card": {
+      "group": "effect",
+      "light": "0 0 0 1px #f1f5f9,0 2px 4px rgba(0,0,0,.05),0 12px 24px rgba(0,0,0,.05)",
+      "dark": "hsla(0,0%,100%,.12) 0px 1px 0px 0px inset",
+      "themed": true
+    },
+    "--ds-space-1": {
+      "group": "space",
+      "light": "4px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-10": {
+      "group": "space",
+      "light": "120px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-11": {
+      "group": "space",
+      "light": "160px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-12": {
+      "group": "space",
+      "light": "200px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-13": {
+      "group": "space",
+      "light": "240px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-2": {
+      "group": "space",
+      "light": "8px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-3": {
+      "group": "space",
+      "light": "12px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-4": {
+      "group": "space",
+      "light": "16px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-5": {
+      "group": "space",
+      "light": "24px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-6": {
+      "group": "space",
+      "light": "32px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-7": {
+      "group": "space",
+      "light": "40px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-8": {
+      "group": "space",
+      "light": "56px",
+      "dark": null,
+      "themed": false
+    },
+    "--ds-space-9": {
+      "group": "space",
+      "light": "80px",
+      "dark": null,
+      "themed": false
+    }
+  }
+}

@@ -66,3 +66,179 @@ const copy =
     </div>
   </div>
 </figure>
+
+<style>
+  /* Self-contained since public-site.css retired. Tokens only — no bare spacing or radius values. */
+  .workflow-topology {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+  }
+
+  .workflow-topology figcaption {
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    color: var(--oc-color-text-description);
+  }
+
+  .topology-graph {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--oc-space-3);
+    align-items: stretch;
+    padding: var(--oc-space-3);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-panel);
+    background: var(--oc-color-bg-surface-4);
+  }
+
+  .topology-seal,
+  .topology-output {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--oc-space-1);
+    padding: var(--oc-space-2);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-5);
+    font-size: 10px;
+    line-height: 1.3;
+    text-align: center;
+    color: var(--oc-color-text-description);
+    min-width: 62px;
+  }
+
+  .topology-seal code {
+    font-family: var(--oc-font-mono);
+    font-size: 10px;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .topology-output b {
+    font-family: var(--oc-font-display);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--oc-color-text-primary);
+  }
+
+  .topology-workflows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+    min-width: 0;
+  }
+
+  .topology-workflow header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--oc-space-2);
+    font-size: 12px;
+  }
+
+  .topology-workflow header > span {
+    font-family: var(--oc-font-mono);
+    font-size: 10px;
+    color: var(--oc-color-brand);
+  }
+
+  .topology-workflow header strong {
+    font-weight: 500;
+    color: var(--oc-color-text-primary);
+    min-width: 0;
+  }
+
+  .topology-workflow header code {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-family: var(--oc-font-mono);
+    font-size: 10px;
+    color: var(--oc-color-text-description);
+  }
+
+  .topology-workflow ol {
+    list-style: none;
+    margin: var(--oc-space-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-2);
+  }
+
+  .topology-workflow li {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    gap: var(--oc-space-1);
+    align-items: center;
+    padding: var(--oc-space-1) var(--oc-space-2);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .topology-node-index {
+    font-family: var(--oc-font-mono);
+    font-size: 9px;
+    color: var(--oc-color-text-placeholder);
+  }
+
+  /* The dependency dot. Purely decorative, hence aria-hidden at the markup level. */
+  .topology-node-mark {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--oc-color-brand);
+    opacity: 0.65;
+  }
+
+  .topology-node-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .topology-node-copy strong {
+    font-family: var(--oc-font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .topology-node-copy small {
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--oc-color-text-description);
+  }
+
+  .topology-node-copy code {
+    font-family: var(--oc-font-mono);
+    font-size: 9px;
+    color: var(--oc-color-text-placeholder);
+  }
+
+  /* Expanded is the detail page: node descriptions appear, so rows go full width to stay readable. */
+  .workflow-topology-expanded .topology-workflow ol {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .workflow-topology-expanded .topology-workflow li {
+    width: 100%;
+    align-items: start;
+    padding: var(--oc-space-2) var(--oc-space-3);
+  }
+
+  @media (max-width: 640px) {
+    .topology-graph {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .topology-seal,
+    .topology-output {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+</style>

@@ -1,0 +1,168 @@
+---
+title: Use OpenCorvus from other agents
+description: Install the portable OpenCorvus Agent Skill so OpenClaw, Hermes Agent, and other Agent Skills hosts can run, create, observe, and guide OpenCorvus work.
+---
+
+OpenClaw, Hermes Agent, and other Agent Skills-compatible assistants can use the repository's
+`opencorvus` Skill to inspect an environment, start the runtime, create Tasks, follow progress, and
+read delivery evidence.
+
+The Skill is the **operating-instruction layer**. OpenCorvus remains the runtime and the Task
+authority — installing the Skill grants no capability on its own.
+
+:::caution[Install from a revision you chose]
+Install from a trusted OpenCorvus checkout at an intentional revision, and read the complete Skill
+directory before enabling it. Do not copy only `SKILL.md`: `references/` carries the installation,
+API, operations, and troubleshooting contracts, and a host that cannot reach them will improvise.
+:::
+
+## Ready the runtime first
+
+Skill visible, runtime healthy, model reachable, and Task accepted are four different states.
+Verify them in order, so a failure tells you which layer to fix.
+
+1. **Get the runtime.** Install a release from the download section, or build from source below.
+2. **Verify health.** Run `doctor` and read every warning. Use `doctor --strict` when you need a
+   no-warnings gate.
+3. **Connect a model.** Complete a provider login, then confirm one genuinely usable
+   provider/model pair with `auth list` and `models`.
+4. **Install the operating Skill.** Copy the complete Skill package, confirm the host discovered
+   `opencorvus` by name, then start a new session with read-only checks.
+
+### Verified source path
+
+```bash
+git clone https://github.com/yangheng95/opencorvus.git
+cd opencorvus
+bun install
+bun run --cwd packages/opencorvus build
+bun packages/opencorvus/src/index.ts doctor
+bun packages/opencorvus/src/index.ts auth login
+bun packages/opencorvus/src/index.ts auth list
+bun packages/opencorvus/src/index.ts models
+```
+
+If a global `opencorvus` command is already installed you can use the short form instead. Otherwise
+keep the explicit source entrypoint above — it is the form that always works from a checkout.
+
+## Host setup
+
+The install commands differ, but both hosts read the same `SKILL.md` and the same relative
+`references/`. After installing, confirm the Skill name **before** any action that changes the
+machine.
+
+### OpenClaw
+
+```bash
+openclaw skills install ./skills/opencorvus --as opencorvus
+openclaw skills list
+openclaw skills check
+```
+
+Installs into the current workspace. Add `--global` only when every local agent genuinely should
+share it.
+
+`opencorvus` should appear in the list as ready or eligible. `skills check` is a broader dependency
+summary and does not replace confirming by name. A new session is the most certain refresh.
+
+Invoke with `$opencorvus` in the Control UI, or `/opencorvus` in message channels. A good first
+prompt is a read-only one:
+
+```text
+Use $opencorvus to check whether OpenCorvus is installed and healthy. Do not change anything.
+```
+
+### Hermes Agent
+
+```bash
+mkdir -p ~/.hermes/skills/developer-tools
+cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
+hermes skills list
+```
+
+On Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.hermes\skills\developer-tools" | Out-Null
+Copy-Item -Recurse -Force ".\skills\opencorvus" "$HOME\.hermes\skills\developer-tools\opencorvus"
+hermes skills list
+```
+
+Hermes discovers Skills recursively under `~/.hermes/skills`; the `developer-tools` directory just
+keeps the categories legible. After a manual copy, start a new session or run `/reset`. `--now`
+applies only to `hermes skills install` flows that accept it.
+
+### Other Agent Skills hosts
+
+If a host supports Agent Skills directories, YAML frontmatter, and relative references, you can place
+the complete `opencorvus/` directory in its declared Skill root. Install location, invocation syntax,
+and refresh mechanics are the host's business; before enabling it, confirm the host can read
+`references/` on demand.
+
+This is a conditional compatibility statement, not a guarantee for every agent.
+
+## Pick a surface: one-off or durable
+
+The Skill guides the operating; the work itself runs on one of two OpenCorvus surfaces. Do not mix
+their state.
+
+### One-off — one session, one result
+
+```bash
+opencorvus run "Inspect this project and explain the current architecture." --dir /absolute/path/to/project
+```
+
+Use `run --attach` to reach an already-running server. This is the Session path: it returns no Task
+ID, and there is no Task board or Task event stream.
+
+### Durable — observable and resumable
+
+```bash
+opencorvus serve --hostname 127.0.0.1 --port 7878 --project-dir /absolute/path/to/project
+```
+
+Then create a Task for one exact absolute project directory. `HTTP 202` returns `task_id`. The host
+must retain it, and judge progress and completion from the board, the events, and the final evidence
+— not from prose.
+
+```text
+Start or reach OpenCorvus for /absolute/path/to/project. Create a code Task for the requested
+outcome, retain the returned task_id, and report observable board and event progress.
+```
+
+## What the agent can do
+
+| Action | Boundary |
+| ------ | -------- |
+| Inspect | Discover existing commands, checkouts, config, processes, and project directories without changing anything first. |
+| Configure | Log in to a provider, list models, and modify only the authoritative config scope the user asked for. |
+| Start | Launch a headless server with localhost as the default boundary, and verify the real `/ui/`. |
+| Create and observe | Create a code or work Task, retain `task_id`, read the board and the SSE events. |
+| Continue | Send an ordinary follow-up message. A terminal Task reopens on real new input — there is no separate retry or replan control. |
+| Stop | Cancellation is destructive: it needs explicit authorization and a retained reason. Stopping the server is not cancelling a Task. |
+
+## The real boundary
+
+The agent has to actually see the runtime, the project, and the network.
+
+- **Same execution environment.** The host must be able to execute the OpenCorvus CLI, or reach the
+  server and the exact project directory from its own user, machine, container, and network
+  namespace.
+- **`localhost` is not a cross-machine address.** `127.0.0.1` means the environment making the
+  request. A container's or remote agent's localhost does not point at your desktop.
+- **Credentials stay inside the security boundary.** Never put provider keys, Basic Auth passwords,
+  or `Authorization` headers into prompts, logs, source, or commits.
+- **External exposure must be protected.** Bind a non-loopback address only with explicit
+  authorization, and then set `OPENCORVUS_SERVER_PASSWORD` with appropriate network isolation.
+- **Directories and identity must be exact.** Use absolute directories for project-scoped requests.
+  A Task is identified by its returned `task_id`, never guessed from a title or a recent list.
+- **Completion needs evidence.** Distinguish Skill visible, runtime healthy, Task accepted, Task
+  running, and terminal-with-reviewable-evidence. They are five different things.
+
+## Related
+
+- [Server operations](../../server/) — running and protecting the server
+- [HTTP API](../../reference/api/) — project directory, Task routes, auth, event streams
+- [Mission and Task API](../../reference/mission-task/) — the common integration path
+- [ACP support](../../acp/) — editor integration over JSON-RPC instead of a Skill
+- [Skill source](https://github.com/yangheng95/opencorvus/tree/main/skills/opencorvus)

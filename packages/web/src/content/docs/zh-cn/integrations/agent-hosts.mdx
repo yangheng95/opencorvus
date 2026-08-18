@@ -1,0 +1,153 @@
+---
+title: 从其他 Agent 使用 OpenCorvus
+description: 安装可移植的 OpenCorvus Agent Skill，让 OpenClaw、Hermes Agent 与其他 Agent Skills 宿主能运行、创建、观察和引导 OpenCorvus 工作。
+---
+
+OpenClaw、Hermes Agent 以及其他兼容 Agent Skills 的助手，可以通过仓库内的 `opencorvus` Skill 检查
+环境、启动运行时、创建 Task、跟进进度并读取交付证据。
+
+Skill 是**操作说明层**。OpenCorvus 才是运行时与 Task 权限边界——装上 Skill 本身不授予任何能力。
+
+:::caution[从你选定的 revision 安装]
+从可信的 OpenCorvus checkout、明确的 revision 安装，并在启用前通读完整 Skill 目录。不要只复制
+`SKILL.md`：`references/` 里保存着安装、API、运维与故障诊断契约，读不到它们的宿主会自己编。
+:::
+
+## 先让运行时就绪
+
+Skill 可见、运行时健康、模型可用、Task 已受理，是四种不同状态。按顺序验证，失败时才知道该修哪一层。
+
+1. **取得运行时。**从下载区安装发布版本，或按下面的源码路径构建。
+2. **验证健康。**运行 `doctor` 并逐条读警告。需要"无警告"验收时用 `doctor --strict`。
+3. **连接模型。**完成 provider 登录，再用 `auth list` 和 `models` 确认一对真实可用的 provider/model。
+4. **安装操作 Skill。**复制完整 Skill 包，按名称确认宿主发现了 `opencorvus`，然后在新会话里先做
+   只读检查。
+
+### 经过验证的源码路径
+
+```bash
+git clone https://github.com/yangheng95/opencorvus.git
+cd opencorvus
+bun install
+bun run --cwd packages/opencorvus build
+bun packages/opencorvus/src/index.ts doctor
+bun packages/opencorvus/src/index.ts auth login
+bun packages/opencorvus/src/index.ts auth list
+bun packages/opencorvus/src/index.ts models
+```
+
+如果已经装了全局 `opencorvus` 命令，可以用简写。否则保留上面的显式源码入口——它在任何 checkout 里
+都能用。
+
+## 宿主设置
+
+安装命令不同，但两种宿主读的是同一份 `SKILL.md` 和同一套相对 `references/`。安装后，**在任何会改变
+机器的操作之前**先按名称确认 Skill。
+
+### OpenClaw
+
+```bash
+openclaw skills install ./skills/opencorvus --as opencorvus
+openclaw skills list
+openclaw skills check
+```
+
+默认安装到当前 workspace。只有确实要让所有本地 Agent 共享时才加 `--global`。
+
+列表中应出现 `opencorvus`，状态为 ready 或 eligible。`skills check` 是更广的依赖就绪摘要，
+不能替代按名称确认。新会话是最确定的刷新方式。
+
+Control UI 用 `$opencorvus`，消息频道用 `/opencorvus`。第一条 prompt 建议是只读的：
+
+```text
+Use $opencorvus to check whether OpenCorvus is installed and healthy. Do not change anything.
+```
+
+### Hermes Agent
+
+```bash
+mkdir -p ~/.hermes/skills/developer-tools
+cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
+hermes skills list
+```
+
+Windows PowerShell：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.hermes\skills\developer-tools" | Out-Null
+Copy-Item -Recurse -Force ".\skills\opencorvus" "$HOME\.hermes\skills\developer-tools\opencorvus"
+hermes skills list
+```
+
+Hermes 会递归发现 `~/.hermes/skills` 下的 Skill；`developer-tools` 目录只是让分类清晰。手动复制后
+启动新会话或执行 `/reset`。`--now` 只适用于支持该参数的 `hermes skills install` 流程。
+
+### 其他 Agent Skills 宿主
+
+如果宿主支持 Agent Skills 目录、YAML frontmatter 与相对引用，可以把完整的 `opencorvus/` 目录放进
+它声明的 Skill root。安装位置、调用语法与刷新方式由宿主决定；启用前请确认它能按需读取 `references/`。
+
+这是一项**条件兼容声明**，不是对所有 Agent 的通用保证。
+
+## 选运行方式：一次性还是持久
+
+Skill 指导操作，真正的工作跑在两种 OpenCorvus 表面上。不要把两者的状态混在一起。
+
+### 一次性——一次会话，一次结果
+
+```bash
+opencorvus run "Inspect this project and explain the current architecture." --dir /absolute/path/to/project
+```
+
+用 `run --attach` 连接已运行的 server。这属于 Session 路径：不返回 Task ID，也没有 Task board 或
+Task 事件流。
+
+### 持久——可观察、可恢复
+
+```bash
+opencorvus serve --hostname 127.0.0.1 --port 7878 --project-dir /absolute/path/to/project
+```
+
+然后为一个明确的绝对项目目录创建 Task。`HTTP 202` 返回 `task_id`。宿主必须保存它，并通过 board、
+events 和最终证据判断进度与完成状态——不是靠自然语言描述。
+
+```text
+为 /absolute/path/to/project 启动或连接 OpenCorvus。为要求的结果创建 code Task，
+保存返回的 task_id，并报告可观察的 board 与 event 进度。
+```
+
+## Agent 可以做什么
+
+| 动作 | 边界 |
+| ---- | ---- |
+| 检查 | 先发现现有命令、checkout、配置、进程与项目目录，不做任何改动。 |
+| 配置 | 登录 provider、列出模型，只修改用户要求的那个权威配置范围。 |
+| 启动 | 以 localhost 为默认边界启动 headless server，并验证真实的 `/ui/`。 |
+| 创建与观察 | 创建 code 或 work Task，保存 `task_id`，读取 board 与 SSE events。 |
+| 继续 | 发普通 follow-up 消息即可。终态任务收到真实新输入就会重开——不存在单独的重试或重规划控件。 |
+| 停止 | 取消是破坏性操作，需要明确授权并保留原因。停 server 不等于取消 Task。 |
+
+## 真实边界
+
+Agent 必须真正看得见运行时、项目与网络。
+
+- **同一执行环境。**宿主必须能执行 OpenCorvus CLI，或从自己的用户、机器、容器与网络 namespace
+  访问到 server 和精确的项目目录。
+- **`localhost` 不是跨机器地址。**`127.0.0.1` 指发起请求的那个环境。容器或远程 Agent 的 localhost
+  不会指向你的桌面。
+- **凭据留在安全边界内。**不要把 provider key、Basic Auth 密码或 `Authorization` header 写进
+  prompt、日志、源码或提交。
+- **对外暴露必须受保护。**只有得到明确授权才绑定非 loopback 地址，并同时设置
+  `OPENCORVUS_SERVER_PASSWORD` 与合适的网络隔离。
+- **目录与身份必须精确。**项目作用域请求用绝对目录。Task 以返回的 `task_id` 为准，
+  不从标题或最近列表里猜。
+- **完成必须有证据。**要区分 Skill 可见、运行时健康、Task 受理、Task 运行中，以及带可审查交付证据
+  的终态——这是五件不同的事。
+
+## 相关
+
+- [Server 运维](../../server/)——运行与保护 server
+- [HTTP API](../../reference/api/)——项目目录、Task 路由、认证、事件流
+- [Mission 与 Task API](../../reference/mission-task/)——常见集成路径
+- [ACP 支持](../../acp/)——走 JSON-RPC 的编辑器集成，不用 Skill
+- [Skill 源码](https://github.com/yangheng95/opencorvus/tree/main/skills/opencorvus)

@@ -1,0 +1,153 @@
+---
+import { publicPath, type PublicLocale } from "../content/public-market"
+import VisitorCount from "./VisitorCount.astro"
+import config from "../../config.mjs"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const zh = locale === "zh-cn"
+
+const copy = zh
+  ? {
+      statement: "开源的 Agent 工作台。自己托管，自己定制，自己掌控。",
+      product: "产品",
+      resources: "资源",
+      community: "社区",
+      docs: "文档",
+      market: "专家团",
+      download: "下载",
+      quickstart: "快速开始",
+      cli: "命令行",
+      source: "源代码",
+      discuss: "讨论",
+      licence: "开源 · MIT 许可证",
+    }
+  : {
+      statement: "An open-source Agent workbench. Self-hosted, yours to change, yours to control.",
+      product: "Product",
+      resources: "Resources",
+      community: "Community",
+      docs: "Documentation",
+      market: "Expert Squads",
+      download: "Download",
+      quickstart: "Quickstart",
+      cli: "CLI reference",
+      source: "Source",
+      discuss: "Discussions",
+      licence: "Open source · MIT licence",
+    }
+
+const columns = [
+  {
+    title: copy.product,
+    links: [
+      { label: copy.market, href: publicPath(locale, "/market/") },
+      { label: copy.download, href: `${publicPath(locale)}#start` },
+    ],
+  },
+  {
+    title: copy.resources,
+    links: [
+      { label: copy.docs, href: publicPath(locale, "/start/quickstart/") },
+      { label: copy.quickstart, href: publicPath(locale, "/start/install/") },
+      { label: copy.cli, href: publicPath(locale, "/reference/cli/") },
+    ],
+  },
+  {
+    title: copy.community,
+    links: [
+      { label: copy.source, href: config.github },
+      { label: copy.discuss, href: config.discord },
+    ],
+  },
+]
+
+const year = 2026
+---
+
+<footer class="oc-footer">
+  <div class="oc-container oc-footer-inner">
+    <div class="oc-footer-lede">
+      <p class="oc-text-title oc-cjk-spacing">OpenCorvus</p>
+      <p class="oc-text-caption oc-text-description">{copy.statement}</p>
+      <VisitorCount {locale} />
+    </div>
+
+    {
+      columns.map((column) => (
+        <nav class="oc-footer-column" aria-label={column.title}>
+          <p class="oc-eyebrow">{column.title}</p>
+          <ul>
+            {column.links.map((link) => (
+              <li>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+  </div>
+
+  <div class="oc-container oc-footer-base">
+    <p class="oc-text-xs oc-text-description">{copy.licence} · © {year} OpenCorvus</p>
+  </div>
+</footer>
+
+<style>
+  .oc-footer {
+    border-top: 1px solid var(--oc-color-border-subtle);
+    padding-top: var(--oc-space-9);
+    padding-bottom: var(--oc-space-6);
+  }
+
+  .oc-footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+    gap: var(--oc-space-7);
+    align-items: start;
+  }
+
+  .oc-footer-lede {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+    max-width: 34ch;
+  }
+
+  .oc-footer-column ul {
+    list-style: none;
+    margin: var(--oc-space-3) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+  }
+
+  .oc-footer-column a {
+    font-size: 14px;
+    color: var(--oc-color-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .oc-footer-column a:hover {
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-footer-base {
+    margin-top: var(--oc-space-8);
+    padding-top: var(--oc-space-5);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  @media (max-width: 767px) {
+    .oc-footer-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--oc-space-6);
+    }
+
+    .oc-footer-lede {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

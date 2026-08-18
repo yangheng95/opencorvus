@@ -1,0 +1,426 @@
+---
+/**
+ * Hero backdrop: a mesh gradient that the light-mode glass sits on.
+ *
+ * Why this is not decoration — the translucent-white surface family (glass cards, the header slab,
+ * secondary buttons) is white at 20–45% alpha. Over a flat page colour it is invisible. The whole
+ * light palette assumes something tonal underneath, so this layer is load-bearing. See the surface
+ * families note in tokens.css.
+ *
+ * Three layers, cheapest first, each a complete fallback for the one above:
+ *   1. A CSS radial-gradient stack. No JS, no canvas, ships in the HTML. This alone is enough for
+ *      the glass to read.
+ *   2. A WebGL2 canvas that fades in over the CSS layer once it has compiled a frame.
+ *   3. Pointer influence, added only for fine pointers.
+ *
+ * Divergence from the reference, on purpose: it drives warp from a ping-pong framebuffer that
+ * accumulates a mouse flowmap. We use a smoothed pointer uniform instead — most of the felt effect
+ * for none of the FBO plumbing, and one less thing to get wrong on drivers with flaky float
+ * texture support. Logged in the plan's deliberate-divergence list.
+ */
+---
+
+<div class="oc-hero-backdrop" data-oc-hero-backdrop aria-hidden="true">
+  <div class="oc-hero-css"></div>
+  <canvas class="oc-hero-canvas" data-oc-hero-canvas></canvas>
+  <div class="oc-hero-grain"></div>
+  <div class="oc-grid-bg oc-hero-grid"></div>
+  <div class="oc-hero-fade"></div>
+</div>
+
+<style>
+  .oc-hero-backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    /* Isolate so the canvas and the fades cannot escape into the page's stacking context. */
+    isolation: isolate;
+    z-index: 0;
+  }
+
+  /* Layer 1 — the always-present substrate. Four soft blooms plus a warm base. */
+  .oc-hero-css {
+    position: absolute;
+    inset: -10%;
+    background:
+      radial-gradient(42% 46% at 18% 22%, rgba(41, 70, 211, 0.16), transparent 70%),
+      radial-gradient(38% 42% at 82% 18%, rgba(224, 75, 34, 0.1), transparent 70%),
+      radial-gradient(46% 50% at 72% 78%, rgba(120, 150, 255, 0.18), transparent 72%),
+      radial-gradient(40% 44% at 26% 84%, rgba(23, 43, 143, 0.1), transparent 70%),
+      linear-gradient(168deg, #f7f5f1 0%, #f9f8f8 46%, #f1f2f7 100%);
+  }
+
+  .oc-hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+
+  .oc-hero-backdrop[data-shader="live"] .oc-hero-canvas {
+    opacity: 1;
+  }
+
+  /* Fine film grain. Keeps large flat gradients from banding on 8-bit panels. */
+  .oc-hero-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter>\
+<rect width='140' height='140' filter='url(%23n)'/></svg>");
+    background-size: 140px 140px;
+  }
+
+  .oc-hero-grid {
+    opacity: 0.75;
+  }
+
+  /* Hands the hero off to the flat page colour so the seam does not read as a band. */
+  .oc-hero-fade {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 22%;
+    background: linear-gradient(to bottom, transparent, var(--oc-color-bg-page));
+  }
+
+  :global(:root[data-theme="dark"]) .oc-hero-css {
+    background:
+      radial-gradient(44% 48% at 16% 20%, rgba(58, 92, 255, 0.22), transparent 70%),
+      radial-gradient(38% 42% at 84% 16%, rgba(255, 122, 82, 0.1), transparent 70%),
+      radial-gradient(48% 52% at 74% 80%, rgba(78, 60, 190, 0.24), transparent 72%),
+      radial-gradient(42% 46% at 24% 86%, rgba(20, 70, 90, 0.2), transparent 70%),
+      linear-gradient(168deg, #0b0c12 0%, #0a0a0a 48%, #0c0a10 100%);
+  }
+
+  :global(:root[data-theme="dark"]) .oc-hero-grain {
+    mix-blend-mode: screen;
+    opacity: 0.05;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .oc-hero-css {
+      background:
+        radial-gradient(44% 48% at 16% 20%, rgba(58, 92, 255, 0.22), transparent 70%),
+        radial-gradient(38% 42% at 84% 16%, rgba(255, 122, 82, 0.1), transparent 70%),
+        radial-gradient(48% 52% at 74% 80%, rgba(78, 60, 190, 0.24), transparent 72%),
+        radial-gradient(42% 46% at 24% 86%, rgba(20, 70, 90, 0.2), transparent 70%),
+        linear-gradient(168deg, #0b0c12 0%, #0a0a0a 48%, #0c0a10 100%);
+    }
+
+    :global(:root:not([data-theme="light"])) .oc-hero-grain {
+      mix-blend-mode: screen;
+      opacity: 0.05;
+    }
+  }
+</style>
+
+<script>
+  type Palette = { colors: number[][]; grain: number; vignette: number }
+
+  const LIGHT: Palette = {
+    colors: [
+      [0.969, 0.961, 0.945],
+      [0.874, 0.902, 1.0],
+      [1.0, 0.906, 0.851],
+      [0.909, 0.886, 0.961],
+      [1.0, 1.0, 1.0],
+    ],
+    grain: 0.03,
+    vignette: 0.32,
+  }
+
+  const DARK: Palette = {
+    colors: [
+      [0.039, 0.039, 0.039],
+      [0.078, 0.106, 0.227],
+      [0.165, 0.082, 0.188],
+      [0.051, 0.141, 0.188],
+      [0.102, 0.086, 0.082],
+    ],
+    grain: 0.05,
+    vignette: 0.55,
+  }
+
+  const VERTEX = `#version 300 es
+in vec2 a_position;
+out vec2 v_uv;
+void main() {
+  v_uv = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`
+
+  // Simplex noise below is the standard Ashima/Gustavson formulation, published in the public
+  // domain. Everything after `fbm` is ours.
+  const FRAGMENT = `#version 300 es
+precision mediump float;
+
+in vec2 v_uv;
+uniform vec2 u_resolution;
+uniform float u_time;
+uniform vec2 u_pointer;
+uniform float u_pointerStrength;
+uniform vec3 u_c1, u_c2, u_c3, u_c4, u_c5;
+uniform float u_grain;
+uniform float u_vignette;
+out vec4 fragColor;
+
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+  vec2 i = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod289(i);
+  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+  vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+  m = m * m; m = m * m;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+float fbm(vec2 p) {
+  float sum = 0.0;
+  float amp = 0.5;
+  for (int i = 0; i < 4; i++) {
+    sum += amp * snoise(p);
+    p *= 2.02;
+    amp *= 0.5;
+  }
+  return sum;
+}
+
+vec2 rotate(vec2 p, float a) {
+  return mat2(cos(a), sin(a), -sin(a), cos(a)) * p;
+}
+
+void main() {
+  float aspect = u_resolution.x / max(u_resolution.y, 1.0);
+  vec2 p = (v_uv - 0.5) * vec2(aspect, 1.0);
+
+  // Pointer pull. A single smoothed uniform, falling off as a gaussian, standing in for the
+  // reference's accumulated flowmap.
+  vec2 toPointer = p - (u_pointer - 0.5) * vec2(aspect, 1.0);
+  float pointerFall = exp(-dot(toPointer, toPointer) * 6.0) * u_pointerStrength;
+
+  // Domain warp, then a slow swirl about the centre. Both run on the same slow clock so the field
+  // drifts rather than churns.
+  float t = u_time * 0.045;
+  vec2 warp = vec2(fbm(p * 1.5 + vec2(t, -t * 0.7)), fbm(p * 1.5 + vec2(-t * 0.8, t)));
+  vec2 q = p + warp * (0.34 + pointerFall * 0.5);
+  q = rotate(q, (0.22 + pointerFall * 0.6) * length(q));
+
+  float f1 = fbm(q * 1.1 + vec2(t * 0.6, 0.0)) * 0.5 + 0.5;
+  float f2 = fbm(q * 1.9 + vec2(-t * 0.4, t * 0.5)) * 0.5 + 0.5;
+  float f3 = fbm(q * 0.7 + vec2(t * 0.3, -t * 0.2)) * 0.5 + 0.5;
+
+  vec3 colour = mix(u_c1, u_c2, smoothstep(0.25, 0.85, f1));
+  colour = mix(colour, u_c3, smoothstep(0.35, 0.9, f2) * 0.55);
+  colour = mix(colour, u_c4, smoothstep(0.3, 0.85, f3) * 0.5);
+  colour = mix(colour, u_c5, pow(pointerFall, 1.5) * 0.45);
+
+  // Vignette, then grain. Grain last so it is not smeared by the mix above.
+  float vig = 1.0 - smoothstep(0.35, 1.05, length(p)) * u_vignette;
+  colour *= vig;
+
+  float grain = fract(sin(dot(v_uv * u_resolution, vec2(12.9898, 78.233))) * 43758.5453);
+  colour += (grain - 0.5) * u_grain;
+
+  fragColor = vec4(colour, 1.0);
+}`
+
+  function compile(gl: WebGL2RenderingContext, type: number, source: string) {
+    const shader = gl.createShader(type)
+    if (!shader) return null
+    gl.shaderSource(shader, source)
+    gl.compileShader(shader)
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      // Driver-specific compile failures are common enough that we swallow them and keep the CSS
+      // substrate rather than shipping a broken hero.
+      gl.deleteShader(shader)
+      return null
+    }
+    return shader
+  }
+
+  function start(root: HTMLElement, canvas: HTMLCanvasElement) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (reduceMotion.matches) return
+
+    const gl = canvas.getContext("webgl2", { antialias: false, alpha: false, powerPreference: "low-power" })
+    if (!gl) return
+
+    // Hoisted helpers below could in principle be called before the guard above, so TypeScript will
+    // not carry the narrowing into them. Re-bind once, here, where the fact is already established.
+    const ctx: WebGL2RenderingContext = gl
+
+    const vertex = compile(ctx, ctx.VERTEX_SHADER, VERTEX)
+    const fragment = compile(ctx, ctx.FRAGMENT_SHADER, FRAGMENT)
+    if (!vertex || !fragment) return
+
+    const program = ctx.createProgram()
+    if (!program) return
+    ctx.attachShader(program, vertex)
+    ctx.attachShader(program, fragment)
+    ctx.linkProgram(program)
+    if (!ctx.getProgramParameter(program, ctx.LINK_STATUS)) return
+    ctx.useProgram(program)
+
+    const buffer = ctx.createBuffer()
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, buffer)
+    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), ctx.STATIC_DRAW)
+    const location = ctx.getAttribLocation(program, "a_position")
+    ctx.enableVertexAttribArray(location)
+    ctx.vertexAttribPointer(location, 2, ctx.FLOAT, false, 0, 0)
+
+    const uniform = (name: string) => ctx.getUniformLocation(program, name)
+    const uResolution = uniform("u_resolution")
+    const uTime = uniform("u_time")
+    const uPointer = uniform("u_pointer")
+    const uPointerStrength = uniform("u_pointerStrength")
+    const uGrain = uniform("u_grain")
+    const uVignette = uniform("u_vignette")
+    const colourUniforms = [uniform("u_c1"), uniform("u_c2"), uniform("u_c3"), uniform("u_c4"), uniform("u_c5")]
+
+    const isDark = () => {
+      const explicit = document.documentElement.dataset.theme
+      if (explicit === "dark") return true
+      if (explicit === "light") return false
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+    }
+
+    let palette = isDark() ? DARK : LIGHT
+    function pushPalette() {
+      palette.colors.forEach((colour, index) => {
+        const slot = colourUniforms[index]
+        if (slot) ctx.uniform3f(slot, colour[0], colour[1], colour[2])
+      })
+      ctx.uniform1f(uGrain, palette.grain)
+      ctx.uniform1f(uVignette, palette.vignette)
+    }
+    pushPalette()
+
+    // Cap the backing store at 2x and 1600px on the long edge. Beyond that the fragment count
+    // costs real frames and the gradient is too soft for anyone to see the difference.
+    let width = 0
+    let height = 0
+    function resize() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2)
+      const rect = root.getBoundingClientRect()
+      const scale = Math.min(1, 1600 / Math.max(rect.width * ratio, 1))
+      const next = {
+        width: Math.max(1, Math.round(rect.width * ratio * scale)),
+        height: Math.max(1, Math.round(rect.height * ratio * scale)),
+      }
+      if (next.width === width && next.height === height) return
+      width = next.width
+      height = next.height
+      canvas.width = width
+      canvas.height = height
+      ctx.viewport(0, 0, width, height)
+      ctx.uniform2f(uResolution, width, height)
+    }
+    resize()
+
+    const pointer = { x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5, strength: 0, targetStrength: 0 }
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)")
+    if (finePointer.matches) {
+      window.addEventListener(
+        "pointermove",
+        (event) => {
+          const rect = root.getBoundingClientRect()
+          pointer.targetX = (event.clientX - rect.left) / Math.max(rect.width, 1)
+          pointer.targetY = 1 - (event.clientY - rect.top) / Math.max(rect.height, 1)
+          pointer.targetStrength = 1
+        },
+        { passive: true },
+      )
+      window.addEventListener("pointerleave", () => {
+        pointer.targetStrength = 0
+      })
+    }
+
+    let visible = true
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (visible) frame(performance.now())
+    }).observe(root)
+
+    let running = false
+    let startedAt = 0
+    function frame(now: number) {
+      if (!visible) {
+        running = false
+        return
+      }
+      running = true
+      if (!startedAt) startedAt = now
+      resize()
+
+      // Critically damped follow, so the pull trails the cursor instead of snapping to it.
+      pointer.x += (pointer.targetX - pointer.x) * 0.06
+      pointer.y += (pointer.targetY - pointer.y) * 0.06
+      pointer.strength += (pointer.targetStrength - pointer.strength) * 0.05
+      ctx.uniform2f(uPointer, pointer.x, pointer.y)
+      ctx.uniform1f(uPointerStrength, pointer.strength)
+      ctx.uniform1f(uTime, (now - startedAt) / 1000)
+      ctx.drawArrays(ctx.TRIANGLES, 0, 3)
+      requestAnimationFrame(frame)
+    }
+
+    const themeQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    const repaint = () => {
+      palette = isDark() ? DARK : LIGHT
+      pushPalette()
+      if (!running) frame(performance.now())
+    }
+    themeQuery.addEventListener("change", repaint)
+    new MutationObserver(repaint).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    })
+
+    // Turning the animation off mid-session should drop straight back to the CSS substrate.
+    reduceMotion.addEventListener("change", (event) => {
+      if (!event.matches) return
+      visible = false
+      root.dataset.shader = "css"
+    })
+
+    root.dataset.shader = "live"
+    requestAnimationFrame(frame)
+  }
+
+  const root = document.querySelector<HTMLElement>("[data-oc-hero-backdrop]")
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-oc-hero-canvas]")
+  if (root && canvas) {
+    // Off the critical path: the CSS substrate is already painted, so compiling can wait for idle.
+    const boot = () => start(root, canvas)
+    const idle = (
+      window as Window & {
+        requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+      }
+    ).requestIdleCallback
+    if (idle) idle(boot, { timeout: 1200 })
+    else window.setTimeout(boot, 200)
+  }
+</script>

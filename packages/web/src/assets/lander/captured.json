@@ -1,0 +1,24 @@
+{
+  "note": "Provenance for the landing page's product material. Staleness in a screenshot is invisible in review — the old gallery shipped a v0.0.42beta window with an empty Mission Board and a stray text selection for weeks. Recording what each asset was captured from makes the gap a fact instead of an impression. test/lander-assets.test.ts asserts this file and the directory agree. The landing page no longer carries a screenshot gallery; the two files left are referenced by README.md only.",
+  "refresh": {
+    "gallery": "Run the desktop app on the target release, drive it to the state each shot describes, and capture the window. Shots must show real work, not an empty state.",
+    "conceptFlow": "qa/record-real-client-demo.ps1 records the desktop window against a live task, then qa/curate-client-demo.mjs edits the frames into the GIF."
+  },
+  "assets": [
+    {
+      "file": "harness-gallery/work-harness.png",
+      "capturedAppVersion": "0.0.42-beta",
+      "capturedOn": "2026-08-13",
+      "knownIssues": [
+        "empty state: 'No work yet.', Mission Board 0",
+        "stray text selection highlight in the composer"
+      ]
+    },
+    {
+      "file": "harness-gallery/mission-composer.png",
+      "capturedAppVersion": "0.0.42-beta",
+      "capturedOn": "2026-08-13",
+      "knownIssues": []
+    }
+  ]
+}

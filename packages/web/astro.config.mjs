@@ -30,6 +30,31 @@ export default defineConfig({
   markdown: {
     rehypePlugins: [rehypeHeadingIds, [astroRehypeAutolinkHeadings, { behavior: "wrap" }]],
   },
+  /*
+   * Retired public surfaces.
+   *
+   * The public site collapsed from eight surfaces to two (landing + Expert Squad market); see
+   * docs/website-restyle-plan.md §4. These twelve URLs are indexed and linked from outside, so they
+   * redirect rather than 404. The market's own URLs are unchanged and deliberately absent here.
+   *
+   * Two destinations, by kind:
+   *   - Content that became documentation points at its new docs page.
+   *   - Content that became a landing-page section points at that section's anchor.
+   */
+  redirects: {
+    "/download": "/#start",
+    "/zh-cn/download": "/zh-cn/#start",
+    "/mission": "/concepts/mission/",
+    "/zh-cn/mission": "/zh-cn/concepts/mission/",
+    "/use-with-agents": "/integrations/agent-hosts/",
+    "/zh-cn/use-with-agents": "/zh-cn/integrations/agent-hosts/",
+    "/publish": "/expert-squads/publish/",
+    "/zh-cn/publish": "/zh-cn/expert-squads/publish/",
+    "/trust": "/expert-squads/trust/",
+    "/zh-cn/trust": "/zh-cn/expert-squads/trust/",
+    "/architecture-explorer": "/concepts/enterprise-architecture/",
+    "/zh-cn/architecture-explorer": "/zh-cn/concepts/enterprise-architecture/",
+  },
   build: {},
   vite: {
     // esbuild 0.28 no longer lowers destructuring for Safari 14.0. Safari 14.1 is the
@@ -96,7 +121,18 @@ export default defineConfig({
             "concepts/enterprise-architecture",
             "concepts/agent-loop",
             "concepts/delivery-slice-task",
+            "concepts/mission",
           ],
+        },
+        {
+          label: "Expert Squads",
+          translations: { en: "Expert Squads", "zh-CN": "专家团" },
+          items: ["expert-squads/publish", "expert-squads/trust"],
+        },
+        {
+          label: "Integrations",
+          translations: { en: "Integrations", "zh-CN": "集成" },
+          items: ["integrations/agent-hosts"],
         },
         {
           label: "Usage",

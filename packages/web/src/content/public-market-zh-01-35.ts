@@ -1785,7 +1785,6 @@ export const publicMarketZhTranslations01To35 = {
         description:
           "仅在 Mission 已运行相互独立、profile 精确一致的基线与候选 Tasks，并将其终态证据连同活动和候选 Artifacts 一并导入后使用。",
         nodes: {
-          "evolution-experiment-planner": "发布已固化的评估边界、输入和双组验收分配。",
           "evolution-evaluator": "发布已导入且固化的基线与候选 Tasks 的精确运行证据和评分器结果。",
           "evolution-safety-auditor": "审计候选方案完整性、权限、证据、实验漂移和奖励操纵。",
           "evolution-recommendation-owner": "发布范围明确的比较与建议，但不具备候选方案晋级权限。",

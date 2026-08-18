@@ -1,0 +1,63 @@
+---
+title: Expert Squad trust model
+description: The verification boundary from signed publication pointer and catalog through downloaded bytes to client installation, and what it does not certify.
+---
+
+Trust here does not come from a badge. It comes from a chain of checks where every step is able to
+reject the wrong bytes, and where a failed step never silently substitutes another file.
+
+The public catalog is signed by the OpenCorvus publication key. The website verifies the signed
+catalog and the downloaded bytes; the client then validates each package again during installation.
+
+## Evidence chain
+
+<ol>
+  <li>
+    **Bind publication identity.** The publication pointer declares protocol version, publication
+    version, expiry, resource counts, and exact digests.
+  </li>
+  <li>
+    **Verify the publication signature.** The browser uses an embedded trust root to verify Ed25519
+    signatures. Unknown key IDs do not count toward the trusted threshold; an insufficient
+    threshold, an expired publication, or a rollback is rejected.
+  </li>
+  <li>
+    **Verify downloaded bytes.** The download action enables only after the signed catalog passes.
+    After the ZIP arrives, the browser recomputes SHA-256 and compares it against the
+    content-addressed record.
+  </li>
+  <li>
+    **Repeat strict validation in the client.** Import rechecks the archive, manifest, identity,
+    paths, reference closure, workflow topology, and content digest. The client does not trust the
+    website's verdict.
+  </li>
+  <li>
+    **Keep install separate from activation.** The Manager writes atomically under an explicit scope
+    and returns a receipt. Installation never selects or activates the Squad on its own.
+  </li>
+</ol>
+
+## What stays protected when verification fails
+
+| Guarantee | Behaviour |
+| --------- | --------- |
+| No unsigned fallback | The complete-bundle action stays disabled when signature, version, expiry, or resource counts do not match. There is no "download anyway". |
+| Wrong bytes never install | A catalog or ZIP digest mismatch is rejected outright, rather than treating similar content as the same revision. |
+| The existing install survives | Strict validation finishes before the atomic install commit or replacement, so a failure cannot leave a half-written package where a working one was. |
+| A download cannot change behaviour | Download is not install, and install is not activation. The final selection stays explicit. |
+
+## Boundary
+
+This proves **OpenCorvus publication integrity**. It does not certify a third-party author.
+
+The signature answers one question: were this catalog and bundle published by OpenCorvus, and did
+they arrive intact? Third-party namespace enrollment, publisher identity verification, independent
+review records, and a public withdrawal service are not open yet. Catalog entries come from the
+current repository source. Do not read the OpenCorvus publication signature as an endorsement of
+every future third-party author.
+
+## Related
+
+- [Build an Expert Squad](../publish/) — the author path
+- [Expert Squad market](/market/) — the current signed catalog
+- [Expert squads and agents](../../agents/) — how an installed squad projects capabilities

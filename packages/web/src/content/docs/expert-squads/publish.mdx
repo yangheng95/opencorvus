@@ -1,0 +1,56 @@
+---
+title: Build an Expert Squad
+description: Build, validate, and freeze an inspectable Expert Squad package with the current OpenCorvus SDK, and what the publication boundary is today.
+---
+
+An Expert Squad is more than a set of prompts. It states selection fit, role ownership,
+collaboration order, required capabilities, and delivery evidence — and freezes all of it in one
+verifiable revision.
+
+The goal is a package someone else can understand, inspect, and reproduce.
+
+## From task boundary to exact package
+
+1. **Define the selection boundary.** State the outcome the team fits, the inputs it needs, and the
+   conditions where it should *not* be selected. A selector that only repeats marketing copy is not
+   a boundary.
+2. **Shape roles and workflow.** Give every specialist visible ownership. Declare dependencies,
+   deliverables, and the points where review happens independently of production.
+3. **Add Skills and tools.** Bind only what the team needs. Every reference must stay inside the
+   validated self-contained package closure — a reference that reaches outside it will fail
+   validation rather than resolve at runtime.
+4. **Validate strictly.** Use the Registry and Manager to check identity, schema, paths, reference
+   closure, workflow topology, and capability projection.
+5. **Freeze the exact revision.** Export a canonical ZIP; record namespace, id, version, and digest;
+   then inspect selection and installation in a real client.
+
+## What a deliverable package must answer
+
+| Question | Where it is answered |
+| -------- | -------------------- |
+| When should it be selected? | The selector defines task fit, including the cases it does not cover. |
+| Who owns what? | Agent roles, inputs, outputs, and review responsibility are all inspectable. |
+| How is completion proved? | The workflow and Skills define evidence, deliverables, and acceptance. |
+| Which exact revision is this? | Identity, version, and digest bind the content together. |
+
+## Publication boundary
+
+**Package authoring is open. Self-service listing is not.**
+
+The public site showcases repository-selected squads and distributes a complete bundle signed by the
+OpenCorvus publication key. It is not yet a third-party self-service registry: namespace enrollment,
+publisher identity, third-party review, and withdrawal services are not open. Authors currently
+build, validate, and contribute packages through the source repository.
+
+## Download, install, and activate are three decisions
+
+The website explains and distributes. The client repeats validation after download and requires an
+explicit install scope. Installation does not select the team — runtime behaviour changes only after
+the user activates it.
+
+## Related
+
+- [Squad SDK](../../sdk/) — the authoring API
+- [Expert Squad trust model](../trust/) — what the signature does and does not prove
+- [Plugins](../../plugins/) — process-level TypeScript extension, a different mechanism
+- [Expert Squad market](/market/) — the current signed catalog
