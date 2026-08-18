@@ -1,6 +1,7 @@
 import type { RuntimeCaptureInput, RuntimeCaptureResult } from "@/runtime/capture-contract"
 import { findBrowserPreviewTargetByID } from "./persist"
 import { writeBrowserEvidenceManifest } from "./evidence-runner"
+import { browserPreviewViewportByID } from "./viewport"
 import {
   runBrowserPreviewVerification,
   type BrowserPreviewVerification,
@@ -34,7 +35,10 @@ async function captureWithTestHarness(
   const captures: Record<string, RuntimeCaptureResult> = {}
   const artifactPaths: string[] = []
   const diagnostics: string[] = []
-  for (const viewport of input.viewports) {
+  // Resolved from the same persisted target the URL comes from, so the
+  // harness cannot capture a viewport the target does not declare.
+  const viewports = input.viewportIDs.map((id) => browserPreviewViewportByID(target.viewports, id))
+  for (const viewport of viewports) {
     const result = await input.captureForTest({
       processAuthority: { kind: "task", taskID: input.taskID, cwd: input.projectRoot },
       url: target.url,

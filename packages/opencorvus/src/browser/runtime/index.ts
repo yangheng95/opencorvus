@@ -484,14 +484,7 @@ export namespace BrowserRuntime {
   }
 
   function uniqueCandidates(candidates: readonly string[]): string[] {
-    const seen = new Set<string>()
-    const output: string[] = []
-    for (const candidate of candidates) {
-      if (seen.has(candidate)) continue
-      seen.add(candidate)
-      output.push(candidate)
-    }
-    return output
+    return [...new Set(candidates)]
   }
 }
 

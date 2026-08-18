@@ -6,12 +6,12 @@ import { Identifier } from "@/id/id"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import { readTaskArtifactRef } from "@/task-artifact/store"
-import { decodePNGBuffer, nonWhiteDensity, uniqueColorBucketCount } from "@/util/pixel-stats"
+import { contentPixelRatio, decodePNGBuffer, uniqueColorBucketCount } from "@/util/pixel-stats"
 import {
   evaluateVisual,
   isEvaluationReportPassing,
   WEBPAGE_REFERENCE_COMPARISON_SSIM_PASS_THRESHOLD,
-} from "@/verification/visual/evaluate"
+} from "@/browser-preview/visual/evaluate"
 import { BrowserPreviewRegionRouteDiagnosticsSchema, runBrowserPreviewRegionComparisonCapture } from "./evidence-runner"
 import { BrowserPreviewViewportID } from "./viewport"
 import {
@@ -138,13 +138,13 @@ export const BrowserPreviewRegionComparisonResult = z.object({
         .object({
           source: z
             .object({
-              non_white_pixel_ratio: z.number(),
+              content_pixel_ratio: z.number(),
               unique_color_count: z.number().int().nonnegative(),
             })
             .strict(),
           implementation: z
             .object({
-              non_white_pixel_ratio: z.number(),
+              content_pixel_ratio: z.number(),
               unique_color_count: z.number().int().nonnegative(),
             })
             .strict(),
@@ -182,7 +182,7 @@ type TrueSizeRegionVisualReport = {
 }
 
 type RegionContentMetrics = {
-  non_white_pixel_ratio: number
+  content_pixel_ratio: number
   unique_color_count: number
 }
 
@@ -532,7 +532,7 @@ async function materializeRegionComparison(input: {
 async function measureRegionContent(bytes: Buffer): Promise<RegionContentMetrics> {
   const png = await decodePNGBuffer(bytes)
   return {
-    non_white_pixel_ratio: nonWhiteDensity(png),
+    content_pixel_ratio: contentPixelRatio(png),
     unique_color_count: uniqueColorBucketCount(png),
   }
 }

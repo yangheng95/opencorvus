@@ -43,8 +43,25 @@ const BrowserPreviewEvidenceOperationKind = z.enum([
   "layout-geometry",
 ])
 const BrowserPreviewEvidenceStatus = z.enum(["passed", "failed"])
-const REQUIRED_REFERENCE_COMPARISON_ARTIFACTS = ["source_crop", "implementation_crop", "side_by_side"] as const
-const REQUIRED_SCROLL_SLICE_COMPARISON_ARTIFACTS = ["source_crop", "implementation_crop", "side_by_side"] as const
+/**
+ * What a passed operation of each kind must carry.
+ *
+ * These used to be two `if (operationKind === ... && status === "passed")`
+ * blocks inside the single persist entry, so a fifth operation meant another
+ * branch in code shared by all of them. Stated as data, adding one is a row.
+ */
+const PASSED_EVIDENCE_REQUIREMENTS = {
+  "preview-capture": { artifacts: [], cropIntent: false },
+  "reference-comparison": {
+    artifacts: ["source_crop", "implementation_crop", "side_by_side"],
+    cropIntent: true,
+  },
+  "scroll-slice-comparison": {
+    artifacts: ["source_crop", "implementation_crop", "side_by_side"],
+    cropIntent: false,
+  },
+  "layout-geometry": { artifacts: [], cropIntent: false },
+} as const satisfies Record<string, { artifacts: readonly string[]; cropIntent: boolean }>
 
 const BrowserPreviewReferenceComparisonCapture = z
   .object({
@@ -746,15 +763,21 @@ export async function readBrowserPreviewEvidenceArtifact(input: {
   artifactName: "source" | "implementation" | "side-by-side" | "diff"
 }): Promise<Buffer | undefined> {
   const loaded = await readBrowserPreviewEvidenceByID(input)
-  if (!loaded || loaded.evidence.operationKind !== "reference-comparison") return undefined
+  if (!loaded) return undefined
   const keyByName: Record<typeof input.artifactName, string> = {
     source: "source_crop",
     implementation: "implementation_crop",
     "side-by-side": "side_by_side",
     diff: "diff",
   }
-  const role = keyByName[input.artifactName]
-  return loaded.bytesByRole.get(role)
+  // Whether the role exists is the question; which operation produced it is
+  // not. This used to require `operationKind === "reference-comparison"`, so
+  // the crops a `scroll-slice-comparison` writes under the very same three
+  // roles — `PASSED_EVIDENCE_REQUIREMENTS` demands the identical set from both
+  // — were unreachable through the only route that serves them, and the caller
+  // got a 404 for bytes that were sitting on disk. An operation that did not
+  // produce the requested role still misses the map and still 404s.
+  return loaded.bytesByRole.get(keyByName[input.artifactName])
 }
 
 export type PersistBrowserPreviewEvidenceInput = {
@@ -867,19 +890,18 @@ async function prepareBrowserPreviewEvidence(
           ]),
       )
     : undefined
-  if (operationKind === "reference-comparison" && status === "passed") {
-    if (!input.cropIntent) {
-      throw new Error("passed reference-comparison evidence requires cropIntent")
+  if (status === "passed") {
+    const required = PASSED_EVIDENCE_REQUIREMENTS[operationKind]
+    if (required.cropIntent && !input.cropIntent) {
+      throw new Error(`passed ${operationKind} evidence requires cropIntent`)
     }
-    const missing = REQUIRED_REFERENCE_COMPARISON_ARTIFACTS.filter((key) => !artifactPaths?.[key])
+    const missing = required.artifacts.filter((key) => !artifactPaths?.[key])
     if (missing.length > 0) {
-      throw new Error(`passed reference-comparison evidence requires artifact path(s): ${missing.join(", ")}`)
-    }
-  }
-  if (operationKind === "scroll-slice-comparison" && status === "passed") {
-    const missing = REQUIRED_SCROLL_SLICE_COMPARISON_ARTIFACTS.filter((key) => !artifactPaths?.[key])
-    if (missing.length > 0) {
-      throw new Error(`passed scroll-slice-comparison evidence requires artifact path(s): ${missing.join(", ")}`)
+      throw new Error(
+        `passed ${operationKind} evidence requires artifact path(s). received: ${JSON.stringify(
+          Object.keys(artifactPaths ?? {}),
+        )}, expected to include: ${JSON.stringify(missing)}`,
+      )
     }
   }
   if (!input.manifestPath?.trim()) {
@@ -983,20 +1005,13 @@ async function readBrowserPreviewEvidenceResources(
       })
     }
   }
-  if (evidence.status === "passed" && evidence.operationKind === "reference-comparison") {
-    for (const key of REQUIRED_REFERENCE_COMPARISON_ARTIFACTS) {
+  if (evidence.status === "passed") {
+    // Same table the write path checks, so a read can never demand a role the
+    // writer was not required to produce.
+    for (const key of PASSED_EVIDENCE_REQUIREMENTS[evidence.operationKind].artifacts) {
       if (!bytesByRole.has(key)) {
         throw browserPreviewEvidenceCorruption(evidence, {
-          reason: `passed reference-comparison missing required resource role: ${key}`,
-        })
-      }
-    }
-  }
-  if (evidence.status === "passed" && evidence.operationKind === "scroll-slice-comparison") {
-    for (const key of REQUIRED_SCROLL_SLICE_COMPARISON_ARTIFACTS) {
-      if (!bytesByRole.has(key)) {
-        throw browserPreviewEvidenceCorruption(evidence, {
-          reason: `passed scroll-slice-comparison missing required resource role: ${key}`,
+          reason: `passed ${evidence.operationKind} missing required resource role: ${key}`,
         })
       }
     }

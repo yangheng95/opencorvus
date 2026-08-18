@@ -126,16 +126,10 @@ function toGrayscale(png: PNG): { data: number[]; width: number; height: number 
 
 // ─── Public API ──────────────────────────────────────────────────────────
 
-export interface EvaluateVisualCtx {
-  /** Opt-in progress hook — Phase 2 will wire this to `EngineProtocol.emit`. */
-  emit?: (event: { phase: "decode" | "pixelmatch" | "ssim" | "score"; detail?: string }) => void
-}
-
 /** Compare a design screenshot to a rendered screenshot — returns an `EvaluationReport`. */
-export async function evaluateVisual(input: EvaluateInput, ctx?: EvaluateVisualCtx): Promise<EvaluationReport> {
+export async function evaluateVisual(input: EvaluateInput): Promise<EvaluationReport> {
   const parsed = EvaluateInputSchema.parse(input)
 
-  ctx?.emit?.({ phase: "decode" })
   const original = decodePng(parsed.originalImage)
   let rendered = decodePng(parsed.renderedImage)
 
@@ -145,14 +139,9 @@ export async function evaluateVisual(input: EvaluateInput, ctx?: EvaluateVisualC
   const compHeight = original.height
 
   if (!dimensionsMatch) {
-    ctx?.emit?.({
-      phase: "decode",
-      detail: `resizing rendered ${rendered.width}x${rendered.height} → ${compWidth}x${compHeight}`,
-    })
     rendered = resizePng(rendered, compWidth, compHeight)
   }
 
-  ctx?.emit?.({ phase: "pixelmatch" })
   const totalPixels = compWidth * compHeight
   const diffPng = new PNG({ width: compWidth, height: compHeight })
   const mismatchedPixels = pixelmatch(
@@ -168,7 +157,6 @@ export async function evaluateVisual(input: EvaluateInput, ctx?: EvaluateVisualC
   const diffBuffer = PNG.sync.write(diffPng)
   const diffImageDataUrl = `data:image/png;base64,${diffBuffer.toString("base64")}`
 
-  ctx?.emit?.({ phase: "ssim" })
   const grayOriginal = toGrayscale(original)
   const grayRendered = toGrayscale(rendered)
   const ssimResult = ssim(
@@ -185,7 +173,6 @@ export async function evaluateVisual(input: EvaluateInput, ctx?: EvaluateVisualC
   )
   const ssimScore = ssimResult.mssim
 
-  ctx?.emit?.({ phase: "score" })
   let overallScore = Math.round(ssimScore * 50 + (100 - pixelDiffPercent) * 0.5)
 
   if (!dimensionsMatch) {
