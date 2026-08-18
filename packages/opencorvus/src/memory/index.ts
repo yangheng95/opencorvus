@@ -1,8 +1,10 @@
+import { Token } from "@/util/token"
 import { Database, and, desc, eq, sql } from "@/storage/db"
 import { MemoryFileTable, MemoryChunkTable } from "./memory.sql"
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
 import { MemorySearch } from "./search"
+import { isHostOwnedMemoryKind } from "./types"
 import type {
   MemoryChunk as MemoryChunkRecord,
   MemoryFile as MemoryFileRecord,
@@ -50,16 +52,13 @@ export namespace Memory {
       source: row.source,
       kind: row.kind,
       key: row.key ?? undefined,
-      importance: clampMetric(row.importance, DEFAULT_IMPORTANCE[row.kind]),
-      confidence: clampMetric(row.confidence, DEFAULT_CONFIDENCE[row.kind]),
+      importance: MemorySearch.clampScore(row.importance, DEFAULT_IMPORTANCE[row.kind]),
+      confidence: MemorySearch.clampScore(row.confidence, DEFAULT_CONFIDENCE[row.kind]),
       timeCreated: row.time_created,
       timeUpdated: row.time_updated,
     }
   }
 
-  function estimateTokens(text: string) {
-    return Math.ceil(text.length / 4)
-  }
 
   function splitChunks(markdown: string, maxTokens = 400) {
     const sections = markdown.split(/^(?=## )/m)
@@ -67,7 +66,7 @@ export namespace Memory {
     for (const section of sections) {
       const trimmed = section.trim()
       if (!trimmed) continue
-      if (estimateTokens(trimmed) <= maxTokens) {
+      if (Token.estimate(trimmed) <= maxTokens) {
         chunks.push(trimmed)
         continue
       }
@@ -75,7 +74,7 @@ export namespace Memory {
       let current = ""
       for (const para of paragraphs) {
         const next = current ? current + "\n\n" + para : para
-        if (estimateTokens(next) > maxTokens && current) {
+        if (Token.estimate(next) > maxTokens && current) {
           chunks.push(current)
           current = para
           continue
@@ -85,11 +84,6 @@ export namespace Memory {
       if (current) chunks.push(current)
     }
     return chunks.length > 0 ? chunks : [markdown.trim()]
-  }
-
-  function clampMetric(value: number | undefined, defaultValue: number) {
-    if (typeof value !== "number" || Number.isNaN(value)) return defaultValue
-    return Math.max(0, Math.min(100, Math.round(value)))
   }
 
   function ftsInsert(db: Database.TxOrDb, chunkId: string, projectId: string, content: string) {
@@ -279,7 +273,7 @@ export namespace Memory {
     confidence?: number
   }) {
     const kind = input.kind ?? "note"
-    if (isProtectedProjectMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
+    if (isHostOwnedMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
     const key = input.key ? normalizeKey(input.key) : undefined
     const id = Identifier.ascending("memory")
     const now = Date.now()
@@ -293,8 +287,8 @@ export namespace Memory {
           source: input.source,
           kind,
           key: key ?? null,
-          importance: clampMetric(input.importance, DEFAULT_IMPORTANCE[kind]),
-          confidence: clampMetric(input.confidence, DEFAULT_CONFIDENCE[kind]),
+          importance: MemorySearch.clampScore(input.importance, DEFAULT_IMPORTANCE[kind]),
+          confidence: MemorySearch.clampScore(input.confidence, DEFAULT_CONFIDENCE[kind]),
         })
         .run(),
     )
@@ -313,8 +307,8 @@ export namespace Memory {
       source: input.source,
       kind,
       key,
-      importance: clampMetric(input.importance, DEFAULT_IMPORTANCE[kind]),
-      confidence: clampMetric(input.confidence, DEFAULT_CONFIDENCE[kind]),
+      importance: MemorySearch.clampScore(input.importance, DEFAULT_IMPORTANCE[kind]),
+      confidence: MemorySearch.clampScore(input.confidence, DEFAULT_CONFIDENCE[kind]),
       timeCreated: now,
       timeUpdated: now,
     } satisfies MemoryFile
@@ -330,7 +324,7 @@ export namespace Memory {
     importance?: number
     confidence?: number
   }) {
-    if (isProtectedProjectMemoryKind(input.kind)) throw new Error(`${input.kind} memory is host-owned`)
+    if (isHostOwnedMemoryKind(input.kind)) throw new Error(`${input.kind} memory is host-owned`)
     const now = Date.now()
     Database.use((db) =>
       db
@@ -340,8 +334,8 @@ export namespace Memory {
           source: input.source,
           kind: input.kind,
           key: input.key ? normalizeKey(input.key) : null,
-          importance: clampMetric(input.importance, DEFAULT_IMPORTANCE[input.kind]),
-          confidence: clampMetric(input.confidence, DEFAULT_CONFIDENCE[input.kind]),
+          importance: MemorySearch.clampScore(input.importance, DEFAULT_IMPORTANCE[input.kind]),
+          confidence: MemorySearch.clampScore(input.confidence, DEFAULT_CONFIDENCE[input.kind]),
           time_updated: now,
         })
         .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
@@ -361,7 +355,7 @@ export namespace Memory {
         .from(MemoryFileTable)
         .where(and(eq(MemoryFileTable.id, fileId), eq(MemoryFileTable.project_id, projectId)))
         .get()
-      if (file && isProtectedProjectMemoryKind(file.kind)) {
+      if (file && isHostOwnedMemoryKind(file.kind)) {
         throw new ProtectedProjectMemoryError({
           message: `Project memory ledger file ${fileId} is read-only`,
           code: "protected_project_memory",
@@ -374,7 +368,7 @@ export namespace Memory {
         .run()
       for (const text of texts) {
         const id = Identifier.ascending("memchunk")
-        const tokenCount = estimateTokens(text)
+        const tokenCount = Token.estimate(text)
         db.insert(MemoryChunkTable)
           .values({
             id,
@@ -417,7 +411,7 @@ export namespace Memory {
   }) {
     return Database.transaction(() => {
       const kind = input.kind ?? "note"
-      if (isProtectedProjectMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
+      if (isHostOwnedMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
       const key = input.key ? normalizeKey(input.key) : undefined
       const existing = key
         ? findByKey({
@@ -622,13 +616,13 @@ export namespace Memory {
     )
     const files = rows.map(fromFile)
     const kinds = input.kinds
-    if (!kinds || kinds.length === 0) return files.filter((row) => !isProtectedProjectMemoryKind(row.kind))
-    return files.filter((row) => kinds.includes(row.kind) && !isProtectedProjectMemoryKind(row.kind))
+    if (!kinds || kinds.length === 0) return files.filter((row) => !isHostOwnedMemoryKind(row.kind))
+    return files.filter((row) => kinds.includes(row.kind) && !isHostOwnedMemoryKind(row.kind))
   }
 
   export function getFile(fileId: string) {
     const row = Database.use((db) => db.select().from(MemoryFileTable).where(eq(MemoryFileTable.id, fileId)).get())
-    if (!row || isProtectedProjectMemoryKind(row.kind)) return null
+    if (!row || isHostOwnedMemoryKind(row.kind)) return null
     return fromFile(row)
   }
 
@@ -640,7 +634,7 @@ export namespace Memory {
         .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
         .get(),
     )
-    if (!row || isProtectedProjectMemoryKind(row.kind)) return null
+    if (!row || isHostOwnedMemoryKind(row.kind)) return null
     return fromFile(row)
   }
 
@@ -651,7 +645,7 @@ export namespace Memory {
         .from(MemoryFileTable)
         .where(eq(MemoryFileTable.id, fileId))
         .get()
-      if (!file || isProtectedProjectMemoryKind(file.kind)) return []
+      if (!file || isHostOwnedMemoryKind(file.kind)) return []
       return db.select().from(MemoryChunkTable).where(eq(MemoryChunkTable.file_id, fileId)).all()
     })
     return rows.map((row) => ({
@@ -672,7 +666,7 @@ export namespace Memory {
         .from(MemoryFileTable)
         .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
         .get()
-      if (!file || isProtectedProjectMemoryKind(file.kind)) return []
+      if (!file || isHostOwnedMemoryKind(file.kind)) return []
       return db
         .select()
         .from(MemoryChunkTable)
@@ -698,7 +692,7 @@ export namespace Memory {
         .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
         .get()
       if (!file) return null
-      if (isProtectedProjectMemoryKind(file.kind)) {
+      if (isHostOwnedMemoryKind(file.kind)) {
         throw new ProtectedProjectMemoryError({
           message: `Project memory ledger file ${input.fileId} is read-only`,
           code: "protected_project_memory",
@@ -719,6 +713,3 @@ export namespace Memory {
   }
 }
 
-function isProtectedProjectMemoryKind(kind: Memory.Kind) {
-  return kind === "user_message" || kind === "project_context"
-}

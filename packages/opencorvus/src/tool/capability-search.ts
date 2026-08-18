@@ -1,6 +1,6 @@
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
-import { CapabilityCatalog, CapabilitySearchInput, searchCapabilityCatalog } from "@/capability/catalog"
+import { CapabilityCatalog, CapabilitySearchInput, searchCapabilityCatalog } from "./capability-catalog"
 import { tool as aiTool } from "ai"
 import { createAiSdkToolFromInfo } from "./ai-sdk-adapter"
 import { Tool } from "./tool"

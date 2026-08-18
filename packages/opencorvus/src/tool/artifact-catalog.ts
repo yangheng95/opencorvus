@@ -1,3 +1,4 @@
+import { PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES } from "@opencorvus-ai/plugin"
 import {
   ArtifactJSONValueSchema,
   ArtifactReadInputSchema,
@@ -95,7 +96,9 @@ export class ArtifactPublisherAuthorityError extends Error {
 }
 
 export function assertGenericArtifactPublisherAuthority(artifactType: string) {
-  if (artifactType.startsWith("evolution-lab/")) {
+  // Asked of the ABI that declares those types, not spelled out here: the Host
+  // used to hardcode one plugin's namespace to arbitrate ownership of it.
+  if (PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES.some((namespace) => artifactType.startsWith(namespace))) {
     throw new ArtifactPublisherAuthorityError(artifactType)
   }
 }

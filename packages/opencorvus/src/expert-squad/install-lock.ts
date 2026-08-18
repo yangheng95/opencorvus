@@ -2,7 +2,7 @@ import { Global } from "@/global"
 import { Filesystem } from "@/util/filesystem"
 import { mkdir } from "node:fs/promises"
 import path from "node:path"
-import lockfile from "proper-lockfile"
+import { withProcessLock } from "@/util/process-lock"
 
 export namespace ExpertSquadInstallLock {
   const leaseBrand: unique symbol = Symbol("opencorvus.expert-squad-install-lease")
@@ -21,18 +21,18 @@ export namespace ExpertSquadInstallLock {
     return path.join(Global.Path.config, "expert-squad-install-locks", id)
   }
 
-  async function withProcessLock<T>(id: string, run: (lease: Lease) => Promise<T>): Promise<T> {
+  async function withInstallProcessLock<T>(id: string, run: (lease: Lease) => Promise<T>): Promise<T> {
     const lockTarget = target(id)
     await mkdir(path.dirname(lockTarget), { recursive: true })
-    const release = await lockfile.lock(lockTarget, { realpath: false, retries: crossProcessRetry })
-    const lease = Object.freeze({ id, [leaseBrand]: true }) as Lease
-    activeLeases.add(lease)
-    try {
-      return await run(lease)
-    } finally {
-      activeLeases.delete(lease)
-      await release()
-    }
+    return withProcessLock(lockTarget, { realpath: false, retries: crossProcessRetry }, async () => {
+      const lease = Object.freeze({ id, [leaseBrand]: true }) as Lease
+      activeLeases.add(lease)
+      try {
+        return await run(lease)
+      } finally {
+        activeLeases.delete(lease)
+      }
+    })
   }
 
   export async function run<T>(id: string, operation: (lease: Lease) => Promise<T>): Promise<T> {
@@ -50,7 +50,7 @@ export namespace ExpertSquadInstallLock {
     localQueues.set(key, tail)
     await settledPrevious
     try {
-      return await withProcessLock(id, operation)
+      return await withInstallProcessLock(id, operation)
     } finally {
       finish()
       if (localQueues.get(key) === tail) localQueues.delete(key)

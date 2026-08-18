@@ -11,7 +11,7 @@ import {
 
 import { Env } from "@/env"
 import { abortableIterable } from "@/util/stream-activity"
-import { createToolCallRepair } from "@/session/repair-hint"
+import { createToolCallRepair } from "@/llm/repair-hint"
 import { Log } from "@/util/log"
 import { ProviderLLM } from "@/provider/llm"
 import type { UsagePurpose } from "@/usage/usage.sql"

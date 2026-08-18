@@ -1,8 +1,8 @@
 import { Global } from "../global"
+import { withProcessLock } from "@/util/process-lock"
 import { Log } from "../util/log"
 import path from "path"
 import fs from "fs/promises"
-import lockfile from "proper-lockfile"
 import z from "zod"
 import { Installation } from "../installation"
 import { Flag } from "../flag/flag"
@@ -223,16 +223,13 @@ export namespace ModelsDev {
     if (source === catalogPath() && Flag.OPENCORVUS_MODELS_PATH) return false
     await fs.mkdir(path.dirname(source), { recursive: true })
     return withKeyedLock(catalogWriterLocks, source, async () => {
-      const release = await lockfile.lock(source, { realpath: false })
-      try {
+      return withProcessLock(source, { realpath: false }, async () => {
         const current = parseCatalog(await Filesystem.readJson<unknown>(source), source, false)
         if (current.opencorvus) return false
         const next = parseCatalog(migrateDefaultCatalog(current), source)
         await Filesystem.writeAtomic(source, JSON.stringify(next, null, 2), 0o600)
         return true
-      } finally {
-        await release()
-      }
+      })
     })
   }
 
@@ -244,16 +241,13 @@ export namespace ModelsDev {
     await migrateDefaultCatalogFile()
     await fs.mkdir(path.dirname(source), { recursive: true })
     return withKeyedLock(catalogWriterLocks, source, async () => {
-      const release = await lockfile.lock(source, { realpath: false })
-      try {
+      return withProcessLock(source, { realpath: false }, async () => {
         const current = parseCatalog(await Filesystem.readJson<unknown>(source), source)
         const next = parseCatalog(update(current), source)
         await Filesystem.writeAtomic(source, JSON.stringify(next, null, 2), 0o600)
         ModelsDev.Data.reset()
         return next
-      } finally {
-        await release()
-      }
+      })
     })
   }
 

@@ -9,9 +9,9 @@ import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { SkillManager } from "@/skill/manager"
 import { Instance } from "@/project/instance"
 import { EffectiveConfig } from "@/config/effective"
-import { CapabilityKind, CapabilityRef, CapabilityRefCodec, capabilityRef } from "./ref"
-import type { HarnessProjection } from "./harness-projection"
-import { scoreDiscoveryFields, type DiscoverySearchField } from "./fuzzy"
+import { CapabilityKind, CapabilityRef, CapabilityRefCodec, capabilityRef } from "@/capability/ref"
+import type { HarnessProjection } from "@/capability/harness-projection"
+import { scoreDiscoveryFields, type DiscoverySearchField } from "@/capability/fuzzy"
 
 export const CapabilityCaller = z.enum(["conversation", "mission", "task_scheduler", "task_agent"])
 export type CapabilityCaller = z.infer<typeof CapabilityCaller>

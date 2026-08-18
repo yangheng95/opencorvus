@@ -8,6 +8,9 @@ export const WORK_AGENT_ID = "work" as const
 
 export {
   WORK_ARTIFACT_TOOL_IDS,
+  WORK_ARTIFACT_INSPECT_TOOL_ID,
+  WORK_ARTIFACT_VALIDATE_TOOL_ID,
+  WORK_ARTIFACT_DELIVER_TOOL_ID,
   WORK_ARTIFACT_PARENT_ONLY_TOOL_IDS as WORK_PARENT_ONLY_TOOL_IDS,
 } from "@/work-artifact/profile-registry"
 import { WORK_ARTIFACT_PARENT_ONLY_TOOL_IDS, WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"

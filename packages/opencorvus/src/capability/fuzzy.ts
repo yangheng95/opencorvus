@@ -1,4 +1,5 @@
 import fuzzysort from "fuzzysort"
+import { SEPARATORLESS_FILLER_CHARACTERS, SEPARATORLESS_FILLER_SCRIPT } from "./discovery-filler"
 
 export type DiscoverySearchField = {
   text: string
@@ -49,22 +50,35 @@ const SEPARATORLESS_SCRIPT = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Kataka
 const SEPARATORLESS_RUN_SCORES = [0, 0, 0.15, 0.46, 0.72, 0.86, 0.94] as const
 const SEPARATORLESS_MAX_RUN = SEPARATORLESS_RUN_SCORES.length - 1
 
-let separatorlessRunCacheQuery: string | undefined
-let separatorlessRunCache: Map<number, Set<string>> | undefined
+// The filler table lives in `discovery-filler.ts`: it is language data, not part of this scoring
+// algorithm, and extending it should not mean editing a scoring function.
+const SEPARATORLESS_FILLER_SET = new Set([...SEPARATORLESS_FILLER_CHARACTERS])
 
-// Conversational requests carry function words that no package vocabulary distinguishes: "一个" and
-// "帮我" appear in almost every Chinese sentence, so a run made only of them is evidence of Chinese,
-// not of relevance. Hiragana plays the same grammatical role in Japanese. A run is dropped only when
-// every one of its characters is filler, which keeps compounds such as "个人" or "有效" intact.
-const SEPARATORLESS_FILLER =
-  /^[\p{Script=Hiragana}的了着过是在和与及或也就都还很太更最我你您他她它们请帮把被给让对跟从到向于为之其此该这那哪些个一二三两几有无没不要想需能会可做弄搞份次种位名条张台只样点些]+$/u
-
-function contentRun(run: string): boolean {
-  return SEPARATORLESS_SCRIPT.test(run) && !SEPARATORLESS_FILLER.test(run)
+function fillerCharacter(character: string): boolean {
+  return SEPARATORLESS_FILLER_SET.has(character) || SEPARATORLESS_FILLER_SCRIPT.test(character)
 }
 
-function separatorlessQueryRuns(query: string): Map<number, Set<string>> {
-  if (separatorlessRunCacheQuery === query && separatorlessRunCache) return separatorlessRunCache
+// A run is dropped only when every one of its characters is filler, which keeps compounds such as
+// "个人" or "有效" intact.
+function contentRun(run: string): boolean {
+  if (!SEPARATORLESS_SCRIPT.test(run)) return false
+  for (const character of run) if (!fillerCharacter(character)) return true
+  return false
+}
+
+/**
+ * Character runs of the request, indexed by run length.
+ *
+ * Computed once per scoring call and threaded through the candidate loop. It used to be memoized in
+ * a module-level pair of `let` bindings keyed by the last query string, which made this otherwise
+ * pure module carry process state: two interleaved queries thrashed the single slot back to a full
+ * recompute per candidate, and no caller could scope or reset it.
+ */
+type SeparatorlessRuns = Map<number, Set<string>>
+
+/** Undefined when the request carries no separatorless script, so the candidate loop skips it. */
+function separatorlessQueryRuns(query: string): SeparatorlessRuns | undefined {
+  if (!SEPARATORLESS_SCRIPT.test(query)) return undefined
   const compacted = compact(query)
   const runs = new Map<number, Set<string>>()
   for (let length = 2; length <= SEPARATORLESS_MAX_RUN; length += 1) {
@@ -75,8 +89,6 @@ function separatorlessQueryRuns(query: string): Map<number, Set<string>> {
     }
     if (values.size > 0) runs.set(length, values)
   }
-  separatorlessRunCacheQuery = query
-  separatorlessRunCache = runs
   return runs
 }
 
@@ -87,7 +99,7 @@ function separatorlessQueryRuns(query: string): Map<number, Set<string>> {
 // diluting a request the way whole-query coverage would.
 const SEPARATORLESS_MINIMUM_PAIR_COVERAGE = 0.25
 
-function longestRunAt(runs: Map<number, Set<string>>, candidate: string, start: number): number {
+function longestRunAt(runs: SeparatorlessRuns, candidate: string, start: number): number {
   for (let length = SEPARATORLESS_MAX_RUN; length > 2; length -= 1) {
     if (start + length > candidate.length) continue
     if (runs.get(length)?.has(candidate.slice(start, start + length))) return length
@@ -95,9 +107,8 @@ function longestRunAt(runs: Map<number, Set<string>>, candidate: string, start: 
   return 2
 }
 
-function separatorlessScore(query: string, candidate: string): number {
-  if (!SEPARATORLESS_SCRIPT.test(query)) return 0
-  const runs = separatorlessQueryRuns(query)
+function separatorlessScore(runs: SeparatorlessRuns | undefined, candidate: string): number {
+  if (!runs) return 0
   const pairs = runs.get(2)
   if (!pairs || pairs.size === 0) return 0
   const compacted = compact(candidate)
@@ -150,7 +161,7 @@ function tokenCoverageScore(query: string, candidate: string): number {
   return scores.reduce((sum, score) => sum + score, 0) / scores.length
 }
 
-function scoreField(query: string, rawCandidate: string): number {
+function scoreField(query: string, runs: SeparatorlessRuns | undefined, rawCandidate: string): number {
   const candidate = normalizeDiscoveryText(rawCandidate)
   if (!candidate) return 0
   if (candidate === query) return 1
@@ -163,7 +174,7 @@ function scoreField(query: string, rawCandidate: string): number {
     fuzzyScore(query, candidate),
     tokenCoverageScore(query, candidate) * 0.9,
     bigramDiceCoefficient(query, candidate) * 0.88,
-    separatorlessScore(query, candidate),
+    separatorlessScore(runs, candidate),
   )
 }
 
@@ -183,7 +194,7 @@ export function scoreDocumentField(query: string, rawCandidate: string): number 
   if (!normalizedQuery || !candidate) return 0
   if (candidate.includes(normalizedQuery)) return 0.98
   return Math.max(
-    separatorlessScore(normalizedQuery, candidate),
+    separatorlessScore(separatorlessQueryRuns(normalizedQuery), candidate),
     tokenCoverageScore(normalizedQuery, candidate) * DOCUMENT_TOKEN_DAMPING,
   )
 }
@@ -191,12 +202,13 @@ export function scoreDocumentField(query: string, rawCandidate: string): number 
 export function scoreDiscoveryFields(query: string, fields: readonly DiscoverySearchField[]): number | undefined {
   const normalizedQuery = normalizeDiscoveryText(query)
   if (!normalizedQuery) return undefined
+  const runs = separatorlessQueryRuns(normalizedQuery)
   let best = 0
   for (const field of fields) {
     if (!Number.isFinite(field.weight) || field.weight <= 0 || field.weight > 1) {
       throw new Error(`Discovery field weight must be greater than zero and at most one: ${field.weight}`)
     }
-    best = Math.max(best, scoreField(normalizedQuery, field.text) * field.weight)
+    best = Math.max(best, scoreField(normalizedQuery, runs, field.text) * field.weight)
   }
   if (best < MINIMUM_DISCOVERY_SCORE) return undefined
   return Number(best.toFixed(6))

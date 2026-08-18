@@ -65,20 +65,44 @@ export namespace CapabilityRules {
     return Wildcard.match(permission, rule.permission) && Wildcard.match(pattern, rule.pattern)
   }
 
-  export function evaluate(permission: string, pattern: string, ...rulesets: (Ruleset | undefined)[]): Rule {
-    const match = merge(...rulesets).findLast((rule) => matches(permission, pattern, rule))
-    return match ?? { action: "allow", permission, pattern: "*" }
-  }
-
   const EDIT_TOOLS = new Set(["edit", "write", "patch", "multiedit"])
 
+  /**
+   * The permission a Tool ID draws on; identity for every other subject.
+   *
+   * `Config.Permission` has one `edit` key and no `write` / `patch` /
+   * `multiedit` keys, so those three Tools can only ever be denied through
+   * `edit`. The mapping used to live inside `disabled` alone, which meant
+   * `{ edit: "deny" }` produced opposite verdicts depending on who asked:
+   * `disabled(["write"])` denied, while `evaluate("write", "*")` — the form
+   * `tool/execution-surface.ts` and `skill/eligibility.ts` call, and the one
+   * that actually removes a Tool from the model-visible table — matched no
+   * rule and fell back to allow. It belongs in the single matching entry
+   * point so every caller asks the same question.
+   */
+  function permissionSubject(subject: string): string {
+    return EDIT_TOOLS.has(subject) ? "edit" : subject
+  }
+
+  export function evaluate(permission: string, pattern: string, ...rulesets: (Ruleset | undefined)[]): Rule {
+    const subject = permissionSubject(permission)
+    const match = merge(...rulesets).findLast((rule) => matches(subject, pattern, rule))
+    return match ?? { action: "allow", permission: subject, pattern: "*" }
+  }
+
+  /**
+   * A Tool is disabled when the ruleset denies it for every pattern. That
+   * question is answered by `evaluate` so this module has one matching
+   * semantics: the previous scan here matched the permission alone and then
+   * compared `pattern === "*"` as a literal string, so a blanket rule written
+   * any other way silently failed to disable the Tool while `evaluate` — used
+   * by the very next check in `skill/eligibility.ts` — denied it.
+   */
   export function disabled(tools: string[], ruleset: Ruleset | undefined): Set<string> {
     const result = new Set<string>()
     if (!ruleset) return result
     for (const tool of tools) {
-      const permission = EDIT_TOOLS.has(tool) ? "edit" : tool
-      const rule = ruleset.findLast((candidate) => Wildcard.match(permission, candidate.permission))
-      if (rule?.pattern === "*" && rule.action === "deny") result.add(tool)
+      if (evaluate(tool, "*", ruleset).action === "deny") result.add(tool)
     }
     return result
   }

@@ -146,19 +146,3 @@ export const MetricExecutionEvidence = z.discriminatedUnion("status", [
 ])
 export type MetricExecutionEvidence = z.infer<typeof MetricExecutionEvidence>
 
-/** Materialized per-iteration measurement snapshot. */
-export const IterationSnapshot = z.object({
-  task_id: z.string().min(1),
-  iteration: z.number().int().min(0),
-  aggregate_score: z.number().nullable(),
-  /** {goal_id → score}. JSON text in DB; typed object in memory. */
-  per_goal_score: z.record(z.string(), z.number().nullable()),
-  global_score: z.number().nullable(),
-  delta_vs_prev: z.number().nullable(),
-  novelty_score: z.number().min(0),
-  unmet_target_count: z.number().int().min(0),
-  unmeasured_target_count: z.number().int().min(0),
-  open_counterexamples: z.number().int().min(0),
-  regressed_target_count: z.number().int().min(0),
-})
-export type IterationSnapshot = z.infer<typeof IterationSnapshot>

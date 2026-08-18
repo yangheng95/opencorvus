@@ -1,7 +1,9 @@
+import { Token } from "@/util/token"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Database, and, asc, desc, eq, inArray, lt, or } from "@/storage/db"
 import { MemoryChunkTable, MemoryFileTable } from "./memory.sql"
+import type { HostOwnedMemoryKind } from "./types"
 import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { Message } from "@/session/message"
@@ -159,10 +161,6 @@ function documentChunkID(projectID: string) {
   return Identifier.deterministic("memchunk", `project-context\0${projectID}`)
 }
 
-function estimateTokens(text: string) {
-  return Math.ceil(text.length / 4)
-}
-
 function ownsOrganizerLease(
   envelope: DocumentEnvelope,
   input: { leaseID: string; expectedRevision: number; time: number },
@@ -198,7 +196,9 @@ function assertFileOwnership(
     id: string
     projectID: string
     source: "user" | "reflection"
-    kind: "user_message" | "project_context"
+    // Restating the pair here made this the third place that decided what the
+    // Host owns; `HOST_OWNED_MEMORY_KINDS` is the one that does.
+    kind: HostOwnedMemoryKind
     key: string
     occurrenceID: string
   },
@@ -516,7 +516,7 @@ function insert(db: Database.TxOrDb, entry: Entry) {
       file_id: id,
       project_id: entry.projectID,
       content: payload,
-      token_count: Math.ceil(payload.length / 4),
+      token_count: Token.estimate(payload),
       time_created: entry.timeCreated,
       time_updated: entry.timeCreated,
     })
@@ -960,7 +960,7 @@ export namespace ProjectMemory {
       })
     }
     const markdown = normalizedMarkdown
-    const tokenCount = estimateTokens(markdown)
+    const tokenCount = Token.estimate(markdown)
     const limit = input.documentTokenLimit ?? DEFAULT_DOCUMENT_TOKEN_LIMIT
     if (!input.markdown.trim() || tokenCount > limit || sanitizeText(markdown) !== markdown) {
       throw new ProjectMemoryInvariantError({

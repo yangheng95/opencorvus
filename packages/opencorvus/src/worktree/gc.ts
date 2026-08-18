@@ -100,7 +100,6 @@ export namespace WorktreeGC {
       id: "worktree.gc",
       interval: GC_INTERVAL_MS,
       runAtStart: true,
-      scope: "global",
       run: async (signal) => {
         if (running) return
         running = true

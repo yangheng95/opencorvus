@@ -347,10 +347,26 @@ async function workLedgerRowFromCandidate(
   candidate: WorkLedgerTopRowCandidate,
   pendingInteractions: ReadonlyMap<string, number>,
 ) {
-  if (candidate.kind === "project") return workLedgerProjectFromCandidate(candidate)
-  if (candidate.kind === "mission") return workLedgerMissionFromCandidate(candidate, pendingInteractions)
-  if (candidate.kind === "chat") return workLedgerChatFromCandidate(candidate)
-  return workLedgerArchivedTaskFromTaskID(candidate.id, pendingInteractions)
+  // Exhaustive on purpose. The `task` arm used to be an unconditional fallback
+  // after three `if`s, so a fifth candidate kind added to the UNION query would
+  // have compiled and then been read as an archived task — surfacing as
+  // "Archived Work Ledger task candidate missing task row", an error about
+  // something else entirely. `kind` here is a plain literal union rather than a
+  // zod union, so `never` is what makes the compiler ask.
+  switch (candidate.kind) {
+    case "project":
+      return workLedgerProjectFromCandidate(candidate)
+    case "mission":
+      return workLedgerMissionFromCandidate(candidate, pendingInteractions)
+    case "chat":
+      return workLedgerChatFromCandidate(candidate)
+    case "task":
+      return workLedgerArchivedTaskFromTaskID(candidate.id, pendingInteractions)
+    default: {
+      const unhandled: never = candidate.kind
+      throw new Error(`Unhandled Work Ledger candidate kind: ${String(unhandled)}`)
+    }
+  }
 }
 
 async function listWorkLedgerProjection(input: WorkLedgerListInput) {

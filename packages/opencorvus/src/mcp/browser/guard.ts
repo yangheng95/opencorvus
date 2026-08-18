@@ -217,6 +217,8 @@ export const runPointGuard = async (
           risks.push("disabled")
         }
 
+        // 0-1 DOM-match heuristic. Unrelated to every other `confidence` in the
+        // repository despite sharing the name and, with intent analysis, the range.
         return { confidence: clamp01(score), signals: uniq(signals), risks: uniq(risks) }
       }
       const candidateOf = (el: Element): EvalGuardCandidate | null => {

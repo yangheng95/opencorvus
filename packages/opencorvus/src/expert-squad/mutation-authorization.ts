@@ -1,10 +1,10 @@
 import { createHash } from "node:crypto"
-import { Message } from "@/session/message"
-import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
+import { Session } from "@/session"
+import { MessageTable, SessionTable } from "@/session/session.sql"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { TaskRootMessageProvenance } from "@/task-api/task-root-message"
-import { Database, and, asc, eq } from "@/storage/db"
+import { Database, and, eq } from "@/storage/db"
 import type { EvolutionMutationAuthorizationSchema } from "@opencorvus-ai/plugin"
 import type z from "zod"
 
@@ -36,37 +36,31 @@ export function requireEvolutionMutationRootSession(input: {
   return facts
 }
 
-export function requireEvolutionMutationAuthorization(input: {
+/**
+ * Verify the exact visible operator confirmation that authorizes a mutation.
+ *
+ * The facts are read through `Session.messages`, which already decodes rows
+ * into `Message.WithParts`. This function used to select from `session.sql`
+ * itself and then re-run `Message.User.safeParse` / `Message.TextPart.safeParse`
+ * over the raw `data` columns — a second decoder for a shape the Session
+ * module already owns, and one that would keep parsing happily while drifting
+ * from the real one.
+ */
+export async function requireEvolutionMutationAuthorization(input: {
   projectID: string
   taskID: string
   sessionID: string
   messageID: string
   expectedText: string
-}): VerifiedEvolutionMutationAuthorization {
+}): Promise<VerifiedEvolutionMutationAuthorization> {
   requireEvolutionMutationRootSession(input)
-  const facts = Database.use((db) => {
-    const message = db
-      .select({ sessionID: MessageTable.session_id, data: MessageTable.data, timeCreated: MessageTable.time_created })
-      .from(MessageTable)
-      .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
-      .get()
-    const parts = db
-      .select({ id: PartTable.id, messageID: PartTable.message_id, data: PartTable.data })
-      .from(PartTable)
-      .where(eq(PartTable.message_id, input.messageID))
-      .orderBy(asc(PartTable.time_created), asc(PartTable.id))
-      .all()
-    return { message, parts }
-  })
-  if (!facts.message) throw new Error(`Evolution mutation authorization Message ${input.messageID} does not exist`)
-  const user = Message.User.safeParse({
-    ...facts.message.data,
-    id: input.messageID,
-    sessionID: facts.message.sessionID,
-  })
-  if (!user.success || user.data.author !== "user")
+  const message = (await Session.messages({ sessionID: input.sessionID })).find(
+    (candidate) => candidate.info.id === input.messageID,
+  )
+  if (!message) throw new Error(`Evolution mutation authorization Message ${input.messageID} does not exist`)
+  if (message.info.role !== "user" || message.info.author !== "user")
     throw new Error(`Evolution mutation authorization Message ${input.messageID} is not a real user Turn`)
-  const provenance = TaskRootMessageProvenance.safeParse(user.data.extra?.task_root_message)
+  const provenance = TaskRootMessageProvenance.safeParse(message.info.extra?.task_root_message)
   if (
     !provenance.success ||
     provenance.data.taskID !== input.taskID ||
@@ -74,18 +68,12 @@ export function requireEvolutionMutationAuthorization(input: {
     provenance.data.source !== "expert_squad.evolution_authorization"
   )
     throw new Error("Evolution mutation authorization Message does not have exact Task operator provenance")
-  if (facts.parts.length !== 1)
+  if (message.parts.length !== 1)
     throw new Error("Evolution mutation authorization Message must contain exactly one visible confirmation part")
-  const row = facts.parts[0]
-  const part = Message.TextPart.safeParse({
-    ...row.data,
-    id: row.id,
-    sessionID: input.sessionID,
-    messageID: row.messageID,
-  })
-  if (!part.success || part.data.kind !== "user_content" || part.data.source !== "user")
+  const part = message.parts[0]!
+  if (part.type !== "text" || part.kind !== "user_content" || part.source !== "user")
     throw new Error("Evolution mutation authorization Message must contain one exact visible user text part")
-  const visibleText = part.data.text
+  const visibleText = part.text
   if (visibleText !== input.expectedText)
     throw new Error("Evolution mutation authorization Message does not equal the exact visible confirmation text")
   return {
@@ -94,6 +82,6 @@ export function requireEvolutionMutationAuthorization(input: {
     session_id: input.sessionID,
     message_id: input.messageID,
     message_sha256: createHash("sha256").update(Buffer.from(visibleText, "utf8")).digest("hex"),
-    time_created: facts.message.timeCreated,
+    time_created: message.info.time.created,
   }
 }

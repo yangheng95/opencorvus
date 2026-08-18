@@ -78,29 +78,3 @@ export const EngineMetricResultTable = sqliteTable(
   ],
 )
 
-/**
- * Aggregated per-iteration observation snapshot. The Orchestrator may read
- * these facts alongside other context; the row has no scheduling authority.
- * PK (task_id, iteration) — never more than one row per iteration.
- */
-export const EngineIterationTable = sqliteTable(
-  "engine_iteration",
-  {
-    task_id: text()
-      .notNull()
-      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
-    iteration: integer().notNull(),
-    aggregate_score: real(),
-    /** JSON encoded {goal_id → score} map. */
-    per_goal_score_json: text({ mode: "json" }).$type<Record<string, number | null>>().notNull(),
-    global_score: real(),
-    delta_vs_prev: real(),
-    novelty_score: real().notNull(),
-    unmet_target_count: integer().notNull(),
-    unmeasured_target_count: integer().notNull(),
-    open_counterexamples: integer().notNull(),
-    regressed_target_count: integer().notNull(),
-    ...Timestamps,
-  },
-  (table) => [primaryKey({ columns: [table.task_id, table.iteration] })],
-)
