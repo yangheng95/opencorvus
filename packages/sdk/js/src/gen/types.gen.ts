@@ -20926,6 +20926,20 @@ export type PanelMessageData = {
   url: "/panel/message"
 }
 
+export type PanelMessageErrors = {
+  /**
+   * Mission execution is owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
+}
+
+export type PanelMessageError = PanelMessageErrors[keyof PanelMessageErrors]
+
 export type PanelMessageResponses = {
   /**
    * Panel message handled
@@ -21024,6 +21038,20 @@ export type PanelMessageStreamData = {
   }
   url: "/panel/message/stream"
 }
+
+export type PanelMessageStreamErrors = {
+  /**
+   * Mission execution is owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
+}
+
+export type PanelMessageStreamError = PanelMessageStreamErrors[keyof PanelMessageStreamErrors]
 
 export type PanelMessageStreamResponses = {
   /**
@@ -22873,6 +22901,15 @@ export type SessionCreateErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
 }
 
 export type SessionCreateError = SessionCreateErrors[keyof SessionCreateErrors]
@@ -23023,6 +23060,12 @@ export type SessionDeleteErrors = {
         data: {
           [key: string]: unknown
         }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
         name: "TaskCancellationIncompleteError"
       }
     | {
@@ -23148,6 +23191,15 @@ export type SessionUpdateErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
 }
 
 export type SessionUpdateError = SessionUpdateErrors[keyof SessionUpdateErrors]
@@ -23197,14 +23249,21 @@ export type SessionAbortErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Conflict
+   * Session abort conflicts with Mission or Task lifecycle authority
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskCancellationIncompleteError"
+      }
 }
 
 export type SessionAbortError = SessionAbortErrors[keyof SessionAbortErrors]
@@ -23321,6 +23380,15 @@ export type SessionCommandErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
 }
 
 export type SessionCommandError = SessionCommandErrors[keyof SessionCommandErrors]
@@ -24552,6 +24620,20 @@ export type SessionForkData = {
   url: "/session/{sessionID}/fork"
 }
 
+export type SessionForkErrors = {
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
+}
+
+export type SessionForkError = SessionForkErrors[keyof SessionForkErrors]
+
 export type SessionForkResponses = {
   /**
    * 200
@@ -24603,6 +24685,15 @@ export type SessionInitErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
 }
 
 export type SessionInitError = SessionInitErrors[keyof SessionInitErrors]
@@ -25258,6 +25349,15 @@ export type SessionShellErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
 }
 
 export type SessionShellError = SessionShellErrors[keyof SessionShellErrors]
@@ -25376,6 +25476,15 @@ export type SessionSummarizeErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution and lifecycle are owned by the canonical Mission API
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionSessionAuthorityError"
+  }
 }
 
 export type SessionSummarizeError = SessionSummarizeErrors[keyof SessionSummarizeErrors]

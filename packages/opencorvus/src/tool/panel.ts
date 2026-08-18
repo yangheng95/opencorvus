@@ -40,6 +40,7 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
+import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
 
 import { ChannelId } from "@/channel/catalog"
 import { ControlPromptContext } from "@/control/prompt"
@@ -1418,6 +1419,8 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
       }
       case "fork_session": {
+        const target = await Session.getInProject({ sessionID: params.sessionID, projectID: Instance.project.id })
+        assertPublicSessionOperationAuthority(target, "session.fork")
         const session = await Session.fork({ sessionID: params.sessionID })
         return {
           title: "Session forked",
@@ -1438,6 +1441,8 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
       }
       case "delete_session": {
+        const target = await Session.getInProject({ sessionID: params.sessionID, projectID: Instance.project.id })
+        assertPublicSessionOperationAuthority(target, "session.delete")
         const deletionIdentity = await panelMutationIdentity(ctx, actor, "delete_session")
         await EngineService.deleteSession(params.sessionID, {
           deleteTasks: true,

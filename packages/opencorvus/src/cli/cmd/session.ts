@@ -13,6 +13,7 @@ import * as prompts from "@clack/prompts"
 import { which } from "@/util/which"
 import { EngineService } from "@/task-api"
 import { randomUUID } from "node:crypto"
+import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
 
 function pagerCmd(): string[] {
   const lessOptions = ["-R", "-S"]
@@ -47,6 +48,12 @@ export const SessionCommand = cmd({
   builder: (yargs: Argv) => yargs.command(SessionListCommand).command(SessionDeleteCommand).demandCommand(),
   async handler() {},
 })
+
+export function assertSessionDeleteTargets(targets: Session.Info[]): void {
+  for (const target of targets) {
+    assertPublicSessionOperationAuthority(target, "session.delete")
+  }
+}
 
 export const SessionDeleteCommand = cmd({
   command: "delete [sessionID]",
@@ -122,6 +129,8 @@ export const SessionDeleteCommand = cmd({
         UI.println("No sessions selected")
         return
       }
+
+      assertSessionDeleteTargets(targets)
 
       if (!args.yes) {
         const message =

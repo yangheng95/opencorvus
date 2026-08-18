@@ -359,7 +359,9 @@ import type {
   PanelKnowledgeMemoryGetResponses,
   PanelKnowledgeMemoryListResponses,
   PanelKnowledgeMemorySearchResponses,
+  PanelMessageErrors,
   PanelMessageResponses,
+  PanelMessageStreamErrors,
   PanelMessageStreamResponse,
   PanelMessageStreamResponses,
   Part as Part2,
@@ -465,6 +467,7 @@ import type {
   SessionDiffResponses,
   SessionEventsResponse,
   SessionEventsResponses,
+  SessionForkErrors,
   SessionForkResponses,
   SessionGetErrors,
   SessionGetResponses,
@@ -9606,7 +9609,11 @@ export class Message extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).sse.post<PanelMessageStreamResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).sse.post<
+      PanelMessageStreamResponses,
+      PanelMessageStreamErrors,
+      ThrowOnError
+    >({
       url: "/panel/message/stream",
       ...options,
       ...params,
@@ -9758,7 +9765,7 @@ export class Panel extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<PanelMessageResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<PanelMessageResponses, PanelMessageErrors, ThrowOnError>({
       url: "/panel/message",
       ...options,
       ...params,
@@ -11607,7 +11614,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Send command
    *
-   * Send a new command to a standalone, Mission, or Coding Assistant session for execution by the AI assistant. Projected worker guidance uses the task-scoped operator-steer route.
+   * Send a new command to a standalone or Coding Assistant session for execution by the AI assistant. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.
    */
   public command<ThrowOnError extends boolean = false>(
     parameters: {
@@ -11779,7 +11786,7 @@ export class Session4 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<SessionForkResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<SessionForkResponses, SessionForkErrors, ThrowOnError>({
       url: "/session/{sessionID}/fork",
       ...options,
       ...params,
@@ -11867,7 +11874,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Send message
    *
-   * Create and send a new message to a standalone, Mission, or Coding Assistant session, waiting until assistant output is complete. Projected worker guidance uses the task-scoped operator-steer route.
+   * Create and send a new message to a standalone or Coding Assistant session, waiting until assistant output is complete. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.
    */
   public prompt<ThrowOnError extends boolean = false>(
     parameters: {
@@ -11985,7 +11992,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Run shell command
    *
-   * Execute a shell command within a standalone, Mission, or Coding Assistant session context and return the AI's response. Projected worker guidance uses the task-scoped operator-steer route.
+   * Execute a shell command within a standalone or Coding Assistant session context and return the AI's response. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.
    */
   public shell<ThrowOnError extends boolean = false>(
     parameters: {

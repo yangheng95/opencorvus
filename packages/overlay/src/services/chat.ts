@@ -25,6 +25,8 @@ import { conversationSourceDirectory } from "./conversation"
 import { taskOwningDirectory } from "./task-directory"
 import { directoryScopedPath, taskScopedPath } from "./task-path"
 import { requestTaskCancellation } from "./task-cancellation"
+import { abortMission, wakeMission } from "./mission"
+import { workLedgerSessionExecution, type WorkLedgerMissionRow } from "./work-ledger"
 
 // ── Types ──
 
@@ -134,6 +136,17 @@ async function abortChatTargetRemote(target: ChatAbortTarget): Promise<void> {
     })
     return
   }
+  if (target.kind === "mission") {
+    const aborted = await abortMission(
+      { missionID: target.missionID, directory: target.directory },
+      {
+        surface: "overlay.chat_request_stop",
+        reason: "Operator stopped the active Mission chat request",
+      },
+    )
+    if (!aborted) throw new Error(`Mission abort was not accepted: ${target.missionID}`)
+    return
+  }
   await apiJson(
     directoryScopedPath(`session/${encodeURIComponent(target.sessionID)}/abort`, target.directory, "abort session"),
     {
@@ -193,6 +206,16 @@ function sessionPromptParts(text: string, attachments: any[], metadata: any): an
   return parts
 }
 
+function missionExecutionForPrompt(sessionID: string): WorkLedgerMissionRow | null {
+  const execution = workLedgerSessionExecution(sessionID)
+  if (execution?.kind === "mission") return execution
+  const source = boardStore.selectedSource
+  if (source?.kind === "session" && source.id === sessionID && source.sessionKind === "mission") {
+    throw new Error(`Mission Work Ledger identity is unavailable for Session ${sessionID}`)
+  }
+  return null
+}
+
 export async function promptSessionMessage(input: {
   sessionID: string
   directory: string
@@ -205,18 +228,28 @@ export async function promptSessionMessage(input: {
 }): Promise<any> {
   const requestID = crypto.randomUUID()
   const controller = new AbortController()
+  const mission = missionExecutionForPrompt(input.sessionID)
   const request: ChatRequestState = {
     requestID,
     controller,
-    target: {
-      kind: "session",
-      sessionID: input.sessionID,
-      directory: input.directory,
-    },
+    target: mission
+      ? { kind: "mission", missionID: mission.missionID, directory: mission.directory }
+      : { kind: "session", sessionID: input.sessionID, directory: input.directory },
   }
   try {
     setConnectionStatus("online")
     setChatRequest(request)
+    if (mission) {
+      return await wakeMission({
+        missionID: mission.missionID,
+        directory: mission.directory,
+        productPillar: mission.productPillar,
+        text: input.text,
+        attachments: input.attachments,
+        model: input.model ? `${input.model.providerID}/${input.model.modelID}` : currentOpenCorvusModel(),
+        signal: controller.signal,
+      })
+    }
     if (input.promptProfile) {
       await setSessionExpertSquadActive(input.sessionID, input.promptProfile, input.directory)
     }
@@ -240,6 +273,13 @@ export async function promptSessionMessage(input: {
     )
     ingestPersistedConversationMessage(result)
     return result
+  } catch (error) {
+    // A locally aborted request is the successful completion of the operator's
+    // explicit Stop action. The durable Mission/Task/Session cancellation is
+    // dispatched by stopChatRequest; do not surface that local transport abort
+    // as a second, contradictory send failure.
+    if (controller.signal.aborted) return undefined
+    throw error
   } finally {
     if (messageStore.chatRequest?.requestID === request.requestID) {
       setChatRequest(null)

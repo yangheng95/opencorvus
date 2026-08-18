@@ -102,4 +102,4 @@ occurrence for a draft Mission.
       because `visibleExpertSquadIDs` is absent, before either test enters `panel.start_mission`; this unrelated test
       fixture was not changed or masked by a compatibility path.
 - [x] First, second, and third independent review findings implemented; fourth independent review reports no findings.
-- [ ] Commit, upstream merge, final verification, and push complete.
+- [x] Commit, upstream merge, final verification, and push complete.

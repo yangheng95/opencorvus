@@ -59,6 +59,8 @@ import { AppLog } from "../utils/log"
 import { isImplicitProjectDirectory } from "../utils/project-directory"
 import { requestTaskCancellation, type TaskCancellationSurface } from "./task-cancellation"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
+import { wakeMission } from "./mission"
+import { workLedgerSessionExecution } from "./work-ledger"
 
 // ── Types ──
 
@@ -600,6 +602,21 @@ export async function submitMessage(
   if (selectedSource?.kind === "session") {
     const directory = conversationSourceDirectory(selectedSource)
     try {
+      if (selectedSource.sessionKind === "mission") {
+        const mission = workLedgerSessionExecution(selectedSource.id)
+        if (mission?.kind !== "mission") {
+          throw new Error(`Mission Work Ledger identity is unavailable for Session ${selectedSource.id}`)
+        }
+        return await wakeMission({
+          missionID: mission.missionID,
+          directory: mission.directory,
+          productPillar: mission.productPillar,
+          text,
+          attachments,
+          model: currentOpenCorvusModel(),
+          signal: controller.signal,
+        })
+      }
       const result = await apiJson(
         directoryScopedPath(
           `session/${encodeURIComponent(selectedSource.id)}/message`,

@@ -184,23 +184,23 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | Method | Path | Summary | operationId |
 |---|---|---|---|
 | GET | `/session` | List sessions | `session.list` |
-| POST | `/session` | Create session Body: `kind`, `metadata`, `parentID`, `permission`, `title`; Errors: `BadRequestError`. | `session.create` |
+| POST | `/session` | Create session Body: `kind`, `metadata`, `parentID`, `permission`, `title`; Errors: `BadRequestError`, `MissionSessionAuthorityError`. | `session.create` |
 | GET | `/session/global` | List sessions across projects Errors: `BadRequestError`. | `session.listGlobal` |
 | GET | `/session/status` | Get session status Errors: `BadRequestError`. | `session.status` |
-| DELETE | `/session/{sessionID}` | Delete session Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskBoundSessionDeletionError`, `TaskCancellationIncompleteError`, `UnknownError`. | `session.delete` |
+| DELETE | `/session/{sessionID}` | Delete session Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskBoundSessionDeletionError`, `TaskCancellationIncompleteError`, `UnknownError`. | `session.delete` |
 | GET | `/session/{sessionID}` | Get session Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.get` |
-| PATCH | `/session/{sessionID}` | Update session Body: `time`, `title`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.update` |
-| POST | `/session/{sessionID}/abort` | Abort session Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
+| PATCH | `/session/{sessionID}` | Update session Body: `time`, `title`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.update` |
+| POST | `/session/{sessionID}/abort` | Abort session Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
-| POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.command` |
+| POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.command` |
 | GET | `/session/{sessionID}/config` | Get session effective configuration Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay Body: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
 | GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
-| POST | `/session/{sessionID}/fork` | Fork session Body: `messageID`. | `session.fork` |
-| POST | `/session/{sessionID}/init` | Initialize session Body: `messageID`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.init` |
+| POST | `/session/{sessionID}/fork` | Fork session Body: `messageID`; Errors: `MissionSessionAuthorityError`. | `session.fork` |
+| POST | `/session/{sessionID}/init` | Initialize session Body: `messageID`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.init` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}` | Read session interactive artifact Errors: `BadRequestError`, `InteractiveArtifactCorruptionError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.readSessionArtifact` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request Errors: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
@@ -210,8 +210,8 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/session/{sessionID}/message/{messageID}` | Get message Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | (no summary) Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | (no summary) Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/shell` | Run shell command Body: `agent`, `command`, `model`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.shell` |
-| POST | `/session/{sessionID}/summarize` | Summarize session Body: `auto`, `focus`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.summarize` |
+| POST | `/session/{sessionID}/shell` | Run shell command Body: `agent`, `command`, `model`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.shell` |
+| POST | `/session/{sessionID}/summarize` | Summarize session Body: `auto`, `focus`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.summarize` |
 | GET | `/session/{sessionID}/todo` | Get session todos Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.todo` |
 | GET | `/session/{sessionID}/trace` | Get session AgentTrace events | `session.trace` |
 | GET | `/session/{sessionID}/turn-artifacts` | Project Mission child Task artifacts onto their owning turns Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.turnArtifacts` |
@@ -277,8 +277,8 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/panel/knowledge/memory/search` | Search memories Body: `limit`, `query`. | `panel.knowledge.memory.search` |
 | DELETE | `/panel/knowledge/memory/{id}` | Delete memory file Errors: `LogFileNotFoundError`, `NotFoundError`. | `panel.knowledge.memory.delete` |
 | GET | `/panel/knowledge/memory/{id}` | Get memory file content (all chunks) Errors: `LogFileNotFoundError`, `NotFoundError`. | `panel.knowledge.memory.get` |
-| POST | `/panel/message` | Handle desktop panel message Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `panel.message` |
-| POST | `/panel/message/stream` | Handle desktop panel message with streaming Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `panel.message.stream` |
+| POST | `/panel/message` | Handle desktop panel message Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`; Errors: `MissionSessionAuthorityError`. | `panel.message` |
+| POST | `/panel/message/stream` | Handle desktop panel message with streaming Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`; Errors: `MissionSessionAuthorityError`. | `panel.message.stream` |
 
 ### Expert Squad
 

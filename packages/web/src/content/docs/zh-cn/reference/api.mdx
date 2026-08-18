@@ -184,23 +184,23 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
 | GET | `/session` | List sessions | `session.list` |
-| POST | `/session` | Create session 请求体: `kind`, `metadata`, `parentID`, `permission`, `title`; 错误: `BadRequestError`. | `session.create` |
+| POST | `/session` | Create session 请求体: `kind`, `metadata`, `parentID`, `permission`, `title`; 错误: `BadRequestError`, `MissionSessionAuthorityError`. | `session.create` |
 | GET | `/session/global` | List sessions across projects 错误: `BadRequestError`. | `session.listGlobal` |
 | GET | `/session/status` | Get session status 错误: `BadRequestError`. | `session.status` |
-| DELETE | `/session/{sessionID}` | Delete session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskBoundSessionDeletionError`, `TaskCancellationIncompleteError`, `UnknownError`. | `session.delete` |
+| DELETE | `/session/{sessionID}` | Delete session 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskBoundSessionDeletionError`, `TaskCancellationIncompleteError`, `UnknownError`. | `session.delete` |
 | GET | `/session/{sessionID}` | Get session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.get` |
-| PATCH | `/session/{sessionID}` | Update session 请求体: `time`, `title`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.update` |
-| POST | `/session/{sessionID}/abort` | Abort session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
+| PATCH | `/session/{sessionID}` | Update session 请求体: `time`, `title`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.update` |
+| POST | `/session/{sessionID}/abort` | Abort session 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
-| POST | `/session/{sessionID}/command` | Send command 请求体: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.command` |
+| POST | `/session/{sessionID}/command` | Send command 请求体: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.command` |
 | GET | `/session/{sessionID}/config` | Get session effective configuration 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay 请求体: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
 | GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
-| POST | `/session/{sessionID}/fork` | Fork session 请求体: `messageID`. | `session.fork` |
-| POST | `/session/{sessionID}/init` | Initialize session 请求体: `messageID`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.init` |
+| POST | `/session/{sessionID}/fork` | Fork session 请求体: `messageID`; 错误: `MissionSessionAuthorityError`. | `session.fork` |
+| POST | `/session/{sessionID}/init` | Initialize session 请求体: `messageID`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.init` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}` | Read session interactive artifact 错误: `BadRequestError`, `InteractiveArtifactCorruptionError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.readSessionArtifact` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request 错误: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
@@ -210,8 +210,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/message/{messageID}` | Get message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.shell` |
-| POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.summarize` |
+| POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.shell` |
+| POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.summarize` |
 | GET | `/session/{sessionID}/todo` | Get session todos 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.todo` |
 | GET | `/session/{sessionID}/trace` | Get session AgentTrace events | `session.trace` |
 | GET | `/session/{sessionID}/turn-artifacts` | Project Mission child Task artifacts onto their owning turns 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.turnArtifacts` |
@@ -277,8 +277,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/panel/knowledge/memory/search` | Search memories 请求体: `limit`, `query`. | `panel.knowledge.memory.search` |
 | DELETE | `/panel/knowledge/memory/{id}` | Delete memory file 错误: `LogFileNotFoundError`, `NotFoundError`. | `panel.knowledge.memory.delete` |
 | GET | `/panel/knowledge/memory/{id}` | Get memory file content (all chunks) 错误: `LogFileNotFoundError`, `NotFoundError`. | `panel.knowledge.memory.get` |
-| POST | `/panel/message` | Handle desktop panel message 请求体: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `panel.message` |
-| POST | `/panel/message/stream` | Handle desktop panel message with streaming 请求体: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `panel.message.stream` |
+| POST | `/panel/message` | Handle desktop panel message 请求体: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`; 错误: `MissionSessionAuthorityError`. | `panel.message` |
+| POST | `/panel/message/stream` | Handle desktop panel message with streaming 请求体: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`; 错误: `MissionSessionAuthorityError`. | `panel.message.stream` |
 
 ### Expert Squad
 

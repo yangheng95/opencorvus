@@ -68,7 +68,11 @@ import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { resolveSessionActivityStatus, resolveSessionLifecycleSnapshot } from "@/session/lifecycle"
 import { assertActiveProjectSession, getActiveProjectSession } from "../active-project-session"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
-import { applyMissionControlPromptOverlay } from "@/mission/session"
+import {
+  assertPublicSessionCreateAuthority,
+  assertPublicSessionOperationAuthority,
+  type MissionPublicSessionOperation,
+} from "@/mission/public-session-authority"
 import { Question } from "@/question"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
@@ -87,6 +91,10 @@ import {
 } from "@/conversation/history-window"
 
 const log = Log.create({ service: "server" })
+const MissionSessionAuthorityConflict = namedErrorResponse(
+  "Mission execution and lifecycle are owned by the canonical Mission API",
+  "MissionSessionAuthorityError",
+)
 
 export function latestSummarizableUser(messages: Message.WithParts[]): Message.User | undefined {
   return messages.findLast(
@@ -264,8 +272,13 @@ async function validatedRightSidebarConversationTaskID(session: Session.Info): P
   return taskID
 }
 
-async function preparePublicSessionPrompt(sessionID: string, prompt: SessionPromptRouteBody) {
+async function preparePublicSessionPrompt(
+  sessionID: string,
+  prompt: SessionPromptRouteBody,
+  operation: Extract<MissionPublicSessionOperation, "session.prompt" | "session.prompt_async">,
+) {
   const session = await getActiveProjectSession(sessionID)
+  assertPublicSessionOperationAuthority(session, operation)
   const rejection = projectedWorkerPublicPromptRejection(sessionID)
   if (rejection) {
     return {
@@ -302,15 +315,12 @@ async function preparePublicSessionPrompt(sessionID: string, prompt: SessionProm
       publicSessionPromptIdentity,
     },
   }
-  const overlaidPrompt =
-    session.kind === "mission"
-      ? applyMissionControlPromptOverlay(authoredPrompt)
-      : isRightSidebarConversationSession(session)
-        ? applyRightSidebarConversationPromptOverlay(authoredPrompt, {
-            experience: rightSidebarConversationExperience(session)!,
-            taskID: await validatedRightSidebarConversationTaskID(session),
-          })
-        : authoredPrompt
+  const overlaidPrompt = isRightSidebarConversationSession(session)
+    ? applyRightSidebarConversationPromptOverlay(authoredPrompt, {
+        experience: rightSidebarConversationExperience(session)!,
+        taskID: await validatedRightSidebarConversationTaskID(session),
+      })
+    : authoredPrompt
   const identity = await resolveSessionMessageIdentity({
     session,
     requestedAgentID:
@@ -1130,6 +1140,7 @@ export const SessionRoutes = lazy(() =>
         operationId: "session.create",
         responses: {
           ...errors(400),
+          409: MissionSessionAuthorityConflict,
           200: {
             description: "Successfully created session",
             content: { "application/json": { schema: resolver(Session.Info) } },
@@ -1138,7 +1149,9 @@ export const SessionRoutes = lazy(() =>
       }),
       validator("json", Session.create.schema),
       async (c) => {
-        const session = await Session.create(c.req.valid("json"))
+        const input = c.req.valid("json")
+        assertPublicSessionCreateAuthority(input.kind)
+        const session = await Session.create(input)
         return c.json(session)
       },
     )
@@ -1156,6 +1169,7 @@ export const SessionRoutes = lazy(() =>
           ...errors(400, 404),
           409: namedErrorResponse(
             "Session execution has not settled or still owns a Task",
+            "MissionSessionAuthorityError",
             "TaskCancellationIncompleteError",
             "TaskBoundSessionDeletionError",
           ),
@@ -1181,7 +1195,8 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const projectID = PersistedProjectContext.currentProject().id
-        await Session.getInProject({ sessionID, projectID })
+        const session = await Session.getInProject({ sessionID, projectID })
+        assertPublicSessionOperationAuthority(session, "session.delete")
         await EngineService.deleteSession(sessionID, {
           deleteTasks: c.req.valid("query").deleteTasks === true,
           projectID,
@@ -1209,6 +1224,7 @@ export const SessionRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(Session.Info) } },
           },
           ...errors(400, 404),
+          409: MissionSessionAuthorityConflict,
         },
       }),
       validator(
@@ -1233,6 +1249,9 @@ export const SessionRoutes = lazy(() =>
         const updates = c.req.valid("json")
 
         let session = await getActiveProjectSession(sessionID)
+        if (updates.time?.archived !== undefined) {
+          assertPublicSessionOperationAuthority(session, "session.archive")
+        }
         if (updates.title !== undefined) {
           session = await Session.setTitle({ sessionID, title: updates.title })
         }
@@ -1254,6 +1273,7 @@ export const SessionRoutes = lazy(() =>
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(z.boolean()) } } },
           ...errors(400, 404),
+          409: MissionSessionAuthorityConflict,
         },
       }),
       validator(
@@ -1266,7 +1286,8 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
-        await assertActiveProjectSession(sessionID)
+        const session = await assertActiveProjectSession(sessionID)
+        assertPublicSessionOperationAuthority(session, "session.init")
         await SessionInitializer.initialize({ ...body, sessionID })
         return c.json(true)
       },
@@ -1279,6 +1300,7 @@ export const SessionRoutes = lazy(() =>
         operationId: "session.fork",
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(Session.Info) } } },
+          409: MissionSessionAuthorityConflict,
         },
       }),
       validator(
@@ -1291,7 +1313,8 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
-        await assertActiveProjectSession(sessionID)
+        const session = await assertActiveProjectSession(sessionID)
+        assertPublicSessionOperationAuthority(session, "session.fork")
         const result = await Session.fork({ ...body, sessionID })
         return c.json(result)
       },
@@ -1307,7 +1330,12 @@ export const SessionRoutes = lazy(() =>
             description: "Aborted session",
             content: { "application/json": { schema: resolver(z.boolean()) } },
           },
-          ...errors(400, 404, 409),
+          ...errors(400, 404),
+          409: namedErrorResponse(
+            "Session abort conflicts with Mission or Task lifecycle authority",
+            "MissionSessionAuthorityError",
+            "TaskCancellationIncompleteError",
+          ),
         },
       }),
       validator(
@@ -1319,6 +1347,7 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const session = await assertActiveProjectSession(sessionID)
+        assertPublicSessionOperationAuthority(session, "session.abort")
         const origin = createExecutionCancellationOrigin({
           actor: "user",
           source: "session.abort",
@@ -1389,6 +1418,7 @@ export const SessionRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(z.boolean()) } },
           },
           ...errors(400, 404),
+          409: MissionSessionAuthorityConflict,
         },
       }),
       validator(
@@ -1410,6 +1440,7 @@ export const SessionRoutes = lazy(() =>
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
         const session = await getActiveProjectSession(sessionID)
+        assertPublicSessionOperationAuthority(session, "session.summarize")
         const result = await SessionContext.provide(session, () =>
           provideInitializedProjectExecution({
             directory: session.directory,
@@ -1613,7 +1644,7 @@ export const SessionRoutes = lazy(() =>
       describeRoute({
         summary: "Send message",
         description:
-          "Create and send a new message to a standalone, Mission, or Coding Assistant session, waiting until assistant output is complete. Projected worker guidance uses the task-scoped operator-steer route.",
+          "Create and send a new message to a standalone or Coding Assistant session, waiting until assistant output is complete. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         operationId: "session.prompt",
         responses: {
           200: {
@@ -1655,7 +1686,7 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
-        const prepared = await preparePublicSessionPrompt(sessionID, body)
+        const prepared = await preparePublicSessionPrompt(sessionID, body, "session.prompt")
         if (!prepared.ok) return c.json(badRequestBody(prepared.message), 400)
         const msg = await executePublicSessionPrompt(sessionID, { sessionID, ...prepared.prompt })
         return c.json(projectPersistedSessionMessage(msg))
@@ -1666,7 +1697,7 @@ export const SessionRoutes = lazy(() =>
       describeRoute({
         summary: "Send command",
         description:
-          "Send a new command to a standalone, Mission, or Coding Assistant session for execution by the AI assistant. Projected worker guidance uses the task-scoped operator-steer route.",
+          "Send a new command to a standalone or Coding Assistant session for execution by the AI assistant. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         operationId: "session.command",
         responses: {
           200: {
@@ -1683,6 +1714,7 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          409: MissionSessionAuthorityConflict,
         },
       }),
       validator(
@@ -1695,7 +1727,8 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
-        await assertActiveProjectSession(sessionID)
+        const session = await assertActiveProjectSession(sessionID)
+        assertPublicSessionOperationAuthority(session, "session.command")
         const rejection = projectedWorkerPublicPromptRejection(sessionID)
         if (rejection) return c.json(badRequestBody(rejection), 400)
         const msg = await SessionPrompt.command({ ...body, sessionID })
@@ -1707,7 +1740,7 @@ export const SessionRoutes = lazy(() =>
       describeRoute({
         summary: "Run shell command",
         description:
-          "Execute a shell command within a standalone, Mission, or Coding Assistant session context and return the AI's response. Projected worker guidance uses the task-scoped operator-steer route.",
+          "Execute a shell command within a standalone or Coding Assistant session context and return the AI's response. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         operationId: "session.shell",
         responses: {
           200: {
@@ -1719,6 +1752,7 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          409: MissionSessionAuthorityConflict,
         },
       }),
       validator(
@@ -1731,7 +1765,8 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
-        await assertActiveProjectSession(sessionID)
+        const session = await assertActiveProjectSession(sessionID)
+        assertPublicSessionOperationAuthority(session, "session.shell")
         const rejection = projectedWorkerPublicPromptRejection(sessionID)
         if (rejection) return c.json(badRequestBody(rejection), 400)
         const msg = await SessionPrompt.shell({ ...body, sessionID })

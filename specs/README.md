@@ -62,6 +62,8 @@ Latest Computer Use scope and Project-delete settlement repair: [`2026-08-14-com
 
 Latest message-source File layout repair: [`2026-08-14-message-source-file-layout-repair.md`](records/2026-08/2026-08-14-message-source-file-layout-repair.md).
 
+Latest Mission public Session authority P0: [`2026-08-14-mission-public-session-authority-p0.md`](records/2026-08/2026-08-14-mission-public-session-authority-p0.md).
+
 Latest Mission wake activation fence P0: [`2026-08-14-mission-wake-activation-fence-p0.md`](records/2026-08/2026-08-14-mission-wake-activation-fence-p0.md).
 
 Latest `v0.0.43-beta` application and website release: [`2026-08-14-v0.0.43-beta-release.md`](records/2026-08/2026-08-14-v0.0.43-beta-release.md).
