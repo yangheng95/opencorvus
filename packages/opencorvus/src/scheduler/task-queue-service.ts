@@ -31,6 +31,11 @@ import {
   RuntimeExecutionSettlement,
   type RuntimeExecutionReservation,
 } from "@/runtime/execution-settlement"
+import {
+  assertPublicSessionOperationAuthority,
+  publicSessionOperationAuthorityError,
+  type MissionPublicSessionOperation,
+} from "@/mission/public-session-authority"
 
 export const TaskQueueEvent = {
   Changed: BusEvent.define(
@@ -159,6 +164,12 @@ export namespace TaskQueueService {
   }
 
   type QueueTaskRow = typeof TaskQueueTable.$inferSelect
+
+  function queueOperation(
+    task: Pick<QueueTaskRow, "metadata">,
+  ): Extract<MissionPublicSessionOperation, "task_queue.prompt" | "task_queue.compaction"> {
+    return task.metadata.kind === "session_compaction" ? "task_queue.compaction" : "task_queue.prompt"
+  }
   type InFlightTask = {
     promise: Promise<void>
     cleanup: () => void
@@ -673,6 +684,9 @@ export namespace TaskQueueService {
     async recoverAt(now: number): Promise<number> {
       return recover(now)
     },
+    async drainReady(reason = "Task Queue positive contract"): Promise<void> {
+      await Promise.all(await drainReadyTasks(reason))
+    },
     async waitForRecoveryCancellation(taskID: string): Promise<string> {
       const deadline = Date.now() + 5_000
       while (Date.now() < deadline) {
@@ -753,7 +767,8 @@ export namespace TaskQueueService {
         source: z.string().optional(),
       })
       .parse(raw)
-    await assertSessionLineageInCurrentProject(input.sessionID)
+    const session = await assertSessionLineageInCurrentProject(input.sessionID)
+    assertPublicSessionOperationAuthority(session, "task_queue.prompt")
     const prompt = stampTaskQueueWakeReason(
       validateQueuedPromptMaterialization(input.sessionID, promptSchema().parse(input.prompt), "new"),
       { queueSource: input.source },
@@ -772,6 +787,7 @@ export namespace TaskQueueService {
   ) {
     const input = ExecuteCompactionInput.parse(raw)
     const session = await assertSessionLineageInCurrentProject(input.sessionID)
+    assertPublicSessionOperationAuthority(session, "task_queue.compaction")
     const source = await compactionSource(input.sessionID, input.sourceUserMessageID)
     const { SessionCompaction } = await import("@/session/compaction")
     await SessionCompaction.create({
@@ -799,8 +815,10 @@ export namespace TaskQueueService {
     )
   }
 
-  export function enqueueCompaction(raw: z.input<typeof EnqueueCompactionInput>) {
+  export async function enqueueCompaction(raw: z.input<typeof EnqueueCompactionInput>) {
     const input = EnqueueCompactionInput.parse(raw)
+    const session = await assertSessionLineageInCurrentProject(input.sessionID)
+    assertPublicSessionOperationAuthority(session, "task_queue.compaction")
     const id = Identifier.ascending("task")
     const now = Date.now()
     const payload = StoredCompactionInput.parse({
@@ -841,6 +859,8 @@ export namespace TaskQueueService {
 
   export async function enqueuePromptAfterPersistingUserMessage(raw: z.input<typeof EnqueuePromptInput>) {
     const input = EnqueuePromptInput.parse(raw)
+    const session = await assertSessionLineageInCurrentProject(input.sessionID)
+    assertPublicSessionOperationAuthority(session, "task_queue.prompt")
     const id = Identifier.ascending("task")
     const prompt = stampTaskQueueWakeReason(
       validateQueuedPromptMaterialization(input.sessionID, promptSchema().parse(input.prompt), "new"),
@@ -1251,10 +1271,15 @@ export namespace TaskQueueService {
       const queued = pending(limit - started.length)
       if (queued.length === 0) break
       for (const item of queued) {
-        const valid = await assertSessionLineageInCurrentProject(item.session_id).catch(async (error) => {
-          await failQueued(item.id, item.session_id, error)
-          return undefined
-        })
+        const valid = await assertSessionLineageInCurrentProject(item.session_id)
+          .then((session) => {
+            assertPublicSessionOperationAuthority(session, queueOperation(item))
+            return session
+          })
+          .catch(async (error) => {
+            await failQueued(item.id, item.session_id, error)
+            return undefined
+          })
         if (!valid) continue
         await beforeQueueClaimReservationForTest?.(item.id)
         assertDrainAuthority(current, generation)
@@ -1343,6 +1368,7 @@ export namespace TaskQueueService {
         .select({
           id: TaskQueueTable.id,
           session_id: TaskQueueTable.session_id,
+          metadata: TaskQueueTable.metadata,
           running_count: runningCount,
         })
         .from(TaskQueueTable)
@@ -1366,7 +1392,11 @@ export namespace TaskQueueService {
         .limit(limit)
         .all()
       const available = Math.max(0, capacity - Number(rows[0]?.running_count ?? capacity))
-      return rows.slice(0, Math.min(limit, available)).map(({ id, session_id }) => ({ id, session_id }))
+      return rows.slice(0, Math.min(limit, available)).map(({ id, session_id, metadata }) => ({
+        id,
+        session_id,
+        metadata,
+      }))
     })
   }
 
@@ -1739,6 +1769,7 @@ export namespace TaskQueueService {
     hooks?: { beforeLoop?: (signal?: AbortSignal) => void | Promise<void>; signal?: AbortSignal },
   ) {
     const session = await assertSessionLineageInCurrentProject(sessionID)
+    assertPublicSessionOperationAuthority(session, "task_queue.prompt")
     return SessionContext.provide(session, () =>
       provideInitializedProjectExecution({
         directory: session.directory,
@@ -1793,10 +1824,11 @@ export namespace TaskQueueService {
       if (!session) continue
       if (!recoveryStillOwnsProgressEpoch(task.id, observedProgressEpoch)) continue
       const inFlight = processInFlight.get(task.id)
-      const cancellationReason = "task timed out while running"
+      const authorityError = publicSessionOperationAuthorityError(session, queueOperation(task))
+      const cancellationReason = authorityError ? message(authorityError) : "task timed out while running"
       const cancellationOrigin = createExecutionCancellationOrigin({
         actor: "scheduler",
-        source: "task.queue_timeout",
+        source: authorityError ? "task.lifecycle" : "task.queue_timeout",
         surface: "scheduler",
         requestID: task.id,
         reason: cancellationReason,
@@ -1827,6 +1859,16 @@ export namespace TaskQueueService {
               error: message(error),
             })
           })
+        continue
+      }
+      if (authorityError) {
+        if (!failQueueRowOnly(task, "running", authorityError, now)) continue
+        recovered += 1
+        log.warn("settled stale Mission queue claim against public Session authority", {
+          id: task.id,
+          sessionID: task.session_id,
+          operation: queueOperation(task),
+        })
         continue
       }
       const failed = Database.transaction((db) => {
@@ -1953,6 +1995,12 @@ export namespace TaskQueueService {
   }
 
   async function fail(task: QueueTaskRow, error: unknown) {
+    const session = await Session.get(task.session_id).catch(() => undefined)
+    const authorityError = session && publicSessionOperationAuthorityError(session, queueOperation(task))
+    if (authorityError) {
+      failQueueRowOnly(task, "running", authorityError)
+      return
+    }
     const now = Date.now()
     const errorMessage = message(error)
     const publishTerminal = SessionStatus.get(task.session_id).type !== "terminal"
@@ -2091,7 +2139,21 @@ export namespace TaskQueueService {
   }
 
   async function failQueued(id: string, sessionID: string, error: unknown) {
-    const now = Date.now()
+    const failed = failQueueRowOnly({ id, session_id: sessionID }, "queued", error)
+    if (!failed) return
+    log.error("queued task rejected before claim", {
+      id,
+      sessionID,
+      error: message(error),
+    })
+  }
+
+  function failQueueRowOnly(
+    task: Pick<QueueTaskRow, "id" | "session_id">,
+    expectedStatus: "queued" | "running",
+    error: unknown,
+    now = Date.now(),
+  ): boolean {
     const failed = Database.transaction((db) => {
       const row = db
         .update(TaskQueueTable)
@@ -2101,21 +2163,22 @@ export namespace TaskQueueService {
           error_message: message(error),
           time_updated: now,
         })
-        .where(and(eq(TaskQueueTable.id, id), eq(TaskQueueTable.status, "queued")))
+        .where(and(eq(TaskQueueTable.id, task.id), eq(TaskQueueTable.status, expectedStatus)))
         .returning({ id: TaskQueueTable.id })
         .get()
       if (row) {
-        publishQueueChangedInTransaction({ queueTaskID: id, sessionID, status: "failed", sequence: now })
+        publishQueueChangedInTransaction({
+          queueTaskID: task.id,
+          sessionID: task.session_id,
+          status: "failed",
+          sequence: now,
+        })
       }
       return row
     })
-    if (!failed) return
-    clearRecoveryTimer(id)
-    log.error("queued task rejected before claim", {
-      id,
-      sessionID,
-      error: message(error),
-    })
+    if (!failed) return false
+    clearRecoveryTimer(task.id)
+    return true
   }
 
   function touch(id: string) {

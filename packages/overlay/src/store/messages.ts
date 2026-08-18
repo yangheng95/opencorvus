@@ -3,6 +3,7 @@ import { createStore } from "solid-js/store"
 export type ChatAbortTarget =
   | { kind: "session"; sessionID: string; directory: string }
   | { kind: "task"; taskID: string; directory: string }
+  | { kind: "mission"; missionID: string; directory: string }
 
 export interface ChatRequestState {
   requestID: string

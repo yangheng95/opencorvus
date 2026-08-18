@@ -70519,6 +70519,33 @@
               }
             },
             "description": "Panel message handled"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution is owned by the canonical Mission API"
           }
         },
         "summary": "Handle desktop panel message",
@@ -70850,6 +70877,33 @@
               }
             },
             "description": "Streaming panel message events"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution is owned by the canonical Mission API"
           }
         },
         "summary": "Handle desktop panel message with streaming",
@@ -75115,6 +75169,33 @@
               }
             },
             "description": "Bad request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Create session",
@@ -75420,6 +75501,26 @@
               "application/json": {
                 "schema": {
                   "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
                     {
                       "properties": {
                         "data": {
@@ -75755,6 +75856,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Update session",
@@ -75865,28 +75993,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskCancellationIncompleteError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Conflict"
+            "description": "Session abort conflicts with Mission or Task lifecycle authority"
           }
         },
         "summary": "Abort session",
@@ -76012,7 +76164,7 @@
     },
     "/session/{sessionID}/command": {
       "post": {
-        "description": "Send a new command to a standalone, Mission, or Coding Assistant session for execution by the AI assistant. Projected worker guidance uses the task-scoped operator-steer route.",
+        "description": "Send a new command to a standalone or Coding Assistant session for execution by the AI assistant. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         "operationId": "session.command",
         "parameters": [
           {
@@ -76464,6 +76616,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Send command",
@@ -81642,6 +81821,33 @@
               }
             },
             "description": "200"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Fork session",
@@ -81775,6 +81981,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Initialize session",
@@ -82321,7 +82554,7 @@
         ]
       },
       "post": {
-        "description": "Create and send a new message to a standalone, Mission, or Coding Assistant session, waiting until assistant output is complete. Projected worker guidance uses the task-scoped operator-steer route.",
+        "description": "Create and send a new message to a standalone or Coding Assistant session, waiting until assistant output is complete. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         "operationId": "session.prompt",
         "parameters": [
           {
@@ -82752,6 +82985,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           },
           "503": {
             "content": {
@@ -83257,7 +83517,7 @@
     },
     "/session/{sessionID}/prompt_async": {
       "post": {
-        "description": "Create and send a new message to a standalone, Mission, or Coding Assistant session asynchronously, starting the session if needed and returning immediately. Projected worker guidance uses the task-scoped operator-steer route.",
+        "description": "Create and send a new message to a standalone or Coding Assistant session asynchronously, starting the session if needed and returning immediately. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         "operationId": "session.prompt_async",
         "parameters": [
           {
@@ -83419,6 +83679,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           },
           "503": {
             "content": {
@@ -83630,7 +83917,7 @@
     },
     "/session/{sessionID}/shell": {
       "post": {
-        "description": "Execute a shell command within a standalone, Mission, or Coding Assistant session context and return the AI's response. Projected worker guidance uses the task-scoped operator-steer route.",
+        "description": "Execute a shell command within a standalone or Coding Assistant session context and return the AI's response. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.",
         "operationId": "session.shell",
         "parameters": [
           {
@@ -84026,6 +84313,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Run shell command",
@@ -84161,6 +84475,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionSessionAuthorityError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
           }
         },
         "summary": "Summarize session",

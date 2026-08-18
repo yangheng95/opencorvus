@@ -15,6 +15,7 @@ import { Instance } from "@/project/instance"
 import { ChannelId } from "@/channel/catalog"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
+import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
 
 const log = Log.create({ service: "control-message" })
 
@@ -27,6 +28,11 @@ type ControlSession = {
 }
 
 export namespace ControlMessage {
+  export async function assertPublicSessionAuthority(raw: z.input<typeof ControlMessageInput>): Promise<void> {
+    const input = ControlMessageInput.parse(raw)
+    await resolveReusableSession(input)
+  }
+
   export async function handle(raw: z.input<typeof ControlMessageInput>) {
     const input = ControlMessageInput.parse(raw)
     const runResult = await run(input)
@@ -55,6 +61,7 @@ async function run(
     input: payload,
     stream: !!onEvent,
   })
+  const reusableControl = await resolveReusableSession(input)
   const model = await resolveModel(input.model)
 
   let control: ControlSession | undefined
@@ -65,7 +72,7 @@ async function run(
   const unsubs: (() => void)[] = []
 
   try {
-    control = await resolveSession(input)
+    control = await resolveSession(input, reusableControl)
     const controlSession = control
     if (streamOptions?.signal.aborted) return { type: "aborted" } satisfies RunResult
     if (streamOptions) SessionPrompt.assertNoOwnedPrompt(controlSession.info.id)
@@ -247,14 +254,23 @@ function serverChannelBinding(input: z.infer<typeof ControlMessageInput>) {
   }
 }
 
-async function resolveSession(input: z.infer<typeof ControlMessageInput>) {
+async function resolveReusableSession(input: z.infer<typeof ControlMessageInput>): Promise<ControlSession | undefined> {
   const reusable = input.surface === "panel" && !input.taskID
   if (reusable && input.sessionID) {
+    const info = await Session.getInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
+    assertPublicSessionOperationAuthority(info, "session.prompt")
     return {
-      info: await Session.getInProject({ sessionID: input.sessionID, projectID: Instance.project.id }),
+      info,
       created: false,
     } satisfies ControlSession
   }
+}
+
+async function resolveSession(
+  input: z.infer<typeof ControlMessageInput>,
+  reusable: ControlSession | undefined,
+): Promise<ControlSession> {
+  if (reusable) return reusable
   const parentID = input.taskID ? taskScope(input.taskID)?.sessionID : undefined
   const info = await Session.create({
     kind: "assistant",

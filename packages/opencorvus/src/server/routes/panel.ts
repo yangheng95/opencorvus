@@ -9,9 +9,13 @@ import { Memory } from "@/memory"
 import { Instance } from "@/project/instance"
 import { Log } from "@/util/log"
 import { NotFoundError } from "@/storage/db"
-import { errors } from "../error"
+import { errors, namedErrorResponse } from "../error"
 
 const log = Log.create({ service: "server.routes.panel" })
+const MissionSessionAuthorityConflict = namedErrorResponse(
+  "Mission execution is owned by the canonical Mission API",
+  "MissionSessionAuthorityError",
+)
 
 function projectId() {
   return Instance.project.id
@@ -61,6 +65,7 @@ export function PanelRoutes() {
           description: "Route a desktop panel chat or button intent through the control message service.",
           operationId: "panel.message",
           responses: {
+            409: MissionSessionAuthorityConflict,
             200: {
               description: "Panel message handled",
               content: { "application/json": { schema: resolver(ControlMessageResult) } },
@@ -79,6 +84,7 @@ export function PanelRoutes() {
           description: "Route a desktop panel message through the control message service, streaming deltas via SSE.",
           operationId: "panel.message.stream",
           responses: {
+            409: MissionSessionAuthorityConflict,
             200: {
               description: "Streaming panel message events",
               content: { "text/event-stream": { schema: resolver(PanelMessageStreamEvent) } },
@@ -88,6 +94,7 @@ export function PanelRoutes() {
         validator("json", ControlMessageInput),
         async (c) => {
           const input = c.req.valid("json")
+          await ControlMessage.assertPublicSessionAuthority(input)
           c.header("X-Accel-Buffering", "no")
           c.header("X-Content-Type-Options", "nosniff")
           return streamProjectSSE(c, Instance.directory, async (stream, bind) => {

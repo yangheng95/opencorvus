@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-14-mission-public-session-authority-p0.md](2026-08-14-mission-public-session-authority-p0.md) removes the generic Session API as a parallel Mission execution/lifecycle control plane and routes Overlay continuations through canonical Mission operations without changing retry policy.
+
 - [2026-08-14-mission-wake-activation-fence-p0.md](2026-08-14-mission-wake-activation-fence-p0.md) closes the bounded handoff between Mission lifecycle admission and physical prompt ownership across operator, scheduler, and startup-recovery wakes without changing retry policy.
 
 - [2026-08-14-v0.0.43-beta-release.md](2026-08-14-v0.0.43-beta-release.md) records the current-main convergence, canonical release-family bump, native Release publication, beta updater promotion, and production website verification for `v0.0.43-beta`.
