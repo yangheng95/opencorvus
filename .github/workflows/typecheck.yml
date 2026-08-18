@@ -20,9 +20,6 @@ jobs:
         with:
           prepare_sdk: "true"
 
-      - name: Enforce SDK v2 imports
-        run: bun run check:sdk-imports
-
       - name: Verify generated SDK and OpenAPI
         run: |
           bun ./script/generate.ts
@@ -33,5 +30,11 @@ jobs:
       - name: Verify generated API docs
         run: bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
 
+      # The root `typecheck` script owns the list of checks. This step used to
+      # restate part of that list — `check:sdk-imports` in its own step and
+      # `turbo run typecheck` here — so `check:ai-runtime` and
+      # `check:expert-squad-types` were in the script but never in CI, and the
+      # tsconfig added to bring `expert-squads/**` under `tsc` was enforced
+      # only on developer machines. One command, one list.
       - name: Run typecheck
-        run: bunx turbo run typecheck
+        run: bun run typecheck
