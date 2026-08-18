@@ -677,10 +677,6 @@
   }
 }
 
-.mission-board-nav-tooltip {
-  width: calc(280px * var(--ui-scale));
-}
-
 .sidebar-codex-action-trailing {
   display: inline-flex;
   grid-column: 3;
@@ -688,48 +684,33 @@
   justify-self: end;
 }
 
-.mission-board-nav-count {
-  min-width: calc(23px * var(--ui-scale));
-  justify-content: center;
-  font-variant-numeric: tabular-nums;
+.mission-board-nav-arrow {
+  color: var(--text-muted);
+  opacity: 0.75;
+  transition:
+    color var(--ui-duration-base) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
 }
 
-.mission-board-nav-summary,
-.mission-board-nav-summary__lanes {
-  display: flex;
-  flex-direction: column;
+.sidebar-codex-action:is(:hover, :focus-within) .mission-board-nav-arrow,
+.sidebar-codex-action[data-active="true"] .mission-board-nav-arrow {
+  color: var(--text-strong);
+  opacity: 1;
 }
 
 .mission-board-nav-summary {
-  gap: var(--ui-gap-sm);
-}
-
-.mission-board-nav-summary > strong {
-  color: var(--text-strong);
-  font-size: var(--ui-font-body);
-}
-
-.mission-board-nav-summary__description {
-  color: var(--text-muted);
-  font-size: var(--ui-font-small);
-  line-height: 1.5;
-}
-
-.mission-board-nav-summary__lanes {
-  gap: calc(6px * var(--ui-scale));
-  padding-top: var(--ui-gap-xs);
-  border-top: var(--oc-border-width) solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(3px * var(--ui-scale)) var(--ui-gap-sm);
 }
 
 .mission-board-nav-summary__lane {
   --mission-board-nav-accent: var(--text-muted);
 
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: inline-flex;
   align-items: center;
-  gap: var(--ui-gap-sm);
+  gap: calc(5px * var(--ui-scale));
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
   font-variant-numeric: tabular-nums;
 }
 
@@ -750,12 +731,13 @@
 }
 
 .mission-board-nav-summary__lane i {
-  width: calc(7px * var(--ui-scale));
-  height: calc(7px * var(--ui-scale));
+  width: calc(6px * var(--ui-scale));
+  height: calc(6px * var(--ui-scale));
   border-radius: var(--oc-radius-pill);
   background: var(--mission-board-nav-accent);
 }
 
 .mission-board-nav-summary__lane strong {
   color: var(--text-strong);
+  font-weight: var(--ui-font-weight-strong);
 }

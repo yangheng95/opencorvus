@@ -37,3 +37,10 @@
   color: var(--text-muted);
   line-height: 1.45;
 }
+
+/* One extra line under the description. Deliberately rule-free: a tooltip this
+   small reads as a panel the moment it is divided into sections. */
+.oc-tooltip-explainer__detail {
+  margin-top: calc(3px * var(--ui-scale));
+  color: var(--text-muted);
+}

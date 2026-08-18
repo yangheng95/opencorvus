@@ -272,7 +272,7 @@ function WorkLedgerNavigationAction(props: {
   label: string
   description: string
   trailing?: JSX.Element
-  tooltipContent?: JSX.Element
+  tooltipDetail?: JSX.Element
   disabled?: boolean
   active?: boolean
   onClick: () => void
@@ -300,20 +300,12 @@ function WorkLedgerNavigationAction(props: {
         </Show>
       </Tooltip.Trigger>
       <Tooltip.Portal>
-        <Show
-          when={props.tooltipContent}
-          fallback={
-            <Tooltip.ExplainerContent
-              data-ui={`${props["data-ui"]}-tooltip`}
-              heading={props.label}
-              description={props.description}
-            />
-          }
-        >
-          <Tooltip.Content data-ui={`${props["data-ui"]}-tooltip`} class="mission-board-nav-tooltip">
-            {props.tooltipContent}
-          </Tooltip.Content>
-        </Show>
+        <Tooltip.ExplainerContent
+          data-ui={`${props["data-ui"]}-tooltip`}
+          heading={props.label}
+          description={props.description}
+          detail={props.tooltipDetail}
+        />
       </Tooltip.Portal>
     </Tooltip.Root>
   )
@@ -839,6 +831,9 @@ function WorkLedgerProjectGroupView(props: {
 
 export function WorkLedger(props: WorkLedgerProps) {
   const missionCounts = createMemo(() => missionBoardCounts(missionBoardStore.records))
+  // A hover hint reports what is happening, not what is not: empty lanes stay silent so the
+  // Mission Board row collapses to the same two-line explainer every other shortcut shows.
+  const busyMissionLanes = createMemo(() => MISSION_BOARD_LANES.filter((lane) => missionCounts()[lane] > 0))
   const [groups, setGroups] = createStore<WorkLedgerGroup[]>([])
   const [oneListGroups, setOneListGroups] = createStore<WorkLedgerGroup[]>([])
   const [loading, setLoading] = createSignal(false)
@@ -1127,27 +1122,21 @@ export function WorkLedger(props: WorkLedgerProps) {
           label={t("mission_board.navigation")}
           description={t("mission_board.navigation_description")}
           active={props.primarySurface === "mission-board"}
-          trailing={
-            <Badge class="mission-board-nav-count" size="sm" tone={missionCounts().running > 0 ? "accent" : "muted"}>
-              {missionCounts().running}
-            </Badge>
-          }
-          tooltipContent={
-            <div class="mission-board-nav-summary">
-              <strong>{t("mission_board.summary.title")}</strong>
-              <span class="mission-board-nav-summary__description">{t("mission_board.navigation_description")}</span>
-              <div class="mission-board-nav-summary__lanes">
-                <For each={MISSION_BOARD_LANES}>
+          trailing={<Icon name="arrow-up-right" size="compact" class="mission-board-nav-arrow" />}
+          tooltipDetail={
+            busyMissionLanes().length > 0 ? (
+              <span class="mission-board-nav-summary">
+                <For each={busyMissionLanes()}>
                   {(lane) => (
                     <span class="mission-board-nav-summary__lane" data-lane={lane}>
                       <i aria-hidden="true" />
-                      <span>{t(`mission_board.lane.${lane}`)}</span>
                       <strong>{missionCounts()[lane]}</strong>
+                      {t(`mission_board.lane.${lane}`)}
                     </span>
                   )}
                 </For>
-              </div>
-            </div>
+              </span>
+            ) : undefined
           }
           onClick={() => void props.onOpenMissionBoard()}
         />
