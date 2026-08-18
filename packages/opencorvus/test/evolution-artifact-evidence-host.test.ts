@@ -1400,9 +1400,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 agent: "user",
                 model: { providerID: "test", modelID: "test" },
               })
+              // Producer Messages live on a child worker Session; a root
+              // Session carries the operator's user Messages only.
+              const trialWorkerSession = await Session.create({
+                kind: "assistant",
+                parentID: trialSession.id,
+                title: "Frozen baseline Trial worker",
+              })
               const trialAssistant = await Session.updateMessage({
                 id: Identifier.ascending("message"),
-                sessionID: trialSession.id,
+                sessionID: trialWorkerSession.id,
                 role: "assistant",
                 author: "target-worker",
                 time: { created: trialStarted, completed: trialCompleted },
@@ -1437,6 +1444,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               }
               return {
                 trialSession,
+                trialWorkerSession,
                 trialTaskID,
                 trialStarted: terminalTrialTask.time_started,
                 trialCompleted: trialLifecycle.timeCompleted,
@@ -1448,6 +1456,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           const {
             trialSession,
+            trialWorkerSession,
             trialTaskID,
             trialStarted,
             trialCompleted,
@@ -1462,7 +1471,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 terminal_occurrence: terminalOccurrence,
                 selected_messages: [
                   { session_id: trialSession.id, message_id: trialUser.id },
-                  { session_id: trialSession.id, message_id: trialAssistant.id },
+                  { session_id: trialWorkerSession.id, message_id: trialAssistant.id },
                 ],
               },
               { host } as never,
@@ -1859,9 +1868,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const importedWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: importedSession.id,
+          title: "Imported campaign evaluation worker",
+        })
         const importedAssistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           role: "assistant",
           author: "evolution-evaluator",
           time: { created: sourceCompleted + 1 },
@@ -1876,13 +1892,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await Session.updatePart({
           id: "part--step-imported-campaign-evaluation",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-imported-campaign-evaluation",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "tool",
           callID: "call-imported-campaign-evaluation",
@@ -1895,7 +1911,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID: importedTaskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, importedTaskID),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           toolCallID: "call-imported-campaign-evaluation",
           toolPartID: "part-imported-campaign-evaluation",
@@ -2681,9 +2697,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const importedWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: importedSession.id,
+          title: "Imported candidate validation worker",
+        })
         const importedAssistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           role: "assistant",
           author: "evolution-safety-auditor",
           time: { created: sourceCompleted + 1 },
@@ -2698,13 +2721,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await Session.updatePart({
           id: "part--step-rehydrate-candidate",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-rehydrate-candidate",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "tool",
           callID: "call-rehydrate-candidate",
@@ -2717,7 +2740,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID: importedTaskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, importedTaskID),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           toolCallID: "call-rehydrate-candidate",
           toolPartID: "part-rehydrate-candidate",
@@ -3055,10 +3078,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const evidenceOwnerWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: evidenceOwnerSession.id,
+          title: "Evolution evidence owner worker",
+        })
         const evidenceOwnerMessageID = "message-evidence-owner-publisher"
         await Session.updateMessage({
           id: evidenceOwnerMessageID,
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           role: "assistant",
           author: "evolution-evaluator",
           time: { created: completed + 1 },
@@ -3106,7 +3136,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               terminal_occurrence: evidence.terminal_occurrence,
               selected_messages: [
                 { session_id: session.id, message_id: message.id },
-                { session_id: session.id, message_id: assistant.id },
+                { session_id: evidenceWorkerSession.id, message_id: assistant.id },
               ],
             },
             {
@@ -3143,13 +3173,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
 
         await Session.updatePart({
           id: "part--step-evidence-owner-publisher",
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           messageID: evidenceOwnerMessageID,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-evidence-owner-publisher",
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           messageID: evidenceOwnerMessageID,
           type: "tool",
           callID: "call-evidence-owner-publisher",
@@ -3162,7 +3192,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID: evidenceOwnerTaskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, evidenceOwnerTaskID),
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           messageID: evidenceOwnerMessageID,
           toolCallID: "call-evidence-owner-publisher",
           toolPartID: "part-evidence-owner-publisher",

@@ -247,16 +247,57 @@ test("rejects replay when persisted Mission receipt provenance is not the strict
     directory: project.path,
     fn: async () => {
       const fixture = await createMissionCallerFixture()
-      const receipt = await recordMissionCallerReceipt({ sessionID: fixture.missionSession.id, status: completed })
-      if (!receipt) throw new Error("Expected Mission receipt")
-      Database.use((db) => {
-        const row = db.select().from(PartTable).where(eq(PartTable.id, receipt.part_id)).get()
-        if (!row) throw new Error("Expected Mission receipt Part")
-        const data = row.data as Record<string, unknown>
-        db.update(PartTable)
-          .set({ data: { ...data, metadata: { ...(data.metadata as object), foreign: true } } as never })
-          .where(eq(PartTable.id, receipt.part_id))
+      // The non-canonical receipt is written as it would already exist, not
+      // produced and then rewritten. A completed assistant Part and the Mission
+      // identity metadata are both immutable at the database, so tampering with
+      // a recorded receipt is refused before this assertion can run — and
+      // refusing it is the guard working. What remains reachable, and what this
+      // test is about, is provenance persisted before the guard existed.
+      const occurrence = missionCallerReceiptOccurrenceIdentity(fixture.missionSession.id)
+      const sentAt = Date.now()
+      Database.transaction((db) => {
+        db.insert(MessageTable)
+          .values({
+            id: occurrence.messageID,
+            session_id: fixture.callerSession.id,
+            data: { role: "assistant", author: "mission", agent: "mission" } as never,
+            time_created: sentAt,
+            time_updated: sentAt,
+          })
           .run()
+        db.insert(PartTable)
+          .values({
+            id: occurrence.partID,
+            message_id: occurrence.messageID,
+            session_id: fixture.callerSession.id,
+            data: {
+              type: "text",
+              text: "Legacy Mission receipt",
+              source: "system",
+              metadata: { foreign: true },
+            } as never,
+            time_created: sentAt,
+            time_updated: sentAt,
+          })
+          .run()
+      })
+      await Session.mergeMetadata({
+        sessionID: fixture.missionSession.id,
+        patch: {
+          // Merging replaces the whole Mission object, so it is carried over
+          // rather than restated: dropping an identity field is what the
+          // immutability trigger refuses, and dropping the caller would leave
+          // nothing for the receipt to be recorded against.
+          mission: {
+            ...(await Session.get(fixture.missionSession.id)).metadata.mission!,
+            receipt: {
+              message_id: occurrence.messageID,
+              part_id: occurrence.partID,
+              terminal_reason: "completed",
+              sent_at: sentAt,
+            },
+          },
+        },
       })
       await expect(
         recordMissionCallerReceipt({ sessionID: fixture.missionSession.id, status: completed }),
