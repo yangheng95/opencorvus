@@ -3,38 +3,9 @@ import {
   HOST_CAPABILITIES,
   type HostCapabilities,
   type HostKind,
+  NATIVE_COMMAND_KINDS,
   type NativeCommandKind,
 } from "../src/services/host-transport"
-
-const NATIVE_COMMAND_KINDS: NativeCommandKind[] = [
-  "open-url",
-  "open-path",
-  "browserPreview.sync",
-  "browserPreview.navigate",
-  "browserPreview.navigateUrl",
-  "browserPreview.close",
-  "browserPreview.destroy",
-  "browserPreview.selection.setEnabled",
-  "browserPreview.selection.take",
-  "browserPreview.currentPage",
-  "browserPreview.setZoom",
-  "clipboard.readText",
-  "settings.load",
-  "settings.save",
-  "server.info",
-  "server.restart",
-  "devtools.toggle",
-  "desktopUpdate.check",
-  "desktopUpdate.download",
-  "desktopUpdate.install",
-  "window.quit",
-  "workspace.pickDir",
-  "workspace.pickFiles",
-  "workspace.openProjectEditor",
-  "notification.permission",
-  "notification.requestPermission",
-  "notification.send",
-]
 
 function supported(capabilities: HostCapabilities): NativeCommandKind[] {
   return NATIVE_COMMAND_KINDS.filter((kind) => capabilities.nativeCommands[kind])
@@ -48,8 +19,9 @@ describe("HostTransport capability contract", () => {
   })
 
   test("capability matrix matches implemented native command surfaces", () => {
-    expect(supported(HOST_CAPABILITIES.tauri)).toEqual(NATIVE_COMMAND_KINDS)
+    expect(supported(HOST_CAPABILITIES.tauri)).toEqual([...NATIVE_COMMAND_KINDS])
     expect(supported(HOST_CAPABILITIES.browser)).toEqual([
+      "clipboard.writeText",
       "settings.load",
       "settings.save",
       "notification.permission",
@@ -59,5 +31,4 @@ describe("HostTransport capability contract", () => {
     expect(HOST_CAPABILITIES.tauri.ui.desktopNotificationsRequirePermission).toBe(true)
     expect(HOST_CAPABILITIES.browser.ui.desktopNotificationsRequirePermission).toBe(true)
   })
-
 })

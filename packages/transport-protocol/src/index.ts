@@ -1069,6 +1069,52 @@ export type NativeCommand =
 
 export type NativeCommandKind = NativeCommand["kind"]
 
+/**
+ * Every NativeCommandKind, in the union's declaration order.
+ *
+ * Each host declares its capability matrix as `Record<NativeCommandKind, boolean>`,
+ * so the compiler already forces every host to answer for every command. This array
+ * is the ordered companion for callers that need to *enumerate* the kinds rather than
+ * look one up. It lives beside the union so that no second, hand-maintained copy has
+ * to be kept in sync: the assertion below turns a forgotten entry into a compile
+ * error instead of a runtime surprise.
+ */
+export const NATIVE_COMMAND_KINDS = [
+  "open-url",
+  "open-path",
+  "browserPreview.sync",
+  "browserPreview.navigate",
+  "browserPreview.navigateUrl",
+  "browserPreview.close",
+  "browserPreview.destroy",
+  "browserPreview.selection.setEnabled",
+  "browserPreview.selection.take",
+  "browserPreview.currentPage",
+  "browserPreview.setZoom",
+  "clipboard.readText",
+  "clipboard.writeText",
+  "settings.load",
+  "settings.save",
+  "server.info",
+  "server.restart",
+  "devtools.toggle",
+  "desktopUpdate.check",
+  "desktopUpdate.download",
+  "desktopUpdate.install",
+  "window.quit",
+  "workspace.pickDir",
+  "workspace.pickFiles",
+  "workspace.openProjectEditor",
+  "notification.permission",
+  "notification.requestPermission",
+  "notification.send",
+] as const satisfies readonly NativeCommandKind[]
+
+type AssertNever<T extends never> = T
+
+/** Compile error when a NativeCommand member is missing from NATIVE_COMMAND_KINDS. */
+type _NativeCommandKindsAreExhaustive = AssertNever<Exclude<NativeCommandKind, (typeof NATIVE_COMMAND_KINDS)[number]>>
+
 function isOptionalPositiveInteger(value: unknown): boolean {
   return value === undefined || (typeof value === "number" && Number.isSafeInteger(value) && value >= 1)
 }

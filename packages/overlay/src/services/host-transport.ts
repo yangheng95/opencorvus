@@ -137,7 +137,7 @@ export type {
   NativeCommandKind,
   ProjectEditorID,
 } from "@opencorvus-ai/transport-protocol"
-export { PROJECT_EDITOR_IDS } from "@opencorvus-ai/transport-protocol"
+export { NATIVE_COMMAND_KINDS, PROJECT_EDITOR_IDS } from "@opencorvus-ai/transport-protocol"
 
 import { PROJECT_EDITOR_IDS } from "@opencorvus-ai/transport-protocol"
 import type { NativeCommand, NativeCommandKind, ProjectEditorID } from "@opencorvus-ai/transport-protocol"
