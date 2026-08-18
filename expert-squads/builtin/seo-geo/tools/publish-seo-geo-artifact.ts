@@ -1,5 +1,5 @@
 import {
-  ArtifactReadLocatorSchema,
+  EngineArtifactLocatorSchema,
   EngineArtifactEnvelopeSchema,
   TaskArtifactResourceSetLocatorSchema,
   tool,
@@ -43,7 +43,10 @@ export default tool({
   args: {
     artifact: SeoGeoPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
+    // Predecessors of this Artifact type are Engine Artifacts. Declaring the
+    // wider read-locator union let a caller express a Task Artifact locator
+    // that readSource would then handle as an Engine Artifact.
+    source_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema),
   },
   async execute(args, context) {
     const parsed = parseSeoGeoArtifact(args.artifact.artifact_type, args.artifact.payload)
