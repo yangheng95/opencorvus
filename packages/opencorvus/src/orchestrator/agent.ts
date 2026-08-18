@@ -76,7 +76,6 @@ import { toolGuard } from "@/util/tool-guard"
 import { createOrchestratorTools } from "./tools"
 import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
-import { readIterationHistory as readHistForPrompt } from "@/metrics/store"
 import { requireTask, terminalTask } from "@/engine"
 import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
@@ -99,7 +98,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { isDeepStrictEqual } from "node:util"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
-import { ORCHESTRATOR_TASK_ERROR_ENVELOPE_MARKER, type OrchestratorTaskErrorEnvelope } from "./error-envelope"
+import type { OrchestratorTaskErrorEnvelope } from "./error-envelope"
 import { assertTaskRootSessionLineage, taskOrchestratorSession } from "./task-session"
 import { orchestratorControlOccurrenceIdentity } from "./control-message-identity"
 
@@ -126,8 +125,10 @@ function serializeOrchestratorTaskError(error: unknown): {
   return {
     envelope,
     message,
-    taskError:
-      `Orchestrator error: ${message}` + `${ORCHESTRATOR_TASK_ERROR_ENVELOPE_MARKER}${JSON.stringify(envelope)}`,
+    // Human- and model-readable only. The JSON envelope that used to be
+    // appended here had no reader anywhere in the repository, so it only ever
+    // added noise to a visible error string.
+    taskError: `Orchestrator error: ${message}`,
   }
 }
 
@@ -671,7 +672,7 @@ export namespace Orchestrator {
         return terminalConversation
           ? [
               ...runtimeParts,
-              `This is a terminal conversation-only Turn for ingress ${terminalConversationAuthority.ingressID}. Answer the visible request or acknowledge the exact coordination request. Keep Task lifecycle unchanged. Do not dispatch product work, create a wait/question, or call Task lifecycle tools. Recoverable follow-up requires the operator's explicit same-Task Retry control.`,
+              `This is a terminal conversation-only Turn for ingress ${terminalConversationAuthority.ingressID}. Answer the visible request or acknowledge the exact coordination request. Keep Task lifecycle unchanged. Do not dispatch product work, create a wait/question, or call Task lifecycle tools. A real new operator message is what opens further work.`,
             ]
           : runtimeParts
       }
@@ -1603,14 +1604,14 @@ async function buildSystemParts(
   }
   ctx.push("## Active Projected Worker Identities")
   ctx.push(
-    "`dispatch_agent.dispatch.target` accepts only the exact agent IDs below. Choose responsibility from each projection's label, description, target schema, and the active package collaboration contract. `base_role` and `dispatch_adapter_id` are template metadata, never aliases or scheduler order.",
+    "`dispatch_agent.dispatch.target` accepts only the exact agent IDs below. Choose responsibility from each projection's label, description, target schema, and the active package collaboration contract. `base_role` and `dispatch_adapter_id` are template metadata, never aliases or scheduler order. `tools` is the exact set each projection can call — read it to know what a worker is able to produce and to tell a capability this Squad lacks from one it holds and was never told to use; it is a capability fact, not a routing key, and never overrides the responsibility the contract assigns.",
   )
   for (const projectedAgent of projectedAgents.toSorted((left, right) =>
     left.identity.agentID.localeCompare(right.identity.agentID),
   )) {
     const adapterFields = DispatchAdapterContractRegistry.inputFieldNames(projectedAgent.identity.dispatchAdapterID)
     ctx.push(
-      `- target=${projectedAgent.identity.agentID}; label=${JSON.stringify(projectedAgent.label)}; description=${JSON.stringify(projectedAgent.description ?? "")}; base_role=${projectedAgent.identity.baseRole}; dispatch_adapter_id=${projectedAgent.identity.dispatchAdapterID}; target_fields=${adapterFields.join(",")}`,
+      `- target=${projectedAgent.identity.agentID}; label=${JSON.stringify(projectedAgent.label)}; description=${JSON.stringify(projectedAgent.description ?? "")}; base_role=${projectedAgent.identity.baseRole}; dispatch_adapter_id=${projectedAgent.identity.dispatchAdapterID}; target_fields=${adapterFields.join(",")}; tools=${projectedAgent.projectedToolIDs.toSorted().join(",")}`,
     )
   }
   ctx.push(renderInitialDispatchContractInstruction())
@@ -1652,33 +1653,9 @@ async function buildSystemParts(
     ctx.push("")
   }
 
-  // ── Metric observations ──
-  // engine_iteration stores measurement snapshots. They remain context beside
-  // review findings and never encode a dispatch, retry, or completion verdict.
-  const iterationHistory = readHistForPrompt(task.id)
-  if (iterationHistory.length > 0) {
-    const RENDER_RECENT = 3
-    const tail = iterationHistory.slice(-RENDER_RECENT)
-    ctx.push("## Metric Observations")
-    ctx.push(`${iterationHistory.length} prior iteration(s). Last ${tail.length}:`)
-    for (const it of tail) {
-      const aggregate = it.aggregate_score === null ? "unmeasured" : it.aggregate_score.toFixed(3)
-      const delta = it.delta_vs_prev === null ? "unmeasured" : it.delta_vs_prev.toFixed(3)
-      ctx.push(
-        `  - iter ${it.iteration}: aggregate=${aggregate} (Δ=${delta}), unmet_targets=${it.unmet_target_count}, unmeasured_targets=${it.unmeasured_target_count}, regressed_targets=${it.regressed_target_count}, open_counterexamples=${it.open_counterexamples}, novelty=${it.novelty_score}`,
-      )
-    }
-    ctx.push("")
-    ctx.push(
-      "These measurements, including unavailable observations, are advisory facts. Interpret them with the Task's " +
-        "expert reports, artifacts, tool results, and operator request; they do not prescribe a workflow outcome.",
-    )
-    ctx.push("")
-  }
-
   // ── Durable Task fact projection ──
   // The describe layer composes the task snapshot from the append-only event
-  // stream (Delivery Slice revisions, engine_iteration, domain artifacts,
+  // stream (Delivery Slice revisions, domain artifacts,
   // decision_log and answered clarifications). It does NOT read
   // persisted presentation progress — terminal facts come from Task/Session
   // evidence directly. This keeps the LLM's

@@ -5,7 +5,7 @@ import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import type { TaskRow } from "@/engine/store"
 import { Log } from "@/util/log"
-import { persistResearchArtifactBestEffort } from "./research-persistence"
+import { persistCompleteResearchBrief, persistPartialResearchBrief } from "./research-persistence"
 import { DeepResearchAgent } from "@/research/agent"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 
@@ -69,12 +69,10 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
           result.sessionID,
           result.finalMessageID,
         )
-        return persistResearchArtifactBestEffort({
+        return persistPartialResearchBrief({
           taskID: dependencies.taskID,
           dispatchID,
           component: "deep-research",
-          operation: "persist-partial-research-brief",
-          delivery: "incomplete",
           sessionID: result.sessionID,
           finalMessageID: result.finalMessageID,
           persist: () =>
@@ -95,12 +93,10 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
         result.sessionID,
         result.brief.metadata.created_for_message_id,
       )
-      return persistResearchArtifactBestEffort({
+      return persistCompleteResearchBrief({
         taskID: dependencies.taskID,
         dispatchID,
         component: "deep-research",
-        operation: "persist-research-brief",
-        delivery: "complete",
         sessionID: result.sessionID,
         finalMessageID: result.brief.metadata.created_for_message_id,
         persist: () =>

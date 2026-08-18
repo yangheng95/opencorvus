@@ -98,6 +98,7 @@ export function createIntegrityReviewStage(dependencies: IntegrityReviewStageDep
         sourceArtifactLocators: provenance.sourceArtifactLocators,
         phase: persistenceRefs.phase,
         review,
+        completenessFindings: verdict.completenessFindings,
       })
     } catch (err) {
       persistenceFailed = true

@@ -19,6 +19,7 @@ import { Database } from "@/storage/db"
 import { persistIntentAnalysisArtifact } from "@/engine/persist"
 import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { IntentAnalysisAgent } from "@/intent-analysis/agent"
+import { clarificationBlocksDispatch } from "@/intent-analysis/types"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 
 const log = Log.create({ service: "analyze-intent-tool" })
@@ -88,7 +89,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
           const extractedSlots = result?.extracted_slots ?? output.facts.slots
           const missingInfo = result?.missing_info ?? output.facts.missing
           const clarifications = result?.clarifications ?? output.facts.clarifications
-          const blockers = clarifications.filter((item) => item.priority === "blocker")
+          const blockers = clarifications.filter((item) => clarificationBlocksDispatch(item.priority))
           let clarificationStatus:
             | "not_required"
             | "rejected"

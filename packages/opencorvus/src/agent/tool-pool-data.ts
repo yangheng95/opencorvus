@@ -77,6 +77,12 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   "cancel_subagent",
   ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
   "publish_interactive_artifact",
+  // The core Orchestrator prompt tells every scheduler to offer squad
+  // evolution when the operator states a durable preference. A prompt that
+  // names a Tool the projection withheld is an instruction the model cannot
+  // follow, so this belongs to the inherited base rather than per-package
+  // grants.
+  "evolve_expert_squad_from_feedback",
 ] as const
 
 export const ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS = [
