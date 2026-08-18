@@ -12,6 +12,14 @@
  *     default. The runner then asked the processor to retry an attempt whose
  *     tools had already executed — structurally impossible — so the operator
  *     saw `ProcessorUnsafeRetryError` and never the real cause.
+ *
+ * Defect 2 was first patched by wrapping this one call site in
+ * `HostProcessingFaultError`. That left the default itself fail-open: every
+ * other deterministic Host invariant in the codebase still classified as
+ * `unknown` and still retried. The policy now grants retryability instead of
+ * assuming it, so `unknown` terminates on the first attempt and the wrapper is
+ * a diagnostic label rather than the only thing standing between an invariant
+ * violation and a retry storm.
  */
 import { afterEach, describe, expect, test } from "bun:test"
 import { DefaultLLMActivityPolicy, withLLMActivity, type LLMActivityEvent } from "@/llm/activity"
@@ -221,17 +229,39 @@ describe("Host faults inside one LLM activity", () => {
     expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "failed", cls: "host_fault" })
   })
 
-  test("still retries an unrecognized provider-side error under the same policy", async () => {
+  test("terminates an unrecognized error on the first attempt instead of assuming it is transient", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+
+    await expect(
+      withLLMActivity(
+        { sessionID: "session-unknown-terminal", provider: "openai", model: "gpt-5.6-terra" },
+        retryingPolicy,
+        new AbortController().signal,
+        async () => {
+          attempts += 1
+          throw new Error("something the classifier does not recognize")
+        },
+        (event) => events.push(event),
+      ),
+    ).rejects.toThrow()
+
+    expect(attempts).toBe(1)
+    expect(events.filter((event) => event.type === "retry")).toEqual([])
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "failed", cls: "unknown" })
+  })
+
+  test("still retries a transport failure the classifier does recognize, under the same policy", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0
 
     const result = await withLLMActivity(
-      { sessionID: "session-unknown-retry", provider: "openai", model: "gpt-5.6-terra" },
+      { sessionID: "session-network-retry", provider: "openai", model: "gpt-5.6-terra" },
       retryingPolicy,
       new AbortController().signal,
       async (run) => {
         attempts += 1
-        if (run.attempt === 0) throw new Error("something the classifier does not recognize")
+        if (run.attempt === 0) throw new Error("fetch failed: ECONNRESET")
         run.bump("text-delta")
         return "recovered"
       },
@@ -240,7 +270,7 @@ describe("Host faults inside one LLM activity", () => {
 
     expect(result).toBe("recovered")
     expect(attempts).toBe(2)
-    expect(events.filter((event) => event.type === "retry")).toMatchObject([{ cls: "unknown" }])
+    expect(events.filter((event) => event.type === "retry")).toMatchObject([{ cls: "network" }])
   })
 
   test("recognizes a Host fault after the activity runner wraps it", () => {

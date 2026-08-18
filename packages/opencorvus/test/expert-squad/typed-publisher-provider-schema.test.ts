@@ -1,13 +1,13 @@
 import { describe, expect, test } from "bun:test"
-import publishCommercialLegalArtifact from "../../../../expert-squads/builtin/commercial-legal/tools/publish-commercial-legal-artifact"
-import publishDataAnalysisArtifact from "../../../../expert-squads/builtin/data-analysis/tools/publish-data-analysis-artifact"
-import publishHrOperationsArtifact from "../../../../expert-squads/builtin/hr-operations/tools/publish-hr-operations-artifact"
-import publishMarketingGrowthArtifact from "../../../../expert-squads/builtin/marketing-growth/tools/publish-marketing-growth-artifact"
-import publishOmnichannelArtifact from "../../../../expert-squads/builtin/omnichannel-distribution/tools/publish-omnichannel-artifact"
-import publishSalesStrategyArtifact from "../../../../expert-squads/builtin/sales-strategy/tools/publish-sales-strategy-artifact"
-import publishSeoGeoArtifact from "../../../../expert-squads/builtin/seo-geo/tools/publish-seo-geo-artifact"
-import publishTaxComplianceArtifact from "../../../../expert-squads/builtin/tax-compliance/tools/publish-tax-compliance-artifact"
-import publishViralContentArtifact from "../../../../expert-squads/builtin/viral-content/tools/publish-viral-content-artifact"
+import publishCommercialLegalArtifact from "@squads/commercial-legal/tools/publish-commercial-legal-artifact"
+import publishDataAnalysisArtifact from "@squads/data-analysis/tools/publish-data-analysis-artifact"
+import publishHrOperationsArtifact from "@squads/hr-operations/tools/publish-hr-operations-artifact"
+import publishMarketingGrowthArtifact from "@squads/marketing-growth/tools/publish-marketing-growth-artifact"
+import publishOmnichannelArtifact from "@squads/omnichannel-distribution/tools/publish-omnichannel-artifact"
+import publishSalesStrategyArtifact from "@squads/sales-strategy/tools/publish-sales-strategy-artifact"
+import publishSeoGeoArtifact from "@squads/seo-geo/tools/publish-seo-geo-artifact"
+import publishTaxComplianceArtifact from "@squads/tax-compliance/tools/publish-tax-compliance-artifact"
+import publishViralContentArtifact from "@squads/viral-content/tools/publish-viral-content-artifact"
 
 const publishers = [
   {

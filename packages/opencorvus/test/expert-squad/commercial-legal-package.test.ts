@@ -19,8 +19,8 @@ import {
   CommercialLegalArtifactSchemas,
   parseCommercialLegalArtifact,
   type CommercialLegalArtifactType,
-} from "../../../../expert-squads/builtin/commercial-legal/lib/commercial-legal/artifacts"
-import publishCommercialLegalArtifact from "../../../../expert-squads/builtin/commercial-legal/tools/publish-commercial-legal-artifact"
+} from "@squads/commercial-legal/lib/commercial-legal/artifacts"
+import publishCommercialLegalArtifact from "@squads/commercial-legal/tools/publish-commercial-legal-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "commercial-legal")
 const workflowID = "commercial-legal-review"

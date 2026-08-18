@@ -23,8 +23,8 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import {
   DataAnalysisArtifactSchemas,
   type DataAnalysisArtifactType,
-} from "../../../../expert-squads/builtin/data-analysis/lib/data-analysis/artifacts"
-import publishDataAnalysisArtifact from "../../../../expert-squads/builtin/data-analysis/tools/publish-data-analysis-artifact"
+} from "@squads/data-analysis/lib/data-analysis/artifacts"
+import publishDataAnalysisArtifact from "@squads/data-analysis/tools/publish-data-analysis-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "data-analysis")
 const skillRefs = ["data-analysis/shared/method", "data-analysis/shared/workflow"]

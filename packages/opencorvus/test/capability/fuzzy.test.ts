@@ -1,7 +1,32 @@
 import { describe, expect, test } from "bun:test"
 import { normalizeDiscoveryText, scoreDiscoveryFields, scoreDocumentField } from "../../src/capability/fuzzy"
+import { SEPARATORLESS_FILLER_CHARACTERS } from "../../src/capability/discovery-filler"
 
 describe("capability fuzzy relevance", () => {
+  test("scores identically whether or not another query was scored in between", () => {
+    // The separatorless run table used to be memoized in module-level `let`
+    // bindings keyed by the last query, so this module carried process state
+    // across unrelated calls. Interleaving two queries is the observation that
+    // distinguishes a pure scorer from one that does.
+    const fields = [{ text: "把财务报表、科目余额与季度分析证据整合为可复核的财务运营资料包。", weight: 0.94 }]
+    const other = [{ text: "为团队做一份可复用的排班表。", weight: 0.94 }]
+
+    const isolated = scoreDiscoveryFields("季度财务报表分析", fields)
+    scoreDiscoveryFields("排班表", other)
+    const interleaved = scoreDiscoveryFields("季度财务报表分析", fields)
+
+    expect(interleaved).toBe(isolated)
+    expect(isolated).toBeGreaterThan(0.22)
+  })
+
+  test("keeps the filler table as data, and keeps compounds out of it", () => {
+    // A run is dropped only when every character is filler, so a compound built
+    // from two filler characters must still be scored as the request's own term.
+    expect(SEPARATORLESS_FILLER_CHARACTERS).toContain("个")
+    expect(SEPARATORLESS_FILLER_CHARACTERS).not.toContain("人")
+    expect(scoreDiscoveryFields("帮我做一个", [{ text: "季度财务报表分析包", weight: 1 }])).toBeUndefined()
+  })
+
   test("normalizes Unicode and ranks exact, Chinese phrase, and English typo queries with positive scores", () => {
     expect(normalizeDiscoveryText("  ＯＦＦＩＣＥ／Artifacts  ")).toBe("office artifacts")
 

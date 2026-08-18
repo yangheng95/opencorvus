@@ -220,13 +220,18 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     }),
   })
   const locator = exactEngineArtifactLocator({ taskID: task.taskID, artifactID })
-  const assistantMessage = (id: string, created: number, completed: number) => ({
+  // Each of these Messages is created open and completed only after its Tool
+  // Part is written: a completed assistant Message is immutable, so appending
+  // the Part first and stamping completion afterwards is the order the Host
+  // allows. Building them pre-completed made the fixture, not the code under
+  // test, the thing that failed.
+  const assistantMessage = (id: string, created: number) => ({
     id,
     sessionID: task.worker.id,
     role: "assistant" as const,
     author: identity.agentID,
     parentID: task.final.parentID,
-    time: { created, completed },
+    time: { created },
     agent: identity.agentID,
     providerID: "test",
     modelID: "test-model",
@@ -236,11 +241,7 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     finish: "stop" as const,
   })
   const searchMessage = await Session.updateMessage(
-    assistantMessage(
-      Identifier.ascending("message"),
-      task.final.time.created - 6,
-      task.final.time.created - 5,
-    ),
+    assistantMessage(Identifier.ascending("message"), task.final.time.created - 6),
   )
   const searchTool = createArtifactSearchAiTool(task.taskID)
   if (!searchTool.execute) throw new Error("artifact_search is missing its production execution boundary")
@@ -249,14 +250,29 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     version_scope: "current" as const,
     limit: 10,
   }
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: searchMessage.id,
+    type: "step-start",
+  })
+  const searchPart = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: searchMessage.id,
+    type: "tool",
+    callID: "requirements-search",
+    tool: "artifact_search",
+    state: { status: "running", input: searchInput, time: { start: task.final.time.created - 6 } },
+  })
   const searchOutput = await searchTool.execute(searchInput, {
     toolCallId: "requirements-search",
     messages: [],
     abortSignal: new AbortController().signal,
-    opencorvus: { sessionID: task.worker.id, messageID: searchMessage.id },
+    opencorvus: { sessionID: task.worker.id, messageID: searchMessage.id, toolPartID: searchPart.id },
   } as never)
   await Session.updatePart({
-    id: Identifier.ascending("part"),
+    id: searchPart.id,
     sessionID: task.worker.id,
     messageID: searchMessage.id,
     type: "tool",
@@ -274,13 +290,13 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
   const searchPage = JSON.parse(searchOutput.output) as { entries: Array<{ artifact_locator_ref: string }> }
   const artifactLocatorRef = searchPage.entries[0]?.artifact_locator_ref
   if (!artifactLocatorRef) throw new Error("artifact_search did not return the persisted requirements evidence")
-  const readMessage = await Session.updateMessage({
-    ...assistantMessage(
-      Identifier.ascending("message"),
-      task.final.time.created - 4,
-      task.final.time.created - 3,
-    ),
+  await Session.updateMessage({
+    ...searchMessage,
+    time: { ...searchMessage.time, completed: task.final.time.created - 5 },
   })
+  const readMessage = await Session.updateMessage(
+    assistantMessage(Identifier.ascending("message"), task.final.time.created - 4),
+  )
   const readTool = createArtifactReadAiTool(task.taskID)
   if (!readTool.execute) throw new Error("artifact_read is missing its production execution boundary")
   const readInput = {
@@ -290,17 +306,32 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     max_bytes: 16_384,
     delivery: "inline" as const,
   }
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: readMessage.id,
+    type: "step-start",
+  })
+  const readPart = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: readMessage.id,
+    type: "tool",
+    callID: "requirements-read",
+    tool: "artifact_read",
+    state: { status: "running", input: readInput, time: { start: task.final.time.created - 4 } },
+  })
   const readOutput = await readTool.execute(
     readInput,
     {
       toolCallId: "requirements-read",
       messages: [],
       abortSignal: new AbortController().signal,
-      opencorvus: { sessionID: task.worker.id, messageID: readMessage.id },
+      opencorvus: { sessionID: task.worker.id, messageID: readMessage.id, toolPartID: readPart.id },
     } as never,
   )
   await Session.updatePart({
-    id: Identifier.ascending("part"),
+    id: readPart.id,
     sessionID: task.worker.id,
     messageID: readMessage.id,
     type: "tool",
@@ -317,12 +348,12 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
   })
   const readResult = JSON.parse(readOutput.output) as { artifact_read_ref?: string }
   if (!readResult.artifact_read_ref) throw new Error("artifact_read did not return a persisted read reference")
+  await Session.updateMessage({
+    ...readMessage,
+    time: { ...readMessage.time, completed: task.final.time.created - 3 },
+  })
   const selectMessage = await Session.updateMessage(
-    assistantMessage(
-      Identifier.ascending("message"),
-      task.final.time.created - 2,
-      task.final.time.created - 1,
-    ),
+    assistantMessage(Identifier.ascending("message"), task.final.time.created - 2),
   )
   const selectTool = createArtifactSelectAiTool(task.taskID)
   if (!selectTool.execute) throw new Error("artifact_select is missing its production execution boundary")
@@ -331,14 +362,29 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     artifact_read_ref: readResult.artifact_read_ref,
     purpose: "Supports REQ-1",
   }
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: selectMessage.id,
+    type: "step-start",
+  })
+  const selectPart = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: selectMessage.id,
+    type: "tool",
+    callID: "requirements-select",
+    tool: "artifact_select",
+    state: { status: "running", input: selectInput, time: { start: task.final.time.created - 2 } },
+  })
   const selectOutput = await selectTool.execute(selectInput, {
     toolCallId: "requirements-select",
     messages: [],
     abortSignal: new AbortController().signal,
-    opencorvus: { sessionID: task.worker.id, messageID: selectMessage.id },
+    opencorvus: { sessionID: task.worker.id, messageID: selectMessage.id, toolPartID: selectPart.id },
   } as never)
   await Session.updatePart({
-    id: Identifier.ascending("part"),
+    id: selectPart.id,
     sessionID: task.worker.id,
     messageID: selectMessage.id,
     type: "tool",
@@ -352,6 +398,10 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
       metadata: selectOutput.metadata,
       time: { start: task.final.time.created - 2, end: task.final.time.created - 1 },
     },
+  })
+  await Session.updateMessage({
+    ...selectMessage,
+    time: { ...selectMessage.time, completed: task.final.time.created - 1 },
   })
   return locator
 }

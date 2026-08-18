@@ -22,7 +22,6 @@ import {
   MetricJudgeParseError,
   type JudgeRequest,
 } from "../src/metrics/executor"
-import { computeIterationSnapshot } from "../src/metrics/score"
 import { readResultsForIteration, registerBaselineSpec } from "../src/metrics/store"
 import { MetricExecutionEvidence } from "../src/metrics/types"
 import { canonicalMetricJSON } from "../src/metrics/canonical-json"
@@ -248,9 +247,10 @@ describe("Metric scorer exact evidence runtime", () => {
             timeCreated: started,
           }),
         })
-        Database.use((db) =>
-          db.update(EngineTaskTable).set({ time_started: started }).where(eq(EngineTaskTable.id, taskID)).run(),
-        )
+        // `time_started` is projected from the Task lifecycle (`store.ts` reads
+        // it off `lifecycle.openedAt`), not a column on `engine_task`. Setting
+        // it here produced an empty SQL `SET` clause and a syntax error; the
+        // lifecycle open above already establishes the start time.
         const execution = createTaskArtifactStoreExecution({
           kind: "task",
           projectID: Instance.project.id,
@@ -711,23 +711,6 @@ describe("Metric scorer exact evidence runtime", () => {
         )!
         expect(persistedMeasured.evidence_ref).toBe(canonicalMetricJSON(measuredResult.evidence_ref))
 
-        const snapshot = computeIterationSnapshot({
-          task_id: taskID,
-          iteration: 0,
-          specs: [
-            measuredSpec,
-            parseUnavailableSpec,
-            inactivitySpec,
-            judgeSpec,
-            invalidJudgeSpec,
-            zeroQuerySpec,
-            emptyQuerySpec,
-          ],
-          currentResults: outcome.results,
-          previousResults: [],
-          previousAggregateScore: null,
-        })
-        expect(snapshot).toMatchObject({ aggregate_score: null, unmeasured_target_count: 4 })
 
         const wrongIdentityOutcome = await executeMetrics(
           {

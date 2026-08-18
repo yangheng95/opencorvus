@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas } from "@opencorvus-ai/plugin"
-import { deriveComparisonRecommendation } from "../../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison"
+import { deriveComparisonRecommendation } from "@squads/evolution-lab/lib/evolution-lab/comparison"
 import {
   assertRandomEvolutionCampaignContract,
   eligibleRandomEvolutionTargets,
@@ -539,6 +539,7 @@ describe("random Expert Squad evolution controller contracts", () => {
     ).toEqual(campaign)
     const candidate = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse({
       development_campaign_locator: locations.campaign,
+      feedback: null,
       parent_revision: baselineRevision,
       candidate_revision: candidateRevision,
       parent_resources: [resource],

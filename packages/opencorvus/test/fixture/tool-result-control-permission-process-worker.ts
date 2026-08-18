@@ -14,7 +14,6 @@ import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
-import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
 import { AutomationTable } from "@/scheduler/automation.sql"
 import { Session } from "@/session"
 import { LLM } from "@/session/llm"
@@ -41,7 +40,6 @@ if (!mode || !projectDirectory || !stateFile) {
 }
 
 declareNativeTaskProcessDeployment()
-installDefaultTaskWakeRuntime()
 installDefaultControlPlaneToolLoaders()
 
 const model = {

@@ -121,7 +121,7 @@ async function createFixture(title: string) {
     role: "assistant",
     author: "research-studio-analyst",
     parentID: targetUser.id,
-    time: { created: now + 2, completed: now + 3 },
+    time: { created: now + 2 },
     agent: "research-studio-analyst",
     providerID: "test",
     modelID: "test-model",
@@ -137,6 +137,7 @@ async function createFixture(title: string) {
     type: "text",
     text: "The bounded fixture has zero registered factual claims.",
   })
+  await Session.updateMessage({ ...targetMessage, time: { ...targetMessage.time, completed: now + 3 } })
 
   const worker = await Session.create({ kind: "fact-check", parentID: root.id, title: "Fact Check worker" })
   const workerUser = await Session.updateMessage({
@@ -161,7 +162,7 @@ async function createFixture(title: string) {
     role: "assistant",
     author: projectedFactChecker.identity.agentID,
     parentID: workerUser.id,
-    time: { created: now + 5, completed: now + 6 },
+    time: { created: now + 5 },
     agent: projectedFactChecker.identity.agentID,
     providerID: "test",
     modelID: "test-model",
@@ -195,7 +196,11 @@ async function createFixture(title: string) {
     },
   })
 
-  return { taskID, root, target, targetMessage, worker, workerFinal }
+  // `workerFinal` is deliberately left open: a completed assistant Message is
+  // immutable, and one case below appends its own Tool request Part to it.
+  const completeWorkerFinal = () =>
+    Session.updateMessage({ ...workerFinal, time: { ...workerFinal.time, completed: now + 6 } })
+  return { taskID, root, target, targetMessage, worker, workerFinal, completeWorkerFinal }
 }
 
 function reviewFor(fixture: Awaited<ReturnType<typeof createFixture>>): FactCheckReview {
@@ -332,6 +337,7 @@ describe("Fact Check domain-incomplete settlement", () => {
       directory: project.path,
       fn: async () => {
         const fixture = await createFixture("Fact Check missing review")
+        await fixture.completeWorkerFinal()
         const result = await executeAdapter({
           fixture,
           run: async () => ({ sessionID: fixture.worker.id, finalMessageID: fixture.workerFinal.id }),
@@ -378,6 +384,7 @@ describe("Fact Check domain-incomplete settlement", () => {
       directory: project.path,
       fn: async () => {
         const fixture = await createFixture("Fact Check valid review")
+        await fixture.completeWorkerFinal()
         const review = reviewFor(fixture)
         const result = await executeAdapter({
           fixture,
@@ -408,6 +415,7 @@ describe("Fact Check domain-incomplete settlement", () => {
       directory: project.path,
       fn: async () => {
         const fixture = await createFixture("Fact Check target mismatch")
+        await fixture.completeWorkerFinal()
         const review = reviewFor(fixture)
         review.scope.target_message_id = Identifier.ascending("message")
         const result = await executeAdapter({
@@ -513,6 +521,7 @@ describe("Fact Check domain-incomplete settlement", () => {
       directory: project.path,
       fn: async () => {
         const fixture = await createFixture("Fact Check handoff")
+        await fixture.completeWorkerFinal()
         const { dispatchID, lineage } = recordLineage(fixture)
         const handoff: AgentCoordinationHandoffResult = {
           outcome: "coordination_handoff",

@@ -21,7 +21,7 @@ import { buildExpertSquadAuthorDefinition } from "../../src/tool/expert-squad-au
 import { MCP } from "../../src/mcp"
 import { computerMcpPermissionKeyOf } from "../../src/mcp/computer/permission-plan"
 import { computerRuntimeScopeIdentity } from "../../src/mcp/computer/runtime-scope"
-import { CapabilityCatalog, searchCapabilityCatalog } from "../../src/capability/catalog"
+import { CapabilityCatalog, searchCapabilityCatalog } from "../../src/tool/capability-catalog"
 import { ComputerHostRuntimeAuthority } from "../../src/mcp/computer/host-runtime"
 import { HostComputerBackend } from "../../src/mcp/computer/host-client"
 import { EngineService } from "../../src/task-api"

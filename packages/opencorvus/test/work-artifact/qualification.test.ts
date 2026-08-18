@@ -101,13 +101,17 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
           }
         },
       }
+      // Left open on purpose: a completed assistant Message is immutable, so a
+      // Tool request Part has to land while the Message is still in flight —
+      // exactly the order a real turn produces. The Message is completed after
+      // the Part is written, below.
       const assistant = await Session.updateMessage({
         id: Identifier.ascending("message"),
         sessionID: session.id,
         parentID: "msg_work_artifact_qualification_user",
         role: "assistant",
         author: "orchestrator",
-        time: { created: Date.now(), completed: Date.now() },
+        time: { created: Date.now() },
         agent: "orchestrator",
         providerID: "test",
         modelID: "test",
@@ -180,8 +184,9 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
           time: { start: validationTime, end: validationTime + 1 },
         },
       })
+      await Session.updateMessage({ ...assistant, time: { ...assistant.time, completed: Date.now() } })
       expect(
-        requireWorkArtifactValidationAuthority({
+        await requireWorkArtifactValidationAuthority({
           sessionID: session.id,
           receiptUrl: validated.validation_receipt.url,
           receiptSha: validated.validation_receipt.sha,

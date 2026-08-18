@@ -19,8 +19,8 @@ import {
   TaxComplianceArtifactSchemas,
   parseTaxComplianceArtifact,
   type TaxComplianceArtifactType,
-} from "../../../../expert-squads/builtin/tax-compliance/lib/tax-compliance/artifacts"
-import publishTaxComplianceArtifact from "../../../../expert-squads/builtin/tax-compliance/tools/publish-tax-compliance-artifact"
+} from "@squads/tax-compliance/lib/tax-compliance/artifacts"
+import publishTaxComplianceArtifact from "@squads/tax-compliance/tools/publish-tax-compliance-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "tax-compliance")
 const workflowID = "tax-compliance-assessment"
