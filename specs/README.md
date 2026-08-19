@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Overlay performance and scalability investigation: [`2026-08-19-overlay-performance-investigation.md`](records/2026-08/2026-08-19-overlay-performance-investigation.md).
+
 Latest Work Ledger item pin and directory-reference Project authority repair: [`2026-08-19-work-ledger-item-pin-project-authority.md`](records/2026-08/2026-08-19-work-ledger-item-pin-project-authority.md).
 
 Latest sparse candlestick first-sized-layout and bar-spacing repair: [`2026-08-17-sparse-candlestick-visibility-repair.md`](records/2026-08/2026-08-17-sparse-candlestick-visibility-repair.md).
