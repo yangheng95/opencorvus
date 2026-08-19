@@ -29,7 +29,7 @@ import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { t } from "../utils/i18n"
-import { isSubagentActivityRecord } from "../utils/subagent-presentation"
+import { isSubagentActivityRecord, subagentSessionRecords } from "../utils/subagent-presentation"
 import { Avatar } from "./Avatar"
 import { ConversationCard } from "./ConversationCard"
 import { Button } from "./ui/Button"
@@ -116,14 +116,20 @@ export function SubagentConversationPanel(props: {
   const records = createMemo(() =>
     conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
   )
-  const sessionIDs = createMemo(() => records().map((candidate) => candidate.sessionID), [], {
+  // One tab per Session, newest occurrence. Scanning the raw list instead would
+  // repeat a Session that ran more than once and would answer a lookup with its
+  // oldest occurrence, carrying that occurrence's stale status and target.
+  const sessionRecords = createMemo(() => subagentSessionRecords(records()))
+  const sessionIDs = createMemo(() => sessionRecords().map((candidate) => candidate.sessionID), [], {
     equals: (previous, next) =>
       previous.length === next.length && previous.every((sessionID, index) => sessionID === next[index]),
   })
+  const recordForSession = (sessionID: string) =>
+    sessionRecords().find((candidate) => candidate.sessionID === sessionID)
   const selectedRecord = createMemo(() => {
     const sessionID = props.sessionID().trim()
     if (!sessionID) return undefined
-    return records().find((candidate) => candidate.sessionID === sessionID)
+    return recordForSession(sessionID)
   })
   let agentTabListElement: HTMLDivElement | undefined
   let revealSelectedFrame: number | undefined
@@ -264,7 +270,7 @@ export function SubagentConversationPanel(props: {
               <For each={sessionIDs()}>
                 {(sessionID) => {
                   const candidate = createMemo(() => {
-                    const record = records().find((item) => item.sessionID === sessionID)
+                    const record = recordForSession(sessionID)
                     if (!record) throw new Error(`Sub-agent selector missing activity record for ${sessionID}`)
                     return record
                   })
@@ -296,7 +302,7 @@ export function SubagentConversationPanel(props: {
                 }}
               </For>
             </TabList>
-            <Show when={records().length > 1}>
+            <Show when={sessionIDs().length > 1}>
               <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
                 <DropdownMenu.Trigger
                   as={Button}
@@ -306,8 +312,8 @@ export function SubagentConversationPanel(props: {
                   tone="neutral"
                   class="subagent-conversation-panel__agent-menu-trigger"
                   data-ui="subagent-agent-menu-trigger"
-                  aria-label={t("subagent.conversation.all_agents", { count: records().length })}
-                  title={t("subagent.conversation.all_agents", { count: records().length })}
+                  aria-label={t("subagent.conversation.all_agents", { count: sessionIDs().length })}
+                  title={t("subagent.conversation.all_agents", { count: sessionIDs().length })}
                 >
                   <Icon name="more-horizontal" size="compact" />
                 </DropdownMenu.Trigger>
@@ -316,7 +322,7 @@ export function SubagentConversationPanel(props: {
                     <For each={sessionIDs()}>
                       {(sessionID) => {
                         const candidate = createMemo(() => {
-                          const record = records().find((item) => item.sessionID === sessionID)
+                          const record = recordForSession(sessionID)
                           if (!record) throw new Error(`Sub-agent menu missing activity record for ${sessionID}`)
                           return record
                         })

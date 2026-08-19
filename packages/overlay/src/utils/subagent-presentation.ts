@@ -72,6 +72,33 @@ export function isSubagentActivityRecord(record: AgentActivityRecord): boolean {
   return Boolean(record.parentSessionID.trim()) && record.stage !== "orchestrator"
 }
 
+/**
+ * One record per sub-agent Session, newest occurrence first-come order.
+ *
+ * A Session that ran more than once carries one activity record per execution
+ * occurrence, so the raw list repeats a sessionID. Every sub-agent surface is
+ * keyed by Session — the selector tabs, the overflow menu, and the progress
+ * grid all address one agent — so they must agree on which occurrence speaks
+ * for it. That is the newest one, matching how the store resolves a Session
+ * without an exact occurrence. Order follows each Session's first appearance so
+ * the surfaces stay stable as later occurrences arrive.
+ */
+export function subagentSessionRecords(records: readonly AgentActivityRecord[]): AgentActivityRecord[] {
+  const bySession = new Map<string, AgentActivityRecord>()
+  for (const record of records) {
+    const current = bySession.get(record.sessionID)
+    if (!current) {
+      bySession.set(record.sessionID, record)
+      continue
+    }
+    const newer =
+      record.lastObservedAt > current.lastObservedAt ||
+      (record.lastObservedAt === current.lastObservedAt && record.startedAt > current.startedAt)
+    if (newer) bySession.set(record.sessionID, record)
+  }
+  return [...bySession.values()]
+}
+
 export function subagentProgressCardID(sessionID: string): string {
   const value = String(sessionID || "").trim()
   if (!value) throw new Error("subagent progress card requires a sessionID")
@@ -93,7 +120,7 @@ export function buildSubagentConversationItems(input: {
   cards: Record<string, CardNode>
   records: AgentActivityRecord[]
 }): SubagentConversationItem[] {
-  const records = input.records.filter(isSubagentActivityRecord)
+  const records = subagentSessionRecords(input.records.filter(isSubagentActivityRecord))
   const recordsBySession = new Map(records.map((record) => [record.sessionID, record]))
   const timeline: TimelineEntry[] = []
   for (const cardID of input.order) {
