@@ -1,6 +1,7 @@
 ---
 import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
+import OcArtifactCarousel from "./OcArtifactCarousel.astro"
 import { landingCopy } from "../content/landing-copy"
 import { platformFacts } from "../content/platform-facts"
 import { publicPath, type PublicLocale } from "../content/public-market"
@@ -171,7 +172,15 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------------- 2 · why */}
+  {/* --------------------------------------------------- 2 · deliverables */}
+  {/*
+    Directly under the hero because "what does it actually hand me" is the question the hero raises,
+    and because these are captures of real runs — the strongest evidence on the page belongs where a
+    reader is still deciding whether to keep scrolling.
+  */}
+  <OcArtifactCarousel {locale} />
+
+  {/* ------------------------------------------------------------- 3 · why */}
   <section class="oc-section oc-anchor" id="why">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.why.eyebrow}</p>
@@ -256,7 +265,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ---------------------------------------------------------- 3 · squads */}
+  {/* --------------------------------------------------------- 4 · squads */}
   {/*
     A funnel, not a second market. Six static cards and a link out. The filtering, search and
     segment browsing all live on /market/ — duplicating them here would mean two implementations
@@ -296,7 +305,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ----------------------------------------------------------- 4 · start */}
+  {/* ---------------------------------------------------------- 5 · start */}
   <section class="oc-section oc-anchor" id="start">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.start.eyebrow}</p>
@@ -359,7 +368,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------------- 5 · faq */}
+  {/* ------------------------------------------------------------ 6 · faq */}
   {/*
     Native <details>. An accordion is the one place a section can hold six answers without costing
     six answers' worth of scroll, and the disclosure widget browsers already ship is keyboard
@@ -389,7 +398,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------------ 6 · join */}
+  {/* ----------------------------------------------------------- 7 · join */}
   <section class="oc-section-tight oc-anchor" id="join">
     <div class="oc-container">
       <div class="oc-cta-block oc-join oc-reveal">

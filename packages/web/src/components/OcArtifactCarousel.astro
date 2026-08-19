@@ -1,0 +1,391 @@
+---
+/**
+ * The deliverable gallery under the hero.
+ *
+ * Every frame is a real capture: a Mission ran in the desktop app against live data, published one
+ * Interactive Artifact, and qa/artifact-gallery/capture.mjs took an element-level screenshot of that
+ * artifact's frame in the real Overlay. Provenance for each file is in assets/lander/captured.json;
+ * refresh instructions are in that file's `refresh` block.
+ *
+ * The imports are written out one per slide rather than globbed on purpose — test/lander-assets.test.ts
+ * proves every image on disk is referenced by name from a component, and a glob would make the whole
+ * directory look dead to it.
+ */
+import { Image } from "astro:assets"
+import { landingCopy } from "../content/landing-copy"
+import type { PublicLocale } from "../content/public-market"
+
+import terminalShot from "../assets/lander/artifact-gallery/terminal.png"
+import codeShot from "../assets/lander/artifact-gallery/code.png"
+import filePreviewShot from "../assets/lander/artifact-gallery/file-preview.png"
+import spreadsheetShot from "../assets/lander/artifact-gallery/spreadsheet.png"
+import documentShot from "../assets/lander/artifact-gallery/document.png"
+import presentationShot from "../assets/lander/artifact-gallery/presentation.png"
+import chartShot from "../assets/lander/artifact-gallery/chart.png"
+import tableShot from "../assets/lander/artifact-gallery/table.png"
+import dashboardShot from "../assets/lander/artifact-gallery/dashboard.png"
+import candlestickShot from "../assets/lander/artifact-gallery/candlestick.png"
+import mapShot from "../assets/lander/artifact-gallery/map.png"
+import networkShot from "../assets/lander/artifact-gallery/network.png"
+import treeShot from "../assets/lander/artifact-gallery/tree.png"
+import timelineShot from "../assets/lander/artifact-gallery/timeline.png"
+import diagramShot from "../assets/lander/artifact-gallery/diagram.png"
+import diffShot from "../assets/lander/artifact-gallery/diff.png"
+import notebookShot from "../assets/lander/artifact-gallery/notebook.png"
+import mediaShot from "../assets/lander/artifact-gallery/media.png"
+import model3dShot from "../assets/lander/artifact-gallery/model-3d.png"
+import mcpAppShot from "../assets/lander/artifact-gallery/mcp-app.png"
+
+type Props = { locale: PublicLocale }
+
+const { locale } = Astro.props
+const copy = landingCopy[locale].showcase
+
+/** Order is editorial: the office deliverables lead, then statistics, then the engineering surfaces. */
+const slides = [
+  { id: "terminal", renderer: "terminal@1", image: terminalShot },
+  { id: "file-preview", renderer: "file-preview@1", image: filePreviewShot },
+  { id: "spreadsheet", renderer: "spreadsheet@1", image: spreadsheetShot },
+  { id: "document", renderer: "document@1", image: documentShot },
+  { id: "presentation", renderer: "presentation@1", image: presentationShot },
+  { id: "chart", renderer: "chart@1", image: chartShot },
+  { id: "dashboard", renderer: "dashboard@1", image: dashboardShot },
+  { id: "candlestick", renderer: "candlestick@1", image: candlestickShot },
+  { id: "table", renderer: "table@1", image: tableShot },
+  { id: "map", renderer: "map@1", image: mapShot },
+  { id: "network", renderer: "network@1", image: networkShot },
+  { id: "tree", renderer: "tree@1", image: treeShot },
+  { id: "timeline", renderer: "timeline@1", image: timelineShot },
+  { id: "diagram", renderer: "diagram@1", image: diagramShot },
+  { id: "diff", renderer: "diff@1", image: diffShot },
+  { id: "notebook", renderer: "notebook@1", image: notebookShot },
+  { id: "code", renderer: "code@1", image: codeShot },
+  { id: "media", renderer: "media@1", image: mediaShot },
+  { id: "model-3d", renderer: "model-3d@1", image: model3dShot },
+  { id: "mcp-app", renderer: "mcp-app@1", image: mcpAppShot },
+] as const
+
+const label = (id: string) => copy.slides[id] ?? id
+---
+
+<section class="oc-showcase oc-anchor" id="deliverables" aria-labelledby="oc-showcase-title">
+  <div class="oc-container oc-showcase-head">
+    <p class="oc-eyebrow oc-reveal">{copy.eyebrow}</p>
+    <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal" id="oc-showcase-title">{copy.title}</h2>
+    <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.lead}</p>
+  </div>
+
+  {/*
+    Scroll-snap does the carousel; script only nudges scrollLeft. With JavaScript off the reader
+    still gets a swipeable, keyboard-scrollable strip instead of a single frozen frame.
+  */}
+  <div
+    class="oc-showcase-stage oc-reveal"
+    data-oc-carousel
+    role="group"
+    aria-roledescription="carousel"
+    aria-label={copy.carouselLabel}
+  >
+    <ul class="oc-showcase-track" data-oc-carousel-track tabindex="0">
+      {
+        slides.map((slide, index) => (
+          <li
+            class="oc-showcase-slide"
+            data-oc-carousel-slide={slide.id}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} / ${slides.length} · ${label(slide.id)}`}
+          >
+            <figure class="oc-showcase-figure">
+              <div class="oc-showcase-media">
+                <Image
+                  src={slide.image}
+                  alt={label(slide.id)}
+                  widths={[640, 960, 1280]}
+                  sizes="(min-width: 1180px) 1040px, 92vw"
+                  loading={index < 2 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </div>
+              <figcaption class="oc-showcase-caption">
+                <span class="oc-showcase-kind">{slide.renderer}</span>
+                <span class="oc-showcase-label">{label(slide.id)}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+
+    <button class="oc-showcase-arrow oc-showcase-arrow-prev" type="button" data-oc-carousel-prev aria-label={copy.previous}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+    </button>
+    <button class="oc-showcase-arrow oc-showcase-arrow-next" type="button" data-oc-carousel-next aria-label={copy.next}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+    </button>
+  </div>
+
+  <div class="oc-container oc-showcase-dots-row">
+    <ol class="oc-showcase-dots" data-oc-carousel-dots>
+      {
+        slides.map((slide, index) => (
+          <li>
+            <button
+              type="button"
+              class="oc-showcase-dot"
+              data-oc-carousel-dot={index}
+              aria-label={label(slide.id)}
+              aria-current={index === 0 ? "true" : "false"}
+            />
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .oc-showcase {
+    padding-block: var(--oc-space-9);
+  }
+
+  .oc-showcase-head {
+    text-align: center;
+  }
+
+  /* Full-bleed: the strip runs past the container so the neighbouring frames stay visible and the
+     thing reads as a gallery rather than a single screenshot. */
+  .oc-showcase-stage {
+    position: relative;
+    margin-top: var(--oc-space-6);
+  }
+
+  .oc-showcase-track {
+    display: flex;
+    gap: var(--oc-space-5);
+    margin: 0;
+    padding-inline: max(var(--oc-space-5), calc((100vw - var(--oc-container)) / 2));
+    padding-block: var(--oc-space-2);
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+  }
+
+  .oc-showcase-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .oc-showcase-slide {
+    flex: 0 0 auto;
+    width: min(92vw, var(--oc-container));
+    scroll-snap-align: center;
+  }
+
+  .oc-showcase-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  /* The captures are element screenshots of one artifact frame, so their aspect ratios differ a
+     lot. A fixed-height window with the image contained keeps the strip from jumping. */
+  .oc-showcase-media {
+    border-radius: var(--oc-radius-card);
+    border: 1px solid var(--oc-color-border-subtle);
+    background: var(--oc-color-bg-overlay);
+    box-shadow: var(--oc-shadow-card);
+    overflow: hidden;
+    height: min(62vh, 560px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--oc-space-4);
+  }
+
+  .oc-showcase-media :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--oc-radius-media);
+  }
+
+  .oc-showcase-caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--oc-space-3);
+    flex-wrap: wrap;
+  }
+
+  .oc-showcase-kind {
+    font-family: var(--oc-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--oc-color-text-description);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-pill);
+    padding-block: var(--oc-space-1);
+    padding-inline: var(--oc-space-3);
+  }
+
+  .oc-showcase-label {
+    font-size: 15px;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .oc-showcase-arrow {
+    position: absolute;
+    top: calc(50% - var(--oc-space-6));
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--oc-radius-pill);
+    border: 1px solid var(--oc-color-border-subtle);
+    background: var(--oc-color-bg-overlay);
+    box-shadow: var(--oc-shadow-card);
+    color: var(--oc-color-text-primary);
+    cursor: pointer;
+  }
+
+  .oc-showcase-arrow-prev {
+    left: var(--oc-space-5);
+  }
+
+  .oc-showcase-arrow-next {
+    right: var(--oc-space-5);
+  }
+
+  .oc-showcase-dots-row {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--oc-space-5);
+  }
+
+  .oc-showcase-dots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--oc-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .oc-showcase-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--oc-radius-pill);
+    background: var(--oc-color-border-default);
+    cursor: pointer;
+  }
+
+  .oc-showcase-dot[aria-current="true"] {
+    background: var(--oc-color-text-primary);
+    width: 22px;
+  }
+
+  @media (min-width: 900px) {
+    .oc-showcase-arrow {
+      display: flex;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oc-showcase-track {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Autoplay is a convenience, not the mechanism — the strip is a scroll container either way, so a
+   * reader who grabs it keeps control and a reader who prefers reduced motion never has it taken.
+   */
+  const AUTOPLAY_MS = 5200
+
+  for (const stage of document.querySelectorAll<HTMLElement>("[data-oc-carousel]")) {
+    const track = stage.querySelector<HTMLElement>("[data-oc-carousel-track]")
+    const slides = [...stage.querySelectorAll<HTMLElement>("[data-oc-carousel-slide]")]
+    const section = stage.closest("section")!
+    const dots = [...section.querySelectorAll<HTMLButtonElement>("[data-oc-carousel-dot]")]
+    if (!track || slides.length === 0) continue
+
+    let index = 0
+    let timer: number | undefined
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
+
+    const show = (next: number) => {
+      index = (next + slides.length) % slides.length
+      const slide = slides[index]!
+      track.scrollTo({ left: slide.offsetLeft - (track.clientWidth - slide.clientWidth) / 2 })
+    }
+
+    const markCurrent = (next: number) => {
+      index = next
+      dots.forEach((dot, position) => dot.setAttribute("aria-current", position === next ? "true" : "false"))
+    }
+
+    const stop = () => {
+      if (timer !== undefined) window.clearInterval(timer)
+      timer = undefined
+    }
+
+    const start = () => {
+      stop()
+      if (reduced.matches || document.hidden) return
+      timer = window.setInterval(() => show(index + 1), AUTOPLAY_MS)
+    }
+
+    // Which slide is actually centred is the scroll container's business, not the timer's; reading
+    // it back keeps the dots honest after a swipe, a resize, or a mid-flight interruption.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          const position = slides.indexOf(entry.target as HTMLElement)
+          if (position !== -1) markCurrent(position)
+        }
+      },
+      { root: track, threshold: 0.6 },
+    )
+    slides.forEach((slide) => observer.observe(slide))
+
+    stage.querySelector("[data-oc-carousel-prev]")?.addEventListener("click", () => {
+      show(index - 1)
+      start()
+    })
+    stage.querySelector("[data-oc-carousel-next]")?.addEventListener("click", () => {
+      show(index + 1)
+      start()
+    })
+    dots.forEach((dot, position) =>
+      dot.addEventListener("click", () => {
+        show(position)
+        start()
+      }),
+    )
+
+    stage.addEventListener("pointerenter", stop)
+    stage.addEventListener("pointerleave", start)
+    stage.addEventListener("focusin", stop)
+    stage.addEventListener("focusout", start)
+    track.addEventListener("pointerdown", stop)
+    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()))
+    reduced.addEventListener("change", start)
+
+    start()
+  }
+</script>

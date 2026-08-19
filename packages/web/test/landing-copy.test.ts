@@ -35,6 +35,7 @@ function measurer(locale: keyof typeof BUDGET) {
 function bodyStrings(copy: LandingCopy): string[] {
   return [
     copy.hero.description,
+    copy.showcase.lead,
     copy.why.lead,
     ...copy.why.pillars.map((pillar) => pillar.body),
     copy.why.compare.lead,
@@ -51,11 +52,12 @@ function bodyStrings(copy: LandingCopy): string[] {
 }
 
 function sectionTitles(copy: LandingCopy): string[] {
-  return [copy.why.title, copy.start.title, copy.faq.title, copy.join.title]
+  return [copy.showcase.title, copy.why.title, copy.start.title, copy.faq.title, copy.join.title]
 }
 
 function leads(copy: LandingCopy): string[] {
   return [
+    copy.showcase.lead,
     copy.why.lead,
     copy.squads.lead,
     copy.start.lead,

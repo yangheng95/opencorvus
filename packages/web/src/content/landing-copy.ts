@@ -36,6 +36,21 @@ export type LandingCopy = {
     readonly terminalLabel: string
     readonly terminals: readonly { readonly id: string; readonly label: string; readonly lines: readonly string[] }[]
   }
+  /**
+   * The artifact carousel under the hero. `slides` is keyed by the capture id in
+   * qa/artifact-gallery/cases.mjs, and the strings are labels on a picture rather than prose a
+   * reader has to get through — so they sit outside the body budget for the same reason alt text
+   * does. The section's own title and lead are inside it.
+   */
+  readonly showcase: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly carouselLabel: string
+    readonly previous: string
+    readonly next: string
+    readonly slides: Readonly<Record<string, string>>
+  }
   readonly why: {
     readonly eyebrow: string
     readonly title: string
@@ -158,6 +173,36 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           ],
         },
       ],
+    },
+    showcase: {
+      eyebrow: "产出",
+      title: "真实的交付物",
+      lead: "每一张都来自一次真实运行：真数据进来，文件或视图出去。",
+      carouselLabel: "交付物轮播",
+      previous: "上一张",
+      next: "下一张",
+      slides: {
+        terminal: "真实命令，真实回显",
+        code: "真正跑过的生成脚本",
+        "file-preview": "PDF 简报",
+        spreadsheet: "XLSX 模型",
+        document: "DOCX 分析简报",
+        presentation: "PPTX 汇报",
+        chart: "人均 GDP，2000–2024",
+        table: "各国最新人均 GDP",
+        dashboard: "宏观指标看板",
+        candlestick: "BTC-USD 日线",
+        map: "本周 2.5 级以上地震",
+        network: "express 依赖图",
+        tree: "世界银行国家层级",
+        timeline: "VS Code 发布节奏",
+        diagram: "这些文件是怎么生成的",
+        diff: "left-pad 1.2.0 → 1.3.0",
+        notebook: "增长率推演过程",
+        media: "智能体协作流程",
+        "model-3d": "glTF 示例模型",
+        "mcp-app": "MCP App：实时行情板",
+      },
     },
     why: {
       eyebrow: "特性",
@@ -331,6 +376,36 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           ],
         },
       ],
+    },
+    showcase: {
+      eyebrow: "What it produces",
+      title: "Real deliverables",
+      lead: "Every panel is one real run — live data in, a real file or view out.",
+      carouselLabel: "Deliverable gallery",
+      previous: "Previous",
+      next: "Next",
+      slides: {
+        terminal: "A real command, read back",
+        code: "The generator that actually ran",
+        "file-preview": "PDF brief",
+        spreadsheet: "XLSX model",
+        document: "DOCX analyst brief",
+        presentation: "PPTX readout",
+        chart: "GDP per capita, 2000–2024",
+        table: "Latest GDP per capita by country",
+        dashboard: "Macro indicators",
+        candlestick: "BTC-USD daily candles",
+        map: "Earthquakes, magnitude 2.5+ this week",
+        network: "express dependency graph",
+        tree: "World Bank country hierarchy",
+        timeline: "VS Code release cadence",
+        diagram: "How those files were built",
+        diff: "left-pad 1.2.0 → 1.3.0",
+        notebook: "Growth analysis, worked out",
+        media: "Agent teams workflow",
+        "model-3d": "glTF sample model",
+        "mcp-app": "MCP App — live spot rates",
+      },
     },
     why: {
       eyebrow: "Why",
