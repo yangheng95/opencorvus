@@ -28,8 +28,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "evolution-lab",
-      "version": "2026.08.18.1",
-      "digest": "e32137194c72f84cbda0a7323980c2be619a93d3d3f761a150364337a0eddc7c"
+      "version": "2026.08.19.1",
+      "digest": "294cd20d06abbedb81ce87949cfc59459106559ceee5f363f92de34ff63ef93e"
     },
     "displayLabel": {
       "root": "Evolution Lab",
@@ -113,8 +113,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "omnichannel-distribution",
-      "version": "2026.08.13.1",
-      "digest": "45d02c290312cd1299badb7f3bd07926fea59c0a850931b3a833c6bea8344436"
+      "version": "2026.08.19.1",
+      "digest": "d47aa7e9bbdbd6ae0d3259f30bdcd61c0c20147543e86e5fe5a834f83b9bb8e2"
     },
     "displayLabel": {
       "root": "Omnichannel Distribution",

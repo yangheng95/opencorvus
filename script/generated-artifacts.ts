@@ -8,6 +8,7 @@ export const GENERATED_ARTIFACT_PATHS = [
   "packages/sdk/js/src/defaults.ts",
   "packages/sdk/js/src/route-policy.ts",
   "packages/opencorvus/generated/expert-squad-payload.ts",
+  "packages/opencorvus/generated/expert-squad-revisions.ts",
   "packages/opencorvus/generated/expert-squad-search-localization.ts",
   "packages/opencorvus/src/skill/builtin-payload.ts",
   "packages/opencorvus/src/mission-skill/builtin-payload.ts",
