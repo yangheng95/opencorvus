@@ -160,12 +160,12 @@ probe_live_release() {
   mv "$readiness" "$probe/ready.json"
   curl --fail --silent --show-error http://127.0.0.1:8080/market/ > "$probe/market-en.html" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/zh-cn/market/ > "$probe/market-zh.html" || { rm -rf -- "$probe"; return 1; }
-  curl --fail --silent --show-error http://127.0.0.1:8080/api/site/v1/visitors > "$probe/visitors.json" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/api/site/v1/views > "$probe/views.json" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/expert-squads/catalog.json > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
   cmp "$probe/pointer.json" "$CURRENT/client/expert-squads/catalog.json" || { rm -rf -- "$probe"; return 1; }
-  python3 - "$probe/ready.json" "$CURRENT/client/expert-squads/catalog.json" "$probe/visitors.json" "$probe/references.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
+  python3 - "$probe/ready.json" "$CURRENT/client/expert-squads/catalog.json" "$probe/views.json" "$probe/references.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
 import json, sys
-ready, pointer, visitors = [json.load(open(item, encoding="utf-8")) for item in sys.argv[1:4]]
+ready, pointer, views = [json.load(open(item, encoding="utf-8")) for item in sys.argv[1:4]]
 resources = pointer.get("resources", {})
 expected = {
     "catalogSha256": pointer.get("catalog", {}).get("sha256"),
@@ -175,8 +175,10 @@ expected = {
 }
 publication = ready.get("publication")
 if ready.get("status") != "ready" or not isinstance(publication, dict) or any(publication.get(key) != value for key, value in expected.items()): raise SystemExit("database readiness disagrees with publication")
-if visitors.get("protocol") != "opencorvus/site-visitors@1" or visitors.get("measuredWindowDays") != 30 or not isinstance(visitors.get("estimatedParticipatingBrowsers"), int) or visitors.get("estimatedParticipatingBrowsers") < 0: raise SystemExit("visitor summary contract is invalid")
-if visitors.get("participating") is not False or visitors.get("renewalDue") is not False: raise SystemExit("cookie-free visitor probe must be read-only")
+month, month_views, total_views = views.get("month"), views.get("monthViews"), views.get("totalViews")
+if views.get("protocol") != "opencorvus/site-views@1": raise SystemExit("view summary contract is invalid")
+if not isinstance(month, str) or len(month) != 7 or month[4] != "-" or not month.replace("-", "").isdigit(): raise SystemExit("view summary month is not YYYY-MM")
+if not isinstance(month_views, int) or not isinstance(total_views, int) or month_views < 0 or total_views < month_views: raise SystemExit("view counters are not a consistent non-negative pair")
 with open(sys.argv[4], "w", encoding="utf-8") as output:
     for name in ("catalog", "signatures", "bundle"):
         ref = pointer[name]

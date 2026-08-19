@@ -104,7 +104,7 @@ print(json.dumps({"status":"ready","publication":{
 PY
     ;;
   /market/|/zh-cn/market/|/market/*|/zh-cn/market/*) printf '<!doctype html><title>database market</title>\n' ;;
-  /api/site/v1/visitors) printf '{"protocol":"opencorvus/site-visitors@1","estimatedParticipatingBrowsers":0,"participating":false,"renewalDue":false,"measuredWindowDays":30}\n' ;;
+  /api/site/v1/views) printf '{"protocol":"opencorvus/site-views@1","month":"2026-08","monthViews":0,"totalViews":0}\n' ;;
   /api/registry/v1/squads/*/archive)
     python3 - "$public" <<'PY'
 import json, pathlib, sys
