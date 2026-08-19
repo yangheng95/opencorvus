@@ -108,6 +108,32 @@ describe("GitHub Actions workflow contract", () => {
     }
   })
 
+  test("tags the Release at the commit its binaries were built from", async () => {
+    /*
+     * prepare freezes source-sha at the start of the run and the release dispatch carries it, but
+     * `gh release create` without --target tags whatever the default branch points at when that
+     * step runs — an hour of packaging later. On v0.0.48-beta two website commits merged during
+     * the build, so the tag landed on one commit while the dispatch payload named another, and
+     * deploy-opencorvus-com's immutable-source job refused a Release whose binaries were correct.
+     *
+     * Both halves have to name the same commit, so both are pinned here.
+     */
+    const workflow = await readWorkflow("build.yml")
+    const stage = (workflow.jobs?.["publish-release-assets"]?.steps ?? []).find(
+      (step: { name?: string }) => step.name === "Upload release assets to GitHub Release",
+    )
+
+    expect(stage, "build.yml lost its Release upload step").toBeDefined()
+    expect(stage.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
+    expect(stage.run).toContain('--target "$SOURCE_SHA"')
+
+    const dispatch = (workflow.jobs?.["publish-release"]?.steps ?? []).find(
+      (step: { name?: string }) => step.name === "Dispatch public download page deployment",
+    )
+    expect(dispatch.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
+    expect(dispatch.run).toContain("client_payload[source_sha]=$SOURCE_SHA")
+  })
+
   test("packages all five native GUI and CLI rows before publishing the release", async () => {
     const workflow = await readWorkflow("build.yml")
     const jobs = workflow.jobs ?? {}

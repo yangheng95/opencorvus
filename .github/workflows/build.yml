@@ -297,6 +297,7 @@ jobs:
       - name: Upload release assets to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
         run: |
           VERSION="${{ needs.prepare.outputs.version }}"
           UPLOAD_DIR="$(mktemp -d)"
@@ -316,8 +317,15 @@ jobs:
           mapfile -t FILES < <(find "$UPLOAD_DIR" -type f | sort)
           printf '%s\n' "${FILES[@]}"
           if ! gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            # --target pins the tag to the commit prepare resolved, which is the tree these
+            # binaries were actually built from. Without it `gh release create` tags whatever the
+            # default branch points at when this step runs — an hour of packaging later — so any
+            # merge during a release silently produced a tag that disagreed with the payload
+            # `source_sha` the deploy carries, and the website's immutable-source guard refused a
+            # Release whose binaries were fine. Observed on v0.0.48-beta.
             gh release create "v${VERSION}" \
               --draft \
+              --target "$SOURCE_SHA" \
               --prerelease="${{ needs.prepare.outputs.prerelease }}" \
               --title "v${VERSION}" \
               --generate-notes \
