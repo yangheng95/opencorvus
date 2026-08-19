@@ -740,7 +740,6 @@ export default tool({
       label: artifact_type,
       payload,
       resources,
-      source_artifact_locators: publication.source_artifact_locators,
     })
     return JSON.stringify({
       artifact_type,

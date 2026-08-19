@@ -96,7 +96,6 @@ export default tool({
       label: artifactType,
       payload,
       resources,
-      source_artifact_locators: batch.reads.map((read) => read.locator),
     })
     return JSON.stringify({
       artifact_type: artifactType,

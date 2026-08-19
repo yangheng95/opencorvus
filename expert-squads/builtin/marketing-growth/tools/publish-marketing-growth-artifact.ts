@@ -74,7 +74,6 @@ export default tool({
       label: parsed.artifactType,
       payload: parsed.payload,
       resources,
-      source_artifact_locators: args.source_artifact_locators,
     })
     return JSON.stringify({ artifact_type: parsed.artifactType, schema_version: 1, locator: publication.locator, artifact_sha256: publication.sha256 })
   },

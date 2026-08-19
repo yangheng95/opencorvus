@@ -958,13 +958,20 @@ export type EngineArtifactPublishRequest = z.input<typeof EngineArtifactPublishI
  * (`taskArtifacts.resources`), so the package-facing shape accepts them
  * directly rather than making every publisher copy the list to satisfy a
  * mutability the Host never needs.
+ *
+ * Sources are not among these fields. A package declares one by calling
+ * `engineArtifacts.select`, which is the same act the Host's own publisher
+ * requires, and the Host stamps the selected set onto the publication. Asking
+ * a package to restate them made a Tool argument out of a fact the Host had
+ * already derived — and a package that exposed that argument to its model
+ * asked the model to hand-build locator objects, which is the shape that
+ * produced publications no input could satisfy.
  */
 export type PackageEngineArtifactPublishRequest = Omit<
   EngineArtifactPublishRequest,
   "idempotent" | "resources" | "source_artifact_locators"
 > & {
   resources?: readonly TaskArtifactRef[]
-  source_artifact_locators?: readonly ArtifactReadLocator[]
 }
 export type EngineArtifactEnvelope = z.infer<typeof EngineArtifactEnvelopeSchema>
 export type EngineArtifactPublishResult = z.infer<typeof EngineArtifactPublishResultSchema>

@@ -246,7 +246,63 @@ JavaScript 字符串下标。本次实测一份 22262 字节 / 13064 字符的�
 `project-instance-lock-liveness`、`persistent-instance-publication`、
 `project-directory-and-worktree-gc` 全绿；`packages/opencorvus` 的 `tsc --noEmit` 干净。
 
-## 追加发现：生成的包可以带着不可满足的工具契约出厂（本次不改）
+
+## 第三轮修复：包发布不再声明来源（用户选择方案 B）
+
+### 根因不在生成器，在它照抄的契约
+
+`squad-sdk` 的编写技能就是这样教的：
+
+- `skills/authoring/SKILL.md:30` 让作者调
+  `context.host.engineArtifacts.publish({ ..., source_artifact_locators })`；
+- 同文件第 31 行要求「explicit `source_artifact_locators`（`[]` when none）」；
+- `skills/authoring/references/definition-contract.json` 的完整示例工具里也带着
+  `source_artifact_locators: []`。
+
+生成的包**照做了**，只是把元素类型写成了字符串。而仓库里 10 个内置发布器工具同样把
+locator 暴露成**模型可见的工具入参**（`tool.schema.array(ArtifactReadLocatorSchema)`），
+只不过声明成对象、勉强可满足。
+
+更关键的是这份声明本就是冗余的：`tool/plugin-tool-host.ts` 桥接时已经把
+`observedArtifactLocators()`（本次调用完整读过的）和 `selectedArtifactLocators()`
+（本次调用 select 过的）一并交给 `publishExpertArtifact`，而后者
+（`artifact-catalog/index.ts:2259-2270`）只是校验包声明的来源是这两个集合的子集。
+宿主已经算出了答案，却要求包再抄一遍——正是记忆 `host-must-own-derivable-facts` 判过的形态。
+
+### 改动
+
+- `packages/plugin/src/artifact-catalog.ts`：`PackageEngineArtifactPublishRequest`
+  不再包含 `source_artifact_locators`。**包不能声明来源**。
+- `packages/opencorvus/src/tool/plugin-tool-host.ts`：桥接时由宿主盖章
+  `source_artifact_locators = selectedArtifactLocators()`。包通过调用
+  `engineArtifacts.select` 来声明来源——与平台自己的 `artifact_publish`
+  要求 `source_selection_refs` 完全同构。
+- 10 个内置发布器工具删掉传参那一行。全部 10 个在删除前就已经在发布前调用了
+  `select`（`selectExactArtifactSources` 或直接 `engineArtifacts.select`），
+  因此来源不丢，只是改由宿主记录实际选中的集合。
+- `squad-sdk` 编写技能与其示例同步更新，并明确写出「不要把 locator 暴露成模型可见的
+  工具入参」——否则下一个生成的包会再犯一次。
+
+`EngineArtifactPublishInputSchema` 内部保留该字段：宿主自己的 `artifact_publish`
+把模型给的 `source_selection_refs` 解析成 locator 后仍从这里传入，跨 Task 导入与
+持久化路径也用它。收窄的只有**面向包的**那一层。
+
+### 验证与仍存在的缺口
+
+`bun run check:expert-squad-types` 是这次的主要验收：收窄类型后它**一次性找出全部 10 处**
+违规调用点，全部修完后归零；`check:expert-squad-topology` 119 manifests / 131 workflows 通过；
+`packages/opencorvus` 的 `tsc --noEmit` 干净。这正是生成包缺失的那道关卡——它只覆盖
+`expert-squads/**`，项目内生成的包不在范围内，这个缺口本轮没有补上。
+
+包发布路径的**运行时**用例目前跑不起来：`evolution-artifact-evidence-host`、
+`commercial-legal-package`、`data-analysis-package`、`hr-operations-package`、
+`omnichannel-distribution-package` 各有一个用例在 HEAD 上就已失败，报
+`Artifact provenance requires persisted Tool Part …`（夹具没有持久化 Tool Part 与
+step-start，见记忆 `artifact-provenance-requires-persisted-parts`）。已用 stash 对
+`commercial-legal` 与 `evolution-artifact-evidence-host` 做过基线比对，确认与本次改动无关。
+修夹具的规范写法在 `test/artifact-read-facts-provider-input.test.ts:146-156`，属于另一轮工作。
+
+## 追加发现：生成的包可以带着不可满足的工具契约出厂（已修，见「第三轮修复」）
 
 2026-08-19 的同一条链路里，`squad-sdk` 生成并安装的 `office/meeting-minutes-weekly-report`
 在真实运行时反复失败。根因不在进化侧，也不在编排侧，而在**生成侧**：

@@ -23,7 +23,9 @@
     "label": "Source-backed Briefing",
     "description": "Researches public evidence and delivers one source-backed briefing.",
     "version": "2026.08.03.1",
-    "product_pillars": ["work"],
+    "product_pillars": [
+      "work"
+    ],
     "readme": "# Source-backed Briefing\n\nA portable example with public evidence collection and verified briefing delivery.\n",
     "selector": {
       "summary": "Use for a bounded public-source briefing with independent claim verification.",
@@ -32,7 +34,9 @@
     },
     "scheduler": {
       "prompt": "# Briefing Orchestrator\n\nLoad the package method Skill, select the verified-briefing workflow, and preserve source attribution and explicit unknowns.\n",
-      "package_skill_refs": ["source-backed-briefing/shared/method"]
+      "package_skill_refs": [
+        "source-backed-briefing/shared/method"
+      ]
     },
     "agents": {
       "briefing-planner": {
@@ -40,29 +44,39 @@
         "description": "Freezes the evidence boundary, briefing structure, worker partition, and acceptance allocation.",
         "base_role": "delegated-worker",
         "prompt": "# Briefing Planner\n\nPublish one bounded source and delivery plan. Partition public evidence collection, briefing construction, and independent claim checking into non-overlapping worker ownership. Do not write the final briefing.\n",
-        "package_skill_refs": ["source-backed-briefing/shared/method"]
+        "package_skill_refs": [
+          "source-backed-briefing/shared/method"
+        ]
       },
       "evidence-researcher": {
         "label": "Evidence Researcher",
         "description": "Collects attributable public evidence and records unknowns.",
         "base_role": "deep-research",
         "prompt": "# Evidence Researcher\n\nCollect real public sources, cite exact URLs and dates, mark unavailable facts unknown, and publish the complete structured evidence once through the package-owned publish-source-evidence tool.\n",
-        "package_skill_refs": ["source-backed-briefing/shared/method"],
-        "package_tool_refs": ["source-backed-briefing/shared/publish-source-evidence"]
+        "package_skill_refs": [
+          "source-backed-briefing/shared/method"
+        ],
+        "package_tool_refs": [
+          "source-backed-briefing/shared/publish-source-evidence"
+        ]
       },
       "briefing-writer": {
         "label": "Briefing Writer",
         "description": "Verifies the collected claims and delivers the final briefing.",
         "base_role": "build",
         "prompt": "# Briefing Writer\n\nLoad the package method Skill, read the accepted evidence, verify every load-bearing claim, and deliver one cited briefing.\n",
-        "package_skill_refs": ["source-backed-briefing/shared/method"]
+        "package_skill_refs": [
+          "source-backed-briefing/shared/method"
+        ]
       },
       "claim-checker": {
         "label": "Briefing Claim Checker",
         "description": "Independently checks load-bearing claims and records uncertainty against the planned source boundary.",
         "base_role": "fact-check",
         "prompt": "# Briefing Claim Checker\n\nCheck the Planner's exact target message and evidence boundary, report unsupported claims and explicit unknowns, and do not rewrite the briefing.\n",
-        "package_skill_refs": ["source-backed-briefing/shared/method"]
+        "package_skill_refs": [
+          "source-backed-briefing/shared/method"
+        ]
       }
     },
     "virtual_workflows": {
@@ -77,24 +91,30 @@
           "briefing-writer": {
             "agent_id": "briefing-writer",
             "description": "Build the source-backed briefing from the Planner contract.",
-            "depends_on": ["briefing-planner"]
+            "depends_on": [
+              "briefing-planner"
+            ]
           },
           "evidence-researcher": {
             "agent_id": "evidence-researcher",
             "description": "Collect public evidence and record contradictions and unknowns.",
-            "depends_on": ["briefing-planner"]
+            "depends_on": [
+              "briefing-planner"
+            ]
           },
           "claim-checker": {
             "agent_id": "claim-checker",
             "description": "Independently check load-bearing claims and explicit unknowns.",
-            "depends_on": ["briefing-planner"]
+            "depends_on": [
+              "briefing-planner"
+            ]
           }
         }
       }
     },
     "extra_files": {
       "skills/method/SKILL.md": "---\nname: source-backed-briefing-method\ndescription: Produce one source-backed briefing through attributable research, explicit unknowns, independent claim verification, and cited delivery.\n---\n\n# Source-backed briefing method\n\nCollect attributable public evidence, preserve source URLs and observation dates, distinguish facts from inference, and record unknowns. The writer completely reads the accepted evidence, verifies every load-bearing claim, and delivers one cited briefing without inventing unavailable facts.\n",
-      "tools/publish-source-evidence.ts": "import { tool } from \"@opencorvus-ai/plugin\"\n\nconst ClaimSchema = tool.schema.object({\n  claim: tool.schema.string().min(1),\n  source_url: tool.schema.string().url(),\n  observed_at: tool.schema.string().min(1),\n}).strict()\n\nconst EvidenceSchema = tool.schema.object({\n  claims: tool.schema.array(ClaimSchema).min(1),\n  unknowns: tool.schema.array(tool.schema.string().min(1)),\n}).strict()\n\nexport default tool({\n  description: \"Publish the source-backed briefing evidence through its typed package ABI.\",\n  args: { evidence: EvidenceSchema },\n  async execute(args, context) {\n    const publication = await context.host.engineArtifacts.publish({\n      artifact_type: \"source-backed-briefing/source-evidence\",\n      schema_version: 1,\n      label: \"Source-backed briefing evidence\",\n      payload: args.evidence,\n      resources: [],\n      source_artifact_locators: [],\n    })\n    context.metadata({\n      title: \"Published source-backed briefing evidence\",\n      metadata: { artifact_sha256: publication.sha256 },\n    })\n    return JSON.stringify({ locator: publication.locator, sha256: publication.sha256 })\n  },\n})\n"
+      "tools/publish-source-evidence.ts": "import { tool } from \"@opencorvus-ai/plugin\"\n\nconst ClaimSchema = tool.schema.object({\n  claim: tool.schema.string().min(1),\n  source_url: tool.schema.string().url(),\n  observed_at: tool.schema.string().min(1),\n}).strict()\n\nconst EvidenceSchema = tool.schema.object({\n  claims: tool.schema.array(ClaimSchema).min(1),\n  unknowns: tool.schema.array(tool.schema.string().min(1)),\n}).strict()\n\nexport default tool({\n  description: \"Publish the source-backed briefing evidence through its typed package ABI.\",\n  args: { evidence: EvidenceSchema },\n  async execute(args, context) {\n    const publication = await context.host.engineArtifacts.publish({\n      artifact_type: \"source-backed-briefing/source-evidence\",\n      schema_version: 1,\n      label: \"Source-backed briefing evidence\",\n      payload: args.evidence,\n      resources: [],\n    })\n    context.metadata({\n      title: \"Published source-backed briefing evidence\",\n      metadata: { artifact_sha256: publication.sha256 },\n    })\n    return JSON.stringify({ locator: publication.locator, sha256: publication.sha256 })\n  },\n})\n"
     }
   }
 }

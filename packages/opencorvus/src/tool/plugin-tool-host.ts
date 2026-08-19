@@ -324,14 +324,18 @@ export async function withTaskScopedPluginToolHost<T>(
     runCommand: invocationRunCommand,
     engineArtifacts: Object.freeze({
       publish: (input) =>
-        trackArtifactOperation(() =>
-          publishExpertArtifact({
+        trackArtifactOperation(() => {
+          // The sources are what this invocation selected. The Host already
+          // holds that set, so the package declares sources by selecting them
+          // rather than by restating them here.
+          const selected = selectedArtifactLocators()
+          return publishExpertArtifact({
             scope,
-            artifact: { ...input, idempotent: true },
+            artifact: { ...input, source_artifact_locators: selected, idempotent: true },
             observedArtifactLocators: observedArtifactLocators(),
-            selectedArtifactLocators: selectedArtifactLocators(),
-          }),
-        ),
+            selectedArtifactLocators: selected,
+          })
+        }),
       search: (input) =>
         trackArtifactOperation(() => searchTaskArtifacts({ authority: artifactAuthority, search: input })),
       read: (input) =>
