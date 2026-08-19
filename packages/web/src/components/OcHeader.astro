@@ -21,10 +21,14 @@ const docsHref = publicPath(locale, "/start/quickstart/")
 // they have to carry the path or they resolve against the current URL and go nowhere.
 const anchorBase = current === "home" ? "" : home
 // Two anchors, not five. With the market and docs links the header already carries, seven entries
-// left no room to breathe and pushed Chinese labels into wrapping. FAQ and the squad teaser are a
-// scroll away on the only page these anchors apply to.
+// left no room to breathe and pushed Chinese labels into wrapping. FAQ, the comparison and the
+// squad teaser are a scroll away on the only page these anchors apply to.
+//
+// The first one points at the long-horizon section rather than the open-source pillars: it is the
+// section that answers why a reader is on the page, and a nav that leads with the licence is
+// answering a later question first.
 const anchors = [
-  { href: `${anchorBase}#why`, label: zh ? "特性" : "Why" },
+  { href: `${anchorBase}#horizon`, label: zh ? "长程" : "Long-horizon" },
   { href: `${anchorBase}#start`, label: zh ? "开始" : "Start" },
 ]
 

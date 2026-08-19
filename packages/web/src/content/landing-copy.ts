@@ -182,7 +182,7 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
     },
     hero: {
       eyebrow: "长程任务 Harness · MIT · 可自托管",
-      titleLines: ["跑得久的工作，", "还会越跑越好。"],
+      titleLines: ["能跑完的长任务，", "还会越跑越好。"],
       description: "长程任务交给组合起来的专家团，每次交接都有证据，专家团还能按你的反馈改自己。",
       ctas: [
         { label: "查看源码", href: GITHUB, variant: "secondary" },
@@ -434,7 +434,7 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
     },
     hero: {
       eyebrow: "Long-horizon agent harness · MIT · Self-hosted",
-      titleLines: ["Work that runs long,", "and gets better at it."],
+      titleLines: ["Work that finishes,", "and gets better."],
       description:
         "Long-horizon work carried by combined expert squads, evidenced at every handoff, and revised from your feedback.",
       ctas: [
