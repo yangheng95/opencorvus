@@ -525,12 +525,16 @@ function requireTaskSourceMessageOccurrence(
   input: { source: Extract<SchedulerEndpoint, { kind: "task_scheduler" }>; sourceMessageID: string },
 ): number {
   const message = db
-    .select({ data: MessageTable.data })
+    .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
     .from(MessageTable)
     .where(eq(MessageTable.id, input.sourceMessageID))
     .get()
-  const assistant = Message.Assistant.safeParse(message?.data)
-  if (!assistant.success || !assistant.data.activationID) {
+  // `data` never carries the row's own identity; `upsertMessageRow` splits `id`
+  // and `sessionID` into their SQL columns. Decode from the reassembled Message.
+  const assistant = message
+    ? Message.Assistant.safeParse({ ...message.data, id: message.id, sessionID: message.sessionID })
+    : undefined
+  if (!assistant?.success || !assistant.data.activationID) {
     throw new SchedulerMessageAuthorityError({
       message: `Task scheduler source Message ${input.sourceMessageID} has no exact Task ingress occurrence.`,
     })

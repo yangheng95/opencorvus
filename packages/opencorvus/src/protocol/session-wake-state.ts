@@ -19,12 +19,16 @@ export function schedulerWakeMessageMatchesInTransaction(
   input: { sessionID: string; messageID: string; eventID: string; inboxID: string },
 ): boolean {
   const message = db
-    .select({ id: MessageTable.id, data: MessageTable.data })
+    .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
     .from(MessageTable)
     .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
     .get()
   if (!message) return false
-  const info = Message.User.safeParse(message.data)
+  // `data` never carries the row's own identity: `upsertMessageRow` splits `id`
+  // and `sessionID` out into their SQL columns before writing the JSON. Decoding
+  // the column alone therefore fails on every persisted row, so the identity has
+  // to be put back the same way every other Message decode site does it.
+  const info = Message.User.safeParse({ ...message.data, id: message.id, sessionID: message.sessionID })
   if (!info.success) return false
   const reason = SessionWake.WakeReason.safeParse(info.data.extra?.wake_reason)
   if (!reason.success || reason.data.source !== "scheduler.message") return false
