@@ -108,7 +108,7 @@ Artifacts into the next Task"，其返回边正是这条回路，所以在修复
 
 `data` 列的持久化形状不变；两处仍然经由 zod 解码，保留 `66d4ab3c` 想要的改名即失败的性质。
 
-## 附带发现（本次不改）
+## 附带发现（第二轮已修两项，见「第二轮修复」）
 
 - `protocol/delivery.ts:986` 的 `rescheduleSchedulerDelivery` 写完 retry 收据后不释放 control lease，
   而 `engine/control-lease.ts` 根本没有 release 原语（只有 acquire/renew/assert，靠超时回收）。
@@ -179,6 +179,63 @@ Artifacts into the next Task"，其返回边正是这条回路，所以在修复
 审查提出的剩余风险：修复让一段自 2026-08-15 起从未执行的代码重新可达
 （`delivery.ts:537` 之后的租约查找、`delivery.ts:753-760` 的 epoch 比较）。上述真实路径验收第 2 项
 已覆盖该风险；夹具测试仍缺。
+
+## 第二轮修复（2026-08-19，用户指示「修复专家团进化暴露的问题」）
+
+「附带发现」三项中的两项已修，第三项与「追加发现」保留，理由见下。
+
+### 一、control lease 没有归还原语，退避恒等于租约 TTL
+
+`engine/control-lease.ts` 只有 acquire / renew / assert，租约唯一的结束方式是超时。
+`rescheduleSchedulerDelivery`（`protocol/delivery.ts`）写完 `retry_wait` 收据后直接返回，
+仍持有租约，于是 `drainMissionRecipient` 计算的 `min(30s, 500·2^(n-1))` 从未生效，
+真实重试周期恒等于 `DELIVERY_LEASE_MS = 120_000`。本次实测四次重试间隔精确为 120s。
+
+修复：新增 `releaseControlLease`，owner 围栏校验后把该租约行的 `expires_at` **就地置为 now**
+（不删除，保留 `projectProtocolDeliveryInTransaction` 用来计数 `attempt` 的租约历史）；
+`rescheduleSchedulerDelivery` 在写收据的同一事务内归还租约。
+
+### 二、`artifact_publish` 把字符偏移谎报成字节偏移
+
+`tool/artifact-catalog.ts` 原先拼 `at byte ${error.offset}`，而 jsonc-parser 返回的是
+JavaScript 字符串下标。本次实测一份 22262 字节 / 13064 字符的中文 blueprint 报
+`at byte 12731`，真实错点在**字符** 12731 —— 模型若按字节去数会落到无关位置，且报文不含任何片段。
+
+修复：改为 `at line L, column C (near "…")`，与 `config/config.ts:1961`、`config/paths.ts:217`
+的既有做法一致，并附上错点前后各 40 字符的 `JSON.stringify` 片段，让位置可核对而不必数数。
+
+### 三、保留未修的两项及理由
+
+- **恢复期 Instance 递归杀 Task。** 根因已定位到具体机制：`project/bootstrap.ts:134` 的
+  `task-control.reconcile` 跑在 `prepareContext` 的 "instance context preparation" 生命周期内，
+  而被恢复的编排器轮次会经由 `expert-squad/prompt-profile-resolver.ts:739/795/801/4061`、
+  `config/effective.ts:25` 这类「按目录再进一次实例」的读取助手调用 `Instance.provide`，
+  撞上 `project/instance.ts:1152` 的 `assertNoRecursiveLifecycle`。该守卫在
+  `assertSameKeyReentryAllowed` 之前无条件拒绝，因此连合法的同租约重入也被拒。
+  正确的修法是让守卫区分「递归进入准备阶段」与「复用已准备好的上下文」，这会改动
+  一个已经出过多次事故的并发原语；bootstrap 的注释又明确拒绝把恢复移出 project open。
+  这需要独立的一次改动和它自己的并发测试，不适合并入本轮。
+- **生成的包可以带着不可满足的工具契约出厂。** 见「追加发现」。真正的根因不在生成器：
+  平台自己的 `artifact_publish` 接受**宿主铸造的** `source_selection_refs`，而包工具面对的
+  `engineArtifacts.publish`（`packages/plugin/src/artifact-catalog.ts:887/967`）只接受
+  手工构造的 `ArtifactReadLocator` 对象数组。包被推向一种平台已为自己否决的入参形态
+  （见记忆 `host-must-own-derivable-facts`）。修法是让 `engineArtifacts.publish` 也接受
+  宿主铸造的 ref，这是 `packages/plugin` 的公开 ABI 变更，且应同步内置包字节，
+  同样需要独立一轮。
+
+### 验证
+
+`packages/opencorvus/test/evolution-chain-host-defect-repairs.test.ts`（3 pass / 13 expect）：
+
+- 解析诊断用例给一份「错点之前全是中文」的载荷，断言 column 等于 `error.offset + 1`
+  （即字符坐标可直接索引载荷）、字节长度确实大于字符长度、片段里含得到出错处的原文。
+- 租约归还用例断言归还后 `expires_at` 就是归还时刻，且另一 owner 在**退避时刻**即可取得租约。
+- 第三个用例断言只有记录在案的 owner 能归还自己的租约，他人归还返回 false 且租约不变。
+
+回归：`protocol-scheduler-message-delivery`、`protocol-delivery-fact-storage`、
+`scheduler-wake-message-identity`、`scheduler-claim-and-fire-identity`、`scheduler-fact-control`、
+`artifact-catalog-cursor`、`artifact-publisher-authority`、`artifact-provider-reference-flow` 全绿；
+`packages/opencorvus` 的 `tsc --noEmit` 干净。
 
 ## 追加发现：生成的包可以带着不可满足的工具契约出厂（本次不改）
 
