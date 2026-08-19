@@ -122,131 +122,47 @@ try {
       throw new Error(`Surface loads stylesheets but none define the design system: ${surface}`)
     }
   }
-  const visitorRead = await fetch(`${origin}/api/site/v1/visitors`)
-  const visitorInitial = await visitorRead.json() as { estimatedParticipatingBrowsers?: number; participating?: boolean }
-  if (!visitorRead.ok || visitorInitial.estimatedParticipatingBrowsers !== 0 || visitorInitial.participating !== false || visitorRead.headers.get("set-cookie")) {
-    throw new Error("Read-only visitor summary changed browser participation")
+  const viewRead = await fetch(`${origin}/api/site/v1/views`)
+  const viewInitial = await viewRead.json() as { month?: string; monthViews?: number; totalViews?: number }
+  if (!viewRead.ok || viewInitial.monthViews !== 0 || viewInitial.totalViews !== 0 || viewRead.headers.get("set-cookie")) {
+    throw new Error("Read-only view summary recorded a view or issued a cookie")
   }
-  if (visitorRead.headers.get("access-control-allow-origin")) throw new Error("Visitor summary unexpectedly enabled cross-origin reads")
-  const visitorCount = await fetch(`${origin}/api/site/v1/visitors`, {
+  if (!/^[0-9]{4}-[0-9]{2}$/.test(viewInitial.month ?? "")) throw new Error("View summary did not report its UTC month")
+  if (viewRead.headers.get("access-control-allow-origin")) throw new Error("View summary unexpectedly enabled cross-origin reads")
+  const recorded = await fetch(`${origin}/api/site/v1/views`, {
     method: "POST",
     headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json" },
-    body: JSON.stringify({ purpose: "footer-count" }),
   })
-  const visitorCounted = await visitorCount.json() as { estimatedParticipatingBrowsers?: number; participating?: boolean }
-  const setCookie = visitorCount.headers.get("set-cookie") ?? ""
-  if (!visitorCount.ok || visitorCounted.estimatedParticipatingBrowsers !== 1 || visitorCounted.participating !== true) {
-    throw new Error("Same-origin visitor participation did not increment the estimate")
+  const recordedBody = await recorded.json() as { monthViews?: number; totalViews?: number }
+  if (!recorded.ok || recordedBody.monthViews !== 1 || recordedBody.totalViews !== 1 || recorded.headers.get("set-cookie")) {
+    throw new Error("Same-origin view record did not count exactly one view without a cookie")
   }
-  if (visitorCount.headers.get("access-control-allow-origin")) throw new Error("Visitor participation unexpectedly enabled cross-origin reads")
-  for (const attribute of ["__Host-opencorvus-visitor=", "__Host-opencorvus-visitor-consent=1", "Secure", "HttpOnly", "SameSite=Lax", "Path=/", "Max-Age=2592000"]) {
-    if (!setCookie.includes(attribute)) throw new Error(`Visitor cookie contract is missing ${attribute}`)
-  }
-  const visitorToken = /__Host-opencorvus-visitor=([^;,]+)/.exec(setCookie)?.[1]
-  if (!visitorToken) throw new Error("Visitor response did not issue an opaque token")
-  const participatingCookie = `__Host-opencorvus-visitor=${visitorToken}; __Host-opencorvus-visitor-consent=1`
-  const sameDayDatabase = new Database(databasePath, { strict: true })
-  const visitorDigest = createHash("sha256").update(visitorToken).digest("hex")
-  const initialExpiry = sameDayDatabase.query<{ expires_at: number }, [string]>("SELECT expires_at FROM site_visitor WHERE visitor_digest = ?").get(visitorDigest)?.expires_at
-  const sameDay = await fetch(`${origin}/api/site/v1/visitors`, {
+  if (recorded.headers.get("access-control-allow-origin")) throw new Error("View record unexpectedly enabled cross-origin reads")
+  const repeated = await fetch(`${origin}/api/site/v1/views`, {
     method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json", cookie: participatingCookie },
-    body: JSON.stringify({ purpose: "footer-count" }),
+    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json" },
   })
-  const sameDayExpiry = sameDayDatabase.query<{ expires_at: number }, [string]>("SELECT expires_at FROM site_visitor WHERE visitor_digest = ?").get(visitorDigest)?.expires_at
-  if (!sameDay.ok || !initialExpiry || sameDayExpiry !== initialExpiry || sameDay.headers.get("set-cookie")) {
-    throw new Error("Same-day visitor participation was not a read-only repeat")
+  const repeatedBody = await repeated.json() as { monthViews?: number; totalViews?: number }
+  if (!repeated.ok || repeatedBody.monthViews !== 2 || repeatedBody.totalViews !== 2) {
+    throw new Error("A second view from the same reader did not count as a second view")
   }
-  sameDayDatabase.run("UPDATE site_visitor SET expires_at = ? WHERE visitor_digest = ?", [Math.floor(Date.now() / 1000) + 60, visitorDigest])
-  sameDayDatabase.close()
-  const renewalRead = await fetch(`${origin}/api/site/v1/visitors`, { headers: { cookie: participatingCookie } })
-  const renewalState = await renewalRead.json() as { renewalDue?: boolean; participating?: boolean }
-  if (!renewalRead.ok || renewalState.participating !== true || renewalState.renewalDue !== true || renewalRead.headers.get("set-cookie")) {
-    throw new Error("Read-only visitor summary did not expose due renewal")
+  const viewDatabase = new Database(databasePath, { strict: true })
+  const storedTotal = viewDatabase.query<{ total_views: number }, []>("SELECT total_views FROM site_view_summary WHERE singleton = 1").get()?.total_views
+  const storedMonths = viewDatabase.query<{ month: string; views: number }, []>("SELECT month, views FROM site_view_month ORDER BY month").all()
+  viewDatabase.close()
+  if (storedTotal !== 2 || storedMonths.length !== 1 || storedMonths[0]?.views !== 2) {
+    throw new Error("Recorded views did not land in the monthly ledger and its running total")
   }
-  const renewal = await fetch(`${origin}/api/site/v1/visitors`, {
-    method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json", cookie: participatingCookie },
-    body: JSON.stringify({ purpose: "footer-count" }),
-  })
-  const renewalCookies = renewal.headers.get("set-cookie") ?? ""
-  if (!renewal.ok || !renewalCookies.includes("__Host-opencorvus-visitor=") || !renewalCookies.includes("__Host-opencorvus-visitor-consent=1")) {
-    throw new Error("Due renewal did not synchronously extend both visitor cookies")
-  }
-  const crossSite = await fetch(`${origin}/api/site/v1/visitors`, {
+  const crossSiteView = await fetch(`${origin}/api/site/v1/views`, {
     method: "POST",
     headers: { origin: "https://example.invalid", "sec-fetch-site": "cross-site", "content-type": "application/json" },
-    body: JSON.stringify({ purpose: "footer-count" }),
   })
-  const crossSiteBody = await crossSite.json() as { error?: { code?: string } }
-  if (crossSite.status !== 403 || crossSiteBody.error?.code !== "site_visitor_origin_rejected") throw new Error("Cross-site visitor mutation did not return its typed rejection")
-  const invalidBody = await fetch(`${origin}/api/site/v1/visitors`, {
-    method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json" },
-    body: JSON.stringify({ purpose: "other" }),
-  })
-  const invalidBodyResult = await invalidBody.json() as { error?: { code?: string } }
-  if (invalidBody.status !== 400 || invalidBodyResult.error?.code !== "site_visitor_request_invalid") throw new Error("Invalid visitor mutation did not return its typed request error")
-  const oversized = await fetch(`${origin}/api/site/v1/visitors`, {
-    method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json" },
-    body: JSON.stringify({ purpose: "footer-count", padding: "x".repeat(256) }),
-  })
-  const oversizedBody = await oversized.json() as { error?: { code?: string } }
-  if (oversized.status !== 400 || oversizedBody.error?.code !== "site_visitor_request_invalid") throw new Error("Fixed-length oversized visitor mutation did not return its typed request error")
-  const streamedBody = new ReadableStream<Uint8Array>({
-    start(controller) {
-      controller.enqueue(new TextEncoder().encode('{"purpose":"footer-count","padding":"'))
-      controller.enqueue(new TextEncoder().encode("x".repeat(256)))
-      controller.enqueue(new TextEncoder().encode('"}'))
-      controller.close()
-    },
-  })
-  const streamed = await fetch(`${origin}/api/site/v1/visitors`, {
-    method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json" },
-    body: streamedBody,
-  })
-  const streamedResult = await streamed.json() as { error?: { code?: string } }
-  if (streamed.status !== 400 || streamedResult.error?.code !== "site_visitor_request_invalid") throw new Error("Streamed oversized visitor mutation did not return its typed request error")
-  const withdrawn = await fetch(`${origin}/api/site/v1/visitors/current`, {
-    method: "DELETE",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json", cookie: participatingCookie },
-  })
-  const withdrawnBody = await withdrawn.json() as { estimatedParticipatingBrowsers?: number; participating?: boolean }
-  const clearedCookies = withdrawn.headers.get("set-cookie") ?? ""
-  if (!withdrawn.ok || withdrawnBody.estimatedParticipatingBrowsers !== 0 || withdrawnBody.participating !== false || !clearedCookies.includes("Max-Age=0")) {
-    throw new Error("Visitor withdrawal did not remove membership and clear both cookies")
+  const crossSiteViewBody = await crossSiteView.json() as { error?: { code?: string } }
+  if (crossSiteView.status !== 403 || crossSiteViewBody.error?.code !== "site_view_origin_rejected") {
+    throw new Error("Cross-site view record did not return its typed rejection")
   }
-  const repeatedWithdrawal = await fetch(`${origin}/api/site/v1/visitors/current`, {
-    method: "DELETE",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json" },
-  })
-  const repeatedWithdrawalBody = await repeatedWithdrawal.json() as { estimatedParticipatingBrowsers?: number; participating?: boolean }
-  if (!repeatedWithdrawal.ok || repeatedWithdrawalBody.estimatedParticipatingBrowsers !== 0 || repeatedWithdrawalBody.participating !== false || repeatedWithdrawal.headers.get("access-control-allow-origin")) {
-    throw new Error("Visitor withdrawal without a current token was not an idempotent same-origin success")
-  }
-  const fixedToken = "A".repeat(22)
-  const fixedCookie = `__Host-opencorvus-visitor=${fixedToken}; __Host-opencorvus-visitor-consent=1`
-  const concurrent = await Promise.all([0, 1].map(() => fetch(`${origin}/api/site/v1/visitors`, {
-    method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json", cookie: fixedCookie },
-    body: JSON.stringify({ purpose: "footer-count" }),
-  })))
-  const concurrentBodies = await Promise.all(concurrent.map((response) => response.json() as Promise<{ estimatedParticipatingBrowsers?: number }>))
-  if (concurrent.some((response) => !response.ok) || concurrentBodies.some((body) => body.estimatedParticipatingBrowsers !== 1)) {
-    throw new Error("Concurrent first participation for one browser token did not converge on one member")
-  }
-  const invalidCookie = `__Host-opencorvus-visitor=invalid; __Host-opencorvus-visitor-consent=1`
-  const rotated = await fetch(`${origin}/api/site/v1/visitors`, {
-    method: "POST",
-    headers: { origin, "sec-fetch-site": "same-origin", "content-type": "application/json", cookie: invalidCookie },
-    body: JSON.stringify({ purpose: "footer-count" }),
-  })
-  const rotatedCookies = rotated.headers.get("set-cookie") ?? ""
-  if (!rotated.ok || !rotatedCookies.includes("__Host-opencorvus-visitor=") || rotatedCookies.includes("__Host-opencorvus-visitor=invalid")) {
-    throw new Error("Consented invalid visitor token did not rotate to a valid token")
-  }
+  const unchanged = await (await fetch(`${origin}/api/site/v1/views`)).json() as { totalViews?: number }
+  if (unchanged.totalViews !== 2) throw new Error("A rejected cross-site record still moved the counter")
   const archive = await fetch(
     `${origin}/api/registry/v1/squads/${identityPath}/${encodeURIComponent(exact.identity.version)}/${exact.identity.digest}/archive`,
   )

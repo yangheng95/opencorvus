@@ -12,7 +12,7 @@ const command = process.argv[2]
 const databasePath = option("--database")
 const dataRoot = option("--data")
 if (!command || !databasePath || !dataRoot) {
-  throw new Error("Usage: website-registry-control.ts <import|reset-v1|health|backup|visitor-cleanup|schema-state> --database <file> --data <directory> [--seed <file> --source <directory> | --target <file>]")
+  throw new Error("Usage: website-registry-control.ts <import|reset-v1|health|backup|schema-state> --database <file> --data <directory> [--seed <file> --source <directory> | --target <file>]")
 }
 
 const resolvedDatabase = path.resolve(databasePath)
@@ -36,8 +36,8 @@ if (command === "reset-v1") {
     const seed = await readWebsiteRegistrySeed(path.resolve(seedFile))
     await importWebsiteRegistryPublication(resetRegistry, seed, path.resolve(sourceRoot))
     const counters = resetRegistry.sqlite.query<{ total: number }, []>("SELECT COALESCE(SUM(response_count), 0) AS total FROM revision_download_counter").get()?.total
-    const visitors = resetRegistry.sqlite.query<{ total: number }, []>("SELECT COUNT(*) AS total FROM site_visitor").get()?.total
-    if (counters !== 0 || visitors !== 0) throw new Error("reset-v1 did not initialize counters and visitors at zero")
+    const views = resetRegistry.sqlite.query<{ total: number }, []>("SELECT total_views AS total FROM site_view_summary WHERE singleton = 1").get()?.total
+    if (counters !== 0 || views !== 0) throw new Error("reset-v1 did not initialize download and view counters at zero")
     await resetRegistry.readiness()
     await resetRegistry.prepareForAtomicSwap()
   } catch (error) {
@@ -68,8 +68,6 @@ try {
     const target = option("--target")
     if (!target) throw new Error("backup requires --target")
     console.log(JSON.stringify({ backup: await registry.backup(path.resolve(target)) }))
-  } else if (command === "visitor-cleanup") {
-    console.log(JSON.stringify({ removed: registry.cleanupVisitors(), visitor: registry.visitorSummary() }))
   } else {
     throw new Error(`Unknown Website Registry command: ${command}`)
   }

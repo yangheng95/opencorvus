@@ -1,0 +1,129 @@
+---
+type Props = { locale: "root" | "zh-cn"; surface?: "public" | "docs" }
+const { locale, surface = "public" } = Astro.props
+const copy = locale === "zh-cn"
+  ? {
+      monthLabel: "本月浏览量",
+      totalLabel: "总浏览量",
+      unavailable: "访问统计暂不可用",
+      note: "仅累计页面浏览次数 · 不使用 cookie，不存储 IP、指纹或任何逐访客数据",
+    }
+  : {
+      monthLabel: "Views this month",
+      totalLabel: "Views all time",
+      unavailable: "View count unavailable",
+      note: "Page views only · no cookies, no IP, fingerprint, or per-visitor record",
+    }
+---
+
+<aside class:list={["view-count", `view-count--${surface}`]} data-view-count data-unavailable={copy.unavailable}>
+  <div class="view-count__figures">
+    <p class="view-count__figure">
+      <span class="view-count__label">{copy.monthLabel}</span>
+      <span class="view-count__value" data-view-month aria-live="polite">—</span>
+    </p>
+    <p class="view-count__figure">
+      <span class="view-count__label">{copy.totalLabel}</span>
+      <span class="view-count__value" data-view-total aria-live="polite">—</span>
+    </p>
+  </div>
+  <p class="view-count__note">{copy.note}</p>
+  <noscript><p class="view-count__note">{copy.unavailable}</p></noscript>
+</aside>
+
+<script>
+  type ViewPayload = { month: string; monthViews: number; totalViews: number }
+
+  /**
+   * The visit is the record — nothing to click, nothing to opt into, and nothing stored that
+   * belongs to the reader. A failed record still leaves the page working; it just shows no number.
+   */
+  const record = async (): Promise<ViewPayload> => {
+    const response = await fetch("/api/site/v1/views", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { "content-type": "application/json" },
+    })
+    if (!response.ok) throw new Error("view count unavailable")
+    return (await response.json()) as ViewPayload
+  }
+
+  const roots = [...document.querySelectorAll<HTMLElement>("[data-view-count]")]
+  if (roots.length > 0) {
+    // One record per page load however many counters the layout carries.
+    record().then(
+      (payload) => {
+        const format = new Intl.NumberFormat(document.documentElement.lang)
+        for (const root of roots) {
+          root.querySelector<HTMLElement>("[data-view-month]")!.textContent = format.format(payload.monthViews)
+          root.querySelector<HTMLElement>("[data-view-total]")!.textContent = format.format(payload.totalViews)
+        }
+      },
+      () => {
+        for (const root of roots) {
+          root.querySelector<HTMLElement>("[data-view-month]")!.textContent = root.dataset.unavailable!
+          root.querySelector<HTMLElement>("[data-view-total]")!.textContent = ""
+        }
+      },
+    )
+  }
+</script>
+
+<style>
+  .view-count {
+    min-width: 0;
+  }
+
+  .view-count p {
+    margin: 0;
+  }
+
+  .view-count__figures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .view-count__figure {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .view-count__label {
+    color: inherit;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  .view-count__value {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: clamp(1.35rem, 2vw, 2rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .view-count__note {
+    margin-top: 0.55rem !important;
+    max-width: 21rem;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    opacity: 0.72;
+  }
+
+  .view-count--public {
+    padding-left: 1.25rem;
+    border-left: 2px solid currentColor;
+  }
+
+  .view-count--docs {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--sl-color-border);
+    background: var(--sl-color-bg-nav);
+  }
+</style>

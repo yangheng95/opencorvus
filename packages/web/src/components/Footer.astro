@@ -2,7 +2,7 @@
 import config from "virtual:starlight/user-config"
 import LanguageSelect from "@astrojs/starlight/components/LanguageSelect.astro"
 import { Icon } from "@astrojs/starlight/components"
-import VisitorCount from "./VisitorCount.astro"
+import ViewCount from "./ViewCount.astro"
 
 const { lang, editUrl, lastUpdated, entry } = Astro.locals.starlightRoute
 const template = entry.data.template
@@ -43,7 +43,7 @@ const discord = config.social?.find((item) => item.icon === "discord")
             )
           }
           <LanguageSelect />
-          <VisitorCount locale={lang === "zh-CN" ? "zh-cn" : "root"} surface="docs" />
+          <ViewCount locale={lang === "zh-CN" ? "zh-cn" : "root"} surface="docs" />
         </div>
         <div>
           <p>&copy; <a target="_blank" rel="noopener noreferrer" href="https://github.com/yangheng95/opencorvus">OpenCorvus</a></p>

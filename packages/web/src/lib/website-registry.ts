@@ -17,12 +17,13 @@ import {
 } from "./website-registry-contract"
 
 const SCHEMA_VERSION = 1
-export const LEGACY_SCHEMA_CHECKSUM = "dddd1a8384b02fd05c745832f55c53e85366bcdda328fbc7d5c17f61ef12e245"
-const LEGACY_SCHEMA_FINGERPRINT = "3ea05c5218a1f139aa20433d105d5674a31c5ca803889c4a451dfcbd036e08ba"
-const VISITOR_WINDOW_SECONDS = 30 * 24 * 60 * 60
-const VISITOR_RENEWAL_SECONDS = 24 * 60 * 60
-const VISITOR_DAILY_LIMIT = 5_000
-const VISITOR_ACTIVE_LIMIT = 150_000
+export const LEGACY_SCHEMA_CHECKSUM = "d9e63ae0d83599605266918d3a2a12c76bfc9d0e941f66b62437eecefdf176f8"
+const LEGACY_SCHEMA_FINGERPRINT = "35f48b3d0a60b66d16389e8e202c1153067c6cbc8edc377271b4dc7ca259cc79"
+
+/** Views are bucketed by UTC month so the site can show this month next to all time. */
+function viewMonth(now: number) {
+  return new Date(now * 1000).toISOString().slice(0, 7)
+}
 const DDL = `
 CREATE TABLE registry_schema (
   version INTEGER PRIMARY KEY,
@@ -151,30 +152,24 @@ CREATE TABLE revision_download_counter (
   response_count INTEGER NOT NULL DEFAULT 0 CHECK (response_count >= 0),
   last_response_at TEXT
 );
-CREATE TABLE site_visitor (
-  visitor_digest TEXT PRIMARY KEY CHECK (length(visitor_digest) = 64 AND visitor_digest NOT GLOB '*[^0-9a-f]*'),
-  first_seen_at INTEGER NOT NULL CHECK (first_seen_at >= 0),
-  expires_at INTEGER NOT NULL CHECK (expires_at > first_seen_at)
+CREATE TABLE site_view_month (
+  month TEXT PRIMARY KEY CHECK (length(month) = 7 AND month GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]'),
+  views INTEGER NOT NULL CHECK (views >= 0)
 );
-CREATE TABLE site_visitor_summary (
+CREATE TABLE site_view_summary (
   singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
-  active_count INTEGER NOT NULL CHECK (active_count BETWEEN 0 AND 150000),
-  next_cleanup_at INTEGER NOT NULL CHECK (next_cleanup_at >= 0),
-  intake_day TEXT NOT NULL,
-  new_tokens_today INTEGER NOT NULL CHECK (new_tokens_today BETWEEN 0 AND 5000),
+  total_views INTEGER NOT NULL CHECK (total_views >= 0),
   updated_at INTEGER NOT NULL CHECK (updated_at >= 0)
 );
 CREATE INDEX publication_revision_revision ON publication_revision(revision_id);
 CREATE INDEX squad_revision_identity ON squad_revision(namespace, squad_id);
-CREATE INDEX site_visitor_expiry ON site_visitor(expires_at);
 `
 export const SCHEMA_CHECKSUM = createHash("sha256").update(DDL).digest("hex")
 
-export type WebsiteVisitorSummary = {
-  estimatedParticipatingBrowsers: number
-  participating: boolean
-  renewalDue: boolean
-  counted?: boolean
+export type WebsiteViewSummary = {
+  month: string
+  monthViews: number
+  totalViews: number
 }
 
 export function inspectWebsiteRegistrySchema(databasePath: string) {
@@ -284,7 +279,7 @@ export class WebsiteRegistry {
   private ensureSchema() {
     const tables = this.sqlite.query<{ name: string; sql: string }, []>("SELECT name, sql FROM sqlite_schema WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all()
     if (tables.length === 0) {
-      this.sqlite.exec(`${DDL}\nINSERT INTO registry_schema(version, checksum, applied_at) VALUES (${SCHEMA_VERSION}, ${quoteLiteral(SCHEMA_CHECKSUM)}, ${quoteLiteral(new Date().toISOString())}); INSERT INTO registry_state(singleton, active_publication_id) VALUES (1, NULL); INSERT INTO site_visitor_summary(singleton, active_count, next_cleanup_at, intake_day, new_tokens_today, updated_at) VALUES (1, 0, 0, '', 0, 0);`)
+      this.sqlite.exec(`${DDL}\nINSERT INTO registry_schema(version, checksum, applied_at) VALUES (${SCHEMA_VERSION}, ${quoteLiteral(SCHEMA_CHECKSUM)}, ${quoteLiteral(new Date().toISOString())}); INSERT INTO registry_state(singleton, active_publication_id) VALUES (1, NULL); INSERT INTO site_view_summary(singleton, total_views, updated_at) VALUES (1, 0, 0);`)
       return
     }
     const schema = this.sqlite.query<{ version: number; checksum: string }, []>("SELECT version, checksum FROM registry_schema").get()
@@ -585,94 +580,32 @@ export class WebsiteRegistry {
     return file
   }
 
-  private cleanupVisitorsInTransaction(now: number) {
-    const removed = this.sqlite.run("DELETE FROM site_visitor WHERE expires_at <= ?", [now]).changes
-    const row = this.sqlite.query<{ active_count: number }, []>("SELECT active_count FROM site_visitor_summary WHERE singleton = 1").get()
-    if (!row || removed > row.active_count) throw new WebsiteRegistryIntegrityError("Visitor summary is missing or smaller than expired membership")
-    this.sqlite.run(
-      "UPDATE site_visitor_summary SET active_count = active_count - ?, next_cleanup_at = ?, updated_at = ? WHERE singleton = 1",
-      [removed, now + 60 * 60, now],
-    )
-    return removed
+  viewSummary(now = Math.floor(Date.now() / 1000)): WebsiteViewSummary {
+    const summary = this.sqlite.query<{ total_views: number }, []>("SELECT total_views FROM site_view_summary WHERE singleton = 1").get()
+    if (!summary) throw new WebsiteRegistryIntegrityError("View summary is missing")
+    const month = viewMonth(now)
+    const bucket = this.sqlite.query<{ views: number }, [string]>("SELECT views FROM site_view_month WHERE month = ?").get(month)
+    return { month, monthViews: bucket?.views ?? 0, totalViews: summary.total_views }
   }
 
-  cleanupVisitors(now = Math.floor(Date.now() / 1000)) {
-    return this.sqlite.transaction(() => this.cleanupVisitorsInTransaction(now))()
-  }
-
-  visitorSummary(visitorDigest?: string, now = Math.floor(Date.now() / 1000)): WebsiteVisitorSummary {
-    const summary = this.sqlite.query<{ active_count: number }, []>("SELECT active_count FROM site_visitor_summary WHERE singleton = 1").get()
-    if (!summary) throw new WebsiteRegistryIntegrityError("Visitor summary is missing")
-    const visitor = visitorDigest
-      ? this.sqlite.query<{ expires_at: number }, [string, number]>("SELECT expires_at FROM site_visitor WHERE visitor_digest = ? AND expires_at > ?").get(visitorDigest, now)
-      : undefined
-    return {
-      estimatedParticipatingBrowsers: summary.active_count,
-      participating: Boolean(visitor),
-      renewalDue: Boolean(visitor && visitor.expires_at - now <= VISITOR_WINDOW_SECONDS - VISITOR_RENEWAL_SECONDS),
-    }
-  }
-
-  countVisitor(visitorDigest: string, now = Math.floor(Date.now() / 1000)): WebsiteVisitorSummary {
-    if (!/^[a-f0-9]{64}$/.test(visitorDigest)) throw new WebsiteRegistryIntegrityError("Visitor digest is invalid")
+  recordView(now = Math.floor(Date.now() / 1000)): WebsiteViewSummary {
     return this.sqlite.transaction(() => {
-      const summary = this.sqlite.query<{ active_count: number; next_cleanup_at: number; intake_day: string; new_tokens_today: number }, []>(
-        "SELECT active_count, next_cleanup_at, intake_day, new_tokens_today FROM site_visitor_summary WHERE singleton = 1",
-      ).get()
-      if (!summary) throw new WebsiteRegistryIntegrityError("Visitor summary is missing")
-      if (summary.next_cleanup_at <= now) this.cleanupVisitorsInTransaction(now)
-      const day = new Date(now * 1000).toISOString().slice(0, 10)
-      const existing = this.sqlite.query<{ expires_at: number }, [string]>("SELECT expires_at FROM site_visitor WHERE visitor_digest = ?").get(visitorDigest)
-      if (existing) {
-        const expired = existing.expires_at <= now
-        const renewalDue = expired || existing.expires_at - now <= VISITOR_WINDOW_SECONDS - VISITOR_RENEWAL_SECONDS
-        if (renewalDue) {
-          this.sqlite.run("UPDATE site_visitor SET expires_at = ? WHERE visitor_digest = ?", [now + VISITOR_WINDOW_SECONDS, visitorDigest])
-          this.sqlite.run("UPDATE site_visitor_summary SET updated_at = ? WHERE singleton = 1", [now])
-        }
-        return { ...this.visitorSummary(visitorDigest, now), counted: true }
-      }
-      const current = this.sqlite.query<{ active_count: number; intake_day: string; new_tokens_today: number }, []>(
-        "SELECT active_count, intake_day, new_tokens_today FROM site_visitor_summary WHERE singleton = 1",
-      ).get()!
-      const daily = current.intake_day === day ? current.new_tokens_today : 0
-      if (current.active_count >= VISITOR_ACTIVE_LIMIT || daily >= VISITOR_DAILY_LIMIT) {
-        return { ...this.visitorSummary(undefined, now), counted: false }
-      }
-      this.sqlite.run("INSERT INTO site_visitor(visitor_digest, first_seen_at, expires_at) VALUES (?, ?, ?)", [visitorDigest, now, now + VISITOR_WINDOW_SECONDS])
-      this.sqlite.run(
-        "UPDATE site_visitor_summary SET active_count = active_count + 1, intake_day = ?, new_tokens_today = ?, updated_at = ? WHERE singleton = 1",
-        [day, daily + 1, now],
-      )
-      return { ...this.visitorSummary(visitorDigest, now), counted: true }
+      this.sqlite.run("INSERT INTO site_view_month(month, views) VALUES (?, 1) ON CONFLICT(month) DO UPDATE SET views = views + 1", [viewMonth(now)])
+      const updated = this.sqlite.run("UPDATE site_view_summary SET total_views = total_views + 1, updated_at = ? WHERE singleton = 1", [now]).changes
+      if (updated !== 1) throw new WebsiteRegistryIntegrityError("View summary is missing")
+      return this.viewSummary(now)
     })()
   }
 
-  withdrawVisitor(visitorDigest?: string, now = Math.floor(Date.now() / 1000)): WebsiteVisitorSummary {
-    return this.sqlite.transaction(() => {
-      const removed = visitorDigest ? this.sqlite.run("DELETE FROM site_visitor WHERE visitor_digest = ?", [visitorDigest]).changes : 0
-      if (removed === 1) this.sqlite.run("UPDATE site_visitor_summary SET active_count = active_count - 1, updated_at = ? WHERE singleton = 1", [now])
-      return { ...this.visitorSummary(undefined, now), participating: false, renewalDue: false, counted: false }
-    })()
-  }
-
-  private assertVisitorSummary() {
-    const summary = this.sqlite.query<{ active_count: number }, []>("SELECT active_count FROM site_visitor_summary WHERE singleton = 1").get()
-    const rows = this.sqlite.query<{ count: number }, []>("SELECT COUNT(*) AS count FROM site_visitor").get()
-    if (!summary || !rows || summary.active_count !== rows.count) throw new WebsiteRegistryIntegrityError("Visitor summary does not match active visitor membership")
-  }
-
-  private assertVisitorSummaryBounds() {
-    const summary = this.sqlite.query<{ active_count: number; next_cleanup_at: number; intake_day: string; new_tokens_today: number }, []>(
-      "SELECT active_count, next_cleanup_at, intake_day, new_tokens_today FROM site_visitor_summary WHERE singleton = 1",
-    ).get()
-    if (!summary || !Number.isSafeInteger(summary.active_count) || summary.active_count < 0 || summary.active_count > VISITOR_ACTIVE_LIMIT) {
-      throw new WebsiteRegistryIntegrityError("Visitor summary active count is outside its bounded contract")
+  // The monthly buckets are the ledger; the total is a running sum of them. Reading them back
+  // against each other is what catches a partially applied write.
+  private assertViewSummary() {
+    const summary = this.sqlite.query<{ total_views: number }, []>("SELECT total_views FROM site_view_summary WHERE singleton = 1").get()
+    const months = this.sqlite.query<{ total: number }, []>("SELECT COALESCE(SUM(views), 0) AS total FROM site_view_month").get()
+    if (!summary || !months || !Number.isSafeInteger(summary.total_views) || summary.total_views < 0) {
+      throw new WebsiteRegistryIntegrityError("View summary is missing or outside its bounded contract")
     }
-    if (!Number.isSafeInteger(summary.next_cleanup_at) || summary.next_cleanup_at < 0 || !Number.isSafeInteger(summary.new_tokens_today) || summary.new_tokens_today < 0 || summary.new_tokens_today > VISITOR_DAILY_LIMIT) {
-      throw new WebsiteRegistryIntegrityError("Visitor summary cleanup or intake fields are outside their bounded contract")
-    }
-    if (summary.intake_day !== "" && !/^\d{4}-\d{2}-\d{2}$/.test(summary.intake_day)) throw new WebsiteRegistryIntegrityError("Visitor summary intake day is invalid")
+    if (summary.total_views !== months.total) throw new WebsiteRegistryIntegrityError("View summary does not match its monthly buckets")
   }
 
   async readiness() {
@@ -694,14 +627,13 @@ export class WebsiteRegistry {
       this.assertRevisionProjection(row.revision_id)
       await this.verifiedArchive({ revisionID: row.revision_id, sha256: row.sha256, bytes: row.bytes, relativePath: row.relative_path, filename: `${row.squad_id}-${row.version}.zip` }, false)
     }
-    this.assertVisitorSummaryBounds()
+    this.assertViewSummary()
     return { status: "ready" as const, schemaVersion: SCHEMA_VERSION, schemaChecksum: SCHEMA_CHECKSUM, publication }
   }
 
   async backup(target: string) {
     await mkdir(path.dirname(target), { recursive: true })
-    this.cleanupVisitors()
-    this.assertVisitorSummary()
+    this.assertViewSummary()
     this.sqlite.exec("PRAGMA wal_checkpoint(FULL)")
     this.sqlite.exec(`VACUUM INTO ${quoteLiteral(path.resolve(target))}`)
     return target

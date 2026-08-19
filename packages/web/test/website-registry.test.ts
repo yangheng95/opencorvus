@@ -158,50 +158,37 @@ test(
   120_000,
 )
 
-test("keeps schema version 1 while counting rolling opt-in browser tokens", async () => {
-  const visitorRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-site-visitors-"))
-  const visitorRegistry = await WebsiteRegistry.open(path.join(visitorRoot, "registry.sqlite3"), path.join(visitorRoot, "data"))
+test("keeps schema version 1 while counting page views by month and all time", async () => {
+  const viewRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-site-views-"))
+  const viewRegistry = await WebsiteRegistry.open(path.join(viewRoot, "registry.sqlite3"), path.join(viewRoot, "data"))
   try {
     const seed = await readWebsiteRegistrySeed(path.join(generatedRoot, "website-registry-seed.json"))
-    await importWebsiteRegistryPublication(visitorRegistry, seed, distributionRoot)
-    expect(visitorRegistry.sqlite.query<{ version: number; checksum: string }, []>("SELECT version, checksum FROM registry_schema").get()).toEqual({
+    await importWebsiteRegistryPublication(viewRegistry, seed, distributionRoot)
+    expect(viewRegistry.sqlite.query<{ version: number; checksum: string }, []>("SELECT version, checksum FROM registry_schema").get()).toEqual({
       version: 1,
       checksum: SCHEMA_CHECKSUM,
     })
-    const digest = "a".repeat(64)
-    const start = Date.UTC(2026, 0, 1) / 1000
-    expect(visitorRegistry.countVisitor(digest, start)).toMatchObject({ estimatedParticipatingBrowsers: 1, participating: true, counted: true })
-    expect(visitorRegistry.countVisitor(digest, start + 60)).toMatchObject({ estimatedParticipatingBrowsers: 1, participating: true, renewalDue: false })
-    expect(visitorRegistry.visitorSummary(digest, start + 24 * 60 * 60)).toMatchObject({ participating: true, renewalDue: true })
-    expect(visitorRegistry.countVisitor(digest, start + 24 * 60 * 60)).toMatchObject({ estimatedParticipatingBrowsers: 1, renewalDue: false })
-    expect(visitorRegistry.visitorSummary(digest, start + 29 * 24 * 60 * 60)).toMatchObject({ participating: true, renewalDue: true })
-    expect(visitorRegistry.countVisitor(digest, start + 29 * 24 * 60 * 60)).toMatchObject({ estimatedParticipatingBrowsers: 1, renewalDue: false })
-    expect(visitorRegistry.visitorSummary(digest, start + 31 * 24 * 60 * 60)).toMatchObject({ participating: true })
-    expect(visitorRegistry.withdrawVisitor(digest, start + 31 * 24 * 60 * 60)).toMatchObject({ estimatedParticipatingBrowsers: 0, participating: false })
+    const january = Date.UTC(2026, 0, 4) / 1000
+    const february = Date.UTC(2026, 1, 2) / 1000
+    expect(viewRegistry.viewSummary(january)).toEqual({ month: "2026-01", monthViews: 0, totalViews: 0 })
+    expect(viewRegistry.recordView(january)).toEqual({ month: "2026-01", monthViews: 1, totalViews: 1 })
+    expect(viewRegistry.recordView(january + 60)).toEqual({ month: "2026-01", monthViews: 2, totalViews: 2 })
+    expect(viewRegistry.recordView(february)).toEqual({ month: "2026-02", monthViews: 1, totalViews: 3 })
+    expect(viewRegistry.viewSummary(january)).toEqual({ month: "2026-01", monthViews: 2, totalViews: 3 })
+    expect(await viewRegistry.readiness()).toMatchObject({ status: "ready", schemaVersion: 1 })
 
-    visitorRegistry.countVisitor(digest, start)
-    visitorRegistry.sqlite.run("UPDATE site_visitor SET expires_at = ? WHERE visitor_digest = ?", [start + 1, digest])
-    visitorRegistry.sqlite.run("UPDATE site_visitor_summary SET next_cleanup_at = ? WHERE singleton = 1", [start + 60 * 60])
-    expect(visitorRegistry.countVisitor(digest, start + 2)).toMatchObject({ estimatedParticipatingBrowsers: 1, participating: true, counted: true })
-    expect(visitorRegistry.withdrawVisitor(digest, start + 2)).toMatchObject({ estimatedParticipatingBrowsers: 0 })
-
-    visitorRegistry.countVisitor(digest, start)
-    expect(visitorRegistry.cleanupVisitors(start + 30 * 24 * 60 * 60)).toBe(1)
-    expect(visitorRegistry.visitorSummary()).toMatchObject({ estimatedParticipatingBrowsers: 0 })
-    visitorRegistry.sqlite.run("UPDATE site_visitor_summary SET active_count = 150000, intake_day = '2026-01-01', new_tokens_today = 5000 WHERE singleton = 1")
-    expect(visitorRegistry.countVisitor("b".repeat(64), start)).toMatchObject({ counted: false, estimatedParticipatingBrowsers: 150000 })
-    visitorRegistry.sqlite.run("UPDATE site_visitor_summary SET active_count = 0, new_tokens_today = 0 WHERE singleton = 1")
-    visitorRegistry.sqlite.run("INSERT INTO site_visitor(visitor_digest, first_seen_at, expires_at) VALUES (?, ?, ?)", ["c".repeat(64), start - 60, start - 1])
-    const failedBackup = path.join(visitorRoot, "failed-backup.sqlite3")
-    await expect(visitorRegistry.backup(failedBackup)).rejects.toBeInstanceOf(WebsiteRegistryIntegrityError)
+    // The monthly buckets are the ledger; a total that disagrees with them is corruption.
+    viewRegistry.sqlite.run("UPDATE site_view_summary SET total_views = 9 WHERE singleton = 1")
+    const failedBackup = path.join(viewRoot, "failed-backup.sqlite3")
+    await expect(viewRegistry.backup(failedBackup)).rejects.toBeInstanceOf(WebsiteRegistryIntegrityError)
     await expect(access(failedBackup)).rejects.toMatchObject({ code: "ENOENT" })
-    visitorRegistry.sqlite.run("DELETE FROM site_visitor WHERE visitor_digest = ?", ["c".repeat(64)])
-    expect(await visitorRegistry.readiness()).toMatchObject({ status: "ready", schemaVersion: 1 })
+    viewRegistry.sqlite.run("UPDATE site_view_summary SET total_views = 3 WHERE singleton = 1")
+    expect(await viewRegistry.backup(path.join(viewRoot, "backup.sqlite3"))).toContain("backup.sqlite3")
   } finally {
-    visitorRegistry.close()
+    viewRegistry.close()
     Bun.gc(true)
     await Bun.sleep(100)
-    await rm(visitorRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+    await rm(viewRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
   }
 }, 30_000)
 
@@ -214,7 +201,22 @@ test("resets the exact legacy v1 fingerprint into the current v1 fingerprint at 
   try {
     const seed = await readWebsiteRegistrySeed(path.join(generatedRoot, "website-registry-seed.json"))
     await importWebsiteRegistryPublication(legacy, seed, distributionRoot)
-    legacy.sqlite.exec("DROP INDEX site_visitor_expiry; DROP TABLE site_visitor; DROP TABLE site_visitor_summary")
+    legacy.sqlite.exec(`DROP TABLE site_view_month;
+DROP TABLE site_view_summary;
+CREATE TABLE site_visitor (
+  visitor_digest TEXT PRIMARY KEY CHECK (length(visitor_digest) = 64 AND visitor_digest NOT GLOB '*[^0-9a-f]*'),
+  first_seen_at INTEGER NOT NULL CHECK (first_seen_at >= 0),
+  expires_at INTEGER NOT NULL CHECK (expires_at > first_seen_at)
+);
+CREATE TABLE site_visitor_summary (
+  singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
+  active_count INTEGER NOT NULL CHECK (active_count BETWEEN 0 AND 150000),
+  next_cleanup_at INTEGER NOT NULL CHECK (next_cleanup_at >= 0),
+  intake_day TEXT NOT NULL,
+  new_tokens_today INTEGER NOT NULL CHECK (new_tokens_today BETWEEN 0 AND 5000),
+  updated_at INTEGER NOT NULL CHECK (updated_at >= 0)
+);
+CREATE INDEX site_visitor_expiry ON site_visitor(expires_at);`)
     legacy.sqlite.run("UPDATE registry_schema SET checksum = ? WHERE version = 1", [LEGACY_SCHEMA_CHECKSUM])
   } finally {
     legacy.close()
@@ -236,7 +238,7 @@ test("resets the exact legacy v1 fingerprint into the current v1 fingerprint at 
   const reset = await WebsiteRegistry.open(targetPath, dataRoot)
   try {
     expect(await reset.readiness()).toMatchObject({ status: "ready", schemaVersion: 1 })
-    expect(reset.visitorSummary()).toMatchObject({ estimatedParticipatingBrowsers: 0 })
+    expect(reset.viewSummary()).toMatchObject({ monthViews: 0, totalViews: 0 })
     expect(reset.sqlite.query<{ total: number }, []>("SELECT COALESCE(SUM(response_count), 0) AS total FROM revision_download_counter").get()?.total).toBe(0)
   } finally {
     reset.close()

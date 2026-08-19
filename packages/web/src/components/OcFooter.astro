@@ -1,6 +1,6 @@
 ---
 import { publicPath, type PublicLocale } from "../content/public-market"
-import VisitorCount from "./VisitorCount.astro"
+import ViewCount from "./ViewCount.astro"
 import config from "../../config.mjs"
 
 const { locale } = Astro.props as { locale: PublicLocale }
@@ -69,7 +69,7 @@ const year = 2026
     <div class="oc-footer-lede">
       <p class="oc-text-title oc-cjk-spacing">OpenCorvus</p>
       <p class="oc-text-caption oc-text-description">{copy.statement}</p>
-      <VisitorCount {locale} />
+      <ViewCount {locale} />
     </div>
 
     {
