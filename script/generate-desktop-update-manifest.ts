@@ -42,10 +42,20 @@ function publicationDate(value: string): string {
   return value
 }
 
-function requireSingleAsset(files: readonly string[], pattern: RegExp, label: string): string {
+/**
+ * The one bundle for this platform, or nothing when the platform is absent.
+ *
+ * A Release may ship without a platform: one runner failing used to discard
+ * every other platform's finished build, so publication now proceeds with
+ * whatever exists. The updater manifest describes what a client can actually
+ * download, and a client on a missing platform simply sees no update — while
+ * two bundles matching one pattern still means the staging directory is wrong
+ * and is refused.
+ */
+function singleAssetOrAbsent(files: readonly string[], pattern: RegExp, label: string): string | undefined {
   const matches = files.filter((file) => pattern.test(file))
-  if (matches.length !== 1) throw new Error(`${label} must resolve to exactly one asset; found ${matches.length}`)
-  return matches[0]!
+  if (matches.length > 1) throw new Error(`${label} must resolve to exactly one asset; found ${matches.length}`)
+  return matches[0]
 }
 
 export async function generateDesktopUpdateManifest(input: DesktopUpdateManifestInput): Promise<DesktopUpdateManifest> {
@@ -56,7 +66,8 @@ export async function generateDesktopUpdateManifest(input: DesktopUpdateManifest
 
   for (const platform of DESKTOP_UPDATE_PLATFORMS) {
     const contract = overlayUpdaterContract(platform, version)
-    const bundle = requireSingleAsset(files, contract.bundlePattern, contract.label)
+    const bundle = singleAssetOrAbsent(files, contract.bundlePattern, contract.label)
+    if (!bundle) continue
     const signatureFile = updaterSignatureName(bundle)
     const signature = (await fs.readFile(path.join(input.directory, signatureFile), "utf8")).trim()
     if (!signature) throw new Error(`Desktop updater signature is empty: ${signatureFile}`)
@@ -64,6 +75,12 @@ export async function generateDesktopUpdateManifest(input: DesktopUpdateManifest
       url: `https://github.com/${input.repository}/releases/download/v${version}/${encodeURIComponent(bundle)}`,
       signature,
     }
+  }
+
+  // Every platform absent means the staging directory holds no overlay bundle
+  // at all, which is a broken run rather than a partial one.
+  if (Object.keys(platforms).length === 0) {
+    throw new Error(`Desktop update manifest for v${version} found no overlay bundle in ${input.directory}`)
   }
 
   return {
