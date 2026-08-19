@@ -122,12 +122,14 @@ export default defineConfig({
             "concepts/agent-loop",
             "concepts/delivery-slice-task",
             "concepts/mission",
+            "concepts/long-horizon",
+            "concepts/squad-composition",
           ],
         },
         {
           label: "Expert Squads",
           translations: { en: "Expert Squads", "zh-CN": "专家团" },
-          items: ["expert-squads/publish", "expert-squads/trust"],
+          items: ["expert-squads/publish", "expert-squads/trust", "expert-squads/evolution"],
         },
         {
           label: "Integrations",

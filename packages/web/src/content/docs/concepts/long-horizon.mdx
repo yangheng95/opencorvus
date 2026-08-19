@@ -1,0 +1,87 @@
+---
+title: Where long-horizon work breaks
+description: The three ways long-running agent work fails — stopping short, unusable results, and never improving — and the mechanism in OpenCorvus that answers each.
+---
+
+Long-horizon capability is a property of the whole model-and-harness system, not of the model. A
+capable model inside a harness that loses task state still stops short; a harness that never checks
+what came back still hands you something you cannot use.
+
+Three failures account for most of it. This page names each one and the mechanism that answers it,
+with the part of the system that owns it.
+
+## 1 · It stops short
+
+The run ends before the work does — a step is skipped, a process dies, or a Task reaches a terminal
+state with the goal only half met.
+
+**Scope is written down before execution.** The Requirements stage emits `REQ-N` entries, each
+carrying its own acceptance condition, its explicit non-goals, and references to the evidence it
+rests on. Decomposition is the Architect's, not a side effect of whichever agent went first.
+
+**Order is a declared dependency, not a convention.** An Expert Squad's workflow declares which
+agents run and what each depends on. A Task pins one workflow for its lifetime.
+
+**A lost process is recovered, not restarted.** Physical ownership is an append-only lease. When a
+process disappears, the reconciler terminalizes the exact abandoned assistant Turn at the lease's
+expiry — a deterministic timestamp, so two concurrent reconcilers converge on the same completion —
+and only then acquires a successor. Every accepted input is reduced through one total order in which
+each state has a name; nothing is silently dropped, and an exhausted budget is an explicit fence
+rather than a quiet stop.
+
+**Terminal is not final.** A Task that reached `completed`, `failed`, or `cancelled` reopens when
+you send it a message. That opens a fresh execution occurrence at the next epoch; the previous
+occurrence stays intact as an immutable fact. There is no separate retry or replan control to find,
+because a state whose only exit is special vocabulary is a state you cannot leave with an ordinary
+action.
+
+## 2 · The result is not dependably usable
+
+The run finishes and reports success, but what you get is a summary you cannot check, a file that
+does not open, or a number nobody re-derived.
+
+**Handoffs are typed artifacts, not prose.** A worker publishes an Artifact with provenance and an
+exact locator; the next worker reads that locator. The causal read boundary is the producing
+Provider step, so only completed prior-step outputs are visible — a sibling running in parallel
+cannot leak an unfinished result forward.
+
+**The host records facts separately from the agent's account of them.** File changes and command
+results are host observations. They exist whether or not an agent mentioned them, which is what
+makes an agent's summary checkable rather than authoritative.
+
+**Verification runs as named stages.** Fact-checking, integrity review, and visual QA are steps in
+the workflow with their own agents and their own outputs — not a line in a prompt asking the writer
+to double-check itself. Where a deliverable is a real file, the Work Artifact path renders and
+inspects it, and the validation receipt is what makes it delivered.
+
+## 3 · It never gets better
+
+The tenth run repeats the mistake of the first, because nothing about what you corrected survived
+the conversation it happened in.
+
+**A squad can be revised from what you told it.** State a durable preference — one that would apply
+again to the next task of this kind — and the host copies the exact installed revision, applies the
+edits, validates the result as a runnable package, and stages it against your verbatim words. It
+installs when you accept it. See [How squads evolve](../../expert-squads/evolution/).
+
+**Or from measurement.** Evolution Lab freezes the target revision, cases, scorers, environment, arm
+order, budget, and mutation surface before any candidate exists, runs the arms, and produces an
+integrity review and a comparison recommendation.
+
+**Neither path installs anything on its own.** Promotion, restoration, and feedback revision each
+require a real operator confirmation message bound to that exact Task and Project.
+
+## The real boundary
+
+Long-horizon is not unlimited execution and not permanent unattended operation.
+
+Work continues only while your OpenCorvus runtime is online. Output quality still depends on the
+model you selected, the sources it can reach, the capabilities you installed, and the evidence
+available to the run. External effects remain bound by permission rules.
+
+## Related
+
+- [How Missions run long-horizon work](./mission/) — coordination across several owned Tasks
+- [Squad composition](./squad-composition/) — why the longest work is several teams, not one longer one
+- [How squads evolve](../../expert-squads/evolution/) — the two revision paths and their boundary
+- [The agent loop](./agent-loop/) — what happens inside one Task

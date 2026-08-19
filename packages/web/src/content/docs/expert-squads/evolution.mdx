@@ -1,0 +1,90 @@
+---
+title: How squads evolve
+description: The two paths an Expert Squad revision can take in OpenCorvus — from your feedback, or from a measured campaign — and the operator confirmation both end at.
+---
+
+An Expert Squad is a package, not a prompt you edited once. It can be revised, and the revision is
+itself a versioned package with a digest, a history, and a way back.
+
+There are exactly two paths into that revision, and both end at a confirmation you have to give.
+
+## Path 1 · From what you said
+
+The fast path. It exists because the most valuable correction you ever give a squad is the one you
+give in passing, in the middle of a task, and it is the one that normally dies with the
+conversation.
+
+When you state a **durable preference** — one that would apply again to the next task of this kind —
+the squad can draft a revision from it. What happens then is entirely on the host side:
+
+1. It copies the exact installed revision, byte for byte.
+2. It applies the proposed file changes: agent prompts, the scheduler prompt, the selector, Skills,
+   or the manifest itself.
+3. It validates the result as a runnable package.
+4. It publishes a candidate Artifact carrying **your verbatim words**, not a paraphrase of them.
+5. It returns a confirmation for you to accept.
+
+Nothing is installed until you accept it, and the receipt you get back is how you undo it.
+
+Two constraints are worth knowing, because they explain refusals:
+
+- **Capability cannot widen.** A candidate that grants a Tool, Skill, base role, or reference the
+  squad did not already hold is refused. Revision moves capability between agents; it does not add
+  any.
+- **Appending is not revising.** A candidate where every changed file still begins with its parent
+  unchanged and only adds at the end is refused. That shape leaves the older, more specific
+  instruction in force, which is the usual reason a revision appears to change nothing.
+
+This path carries no trial and no measurement. Your acceptance is the verdict, and it should not be
+described as tested.
+
+## Path 2 · From measurement
+
+The Evolution Lab squad runs an explicit campaign, in three workflows: opportunity analysis,
+candidate preparation, and campaign evaluation.
+
+The order matters. The experiment planner freezes the target revision, the cases, the scorers, the
+environment, the arm order, the budget, and the mutation surface **before** any candidate is
+authored. A campaign whose scoring is decided after the results are in is not a comparison.
+
+What comes out is a set of typed artifacts: the campaign spec, the candidate revision, run evidence
+bundles, evaluation results, an integrity review, and a comparison recommendation. They are
+persisted, so the campaign is readable later rather than summarised.
+
+Select Evolution Lab only when you are explicitly asking to investigate, construct, evaluate,
+compare, promote, or restore a revision.
+
+## What actually installs
+
+Three operations change an installed package, and each is a separate authorization:
+
+| Operation | What it does |
+| --------- | ------------ |
+| `feedback_revision` | Installs a candidate drafted from your stated preference |
+| `promotion` | Installs a candidate that a campaign recommended |
+| `restoration` | Returns the target to a revision it previously held |
+
+Each requires a real operator message, bound to that exact Project, Task, and root Session, carrying
+the exact confirmation text for that change. A projected agent cannot supply it, and neither can a
+scheduler, a recovery pass, or a late outcome. Repeating the same authorization is idempotent.
+
+## History and going back
+
+Every campaign and every revision is recorded. The evolution history lists what a target has held,
+partitioned into the current revision and its historical ones, so restoring is selecting a revision
+that already existed rather than reconstructing one.
+
+That is what makes accepting a revision a low-stakes decision: the way back is a listed entry, not a
+reconstruction from memory.
+
+## The boundary, stated plainly
+
+OpenCorvus does not modify its own squads in the background. There is no autonomous rewrite loop, no
+silent version bump, and no revision that installs because a metric moved. Every path above stops at
+a confirmation, and every confirmation is a message you sent.
+
+## Related
+
+- [Where long-horizon work breaks](../../concepts/long-horizon/) — why a workflow that never improves is a failure mode
+- [Expert Squad trust](./trust/) — signatures, digests, and what a package is allowed to carry
+- [Author an Expert Squad](./publish/) — writing one from scratch instead of revising one

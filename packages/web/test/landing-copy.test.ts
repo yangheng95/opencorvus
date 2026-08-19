@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { landingCopy, type LandingCopy } from "../src/content/landing-copy"
 import { platformFacts } from "../src/content/platform-facts"
+import { FEATURED_COMPOSITION_ID, squadCompositions } from "../src/content/squad-compositions"
+import { generatedSquadCompositions } from "../src/content/squad-compositions.generated"
 
 /**
  * Landing copy budget.
@@ -17,11 +19,16 @@ import { platformFacts } from "../src/content/platform-facts"
  *
  * Current headroom is deliberate — the limits are set where the copy would start to feel long, not
  * snug against today's text, so ordinary edits do not fail the suite.
+ *
+ * `totalBody` was raised once, deliberately, when the page took on the long-horizon and evolution
+ * sections: three new failure/mechanism cards, a composition section, and two paths of squad
+ * revision. That is more page, not looser prose — the per-string limits below did not move, so each
+ * individual sentence is held to exactly what it was before.
  */
 
 const BUDGET = {
-  "zh-cn": { unit: "characters", totalBody: 1400, title: 12, lead: 40, cardBody: 60, heroLine: 12, heroDescription: 45, faqQuestion: 30, faqAnswer: 140 },
-  root: { unit: "words", totalBody: 560, title: 6, lead: 16, cardBody: 20, heroLine: 6, heroDescription: 20, faqQuestion: 10, faqAnswer: 60 },
+  "zh-cn": { unit: "characters", totalBody: 1750, title: 12, lead: 40, cardBody: 60, heroLine: 12, heroDescription: 45, faqQuestion: 30, faqAnswer: 140 },
+  root: { unit: "words", totalBody: 780, title: 6, lead: 16, cardBody: 20, heroLine: 6, heroDescription: 20, faqQuestion: 10, faqAnswer: 60 },
 } as const
 
 const countWords = (value: string) => value.trim().split(/\s+/).filter(Boolean).length
@@ -36,6 +43,12 @@ function bodyStrings(copy: LandingCopy): string[] {
   return [
     copy.hero.description,
     copy.demo.lead,
+    copy.horizon.lead,
+    ...copy.horizon.breaks.map((entry) => entry.body),
+    copy.compose.lead,
+    copy.evolve.lead,
+    ...copy.evolve.paths.map((path) => path.body),
+    copy.evolve.boundary,
     copy.why.lead,
     ...copy.why.pillars.map((pillar) => pillar.body),
     copy.why.compare.lead,
@@ -52,12 +65,24 @@ function bodyStrings(copy: LandingCopy): string[] {
 }
 
 function sectionTitles(copy: LandingCopy): string[] {
-  return [copy.demo.title, copy.why.title, copy.start.title, copy.faq.title, copy.join.title]
+  return [
+    copy.demo.title,
+    copy.horizon.title,
+    copy.compose.title,
+    copy.evolve.title,
+    copy.why.title,
+    copy.start.title,
+    copy.faq.title,
+    copy.join.title,
+  ]
 }
 
 function leads(copy: LandingCopy): string[] {
   return [
     copy.demo.lead,
+    copy.horizon.lead,
+    copy.compose.lead,
+    copy.evolve.lead,
     copy.why.lead,
     copy.squads.lead,
     copy.start.lead,
@@ -68,6 +93,8 @@ function leads(copy: LandingCopy): string[] {
 
 function cardBodies(copy: LandingCopy): string[] {
   return [
+    ...copy.horizon.breaks.map((entry) => entry.body),
+    ...copy.evolve.paths.map((path) => path.body),
     ...copy.why.pillars.map((pillar) => pillar.body),
     ...copy.start.trust.map((item) => item.body),
   ]
@@ -120,6 +147,8 @@ describe("landing copy integrity", () => {
     const shapeOf = (copy: LandingCopy) => ({
       ctas: copy.hero.ctas.length,
       terminals: copy.hero.terminals.map((terminal) => terminal.id),
+      horizonBreaks: copy.horizon.breaks.map((entry) => entry.id),
+      evolvePaths: copy.evolve.paths.map((path) => path.id),
       pillars: copy.why.pillars.map((pillar) => pillar.id),
       compareColumns: copy.why.compare.columns.map((column) => column.label),
       compareRows: copy.why.compare.rows.map((row) => row.axis).length,
@@ -141,6 +170,34 @@ describe("landing copy integrity", () => {
       const customPillar = copy.why.pillars.find((pillar) => pillar.id === "custom")
       expect(customPillar?.evidenceValue).toBe(total)
     }
+  })
+
+  test("composition totals are resolved from the catalog, not typed into copy", () => {
+    // "Six squads, thirty-three roles" is the shape of claim that outlives the squad that gained a
+    // role. `squad-compositions.ts` declares the chain and no numbers; the generator resolves the
+    // counts from the same records the market is built from. These assertions hold that seam: every
+    // declared composition is generated, and its published total really is the sum of its parts.
+    for (const composition of squadCompositions) {
+      const generated = generatedSquadCompositions[composition.id]
+      expect(generated, composition.id).toBeDefined()
+      expect(generated.squads.map((squad) => `${squad.namespace}/${squad.id}`)).toEqual(
+        composition.steps.map((step) => step.squadId),
+      )
+      expect(generated.squadCount).toBe(composition.steps.length)
+      expect(generated.roleCount).toBe(generated.squads.reduce((sum, squad) => sum + squad.agentCount, 0))
+      expect(generated.roleCount).toBeGreaterThan(generated.squadCount)
+
+      const extraIDs = composition.extras?.squadIds ?? []
+      expect(generated.extras.map((squad) => `${squad.namespace}/${squad.id}`)).toEqual([...extraIDs])
+      expect(generated.withExtrasSquadCount).toBe(generated.squadCount + extraIDs.length)
+      expect(generated.withExtrasRoleCount).toBe(
+        generated.roleCount + generated.extras.reduce((sum, squad) => sum + squad.agentCount, 0),
+      )
+    }
+  })
+
+  test("the featured composition is one of the declared ones", () => {
+    expect(squadCompositions.map((composition) => composition.id)).toContain(FEATURED_COMPOSITION_ID)
   })
 
   test("every landing CTA points somewhere resolvable", () => {

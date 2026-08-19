@@ -1,0 +1,68 @@
+---
+title: Squad composition
+description: Why the longest work is several Expert Squads rather than one team running longer, worked through from research sources to a submitted paper.
+---
+
+import SquadCompositions from "../../../components/SquadCompositions.astro"
+
+The longest work is not one team working longer. It is several teams, each owning a stage, each
+handing the next one something it can read.
+
+That is a claim about failure modes, not about org charts. A single team carrying an outcome from
+first source to final file accumulates its own early mistakes, competes with itself for context, and
+ends up reviewing work it wrote. Splitting the outcome into owned stages puts a different squad —
+with different roles, different tools, and no stake in the previous stage's conclusions — on each
+side of every handoff.
+
+## What a Mission holds
+
+A Mission records which Expert Squad IDs are available when it starts. Capabilities installed later
+do not silently widen that set. Each child Task then resolves one admitted ID to one exact package
+revision plus its selected workflow, fixed for that Task's lifetime.
+
+So composition happens at the Mission level, and ownership stays at the Task level. Nothing about
+combining squads dilutes who is responsible for a given delivery.
+
+## The case: from research sources to a submitted paper
+
+This is the full chain, as declared by the shipped packages. Every count below is resolved from the
+catalog rather than written into this page.
+
+<SquadCompositions locale="root" variant="case" />
+
+Read the shape of it rather than the individual stages. Three separate squads in that chain contain
+a role whose entire job is to disbelieve the stage before it — Deep Research's citation reviewer,
+Data Analysis's fact-checker, and Academic Paper Review's citation-and-hallucination auditor. None
+of them wrote what they are checking. That is the property a single long-running team cannot have,
+regardless of how carefully it is prompted.
+
+## Other combinations that already ship
+
+The same shape, in three other domains:
+
+<SquadCompositions locale="root" variant="others" />
+
+## How to choose the split
+
+Split where a delivery can be independently owned, accepted, or depended on. Splitting for its own
+sake produces coordination overhead with no owner.
+
+In practice that means:
+
+- **A new stage needs a different kind of evidence.** Sources, transactions, rendered pages, and
+  statistical results are not checked the same way, and the squad that checks one is not the squad
+  that checks another.
+- **A new stage needs an independent reader.** If the point of the stage is to disagree with the
+  previous one, it has to be a different squad — the same roster reviewing its own output is a
+  review in name only.
+- **A new stage produces something downstream work depends on.** A typed Artifact with provenance
+  is what makes the dependency real rather than narrative.
+
+Everything else belongs inside the squad you already have.
+
+## Related
+
+- [Where long-horizon work breaks](./long-horizon/) — the three failures composition addresses
+- [How Missions run long-horizon work](./mission/) — dependency graph, freezing, and reopening
+- [Expert Squad market](/market/) — every squad named above, with its roles and workflows
+- [How squads evolve](../../expert-squads/evolution/) — revising a squad in the chain

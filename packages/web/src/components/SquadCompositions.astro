@@ -1,0 +1,130 @@
+---
+// The Starlight layout does not load the public site's token sheet — only OcLayout does — so the
+// component brings its own. Astro deduplicates the import where both are already on the page.
+import "../styles/tokens.css"
+import { landingCopy } from "../content/landing-copy"
+import type { PublicLocale } from "../content/public-market"
+import { featuredComposition, otherCompositions } from "../lib/landing-compositions"
+
+/**
+ * The published Expert Squad combinations, rendered inside documentation.
+ *
+ * Same source as the landing page's composition section — editorial chain from
+ * `content/squad-compositions.ts`, squad and role counts generated from the shipped catalog. Two
+ * places showing the same chain from two hand-written copies is exactly how the doc ends up one
+ * squad behind the page.
+ */
+
+type Props = {
+  locale: PublicLocale
+  /** `case` renders the featured chain stage by stage; `others` renders the shorter combinations. */
+  variant: "case" | "others"
+}
+
+const { locale, variant } = Astro.props
+const copy = landingCopy[locale].compose
+const study = featuredComposition(locale)
+const others = otherCompositions(locale)
+---
+
+{
+  variant === "case" && (
+    <div class="oc-doc-composition">
+      <p class="oc-doc-composition-total">
+        <strong>
+          {study.squadCount} {copy.squadsUnit}
+        </strong>
+        <span aria-hidden="true"> · </span>
+        <strong>
+          {study.roleCount} {copy.rolesUnit}
+        </strong>
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">{copy.stageHeading}</th>
+            <th scope="col">{copy.squadHeading}</th>
+            <th scope="col">{copy.rolesUnit}</th>
+            <th scope="col">{copy.handoffHeading}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {study.steps.map((step) => (
+            <tr>
+              <th scope="row">{step.stage}</th>
+              <td>
+                <a href={step.href}>{step.squadLabel}</a>
+              </td>
+              <td>{step.agentCount}</td>
+              <td>{step.handoff}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {study.extras && (
+        <p class="oc-doc-composition-extras">
+          {study.extras.lead} {study.extras.labels.join(" · ")} —{" "}
+          <strong>
+            {study.extras.squadCount} {copy.squadsUnit} · {study.extras.roleCount} {copy.rolesUnit}
+          </strong>
+        </p>
+      )}
+    </div>
+  )
+}
+
+{
+  variant === "others" && (
+    <div class="oc-doc-composition">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">{copy.moreLabel}</th>
+            <th scope="col">{copy.squadHeading}</th>
+            <th scope="col">{copy.rolesUnit}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {others.map((combination) => (
+            <tr>
+              <th scope="row">{combination.title}</th>
+              <td>
+                {combination.steps.map((step, index) => (
+                  <>
+                    {index > 0 && <span aria-hidden="true"> → </span>}
+                    <a href={step.href}>{step.squadLabel}</a>
+                  </>
+                ))}
+              </td>
+              <td>{combination.roleCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<style>
+  .oc-doc-composition {
+    margin-block: var(--oc-space-5);
+  }
+
+  /* Documentation tables get wide fast, and the handoff column is prose. Scroll the table rather
+     than let the page scroll sideways. */
+  .oc-doc-composition table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .oc-doc-composition-total strong {
+    font-size: 18px;
+  }
+
+  .oc-doc-composition-extras {
+    margin-top: var(--oc-space-4);
+  }
+</style>

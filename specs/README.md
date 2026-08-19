@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest long-horizon and self-evolution repositioning of the public site and READMEs: [`2026-08-19-long-horizon-and-evolution-repositioning.md`](records/2026-08/2026-08-19-long-horizon-and-evolution-repositioning.md).
+
 Latest Overlay performance and scalability investigation: [`2026-08-19-overlay-performance-investigation.md`](records/2026-08/2026-08-19-overlay-performance-investigation.md).
 
 Latest Work Ledger item pin and directory-reference Project authority repair: [`2026-08-19-work-ledger-item-pin-project-authority.md`](records/2026-08/2026-08-19-work-ledger-item-pin-project-authority.md).

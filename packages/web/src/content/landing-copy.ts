@@ -4,7 +4,7 @@ import type { PublicLocale } from "./public-market"
 /**
  * Copy for the restyled landing page.
  *
- * Budget, enforced by test/landing-copy.test.ts: 1200 characters of body copy per locale, section
+ * Budget, enforced by test/landing-copy.test.ts: a per-locale ceiling on total body copy, section
  * headings under 12 characters, section leads under 40, card bodies under 60. The budget is the
  * feature — the previous site spread the same message over eight surfaces and nobody read past the
  * first. Anything that does not fit belongs in the docs.
@@ -15,6 +15,15 @@ import type { PublicLocale } from "./public-market"
  */
 
 export type LandingCta = { readonly label: string; readonly href: string; readonly variant: "primary" | "secondary" }
+
+/** A card with a claim and one checkable fact under it. Shared by the `horizon` and `why` grids. */
+export type LandingPillar = {
+  readonly id: string
+  readonly title: string
+  readonly body: string
+  readonly evidenceLabel: string
+  readonly evidenceValue: string
+}
 
 export type LandingCopy = {
   readonly meta: { readonly title: string; readonly description: string }
@@ -52,17 +61,54 @@ export type LandingCopy = {
     readonly label: string
     readonly caption: string
   }
+  /**
+   * The long-horizon section: three ways long work fails, and the mechanism that answers each.
+   *
+   * Shape borrowed deliberately from LongHorizon-Harness, which names its failure modes
+   * (compounding errors, context rot, task-state loss, unverified premises) before it describes a
+   * loop. Naming the failure first is what makes the mechanism readable; a page that opens with
+   * "durable execution" is answering a question the reader has not asked yet.
+   */
+  readonly horizon: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly breaks: readonly LandingPillar[]
+  }
+  /**
+   * Squad composition. The chain itself — which squads, what each stage is called, what it hands
+   * on — lives in `squad-compositions.ts`, and its squad and role counts are generated from the
+   * catalog. Only the framing is here.
+   */
+  readonly compose: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly caseLabel: string
+    readonly stageHeading: string
+    readonly squadHeading: string
+    readonly handoffHeading: string
+    /** Unit nouns for the generated totals, e.g. "6 squads · 33 roles". */
+    readonly squadsUnit: string
+    readonly rolesUnit: string
+    readonly moreLabel: string
+    readonly cta: string
+  }
+  /** Self-evolution: the two paths a squad revision can take, and the boundary on both. */
+  readonly evolve: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly paths: readonly { readonly id: string; readonly title: string; readonly body: string }[]
+    /** Says plainly that nothing installs itself. Kept in body copy, not a footnote. */
+    readonly boundary: string
+    readonly cta: string
+  }
   readonly why: {
     readonly eyebrow: string
     readonly title: string
     readonly lead: string
-    readonly pillars: readonly {
-      readonly id: string
-      readonly title: string
-      readonly body: string
-      readonly evidenceLabel: string
-      readonly evidenceValue: string
-    }[]
+    readonly pillars: readonly LandingPillar[]
     /**
      * Comparison against the closest positioned product. Every cell must be a checkable fact about
      * a published capability, never a judgement — the point is to let a reader place us, not to
@@ -130,14 +176,14 @@ const squadTotal = platformFacts.squadTotal.value
 export const landingCopy: Record<PublicLocale, LandingCopy> = {
   "zh-cn": {
     meta: {
-      title: "OpenCorvus · 自动化地优化你的每日工作流",
+      title: "OpenCorvus · 为长程工作而做的 Harness",
       description:
-        "开源的 Agent 工作台。把每天重复的流程交给它，模型、工具、权限、专家团都能换。MIT 许可证，可自托管。",
+        "开源的多 Agent Harness，为跑得久的工作而做：组合起来的专家团、每次交接都有证据、专家团还能按你的反馈修订自己。MIT 许可证，可自托管。",
     },
     hero: {
-      eyebrow: "开源 · MIT · 可自托管",
-      titleLines: ["自动化地优化", "你的每日工作流"],
-      description: "把每天重复的那些流程交给 Agent。模型、工具、权限、专家团，都能换。",
+      eyebrow: "长程任务 Harness · MIT · 可自托管",
+      titleLines: ["跑得久的工作，", "还会越跑越好。"],
+      description: "长程任务交给组合起来的专家团，每次交接都有证据，专家团还能按你的反馈改自己。",
       ctas: [
         { label: "查看源码", href: GITHUB, variant: "secondary" },
         { label: "读文档", href: "/start/quickstart/", variant: "secondary" },
@@ -181,6 +227,66 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       lead: "NVDA 近一年日线进去，K 线图、技术分析和 Word 报告出来。",
       label: "OpenCorvus 桌面端运行录屏",
       caption: "桌面端 v0.0.47beta 的一次真实运行 · 1 分 44 秒 · 无音轨",
+    },
+    horizon: {
+      eyebrow: "长程",
+      title: "长程工作在哪里断",
+      lead: "三种失败，各自对应一个真实机制。",
+      breaks: [
+        {
+          id: "unfinished",
+          title: "跑不彻底",
+          body: "需求带验收与非目标；进程丢了是恢复不是重来；终态任务收到你下一条消息就继续。",
+          evidenceLabel: "终态",
+          evidenceValue: "可重开",
+        },
+        {
+          id: "unusable",
+          title: "结果不能用",
+          body: "带出处的类型化产物；宿主观测独立于 agent 自述；核查、完整性与视觉复核都是具名阶段。",
+          evidenceLabel: "校验",
+          evidenceValue: "具名阶段",
+        },
+        {
+          id: "static",
+          title: "永远不会变好",
+          body: "把你真正想要的说给专家团；它起草修订，你点头才安装，回执就是撤销凭据。",
+          evidenceLabel: "安装条件",
+          evidenceValue: "你的接受",
+        },
+      ],
+    },
+    compose: {
+      eyebrow: "组合",
+      title: "专家团组合起来",
+      lead: "最长的工作不是一支队伍干更久，而是几支各自负责一段。",
+      caseLabel: "案例",
+      stageHeading: "阶段",
+      squadHeading: "专家团",
+      handoffHeading: "交出什么",
+      squadsUnit: "支专家团",
+      rolesUnit: "个具名角色",
+      moreLabel: "其它组合",
+      cta: "看组合是怎么跑的",
+    },
+    evolve: {
+      eyebrow: "进化",
+      title: "会修订自己的专家团",
+      lead: "两条路径，终点都是一次必须由你给出的确认。",
+      paths: [
+        {
+          id: "feedback",
+          title: "从你说过的话来",
+          body: "说出你真正想要的。宿主复制精确版本、套用改动、校验成可运行的包，然后挂起等你。",
+        },
+        {
+          id: "campaign",
+          title: "从度量结果来",
+          body: "进化实验室先冻结目标版本、用例、评分器、预算与变异面，再跑对照臂并复核结果。",
+        },
+      ],
+      boundary: "没有你的确认，任何修订都不会安装；每次改动都能回退。",
+      cta: "看进化是怎么做的",
     },
     why: {
       eyebrow: "特性",
@@ -295,6 +401,14 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           a: "后端 harness 和桌面前端都在这个仓库里，底下没有套第三方 Agent 引擎——这样每一层才换得动。它站在很多开源项目的肩膀上：Bun、AI SDK、Solid、Tauri。",
         },
         {
+          q: "长程到底能长到什么程度？",
+          a: "取决于你的运行时在不在线。工作能扛过重启，靠的是租约、事件日志和协调器，不是靠某个进程一直活着。已完成、已失败或已取消的任务，收到你下一条消息就在新的执行轮次里继续，旧历史原样保留。",
+        },
+        {
+          q: "它会背着我改自己吗？",
+          a: "不会。修订会被起草、校验成可运行的包并挂起，只有你用自己的消息确认之后才安装；返回的回执就是恢复上一个版本的凭据。",
+        },
+        {
           q: "无人值守能跑多久？",
           a: "只在你的运行时在线时。它不是托管服务，也不承诺无限自治——结果取决于选的模型、能访问的来源和拿到的证据。",
         },
@@ -314,14 +428,15 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
 
   root: {
     meta: {
-      title: "OpenCorvus · Automatically optimize your everyday workflow",
+      title: "OpenCorvus · A harness for long-horizon work",
       description:
-        "OpenCorvus is an open-source Agent workbench. Hand it the work you repeat, and swap the models, tools, permissions, and expert squads underneath. MIT licensed, self-hosted.",
+        "OpenCorvus is an open-source multi-agent harness for work that runs long: combined expert squads, evidence at every handoff, and squads that revise from your feedback. MIT licensed, self-hosted.",
     },
     hero: {
-      eyebrow: "Open source · MIT · Self-hosted",
-      titleLines: ["Automatically optimize", "your everyday workflow"],
-      description: "Hand the repeat work to an Agent. Models, tools, permissions, squads — all replaceable.",
+      eyebrow: "Long-horizon agent harness · MIT · Self-hosted",
+      titleLines: ["Work that runs long,", "and gets better at it."],
+      description:
+        "Long-horizon work carried by combined expert squads, evidenced at every handoff, and revised from your feedback.",
       ctas: [
         { label: "View source", href: GITHUB, variant: "secondary" },
         { label: "Read the docs", href: "/start/quickstart/", variant: "secondary" },
@@ -365,6 +480,66 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       lead: "NVDA's last year of daily candles in; chart, technical read and Word report out.",
       label: "Screen recording of an OpenCorvus desktop run",
       caption: "One real run on desktop v0.0.47beta · 1 min 44 s · no audio track",
+    },
+    horizon: {
+      eyebrow: "Long-horizon",
+      title: "Where long work breaks",
+      lead: "Three failures, and what answers each.",
+      breaks: [
+        {
+          id: "unfinished",
+          title: "It stops short",
+          body: "Requirements carry acceptance and non-goals; a lost process is recovered, not restarted; a terminal Task reopens on your next message.",
+          evidenceLabel: "Terminal state",
+          evidenceValue: "Reopens",
+        },
+        {
+          id: "unusable",
+          title: "The result is not usable",
+          body: "Typed artifacts with provenance, host observations separate from any agent's summary, and fact-check, integrity and visual review as named stages.",
+          evidenceLabel: "Checked by",
+          evidenceValue: "Named stages",
+        },
+        {
+          id: "static",
+          title: "It never gets better",
+          body: "Tell a squad what you actually wanted; it drafts the revision, you accept it, and the receipt undoes it.",
+          evidenceLabel: "Installs on",
+          evidenceValue: "Your acceptance",
+        },
+      ],
+    },
+    compose: {
+      eyebrow: "Composition",
+      title: "Squads, combined",
+      lead: "The longest work is not one team working longer. It is several, each owning a stage.",
+      caseLabel: "Case",
+      stageHeading: "Stage",
+      squadHeading: "Squad",
+      handoffHeading: "Hands on",
+      squadsUnit: "squads",
+      rolesUnit: "named roles",
+      moreLabel: "Other combinations",
+      cta: "How composition works",
+    },
+    evolve: {
+      eyebrow: "Evolution",
+      title: "Squads that revise",
+      lead: "Two paths, both ending at a confirmation you have to give.",
+      paths: [
+        {
+          id: "feedback",
+          title: "From what you said",
+          body: "Say what you actually wanted. The host copies the exact revision, applies the edit, validates the package, and stages it.",
+        },
+        {
+          id: "campaign",
+          title: "From measurement",
+          body: "Evolution Lab freezes the target revision, cases, scorers, budget and mutation surface, then runs the arms and reviews the result.",
+        },
+      ],
+      boundary: "Nothing installs without your confirmation, and every change can be restored.",
+      cta: "How evolution works",
     },
     why: {
       eyebrow: "Why",
@@ -477,6 +652,14 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
         {
           q: "Is it built on another agent?",
           a: "The harness and the desktop app are both written in this repository, with no third-party agent engine underneath — that is what makes every layer replaceable. It stands on plenty of open source: Bun, the AI SDK, Solid, Tauri.",
+        },
+        {
+          q: "How long is long-horizon, really?",
+          a: "As long as your runtime stays online. Work survives a restart because leases, an event log, and a reconciler own it, not because a process stayed alive. A completed, failed, or cancelled Task reopens on your next message, at a fresh execution occurrence, with the old history intact.",
+        },
+        {
+          q: "Does it change itself behind my back?",
+          a: "No. A revision is drafted, validated as a runnable package, and staged. It installs only after you confirm it in your own message, and the receipt you get back is how you restore the previous revision.",
         },
         {
           q: "How long can it run unattended?",

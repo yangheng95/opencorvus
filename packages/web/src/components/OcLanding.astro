@@ -7,6 +7,7 @@ import { platformFacts } from "../content/platform-facts"
 import { publicPath, type PublicLocale } from "../content/public-market"
 import config from "../../config.mjs"
 import type { FeaturedSquad } from "../lib/landing-featured-squads"
+import { featuredComposition, otherCompositions } from "../lib/landing-compositions"
 import { readDownloadManifest, formatBytes } from "../lib/landing-downloads"
 
 type Props = {
@@ -27,7 +28,14 @@ const resolve = (href: string) => (href.startsWith("/") ? publicPath(locale, hre
 const plural = (count: number, one: string, other: string) => (count === 1 ? one : other)
 
 const marketHref = publicPath(locale, "/market/")
+const compositionHref = publicPath(locale, "/concepts/squad-composition/")
+const evolutionHref = publicPath(locale, "/expert-squads/evolution/")
 const downloads = readDownloadManifest()
+
+// The case study and the shorter chains beside it. Counts come from the generated catalog facts;
+// see lib/landing-compositions.ts.
+const caseStudy = featuredComposition(locale)
+const combinations = otherCompositions(locale)
 
 // Only generated facts are allowed to be the largest thing on the page. See platform-facts.ts.
 const featurableSquadTotal = platformFacts.squadTotal
@@ -180,7 +188,158 @@ const featurableSquadTotal = platformFacts.squadTotal
   */}
   <OcDemoVideo {locale} />
 
-  {/* ------------------------------------------------------------- 3 · why */}
+  {/* -------------------------------------------------- 3 · long-horizon */}
+  {/*
+    Named failures before named mechanisms. Borrowed from LongHorizon-Harness, which opens on
+    compounding errors, context rot, task-state loss and unverified premises rather than on its
+    loop: a reader who has not yet felt the failure has no question that "durable execution"
+    answers. Each card therefore states the break first and the mechanism second.
+  */}
+  <section class="oc-section oc-anchor" id="horizon">
+    <div class="oc-container">
+      <p class="oc-eyebrow oc-reveal">{copy.horizon.eyebrow}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.horizon.title}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.horizon.lead}</p>
+
+      <ul class="oc-pillar-grid">
+        {
+          copy.horizon.breaks.map((entry, index) => (
+            <li class="oc-card-raised oc-pillar oc-reveal" style={`transition-delay: ${index * 70}ms`}>
+              <h3 class="oc-text-subtitle oc-cjk-spacing">{entry.title}</h3>
+              <p class="oc-text-body oc-text-description">{entry.body}</p>
+              <p class="oc-pillar-evidence">
+                <span class="oc-text-xs oc-text-description">{entry.evidenceLabel}</span>
+                <span class="oc-break-evidence-value">{entry.evidenceValue}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------- 4 · composition */}
+  {/*
+    The case study is the argument for combining squads, so it is shown as a real chain rather than
+    described: every stage names the squad that owns it, how many roles that squad declares, and
+    what it hands the next one. The numbers are generated from the shipped catalog — see
+    content/squad-compositions.ts for why they are not typed into copy.
+  */}
+  <section class="oc-section-tight oc-anchor" id="compose">
+    <div class="oc-container">
+      <p class="oc-eyebrow oc-reveal">{copy.compose.eyebrow}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.compose.title}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.compose.lead}</p>
+
+      <div class="oc-card-raised oc-case oc-reveal">
+        <div class="oc-case-head">
+          <div class="oc-case-head-copy">
+            <p class="oc-eyebrow">{copy.compose.caseLabel}</p>
+            <h3 class="oc-text-title oc-cjk-spacing">{caseStudy.title}</h3>
+            <p class="oc-text-caption oc-text-description">{caseStudy.lead}</p>
+          </div>
+          <p class="oc-case-total">
+            <span class="oc-case-total-value">{caseStudy.squadCount}</span>
+            <span class="oc-text-xs oc-text-description">{copy.compose.squadsUnit}</span>
+            <span class="oc-case-total-value">{caseStudy.roleCount}</span>
+            <span class="oc-text-xs oc-text-description">{copy.compose.rolesUnit}</span>
+          </p>
+        </div>
+
+        <ol class="oc-case-chain">
+          {
+            caseStudy.steps.map((step) => (
+              <li class="oc-case-step">
+                <p class="oc-case-stage">{step.stage}</p>
+                <p class="oc-case-squad">
+                  <a class="oc-link" href={step.href}>
+                    {step.squadLabel}
+                  </a>
+                  <span class="oc-text-xs oc-text-description">
+                    {step.agentCount} {copy.compose.rolesUnit}
+                  </span>
+                </p>
+                <p class="oc-text-caption oc-text-description oc-case-handoff">{step.handoff}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        {
+          caseStudy.extras && (
+            <p class="oc-text-caption oc-text-secondary oc-case-extras">
+              {caseStudy.extras.lead}{" "}
+              <span class="oc-case-extras-total">
+                {caseStudy.extras.squadCount} {copy.compose.squadsUnit} · {caseStudy.extras.roleCount}{" "}
+                {copy.compose.rolesUnit}
+              </span>
+            </p>
+          )
+        }
+      </div>
+
+      <p class="oc-eyebrow oc-combo-label oc-reveal">{copy.compose.moreLabel}</p>
+      <ul class="oc-combo-grid">
+        {
+          combinations.map((combination, index) => (
+            <li class="oc-card oc-combo oc-reveal" style={`transition-delay: ${(index % 3) * 70}ms`}>
+              <h3 class="oc-text-subtitle oc-cjk-spacing">{combination.title}</h3>
+              <p class="oc-text-caption oc-text-description">{combination.lead}</p>
+              <ul class="oc-combo-chain">
+                {combination.steps.map((step) => (
+                  <li>
+                    <a class="oc-link" href={step.href}>
+                      {step.squadLabel}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="oc-text-xs oc-text-description oc-combo-total">
+                {combination.squadCount} {copy.compose.squadsUnit} · {combination.roleCount}{" "}
+                {copy.compose.rolesUnit}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="oc-compose-cta oc-reveal">
+        <a class="oc-btn oc-btn-secondary oc-btn-m" href={compositionHref}>{copy.compose.cta}</a>
+      </p>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------ 5 · evolution */}
+  <section class="oc-section-tight oc-anchor" id="evolve">
+    <div class="oc-container">
+      <p class="oc-eyebrow oc-reveal">{copy.evolve.eyebrow}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.evolve.title}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.evolve.lead}</p>
+
+      <ul class="oc-evolve-grid">
+        {
+          copy.evolve.paths.map((path, index) => (
+            <li class="oc-card-raised oc-evolve oc-reveal" style={`transition-delay: ${index * 70}ms`}>
+              <h3 class="oc-text-subtitle oc-cjk-spacing">{path.title}</h3>
+              <p class="oc-text-body oc-text-description">{path.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      {/*
+        The boundary is stated in the section, not in a footnote: a page that says "squads evolve"
+        and leaves the reader to discover elsewhere that nothing installs without them is a page
+        that mis-sold the feature.
+      */}
+      <p class="oc-text-body oc-text-secondary oc-evolve-boundary oc-reveal">{copy.evolve.boundary}</p>
+      <p class="oc-compose-cta oc-reveal">
+        <a class="oc-btn oc-btn-secondary oc-btn-m" href={evolutionHref}>{copy.evolve.cta}</a>
+      </p>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------- 6 · why */}
   <section class="oc-section oc-anchor" id="why">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.why.eyebrow}</p>
@@ -265,7 +424,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* --------------------------------------------------------- 4 · squads */}
+  {/* --------------------------------------------------------- 7 · squads */}
   {/*
     A funnel, not a second market. Six static cards and a link out. The filtering, search and
     segment browsing all live on /market/ — duplicating them here would mean two implementations
@@ -305,7 +464,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ---------------------------------------------------------- 5 · start */}
+  {/* ---------------------------------------------------------- 8 · start */}
   <section class="oc-section oc-anchor" id="start">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.start.eyebrow}</p>
@@ -368,7 +527,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------------ 6 · faq */}
+  {/* ------------------------------------------------------------ 9 · faq */}
   {/*
     Native <details>. An accordion is the one place a section can hold six answers without costing
     six answers' worth of scroll, and the disclosure widget browsers already ship is keyboard
@@ -398,7 +557,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ----------------------------------------------------------- 7 · join */}
+  {/* ---------------------------------------------------------- 10 · join */}
   <section class="oc-section-tight oc-anchor" id="join">
     <div class="oc-container">
       <div class="oc-cta-block oc-join oc-reveal">
@@ -730,6 +889,213 @@ const featurableSquadTotal = platformFacts.squadTotal
     letter-spacing: -0.02em;
     line-height: 1;
     color: var(--oc-color-text-primary);
+  }
+
+  /* ------------------------------------------------------ long-horizon */
+
+  /* The `why` pillars end on a single token — "MIT", "119" — which the display face carries at 28px.
+     These end on a short phrase instead, so they take the body face; the same rule above them keeps
+     the two grids reading as one system. */
+  .oc-break-evidence-value {
+    font-family: var(--oc-font-display);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--oc-color-text-primary);
+  }
+
+  /* ------------------------------------------------------ composition */
+
+  .oc-case {
+    margin-top: var(--oc-space-8);
+    padding: var(--oc-space-6);
+  }
+
+  .oc-case-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--oc-space-5);
+    padding-bottom: var(--oc-space-5);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-case-head-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    max-width: 46ch;
+  }
+
+  .oc-case-total {
+    display: flex;
+    align-items: baseline;
+    gap: var(--oc-space-2);
+    margin: 0;
+  }
+
+  .oc-case-total-value {
+    font-family: var(--oc-font-display);
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--oc-color-text-primary);
+  }
+
+  /* The chain reads top to bottom on narrow screens and as a stage grid from three columns up.
+     `counter` numbering rather than list markers, so the stage name stays the loudest thing. */
+  .oc-case-chain {
+    list-style: none;
+    counter-reset: oc-case;
+    margin: var(--oc-space-5) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-5);
+  }
+
+  /* Two rows of three rather than what auto-fit does with six items, which is four and a ragged
+     two. The handoff column is prose and needs the width. */
+  @media (min-width: 640px) {
+    .oc-case-chain {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .oc-case-chain {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .oc-case-step {
+    counter-increment: oc-case;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    padding-top: var(--oc-space-4);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-case-stage {
+    margin: 0;
+    font-family: var(--oc-font-display);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-case-stage::before {
+    content: counter(oc-case, decimal-leading-zero) " · ";
+    color: var(--oc-color-text-primary);
+  }
+
+  /* The role count sits on its own line in every stage. Letting it wrap only where it did not fit
+     made three of the six stages look different from the other three for no reason a reader could
+     see. */
+  .oc-case-squad {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--oc-space-1);
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .oc-case-handoff {
+    margin: 0;
+  }
+
+  .oc-case-extras {
+    margin: var(--oc-space-6) 0 0;
+    padding-top: var(--oc-space-5);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-case-extras-total {
+    color: var(--oc-color-text-primary);
+    white-space: nowrap;
+  }
+
+  .oc-combo-label {
+    margin-top: var(--oc-space-8);
+  }
+
+  .oc-combo-grid {
+    list-style: none;
+    margin: var(--oc-space-4) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--oc-space-4);
+  }
+
+  .oc-combo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+    padding: var(--oc-space-5);
+  }
+
+  /* Squad names separated by a rendered arrow, so the row reads as a handoff order rather than a
+     tag cloud. The separator is generated, which keeps it out of the copy and out of selection. */
+  .oc-combo-chain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--oc-space-1);
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  /* One squad per line with a generated arrow. Laid out inline the arrows land wherever the text
+     happens to wrap, and a handoff order that reads left-to-right on one row and mid-sentence on
+     the next has stopped being an order. */
+  .oc-combo-chain li + li::before {
+    content: "→";
+    margin-right: var(--oc-space-2);
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-combo-total {
+    margin: auto 0 0;
+    padding-top: var(--oc-space-3);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-compose-cta {
+    margin: var(--oc-space-7) 0 0;
+  }
+
+  /* -------------------------------------------------------- evolution */
+
+  .oc-evolve-grid {
+    list-style: none;
+    margin: var(--oc-space-8) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--oc-space-4);
+  }
+
+  .oc-evolve {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  .oc-evolve-boundary {
+    margin: var(--oc-space-6) 0 0;
+    max-width: 60ch;
   }
 
   /* ---------------------------------------------------------- compare */
