@@ -58,6 +58,16 @@ application — with no third-party agent engine underneath. That is a design ch
 rather than a boast: it is what makes every layer replaceable. It stands on a great
 deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
 
+<p align="center">
+  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo-poster.jpg" alt="One recorded OpenCorvus run" width="880" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><strong>&#9654;&nbsp; Play the full run (1 min 44 s)</strong></a>
+</p>
+
+<p align="center"><sub>One real run &mdash; NVDA&rsquo;s last year of daily candles in; a chart, a technical read and a Word report out. Recorded on desktop v0.0.47beta, no audio track.</sub></p>
+
 <table>
   <tr>
     <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/work-harness.png" alt="OpenCorvus Work Harness" /></td>
