@@ -21,7 +21,8 @@ the squad can draft a revision from it. What happens then is entirely on the hos
 2. It applies the proposed file changes: agent prompts, the scheduler prompt, the selector, Skills,
    or the manifest itself.
 3. It validates the result as a runnable package.
-4. It publishes a candidate Artifact carrying **your verbatim words**, not a paraphrase of them.
+4. It publishes a candidate Artifact recording the preference as stated, which the drafting agent is
+   instructed to carry across word for word rather than paraphrase.
 5. It returns a confirmation for you to accept.
 
 Nothing is installed until you accept it, and the receipt you get back is how you undo it.
@@ -31,9 +32,11 @@ Two constraints are worth knowing, because they explain refusals:
 - **Capability cannot widen.** A candidate that grants a Tool, Skill, base role, or reference the
   squad did not already hold is refused. Revision moves capability between agents; it does not add
   any.
-- **Appending is not revising.** A candidate where every changed file still begins with its parent
-  unchanged and only adds at the end is refused. That shape leaves the older, more specific
-  instruction in force, which is the usual reason a revision appears to change nothing.
+- **A claim to have rewritten something is checked.** A candidate may declare that it rewrote a
+  conflicting instruction, or that there was none to rewrite. Declare the rewrite and the host
+  verifies it against the bytes: if every changed file still begins with its parent unchanged and
+  only adds at the end, the candidate is refused. Appending is what leaves the older, more specific
+  instruction in force, and it is the usual reason a revision appears to change nothing.
 
 This path carries no trial and no measurement. Your acceptance is the verdict, and it should not be
 described as tested.
@@ -70,12 +73,16 @@ scheduler, a recovery pass, or a late outcome. Repeating the same authorization 
 
 ## History and going back
 
-Every campaign and every revision is recorded. The evolution history lists what a target has held,
-partitioned into the current revision and its historical ones, so restoring is selecting a revision
-that already existed rather than reconstructing one.
+Every campaign and every revision is recorded, and the evolution history lists what a target has
+held, partitioned into the current revision and its historical ones.
 
-That is what makes accepting a revision a low-stakes decision: the way back is a listed entry, not a
-reconstruction from memory.
+Restoration is an undo rather than random access to that list. It cites one earlier mutation receipt
+and may only return the target to a revision that receipt itself witnessed — the digest it installed,
+or the one it replaced. Reaching further back means walking back through the receipts that got you
+here.
+
+That is still what makes accepting a revision a low-stakes decision: the way back is a recorded
+receipt, not a reconstruction from memory.
 
 ## The boundary, stated plainly
 
@@ -86,5 +93,5 @@ a confirmation, and every confirmation is a message you sent.
 ## Related
 
 - [Where long-horizon work breaks](../../concepts/long-horizon/) — why a workflow that never improves is a failure mode
-- [Expert Squad trust](./trust/) — signatures, digests, and what a package is allowed to carry
-- [Author an Expert Squad](./publish/) — writing one from scratch instead of revising one
+- [Expert Squad trust](../trust/) — signatures, digests, and what a package is allowed to carry
+- [Author an Expert Squad](../publish/) — writing one from scratch instead of revising one

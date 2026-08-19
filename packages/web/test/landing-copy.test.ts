@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { landingCopy, type LandingCopy } from "../src/content/landing-copy"
 import { platformFacts } from "../src/content/platform-facts"
@@ -175,8 +175,8 @@ describe("landing copy integrity", () => {
   test("composition totals are resolved from the catalog, not typed into copy", () => {
     // "Six squads, thirty-three roles" is the shape of claim that outlives the squad that gained a
     // role. `squad-compositions.ts` declares the chain and no numbers; the generator resolves the
-    // counts from the same records the market is built from. These assertions hold that seam: every
-    // declared composition is generated, and its published total really is the sum of its parts.
+    // counts from the same records the market is built from. These assertions hold the internal
+    // shape of that seam — see the next test for whether the numbers are still true.
     for (const composition of squadCompositions) {
       const generated = generatedSquadCompositions[composition.id]
       expect(generated, composition.id).toBeDefined()
@@ -198,6 +198,65 @@ describe("landing copy integrity", () => {
 
   test("the featured composition is one of the declared ones", () => {
     expect(squadCompositions.map((composition) => composition.id)).toContain(FEATURED_COMPOSITION_ID)
+  })
+
+  test("generated role counts still match the shipped packages", () => {
+    // The test above compares the generated file to itself, which passes happily while the file is
+    // stale — the exact failure `platform-facts.test.ts` exists to prevent for platform numbers. So
+    // re-derive from the authority the generator read: `capability_projection.agents` in each
+    // shipped manifest. Embedded squads live under the runtime package, the rest under
+    // `expert-squads/builtin/`; both roots are the ones `generate-public-market.ts` loads.
+    const repoRoot = fileURLToPath(new URL("../../..", import.meta.url))
+
+    const declaredAgentCount = (id: string) => {
+      const roots = [
+        `${repoRoot}/expert-squads/builtin/${id}/expert-squad.jsonc`,
+        `${repoRoot}/packages/opencorvus/src/expert-squad/builtin/${id}/expert-squad.jsonc`,
+      ]
+      const manifestPath = roots.find((candidate) => existsSync(candidate))
+      expect(manifestPath, `no shipped manifest for ${id}`).toBeDefined()
+      const manifest = JSON.parse(readFileSync(manifestPath as string, "utf8"))
+      return Object.keys(manifest.capability_projection.agents ?? {}).length
+    }
+
+    for (const [compositionID, generated] of Object.entries(generatedSquadCompositions)) {
+      for (const squad of [...generated.squads, ...generated.extras]) {
+        expect(squad.agentCount, `${compositionID} / ${squad.id}`).toBe(declaredAgentCount(squad.id))
+      }
+    }
+  })
+
+  test("the README composition figures match the generated facts", () => {
+    // Both READMEs re-type the totals as markdown, because a README cannot import a module. That is
+    // the same shape as the "42 built-in tools" drift this section was written to end, so the
+    // numbers are checked against the generator rather than reviewed by eye.
+    const featured = generatedSquadCompositions[FEATURED_COMPOSITION_ID]
+    const readmes = ["../../../README.md", "../../../README.zh-CN.md"].map((relative) => ({
+      relative,
+      text: readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8"),
+    }))
+
+    for (const { relative, text } of readmes) {
+      // Totals, written as "6 ... 33" in English and "6 ... 33" in Chinese with different units
+      // between them, so the assertion is on the figures rather than on a rendered sentence.
+      expect(text, relative).toContain(String(featured.squadCount))
+      expect(text, relative).toContain(String(featured.roleCount))
+      expect(text, relative).toContain(String(featured.withExtrasSquadCount))
+      expect(text, relative).toContain(String(featured.withExtrasRoleCount))
+
+      // Every per-squad role count in the case table, as a cell of its own.
+      for (const squad of featured.squads) {
+        expect(text, `${relative} / ${squad.id}`).toMatch(
+          new RegExp(`\|\s*${squad.agentCount}\s*\|`),
+        )
+      }
+
+      // And the three shorter chains' totals.
+      for (const [compositionID, generated] of Object.entries(generatedSquadCompositions)) {
+        if (compositionID === FEATURED_COMPOSITION_ID) continue
+        expect(text, `${relative} / ${compositionID}`).toContain(String(generated.roleCount))
+      }
+    }
   })
 
   test("every landing CTA points somewhere resolvable", () => {

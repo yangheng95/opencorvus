@@ -203,7 +203,6 @@ function resolveCompositionSquad(squadId: string, compositionID: string) {
     id: record.identity.id,
     displayLabel: record.displayLabel,
     agentCount: record.agents.length,
-    workflowCount: record.workflows.length,
   }
 }
 
@@ -242,7 +241,6 @@ await writeFile(
     "  readonly id: string",
     "  readonly displayLabel: { readonly root: string; readonly \"zh-cn\": string }",
     "  readonly agentCount: number",
-    "  readonly workflowCount: number",
     "}",
     "",
     "export type GeneratedComposition = {",

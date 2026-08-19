@@ -220,7 +220,8 @@ radius 6 / brand 4 / font 4 / static 3 / effect 2 / other 1`【测】。五组�
 
 有利条件：
 
-- 内容层已隔离：[landing.ts](../packages/web/src/content/landing.ts)（424 行，双语同构）+ `src/i18n/`
+- 内容层已隔离：双语同构的落地页文案模块 + `src/i18n/`（当时是 `content/landing.ts`；期 0–8 落地后改由
+  [`landing-copy.ts`](../packages/web/src/content/landing-copy.ts) 承担，旧模块已于 2026-08-19 删除）
 - `src/assets/lander/` 已有 20+ 张产品截图与概念 GIF，参考站截图位**现成有料填**
 - 已用 `@fontsource/ibm-plex-mono` 自托管字体，加字体通路现成
 - `PublicSiteLayout` 已有 `data-*` + inline script 的偏好机制，主题切换可挂同一处

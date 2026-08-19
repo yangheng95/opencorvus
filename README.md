@@ -94,7 +94,7 @@ deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
 | -------------- | --------------- |
 | **The run stops short.** A step is skipped, a process dies, or a Task ends terminal with the goal half met. | Requirements emit `REQ-N` entries carrying their own acceptance conditions and explicit non-goals, and a squad's workflow declares what depends on what. Physical ownership is an append-only lease: when a process disappears, the reconciler terminalizes the abandoned Turn at the lease's expiry — a deterministic timestamp — and only then acquires a successor. Every accepted input passes one total-order reduction in which each state has a name. |
 | **The result is not dependably usable.** Success is reported, but what arrives is a summary you cannot check. | Handoffs are typed Artifacts with provenance and exact locators, read across a causal boundary that only exposes completed prior-step output. The host records file changes and command results independently of any agent's account of them. Fact-checking, integrity review, and visual QA run as named stages with their own agents, and a Work Artifact is delivered when it has been rendered, inspected, and given a validation receipt. |
-| **The workflow never improves.** The tenth run repeats the mistake of the first, because the correction died with the conversation. | Tell a squad what you actually wanted and it drafts a revision from your verbatim words; you accept it, and the receipt is how you undo it. Or run a measured Evolution Lab campaign. Nothing installs without your confirmation. |
+| **The workflow never improves.** The tenth run repeats the mistake of the first, because the correction died with the conversation. | Tell a squad what you actually wanted and it drafts a revision from what you said; you accept it, and the receipt is how you undo it. Or run a measured Evolution Lab campaign. Nothing installs without your confirmation. |
 
 Terminal is not final either. A Task that reached `completed`, `failed`, or `cancelled`
 reopens when you send it a message, at a fresh execution occurrence, with the prior
@@ -123,7 +123,7 @@ lifetime. Composition happens at the Mission level and ownership stays at the Ta
 |    | Stage   | Expert Squad                                                                                          | Roles | Hands on                                                                                                                 |
 | -- | ------- | ----------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------ |
 | 01 | Frame   | [Scientific Research Design](https://opencorvus.com/market/builtin/scientific-research-design/)        | 4     | Evidence landscape, competing hypotheses, and a rigor-and-ethics read, joined into one decision register.                 |
-| 02 | Source  | [Deep Research](https://opencorvus.com/market/builtin/deep-research/)                                  | 6     | Multi-perspective discovery and curated evidence, with an independent citation review before anything is written up.      |
+| 02 | Source  | [Deep Research](https://opencorvus.com/market/builtin/deep-research/)                                  | 6     | Multi-perspective discovery and curated evidence, with an independent citation review between the draft and the report.   |
 | 03 | Analyze | [Data Analysis & Business Insights](https://opencorvus.com/market/builtin/data-analysis/)              | 7     | Metric reconciliation and parallel performance and segment work, checked by a role that did not run the analysis.         |
 | 04 | Draft   | [Research Studio](https://opencorvus.com/market/builtin/research-studio/)                              | 5     | Durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven delivery.         |
 | 05 | Review  | [Academic Paper Review](https://opencorvus.com/market/builtin/academic-paper-review/)                  | 8     | Literature, novelty, logic, methods and figures — plus a citation-and-hallucination auditor separate from all of them.    |
@@ -135,11 +135,11 @@ Adding [Patent Landscape and Prior Art](https://opencorvus.com/market/builtin/pa
 and [Localization & Adaptation](https://opencorvus.com/market/builtin/localization-adaptation/) (4)
 makes it **9 squads · 44 named roles**.
 
-Read the shape rather than the individual stages. Three separate squads in that chain
-contain a role whose entire job is to disbelieve the stage before it — Deep Research's
-citation reviewer, Data Analysis's fact-checker, and Academic Paper Review's
-citation-and-hallucination auditor. None of them wrote what they are checking. That is the
-property a single long-running team cannot have, however carefully it is prompted.
+Read the shape rather than the individual stages. Four of the six squads in that chain carry
+a role whose entire job is to disbelieve work it did not do — Deep Research's citation
+reviewer, Data Analysis's fact-checker, Research Studio's own fact-checker, and Academic
+Paper Review's citation-and-hallucination auditor. That is the property a single
+long-running team cannot have, however carefully it is prompted.
 
 ### Other combinations that already ship
 
@@ -160,12 +160,12 @@ revision, and both end at a confirmation you have to give.
 
 **From what you said.** State a durable preference — one that would apply again to the next
 task of this kind — and the host copies the exact installed revision, applies the edits,
-validates the result as a runnable package, and stages a candidate carrying your verbatim
-words. Capability cannot widen: a candidate granting a Tool, Skill, base role, or reference
-the squad did not already hold is refused. Neither is appending a revision — a candidate
-where every changed file still begins with its parent unchanged and only adds at the end
-leaves the older, more specific instruction in force, which is the usual reason a revision
-appears to change nothing.
+validates the result as a runnable package, and stages a candidate recording the preference
+as you stated it. Capability cannot widen: a candidate granting a Tool, Skill, base role, or
+reference the squad did not already hold is refused. A claim to have rewritten a conflicting
+instruction is checked against the bytes: declare the rewrite and then only append, and the
+candidate is refused — appending leaves the older, more specific instruction in force, which
+is the usual reason a revision appears to change nothing.
 
 **From measurement.** The Evolution Lab squad freezes the target revision, cases, scorers,
 environment, arm order, budget, and mutation surface *before* any candidate is authored,
@@ -177,7 +177,8 @@ Three operations change an installed package — `feedback_revision`, `promotion
 Task, and root Session, carrying the exact confirmation text for that change. OpenCorvus
 does not modify its own squads in the background: there is no autonomous rewrite loop and
 no revision that installs because a metric moved. Every revision a target has held stays
-listed, so going back is selecting an entry rather than reconstructing one. See
+listed, and restoration is the undo against that list: it cites one earlier mutation receipt
+and returns the target to a revision that receipt itself witnessed. See
 [How squads evolve](https://opencorvus.com/expert-squads/evolution/).
 
 ## What runs on first launch

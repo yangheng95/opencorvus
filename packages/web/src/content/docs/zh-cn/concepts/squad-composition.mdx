@@ -3,7 +3,7 @@ title: 专家团组合
 description: 为什么最长的工作是几支专家团、而不是一支跑更久；以「从调研资料到一篇可投的论文」完整走一遍。
 ---
 
-import SquadCompositions from "../../../../components/SquadCompositions.astro"
+import OcSquadCompositions from "../../../../components/OcSquadCompositions.astro"
 
 最长的工作不是一支队伍干更久，而是几支队伍各自负责一段，每一段交给下一段的都是能读的东西。
 
@@ -22,17 +22,18 @@ Mission 在启动时记录哪些专家团 ID 可用。之后再安装的能力�
 
 下面是完整的链条，按已发布的包声明。这里的每一个数字都从目录解析而来，不是写死在这一页上的。
 
-<SquadCompositions locale="zh-cn" variant="case" />
+<OcSquadCompositions locale="zh-cn" variant="case" />
 
-要看的是它的形状，而不是单个阶段。这条链里有**三支**不同的专家团，各自包含一个专职去怀疑上一段的
-角色——Deep Research 的引文复核、Data Analysis 的事实核查、Academic Paper Review 的引文与幻觉审计。
-它们谁都没写过自己在查的那份东西。这正是一支长期跑下去的单一队伍拿不到的性质，无论提示词写得多小心。
+要看的是它的形状，而不是单个阶段。这条链的六支里有**四支**各带一个角色，专职去怀疑不是自己做的那
+部分工作——Deep Research 的引文复核、Data Analysis 的事实核查、Research Studio 自己的事实核查，以及
+Academic Paper Review 的引文与幻觉审计。这正是一支长期跑下去的单一队伍拿不到的性质，无论提示词写得
+多小心。
 
 ## 其它已经能用的组合
 
 同样的形状，换三个领域：
 
-<SquadCompositions locale="zh-cn" variant="others" />
+<OcSquadCompositions locale="zh-cn" variant="others" />
 
 ## 怎么决定在哪里拆
 
@@ -50,7 +51,7 @@ Mission 在启动时记录哪些专家团 ID 可用。之后再安装的能力�
 
 ## 相关
 
-- [长程工作在哪里断](./long-horizon/) —— 组合要解决的那三种失败
-- [Mission 如何运行长程任务](./mission/) —— 依赖图、冻结与重开
+- [长程工作在哪里断](../long-horizon/) —— 组合要解决的那三种失败
+- [Mission 如何运行长程任务](../mission/) —— 依赖图、冻结与重开
 - [专家团市场](/zh-cn/market/) —— 上面提到的每一支，含角色与工作流
 - [专家团怎么进化](../../expert-squads/evolution/) —— 修订链条中的某一支

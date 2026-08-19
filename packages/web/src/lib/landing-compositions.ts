@@ -57,7 +57,16 @@ function viewOf(id: string, locale: PublicLocale): CompositionView {
     squadCount: generated.squadCount,
     roleCount: generated.roleCount,
     steps: declared.steps.map((step, index) => {
+      // Paired by position, so the pairing is asserted rather than assumed: a step added to the
+      // editorial file without re-running `market:data` would otherwise read `undefined.displayLabel`
+      // and blame the wrong file.
       const squad = generated.squads[index]
+      if (!squad || `${squad.namespace}/${squad.id}` !== step.squadId) {
+        throw new Error(
+          `Squad composition ${id} step ${index} declares ${step.squadId} but the generated facts have ` +
+            `${squad ? `${squad.namespace}/${squad.id}` : "nothing"}; run \`bun run market:data\``,
+        )
+      }
       return {
         stage: step.stage[locale],
         squadLabel: squad.displayLabel[locale],

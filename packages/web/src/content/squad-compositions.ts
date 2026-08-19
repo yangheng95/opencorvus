@@ -64,8 +64,8 @@ export const squadCompositions: readonly SquadComposition[] = [
         squadId: "builtin/deep-research",
         stage: text("Source", "取证"),
         handoff: text(
-          "Multi-perspective discovery and curated evidence, with an independent citation review before anything is written up.",
-          "多视角检索与证据策展，成文之前先过一遍独立引文复核。",
+          "Multi-perspective discovery and curated evidence, with an independent citation review standing between the draft and the final report.",
+          "多视角检索与证据策展，初稿与最终报告之间隔着一道独立引文复核。",
         ),
       },
       {

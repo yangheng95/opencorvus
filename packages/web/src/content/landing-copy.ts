@@ -91,6 +91,8 @@ export type LandingCopy = {
     /** Unit nouns for the generated totals, e.g. "6 squads · 33 roles". */
     readonly squadsUnit: string
     readonly rolesUnit: string
+    /** Column heading for the role count. Chinese needs a noun here, not the measure word. */
+    readonly rolesHeading: string
     readonly moreLabel: string
     readonly cta: string
   }
@@ -266,6 +268,7 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       handoffHeading: "交出什么",
       squadsUnit: "支专家团",
       rolesUnit: "个具名角色",
+      rolesHeading: "角色",
       moreLabel: "其它组合",
       cta: "看组合是怎么跑的",
     },
@@ -519,6 +522,7 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       handoffHeading: "Hands on",
       squadsUnit: "squads",
       rolesUnit: "named roles",
+      rolesHeading: "Roles",
       moreLabel: "Other combinations",
       cta: "How composition works",
     },

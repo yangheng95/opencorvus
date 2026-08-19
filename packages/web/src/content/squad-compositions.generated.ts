@@ -10,7 +10,6 @@ export type GeneratedCompositionSquad = {
   readonly id: string
   readonly displayLabel: { readonly root: string; readonly "zh-cn": string }
   readonly agentCount: number
-  readonly workflowCount: number
 }
 
 export type GeneratedComposition = {
@@ -33,8 +32,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Scientific Research Design",
           "zh-cn": "科学研究设计"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       },
       {
         "namespace": "builtin",
@@ -43,8 +41,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Deep Research",
           "zh-cn": "深度研究"
         },
-        "agentCount": 6,
-        "workflowCount": 1
+        "agentCount": 6
       },
       {
         "namespace": "builtin",
@@ -53,8 +50,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Data Analysis & Business Insights",
           "zh-cn": "数据分析与商业洞察"
         },
-        "agentCount": 7,
-        "workflowCount": 1
+        "agentCount": 7
       },
       {
         "namespace": "builtin",
@@ -63,8 +59,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Research Studio",
           "zh-cn": "研究工作室"
         },
-        "agentCount": 5,
-        "workflowCount": 3
+        "agentCount": 5
       },
       {
         "namespace": "builtin",
@@ -73,8 +68,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Academic Paper Review",
           "zh-cn": "学术论文审查"
         },
-        "agentCount": 8,
-        "workflowCount": 1
+        "agentCount": 8
       },
       {
         "namespace": "builtin",
@@ -83,8 +77,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Office Delivery",
           "zh-cn": "Office 交付"
         },
-        "agentCount": 3,
-        "workflowCount": 1
+        "agentCount": 3
       }
     ],
     "extras": [
@@ -95,8 +88,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Patent Landscape and Prior Art",
           "zh-cn": "专利格局与现有技术"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       },
       {
         "namespace": "builtin",
@@ -105,8 +97,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Browser Research & Acceptance",
           "zh-cn": "浏览器研究与验收"
         },
-        "agentCount": 3,
-        "workflowCount": 1
+        "agentCount": 3
       },
       {
         "namespace": "builtin",
@@ -115,8 +106,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Localization & Adaptation",
           "zh-cn": "本地化与适配"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       }
     ],
     "squadCount": 6,
@@ -133,8 +123,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Mergers and Acquisitions Due Diligence",
           "zh-cn": "并购尽职调查"
         },
-        "agentCount": 5,
-        "workflowCount": 1
+        "agentCount": 5
       },
       {
         "namespace": "builtin",
@@ -143,8 +132,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Forensic Accounting Investigations",
           "zh-cn": "法务会计调查"
         },
-        "agentCount": 5,
-        "workflowCount": 1
+        "agentCount": 5
       },
       {
         "namespace": "builtin",
@@ -153,8 +141,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Commercial Legal",
           "zh-cn": "商事法务"
         },
-        "agentCount": 7,
-        "workflowCount": 1
+        "agentCount": 7
       },
       {
         "namespace": "builtin",
@@ -163,8 +150,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Tax Compliance",
           "zh-cn": "税务合规"
         },
-        "agentCount": 7,
-        "workflowCount": 1
+        "agentCount": 7
       },
       {
         "namespace": "builtin",
@@ -173,8 +159,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Internal Audit Control Assurance",
           "zh-cn": "内部审计与控制保障"
         },
-        "agentCount": 5,
-        "workflowCount": 1
+        "agentCount": 5
       }
     ],
     "extras": [],
@@ -192,8 +177,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Service Reliability Incident Operations",
           "zh-cn": "服务可靠性与事件运营"
         },
-        "agentCount": 5,
-        "workflowCount": 1
+        "agentCount": 5
       },
       {
         "namespace": "builtin",
@@ -202,8 +186,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Digital Forensics Incident Investigation",
           "zh-cn": "数字取证事件调查"
         },
-        "agentCount": 5,
-        "workflowCount": 1
+        "agentCount": 5
       },
       {
         "namespace": "builtin",
@@ -212,8 +195,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Review & Debug",
           "zh-cn": "审查与调试"
         },
-        "agentCount": 4,
-        "workflowCount": 3
+        "agentCount": 4
       },
       {
         "namespace": "builtin",
@@ -222,8 +204,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Knowledge Base Operations",
           "zh-cn": "知识库运营"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       }
     ],
     "extras": [],
@@ -241,8 +222,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Product Management",
           "zh-cn": "产品管理"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       },
       {
         "namespace": "builtin",
@@ -251,8 +231,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Marketing & Growth Strategy",
           "zh-cn": "营销与增长战略"
         },
-        "agentCount": 7,
-        "workflowCount": 1
+        "agentCount": 7
       },
       {
         "namespace": "builtin",
@@ -261,8 +240,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "SEO & Generative Engine Optimization",
           "zh-cn": "SEO 与生成式引擎优化"
         },
-        "agentCount": 7,
-        "workflowCount": 1
+        "agentCount": 7
       },
       {
         "namespace": "builtin",
@@ -271,8 +249,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Product Video Production",
           "zh-cn": "产品视频制作"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       },
       {
         "namespace": "builtin",
@@ -281,8 +258,7 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "root": "Localization & Adaptation",
           "zh-cn": "本地化与适配"
         },
-        "agentCount": 4,
-        "workflowCount": 1
+        "agentCount": 4
       }
     ],
     "extras": [],
