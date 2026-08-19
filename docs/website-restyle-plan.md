@@ -302,7 +302,7 @@ radius 6 / brand 4 / font 4 / static 3 / effect 2 / other 1`【测】。五组�
 
 | # | 锚点 | 节 | 一句职责 | 素材 | 高度 |
 |---|---|---|---|---|---|
-| 1 | — | Hero | slogan + 4 个去处 | `landing.ts` hero + 着色器 + `npx` 打字机 | 1.0 |
+| 1 | — | Hero | slogan + 4 个去处 | 落地页文案模块的 hero + 着色器 + `npx` 打字机 | 1.0 |
 | 2 | `#why` | 三支柱 | 开源/定制/控制，**每支柱配一条证据不配形容词** | MIT+仓库链接 / 专家团数+插件点 / 本地运行+权限门 | 0.8 |
 | 3 | `#how` | 怎么工作 | 3 步讲完，细节外链 | 已有 `concept-flow` GIF + `MissionPage` 压成 1 段 | 1.0 |
 | 4 | `#look` | 产品实景 | 让人看见东西长什么样 | `harness-gallery/` 4 张，tab 切换 | 1.0 |
@@ -492,7 +492,7 @@ radius 6 / brand 4 / font 4 / static 3 / effect 2 / other 1`【测】。五组�
 
 ### 期 8 · 双语文案（1.5【估】）
 
-按 §五 段落映射与字数预算重写 `landing.ts` 的 `root` / `zh-cn` 两份；
+按 §五 段落映射与字数预算重写落地页文案模块的 `root` / `zh-cn` 两份；
 中文标题走 `oc-cjk-spacing`；同步落地页与市场页的 OG 与 meta 描述。
 
 退出：两语言 ≤ 1200 字且齐平；无遗留旧文案。

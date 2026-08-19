@@ -78,8 +78,8 @@ held, partitioned into the current revision and its historical ones.
 
 Restoration is an undo rather than random access to that list. It cites one earlier mutation receipt
 and may only return the target to a revision that receipt itself witnessed — the digest it installed,
-or the one it replaced. Reaching further back means walking back through the receipts that got you
-here.
+or the one it replaced. Which receipt you cite is open, as long as it is readable from the current
+Task, so an older revision is reachable directly by citing the receipt that installed it.
 
 That is still what makes accepting a revision a low-stakes decision: the way back is a recorded
 receipt, not a reconstruction from memory.

@@ -93,7 +93,7 @@ deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
 | It breaks here | What answers it |
 | -------------- | --------------- |
 | **The run stops short.** A step is skipped, a process dies, or a Task ends terminal with the goal half met. | Requirements emit `REQ-N` entries carrying their own acceptance conditions and explicit non-goals, and a squad's workflow declares what depends on what. Physical ownership is an append-only lease: when a process disappears, the reconciler terminalizes the abandoned Turn at the lease's expiry — a deterministic timestamp — and only then acquires a successor. Every accepted input passes one total-order reduction in which each state has a name. |
-| **The result is not dependably usable.** Success is reported, but what arrives is a summary you cannot check. | Handoffs are typed Artifacts with provenance and exact locators, read across a causal boundary that only exposes completed prior-step output. The host records file changes and command results independently of any agent's account of them. Fact-checking, integrity review, and visual QA run as named stages with their own agents, and a Work Artifact is delivered when it has been rendered, inspected, and given a validation receipt. |
+| **The result is not dependably usable.** Success is reported, but what arrives is a summary you cannot check. | Handoffs are typed Artifacts with provenance and exact locators, read across a causal boundary that only exposes completed prior-step output. The host records file changes and command results independently of any agent's account of them. Fact-checking, integrity review, and visual QA run as named stages with their own agents, and a qualified Work Artifact — today the editable presentation profile — is delivered when it has been rendered, inspected, and given a validation receipt. |
 | **The workflow never improves.** The tenth run repeats the mistake of the first, because the correction died with the conversation. | Tell a squad what you actually wanted and it drafts a revision from what you said; you accept it, and the receipt is how you undo it. Or run a measured Evolution Lab campaign. Nothing installs without your confirmation. |
 
 Terminal is not final either. A Task that reached `completed`, `failed`, or `cancelled`
@@ -160,8 +160,8 @@ revision, and both end at a confirmation you have to give.
 
 **From what you said.** State a durable preference — one that would apply again to the next
 task of this kind — and the host copies the exact installed revision, applies the edits,
-validates the result as a runnable package, and stages a candidate recording the preference
-as you stated it. Capability cannot widen: a candidate granting a Tool, Skill, base role, or
+validates the result as a runnable package, and stages a candidate carrying the preference,
+which the drafting agent is instructed to reproduce word for word rather than paraphrase. Capability cannot widen: a candidate granting a Tool, Skill, base role, or
 reference the squad did not already hold is refused. A claim to have rewritten a conflicting
 instruction is checked against the bytes: declare the rewrite and then only append, and the
 candidate is refused — appending leaves the older, more specific instruction in force, which

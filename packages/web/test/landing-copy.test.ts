@@ -230,31 +230,56 @@ describe("landing copy integrity", () => {
     // Both READMEs re-type the totals as markdown, because a README cannot import a module. That is
     // the same shape as the "42 built-in tools" drift this section was written to end, so the
     // numbers are checked against the generator rather than reviewed by eye.
+    //
+    // Every assertion below is anchored to the sentence or the table row that carries the figure. A
+    // bare `toContain("6")` against a 25 KB README passes on any two-digit accident, and the first
+    // draft of this test did exactly that; the escaping in the cell pattern is why it is written as
+    // a String.raw template rather than a plain one.
     const featured = generatedSquadCompositions[FEATURED_COMPOSITION_ID]
-    const readmes = ["../../../README.md", "../../../README.zh-CN.md"].map((relative) => ({
-      relative,
-      text: readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8"),
-    }))
 
-    for (const { relative, text } of readmes) {
-      // Totals, written as "6 ... 33" in English and "6 ... 33" in Chinese with different units
-      // between them, so the assertion is on the figures rather than on a rendered sentence.
-      expect(text, relative).toContain(String(featured.squadCount))
-      expect(text, relative).toContain(String(featured.roleCount))
-      expect(text, relative).toContain(String(featured.withExtrasSquadCount))
-      expect(text, relative).toContain(String(featured.withExtrasRoleCount))
+    /** A markdown table cell holding this number and nothing else. */
+    const cell = (value: number) => new RegExp(String.raw`\|\s*${value}\s*\|`)
 
-      // Every per-squad role count in the case table, as a cell of its own.
+    const readmes = [
+      {
+        relative: "../../../README.md",
+        locale: "root" as const,
+        totals: [
+          `**${featured.squadCount} Expert Squads · ${featured.roleCount} named roles**`,
+          `**${featured.withExtrasSquadCount} squads · ${featured.withExtrasRoleCount} named roles**`,
+        ],
+      },
+      {
+        relative: "../../../README.zh-CN.md",
+        locale: "zh-cn" as const,
+        totals: [
+          `**${featured.squadCount} 支专家团 · ${featured.roleCount} 个具名角色**`,
+          `**${featured.withExtrasSquadCount} 支专家团 · ${featured.withExtrasRoleCount} 个具名角色**`,
+        ],
+      },
+    ]
+
+    for (const { relative, locale, totals } of readmes) {
+      const text = readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8")
+      const lines = text.split(/\r?\n/)
+
+      for (const total of totals) expect(text, `${relative}: ${total}`).toContain(total)
+
+      // Each case-table row, located by the squad's own market link so the row cannot be confused
+      // with another, must carry that squad's role count as a cell of its own.
       for (const squad of featured.squads) {
-        expect(text, `${relative} / ${squad.id}`).toMatch(
-          new RegExp(`\|\s*${squad.agentCount}\s*\|`),
-        )
+        const row = lines.find((line) => line.startsWith("|") && line.includes(`/market/builtin/${squad.id}/`))
+        expect(row, `${relative}: no case-table row for ${squad.id}`).toBeDefined()
+        expect(row, `${relative} / ${squad.id} role count`).toMatch(cell(squad.agentCount))
       }
 
-      // And the three shorter chains' totals.
+      // And the shorter chains, located by the label of the squad that opens each one.
       for (const [compositionID, generated] of Object.entries(generatedSquadCompositions)) {
         if (compositionID === FEATURED_COMPOSITION_ID) continue
-        expect(text, `${relative} / ${compositionID}`).toContain(String(generated.roleCount))
+        const opener = generated.squads[0].displayLabel[locale]
+        const row = lines.find((line) => line.startsWith("|") && line.includes(opener))
+        expect(row, `${relative}: no row for ${compositionID} (opening squad ${opener})`).toBeDefined()
+        expect(row, `${relative} / ${compositionID} role total`).toMatch(cell(generated.roleCount))
       }
     }
   })
