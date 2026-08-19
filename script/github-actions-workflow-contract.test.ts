@@ -78,6 +78,36 @@ describe("GitHub Actions workflow contract", () => {
     ])
   })
 
+  test("resolves the release version to canonical SemVer before any job reads it", async () => {
+    /*
+     * Every packaging job exports this value as OPENCORVUS_VERSION, and packages/script accepts
+     * canonical SemVer only. A `v0.0.48-beta` tag is already canonical once the `v` is stripped,
+     * so the tag path never exercised the gap; the dispatch path documents compact input
+     * ("0.0.1"-style, and README/RELEASE.md promise `0.0.48beta` works) and passed it through
+     * untouched. `0.0.48beta` therefore reached all ten packaging legs and failed each one with
+     * "Invalid OPENCORVUS_VERSION", after prepare had reported success.
+     *
+     * The guard is on the resolve step rather than on a job env, because that step is the single
+     * place both trigger paths meet.
+     */
+    const workflow = await readWorkflow("build.yml")
+    const resolve = (workflow.jobs?.prepare?.steps ?? []).find(
+      (step: { name?: string }) => step.name === "Resolve release version",
+    )
+
+    expect(resolve, "build.yml lost its release-version resolve step").toBeDefined()
+    expect(resolve.id).toBe("meta")
+    expect(resolve.run).toContain("normalizeReleaseVersion")
+    expect(resolve.run).toContain('echo "version=$VERSION" >> "$GITHUB_OUTPUT"')
+
+    // The normalized value is what leaves the step, so the raw input must land somewhere else.
+    for (const assignment of ['VERSION="${GITHUB_REF_NAME#v}"', 'VERSION="${{ inputs.version }}"']) {
+      expect(resolve.run, `raw input still assigned straight to VERSION: ${assignment}`).not.toContain(
+        `\n            ${assignment}`,
+      )
+    }
+  })
+
   test("packages all five native GUI and CLI rows before publishing the release", async () => {
     const workflow = await readWorkflow("build.yml")
     const jobs = workflow.jobs ?? {}

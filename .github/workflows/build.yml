@@ -35,11 +35,16 @@ jobs:
         shell: bash
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            VERSION="${GITHUB_REF_NAME#v}"
+            RAW_VERSION="${GITHUB_REF_NAME#v}"
           else
-            VERSION="${{ inputs.version }}"
-            VERSION="${VERSION#v}"
+            RAW_VERSION="${{ inputs.version }}"
           fi
+          # Everything downstream reads this as OPENCORVUS_VERSION, and packages/script rejects
+          # anything that is not canonical SemVer. A `v0.0.48-beta` tag happened to be canonical
+          # once the `v` came off, so only the dispatch path ever carried a compact `0.0.48beta`
+          # through — and it failed in all ten packaging legs rather than in prepare. Normalize
+          # here, where both paths meet, so the input forms this workflow documents all resolve.
+          VERSION="$(bun -e 'import { normalizeReleaseVersion } from "./script/sync-version.ts"; console.log(normalizeReleaseVersion(Bun.argv.at(-1)))' "$RAW_VERSION")"
           PRERELEASE="$(bun -e 'import { releaseVersionMetadata } from "./script/sync-version.ts"; console.log(releaseVersionMetadata(Bun.argv.at(-1)).prerelease)' "$VERSION")"
           UPDATE_CHANNEL="$(bun -e 'import { desktopUpdateChannel } from "./script/desktop-update-channel.ts"; console.log(desktopUpdateChannel(Bun.argv.at(-1)))' "$VERSION")"
           SOURCE_SHA="$(git rev-parse 'HEAD^{commit}')"
