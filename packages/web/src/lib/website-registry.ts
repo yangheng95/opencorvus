@@ -261,8 +261,37 @@ export class WebsiteRegistry {
     this.sqlite.close(false)
   }
 
+  /**
+   * Leave the database as one file that can be moved by itself.
+   *
+   * The deploy activator swaps this file into place with `mv` and refuses to proceed while a
+   * `-wal` or `-shm` sits beside it, because moving only the main file would drop whatever the WAL
+   * still held. That guard is right. What was wrong was treating its precondition as something
+   * SQLite would arrange on its own:
+   *
+   *   - `exec` discards the result of `wal_checkpoint(TRUNCATE)`, and the pragma reports
+   *     `busy = 1` and leaves the WAL intact when it cannot get the writer lock. A checkpoint that
+   *     silently did nothing was indistinguishable here from one that emptied the log.
+   *   - SQLite unlinks the sidecars when the last connection closes, but only if it can. The unlink
+   *     needs write permission on the *directory*, not the file, and its failure is ignored — so on
+   *     a host where the service user does not own the state directory the files simply stay, which
+   *     is exactly the shape of the production failure this addresses and the reason it never
+   *     reproduced locally.
+   *
+   * So the postcondition is asserted rather than assumed. After a checkpoint that really did
+   * truncate, the WAL holds nothing the main file does not, which is what makes deleting it safe;
+   * a WAL with bytes left in it is a genuine fault and fails loudly instead of being cleaned away.
+   */
   async prepareForAtomicSwap() {
-    this.sqlite.exec("PRAGMA wal_checkpoint(TRUNCATE)")
+    const checkpoint = this.sqlite
+      .query<{ busy: number; log: number; checkpointed: number }, []>("PRAGMA wal_checkpoint(TRUNCATE)")
+      .get()
+    if (!checkpoint) throw new WebsiteRegistryIntegrityError("Website Registry checkpoint reported no result")
+    if (checkpoint.busy !== 0 || checkpoint.log !== 0) {
+      throw new WebsiteRegistryIntegrityError(
+        `Website Registry checkpoint did not truncate the write-ahead log (busy=${checkpoint.busy}, log=${checkpoint.log}, checkpointed=${checkpoint.checkpointed})`,
+      )
+    }
     this.close()
     const database = await open(this.databasePath, "r")
     try {
@@ -274,6 +303,27 @@ export class WebsiteRegistry {
     } finally {
       await database.close()
     }
+
+    const remaining: string[] = []
+    for (const suffix of ["-wal", "-shm"] as const) {
+      const sidecar = `${this.databasePath}${suffix}`
+      const info = await stat(sidecar).catch(() => null)
+      if (!info) continue
+      if (suffix === "-wal" && info.size > 0) {
+        throw new WebsiteRegistryIntegrityError(
+          `Website Registry write-ahead log still holds ${info.size} bytes after a truncating checkpoint`,
+        )
+      }
+      remaining.push(sidecar)
+    }
+    if (remaining.length === 0) return
+
+    // Bun holds the SQLite handle until it is collected, so the files can still be locked here even
+    // though the connection is closed — this method's own caller already collects before it cleans
+    // up on the failure path, for the same reason. Release first, then retry the unlink.
+    Bun.gc(true)
+    await Bun.sleep(100)
+    for (const sidecar of remaining) await rm(sidecar, { force: true, maxRetries: 10, retryDelay: 100 })
   }
 
   private ensureSchema() {

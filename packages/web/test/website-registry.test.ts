@@ -9,6 +9,8 @@ import { WebsiteRegistryConflictError, WebsiteRegistryIntegrityError } from "../
 import { canonicalWebsiteRegistryJSON } from "../src/lib/website-registry-contract"
 import { validateWebsiteRegistrySeed } from "../src/lib/website-registry-seed-validation"
 
+const exists = (target: string) => access(target).then(() => true).catch(() => false)
+
 const webRoot = path.resolve(import.meta.dir, "..")
 const generatedRoot = path.join(webRoot, ".generated")
 const distributionRoot = path.join(webRoot, ".generated")
@@ -234,6 +236,16 @@ CREATE INDEX site_visitor_expiry ON site_visitor(expires_at);`)
     "--source", distributionRoot,
   ], { cwd: webRoot, stdout: "pipe", stderr: "inherit" })
   expect(await child.exited).toBe(0)
+
+  // The contract the deploy activator actually depends on: it swaps this file into place with a
+  // plain `mv` and aborts while a sidecar sits beside it, because moving the main file alone would
+  // drop whatever the WAL still held. Nothing asserted that here, which is how a reset that left
+  // them behind reached production — it failed on the server, at the one step that checks.
+  // Asserted before anything reopens the database, since opening it recreates them.
+  for (const suffix of ["-wal", "-shm"]) {
+    expect(await exists(`${targetPath}${suffix}`), `reset-v1 left ${suffix} beside its target`).toBe(false)
+  }
+
   expect(inspectWebsiteRegistrySchema(targetPath)).toBe("current")
   const reset = await WebsiteRegistry.open(targetPath, dataRoot)
   try {
@@ -247,3 +259,68 @@ CREATE INDEX site_visitor_expiry ON site_visitor(expires_at);`)
     await rm(resetRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
   }
 }, 60_000)
+
+test("prepareForAtomicSwap leaves one movable file with the write-ahead log folded in", async () => {
+  // `prepareForAtomicSwap` had no test at all, which is why a partial checkpoint and an unlink the
+  // host refused both looked like success. The two things worth pinning are that the sidecars are
+  // gone and that the data they carried survived into the main file — deleting a WAL that still
+  // held commits is the failure the deploy guard exists to prevent, so a test that only checked
+  // for absence would bless exactly the wrong fix.
+  const swapRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-atomic-swap-"))
+  const databasePath = path.join(swapRoot, "registry.sqlite3")
+  try {
+    const registry = await WebsiteRegistry.open(databasePath, path.join(swapRoot, "data"))
+    registry.sqlite.run("UPDATE site_view_summary SET total_views = ?, updated_at = ? WHERE singleton = 1", [7, 1])
+    expect(await exists(`${databasePath}-wal`)).toBe(true)
+
+    await registry.prepareForAtomicSwap()
+
+    for (const suffix of ["-wal", "-shm"]) {
+      expect(await exists(`${databasePath}${suffix}`), `${suffix} survived the swap preparation`).toBe(false)
+    }
+
+    // Moving the main file on its own is what the activator does; the write has to come with it.
+    const moved = path.join(swapRoot, "moved.sqlite3")
+    await rename(databasePath, moved)
+    const reopened = await WebsiteRegistry.open(moved, path.join(swapRoot, "data"))
+    try {
+      expect(reopened.sqlite.query<{ total_views: number }, []>("SELECT total_views FROM site_view_summary WHERE singleton = 1").get()?.total_views).toBe(7)
+    } finally {
+      reopened.close()
+    }
+  } finally {
+    Bun.gc(true)
+    await Bun.sleep(100)
+    await rm(swapRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+  }
+}, 30_000)
+
+test("a checkpoint that cannot finish is reported, not swallowed", async () => {
+  // The other half of the production failure. `exec` threw the pragma's result away, and
+  // wal_checkpoint(TRUNCATE) answers `busy = 1` and leaves the log intact when it cannot take the
+  // writer lock — so a checkpoint that moved nothing was indistinguishable from one that emptied
+  // the WAL, and the swap went ahead on a file that still needed its sidecar. A second live
+  // connection reproduces that lock.
+  const busyRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-busy-checkpoint-"))
+  const databasePath = path.join(busyRoot, "registry.sqlite3")
+  let reader: WebsiteRegistry | undefined
+  let registry: WebsiteRegistry | undefined
+  try {
+    registry = await WebsiteRegistry.open(databasePath, path.join(busyRoot, "data"))
+    registry.sqlite.run("UPDATE site_view_summary SET total_views = ?, updated_at = ? WHERE singleton = 1", [3, 1])
+
+    reader = await WebsiteRegistry.open(databasePath, path.join(busyRoot, "data"))
+    reader.sqlite.exec("BEGIN")
+    reader.sqlite.query("SELECT total_views FROM site_view_summary WHERE singleton = 1").get()
+
+    await expect(registry.prepareForAtomicSwap()).rejects.toBeInstanceOf(WebsiteRegistryIntegrityError)
+  } finally {
+    try { reader?.sqlite.exec("ROLLBACK") } catch {}
+    reader?.close()
+    // The refused checkpoint throws before the connection is closed, so the caller still owns it.
+    try { registry?.close() } catch {}
+    Bun.gc(true)
+    await Bun.sleep(100)
+    await rm(busyRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+  }
+}, 30_000)
