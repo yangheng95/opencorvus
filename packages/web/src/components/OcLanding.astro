@@ -1122,6 +1122,26 @@ const featurableSquadTotal = platformFacts.squadTotal
   if (terminal) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     let timer = 0
+    // Each recording plays itself out and hands over to the next one. Reading the runs is the
+    // point; making someone click a tab to discover there are more is not.
+    const HOLD_AFTER_RUN_MS = 2600
+    const tabs = [...terminal.querySelectorAll<HTMLElement>("[data-oc-terminal-tab]")]
+    let advance = 0
+    let handOver = true
+
+    const stopAdvance = () => {
+      window.clearTimeout(advance)
+      advance = 0
+    }
+
+    function queueNext(pane: HTMLElement) {
+      stopAdvance()
+      if (!handOver || reduced || document.hidden || tabs.length < 2) return
+      const id = pane.getAttribute("data-oc-terminal-pane")
+      const position = tabs.findIndex((tab) => tab.getAttribute("data-oc-terminal-tab") === id)
+      if (position === -1) return
+      advance = window.setTimeout(() => tabs[(position + 1) % tabs.length]!.click(), HOLD_AFTER_RUN_MS)
+    }
 
     function type(pane: HTMLElement) {
       const source = pane.querySelector<HTMLElement>("[data-oc-terminal-source]")
@@ -1129,6 +1149,7 @@ const featurableSquadTotal = platformFacts.squadTotal
       if (!source || !out) return
       const text = source.textContent ?? ""
       window.clearInterval(timer)
+      stopAdvance()
 
       if (reduced) {
         out.textContent = text
@@ -1140,7 +1161,10 @@ const featurableSquadTotal = platformFacts.squadTotal
       timer = window.setInterval(() => {
         index += 1
         out.textContent = text.slice(0, index)
-        if (index >= text.length) window.clearInterval(timer)
+        if (index >= text.length) {
+          window.clearInterval(timer)
+          queueNext(pane)
+        }
       }, 26)
     }
 
@@ -1149,6 +1173,13 @@ const featurableSquadTotal = platformFacts.squadTotal
       const pane = (event as CustomEvent<{ pane?: HTMLElement }>).detail.pane
       if (pane) type(pane)
     })
+
+    // A reader who takes the wheel keeps it: once a tab is picked by hand, or the pointer is
+    // resting on the recording, nothing moves on its own again.
+    tabs.forEach((tab) => tab.addEventListener("pointerdown", () => { handOver = false; stopAdvance() }))
+    terminal.addEventListener("pointerenter", stopAdvance)
+    terminal.addEventListener("focusin", stopAdvance)
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stopAdvance() })
 
     // Hold the typing until the hero is actually on screen, so a deep link into #start does not
     // burn a timer nobody is watching.
