@@ -23,6 +23,7 @@ import {
   cardTreeStore,
   markCardTreeReplaced,
   markCardTreeVisibleChanged as markCardTreeVisibleChangedNow,
+  publishCardTreeVisibleNow,
   replaceCardTreeOrder,
   setCardTreeStore,
   type CardNode,
@@ -44,6 +45,7 @@ import { conversationMessageDisplayStage, isDelegatedContextMessage, type Messag
 import { stageAccent } from "../utils/card-color"
 import { t } from "../utils/i18n"
 import { normalizeToolPartRecord } from "../utils/tool"
+import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { aggregateTurnUsage, type TurnUsageContribution } from "../utils/turn-usage"
 import {
   compareTimelineOrderKeys,
@@ -430,6 +432,7 @@ function markCardTreeVisibleChanged(): void {
 }
 
 export function deferConversationTreeProjection(run: () => void): void {
+  if (projectionDeferralDepth === 0) settlePendingCardTreeDisplayAggregates()
   projectionDeferralDepth += 1
   let completed = false
   try {
@@ -481,6 +484,8 @@ export function resetWriter(
   // being discarded, so executing them here would mutate the old tree before
   // clearing it and could prevent the clear if a stale delta is malformed.
   cancelBufferedPartDeltaTimer()
+  // A pending display-aggregate settlement belongs to the tree being replaced.
+  cancelCardTreeDisplayAggregateSettlement()
   bufferedPartDeltas.clear()
   sessions.clear()
   messages.clear()
@@ -512,15 +517,76 @@ export function resetWriter(
   markCardTreeVisibleChanged()
 }
 
+// ── Display-aggregate settlement ──
+//
+// `flushCardStats` recomputes a touched card's own aggregates by walking all of
+// its parts and then bubbling to its ancestors, so its cost tracks the size of
+// the card, not the size of the change. Running it once per event made it the
+// single most expensive thing the live path did.
+//
+// It is a display cache — collapsed-bubble counters, the latest-activity line,
+// the header usage strip — and nothing that resolves identity or placement
+// reads it. The projection the agent rail reads back synchronously right after
+// each write (card order, hierarchy, message→card ownership) therefore stays
+// synchronous; only this cache is coalesced.
+//
+// The frame callback runs before the browser paints, so a frame is never
+// painted from a stale cache. Events landing in the same frame collapse into
+// one recompute per touched card because the dirty set already dedupes.
+const cardStatsSettlementFrame = createAnimationFrameScheduler(() => {
+  cardStatsSettlementScheduled = false
+  settleCardTreeDisplayAggregates()
+})
+let cardStatsSettlementScheduled = false
+
+/** Coalescing needs the host's frame clock to decide when "before the next
+ *  paint" is. Where there is none there is also nothing to paint, so the same
+ *  settlement runs immediately instead — same result, no coalescing. */
+function hostSchedulesFrames(): boolean {
+  return typeof requestAnimationFrame === "function" && typeof cancelAnimationFrame === "function"
+}
+
+function settleCardTreeDisplayAggregates(): void {
+  batch(() => {
+    flushCardStats()
+    // Already inside the frame that will paint: publish now so the projection
+    // token never runs ahead of the aggregates it is meant to publish.
+    if (projectionDeferralDepth > 0) markCardTreeVisibleChanged()
+    else publishCardTreeVisibleNow()
+  })
+}
+
+/** Settle a pending frame's aggregates now. A deferred projection block owns
+ *  its own settlement, so it must start from a settled cache rather than race a
+ *  frame scheduled by the live events that came before it. */
+function settlePendingCardTreeDisplayAggregates(): void {
+  if (!cardStatsSettlementScheduled) return
+  cardStatsSettlementScheduled = false
+  cardStatsSettlementFrame.cancel()
+  settleCardTreeDisplayAggregates()
+}
+
+function cancelCardTreeDisplayAggregateSettlement(): void {
+  if (!cardStatsSettlementScheduled) return
+  cardStatsSettlementScheduled = false
+  cardStatsSettlementFrame.cancel()
+}
+
+function scheduleCardTreeDisplayAggregates(): void {
+  if (!hostSchedulesFrames()) {
+    settleCardTreeDisplayAggregates()
+    return
+  }
+  if (cardStatsSettlementScheduled) return
+  cardStatsSettlementScheduled = true
+  cardStatsSettlementFrame.schedule()
+}
+
 function applyVisibleCardTreeEvent(handler: () => void): void {
   batch(() => {
     handler()
-    // Drain the subtree-stats dirty queue inside the same batch so the
-    // ancestor cache updates land in one render frame alongside the event's
-    // primary writes. See store/card-tree-stats.ts for the bubble-up walk.
-    flushCardStats()
-    markCardTreeVisibleChanged()
   })
+  scheduleCardTreeDisplayAggregates()
 }
 
 function cancelBufferedPartDeltaTimer(): void {
@@ -657,9 +723,8 @@ export function flushBufferedPartDeltas(): void {
       bufferedPartDeltas.delete(key)
       handlePartDelta(mergedPartDeltaEvent(entry))
     }
-    flushCardStats()
-    markCardTreeVisibleChanged()
   })
+  scheduleCardTreeDisplayAggregates()
 }
 
 /** Top-level dispatcher. Unknown event types throw by design (rule 1:
@@ -1055,6 +1120,10 @@ interface EnsuredPartProjection {
   messageID: string
   sessionID: string
   displayRole: string
+  /** True only when this part arrived before its `message.updated` and had to
+   *  create the message turn itself. That is the one part-driven way message
+   *  segmentation can change, so it is the one case that must regroup. */
+  createdMessageTurn: boolean
 }
 
 type PartEventRouteMeta = {
@@ -1141,6 +1210,7 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta 
   const existingSession = sessions.get(sessionID)
   let session = existingSession
   let cardID = session?.messageCardIDs.get(messageID)
+  let createdMessageTurn = false
   let displayRole = ""
   const existingMessage = messages.get(messageID)
   if (existingMessage) {
@@ -1221,6 +1291,7 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta 
       stampServerTime: false,
       occurrenceInputMessageID: route.role === "user" ? messageID : route.parentMessageID || undefined,
     })
+    createdMessageTurn = true
     drainPendingSessionStatus(sessionID)
   }
 
@@ -1232,7 +1303,7 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta 
       `message.part.updated for ${messageID} could not resolve display role from message or event metadata`,
     )
   }
-  return { session, cardID, partID, messageID, sessionID, displayRole }
+  return { session, cardID, partID, messageID, sessionID, displayRole, createdMessageTurn }
 }
 
 function handlePartUpdated(event: any): void {
@@ -1252,7 +1323,17 @@ function handlePartUpdated(event: any): void {
   })
   if (!projection) return
   const { session } = projection
-  if (conversationPartHasDisplay(part)) {
+  // `ensurePartProjection` has already placed this part: `upsertPart` either
+  // rewrote it in place or inserted it at its exact order-key position inside
+  // the owning message's run, keeping `partIndex` correct. Message segmentation
+  // is derived from the message timeline, not from parts, so a part landing in
+  // an already-projected message turn cannot change it — regrouping there would
+  // re-derive the identical segments and rewrite every card in the conversation.
+  // The one part-driven exception is a part that arrived before its message and
+  // had to create the turn itself; that new message may merge into an adjacent
+  // segment, which only the regroup can settle. `handleMessageUpdated` already
+  // guards its own regroup the same way.
+  if (conversationPartHasDisplay(part) && projection.createdMessageTurn) {
     regroupTimelineSegments()
   } else {
     rebuildTopLevelOrder()
@@ -2656,6 +2737,66 @@ function isReviewStreamPart(part: any): boolean {
   return String(part?.partID || "").startsWith("review:integrity:")
 }
 
+/** Boundary rows are rebuilt as fresh objects on every regroup and carry a
+ *  translated label, so they are compared by value. Every other part is carried
+ *  over by reference from the card it already lives in. */
+function projectedPartIsUnchanged(existing: any, next: any): boolean {
+  if (existing === next) return true
+  if (!isBoundaryMessagePart(existing) || !isBoundaryMessagePart(next)) return false
+  return (
+    existing.messageID === next.messageID &&
+    existing.role === next.role &&
+    existing.roleLabel === next.roleLabel &&
+    existing.time === next.time
+  )
+}
+
+/** True when the card already in the store is exactly what this regroup derived. */
+function projectedCardIsUnchanged(
+  existing: CardNode,
+  fields: {
+    sessionID: string
+    parentSessionID: string | undefined
+    agentID: string | undefined
+    messageID: string
+    stage: string
+    accent: string | undefined
+    title: string
+    orderKey: string
+    time: number
+    status: CardStatus
+    collapsedContextMessageIDs: string[]
+  },
+  parts: readonly any[],
+): boolean {
+  const current = existing as Record<string, any>
+  if (
+    current.sessionID !== fields.sessionID ||
+    current.parentSessionID !== fields.parentSessionID ||
+    current.agentID !== fields.agentID ||
+    current.messageID !== fields.messageID ||
+    current.stage !== fields.stage ||
+    current.accent !== fields.accent ||
+    current.title !== fields.title ||
+    current.orderKey !== fields.orderKey ||
+    current.time !== fields.time ||
+    current.status !== fields.status
+  ) {
+    return false
+  }
+  const collapsed = existing.collapsedContextMessageIDs ?? []
+  if (collapsed.length !== fields.collapsedContextMessageIDs.length) return false
+  for (let index = 0; index < collapsed.length; index += 1) {
+    if (collapsed[index] !== fields.collapsedContextMessageIDs[index]) return false
+  }
+  const currentParts = existing.parts ?? []
+  if (currentParts.length !== parts.length) return false
+  for (let index = 0; index < currentParts.length; index += 1) {
+    if (!projectedPartIsUnchanged(currentParts[index], parts[index])) return false
+  }
+  return true
+}
+
 function collectTimelineParts(messageIDs: Set<string>): Map<string, any[]> {
   const byMessage = new Map<string, any[]>()
   const seenPartIDs = new Set<string>()
@@ -2805,7 +2946,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
     if (!first) continue
     const existing = cardTreeStore.cards[segment.cardID]
     const active = activeBySession.get(first.sessionID)?.cardID === segment.cardID
-    const status = (() => {
+    const status: CardStatus = (() => {
       if (isUserStage(segment.stage)) return "completed"
       if (active) {
         if (existing?.status === "error") return "error"
@@ -2814,22 +2955,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       }
       return existing?.status === "error" ? "error" : "completed"
     })()
-    const base =
-      existing ??
-      createSessionCardNode(
-        segment.cardID,
-        segment.stage,
-        isUserStage(segment.stage) ? undefined : first.agentID,
-        first.orderKey,
-        first.time,
-        first.sessionID,
-        first.id,
-        [],
-        [],
-        segment.session.parentSessionID,
-      )
-    setCardTreeStore("cards", segment.cardID, {
-      ...base,
+    const projectedFields = {
       sessionID: first.sessionID,
       parentSessionID: segment.session.parentSessionID || undefined,
       agentID: isUserStage(segment.stage) ? undefined : first.agentID,
@@ -2843,9 +2969,11 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       collapsedContextMessageIDs: segment.messages
         .filter((message) => message.delegatedContext)
         .map((message) => message.id),
-      parts: [],
-    })
+    }
 
+    // The part index is authoritative for live updates and was just cleared for
+    // every target message, so it is rebuilt whether or not the card itself
+    // changed. Only the store write below is conditional.
     const rebuiltParts: any[] = existing?.parts?.filter(isReviewStreamPart) ?? []
     for (const [index, message] of segment.messages.entries()) {
       if (index > 0) {
@@ -2874,7 +3002,29 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
         rebuiltParts.push(part)
       }
     }
-    setCardTreeStore("cards", segment.cardID, "parts", rebuiltParts)
+
+    // A regroup re-derives every segment, but one new message changes at most
+    // its own segment and the one it split. Writing an identical projection back
+    // is not free: it hands a fresh `parts` array to every mounted card, invalidates
+    // their memos, and dirties the whole subtree-stats chain. Skip the write when
+    // the derived projection is the one already in the store.
+    if (existing && projectedCardIsUnchanged(existing, projectedFields, rebuiltParts)) continue
+
+    const base =
+      existing ??
+      createSessionCardNode(
+        segment.cardID,
+        segment.stage,
+        isUserStage(segment.stage) ? undefined : first.agentID,
+        first.orderKey,
+        first.time,
+        first.sessionID,
+        first.id,
+        [],
+        [],
+        segment.session.parentSessionID,
+      )
+    setCardTreeStore("cards", segment.cardID, { ...base, ...projectedFields, parts: rebuiltParts })
     refreshMetadataProjectionForCard(segment.cardID)
     markCardStatsDirty(segment.cardID)
   }

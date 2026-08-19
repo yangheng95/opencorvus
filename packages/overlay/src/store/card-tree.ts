@@ -363,6 +363,15 @@ export function markCardTreeVisibleChanged(): void {
   })
 }
 
+/** Publish the projection immediately instead of on the next frame. Callers
+ *  that are already running inside the frame that will paint use this: going
+ *  through `markCardTreeVisibleChanged` there would cost a second frame and
+ *  could publish ahead of the caller's own remaining work. */
+export function publishCardTreeVisibleNow(): void {
+  visibleChangeScheduled = false
+  setCardTreeStore("visibleVersion", (version) => version + 1)
+}
+
 /** Reactive publication token for the complete visible card-tree projection.
  * Consumers read this before deriving from nested order/card paths so an
  * atomic projection is observed only after its final hierarchy is published. */
