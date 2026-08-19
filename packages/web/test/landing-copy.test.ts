@@ -266,11 +266,24 @@ describe("landing copy integrity", () => {
       for (const total of totals) expect(text, `${relative}: ${total}`).toContain(total)
 
       // Each case-table row, located by the squad's own market link so the row cannot be confused
-      // with another, must carry that squad's role count as a cell of its own.
+      // with another, must carry that squad's role count as a cell of its own. Only the part of the
+      // row after the link is searched: the stage index is a bare-number cell too, and it is only
+      // the zero padding that keeps `01`–`06` from colliding with a role count today.
       for (const squad of featured.squads) {
-        const row = lines.find((line) => line.startsWith("|") && line.includes(`/market/builtin/${squad.id}/`))
+        const link = `/market/builtin/${squad.id}/`
+        const row = lines.find((line) => line.startsWith("|") && line.includes(link))
         expect(row, `${relative}: no case-table row for ${squad.id}`).toBeDefined()
-        expect(row, `${relative} / ${squad.id} role count`).toMatch(cell(squad.agentCount))
+        const afterLink = (row as string).slice((row as string).indexOf(link))
+        expect(afterLink, `${relative} / ${squad.id} role count`).toMatch(cell(squad.agentCount))
+      }
+
+      // The optional extensions are prose rather than a table, and each carries its own role count
+      // in parentheses. Checking only their sum lets two compensating errors through — swapping the
+      // prior-art and browser figures keeps the total at 44 and would otherwise pass.
+      for (const squad of featured.extras) {
+        expect(text, `${relative} / ${squad.id} extension role count`).toMatch(
+          new RegExp(String.raw`/market/builtin/${squad.id}/\)\s*[(（]${squad.agentCount}[)）]`),
+        )
       }
 
       // And the shorter chains, located by the label of the squad that opens each one.
