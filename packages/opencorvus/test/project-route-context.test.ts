@@ -32,4 +32,18 @@ describe("Project route context authority", () => {
       runtime: "runtime",
     })
   })
+
+  test("gives project-owned routes on globally-served routers the same runtime authority as their siblings", () => {
+    expect({
+      taskPin: projectRouteContextKind("/work-ledger/item/task/tsk_1/pin", "PATCH"),
+      missionPin: projectRouteContextKind("/work-ledger/item/mission/ses_1/pin", "PATCH"),
+      directoryReference: projectRouteContextKind("/attachment/directory-reference", "POST"),
+      attachmentUpload: projectRouteContextKind("/attachment", "POST"),
+    }).toEqual({
+      taskPin: "runtime",
+      missionPin: "runtime",
+      directoryReference: "runtime",
+      attachmentUpload: "runtime",
+    })
+  })
 })

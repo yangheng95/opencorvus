@@ -19364,6 +19364,17 @@
       "post": {
         "description": "Validate one local directory and store a canonical reference manifest without enumerating or uploading descendants.",
         "operationId": "attachment.createDirectoryReference",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -115570,6 +115581,15 @@
         "description": "Persist pin state for a Mission, Task, or Chat shown by the Work Ledger.",
         "operationId": "workLedger.setItemPinned",
         "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "in": "path",
             "name": "kind",

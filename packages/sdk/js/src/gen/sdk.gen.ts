@@ -826,11 +826,22 @@ export class Attachment extends HeyApiClient {
    */
   public createDirectoryReference<ThrowOnError extends boolean = false>(
     parameters: {
+      directory?: string
       path: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "path" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "path" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).post<
       AttachmentCreateDirectoryReferenceResponses,
       AttachmentCreateDirectoryReferenceErrors,
@@ -13462,6 +13473,7 @@ export class WorkLedger extends HeyApiClient {
     parameters: {
       kind: "mission" | "task" | "chat"
       itemID: string
+      directory?: string
       pinned: boolean
     },
     options?: Options<never, ThrowOnError>,
@@ -13473,6 +13485,7 @@ export class WorkLedger extends HeyApiClient {
           args: [
             { in: "path", key: "kind" },
             { in: "path", key: "itemID" },
+            { in: "query", key: "directory" },
             { in: "body", key: "pinned" },
           ],
         },

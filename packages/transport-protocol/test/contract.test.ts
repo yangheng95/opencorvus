@@ -471,6 +471,44 @@ describe("route directory policy", () => {
     expect(routeRequiresProjectDirectory("/task/abc/browser-preview", "GET")).toBe(true)
     expect(routeRequiresProjectDirectory("/task/abc/conversation", "POST")).toBe(true)
   })
+
+  test("scopes project-owned routes on globally-served routers to their own Project", () => {
+    expect({
+      taskPin: routeRequiresProjectDirectory("/work-ledger/item/task/tsk_1/pin", "PATCH"),
+      missionPin: routeRequiresProjectDirectory("/work-ledger/item/mission/ses_1/pin", "PATCH"),
+      chatPin: routeRequiresProjectDirectory("/work-ledger/item/chat/ses_1/pin", "PATCH"),
+      directoryReference: routeRequiresProjectDirectory("/attachment/directory-reference", "POST"),
+      attachmentUpload: routeRequiresProjectDirectory("/attachment", "POST"),
+    }).toEqual({
+      taskPin: true,
+      missionPin: true,
+      chatPin: true,
+      directoryReference: true,
+      attachmentUpload: true,
+    })
+  })
+
+  test("keeps every global member of those routers free of a Project directory", () => {
+    expect({
+      list: routeRequiresProjectDirectory("/work-ledger", "GET"),
+      archive: routeRequiresProjectDirectory("/work-ledger/archive", "GET"),
+      events: routeRequiresProjectDirectory("/work-ledger/events", "GET"),
+      projectPin: routeRequiresProjectDirectory("/work-ledger/project/prj_1/pin", "PATCH"),
+      attachmentRead: routeRequiresProjectDirectory("/attachment/prj_1/8f2c.png?variant=thumbnail", "GET"),
+      mailboxList: routeRequiresProjectDirectory("/mailbox", "GET"),
+      mailboxAcknowledge: routeRequiresProjectDirectory("/mailbox/msg_1", "PATCH"),
+      mailboxDelete: routeRequiresProjectDirectory("/mailbox/msg_1", "DELETE"),
+    }).toEqual({
+      list: false,
+      archive: false,
+      events: false,
+      projectPin: false,
+      attachmentRead: false,
+      mailboxList: false,
+      mailboxAcknowledge: false,
+      mailboxDelete: false,
+    })
+  })
 })
 
 describe("conversation message part projection", () => {

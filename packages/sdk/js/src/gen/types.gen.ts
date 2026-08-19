@@ -5815,7 +5815,12 @@ export type AttachmentCreateDirectoryReferenceData = {
     path: string
   }
   path?: never
-  query?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
   url: "/attachment/directory-reference"
 }
 
@@ -34129,7 +34134,12 @@ export type WorkLedgerSetItemPinnedData = {
     kind: "mission" | "task" | "chat"
     itemID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
   url: "/work-ledger/item/{kind}/{itemID}/pin"
 }
 
