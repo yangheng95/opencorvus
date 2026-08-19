@@ -53,7 +53,29 @@
 
 ### 独立 agent 反馈
 
-无（实施完成后按 `AGENTS.md` §3 委托一名只读审查 agent）。
+**第一轮（对 `995f751f` + `50e61b7d`）**，全部核实为真，已在 `90c99bb1` 修复：
+
+- **P0**：六个新文档页共 **14 条同级相对链接**写成 `./name/`，浏览器按以斜杠结尾的页面 URL 解析，
+  全部 404（实测确认）。仓库既有文档用的是 `../name/`。**主 agent 首轮链接扫描只抓了绝对 href，
+  整类相对链接一条没测到** —— 这是本次最该记住的教训。
+- **P1，六处主张说过了头**：
+  1. 恢复被写成「从历史里挑一个」；`evolution-mutation.ts` 只允许退回**一份被引用回执见证过的两个
+     digest**，代码注释原文即「an undo button instead of a way to reach any revision」。
+  2. 「追加不算修订，会被拒绝」是无条件表述；实际只在候选声明 `conflicting_instruction: "rewritten"`
+     时才校验，声明 `none` 不被二次猜测。
+  3. 「携带你的原话」被写成保证；`feedback` 是模型入参，"verbatim" 只是提示词要求，宿主逐字校验的是
+     **授权确认文本**，不是它。正撞上仓库自己的 [[host-must-own-derivable-facts]] 规则。
+  4. Deep Research 的引文复核不在「成文之前」：工作流是 draft-writer → citation-reviewer →
+     report-writer。
+  5. 「三支专家团带怀疑角色」实为**四支** —— Research Studio 自己就有 fact-checker，还在同一张表上。
+  6. Work Artifact 的渲染检查路径只覆盖 `office.presentation@1`，不是「任何真实文件」。
+- **P2**：新加的组合测试**拿生成物和它自己比**，生成物过期照样全绿；README 里的数字完全没有校验 ——
+  正是「42 个工具」漂移的同一个洞。已改为从已发布 manifest 重新推导角色数，并把 README 数字与生成物
+  对账；两个测试都**实测过会咬人**（故意改脏生成物 → 2 红；故意改脏 README → 1 红）。
+  另修：组件改名进样式门扫描集、角色列补真正的表头（中文原来用的是量词「个具名角色」）、
+  组合视图按位配对加显式断言、生成物去掉无人读的 `workflowCount`、改版方案文档不再链已删文件。
+
+**第二轮**：对 `90c99bb1` 的修复复审（结论见交付说明）。
 
 ---
 
@@ -82,7 +104,7 @@
 | 同上 | Work Artifact 必须过验证权威（真实渲染 + 检查）才算交付 | `src/work-artifact/validation-authority.ts`、`profile-registry.ts` |
 | 长程工作流不会自动进化 | 反馈修订：操作者原话 → 宿主复制精确 revision、套用改动、校验为可运行包、发布候选 Artifact → **必须操作者接受**才安装；回执即撤销凭据；能力面不得变宽 | `src/expert-squad/feedback-revision.ts`、`src/tool/expert-squad-feedback-revision-tool.ts` |
 | 同上 | 度量式进化：Evolution Lab（7 角色 / 3 工作流）冻结目标版本、用例、评分器、环境、臂序、预算与变异面，跑完出完整性审查与对比建议 | `expert-squads/builtin/evolution-lab/expert-squad.jsonc` |
-| 同上 | 三种变更都要真实操作者确认消息：`promotion` / `restoration` / `feedback_revision`；历史可列、可回到任意持有过的修订 | `src/expert-squad/evolution-mutation.ts`、`evolution-history.ts`、`mutation-authorization.ts` |
+| 同上 | 三种变更都要真实操作者确认消息：`promotion` / `restoration` / `feedback_revision`；历史可列，但恢复是**撤销**——只能退回一份被引用回执见证过的 digest，不是任意历史版本 | `src/expert-squad/evolution-mutation.ts`、`evolution-history.ts`、`mutation-authorization.ts` |
 
 **必须写清的边界**：进化不是自动的。没有操作者的确认消息，任何修订都不安装。
 
