@@ -314,13 +314,13 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
 
   root: {
     meta: {
-      title: "OpenCorvus · Automate the workflow you repeat every day",
+      title: "OpenCorvus · Automatically optimize your everyday workflow",
       description:
         "OpenCorvus is an open-source Agent workbench. Hand it the work you repeat, and swap the models, tools, permissions, and expert squads underneath. MIT licensed, self-hosted.",
     },
     hero: {
       eyebrow: "Open source · MIT · Self-hosted",
-      titleLines: ["Automate the workflow", "you repeat every day"],
+      titleLines: ["Automatically optimize", "your everyday workflow"],
       description: "Hand the repeat work to an Agent. Models, tools, permissions, squads — all replaceable.",
       ctas: [
         { label: "View source", href: GITHUB, variant: "secondary" },
