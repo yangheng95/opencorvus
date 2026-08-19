@@ -58,6 +58,34 @@ export function assertControlLeaseInTransaction(db: Database.TxOrDb, input: {
   return current
 }
 
+/**
+ * End one lease early, so the next claim waits on the retry's own schedule.
+ *
+ * Leases otherwise only end by expiry, which silently becomes the retry
+ * period: a caller that records "try again in 500ms" and keeps holding a
+ * two-minute lease is not retried in 500ms, it is retried in two minutes.
+ * Expiring in place rather than deleting keeps the attempt history that
+ * `projectProtocolDeliveryInTransaction` counts.
+ */
+export function releaseControlLease(input: {
+  target: EngineControlActivationTarget
+  targetID: string
+  ownerOccurrenceID: string
+  now: number
+}): boolean {
+  return Database.immediateTransaction((db) => {
+    const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
+    if (!current || current.owner_occurrence_id !== input.ownerOccurrenceID || current.expires_at <= input.now) {
+      return false
+    }
+    db.update(EngineControlActivationLeaseTable)
+      .set({ expires_at: input.now })
+      .where(eq(EngineControlActivationLeaseTable.id, current.id))
+      .run()
+    return true
+  })
+}
+
 export function renewControlLease(input: {
   target: EngineControlActivationTarget
   targetID: string

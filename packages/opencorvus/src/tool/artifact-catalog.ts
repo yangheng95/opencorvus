@@ -240,6 +240,25 @@ function assertUniqueArtifactJSONKeys(node: Node, path = "$"): void {
   }
 }
 
+/**
+ * Where the model has to look, in the coordinates the model can count.
+ *
+ * `jsonc-parser` reports offsets into the JavaScript string, not into UTF-8
+ * bytes, and a CJK payload makes those two diverge by a factor of three — so
+ * naming this number a byte offset points the author at unrelated text. Line
+ * and column are countable in the text the model actually wrote, and the
+ * excerpt makes the position checkable without counting anything at all.
+ */
+export function describeArtifactJSONParseError(text: string, error: ParseError): string {
+  const before = text.slice(0, error.offset).split("\n")
+  const line = before.length
+  const column = (before[before.length - 1]?.length ?? 0) + 1
+  // JSON.stringify renders the excerpt's own newlines and quotes, so the
+  // position stays readable on one line of an error message.
+  const excerpt = JSON.stringify(text.slice(Math.max(0, error.offset - 40), error.offset + 40))
+  return `${printParseErrorCode(error.error)} at line ${line}, column ${column} (near ${excerpt})`
+}
+
 function parseArtifactPublishJSON(text: string) {
   const errors: ParseError[] = []
   const tree = parseTree(text, errors, {
@@ -248,9 +267,7 @@ function parseArtifactPublishJSON(text: string) {
   })
   if (!tree || errors.length > 0) {
     const detail =
-      errors.length > 0
-        ? errors.map((error) => `${printParseErrorCode(error.error)} at byte ${error.offset}`).join("; ")
-        : "empty JSON document"
+      errors.length > 0 ? errors.map((error) => describeArtifactJSONParseError(text, error)).join("; ") : "empty JSON document"
     throw new Error(`artifact_publish payload_json is invalid: ${detail}`)
   }
   assertUniqueArtifactJSONKeys(tree)

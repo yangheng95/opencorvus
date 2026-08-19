@@ -35,7 +35,15 @@
 
 /* AppKit traffic lights keep a native logical position while application
  * content zoom changes --ui-scale. Keep the one Web chrome row on the same
- * canonical 36px geometry that owns the measured native alignment. */
+ * canonical 36px geometry that owns the measured native alignment.
+ *
+ * This height is half of a pair. tao's inset_traffic_lights only ever assigns
+ * origin.x per button; the configured y resizes the titlebar container to
+ * (button height + y) and the buttons keep their offset from its bottom edge,
+ * which lands their centre at 12 + y - 6. Centring them on this row therefore
+ * means trafficLightPosition.y = (36 / 2) - 6 = 12 in src-tauri/tauri.conf.json.
+ * Change one and the other stops matching -- the sidebar toggle is the control
+ * a reader sees them against. */
 html[data-native-titlebar="macos"] {
   --ui-titlebar-height: 36px;
 }

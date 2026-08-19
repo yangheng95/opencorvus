@@ -15,7 +15,7 @@ import { and, asc, Database, eq, inArray, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "./protocol.sql"
 import { projectProtocolDeliveryInTransaction, type ProtocolDeliveryRow } from "./delivery-projection"
-import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLease, renewControlLease } from "@/engine/control-lease"
 import {
   ProtocolInboxDeliveryResult,
   SchedulerEndpoint,
@@ -1001,6 +1001,11 @@ export function rescheduleSchedulerDelivery(input: {
     const lease = currentControlLeaseInTransaction(db, "protocol_delivery", input.inboxID)
     if (!current || !lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now) throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
     db.insert(ProtocolDeliveryReceiptTable).values({ id: Identifier.ascending("protocol_inbox"), inbox_id: input.inboxID, receipt: { kind: "retry_wait", visible_at: input.visibleAt, error }, time_created: now }).run()
+    // Hand the lease back with the receipt. Holding it until expiry would make
+    // `DELIVERY_LEASE_MS` the real retry period and the caller's backoff dead
+    // code, so a failure the caller wanted to retry in half a second waits two
+    // minutes instead.
+    releaseControlLease({ target: "protocol_delivery", targetID: input.inboxID, ownerOccurrenceID: input.ownerID, now })
     return parseDeliveryRow(projectProtocolDeliveryInTransaction(db, current, now))
   })
 }
