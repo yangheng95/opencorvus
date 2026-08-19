@@ -1,6 +1,8 @@
 import { createSignal } from "solid-js"
+import { showAppDialog } from "./app-dialog"
 import { getHostTransport } from "./host-transport-runtime"
 import { listenTauriEvent } from "./tauri-transport"
+import { t } from "../utils/i18n"
 
 export interface DesktopUpdateInfo {
   currentVersion: string
@@ -149,7 +151,41 @@ export async function downloadDesktopUpdate(): Promise<void> {
   }
 }
 
-export async function installDesktopUpdate(): Promise<void> {
+/** Human-readable byte count for update size and download progress. */
+export function formatDesktopUpdateBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KiB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MiB`
+}
+
+/** Live download description, shared by the sidebar affordance and the About panel. */
+export function desktopUpdateProgressLabel(): string {
+  const progress = desktopUpdateProgress()
+  if (!progress) return t("about.update_downloading")
+  const downloaded = formatDesktopUpdateBytes(progress.downloadedBytes)
+  return progress.totalBytes === undefined
+    ? t("about.update_progress_unknown", { downloaded })
+    : t("about.update_progress", { downloaded, total: formatDesktopUpdateBytes(progress.totalBytes) })
+}
+
+/**
+ * Confirm the restart, then install. Installing stops the local service and
+ * relaunches the app, so this confirmation is the one gate that stays no
+ * matter where the install was triggered from.
+ */
+export async function confirmAndInstallDesktopUpdate(): Promise<void> {
+  const version = desktopUpdateInfo()?.version
+  if (!version) return
+  const result = await showAppDialog({
+    title: t("about.update_install_title"),
+    message: t("about.update_install_message", { version }),
+    okLabel: t("about.update_restart"),
+    cancel: true,
+  })
+  if (result.confirmed) await installDesktopUpdate()
+}
+
+async function installDesktopUpdate(): Promise<void> {
   const info = desktopUpdateInfo()
   if (!info?.version || info.downloadedBytes === undefined) {
     throw new Error("No verified desktop update is ready to install")
@@ -159,7 +195,13 @@ export async function installDesktopUpdate(): Promise<void> {
     await getHostTransport().native({ kind: "desktopUpdate.install", expectedVersion: info.version })
   } catch (error) {
     setDesktopUpdateError(errorMessage(error))
+    // A failed install leaves no claim that the package is still installable
+    // here, so drop the downloaded state: the next attempt downloads again
+    // rather than repeating an install the host may no longer be able to serve.
+    const stale = desktopUpdateInfo()
+    if (stale) setDesktopUpdateInfo({ ...stale, downloadedBytes: undefined })
+    setDesktopUpdateProgress(null)
   }
 }
 
-export { desktopUpdateChecking, desktopUpdateDownloading, desktopUpdateError, desktopUpdateInfo, desktopUpdateProgress }
+export { desktopUpdateChecking, desktopUpdateDownloading, desktopUpdateError, desktopUpdateInfo }

@@ -1,53 +1,28 @@
 import { Show, createMemo, onMount } from "solid-js"
 import { Button } from "../ui/Button"
-import { showAppDialog } from "../../services/app-dialog"
 import {
   checkDesktopUpdate,
+  confirmAndInstallDesktopUpdate,
   desktopUpdateChecking,
   desktopUpdateDownloading,
   desktopUpdateError,
   desktopUpdateInfo,
-  desktopUpdateProgress,
+  desktopUpdateProgressLabel,
   desktopUpdateSupported,
   downloadDesktopUpdate,
-  installDesktopUpdate,
+  formatDesktopUpdateBytes,
 } from "../../services/desktop-update"
 import { t } from "../../utils/i18n"
 import { OVERLAY_VERSION } from "../../utils/version"
 import { SettingsGroup, SettingsRow, SettingsState, SettingsSurface } from "./layout"
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KiB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MiB`
-}
-
 export default function DesktopUpdatePanel() {
   const readyToInstall = createMemo(() => desktopUpdateInfo()?.downloadedBytes !== undefined)
-  const progressDescription = createMemo(() => {
-    const progress = desktopUpdateProgress()
-    if (!progress) return t("about.update_downloading")
-    const downloaded = formatBytes(progress.downloadedBytes)
-    return progress.totalBytes === undefined
-      ? t("about.update_progress_unknown", { downloaded })
-      : t("about.update_progress", { downloaded, total: formatBytes(progress.totalBytes) })
-  })
+  const progressDescription = createMemo(() => desktopUpdateProgressLabel())
 
   onMount(() => {
     if (desktopUpdateSupported() && desktopUpdateInfo() === null) void checkDesktopUpdate()
   })
-
-  const confirmInstall = async () => {
-    const version = desktopUpdateInfo()?.version
-    if (!version) return
-    const result = await showAppDialog({
-      title: t("about.update_install_title"),
-      message: t("about.update_install_message", { version }),
-      okLabel: t("about.update_restart"),
-      cancel: true,
-    })
-    if (result.confirmed) await installDesktopUpdate()
-  }
 
   return (
     <SettingsGroup title={t("about.update_title")} description={t("about.update_description")}>
@@ -91,7 +66,12 @@ export default function DesktopUpdatePanel() {
                 title={t("about.update_available", { version: info().version || "" })}
                 actions={
                   readyToInstall() ? (
-                    <Button variant="solid" size="sm" tone="accent" onClick={() => void confirmInstall()}>
+                    <Button
+                      variant="solid"
+                      size="sm"
+                      tone="accent"
+                      onClick={() => void confirmAndInstallDesktopUpdate()}
+                    >
                       {t("about.update_restart")}
                     </Button>
                   ) : (
@@ -102,7 +82,7 @@ export default function DesktopUpdatePanel() {
                 }
               >
                 {readyToInstall()
-                  ? t("about.update_ready", { size: formatBytes(info().downloadedBytes || 0) })
+                  ? t("about.update_ready", { size: formatDesktopUpdateBytes(info().downloadedBytes || 0) })
                   : info().notes || t("about.update_available_description")}
               </SettingsState>
             </Show>
