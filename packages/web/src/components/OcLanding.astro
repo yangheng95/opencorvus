@@ -1,7 +1,7 @@
 ---
 import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
-import OcArtifactCarousel from "./OcArtifactCarousel.astro"
+import OcDemoVideo from "./OcDemoVideo.astro"
 import { landingCopy } from "../content/landing-copy"
 import { platformFacts } from "../content/platform-facts"
 import { publicPath, type PublicLocale } from "../content/public-market"
@@ -172,13 +172,13 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* --------------------------------------------------- 2 · deliverables */}
+  {/* ----------------------------------------------------------- 2 · demo */}
   {/*
-    Directly under the hero because "what does it actually hand me" is the question the hero raises,
-    and because these are captures of real runs — the strongest evidence on the page belongs where a
-    reader is still deciding whether to keep scrolling.
+    Directly under the hero because "what is it actually like to use" is the question the hero
+    raises, and because a recording of one real run is the strongest evidence on the page — it
+    belongs where a reader is still deciding whether to keep scrolling.
   */}
-  <OcArtifactCarousel {locale} />
+  <OcDemoVideo {locale} />
 
   {/* ------------------------------------------------------------- 3 · why */}
   <section class="oc-section oc-anchor" id="why">

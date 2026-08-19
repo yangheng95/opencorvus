@@ -1,5 +1,10 @@
 # Artifact gallery — one Mission-produced case per Interactive Artifact renderer, carousel on the public landing page
 
+> **已被取代（2026-08-19 同日）**：轮播、20 张图和 `qa/artifact-gallery/**` 采集流水线都已删除，
+> 落地页第 2 节换成一段真实运行录屏。见
+> [2026-08-19-landing-demo-video-replaces-carousel.md](2026-08-19-landing-demo-video-replaces-carousel.md)。
+> 本记录保留为当时工作的历史记载，其中的路径和命令已不再存在。
+
 ## Recall
 
 **用户原始要求**（逐条，按到达顺序）：

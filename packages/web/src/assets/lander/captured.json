@@ -1,9 +1,9 @@
 {
-  "note": "Provenance for the landing page's product material. Staleness in a screenshot is invisible in review — the old gallery shipped a v0.0.42beta window with an empty Mission Board and a stray text selection for weeks. Recording what each asset was captured from makes the gap a fact instead of an impression. test/lander-assets.test.ts asserts this file and the directory agree. The landing page no longer carries a screenshot gallery; the two files left are referenced by README.md only.",
+  "note": "Provenance for the landing page's product material. Staleness in a capture is invisible in review — the old gallery shipped a v0.0.42beta window with an empty Mission Board and a stray text selection for weeks. Recording what each asset was captured from makes the gap a fact instead of an impression. test/lander-assets.test.ts asserts this file agrees with both src/assets/lander and public/media, whose files are listed here under a media/ prefix.",
   "refresh": {
     "gallery": "Run the desktop app on the target release, drive it to the state each shot describes, and capture the window. Shots must show real work, not an empty state.",
     "conceptFlow": "qa/record-real-client-demo.ps1 records the desktop window against a live task, then qa/curate-client-demo.mjs edits the frames into the GIF.",
-    "artifactGallery": "qa/artifact-gallery/run-missions.mjs dispatches one Mission per renderer against a running server, capture.mjs screenshots each artifact frame in the real Overlay, and this script resizes them into src/assets/lander/artifact-gallery. Every frame is a real run over live data — re-run all three together."
+    "demoVideo": "Record the desktop app driving one real task end to end, then re-encode for the web: ffmpeg -i <capture> -an -c:v libx264 -profile:v high -level 4.0 -preset slow -crf 28 -pix_fmt yuv420p -g 60 -movflags +faststart public/media/opencorvus-demo.mp4. -an drops the capture's silent system-audio channel and +faststart puts the moov atom in front, without which a browser must download the whole file before the first frame. The poster is one frame of the same file: ffmpeg -ss <t> -i <mp4> -frames:v 1 -q:v 4 <poster>.jpg."
   },
   "assets": [
     {
@@ -22,184 +22,24 @@
       "knownIssues": []
     },
     {
-      "file": "artifact-gallery/terminal.png",
+      "file": "media/opencorvus-demo.mp4",
       "capturedAppVersion": "0.0.47-beta",
       "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "terminal@1",
-      "sourceMission": "Reading the build back",
-      "bytes": 176201
+      "knownIssues": [
+        "a browser_session_create tool call fails on screen at ~16s (BrowserRuntime could not connect); the run recovers through webfetch and carries on"
+      ],
+      "sourceMission": "NVDA daily candles over the past year, then the NVDA ecosystem — chart, technical read, network graph and a Word research report",
+      "model": "openai/gpt-5.6-terra",
+      "durationSeconds": 103.67,
+      "bytes": 7077401
     },
     {
-      "file": "artifact-gallery/code.png",
+      "file": "media/opencorvus-demo-poster.jpg",
       "capturedAppVersion": "0.0.47-beta",
       "capturedOn": "2026-08-19",
       "knownIssues": [],
-      "renderer": "code@1",
-      "sourceMission": "build-deliverables.mjs",
-      "bytes": 177013
-    },
-    {
-      "file": "artifact-gallery/file-preview.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "file-preview@1",
-      "sourceMission": "GDP per capita brief (PDF)",
-      "bytes": 127420
-    },
-    {
-      "file": "artifact-gallery/spreadsheet.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "spreadsheet@1",
-      "sourceMission": "GDP per capita model (XLSX)",
-      "bytes": 165024
-    },
-    {
-      "file": "artifact-gallery/document.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "document@1",
-      "sourceMission": "GDP per capita — analyst brief (DOCX)",
-      "bytes": 146923
-    },
-    {
-      "file": "artifact-gallery/presentation.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "presentation@1",
-      "sourceMission": "GDP per capita — five-slide readout (PPTX)",
-      "bytes": 42725
-    },
-    {
-      "file": "artifact-gallery/chart.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "chart@1",
-      "sourceMission": "GDP per capita, 2000–2024",
-      "bytes": 91812
-    },
-    {
-      "file": "artifact-gallery/table.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "table@1",
-      "sourceMission": "Latest GDP per capita by country",
-      "bytes": 98268
-    },
-    {
-      "file": "artifact-gallery/dashboard.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "dashboard@1",
-      "sourceMission": "Macro indicators dashboard",
-      "bytes": 199184
-    },
-    {
-      "file": "artifact-gallery/candlestick.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "candlestick@1",
-      "sourceMission": "BTC-USD daily candles",
-      "bytes": 82511
-    },
-    {
-      "file": "artifact-gallery/map.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "map@1",
-      "sourceMission": "Earthquakes, magnitude 2.5+ this week",
-      "bytes": 286502
-    },
-    {
-      "file": "artifact-gallery/network.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "network@1",
-      "sourceMission": "express dependency graph",
-      "bytes": 99995
-    },
-    {
-      "file": "artifact-gallery/tree.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "tree@1",
-      "sourceMission": "World Bank country hierarchy",
-      "bytes": 63267
-    },
-    {
-      "file": "artifact-gallery/timeline.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "timeline@1",
-      "sourceMission": "VS Code release cadence",
-      "bytes": 22622
-    },
-    {
-      "file": "artifact-gallery/diagram.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "diagram@1",
-      "sourceMission": "How the deliverables were built",
-      "bytes": 54261
-    },
-    {
-      "file": "artifact-gallery/diff.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "diff@1",
-      "sourceMission": "left-pad 1.2.0 → 1.3.0",
-      "bytes": 23223
-    },
-    {
-      "file": "artifact-gallery/notebook.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "notebook@1",
-      "sourceMission": "Growth analysis, worked out",
-      "bytes": 181905
-    },
-    {
-      "file": "artifact-gallery/media.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "media@1",
-      "sourceMission": "Agent teams workflow",
-      "bytes": 462567
-    },
-    {
-      "file": "artifact-gallery/model-3d.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "model-3d@1",
-      "sourceMission": "Khronos glTF sample — DamagedHelmet",
-      "bytes": 443338
-    },
-    {
-      "file": "artifact-gallery/mcp-app.png",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [],
-      "renderer": "mcp-app@1",
-      "sourceMission": "Live spot rates as an MCP App",
-      "bytes": 77912
+      "sourceMission": "frame at 18.6s of media/opencorvus-demo.mp4",
+      "bytes": 123414
     }
   ]
 }
