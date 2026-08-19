@@ -3,7 +3,7 @@
   "refresh": {
     "gallery": "Run the desktop app on the target release, drive it to the state each shot describes, and capture the window. Shots must show real work, not an empty state.",
     "conceptFlow": "qa/record-real-client-demo.ps1 records the desktop window against a live task, then qa/curate-client-demo.mjs edits the frames into the GIF.",
-    "demoVideo": "Record the desktop app driving one real task end to end, then re-encode for the web: ffmpeg -i <capture> -an -c:v libx264 -profile:v high -level 4.0 -preset slow -crf 28 -pix_fmt yuv420p -g 60 -movflags +faststart public/media/opencorvus-demo.mp4. -an drops the capture's silent system-audio channel and +faststart puts the moov atom in front, without which a browser must download the whole file before the first frame. The poster is one frame of the same file: ffmpeg -ss <t> -i <mp4> -frames:v 1 -q:v 4 <poster>.jpg."
+    "demoVideo": "Record the desktop app driving one real task end to end, then re-encode for the web: ffmpeg -i <capture> -an -c:v libx264 -profile:v high -level 4.0 -preset slow -crf 28 -pix_fmt yuv420p -g 60 -movflags +faststart public/media/opencorvus-demo.mp4. -an drops the capture's silent system-audio channel and +faststart puts the moov atom in front, without which a browser must download the whole file before the first frame. The poster is one frame of the same file: ffmpeg -ss <t> -i <mp4> -frames:v 1 -q:v 4 <poster>.jpg. The README cannot show that file playing: GitHub renders an inline player only for its own user-attachments uploads, and a raw URL to a committed .mp4 is served as an attachment, so it downloads. media/opencorvus-demo.gif is the excerpt that does autoplay there — two beats cut from the same recording: ffmpeg -ss 15.5 -t 9 and -ss 42.5 -t 9, concat, then fps=12,scale=900:-1,palettegen(max_colors=128,stats_mode=diff) + paletteuse(dither=bayer). Keep it under a few megabytes; GitHub proxies README images through camo."
   },
   "assets": [
     {
@@ -40,6 +40,14 @@
       "knownIssues": [],
       "sourceMission": "frame at 18.6s of media/opencorvus-demo.mp4",
       "bytes": 123414
+    },
+    {
+      "file": "media/opencorvus-demo.gif",
+      "capturedAppVersion": "0.0.47-beta",
+      "capturedOn": "2026-08-19",
+      "knownIssues": [],
+      "sourceMission": "18s excerpt of media/opencorvus-demo.mp4 — 15.5s-24.5s (candle chart) and 42.5s-51.5s (ecosystem graph, Word report)",
+      "bytes": 3199154
     }
   ]
 }

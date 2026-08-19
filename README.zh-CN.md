@@ -55,14 +55,10 @@ OpenCorvus 直接交付一套已经组装好的 Harness。安装之后你立刻�
 AI SDK、SolidJS、Tauri 都在其中。
 
 <p align="center">
-  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo-poster.jpg" alt="OpenCorvus 桌面端运行录屏" width="880" /></a>
+  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.gif" alt="OpenCorvus 桌面端运行录屏" width="880" /></a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><strong>&#9654;&nbsp; 播放完整运行（1 分 44 秒）</strong></a>
-</p>
-
-<p align="center"><sub>一次真实运行 &mdash; NVDA 近一年日线进去，K 线图、技术分析和 Word 报告出来。录于桌面端 v0.0.47beta，无音轨。</sub></p>
+<p align="center"><sub>同一次真实运行里的两段：它画出的日线图，以及它发布的生态关系图与 Word 研究报告。<a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4">看完整运行</a> &mdash; 1 分 44 秒，桌面端 v0.0.47beta，无音轨。</sub></p>
 
 <table>
   <tr>

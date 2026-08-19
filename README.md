@@ -59,14 +59,10 @@ rather than a boast: it is what makes every layer replaceable. It stands on a gr
 deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
 
 <p align="center">
-  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo-poster.jpg" alt="One recorded OpenCorvus run" width="880" /></a>
+  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.gif" alt="One recorded OpenCorvus run" width="880" /></a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><strong>&#9654;&nbsp; Play the full run (1 min 44 s)</strong></a>
-</p>
-
-<p align="center"><sub>One real run &mdash; NVDA&rsquo;s last year of daily candles in; a chart, a technical read and a Word report out. Recorded on desktop v0.0.47beta, no audio track.</sub></p>
+<p align="center"><sub>Two moments from one real run: the daily-candle chart it drew, then the ecosystem graph and Word report it published. <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4">Watch the whole run</a> &mdash; 1 min 44 s, desktop v0.0.47beta, no audio.</sub></p>
 
 <table>
   <tr>
