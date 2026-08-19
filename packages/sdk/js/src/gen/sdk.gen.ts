@@ -3044,6 +3044,16 @@ export class ExpertSquad extends HeyApiClient {
             }
             restorePackageDigest: string
           }
+        | {
+            candidateRevisionLocator: {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+            expectedCurrentPackageDigest: string
+            operation: "feedback_revision"
+          }
       sessionID: string
       taskID: string
     },
@@ -3242,6 +3252,21 @@ export class ExpertSquad extends HeyApiClient {
               source: "engine_artifact"
             }
             restorePackageDigest: string
+          }
+        | {
+            authorization: {
+              messageID: string
+              sessionID: string
+              taskID: string
+            }
+            candidateRevisionLocator: {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+            expectedCurrentPackageDigest: string
+            operation: "feedback_revision"
           }
     },
     options?: Options<never, ThrowOnError>,
@@ -12816,10 +12841,8 @@ export class BrowserPreview extends HeyApiClient {
       taskID: string
       directory?: string
       inlineBindings: Array<{
-        acceptance_refs?: Array<string>
         crop_intent: "full-region" | "content-well"
         implementation: {
-          component_files?: Array<string>
           locator:
             | {
                 kind: "test-id"
@@ -12842,7 +12865,6 @@ export class BrowserPreview extends HeyApiClient {
           route?: string
         }
         region_id: string
-        region_scope: "page-section" | "card" | "content" | "title" | "chart" | "table" | "control" | "navigation"
         source: {
           bbox: {
             height: number
@@ -12864,9 +12886,6 @@ export class BrowserPreview extends HeyApiClient {
             }
             tree: string
           }
-          semantic_role: string
-          source_refs?: Array<string>
-          text_anchors?: Array<string>
         }
         state_id?: string
         viewport_id: "desktop" | "tablet" | "mobile"

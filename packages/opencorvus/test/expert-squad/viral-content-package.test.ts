@@ -24,8 +24,8 @@ import {
   VIRAL_CONTENT_SCHEMA_VERSION,
   VIRAL_CONTENT_WORKFLOW_ID,
   ViralContentArtifactSchemas,
-} from "../../../../expert-squads/builtin/viral-content/lib/viral-content/artifacts"
-import publishViralContentArtifact from "../../../../expert-squads/builtin/viral-content/tools/publish-viral-content-artifact"
+} from "@squads/viral-content/lib/viral-content/artifacts"
+import publishViralContentArtifact from "@squads/viral-content/tools/publish-viral-content-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "viral-content")
 const skillRefs = ["viral-content/shared/acceptance", "viral-content/shared/method", "viral-content/shared/workflow"]

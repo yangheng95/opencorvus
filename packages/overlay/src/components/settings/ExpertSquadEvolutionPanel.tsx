@@ -8,6 +8,7 @@ import {
   type ExpertSquadEvolutionHistoryCandidate,
   type ExpertSquadEvolutionHistoryComparison,
   type ExpertSquadEvolutionHistoryDetail,
+  type ExpertSquadEvolutionFeedbackRevision,
   type ExpertSquadEvolutionHistoryRecord,
   type ExpertSquadEvolutionMutationIntent,
   type ExpertSquadInstallationScope,
@@ -201,44 +202,61 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     await loadDetail(entry)
   }
 
-  async function runMutation(
-    entry: EvolutionSelection,
-    confirmationText: string,
-    intent: ExpertSquadEvolutionMutationIntent,
-  ): Promise<void> {
-    if (mutationBusy() || !entry.comparison) return
+  async function applyMutation(input: {
+    taskID: string
+    sessionID: string
+    confirmationText: string
+    intent: ExpertSquadEvolutionMutationIntent
+    busyKey: string
+    preferredKey?: string
+  }): Promise<void> {
+    if (mutationBusy()) return
+    const restoring = input.intent.operation === "restoration"
     const dialog = await showAppDialog({
-      title:
-        intent.operation === "promotion"
-          ? t("expert_squad.evolution_promote_title")
-          : t("expert_squad.evolution_restore_title"),
-      message: confirmationText,
+      title: restoring ? t("expert_squad.evolution_restore_title") : t("expert_squad.evolution_promote_title"),
+      message: input.confirmationText,
       cancel: true,
-      okLabel:
-        intent.operation === "promotion"
-          ? t("expert_squad.evolution_promote")
-          : t("expert_squad.evolution_restore"),
-      okTone: intent.operation === "restoration" ? "danger" : "accent",
+      okLabel: restoring ? t("expert_squad.evolution_restore") : t("expert_squad.evolution_promote"),
+      okTone: restoring ? "danger" : "accent",
     })
     if (!dialog.confirmed) return
-    const busyKey = `${intent.operation}:${entry.key}`
-    setMutationBusy(busyKey)
+    setMutationBusy(input.busyKey)
     setError("")
     try {
       await executeExpertSquadEvolutionMutation({
         directory: props.directory,
-        taskID: entry.comparison.artifact.task_id,
-        sessionID: entry.comparison.artifact.root_session_id,
-        confirmationText,
-        intent,
+        taskID: input.taskID,
+        sessionID: input.sessionID,
+        confirmationText: input.confirmationText,
+        intent: input.intent,
       })
       await props.onMutation()
-      await refresh(entry.key)
+      await refresh(input.preferredKey ?? selectedKey())
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause))
     } finally {
       setMutationBusy("")
     }
+  }
+
+  async function runMutation(
+    entry: EvolutionSelection,
+    confirmationText: string,
+    intent: ExpertSquadEvolutionMutationIntent,
+  ): Promise<void> {
+    if (!entry.comparison) return
+    await applyMutation({
+      taskID: entry.comparison.artifact.task_id,
+      sessionID: entry.comparison.artifact.root_session_id,
+      confirmationText,
+      intent,
+      busyKey: `${intent.operation}:${entry.key}`,
+      preferredKey: entry.key,
+    })
+  }
+
+  function feedbackKey(revision: ExpertSquadEvolutionFeedbackRevision): string {
+    return `${revision.artifact.task_id}:${revision.artifact.locator.artifact_id}`
   }
 
   return (
@@ -274,6 +292,57 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
               <div><span>{t("expert_squad.evolution_package_digest")}</span><strong title={current().authority.installed_revision.package_digest}>{digest(current().authority.installed_revision.package_digest)}</strong></div>
               <div><span>{t("expert_squad.evolution_catalog_revision")}</span><strong>{current().catalog_revision_upper}</strong></div>
             </div>
+            <Show when={current().revisions.length > 1}>
+              <section class="expert-squad-evolution-revisions" data-ui="expert-squad-evolution-revisions">
+                <header>
+                  <strong>{t("expert_squad.evolution_revisions")}</strong>
+                  <span>{t("expert_squad.evolution_revisions_intro")}</span>
+                </header>
+                <For each={current().revisions}>
+                  {(choice) => (
+                    <div class="expert-squad-evolution-revision" data-installed={choice.installed ? "true" : "false"}>
+                      <strong>{choice.version ?? t("expert_squad.evolution_revision_unnamed")}</strong>
+                      <code title={choice.package_digest}>{digest(choice.package_digest)}</code>
+                      <Show
+                        when={!choice.installed && choice.switch_intent}
+                        fallback={
+                          <Badge tone={choice.installed ? "accent" : "muted"}>
+                            {choice.installed
+                              ? t("expert_squad.evolution_revision_installed")
+                              : t("expert_squad.evolution_revision_unreachable")}
+                          </Badge>
+                        }
+                      >
+                        {(intent) => (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            tone="accent"
+                            disabled={!!mutationBusy()}
+                            onClick={() =>
+                              void applyMutation({
+                                taskID: choice.authorization_root!.task_id,
+                                sessionID: choice.authorization_root!.root_session_id,
+                                confirmationText: intent().confirmation_text,
+                                intent: intent().request,
+                                busyKey: `switch:${choice.package_digest}`,
+                              })
+                            }
+                          >
+                            <Show when={mutationBusy() === `switch:${choice.package_digest}`}>
+                              <Icon name="loading" />
+                            </Show>
+                            {t("expert_squad.evolution_revision_switch")}
+                          </Button>
+                        )}
+                      </Show>
+                    </div>
+                  )}
+                </For>
+              </section>
+            </Show>
+
             <Show when={current().integrity_issues.length > 0}>
               <div class="expert-squad-evolution-issues">
                 <strong>{t("expert_squad.evolution_integrity_issues")}: {current().integrity_issues.length}</strong>
@@ -284,6 +353,88 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
             </Show>
           </>
         )}
+      </Show>
+
+      <Show when={(history()?.feedback_revisions.length ?? 0) > 0}>
+        <section class="expert-squad-evolution-feedback" data-ui="expert-squad-evolution-feedback">
+          <header>
+            <strong>{t("expert_squad.evolution_feedback_revisions")}</strong>
+            <span>{t("expert_squad.evolution_feedback_intro")}</span>
+          </header>
+          <For each={history()?.feedback_revisions ?? []}>
+            {(revision) => (
+              <article class="expert-squad-evolution-record">
+                <div class="expert-squad-evolution-record-title">
+                  <strong>{revision.feedback}</strong>
+                  <Badge tone={revision.installed ? "accent" : revision.acceptance_intent ? "warn" : "muted"}>
+                    {revision.installed
+                      ? t("expert_squad.evolution_feedback_installed")
+                      : revision.acceptance_intent
+                        ? t("expert_squad.evolution_feedback_pending")
+                        : t("expert_squad.evolution_feedback_superseded")}
+                  </Badge>
+                </div>
+                <span>{revision.hypothesis}</span>
+                <span>
+                  {t("expert_squad.evolution_feedback_changed_files")}: {revision.changed_paths.join(", ")}
+                </span>
+                <div class="expert-squad-evolution-actions">
+                  <Show when={revision.acceptance_intent}>
+                    {(acceptance) => (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        tone="accent"
+                        disabled={!!mutationBusy()}
+                        onClick={() =>
+                          void applyMutation({
+                            taskID: revision.artifact.task_id,
+                            sessionID: revision.artifact.root_session_id,
+                            confirmationText: acceptance().confirmation_text,
+                            intent: acceptance().request,
+                            busyKey: `feedback_revision:${feedbackKey(revision)}`,
+                          })
+                        }
+                      >
+                        <Show when={mutationBusy() === `feedback_revision:${feedbackKey(revision)}`}>
+                          <Icon name="loading" />
+                        </Show>
+                        {t("expert_squad.evolution_feedback_accept")}
+                      </Button>
+                    )}
+                  </Show>
+                  <For each={revision.restoration_intents}>
+                    {(restoration) => (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="neutral"
+                        disabled={!!mutationBusy()}
+                        title={restoration.request.restorePackageDigest}
+                        onClick={() =>
+                          void applyMutation({
+                            taskID: revision.artifact.task_id,
+                            sessionID: revision.artifact.root_session_id,
+                            confirmationText: restoration.confirmation_text,
+                            intent: restoration.request,
+                            busyKey: `restoration:${feedbackKey(revision)}`,
+                          })
+                        }
+                      >
+                        <Show when={mutationBusy() === `restoration:${feedbackKey(revision)}`}>
+                          <Icon name="loading" />
+                        </Show>
+                        {t("expert_squad.evolution_restore")} {digest(restoration.request.restorePackageDigest)}
+                      </Button>
+                    )}
+                  </For>
+                </div>
+              </article>
+            )}
+          </For>
+        </section>
       </Show>
 
       <Show when={!error() || Boolean(history())} fallback={
@@ -297,7 +448,11 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         when={!loading() && entries().length > 0}
         fallback={
           <Show when={!loading()} fallback={<SettingsState>{t("expert_squad.evolution_loading")}</SettingsState>}>
-            <SettingsState title={t("expert_squad.evolution_empty_title")}>{t("expert_squad.evolution_empty_body")}</SettingsState>
+            {/* Feedback revisions render above and are history too, so the
+                empty state must not claim there is none. */}
+            <Show when={(history()?.feedback_revisions.length ?? 0) === 0}>
+              <SettingsState title={t("expert_squad.evolution_empty_title")}>{t("expert_squad.evolution_empty_body")}</SettingsState>
+            </Show>
           </Show>
         }
       >

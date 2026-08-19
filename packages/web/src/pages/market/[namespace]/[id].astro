@@ -6,12 +6,18 @@ import { getWebsiteRegistry } from "../../../lib/website-registry"
 export const prerender = false
 const registry = await getWebsiteRegistry()
 const record = registry.squad(Astro.params.namespace ?? "", Astro.params.id ?? "")
+// The one-click handoff has to name the exact archive the client will re-verify, so the page
+// resolves the same descriptor the archive route serves and hands over only its byte binding.
+const descriptor = record
+  ? registry.archive(record.identity.namespace, record.identity.id, record.identity.version, record.identity.digest)
+  : undefined
+const archive = descriptor ? { sha256: descriptor.sha256, bytes: descriptor.bytes } : undefined
 if (!record) Astro.response.status = 404
 ---
 
 {
   record ? (
-    <SquadDetailPage locale="root" {record} />
+    <SquadDetailPage locale="root" {record} {archive} />
   ) : (
     <OcNotFound locale="root" languageHref="/zh-cn/market/" />
   )

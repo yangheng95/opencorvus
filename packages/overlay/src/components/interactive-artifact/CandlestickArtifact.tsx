@@ -9,35 +9,29 @@ import {
 } from "lightweight-charts"
 import { onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { observeAppliedTheme } from "../../services/theme"
+import { observeAppliedTheme, themeColor } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
 
 type CandlestickPayload = Extract<InteractiveArtifactPayload, { renderer: "candlestick@1" }>
 
 const MAX_CANDLE_BAR_SPACING = 32
 
-function requiredThemeColor(styles: CSSStyleDeclaration, token: string): string {
-  // CSS means Cascading Style Sheets. The active theme is the only chart palette owner.
-  const value = styles.getPropertyValue(token).trim()
-  if (!value) throw new Error(`Candlestick artifact requires theme token ${token}`)
-  return value
-}
-
 export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
   let container!: HTMLDivElement
 
   onMount(() => {
     const theme = () => {
-      const styles = getComputedStyle(container)
+      // CSS means Cascading Style Sheets. The active theme is the only chart palette owner.
+      const color = (token: `--${string}`) => themeColor(container, token)
       return {
-        backgroundColor: requiredThemeColor(styles, "--surface-inset"),
-        textColor: requiredThemeColor(styles, "--text-soft"),
-        gridColor: requiredThemeColor(styles, "--border"),
-        scaleBorderColor: requiredThemeColor(styles, "--border-strong"),
-        upColor: requiredThemeColor(styles, "--good"),
-        downColor: requiredThemeColor(styles, "--bad"),
-        upVolumeColor: requiredThemeColor(styles, "--good-dim"),
-        downVolumeColor: requiredThemeColor(styles, "--bad-dim"),
+        backgroundColor: color("--surface-inset"),
+        textColor: color("--text-soft"),
+        gridColor: color("--border"),
+        scaleBorderColor: color("--border-strong"),
+        upColor: color("--good"),
+        downColor: color("--bad"),
+        upVolumeColor: color("--good-dim"),
+        downVolumeColor: color("--bad-dim"),
       }
     }
     const initial = theme()

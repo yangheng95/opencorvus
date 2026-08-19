@@ -119,6 +119,51 @@ const evolutionCampaignPublishInputShape = {
   ]),
 } as const
 
+/**
+ * Model-facing candidate-revision publication input.
+ *
+ * The publisher already validates both package resource sets and compares
+ * them, so every revision identity, resource manifest, changed path, frozen
+ * file digest, diff digest, and validation receipt is a fact it derives. Asking
+ * the author to restate them meant transcribing dozens of 64-character digests
+ * byte-for-byte: in the 2026-08-18 luna12 run that produced ten consecutive
+ * publication rejections and zero candidate revisions. The author supplies only
+ * what it owns — which campaign, why, and the evidence it read.
+ */
+export const EvolutionCandidateRevisionPublishInputSchema = z
+  .object({
+    // A campaign-driven candidate names its frozen development Campaign. A
+    // feedback-driven candidate has none: one piece of user feedback has
+    // nothing to measure, so it carries the verbatim feedback instead and the
+    // user's own acceptance is the verdict.
+    development_campaign_locator: EngineArtifactLocatorSchema.nullable(),
+    feedback: z.string().min(1).nullable(),
+    hypothesis: z.string().min(1),
+    provenance: evidence,
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if ((value.development_campaign_locator === null) === (value.feedback === null))
+      context.addIssue({
+        code: "custom",
+        path: ["feedback"],
+        message: "a candidate revision is driven by exactly one of a development Campaign or user feedback",
+      })
+  })
+
+/**
+ * Model-facing evaluation-result publication input.
+ *
+ * Every field of the published artifact — case, arm, repetition, trial task,
+ * revision digest, scorer values, and all three predecessor locators — already
+ * exists in the immutable metric receipt the Host produced. The Evaluator owns
+ * no semantics here at all; its only decision is which receipt to publish, and
+ * the publisher requires exactly one receipt resource, so even that is derived.
+ * The payload is therefore empty: an empty object is the honest statement that
+ * this artifact is a Host projection of a Host fact.
+ */
+export const EvolutionEvaluationResultPublishInputSchema = z.object({}).strict()
+
 export const EvolutionCampaignPublishInputSchema = z
   .object({
     candidate_version_policy: z.string().min(1),
@@ -313,11 +358,18 @@ export const EvolutionArtifactSchemas = {
     .strict(),
   "evolution-lab/candidate-revision": z
     .object({
-      development_campaign_locator: EngineArtifactLocatorSchema,
+      development_campaign_locator: EngineArtifactLocatorSchema.nullable(),
+      feedback: z.string().min(1).nullable(),
       parent_revision: exactRevision,
       candidate_revision: exactRevision,
-      parent_resources: z.array(taskArtifactResourceIdentity).min(1),
-      candidate_resources: z.array(taskArtifactResourceIdentity).min(1),
+      // A Campaign-driven candidate is authored by a worker that read the
+      // package as materialized Task Artifact resources, so it names them. A
+      // feedback-driven candidate is authored by the Host directly against the
+      // content-addressed revision store: the exact bytes are already named by
+      // parent_revision/candidate_revision, and staging a second copy would be
+      // a second source for one fact.
+      parent_resources: z.array(taskArtifactResourceIdentity),
+      candidate_resources: z.array(taskArtifactResourceIdentity),
       hypothesis: z.string().min(1),
       changed_paths: z.array(z.string().min(1)).min(1),
       diff_sha256: sha256,
@@ -340,6 +392,26 @@ export const EvolutionArtifactSchemas = {
           path: ["manager_receipt"],
           message: "candidate validation receipt must equal the exact candidate revision",
         })
+      if ((value.development_campaign_locator === null) === (value.feedback === null))
+        context.addIssue({
+          code: "custom",
+          path: ["feedback"],
+          message: "a candidate revision is driven by exactly one of a development Campaign or user feedback",
+        })
+      const campaignDriven = value.development_campaign_locator !== null
+      for (const [key, resources] of [
+        ["parent_resources", value.parent_resources],
+        ["candidate_resources", value.candidate_resources],
+      ] as const) {
+        if (campaignDriven === resources.length > 0) continue
+        context.addIssue({
+          code: "custom",
+          path: [key],
+          message: campaignDriven
+            ? "a Campaign-driven candidate names the materialized package resources it was authored from"
+            : "a feedback-driven candidate is authored from the revision store and names no Task Artifact resources",
+        })
+      }
     }),
   "evolution-lab/run-evidence-bundle": z
     .object({
@@ -460,6 +532,17 @@ export const EvolutionArtifactSchemas = {
         })
         .strict(),
       aggregate_score: z.number().nullable(),
+      /**
+       * Interval around `aggregate_score` on the same normalized scale. The
+       * promotion rule is decided on these bounds rather than on the point
+       * estimate, so publishing them is what makes the recommendation
+       * reproducible from the artifact alone.
+       */
+      aggregate_interval: z
+        .object({ confidence: z.number().positive().max(1), lower: z.number(), upper: z.number() })
+        .strict()
+        .refine((interval) => interval.lower <= interval.upper, "confidence interval lower must not exceed upper")
+        .nullable(),
       regressions: z.array(z.string().min(1)),
       unavailable_dimensions: z.array(z.string().min(1)),
       required_unavailable_dimensions: z.array(z.string().min(1)),
@@ -482,6 +565,27 @@ export const EvolutionArtifactSchemas = {
           code: "custom",
           path: ["aggregate_score"],
           message: "aggregate score must be null when a required dimension is unavailable",
+        })
+      // The reverse pairing is deliberately not required: a campaign whose
+      // scorers were each measured once still has a legitimate point estimate,
+      // but supports no interval around it. That asymmetry is the signal the
+      // recommendation reads — no interval means it cannot promote.
+      if (value.aggregate_score === null && value.aggregate_interval !== null)
+        context.addIssue({
+          code: "custom",
+          path: ["aggregate_interval"],
+          message: "aggregate interval must be null when aggregate score is null",
+        })
+      if (
+        value.aggregate_interval &&
+        value.aggregate_score !== null &&
+        (value.aggregate_score < value.aggregate_interval.lower ||
+          value.aggregate_score > value.aggregate_interval.upper)
+      )
+        context.addIssue({
+          code: "custom",
+          path: ["aggregate_interval"],
+          message: "aggregate score must lie inside its own interval",
         })
       if (value.required_unavailable_dimensions.length > 0 && value.recommendation !== "inconclusive")
         context.addIssue({
@@ -527,7 +631,7 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/candidate-revision"),
-    payload: EvolutionArtifactSchemas["evolution-lab/candidate-revision"],
+    payload: EvolutionCandidateRevisionPublishInputSchema,
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/run-evidence-bundle"),
@@ -535,7 +639,7 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/evaluation-result"),
-    payload: EvolutionArtifactSchemas["evolution-lab/evaluation-result"],
+    payload: EvolutionEvaluationResultPublishInputSchema,
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/integrity-review"),
@@ -550,3 +654,13 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
 export function parseEvolutionArtifact(type: EvolutionArtifactType, payload: unknown) {
   return EvolutionArtifactSchemas[type].parse(payload)
 }
+
+/**
+ * Artifact-type namespaces whose members must be published by their own typed
+ * publisher rather than the generic catalog tool. Derived from the schemas
+ * above so the Host does not restate a package's namespace as a string
+ * literal — it asks the ABI that owns it.
+ */
+export const PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES: readonly string[] = Object.freeze([
+  ...new Set(Object.keys(EvolutionArtifactSchemas).map((artifactType) => `${artifactType.split("/")[0]}/`)),
+])

@@ -30,30 +30,31 @@ export const BrowserPreviewRegionLocator = z.discriminatedUnion("kind", [
 ])
 export type BrowserPreviewRegionLocator = z.infer<typeof BrowserPreviewRegionLocator>
 
+/**
+ * Exactly the geometry and locator facts the region comparison reads. The
+ * binding record that frontend-design curates carries more (scope labels,
+ * semantic roles, evidence refs, component files); none of it reaches a
+ * verdict here, and requiring it made the model author values that could not
+ * change any outcome.
+ */
 export const BrowserPreviewRegionBinding = z
   .object({
     region_id: z.string().min(1),
     viewport_id: BrowserPreviewViewportID,
     state_id: z.string().min(1).default("default"),
-    region_scope: z.enum(["page-section", "card", "content", "title", "chart", "table", "control", "navigation"]),
     crop_intent: BrowserPreviewCropIntent,
     source: z
       .object({
         reference_artifact: BrowserPreviewSourceImageArtifactRef,
         bbox: BrowserPreviewRegionBox,
-        semantic_role: z.string().min(1),
-        text_anchors: z.array(z.string().min(1)).default([]),
-        source_refs: z.array(z.string().min(1)).default([]),
       })
       .strict(),
     implementation: z
       .object({
         route: z.string().min(1).default("/"),
         locator: BrowserPreviewRegionLocator,
-        component_files: z.array(z.string().min(1)).default([]),
       })
       .strict(),
-    acceptance_refs: z.array(z.string().min(1)).default([]),
   })
   .strict()
 export type BrowserPreviewRegionBinding = z.infer<typeof BrowserPreviewRegionBinding>

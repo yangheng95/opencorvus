@@ -29,6 +29,7 @@ import z from "zod"
 import { ExpertSquadPackageLocations } from "./locations"
 import { ExpertSquadRegistry } from "./registry"
 import { evolutionMutationConfirmationText } from "./evolution-mutation"
+import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
 
 type InstallationScope = "project" | "global"
 type Partition = "current" | "historical"
@@ -184,6 +185,17 @@ function requireEvolutionProducer(envelope: Envelope) {
   if (envelope.artifact_type === "evolution-lab/promotion-receipt") {
     if (envelope.producer.owner_kind !== "core" || envelope.producer.component_id !== "expert-squad-package-manager")
       throw new Error("Evolution history receipt must be produced by the Core package manager")
+    return
+  }
+  // A feedback-driven candidate has no Campaign and no Evolution Lab run
+  // behind it: the Host authored it from a Message only the Host saw, so the
+  // Host is its honest producer.
+  if (
+    envelope.artifact_type === "evolution-lab/candidate-revision" &&
+    envelope.producer.owner_kind === "core"
+  ) {
+    if (envelope.producer.component_id !== FEEDBACK_REVISION_COMPONENT_ID)
+      throw new Error(`Evolution history candidate revision must be produced by Core ${FEEDBACK_REVISION_COMPONENT_ID}`)
     return
   }
   if (
@@ -652,6 +664,270 @@ function receiptArtifacts(read: FrozenRead) {
   })
 }
 
+/**
+ * The revisions written from operator feedback for this exact target.
+ *
+ * They are rooted at the candidate rather than a Campaign because they have no
+ * Campaign, and each one carries the receipts that installed it so the panel
+ * can offer the way back without a comparison it never had.
+ */
+/**
+ * Every mutation receipt that belongs to one feedback candidate.
+ *
+ * The install cites the candidate; the undo cites the install. Walking that
+ * second hop is what keeps an undone revision's receipt attached to something
+ * — otherwise reverting a revision reports its own receipt as an orphan.
+ */
+function receiptsForFeedbackCandidate(
+  receipts: FrozenArtifact<Receipt>[],
+  candidate: FrozenArtifact<Candidate>,
+  target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>,
+) {
+  const owned: FrozenArtifact<Receipt>[] = []
+  const cited = new Set<string>()
+  const forTarget = receipts.filter((artifact) => sameIdentity(artifact.payload!.target, target))
+  for (const artifact of forTarget) {
+    const receipt = artifact.payload!
+    if (receipt.operation !== "feedback_revision") continue
+    if (receipt.evidence.length !== 1 || !sameIdentity(receipt.evidence[0], candidate.locator)) continue
+    owned.push(artifact)
+    cited.add(canonicalEvolutionJSON(artifact.locator))
+  }
+  // A restoration names the receipt it supersedes, so a chain of switches hangs
+  // off whichever candidate started it. Walking one hop reached only the first
+  // switch back: the third and every later one cited a restoration rather than
+  // the install, so their receipts read as artifacts nothing had authorized and
+  // the panel reported them as orphans. Walk to a fixed point instead.
+  for (let joined = true; joined; ) {
+    joined = false
+    for (const artifact of forTarget) {
+      const receipt = artifact.payload!
+      if (receipt.operation !== "restoration") continue
+      const key = canonicalEvolutionJSON(artifact.locator)
+      if (cited.has(key)) continue
+      if (receipt.evidence.length !== 1 || !cited.has(canonicalEvolutionJSON(receipt.evidence[0]))) continue
+      owned.push(artifact)
+      cited.add(key)
+      joined = true
+    }
+  }
+  return owned.toSorted((left, right) => left.row.time_created - right.row.time_created)
+}
+
+function feedbackRevisionPairs(
+  read: FrozenRead,
+  receipts: FrozenArtifact<Receipt>[],
+  target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>,
+) {
+  return read.artifacts.flatMap((artifact) => {
+    const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")
+    const payload = candidate?.payload
+    if (!candidate || !payload || payload.feedback === null) return []
+    if (payload.candidate_revision.namespace !== target.namespace || payload.candidate_revision.id !== target.id)
+      return []
+    return [
+      {
+        candidate,
+        feedback: payload.feedback,
+        payload,
+        receipts: receiptsForFeedbackCandidate(receipts, candidate, target),
+      },
+    ]
+  })
+}
+
+/**
+ * Accepting a staged revision is a compare-and-swap against the exact revision
+ * it was written on top of: the edit means what it means only against that
+ * parent. Applying it to any other installed revision would silently discard
+ * whatever came in between, so the intent restates the parent rather than
+ * whatever happens to be installed.
+ */
+function feedbackAcceptanceIntent(input: {
+  pair: ReturnType<typeof feedbackRevisionPairs>[number]
+  target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>
+}) {
+  const { candidate, feedback, payload } = input.pair
+  return {
+    operation: "feedback_revision" as const,
+    confirmation_text: evolutionMutationConfirmationText({
+      projectID: Instance.project.id,
+      target: input.target,
+      beforeDigest: payload.parent_revision.package_digest,
+      afterDigest: payload.candidate_revision.package_digest,
+      evidenceSHA256s: [candidate.locator.expected_sha256],
+      operation: "feedback_revision",
+      feedback,
+    }),
+    request: {
+      operation: "feedback_revision" as const,
+      candidateRevisionLocator: candidate.locator,
+      expectedCurrentPackageDigest: payload.parent_revision.package_digest,
+    },
+  }
+}
+
+function feedbackRevisionRecords(input: {
+  read: FrozenRead
+  receipts: FrozenArtifact<Receipt>[]
+  target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>
+  installedDigest: string
+}) {
+  return feedbackRevisionPairs(input.read, input.receipts, input.target).map((pair) => {
+    const { candidate, payload, receipts } = pair
+    const installed = payload.candidate_revision.package_digest === input.installedDigest
+    return {
+      artifact: artifactIdentity(candidate),
+      feedback: payload.feedback,
+      hypothesis: payload.hypothesis,
+      parent_revision: payload.parent_revision,
+      candidate_revision: payload.candidate_revision,
+      changed_paths: payload.changed_paths,
+      diff_sha256: payload.diff_sha256,
+      installed,
+      receipts: receipts.map((receiptArtifact) => ({
+        artifact: artifactIdentity(receiptArtifact),
+        receipt: receiptArtifact.payload!,
+      })),
+      // Offered only while this revision is exactly the next step: its parent
+      // is what is installed now, and nothing has accepted it yet. Once it is
+      // installed, or the target has moved on, accepting it would be a
+      // compare-and-swap against a digest that is no longer there.
+      acceptance_intent:
+        receipts.length === 0 && payload.parent_revision.package_digest === input.installedDigest
+          ? feedbackAcceptanceIntent({ pair, target: input.target })
+          : null,
+      restoration_intents: receipts.flatMap((receiptArtifact) => {
+        const receipt = receiptArtifact.payload!
+        if (receipt.after_digest !== input.installedDigest) return []
+        return [
+          {
+            operation: "restoration" as const,
+            confirmation_text: evolutionMutationConfirmationText({
+              projectID: Instance.project.id,
+              target: input.target,
+              beforeDigest: receipt.after_digest,
+              afterDigest: receipt.before_digest,
+              evidenceSHA256s: [receiptArtifact.locator.expected_sha256],
+              operation: "restoration",
+            }),
+            request: {
+              operation: "restoration" as const,
+              priorReceiptLocator: receiptArtifact.locator,
+              restorePackageDigest: receipt.before_digest,
+              expectedCurrentPackageDigest: receipt.after_digest,
+            },
+          },
+        ]
+      }),
+    }
+  })
+}
+
+/**
+ * Every revision this target provably had, newest witness first, each with the
+ * one way in that its own provenance supports.
+ *
+ * A digest reachable from a Core receipt is reachable again: the receipt is the
+ * standing proof that this exact revision was installed here under an operator
+ * authorization, so restoring it needs nothing further than knowing where we
+ * are leaving from. A candidate that was staged and never accepted has no such
+ * receipt, and its acceptance is the only way in, which the CAS confines to the
+ * moment its own parent is installed.
+ */
+function revisionChoices(input: {
+  read: FrozenRead
+  receipts: FrozenArtifact<Receipt>[]
+  target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>
+  installed: { version: string; package_digest: string }
+}) {
+  const versions = new Map<string, string>([[input.installed.package_digest, input.installed.version]])
+  const witnesses = new Map<string, FrozenArtifact<Receipt>>()
+  const order = new Map<string, number>()
+  const note = (digest: string | null | undefined, at: number) => {
+    if (typeof digest !== "string") return
+    const seen = order.get(digest)
+    if (seen === undefined || at > seen) order.set(digest, at)
+  }
+  for (const artifact of input.read.artifacts) {
+    const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")?.payload
+    if (!candidate) continue
+    for (const revision of [candidate.parent_revision, candidate.candidate_revision])
+      if (revision.namespace === input.target.namespace && revision.id === input.target.id)
+        versions.set(revision.package_digest, revision.version)
+  }
+  for (const artifact of input.receipts) {
+    const receipt = artifact.payload!
+    if (!sameIdentity(receipt.target, input.target)) continue
+    for (const digest of [receipt.before_digest, receipt.after_digest]) {
+      if (typeof digest !== "string") continue
+      note(digest, artifact.row.time_created)
+      // The newest receipt naming a digest is the one whose evidence the
+      // operator is most likely to recognize in the confirmation text.
+      const held = witnesses.get(digest)
+      if (held === undefined || artifact.row.time_created >= held.row.time_created) witnesses.set(digest, artifact)
+    }
+  }
+  note(input.installed.package_digest, Number.MAX_SAFE_INTEGER)
+  const acceptances = new Map<
+    string,
+    { intent: ReturnType<typeof feedbackAcceptanceIntent>; artifact: FrozenArtifact<Candidate> }
+  >()
+  for (const pair of feedbackRevisionPairs(input.read, input.receipts, input.target)) {
+    const digest = pair.payload.candidate_revision.package_digest
+    if (witnesses.has(digest) || digest === input.installed.package_digest) continue
+    if (pair.payload.parent_revision.package_digest !== input.installed.package_digest) continue
+    acceptances.set(digest, { intent: feedbackAcceptanceIntent({ pair, target: input.target }), artifact: pair.candidate })
+    note(digest, pair.candidate.row.time_created)
+  }
+  return [...order.keys()]
+    .toSorted((left, right) => (order.get(right) ?? 0) - (order.get(left) ?? 0))
+    .map((digest) => {
+      const version = versions.get(digest) ?? null
+      if (digest === input.installed.package_digest)
+        return { package_digest: digest, version, installed: true, authorization_root: null, switch_intent: null }
+      const acceptance = acceptances.get(digest)
+      if (acceptance)
+        return {
+          package_digest: digest,
+          version,
+          installed: false,
+          authorization_root: authorizationRoot(acceptance.artifact),
+          switch_intent: acceptance.intent,
+        }
+      const witness = witnesses.get(digest)
+      if (!witness)
+        return { package_digest: digest, version, installed: false, authorization_root: null, switch_intent: null }
+      return {
+        package_digest: digest,
+        version,
+        installed: false,
+        authorization_root: authorizationRoot(witness),
+        switch_intent: {
+          operation: "restoration" as const,
+          confirmation_text: evolutionMutationConfirmationText({
+            projectID: Instance.project.id,
+            target: input.target,
+            beforeDigest: input.installed.package_digest,
+            afterDigest: digest,
+            evidenceSHA256s: [witness.locator.expected_sha256],
+            operation: "restoration",
+          }),
+          request: {
+            operation: "restoration" as const,
+            priorReceiptLocator: witness.locator,
+            restorePackageDigest: digest,
+            expectedCurrentPackageDigest: input.installed.package_digest,
+          },
+        },
+      }
+    })
+}
+
+function authorizationRoot(artifact: FrozenArtifact) {
+  return { task_id: artifact.catalog.taskID, root_session_id: artifact.catalog.sessionID }
+}
+
 function campaignArtifacts(read: FrozenRead, target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>) {
   return read.artifacts.flatMap((artifact) => {
     const campaign = typedArtifact<Campaign>(artifact, "evolution-lab/campaign-spec")
@@ -717,6 +993,12 @@ function integrityIssuesForTarget(
     for (const receipt of receiptsForComparison({ ...comparison, receipts }).receipts) {
       reachable.add(exactKey(receipt.catalog.taskID, receipt.locator))
     }
+  }
+  // A feedback revision is rooted at its own candidate, not at a Campaign, so
+  // its receipt is reachable through that candidate and is not an orphan.
+  for (const pair of feedbackRevisionPairs(read, receipts, target)) {
+    reachable.add(exactKey(pair.candidate.catalog.taskID, pair.candidate.locator))
+    for (const receipt of pair.receipts) reachable.add(exactKey(receipt.catalog.taskID, receipt.locator))
   }
   const targetCampaignLocators = campaigns.map((campaign) => campaign.locator)
   const candidateTargetsCampaign = (candidate: FrozenArtifact<Candidate>) =>
@@ -809,6 +1091,18 @@ export async function readEvolutionHistory(rawQuery: unknown): Promise<Evolution
       authority: historyAuthority,
       catalog_revision_upper: revisionUpper,
       records,
+      feedback_revisions: feedbackRevisionRecords({
+        read,
+        receipts,
+        target: historyAuthority.target,
+        installedDigest: historyAuthority.installed_revision.package_digest,
+      }),
+      revisions: revisionChoices({
+        read,
+        receipts,
+        target: historyAuthority.target,
+        installed: historyAuthority.installed_revision,
+      }),
       integrity_issues: integrityIssuesForTarget(read, historyAuthority.target),
       next_cursor:
         page.length > selected.length && last

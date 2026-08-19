@@ -23,8 +23,8 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import {
   SalesStrategyArtifactSchemas,
   type SalesStrategyArtifactType,
-} from "../../../../expert-squads/builtin/sales-strategy/lib/sales-strategy/artifacts"
-import publishSalesStrategyArtifact from "../../../../expert-squads/builtin/sales-strategy/tools/publish-sales-strategy-artifact"
+} from "@squads/sales-strategy/lib/sales-strategy/artifacts"
+import publishSalesStrategyArtifact from "@squads/sales-strategy/tools/publish-sales-strategy-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "sales-strategy")
 const skillRefs = ["sales-strategy/shared/method", "sales-strategy/shared/workflow"]

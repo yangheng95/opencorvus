@@ -1,3 +1,4 @@
+import z from "zod"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { requireTask, type TaskRow } from "@/engine/store"
 import { Session } from "@/session"
@@ -45,27 +46,43 @@ export function optionsWithVisibleOrchestratorToolName(
   }
 }
 
+/**
+ * The identity the Session loop attaches to every projected Orchestrator tool
+ * call. Named and parsed in one place: this used to be four independent
+ * `typeof` narrowings over an `unknown` bag, each defaulting to `""` before a
+ * combined emptiness check, so a renamed field degraded into the same error as
+ * a genuinely absent one.
+ */
+export const OrchestratorToolInvocationSchema = z
+  .object({
+    sessionID: z.string().min(1),
+    messageID: z.string().min(1),
+    toolCallID: z.string().min(1),
+    toolPartID: z.string().min(1),
+    visibleToolName: z.string().min(1).optional(),
+  })
+  .loose()
+
+export type OrchestratorToolInvocation = z.infer<typeof OrchestratorToolInvocationSchema>
+
 export function requireOrchestratorToolExecutionContext(
   options: unknown,
   toolName: string,
 ): OrchestratorToolExecutionContext {
-  const meta = (options as { opencorvus?: Record<string, unknown> } | undefined)?.opencorvus
-  const visibleToolName = typeof meta?.visibleToolName === "string" ? meta.visibleToolName : toolName
-  const orchestratorSessionID = typeof meta?.sessionID === "string" ? meta.sessionID : ""
-  const orchestratorMessageID = typeof meta?.messageID === "string" ? meta.messageID : ""
-  const toolCallID = typeof meta?.toolCallID === "string" ? meta.toolCallID : ""
-  const toolPartID = typeof meta?.toolPartID === "string" ? meta.toolPartID : ""
-  if (!orchestratorSessionID || !orchestratorMessageID || !toolCallID || !toolPartID) {
+  const meta = (options as { opencorvus?: unknown } | undefined)?.opencorvus
+  const parsed = OrchestratorToolInvocationSchema.safeParse(meta)
+  if (!parsed.success) {
     throw new Error(
-      `${toolName}: missing real tool execution identity; refusing to run because ownership cannot be tied to a persisted message/tool part.`,
+      `${toolName}: missing real tool execution identity; refusing to run because ownership cannot be tied to a persisted message/tool part. ` +
+        `received: ${JSON.stringify(meta)}, expected: ${z.prettifyError(parsed.error)}`,
     )
   }
   return {
-    orchestratorSessionID,
-    orchestratorMessageID,
-    toolCallID,
-    toolPartID,
-    visibleToolName,
+    orchestratorSessionID: parsed.data.sessionID,
+    orchestratorMessageID: parsed.data.messageID,
+    toolCallID: parsed.data.toolCallID,
+    toolPartID: parsed.data.toolPartID,
+    visibleToolName: parsed.data.visibleToolName ?? toolName,
   }
 }
 

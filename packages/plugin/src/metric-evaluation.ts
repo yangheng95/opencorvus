@@ -41,30 +41,42 @@ export const JudgeMetricEvaluatorConfigSchema = z
   })
   .strict()
 
+/**
+ * The one name a prebuilt evaluator can carry. Declared here because the Host
+ * that implements it and the Campaign comparison that looks for it live in
+ * different packages, and a literal repeated across that boundary is a rename
+ * waiting to silently disable a gate.
+ */
+export const VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME = "visual-feedback-verification" as const
+
 export const PrebuiltMetricEvaluatorConfigSchema = z
   .object({
-    name: z.literal("visual-feedback-verification"),
+    name: z.literal(VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME),
     scorer_revision: SHA256Schema,
   })
   .strict()
 
+const ConstantValueQueryConfigSchema = z
+  .object({
+    scorer_revision: SHA256Schema,
+    query: z.literal("constant_value"),
+    value: z.number(),
+  })
+  .strict()
+
+const MetricResultValueQueryConfigSchema = z
+  .object({
+    scorer_revision: SHA256Schema,
+    query: z.literal("metric_result_value"),
+    metric_spec_id: z.string().min(1),
+    iteration_offset: z.number().int(),
+    result_column: z.enum(["raw_value", "normalized_value"]),
+  })
+  .strict()
+
 export const QueryMetricEvaluatorConfigSchema = z.discriminatedUnion("query", [
-  z
-    .object({
-      scorer_revision: SHA256Schema,
-      query: z.literal("constant_value"),
-      value: z.number(),
-    })
-    .strict(),
-  z
-    .object({
-      scorer_revision: SHA256Schema,
-      query: z.literal("metric_result_value"),
-      metric_spec_id: z.string().min(1),
-      iteration_offset: z.number().int(),
-      result_column: z.enum(["raw_value", "normalized_value"]),
-    })
-    .strict(),
+  ConstantValueQueryConfigSchema,
+  MetricResultValueQueryConfigSchema,
 ])
 
 export const AggregatorMetricEvaluatorConfigSchema = z
@@ -133,6 +145,71 @@ export const MetricScorerSpecSchema = z
   })
 
 export type MetricScorerSpec = z.infer<typeof MetricScorerSpecSchema>
+
+/**
+ * Host-stamped facts. An author never transcribes a 64-hex digest, and a
+ * Campaign fixes placement by construction, so the authoring shape omits them
+ * and the Host supplies them from the published asset bytes.
+ */
+const HOST_STAMPED_SCORER_FACTS = { scorer_revision: true, scope: true, goal_id: true } as const
+const HOST_STAMPED_CONFIG_FACTS = { scorer_revision: true } as const
+
+const MetricScorerAuthoringIdentitySchema = MetricScorerIdentitySchema.omit(HOST_STAMPED_SCORER_FACTS).extend({
+  schema_version: z.literal(1),
+})
+
+/**
+ * Authoring shape for one scorer asset: the same kind set and the same
+ * per-kind evaluator config as {@link MetricScorerSpecSchema}, minus the facts
+ * the Host stamps. Deriving it from those declarations is what keeps an
+ * authoring surface from silently accepting fewer kinds than the executor runs.
+ */
+export const MetricScorerAuthoringSpecSchema = z.discriminatedUnion("evaluator_kind", [
+  MetricScorerAuthoringIdentitySchema.extend({
+    evaluator_kind: z.literal("shell"),
+    evaluator_config: ShellMetricEvaluatorConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+  }),
+  MetricScorerAuthoringIdentitySchema.extend({
+    evaluator_kind: z.literal("judge"),
+    evaluator_config: JudgeMetricEvaluatorConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+  }),
+  MetricScorerAuthoringIdentitySchema.extend({
+    evaluator_kind: z.literal("prebuilt"),
+    evaluator_config: PrebuiltMetricEvaluatorConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+  }),
+  MetricScorerAuthoringIdentitySchema.extend({
+    evaluator_kind: z.literal("query"),
+    evaluator_config: z.discriminatedUnion("query", [
+      ConstantValueQueryConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+      MetricResultValueQueryConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+    ]),
+  }),
+  MetricScorerAuthoringIdentitySchema.extend({
+    evaluator_kind: z.literal("aggregator"),
+    evaluator_config: AggregatorMetricEvaluatorConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+  }),
+])
+
+export type MetricScorerAuthoringSpec = z.infer<typeof MetricScorerAuthoringSpecSchema>
+
+/**
+ * Expand one authored scorer into the canonical spec by stamping the
+ * Host-owned facts. The single expansion point replaces per-kind transcription
+ * at every authoring surface.
+ */
+export function metricScorerSpecFromAuthoring(
+  authored: MetricScorerAuthoringSpec,
+  stamp: Readonly<{ scorer_revision: string; scope: "goal" | "global"; goal_id: string | null }>,
+): MetricScorerSpec {
+  const { schema_version: _schema_version, evaluator_config, ...identity } = authored
+  return MetricScorerSpecSchema.parse({
+    ...identity,
+    scorer_revision: stamp.scorer_revision,
+    scope: stamp.scope,
+    goal_id: stamp.goal_id,
+    evaluator_config: { ...evaluator_config, scorer_revision: stamp.scorer_revision },
+  })
+}
 
 export const MetricEvaluationRequestSchema = z
   .object({

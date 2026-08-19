@@ -2,7 +2,8 @@ import { afterAll, expect, test } from "bun:test"
 import { EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
-import { createOrchestratorTools, projectTerminalConversationTools } from "../src/orchestrator/tools"
+import { createOrchestratorTools } from "../src/orchestrator/tools"
+import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS } from "../src/tool/tool-id-catalog"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database } from "../src/storage/db"
@@ -95,36 +96,91 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
         reason: "Acknowledge the exact terminal occurrence authorized by the Host.",
       })
 
-      // Authority by projection: what a conversation-only Turn must not do is
-      // simply not on its table. There is no wrapped refusal to loop on.
-      expect(tools.dispatch_agent).toBeUndefined()
-      expect(tools.manage_task).toBeUndefined()
-      expect(tools.wait).toBeUndefined()
-      expect(tools.no_action).toBeUndefined()
+      // Tool availability follows the real environment, never the Task's
+      // terminal color. The authority still decides what it actually governs:
+      // the coordination decision set, and the acknowledge_terminal identity
+      // and occurrence fence checked when the decision executes.
+      expect(tools.dispatch_agent).toBeDefined()
+      expect(tools.manage_task).toBeDefined()
+      expect(tools.no_action).toBeDefined()
     },
   })
 })
 
-test("projects the decision Tool for the exact terminal ingress kind", () => {
-  const table = {
-    no_action: "no_action",
-    respond_agent_coordination: "respond",
-    dispatch_agent: "dispatch",
-    manage_task: "manage",
-    wait: "wait",
-    read: "read",
-    read_task_message: "read_task_message",
-    artifact_read: "artifact_read",
-  }
+// Regression: the scheduler capability declares TASK_ARTIFACT_SCHEDULER_TOOL_IDS
+// and publish_interactive_artifact unconditionally, and projectOrchestratorTools
+// throws when a declared Tool was not built. A terminal-only crop of the built
+// table therefore failed every terminal wake before the model saw anything.
+test("builds every declared scheduler Tool on a terminal conversation wake", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const taskID = Identifier.ascending("task")
+      const root = await Session.create({ kind: "root", title: "Terminal scheduler tool table" })
+      const now = Date.now()
+      Database.immediateTransaction((db) => {
+        db.insert(EngineTaskTable)
+          .values({
+            id: taskID,
+            project_id: Instance.project.id,
+            session_id: root.id,
+            source: "test",
+            product_pillar: "code",
+            title: "Terminal scheduler tool table",
+            request: "Build the declared scheduler Tool table for a terminal wake.",
+            time_started: now,
+            time_created: now,
+            time_updated: now,
+          })
+          .run()
+        appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.terminal-tool-table" })
+      })
 
-  const operator = projectTerminalConversationTools(table, { ingressKind: "operator_message" })
-  expect(Object.keys(operator).sort()).toEqual(["artifact_read", "no_action", "read", "read_task_message"])
+      const { tools } = createOrchestratorTools({
+        taskID,
+        agentSessionID: root.id,
+        dispatchAgents: [
+          {
+            identity: {
+              agentID: "base-developer",
+              baseRole: "build",
+              sessionKind: "build",
+              dispatchAdapterID: "build",
+              runtimeTemplateABIVersion: 1,
+              dispatchAdapterABIVersion: 1,
+              projectionHash: "b".repeat(64),
+            },
+            packageRevision: {
+              scope: "built_in",
+              projectID: null,
+              namespace: "opencorvus",
+              id: "base",
+              version: "1.0.0",
+              packageDigest: "a".repeat(64),
+            },
+            virtualWorkflows: {},
+            capabilityOwner: "platform",
+            label: "terminal-scheduler-tool-table",
+            builtInToolIDs: [],
+            projectedToolIDs: [],
+          } as never,
+        ],
+        terminalConversationAuthority: {
+          taskID,
+          ingressID: Identifier.ascending("artifact"),
+          ingressKind: "operator_message",
+          coordinationRequestID: null,
+          terminalLifecycleReference: {
+            terminalEventID: Identifier.ascending("protocol_event"),
+            terminalStatus: "completed",
+            timeCompleted: now,
+          },
+        },
+      })
 
-  const coordination = projectTerminalConversationTools(table, { ingressKind: "coordination_request" })
-  expect(Object.keys(coordination).sort()).toEqual([
-    "artifact_read",
-    "read",
-    "read_task_message",
-    "respond_agent_coordination",
-  ])
+      for (const toolID of [...TASK_ARTIFACT_SCHEDULER_TOOL_IDS, "publish_interactive_artifact"])
+        expect(Object.hasOwn(tools, toolID)).toBe(true)
+    },
+  })
 })

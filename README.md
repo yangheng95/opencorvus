@@ -53,6 +53,11 @@ Then every layer underneath is a configuration surface. Swap the model, narrow t
 tool set, tighten the permission rules, replace an entire squad, or drive the whole
 harness from the SDK.
 
+Both halves are written in this repository — the harness runtime and the desktop
+application — with no third-party agent engine underneath. That is a design choice
+rather than a boast: it is what makes every layer replaceable. It stands on a great
+deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
+
 <table>
   <tr>
     <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/work-harness.png" alt="OpenCorvus Work Harness" /></td>

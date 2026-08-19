@@ -34,20 +34,22 @@ export const RubricLevelSchema = z
   })
   .strict()
 
-const HeuristicScorerSchema = z
+export const HeuristicShellSpecSchema = z
+  .object({
+    kind: z.literal("shell").describe("shell — run an inline command. Requires: cmd; optional cwd."),
+    cmd: z.string().min(1).describe("Shell command. Exit 0 = pass unless expect.exit_code set."),
+    cwd: z.string().optional(),
+  })
+  .strict()
+
+export const HeuristicScorerSchema = z
   .object({
     type: z
       .literal("heuristic")
       .describe("heuristic — deterministic shell/script check, pass/fail by exit code. Requires: name, spec{kind}."),
     name: z.string().min(1),
     spec: z.discriminatedUnion("kind", [
-      z
-        .object({
-          kind: z.literal("shell").describe("shell — run an inline command. Requires: cmd; optional cwd."),
-          cmd: z.string().min(1).describe("Shell command. Exit 0 = pass unless expect.exit_code set."),
-          cwd: z.string().optional(),
-        })
-        .strict(),
+      HeuristicShellSpecSchema,
       z
         .object({
           kind: z
@@ -69,7 +71,7 @@ const HeuristicScorerSchema = z
   })
   .strict()
 
-const LlmJudgeScorerSchema = z
+export const LlmJudgeScorerSchema = z
   .object({
     type: z
       .literal("llm_judge")
@@ -91,7 +93,7 @@ const LlmJudgeScorerSchema = z
   })
   .strict()
 
-const PrebuiltScorerSchema = z
+export const PrebuiltScorerSchema = z
   .object({
     type: z.literal("prebuilt").describe("prebuilt — the platform-owned rendered visual feedback verification scorer."),
     name: z
@@ -100,7 +102,7 @@ const PrebuiltScorerSchema = z
   })
   .strict()
 
-const ContractAuditScorerSchema = z
+export const ContractAuditScorerSchema = z
   .object({
     type: z
       .literal("contract_audit")
@@ -122,6 +124,26 @@ const ContractAuditScorerSchema = z
   })
   .strict()
 
+/**
+ * How an AcceptanceSpec is to be proven — a specification the Architect writes
+ * and downstream consumers act on, not a job the Host runs.
+ *
+ * Worth stating because the shape invites the opposite reading: `expect.status`
+ * and `expect.exit_code` look like assertions something evaluates. Nothing in
+ * the Host does. These specs are rendered into prompts by `renderSpecsAsText`
+ * and carried out by the projected executor and the integrity team, which is
+ * what `architect-core.txt` means by leaving the audit to review consumers.
+ * The Host's own scorer execution is a separate taxonomy — `evaluator_kind` on
+ * `MetricScorerSpec`, dispatched in `metrics/executor.ts` — that shares the
+ * word "scorer" and the member name `prebuilt` with this union and nothing
+ * else.
+ *
+ * A 762-line `runContractAudit` once sat in this directory implementing the
+ * `contract_audit` member Host-side. It had no importer at any point and was
+ * deleted rather than wired: the check it duplicated already exists as
+ * `architect/reference-integrity.ts`, which rejects contract IDs the graph
+ * does not declare.
+ */
 export const ScorerSchema = z.discriminatedUnion("type", [
   HeuristicScorerSchema,
   LlmJudgeScorerSchema,

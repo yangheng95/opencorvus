@@ -11,7 +11,7 @@ import { readTaskArtifactRef } from "@/task-artifact/store"
 import {
   isEvaluationReportPassing,
   WEBPAGE_REFERENCE_COMPARISON_SSIM_PASS_THRESHOLD,
-} from "@/verification/visual/evaluate"
+} from "@/browser-preview/visual/evaluate"
 import {
   findBrowserPreviewTargetByID,
   normalizeRuntimePathRefs,
@@ -406,7 +406,7 @@ function assertSliceWithinSource(input: {
 }
 
 async function evaluateSliceVisual(originalImage: Uint8Array, renderedImage: Uint8Array) {
-  const { evaluateVisual } = await import("@/verification/visual/evaluate")
+  const { evaluateVisual } = await import("@/browser-preview/visual/evaluate")
   return evaluateVisual({ originalImage: pngDataUrl(originalImage), renderedImage: pngDataUrl(renderedImage) })
 }
 

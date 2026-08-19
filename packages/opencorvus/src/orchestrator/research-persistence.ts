@@ -33,30 +33,54 @@ function deterministicContractIssues(error: unknown): DispatchFailureIssue[] | u
   return undefined
 }
 
-export function persistResearchArtifactBestEffort(input: {
+type ResearchPersistenceInput = {
   taskID: string
   dispatchID: string
   component: "deep-research" | "frontend-research"
-  operation: "persist-research-brief" | "persist-partial-research-brief"
-  delivery: "complete" | "incomplete"
   sessionID: string
   finalMessageID: string
   persist: () => string
   recordInfrastructure?: typeof recordTaskInfrastructureErrorBestEffort
-}): DispatchOutcomeResult {
+}
+
+/** A brief that stands on its own: the dispatch is done. */
+export function persistCompleteResearchBrief(input: ResearchPersistenceInput): DispatchOutcomeResult {
+  return persistResearchArtifactBestEffort({
+    ...input,
+    operation: "persist-research-brief",
+    succeeded: () => DispatchOutcome.terminal({ sessionID: input.sessionID, finalMessageID: input.finalMessageID }),
+  })
+}
+
+/** A brief the worker could not finish: the domain stays incomplete. */
+export function persistPartialResearchBrief(input: ResearchPersistenceInput): DispatchOutcomeResult {
+  return persistResearchArtifactBestEffort({
+    ...input,
+    operation: "persist-partial-research-brief",
+    succeeded: (artifactID) =>
+      DispatchOutcome.domainIncomplete({
+        sessionID: input.sessionID,
+        finalMessageID: input.finalMessageID,
+        domain: input.component.replaceAll("-", "_"),
+        domainArtifact: exactEngineArtifactLocator({ taskID: input.taskID, artifactID }),
+      }),
+  })
+}
+
+/**
+ * Shared failure handling for both. The success shape and the operation name
+ * used to be two separate parameters that every caller had to keep in
+ * agreement — `delivery: "incomplete"` was only ever passed together with
+ * `operation: "persist-partial-research-brief"`, and nothing checked that.
+ */
+function persistResearchArtifactBestEffort(
+  input: ResearchPersistenceInput & {
+    operation: "persist-research-brief" | "persist-partial-research-brief"
+    succeeded: (artifactID: string) => DispatchOutcomeResult
+  },
+): DispatchOutcomeResult {
   try {
-    const artifactID = input.persist()
-    return input.delivery === "incomplete"
-      ? DispatchOutcome.domainIncomplete({
-          sessionID: input.sessionID,
-          finalMessageID: input.finalMessageID,
-          domain: input.component.replaceAll("-", "_"),
-          domainArtifact: exactEngineArtifactLocator({ taskID: input.taskID, artifactID }),
-        })
-      : DispatchOutcome.terminal({
-          sessionID: input.sessionID,
-          finalMessageID: input.finalMessageID,
-        })
+    return input.succeeded(input.persist())
   } catch (error) {
     const failureIssues = deterministicContractIssues(error)
     const reason = error instanceof Error ? error.message : String(error)

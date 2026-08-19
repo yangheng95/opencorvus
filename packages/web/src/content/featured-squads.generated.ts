@@ -28,8 +28,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "evolution-lab",
-      "version": "2026.08.13.1",
-      "digest": "572cafaa54713218cb0428befd4433f49923ef3531009beaa44194405d0d6e98"
+      "version": "2026.08.18.1",
+      "digest": "e32137194c72f84cbda0a7323980c2be619a93d3d3f761a150364337a0eddc7c"
     },
     "displayLabel": {
       "root": "Evolution Lab",

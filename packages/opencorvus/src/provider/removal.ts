@@ -1,6 +1,6 @@
 import path from "path"
+import { acquireProcessLock } from "@/util/process-lock"
 import fs from "fs/promises"
-import lockfile from "proper-lockfile"
 import z from "zod"
 import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { Auth } from "@/auth"
@@ -76,7 +76,7 @@ export async function removeProvider(input: {
   await fs.mkdir(path.dirname(ownerPath), { recursive: true })
   await Filesystem.writeAtomicIfAbsent(ownerPath, "provider removal owner\n", 0o600)
   return withKeyedLock(removalLocks, ownerPath, async () => {
-    const release = await lockfile.lock(ownerPath, { realpath: false })
+    const release = await acquireProcessLock(ownerPath, { realpath: false })
     try {
       if (input.scope === "global") await commitGlobalConfig(input.providerID)
       else await commitProjectConfig(input.providerID)

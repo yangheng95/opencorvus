@@ -1,26 +1,17 @@
 /**
- * Visual similarity evaluator — Browser Runtime screenshot + SSIM check.
- * SSIM means structural similarity index measure.
+ * Live page capture — renders an http(s) target with the Browser Runtime and
+ * returns the screenshot plus the DOM, glyph-coverage and interaction probes
+ * collected during that render.
  *
- * The current implementation lives here as a library so the Delivery Slice
- * evaluator can run it inside the orchestrator. Every fig2code-style task that lists a
- * visual reference automatically gets a structural-similarity check without
- * any external pipeline tooling.
- *
- * This module is the single source of truth for thresholds and SSIM map analysis:
- *   - Render a live http(s) target URL with Chromium at the reference's
- *     natural viewport (or a caller-supplied size).
- *   - Compare against the reference PNG using SSIM. Fail when either
- *     `mean SSIM < threshold` OR the worst-5% window SSIM (`p5`) drops below
- *     `worstThreshold` — protects against partial structural collapse that
- *     a generous mean would hide.
- *   - No fallback: missing browser, missing reference, or size-mismatched
- *     images all produce explicit failures.
+ * This module used to also carry a second SSIM comparison engine
+ * (`runVisualDiff`/`summarizeVisualReport`) whose only export path was a
+ * barrel nothing imported. The live visual verdict is
+ * `verification/visual/evaluate.ts`; a second scorer with different math and
+ * different thresholds could only ever disagree with it.
  */
 import fs from "node:fs/promises"
 import path from "node:path"
 import { PNG } from "pngjs"
-import ssim from "ssim.js"
 import {
   BrowserNodeSidecarError,
   runExplicitBrowserNodeSidecar,
@@ -28,55 +19,8 @@ import {
 } from "@/browser/runtime/node-executor"
 import { resolveBrowserNodeSidecarRuntime } from "@/browser/runtime/node-sidecar"
 import { BrowserRuntime } from "@/browser/runtime"
-import {
-  runtimeCaptureFailedLayers,
-  type RuntimeCaptureLayers,
-  type RuntimeInteractionProbe,
-} from "@/runtime/capture-contract"
+import type { RuntimeCaptureLayers, RuntimeInteractionProbe } from "@/runtime/capture-contract"
 import { pngLuminanceVariance } from "@/runtime/png-metrics"
-
-export interface VisualDiffOptions {
-  processAuthority: BrowserNodeSidecarAuthority
-  /** Live http(s) URL. File paths are intentionally rejected by renderPage. */
-  rendered: string
-  /** Absolute path to the reference PNG. */
-  reference: string
-  /** Force a specific browser viewport. Defaults to the reference image's
-   *  native pixel size, which is the common case for fig2code. */
-  viewport?: { width: number; height: number }
-  /** Explicit mean SSIM floor. */
-  threshold: number
-  /** Explicit worst-5%-window SSIM floor. */
-  worstThreshold: number
-  /** Directory to write `rendered.png` and `diff.json`. Created if absent. */
-  outDir: string
-  /** Optional override for the chrome/edge executable. */
-  browserExecutable?: string
-  /** Explicit browser launch timeout. */
-  browserLaunchTimeoutMs: number
-  /** Explicit page navigation inactivity timeout. */
-  navigationTimeoutMs: number
-  /** Explicit settle delay before capture. */
-  settleMs: number
-  /** Run Chromium headless. Default false so visual evidence remains operator-visible. */
-  headless?: boolean
-}
-
-export interface VisualDiffReport {
-  passed: boolean
-  /** "ok" if SSIM and runtime capture checks passed, otherwise a categorical reason. */
-  reason: "ok" | "size_mismatch" | "below_mean" | "below_worst" | "below_both" | "runtime_layers"
-  mssim: number
-  threshold: number
-  worstThreshold: number
-  distribution: { min: number; p1: number; p5: number; p25: number; mean: number }
-  checks: { meanPassed: boolean; worstPassed: boolean; runtimePassed: boolean }
-  runtime: { passed: boolean; failedLayers: string[]; layers: RuntimeCaptureLayers }
-  viewport: { width: number; height: number }
-  rendered: { path: string; width: number; height: number }
-  reference: { path: string; width: number; height: number }
-  ssimPerformanceMs: unknown
-}
 
 async function decodePNG(filePath: string): Promise<PNG> {
   const buf = await fs.readFile(filePath)
@@ -711,126 +655,3 @@ main();
  *  + integrity acceptance multimodal attachments), which produces actionable
  *  "header is missing N button, sidebar 20px too wide" feedback instead of
  *  a single opaque similarity number. */
-export async function runVisualDiff(opts: VisualDiffOptions): Promise<VisualDiffReport> {
-  const threshold = opts.threshold
-  const worstThreshold = opts.worstThreshold
-  for (const [name, value] of [
-    ["threshold", threshold],
-    ["worstThreshold", worstThreshold],
-  ] as const) {
-    if (!Number.isFinite(value) || value <= 0 || value > 1) {
-      throw new Error(`runVisualDiff: invalid ${name} (expected 0..1): ${value}`)
-    }
-  }
-  if (!Number.isFinite(opts.browserLaunchTimeoutMs) || opts.browserLaunchTimeoutMs <= 0) {
-    throw new Error(`runVisualDiff: invalid browserLaunchTimeoutMs: ${opts.browserLaunchTimeoutMs}`)
-  }
-  if (!Number.isFinite(opts.navigationTimeoutMs) || opts.navigationTimeoutMs <= 0) {
-    throw new Error(`runVisualDiff: invalid navigationTimeoutMs: ${opts.navigationTimeoutMs}`)
-  }
-  if (!Number.isFinite(opts.settleMs) || opts.settleMs <= 0) {
-    throw new Error(`runVisualDiff: invalid settleMs: ${opts.settleMs}`)
-  }
-  await fs.access(opts.reference).catch(() => {
-    throw new Error(`runVisualDiff: reference image not found: ${opts.reference}`)
-  })
-
-  const refImgProbe = await decodePNG(opts.reference)
-  const rendered = await renderPage({
-    processAuthority: opts.processAuthority,
-    rendered: opts.rendered,
-    outDir: opts.outDir,
-    viewport: opts.viewport ?? { width: refImgProbe.width, height: refImgProbe.height },
-    browserExecutable: opts.browserExecutable,
-    browserLaunchTimeoutMs: opts.browserLaunchTimeoutMs,
-    navigationTimeoutMs: opts.navigationTimeoutMs,
-    settleMs: opts.settleMs,
-    headless: opts.headless,
-  })
-  const { renderedPath, viewport } = rendered
-  const runtimeFailedLayers = runtimeCaptureFailedLayers(rendered.capture.layers)
-  const runtimePassed = runtimeFailedLayers.length === 0
-  const runtimeReport = {
-    passed: runtimePassed,
-    failedLayers: runtimeFailedLayers,
-    layers: rendered.capture.layers,
-  }
-
-  const rendImg = await decodePNG(renderedPath)
-  const refImg = refImgProbe
-  if (rendImg.width !== refImg.width || rendImg.height !== refImg.height) {
-    const report: VisualDiffReport = {
-      passed: false,
-      reason: "size_mismatch",
-      mssim: Number.NaN,
-      threshold,
-      worstThreshold,
-      distribution: { min: Number.NaN, p1: Number.NaN, p5: Number.NaN, p25: Number.NaN, mean: Number.NaN },
-      checks: { meanPassed: false, worstPassed: false, runtimePassed },
-      runtime: runtimeReport,
-      viewport,
-      rendered: { path: renderedPath, width: rendImg.width, height: rendImg.height },
-      reference: { path: path.resolve(opts.reference), width: refImg.width, height: refImg.height },
-      ssimPerformanceMs: undefined,
-    }
-    await fs.writeFile(path.join(opts.outDir, "diff.json"), JSON.stringify(report, null, 2))
-    return report
-  }
-
-  // pngjs returns `Buffer` for `data`; ssim.js types it as `Uint8ClampedArray`.
-  // The bytes are bit-identical RGBA, so a structural cast is safe — no copy.
-  const { mssim, ssim_map, performance } = ssim(
-    { data: rendImg.data as unknown as Uint8ClampedArray, width: rendImg.width, height: rendImg.height },
-    { data: refImg.data as unknown as Uint8ClampedArray, width: refImg.width, height: refImg.height },
-  )
-  const mapData = ssim_map?.data ? Array.from(ssim_map.data as Float32Array | number[]) : []
-  mapData.sort((a, b) => a - b)
-  const percentile = (p: number) =>
-    mapData.length === 0 ? Number.NaN : mapData[Math.min(mapData.length - 1, Math.floor(p * mapData.length))]
-  const minSSIM = mapData[0] ?? Number.NaN
-  const p1 = percentile(0.01)
-  const p5 = percentile(0.05)
-  const p25 = percentile(0.25)
-
-  const meanPassed = mssim >= threshold
-  const worstPassed = Number.isFinite(p5) ? p5 >= worstThreshold : false
-  const passed = runtimePassed && meanPassed && worstPassed
-  const reason: VisualDiffReport["reason"] = passed
-    ? "ok"
-    : !meanPassed && !worstPassed
-      ? "below_both"
-      : !meanPassed
-        ? "below_mean"
-        : !worstPassed
-          ? "below_worst"
-          : "runtime_layers"
-
-  const report: VisualDiffReport = {
-    passed,
-    reason,
-    mssim,
-    threshold,
-    worstThreshold,
-    distribution: { min: minSSIM, p1, p5, p25, mean: mssim },
-    checks: { meanPassed, worstPassed, runtimePassed },
-    runtime: runtimeReport,
-    viewport,
-    rendered: { path: renderedPath, width: rendImg.width, height: rendImg.height },
-    reference: { path: path.resolve(opts.reference), width: refImg.width, height: refImg.height },
-    ssimPerformanceMs: performance,
-  }
-  await fs.writeFile(path.join(opts.outDir, "diff.json"), JSON.stringify(report, null, 2))
-  return report
-}
-
-/** Format a `VisualDiffReport` as a one-line evidence string suitable for
- *  CheckResult.output / HostCheckObservation.evidence. */
-export function summarizeVisualReport(report: VisualDiffReport): string {
-  const fmt = (n: number) => (Number.isFinite(n) ? n.toFixed(4) : "n/a")
-  if (report.reason === "size_mismatch") {
-    const runtimeSuffix = report.runtime.passed ? "" : ` runtime_failed=${report.runtime.failedLayers.join(",")}`
-    return `size mismatch — rendered=${report.rendered.width}x${report.rendered.height} reference=${report.reference.width}x${report.reference.height}${runtimeSuffix}`
-  }
-  const runtimeSuffix = report.runtime.passed ? "" : ` runtime_failed=${report.runtime.failedLayers.join(",")}`
-  return `mean=${fmt(report.mssim)} (≥${report.threshold}) p5=${fmt(report.distribution.p5)} (≥${report.worstThreshold}) min=${fmt(report.distribution.min)}${runtimeSuffix}`
-}

@@ -23,8 +23,34 @@ export type LandingCopy = {
     readonly titleLines: readonly [string, string]
     readonly description: string
     readonly ctas: readonly LandingCta[]
+    /** The hero's download control. Labels only — the assets come from the release manifest. */
+    readonly download: {
+      readonly label: string
+      /** Prefixed to the detected platform so the button still reads as an action. */
+      readonly verb: string
+      readonly detecting: string
+      readonly menuLabel: string
+      readonly allPlatforms: string
+      readonly releaseNote: string
+    }
     readonly terminalLabel: string
     readonly terminals: readonly { readonly id: string; readonly label: string; readonly lines: readonly string[] }[]
+  }
+  /**
+   * The recorded run under the hero. It replaced a twenty-frame screenshot carousel: the frames
+   * each proved one renderer, but a reader had to assemble the run from stills, and the strongest
+   * thing about the product — that one prompt carries all the way to a finished file — was the one
+   * thing twenty separate pictures could not show.
+   *
+   * `label` is the player's accessible name and `caption` is provenance, so both sit outside the
+   * body budget for the same reason alt text does. The title and lead are inside it.
+   */
+  readonly demo: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly label: string
+    readonly caption: string
   }
   readonly why: {
     readonly eyebrow: string
@@ -75,7 +101,8 @@ export type LandingCopy = {
     readonly desktopTitle: string
     readonly desktopBody: string
     readonly desktopCta: string
-    readonly detecting: string
+    /** Must match an install path README.md actually documents. */
+    readonly serveCommand: string
     readonly copy: string
     readonly copied: string
     readonly trustTitle: string
@@ -112,11 +139,18 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       titleLines: ["自动化地优化", "你的每日工作流"],
       description: "把每天重复的那些流程交给 Agent。模型、工具、权限、专家团，都能换。",
       ctas: [
-        { label: "开始使用", href: "#start", variant: "primary" },
         { label: "查看源码", href: GITHUB, variant: "secondary" },
         { label: "读文档", href: "/start/quickstart/", variant: "secondary" },
         { label: "专家团", href: "/market/", variant: "secondary" },
       ],
+      download: {
+        label: "下载桌面端",
+        verb: "下载",
+        detecting: "识别平台中…",
+        menuLabel: "选择平台",
+        allPlatforms: "全部平台与格式",
+        releaseNote: "从 GitHub Release 下载",
+      },
       terminalLabel: "两条路",
       terminals: [
         {
@@ -140,6 +174,13 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           ],
         },
       ],
+    },
+    demo: {
+      eyebrow: "实录",
+      title: "一次完整的运行",
+      lead: "NVDA 近一年日线进去，K 线图、技术分析和 Word 报告出来。",
+      label: "OpenCorvus 桌面端运行录屏",
+      caption: "桌面端 v0.0.47beta 的一次真实运行 · 1 分 44 秒 · 无音轨",
     },
     why: {
       eyebrow: "特性",
@@ -211,10 +252,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       cliTitle: "源码构建",
       cliBody: "装好 Bun，克隆、构建、自检。",
       cliCommand: "git clone https://github.com/yangheng95/opencorvus.git",
-      desktopTitle: "桌面端",
-      desktopBody: "已识别你的平台，下载即可运行。",
-      desktopCta: "查看全部平台",
-      detecting: "正在识别平台…",
+      desktopTitle: "已经装好了？",
+      desktopBody: "在你的仓库里起服务，工作台开在本地。",
+      desktopCta: "读快速开始",
+      serveCommand: 'bun "$OPENCORVUS_SOURCE" serve',
       copy: "复制",
       copied: "已复制",
       trustTitle: "三条边界",
@@ -250,6 +291,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           a: "一个能打开看的能力包：角色、工作流、Skills、工具、适用说明、版本和 digest 冻在一起。任务创建时锁死一个版本，中途不会被悄悄换掉。",
         },
         {
+          q: "这套东西是自己写的吗？",
+          a: "后端 harness 和桌面前端都在这个仓库里，底下没有套第三方 Agent 引擎——这样每一层才换得动。它站在很多开源项目的肩膀上：Bun、AI SDK、Solid、Tauri。",
+        },
+        {
           q: "无人值守能跑多久？",
           a: "只在你的运行时在线时。它不是托管服务，也不承诺无限自治——结果取决于选的模型、能访问的来源和拿到的证据。",
         },
@@ -278,11 +323,18 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       titleLines: ["Automate the workflow", "you repeat every day"],
       description: "Hand the repeat work to an Agent. Models, tools, permissions, squads — all replaceable.",
       ctas: [
-        { label: "Get started", href: "#start", variant: "primary" },
         { label: "View source", href: GITHUB, variant: "secondary" },
         { label: "Read the docs", href: "/start/quickstart/", variant: "secondary" },
         { label: "Expert Squads", href: "/market/", variant: "secondary" },
       ],
+      download: {
+        label: "Download",
+        verb: "Download",
+        detecting: "Detecting platform…",
+        menuLabel: "Choose a platform",
+        allPlatforms: "All platforms and formats",
+        releaseNote: "Served from the GitHub Release",
+      },
       terminalLabel: "Two ways in",
       terminals: [
         {
@@ -306,6 +358,13 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           ],
         },
       ],
+    },
+    demo: {
+      eyebrow: "Recorded run",
+      title: "One full run",
+      lead: "NVDA's last year of daily candles in; chart, technical read and Word report out.",
+      label: "Screen recording of an OpenCorvus desktop run",
+      caption: "One real run on desktop v0.0.47beta · 1 min 44 s · no audio track",
     },
     why: {
       eyebrow: "Why",
@@ -377,10 +436,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       cliTitle: "Build from source",
       cliBody: "With Bun installed, clone the repository, build, and self-check.",
       cliCommand: "git clone https://github.com/yangheng95/opencorvus.git",
-      desktopTitle: "Desktop",
-      desktopBody: "Your platform is detected below. Download and run.",
-      desktopCta: "All platforms",
-      detecting: "Detecting your platform…",
+      desktopTitle: "Already installed?",
+      desktopBody: "Start the server inside your repository; the workbench opens locally.",
+      desktopCta: "Read the quickstart",
+      serveCommand: 'bun "$OPENCORVUS_SOURCE" serve',
       copy: "Copy",
       copied: "Copied",
       trustTitle: "Three boundaries",
@@ -414,6 +473,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
         {
           q: "What exactly is an Expert Squad?",
           a: "An inspectable capability package: roles, workflow, Skills, tools, selection guidance, version, and digest frozen together. A Task pins one exact revision and cannot silently switch it mid-life.",
+        },
+        {
+          q: "Is it built on another agent?",
+          a: "The harness and the desktop app are both written in this repository, with no third-party agent engine underneath — that is what makes every layer replaceable. It stands on plenty of open source: Bun, the AI SDK, Solid, Tauri.",
         },
         {
           q: "How long can it run unattended?",

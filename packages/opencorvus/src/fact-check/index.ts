@@ -21,7 +21,7 @@ import { createReadonlyRetrievalTools } from "@/agent/retrieval-tools"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { createFactCheckOutputTools, type FactCheckCollector } from "./tools"
 import type { FactCheckReview } from "./schema"
-import { projectFactCheckFacts, type FactCheckFactProjection } from "./fact-projection"
+import { projectFactCheckFacts, type FactCheckFactProjection } from "./discovery-instruction"
 import { requireTask } from "@/engine/store"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 

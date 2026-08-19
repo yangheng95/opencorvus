@@ -35,6 +35,7 @@ function measurer(locale: keyof typeof BUDGET) {
 function bodyStrings(copy: LandingCopy): string[] {
   return [
     copy.hero.description,
+    copy.demo.lead,
     copy.why.lead,
     ...copy.why.pillars.map((pillar) => pillar.body),
     copy.why.compare.lead,
@@ -51,11 +52,12 @@ function bodyStrings(copy: LandingCopy): string[] {
 }
 
 function sectionTitles(copy: LandingCopy): string[] {
-  return [copy.why.title, copy.start.title, copy.faq.title, copy.join.title]
+  return [copy.demo.title, copy.why.title, copy.start.title, copy.faq.title, copy.join.title]
 }
 
 function leads(copy: LandingCopy): string[] {
   return [
+    copy.demo.lead,
     copy.why.lead,
     copy.squads.lead,
     copy.start.lead,
@@ -163,6 +165,7 @@ describe("landing copy integrity", () => {
     for (const locale of ["zh-cn", "root"] as const) {
       const copy = landingCopy[locale]
       expect(readme).toContain(copy.start.cliCommand)
+      expect(readme).toContain(copy.start.serveCommand)
 
       const commands = copy.hero.terminals
         .flatMap((terminal) => terminal.lines)

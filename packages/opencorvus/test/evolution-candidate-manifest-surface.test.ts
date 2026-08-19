@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { compareCandidateIntegrity } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/candidate-integrity"
+import { compareCandidateIntegrity } from "@squads/evolution-lab/lib/evolution-lab/candidate-integrity"
 
 const digest = (seed: string) => seed.repeat(64).slice(0, 64)
 
@@ -115,24 +115,124 @@ describe("Evolution candidate manifest surface", () => {
     expect(comparison.changed_paths).toEqual(["agents/worker/system.md", "expert-squad.jsonc"])
   })
 
-  test("rejects a capability grant change disguised as a descriptive revision", () => {
-    const parent = packageValue(baseline)
+  // T2 stays a declared evolution surface, but only downward: a candidate may
+  // drop or redistribute what its parent held and may never introduce a grant
+  // the parent did not have. The upward case is covered below.
+  test("accepts a capability grant change that stays inside what the parent already held", () => {
+    const parent = packageValue({ ...baseline, schedulerTools: ["read", "write"] })
     const candidate = packageValue({
       ...baseline,
       version: "2026.08.17.2",
       description: "evolved description",
-      schedulerTools: ["read", "write"],
+      schedulerTools: ["read"],
     })
-    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(
-      /frozen capability, reference, topology, or dependency field/,
-    )
+    expect(compareCandidateIntegrity(parent, candidate).changed_paths).toEqual(["expert-squad.jsonc"])
   })
 
   test("rejects a revision that changes nothing at all", () => {
     const parent = packageValue(baseline)
     const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
     expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(
-      /must change at least one V1 mutable text path or declared descriptive field/,
+      /must change at least one mutable text path or declared manifest field/,
     )
+  })
+
+  test("accepts a new agent with its own prompt file", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const agents = candidate.manifest.capability_projection.agents as Record<string, unknown>
+    agents.reviewer = {
+      label: "Reviewer",
+      description: "added by evolution",
+      base_role: "delegated-worker",
+      prompt: "agents/reviewer/system.md",
+    }
+    candidate.files.push({ path: "agents/reviewer/system.md", sha256: digest("7"), bytes: 10, utf8_text: true })
+    const comparison = compareCandidateIntegrity(parent, candidate)
+    expect(comparison.changed_paths).toEqual(["agents/reviewer/system.md", "expert-squad.jsonc"])
+  })
+
+  test("rejects a manifest that names a prompt file the package does not ship", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const agents = candidate.manifest.capability_projection.agents as Record<string, unknown>
+    agents.ghost = { label: "Ghost", description: "no prompt", base_role: "delegated-worker", prompt: "agents/ghost.md" }
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(
+      /agent ghost prompt names missing package file agents\/ghost\.md/,
+    )
+  })
+
+  test("rejects a workflow node that depends on an undeclared node", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const workflows = candidate.manifest.capability_projection.virtual_workflows as Record<string, any>
+    workflows.main.nodes.worker.depends_on = ["absent"]
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/depends on undeclared node absent/)
+  })
+
+  test("rejects a dependency cycle, which would deadlock dispatch", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const workflows = candidate.manifest.capability_projection.virtual_workflows as Record<string, any>
+    workflows.main.nodes.second = { agent_id: "worker", description: "second", depends_on: ["worker"] }
+    workflows.main.nodes.worker.depends_on = ["second"]
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/dependency cycle/)
+  })
+
+  test("rejects a candidate that grants itself a built-in Tool the parent never held", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2", schedulerTools: ["read", "bash"] })
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(
+      /Candidate grants built_in_tool_ids .*received: \["bash"\], expected: a subset of \["read"\]/,
+    )
+  })
+
+  test("rejects a newly added agent that grants itself a package Tool the parent never held", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const agents = candidate.manifest.capability_projection.agents as Record<string, unknown>
+    agents.reviewer = {
+      label: "Reviewer",
+      description: "added by evolution",
+      base_role: "delegated-worker",
+      prompt: "agents/reviewer/system.md",
+      package_tool_refs: ["surface-target/shared/escalate"],
+    }
+    candidate.files.push({ path: "agents/reviewer/system.md", sha256: digest("7"), bytes: 10, utf8_text: true })
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/Candidate grants package_tool_refs/)
+  })
+
+  test("accepts a newly added agent that reuses a reference the parent already declared elsewhere", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const agents = candidate.manifest.capability_projection.agents as Record<string, unknown>
+    agents.reviewer = {
+      label: "Reviewer",
+      description: "added by evolution",
+      base_role: "delegated-worker",
+      prompt: "agents/reviewer/system.md",
+      package_tool_refs: ["surface-target/shared/run"],
+    }
+    candidate.files.push({ path: "agents/reviewer/system.md", sha256: digest("7"), bytes: 10, utf8_text: true })
+    expect(compareCandidateIntegrity(parent, candidate).changed_paths).toEqual([
+      "agents/reviewer/system.md",
+      "expert-squad.jsonc",
+    ])
+  })
+
+  test("rejects moving an agent onto a base role the parent does not use", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const agents = candidate.manifest.capability_projection.agents as Record<string, any>
+    agents.worker.base_role = "build"
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/Candidate grants base_role/)
+  })
+
+  test("still refuses to touch an executable file", () => {
+    const parent = packageValue(baseline)
+    const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
+    const runTool = candidate.files.find((file) => file.path === "tools/run.ts")!
+    runTool.sha256 = digest("8")
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/changed frozen file tools\/run\.ts/)
   })
 })

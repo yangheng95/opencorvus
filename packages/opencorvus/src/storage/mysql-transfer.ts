@@ -10,6 +10,7 @@ import {
   engineArtifactCatalogMetadataSHA256,
 } from "@/engine/artifact-catalog-metadata"
 import { engineArtifactCatalogLabelIndex } from "@/engine/artifact-catalog-constants"
+import { HOST_OWNED_MEMORY_KINDS } from "@/memory/types"
 import type { EngineArtifactKind } from "@/engine/engine.sql"
 import { collectTables, SCHEMA_DDL, tableName } from "./ddl"
 import { Database, queryAllFinalized } from "./db"
@@ -583,8 +584,18 @@ function insertRows(sqlite: BunDatabase, table: TableShape, rows: Array<Record<s
 function rebuildMemoryFts(sqlite: BunDatabase) {
   // FTS means Full-Text Search. The SQLite virtual table is derived from
   // memory_chunk rows, so transfer snapshots carry only the source rows.
+  // Host-owned kinds are never indexed while running — their chunk content is
+  // a JSON envelope, not prose — so the rebuild has to exclude them too or a
+  // transferred database answers searches the source database could not.
+  const excluded = HOST_OWNED_MEMORY_KINDS.map((kind) => `'${kind}'`).join(", ")
   sqlite.run("DELETE FROM memory_fts")
-  sqlite.run("INSERT INTO memory_fts (content, chunk_id, project_id) SELECT content, id, project_id FROM memory_chunk")
+  sqlite.run(
+    `INSERT INTO memory_fts (content, chunk_id, project_id)
+     SELECT mc.content, mc.id, mc.project_id
+     FROM memory_chunk mc
+     JOIN memory_file mf ON mf.id = mc.file_id
+     WHERE mf.kind NOT IN (${excluded})`,
+  )
 }
 
 function deepFreeze<T>(value: T): T {

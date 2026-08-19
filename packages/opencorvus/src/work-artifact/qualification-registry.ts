@@ -49,9 +49,6 @@ const qualifications = new Map<WorkArtifactQualificationID, WorkArtifactQualific
 ])
 
 export const WorkArtifactQualificationRegistry = Object.freeze({
-  all(): readonly WorkArtifactQualification[] {
-    return WORK_ARTIFACT_QUALIFICATION_IDS.map((id) => qualifications.get(id)!)
-  },
   require(id: WorkArtifactQualificationID): WorkArtifactQualification {
     const qualification = qualifications.get(id)
     if (!qualification) throw new Error(`Unknown Work Artifact qualification: ${id}`)

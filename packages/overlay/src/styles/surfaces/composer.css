@@ -968,6 +968,39 @@
   text-align: center;
 }
 
+.composer-reference-market {
+  display: grid;
+  gap: calc(4px * var(--ui-scale));
+  padding-top: calc(6px * var(--ui-scale));
+  border-top: 1px solid var(--border-subtle);
+  min-width: 0;
+}
+
+.composer-reference-market-head {
+  display: flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.composer-reference-market-error {
+  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  color: var(--text-bad, var(--text-muted));
+  font-size: var(--ui-font-meta);
+  overflow-wrap: anywhere;
+}
+
+.composer-reference-market .composer-reference-option {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  min-width: 0;
+}
+
 .composer-model-selector {
   position: relative;
   display: flex;

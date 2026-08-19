@@ -9,6 +9,8 @@ import {
   sameTaskArtifactRef,
   WorkspaceTreeSnapshotSchema,
   workspaceTreeDigest,
+  MetricScorerAuthoringSpecSchema,
+  metricScorerSpecFromAuthoring,
   tool,
   type ArtifactReadLocator,
   type EngineArtifactLocator,
@@ -19,6 +21,8 @@ import {
   EvolutionArtifactIntegrityError,
   EvolutionArtifactSchemas,
   EvolutionCampaignPublishInputSchema,
+  EvolutionCandidateRevisionPublishInputSchema,
+  EvolutionEvaluationResultPublishInputSchema,
   EvolutionMetricReceiptSchema,
   EvolutionPackagePublishableArtifactInputSchema,
   parseEvolutionArtifact,
@@ -64,60 +68,10 @@ const CampaignModelConfigurationSchema = tool.schema
   })
   .strict()
 
-const CampaignJudgeScorerAssetSchema = tool.schema
-  .object({
-    schema_version: tool.schema.literal(1),
-    scorer_id: tool.schema.string().min(1),
-    evaluator_kind: tool.schema.literal("judge"),
-    provider_id: tool.schema.string().min(1),
-    model_id: tool.schema.string().min(1),
-    streaming: tool.schema.literal(true),
-    retries: tool.schema.number().int().nonnegative(),
-    inactivity_timeout_ms: tool.schema.number().int().positive(),
-    max_evidence_bytes: tool.schema.number().int().positive(),
-    direction: tool.schema.enum(["higher_better", "lower_better"]),
-    target: tool.schema.number(),
-    floor: tool.schema.number(),
-    weight: tool.schema.number().nonnegative(),
-    unit: tool.schema.string().min(1),
-    observation_class: tool.schema.enum(["quality", "diagnostic", "efficiency"]),
-    criteria: tool.schema.string().min(1),
-    rubric: tool.schema
-      .array(
-        tool.schema
-          .object({
-            score: tool.schema.number(),
-            label: tool.schema.string().min(1),
-            anchor: tool.schema.string().min(1),
-            passes: tool.schema.boolean(),
-          })
-          .strict(),
-      )
-      .min(1),
-  })
-  .strict()
-
-const CampaignQueryScorerAssetSchema = tool.schema
-  .object({
-    schema_version: tool.schema.literal(1),
-    scorer_id: tool.schema.string().min(1),
-    evaluator_kind: tool.schema.literal("query"),
-    direction: tool.schema.enum(["higher_better", "lower_better"]),
-    target: tool.schema.number(),
-    floor: tool.schema.number(),
-    weight: tool.schema.number().nonnegative(),
-    unit: tool.schema.string().min(1),
-    observation_class: tool.schema.enum(["quality", "diagnostic", "efficiency"]),
-    description: tool.schema.string().min(1),
-    query: tool.schema.literal("constant_value"),
-    value: tool.schema.number(),
-  })
-  .strict()
-
-const CampaignScorerAssetSchema = tool.schema.discriminatedUnion("evaluator_kind", [
-  CampaignJudgeScorerAssetSchema,
-  CampaignQueryScorerAssetSchema,
-])
+// Campaign scorer assets are validated by the canonical authoring schema, so
+// the kind set here can never fall behind what the executor runs. The Host
+// stamps scorer_revision from the published asset bytes.
+const CampaignScorerAssetSchema = MetricScorerAuthoringSpecSchema
 
 async function readJSONResource(resource: TaskArtifactRef, context: ToolContext) {
   if (resource.media_type !== "application/json")
@@ -231,11 +185,30 @@ const evolutionPublicationControls = {
   source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
 }
 
-const EvolutionPackagePublicationArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
-  ...EvolutionPackagePublishableArtifactInputSchema.options.map((branch) =>
-    branch.extend(evolutionPublicationControls),
-  ),
-])
+const evolutionPublicationBranches = EvolutionPackagePublishableArtifactInputSchema.options.map((branch) =>
+  branch.extend(evolutionPublicationControls),
+)
+// `.map` widens the branch tuple to a plain array; the discriminated union
+// constructor needs the non-empty tuple shape back. The source union is
+// non-empty by construction, so the assertion restates a fact zod cannot see.
+type EvolutionPublicationBranch = (typeof evolutionPublicationBranches)[number]
+const EvolutionPackagePublicationArtifactInputSchema = tool.schema.discriminatedUnion(
+  "artifact_type",
+  evolutionPublicationBranches as [EvolutionPublicationBranch, ...EvolutionPublicationBranch[]],
+)
+
+/**
+ * Which artifact types cannot be published without their immutable resource
+ * set, and what that set is called in the refusal. Four types used to be
+ * spread across a three-way `||` chain plus a separate `if` with its own
+ * wording; a fifth would have joined one of them by guesswork.
+ */
+const REQUIRED_RESOURCE_SET_BY_ARTIFACT_TYPE: Partial<Record<string, string>> = {
+  "evolution-lab/campaign-spec": "its exact immutable resource set",
+  "evolution-lab/candidate-revision": "its exact immutable resource set",
+  "evolution-lab/evaluation-result": "its exact immutable resource set",
+  "evolution-lab/run-evidence-bundle": "the exact immutable collector resource set",
+}
 
 export default tool({
   description:
@@ -249,20 +222,12 @@ export default tool({
     const publication = args.artifact
     const artifact_type = publication.artifact_type
     assertEvolutionArtifactOwner(artifact_type, context.agent)
-    if (
-      (artifact_type === "evolution-lab/campaign-spec" ||
-        artifact_type === "evolution-lab/candidate-revision" ||
-        artifact_type === "evolution-lab/evaluation-result") &&
-      !publication.resource_set
-    )
-      throw new EvolutionArtifactIntegrityError(`${artifact_type} requires its exact immutable resource set`)
-    if (artifact_type === "evolution-lab/run-evidence-bundle" && !publication.resource_set) {
-      throw new EvolutionArtifactIntegrityError(
-        "run-evidence-bundle requires the exact immutable collector resource set",
-      )
-    }
+    const requiredResourceSet = REQUIRED_RESOURCE_SET_BY_ARTIFACT_TYPE[artifact_type]
+    if (requiredResourceSet && !publication.resource_set)
+      throw new EvolutionArtifactIntegrityError(`${artifact_type} requires ${requiredResourceSet}`)
     let resources = publication.resource_set ? await context.host.taskArtifacts.resources(publication.resource_set) : []
-    const payload =
+    // Reassigned by branches whose payload the Host derives rather than accepts.
+    let payload =
       artifact_type === "evolution-lab/failure-attribution"
         ? await (async () => {
             const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(publication.payload)
@@ -387,44 +352,16 @@ export default tool({
                 throw new EvolutionArtifactIntegrityError("campaign workspace snapshot is not canonical JSON")
               }
               const model = CampaignModelConfigurationSchema.parse(await readJSONResource(modelConfiguration, context))
-              const scorers = scorerAssets.map(({ resource, asset }) => {
-                const identity = {
-                  scorer_id: asset.scorer_id,
+              // One expansion point: the Host stamps the frozen revision from the
+              // published asset bytes and fixes campaign-global placement. Adding a
+              // scorer kind touches the canonical declaration only.
+              const scorers = scorerAssets.map(({ resource, asset }) =>
+                metricScorerSpecFromAuthoring(asset, {
                   scorer_revision: resource.sha256,
-                  scope: "global" as const,
+                  scope: "global",
                   goal_id: null,
-                  description: asset.evaluator_kind === "judge" ? asset.criteria : asset.description,
-                  unit: asset.unit,
-                  direction: asset.direction,
-                  target: asset.target,
-                  floor: asset.floor,
-                  weight: asset.weight,
-                  observation_class: asset.observation_class,
-                }
-                return asset.evaluator_kind === "judge"
-                  ? {
-                      ...identity,
-                      evaluator_kind: "judge" as const,
-                      evaluator_config: {
-                        scorer_revision: resource.sha256,
-                        provider_id: asset.provider_id,
-                        model_id: asset.model_id,
-                        inactivity_timeout_ms: asset.inactivity_timeout_ms,
-                        max_evidence_bytes: asset.max_evidence_bytes,
-                        criteria: asset.criteria,
-                        rubric: asset.rubric,
-                      },
-                    }
-                  : {
-                      ...identity,
-                      evaluator_kind: "query" as const,
-                      evaluator_config: {
-                        scorer_revision: resource.sha256,
-                        query: asset.query,
-                        value: asset.value,
-                      },
-                    }
-              })
+                }),
+              )
               const frozen = {
                 dataset: resourceIdentity(dataset),
                 cases: cases.map((item) => ({
@@ -476,56 +413,74 @@ export default tool({
                 trial_execution: trialExecution,
               })
             })()
-          : parseEvolutionArtifact(artifact_type, publication.payload)
+          : artifact_type === "evolution-lab/candidate-revision"
+            ? EvolutionCandidateRevisionPublishInputSchema.parse(publication.payload)
+            : artifact_type === "evolution-lab/evaluation-result"
+              ? EvolutionEvaluationResultPublishInputSchema.parse(publication.payload)
+              : parseEvolutionArtifact(artifact_type, publication.payload)
     if (artifact_type === "evolution-lab/candidate-revision") {
-      const candidatePayload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(payload)
-      if (
-        !publication.source_artifact_locators.some((locator) =>
-          sameJSON(locator, candidatePayload.development_campaign_locator),
-        )
-      )
+      const candidatePayload = EvolutionCandidateRevisionPublishInputSchema.parse(payload)
+      const campaignLocator = candidatePayload.development_campaign_locator
+      if (campaignLocator && !publication.source_artifact_locators.some((locator) => sameJSON(locator, campaignLocator)))
         throw new EvolutionArtifactIntegrityError(
           "candidate publication sources must include its exact development campaign",
         )
-      const campaignEnvelope = await readEngineArtifactEnvelope(candidatePayload.development_campaign_locator, context)
-      if (campaignEnvelope.artifact_type !== "evolution-lab/campaign-spec")
-        throw new EvolutionArtifactIntegrityError(
-          "candidate development campaign locator must identify a campaign-spec",
-        )
-      const developmentCampaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
-        campaignEnvelope.payload,
-      )
-      if (developmentCampaign.dataset_partition !== "development")
-        throw new EvolutionArtifactIntegrityError("candidate authoring requires an exact development campaign")
-      if (
-        developmentCampaign.target.namespace !== candidatePayload.parent_revision.namespace ||
-        developmentCampaign.target.id !== candidatePayload.parent_revision.id ||
-        !sameJSON(developmentCampaign.baseline_revision, candidatePayload.parent_revision)
-      )
-        throw new EvolutionArtifactIntegrityError(
-          "candidate parent revision must equal its exact development campaign target and baseline",
-        )
+      const developmentCampaign = campaignLocator
+        ? await (async () => {
+            const campaignEnvelope = await readEngineArtifactEnvelope(campaignLocator, context)
+            if (campaignEnvelope.artifact_type !== "evolution-lab/campaign-spec")
+              throw new EvolutionArtifactIntegrityError(
+                "candidate development campaign locator must identify a campaign-spec",
+              )
+            const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaignEnvelope.payload)
+            if (campaign.dataset_partition !== "development")
+              throw new EvolutionArtifactIntegrityError("candidate authoring requires an exact development campaign")
+            return campaign
+          })()
+        : undefined
       if (!publication.parent_resource_set)
         throw new EvolutionArtifactIntegrityError("candidate publication requires the exact parent resource set")
       const parent = await context.host.expertSquadPackages.validateResourceSet({
         resource_set: publication.parent_resource_set,
       })
+      // The parent revision is proven from the supplied parent resource set,
+      // not from a claim about it, so this compares the Campaign against the
+      // package the author actually authored from.
+      const parentRevision = {
+        namespace: parent.namespace,
+        id: parent.id,
+        version: parent.version,
+        package_digest: parent.package_digest,
+      }
+      if (
+        developmentCampaign &&
+        (developmentCampaign.target.namespace !== parentRevision.namespace ||
+          developmentCampaign.target.id !== parentRevision.id ||
+          !sameJSON(developmentCampaign.baseline_revision, parentRevision))
+      )
+        throw new EvolutionArtifactIntegrityError(
+          "candidate parent revision must equal its exact development campaign target and baseline",
+        )
       const parentResources = await context.host.taskArtifacts.resources(publication.parent_resource_set)
       const candidate = await context.host.expertSquadPackages.validateResourceSet({
         resource_set: publication.resource_set!,
       })
       const comparison = compareCandidateIntegrity(parent, candidate)
-      if (!sameJSON(developmentCampaign.mutable_paths, comparison.mutable_paths))
+      if (developmentCampaign && !sameJSON(developmentCampaign.mutable_paths, comparison.mutable_paths))
         throw new EvolutionArtifactIntegrityError(
           "candidate parent mutable path closure must equal its exact development campaign",
         )
-      const exactCandidateFacts = {
-        parent_revision: {
-          namespace: parent.namespace,
-          id: parent.id,
-          version: parent.version,
-          package_digest: parent.package_digest,
-        },
+      // Every identity, manifest, and digest below is derived from the two
+      // resource sets this publisher just validated. It stamps them rather than
+      // asking the author to restate them: a restated digest is a second source
+      // for one fact, and transcribing dozens of them byte-for-byte is a
+      // failure mode, not a verification.
+      payload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse({
+        development_campaign_locator: candidatePayload.development_campaign_locator,
+        feedback: candidatePayload.feedback,
+        hypothesis: candidatePayload.hypothesis,
+        provenance: candidatePayload.provenance,
+        parent_revision: parentRevision,
         candidate_revision: {
           namespace: candidate.namespace,
           id: candidate.id,
@@ -544,28 +499,11 @@ export default tool({
           version: candidate.version,
           package_digest: candidate.package_digest,
         },
-      }
-      const claimedCandidateFacts = {
-        parent_revision: candidatePayload.parent_revision,
-        candidate_revision: candidatePayload.candidate_revision,
-        parent_resources: candidatePayload.parent_resources,
-        candidate_resources: candidatePayload.candidate_resources,
-        changed_paths: candidatePayload.changed_paths,
-        diff_sha256: candidatePayload.diff_sha256,
-        frozen_files: candidatePayload.frozen_files,
-        manager_receipt: candidatePayload.manager_receipt,
-      }
-      if (!sameJSON(exactCandidateFacts, claimedCandidateFacts))
-        throw new EvolutionArtifactIntegrityError(
-          "candidate-revision does not equal exact package validation and comparison facts",
-        )
+      })
       resources = [...parentResources, ...resources]
     }
     if (artifact_type === "evolution-lab/evaluation-result") {
-      const evaluation = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(payload)
-      const receiptResource = resources.find((resource) =>
-        sameResourceIdentity(resource, evaluation.metric_receipt_resource),
-      )
+      const receiptResource = resources[0]
       if (resources.length !== 1 || !receiptResource)
         throw new EvolutionArtifactIntegrityError(
           "evaluation-result resource set must contain its exact metric receipt",
@@ -575,35 +513,21 @@ export default tool({
       const receipt = EvolutionMetricReceiptSchema.parse(JSON.parse(receiptText))
       if (JSON.stringify(receipt) !== receiptText)
         throw new EvolutionArtifactIntegrityError("metric evaluation receipt is not exact canonical JSON")
-      if (
-        !sameJSON(
-          {
-            campaign_spec_locator: evaluation.campaign_spec_locator,
-            candidate_revision_locator: evaluation.candidate_revision_locator,
-            run_evidence_locator: evaluation.run_evidence_locator,
-            case_id: evaluation.case_id,
-            arm: evaluation.arm,
-            repetition: evaluation.repetition,
-            trial_task_id: evaluation.trial_task_id,
-            trial_revision_digest: evaluation.trial_revision_digest,
-            scorers: evaluation.scorers,
-          },
-          {
-            campaign_spec_locator: receipt.campaign_spec_locator,
-            candidate_revision_locator: receipt.candidate_revision_locator,
-            run_evidence_locator: receipt.run_evidence_locator,
-            case_id: receipt.case_id,
-            arm: receipt.arm,
-            repetition: receipt.repetition,
-            trial_task_id: receipt.trial_task_id,
-            trial_revision_digest: receipt.trial_revision_digest,
-            scorers: receipt.scorers,
-          },
-        )
-      )
-        throw new EvolutionArtifactIntegrityError(
-          "evaluation-result identity and values must equal the exact metric receipt",
-        )
+      // The receipt is the fact; this artifact is its catalog projection. The
+      // Evaluator owns no field here, so every one is stamped from the receipt
+      // rather than restated and compared.
+      payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
+        campaign_spec_locator: receipt.campaign_spec_locator,
+        candidate_revision_locator: receipt.candidate_revision_locator,
+        run_evidence_locator: receipt.run_evidence_locator,
+        case_id: receipt.case_id,
+        arm: receipt.arm,
+        repetition: receipt.repetition,
+        trial_task_id: receipt.trial_task_id,
+        trial_revision_digest: receipt.trial_revision_digest,
+        scorers: receipt.scorers,
+        metric_receipt_resource: resourceIdentity(receiptResource),
+      })
       const scorerResources = receipt.scorers.flatMap((scorer) =>
         scorer.evidence.flatMap((locator) => (locator.source === "task_artifact_resource" ? [locator.ref] : [])),
       )

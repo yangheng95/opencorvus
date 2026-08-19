@@ -53,6 +53,7 @@ export const GLOBAL_TOOL_IDS = [
   "planner",
   "panel",
   "expert_squad_author",
+  "evolve_expert_squad_from_feedback",
   "mission_state",
   "scheduler_message",
   "wait",

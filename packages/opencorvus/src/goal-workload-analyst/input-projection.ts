@@ -25,8 +25,13 @@ export function projectWorkloadInput(input: WorkloadInputRefs): WorkloadPromptIn
   const goalsByID = new Map(membership.goals.map((goal) => [goal.goal.id, goal]))
   const missingGoalIDs = [...selectedGoalIDs].filter((goalID) => !goalsByID.has(goalID))
   if (missingGoalIDs.length > 0) {
+    // `goal_ids` is a model-facing orchestrator tool argument, and this throw
+    // is what the model sees when it names a Goal that is not in the current
+    // GoalGraph. Naming only the rejected IDs left it nothing to correct
+    // toward, so it retries the same guess; the members are right here.
     throw new Error(
-      `Selected Goal IDs are not members of the current GoalGraph for Task ${input.taskID}: ${missingGoalIDs.join(", ")}`,
+      `Selected Goal IDs are not members of the current GoalGraph for Task ${input.taskID}. ` +
+        `received: ${JSON.stringify(missingGoalIDs)}, expected: a subset of ${JSON.stringify([...goalsByID.keys()])}.`,
     )
   }
   const goals = [...selectedGoalIDs].flatMap((goalID) => {

@@ -23,8 +23,8 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import {
   HrOperationsArtifactSchemas,
   type HrOperationsArtifactType,
-} from "../../../../expert-squads/builtin/hr-operations/lib/hr-operations/artifacts"
-import publishHrOperationsArtifact from "../../../../expert-squads/builtin/hr-operations/tools/publish-hr-operations-artifact"
+} from "@squads/hr-operations/lib/hr-operations/artifacts"
+import publishHrOperationsArtifact from "@squads/hr-operations/tools/publish-hr-operations-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "hr-operations")
 const skillRefs = ["hr-operations/shared/method", "hr-operations/shared/workflow"]

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/bun/tsconfig.json",
+  "compilerOptions": {
+    // Squad packages are plugin consumers on the Bun runtime. Bun's ambient
+    // types are installed under the opencorvus workspace, not the root.
+    "typeRoots": ["../packages/opencorvus/node_modules/@types", "../node_modules/@types"],
+    "types": ["bun"],
+    // Mirror packages/opencorvus/tsconfig.json: these packages were authored
+    // under the host's strictness, so this project adds coverage without
+    // retroactively tightening policy on already-published package bytes.
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": false,
+    "noEmit": true
+  },
+  "include": ["builtin/**/*.ts"]
+}

@@ -1,3 +1,4 @@
+import { Token } from "@/util/token"
 import type { ModelMessage } from "ai"
 import z from "zod"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
@@ -37,17 +38,13 @@ const Candidate = z.object({
   markdown: z.string().min(1),
 })
 
-function estimateTokens(input: string) {
-  return Math.ceil(input.length / 4)
-}
-
 function usableInputTokens(model: Provider.Model) {
   const declared = model.limit.input && model.limit.input > 0 ? model.limit.input : model.limit.context
   return Math.max(0, declared - RUNTIME_RESERVE_TOKENS)
 }
 
 function evidenceTokens(entry: Entry) {
-  return estimateTokens(JSON.stringify(entry))
+  return Token.estimate(JSON.stringify(entry))
 }
 
 function selectPrefix(input: {
@@ -299,7 +296,7 @@ export namespace ProjectMemoryOrganizer {
       checkpoint()
       const candidate = parseCandidate(candidateText)
       checkpoint()
-      const candidateTokens = estimateTokens(candidate.markdown.trim() + "\n")
+      const candidateTokens = Token.estimate(candidate.markdown.trim() + "\n")
       if (candidateTokens > documentTokenLimit) {
         checkpoint()
         const applied = Database.transaction((db) =>

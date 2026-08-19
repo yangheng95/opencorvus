@@ -277,7 +277,10 @@ function contentUUID(canonical: string): string {
 
 function stableTaskArtifactPublication(input: {
   taskID: string
-  snapshotKind: "catalog"
+  // The kind is part of the idempotency key because it is part of the stored
+  // manifest: two publications of the same trees under different kinds are two
+  // different snapshots, and collapsing them would hand one the other's ID.
+  snapshotKind: TaskArtifactSnapshotManifest["snapshot_kind"]
   producer: ArtifactProducer
   trees: TaskArtifactSnapshotManifest["trees"]
 }) {
@@ -1332,7 +1335,9 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
     publish(
       handle: TaskArtifactStage,
       input: {
-        snapshot_kind: "catalog"
+        // Passed straight through to the manifest, whose schema accepts both
+        // kinds; declaring only "catalog" understated what this already stores.
+        snapshot_kind: "catalog" | "engine_resource"
         files: readonly TaskArtifactPublicationFile[]
         idempotent?: true
       },

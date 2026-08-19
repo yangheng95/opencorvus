@@ -3,13 +3,41 @@ import OcLayout from "./OcLayout.astro"
 import WorkflowTopology from "./WorkflowTopology.astro"
 import { publicPath, segmentPublicMarketText, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
 
-const { locale, record } = Astro.props as { locale: PublicLocale; record: PublicSquadRecord }
+const { locale, record, archive } = Astro.props as {
+  locale: PublicLocale
+  record: PublicSquadRecord
+  archive?: { sha256: string; bytes: number }
+}
 const detailPath = `/market/${record.identity.namespace}/${record.identity.id}/`
 const displayedPillars = record.pillars
   .map((pillar) => (locale === "zh-cn" ? { code: "代码与产品", work: "知识与业务" }[pillar] : pillar))
   .join(" + ")
 const archiveHref = `/api/registry/v1/squads/${encodeURIComponent(record.identity.namespace)}/${encodeURIComponent(record.identity.id)}/${encodeURIComponent(record.identity.version)}/${record.identity.digest}/archive`
 const archiveFilename = `${record.identity.id}-${record.identity.version}.zip`
+/*
+ * One-click install handoff.
+ *
+ * The desktop client registers the `opencorvus` scheme and parses this exact route
+ * (`opencorvus://expert-squad/install`). It re-downloads the archive itself, refuses a response that
+ * redirects or resolves to a different URL, and refuses bytes whose length or SHA-256 differ from the
+ * ones named here. So the link must carry the canonical public origin: a request origin behind a
+ * TLS-terminating proxy would name a host the client can never reach. A loopback dev server is the
+ * one case that may name itself, because it is the origin serving the archive.
+ */
+const loopbackRequest =
+  Astro.url.hostname === "127.0.0.1" || Astro.url.hostname === "localhost" || Astro.url.hostname === "[::1]"
+const archiveOrigin = loopbackRequest ? Astro.url.origin : new URL(Astro.site ?? Astro.url).origin
+const installHandoffHref = archive
+  ? `opencorvus://expert-squad/install?${new URLSearchParams({
+      namespace: record.identity.namespace,
+      id: record.identity.id,
+      version: record.identity.version,
+      packageDigest: record.identity.digest,
+      archiveSha256: archive.sha256,
+      archiveBytes: String(archive.bytes),
+      archiveUrl: `${archiveOrigin}${archiveHref}`,
+    }).toString()}`
+  : null
 const copy =
   locale === "zh-cn"
     ? {
@@ -21,6 +49,10 @@ const copy =
         summary: record.description[locale],
         inspect: "理解安装边界",
         demonstrate: "查看角色如何衔接",
+        install: "在 OpenCorvus 中安装",
+        installHint: "点击后唤起已安装的 OpenCorvus 桌面端；客户端会重新下载并校验这一精确 revision，再由你选择安装 scope。",
+        installGetApp: "还没有桌面端？先安装 OpenCorvus",
+        installOpening: "已请求打开 OpenCorvus 桌面端。请在客户端里选择项目或用户全局 scope 完成安装。",
         download: "下载这一精确 revision",
         downloadPreparing: "正在校验并接收这一精确 revision…",
         downloadReady: "精确 ZIP 已完整接收，浏览器下载已创建。",
@@ -63,9 +95,10 @@ const copy =
         proposedTitle: "当前发布状态",
         proposedBody: "这份条目属于当前数据库发布；导入器已逐字段核对它与 OpenCorvus 签名目录、精确 ZIP 和内容 digest。签名私钥不会进入生产服务器；第三方发布者身份与独立审核服务尚未开放。",
         installTitle: "安装边界",
-        installBody: "当前网页只流式下载这一精确 revision 的内容寻址 ZIP，不会自动打开客户端、安装或激活团队。后续导入由 OpenCorvus 客户端重新校验，并要求明确选择 scope。",
+        installBody:
+          "网页可以把这一精确 revision 交给已安装的 OpenCorvus 客户端，也可以直接流式下载它的内容寻址 ZIP。两条路都不会由网页完成安装或激活：客户端重新下载后会再次校验字节、digest 与结构，并要求明确选择 scope。",
         installSteps: [
-          ["01", "网站数据库定位精确 revision，校验 ZIP 字节数与 SHA-256 后开始响应"],
+          ["01", "网站数据库定位精确 revision，校验 ZIP 字节数与 SHA-256 后交给客户端，或直接开始下载响应"],
           ["02", "客户端导入时重算 digest 并严格验证具体能力包"],
           ["03", "用户明确选择 project 或 user-global scope"],
           ["04", "Manager 原子导入并返回 mutation receipt"],
@@ -77,7 +110,8 @@ const copy =
         projectScopeBody: "只在当前项目目录生效；同 ID 的项目安装覆盖 global 版本。",
         globalScope: "用户全局 scope",
         globalScopeBody: "对当前用户目录可用，但不会自动覆盖项目安装。",
-        noBridge: "当前公开网页只完成签名资源包下载，不提供自动批量安装或激活。scope 说明用于解释客户端责任，不是可提交的网页表单。",
+        noBridge:
+          "公开网页只能交出单个精确 revision，或完成签名资源包下载；它不会批量安装或激活任何团队。scope 说明用于解释客户端责任，不是可提交的网页表单。",
         close: "关闭",
         guide: "阅读发布与安装边界",
       }
@@ -90,6 +124,11 @@ const copy =
         summary: record.description[locale],
         inspect: "Understand the install boundary",
         demonstrate: "See how responsibilities connect",
+        install: "Install in OpenCorvus",
+        installHint:
+          "Opens the installed OpenCorvus desktop app. The client re-downloads and re-verifies this exact revision, then asks you for an install scope.",
+        installGetApp: "No desktop app yet? Install OpenCorvus first",
+        installOpening: "OpenCorvus was asked to open. Choose project or user-global scope in the client to finish the install.",
         download: "Download this exact revision",
         downloadPreparing: "Verifying and receiving this exact revision…",
         downloadReady: "The exact ZIP was received in full and the browser download was created.",
@@ -140,9 +179,9 @@ const copy =
           "This record belongs to the active database publication. The importer checked it field by field against the OpenCorvus-signed catalog, exact ZIP, and content digest. The signing private key never reaches the production server; third-party publisher identity and independent review services are not open yet.",
         installTitle: "Install boundary",
         installBody:
-          "The page streams the content-addressed ZIP for this exact revision. It does not launch the client, install, or activate a team automatically. A later client import repeats validation and requires an explicit scope.",
+          "The page can hand this exact revision to an installed OpenCorvus client, or stream its content-addressed ZIP. Neither path installs or activates a team from the web: the client re-downloads the archive, re-verifies its bytes, digest, and shape, and requires an explicit scope.",
         installSteps: [
-          ["01", "Resolve the exact revision in the website database, then verify ZIP bytes and SHA-256 before the response starts"],
+          ["01", "Resolve the exact revision in the website database, verify ZIP bytes and SHA-256, then hand it to the client or start the download response"],
           ["02", "Recompute the digest and strictly validate the selected package during client import"],
           ["03", "Require the operator to choose project or user-global scope"],
           ["04", "Import atomically through the Manager and return a mutation receipt"],
@@ -156,7 +195,7 @@ const copy =
         globalScope: "User-global scope",
         globalScopeBody: "Available to the current user, but never silently overrides a project installation.",
         noBridge:
-          "The public page currently completes signed bundle download only. It does not submit automatic batch installation or activation. The scope explanation describes client responsibility; it is not a web form that can be submitted.",
+          "The public page hands over one exact revision, or completes a signed bundle download. It never batch-installs or activates a team. The scope explanation describes client responsibility; it is not a web form that can be submitted.",
         close: "Close",
         guide: "Read publishing and install boundaries",
       }
@@ -178,6 +217,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     data-download-preparing={copy.downloadPreparing}
     data-download-ready={copy.downloadReady}
     data-download-failed={copy.downloadFailed}
+    data-install-opening={copy.installOpening}
   >
     <section class="detail-hero" aria-labelledby="squad-title">
       <div>
@@ -186,11 +226,22 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <h1 id="squad-title">{segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</h1>
         <p class="detail-summary">{segmentPublicMarketText(locale, copy.summary).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
         <div class="detail-actions">
+          {installHandoffHref && (
+            <a class="oc-btn oc-btn-primary oc-btn-m" href={installHandoffHref} data-install-handoff aria-describedby="install-handoff-status">{copy.install}</a>
+          )}
           <button class="oc-btn oc-btn-secondary oc-btn-m" type="button" data-open-demo>{copy.demonstrate}</button>
-          <a class="oc-btn oc-btn-primary oc-btn-m" href={archiveHref} download={archiveFilename} data-exact-download aria-describedby="exact-download-status">{copy.download}</a>
+          <a class="oc-btn oc-btn-secondary oc-btn-m" href={archiveHref} download={archiveFilename} data-exact-download aria-describedby="exact-download-status">{copy.download}</a>
           <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/expert-squads/trust/")}>{copy.trust}</a>
           <button class="oc-btn oc-btn-ghost oc-btn-m" type="button" data-open-install>{copy.inspect}</button>
         </div>
+        {installHandoffHref && (
+          <Fragment>
+            <p class="install-hint">
+              {copy.installHint} <a class="oc-link" href={publicPath(locale, "/#start")}>{copy.installGetApp}</a>
+            </p>
+            <p id="install-handoff-status" class="download-status" role="status" aria-live="polite" data-install-status></p>
+          </Fragment>
+        )}
         <p id="exact-download-status" class="download-status" role="status" aria-live="polite" data-download-status></p>
       </div>
 
@@ -437,6 +488,16 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
       }
     })
 
+    // A custom-scheme navigation succeeds silently and fails silently. Say what was asked for, so a
+    // machine without the desktop client does not read the button as broken.
+    const installLink = detailRoot.querySelector<HTMLAnchorElement>("[data-install-handoff]")
+    const installStatus = detailRoot.querySelector<HTMLElement>("[data-install-status]")
+    if (installLink && installStatus) {
+      installLink.addEventListener("click", () => {
+        installStatus.textContent = detailRoot.dataset.installOpening ?? ""
+      })
+    }
+
     const demoDialog = detailRoot.querySelector<HTMLDialogElement>("[data-demo-dialog]")!
     const demoTrigger = detailRoot.querySelector<HTMLButtonElement>("[data-open-demo]")!
     demoTrigger.addEventListener("click", () => {
@@ -538,6 +599,13 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     flex-wrap: wrap;
     gap: var(--oc-space-3);
     margin-top: var(--oc-space-5);
+  }
+
+  .install-hint {
+    margin: var(--oc-space-3) 0 0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--oc-color-text-description);
   }
 
   .download-status {

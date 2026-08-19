@@ -1,4 +1,5 @@
 import { Log } from "../util/log"
+import { acquireProcessLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
 import os from "os"
@@ -49,7 +50,6 @@ import {
   RuntimeTemplateOverridesSchema,
   RuntimeTemplateOverlaysSchema,
 } from "@/agent/runtime-override"
-import lockfile from "proper-lockfile"
 
 export namespace Config {
   export const ModelId = z
@@ -407,7 +407,7 @@ export namespace Config {
     const key = Filesystem.normalizePath(Filesystem.resolve(dir))
     return withKeyedLock(dependencyInstallLocks, key, async () => {
       await fs.mkdir(dir, { recursive: true })
-      const release = await lockfile.lock(dir, { realpath: false })
+      const release = await acquireProcessLock(dir, { realpath: false })
       try {
         // A second project Instance may have completed the shared installation
         // while this owner waited. Re-check under both the process-local and

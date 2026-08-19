@@ -4,7 +4,13 @@ import { Session } from "@/session"
 import { SessionStatus } from "@/session/status"
 import z from "zod"
 import { Tool } from "./tool"
-import { WORK_ARTIFACT_TOOL_IDS, WORK_PARENT_ONLY_TOOL_IDS } from "@/work/harness"
+import {
+  WORK_ARTIFACT_DELIVER_TOOL_ID,
+  WORK_ARTIFACT_INSPECT_TOOL_ID,
+  WORK_ARTIFACT_TOOL_IDS,
+  WORK_ARTIFACT_VALIDATE_TOOL_ID,
+  WORK_PARENT_ONLY_TOOL_IDS,
+} from "@/work/harness"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
 
 export const DELEGATE_AGENT_TOOL_ID = "delegate_agent" as const
@@ -73,7 +79,7 @@ function delegatedInstruction(input: { instruction: string; parentAgent: "coding
     ...(input.parentAgent === "work"
       ? [
           "",
-          `You may inspect and validate Work Artifacts with ${WORK_ARTIFACT_TOOL_IDS[0]} and ${WORK_ARTIFACT_TOOL_IDS[2]}, but ${WORK_ARTIFACT_TOOL_IDS[3]} is parent-owned and unavailable. Report review findings to the parent; do not claim final delivery.`,
+          `You may inspect and validate Work Artifacts with ${WORK_ARTIFACT_INSPECT_TOOL_ID} and ${WORK_ARTIFACT_VALIDATE_TOOL_ID}, but ${WORK_ARTIFACT_DELIVER_TOOL_ID} is parent-owned and unavailable. Report review findings to the parent; do not claim final delivery.`,
         ]
       : []),
     "",

@@ -23,13 +23,17 @@ import { Filesystem } from "@/util/filesystem"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { Log } from "@/util/log"
 import {
+  type VisualFeedbackVerificationIssue,
   summarizeVisualFeedbackVerification,
   validateVisualFeedbackVerification,
+  type VisualFeedbackVerificationEvidenceReader,
   VISUAL_FEEDBACK_VERIFICATION_ARTIFACT_LABEL,
   VisualFeedbackVerificationListSchema,
 } from "@/acceptance/visual-feedback-verification"
 import { requireEngineArtifactByLocator } from "@/artifact-catalog"
-import { readResultsForIteration, readSpecsForTask, writeMetricResult } from "./store"
+import { readBrowserPreviewEvidenceByRow } from "@/browser-preview/persist"
+import { Session } from "@/session"
+import { clip01, readResultsForIteration, readSpecsForTask, writeMetricResult } from "./store"
 import { canonicalMetricJSON } from "./canonical-json"
 import {
   MetricExecutionEvidence,
@@ -294,12 +298,6 @@ function meetsThreshold(rawValue: number, threshold: number, direction: MetricDi
   return direction === "higher_better" ? rawValue >= threshold : rawValue <= threshold
 }
 
-function clip01(value: number): number {
-  if (value < 0) return 0
-  if (value > 1) return 1
-  return value
-}
-
 async function runShell(spec: MetricSpec, context: MetricExecutorContext, taskID: string): Promise<EvaluationAttempt> {
   const parsed = ShellMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
   if (!parsed.success) return unavailableAttempt("configuration_invalid", z.prettifyError(parsed.error), {})
@@ -552,18 +550,26 @@ async function runPrebuilt(spec: MetricSpec, input: ExecuteMetricsInput): Promis
       locators,
     })
   }
-  const issues: string[] = []
+  const issues: VisualFeedbackVerificationIssue[] = []
   const summaries: string[] = []
   for (const verification of parsed.data) {
     summaries.push(summarizeVisualFeedbackVerification(verification))
-    const validation = await validateVisualFeedbackVerification({ verification, expectedTaskID: input.task_id })
+    const validation = await validateVisualFeedbackVerification({
+      verification,
+      expectedTaskID: input.task_id,
+      reader: visualFeedbackVerificationEvidenceReader,
+    })
     if (!validation.passing) issues.push(...validation.issues)
   }
+  // The metric stays 0/1 — changing what scores what is a separate decision —
+  // but the evidence now carries which gate family rejected, so a reader can
+  // tell an unreadable capture apart from a genuinely blank render.
   return measured(issues.length > 0 ? 0 : 1, {
     scorer_revision: config.data.scorer_revision,
     locators,
     summaries,
     issues,
+    issue_codes: [...new Set(issues.map((entry) => entry.code))].sort(),
   })
 }
 
@@ -724,4 +730,14 @@ function shellOutputResources(result: { stdoutBytes: Uint8Array; stderrBytes: Ui
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
+}
+
+// The evidence verdict declares what it reads; this is where those reads are
+// bound to the real Session, Engine Artifact catalog, and evidence directory.
+const visualFeedbackVerificationEvidenceReader: VisualFeedbackVerificationEvidenceReader<
+  ReturnType<typeof requireEngineArtifactByLocator>
+> = {
+  engineArtifactByLocator: (readInput) => requireEngineArtifactByLocator(readInput),
+  sessionMessages: (sessionID) => Session.messages({ sessionID }),
+  browserPreviewEvidence: (readInput) => readBrowserPreviewEvidenceByRow(readInput),
 }

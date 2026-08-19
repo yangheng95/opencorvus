@@ -36,7 +36,6 @@ export namespace Truncate {
       run: async (signal) => {
         await cleanup(signal)
       },
-      scope: "global",
     })
   }
 

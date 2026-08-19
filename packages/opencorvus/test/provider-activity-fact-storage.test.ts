@@ -2,7 +2,10 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { recordProviderActivityEvent } from "@/session/provider-activity-facts"
+import {
+  recordProviderActivityEvent,
+  settleAbandonedProviderActivity,
+} from "@/session/provider-activity-facts"
 import { ProviderActivityOutcomeTable, ProviderActivityRequestTable } from "@/session/session.sql"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -101,6 +104,96 @@ describe("Provider activity fact storage", () => {
         expect(facts.outcomes).toEqual([
           { id: expect.any(String), request_id: activityID, data: { outcome: "done" }, time_created: now + 4 },
           { id: expect.any(String), request_id: secondActivityID, data: { outcome: "done" }, time_created: now + 5 },
+        ])
+      },
+    })
+  })
+
+  test("lets a late receipt stand down to a recovery verdict while still refusing two owned results", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Late provider receipt" })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "assistant",
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          parentID: user.id,
+          role: "assistant",
+          author: "assistant",
+          time: { created: now + 1 },
+          agent: "assistant",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const abandoned = Identifier.ascending("activity")
+        const owned = Identifier.ascending("activity")
+        for (const [id, ts] of [
+          [abandoned, now + 2],
+          [owned, now + 3],
+        ] as const) {
+          recordProviderActivityEvent(assistant.id, {
+            type: "started",
+            id,
+            ts,
+            sessionID: session.id,
+            provider: "openai",
+            model: "gpt-5.6-terra",
+          })
+        }
+
+        // The owner of the second call did return; only the first is abandoned.
+        recordProviderActivityEvent(assistant.id, { type: "terminal", id: owned, ts: now + 4, outcome: "done" })
+        expect(
+          settleAbandonedProviderActivity({
+            assistantMessageID: assistant.id,
+            now: now + 5,
+            reason: "Previous process ended mid-call",
+          }),
+        ).toEqual([abandoned])
+
+        // An activation lease can expire while the call it covers is still
+        // streaming, so the owner can return after recovery already spoke for
+        // it. The recovery verdict stands; it must not fault the caller.
+        recordProviderActivityEvent(assistant.id, { type: "terminal", id: abandoned, ts: now + 6, outcome: "done" })
+
+        // Two receipts that both claim an owned result stay a Host bug.
+        expect(() =>
+          recordProviderActivityEvent(assistant.id, {
+            type: "terminal",
+            id: owned,
+            ts: now + 7,
+            outcome: "failed",
+            cls: "server_5xx",
+          }),
+        ).toThrow(`Provider activity ${owned} has conflicting terminal receipts.`)
+
+        const outcomes = Database.use((db) =>
+          db.select().from(ProviderActivityOutcomeTable).orderBy(ProviderActivityOutcomeTable.time_created).all(),
+        )
+        expect(outcomes.map((outcome) => [outcome.request_id, outcome.data])).toEqual([
+          [owned, { outcome: "done" }],
+          [
+            abandoned,
+            {
+              outcome: "aborted",
+              error_class: "external_abort",
+              error: { name: "ProcessExecutionInterruptedError", message: "Previous process ended mid-call" },
+            },
+          ],
         ])
       },
     })

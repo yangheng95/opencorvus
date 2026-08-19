@@ -12,6 +12,12 @@ export interface DispatchAdapterContract {
   /** Explicit effectful subset. Every other private stage Tool is a pure in-memory collector/control Tool. */
   readonly permissionBearingStageToolIDs: readonly string[]
   readonly coordinationHandoffToolID: "request_orchestrator_decision"
+  /** Input fields the Host supplies; omitted from what the model is shown. */
+  readonly hostOwnedInputFields?: readonly string[]
+  /** Input field carrying exact Delivery Slice revision refs, when the adapter takes them. */
+  readonly deliverySliceRevisionField?: string
+  /** Adapter-authored sentence appended to the generic dispatch tool description. */
+  readonly modelGuidance?: string
 }
 
 const contracts = {
@@ -162,6 +168,9 @@ const contracts = {
     abiVersion: 1,
     inputSchema: DispatchAdapterInputSchemas.workload_analysis,
     sessionKind: "goal-workload-analyst",
+    deliverySliceRevisionField: "goal_ids",
+    modelGuidance:
+      "`goal_ids` contains exact immutable Delivery Slice revision subjects: an empty array produces a zero-Slice review and does not infer Slices from a ContractGraph artifact. For a whole-plan review, copy every exact current Slice revision ref returned by the Architect into `goal_ids`. ",
     privateStageToolIDs: ["register_workload_brief"],
     permissionBearingStageToolIDs: [],
     coordinationHandoffToolID: "request_orchestrator_decision",
@@ -186,6 +195,9 @@ const contracts = {
     abiVersion: 1,
     inputSchema: DispatchAdapterInputSchemas.build,
     sessionKind: "build",
+    // The Host decides worktree usage for a build dispatch; the model neither
+    // sees nor supplies it.
+    hostOwnedInputFields: ["worktreeUsage"],
     privateStageToolIDs: ["merge_back"],
     permissionBearingStageToolIDs: ["merge_back"],
     coordinationHandoffToolID: "request_orchestrator_decision",
@@ -285,5 +297,57 @@ export namespace DispatchAdapterContractRegistry {
 
   export function coordinationHandoffToolID(id: string): "request_orchestrator_decision" {
     return get(id).coordinationHandoffToolID
+  }
+
+  /**
+   * The input schema the model actually sees. Host-owned fields are declared by
+   * the adapter that owns them; the dispatch tool used to name `"build"` and
+   * `omit({ worktreeUsage: true })` directly, so a second adapter with a
+   * Host-owned field would have needed another branch in generic code.
+   */
+  export function modelFacingInputSchema(id: string) {
+    const contract = get(id)
+    const hidden = contract.hostOwnedInputFields
+    if (!hidden || hidden.length === 0) return contract.inputSchema
+    return contract.inputSchema.omit(Object.fromEntries(hidden.map((field) => [field, true as const])) as never)
+  }
+
+  /** Exact Delivery Slice revision refs this adapter's input carries, if any. */
+  export function deliverySliceRevisionIDs(id: string, input: unknown): string[] {
+    const field = get(id).deliverySliceRevisionField
+    if (!field) return []
+    const value = (input as Record<string, unknown> | undefined)?.[field]
+    return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === "string") : []
+  }
+
+  /**
+   * The same input with its Delivery Slice revision refs replaced by the exact
+   * frozen set, or unchanged when this adapter declares no such field.
+   *
+   * Symmetric with `deliverySliceRevisionIDs` on purpose. The write side used
+   * to name `"goal_ids"` as a literal while the read side asked the registry,
+   * so the second adapter to declare a different `deliverySliceRevisionField`
+   * would have had its frozen Slice set quietly dropped — the same silent
+   * empty Delivery Slice the contract table was introduced to prevent.
+   */
+  export function withDeliverySliceRevisionIDs<Input>(id: string, input: Input, ids: readonly string[]): Input {
+    const field = get(id).deliverySliceRevisionField
+    if (!field) return input
+    const record = input as Record<string, unknown>
+    if (!Object.hasOwn(record, field)) return input
+    return { ...record, [field]: [...ids] } as Input
+  }
+
+  /** Adapter-authored guidance appended to the generic dispatch description. */
+  export function modelGuidance(id: string): string {
+    return get(id).modelGuidance ?? ""
+  }
+
+  /**
+   * Whether the adapter itself decides how the worktree is used. The dispatch
+   * tool compared against the literal `"build"` in four places to answer this.
+   */
+  export function ownsWorktreeUsage(id: string): boolean {
+    return (get(id).hostOwnedInputFields ?? []).includes("worktreeUsage")
   }
 }

@@ -27,7 +27,7 @@ import { MessageStore } from "../src/session/message-store"
 import { EngineService } from "../src/task-api"
 import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-import { deriveComparisonRecommendation } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison"
+import { deriveComparisonRecommendation } from "@squads/evolution-lab/lib/evolution-lab/comparison"
 
 function emptyProjectionResources() {
   return {
@@ -310,10 +310,10 @@ describe("authorized expert squad evolution mutation", () => {
             workspace_digest: digests.workspace,
             permission_snapshot_digest: digests.permission,
             external_side_effect_policy: "no external side effects",
-            repetitions: 1,
+            repetitions: 2,
             arm_order: ["baseline", "candidate"],
             statistics: "paired population statistics",
-            budget: { max_runs: 2, max_cost: 1 },
+            budget: { max_runs: 4, max_cost: 1 },
             inactivity_timeout_ms: 1_000,
             ui_rubric_digest: null,
             mutable_paths: ["README.md"],
@@ -341,6 +341,7 @@ describe("authorized expert squad evolution mutation", () => {
           })
           const candidatePayload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse({
             development_campaign_locator: campaign,
+            feedback: null,
             parent_revision: baselineRevision,
             candidate_revision: candidateRevision,
             parent_resources: [evolutionResource("README.md", baselineRevision.package_digest)],
@@ -379,15 +380,28 @@ describe("authorized expert squad evolution mutation", () => {
             candidateDigest: candidateRevision.package_digest,
             comparisons: 0,
           })
-          const recordRun = (arm: "baseline" | "candidate", digest: string, revision: string) => {
+          // Promotion needs the whole aggregate interval above zero, so the fixture measures each
+          // arm more than once. One repetition per arm supports a point estimate and no interval,
+          // and a candidate that cannot be bounded is deliberately not promotable.
+          const repetitionDigest = (base: string, repetition: number) =>
+            `${base.slice(0, 62)}${String(repetition).padStart(2, "0")}`
+          const recordRun = (
+            arm: "baseline" | "candidate",
+            digest: string,
+            revision: string,
+            repetition: number,
+          ) => {
             const payload = EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse({
               case_id: "case-a",
               arm,
-              repetition: 0,
+              repetition,
               workspace_digest: digests.workspace,
-              run_evidence_sha256: digest,
-              run_evidence_resource: evolutionResource(`runs/${arm}.json`, digest),
-              task_id: `${operationTask.taskID}-${arm}`,
+              run_evidence_sha256: repetitionDigest(digest, repetition),
+              run_evidence_resource: evolutionResource(
+                `runs/${arm}-${repetition}.json`,
+                repetitionDigest(digest, repetition),
+              ),
+              task_id: `${operationTask.taskID}-${arm}-${repetition}`,
               terminal_time: Date.now(),
               model: "test-model",
               environment_digest: digests.environment,
@@ -412,18 +426,26 @@ describe("authorized expert squad evolution mutation", () => {
             })
             return { locator, value: payload }
           }
-          const baselineRun = recordRun("baseline", digests.baselineRun, baselineRevision.package_digest)
-          const candidateRun = recordRun("candidate", digests.candidateRun, candidateRevision.package_digest)
+          const repetitions = [0, 1]
+          const baselineRuns = repetitions.map((repetition) =>
+            recordRun("baseline", digests.baselineRun, baselineRevision.package_digest, repetition),
+          )
+          const candidateRuns = repetitions.map((repetition) =>
+            recordRun("candidate", digests.candidateRun, candidateRevision.package_digest, repetition),
+          )
+          const baselineRun = baselineRuns[0]!
+          const candidateRun = candidateRuns[0]!
           const recordEvaluation = (
             arm: "baseline" | "candidate",
             run: typeof baselineRun,
             score: number,
             metricDigest: string,
+            repetition: number,
           ) => {
             const payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
               case_id: "case-a",
               arm,
-              repetition: 0,
+              repetition,
               scorers: [{ scorer_id: "quality", status: "measured", value: score, evidence: [run.locator] }],
               trial_task_id: run.value.task_id,
               trial_revision_digest:
@@ -431,7 +453,10 @@ describe("authorized expert squad evolution mutation", () => {
               campaign_spec_locator: campaign,
               candidate_revision_locator: arm === "candidate" ? candidateArtifact : null,
               run_evidence_locator: run.locator,
-              metric_receipt_resource: evolutionResource(`metrics/${arm}.json`, metricDigest),
+              metric_receipt_resource: evolutionResource(
+                `metrics/${arm}-${repetition}.json`,
+                repetitionDigest(metricDigest, repetition),
+              ),
             })
             const locator = recordEvolutionArtifact({
               taskID: operationTask.taskID,
@@ -441,13 +466,23 @@ describe("authorized expert squad evolution mutation", () => {
             })
             return { locator, value: payload }
           }
-          const baselineEvaluation = recordEvaluation("baseline", baselineRun, 0.5, digests.baselineMetric)
-          const candidateEvaluation = recordEvaluation("candidate", candidateRun, 0.8, digests.candidateMetric)
-          const recordReview = (arm: "baseline" | "candidate", evaluation: typeof baselineEvaluation) => {
+          const baselineEvaluations = repetitions.map((repetition) =>
+            recordEvaluation("baseline", baselineRuns[repetition]!, 0.5, digests.baselineMetric, repetition),
+          )
+          const candidateEvaluations = repetitions.map((repetition) =>
+            recordEvaluation("candidate", candidateRuns[repetition]!, 0.8, digests.candidateMetric, repetition),
+          )
+          const baselineEvaluation = baselineEvaluations[0]!
+          const candidateEvaluation = candidateEvaluations[0]!
+          const recordReview = (
+            arm: "baseline" | "candidate",
+            evaluation: typeof baselineEvaluation,
+            repetition: number,
+          ) => {
             const payload = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
               case_id: "case-a",
               arm,
-              repetition: 0,
+              repetition,
               evaluation_result_locator: evaluation.locator,
               status: "reviewed",
               findings: [],
@@ -462,8 +497,14 @@ describe("authorized expert squad evolution mutation", () => {
             })
             return { locator, value: payload }
           }
-          const baselineReview = recordReview("baseline", baselineEvaluation)
-          const candidateReview = recordReview("candidate", candidateEvaluation)
+          const baselineReviews = repetitions.map((repetition) =>
+            recordReview("baseline", baselineEvaluations[repetition]!, repetition),
+          )
+          const candidateReviews = repetitions.map((repetition) =>
+            recordReview("candidate", candidateEvaluations[repetition]!, repetition),
+          )
+          const baselineReview = baselineReviews[0]!
+          const candidateReview = candidateReviews[0]!
           const trialEvidenceHistory = await readEvolutionHistory({
             namespace: target.namespace,
             id: target.id,
@@ -475,8 +516,10 @@ describe("authorized expert squad evolution mutation", () => {
             evaluations: trialEvidenceHistory.records[0]!.candidates[0]!.evaluations.length,
             candidateDigest: trialEvidenceHistory.records[0]!.candidates[0]!.candidate_revision.package_digest,
           }).toEqual({
-            runs: 2,
-            evaluations: 2,
+            // Two repetitions per arm: the interval the promotion rule decides on
+            // cannot be formed from a single measurement.
+            runs: 4,
+            evaluations: 4,
             candidateDigest: candidateRevision.package_digest,
           })
           const comparisonPayload = deriveComparisonRecommendation({
@@ -484,19 +527,19 @@ describe("authorized expert squad evolution mutation", () => {
             campaignLocator: campaign,
             candidate: candidatePayload,
             candidateLocator: candidateArtifact,
-            evaluations: [baselineEvaluation, candidateEvaluation],
-            reviews: [baselineReview, candidateReview],
-            runs: [baselineRun, candidateRun],
+            evaluations: [...baselineEvaluations, ...candidateEvaluations],
+            reviews: [...baselineReviews, ...candidateReviews],
+            runs: [...baselineRuns, ...candidateRuns],
           })
           const comparisonSources = [
             campaign,
             candidateArtifact,
-            baselineRun.locator,
-            candidateRun.locator,
-            baselineEvaluation.locator,
-            candidateEvaluation.locator,
-            baselineReview.locator,
-            candidateReview.locator,
+            ...baselineRuns.map((run) => run.locator),
+            ...candidateRuns.map((run) => run.locator),
+            ...baselineEvaluations.map((evaluation) => evaluation.locator),
+            ...candidateEvaluations.map((evaluation) => evaluation.locator),
+            ...baselineReviews.map((review) => review.locator),
+            ...candidateReviews.map((review) => review.locator),
           ]
           const comparison = recordEvolutionArtifact({
             taskID: operationTask.taskID,
@@ -672,21 +715,21 @@ describe("authorized expert squad evolution mutation", () => {
               workspace_digest: digests.workspace,
               permission_snapshot_digest: digests.permission,
               external_side_effect_policy: "no external side effects",
-              repetitions: 1,
+              repetitions: 2,
               arm_order: ["baseline", "candidate"],
               statistics: "paired population statistics",
-              budget: { max_runs: 2, max_cost: 1 },
+              budget: { max_runs: 4, max_cost: 1 },
               inactivity_timeout_ms: 1_000,
               ui_rubric_digest: null,
             },
             completeness: {
-              expected_slots: 2,
-              present_runs: 2,
-              present_evaluations: 2,
-              expected_scorer_results: 2,
-              measured_scorer_results: 2,
+              expected_slots: 4,
+              present_runs: 4,
+              present_evaluations: 4,
+              expected_scorer_results: 4,
+              measured_scorer_results: 4,
               unavailable_scorer_results: 0,
-              reviewed_integrity_slots: 2,
+              reviewed_integrity_slots: 4,
               required_unavailable_dimensions: [],
             },
             receipts: ["promotion"],
@@ -709,32 +752,34 @@ describe("authorized expert squad evolution mutation", () => {
             catalogRevisionUpper: historyAfterPromotion.catalog_revision_upper,
           })
           expect(
-            historyDetail.slots.map((slot) => ({
-              caseID: slot.case_id,
-              arm: slot.arm,
-              run: slot.run?.artifact_type,
-              evaluation: slot.evaluation?.artifact_type,
-              scorer: slot.scorer_results[0]?.status,
-              integrity: slot.integrity_review?.status,
-            })),
-          ).toEqual([
-            {
-              caseID: "case-a",
-              arm: "baseline",
-              run: "evolution-lab/run-evidence-bundle",
-              evaluation: "evolution-lab/evaluation-result",
-              scorer: "measured",
-              integrity: "reviewed",
-            },
-            {
-              caseID: "case-a",
-              arm: "candidate",
-              run: "evolution-lab/run-evidence-bundle",
-              evaluation: "evolution-lab/evaluation-result",
-              scorer: "measured",
-              integrity: "reviewed",
-            },
-          ])
+            historyDetail.slots
+              .map((slot) => ({
+                caseID: slot.case_id,
+                arm: slot.arm,
+                repetition: slot.repetition,
+                run: slot.run?.artifact_type,
+                evaluation: slot.evaluation?.artifact_type,
+                scorer: slot.scorer_results[0]?.status,
+                integrity: slot.integrity_review?.status,
+              }))
+              .toSorted((left, right) =>
+                left.arm === right.arm ? left.repetition - right.repetition : left.arm.localeCompare(right.arm),
+              ),
+          ).toEqual(
+            // One complete slot per arm per repetition: the promotion rule reads an
+            // interval, and an interval needs more than one measurement per arm.
+            (["baseline", "candidate"] as const).flatMap((arm) =>
+              repetitions.map((repetition) => ({
+                caseID: "case-a",
+                arm,
+                repetition,
+                run: "evolution-lab/run-evidence-bundle",
+                evaluation: "evolution-lab/evaluation-result",
+                scorer: "measured",
+                integrity: "reviewed",
+              })),
+            ),
+          )
           const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
             prompt_profile: { active: candidate.id },
           })

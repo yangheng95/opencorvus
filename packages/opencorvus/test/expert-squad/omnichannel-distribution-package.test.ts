@@ -24,8 +24,8 @@ import {
   OMNICHANNEL_SCHEMA_VERSION,
   OMNICHANNEL_WORKFLOW_ID,
   OmnichannelArtifactSchemas,
-} from "../../../../expert-squads/builtin/omnichannel-distribution/lib/omnichannel-distribution/artifacts"
-import publishOmnichannelArtifact from "../../../../expert-squads/builtin/omnichannel-distribution/tools/publish-omnichannel-artifact"
+} from "@squads/omnichannel-distribution/lib/omnichannel-distribution/artifacts"
+import publishOmnichannelArtifact from "@squads/omnichannel-distribution/tools/publish-omnichannel-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "omnichannel-distribution")
 const skillRefs = [

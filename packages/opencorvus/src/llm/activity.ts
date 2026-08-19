@@ -27,7 +27,6 @@
  */
 
 import { Identifier } from "@/id/id"
-import { SessionStatus } from "@/session/status"
 import { withStreamActivity, type StreamActivityMonitor } from "@/util/stream-activity"
 import { APICallError } from "ai"
 import { ProviderError } from "@/provider/error"
@@ -203,17 +202,16 @@ export interface LLMActivityPolicy {
    *  heartbeat is observed, this timer is cleared and idle monitoring takes over. */
   firstByteMs: number
 
-  /** Per-class retry caps. Non-retryable classes (external_abort,
-   *  total_timeout, client_4xx, request_timeout, payload_too_large,
-   *  context_overflow) ignore these — shouldRetry hard-rejects them. */
+  /** Per-class retry caps. Classes this policy does not grant retryability to
+   *  ignore these — the runner hard-rejects them before consulting a cap. */
   maxRetries: Partial<Record<ErrorClass, number>> & { default: number }
 
   classify(err: unknown, ctx: ClassifyContext): ErrorClass
-  /** Pure-class retryability. Return false for hard non-retryable categories
-   *  (external_abort, total_timeout, client_4xx, request_timeout,
-   *  payload_too_large, context_overflow). The runner combines this with
-   *  the attempt cap (from maxRetries) and the remaining total deadline —
-   *  callers do NOT also re-implement those checks here. */
+  /** Pure-class retryability, expressed as a grant rather than a denial:
+   *  return true only for classes a repeated identical request could survive,
+   *  and false for everything else including `unknown`. The runner combines
+   *  this with the attempt cap (from maxRetries) and the remaining total
+   *  deadline — callers do NOT also re-implement those checks here. */
   isRetryable(cls: ErrorClass): boolean
   /** Must return ≤ remainingTotalMs; runner will additionally clamp to
    *  remaining and race the sleep against external+total deadlines. */
@@ -262,6 +260,14 @@ export interface LLMActivityRetryBoundary {
 
 export interface LLMActivityOptions {
   beforeRetry?: (input: LLMActivityRetryBoundary) => void | Promise<void>
+  /**
+   * Publish the idle monitor for the duration of this attempt, returning the
+   * handle that retracts it. The retry layer sits below the Session, so it
+   * hands the monitor upward instead of reaching into the Session's own
+   * registry — which is what let a lower layer write a module-level singleton
+   * owned by a higher one.
+   */
+  publishActivityMonitor?: (monitor: StreamActivityMonitor) => () => void
 }
 
 // ---- Default policy --------------------------------------------------------
@@ -342,18 +348,35 @@ function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
   return "unknown"
 }
 
+/**
+ * Retryability is granted, never assumed.
+ *
+ * Every member names a specific transport or provider condition that an
+ * identical later request can plausibly survive. `unknown` is deliberately
+ * absent. It is the fall-through for errors this classifier did not recognize,
+ * and every genuine transient provider failure above already has an explicit
+ * branch (HTTP status, transport error text, abort cause marker) — so what
+ * actually lands in `unknown` is overwhelmingly the Host's own deterministic
+ * invariants, which a retry replays byte for byte. Treating those as transient
+ * turned one deterministic conflict into five attempts with backoff, and the
+ * only defence was an opt-in `HostProcessingFaultError` wrapper applied at 8
+ * of the several thousand `throw` sites that can reach here.
+ *
+ * A new ErrorClass therefore defaults to non-retryable. Add one here only with
+ * a reason that repeating the request could change the outcome.
+ */
+const RETRYABLE_CLASSES: ReadonlySet<ErrorClass> = new Set<ErrorClass>([
+  "rate_limit",
+  "server_5xx",
+  "network",
+  "tls",
+  "stream_protocol",
+  "first_byte",
+  "idle",
+])
+
 function isRetryable(cls: ErrorClass): boolean {
-  return !(
-    cls === "external_abort" ||
-    cls === "total_timeout" ||
-    cls === "quota_exhausted" ||
-    cls === "client_4xx" ||
-    cls === "request_timeout" ||
-    cls === "payload_too_large" ||
-    cls === "context_overflow" ||
-    cls === "auth_required" ||
-    cls === "host_fault"
-  )
+  return RETRYABLE_CLASSES.has(cls)
 }
 
 function backoffMs(cls: ErrorClass, attempt: number, remainingTotalMs: number): number {
@@ -602,7 +625,7 @@ export async function withLLMActivity<T>(
           describePause: () => Array.from(pauseOwners).join(", "),
         })
         idleHolder.monitor = monitor
-        unregisterActivityMonitor = SessionStatus.registerActivityMonitor(ctx.sessionID, monitor)
+        unregisterActivityMonitor = options.publishActivityMonitor?.(monitor)
         monitor.signal.addEventListener("abort", () => {
           if (monitor.timedOut() && !idleCtrl.signal.aborted) {
             idleCtrl.abort(makeAbortReason("idle", `LLMActivity idle > ${policy.idleMs}ms`))
@@ -696,7 +719,7 @@ export async function withLLMActivity<T>(
 
         const remain = remainingTotalMs()
         // Three independent reasons NOT to retry, in priority order:
-        //   1. cls itself is hard non-retryable (e.g. client_4xx, context_overflow)
+        //   1. cls was never granted retryability (client_4xx, context_overflow, unknown, …)
         //   2. we've exhausted maxRetries[cls] / .default
         //   3. total deadline has 0 budget left → upgrade cls to total_timeout
         if (!policy.isRetryable(cls)) {

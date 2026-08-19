@@ -21,8 +21,15 @@ import {
   GoalContractUpdateSchema,
   normalizeGoalContractFields,
 } from "@/pipeline/goal-contract.schema"
-import { AcceptanceSeverity, LlmJudgeInputKind, RubricLevelSchema, type AcceptanceSpec } from "@/acceptance/types"
-import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME } from "@/acceptance/prebuilt-scorer"
+import {
+  AcceptanceSeverity,
+  ContractAuditScorerSchema,
+  HeuristicScorerSchema,
+  HeuristicShellSpecSchema,
+  LlmJudgeScorerSchema,
+  PrebuiltScorerSchema,
+  type AcceptanceSpec,
+} from "@/acceptance/types"
 import { RequirementDeclaredIDSchema } from "@/requirements/types"
 import {
   AssemblyOwnerEntrySchema,
@@ -37,7 +44,7 @@ import {
 } from "./contract-graph"
 import { ContractIRSchema } from "./contract-ir"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
-import { discriminatorRepairHint } from "@/session/repair-hint"
+import { discriminatorRepairHint } from "@/llm/repair-hint"
 
 const RegisterContractToolInputBaseSchema = z.object(ArchitectContractRefSchema.shape).omit({
   ir: true,
@@ -79,88 +86,24 @@ function registerContractToolInputSchema(knownResearchEvidenceRefs?: readonly st
   })
 }
 
-const ArchitectHeuristicScorerSchema = z
-  .object({
-    type: z
-      .literal("heuristic")
-      .describe(
-        "heuristic — deterministic inline shell check. Architect exposes only inline shell checks for one-off page checks.",
-      ),
-    name: z.string().min(1),
-    spec: z
-      .object({
-        kind: z.literal("shell").describe("shell — run an inline command. Requires: cmd; optional cwd."),
-        cmd: z.string().min(1).describe("Shell command. Exit 0 = pass unless expect.exit_code set."),
-        cwd: z.string().optional(),
-      })
-      .strict(),
-    expect: z
-      .object({
-        exit_code: z.number().int().optional(),
-      })
-      .strict()
-      .optional(),
-  })
-  .strict()
-
-const ArchitectLlmJudgeScorerSchema = z
-  .object({
-    type: z
-      .literal("llm_judge")
-      .describe("llm_judge — natural-language rubric evaluation. Requires: name, criteria; optional rubric, inputs."),
-    name: z.string().min(1),
-    criteria: z.string().min(10).describe("Single-criterion evaluation question in natural language."),
-    rubric: z
-      .array(RubricLevelSchema)
-      .min(2)
-      .max(5)
-      .optional()
-      .describe("Ordinal anchors, 2-5 levels. Omit for binary MET/UNMET."),
-    inputs: z
-      .array(LlmJudgeInputKind)
-      .optional()
-      .describe(
-        "Which parts of the acceptance to feed the judge. LLM judges cannot consume visual feedback; use prebuilt visual-feedback-verification for final reference parity.",
-      ),
-  })
-  .strict()
-
-const ArchitectPrebuiltScorerSchema = z
-  .object({
-    type: z.literal("prebuilt").describe("prebuilt — the platform-owned rendered visual feedback verifier."),
-    name: z
-      .literal(VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME)
-      .describe("Exact executable prebuilt scorer identity for rendered visual feedback verification."),
-  })
-  .strict()
-
-const ArchitectContractAuditScorerSchema = z
-  .object({
-    type: z
-      .literal("contract_audit")
-      .describe(
-        "contract_audit — static audit of typed-contract field literals against registered graph contract_ids.",
-      ),
-    name: z.string().min(1),
-    spec: z
-      .object({
-        kind: z.literal("contract_graph"),
-        contract_ids: z.array(z.string().min(1)).min(1),
-      })
-      .strict(),
-    expect: z
-      .object({
-        status: z.literal("passed"),
-      })
-      .strict(),
-  })
-  .strict()
+/**
+ * The Architect's acceptance surface is the canonical one, narrowed.
+ *
+ * Three of its four scorer types used to be re-authored field by field here,
+ * identical to `acceptance/types.ts` apart from wording — two definitions of
+ * one contract, with nothing to catch them drifting. Only `heuristic` is
+ * genuinely narrower: the Architect exposes inline shell checks only, so it is
+ * derived from the canonical member rather than rewritten.
+ */
+const ArchitectHeuristicScorerSchema = HeuristicScorerSchema.extend({
+  spec: HeuristicShellSpecSchema,
+})
 
 const ArchitectScorerSchema = z.discriminatedUnion("type", [
   ArchitectHeuristicScorerSchema,
-  ArchitectLlmJudgeScorerSchema,
-  ArchitectPrebuiltScorerSchema,
-  ArchitectContractAuditScorerSchema,
+  LlmJudgeScorerSchema,
+  PrebuiltScorerSchema,
+  ContractAuditScorerSchema,
 ])
 
 const ArchitectAcceptanceSpecSchema = z

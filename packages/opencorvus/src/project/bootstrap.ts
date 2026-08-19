@@ -30,7 +30,6 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import { runTaskLoop } from "@/orchestrator/loop"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
-import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
 import { ensureSessionProtocolBridge } from "@/protocol/session-mirror"
 import { markConversationCapabilityTransactionalInit } from "@/conversation/capability-transaction"
 import { PermissionAuthority } from "@/permission/authority"
@@ -57,8 +56,7 @@ async function validateInstanceConversationCapabilities() {
 export const InstanceBootstrap = markConversationCapabilityTransactionalInit(async function InstanceBootstrap() {
   Log.Default.info("bootstrapping", { directory: Instance.directory })
   installDefaultControlPlaneToolLoaders()
-  installDefaultTaskWakeRuntime()
-  configureTaskIngressRunner(runTaskLoop)
+    configureTaskIngressRunner(runTaskLoop)
   const lifecycleContext = {
     directory: Instance.directory,
     worktree: Instance.worktree,

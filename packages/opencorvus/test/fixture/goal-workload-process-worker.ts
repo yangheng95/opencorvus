@@ -19,7 +19,6 @@ import { Database, count, eq } from "@/storage/db"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { persistEstablishedTask } from "./engine-task"
-import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
 
 type Fixture = Awaited<ReturnType<typeof createFixture>>
 
@@ -29,7 +28,6 @@ if (!mode || !projectDirectory || !barrierDirectory || !fixturePath) {
 }
 
 declareNativeTaskProcessDeployment()
-installDefaultTaskWakeRuntime()
 
 const packageRevision = {
   scope: "built_in" as const,

@@ -18,7 +18,7 @@ import { recordEngineArtifact } from "../src/engine/artifact"
 import { collectTaskRunEvidence } from "../src/tool/task-run-evidence-host"
 import { createExpertSquadPackageHost } from "../src/tool/expert-squad-package-host"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-import { candidateMutableTextPaths } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/candidate-integrity"
+import { candidateMutableTextPaths } from "@squads/evolution-lab/lib/evolution-lab/candidate-integrity"
 import {
   TaskArtifactResourceSetLocatorSchema,
   TaskArtifactRefSchema,
@@ -41,18 +41,18 @@ import {
   EvolutionMetricIdentityError,
   EvolutionArtifactSchemas,
   EvolutionPackagePublishableArtifactInputSchema,
-} from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/artifacts"
-import collectRunEvidenceTool from "../../../expert-squads/builtin/evolution-lab/tools/collect-run-evidence"
-import expertSquadPackageTool from "../../../expert-squads/builtin/evolution-lab/tools/expert-squad-package"
+} from "@squads/evolution-lab/lib/evolution-lab/artifacts"
+import collectRunEvidenceTool from "@squads/evolution-lab/tools/collect-run-evidence"
+import expertSquadPackageTool from "@squads/evolution-lab/tools/expert-squad-package"
 import publishEvolutionArtifactTool, {
   assertEvolutionArtifactOwner,
   evolutionArtifactOwner,
   requireEvolutionWorkerProducer,
-} from "../../../expert-squads/builtin/evolution-lab/tools/publish-evolution-artifact"
-import executeEvolutionMetricsTool from "../../../expert-squads/builtin/evolution-lab/tools/execute-evolution-metrics"
+} from "@squads/evolution-lab/tools/publish-evolution-artifact"
+import executeEvolutionMetricsTool from "@squads/evolution-lab/tools/execute-evolution-metrics"
 import { withTaskScopedPluginToolHost } from "../src/tool/plugin-tool-host"
 import { prepareCrossTaskArtifactImports } from "../src/engine/cross-task-artifact-import"
-import rehydrateEvolutionResourcesTool from "../../../expert-squads/builtin/evolution-lab/tools/rehydrate-evolution-resources"
+import rehydrateEvolutionResourcesTool from "@squads/evolution-lab/tools/rehydrate-evolution-resources"
 import { prepareTaskProcessBinding, readTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { requireTaskPackageRevisionBinding } from "../src/engine/task-package-revision-binding"
 import { insertPreparedTaskCompletionDecision, prepareTaskCompletionDecision } from "../src/engine/completion-decision"
@@ -117,9 +117,17 @@ async function completeFixtureTaskWithDeliverables(input: {
     sessionID: input.sessionID,
     patch: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
+  // The Message carrying `complete_task` belongs to the Orchestrator Session,
+  // not to the Task's root Session. A root Session carries the operator's user
+  // Messages only, and the Host rejects an assistant Message written onto one.
+  const orchestratorSession = await Session.create({
+    kind: "orchestrator",
+    parentID: input.sessionID,
+    title: "Fixture Task completion",
+  })
   const userMessage = await Session.updateMessage({
     id: Identifier.ascending("message"),
-    sessionID: input.sessionID,
+    sessionID: orchestratorSession.id,
     role: "user",
     author: "orchestrator",
     time: { created: input.completedAt - 2 },
@@ -128,7 +136,7 @@ async function completeFixtureTaskWithDeliverables(input: {
   })
   const message = await Session.updateMessage({
     id: Identifier.ascending("message"),
-    sessionID: input.sessionID,
+    sessionID: orchestratorSession.id,
     parentID: userMessage.id,
     role: "assistant",
     author: "orchestrator",
@@ -143,7 +151,7 @@ async function completeFixtureTaskWithDeliverables(input: {
   const toolCallID = `call-complete-fixture-${input.taskID}`
   const part = await Session.updatePart({
     id: Identifier.ascending("part"),
-    sessionID: input.sessionID,
+    sessionID: orchestratorSession.id,
     messageID: message.id,
     type: "tool",
     callID: toolCallID,
@@ -154,7 +162,7 @@ async function completeFixtureTaskWithDeliverables(input: {
     taskID: input.taskID,
     visibleToolName: "complete_task",
     payload: {
-      orchestrator_session_id: input.sessionID,
+      orchestrator_session_id: orchestratorSession.id,
       orchestrator_message_id: message.id,
       tool_call_id: toolCallID,
       tool_part_id: part.id,
@@ -211,7 +219,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         project_id: "project-1",
         namespace: "builtin",
         id: "evolution-lab",
-        version: "2026.08.13.1",
+        version: "2026.08.18.1",
         package_digest: "a".repeat(64),
       },
       agent_id: "evolution-observer",
@@ -372,6 +380,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       },
       "evolution-lab/candidate-revision": {
         development_campaign_locator: locator,
+        feedback: null,
         parent_revision: revision,
         candidate_revision: { ...revision, version: "2026.08.06.2" },
         parent_resources: [resource],
@@ -463,6 +472,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           candidate: { failure: 0, unavailable: 0 },
         },
         aggregate_score: 0.9,
+        aggregate_interval: { confidence: 0.95, lower: 0.7, upper: 1.1 },
         regressions: [],
         unavailable_dimensions: [],
         required_unavailable_dimensions: [],
@@ -594,6 +604,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         unavailable_dimensions: ["evidence_integrity"],
         required_unavailable_dimensions: ["evidence_integrity"],
         aggregate_score: 0.9,
+        aggregate_interval: { confidence: 0.95, lower: 0.7, upper: 1.1 },
       }),
     ]
     expect(
@@ -791,9 +802,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           type: "text",
           text: "Authorize an exact evolution evidence chain",
         })
+        // The producer Message belongs to a child worker Session: a root
+        // Session carries the operator's user Messages only, and the Host
+        // rejects an assistant Message written onto one.
+        const workerSession = await Session.create({
+          kind: "assistant",
+          parentID: session.id,
+          title: "Evolution typed ABI chain worker",
+        })
         await Session.updateMessage({
           id: "message-evolution-abi-chain",
-          sessionID: session.id,
+          sessionID: workerSession.id,
           role: "assistant",
           author: "evolution-failure-analyst",
           time: { created: started },
@@ -821,13 +840,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         }
         await Session.updatePart({
           id: "part--step-evolution-abi-chain",
-          sessionID: session.id,
+          sessionID: workerSession.id,
           messageID: "message-evolution-abi-chain",
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-evolution-abi-chain",
-          sessionID: session.id,
+          sessionID: workerSession.id,
           messageID: "message-evolution-abi-chain",
           type: "tool",
           callID: "call-evolution-abi-chain",
@@ -840,7 +859,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
-          sessionID: session.id,
+          sessionID: workerSession.id,
           messageID: "message-evolution-abi-chain",
           toolCallID: "call-evolution-abi-chain",
           toolPartID: "part-evolution-abi-chain",
@@ -1040,16 +1059,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               JSON.stringify({
                 schema_version: 1,
                 scorer_id: "correctness",
-                evaluator_kind: "query",
+                description: "Exact correctness observation",
+                unit: "ratio",
                 direction: "higher_better",
                 target: 1,
                 floor: 0,
                 weight: 1,
-                unit: "ratio",
                 observation_class: "quality",
-                description: "Exact correctness observation",
-                query: "constant_value",
-                value: 1,
+                evaluator_kind: "query",
+                evaluator_config: { query: "constant_value", value: 1 },
               }),
             ],
           ])
@@ -1382,9 +1400,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 agent: "user",
                 model: { providerID: "test", modelID: "test" },
               })
+              // Producer Messages live on a child worker Session; a root
+              // Session carries the operator's user Messages only.
+              const trialWorkerSession = await Session.create({
+                kind: "assistant",
+                parentID: trialSession.id,
+                title: "Frozen baseline Trial worker",
+              })
               const trialAssistant = await Session.updateMessage({
                 id: Identifier.ascending("message"),
-                sessionID: trialSession.id,
+                sessionID: trialWorkerSession.id,
                 role: "assistant",
                 author: "target-worker",
                 time: { created: trialStarted, completed: trialCompleted },
@@ -1419,6 +1444,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               }
               return {
                 trialSession,
+                trialWorkerSession,
                 trialTaskID,
                 trialStarted: terminalTrialTask.time_started,
                 trialCompleted: trialLifecycle.timeCompleted,
@@ -1430,6 +1456,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           const {
             trialSession,
+            trialWorkerSession,
             trialTaskID,
             trialStarted,
             trialCompleted,
@@ -1444,7 +1471,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 terminal_occurrence: terminalOccurrence,
                 selected_messages: [
                   { session_id: trialSession.id, message_id: trialUser.id },
-                  { session_id: trialSession.id, message_id: trialAssistant.id },
+                  { session_id: trialWorkerSession.id, message_id: trialAssistant.id },
                 ],
               },
               { host } as never,
@@ -1581,45 +1608,27 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             locator: metricEvidenceLocator,
             purpose: "Exact metric execution evidence for the baseline arm",
           })
+          // A contradicting arm used to be caught by comparing the stated
+          // payload against the receipt. It is now unrepresentable: the arm is
+          // not a field the Evaluator may state, so a wrong one is refused as
+          // an unrecognized key instead of being compared against the truth.
           await expect(
             executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/evaluation-result",
-                payload: {
-                  case_id: metricOutcome.receipt.case_id,
-                  arm: "candidate",
-                  repetition: metricOutcome.receipt.repetition,
-                  scorers: metricOutcome.receipt.scorers,
-                  trial_task_id: metricOutcome.receipt.trial_task_id,
-                  trial_revision_digest: metricOutcome.receipt.trial_revision_digest,
-                  campaign_spec_locator: metricOutcome.receipt.campaign_spec_locator,
-                  candidate_revision_locator: metricOutcome.receipt.candidate_revision_locator,
-                  run_evidence_locator: metricOutcome.receipt.run_evidence_locator,
-                  metric_receipt_resource: metricReceiptResource,
-                },
+                payload: { arm: "candidate" },
                 resource_set: metricReceiptResourceSet,
                 source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
               },
               { host } as never,
             ),
-          ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
+          ).rejects.toThrow(/Unrecognized key/)
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const evaluationReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/evaluation-result",
-                payload: {
-                  case_id: metricOutcome.receipt.case_id,
-                  arm: metricOutcome.receipt.arm,
-                  repetition: metricOutcome.receipt.repetition,
-                  scorers: metricOutcome.receipt.scorers,
-                  trial_task_id: metricOutcome.receipt.trial_task_id,
-                  trial_revision_digest: metricOutcome.receipt.trial_revision_digest,
-                  campaign_spec_locator: metricOutcome.receipt.campaign_spec_locator,
-                  candidate_revision_locator: metricOutcome.receipt.candidate_revision_locator,
-                  run_evidence_locator: metricOutcome.receipt.run_evidence_locator,
-                  metric_receipt_resource: metricReceiptResource,
-                },
+                payload: {},
                 resource_set: metricReceiptResourceSet,
                 source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
               },
@@ -1694,6 +1703,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             label: "Exact candidate revision source",
             payload: {
               development_campaign_locator: campaignReceipt.locator,
+              feedback: null,
               parent_revision: revision,
               candidate_revision: candidateRevision,
               parent_resources: [caseResource],
@@ -1731,6 +1741,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                     candidate: { failure: 0, unavailable: 1 },
                   },
                   aggregate_score: null,
+                  aggregate_interval: null,
                   regressions: [],
                   unavailable_dimensions: [
                     "activity_duration_ms_delta",
@@ -1857,9 +1868,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const importedWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: importedSession.id,
+          title: "Imported campaign evaluation worker",
+        })
         const importedAssistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           role: "assistant",
           author: "evolution-evaluator",
           time: { created: sourceCompleted + 1 },
@@ -1874,13 +1892,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await Session.updatePart({
           id: "part--step-imported-campaign-evaluation",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-imported-campaign-evaluation",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "tool",
           callID: "call-imported-campaign-evaluation",
@@ -1893,7 +1911,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID: importedTaskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, importedTaskID),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           toolCallID: "call-imported-campaign-evaluation",
           toolPartID: "part-imported-campaign-evaluation",
@@ -2207,7 +2225,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           package_digest: loaded.packageDigest,
           namespace: "builtin",
           id: "evolution-lab",
-          version: "2026.08.13.1",
+          version: "2026.08.18.1",
           resource_set: { tree: "package" },
           package_root: `expert-squad-evolution-candidates/${taskID}/builtin/evolution-lab`,
         })
@@ -2266,7 +2284,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const candidateManifest = path.join(candidateDirectory, "expert-squad.jsonc")
         await writeFile(
           candidateManifest,
-          (await readFile(candidateManifest, "utf8")).replace('"version": "2026.08.13.1"', '"version": "2026.08.13.2"'),
+          (await readFile(candidateManifest, "utf8")).replace('"version": "2026.08.18.1"', '"version": "2026.08.18.2"'),
         )
         const candidatePublication = await candidateExecution.publish(candidateStage, {
           snapshot_kind: "catalog",
@@ -2318,7 +2336,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         expect(validatedCandidate).toMatchObject({
           namespace: "builtin",
           id: "evolution-lab",
-          version: "2026.08.13.2",
+          version: "2026.08.18.2",
           package_digest: comparison.candidate_digest,
           resource_set: candidateResourceSet,
         })
@@ -2360,9 +2378,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const candidateWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: session.id,
+          title: "Evolution candidate worker",
+        })
         const candidateAssistantMessage = await Session.updateMessage({
           id: "message-candidate-assistant",
-          sessionID: session.id,
+          sessionID: candidateWorkerSession.id,
           role: "assistant",
           author: "evolution-candidate-author",
           time: { created: Date.now() },
@@ -2377,13 +2402,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await Session.updatePart({
           id: "part--step-candidate-publisher",
-          sessionID: session.id,
+          sessionID: candidateWorkerSession.id,
           messageID: candidateAssistantMessage.id,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-candidate-publisher",
-          sessionID: session.id,
+          sessionID: candidateWorkerSession.id,
           messageID: candidateAssistantMessage.id,
           type: "tool",
           callID: "call-candidate-publisher",
@@ -2396,7 +2421,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
-          sessionID: session.id,
+          sessionID: candidateWorkerSession.id,
           messageID: candidateAssistantMessage.id,
           toolCallID: "call-candidate-publisher",
           toolPartID: "part-candidate-publisher",
@@ -2524,33 +2549,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             resources: [],
             source_artifact_locators: [],
           })
+          // The author supplies only what it owns; the publisher derives every
+          // revision, manifest, digest, and receipt from the two validated
+          // resource sets.
           const candidatePayload = {
             development_campaign_locator: developmentCampaign.locator,
-            parent_revision: {
-              namespace: "builtin",
-              id: "evolution-lab",
-              version: loaded.manifest.version,
-              package_digest: loaded.packageDigest,
-            },
-            candidate_revision: {
-              namespace: validatedCandidate.namespace,
-              id: validatedCandidate.id,
-              version: validatedCandidate.version,
-              package_digest: validatedCandidate.package_digest,
-            },
-            parent_resources: parentPackageResources.map(portableResource),
-            candidate_resources: candidatePackageResources.map(portableResource),
+            feedback: null,
             hypothesis: "Refine the exact candidate author instruction",
-            changed_paths: comparison.changed_paths,
-            diff_sha256: comparison.diff_sha256,
-            frozen_files: comparison.frozen_files,
-            manager_receipt: {
-              operation: "validated" as const,
-              namespace: validatedCandidate.namespace,
-              id: validatedCandidate.id,
-              version: validatedCandidate.version,
-              package_digest: validatedCandidate.package_digest,
-            },
             provenance: [developmentCampaign.locator],
           }
           let incompatibleCampaignError: unknown
@@ -2592,6 +2597,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               { host } as never,
             ),
           ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
+          // A Host-derived digest is not a field the author may state at all,
+          // so a false one is refused as an unrecognized key rather than
+          // compared against the truth.
           await expect(
             executePublishEvolutionArtifact(
               {
@@ -2603,7 +2611,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               },
               { host } as never,
             ),
-          ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
+          ).rejects.toThrow(/Unrecognized key/)
           const candidateReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
@@ -2689,9 +2697,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const importedWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: importedSession.id,
+          title: "Imported candidate validation worker",
+        })
         const importedAssistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           role: "assistant",
           author: "evolution-safety-auditor",
           time: { created: sourceCompleted + 1 },
@@ -2706,13 +2721,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await Session.updatePart({
           id: "part--step-rehydrate-candidate",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-rehydrate-candidate",
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           type: "tool",
           callID: "call-rehydrate-candidate",
@@ -2725,7 +2740,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID: importedTaskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, importedTaskID),
-          sessionID: importedSession.id,
+          sessionID: importedWorkerSession.id,
           messageID: importedAssistant.id,
           toolCallID: "call-rehydrate-candidate",
           toolPartID: "part-rehydrate-candidate",
@@ -2891,9 +2906,16 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           type: "text",
           text: "selected exact body",
         })
+        // The worker's Message belongs to a child Session; the root Session
+        // carries the operator's user Message only.
+        const evidenceWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: session.id,
+          title: "Terminal occurrence worker",
+        })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
-          sessionID: session.id,
+          sessionID: evidenceWorkerSession.id,
           role: "assistant",
           author: "worker",
           time: { created: started },
@@ -2907,7 +2929,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         await Session.updatePart({
           id: Identifier.ascending("part"),
-          sessionID: session.id,
+          sessionID: evidenceWorkerSession.id,
           messageID: assistant.id,
           type: "tool",
           callID: "call-1",
@@ -2949,7 +2971,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             },
             selectedMessageLocators: [
               { session_id: session.id, message_id: message.id },
-              { session_id: session.id, message_id: assistant.id },
+              { session_id: evidenceWorkerSession.id, message_id: assistant.id },
             ],
           },
         })
@@ -2977,7 +2999,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         })
         expect(evidence.messages[1]).toMatchObject({
-          locator: { session_id: session.id, message_id: assistant.id },
+          locator: { session_id: evidenceWorkerSession.id, message_id: assistant.id },
           role: "assistant",
           agent: "worker",
           parts: [
@@ -3056,10 +3078,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        // Producer Messages live on a child worker Session; a root Session
+        // carries the operator's user Messages only.
+        const evidenceOwnerWorkerSession = await Session.create({
+          kind: "assistant",
+          parentID: evidenceOwnerSession.id,
+          title: "Evolution evidence owner worker",
+        })
         const evidenceOwnerMessageID = "message-evidence-owner-publisher"
         await Session.updateMessage({
           id: evidenceOwnerMessageID,
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           role: "assistant",
           author: "evolution-evaluator",
           time: { created: completed + 1 },
@@ -3107,7 +3136,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               terminal_occurrence: evidence.terminal_occurrence,
               selected_messages: [
                 { session_id: session.id, message_id: message.id },
-                { session_id: session.id, message_id: assistant.id },
+                { session_id: evidenceWorkerSession.id, message_id: assistant.id },
               ],
             },
             {
@@ -3144,13 +3173,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
 
         await Session.updatePart({
           id: "part--step-evidence-owner-publisher",
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           messageID: evidenceOwnerMessageID,
           type: "step-start",
         })
         await Session.updatePart({
           id: "part-evidence-owner-publisher",
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           messageID: evidenceOwnerMessageID,
           type: "tool",
           callID: "call-evidence-owner-publisher",
@@ -3163,7 +3192,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           projectDirectory: project.path,
           taskID: evidenceOwnerTaskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, evidenceOwnerTaskID),
-          sessionID: evidenceOwnerSession.id,
+          sessionID: evidenceOwnerWorkerSession.id,
           messageID: evidenceOwnerMessageID,
           toolCallID: "call-evidence-owner-publisher",
           toolPartID: "part-evidence-owner-publisher",

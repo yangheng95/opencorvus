@@ -8,11 +8,11 @@ import { Instance } from "../../src/project/instance"
 import {
   MarketingGrowthArtifactTypes,
   parseMarketingGrowthArtifact,
-} from "../../../../expert-squads/builtin/marketing-growth/lib/marketing-growth/artifacts"
+} from "@squads/marketing-growth/lib/marketing-growth/artifacts"
 import {
   SeoGeoArtifactTypes,
   parseSeoGeoArtifact,
-} from "../../../../expert-squads/builtin/seo-geo/lib/seo-geo/artifacts"
+} from "@squads/seo-geo/lib/seo-geo/artifacts"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterAll(async () => {

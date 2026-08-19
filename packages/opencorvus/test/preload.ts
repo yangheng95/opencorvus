@@ -134,8 +134,6 @@ await Log.init({
 
 const { installDefaultControlPlaneToolLoaders } = await import("../src/tool/control-plane-tool-composition")
 installDefaultControlPlaneToolLoaders()
-const { installDefaultTaskWakeRuntime } = await import("../src/scheduler/task-wake-composition")
-installDefaultTaskWakeRuntime()
 const { TestHooks: TaskRootIngressTestHooks } = await import("../src/engine/task-root-ingress-delivery")
 terminalIngressRuntimeOverride = TaskRootIngressTestHooks.replaceTerminalIngressDeliveryRuntime(`test-runtime:${process.pid}`)
   })()

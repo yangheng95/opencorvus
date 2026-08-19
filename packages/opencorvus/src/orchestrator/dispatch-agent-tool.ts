@@ -387,10 +387,9 @@ export function createDispatchAgentTool(input: {
     const adapterInputSchema = DispatchAdapterContractRegistry.inputSchema(
       projectedAgent.identity.dispatchAdapterID,
     ) as z.ZodObject<any>
-    const publicAdapterInputSchema =
-      projectedAgent.identity.dispatchAdapterID === "build"
-        ? adapterInputSchema.omit({ worktreeUsage: true })
-        : adapterInputSchema
+    const publicAdapterInputSchema = DispatchAdapterContractRegistry.modelFacingInputSchema(
+      projectedAgent.identity.dispatchAdapterID,
+    )
     return {
       projectedAgent,
       publicAdapterInputSchema,
@@ -413,9 +412,7 @@ export function createDispatchAgentTool(input: {
         .describe(
           "Projected expert-squad dispatch target identifier to dispatch through the single scheduler agent-dispatch tool. " +
             `For target ${JSON.stringify(agentID)}, provide only these adapter-specific fields: ${acceptedAdapterFields.join(", ")}; omit fields owned by every other target. ` +
-            (dispatchAdapterID === "workload_analysis"
-              ? "`goal_ids` contains exact immutable Delivery Slice revision subjects: an empty array produces a zero-Slice review and does not infer Slices from a ContractGraph artifact. For a whole-plan review, copy every exact current Slice revision ref returned by the Architect into `goal_ids`. "
-              : "") +
+            DispatchAdapterContractRegistry.modelGuidance(dispatchAdapterID) +
             "Put those adapter-specific fields only in turn.input when turn.kind is initial. Every projected workflow node has one logical occurrence per Task. A continuation uses turn.kind=continuation, names one exact lineage authority, reopens its existing Session for another Turn, and reuses that occurrence. When this adapter accepts exact Delivery Slice revision identifiers, they select contract subjects and never create additional logical occurrences.",
         ),
       work_scope: ProjectedAgentWorkScopeSchema,
@@ -549,9 +546,10 @@ export function createDispatchAgentTool(input: {
               subject: DispatchWorkflowSubjectSchema.parse(workflowSubject),
               targetAgentID: target,
             })
-      const deliverySliceRevisionIDs = Array.isArray(targetInput.goal_ids)
-        ? targetInput.goal_ids.filter((value): value is string => typeof value === "string")
-        : []
+      const deliverySliceRevisionIDs = DispatchAdapterContractRegistry.deliverySliceRevisionIDs(
+        projectedAgent.identity.dispatchAdapterID,
+        targetInput,
+      )
       let childSessionID: string | undefined
       let dispatchID: string | undefined
       try {
@@ -606,18 +604,20 @@ export function createDispatchAgentTool(input: {
             path.resolve(taskPrimaryProjectRoot(input.taskID))
           : (initialTurn?.use_worktree ?? false)
         const executorTargetInput = structuredClone(dispatch.adapterInput)
-        const frozenTargetInput = Object.hasOwn(executorTargetInput, "goal_ids")
-          ? { ...executorTargetInput, goal_ids: [...dispatch.deliverySliceRevisionIDs] }
-          : executorTargetInput
+        const frozenTargetInput = DispatchAdapterContractRegistry.withDeliverySliceRevisionIDs(
+          projectedAgent.identity.dispatchAdapterID,
+          executorTargetInput,
+          dispatch.deliverySliceRevisionIDs,
+        )
         const adapterInput =
-          projectedAgent.identity.dispatchAdapterID === "build"
+          DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID)
             ? {
                 ...frozenTargetInput,
                 worktreeUsage: useWorktree ? "managed_worktree" : "current_project",
               }
             : frozenTargetInput
         const preparedSessionID =
-          useWorktree && projectedAgent.identity.dispatchAdapterID !== "build" && !dispatch.existingSessionID
+          useWorktree && !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID) && !dispatch.existingSessionID
             ? Identifier.descending("session")
             : undefined
         let resolveCommittedLineage!: (lineage: { sessionID: string; artifactID: string }) => void
@@ -676,7 +676,7 @@ export function createDispatchAgentTool(input: {
           return parsed
         }
         const executeDetached = async () => {
-          if (useWorktree && projectedAgent.identity.dispatchAdapterID !== "build") {
+          if (useWorktree && !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID)) {
             const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
             if (!worktreeSessionID) {
               throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)

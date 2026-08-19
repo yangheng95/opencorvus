@@ -558,9 +558,12 @@ export namespace ExpertSquadPackageManager {
     )
       throw new Error("Expert squad mutation journal receipt identity collides with a non-Manager Artifact")
     const receipt = EvolutionPromotionReceiptSchema.parse(envelope.payload)
-    const expectedOperation = journal.managerOperation === "replaced" ? "promotion" : "restoration"
+    // The journal proves what the Manager did; the receipt's own operation
+    // names what authorized it. Only restoration is pinned one-to-one — every
+    // other authorization installs, so a new one must not have to edit this.
+    const restoring = journal.managerOperation === "restored"
     if (
-      receipt.operation !== expectedOperation ||
+      (receipt.operation === "restoration") !== restoring ||
       receipt.authorization.task_id !== journal.identity.taskID ||
       envelope.producer.operation_id !== receipt.authorization.message_id ||
       receipt.target.scope !== journal.installationScope ||

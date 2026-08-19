@@ -64,14 +64,18 @@ export type BrowserPreviewVerificationInput = {
   signal?: AbortSignal
 }
 
+/**
+ * What a capture job is actually given. `url` and the resolved viewport
+ * presets used to ride along here too, but the job resolves both from the
+ * persisted target itself, so forwarding them only created a second copy that
+ * could disagree with the first.
+ */
 export type BrowserPreviewVerificationCaptureJobInput = {
   projectRoot: string
   jobID: string
   taskID: string
   targetID: string
-  url: string
   outDir: string
-  viewports: BrowserPreviewViewport[]
   viewportIDs: BrowserPreviewViewportID[]
   signal?: AbortSignal
 }
@@ -168,9 +172,7 @@ export async function runBrowserPreviewVerification(
       jobID,
       taskID: input.taskID,
       targetID: input.targetID,
-      url: input.target.url,
       outDir: preparedDir,
-      viewports,
       viewportIDs,
       signal: input.signal,
     })

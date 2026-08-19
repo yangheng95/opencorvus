@@ -439,7 +439,6 @@ export namespace SchedulerMessageDeliveryService {
       interval: DELIVERY_POLL_INTERVAL_MS,
       runAtStart: true,
       run: pollSchedulerMessageDeliveries,
-      scope: "global",
     })
   }
 

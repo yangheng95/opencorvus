@@ -1,8 +1,9 @@
 {
-  "note": "Provenance for the landing page's product material. Staleness in a screenshot is invisible in review — the old gallery shipped a v0.0.42beta window with an empty Mission Board and a stray text selection for weeks. Recording what each asset was captured from makes the gap a fact instead of an impression. test/lander-assets.test.ts asserts this file and the directory agree. The landing page no longer carries a screenshot gallery; the two files left are referenced by README.md only.",
+  "note": "Provenance for the landing page's product material. Staleness in a capture is invisible in review — the old gallery shipped a v0.0.42beta window with an empty Mission Board and a stray text selection for weeks. Recording what each asset was captured from makes the gap a fact instead of an impression. test/lander-assets.test.ts asserts this file agrees with both src/assets/lander and public/media, whose files are listed here under a media/ prefix.",
   "refresh": {
     "gallery": "Run the desktop app on the target release, drive it to the state each shot describes, and capture the window. Shots must show real work, not an empty state.",
-    "conceptFlow": "qa/record-real-client-demo.ps1 records the desktop window against a live task, then qa/curate-client-demo.mjs edits the frames into the GIF."
+    "conceptFlow": "qa/record-real-client-demo.ps1 records the desktop window against a live task, then qa/curate-client-demo.mjs edits the frames into the GIF.",
+    "demoVideo": "Record the desktop app driving one real task end to end, then re-encode for the web: ffmpeg -i <capture> -an -c:v libx264 -profile:v high -level 4.0 -preset slow -crf 28 -pix_fmt yuv420p -g 60 -movflags +faststart public/media/opencorvus-demo.mp4. -an drops the capture's silent system-audio channel and +faststart puts the moov atom in front, without which a browser must download the whole file before the first frame. The poster is one frame of the same file: ffmpeg -ss <t> -i <mp4> -frames:v 1 -q:v 4 <poster>.jpg."
   },
   "assets": [
     {
@@ -19,6 +20,26 @@
       "capturedAppVersion": "0.0.42-beta",
       "capturedOn": "2026-08-13",
       "knownIssues": []
+    },
+    {
+      "file": "media/opencorvus-demo.mp4",
+      "capturedAppVersion": "0.0.47-beta",
+      "capturedOn": "2026-08-19",
+      "knownIssues": [
+        "a browser_session_create tool call fails on screen at ~16s (BrowserRuntime could not connect); the run recovers through webfetch and carries on"
+      ],
+      "sourceMission": "NVDA daily candles over the past year, then the NVDA ecosystem — chart, technical read, network graph and a Word research report",
+      "model": "openai/gpt-5.6-terra",
+      "durationSeconds": 103.67,
+      "bytes": 7077401
+    },
+    {
+      "file": "media/opencorvus-demo-poster.jpg",
+      "capturedAppVersion": "0.0.47-beta",
+      "capturedOn": "2026-08-19",
+      "knownIssues": [],
+      "sourceMission": "frame at 18.6s of media/opencorvus-demo.mp4",
+      "bytes": 123414
     }
   ]
 }

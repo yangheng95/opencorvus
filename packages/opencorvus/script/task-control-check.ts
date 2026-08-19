@@ -372,7 +372,6 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     { ProcessSupervisor },
     { ProtocolStore },
     { Session },
-    { listInterruptedSessionEvidence },
     { listOwnedPromptSessionsForTask, listStartedIncompleteTaskIDs },
   ] = await Promise.all([
     import("@/cli/server-runtime"),
@@ -382,7 +381,6 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/shell/process-supervisor"),
     import("@/protocol/store"),
     import("@/session"),
-    import("@/engine/task-root-ingress-delivery"),
     import("@/engine/store"),
   ])
   const preparedServer = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
@@ -849,13 +847,11 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
               taskStatus: current.task.status,
               startedIncompleteTaskIDs: listStartedIncompleteTaskIDs({ projectID: Instance.project.id }),
               ownedPromptSessions,
-              interruptedSessionEvidence: rootSessionID
-                ? listInterruptedSessionEvidence({
-                    taskID,
-                    rootSessionID,
-                    ownedSessionIDs: new Set(ownedPromptSessions.map((owner) => owner.sessionID)),
-                  }).map((entry) => ({ sessionID: entry.session_id, inputMessageID: entry.input_message_id }))
-                : [],
+              // `interruptedSessionEvidence` came from a projection removed in 627146cc when
+              // execution state converged on immutable facts. The dynamic destructure kept
+              // resolving to `undefined`, so this diagnostic threw for every task that had a
+              // root session. Interrupted execution is now observable through the process
+              // recovery facts this check already reports below.
               wakes: current.artifacts
                 .filter((artifact) => artifact.kind === "task_root_ingress")
                 .map((artifact) => ({ id: artifact.id, status: artifact.label })),

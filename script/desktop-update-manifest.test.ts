@@ -100,4 +100,54 @@ describe("desktop update publication contract", () => {
       await fs.rm(directory, { recursive: true, force: true })
     }
   })
+
+  /**
+   * A Release that shipped without a platform still describes the ones it has.
+   * On v0.0.47-beta a single runner's apt install stalled, and refusing the
+   * manifest over the missing AppImage discarded nine finished platform builds
+   * and published nothing. A client on the absent platform sees no update;
+   * every other client still gets one.
+   */
+  test("omits a platform that did not build and still describes the rest", async () => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-desktop-update-partial-"))
+    const bundles = [
+      "OpenCorvus_0.0.36-beta_aarch64.AppImage",
+      "OpenCorvus_0.0.36-beta_x64.app.tar.gz",
+      "OpenCorvus_0.0.36-beta_x64-setup.exe",
+    ]
+    await Promise.all(
+      bundles.flatMap((bundle, index) => [
+        fs.writeFile(path.join(directory, bundle), `bundle-${index}`),
+        fs.writeFile(path.join(directory, `${bundle}.sig`), `signature-${index}\n`),
+      ]),
+    )
+
+    try {
+      const manifest = await generateDesktopUpdateManifest({
+        directory,
+        version: "0.0.36-beta",
+        repository: "yangheng95/opencorvus",
+        publicationDate: "2026-08-08T12:00:00.000Z",
+      })
+      expect(Object.keys(manifest.platforms).sort()).toEqual(["darwin-x86_64", "linux-aarch64", "windows-x86_64"])
+    } finally {
+      await fs.rm(directory, { recursive: true, force: true })
+    }
+  })
+
+  test("refuses a staging directory holding no overlay bundle at all", async () => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-desktop-update-empty-"))
+    try {
+      await expect(
+        generateDesktopUpdateManifest({
+          directory,
+          version: "0.0.36-beta",
+          repository: "yangheng95/opencorvus",
+          publicationDate: "2026-08-08T12:00:00.000Z",
+        }),
+      ).rejects.toThrow(/found no overlay bundle/)
+    } finally {
+      await fs.rm(directory, { recursive: true, force: true })
+    }
+  })
 })

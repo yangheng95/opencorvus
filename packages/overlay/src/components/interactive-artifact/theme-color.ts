@@ -20,12 +20,7 @@ export type ArtifactVisualTheme = {
 }
 
 export function artifactVisualTheme(element: Element): ArtifactVisualTheme {
-  const style = getComputedStyle(element)
-  const required = (token: `--${string}`) => {
-    const value = style.getPropertyValue(token).trim()
-    if (!value) throw new Error(`Interactive artifact theme token is missing: ${token}`)
-    return value
-  }
+  const required = (token: `--${string}`) => requiredThemeColor(element, token)
   const accent = required("--accent")
   const good = required("--good")
   const warning = required("--warn")

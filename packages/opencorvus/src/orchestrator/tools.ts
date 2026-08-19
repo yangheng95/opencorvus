@@ -4,6 +4,7 @@
  * Created per-task via createOrchestratorTools({ taskID }).
  * The taskID is captured in the closure — no global registry needed.
  */
+import type { AgentDispatchAuthorityCommit } from "@/agent/runner"
 import { parseAcceptanceSpecs } from "@/acceptance/types"
 import { isDeepStrictEqual } from "node:util"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
@@ -144,6 +145,7 @@ import { createFrontendResearchStageDispatcher } from "./frontend-research-stage
 import { createMulticaImportTools } from "./multica-import-tools"
 import { createNoActionTool } from "./no-action-tool"
 import { createExpertSquadAuthorAiTool } from "@/tool/expert-squad-author"
+import { createExpertSquadFeedbackRevisionAiTool } from "@/tool/expert-squad-feedback-revision-tool"
 import {
   AddGoalInputSchema,
   createDeliverySliceContractTools,
@@ -158,7 +160,6 @@ import { createReadContextTool } from "./read-context-tool"
 import { createReadAgentMessageTool } from "./read-agent-message-tool"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
 import { createRuntimeRepairTools } from "./runtime-repair-tools"
-import { stageInputDigest } from "./stage-input-digest"
 import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
 import { createSubagentCancellationTool } from "./subagent-cancellation-tool"
 import {
@@ -219,13 +220,6 @@ function architectDispatchReason(input: ArchitectToolInput): string {
   ].join("\n")
 }
 
-function taskContinuationScope(task: { title: string; request: string }) {
-  return {
-    task_title: task.title,
-    task_request_digest: stageInputDigest(task.request),
-  }
-}
-
 async function taskAuthorityAnchor(input: {
   task: TaskWithRootSession
   existingSessionID?: string
@@ -282,45 +276,6 @@ async function taskAuthorityAnchor(input: {
   return authority
 }
 
-export function goalsContinuationScope(
-  goals: Array<{
-    id: string
-    requirement_set_artifact_id: string | null
-    requirement_set_artifact_sha256: string | null
-    contract_graph_artifact_id: string | null
-    contract_graph_artifact_sha256: string | null
-    title: string
-    slug: string
-    objective: string
-    acceptance_specs: unknown
-    owned_paths: unknown
-    kind: string
-    priority: string
-    order_index: number
-  }>,
-) {
-  return goals
-    .slice()
-    .sort((a, b) => a.order_index - b.order_index || a.id.localeCompare(b.id))
-    .map((goal) => {
-      const acceptanceSpecs = parseAcceptanceSpecs(goal.acceptance_specs, `engine_goal ${goal.id}.acceptance_specs`)
-      return {
-        id: goal.id,
-        requirement_set_artifact_id: goal.requirement_set_artifact_id,
-        requirement_set_artifact_sha256: goal.requirement_set_artifact_sha256,
-        contract_graph_artifact_id: goal.contract_graph_artifact_id,
-        contract_graph_artifact_sha256: goal.contract_graph_artifact_sha256,
-        title: goal.title,
-        slug: goal.slug,
-        objective_digest: stageInputDigest(goal.objective),
-        acceptance_specs_digest: stageInputDigest(acceptanceSpecs),
-        owned_paths_digest: stageInputDigest(goal.owned_paths),
-        kind: goal.kind,
-        priority: goal.priority,
-        order_index: goal.order_index,
-      }
-    })
-}
 
 function buildAgentContextSections(
   entries: Array<{
@@ -872,47 +827,35 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
 
-const TERMINAL_TASK_TOOL_CAPABILITIES = {
-  skill: "read_only",
-  read: "read_only",
-  read_context: "read_only",
-  read_agent_message: "read_only",
-  read_task_message: "read_only",
-  capability_search: "read_only",
-  artifact_search: "read_only",
-  artifact_read: "read_only",
-  multica_catalog: "read_only",
-  multica_preview: "read_only",
-} as const satisfies Record<string, "read_only">
-
-function terminalTaskToolCapability(name: string): "read_only" | "mutation" {
-  return name in TERMINAL_TASK_TOOL_CAPABILITIES ? "read_only" : "mutation"
-}
-
-/**
- * The Tool table for a conversation-only Turn: every read-only Tool, plus the
- * single decision Tool the ingress kind authorizes. Authority by projection —
- * what the Turn must not do simply is not on its table.
- */
-export function projectTerminalConversationTools<T>(
-  tools: Record<string, T>,
-  authority: Pick<TerminalConversationAuthority, "ingressKind">,
-): Record<string, T> {
-  const decisionTool = authority.ingressKind === "operator_message" ? "no_action" : "respond_agent_coordination"
-  return Object.fromEntries(
-    Object.entries(tools).filter(([name]) => name === decisionTool || terminalTaskToolCapability(name) === "read_only"),
-  )
-}
-
-// Re-export the stateful-tool registry (defined in a dependency-free module
-// so `session/message.ts` can import it without creating a circular graph
-// through `@/session`). Surfacing it from this module keeps it visible to
-// developers reading tool definitions.
-export { STATEFUL_SNAPSHOT_TOOL_NAMES, type StatefulSnapshotToolName } from "./stateful-tool-names"
 
 // ---------------------------------------------------------------------------
 // Tool factory
 // ---------------------------------------------------------------------------
+
+/**
+ * The part of a stage dispatch that is the same for every stage.
+ *
+ * Five call sites each unpacked the very same nine fields out of the typed
+ * `DispatchAdapterExecutionContext` they already held — including two closures
+ * over `execution.dispatch` written out identically each time. Adding a stage
+ * meant copying them again, and changing one meant finding all five.
+ */
+function stageDispatchBinding(execution: DispatchAdapterExecutionContext) {
+  return {
+    agentID: execution.agentID,
+    packageRevision: execution.projectedAgent.packageRevision,
+    workScope: execution.workScope,
+    newSessionID: execution.newSessionID,
+    existingSessionID: execution.existingSessionID,
+    continuationPrompt: dispatchAdapterContinuationPrompt(execution),
+    dispatchTurn: execution.dispatch.turn,
+    onSessionCreated: async (sessionID: string) => {
+      execution.dispatch.observeSession(sessionID)
+    },
+    onDispatchAuthorityCommit: ((sessionID, descriptor) =>
+      execution.dispatch.commitSession(sessionID, descriptor)) as AgentDispatchAuthorityCommit,
+  }
+}
 
 export function createOrchestratorTools(input: {
   taskID: string
@@ -1143,17 +1086,7 @@ export function createOrchestratorTools(input: {
           task,
           reason,
           attachmentRefs: attachment_refs,
-          agentID: execution.agentID,
-          packageRevision: execution.projectedAgent.packageRevision,
-          workScope: execution.workScope,
-          newSessionID: execution.newSessionID,
-          existingSessionID: execution.existingSessionID,
-          continuationPrompt: dispatchAdapterContinuationPrompt(execution),
-          dispatchTurn: execution.dispatch.turn,
-          onSessionCreated: async (sessionID) => {
-            execution.dispatch.observeSession(sessionID)
-          },
-          onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
+          ...stageDispatchBinding(execution),
         })
         return dispatch
       },
@@ -1189,18 +1122,8 @@ export function createOrchestratorTools(input: {
         const dispatch = await dispatchArchitectStage({
           task,
           reason: architectDispatchReason(input),
-          agentID: execution.agentID,
-          packageRevision: execution.projectedAgent.packageRevision,
+          ...stageDispatchBinding(execution),
           attachmentRefs: input.attachment_refs,
-          workScope: execution.workScope,
-          newSessionID: execution.newSessionID,
-          existingSessionID: execution.existingSessionID,
-          continuationPrompt: dispatchAdapterContinuationPrompt(execution),
-          dispatchTurn: execution.dispatch.turn,
-          onSessionCreated: async (sessionID) => {
-            execution.dispatch.observeSession(sessionID)
-          },
-          onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
         })
         return dispatch
       },
@@ -1254,18 +1177,8 @@ export function createOrchestratorTools(input: {
           focus,
           appUrl: app_url,
           previewCommand: preview_command,
-          agentID: execution.agentID,
-          packageRevision: execution.projectedAgent.packageRevision,
-          workScope: execution.workScope,
+          ...stageDispatchBinding(execution),
           goalIDs: goal_ids,
-          newSessionID: execution.newSessionID,
-          existingSessionID: execution.existingSessionID,
-          continuationPrompt: dispatchAdapterContinuationPrompt(execution),
-          dispatchTurn: execution.dispatch.turn,
-          onSessionCreated: async (sessionID) => {
-            execution.dispatch.observeSession(sessionID)
-          },
-          onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
         })
         return dispatch
       },
@@ -1346,17 +1259,7 @@ export function createOrchestratorTools(input: {
           sourceUrls: source_urls,
           focus,
           deliverySliceRevisionIDs: goal_ids,
-          agentID: execution.agentID,
-          packageRevision: execution.projectedAgent.packageRevision,
-          workScope: execution.workScope,
-          newSessionID: execution.newSessionID,
-          existingSessionID: execution.existingSessionID,
-          continuationPrompt: dispatchAdapterContinuationPrompt(execution),
-          dispatchTurn: execution.dispatch.turn,
-          onSessionCreated: async (sessionID) => {
-            execution.dispatch.observeSession(sessionID)
-          },
-          onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
+          ...stageDispatchBinding(execution),
         })
         return dispatch
       },
@@ -1375,17 +1278,7 @@ export function createOrchestratorTools(input: {
           targetDeliverable: target_deliverable,
           sourceUrls: source_urls,
           focus,
-          agentID: execution.agentID,
-          packageRevision: execution.projectedAgent.packageRevision,
-          workScope: execution.workScope,
-          newSessionID: execution.newSessionID,
-          existingSessionID: execution.existingSessionID,
-          continuationPrompt: dispatchAdapterContinuationPrompt(execution),
-          dispatchTurn: execution.dispatch.turn,
-          onSessionCreated: async (sessionID) => {
-            execution.dispatch.observeSession(sessionID)
-          },
-          onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
+          ...stageDispatchBinding(execution),
         })
         return dispatch
       },
@@ -2636,6 +2529,10 @@ export function createOrchestratorTools(input: {
       taskID: input.taskID,
       sessionID: input.agentSessionID,
     }),
+    evolve_expert_squad_from_feedback: createExpertSquadFeedbackRevisionAiTool({
+      taskID: input.taskID,
+      sessionID: input.agentSessionID,
+    }),
     artifact_search: createArtifactSearchAiTool(input.taskID),
     artifact_read: createArtifactReadAiTool(input.taskID),
     artifact_select: createArtifactSelectAiTool(input.taskID),
@@ -2680,11 +2577,7 @@ export function createOrchestratorTools(input: {
   // is a projection, never a per-call gate: a stray lifecycle call lands on
   // the engine's own existing_terminal invariant and returns a model-visible
   // rejection with the actual status.
-  const surface = {
-    tools: input.terminalConversationAuthority
-      ? projectTerminalConversationTools(publicTools, input.terminalConversationAuthority)
-      : publicTools,
-  }
+  const surface = { tools: publicTools }
   orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentTool))
   return surface
 }

@@ -12,6 +12,7 @@ import {
   type PtyInfo,
 } from "../services/terminal"
 import type { StreamHandle } from "../services/host-transport"
+import { themeColor } from "../services/theme"
 import { t } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
 
@@ -82,7 +83,7 @@ export function TerminalPanel(props: TerminalPanelProps): JSX.Element {
       background: styles.backgroundColor,
       foreground,
       cursor: foreground,
-      selectionBackground: styles.getPropertyValue("--accent-dim").trim(),
+      selectionBackground: themeColor(host, "--accent-dim"),
     }
   }
 

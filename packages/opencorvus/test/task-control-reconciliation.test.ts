@@ -1018,10 +1018,11 @@ describe("Task-control reconciliation", () => {
             terminalLifecycleReference: requireCurrentTerminalLifecycleReference(taskID),
           },
         })
-        // Authority by projection: a coordination-only terminal conversation
-        // has no no_action Tool at all, so there is no refusal path to record.
-        expect(tools.no_action).toBeUndefined()
-        expect(tools.dispatch_agent).toBeUndefined()
+        // Tool availability follows the real environment, not the Task's
+        // terminal color; the recorded refusal below is an assistant-authored
+        // Tool failure, which is what this reconciliation actually settles.
+        expect(tools.no_action).toBeDefined()
+        expect(tools.dispatch_agent).toBeDefined()
         if (!tools.respond_agent_coordination) throw new Error("Expected terminal respond_agent_coordination Tool")
         await Session.updatePart({
           ...rejectedRequest,

@@ -20,35 +20,6 @@ export const RequirementDeclaredIDSchema = z
 
 export type RequirementDeclaredID = z.infer<typeof RequirementDeclaredIDSchema>
 
-export const RequirementStringArraySchema = z.array(z.string().trim().min(1))
-export const RequirementAcceptanceListSchema = RequirementStringArraySchema.min(1)
-
-export function parseStoredRequirementAcceptance(input: unknown, context: string): string[] {
-  if (typeof input !== "string") {
-    throw new Error(`${context}: requirement acceptance must be JSON text`)
-  }
-  let decoded: unknown
-  try {
-    decoded = JSON.parse(input) as unknown
-  } catch (error) {
-    const detail = error instanceof Error ? error.message : String(error)
-    throw new Error(`${context}: requirement acceptance is not valid JSON: ${detail}`)
-  }
-  const result = RequirementAcceptanceListSchema.safeParse(decoded)
-  if (!result.success) {
-    throw new Error(`${context}: invalid requirement acceptance: ${z.prettifyError(result.error)}`)
-  }
-  return result.data
-}
-
-export function parseStoredRequirementStringArray(input: unknown, context: string): string[] {
-  const result = RequirementStringArraySchema.safeParse(input)
-  if (!result.success) {
-    throw new Error(`${context}: invalid requirement string array: ${z.prettifyError(result.error)}`)
-  }
-  return result.data
-}
-
 export const RequirementSchema = z
   .object({
     id: RequirementDeclaredIDSchema,

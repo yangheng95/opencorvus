@@ -54,7 +54,7 @@ import {
   normalizeComposerDraftKey,
   setComposerDraft,
 } from "../services/composer-draft"
-import type { ExpertSquadOption } from "../services/expert-squad"
+import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
 import { currentUIScale } from "../utils/layout-tokens"
 import { ComposerModelSelector } from "./ComposerModelSelector"
 import { ComposerPermissionControl } from "./ComposerPermissionControl"
@@ -170,6 +170,8 @@ export interface ChatComposerProps {
   missionSkills: ComposerSkillOption[]
   referenceCatalogError?: string
   expertSquads: ExpertSquadOption[]
+  onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onInstallMoreExpertSquads?: () => void
   activeExpertSquadID: string
@@ -1551,6 +1553,8 @@ export function ChatComposer(props: ChatComposerProps) {
                     expertSquads={props.expertSquads}
                     onExpertSquadQuery={props.onExpertSquadQuery}
                     onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
+                    onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
+                    onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
                     launchReferences={visibleComposerReferences(text())}
                     readOnly={false}
                     disabled={!props.enabled || props.busy}

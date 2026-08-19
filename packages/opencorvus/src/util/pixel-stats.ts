@@ -29,10 +29,23 @@ export function decodePNGBuffer(buf: Buffer): Promise<DecodedPNG> {
 }
 
 /**
- * 非白像素密度：一个像素只要 max(r,g,b) < 250 就记为"有内容"。
- * α<16 视为背景（否则 dist/ 截图的边缘 alpha 会被错当作内容）。
+ * 一个像素离本图自身背景色多远才算"有内容"，按 8bit 通道的切比雪夫距离。
+ * 约等于 1.5 个 4bit 量化桶，用来吸收 PNG/JPEG 量化与抗锯齿噪声——与
+ * `uniqueColorBucketCount` 用桶而非原始 RGB 的理由相同。
  */
-export function nonWhiteDensity(
+const BACKGROUND_TOLERANCE = 24
+
+/**
+ * 内容像素密度：背景色取该区域自身的众数色（4bit/通道桶），偏离它超过
+ * `BACKGROUND_TOLERANCE` 的像素记为"有内容"。α<16 视为背景（否则 dist/
+ * 截图的边缘 alpha 会被错当作内容）。
+ *
+ * 旧实现把"背景"写死为白色（`max(r,g,b) < 250` 即算内容）。深色主题页面因此
+ * 恒等于 1.0——一张全黑的失败截图与一张正常的深色页面得到同一个读数，指标
+ * 对深色 UI 不携带任何信息，而本仓库自己的产物就是 theme-aware 的。取众数
+ * 色让这个比值在任意背景下都表示同一件事：这块裁图相对它自己的底色有多少内容。
+ */
+export function contentPixelRatio(
   img: DecodedPNG,
   region?: { x: number; y: number; width: number; height: number },
 ): number {
@@ -41,25 +54,46 @@ export function nonWhiteDensity(
   const x1 = region ? Math.max(0, Math.min(img.width, region.x + region.width)) : img.width
   const y1 = region ? Math.max(0, Math.min(img.height, region.y + region.height)) : img.height
   if (x1 <= x0 || y1 <= y0) return 0
-  let nonWhite = 0
+
+  const counts = new Map<number, number>()
+  for (let y = y0; y < y1; y++) {
+    for (let x = x0; x < x1; x++) {
+      const idx = (y * img.width + x) * 4
+      if (img.data[idx + 3] < 16) continue
+      const key = ((img.data[idx] >> 4) << 8) | ((img.data[idx + 1] >> 4) << 4) | (img.data[idx + 2] >> 4)
+      counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+  }
+  // Fully transparent crops carry no background and therefore no content.
+  if (counts.size === 0) return 0
+  let modalKey = 0
+  let modalCount = -1
+  for (const [key, count] of counts) {
+    if (count > modalCount) {
+      modalCount = count
+      modalKey = key
+    }
+  }
+  const backgroundR = ((modalKey >> 8) & 0xf) * 16 + 8
+  const backgroundG = ((modalKey >> 4) & 0xf) * 16 + 8
+  const backgroundB = (modalKey & 0xf) * 16 + 8
+
+  let content = 0
   let total = 0
   for (let y = y0; y < y1; y++) {
     for (let x = x0; x < x1; x++) {
       const idx = (y * img.width + x) * 4
-      const r = img.data[idx]
-      const g = img.data[idx + 1]
-      const b = img.data[idx + 2]
-      const a = img.data[idx + 3]
-      if (a < 16) {
-        total++
-        continue
-      }
-      const maxCh = r > g ? (r > b ? r : b) : g > b ? g : b
-      if (maxCh < 250) nonWhite++
       total++
+      if (img.data[idx + 3] < 16) continue
+      const distance = Math.max(
+        Math.abs(img.data[idx] - backgroundR),
+        Math.abs(img.data[idx + 1] - backgroundG),
+        Math.abs(img.data[idx + 2] - backgroundB),
+      )
+      if (distance > BACKGROUND_TOLERANCE) content++
     }
   }
-  return total === 0 ? 0 : nonWhite / total
+  return total === 0 ? 0 : content / total
 }
 
 /**

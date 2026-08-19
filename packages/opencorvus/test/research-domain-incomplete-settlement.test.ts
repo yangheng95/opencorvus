@@ -11,7 +11,7 @@ import { Identifier } from "@/id/id"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { createDeepResearchStageDispatcher } from "@/orchestrator/deep-research-stage"
 import { createFrontendResearchStageDispatcher } from "@/orchestrator/frontend-research-stage"
-import { persistResearchArtifactBestEffort } from "@/orchestrator/research-persistence"
+import { persistPartialResearchBrief } from "@/orchestrator/research-persistence"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
@@ -377,12 +377,10 @@ describe("Research domain-incomplete settlement", () => {
   }
 
   test("a failed post-Turn Research persistence remains the distinct partial outcome", () => {
-    const outcome = persistResearchArtifactBestEffort({
+    const outcome = persistPartialResearchBrief({
       taskID: Identifier.ascending("task"),
       dispatchID: Identifier.ascending("artifact"),
       component: "deep-research",
-      operation: "persist-partial-research-brief",
-      delivery: "incomplete",
       sessionID: Identifier.ascending("session"),
       finalMessageID: Identifier.ascending("message"),
       persist() {

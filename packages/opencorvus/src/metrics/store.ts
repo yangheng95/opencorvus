@@ -10,12 +10,13 @@
  *   - Scope/goal_id invariant: scope='goal' ⇔ goal_id NOT NULL;
  *     scope='global' ⇔ goal_id NULL.
  */
+import type { MetricEvaluatorKind, MetricObservationClass } from "./types"
 import { and, asc, count, eq, sql } from "drizzle-orm"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Database } from "@/storage/db"
 import { Identifier } from "@/id/id"
-import { EngineIterationTable, EngineMetricResultTable, EngineMetricSpecTable } from "./metrics.sql"
-import { MetricResult, type IterationSnapshot, type MetricSpec } from "./types"
+import { EngineMetricResultTable, EngineMetricSpecTable } from "./metrics.sql"
+import { MetricResult, type MetricSpec } from "./types"
 import z from "zod"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { canonicalMetricJSON } from "./canonical-json"
@@ -40,8 +41,10 @@ export interface BaselineSpecInput {
   target: number
   floor: number
   weight: number
-  observation_class: "quality" | "diagnostic" | "efficiency"
-  evaluator_kind: "shell" | "judge" | "prebuilt" | "query" | "aggregator"
+  observation_class: MetricObservationClass
+  // Restating the union inline meant a sixth evaluator kind would compile here
+  // while silently never reaching this input type.
+  evaluator_kind: MetricEvaluatorKind
   evaluator_config: Record<string, unknown>
 }
 
@@ -56,17 +59,6 @@ export interface BaselineSpecInput {
 export function registerBaselineSpec(input: BaselineSpecInput): MetricSpec {
   validateScopeInvariant(input.scope, input.goal_id)
   return Database.transaction((tx) => {
-    const iterExists = tx
-      .select({ c: count() })
-      .from(EngineIterationTable)
-      .where(eq(EngineIterationTable.task_id, input.task_id))
-      .get()
-    if (iterExists && iterExists.c > 0) {
-      throw new MetricWriteError({
-        message: `cannot register baseline spec for task ${input.task_id}: modeling window closed (${iterExists.c} iterations exist)`,
-        code: "modeling_window_closed",
-      })
-    }
     const now = Date.now()
     const id = Identifier.ascending("metric_spec")
     const row = {
@@ -147,30 +139,6 @@ export function writeMetricResult(input: MetricResultInput): MetricResult {
 }
 
 // ---------------------------------------------------------------------------
-// Iteration rows
-// ---------------------------------------------------------------------------
-
-export function writeIterationSnapshot(snapshot: IterationSnapshot): void {
-  Database.use((db) =>
-    db
-      .insert(EngineIterationTable)
-      .values({
-        task_id: snapshot.task_id,
-        iteration: snapshot.iteration,
-        aggregate_score: snapshot.aggregate_score,
-        per_goal_score_json: snapshot.per_goal_score,
-        global_score: snapshot.global_score,
-        delta_vs_prev: snapshot.delta_vs_prev,
-        novelty_score: snapshot.novelty_score,
-        unmet_target_count: snapshot.unmet_target_count,
-        unmeasured_target_count: snapshot.unmeasured_target_count,
-        open_counterexamples: snapshot.open_counterexamples,
-        regressed_target_count: snapshot.regressed_target_count,
-      })
-      .run(),
-  )
-}
-
 // ---------------------------------------------------------------------------
 // Reads
 // ---------------------------------------------------------------------------
@@ -193,42 +161,6 @@ export function readResultsForIteration(taskID: string, iteration: number): Metr
   return rows.map((row) => MetricResult.parse({ ...row, evidence_ref: JSON.parse(row.evidence_ref) }))
 }
 
-export function readIterationHistory(taskID: string): IterationSnapshot[] {
-  const rows = Database.use((db) =>
-    db
-      .select()
-      .from(EngineIterationTable)
-      .where(eq(EngineIterationTable.task_id, taskID))
-      .orderBy(asc(EngineIterationTable.iteration))
-      .all(),
-  )
-  return rows.map((r) => ({
-    task_id: r.task_id,
-    iteration: r.iteration,
-    aggregate_score: r.aggregate_score,
-    per_goal_score: (r.per_goal_score_json ?? {}) as Record<string, number | null>,
-    global_score: r.global_score,
-    delta_vs_prev: r.delta_vs_prev,
-    novelty_score: r.novelty_score,
-    unmet_target_count: r.unmet_target_count,
-    unmeasured_target_count: r.unmeasured_target_count,
-    open_counterexamples: r.open_counterexamples,
-    regressed_target_count: r.regressed_target_count,
-  }))
-}
-
-export function readPreviousAggregateScore(taskID: string, iteration: number): number | null {
-  if (iteration === 0) return null
-  const row = Database.use((db) =>
-    db
-      .select({ aggregate_score: EngineIterationTable.aggregate_score })
-      .from(EngineIterationTable)
-      .where(and(eq(EngineIterationTable.task_id, taskID), eq(EngineIterationTable.iteration, iteration - 1)))
-      .get(),
-  )
-  return row?.aggregate_score ?? null
-}
-
 // ---------------------------------------------------------------------------
 // Internal validators
 // ---------------------------------------------------------------------------
@@ -248,7 +180,13 @@ function validateScopeInvariant(scope: "goal" | "global", goalID: string | null)
   }
 }
 
-function clip01(x: number): number {
+/**
+ * The single normalized-value clamp. `executor.ts` held a copy without the
+ * finite guard, so a degenerate spec (floor === target) produced NaN that only
+ * became 0 once it reached this module on write — the in-memory attempt
+ * carried NaN through aggregation in between.
+ */
+export function clip01(x: number): number {
   if (!Number.isFinite(x)) return 0
   if (x < 0) return 0
   if (x > 1) return 1

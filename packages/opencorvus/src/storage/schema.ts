@@ -50,7 +50,7 @@ import {
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "../protocol/protocol.sql"
 import { QuickNoteTable } from "../quicknote/quicknote.sql"
 import { DecisionLogTable } from "../decision-log/schema"
-import { EngineMetricSpecTable, EngineMetricResultTable, EngineIterationTable } from "../metrics/metrics.sql"
+import { EngineMetricSpecTable, EngineMetricResultTable } from "../metrics/metrics.sql"
 import { ProviderUsageEventTable } from "../usage/usage.sql"
 
 export {
@@ -123,7 +123,6 @@ export {
   DecisionLogTable,
   EngineMetricSpecTable,
   EngineMetricResultTable,
-  EngineIterationTable,
   ProviderUsageEventTable,
 }
 
@@ -197,6 +196,5 @@ export const ApplicationSchema = {
   DecisionLogTable,
   EngineMetricSpecTable,
   EngineMetricResultTable,
-  EngineIterationTable,
   ProviderUsageEventTable,
 } as const satisfies Record<string, AnySQLiteTable>

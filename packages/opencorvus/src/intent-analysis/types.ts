@@ -19,6 +19,26 @@ export type IntentComplexity = "trivial" | "small" | "medium" | "large" | "unkno
 
 export type ClarificationPriority = "blocker" | "nice"
 
+/**
+ * Whether a clarification at this priority stops dispatch to ask the operator.
+ *
+ * Stated as an exhaustive switch because the caller used to select blockers
+ * with `priority === "blocker"`: a third priority would have been swept in
+ * with `nice` and never reached the operator, with nothing to compile against.
+ */
+export function clarificationBlocksDispatch(priority: ClarificationPriority): boolean {
+  switch (priority) {
+    case "blocker":
+      return true
+    case "nice":
+      return false
+    default: {
+      const unhandled: never = priority
+      throw new Error(`Unhandled clarification priority: ${String(unhandled)}`)
+    }
+  }
+}
+
 export interface IntentSlot {
   /** Slot name, e.g. "target_file", "module", "stack", "action_verb". */
   key: string
@@ -61,7 +81,9 @@ export interface IntentAnalysisResult {
   /** Keys of information judged missing but important — empty means fully specified. */
   missing_info: string[]
   clarifications: IntentClarification[]
-  /** Overall confidence in this analysis, 0-1. */
+  /** Overall confidence in this analysis, 0-1. Self-reported by the model, not
+   *  derived from any statistic, and on a different scale from the 0-100 integer
+   *  memory metric and the three-value labels used by fact-check and research. */
   confidence: number
   /** One-line statement of what the user wants. */
   summary: string

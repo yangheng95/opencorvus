@@ -72,8 +72,16 @@ export async function discoverExpertSquadPayloadPackages(repoRoot: string): Prom
 
   for (const trackedPath of trackedAuthoringPaths(repoRoot)) {
     const segments = trackedPath.split("/")
+    // A file sitting directly in the authoring root is repository tooling that
+    // happens to live beside the packages — `tsconfig.json` for the behavior
+    // tests — not a package file with a malformed path. Refusing it turned
+    // tracking one such file into a generation failure. Anything deeper still
+    // has to name a package, because there a short path is a real mistake.
+    if (segments.length === 1 && segments[0]) continue
     if (segments.length < 3 || segments.some((segment) => !segment)) {
-      throw new Error(`Expert squad payload generation tracked path must match <namespace>/<id>/<file>: ${trackedPath}`)
+      throw new Error(
+        `Expert squad payload generation tracked path must match <namespace>/<id>/<file>: ${trackedPath}`,
+      )
     }
     const [namespace, id, ...fileSegments] = segments as [string, string, ...string[]]
     if (embeddedIDs.has(id)) continue

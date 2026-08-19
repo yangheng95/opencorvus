@@ -1,21 +1,42 @@
 import { Database, eq, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { MemoryFileTable } from "./memory.sql"
-import type { MemoryKind, MemorySearchResult, MemorySource } from "./types"
+import type { HostOwnedMemoryKind, MemoryKind, MemorySearchResult, MemorySource } from "./types"
 
 export namespace MemorySearch {
   const log = Log.create({ service: "memory.search" })
 
   const HALF_LIFE_DAYS = 30
   const LAMBDA = Math.LN2 / HALF_LIFE_DAYS
-  const KIND_WEIGHT: Record<MemoryKind, number> = {
+
+  /**
+   * Host-owned kinds are per-project singleton documents addressed by
+   * deterministic identity, and their chunk content is a JSON envelope rather
+   * than prose. They are not relevance-search results at all, so they are
+   * absent from this map instead of carrying a zero weight: a zero weight let
+   * them match full-text, consume candidate slots, and then vanish below
+   * `minScore`, which reads as "indexed but unsearchable".
+   *
+   * Every other `MemoryKind` must appear here. `Partial<Record<...>>` was the
+   * previous constraint, so a kind added to the union and forgotten here fell
+   * out of `SEARCHABLE_KINDS` with nothing to say so — written, indexed, and
+   * unfindable, which is the defect `HOST_OWNED_MEMORY_KINDS` was introduced
+   * to end and which this map was never actually joined to.
+   */
+  const KIND_WEIGHT = {
     profile: 1.45,
     lesson: 1.25,
     fact: 1.1,
     note: 0.95,
     episode: 0.8,
-    user_message: 0,
-    project_context: 0,
+  } as const satisfies Record<SearchableMemoryKind, number>
+
+  type SearchableMemoryKind = Exclude<MemoryKind, HostOwnedMemoryKind>
+
+  const SEARCHABLE_KINDS = Object.keys(KIND_WEIGHT) as SearchableMemoryKind[]
+
+  function isSearchableKind(kind: MemoryKind): kind is SearchableMemoryKind {
+    return kind in KIND_WEIGHT
   }
 
   function projectHasMemory(projectId: string): boolean {
@@ -41,8 +62,22 @@ export namespace MemorySearch {
   }) {
     const limit = input.limit ?? 6
     const minScore = input.minScore ?? 0.1
-    const query = buildFtsQuery(input.query)
 
+    // Argument validation precedes every data-dependent short circuit below:
+    // an unsupported kind is a caller error whether or not this project has
+    // any memory yet, and returning [] for it would be the same silent
+    // "indexed but unsearchable" behaviour the zero weight used to produce.
+    const requestedKinds = input.kinds && input.kinds.length > 0 ? input.kinds : undefined
+    const unsearchable = requestedKinds?.filter((kind) => !isSearchableKind(kind)) ?? []
+    if (unsearchable.length > 0) {
+      throw new Error(
+        `Memory search kinds must be relevance-searchable. expected one of: ${SEARCHABLE_KINDS.join(", ")}; ` +
+          `received: ${unsearchable.join(", ")}`,
+      )
+    }
+    const searchedKinds = requestedKinds ?? SEARCHABLE_KINDS
+
+    const query = buildFtsQuery(input.query)
     if (!query) {
       log.info("empty search query after tokenization")
       return []
@@ -54,13 +89,10 @@ export namespace MemorySearch {
 
     const nowMs = Date.now()
     const candidates = Math.min(200, limit * 6)
-    const kindFilter =
-      input.kinds && input.kinds.length > 0
-        ? sql`AND mf.kind IN (${sql.join(
-            input.kinds.map((kind) => sql`${kind}`),
-            sql`, `,
-          )})`
-        : sql`AND mf.kind <> 'user_message'`
+    const kindFilter = sql`AND mf.kind IN (${sql.join(
+      searchedKinds.map((kind) => sql`${kind}`),
+      sql`, `,
+    )})`
     const sourceFilter =
       input.sources && input.sources.length > 0
         ? sql`AND mf.source IN (${sql.join(
@@ -106,17 +138,69 @@ export namespace MemorySearch {
       `),
     )
 
+    const final = rankCandidates(rows, { nowMs, temporalDecay: input.temporalDecay, minScore, limit })
+    log.info("full-text search", {
+      query: input.query,
+      projectId: input.projectId,
+      kinds: input.kinds?.join(","),
+      found: final.length,
+      candidates: rows.length,
+    })
+    return final
+  }
+
+  /**
+   * Kind already multiplies into `score`; ranking by kind first as well made the
+   * relevance score unable to affect any cross-kind ordering, so the weakest
+   * `profile` hit outranked the strongest `fact` hit unconditionally.
+   */
+  function compareResults(a: MemorySearchResult, b: MemorySearchResult) {
+    if (Math.abs(b.score - a.score) > 0.001) return b.score - a.score
+    return b.timeCreated - a.timeCreated
+  }
+
+  /**
+   * One scored candidate row as the full-text query returns it. Naming the
+   * shape is what lets the ranking be exercised without a database.
+   */
+  export type ScoredCandidateRow = {
+    chunk_id: string
+    file_id: string
+    title: string
+    content: string
+    source: MemorySource
+    kind: MemoryKind
+    key: string | null
+    importance: number
+    confidence: number
+    time_created: number
+    rank: number
+  }
+
+  /**
+   * Rank, threshold and cut the candidate set. Extracted from the query
+   * function it used to be welded into: this formula is the part with a
+   * statistical right and wrong, and it could not be checked at all while
+   * reaching it required an FTS5 index and a live database.
+   */
+  export function rankCandidates(
+    rows: readonly ScoredCandidateRow[],
+    input: { nowMs: number; temporalDecay?: boolean; minScore: number; limit: number },
+  ): MemorySearchResult[] {
     const results: MemorySearchResult[] = []
     for (const row of rows) {
+      // The kind filter in the query already restricts the candidate set; this
+      // narrows the row type rather than re-deciding what is searchable.
+      if (!isSearchableKind(row.kind)) continue
       let score = bm25RankToScore(row.rank)
       score *= KIND_WEIGHT[row.kind]
       score *= 0.8 + clampScore(row.importance, 60) / 200
       score *= 0.85 + clampScore(row.confidence, 75) / 250
       if (input.temporalDecay) {
-        const ageDays = (nowMs - row.time_created) / (1000 * 60 * 60 * 24)
+        const ageDays = (input.nowMs - row.time_created) / (1000 * 60 * 60 * 24)
         score *= Math.exp(-LAMBDA * ageDays)
       }
-      if (score < minScore) continue
+      if (score < input.minScore) continue
 
       results.push({
         chunkId: row.chunk_id,
@@ -133,25 +217,15 @@ export namespace MemorySearch {
         timeCreated: row.time_created,
       })
     }
-
-    const final = results.sort(compareResults).slice(0, limit)
-    log.info("full-text search", {
-      query: input.query,
-      projectId: input.projectId,
-      kinds: input.kinds?.join(","),
-      found: final.length,
-      candidates: rows.length,
-    })
-    return final
+    return results.sort(compareResults).slice(0, input.limit)
   }
 
-  function compareResults(a: MemorySearchResult, b: MemorySearchResult) {
-    if (a.kind !== b.kind) return KIND_WEIGHT[b.kind] - KIND_WEIGHT[a.kind]
-    if (Math.abs(b.score - a.score) > 0.001) return b.score - a.score
-    return b.timeCreated - a.timeCreated
-  }
-
-  function clampScore(value: number | undefined, defaultValue: number) {
+  /**
+   * The single 0..100 metric normalizer for stored memory rows. `index.ts`
+   * held a byte-identical copy; two normalizers for one stored range can only
+   * ever drift apart.
+   */
+  export function clampScore(value: number | undefined, defaultValue: number) {
     if (typeof value !== "number" || Number.isNaN(value)) return defaultValue
     return Math.max(0, Math.min(100, Math.round(value)))
   }

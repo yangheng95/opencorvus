@@ -1,89 +1,30 @@
-import { createHash } from "node:crypto"
-import { mkdir, mkdtemp, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, rename, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
 import {
   ExpertSquadPackageRevisionSchema,
   ExpertSquadPackageCommitSubtreeSchema,
   MaterializedExpertSquadPackageSchema,
   PreparedExpertSquadCandidateSchema,
-  InspectedExpertSquadPackageSchema,
   TaskArtifactResourceSetLocatorSchema,
   ValidatedExpertSquadPackageSchema,
   type ExpertSquadPackageHost,
   type TaskArtifactHost,
 } from "@opencorvus-ai/plugin"
 import { ExpertSquadRegistry } from "@/expert-squad/registry"
+import {
+  inspectExpertSquadPackage,
+  readExpertSquadPackageFiles as packageFiles,
+  type ExpertSquadPackageFile as PackageFile,
+} from "@/expert-squad/package-inspection"
 import { assertMergedPrimaryCommitToolAuthority } from "@/build/merge-back-publication-authority"
 import { publishTaskArtifactGitCommitSubtree } from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
-
-type PackageFile = {
-  path: string
-  bytes: Uint8Array
-  sha256: string
-  utf8Text: boolean
-}
-
-async function packageFiles(root: string): Promise<PackageFile[]> {
-  const files: PackageFile[] = []
-  const decoder = new TextDecoder("utf-8", { fatal: true })
-  async function walk(directory: string) {
-    const entries = await readdir(directory, { withFileTypes: true })
-    entries.sort((left, right) => (left.name < right.name ? -1 : left.name > right.name ? 1 : 0))
-    for (const entry of entries) {
-      const absolute = path.join(directory, entry.name)
-      if (entry.isDirectory()) {
-        await walk(absolute)
-        continue
-      }
-      if (!entry.isFile()) throw new Error(`Expert Squad package contains a non-regular entry: ${absolute}`)
-      const bytes = await readFile(absolute)
-      let utf8Text = false
-      try {
-        utf8Text = !decoder.decode(bytes).includes("\u0000")
-      } catch {
-        utf8Text = false
-      }
-      files.push({
-        path: path.relative(root, absolute).split(path.sep).join("/"),
-        bytes,
-        sha256: createHash("sha256").update(bytes).digest("hex"),
-        utf8Text,
-      })
-    }
-  }
-  await walk(root)
-  return files
-}
 
 export function createExpertSquadPackageHost(
   taskArtifacts: TaskArtifactHost,
   scope?: TaskToolExecutionScope,
 ): ExpertSquadPackageHost {
-  function inspectPackage(input: {
-    loaded: Awaited<ReturnType<typeof ExpertSquadRegistry.loadPackageRevisionSnapshot>>
-    files: PackageFile[]
-  }) {
-    return InspectedExpertSquadPackageSchema.parse({
-      package_digest: input.loaded.packageDigest,
-      namespace: input.loaded.namespace,
-      id: input.loaded.id,
-      version: input.loaded.manifest.version,
-      manifest: input.loaded.manifest,
-      skill_closures: [...input.loaded.packageSkills.values()]
-        .map((skill) => ({
-          source: skill.snapshot.source,
-          files: skill.snapshot.files.map((file) => file.path),
-        }))
-        .sort((left, right) => (left.source < right.source ? -1 : left.source > right.source ? 1 : 0)),
-      files: input.files.map((file) => ({
-        path: file.path,
-        sha256: file.sha256,
-        bytes: file.bytes.byteLength,
-        utf8_text: file.utf8Text,
-      })),
-    })
-  }
+  const inspectPackage = inspectExpertSquadPackage
 
   async function validateResourceSet(input: { resource_set: unknown }) {
     const resourceSet = TaskArtifactResourceSetLocatorSchema.parse(input.resource_set)

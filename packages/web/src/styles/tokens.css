@@ -134,6 +134,9 @@
   --oc-btn-primary-text: #ffffff;
   --oc-btn-primary-border: transparent;
   --oc-btn-primary-hover-bg: hsla(0, 0%, 100%, 0.3);
+  /* Divider inside a split primary button. It has to be a hairline *within* the pill: a gap that
+     lets the page through reads as a crack across the button, not as two halves of one control. */
+  --oc-btn-primary-divider: hsla(0, 0%, 100%, 0.22);
 
   /* ---- Buttons: secondary (glass) ---- */
   --oc-btn-secondary-bg: hsla(0, 0%, 100%, 0.4);
@@ -232,6 +235,7 @@
   --oc-btn-primary-text: #0a0a0a;
   --oc-btn-primary-border: transparent;
   --oc-btn-primary-hover-bg: rgba(0, 0, 0, 0.2);
+  --oc-btn-primary-divider: rgba(0, 0, 0, 0.18);
 
   --oc-btn-secondary-bg: hsla(0, 0%, 100%, 0.06);
   --oc-btn-secondary-text: #ffffff;
@@ -296,6 +300,7 @@
     --oc-btn-primary-text: #0a0a0a;
     --oc-btn-primary-border: transparent;
     --oc-btn-primary-hover-bg: rgba(0, 0, 0, 0.2);
+    --oc-btn-primary-divider: rgba(0, 0, 0, 0.18);
 
     --oc-btn-secondary-bg: hsla(0, 0%, 100%, 0.06);
     --oc-btn-secondary-text: #ffffff;

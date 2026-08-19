@@ -13,7 +13,17 @@ const Sha256 = z.string().regex(/^[a-f0-9]{64}$/)
 const PackageFileSchema = z
   .object({
     path: z.string().min(1).refine((value) => !path.isAbsolute(value) && !value.split(/[\\/]/).includes("..")),
-    kind: z.enum(["executable", "shared_library", "data"]),
+    // Two kinds, because two is what this manifest can hold: the writer below
+    // declares `"executable" | "data"` and no path produces anything else.
+    // `shared_library` sat in the enum unreachable, while every rule that
+    // reads `kind` — mode 0755 vs 0644, whether `binary_target` is required,
+    // whether a signature is required — asks `=== "executable"` and treats the
+    // remainder as data. Admitting a shared library through the schema alone
+    // would have handed it 0644 and skipped its signature with nothing to
+    // fail. Adding it back is a deliberate change to those rules, and this
+    // enum is where it starts. Build-time permission normalization has its own
+    // richer classifier in `script/runtime-executable-contract.ts`.
+    kind: z.enum(["executable", "data"]),
     sha256: Sha256,
     size: z.number().int().nonnegative(),
     mode: z.union([z.literal("0755"), z.literal("0644"), z.null()]),

@@ -5420,23 +5420,33 @@ fn overlay_desktop_update_install<R: Runtime>(
         prepared.take().unwrap()
     };
 
+    // The verified package survives a failed install: put it back so the next
+    // attempt installs what was already downloaded instead of reporting the
+    // package missing forever.
+    let restore = |prepared: PreparedDesktopUpdate| {
+        *coordinator.prepared.lock().unwrap() = Some(prepared);
+    };
+
     {
         let server = app.state::<Server>();
         let _server_operation = server.operation.lock().unwrap();
-        stop_server_state(&server).map_err(|error| {
-            desktop_update_error(
+        if let Err(error) = stop_server_state(&server) {
+            restore(prepared);
+            return Err(desktop_update_error(
                 "DESKTOP_UPDATE_SHUTDOWN_FAILED",
                 "Cannot establish terminal managed-backend ownership before update",
                 error,
-            )
-        })?;
+            ));
+        }
     }
 
-    if let Err(error) = prepared.update.install(&prepared.bytes) {
+    let installed = prepared.update.install(&prepared.bytes);
+    if let Err(error) = installed {
         let recovery = restart_server(&app).err();
         let recovery_suffix = recovery
             .map(|restart_error| format!(" Managed backend restart also failed: {restart_error}"))
             .unwrap_or_default();
+        restore(prepared);
         return Err(DesktopUpdateCommandError::new(
             "DESKTOP_UPDATE_INSTALL_FAILED",
             format!("Cannot install verified desktop update: {error}.{recovery_suffix}"),

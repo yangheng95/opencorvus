@@ -6,7 +6,7 @@ import { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import type { TaskRow } from "@/engine/store"
 import { isHttpWebpageUrl } from "@/util/web-url"
 import { Log } from "@/util/log"
-import { persistResearchArtifactBestEffort } from "./research-persistence"
+import { persistCompleteResearchBrief, persistPartialResearchBrief } from "./research-persistence"
 import { discardEngineArtifactResources } from "@/task-artifact/store"
 import { FrontendResearchAgent } from "@/frontend-research/agent"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
@@ -74,12 +74,10 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
       }
       if (result.outcome === "incomplete") {
         const provenance = artifactProvenanceForAgentTurn(result.sessionID, result.finalMessageID)
-        return persistResearchArtifactBestEffort({
+        return persistPartialResearchBrief({
           taskID: dependencies.taskID,
           dispatchID,
           component: "frontend-research",
-          operation: "persist-partial-research-brief",
-          delivery: "incomplete",
           sessionID: result.sessionID,
           finalMessageID: result.finalMessageID,
           persist: () =>
@@ -103,12 +101,10 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
       const artifactResources = result.artifactResources
       let persisted = false
       try {
-        const outcome = persistResearchArtifactBestEffort({
+        const outcome = persistCompleteResearchBrief({
           taskID: dependencies.taskID,
           dispatchID,
           component: "frontend-research",
-          operation: "persist-research-brief",
-          delivery: "complete",
           sessionID: result.sessionID,
           finalMessageID: result.brief.metadata.created_for_message_id,
           persist: () =>

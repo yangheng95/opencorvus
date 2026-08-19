@@ -40,9 +40,15 @@ jobs:
           prepare_sdk: "true"
 
       - name: Install critical build runtime dependencies
+        # Bounded for the same reason as the release build: a plain `-y` does
+        # not stop a debconf prompt or the runner's unattended-upgrades holding
+        # the apt lock, and either one hangs the job indefinitely.
+        timeout-minutes: 15
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ripgrep
+          sudo apt-get -o DPkg::Lock::Timeout=300 -o Acquire::Retries=5 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o DPkg::Lock::Timeout=300 -o Acquire::Retries=5 -o Acquire::http::Timeout=20 install -y ripgrep
 
       - name: Run critical builds
         run: bun run --cwd packages/opencorvus build --single --skip-install

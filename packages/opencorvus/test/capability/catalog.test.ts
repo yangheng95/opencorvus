@@ -4,7 +4,7 @@ import {
   createCapabilityCatalogSnapshot,
   searchCapabilityCatalog,
   type CapabilityCatalogEntry,
-} from "../../src/capability/catalog"
+} from "../../src/tool/capability-catalog"
 import { memoryProject } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"
 import { ensureMissionSession } from "../../src/mission/session"

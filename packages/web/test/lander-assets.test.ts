@@ -22,6 +22,15 @@ import { join } from "node:path"
 const landerDir = fileURLToPath(new URL("../src/assets/lander", import.meta.url))
 const componentsDir = fileURLToPath(new URL("../src/components", import.meta.url))
 
+/**
+ * Two roots, one manifest. Images go through Astro's asset pipeline from src/assets/lander; the
+ * recorded run cannot — a video wants a plain URL the browser can range-request — so it is served
+ * from public/media instead. Splitting the provenance file along that purely technical seam would
+ * mean the next capture lands in whichever half nobody is looking at, so public/media's files are
+ * listed in the same manifest under a media/ prefix.
+ */
+const mediaDir = fileURLToPath(new URL("../public/media", import.meta.url))
+
 function walk(dir: string, base = ""): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = join(dir, entry)
@@ -30,7 +39,12 @@ function walk(dir: string, base = ""): string[] {
   })
 }
 
-const assets = walk(landerDir).filter((name) => /\.(png|gif|jpg|webp|svg)$/i.test(name))
+const CAPTURE_FILE = /\.(png|gif|jpg|webp|svg|mp4)$/i
+
+const assets = [
+  ...walk(landerDir),
+  ...walk(mediaDir).map((name) => `media/${name}`),
+].filter((name) => CAPTURE_FILE.test(name))
 
 function readRepoFile(relative: string): string {
   try {

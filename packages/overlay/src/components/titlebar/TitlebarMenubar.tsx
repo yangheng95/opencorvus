@@ -28,7 +28,6 @@ type MenuDef = {
 }
 
 const MENU_IDS: MenuID[] = ["file", "edit", "view", "help"]
-const TITLEBAR_MENU_HOVER_INTENT_DELAY_MILLISECONDS = 500
 const MENU_ACCESS_KEYS: Record<MenuID, string> = {
   file: "f",
   edit: "e",
@@ -190,8 +189,7 @@ export function TitlebarMenubar() {
   const [openMenu, setOpenMenu] = createSignal<MenuID | null>(null)
   const [autoFocusMenu, setAutoFocusMenu] = createSignal(false)
   let rootRef: HTMLDivElement | undefined
-  let hoverIntentTimer: ReturnType<typeof setTimeout> | undefined
-  let pointerClickTimer: ReturnType<typeof setTimeout> | undefined
+  let pointerDriftInProgress = false
   let altPressedOnly = false
   const hostTransport = getHostTransport()
   const hostCapabilities = hostTransport.capabilities
@@ -205,72 +203,30 @@ export function TitlebarMenubar() {
     { id: "help", label: t("titlebar.menu.help"), compact: "H", accessKey: MENU_ACCESS_KEYS.help },
   ])
 
-  function clearHoverIntentTimer(): void {
-    if (hoverIntentTimer === undefined) return
-    clearTimeout(hoverIntentTimer)
-    hoverIntentTimer = undefined
-  }
-
-  function clearPointerClickTimer(): void {
-    if (pointerClickTimer === undefined) return
-    clearTimeout(pointerClickTimer)
-    pointerClickTimer = undefined
-  }
-
-  function scheduleHoverIntent(action: () => void): void {
-    clearHoverIntentTimer()
-    hoverIntentTimer = setTimeout(() => {
-      hoverIntentTimer = undefined
-      action()
-    }, TITLEBAR_MENU_HOVER_INTENT_DELAY_MILLISECONDS)
-  }
-
   function closeMenu() {
-    clearHoverIntentTimer()
     setAutoFocusMenu(false)
     setOpenMenu(null)
   }
 
-  function openMenuFromMouseHover(id: MenuID): void {
-    scheduleHoverIntent(() => {
-      setAutoFocusMenu(false)
-      setOpenMenu(id)
-    })
-  }
-
-  function keepMenuOpenFromMouseHover(): void {
-    clearHoverIntentTimer()
-  }
-
-  function closeMenuAfterMouseLeave(): void {
-    scheduleHoverIntent(() => {
-      setAutoFocusMenu(false)
-      setOpenMenu(null)
+  // Kobalte moves the menubar to whichever trigger the pointer or the focus lands on as soon as the
+  // menubar carries a value, and this menubar stays controlled with `null` — never `undefined` — while
+  // closed, so that guard can never turn the drift off on its own. Mark the drift so a closed menubar
+  // ignores it: pointing at the titlebar never opens a menu, only an explicit activation does.
+  function markPointerDrift(): void {
+    pointerDriftInProgress = true
+    queueMicrotask(() => {
+      pointerDriftInProgress = false
     })
   }
 
   function handleMenuValueChange(value: string | null | undefined) {
     if (value && MENU_IDS.includes(value as MenuID)) {
+      if (openMenu() === null && pointerDriftInProgress) return
       setAutoFocusMenu(true)
       setOpenMenu(value as MenuID)
       return
     }
     closeMenu()
-  }
-
-  function prepareMenuTriggerPointerInteraction(): void {
-    clearHoverIntentTimer()
-  }
-
-  function openMenuFromPointerClick(id: MenuID): void {
-    clearPointerClickTimer()
-    // Kobalte settles the current dismissable-layer pointer sequence asynchronously.
-    // Apply the controlled value on the next turn so that sequence cannot undo the click.
-    pointerClickTimer = setTimeout(() => {
-      pointerClickTimer = undefined
-      setAutoFocusMenu(true)
-      setOpenMenu(id)
-    }, 0)
   }
 
   function menuTrigger(id: MenuID): HTMLButtonElement {
@@ -522,11 +478,6 @@ export function TitlebarMenubar() {
   const zoomPercent = createMemo(() => Math.round(settingsStore.zoom * 100))
   const themeOptions = themeOptionsForCurrentHost()
 
-  onCleanup(() => {
-    clearHoverIntentTimer()
-    clearPointerClickTimer()
-  })
-
   if (nativeMacosMenu) return null
 
   return (
@@ -544,11 +495,7 @@ export function TitlebarMenubar() {
       <For each={menus()}>
         {(menu) => (
           <Menubar.Menu value={menu.id} placement="bottom-start" gutter={7} fitViewport slide={false} flip={false}>
-            <div
-              class="titlebar-menubar-slot"
-              onMouseEnter={() => openMenuFromMouseHover(menu.id)}
-              onMouseLeave={closeMenuAfterMouseLeave}
-            >
+            <div class="titlebar-menubar-slot">
               <Menubar.Trigger
                 as={Button}
                 type="button"
@@ -561,8 +508,8 @@ export function TitlebarMenubar() {
                 data-access-key={menu.accessKey}
                 aria-label={menu.label}
                 aria-keyshortcuts={`Alt+${menu.accessKey.toUpperCase()}`}
-                onPointerDown={prepareMenuTriggerPointerInteraction}
-                onClick={() => openMenuFromPointerClick(menu.id)}
+                onMouseOver={markPointerDrift}
+                onFocus={markPointerDrift}
               >
                 <span class="titlebar-menu-trigger-label">{menu.label}</span>
                 <span class="titlebar-menu-trigger-compact" aria-hidden="true">
@@ -576,8 +523,6 @@ export function TitlebarMenubar() {
                 class="titlebar-menubar-panel"
                 data-menu={menu.id}
                 data-testid={`titlebar-menu-${menu.id}`}
-                onMouseOver={keepMenuOpenFromMouseHover}
-                onMouseLeave={closeMenuAfterMouseLeave}
               >
                 <Show when={menu.id === "file"}>
                   <MenuItem

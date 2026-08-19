@@ -15,7 +15,14 @@
  */
 import { tool } from "ai"
 import z from "zod"
-import type { IntentAnalysisResult, IntentClarification, IntentClass, IntentComplexity, IntentSlot } from "./types"
+import type {
+  ClarificationPriority,
+  IntentAnalysisResult,
+  IntentClarification,
+  IntentClass,
+  IntentComplexity,
+  IntentSlot,
+} from "./types"
 import { FactCheckItemListSchema } from "@/fact-check/schema"
 
 export const INTENT_CLASSES = [
@@ -36,7 +43,14 @@ export const COMPLEXITY_BANDS = [
   "unknown",
 ] as const satisfies readonly IntentComplexity[]
 
-const CLARIFICATION_PRIORITIES = ["blocker", "nice"] as const
+/**
+ * Its two siblings above carry `satisfies`; this one did not, so the enum here
+ * and `ClarificationPriority` could drift apart. The consumer in
+ * `orchestrator/analyze-intent-tool.ts` selects blockers with `=== "blocker"`,
+ * which means a third priority would be sorted into the same bucket as `nice`
+ * and never become a question the operator is actually asked.
+ */
+const CLARIFICATION_PRIORITIES = ["blocker", "nice"] as const satisfies readonly ClarificationPriority[]
 
 const ClarificationOptionSchema = z
   .object({
