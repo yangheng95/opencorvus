@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createResource, createSignal, onCleanup, Show } from "solid-js"
+import { createEffect, createMemo, createResource, createSignal, lazy, onCleanup, Show } from "solid-js"
 import { apiJson } from "../services/api"
 import {
   closeFileEditor,
@@ -12,7 +12,10 @@ import {
 import { projectScopedPath } from "../services/project-directory"
 import { t } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
-import { CodeEditor } from "./ui/CodeEditor"
+// CodeMirror and its Lezer grammars are only needed once a file is actually
+// open. This pane stays mounted to keep its state, so the editor itself is what
+// loads on demand.
+const CodeEditor = lazy(async () => ({ default: (await import("./ui/CodeEditor")).CodeEditor }))
 import { Button } from "./ui/Button"
 import { Dialog } from "./ui/Dialog"
 

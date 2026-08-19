@@ -1,20 +1,30 @@
-import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, lazy, onCleanup } from "solid-js"
 import type { JSX } from "solid-js"
-import ExpertSquadPanel from "./settings/ExpertSquadPanel"
-import ExpertSquadMarketPanel from "./settings/ExpertSquadMarketPanel"
-import ConversationCapabilityPanel from "./settings/ConversationCapabilityPanel"
-import { McpResourceManagementPanel, SkillResourceManagementPanel } from "./settings/SkillMarketPanel"
-import ChannelsPanel from "./settings/ChannelsPanel"
-import MissionSkillPanel from "./settings/MissionSkillPanel"
-import ProvidersPanel from "./settings/ProvidersPanel"
-import GeneralPanel from "./settings/GeneralPanel"
-import AppearancePanel from "./settings/AppearancePanel"
-import NetworkPanel from "./settings/NetworkPanel"
-import ArchivePanel from "./settings/ArchivePanel"
-import ScheduledAutomationsPanel from "./settings/ScheduledAutomationsPanel"
-import { MemoryContextPanel } from "./settings/MemoryContextPanel"
-import DesktopUpdatePanel from "./settings/DesktopUpdatePanel"
-import UsagePanel from "./settings/UsagePanel"
+// Settings panels are the largest components in the app and none of them render
+// until the operator opens this dialog and selects their tab, so they load on
+// that click instead of riding in the startup bundle.
+const ExpertSquadPanel = lazy(() => import("./settings/ExpertSquadPanel"))
+const ExpertSquadMarketPanel = lazy(() => import("./settings/ExpertSquadMarketPanel"))
+const ConversationCapabilityPanel = lazy(() => import("./settings/ConversationCapabilityPanel"))
+const McpResourceManagementPanel = lazy(async () => ({
+  default: (await import("./settings/SkillMarketPanel")).McpResourceManagementPanel,
+}))
+const SkillResourceManagementPanel = lazy(async () => ({
+  default: (await import("./settings/SkillMarketPanel")).SkillResourceManagementPanel,
+}))
+const ChannelsPanel = lazy(() => import("./settings/ChannelsPanel"))
+const MissionSkillPanel = lazy(() => import("./settings/MissionSkillPanel"))
+const ProvidersPanel = lazy(() => import("./settings/ProvidersPanel"))
+const GeneralPanel = lazy(() => import("./settings/GeneralPanel"))
+const AppearancePanel = lazy(() => import("./settings/AppearancePanel"))
+const NetworkPanel = lazy(() => import("./settings/NetworkPanel"))
+const ArchivePanel = lazy(() => import("./settings/ArchivePanel"))
+const ScheduledAutomationsPanel = lazy(() => import("./settings/ScheduledAutomationsPanel"))
+const MemoryContextPanel = lazy(async () => ({
+  default: (await import("./settings/MemoryContextPanel")).MemoryContextPanel,
+}))
+const DesktopUpdatePanel = lazy(() => import("./settings/DesktopUpdatePanel"))
+const UsagePanel = lazy(() => import("./settings/UsagePanel"))
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"

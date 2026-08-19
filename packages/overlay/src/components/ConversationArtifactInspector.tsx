@@ -25,13 +25,22 @@ import {
 } from "../services/conversation-artifact"
 import { t } from "../utils/i18n"
 import { ArtifactFrame } from "./interactive-artifact/ArtifactFrame"
-import { CodeArtifact, type ArtifactCodeLanguage } from "./interactive-artifact/CodeArtifact"
-import { DocumentArtifact } from "./interactive-artifact/DocumentArtifact"
-import { MediaArtifact } from "./interactive-artifact/MediaArtifact"
+import type { ArtifactCodeLanguage } from "./interactive-artifact/CodeArtifact"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { SearchField } from "./ui/SearchField"
 
+// Loaded with the artifact the inspector is actually opening; keeping these
+// static held CodeMirror and its grammars in the startup bundle.
+const CodeArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/CodeArtifact")).CodeArtifact,
+}))
+const DocumentArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/DocumentArtifact")).DocumentArtifact,
+}))
+const MediaArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/MediaArtifact")).MediaArtifact,
+}))
 const FilePreviewArtifact = lazy(async () => ({
   default: (await import("./interactive-artifact/FilePreviewArtifact")).FilePreviewArtifact,
 }))

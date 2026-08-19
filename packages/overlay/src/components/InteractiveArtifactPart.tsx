@@ -3,14 +3,31 @@ import { parseConversationInteractiveArtifactMessagePart } from "@opencorvus-ai/
 import { activeProjectDirectory } from "../services/project-directory"
 import { loadSessionInteractiveArtifact, type InteractiveArtifactPayload } from "../services/interactive-artifact"
 import { t } from "../utils/i18n"
-import { DocumentArtifact } from "./interactive-artifact/DocumentArtifact"
-import { TableArtifact } from "./interactive-artifact/TableArtifact"
-import { CandlestickArtifact } from "./interactive-artifact/CandlestickArtifact"
-import { McpAppArtifact } from "./interactive-artifact/McpAppArtifact"
-import { CodeArtifact } from "./interactive-artifact/CodeArtifact"
-import { MediaArtifact } from "./interactive-artifact/MediaArtifact"
-import { NotebookArtifact } from "./interactive-artifact/NotebookArtifact"
-
+// Every renderer here loads on the first artifact that needs it. These seven
+// used to be static, which put CodeMirror and its Lezer grammars (via the code
+// and notebook renderers), the candlestick charting library, and the table core
+// into the startup bundle of a window that may never show an artifact at all.
+const DocumentArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/DocumentArtifact")).DocumentArtifact,
+}))
+const TableArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/TableArtifact")).TableArtifact,
+}))
+const CandlestickArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/CandlestickArtifact")).CandlestickArtifact,
+}))
+const McpAppArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/McpAppArtifact")).McpAppArtifact,
+}))
+const CodeArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/CodeArtifact")).CodeArtifact,
+}))
+const MediaArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/MediaArtifact")).MediaArtifact,
+}))
+const NotebookArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/NotebookArtifact")).NotebookArtifact,
+}))
 const ChartArtifact = lazy(async () => ({
   default: (await import("./interactive-artifact/ChartArtifact")).ChartArtifact,
 }))
