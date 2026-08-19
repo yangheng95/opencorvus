@@ -50,6 +50,10 @@ OpenCorvus 直接交付一套已经组装好的 Harness。安装之后你立刻�
 而下面的每一层都是配置面：换模型、收窄工具集、收紧权限规则、替换整支专家团，或者
 直接用 SDK 驱动整个 Harness。
 
+后端运行时与桌面前端都写在这个仓库里，底下没有套第三方 Agent 引擎。这不是什么值得
+炫耀的事，而是「每一层都能换掉」的前提。它同样站在大量开源项目的肩膀上 —— Bun、
+AI SDK、SolidJS、Tauri 都在其中。
+
 <table>
   <tr>
     <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/work-harness.png" alt="OpenCorvus Work Harness" /></td>

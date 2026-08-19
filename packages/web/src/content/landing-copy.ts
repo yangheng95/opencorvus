@@ -313,6 +313,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           a: "一个能打开看的能力包：角色、工作流、Skills、工具、适用说明、版本和 digest 冻在一起。任务创建时锁死一个版本，中途不会被悄悄换掉。",
         },
         {
+          q: "这套东西是自己写的吗？",
+          a: "后端 harness 和桌面前端都在这个仓库里，底下没有套第三方 Agent 引擎——这样每一层才换得动。它站在很多开源项目的肩膀上：Bun、AI SDK、Solid、Tauri。",
+        },
+        {
           q: "无人值守能跑多久？",
           a: "只在你的运行时在线时。它不是托管服务，也不承诺无限自治——结果取决于选的模型、能访问的来源和拿到的证据。",
         },
@@ -514,6 +518,10 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
         {
           q: "What exactly is an Expert Squad?",
           a: "An inspectable capability package: roles, workflow, Skills, tools, selection guidance, version, and digest frozen together. A Task pins one exact revision and cannot silently switch it mid-life.",
+        },
+        {
+          q: "Is it built on another agent?",
+          a: "The harness and the desktop app are both written in this repository, with no third-party agent engine underneath — that is what makes every layer replaceable. It stands on plenty of open source: Bun, the AI SDK, Solid, Tauri.",
         },
         {
           q: "How long can it run unattended?",
