@@ -11,5 +11,5 @@ export const generatedPlatformFacts = {
   "models": 2579,
   "chatChannels": 13,
   "plannedChatChannels": 14,
-  "builtInTools": 42
+  "builtInTools": 43
 } as const
