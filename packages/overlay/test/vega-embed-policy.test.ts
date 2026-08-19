@@ -10,6 +10,7 @@ test("inline Vega rendering uses one immutable Content Security Policy safe runt
     actions: INLINE_VEGA_EMBED_OPTIONS.actions,
     ast: INLINE_VEGA_EMBED_OPTIONS.ast,
     defaultStyle: INLINE_VEGA_EMBED_OPTIONS.defaultStyle,
+    forceActionsMenu: INLINE_VEGA_EMBED_OPTIONS.forceActionsMenu,
     mode: INLINE_VEGA_EMBED_OPTIONS.mode,
     renderer: INLINE_VEGA_EMBED_OPTIONS.renderer,
     tooltip: INLINE_VEGA_EMBED_OPTIONS.tooltip,
@@ -23,6 +24,9 @@ test("inline Vega rendering uses one immutable Content Security Policy safe runt
     },
     ast: true,
     defaultStyle: false,
+    // Without the wrapper Vega Embed builds only when asked, the export menu
+    // renders permanently open on top of every chart.
+    forceActionsMenu: true,
     mode: "vega-lite",
     renderer: "svg",
     tooltip: { disableDefaultStyle: true },
