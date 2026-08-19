@@ -790,15 +790,31 @@ function propsOf(event: any): Record<string, any> {
       : event?.payload && typeof event.payload === "object" && !Array.isArray(event.payload)
         ? event.payload
         : {}
+  // Protocol envelopes own Task and Session identity: EngineProtocol.emit
+  // moves `taskID`/`sessionID` out of the payload into the aggregate tuple,
+  // which reaches the overlay as `task_id`/`session_id`. Republish both under
+  // their payload names so handlers read one identity, not two shapes.
+  const envelopeTaskID = typeof event?.task_id === "string" ? event.task_id : ""
   const envelopeSessionID = typeof event?.session_id === "string" ? event.session_id : ""
-  if (!envelopeSessionID) return base
-  const payloadSessionID = typeof base.sessionID === "string" ? base.sessionID : ""
-  if (payloadSessionID && payloadSessionID !== envelopeSessionID) {
-    throw new Error(
-      `protocol event session identity conflict: envelope=${envelopeSessionID} payload=${payloadSessionID}`,
-    )
+  if (!envelopeTaskID && !envelopeSessionID) return base
+  const normalized = { ...base }
+  if (envelopeTaskID) {
+    const payloadTaskID = typeof base.taskID === "string" ? base.taskID : ""
+    if (payloadTaskID && payloadTaskID !== envelopeTaskID) {
+      throw new Error(`protocol event task identity conflict: envelope=${envelopeTaskID} payload=${payloadTaskID}`)
+    }
+    normalized.taskID = envelopeTaskID
   }
-  return { ...base, sessionID: envelopeSessionID }
+  if (envelopeSessionID) {
+    const payloadSessionID = typeof base.sessionID === "string" ? base.sessionID : ""
+    if (payloadSessionID && payloadSessionID !== envelopeSessionID) {
+      throw new Error(
+        `protocol event session identity conflict: envelope=${envelopeSessionID} payload=${payloadSessionID}`,
+      )
+    }
+    normalized.sessionID = envelopeSessionID
+  }
+  return normalized
 }
 
 /** Dedicated, message-turn-less card id. Only the integrity review uses
