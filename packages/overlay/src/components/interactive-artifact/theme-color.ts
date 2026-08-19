@@ -4,30 +4,6 @@ export function requiredThemeColor(element: Element, token: `--${string}`): stri
   return value
 }
 
-let colorNormalizer: CanvasRenderingContext2D | undefined
-
-/**
- * Canvas chart libraries parse only legacy CSS color syntax, while the palette
- * is free to express a token as any CSS color — `color-mix()` among them, which
- * an unregistered custom property hands over unevaluated. Let the browser
- * evaluate the value and hand the library the `rgba()` it can read.
- */
-export function requiredThemeChartColor(element: Element, token: `--${string}`): string {
-  const value = requiredThemeColor(element, token)
-  if (!colorNormalizer) {
-    const context = document.createElement("canvas").getContext("2d", { willReadFrequently: true })
-    if (!context) throw new Error("Interactive artifact theme colors require a 2D canvas context")
-    context.canvas.width = 1
-    context.canvas.height = 1
-    colorNormalizer = context
-  }
-  colorNormalizer.clearRect(0, 0, 1, 1)
-  colorNormalizer.fillStyle = value
-  colorNormalizer.fillRect(0, 0, 1, 1)
-  const [red, green, blue, alpha] = colorNormalizer.getImageData(0, 0, 1, 1).data
-  return `rgba(${red}, ${green}, ${blue}, ${(alpha / 255).toFixed(3)})`
-}
-
 export type ArtifactVisualTheme = {
   accent: string
   background: string
@@ -44,12 +20,7 @@ export type ArtifactVisualTheme = {
 }
 
 export function artifactVisualTheme(element: Element): ArtifactVisualTheme {
-  const style = getComputedStyle(element)
-  const required = (token: `--${string}`) => {
-    const value = style.getPropertyValue(token).trim()
-    if (!value) throw new Error(`Interactive artifact theme token is missing: ${token}`)
-    return value
-  }
+  const required = (token: `--${string}`) => requiredThemeColor(element, token)
   const accent = required("--accent")
   const good = required("--good")
   const warning = required("--warn")

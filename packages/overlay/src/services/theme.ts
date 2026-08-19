@@ -5,6 +5,7 @@
 // resolvedTheme() — effective "light" | "dark" after system detection
 // applyTheme(theme) — writes the documentElement data-theme
 // applyZoom(zoom) — writes --ui-scale CSS custom property via renderScale
+// themeColor(element, token) — palette token as an rgba() color libraries can parse
 
 import { settingsStore } from "../store/settings"
 import { currentUIScale } from "../utils/layout-tokens"
@@ -15,6 +16,31 @@ import { sanitizeThemeForHost, type OverlayThemeID } from "./theme-registry"
 
 const MIN_UI_ZOOM = 0.8
 const MAX_UI_ZOOM = 1.6
+
+// ── themeColor ──
+// Canvas-backed libraries (charts, terminals) parse only legacy CSS color
+// syntax, while the palette is free to express a token as any CSS color —
+// `color-mix()` among them, which an unregistered custom property hands over
+// unevaluated. Let the browser evaluate the value and read it back as rgba().
+
+let colorNormalizer: CanvasRenderingContext2D | undefined
+
+export function themeColor(element: Element, token: `--${string}`): string {
+  const value = getComputedStyle(element).getPropertyValue(token).trim()
+  if (!value) throw new Error(`Theme color token is missing: ${token}`)
+  if (!colorNormalizer) {
+    const context = document.createElement("canvas").getContext("2d", { willReadFrequently: true })
+    if (!context) throw new Error("Theme colors require a 2D canvas context")
+    context.canvas.width = 1
+    context.canvas.height = 1
+    colorNormalizer = context
+  }
+  colorNormalizer.clearRect(0, 0, 1, 1)
+  colorNormalizer.fillStyle = value
+  colorNormalizer.fillRect(0, 0, 1, 1)
+  const [red, green, blue, alpha] = colorNormalizer.getImageData(0, 0, 1, 1).data
+  return `rgba(${red}, ${green}, ${blue}, ${(alpha / 255).toFixed(3)})`
+}
 
 // ── System theme media query ──
 // Shared singleton,

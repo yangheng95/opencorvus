@@ -9,9 +9,8 @@ import {
 } from "lightweight-charts"
 import { onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { observeAppliedTheme } from "../../services/theme"
+import { observeAppliedTheme, themeColor } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
-import { requiredThemeChartColor } from "./theme-color"
 
 type CandlestickPayload = Extract<InteractiveArtifactPayload, { renderer: "candlestick@1" }>
 
@@ -23,7 +22,7 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
   onMount(() => {
     const theme = () => {
       // CSS means Cascading Style Sheets. The active theme is the only chart palette owner.
-      const color = (token: `--${string}`) => requiredThemeChartColor(container, token)
+      const color = (token: `--${string}`) => themeColor(container, token)
       return {
         backgroundColor: color("--surface-inset"),
         textColor: color("--text-soft"),
