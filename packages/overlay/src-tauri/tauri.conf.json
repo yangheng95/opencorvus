@@ -37,7 +37,8 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' customprotocol: asset:; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' asset: http: https: data: blob:; media-src 'self' asset: http: https: data: blob:; connect-src 'self' ipc: http://ipc.localhost http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:* https: wss:; worker-src 'self' blob:; frame-src 'self' http: https:"
+      "csp": "default-src 'self' customprotocol: asset:; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' asset: http: https: data: blob:; media-src 'self' asset: http: https: data: blob:; connect-src 'self' ipc: http://ipc.localhost http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:* https: wss:; worker-src 'self' blob:; frame-src 'self' http: https:",
+      "dangerousDisableAssetCspModification": ["style-src"]
     }
   },
   "plugins": {
