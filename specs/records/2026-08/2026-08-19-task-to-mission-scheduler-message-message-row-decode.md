@@ -204,24 +204,25 @@ JavaScript 字符串下标。本次实测一份 22262 字节 / 13064 字符的�
 修复：改为 `at line L, column C (near "…")`，与 `config/config.ts:1961`、`config/paths.ts:217`
 的既有做法一致，并附上错点前后各 40 字符的 `JSON.stringify` 片段，让位置可核对而不必数数。
 
-### 三、保留未修的两项及理由
+### 三、恢复期 Instance 递归杀掉正在恢复的 Task
 
-- **恢复期 Instance 递归杀 Task。** 根因已定位到具体机制：`project/bootstrap.ts:134` 的
-  `task-control.reconcile` 跑在 `prepareContext` 的 "instance context preparation" 生命周期内，
-  而被恢复的编排器轮次会经由 `expert-squad/prompt-profile-resolver.ts:739/795/801/4061`、
-  `config/effective.ts:25` 这类「按目录再进一次实例」的读取助手调用 `Instance.provide`，
-  撞上 `project/instance.ts:1152` 的 `assertNoRecursiveLifecycle`。该守卫在
-  `assertSameKeyReentryAllowed` 之前无条件拒绝，因此连合法的同租约重入也被拒。
-  正确的修法是让守卫区分「递归进入准备阶段」与「复用已准备好的上下文」，这会改动
-  一个已经出过多次事故的并发原语；bootstrap 的注释又明确拒绝把恢复移出 project open。
-  这需要独立的一次改动和它自己的并发测试，不适合并入本轮。
-- **生成的包可以带着不可满足的工具契约出厂。** 见「追加发现」。真正的根因不在生成器：
-  平台自己的 `artifact_publish` 接受**宿主铸造的** `source_selection_refs`，而包工具面对的
-  `engineArtifacts.publish`（`packages/plugin/src/artifact-catalog.ts:887/967`）只接受
-  手工构造的 `ArtifactReadLocator` 对象数组。包被推向一种平台已为自己否决的入参形态
-  （见记忆 `host-must-own-derivable-facts`）。修法是让 `engineArtifacts.publish` 也接受
-  宿主铸造的 ref，这是 `packages/plugin` 的公开 ABI 变更，且应同步内置包字节，
-  同样需要独立一轮。
+`project/bootstrap.ts:134` 的 `task-control.reconcile` 跑在 `prepareContext` 的
+"instance context preparation" 生命周期内，被恢复的编排器轮次会经由
+`expert-squad/prompt-profile-resolver.ts:739/795/801/4061`、`config/effective.ts:25`
+这类「按目录再进一次实例」的读取助手调用 `Instance.provide`，撞上
+`project/instance.ts` 的 `assertNoRecursiveLifecycle`，Task 被判 `failed`，
+而 `[serve] runtime project recovery` 同时自报 `failures=0`。
+
+那道守卫不能简单放宽：普通重入路径会走 `runLeasePreparation` → `prepareContext`，
+而项目开启期 `entry.initialized` 仍为 false，`contextPreparationRequired` 为真，
+于是再次进入 `runLeaseLifecycle`，`await previous` 等的正是当前这一轮
+—— 放宽守卫会把一个明确的报错换成一次挂死。
+
+修复：在守卫之前增加一条**同租约同生命周期**的重入快路径。当调用方本就运行在该
+租约自己的生命周期轮次内、且项目上下文已经环绕（`ProjectInstanceContext.tryUse()`
+非空）、且没有请求 `init` 时，直接复用环绕上下文执行 `fn`，不再进入准备阶段
+（准备仍归拥有它的那一轮）。请求了 `init` 的调用仍走原路：要初始化就是要准备。
+快路径保留了 `assertSameKeyReentryAllowed`、缓存条目替换检查与 rollback 检查。
 
 ### 验证
 
@@ -232,10 +233,18 @@ JavaScript 字符串下标。本次实测一份 22262 字节 / 13064 字符的�
 - 租约归还用例断言归还后 `expires_at` 就是归还时刻，且另一 owner 在**退避时刻**即可取得租约。
 - 第三个用例断言只有记录在案的 owner 能归还自己的租约，他人归还返回 false 且租约不变。
 
+`packages/opencorvus/test/instance-nested-provide-during-preparation.test.ts`（2 pass / 6 expect）
+锁定第三项：初始化器内部按目录重入的项目级读取必须拿到本项目上下文。该用例已做过反向验证 ——
+把 `instance.ts` 单文件还原到 HEAD 后两个用例都失败，报的正是线上那条
+`Cannot provide an instance recursively while instance context preparation is active`，
+确认它守得住这个回归。
+
 回归：`protocol-scheduler-message-delivery`、`protocol-delivery-fact-storage`、
 `scheduler-wake-message-identity`、`scheduler-claim-and-fire-identity`、`scheduler-fact-control`、
-`artifact-catalog-cursor`、`artifact-publisher-authority`、`artifact-provider-reference-flow` 全绿；
-`packages/opencorvus` 的 `tsc --noEmit` 干净。
+`artifact-catalog-cursor`、`artifact-publisher-authority`、`artifact-provider-reference-flow`、
+`runtime-startup-recovery`、`mission-process-recovery`、`project-instance-capability-refresh`、
+`project-instance-lock-liveness`、`persistent-instance-publication`、
+`project-directory-and-worktree-gc` 全绿；`packages/opencorvus` 的 `tsc --noEmit` 干净。
 
 ## 追加发现：生成的包可以带着不可满足的工具契约出厂（本次不改）
 

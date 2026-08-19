@@ -1149,6 +1149,30 @@ export const Instance: InstanceApi = {
     assertNotDisposing(directory)
     const key = instanceCacheKey(directory)
     const inheritedLease = leaseContext.tryUse()
+    const activeLifecycle = lifecycleContext.tryUse()
+    // Work running inside this lease's own lifecycle turn is already in this
+    // project's context. Project open's Task-control recovery is such work, and
+    // a recovered Orchestrator Turn reaches project-scoped read helpers that
+    // re-enter by directory. Sending them through preparation would await the
+    // lifecycle tail that settles only when the turn making the call returns,
+    // so the guard below refuses them outright — and the Task that was being
+    // recovered dies with it. Reuse the ambient context instead, and leave
+    // preparation to the turn that owns it. An `init` still goes the long way:
+    // asking for initialization is asking for preparation.
+    if (
+      !input.init &&
+      inheritedLease?.key === key &&
+      activeLifecycle?.lease === inheritedLease &&
+      !activeLifecycle.closed &&
+      ProjectInstanceContext.tryUse() !== undefined
+    ) {
+      assertSameKeyReentryAllowed(inheritedLease, "provide an instance")
+      if (cache.get(key) !== inheritedLease.entry) {
+        throw new Error(`Cannot re-enter replaced instance cache entry: ${key}`)
+      }
+      if (inheritedLease.entry.rollback) throw rollbackError(inheritedLease.entry.rollback)
+      return await input.fn()
+    }
     assertNoRecursiveLifecycle(key, "provide an instance")
     if (inheritedLease?.key === key) {
       // A registered instance activity is part of the lease owner and remains
