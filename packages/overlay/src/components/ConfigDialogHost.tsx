@@ -29,6 +29,13 @@ import { activeProjectDirectory } from "../services/project-directory"
 import { dialogStore, CONFIG_SECTIONS, type ConfigDialogTab } from "../store/dialog"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { t } from "../utils/i18n"
+import {
+  AUTHOR_EMAIL,
+  AUTHOR_GITHUB_URL,
+  AUTHOR_HOMEPAGE_URL,
+  PROJECT_ISSUES_URL,
+  PROJECT_URL,
+} from "../utils/project-links"
 import { OVERLAY_VERSION } from "../utils/version"
 import { currentUIScale } from "../utils/layout-tokens"
 import { Icon, type IconName } from "./ui/Icon"
@@ -116,9 +123,15 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
 ]
 const ABOUT_CONFIG_TAB = CONFIG_TABS.find((tab) => tab.id === "about") as ConfigTabDef
 
+const AUTHOR_LINKS: Array<{ href: string; icon: IconName; label: () => string }> = [
+  { href: AUTHOR_GITHUB_URL, icon: "github", label: () => "GitHub" },
+  { href: AUTHOR_HOMEPAGE_URL, icon: "web-search", label: () => t("about.homepage") },
+  { href: `mailto:${AUTHOR_EMAIL}`, icon: "mailbox", label: () => t("about.email") },
+]
+
 const ABOUT_LINKS: Array<{ href: string; icon: IconName; label: () => string }> = [
-  { href: "https://github.com/yangheng95", icon: "github", label: () => "GitHub" },
-  { href: "https://github.com/yangheng95/opencorvus/issues", icon: "info-circle", label: () => t("about.issues") },
+  { href: PROJECT_URL, icon: "github", label: () => "GitHub" },
+  { href: PROJECT_ISSUES_URL, icon: "info-circle", label: () => t("about.issues") },
 ]
 
 function activePanelBodyID(tab: ConfigDialogTab): string {
@@ -364,7 +377,25 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                 <SettingsRow
                   align="center"
                   leading={<Icon name="avatar-user" size="display" />}
-                  title="杨恒@Hithink Research"
+                  title="杨恒@GitHub"
+                  desc={t("about.self_built")}
+                  actions={
+                    <For each={AUTHOR_LINKS}>
+                      {(link) => (
+                        <LinkButton
+                          variant="outline"
+                          size="sm"
+                          tone="neutral"
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Icon name={link.icon} size="compact" />
+                          {link.label()}
+                        </LinkButton>
+                      )}
+                    </For>
+                  }
                 />
               </SettingsSurface>
             </SettingsGroup>

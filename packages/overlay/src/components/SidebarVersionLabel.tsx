@@ -8,8 +8,7 @@ import { openConfigDialog } from "../services/config-dialog-control"
 import { canRestartManagedLocalServer, restartLocalServer } from "../services/connection"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { t } from "../utils/i18n"
-
-const PROJECT_URL = "https://github.com/yangheng95/opencorvus"
+import { PROJECT_URL } from "../utils/project-links"
 
 export function SidebarVersionLabel() {
   const [restarting, setRestarting] = createSignal(false)
