@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
+    "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit && node --max-old-space-size=8192 node_modules/typescript/bin/tsc -p tsconfig.benchmark.json",
     "pretest": "bun script/prepare-test-process-supervisor.ts",
     "test": "bun script/run-tests.ts",
     "prepare:test-runtime": "bun script/prepare-test-process-supervisor.ts",

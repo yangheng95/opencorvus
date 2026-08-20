@@ -6,7 +6,7 @@ import {
   paperEvidenceChecks,
   auditBenchmarkIsolation,
   auditRunBinding,
-  auditSkillProjection,
+  auditSkillEvidenceSeal,
   auditTaskOutcome,
   auditTerminalQuiescence,
   auditBatchEvidence,
@@ -18,6 +18,8 @@ import {
 } from "./contract"
 
 const EXPECTED_PACKAGE_TREE_SHA256 = "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4"
+
+type Profile = "base" | "advanced"
 
 type Result = {
   run: { id?: string; key?: string; started_at: number; finished_at?: number; duration_ms?: number; status: string }
@@ -57,7 +59,11 @@ type Result = {
     isolation_audit?: { passed?: boolean }
     task_outcome_audit?: { scored_terminal?: boolean }
     terminal_quiescence_audit?: { passed?: boolean }
-    skill?: { name?: string; projection?: { passed?: boolean } }
+    skill?: {
+      name?: string
+      projection?: { passed?: boolean }
+      dispatched_coverage?: { passed?: boolean }
+    }
   }
 }
 
@@ -84,7 +90,7 @@ async function arguments_() {
   if (!root || !sourceData || !python || !restrictedShell) {
     throw new Error("--root, --source-data, --python, and --restricted-shell are required")
   }
-  const profiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim())
+  const profiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim()) as Profile[]
   if (
     profiles.length < 1 ||
     profiles.length > 2 ||
@@ -325,16 +331,13 @@ async function inspectRawRunEvidence(
       terminalQuiescenceAudit.passed &&
       JSON.stringify((result.opencorvus as any).terminal_quiescence_audit ?? null) ===
         JSON.stringify(terminalQuiescenceAudit)
-    const skillAudit = auditSkillProjection({
-      profile: String(result.opencorvus.profile ?? ""),
-      matrix: skillProjection.matrix,
+    const skillSeal = auditSkillEvidenceSeal({
+      profile: result.opencorvus.profile,
+      resultSkill: result.opencorvus.skill,
+      projectionFile: skillProjection,
+      transcript,
     })
-    const skillPassed =
-      skillAudit.passed &&
-      skillProjection.profile === result.opencorvus.profile &&
-      skillProjection.skill?.name === result.opencorvus.skill?.name &&
-      JSON.stringify(skillAudit) === JSON.stringify(skillProjection.skill?.projection ?? null) &&
-      JSON.stringify(skillAudit) === JSON.stringify(result.opencorvus.skill?.projection ?? null)
+    const skillPassed = skillSeal.passed
     const isolation = auditBenchmarkIsolation(transcript, {
       protectedPaths: [
         path.dirname(path.dirname(input.python)),
@@ -403,7 +406,9 @@ async function inspectRawRunEvidence(
       task_outcome_passed: taskOutcomePassed,
       terminal_quiescence_audit: terminalQuiescenceAudit,
       terminal_quiescence_passed: terminalQuiescencePassed,
-      skill_projection_audit: skillAudit,
+      skill_projection_audit: skillSeal.projection,
+      skill_dispatched_coverage_audit: skillSeal.coverage,
+      skill_evidence_violations: skillSeal.violations,
       skill_projection_passed: skillPassed,
       isolation,
       tool_audit: toolAudit,
@@ -552,6 +557,7 @@ for (const directory of terminalDirectories) {
     result.opencorvus.task_outcome_audit?.scored_terminal === true &&
     result.opencorvus.terminal_quiescence_audit?.passed === true &&
     result.opencorvus.skill?.projection?.passed === true &&
+    result.opencorvus.skill?.dispatched_coverage?.passed === true &&
     result.benchmark.metrics !== null &&
     result.opencorvus.source?.worktree_clean === true &&
     !permanentInvalidation.invalid &&
@@ -561,6 +567,7 @@ for (const directory of terminalDirectories) {
     result?.run.status === "scored" &&
     result.opencorvus.task_outcome_audit?.scored_terminal === true &&
     result.opencorvus.skill?.projection?.passed === true &&
+    result.opencorvus.skill?.dispatched_coverage?.passed === true &&
     result.benchmark.metrics !== null &&
     result.opencorvus.source?.worktree_clean !== true &&
     !permanentInvalidation.invalid &&
@@ -757,7 +764,7 @@ function summarizeProfile(profile: "base" | "advanced") {
   }
 }
 const profileSummaries = cli.profiles.map(summarizeProfile)
-const exploratoryProfileSummaries = ["base", "advanced"]
+const exploratoryProfileSummaries = (["base", "advanced"] as const)
   .filter((profile) => !cli.profiles.includes(profile))
   .map(summarizeProfile)
 const primaryEligible = eligible.filter((record) => cli.profiles.includes(record.opencorvus.profile))

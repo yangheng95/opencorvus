@@ -9,7 +9,9 @@ import {
   summarizeBenchmarkToolEvents,
   evidenceFileSetMatches,
   permanentRunInvalidation,
+  auditDispatchedSkillCoverage,
   auditRunBinding,
+  auditSkillEvidenceSeal,
   auditSkillProjection,
   auditTaskOutcome,
   auditTerminalQuiescence,
@@ -77,6 +79,8 @@ describe("external agent benchmark contract", () => {
           total_tokens: 20,
           cost_usd: 0.01,
           billing_status: "priced",
+          session_id: "ses_one",
+          agent_id: "implementation-engineer",
         },
       ]),
     ).toEqual({
@@ -244,6 +248,9 @@ describe("external agent benchmark contract", () => {
       mounted_agents: ["base-developer", "base-planner", "base-tester"],
       unmountable_agents: [
         { agent_id: "base-researcher", base_role: "explore", reason: "base_role_not_skill_mountable" },
+        // The scheduler is outside the mount matrix by construction. Recording it keeps the
+        // post-run coverage audit's accounted set complete instead of leaving an implicit exemption.
+        { agent_id: "orchestrator", base_role: "orchestrator", reason: "scheduler_outside_mount_matrix" },
       ],
       violations: [],
     })
@@ -276,6 +283,108 @@ describe("external agent benchmark contract", () => {
         matrix: matrix({ ...mounted, "base-tester": { effective: true, enabled: false, reason: "permission_denied" } }),
       }).violations,
     ).toEqual(["not_enabled:base-tester:permission_denied"])
+  })
+
+  test("accepts a sealed Skill receipt only when result.json and skill-projection.json both carry it", () => {
+    const matrix = {
+      active_profile: "advanced",
+      projection_hash: "hash",
+      skills: [
+        {
+          ref: "default/skill/automationbench-api",
+          name: "automationbench-api",
+          location: "/project/.opencorvus/skill/automationbench-api/SKILL.md",
+          projection_source: "default",
+        },
+      ],
+      agents: [
+        {
+          agent_id: "universal-build",
+          base_role: "build",
+          skill_mountable: true,
+          skill_tool_available: true,
+        },
+        {
+          agent_id: "source-investigator",
+          base_role: "explore",
+          skill_mountable: false,
+          skill_tool_available: false,
+        },
+      ],
+      matrix: [
+        {
+          agent_id: "universal-build",
+          grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
+        },
+      ],
+    }
+    const transcript = [{ info: { agent: "orchestrator" } }, { info: { agent: "universal-build" } }]
+    const projection = auditSkillProjection({ profile: "advanced", matrix })
+    const coverage = auditDispatchedSkillCoverage({ projection, transcript })
+    // Exactly what the runner seals: one audited value written into both files.
+    const skill = {
+      name: "automationbench-api",
+      ref: "default/skill/automationbench-api",
+      revision: 1,
+      projection,
+      dispatched_coverage: coverage,
+    }
+    const projectionFile = { profile: "advanced", skill, matrix }
+
+    expect(
+      auditSkillEvidenceSeal({ profile: "advanced", resultSkill: skill, projectionFile, transcript }),
+    ).toMatchObject({ passed: true, violations: [] })
+
+    // The shipped wiring bug: the receipt file carried the coverage and `result.json` did not, so
+    // every otherwise-valid run would have been rejected by the checkers instead of scored.
+    const { dispatched_coverage: _omitted, ...skillWithoutCoverage } = skill
+    expect(
+      auditSkillEvidenceSeal({
+        profile: "advanced",
+        resultSkill: skillWithoutCoverage,
+        projectionFile,
+        transcript,
+      }),
+    ).toMatchObject({ passed: false, violations: ["result_coverage_mismatch"] })
+
+    // And the inverse: a receipt that disagrees with the sealed result is never silently accepted.
+    expect(
+      auditSkillEvidenceSeal({
+        profile: "advanced",
+        resultSkill: skill,
+        projectionFile: { ...projectionFile, skill: skillWithoutCoverage },
+        transcript,
+      }),
+    ).toMatchObject({ passed: false, violations: ["receipt_coverage_mismatch"] })
+  })
+
+  test("rejects a run whose transcript shows an Agent the Skill projection never described", () => {
+    const projection = {
+      mounted_agents: ["implementation-engineer", "test-engineer"],
+      unmountable_agents: [{ agent_id: "source-investigator" }, { agent_id: "orchestrator" }],
+    }
+    const transcript = (agents: string[]) => agents.map((agent) => ({ info: { agent } }))
+
+    expect(
+      auditDispatchedSkillCoverage({
+        projection,
+        transcript: transcript(["orchestrator", "implementation-engineer", "source-investigator"]),
+      }),
+    ).toMatchObject({ passed: true, uncovered_agents: [] })
+
+    // The real failure: `SkillMount.matrix()` omitted scheduler-only `universal-build`, so the
+    // pre-Task projection audit passed while the worker that performed every mutation searched an
+    // empty Skill surface. Two sealed Advanced runs carried that false positive.
+    expect(
+      auditDispatchedSkillCoverage({
+        projection,
+        transcript: transcript(["orchestrator", "universal-build"]),
+      }),
+    ).toMatchObject({
+      passed: false,
+      dispatched_agents: ["orchestrator", "universal-build"],
+      uncovered_agents: ["universal-build"],
+    })
   })
 
   test("scores an explicit natural Task failure but rejects an infrastructure-affected failure", () => {

@@ -388,6 +388,8 @@ export async function executeRollingBatchChains<T>(input: {
   )
 }
 
+type BatchPlanSlot = { case_index: number; profile: string }
+
 export function auditBatchEvidence(input: {
   plan: any
   receipt?: any
@@ -443,9 +445,11 @@ export function auditBatchEvidence(input: {
   const eligibleClaims = waveIndexes.flatMap((waveIndex: number) =>
     (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => ({ ...item, waveIndex })),
   )
-  const preexisting = new Map(
+  const preexisting = new Map<string, BatchPlanSlot & { run_id: string }>(
     ["base", "advanced"].flatMap((profile) =>
-      (input.plan.preexisting_eligible?.[profile] ?? []).map((item: any) => [String(item.run_id), item] as const),
+      (input.plan.preexisting_eligible?.[profile] ?? []).map(
+        (item: any) => [String(item.run_id), item] as [string, BatchPlanSlot & { run_id: string }],
+      ),
     ),
   )
   const intervals: Array<{
@@ -458,8 +462,8 @@ export function auditBatchEvidence(input: {
   const launchedRunIDs = new Set<string>()
   for (const item of launched) {
     const attempt = input.attempts.find((record) => record.run_id === item.run_id)
-    const expectedSlot = input.plan.waves?.[item.waveIndex - 1]?.some(
-      (slot: any) => slot.case_index === item.case_index && slot.profile === item.profile,
+    const expectedSlot = (input.plan.waves?.[item.waveIndex - 1] as BatchPlanSlot[] | undefined)?.some(
+      (slot) => slot.case_index === item.case_index && slot.profile === item.profile,
     )
     if (input.receipt.status === "failed" && (!item.run_id || attempt?.raw_leaderboard_eligible !== true)) continue
     if (
@@ -915,6 +919,11 @@ export function auditSkillProjection(input: {
   if (input.expectedSHA256 && input.poolSHA256 && input.expectedSHA256 !== input.poolSHA256) {
     violations.push("skill_content_mismatch")
   }
+  unmountable.push({
+    agent_id: SCHEDULER_AGENT_ID,
+    base_role: "orchestrator",
+    reason: "scheduler_outside_mount_matrix",
+  })
   return {
     passed: violations.length === 0,
     skill_name: skillName,
@@ -924,5 +933,74 @@ export function auditSkillProjection(input: {
     mounted_agents: mounted.sort(),
     unmountable_agents: unmountable.sort((left, right) => left.agent_id.localeCompare(right.agent_id)),
     violations,
+  }
+}
+
+export const SCHEDULER_AGENT_ID = "orchestrator"
+
+/**
+ * The pre-Task projection audit can only speak about agents the Host's mount matrix listed. When
+ * `SkillMount.matrix()` omitted scheduler-only `universal-build`, the audit reported a passing
+ * projection while the worker that actually performed every Advanced mutation searched an empty
+ * Skill surface — a false positive that survived two sealed runs.
+ *
+ * This closes that class of gap from the other side, against evidence rather than against the same
+ * matrix: every Agent the sealed transcript shows actually running must be accounted for by the
+ * projection audit, either as mounted or as explicitly unmountable. An Agent that ran without
+ * appearing in either list means the projection never described the real execution.
+ */
+/**
+ * Accept a sealed run's Skill evidence.
+ *
+ * The catalog and the independent verifier each used to hand-roll this comparison, which is how the
+ * runner drifted away from both: a mis-targeted edit wrote `dispatched_coverage` into
+ * `skill-projection.json` and left `result.json` without it, and nothing failed until a real batch
+ * would have been rejected wholesale. One predicate, recomputed from raw evidence and required to
+ * agree with both receipts, is the seam that keeps runner and checker from disagreeing silently.
+ */
+export function auditSkillEvidenceSeal(input: {
+  profile: unknown
+  resultSkill: any
+  projectionFile: any
+  transcript: TranscriptMessage[]
+}) {
+  const projection = auditSkillProjection({
+    profile: String(input.profile ?? ""),
+    matrix: input.projectionFile?.matrix ?? {},
+  })
+  const coverage = auditDispatchedSkillCoverage({ projection, transcript: input.transcript })
+  const same = (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right ?? null)
+  const violations: string[] = []
+  if (!projection.passed) violations.push("projection_failed")
+  if (!coverage.passed) violations.push(`uncovered_agents:${coverage.uncovered_agents.join("|")}`)
+  if (input.projectionFile?.profile !== input.profile) violations.push("receipt_profile_mismatch")
+  if (input.projectionFile?.skill?.name !== input.resultSkill?.name) violations.push("skill_name_mismatch")
+  if (!same(projection, input.projectionFile?.skill?.projection)) violations.push("receipt_projection_mismatch")
+  if (!same(projection, input.resultSkill?.projection)) violations.push("result_projection_mismatch")
+  if (!same(coverage, input.projectionFile?.skill?.dispatched_coverage)) violations.push("receipt_coverage_mismatch")
+  if (!same(coverage, input.resultSkill?.dispatched_coverage)) violations.push("result_coverage_mismatch")
+  return { passed: violations.length === 0, projection, coverage, violations }
+}
+
+export function auditDispatchedSkillCoverage(input: {
+  projection: { mounted_agents: string[]; unmountable_agents: Array<{ agent_id: string }> }
+  transcript: TranscriptMessage[]
+}) {
+  const accounted = new Set([
+    ...input.projection.mounted_agents,
+    ...input.projection.unmountable_agents.map((agent) => agent.agent_id),
+  ])
+  const dispatched = [
+    ...new Set(
+      input.transcript
+        .map((message) => message.info?.agent)
+        .filter((agent): agent is string => typeof agent === "string" && agent.length > 0),
+    ),
+  ].sort()
+  const uncovered = dispatched.filter((agent) => !accounted.has(agent))
+  return {
+    passed: uncovered.length === 0,
+    dispatched_agents: dispatched,
+    uncovered_agents: uncovered,
   }
 }

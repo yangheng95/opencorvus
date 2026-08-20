@@ -281,6 +281,43 @@ Known agent-level contract mistakes in this wave — out-of-range `top_k`, shell
 
 The repair does not ask the Host to judge whether a Tester report is fresh enough or whether the Orchestrator is allowed to stop. Base owns those decisions through its declared Developer-to-Tester edge, prompts, and visible evidence. The benchmark runner owns only experimental completeness: after any completed or failed Task transition it waits until every recorded execution occurrence is terminal and detached ingress delivery is settled, then takes a fresh board/transcript/trace/Provider-ledger snapshot before scoring. A natural failed outcome is counted only when the transcript records a successfully completed `fail_task`; a rejected historical tool attempt cannot authorize a score. This prevents late worker activity from truncating tokens or trajectories without teaching the model a benchmark-specific workflow.
 
+## Advanced never ran as a multi-Agent Advanced workflow
+
+Reviewing the four scored Advanced trajectories showed the profile comparison was not measuring what the matrix claims. Every one of them settled with `selected_workflow_id = null`: the two earlier trials dispatched `implementation-engineer` directly and the two later ones dispatched platform `universal-build` directly. `planned-delivery` was never selected, no `test-engineer` ran, and no `system-integrity-reviewer` ran. What each Task called verification was a continuation of the same worker that had performed the mutation.
+
+| Case | Strict | Partial | Executed structure | Dominant error |
+| --- | ---: | ---: | --- | --- |
+| HelpScout | 0 | 0.7222 | orchestrator + implementation-engineer, no workflow | `hs_cat11` matched technical and account; priority ignored; categorization note missing |
+| Wave invoice | 0 | 0.5000 | investigator + implementation-engineer, no workflow | Invoices marked SENT in Wave, both expected customer notifications missing |
+| LinkedIn | 0 | 0.6000 | orchestrator + universal-build, no workflow | Authoritative Calendar/Gmail records never read; post missing date and registration link |
+| Campaign handoff | 0 | 0.9000 | orchestrator + universal-build, no workflow | `LEGAL HOLD - do not distribute` was read, and the Regulatory Compliance mail was sent anyway |
+
+Strict is `0/4` and mean partial credit is `0.6806`. The paired Base Campaign run is the control: its first Tester occurrence rejected the candidate set, drove the Developer back to the procedure, and excluded SEO Sprint (already handed off), Regulatory Compliance (legal hold), and Demand Gen Pilot (ownership transferred) before a second Tester pass accepted the result. Advanced had no independent closure and sent the held mail.
+
+### The Skill projection audit produced a false positive
+
+Both `universal-build` trials sealed `skill.projection.passed = true` while their transcripts show `matched=0` for the Skill search and an error from `skill(name="automationbench-api")`. `PromptProfileResolver` resolves `universal-build` into `schedulerOnlyAgents` and `SkillMount.resolve()` serves its turn surface, but `SkillMount.matrix()` enumerated only `projectedAgents`. The operator route could therefore not mount anything onto the one worker that performed every mutation, and the benchmark audit — which reads that same matrix — reported full coverage over a set that excluded it.
+
+`SkillMount.matrix()` now enumerates scheduler-only agents alongside projected ones and each entry carries `capability_owner` so a platform agent is not presented as a package agent; `skill_mounts` validation accepts `universal-build`. That alone would only move the blind spot, so the benchmark now also audits from the other side: `auditDispatchedSkillCoverage` requires every Agent the sealed transcript shows running to appear in the projection audit as mounted or explicitly unmountable, and the scheduler is recorded explicitly rather than exempted implicitly. Both `universal-build` runs are `invalid_bug` and rerun from a fresh world after the fix.
+
+### The benchmark scripts were never typechecked
+
+The first wiring of the coverage audit referenced its `const` above its own declaration, inside the pre-Task `skill_projection` stage where no terminal transcript exists yet. Repository typecheck passed because `packages/opencorvus/tsconfig.json` excludes `script/**` and `test/**`, so the whole benchmark harness — runner, bridge, catalog, verifier — was outside every check the repository runs. TypeScript reports that exact defect as TS2448/TS2454; a real wave would have reported it as a `ReferenceError` after acquiring a lease and starting a world.
+
+`tsconfig.benchmark.json` now covers `script/benchmark/**` and `test/benchmark/**` and runs as the second half of the package `typecheck` script. Bringing it to zero required nine small type repairs in previously unchecked files (widened `--profiles` arrays, an untyped batch-plan slot, a `Bun.Subprocess` stdio generic), none of which changes behavior.
+
+The same edit also left `result.json` writing the projection summary without the coverage receipt while `skill-projection.json` carried it, which the checkers would have rejected wholesale. Both files are now written from one `skillEvidence` value built after the terminal transcript, and the duplicated comparison the catalog and verifier each carried is replaced by a single `auditSkillEvidenceSeal` predicate that recomputes both audits from raw evidence and requires the two receipts to agree.
+
+### Direct `universal-build` was the wrong owner for external business work
+
+The platform describes direct `universal-build` as bounded implementation that no declared workflow owns, and Advanced's README repeated it without qualifying where the acceptance lives. An AutomationBench case is bounded and matches no Advanced workflow by name, so the escape hatch fit — and took the whole delivery with it. The allowance is now explicitly repository-scoped: a Task whose requested outcome is a change to an external system of record requires a declared delivery workflow whose independent verification owner is a different Agent from the mutation owner. `planned-delivery` already carries exactly that chain, so nothing new was declared.
+
+### Self-published business state is not acceptance
+
+The LinkedIn run shows the pattern end to end: the worker recorded that it had not read the posting guidelines, the operative date, or the registration link; published a post missing the date and the link; published its own `advanced/automationbench_business_state` Artifact asserting it had used the operative date and current guideline-style copy; and the Orchestrator completed the Task from that Artifact. The official scorer read the real world and failed both assertions. A typed Artifact authored by the mutation owner is that worker's account, and an earlier admission that a source could not be read outranks a later self-published summary claiming otherwise. Both Orchestrator overlays now say so, and Advanced's says that continuing the mutation owner's lineage is repair rather than verification — it re-reads records that worker already chose and cannot challenge a missed source, a higher-priority rule, a wrong channel, a violated exclusion, or an unmapped obligation. Campaign handoff performed extensive post-write readback and still only confirmed that all five wrong messages existed.
+
+None of these repairs encode case detail. No prompt names Calendar, Gmail, legal holds, or any AutomationBench record.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>

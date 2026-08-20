@@ -16,6 +16,7 @@ import {
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   auditBenchmarkIsolation,
+  auditDispatchedSkillCoverage,
   auditSkillProjection,
   auditTaskOutcome,
   auditTerminalQuiescence,
@@ -1215,9 +1216,14 @@ try {
     throw new Error(`Exact Provider/model preflight failed: ${JSON.stringify(preflight)}`)
   }
   stage = "skill_projection"
+  // Fail-closed before Task creation. The sealed receipt is written after the terminal transcript,
+  // because half of it — which Agents actually ran under this projection — does not exist yet.
+  // Preserve the pre-Task matrix immediately as failure evidence, then replace this unsealed file
+  // with the terminal coverage receipt before the exact-file-set manifest is written.
   const skillProjection = await projectBenchmarkSkill({ profile: arguments_.profile, skill: seededSkill })
+  const skillProjectionPath = path.join(outputDirectory, "skill-projection.json")
   await fs.writeFile(
-    path.join(outputDirectory, "skill-projection.json"),
+    skillProjectionPath,
     JSON.stringify(
       {
         schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
@@ -1355,15 +1361,23 @@ try {
     protectedSecrets: source.protectedSecrets,
   })
   const taskOutcomeAudit = auditTaskOutcome(lifecycleStatus, terminal.transcript)
+  const skillCoverageAudit = auditDispatchedSkillCoverage({
+    projection: skillProjection.summary.projection,
+    transcript: terminal.transcript,
+  })
+  const skillEvidence = { ...skillProjection.summary, dispatched_coverage: skillCoverageAudit }
   const valid =
     taskOutcomeAudit.scored_terminal &&
     profileAudit.passed &&
     isolationAudit.passed &&
-    skillProjection.summary.projection.passed
+    skillProjection.summary.projection.passed &&
+    skillCoverageAudit.passed
   const invalidReason = !taskOutcomeAudit.scored_terminal
     ? `OpenCorvus Task terminal outcome was invalid (${taskOutcomeAudit.outcome})`
     : !skillProjection.summary.projection.passed
       ? "The experimental Skill was not projected onto the Expert Squad's agents"
+      : !skillCoverageAudit.passed
+        ? `Agents ran that the Skill projection never described (${skillCoverageAudit.uncovered_agents.join(", ")})`
       : !profileAudit.passed
         ? "OpenCorvus Task bound a different Expert Squad profile"
         : !isolationAudit.passed
@@ -1435,7 +1449,7 @@ try {
       terminal_quiescence_audit: quiescence.audit,
       profile: arguments_.profile,
       model: arguments_.model,
-      skill: skillProjection.summary,
+      skill: skillEvidence,
       selected_workflow_id: selectedWorkflowID,
       workflow_binding: workflowBinding,
       profile_audit: profileAudit,
@@ -1476,6 +1490,20 @@ try {
   const trajectoryPath = path.join(outputDirectory, "trajectory.json")
   const svgPath = path.join(outputDirectory, "trajectory.svg")
   await Promise.all([
+    fs.writeFile(
+      skillProjectionPath,
+      JSON.stringify(
+        {
+          schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+          profile: arguments_.profile,
+          skill: skillEvidence,
+          matrix: skillProjection.matrix,
+        },
+        null,
+        2,
+      ) + "\n",
+      "utf8",
+    ),
     fs.writeFile(resultPath, JSON.stringify(result, null, 2) + "\n", "utf8"),
     fs.writeFile(tracePath, JSON.stringify(terminal.trace, null, 2) + "\n", "utf8"),
     fs.writeFile(transcriptPath, JSON.stringify(terminal.transcript, null, 2) + "\n", "utf8"),

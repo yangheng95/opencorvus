@@ -53,10 +53,15 @@ const wave1 = cases.map((item) => ({ case_index: item.case_index, profile: item.
   case_index: number
   profile: Profile
 }>
-const wave2 = wave1.map((item) => ({ case_index: item.case_index, profile: item.profile === "base" ? "advanced" : "base" }))
-const waves = profiles.length === 2
-  ? [wave1, wave2]
-  : [cases.map((item) => ({ case_index: item.case_index, profile: profiles[0]! }))]
+type BatchSlot = { case_index: number; profile: Profile }
+const wave2: BatchSlot[] = wave1.map((item) => ({
+  case_index: item.case_index,
+  profile: item.profile === "base" ? "advanced" : "base",
+}))
+const waves: BatchSlot[][] =
+  profiles.length === 2
+    ? [wave1, wave2]
+    : [cases.map((item) => ({ case_index: item.case_index, profile: profiles[0]! }))]
 
 await Promise.all([
   fs.mkdir(output, { recursive: true, mode: 0o700 }),

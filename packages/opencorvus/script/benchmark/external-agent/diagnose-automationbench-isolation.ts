@@ -36,7 +36,9 @@ async function chownTree(target: string, uid: number) {
   }
 }
 
-async function ready(child: ReturnType<typeof Bun.spawn>) {
+type PipedChild = Bun.Subprocess<"pipe", "pipe", "pipe">
+
+async function ready(child: PipedChild) {
   const reader = child.stdout.getReader()
   const decoder = new TextDecoder()
   let pending = ""

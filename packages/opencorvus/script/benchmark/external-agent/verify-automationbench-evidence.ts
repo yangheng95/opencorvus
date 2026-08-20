@@ -4,7 +4,7 @@ import path from "node:path"
 import {
   auditBenchmarkIsolation,
   auditBatchEvidence,
-  auditSkillProjection,
+  auditSkillEvidenceSeal,
   auditTaskOutcome,
   auditTerminalQuiescence,
   evidenceFileSetMatches,
@@ -300,6 +300,7 @@ for (const attempt of catalog.attempts) {
     payload.opencorvus?.task_outcome_audit?.scored_terminal === true &&
     payload.opencorvus?.terminal_quiescence_audit?.passed === true &&
     payload.opencorvus?.skill?.projection?.passed === true &&
+    payload.opencorvus?.skill?.dispatched_coverage?.passed === true &&
     payload.benchmark?.metrics !== null &&
     payload.opencorvus?.source?.worktree_clean === true &&
     !permanentlyInvalid &&
@@ -363,15 +364,14 @@ for (const attempt of catalog.attempts) {
   const profile = payload.opencorvus.profile
   const taskOutcomeAudit = auditTaskOutcome(payload.opencorvus.lifecycle_status, transcript)
   const terminalQuiescenceAudit = auditTerminalQuiescence(board)
-  const skillProjectionAudit = auditSkillProjection({ profile, matrix: skillProjection.matrix })
-  if (
-    !skillProjectionAudit.passed ||
-    skillProjection.profile !== profile ||
-    skillProjection.skill?.name !== payload.opencorvus.skill?.name ||
-    JSON.stringify(skillProjectionAudit) !== JSON.stringify(skillProjection.skill?.projection ?? null) ||
-    JSON.stringify(skillProjectionAudit) !== JSON.stringify(payload.opencorvus.skill?.projection ?? null)
-  ) {
-    throw new Error(`Experimental Skill projection mismatch: ${attempt.run_id}`)
+  const skillSeal = auditSkillEvidenceSeal({
+    profile,
+    resultSkill: payload.opencorvus.skill,
+    projectionFile: skillProjection,
+    transcript,
+  })
+  if (!skillSeal.passed) {
+    throw new Error(`Experimental Skill evidence seal failed for ${attempt.run_id}: ${skillSeal.violations.join(", ")}`)
   }
   const workflow = board.task?.completionDecision?.workflowBinding ?? null
   const selectedWorkflowID = workflow?.kind === "virtual_workflow" ? workflow.workflow_id : null

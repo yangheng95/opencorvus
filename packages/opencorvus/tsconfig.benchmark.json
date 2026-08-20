@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  // The package tsconfig excludes `script/**`, so the AutomationBench runner and its checkers were
+  // never typechecked. That let a `const` be referenced above its own declaration reach a sealed
+  // batch: the error is a temporal-dead-zone `ReferenceError` at run time and TS2448 at check time,
+  // and only one of those costs a five-case wave.
+  "include": ["script/benchmark/**/*.ts", "test/benchmark/**/*.ts", "src/**/*.d.ts"],
+  "exclude": []
+}
