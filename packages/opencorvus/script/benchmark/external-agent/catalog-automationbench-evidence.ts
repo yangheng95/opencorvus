@@ -107,18 +107,24 @@ for (const file of files.filter((item) => ["result.json", "failure.json"].includ
   const isResult = path.basename(file) === "result.json"
   const result = isResult ? (payload as Result) : undefined
   const failure = isResult ? undefined : (payload as Failure)
+  const cleanupFailure = await fs.readFile(path.join(directory, "cleanup-failure.json"), "utf8").catch(() => undefined)
+  const cleanupBug = cleanupFailure !== undefined
   const eligible =
     result?.run.status === "scored" &&
     result.opencorvus.lifecycle_status === "completed" &&
     result.benchmark.metrics !== null &&
-    result.opencorvus.source?.worktree_clean === true
+    result.opencorvus.source?.worktree_clean === true &&
+    !cleanupBug
   const developmentScore =
     result?.run.status === "scored" &&
     result.opencorvus.lifecycle_status === "completed" &&
     result.benchmark.metrics !== null &&
-    result.opencorvus.source?.worktree_clean !== true
+    result.opencorvus.source?.worktree_clean !== true &&
+    !cleanupBug
   const evidenceStatus = eligible
     ? "scored"
+    : cleanupBug
+      ? "invalid_bug"
     : developmentScore
       ? "development_scored"
     : failure?.run.status === "blocked_preflight"
@@ -126,6 +132,8 @@ for (const file of files.filter((item) => ["result.json", "failure.json"].includ
       : "invalid"
   const reason = eligible
     ? "natural_terminal_official_score"
+    : cleanupBug
+      ? "cleanup_failure"
     : developmentScore
       ? "uncommitted_or_unrecorded_source_state"
     : result

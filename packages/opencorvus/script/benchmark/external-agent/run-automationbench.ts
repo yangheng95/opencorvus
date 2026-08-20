@@ -589,11 +589,6 @@ try {
 } finally {
   const failures: unknown[] = []
   try {
-    await writeEvidenceManifest()
-  } catch (error) {
-    failures.push(error)
-  }
-  try {
     await waitForIngressDeliveryHooksForTest()
   } catch (error) {
     failures.push(error)
@@ -618,6 +613,29 @@ try {
   }
   try {
     await removeIsolatedTestRuntime(isolatedRuntime)
+  } catch (error) {
+    failures.push(error)
+  }
+  if (failures.length > 0) {
+    await fs.writeFile(
+      path.join(outputDirectory, "cleanup-failure.json"),
+      JSON.stringify(
+        {
+          schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+          run_id: runID,
+          run_key: runKey,
+          failures: failures.map((error) =>
+            error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError", message: String(error) },
+          ),
+        },
+        null,
+        2,
+      ) + "\n",
+      "utf8",
+    )
+  }
+  try {
+    await writeEvidenceManifest()
   } catch (error) {
     failures.push(error)
   }
