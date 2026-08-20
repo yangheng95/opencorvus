@@ -15,6 +15,50 @@ export type TokenBreakdown = {
   assistantMessages: number
 }
 
+export type ProviderUsageRow = {
+  id: string
+  occurred_at: number
+  provider_id: string
+  model_id: string
+  purpose: string
+  input_tokens: number
+  output_tokens: number
+  reasoning_tokens: number
+  cache_read_tokens: number
+  cache_write_tokens: number
+  total_tokens: number
+  cost_usd: number
+  billing_status: string
+}
+
+export function summarizeProviderUsageRows(rows: ProviderUsageRow[]): TokenBreakdown & { modelCalls: number } {
+  const result: TokenBreakdown & { modelCalls: number } = {
+    input: 0,
+    output: 0,
+    reasoning: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    total: 0,
+    costUSD: 0,
+    pricedCalls: 0,
+    unpricedCalls: 0,
+    assistantMessages: 0,
+    modelCalls: rows.length,
+  }
+  for (const row of rows) {
+    result.input += finiteNonnegative(row.input_tokens)
+    result.output += finiteNonnegative(row.output_tokens)
+    result.reasoning += finiteNonnegative(row.reasoning_tokens)
+    result.cacheRead += finiteNonnegative(row.cache_read_tokens)
+    result.cacheWrite += finiteNonnegative(row.cache_write_tokens)
+    result.total += finiteNonnegative(row.total_tokens)
+    result.costUSD += finiteNonnegative(row.cost_usd)
+    if (row.billing_status === "priced") result.pricedCalls++
+    if (row.billing_status === "unpriced") result.unpricedCalls++
+  }
+  return result
+}
+
 export type TrajectoryEvent = {
   at: number
   end?: number
@@ -26,6 +70,363 @@ export type TrajectoryEvent = {
 
 export function benchmarkRunKey(startedAt: number, runID: string) {
   return `${new Date(startedAt).toISOString().replaceAll(":", "-")}-${runID}`
+}
+
+export function automationBenchToolConfig(socketPath: string) {
+  return { socket_path: socketPath }
+}
+
+const STOCK_SINGLE_MODEL_BUDGET =
+  "You have a budget of ~50 tool-using turns — favor parallel tool calls and avoid duplicate searches."
+
+function removeStockSingleModelBudget(content: string) {
+  const index = content.indexOf(STOCK_SINGLE_MODEL_BUDGET)
+  if (index < 0) return content
+  const before = content.slice(0, index)
+  let after = content.slice(index + STOCK_SINGLE_MODEL_BUDGET.length)
+  // The frozen sentence is normally surrounded by one separator space. Removing
+  // the sentence would create a duplicate separator, so consume only that one
+  // newly-adjacent space and preserve every other business-content byte.
+  if (before.endsWith(" ") && after.startsWith(" ")) after = after.slice(1)
+  return before + after
+}
+
+export function automationBenchHarnessRequest(prompt: unknown): string {
+  if (!Array.isArray(prompt)) throw new Error("AutomationBench task prompt must be an array")
+  let budgetOccurrences = 0
+  const messages = prompt.map((item) => {
+    if (!item || typeof item !== "object") throw new Error("AutomationBench task prompt contains a non-object message")
+    const role = String((item as Record<string, unknown>).role ?? "")
+    const originalContent = String((item as Record<string, unknown>).content ?? "")
+    budgetOccurrences += originalContent.split(STOCK_SINGLE_MODEL_BUDGET).length - 1
+    const content = removeStockSingleModelBudget(originalContent)
+    return `${role.toUpperCase()}:\n${content}`
+  })
+  if (budgetOccurrences !== 1) {
+    throw new Error(`AutomationBench stock single-model budget sentence must occur exactly once, observed ${budgetOccurrences}`)
+  }
+  return [
+    "This is an AutomationBench API-mode evaluation. The simulated business end state is the only scored deliverable.",
+    "Load the project Skill named `automationbench-api` before acting and use only its project-local client for benchmark operations.",
+    "Do not ask the operator a question, do not modify product files, and do not replace benchmark operations with a prose report.",
+    "OpenCorvus is the evaluated multi-Agent harness. Tool, model, Agent, retry, and concurrent call counts are measured without a stock single-model turn budget.",
+    ...messages,
+  ].join("\n\n")
+}
+
+export function auditBenchmarkIsolation(
+  transcript: unknown,
+  input: {
+    protectedPaths: string[]
+    forbiddenMarkers: string[]
+    protectedSecrets?: Array<{ label: string; value: string }>
+  },
+) {
+  const strings: string[] = []
+  const collect = (value: unknown) => {
+    if (typeof value === "string") {
+      strings.push(value)
+      return
+    }
+    if (Array.isArray(value)) {
+      for (const item of value) collect(item)
+      return
+    }
+    if (value && typeof value === "object") {
+      for (const item of Object.values(value)) collect(item)
+    }
+  }
+  collect(transcript)
+  const normalizedStrings = strings.map(normalizeAuditPath)
+  const violations = new Set<string>()
+  input.protectedPaths.forEach((value, index) => {
+    const marker = normalizeAuditPath(value).replace(/\/$/, "")
+    if (marker && normalizedStrings.some((text) => containsPathAtBoundary(text, marker))) {
+      violations.add(`protected_path_${index + 1}`)
+    }
+  })
+  input.forbiddenMarkers.forEach((value) => {
+    const marker = value.toLowerCase()
+    if (marker && strings.some((text) => text.toLowerCase().includes(marker))) {
+      violations.add(`forbidden_marker:${value}`)
+    }
+  })
+  for (const secret of input.protectedSecrets ?? []) {
+    if (secret.value && strings.some((text) => text.includes(secret.value))) violations.add(`protected_secret:${secret.label}`)
+  }
+  return { passed: violations.size === 0, violations: [...violations] }
+}
+
+function normalizeAuditPath(value: string) {
+  return value.replace(/[\\/]+/g, "/").toLowerCase()
+}
+
+function containsPathAtBoundary(text: string, marker: string) {
+  let index = text.indexOf(marker)
+  while (index >= 0) {
+    const before = index === 0 ? "" : text[index - 1]!
+    const afterIndex = index + marker.length
+    const after = afterIndex >= text.length ? "" : text[afterIndex]!
+    const beforeBoundary = before === "" || !/[a-z0-9_.-]/i.test(before)
+    const afterBoundary = after === "" || after === "/" || !/[a-z0-9_.-]/i.test(after)
+    if (beforeBoundary && afterBoundary) return true
+    index = text.indexOf(marker, index + 1)
+  }
+  return false
+}
+
+export function sourceAuthSecretLeaves(value: unknown) {
+  const secrets: Array<{ label: string; value: string }> = []
+  const visit = (item: unknown, sensitive: boolean) => {
+    if (typeof item === "string") {
+      if (sensitive && item.length >= 8) secrets.push({ label: `source_auth_secret_${secrets.length + 1}`, value: item })
+      return
+    }
+    if (Array.isArray(item)) {
+      for (const child of item) visit(child, sensitive)
+      return
+    }
+    if (!item || typeof item !== "object") return
+    for (const [key, child] of Object.entries(item)) {
+      visit(child, sensitive || /token|secret|password|credential|api[_-]?key|access|refresh/i.test(key))
+    }
+  }
+  visit(value, false)
+  return secrets
+}
+
+export function summarizeBenchmarkToolEvents(events: Array<Record<string, any>>) {
+  const scoreIndex = events.findIndex((event) => event.kind === "score")
+  const terminalIndex = scoreIndex < 0 ? events.length : scoreIndex
+  const accepted = events.slice(0, terminalIndex).filter((event) => event.kind === "tool" || event.kind === "tool_error")
+  const succeeded = accepted.filter((event) => event.kind === "tool").length
+  const failed = accepted.filter((event) => event.kind === "tool_error").length
+  const sequenceValid = events.every((event, index) => event.sequence === index + 1)
+  return {
+    attempts: succeeded + failed,
+    succeeded,
+    failed,
+    scoreEvents: events.filter((event) => event.kind === "score").length,
+    scoreIndex,
+    sequenceValid,
+  }
+}
+
+export function evidenceFileSetMatches(actual: string[], expected: string[]) {
+  return JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort())
+}
+
+export function permanentRunInvalidation(fileNames: string[], manifest: Record<string, unknown>) {
+  if (fileNames.includes("cleanup-failure.json")) return { invalid: true, reason: "cleanup_failure" }
+  if (fileNames.includes("evidence-seal-failure.json")) return { invalid: true, reason: "evidence_seal_failure" }
+  if (fileNames.some((name) => /^redaction-receipt(?:-\d+)?\.json$/.test(name))) {
+    return { invalid: true, reason: "post_seal_secret_redaction" }
+  }
+  if (manifest.redacted_from_manifest_sha256) return { invalid: true, reason: "post_seal_secret_redaction" }
+  return { invalid: false as const }
+}
+
+export function auditRunBinding(input: {
+  resultProfile: string
+  resultTaskID: string | null | undefined
+  resultWorkflow: unknown
+  resultSelectedWorkflowID: string | null | undefined
+  requestedProfile: unknown
+  boundProfile: unknown
+  boardTaskID: unknown
+  responseTaskID: unknown
+  boardWorkflow: any
+}) {
+  const selectedWorkflowID =
+    input.boardWorkflow?.kind === "virtual_workflow" ? input.boardWorkflow.workflow_id : null
+  return {
+    passed:
+      input.requestedProfile === input.resultProfile &&
+      input.boundProfile === input.resultProfile &&
+      input.boardTaskID === input.resultTaskID &&
+      input.responseTaskID === input.resultTaskID &&
+      JSON.stringify(input.boardWorkflow ?? null) === JSON.stringify(input.resultWorkflow ?? null) &&
+      selectedWorkflowID === (input.resultSelectedWorkflowID ?? null),
+    selectedWorkflowID,
+  }
+}
+
+export function auditBatchEvidence(input: {
+  plan: any
+  receipt?: any
+  waveCompletion?: any
+  attempts: Array<Record<string, any>>
+  planSHA256: string
+}) {
+  if (!input.receipt) {
+    return {
+      passed: false,
+      status: "orphan_plan",
+      reasons: ["batch_receipt_missing"],
+      eligible_run_ids: [] as string[],
+      sealing_run_ids: [] as string[],
+      adopted_run_ids: [] as string[],
+    }
+  }
+  const reasons: string[] = []
+  if (!["completed", "failed"].includes(input.receipt.status) || input.receipt.batch_run_id !== input.plan.batch_run_id) {
+    reasons.push("batch_receipt_identity")
+  }
+  const expectedCases = (input.plan.cases ?? []).map((item: any) => Number(item.case_index)).sort((a: number, b: number) => a - b)
+  if (
+    input.plan.trial_concurrency !== 5 ||
+    expectedCases.length !== 5 ||
+    new Set(expectedCases).size !== 5
+  ) {
+    reasons.push("batch_plan_shape")
+  }
+  const expectedWave1 = (input.plan.waves?.[0] ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()
+  const waveCompletionValid =
+    input.waveCompletion?.status === "wave_1_complete" &&
+    input.waveCompletion?.batch_run_id === input.plan.batch_run_id &&
+    JSON.stringify((input.waveCompletion?.eligible_slots ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()) ===
+      JSON.stringify(expectedWave1)
+  if ((input.receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
+    reasons.push("wave_1_completion")
+  }
+  const launched = [1, 2].flatMap((waveIndex) =>
+    (input.receipt[`wave_${waveIndex}`]?.launched ?? []).map((item: any) => ({ ...item, waveIndex })),
+  )
+  const eligibleClaims = [1, 2].flatMap((waveIndex) =>
+    (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => ({ ...item, waveIndex })),
+  )
+  const preexisting = new Map(
+    ["base", "advanced"].flatMap((profile) =>
+      (input.plan.preexisting_eligible?.[profile] ?? []).map((item: any) => [String(item.run_id), item] as const),
+    ),
+  )
+  const intervals: Array<{
+    waveIndex: number
+    profile: string
+    caseIndex: number
+    start: number
+    end: number
+  }> = []
+  const launchedRunIDs = new Set<string>()
+  for (const item of launched) {
+    const attempt = input.attempts.find((record) => record.run_id === item.run_id)
+    const expectedSlot = input.plan.waves?.[item.waveIndex - 1]?.some(
+      (slot: any) => slot.case_index === item.case_index && slot.profile === item.profile,
+    )
+    if (input.receipt.status === "failed" && (!item.run_id || attempt?.raw_leaderboard_eligible !== true)) continue
+    if (
+      !attempt ||
+      attempt.benchmark?.batch_run_id !== input.plan.batch_run_id ||
+      attempt.benchmark?.batch_plan_sha256 !== input.planSHA256 ||
+      attempt.benchmark?.wave_index !== item.waveIndex ||
+      attempt.benchmark?.case_index !== item.case_index ||
+      attempt.opencorvus?.profile !== item.profile ||
+      !expectedSlot ||
+      !item.run_id ||
+      launchedRunIDs.has(String(item.run_id))
+    ) {
+      reasons.push(`launched_trial:${item.profile}:${item.case_index}`)
+      continue
+    }
+    launchedRunIDs.add(String(item.run_id))
+    intervals.push({
+      profile: item.profile,
+      waveIndex: item.waveIndex,
+      caseIndex: item.case_index,
+      start: Number(attempt.started_at),
+      end: Number(attempt.finished_at),
+    })
+  }
+  for (const waveIndex of [1, 2]) {
+    const waveLaunched = launched.filter((item) => item.waveIndex === waveIndex)
+    if (waveLaunched.length > 5 || new Set(waveLaunched.map((item) => item.case_index)).size !== waveLaunched.length) {
+      reasons.push(`wave_launch_shape:${waveIndex}`)
+    }
+  }
+  const eligibleRunIDs = new Set<string>()
+  const sealingRunIDs = new Set<string>()
+  const adoptedRunIDs = new Set<string>()
+  for (const item of eligibleClaims) {
+    const attempt = input.attempts.find((record) => record.run_id === item.run_id)
+    const expectedSlot = input.plan.waves?.[item.waveIndex - 1]?.some(
+      (slot: any) => slot.case_index === item.case_index && slot.profile === item.profile,
+    )
+    const adopted = preexisting.get(String(item.run_id))
+    const currentBatch = attempt?.benchmark?.batch_run_id === input.plan.batch_run_id
+    if (
+      !attempt ||
+      attempt.raw_leaderboard_eligible !== true ||
+      attempt.benchmark?.case_index !== item.case_index ||
+      attempt.opencorvus?.profile !== item.profile ||
+      !expectedSlot ||
+      !item.run_id ||
+      eligibleRunIDs.has(String(item.run_id)) ||
+      (currentBatch
+        ? !launchedRunIDs.has(String(item.run_id)) || attempt.benchmark?.batch_plan_sha256 !== input.planSHA256
+        : !adopted ||
+          adopted.case_index !== item.case_index ||
+          adopted.profile !== item.profile ||
+          attempt.leaderboard_eligible !== true)
+    ) {
+      reasons.push(`eligible_trial:${item.profile}:${item.case_index}`)
+      continue
+    }
+    eligibleRunIDs.add(String(item.run_id))
+    if (currentBatch) sealingRunIDs.add(String(item.run_id))
+    else adoptedRunIDs.add(String(item.run_id))
+  }
+  for (const waveIndex of [1, 2]) {
+    const events = intervals
+      .filter((item) => item.waveIndex === waveIndex)
+      .flatMap((item) => [
+        { at: item.start, delta: 1 },
+        { at: item.end, delta: -1 },
+      ])
+      .sort((left, right) => left.at - right.at || left.delta - right.delta)
+    let active = 0
+    for (const event of events) {
+      active += event.delta
+      if (active > 5) reasons.push(`wave_concurrency:${waveIndex}`)
+    }
+  }
+  const waveCompletedAt = Number(input.waveCompletion?.completed_at)
+  if (waveCompletionValid && intervals.some((item) => item.waveIndex === 1 && item.end > waveCompletedAt)) {
+    reasons.push("wave_1_barrier_end")
+  }
+  if (waveCompletionValid && intervals.some((item) => item.waveIndex === 2 && item.start < waveCompletedAt)) {
+    reasons.push("wave_2_barrier_start")
+  }
+  const pairedSlots = [1, 2]
+    .flatMap((waveIndex) =>
+      (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => `${item.case_index}:${item.profile}`),
+    )
+    .sort()
+  const expectedPairedSlots = expectedCases.flatMap((caseIndex) => [`${caseIndex}:base`, `${caseIndex}:advanced`]).sort()
+  if (input.receipt.status === "completed" && JSON.stringify(pairedSlots) !== JSON.stringify(expectedPairedSlots)) {
+    reasons.push("paired_case_coverage")
+  }
+  return {
+    passed: reasons.length === 0,
+    status: reasons.length === 0 ? input.receipt.status : "invalid",
+    reasons,
+    eligible_run_ids: [...eligibleRunIDs].sort(),
+    sealing_run_ids: [...sealingRunIDs].sort(),
+    adopted_run_ids: [...adoptedRunIDs].sort(),
+  }
+}
+
+export function paperEvidenceChecks(input: {
+  manifestVerified: boolean
+  providerLedgerVerified: boolean
+  profileVerified: boolean
+  isolationVerified: boolean
+  benchmarkIdentityVerified: boolean
+  rawEvidenceVerified: boolean
+}) {
+  const failed = Object.entries(input)
+    .filter(([, passed]) => !passed)
+    .map(([name]) => name)
+  return { passed: failed.length === 0, failed }
 }
 
 type TranscriptMessage = {
@@ -181,6 +582,9 @@ export function renderTrajectorySVG(input: {
   title: string
   events: TrajectoryEvent[]
   tokens: TokenBreakdown
+  runDurationMs?: number
+  modelCalls?: number
+  toolCalls?: number
 }): string {
   const lanes = [...new Set(input.events.map((event) => event.lane))]
   const min = Math.min(...input.events.map((event) => event.at), Date.now())
@@ -220,6 +624,14 @@ export function renderTrajectorySVG(input: {
     })
     .join("")
   const durationSeconds = (max - min) / 1000
+  const runDurationSeconds = finiteNonnegative(input.runDurationMs) / 1000
+  const durationLabel = input.runDurationMs === undefined
+    ? `${durationSeconds.toFixed(1)} s event span`
+    : `${runDurationSeconds.toFixed(1)} s run · ${durationSeconds.toFixed(1)} s event span`
+  const callLabel = [
+    input.modelCalls === undefined ? undefined : `${input.modelCalls} model calls`,
+    input.toolCalls === undefined ? undefined : `${input.toolCalls} benchmark calls`,
+  ].filter(Boolean)
   const ticks = [0, 0.25, 0.5, 0.75, 1]
     .map((ratio) => {
       const tickX = left + ratio * plotWidth
@@ -246,7 +658,7 @@ export function renderTrajectorySVG(input: {
     `<desc id="desc">Aligned OpenCorvus agent and AutomationBench tool trajectory.</desc>`,
     `<rect width="100%" height="100%" fill="#ffffff"/>`,
     `<text x="24" y="32" font-size="20" font-weight="600" fill="#111827">${escapeXML(input.title)}</text>`,
-    `<text x="24" y="58" font-size="12" fill="#4b5563">${durationSeconds.toFixed(1)} s · ${input.events.length} events · ${input.tokens.total.toLocaleString()} provider tokens · ${input.tokens.output.toLocaleString()} text output · ${input.tokens.reasoning.toLocaleString()} reasoning</text>`,
+    `<text x="24" y="58" font-size="12" fill="#4b5563">${durationLabel} · ${input.events.length} events${callLabel.length ? ` · ${callLabel.join(" · ")}` : ""} · ${input.tokens.total.toLocaleString()} provider tokens · ${input.tokens.output.toLocaleString()} text output · ${input.tokens.reasoning.toLocaleString()} reasoning</text>`,
     ticks,
     `<line x1="${left}" y1="${top - 12}" x2="${width - right}" y2="${top - 12}" stroke="#9ca3af"/>`,
     rows,

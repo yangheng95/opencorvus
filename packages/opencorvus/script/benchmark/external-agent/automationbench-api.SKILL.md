@@ -10,10 +10,10 @@ The Task is scored only from the final simulated business state. A narrative ans
 Use the project-local client with these exact commands:
 
 ```text
-python automationbench_tool.py search "API-native keywords" --top-k 5
-python automationbench_tool.py fetch GET "https://full.url/from/search" --params '{"key":"value"}'
-python automationbench_tool.py fetch POST "https://full.url/from/search" --body '{"key":"value"}'
-python automationbench_tool.py base64 "text that an endpoint explicitly requires encoded"
+python3 automationbench_tool.py search "API-native keywords" --top-k 5
+python3 automationbench_tool.py fetch GET "https://full.url/from/search" --params '{"key":"value"}'
+python3 automationbench_tool.py fetch POST "https://full.url/from/search" --body '{"key":"value"}'
+python3 automationbench_tool.py base64 "text that an endpoint explicitly requires encoded"
 ```
 
 Method:

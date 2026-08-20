@@ -8,11 +8,12 @@
 | Scope correction | Keep all work on a new benchmark branch so the main delivery branch is not changed. The active branch is `codex/automation-workbuddy-benchmark`. External source trees and datasets stay outside the repository. |
 | Pilot correction | Start with `gpt-5.6-luna`, first prove the chain, and copy only OpenCorvus results into this project's own comparison board. Do not submit to or impersonate an official leaderboard. |
 | Round-one correction | Round one contains only AutomationBench `1.0.6` with `openai/gpt-5.6-luna`; WorkBuddy is deferred. OpenCorvus is the evaluated multi-Agent harness, so calls, Agents, retries, and concurrency are measured without a model-runner call cap. |
+| Matrix correction | Freeze a deterministic 50-case public AutomationBench set and run paired Base and Advanced trials for every case. Schedule at most five distinct cases per batch, never overlap Base and Advanced for the same case, and seal a batch before starting the next. This is 50 benchmark cases and 100 profile trials. |
 | Bug/evidence correction | Any run that encounters a product, adapter, scorer, lifecycle, timeout, or evidence bug is retained as `invalid_bug`, excluded from experiment results, and rerun from a fresh world only after the root fix lands. Every attempt uses an independent timestamp-plus-UUID directory and SHA-256 evidence manifest so reruns never overwrite paper evidence. These rules are also frozen in `skills/automationbench-experiment/SKILL.md`. |
-| Acceptance metrics | (1) exact `openai/gpt-5.6-luna` credential and model projection preflight succeeds from an isolated runtime containing both `auth.json` and `models.json`; (2) one public AutomationBench task reaches deterministic official rubric scoring from fresh state in both Base and Advanced on a clean recorded commit; (3) every attempt records status and a sealed evidence manifest; (4) every accepted run records task/version/config identity, terminal state, raw transcript/trace/world events, readable trajectory, duration, token components, cost coverage, partial credit, and strict pass; (5) only clean-source natural-completion runs enter the self-owned leaderboard, and public held-out percentages remain context only. |
+| Acceptance metrics | (1) exact `openai/gpt-5.6-luna` credential and model projection preflight succeeds from an isolated runtime containing both `auth.json` and `models.json`; (2) every frozen public case reaches deterministic official rubric scoring from fresh state in both Base and Advanced on a clean recorded commit; (3) every attempt records status and a sealed evidence manifest; (4) every accepted run records task/version/config identity, terminal state, raw transcript/trace/world events, readable trajectory, duration, token components, cost coverage, partial credit, and strict pass; (5) only clean-source natural-completion runs enter the self-owned leaderboard, and public held-out percentages remain context only. |
 | Hard constraints | Use public Task APIs and normal OpenCorvus Expert Squad selection; all model interaction remains streaming; no fallback or parallel orchestration implementation; no call-count or Agent-count limit; benchmark inactivity timeout is reset only by real work activity; no UI automation tests; no secrets in logs, specs, result artifacts, or Git; product fixes are separately reviewed/committed and only that fix is merged into `v0.0.49beta`; benchmark code/evidence remain on the bench branch. |
 | Sources read | `AGENTS.md`; `benchmark-debug-template/SKILL.md`; `visualize/SKILL.md`; root and package `package.json`; `specs/README.md`; `specs/records/2026-08/README.md`; `specs/current/architecture/02-data.md`; `04-extensions.md`; `06-provider.md`; `task-control-plane.md`; `task-runtime-directory.md`; public Benchmark documentation; Base and Advanced package READMEs/manifests; provider usage, AgentTrace, Task route, isolated runtime, and existing real benchmark code; official AutomationBench 1.0.6 repository/docs/leaderboard; official WorkBuddy repository/config/harness-authoring docs/leaderboard and paper. |
-| Whole-repository search results | The product already owns the required Task API, isolated `OPENCORVUS_HOME`, trace JSONL, persistent SQLite, transcript token facts, exact `promptProfile` selection, project Skill discovery, and Provider connectivity route. Existing benchmark guidance forbids a parallel Task path. `provider_usage_event` is the global request ledger but has no Task identity, so per-trial token attribution must be reduced from exact Task transcript assistant/step facts and reconciled with the isolated ledger, not inferred from wall-clock windows in a shared home. Existing WorkBuddy integration does not exist. |
+| Whole-repository search results | The product already owns the required Task API, isolated `OPENCORVUS_HOME`, trace JSONL, persistent SQLite, transcript token facts, exact `promptProfile` selection, project Skill discovery, and Provider connectivity route. Existing benchmark guidance forbids a parallel Task path. `provider_usage_event` has no Task identity, so each trial uses its own isolated database and preserves every non-connectivity row before cleanup; result totals are recomputed from that ledger and reconciled with transcript assistant facts. Existing WorkBuddy integration does not exist. |
 | Local environment evidence | Python 3.14, Bun, Node.js, Git, and Docker CLI are installed. Docker Desktop's Linux daemon is not running. `uv` is not installed. User OpenCorvus data contains configured OpenAI OAuth and a canonical models catalog with exact `openai/gpt-5.6-luna`; credential contents were not printed. |
 | Independent Agent feedback | The Provider-helper repair received four independent read-only review passes. Findings drove a dedicated internal physical-Provider hook owner, preserved third-party message-hook compatibility, corrected Agent ID projection, made Provider rules final, added multi-owner coverage, and ended with no unresolved finding. The full benchmark delivery still requires its own final independent review after clean reruns. |
 
@@ -47,7 +48,7 @@ The missing component is an adapter at AutomationBench's supported harness bound
 
 - Definitions/calls: add benchmark-only code under `packages/opencorvus/script/benchmark/external-agent/`; do not alter production Task, Provider, trace, Expert Squad, Skill, or scheduler contracts.
 - Public contracts: call `POST /task`, `GET /task/:id/board`, `GET /task/:id/transcript`, `GET /task/:id/trace`, and `POST /global/providers/openai/test`. Product mutations remain public API calls; SQLite is read-only evidence only.
-- Data: each trial owns a fresh project, isolated runtime, AutomationBench world, output directory, and task ID. Results use one versioned JSON schema and retain raw benchmark/Task evidence separately from derived summaries.
+- Data: each trial owns a fresh project, isolated runtime, AutomationBench world, timestamp-plus-UUID output directory, and task ID. Results use one versioned JSON schema and retain raw benchmark events, terminal board, Task request/binding receipt, transcript, trace, per-call Provider ledger, trajectory, cleanup state, and exact manifest separately from derived summaries.
 - Tests: add focused non-UI positive contract tests for argument/config validation, transcript usage reduction, inactivity activity signatures, result aggregation, and trajectory generation. Do not run existing UI tests found elsewhere.
 - Docs: update both spec indexes and run the declared docs checker.
 - Delivery: commit and push only the benchmark branch. External repos, virtual environments, Docker layers, datasets, and secret-bearing runtime homes are ignored and uncommitted.
@@ -75,6 +76,7 @@ Output:
 - priced/unpriced coverage and request-time cost where available;
 - model-call, benchmark-tool-call, Session, Agent, and elapsed-time counts;
 - canonical Task trace plus an aligned-lane trajectory data file and SVG;
+- terminal board, Task create receipt, actual package/profile/workflow binding, isolation audit, and exact per-call Provider usage ledger;
 - immutable configuration/source hashes and exact reproduction command.
 
 Every unknown value stays `null` with a reason. It is not silently converted to zero.
@@ -83,23 +85,24 @@ Every unknown value stays `null` with a reason. It is not silently converted to 
 
 Task definition:
 
-- Use one public task from a scored domain for the first chain proof. `simple` may be used only for tool-bridge diagnostics and is never written as an official score.
+- Use only the committed deterministic 50-case public manifest. Selection is quota-balanced across all six public domains, uses a fixed SHA-256 ranking seed without reading task content or assertions, and freezes example ID, task name, task-contract hash, case index, and batch index. `simple` may be used only for tool-bridge diagnostics and is never written as a score.
 - Initialize the task through AutomationBench's release code, preserve its allowed-service computation, and call its original `api_search`, `api_fetch`, and `base64_encode` functions.
-- Keep the assertions and mutable world outside the project visible to OpenCorvus. The generated project wrapper can invoke only the three official tools; it cannot read state or request scoring.
+- Keep assertions, evaluator source, and mutable world outside the project and inaccessible to the Agent identity. The generated project wrapper can invoke only the three official tool routes through its UID-scoped Unix socket; it has no project credential. Hidden task/scorer admin routes use a separate random token delivered to the bridge through an anonymous stdin pipe, never a file, argument, environment variable, prompt, or transcript.
+- Remove only AutomationBench's stock single-model `~50` tool-turn sentence when constructing the OpenCorvus Task request, and add the explicit uncapped-harness measurement contract. Preserve all business instructions unchanged and hash both the official task contract and mapped harness request.
 - After OpenCorvus settles, call AutomationBench's original `partial_credit` and `task_completed_correctly` functions against the final world.
 
 Settings:
 
 | Setting | Pilot value |
 | --- | --- |
-| Release | PyPI `automation-bench==1.0.6`, reconciled to the official source release |
+| Release | Distribution `automation-bench==1.0.6` built from official revision `4a8e106…`; fail-closed distribution version, installed package-tree SHA-256, public dataset-index SHA-256, frozen case-set SHA-256, per-case official task-contract SHA-256, and source revision |
 | Toolset | API mode |
 | Model | `openai/gpt-5.6-luna` |
-| Profiles | `base`, then `advanced`; fresh world and project for each |
+| Profiles | paired `base` and `advanced`; fresh world/project per profile; deterministic crossover order balances which profile runs first |
 | Reasoning variant | Provider default for the chain proof; later experiments must record an exact variant |
 | Skill | `automationbench-api` method-only project Skill; no task answer, assertion, or endpoint hint |
-| Concurrency | 1 |
-| Repetitions | 1 for smoke; 3 for any result promoted beyond smoke |
+| Trial concurrency | At most 5 distinct cases per batch; Base/Advanced of one case never overlap; OpenCorvus internal Agent/tool concurrency is unrestricted |
+| Repetitions | 1 paired Base/Advanced trial per each of 50 frozen public cases |
 | Scored metric | strict `task_completed_correctly`; `partial_credit` diagnostic |
 | Harness usage | record every call and model Turn without imposing the stock single-model runner's step limit on the multi-Agent harness |
 
@@ -109,13 +112,21 @@ Timeout:
 - No wall-clock deadline while work continues.
 - Benchmark bridge health and Provider retries must surface activity separately from no-op polling.
 
+Isolation boundary:
+
+- Formal runs execute inside WSL2 Linux as an operational benchmark boundary, not a hostile multi-tenant security proof. Evaluator source/venv, dataset, scorer, Provider data, control, and evidence roots are root-owned and mode-0700.
+- Agent Bash is a frozen root-owned wrapper that creates a private mount namespace and tmpfs HOME, unmounts Windows drives, removes inherited environment authority, drops to the case's unique UID/GID in `60001..60050`, and then launches Bash. Do not make stronger sandboxing an experiment prerequisite unless a concrete leak is observed.
+- Each tool surface is a mode-0600 Unix socket inside a mode-0700 directory owned by that case UID; the admin surface is physically separate and keeps its stdin-only token. Before Task creation, the runner positively probes that the exact shell/wrapper hash can write its project/use its socket and cannot traverse source auth/models, isolated runtime data, evaluator files, bridge `/proc` authority, sibling authority, or Windows mounts. Transcript scanning and exact secret-leaf matching remain defense-in-depth evidence, not the primary boundary.
+
 Acceptance:
 
 - fresh official world per profile;
 - exact Provider preflight reports `connected` for `openai/gpt-5.6-luna`;
+- bridge identity matches release/package/task-contract locks before Task creation;
 - benchmark task reaches an OpenCorvus terminal decision without operator intervention;
-- official rubric executes and emits strict plus partial scores;
-- result, trace, usage, and trajectory artifacts validate against the local checker;
+- official rubric executes and emits strict plus partial scores; an independent verifier checks the raw initial-to-final world hash chain, replays deterministic stateless tools, reloads the sealed final world, and reruns the official rubric to the same strict/partial/assertions/end-world hash and attempted/succeeded/failed call counts;
+- terminal package binding equals requested Base/Advanced; transcript isolation audit shows no evaluator path/admin/scorer access;
+- result, exact per-call usage ledger, trace, transcript, board, Task receipt, trajectory, cleanup state, and exact file-set manifest validate against the local checker;
 - failures retain exact stage and evidence instead of becoming score `0` unless the official rubric itself returned zero.
 
 ### Deferred scope: WorkBuddy Bench
@@ -124,23 +135,18 @@ WorkBuddy investigation remains historical input from the original request, but 
 
 ## Experiment matrix and comparison rules
 
-The smoke matrix is:
+The round-one matrix is:
 
 | Suite | Unit | Base | Advanced | Skill | Repetitions |
 | --- | --- | ---: | ---: | --- | ---: |
-| AutomationBench public | one scored-domain task | yes | yes | on | 1 |
+| AutomationBench public | deterministic 50-case set | yes | yes | on | 1 paired trial per case |
 
-After the clean Base and Advanced runs pass the evidence checker, expand in this order only with additional authorization:
-
-1. three repetitions of the same tasks to expose variance;
-2. one task per AutomationBench scored domain;
-3. stratified public subsets;
-4. the full public suite only after cost and runtime approval.
+The committed case-set manifest freezes selection order, domain, task name, public example identity, and official task-contract hash. Execution uses ten deterministic five-case batches. Each batch has two sealed five-trial waves: odd case indexes run Base first and even case indexes run Advanced first, then the second wave runs the opposite profile. This balances profile order across the 50 cases, never overlaps the two profiles of one case, and seals the batch before the next begins.
 
 Comparison rules:
 
 - AutomationBench private official leaderboard and local public-set results appear in separate columns. The official site currently lists no `gpt-5.6-luna` row; the closest named OpenAI references are `gpt-5.6-terra` and `gpt-5.6-sol`, but they are contextual only.
-- A one-task smoke result is shown as `1/1` or `0/1`, never as a model-wide percentage comparable to 600+ held-out tasks.
+- Per-case strict results are shown as `1/1` or `0/1`; aggregate public-set success is `passes/50`. It is never represented as the official private held-out score.
 - Base and Advanced remain distinct harness profiles. A difference in call count, concurrency, duration, or token use is reported, not normalized away.
 
 ## Trajectory view
@@ -149,8 +155,8 @@ The renderer consumes only normalized raw events and draws aligned lanes on one 
 
 - Orchestrator and each projected Agent occupy separate lanes.
 - LLM request/turn spans, Skill loads, benchmark search/fetch calls, waits, terminal decisions, and verifier/scorer events use distinct mark shapes and labels.
-- The plot annotates total duration, model/tool calls, idle gaps, token totals, and the critical path.
-- A compact side-by-side profile view shares one time scale when both runs exist. Missing lanes remain absent rather than fabricated.
+- Each profile plot labels full run duration separately from the first-to-last normalized event span, and annotates model calls, benchmark calls, event count, and token totals.
+- Base and Advanced use separate readable time axes because their durations differ materially; the numeric comparison table carries exact cross-profile duration/call/token deltas. The committed renderer deterministically emits SVG and optional PNG.
 
 ## Implementation sequence
 
@@ -197,12 +203,27 @@ Shared Provider-helper root cause:
 
 Two natural-completion reruns established that the adapter and official scorer work, but they were executed before the benchmark source-state recorder and immutable timestamp-plus-UUID directory contract were committed. They remain `development_scored` evidence and are excluded from the paper round-one leaderboard:
 
-| Profile | Strict | Partial | Tool calls | Model calls | Total tokens | Duration |
+| Profile | Strict | Partial | Successful tool calls | Model calls | Total tokens | Duration |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Base | 1/1 | 1.0000 | 134 | 130 | 8,210,786 | 1,060,812 ms |
 | Advanced | 0/1 | 0.6667 | 53 | 36 | 1,892,387 | 470,411 ms |
 
 Base completed all three positive assertions. Advanced updated the Opportunity and sent the executive email but never submitted a support-escalation email request; this is measured harness behavior, not an adapter/scorer bug. The user nevertheless requires a clean post-fix rerun for the experiment result, so neither row is promoted or relabeled.
+
+## Clean-source reruns invalidated by evidence-secret bug
+
+These two reruns used clean OpenCorvus commit `9a81613f633bec17d0f5964721c82db49a130b43`, identical benchmark bundle SHA-256 `9482c6961cd58e28b9fde59a6205675325d1dfa4cf986a84f1cb809a200c4be0`, AutomationBench source `4a8e1061254004d9dac807054eed33fad7d1ff14`, exact `openai/gpt-5.6-luna`, and fresh public task example `501`. Provider preflight, natural Task completion, official scoring, cleanup, and initial manifest checks succeeded, but the later secret audit found that Agents had read the project `.automationbench-tool.json`; the raw transcripts therefore contained the expired localhost-only tool bearer. Both runs are `invalid_bug` and cannot enter the experiment leaderboard.
+
+| Profile | Strict | Partial | Successful / failed tool calls | Model calls | Total tokens | Output | Duration | Sessions / Agents |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Base | 0/1 | 0.3333 | 169 / 6 | 122 | 6,762,463 | 30,809 | 1,357,789 ms | 5 / 5 |
+| Advanced | 0/1 | 0.6667 | 56 / 1 | 44 | 2,907,836 | 13,442 | 686,134 ms | 2 / 2 |
+
+Within this invalid pair, Advanced improved partial credit by `33.33` percentage points while using `57.00%` fewer total tokens, `56.37%` fewer text-output tokens, `63.93%` fewer model calls, `66.86%` fewer benchmark API calls, and `49.47%` less elapsed time. These values remain debugging evidence only and are not the round-one comparison.
+
+Official assertions show Base only changed the correct Opportunity to `Closed Won`; neither target email met the scorer. Advanced changed the Opportunity and sent the correct executive email but omitted the required support-escalation email. Other recorded error marks were agent-level contract mistakes (out-of-range `top_k`, malformed shell quoting, rejected tool inputs) that the harness observed and continued from; they were not the invalidating bug.
+
+Root repair removes the project-side bearer entirely: each trial's intended tool capability is a UID-scoped Unix socket, while task/scorer admin routes live on a separate loopback HTTP surface with a host-only random token injected through anonymous stdin. It never enters child argv or environment. Formal execution moves evaluator, Provider data, Host, and evidence into the WSL2 root boundary; each case receives a unique numeric UID, private tmpfs HOME, mode-0700 project/socket roots, and a private mount namespace without Windows mounts. A positive pre-Task probe proves own-project/socket access and evaluator/auth/bridge-process denial; a separate five-trial diagnostic attacks sibling project, socket, process, home, symlink, and Windows-mount boundaries. The bridge diagnostic verifies physical tool/admin surface separation, exact distribution/package/task-contract identity, real stateless concurrency, atomic attempted/succeeded/failed counting, score-versus-tool terminal sealing, initial-to-final state hash chaining, deterministic stateless replay, and official rescoring of the sealed final world. The model-visible request removes exactly one frozen stock budget sentence and preserves all other business bytes. Each candidate run saves its terminal board, create/binding receipt, actual Expert Squad profile/workflow, shell and transcript isolation audits, initial/final worlds, replay receipt, per-call Provider ledger, and exact-set manifest; catalog and the final verifier independently recompute those claims. The two affected transcripts were mechanically redacted twice as needed for nested escaped metadata; redaction/seal/cleanup markers now cause permanent `invalid_bug` classification regardless of manual disposition. The original result and world evidence remain present but excluded; neither run is relabeled after repair.
 
 ## Public references frozen for this pilot
 

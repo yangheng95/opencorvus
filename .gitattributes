@@ -25,3 +25,7 @@ expert-squads/builtin/medical-device-human-factors-usability-assurance/skills/me
 *.ppt binary
 *.pptx binary
 *.pptm binary
+
+# Preserve benchmark evidence byte-for-byte so committed SHA-256 manifests remain verifiable across platforms.
+specs/artifacts/2026-08-20-external-agent-benchmark/** -text
+packages/opencorvus/script/benchmark/external-agent/automationbench-case-set.json text eol=lf

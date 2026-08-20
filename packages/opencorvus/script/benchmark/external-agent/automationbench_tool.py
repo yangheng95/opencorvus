@@ -4,28 +4,39 @@
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
-import urllib.error
-import urllib.request
+import socket
 from pathlib import Path
 
 
+class UnixHTTPConnection(http.client.HTTPConnection):
+    def __init__(self, socket_path: str):
+        super().__init__("localhost", timeout=60)
+        self.socket_path = socket_path
+
+    def connect(self) -> None:
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.sock.settimeout(self.timeout)
+        self.sock.connect(self.socket_path)
+
+
 def _call(config: dict[str, str], route: str, payload: dict) -> None:
-    request = urllib.request.Request(
-        config["base_url"].rstrip("/") + route,
-        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        headers={
-            "authorization": f"Bearer {config['tool_token']}",
-            "content-type": "application/json",
-        },
-        method="POST",
-    )
+    connection = UnixHTTPConnection(config["socket_path"])
     try:
-        with urllib.request.urlopen(request, timeout=60) as response:
-            print(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as error:
-        print(error.read().decode("utf-8"))
-        raise SystemExit(1) from error
+        connection.request(
+            "POST",
+            route,
+            body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+            headers={"content-type": "application/json"},
+        )
+        response = connection.getresponse()
+        text = response.read().decode("utf-8")
+        print(text)
+        if response.status >= 400:
+            raise SystemExit(1)
+    finally:
+        connection.close()
 
 
 def main() -> None:
