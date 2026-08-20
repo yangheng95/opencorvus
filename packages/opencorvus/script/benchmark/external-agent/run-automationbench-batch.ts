@@ -286,6 +286,31 @@ function queueDashboardWrite() {
   return dashboardQueue
 }
 
+async function queueDashboardWhenLeaseActive(item: FrozenCase, profile: Profile) {
+  if (!dashboard) return
+  const caseID = `${item.domain}:${item.task}`
+  for (let attempt = 0; attempt < 40 && !terminationSignal; attempt += 1) {
+    const leases = (await fs
+      .readFile(path.join(output, ".automationbench-active-leases.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => ({ active: [] }))) as {
+      active?: Array<{ case_id?: string; profile?: string; batch_run_id?: string }>
+    }
+    if (
+      leases.active?.some(
+        (lease) => lease.case_id === caseID && lease.profile === profile && lease.batch_run_id === batchRunID,
+      )
+    ) {
+      await queueDashboardWrite()
+      return
+    }
+    await new Promise<void>((resolve) => {
+      const timer = setTimeout(resolve, 250)
+      timer.unref()
+    })
+  }
+}
+
 function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, profile: Profile) {
   return new Map(
     catalog.leaderboard
@@ -365,6 +390,7 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
   ]
   const child = Bun.spawn(args, { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" })
   activeChildren.add(child)
+  void queueDashboardWhenLeaseActive(item, profile)
   try {
     const stdoutPromise = readWithInactivity(child.stdout, child, Number(inactivityMs) + 60_000)
     const stderrPromise = new Response(child.stderr).text()
