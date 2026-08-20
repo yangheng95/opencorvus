@@ -4,6 +4,20 @@
 
 ## 未发布
 
+## 0.0.50beta - 2026-08-21
+
+本版本修复多 Agent Harness 在外部业务系统交付中的 Skill 投影与独立验收链路，并同步发布桌面端、命令行二进制和公开网站。
+
+### Changed
+
+- Advanced 对外部系统的变更统一绑定到 `planned-delivery` 工作流；执行变更的 Agent 不再用自己的交付物充当独立验收，Tester 会从原始要求和权威数据源重新观察结果。
+- Base 同步明确：变更执行者发布的 Artifact 是交付声明，不是独立验收证据。
+
+### Fixed
+
+- 修复 `universal-build` 能解析 Expert Squad Skill、却不出现在 Skill mount matrix 中的双源问题；matrix 现在同时覆盖 scheduler-only 与 package-projected Agent，并标明能力由 package 还是 platform 提供。
+- 修复 Advanced 外部系统任务可能直接派给通用 worker、绕过计划交付和独立测试的问题。
+
 ## 0.0.49beta - 2026-08-19
 
 本版本把公开站与 README 的主张收敛到长程任务与自进化上，并汇总自 `0.0.48beta` 发布以来的用户可见改动。

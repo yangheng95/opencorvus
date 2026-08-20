@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-21-v0.0.50-beta-release.md](2026-08-21-v0.0.50-beta-release.md) records the product-only harness repair, canonical `0.0.50-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
+
 - [2026-08-20-external-agent-benchmark-pilot.md](2026-08-20-external-agent-benchmark-pilot.md) defines the isolated `gpt-5.6-luna` AutomationBench round for OpenCorvus Base/Advanced, including bug-run invalidation, immutable per-run evidence, exact Provider/model preflight, official scoring, token accounting, readable trajectories, and honest public-leaderboard context.
 
 - [2026-08-19-xiaohongshu-long-horizon-promotion.md](2026-08-19-xiaohongshu-long-horizon-promotion.md) defines the coordinated two-cover, real-site, README-image, and publish-ready copy package for presenting OpenCorvus long-horizon Expert Squads on Xiaohongshu.
