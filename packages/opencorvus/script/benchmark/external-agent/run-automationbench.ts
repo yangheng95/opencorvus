@@ -937,7 +937,10 @@ try {
   await seedProject({ projectDirectory, socketPath: bridge.toolSocketPath })
   const agentHome = `/tmp/opencorvus-benchmark-agent-${runID}`
   await fs.mkdir(agentHome, { mode: 0o700 })
-  await fs.chmod(path.dirname(projectDirectory), 0o711)
+  await Promise.all([
+    fs.chmod(isolatedRuntime.ownerRoot, 0o711),
+    fs.chmod(isolatedRuntime.processRoot, 0o711),
+  ])
   await chownAgentTree(projectDirectory, agentUID)
   process.env.OPENCORVUS_BENCH_AGENT_UID = String(agentUID)
   process.env.OPENCORVUS_BENCH_AGENT_HOME = agentHome
