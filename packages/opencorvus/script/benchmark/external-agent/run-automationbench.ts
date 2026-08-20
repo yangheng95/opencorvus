@@ -663,6 +663,8 @@ let projectDirectory = ""
 let backend: { url: URL; stop(closeActiveConnections?: boolean): Promise<void> } | undefined
 let waitForIngressDeliveryHooks: (() => Promise<void>) | undefined
 let closeDatabase: (() => void) | undefined
+let runtimeLogPath = ""
+let flushRuntimeLog: (() => Promise<void>) | undefined
 let taskID: string | undefined
 let stage = "source_preflight"
 let agentUID: number | undefined
@@ -969,6 +971,8 @@ try {
   const { Server } = await import("@/server/server")
   const { declareNativeTaskProcessDeployment } = await import("@/runtime/task-process-deployment")
   await Log.init({ print: false })
+  runtimeLogPath = Log.file()
+  flushRuntimeLog = Log.flush
   const engineGitHome = path.join(Global.Path.cache, "engine-git-runtime", "home")
   await fs.mkdir(engineGitHome, { recursive: true, mode: 0o700 })
   await fs.writeFile(path.join(engineGitHome, ".gitconfig"), `[safe]\n\tdirectory = ${projectDirectory}\n`, {
@@ -1270,6 +1274,24 @@ try {
   process.stdout.write(JSON.stringify({ event: "result", resultPath, svgPath, result }) + "\n")
   if (!valid) process.exitCode = 2
 } catch (error) {
+  if (runtimeLogPath && source) {
+    await flushRuntimeLog?.().catch(() => undefined)
+    const rawRuntimeLog = await fs.readFile(runtimeLogPath, "utf8").catch(() => "")
+    let redactedRuntimeLog = rawRuntimeLog
+    for (const secret of source.protectedSecrets) {
+      redactedRuntimeLog = redactedRuntimeLog.replaceAll(secret.value, `[REDACTED:${secret.label}]`)
+    }
+    redactedRuntimeLog = redactedRuntimeLog
+      .replace(/Bearer\s+[A-Za-z0-9._~+/=-]+/gi, "Bearer [REDACTED]")
+      .replace(/\b[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}\b/g, "[REDACTED:jwt]")
+      .replace(
+        /((?:access_token|refresh_token|id_token|api[_-]?key|authorization|token)(?:\\?"|')?\s*[:=]\s*(?:\\?"|')?)[^"'\\\s,}]+/gi,
+        "$1[REDACTED]",
+      )
+    await fs
+      .writeFile(path.join(outputDirectory, "opencorvus-runtime.log"), redactedRuntimeLog, { encoding: "utf8", flag: "wx" })
+      .catch(() => undefined)
+  }
   const failure = {
     schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
     run: {
