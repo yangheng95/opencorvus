@@ -39,11 +39,16 @@
  *
  * This height is half of a pair. tao's inset_traffic_lights only ever assigns
  * origin.x per button; the configured y resizes the titlebar container to
- * (button height + y) and the buttons keep their offset from its bottom edge,
- * which lands their centre at 12 + y - 6. Centring them on this row therefore
- * means trafficLightPosition.y = (36 / 2) - 6 = 12 in src-tauri/tauri.conf.json.
- * Change one and the other stops matching -- the sidebar toggle is the control
- * a reader sees them against. */
+ * (close button height + y) and the buttons keep their frame inside it. AppKit
+ * hands out a 14x16 button frame whose origin sits 6pt above the container's
+ * bottom edge, so the measured centre lands at (16 + y) - 6 - 8 = y + 2 below
+ * the window top. Centring them on this row therefore means
+ * trafficLightPosition.y = (36 / 2) - 2 = 16 in src-tauri/tauri.conf.json.
+ * Change one and the other stops matching -- the sidebar toggle and the menubar
+ * are the controls a reader sees them against.
+ *
+ * The row only holds 36px while nothing inside it grows with --ui-scale, so
+ * every control it carries pins its own metrics below instead of scaling. */
 html[data-native-titlebar="macos"] {
   --ui-titlebar-height: 36px;
 }
@@ -53,11 +58,23 @@ html[data-native-titlebar="macos"] .titlebar-top-row {
   --oc-icon-size-standard: 14px;
   --oc-titlebar-cluster-gap: 6px;
   --oc-titlebar-navigation-gap: 4px;
+  --oc-titlebar-menu-gap: 3px;
+  --oc-titlebar-menu-padding-x: 6px;
 
   grid-template-columns: minmax(0, auto) minmax(calc(16px * var(--ui-scale)), 1fr);
   gap: 2px;
   padding-left: var(--oc-titlebar-macos-controls-inset);
   padding-right: 8px;
+}
+
+/* The menubar rides the same pinned row as the traffic lights, so its triggers
+ * keep the native 22pt/13pt menu metrics that AppKit's own menu bar uses
+ * instead of following application content zoom out of the 36px row. */
+html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titlebar-menubar-trigger"] {
+  --oc-button-height: 22px;
+
+  height: 22px;
+  font-size: 13px;
 }
 
 .workspace-contextbar {
