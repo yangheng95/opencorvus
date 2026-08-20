@@ -1,3 +1,4 @@
+import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 
@@ -37,13 +38,16 @@ type BatchPlan = {
 type CatalogAttempt = {
   run_id?: string
   evidence_status?: string
+  raw_leaderboard_eligible?: boolean
+  batch_candidate_eligible?: boolean
   permanent_invalidation?: { invalid?: boolean }
 }
 
 type EvidenceManifest = {
-  verified?: boolean
   run_id?: string
-  files?: Array<{ path?: string }>
+  run_key?: string
+  redacted_from_manifest_sha256?: string
+  files?: Array<{ path?: string; bytes?: number; sha256?: string }>
 }
 
 type PublicContext = {
@@ -91,6 +95,43 @@ async function walk(directory: string): Promise<string[]> {
       }),
     )
   ).flat()
+}
+
+async function verifyEvidenceManifest(directory: string, manifest: EvidenceManifest | undefined, runID: string) {
+  if (
+    !manifest ||
+    manifest.run_id !== runID ||
+    manifest.redacted_from_manifest_sha256 ||
+    !Array.isArray(manifest.files)
+  ) {
+    return false
+  }
+  const entries = await fs.readdir(directory, { withFileTypes: true }).catch(() => [])
+  const actualFiles = entries
+    .filter((entry) => entry.isFile() && entry.name !== "evidence-manifest.json")
+    .map((entry) => entry.name)
+    .sort()
+  const declaredFiles = manifest.files.map((entry) => entry.path ?? "").sort()
+  if (
+    new Set(declaredFiles).size !== declaredFiles.length ||
+    actualFiles.length !== declaredFiles.length ||
+    actualFiles.some((name, index) => name !== declaredFiles[index])
+  ) {
+    return false
+  }
+  return (
+    await Promise.all(
+      manifest.files.map(async (entry) => {
+        if (!entry.path || path.basename(entry.path) !== entry.path) return false
+        const bytes = await fs.readFile(path.join(directory, entry.path)).catch(() => undefined)
+        return (
+          bytes !== undefined &&
+          bytes.byteLength === entry.bytes &&
+          crypto.createHash("sha256").update(bytes).digest("hex") === entry.sha256
+        )
+      }),
+    )
+  ).every(Boolean)
 }
 
 function escapeHTML(value: unknown) {
@@ -144,22 +185,36 @@ const currentResults = (
       .filter((file) => path.basename(file) === "result.json")
       .map(async (file) => {
         const directory = path.dirname(file)
-        const [payload, manifest, names] = await Promise.all([
-          readJSON<DashboardResult>(file),
+        const payload = await readJSON<DashboardResult>(file)
+        if (
+          !payload ||
+          !plan ||
+          payload.benchmark.batch_run_id !== plan.batch_run_id ||
+          verifiedRunIDs.has(String(payload.run.id))
+        ) {
+          return { file, payload, manifest: undefined, manifestValid: false, names: [] }
+        }
+        const [manifest, names] = await Promise.all([
           readJSON<EvidenceManifest>(path.join(directory, "evidence-manifest.json")),
           fs.readdir(directory).catch(() => []),
         ])
-        return { file, payload, manifest, names }
+        const manifestValid = await verifyEvidenceManifest(directory, manifest, String(payload.run.id))
+        return { file, payload, manifest, manifestValid, names }
       }),
   )
 )
   .filter(
-    (item): item is { file: string; payload: DashboardResult; manifest: EvidenceManifest; names: string[] } =>
+    (item): item is {
+      file: string
+      payload: DashboardResult
+      manifest: EvidenceManifest
+      manifestValid: true
+      names: string[]
+    } =>
       Boolean(
         item.payload &&
-          item.manifest?.verified === true &&
-          item.manifest.run_id === item.payload.run.id &&
-          item.manifest.files?.some((entry) => entry.path === "result.json") &&
+          item.manifestValid &&
+          item.manifest?.files?.some((entry) => entry.path === "result.json") &&
           item.payload.run.status === "scored" &&
           item.payload.benchmark.metrics &&
           profiles.includes(item.payload.opencorvus.profile) &&
@@ -173,10 +228,11 @@ const currentResults = (
     const attempt = catalogAttempts.get(runID)
     return (
       dispositions?.runs?.[runID] === undefined &&
-      attempt?.evidence_status !== "invalid" &&
+      (attempt === undefined || attempt.raw_leaderboard_eligible === true || attempt.batch_candidate_eligible === true) &&
       attempt?.permanent_invalidation?.invalid !== true &&
       !item.names.some(
         (name) =>
+          name === "failure.json" ||
           name === "cleanup-failure.json" ||
           name === "evidence-seal-failure.json" ||
           /^redaction-receipt(?:-\d+)?\.json$/.test(name),
