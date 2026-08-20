@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "run": {
+    "started_at": 1787202022814,
+    "failed_at": 1787202119164,
+    "status": "failed",
+    "stage": "task_execution"
+  },
+  "benchmark": {
+    "name": "automationbench",
+    "version": "1.0.6",
+    "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+    "split": "public",
+    "domain": "sales",
+    "task": "sales.multi_hop_lookup"
+  },
+  "opencorvus": {
+    "profile": "base",
+    "model": "openai/gpt-5.6-luna",
+    "task_id": "tsk_g00VSoHa0600BVcVZjqJ"
+  },
+  "error": {
+    "name": "TypeError",
+    "message": "input.trace.map is not a function. (In 'input.trace.map((event) => [event.ts, event.kind, event.sessionID, event.agentName])', 'input.trace.map' is undefined)"
+  }
+}

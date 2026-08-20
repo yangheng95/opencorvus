@@ -1,0 +1,4 @@
+interface:
+  display_name: "AutomationBench Experiment"
+  short_description: "Run auditable OpenCorvus AutomationBench experiments"
+  default_prompt: "Use $automationbench-experiment to run and preserve an OpenCorvus AutomationBench experiment."

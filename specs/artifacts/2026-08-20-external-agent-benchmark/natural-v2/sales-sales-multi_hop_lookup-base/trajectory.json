@@ -1,0 +1,3365 @@
+[
+  {
+    "at": 1787204114376,
+    "end": 1787204194799,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204121059,
+    "end": 1787204121846,
+    "lane": "orchestrator",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204122307,
+    "end": 1787204362507,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204131142,
+    "end": 1787204131334,
+    "lane": "orchestrator",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204132376,
+    "end": 1787204476724,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204137894,
+    "end": 1787204138025,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204138649,
+    "end": 1787204686134,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204144723,
+    "end": 1787204144845,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204144824,
+    "end": 1787204144939,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204144888,
+    "end": 1787204144956,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204145234,
+    "end": 1787204757755,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204153558,
+    "end": 1787204154830,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_snapshot",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204155319,
+    "end": 1787204981740,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204164616,
+    "end": 1787204164715,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204164725,
+    "end": 1787204164809,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204164838,
+    "end": 1787204164996,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204165155,
+    "end": 1787205166584,
+    "lane": "orchestrator",
+    "kind": "decision",
+    "label": "orchestrator_wake",
+    "source": "trace"
+  },
+  {
+    "at": 1787204172204,
+    "end": 1787204172319,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204172423,
+    "end": 1787204172475,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204172474,
+    "end": 1787204172521,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204178186,
+    "end": 1787204185499,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "dispatch_agent",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204185870,
+    "end": 1787204292973,
+    "lane": "base-planner",
+    "kind": "turn",
+    "label": "agent_turn",
+    "source": "trace"
+  },
+  {
+    "at": 1787204191692,
+    "end": 1787204192632,
+    "lane": "base-planner",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204197278,
+    "end": 1787204198488,
+    "lane": "base-planner",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204206514,
+    "end": 1787204206803,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204206623,
+    "end": 1787204206864,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "search_code",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204206636,
+    "end": 1787204206709,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204217436,
+    "end": 1787204217538,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204217484,
+    "end": 1787204217516,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204217528,
+    "end": 1787204217620,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204217582,
+    "end": 1787204217609,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204229438,
+    "end": 1787204229588,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204229540,
+    "end": 1787204229602,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204239730,
+    "end": 1787204239791,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204239806,
+    "end": 1787204239819,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204245656,
+    "end": 1787204286165,
+    "lane": "base-planner",
+    "kind": "tool",
+    "label": "artifact_publish",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204300298,
+    "end": 1787204302411,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204308023,
+    "end": 1787204309604,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204314668,
+    "end": 1787204315481,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204321975,
+    "end": 1787204323477,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204351245,
+    "end": 1787204351725,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "dispatch_agent",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204351424,
+    "end": 1787204354367,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "dispatch_agent",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204351524,
+    "end": 1787204353125,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "dispatch_agent",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204351980,
+    "end": 1787204445681,
+    "lane": "base-researcher",
+    "kind": "turn",
+    "label": "agent_turn",
+    "source": "trace"
+  },
+  {
+    "at": 1787204353282,
+    "end": 1787204694359,
+    "lane": "base-tester",
+    "kind": "turn",
+    "label": "agent_turn",
+    "source": "trace"
+  },
+  {
+    "at": 1787204354679,
+    "end": 1787204630716,
+    "lane": "base-developer",
+    "kind": "turn",
+    "label": "agent_turn",
+    "source": "trace"
+  },
+  {
+    "at": 1787204358443,
+    "end": 1787204359236,
+    "lane": "base-tester",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204359434,
+    "end": 1787205104674,
+    "lane": "base-tester",
+    "kind": "turn",
+    "label": "agent_turn",
+    "source": "trace"
+  },
+  {
+    "at": 1787204360567,
+    "end": 1787204361258,
+    "lane": "base-developer",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204361101,
+    "end": 1787204361482,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "search_code",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204361172,
+    "end": 1787204361470,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204361181,
+    "end": 1787204361463,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204361190,
+    "end": 1787204361301,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204361581,
+    "end": 1787204362437,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "no_action",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204361812,
+    "end": 1787204935402,
+    "lane": "base-developer",
+    "kind": "turn",
+    "label": "agent_turn",
+    "source": "trace"
+  },
+  {
+    "at": 1787204366138,
+    "end": 1787204366225,
+    "lane": "base-developer",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204366713,
+    "end": 1787204367110,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204369169,
+    "end": 1787204370044,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204370039,
+    "end": 1787204370545,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204370389,
+    "end": 1787204370657,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204371896,
+    "end": 1787204372097,
+    "lane": "base-developer",
+    "kind": "skill",
+    "label": "skill",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204374606,
+    "end": 1787204376657,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204376980,
+    "end": 1787204377947,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204378277,
+    "end": 1787204378567,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204378344,
+    "end": 1787204378553,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204378354,
+    "end": 1787204378385,
+    "lane": "base-developer",
+    "kind": "failure",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204382665,
+    "end": 1787204383552,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204384151,
+    "end": 1787204384269,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204384426,
+    "end": 1787204385335,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204390402,
+    "end": 1787204390828,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204391334,
+    "end": 1787204393484,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204397014,
+    "end": 1787204398051,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "capability_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204399972,
+    "end": 1787204400916,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400052,
+    "end": 1787204400826,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400061,
+    "end": 1787204400910,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400070,
+    "end": 1787204400900,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400079,
+    "end": 1787204400922,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400086,
+    "end": 1787204400939,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400597,
+    "end": 1787204400868,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400736,
+    "end": 1787204400736,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204400742,
+    "end": 1787204401049,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "glob",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400756,
+    "end": 1787204400839,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400760,
+    "end": 1787204400760,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204400768,
+    "end": 1787204400855,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204400781,
+    "end": 1787204400781,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204400798,
+    "end": 1787204400798,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204400818,
+    "end": 1787204400818,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204400841,
+    "end": 1787204400841,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204407191,
+    "end": 1787204407570,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204409755,
+    "end": 1787204409901,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204409827,
+    "end": 1787204409917,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204409848,
+    "end": 1787204409950,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204409862,
+    "end": 1787204409889,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "capability_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204409887,
+    "end": 1787204409937,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "capability_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204412701,
+    "end": 1787204413291,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204412780,
+    "end": 1787204413380,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204412805,
+    "end": 1787204413451,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204412844,
+    "end": 1787204413495,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204412860,
+    "end": 1787204413478,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204412877,
+    "end": 1787204413520,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204413216,
+    "end": 1787204413216,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204413317,
+    "end": 1787204413317,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204413381,
+    "end": 1787204413381,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204413413,
+    "end": 1787204413413,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204413428,
+    "end": 1787204413428,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204413446,
+    "end": 1787204413446,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204420570,
+    "end": 1787204437259,
+    "lane": "base-researcher",
+    "kind": "tool",
+    "label": "artifact_publish",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204421466,
+    "end": 1787204422070,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204421642,
+    "end": 1787204422378,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204421773,
+    "end": 1787204422412,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204421888,
+    "end": 1787204422471,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204421929,
+    "end": 1787204422584,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204421956,
+    "end": 1787204421956,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204421963,
+    "end": 1787204422608,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204422169,
+    "end": 1787204422169,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204422338,
+    "end": 1787204422338,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204422396,
+    "end": 1787204422396,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204422450,
+    "end": 1787204422450,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204422476,
+    "end": 1787204422476,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204424616,
+    "end": 1787204425063,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204424644,
+    "end": 1787204425120,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204424681,
+    "end": 1787204425164,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204424703,
+    "end": 1787204425170,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204424722,
+    "end": 1787204425196,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204424986,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204425051,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204425094,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204425102,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204425133,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204434001,
+    "end": 1787204434664,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204434168,
+    "end": 1787204434708,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204434219,
+    "end": 1787204434917,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204434297,
+    "end": 1787204434943,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204434412,
+    "end": 1787204434937,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204434435,
+    "end": 1787204434961,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204434488,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204434603,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204434731,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204434861,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204434869,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204434890,
+    "lane": "automationbench",
+    "kind": "failure",
+    "label": "error",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204435171,
+    "end": 1787204436102,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204435335,
+    "end": 1787204436092,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204435482,
+    "end": 1787204436163,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204435497,
+    "end": 1787204436124,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204435515,
+    "end": 1787204436148,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204435989,
+    "end": 1787204435989,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204436022,
+    "end": 1787204436022,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204436051,
+    "end": 1787204436051,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204436077,
+    "end": 1787204436077,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204436095,
+    "end": 1787204436095,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204445911,
+    "end": 1787204446897,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204446126,
+    "end": 1787204447163,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204446142,
+    "end": 1787204447143,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204446157,
+    "end": 1787204447179,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204446169,
+    "end": 1787204447200,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204446184,
+    "end": 1787204447216,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204446836,
+    "end": 1787204446836,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204447072,
+    "end": 1787204447072,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204447087,
+    "end": 1787204447087,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204447103,
+    "end": 1787204447103,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204447120,
+    "end": 1787204447120,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204447142,
+    "end": 1787204447142,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204451168,
+    "end": 1787204451603,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204451226,
+    "end": 1787204451714,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204451323,
+    "end": 1787204451757,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204451363,
+    "end": 1787204451793,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204451529,
+    "end": 1787204453779,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204451546,
+    "end": 1787204451546,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204451654,
+    "end": 1787204451654,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204451702,
+    "end": 1787204451702,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204451723,
+    "end": 1787204451723,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204457479,
+    "end": 1787204458144,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204457605,
+    "end": 1787204458135,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204457619,
+    "end": 1787204458174,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204457663,
+    "end": 1787204458165,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204457999,
+    "end": 1787204457999,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204458015,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204458075,
+    "end": 1787204458075,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204458089,
+    "end": 1787204458089,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204460110,
+    "end": 1787204461170,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204463745,
+    "end": 1787204464285,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204463839,
+    "end": 1787204464448,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204464025,
+    "end": 1787204464428,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204464041,
+    "end": 1787204464434,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204464216,
+    "end": 1787204464216,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204464355,
+    "end": 1787204464355,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204464362,
+    "end": 1787204464362,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204464362,
+    "end": 1787204464362,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204466384,
+    "end": 1787204467167,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204475549,
+    "end": 1787204476506,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "no_action",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204476805,
+    "end": 1787204477314,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204477140,
+    "end": 1787204477757,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204477227,
+    "end": 1787204477227,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204477514,
+    "end": 1787204478117,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204477565,
+    "end": 1787204477565,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204477701,
+    "end": 1787204478108,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204477966,
+    "end": 1787204478556,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204478019,
+    "end": 1787204478019,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204478024,
+    "end": 1787204478024,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204478084,
+    "end": 1787204478770,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204478198,
+    "end": 1787204478872,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204478214,
+    "end": 1787204478898,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204478230,
+    "end": 1787204478891,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204478250,
+    "end": 1787204478904,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204478416,
+    "end": 1787204478416,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204478776,
+    "end": 1787204478776,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204478783,
+    "end": 1787204478783,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204478795,
+    "end": 1787204478795,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204490946,
+    "end": 1787204491652,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204491214,
+    "end": 1787204491668,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204491227,
+    "end": 1787204491742,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204491243,
+    "end": 1787204491764,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204491588,
+    "end": 1787204491588,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204491589,
+    "end": 1787204491589,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204491676,
+    "end": 1787204491676,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204491704,
+    "end": 1787204491704,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204495878,
+    "end": 1787204496482,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204496116,
+    "end": 1787204496608,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204496242,
+    "end": 1787204496874,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204496383,
+    "end": 1787204496951,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204496412,
+    "end": 1787204496412,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204496549,
+    "end": 1787204496549,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204496558,
+    "end": 1787204497238,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204496637,
+    "end": 1787204496637,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204496813,
+    "end": 1787204497257,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204496882,
+    "end": 1787204496882,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204497174,
+    "end": 1787204497174,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204497192,
+    "end": 1787204497192,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204505749,
+    "end": 1787204506265,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204505856,
+    "end": 1787204506337,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204505902,
+    "end": 1787204506329,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204505916,
+    "end": 1787204506352,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204506186,
+    "end": 1787204506186,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204506256,
+    "end": 1787204506256,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204506264,
+    "end": 1787204506264,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204506289,
+    "end": 1787204506289,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204509550,
+    "end": 1787204510172,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204509781,
+    "end": 1787204510180,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204509794,
+    "end": 1787204510194,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204510106,
+    "end": 1787204510106,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204510116,
+    "end": 1787204510116,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204510122,
+    "end": 1787204510122,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204523352,
+    "end": 1787204523941,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204523459,
+    "end": 1787204523934,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204523496,
+    "end": 1787204523974,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204523512,
+    "end": 1787204523990,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204523757,
+    "end": 1787204523757,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204523835,
+    "end": 1787204523835,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204523905,
+    "end": 1787204523905,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204523926,
+    "end": 1787204523926,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204525096,
+    "end": 1787204525560,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204525133,
+    "end": 1787204525671,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204525221,
+    "end": 1787204525729,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204525264,
+    "end": 1787204525825,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204525320,
+    "end": 1787204525833,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204525341,
+    "end": 1787204525888,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204525481,
+    "end": 1787204525481,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204525599,
+    "end": 1787204525599,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204525654,
+    "end": 1787204525654,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204525750,
+    "end": 1787204525750,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204525760,
+    "end": 1787204525760,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204525804,
+    "end": 1787204525804,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204534432,
+    "end": 1787204534880,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204534627,
+    "end": 1787204534973,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204534826,
+    "end": 1787204534826,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204534915,
+    "end": 1787204534915,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204536900,
+    "end": 1787204537351,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204536940,
+    "end": 1787204537450,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204537036,
+    "end": 1787204537533,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204537284,
+    "end": 1787204537284,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204537371,
+    "end": 1787204537371,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204537372,
+    "end": 1787204537372,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204544808,
+    "end": 1787204546855,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204546793,
+    "end": 1787204546793,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204550889,
+    "end": 1787204551410,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204550989,
+    "end": 1787204551400,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204551001,
+    "end": 1787204551425,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204551325,
+    "end": 1787204551325,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204551331,
+    "end": 1787204551331,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204551341,
+    "end": 1787204551341,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204552485,
+    "end": 1787204554311,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204554245,
+    "end": 1787204554245,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204560825,
+    "end": 1787204563684,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204563621,
+    "end": 1787204563621,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "base64_encode",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204570032,
+    "end": 1787204570663,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204570121,
+    "end": 1787204570681,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204570133,
+    "end": 1787204570675,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204570149,
+    "end": 1787204570669,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204570369,
+    "end": 1787204577185,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204570520,
+    "end": 1787204570520,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204570532,
+    "end": 1787204570532,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204570541,
+    "end": 1787204570541,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204570554,
+    "end": 1787204570554,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204577121,
+    "end": 1787204577121,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204584133,
+    "end": 1787204584555,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204584149,
+    "end": 1787204584670,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204584184,
+    "end": 1787204584685,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204584270,
+    "end": 1787204584700,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204584480,
+    "end": 1787204584480,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204584610,
+    "end": 1787204584610,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204584618,
+    "end": 1787204584618,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204584629,
+    "end": 1787204584629,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204587926,
+    "end": 1787204588991,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204588448,
+    "end": 1787204588683,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204588925,
+    "end": 1787204588925,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204593983,
+    "end": 1787204594449,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204594169,
+    "end": 1787204594711,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204594379,
+    "end": 1787204594379,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204594482,
+    "end": 1787204594482,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204595201,
+    "end": 1787204596376,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204602017,
+    "end": 1787204603005,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204608989,
+    "end": 1787204620275,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_publish",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204614522,
+    "end": 1787204614997,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204614565,
+    "end": 1787204615005,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204614590,
+    "end": 1787204615125,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204614711,
+    "end": 1787204615116,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204614914,
+    "end": 1787204614914,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204614919,
+    "end": 1787204614919,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204615047,
+    "end": 1787204615047,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204615056,
+    "end": 1787204615056,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204624492,
+    "end": 1787204627881,
+    "lane": "base-tester",
+    "kind": "failure",
+    "label": "send_mailbox_message",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204634768,
+    "end": 1787204636836,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "send_mailbox_message",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204645432,
+    "end": 1787204675903,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_publish",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204646373,
+    "end": 1787204649099,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204656048,
+    "end": 1787204657075,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204666999,
+    "end": 1787204671237,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204683494,
+    "end": 1787204685669,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "send_mailbox_message",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204684907,
+    "end": 1787204685988,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "no_action",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204703202,
+    "end": 1787204706542,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204712309,
+    "end": 1787204714202,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204721896,
+    "end": 1787204723683,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204733188,
+    "end": 1787204734210,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204740298,
+    "end": 1787204749133,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "dispatch_agent",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204756299,
+    "end": 1787204757658,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "no_action",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204762032,
+    "end": 1787204762144,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204762184,
+    "end": 1787204762454,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204776592,
+    "end": 1787204776712,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204776718,
+    "end": 1787204776750,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204786213,
+    "end": 1787204786224,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204786252,
+    "end": 1787204786305,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204786303,
+    "end": 1787204786319,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204803309,
+    "end": 1787204804328,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204803643,
+    "end": 1787204804346,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204803658,
+    "end": 1787204804317,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204803673,
+    "end": 1787204804363,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204803689,
+    "end": 1787204804382,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204803701,
+    "end": 1787204804397,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204804226,
+    "end": 1787204804226,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204804240,
+    "end": 1787204804240,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204804261,
+    "end": 1787204804261,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204804276,
+    "end": 1787204804276,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204804296,
+    "end": 1787204804296,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204804315,
+    "end": 1787204804315,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204819931,
+    "end": 1787204820394,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204820027,
+    "end": 1787204820461,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204820085,
+    "end": 1787204820523,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204820104,
+    "end": 1787204820515,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204820322,
+    "end": 1787204820322,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_search",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204820377,
+    "end": 1787204820377,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204820446,
+    "end": 1787204820446,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204820454,
+    "end": 1787204820454,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204833248,
+    "end": 1787204834095,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204833382,
+    "end": 1787204834116,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204833397,
+    "end": 1787204834137,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204833412,
+    "end": 1787204834155,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204833429,
+    "end": 1787204834146,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204834022,
+    "end": 1787204834022,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204834025,
+    "end": 1787204834025,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204834034,
+    "end": 1787204834034,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204834043,
+    "end": 1787204834043,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204834049,
+    "end": 1787204834049,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204841229,
+    "end": 1787204843526,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204843459,
+    "end": 1787204843459,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204853040,
+    "end": 1787204857857,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204857753,
+    "end": 1787204857753,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "base64_encode",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204863209,
+    "end": 1787204880023,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204879961,
+    "end": 1787204879961,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204893204,
+    "end": 1787204893646,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204893245,
+    "end": 1787204893695,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204893363,
+    "end": 1787204893851,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204893574,
+    "end": 1787204893574,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204893628,
+    "end": 1787204893628,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204893778,
+    "end": 1787204893778,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204901756,
+    "end": 1787204902241,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204909035,
+    "end": 1787204925687,
+    "lane": "base-developer",
+    "kind": "tool",
+    "label": "artifact_publish",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204942607,
+    "end": 1787204944910,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204951706,
+    "end": 1787204952689,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204959368,
+    "end": 1787204960176,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204967814,
+    "end": 1787204974486,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "dispatch_agent",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204980776,
+    "end": 1787204981644,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "no_action",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998009,
+    "end": 1787204998627,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998083,
+    "end": 1787204998669,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998135,
+    "end": 1787204998662,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998165,
+    "end": 1787204998655,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998195,
+    "end": 1787204998693,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998278,
+    "end": 1787204998742,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787204998453,
+    "end": 1787204998453,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204998514,
+    "end": 1787204998514,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204998555,
+    "end": 1787204998555,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204998571,
+    "end": 1787204998571,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204998636,
+    "end": 1787204998636,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787204998671,
+    "end": 1787204998671,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787205007259,
+    "end": 1787205007767,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205007396,
+    "end": 1787205007845,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205007706,
+    "end": 1787205007706,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787205007777,
+    "end": 1787205007777,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787205027236,
+    "end": 1787205027912,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205027532,
+    "end": 1787205027930,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "bash",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205027849,
+    "end": 1787205027849,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787205027860,
+    "end": 1787205027860,
+    "lane": "automationbench",
+    "kind": "benchmark",
+    "label": "api_fetch",
+    "source": "benchmark"
+  },
+  {
+    "at": 1787205034210,
+    "end": 1787205035857,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205040083,
+    "end": 1787205041046,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205047047,
+    "end": 1787205048162,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205058133,
+    "end": 1787205085457,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "artifact_publish",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205094127,
+    "end": 1787205096441,
+    "lane": "base-tester",
+    "kind": "tool",
+    "label": "send_mailbox_message",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205113464,
+    "end": 1787205115587,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_search",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205121455,
+    "end": 1787205122294,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_read",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205130562,
+    "end": 1787205131279,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "artifact_select",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205140323,
+    "end": 1787205145701,
+    "lane": "orchestrator",
+    "kind": "failure",
+    "label": "manage_task",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205158365,
+    "end": 1787205166477,
+    "lane": "orchestrator",
+    "kind": "tool",
+    "label": "manage_task",
+    "source": "transcript"
+  },
+  {
+    "at": 1787205166986,
+    "lane": "automationbench",
+    "kind": "decision",
+    "label": "score",
+    "source": "benchmark"
+  }
+]
