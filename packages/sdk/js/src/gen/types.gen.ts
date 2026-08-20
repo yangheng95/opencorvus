@@ -26555,6 +26555,7 @@ export type SkillSetMountOverrideResponses = {
     agents: Array<{
       agent_id: string
       base_role: string
+      capability_owner: "package" | "platform"
       description?: string
       label: string
       projected_tool_ids: Array<string>
@@ -26697,6 +26698,7 @@ export type SkillMountsResponses = {
     agents: Array<{
       agent_id: string
       base_role: string
+      capability_owner: "package" | "platform"
       description?: string
       label: string
       projected_tool_ids: Array<string>

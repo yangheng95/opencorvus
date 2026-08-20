@@ -46,6 +46,12 @@ export namespace SkillMount {
       base_role: z.string(),
       label: z.string(),
       description: z.string().optional(),
+      /**
+       * `package` agents come from the active manifest. `platform` agents — currently
+       * `universal-build` — are dispatchable by the scheduler without being declared by any package,
+       * so they never appeared here while still being able to own real mutations.
+       */
+      capability_owner: z.enum(["package", "platform"]),
       skill_mountable: z.boolean(),
       skill_tool_available: z.boolean(),
       projected_tool_ids: z.array(z.string()),
@@ -441,7 +447,11 @@ export namespace SkillMount {
     })
     const rows: MatrixRow[] = []
     const agents: AgentEntry[] = []
-    for (const projected of projection.projectedAgents) {
+    // Scheduler-only agents first: `PromptProfileResolver` already resolves their production Skill
+    // grants and `resolve()` already serves their turn surface, but omitting them here meant an
+    // operator could not mount a Skill onto the one worker an Advanced Task most often dispatches
+    // directly, and any audit reading this matrix silently reported full coverage without them.
+    for (const projected of [...projection.schedulerOnlyAgents, ...projection.projectedAgents]) {
       const template = RuntimeTemplateRegistry.get(projected.identity.baseRole)
       const overrides = runtimeOverrideLayers(effectiveConfig, {
         expertSquadID: projection.expertSquadID,
@@ -460,6 +470,7 @@ export namespace SkillMount {
         base_role: projected.identity.baseRole,
         label: projected.label,
         ...(projected.description ? { description: projected.description } : {}),
+        capability_owner: projected.capabilityOwner,
         skill_mountable: mountable,
         skill_tool_available: agentCanUseSkillTool({ runtime, projectedToolIDs }),
         projected_tool_ids: [...projected.projectedToolIDs],

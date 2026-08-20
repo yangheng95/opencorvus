@@ -1,10 +1,12 @@
 import { describe, expect, test } from "bun:test"
+import fs from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../../src/config/config"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import { Instance } from "../../src/project/instance"
+import { SkillManager } from "../../src/skill/manager"
 import { SkillMount } from "../../src/skill/mounts"
 import { memoryProject } from "../fixture/memory"
 
@@ -24,7 +26,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.20.1")
+    expect(loaded.manifest.version).toBe("2026.08.20.2")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -70,12 +72,21 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
       "acceptance scope from the original request and the authoritative sources it names",
     )
+    expect(loaded.promptProfile.agents["orchestrator"]).toContain(
+      "requested outcome is a change to an external system of record",
+    )
+    expect(loaded.promptProfile.agents["orchestrator"]).toContain(
+      "Do not dispatch platform `universal-build` directly for that work",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "derive the obligations yourself, including the ones no implementation Artifact mentions",
+    )
   })
 
   test("orders Base verification behind implementation while research stays parallel", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.20.2")
+    expect(loaded.manifest.version).toBe("2026.08.20.3")
     // Verification cannot race the mutation it checks: an AutomationBench Base trial failed its
     // Task with "No post was created" after the Tester verified a pre-mutation world.
     expect(workflowNodes(loaded, "planner-parallel-delivery")).toEqual({
@@ -134,6 +145,83 @@ describe("built-in interface review workflow authority", () => {
         expect(surface.skills.map((skill) => ({ name: skill.name, enabled: skill.enabled }))).toEqual([
           { name: "advanced-delivery-method", enabled: true },
           { name: "grill-me", enabled: true },
+        ])
+      },
+    })
+  })
+
+  test("mounts an operator Skill onto dispatchable universal-build and serves it on that real turn", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const skillDirectory = path.join(project.path, ".opencorvus", "skill", "turn-visible-probe")
+        await fs.mkdir(skillDirectory, { recursive: true })
+        await fs.writeFile(
+          path.join(skillDirectory, "SKILL.md"),
+          [
+            "---",
+            "name: turn-visible-probe",
+            "description: Probe Skill used to prove an operator mount reaches a real projected turn.",
+            "---",
+            "",
+            "# Probe",
+            "",
+            "Body.",
+            "",
+          ].join("\n"),
+          "utf8",
+        )
+        await SkillManager.refreshDiscoveryState()
+
+        // The matrix is the operator surface. `universal-build` was absent from it, so it could not
+        // be granted a Skill at all — while still being the worker an Advanced Task dispatches
+        // directly for bounded implementation.
+        const discovered = await SkillMount.matrix({ expertSquadID: "advanced" })
+        expect(discovered.agents.find((agent) => agent.agent_id === "universal-build")).toMatchObject({
+          base_role: "build",
+          capability_owner: "platform",
+          skill_mountable: true,
+          skill_tool_available: true,
+        })
+        expect(discovered.agents.filter((agent) => agent.capability_owner === "package").length).toBe(
+          discovered.agents.length - 1,
+        )
+
+        const mounted = await SkillMount.setOverride({
+          scope: "project",
+          expertSquadID: "advanced",
+          agentID: "universal-build",
+          defaultSkillRef: "default/skill/turn-visible-probe",
+          override: true,
+        })
+        expect(
+          mounted.matrix
+            .find((row) => row.agent_id === "universal-build")!
+            .grants.find((grant) => grant.ref === "default/skill/turn-visible-probe"),
+        ).toMatchObject({ effective: true, enabled: true, project_override: true })
+
+        // A matrix row is not proof. Resolve the projection the way a dispatched turn does and
+        // require the Skill on that worker's own surface.
+        // The turn resolves the *active* profile, so the override under `advanced` only applies
+        // when `advanced` is the active one — matrix() takes an explicit id, a dispatched turn does not.
+        const config = { ...(await Config.get()), prompt_profile: { active: "advanced" } }
+        const turn = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "universal-build",
+        })
+        const worker = turn.workerCapability
+        const surface = await SkillMount.resolve({
+          identity: { ...worker.identity, expertSquadID: worker.expertSquadID },
+          runtime: worker.runtime,
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection: turn.skillProjection,
+          availableToolNames: worker.builtInToolIDs,
+        })
+        expect(surface.skills.map((skill) => ({ name: skill.name, enabled: skill.enabled }))).toEqual([
+          { name: "turn-visible-probe", enabled: true },
         ])
       },
     })

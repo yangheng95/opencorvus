@@ -88732,6 +88732,13 @@
                           "base_role": {
                             "type": "string"
                           },
+                          "capability_owner": {
+                            "enum": [
+                              "package",
+                              "platform"
+                            ],
+                            "type": "string"
+                          },
                           "description": {
                             "type": "string"
                           },
@@ -88755,6 +88762,7 @@
                           "agent_id",
                           "base_role",
                           "label",
+                          "capability_owner",
                           "skill_mountable",
                           "skill_tool_available",
                           "projected_tool_ids"
@@ -89353,6 +89361,13 @@
                           "base_role": {
                             "type": "string"
                           },
+                          "capability_owner": {
+                            "enum": [
+                              "package",
+                              "platform"
+                            ],
+                            "type": "string"
+                          },
                           "description": {
                             "type": "string"
                           },
@@ -89376,6 +89391,7 @@
                           "agent_id",
                           "base_role",
                           "label",
+                          "capability_owner",
                           "skill_mountable",
                           "skill_tool_available",
                           "projected_tool_ids"
