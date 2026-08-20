@@ -1,5 +1,4 @@
 import { tool } from "ai"
-import z from "zod"
 import { requireTask } from "@/engine/store"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { terminalTask } from "@/engine/state"
@@ -14,13 +13,7 @@ import {
   insertPreparedTaskCompletionDecision,
   prepareTaskCompletionDecision,
 } from "@/engine/completion-decision"
-import {
-  ArtifactReadLocatorInputListSchema,
-  EvidenceLocatorInputListSchema,
-} from "@opencorvus-ai/plugin/artifact-catalog"
 import { resolveTaskArtifactReadLocators, resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
-import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
-import { Identifier } from "@/id/id"
 import { selectedWorkflowBinding, type WorkflowProjection } from "@/engine/workflow-binding"
 import { TaskLifecycleRuntime } from "./task-lifecycle-runtime"
 import { assertTaskDispatchesSettledInTransaction } from "@/engine/dispatch-settlement"
@@ -31,44 +24,11 @@ import {
   releaseTaskCompletionClosureInTransaction,
 } from "@/engine/task-completion-closure"
 import { Log } from "@/util/log"
+import { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } from "./task-lifecycle-input"
 
 const log = Log.create({ service: "orchestrator.task-lifecycle-tools" })
 
-export const CompleteTaskInputSchema = z
-  .object({
-    summary: z
-      .string()
-      .min(1)
-      .describe(
-        "Orchestrator-owned task decision summary. Cite the evidence you used, including IntegrityReview or VisualReview artifacts when relevant.",
-      ),
-    evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
-      "Exact typed durable evidence locators used for this completion decision. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",
-    ),
-    deliverable_artifact_locators: ArtifactReadLocatorInputListSchema.default([]).describe(
-      "Exact Artifact locators intentionally delivered to the user, named by exact revision or snapshot path without any content digest. Include every user-consumable report, document, screenshot set, structured result, or other published Artifact; use an empty list only when the Task produced no Artifact deliverable. Completion evidence belongs in evidence_locators instead.",
-    ),
-    accepted_delivery_slice_revision_ids: z
-      .array(Identifier.schema("goal"))
-      .default([])
-      .describe(
-        "Exact current Delivery Slice revision IDs accepted by this Task completion decision. Slice IDs are evidence subjects, not lifecycle owners; use an empty list only when the Task has no Delivery Slices.",
-      ),
-    workflow_id: z
-      .string()
-      .min(1)
-      .nullable()
-      .default(null)
-      .describe(
-        "Exact selected virtual workflow ID, or null for a direct Task with no selected virtual workflow. The persisted completion decision binds this ID to the active expert squad package revision and complete declared node graph.",
-      ),
-  })
-  .strict()
-
-export const FailTaskInputSchema = z.object({ error: z.string().describe("Why the task failed") }).strict()
-export const CancelTaskInputSchema = z
-  .object({ reason: TaskCancellationReason.describe("Why you are cancelling the task") })
-  .strict()
+export { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } from "./task-lifecycle-input"
 
 export async function failTaskLifecycle(input: {
   taskID: string

@@ -1,6 +1,6 @@
 # Base
 
-Base is the built-in default Expert Squad and the convenient compact alternative to Advanced. It owns one complete ordinary repository Task through one bounded plan followed by independently owned research, implementation, and test work. The Task may contain many product, data, report, audit, and validation deliverables; these are worker partitions, not Mission phase boundaries or a hidden serial state machine.
+Base is the built-in default Expert Squad and the convenient compact alternative to Advanced. It owns one complete ordinary repository Task through one bounded plan, independently owned research and implementation, and verification of whatever the implementation settles. The Task may contain many product, data, report, audit, and validation deliverables; these are worker partitions, not Mission phase boundaries or a hidden serial state machine.
 
 ## Fact and Turn Contract
 
@@ -13,11 +13,17 @@ Execution attempts and dispatch lineage are immutable physical evidence identiti
 Base has exactly four projected Agent identities:
 
 - `base-planner` investigates enough current repository state to publish one complete `base/implementation-plan`. The plan assigns non-overlapping paths, shared inputs, evidence obligations, and acceptance ownership to every worker.
-- `base-researcher` executes the plan's read-oriented evidence partition and publishes `base/research-report`.
+- `base-researcher` executes the plan's read-oriented evidence partition and publishes `base/research-report`. It has no shell and no command execution, so the plan never allocates work to it that must be run.
 - `base-developer` owns the plan's product and generated-output partition, performs implementation-owned checks and real-page inspection when applicable, and publishes `base/development-report`.
-- `base-tester` owns the plan's test/checker partition, may edit only its assigned test and checker paths, runs its focused checks against observed repository state, and publishes `base/test-report`.
+- `base-tester` owns the plan's test/checker partition, may edit only its assigned test and checker paths, runs its focused checks against the settled state, and publishes `base/test-report`. Its acceptance scope is the original request and the authoritative sources that request names, never another worker's account of what it acted on.
 
-Base declares one binding workflow, `planner-parallel-delivery`: the Planner is the single root, and all three workers depend only on that plan. Workers do not consume one another's reports and must not invent a serial handoff. When a final check must observe a concurrent worker's finished files, the Orchestrator continues the same Tester lineage after the Host has observed those files rather than creating another logical node or a hidden workflow gate.
+Base declares one binding workflow, `planner-parallel-delivery`: the Planner is the single root, `base-researcher` and `base-developer` depend only on that plan and run in the same frontier, and `base-tester` depends on `base-developer`.
+
+That last edge is a declared ordering, not an Artifact handoff. Verification is the one obligation that is meaningless against a moving target: a Tester that runs beside the mutation owner can only observe a half-finished world, and the report it publishes then reads afterwards as a standing claim about a state that no longer exists. The Tester therefore starts once the implementation node has settled — but it still takes its acceptance scope from the original request and the plan, never from the Developer's account of what it did, and it does not consume `base/development-report` as an input to its own scope.
+
+Research stays parallel because reading does not race the implementation. Workers otherwise do not consume one another's reports and must not invent further serial handoffs.
+
+Settling is not the same as final. When a final check must observe state that changed after the Tester's own occurrence — a same-Task repair, a late generated output, or an external system reached through tools — the Orchestrator continues that exact Tester lineage after the Host has observed the current state rather than creating another logical node or a hidden workflow gate. Every worker report is an observation of the moment it was published, so a report that predates the mutation owner's latest settled occurrence is stale for the mutated surface and cannot carry a terminal decision.
 
 The Orchestrator visibly binds this graph before domain dispatch, and every node is mandatory. The workflow does not create or consume RequirementSet, ContractGraph, Goal, Delivery Slice, Requirements, Architect, or workload-analysis planning facts. The Task remains the sole lifecycle owner, and the Orchestrator judges completion from visible messages, immutable Artifacts, dispatch lineage, the final diff, command results, the test verdict, and rendered evidence when applicable.
 

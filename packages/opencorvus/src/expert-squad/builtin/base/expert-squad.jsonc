@@ -4,16 +4,16 @@
   "id": "base",
   "name": "Base",
   "label": "Base",
-  "description": "Built-in Planner-first Expert Squad for compact delivery through one bounded plan and parallel research, implementation, and verification workers.",
-  "version": "2026.08.13.1",
+  "description": "Built-in Planner-first Expert Squad for compact delivery through one bounded plan, parallel research and implementation, and verification of the settled result.",
+  "version": "2026.08.20.2",
   "product_pillars": [
     "code",
     "work"
   ],
   "readme": "README.md",
   "selector": {
-    "summary": "Use Base for one compact Task planned once and executed by parallel research, implementation, and verification workers.",
-    "selection_guidance": "Select Base when one Planner can partition the complete Task into independent research, implementation, and verification worker ownership. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
+    "summary": "Use Base for one compact Task planned once, researched and implemented in parallel, then verified against the settled result.",
+    "selection_guidance": "Select Base when one Planner can partition the complete Task into independent research and implementation ownership, with verification of whatever the implementation settles. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
     "instructions": "selector.md"
   },
   "capability_projection": {
@@ -132,7 +132,7 @@
       },
       "base-tester": {
         "label": "Base Tester",
-        "description": "Independently tests the implementation against the research, plan, development report, final diff, executable checks, and rendered evidence and publishes the canonical test report.",
+        "description": "Independently verifies the settled implementation against the original request and the plan's acceptance criteria through the final diff, executable checks, and rendered evidence, and publishes the canonical test report.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-tester/system.md",
         "inherit_base_tools": true,
@@ -173,8 +173,8 @@
     },
     "virtual_workflows": {
       "planner-parallel-delivery": {
-        "label": "Planner and Parallel Workers",
-        "description": "Publish one bounded Task plan, then run research, implementation, and verification workers in the same dependency-ready frontier.",
+        "label": "Planner, Parallel Workers, and Verification",
+        "description": "Publish one bounded Task plan, run the research and implementation partitions in the same dependency-ready frontier, then verify the settled result.",
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
@@ -197,9 +197,9 @@
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Executes the plan's independent verification partition and records exact results.",
+            "description": "Executes the plan's independent verification partition against the settled result and records exact results.",
             "depends_on": [
-              "base-planner"
+              "base-developer"
             ]
           }
         }

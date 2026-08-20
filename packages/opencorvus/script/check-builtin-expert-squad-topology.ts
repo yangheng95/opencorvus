@@ -10,15 +10,42 @@ const manifestPaths = [
   ...new Bun.Glob("packages/opencorvus/src/expert-squad/builtin/*/expert-squad.jsonc").scanSync(repositoryRoot),
 ].sort()
 
-const requiredFlatWorkflows = new Map<string, Set<string>>([
-  ["base", new Set(["planner-parallel-delivery"])],
-  ["browser-research-acceptance", new Set(["browser-evidence-acceptance"])],
-  ["frontend-innovate", new Set(["delivery"])],
-  ["frontend-replica", new Set(["interface-modeling", "source-replica"])],
-  ["office-delivery", new Set(["planned-office-delivery"])],
-  ["review-debug", new Set(["review-only", "debug-repair", "visual-debug-repair"])],
-  ["squad-sdk", new Set(["sdk-authoring", "heterogeneous-import"])],
-  ["evolution-lab", new Set(["evolution-candidate-preparation"])],
+type RequiredStructure = "flat_planner_parallel_workers" | "parallel_workers_join" | "dependency_dag"
+
+/**
+ * Pin the declared shape of the workflows whose structure is a product decision rather than an
+ * author's preference. Base is a `dependency_dag` on purpose: its Researcher still shares the
+ * Planner's frontier with the Developer, but its Tester depends on the Developer so verification
+ * observes a settled result instead of racing the mutation it is supposed to check.
+ */
+const requiredWorkflowStructures = new Map<string, Map<string, RequiredStructure>>([
+  ["base", new Map([["planner-parallel-delivery", "dependency_dag"]])],
+  ["browser-research-acceptance", new Map([["browser-evidence-acceptance", "flat_planner_parallel_workers"]])],
+  ["frontend-innovate", new Map([["delivery", "flat_planner_parallel_workers"]])],
+  [
+    "frontend-replica",
+    new Map([
+      ["interface-modeling", "flat_planner_parallel_workers"],
+      ["source-replica", "flat_planner_parallel_workers"],
+    ]),
+  ],
+  ["office-delivery", new Map([["planned-office-delivery", "flat_planner_parallel_workers"]])],
+  [
+    "review-debug",
+    new Map([
+      ["review-only", "flat_planner_parallel_workers"],
+      ["debug-repair", "flat_planner_parallel_workers"],
+      ["visual-debug-repair", "flat_planner_parallel_workers"],
+    ]),
+  ],
+  [
+    "squad-sdk",
+    new Map([
+      ["sdk-authoring", "flat_planner_parallel_workers"],
+      ["heterogeneous-import", "flat_planner_parallel_workers"],
+    ]),
+  ],
+  ["evolution-lab", new Map([["evolution-candidate-preparation", "flat_planner_parallel_workers"]])],
 ])
 
 const summaries: Array<{
@@ -33,12 +60,14 @@ for (const relativePath of manifestPaths) {
   const absolutePath = path.join(repositoryRoot, relativePath)
   const manifest = validateBuiltInExpertSquadTopologyPolicy(Bun.JSONC.parse(await Bun.file(absolutePath).text()))
   const analyses = analyzeExpertSquadWorkflowTopology(manifest)
-  const required = requiredFlatWorkflows.get(manifest.id) ?? new Set<string>()
-  for (const workflowID of required) {
+  const required = requiredWorkflowStructures.get(manifest.id) ?? new Map<string, RequiredStructure>()
+  for (const [workflowID, structure] of required) {
     const analysis = analyses.find((item) => item.workflow_id === workflowID)
     if (!analysis) throw new Error(`${manifest.id} is missing required workflow ${workflowID}`)
-    if (analysis.structure !== "flat_planner_parallel_workers") {
-      throw new Error(`${manifest.id}/${workflowID} must be Planner-first with one parallel worker frontier`)
+    if (analysis.structure !== structure) {
+      throw new Error(
+        `${manifest.id}/${workflowID} must declare structure ${structure}, but analyzes as ${analysis.structure}`,
+      )
     }
   }
   for (const agentID of Object.keys(manifest.capability_projection.agents)) {

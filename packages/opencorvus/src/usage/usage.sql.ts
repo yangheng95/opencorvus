@@ -30,9 +30,17 @@ export const ProviderUsageEventTable = sqliteTable(
     total_tokens: integer().notNull(),
     cost_usd: real().notNull(),
     billing_status: text().notNull().$type<UsageBillingStatus>(),
+    /** Session that issued the Provider call, when one owns it. Non-Session purposes
+     *  (Provider connectivity probes, commit-message helpers) leave both identities null.
+     *  Without these, a multi-Agent Task's token cost can only be re-derived by matching
+     *  transcript timestamps, which cannot separate concurrent workers. */
+    session_id: text(),
+    /** Projected Agent identity inside that Session. */
+    agent_id: text(),
   },
   (table) => [
     index("provider_usage_event_time_idx").on(table.occurred_at, table.id),
+    index("provider_usage_event_session_time_idx").on(table.session_id, table.occurred_at, table.id),
     index("provider_usage_event_provider_time_idx").on(table.provider_id, table.occurred_at, table.id),
     index("provider_usage_event_model_time_idx").on(table.provider_id, table.model_id, table.occurred_at, table.id),
   ],

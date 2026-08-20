@@ -309,6 +309,7 @@ export namespace LLM {
       // `input.abort`. A second timeout here would race it.
       timeoutMs: false,
       usagePurpose: "session",
+      usageAttribution: { sessionID: input.sessionID, agentID: input.agentID },
       headers: requestHeaders,
       maxRetries: input.retries ?? 0,
       stopWhen: input.stopWhen,
