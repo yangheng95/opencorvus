@@ -23,7 +23,7 @@ import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-
 import { Message } from "./message"
 import { SessionEvents } from "./events"
 import { sessionLifecycleOrderKey } from "./status"
-import { Plugin } from "@/plugin"
+import { Plugin, type ChatParamsOutput } from "@/plugin"
 import { SystemPrompt } from "./system"
 import { Flag } from "@/flag/flag"
 import { CapabilityRules } from "@/capability/rules"
@@ -66,6 +66,47 @@ export namespace LLM {
   export type StreamOutput = ReturnType<typeof streamText<ToolSet>>
 
   export type StreamResult = ReturnType<typeof streamText<ToolSet>>
+
+  export async function applyRequestHooks(
+    input: {
+      sessionID: string
+      requestID: string
+      agentID: string
+      model: Provider.Model
+      provider: Provider.Info
+      message?: Message.User
+    },
+    baseParams: ChatParamsOutput,
+    triggers: {
+      message: typeof Plugin.trigger
+      physical: typeof Plugin.triggerPhysicalProvider
+    } = { message: Plugin.trigger, physical: Plugin.triggerPhysicalProvider },
+  ) {
+    const physicalInput = {
+      sessionID: input.sessionID,
+      requestID: input.requestID,
+      agent: input.agentID,
+      model: input.model,
+      provider: input.provider,
+      message: input.message,
+    }
+    let messageParams = baseParams
+    let messageHeaders = { headers: {} as Record<string, string> }
+    if (input.message) {
+      const messageInput = {
+        sessionID: input.sessionID,
+        agent: input.agentID,
+        model: input.model,
+        provider: input.provider,
+        message: input.message,
+      }
+      messageParams = await triggers.message("chat.params", messageInput, messageParams)
+      messageHeaders = await triggers.message("chat.headers", messageInput, messageHeaders)
+    }
+    const params = await triggers.physical("provider.chat.params", physicalInput, messageParams)
+    const headers = (await triggers.physical("provider.chat.headers", physicalInput, messageHeaders)).headers
+    return { params, headers }
+  }
 
   export function telemetryConfig(input: {
     enabled: boolean | undefined
@@ -184,23 +225,17 @@ export namespace LLM {
       maxOutputTokens,
       options,
     }
-    const params = input.user
-      ? await Plugin.trigger(
-          "chat.params",
-          { sessionID: input.sessionID, agent, model: input.model, provider, message: input.user },
-          baseParams,
-        )
-      : baseParams
-
-    const headers = input.user
-      ? (
-          await Plugin.trigger(
-            "chat.headers",
-            { sessionID: input.sessionID, agent, model: input.model, provider, message: input.user },
-            { headers: {} },
-          )
-        ).headers
-      : {}
+    const { params, headers } = await applyRequestHooks(
+      {
+        sessionID: input.sessionID,
+        requestID,
+        agentID: input.agentID,
+        model: input.model,
+        provider,
+        message: input.user,
+      },
+      baseParams,
+    )
 
     const tools = await resolveTools({ ...input, agent })
     const toolChoice = input.toolChoice

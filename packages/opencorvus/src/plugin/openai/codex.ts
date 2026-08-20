@@ -1,6 +1,7 @@
 // Upstream source: anomalyco/opencode packages/opencode/src/plugin/openai/codex.ts @ 8e2d422ffe56f3b2eb52e3f7195a2f9722a9fc46.
 // OpenCorvus adaptation: package names and product headers only; the optional HTTP/WebSocket dual transport is omitted.
 import type { Hooks, PluginInput } from "@opencorvus-ai/plugin"
+import type { PhysicalProviderHooks } from "@/plugin"
 import { Installation } from "../../installation"
 import { Auth, OAUTH_DUMMY_KEY } from "../../auth"
 import os from "os"
@@ -375,7 +376,10 @@ function waitForOAuthCallback(pkce: PkceCodes, state: string, lease: object): Pr
   )
 }
 
-export async function CodexAuthPlugin(input: PluginInput, options: CodexAuthPluginOptions = {}): Promise<Hooks> {
+export async function CodexAuthPlugin(
+  input: PluginInput,
+  options: CodexAuthPluginOptions = {},
+): Promise<Hooks & PhysicalProviderHooks> {
   const issuer = options.issuer ?? ISSUER
   const codexApiEndpoint = options.codexApiEndpoint ?? CODEX_API_ENDPOINT
   return {
@@ -602,14 +606,14 @@ export async function CodexAuthPlugin(input: PluginInput, options: CodexAuthPlug
         },
       ],
     },
-    "chat.headers": async (input, output) => {
+    "provider.chat.headers": async (input, output) => {
       if (input.model.providerID !== "openai") return
       output.headers.originator = "opencorvus"
       output.headers["User-Agent"] =
         `opencorvus/${Installation.VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`
       output.headers["session-id"] = input.sessionID
     },
-    "chat.params": async (input, output) => {
+    "provider.chat.params": async (input, output) => {
       if (input.model.providerID !== "openai") return
       // Match codex cli
       output.maxOutputTokens = undefined

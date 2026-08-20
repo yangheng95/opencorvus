@@ -1,6 +1,7 @@
 // Upstream source: anomalyco/opencode packages/opencode/src/plugin/github-copilot/copilot.ts @ 8e2d422ffe56f3b2eb52e3f7195a2f9722a9fc46.
 // OpenCorvus adaptation: package/client names and explicit fail-fast behavior replace upstream discovery/request fallbacks.
 import type { Hooks, PluginInput } from "@opencorvus-ai/plugin"
+import type { PhysicalProviderHooks } from "@/plugin"
 import type { Model } from "@opencorvus-ai/sdk"
 import { Installation } from "../../installation"
 import { iife } from "@/util/iife"
@@ -55,7 +56,7 @@ function fix(model: Model, url: string): Model {
   }
 }
 
-export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks> {
+export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & PhysicalProviderHooks> {
   const sdk = input.client
   return {
     provider: {
@@ -333,7 +334,7 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks> {
         },
       ],
     },
-    "chat.params": async (incoming, output) => {
+    "provider.chat.params": async (incoming, output) => {
       if (!incoming.model.providerID.includes("github-copilot")) return
 
       // Match github copilot cli, omit maxOutputTokens for gpt models
@@ -348,7 +349,7 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks> {
         output.options.toolStreaming = false
       }
     },
-    "chat.headers": async (incoming, output) => {
+    "provider.chat.headers": async (incoming, output) => {
       if (!incoming.model.providerID.includes("github-copilot")) return
 
       output.headers["X-GitHub-Api-Version"] = API_VERSION
@@ -360,26 +361,28 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks> {
         output.headers["anthropic-beta"] = "interleaved-thinking-2025-05-14"
       }
 
-      const parts = await sdk.session.message(
-        {
-          sessionID: incoming.message.sessionID,
-          messageID: incoming.message.id,
-          directory: input.directory,
-        },
-        { throwOnError: true },
-      )
-
-      if (
-        parts?.data.parts?.some(
-          (part) =>
-            part.type === "compaction" ||
-            // Auto-compaction resumes via a synthetic user text part. Treat only
-            // that marked followup as agent-initiated so manual prompts stay user-initiated.
-            (part.type === "text" && part.metadata?.compaction_continue === true),
+      if (incoming.message) {
+        const parts = await sdk.session.message(
+          {
+            sessionID: incoming.message.sessionID,
+            messageID: incoming.message.id,
+            directory: input.directory,
+          },
+          { throwOnError: true },
         )
-      ) {
-        output.headers["x-initiator"] = "agent"
-        return
+
+        if (
+          parts?.data.parts?.some(
+            (part) =>
+              part.type === "compaction" ||
+              // Auto-compaction resumes via a synthetic user text part. Treat only
+              // that marked followup as agent-initiated so manual prompts stay user-initiated.
+              (part.type === "text" && part.metadata?.compaction_continue === true),
+          )
+        ) {
+          output.headers["x-initiator"] = "agent"
+          return
+        }
       }
 
       const session = await sdk.session.get(
