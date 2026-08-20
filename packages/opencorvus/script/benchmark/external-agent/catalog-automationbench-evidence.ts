@@ -84,11 +84,21 @@ async function arguments_() {
   if (!root || !sourceData || !python || !restrictedShell) {
     throw new Error("--root, --source-data, --python, and --restricted-shell are required")
   }
+  const profiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim())
+  if (
+    profiles.length < 1 ||
+    profiles.length > 2 ||
+    new Set(profiles).size !== profiles.length ||
+    profiles.some((profile) => profile !== "base" && profile !== "advanced")
+  ) {
+    throw new Error("--profiles must be base, advanced, or base,advanced")
+  }
   return {
     root: path.resolve(root),
     sourceData: path.resolve(sourceData),
     python: path.resolve(python),
     restrictedShell: path.resolve(restrictedShell),
+    profiles,
     caseSet: path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json")),
   }
 }
@@ -746,7 +756,11 @@ function summarizeProfile(profile: "base" | "advanced") {
     duration_ms_mean: rows.length === 0 ? null : durationTotal / rows.length,
   }
 }
-const profileSummaries = [summarizeProfile("base"), summarizeProfile("advanced")]
+const profileSummaries = cli.profiles.map(summarizeProfile)
+const exploratoryProfileSummaries = ["base", "advanced"]
+  .filter((profile) => !cli.profiles.includes(profile))
+  .map(summarizeProfile)
+const primaryEligible = eligible.filter((record) => cli.profiles.includes(record.opencorvus.profile))
 const completeSummaries = profileSummaries.filter((summary) => summary.matrix_complete)
 const internalRanking = [...completeSummaries]
   .sort(
@@ -756,8 +770,8 @@ const internalRanking = [...completeSummaries]
       left.tokens_total - right.tokens_total,
   )
   .map((summary, index) => ({ rank: index + 1, profile: summary.profile }))
-const base = profileSummaries.find((summary) => summary.profile === "base")!
-const advanced = profileSummaries.find((summary) => summary.profile === "advanced")!
+const base = profileSummaries.find((summary) => summary.profile === "base")
+const advanced = profileSummaries.find((summary) => summary.profile === "advanced")
 const catalog = {
   schema_version: 1,
   generated_at: Date.now(),
@@ -765,7 +779,8 @@ const catalog = {
     round: 1,
     benchmark: "AutomationBench",
     model: "openai/gpt-5.6-luna",
-    profiles: ["base", "advanced"],
+    profiles: cli.profiles,
+    exploratory_profiles: exploratoryProfileSummaries.map((summary) => summary.profile),
     note: "Every attempt is evidence; only natural terminal official scores enter the self-owned leaderboard.",
   },
   public_context: {
@@ -784,7 +799,9 @@ const catalog = {
   attempts: records,
   candidates: records.filter((record) => record.batch_candidate_eligible),
   leaderboard: eligible,
+  primary_leaderboard: primaryEligible,
   profile_summaries: profileSummaries,
+  exploratory_profile_summaries: exploratoryProfileSummaries,
   internal_ranking: internalRanking,
   batches: batchAudits,
 }
@@ -796,7 +813,7 @@ const lines = [
   "",
   "This board contains only `openai/gpt-5.6-luna` runs made through the OpenCorvus harness. Every attempt is retained below; only a clean-source, natural OpenCorvus `completed` terminal state followed by the official AutomationBench scorer is leaderboard-eligible.",
   "",
-  "## Paired 50-case profile summary",
+  "## Primary 50-case profile summary",
   "",
   "| Internal rank | Profile | Coverage | Strict | Partial mean | Total tokens | Output tokens | Model calls | API attempts | Failed API | Mean duration |",
   "| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
@@ -804,7 +821,7 @@ const lines = [
     const rank = internalRanking.find((item) => item.profile === summary.profile)?.rank
     return `| ${rank ?? "—"} | ${summary.profile} | ${summary.completed_cases}/${summary.target_cases} | ${summary.strict_passes}/${summary.completed_cases || 0} (${percent(summary.strict_success_rate ?? undefined)}) | ${percent(summary.partial_credit_mean ?? undefined)} | ${integer(summary.tokens_total)} | ${integer(summary.output_tokens_total)} | ${integer(summary.model_calls_total)} | ${integer(summary.benchmark_attempts_total)} | ${integer(summary.benchmark_failed_total)} | ${duration(summary.duration_ms_mean ?? undefined)} |`
   }),
-  ...(base.completed_cases > 0 && advanced.completed_cases > 0
+  ...(base?.matrix_complete && advanced?.matrix_complete
     ? [
         "",
         "## Advanced versus Base",
@@ -821,11 +838,11 @@ const lines = [
       ]
     : []),
   "",
-  "## Eligible per-case scores",
+  "## Primary eligible per-case scores",
   "",
   "| Case | Batch | Profile | Task | Strict | Partial | Total tokens | Model calls | API attempts | API failures | Duration |",
   "| ---: | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
-  ...eligible.map((record) => {
+  ...primaryEligible.map((record) => {
     const metrics = record.benchmark.metrics
     const tokens = record.opencorvus.tokens
     return `| ${record.benchmark.case_index} | ${record.benchmark.batch_index} | ${record.opencorvus.profile} | ${record.benchmark.task} | ${strictScore(metrics.task_completed_correctly)} | ${percent(metrics.partial_credit)} | ${integer(tokens?.total)} | ${integer(tokens?.modelCalls)} | ${integer(record.benchmark.tool_attempts)} | ${integer(record.benchmark.tool_failed)} | ${duration(record.duration_ms)} |`

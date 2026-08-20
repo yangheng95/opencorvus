@@ -359,15 +359,15 @@ export type BatchProfileSlot = {
 }
 
 export function rollingBatchChains(waves: BatchProfileSlot[][]) {
-  if (waves.length !== 2 || waves.some((wave) => wave.length !== 5)) {
-    throw new Error("Rolling AutomationBench batches require two five-slot crossover lists")
+  if (waves.length < 1 || waves.some((wave) => wave.length !== 5)) {
+    throw new Error("Rolling AutomationBench batches require one or more five-slot profile lists")
   }
   return waves[0]!.map((first) => {
-    const second = waves[1]!.find((slot) => slot.case_index === first.case_index)
-    if (!second || second.profile === first.profile) {
-      throw new Error(`Rolling AutomationBench case ${first.case_index} requires the opposite profile`)
+    const chain = waves.map((wave) => wave.find((slot) => slot.case_index === first.case_index))
+    if (chain.some((slot) => !slot) || new Set(chain.map((slot) => slot!.profile)).size !== chain.length) {
+      throw new Error(`Rolling AutomationBench case ${first.case_index} requires one unique slot per profile list`)
     }
-    return [first, second] as const
+    return chain as BatchProfileSlot[]
   })
 }
 
@@ -420,6 +420,7 @@ export function auditBatchEvidence(input: {
   }
   const expectedWave1 = (input.plan.waves?.[0] ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()
   const rolling = input.plan.schedule_mode === "rolling_case_slots_v1"
+  const waveIndexes = (input.plan.waves ?? []).map((_: any, index: number) => index + 1)
   if (rolling) {
     try {
       rollingBatchChains(input.plan.waves ?? [])
@@ -436,10 +437,10 @@ export function auditBatchEvidence(input: {
   if (!rolling && (input.receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
     reasons.push("wave_1_completion")
   }
-  const launched = [1, 2].flatMap((waveIndex) =>
+  const launched = waveIndexes.flatMap((waveIndex: number) =>
     (input.receipt[`wave_${waveIndex}`]?.launched ?? []).map((item: any) => ({ ...item, waveIndex })),
   )
-  const eligibleClaims = [1, 2].flatMap((waveIndex) =>
+  const eligibleClaims = waveIndexes.flatMap((waveIndex: number) =>
     (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => ({ ...item, waveIndex })),
   )
   const preexisting = new Map(
@@ -484,7 +485,7 @@ export function auditBatchEvidence(input: {
       end: Number(attempt.finished_at),
     })
   }
-  for (const waveIndex of [1, 2]) {
+  for (const waveIndex of waveIndexes) {
     const waveLaunched = launched.filter((item) => item.waveIndex === waveIndex)
     if (waveLaunched.length > 5 || new Set(waveLaunched.map((item) => item.case_index)).size !== waveLaunched.length) {
       reasons.push(`wave_launch_shape:${waveIndex}`)
@@ -522,7 +523,7 @@ export function auditBatchEvidence(input: {
     if (currentBatch) sealingRunIDs.add(String(item.run_id))
     else adoptedRunIDs.add(String(item.run_id))
   }
-  for (const waveIndex of rolling ? [0] : [1, 2]) {
+  for (const waveIndex of rolling ? [0] : waveIndexes) {
     const scoped = rolling ? intervals : intervals.filter((item) => item.waveIndex === waveIndex)
     const events = scoped.flatMap((item) => [
       { at: item.start, delta: 1 },
@@ -537,9 +538,12 @@ export function auditBatchEvidence(input: {
   }
   if (rolling) {
     for (const caseIndex of expectedCases) {
-      const first = intervals.find((item) => item.caseIndex === caseIndex && item.waveIndex === 1)
-      const second = intervals.find((item) => item.caseIndex === caseIndex && item.waveIndex === 2)
-      if (first && second && second.start < first.end) reasons.push(`rolling_case_overlap:${caseIndex}`)
+      const chain = intervals
+        .filter((item) => item.caseIndex === caseIndex)
+        .sort((left, right) => left.waveIndex - right.waveIndex)
+      for (let index = 1; index < chain.length; index++) {
+        if (chain[index]!.start < chain[index - 1]!.end) reasons.push(`rolling_case_overlap:${caseIndex}`)
+      }
     }
   } else {
     const waveCompletedAt = Number(input.waveCompletion?.completed_at)
@@ -550,16 +554,16 @@ export function auditBatchEvidence(input: {
       reasons.push("wave_2_barrier_start")
     }
   }
-  const pairedSlots = [1, 2]
+  const selectedSlots = waveIndexes
     .flatMap((waveIndex) =>
       (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => `${item.case_index}:${item.profile}`),
     )
     .sort()
-  const expectedPairedSlots = expectedCases
-    .flatMap((caseIndex) => [`${caseIndex}:base`, `${caseIndex}:advanced`])
+  const expectedSelectedSlots = expectedCases
+    .flatMap((caseIndex) => (input.plan.profiles ?? []).map((profile: string) => `${caseIndex}:${profile}`))
     .sort()
-  if (input.receipt.status === "completed" && JSON.stringify(pairedSlots) !== JSON.stringify(expectedPairedSlots)) {
-    reasons.push("paired_case_coverage")
+  if (input.receipt.status === "completed" && JSON.stringify(selectedSlots) !== JSON.stringify(expectedSelectedSlots)) {
+    reasons.push("selected_case_coverage")
   }
   return {
     passed: reasons.length === 0,

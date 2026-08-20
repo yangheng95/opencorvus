@@ -12,6 +12,7 @@ type FrozenCase = {
   example_id: string | number
   task_contract_sha256: string
 }
+type Profile = "base" | "advanced"
 
 const values = new Map<string, string>()
 for (let index = 2; index < process.argv.length; index += 2) {
@@ -36,15 +37,26 @@ if (!Number.isInteger(batchIndex) || batchIndex < 1 || batchIndex > 10) throw ne
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
 const model = values.get("model") ?? "openai/gpt-5.6-luna"
 const inactivityMs = values.get("inactivity-ms") ?? "600000"
+const profiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim()) as Profile[]
+if (
+  profiles.length < 1 ||
+  profiles.length > 2 ||
+  new Set(profiles).size !== profiles.length ||
+  profiles.some((profile) => profile !== "base" && profile !== "advanced")
+) {
+  throw new Error("--profiles must be base, advanced, or base,advanced")
+}
 const manifest = JSON.parse(await fs.readFile(caseSet, "utf8")) as { selection: { count: number }; cases: FrozenCase[] }
 const cases = manifest.cases.filter((item) => item.batch_index === batchIndex).sort((left, right) => left.case_index - right.case_index)
 if (manifest.selection?.count !== 50 || cases.length !== 5) throw new Error(`Frozen batch ${batchIndex} must contain five of 50 cases`)
 const wave1 = cases.map((item) => ({ case_index: item.case_index, profile: item.case_index % 2 === 1 ? "base" : "advanced" })) as Array<{
   case_index: number
-  profile: "base" | "advanced"
+  profile: Profile
 }>
 const wave2 = wave1.map((item) => ({ case_index: item.case_index, profile: item.profile === "base" ? "advanced" : "base" }))
-const waves = [wave1, wave2]
+const waves = profiles.length === 2
+  ? [wave1, wave2]
+  : [cases.map((item) => ({ case_index: item.case_index, profile: profiles[0]! }))]
 
 await Promise.all([
   fs.mkdir(output, { recursive: true, mode: 0o700 }),
@@ -112,10 +124,24 @@ function processIsAlive(pid: number) {
   }
 }
 
+function cancellableDelay<T>(timeoutMs: number, value: T) {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return {
+    promise: new Promise<T>((resolve) => {
+      timer = setTimeout(() => resolve(value), timeoutMs)
+    }),
+    cancel: () => {
+      if (timer) clearTimeout(timer)
+    },
+  }
+}
+
 async function stopChild(child: ReturnType<typeof Bun.spawn>) {
   if (!processIsAlive(child.pid)) return child.exited.catch(() => undefined)
   child.kill("SIGTERM")
-  const exited = await Promise.race([child.exited.then(() => true).catch(() => true), Bun.sleep(5_000).then(() => false)])
+  const deadline = cancellableDelay(5_000, false)
+  const exited = await Promise.race([child.exited.then(() => true).catch(() => true), deadline.promise])
+  deadline.cancel()
   if (!exited) {
     child.kill("SIGKILL")
     await child.exited.catch(() => undefined)
@@ -131,10 +157,8 @@ async function readWithInactivity(
   const decoder = new TextDecoder()
   let output = ""
   while (true) {
-    const next = await Promise.race([
-      reader.read(),
-      Bun.sleep(timeoutMs).then(() => ({ timeout: true as const })),
-    ])
+    const deadline = cancellableDelay(timeoutMs, { timeout: true as const })
+    const next = await Promise.race([reader.read(), deadline.promise]).finally(deadline.cancel)
     if ("timeout" in next) {
       child.kill("SIGTERM")
       await stopChild(child)
@@ -160,6 +184,8 @@ async function refreshCatalog() {
       restrictedShell,
       "--case-set",
       caseSet,
+      "--profiles",
+      profiles.join(","),
     ],
     { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
   )
@@ -176,7 +202,7 @@ async function refreshCatalog() {
   }
 }
 
-function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, profile: "base" | "advanced") {
+function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, profile: Profile) {
   return new Map(
     catalog.leaderboard
       .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1)
@@ -184,7 +210,7 @@ function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, pr
   )
 }
 
-function candidateByCase(catalog: { candidates: Array<Record<string, any>> }, profile: "base" | "advanced") {
+function candidateByCase(catalog: { candidates: Array<Record<string, any>> }, profile: Profile) {
   return new Map(
     catalog.candidates
       .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1)
@@ -194,7 +220,7 @@ function candidateByCase(catalog: { candidates: Array<Record<string, any>> }, pr
 
 function waveCandidateByCase(
   catalog: { attempts: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
-  profile: "base" | "advanced",
+  profile: Profile,
 ) {
   const records = [
     ...catalog.candidates.filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1),
@@ -216,7 +242,7 @@ function waveCandidateByCase(
   return candidates
 }
 
-async function runTrial(item: FrozenCase, profile: "base" | "advanced", waveIndex: number) {
+async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
   const args = [
     process.execPath,
     path.join(import.meta.dir, "run-automationbench.ts"),
@@ -335,15 +361,12 @@ async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshC
     complete:
       launchedByWave.flat().every((item) => item.exit_code === 0 && item.run_status === "scored") &&
       outcomes.every((outcome) => outcome.eligible.length === 5),
-    wave_1: outcomes[0]!,
-    wave_2: outcomes[1]!,
+    outcomes,
   }
 }
 
 let receiptWritten = false
-type BatchWaveOutcome = Awaited<ReturnType<typeof runRollingBatch>>["wave_1"]
-let wave1Outcome: BatchWaveOutcome | undefined
-let wave2Outcome: BatchWaveOutcome | undefined
+let batchOutcomes: Awaited<ReturnType<typeof runRollingBatch>>["outcomes"] | undefined
 try {
   await fs.mkdir(planDirectory, { recursive: true })
   const preexistingCatalog = await refreshCatalog()
@@ -353,7 +376,7 @@ try {
     batch_index: batchIndex,
     started_at: Date.now(),
     model,
-    profiles: ["base", "advanced"],
+    profiles,
     trial_concurrency: 5,
     schedule_mode: "rolling_case_slots_v1",
     protected_roots: {
@@ -390,8 +413,7 @@ try {
     { encoding: "utf8", flag: "wx" },
   )
   const rolling = await runRollingBatch(preexistingCatalog)
-  wave1Outcome = rolling.wave_1
-  wave2Outcome = rolling.wave_2
+  batchOutcomes = rolling.outcomes
   if (!rolling.complete) throw new Error("Rolling batch contains a failed, invalid, or unsealed trial")
   await fs.writeFile(
     receiptPath,
@@ -402,8 +424,7 @@ try {
         batch_index: batchIndex,
         status: "completed",
         finished_at: Date.now(),
-        wave_1: rolling.wave_1,
-        wave_2: rolling.wave_2,
+        ...Object.fromEntries(rolling.outcomes.map((outcome, index) => [`wave_${index + 1}`, outcome])),
       },
       null,
       2,
@@ -412,8 +433,8 @@ try {
   )
   receiptWritten = true
   const finalCatalog = await refreshCatalog()
-  const finalizedSlots = [...wave1, ...wave2].filter((slot) => eligibleByCase(finalCatalog, slot.profile).has(slot.case_index))
-  if (finalizedSlots.length !== 10) throw new Error("Completed receipt did not finalize all ten paired batch slots")
+  const finalizedSlots = waves.flat().filter((slot) => eligibleByCase(finalCatalog, slot.profile).has(slot.case_index))
+  if (finalizedSlots.length !== waves.flat().length) throw new Error("Completed receipt did not finalize every selected batch slot")
   process.stdout.write(JSON.stringify({ ok: true, batch_index: batchIndex, receipt: receiptPath }) + "\n")
 } catch (error) {
   if (!receiptWritten) {
@@ -429,8 +450,9 @@ try {
             status: "failed",
             finished_at: Date.now(),
             signal: terminationSignal ?? null,
-            wave_1: wave1Outcome ?? null,
-            wave_2: wave2Outcome ?? null,
+            ...(batchOutcomes
+              ? Object.fromEntries(batchOutcomes.map((outcome, index) => [`wave_${index + 1}`, outcome]))
+              : {}),
             error: error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError" },
           },
           null,

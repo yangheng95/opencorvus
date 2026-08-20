@@ -34,6 +34,15 @@ const sourceData = path.resolve(sourceDataValue)
 const python = path.resolve(pythonValue)
 const restrictedShell = path.resolve(restrictedShellValue)
 const finalMode = values.get("mode") === "final"
+const finalProfiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim())
+if (
+  finalProfiles.length < 1 ||
+  finalProfiles.length > 2 ||
+  new Set(finalProfiles).size !== finalProfiles.length ||
+  finalProfiles.some((profile) => profile !== "base" && profile !== "advanced")
+) {
+  throw new Error("--profiles must be base, advanced, or base,advanced")
+}
 const caseSetPath = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
 const [restrictedShellBytes, expectedRestrictedShellBytes, restrictedShellStat] = await Promise.all([
   fs.readFile(restrictedShell),
@@ -234,6 +243,7 @@ if (secretFindings.length > 0) {
 }
 
 const catalog = JSON.parse(await fs.readFile(path.join(root, "evidence-catalog.json"), "utf8")) as {
+  scope?: { profiles?: string[] }
   attempts: Array<Record<string, any>>
   leaderboard: Array<Record<string, any>>
   batches: Array<Record<string, any>>
@@ -494,6 +504,7 @@ const verifiedBatches = await Promise.all(
       const audit = auditBatchEvidence({ plan, receipt, waveCompletion, attempts: independentAttempts, planSHA256 })
       return {
         batchRunID: plan.batch_run_id,
+        profiles: plan.profiles as string[],
         planSHA256,
         receipt,
         audit,
@@ -560,20 +571,27 @@ if (JSON.stringify(expectedPaperPaths) !== JSON.stringify(declaredPaperPaths)) {
   throw new Error("Paper artifact manifest does not cover the exact expected paper file set")
 }
 if (finalMode) {
-  if (catalog.leaderboard.length !== 100) throw new Error("Final matrix requires exactly 100 eligible profile trials")
+  if (JSON.stringify([...(catalog.scope?.profiles ?? [])].sort()) !== JSON.stringify([...finalProfiles].sort())) {
+    throw new Error("Final verifier profiles do not match the catalog primary profile scope")
+  }
+  const selectedRows = catalog.leaderboard.filter((attempt) => finalProfiles.includes(attempt.opencorvus?.profile))
+  if (selectedRows.length !== finalProfiles.length * 50) {
+    throw new Error(`Final matrix requires exactly ${finalProfiles.length * 50} selected-profile trials`)
+  }
   for (const batchIndex of Array.from({ length: 10 }, (_, index) => index + 1)) {
     if (
       !verifiedBatches.some(
         (batch) =>
           batch.audit.passed === true &&
           batch.audit.status === "completed" &&
-          batch.receipt?.batch_index === batchIndex,
+          batch.receipt?.batch_index === batchIndex &&
+          finalProfiles.every((profile) => batch.profiles.includes(profile)),
       )
     ) {
       throw new Error(`Final matrix requires a completed receipt for frozen batch ${batchIndex}`)
     }
   }
-  for (const profile of ["base", "advanced"]) {
+  for (const profile of finalProfiles) {
     const rows = catalog.leaderboard.filter((attempt) => attempt.opencorvus?.profile === profile)
     const indexes = rows.map((attempt) => attempt.benchmark?.case_index).sort((left, right) => left - right)
     const expected = Array.from({ length: 50 }, (_, index) => index + 1)

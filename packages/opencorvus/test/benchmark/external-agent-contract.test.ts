@@ -374,6 +374,9 @@ describe("external agent benchmark contract", () => {
     expect(rollingBatchChains([wave1, wave2])).toEqual(
       wave1.map((item, index) => [item, wave2[index]]),
     )
+    expect(rollingBatchChains([wave1.map((item) => ({ ...item, profile: "base" as const }))])).toEqual(
+      wave1.map((item) => [{ ...item, profile: "base" }]),
+    )
   })
 
   test("keeps five rolling case slots busy and continues each case after a settled invalid attempt", async () => {
@@ -451,6 +454,7 @@ describe("external agent benchmark contract", () => {
           batch_run_id: "batch-1",
           trial_concurrency: 5,
           schedule_mode: "rolling_case_slots_v1",
+          profiles: ["base", "advanced"],
           network_isolation: "private_netns_slirp4netns_disable_host_loopback_v1",
           host_network_namespace: "net:[999]",
           protected_roots: { evidence: { passed: true }, control: { passed: true } },
@@ -484,6 +488,53 @@ describe("external agent benchmark contract", () => {
         .map((item) => item.run_id)
         .sort(),
       adopted_run_ids: [adoptedRun.run_id],
+    })
+  })
+
+  test("accepts a completed five-case Base-only rolling batch", () => {
+    const cases = [6, 7, 8, 9, 10].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const launched = wave.map((item, index) => ({ ...item, run_id: `base-${item.case_index}`, index }))
+    const attempts = launched.map((item) => ({
+      run_id: item.run_id,
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at: 100,
+      finished_at: 200 + item.index,
+      benchmark: {
+        batch_run_id: "batch-2",
+        batch_plan_sha256: "base-plan-sha",
+        wave_index: 1,
+        case_index: item.case_index,
+      },
+      opencorvus: { profile: "base" },
+    }))
+    expect(
+      auditBatchEvidence({
+        plan: {
+          batch_run_id: "batch-2",
+          trial_concurrency: 5,
+          schedule_mode: "rolling_case_slots_v1",
+          profiles: ["base"],
+          cases,
+          waves: [wave],
+          preexisting_eligible: { base: [], advanced: [] },
+        },
+        receipt: {
+          batch_run_id: "batch-2",
+          status: "completed",
+          wave_1: { launched, eligible: launched },
+        },
+        attempts,
+        planSHA256: "base-plan-sha",
+      }),
+    ).toEqual({
+      passed: true,
+      status: "completed",
+      reasons: [],
+      eligible_run_ids: launched.map((item) => item.run_id).sort(),
+      sealing_run_ids: launched.map((item) => item.run_id).sort(),
+      adopted_run_ids: [],
     })
   })
 

@@ -200,7 +200,9 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     plan.model !== input.model ||
     plan.trial_concurrency !== 5 ||
     plan.cases?.length !== 5 ||
-    plan.waves?.length !== 2 ||
+    ![1, 2].includes(plan.profiles?.length) ||
+    plan.waves?.length !== plan.profiles.length ||
+    plan.waves.some((wave) => wave.length !== 5) ||
     authorizedWave?.length !== 5 ||
     !plan.profiles?.includes(input.profile) ||
     !authorizedCase ||
