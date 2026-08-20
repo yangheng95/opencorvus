@@ -270,22 +270,40 @@ const acquireBrowser = async (): Promise<BrowserMcpConnection> => {
   if (!browserLaunch) {
     const launchGeneration = browserShutdownGeneration
     browserLaunch = (async (): Promise<BrowserMcpConnection> => {
-      if (CONNECTION_CONFIG.mode === "cdp") {
-        const attached =
-          "endpointURL" in CONNECTION_CONFIG
-            ? await BrowserRuntime.connectPlaywrightBrowserOverCdpInNodeProcess({
-                endpointURL: CONNECTION_CONFIG.endpointURL,
-              })
-            : await BrowserRuntime.connectPlaywrightBrowserToChromeChannelInNodeProcess()
+      if (CONNECTION_CONFIG.mode === "cdp" && "endpointURL" in CONNECTION_CONFIG) {
+        const attached = await BrowserRuntime.connectPlaywrightBrowserOverCdpInNodeProcess({
+          endpointURL: CONNECTION_CONFIG.endpointURL,
+        })
         return {
           browser: attached,
           mode: "cdp",
-          product: "endpointURL" in CONNECTION_CONFIG ? "Chromium-family browser (CDP)" : "Google Chrome",
+          product: "Chromium-family browser (CDP)",
           close: () => attached.close(),
         }
       }
+      if (CONNECTION_CONFIG.mode === "cdp") {
+        const attached = await BrowserRuntime.connectPlaywrightBrowserToChromeChannelInNodeProcess().catch(
+          (error: unknown) => {
+            // Chrome CDP is the default, so failing hard here used to take every
+            // browser tool down with it. An isolated browser is a worse profile,
+            // not a worse capability; session_create reports which one you got.
+            log(
+              `chrome CDP unavailable, falling back to an isolated browser  ${error instanceof Error ? error.message : String(error)}`,
+            )
+            return undefined
+          },
+        )
+        if (attached) {
+          return {
+            browser: attached,
+            mode: "cdp",
+            product: browserMcpProductFromExecutable(await BrowserRuntime.findBrowserExecutable()),
+            close: () => attached.close(),
+          }
+        }
+      }
       const launched = await BrowserRuntime.launchPlaywrightBrowserInNodeProcess({
-        headless: CONNECTION_CONFIG.headless,
+        headless: CONNECTION_CONFIG.mode === "isolated" ? CONNECTION_CONFIG.headless : resolveBrowserMcpHeadless(),
         args: browserMcpIsolatedLaunchArgs(),
       })
       return {

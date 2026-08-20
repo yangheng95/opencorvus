@@ -1,7 +1,10 @@
+import { spawn } from "node:child_process"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import { setTimeout as delay } from "node:timers/promises"
 import { pathToFileURL } from "node:url"
+import { resolveOpenCorvusRuntimePaths } from "@opencorvus-ai/util/runtime-paths"
 
 export namespace BrowserRuntime {
   export type BrowserProxyConfig = {
@@ -70,8 +73,19 @@ export namespace BrowserRuntime {
   export const CDP_ENDPOINT_RECOVERY_COMMAND =
     "Start Chrome with a remote debugging endpoint and a non-default --user-data-dir, then set OPENCORVUS_BROWSER_CDP_ENDPOINT."
   export const CHROME_CHANNEL_RECOVERY_COMMAND =
-    'Enable "Allow remote debugging for this browser instance" at chrome://inspect/#remote-debugging, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.'
+    "Install Chrome/Edge so OpenCorvus can start its own remote-debugging Chrome in a dedicated profile, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser."
+  export const CHROME_PROFILE_RECOVERY_COMMAND =
+    "Point OPENCORVUS_BROWSER_CHROME_USER_DATA_DIR at a writable non-default profile directory and close any browser already using it, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser."
   export const DEFAULT_BROWSER_LAUNCH_TIMEOUT_MS = 300_000
+  export const DEFAULT_CHROME_CDP_STARTUP_TIMEOUT_MS = 30_000
+
+  /**
+   * Chrome 136 and later refuse `--remote-debugging-port` whenever the profile
+   * is the browser's own default data directory ("DevTools remote debugging
+   * requires a non-default data directory"), so the managed CDP profile lives
+   * beside the rest of the OpenCorvus runtime state instead.
+   */
+  export const MANAGED_CHROME_PROFILE_DIRECTORY_NAME = "chrome-cdp-profile"
 
   export function cdpConnectionDiagnostic(target: "endpoint" | "chrome" = "endpoint"): Diagnostic {
     return {
@@ -110,13 +124,95 @@ export namespace BrowserRuntime {
     throw new RuntimeError(cdpConnectionDiagnostic("chrome"))
   }
 
+  export function defaultChromeProfileDiagnostic(userDataDir: string): Diagnostic {
+    return {
+      code: "browser_launch_failed",
+      message:
+        `Chrome refuses remote debugging on its own default profile directory (${userDataDir}). ` +
+        "DevTools remote debugging requires a non-default data directory.",
+      checkedCandidates: [userDataDir],
+      recoveryCommand: CHROME_PROFILE_RECOVERY_COMMAND,
+    }
+  }
+
+  export function managedChromeStartupDiagnostic(input: {
+    executablePath: string
+    userDataDir: string
+    exitCode: number | null
+    spawnError?: string
+  }): Diagnostic {
+    const exited = input.spawnError
+      ? ` The browser could not be started: ${input.spawnError}.`
+      : input.exitCode === null
+        ? ""
+        : ` The browser exited with code ${input.exitCode}.`
+    return {
+      code: "browser_launch_failed",
+      message:
+        `BrowserRuntime started ${input.executablePath} with remote debugging in ${input.userDataDir} ` +
+        `but no DevTools endpoint became reachable.${exited}`,
+      checkedCandidates: [input.userDataDir],
+      recoveryCommand: CHROME_PROFILE_RECOVERY_COMMAND,
+    }
+  }
+
+  function normalizedUserDataDir(userDataDir: string, platform: NodeJS.Platform): string {
+    const platformPath = platform === "win32" ? path.win32 : path.posix
+    return platformPath.normalize(userDataDir.trim()).replace(/[\\/]+$/, "")
+  }
+
+  function comparableUserDataDir(userDataDir: string, platform: NodeJS.Platform): string {
+    const normalized = normalizedUserDataDir(userDataDir, platform)
+    return platform === "win32" ? normalized.toLowerCase() : normalized
+  }
+
+  /**
+   * The one profile a remote-debugging Chrome can never use. Refusing it here
+   * turns an unreachable DevTools endpoint — the failure mode that silently
+   * disabled every browser tool — into a named, actionable error.
+   */
+  export function assertNonDefaultChromeUserDataDir(
+    userDataDir: string,
+    input?: { platform?: NodeJS.Platform; env?: NodeJS.ProcessEnv; homeDir?: string },
+  ): string {
+    const platform = input?.platform ?? process.platform
+    let browserDefault: string | undefined
+    try {
+      browserDefault = comparableUserDataDir(resolveChromeUserDataDir({ ...input, platform }), platform)
+    } catch {
+      browserDefault = undefined
+    }
+    if (browserDefault && comparableUserDataDir(userDataDir, platform) === browserDefault) {
+      throw new RuntimeError(defaultChromeProfileDiagnostic(userDataDir.trim()))
+    }
+    return normalizedUserDataDir(userDataDir, platform)
+  }
+
+  export function resolveManagedChromeUserDataDir(input?: {
+    platform?: NodeJS.Platform
+    env?: NodeJS.ProcessEnv
+    homeDir?: string
+  }): string {
+    const platform = input?.platform ?? process.platform
+    const env = input?.env ?? process.env
+    const homeDir = input?.homeDir ?? os.homedir()
+    const platformPath = platform === "win32" ? path.win32 : path.posix
+    const explicit = env.OPENCORVUS_BROWSER_CHROME_USER_DATA_DIR?.trim()
+    if (explicit) return assertNonDefaultChromeUserDataDir(explicit, { platform, env, homeDir })
+    const runtimePaths = resolveOpenCorvusRuntimePaths({ env, platform, home: homeDir })
+    return assertNonDefaultChromeUserDataDir(
+      platformPath.join(runtimePaths.data, MANAGED_CHROME_PROFILE_DIRECTORY_NAME),
+      { platform, env, homeDir },
+    )
+  }
+
   export async function resolveChromeCdpEndpoint(input?: {
     userDataDir?: string
     platform?: NodeJS.Platform
     env?: NodeJS.ProcessEnv
     homeDir?: string
   }): Promise<string> {
-    const userDataDir = input?.userDataDir ?? resolveChromeUserDataDir(input)
+    const userDataDir = input?.userDataDir ?? resolveManagedChromeUserDataDir(input)
     const activePort = await fs.readFile(path.join(userDataDir, "DevToolsActivePort"), "utf8").catch(() => "")
     const [portLine, browserPath, ...unexpected] = activePort.trim().split(/\r?\n/)
     const port = Number(portLine)
@@ -230,16 +326,95 @@ export namespace BrowserRuntime {
     }
   }
 
+  export function resolveChromeCdpStartupTimeoutMs(explicit?: number, env: NodeJS.ProcessEnv = process.env): number {
+    if (typeof explicit === "number" && Number.isFinite(explicit) && explicit > 0) return explicit
+    const configured = Number(env.OPENCORVUS_BROWSER_CDP_STARTUP_TIMEOUT_MS ?? "")
+    if (Number.isFinite(configured) && configured > 0) return configured
+    return DEFAULT_CHROME_CDP_STARTUP_TIMEOUT_MS
+  }
+
+  export function managedChromeLaunchArgs(userDataDir: string): string[] {
+    return [
+      `--user-data-dir=${userDataDir}`,
+      "--remote-debugging-port=0",
+      "--no-first-run",
+      "--no-default-browser-check",
+    ]
+  }
+
+  export async function tryResolveChromeCdpEndpoint(userDataDir: string): Promise<string | undefined> {
+    return resolveChromeCdpEndpoint({ userDataDir }).catch(() => undefined)
+  }
+
+  /**
+   * Connects to the visible Chrome that serves OpenCorvus browser work, starting
+   * one in the managed profile when no DevTools endpoint is reachable yet. The
+   * browser deliberately outlives this process: an attached profile keeps its
+   * signed-in state and only its pages are closed on shutdown, so the next
+   * connection reuses the same instance through its DevToolsActivePort file.
+   */
   export async function connectPlaywrightBrowserToChromeChannelInNodeProcess(input?: {
     timeoutMs?: number
+    startupTimeoutMs?: number
     userDataDir?: string
+    executablePath?: string
+    env?: NodeJS.ProcessEnv
   }): Promise<any> {
-    const endpointURL = await resolveChromeCdpEndpoint({ userDataDir: input?.userDataDir })
-    return connectPlaywrightBrowserOverCdpInNodeProcess({
-      endpointURL,
-      timeoutMs: input?.timeoutMs,
-      target: "chrome",
+    if (typeof Bun !== "undefined") {
+      throw new RuntimeError({
+        code: "browser_connect_failed",
+        message: "Playwright CDP connection must run in the Browser Node sidecar, not in a Bun process.",
+        checkedCandidates: [],
+        recoveryCommand: "Start browser work through the Browser Node sidecar runtime.",
+      })
+    }
+    const env = input?.env ?? process.env
+    const userDataDir = assertNonDefaultChromeUserDataDir(
+      input?.userDataDir ?? resolveManagedChromeUserDataDir({ env }),
+      { env },
+    )
+    const runningEndpoint = await tryResolveChromeCdpEndpoint(userDataDir)
+    if (runningEndpoint) {
+      const reused = await connectPlaywrightBrowserOverCdpInNodeProcess({
+        endpointURL: runningEndpoint,
+        timeoutMs: input?.timeoutMs,
+        target: "chrome",
+      }).catch(() => undefined)
+      if (reused) return reused
+    }
+    const executablePath = await findBrowserExecutable(input?.executablePath)
+    await fs.mkdir(userDataDir, { recursive: true })
+    const child = spawn(executablePath, managedChromeLaunchArgs(userDataDir), {
+      detached: true,
+      stdio: "ignore",
     })
+    child.unref()
+    let exitCode: number | null = null
+    let spawnError: string | undefined
+    child.on("error", (error) => {
+      spawnError = error.message
+      exitCode = exitCode ?? -1
+    })
+    child.on("exit", (code) => {
+      exitCode = code ?? 0
+    })
+    const deadline = Date.now() + resolveChromeCdpStartupTimeoutMs(input?.startupTimeoutMs, env)
+    while (Date.now() < deadline) {
+      const endpointURL = await tryResolveChromeCdpEndpoint(userDataDir)
+      if (endpointURL && endpointURL !== runningEndpoint) {
+        const connected = await connectPlaywrightBrowserOverCdpInNodeProcess({
+          endpointURL,
+          timeoutMs: input?.timeoutMs,
+          target: "chrome",
+        }).catch(() => undefined)
+        if (connected) return connected
+      }
+      // A browser that hands its command line to an instance already owning the
+      // profile exits at once; waiting out the full deadline would hide that.
+      if (exitCode !== null) break
+      await delay(100)
+    }
+    throw new RuntimeError(managedChromeStartupDiagnostic({ executablePath, userDataDir, exitCode, spawnError }))
   }
 
   export function defaultLaunchArgs(input?: {

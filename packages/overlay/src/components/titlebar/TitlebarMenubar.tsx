@@ -54,6 +54,23 @@ const FILE_SHORTCUTS: Record<FileShortcutID, FileShortcutDefinition> = {
   exit: { key: "q", ctrl: true, alt: false, shift: false, display: "Ctrl+Q", aria: "Control+Q" },
 }
 
+/* The macOS build keeps AppKit's application menu, and that menu owns the real
+ * accelerators. The in-window menubar mirrors this build's own Ctrl bindings
+ * everywhere else, so on macOS it has to quote the Command bindings AppKit
+ * actually installs instead. */
+const MACOS_FILE_SHORTCUTS: Record<FileShortcutID, { display: string; aria: string }> = {
+  "new-window": { display: "⇧⌘N", aria: "Meta+Shift+N" },
+  "new-chat": { display: "⌘N", aria: "Meta+N" },
+  "quick-chat": { display: "⌥⌘N", aria: "Alt+Meta+N" },
+  "open-folder": { display: "⌘O", aria: "Meta+O" },
+  close: { display: "⌘W", aria: "Meta+W" },
+  settings: { display: "⌘,", aria: "Meta+," },
+  exit: { display: "⌘Q", aria: "Meta+Q" },
+}
+
+const SEARCH_SHORTCUT = { display: "Ctrl+G", aria: "Control+G" }
+const MACOS_SEARCH_SHORTCUT = { display: "⌘G", aria: "Meta+G" }
+
 function fileShortcutIDForEvent(event: KeyboardEvent): FileShortcutID | null {
   const key = event.key.toLowerCase()
   const entry = (Object.entries(FILE_SHORTCUTS) as Array<[FileShortcutID, FileShortcutDefinition]>).find(
@@ -195,6 +212,14 @@ export function TitlebarMenubar() {
   const hostCapabilities = hostTransport.capabilities
   const nativeCommands = hostCapabilities.nativeCommands
   const nativeMacosMenu = usesNativeMacosMenu(__OPENCORVUS_BUILD_PLATFORM__, hostTransport.kind)
+
+  function shortcut(id: FileShortcutID): { display: string; aria: string } {
+    return nativeMacosMenu ? MACOS_FILE_SHORTCUTS[id] : FILE_SHORTCUTS[id]
+  }
+
+  function searchShortcut(): { display: string; aria: string } {
+    return nativeMacosMenu ? MACOS_SEARCH_SHORTCUT : SEARCH_SHORTCUT
+  }
 
   const menus = createMemo<MenuDef[]>(() => [
     { id: "file", label: t("titlebar.menu.file"), compact: "F", accessKey: MENU_ACCESS_KEYS.file },
@@ -402,6 +427,11 @@ export function TitlebarMenubar() {
   }
 
   onMount(() => {
+    // macOS renders this menubar in the window titlebar as well, but AppKit's
+    // application menu stays the one owner of the accelerators there -- it
+    // carries the Command bindings and the Edit items the WebView needs. So
+    // the macOS build wires that menu's events and installs none of the Ctrl
+    // shortcuts or Alt access keys the Windows and Linux builds depend on.
     if (nativeMacosMenu) {
       let disposed = false
       let unlisten: (() => void) | undefined
@@ -478,8 +508,6 @@ export function TitlebarMenubar() {
   const zoomPercent = createMemo(() => Math.round(settingsStore.zoom * 100))
   const themeOptions = themeOptionsForCurrentHost()
 
-  if (nativeMacosMenu) return null
-
   return (
     /* OpenCorvus is the visible product brand, so this menubar landmark keeps the literal brand label. */
     <Menubar.Root
@@ -527,24 +555,24 @@ export function TitlebarMenubar() {
                 <Show when={menu.id === "file"}>
                   <MenuItem
                     onClick={openNewWindow}
-                    meta={FILE_SHORTCUTS["new-window"].display}
-                    ariaKeyShortcuts={FILE_SHORTCUTS["new-window"].aria}
+                    meta={shortcut("new-window").display}
+                    ariaKeyShortcuts={shortcut("new-window").aria}
                     testid="titlebar-file-new-window"
                   >
                     {t("titlebar.file.new_window")}
                   </MenuItem>
                   <MenuItem
                     onClick={startNewChat}
-                    meta={FILE_SHORTCUTS["new-chat"].display}
-                    ariaKeyShortcuts={FILE_SHORTCUTS["new-chat"].aria}
+                    meta={shortcut("new-chat").display}
+                    ariaKeyShortcuts={shortcut("new-chat").aria}
                     testid="titlebar-file-new-chat"
                   >
                     {t("titlebar.file.new_chat")}
                   </MenuItem>
                   <MenuItem
                     onClick={startNewChat}
-                    meta={FILE_SHORTCUTS["quick-chat"].display}
-                    ariaKeyShortcuts={FILE_SHORTCUTS["quick-chat"].aria}
+                    meta={shortcut("quick-chat").display}
+                    ariaKeyShortcuts={shortcut("quick-chat").aria}
                     testid="titlebar-file-quick-chat"
                   >
                     {t("titlebar.file.quick_chat")}
@@ -552,8 +580,8 @@ export function TitlebarMenubar() {
                   <Show when={nativeCommands["workspace.pickDir"]}>
                     <MenuItem
                       onClick={openFolder}
-                      meta={FILE_SHORTCUTS["open-folder"].display}
-                      ariaKeyShortcuts={FILE_SHORTCUTS["open-folder"].aria}
+                      meta={shortcut("open-folder").display}
+                      ariaKeyShortcuts={shortcut("open-folder").aria}
                       testid="titlebar-file-open-folder"
                     >
                       {t("titlebar.file.open_folder")}
@@ -562,8 +590,8 @@ export function TitlebarMenubar() {
                   <MenuItem
                     onClick={closeCurrentProject}
                     disabled={!settingsStore.directory}
-                    meta={FILE_SHORTCUTS["close"].display}
-                    ariaKeyShortcuts={FILE_SHORTCUTS["close"].aria}
+                    meta={shortcut("close").display}
+                    ariaKeyShortcuts={shortcut("close").aria}
                     testid="titlebar-file-close"
                   >
                     {t("titlebar.file.close")}
@@ -571,8 +599,8 @@ export function TitlebarMenubar() {
                   <MenuSeparator />
                   <MenuItem
                     onClick={() => openConfig("general")}
-                    meta={FILE_SHORTCUTS["settings"].display}
-                    ariaKeyShortcuts={FILE_SHORTCUTS["settings"].aria}
+                    meta={shortcut("settings").display}
+                    ariaKeyShortcuts={shortcut("settings").aria}
                     testid="titlebar-file-settings"
                   >
                     {t("titlebar.file.settings")}
@@ -580,8 +608,8 @@ export function TitlebarMenubar() {
                   <MenuSeparator />
                   <MenuItem
                     onClick={exitApp}
-                    meta={FILE_SHORTCUTS["exit"].display}
-                    ariaKeyShortcuts={FILE_SHORTCUTS["exit"].aria}
+                    meta={shortcut("exit").display}
+                    ariaKeyShortcuts={shortcut("exit").aria}
                     testid="titlebar-file-exit"
                   >
                     {t("titlebar.file.exit")}
@@ -589,7 +617,12 @@ export function TitlebarMenubar() {
                 </Show>
 
                 <Show when={menu.id === "edit"}>
-                  <MenuItem onClick={focusSidebarSearch} meta="Ctrl+G" testid="titlebar-edit-search">
+                  <MenuItem
+                    onClick={focusSidebarSearch}
+                    meta={searchShortcut().display}
+                    ariaKeyShortcuts={searchShortcut().aria}
+                    testid="titlebar-edit-search"
+                  >
                     {t("titlebar.edit.search")}
                   </MenuItem>
                   <MenuItem onClick={() => openConfig("providers")} testid="titlebar-edit-providers">
