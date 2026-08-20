@@ -32,6 +32,8 @@ const sourceData = required("source-data")
 const output = required("output")
 const restrictedShell = required("restricted-shell")
 const controlRoot = required("control-root")
+const dashboard = values.get("dashboard") ? path.resolve(values.get("dashboard")!) : undefined
+const evaluatorRoot = path.dirname(path.dirname(python))
 const batchIndex = Number(values.get("batch-index"))
 if (!Number.isInteger(batchIndex) || batchIndex < 1 || batchIndex > 10) throw new Error("--batch-index must be 1 through 10")
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
@@ -70,6 +72,25 @@ await Promise.all([
 if (output === controlRoot || output.startsWith(`${controlRoot}${path.sep}`) || controlRoot.startsWith(`${output}${path.sep}`)) {
   throw new Error("Evidence and control roots must be distinct non-nested private directories")
 }
+if (dashboard) {
+  const dashboardParent = path.dirname(dashboard)
+  await fs.mkdir(dashboardParent, { recursive: true })
+  const [dashboardParentRealpath, ...protectedRealpaths] = await Promise.all([
+    fs.realpath(dashboardParent),
+    ...[output, controlRoot, sourceData, evaluatorRoot].map((target) => fs.realpath(target)),
+  ])
+  const dashboardRealpath = path.join(dashboardParentRealpath, path.basename(dashboard))
+  if (
+    protectedRealpaths.some(
+      (protectedRoot) =>
+        dashboardRealpath === protectedRoot ||
+        dashboardRealpath.startsWith(`${protectedRoot}${path.sep}`) ||
+        protectedRoot.startsWith(`${dashboardRealpath}${path.sep}`),
+    )
+  ) {
+    throw new Error("External dashboard must be outside evaluator, evidence, control, and Provider-data roots")
+  }
+}
 const protectedRootAudits = await Promise.all(
   [output, controlRoot].map(async (target) => {
     const [lstat, realpath, stat] = await Promise.all([fs.lstat(target), fs.realpath(target), fs.stat(target)])
@@ -106,6 +127,10 @@ const planDirectory = path.join(output, "batch-plans")
 const planPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-plan.json`)
 const receiptPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-receipt.json`)
 const activeChildren = new Set<ReturnType<typeof Bun.spawn>>()
+let dashboardFailure: Error | undefined
+let dashboardQueue = Promise.resolve()
+let dashboardWriteRequested = false
+let dashboardWriterRunning = false
 let terminationSignal: "SIGINT" | "SIGTERM" | undefined
 let forcedTerminationTimer: ReturnType<typeof setTimeout> | undefined
 const terminate = (signal: "SIGINT" | "SIGTERM") => {
@@ -205,6 +230,60 @@ async function refreshCatalog() {
     candidates: Array<Record<string, any>>
     leaderboard: Array<Record<string, any>>
   }
+}
+
+async function writeDashboard() {
+  if (!dashboard) return
+  const child = Bun.spawn(
+    [
+      process.execPath,
+      path.join(import.meta.dir, "write-automationbench-dashboard.ts"),
+      "--root",
+      output,
+      "--dashboard",
+      dashboard,
+      "--batch-plan",
+      planPath,
+      "--profiles",
+      profiles.join(","),
+    ],
+    { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
+  )
+  let timedOut = false
+  const terminateTimer = setTimeout(() => {
+    timedOut = true
+    child.kill("SIGTERM")
+  }, 10_000)
+  const killTimer = setTimeout(() => child.kill("SIGKILL"), 12_000)
+  const [exitCode, stderr] = await Promise.all([child.exited, new Response(child.stderr).text()]).finally(() => {
+    clearTimeout(terminateTimer)
+    clearTimeout(killTimer)
+  })
+  if (timedOut) throw new Error("External dashboard refresh exceeded 10 seconds")
+  if (exitCode !== 0) throw new Error(`External dashboard refresh failed: ${stderr.trim() || exitCode}`)
+}
+
+function queueDashboardWrite() {
+  if (!dashboard) return dashboardQueue
+  dashboardWriteRequested = true
+  if (dashboardWriterRunning) return dashboardQueue
+  dashboardWriterRunning = true
+  dashboardQueue = (async () => {
+    try {
+      while (dashboardWriteRequested) {
+        dashboardWriteRequested = false
+        try {
+          await writeDashboard()
+          dashboardFailure = undefined
+        } catch (error) {
+          dashboardFailure = error instanceof Error ? error : new Error(String(error))
+        }
+      }
+    } finally {
+      dashboardWriterRunning = false
+    }
+  })()
+  return dashboardQueue
 }
 
 function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, profile: Profile) {
@@ -344,6 +423,7 @@ async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshC
           stderr_tail: error instanceof Error ? error.message : String(error),
         }))
         launchedByWave[waveIndex - 1]!.push(outcome)
+        void queueDashboardWrite()
         return outcome
     },
   })
@@ -417,6 +497,7 @@ try {
     ) + "\n",
     { encoding: "utf8", flag: "wx" },
   )
+  await queueDashboardWrite()
   const rolling = await runRollingBatch(preexistingCatalog)
   batchOutcomes = rolling.outcomes
   if (!rolling.complete) throw new Error("Rolling batch contains a failed, invalid, or unsealed trial")
@@ -438,9 +519,17 @@ try {
   )
   receiptWritten = true
   const finalCatalog = await refreshCatalog()
+  await queueDashboardWrite()
   const finalizedSlots = waves.flat().filter((slot) => eligibleByCase(finalCatalog, slot.profile).has(slot.case_index))
   if (finalizedSlots.length !== waves.flat().length) throw new Error("Completed receipt did not finalize every selected batch slot")
-  process.stdout.write(JSON.stringify({ ok: true, batch_index: batchIndex, receipt: receiptPath }) + "\n")
+  process.stdout.write(
+    JSON.stringify({
+      ok: true,
+      batch_index: batchIndex,
+      receipt: receiptPath,
+      dashboard_warning: dashboardFailure?.message,
+    }) + "\n",
+  )
 } catch (error) {
   if (!receiptWritten) {
     await fs.mkdir(planDirectory, { recursive: true }).catch(() => undefined)
@@ -468,6 +557,7 @@ try {
       .catch((writeError: NodeJS.ErrnoException) => {
         if (writeError.code !== "EEXIST") throw writeError
       })
+    await queueDashboardWrite()
   }
   throw error
 } finally {
