@@ -42,6 +42,7 @@ An excessive call count, long duration while observable work continues, parallel
 Run one deterministic batch (five cases, then the opposite-profile wave) with the committed coordinator:
 
 ```bash
+apt-get update && apt-get install -y ripgrep
 bun install --frozen-lockfile
 bun run --cwd packages/sdk/js build
 # The SDK build refreshes this generated tracked source while producing ignored dist/.

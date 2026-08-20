@@ -942,9 +942,6 @@ try {
     fs.chmod(isolatedRuntime.processRoot, 0o711),
   ])
   await chownAgentTree(projectDirectory, agentUID)
-  process.env.GIT_CONFIG_COUNT = "1"
-  process.env.GIT_CONFIG_KEY_0 = "safe.directory"
-  process.env.GIT_CONFIG_VALUE_0 = projectDirectory
   process.env.OPENCORVUS_BENCH_AGENT_UID = String(agentUID)
   process.env.OPENCORVUS_BENCH_AGENT_HOME = agentHome
   process.env.SHELL = arguments_.restrictedShell
@@ -968,9 +965,17 @@ try {
   const ingress = await import("@/engine/task-root-ingress-delivery")
   waitForIngressDeliveryHooks = ingress.waitForIngressDeliveryHooksForTest
   const { Log } = await import("@/util/log")
+  const { Global } = await import("@/global")
   const { Server } = await import("@/server/server")
   const { declareNativeTaskProcessDeployment } = await import("@/runtime/task-process-deployment")
   await Log.init({ print: false })
+  const engineGitHome = path.join(Global.Path.cache, "engine-git-runtime", "home")
+  await fs.mkdir(engineGitHome, { recursive: true, mode: 0o700 })
+  await fs.writeFile(path.join(engineGitHome, ".gitconfig"), `[safe]\n\tdirectory = ${projectDirectory}\n`, {
+    encoding: "utf8",
+    mode: 0o600,
+    flag: "wx",
+  })
   declareNativeTaskProcessDeployment()
   stage = "runtime_start"
   backend = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
