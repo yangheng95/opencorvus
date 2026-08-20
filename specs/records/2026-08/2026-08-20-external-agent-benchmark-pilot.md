@@ -229,6 +229,8 @@ Root repair removes the project-side bearer entirely: each trial's intended tool
 
 The first clean-commit batch-1 wave created five evidence directories but stopped before Provider/model execution. Every trial failed the positive Agent-shell probe because the isolated runtime's outer `ownerRoot` remained mode `0700`; the runner had opened only the inner `processRoot` to traversal, so the case UID could use its socket but could not reach its own project. These attempts are adapter-bug evidence, not scores. The fix makes both traversal-only ancestors mode `0711` while the credential/runtime data directories remain root-owned mode `0700`; the wave must be rerun with new worlds and run IDs.
 
+Two subsequent pre-score waves are also retained and excluded. The first showed that a clean clone must build `packages/sdk/js/dist` before runtime imports; the reproducible setup now builds the SDK and restores only the generated tracked route-policy source so Git source evidence remains clean. The next clean wave reached `POST /task` and exposed Git's dubious-ownership protection: Host-side VCS inspection ran as root after the project was assigned to the case UID. The runner now projects `safe.directory` for only its exact random project through process-local Git configuration; the Agent's `env -i` shell does not inherit this Host authority.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>

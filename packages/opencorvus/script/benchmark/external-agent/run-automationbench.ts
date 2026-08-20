@@ -942,6 +942,9 @@ try {
     fs.chmod(isolatedRuntime.processRoot, 0o711),
   ])
   await chownAgentTree(projectDirectory, agentUID)
+  process.env.GIT_CONFIG_COUNT = "1"
+  process.env.GIT_CONFIG_KEY_0 = "safe.directory"
+  process.env.GIT_CONFIG_VALUE_0 = projectDirectory
   process.env.OPENCORVUS_BENCH_AGENT_UID = String(agentUID)
   process.env.OPENCORVUS_BENCH_AGENT_HOME = agentHome
   process.env.SHELL = arguments_.restrictedShell

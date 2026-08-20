@@ -42,6 +42,13 @@ An excessive call count, long duration while observable work continues, parallel
 Run one deterministic batch (five cases, then the opposite-profile wave) with the committed coordinator:
 
 ```bash
+bun install --frozen-lockfile
+bun run --cwd packages/sdk/js build
+# The SDK build refreshes this generated tracked source while producing ignored dist/.
+# Restore only this proven generated file so result source-state evidence stays clean.
+git restore -- packages/sdk/js/src/route-policy.ts
+test -z "$(git status --porcelain)"
+
 bun packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts \
   --batch-index 1 \
   --python /var/lib/opencorvus-benchmark/evaluator-venv/bin/python \
