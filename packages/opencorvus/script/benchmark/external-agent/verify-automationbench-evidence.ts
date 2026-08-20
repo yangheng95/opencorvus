@@ -4,6 +4,9 @@ import path from "node:path"
 import {
   auditBenchmarkIsolation,
   auditBatchEvidence,
+  auditSkillProjection,
+  auditTaskOutcome,
+  auditTerminalQuiescence,
   evidenceFileSetMatches,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
@@ -15,7 +18,8 @@ const values = new Map<string, string>()
 for (let index = 2; index < process.argv.length; index += 2) {
   const key = process.argv[index]
   const value = process.argv[index + 1]
-  if (!key?.startsWith("--") || value === undefined) throw new Error("Expected --root, --source-data, and --python values")
+  if (!key?.startsWith("--") || value === undefined)
+    throw new Error("Expected --root, --source-data, and --python values")
   values.set(key.slice(2), value)
 }
 const rootValue = values.get("root")
@@ -88,7 +92,12 @@ async function verifyManifest(directory: string, runID: unknown, runKey: unknown
   const actual = (await fs.readdir(directory, { withFileTypes: true }))
     .filter((entry) => entry.isFile() && entry.name !== "evidence-manifest.json")
     .map((entry) => entry.name)
-  if (!evidenceFileSetMatches(actual, manifest.files.map((entry) => entry.path))) {
+  if (
+    !evidenceFileSetMatches(
+      actual,
+      manifest.files.map((entry) => entry.path),
+    )
+  ) {
     throw new Error(`Run manifest file-set mismatch: ${directory}`)
   }
   for (const expected of manifest.files) {
@@ -104,7 +113,8 @@ async function replayScore(directory: string, payload: Record<string, any>) {
   const expected = {
     partial_credit: payload.benchmark.diagnostic_metrics?.partial_credit ?? payload.benchmark.metrics?.partial_credit,
     task_completed_correctly:
-      payload.benchmark.diagnostic_metrics?.task_completed_correctly ?? payload.benchmark.metrics?.task_completed_correctly,
+      payload.benchmark.diagnostic_metrics?.task_completed_correctly ??
+      payload.benchmark.metrics?.task_completed_correctly,
     assertion_results: payload.benchmark.assertion_results,
     end_state_sha256: payload.benchmark.end_state_sha256,
     tool_attempts: payload.benchmark.tool_attempts,
@@ -167,7 +177,9 @@ for (const expected of paperManifest.files) {
   }
 }
 
-const protectedSecrets = sourceAuthSecretLeaves(JSON.parse(await fs.readFile(path.join(sourceData, "auth.json"), "utf8")))
+const protectedSecrets = sourceAuthSecretLeaves(
+  JSON.parse(await fs.readFile(path.join(sourceData, "auth.json"), "utf8")),
+)
 if (protectedSecrets.length === 0) throw new Error("Source auth did not contain recognized credential leaves")
 const caseSetBytes = await fs.readFile(caseSetPath)
 const caseSetSHA256 = digest(caseSetBytes)
@@ -176,7 +188,8 @@ const caseSet = JSON.parse(caseSetBytes.toString("utf8")) as {
   cases: Array<Record<string, any>>
 }
 const caseSetCanonicalSHA256 = digest(JSON.stringify(caseSet))
-if (caseSet.selection?.count !== 50 || caseSet.cases?.length !== 50) throw new Error("Verifier requires the frozen 50-case manifest")
+if (caseSet.selection?.count !== 50 || caseSet.cases?.length !== 50)
+  throw new Error("Verifier requires the frozen 50-case manifest")
 if (digest(await fs.readFile(path.join(root, "automationbench-case-set.json"))) !== caseSetSHA256) {
   throw new Error("Paper case-set copy does not match the committed frozen manifest")
 }
@@ -190,7 +203,9 @@ const [selectorExit, selectorStdout, selectorStderr] = await Promise.all([
   new Response(selector.stderr).text(),
 ])
 if (selectorExit !== 0 || canonicalJSON(JSON.parse(selectorStdout)) !== canonicalJSON(caseSet)) {
-  throw new Error(`Frozen case selector did not reproduce the committed manifest: ${selectorStderr.trim() || selectorExit}`)
+  throw new Error(
+    `Frozen case selector did not reproduce the committed manifest: ${selectorStderr.trim() || selectorExit}`,
+  )
 }
 const secretFindings: string[] = []
 for (const file of await walk(root)) {
@@ -261,11 +276,7 @@ for (const attempt of catalog.attempts) {
     ? path.join(directory, "failure.json")
     : path.join(directory, "result.json")
   const payload = JSON.parse(await fs.readFile(terminalPath, "utf8")) as Record<string, any>
-  const runManifest = await verifyManifest(
-    directory,
-    undefined,
-    undefined,
-  )
+  const runManifest = await verifyManifest(directory, undefined, undefined)
   const permanentlyInvalid =
     (names.includes("failure.json") && names.includes("result.json")) ||
     names.includes("cleanup-failure.json") ||
@@ -276,7 +287,9 @@ for (const attempt of catalog.attempts) {
   const rawEligible =
     names.includes("result.json") &&
     payload.run?.status === "scored" &&
-    payload.opencorvus?.lifecycle_status === "completed" &&
+    payload.opencorvus?.task_outcome_audit?.scored_terminal === true &&
+    payload.opencorvus?.terminal_quiescence_audit?.passed === true &&
+    payload.opencorvus?.skill?.projection?.passed === true &&
     payload.benchmark?.metrics !== null &&
     payload.opencorvus?.source?.worktree_clean === true &&
     !permanentlyInvalid &&
@@ -314,20 +327,50 @@ for (const attempt of catalog.attempts) {
     throw new Error(`Frozen case identity mismatch: ${attempt.run_id}`)
   }
 
-  const [board, receipt, transcript, eventText, ledger, scorerReplay, sandboxAudit, protectedRootAudit] = await Promise.all([
+  const [
+    board,
+    receipt,
+    transcript,
+    eventText,
+    ledger,
+    scorerReplay,
+    sandboxAudit,
+    protectedRootAudit,
+    skillProjection,
+  ] = await Promise.all([
     fs.readFile(path.join(directory, "terminal-board.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "task-receipt.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "opencorvus-transcript.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "automationbench-events.jsonl"), "utf8"),
-    fs.readFile(path.join(directory, "provider-usage-ledger.json"), "utf8").then(JSON.parse) as Promise<ProviderUsageRow[]>,
+    fs.readFile(path.join(directory, "provider-usage-ledger.json"), "utf8").then(JSON.parse) as Promise<
+      ProviderUsageRow[]
+    >,
     fs.readFile(path.join(directory, "scorer-replay-audit.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "sandbox-isolation-audit.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "protected-root-isolation-audit.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "skill-projection.json"), "utf8").then(JSON.parse),
   ])
   const profile = payload.opencorvus.profile
+  const taskOutcomeAudit = auditTaskOutcome(payload.opencorvus.lifecycle_status, transcript)
+  const terminalQuiescenceAudit = auditTerminalQuiescence(board)
+  const skillProjectionAudit = auditSkillProjection({ profile, matrix: skillProjection.matrix })
+  if (
+    !skillProjectionAudit.passed ||
+    skillProjection.profile !== profile ||
+    skillProjection.skill?.name !== payload.opencorvus.skill?.name ||
+    JSON.stringify(skillProjectionAudit) !== JSON.stringify(skillProjection.skill?.projection ?? null) ||
+    JSON.stringify(skillProjectionAudit) !== JSON.stringify(payload.opencorvus.skill?.projection ?? null)
+  ) {
+    throw new Error(`Experimental Skill projection mismatch: ${attempt.run_id}`)
+  }
   const workflow = board.task?.completionDecision?.workflowBinding ?? null
   const selectedWorkflowID = workflow?.kind === "virtual_workflow" ? workflow.workflow_id : null
   if (
+    !taskOutcomeAudit.passed ||
+    JSON.stringify(taskOutcomeAudit) !== JSON.stringify(payload.opencorvus.task_outcome_audit ?? null) ||
+    !terminalQuiescenceAudit.passed ||
+    JSON.stringify(terminalQuiescenceAudit) !==
+      JSON.stringify(payload.opencorvus.terminal_quiescence_audit ?? null) ||
     receipt.request?.promptProfile !== profile ||
     board.task?.packageRevisionBinding?.id !== profile ||
     board.task?.id !== payload.opencorvus.task_id ||
@@ -389,7 +432,10 @@ for (const attempt of catalog.attempts) {
   ) {
     throw new Error(`Scorer replay mismatch: ${attempt.run_id}`)
   }
-  const events = eventText.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line))
+  const events = eventText
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line))
   const toolAudit = summarizeBenchmarkToolEvents(events)
   if (
     !toolAudit.sequenceValid ||
@@ -402,12 +448,28 @@ for (const attempt of catalog.attempts) {
     throw new Error(`Benchmark event ledger mismatch: ${attempt.run_id}`)
   }
   const usage = summarizeProviderUsageRows(ledger)
-  for (const field of ["input", "output", "reasoning", "cacheRead", "cacheWrite", "total", "costUSD", "pricedCalls", "unpricedCalls", "modelCalls"]) {
+  for (const field of [
+    "input",
+    "output",
+    "reasoning",
+    "cacheRead",
+    "cacheWrite",
+    "total",
+    "costUSD",
+    "pricedCalls",
+    "unpricedCalls",
+    "modelCalls",
+  ]) {
     if (usage[field as keyof typeof usage] !== payload.opencorvus.tokens[field]) {
       throw new Error(`Provider ledger mismatch (${field}): ${attempt.run_id}`)
     }
   }
-  if (ledger.some((row) => row.provider_id !== "openai" || row.model_id !== "gpt-5.6-luna" || row.purpose === "provider-connectivity")) {
+  if (
+    ledger.some(
+      (row) =>
+        row.provider_id !== "openai" || row.model_id !== "gpt-5.6-luna" || row.purpose === "provider-connectivity",
+    )
+  ) {
     throw new Error(`Provider ledger identity mismatch: ${attempt.run_id}`)
   }
   independentlyRawEligible.push(String(attempt.run_id))
@@ -420,7 +482,10 @@ const verifiedBatches = await Promise.all(
       const planBytes = await fs.readFile(planPath)
       const plan = JSON.parse(planBytes.toString("utf8"))
       const prefix = planPath.slice(0, -"-plan.json".length)
-      const receipt = await fs.readFile(`${prefix}-receipt.json`, "utf8").then(JSON.parse).catch(() => undefined)
+      const receipt = await fs
+        .readFile(`${prefix}-receipt.json`, "utf8")
+        .then(JSON.parse)
+        .catch(() => undefined)
       const waveCompletion = await fs
         .readFile(`${prefix}-wave-1-complete.json`, "utf8")
         .then(JSON.parse)
@@ -475,7 +540,8 @@ if (JSON.stringify(independentlyEligible) !== JSON.stringify(declaredEligible)) 
 }
 for (const attempt of catalog.attempts) {
   const expected = independentlyEligible.includes(String(attempt.run_id))
-  if (attempt.leaderboard_eligible !== expected) throw new Error(`Catalog final eligibility mismatch: ${attempt.run_id}`)
+  if (attempt.leaderboard_eligible !== expected)
+    throw new Error(`Catalog final eligibility mismatch: ${attempt.run_id}`)
 }
 const batchArtifactFiles = await walk(path.join(root, "batch-plans")).catch(() => [] as string[])
 const expectedPaperPaths = [
@@ -496,7 +562,14 @@ if (JSON.stringify(expectedPaperPaths) !== JSON.stringify(declaredPaperPaths)) {
 if (finalMode) {
   if (catalog.leaderboard.length !== 100) throw new Error("Final matrix requires exactly 100 eligible profile trials")
   for (const batchIndex of Array.from({ length: 10 }, (_, index) => index + 1)) {
-    if (!verifiedBatches.some((batch) => batch.audit.passed === true && batch.audit.status === "completed" && batch.receipt?.batch_index === batchIndex)) {
+    if (
+      !verifiedBatches.some(
+        (batch) =>
+          batch.audit.passed === true &&
+          batch.audit.status === "completed" &&
+          batch.receipt?.batch_index === batchIndex,
+      )
+    ) {
       throw new Error(`Final matrix requires a completed receipt for frozen batch ${batchIndex}`)
     }
   }
@@ -514,5 +587,11 @@ if (finalMode) {
   }
 }
 process.stdout.write(
-  JSON.stringify({ ok: true, mode: finalMode ? "final" : "development", attempts: catalog.attempts.length, eligible: declaredEligible.length, paper_files: paperManifest.files.length }) + "\n",
+  JSON.stringify({
+    ok: true,
+    mode: finalMode ? "final" : "development",
+    attempts: catalog.attempts.length,
+    eligible: declaredEligible.length,
+    paper_files: paperManifest.files.length,
+  }) + "\n",
 )

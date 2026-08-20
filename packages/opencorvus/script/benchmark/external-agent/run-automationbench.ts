@@ -16,13 +16,20 @@ import {
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   auditBenchmarkIsolation,
+  auditSkillProjection,
+  auditTaskOutcome,
+  auditTerminalQuiescence,
   normalizeTrajectory,
   renderTrajectorySVG,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
   summarizeTranscriptUsage,
   summarizeProviderUsageRows,
+  summarizeProviderUsageByAgent,
+  AUTOMATIONBENCH_SKILL_NAME,
+  AUTOMATIONBENCH_SKILL_REF,
   type ProviderUsageRow,
+  type SkillMountMatrix,
 } from "./contract"
 
 const SCRIPT_DIRECTORY = import.meta.dir
@@ -89,19 +96,23 @@ function parseArguments(argv: string[]): Arguments {
   for (let index = 0; index < argv.length; index += 2) {
     const key = argv[index]
     const value = argv[index + 1]
-    if (!key?.startsWith("--") || value === undefined) throw new Error(`Expected --name value arguments, got ${argv.join(" ")}`)
+    if (!key?.startsWith("--") || value === undefined)
+      throw new Error(`Expected --name value arguments, got ${argv.join(" ")}`)
     values.set(key.slice(2), value)
   }
   const profile = values.get("profile")
   if (profile !== "base" && profile !== "advanced") throw new Error("--profile must be base or advanced")
   const python = values.get("python") ?? process.env.AUTOMATION_BENCH_PYTHON
-  if (!python) throw new Error("--python or AUTOMATION_BENCH_PYTHON must name a Python 3.13 AutomationBench environment")
+  if (!python)
+    throw new Error("--python or AUTOMATION_BENCH_PYTHON must name a Python 3.13 AutomationBench environment")
   const sourceData = values.get("source-data") ?? process.env.OPENCORVUS_BENCH_SOURCE_DATA
-  if (!sourceData) throw new Error("--source-data or OPENCORVUS_BENCH_SOURCE_DATA must name the existing OpenCorvus data directory")
+  if (!sourceData)
+    throw new Error("--source-data or OPENCORVUS_BENCH_SOURCE_DATA must name the existing OpenCorvus data directory")
   const output = values.get("output")
   if (!output) throw new Error("--output is required")
   const inactivityMs = Number(values.get("inactivity-ms") ?? DEFAULT_INACTIVITY_MS)
-  if (!Number.isFinite(inactivityMs) || inactivityMs <= 0) throw new Error("--inactivity-ms must be a positive finite number")
+  if (!Number.isFinite(inactivityMs) || inactivityMs <= 0)
+    throw new Error("--inactivity-ms must be a positive finite number")
   const repetition = Number(values.get("repetition") ?? 1)
   if (!Number.isInteger(repetition) || repetition < 1) throw new Error("--repetition must be a positive integer")
   const batchPlan = values.get("batch-plan")
@@ -168,7 +179,8 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     waves: Array<Array<{ case_index: number; profile: Profile }>>
   }
   const authorizedCase = plan.cases?.some(
-    (item) => item.case_index === frozenCase.case_index && item.domain === frozenCase.domain && item.task === frozenCase.task,
+    (item) =>
+      item.case_index === frozenCase.case_index && item.domain === frozenCase.domain && item.task === frozenCase.task,
   )
   const authorizedWave = plan.waves?.[input.waveIndex - 1]
   const authorizedSlot = authorizedWave?.some(
@@ -196,16 +208,15 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     throw new Error("Trial is not authorized by the exact frozen batch plan")
   }
   if (input.waveIndex === 2) {
-    if (!input.priorWaveCompletion) throw new Error("Second-wave trial requires the sealed first-wave completion receipt")
+    if (!input.priorWaveCompletion)
+      throw new Error("Second-wave trial requires the sealed first-wave completion receipt")
     const completion = JSON.parse(await fs.readFile(input.priorWaveCompletion, "utf8")) as {
       batch_run_id: string
       batch_index: number
       status: string
       eligible_slots: Array<{ case_index: number; profile: Profile }>
     }
-    const expected = JSON.stringify(
-      plan.waves[0]!.map((item) => `${item.case_index}:${item.profile}`).sort(),
-    )
+    const expected = JSON.stringify(plan.waves[0]!.map((item) => `${item.case_index}:${item.profile}`).sort())
     if (
       completion.batch_run_id !== input.batchRunID ||
       completion.batch_index !== input.batchIndex ||
@@ -237,7 +248,8 @@ async function loadFrozenCase(input: Arguments) {
     throw new Error("Frozen AutomationBench case-set identity does not match the round-one contract")
   }
   const matches = manifest.cases.filter((item) => item.domain === input.domain && item.task === input.task)
-  if (matches.length !== 1) throw new Error(`Case ${input.domain}:${input.task} is not uniquely frozen in the round-one set`)
+  if (matches.length !== 1)
+    throw new Error(`Case ${input.domain}:${input.task} is not uniquely frozen in the round-one set`)
   return {
     case: matches[0]!,
     manifest_sha256: crypto.createHash("sha256").update(raw).digest("hex"),
@@ -257,9 +269,11 @@ async function verifySourceProjection(input: Arguments) {
   const providerID = input.model.slice(0, slash)
   const modelID = input.model.slice(slash + 1)
   if (!(providerID in auth)) throw new Error(`Source auth.json does not configure provider ${providerID}`)
-  if (!models[providerID]?.models?.[modelID]) throw new Error(`Source models.json does not project exact model ${input.model}`)
+  if (!models[providerID]?.models?.[modelID])
+    throw new Error(`Source models.json does not project exact model ${input.model}`)
   const protectedSecrets = sourceAuthSecretLeaves(auth)
-  if (protectedSecrets.length === 0) throw new Error("Source auth.json did not contain a recognized non-empty credential leaf")
+  if (protectedSecrets.length === 0)
+    throw new Error("Source auth.json did not contain a recognized non-empty credential leaf")
   return { authPath, modelsPath, providerID, modelID, protectedSecrets }
 }
 
@@ -401,7 +415,8 @@ async function startAutomationBenchBridge(
       if (newline < 0) continue
       ready = JSON.parse(pending.slice(0, newline))
     }
-    if (ready.event !== "ready" || typeof ready.port !== "number") throw new Error("AutomationBench bridge returned an invalid ready event")
+    if (ready.event !== "ready" || typeof ready.port !== "number")
+      throw new Error("AutomationBench bridge returned an invalid ready event")
     if (
       ready.distribution_version !== AUTOMATIONBENCH_VERSION ||
       ready.package_tree_sha256 !== AUTOMATIONBENCH_PACKAGE_TREE_SHA256 ||
@@ -422,7 +437,10 @@ async function startAutomationBenchBridge(
     const request = async <T>(route: string, token?: string, body?: unknown): Promise<T> => {
       const response = await fetch(adminBaseURL + route, {
         method: body === undefined ? "GET" : "POST",
-        headers: { ...(token ? { authorization: `Bearer ${token}` } : {}), ...(body === undefined ? {} : { "content-type": "application/json" }) },
+        headers: {
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
+          ...(body === undefined ? {} : { "content-type": "application/json" }),
+        },
         body: body === undefined ? undefined : JSON.stringify(body),
         signal: AbortSignal.any([signal, AbortSignal.timeout(input.inactivityMs)]),
       })
@@ -503,7 +521,9 @@ async function verifyAgentShellIsolation(input: {
   controlRoot: string
 }) {
   if (process.platform !== "linux" || process.getuid?.() !== 0) {
-    throw new Error("Formal AutomationBench runs require the Linux root-owned evaluator harness with a demoted Agent shell")
+    throw new Error(
+      "Formal AutomationBench runs require the Linux root-owned evaluator harness with a demoted Agent shell",
+    )
   }
   const shell = input.restrictedShell
   const [wrapperBytes, expectedWrapperBytes, wrapperStat] = await Promise.all([
@@ -599,11 +619,16 @@ async function chownAgentTree(target: string, uid: number) {
 }
 
 async function seedProject(input: { projectDirectory: string; socketPath: string }) {
-  const skillDirectory = path.join(input.projectDirectory, ".opencorvus", "skill", "automationbench-api")
+  const skillDirectory = path.join(input.projectDirectory, ".opencorvus", "skill", AUTOMATIONBENCH_SKILL_NAME)
+  const skillPath = path.join(skillDirectory, "SKILL.md")
   await fs.mkdir(skillDirectory, { recursive: true })
+  const skillBytes = await fs.readFile(path.join(SCRIPT_DIRECTORY, "automationbench-api.SKILL.md"))
   await Promise.all([
-    fs.copyFile(path.join(SCRIPT_DIRECTORY, "automationbench_tool.py"), path.join(input.projectDirectory, "automationbench_tool.py")),
-    fs.copyFile(path.join(SCRIPT_DIRECTORY, "automationbench-api.SKILL.md"), path.join(skillDirectory, "SKILL.md")),
+    fs.copyFile(
+      path.join(SCRIPT_DIRECTORY, "automationbench_tool.py"),
+      path.join(input.projectDirectory, "automationbench_tool.py"),
+    ),
+    fs.writeFile(skillPath, skillBytes),
     fs.writeFile(
       path.join(input.projectDirectory, ".automationbench-tool.json"),
       JSON.stringify(automationBenchToolConfig(input.socketPath)) + "\n",
@@ -615,6 +640,71 @@ async function seedProject(input: { projectDirectory: string; socketPath: string
       "utf8",
     ),
   ])
+  return {
+    location: skillPath,
+    sha256: crypto.createHash("sha256").update(skillBytes).digest("hex"),
+    bytes: skillBytes.byteLength,
+  }
+}
+
+/**
+ * The isolated runtime — database included — is removed at the end of every trial, so the sealed
+ * evidence directory is the only place a later analysis can look. `result.json`, the transcript,
+ * and the board answer per-message questions but cannot be joined: reconstructing "which Agent
+ * occurrence produced this Artifact, and what did that occurrence cost" needs the relational rows.
+ * This exports exactly the identity/relationship tables for that join, and never message or part
+ * payloads, which already exist as transcript evidence and would re-import Provider text.
+ */
+const SNAPSHOT_TABLES = [
+  "engine_task",
+  "engine_workflow_node_occurrence",
+  "engine_artifact",
+  "engine_artifact_catalog_revision",
+  "session",
+  "provider_usage_event",
+] as const
+
+function databaseSnapshot(databasePath: string) {
+  const db = new SQLite(databasePath, { readonly: true })
+  try {
+    const present = new Set(
+      db
+        .query<{ name: string }, []>(`SELECT name FROM sqlite_master WHERE type = 'table'`)
+        .all()
+        .map((row) => row.name),
+    )
+    const tables: Record<string, unknown[]> = {}
+    const missing: string[] = []
+    for (const table of SNAPSHOT_TABLES) {
+      if (!present.has(table)) {
+        missing.push(table)
+        continue
+      }
+      tables[table] = db.query<Record<string, unknown>, []>(`SELECT * FROM "${table}"`).all()
+    }
+    return { tables, missing }
+  } finally {
+    db.close()
+  }
+}
+
+/** Redaction is defence in depth: these tables carry identities and counters rather than Provider
+ *  credentials, but the same secret leaves the transcript audit uses are stripped before sealing. */
+function redactSnapshot(value: unknown, secrets: Array<{ label: string; value: string }>): unknown {
+  if (typeof value === "string") {
+    let result = value
+    for (const secret of secrets) {
+      if (secret.value) result = result.replaceAll(secret.value, `[REDACTED:${secret.label}]`)
+    }
+    return result
+  }
+  if (Array.isArray(value)) return value.map((item) => redactSnapshot(item, secrets))
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, item]) => [key, redactSnapshot(item, secrets)]),
+    )
+  }
+  return value
 }
 
 function ledgerRows(databasePath: string): ProviderUsageRow[] {
@@ -625,7 +715,7 @@ function ledgerRows(databasePath: string): ProviderUsageRow[] {
         `SELECT id, occurred_at, provider_id, model_id, purpose,
                 input_tokens, output_tokens, reasoning_tokens,
                 cache_read_tokens, cache_write_tokens, total_tokens,
-                cost_usd, billing_status
+                cost_usd, billing_status, session_id, agent_id
          FROM provider_usage_event
          WHERE purpose <> 'provider-connectivity'
          ORDER BY occurred_at ASC, id ASC`,
@@ -737,6 +827,72 @@ async function requestJSON<T>(route: string, init: RequestInit = {}, projectScop
   return body ? (JSON.parse(body) as T) : (undefined as T)
 }
 
+/**
+ * A projected Expert Squad agent sees only the Skills its package manifest grants plus explicit
+ * operator mounts, so seeding `.opencorvus/skill/` alone leaves every worker's `skill` call with
+ * zero matches. Mount the experimental Skill on every agent the Host reports as mountable through
+ * the same public operator route a user would use, then re-read the Host's own matrix and refuse to
+ * create the Task unless the projection actually carries it.
+ */
+async function projectBenchmarkSkill(input: {
+  profile: Profile
+  skill: { location: string; sha256: string; bytes: number }
+}) {
+  const matrixRoute = `/skill/mounts?expertSquadID=${encodeURIComponent(input.profile)}&refresh=true`
+  const discovered = await requestJSON<SkillMountMatrix>(matrixRoute)
+  const mountable = (discovered.agents ?? []).filter(
+    (agent) => agent.skill_mountable === true && agent.skill_tool_available === true,
+  )
+  for (const agent of mountable) {
+    await requestJSON<SkillMountMatrix>("/skill/mount", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        scope: "project",
+        expertSquadID: input.profile,
+        agentID: String(agent.agent_id ?? ""),
+        defaultSkillRef: AUTOMATIONBENCH_SKILL_REF,
+        override: true,
+      }),
+    })
+  }
+  const projected = await requestJSON<SkillMountMatrix>(
+    `/skill/mounts?expertSquadID=${encodeURIComponent(input.profile)}`,
+  )
+  const poolLocation = (projected.skills ?? []).find((skill) => skill.ref === AUTOMATIONBENCH_SKILL_REF)?.location
+  const poolSHA256 =
+    typeof poolLocation === "string"
+      ? crypto
+          .createHash("sha256")
+          .update(await fs.readFile(poolLocation))
+          .digest("hex")
+      : undefined
+  const audit = auditSkillProjection({
+    profile: input.profile,
+    matrix: projected,
+    expectedLocation: input.skill.location,
+    expectedSHA256: input.skill.sha256,
+    poolSHA256,
+  })
+  if (!audit.passed) {
+    throw new Error(`Experimental Skill projection failed fail-closed verification: ${JSON.stringify(audit)}`)
+  }
+  return {
+    summary: {
+      name: AUTOMATIONBENCH_SKILL_NAME,
+      ref: AUTOMATIONBENCH_SKILL_REF,
+      revision: 1,
+      source: {
+        location: `.opencorvus/skill/${AUTOMATIONBENCH_SKILL_NAME}/SKILL.md`,
+        sha256: input.skill.sha256,
+        bytes: input.skill.bytes,
+      },
+      projection: audit,
+    },
+    matrix: projected,
+  }
+}
+
 async function discoverTaskID(input: {
   title: string
   creation: Promise<{ ok: true; value: { task_id: string } } | { ok: false; error: unknown }>
@@ -759,7 +915,9 @@ async function observations() {
   const [board, transcript, traceProjection, interactions, benchmarkEvents] = await Promise.all([
     requestJSON<Record<string, any>>(`/task/${taskID}/board?sync=0`),
     requestJSON<Array<{ info: Record<string, any>; parts: Array<Record<string, any>> }>>(`/task/${taskID}/transcript`),
-    requestJSON<{ ok: true; enabled: boolean; traceDir: string; events: Array<Record<string, any>> }>(`/task/${taskID}/trace`),
+    requestJSON<{ ok: true; enabled: boolean; traceDir: string; events: Array<Record<string, any>> }>(
+      `/task/${taskID}/trace`,
+    ),
     requestJSON<Array<Record<string, any>>>(`/task/${taskID}/interactions`),
     readJSONLines(bridgeEventsPath),
   ])
@@ -803,6 +961,55 @@ async function waitForTerminal() {
   throw new Error(
     `AutomationBench ${arguments_.profile} Task had no observable activity for ${arguments_.inactivityMs}ms; ` +
       `pending interactions=${current.interactions.filter((item) => item.status === "pending").length}`,
+  )
+}
+
+async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof observations>>) {
+  let current = initial
+  let signature = benchmarkActivitySignature({
+    board: current.board,
+    transcript: current.transcript,
+    trace: current.trace,
+    benchmarkEventCount: current.benchmarkEvents.length,
+  })
+  let inactivityDeadline = Date.now() + arguments_.inactivityMs
+  while (Date.now() < inactivityDeadline) {
+    throwIfTerminationRequested()
+    const audit = auditTerminalQuiescence(current.board)
+    if (audit.passed) {
+      await within(waitForIngressDeliveryHooks?.() ?? Promise.resolve(), CLEANUP_TIMEOUT_MS, "Terminal ingress settlement")
+      const confirmed = await observations()
+      const confirmedSignature = benchmarkActivitySignature({
+        board: confirmed.board,
+        transcript: confirmed.transcript,
+        trace: confirmed.trace,
+        benchmarkEventCount: confirmed.benchmarkEvents.length,
+      })
+      const confirmedAudit = auditTerminalQuiescence(confirmed.board)
+      if (confirmedAudit.passed && confirmedSignature === signature) {
+        return { terminal: confirmed, audit: confirmedAudit }
+      }
+      current = confirmed
+      signature = confirmedSignature
+      inactivityDeadline = Date.now() + arguments_.inactivityMs
+      continue
+    }
+    await Bun.sleep(1000)
+    const next = await observations()
+    const nextSignature = benchmarkActivitySignature({
+      board: next.board,
+      transcript: next.transcript,
+      trace: next.trace,
+      benchmarkEventCount: next.benchmarkEvents.length,
+    })
+    if (nextSignature !== signature) {
+      signature = nextSignature
+      inactivityDeadline = Date.now() + arguments_.inactivityMs
+    }
+    current = next
+  }
+  throw new Error(
+    `AutomationBench ${arguments_.profile} Task did not reach terminal execution quiescence; ${JSON.stringify(auditTerminalQuiescence(current.board))}`,
   )
 }
 
@@ -893,7 +1100,9 @@ try {
     }
   })
   if (!lease.acquired) {
-    throw new Error("AutomationBench trial lease rejected: at most five distinct cases may run and paired profiles may not overlap")
+    throw new Error(
+      "AutomationBench trial lease rejected: at most five distinct cases may run and paired profiles may not overlap",
+    )
   }
   leaseAcquired = true
   throwIfTerminationRequested()
@@ -936,13 +1145,10 @@ try {
   ])
   projectDirectory = path.join(isolatedRuntime.processRoot, "project")
   await fs.mkdir(projectDirectory, { recursive: true })
-  await seedProject({ projectDirectory, socketPath: bridge.toolSocketPath })
+  const seededSkill = await seedProject({ projectDirectory, socketPath: bridge.toolSocketPath })
   const agentHome = `/tmp/opencorvus-benchmark-agent-${runID}`
   await fs.mkdir(agentHome, { mode: 0o700 })
-  await Promise.all([
-    fs.chmod(isolatedRuntime.ownerRoot, 0o711),
-    fs.chmod(isolatedRuntime.processRoot, 0o711),
-  ])
+  await Promise.all([fs.chmod(isolatedRuntime.ownerRoot, 0o711), fs.chmod(isolatedRuntime.processRoot, 0o711)])
   await chownAgentTree(projectDirectory, agentUID)
   process.env.GIT_CONFIG_COUNT = "1"
   process.env.GIT_CONFIG_KEY_0 = "safe.directory"
@@ -995,12 +1201,32 @@ try {
     message: string
   }>(
     `/global/providers/${encodeURIComponent(source.providerID)}/test`,
-    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ modelID: source.modelID }) },
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ modelID: source.modelID }),
+    },
     false,
   )
   if (!preflight.ok || preflight.status !== "connected" || preflight.modelID !== source.modelID) {
     throw new Error(`Exact Provider/model preflight failed: ${JSON.stringify(preflight)}`)
   }
+  stage = "skill_projection"
+  const skillProjection = await projectBenchmarkSkill({ profile: arguments_.profile, skill: seededSkill })
+  await fs.writeFile(
+    path.join(outputDirectory, "skill-projection.json"),
+    JSON.stringify(
+      {
+        schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+        profile: arguments_.profile,
+        skill: skillProjection.summary,
+        matrix: skillProjection.matrix,
+      },
+      null,
+      2,
+    ) + "\n",
+    "utf8",
+  )
   stage = "benchmark_task_load"
   const benchmarkTask = await bridge.request<{
     prompt: unknown
@@ -1043,7 +1269,9 @@ try {
   )
   taskID = await discoverTaskID({ title: taskTitle, creation })
   stage = "task_execution"
-  const terminal = await waitForTerminal()
+  const observedTerminal = await waitForTerminal()
+  const quiescence = await waitForTerminalQuiescence(observedTerminal)
+  const terminal = quiescence.terminal
   const created = await creation
   if (!created.ok) throw created.error
   if (created.value.task_id !== taskID) {
@@ -1123,10 +1351,16 @@ try {
     ],
     protectedSecrets: source.protectedSecrets,
   })
-  const valid = lifecycleStatus === "completed" && profileAudit.passed && isolationAudit.passed
-  const invalidReason =
-    lifecycleStatus !== "completed"
-      ? `OpenCorvus Task lifecycle settled ${lifecycleStatus}`
+  const taskOutcomeAudit = auditTaskOutcome(lifecycleStatus, terminal.transcript)
+  const valid =
+    taskOutcomeAudit.scored_terminal &&
+    profileAudit.passed &&
+    isolationAudit.passed &&
+    skillProjection.summary.projection.passed
+  const invalidReason = !taskOutcomeAudit.scored_terminal
+    ? `OpenCorvus Task terminal outcome was invalid (${taskOutcomeAudit.outcome})`
+    : !skillProjection.summary.projection.passed
+      ? "The experimental Skill was not projected onto the Expert Squad's agents"
       : !profileAudit.passed
         ? "OpenCorvus Task bound a different Expert Squad profile"
         : !isolationAudit.passed
@@ -1194,9 +1428,11 @@ try {
       source: runSource,
       task_id: taskID,
       lifecycle_status: lifecycleStatus,
+      task_outcome_audit: taskOutcomeAudit,
+      terminal_quiescence_audit: quiescence.audit,
       profile: arguments_.profile,
       model: arguments_.model,
-      skill: { name: "automationbench-api", enabled: true, revision: 1 },
+      skill: skillProjection.summary,
       selected_workflow_id: selectedWorkflowID,
       workflow_binding: workflowBinding,
       profile_audit: profileAudit,
@@ -1211,6 +1447,7 @@ try {
         model_id: preflight.modelID,
       },
       tokens,
+      tokens_by_agent: summarizeProviderUsageByAgent(providerUsageLedger),
       transcript_token_reconciliation: transcriptTokens,
       sessions: new Set(terminal.transcript.map((message) => message.info?.sessionID).filter(Boolean)).size,
       agents: [...new Set(terminal.transcript.map((message) => message.info?.agent).filter(Boolean))],
@@ -1292,7 +1529,10 @@ try {
         "$1[REDACTED]",
       )
     await fs
-      .writeFile(path.join(outputDirectory, "opencorvus-runtime.log"), redactedRuntimeLog, { encoding: "utf8", flag: "wx" })
+      .writeFile(path.join(outputDirectory, "opencorvus-runtime.log"), redactedRuntimeLog, {
+        encoding: "utf8",
+        flag: "wx",
+      })
       .catch(() => undefined)
   }
   const failure = {
@@ -1332,7 +1572,10 @@ try {
       task_id: taskID ?? null,
       source: runSource ?? null,
     },
-    error: error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError", message: String(error) },
+    error:
+      error instanceof Error
+        ? { name: error.name, message: error.message }
+        : { name: "UnknownError", message: String(error) },
   }
   await fs.writeFile(path.join(outputDirectory, "failure.json"), JSON.stringify(failure, null, 2) + "\n", "utf8")
   process.stdout.write(JSON.stringify({ event: "failure", failure }) + "\n")
@@ -1382,6 +1625,39 @@ try {
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") failures.push(error)
     }
   }
+  // A run that failed before the runtime opened its database has nothing to snapshot. Treating that
+  // as a cleanup failure would permanently invalidate an attempt whose real stage is `blocked_preflight`.
+  const isolatedDatabasePath = isolatedData ? path.join(isolatedData, "opencorvus.db") : ""
+  if (
+    isolatedDatabasePath &&
+    (await fs.stat(isolatedDatabasePath).then(
+      () => true,
+      () => false,
+    ))
+  ) {
+    try {
+      const snapshot = databaseSnapshot(isolatedDatabasePath)
+      await fs.writeFile(
+        path.join(outputDirectory, "runtime-database-snapshot.json"),
+        JSON.stringify(
+          {
+            schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+            run_id: runID,
+            run_key: runKey,
+            task_id: taskID ?? null,
+            tables: SNAPSHOT_TABLES,
+            missing_tables: snapshot.missing,
+            rows: redactSnapshot(snapshot.tables, source?.protectedSecrets ?? []),
+          },
+          null,
+          2,
+        ) + "\n",
+        { encoding: "utf8", flag: "wx" },
+      )
+    } catch (error) {
+      failures.push(error)
+    }
+  }
   if (isolatedRuntime) {
     try {
       await removeIsolatedTestRuntime(isolatedRuntime)
@@ -1419,7 +1695,9 @@ try {
           run_id: runID,
           run_key: runKey,
           failures: failures.map((error) =>
-            error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError", message: String(error) },
+            error instanceof Error
+              ? { name: error.name, message: error.message }
+              : { name: "UnknownError", message: String(error) },
           ),
         },
         null,
@@ -1432,20 +1710,25 @@ try {
     await writeEvidenceManifest()
   } catch (error) {
     failures.push(error)
-    await fs.writeFile(
-      path.join(outputDirectory, "evidence-seal-failure.json"),
-      JSON.stringify(
-        {
-          schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
-          run_id: runID,
-          run_key: runKey,
-          error: error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError", message: String(error) },
-        },
-        null,
-        2,
-      ) + "\n",
-      "utf8",
-    ).catch(() => undefined)
+    await fs
+      .writeFile(
+        path.join(outputDirectory, "evidence-seal-failure.json"),
+        JSON.stringify(
+          {
+            schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+            run_id: runID,
+            run_key: runKey,
+            error:
+              error instanceof Error
+                ? { name: error.name, message: error.message }
+                : { name: "UnknownError", message: String(error) },
+          },
+          null,
+          2,
+        ) + "\n",
+        "utf8",
+      )
+      .catch(() => undefined)
   }
   if (failures.length === 1) throw failures[0]
   if (failures.length > 1) throw new AggregateError(failures, "AutomationBench pilot cleanup failed")

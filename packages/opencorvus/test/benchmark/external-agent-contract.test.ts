@@ -10,6 +10,9 @@ import {
   evidenceFileSetMatches,
   permanentRunInvalidation,
   auditRunBinding,
+  auditSkillProjection,
+  auditTaskOutcome,
+  auditTerminalQuiescence,
   auditBatchEvidence,
   paperEvidenceChecks,
   normalizeTrajectory,
@@ -102,9 +105,7 @@ describe("external agent benchmark contract", () => {
 
   test("changes the activity signature when benchmark world activity advances", () => {
     const base = { board: { task: { status: "active" }, artifacts: [] }, transcript, trace: [], benchmarkEventCount: 1 }
-    expect(benchmarkActivitySignature({ ...base, benchmarkEventCount: 2 })).not.toBe(
-      benchmarkActivitySignature(base),
-    )
+    expect(benchmarkActivitySignature({ ...base, benchmarkEventCount: 2 })).not.toBe(benchmarkActivitySignature(base))
   })
 
   test("assigns every run an immutable timestamp and run identity key", () => {
@@ -136,10 +137,10 @@ describe("external agent benchmark contract", () => {
 
   test("accepts a trajectory whose tools stay inside the projected benchmark capability", () => {
     expect(
-      auditBenchmarkIsolation(
-        [{ parts: [{ type: "tool", output: "Used http://127.0.0.1:43123/v1/search" }] }],
-        { protectedPaths: ["C:/protected/automationbench"], forbiddenMarkers: ["/admin/score"] },
-      ),
+      auditBenchmarkIsolation([{ parts: [{ type: "tool", output: "Used http://127.0.0.1:43123/v1/search" }] }], {
+        protectedPaths: ["C:/protected/automationbench"],
+        forbiddenMarkers: ["/admin/score"],
+      }),
     ).toEqual({ passed: true, violations: [] })
   })
 
@@ -202,10 +203,170 @@ describe("external agent benchmark contract", () => {
     ).toEqual({ passed: true, selectedWorkflowID: "planned-delivery" })
   })
 
+  test("passes the experimental Skill projection only when every skill-capable agent mounts it", () => {
+    const matrix = (grants: Record<string, { effective: boolean; enabled: boolean | null; reason?: string }>) => ({
+      active_profile: "base",
+      projection_hash: "hash",
+      skills: [
+        {
+          ref: "default/skill/automationbench-api",
+          name: "automationbench-api",
+          location: "/project/.opencorvus/skill/automationbench-api/SKILL.md",
+          projection_source: "default",
+        },
+      ],
+      agents: [
+        { agent_id: "base-planner", base_role: "delegated-worker", skill_mountable: true, skill_tool_available: true },
+        { agent_id: "base-developer", base_role: "build", skill_mountable: true, skill_tool_available: true },
+        { agent_id: "base-tester", base_role: "delegated-worker", skill_mountable: true, skill_tool_available: true },
+        { agent_id: "base-researcher", base_role: "explore", skill_mountable: false, skill_tool_available: false },
+      ],
+      matrix: Object.entries(grants).map(([agent_id, grant]) => ({
+        agent_id,
+        grants: [{ ref: "default/skill/automationbench-api", ...grant }],
+      })),
+    })
+    const mounted = {
+      "base-planner": { effective: true, enabled: true },
+      "base-developer": { effective: true, enabled: true },
+      "base-tester": { effective: true, enabled: true },
+    }
+    expect(
+      auditSkillProjection({
+        profile: "base",
+        matrix: matrix(mounted),
+        expectedLocation: "/project/.opencorvus/skill/automationbench-api/SKILL.md",
+      }),
+    ).toMatchObject({
+      passed: true,
+      mounted_agents: ["base-developer", "base-planner", "base-tester"],
+      unmountable_agents: [
+        { agent_id: "base-researcher", base_role: "explore", reason: "base_role_not_skill_mountable" },
+      ],
+      violations: [],
+    })
+
+    // The first five-case wave seeded `.opencorvus/skill/` and declared `skill.enabled` without
+    // mounting anything, so every projected worker searched an empty Skill surface.
+    expect(
+      auditSkillProjection({
+        profile: "base",
+        matrix: matrix({
+          "base-planner": { effective: false, enabled: null },
+          "base-developer": { effective: false, enabled: null },
+          "base-tester": { effective: false, enabled: null },
+        }),
+      }),
+    ).toMatchObject({
+      passed: false,
+      mounted_agents: [],
+      violations: [
+        "not_effective:base-planner",
+        "not_effective:base-developer",
+        "not_effective:base-tester",
+        "no_agent_mounted",
+      ],
+    })
+
+    expect(
+      auditSkillProjection({
+        profile: "base",
+        matrix: matrix({ ...mounted, "base-tester": { effective: true, enabled: false, reason: "permission_denied" } }),
+      }).violations,
+    ).toEqual(["not_enabled:base-tester:permission_denied"])
+  })
+
+  test("scores an explicit natural Task failure but rejects an infrastructure-affected failure", () => {
+    const natural = auditTaskOutcome("failed", [
+      {
+        parts: [
+          {
+            type: "tool",
+            tool: "manage_task",
+            state: { status: "completed", input: { action: "fail_task" }, output: "Task stopped" },
+          },
+        ],
+      },
+    ])
+    expect(natural).toMatchObject({ passed: true, scored_terminal: true, outcome: "natural_failed" })
+
+    const infrastructure = auditTaskOutcome("failed", [
+      {
+        parts: [
+          {
+            type: "tool",
+            tool: "dispatch_agent",
+            state: {
+              output: JSON.stringify({
+                kind: "infrastructure_failure",
+                operation: "build_adapter",
+                message: "MCP failed",
+              }),
+            },
+          },
+          {
+            type: "tool",
+            tool: "manage_task",
+            state: { status: "completed", input: { action: "fail_task" }, output: "Task stopped" },
+          },
+        ],
+      },
+    ])
+    expect(infrastructure).toMatchObject({ passed: false, scored_terminal: false, outcome: "invalid_terminal" })
+
+    expect(
+      auditTaskOutcome("failed", [
+        {
+          parts: [
+            {
+              type: "tool",
+              tool: "manage_task",
+              state: { status: "error", input: { action: "fail_task" }, output: "Rejected" },
+            },
+          ],
+        },
+      ]),
+    ).toMatchObject({ passed: false, scored_terminal: false, explicit_fail_task: false })
+  })
+
+  test("accepts terminal evidence only after every execution occurrence settles", () => {
+    const terminal = (type: string) => ({ events: [{ status: { type } }] })
+    expect(
+      auditTerminalQuiescence({
+        task: { status: "failed" },
+        executionProjection: {
+          occurrences: [
+            terminal("terminal"),
+            { agent: "orchestrator", events: [{ status: { type: "idle" } }] },
+          ],
+        },
+      }),
+    ).toMatchObject({ passed: true, occurrence_count: 2, unsettled_occurrences: [] })
+    expect(
+      auditTerminalQuiescence({
+        task: { status: "failed" },
+        executionProjection: {
+          occurrences: [
+            terminal("terminal"),
+            { agent: "base-developer", sessionID: "session-late", events: [{ status: { type: "streaming" } }] },
+          ],
+        },
+      }),
+    ).toMatchObject({
+      passed: false,
+      unsettled_occurrences: [
+        { agent: "base-developer", session_id: "session-late", last_status: "streaming" },
+      ],
+    })
+  })
+
   test("accepts a sealed five-case batch with paired crossover waves", () => {
     const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
     const wave1 = cases.map((item) => ({ ...item, profile: item.case_index % 2 ? "base" : "advanced" }))
-    const wave2 = wave1.map((item) => ({ case_index: item.case_index, profile: item.profile === "base" ? "advanced" : "base" }))
+    const wave2 = wave1.map((item) => ({
+      case_index: item.case_index,
+      profile: item.profile === "base" ? "advanced" : "base",
+    }))
     const launched = [wave1, wave2].map((wave, waveOffset) =>
       wave.map((item, index) => ({
         ...item,
@@ -263,8 +424,14 @@ describe("external agent benchmark contract", () => {
       passed: true,
       status: "completed",
       reasons: [],
-      eligible_run_ids: launched.flat().map((item) => item.run_id).sort(),
-      sealing_run_ids: launched.flat().map((item) => item.run_id).sort(),
+      eligible_run_ids: launched
+        .flat()
+        .map((item) => item.run_id)
+        .sort(),
+      sealing_run_ids: launched
+        .flat()
+        .map((item) => item.run_id)
+        .sort(),
       adopted_run_ids: [],
     })
   })
@@ -283,8 +450,8 @@ describe("external agent benchmark contract", () => {
       ["base-developer", "skill", "skill"],
       ["automationbench", "benchmark", "api_fetch"],
     ])
-    expect(renderTrajectorySVG({ title: "Base trial", events, tokens: summarizeTranscriptUsage(transcript) })).toContain(
-      "Aligned OpenCorvus agent and AutomationBench tool trajectory.",
-    )
+    expect(
+      renderTrajectorySVG({ title: "Base trial", events, tokens: summarizeTranscriptUsage(transcript) }),
+    ).toContain("Aligned OpenCorvus agent and AutomationBench tool trajectory.")
   })
 })

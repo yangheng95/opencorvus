@@ -29,6 +29,8 @@ export type ProviderUsageRow = {
   total_tokens: number
   cost_usd: number
   billing_status: string
+  session_id: string | null
+  agent_id: string | null
 }
 
 export function summarizeProviderUsageRows(rows: ProviderUsageRow[]): TokenBreakdown & { modelCalls: number } {
@@ -57,6 +59,31 @@ export function summarizeProviderUsageRows(rows: ProviderUsageRow[]): TokenBreak
     if (row.billing_status === "unpriced") result.unpricedCalls++
   }
   return result
+}
+
+export function summarizeProviderUsageByAgent(rows: ProviderUsageRow[]) {
+  const byAgent = new Map<string, ProviderUsageRow[]>()
+  for (const row of rows) {
+    const key = `${row.session_id ?? "unattributed"}\u0000${row.agent_id ?? "unattributed"}`
+    const bucket = byAgent.get(key)
+    if (bucket) bucket.push(row)
+    else byAgent.set(key, [row])
+  }
+  return [...byAgent.entries()]
+    .map(([key, bucket]) => {
+      const [sessionID, agentID] = key.split("\u0000")
+      return {
+        session_id: sessionID === "unattributed" ? null : sessionID!,
+        agent_id: agentID === "unattributed" ? null : agentID!,
+        ...summarizeProviderUsageRows(bucket),
+      }
+    })
+    .sort(
+      (left, right) =>
+        right.total - left.total ||
+        String(left.agent_id).localeCompare(String(right.agent_id)) ||
+        String(left.session_id).localeCompare(String(right.session_id)),
+    )
 }
 
 export type TrajectoryEvent = {
@@ -103,7 +130,9 @@ export function automationBenchHarnessRequest(prompt: unknown): string {
     return `${role.toUpperCase()}:\n${content}`
   })
   if (budgetOccurrences !== 1) {
-    throw new Error(`AutomationBench stock single-model budget sentence must occur exactly once, observed ${budgetOccurrences}`)
+    throw new Error(
+      `AutomationBench stock single-model budget sentence must occur exactly once, observed ${budgetOccurrences}`,
+    )
   }
   return [
     "This is an AutomationBench API-mode evaluation. The simulated business end state is the only scored deliverable.",
@@ -152,7 +181,8 @@ export function auditBenchmarkIsolation(
     }
   })
   for (const secret of input.protectedSecrets ?? []) {
-    if (secret.value && strings.some((text) => text.includes(secret.value))) violations.add(`protected_secret:${secret.label}`)
+    if (secret.value && strings.some((text) => text.includes(secret.value)))
+      violations.add(`protected_secret:${secret.label}`)
   }
   return { passed: violations.size === 0, violations: [...violations] }
 }
@@ -179,7 +209,8 @@ export function sourceAuthSecretLeaves(value: unknown) {
   const secrets: Array<{ label: string; value: string }> = []
   const visit = (item: unknown, sensitive: boolean) => {
     if (typeof item === "string") {
-      if (sensitive && item.length >= 8) secrets.push({ label: `source_auth_secret_${secrets.length + 1}`, value: item })
+      if (sensitive && item.length >= 8)
+        secrets.push({ label: `source_auth_secret_${secrets.length + 1}`, value: item })
       return
     }
     if (Array.isArray(item)) {
@@ -198,7 +229,9 @@ export function sourceAuthSecretLeaves(value: unknown) {
 export function summarizeBenchmarkToolEvents(events: Array<Record<string, any>>) {
   const scoreIndex = events.findIndex((event) => event.kind === "score")
   const terminalIndex = scoreIndex < 0 ? events.length : scoreIndex
-  const accepted = events.slice(0, terminalIndex).filter((event) => event.kind === "tool" || event.kind === "tool_error")
+  const accepted = events
+    .slice(0, terminalIndex)
+    .filter((event) => event.kind === "tool" || event.kind === "tool_error")
   const succeeded = accepted.filter((event) => event.kind === "tool").length
   const failed = accepted.filter((event) => event.kind === "tool_error").length
   const sequenceValid = events.every((event, index) => event.sequence === index + 1)
@@ -237,8 +270,7 @@ export function auditRunBinding(input: {
   responseTaskID: unknown
   boardWorkflow: any
 }) {
-  const selectedWorkflowID =
-    input.boardWorkflow?.kind === "virtual_workflow" ? input.boardWorkflow.workflow_id : null
+  const selectedWorkflowID = input.boardWorkflow?.kind === "virtual_workflow" ? input.boardWorkflow.workflow_id : null
   return {
     passed:
       input.requestedProfile === input.resultProfile &&
@@ -248,6 +280,76 @@ export function auditRunBinding(input: {
       JSON.stringify(input.boardWorkflow ?? null) === JSON.stringify(input.resultWorkflow ?? null) &&
       selectedWorkflowID === (input.resultSelectedWorkflowID ?? null),
     selectedWorkflowID,
+  }
+}
+
+export function auditTaskOutcome(lifecycleStatus: unknown, transcript: TranscriptMessage[]) {
+  let explicitFailTask = false
+  const infrastructureFailures: Array<{ operation: string | null; message: string | null }> = []
+  for (const message of transcript) {
+    for (const part of message.parts ?? []) {
+      const state = part.state && typeof part.state === "object" ? part.state : undefined
+      if (
+        part.type === "tool" &&
+        part.tool === "manage_task" &&
+        state?.status === "completed" &&
+        state.input?.action === "fail_task"
+      ) {
+        explicitFailTask = true
+      }
+      const raw = state?.output
+      let output: any = raw
+      if (typeof raw === "string") {
+        try {
+          output = JSON.parse(raw)
+        } catch {}
+      }
+      if (output?.kind === "infrastructure_failure") {
+        infrastructureFailures.push({
+          operation: typeof output.operation === "string" ? output.operation : null,
+          message: typeof output.message === "string" ? output.message : null,
+        })
+      }
+    }
+  }
+  const naturalCompleted = lifecycleStatus === "completed"
+  const naturalFailed = lifecycleStatus === "failed" && explicitFailTask && infrastructureFailures.length === 0
+  return {
+    passed: naturalCompleted || naturalFailed,
+    scored_terminal: naturalCompleted || naturalFailed,
+    lifecycle_status: lifecycleStatus,
+    explicit_fail_task: explicitFailTask,
+    infrastructure_failures: infrastructureFailures,
+    outcome: naturalCompleted ? "completed" : naturalFailed ? "natural_failed" : "invalid_terminal",
+  }
+}
+
+export function auditTerminalQuiescence(board: any) {
+  const lifecycleStatus = String(board?.task?.status ?? "")
+  const terminal = ["completed", "failed", "cancelled"].includes(lifecycleStatus)
+  const occurrences = Array.isArray(board?.executionProjection?.occurrences)
+    ? board.executionProjection.occurrences
+    : []
+  const unsettled = occurrences.flatMap((occurrence: any, index: number) => {
+    const events = Array.isArray(occurrence?.events) ? occurrence.events : []
+    const last = events.at(-1)
+    const lastStatus = last?.status?.type
+    const agent = typeof occurrence?.agent === "string" ? occurrence.agent : null
+    if (lastStatus === "terminal" || (agent === "orchestrator" && lastStatus === "idle")) return []
+    return [
+      {
+        index,
+        agent,
+        session_id: typeof occurrence?.sessionID === "string" ? occurrence.sessionID : null,
+        last_status: typeof lastStatus === "string" ? lastStatus : null,
+      },
+    ]
+  })
+  return {
+    passed: terminal && unsettled.length === 0,
+    lifecycle_status: lifecycleStatus || null,
+    occurrence_count: occurrences.length,
+    unsettled_occurrences: unsettled,
   }
 }
 
@@ -269,23 +371,25 @@ export function auditBatchEvidence(input: {
     }
   }
   const reasons: string[] = []
-  if (!["completed", "failed"].includes(input.receipt.status) || input.receipt.batch_run_id !== input.plan.batch_run_id) {
+  if (
+    !["completed", "failed"].includes(input.receipt.status) ||
+    input.receipt.batch_run_id !== input.plan.batch_run_id
+  ) {
     reasons.push("batch_receipt_identity")
   }
-  const expectedCases = (input.plan.cases ?? []).map((item: any) => Number(item.case_index)).sort((a: number, b: number) => a - b)
-  if (
-    input.plan.trial_concurrency !== 5 ||
-    expectedCases.length !== 5 ||
-    new Set(expectedCases).size !== 5
-  ) {
+  const expectedCases = (input.plan.cases ?? [])
+    .map((item: any) => Number(item.case_index))
+    .sort((a: number, b: number) => a - b)
+  if (input.plan.trial_concurrency !== 5 || expectedCases.length !== 5 || new Set(expectedCases).size !== 5) {
     reasons.push("batch_plan_shape")
   }
   const expectedWave1 = (input.plan.waves?.[0] ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()
   const waveCompletionValid =
     input.waveCompletion?.status === "wave_1_complete" &&
     input.waveCompletion?.batch_run_id === input.plan.batch_run_id &&
-    JSON.stringify((input.waveCompletion?.eligible_slots ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()) ===
-      JSON.stringify(expectedWave1)
+    JSON.stringify(
+      (input.waveCompletion?.eligible_slots ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort(),
+    ) === JSON.stringify(expectedWave1)
   if ((input.receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
     reasons.push("wave_1_completion")
   }
@@ -401,7 +505,9 @@ export function auditBatchEvidence(input: {
       (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => `${item.case_index}:${item.profile}`),
     )
     .sort()
-  const expectedPairedSlots = expectedCases.flatMap((caseIndex) => [`${caseIndex}:base`, `${caseIndex}:advanced`]).sort()
+  const expectedPairedSlots = expectedCases
+    .flatMap((caseIndex) => [`${caseIndex}:base`, `${caseIndex}:advanced`])
+    .sort()
   if (input.receipt.status === "completed" && JSON.stringify(pairedSlots) !== JSON.stringify(expectedPairedSlots)) {
     reasons.push("paired_case_coverage")
   }
@@ -625,9 +731,10 @@ export function renderTrajectorySVG(input: {
     .join("")
   const durationSeconds = (max - min) / 1000
   const runDurationSeconds = finiteNonnegative(input.runDurationMs) / 1000
-  const durationLabel = input.runDurationMs === undefined
-    ? `${durationSeconds.toFixed(1)} s event span`
-    : `${runDurationSeconds.toFixed(1)} s run · ${durationSeconds.toFixed(1)} s event span`
+  const durationLabel =
+    input.runDurationMs === undefined
+      ? `${durationSeconds.toFixed(1)} s event span`
+      : `${runDurationSeconds.toFixed(1)} s run · ${durationSeconds.toFixed(1)} s event span`
   const callLabel = [
     input.modelCalls === undefined ? undefined : `${input.modelCalls} model calls`,
     input.toolCalls === undefined ? undefined : `${input.toolCalls} benchmark calls`,
@@ -666,4 +773,102 @@ export function renderTrajectorySVG(input: {
     `<text x="${width - right}" y="${height - 40}" text-anchor="end" font-size="11" fill="#6b7280">Hover marks in SVG for exact labels and durations.</text>`,
     `</svg>`,
   ].join("\n")
+}
+
+export const AUTOMATIONBENCH_SKILL_NAME = "automationbench-api"
+export const AUTOMATIONBENCH_SKILL_REF = `default/skill/${AUTOMATIONBENCH_SKILL_NAME}`
+
+export type SkillMountMatrix = {
+  active_profile?: unknown
+  projection_hash?: unknown
+  skills?: Array<{ ref?: unknown; name?: unknown; location?: unknown; projection_source?: unknown }>
+  agents?: Array<{
+    agent_id?: unknown
+    base_role?: unknown
+    skill_mountable?: unknown
+    skill_tool_available?: unknown
+  }>
+  matrix?: Array<{
+    agent_id?: unknown
+    grants?: Array<{ ref?: unknown; effective?: unknown; enabled?: unknown; reason?: unknown }>
+  }>
+}
+
+/**
+ * The experimental Skill is a project-local Skill, and a projected Expert Squad agent only sees the
+ * Skills its manifest grants plus explicit operator mounts. Declaring `skill.enabled` in the result
+ * without measuring the projection is a self-report: the first five-case wave wrote it while every
+ * Agent's `skill` call returned zero matches. This audits the Host's own mount matrix instead.
+ */
+export function auditSkillProjection(input: {
+  profile: string
+  matrix: SkillMountMatrix
+  skillName?: string
+  skillRef?: string
+  expectedLocation?: string
+  expectedSHA256?: string
+  poolSHA256?: string
+}) {
+  const skillName = input.skillName ?? AUTOMATIONBENCH_SKILL_NAME
+  const skillRef = input.skillRef ?? AUTOMATIONBENCH_SKILL_REF
+  const grantsByAgent = new Map(
+    (input.matrix.matrix ?? []).map((row) => [
+      String(row.agent_id ?? ""),
+      (row.grants ?? []).find((grant) => grant.ref === skillRef),
+    ]),
+  )
+  const pool = (input.matrix.skills ?? []).find((skill) => skill.ref === skillRef)
+  const mounted: string[] = []
+  const unmountable: Array<{ agent_id: string; base_role: string; reason: string }> = []
+  const violations: string[] = []
+  for (const agent of input.matrix.agents ?? []) {
+    const agentID = String(agent.agent_id ?? "")
+    const baseRole = String(agent.base_role ?? "")
+    // An `explore` runtime template is neither Skill-mountable nor projected the `skill` Tool at
+    // all, so demanding the mount there would be a fail-closed check no profile can ever pass.
+    if (agent.skill_mountable !== true || agent.skill_tool_available !== true) {
+      unmountable.push({
+        agent_id: agentID,
+        base_role: baseRole,
+        reason: agent.skill_mountable !== true ? "base_role_not_skill_mountable" : "skill_tool_not_projected",
+      })
+      continue
+    }
+    const grant = grantsByAgent.get(agentID)
+    if (grant?.effective !== true) {
+      violations.push(`not_effective:${agentID}`)
+      continue
+    }
+    if (grant.enabled !== true) {
+      violations.push(`not_enabled:${agentID}:${String(grant.reason ?? "unknown")}`)
+      continue
+    }
+    mounted.push(agentID)
+  }
+  if (input.matrix.active_profile !== input.profile) violations.push("profile_mismatch")
+  if (!pool) violations.push("skill_absent_from_pool")
+  else {
+    if (pool.name !== skillName) violations.push("pool_name_mismatch")
+    if (pool.projection_source !== "default") violations.push("pool_not_project_installed")
+    if (
+      input.expectedLocation &&
+      normalizeAuditPath(String(pool.location ?? "")) !== normalizeAuditPath(input.expectedLocation)
+    ) {
+      violations.push("pool_location_mismatch")
+    }
+  }
+  if (mounted.length === 0) violations.push("no_agent_mounted")
+  if (input.expectedSHA256 && input.poolSHA256 && input.expectedSHA256 !== input.poolSHA256) {
+    violations.push("skill_content_mismatch")
+  }
+  return {
+    passed: violations.length === 0,
+    skill_name: skillName,
+    skill_ref: skillRef,
+    profile: input.profile,
+    projection_hash: typeof input.matrix.projection_hash === "string" ? input.matrix.projection_hash : null,
+    mounted_agents: mounted.sort(),
+    unmountable_agents: unmountable.sort((left, right) => left.agent_id.localeCompare(right.agent_id)),
+    violations,
+  }
 }

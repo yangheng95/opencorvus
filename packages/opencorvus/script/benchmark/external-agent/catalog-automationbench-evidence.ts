@@ -6,6 +6,9 @@ import {
   paperEvidenceChecks,
   auditBenchmarkIsolation,
   auditRunBinding,
+  auditSkillProjection,
+  auditTaskOutcome,
+  auditTerminalQuiescence,
   auditBatchEvidence,
   permanentRunInvalidation,
   sourceAuthSecretLeaves,
@@ -52,6 +55,9 @@ type Result = {
     agents?: string[]
     profile_audit?: { passed?: boolean }
     isolation_audit?: { passed?: boolean }
+    task_outcome_audit?: { scored_terminal?: boolean }
+    terminal_quiescence_audit?: { passed?: boolean }
+    skill?: { name?: string; projection?: { passed?: boolean } }
   }
 }
 
@@ -261,7 +267,16 @@ async function inspectRawRunEvidence(
   if (!result) return { required: false, passed: true }
   const required = result.opencorvus.source?.worktree_clean === true
   try {
-    const [board, receipt, transcript, benchmarkEvents, scorerReplay, sandboxAudit, protectedRootAudit] = await Promise.all([
+    const [
+      board,
+      receipt,
+      transcript,
+      benchmarkEvents,
+      scorerReplay,
+      sandboxAudit,
+      protectedRootAudit,
+      skillProjection,
+    ] = await Promise.all([
       fs.readFile(path.join(directory, "terminal-board.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "task-receipt.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "opencorvus-transcript.json"), "utf8").then(JSON.parse),
@@ -271,6 +286,7 @@ async function inspectRawRunEvidence(
       fs.readFile(path.join(directory, "scorer-replay-audit.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "sandbox-isolation-audit.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "protected-root-isolation-audit.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "skill-projection.json"), "utf8").then(JSON.parse),
     ])
     const requestedProfile = receipt.request?.promptProfile
     const boundProfile = board.task?.packageRevisionBinding?.id
@@ -290,6 +306,25 @@ async function inspectRawRunEvidence(
       boardWorkflow,
     })
     const profilePassed = bindingAudit.passed
+    const taskOutcomeAudit = auditTaskOutcome(result.opencorvus.lifecycle_status, transcript)
+    const taskOutcomePassed =
+      taskOutcomeAudit.passed &&
+      JSON.stringify((result.opencorvus as any).task_outcome_audit ?? null) === JSON.stringify(taskOutcomeAudit)
+    const terminalQuiescenceAudit = auditTerminalQuiescence(board)
+    const terminalQuiescencePassed =
+      terminalQuiescenceAudit.passed &&
+      JSON.stringify((result.opencorvus as any).terminal_quiescence_audit ?? null) ===
+        JSON.stringify(terminalQuiescenceAudit)
+    const skillAudit = auditSkillProjection({
+      profile: String(result.opencorvus.profile ?? ""),
+      matrix: skillProjection.matrix,
+    })
+    const skillPassed =
+      skillAudit.passed &&
+      skillProjection.profile === result.opencorvus.profile &&
+      skillProjection.skill?.name === result.opencorvus.skill?.name &&
+      JSON.stringify(skillAudit) === JSON.stringify(skillProjection.skill?.projection ?? null) &&
+      JSON.stringify(skillAudit) === JSON.stringify(result.opencorvus.skill?.projection ?? null)
     const isolation = auditBenchmarkIsolation(transcript, {
       protectedPaths: [
         path.dirname(path.dirname(input.python)),
@@ -339,11 +374,27 @@ async function inspectRawRunEvidence(
       protectedRootAudit.evidence?.mode === "700" &&
       protectedRootAudit.control?.uid === 0 &&
       protectedRootAudit.control?.mode === "700"
-    const passed = profilePassed && isolation.passed && toolPassed && requestPassed && replayPassed && sandboxPassed && hostBoundaryPassed
+    const passed =
+      profilePassed &&
+      taskOutcomePassed &&
+      terminalQuiescencePassed &&
+      skillPassed &&
+      isolation.passed &&
+      toolPassed &&
+      requestPassed &&
+      replayPassed &&
+      sandboxPassed &&
+      hostBoundaryPassed
     return {
       required,
       passed,
       profile_passed: profilePassed,
+      task_outcome_audit: taskOutcomeAudit,
+      task_outcome_passed: taskOutcomePassed,
+      terminal_quiescence_audit: terminalQuiescenceAudit,
+      terminal_quiescence_passed: terminalQuiescencePassed,
+      skill_projection_audit: skillAudit,
+      skill_projection_passed: skillPassed,
       isolation,
       tool_audit: toolAudit,
       tool_passed: toolPassed,
@@ -356,7 +407,10 @@ async function inspectRawRunEvidence(
     return {
       required,
       passed: false,
-      reason: error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT" ? "raw_evidence_missing" : "raw_evidence_invalid",
+      reason:
+        error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+          ? "raw_evidence_missing"
+          : "raw_evidence_invalid",
     }
   }
 }
@@ -404,16 +458,21 @@ const caseSet = JSON.parse(caseSetBytes.toString("utf8")) as {
   }>
 }
 const caseSetCanonicalSHA256 = crypto.createHash("sha256").update(JSON.stringify(caseSet)).digest("hex")
-if (caseSet.selection?.count !== 50 || caseSet.cases?.length !== 50) throw new Error("Catalog requires the frozen 50-case manifest")
+if (caseSet.selection?.count !== 50 || caseSet.cases?.length !== 50)
+  throw new Error("Catalog requires the frozen 50-case manifest")
 await fs.writeFile(path.join(root, "automationbench-case-set.json"), caseSetBytes)
-const protectedSecrets = sourceAuthSecretLeaves(JSON.parse(await fs.readFile(path.join(cli.sourceData, "auth.json"), "utf8")))
+const protectedSecrets = sourceAuthSecretLeaves(
+  JSON.parse(await fs.readFile(path.join(cli.sourceData, "auth.json"), "utf8")),
+)
 const dispositions = JSON.parse(
   await fs.readFile(path.join(root, "run-dispositions.json"), "utf8").catch(() => '{"runs":{}}'),
 ) as { runs: Record<string, { status: string; reason: string }> }
 const files = await walk(root)
 const records: Array<Record<string, any>> = []
 const terminalDirectories = new Set(
-  files.filter((item) => ["result.json", "failure.json"].includes(path.basename(item))).map((item) => path.dirname(item)),
+  files
+    .filter((item) => ["result.json", "failure.json"].includes(path.basename(item)))
+    .map((item) => path.dirname(item)),
 )
 
 for (const directory of terminalDirectories) {
@@ -438,7 +497,9 @@ for (const directory of terminalDirectories) {
     wrapperSHA256: restrictedShellSHA256,
   })
   const frozenCase = result
-    ? caseSet.cases.find((item) => item.domain === (result.benchmark as any).domain && item.task === result.benchmark.task)
+    ? caseSet.cases.find(
+        (item) => item.domain === (result.benchmark as any).domain && item.task === result.benchmark.task,
+      )
     : undefined
   const benchmarkIdentityPassed =
     result?.benchmark.version === "1.0.6" &&
@@ -454,8 +515,10 @@ for (const directory of terminalDirectories) {
   const evidenceChecks = paperEvidenceChecks({
     manifestVerified: manifest.verified === true,
     providerLedgerVerified: ledgerAudit.passed === true,
-    profileVerified: result?.opencorvus.profile_audit?.passed === true && (rawEvidenceAudit as any).profile_passed === true,
-    isolationVerified: result?.opencorvus.isolation_audit?.passed === true && (rawEvidenceAudit as any).isolation?.passed === true,
+    profileVerified:
+      result?.opencorvus.profile_audit?.passed === true && (rawEvidenceAudit as any).profile_passed === true,
+    isolationVerified:
+      result?.opencorvus.isolation_audit?.passed === true && (rawEvidenceAudit as any).isolation?.passed === true,
     benchmarkIdentityVerified: benchmarkIdentityPassed,
     rawEvidenceVerified: rawEvidenceAudit.passed === true,
   })
@@ -464,19 +527,21 @@ for (const directory of terminalDirectories) {
     manifest.verified !== true
       ? manifest.reason
       : ledgerAudit.passed !== true
-        ? (ledgerAudit as any).reason ?? "provider_ledger_mismatch"
+        ? ((ledgerAudit as any).reason ?? "provider_ledger_mismatch")
         : rawEvidenceAudit.passed !== true
-          ? (rawEvidenceAudit as any).reason ?? "raw_evidence_mismatch"
-        : result?.opencorvus.profile_audit?.passed !== true
-          ? "profile_audit_failed"
-          : result?.opencorvus.isolation_audit?.passed !== true
-            ? "isolation_audit_failed"
-            : !benchmarkIdentityPassed
-              ? "benchmark_identity_failed"
-              : undefined
+          ? ((rawEvidenceAudit as any).reason ?? "raw_evidence_mismatch")
+          : result?.opencorvus.profile_audit?.passed !== true
+            ? "profile_audit_failed"
+            : result?.opencorvus.isolation_audit?.passed !== true
+              ? "isolation_audit_failed"
+              : !benchmarkIdentityPassed
+                ? "benchmark_identity_failed"
+                : undefined
   const eligible =
     result?.run.status === "scored" &&
-    result.opencorvus.lifecycle_status === "completed" &&
+    result.opencorvus.task_outcome_audit?.scored_terminal === true &&
+    result.opencorvus.terminal_quiescence_audit?.passed === true &&
+    result.opencorvus.skill?.projection?.passed === true &&
     result.benchmark.metrics !== null &&
     result.opencorvus.source?.worktree_clean === true &&
     !permanentInvalidation.invalid &&
@@ -484,7 +549,8 @@ for (const directory of terminalDirectories) {
     evidencePassed
   const developmentScore =
     result?.run.status === "scored" &&
-    result.opencorvus.lifecycle_status === "completed" &&
+    result.opencorvus.task_outcome_audit?.scored_terminal === true &&
+    result.opencorvus.skill?.projection?.passed === true &&
     result.benchmark.metrics !== null &&
     result.opencorvus.source?.worktree_clean !== true &&
     !permanentInvalidation.invalid &&
@@ -493,28 +559,28 @@ for (const directory of terminalDirectories) {
     ? "invalid_bug"
     : disposition
       ? disposition.status
-    : eligible
-    ? "scored"
-    : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
-      ? "invalid_evidence"
-    : developmentScore
-      ? "development_scored"
-    : failure?.run.status === "blocked_preflight"
-      ? "blocked_preflight"
-      : "invalid"
+      : eligible
+        ? "scored"
+        : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
+          ? "invalid_evidence"
+          : developmentScore
+            ? "development_scored"
+            : failure?.run.status === "blocked_preflight"
+              ? "blocked_preflight"
+              : "invalid"
   const reason = permanentInvalidation.invalid
     ? permanentInvalidation.reason
     : disposition
       ? disposition.reason
-    : eligible
-    ? "natural_terminal_official_score"
-    : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
-      ? evidenceFailureReason
-    : developmentScore
-      ? "uncommitted_or_unrecorded_source_state"
-    : result
-      ? `lifecycle_${result.opencorvus.lifecycle_status ?? "unknown"}`
-      : `${failure?.run.stage ?? "unknown_stage"}:${failure?.error?.name ?? "unknown_error"}`
+      : eligible
+        ? "natural_terminal_official_score"
+        : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
+          ? evidenceFailureReason
+          : developmentScore
+            ? "uncommitted_or_unrecorded_source_state"
+            : result
+              ? `lifecycle_${result.opencorvus.lifecycle_status ?? "unknown"}`
+              : `${failure?.run.stage ?? "unknown_stage"}:${failure?.error?.name ?? "unknown_error"}`
   const tokens = result?.opencorvus.tokens
   records.push({
     run_id: payload.run.id ?? path.basename(directory),
@@ -540,7 +606,9 @@ for (const directory of terminalDirectories) {
   })
 }
 
-for (const file of files.filter((item) => path.basename(item) === "run-start.json" && !terminalDirectories.has(path.dirname(item)))) {
+for (const file of files.filter(
+  (item) => path.basename(item) === "run-start.json" && !terminalDirectories.has(path.dirname(item)),
+)) {
   const directory = path.dirname(file)
   const started = JSON.parse(await fs.readFile(file, "utf8")) as Failure
   const manifest = await inspectManifest(directory, started, false)
@@ -574,7 +642,10 @@ const batchAudits = await Promise.all(
       const planBytes = await fs.readFile(planPath)
       const plan = JSON.parse(planBytes.toString("utf8"))
       const prefix = planPath.slice(0, -"-plan.json".length)
-      const receipt = await fs.readFile(`${prefix}-receipt.json`, "utf8").then(JSON.parse).catch(() => undefined)
+      const receipt = await fs
+        .readFile(`${prefix}-receipt.json`, "utf8")
+        .then(JSON.parse)
+        .catch(() => undefined)
       const waveCompletion = await fs
         .readFile(`${prefix}-wave-1-complete.json`, "utf8")
         .then(JSON.parse)
@@ -621,9 +692,7 @@ for (let pass = 0; pass < batchAudits.length; pass++) {
 for (const record of records.filter((item) => item.leaderboard_eligible)) {
   const candidateBatch = batchAudits.find(
     (item) =>
-      item.receipt_present &&
-      item.referenced_run_ids.includes(String(record.run_id)) &&
-      item.audit.passed === true,
+      item.receipt_present && item.referenced_run_ids.includes(String(record.run_id)) && item.audit.passed === true,
   )
   record.batch_candidate_eligible = candidateBatch !== undefined
   const completedBatch = batchAudits.find(
@@ -648,7 +717,8 @@ const eligible = records.filter((record) => record.leaderboard_eligible)
 function summarizeProfile(profile: "base" | "advanced") {
   const rows = eligible.filter((record) => record.opencorvus.profile === profile)
   const keys = rows.map((record) => `${record.benchmark.case_index}:${record.benchmark.repetition ?? 1}`)
-  if (new Set(keys).size !== keys.length) throw new Error(`Eligible ${profile} runs contain duplicate case/repetition identities`)
+  if (new Set(keys).size !== keys.length)
+    throw new Error(`Eligible ${profile} runs contain duplicate case/repetition identities`)
   const expectedKeys = Array.from({ length: 50 }, (_, index) => `${index + 1}:1`)
   const matrixComplete = JSON.stringify([...keys].sort()) === JSON.stringify(expectedKeys.sort())
   const strictPasses = rows.reduce(
@@ -656,7 +726,8 @@ function summarizeProfile(profile: "base" | "advanced") {
     0,
   )
   const partialTotal = rows.reduce((sum, record) => sum + Number(record.benchmark.metrics?.partial_credit ?? 0), 0)
-  const totals = (field: string) => rows.reduce((sum, record) => sum + Number(record.opencorvus.tokens?.[field] ?? 0), 0)
+  const totals = (field: string) =>
+    rows.reduce((sum, record) => sum + Number(record.opencorvus.tokens?.[field] ?? 0), 0)
   const durationTotal = rows.reduce((sum, record) => sum + Number(record.duration_ms ?? 0), 0)
   return {
     profile,
