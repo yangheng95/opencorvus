@@ -162,13 +162,8 @@ import { createRequirementsStageDispatcher } from "./requirements-stage"
 import { createRuntimeRepairTools } from "./runtime-repair-tools"
 import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
 import { createSubagentCancellationTool } from "./subagent-cancellation-tool"
-import {
-  CancelTaskInputSchema,
-  CompleteTaskInputSchema,
-  createTaskLifecycleTools,
-  FailTaskInputSchema,
-  failTaskLifecycle,
-} from "./task-lifecycle-tools"
+import { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } from "./task-lifecycle-input"
+import { createTaskLifecycleTools, failTaskLifecycle } from "./task-lifecycle-tools"
 import {
   assertTaskRootSessionLineageForConfig,
   optionsWithVisibleOrchestratorToolName,

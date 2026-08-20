@@ -15,6 +15,8 @@ export namespace UsageLedger {
     tokens: Message.TokenUsage
     costUSD: number
     billing: Message.BillingCoverage
+    sessionID?: string
+    agentID?: string
   }): void {
     Database.use((db) =>
       db
@@ -32,6 +34,8 @@ export namespace UsageLedger {
           total_tokens: input.tokens.total,
           cost_usd: input.costUSD,
           billing_status: input.billing.status,
+          session_id: input.sessionID ?? null,
+          agent_id: input.agentID ?? null,
         })
         .run(),
     )

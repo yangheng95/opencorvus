@@ -159,11 +159,13 @@ test("reconciles a stale immutable-evidence trigger before Project deletion", ()
       reconciled,
       drift: findSchemaDrift(sqlite),
       remaining: sqlite
-        .query<{ projects: number; policies: number }, []>(`
+        .query<{ projects: number; policies: number }, []>(
+          `
           SELECT
             (SELECT count(*) FROM project) AS projects,
             (SELECT count(*) FROM permission_policy) AS policies
-        `)
+        `,
+        )
         .get(),
     }).toEqual({
       reconciled: ["permission_policy_no_delete"],
@@ -216,7 +218,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("456af36fb51c2c4cdcff68616ec9675ca7eca93e6f010606e8e8292afdd93f8f")
+    expect(mysqlSchemaFingerprint()).toBe("a944e8f1bc6df4b5b879dec268737b733763e14fcb034626c26512cccb487daa")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )
@@ -278,9 +280,7 @@ test("returns the reset-required contract for an unexpected legacy application t
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
     rebuildTestDatabase()
-    Database.rebuildSqlite((sqlite) =>
-      sqlite.run('CREATE TABLE "a2a_task_queue" ("id" text PRIMARY KEY NOT NULL)'),
-    )
+    Database.rebuildSqlite((sqlite) => sqlite.run('CREATE TABLE "a2a_task_queue" ("id" text PRIMARY KEY NOT NULL)'))
     let captured: unknown
     try {
       Database.Client()

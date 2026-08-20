@@ -498,18 +498,18 @@ export const publicMarketZhTranslations01To35 = {
       },
       "base-tester": {
         label: "Base 测试工程师",
-        description: "只消费 Base 计划，完成分配的正向测试、checker 与独立验证并发布规范报告。",
+        description: "在实现结算后，依据原始请求与 Base 计划完成分配的正向测试、checker 与独立验证并发布规范报告。",
       },
     },
     workflows: {
       "planner-parallel-delivery": {
-        label: "规划师与并行 Worker",
-        description: "一个 Planner 先固定任务分区，研究、实现与测试 worker 随后在同一 frontier 并行工作。",
+        label: "规划师、并行 Worker 与验证",
+        description: "一个 Planner 先固定任务分区，研究与实现 worker 随后在同一 frontier 并行工作，再由测试 worker 验证已结算的结果。",
         nodes: {
           "base-planner": "发布完整 Task 分区、共享输入、路径所有权与验收分配。",
           "base-researcher": "执行计划中的只读证据调查分区。",
           "base-developer": "执行计划中的产品与生成输出分区。",
-          "base-tester": "执行计划中的测试与 checker 分区。",
+          "base-tester": "在实现结算后执行计划中的测试与 checker 分区。",
         },
       },
     },

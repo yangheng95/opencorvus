@@ -11,14 +11,12 @@ import { memoryProject } from "../fixture/memory"
 const advancedPackageRoot = path.resolve(import.meta.dir, "../../src/expert-squad/builtin/advanced")
 const basePackageRoot = path.resolve(import.meta.dir, "../../src/expert-squad/builtin/base")
 
-function workflowNodes(
-  loaded: Awaited<ReturnType<typeof ExpertSquadRegistry.loadSourcePackage>>,
-  workflowID: string,
-) {
+function workflowNodes(loaded: Awaited<ReturnType<typeof ExpertSquadRegistry.loadSourcePackage>>, workflowID: string) {
   return Object.fromEntries(
-    Object.entries(loaded.manifest.capability_projection.virtual_workflows[workflowID]!.nodes).map(
-      ([nodeID, node]) => [nodeID, node.depends_on],
-    ),
+    Object.entries(loaded.manifest.capability_projection.virtual_workflows[workflowID]!.nodes).map(([nodeID, node]) => [
+      nodeID,
+      node.depends_on,
+    ]),
   )
 }
 
@@ -26,7 +24,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.13.1")
+    expect(loaded.manifest.version).toBe("2026.08.20.1")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -67,20 +65,41 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["implementation-engineer"]).toContain(
       "open and personally inspect the real rendered page and applicable interaction states",
     )
+    // Verifying only what the implementation reported acting on turned a partial AutomationBench
+    // delivery into a PASS verdict; scope comes from the request instead.
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "acceptance scope from the original request and the authoritative sources it names",
+    )
   })
 
-  test("keeps Base as one Planner-first parallel worker workflow", async () => {
+  test("orders Base verification behind implementation while research stays parallel", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.13.1")
+    expect(loaded.manifest.version).toBe("2026.08.20.2")
+    // Verification cannot race the mutation it checks: an AutomationBench Base trial failed its
+    // Task with "No post was created" after the Tester verified a pre-mutation world.
     expect(workflowNodes(loaded, "planner-parallel-delivery")).toEqual({
       "base-planner": [],
       "base-researcher": ["base-planner"],
       "base-developer": ["base-planner"],
-      "base-tester": ["base-planner"],
+      "base-tester": ["base-developer"],
     })
     expect(loaded.selectorInstructions).toContain(
-      "Planner runs first; Researcher, Developer, and Tester then become dependency-ready together",
+      "Researcher and Developer then become dependency-ready together and consume only the plan; the Tester runs after the Developer's node settles",
+    )
+    // The parallel frontier stays, but a report published before the mutation owner's latest
+    // occurrence can no longer carry the terminal decision.
+    expect(loaded.promptProfile.agents["orchestrator"]).toContain("that report is stale for the mutated surface")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "acceptance scope comes from the original Task request and the authoritative sources it names",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "read-oriented identity with no shell and no command execution",
+    )
+    // The new edge is ordering only. If it ever becomes a report handoff, the Tester inherits the
+    // Developer's blind spots and the scope fix above is undone.
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "that ordering is not a handoff, and you do not consume the Researcher's or Developer's report as your scope",
     )
   })
 

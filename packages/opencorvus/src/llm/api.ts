@@ -75,12 +75,16 @@ export function streamText<
     timeoutMs?: number | false
     retries?: number
     usagePurpose?: UsagePurpose
+    /** Session/Agent that owns this Provider call, so the usage ledger can be grouped by
+     *  worker instead of re-derived from transcript timestamps. */
+    usageAttribution?: { sessionID?: string; agentID?: string }
   },
 ) {
   const {
     timeoutMs: timeout,
     retries: count,
     usagePurpose = "other",
+    usageAttribution,
     abortSignal,
     onStepFinish: callerOnStepFinish,
     ...rest
@@ -117,6 +121,8 @@ export function streamText<
             tokens: normalized.tokens,
             costUSD: normalized.cost,
             billing: normalized.billing,
+            sessionID: usageAttribution?.sessionID,
+            agentID: usageAttribution?.agentID,
           })
         } catch (error) {
           failures.push(error)

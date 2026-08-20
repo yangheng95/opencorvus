@@ -26,7 +26,6 @@ import {
   sameCrossTaskArtifactImportSet,
 } from "@/engine/cross-task-artifact-import"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
-import { TaskCompletionEvidenceIncompleteError } from "@/engine/completion-decision"
 import { EngineGit } from "@/engine/git"
 import {
   acquireTaskCompletionClosureInTransaction,
@@ -50,10 +49,7 @@ import { terminalTask } from "@/engine/state"
 import { requireTask } from "@/engine/store"
 import { openTaskForContinuationInTransaction } from "@/engine/task-intent-open"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
-import {
-  publishImportedTaskArtifactResources,
-  publishTaskArtifactProjectFiles,
-} from "@/task-artifact/store"
+import { publishImportedTaskArtifactResources, publishTaskArtifactProjectFiles } from "@/task-artifact/store"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -148,7 +144,12 @@ async function taskFixture(directory: string) {
 async function completeFixtureTask(
   task: Awaited<ReturnType<typeof taskFixture>>,
   projectPath: string,
-  deliverables: readonly { source: "engine_artifact"; artifact_id: string; catalog_revision: number; expected_sha256: string }[],
+  deliverables: readonly {
+    source: "engine_artifact"
+    artifact_id: string
+    catalog_revision: number
+    expected_sha256: string
+  }[],
   suffix: string,
   workflow: {
     id: string
@@ -193,7 +194,13 @@ async function completeFixtureTask(
     workflowProjection: {
       packageRevision: task.packageRevision,
       virtualWorkflows: workflow
-        ? { [workflow.id]: { label: "Terminal evidence fixture", description: "Terminal evidence fixture", nodes: workflow.nodes } }
+        ? {
+            [workflow.id]: {
+              label: "Terminal evidence fixture",
+              description: "Terminal evidence fixture",
+              nodes: workflow.nodes,
+            },
+          }
         : {},
     },
     requireExecutionContext: async () => ({
@@ -218,7 +225,7 @@ async function completeFixtureTask(
   )
 }
 
-test("requires every terminal workflow worker Artifact in the completion evidence closure", async () => {
+test("seals every terminal workflow worker Artifact into the completion decision without asking the model", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -257,16 +264,24 @@ test("requires every terminal workflow worker Artifact in the completion evidenc
         },
       }
 
-      await expect(completeFixtureTask(task, project.path, [first.locator], "incomplete", workflow)).rejects.toMatchObject({
-        name: TaskCompletionEvidenceIncompleteError.name,
-        code: "TASK_COMPLETION_EVIDENCE_INCOMPLETE",
-        taskID: task.taskID,
-        missingArtifactLocators: [second.locator],
+      // The Orchestrator names only the first Artifact. The second is still a terminal-node
+      // `expert_output` of the bound workflow, so the Host seals it itself instead of rejecting a
+      // decision whose only missing input the Host already holds.
+      expect(await completeFixtureTask(task, project.path, [first.locator], "derived", workflow)).toMatchObject({
+        title: "Task Completed",
       })
-      expect(requireTask(task.taskID).time_completed).toBeNull()
-      expect(
-        await completeFixtureTask(task, project.path, [first.locator, second.locator], "complete", workflow),
-      ).toMatchObject({ title: "Task Completed" })
+      const decision = findTaskCompletionDecisionForTerminalTime({
+        taskID: task.taskID,
+        timeCompleted: requireTask(task.taskID).time_completed!,
+      })
+      expect(decision?.payload.deliverable_artifact_locators).toEqual([first.locator])
+      // The derivation orders by artifact id under SQLite's binary collation, so the expectation
+      // uses the same comparison rather than a locale-aware one.
+      expect(decision?.payload.terminal_workflow_artifact_locators).toEqual(
+        [first.locator, second.locator].sort((left, right) =>
+          left.artifact_id < right.artifact_id ? -1 : left.artifact_id > right.artifact_id ? 1 : 0,
+        ),
+      )
     },
   })
 }, 60_000)
@@ -290,12 +305,10 @@ test("keeps the exact terminal expert Artifact immutable while preserving an ide
       expect(accepted.locator.artifact_id).toHaveLength(Identifier.MAX_LENGTH)
       expect(accepted.locator.expected_sha256).toHaveLength(64)
       const completedAt = Date.now()
-      await terminalTask(
-        requireTask(task.taskID),
-        { status: "completed" },
-        "Terminal publication fixture completed",
-        { projectDir: project.path, terminalAt: completedAt },
-      )
+      await terminalTask(requireTask(task.taskID), { status: "completed" }, "Terminal publication fixture completed", {
+        projectDir: project.path,
+        terminalAt: completedAt,
+      })
 
       expect(await publishExpertArtifact({ scope: task.scope, artifact: publication })).toEqual(accepted)
       let latePublication: unknown
@@ -345,7 +358,8 @@ test("returns the typed compact Artifact identity collision contract", async () 
       const row = Database.use((db) =>
         db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).get(),
       )
-      if (!row || !row.payload || typeof row.payload !== "object") throw new Error("Published Artifact fixture is absent")
+      if (!row || !row.payload || typeof row.payload !== "object")
+        throw new Error("Published Artifact fixture is absent")
       Database.use((db) =>
         db.delete(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).run(),
       )
@@ -461,11 +475,7 @@ test("requires a pre-release reset for the legacy expanded Project identity epoc
       expect(await fs.readFile(markerPath, "utf8")).toBe(discovered.project.id)
       expect(
         Database.use((db) =>
-          db
-            .select({ id: ProjectTable.id })
-            .from(ProjectTable)
-            .where(eq(ProjectTable.id, discovered.project.id))
-            .get(),
+          db.select({ id: ProjectTable.id }).from(ProjectTable).where(eq(ProjectTable.id, discovered.project.id)).get(),
         ),
       ).toEqual({ id: discovered.project.id })
       Database.close()
@@ -757,8 +767,8 @@ test("closes continuation admission before the real completion checkpoint and im
         Database.transaction((db) =>
           persistPreparedCrossTaskArtifactImports(db, {
             targetTaskID: Identifier.ascending("task"),
-          prepared: preparedCanonicalImport.imports,
-          authorities: preparedCanonicalImport.authorities,
+            prepared: preparedCanonicalImport.imports,
+            authorities: preparedCanonicalImport.authorities,
             timeCreated: Date.now(),
           }),
         )
