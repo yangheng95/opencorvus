@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-21-v0.0.50-beta-release.md](2026-08-21-v0.0.50-beta-release.md) records the product-only harness repair, canonical `0.0.50-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
+
 - [2026-08-19-xiaohongshu-long-horizon-promotion.md](2026-08-19-xiaohongshu-long-horizon-promotion.md) defines the coordinated two-cover, real-site, README-image, and publish-ready copy package for presenting OpenCorvus long-horizon Expert Squads on Xiaohongshu.
 
 - [2026-08-19-subagent-session-occurrence-dedup.md](2026-08-19-subagent-session-occurrence-dedup.md) collapses a sub-agent Session's execution occurrences to one record so the selector tabs, the overflow menu, and the progress grid stop repeating an agent that ran twice — and stop answering a lookup with its oldest run.
