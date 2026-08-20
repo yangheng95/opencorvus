@@ -706,7 +706,14 @@ export namespace PromptProfileResolver {
       ExpertSquadRegistry.agentProjectionEntries(input.active.pkg.manifest).map((entry) => [entry.agentID, entry]),
     )
     for (const [agentID, overrides] of Object.entries(mounts)) {
-      const baseRole = agentID === "orchestrator" ? "orchestrator" : projections.get(agentID)?.baseRole
+      // `universal-build` is dispatchable by every scheduler without being declared by a package, so
+      // an operator mount naming it is valid even though no manifest projects it.
+      const baseRole =
+        agentID === "orchestrator"
+          ? "orchestrator"
+          : agentID === UNIVERSAL_BUILD_AGENT_ID
+            ? universalBuildProjection.base_role
+            : projections.get(agentID)?.baseRole
       if (!baseRole) {
         throw new Error(
           `Expert squad ${input.active.profileID} skill_mounts references undeclared dynamic agent ${JSON.stringify(agentID)}.`,
