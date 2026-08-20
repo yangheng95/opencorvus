@@ -30,6 +30,23 @@ import { fileURLToPath } from "node:url"
 import z from "zod"
 import { lazy } from "@/util/lazy"
 
+export type ChatParamsOutput = Parameters<Required<Hooks>["chat.params"]>[1]
+type ChatHeadersOutput = Parameters<Required<Hooks>["chat.headers"]>[1]
+type ChatMessageInput = Parameters<Required<Hooks>["chat.params"]>[0]
+
+export type PhysicalProviderRequest = Omit<ChatMessageInput, "message"> & {
+  requestID: string
+  message?: ChatMessageInput["message"]
+}
+
+export type PhysicalProviderHooks = {
+  "provider.chat.params"?: (input: PhysicalProviderRequest, output: ChatParamsOutput) => Promise<void>
+  "provider.chat.headers"?: (input: PhysicalProviderRequest, output: ChatHeadersOutput) => Promise<void>
+}
+
+type RuntimeHooks = Hooks & PhysicalProviderHooks
+type HookEntry = { owner: "internal" | "project"; specifier: string; serviceID?: string; hook: RuntimeHooks }
+
 export namespace Plugin {
   const log = Log.create({ service: "plugin" })
 
@@ -200,7 +217,7 @@ export namespace Plugin {
         fetch: createInProcessFetch(),
       })
       const config = await Config.get()
-      const hooks: Array<{ specifier: string; serviceID?: string; hook: Hooks }> = []
+      const hooks: HookEntry[] = []
       const baseInput = {
         client,
         project: Instance.project,
@@ -221,7 +238,7 @@ export namespace Plugin {
         log.info("loading internal plugin", { name: plugin.name })
         const specifier = `internal:${plugin.name || "anonymous"}`
         try {
-          hooks.push({ specifier, hook: await plugin(pluginInput()) })
+          hooks.push({ owner: "internal", specifier, hook: (await plugin(pluginInput())) as RuntimeHooks })
         } catch (cause) {
           throw pluginFailure("initialization", specifier, cause)
         }
@@ -246,11 +263,16 @@ export namespace Plugin {
         try {
           const mod = await import(plugin)
           const seen = new Set<PluginInstance>()
-          const loaded: Array<{ specifier: string; serviceID?: string; hook: Hooks }> = []
+          const loaded: HookEntry[] = []
           for (const [_name, fn] of Object.entries<PluginInstance>(mod)) {
             if (seen.has(fn)) continue
             seen.add(fn)
-            loaded.push({ specifier: diagnosticSpecifier, serviceID, hook: await fn(pluginInput(resources)) })
+            loaded.push({
+              owner: "project",
+              specifier: diagnosticSpecifier,
+              serviceID,
+              hook: await fn(pluginInput(resources)),
+            })
           }
           if (loaded.length === 0) throw new Error("Plugin module does not export a plugin factory")
           hooks.push(...loaded)
@@ -397,6 +419,32 @@ export namespace Plugin {
         await (fn as (input: Input, output: Output) => unknown)(input, output)
       } catch (cause) {
         throw pluginFailure(`hook ${String(name)}`, entry.specifier, cause)
+      }
+    }
+    return output
+  }
+
+  export async function triggerPhysicalProvider<
+    Name extends keyof Required<PhysicalProviderHooks>,
+    Input = Parameters<Required<PhysicalProviderHooks>[Name]>[0],
+    Output = Parameters<Required<PhysicalProviderHooks>[Name]>[1],
+  >(name: Name, input: Input, output: Output): Promise<Output> {
+    return applyPhysicalProviderHooks(name, input, output, (await state()).hooks)
+  }
+
+  export async function applyPhysicalProviderHooks<
+    Name extends keyof Required<PhysicalProviderHooks>,
+    Input = Parameters<Required<PhysicalProviderHooks>[Name]>[0],
+    Output = Parameters<Required<PhysicalProviderHooks>[Name]>[1],
+  >(name: Name, input: Input, output: Output, entries: HookEntry[]): Promise<Output> {
+    for (const entry of entries) {
+      if (entry.owner !== "internal") continue
+      const fn = entry.hook[name]
+      if (!fn) continue
+      try {
+        await (fn as (input: Input, output: Output) => unknown)(input, output)
+      } catch (cause) {
+        throw pluginFailure(`physical Provider hook ${String(name)}`, entry.specifier, cause)
       }
     }
     return output

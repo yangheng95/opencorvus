@@ -53,6 +53,14 @@ lineage；Delivery Slice 不记录、复用或回收 workspace。
 Plugin 提供生命周期回调、auth 和 rewrite 能力，不承担 Task 调度身份。OpenAI Codex 和
 GitHub Copilot Provider Auth Plugin 把订阅 OAuth（Open Authorization，开放授权）、模型目录和
 流式 Provider 请求投影进 OpenCorvus 的统一 LLM（Large Language Model，大语言模型）链路。
+消息级 `chat.params` / `chat.headers` hook 只处理具有真实 User Message 的对话 occurrence，
+因此 `message` 保持必填，现有第三方 Plugin 不会收到合成消息或 `undefined`。物理 Provider 约束由
+Host-internal `provider.chat.params` / `provider.chat.headers` 单独拥有；它们不属于公开项目 Plugin
+hook 面，专用触发器只执行内置 Provider/Auth owner。其输入携带真实 `requestID`、字符串 Agent ID
+和可选真实消息，对包括 memory/helper 在内的每次流式 LLM occurrence 都执行。用户消息路径先执行
+消息级 rewrite，再由物理 Provider hook 最后收敛实际参数和 header；因此项目 Plugin 不能重新引入
+Provider 明确拒绝的字段，也不能覆盖 Provider 必需 header。helper 路径直接进入同一物理层，不建立
+Provider 特判或第二套请求实现。
 
 普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。`/global/skill/market` 与项目
 `/skill/market` 只投影同一个 `SkillManager.market` 内置 catalog owner；不存在不可配置的远端 registry
