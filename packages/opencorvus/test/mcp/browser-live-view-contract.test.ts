@@ -232,10 +232,10 @@ describe("Browser MCP Live View contract", () => {
       message: "BrowserRuntime could not connect to the running Google Chrome instance.",
       checkedCandidates: [],
       recoveryCommand:
-        'Enable "Allow remote debugging for this browser instance" at chrome://inspect/#remote-debugging, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.',
+        "Install Chrome/Edge so OpenCorvus can start its own remote-debugging Chrome in a dedicated profile, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.",
     })
     expect(new BrowserRuntime.RuntimeError(chromeDiagnostic).message).toBe(
-      'browser_connect_failed: BrowserRuntime could not connect to the running Google Chrome instance. Recovery: Enable "Allow remote debugging for this browser instance" at chrome://inspect/#remote-debugging, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.',
+      "browser_connect_failed: BrowserRuntime could not connect to the running Google Chrome instance. Recovery: Install Chrome/Edge so OpenCorvus can start its own remote-debugging Chrome in a dedicated profile, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.",
     )
   })
 
@@ -252,6 +252,47 @@ describe("Browser MCP Live View contract", () => {
     )
   })
 
+  test("keeps the managed CDP profile off the directory Chrome refuses to debug", () => {
+    expect(
+      BrowserRuntime.resolveManagedChromeUserDataDir({ platform: "darwin", env: {}, homeDir: "/Users/me" }),
+    ).toBe("/Users/me/Library/Application Support/opencorvus/data/chrome-cdp-profile")
+    expect(BrowserRuntime.resolveManagedChromeUserDataDir({ platform: "linux", env: {}, homeDir: "/home/me" })).toBe(
+      "/home/me/.local/share/opencorvus/data/chrome-cdp-profile",
+    )
+    expect(
+      BrowserRuntime.resolveManagedChromeUserDataDir({
+        platform: "linux",
+        env: { OPENCORVUS_BROWSER_CHROME_USER_DATA_DIR: "/home/me/chrome-debug/" },
+        homeDir: "/home/me",
+      }),
+    ).toBe("/home/me/chrome-debug")
+    expect(() =>
+      BrowserRuntime.resolveManagedChromeUserDataDir({
+        platform: "linux",
+        env: { OPENCORVUS_BROWSER_CHROME_USER_DATA_DIR: "/home/me/.config/google-chrome" },
+        homeDir: "/home/me",
+      }),
+    ).toThrow(
+      "browser_launch_failed: Chrome refuses remote debugging on its own default profile directory (/home/me/.config/google-chrome). DevTools remote debugging requires a non-default data directory. Recovery: Point OPENCORVUS_BROWSER_CHROME_USER_DATA_DIR at a writable non-default profile directory and close any browser already using it, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.",
+    )
+  })
+
+  test("starts the managed Chrome with remote debugging on the managed profile", () => {
+    expect(BrowserRuntime.managedChromeLaunchArgs("/home/me/chrome-debug")).toEqual([
+      "--user-data-dir=/home/me/chrome-debug",
+      "--remote-debugging-port=0",
+      "--no-first-run",
+      "--no-default-browser-check",
+    ])
+    expect(BrowserRuntime.resolveChromeCdpStartupTimeoutMs(undefined, {})).toBe(30_000)
+    expect(
+      BrowserRuntime.resolveChromeCdpStartupTimeoutMs(undefined, {
+        OPENCORVUS_BROWSER_CDP_STARTUP_TIMEOUT_MS: "5000",
+      }),
+    ).toBe(5_000)
+    expect(BrowserRuntime.resolveChromeCdpStartupTimeoutMs(1_500, {})).toBe(1_500)
+  })
+
   test("resolves the exact Chrome browser websocket rendezvous", async () => {
     const userDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-chrome-cdp-contract-"))
     temporaryDirectories.push(userDataDir)
@@ -262,6 +303,12 @@ describe("Browser MCP Live View contract", () => {
     expect(await BrowserRuntime.resolveChromeCdpEndpoint({ userDataDir })).toBe(
       "ws://127.0.0.1:43127/devtools/browser/78bb9584-253f-47cf-b950-70dd0180488a",
     )
+    expect(await BrowserRuntime.tryResolveChromeCdpEndpoint(userDataDir)).toBe(
+      "ws://127.0.0.1:43127/devtools/browser/78bb9584-253f-47cf-b950-70dd0180488a",
+    )
+    const emptyDir = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-chrome-cdp-empty-"))
+    temporaryDirectories.push(emptyDir)
+    expect(await BrowserRuntime.tryResolveChromeCdpEndpoint(emptyDir)).toBeUndefined()
   })
 
   test("identifies branded system browser executables", () => {
