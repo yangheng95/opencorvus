@@ -353,6 +353,41 @@ export function auditTerminalQuiescence(board: any) {
   }
 }
 
+export type BatchProfileSlot = {
+  case_index: number
+  profile: "base" | "advanced"
+}
+
+export function rollingBatchChains(waves: BatchProfileSlot[][]) {
+  if (waves.length !== 2 || waves.some((wave) => wave.length !== 5)) {
+    throw new Error("Rolling AutomationBench batches require two five-slot crossover lists")
+  }
+  return waves[0]!.map((first) => {
+    const second = waves[1]!.find((slot) => slot.case_index === first.case_index)
+    if (!second || second.profile === first.profile) {
+      throw new Error(`Rolling AutomationBench case ${first.case_index} requires the opposite profile`)
+    }
+    return [first, second] as const
+  })
+}
+
+export async function executeRollingBatchChains<T>(input: {
+  chains: ReadonlyArray<ReadonlyArray<BatchProfileSlot>>
+  shouldRun: (slot: BatchProfileSlot) => boolean
+  run: (slot: BatchProfileSlot, waveIndex: number) => Promise<T>
+}) {
+  return Promise.all(
+    input.chains.map(async (chain) => {
+      const outcomes: T[] = []
+      for (const [offset, slot] of chain.entries()) {
+        if (!input.shouldRun(slot)) continue
+        outcomes.push(await input.run(slot, offset + 1))
+      }
+      return outcomes
+    }),
+  )
+}
+
 export function auditBatchEvidence(input: {
   plan: any
   receipt?: any
@@ -384,13 +419,21 @@ export function auditBatchEvidence(input: {
     reasons.push("batch_plan_shape")
   }
   const expectedWave1 = (input.plan.waves?.[0] ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()
+  const rolling = input.plan.schedule_mode === "rolling_case_slots_v1"
+  if (rolling) {
+    try {
+      rollingBatchChains(input.plan.waves ?? [])
+    } catch {
+      reasons.push("rolling_plan_shape")
+    }
+  }
   const waveCompletionValid =
     input.waveCompletion?.status === "wave_1_complete" &&
     input.waveCompletion?.batch_run_id === input.plan.batch_run_id &&
     JSON.stringify(
       (input.waveCompletion?.eligible_slots ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort(),
     ) === JSON.stringify(expectedWave1)
-  if ((input.receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
+  if (!rolling && (input.receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
     reasons.push("wave_1_completion")
   }
   const launched = [1, 2].flatMap((waveIndex) =>
@@ -479,26 +522,33 @@ export function auditBatchEvidence(input: {
     if (currentBatch) sealingRunIDs.add(String(item.run_id))
     else adoptedRunIDs.add(String(item.run_id))
   }
-  for (const waveIndex of [1, 2]) {
-    const events = intervals
-      .filter((item) => item.waveIndex === waveIndex)
-      .flatMap((item) => [
-        { at: item.start, delta: 1 },
-        { at: item.end, delta: -1 },
-      ])
+  for (const waveIndex of rolling ? [0] : [1, 2]) {
+    const scoped = rolling ? intervals : intervals.filter((item) => item.waveIndex === waveIndex)
+    const events = scoped.flatMap((item) => [
+      { at: item.start, delta: 1 },
+      { at: item.end, delta: -1 },
+    ])
       .sort((left, right) => left.at - right.at || left.delta - right.delta)
     let active = 0
     for (const event of events) {
       active += event.delta
-      if (active > 5) reasons.push(`wave_concurrency:${waveIndex}`)
+      if (active > 5) reasons.push(rolling ? "rolling_concurrency" : `wave_concurrency:${waveIndex}`)
     }
   }
-  const waveCompletedAt = Number(input.waveCompletion?.completed_at)
-  if (waveCompletionValid && intervals.some((item) => item.waveIndex === 1 && item.end > waveCompletedAt)) {
-    reasons.push("wave_1_barrier_end")
-  }
-  if (waveCompletionValid && intervals.some((item) => item.waveIndex === 2 && item.start < waveCompletedAt)) {
-    reasons.push("wave_2_barrier_start")
+  if (rolling) {
+    for (const caseIndex of expectedCases) {
+      const first = intervals.find((item) => item.caseIndex === caseIndex && item.waveIndex === 1)
+      const second = intervals.find((item) => item.caseIndex === caseIndex && item.waveIndex === 2)
+      if (first && second && second.start < first.end) reasons.push(`rolling_case_overlap:${caseIndex}`)
+    }
+  } else {
+    const waveCompletedAt = Number(input.waveCompletion?.completed_at)
+    if (waveCompletionValid && intervals.some((item) => item.waveIndex === 1 && item.end > waveCompletedAt)) {
+      reasons.push("wave_1_barrier_end")
+    }
+    if (waveCompletionValid && intervals.some((item) => item.waveIndex === 2 && item.start < waveCompletedAt)) {
+      reasons.push("wave_2_barrier_start")
+    }
   }
   const pairedSlots = [1, 2]
     .flatMap((waveIndex) =>

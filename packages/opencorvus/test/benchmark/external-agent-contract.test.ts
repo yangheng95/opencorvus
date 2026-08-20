@@ -14,6 +14,8 @@ import {
   auditTaskOutcome,
   auditTerminalQuiescence,
   auditBatchEvidence,
+  executeRollingBatchChains,
+  rollingBatchChains,
   paperEvidenceChecks,
   normalizeTrajectory,
   renderTrajectorySVG,
@@ -360,7 +362,53 @@ describe("external agent benchmark contract", () => {
     })
   })
 
-  test("accepts a sealed five-case batch with paired crossover waves", () => {
+  test("builds five rolling crossover case chains", () => {
+    const wave1 = [1, 2, 3, 4, 5].map((case_index) => ({
+      case_index,
+      profile: case_index % 2 ? ("base" as const) : ("advanced" as const),
+    }))
+    const wave2 = wave1.map((item) => ({
+      case_index: item.case_index,
+      profile: item.profile === "base" ? ("advanced" as const) : ("base" as const),
+    }))
+    expect(rollingBatchChains([wave1, wave2])).toEqual(
+      wave1.map((item, index) => [item, wave2[index]]),
+    )
+  })
+
+  test("keeps five rolling case slots busy and continues each case after a settled invalid attempt", async () => {
+    const wave1 = [1, 2, 3, 4, 5].map((case_index) => ({
+      case_index,
+      profile: case_index % 2 ? ("base" as const) : ("advanced" as const),
+    }))
+    const wave2 = wave1.map((item) => ({
+      case_index: item.case_index,
+      profile: item.profile === "base" ? ("advanced" as const) : ("base" as const),
+    }))
+    let active = 0
+    let peak = 0
+    const outcomes = await executeRollingBatchChains({
+      chains: rollingBatchChains([wave1, wave2]),
+      shouldRun: () => true,
+      run: async (slot, waveIndex) => {
+        active += 1
+        peak = Math.max(peak, active)
+        await Bun.sleep(slot.case_index)
+        active -= 1
+        return { ...slot, wave_index: waveIndex, status: slot.case_index === 1 && waveIndex === 1 ? "invalid" : "scored" }
+      },
+    })
+    expect({ peak, active, outcomes }).toEqual({
+      peak: 5,
+      active: 0,
+      outcomes: wave1.map((first, index) => [
+        { ...first, wave_index: 1, status: index === 0 ? "invalid" : "scored" },
+        { ...wave2[index]!, wave_index: 2, status: "scored" },
+      ]),
+    })
+  })
+
+  test("accepts a sealed five-case rolling batch with paired crossover slots", () => {
     const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
     const wave1 = cases.map((item) => ({ ...item, profile: item.case_index % 2 ? "base" : "advanced" }))
     const wave2 = wave1.map((item) => ({
@@ -374,47 +422,49 @@ describe("external agent benchmark contract", () => {
         network_namespace: `net:[${1000 + waveOffset * 10 + index}]`,
       })),
     )
+    const adoptedRun = launched[0]![0]!
     const attempts = launched.flatMap((wave, waveOffset) =>
-      wave.map((item, index) => ({
-        run_id: item.run_id,
-        raw_leaderboard_eligible: true,
-        leaderboard_eligible: true,
-        started_at: waveOffset === 0 ? 100 + index : 210 + index,
-        finished_at: waveOffset === 0 ? 150 + index : 260 + index,
-        benchmark: {
-          batch_run_id: "batch-1",
-          batch_plan_sha256: "plan-sha",
-          wave_index: waveOffset + 1,
-          case_index: item.case_index,
-        },
-        opencorvus: {
-          profile: item.profile,
-          host_network_isolation_audit: { network_namespace: item.network_namespace },
-        },
-      })),
+      wave.map((item, index) => {
+        const adopted = item.run_id === adoptedRun.run_id
+        return {
+          run_id: item.run_id,
+          raw_leaderboard_eligible: true,
+          leaderboard_eligible: true,
+          started_at: waveOffset === 0 ? 100 : 151 + index * 10,
+          finished_at: waveOffset === 0 ? 150 + index * 10 : 200 + index * 10,
+          benchmark: {
+            batch_run_id: adopted ? "batch-previous" : "batch-1",
+            batch_plan_sha256: adopted ? "previous-plan-sha" : "plan-sha",
+            wave_index: waveOffset + 1,
+            case_index: item.case_index,
+          },
+          opencorvus: {
+            profile: item.profile,
+            host_network_isolation_audit: { network_namespace: item.network_namespace },
+          },
+        }
+      }),
     )
     expect(
       auditBatchEvidence({
         plan: {
           batch_run_id: "batch-1",
           trial_concurrency: 5,
+          schedule_mode: "rolling_case_slots_v1",
           network_isolation: "private_netns_slirp4netns_disable_host_loopback_v1",
           host_network_namespace: "net:[999]",
           protected_roots: { evidence: { passed: true }, control: { passed: true } },
-          preexisting_eligible: { base: [], advanced: [] },
+          preexisting_eligible: {
+            base: [{ run_id: adoptedRun.run_id, case_index: adoptedRun.case_index, profile: adoptedRun.profile }],
+            advanced: [],
+          },
           cases,
           waves: [wave1, wave2],
-        },
-        waveCompletion: {
-          batch_run_id: "batch-1",
-          status: "wave_1_complete",
-          completed_at: 200,
-          eligible_slots: wave1,
         },
         receipt: {
           batch_run_id: "batch-1",
           status: "completed",
-          wave_1: { launched: launched[0], eligible: launched[0] },
+          wave_1: { launched: launched[0]!.slice(1), eligible: launched[0] },
           wave_2: { launched: launched[1], eligible: launched[1] },
         },
         attempts,
@@ -430,9 +480,10 @@ describe("external agent benchmark contract", () => {
         .sort(),
       sealing_run_ids: launched
         .flat()
+        .filter((item) => item.run_id !== adoptedRun.run_id)
         .map((item) => item.run_id)
         .sort(),
-      adopted_run_ids: [],
+      adopted_run_ids: [adoptedRun.run_id],
     })
   })
 

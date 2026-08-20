@@ -11,7 +11,7 @@ Treat OpenCorvus Base and Advanced as the evaluated multi-Agent harness, not as 
 
 - Keep benchmark work on the dedicated bench branch. Do not merge benchmark adapters, Skills, scores, specs, or evidence into the release branch.
 - Round 1 is AutomationBench `1.0.6`, a committed deterministic set of 50 public cases, exact model `openai/gpt-5.6-luna`, and paired fresh-world Base and Advanced runs for every case. WorkBuddy is out of scope until the user explicitly adds it.
-- Schedule cases in deterministic batches of at most five. Each batch uses two crossover waves: odd case indexes run Base first and even indexes run Advanced first, then the opposite profile, so exactly 25 cases expose each profile to first-run conditions. Base and Advanced for the same case never overlap. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, and evidence directory. Finish and seal the batch before starting the next one.
+- Schedule deterministic batches as five rolling case chains. Odd case indexes run Base then Advanced and even indexes run Advanced then Base, so exactly 25 cases expose each profile to first-run conditions. Start the five chains together; when an attempt settles, immediately use that case's released slot for its opposite profile instead of waiting for a global wave barrier. Base and Advanced for the same case never overlap, and no more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, and evidence directory. Finish and seal the batch before starting the next one.
 - Before each run, require an isolated runtime containing both the source `auth.json` and `models.json`; verify the exact Provider/model reports `connected`. Never print or copy credential contents into evidence.
 - Formal runs use WSL2 as an operational benchmark boundary, not as a hostile multi-tenant security proof. Keep evaluator, scorer, Provider data, control, and evidence roots owned by root with mode `0700`; run Agent Bash under the case UID with a private HOME, mount namespace, Windows mounts removed, and a UID-scoped Unix tool socket. The preflight must show that credentials/evaluator data are not readable and that the trial can use its own project/socket. Do not add stronger sandbox machinery unless an observed benchmark leak requires it.
 - Fail closed unless the bridge proves the exact AutomationBench distribution version, installed package-tree hash, and official task-contract hash. Map out only the stock single-model turn-budget sentence; preserve the business contract and record the mapped request hash.
@@ -40,7 +40,7 @@ An excessive call count, long duration while observable work continues, parallel
 
 ## Execute
 
-Run one deterministic batch (five cases, then the opposite-profile wave) with the committed coordinator:
+Run one deterministic rolling batch (five case chains, each followed immediately by its opposite profile) with the committed coordinator. Use a ten-minute inactivity window so a legitimate long streaming model call is not mistaken for a stuck trial:
 
 ```bash
 apt-get update && apt-get install -y ripgrep nodejs
@@ -57,7 +57,8 @@ bun packages/opencorvus/script/benchmark/external-agent/run-automationbench-batc
   --source-data /var/lib/opencorvus-benchmark/provider-data \
   --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell \
   --output /var/lib/opencorvus-benchmark/evidence \
-  --control-root /var/lib/opencorvus-benchmark/control
+  --control-root /var/lib/opencorvus-benchmark/control \
+  --inactivity-ms 600000
 ```
 
 After a batch, regenerate the catalog with `catalog-automationbench-evidence.ts`. Before reporting, run `verify-automationbench-evidence.ts` with the same root/source/Python/shell arguments; add `--mode final` only after all 100 Base/Advanced trials exist.

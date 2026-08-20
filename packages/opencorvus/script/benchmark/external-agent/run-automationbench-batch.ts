@@ -2,6 +2,7 @@ import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import lockfile from "proper-lockfile"
+import { executeRollingBatchChains, rollingBatchChains } from "./contract"
 
 type FrozenCase = {
   case_index: number
@@ -34,7 +35,7 @@ const batchIndex = Number(values.get("batch-index"))
 if (!Number.isInteger(batchIndex) || batchIndex < 1 || batchIndex > 10) throw new Error("--batch-index must be 1 through 10")
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
 const model = values.get("model") ?? "openai/gpt-5.6-luna"
-const inactivityMs = values.get("inactivity-ms") ?? "120000"
+const inactivityMs = values.get("inactivity-ms") ?? "600000"
 const manifest = JSON.parse(await fs.readFile(caseSet, "utf8")) as { selection: { count: number }; cases: FrozenCase[] }
 const cases = manifest.cases.filter((item) => item.batch_index === batchIndex).sort((left, right) => left.case_index - right.case_index)
 if (manifest.selection?.count !== 50 || cases.length !== 5) throw new Error(`Frozen batch ${batchIndex} must contain five of 50 cases`)
@@ -86,7 +87,6 @@ await fs.rm(activeAuthorizationPath, { force: true })
 const batchRunID = crypto.randomUUID()
 const planDirectory = path.join(output, "batch-plans")
 const planPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-plan.json`)
-const waveCompletionPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-wave-1-complete.json`)
 const receiptPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-receipt.json`)
 const activeChildren = new Set<ReturnType<typeof Bun.spawn>>()
 let terminationSignal: "SIGINT" | "SIGTERM" | undefined
@@ -252,7 +252,6 @@ async function runTrial(item: FrozenCase, profile: "base" | "advanced", waveInde
     restrictedShell,
     "--wave-index",
     String(waveIndex),
-    ...(waveIndex === 2 ? ["--prior-wave-completion", waveCompletionPath] : []),
   ]
   const child = Bun.spawn(args, { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" })
   activeChildren.add(child)
@@ -289,44 +288,62 @@ async function runTrial(item: FrozenCase, profile: "base" | "advanced", waveInde
   }
 }
 
-async function runWave(waveIndex: 1 | 2) {
+async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
-  const slots = waves[waveIndex - 1]!
-  const catalogBefore = await refreshCatalog()
-  const pending = slots.filter(
-    (slot) => !candidateByCase(catalogBefore, slot.profile).has(slot.case_index),
-  )
-  const launched = await Promise.all(
-    pending.map((slot) =>
-      runTrial(cases.find((item) => item.case_index === slot.case_index)!, slot.profile, waveIndex).catch((error) => ({
-        case_index: slot.case_index,
-        profile: slot.profile,
-        exit_code: -1,
-        run_id: null,
-        run_status: "coordinator_failed",
-        stderr_tail: error instanceof Error ? error.message : String(error),
-      })),
-    ),
-  )
+  const existing = {
+    base: candidateByCase(catalogBefore, "base"),
+    advanced: candidateByCase(catalogBefore, "advanced"),
+  }
+  const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = [[], []]
+  await executeRollingBatchChains({
+    chains: rollingBatchChains(waves),
+    shouldRun: (slot) => !existing[slot.profile].has(slot.case_index),
+    run: async (slot, waveIndex) => {
+        if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
+        const outcome = await runTrial(
+          cases.find((item) => item.case_index === slot.case_index)!,
+          slot.profile,
+          waveIndex,
+        ).catch((error) => ({
+          case_index: slot.case_index,
+          profile: slot.profile,
+          exit_code: -1,
+          run_id: null,
+          run_status: "coordinator_failed",
+          stderr_tail: error instanceof Error ? error.message : String(error),
+        }))
+        launchedByWave[waveIndex - 1]!.push(outcome)
+        return outcome
+    },
+  })
   const catalogAfter = await refreshCatalog()
-  const eligible = slots
-    .map((slot) => waveCandidateByCase(catalogAfter, slot.profile).get(slot.case_index))
-    .filter(Boolean)
+  const outcomes = waves.map((slots, offset) => {
+    const eligible = slots
+      .map((slot) => waveCandidateByCase(catalogAfter, slot.profile).get(slot.case_index))
+      .filter(Boolean)
+      .map((record) => ({
+        case_index: record!.benchmark.case_index,
+        profile: record!.opencorvus.profile,
+        run_id: record!.run_id,
+      }))
+    return {
+      launched: launchedByWave[offset]!.sort((left, right) => left.case_index - right.case_index),
+      eligible,
+    }
+  })
   return {
     complete:
-      launched.every((item) => item.exit_code === 0 && item.run_status === "scored") && eligible.length === 5,
-    launched,
-    eligible: eligible.map((record) => ({
-      case_index: record.benchmark.case_index,
-      profile: record.opencorvus.profile,
-      run_id: record.run_id,
-    })),
+      launchedByWave.flat().every((item) => item.exit_code === 0 && item.run_status === "scored") &&
+      outcomes.every((outcome) => outcome.eligible.length === 5),
+    wave_1: outcomes[0]!,
+    wave_2: outcomes[1]!,
   }
 }
 
 let receiptWritten = false
-let wave1Outcome: Awaited<ReturnType<typeof runWave>> | undefined
-let wave2Outcome: Awaited<ReturnType<typeof runWave>> | undefined
+type BatchWaveOutcome = Awaited<ReturnType<typeof runRollingBatch>>["wave_1"]
+let wave1Outcome: BatchWaveOutcome | undefined
+let wave2Outcome: BatchWaveOutcome | undefined
 try {
   await fs.mkdir(planDirectory, { recursive: true })
   const preexistingCatalog = await refreshCatalog()
@@ -338,6 +355,7 @@ try {
     model,
     profiles: ["base", "advanced"],
     trial_concurrency: 5,
+    schedule_mode: "rolling_case_slots_v1",
     protected_roots: {
       evidence: protectedRootAudits[0],
       control: protectedRootAudits[1],
@@ -371,29 +389,10 @@ try {
     ) + "\n",
     { encoding: "utf8", flag: "wx" },
   )
-  const firstWave = await runWave(1)
-  wave1Outcome = firstWave
-  if (!firstWave.complete) throw new Error("Wave 1 contains a failed, invalid, or unsealed trial")
-  await fs.writeFile(
-    waveCompletionPath,
-    JSON.stringify(
-      {
-        schema_version: 1,
-        batch_run_id: batchRunID,
-        batch_index: batchIndex,
-        status: "wave_1_complete",
-        completed_at: Date.now(),
-        eligible_slots: firstWave.eligible.map((item) => ({ case_index: item.case_index, profile: item.profile })),
-        eligible_runs: firstWave.eligible,
-      },
-      null,
-      2,
-    ) + "\n",
-    { encoding: "utf8", flag: "wx" },
-  )
-  const secondWave = await runWave(2)
-  wave2Outcome = secondWave
-  if (!secondWave.complete) throw new Error("Wave 2 contains a failed, invalid, or unsealed trial")
+  const rolling = await runRollingBatch(preexistingCatalog)
+  wave1Outcome = rolling.wave_1
+  wave2Outcome = rolling.wave_2
+  if (!rolling.complete) throw new Error("Rolling batch contains a failed, invalid, or unsealed trial")
   await fs.writeFile(
     receiptPath,
     JSON.stringify(
@@ -403,8 +402,8 @@ try {
         batch_index: batchIndex,
         status: "completed",
         finished_at: Date.now(),
-        wave_1: firstWave,
-        wave_2: secondWave,
+        wave_1: rolling.wave_1,
+        wave_2: rolling.wave_2,
       },
       null,
       2,

@@ -175,6 +175,7 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     model: string
     profiles: string[]
     trial_concurrency: number
+    schedule_mode?: string
     cases: FrozenCase[]
     waves: Array<Array<{ case_index: number; profile: Profile }>>
   }
@@ -207,7 +208,7 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
   ) {
     throw new Error("Trial is not authorized by the exact frozen batch plan")
   }
-  if (input.waveIndex === 2) {
+  if (input.waveIndex === 2 && plan.schedule_mode !== "rolling_case_slots_v1") {
     if (!input.priorWaveCompletion)
       throw new Error("Second-wave trial requires the sealed first-wave completion receipt")
     const completion = JSON.parse(await fs.readFile(input.priorWaveCompletion, "utf8")) as {
