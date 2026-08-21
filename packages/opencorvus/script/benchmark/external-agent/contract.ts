@@ -1205,8 +1205,11 @@ export const SCHEDULER_AGENT_ID = "orchestrator"
  *
  * This closes that class of gap from the other side, against evidence rather than against the same
  * matrix: every Agent the sealed transcript shows actually running must be accounted for by the
- * projection audit, either as mounted or as explicitly unmountable. An Agent that ran without
- * appearing in either list means the projection never described the real execution.
+ * projection audit, either as mounted or as explicitly unmountable. Every mounted Agent Session
+ * that actually produces an assistant Message also gets an explicit runtime-adherence outcome for
+ * the exact Skill load, and every real benchmark-client Bash invocation gets an ordering outcome
+ * in the same Session. Projection, runtime load, and operational ordering remain three independently
+ * measured facts; natural model non-adherence is reported without discarding its official score.
  */
 /**
  * Accept a sealed run's Skill evidence.
@@ -1231,7 +1234,7 @@ export function auditSkillEvidenceSeal(input: {
   const same = (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right ?? null)
   const violations: string[] = []
   if (!projection.passed) violations.push("projection_failed")
-  if (!coverage.passed) violations.push(`uncovered_agents:${coverage.uncovered_agents.join("|")}`)
+  if (!coverage.passed) violations.push(...coverage.violations.map((violation) => `coverage:${violation}`))
   if (input.projectionFile?.profile !== input.profile) violations.push("receipt_profile_mismatch")
   if (input.projectionFile?.skill?.name !== input.resultSkill?.name) violations.push("skill_name_mismatch")
   if (!same(projection, input.projectionFile?.skill?.projection)) violations.push("receipt_projection_mismatch")
@@ -1242,9 +1245,15 @@ export function auditSkillEvidenceSeal(input: {
 }
 
 export function auditDispatchedSkillCoverage(input: {
-  projection: { mounted_agents: string[]; unmountable_agents: Array<{ agent_id: string }> }
+  projection: {
+    skill_name?: string
+    mounted_agents: string[]
+    unmountable_agents: Array<{ agent_id: string }>
+  }
   transcript: TranscriptMessage[]
 }) {
+  const skillName = input.projection.skill_name ?? AUTOMATIONBENCH_SKILL_NAME
+  const mounted = new Set(input.projection.mounted_agents)
   const accounted = new Set([
     ...input.projection.mounted_agents,
     ...input.projection.unmountable_agents.map((agent) => agent.agent_id),
@@ -1257,10 +1266,204 @@ export function auditDispatchedSkillCoverage(input: {
     ),
   ].sort()
   const uncovered = dispatched.filter((agent) => !accounted.has(agent))
+  const ownerSessions = new Map<string, { agent_id: string; session_id: string }>()
+  const successfulLoads: Array<{
+    agent_id: string
+    session_id: string
+    message_index: number
+    part_index: number
+  }> = []
+  const clientAttempts: Array<{
+    agent_id: string
+    session_id: string | null
+    message_index: number
+    part_index: number
+    status: string | null
+  }> = []
+  const missingSessionIDs: Array<{ agent_id: string; message_index: number }> = []
+
+  const sessionID = (message: TranscriptMessage) => {
+    const value = message.info?.sessionID ?? message.info?.session_id
+    return typeof value === "string" && value.length > 0 ? value : null
+  }
+  const invokesBenchmarkClient = (toolInput: Record<string, any>) => {
+    const command = toolInput.command
+    if (typeof command !== "string") return false
+    return /(?:^|[\n;&|()])\s*(?:python3|python)\s+(?:\.\/)?automationbench_tool\.py(?:\s|$)/.test(command)
+  }
+
+  for (const [messageIndex, message] of input.transcript.entries()) {
+    const agentID = message.info?.agent
+    if (typeof agentID !== "string" || agentID.length === 0) continue
+    const currentSessionID = sessionID(message)
+    if (message.info?.role === "assistant" && mounted.has(agentID)) {
+      if (currentSessionID) {
+        ownerSessions.set(`${agentID}\u0000${currentSessionID}`, {
+          agent_id: agentID,
+          session_id: currentSessionID,
+        })
+      } else {
+        missingSessionIDs.push({ agent_id: agentID, message_index: messageIndex })
+      }
+    }
+    for (const [partIndex, part] of (message.parts ?? []).entries()) {
+      if (part.type !== "tool") continue
+      const state = part.state && typeof part.state === "object" ? part.state : {}
+      const toolInput = state.input && typeof state.input === "object" ? state.input : {}
+      if (
+        part.tool === "skill" &&
+        toolInput.name === skillName &&
+        state.status === "completed" &&
+        currentSessionID
+      ) {
+        successfulLoads.push({
+          agent_id: agentID,
+          session_id: currentSessionID,
+          message_index: messageIndex,
+          part_index: partIndex,
+        })
+      }
+      if (part.tool === "bash" && invokesBenchmarkClient(toolInput)) {
+        clientAttempts.push({
+          agent_id: agentID,
+          session_id: currentSessionID,
+          message_index: messageIndex,
+          part_index: partIndex,
+          status: typeof state.status === "string" ? state.status : null,
+        })
+      }
+    }
+  }
+
+  const loadBefore = (attempt: (typeof clientAttempts)[number]) =>
+    successfulLoads.some(
+      (load) =>
+        load.agent_id === attempt.agent_id &&
+        load.session_id === attempt.session_id &&
+        (load.message_index < attempt.message_index ||
+          (load.message_index === attempt.message_index && load.part_index < attempt.part_index)),
+    )
+  const missingLoads = [...ownerSessions.values()]
+    .filter(
+      (owner) =>
+        !successfulLoads.some(
+          (load) => load.agent_id === owner.agent_id && load.session_id === owner.session_id,
+        ),
+    )
+    .sort(
+      (left, right) =>
+        left.agent_id.localeCompare(right.agent_id) || left.session_id.localeCompare(right.session_id),
+    )
+  const clientBeforeLoad = clientAttempts.filter((attempt) => mounted.has(attempt.agent_id) && !loadBefore(attempt))
+  const unmountedClientAttempts = clientAttempts.filter((attempt) => !mounted.has(attempt.agent_id))
+  const violations = [
+    ...uncovered.map((agent) => `uncovered_agent:${agent}`),
+    ...missingSessionIDs.map((item) => `missing_session_id:${item.agent_id}:${item.message_index}`),
+  ]
+  const adherenceViolations = [
+    ...missingLoads.map((item) => `missing_skill_load:${item.agent_id}:${item.session_id}`),
+    ...clientBeforeLoad.map(
+      (item) =>
+        `client_before_skill_load:${item.agent_id}:${item.session_id ?? "unknown"}:${item.message_index}:${item.part_index}`,
+    ),
+    ...unmountedClientAttempts.map(
+      (item) =>
+        `client_by_unmounted_agent:${item.agent_id}:${item.session_id ?? "unknown"}:${item.message_index}:${item.part_index}`,
+    ),
+  ]
   return {
-    passed: uncovered.length === 0,
+    passed: violations.length === 0,
+    runtime_adherence_passed: adherenceViolations.length === 0,
     dispatched_agents: dispatched,
     uncovered_agents: uncovered,
+    dispatched_owner_sessions: [...ownerSessions.values()].sort(
+      (left, right) =>
+        left.agent_id.localeCompare(right.agent_id) || left.session_id.localeCompare(right.session_id),
+    ),
+    successful_skill_loads: successfulLoads,
+    benchmark_client_attempts: clientAttempts,
+    missing_skill_loads: missingLoads,
+    client_before_skill_load: clientBeforeLoad,
+    unmounted_client_attempts: unmountedClientAttempts,
+    violations,
+    runtime_adherence_violations: adherenceViolations,
+  }
+}
+
+/** Keep treatment adherence observable without conditioning the official score on model behaviour. */
+export function automationBenchRunValidity(input: {
+  taskOutcomePassed: boolean
+  profilePassed: boolean
+  isolationPassed: boolean
+  promptCompositionPassed: boolean
+  skillProjectionPassed: boolean
+  skillCoveragePassed: boolean
+  skillRuntimeAdherencePassed: boolean
+}) {
+  return {
+    valid:
+      input.taskOutcomePassed &&
+      input.profilePassed &&
+      input.isolationPassed &&
+      input.promptCompositionPassed &&
+      input.skillProjectionPassed &&
+      input.skillCoveragePassed,
+    runtime_adherence_passed: input.skillRuntimeAdherencePassed,
+  }
+}
+
+/** Compact receipt for the last successful public observation of a failed attempt. */
+export function failureObservationReceipt(input: {
+  runID: string
+  runKey: string
+  taskID?: string
+  capturedAt: number
+  projection?: {
+    skill_name?: string
+    mounted_agents: string[]
+    unmountable_agents: Array<{ agent_id: string }>
+  }
+  observation?: {
+    transcript: TranscriptMessage[]
+    trace: Array<Record<string, any>>
+    interactions: Array<Record<string, any>>
+    benchmarkEvents: Array<Record<string, any>>
+  }
+}) {
+  if (!input.observation) {
+    return {
+      schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+      run_id: input.runID,
+      run_key: input.runKey,
+      task_id: input.taskID ?? null,
+      status: "unavailable" as const,
+      reason: input.taskID ? "no_successful_observation" : "task_not_created",
+      captured_at: null,
+      message_count: 0,
+      trace_event_count: 0,
+      interaction_count: 0,
+      benchmark_event_count: 0,
+      skill_runtime_coverage: null,
+    }
+  }
+  return {
+    schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+    run_id: input.runID,
+    run_key: input.runKey,
+    task_id: input.taskID ?? null,
+    status: "captured" as const,
+    reason: "last_successful_public_observation",
+    captured_at: input.capturedAt,
+    message_count: input.observation.transcript.length,
+    trace_event_count: input.observation.trace.length,
+    interaction_count: input.observation.interactions.length,
+    benchmark_event_count: input.observation.benchmarkEvents.length,
+    skill_runtime_coverage: input.projection
+      ? auditDispatchedSkillCoverage({
+          projection: input.projection,
+          transcript: input.observation.transcript,
+        })
+      : null,
   }
 }
 

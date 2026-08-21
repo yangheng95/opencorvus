@@ -15,6 +15,7 @@ import {
   benchmarkRunKey,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
+  automationBenchRunValidity,
   auditBenchmarkIsolation,
   auditPromptCompositionCoverage,
   auditDispatchedSkillCoverage,
@@ -32,6 +33,7 @@ import {
   AUTOMATIONBENCH_SKILL_NAME,
   AUTOMATIONBENCH_SKILL_REF,
   automationBenchSkillAgentIDs,
+  failureObservationReceipt,
   type ProviderUsageRow,
   type SkillMountMatrix,
 } from "./contract"
@@ -843,6 +845,7 @@ await fs.mkdir(outputDirectory, { recursive: true })
 const bridgeEventsPath = path.join(outputDirectory, "automationbench-events.jsonl")
 const initialWorldPath = path.join(outputDirectory, "automationbench-initial-world.json")
 const finalWorldPath = path.join(outputDirectory, "automationbench-final-world.json")
+const skillProjectionPath = path.join(outputDirectory, "skill-projection.json")
 const toolSocketDirectory = path.join("/run/opencorvus-automationbench", runID)
 const toolSocketPath = path.join(toolSocketDirectory, "tool.sock")
 let source: Awaited<ReturnType<typeof verifySourceProjection>> | undefined
@@ -858,6 +861,7 @@ let waitForIngressDeliveryHooks: (() => Promise<void>) | undefined
 let closeDatabase: (() => void) | undefined
 let runtimeLogPath = ""
 let flushRuntimeLog: (() => Promise<void>) | undefined
+let skillProjection: Awaited<ReturnType<typeof projectBenchmarkSkill>> | undefined
 let taskID: string | undefined
 let stage = "source_preflight"
 let agentUID: number | undefined
@@ -1016,6 +1020,9 @@ async function discoverTaskID(input: {
   }
 }
 
+let latestObservation: Awaited<ReturnType<typeof observations>> | undefined
+let latestObservationAt: number | undefined
+
 async function observations() {
   if (!taskID) throw new Error("Task has not been created")
   const [board, transcript, traceProjection, interactions, benchmarkEvents] = await Promise.all([
@@ -1028,7 +1035,10 @@ async function observations() {
     readJSONLines(bridgeEventsPath),
   ])
   if (!traceProjection.enabled) throw new Error("OpenCorvus AgentTrace is disabled for the benchmark Task")
-  return { board, transcript, trace: traceProjection.events, interactions, benchmarkEvents }
+  const current = { board, transcript, trace: traceProjection.events, interactions, benchmarkEvents }
+  latestObservation = current
+  latestObservationAt = Date.now()
+  return current
 }
 
 async function waitForTerminal() {
@@ -1116,6 +1126,40 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
   }
   throw new Error(
     `AutomationBench ${arguments_.profile} Task did not reach terminal execution quiescence; ${JSON.stringify(auditTerminalQuiescence(current.board))}`,
+  )
+}
+
+async function captureFailureObservationEvidence() {
+  const receipt = failureObservationReceipt({
+    runID,
+    runKey,
+    taskID,
+    capturedAt: latestObservationAt ?? Date.now(),
+    projection: skillProjection?.summary.projection,
+    observation: latestObservation,
+  })
+  if (latestObservation) {
+    const secrets = source?.protectedSecrets ?? []
+    const artifacts = [
+      ["latest-board.json", latestObservation.board],
+      ["opencorvus-transcript.json", latestObservation.transcript],
+      ["opencorvus-trace.json", latestObservation.trace],
+      ["opencorvus-interactions.json", latestObservation.interactions],
+    ] as const
+    await Promise.all(
+      artifacts.map(([name, value]) =>
+        fs.writeFile(
+          path.join(outputDirectory, name),
+          JSON.stringify(redactSnapshot(value, secrets), null, 2) + "\n",
+          { encoding: "utf8", flag: "wx" },
+        ),
+      ),
+    )
+  }
+  await fs.writeFile(
+    path.join(outputDirectory, "failure-observation-receipt.json"),
+    JSON.stringify(receipt, null, 2) + "\n",
+    { encoding: "utf8", flag: "wx" },
   )
 }
 
@@ -1322,8 +1366,7 @@ try {
   // because half of it — which Agents actually ran under this projection — does not exist yet.
   // Preserve the pre-Task matrix immediately as failure evidence, then replace this unsealed file
   // with the terminal coverage receipt before the exact-file-set manifest is written.
-  const skillProjection = await projectBenchmarkSkill({ profile: arguments_.profile, skill: seededSkill })
-  const skillProjectionPath = path.join(outputDirectory, "skill-projection.json")
+  skillProjection = await projectBenchmarkSkill({ profile: arguments_.profile, skill: seededSkill })
   await fs.writeFile(
     skillProjectionPath,
     JSON.stringify(
@@ -1470,19 +1513,22 @@ try {
     transcript: terminal.transcript,
   })
   const skillEvidence = { ...skillProjection.summary, dispatched_coverage: skillCoverageAudit }
-  const valid =
-    taskOutcomeAudit.scored_terminal &&
-    profileAudit.passed &&
-    isolationAudit.passed &&
-    promptCompositionAudit.passed &&
-    skillProjection.summary.projection.passed &&
-    skillCoverageAudit.passed
+  const validity = automationBenchRunValidity({
+    taskOutcomePassed: taskOutcomeAudit.scored_terminal,
+    profilePassed: profileAudit.passed,
+    isolationPassed: isolationAudit.passed,
+    promptCompositionPassed: promptCompositionAudit.passed,
+    skillProjectionPassed: skillProjection.summary.projection.passed,
+    skillCoveragePassed: skillCoverageAudit.passed,
+    skillRuntimeAdherencePassed: skillCoverageAudit.runtime_adherence_passed,
+  })
+  const valid = validity.valid
   const invalidReason = !taskOutcomeAudit.scored_terminal
     ? `OpenCorvus Task terminal outcome was invalid (${taskOutcomeAudit.outcome})`
     : !skillProjection.summary.projection.passed
       ? "The experimental Skill was not projected onto the Expert Squad's agents"
       : !skillCoverageAudit.passed
-        ? `Agents ran that the Skill projection never described (${skillCoverageAudit.uncovered_agents.join(", ")})`
+        ? `Experimental Skill runtime evidence failed (${skillCoverageAudit.violations.join(", ")})`
         : !profileAudit.passed
           ? "OpenCorvus Task bound a different Expert Squad profile"
           : !promptCompositionAudit.passed
@@ -1654,6 +1700,28 @@ try {
   process.stdout.write(JSON.stringify({ event: "result", resultPath, svgPath, result }) + "\n")
   if (!valid) process.exitCode = 2
 } catch (error) {
+  try {
+    await captureFailureObservationEvidence()
+  } catch (captureError) {
+    await fs
+      .writeFile(
+        path.join(outputDirectory, "failure-observation-receipt.json"),
+        JSON.stringify(
+          {
+            schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+            run_id: runID,
+            run_key: runKey,
+            task_id: taskID ?? null,
+            status: "capture_failed",
+            reason: captureError instanceof Error ? captureError.name : "UnknownError",
+          },
+          null,
+          2,
+        ) + "\n",
+        { encoding: "utf8", flag: "wx" },
+      )
+      .catch(() => undefined)
+  }
   if (runtimeLogPath && source) {
     await flushRuntimeLog?.().catch(() => undefined)
     const rawRuntimeLog = await fs.readFile(runtimeLogPath, "utf8").catch(() => "")

@@ -6,6 +6,7 @@ import {
   benchmarkRunKey,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
+  automationBenchRunValidity,
   auditBenchmarkIsolation,
   summarizeProviderUsageRows,
   summarizeBenchmarkToolEvents,
@@ -22,6 +23,7 @@ import {
   auditTerminalQuiescence,
   auditBatchEvidence,
   executeRollingBatchChains,
+  failureObservationReceipt,
   missingCompletedBatchProfileReceipts,
   reusableProfileRuns,
   reusableBatchCandidateRunIDs,
@@ -586,10 +588,59 @@ describe("external agent benchmark contract", () => {
       ],
     }
     const transcript = [
-      { info: { agent: "orchestrator" } },
-      { info: { agent: "source-investigator" } },
-      { info: { agent: "implementation-engineer" } },
-      { info: { agent: "test-engineer" } },
+      { info: { agent: "orchestrator", role: "assistant", sessionID: "ses_orchestrator" } },
+      { info: { agent: "source-investigator", role: "assistant", sessionID: "ses_source" } },
+      {
+        info: { agent: "implementation-engineer", role: "assistant", sessionID: "ses_impl" },
+        parts: [
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "completed", input: { name: "automationbench-api" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "implementation-engineer", role: "assistant", sessionID: "ses_impl" },
+        parts: [
+          {
+            type: "tool",
+            tool: "bash",
+            state: {
+              status: "completed",
+              input: {
+                command: "rg automationbench_tool.py README.md",
+                description: "Inspect documentation that mentions python3 automationbench_tool.py",
+              },
+            },
+          },
+          {
+            type: "tool",
+            tool: "bash",
+            state: { status: "completed", input: { command: "python3 automationbench_tool.py search contacts" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "test-engineer", role: "assistant", sessionID: "ses_test" },
+        parts: [
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "completed", input: { name: "automationbench-api" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "test-engineer", role: "assistant", sessionID: "ses_test" },
+        parts: [
+          {
+            type: "tool",
+            tool: "bash",
+            state: { status: "completed", input: { command: "python3 automationbench_tool.py fetch GET https://api" } },
+          },
+        ],
+      },
     ]
     const projection = auditSkillProjection({ profile: "advanced", matrix })
     const coverage = auditDispatchedSkillCoverage({ projection, transcript })
@@ -605,7 +656,28 @@ describe("external agent benchmark contract", () => {
 
     expect(
       auditSkillEvidenceSeal({ profile: "advanced", resultSkill: skill, projectionFile, transcript }),
-    ).toMatchObject({ passed: true, violations: [] })
+    ).toMatchObject({
+      passed: true,
+      coverage: {
+        passed: true,
+        runtime_adherence_passed: true,
+        dispatched_owner_sessions: [
+          { agent_id: "implementation-engineer", session_id: "ses_impl" },
+          { agent_id: "test-engineer", session_id: "ses_test" },
+        ],
+        successful_skill_loads: [
+          { agent_id: "implementation-engineer", session_id: "ses_impl" },
+          { agent_id: "test-engineer", session_id: "ses_test" },
+        ],
+        benchmark_client_attempts: [
+          { agent_id: "implementation-engineer", session_id: "ses_impl", status: "completed" },
+          { agent_id: "test-engineer", session_id: "ses_test", status: "completed" },
+        ],
+        violations: [],
+        runtime_adherence_violations: [],
+      },
+      violations: [],
+    })
 
     // The shipped wiring bug: the receipt file carried the coverage and `result.json` did not, so
     // every otherwise-valid run would have been rejected by the checkers instead of scored.
@@ -628,6 +700,26 @@ describe("external agent benchmark contract", () => {
         transcript,
       }),
     ).toMatchObject({ passed: false, violations: ["receipt_coverage_mismatch"] })
+
+    const legacySkill = {
+      ...skill,
+      dispatched_coverage: {
+        passed: true,
+        dispatched_agents: coverage.dispatched_agents,
+        uncovered_agents: [],
+      },
+    }
+    expect(
+      auditSkillEvidenceSeal({
+        profile: "advanced",
+        resultSkill: legacySkill,
+        projectionFile: { ...projectionFile, skill: legacySkill },
+        transcript,
+      }),
+    ).toMatchObject({
+      passed: false,
+      violations: ["receipt_coverage_mismatch", "result_coverage_mismatch"],
+    })
   })
 
   test("rejects a run whose transcript shows an Agent the Skill projection never described", () => {
@@ -635,7 +727,10 @@ describe("external agent benchmark contract", () => {
       mounted_agents: ["implementation-engineer", "test-engineer"],
       unmountable_agents: [{ agent_id: "source-investigator" }, { agent_id: "orchestrator" }],
     }
-    const transcript = (agents: string[]) => agents.map((agent) => ({ info: { agent } }))
+    // This fixture isolates projection accounting: user Messages prove dispatch identity, while the
+    // preceding sealed-receipt fixture owns assistant runtime-load and command-order evidence.
+    const transcript = (agents: string[]) =>
+      agents.map((agent, index) => ({ info: { agent, role: "user", sessionID: `ses_projection_${index}` } }))
 
     expect(
       auditDispatchedSkillCoverage({
@@ -656,6 +751,205 @@ describe("external agent benchmark contract", () => {
       passed: false,
       dispatched_agents: ["orchestrator", "universal-build"],
       uncovered_agents: ["universal-build"],
+    })
+  })
+
+  test("preserves official scoring while reporting explicit Skill runtime non-adherence", () => {
+    const projection = {
+      skill_name: "automationbench-api",
+      mounted_agents: ["base-developer", "base-tester"],
+      unmountable_agents: [{ agent_id: "orchestrator" }],
+    }
+    const transcript = [
+      {
+        info: { agent: "base-developer", role: "assistant", sessionID: "ses_developer" },
+        parts: [
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "error", input: { name: "automationbench-api" } },
+          },
+          {
+            type: "tool",
+            tool: "bash",
+            state: { status: "error", input: { command: "python3 automationbench_tool.py search leads" } },
+          },
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "completed", input: { name: "automationbench-api" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "base-tester", role: "assistant", sessionID: "ses_tester_load" },
+        parts: [
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "completed", input: { name: "automationbench-api" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "base-tester", role: "assistant", sessionID: "ses_tester_client" },
+        parts: [
+          {
+            type: "tool",
+            tool: "bash",
+            state: { status: "completed", input: { command: "python3 automationbench_tool.py fetch GET https://api" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "orchestrator", role: "assistant", sessionID: "ses_orchestrator" },
+        parts: [
+          {
+            type: "tool",
+            tool: "bash",
+            state: { status: "completed", input: { command: "python3 automationbench_tool.py search leads" } },
+          },
+        ],
+      },
+    ]
+    const coverage = auditDispatchedSkillCoverage({
+      projection,
+      transcript,
+    })
+
+    expect(coverage).toMatchObject({
+      passed: true,
+      runtime_adherence_passed: false,
+      missing_skill_loads: [{ agent_id: "base-tester", session_id: "ses_tester_client" }],
+      client_before_skill_load: [
+        { agent_id: "base-developer", session_id: "ses_developer", status: "error" },
+        { agent_id: "base-tester", session_id: "ses_tester_client", status: "completed" },
+      ],
+      unmounted_client_attempts: [
+        { agent_id: "orchestrator", session_id: "ses_orchestrator", status: "completed" },
+      ],
+      violations: [],
+      runtime_adherence_violations: [
+        "missing_skill_load:base-tester:ses_tester_client",
+        "client_before_skill_load:base-developer:ses_developer:0:1",
+        "client_before_skill_load:base-tester:ses_tester_client:2:0",
+        "client_by_unmounted_agent:orchestrator:ses_orchestrator:3:0",
+      ],
+    })
+    const naturalOutcome = auditTaskOutcome("failed", [
+      ...transcript,
+      {
+        parts: [
+          {
+            type: "tool",
+            tool: "manage_task",
+            state: { status: "completed", input: { action: "fail_task" } },
+          },
+        ],
+      },
+    ])
+    expect(naturalOutcome).toMatchObject({ passed: true, scored_terminal: true, outcome: "natural_failed" })
+    expect(
+      automationBenchRunValidity({
+        taskOutcomePassed: naturalOutcome.scored_terminal,
+        profilePassed: true,
+        isolationPassed: true,
+        promptCompositionPassed: true,
+        skillProjectionPassed: true,
+        skillCoveragePassed: coverage.passed,
+        skillRuntimeAdherencePassed: coverage.runtime_adherence_passed,
+      }),
+    ).toEqual({ valid: true, runtime_adherence_passed: false })
+  })
+
+  test("seals the last successful failed-run observation or a typed unavailable receipt", () => {
+    const transcript = [
+      {
+        info: { agent: "base-developer", role: "assistant", sessionID: "ses_developer" },
+        parts: [
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "completed", input: { name: "automationbench-api" } },
+          },
+        ],
+      },
+      {
+        info: { agent: "base-developer", role: "assistant", sessionID: "ses_developer" },
+        parts: [
+          {
+            type: "tool",
+            tool: "bash",
+            state: { status: "completed", input: { command: "python3 automationbench_tool.py search leads" } },
+          },
+        ],
+      },
+    ]
+    expect(
+      failureObservationReceipt({
+        runID: "run_captured",
+        runKey: "key_captured",
+        taskID: "task_captured",
+        capturedAt: 123,
+        projection: {
+          skill_name: "automationbench-api",
+          mounted_agents: ["base-developer"],
+          unmountable_agents: [{ agent_id: "orchestrator" }],
+        },
+        observation: {
+          transcript,
+          trace: [{ kind: "llm" }],
+          interactions: [],
+          benchmarkEvents: [{ kind: "tool" }],
+        },
+      }),
+    ).toMatchObject({
+      status: "captured",
+      reason: "last_successful_public_observation",
+      captured_at: 123,
+      message_count: 2,
+      trace_event_count: 1,
+      benchmark_event_count: 1,
+      skill_runtime_coverage: {
+        passed: true,
+        runtime_adherence_passed: true,
+        successful_skill_loads: [{ agent_id: "base-developer", session_id: "ses_developer" }],
+        benchmark_client_attempts: [{ agent_id: "base-developer", session_id: "ses_developer" }],
+      },
+    })
+    expect(
+      failureObservationReceipt({
+        runID: "run_unavailable",
+        runKey: "key_unavailable",
+        capturedAt: 456,
+      }),
+    ).toEqual({
+      schema_version: 1,
+      run_id: "run_unavailable",
+      run_key: "key_unavailable",
+      task_id: null,
+      status: "unavailable",
+      reason: "task_not_created",
+      captured_at: null,
+      message_count: 0,
+      trace_event_count: 0,
+      interaction_count: 0,
+      benchmark_event_count: 0,
+      skill_runtime_coverage: null,
+    })
+    expect(
+      failureObservationReceipt({
+        runID: "run_unobserved",
+        runKey: "key_unobserved",
+        taskID: "task_unobserved",
+        capturedAt: 789,
+      }),
+    ).toMatchObject({
+      task_id: "task_unobserved",
+      status: "unavailable",
+      reason: "no_successful_observation",
+      captured_at: null,
+      skill_runtime_coverage: null,
     })
   })
 
