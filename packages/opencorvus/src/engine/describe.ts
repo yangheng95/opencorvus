@@ -184,10 +184,6 @@ export interface CurrentProcessPromptOwnerDesc {
   /** Current process-local lifecycle observation. An idle owner is retained
    * for coordination continuation and is not an executing worker. */
   lifecycle_status: SessionStatus.Info["type"]
-  /** Wall-clock timestamp of the latest prompt-controller activity observed
-   *  by this exact Host process. It is an ephemeral observation, not a
-   *  durable lifecycle verdict. */
-  last_activity_ms: number
 }
 
 export function currentProcessPromptOwnersForTask(taskID: string): CurrentProcessPromptOwnerDesc[] {
@@ -195,7 +191,6 @@ export function currentProcessPromptOwnersForTask(taskID: string): CurrentProces
     session_id: owner.sessionID,
     session_kind: owner.kind,
     lifecycle_status: SessionStatus.get(owner.sessionID).type,
-    last_activity_ms: owner.lastActivityMs,
   }))
 }
 
@@ -1197,9 +1192,9 @@ export function renderTaskDescription(desc: TaskDesc): string {
   if (desc.current_process_prompt_owners && desc.current_process_prompt_owners.length > 0) {
     lines.push("## Current-process prompt owners")
     for (const owner of desc.current_process_prompt_owners) {
-      lines.push(
-        `- session=${owner.session_id}; kind=${owner.session_kind}; lifecycle=${owner.lifecycle_status}; last_activity_ms=${owner.last_activity_ms}`,
-      )
+      // Keep raw activity milliseconds out of this prefix: they advance every Provider step,
+      // while lifecycle is the execution signal the Orchestrator is instructed to use.
+      lines.push(`- session=${owner.session_id}; kind=${owner.session_kind}; lifecycle=${owner.lifecycle_status}`)
     }
     lines.push(
       "These are current-now ephemeral prompt-controller facts from this exact Host process, including when the durable view is rewound. Ownership alone does not mean a worker is executing: use the lifecycle field. These observations do not mutate Delivery Slice contracts or Task lifecycle.",
