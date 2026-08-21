@@ -18,7 +18,7 @@
 
 - 修复同一编排 Turn 内先更新 Goal、随后并行 dispatch 时，后续 Tool 会因决策身份漂移而被拒绝的问题；重启恢复继续使用持久化的同一决策集合。
 - 修复运行时 prompt 标签、Prompt composition 指纹和实际 Agent/Session 归因可能不一致，导致 Provider 调用证据无法稳定复核的问题。
-- 修复 `squad-sdk` 当前包字节仍声明旧 revision、使干净构建自动改写 manifest 并阻断生成产物检查的问题。
+- 修复 `squad-sdk` 当前包字节仍声明旧 revision，以及 revision digest 读取平台相关 checkout 换行符、使 Windows 与 Linux 对同一提交生成不同基线的问题；生成器现在与 package payload 共用 UTF‑8/LF 规范字节。
 
 ## 0.0.50beta - 2026-08-21
 

@@ -117,7 +117,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "seo-geo": { version: "2026.08.19.2", contentDigest: "5e89b15a59e09f65fe16ec688ba5b76a514713e3ae5be3080e2045d59e029cb9" },
   "service-reliability-incident-operations": { version: "2026.08.13.1", contentDigest: "2678139215d1a87447dd222bf94084d2bf5a3acfd7c4190378b3cdd9453b1947" },
   "sports-performance-analysis": { version: "2026.08.13.1", contentDigest: "ad9dabc34de059d311f5e8b211286396ea56c634eaa7acae8d0e2f4e8804ec76" },
-  "squad-sdk": { version: "2026.08.21.1", contentDigest: "b3676ad131f0777cd15e80e9d76a9a30d19d4b8264426dfd70c83018c26dae47" },
+  "squad-sdk": { version: "2026.08.21.1", contentDigest: "cc07dcee0de5f3021f1d1918b91037ef335ddfa4171942ed932b8984cce23d9f" },
   "student-financial-aid-administration": { version: "2026.08.13.1", contentDigest: "584ac4a51c63f1c86a681bb117cf107bde616ada7d504ad56ac781547d641bef" },
   "supply-chain-logistics": { version: "2026.08.13.1", contentDigest: "1a72d1662edb28de9d92d3008d2c31867cd2fda14aef05a40f7ab7015654cf34" },
   "tax-compliance": { version: "2026.08.19.1", contentDigest: "4065d83dfc5c6f1d3ea3c46a26047ee366e7fd6c0efb9f2ca8a26b4d7b443c83" },

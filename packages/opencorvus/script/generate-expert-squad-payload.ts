@@ -2,14 +2,11 @@
 
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { EMBEDDED_EXPERT_SQUAD_IDS } from "../src/expert-squad/builtin/ids"
-import { isUtf8 } from "node:buffer"
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import {
-  createOpenCorvusTemporaryDirectory,
-  removeManagedDirectoryTree,
-} from "@opencorvus-ai/util/runtime-directories"
+import { createOpenCorvusTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
+import { canonicalExpertSquadPackageFileBytes } from "./expert-squad-package-file-bytes"
 
 interface PayloadPackageInput {
   namespace: string
@@ -59,8 +56,9 @@ function trackedAuthoringPaths(repoRoot: string): string[] {
 }
 
 export function payloadFileExpression(bytes: Uint8Array): string {
-  if (isUtf8(bytes)) return JSON.stringify(Buffer.from(bytes).toString("utf8").replace(/\r\n?/g, "\n"))
-  return JSON.stringify({ encoding: "base64", content: Buffer.from(bytes).toString("base64") })
+  const canonical = canonicalExpertSquadPackageFileBytes(bytes)
+  if (canonical.encoding === "utf8") return JSON.stringify(canonical.bytes.toString("utf8"))
+  return JSON.stringify({ encoding: "base64", content: canonical.bytes.toString("base64") })
 }
 
 export async function discoverExpertSquadPayloadPackages(repoRoot: string): Promise<PayloadPackageInput[]> {
@@ -79,9 +77,7 @@ export async function discoverExpertSquadPayloadPackages(repoRoot: string): Prom
     // has to name a package, because there a short path is a real mistake.
     if (segments.length === 1 && segments[0]) continue
     if (segments.length < 3 || segments.some((segment) => !segment)) {
-      throw new Error(
-        `Expert squad payload generation tracked path must match <namespace>/<id>/<file>: ${trackedPath}`,
-      )
+      throw new Error(`Expert squad payload generation tracked path must match <namespace>/<id>/<file>: ${trackedPath}`)
     }
     const [namespace, id, ...fileSegments] = segments as [string, string, ...string[]]
     if (embeddedIDs.has(id)) continue

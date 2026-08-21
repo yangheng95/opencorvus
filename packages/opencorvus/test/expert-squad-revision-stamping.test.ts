@@ -8,6 +8,7 @@ import {
   planExpertSquadRevisions,
   readManifestVersion,
 } from "../script/generate-expert-squad-revisions"
+import { canonicalExpertSquadPackageFileBytes } from "../script/expert-squad-package-file-bytes"
 
 /**
  * A built-in package's version has to move whenever its bytes move, because the site registry keys
@@ -22,15 +23,19 @@ import {
 
 const MANIFEST = "expert-squad.jsonc"
 
-function repoWith(files: Record<string, string>): string {
+function repoWith(files: Record<string, string | Uint8Array>): string {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "opencorvus-revision-"))
   for (const [relative, content] of Object.entries(files)) {
     const target = path.join(root, relative)
     fs.mkdirSync(path.dirname(target), { recursive: true })
     fs.writeFileSync(target, content)
   }
-  // The digest reads the git index, so the fixture needs to be a repository with the files tracked.
-  for (const args of [["init", "-q"], ["add", "-A"], ["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "fixture"]]) {
+  // The digest enumerates tracked files and canonicalizes their UTF-8 payload bytes.
+  for (const args of [
+    ["init", "-q"],
+    ["add", "-A"],
+    ["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "fixture"],
+  ]) {
     const done = Bun.spawnSync({ cmd: ["git", ...args], cwd: root, stdout: "pipe", stderr: "pipe" })
     if (done.exitCode !== 0) throw new Error(`git ${args.join(" ")}: ${new TextDecoder().decode(done.stderr)}`)
   }
@@ -40,6 +45,26 @@ function repoWith(files: Record<string, string>): string {
 const manifest = (version: string) => `{\n  "id": "sample",\n  "version": "${version}",\n  "name": "Sample"\n}\n`
 
 describe("expert squad content digest", () => {
+  test("preserves non-UTF-8 package payload bytes exactly", () => {
+    const source = Uint8Array.from([0xff, 0x00, 0x0d, 0x0a, 0x80])
+    const canonical = canonicalExpertSquadPackageFileBytes(source)
+
+    expect(canonical).toEqual({ encoding: "binary", bytes: Buffer.from(source) })
+  })
+
+  test("moves when a non-UTF-8 package payload changes", () => {
+    const binaryPath = "expert-squads/builtin/sample/assets/payload.bin"
+    const root = repoWith({
+      [`expert-squads/builtin/sample/${MANIFEST}`]: manifest("2026.08.13.1"),
+      [binaryPath]: Uint8Array.from([0xff, 0x00, 0x0d, 0x0a, 0x80]),
+    })
+    const packageRoot = path.join(root, "expert-squads", "builtin", "sample")
+    const before = packageContentDigest(root, packageRoot)
+
+    fs.writeFileSync(path.join(root, binaryPath), Uint8Array.from([0xff, 0x00, 0x0d, 0x0a, 0x81]))
+    expect(packageContentDigest(root, packageRoot)).not.toBe(before)
+  })
+
   test("ignores the version field, so a stamp cannot chase its own tail", () => {
     const root = repoWith({ [`expert-squads/builtin/sample/${MANIFEST}`]: manifest("2026.08.13.1") })
     const packageRoot = path.join(root, "expert-squads", "builtin", "sample")
@@ -61,6 +86,19 @@ describe("expert squad content digest", () => {
     const before = packageContentDigest(root, packageRoot)
     fs.writeFileSync(path.join(packageRoot, "skills", "authoring", "SKILL.md"), "edited\n")
     expect(packageContentDigest(root, packageRoot)).not.toBe(before)
+  })
+
+  test("uses canonical payload bytes across checkout line endings", () => {
+    const relative = `expert-squads/builtin/sample/${MANIFEST}`
+    const root = repoWith({
+      [relative]: manifest("2026.08.13.1"),
+      "expert-squads/builtin/sample/README.md": "line one\nline two\n",
+    })
+    const packageRoot = path.join(root, "expert-squads", "builtin", "sample")
+    const canonical = packageContentDigest(root, packageRoot)
+
+    fs.writeFileSync(path.join(packageRoot, "README.md"), "line one\r\nline two\r\n")
+    expect(packageContentDigest(root, packageRoot)).toBe(canonical)
   })
 })
 
