@@ -1,13 +1,22 @@
 import { describe, expect, test } from "bun:test"
-import { orchestratorDecisionToolCompletionEffect } from "@/orchestrator/decision-tool-names"
+import {
+  ORCHESTRATOR_DECISION_TOOL_NAMES,
+  orchestratorCommittedDecisionInParts,
+  orchestratorDecisionToolAlwaysCommits,
+  orchestratorDecisionToolCompletionEffect,
+  orchestratorWithheldDecisionToolNames,
+} from "@/orchestrator/decision-tool-names"
 import { ToolTurnExecutionConflictError, ToolTurnExecutionCoordinator } from "@/tool/execution-mode"
 
 /**
  * The durable reduction accepts one assistant turn's decision set only when it
  * is a `dispatch_agent` fan-out or a single other decision. Anything mixed is
- * an integrity conflict, which is absorbing: the ingress blocks permanently
- * and head-of-line blocks every later one. A model can emit that combination
- * in ordinary output, so it has to be refused before it becomes a fact.
+ * an integrity conflict that costs the turn its effect: the ingress rests in
+ * `host_fault`, the reduction returns before any decision can be read, and only
+ * a new operator message can redo the abandoned work. A model can emit that
+ * combination in ordinary output, so it has to be refused before it becomes a
+ * fact — and "a turn" means the persisted assistant Message, which outlives the
+ * Provider step that resolves the Tool surface.
  */
 describe("assistant-turn decision coordination", () => {
   async function attempt(coordinator: ToolTurnExecutionCoordinator, command: string, commits = true) {
@@ -74,6 +83,98 @@ describe("assistant-turn decision coordination", () => {
       mutation: "committed",
       dispatch: "committed",
     })
+  })
+
+  const completedToolPart = (tool: string, input: unknown = {}) => ({
+    type: "tool",
+    tool,
+    state: { status: "completed", input },
+  })
+
+  test("carries the turn's decision across the Provider step that resolves a new surface", async () => {
+    // The shipped fault, as the Host recorded it 43 times in one Base batch: a
+    // Task-root assistant Message is retained across Provider steps, but a
+    // coordinator is built per resolved Tool surface, so step two started with
+    // no memory of step one's dispatch and `no_action` became a durable fact
+    // beside it. The reduction then rejected the pair and the turn executed
+    // nothing.
+    const stepOne = new ToolTurnExecutionCoordinator()
+    expect(await attempt(stepOne, "dispatch_agent")).toBe("committed")
+
+    const persistedParts = [completedToolPart("dispatch_agent", { agent: "base-developer" })]
+    const stepTwo = new ToolTurnExecutionCoordinator({
+      committedDecision: orchestratorCommittedDecisionInParts(persistedParts),
+    })
+    expect(await attempt(stepTwo, "no_action")).toBe("refused")
+    // A fan-out is still one decision, so it survives the step boundary too.
+    expect(await attempt(stepTwo, "dispatch_agent")).toBe("committed")
+  })
+
+  test("seeds the claim from the Message's receipts, not from the step that wrote them", async () => {
+    const settled = new ToolTurnExecutionCoordinator({
+      committedDecision: orchestratorCommittedDecisionInParts([
+        completedToolPart("manage_task", { action: "complete_task" }),
+      ]),
+    })
+    expect([await attempt(settled, "dispatch_agent"), await attempt(settled, "no_action")]).toEqual([
+      "refused",
+      "refused",
+    ])
+  })
+
+  test("reads a committed decision out of recorded Tool parts the way the reduction does", () => {
+    expect(orchestratorCommittedDecisionInParts([])).toBeUndefined()
+    expect(orchestratorCommittedDecisionInParts([{ type: "text" } as any])).toBeUndefined()
+    // Still running, so nothing is committed yet.
+    expect(
+      orchestratorCommittedDecisionInParts([{ type: "tool", tool: "dispatch_agent", state: { status: "running" } }]),
+    ).toBeUndefined()
+    // Owes the next decision, so it claims nothing.
+    expect(orchestratorCommittedDecisionInParts([completedToolPart("question", { question: "?" })])).toBeUndefined()
+    expect(
+      orchestratorCommittedDecisionInParts([completedToolPart("manage_task", { action: "add_goal" })]),
+    ).toBeUndefined()
+    // Unclassifiable recorded input is a call that failed on its own terms.
+    expect(orchestratorCommittedDecisionInParts([completedToolPart("respond_agent_coordination", {})])).toBeUndefined()
+    expect(orchestratorCommittedDecisionInParts([completedToolPart("no_action")])).toBe("no_action")
+    expect(
+      orchestratorCommittedDecisionInParts([
+        completedToolPart("artifact_read", {}),
+        completedToolPart("dispatch_agent", { agent: "base-tester" }),
+      ]),
+    ).toBe("dispatch_agent")
+  })
+
+  test("withholds only the decision Tools no legal input could have called", () => {
+    const surface = [...ORCHESTRATOR_DECISION_TOOL_NAMES, "artifact_read"]
+    expect(orchestratorWithheldDecisionToolNames({ toolNames: surface, committedDecision: undefined })).toEqual([])
+    // A fan-out stays open; the two Tools that commit whatever they are given do not.
+    expect(
+      orchestratorWithheldDecisionToolNames({ toolNames: surface, committedDecision: "dispatch_agent" }).sort(),
+    ).toEqual(["no_action", "wait"])
+    // `manage_task` and `respond_agent_coordination` keep their non-deciding
+    // forms, so they are never withheld — the coordinator judges them by input.
+    expect(
+      orchestratorWithheldDecisionToolNames({ toolNames: surface, committedDecision: "manage_task" }).sort(),
+    ).toEqual(["dispatch_agent", "no_action", "wait"])
+  })
+
+  test("only classifies a Tool as always-committing when no input makes it owe a decision", () => {
+    const probeInputs: unknown[] = [
+      {},
+      { action: "add_goal" },
+      { action: "complete_task" },
+      { goal: "x" },
+      { updates: {} },
+      { decision: "redispatch" },
+      { decision: "accept" },
+    ]
+    for (const tool of ORCHESTRATOR_DECISION_TOOL_NAMES) {
+      if (!orchestratorDecisionToolAlwaysCommits(tool)) continue
+      for (const stateInput of probeInputs) {
+        expect(orchestratorDecisionToolCompletionEffect({ tool, stateInput })).not.toBe("requires_followup_decision")
+      }
+    }
   })
 
   test("classifies every manage_task action by its durable scheduling effect", () => {

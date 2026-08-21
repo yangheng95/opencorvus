@@ -64,6 +64,96 @@ afterEach(async () => {
 })
 
 describe("SessionLoop Tool execution authority integration", () => {
+  test("binds a resolved Tool surface to the decision its assistant Message already committed", async () => {
+    // A surface is resolved once per Provider step; a Task-root assistant Message
+    // spans several. When the coordinator was built with no knowledge of that
+    // Message, step two decided again beside step one's decision, the reduction
+    // rejected the pair, and the Turn executed nothing — 43 times in one Base
+    // batch. `resolveTools` derives the claim from the arguments it already
+    // receives, so no call site can reintroduce that gap by forgetting to pass it.
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const agent = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("coding", { config }))
+        const session = await Session.create({ kind: "assistant", title: "Retained turn decision claim" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          agent: "coding",
+          time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const processor = SessionProcessor.create({
+          assistantMessage: assistant,
+          sessionID: session.id,
+          model,
+          abort: new AbortController().signal,
+        })
+        const history = await Session.messages({ sessionID: session.id })
+        const retained = history.map((message) =>
+          message.info.id === assistant.id
+            ? {
+                ...message,
+                parts: [
+                  ...message.parts,
+                  {
+                    id: Identifier.ascending("part"),
+                    sessionID: session.id,
+                    messageID: assistant.id,
+                    type: "tool",
+                    tool: "dispatch_agent",
+                    callID: "call_retained_dispatch",
+                    state: { status: "completed", input: { agent: "base-developer" }, output: "dispatched" },
+                  },
+                ],
+              }
+            : message,
+        ) as typeof history
+
+        const withoutReceipt = await SessionLoop.resolveTools({
+          agent,
+          agentID: "coding",
+          model,
+          session,
+          processor,
+          messages: history,
+          config,
+        })
+        expect(SessionLoop.executionCoordinatorForResolvedTools(withoutReceipt)?.committedDecision).toBeUndefined()
+
+        const withReceipt = await SessionLoop.resolveTools({
+          agent,
+          agentID: "coding",
+          model,
+          session,
+          processor,
+          messages: retained,
+          config,
+        })
+        expect(SessionLoop.executionCoordinatorForResolvedTools(withReceipt)?.committedDecision).toBe("dispatch_agent")
+      },
+    })
+  })
+
   test("persists a provider-driven standalone write result through the real SessionLoop Tool wrapper", async () => {
     await using project = await memoryProject()
     await Instance.provide({

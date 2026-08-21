@@ -26,6 +26,32 @@ export function isOrchestratorDecisionToolName(value: string): value is Orchestr
 }
 
 /**
+ * Whether every input this decision Tool accepts commits a decision.
+ *
+ * `orchestratorDecisionToolCompletionEffect` answers that for one call, once the
+ * arguments exist. Projecting a Tool surface happens before any arguments do, so
+ * a Tool may only be withheld from a Turn that already decided when no input it
+ * accepts could have been legal — `manage_task` still carries the Goal edits and
+ * `respond_agent_coordination` still carries `redispatch`, and neither of those
+ * is a decision.
+ *
+ * The map is exhaustive over the Tool names by construction, so adding a
+ * decision Tool is a compile error until this classification is made for it.
+ */
+const ORCHESTRATOR_DECISION_TOOL_ALWAYS_COMMITS: Record<OrchestratorDecisionToolName, boolean> = {
+  dispatch_agent: true,
+  no_action: true,
+  wait: true,
+  question: false,
+  manage_task: false,
+  respond_agent_coordination: false,
+}
+
+export function orchestratorDecisionToolAlwaysCommits(tool: OrchestratorDecisionToolName): boolean {
+  return ORCHESTRATOR_DECISION_TOOL_ALWAYS_COMMITS[tool]
+}
+
+/**
  * Interpret the durable completion contract of one visible decision Tool.
  * A completed interaction Tool has already returned its new operator fact, and
  * a coordination redispatch has only frozen authority for a later dispatch.
@@ -68,3 +94,54 @@ export function orchestratorDecisionToolCompletionEffect(input: {
   return "satisfies_current_epoch"
 }
 import { isAgentCoordinationDecision } from "@/engine/agent-coordination-decision"
+
+/**
+ * The decision a recorded assistant turn has already committed, if any.
+ *
+ * A decision is durable evidence, not process memory: the reduction derives its
+ * decision facts from exactly these Tool parts, so anything that has to know
+ * what a turn already decided — across a Provider step, or across a restart —
+ * must read them the same way rather than remember. A declaration that cannot
+ * classify its own recorded input is not a committed decision; the call it
+ * describes failed on its own terms.
+ */
+export function orchestratorCommittedDecisionInParts(
+  parts: ReadonlyArray<{ type: string; tool?: string; state?: { status?: string; input?: unknown } }>,
+): OrchestratorDecisionToolName | undefined {
+  for (const part of parts) {
+    if (part.type !== "tool" || part.state?.status !== "completed") continue
+    const tool = part.tool
+    if (typeof tool !== "string" || !isOrchestratorDecisionToolName(tool)) continue
+    try {
+      const effect = orchestratorDecisionToolCompletionEffect({ tool, stateInput: part.state.input })
+      if (effect === "requires_followup_decision") continue
+    } catch {
+      continue
+    }
+    return tool
+  }
+  return undefined
+}
+
+/**
+ * Decision Tools a Turn that already decided must not be offered.
+ *
+ * The coordinator refuses a second decision, but a refusal is a result the model
+ * can answer with the same call again, and an absent Tool has no retry path.
+ * Only a Tool that commits for every input it accepts may be withheld — see
+ * `orchestratorDecisionToolAlwaysCommits` — and a `dispatch_agent` fan-out stays
+ * open across Provider steps because the reduction accepts it.
+ */
+export function orchestratorWithheldDecisionToolNames(input: {
+  toolNames: Iterable<string>
+  committedDecision: OrchestratorDecisionToolName | undefined
+}): string[] {
+  if (!input.committedDecision) return []
+  const committed = input.committedDecision
+  return [...input.toolNames].filter(
+    (name) =>
+      isOrchestratorDecisionToolName(name) &&
+      orchestratorDecisionToolAlwaysCommits(name) &&
+      !(committed === "dispatch_agent" && name === "dispatch_agent"),
+  )
+}

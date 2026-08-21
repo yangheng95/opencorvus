@@ -128,7 +128,9 @@ import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
 import {
   isOrchestratorDecisionToolName,
-  orchestratorDecisionToolCompletionEffect,
+  orchestratorCommittedDecisionInParts,
+  orchestratorWithheldDecisionToolNames,
+  type OrchestratorDecisionToolName,
 } from "@/orchestrator/decision-tool-names"
 import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
 import {
@@ -159,20 +161,12 @@ function taskRootDecisionGapStepIDs(message: Message.WithParts): string[] {
     .map((part) => part.id)
 }
 
+function taskRootAssistantCommittedDecision(message: Message.WithParts): OrchestratorDecisionToolName | undefined {
+  return orchestratorCommittedDecisionInParts(message.parts)
+}
+
 function taskRootAssistantHasDecisionReceipt(message: Message.WithParts): boolean {
-  return message.parts.some((part) => {
-    if (
-      part.type !== "tool" ||
-      part.state.status !== "completed" ||
-      !isOrchestratorDecisionToolName(part.tool)
-    ) {
-      return false
-    }
-    return (
-      orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input }) !==
-      "requires_followup_decision"
-    )
-  })
+  return taskRootAssistantCommittedDecision(message) !== undefined
 }
 
 /**
@@ -285,6 +279,10 @@ export namespace SessionLoop {
 
   export function skillSurfaceForResolvedTools(tools: Record<string, AITool>) {
     return resolvedToolSkillSurfaces.get(tools)
+  }
+
+  export function executionCoordinatorForResolvedTools(tools: Record<string, AITool>) {
+    return resolvedToolExecutionSurfaces.get(tools)?.coordinator
   }
 
   /**
@@ -1651,6 +1649,36 @@ export namespace SessionLoop {
       }
     }
 
+    // The complement of the repair rung. That rung constrains a Turn that has
+    // not decided yet; this one constrains a Turn that already has.
+    //
+    // The coordinator refuses a second decision, but a refusal is a result the
+    // model can answer with the same call again, and `no_action` arriving after
+    // a settled `dispatch_agent` was the single most common way a Turn lost its
+    // effect. An absent Tool has no retry path. Only a Tool that commits for
+    // every input it accepts may be withheld: `manage_task` still carries the
+    // Goal edits and `respond_agent_coordination` still carries `redispatch`,
+    // so those stay on the surface and the coordinator judges them by their
+    // arguments at the call.
+    const committedDecision = openTaskRootAssistant
+      ? taskRootAssistantCommittedDecision(openTaskRootAssistant)
+      : undefined
+    if (committedDecision) {
+      const withheld = orchestratorWithheldDecisionToolNames({
+        toolNames: Object.keys(tools),
+        committedDecision,
+      })
+      if (withheld.length > 0) {
+        log.info("task-root-decision-committed-withholding-tools", {
+          sessionID: input.sessionID,
+          committedDecision,
+          withheld,
+        })
+        const remaining = new Set(withheld)
+        tools = Object.fromEntries(Object.entries(tools).filter(([name]) => !remaining.has(name)))
+      }
+    }
+
     // Live session-state blocks. These change between turns (the project MEMORY.MD
     // document and its notices are re-read, and taskplan tracks progress). Until 2026-04
     // they were pushed onto `system` after the cached entries (env, runtime context), but
@@ -2742,8 +2770,15 @@ export namespace SessionLoop {
   }) {
     using _ = log.time("resolveTools")
     const tools: Record<string, AITool> = {}
+    // Derived here rather than accepted as an argument. A surface is resolved
+    // once per Provider step while the assistant Message it belongs to can span
+    // several, so the claim has to be re-read from that Message every time — and
+    // a call site that had to remember to pass it is a call site that can forget.
+    const retainedAssistant = input.messages.find((message) => message.info.id === input.processor.message.id)
     resolvedToolExecutionSurfaces.set(tools, {
-      coordinator: new ToolTurnExecutionCoordinator(),
+      coordinator: new ToolTurnExecutionCoordinator({
+        committedDecision: retainedAssistant ? taskRootAssistantCommittedDecision(retainedAssistant) : undefined,
+      }),
       coordinatedTools: new WeakSet<object>(),
     })
     const toolSources = new Map<string, ProviderToolSource>()
