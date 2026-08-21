@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { LLM } from "@/session/llm"
 import {
   comparePromptComposition,
   fingerprintPromptComposition,
@@ -121,6 +122,44 @@ describe("prompt composition fingerprint", () => {
     expect(
       comparePromptComposition(fingerprintOf(before), fingerprintOf(oldChanged)).firstDivergentLabel,
     ).toBe("system[1]")
+  })
+
+  test("retains logical labels alongside the physically joined system request", async () => {
+    const logicalSystem = ["instructions", "wake", "live task"]
+    const labels = [
+      "runtime:orchestrator-instructions",
+      "runtime:orchestrator-wake-and-capabilities",
+      "runtime:orchestrator-live-task-render",
+    ]
+    const physicalSystem = await LLM.composeSystem({
+      agentID: "orchestrator",
+      agent: {} as never,
+      model: {} as never,
+      system: logicalSystem,
+      runtimeSystemMode: "complete",
+    })
+    expect(physicalSystem).toEqual([logicalSystem.join("\n")])
+
+    const fingerprint = fingerprintPromptComposition({
+      system: logicalSystem,
+      systemLabels: labels,
+      physicalSystemText: physicalSystem.join("\n"),
+      messages: [],
+      toolPayloads: [],
+    })
+    expect(fingerprint.blocks.map((block) => block.label)).toEqual(["tools", ...labels])
+    expect(fingerprint.physicalSystem).toMatchObject({ chars: logicalSystem.join("\n").length })
+
+    const changed = fingerprintPromptComposition({
+      system: ["instructions", "wake", "live task changed"],
+      systemLabels: labels,
+      physicalSystemText: ["instructions", "wake", "live task changed"].join("\n"),
+      messages: [],
+      toolPayloads: [],
+    })
+    expect(comparePromptComposition(fingerprint, changed).firstDivergentLabel).toBe(
+      "runtime:orchestrator-live-task-render",
+    )
   })
 
   test("Tool payload text follows the normalised schema, not the Zod wrapper", () => {

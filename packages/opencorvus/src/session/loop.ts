@@ -1601,17 +1601,33 @@ export namespace SessionLoop {
     await Plugin.trigger("experimental.chat.messages.transform", {}, { messages: input.msgs })
 
     const skillsSection = skillSurface ? await SystemPrompt.skills(agent, { surface: skillSurface }) : undefined
+    const environmentSystem = await SystemPrompt.environment(input.model)
+    const instructionSystem = await InstructionPrompt.system()
     const runtimeSystem =
       typeof runtimeContract?.system === "function" ? await runtimeContract.system() : runtimeContract?.system
-    const system = [
-      ...(await SystemPrompt.environment(input.model)),
-      ...(skillsSection ? [skillsSection] : []),
-      ...(await InstructionPrompt.system()),
-      ...(runtimeSystem ?? []),
-      ...(messagePromptProjection?.system ?? []),
+    const runtimeSystemLabels = runtimeContract?.systemLabels
+    if (runtimeSystemLabels && runtimeSystemLabels.length !== (runtimeSystem?.length ?? 0)) {
+      throw new Error(
+        `Session ${input.sessionID} runtime system label count ${runtimeSystemLabels.length} does not match ` +
+          `part count ${runtimeSystem?.length ?? 0}`,
+      )
+    }
+    const messageProjectionSystem = messagePromptProjection?.system ?? []
+    const labeledSystem = [
+      ...environmentSystem.map((text, index) => ({ label: `environment[${index}]`, text })),
+      ...(skillsSection ? [{ label: "skills", text: skillsSection }] : []),
+      ...instructionSystem.map((text, index) => ({ label: `instructions[${index}]`, text })),
+      ...(runtimeSystem ?? []).map((text, index) => ({
+        label: runtimeSystemLabels?.[index] ?? `runtime-system[${index}]`,
+        text,
+      })),
+      ...messageProjectionSystem.map((text, index) => ({ label: `message-projection-system[${index}]`, text })),
     ]
+    const system = labeledSystem.map((part) => part.text)
+    const systemLabels = labeledSystem.map((part) => part.label)
     if (isLastStep) {
       system.push(MAX_STEPS)
+      systemLabels.push("max-steps")
     }
     const decisionRepairRung =
       openTaskRootAssistant &&
@@ -1627,6 +1643,7 @@ export namespace SessionLoop {
           rung: decisionRepairRung,
         }),
       )
+      systemLabels.push("task-root-decision-repair")
       if (decisionRepairRung.restrictToDecisionTools) {
         const decisionTools = Object.fromEntries(
           Object.entries(tools).filter(([name]) => isOrchestratorDecisionToolName(name)),
@@ -1911,6 +1928,7 @@ export namespace SessionLoop {
       abort: input.abort,
       sessionID: input.sessionID,
       system,
+      systemLabels,
       messages: modelMessages,
       tools,
       model: input.model,
