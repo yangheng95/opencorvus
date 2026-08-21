@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Orchestrator context-economics measurement and remediation plan: [`2026-08-21-orchestrator-context-economics.md`](records/2026-08/2026-08-21-orchestrator-context-economics.md), covering prompt-block attribution, the system-prefix divergence point, and the phased plan.
+
 Latest external agent benchmark pilot: [`2026-08-20-external-agent-benchmark-pilot.md`](records/2026-08/2026-08-20-external-agent-benchmark-pilot.md), covering the paper-evidence `gpt-5.6-luna` AutomationBench round for OpenCorvus Base and Advanced.
 
 Latest OpenCorvus long-horizon Expert Squad Xiaohongshu promotion package: [`2026-08-19-xiaohongshu-long-horizon-promotion.md`](records/2026-08/2026-08-19-xiaohongshu-long-horizon-promotion.md).

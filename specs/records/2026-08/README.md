@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-21-orchestrator-context-economics.md](2026-08-21-orchestrator-context-economics.md) measures where the AutomationBench Base batch actually spends uncached tokens — the Orchestrator carries 76% of all fresh input at a 45% cache hit while workers sit above 91% — traces it to a live Task render re-resolved into the system prefix on every Provider step, and plans the relocation, observation, topology and ledger work in that order.
+
 - [2026-08-21-v0.0.50-beta-release.md](2026-08-21-v0.0.50-beta-release.md) records the product-only harness repair, canonical `0.0.50-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
 
 - [2026-08-20-external-agent-benchmark-pilot.md](2026-08-20-external-agent-benchmark-pilot.md) defines the isolated `gpt-5.6-luna` AutomationBench round for OpenCorvus Base/Advanced, including bug-run invalidation, immutable per-run evidence, exact Provider/model preflight, official scoring, token accounting, readable trajectories, and honest public-leaderboard context.
