@@ -22,6 +22,17 @@ import { copyToolCoordinationBindings } from "@/tool/execution-mode"
 
 export type SessionRuntimeContractKind = "stage-attempt" | "orchestrator-wake"
 
+export type SessionRuntimeSystemProjection = Readonly<{
+  parts: readonly string[]
+  labels: readonly string[]
+}>
+
+export function isSessionRuntimeSystemProjection(
+  value: readonly string[] | SessionRuntimeSystemProjection | undefined,
+): value is SessionRuntimeSystemProjection {
+  return Boolean(value && !Array.isArray(value))
+}
+
 interface SessionRuntimeContractIdentityBase {
   sessionID: string
   agentID: string
@@ -62,9 +73,6 @@ export type SessionRuntimeContractIdentity =
 
 interface SessionRuntimeContractBase {
   systemMode?: "complete"
-  /** Stable observability labels for the logical system parts supplied to one
-   * Provider request. Labels never affect prompt bytes. */
-  systemLabels?: readonly string[]
   runOnce?: boolean
   stream?: TextHooks
   resources?: Readonly<{
@@ -98,7 +106,9 @@ export type ProjectedWorkerRuntimeContract = ProjectedWorkerSessionLoopRuntimeCo
 
 export type ProjectedSchedulerRuntimeContract = SessionRuntimeContractBase &
   SessionLoopRuntimeOptions & {
-    system?: readonly string[] | (() => readonly string[] | Promise<readonly string[]>)
+    system?:
+      | readonly string[]
+      | (() => SessionRuntimeSystemProjection | Promise<SessionRuntimeSystemProjection>)
     identity: Extract<SessionRuntimeContractIdentity, { identityKind: "projected-scheduler" }>
     projectedTools: Readonly<Record<string, AITool>>
     stageTools?: never

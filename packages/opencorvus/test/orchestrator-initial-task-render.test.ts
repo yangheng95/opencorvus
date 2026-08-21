@@ -142,6 +142,7 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
       const retainAssistantOnToolContinuation: boolean[] = []
       const retainedDecisionGaps: boolean[] = []
       const decisionRepairPrompts: boolean[] = []
+      const promptSystemAudits: Array<{ countMatch: boolean; runtimeLabels: string[] }> = []
       let providerSteps = 0
       const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
         const assistant = input.assistantMessage as Message.Assistant
@@ -152,8 +153,12 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           partFromToolCall() {
             return undefined
           },
-          async process(processInput: { system: string[] }) {
+          async process(processInput: { system: string[]; systemLabels?: string[] }) {
             providerSteps += 1
+            promptSystemAudits.push({
+              countMatch: processInput.system.length === processInput.systemLabels?.length,
+              runtimeLabels: (processInput.systemLabels ?? []).filter((label) => label.startsWith("runtime:")),
+            })
             decisionRepairPrompts.push(
               processInput.system.some((part) => part.includes("<task-root-decision-repair>")),
             )
@@ -253,6 +258,7 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           retainAssistantOnToolContinuation,
           retainedDecisionGaps,
           decisionRepairPrompts,
+          promptSystemAudits,
           ingressDebug: ingressDebug.map((entry) => ({
             activationCount: entry.activationIDs.length,
             decisionGapCount: entry.decisionGapStepIDs.length,
@@ -278,6 +284,26 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           retainAssistantOnToolContinuation: [true, true],
           retainedDecisionGaps: [true],
           decisionRepairPrompts: [false, true],
+          promptSystemAudits: [
+            {
+              countMatch: true,
+              runtimeLabels: [
+                "runtime:orchestrator-instructions",
+                "runtime:orchestrator-wake-and-capabilities",
+                "runtime:orchestrator-live-task-render",
+                "runtime:orchestrator-current-ingress",
+              ],
+            },
+            {
+              countMatch: true,
+              runtimeLabels: [
+                "runtime:orchestrator-instructions",
+                "runtime:orchestrator-wake-and-capabilities",
+                "runtime:orchestrator-live-task-render",
+                "runtime:orchestrator-current-ingress",
+              ],
+            },
+          ],
           ingressDebug: [{ activationCount: 1, decisionGapCount: 1, semanticAttemptCount: 1, state: "resolved" }],
           observed: {
             sessionID: child!.id,
