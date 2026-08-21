@@ -18,6 +18,7 @@ import {
   auditBatchEvidence,
   executeRollingBatchChains,
   missingCompletedBatchProfileReceipts,
+  reusableProfileRuns,
   rollingBatchChains,
   paperEvidenceChecks,
   normalizeTrajectory,
@@ -666,6 +667,26 @@ describe("external agent benchmark contract", () => {
         profiles: ["base", "advanced"],
       }),
     ).toEqual([])
+  })
+
+  test("reuses verified profile rows before failed-batch candidates", () => {
+    const record = (run_id: string, case_index: number) => ({
+      run_id,
+      benchmark: { case_index, repetition: 1 },
+      opencorvus: { profile: "base" },
+    })
+    const reusable = reusableProfileRuns(
+      {
+        leaderboard: [record("verified-1", 1)],
+        candidates: [record("superseded-candidate-1", 1), record("candidate-2", 2)],
+      },
+      "base",
+    )
+
+    expect([...reusable].map(([caseIndex, item]) => [caseIndex, item.run_id])).toEqual([
+      [2, "candidate-2"],
+      [1, "verified-1"],
+    ])
   })
 
   test("normalizes trace, Skill, and benchmark calls onto aligned lanes", () => {

@@ -28,6 +28,8 @@ Each directory must contain the available raw suite events, terminal board, Task
 
 Before a batch starts, write its planned case/profile/repetition identities and a create-only run-start receipt for each trial. Enforce an evidence-root lease limiting active trials to five and a case lease preventing Base and Advanced for the same case from overlapping. Catalog orphan start receipts and signal-terminated attempts instead of silently omitting them.
 
+Never rerun a profile/case/repetition slot that is already verified in the leaderboard, including a valid official strict-zero result. Build every recovery plan from the union of verified leaderboard rows and sealed failed-batch candidates, with the verified row authoritative for its slot. Only an invalid, unsealed, interrupted, or genuinely missing slot may launch a fresh attempt.
+
 Write the operator view to the external standalone HTML path passed through `--dashboard`. Rewrite it atomically after every settled trial and after the batch catalog is sealed, so an ordinary browser refresh shows current verified, pending, and running Base/Advanced rows. Keep the page outside Git and evidence roots, do not expose secrets or protected paths, and do not create a Codex visualization artifact for this experiment.
 
 ## Bug rule

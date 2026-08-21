@@ -2,7 +2,7 @@ import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import lockfile from "proper-lockfile"
-import { executeRollingBatchChains, rollingBatchChains } from "./contract"
+import { executeRollingBatchChains, reusableProfileRuns, rollingBatchChains } from "./contract"
 
 type FrozenCase = {
   case_index: number
@@ -319,20 +319,16 @@ function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, pr
   )
 }
 
-function candidateByCase(catalog: { candidates: Array<Record<string, any>> }, profile: Profile) {
-  return new Map(
-    catalog.candidates
-      .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1)
-      .map((record) => [Number(record.benchmark.case_index), record]),
-  )
-}
-
 function waveCandidateByCase(
-  catalog: { attempts: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
+  catalog: {
+    attempts: Array<Record<string, any>>
+    candidates: Array<Record<string, any>>
+    leaderboard: Array<Record<string, any>>
+  },
   profile: Profile,
 ) {
   const records = [
-    ...catalog.candidates.filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1),
+    ...reusableProfileRuns(catalog, profile).values(),
     ...catalog.attempts.filter(
       (record) =>
         record.raw_leaderboard_eligible === true &&
@@ -427,8 +423,8 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
 async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
   const existing = {
-    base: candidateByCase(catalogBefore, "base"),
-    advanced: candidateByCase(catalogBefore, "advanced"),
+    base: reusableProfileRuns(catalogBefore, "base"),
+    advanced: reusableProfileRuns(catalogBefore, "advanced"),
   }
   const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = [[], []]
   await executeRollingBatchChains({
@@ -497,10 +493,10 @@ try {
     cases,
     waves,
     preexisting_eligible: {
-      base: [...candidateByCase(preexistingCatalog, "base").values()]
+      base: [...reusableProfileRuns(preexistingCatalog, "base").values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
-      advanced: [...candidateByCase(preexistingCatalog, "advanced").values()]
+      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced").values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
     },

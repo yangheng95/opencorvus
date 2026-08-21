@@ -388,6 +388,30 @@ export async function executeRollingBatchChains<T>(input: {
   )
 }
 
+export function reusableProfileRuns(
+  catalog: { leaderboard: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
+  profile: "base" | "advanced",
+): Map<number, Record<string, any>> {
+  const verified = new Map(
+    catalog.leaderboard
+      .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1)
+      .map((record) => [Number(record.benchmark.case_index), record]),
+  )
+  const reusable = new Map<number, Record<string, any>>()
+  for (const record of catalog.candidates.filter(
+    (item) => item.opencorvus?.profile === profile && item.benchmark?.repetition === 1,
+  )) {
+    const caseIndex = Number(record.benchmark.case_index)
+    if (verified.has(caseIndex)) continue
+    const existing = reusable.get(caseIndex)
+    if (existing && existing.run_id !== record.run_id) {
+      throw new Error(`Multiple reusable ${profile} candidates exist for case ${caseIndex}`)
+    }
+    reusable.set(caseIndex, record)
+  }
+  return new Map([...reusable, ...verified])
+}
+
 export function missingCompletedBatchProfileReceipts(input: {
   batches: Array<{
     profiles: string[]
