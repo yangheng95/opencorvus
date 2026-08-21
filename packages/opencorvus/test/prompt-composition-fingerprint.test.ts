@@ -89,6 +89,40 @@ describe("prompt composition fingerprint", () => {
     expect(divergence.divergentTokensEst).toBeGreaterThan(0)
   })
 
+  test("splitting a system part at a line boundary is observability-only", () => {
+    // `buildSystemParts` used to return the live Task render as the tail of one
+    // context blob. Both shapes are joined with a newline by `LLM.stream` before
+    // they reach the Provider, so the request bytes are identical; only the
+    // number of blocks the fingerprint can name changes. This pins the identity,
+    // because the whole justification for the split is that it changes nothing
+    // the model sees.
+    const instructions = "orchestrator instructions"
+    const ctx = ["## Wake", "- id=1", "", "## Identities", "- base-developer"]
+    const taskRender = "## Task\n- artifact art_1"
+
+    const before = [instructions, [...ctx, taskRender].join("\n")]
+    const after = [instructions, ctx.join("\n"), taskRender]
+    expect(after.join("\n")).toBe(before.join("\n"))
+
+    // The observability gain: the Task render now has a digest of its own, so a
+    // divergence in it is distinguishable from a divergence in the wake header.
+    const fingerprintOf = (system: string[]) =>
+      fingerprintPromptComposition({ system, messages: [], toolPayloads: [] })
+    expect(fingerprintOf(before).systemBlocks).toBe(2)
+    expect(fingerprintOf(after).systemBlocks).toBe(3)
+
+    const changedRender = [instructions, ctx.join("\n"), "## Task\n- artifact art_2"]
+    const divergence = comparePromptComposition(fingerprintOf(after), fingerprintOf(changedRender))
+    expect(divergence.firstDivergentLabel).toBe("system[2]")
+
+    // Under the old single-block shape the same change reported the blob, which
+    // could equally have been the wake header moving.
+    const oldChanged = [instructions, [...ctx, "## Task\n- artifact art_2"].join("\n")]
+    expect(
+      comparePromptComposition(fingerprintOf(before), fingerprintOf(oldChanged)).firstDivergentLabel,
+    ).toBe("system[1]")
+  })
+
   test("Tool payload text follows the normalised schema, not the Zod wrapper", () => {
     const payloads = toolPayloadTexts({
       read: { description: "Read a file", inputSchema: { jsonSchema: { type: "object" } } } as never,
