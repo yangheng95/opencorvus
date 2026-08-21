@@ -324,6 +324,129 @@ export function auditTaskOutcome(lifecycleStatus: unknown, transcript: Transcrip
   }
 }
 
+export type TaskInfrastructureIncident = {
+  id: string | null
+  operation: string | null
+  state: string | null
+  reason: string | null
+}
+
+const TASK_INFRASTRUCTURE_ARTIFACT_KIND = "task-infrastructure-error"
+
+function infrastructureIncidentsFromSnapshot(snapshot: unknown): TaskInfrastructureIncident[] | undefined {
+  const rows = (snapshot as { rows?: Record<string, unknown> } | undefined)?.rows?.[
+    "engine_artifact"
+  ]
+  if (!Array.isArray(rows)) return undefined
+  const incidents: TaskInfrastructureIncident[] = []
+  for (const row of rows as Array<Record<string, unknown>>) {
+    if (row?.kind !== TASK_INFRASTRUCTURE_ARTIFACT_KIND) continue
+    // The snapshot preserves SQLite column values, so a payload that was stored
+    // as JSON text arrives as a string here and as an object nowhere else.
+    let payload: Record<string, unknown> = {}
+    if (typeof row.payload === "string") {
+      try {
+        payload = JSON.parse(row.payload) as Record<string, unknown>
+      } catch {
+        payload = {}
+      }
+    } else if (row.payload && typeof row.payload === "object") {
+      payload = row.payload as Record<string, unknown>
+    }
+    const context = (payload.context ?? {}) as Record<string, unknown>
+    incidents.push({
+      id: typeof row.id === "string" ? row.id : null,
+      operation: typeof payload.operation === "string" ? payload.operation : null,
+      state: typeof context.state === "string" ? context.state : null,
+      reason: typeof context.gateReason === "string" ? context.gateReason : null,
+    })
+  }
+  return incidents
+}
+
+function infrastructureIncidentsFromBoard(board: unknown): TaskInfrastructureIncident[] | undefined {
+  const rows = (board as { processIncidents?: unknown } | undefined)?.processIncidents
+  if (!Array.isArray(rows)) return undefined
+  return (rows as Array<Record<string, unknown>>)
+    .filter((row) => row?.source === "infrastructure")
+    .map((row) => ({
+      id: typeof row.id === "string" ? row.id : null,
+      // The board renders one incident line rather than the artifact payload, so
+      // only the identity is comparable across the two sources.
+      operation: null,
+      state: null,
+      reason: typeof row.errorName === "string" ? row.errorName : null,
+    }))
+}
+
+/**
+ * Disqualify a run whose Host recorded a `task-infrastructure-error`.
+ *
+ * `auditTaskOutcome` reads the Agent-visible transcript, where an infrastructure
+ * failure appears only when a Tool returned one. A Task-root ingress that rests
+ * in `host_fault` never reaches a Tool: the reduction surfaces one artifact and
+ * abandons that scheduling round, so the transcript reads as an ordinary Task
+ * and the run scored as if nothing had gone wrong. The Host's own record is the
+ * only place that fault exists.
+ *
+ * It exists in two sealed files at once — the relational snapshot's
+ * `engine_artifact` rows and the terminal board's incident list, which the board
+ * derives from those same rows and keys by the same artifact id. Reading both
+ * and requiring their identities to agree costs nothing and turns a silent
+ * disagreement between the two into a checker failure instead of a coin flip
+ * over which file the checker happened to read.
+ *
+ * Fail-closed when neither source is present: an unreadable Host record is not
+ * evidence that the Host recorded nothing.
+ */
+export function auditTaskInfrastructureIncidents(input: { snapshot?: unknown; board?: unknown }) {
+  const fromSnapshot = infrastructureIncidentsFromSnapshot(input.snapshot)
+  const fromBoard = infrastructureIncidentsFromBoard(input.board)
+  const missingSources = [
+    ...(fromSnapshot === undefined ? ["runtime_database_snapshot"] : []),
+    ...(fromBoard === undefined ? ["terminal_board"] : []),
+  ]
+  const byID = new Map<string, TaskInfrastructureIncident>()
+  for (const incident of [...(fromSnapshot ?? []), ...(fromBoard ?? [])]) {
+    const key = incident.id ?? `anonymous:${byID.size}`
+    const current = byID.get(key)
+    byID.set(key, {
+      id: incident.id,
+      operation: current?.operation ?? incident.operation,
+      state: current?.state ?? incident.state,
+      reason: current?.reason ?? incident.reason,
+    })
+  }
+  const incidents = [...byID.values()].sort((left, right) => String(left.id).localeCompare(String(right.id)))
+  const countsByReason: Record<string, number> = {}
+  for (const incident of incidents) {
+    const key = `${incident.operation ?? "unknown"}|${incident.reason ?? "unknown"}`
+    countsByReason[key] = (countsByReason[key] ?? 0) + 1
+  }
+  const identities = (list: TaskInfrastructureIncident[] | undefined) =>
+    list === undefined ? undefined : JSON.stringify(list.map((item) => item.id).sort())
+  const snapshotIdentities = identities(fromSnapshot)
+  const boardIdentities = identities(fromBoard)
+  const sourcesAgree =
+    snapshotIdentities === undefined || boardIdentities === undefined || snapshotIdentities === boardIdentities
+  const violations: string[] = []
+  if (missingSources.length === 2) violations.push("no_host_record_available")
+  if (!sourcesAgree) violations.push("source_disagreement")
+  if (incidents.length > 0) violations.push(`task_infrastructure_error:${incidents.length}`)
+  return {
+    passed: violations.length === 0,
+    incidents,
+    counts_by_reason: countsByReason,
+    sources: {
+      runtime_database_snapshot: fromSnapshot?.length ?? null,
+      terminal_board: fromBoard?.length ?? null,
+    },
+    missing_sources: missingSources,
+    sources_agree: sourcesAgree,
+    violations,
+  }
+}
+
 export function auditTerminalQuiescence(board: any) {
   const lifecycleStatus = String(board?.task?.status ?? "")
   const terminal = ["completed", "failed", "cancelled"].includes(lifecycleStatus)

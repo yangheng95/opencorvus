@@ -327,6 +327,20 @@ The LinkedIn run shows the pattern end to end: the worker recorded that it had n
 
 None of these repairs encode case detail. No prompt names Calendar, Gmail, legal holds, or any AutomationBench record.
 
+### Eligibility never read the Host's own fault record
+
+The first twenty-run Base batch published strict `3/20` and a mean partial of `54.02%`. Fifteen of those runs were not scorable: the Host had recorded a `task-infrastructure-error` for each of them, forty-four incidents in all, forty-three of them a Task-root ingress resting in `host_fault (decision_ambiguous)`.
+
+`auditTaskOutcome` did look for infrastructure failure, but only where an Agent could see one — a Tool result carrying `kind: "infrastructure_failure"` in the sealed transcript. A Task-root ingress that rests in `host_fault` never reaches a Tool. The reduction returns the fault before any decision can be read, surfaces one artifact, and abandons that scheduling round; the transcript that remains reads like an ordinary Task. So the runs scored, entered the leaderboard, and the batch looked complete.
+
+The record was sealed the whole time, in two places at once: the relational snapshot's `engine_artifact` rows and the terminal board's incident list, which the board derives from those same rows and keys by the same artifact id. `auditTaskInfrastructureIncidents` reads both, requires their identities to agree, and fails closed when neither is readable — an unreadable Host record is not evidence that the Host recorded nothing. The catalog and the independent verifier share the one predicate rather than each restating it, which is the seam that let the runner drift away from both checkers once already.
+
+Reclassification excluded every Base run. Fifteen are `invalid_bug` naming the fault that produced them. The remaining five are individually clean and fall out anyway: their five-case batches can no longer complete, so the batch-evidence contract reports `batch_evidence_failed`. Base leaderboard coverage is `0/50`, and the published figures above never described a measurable system.
+
+Two smaller things were wrong in the same direction. Every failed raw-evidence check reported the single reason `raw_evidence_mismatch`, which made ten distinct checks indistinguishable in the catalog and is part of why a whole batch of faulted runs read as ordinary scores; the audit now returns an ordered violation list and names the first one. And the operator dashboard had three slot states — verified, sealed-and-pending, planned — with no place for an invalidated run, so three reclassified slots rendered as `queued`, claiming work was waiting to start that had in fact run and been thrown out.
+
+The fault itself is a product bug and is not repaired here. `ToolTurnExecutionCoordinator` is constructed once per `resolveTools` call, which is once per Provider step, while a Task-root assistant Message is deterministic in its input message and is retained across steps whenever the step ended on tool calls. The in-memory refusal of a mixed decision set therefore resets every step while the durable decision facts accumulate under one `assistantMessageID`, and `validDecisionSet` rejects the combination the coordinator would have refused in-turn. The decision claim has to be scoped to the persisted assistant Message and seeded from its completed decision receipts.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>

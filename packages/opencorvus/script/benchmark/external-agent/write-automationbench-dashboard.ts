@@ -38,9 +38,13 @@ type BatchPlan = {
 type CatalogAttempt = {
   run_id?: string
   evidence_status?: string
+  reason?: string
+  started_at?: number
   raw_leaderboard_eligible?: boolean
   batch_candidate_eligible?: boolean
   permanent_invalidation?: { invalid?: boolean }
+  benchmark?: { case_index?: number }
+  opencorvus?: { profile?: Profile }
 }
 
 type EvidenceManifest = {
@@ -257,6 +261,26 @@ const verifiedBySlot = new Map(
 const pendingBySlot = new Map(
   currentResults.map((record) => [slotKey(record.benchmark.case_index, record.opencorvus.profile), record]),
 )
+/**
+ * A planned slot whose run was invalidated is not a slot that has yet to run.
+ *
+ * The plan view has three states — verified, sealed-and-pending, and planned —
+ * and an invalidated run belongs to none of them, so it fell through to
+ * "queued" and the page claimed work was waiting to start that had in fact run
+ * and been thrown out. That is the one reading a stopped batch must not admit.
+ */
+const invalidatedBySlot = new Map<string, { status: string; reason: string; startedAt: number }>()
+for (const attempt of catalog?.attempts ?? []) {
+  const status = String(attempt.evidence_status ?? "")
+  if (status !== "invalid_bug" && status !== "invalid_evidence") continue
+  const profile = attempt.opencorvus?.profile
+  if (!profile || !profiles.includes(profile)) continue
+  const key = slotKey(attempt.benchmark?.case_index, profile)
+  const startedAt = Number(attempt.started_at ?? 0)
+  const current = invalidatedBySlot.get(key)
+  if (current && current.startedAt >= startedAt) continue
+  invalidatedBySlot.set(key, { status, reason: String(attempt.reason ?? ""), startedAt })
+}
 const planned = plan?.waves.flat() ?? []
 const displayRecords = [...verified]
 for (const slot of planned) {
@@ -315,8 +339,13 @@ const plannedRows = planned
   .filter((slot) => !verifiedBySlot.has(slotKey(slot.case_index, slot.profile)) && !pendingBySlot.has(slotKey(slot.case_index, slot.profile)))
   .map((slot) => {
     const task = plan?.cases.find((item) => item.case_index === slot.case_index)?.task ?? ""
-    const status = activeSlots.has(slotKey(slot.case_index, slot.profile)) ? "running" : "queued"
-    return `<tr><td>${slot.case_index}</td><td>${escapeHTML(task)}</td><td>${escapeHTML(slot.profile)}</td><td>${status}</td></tr>`
+    const invalidated = invalidatedBySlot.get(slotKey(slot.case_index, slot.profile))
+    const status = activeSlots.has(slotKey(slot.case_index, slot.profile))
+      ? "running"
+      : invalidated
+        ? `${invalidated.status.replaceAll("_", " ")} · ${invalidated.reason}`
+        : "queued"
+    return `<tr><td>${slot.case_index}</td><td>${escapeHTML(task)}</td><td>${escapeHTML(slot.profile)}</td><td>${escapeHTML(status)}</td></tr>`
   })
   .join("\n")
 

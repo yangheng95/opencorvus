@@ -13,6 +13,7 @@ import {
   auditRunBinding,
   auditSkillEvidenceSeal,
   auditSkillProjection,
+  auditTaskInfrastructureIncidents,
   auditTaskOutcome,
   auditTerminalQuiescence,
   auditBatchEvidence,
@@ -285,6 +286,72 @@ describe("external agent benchmark contract", () => {
         matrix: matrix({ ...mounted, "base-tester": { effective: true, enabled: false, reason: "permission_denied" } }),
       }).violations,
     ).toEqual(["not_enabled:base-tester:permission_denied"])
+  })
+
+  const infrastructureArtifact = (id: string, gateReason: string) => ({
+    id,
+    kind: "task-infrastructure-error",
+    label: "task-control",
+    payload: JSON.stringify({
+      component: "task-control",
+      operation: "surface-operator-gated-ingress",
+      reason: `Task-root ingress ing_${id} rests in host_fault (${gateReason})`,
+      context: { ingressID: `ing_${id}`, state: "host_fault", gateReason },
+    }),
+  })
+  const boardIncident = (id: string) => ({ id, source: "infrastructure", errorName: "InfrastructureError" })
+  const snapshotOf = (...artifacts: unknown[]) => ({ rows: { engine_artifact: artifacts } })
+  const boardOf = (...incidents: unknown[]) => ({ processIncidents: incidents })
+
+  test("accepts a run only when the Host recorded no task infrastructure error", () => {
+    expect(
+      auditTaskInfrastructureIncidents({
+        snapshot: snapshotOf({ id: "art_ok", kind: "expert_output" }),
+        board: boardOf({ id: "inc_stream", source: "stream" }),
+      }),
+    ).toMatchObject({ passed: true, violations: [], missing_sources: [], sources_agree: true })
+  })
+
+  test("rejects a run whose relational snapshot holds a host_fault ingress artifact", () => {
+    // The exact shape that scored as an ordinary run: the Task-root ingress rests
+    // in `host_fault`, no Tool ever returned an `infrastructure_failure`, so the
+    // transcript-side audit sees a clean Task.
+    const audit = auditTaskInfrastructureIncidents({
+      snapshot: snapshotOf(
+        infrastructureArtifact("art_one", "decision_ambiguous"),
+        infrastructureArtifact("art_two", "decision_ambiguous"),
+      ),
+      board: boardOf(boardIncident("art_one"), boardIncident("art_two")),
+    })
+    expect(audit.passed).toBe(false)
+    expect(audit.violations).toEqual(["task_infrastructure_error:2"])
+    expect(audit.counts_by_reason).toEqual({ "surface-operator-gated-ingress|decision_ambiguous": 2 })
+    expect(audit.incidents.map((item) => item.id)).toEqual(["art_one", "art_two"])
+    expect(auditTaskOutcome("completed", []).passed).toBe(true)
+  })
+
+  test("rejects a run on the terminal board alone when no relational snapshot was sealed", () => {
+    const audit = auditTaskInfrastructureIncidents({ board: boardOf(boardIncident("art_one")) })
+    expect(audit.passed).toBe(false)
+    expect(audit.missing_sources).toEqual(["runtime_database_snapshot"])
+    expect(audit.violations).toContain("task_infrastructure_error:1")
+  })
+
+  test("fails closed when neither Host record is readable", () => {
+    expect(auditTaskInfrastructureIncidents({})).toMatchObject({
+      passed: false,
+      violations: ["no_host_record_available"],
+    })
+  })
+
+  test("rejects a run whose two Host records disagree about the incident set", () => {
+    const audit = auditTaskInfrastructureIncidents({
+      snapshot: snapshotOf(infrastructureArtifact("art_one", "decision_ambiguous")),
+      board: boardOf(),
+    })
+    expect(audit.passed).toBe(false)
+    expect(audit.sources_agree).toBe(false)
+    expect(audit.violations).toEqual(["source_disagreement", "task_infrastructure_error:1"])
   })
 
   test("accepts a sealed Skill receipt only when result.json and skill-projection.json both carry it", () => {

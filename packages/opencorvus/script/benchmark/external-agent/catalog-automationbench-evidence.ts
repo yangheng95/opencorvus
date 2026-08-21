@@ -7,6 +7,7 @@ import {
   auditBenchmarkIsolation,
   auditRunBinding,
   auditSkillEvidenceSeal,
+  auditTaskInfrastructureIncidents,
   auditTaskOutcome,
   auditTerminalQuiescence,
   auditBatchEvidence,
@@ -292,6 +293,7 @@ async function inspectRawRunEvidence(
       sandboxAudit,
       protectedRootAudit,
       skillProjection,
+      runtimeSnapshot,
     ] = await Promise.all([
       fs.readFile(path.join(directory, "terminal-board.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "task-receipt.json"), "utf8").then(JSON.parse),
@@ -303,6 +305,13 @@ async function inspectRawRunEvidence(
       fs.readFile(path.join(directory, "sandbox-isolation-audit.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "protected-root-isolation-audit.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "skill-projection.json"), "utf8").then(JSON.parse),
+      // Runs sealed before the snapshot existed still have to be classifiable,
+      // so absence is handed to the audit as a missing source rather than
+      // failing the whole raw-evidence read as `raw_evidence_missing`.
+      fs
+        .readFile(path.join(directory, "runtime-database-snapshot.json"), "utf8")
+        .then(JSON.parse)
+        .catch(() => undefined),
     ])
     const requestedProfile = receipt.request?.promptProfile
     const boundProfile = board.task?.packageRevisionBinding?.id
@@ -331,6 +340,8 @@ async function inspectRawRunEvidence(
       terminalQuiescenceAudit.passed &&
       JSON.stringify((result.opencorvus as any).terminal_quiescence_audit ?? null) ===
         JSON.stringify(terminalQuiescenceAudit)
+    const taskInfrastructureAudit = auditTaskInfrastructureIncidents({ snapshot: runtimeSnapshot, board })
+    const taskInfrastructurePassed = taskInfrastructureAudit.passed
     const skillSeal = auditSkillEvidenceSeal({
       profile: result.opencorvus.profile,
       resultSkill: result.opencorvus.skill,
@@ -387,20 +398,30 @@ async function inspectRawRunEvidence(
       protectedRootAudit.evidence?.mode === "700" &&
       protectedRootAudit.control?.uid === 0 &&
       protectedRootAudit.control?.mode === "700"
-    const passed =
-      profilePassed &&
-      taskOutcomePassed &&
-      terminalQuiescencePassed &&
-      skillPassed &&
-      isolation.passed &&
-      toolPassed &&
-      requestPassed &&
-      replayPassed &&
-      sandboxPassed &&
-      hostBoundaryPassed
+    // Ordered most-specific first: a disposition that says `raw_evidence_mismatch`
+    // for every failure mode makes the ten checks below indistinguishable in the
+    // catalog, which is how a whole batch of infrastructure-faulted runs read as
+    // ordinary scores.
+    const violations = [
+      ...(profilePassed ? [] : ["profile_binding_mismatch"]),
+      ...(taskInfrastructurePassed ? [] : taskInfrastructureAudit.violations),
+      ...(taskOutcomePassed ? [] : ["task_outcome_mismatch"]),
+      ...(terminalQuiescencePassed ? [] : ["terminal_quiescence_failed"]),
+      ...(skillPassed ? [] : skillSeal.violations.map((item) => `skill:${item}`)),
+      ...(isolation.passed ? [] : ["evaluator_isolation_failed"]),
+      ...(toolPassed ? [] : ["benchmark_tool_ledger_mismatch"]),
+      ...(requestPassed ? [] : ["harness_request_hash_mismatch"]),
+      ...(replayPassed ? [] : ["scorer_replay_mismatch"]),
+      ...(sandboxPassed ? [] : ["sandbox_isolation_failed"]),
+      ...(hostBoundaryPassed ? [] : ["host_boundary_isolation_failed"]),
+    ]
+    const passed = violations.length === 0
     return {
       required,
       passed,
+      ...(passed ? {} : { reason: violations[0], violations }),
+      task_infrastructure_audit: taskInfrastructureAudit,
+      task_infrastructure_passed: taskInfrastructurePassed,
       profile_passed: profilePassed,
       task_outcome_audit: taskOutcomeAudit,
       task_outcome_passed: taskOutcomePassed,
@@ -572,32 +593,53 @@ for (const directory of terminalDirectories) {
     result.opencorvus.source?.worktree_clean !== true &&
     !permanentInvalidation.invalid &&
     disposition === undefined
+  // A `task-infrastructure-error` is the Host reporting its own broken write, so
+  // the run is bug-affected evidence rather than unverifiable evidence: it keeps
+  // its place in the all-attempt catalog and stays out of every aggregate, and
+  // its reason names the fault so the rerun set is readable without opening the
+  // snapshots. This sits below an explicit operator disposition, which is a
+  // deliberate human classification, and above the generic evidence branch,
+  // which would otherwise absorb it as `invalid_evidence`.
+  const taskInfrastructureAudit = (rawEvidenceAudit as any).task_infrastructure_audit as
+    | { passed: boolean; violations: string[]; counts_by_reason: Record<string, number> }
+    | undefined
+  const taskInfrastructureFaulted = taskInfrastructureAudit?.passed === false
+  const taskInfrastructureReason = taskInfrastructureFaulted
+    ? `host_${Object.keys(taskInfrastructureAudit?.counts_by_reason ?? {})
+        .sort()
+        .join("+")
+        .replaceAll("|", "_") || "task_infrastructure_error"}`
+    : undefined
   const evidenceStatus = permanentInvalidation.invalid
     ? "invalid_bug"
     : disposition
       ? disposition.status
-      : eligible
-        ? "scored"
-        : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
-          ? "invalid_evidence"
-          : developmentScore
-            ? "development_scored"
-            : failure?.run.status === "blocked_preflight"
-              ? "blocked_preflight"
-              : "invalid"
+      : taskInfrastructureFaulted
+        ? "invalid_bug"
+        : eligible
+          ? "scored"
+          : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
+            ? "invalid_evidence"
+            : developmentScore
+              ? "development_scored"
+              : failure?.run.status === "blocked_preflight"
+                ? "blocked_preflight"
+                : "invalid"
   const reason = permanentInvalidation.invalid
     ? permanentInvalidation.reason
     : disposition
       ? disposition.reason
-      : eligible
-        ? "natural_terminal_official_score"
-        : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
-          ? evidenceFailureReason
-          : developmentScore
-            ? "uncommitted_or_unrecorded_source_state"
-            : result
-              ? `lifecycle_${result.opencorvus.lifecycle_status ?? "unknown"}`
-              : `${failure?.run.stage ?? "unknown_stage"}:${failure?.error?.name ?? "unknown_error"}`
+      : taskInfrastructureFaulted
+        ? taskInfrastructureReason
+        : eligible
+          ? "natural_terminal_official_score"
+          : result?.opencorvus.source?.worktree_clean === true && !evidencePassed
+            ? evidenceFailureReason
+            : developmentScore
+              ? "uncommitted_or_unrecorded_source_state"
+              : result
+                ? `lifecycle_${result.opencorvus.lifecycle_status ?? "unknown"}`
+                : `${failure?.run.stage ?? "unknown_stage"}:${failure?.error?.name ?? "unknown_error"}`
   const tokens = result?.opencorvus.tokens
   records.push({
     run_id: payload.run.id ?? path.basename(directory),

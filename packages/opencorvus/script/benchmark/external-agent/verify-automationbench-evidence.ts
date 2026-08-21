@@ -5,6 +5,7 @@ import {
   auditBenchmarkIsolation,
   auditBatchEvidence,
   auditSkillEvidenceSeal,
+  auditTaskInfrastructureIncidents,
   auditTaskOutcome,
   auditTerminalQuiescence,
   evidenceFileSetMatches,
@@ -295,8 +296,26 @@ for (const attempt of catalog.attempts) {
     names.some((name) => /^redaction-receipt(?:-\d+)?\.json$/.test(name)) ||
     Boolean(runManifest.redacted_from_manifest_sha256)
   const disposition = dispositions.runs?.[String(payload.run.id)]
+  // Recomputed here rather than read from the sealed result: the runner never
+  // sealed this audit, and a Host fault that the transcript cannot show must not
+  // depend on the runner having thought to record it.
+  const [infrastructureSnapshot, infrastructureBoard] = await Promise.all([
+    fs
+      .readFile(path.join(directory, "runtime-database-snapshot.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => undefined),
+    fs
+      .readFile(path.join(directory, "terminal-board.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => undefined),
+  ])
+  const infrastructureAudit = auditTaskInfrastructureIncidents({
+    snapshot: infrastructureSnapshot,
+    board: infrastructureBoard,
+  })
   const rawEligible =
     names.includes("result.json") &&
+    infrastructureAudit.passed &&
     payload.run?.status === "scored" &&
     payload.opencorvus?.task_outcome_audit?.scored_terminal === true &&
     payload.opencorvus?.terminal_quiescence_audit?.passed === true &&
@@ -373,6 +392,11 @@ for (const attempt of catalog.attempts) {
   })
   if (!skillSeal.passed) {
     throw new Error(`Experimental Skill evidence seal failed for ${attempt.run_id}: ${skillSeal.violations.join(", ")}`)
+  }
+  if (!infrastructureAudit.passed) {
+    throw new Error(
+      `Host recorded a task infrastructure error for ${attempt.run_id}: ${infrastructureAudit.violations.join(", ")}`,
+    )
   }
   const workflow = board.task?.completionDecision?.workflowBinding ?? null
   const selectedWorkflowID = workflow?.kind === "virtual_workflow" ? workflow.workflow_id : null
