@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-22-v0.0.51-beta-release.md](2026-08-22-v0.0.51-beta-release.md) tracks the reviewed action-matrix harness repair, canonical `0.0.51-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
+
 - [2026-08-21-v0.0.50-beta-release.md](2026-08-21-v0.0.50-beta-release.md) records the product-only harness repair, canonical `0.0.50-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
 
 - [2026-08-19-xiaohongshu-long-horizon-promotion.md](2026-08-19-xiaohongshu-long-horizon-promotion.md) defines the coordinated two-cover, real-site, README-image, and publish-ready copy package for presenting OpenCorvus long-horizon Expert Squads on Xiaohongshu.
