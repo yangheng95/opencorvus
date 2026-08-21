@@ -388,6 +388,30 @@ export async function executeRollingBatchChains<T>(input: {
   )
 }
 
+export function missingCompletedBatchProfileReceipts(input: {
+  batches: Array<{
+    profiles: string[]
+    receipt?: { batch_index?: number }
+    audit: { passed?: boolean; status?: string }
+  }>
+  batchIndexes: number[]
+  profiles: string[]
+}): Array<{ batch_index: number; profile: "base" | "advanced" }> {
+  return input.batchIndexes.flatMap((caseBatchIndex) =>
+    input.profiles.flatMap((profile) =>
+      input.batches.some(
+        (batch) =>
+          batch.audit.passed === true &&
+          batch.audit.status === "completed" &&
+          batch.receipt?.batch_index === caseBatchIndex &&
+          batch.profiles.includes(profile),
+      )
+        ? []
+        : [{ batch_index: caseBatchIndex, profile: profile as BatchProfileSlot["profile"] }],
+    ),
+  )
+}
+
 type BatchPlanSlot = { case_index: number; profile: string }
 
 export function auditBatchEvidence(input: {

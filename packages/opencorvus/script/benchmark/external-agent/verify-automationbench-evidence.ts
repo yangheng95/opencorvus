@@ -8,6 +8,7 @@ import {
   auditTaskOutcome,
   auditTerminalQuiescence,
   evidenceFileSetMatches,
+  missingCompletedBatchProfileReceipts,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
   summarizeProviderUsageRows,
@@ -578,18 +579,17 @@ if (finalMode) {
   if (selectedRows.length !== finalProfiles.length * 50) {
     throw new Error(`Final matrix requires exactly ${finalProfiles.length * 50} selected-profile trials`)
   }
-  for (const batchIndex of Array.from({ length: 10 }, (_, index) => index + 1)) {
-    if (
-      !verifiedBatches.some(
-        (batch) =>
-          batch.audit.passed === true &&
-          batch.audit.status === "completed" &&
-          batch.receipt?.batch_index === batchIndex &&
-          finalProfiles.every((profile) => batch.profiles.includes(profile)),
-      )
-    ) {
-      throw new Error(`Final matrix requires a completed receipt for frozen batch ${batchIndex}`)
-    }
+  const missingBatchProfiles = missingCompletedBatchProfileReceipts({
+    batches: verifiedBatches,
+    batchIndexes: Array.from({ length: 10 }, (_, index) => index + 1),
+    profiles: finalProfiles,
+  })
+  if (missingBatchProfiles.length > 0) {
+    throw new Error(
+      `Final matrix requires completed receipts for: ${missingBatchProfiles
+        .map((slot) => `batch ${slot.batch_index} ${slot.profile}`)
+        .join(", ")}`,
+    )
   }
   for (const profile of finalProfiles) {
     const rows = catalog.leaderboard.filter((attempt) => attempt.opencorvus?.profile === profile)

@@ -17,6 +17,7 @@ import {
   auditTerminalQuiescence,
   auditBatchEvidence,
   executeRollingBatchChains,
+  missingCompletedBatchProfileReceipts,
   rollingBatchChains,
   paperEvidenceChecks,
   normalizeTrajectory,
@@ -645,6 +646,26 @@ describe("external agent benchmark contract", () => {
       sealing_run_ids: launched.map((item) => item.run_id).sort(),
       adopted_run_ids: [],
     })
+  })
+
+  test("accepts profile-phased completed receipts for the final paired matrix", () => {
+    const completed = (batch_index: number, profiles: string[]) => ({
+      profiles,
+      receipt: { batch_index },
+      audit: { passed: true, status: "completed" },
+    })
+    const batches = Array.from({ length: 10 }, (_, offset) => [
+      completed(offset + 1, ["base"]),
+      completed(offset + 1, ["advanced"]),
+    ]).flat()
+
+    expect(
+      missingCompletedBatchProfileReceipts({
+        batches,
+        batchIndexes: Array.from({ length: 10 }, (_, offset) => offset + 1),
+        profiles: ["base", "advanced"],
+      }),
+    ).toEqual([])
   })
 
   test("normalizes trace, Skill, and benchmark calls onto aligned lanes", () => {

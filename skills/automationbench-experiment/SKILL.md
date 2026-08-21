@@ -11,8 +11,8 @@ Treat OpenCorvus Base and Advanced as the evaluated multi-Agent harness, not as 
 
 - Keep benchmark work on the dedicated bench branch. Do not merge benchmark adapters, Skills, scores, specs, or evidence into the release branch.
 - Keep that branch in the dedicated `D:\myhexin-local\opencorvus-bench` worktree. Do not switch the main `opencorvus` worktree onto the benchmark branch.
-- Round 1 is AutomationBench `1.0.6`, a committed deterministic set of 50 public cases, exact model `openai/gpt-5.6-luna`, and paired fresh-world Base and repaired Advanced runs for every case. Superseded Advanced exploratory rows remain invalid debug evidence. WorkBuddy is out of scope until the user explicitly adds it.
-- Schedule deterministic batches as five rolling case chains. Odd case indexes run Base then Advanced and even case indexes run Advanced then Base, so profile order is balanced. Start five chains together; when one profile settles, that same case can start its opposite profile without waiting for the other cases. Base and Advanced for one case never overlap, and no more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, and evidence directory. Finish and seal all ten slots before starting the next batch.
+- Round 1 is AutomationBench `1.0.6`, a committed deterministic set of 50 public cases, exact model `openai/gpt-5.6-luna`, and fresh-world Base then repaired Advanced runs for every case. Finish and verify all 50 Base trials before launching any further Advanced trial. Superseded Advanced exploratory rows remain invalid debug evidence. WorkBuddy is out of scope until the user explicitly adds it.
+- Phase A schedules deterministic five-case Base-only batches. Start five Base trials together, seal the batch, and continue until Base is 50/50. Phase B then schedules Advanced-only batches over the same frozen cases. No more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, and evidence directory.
 - Before each run, require an isolated runtime containing both the source `auth.json` and `models.json`; verify the exact Provider/model reports `connected`. Never print or copy credential contents into evidence.
 - Formal runs use WSL2 as an operational benchmark boundary, not as a hostile multi-tenant security proof. Keep evaluator, scorer, Provider data, control, and evidence roots owned by root with mode `0700`; run Agent Bash under the case UID with a private HOME, mount namespace, Windows mounts removed, and a UID-scoped Unix tool socket. The preflight must show that credentials/evaluator data are not readable and that the trial can use its own project/socket. Do not add stronger sandbox machinery unless an observed benchmark leak requires it.
 - Fail closed unless the bridge proves the exact AutomationBench distribution version, installed package-tree hash, and official task-contract hash. Map out only the stock single-model turn-budget sentence; preserve the business contract and record the mapped request hash.
@@ -43,7 +43,7 @@ An excessive call count, long duration while observable work continues, parallel
 
 ## Execute
 
-Run one deterministic five-case paired batch with the committed coordinator. Use a ten-minute inactivity window so a legitimate long streaming model call is not mistaken for a stuck trial:
+Run one deterministic five-case Base-only batch with the committed coordinator. Use a ten-minute inactivity window so a legitimate long streaming model call is not mistaken for a stuck trial:
 
 ```bash
 apt-get update && apt-get install -y ripgrep nodejs
@@ -61,12 +61,12 @@ bun packages/opencorvus/script/benchmark/external-agent/run-automationbench-batc
   --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell \
   --output /var/lib/opencorvus-benchmark/evidence \
   --control-root /var/lib/opencorvus-benchmark/control \
-  --profiles base,advanced \
+  --profiles base \
   --dashboard /mnt/d/myhexin-local/opencorvus-benchmark-results/index.html \
   --inactivity-ms 600000
 ```
 
-After a batch, regenerate the catalog with `catalog-automationbench-evidence.ts --profiles base,advanced`. Before reporting, run `verify-automationbench-evidence.ts --profiles base,advanced` with the same root/source/Python/shell arguments; add `--mode final` only after all 100 paired trials exist.
+During Phase A, regenerate and verify with `--profiles base`; use final mode after Base reaches 50/50. Only after that phase is sealed may Phase B launch batches with `--profiles advanced`. Use `--profiles base,advanced` only for the final combined catalog/verifier after both 50-trial phases are complete.
 
 ## Score and report
 
