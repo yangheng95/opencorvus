@@ -171,6 +171,12 @@ The renderer consumes only normalized raw events and draws aligned lanes on one 
 6. Render and visually inspect paper figures from sealed trajectory data.
 7. Run focused tests, typecheck/docs checks, and relevant real benchmark paths.
 8. Commission the required independent read-only review; fix every valid finding and repeat review if code changes.
+
+## 2026-08-21 paired batch-1 invalidation
+
+The first repaired paired batch completed all ten profile trials but correctly stopped before batch 2. Nine runs are raw-eligible sealed candidates; `marketing.campaign_handoff` Advanced is permanently `invalid_bug` because runtime cleanup found one failed detached dispatch pipeline. The sealed transcript and database snapshot identify the shared Host trigger: one Orchestrator assistant Message completed `manage_task` with the persisted `add_goal` shape, then completed a two-worker `dispatch_agent` fan-out in a later Provider step. The ingress reducer classified every completed `manage_task` as a terminal decision, so the later fan-out made the same ingress `host_fault/decision_ambiguous`; backend settlement then surfaced the unrecovered lineage as the cleanup failure.
+
+The contract error is in the shared decision-effect classification, not in AutomationBench scoring or model-call volume. Delivery Slice `add_goal`, `modify_goal`, and `delete_goal` mutate the Task contract and explicitly do not dispatch or terminalize work; they require a later scheduling decision. `complete_task`, `fail_task`, and `cancel_task` remain settling decisions. The fix must use this distinction in the existing single `orchestratorDecisionToolCompletionEffect` authority so live Tool coordination and durable ingress replay agree. It must not add a benchmark gate or prompt workaround. Focused positive coverage must prove a goal mutation followed by dispatch reduces to the dispatch decision set. The affected run remains invalid and only its missing case/profile slot is rerun from a fresh world; the other nine sealed candidates are adopted by the recovery batch.
 9. Commit and push `codex/automation-workbuddy-benchmark` without merging benchmark work into a release branch.
 
 ## First Base live run: invalid pilot and root causes
