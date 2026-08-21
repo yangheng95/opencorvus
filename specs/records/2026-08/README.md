@@ -2,6 +2,8 @@
 
 - [2026-08-21-orchestrator-context-economics.md](2026-08-21-orchestrator-context-economics.md) measures where the AutomationBench Base batch spends uncached tokens, adds fail-closed prompt-composition observation, rejects synthetic tail transport and stale per-turn snapshots, and defers the exact Phase 1 optimisation until a clean run names the first divergent block.
 
+- [2026-08-22-v0.0.51-beta-release.md](2026-08-22-v0.0.51-beta-release.md) tracks the reviewed action-matrix harness repair, canonical `0.0.51-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
+
 - [2026-08-21-v0.0.50-beta-release.md](2026-08-21-v0.0.50-beta-release.md) records the product-only harness repair, canonical `0.0.50-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
 
 - [2026-08-20-external-agent-benchmark-pilot.md](2026-08-20-external-agent-benchmark-pilot.md) defines the isolated `gpt-5.6-luna` AutomationBench round for OpenCorvus Base/Advanced, including bug-run invalidation, immutable per-run evidence, exact Provider/model preflight, official scoring, token accounting, readable trajectories, and honest public-leaderboard context.

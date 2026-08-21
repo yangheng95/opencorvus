@@ -4,6 +4,8 @@ Latest Orchestrator context-economics measurement and remediation plan: [`2026-0
 
 Latest external agent benchmark pilot: [`2026-08-20-external-agent-benchmark-pilot.md`](records/2026-08/2026-08-20-external-agent-benchmark-pilot.md), covering the paper-evidence `gpt-5.6-luna` AutomationBench round for OpenCorvus Base and Advanced.
 
+Latest `v0.0.51-beta` application and website release: [`2026-08-22-v0.0.51-beta-release.md`](records/2026-08/2026-08-22-v0.0.51-beta-release.md).
+
 Latest OpenCorvus long-horizon Expert Squad Xiaohongshu promotion package: [`2026-08-19-xiaohongshu-long-horizon-promotion.md`](records/2026-08/2026-08-19-xiaohongshu-long-horizon-promotion.md).
 
 Latest long-horizon and self-evolution repositioning of the public site and READMEs: [`2026-08-19-long-horizon-and-evolution-repositioning.md`](records/2026-08/2026-08-19-long-horizon-and-evolution-repositioning.md).
