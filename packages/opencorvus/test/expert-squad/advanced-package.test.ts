@@ -26,7 +26,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.21.4")
+    expect(loaded.manifest.version).toBe("2026.08.21.6")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -113,7 +113,7 @@ describe("built-in interface review workflow authority", () => {
       "exact current RequirementSet and Architect/Delivery Slice acceptance-spec Artifacts",
     )
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
-      "record passed, failed, or unresolved with exact evidence",
+      "criterion-by-criterion coverage",
     )
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
       "record passed, failed, or unresolved",
@@ -124,8 +124,30 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
       "A missing fact is discovery work, not automatically a rejection condition",
     )
+    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
+      "finite authority-candidate ledger",
+    )
+    expect(loaded.promptProfile.agents["solution-architect"]).toContain("source-derived action matrix")
     expect(loaded.promptProfile.agents["implementation-engineer"]).toContain(
-      "closest truthful supported representation",
+      "Missing a dedicated field never authorizes a different surrogate mutation",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "independently rebuild the finite authority-candidate ledger",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "omitted effects, extra or surrogate mutations, wrong identities, rule-precedence violations",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "When the dynamic business-entity trigger applies, additionally report authority-ledger closure",
+    )
+    expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
+      "Require row-for-row coverage of every in-scope entity",
+    )
+    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
+      "When a dynamic current process, policy, template, backlog, or history decides actions for a set of business entities",
+    )
+    expect(loaded.promptProfile.agents["solution-architect"]).toContain(
+      "Ordinary repository/software delivery retains its normal Requirement and Slice-local acceptance contract",
     )
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
       "current independent `advanced/test-report`",
@@ -135,7 +157,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects capability-matched Base workflows and plan-only Planner tools", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.21.2")
+    expect(loaded.manifest.version).toBe("2026.08.21.4")
     expect(workflowNodes(loaded, "planner-execution-verification")).toEqual({
       "base-planner": [],
       "base-developer": ["base-planner"],
@@ -170,8 +192,26 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "A missing fact is not itself a blocker",
     )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "finite authority-candidate ledger",
+    )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "closest truthful representation exposed by the authoritative interface",
+      "build the plan's source-derived action matrix before external-state mutation",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Missing a dedicated field never authorizes a different surrogate mutation",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "independently rebuild the finite authority-candidate ledger",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "Report omitted required effects, extra or surrogate mutations, wrong identities, rule-precedence violations",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "When the dynamic business-entity trigger applies, it additionally records independent authority-ledger closure",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "Ordinary repository/software delivery continues to use the existing `AC-N` contract",
     )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
       "complete read/select coverage of every `AC-N`",
