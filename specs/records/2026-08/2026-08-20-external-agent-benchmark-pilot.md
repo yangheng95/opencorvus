@@ -341,6 +341,18 @@ Two smaller things were wrong in the same direction. Every failed raw-evidence c
 
 The fault itself is a product bug and is not repaired here. `ToolTurnExecutionCoordinator` is constructed once per `resolveTools` call, which is once per Provider step, while a Task-root assistant Message is deterministic in its input message and is retained across steps whenever the step ended on tool calls. The in-memory refusal of a mixed decision set therefore resets every step while the durable decision facts accumulate under one `assistantMessageID`, and `validDecisionSet` rejects the combination the coordinator would have refused in-turn. The decision claim has to be scoped to the persisted assistant Message and seeded from its completed decision receipts.
 
+### An assistant turn is a Message, not a Provider step
+
+The fault the eligibility gate exposed is one scope error. `ToolTurnExecutionCoordinator` refuses a second, different decision in an assistant turn, because the durable reduction accepts a decision set only as a `dispatch_agent` fan-out or a single other decision. One coordinator is built per resolved Tool surface, and a surface is resolved once per Provider step. A Task-root assistant Message is deterministic in its input Message and is retained across steps whenever a step ended on tool calls — which a `dispatch_agent` step always does. So the in-memory claim reset every step while the durable decision facts kept accumulating under one `assistantMessageID`, and `validDecisionSet` rejected exactly the pair the coordinator existed to refuse.
+
+The retention path made the existing receipt check unreachable rather than wrong. `retainAssistantForNextProviderStep` does ask whether the Message already carries a decision receipt, but it is consulted only when `retainAssistantForToolContinuation` is false, and that one is true for every Task-root step finishing on tool calls.
+
+A decision is durable evidence, not process memory, so the claim is now read back from the Tool parts the reduction itself derives decisions from — `orchestratorCommittedDecisionInParts`, next to the effect rule it mirrors. `resolveTools` derives it from the arguments it already receives rather than accepting it as a parameter: a call site that has to remember to pass it is a call site that can forget, and the permission-continuation resolver was already a second place to forget it. Reading durable parts also means a Turn that resumes in another process is guarded the same way.
+
+Refusal alone would have been the wrong mechanism. A refused call is a result the model can answer with the same call again, and `no_action` arriving after a settled `dispatch_agent` was 28 of the 43 occurrences. An absent Tool has no retry path, so a Turn that has already decided is no longer offered the decision Tools that could only add a second one. Only a Tool that commits for every input it accepts may be withheld: `manage_task` still carries the Goal edits and `respond_agent_coordination` still carries `redispatch`, so those stay on the surface and the coordinator judges them by their arguments. The classification is an exhaustive map over the Tool names, so adding a decision Tool is a compile error until it is classified. This is the complement of the decision-repair rung, which constrains a Turn that has not decided yet; the two never apply to the same step.
+
+The conflict error now names what was expected and what arrived, and says to end the Turn — the model reads it, and a bare statement that two Tools cannot be combined is not a next action.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>
