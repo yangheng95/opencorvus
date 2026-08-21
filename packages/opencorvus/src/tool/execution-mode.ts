@@ -60,12 +60,36 @@ export class ToolTurnExecutionCoordinator {
   #decisionCommand: string | undefined
 
   /**
+   * An assistant turn is a persisted Message, not a Provider step.
+   *
+   * One coordinator is created per resolved Tool surface, and a surface is
+   * resolved once per Provider step — but a Task-root assistant Message is
+   * deterministic in its input Message and is retained across steps whenever a
+   * step ended on tool calls. So the claim below used to reset every step while
+   * the durable decision facts kept accumulating under one `assistantMessageID`,
+   * and the reduction rejected exactly the combination this class exists to
+   * refuse. Seeding from the receipts already on that Message restores the scope
+   * the guard was written for, and does it from durable evidence, so a Turn that
+   * resumes in a different process is guarded the same way.
+   */
+  constructor(input?: { committedDecision?: string }) {
+    this.#decisionCommand = input?.committedDecision
+  }
+
+  /** The decision this turn stands on, whether it was seeded from the Message's
+   *  durable receipts or committed by a call on this surface. */
+  get committedDecision(): string | undefined {
+    return this.#decisionCommand
+  }
+
+  /**
    * Refuse a second, different decision in one assistant turn.
    *
    * The durable reduction accepts a decision set only when it is a single
    * `dispatch_agent` fan-out or exactly one other decision; anything mixed is
-   * an integrity conflict, and an integrity conflict is absorbing — the ingress
-   * blocks permanently and holds every later one behind it. Since a model can
+   * an integrity conflict that costs the Turn its effect: the ingress rests in
+   * `host_fault`, the reduction returns before any decision can be read, and
+   * only a new operator message can redo the abandoned work. Since a model can
    * emit that combination in ordinary output, it has to be refused while the
    * call is still refusable, before it becomes a durable fact.
    */
@@ -73,8 +97,14 @@ export class ToolTurnExecutionCoordinator {
     if (!decision?.commits) return this.#decisionCommand
     const prior = this.#decisionCommand
     if (prior !== undefined && !(prior === "dispatch_agent" && decision.command === "dispatch_agent")) {
+      const expected =
+        prior === "dispatch_agent"
+          ? "another dispatch_agent, or no further decision Tool"
+          : "no further decision Tool"
       throw new ToolTurnExecutionConflictError(
-        `Decision Tool ${decision.command} cannot join an assistant turn that already committed ${prior}`,
+        `Decision Tool ${decision.command} cannot join an assistant turn that already committed ${prior}. ` +
+          `Expected: ${expected}. Received: ${decision.command}. ` +
+          `End this Turn without another decision — ${prior} is already recorded as its decision.`,
       )
     }
     this.#decisionCommand = decision.command

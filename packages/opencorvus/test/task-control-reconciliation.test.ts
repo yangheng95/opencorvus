@@ -221,17 +221,18 @@ describe("Task-control reconciliation", () => {
         Database.Client()
         const reconciled = await reconcileTaskControlPlane(fixture.taskID)
         const evidence = Database.use((db) => readTaskRootIngressEvidence(db, fixture.ingress))
+        const expectedDispatchIDs = dispatchIDs.toSorted((left, right) => left.localeCompare(right))
 
         expect({
           reconciled,
-          decisions: evidence.decisions.map((decision) => ({ id: decision.id, command: decision.command })),
+          decisions: evidence.decisions
+            .toSorted((left, right) => left.id.localeCompare(right.id))
+            .map((decision) => ({ id: decision.id, command: decision.command })),
           projection: projectTaskRootIngress(fixture.ingress.id, Date.now(), readTaskRootIngressEvidence),
         }).toEqual({
           reconciled: 0,
-          decisions: dispatchIDs
-            .toSorted()
-            .map((id) => ({ id, command: "dispatch_agent" })),
-          projection: { state: "resolved", decisionIDs: dispatchIDs.toSorted() },
+          decisions: expectedDispatchIDs.map((id) => ({ id, command: "dispatch_agent" })),
+          projection: { state: "resolved", decisionIDs: expectedDispatchIDs },
         })
       },
     })

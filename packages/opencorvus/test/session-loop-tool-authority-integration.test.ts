@@ -37,6 +37,8 @@ import { createArchitectOutputTools } from "../src/architect/output-tools"
 import { assertArchitectOutputToolTurnIdentity } from "../src/architect/output-tool-turn-identity"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/agent/stage-tool-materializer"
 import { createDecisionLog } from "../src/decision-log"
+import { Database } from "../src/storage/db"
+import { ToolTurnExecutionConflictError } from "../src/tool/execution-mode"
 
 function providerModel(): Provider.Model {
   return {
@@ -64,6 +66,89 @@ afterEach(async () => {
 })
 
 describe("SessionLoop Tool execution authority integration", () => {
+  test("restores a persisted turn decision after database reopen and refuses a conflicting call", async () => {
+    // A surface is resolved once per Provider step; a Task-root assistant Message
+    // spans several. When the coordinator was built with no knowledge of that
+    // Message, step two decided again beside step one's decision, the reduction
+    // rejected the pair, and the Turn executed nothing — 43 times in one Base
+    // batch. `resolveTools` derives the claim from the arguments it already
+    // receives, so no call site can reintroduce that gap by forgetting to pass it.
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const agent = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("coding", { config }))
+        const session = await Session.create({ kind: "assistant", title: "Retained turn decision claim" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          agent: "coding",
+          time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: assistant.id,
+          type: "tool",
+          tool: "dispatch_agent",
+          callID: "call_retained_dispatch",
+          state: {
+            status: "completed",
+            input: { agent: "base-developer" },
+            output: "dispatched",
+            title: "Accepted dispatch",
+            metadata: {},
+            time: { start: Date.now(), end: Date.now() + 1 },
+          },
+        })
+        Database.close()
+        Database.Client()
+        const reopened = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        if (reopened.info.role !== "assistant") throw new Error("Expected the persisted assistant Message")
+        const processor = SessionProcessor.create({
+          assistantMessage: reopened.info,
+          sessionID: session.id,
+          model,
+          abort: new AbortController().signal,
+        })
+        const withReceipt = await SessionLoop.resolveTools({
+          agent,
+          agentID: "coding",
+          model,
+          session,
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+        })
+        const coordinator = SessionLoop.executionCoordinatorForResolvedTools(withReceipt)
+        if (!coordinator) throw new Error("Expected the resolved Tool execution coordinator")
+        expect(coordinator.committedDecision).toBe("dispatch_agent")
+        await expect(
+          coordinator.run("ordinary", async () => "unreachable", { command: "no_action", commits: true }),
+        ).rejects.toBeInstanceOf(ToolTurnExecutionConflictError)
+      },
+    })
+  })
+
   test("persists a provider-driven standalone write result through the real SessionLoop Tool wrapper", async () => {
     await using project = await memoryProject()
     await Instance.provide({

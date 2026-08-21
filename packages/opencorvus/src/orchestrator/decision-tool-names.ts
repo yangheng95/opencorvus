@@ -68,3 +68,31 @@ export function orchestratorDecisionToolCompletionEffect(input: {
   return "satisfies_current_epoch"
 }
 import { isAgentCoordinationDecision } from "@/engine/agent-coordination-decision"
+
+/**
+ * The decision a recorded assistant turn has already committed, if any.
+ *
+ * A decision is durable evidence, not process memory: the reduction derives its
+ * decision facts from exactly these Tool parts, so anything that has to know
+ * what a turn already decided — across a Provider step, or across a restart —
+ * must read them the same way rather than remember. A declaration that cannot
+ * classify its own recorded input is not a committed decision; the call it
+ * describes failed on its own terms.
+ */
+export function orchestratorCommittedDecisionInParts(
+  parts: ReadonlyArray<{ type: string; tool?: string; state?: { status?: string; input?: unknown } }>,
+): OrchestratorDecisionToolName | undefined {
+  for (const part of parts) {
+    if (part.type !== "tool" || part.state?.status !== "completed") continue
+    const tool = part.tool
+    if (typeof tool !== "string" || !isOrchestratorDecisionToolName(tool)) continue
+    try {
+      const effect = orchestratorDecisionToolCompletionEffect({ tool, stateInput: part.state.input })
+      if (effect === "requires_followup_decision") continue
+    } catch {
+      continue
+    }
+    return tool
+  }
+  return undefined
+}

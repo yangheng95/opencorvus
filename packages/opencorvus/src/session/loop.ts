@@ -128,7 +128,8 @@ import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
 import {
   isOrchestratorDecisionToolName,
-  orchestratorDecisionToolCompletionEffect,
+  orchestratorCommittedDecisionInParts,
+  type OrchestratorDecisionToolName,
 } from "@/orchestrator/decision-tool-names"
 import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
 import {
@@ -159,20 +160,12 @@ function taskRootDecisionGapStepIDs(message: Message.WithParts): string[] {
     .map((part) => part.id)
 }
 
+function taskRootAssistantCommittedDecision(message: Message.WithParts): OrchestratorDecisionToolName | undefined {
+  return orchestratorCommittedDecisionInParts(message.parts)
+}
+
 function taskRootAssistantHasDecisionReceipt(message: Message.WithParts): boolean {
-  return message.parts.some((part) => {
-    if (
-      part.type !== "tool" ||
-      part.state.status !== "completed" ||
-      !isOrchestratorDecisionToolName(part.tool)
-    ) {
-      return false
-    }
-    return (
-      orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input }) !==
-      "requires_followup_decision"
-    )
-  })
+  return taskRootAssistantCommittedDecision(message) !== undefined
 }
 
 /**
@@ -285,6 +278,10 @@ export namespace SessionLoop {
 
   export function skillSurfaceForResolvedTools(tools: Record<string, AITool>) {
     return resolvedToolSkillSurfaces.get(tools)
+  }
+
+  export function executionCoordinatorForResolvedTools(tools: Record<string, AITool>) {
+    return resolvedToolExecutionSurfaces.get(tools)?.coordinator
   }
 
   /**
@@ -2742,8 +2739,15 @@ export namespace SessionLoop {
   }) {
     using _ = log.time("resolveTools")
     const tools: Record<string, AITool> = {}
+    // Derived here rather than accepted as an argument. A surface is resolved
+    // once per Provider step while the assistant Message it belongs to can span
+    // several, so the claim has to be re-read from that Message every time — and
+    // a call site that had to remember to pass it is a call site that can forget.
+    const retainedAssistant = input.messages.find((message) => message.info.id === input.processor.message.id)
     resolvedToolExecutionSurfaces.set(tools, {
-      coordinator: new ToolTurnExecutionCoordinator(),
+      coordinator: new ToolTurnExecutionCoordinator({
+        committedDecision: retainedAssistant ? taskRootAssistantCommittedDecision(retainedAssistant) : undefined,
+      }),
       coordinatedTools: new WeakSet<object>(),
     })
     const toolSources = new Map<string, ProviderToolSource>()
