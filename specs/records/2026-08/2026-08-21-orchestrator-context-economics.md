@@ -189,8 +189,8 @@ sealed run; an eligible baseline batch.
 
 ### Phase 1 — stratify the Orchestrator prompt
 
-**1.0 Transport contract (gate).** This is the open design problem and must be settled before any
-implementation. A request-only runtime-context transport must be defined that:
+**1.0 Transport contract — resolved, see §8.** The design is settled. The obligations it had to
+discharge were:
 
 - does not break assistant tool-call / tool-result adjacency;
 - does not impersonate a user or a tool;
@@ -198,25 +198,6 @@ implementation. A request-only runtime-context transport must be defined that:
 - never enters the persisted transcript;
 - does not carry the previous step's stale snapshot into the next step;
 - keeps identical semantics on the OpenAI and Anthropic request shapes.
-
-Candidates and their known problems, none yet cleared:
-
-| Candidate | Problem |
-| --- | --- |
-| Synthetic trailing user message | Fabricates a participant turn; Anthropic already encodes tool results as user messages, so adjacency and consecutive-user-message handling must be proven |
-| Trailing system message | Anthropic's system is a top-level parameter, not a tail message; it stays in the prefix |
-| Append to the last tool result | Pollutes a tool's real return semantics; OpenAI `tool` messages carry string content only |
-| Persisted tail context message | The next step drags the previous snapshot into history and re-breaks the prefix |
-
-One partial design was explored and does **not** close: letting each tool result carry the state
-delta it caused. It fits the attached dispatch path, but `dispatch-agent-tool.ts` settles a
-*detached* dispatch through a new ingress rather than a return value, so state can change
-mid-turn with no tool result to carry it. Any accepted transport must state how it covers that
-path.
-
-Note that `dynamicContextText` already performs request-only injection by mutating the projected
-model-message array rather than persisted messages, so request-only injection has precedent; only
-the position is unsolved.
 
 **1.1 Split.** `buildSystemParts` returns turn-stable parts (instructions, capability projection,
 runtime directory, wake identity, dispatch-agent table, Skill surface) and step-volatile parts
@@ -333,3 +314,104 @@ must come from the clean baseline — this batch cannot serve as a correctness f
 | first business write, share of run | 47% | ≤ 25% | 4 |
 | Tester total tokens | 25,597,977 | ≤ 12,800,000 (cached tokens; report cost separately) | 2, 3 |
 | strict / partial | 3/20, 54.0% (invalid) | not below the Phase 0.4 clean baseline | all |
+
+## 8. Phase 1.0 — the runtime-context transport
+
+### 8.1 What the request actually looks like
+
+Four facts, read from the code rather than assumed, decide the shape:
+
+- `system` is a top-level request parameter on both paths — `streamText({ system })` normally, and
+  `options.instructions` when the OpenAI provider is in OAuth mode. It always precedes every
+  message, so **there is no such thing as a trailing system message**. That candidate is not merely
+  risky; it does not exist.
+- `applyCaching` runs only for the Anthropic family. The benchmark's `openai/gpt-5.6-luna` receives
+  no explicit breakpoints at all, so the design must work under pure automatic prefix caching and
+  cannot lean on a breakpoint to rescue a late-placed block.
+- `normalizeVendorMessages` dispatches through a per-vendor normalizer registry. That is the seam
+  where one logical carrier can take two physical shapes without either call site knowing.
+- `dynamicContextText` already injects request-only content by mutating the projected model-message
+  array; nothing it writes is persisted. Request-only injection has precedent — only the position
+  was unsolved.
+
+### 8.2 The design
+
+Three parts.
+
+**Turn-stable system.** `buildSystemParts` splits into a stable half and a volatile half. The
+stable half is resolved once per turn and reused for that turn's Provider steps, keyed by the
+retained assistant Message — the same identity the turn's decision claim is now scoped to.
+
+**A request-only runtime-context carrier at the tail.** The volatile half becomes a carrier
+appended after the last message in the projected model-message array, built in `processTurn`
+alongside the existing `dynamicContextText` injection and never persisted. It carries only what
+changed since the turn's stable snapshot was taken, **recomputed from the database on every step**.
+
+**Per-vendor shaping**, registered in the normalizer registry:
+
+| Family | Shape |
+| --- | --- |
+| OpenAI | a trailing `user` message whose content is the carrier envelope |
+| Anthropic | a trailing text block appended to the user message that already carries the last `tool_result`, because Anthropic encodes tool results as user messages and a `tool_result` must lead that message |
+
+The envelope marks the content as Host-authored and non-participant, following the existing
+`<system-reminder>` convention rather than inventing a second one.
+
+### 8.3 How each obligation is discharged
+
+| Obligation | How |
+| --- | --- |
+| Does not break tool-call / tool-result adjacency | The carrier is appended after the complete pair; on Anthropic it joins the same user message *behind* the leading `tool_result` block |
+| Does not impersonate a user or a tool | Explicit Host-authored envelope, same convention as `<system-reminder>`; it states facts, never a request |
+| Does not lower system authority | Instructions stay in `system`. Only *facts* move, and facts never needed instruction authority — they needed recency, which is what the tail gives them |
+| Never enters the persisted transcript | Built in the model-message projection, like `dynamicContextText`; no store write exists on that path |
+| Next step carries no stale snapshot | Guaranteed by construction rather than by discipline: the carrier is never persisted, so the next step rebuilds history from the store and the previous carrier simply does not exist |
+| Identical semantics on both providers | One carrier, two shapes, chosen in the vendor normalizer registry that already exists for this class of difference |
+
+### 8.4 Why not the cheaper variant
+
+Letting each tool result carry the state delta it caused would be strictly better for caching: tool
+results are persisted, so history stays append-only and the prefix grows cleanly with no per-step
+penalty.
+
+It is rejected because it cannot see changes that no tool call in this turn caused. A *detached*
+dispatch settles through `dispatchTaskLoop` with a new ingress rather than through a return value,
+so it mutates occurrence and Artifact state with no tool result to attach a delta to. Recomputing
+the carrier from the database on every step covers that case; a tool-result delta cannot. The
+Orchestrator's live read of Task state exists for correctness, and the transport must not quietly
+narrow it.
+
+A hybrid — persist tool-caused deltas, emit the carrier only when the step diff contains something
+no tool result explains — is a real optimisation and is deliberately **not** in Phase 1. Shipping
+two mechanisms before either is measured is how the cheaper one becomes untestable.
+
+### 8.5 Residual cost, stated plainly
+
+The carrier sits at the tail of step N's request. At step N+1 that same position holds the
+persisted assistant message and tool result from step N, so the common prefix ends where the
+carrier began: **each step re-pays the previous exchange plus the carrier.**
+
+That is inherent to any tail injection, not a defect of this one — no placement can be both after
+all stable content and before content appended later. It is also roughly two orders of magnitude
+cheaper than today, where the divergence sits ahead of the *entire* conversation.
+
+Second residual: a carrier the model saw at step N is absent from step N+1's history, so the model
+can reference something no longer visible. `dynamicContextText` already has this property. The
+mitigation is a content rule rather than a mechanism: the carrier states only facts that remain
+independently readable from Artifacts and the board, and never instructions, commitments, or
+anything the model would be expected to recall verbatim.
+
+### 8.6 Acceptance, before any of Phase 1.1 lands
+
+Phase 0's fingerprint supplies the acceptance test directly:
+
+1. `comparePromptComposition` over consecutive Orchestrator calls must report the carrier as the
+   first divergent block. Any earlier label means the stable half is not actually stable and the
+   split is wrong.
+2. A test asserting the carrier never appears in the persisted transcript.
+3. A test asserting step N+1's request contains no step-N carrier.
+4. Both vendor shapes asserted against their normalizers.
+5. `stable_prefix_share` rising and `resent_prefix_tokens_est` falling on a paired A/B against the
+   Phase 0.4 clean baseline.
+6. Strict and partial not below that baseline — relocation changes how a model weighs a fact, so
+   this is a required gate, not a formality.
