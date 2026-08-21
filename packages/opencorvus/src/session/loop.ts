@@ -95,6 +95,7 @@ import { configureSessionShellResume } from "./shell-exec"
 import {
   assertSessionLoopRuntimeContract,
   isProjectedSchedulerRuntimeContract,
+  isSessionRuntimeSystemProjection,
   sessionRuntimeToolRecords,
   SessionRuntimeContractStore,
   type SessionRuntimeContract as RuntimeContract,
@@ -1603,9 +1604,13 @@ export namespace SessionLoop {
     const skillsSection = skillSurface ? await SystemPrompt.skills(agent, { surface: skillSurface }) : undefined
     const environmentSystem = await SystemPrompt.environment(input.model)
     const instructionSystem = await InstructionPrompt.system()
-    const runtimeSystem =
+    const runtimeSystemResolution =
       typeof runtimeContract?.system === "function" ? await runtimeContract.system() : runtimeContract?.system
-    const runtimeSystemLabels = runtimeContract?.systemLabels
+    const labeledRuntimeSystem = isSessionRuntimeSystemProjection(runtimeSystemResolution)
+      ? runtimeSystemResolution
+      : undefined
+    const runtimeSystem = labeledRuntimeSystem?.parts ?? (runtimeSystemResolution as readonly string[] | undefined)
+    const runtimeSystemLabels = labeledRuntimeSystem?.labels
     if (runtimeSystemLabels && runtimeSystemLabels.length !== (runtimeSystem?.length ?? 0)) {
       throw new Error(
         `Session ${input.sessionID} runtime system label count ${runtimeSystemLabels.length} does not match ` +

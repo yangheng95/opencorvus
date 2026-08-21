@@ -665,16 +665,31 @@ export namespace Orchestrator {
           : currentSchedulerInputMessageID
             ? "The last visible input Message is the exact current Mission/Orchestrator scheduler message. Respond to that real participant Message before using older conversation history."
             : wakeProvenanceNotice
-        const runtimeParts =
-          appendCreatorMessage && !hasCurrentWakeIngress
-            ? systemContext.parts
-            : [...systemContext.parts, currentIngressSystemNotice, ...(inventoryText.trim() ? [inventoryText] : [])]
-        return terminalConversation
-          ? [
-              ...runtimeParts,
-              `This is a terminal conversation-only Turn for ingress ${terminalConversationAuthority.ingressID}. Answer the visible request or acknowledge the exact coordination request. Keep Task lifecycle unchanged. Do not dispatch product work, create a wait/question, or call Task lifecycle tools. A real new operator message is what opens further work.`,
-            ]
-          : runtimeParts
+        const baseLabels = [
+          "runtime:orchestrator-instructions",
+          "runtime:orchestrator-wake-and-capabilities",
+          "runtime:orchestrator-live-task-render",
+        ]
+        const projection = systemContext.parts.map((text, index) => ({
+          label: baseLabels[index] ?? `runtime:orchestrator-system[${index}]`,
+          text,
+        }))
+        if (!(appendCreatorMessage && !hasCurrentWakeIngress)) {
+          projection.push({ label: "runtime:orchestrator-current-ingress", text: currentIngressSystemNotice })
+          if (inventoryText.trim()) {
+            projection.push({ label: "runtime:orchestrator-attachment-inventory", text: inventoryText })
+          }
+        }
+        if (terminalConversation) {
+          projection.push({
+            label: "runtime:orchestrator-terminal-conversation",
+            text: `This is a terminal conversation-only Turn for ingress ${terminalConversationAuthority.ingressID}. Answer the visible request or acknowledge the exact coordination request. Keep Task lifecycle unchanged. Do not dispatch product work, create a wait/question, or call Task lifecycle tools. A real new operator message is what opens further work.`,
+          })
+        }
+        return {
+          parts: projection.map((part) => part.text),
+          labels: projection.map((part) => part.label),
+        }
       }
       // Build PromptInput.parts. Text only; attachment media is referenced by
       // URL/index in the prompt inventory.
@@ -829,11 +844,6 @@ export namespace Orchestrator {
             projectDirectory: schedulerProjectDirectory,
             includeMcpTools: false,
             system: resolveRuntimeSystem,
-            systemLabels: [
-              "runtime:orchestrator-instructions",
-              "runtime:orchestrator-wake-and-capabilities",
-              "runtime:orchestrator-live-task-render",
-            ],
             systemMode: "complete",
             // A follow-up durable ingress is an explicit runtime wake. The
             // creator occurrence is carried by its real user Message, so it
