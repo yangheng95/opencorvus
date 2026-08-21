@@ -9,6 +9,7 @@ import {
   summarizeBenchmarkToolEvents,
   evidenceFileSetMatches,
   permanentRunInvalidation,
+  analyzePromptComposition,
   auditDispatchedSkillCoverage,
   auditRunBinding,
   auditSkillEvidenceSeal,
@@ -354,6 +355,89 @@ describe("external agent benchmark contract", () => {
     expect(audit.passed).toBe(false)
     expect(audit.sources_agree).toBe(false)
     expect(audit.violations).toEqual(["source_disagreement", "task_infrastructure_error:1"])
+  })
+
+  test("prices the tokens a Session re-sent because an earlier block was rewritten", () => {
+    const block = (label: string, sha: string, tokens: number) => ({
+      kind: label.startsWith("system") ? "system" : label === "tools" ? "tools" : "message",
+      index: 0,
+      label,
+      chars: tokens * 4,
+      tokensEst: tokens,
+      sha256: sha,
+    })
+    // Two calls in one Session. The second rewrote `system[1]` — the live state
+    // block — so the four message blocks behind it are re-sent unchanged. That
+    // is the measured Orchestrator shape, and the whole point of the metric.
+    const call = (liveStateSha: string) => ({
+      blocks: [
+        block("tools", "aaaa", 100),
+        block("system[0]", "bbbb", 50),
+        block("system[1]", liveStateSha, 30),
+        block("message[0]:user", "cccc", 10),
+        block("message[1]:assistant", "dddd", 10),
+      ],
+      systemBlocks: 2,
+      messageBlocks: 2,
+      toolCount: 1,
+      toolNames: ["read"],
+      totalChars: 800,
+      totalTokensEst: 200,
+      compositionSha256: liveStateSha,
+    })
+    const trace = [
+      { kind: "llm_request", sessionID: "ses_a", payload: { promptComposition: call("t0") } },
+      { kind: "llm_request", sessionID: "ses_a", payload: { promptComposition: call("t1") } },
+      { kind: "agent_turn", sessionID: "ses_a", payload: {} },
+    ]
+
+    const analysis = analyzePromptComposition(trace)
+    expect(analysis.calls).toBe(2)
+    const session = analysis.sessions[0]!
+    expect(session.session_id).toBe("ses_a")
+    // Call two keeps tools + system[0] and loses everything from system[1] on.
+    expect(session.first_divergent_labels).toEqual({ "system[1]": 1 })
+    expect(session.append_only_calls).toBe(0)
+    // The two message blocks never changed and were paid for twice.
+    expect(session.resent_prefix_tokens_est).toBe(20)
+    expect(analysis.resent_prefix_tokens_est).toBe(20)
+  })
+
+  test("charges nothing as re-sent when a Session only appends", () => {
+    const base = (labels: string[]) => ({
+      blocks: labels.map((label, index) => ({
+        kind: "message" as const,
+        index,
+        label,
+        chars: 40,
+        tokensEst: 10,
+        sha256: label,
+      })),
+      systemBlocks: 0,
+      messageBlocks: labels.length,
+      toolCount: 0,
+      toolNames: [],
+      totalChars: labels.length * 40,
+      totalTokensEst: labels.length * 10,
+      compositionSha256: labels.join(""),
+    })
+    const analysis = analyzePromptComposition([
+      { kind: "llm_request", sessionID: "ses_b", payload: { promptComposition: base(["a", "b"]) } },
+      { kind: "llm_request", sessionID: "ses_b", payload: { promptComposition: base(["a", "b", "c"]) } },
+    ])
+    expect(analysis.sessions[0]!.append_only_calls).toBe(1)
+    expect(analysis.resent_prefix_tokens_est).toBe(0)
+    // First call has no predecessor, so all 20 of its tokens count as divergent;
+    // the second call keeps 20 and adds 10. 20 stable against 30 divergent.
+    expect(analysis.stable_prefix_share).toBeCloseTo(0.4, 5)
+  })
+
+  test("ignores trace events that carry no fingerprint", () => {
+    expect(analyzePromptComposition([{ kind: "agent_turn", sessionID: "ses_c", payload: {} }, {}])).toMatchObject({
+      calls: 0,
+      sessions: [],
+      stable_prefix_share: null,
+    })
   })
 
   test("accepts a sealed Skill receipt only when result.json and skill-projection.json both carry it", () => {

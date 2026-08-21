@@ -1,3 +1,7 @@
+import {
+  comparePromptComposition,
+  type PromptCompositionFingerprint,
+} from "../../../src/session/prompt-composition"
 import crypto from "node:crypto"
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
@@ -1230,5 +1234,175 @@ export function auditDispatchedSkillCoverage(input: {
     passed: uncovered.length === 0,
     dispatched_agents: dispatched,
     uncovered_agents: uncovered,
+  }
+}
+
+/**
+ * Context-economics metric definitions.
+ *
+ * Defined in Phase 0 rather than in the phase that finally reports them: a
+ * metric invented after the change it is meant to judge is a metric chosen to
+ * flatter the change. `computable` says whether sealed evidence can answer it
+ * today; the rest name what has to exist first.
+ *
+ * Every entry is a ratio, a count, or a share. None is a token ceiling — a
+ * truncation gate buys its own metric by discarding the exact dates, URLs,
+ * amounts and recipients strict scoring depends on.
+ */
+export const CONTEXT_ECONOMICS_METRICS = [
+  {
+    id: "fresh_input_per_case",
+    unit: "tokens",
+    direction: "lower_is_better",
+    source: "provider_usage_ledger.input_tokens",
+    computable: true,
+  },
+  {
+    id: "cache_read_over_fresh_input",
+    unit: "ratio",
+    direction: "higher_is_better",
+    source: "provider_usage_ledger.cache_read_tokens / input_tokens",
+    computable: true,
+  },
+  {
+    id: "agent_cache_hit",
+    unit: "ratio",
+    direction: "higher_is_better",
+    source: "result.opencorvus.tokens_by_agent",
+    computable: true,
+  },
+  {
+    id: "model_calls_per_case",
+    unit: "count",
+    direction: "lower_is_better",
+    source: "result.opencorvus.tokens.modelCalls",
+    computable: true,
+  },
+  {
+    id: "resent_prefix_tokens",
+    unit: "tokens",
+    direction: "lower_is_better",
+    source: "trace.llm_request.promptComposition, consecutive calls per Session",
+    computable: true,
+  },
+  {
+    id: "stable_prefix_share",
+    unit: "ratio",
+    direction: "higher_is_better",
+    source: "trace.llm_request.promptComposition, consecutive calls per Session",
+    computable: true,
+  },
+  {
+    id: "artifact_reads_per_agent",
+    unit: "count",
+    direction: "lower_is_better",
+    source: "runtime-database-snapshot part projection, tool=artifact_read",
+    computable: true,
+  },
+  {
+    id: "first_business_write_share",
+    unit: "ratio",
+    direction: "lower_is_better",
+    source: "automationbench-events.jsonl write operations against run duration",
+    computable: true,
+  },
+  {
+    id: "last_write_to_terminal_ms",
+    unit: "milliseconds",
+    direction: "lower_is_better",
+    source: "automationbench-events.jsonl last write against terminal board time",
+    computable: true,
+  },
+  {
+    id: "repeat_obligation_cycles",
+    unit: "count",
+    direction: "lower_is_better",
+    source: "obligation ledger",
+    computable: false,
+  },
+] as const
+
+type LLMRequestTraceEvent = {
+  kind?: unknown
+  sessionID?: unknown
+  agentName?: unknown
+  payload?: { promptComposition?: PromptCompositionFingerprint }
+}
+
+/**
+ * Per-Session prompt reuse, derived from consecutive `llm_request` fingerprints.
+ *
+ * "Duplicated input" is defined here as tokens the Session had already sent in
+ * an earlier call and paid for again because a block ahead of them changed.
+ * That is a Host-side account of what *could* have been cached, not a claim
+ * about what the Provider did cache — a cache read is a property of one common
+ * prefix and cannot be decomposed per block. Comparing this series against the
+ * ledger's own `cache_read_tokens` is what confirms or refutes the hypothesis.
+ */
+export function analyzePromptComposition(traceEvents: unknown[]) {
+  const bySession = new Map<string, PromptCompositionFingerprint[]>()
+  for (const raw of traceEvents) {
+    const event = raw as LLMRequestTraceEvent
+    if (event?.kind !== "llm_request") continue
+    const fingerprint = event.payload?.promptComposition
+    if (!fingerprint || typeof event.sessionID !== "string") continue
+    const current = bySession.get(event.sessionID) ?? []
+    current.push(fingerprint)
+    bySession.set(event.sessionID, current)
+  }
+  const sessions = [...bySession.entries()].map(([sessionID, fingerprints]) => {
+    let stableTokens = 0
+    let divergentTokens = 0
+    let resentTokens = 0
+    let appendOnlyCalls = 0
+    const firstDivergentLabels: Record<string, number> = {}
+    const seenDigests = new Set<string>()
+    for (const [index, fingerprint] of fingerprints.entries()) {
+      const divergence = comparePromptComposition(index === 0 ? undefined : fingerprints[index - 1], fingerprint)
+      stableTokens += divergence.stablePrefixTokensEst
+      divergentTokens += divergence.divergentTokensEst
+      if (divergence.appendOnly) appendOnlyCalls += 1
+      if (divergence.comparable && divergence.firstDivergentLabel) {
+        firstDivergentLabels[divergence.firstDivergentLabel] =
+          (firstDivergentLabels[divergence.firstDivergentLabel] ?? 0) + 1
+      }
+      for (const [blockIndex, block] of fingerprint.blocks.entries()) {
+        // A block at or past the divergence point is re-sent as fresh input.
+        // If its exact digest was already sent by this Session, the Host paid
+        // twice for text that never changed.
+        if (blockIndex >= divergence.firstDivergentIndex && seenDigests.has(block.sha256)) {
+          resentTokens += block.tokensEst
+        }
+        seenDigests.add(block.sha256)
+      }
+    }
+    const total = stableTokens + divergentTokens
+    return {
+      session_id: sessionID,
+      calls: fingerprints.length,
+      stable_prefix_tokens_est: stableTokens,
+      divergent_tokens_est: divergentTokens,
+      resent_prefix_tokens_est: resentTokens,
+      stable_prefix_share: total === 0 ? null : stableTokens / total,
+      append_only_calls: appendOnlyCalls,
+      first_divergent_labels: firstDivergentLabels,
+    }
+  })
+  const totals = sessions.reduce(
+    (sum, item) => ({
+      calls: sum.calls + item.calls,
+      stable: sum.stable + item.stable_prefix_tokens_est,
+      divergent: sum.divergent + item.divergent_tokens_est,
+      resent: sum.resent + item.resent_prefix_tokens_est,
+    }),
+    { calls: 0, stable: 0, divergent: 0, resent: 0 },
+  )
+  return {
+    sessions: sessions.sort((left, right) => right.divergent_tokens_est - left.divergent_tokens_est),
+    calls: totals.calls,
+    stable_prefix_tokens_est: totals.stable,
+    divergent_tokens_est: totals.divergent,
+    resent_prefix_tokens_est: totals.resent,
+    stable_prefix_share: totals.stable + totals.divergent === 0 ? null : totals.stable / (totals.stable + totals.divergent),
   }
 }

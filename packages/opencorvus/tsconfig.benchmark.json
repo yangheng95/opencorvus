@@ -8,6 +8,14 @@
   // never typechecked. That let a `const` be referenced above its own declaration reach a sealed
   // batch: the error is a temporal-dead-zone `ReferenceError` at run time and TS2448 at check time,
   // and only one of those costs a five-case wave.
-  "include": ["script/benchmark/**/*.ts", "test/benchmark/**/*.ts", "src/**/*.d.ts"],
+  // `src/session/prompt-composition.ts` is included so the checkers share the
+  // runtime's own fingerprint comparison instead of restating it — a duplicated
+  // predicate is exactly how the runner once drifted away from both checkers.
+  "include": [
+    "script/benchmark/**/*.ts",
+    "test/benchmark/**/*.ts",
+    "src/**/*.d.ts",
+    "src/session/prompt-composition.ts"
+  ],
   "exclude": []
 }

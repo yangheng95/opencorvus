@@ -668,6 +668,86 @@ const SNAPSHOT_TABLES = [
   "provider_usage_event",
 ] as const
 
+/**
+ * Tables sealed by an explicit column list rather than `SELECT *`.
+ *
+ * `engine_task_root_ingress` carries `inline_payload`, a free-form JSON body
+ * that can hold operator message text. The whole-table snapshot above is safe
+ * only because those tables hold identities and counters; adding an ingress
+ * table wholesale would quietly falsify that premise, so its body column is
+ * named out here instead of being redacted after the fact.
+ */
+const SNAPSHOT_TABLE_COLUMNS: Record<string, string[]> = {
+  engine_task_root_ingress: [
+    "id",
+    "task_id",
+    "execution_epoch",
+    "sequence",
+    "source",
+    "source_id",
+    "policy_id",
+    "time_accepted",
+  ],
+  engine_task_root_ingress_policy: ["id", "semantic_turn_limit", "activation_limit", "absolute_deadline"],
+  engine_control_activation_lease: [
+    "id",
+    "target",
+    "target_id",
+    "owner_occurrence_id",
+    "time_activated",
+    "expires_at",
+  ],
+}
+
+/**
+ * Message and Part evidence, projected rather than copied.
+ *
+ * Turn counts, decision facts and per-Artifact read counts all need these two
+ * tables, and neither can be answered from the transcript alone. Copying them
+ * would put a second full copy of every prompt, tool input and tool output into
+ * sealed evidence, inflate the snapshot, widen the credential surface, and give
+ * the run two sources of truth for the same text. Identity, shape, timing,
+ * relationships, length and digest answer every counting question; the bodies
+ * stay in the transcript, which is already sealed and already audited.
+ */
+function messageEvidenceProjection(db: SQLite) {
+  const sha = (value: unknown) =>
+    typeof value === "string" ? crypto.createHash("sha256").update(value).digest("hex").slice(0, 16) : null
+  const messages = db
+    .query<Record<string, any>, []>(
+      `SELECT id, session_id, time_created, time_updated,
+              json_extract(data, '$.role')         AS role,
+              json_extract(data, '$.agent')        AS agent,
+              json_extract(data, '$.author')       AS author,
+              json_extract(data, '$.parentID')     AS parent_id,
+              json_extract(data, '$.activationID') AS activation_id,
+              json_extract(data, '$.modelID')      AS model_id,
+              json_extract(data, '$.providerID')   AS provider_id,
+              json_extract(data, '$.finish')       AS finish,
+              json_extract(data, '$.time.completed') AS time_completed,
+              length(data) AS data_length,
+              data AS _body
+         FROM message`,
+    )
+    .all()
+    .map(({ _body, ...row }) => ({ ...row, data_sha256: sha(_body) }))
+  const parts = db
+    .query<Record<string, any>, []>(
+      `SELECT id, message_id, time_created,
+              json_extract(data, '$.type')         AS type,
+              json_extract(data, '$.tool')         AS tool,
+              json_extract(data, '$.callID')       AS call_id,
+              json_extract(data, '$.state.status') AS state_status,
+              json_extract(data, '$.reason')       AS reason,
+              length(data) AS data_length,
+              data AS _body
+         FROM part`,
+    )
+    .all()
+    .map(({ _body, ...row }) => ({ ...row, data_sha256: sha(_body) }))
+  return { message: messages, part: parts }
+}
+
 function databaseSnapshot(databasePath: string) {
   const db = new SQLite(databasePath, { readonly: true })
   try {
@@ -686,7 +766,23 @@ function databaseSnapshot(databasePath: string) {
       }
       tables[table] = db.query<Record<string, unknown>, []>(`SELECT * FROM "${table}"`).all()
     }
-    return { tables, missing }
+    for (const [table, columns] of Object.entries(SNAPSHOT_TABLE_COLUMNS)) {
+      if (!present.has(table)) {
+        missing.push(table)
+        continue
+      }
+      const projection = columns.map((column) => `"${column}"`).join(", ")
+      tables[table] = db.query<Record<string, unknown>, []>(`SELECT ${projection} FROM "${table}"`).all()
+    }
+    if (present.has("message") && present.has("part")) {
+      const projected = messageEvidenceProjection(db)
+      tables["message"] = projected.message
+      tables["part"] = projected.part
+    } else {
+      if (!present.has("message")) missing.push("message")
+      if (!present.has("part")) missing.push("part")
+    }
+    return { tables, missing: missing.sort() }
   } finally {
     db.close()
   }

@@ -5,6 +5,7 @@ import {
   evidenceFileSetMatches,
   paperEvidenceChecks,
   auditBenchmarkIsolation,
+  analyzePromptComposition,
   auditRunBinding,
   auditSkillEvidenceSeal,
   auditTaskInfrastructureIncidents,
@@ -641,6 +642,15 @@ for (const directory of terminalDirectories) {
               : result
                 ? `lifecycle_${result.opencorvus.lifecycle_status ?? "unknown"}`
                 : `${failure?.run.stage ?? "unknown_stage"}:${failure?.error?.name ?? "unknown_error"}`
+  // Phase 0 observation. Derived from sealed evidence rather than sealed by the
+  // runner, so a run captured before the fingerprint existed simply reports no
+  // sessions instead of failing its evidence audit.
+  const promptComposition = result
+    ? await fs
+        .readFile(path.join(directory, "opencorvus-trace.json"), "utf8")
+        .then((text) => analyzePromptComposition(JSON.parse(text) as unknown[]))
+        .catch(() => undefined)
+    : undefined
   const tokens = result?.opencorvus.tokens
   records.push({
     run_id: payload.run.id ?? path.basename(directory),
@@ -658,6 +668,7 @@ for (const directory of terminalDirectories) {
       tokens: tokens ?? null,
     },
     failure: failure?.error ?? null,
+    ...(promptComposition ? { prompt_composition: promptComposition } : {}),
     evidence_directory: path.relative(root, directory).replaceAll("\\", "/"),
     evidence_manifest: manifest,
     provider_ledger_audit: ledgerAudit,
