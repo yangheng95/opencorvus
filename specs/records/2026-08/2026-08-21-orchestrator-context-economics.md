@@ -454,65 +454,81 @@ satisfied or explicitly amended by the repository owner.
 But the review also exposed a reason to think most of the divergence does not need a transport at
 all.
 
-### 9.2 The self-inflicted share
+### 9.2 The self-inflicted share — retracted
 
-`buildSystemParts` renders the live Task description into `system`, and that description includes
-the current Session's **open tool calls** and **completed tool call references**
-(`engine/describe.ts`, `OPEN_TOOL_CALL_PROMPT_CAP` and `listCompletedToolCallRefs`). Those change
-on every tool call, which is to say on almost every Provider step of an Orchestrator turn.
+The first version of this section claimed the system-side Task render restates the Orchestrator's
+own tool calls, which its message history already carries. **That is wrong on both legs, and the
+code says so plainly.**
 
-They are also already in the model's own message history. The Orchestrator's tool calls and their
-results are the conversation. Rendering them a second time into the prefix is not new information
-to the model; it is the Host restating the tail into the head, and it costs the entire conversation
-its cache every time it changes.
+- `listCompletedToolCallRefs` and `listAgentMessageRefs` already filter
+  `st.kind NOT IN ('root', 'orchestrator', 'mission', 'system')`, so they list worker activity only.
+  Worker activity is not duplication — the Orchestrator has no other way to see it.
+- `listOpenToolCalls` has no kind filter but drops any Session whose status is `streaming`, which
+  the Orchestrator's own Session is while it composes its own request.
 
-Every timestamp in that render comes from a stored row value rather than `Date.now()`, so the
-render is byte-stable when the underlying facts are stable. The volatility is therefore not
-inherent — it is dominated by facts that duplicate the conversation.
+A second claim, that splitting the render into separate `system` entries would help, is also wrong.
+`buildSystemParts` returns `parts: [instructions, ctx.join("\n")]` — one block holding the stable
+wake identity, worker identity table and recovery discipline, with `renderTaskDescription` pushed
+last. Under byte-level prefix caching the boundary falls at the first differing *byte*, not at a
+block edge, and the stable text already precedes the volatile render inside that string. Splitting
+it changes nothing.
 
-### 9.3 Revised Phase 1
+There is no cheap rule-compliant win of the kind 9.2 originally described. What the divergence
+inside that render actually is remains unidentified, and Phase 0.1's fingerprint on a live run is
+what identifies it. That is the sequence this plan already committed to.
 
-**Phase 1a — stop restating the tail into the head.** Remove from the system-side Task render the
-state the requesting Session's own conversation already carries, starting with its open and
-completed tool calls. No transport, no new message, no rule bent, and nothing the model can see is
-lost — it reads the same facts from its own history.
+### 9.3 Mid-turn state change is rare, measured
 
-Measure with Phase 0.1: which block diverges, how often, and how much of the divergence survives.
-The fingerprint answers this directly and was built before the change, so the comparison is honest.
+The only reason §8.4 rejected the cheaper delta-carrying design was the detached-dispatch race.
+It is now measured against the twenty sealed runs, using Orchestrator assistant-Message boundaries
+from the transcript, Provider-call timestamps from the usage ledger, and `dispatch_settlement`
+artifact times from the snapshot.
 
-**Phase 1b — only if the residual still matters.** If removing the duplicated facts leaves the
-system render diverging often enough to matter, then the transport question becomes real and has to
-be answered first as a governance question, with three options and no technical shortcut:
+| | |
+| --- | ---: |
+| Orchestrator turns with two or more Provider calls | 110 |
+| Turns where a dispatch settled between two of that turn's own calls | **1 (0.9%)** |
+| Dispatch settlements total | 90 |
+| Settlements landing mid-turn | 1 |
 
-| Option | What it costs |
-| --- | --- |
-| Amend AGENTS.MD to permit a named, non-participant runtime-context projection channel | Requires the owner's decision; also obliges `dynamicContextText` to move into that channel rather than remain undeclared debt |
-| Deliver mid-turn state only through real, visible, persisted occurrences | Rule-compliant with no amendment, but the Orchestrator stops seeing a detached settlement until its next turn — a real semantic change to turn coherence |
-| Accept the residual divergence | No change; whatever fresh input survives Phase 1a is the price |
+A structural regularity explains it: in **every** run, turns equal settlements plus one. Dispatches
+are predominantly detached, each settlement arrives as its own ingress, and the turns are therefore
+separated by settlements rather than containing them. Mid-turn state change is rare by
+construction, not by luck.
 
-The first option is the only one that keeps both current freshness and the cache. It is not mine to
-choose.
+### 9.4 What this changes
 
-### 9.4 Corrections to §8 carried forward
+The synthetic-message transport of §8 was designed to preserve a freshness guarantee that the
+evidence says is exercised in roughly one turn in a hundred. It is not worth a constitutional
+amendment.
 
-- The vendor shaper in §8.2 is withdrawn. `provider/llm.ts` middleware is the layer that owns
-  post-conversion normalisation, and the pinned Anthropic adapter already merges a trailing user
-  message with the `tool_result` message. Any future carrier is one provider-neutral logical block.
-- Any future carrier must be counted as **non-compressible** in `predictiveCompactionDecision`,
-  which today treats everything outside system and tool schemas as compressible history. A carrier
-  is rebuilt from the database and cannot be shrunk by transcript compaction.
-- §8.6's first acceptance criterion is wrong as written. `MAX_STEPS` and the decision-repair
-  prompt legitimately diverge in `system` on the steps that use them, so "the carrier is the first
-  divergent block" holds only for steps that are neither last-step nor in decision repair.
-- The fingerprint is recorded pre-provider, so it proves logical position only. Proving the
-  physical request needs captured adapter input, which Phase 0.1 does not currently provide.
-- §8.5's wording is corrected: step N+1 does not re-pay the previous carrier. It pays the newly
-  appended exchange plus the current carrier. The one-exchange lag stands.
-- "Roughly two orders of magnitude cheaper" is withdrawn as unsupported. The carrier's size is
-  unspecified and tool results can be large; the A/B measures it.
-- §8.4 stands, with the mechanism stated precisely: `detachDispatchExecution` races full
-  completion against durable lineage publication. When lineage wins, the tool returns `accepted`
-  and execution continues in `supervisedPipeline`, so a child can settle **after** that tool result
-  and **before** a later Provider step of the same retained turn. There is no completion tool
-  result in that turn to carry its delta. How often that race is reachable in a real batch is
-  unmeasured.
+**The primary design is now the rule-compliant one:** resolve the Task render once per turn and let
+attached tool results carry the state their own call produced. No synthetic message, no hidden
+message, no model/interface dual path, no AGENTS.MD change. The cost is that in the ~0.9% of turns
+where a detached child settles mid-turn, the Orchestrator sees that settlement one turn later —
+where it arrives as a real ingress in any case. That is a delay, not a loss, and it is arguably the
+more coherent semantics: a turn acts on the state it was woken for.
+
+§8 is retained as the rejected alternative and as the record of why the amendment route was
+considered. It should not be implemented.
+
+### 9.5 What is still unknown, and why nothing more should be built yet
+
+Freezing the render per turn helps only if the render is what diverges per step. That has not been
+established. The 22,016-token plateau proves the divergence point is fixed and early; it does not
+prove the divergence is inside `renderTaskDescription` rather than elsewhere in the same block.
+
+Phase 0.1 answers it. Its fingerprint records one entry per `system` array element, and
+`buildSystemParts` contributes two of them, so a live run will show whether the divergence sits in
+the Task-render block at all. The old batches predate the fingerprint and cannot answer it.
+
+Sequence, unchanged from what this plan already committed to and now with a concrete first
+question:
+
+1. Phase 0.4 — a clean post-repair batch, with the fingerprint recording.
+2. Read the first-divergence labels. If the Task-render block is the first divergent block on most
+   steps, implement the per-turn freeze in 9.4 and re-measure. If it is not, the freeze would buy
+   nothing and the real source is whatever the labels name.
+
+Implementing the freeze before step 2 would be building on the same kind of unverified reading that
+9.2 had to retract.
