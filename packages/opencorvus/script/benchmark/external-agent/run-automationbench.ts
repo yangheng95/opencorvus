@@ -16,6 +16,7 @@ import {
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   auditBenchmarkIsolation,
+  auditPromptCompositionCoverage,
   auditDispatchedSkillCoverage,
   auditSkillProjection,
   auditTaskOutcome,
@@ -24,6 +25,7 @@ import {
   renderTrajectorySVG,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
+  analyzePromptComposition,
   summarizeTranscriptUsage,
   summarizeProviderUsageRows,
   summarizeProviderUsageByAgent,
@@ -1419,6 +1421,8 @@ try {
   const transcriptTokens = summarizeTranscriptUsage(terminal.transcript)
   const providerUsageLedger = ledgerRows(path.join(isolatedData, "opencorvus.db"))
   const tokens = summarizeProviderUsageRows(providerUsageLedger)
+  const promptCompositionAudit = auditPromptCompositionCoverage(terminal.trace, providerUsageLedger)
+  const promptComposition = analyzePromptComposition(terminal.trace)
   const trajectory = normalizeTrajectory({
     transcript: terminal.transcript,
     trace: terminal.trace,
@@ -1466,6 +1470,7 @@ try {
     taskOutcomeAudit.scored_terminal &&
     profileAudit.passed &&
     isolationAudit.passed &&
+    promptCompositionAudit.passed &&
     skillProjection.summary.projection.passed &&
     skillCoverageAudit.passed
   const invalidReason = !taskOutcomeAudit.scored_terminal
@@ -1474,11 +1479,13 @@ try {
       ? "The experimental Skill was not projected onto the Expert Squad's agents"
       : !skillCoverageAudit.passed
         ? `Agents ran that the Skill projection never described (${skillCoverageAudit.uncovered_agents.join(", ")})`
-      : !profileAudit.passed
-        ? "OpenCorvus Task bound a different Expert Squad profile"
-        : !isolationAudit.passed
-          ? "OpenCorvus transcript touched protected benchmark evaluator state"
-          : null
+        : !profileAudit.passed
+          ? "OpenCorvus Task bound a different Expert Squad profile"
+          : !promptCompositionAudit.passed
+            ? `Prompt composition evidence did not cover the Provider ledger (${promptCompositionAudit.violations.join(", ")})`
+            : !isolationAudit.passed
+              ? "OpenCorvus transcript touched protected benchmark evaluator state"
+              : null
   const result = {
     schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
     run: {
@@ -1560,6 +1567,8 @@ try {
         model_id: preflight.modelID,
       },
       tokens,
+      prompt_composition_audit: promptCompositionAudit,
+      prompt_composition: promptComposition,
       tokens_by_agent: summarizeProviderUsageByAgent(providerUsageLedger),
       transcript_token_reconciliation: transcriptTokens,
       sessions: new Set(terminal.transcript.map((message) => message.info?.sessionID).filter(Boolean)).size,

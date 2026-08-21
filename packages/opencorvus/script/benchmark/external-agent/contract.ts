@@ -1355,10 +1355,19 @@ export function analyzePromptComposition(traceEvents: unknown[]) {
     let divergentTokens = 0
     let resentTokens = 0
     let appendOnlyCalls = 0
+    let physicalSystemChanges = 0
     const firstDivergentLabels: Record<string, number> = {}
     const seenDigests = new Set<string>()
     for (const [index, fingerprint] of fingerprints.entries()) {
       const divergence = comparePromptComposition(index === 0 ? undefined : fingerprints[index - 1], fingerprint)
+      if (
+        index > 0 &&
+        fingerprints[index - 1]?.physicalSystem?.sha256 !== undefined &&
+        fingerprint.physicalSystem?.sha256 !== undefined &&
+        fingerprints[index - 1]!.physicalSystem!.sha256 !== fingerprint.physicalSystem.sha256
+      ) {
+        physicalSystemChanges += 1
+      }
       stableTokens += divergence.stablePrefixTokensEst
       divergentTokens += divergence.divergentTokensEst
       if (divergence.appendOnly) appendOnlyCalls += 1
@@ -1385,6 +1394,7 @@ export function analyzePromptComposition(traceEvents: unknown[]) {
       resent_prefix_tokens_est: resentTokens,
       stable_prefix_share: total === 0 ? null : stableTokens / total,
       append_only_calls: appendOnlyCalls,
+      physical_system_changes: physicalSystemChanges,
       first_divergent_labels: firstDivergentLabels,
     }
   })
@@ -1394,8 +1404,9 @@ export function analyzePromptComposition(traceEvents: unknown[]) {
       stable: sum.stable + item.stable_prefix_tokens_est,
       divergent: sum.divergent + item.divergent_tokens_est,
       resent: sum.resent + item.resent_prefix_tokens_est,
+      physicalSystemChanges: sum.physicalSystemChanges + item.physical_system_changes,
     }),
-    { calls: 0, stable: 0, divergent: 0, resent: 0 },
+    { calls: 0, stable: 0, divergent: 0, resent: 0, physicalSystemChanges: 0 },
   )
   return {
     sessions: sessions.sort((left, right) => right.divergent_tokens_est - left.divergent_tokens_est),
@@ -1403,6 +1414,37 @@ export function analyzePromptComposition(traceEvents: unknown[]) {
     stable_prefix_tokens_est: totals.stable,
     divergent_tokens_est: totals.divergent,
     resent_prefix_tokens_est: totals.resent,
+    physical_system_changes: totals.physicalSystemChanges,
     stable_prefix_share: totals.stable + totals.divergent === 0 ? null : totals.stable / (totals.stable + totals.divergent),
+  }
+}
+
+/**
+ * Fail-closed coverage receipt for a run produced by the instrumented runner.
+ * One `llm_request` trace event is emitted by `LLM.stream` for each completed
+ * session-purpose Provider usage row. Helper calls use another purpose and do
+ * not have a conversational prompt composition.
+ */
+export function auditPromptCompositionCoverage(traceEvents: unknown[], providerRows: ProviderUsageRow[]) {
+  const requests = traceEvents.filter((raw) => {
+    const event = raw as LLMRequestTraceEvent
+    return event?.kind === "llm_request" && typeof event.sessionID === "string"
+  }) as LLMRequestTraceEvent[]
+  const fingerprinted = requests.filter((event) => event.payload?.promptComposition !== undefined)
+  const sessionUsageRows = providerRows.filter((row) => row.purpose === "session")
+  const violations: string[] = []
+  if (requests.length === 0) violations.push("no_llm_request_events")
+  if (fingerprinted.length !== requests.length) {
+    violations.push(`missing_fingerprints:${requests.length - fingerprinted.length}`)
+  }
+  if (requests.length !== sessionUsageRows.length) {
+    violations.push(`request_usage_count_mismatch:${requests.length}:${sessionUsageRows.length}`)
+  }
+  return {
+    passed: violations.length === 0,
+    request_events: requests.length,
+    fingerprinted_events: fingerprinted.length,
+    session_usage_rows: sessionUsageRows.length,
+    violations,
   }
 }

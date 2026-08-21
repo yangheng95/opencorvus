@@ -62,6 +62,9 @@ export type SessionRuntimeContractIdentity =
 
 interface SessionRuntimeContractBase {
   systemMode?: "complete"
+  /** Stable observability labels for the logical system parts supplied to one
+   * Provider request. Labels never affect prompt bytes. */
+  systemLabels?: readonly string[]
   runOnce?: boolean
   stream?: TextHooks
   resources?: Readonly<{

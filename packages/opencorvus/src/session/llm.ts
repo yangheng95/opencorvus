@@ -48,6 +48,8 @@ export namespace LLM {
     agentID: string
     agent: SessionAgentRuntime
     system: string[]
+    /** Logical labels aligned with `system`; observability only. */
+    systemLabels?: string[]
     abort: AbortSignal
     messages: ModelMessage[]
     small?: boolean
@@ -270,7 +272,14 @@ export namespace LLM {
         // stateless — a per-Session cache of the last fingerprint would be one
         // more thing to bound and to clean up on Session disposal.
         const promptComposition = fingerprintPromptComposition({
-          system,
+          // `composeSystem` intentionally joins the request into the one physical
+          // system string the Provider receives. Keep the pre-join logical parts
+          // here as the diagnostic view, and fingerprint the final joined string
+          // separately so plugins/provider modes cannot create an invisible
+          // physical divergence.
+          system: input.runtimeSystemMode === "complete" ? input.system : system,
+          systemLabels: input.runtimeSystemMode === "complete" ? input.systemLabels : undefined,
+          physicalSystemText: systemText,
           messages: requestMessages,
           toolPayloads: toolPayloadTexts(tools),
         })

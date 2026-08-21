@@ -46,6 +46,14 @@ export type PromptCompositionFingerprint = {
   toolNames: string[]
   totalChars: number
   totalTokensEst: number
+  /** Exact final system text after composition and system transforms. It is a
+   * digest/size receipt, not a second logical block and is never double-counted
+   * in the token estimates above. */
+  physicalSystem?: {
+    chars: number
+    tokensEst: number
+    sha256: string
+  }
   /** Digest over every block digest in order — one value that changes if any
    *  block changed or the block order changed. */
   compositionSha256: string
@@ -108,11 +116,18 @@ function messageRole(message: unknown): string {
 
 export function fingerprintPromptComposition(input: {
   system: readonly string[]
+  systemLabels?: readonly string[]
+  physicalSystemText?: string
   messages: readonly unknown[]
   /** Already-normalised tool payload text, one entry per Tool, in request
    *  order. The caller owns schema normalisation; this module never re-runs it. */
   toolPayloads: ReadonlyArray<{ name: string; text: string }>
 }): PromptCompositionFingerprint {
+  if (input.systemLabels && input.systemLabels.length !== input.system.length) {
+    throw new Error(
+      `Prompt system label count ${input.systemLabels.length} does not match part count ${input.system.length}`,
+    )
+  }
   const blocks: PromptBlockFingerprint[] = []
   const push = (kind: PromptBlockFingerprint["kind"], index: number, label: string, text: string) => {
     blocks.push({ kind, index, label, chars: text.length, tokensEst: Token.estimate(text), sha256: digest(text) })
@@ -129,11 +144,21 @@ export function fingerprintPromptComposition(input: {
   // message would shift the Tool block's position.
   const toolText = input.toolPayloads.map((item) => [item.name, item.text].join("\n")).join("\n")
   push("tools", 0, "tools", toolText)
-  input.system.forEach((text, index) => push("system", index, `system[${index}]`, text ?? ""))
+  input.system.forEach((text, index) =>
+    push("system", index, input.systemLabels?.[index] ?? `system[${index}]`, text ?? ""),
+  )
   input.messages.forEach((message, index) =>
     push("message", index, `message[${index}]:${messageRole(message)}`, messageText(message)),
   )
 
+  const physicalSystem =
+    input.physicalSystemText === undefined
+      ? undefined
+      : {
+          chars: input.physicalSystemText.length,
+          tokensEst: Token.estimate(input.physicalSystemText),
+          sha256: digest(input.physicalSystemText),
+        }
   return {
     blocks,
     systemBlocks: input.system.length,
@@ -142,7 +167,10 @@ export function fingerprintPromptComposition(input: {
     toolNames: input.toolPayloads.map((item) => item.name),
     totalChars: blocks.reduce((sum, block) => sum + block.chars, 0),
     totalTokensEst: blocks.reduce((sum, block) => sum + block.tokensEst, 0),
-    compositionSha256: digest(blocks.map((block) => [block.label, block.sha256].join(" ")).join("|")),
+    ...(physicalSystem ? { physicalSystem } : {}),
+    compositionSha256: digest(
+      [physicalSystem?.sha256 ?? "", ...blocks.map((block) => [block.label, block.sha256].join(" "))].join("|"),
+    ),
   }
 }
 

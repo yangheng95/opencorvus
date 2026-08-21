@@ -44,9 +44,9 @@ under the evidence root (`result.json`, `provider-usage-ledger.json`,
 ### Independent agent feedback
 
 A review of the first draft was obtained and is incorporated here. It confirmed the root-cause
-diagnosis, the "relocate rather than freeze" correction, the priority inversion toward the
-Orchestrator, and the call-count arithmetic correction. It rejected four things, all of which are
-fixed in this version:
+diagnosis, the rejection of stale per-turn state, the priority inversion toward the Orchestrator,
+and the call-count arithmetic correction. It rejected four things, all of which are fixed in this
+version:
 
 1. The draft claimed the Orchestrator's cache read "only takes two values, nothing else appears".
    That is arithmetically false and the omitted row was printed in the author's own measurement
@@ -56,9 +56,9 @@ fixed in this version:
    measure rather than assume. Cache read is a property of the whole common prefix and cannot be
    decomposed into per-block hit counts.
 3. The draft named the defect in the existing tail-injection point but did not define a legal
-   replacement. Transport design is now an explicit gated deliverable (Phase 1.0) with its
-   obligations enumerated, and the claim "no information is removed, therefore strict risk is
-   minimal" is withdrawn: position and role change how a model reads a fact.
+   replacement. The later transport proposal was rejected; Phase 1 now waits for Phase 0 evidence
+   and pre-approves no transport. The claim "no information is removed, therefore strict risk is
+   minimal" is also withdrawn: position and role change how a model reads a fact.
 4. The draft would have added `message` and `part` to a snapshot that runs `SELECT *`. Phase 0 now
    specifies a field-level evidence projection instead.
 
@@ -66,8 +66,8 @@ It also required that the strict/partial floor come from a clean post-fix baseli
 this invalid batch, that −67% be stated as an upper bound, that cached tokens not be described as
 free, and that metric definitions move from Phase 5 to Phase 0. All are applied.
 
-A second independent review was run against the settled transport design in §8 and rejected it.
-Its findings are applied in §8.7 and §9:
+A second independent review was run against the proposed transport and rejected it. Its findings
+are applied in §8:
 
 1. **Blocker.** The carrier is a synthetic, hidden, model-only message. AGENTS.MD line 23 requires
    messages to arise from real participants and remain fully visible, and prohibits synthetic
@@ -77,20 +77,14 @@ Its findings are applied in §8.7 and §9:
 2. The vendor shaper is unnecessary. `provider/llm.ts` middleware already owns request-only
    normalisation after AI SDK prompt conversion, and the pinned Anthropic adapter already performs
    the `tool` + trailing `user` merge the design proposed to hand-roll.
-3. Predictive compaction would misclassify the carrier. `predictiveCompactionDecision` counts only
-   system plus tool schemas as non-compressible, so a request-only carrier would be treated as
-   compressible history that compaction cannot actually shrink.
-4. The Phase 0 fingerprint is taken pre-provider, so it can prove the carrier's logical position
-   but not the physical request. §8.6 needed that correction.
-5. Splitting `buildSystemParts` alone does not make `system` turn-stable: `MAX_STEPS` and the
-   decision-repair prompt also diverge, so "the carrier must be the first divergent block" cannot
-   be an unconditional acceptance criterion.
-6. The facts/instructions split is underspecified. `renderTaskDescription` interleaves directives
-   with state, so moving the whole volatile render to a user-role carrier would lower real
-   instructions out of system authority.
-7. "Two orders of magnitude cheaper" is unsupported by code and must wait for measurement.
+3. Predictive compaction would misclassify the carrier as compressible history even though it
+   cannot shrink it.
+4. A pre-provider fingerprint cannot prove the physical request shape. Phase 0 therefore records
+   named logical system blocks and a separate digest/size receipt for the final joined system text.
+5. `renderTaskDescription` interleaves directives with state, so moving it wholesale would lower
+   genuine instructions out of system authority.
 
-It confirmed the detached-dispatch rejection in §8.4, with a more exact mechanism than the draft
+It confirmed the detached-dispatch rejection in §8, with a more exact mechanism than the draft
 had traced, and confirmed the residual-cost reasoning with one wording correction.
 
 ### Repository search
@@ -170,8 +164,10 @@ Freezing the system prompt for a turn is unsafe. `orchestrator/agent.ts` records
 span multiple model turns while dispatch_agent waits for a child, so the contract resolves
 DB-backed task context per turn."* The child mutates the database while the Orchestrator waits.
 
-The correct move is **relocation, not freezing**: keep the live render exactly as fresh, and move
-it from ahead of the conversation to behind it.
+The non-negotiable property is **freshness without synthetic transport**. Freezing the live render
+is unsafe, and moving it behind the conversation has no currently legal cross-provider message
+shape. Phase 0 must identify the exact divergent logical block before an optimisation is selected;
+the plan does not pre-approve either mechanism.
 
 `session/loop.ts` records that live session-state blocks sat on `system` until 2026-04 and were
 relocated to the last user message for precisely this reason. The Orchestrator's
@@ -214,22 +210,14 @@ variable at a time, same cases, model, profile and benchmark revision.
 Exit: fresh input attributable to a named prompt block and a named first-divergence point for any
 sealed run; an eligible baseline batch.
 
-### Phase 1 — stratify the Orchestrator prompt
+### Phase 1 — minimise the measured Orchestrator divergence
 
-**1.0 Transport contract — resolved, see §8.** The design is settled. The obligations it had to
-discharge were:
-
-- does not break assistant tool-call / tool-result adjacency;
-- does not impersonate a user or a tool;
-- does not lower the authority of genuine system instructions;
-- never enters the persisted transcript;
-- does not carry the previous step's stale snapshot into the next step;
-- keeps identical semantics on the OpenAI and Anthropic request shapes.
-
-**1.1 Split.** `buildSystemParts` returns turn-stable parts (instructions, capability projection,
-runtime directory, wake identity, dispatch-agent table, Skill surface) and step-volatile parts
-(Artifact index, occurrence table, decision log, Delivery Slice state, ingress notice). Stable
-stays in `system`, resolved once per turn; volatile moves to the transport chosen in 1.0.
+Phase 1 is selected only after Phase 0 names the first divergent logical block and correlates it
+with the Provider's cache-read plateau. It may split instructions from facts or remove facts already
+carried by a real tool result/ingress, but it must keep the live Task read on every Provider step.
+It may not add a synthetic/hidden message, lower genuine instructions out of system authority, or
+freeze state across a child settlement. Every removed fact needs a named existing authority from
+which the Orchestrator still sees it on that same step.
 
 **Estimated effect.** If the Orchestrator's per-call fresh input fell to worker levels (~4k against
 a comparable ~56k context), 635 calls at a 35.3k median would drop by roughly 17M tokens — batch
@@ -239,9 +227,7 @@ instructions and live-state volume differ, and the step-volatile block is still 
 The realistic range depends on that block's measured size — 2k, 8k and 20k give materially
 different answers. Phase 0 measures it; the range is stated then.
 
-The claim that relocation carries minimal strict risk because no information is removed is
-withdrawn. Position and role change how a model weighs a fact, so 1.1 needs its own paired A/B on
-strict and partial, not just on tokens.
+Any chosen Phase 1 change needs its own paired A/B on strict and partial, not just on tokens.
 
 Exit: Orchestrator cache-hit ratio above 85% with cache read that grows with turn length; strict
 and partial not below the Phase 0.4 baseline.
@@ -312,12 +298,10 @@ token yield is the wrong sort key. Decide that after 0.4, not now.
 
 ## 6. Risks
 
-- **Frozen-prefix regression.** An earlier failure had an Agent repeating one Tool call because its
-  payload was constant between steps. Phase 1 differs — the tail keeps changing as tool results
-  append — but this is the failure mode to watch, and `context-diagnostics` payload sizes are the
-  first check if looping reappears.
-- **Volatile-block duplication.** If the relocated render restates what the preceding tool result
-  already carried, Phase 1 trades prefix cost for tail cost. Phase 0.1 attribution decides this.
+- **Stale-state regression.** No cost change may make a Provider step act on a Task snapshot taken
+  before a child settlement. Task-state version and the named divergent block are checked together.
+- **Instruction/fact boundary.** `renderTaskDescription` interleaves both. A Phase 1 split must keep
+  directives in system authority and prove every fact remains visible from its real authority.
 - **Provider dependence.** The baseline model `openai/gpt-5.6-luna` uses automatic prefix caching,
   while `applyCaching` places explicit Anthropic breakpoints at system[0], system[last],
   messages[-2] and messages[-1]. Phase 1 should help both, but these numbers are OpenAI-shaped and
@@ -342,193 +326,27 @@ must come from the clean baseline — this batch cannot serve as a correctness f
 | Tester total tokens | 25,597,977 | ≤ 12,800,000 (cached tokens; report cost separately) | 2, 3 |
 | strict / partial | 3/20, 54.0% (invalid) | not below the Phase 0.4 clean baseline | all |
 
-## 8. Phase 1.0 — the runtime-context transport
+## 8. Rejected alternatives and the next decision
 
-### 8.1 What the request actually looks like
+Two tempting mechanisms are explicitly rejected:
 
-Four facts, read from the code rather than assumed, decide the shape:
+1. **Request-only tail carrier.** It would be a synthetic, hidden, model-only message; the OpenAI
+   and Anthropic physical shapes also differ. It violates the participant-message contract and
+   must not be implemented.
+2. **Per-turn frozen Task render.** One of 110 measured multi-call Orchestrator turns contained a
+   detached dispatch settlement between its own Provider calls. The frequency is low but non-zero;
+   a later ingress cannot undo a duplicate dispatch or terminal decision made from stale state.
+   This violates the per-step freshness constraint and must not be implemented.
 
-- `system` is a top-level request parameter on both paths — `streamText({ system })` normally, and
-  `options.instructions` when the OpenAI provider is in OAuth mode. It always precedes every
-  message, so **there is no such thing as a trailing system message**. That candidate is not merely
-  risky; it does not exist.
-- `applyCaching` runs only for the Anthropic family. The benchmark's `openai/gpt-5.6-luna` receives
-  no explicit breakpoints at all, so the design must work under pure automatic prefix caching and
-  cannot lean on a breakpoint to rescue a late-placed block.
-- `normalizeVendorMessages` dispatches through a per-vendor normalizer registry. That is the seam
-  where one logical carrier can take two physical shapes without either call site knowing.
-- `dynamicContextText` already injects request-only content by mutating the projected model-message
-  array; nothing it writes is persisted. Request-only injection has precedent — only the position
-  was unsolved.
+The current code change is observability-only: `buildSystemParts` gives the live Task render a
+logical label while `LLM.stream` records both the named pre-join blocks and the final physical
+system digest. Provider request bytes remain unchanged. The instrumented runner fails closed unless
+every session-purpose usage row reconciles to one fingerprinted `llm_request` event.
 
-### 8.2 The design
+The next decision happens only after a clean instrumented baseline:
 
-Three parts.
-
-**Turn-stable system.** `buildSystemParts` splits into a stable half and a volatile half. The
-stable half is resolved once per turn and reused for that turn's Provider steps, keyed by the
-retained assistant Message — the same identity the turn's decision claim is now scoped to.
-
-**A request-only runtime-context carrier at the tail.** The volatile half becomes a carrier
-appended after the last message in the projected model-message array, built in `processTurn`
-alongside the existing `dynamicContextText` injection and never persisted. It carries only what
-changed since the turn's stable snapshot was taken, **recomputed from the database on every step**.
-
-**Per-vendor shaping**, registered in the normalizer registry:
-
-| Family | Shape |
-| --- | --- |
-| OpenAI | a trailing `user` message whose content is the carrier envelope |
-| Anthropic | a trailing text block appended to the user message that already carries the last `tool_result`, because Anthropic encodes tool results as user messages and a `tool_result` must lead that message |
-
-The envelope marks the content as Host-authored and non-participant, following the existing
-`<system-reminder>` convention rather than inventing a second one.
-
-### 8.3 How each obligation is discharged
-
-| Obligation | How |
-| --- | --- |
-| Does not break tool-call / tool-result adjacency | The carrier is appended after the complete pair; on Anthropic it joins the same user message *behind* the leading `tool_result` block |
-| Does not impersonate a user or a tool | Explicit Host-authored envelope, same convention as `<system-reminder>`; it states facts, never a request |
-| Does not lower system authority | Instructions stay in `system`. Only *facts* move, and facts never needed instruction authority — they needed recency, which is what the tail gives them |
-| Never enters the persisted transcript | Built in the model-message projection, like `dynamicContextText`; no store write exists on that path |
-| Next step carries no stale snapshot | Guaranteed by construction rather than by discipline: the carrier is never persisted, so the next step rebuilds history from the store and the previous carrier simply does not exist |
-| Identical semantics on both providers | One carrier, two shapes, chosen in the vendor normalizer registry that already exists for this class of difference |
-
-### 8.4 Why not the cheaper variant
-
-Letting each tool result carry the state delta it caused would be strictly better for caching: tool
-results are persisted, so history stays append-only and the prefix grows cleanly with no per-step
-penalty.
-
-It is rejected because it cannot see changes that no tool call in this turn caused. A *detached*
-dispatch settles through `dispatchTaskLoop` with a new ingress rather than through a return value,
-so it mutates occurrence and Artifact state with no tool result to attach a delta to. Recomputing
-the carrier from the database on every step covers that case; a tool-result delta cannot. The
-Orchestrator's live read of Task state exists for correctness, and the transport must not quietly
-narrow it.
-
-A hybrid — persist tool-caused deltas, emit the carrier only when the step diff contains something
-no tool result explains — is a real optimisation and is deliberately **not** in Phase 1. Shipping
-two mechanisms before either is measured is how the cheaper one becomes untestable.
-
-### 8.5 Residual cost, stated plainly
-
-The carrier sits at the tail of step N's request. At step N+1 that same position holds the
-persisted assistant message and tool result from step N, so the common prefix ends where the
-carrier began: **each step re-pays the previous exchange plus the carrier.**
-
-That is inherent to any tail injection, not a defect of this one — no placement can be both after
-all stable content and before content appended later. It is also roughly two orders of magnitude
-cheaper than today, where the divergence sits ahead of the *entire* conversation.
-
-Second residual: a carrier the model saw at step N is absent from step N+1's history, so the model
-can reference something no longer visible. `dynamicContextText` already has this property. The
-mitigation is a content rule rather than a mechanism: the carrier states only facts that remain
-independently readable from Artifacts and the board, and never instructions, commitments, or
-anything the model would be expected to recall verbatim.
-
-### 8.6 Acceptance, before any of Phase 1.1 lands
-
-Phase 0's fingerprint supplies the acceptance test directly:
-
-1. `comparePromptComposition` over consecutive Orchestrator calls must report the carrier as the
-   first divergent block. Any earlier label means the stable half is not actually stable and the
-   split is wrong.
-2. A test asserting the carrier never appears in the persisted transcript.
-3. A test asserting step N+1's request contains no step-N carrier.
-4. Both vendor shapes asserted against their normalizers.
-5. `stable_prefix_share` rising and `resent_prefix_tokens_est` falling on a paired A/B against the
-   Phase 0.4 clean baseline.
-6. Strict and partial not below that baseline — relocation changes how a model weighs a fact, so
-   this is a required gate, not a formality.
-
-## 9. Phase 1 re-sequenced after the second review
-
-### 9.1 The transport is blocked on a constitutional question, and may not be needed
-
-AGENTS.MD line 23 forbids synthetic, hidden, and model/interface dual-path messages. The §8
-carrier is all three. That is not a caveat to implement around; it is a rule that has to be either
-satisfied or explicitly amended by the repository owner.
-
-But the review also exposed a reason to think most of the divergence does not need a transport at
-all.
-
-### 9.2 The self-inflicted share — retracted
-
-The first version of this section claimed the system-side Task render restates the Orchestrator's
-own tool calls, which its message history already carries. **That is wrong on both legs, and the
-code says so plainly.**
-
-- `listCompletedToolCallRefs` and `listAgentMessageRefs` already filter
-  `st.kind NOT IN ('root', 'orchestrator', 'mission', 'system')`, so they list worker activity only.
-  Worker activity is not duplication — the Orchestrator has no other way to see it.
-- `listOpenToolCalls` has no kind filter but drops any Session whose status is `streaming`, which
-  the Orchestrator's own Session is while it composes its own request.
-
-A second claim, that splitting the render into separate `system` entries would help, is also wrong.
-`buildSystemParts` returns `parts: [instructions, ctx.join("\n")]` — one block holding the stable
-wake identity, worker identity table and recovery discipline, with `renderTaskDescription` pushed
-last. Under byte-level prefix caching the boundary falls at the first differing *byte*, not at a
-block edge, and the stable text already precedes the volatile render inside that string. Splitting
-it changes nothing.
-
-There is no cheap rule-compliant win of the kind 9.2 originally described. What the divergence
-inside that render actually is remains unidentified, and Phase 0.1's fingerprint on a live run is
-what identifies it. That is the sequence this plan already committed to.
-
-### 9.3 Mid-turn state change is rare, measured
-
-The only reason §8.4 rejected the cheaper delta-carrying design was the detached-dispatch race.
-It is now measured against the twenty sealed runs, using Orchestrator assistant-Message boundaries
-from the transcript, Provider-call timestamps from the usage ledger, and `dispatch_settlement`
-artifact times from the snapshot.
-
-| | |
-| --- | ---: |
-| Orchestrator turns with two or more Provider calls | 110 |
-| Turns where a dispatch settled between two of that turn's own calls | **1 (0.9%)** |
-| Dispatch settlements total | 90 |
-| Settlements landing mid-turn | 1 |
-
-A structural regularity explains it: in **every** run, turns equal settlements plus one. Dispatches
-are predominantly detached, each settlement arrives as its own ingress, and the turns are therefore
-separated by settlements rather than containing them. Mid-turn state change is rare by
-construction, not by luck.
-
-### 9.4 What this changes
-
-The synthetic-message transport of §8 was designed to preserve a freshness guarantee that the
-evidence says is exercised in roughly one turn in a hundred. It is not worth a constitutional
-amendment.
-
-**The primary design is now the rule-compliant one:** resolve the Task render once per turn and let
-attached tool results carry the state their own call produced. No synthetic message, no hidden
-message, no model/interface dual path, no AGENTS.MD change. The cost is that in the ~0.9% of turns
-where a detached child settles mid-turn, the Orchestrator sees that settlement one turn later —
-where it arrives as a real ingress in any case. That is a delay, not a loss, and it is arguably the
-more coherent semantics: a turn acts on the state it was woken for.
-
-§8 is retained as the rejected alternative and as the record of why the amendment route was
-considered. It should not be implemented.
-
-### 9.5 What is still unknown, and why nothing more should be built yet
-
-Freezing the render per turn helps only if the render is what diverges per step. That has not been
-established. The 22,016-token plateau proves the divergence point is fixed and early; it does not
-prove the divergence is inside `renderTaskDescription` rather than elsewhere in the same block.
-
-Phase 0.1 answers it. Its fingerprint records one entry per `system` array element, and
-`buildSystemParts` contributes two of them, so a live run will show whether the divergence sits in
-the Task-render block at all. The old batches predate the fingerprint and cannot answer it.
-
-Sequence, unchanged from what this plan already committed to and now with a concrete first
-question:
-
-1. Phase 0.4 — a clean post-repair batch, with the fingerprint recording.
-2. Read the first-divergence labels. If the Task-render block is the first divergent block on most
-   steps, implement the per-turn freeze in 9.4 and re-measure. If it is not, the freeze would buy
-   nothing and the real source is whatever the labels name.
-
-Implementing the freeze before step 2 would be building on the same kind of unverified reading that
-9.2 had to retract.
+1. Read the first-divergence label distribution and correlate it with Provider cache read.
+2. Inspect the exact producer of the dominant divergent block.
+3. Propose the smallest rule-compliant removal or split that preserves every-step Task freshness
+   and real message authority.
+4. Run a paired A/B before making it the active Phase 1 implementation.

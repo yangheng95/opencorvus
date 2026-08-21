@@ -829,6 +829,11 @@ export namespace Orchestrator {
             projectDirectory: schedulerProjectDirectory,
             includeMcpTools: false,
             system: resolveRuntimeSystem,
+            systemLabels: [
+              "runtime:orchestrator-instructions",
+              "runtime:orchestrator-wake-and-capabilities",
+              "runtime:orchestrator-live-task-render",
+            ],
             systemMode: "complete",
             // A follow-up durable ingress is an explicit runtime wake. The
             // creator occurrence is carried by its real user Message, so it

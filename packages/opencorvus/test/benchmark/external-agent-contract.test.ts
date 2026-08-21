@@ -10,6 +10,7 @@ import {
   evidenceFileSetMatches,
   permanentRunInvalidation,
   analyzePromptComposition,
+  auditPromptCompositionCoverage,
   auditDispatchedSkillCoverage,
   auditRunBinding,
   auditSkillEvidenceSeal,
@@ -28,6 +29,7 @@ import {
   normalizeTrajectory,
   renderTrajectorySVG,
   summarizeTranscriptUsage,
+  type ProviderUsageRow,
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
@@ -383,6 +385,7 @@ describe("external agent benchmark contract", () => {
       toolNames: ["read"],
       totalChars: 800,
       totalTokensEst: 200,
+      physicalSystem: { chars: 40, tokensEst: 10, sha256: liveStateSha },
       compositionSha256: liveStateSha,
     })
     const trace = [
@@ -397,6 +400,7 @@ describe("external agent benchmark contract", () => {
     expect(session.session_id).toBe("ses_a")
     // Call two keeps tools + system[0] and loses everything from system[1] on.
     expect(session.first_divergent_labels).toEqual({ "system[1]": 1 })
+    expect(session.physical_system_changes).toBe(1)
     expect(session.append_only_calls).toBe(0)
     // The two message blocks never changed and were paid for twice.
     expect(session.resent_prefix_tokens_est).toBe(20)
@@ -437,6 +441,44 @@ describe("external agent benchmark contract", () => {
       calls: 0,
       sessions: [],
       stable_prefix_share: null,
+    })
+  })
+
+  test("accepts prompt-composition evidence only when every session usage row has one request fingerprint", () => {
+    const promptComposition = {
+      blocks: [],
+      systemBlocks: 0,
+      messageBlocks: 0,
+      toolCount: 0,
+      toolNames: [],
+      totalChars: 0,
+      totalTokensEst: 0,
+      compositionSha256: "receipt",
+    }
+    const trace = [
+      { kind: "llm_request", sessionID: "ses_a", payload: { promptComposition } },
+      { kind: "llm_request", sessionID: "ses_a", payload: { promptComposition } },
+    ]
+    const usage = [{ purpose: "session" }, { purpose: "session" }, { purpose: "summary" }] as ProviderUsageRow[]
+    expect(auditPromptCompositionCoverage(trace, usage)).toEqual({
+      passed: true,
+      request_events: 2,
+      fingerprinted_events: 2,
+      session_usage_rows: 2,
+      violations: [],
+    })
+  })
+
+  test("rejects an instrumented run whose trace omitted a prompt fingerprint", () => {
+    const audit = auditPromptCompositionCoverage([{ kind: "llm_request", sessionID: "ses_a", payload: {} }], [
+      { purpose: "session" },
+    ] as ProviderUsageRow[])
+    expect(audit).toMatchObject({
+      passed: false,
+      request_events: 1,
+      fingerprinted_events: 0,
+      session_usage_rows: 1,
+      violations: ["missing_fingerprints:1"],
     })
   })
 
