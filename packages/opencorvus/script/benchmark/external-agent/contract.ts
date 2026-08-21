@@ -1421,9 +1421,11 @@ export function analyzePromptComposition(traceEvents: unknown[]) {
 
 /**
  * Fail-closed coverage receipt for a run produced by the instrumented runner.
- * One `llm_request` trace event is emitted by `LLM.stream` for each completed
- * session-purpose Provider usage row. Helper calls use another purpose and do
- * not have a conversational prompt composition.
+ * `LLM.stream` emits `llm_request` before invoking the Provider, while a
+ * session-purpose usage row exists only when that attempt returns usage. A
+ * timed-out or otherwise failed attempt therefore has a fingerprint and no
+ * usage row. The unsafe direction is the inverse: usage attributed to a
+ * Session/Agent without a fingerprinted request attempt.
  */
 export function auditPromptCompositionCoverage(traceEvents: unknown[], providerRows: ProviderUsageRow[]) {
   const requests = traceEvents.filter((raw) => {
@@ -1437,14 +1439,40 @@ export function auditPromptCompositionCoverage(traceEvents: unknown[], providerR
   if (fingerprinted.length !== requests.length) {
     violations.push(`missing_fingerprints:${requests.length - fingerprinted.length}`)
   }
-  if (requests.length !== sessionUsageRows.length) {
-    violations.push(`request_usage_count_mismatch:${requests.length}:${sessionUsageRows.length}`)
+  const requestCounts = new Map<string, number>()
+  for (const event of requests) {
+    if (typeof event.agentName !== "string" || !event.agentName) {
+      violations.push(`unattributed_request_event:${String(event.sessionID)}`)
+      continue
+    }
+    const key = `${event.sessionID}\u0000${event.agentName}`
+    requestCounts.set(key, (requestCounts.get(key) ?? 0) + 1)
   }
+  const usageCounts = new Map<string, number>()
+  for (const [index, row] of sessionUsageRows.entries()) {
+    if (!row.session_id || !row.agent_id) {
+      violations.push(`unattributed_session_usage:${row.id || index}`)
+      continue
+    }
+    const key = `${row.session_id}\u0000${row.agent_id}`
+    usageCounts.set(key, (usageCounts.get(key) ?? 0) + 1)
+  }
+  for (const [key, usageCount] of [...usageCounts.entries()].sort(([left], [right]) => left.localeCompare(right))) {
+    const requestCount = requestCounts.get(key) ?? 0
+    if (usageCount <= requestCount) continue
+    const [sessionID, agentID] = key.split("\u0000")
+    violations.push(`usage_without_request_attempt:${sessionID}:${agentID}:${usageCount}:${requestCount}`)
+  }
+  const requestAttemptsWithoutUsage = [...requestCounts.entries()].reduce(
+    (total, [key, requestCount]) => total + Math.max(0, requestCount - (usageCounts.get(key) ?? 0)),
+    0,
+  )
   return {
     passed: violations.length === 0,
     request_events: requests.length,
     fingerprinted_events: fingerprinted.length,
     session_usage_rows: sessionUsageRows.length,
+    request_attempts_without_usage: requestAttemptsWithoutUsage,
     violations,
   }
 }

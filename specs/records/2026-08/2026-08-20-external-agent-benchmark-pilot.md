@@ -398,6 +398,14 @@ The direct trigger is the initial typed Task ingress. The Orchestrator materiali
 
 The root is that `orchestrator/agent.ts` has one dynamic system-part authority but a separate static label authority. The earlier prompt-composition change split the live Task render into a third block and labeled only that nominal three-block shape; its unit test covers the nominal renderer, while the existing real `orchestrator-initial-task-render` integration test was not run in the prompt-change delivery and now reproduces the exact failure before its first mocked Provider step. The repair must derive labels from the same branch facts that derive system parts, without changing prompt bytes, hiding Tools, adding a Host business gate, or weakening `SessionLoop`'s label-count integrity check. The real initial-ingress integration test is the primary positive regression and must reach its two Provider steps again before any fresh benchmark rerun.
 
+### Prompt-attempt coverage incident
+
+The repaired fresh batch reached real model and benchmark activity. Cases 1 and 5 sealed scored results; cases 2–4 reached scorable natural terminal states but were invalidated by `auditPromptCompositionCoverage`. Case 2 naturally called `fail_task`; cases 3 and 4 completed. Their sole evidence violation was respectively `request_usage_count_mismatch:121:120`, `84:82`, and `93:92`.
+
+The trace and Provider ledger prove the two sides count different facts. `LLM.stream` writes one fingerprinted `llm_request` trace event before calling `streamText`, so aborted or failed Provider attempts remain observable. `provider_usage_event` is written only for attempts that return usage. The unmatched events occur inside retained Base Developer, Tester, and Orchestrator assistant Messages and are followed by roughly 115–196 second gaps before the same Message resumes, the shape of an activity-timeout/retry attempt; no final transcript Message carries an error because the same durable assistant Message later continues successfully. Therefore request attempts may validly exceed usage-bearing calls. A usage-bearing call without a fingerprinted request is the evidence hole, not the inverse.
+
+The benchmark audit must continue to require a fingerprint on every request attempt and must fail when any Session/Agent has more usage rows than request attempts. It must preserve and report both counts plus unbilled/failed request attempts instead of requiring global equality. This changes only evidence accounting; it does not forgive missing fingerprints, alter Provider retries, rewrite sealed results, or reclassify the three affected attempts. Those attempts remain `invalid_bug` and their missing slots rerun from fresh worlds after the checker repair; cases 1 and 5 remain sealed candidates and must be adopted rather than rerun.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>

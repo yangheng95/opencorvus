@@ -444,7 +444,7 @@ describe("external agent benchmark contract", () => {
     })
   })
 
-  test("accepts prompt-composition evidence only when every session usage row has one request fingerprint", () => {
+  test("accepts prompt-composition evidence when every usage-bearing call has a fingerprinted request attempt", () => {
     const promptComposition = {
       blocks: [],
       systemBlocks: 0,
@@ -456,29 +456,66 @@ describe("external agent benchmark contract", () => {
       compositionSha256: "receipt",
     }
     const trace = [
-      { kind: "llm_request", sessionID: "ses_a", payload: { promptComposition } },
-      { kind: "llm_request", sessionID: "ses_a", payload: { promptComposition } },
+      { kind: "llm_request", sessionID: "ses_a", agentName: "base-developer", payload: { promptComposition } },
+      { kind: "llm_request", sessionID: "ses_a", agentName: "base-developer", payload: { promptComposition } },
     ]
-    const usage = [{ purpose: "session" }, { purpose: "session" }, { purpose: "summary" }] as ProviderUsageRow[]
+    const usage = [
+      { id: "pvu_1", purpose: "session", session_id: "ses_a", agent_id: "base-developer" },
+      { id: "pvu_2", purpose: "session", session_id: "ses_a", agent_id: "base-developer" },
+      { id: "pvu_3", purpose: "summary", session_id: null, agent_id: null },
+    ] as ProviderUsageRow[]
     expect(auditPromptCompositionCoverage(trace, usage)).toEqual({
       passed: true,
       request_events: 2,
       fingerprinted_events: 2,
       session_usage_rows: 2,
+      request_attempts_without_usage: 0,
       violations: [],
     })
   })
 
-  test("rejects an instrumented run whose trace omitted a prompt fingerprint", () => {
-    const audit = auditPromptCompositionCoverage([{ kind: "llm_request", sessionID: "ses_a", payload: {} }], [
-      { purpose: "session" },
-    ] as ProviderUsageRow[])
+  test("preserves failed request attempts that have fingerprints but no usage row", () => {
+    const promptComposition = {
+      blocks: [],
+      systemBlocks: 0,
+      messageBlocks: 0,
+      toolCount: 0,
+      toolNames: [],
+      totalChars: 0,
+      totalTokensEst: 0,
+      compositionSha256: "failed-attempt-receipt",
+    }
+    const trace = [
+      { kind: "llm_request", sessionID: "ses_a", agentName: "base-tester", payload: { promptComposition } },
+      { kind: "llm_request", sessionID: "ses_a", agentName: "base-tester", payload: { promptComposition } },
+    ]
+    const usage = [
+      { id: "pvu_success", purpose: "session", session_id: "ses_a", agent_id: "base-tester" },
+    ] as ProviderUsageRow[]
+    expect(auditPromptCompositionCoverage(trace, usage)).toEqual({
+      passed: true,
+      request_events: 2,
+      fingerprinted_events: 2,
+      session_usage_rows: 1,
+      request_attempts_without_usage: 1,
+      violations: [],
+    })
+  })
+
+  test("returns explicit violations when usage has no attributed fingerprinted request", () => {
+    const audit = auditPromptCompositionCoverage(
+      [{ kind: "llm_request", sessionID: "ses_a", agentName: "base-planner", payload: {} }],
+      [
+        { id: "pvu_uncovered", purpose: "session", session_id: "ses_b", agent_id: "base-developer" },
+      ] as ProviderUsageRow[],
+    )
     expect(audit).toMatchObject({
       passed: false,
       request_events: 1,
       fingerprinted_events: 0,
       session_usage_rows: 1,
-      violations: ["missing_fingerprints:1"],
+      request_attempts_without_usage: 1,
+      violations: ["missing_fingerprints:1", "usage_without_request_attempt:ses_b:base-developer:1:0"],
     })
   })
 
