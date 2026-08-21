@@ -24,6 +24,8 @@ The Orchestrator owns scheduling and visibly selects the exact manifest workflow
 - `test-engineer`: independently reread dynamic sources and execute applicable non-UI tests and runtime checks after implementation.
 - `visual-reviewer`: review real rendered and interaction evidence.
 - `system-integrity-reviewer`: after executable Test evidence settles, independently audit its requirement coverage, source mapping, freshness, contradictions, and unresolved risk through exact Artifacts.
+
+For dynamic business-state delivery, Requirements and Architecture preserve candidate-source closure plus a source-derived action-matrix contract. The capable implementation owner closes one row per in-scope entity before mutation. Test independently rebuilds that matrix from original inputs and current raw authorities before reading implementation claims, compares expected rows and observed mutations with final state, and reports omitted, extra, surrogate, or rule-precedence failures. System Integrity audits that matrix and its raw evidence rather than accepting an aggregate Test verdict.
 - `interface-integrity-reviewer`: independently review Task-scoped interface implementation and rendered evidence without requiring a Delivery Slice planning graph.
 - `claim-verifier`: verify material factual claims and uncertainty.
 

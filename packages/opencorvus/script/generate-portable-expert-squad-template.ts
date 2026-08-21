@@ -285,7 +285,7 @@ function renderManifest(): ExpertSquadManifestV1 {
     name: "Portable Expert Squad Template",
     label: "Portable Expert Squad Template",
     description: "Concrete invoice-ledger reconciliation sample for authoring portable OpenCorvus expert squads.",
-    version: "2026.08.21.2",
+    version: "2026.08.21.3",
     product_pillars: ["code", "work"],
     readme: "README.md",
     selector: {
@@ -372,11 +372,13 @@ function renderOrchestratorPrompt(): string {
     "",
     `At the start of a fresh run and every resume, first search the complete current catalog for exact type \`${PORTABLE_TEMPLATE_RECONCILIATION_POLICY_ARTIFACT_TYPE}\` and exact label \`${PORTABLE_TEMPLATE_RECONCILIATION_POLICY_ARTIFACT_LABEL}\`. If exactly one authority exists, completely read and select it and do not invoke the package publisher. If the complete healthy catalog has zero matches, invoke the projected package tool ref \`${PORTABLE_TEMPLATE_ID}/shared/reconciliation-policy\` exactly once, then search again, completely read the unique exact locator, and select it before dispatch. Never treat the publisher's compact receipt as the policy body. Multiple exact matches, an incomplete catalog, or provider errors are explicit blockers; do not publish another copy to hide them.`,
     "",
-    "Before implementation dispatch, require the planning chain to inventory every Task element: target identity, authoritative source and recency, required positive effect, negative or preservation guard, exact value/format/routing obligation, and final-state evidence. Require stable individually falsifiable Requirement and Slice-local acceptance criteria with an eligible acceptance owner; unresolved material elements remain explicit coverage, never a broad 'verify policy' placeholder.",
+    "Before implementation dispatch, require the planning chain to inventory every Task element: target identity, authoritative source and recency, required positive effect, negative or preservation guard, exact value/format/routing obligation, and final-state evidence. For every current process, latest policy, approved input, template, recent history, or equivalent delegated authority, freeze a finite candidate ledger from request-named sources plus at most one semantic catalog discovery per authority class using target/action and authority/storage nouns. Record provenance, priority, identity lookup, and content-read method; permit one contract discovery for a selected candidate's missing identity lookup; forbid synonymous expansion; close on one unique satisfying source or frozen-ledger exhaustion. Require stable individually falsifiable Requirement and Slice-local acceptance criteria with an eligible acceptance owner; unresolved material elements remain explicit coverage, never a broad 'verify policy' placeholder.",
     "",
-    "Before every dispatch, compare the required operation with the exact current projected Agent and Tool inventory. Name the required command, Skill, package Tool, Model Context Protocol capability, browser action, or read surface and dispatch only an Agent whose projection exposes it. A role label, a future worker report, or copied evidence never substitutes for physical capability. Treat a missing fact as discovery work owned by a capable Agent; call it a blocker only when current evidence proves missing authority, unsafe irreversible ambiguity, or that no projected capability and no supported interface representation can express a required effect.",
+    "Before mutation, require the capable execution owner to close a source-derived action matrix with one row per in-scope entity: exact authority record, qualification and exclusion facts, required positive effect, preservation guard, target identity, values/routing/format, same-effect persisted representation, and final readback. Missing a dedicated field never authorizes a different surrogate mutation, a new parallel object, or omission of another required effect.",
     "",
-    "When dispatching `close-integrity-reviewer`, `discrepancy-fact-checker`, or any replacement acceptance identity in a derived package, identify the exact canonical RequirementSet and planning/acceptance Artifacts in the current Task catalog. Require the acceptance Agent to completely read and select those sources and report every owned criterion as passed, failed, or unresolved against current authoritative evidence. Do not copy a second criterion list into dispatch prose or reduce scope to the builders' account of what they changed.",
+    "Before every dispatch, compare the required operation with the exact current projected Agent and Tool inventory. Name the required command, Skill, package Tool, Model Context Protocol capability, browser action, or read surface and dispatch only an Agent whose projection exposes it. A role label, a future worker report, or copied evidence never substitutes for physical capability. Treat a missing fact as discovery work owned by a capable Agent; call it a blocker only when the bounded frozen candidate ledger proves missing authority, unsafe irreversible ambiguity, or that no projected capability and no same-effect supported interface representation can express a required effect.",
+    "",
+    "When dispatching `close-integrity-reviewer`, `discrepancy-fact-checker`, or any replacement acceptance identity in a derived package, identify the exact canonical RequirementSet and planning/acceptance Artifacts in the current Task catalog. Require the acceptance Agent to completely read and select those sources, independently rebuild the same finite candidate ledger and action matrix from original inputs and current raw authorities before reading builder claims, compare every expected row and observed mutation with final state, and report omitted, extra, surrogate, or rule-precedence failures alongside every owned criterion's passed, failed, or unresolved status. Do not copy a second criterion or matrix list into dispatch prose or reduce scope to the builders' account of what they changed.",
     "",
     "Keep final acceptance tied to matched totals, unmatched records, source-row references, and unresolved exceptions.",
     "",
@@ -459,6 +461,13 @@ function renderAgentPrompt(agent: PortableTemplateAgentDefinition): string {
     ...(agent.agentID === "ledger-requirements"
       ? [
           `Before defining requirements, search the complete current catalog for exact type \`${PORTABLE_TEMPLATE_RECONCILIATION_POLICY_ARTIFACT_TYPE}\` and exact label \`${PORTABLE_TEMPLATE_RECONCILIATION_POLICY_ARTIFACT_LABEL}\`. Require one unique authority, completely read its exact locator with \`artifact_read\`, and call \`artifact_select\` before using it. This Agent does not own the scheduler-projected publisher and must not ask for a copied policy body or infer one from a package-tool receipt. Zero or multiple matches, incomplete catalog results, and provider errors are explicit blockers.`,
+          "Require the contract to close a source-derived action matrix before implementation, with one row per invoice or settlement entity and exact authority, qualification/exclusion, required effect, preservation guard, target, values, same-effect persisted representation, and final readback.",
+          "",
+        ]
+      : []),
+    ...(["close-integrity-reviewer", "discrepancy-fact-checker"].includes(agent.agentID)
+      ? [
+          "Before reading builder claims, independently rebuild the source-derived action matrix from original inputs and current raw authorities. Compare it row-for-row with final outputs and report omitted, extra, surrogate, stale, or rule-precedence failures.",
           "",
         ]
       : []),
@@ -466,6 +475,8 @@ function renderAgentPrompt(agent: PortableTemplateAgentDefinition): string {
     "",
     ...(agent.baseRole === "build"
       ? [
+          "Before changing outputs, close the source-derived action matrix for every in-scope entity. A representation is valid only when the authority or target interface demonstrates the same required effect; never substitute a convenient different effect.",
+          "",
           "Run exactly once for the Task. Reproduce each concrete defect already established by the accepted input evidence, repair its root cause, rerun the affected checks, and leave the independent verdict to the later responsible reviewer. Findings published after this node remain terminal Task evidence; do not redispatch this workflow node. A new Task is required when the selected workflow must run again.",
           "",
         ]

@@ -4,4 +4,6 @@ Concrete responsibility: implement only approved exception classifications and r
 
 Keep every conclusion tied to invoice, settlement, refund, adjustment, or close-report evidence. Stop and report missing evidence instead of inventing a correction or taking over another responsibility.
 
+Before changing outputs, close the source-derived action matrix for every in-scope entity. A representation is valid only when the authority or target interface demonstrates the same required effect; never substitute a convenient different effect.
+
 Run exactly once for the Task. Reproduce each concrete defect already established by the accepted input evidence, repair its root cause, rerun the affected checks, and leave the independent verdict to the later responsible reviewer. Findings published after this node remain terminal Task evidence; do not redispatch this workflow node. A new Task is required when the selected workflow must run again.
