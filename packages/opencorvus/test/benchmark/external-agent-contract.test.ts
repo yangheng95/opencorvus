@@ -1,4 +1,6 @@
 import { describe, expect, test } from "bun:test"
+import fs from "node:fs/promises"
+import path from "node:path"
 import {
   benchmarkActivitySignature,
   benchmarkRunKey,
@@ -33,6 +35,16 @@ import {
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
+  test("uses the seeded simulated SaaS world and bounded authority discovery", async () => {
+    const skill = await fs.readFile(
+      path.resolve(import.meta.dir, "../../script/benchmark/external-agent/automationbench-api.SKILL.md"),
+      "utf8",
+    )
+    expect(skill).toContain("initializes a seeded simulated business environment for every Task")
+    expect(skill).toContain("do one bounded authority discovery before mutation")
+    expect(skill).toContain("one `api_search` using the concrete target/action nouns")
+    expect(skill).toContain("never report a simulated app's missing connection as benchmark infrastructure failure")
+  })
   const transcript = [
     {
       info: {
