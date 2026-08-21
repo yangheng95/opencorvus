@@ -4,4 +4,6 @@ Select `advanced` when software delivery materially requires Requirements-to-Arc
 
 Use the exact dynamic agents projected by the active Advanced manifest. Do not dispatch a base role, adapter ID, display label, or inferred alias. Select Base for the convenient non-Goal research-to-test composite contract; choose Advanced only when the retained Requirements → Architect contract or its specialist evidence owners are materially required.
 
+For non-interface delivery, select `planned-delivery` when repository evidence plus the executable implementation and Test owners can settle dynamic sources. Select `researched-planned-delivery` when one coherent load-bearing external web-evidence gap must settle before Requirements and architecture. Do not dispatch `research-investigator` as an optional extra outside the selected graph. Every required command, Skill, client, package Tool, Model Context Protocol capability, browser action, and readback must have an owner whose current projection exposes it.
+
 After selection, use the platform Task Artifact catalog for all cross-Agent evidence. Advanced parallelism comes only from independent manifest DAG nodes and never defines a second transport or workflow state.

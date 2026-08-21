@@ -438,7 +438,7 @@ describe("SessionLoop Tool execution authority integration", () => {
         const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
           projectDirectory: project.path,
           config,
-          agentID: "base-planner",
+          agentID: "base-developer",
           packageRevision,
         })
         const taskID = Identifier.ascending("task")
@@ -468,11 +468,11 @@ describe("SessionLoop Tool execution authority integration", () => {
           }),
         })
         const session = await Session.create({
-          kind: "delegated-worker",
+          kind: projection.workerCapability.identity.sessionKind,
           parentID: root.id,
           title: "Projected permission worker",
         })
-        const runtimeTemplate = RuntimeTemplateRegistry.get("delegated-worker")
+        const runtimeTemplate = RuntimeTemplateRegistry.get(projection.workerCapability.identity.baseRole)
         const coordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID(
           projection.workerCapability.identity.dispatchAdapterID,
         )
@@ -507,7 +507,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               taskID,
             })),
           },
-          "delegated-worker",
+          projection.workerCapability.identity.baseRole,
           { taskID, sessionID: root.id },
         )
         const owner = MCP.createScopedConnectionOwner(

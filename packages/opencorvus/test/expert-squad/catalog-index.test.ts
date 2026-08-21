@@ -109,13 +109,16 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.08.20.3",
+      version: "2026.08.21.2",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
       },
-      workflows: [{ id: "planner-parallel-delivery", node_count: 4 }],
-      workflow_count: 1,
+      workflows: [
+        { id: "planner-execution-verification", node_count: 3 },
+        { id: "planner-parallel-delivery", node_count: 4 },
+      ],
+      workflow_count: 2,
       next_workflow_cursor: null,
     })
   }, 0)
@@ -644,7 +647,7 @@ describe("Expert Squad catalog index", () => {
         const marketDetail = await request("market/detail?id=deep-research")
         expect(active).toMatchObject({ active: { effective: "base" }, default: "base" })
         expect(page).toMatchObject({ entries: expect.any(Array) })
-        expect(inspection).toMatchObject({ id: "base", workflow_count: 1, next_workflow_cursor: null })
+        expect(inspection).toMatchObject({ id: "base", workflow_count: 2, next_workflow_cursor: null })
         expect(status).toMatchObject({
           effective_count: (page as { total_count: number }).total_count,
           issue_count: 0,

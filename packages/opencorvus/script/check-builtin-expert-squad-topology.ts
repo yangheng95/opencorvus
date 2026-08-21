@@ -14,12 +14,19 @@ type RequiredStructure = "flat_planner_parallel_workers" | "parallel_workers_joi
 
 /**
  * Pin the declared shape of the workflows whose structure is a product decision rather than an
- * author's preference. Base is a `dependency_dag` on purpose: its Researcher still shares the
- * Planner's frontier with the Developer, but its Tester depends on the Developer so verification
- * observes a settled result instead of racing the mutation it is supposed to check.
+ * author's preference. Both Base workflows are `dependency_dag`s on purpose: the executable
+ * workflow keeps Planner -> Developer -> Tester, while the research workflow additionally shares
+ * the Planner's frontier with a capability-matched Researcher. In both graphs verification observes
+ * a settled result instead of racing the mutation it is supposed to check.
  */
 const requiredWorkflowStructures = new Map<string, Map<string, RequiredStructure>>([
-  ["base", new Map([["planner-parallel-delivery", "dependency_dag"]])],
+  [
+    "base",
+    new Map([
+      ["planner-execution-verification", "dependency_dag"],
+      ["planner-parallel-delivery", "dependency_dag"],
+    ]),
+  ],
   ["browser-research-acceptance", new Map([["browser-evidence-acceptance", "flat_planner_parallel_workers"]])],
   ["frontend-innovate", new Map([["delivery", "flat_planner_parallel_workers"]])],
   [

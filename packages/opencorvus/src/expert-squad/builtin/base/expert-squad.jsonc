@@ -4,16 +4,16 @@
   "id": "base",
   "name": "Base",
   "label": "Base",
-  "description": "Built-in Planner-first Expert Squad for compact delivery through one bounded plan, parallel research and implementation, and verification of the settled result.",
-  "version": "2026.08.21.1",
+  "description": "Built-in Planner-first Expert Squad for compact capability-matched delivery and independent verification of the settled result.",
+  "version": "2026.08.21.2",
   "product_pillars": [
     "code",
     "work"
   ],
   "readme": "README.md",
   "selector": {
-    "summary": "Use Base for one compact Task planned once, researched and implemented in parallel, then verified against the settled result.",
-    "selection_guidance": "Select Base when one Planner can partition the complete Task into independent research and implementation ownership, with verification of whatever the implementation settles. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
+    "summary": "Use Base for one compact Task planned once, executed by capability-matched owners, then independently verified against the settled result.",
+    "selection_guidance": "Select Base when one Planner can partition the complete Task into capability-matched implementation and acceptance ownership. Use the research workflow only for a complete independent read/web partition; use the execution workflow when source discovery requires a project Skill, command, client, or mutating browser. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
     "instructions": "selector.md"
   },
   "capability_projection": {
@@ -70,11 +70,20 @@
       },
       "base-planner": {
         "label": "Base Planner",
-        "description": "Reviews the canonical research report and publishes one complete Task implementation plan without editing product files or creating Goal-derived planning facts.",
+        "description": "Publishes one capability-matched Task implementation plan without executing clients, editing product files, or creating Goal-derived planning facts.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
+        "inherit_base_tools": false,
+        "built_in_tool_ids": [
+          "capability_search",
+          "read",
+          "glob",
+          "search_code",
+          "webfetch",
+          "websearch",
+          "external_code_search",
+          "skill"
+        ],
         "default_skill_refs": [],
         "package_skill_refs": [
           "base/shared/method"
@@ -172,6 +181,31 @@
       }
     },
     "virtual_workflows": {
+      "planner-execution-verification": {
+        "label": "Planner, Execution, and Verification",
+        "description": "Plan once, execute source discovery and delivery with a command-capable owner, then independently verify the settled result.",
+        "nodes": {
+          "base-planner": {
+            "agent_id": "base-planner",
+            "description": "Publishes the complete Task-element inventory, discovery obligations, capability allocation, and acceptance contract.",
+            "depends_on": []
+          },
+          "base-developer": {
+            "agent_id": "base-developer",
+            "description": "Uses projected Skills and executable tools to discover dynamic sources and complete the requested delivery.",
+            "depends_on": [
+              "base-planner"
+            ]
+          },
+          "base-tester": {
+            "agent_id": "base-tester",
+            "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        }
+      },
       "planner-parallel-delivery": {
         "label": "Planner, Parallel Workers, and Verification",
         "description": "Publish one bounded Task plan, run the research and implementation partitions in the same dependency-ready frontier, then verify the settled result.",

@@ -26,7 +26,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.21.1")
+    expect(loaded.manifest.version).toBe("2026.08.21.4")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -34,6 +34,27 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
       "Load and use the mounted `grill-me` Skill as the preferred requirements-discovery method",
     )
+    expect(workflowNodes(loaded, "planned-delivery")).toEqual({
+      "request-interpreter": [],
+      "requirement-engineer": [],
+      "source-investigator": [],
+      "solution-architect": ["request-interpreter", "requirement-engineer", "source-investigator"],
+      "workload-reviewer": ["solution-architect"],
+      "implementation-engineer": ["solution-architect"],
+      "test-engineer": ["implementation-engineer"],
+      "system-integrity-reviewer": ["implementation-engineer", "test-engineer", "workload-reviewer"],
+    })
+    expect(workflowNodes(loaded, "researched-planned-delivery")).toEqual({
+      "request-interpreter": [],
+      "source-investigator": [],
+      "research-investigator": [],
+      "requirement-engineer": ["request-interpreter", "research-investigator", "source-investigator"],
+      "solution-architect": ["requirement-engineer"],
+      "workload-reviewer": ["solution-architect"],
+      "implementation-engineer": ["solution-architect"],
+      "test-engineer": ["implementation-engineer"],
+      "system-integrity-reviewer": ["implementation-engineer", "test-engineer", "workload-reviewer"],
+    })
     expect(workflowNodes(loaded, "greenfield-interface-delivery")).toEqual({
       "request-interpreter": [],
       "requirement-engineer": [],
@@ -44,7 +65,7 @@ describe("built-in interface review workflow authority", () => {
       "implementation-engineer": ["interface-designer"],
       "test-engineer": ["implementation-engineer"],
       "interface-integrity-reviewer": ["implementation-engineer"],
-      "system-integrity-reviewer": ["implementation-engineer", "workload-reviewer"],
+      "system-integrity-reviewer": ["implementation-engineer", "test-engineer", "workload-reviewer"],
     })
     expect(workflowNodes(loaded, "greenfield-interface-visual-delivery")).toEqual({
       "request-interpreter": [],
@@ -57,7 +78,7 @@ describe("built-in interface review workflow authority", () => {
       "test-engineer": ["implementation-engineer"],
       "visual-reviewer": ["implementation-engineer"],
       "interface-integrity-reviewer": ["implementation-engineer"],
-      "system-integrity-reviewer": ["implementation-engineer", "workload-reviewer"],
+      "system-integrity-reviewer": ["implementation-engineer", "test-engineer", "workload-reviewer"],
     })
     expect(workflowNodes(loaded, "reference-interface-delivery")).toMatchObject({
       "interface-investigator": [],
@@ -78,6 +99,9 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
       "Do not dispatch platform `universal-build` directly for that work",
     )
+    expect(loaded.selectorInstructions).toContain(
+      "Select `researched-planned-delivery` when one coherent load-bearing external web-evidence gap",
+    )
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
       "derive the obligations yourself, including the ones no implementation Artifact mentions",
     )
@@ -94,12 +118,29 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
       "record passed, failed, or unresolved",
     )
+    expect(loaded.promptProfile.agents["orchestrator"]).toContain(
+      "compare the required operation with the current projected Agent and Tool inventory",
+    )
+    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
+      "A missing fact is discovery work, not automatically a rejection condition",
+    )
+    expect(loaded.promptProfile.agents["implementation-engineer"]).toContain(
+      "closest truthful supported representation",
+    )
+    expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
+      "current independent `advanced/test-report`",
+    )
   })
 
-  test("orders Base verification behind implementation while research stays parallel", async () => {
+  test("projects capability-matched Base workflows and plan-only Planner tools", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.21.1")
+    expect(loaded.manifest.version).toBe("2026.08.21.2")
+    expect(workflowNodes(loaded, "planner-execution-verification")).toEqual({
+      "base-planner": [],
+      "base-developer": ["base-planner"],
+      "base-tester": ["base-developer"],
+    })
     // Verification cannot race the mutation it checks: an AutomationBench Base trial failed its
     // Task with "No post was created" after the Tester verified a pre-mutation world.
     expect(workflowNodes(loaded, "planner-parallel-delivery")).toEqual({
@@ -109,16 +150,16 @@ describe("built-in interface review workflow authority", () => {
       "base-tester": ["base-developer"],
     })
     expect(loaded.selectorInstructions).toContain(
-      "Researcher and Developer then become dependency-ready together and consume only the plan; the Tester runs after the Developer's node settles",
+      "Select `planner-execution-verification` when source discovery, implementation, or verification requires a project Skill",
     )
     // The parallel frontier stays, but a report published before the mutation owner's latest
     // occurrence can no longer carry the terminal decision.
     expect(loaded.promptProfile.agents["orchestrator"]).toContain("that report is stale for the mutated surface")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "acceptance scope comes from the original Task request and the authoritative sources it names",
+      "acceptance scope comes from the original Task request, the canonical plan, and the current authoritative sources",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "read-oriented identity with no shell and no command execution",
+      "Allocate work from the actual projected Tool inventory",
     )
     // The new edge is ordering only. If it ever becomes a report handoff, the Tester inherits the
     // Developer's blind spots and the scope fix above is undone.
@@ -126,12 +167,66 @@ describe("built-in interface review workflow authority", () => {
       "that ordering is not a handoff, and you do not consume the Researcher's or Developer's report as your scope",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain("explicit Task-element analysis")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "A missing fact is not itself a blocker",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "closest truthful representation exposed by the authoritative interface",
+    )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
       "complete read/select coverage of every `AC-N`",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "criterion-by-criterion coverage for every planned `AC-N`",
     )
+    expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
+      base_role: "delegated-worker",
+      inherit_base_tools: false,
+      built_in_tool_ids: [
+        "capability_search",
+        "read",
+        "glob",
+        "search_code",
+        "webfetch",
+        "websearch",
+        "external_code_search",
+        "skill",
+      ],
+    })
+  })
+
+  test("resolves the exact Base Planner publication and read surface", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = Config.Info.parse({
+          prompt_profile: { active: "base" },
+          mcp: { browser: BrowserMCPBuiltin.localConfig() },
+        })
+        const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "base-planner",
+        })
+        expect([...projection.workerCapability.builtInToolIDs].sort()).toEqual([
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "capability_search",
+          "external_code_search",
+          "glob",
+          "publish_interactive_artifact",
+          "read",
+          "search_code",
+          "skill",
+          "webfetch",
+          "websearch",
+        ])
+      },
+    })
   })
 
   test("resolves grill-me on the exact Advanced Requirement Engineer turn surface", async () => {
