@@ -66,6 +66,33 @@ It also required that the strict/partial floor come from a clean post-fix baseli
 this invalid batch, that −67% be stated as an upper bound, that cached tokens not be described as
 free, and that metric definitions move from Phase 5 to Phase 0. All are applied.
 
+A second independent review was run against the settled transport design in §8 and rejected it.
+Its findings are applied in §8.7 and §9:
+
+1. **Blocker.** The carrier is a synthetic, hidden, model-only message. AGENTS.MD line 23 requires
+   messages to arise from real participants and remain fully visible, and prohibits synthetic
+   messages, hidden messages, and model/interface dual-path messages. The carrier violates all
+   three. Citing `dynamicContextText` as precedent was a bad argument: that injection is existing
+   debt under the same rule, not a licence.
+2. The vendor shaper is unnecessary. `provider/llm.ts` middleware already owns request-only
+   normalisation after AI SDK prompt conversion, and the pinned Anthropic adapter already performs
+   the `tool` + trailing `user` merge the design proposed to hand-roll.
+3. Predictive compaction would misclassify the carrier. `predictiveCompactionDecision` counts only
+   system plus tool schemas as non-compressible, so a request-only carrier would be treated as
+   compressible history that compaction cannot actually shrink.
+4. The Phase 0 fingerprint is taken pre-provider, so it can prove the carrier's logical position
+   but not the physical request. §8.6 needed that correction.
+5. Splitting `buildSystemParts` alone does not make `system` turn-stable: `MAX_STEPS` and the
+   decision-repair prompt also diverge, so "the carrier must be the first divergent block" cannot
+   be an unconditional acceptance criterion.
+6. The facts/instructions split is underspecified. `renderTaskDescription` interleaves directives
+   with state, so moving the whole volatile render to a user-role carrier would lower real
+   instructions out of system authority.
+7. "Two orders of magnitude cheaper" is unsupported by code and must wait for measurement.
+
+It confirmed the detached-dispatch rejection in §8.4, with a more exact mechanism than the draft
+had traced, and confirmed the residual-cost reasoning with one wording correction.
+
 ### Repository search
 
 `grep` for `resolveRuntimeSystem`, `buildSystemParts`, `applyCaching`, `dynamicContextText`,
@@ -415,3 +442,77 @@ Phase 0's fingerprint supplies the acceptance test directly:
    Phase 0.4 clean baseline.
 6. Strict and partial not below that baseline — relocation changes how a model weighs a fact, so
    this is a required gate, not a formality.
+
+## 9. Phase 1 re-sequenced after the second review
+
+### 9.1 The transport is blocked on a constitutional question, and may not be needed
+
+AGENTS.MD line 23 forbids synthetic, hidden, and model/interface dual-path messages. The §8
+carrier is all three. That is not a caveat to implement around; it is a rule that has to be either
+satisfied or explicitly amended by the repository owner.
+
+But the review also exposed a reason to think most of the divergence does not need a transport at
+all.
+
+### 9.2 The self-inflicted share
+
+`buildSystemParts` renders the live Task description into `system`, and that description includes
+the current Session's **open tool calls** and **completed tool call references**
+(`engine/describe.ts`, `OPEN_TOOL_CALL_PROMPT_CAP` and `listCompletedToolCallRefs`). Those change
+on every tool call, which is to say on almost every Provider step of an Orchestrator turn.
+
+They are also already in the model's own message history. The Orchestrator's tool calls and their
+results are the conversation. Rendering them a second time into the prefix is not new information
+to the model; it is the Host restating the tail into the head, and it costs the entire conversation
+its cache every time it changes.
+
+Every timestamp in that render comes from a stored row value rather than `Date.now()`, so the
+render is byte-stable when the underlying facts are stable. The volatility is therefore not
+inherent — it is dominated by facts that duplicate the conversation.
+
+### 9.3 Revised Phase 1
+
+**Phase 1a — stop restating the tail into the head.** Remove from the system-side Task render the
+state the requesting Session's own conversation already carries, starting with its open and
+completed tool calls. No transport, no new message, no rule bent, and nothing the model can see is
+lost — it reads the same facts from its own history.
+
+Measure with Phase 0.1: which block diverges, how often, and how much of the divergence survives.
+The fingerprint answers this directly and was built before the change, so the comparison is honest.
+
+**Phase 1b — only if the residual still matters.** If removing the duplicated facts leaves the
+system render diverging often enough to matter, then the transport question becomes real and has to
+be answered first as a governance question, with three options and no technical shortcut:
+
+| Option | What it costs |
+| --- | --- |
+| Amend AGENTS.MD to permit a named, non-participant runtime-context projection channel | Requires the owner's decision; also obliges `dynamicContextText` to move into that channel rather than remain undeclared debt |
+| Deliver mid-turn state only through real, visible, persisted occurrences | Rule-compliant with no amendment, but the Orchestrator stops seeing a detached settlement until its next turn — a real semantic change to turn coherence |
+| Accept the residual divergence | No change; whatever fresh input survives Phase 1a is the price |
+
+The first option is the only one that keeps both current freshness and the cache. It is not mine to
+choose.
+
+### 9.4 Corrections to §8 carried forward
+
+- The vendor shaper in §8.2 is withdrawn. `provider/llm.ts` middleware is the layer that owns
+  post-conversion normalisation, and the pinned Anthropic adapter already merges a trailing user
+  message with the `tool_result` message. Any future carrier is one provider-neutral logical block.
+- Any future carrier must be counted as **non-compressible** in `predictiveCompactionDecision`,
+  which today treats everything outside system and tool schemas as compressible history. A carrier
+  is rebuilt from the database and cannot be shrunk by transcript compaction.
+- §8.6's first acceptance criterion is wrong as written. `MAX_STEPS` and the decision-repair
+  prompt legitimately diverge in `system` on the steps that use them, so "the carrier is the first
+  divergent block" holds only for steps that are neither last-step nor in decision repair.
+- The fingerprint is recorded pre-provider, so it proves logical position only. Proving the
+  physical request needs captured adapter input, which Phase 0.1 does not currently provide.
+- §8.5's wording is corrected: step N+1 does not re-pay the previous carrier. It pays the newly
+  appended exchange plus the current carrier. The one-exchange lag stands.
+- "Roughly two orders of magnitude cheaper" is withdrawn as unsupported. The carrier's size is
+  unspecified and tool results can be large; the A/B measures it.
+- §8.4 stands, with the mechanism stated precisely: `detachDispatchExecution` races full
+  completion against durable lineage publication. When lineage wins, the tool returns `accepted`
+  and execution continues in `supervisedPipeline`, so a child can settle **after** that tool result
+  and **before** a later Provider step of the same retained turn. There is no completion tool
+  result in that turn to carry its delta. How often that race is reachable in a real batch is
+  unmeasured.
