@@ -29,6 +29,7 @@ import { Flag } from "@/flag/flag"
 import { CapabilityRules } from "@/capability/rules"
 import { Auth } from "@/auth"
 import { AgentTrace } from "@/trace"
+import { fingerprintPromptComposition, toolPayloadTexts } from "@/session/prompt-composition"
 import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
 
 export namespace LLM {
@@ -261,7 +262,20 @@ export namespace LLM {
       const parentSessionID = sessionParentID(input.sessionID)
       const taskID = taskIDForSession(input.sessionID)
       if (taskID) {
+        // Composed here rather than in the caller: this is the one place that
+        // holds the exact system array, message array and Tool table that go
+        // out, so a fingerprint taken anywhere else could describe a request
+        // that was never sent. Divergence against the previous call is derived
+        // offline from consecutive trace events, which keeps this hot path
+        // stateless — a per-Session cache of the last fingerprint would be one
+        // more thing to bound and to clean up on Session disposal.
+        const promptComposition = fingerprintPromptComposition({
+          system,
+          messages: requestMessages,
+          toolPayloads: toolPayloadTexts(tools),
+        })
         AgentTrace.recordLLMRequest({
+          promptComposition,
           sessionID: input.sessionID,
           parentSessionID,
           taskID,

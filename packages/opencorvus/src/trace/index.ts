@@ -50,6 +50,7 @@ import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { requireTask } from "@/engine/store"
 import { SessionObservability } from "@/util/session-observability"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
+import type { PromptCompositionFingerprint } from "@/session/prompt-composition"
 
 const log = Log.create({ service: "agent-trace" })
 
@@ -452,6 +453,11 @@ export namespace AgentTrace {
     /** Mirrors LLM.StreamInput['toolChoice'] — string forms or specific-tool pin. */
     toolChoice?: "auto" | "required" | "none" | { type: "tool"; toolName: string }
     small?: boolean
+    /** Host-side prompt composition fingerprint: per-block sizes and digests,
+     *  never bodies. Keeps prompt projection ephemeral — the rule this event
+     *  already follows — while making "which block moved" answerable, which
+     *  totals alone never were. */
+    promptComposition?: PromptCompositionFingerprint
   }) {
     if (!ENABLED) return
     const bucket = sessionBucket(input.sessionID)
@@ -470,6 +476,7 @@ export namespace AgentTrace {
         toolChoice: input.toolChoice,
         requestMessageID: input.requestMessageID,
         tools: input.tools,
+        ...(input.promptComposition ? { promptComposition: input.promptComposition } : {}),
       },
     })
   }
