@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { orchestratorDecisionToolCompletionEffect } from "@/orchestrator/decision-tool-names"
 import { ToolTurnExecutionConflictError, ToolTurnExecutionCoordinator } from "@/tool/execution-mode"
 
 /**
@@ -54,6 +55,50 @@ describe("assistant-turn decision coordination", () => {
       await attempt(coordinator, "respond_agent_coordination", false),
       await attempt(coordinator, "wait"),
     ]).toEqual(["committed", "committed", "committed"])
+  })
+
+  test("continues from a Delivery Slice mutation into the scheduling decision", async () => {
+    const coordinator = new ToolTurnExecutionCoordinator()
+    const mutationEffect = orchestratorDecisionToolCompletionEffect({
+      tool: "manage_task",
+      // Durable Tool projection carries the action-specific add_goal fields.
+      stateInput: { goal: { title: "Deliver the accepted outcome" }, reason: "Current contract evidence" },
+    })
+
+    expect({
+      mutationEffect,
+      mutation: await attempt(coordinator, "manage_task", mutationEffect === "satisfies_current_epoch"),
+      dispatch: await attempt(coordinator, "dispatch_agent"),
+    }).toEqual({
+      mutationEffect: "requires_followup_decision",
+      mutation: "committed",
+      dispatch: "committed",
+    })
+  })
+
+  test("classifies every manage_task action by its durable scheduling effect", () => {
+    const effect = (stateInput: Record<string, unknown>) =>
+      orchestratorDecisionToolCompletionEffect({ tool: "manage_task", stateInput })
+
+    expect({
+      add: effect({ action: "add_goal", goal: {}, reason: "new scope" }),
+      modify: effect({ action: "modify_goal", goalID: "gol_1", updates: {}, reason: "new evidence" }),
+      remove: effect({ action: "delete_goal", goalID: "gol_1", reason: "obsolete" }),
+      persistedAdd: effect({ goal: {}, reason: "new scope" }),
+      persistedModify: effect({ goalID: "gol_1", updates: {}, reason: "new evidence" }),
+      complete: effect({ action: "complete_task", summary: "accepted" }),
+      fail: effect({ action: "fail_task", error: "terminal failure" }),
+      cancel: effect({ action: "cancel_task", reason: "operator request" }),
+    }).toEqual({
+      add: "requires_followup_decision",
+      modify: "requires_followup_decision",
+      remove: "requires_followup_decision",
+      persistedAdd: "requires_followup_decision",
+      persistedModify: "requires_followup_decision",
+      complete: "satisfies_current_epoch",
+      fail: "satisfies_current_epoch",
+      cancel: "satisfies_current_epoch",
+    })
   })
 
   test("releases the claim when the first decision fails so the turn can still decide", async () => {

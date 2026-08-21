@@ -158,6 +158,85 @@ async function createExpiredDecisionGapFixture(input: {
 }
 
 describe("Task-control reconciliation", () => {
+  test("replays a Delivery Slice mutation followed by a dispatch fan-out as the scheduling decision", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await createExpiredDecisionGapFixture({
+          projectPath: project.path,
+          semanticTurnLimit: 3,
+          label: "goal-mutation-then-dispatch",
+        })
+        Database.use((db) =>
+          db
+            .update(EngineControlActivationLeaseTable)
+            .set({ expires_at: Date.now() + 60_000 })
+            .where(eq(EngineControlActivationLeaseTable.id, fixture.lease.activationID))
+            .run(),
+        )
+        const persistCompletedTool = async (tool: string, input: Record<string, unknown>, output: unknown) => {
+          const request = await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: fixture.orchestrator.id,
+            messageID: fixture.assistantID,
+            type: "tool",
+            callID: `call_${tool}_${Identifier.ascending("part")}`,
+            tool,
+            state: { status: "running", input, time: { start: Date.now() } },
+          })
+          await Session.updatePart({
+            ...request,
+            state: {
+              status: "completed",
+              input,
+              output: JSON.stringify(output),
+              title: tool,
+              metadata: {},
+              time: { start: request.state.time.start, end: Date.now() },
+            },
+          })
+          return request.id
+        }
+        await persistCompletedTool("manage_task", { goal: { title: "New delivery scope" }, reason: "accepted evidence" }, {
+          status: "applied",
+        })
+        const dispatchIDs = await Promise.all([
+          persistCompletedTool("dispatch_agent", { dispatch: { target: "implementation-engineer" } }, { kind: "accepted" }),
+          persistCompletedTool("dispatch_agent", { dispatch: { target: "workload-reviewer" } }, { kind: "accepted" }),
+        ])
+        const assistant = (await Session.messages({ sessionID: fixture.orchestrator.id })).find(
+          (message) => message.info.id === fixture.assistantID,
+        )
+        if (!assistant || assistant.info.role !== "assistant") throw new Error("Expected persisted Orchestrator assistant")
+        await Session.updateMessage({
+          ...assistant.info,
+          finish: "tool-calls",
+          time: { ...assistant.info.time, completed: Date.now() },
+        })
+
+        // Re-open the same SQLite facts before reconciliation: no process-local
+        // Tool coordinator state participates in the durable decision replay.
+        Database.close()
+        Database.Client()
+        const reconciled = await reconcileTaskControlPlane(fixture.taskID)
+        const evidence = Database.use((db) => readTaskRootIngressEvidence(db, fixture.ingress))
+
+        expect({
+          reconciled,
+          decisions: evidence.decisions.map((decision) => ({ id: decision.id, command: decision.command })),
+          projection: projectTaskRootIngress(fixture.ingress.id, Date.now(), readTaskRootIngressEvidence),
+        }).toEqual({
+          reconciled: 0,
+          decisions: dispatchIDs
+            .toSorted()
+            .map((id) => ({ id, command: "dispatch_agent" })),
+          projection: { state: "resolved", decisionIDs: dispatchIDs.toSorted() },
+        })
+      },
+    })
+  })
+
   test("resolves a visible no-action answer once and advances the FIFO to the next ingress", async () => {
     await using project = await memoryProject()
     await Instance.provide({

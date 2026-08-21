@@ -37,6 +37,22 @@ export function orchestratorDecisionToolCompletionEffect(input: {
 }): OrchestratorDecisionToolCompletionEffect {
   if (input.tool === "dispatch_agent") return "inspect_dispatch_outcome"
   if (input.tool === "question") return "requires_followup_decision"
+  if (input.tool === "manage_task") {
+    const taskInput = input.stateInput && typeof input.stateInput === "object" && !Array.isArray(input.stateInput)
+      ? (input.stateInput as Record<string, unknown>)
+      : undefined
+    const action = taskInput?.action
+    if (
+      action === "add_goal" ||
+      action === "modify_goal" ||
+      action === "delete_goal" ||
+      taskInput?.goal !== undefined ||
+      taskInput?.goalID !== undefined ||
+      taskInput?.updates !== undefined
+    ) {
+      return "requires_followup_decision"
+    }
+  }
   if (input.tool === "respond_agent_coordination") {
     if (!input.stateInput || typeof input.stateInput !== "object" || Array.isArray(input.stateInput)) {
       throw new Error("respond_agent_coordination input is not an object")
