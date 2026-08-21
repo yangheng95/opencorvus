@@ -1,10 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import {
-  ORCHESTRATOR_DECISION_TOOL_NAMES,
   orchestratorCommittedDecisionInParts,
-  orchestratorDecisionToolAlwaysCommits,
   orchestratorDecisionToolCompletionEffect,
-  orchestratorWithheldDecisionToolNames,
 } from "@/orchestrator/decision-tool-names"
 import { ToolTurnExecutionConflictError, ToolTurnExecutionCoordinator } from "@/tool/execution-mode"
 
@@ -143,38 +140,6 @@ describe("assistant-turn decision coordination", () => {
         completedToolPart("dispatch_agent", { agent: "base-tester" }),
       ]),
     ).toBe("dispatch_agent")
-  })
-
-  test("withholds only the decision Tools no legal input could have called", () => {
-    const surface = [...ORCHESTRATOR_DECISION_TOOL_NAMES, "artifact_read"]
-    expect(orchestratorWithheldDecisionToolNames({ toolNames: surface, committedDecision: undefined })).toEqual([])
-    // A fan-out stays open; the two Tools that commit whatever they are given do not.
-    expect(
-      orchestratorWithheldDecisionToolNames({ toolNames: surface, committedDecision: "dispatch_agent" }).sort(),
-    ).toEqual(["no_action", "wait"])
-    // `manage_task` and `respond_agent_coordination` keep their non-deciding
-    // forms, so they are never withheld — the coordinator judges them by input.
-    expect(
-      orchestratorWithheldDecisionToolNames({ toolNames: surface, committedDecision: "manage_task" }).sort(),
-    ).toEqual(["dispatch_agent", "no_action", "wait"])
-  })
-
-  test("only classifies a Tool as always-committing when no input makes it owe a decision", () => {
-    const probeInputs: unknown[] = [
-      {},
-      { action: "add_goal" },
-      { action: "complete_task" },
-      { goal: "x" },
-      { updates: {} },
-      { decision: "redispatch" },
-      { decision: "accept" },
-    ]
-    for (const tool of ORCHESTRATOR_DECISION_TOOL_NAMES) {
-      if (!orchestratorDecisionToolAlwaysCommits(tool)) continue
-      for (const stateInput of probeInputs) {
-        expect(orchestratorDecisionToolCompletionEffect({ tool, stateInput })).not.toBe("requires_followup_decision")
-      }
-    }
   })
 
   test("classifies every manage_task action by its durable scheduling effect", () => {

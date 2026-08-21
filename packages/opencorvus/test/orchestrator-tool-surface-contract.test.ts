@@ -26,10 +26,7 @@ import { ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS } from "../src/agent/tool-p
 import { EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
-import {
-  ORCHESTRATOR_DECISION_TOOL_NAMES,
-  orchestratorWithheldDecisionToolNames,
-} from "../src/orchestrator/decision-tool-names"
+import { ORCHESTRATOR_DECISION_TOOL_NAMES } from "../src/orchestrator/decision-tool-names"
 import { createOrchestratorTools } from "../src/orchestrator/tools"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -134,40 +131,6 @@ test("keeps the decision declaration on every Orchestrator decision Tool on the 
       ])
       // The assembled surface carries execution mode; `wait` parks the turn.
       expect(toolExecutionModeOf(tools.wait)).toBe("turn_control_exclusive")
-    },
-  })
-})
-
-test("withholds the already-decided Tools from the next step of the assembled surface", async () => {
-  await using project = await memoryProject()
-  await Instance.provide({
-    directory: project.path,
-    fn: async () => {
-      const { tools } = await orchestratorToolSurface("Committed decision projection")
-      const names = Object.keys(tools)
-      const surfaceAfter = (committedDecision: (typeof ORCHESTRATOR_DECISION_TOOL_NAMES)[number] | undefined) => {
-        const withheld = new Set(orchestratorWithheldDecisionToolNames({ toolNames: names, committedDecision }))
-        return { withheld: [...withheld].sort(), kept: names.filter((name) => !withheld.has(name)) }
-      }
-
-      // A refusal is a result the model can answer with the same call again, and
-      // `no_action` after a settled `dispatch_agent` was the most common way a
-      // Turn lost its effect. An absent Tool has no retry path.
-      const afterDispatch = surfaceAfter("dispatch_agent")
-      expect(afterDispatch.withheld).toEqual(["no_action", "wait"])
-      // The fan-out stays open, and the two Tools whose legality depends on their
-      // arguments stay on the surface for the coordinator to judge at the call.
-      expect(afterDispatch.kept).toContain("dispatch_agent")
-      expect(afterDispatch.kept).toContain("manage_task")
-      expect(afterDispatch.kept).toContain("respond_agent_coordination")
-      expect(afterDispatch.kept).toContain("question")
-
-      // A settling decision closes the fan-out too.
-      expect(surfaceAfter("manage_task").withheld).toEqual(["dispatch_agent", "no_action", "wait"])
-      // Nothing is withheld from a Turn that has not decided; that Turn is the
-      // repair rung's business, and the two projections must not overlap.
-      expect(surfaceAfter(undefined).withheld).toEqual([])
-      expect(names.length).toBeGreaterThan(afterDispatch.withheld.length)
     },
   })
 })

@@ -26,32 +26,6 @@ export function isOrchestratorDecisionToolName(value: string): value is Orchestr
 }
 
 /**
- * Whether every input this decision Tool accepts commits a decision.
- *
- * `orchestratorDecisionToolCompletionEffect` answers that for one call, once the
- * arguments exist. Projecting a Tool surface happens before any arguments do, so
- * a Tool may only be withheld from a Turn that already decided when no input it
- * accepts could have been legal — `manage_task` still carries the Goal edits and
- * `respond_agent_coordination` still carries `redispatch`, and neither of those
- * is a decision.
- *
- * The map is exhaustive over the Tool names by construction, so adding a
- * decision Tool is a compile error until this classification is made for it.
- */
-const ORCHESTRATOR_DECISION_TOOL_ALWAYS_COMMITS: Record<OrchestratorDecisionToolName, boolean> = {
-  dispatch_agent: true,
-  no_action: true,
-  wait: true,
-  question: false,
-  manage_task: false,
-  respond_agent_coordination: false,
-}
-
-export function orchestratorDecisionToolAlwaysCommits(tool: OrchestratorDecisionToolName): boolean {
-  return ORCHESTRATOR_DECISION_TOOL_ALWAYS_COMMITS[tool]
-}
-
-/**
  * Interpret the durable completion contract of one visible decision Tool.
  * A completed interaction Tool has already returned its new operator fact, and
  * a coordination redispatch has only frozen authority for a later dispatch.
@@ -121,27 +95,4 @@ export function orchestratorCommittedDecisionInParts(
     return tool
   }
   return undefined
-}
-
-/**
- * Decision Tools a Turn that already decided must not be offered.
- *
- * The coordinator refuses a second decision, but a refusal is a result the model
- * can answer with the same call again, and an absent Tool has no retry path.
- * Only a Tool that commits for every input it accepts may be withheld — see
- * `orchestratorDecisionToolAlwaysCommits` — and a `dispatch_agent` fan-out stays
- * open across Provider steps because the reduction accepts it.
- */
-export function orchestratorWithheldDecisionToolNames(input: {
-  toolNames: Iterable<string>
-  committedDecision: OrchestratorDecisionToolName | undefined
-}): string[] {
-  if (!input.committedDecision) return []
-  const committed = input.committedDecision
-  return [...input.toolNames].filter(
-    (name) =>
-      isOrchestratorDecisionToolName(name) &&
-      orchestratorDecisionToolAlwaysCommits(name) &&
-      !(committed === "dispatch_agent" && name === "dispatch_agent"),
-  )
 }

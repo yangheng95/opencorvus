@@ -129,7 +129,6 @@ import { createOrchestratorTools } from "@/orchestrator/tools"
 import {
   isOrchestratorDecisionToolName,
   orchestratorCommittedDecisionInParts,
-  orchestratorWithheldDecisionToolNames,
   type OrchestratorDecisionToolName,
 } from "@/orchestrator/decision-tool-names"
 import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
@@ -1646,36 +1645,6 @@ export namespace SessionLoop {
             gapCount: taskRootDecisionGapCount,
           })
         }
-      }
-    }
-
-    // The complement of the repair rung. That rung constrains a Turn that has
-    // not decided yet; this one constrains a Turn that already has.
-    //
-    // The coordinator refuses a second decision, but a refusal is a result the
-    // model can answer with the same call again, and `no_action` arriving after
-    // a settled `dispatch_agent` was the single most common way a Turn lost its
-    // effect. An absent Tool has no retry path. Only a Tool that commits for
-    // every input it accepts may be withheld: `manage_task` still carries the
-    // Goal edits and `respond_agent_coordination` still carries `redispatch`,
-    // so those stay on the surface and the coordinator judges them by their
-    // arguments at the call.
-    const committedDecision = openTaskRootAssistant
-      ? taskRootAssistantCommittedDecision(openTaskRootAssistant)
-      : undefined
-    if (committedDecision) {
-      const withheld = orchestratorWithheldDecisionToolNames({
-        toolNames: Object.keys(tools),
-        committedDecision,
-      })
-      if (withheld.length > 0) {
-        log.info("task-root-decision-committed-withholding-tools", {
-          sessionID: input.sessionID,
-          committedDecision,
-          withheld,
-        })
-        const remaining = new Set(withheld)
-        tools = Object.fromEntries(Object.entries(tools).filter(([name]) => !remaining.has(name)))
       }
     }
 

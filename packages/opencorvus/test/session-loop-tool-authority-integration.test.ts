@@ -37,6 +37,8 @@ import { createArchitectOutputTools } from "../src/architect/output-tools"
 import { assertArchitectOutputToolTurnIdentity } from "../src/architect/output-tool-turn-identity"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/agent/stage-tool-materializer"
 import { createDecisionLog } from "../src/decision-log"
+import { Database } from "../src/storage/db"
+import { ToolTurnExecutionConflictError } from "../src/tool/execution-mode"
 
 function providerModel(): Provider.Model {
   return {
@@ -64,7 +66,7 @@ afterEach(async () => {
 })
 
 describe("SessionLoop Tool execution authority integration", () => {
-  test("binds a resolved Tool surface to the decision its assistant Message already committed", async () => {
+  test("restores a persisted turn decision after database reopen and refuses a conflicting call", async () => {
     // A surface is resolved once per Provider step; a Task-root assistant Message
     // spans several. When the coordinator was built with no knowledge of that
     // Message, step two decided again beside step one's decision, the reduction
@@ -102,54 +104,47 @@ describe("SessionLoop Tool execution authority integration", () => {
           providerID: model.providerID,
           time: { created: Date.now() },
         })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: assistant.id,
+          type: "tool",
+          tool: "dispatch_agent",
+          callID: "call_retained_dispatch",
+          state: {
+            status: "completed",
+            input: { agent: "base-developer" },
+            output: "dispatched",
+            title: "Accepted dispatch",
+            metadata: {},
+            time: { start: Date.now(), end: Date.now() + 1 },
+          },
+        })
+        Database.close()
+        Database.Client()
+        const reopened = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        if (reopened.info.role !== "assistant") throw new Error("Expected the persisted assistant Message")
         const processor = SessionProcessor.create({
-          assistantMessage: assistant,
+          assistantMessage: reopened.info,
           sessionID: session.id,
           model,
           abort: new AbortController().signal,
         })
-        const history = await Session.messages({ sessionID: session.id })
-        const retained = history.map((message) =>
-          message.info.id === assistant.id
-            ? {
-                ...message,
-                parts: [
-                  ...message.parts,
-                  {
-                    id: Identifier.ascending("part"),
-                    sessionID: session.id,
-                    messageID: assistant.id,
-                    type: "tool",
-                    tool: "dispatch_agent",
-                    callID: "call_retained_dispatch",
-                    state: { status: "completed", input: { agent: "base-developer" }, output: "dispatched" },
-                  },
-                ],
-              }
-            : message,
-        ) as typeof history
-
-        const withoutReceipt = await SessionLoop.resolveTools({
-          agent,
-          agentID: "coding",
-          model,
-          session,
-          processor,
-          messages: history,
-          config,
-        })
-        expect(SessionLoop.executionCoordinatorForResolvedTools(withoutReceipt)?.committedDecision).toBeUndefined()
-
         const withReceipt = await SessionLoop.resolveTools({
           agent,
           agentID: "coding",
           model,
           session,
           processor,
-          messages: retained,
+          messages: await Session.messages({ sessionID: session.id }),
           config,
         })
-        expect(SessionLoop.executionCoordinatorForResolvedTools(withReceipt)?.committedDecision).toBe("dispatch_agent")
+        const coordinator = SessionLoop.executionCoordinatorForResolvedTools(withReceipt)
+        if (!coordinator) throw new Error("Expected the resolved Tool execution coordinator")
+        expect(coordinator.committedDecision).toBe("dispatch_agent")
+        await expect(
+          coordinator.run("ordinary", async () => "unreachable", { command: "no_action", commits: true }),
+        ).rejects.toBeInstanceOf(ToolTurnExecutionConflictError)
       },
     })
   })
