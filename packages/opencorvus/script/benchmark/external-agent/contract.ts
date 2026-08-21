@@ -792,6 +792,24 @@ export function reusableBatchCandidateRunIDs(audit: {
   return sealingRunIDs
 }
 
+export type PlannedAutomationBenchSlotState =
+  | { kind: "running" }
+  | { kind: "sealed_candidate_adopted"; run_id: string }
+  | { kind: "invalidated"; status: string; reason: string }
+  | { kind: "queued" }
+
+/** Project one planned slot from the authorities that already own its state. */
+export function plannedAutomationBenchSlotState(input: {
+  active: boolean
+  adoptedRunID?: string
+  invalidation?: { status: string; reason: string }
+}): PlannedAutomationBenchSlotState {
+  if (input.active) return { kind: "running" }
+  if (input.adoptedRunID) return { kind: "sealed_candidate_adopted", run_id: input.adoptedRunID }
+  if (input.invalidation) return { kind: "invalidated", ...input.invalidation }
+  return { kind: "queued" }
+}
+
 export function paperEvidenceChecks(input: {
   manifestVerified: boolean
   providerLedgerVerified: boolean

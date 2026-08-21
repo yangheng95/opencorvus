@@ -1,6 +1,7 @@
 import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { plannedAutomationBenchSlotState } from "./contract"
 
 type Profile = "base" | "advanced"
 type DashboardResult = {
@@ -33,6 +34,9 @@ type BatchPlan = {
   cases: Array<{ case_index: number; task: string }>
   profiles: Profile[]
   waves: Array<Array<{ case_index: number; profile: Profile }>>
+  preexisting_eligible?: Partial<
+    Record<Profile, Array<{ run_id: string; case_index: number; profile: Profile }>>
+  >
 }
 
 type CatalogAttempt = {
@@ -261,6 +265,14 @@ const verifiedBySlot = new Map(
 const pendingBySlot = new Map(
   currentResults.map((record) => [slotKey(record.benchmark.case_index, record.opencorvus.profile), record]),
 )
+const adoptedCandidateBySlot = new Map(
+  profiles.flatMap((profile) =>
+    (plan?.preexisting_eligible?.[profile] ?? []).map((record) => [
+      slotKey(record.case_index, record.profile),
+      record.run_id,
+    ] as const),
+  ),
+)
 /**
  * A planned slot whose run was invalidated is not a slot that has yet to run.
  *
@@ -339,12 +351,19 @@ const plannedRows = planned
   .filter((slot) => !verifiedBySlot.has(slotKey(slot.case_index, slot.profile)) && !pendingBySlot.has(slotKey(slot.case_index, slot.profile)))
   .map((slot) => {
     const task = plan?.cases.find((item) => item.case_index === slot.case_index)?.task ?? ""
-    const invalidated = invalidatedBySlot.get(slotKey(slot.case_index, slot.profile))
-    const status = activeSlots.has(slotKey(slot.case_index, slot.profile))
+    const key = slotKey(slot.case_index, slot.profile)
+    const state = plannedAutomationBenchSlotState({
+      active: activeSlots.has(key),
+      adoptedRunID: adoptedCandidateBySlot.get(key),
+      invalidation: invalidatedBySlot.get(key),
+    })
+    const status = state.kind === "running"
       ? "running"
-      : invalidated
-        ? `${invalidated.status.replaceAll("_", " ")} · ${invalidated.reason}`
-        : "queued"
+      : state.kind === "sealed_candidate_adopted"
+        ? "sealed candidate · adopted"
+        : state.kind === "invalidated"
+          ? `${state.status.replaceAll("_", " ")} · ${state.reason}`
+          : "queued"
     return `<tr><td>${slot.case_index}</td><td>${escapeHTML(task)}</td><td>${escapeHTML(slot.profile)}</td><td>${escapeHTML(status)}</td></tr>`
   })
   .join("\n")

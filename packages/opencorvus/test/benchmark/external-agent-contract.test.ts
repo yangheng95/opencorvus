@@ -21,6 +21,7 @@ import {
   missingCompletedBatchProfileReceipts,
   reusableProfileRuns,
   reusableBatchCandidateRunIDs,
+  plannedAutomationBenchSlotState,
   rollingBatchChains,
   paperEvidenceChecks,
   normalizeTrajectory,
@@ -779,6 +780,21 @@ describe("external agent benchmark contract", () => {
         reasons: ["eligible_trial_contract:base:1"],
       }),
     ).toEqual([])
+  })
+
+  test("projects the current recovery plan ahead of historical slot attempts", () => {
+    const invalidation = { status: "invalid_bug", reason: "host_decision_ambiguous" }
+    expect([
+      plannedAutomationBenchSlotState({ active: true, adoptedRunID: "run-clean", invalidation }),
+      plannedAutomationBenchSlotState({ active: false, adoptedRunID: "run-clean", invalidation }),
+      plannedAutomationBenchSlotState({ active: false, invalidation }),
+      plannedAutomationBenchSlotState({ active: false }),
+    ]).toEqual([
+      { kind: "running" },
+      { kind: "sealed_candidate_adopted", run_id: "run-clean" },
+      { kind: "invalidated", ...invalidation },
+      { kind: "queued" },
+    ])
   })
 
   test("accepts profile-phased completed receipts for the final paired matrix", () => {
