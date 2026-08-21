@@ -1662,7 +1662,14 @@ async function buildSystemParts(
   // world-view event-sourced: if the cache diverges, the description still
   // reflects reality.
   const snapshot = await describeTask(task.id)
-  ctx.push(renderTaskDescription(snapshot))
 
-  return { parts: [instructions, ctx.join("\n")], snapshot }
+  // The live Task render is its own part rather than the tail of `ctx`.
+  //
+  // Both are joined with "\n" downstream, so the bytes the Provider receives are
+  // identical either way. What changes is what the Host can observe: as one
+  // block, a prompt fingerprint can only report that `system[k]` moved, which
+  // cannot separate a changed Task state from a changed wake header. That
+  // distinction is the first question the context-economics work has to answer,
+  // and a single block makes it unanswerable.
+  return { parts: [instructions, ctx.join("\n"), renderTaskDescription(snapshot)], snapshot }
 }
