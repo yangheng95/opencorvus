@@ -31,6 +31,7 @@ import {
   summarizeProviderUsageByAgent,
   AUTOMATIONBENCH_SKILL_NAME,
   AUTOMATIONBENCH_SKILL_REF,
+  automationBenchSkillAgentIDs,
   type ProviderUsageRow,
   type SkillMountMatrix,
 } from "./contract"
@@ -932,9 +933,9 @@ async function requestJSON<T>(route: string, init: RequestInit = {}, projectScop
 /**
  * A projected Expert Squad agent sees only the Skills its package manifest grants plus explicit
  * operator mounts, so seeding `.opencorvus/skill/` alone leaves every worker's `skill` call with
- * zero matches. Mount the experimental Skill on every agent the Host reports as mountable through
- * the same public operator route a user would use, then re-read the Host's own matrix and refuse to
- * create the Task unless the projection actually carries it.
+ * zero matches. Mount the experimental Skill only on the profile's exact planning/execution/
+ * readback owners through the same public operator route a user would use, then re-read the Host's
+ * own matrix and refuse to create the Task unless that exact projection carries it.
  */
 async function projectBenchmarkSkill(input: {
   profile: Profile
@@ -942,17 +943,20 @@ async function projectBenchmarkSkill(input: {
 }) {
   const matrixRoute = `/skill/mounts?expertSquadID=${encodeURIComponent(input.profile)}&refresh=true`
   const discovered = await requestJSON<SkillMountMatrix>(matrixRoute)
-  const mountable = (discovered.agents ?? []).filter(
-    (agent) => agent.skill_mountable === true && agent.skill_tool_available === true,
-  )
-  for (const agent of mountable) {
+  const requiredAgentIDs = automationBenchSkillAgentIDs(input.profile)
+  const agentsByID = new Map((discovered.agents ?? []).map((agent) => [String(agent.agent_id ?? ""), agent]))
+  for (const agentID of requiredAgentIDs) {
+    const agent = agentsByID.get(agentID)
+    if (!agent || agent.skill_mountable !== true || agent.skill_tool_available !== true) {
+      throw new Error(`AutomationBench Skill owner ${input.profile}/${agentID} is not physically mountable`)
+    }
     await requestJSON<SkillMountMatrix>("/skill/mount", {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         scope: "project",
         expertSquadID: input.profile,
-        agentID: String(agent.agent_id ?? ""),
+        agentID,
         defaultSkillRef: AUTOMATIONBENCH_SKILL_REF,
         override: true,
       }),

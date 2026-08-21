@@ -427,3 +427,95 @@ The later instruction to rerun AutomationBench from the latest code supersedes t
 constraint for this three-file fix: a formal paper run requires one clean recorded source commit. The production,
 positive-test, and record files are therefore committed together before the new evidence root is created; the two
 unrelated Squad SDK changes remain outside that commit.
+
+## 10. Acceptance semantics and capability-matched tool allocation
+
+### Recall
+
+The latest clean five-case Base run scored 45.1% partial and 1/5 strict. Cases 1 and 2 consumed 4.48M and 7.10M
+tokens respectively but made no business-state write. The sealed transcript, terminal board, AutomationBench event
+ledger, and database snapshot show two coupled failures. First, the acceptance-decomposition prompt turned
+discoverable facts into execution blockers and, for the LinkedIn task, invented a separate targeting/campaign state
+that the available API did not expose. Second, the only Base workflow still dispatched `base-researcher` for local
+API discovery even though its `explore` runtime has no shell, project Skill mount, or command execution. The blocked
+research partition was then repeated by `base-developer`; the first useful business write in successful cases did
+not occur until 47.8% to 56.7% of run time.
+
+The user requires the fix to cover tool allocation as well as Planner, acceptance, scheduler, and Expert Squad
+template prompts. It must remain prompt/package topology, not a Host gate. Do not relax AutomationBench assertions,
+add a call cap, give a read-only identity a generic shell, invent a fallback client, or restart/repeat the currently
+running old-revision cases without a separate instruction. Framework/package changes merge to `v0.0.50beta`;
+benchmark runner, evidence, and dashboards remain on the benchmark branch.
+
+The user then widened the correction explicitly: every Base lock or capability mismatch must be audited across
+Advanced because its larger graph can reproduce the same fault and add new ones. Fix the complete Advanced Tool,
+dynamic-source, dependency, independent-acceptance, and terminal-decision chain before restarting the benchmark. This
+instruction authorizes stopping the old-revision benchmark process while preserving its evidence, then starting a new
+recorded benchmark revision only after implementation, focused verification, independent review, merge, and push.
+
+Materials read: the Base manifest, selector, README, all four Base overlays, runtime-template registry and Tool pools,
+Skill mount resolver and matrix, package topology checker, Base package/catalog tests, Advanced requirement/architect/
+orchestrator/test prompts, portable Expert Squad generator and generated package, benchmark Skill projection code,
+the latest five result files, transcripts, terminal boards, event ledgers, and database snapshots, and this record.
+Repository search confirms `explore` is intentionally not Skill-mountable; `delegated-worker` and `build` are
+Skill-mountable and command-capable; the Base Planner currently inherits the entire delegated-worker Tool pool even
+though its Turn is plan-only. The two dirty Squad SDK files predate this task and remain excluded.
+
+Independent review has not run before implementation. A new independent read-only review is required after focused
+verification and must cover the final diff, capability projections, declared workflow shapes, generated revisions,
+tests, documentation, and the protected dirty-file boundary.
+
+### Root cause and decisions
+
+1. **Unknowns lost their operational type.** A missing fact can be a discovery obligation, a reversible assumption,
+   or a proven hard blocker. The prompt represented all material unknowns as unresolved coverage and downstream Agents
+   treated the word `unresolved` as authority to avoid a supported mutation. Preserve complete acceptance coverage,
+   but require that classification explicitly. A discoverable fact is work, not a terminal verdict.
+2. **Acceptance froze before dynamic authority was read.** Planner criteria remain the canonical allocation contract,
+   but values and obligations derived from a runtime record are discovery-bound until a command-capable owner reads
+   that exact source. Developer maps every material returned field to the requested effect or records why it is not
+   applicable; Tester independently derives the final matrix from the original request, canonical plan, and current
+   authoritative source. This is one plan plus current evidence, not a second plan.
+3. **The workflow ignored physical capability.** Keep `base-researcher` read-only. Add a second declared Base workflow,
+   `planner-execution-verification`, whose graph is Planner -> Developer -> Tester. Select it when required source
+   discovery or verification needs a project Skill, command, local client, browser mutation, or another capability
+   unavailable to Researcher. Keep `planner-parallel-delivery` only when the Researcher can finish its complete
+   partition with its actual projected read/web Tool set.
+4. **The Planner had excessive physical authority.** Keep its `delegated-worker` identity and Skill visibility so it
+   can read methods, but project a plan-only Tool surface: capability discovery, read/glob/code search, web reads,
+   Skill loading, and Artifact tools. Do not project shell, edit, write, patch, or browser mutation. Developer remains
+   the mutation/command owner; Tester retains command/readback tools for independent final-state verification.
+5. **Tool assignment is package data.** Scheduler dispatch prose must name the exact required capability and select an
+   Agent whose projected inventory owns it. The portable generator and generated scheduler prompt receive the same
+   rule so sample Squads cannot allocate a command, Skill, Model Context Protocol tool, browser action, or package tool
+   to an Agent whose manifest/runtime projection does not expose it.
+6. **Advanced needs ordered evidence owners, not more parallel labels.** Add `researched-planned-delivery` when one
+   load-bearing external web-evidence gap must settle before Requirements; do not dispatch Research outside the
+   selected graph. Direct external-state acceptance belongs to command-capable `test-engineer`. The no-shell/client
+   `system-integrity-reviewer` depends on settled Test evidence and independently audits its coverage, source mapping,
+   freshness, and contradictions instead of pretending to repeat the client operation.
+
+### Implementation and acceptance contract
+
+1. Update Base Planner, Developer, Tester, Orchestrator, selector, README, manifest descriptions, and package version.
+   Add and topology-pin the three-node workflow; keep the four-node workflow intact for true read/web research.
+2. Restrict Base Planner's inherited Tool surface in the manifest and assert the resulting positive projected Tool
+   inventory. Assert both declared workflow graphs and their selection contract.
+3. Align Advanced requirements, architecture, implementation, testing, Integrity, and scheduler prompts with
+   discoverable-fact, supported-representation, live-source mapping, and capability-owner semantics. Add the explicit
+   researched non-interface workflow and order Integrity after executable Test evidence in every delivery graph.
+4. Update the portable template generator and generated scheduler prompt with physical Tool allocation requirements;
+   regenerate the template and built-in package revision catalog without absorbing the dirty Squad SDK revision.
+5. Add focused positive package/template tests for exact workflow dependencies, Planner's plan-only Tool surface,
+   dynamic-source acceptance ownership, and scheduler capability matching. Do not add or run UI tests.
+6. Run the focused Base/Advanced/template/catalog tests, the built-in topology checker, package typecheck, docs checker,
+   generated-revision check, and `git diff --check`. Obtain independent read-only review, resolve all valid findings,
+   and repeat affected checks.
+7. Commit and push the benchmark branch, merge only the framework/package/template/spec/test fix into
+   `v0.0.50beta`, verify the complete outgoing commit set, and push. Do not terminate or restart the old benchmark
+   process in this implementation step.
+
+The later benchmark acceptance is a new recorded prompt/package revision. Before resuming the 50-case matrix it must
+show a business-state write for LinkedIn and Wave, dynamic source-field coverage for HelpScout, no Researcher client
+capability failure under the selected workflow, and independently verified final state. Those model runs require a
+separate execution instruction because process control is intentionally outside this code change.

@@ -217,7 +217,7 @@ describe("external agent benchmark contract", () => {
     ).toEqual({ passed: true, selectedWorkflowID: "planned-delivery" })
   })
 
-  test("passes the experimental Skill projection only when every skill-capable agent mounts it", () => {
+  test("passes the experimental Skill projection only for exact profile owners", () => {
     const matrix = (grants: Record<string, { effective: boolean; enabled: boolean | null; reason?: string }>) => ({
       active_profile: "base",
       projection_hash: "hash",
@@ -255,7 +255,7 @@ describe("external agent benchmark contract", () => {
       passed: true,
       mounted_agents: ["base-developer", "base-planner", "base-tester"],
       unmountable_agents: [
-        { agent_id: "base-researcher", base_role: "explore", reason: "base_role_not_skill_mountable" },
+        { agent_id: "base-researcher", base_role: "explore", reason: "profile_role_not_skill_owner" },
         // The scheduler is outside the mount matrix by construction. Recording it keeps the
         // post-run coverage audit's accounted set complete instead of leaving an implicit exemption.
         { agent_id: "orchestrator", base_role: "orchestrator", reason: "scheduler_outside_mount_matrix" },
@@ -291,6 +291,17 @@ describe("external agent benchmark contract", () => {
         matrix: matrix({ ...mounted, "base-tester": { effective: true, enabled: false, reason: "permission_denied" } }),
       }).violations,
     ).toEqual(["not_enabled:base-tester:permission_denied"])
+
+    const physicallyUnavailable = matrix(mounted)
+    physicallyUnavailable.agents = physicallyUnavailable.agents.map((agent) =>
+      agent.agent_id === "base-tester"
+        ? { ...agent, skill_mountable: false, skill_tool_available: false }
+        : agent,
+    )
+    expect(auditSkillProjection({ profile: "base", matrix: physicallyUnavailable })).toMatchObject({
+      passed: false,
+      violations: ["required_agent_not_mountable:base-tester"],
+    })
   })
 
   const infrastructureArtifact = (id: string, gateReason: string) => ({
@@ -533,8 +544,14 @@ describe("external agent benchmark contract", () => {
       ],
       agents: [
         {
-          agent_id: "universal-build",
+          agent_id: "implementation-engineer",
           base_role: "build",
+          skill_mountable: true,
+          skill_tool_available: true,
+        },
+        {
+          agent_id: "test-engineer",
+          base_role: "delegated-worker",
           skill_mountable: true,
           skill_tool_available: true,
         },
@@ -547,12 +564,21 @@ describe("external agent benchmark contract", () => {
       ],
       matrix: [
         {
-          agent_id: "universal-build",
+          agent_id: "implementation-engineer",
+          grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
+        },
+        {
+          agent_id: "test-engineer",
           grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
         },
       ],
     }
-    const transcript = [{ info: { agent: "orchestrator" } }, { info: { agent: "universal-build" } }]
+    const transcript = [
+      { info: { agent: "orchestrator" } },
+      { info: { agent: "source-investigator" } },
+      { info: { agent: "implementation-engineer" } },
+      { info: { agent: "test-engineer" } },
+    ]
     const projection = auditSkillProjection({ profile: "advanced", matrix })
     const coverage = auditDispatchedSkillCoverage({ projection, transcript })
     // Exactly what the runner seals: one audited value written into both files.

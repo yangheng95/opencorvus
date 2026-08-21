@@ -1108,15 +1108,33 @@ export function auditSkillProjection(input: {
     ]),
   )
   const pool = (input.matrix.skills ?? []).find((skill) => skill.ref === skillRef)
+  const requiredAgentIDs = automationBenchSkillAgentIDs(input.profile)
+  const requiredAgents = new Set(requiredAgentIDs)
+  const observedAgents = new Set((input.matrix.agents ?? []).map((agent) => String(agent.agent_id ?? "")))
   const mounted: string[] = []
   const unmountable: Array<{ agent_id: string; base_role: string; reason: string }> = []
   const violations: string[] = []
   for (const agent of input.matrix.agents ?? []) {
     const agentID = String(agent.agent_id ?? "")
     const baseRole = String(agent.base_role ?? "")
+    const grant = grantsByAgent.get(agentID)
+    if (!requiredAgents.has(agentID)) {
+      if (grant?.effective === true) violations.push(`unexpected_effective:${agentID}`)
+      unmountable.push({
+        agent_id: agentID,
+        base_role: baseRole,
+        reason: "profile_role_not_skill_owner",
+      })
+      continue
+    }
     // An `explore` runtime template is neither Skill-mountable nor projected the `skill` Tool at
     // all, so demanding the mount there would be a fail-closed check no profile can ever pass.
     if (agent.skill_mountable !== true || agent.skill_tool_available !== true) {
+      violations.push(
+        agent.skill_mountable !== true
+          ? `required_agent_not_mountable:${agentID}`
+          : `required_agent_skill_tool_unavailable:${agentID}`,
+      )
       unmountable.push({
         agent_id: agentID,
         base_role: baseRole,
@@ -1124,7 +1142,6 @@ export function auditSkillProjection(input: {
       })
       continue
     }
-    const grant = grantsByAgent.get(agentID)
     if (grant?.effective !== true) {
       violations.push(`not_effective:${agentID}`)
       continue
@@ -1134,6 +1151,9 @@ export function auditSkillProjection(input: {
       continue
     }
     mounted.push(agentID)
+  }
+  for (const agentID of requiredAgentIDs) {
+    if (!observedAgents.has(agentID)) violations.push(`required_agent_missing:${agentID}`)
   }
   if (input.matrix.active_profile !== input.profile) violations.push("profile_mismatch")
   if (!pool) violations.push("skill_absent_from_pool")
@@ -1161,11 +1181,18 @@ export function auditSkillProjection(input: {
     skill_name: skillName,
     skill_ref: skillRef,
     profile: input.profile,
+    required_agents: requiredAgentIDs,
     projection_hash: typeof input.matrix.projection_hash === "string" ? input.matrix.projection_hash : null,
     mounted_agents: mounted.sort(),
     unmountable_agents: unmountable.sort((left, right) => left.agent_id.localeCompare(right.agent_id)),
     violations,
   }
+}
+
+export function automationBenchSkillAgentIDs(profile: string): string[] {
+  if (profile === "base") return ["base-developer", "base-planner", "base-tester"]
+  if (profile === "advanced") return ["implementation-engineer", "test-engineer"]
+  return []
 }
 
 export const SCHEDULER_AGENT_ID = "orchestrator"
