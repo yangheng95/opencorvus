@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { LLM } from "@/session/llm"
 import {
   comparePromptComposition,
@@ -172,5 +173,36 @@ describe("prompt composition fingerprint", () => {
     // A Tool whose schema cannot be unwrapped contributes its description only,
     // rather than throwing and taking the whole request's fingerprint with it.
     expect(payloads[1]!.text).toBe("No schema")
+  })
+
+  test("keeps unchanged owner semantics byte-stable across prompt activity", () => {
+    const renderAtActivity = (lastActivityMs: number) => {
+      // Preserve the legacy runtime input in this regression so a raw activity timestamp
+      // reaching the renderer changes the bytes and fails the stability contract.
+      const owner = {
+        session_id: "ses_worker",
+        session_kind: "base-developer",
+        lifecycle_status: "streaming" as const,
+        last_activity_ms: lastActivityMs,
+      }
+      const task: TaskDesc = {
+        id: "tsk_cache_stability",
+        title: "Cache-stable owner projection",
+        status: "in_progress",
+        source: "operator",
+        request: "Keep semantic prompt-owner state stable.",
+        goals: [],
+        current_process_prompt_owners: [owner],
+        budget: { max_executor_groups: 1 },
+      }
+      return renderTaskDescription(task)
+    }
+
+    const beforeActivity = renderAtActivity(1_000)
+    const afterActivity = renderAtActivity(2_000)
+    const ownerLine = "- session=ses_worker; kind=base-developer; lifecycle=streaming"
+
+    expect(beforeActivity).toContain(ownerLine)
+    expect(afterActivity).toBe(beforeActivity)
   })
 })

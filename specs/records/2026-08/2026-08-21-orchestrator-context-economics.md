@@ -350,3 +350,80 @@ The next decision happens only after a clean instrumented baseline:
 3. Propose the smallest rule-compliant removal or split that preserves every-step Task freshness
    and real message authority.
 4. Run a paired A/B before making it the active Phase 1 implementation.
+
+## 9. Phase 1 prompt-owner activity fix
+
+### Recall
+
+The user supplied 25-run evidence naming the first divergence: while a worker owns a prompt, raw
+`last_activity_ms` changes inside the live Task render on nearly every Provider step. They asked for one focused fix
+that preserves the block's decision signal, makes unchanged semantics byte-stable, adds a regression test, audits
+`renderTaskDescription` and `buildSystemParts` for similar current-process volatility, and runs the focused test plus
+`bunx tsc --noEmit`. They explicitly required the two pre-existing generated/Squad changes to remain untouched and
+the completed fix to remain uncommitted.
+
+Acceptance is an identical Task-render string when only legacy prompt activity changes, with session identity, kind,
+and lifecycle still rendered. The test must fail on the old code and pass on the fix. No fallback, compatibility shim,
+age-from-now bucket, Host gate, broad formatter run, benchmark edit, commit, or push is in scope.
+
+Materials read for this implementation: the prompt projection and full renderer in `engine/describe.ts`; the
+process-owner source in `engine/store.ts` and `engine/model.ts`; activity writes in `session/prompt/state.ts`; complete
+system construction in `orchestrator/agent.ts`; the physical join in `session/llm.ts`; the prompt-composition tests;
+and this context-economics record. Repository search found one `last_activity_ms` producer and renderer. The underlying
+`OwnedPromptSession.lastActivityMs` also serves public API and task-control diagnostics, which are not prompt inputs.
+
+Independent review had not run before implementation. The repository-required post-verification read-only review is
+recorded below before handoff.
+
+### Root cause and decision
+
+`SessionPromptState` advances activity with `Date.now()`, `store.ts` exposes it as `lastActivityMs`, and the
+prompt-specific owner projection renamed it to `last_activity_ms`. `LLM.stream` joins that system block ahead of the
+conversation, so non-semantic telemetry invalidated the whole conversation prefix. Earlier fingerprint work exposed
+the divergence but was observability-only and intentionally kept Provider request bytes unchanged.
+
+Choose option (a): remove the timestamp from the prompt-specific descriptor and rendered line. The prompt explicitly
+says ownership is not execution and directs the model to use `lifecycle`; session identity and kind provide the rest
+of the ownership context. A stable category would introduce a new, unrequested scheduling signal and could change
+Orchestrator judgment. The public `OwnedPromptSession.lastActivityMs` remains the single source for non-prompt API and
+diagnostic consumers.
+
+### Impact and audit
+
+The change is confined to the prompt-specific owner descriptor, its mapper, the rendered owner line, and a renderer
+regression. Definitions and callers confirm no other consumer reads the removed prompt field.
+
+`buildSystemParts` contains no wall-clock read. Its wake timestamps come from the fixed ingress event, while runtime
+directory, projected identities, and prompt profile change only when their semantic inputs change.
+`renderTaskDescription` contains no other `Date.now()` or age-from-now calculation. Its other timestamps are durable
+event, message, failure, request, tool-call, and scheduled-wait facts. Owner presence/lifecycle and the owner-dependent
+unfinished-tool-call projection can change with current process state, but those are semantic state transitions rather
+than a continuously advancing current-process value. No unrelated prompt fact is changed.
+
+### Plan and verification contract
+
+1. Remove the raw timestamp from `CurrentProcessPromptOwnerDesc`, its mapping, and the owner line; keep a code comment
+   at the rendering boundary explaining the prefix-cache reason.
+2. Add a focused regression using two otherwise-identical owner snapshots with different legacy activity values;
+   assert equal bytes and the retained lifecycle-bearing line.
+3. Run `bun run test test/prompt-composition-fingerprint.test.ts`, `bunx tsc --noEmit`, `bun run docs:check`, and exact
+   diff/status checks.
+4. Obtain independent read-only review, resolve valid findings, and rerun affected checks.
+
+### Verification and independent review
+
+The focused regression was first run against the old renderer: nine existing assertions passed and the new assertion
+failed solely because the rendered line changed from `last_activity_ms=1000` to `last_activity_ms=2000`. After the
+production edit, `bun run test test/prompt-composition-fingerprint.test.ts` passed all 10 tests and 39 assertions.
+`bunx tsc --noEmit` passed, `bun run docs:check` passed with 331 operations across 25 groups, and the scoped
+`git diff --check` passed.
+
+The independent read-only review found no unresolved issues. It confirmed that the prompt-specific field and mapper
+were removed while the public API/diagnostic timestamp source remained intact, the positive regression would fail on
+the old renderer, the lifecycle-bearing signal remains visible, the volatility audit is accurate, added lines stay
+within 120 columns, and the two user-owned worktree files remain outside the task diff.
+
+The later instruction to rerun AutomationBench from the latest code supersedes the earlier uncommitted-handoff
+constraint for this three-file fix: a formal paper run requires one clean recorded source commit. The production,
+positive-test, and record files are therefore committed together before the new evidence root is created; the two
+unrelated Squad SDK changes remain outside that commit.
