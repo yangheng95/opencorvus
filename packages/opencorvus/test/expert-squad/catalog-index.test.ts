@@ -565,7 +565,7 @@ describe("Expert Squad catalog index", () => {
     })
     expect(detail).toMatchObject({
       id: "evolution-lab",
-      installations: [{ installationScope: "project", installedVersion: "2026.08.18.1" }],
+      installations: [{ installationScope: "project", installedVersion: "2026.08.19.1" }],
     })
   }, 0)
 
