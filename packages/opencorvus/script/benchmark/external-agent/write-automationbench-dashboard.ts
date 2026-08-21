@@ -170,6 +170,7 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
   readJSON<{
     generated_at?: number
     attempts?: CatalogAttempt[]
+    candidates?: DashboardRecord[]
     leaderboard?: DashboardRecord[]
     primary_leaderboard?: DashboardRecord[]
     public_context?: PublicContext
@@ -273,6 +274,10 @@ const adoptedCandidateBySlot = new Map(
     ] as const),
   ),
 )
+const adoptedRunIDs = new Set(adoptedCandidateBySlot.values())
+const adoptedRecords = (catalog?.candidates ?? []).filter(
+  (record) => adoptedRunIDs.has(String(record.run_id)) && profiles.includes(record.opencorvus.profile),
+)
 /**
  * A planned slot whose run was invalidated is not a slot that has yet to run.
  *
@@ -284,7 +289,7 @@ const adoptedCandidateBySlot = new Map(
 const invalidatedBySlot = new Map<string, { status: string; reason: string; startedAt: number }>()
 for (const attempt of catalog?.attempts ?? []) {
   const status = String(attempt.evidence_status ?? "")
-  if (status !== "invalid_bug" && status !== "invalid_evidence") continue
+  if (!status || status === "scored" || status === "sealed_candidate") continue
   const profile = attempt.opencorvus?.profile
   if (!profile || !profiles.includes(profile)) continue
   const key = slotKey(attempt.benchmark?.case_index, profile)
@@ -294,7 +299,10 @@ for (const attempt of catalog?.attempts ?? []) {
   invalidatedBySlot.set(key, { status, reason: String(attempt.reason ?? ""), startedAt })
 }
 const planned = plan?.waves.flat() ?? []
-const displayRecords = [...verified]
+const displayRecords = [
+  ...verified,
+  ...adoptedRecords.filter((record) => !verifiedRunIDs.has(String(record.run_id))),
+]
 for (const slot of planned) {
   const key = slotKey(slot.case_index, slot.profile)
   if (!verifiedBySlot.has(key) && pendingBySlot.has(key)) displayRecords.push(pendingBySlot.get(key)!)
@@ -331,7 +339,11 @@ const officialRows = catalog?.public_context?.rows ?? []
 const resultRows = displayRecords
   .map((record) => {
     const metrics = record.benchmark.metrics
-    const status = verifiedRunIDs.has(String(record.run_id)) ? "verified" : "sealed · pending catalog"
+    const status = verifiedRunIDs.has(String(record.run_id))
+      ? "verified"
+      : adoptedRunIDs.has(String(record.run_id))
+        ? "sealed candidate · adopted"
+        : "sealed · pending catalog"
     return `<tr>
       <td>${integer(record.benchmark.case_index)}</td>
       <td>${escapeHTML(record.benchmark.task)}</td>
@@ -348,22 +360,22 @@ const resultRows = displayRecords
   .join("\n")
 
 const plannedRows = planned
-  .filter((slot) => !verifiedBySlot.has(slotKey(slot.case_index, slot.profile)) && !pendingBySlot.has(slotKey(slot.case_index, slot.profile)))
+  .filter((slot) => {
+    const key = slotKey(slot.case_index, slot.profile)
+    return !verifiedBySlot.has(key) && !pendingBySlot.has(key) && !adoptedCandidateBySlot.has(key)
+  })
   .map((slot) => {
     const task = plan?.cases.find((item) => item.case_index === slot.case_index)?.task ?? ""
     const key = slotKey(slot.case_index, slot.profile)
     const state = plannedAutomationBenchSlotState({
       active: activeSlots.has(key),
-      adoptedRunID: adoptedCandidateBySlot.get(key),
       invalidation: invalidatedBySlot.get(key),
     })
     const status = state.kind === "running"
       ? "running"
-      : state.kind === "sealed_candidate_adopted"
-        ? "sealed candidate · adopted"
-        : state.kind === "invalidated"
-          ? `${state.status.replaceAll("_", " ")} · ${state.reason}`
-          : "queued"
+      : state.kind === "invalidated"
+        ? `${state.status.replaceAll("_", " ")} · ${state.reason}`
+        : "queued"
     return `<tr><td>${slot.case_index}</td><td>${escapeHTML(task)}</td><td>${escapeHTML(slot.profile)}</td><td>${escapeHTML(status)}</td></tr>`
   })
   .join("\n")
@@ -373,6 +385,7 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="10">
   <title>AutomationBench · OpenCorvus profiles</title>
   <style>
     :root { color-scheme: light dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background:#f6f7f9; color:#172033; }

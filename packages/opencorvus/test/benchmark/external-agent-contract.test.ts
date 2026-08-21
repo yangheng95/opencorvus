@@ -782,16 +782,14 @@ describe("external agent benchmark contract", () => {
     ).toEqual([])
   })
 
-  test("projects the current recovery plan ahead of historical slot attempts", () => {
+  test("projects active and terminal attempts ahead of an unstarted planned slot", () => {
     const invalidation = { status: "invalid_bug", reason: "host_decision_ambiguous" }
     expect([
-      plannedAutomationBenchSlotState({ active: true, adoptedRunID: "run-clean", invalidation }),
-      plannedAutomationBenchSlotState({ active: false, adoptedRunID: "run-clean", invalidation }),
+      plannedAutomationBenchSlotState({ active: true, invalidation }),
       plannedAutomationBenchSlotState({ active: false, invalidation }),
       plannedAutomationBenchSlotState({ active: false }),
     ]).toEqual([
       { kind: "running" },
-      { kind: "sealed_candidate_adopted", run_id: "run-clean" },
       { kind: "invalidated", ...invalidation },
       { kind: "queued" },
     ])
