@@ -636,7 +636,6 @@ export function auditBatchEvidence(input: {
     const expectedSlot = (input.plan.waves?.[item.waveIndex - 1] as BatchPlanSlot[] | undefined)?.some(
       (slot) => slot.case_index === item.case_index && slot.profile === item.profile,
     )
-    if (input.receipt.status === "failed" && (!item.run_id || attempt?.raw_leaderboard_eligible !== true)) continue
     if (
       !attempt ||
       attempt.benchmark?.batch_run_id !== input.plan.batch_run_id ||
@@ -651,13 +650,25 @@ export function auditBatchEvidence(input: {
       reasons.push(`launched_trial:${item.profile}:${item.case_index}`)
       continue
     }
+    const startedAt = attempt.started_at
+    const finishedAt = attempt.finished_at
+    if (
+      typeof startedAt !== "number" ||
+      typeof finishedAt !== "number" ||
+      !Number.isFinite(startedAt) ||
+      !Number.isFinite(finishedAt) ||
+      finishedAt < startedAt
+    ) {
+      reasons.push(`launched_interval:${item.profile}:${item.case_index}`)
+      continue
+    }
     launchedRunIDs.add(String(item.run_id))
     intervals.push({
       profile: item.profile,
       waveIndex: item.waveIndex,
       caseIndex: item.case_index,
-      start: Number(attempt.started_at),
-      end: Number(attempt.finished_at),
+      start: startedAt,
+      end: finishedAt,
     })
   }
   for (const waveIndex of waveIndexes) {
@@ -678,7 +689,6 @@ export function auditBatchEvidence(input: {
     const currentBatch = attempt?.benchmark?.batch_run_id === input.plan.batch_run_id
     if (
       !attempt ||
-      attempt.raw_leaderboard_eligible !== true ||
       attempt.benchmark?.case_index !== item.case_index ||
       attempt.opencorvus?.profile !== item.profile ||
       !expectedSlot ||
@@ -691,7 +701,11 @@ export function auditBatchEvidence(input: {
           adopted.profile !== item.profile ||
           attempt.leaderboard_eligible !== true)
     ) {
-      reasons.push(`eligible_trial:${item.profile}:${item.case_index}`)
+      reasons.push(`eligible_trial_contract:${item.profile}:${item.case_index}`)
+      continue
+    }
+    if (attempt.raw_leaderboard_eligible !== true) {
+      reasons.push(`eligible_trial_raw_invalid:${item.profile}:${item.case_index}`)
       continue
     }
     eligibleRunIDs.add(String(item.run_id))
@@ -748,6 +762,34 @@ export function auditBatchEvidence(input: {
     sealing_run_ids: [...sealingRunIDs].sort(),
     adopted_run_ids: [...adoptedRunIDs].sort(),
   }
+}
+
+/**
+ * Runs whose own raw evidence is still sealed when a sibling is invalidated
+ * after the original batch receipt was written.
+ *
+ * `auditBatchEvidence` intentionally rejects the old receipt because it claimed
+ * the now-invalid sibling as eligible. That does not erase the exact launch and
+ * per-run seal of another run in the same receipt. Reuse is safe only when the
+ * receipt has no structural, identity, coverage, or concurrency violation: the
+ * only permitted audit reasons are the post-hoc invalid eligible claims, and a
+ * run enters this list only if the audit already retained it in
+ * `sealing_run_ids`.
+ */
+export function reusableBatchCandidateRunIDs(audit: {
+  passed?: boolean
+  reasons?: unknown
+  sealing_run_ids?: unknown
+}): string[] {
+  const sealingRunIDs = Array.isArray(audit.sealing_run_ids)
+    ? audit.sealing_run_ids.filter((runID): runID is string => typeof runID === "string").sort()
+    : []
+  if (audit.passed === true) return sealingRunIDs
+  const reasons = Array.isArray(audit.reasons)
+    ? audit.reasons.filter((reason): reason is string => typeof reason === "string")
+    : []
+  if (reasons.length === 0 || !reasons.every((reason) => reason.startsWith("eligible_trial_raw_invalid:"))) return []
+  return sealingRunIDs
 }
 
 export function paperEvidenceChecks(input: {

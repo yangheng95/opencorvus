@@ -10,6 +10,7 @@ import {
   auditTerminalQuiescence,
   evidenceFileSetMatches,
   missingCompletedBatchProfileReceipts,
+  reusableBatchCandidateRunIDs,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
   summarizeProviderUsageRows,
@@ -533,7 +534,7 @@ const verifiedBatches = await Promise.all(
         planSHA256,
         receipt,
         audit,
-        referencedRunIDs: new Set((audit.sealing_run_ids ?? []).map(String)),
+        referencedRunIDs: new Set(reusableBatchCandidateRunIDs(audit)),
         eligibleRunIDs: new Set((audit.eligible_run_ids ?? []).map(String)),
         adoptedRunIDs: (audit.adopted_run_ids ?? []).map(String),
       }
@@ -547,7 +548,6 @@ for (let pass = 0; pass < verifiedBatches.length; pass++) {
       verifiedBatches.some(
         (candidate) =>
           candidate.batchRunID !== batch.batchRunID &&
-          candidate.audit.passed === true &&
           candidate.referencedRunIDs.has(runID),
       ),
     )

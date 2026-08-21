@@ -20,6 +20,7 @@ import {
   executeRollingBatchChains,
   missingCompletedBatchProfileReceipts,
   reusableProfileRuns,
+  reusableBatchCandidateRunIDs,
   rollingBatchChains,
   paperEvidenceChecks,
   normalizeTrajectory,
@@ -714,6 +715,70 @@ describe("external agent benchmark contract", () => {
       sealing_run_ids: launched.map((item) => item.run_id).sort(),
       adopted_run_ids: [],
     })
+  })
+
+  test("preserves clean sealed candidates when later Host faults invalidate sibling claims", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const launched = wave.map((item) => ({ ...item, run_id: `base-${item.case_index}` }))
+    const attempts = launched.map((item) => ({
+      run_id: item.run_id,
+      raw_leaderboard_eligible: item.case_index === 3 || item.case_index === 4,
+      leaderboard_eligible: item.case_index === 3 || item.case_index === 4,
+      started_at: 100,
+      finished_at: 200 + item.case_index,
+      benchmark: {
+        batch_run_id: "batch-posthoc-host-fault",
+        batch_plan_sha256: "posthoc-plan-sha",
+        wave_index: 1,
+        case_index: item.case_index,
+      },
+      opencorvus: { profile: "base" },
+    }))
+    const audit = auditBatchEvidence({
+      plan: {
+        batch_run_id: "batch-posthoc-host-fault",
+        trial_concurrency: 5,
+        schedule_mode: "rolling_case_slots_v1",
+        profiles: ["base"],
+        cases,
+        waves: [wave],
+        preexisting_eligible: { base: [], advanced: [] },
+      },
+      receipt: {
+        batch_run_id: "batch-posthoc-host-fault",
+        status: "failed",
+        wave_1: { launched, eligible: launched },
+      },
+      attempts,
+      planSHA256: "posthoc-plan-sha",
+    })
+
+    expect({
+      passed: audit.passed,
+      reasons: audit.reasons,
+      reusable: reusableBatchCandidateRunIDs(audit),
+    }).toEqual({
+      passed: false,
+      reasons: [
+        "eligible_trial_raw_invalid:base:1",
+        "eligible_trial_raw_invalid:base:2",
+        "eligible_trial_raw_invalid:base:5",
+      ],
+      reusable: ["base-3", "base-4"],
+    })
+    expect(
+      reusableBatchCandidateRunIDs({
+        ...audit,
+        reasons: [...audit.reasons, "rolling_concurrency"],
+      }),
+    ).toEqual([])
+    expect(
+      reusableBatchCandidateRunIDs({
+        ...audit,
+        reasons: ["eligible_trial_contract:base:1"],
+      }),
+    ).toEqual([])
   })
 
   test("accepts profile-phased completed receipts for the final paired matrix", () => {

@@ -11,6 +11,7 @@ import {
   auditTaskOutcome,
   auditTerminalQuiescence,
   auditBatchEvidence,
+  reusableBatchCandidateRunIDs,
   permanentRunInvalidation,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
@@ -711,7 +712,7 @@ const batchAudits = await Promise.all(
         .catch(() => undefined)
       const planSHA256 = crypto.createHash("sha256").update(planBytes).digest("hex")
       const audit = auditBatchEvidence({ plan, receipt, waveCompletion, attempts: records, planSHA256 })
-      const referencedRunIDs = new Set((audit.sealing_run_ids ?? []).map(String))
+      const referencedRunIDs = new Set(reusableBatchCandidateRunIDs(audit))
       return {
         batch_run_id: plan.batch_run_id,
         batch_index: plan.batch_index,
@@ -732,7 +733,6 @@ for (let pass = 0; pass < batchAudits.length; pass++) {
       batchAudits.some(
         (candidate) =>
           candidate.batch_run_id !== batch.batch_run_id &&
-          candidate.audit.passed === true &&
           candidate.referenced_run_ids.includes(runID),
       ),
     )
@@ -750,8 +750,7 @@ for (let pass = 0; pass < batchAudits.length; pass++) {
 }
 for (const record of records.filter((item) => item.leaderboard_eligible)) {
   const candidateBatch = batchAudits.find(
-    (item) =>
-      item.receipt_present && item.referenced_run_ids.includes(String(record.run_id)) && item.audit.passed === true,
+    (item) => item.receipt_present && item.referenced_run_ids.includes(String(record.run_id)),
   )
   record.batch_candidate_eligible = candidateBatch !== undefined
   const completedBatch = batchAudits.find(
