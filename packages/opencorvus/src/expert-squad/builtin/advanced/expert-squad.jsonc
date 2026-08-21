@@ -5,7 +5,7 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with retained Requirements-to-Architect traceability and parallel investigation, implementation, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.20.2",
+  "version": "2026.08.21.1",
   "product_pillars": [
     "code",
     "work"
@@ -403,7 +403,7 @@
           },
           "requirement-engineer": {
             "agent_id": "requirement-engineer",
-            "description": "Registers falsifiable requirements and foundational decisions from current evidence.",
+            "description": "Inventories every Task element and registers complete falsifiable requirements and foundational decisions from current evidence.",
             "depends_on": []
           },
           "source-investigator": {
@@ -413,7 +413,7 @@
           },
           "solution-architect": {
             "agent_id": "solution-architect",
-            "description": "Joins exact intent, RequirementSet, and repository evidence into traceable contracts, immutable Delivery Slice revisions, and assembly ownership.",
+            "description": "Joins exact intent, RequirementSet, and repository evidence into traceable contracts, individually observable acceptance specs, immutable Delivery Slice revisions, and assembly ownership.",
             "depends_on": [
               "request-interpreter",
               "requirement-engineer",

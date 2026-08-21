@@ -26,7 +26,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.20.2")
+    expect(loaded.manifest.version).toBe("2026.08.21.1")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -81,12 +81,25 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
       "derive the obligations yourself, including the ones no implementation Artifact mentions",
     )
+    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain("complete Task-element analysis")
+    expect(loaded.promptProfile.agents["solution-architect"]).toContain(
+      "individually falsifiable Slice-local acceptance specs",
+    )
+    expect(loaded.promptProfile.agents["orchestrator"]).toContain(
+      "exact current RequirementSet and Architect/Delivery Slice acceptance-spec Artifacts",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "record passed, failed, or unresolved with exact evidence",
+    )
+    expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
+      "record passed, failed, or unresolved",
+    )
   })
 
   test("orders Base verification behind implementation while research stays parallel", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.20.3")
+    expect(loaded.manifest.version).toBe("2026.08.21.1")
     // Verification cannot race the mutation it checks: an AutomationBench Base trial failed its
     // Task with "No post was created" after the Tester verified a pre-mutation world.
     expect(workflowNodes(loaded, "planner-parallel-delivery")).toEqual({
@@ -111,6 +124,13 @@ describe("built-in interface review workflow authority", () => {
     // Developer's blind spots and the scope fix above is undone.
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "that ordering is not a handoff, and you do not consume the Researcher's or Developer's report as your scope",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain("explicit Task-element analysis")
+    expect(loaded.promptProfile.agents["orchestrator"]).toContain(
+      "complete read/select coverage of every `AC-N`",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "criterion-by-criterion coverage for every planned `AC-N`",
     )
   })
 

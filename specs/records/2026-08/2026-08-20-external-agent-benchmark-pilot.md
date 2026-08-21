@@ -359,6 +359,28 @@ The persisted claim belongs at the existing Tool execution-integrity boundary. A
 
 The conflict error now names what was expected and what arrived, and says to end the Turn — the model reads it, and a bare statement that two Tools cannot be combined is not a next action. Repeated conflicting attempts remain visible model behavior and token evidence rather than becoming hidden Host control flow.
 
+## Acceptance decomposition prompt repair
+
+### Recall
+
+- User correction: Base and Advanced planning must analyze the complete Task into explicit elements and decomposed acceptance criteria; the scheduler must hand those criteria to `base-tester`, `test-engineer`, or the applicable independent acceptance owner.
+- Acceptance: no Host business gate, no hidden assertion exposure, and no benchmark-specific case wording. Base continues to use the one canonical `base/implementation-plan`; Advanced continues to use the persisted RequirementSet and Slice-local acceptance specs. Dispatches point consumers to those canonical Artifacts and require complete read/select coverage rather than copying criteria into a second prompt source.
+- Current evidence: clean Base cases 6, 8, and 18 read material policy text yet omitted a required positive side effect. Case 6 selected a decoy Opportunity after failing to resolve the superseding policy; cases 8 and 18 read explicit summary/legal-email requirements but treated “no notification” as safe completion. In contrast, case 20 reached strict pass only after the Tester re-derived concrete missing effects and drove two same-owner repairs.
+- Root cause: the existing prompts require acceptance ownership in broad prose but do not require the Planner/Requirements owner to enumerate stable criterion identities across target identity, source authority and recency, positive effects, negative guards, preservation constraints, routing, formatting, and final-state evidence. The scheduler assigns an acceptance role but does not require its dispatch to consume every canonical criterion. A Tester can therefore verify the implementation-shaped subset and publish a pass while a policy-stated effect is absent.
+- Affected definitions and consumers: Base Planner, Base Orchestrator, Base Tester, Base README/manifest identity; Advanced Requirement Engineer, Solution Architect, Orchestrator, Test Engineer, System Integrity Reviewer, Advanced README/manifest identity; built-in package projection tests and generated package payload/revision stamps. Product Host lifecycle and benchmark scorer contracts are out of scope.
+- Current formal-run boundary: the running AutomationBench Base sequence remains pinned to OpenCorvus commit `9bd2640ce98fddae59cc8879b0dbf43cd8b9089e`. This prompt repair is a new harness revision and is not hot-swapped into an active batch or silently mixed into the current leaderboard configuration.
+- Independent Agent feedback: the post-implementation read-only review found no prompt, DAG, Host-gate, hidden-assertion, test, or version/digest defect. It found one delivery-isolation P1: the shared generated revision module also contains an unrelated `squad-sdk` hunk produced from another Claude/user change. This delivery therefore stages only the Base/Advanced generated hunks and preserves the `squad-sdk` manifest plus generated hunk as unrelated working-tree state.
+
+### Prompt contract
+
+The planning authority must first produce a complete element inventory. Each element records the requested or authoritative source, target identity and scope, authority/recency rule, required positive state change or notification, prohibited/guard state, values and formatting that must be preserved, and the evidence needed to observe the final state. It then decomposes the inventory into stable, individually falsifiable acceptance criteria with an owner and proof method. Unknown material elements remain explicit unresolved coverage; they are not converted into a broad “verify policy” placeholder.
+
+Base persists this inventory and criterion set inside `base/implementation-plan`. The Orchestrator dispatches `base-tester` with instructions to completely read and select that exact plan, verify every criterion against the original request and current authoritative sources, and report criterion-by-criterion pass/fail/unresolved coverage. The dispatch does not copy the criteria. A same-Task repair invalidates affected observations and continues the exact Tester lineage against the current state.
+
+Advanced persists the element inventory as falsifiable `REQ-N` records and foundational decisions. The Solution Architect maps every requirement into Slice-local acceptance specs; no parallel acceptance list is introduced. When dispatching `test-engineer`, `system-integrity-reviewer`, `interface-integrity-reviewer`, or `visual-reviewer`, the Orchestrator names the exact canonical planning/contract Artifacts to discover and requires complete criterion coverage owned by that role. Test and Integrity outputs identify every criterion as passed, failed, or unresolved and may not reduce scope to implementation claims.
+
+Positive contract tests project the built-in packages and assert these current prompt obligations. Generated package payload and revision stamps must be refreshed, exact built-in topology must remain unchanged, and package/type checks must pass.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>

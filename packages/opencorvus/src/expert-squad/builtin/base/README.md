@@ -12,14 +12,14 @@ Execution attempts and dispatch lineage are immutable physical evidence identiti
 
 Base has exactly four projected Agent identities:
 
-- `base-planner` investigates enough current repository state to publish one complete `base/implementation-plan`. The plan assigns non-overlapping paths, shared inputs, evidence obligations, and acceptance ownership to every worker.
+- `base-planner` investigates enough current repository state to publish one complete `base/implementation-plan`. The plan inventories every Task element, decomposes it into stable individually falsifiable `AC-N` acceptance criteria, and assigns non-overlapping paths, shared inputs, evidence obligations, and acceptance ownership to every worker.
 - `base-researcher` executes the plan's read-oriented evidence partition and publishes `base/research-report`. It has no shell and no command execution, so the plan never allocates work to it that must be run.
 - `base-developer` owns the plan's product and generated-output partition, performs implementation-owned checks and real-page inspection when applicable, and publishes `base/development-report`.
 - `base-tester` owns the plan's test/checker partition, may edit only its assigned test and checker paths, runs its focused checks against the settled state, and publishes `base/test-report`. Its acceptance scope is the original request and the authoritative sources that request names, never another worker's account of what it acted on.
 
 Base declares one binding workflow, `planner-parallel-delivery`: the Planner is the single root, `base-researcher` and `base-developer` depend only on that plan and run in the same frontier, and `base-tester` depends on `base-developer`.
 
-That last edge is a declared ordering, not an Artifact handoff. Verification is the one obligation that is meaningless against a moving target: a Tester that runs beside the mutation owner can only observe a half-finished world, and the report it publishes then reads afterwards as a standing claim about a state that no longer exists. The Tester therefore starts once the implementation node has settled — but it still takes its acceptance scope from the original request and the plan, never from the Developer's account of what it did, and it does not consume `base/development-report` as an input to its own scope.
+That last edge is a declared ordering, not an implementation-report handoff. Verification is the one obligation that is meaningless against a moving target: a Tester that runs beside the mutation owner can only observe a half-finished world, and the report it publishes then reads afterwards as a standing claim about a state that no longer exists. The Tester therefore starts once the implementation node has settled. Its dispatch identifies the canonical plan and requires complete read/select coverage of every `AC-N`, while its acceptance scope still comes from the original request and current authoritative sources, never from the Developer's account of what it did; it does not consume `base/development-report` as an input to its own scope.
 
 Research stays parallel because reading does not race the implementation. Workers otherwise do not consume one another's reports and must not invent further serial handoffs.
 

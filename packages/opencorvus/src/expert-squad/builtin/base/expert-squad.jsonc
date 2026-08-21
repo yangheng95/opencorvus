@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Built-in Planner-first Expert Squad for compact delivery through one bounded plan, parallel research and implementation, and verification of the settled result.",
-  "version": "2026.08.20.3",
+  "version": "2026.08.21.1",
   "product_pillars": [
     "code",
     "work"
@@ -178,7 +178,7 @@
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Publishes the complete Task partition, shared inputs, owned paths, and acceptance allocation.",
+            "description": "Publishes the complete Task-element inventory, stable acceptance criteria, shared inputs, owned paths, and acceptance allocation.",
             "depends_on": []
           },
           "base-researcher": {
@@ -197,7 +197,7 @@
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Executes the plan's independent verification partition against the settled result and records exact results.",
+            "description": "Executes every planned acceptance criterion against the settled result and records criterion-by-criterion evidence.",
             "depends_on": [
               "base-developer"
             ]
