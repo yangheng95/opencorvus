@@ -381,6 +381,8 @@ Advanced persists the element inventory as falsifiable `REQ-N` records and found
 
 Positive contract tests project the built-in packages and assert these current prompt obligations. Generated package payload and revision stamps must be refreshed, exact built-in topology must remain unchanged, and package/type checks must pass.
 
+The portable Expert Squad template carries the same scheduler contract for newly authored squads. Its generated scheduler prompt requires the package planning chain to inventory Task elements and persist stable falsifiable criteria, then requires every selected acceptance identity to discover, completely read, and select the exact canonical planning/acceptance Artifacts and report criterion-by-criterion status. Derived schedulers must specialize the acceptance identities without copying a second criterion list into dispatch prose. The generated sample package version advances with the prompt bytes so its published identity cannot reuse the older template content revision.
+
 ## Public references frozen for this pilot
 
 - AutomationBench release and public/private distinction: <https://github.com/zapier/AutomationBench>
