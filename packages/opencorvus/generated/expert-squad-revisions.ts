@@ -10,7 +10,7 @@ export const generatedExpertSquadRevisions: Readonly<
 > = {
   "academic-paper-review": { version: "2026.08.13.1", contentDigest: "04c67bb6a409c94b8834c6d28c19ad7681a80a9d54b98753f50003cc5e0f6441" },
   "actuarial-reserving": { version: "2026.08.13.1", contentDigest: "09337e17d4d95b8c1accc7c80f47fe58a347c9dca51b2cd4303fe441f493aad8" },
-  "advanced": { version: "2026.08.21.1", contentDigest: "0a73b5f74f32b18661144a6ecb37bc6b5e5f8c16f9a97c5b93dd846f7f83af6f" },
+  "advanced": { version: "2026.08.21.4", contentDigest: "daacecc38470bd146c3b40b56e7dd157c28ad0a2ec5aa1824738fe5bfe7027ab" },
   "advertising-measurement-brand-safety": { version: "2026.08.13.1", contentDigest: "661e09a514ed9e9e2dda9dd5be23115855c145ec37e94604f0c3624679d6870d" },
   "agriculture-food-systems": { version: "2026.08.13.1", contentDigest: "ef8481ec692fa5911fdce5864ae2935db3b8c2cc38285b7c066c03d01106688d" },
   "ai-model-governance-evaluation": { version: "2026.08.13.1", contentDigest: "ff004c035f8b9c2c377dc69cf653c984996ad7de341b1f4eddfa1f44c22560c0" },
@@ -18,7 +18,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "anti-money-laundering-compliance": { version: "2026.08.13.1", contentDigest: "b0fac22b99ac68ebe77e952d974e7730a1a4d04df9c80efe0e639d669526043b" },
   "automotive-functional-safety": { version: "2026.08.13.1", contentDigest: "19f71cbf88432ed1dc61d09ce59bbe17d60b33cc1f8f75e15c4188bac609be06" },
   "aviation-maintenance-reliability": { version: "2026.08.13.1", contentDigest: "a513a3626171b4d668dffadde7ae206ed4df489f5c03b1b82b4778b8a62dfdc1" },
-  "base": { version: "2026.08.21.1", contentDigest: "7d8368b476dcae4e2e8025ce7efd516130a78b350ad54beffd7ee1f5b7651806" },
+  "base": { version: "2026.08.21.2", contentDigest: "a1d8f4d21dadbdb9ce776518ac48730abefdd23ac047e6a0f6ac40f79e8f95cc" },
   "battery-safety-reliability": { version: "2026.08.13.1", contentDigest: "80a8430659ed323c5d78007d9eca6f9fe70caa43e37a742d3a3c9bc83776ab67" },
   "biopharmaceutical-manufacturing-quality": { version: "2026.08.13.1", contentDigest: "d2382c5c4deb58d89d0b1e97a68a023bcb844ca4a5682455006f427a2e3db074" },
   "bridge-structural-integrity-assurance": { version: "2026.08.13.1", contentDigest: "c67ccef079131d7cc08aa2e1513a5942d1af105e7b65edb9d810385bc0ec47a5" },

@@ -4,16 +4,16 @@
   "id": "advanced",
   "name": "Advanced",
   "label": "Advanced",
-  "description": "Built-in advanced software delivery team with retained Requirements-to-Architect traceability and parallel investigation, implementation, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.21.1",
+  "description": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
+  "version": "2026.08.21.4",
   "product_pillars": [
     "code",
     "work"
   ],
   "readme": "README.md",
   "selector": {
-    "summary": "Use for advanced software delivery that requires Requirements-to-Architect traceability, parallel investigation and implementation evidence, and independent review without a narrower installed expert contract.",
-    "selection_guidance": "Select advanced when the delivery materially requires the full Requirements, architecture, implementation, testing, interface, investigation, and independent-review contract.",
+    "summary": "Use for advanced software delivery that requires capability-matched Requirements-to-Architect traceability, execution evidence, and independent review without a narrower installed expert contract.",
+    "selection_guidance": "Select advanced when the delivery materially requires the full Requirements, architecture, implementation, testing, interface, investigation, and independent-review contract; choose the researched workflow only when external web evidence must precede Requirements.",
     "instructions": "selector.md"
   },
   "capability_projection": {
@@ -443,9 +443,77 @@
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
-            "description": "Performs independent adversarial review after implementation and workload evidence exist, in parallel with test execution.",
+            "description": "Performs independent adversarial review after implementation, workload, and executable test evidence exist.",
             "depends_on": [
               "implementation-engineer",
+              "test-engineer",
+              "workload-reviewer"
+            ]
+          }
+        }
+      },
+      "researched-planned-delivery": {
+        "label": "Externally Researched Planned Delivery",
+        "description": "Resolve one load-bearing external evidence gap before Requirements and architecture, then implement, independently test, and review a non-interface delivery with capability-matched owners.",
+        "nodes": {
+          "request-interpreter": {
+            "agent_id": "request-interpreter",
+            "description": "Confirms intent, inputs, and scope, explicitly recording when no clarification gap remains.",
+            "depends_on": []
+          },
+          "source-investigator": {
+            "agent_id": "source-investigator",
+            "description": "Investigates repository structure, callers, tests, and ownership boundaries with read-only repository Tools.",
+            "depends_on": []
+          },
+          "research-investigator": {
+            "agent_id": "research-investigator",
+            "description": "Resolves the selected coherent multi-source external fact gap with its projected web research capabilities.",
+            "depends_on": []
+          },
+          "requirement-engineer": {
+            "agent_id": "requirement-engineer",
+            "description": "Registers complete falsifiable requirements after exact intent, repository, and external evidence settle.",
+            "depends_on": [
+              "request-interpreter",
+              "research-investigator",
+              "source-investigator"
+            ]
+          },
+          "solution-architect": {
+            "agent_id": "solution-architect",
+            "description": "Binds the settled RequirementSet and selected evidence into traceable contracts, observable acceptance specs, Delivery Slice revisions, and assembly ownership.",
+            "depends_on": [
+              "requirement-engineer"
+            ]
+          },
+          "workload-reviewer": {
+            "agent_id": "workload-reviewer",
+            "description": "Assesses Slice size, coupling, omitted work, acceptance coverage, and verification cost without architecture authority.",
+            "depends_on": [
+              "solution-architect"
+            ]
+          },
+          "implementation-engineer": {
+            "agent_id": "implementation-engineer",
+            "description": "Uses executable projected capabilities to settle remaining dynamic values and implement the exact Architect contract.",
+            "depends_on": [
+              "solution-architect"
+            ]
+          },
+          "test-engineer": {
+            "agent_id": "test-engineer",
+            "description": "Independently rereads authoritative sources and executes applicable non-UI and runtime checks after implementation settles.",
+            "depends_on": [
+              "implementation-engineer"
+            ]
+          },
+          "system-integrity-reviewer": {
+            "agent_id": "system-integrity-reviewer",
+            "description": "Audits requirement coverage, source mapping, implementation, workload, and executable Test evidence after all settle.",
+            "depends_on": [
+              "implementation-engineer",
+              "test-engineer",
               "workload-reviewer"
             ]
           }
@@ -540,9 +608,10 @@
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
-            "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
+            "description": "Reviews requirement, contract, implementation, workload, and executable test evidence independently of interface review.",
             "depends_on": [
               "implementation-engineer",
+              "test-engineer",
               "workload-reviewer"
             ]
           }
@@ -620,9 +689,10 @@
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
-            "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
+            "description": "Reviews requirement, contract, implementation, workload, and executable test evidence independently of visual and interface review.",
             "depends_on": [
               "implementation-engineer",
+              "test-engineer",
               "workload-reviewer"
             ]
           }
@@ -706,9 +776,10 @@
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
-            "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
+            "description": "Reviews requirement, contract, implementation, workload, and executable test evidence independently of visual and interface review.",
             "depends_on": [
               "implementation-engineer",
+              "test-engineer",
               "workload-reviewer"
             ]
           }
