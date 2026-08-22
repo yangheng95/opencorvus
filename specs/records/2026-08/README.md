@@ -1,11 +1,11 @@
 # August 2026 Records
 
  - [2026-08-22-v0.0.52-beta-release.md](2026-08-22-v0.0.52-beta-release.md) tracks canonical `0.0.52-beta` convergence, the reviewed immutable binary release, public website deployment, and the truthful boundary around the concurrent real Expert Squad demonstration.
- 
+
  - [2026-08-22-website-data-analysis-expert-squad-demo.md](2026-08-22-website-data-analysis-expert-squad-demo.md) records one current-source, real-Provider, real-website, seven-node data-analysis Expert Squad demonstration from Mission submission through the final audited Markdown Artifact.
 
  - [2026-08-22-automationbench-adversarial-acceptance-repair.md](2026-08-22-automationbench-adversarial-acceptance-repair.md) repairs self-referential Tester acceptance, endpoint-versus-data discovery semantics, and Base/Advanced project-Skill capability ownership before restarting the frozen 50+50 AutomationBench matrix on a fresh evidence root.
- 
+
  - [2026-08-21-orchestrator-context-economics.md](2026-08-21-orchestrator-context-economics.md) measures where the AutomationBench Base batch spends uncached tokens, adds fail-closed prompt-composition observation, rejects synthetic tail transport and stale per-turn snapshots, and defers the exact Phase 1 optimisation until a clean run names the first divergent block.
 
 - [2026-08-22-v0.0.51-beta-release.md](2026-08-22-v0.0.51-beta-release.md) tracks the reviewed action-matrix harness repair, canonical `0.0.51-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
