@@ -596,6 +596,7 @@ export function auditMissionEvidenceCollections(input: {
   flattenedInteractions: Array<Record<string, any>>
   resultInteractions: Array<Record<string, any>>
   providerLedger: ProviderUsageRow[]
+  taskTrace: Array<Record<string, any>>
 }) {
   const canonicalInteractions = (items: Array<Record<string, any>>) =>
     [...items].sort(
@@ -670,16 +671,28 @@ export function auditMissionEvidenceCollections(input: {
       ? typeof row.session_id === "string" && allowedSessions.has(row.session_id)
       : knownPurposes.has(row.purpose) && row.session_id === null && row.agent_id === null,
   )
+  const traceSessionIDs = new Set(
+    input.taskTrace.map((event) => event.sessionID).filter((value): value is string => typeof value === "string"),
+  )
+  const taskUsageTraceMatches = input.providerLedger.every(
+    (row) =>
+      row.purpose !== "session" ||
+      row.session_id === input.missionSessionID ||
+      (typeof row.session_id === "string" && traceSessionIDs.has(row.session_id)),
+  )
   const violations = [
     ...(interactionsMatch ? [] : ["mission_task_interactions_mismatch"]),
     ...(ledgerMatches ? [] : ["provider_ledger_snapshot_mismatch"]),
     ...(ledgerSessionsMatch ? [] : ["provider_ledger_session_lineage_mismatch"]),
+    ...(taskUsageTraceMatches ? [] : ["task_provider_usage_trace_coverage_mismatch"]),
   ]
   return {
     passed: violations.length === 0,
     interactions_match: interactionsMatch,
     provider_ledger_snapshot_matches: ledgerMatches,
     provider_ledger_session_lineage_matches: ledgerSessionsMatch,
+    task_provider_usage_trace_coverage_matches: taskUsageTraceMatches,
+    traced_task_session_ids: [...traceSessionIDs].sort(),
     allowed_session_ids: [...allowedSessions].sort(),
     violations,
   }
@@ -2299,6 +2312,61 @@ export function auditPromptCompositionCoverage(traceEvents: unknown[], providerR
     fingerprinted_events: fingerprinted.length,
     session_usage_rows: sessionUsageRows.length,
     request_attempts_without_usage: requestAttemptsWithoutUsage,
+    violations,
+  }
+}
+
+/** Prompt fingerprints exist only on Task-bound AgentTrace; Mission usage remains ledger-only by architecture. */
+export function auditTaskBoundPromptCompositionCoverage(input: {
+  traceEvents: unknown[]
+  providerRows: ProviderUsageRow[]
+  missionSessionID: string
+}) {
+  const traceSessionIDs = new Set(
+    input.traceEvents
+      .map((raw) => (raw as Record<string, any>)?.sessionID)
+      .filter((value): value is string => typeof value === "string"),
+  )
+  const taskSessionUsage = input.providerRows.filter(
+    (row) =>
+      row.purpose === "session" &&
+      row.session_id !== input.missionSessionID &&
+      typeof row.session_id === "string",
+  )
+  const untracedTaskUsage = taskSessionUsage.filter((row) => !traceSessionIDs.has(row.session_id!))
+  const tracedTaskUsage = taskSessionUsage.filter((row) => traceSessionIDs.has(row.session_id!))
+  const hasTaskRequestEvents = input.traceEvents.some(
+    (raw) =>
+      (raw as Record<string, any>)?.kind === "llm_request" &&
+      (raw as Record<string, any>)?.sessionID !== input.missionSessionID,
+  )
+  const coverage = tracedTaskUsage.length > 0 || hasTaskRequestEvents
+    ? auditPromptCompositionCoverage(input.traceEvents, tracedTaskUsage)
+    : {
+        passed: true,
+        request_events: 0,
+        fingerprinted_events: 0,
+        session_usage_rows: 0,
+        request_attempts_without_usage: 0,
+        violations: [] as string[],
+      }
+  const violations = [
+    ...coverage.violations,
+    ...untracedTaskUsage.map((row) => `task_usage_without_task_trace:${row.id}`),
+  ]
+  return {
+    passed: violations.length === 0,
+    scope: "task_bound_agent_trace",
+    mission_session_id: input.missionSessionID,
+    mission_usage_rows: input.providerRows.filter(
+      (row) => row.purpose === "session" && row.session_id === input.missionSessionID,
+    ).length,
+    task_usage_rows: taskSessionUsage.length,
+    traced_task_session_ids: [...traceSessionIDs].sort(),
+    request_events: coverage.request_events,
+    fingerprinted_events: coverage.fingerprinted_events,
+    session_usage_rows: coverage.session_usage_rows,
+    request_attempts_without_usage: coverage.request_attempts_without_usage,
     violations,
   }
 }

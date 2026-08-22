@@ -11,6 +11,7 @@ import {
   auditMissionOutcome,
   auditMissionEvidenceLineage,
   auditMissionEvidenceCollections,
+  auditTaskBoundPromptCompositionCoverage,
   auditMissionQuiescence,
   auditMissionRunBinding,
   auditBatchEvidence,
@@ -313,6 +314,7 @@ async function inspectRawRunEvidence(
       taskInteractions,
       interactions,
       providerLedger,
+      trace,
       benchmarkEvents,
       scorerReplay,
       sandboxAudit,
@@ -328,6 +330,7 @@ async function inspectRawRunEvidence(
       fs.readFile(path.join(directory, "task-interactions.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "opencorvus-interactions.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "provider-usage-ledger.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "opencorvus-trace.json"), "utf8").then(JSON.parse),
       fs
         .readFile(path.join(directory, "automationbench-events.jsonl"), "utf8")
         .then((text) => text.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line))),
@@ -407,7 +410,26 @@ async function inspectRawRunEvidence(
         ? (result.opencorvus as any).interactions
         : [],
       providerLedger,
+      taskTrace: trace,
     })
+    const promptCompositionAudit = auditTaskBoundPromptCompositionCoverage({
+      traceEvents: trace,
+      providerRows: providerLedger,
+      missionSessionID: String(result.opencorvus.mission_session_id ?? ""),
+    })
+    const promptCompositionPassed =
+      promptCompositionAudit.passed &&
+      JSON.stringify((result.opencorvus as any).prompt_composition_audit ?? null) ===
+        JSON.stringify(promptCompositionAudit)
+    const expectedTraceScope = {
+      kind: "task_bound_agent_trace",
+      mission_session_traced: false,
+      mission_usage_preserved_in_provider_ledger: true,
+      traced_session_ids: missionCollectionsAudit.traced_task_session_ids,
+    }
+    const traceScopePassed =
+      Number((result.opencorvus as any).trace_events ?? -1) === trace.length &&
+      JSON.stringify((result.opencorvus as any).trace_scope ?? null) === JSON.stringify(expectedTraceScope)
     const taskOutcomePassed =
       taskOutcomeAudit.passed &&
       JSON.stringify((result.opencorvus as any).mission_outcome_audit ?? null) === JSON.stringify(taskOutcomeAudit)
@@ -486,6 +508,8 @@ async function inspectRawRunEvidence(
       ...(profilePassed ? [] : ["profile_binding_mismatch"]),
       ...(missionLineageAudit.passed ? [] : missionLineageAudit.violations),
       ...(missionCollectionsAudit.passed ? [] : missionCollectionsAudit.violations),
+      ...(promptCompositionPassed ? [] : ["task_prompt_composition_evidence_mismatch"]),
+      ...(traceScopePassed ? [] : ["task_trace_scope_mismatch"]),
       ...(workflowPassed ? [] : ["workflow_binding_mismatch"]),
       ...(taskInfrastructurePassed ? [] : taskInfrastructureAudit.violations),
       ...(taskOutcomePassed ? [] : ["mission_outcome_mismatch"]),
@@ -508,6 +532,9 @@ async function inspectRawRunEvidence(
       profile_passed: profilePassed,
       mission_lineage_audit: missionLineageAudit,
       mission_collections_audit: missionCollectionsAudit,
+      prompt_composition_audit: promptCompositionAudit,
+      prompt_composition_passed: promptCompositionPassed,
+      trace_scope_passed: traceScopePassed,
       mission_outcome_audit: taskOutcomeAudit,
       mission_outcome_passed: taskOutcomePassed,
       terminal_quiescence_audit: terminalQuiescenceAudit,

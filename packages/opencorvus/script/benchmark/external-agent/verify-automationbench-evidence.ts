@@ -9,6 +9,7 @@ import {
   auditMissionOutcome,
   auditMissionEvidenceLineage,
   auditMissionEvidenceCollections,
+  auditTaskBoundPromptCompositionCoverage,
   auditMissionQuiescence,
   auditMissionRunBinding,
   evidenceFileSetMatches,
@@ -376,6 +377,7 @@ for (const attempt of catalog.attempts) {
     taskTranscripts,
     taskInteractions,
     interactions,
+    trace,
     eventText,
     ledger,
     scorerReplay,
@@ -390,6 +392,7 @@ for (const attempt of catalog.attempts) {
     fs.readFile(path.join(directory, "task-transcripts.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "task-interactions.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "opencorvus-interactions.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "opencorvus-trace.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "automationbench-events.jsonl"), "utf8"),
     fs.readFile(path.join(directory, "provider-usage-ledger.json"), "utf8").then(JSON.parse) as Promise<
       ProviderUsageRow[]
@@ -432,7 +435,19 @@ for (const attempt of catalog.attempts) {
     flattenedInteractions: interactions,
     resultInteractions: Array.isArray(payload.opencorvus.interactions) ? payload.opencorvus.interactions : [],
     providerLedger: ledger,
+    taskTrace: trace,
   })
+  const promptCompositionAudit = auditTaskBoundPromptCompositionCoverage({
+    traceEvents: trace,
+    providerRows: ledger,
+    missionSessionID: String(payload.opencorvus.mission_session_id ?? ""),
+  })
+  const expectedTraceScope = {
+    kind: "task_bound_agent_trace",
+    mission_session_traced: false,
+    mission_usage_preserved_in_provider_ledger: true,
+    traced_session_ids: missionCollectionsAudit.traced_task_session_ids,
+  }
   const terminalQuiescenceAudit = auditMissionQuiescence({
     missionRecord: board.mission,
     missionStatus: board.mission_status,
@@ -479,6 +494,11 @@ for (const attempt of catalog.attempts) {
     !taskOutcomeAudit.passed ||
     !missionLineageAudit.passed ||
     !missionCollectionsAudit.passed ||
+    !promptCompositionAudit.passed ||
+    JSON.stringify(promptCompositionAudit) !==
+      JSON.stringify(payload.opencorvus.prompt_composition_audit ?? null) ||
+    Number(payload.opencorvus.trace_events ?? -1) !== trace.length ||
+    JSON.stringify(payload.opencorvus.trace_scope ?? null) !== JSON.stringify(expectedTraceScope) ||
     JSON.stringify(taskOutcomeAudit) !== JSON.stringify(payload.opencorvus.mission_outcome_audit ?? null) ||
     !terminalQuiescenceAudit.passed ||
     JSON.stringify(terminalQuiescenceAudit) !==

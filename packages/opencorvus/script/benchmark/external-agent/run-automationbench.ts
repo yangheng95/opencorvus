@@ -18,7 +18,7 @@ import {
   automationBenchRunValidity,
   canonicalTranscriptOrder,
   auditBenchmarkIsolation,
-  auditPromptCompositionCoverage,
+  auditTaskBoundPromptCompositionCoverage,
   auditDispatchedSkillCoverage,
   auditSkillProjection,
   auditMissionOutcome,
@@ -1045,21 +1045,17 @@ const orderedMessages = canonicalTranscriptOrder
 
 async function observations() {
   if (!missionID || !missionSessionID) throw new Error("Mission has not been created")
-  const [missionStatus, missionRecords, missionTranscript, missionTraceProjection, benchmarkEvents] =
+  const [missionStatus, missionRecords, missionTranscript, benchmarkEvents] =
     await Promise.all([
       requestJSON<Record<string, any>>(`/mission/${missionID}/status`),
       requestJSON<Array<Record<string, any>>>("/mission?limit=100"),
       requestJSON<Array<{ info: Record<string, any>; parts: Array<Record<string, any>> }>>(
         `/session/${missionSessionID}/message`,
       ),
-      requestJSON<{ ok: true; enabled: boolean; traceDir: string; events: Array<Record<string, any>> }>(
-        `/session/${missionSessionID}/trace`,
-      ),
       readJSONLines(bridgeEventsPath),
     ])
   const missionRecord = missionRecords.find((record) => record.missionID === missionID)
   if (!missionRecord) throw new Error(`Mission ${missionID} is missing from the current project projection`)
-  if (!missionTraceProjection.enabled) throw new Error("OpenCorvus AgentTrace is disabled for the benchmark Mission")
   const observedTaskIDs = [
     ...new Set(
       (Array.isArray(missionStatus.tasks) ? missionStatus.tasks : [])
@@ -1097,7 +1093,9 @@ async function observations() {
   taskID = observedTaskIDs[0]
   const taskTranscript = orderedMessages(tasks.flatMap((task) => task.transcript))
   const allTranscript = orderedMessages([...missionTranscript, ...taskTranscript])
-  const trace = [...missionTraceProjection.events, ...tasks.flatMap((task) => task.trace)].sort(
+  // AgentTrace is physically Task-bound: Mission Sessions have no Task trace directory.
+  // Mission Provider calls remain complete in the preserved usage ledger and DB snapshot.
+  const trace = tasks.flatMap((task) => task.trace).sort(
     (left, right) => Number(left.ts ?? 0) - Number(right.ts ?? 0),
   )
   const interactions = tasks.flatMap((task) => task.interactions)
@@ -1707,7 +1705,14 @@ try {
   const transcriptTokens = summarizeTranscriptUsage(terminal.allTranscript)
   const providerUsageLedger = ledgerRows(path.join(isolatedData, "opencorvus.db"))
   const tokens = summarizeProviderUsageRows(providerUsageLedger)
-  const promptCompositionAudit = auditPromptCompositionCoverage(terminal.trace, providerUsageLedger)
+  const tracedSessionIDs = new Set(
+    terminal.trace.map((event) => event.sessionID).filter((value): value is string => typeof value === "string"),
+  )
+  const promptCompositionAudit = auditTaskBoundPromptCompositionCoverage({
+    traceEvents: terminal.trace,
+    providerRows: providerUsageLedger,
+    missionSessionID: missionSessionID!,
+  })
   const promptComposition = analyzePromptComposition(terminal.trace)
   const trajectory = normalizeTrajectory({
     transcript: terminal.allTranscript,
@@ -1892,6 +1897,12 @@ try {
       sessions: new Set(terminal.allTranscript.map((message) => message.info?.sessionID).filter(Boolean)).size,
       agents: [...new Set(terminal.allTranscript.map((message) => message.info?.agent).filter(Boolean))],
       trace_events: terminal.trace.length,
+      trace_scope: {
+        kind: "task_bound_agent_trace",
+        mission_session_traced: false,
+        mission_usage_preserved_in_provider_ledger: true,
+        traced_session_ids: [...tracedSessionIDs].sort(),
+      },
       interactions: terminal.interactions,
     },
     comparison: {

@@ -15,6 +15,7 @@ import {
   permanentRunInvalidation,
   analyzePromptComposition,
   auditPromptCompositionCoverage,
+  auditTaskBoundPromptCompositionCoverage,
   auditDispatchedSkillCoverage,
   auditRunBinding,
   auditSkillEvidenceSeal,
@@ -550,6 +551,22 @@ describe("external agent benchmark contract", () => {
           session_id: "session-a",
           agent_id: "base-developer",
         }, {
+          id: "usage-mission",
+          occurred_at: 6,
+          provider_id: "openai",
+          model_id: "gpt-5.6-luna",
+          purpose: "session",
+          input_tokens: 8,
+          output_tokens: 4,
+          reasoning_tokens: 1,
+          cache_read_tokens: 0,
+          cache_write_tokens: 0,
+          total_tokens: 13,
+          cost_usd: 0,
+          billing_status: "unpriced",
+          session_id: "session-mission",
+          agent_id: "mission",
+        }, {
           id: "usage-helper",
           occurred_at: 7,
           provider_id: "openai",
@@ -612,6 +629,22 @@ describe("external agent benchmark contract", () => {
         session_id: "session-a",
         agent_id: "base-developer",
       }, {
+        id: "usage-mission",
+        occurred_at: 6,
+        provider_id: "openai",
+        model_id: "gpt-5.6-luna",
+        purpose: "session",
+        input_tokens: 8,
+        output_tokens: 4,
+        reasoning_tokens: 1,
+        cache_read_tokens: 0,
+        cache_write_tokens: 0,
+        total_tokens: 13,
+        cost_usd: 0,
+        billing_status: "unpriced",
+        session_id: "session-mission",
+        agent_id: "mission",
+      }, {
         id: "usage-helper",
         occurred_at: 7,
         provider_id: "openai",
@@ -628,11 +661,13 @@ describe("external agent benchmark contract", () => {
         session_id: null,
         agent_id: null,
       }],
+      taskTrace: [{ sessionID: "session-a", kind: "llm_request", ts: 6 }],
     })).toMatchObject({
       passed: true,
       interactions_match: true,
       provider_ledger_snapshot_matches: true,
       provider_ledger_session_lineage_matches: true,
+      task_provider_usage_trace_coverage_matches: true,
     })
   })
 
@@ -886,6 +921,71 @@ describe("external agent benchmark contract", () => {
     // First call has no predecessor, so all 20 of its tokens count as divergent;
     // the second call keeps 20 and adds 10. 20 stable against 30 divergent.
     expect(analysis.stable_prefix_share).toBeCloseTo(0.4, 5)
+  })
+
+  test("accepts a zero-child Mission with ledger usage and no Task-bound trace", () => {
+    const missionUsage: ProviderUsageRow = {
+      id: "usage-mission-only",
+      occurred_at: 1,
+      provider_id: "openai",
+      model_id: "gpt-5.6-luna",
+      purpose: "session",
+      input_tokens: 10,
+      output_tokens: 3,
+      reasoning_tokens: 1,
+      cache_read_tokens: 0,
+      cache_write_tokens: 0,
+      total_tokens: 14,
+      cost_usd: 0,
+      billing_status: "unpriced",
+      session_id: "session-mission",
+      agent_id: "mission",
+    }
+    expect(
+      auditTaskBoundPromptCompositionCoverage({
+        traceEvents: [],
+        providerRows: [missionUsage],
+        missionSessionID: "session-mission",
+      }),
+    ).toMatchObject({
+      passed: true,
+      mission_usage_rows: 1,
+      task_usage_rows: 0,
+      request_events: 0,
+      violations: [],
+    })
+  })
+
+  test("audits a failed Task Provider attempt from its fingerprinted request even without usage", () => {
+    const promptComposition = {
+      blocks: [],
+      systemBlocks: 0,
+      messageBlocks: 0,
+      toolCount: 0,
+      toolNames: [],
+      totalChars: 0,
+      totalTokensEst: 0,
+      compositionSha256: "failed-task-attempt",
+    }
+    expect(
+      auditTaskBoundPromptCompositionCoverage({
+        traceEvents: [{
+          kind: "llm_request",
+          sessionID: "session-task",
+          agentName: "base-developer",
+          payload: { promptComposition },
+        }],
+        providerRows: [],
+        missionSessionID: "session-mission",
+      }),
+    ).toMatchObject({
+      passed: true,
+      task_usage_rows: 0,
+      request_events: 1,
+      fingerprinted_events: 1,
+      request_attempts_without_usage: 1,
+      violations: [],
+    })
   })
 
   test("ignores trace events that carry no fingerprint", () => {
