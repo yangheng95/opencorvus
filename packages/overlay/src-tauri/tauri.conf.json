@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/refs/heads/v2/crates/tauri-cli/schema.json",
   "productName": "OpenCorvus",
-  "version": "0.0.51-beta",
+  "version": "0.0.52-beta",
   "identifier": "ai.opencorvus.overlay",
   "build": {
     "frontendDist": "../dist-vite",
@@ -80,7 +80,7 @@
     ],
     "windows": {
       "wix": {
-        "version": "0.0.51.0"
+        "version": "0.0.52.0"
       },
       "webviewInstallMode": {
         "type": "embedBootstrapper"
