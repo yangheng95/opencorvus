@@ -134,7 +134,7 @@ describe("Data Analysis expert squad package", () => {
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.08.13.1",
+      version: "2026.08.19.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -234,105 +234,89 @@ describe("Data Analysis expert squad package", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
-        const assistantMessage = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "assistant",
-          author: "data-analysis-planner",
-          time: { created: started, completed: started + 1 },
-          parentID: userMessage.id,
-          modelID: "test",
-          providerID: "test",
-          agent: "data-analysis-planner",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
-        })
-        const scope: TaskToolExecutionScope = {
-          kind: "task",
-          projectID: Instance.project.id,
-          projectDirectory: project.path,
-          taskID,
-          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
-          sessionID: session.id,
-          messageID: assistantMessage.id,
-          toolCallID: "call-data-analysis-chain",
-          toolPartID: "part-data-analysis-chain",
-          executionSurface: {},
-          owner: {
-            kind: "projected-worker",
-            expertSquadID: "data-analysis",
-            packageRevision: {
-              scope: "project",
-              projectID: Instance.project.id,
-              namespace: "builtin",
-              id: "data-analysis",
-              version: loaded.manifest.version,
-              packageDigest: loaded.packageDigest,
-            },
-            agentID: "data-analysis-planner",
-            projectionHash: "a".repeat(64),
-            workerTurnDescriptorID: "descriptor-data-analysis-chain",
-            workerTurnDescriptorHash: "b".repeat(64),
-          },
-        }
-        await withTaskScopedPluginToolHost(scope, async (host) => {
-          const charterReceipt = JSON.parse(
-            await publishDataAnalysisArtifact.execute(
-              {
-                artifact: {
-                  artifact_type: "data-analysis/analysis-charter",
-                  payload: samples["data-analysis/analysis-charter"],
-                },
-                resource_set: null,
-                source_artifact_locators: [],
-              },
-              { host } as never,
-            ),
-          ) as { locator: EngineArtifactLocator }
-          ;(scope.owner as { agentID: string }).agentID = "data-analysis-data-steward"
-          const dossierReceipt = JSON.parse(
-            await publishDataAnalysisArtifact.execute(
-              {
-                artifact: {
-                  artifact_type: "data-analysis/data-dossier",
-                  payload: samples["data-analysis/data-dossier"],
-                },
-                resource_set: null,
-                source_artifact_locators: [charterReceipt.locator],
-              },
-              { host } as never,
-            ),
-          ) as { locator: EngineArtifactLocator; artifact_sha256: string }
-          const dossierRead = await host.engineArtifacts.read({
-            locator: dossierReceipt.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+        let invocation = 0
+        const publish = async (
+          artifactType: keyof typeof samples,
+          producer: keyof typeof dependencies,
+          sources: EngineArtifactLocator[],
+          attachReportResource = false,
+        ) => {
+          const created = started + 10 + invocation++ * 10
+          const assistantMessage = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: session.id,
+            role: "assistant",
+            author: producer,
+            time: { created },
+            parentID: userMessage.id,
+            modelID: "test",
+            providerID: "test",
+            agent: producer,
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           })
-          const dossierEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(dossierRead.chunk.text!))
-          expect(dossierEnvelope).toMatchObject({
-            artifact_type: "data-analysis/data-dossier",
-            schema_version: 1,
-            payload: samples["data-analysis/data-dossier"],
-            source_artifact_locators: [charterReceipt.locator],
-            producer: {
-              owner_kind: "projected-worker",
-              expert_squad_id: "data-analysis",
-              agent_id: "data-analysis-data-steward",
-            },
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: session.id,
+            messageID: assistantMessage.id,
+            type: "step-start",
           })
-          expect(dossierReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
-
-          const publish = async (
-            artifactType: keyof typeof samples,
-            producer: keyof typeof dependencies,
-            sources: EngineArtifactLocator[],
-            resourceSet: ReturnType<typeof TaskArtifactResourceSetLocatorSchema.parse> | null = null,
-          ) => {
-            ;(scope.owner as { agentID: string }).agentID = producer
-            return JSON.parse(
+          const toolPart = await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: session.id,
+            messageID: assistantMessage.id,
+            type: "tool",
+            callID: Identifier.ascending("tool"),
+            tool: publisherRef,
+            state: { status: "running", input: {}, time: { start: created + 1 } },
+          })
+          const scope: TaskToolExecutionScope = {
+            kind: "task",
+            projectID: Instance.project.id,
+            projectDirectory: project.path,
+            taskID,
+            taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
+            sessionID: session.id,
+            messageID: assistantMessage.id,
+            toolCallID: toolPart.callID,
+            toolPartID: toolPart.id,
+            executionSurface: {},
+            owner: {
+              kind: "projected-worker",
+              expertSquadID: "data-analysis",
+              packageRevision: {
+                scope: "project",
+                projectID: Instance.project.id,
+                namespace: "builtin",
+                id: "data-analysis",
+                version: loaded.manifest.version,
+                packageDigest: loaded.packageDigest,
+              },
+              agentID: producer,
+              projectionHash: "a".repeat(64),
+              workerTurnDescriptorID: Identifier.ascending("artifact"),
+              workerTurnDescriptorHash: "b".repeat(64),
+            },
+          }
+          return withTaskScopedPluginToolHost(scope, async (host) => {
+            let resourceSet: ReturnType<typeof TaskArtifactResourceSetLocatorSchema.parse> | null = null
+            if (attachReportResource) {
+              const stage = await host.taskArtifacts.stage({ trees: ["data-analysis-delivery"] })
+              await writeFile(
+                path.join(stage.treeDirectories["data-analysis-delivery"]!, "report.md"),
+                "# Operating Insight Report\n",
+              )
+              const publication = await host.taskArtifacts.publish(stage, {
+                snapshot_kind: "catalog",
+                files: [{ tree: "data-analysis-delivery", path: "report.md", media_type: "text/markdown" }],
+              })
+              resourceSet = TaskArtifactResourceSetLocatorSchema.parse({
+                snapshot: publication.snapshot,
+                tree: "data-analysis-delivery",
+              })
+            }
+            const receipt = JSON.parse(
               await publishDataAnalysisArtifact.execute(
                 {
                   artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
@@ -342,69 +326,77 @@ describe("Data Analysis expert squad package", () => {
                 { host } as never,
               ),
             ) as { locator: EngineArtifactLocator; artifact_sha256: string }
-          }
-          const performanceReceipt = await publish(
-            "data-analysis/performance-analysis",
-            "data-analysis-performance-analyst",
-            [dossierReceipt.locator],
-          )
-          const segmentReceipt = await publish("data-analysis/segment-analysis", "data-analysis-segment-analyst", [
-            dossierReceipt.locator,
-          ])
-          const insightReceipt = await publish("data-analysis/insight-brief", "data-analysis-insight-synthesizer", [
-            performanceReceipt.locator,
-            segmentReceipt.locator,
-          ])
-          const auditReceipt = await publish("data-analysis/audit", "data-analysis-fact-checker", [
-            insightReceipt.locator,
-          ])
-          const stage = await host.taskArtifacts.stage({ trees: ["data-analysis-delivery"] })
-          await writeFile(
-            path.join(stage.treeDirectories["data-analysis-delivery"]!, "report.md"),
-            "# Operating Insight Report\n",
-          )
-          const publication = await host.taskArtifacts.publish(stage, {
-            snapshot_kind: "catalog",
-            files: [{ tree: "data-analysis-delivery", path: "report.md", media_type: "text/markdown" }],
+            const read = await host.engineArtifacts.read({
+              locator: receipt.locator,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
+            })
+            return {
+              receipt,
+              envelope: EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!)),
+            }
           })
-          const resourceSet = TaskArtifactResourceSetLocatorSchema.parse({
-            snapshot: publication.snapshot,
-            tree: "data-analysis-delivery",
-          })
-          const reportSources = [
-            charterReceipt.locator,
-            dossierReceipt.locator,
-            performanceReceipt.locator,
-            segmentReceipt.locator,
-            insightReceipt.locator,
-            auditReceipt.locator,
-          ]
-          const reportReceipt = await publish(
-            "data-analysis/report",
-            "data-analysis-report-writer",
-            reportSources,
-            resourceSet,
-          )
-          const reportRead = await host.engineArtifacts.read({
-            locator: reportReceipt.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
-          })
-          const reportEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(reportRead.chunk.text!))
-          expect(reportEnvelope.resources.map((resource) => resource.path)).toEqual(["report.md"])
-          expect(
-            [...reportEnvelope.source_artifact_locators].sort((left, right) =>
-              left.artifact_id.localeCompare(right.artifact_id),
-            ),
-          ).toEqual([...reportSources].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id)))
-          expect(reportEnvelope.producer).toMatchObject({
+        }
+
+        const charter = await publish("data-analysis/analysis-charter", "data-analysis-planner", [])
+        const dossier = await publish("data-analysis/data-dossier", "data-analysis-data-steward", [
+          charter.receipt.locator,
+        ])
+        expect(dossier.envelope).toMatchObject({
+          artifact_type: "data-analysis/data-dossier",
+          schema_version: 1,
+          payload: samples["data-analysis/data-dossier"],
+          source_artifact_locators: [charter.receipt.locator],
+          producer: {
             owner_kind: "projected-worker",
             expert_squad_id: "data-analysis",
-            agent_id: "data-analysis-report-writer",
-          })
-          expect(reportReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
+            agent_id: "data-analysis-data-steward",
+          },
         })
+        expect(dossier.receipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
+
+        const performance = await publish(
+          "data-analysis/performance-analysis",
+          "data-analysis-performance-analyst",
+          [dossier.receipt.locator],
+        )
+        const segment = await publish("data-analysis/segment-analysis", "data-analysis-segment-analyst", [
+          dossier.receipt.locator,
+        ])
+        const insight = await publish("data-analysis/insight-brief", "data-analysis-insight-synthesizer", [
+          performance.receipt.locator,
+          segment.receipt.locator,
+        ])
+        const audit = await publish("data-analysis/audit", "data-analysis-fact-checker", [
+          insight.receipt.locator,
+        ])
+        const reportSources = [
+          charter.receipt.locator,
+          dossier.receipt.locator,
+          performance.receipt.locator,
+          segment.receipt.locator,
+          insight.receipt.locator,
+          audit.receipt.locator,
+        ]
+        const report = await publish(
+          "data-analysis/report",
+          "data-analysis-report-writer",
+          reportSources,
+          true,
+        )
+        expect(report.envelope.resources.map((resource) => resource.path)).toEqual(["report.md"])
+        expect(
+          [...report.envelope.source_artifact_locators].sort((left, right) =>
+            left.artifact_id.localeCompare(right.artifact_id),
+          ),
+        ).toEqual([...reportSources].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id)))
+        expect(report.envelope.producer).toMatchObject({
+          owner_kind: "projected-worker",
+          expert_squad_id: "data-analysis",
+          agent_id: "data-analysis-report-writer",
+        })
+        expect(report.receipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
       },
     })
   }, 120_000)

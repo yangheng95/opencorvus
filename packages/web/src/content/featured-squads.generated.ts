@@ -6,8 +6,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "advanced",
-      "version": "2026.08.21.6",
-      "digest": "9ed6b0451f30f4ffea1666ef4afb5c7faa0dfea11e63100316fbd4d5415df8b7"
+      "version": "2026.08.22.6",
+      "digest": "bdc6db2afdab074f962343d66efeb834b59199abef93b227bdf8fd17f83b0427"
     },
     "displayLabel": {
       "root": "Advanced",

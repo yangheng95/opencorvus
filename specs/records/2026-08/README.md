@@ -1,5 +1,9 @@
 # August 2026 Records
 
+- [2026-08-22-v0.0.52-beta-release.md](2026-08-22-v0.0.52-beta-release.md) tracks canonical `0.0.52-beta` convergence, the reviewed immutable binary release, public website deployment, and the truthful boundary around the concurrent real Expert Squad demonstration.
+
+- [2026-08-22-website-data-analysis-expert-squad-demo.md](2026-08-22-website-data-analysis-expert-squad-demo.md) records one current-source, real-Provider, real-website, seven-node data-analysis Expert Squad demonstration from Mission submission through the final audited Markdown Artifact.
+
 - [2026-08-22-v0.0.51-beta-release.md](2026-08-22-v0.0.51-beta-release.md) tracks the reviewed action-matrix harness repair, canonical `0.0.51-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.
 
 - [2026-08-21-v0.0.50-beta-release.md](2026-08-21-v0.0.50-beta-release.md) records the product-only harness repair, canonical `0.0.50-beta` version convergence, tagged binary publication, and same-source `opencorvus.com` deployment.

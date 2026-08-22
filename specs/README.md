@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+Latest `v0.0.52-beta` application and website release: [`2026-08-22-v0.0.52-beta-release.md`](records/2026-08/2026-08-22-v0.0.52-beta-release.md).
+
+Latest real website data-analysis Expert Squad demonstration: [`2026-08-22-website-data-analysis-expert-squad-demo.md`](records/2026-08/2026-08-22-website-data-analysis-expert-squad-demo.md).
+
 Latest `v0.0.51-beta` application and website release: [`2026-08-22-v0.0.51-beta-release.md`](records/2026-08/2026-08-22-v0.0.51-beta-release.md).
 
 Latest OpenCorvus long-horizon Expert Squad Xiaohongshu promotion package: [`2026-08-19-xiaohongshu-long-horizon-promotion.md`](records/2026-08/2026-08-19-xiaohongshu-long-horizon-promotion.md).
