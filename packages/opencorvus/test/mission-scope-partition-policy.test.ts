@@ -10,6 +10,9 @@ test("projects scope-first Expert Squad Task partitioning", () => {
     "Different held Squads always mean different stages and different fixed-`promptProfile` Tasks",
     "Never assign the complete input wholesale to one Squad when another held Squad positively owns a distinct requested partition",
     "No Task spans scope partitions positively owned by different held Squads",
+    "The operator's original request is the sole semantic authority for the Mission and its complete child-Task set",
+    "the union of all Task assignments plus explicit unresolved boundaries must cover the complete request",
+    "The original request may remain visible as authority context without making a child execute effects assigned to sibling Tasks",
   ]
 
   expect(requiredMissionClauses.map((clause) => MISSION_CORE.includes(clause))).toEqual(
