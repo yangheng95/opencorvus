@@ -6,23 +6,23 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "advanced",
-      "version": "2026.08.20.1",
-      "digest": "ef55332fb2c5ac59bdad5f255710ef06782059e685adb3e69e57edc621b7f01d"
+      "version": "2026.08.21.6",
+      "digest": "9ed6b0451f30f4ffea1666ef4afb5c7faa0dfea11e63100316fbd4d5415df8b7"
     },
     "displayLabel": {
       "root": "Advanced",
       "zh-cn": "Advanced"
     },
     "description": {
-      "root": "Built-in advanced software delivery team with retained Requirements-to-Architect traceability and parallel investigation, implementation, testing, interface, and independent-review frontiers.",
-      "zh-cn": "内置的高级软件交付团队，保留从需求到架构的可追溯性，以及并行调查、实施、测试、界面与独立审查边界。"
+      "root": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
+      "zh-cn": "内置的高级软件交付团队，保留能力匹配的需求到架构可追溯性，以及执行、测试、界面与独立审查边界。"
     },
     "pillars": [
       "code",
       "work"
     ],
     "agentCount": 14,
-    "workflowCount": 5
+    "workflowCount": 6
   },
   {
     "identity": {

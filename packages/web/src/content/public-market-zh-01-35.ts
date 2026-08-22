@@ -100,7 +100,7 @@ export const publicMarketZhTranslations01To35 = {
   },
   "builtin/advanced": {
     label: "Advanced",
-    description: "内置的高级软件交付团队，保留从需求到架构的可追溯性，以及并行调查、实施、测试、界面与独立审查边界。",
+    description: "内置的高级软件交付团队，保留能力匹配的需求到架构可追溯性，以及执行、测试、界面与独立审查边界。",
     selectorSummary:
       "用于需要从需求到架构可追溯、并行调查与实施证据及独立审查，但没有更窄已安装专家契约的高级软件交付。",
     agents: {
@@ -176,6 +176,23 @@ export const publicMarketZhTranslations01To35 = {
           "implementation-engineer": "与工作量审查并行实施确切的架构师合同，并记录具体存储库和验证证据。",
           "test-engineer": "在存在实施证据后，独立执行适用的非 UI 测试和 runtime 检查。",
           "system-integrity-reviewer": "在实施和工作量证据存在后，与测试执行同时进行独立的对抗性审查。",
+        },
+      },
+      "researched-planned-delivery": {
+        label: "外部研究型计划交付",
+        description:
+          "先解决一个关键外部证据缺口，再形成需求与架构，随后由能力匹配的责任方实施、独立测试并审查非界面交付。",
+        nodes: {
+          "request-interpreter": "确认意图、输入和范围，并在不存在任何澄清差距时明确记录。",
+          "source-investigator": "使用只读代码库工具调查结构、调用者、测试和责任边界。",
+          "research-investigator": "使用投影的网页研究能力解决选定且连贯的多来源外部事实缺口。",
+          "requirement-engineer": "在精确意图、代码库证据与外部证据收敛后登记完整、可证伪的需求。",
+          "solution-architect":
+            "将已收敛的 RequirementSet 与所选证据绑定为可追溯契约、可观察验收规格、Delivery Slice revision 和组装责任归属。",
+          "workload-reviewer": "在没有架构授权的情况下评估切片大小、耦合、省略的工作、验收覆盖率和验证成本。",
+          "implementation-engineer": "使用可执行的投影能力收敛剩余动态值，并实现精确的 Architect 契约。",
+          "test-engineer": "实施收敛后，独立重读权威来源并执行适用的非 UI 与 runtime 检查。",
+          "system-integrity-reviewer": "在全部工作收敛后，审计需求覆盖、来源映射、实施、工作量和可执行测试证据。",
         },
       },
       "evidence-investigation": {
@@ -481,8 +498,8 @@ export const publicMarketZhTranslations01To35 = {
   },
   "builtin/base": {
     label: "Base",
-    description: "Base 是 Advanced 的紧凑替代：一个规划师先划分任务，研究、实现与测试 worker 随后并行执行互不重叠的分区。",
-    selectorSummary: "适用于可由一个 Planner 划分为独立调查、产品实现和测试/checker 工作的一项完整 Task。",
+    description: "Base 是 Advanced 的紧凑替代：一个规划师先建立完整契约，再由具备命令能力的执行方交付并由测试方独立验收；需要时也可采用研究与实现并行的分区图。",
+    selectorSummary: "适用于可由一个 Planner 规划、一个执行责任方交付并由独立 Tester 验收，或可安全划分为研究与实现分区的一项完整 Task。",
     agents: {
       "base-researcher": {
         label: "Base 研究员",
@@ -502,6 +519,15 @@ export const publicMarketZhTranslations01To35 = {
       },
     },
     workflows: {
+      "planner-execution-verification": {
+        label: "规划、执行与验证",
+        description: "由 Planner 一次性规划，具备命令能力的责任方完成来源发现与交付，再独立验证已结算结果。",
+        nodes: {
+          "base-planner": "发布完整 Task 要素清单、发现义务、能力分配与验收契约。",
+          "base-developer": "使用投影的 Skill 与可执行工具发现动态来源并完成请求的交付。",
+          "base-tester": "独立重读动态来源，并按每项标准验证已结算结果。",
+        },
+      },
       "planner-parallel-delivery": {
         label: "规划师、并行 Worker 与验证",
         description: "一个 Planner 先固定任务分区，研究与实现 worker 随后在同一 frontier 并行工作，再由测试 worker 验证已结算的结果。",
