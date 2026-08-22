@@ -45,6 +45,10 @@ describe("external agent benchmark contract", () => {
     expect(skill).toContain("initializes a seeded simulated business environment for every Task")
     expect(skill).toContain("do one bounded authority discovery before mutation")
     expect(skill).toContain("one `api_search` using the concrete target/action nouns")
+    expect(skill).toContain("`search` is an endpoint-contract directory")
+    expect(skill).toContain("That closure ends discovery, not the Task")
+    expect(skill).toContain("email message inbox thread channel history")
+    expect(skill).toContain("first re-check the endpoint field name, path identity, range, body shape")
     expect(skill).toContain("never report a simulated app's missing connection as benchmark infrastructure failure")
   })
   const transcript = [
@@ -244,6 +248,7 @@ describe("external agent benchmark contract", () => {
         },
       ],
       agents: [
+        { agent_id: "orchestrator", base_role: "orchestrator", skill_mountable: true, skill_tool_available: true },
         { agent_id: "base-planner", base_role: "delegated-worker", skill_mountable: true, skill_tool_available: true },
         { agent_id: "base-developer", base_role: "build", skill_mountable: true, skill_tool_available: true },
         { agent_id: "base-tester", base_role: "delegated-worker", skill_mountable: true, skill_tool_available: true },
@@ -255,6 +260,7 @@ describe("external agent benchmark contract", () => {
       })),
     })
     const mounted = {
+      orchestrator: { effective: true, enabled: true },
       "base-planner": { effective: true, enabled: true },
       "base-developer": { effective: true, enabled: true },
       "base-tester": { effective: true, enabled: true },
@@ -267,12 +273,9 @@ describe("external agent benchmark contract", () => {
       }),
     ).toMatchObject({
       passed: true,
-      mounted_agents: ["base-developer", "base-planner", "base-tester"],
+      mounted_agents: ["base-developer", "base-planner", "base-tester", "orchestrator"],
       unmountable_agents: [
         { agent_id: "base-researcher", base_role: "explore", reason: "profile_role_not_skill_owner" },
-        // The scheduler is outside the mount matrix by construction. Recording it keeps the
-        // post-run coverage audit's accounted set complete instead of leaving an implicit exemption.
-        { agent_id: "orchestrator", base_role: "orchestrator", reason: "scheduler_outside_mount_matrix" },
       ],
       violations: [],
     })
@@ -283,6 +286,7 @@ describe("external agent benchmark contract", () => {
       auditSkillProjection({
         profile: "base",
         matrix: matrix({
+          orchestrator: { effective: false, enabled: null },
           "base-planner": { effective: false, enabled: null },
           "base-developer": { effective: false, enabled: null },
           "base-tester": { effective: false, enabled: null },
@@ -292,6 +296,7 @@ describe("external agent benchmark contract", () => {
       passed: false,
       mounted_agents: [],
       violations: [
+        "not_effective:orchestrator",
         "not_effective:base-planner",
         "not_effective:base-developer",
         "not_effective:base-tester",
@@ -558,6 +563,24 @@ describe("external agent benchmark contract", () => {
       ],
       agents: [
         {
+          agent_id: "orchestrator",
+          base_role: "orchestrator",
+          skill_mountable: true,
+          skill_tool_available: true,
+        },
+        {
+          agent_id: "requirement-engineer",
+          base_role: "requirements",
+          skill_mountable: true,
+          skill_tool_available: true,
+        },
+        {
+          agent_id: "solution-architect",
+          base_role: "architect",
+          skill_mountable: true,
+          skill_tool_available: true,
+        },
+        {
           agent_id: "implementation-engineer",
           base_role: "build",
           skill_mountable: true,
@@ -571,12 +594,28 @@ describe("external agent benchmark contract", () => {
         },
         {
           agent_id: "source-investigator",
-          base_role: "explore",
-          skill_mountable: false,
-          skill_tool_available: false,
+          base_role: "delegated-worker",
+          skill_mountable: true,
+          skill_tool_available: true,
         },
       ],
       matrix: [
+        {
+          agent_id: "orchestrator",
+          grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
+        },
+        {
+          agent_id: "requirement-engineer",
+          grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
+        },
+        {
+          agent_id: "solution-architect",
+          grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
+        },
+        {
+          agent_id: "source-investigator",
+          grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
+        },
         {
           agent_id: "implementation-engineer",
           grants: [{ ref: "default/skill/automationbench-api", effective: true, enabled: true }],
@@ -588,8 +627,28 @@ describe("external agent benchmark contract", () => {
       ],
     }
     const transcript = [
-      { info: { agent: "orchestrator", role: "assistant", sessionID: "ses_orchestrator" } },
-      { info: { agent: "source-investigator", role: "assistant", sessionID: "ses_source" } },
+      ...["orchestrator", "requirement-engineer", "solution-architect", "source-investigator"].map((agent) => ({
+        info: { agent, role: "assistant", sessionID: `ses_${agent}` },
+        parts: [
+          {
+            type: "tool",
+            tool: "skill",
+            state: { status: "completed", input: { name: "automationbench-api" } },
+          },
+          ...(agent === "source-investigator"
+            ? [
+                {
+                  type: "tool",
+                  tool: "bash",
+                  state: {
+                    status: "completed",
+                    input: { command: "python3 automationbench_tool.py fetch GET https://api/read" },
+                  },
+                },
+              ]
+            : []),
+        ],
+      })),
       {
         info: { agent: "implementation-engineer", role: "assistant", sessionID: "ses_impl" },
         parts: [
@@ -663,13 +722,22 @@ describe("external agent benchmark contract", () => {
         runtime_adherence_passed: true,
         dispatched_owner_sessions: [
           { agent_id: "implementation-engineer", session_id: "ses_impl" },
+          { agent_id: "orchestrator", session_id: "ses_orchestrator" },
+          { agent_id: "requirement-engineer", session_id: "ses_requirement-engineer" },
+          { agent_id: "solution-architect", session_id: "ses_solution-architect" },
+          { agent_id: "source-investigator", session_id: "ses_source-investigator" },
           { agent_id: "test-engineer", session_id: "ses_test" },
         ],
         successful_skill_loads: [
+          { agent_id: "orchestrator", session_id: "ses_orchestrator" },
+          { agent_id: "requirement-engineer", session_id: "ses_requirement-engineer" },
+          { agent_id: "solution-architect", session_id: "ses_solution-architect" },
+          { agent_id: "source-investigator", session_id: "ses_source-investigator" },
           { agent_id: "implementation-engineer", session_id: "ses_impl" },
           { agent_id: "test-engineer", session_id: "ses_test" },
         ],
         benchmark_client_attempts: [
+          { agent_id: "source-investigator", session_id: "ses_source-investigator", status: "completed" },
           { agent_id: "implementation-engineer", session_id: "ses_impl", status: "completed" },
           { agent_id: "test-engineer", session_id: "ses_test", status: "completed" },
         ],
@@ -724,8 +792,15 @@ describe("external agent benchmark contract", () => {
 
   test("rejects a run whose transcript shows an Agent the Skill projection never described", () => {
     const projection = {
-      mounted_agents: ["implementation-engineer", "test-engineer"],
-      unmountable_agents: [{ agent_id: "source-investigator" }, { agent_id: "orchestrator" }],
+      mounted_agents: [
+        "implementation-engineer",
+        "orchestrator",
+        "requirement-engineer",
+        "solution-architect",
+        "source-investigator",
+        "test-engineer",
+      ],
+      unmountable_agents: [],
     }
     // This fixture isolates projection accounting: user Messages prove dispatch identity, while the
     // preceding sealed-receipt fixture owns assistant runtime-load and command-order evidence.

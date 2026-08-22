@@ -2,7 +2,7 @@
 
 Latest Orchestrator context-economics measurement and remediation plan: [`2026-08-21-orchestrator-context-economics.md`](records/2026-08/2026-08-21-orchestrator-context-economics.md), covering prompt-block attribution, the system-prefix divergence point, and the phased plan.
 
-Latest external agent benchmark pilot: [`2026-08-20-external-agent-benchmark-pilot.md`](records/2026-08/2026-08-20-external-agent-benchmark-pilot.md), covering the paper-evidence `gpt-5.6-luna` AutomationBench round for OpenCorvus Base and Advanced.
+Latest external agent benchmark repair and replacement round: [`2026-08-22-automationbench-adversarial-acceptance-repair.md`](records/2026-08/2026-08-22-automationbench-adversarial-acceptance-repair.md), covering adversarial two-pass acceptance, truthful Skill/tool ownership, and the fresh `gpt-5.6-luna` Base/Advanced matrix. The original harness definition remains in [`2026-08-20-external-agent-benchmark-pilot.md`](records/2026-08/2026-08-20-external-agent-benchmark-pilot.md).
 
 Latest `v0.0.51-beta` application and website release: [`2026-08-22-v0.0.51-beta-release.md`](records/2026-08/2026-08-22-v0.0.51-beta-release.md).
 

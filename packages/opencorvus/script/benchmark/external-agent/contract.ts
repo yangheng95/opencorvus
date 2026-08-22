@@ -1127,8 +1127,6 @@ export function auditSkillProjection(input: {
       })
       continue
     }
-    // An `explore` runtime template is neither Skill-mountable nor projected the `skill` Tool at
-    // all, so demanding the mount there would be a fail-closed check no profile can ever pass.
     if (agent.skill_mountable !== true || agent.skill_tool_available !== true) {
       violations.push(
         agent.skill_mountable !== true
@@ -1171,11 +1169,6 @@ export function auditSkillProjection(input: {
   if (input.expectedSHA256 && input.poolSHA256 && input.expectedSHA256 !== input.poolSHA256) {
     violations.push("skill_content_mismatch")
   }
-  unmountable.push({
-    agent_id: SCHEDULER_AGENT_ID,
-    base_role: "orchestrator",
-    reason: "scheduler_outside_mount_matrix",
-  })
   return {
     passed: violations.length === 0,
     skill_name: skillName,
@@ -1190,8 +1183,17 @@ export function auditSkillProjection(input: {
 }
 
 export function automationBenchSkillAgentIDs(profile: string): string[] {
-  if (profile === "base") return ["base-developer", "base-planner", "base-tester"]
-  if (profile === "advanced") return ["implementation-engineer", "test-engineer"]
+  if (profile === "base") return [SCHEDULER_AGENT_ID, "base-developer", "base-planner", "base-tester"]
+  if (profile === "advanced") {
+    return [
+      SCHEDULER_AGENT_ID,
+      "requirement-engineer",
+      "solution-architect",
+      "source-investigator",
+      "implementation-engineer",
+      "test-engineer",
+    ]
+  }
   return []
 }
 
