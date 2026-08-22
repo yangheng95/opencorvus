@@ -1708,12 +1708,20 @@
                 "type": "object"
               },
               "propertyNames": {
-                "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "const": "orchestrator",
+                    "type": "string"
+                  },
+                  {
+                    "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                    "type": "string"
+                  }
+                ]
               },
               "type": "object"
             },
-            "description": "Project-owned operator skill overrides qualified by expert squad, dynamic agent, and default skill ref.",
+            "description": "Project-owned operator skill overrides qualified by expert squad, projected Skill owner, and default skill ref.",
             "propertyNames": {
               "maxLength": 64,
               "minLength": 1,
@@ -79854,8 +79862,16 @@
                                 ]
                               },
                               "propertyNames": {
-                                "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "const": "orchestrator",
+                                    "type": "string"
+                                  },
+                                  {
+                                    "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                                    "type": "string"
+                                  }
+                                ]
                               },
                               "type": "object"
                             },
@@ -88607,7 +88623,7 @@
     },
     "/skill/mount": {
       "patch": {
-        "description": "Set or delete one project/session operator override qualified by expert squad, dynamic agent, and default skill ref.",
+        "description": "Set or delete one project/session operator override qualified by expert squad, projected Skill owner, and default skill ref.",
         "operationId": "skill.setMountOverride",
         "parameters": [
           {
@@ -88629,8 +88645,16 @@
                     "additionalProperties": false,
                     "properties": {
                       "agentID": {
-                        "minLength": 1,
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "const": "orchestrator",
+                            "type": "string"
+                          },
+                          {
+                            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                            "type": "string"
+                          }
+                        ]
                       },
                       "defaultSkillRef": {
                         "type": "string"
@@ -88667,8 +88691,16 @@
                     "additionalProperties": false,
                     "properties": {
                       "agentID": {
-                        "minLength": 1,
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "const": "orchestrator",
+                            "type": "string"
+                          },
+                          {
+                            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                            "type": "string"
+                          }
+                        ]
                       },
                       "defaultSkillRef": {
                         "type": "string"

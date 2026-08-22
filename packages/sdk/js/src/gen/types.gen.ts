@@ -587,7 +587,7 @@ export type Config = {
    */
   share?: "manual" | "auto" | "disabled"
   /**
-   * Project-owned operator skill overrides qualified by expert squad, dynamic agent, and default skill ref.
+   * Project-owned operator skill overrides qualified by expert squad, projected Skill owner, and default skill ref.
    */
   skill_mounts?: {
     [key: string]: {
@@ -26522,14 +26522,14 @@ export type SkillMarketResponse = SkillMarketResponses[keyof SkillMarketResponse
 export type SkillSetMountOverrideData = {
   body:
     | {
-        agentID: string
+        agentID: "orchestrator" | string
         defaultSkillRef: string
         expertSquadID: string
         override: boolean | null
         scope: "project"
       }
     | {
-        agentID: string
+        agentID: "orchestrator" | string
         defaultSkillRef: string
         expertSquadID: string
         override: boolean | null

@@ -16,7 +16,7 @@ The Orchestrator owns scheduling and visibly selects the exact manifest workflow
 - `requirement-engineer`: inventory every Task element, classify observed obligations, discovery work, reversible assumptions, and proven blockers, then register complete falsifiable requirements and foundational decisions.
 - `solution-architect`: bind every persisted requirement through individually observable Slice-local acceptance sources, then register contracts, dependencies, assembly ownership, and immutable Delivery Slice revisions.
 - `workload-reviewer`: assess Slice size, coupling, omitted work, acceptance coverage, and verification cost without architecture authority.
-- `source-investigator`: gather read-oriented repository evidence.
+- `source-investigator`: gather read-only repository and projected-client current-authority evidence through its actual Skill/tool surface.
 - `research-investigator`: gather durable external evidence.
 - `interface-investigator`: capture interface structure, behavior, assets, and reference evidence.
 - `interface-designer`: create the interface design and implementation contract.
@@ -25,7 +25,7 @@ The Orchestrator owns scheduling and visibly selects the exact manifest workflow
 - `visual-reviewer`: review real rendered and interaction evidence.
 - `system-integrity-reviewer`: after executable Test evidence settles, independently audit its requirement coverage, source mapping, freshness, contradictions, and unresolved risk through exact Artifacts.
 
-For dynamic business-state delivery, Requirements and Architecture preserve candidate-source closure plus a source-derived action-matrix contract. The capable implementation owner closes one row per in-scope entity before mutation. Test independently rebuilds that matrix from original inputs and current raw authorities before reading implementation claims, compares expected rows and observed mutations with final state, and reports omitted, extra, surrogate, or rule-precedence failures. System Integrity audits that matrix and its raw evidence rather than accepting an aggregate Test verdict.
+For dynamic business-state delivery, Requirements and Architecture preserve candidate-source closure plus a source-derived action-matrix contract. The capable implementation owner closes one row per in-scope entity before mutation. Test first derives an independent acceptance inventory from original inputs and current raw authorities, then treats Requirements, Architecture and implementation evidence as claims, rebuilds the matrix, and compares expected rows and observed mutations bidirectionally with final state. System Integrity challenges both the Test inventory and verdict against preserved raw evidence rather than accepting an aggregate conclusion.
 - `interface-integrity-reviewer`: independently review Task-scoped interface implementation and rendered evidence without requiring a Delivery Slice planning graph.
 - `claim-verifier`: verify material factual claims and uncertainty.
 

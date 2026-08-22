@@ -366,6 +366,16 @@ Skill definition 错误而失败，真正访问 Skill catalog 时仍保留严格
 当前全局内置 inventory 包含 `design-taste-frontend`、`grill-me`、`work-artifacts` 和
 `research-report`。inventory 本身不代表 Agent 可调用：
 
+项目或 Session 的 `skill_mounts` 以 active Expert Squad ID、精确 Skill owner ID 和
+`default/skill/<name>` 为唯一 operator grant 坐标。canonical mount matrix 同时列出 package scheduler、
+scheduler-only platform worker 与 package worker；`orchestrator` 是保留的 projected scheduler owner，
+不是普通 dynamic worker ID，但可通过同一 operator mount route 获得一个已安装 project Skill。真实
+Orchestrator Turn 与 worker Turn 都经 `PromptProfileResolver` 和 `SkillMount.resolve()` 重算同一
+projection；matrix row 不是第二份执行授权。每个 owner 仍必须拥有物理 `skill` Tool，Skill eligibility
+仍按 platform、required tools 与 permission 独立判定。改变角色名称或 `base_role` 不会继承 mount；例如
+Advanced `source-investigator` 只有在 manifest 显式使用 Skill-mountable runtime 且 operator 精确挂载后，
+才可通过其真实只读命令/Skill surface 调用项目客户端。
+
 - `advanced` manifest 的 scheduler 与精确 `requirement-engineer` worker 各自通过 `default_skill_refs`
   显式获得 `grill-me`；Requirements worker 被鼓励用它逐个澄清当前决策 frontier，但问题仍经可见的
   worker coordination → Orchestrator `ask_user` interaction → 同 lineage continuation 链路返回，最终
