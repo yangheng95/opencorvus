@@ -14,6 +14,7 @@ import {
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
   summarizeProviderUsageRows,
+  providerUsageMatchesModel,
   type ProviderUsageRow,
 } from "./contract"
 
@@ -29,8 +30,9 @@ const rootValue = values.get("root")
 const sourceDataValue = values.get("source-data")
 const pythonValue = values.get("python")
 const restrictedShellValue = values.get("restricted-shell")
-if (!rootValue || !sourceDataValue || !pythonValue || !restrictedShellValue) {
-  throw new Error("--root, --source-data, --python, and --restricted-shell are required")
+const model = values.get("model")
+if (!rootValue || !sourceDataValue || !pythonValue || !restrictedShellValue || !model) {
+  throw new Error("--root, --source-data, --python, --restricted-shell, and --model are required")
 }
 const root = path.resolve(rootValue)
 const sourceData = path.resolve(sourceDataValue)
@@ -246,11 +248,12 @@ if (secretFindings.length > 0) {
 }
 
 const catalog = JSON.parse(await fs.readFile(path.join(root, "evidence-catalog.json"), "utf8")) as {
-  scope?: { profiles?: string[] }
+  scope?: { profiles?: string[]; model?: string }
   attempts: Array<Record<string, any>>
   leaderboard: Array<Record<string, any>>
   batches: Array<Record<string, any>>
 }
+if (catalog.scope?.model !== model) throw new Error("Catalog primary model does not match --model")
 const discoveredAttemptDirectories = [
   ...new Set(
     (await walk(root))
@@ -500,12 +503,7 @@ for (const attempt of catalog.attempts) {
       throw new Error(`Provider ledger mismatch (${field}): ${attempt.run_id}`)
     }
   }
-  if (
-    ledger.some(
-      (row) =>
-        row.provider_id !== "openai" || row.model_id !== "gpt-5.6-luna" || row.purpose === "provider-connectivity",
-    )
-  ) {
+  if (payload.opencorvus.model !== model || !providerUsageMatchesModel(ledger, model).passed) {
     throw new Error(`Provider ledger identity mismatch: ${attempt.run_id}`)
   }
   independentlyRawEligible.push(String(attempt.run_id))
@@ -517,6 +515,7 @@ const verifiedBatches = await Promise.all(
     .map(async (planPath) => {
       const planBytes = await fs.readFile(planPath)
       const plan = JSON.parse(planBytes.toString("utf8"))
+      if (plan.model !== model) throw new Error(`Batch plan model mismatch: ${plan.batch_run_id}`)
       const prefix = planPath.slice(0, -"-plan.json".length)
       const receipt = await fs
         .readFile(`${prefix}-receipt.json`, "utf8")

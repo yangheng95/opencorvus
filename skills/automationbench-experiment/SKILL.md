@@ -11,9 +11,9 @@ Treat OpenCorvus Base and Advanced as the evaluated multi-Agent harness, not as 
 
 - Keep benchmark work on the dedicated bench branch. Do not merge benchmark adapters, Skills, scores, specs, or evidence into the release branch.
 - Keep that branch in the dedicated `D:\myhexin-local\opencorvus-bench` worktree. Do not switch the main `opencorvus` worktree onto the benchmark branch.
-- Round 1 is AutomationBench `1.0.6`, a committed deterministic set of 50 public cases, exact model `openai/gpt-5.6-luna`, and fresh-world Base then repaired Advanced runs for every case. Finish and verify all 50 Base trials before launching any further Advanced trial. Superseded Advanced exploratory rows remain invalid debug evidence. WorkBuddy is out of scope until the user explicitly adds it.
-- The adversarial-acceptance replacement round uses empty evidence `/var/lib/opencorvus-benchmark/evidence-adversarial-v20260822`, control `/var/lib/opencorvus-benchmark/control-adversarial-v20260822`, and dashboard `D:\myhexin-local\opencorvus-benchmark-results\adversarial-v20260822\index.html`. Preserve every earlier root and do not adopt its candidates. Base Tester and Advanced Test first derive an independent acceptance inventory from the original request and current raw authorities before reading plan, Requirement, Architect, implementation, or prior-verdict claims; they then challenge those claims bidirectionally against final state. Advanced Integrity challenges the Test inventory and verdict through preserved raw evidence.
-- Phase A schedules deterministic five-case Base-only batches. Start five Base trials together, seal the batch, and continue until Base is 50/50. Phase B then schedules Advanced-only batches over the same frozen cases. No more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, and evidence directory.
+- The current primary round is AutomationBench `1.0.6`, a committed deterministic set of 50 public cases, exact model `openai/gpt-5.6-terra`, and one fresh-world repaired Advanced run for every case. The user explicitly replaced the planned Terra Base-first phase with Advanced-only execution. The superseded Luna rounds remain immutable debug evidence and are excluded from Terra aggregates. WorkBuddy is out of scope until the user explicitly adds it.
+- The Terra Advanced round uses empty evidence `/var/lib/opencorvus-benchmark/evidence-terra-advanced-v20260822`, control `/var/lib/opencorvus-benchmark/control-terra-advanced-v20260822`, and dashboard `D:\myhexin-local\opencorvus-benchmark-results\terra-advanced-v20260822\index.html`. Preserve every earlier root and do not adopt its candidates. Advanced Test first derives an independent acceptance inventory from the original request and current raw authorities before reading Requirement, Architect, implementation, or prior-verdict claims; it then challenges those claims bidirectionally against final state. Advanced Integrity challenges the Test inventory and verdict through preserved raw evidence.
+- Schedule deterministic five-case Advanced-only batches until Advanced is 50/50. No more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, and evidence directory.
 - Before each run, require an isolated runtime containing both the source `auth.json` and `models.json`; verify the exact Provider/model reports `connected`. Never print or copy credential contents into evidence.
 - Formal runs use WSL2 as an operational benchmark boundary, not as a hostile multi-tenant security proof. Keep evaluator, scorer, Provider data, control, and evidence roots owned by root with mode `0700`; run Agent Bash under the case UID with a private HOME, mount namespace, Windows mounts removed, and a UID-scoped Unix tool socket. The preflight must show that credentials/evaluator data are not readable and that the trial can use its own project/socket. Do not add stronger sandbox machinery unless an observed benchmark leak requires it.
 - Fail closed unless the bridge proves the exact AutomationBench distribution version, installed package-tree hash, and official task-contract hash. Map out only the stock single-model turn-budget sentence; preserve the business contract and record the mapped request hash.
@@ -61,17 +61,18 @@ test -z "$(git status --porcelain)"
 
 bun packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts \
   --batch-index 1 \
+  --model openai/gpt-5.6-terra \
   --python /var/lib/opencorvus-benchmark/evaluator-venv/bin/python \
   --source-data /var/lib/opencorvus-benchmark/provider-data \
   --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell \
-  --output /var/lib/opencorvus-benchmark/evidence-adversarial-v20260822 \
-  --control-root /var/lib/opencorvus-benchmark/control-adversarial-v20260822 \
-  --profiles base \
-  --dashboard /mnt/d/myhexin-local/opencorvus-benchmark-results/adversarial-v20260822/index.html \
+  --output /var/lib/opencorvus-benchmark/evidence-terra-advanced-v20260822 \
+  --control-root /var/lib/opencorvus-benchmark/control-terra-advanced-v20260822 \
+  --profiles advanced \
+  --dashboard /mnt/d/myhexin-local/opencorvus-benchmark-results/terra-advanced-v20260822/index.html \
   --inactivity-ms 600000
 ```
 
-During Phase A, regenerate and verify with `--profiles base`; use final mode after Base reaches 50/50. Only after that phase is sealed may Phase B launch batches with `--profiles advanced`. Use `--profiles base,advanced` only for the final combined catalog/verifier after both 50-trial phases are complete.
+Regenerate and verify this round with exact `--model openai/gpt-5.6-terra --profiles advanced`; use final mode after Advanced reaches 50/50. Do not add Base rows to this Advanced-only primary aggregate.
 
 ## Score and report
 
@@ -80,5 +81,5 @@ During Phase A, regenerate and verify with `--profiles base`; use final mode aft
 - The bridge must atomically seal the world, score it, and record attempted/succeeded/failed API counts in one terminal critical section. Independently verify the initial-to-final world hash chain, replay deterministic stateless tools, reload the sealed final world, and rerun the official rubric; require exact strict, partial, assertions, final-world hash, deterministic output hashes, and call-count agreement.
 - Only natural terminal runs—`completed`, or an explicit `fail_task` with no structured infrastructure failure—with official scorer output, clean source, exact profile binding, passed evaluator-isolation audit, recomputable Provider ledger, and verified exact-set manifest are leaderboard-eligible. Cancelled, interrupted, infrastructure-affected, operator-steered, dirty-source final candidates, and `invalid_bug` runs remain evidence only.
 - Report strict `task_completed_correctly` as the primary score and `partial_credit` as diagnostic. Include input, text output, reasoning, cache read/write, total tokens, model calls, benchmark calls, Sessions, Agents, duration, and exact assertions. Report the per-Agent token split from the ledger's own Session/Agent attribution rather than inferring it from transcript timestamps, which cannot separate concurrent workers.
-- Write only OpenCorvus rows into the project's own leaderboard and compare Base with repaired Advanced across the paired frozen 50-case public matrix. Superseded Advanced rows remain invalid debug evidence. Official private leaderboard rows are a separate context table only: never compute a cross-dataset rank, slot, band, position, or numeric delta, and keep an absent Luna row explicitly absent.
+- Write only the 50 Terra Advanced rows into this round's primary aggregate. Earlier Base, Luna, and superseded Advanced rows remain separate historical/debug evidence and must never be merged into the Terra Advanced score or comparison. Official private leaderboard rows are a separate context table only: never compute a cross-dataset rank, slot, band, position, or numeric delta. The exact `openai/gpt-5.6-terra` configuration is not an official comparable row; never relabel the published GPT-5.6 Terra Max row as this experiment.
 - Render and visually inspect Base and repaired Advanced trajectories. Keep superseded Advanced trajectories as debug evidence only. If labels or lanes are unreadable, fix the renderer and regenerate the derived view without changing raw run evidence.

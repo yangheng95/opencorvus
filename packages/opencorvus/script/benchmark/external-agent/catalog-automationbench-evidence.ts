@@ -17,6 +17,7 @@ import {
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
   summarizeProviderUsageRows,
+  providerUsageMatchesModel,
   type ProviderUsageRow,
 } from "./contract"
 
@@ -90,8 +91,9 @@ async function arguments_() {
   const sourceData = values.get("source-data")
   const python = values.get("python")
   const restrictedShell = values.get("restricted-shell")
-  if (!root || !sourceData || !python || !restrictedShell) {
-    throw new Error("--root, --source-data, --python, and --restricted-shell are required")
+  const model = values.get("model")
+  if (!root || !sourceData || !python || !restrictedShell || !model) {
+    throw new Error("--root, --source-data, --python, --restricted-shell, and --model are required")
   }
   const profiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim()) as Profile[]
   if (
@@ -107,6 +109,7 @@ async function arguments_() {
     sourceData: path.resolve(sourceData),
     python: path.resolve(python),
     restrictedShell: path.resolve(restrictedShell),
+    model,
     profiles,
     caseSet: path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json")),
   }
@@ -207,7 +210,7 @@ function relativeChange(current: number, baseline: number) {
   return `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`
 }
 
-async function inspectProviderLedger(directory: string, result: Result | undefined) {
+async function inspectProviderLedger(directory: string, result: Result | undefined, model: string) {
   if (!result) return { required: false, passed: true }
   const ledgerPath = path.join(directory, "provider-usage-ledger.json")
   const raw = await fs.readFile(ledgerPath, "utf8").catch(() => undefined)
@@ -217,9 +220,8 @@ async function inspectProviderLedger(directory: string, result: Result | undefin
   const expected = result.opencorvus.tokens ?? {}
   const fields = ["input", "output", "reasoning", "cacheRead", "cacheWrite", "total", "costUSD", "pricedCalls", "unpricedCalls", "modelCalls"]
   const mismatches = fields.filter((field) => aggregate[field as keyof typeof aggregate] !== expected[field])
-  const identityMismatch = rows.some(
-    (row) => row.provider_id !== "openai" || row.model_id !== "gpt-5.6-luna" || row.purpose === "provider-connectivity",
-  )
+  const identityAudit = providerUsageMatchesModel(rows, model)
+  const identityMismatch = !identityAudit.passed
   return {
     required: true,
     passed: mismatches.length === 0 && !identityMismatch,
@@ -227,6 +229,8 @@ async function inspectProviderLedger(directory: string, result: Result | undefin
     aggregate,
     mismatches,
     identity_mismatch: identityMismatch,
+    expected_provider_id: identityAudit.provider_id,
+    expected_model_id: identityAudit.model_id,
   }
 }
 
@@ -527,7 +531,7 @@ for (const directory of terminalDirectories) {
   const permanentInvalidation = terminalAmbiguous
     ? { invalid: true, reason: "multiple_terminal_records" }
     : await inspectPermanentInvalidation(directory, manifest as Record<string, any>)
-  const ledgerAudit = await inspectProviderLedger(directory, result)
+  const ledgerAudit = await inspectProviderLedger(directory, result, cli.model)
   const rawEvidenceAudit = await inspectRawRunEvidence(directory, result, {
     sourceData: cli.sourceData,
     python: cli.python,
@@ -540,6 +544,7 @@ for (const directory of terminalDirectories) {
       )
     : undefined
   const benchmarkIdentityPassed =
+    result?.opencorvus.model === cli.model &&
     result?.benchmark.version === "1.0.6" &&
     result.benchmark.package_tree_sha256 === EXPECTED_PACKAGE_TREE_SHA256 &&
     frozenCase !== undefined &&
@@ -837,14 +842,14 @@ const catalog = {
   scope: {
     round: 1,
     benchmark: "AutomationBench",
-    model: "openai/gpt-5.6-luna",
+    model: cli.model,
     profiles: cli.profiles,
     exploratory_profiles: exploratoryProfileSummaries.map((summary) => summary.profile),
     note: "Every attempt is evidence; only natural terminal official scores enter the self-owned leaderboard.",
   },
   public_context: {
     comparability: "context_only_private_held_out_vs_local_public_50_case_set",
-    luna_listed: false,
+    exact_primary_model_listed: false,
     automationbench_version: "1.0.6",
     snapshot_date: "2026-08-20",
     source: "https://zapier.com/benchmarks",
@@ -870,7 +875,7 @@ await fs.writeFile(path.join(root, "evidence-catalog.json"), JSON.stringify(cata
 const lines = [
   "# AutomationBench round 1 · OpenCorvus self-owned leaderboard",
   "",
-  "This board contains only `openai/gpt-5.6-luna` runs made through the OpenCorvus harness. Every attempt is retained below; only a clean-source, natural OpenCorvus `completed` terminal state followed by the official AutomationBench scorer is leaderboard-eligible.",
+  `This board contains only \`${cli.model}\` runs made through the OpenCorvus harness. Every attempt is retained below; only a clean-source, natural OpenCorvus \`completed\` terminal state followed by the official AutomationBench scorer is leaderboard-eligible.`,
   "",
   "## Primary 50-case profile summary",
   "",
@@ -918,7 +923,7 @@ const lines = [
   "",
   "## Public leaderboard context (not numerically comparable)",
   "",
-  "The official AutomationBench board uses a private held-out set, while this round uses a deterministic 50-case public set. `gpt-5.6-luna` is not listed publicly. No cross-dataset position, rank, slot, statistical estimate, or numeric delta is computed.",
+  `The official AutomationBench board uses a private held-out set, while this round uses a deterministic 50-case public set. The exact \`${cli.model}\` configuration is not an official comparable row; in particular, the published GPT-5.6 Terra Max row is not relabeled as this run. No cross-dataset position, rank, slot, statistical estimate, or numeric delta is computed.`,
   "",
   "| Official row | Strict success rate |",
   "| --- | ---: |",

@@ -42,7 +42,6 @@ const SCRIPT_DIRECTORY = import.meta.dir
 const AUTOMATIONBENCH_VERSION = "1.0.6"
 const AUTOMATIONBENCH_SOURCE_REVISION = "4a8e1061254004d9dac807054eed33fad7d1ff14"
 const AUTOMATIONBENCH_PACKAGE_TREE_SHA256 = "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4"
-const DEFAULT_MODEL = "openai/gpt-5.6-luna"
 const DEFAULT_INACTIVITY_MS = 120_000
 const CLEANUP_TIMEOUT_MS = 10_000
 
@@ -116,6 +115,8 @@ function parseArguments(argv: string[]): Arguments {
     throw new Error("--source-data or OPENCORVUS_BENCH_SOURCE_DATA must name the existing OpenCorvus data directory")
   const output = values.get("output")
   if (!output) throw new Error("--output is required")
+  const model = values.get("model")
+  if (!model) throw new Error("--model is required")
   const inactivityMs = Number(values.get("inactivity-ms") ?? DEFAULT_INACTIVITY_MS)
   if (!Number.isFinite(inactivityMs) || inactivityMs <= 0)
     throw new Error("--inactivity-ms must be a positive finite number")
@@ -145,7 +146,7 @@ function parseArguments(argv: string[]): Arguments {
     profile,
     domain: values.get("domain") ?? "sales",
     task: values.get("task") ?? "sales.multi_hop_lookup",
-    model: values.get("model") ?? DEFAULT_MODEL,
+    model,
     python: path.resolve(python),
     sourceData: path.resolve(sourceData),
     output: path.resolve(output),

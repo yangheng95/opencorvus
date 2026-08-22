@@ -65,6 +65,23 @@ export function summarizeProviderUsageRows(rows: ProviderUsageRow[]): TokenBreak
   return result
 }
 
+export function providerUsageMatchesModel(rows: ProviderUsageRow[], model: string) {
+  const separator = model.indexOf("/")
+  if (separator <= 0 || separator === model.length - 1) {
+    return { passed: false, provider_id: "", model_id: "" }
+  }
+  const providerID = model.slice(0, separator)
+  const modelID = model.slice(separator + 1)
+  return {
+    passed: rows.every(
+      (row) =>
+        row.provider_id === providerID && row.model_id === modelID && row.purpose !== "provider-connectivity",
+    ),
+    provider_id: providerID,
+    model_id: modelID,
+  }
+}
+
 export function summarizeProviderUsageByAgent(rows: ProviderUsageRow[]) {
   const byAgent = new Map<string, ProviderUsageRow[]>()
   for (const row of rows) {
@@ -518,15 +535,22 @@ export async function executeRollingBatchChains<T>(input: {
 export function reusableProfileRuns(
   catalog: { leaderboard: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
   profile: "base" | "advanced",
+  model: string,
 ): Map<number, Record<string, any>> {
   const verified = new Map(
     catalog.leaderboard
-      .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1)
+      .filter(
+        (record) =>
+          record.opencorvus?.profile === profile &&
+          record.opencorvus?.model === model &&
+          record.benchmark?.repetition === 1,
+      )
       .map((record) => [Number(record.benchmark.case_index), record]),
   )
   const reusable = new Map<number, Record<string, any>>()
   for (const record of catalog.candidates.filter(
-    (item) => item.opencorvus?.profile === profile && item.benchmark?.repetition === 1,
+    (item) =>
+      item.opencorvus?.profile === profile && item.opencorvus?.model === model && item.benchmark?.repetition === 1,
   )) {
     const caseIndex = Number(record.benchmark.case_index)
     if (verified.has(caseIndex)) continue
@@ -592,7 +616,13 @@ export function auditBatchEvidence(input: {
   const expectedCases = (input.plan.cases ?? [])
     .map((item: any) => Number(item.case_index))
     .sort((a: number, b: number) => a - b)
-  if (input.plan.trial_concurrency !== 5 || expectedCases.length !== 5 || new Set(expectedCases).size !== 5) {
+  if (
+    input.plan.trial_concurrency !== 5 ||
+    typeof input.plan.model !== "string" ||
+    input.plan.model.length === 0 ||
+    expectedCases.length !== 5 ||
+    new Set(expectedCases).size !== 5
+  ) {
     reasons.push("batch_plan_shape")
   }
   const expectedWave1 = (input.plan.waves?.[0] ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort()
@@ -647,6 +677,7 @@ export function auditBatchEvidence(input: {
       attempt.benchmark?.wave_index !== item.waveIndex ||
       attempt.benchmark?.case_index !== item.case_index ||
       attempt.opencorvus?.profile !== item.profile ||
+      attempt.opencorvus?.model !== input.plan.model ||
       !expectedSlot ||
       !item.run_id ||
       launchedRunIDs.has(String(item.run_id))
@@ -695,6 +726,7 @@ export function auditBatchEvidence(input: {
       !attempt ||
       attempt.benchmark?.case_index !== item.case_index ||
       attempt.opencorvus?.profile !== item.profile ||
+      attempt.opencorvus?.model !== input.plan.model ||
       !expectedSlot ||
       !item.run_id ||
       eligibleRunIDs.has(String(item.run_id)) ||

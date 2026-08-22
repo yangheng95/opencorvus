@@ -37,33 +37,22 @@ const evaluatorRoot = path.dirname(path.dirname(python))
 const batchIndex = Number(values.get("batch-index"))
 if (!Number.isInteger(batchIndex) || batchIndex < 1 || batchIndex > 10) throw new Error("--batch-index must be 1 through 10")
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
-const model = values.get("model") ?? "openai/gpt-5.6-luna"
+const model =
+  values.get("model") ??
+  (() => {
+    throw new Error("--model is required")
+  })()
 const inactivityMs = values.get("inactivity-ms") ?? "600000"
-const profiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim()) as Profile[]
-if (
-  profiles.length < 1 ||
-  profiles.length > 2 ||
-  new Set(profiles).size !== profiles.length ||
-  profiles.some((profile) => profile !== "base" && profile !== "advanced")
-) {
-  throw new Error("--profiles must be base, advanced, or base,advanced")
+const profile = values.get("profiles")
+if (profile !== "base" && profile !== "advanced") {
+  throw new Error("--profiles must name exactly one execution profile: base or advanced")
 }
+const profiles: Profile[] = [profile]
 const manifest = JSON.parse(await fs.readFile(caseSet, "utf8")) as { selection: { count: number }; cases: FrozenCase[] }
 const cases = manifest.cases.filter((item) => item.batch_index === batchIndex).sort((left, right) => left.case_index - right.case_index)
 if (manifest.selection?.count !== 50 || cases.length !== 5) throw new Error(`Frozen batch ${batchIndex} must contain five of 50 cases`)
-const wave1 = cases.map((item) => ({ case_index: item.case_index, profile: item.case_index % 2 === 1 ? "base" : "advanced" })) as Array<{
-  case_index: number
-  profile: Profile
-}>
 type BatchSlot = { case_index: number; profile: Profile }
-const wave2: BatchSlot[] = wave1.map((item) => ({
-  case_index: item.case_index,
-  profile: item.profile === "base" ? "advanced" : "base",
-}))
-const waves: BatchSlot[][] =
-  profiles.length === 2
-    ? [wave1, wave2]
-    : [cases.map((item) => ({ case_index: item.case_index, profile: profiles[0]! }))]
+const waves: BatchSlot[][] = [cases.map((item) => ({ case_index: item.case_index, profile }))]
 
 await Promise.all([
   fs.mkdir(output, { recursive: true, mode: 0o700 }),
@@ -214,6 +203,8 @@ async function refreshCatalog() {
       restrictedShell,
       "--case-set",
       caseSet,
+      "--model",
+      model,
       "--profiles",
       profiles.join(","),
     ],
@@ -244,6 +235,8 @@ async function writeDashboard() {
       dashboard,
       "--batch-plan",
       planPath,
+      "--model",
+      model,
       "--profiles",
       profiles.join(","),
     ],
@@ -328,7 +321,7 @@ function waveCandidateByCase(
   profile: Profile,
 ) {
   const records = [
-    ...reusableProfileRuns(catalog, profile).values(),
+    ...reusableProfileRuns(catalog, profile, model).values(),
     ...catalog.attempts.filter(
       (record) =>
         record.raw_leaderboard_eligible === true &&
@@ -423,8 +416,8 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
 async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
   const existing = {
-    base: reusableProfileRuns(catalogBefore, "base"),
-    advanced: reusableProfileRuns(catalogBefore, "advanced"),
+    base: reusableProfileRuns(catalogBefore, "base", model),
+    advanced: reusableProfileRuns(catalogBefore, "advanced", model),
   }
   const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = [[], []]
   await executeRollingBatchChains({
@@ -493,10 +486,10 @@ try {
     cases,
     waves,
     preexisting_eligible: {
-      base: [...reusableProfileRuns(preexistingCatalog, "base").values()]
+      base: [...reusableProfileRuns(preexistingCatalog, "base", model).values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
-      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced").values()]
+      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model).values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
     },

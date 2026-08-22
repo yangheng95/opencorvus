@@ -9,6 +9,7 @@ import {
   automationBenchRunValidity,
   auditBenchmarkIsolation,
   summarizeProviderUsageRows,
+  providerUsageMatchesModel,
   summarizeBenchmarkToolEvents,
   evidenceFileSetMatches,
   permanentRunInvalidation,
@@ -121,6 +122,33 @@ describe("external agent benchmark contract", () => {
       unpricedCalls: 0,
       assistantMessages: 0,
       modelCalls: 1,
+    })
+  })
+
+  test("binds preserved Provider usage to the exact Terra experiment model", () => {
+    const rows: ProviderUsageRow[] = [
+      {
+        id: "usage-terra",
+        occurred_at: 100,
+        provider_id: "openai",
+        model_id: "gpt-5.6-terra",
+        purpose: "session",
+        input_tokens: 10,
+        output_tokens: 4,
+        reasoning_tokens: 3,
+        cache_read_tokens: 2,
+        cache_write_tokens: 1,
+        total_tokens: 20,
+        cost_usd: 0.01,
+        billing_status: "priced",
+        session_id: "ses_terra",
+        agent_id: "base-developer",
+      },
+    ]
+    expect(providerUsageMatchesModel(rows, "openai/gpt-5.6-terra")).toEqual({
+      passed: true,
+      provider_id: "openai",
+      model_id: "gpt-5.6-terra",
     })
   })
 
@@ -1161,86 +1189,6 @@ describe("external agent benchmark contract", () => {
     })
   })
 
-  test("accepts a sealed five-case rolling batch with paired crossover slots", () => {
-    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
-    const wave1 = cases.map((item) => ({ ...item, profile: item.case_index % 2 ? "base" : "advanced" }))
-    const wave2 = wave1.map((item) => ({
-      case_index: item.case_index,
-      profile: item.profile === "base" ? "advanced" : "base",
-    }))
-    const launched = [wave1, wave2].map((wave, waveOffset) =>
-      wave.map((item, index) => ({
-        ...item,
-        run_id: `run-${waveOffset + 1}-${item.case_index}`,
-        network_namespace: `net:[${1000 + waveOffset * 10 + index}]`,
-      })),
-    )
-    const adoptedRun = launched[0]![0]!
-    const attempts = launched.flatMap((wave, waveOffset) =>
-      wave.map((item, index) => {
-        const adopted = item.run_id === adoptedRun.run_id
-        return {
-          run_id: item.run_id,
-          raw_leaderboard_eligible: true,
-          leaderboard_eligible: true,
-          started_at: waveOffset === 0 ? 100 : 151 + index * 10,
-          finished_at: waveOffset === 0 ? 150 + index * 10 : 200 + index * 10,
-          benchmark: {
-            batch_run_id: adopted ? "batch-previous" : "batch-1",
-            batch_plan_sha256: adopted ? "previous-plan-sha" : "plan-sha",
-            wave_index: waveOffset + 1,
-            case_index: item.case_index,
-          },
-          opencorvus: {
-            profile: item.profile,
-            host_network_isolation_audit: { network_namespace: item.network_namespace },
-          },
-        }
-      }),
-    )
-    expect(
-      auditBatchEvidence({
-        plan: {
-          batch_run_id: "batch-1",
-          trial_concurrency: 5,
-          schedule_mode: "rolling_case_slots_v1",
-          profiles: ["base", "advanced"],
-          network_isolation: "private_netns_slirp4netns_disable_host_loopback_v1",
-          host_network_namespace: "net:[999]",
-          protected_roots: { evidence: { passed: true }, control: { passed: true } },
-          preexisting_eligible: {
-            base: [{ run_id: adoptedRun.run_id, case_index: adoptedRun.case_index, profile: adoptedRun.profile }],
-            advanced: [],
-          },
-          cases,
-          waves: [wave1, wave2],
-        },
-        receipt: {
-          batch_run_id: "batch-1",
-          status: "completed",
-          wave_1: { launched: launched[0]!.slice(1), eligible: launched[0] },
-          wave_2: { launched: launched[1], eligible: launched[1] },
-        },
-        attempts,
-        planSHA256: "plan-sha",
-      }),
-    ).toEqual({
-      passed: true,
-      status: "completed",
-      reasons: [],
-      eligible_run_ids: launched
-        .flat()
-        .map((item) => item.run_id)
-        .sort(),
-      sealing_run_ids: launched
-        .flat()
-        .filter((item) => item.run_id !== adoptedRun.run_id)
-        .map((item) => item.run_id)
-        .sort(),
-      adopted_run_ids: [adoptedRun.run_id],
-    })
-  })
-
   test("accepts a completed five-case Base-only rolling batch", () => {
     const cases = [6, 7, 8, 9, 10].map((case_index) => ({ case_index }))
     const wave = cases.map((item) => ({ ...item, profile: "base" }))
@@ -1257,12 +1205,13 @@ describe("external agent benchmark contract", () => {
         wave_index: 1,
         case_index: item.case_index,
       },
-      opencorvus: { profile: "base" },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-terra" },
     }))
     expect(
       auditBatchEvidence({
         plan: {
           batch_run_id: "batch-2",
+          model: "openai/gpt-5.6-terra",
           trial_concurrency: 5,
           schedule_mode: "rolling_case_slots_v1",
           profiles: ["base"],
@@ -1304,11 +1253,12 @@ describe("external agent benchmark contract", () => {
         wave_index: 1,
         case_index: item.case_index,
       },
-      opencorvus: { profile: "base" },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-terra" },
     }))
     const audit = auditBatchEvidence({
       plan: {
         batch_run_id: "batch-posthoc-host-fault",
+        model: "openai/gpt-5.6-terra",
         trial_concurrency: 5,
         schedule_mode: "rolling_case_slots_v1",
         profiles: ["base"],
@@ -1389,14 +1339,22 @@ describe("external agent benchmark contract", () => {
     const record = (run_id: string, case_index: number) => ({
       run_id,
       benchmark: { case_index, repetition: 1 },
-      opencorvus: { profile: "base" },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-terra" },
     })
     const reusable = reusableProfileRuns(
       {
         leaderboard: [record("verified-1", 1)],
-        candidates: [record("superseded-candidate-1", 1), record("candidate-2", 2)],
+        candidates: [
+          record("superseded-candidate-1", 1),
+          record("candidate-2", 2),
+          {
+            ...record("luna-candidate-3", 3),
+            opencorvus: { profile: "base", model: "openai/gpt-5.6-luna" },
+          },
+        ],
       },
       "base",
+      "openai/gpt-5.6-terra",
     )
 
     expect([...reusable].map(([caseIndex, item]) => [caseIndex, item.run_id])).toEqual([

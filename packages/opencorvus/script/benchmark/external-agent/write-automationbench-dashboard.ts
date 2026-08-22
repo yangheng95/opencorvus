@@ -31,6 +31,7 @@ type DashboardRecord = {
 type BatchPlan = {
   batch_run_id: string
   batch_index: number
+  model: string
   cases: Array<{ case_index: number; task: string }>
   profiles: Profile[]
   waves: Array<Array<{ case_index: number; profile: Profile }>>
@@ -75,7 +76,8 @@ for (let index = 2; index < process.argv.length; index += 2) {
 const rootValue = values.get("root")
 const dashboardValue = values.get("dashboard")
 const planValue = values.get("batch-plan")
-if (!rootValue || !dashboardValue) throw new Error("--root and --dashboard are required")
+const model = values.get("model")
+if (!rootValue || !dashboardValue || !model) throw new Error("--root, --dashboard, and --model are required")
 const root = path.resolve(rootValue)
 const dashboard = path.resolve(dashboardValue)
 const planPath = planValue ? path.resolve(planValue) : undefined
@@ -174,6 +176,7 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
     leaderboard?: DashboardRecord[]
     primary_leaderboard?: DashboardRecord[]
     public_context?: PublicContext
+    scope?: { model?: string }
   }>(path.join(root, "evidence-catalog.json")),
   planPath ? readJSON<BatchPlan>(planPath) : Promise.resolve(undefined),
   walk(root),
@@ -181,9 +184,13 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
     path.join(root, ".automationbench-active-leases.json"),
   ),
 ])
+if (plan && plan.model !== model) throw new Error("Dashboard batch plan model does not match --model")
+if (catalog?.scope?.model && catalog.scope.model !== model) {
+  throw new Error("Dashboard catalog model does not match --model")
+}
 
 const verified = (catalog?.primary_leaderboard ?? catalog?.leaderboard ?? [])
-  .filter((record) => profiles.includes(record.opencorvus.profile))
+  .filter((record) => profiles.includes(record.opencorvus.profile) && record.opencorvus.model === model)
   .sort((left, right) => Number(left.benchmark.case_index) - Number(right.benchmark.case_index))
 const verifiedRunIDs = new Set(verified.map((record) => String(record.run_id)))
 const catalogAttempts = new Map((catalog?.attempts ?? []).map((attempt) => [String(attempt.run_id), attempt]))
@@ -199,6 +206,7 @@ const currentResults = (
           !payload ||
           !plan ||
           payload.benchmark.batch_run_id !== plan.batch_run_id ||
+          payload.opencorvus.model !== model ||
           verifiedRunIDs.has(String(payload.run.id))
         ) {
           return { file, payload, manifest: undefined, manifestValid: false, names: [] }
@@ -432,7 +440,7 @@ const html = `<!doctype html>
 </head>
 <body>
 <main>
-  <h1>AutomationBench · OpenCorvus Base + Advanced / GPT-5.6 Luna</h1>
+  <h1>AutomationBench · OpenCorvus ${profiles.map((profile) => escapeHTML(profile)).join(" + ")} / ${escapeHTML(model)}</h1>
   <div class="subtle">Primary profiles: ${profiles.map(escapeHTML).join(" + ")} · updated ${new Date(generatedAt).toISOString()}</div>
   <section class="metrics" aria-label="Profile benchmark summary">
     ${summaries
@@ -450,7 +458,7 @@ const html = `<!doctype html>
     ${summaries
       .map(
         (summary) =>
-          `<div class="bar"><span>OpenCorvus ${escapeHTML(summary.profile)} · Luna <span class="subtle">n=${summary.rows.length}</span></span><div class="track"><div class="fill local" style="width:${Math.min(100, summary.strictRate * 200)}%"></div></div><strong class="num">${percent(summary.strictRate)}</strong></div>`,
+          `<div class="bar"><span>OpenCorvus ${escapeHTML(summary.profile)} · ${escapeHTML(model)} <span class="subtle">n=${summary.rows.length}</span></span><div class="track"><div class="fill local" style="width:${Math.min(100, summary.strictRate * 200)}%"></div></div><strong class="num">${percent(summary.strictRate)}</strong></div>`,
       )
       .join("\n    ")}
     ${officialRows
