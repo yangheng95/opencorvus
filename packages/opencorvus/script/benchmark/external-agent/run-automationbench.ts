@@ -1824,7 +1824,7 @@ try {
       task_contract_schema: bridge.identity.taskContractSchema,
       task_contract_sha256: bridge.identity.taskContractSHA256,
       harness_request_sha256: crypto.createHash("sha256").update(harnessRequest).digest("hex"),
-      prompt_mapping: "remove_stock_single_model_turn_budget_and_use_mission_intake_v2",
+      prompt_mapping: "remove_stock_single_model_turn_budget_and_use_mission_intake_v3",
       split: "public",
       domain: arguments_.domain,
       task: arguments_.task,

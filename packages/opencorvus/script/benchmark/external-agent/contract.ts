@@ -159,6 +159,7 @@ export function automationBenchHarnessRequest(prompt: unknown): string {
     "This is an AutomationBench API-mode evaluation. The simulated business end state is the only scored deliverable.",
     "Mission is the real intake coordinator for this run. Delegate the complete business workflow to child Task work owned by the held Expert Squad; Mission must not execute benchmark operations itself.",
     "Every child Task request must retain the exact `This is an AutomationBench API-mode evaluation` statement and the complete SYSTEM/USER business-content block below.",
+    "The SYSTEM/USER block is the sole semantic authority. Mission must assign every requested effect across the complete child-Task set. Within each child Task's assigned closure it may add ownership, lineage, dependencies, and evidence duties, but must not weaken, generalize, substitute, reinterpret, or omit an assigned operation, channel, target, value, format, or guard. The full block remains authority context and does not make one child duplicate effects explicitly assigned to a sibling Task.",
     "Every child Task Agent that performs benchmark work must load the project Skill named `automationbench-api` before acting and use only its project-local client for benchmark operations.",
     "Do not ask the operator a question, do not modify product files, and do not replace benchmark operations with a prose report.",
     "OpenCorvus is the evaluated multi-Agent harness. Tool, model, Agent, retry, and concurrent call counts are measured without a stock single-model turn budget.",

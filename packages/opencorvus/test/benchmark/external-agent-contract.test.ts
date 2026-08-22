@@ -55,6 +55,10 @@ describe("external agent benchmark contract", () => {
     expect(skill).toContain("`search` is an endpoint-contract directory")
     expect(skill).toContain("That closure ends discovery, not the Task")
     expect(skill).toContain("email message inbox thread channel history")
+    expect(skill).toContain("A keyword-filtered empty record read proves only that filter")
+    expect(skill).toContain("one bounded list/read that is not narrowed by the missing business keyword")
+    expect(skill).toContain("build one authority-field effect row for every material returned field/value")
+    expect(skill).toContain("A field that names an action remains an action obligation")
     expect(skill).toContain("first re-check the endpoint field name, path identity, range, body shape")
     expect(skill).toContain("never report a simulated app's missing connection as benchmark infrastructure failure")
   })
@@ -200,8 +204,20 @@ describe("external agent benchmark contract", () => {
     expect(mapped).toContain(
       "Mission is the real intake coordinator for this run. Delegate the complete business workflow to child Task work owned by the held Expert Squad",
     )
+    expect(mapped).toContain(
+      "The SYSTEM/USER block is the sole semantic authority. Mission must assign every requested effect across the complete child-Task set",
+    )
+    expect(mapped).toContain("The full block remains authority context and does not make one child duplicate effects explicitly assigned to a sibling Task")
     expect(mapped).toContain("SYSTEM:\nExecute  the requested task. Keep  records exact.\n  code = '  exact  '")
     expect(mapped).toContain("USER:\n  Update the simulated business state.  ")
+  })
+
+  test("records the semantic-preserving Mission intake mapping as revision three", async () => {
+    const runner = await fs.readFile(
+      path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-automationbench.ts"),
+      "utf8",
+    )
+    expect(runner).toContain('prompt_mapping: "remove_stock_single_model_turn_budget_and_use_mission_intake_v3"')
   })
 
   test("accepts a trajectory whose tools stay inside the projected benchmark capability", () => {
