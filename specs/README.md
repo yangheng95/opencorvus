@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+In-progress CUDA-only DeBERTa ABSA multi-Expert-Squad Mission, including the completed Scientific Research Design package repair acceptance: [`2026-08-22-deberta-absa-multi-squad-mission.md`](records/2026-08/2026-08-22-deberta-absa-multi-squad-mission.md).
+
 Latest `v0.0.52-beta` application and website release: [`2026-08-22-v0.0.52-beta-release.md`](records/2026-08/2026-08-22-v0.0.52-beta-release.md).
 
 Latest real website data-analysis Expert Squad demonstration: [`2026-08-22-website-data-analysis-expert-squad-demo.md`](records/2026-08/2026-08-22-website-data-analysis-expert-squad-demo.md).

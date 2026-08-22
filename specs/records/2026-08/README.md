@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-22-deberta-absa-multi-squad-mission.md](2026-08-22-deberta-absa-multi-squad-mission.md) tracks the in-progress CUDA-only, `gpt-5.6-sol`, seven-stage Mission plan and the completed Scientific Research Design package repair acceptance; training, monitoring, paper, and GitHub stages remain pending.
+
 - [2026-08-22-v0.0.52-beta-release.md](2026-08-22-v0.0.52-beta-release.md) tracks canonical `0.0.52-beta` convergence, the reviewed immutable binary release, public website deployment, and the truthful boundary around the concurrent real Expert Squad demonstration.
 
 - [2026-08-22-website-data-analysis-expert-squad-demo.md](2026-08-22-website-data-analysis-expert-squad-demo.md) records one current-source, real-Provider, real-website, seven-node data-analysis Expert Squad demonstration from Mission submission through the final audited Markdown Artifact.

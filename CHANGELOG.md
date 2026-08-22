@@ -4,6 +4,10 @@
 
 ## 未发布
 
+### Fixed
+
+- 修复 Scientific Research Design 的最终领域整合者误用 Delivery Slice Architect adapter、在没有 RequirementSet 生产者的工作流中连续结算为 `requirement_set_not_read` 并使 Mission Task 失败的问题；该节点现在通过普通 Delegated Worker adapter 汇合研究 Artifact，Cloud 与 Advanced 的合法 Requirements → Architect 路径保持不变。
+
 ## 0.0.52beta - 2026-08-22
 
 本版本收敛专家团工作流的公开投影、交付结算与独立验收权威链路，并同步发布桌面端、命令行二进制和公开网站。

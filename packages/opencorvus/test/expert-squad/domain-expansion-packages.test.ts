@@ -10,6 +10,7 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 const packages = [
   {
     id: "cybersecurity-assurance",
+    version: "2026.08.13.1",
     skillName: "cybersecurity-assurance-method",
     workflowID: "security-assurance-pack",
     roots: [
@@ -18,26 +19,32 @@ const packages = [
       "security-incident-readiness-analyst",
     ],
     join: "security-assurance-integrator",
+    joinBaseRole: "delegated-worker",
     asset: "assets/security-assurance-register.md",
   },
   {
     id: "cloud-platform-architecture",
+    version: "2026.08.13.1",
     skillName: "cloud-platform-architecture-method",
     workflowID: "cloud-architecture-decision-pack",
     roots: ["cloud-workload-requirements-analyst", "cloud-reliability-analyst", "cloud-cost-operations-analyst"],
     join: "cloud-architecture-decision-owner",
+    joinBaseRole: "architect",
     asset: "assets/cloud-decision-record.md",
   },
   {
     id: "data-engineering-reliability",
+    version: "2026.08.13.1",
     skillName: "data-engineering-reliability-method",
     workflowID: "data-product-release-pack",
     roots: ["data-contract-analyst", "data-pipeline-resilience-analyst", "data-observability-analyst"],
     join: "data-release-integrator",
+    joinBaseRole: "delegated-worker",
     asset: "assets/data-product-contract.md",
   },
   {
     id: "scientific-research-design",
+    version: "2026.08.23.1",
     skillName: "scientific-research-design-method",
     workflowID: "research-design-decision-register",
     roots: [
@@ -46,10 +53,12 @@ const packages = [
       "research-rigor-ethics-analyst",
     ],
     join: "research-decision-integrator",
+    joinBaseRole: "delegated-worker",
     asset: "assets/research-decision-register.md",
   },
   {
     id: "healthcare-operations",
+    version: "2026.08.13.1",
     skillName: "healthcare-operations-method",
     workflowID: "healthcare-operations-improvement-pack",
     roots: [
@@ -58,10 +67,12 @@ const packages = [
       "healthcare-safety-privacy-analyst",
     ],
     join: "healthcare-operations-improvement-owner",
+    joinBaseRole: "delegated-worker",
     asset: "assets/healthcare-operations-register.md",
   },
   {
     id: "education-program-design",
+    version: "2026.08.13.1",
     skillName: "education-program-design-method",
     workflowID: "learning-program-blueprint",
     roots: [
@@ -70,10 +81,12 @@ const packages = [
       "education-assessment-accessibility-analyst",
     ],
     join: "education-program-integrator",
+    joinBaseRole: "delegated-worker",
     asset: "assets/learning-program-blueprint.md",
   },
   {
     id: "supply-chain-logistics",
+    version: "2026.08.13.1",
     skillName: "supply-chain-logistics-method",
     workflowID: "logistics-control-tower-plan",
     roots: [
@@ -82,10 +95,12 @@ const packages = [
       "logistics-disruption-risk-analyst",
     ],
     join: "logistics-plan-owner",
+    joinBaseRole: "delegated-worker",
     asset: "assets/logistics-control-tower.md",
   },
   {
     id: "manufacturing-quality",
+    version: "2026.08.13.1",
     skillName: "manufacturing-quality-method",
     workflowID: "manufacturing-quality-disposition-pack",
     roots: [
@@ -94,10 +109,12 @@ const packages = [
       "quality-control-verification-analyst",
     ],
     join: "quality-disposition-owner",
+    joinBaseRole: "delegated-worker",
     asset: "assets/nonconformance-register.md",
   },
   {
     id: "real-estate-due-diligence",
+    version: "2026.08.13.1",
     skillName: "real-estate-due-diligence-method",
     workflowID: "property-due-diligence-pack",
     roots: [
@@ -106,10 +123,12 @@ const packages = [
       "property-physical-regulatory-risk-analyst",
     ],
     join: "property-diligence-pack-owner",
+    joinBaseRole: "delegated-worker",
     asset: "assets/property-diligence-register.md",
   },
   {
     id: "ecommerce-merchandising",
+    version: "2026.08.13.1",
     skillName: "ecommerce-merchandising-method",
     workflowID: "merchandising-test-plan",
     roots: [
@@ -118,6 +137,7 @@ const packages = [
       "merchandising-experience-operations-analyst",
     ],
     join: "merchandising-plan-owner",
+    joinBaseRole: "delegated-worker",
     asset: "assets/merchandising-test-plan.md",
   },
 ] as const
@@ -142,7 +162,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
         schema_version: 1,
         namespace: "builtin",
         id: definition.id,
-        version: "2026.08.13.1",
+        version: definition.version,
       })
       expect([...loaded.packageSkills.keys()]).toEqual([ref])
       expect(method.definition.name).toBe(definition.skillName)
@@ -153,6 +173,10 @@ describe("Ten-domain Expert Squad package expansion", () => {
       expect(Object.values(agents).map((agent) => agent.package_skill_refs)).toEqual(
         Object.values(agents).map(() => [ref]),
       )
+      expect(agents[definition.join].base_role).toBe(definition.joinBaseRole)
+      if (definition.id === "cloud-platform-architecture") {
+        expect(agents["cloud-workload-requirements-analyst"].base_role).toBe("requirements")
+      }
       expect(Object.fromEntries(Object.entries(workflow.nodes).map(([id, node]) => [id, node.depends_on]))).toEqual({
         ...Object.fromEntries(definition.roots.map((id) => [id, []])),
         [definition.join]: [...definition.roots].sort(),
@@ -190,7 +214,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
 
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { version: "2026.08.13.1" },
+            packageRevision: { version: definition.version },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref, source: "package" },
@@ -207,6 +231,21 @@ describe("Ten-domain Expert Squad package expansion", () => {
             expect(worker.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
               { ref, source: "package" },
             ])
+            if (agentID === definition.join) {
+              expect(worker.identity).toMatchObject({
+                baseRole: definition.joinBaseRole,
+                dispatchAdapterID: definition.joinBaseRole === "architect" ? "architect" : "delegated_worker",
+              })
+            }
+            if (
+              definition.id === "cloud-platform-architecture" &&
+              agentID === "cloud-workload-requirements-analyst"
+            ) {
+              expect(worker.identity).toMatchObject({
+                baseRole: "requirements",
+                dispatchAdapterID: "requirements",
+              })
+            }
           }
         }
       },

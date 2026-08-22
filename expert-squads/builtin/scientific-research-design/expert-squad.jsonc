@@ -5,7 +5,7 @@
   "name": "Scientific Research Design",
   "label": "Scientific Research Design",
   "description": "Evidence landscape, competing hypothesis, and rigor or ethics analysis joined into a reproducible research decision register.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.23.1",
   "product_pillars": [
     "work"
   ],
@@ -113,7 +113,7 @@
       "research-decision-integrator": {
         "label": "Research Decision Integrator",
         "description": "Joins evidence, alternatives, and gates into a reproducible research register.",
-        "base_role": "architect",
+        "base_role": "delegated-worker",
         "prompt": "agents/research-decision-integrator/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
