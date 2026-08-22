@@ -1231,6 +1231,67 @@ export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
   })
 }
 
+/** Physical settlement of every durable scheduler delivery owned by one Session. */
+export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
+  passed: boolean
+  pendingInboxIDs: string[]
+  leasedInboxIDs: string[]
+  unansweredInboxIDs: string[]
+  deadLetterInboxIDs: string[]
+  invalidTerminalInboxIDs: string[]
+} {
+  return Database.use((db) => {
+    const deliveries = db
+      .select()
+      .from(ProtocolInboxTable)
+      .where(and(eq(ProtocolInboxTable.actor, "session"), eq(ProtocolInboxTable.actor_id, sessionID)))
+      .all()
+      .map((row) => projectProtocolDeliveryInTransaction(db, row))
+    const pendingInboxIDs = deliveries
+      .filter((delivery) => delivery.status === "pending")
+      .map((delivery) => delivery.id)
+      .sort()
+    const leasedInboxIDs = deliveries
+      .filter((delivery) => delivery.status === "leased")
+      .map((delivery) => delivery.id)
+      .sort()
+    const deadLetterInboxIDs = deliveries
+      .filter((delivery) => delivery.status === "dead_letter")
+      .map((delivery) => delivery.id)
+      .sort()
+    const unansweredInboxIDs = deliveries
+      .filter((delivery) => {
+        if (delivery.status !== "delivered" || delivery.delivery_result?.kind !== "session_wake") return false
+        return !successfulSchedulerWakeReplyExistsInTransaction(db, {
+          sessionID,
+          messageID: delivery.delivery_result.message_id,
+        })
+      })
+      .map((delivery) => delivery.id)
+      .sort()
+    const invalidTerminalInboxIDs = deliveries
+      .filter(
+        (delivery) =>
+          delivery.status === "delivered" && delivery.delivery_result?.kind !== "session_wake",
+      )
+      .map((delivery) => delivery.id)
+      .sort()
+    return {
+      passed:
+        pendingInboxIDs.length === 0 &&
+        leasedInboxIDs.length === 0 &&
+        unansweredInboxIDs.length === 0 &&
+        deadLetterInboxIDs.length === 0 &&
+        invalidTerminalInboxIDs.length === 0,
+      pendingInboxIDs,
+      leasedInboxIDs,
+      unansweredInboxIDs,
+      deadLetterInboxIDs,
+      invalidTerminalInboxIDs,
+    }
+  })
+}
+
 export function schedulerSessionWakeNeedsRecovery(input: {
   inboxID: string
   sessionID: string
