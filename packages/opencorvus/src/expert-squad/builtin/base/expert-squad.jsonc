@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Built-in Planner-first Expert Squad for compact capability-matched delivery and independent verification of the settled result.",
-  "version": "2026.08.22.1",
+  "version": "2026.08.22.4",
   "product_pillars": [
     "code",
     "work"
@@ -70,7 +70,7 @@
       },
       "base-planner": {
         "label": "Base Planner",
-        "description": "Publishes one capability-matched Task implementation plan without executing clients, editing product files, or creating Goal-derived planning facts.",
+        "description": "Publishes one capability-matched Task implementation plan after read-only current-authority discovery, without mutating external state, editing product files, or creating Goal-derived planning facts.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md",
         "inherit_base_tools": false,
@@ -82,7 +82,8 @@
           "webfetch",
           "websearch",
           "external_code_search",
-          "skill"
+          "skill",
+          "bash"
         ],
         "default_skill_refs": [],
         "package_skill_refs": [

@@ -28,7 +28,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.22.2")
+    expect(loaded.manifest.version).toBe("2026.08.22.6")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -96,11 +96,11 @@ describe("built-in interface review workflow authority", () => {
       "acceptance authority from the original request and current raw authorities",
     )
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
-      "Before reading any RequirementSet, Architect spec, implementation report, or prior verdict",
+      "Before searching for, reading, or selecting any RequirementSet, Architect spec, implementation report, or prior verdict",
     )
     expect(loaded.promptProfile.agents["test-engineer"]).toContain("bidirectional traceability")
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
-      "treat its inventory, mappings and verdict as claims to challenge",
+      "treat both the inventory and verdict as claims to challenge",
     )
     expect(loaded.manifest.capability_projection.agents["source-investigator"]).toMatchObject({
       base_role: "delegated-worker",
@@ -145,7 +145,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
       "finite authority-candidate ledger",
     )
-    expect(loaded.promptProfile.agents["solution-architect"]).toContain("source-derived action matrix")
+    expect(loaded.promptProfile.agents["solution-architect"]).toContain("authority-field effect ledger")
     expect(loaded.promptProfile.agents["implementation-engineer"]).toContain(
       "Missing a dedicated field never authorizes a different surrogate mutation",
     )
@@ -159,7 +159,7 @@ describe("built-in interface review workflow authority", () => {
       "When the dynamic business-entity trigger applies, additionally report authority-ledger closure",
     )
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
-      "Require row-for-row coverage of every in-scope entity",
+      "Require row-for-row coverage of every material source field/value, in-scope entity",
     )
     expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
       "When a dynamic current process, policy, template, backlog, or history decides actions for a set of business entities",
@@ -168,14 +168,30 @@ describe("built-in interface review workflow authority", () => {
       "Ordinary repository/software delivery retains its normal Requirement and Slice-local acceptance contract",
     )
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
-      "current `advanced/test-report`",
+      "immutable `advanced/acceptance-inventory` and current `advanced/test-report`",
+    )
+    expect(loaded.promptProfile.agents["source-investigator"]).toContain(
+      "A keyword-filtered empty record read proves only that filter",
+    )
+    expect(loaded.promptProfile.agents["implementation-engineer"]).toContain("authority-field effect ledger")
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "Publish that frozen baseline first as one `advanced/acceptance-inventory` Artifact",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "Include the independent authority-field effect ledger only when the dynamic business-entity trigger applies",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "First find that exact acceptance inventory through `artifact_search`, completely read it through `artifact_read`, and select it through `artifact_select` in the current physical Turn",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "current-Turn `artifact_selection_ref` for the acceptance inventory and every semantically used RequirementSet, Architect, implementation, and prior test-owned Artifact in `source_selection_refs`",
     )
   })
 
-  test("projects capability-matched Base workflows and plan-only Planner tools", async () => {
+  test("projects capability-matched Base workflows and the read-only authority Planner surface", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.22.1")
+    expect(loaded.manifest.version).toBe("2026.08.22.4")
     expect(workflowNodes(loaded, "planner-execution-verification")).toEqual({
       "base-planner": [],
       "base-developer": ["base-planner"],
@@ -214,7 +230,7 @@ describe("built-in interface review workflow authority", () => {
       "finite authority-candidate ledger",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "build the plan's source-derived action matrix before external-state mutation",
+      "close the plan's authority-field effect ledger before external-state mutation",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Missing a dedicated field never authorizes a different surrogate mutation",
@@ -226,23 +242,39 @@ describe("built-in interface review workflow authority", () => {
       "omitted required effects, extra or surrogate mutations, wrong identities, stale precedence",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "When the dynamic business-entity trigger applies, it additionally records independent authority-ledger closure",
+      "When the dynamic business-entity trigger applies, it additionally records row-for-row comparison of the published independent effect ledger",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "Ordinary repository/software delivery continues to use the existing `AC-N` contract",
     )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
-      "challenges every `AC-N` and omission against that baseline",
+      "challenges every `AC-N` and omission against that immutable baseline",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "criterion-by-criterion coverage for every planned `AC-N`",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "Before reading the plan or any worker claim, perform pass one",
+      "Before searching for, reading, or selecting the plan or any worker claim, perform pass one",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("bidirectional traceability")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "The plan is an allocation claim, not acceptance authority",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "invoke its local client or shell only for read/list/get/search operations",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("authority-field effect ledger")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "Publish that frozen baseline first as one `base/acceptance-inventory` Artifact",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "Include the independent authority-field effect ledger only when the dynamic business-entity trigger applies",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "First find that exact acceptance inventory through `artifact_search`, completely read it through `artifact_read`, and select it through `artifact_select` in the current physical Turn",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "current-Turn `artifact_selection_ref` in `source_selection_refs`",
     )
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
@@ -256,6 +288,7 @@ describe("built-in interface review workflow authority", () => {
         "websearch",
         "external_code_search",
         "skill",
+        "bash",
       ],
     })
   })
@@ -280,6 +313,7 @@ describe("built-in interface review workflow authority", () => {
           "artifact_search",
           "artifact_select",
           "artifact_snapshot",
+          "bash",
           "capability_search",
           "external_code_search",
           "glob",
@@ -407,7 +441,7 @@ describe("built-in interface review workflow authority", () => {
     })
   })
 
-  test("mounts an operator Skill onto the real scheduler and Advanced source investigator surfaces", async () => {
+  test("mounts an operator Skill onto the real scheduler, Base Planner, and Advanced source investigator surfaces", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -438,13 +472,21 @@ describe("built-in interface review workflow authority", () => {
           skill_mountable: true,
           skill_tool_available: true,
         })
-        await SkillMount.setOverride({
-          scope: "project",
-          expertSquadID: "base",
-          agentID: "orchestrator",
-          defaultSkillRef: "default/skill/authority-read-probe",
-          override: true,
+        expect(baseDiscovered.agents.find((agent) => agent.agent_id === "base-planner")).toMatchObject({
+          base_role: "delegated-worker",
+          capability_owner: "package",
+          skill_mountable: true,
+          skill_tool_available: true,
         })
+        for (const agentID of ["orchestrator", "base-planner"]) {
+          await SkillMount.setOverride({
+            scope: "project",
+            expertSquadID: "base",
+            agentID,
+            defaultSkillRef: "default/skill/authority-read-probe",
+            override: true,
+          })
+        }
         const baseConfig = Config.Info.parse({
           ...(await Config.get()),
           prompt_profile: { active: "base" },
@@ -466,6 +508,28 @@ describe("built-in interface review workflow authority", () => {
           availableToolNames: baseScheduler.builtInToolIDs,
         })
         expect(baseSchedulerSurface.skills).toEqual(
+          expect.arrayContaining([expect.objectContaining({ name: "authority-read-probe", enabled: true })]),
+        )
+        const basePlannerTurn = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config: baseConfig,
+          agentID: "base-planner",
+        })
+        expect(basePlannerTurn.workerCapability.builtInToolIDs).toEqual(
+          expect.arrayContaining(["bash", "skill"]),
+        )
+        const basePlannerSurface = await SkillMount.resolve({
+          identity: {
+            ...basePlannerTurn.workerCapability.identity,
+            expertSquadID: basePlannerTurn.workerCapability.expertSquadID,
+          },
+          runtime: basePlannerTurn.workerCapability.runtime,
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection: basePlannerTurn.skillProjection,
+          availableToolNames: basePlannerTurn.workerCapability.builtInToolIDs,
+        })
+        expect(basePlannerSurface.skills).toEqual(
           expect.arrayContaining([expect.objectContaining({ name: "authority-read-probe", enabled: true })]),
         )
 
