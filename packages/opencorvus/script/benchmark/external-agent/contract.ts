@@ -6,6 +6,19 @@ import crypto from "node:crypto"
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
 
+export function auditBenchmarkBunRuntime(packageManager: unknown, actualVersion: string | undefined) {
+  const expectedVersion =
+    typeof packageManager === "string" && packageManager.startsWith("bun@")
+      ? packageManager.slice("bun@".length).trim()
+      : ""
+  const actual = actualVersion?.trim() ?? ""
+  return {
+    passed: expectedVersion.length > 0 && actual === expectedVersion,
+    expected_version: expectedVersion,
+    actual_version: actual,
+  }
+}
+
 export type TokenBreakdown = {
   input: number
   output: number

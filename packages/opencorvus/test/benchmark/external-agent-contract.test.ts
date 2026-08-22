@@ -4,6 +4,7 @@ import path from "node:path"
 import {
   benchmarkActivitySignature,
   benchmarkRunKey,
+  auditBenchmarkBunRuntime,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   automationBenchRunValidity,
@@ -44,6 +45,14 @@ import {
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
+  test("binds formal batches to the repository's exact Bun runtime", () => {
+    expect(auditBenchmarkBunRuntime("bun@1.3.14", "1.3.14")).toEqual({
+      passed: true,
+      expected_version: "1.3.14",
+      actual_version: "1.3.14",
+    })
+  })
+
   test("uses the seeded simulated SaaS world and bounded authority discovery", async () => {
     const skill = await fs.readFile(
       path.resolve(import.meta.dir, "../../script/benchmark/external-agent/automationbench-api.SKILL.md"),

@@ -2,7 +2,12 @@ import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import lockfile from "proper-lockfile"
-import { executeRollingBatchChains, reusableProfileRuns, rollingBatchChains } from "./contract"
+import {
+  auditBenchmarkBunRuntime,
+  executeRollingBatchChains,
+  reusableProfileRuns,
+  rollingBatchChains,
+} from "./contract"
 
 type FrozenCase = {
   case_index: number
@@ -27,6 +32,16 @@ const required = (name: string) => {
   return path.resolve(value)
 }
 if (process.platform !== "linux" || process.getuid?.() !== 0) throw new Error("Batch coordinator requires the WSL2 root boundary")
+const rootPackage = JSON.parse(
+  await fs.readFile(path.resolve(import.meta.dir, "../../../../../package.json"), "utf8"),
+) as { packageManager?: unknown }
+const runtimeAudit = auditBenchmarkBunRuntime(rootPackage.packageManager, process.versions.bun)
+if (!runtimeAudit.passed) {
+  throw new Error(
+    `Benchmark Bun runtime mismatch: expected ${runtimeAudit.expected_version || "bun@<version>"}, ` +
+      `received ${runtimeAudit.actual_version || "unavailable"}`,
+  )
+}
 const python = required("python")
 const sourceData = required("source-data")
 const output = required("output")

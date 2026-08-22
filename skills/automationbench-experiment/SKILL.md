@@ -41,7 +41,7 @@ If any product, adapter, scorer, evidence, timeout, credential/model projection,
 
 1. Mark every affected run `invalid_bug`. Keep it in the all-attempt evidence catalog, but exclude it from experiment tables, aggregates, rankings, and claims.
 2. Stop launching experiment runs. Diagnose and fix the shared root cause first; add focused positive coverage and perform the repository-required independent read-only review.
-3. Commit the framework fix separately from benchmark work. Merge or cherry-pick only that fix commit into the current `v0.0.51beta` maintenance branch; do not move benchmark files, dashboard code, experiment Skill, benchmark spec, or evidence there.
+3. Commit the framework fix separately from benchmark work. Merge or cherry-pick only that fix commit into the current `0.0.52-beta` release source (`v0.0.51beta` until publication, then maintenance branch `v0.0.52beta`); do not move benchmark files, dashboard code, experiment Skill, benchmark spec, or evidence there.
 4. Bring the repaired release history back into the bench branch, then rerun from a fresh AutomationBench world and new evidence directory. Never relabel an old run as fixed.
 
 An excessive call count, long duration while observable work continues, parallel Agents, repeated work, or a low official score is harness behavior—not a bug and not a reason to cancel. Use only true inactivity detection for a stuck run; do not impose a wall-clock deadline while work advances.
