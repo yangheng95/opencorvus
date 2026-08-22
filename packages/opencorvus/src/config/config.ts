@@ -1407,7 +1407,7 @@ export namespace Config {
         .lazy(() => PromptProfileConfigSchema)
         .describe("Active package-backed expert-squad prompt profile selection."),
       skill_mounts: SkillMountProjectConfigSchema.optional().describe(
-        "Project-owned operator skill overrides qualified by expert squad, dynamic agent, and default skill ref.",
+        "Project-owned operator skill overrides qualified by expert squad, projected Skill owner, and default skill ref.",
       ),
       skill_policy: z
         .record(z.string(), PermissionAction)

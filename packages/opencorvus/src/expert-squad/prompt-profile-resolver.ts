@@ -719,7 +719,8 @@ export namespace PromptProfileResolver {
           `Expert squad ${input.active.profileID} skill_mounts references undeclared dynamic agent ${JSON.stringify(agentID)}.`,
         )
       }
-      const skillMountable = baseRole === "orchestrator" ? false : RuntimeTemplateRegistry.get(baseRole).skillMountable
+      const skillMountable =
+        baseRole === "orchestrator" ? true : RuntimeTemplateRegistry.get(baseRole).skillMountable
       if (!skillMountable) {
         throw new Error(
           `Expert squad ${input.active.profileID} agent ${agentID} uses base role ${baseRole}, which does not allow operator skill mounts.`,

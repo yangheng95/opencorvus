@@ -96,7 +96,7 @@ export function SkillRoutes() {
       describeRoute({
         summary: "Set a qualified skill mount override",
         description:
-          "Set or delete one project/session operator override qualified by expert squad, dynamic agent, and default skill ref.",
+          "Set or delete one project/session operator override qualified by expert squad, projected Skill owner, and default skill ref.",
         operationId: "skill.setMountOverride",
         responses: {
           200: {

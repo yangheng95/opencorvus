@@ -5,7 +5,7 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.21.6",
+  "version": "2026.08.22.2",
   "product_pillars": [
     "code",
     "work"
@@ -135,11 +135,17 @@
       },
       "source-investigator": {
         "label": "Source Investigator",
-        "description": "Performs read-oriented repository investigation and records source-grounded evidence.",
-        "base_role": "explore",
+        "description": "Performs read-only repository and projected-client authority investigation and records source-grounded evidence.",
+        "base_role": "delegated-worker",
         "prompt": "agents/source-investigator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
+        "inherit_base_tools": false,
+        "built_in_tool_ids": [
+          "read",
+          "glob",
+          "search_code",
+          "bash",
+          "skill"
+        ],
         "default_skill_refs": [],
         "package_skill_refs": [
           "advanced/shared/method"
@@ -408,7 +414,7 @@
           },
           "source-investigator": {
             "agent_id": "source-investigator",
-            "description": "Investigates repository structure, callers, tests, and ownership boundaries in parallel with intent and Requirements work.",
+            "description": "Investigates repository structure and, when projected, current external authority through read-only Skills or clients in parallel with intent and Requirements work.",
             "depends_on": []
           },
           "solution-architect": {
@@ -463,7 +469,7 @@
           },
           "source-investigator": {
             "agent_id": "source-investigator",
-            "description": "Investigates repository structure, callers, tests, and ownership boundaries with read-only repository Tools.",
+            "description": "Investigates repository structure and projected current-authority sources with read-only repository, Skill, and client operations.",
             "depends_on": []
           },
           "research-investigator": {

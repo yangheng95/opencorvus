@@ -1,8 +1,12 @@
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { runtimeOverrideLayers } from "@/agent/runtime-override"
-import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
+import {
+  sessionRuntimeFromNativeAgent,
+  sessionRuntimeFromProjectedTemplate,
+  type SessionAgentRuntime,
+} from "@/agent/session-agent-runtime"
+import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
-import { DynamicAgentIDSchema } from "@/agent/dynamic-agent-id"
 import { ExpertSquadVirtualWorkflowsSchema } from "@/expert-squad/protocol-schema"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
@@ -14,6 +18,7 @@ import z from "zod"
 import { DefaultSkillRefSchema, defaultSkillRefFromName } from "./default-skill-ref"
 import { Skill } from "./skill"
 import { SkillManager } from "./manager"
+import { SkillMountAgentIDSchema } from "./mount-config"
 import { skillDisabledReason, skillLoaderAvailable } from "./eligibility"
 import { taskPackageRevisionForSession } from "@/engine/task-package-projection"
 
@@ -113,7 +118,7 @@ export namespace SkillMount {
 
   const MutationFields = {
     expertSquadID: z.string().trim().min(1),
-    agentID: z.string().trim().min(1),
+    agentID: SkillMountAgentIDSchema,
     defaultSkillRef: DefaultSkillRefSchema,
     override: z.boolean().nullable(),
   }
@@ -334,7 +339,7 @@ export namespace SkillMount {
 
   function relationsForAgent(input: {
     projection: PromptProfileResolver.ResolvedSkillProjection
-    projected: ProjectedAgent
+    projected: ProjectedSkillOwner
     runtime: SessionAgentRuntime
     projectConfig: Config.Info
     sessionOverlay?: Config.Overlay
@@ -447,6 +452,33 @@ export namespace SkillMount {
     })
     const rows: MatrixRow[] = []
     const agents: AgentEntry[] = []
+    const scheduler = projection.projectedScheduler
+    const schedulerRuntime = sessionRuntimeFromNativeAgent(
+      await HostAgentRegistry.get("orchestrator", { config: projectionConfig }),
+    )
+    const schedulerToolIDs = new Set(scheduler.projectedToolIDs)
+    agents.push({
+      agent_id: scheduler.identity.agentID,
+      base_role: scheduler.identity.baseRole,
+      label: scheduler.label,
+      ...(scheduler.description ? { description: scheduler.description } : {}),
+      capability_owner: "package",
+      skill_mountable: true,
+      skill_tool_available: agentCanUseSkillTool({ runtime: schedulerRuntime, projectedToolIDs: schedulerToolIDs }),
+      projected_tool_ids: [...scheduler.projectedToolIDs],
+    })
+    rows.push({
+      agent_id: scheduler.identity.agentID,
+      base_role: scheduler.identity.baseRole,
+      grants: relationsForAgent({
+        projection,
+        projected: scheduler,
+        runtime: schedulerRuntime,
+        projectConfig,
+        sessionOverlay,
+        effectiveConfig,
+      }),
+    })
     // Scheduler-only agents first: `PromptProfileResolver` already resolves their production Skill
     // grants and `resolve()` already serves their turn surface, but omitting them here meant an
     // operator could not mount a Skill onto the one worker an Advanced Task most often dispatches
@@ -536,10 +568,6 @@ export namespace SkillMount {
 
   export async function setOverride(raw: z.input<typeof SetOverrideInput>): Promise<Matrix> {
     const input = SetOverrideInput.parse(raw)
-    const dynamicAgentID = DynamicAgentIDSchema.safeParse(input.agentID)
-    if (!dynamicAgentID.success) {
-      throw new Error(dynamicAgentID.error.issues[0]?.message ?? "Invalid dynamic agent id.")
-    }
     const [config, projectDirectory] =
       input.scope === "session"
         ? await Promise.all([

@@ -12571,21 +12571,21 @@ export class Skill2 extends HeyApiClient {
   /**
    * Set a qualified skill mount override
    *
-   * Set or delete one project/session operator override qualified by expert squad, dynamic agent, and default skill ref.
+   * Set or delete one project/session operator override qualified by expert squad, projected Skill owner, and default skill ref.
    */
   public setMountOverride<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
       body:
         | {
-            agentID: string
+            agentID: "orchestrator" | string
             defaultSkillRef: string
             expertSquadID: string
             override: boolean | null
             scope: "project"
           }
         | {
-            agentID: string
+            agentID: "orchestrator" | string
             defaultSkillRef: string
             expertSquadID: string
             override: boolean | null

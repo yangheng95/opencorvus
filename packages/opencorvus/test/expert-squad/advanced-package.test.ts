@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { HostAgentRegistry } from "../../src/agent/host-agent-registry"
+import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
 import { Config } from "../../src/config/config"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
@@ -26,7 +28,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.21.6")
+    expect(loaded.manifest.version).toBe("2026.08.22.2")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -91,7 +93,23 @@ describe("built-in interface review workflow authority", () => {
     // Verifying only what the implementation reported acting on turned a partial AutomationBench
     // delivery into a PASS verdict; scope comes from the request instead.
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
-      "acceptance scope from the original request and the authoritative sources it names",
+      "acceptance authority from the original request and current raw authorities",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
+      "Before reading any RequirementSet, Architect spec, implementation report, or prior verdict",
+    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain("bidirectional traceability")
+    expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
+      "treat its inventory, mappings and verdict as claims to challenge",
+    )
+    expect(loaded.manifest.capability_projection.agents["source-investigator"]).toMatchObject({
+      base_role: "delegated-worker",
+      inherit_base_tools: false,
+      built_in_tool_ids: ["read", "glob", "search_code", "bash", "skill"],
+      description: "Performs read-only repository and projected-client authority investigation and records source-grounded evidence.",
+    })
+    expect(loaded.promptProfile.agents["source-investigator"]).toContain(
+      "use its executable surface only for read/list/get/search operations",
     )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
       "requested outcome is a change to an external system of record",
@@ -135,7 +153,7 @@ describe("built-in interface review workflow authority", () => {
       "independently rebuild the finite authority-candidate ledger",
     )
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
-      "omitted effects, extra or surrogate mutations, wrong identities, rule-precedence violations",
+      "omitted effects, extra or surrogate mutations, wrong identities, stale precedence",
     )
     expect(loaded.promptProfile.agents["test-engineer"]).toContain(
       "When the dynamic business-entity trigger applies, additionally report authority-ledger closure",
@@ -150,14 +168,14 @@ describe("built-in interface review workflow authority", () => {
       "Ordinary repository/software delivery retains its normal Requirement and Slice-local acceptance contract",
     )
     expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
-      "current independent `advanced/test-report`",
+      "current `advanced/test-report`",
     )
   })
 
   test("projects capability-matched Base workflows and plan-only Planner tools", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.21.4")
+    expect(loaded.manifest.version).toBe("2026.08.22.1")
     expect(workflowNodes(loaded, "planner-execution-verification")).toEqual({
       "base-planner": [],
       "base-developer": ["base-planner"],
@@ -178,7 +196,7 @@ describe("built-in interface review workflow authority", () => {
     // occurrence can no longer carry the terminal decision.
     expect(loaded.promptProfile.agents["orchestrator"]).toContain("that report is stale for the mutated surface")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "acceptance scope comes from the original Task request, the canonical plan, and the current authoritative sources",
+      "acceptance authority is the original Task request plus current raw authoritative sources",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "Allocate work from the actual projected Tool inventory",
@@ -205,7 +223,7 @@ describe("built-in interface review workflow authority", () => {
       "independently rebuild the finite authority-candidate ledger",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "Report omitted required effects, extra or surrogate mutations, wrong identities, rule-precedence violations",
+      "omitted required effects, extra or surrogate mutations, wrong identities, stale precedence",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "When the dynamic business-entity trigger applies, it additionally records independent authority-ledger closure",
@@ -214,10 +232,17 @@ describe("built-in interface review workflow authority", () => {
       "Ordinary repository/software delivery continues to use the existing `AC-N` contract",
     )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
-      "complete read/select coverage of every `AC-N`",
+      "challenges every `AC-N` and omission against that baseline",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "criterion-by-criterion coverage for every planned `AC-N`",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "Before reading the plan or any worker claim, perform pass one",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("bidirectional traceability")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "The plan is an allocation claim, not acceptance authority",
     )
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
@@ -378,6 +403,152 @@ describe("built-in interface review workflow authority", () => {
         expect(surface.skills.map((skill) => ({ name: skill.name, enabled: skill.enabled }))).toEqual([
           { name: "turn-visible-probe", enabled: true },
         ])
+      },
+    })
+  })
+
+  test("mounts an operator Skill onto the real scheduler and Advanced source investigator surfaces", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const skillDirectory = path.join(project.path, ".opencorvus", "skill", "authority-read-probe")
+        await fs.mkdir(skillDirectory, { recursive: true })
+        await fs.writeFile(
+          path.join(skillDirectory, "SKILL.md"),
+          [
+            "---",
+            "name: authority-read-probe",
+            "description: Read-only authority probe for projected scheduler and source turns.",
+            "---",
+            "",
+            "# Authority read probe",
+            "",
+            "Read current authority before judging delivery.",
+            "",
+          ].join("\n"),
+          "utf8",
+        )
+        await SkillManager.refreshDiscoveryState()
+
+        const baseDiscovered = await SkillMount.matrix({ expertSquadID: "base" })
+        expect(baseDiscovered.agents.find((agent) => agent.agent_id === "orchestrator")).toMatchObject({
+          base_role: "orchestrator",
+          capability_owner: "package",
+          skill_mountable: true,
+          skill_tool_available: true,
+        })
+        await SkillMount.setOverride({
+          scope: "project",
+          expertSquadID: "base",
+          agentID: "orchestrator",
+          defaultSkillRef: "default/skill/authority-read-probe",
+          override: true,
+        })
+        const baseConfig = Config.Info.parse({
+          ...(await Config.get()),
+          prompt_profile: { active: "base" },
+          mcp: { browser: BrowserMCPBuiltin.localConfig() },
+        })
+        const baseSkillProjection = await PromptProfileResolver.resolveSkillProjection({
+          projectDirectory: project.path,
+          config: baseConfig,
+        })
+        const baseScheduler = baseSkillProjection.projectedScheduler
+        const baseSchedulerSurface = await SkillMount.resolve({
+          identity: { ...baseScheduler.identity, expertSquadID: baseSkillProjection.expertSquadID },
+          runtime: sessionRuntimeFromNativeAgent(
+            await HostAgentRegistry.get("orchestrator", { config: baseConfig }),
+          ),
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection: baseSkillProjection,
+          availableToolNames: baseScheduler.builtInToolIDs,
+        })
+        expect(baseSchedulerSurface.skills).toEqual(
+          expect.arrayContaining([expect.objectContaining({ name: "authority-read-probe", enabled: true })]),
+        )
+
+        const discovered = await SkillMount.matrix({ expertSquadID: "advanced" })
+        expect(discovered.agents.find((agent) => agent.agent_id === "orchestrator")).toMatchObject({
+          base_role: "orchestrator",
+          capability_owner: "package",
+          skill_mountable: true,
+          skill_tool_available: true,
+        })
+        expect(discovered.agents.find((agent) => agent.agent_id === "source-investigator")).toMatchObject({
+          base_role: "delegated-worker",
+          capability_owner: "package",
+          skill_mountable: true,
+          skill_tool_available: true,
+        })
+
+        for (const agentID of ["orchestrator", "source-investigator"]) {
+          await SkillMount.setOverride({
+            scope: "project",
+            expertSquadID: "advanced",
+            agentID,
+            defaultSkillRef: "default/skill/authority-read-probe",
+            override: true,
+          })
+        }
+
+        const effectiveConfig = Config.Info.parse({
+          ...(await Config.get()),
+          prompt_profile: { active: "advanced" },
+          mcp: { browser: BrowserMCPBuiltin.localConfig() },
+        })
+        const skillProjection = await PromptProfileResolver.resolveSkillProjection({
+          projectDirectory: project.path,
+          config: effectiveConfig,
+        })
+        const scheduler = skillProjection.projectedScheduler
+        const schedulerSurface = await SkillMount.resolve({
+          identity: { ...scheduler.identity, expertSquadID: skillProjection.expertSquadID },
+          runtime: sessionRuntimeFromNativeAgent(
+            await HostAgentRegistry.get("orchestrator", { config: effectiveConfig }),
+          ),
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection,
+          availableToolNames: scheduler.builtInToolIDs,
+        })
+        expect(schedulerSurface.skills).toEqual(
+          expect.arrayContaining([expect.objectContaining({ name: "authority-read-probe", enabled: true })]),
+        )
+
+        const sourceTurn = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config: effectiveConfig,
+          agentID: "source-investigator",
+        })
+        expect(sourceTurn.workerCapability.builtInToolIDs).toEqual([
+          "artifact_search",
+          "artifact_read",
+          "artifact_select",
+          "artifact_snapshot",
+          "artifact_publish",
+          "publish_interactive_artifact",
+          "read",
+          "glob",
+          "search_code",
+          "bash",
+          "skill",
+        ])
+        const sourceSurface = await SkillMount.resolve({
+          identity: {
+            ...sourceTurn.workerCapability.identity,
+            expertSquadID: sourceTurn.workerCapability.expertSquadID,
+          },
+          runtime: sourceTurn.workerCapability.runtime,
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection: sourceTurn.skillProjection,
+          availableToolNames: sourceTurn.workerCapability.builtInToolIDs,
+        })
+        expect(sourceSurface.skills).toEqual(
+          expect.arrayContaining([expect.objectContaining({ name: "authority-read-probe", enabled: true })]),
+        )
       },
     })
   })
