@@ -17,6 +17,7 @@ type DashboardResult = {
   opencorvus: {
     profile: Profile
     model: string
+    launch_mode?: string
     tokens?: { total?: number; modelCalls?: number }
   }
 }
@@ -29,6 +30,7 @@ type DashboardRecord = {
 }
 
 type BatchPlan = {
+  launch_mode: string
   batch_run_id: string
   batch_index: number
   model: string
@@ -176,7 +178,7 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
     leaderboard?: DashboardRecord[]
     primary_leaderboard?: DashboardRecord[]
     public_context?: PublicContext
-    scope?: { model?: string }
+    scope?: { model?: string; launch_mode?: string }
   }>(path.join(root, "evidence-catalog.json")),
   planPath ? readJSON<BatchPlan>(planPath) : Promise.resolve(undefined),
   walk(root),
@@ -184,13 +186,20 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
     path.join(root, ".automationbench-active-leases.json"),
   ),
 ])
-if (plan && plan.model !== model) throw new Error("Dashboard batch plan model does not match --model")
-if (catalog?.scope?.model && catalog.scope.model !== model) {
-  throw new Error("Dashboard catalog model does not match --model")
+if (plan && (plan.model !== model || plan.launch_mode !== "mission")) {
+  throw new Error("Dashboard batch plan model/launch mode does not match the Mission run")
+}
+if (catalog?.scope && (catalog.scope.model !== model || catalog.scope.launch_mode !== "mission")) {
+  throw new Error("Dashboard catalog model/launch mode does not match the Mission run")
 }
 
 const verified = (catalog?.primary_leaderboard ?? catalog?.leaderboard ?? [])
-  .filter((record) => profiles.includes(record.opencorvus.profile) && record.opencorvus.model === model)
+  .filter(
+    (record) =>
+      profiles.includes(record.opencorvus.profile) &&
+      record.opencorvus.model === model &&
+      (record.opencorvus as Record<string, any>).launch_mode === "mission",
+  )
   .sort((left, right) => Number(left.benchmark.case_index) - Number(right.benchmark.case_index))
 const verifiedRunIDs = new Set(verified.map((record) => String(record.run_id)))
 const catalogAttempts = new Map((catalog?.attempts ?? []).map((attempt) => [String(attempt.run_id), attempt]))
@@ -207,6 +216,7 @@ const currentResults = (
           !plan ||
           payload.benchmark.batch_run_id !== plan.batch_run_id ||
           payload.opencorvus.model !== model ||
+          payload.opencorvus.launch_mode !== "mission" ||
           verifiedRunIDs.has(String(payload.run.id))
         ) {
           return { file, payload, manifest: undefined, manifestValid: false, names: [] }
@@ -440,7 +450,7 @@ const html = `<!doctype html>
 </head>
 <body>
 <main>
-  <h1>AutomationBench · OpenCorvus ${profiles.map((profile) => escapeHTML(profile)).join(" + ")} / ${escapeHTML(model)}</h1>
+  <h1>AutomationBench · OpenCorvus Mission ${profiles.map((profile) => escapeHTML(profile)).join(" + ")} / ${escapeHTML(model)}</h1>
   <div class="subtle">Primary profiles: ${profiles.map(escapeHTML).join(" + ")} · updated ${new Date(generatedAt).toISOString()}</div>
   <section class="metrics" aria-label="Profile benchmark summary">
     ${summaries

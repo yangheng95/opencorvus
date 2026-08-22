@@ -16,12 +16,14 @@ import {
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   automationBenchRunValidity,
+  canonicalTranscriptOrder,
   auditBenchmarkIsolation,
   auditPromptCompositionCoverage,
   auditDispatchedSkillCoverage,
   auditSkillProjection,
-  auditTaskOutcome,
-  auditTerminalQuiescence,
+  auditMissionOutcome,
+  auditMissionQuiescence,
+  auditMissionRunBinding,
   normalizeTrajectory,
   renderTrajectorySVG,
   sourceAuthSecretLeaves,
@@ -177,6 +179,7 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     coordinator_pid: number
   }
   const plan = JSON.parse(bytes.toString("utf8")) as {
+    launch_mode: string
     batch_run_id: string
     batch_index: number
     model: string
@@ -205,9 +208,10 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     plan.batch_index !== input.batchIndex ||
     frozenCase.batch_index !== input.batchIndex ||
     plan.model !== input.model ||
+    plan.launch_mode !== "mission" ||
     plan.trial_concurrency !== 5 ||
     plan.cases?.length !== 5 ||
-    ![1, 2].includes(plan.profiles?.length) ||
+    plan.profiles?.length !== 1 ||
     plan.waves?.length !== plan.profiles.length ||
     plan.waves.some((wave) => wave.length !== 5) ||
     authorizedWave?.length !== 5 ||
@@ -672,6 +676,8 @@ const SNAPSHOT_TABLES = [
   "engine_artifact_catalog_revision",
   "session",
   "provider_usage_event",
+  "protocol_inbox",
+  "protocol_delivery_receipt",
 ] as const
 
 /**
@@ -730,6 +736,7 @@ function messageEvidenceProjection(db: SQLite) {
               json_extract(data, '$.modelID')      AS model_id,
               json_extract(data, '$.providerID')   AS provider_id,
               json_extract(data, '$.finish')       AS finish,
+              json_extract(data, '$.error.name')   AS error_name,
               json_extract(data, '$.time.completed') AS time_completed,
               length(data) AS data_length,
               data AS _body
@@ -788,6 +795,7 @@ function databaseSnapshot(databasePath: string) {
       if (!present.has("message")) missing.push("message")
       if (!present.has("part")) missing.push("part")
     }
+    if (independentTranscriptSurface) tables["benchmark_transcript_surface"] = independentTranscriptSurface
     return { tables, missing: missing.sort() }
   } finally {
     db.close()
@@ -859,11 +867,37 @@ let isolatedData = ""
 let projectDirectory = ""
 let backend: { url: URL; stop(closeActiveConnections?: boolean): Promise<void> } | undefined
 let waitForIngressDeliveryHooks: (() => Promise<void>) | undefined
+let waitForProtocolDeliveryIdle: (() => Promise<void>) | undefined
+let drainMissionSchedulerMessages: (() => Promise<void>) | undefined
+let missionSchedulerSettlement:
+  | (() => {
+      passed: boolean
+      pendingInboxIDs: string[]
+      leasedInboxIDs: string[]
+      unansweredInboxIDs: string[]
+      deadLetterInboxIDs: string[]
+      invalidTerminalInboxIDs: string[]
+    })
+  | undefined
+let activeMissionSchedulerDrain: Promise<void> | undefined
+let missionSchedulerDrainError: unknown
 let closeDatabase: (() => void) | undefined
 let runtimeLogPath = ""
 let flushRuntimeLog: (() => Promise<void>) | undefined
 let skillProjection: Awaited<ReturnType<typeof projectBenchmarkSkill>> | undefined
 let taskID: string | undefined
+let taskIDs: string[] = []
+let missionID: string | undefined
+let missionSessionID: string | undefined
+let missionSessionReceipt: Record<string, any> | undefined
+let independentTranscriptSurface: Array<{
+  surface: "mission" | "task"
+  owner_id: string
+  message_id: string
+  session_id: string
+}> | undefined
+let captureIndependentTranscriptSurface: (() => Promise<typeof independentTranscriptSurface>) | undefined
+let projectInitReceipt: Record<string, any> | undefined
 let stage = "source_preflight"
 let agentUID: number | undefined
 let leaseAcquired = false
@@ -1004,42 +1038,148 @@ async function projectBenchmarkSkill(input: {
   }
 }
 
-async function discoverTaskID(input: {
-  title: string
-  creation: Promise<{ ok: true; value: { task_id: string } } | { ok: false; error: unknown }>
-}) {
-  while (true) {
-    throwIfTerminationRequested()
-    const settled = await Promise.race([input.creation, Bun.sleep(1000).then(() => undefined)])
-    if (settled?.ok) return settled.value.task_id
-    if (settled && !settled.ok) throw settled.error
-    const board = await requestJSON<{
-      tasks: Array<{ task: { id: string; title: string } }>
-    }>(`/tasks?q=${encodeURIComponent(input.title)}&limit=10`)
-    const matched = board.tasks.find((item) => item.task.title === input.title)
-    if (matched) return matched.task.id
-  }
-}
-
 let latestObservation: Awaited<ReturnType<typeof observations>> | undefined
 let latestObservationAt: number | undefined
 
+const orderedMessages = canonicalTranscriptOrder
+
 async function observations() {
-  if (!taskID) throw new Error("Task has not been created")
-  const [board, transcript, traceProjection, interactions, benchmarkEvents] = await Promise.all([
-    requestJSON<Record<string, any>>(`/task/${taskID}/board?sync=0`),
-    requestJSON<Array<{ info: Record<string, any>; parts: Array<Record<string, any>> }>>(`/task/${taskID}/transcript`),
-    requestJSON<{ ok: true; enabled: boolean; traceDir: string; events: Array<Record<string, any>> }>(
-      `/task/${taskID}/trace`,
+  if (!missionID || !missionSessionID) throw new Error("Mission has not been created")
+  const [missionStatus, missionRecords, missionTranscript, missionTraceProjection, benchmarkEvents] =
+    await Promise.all([
+      requestJSON<Record<string, any>>(`/mission/${missionID}/status`),
+      requestJSON<Array<Record<string, any>>>("/mission?limit=100"),
+      requestJSON<Array<{ info: Record<string, any>; parts: Array<Record<string, any>> }>>(
+        `/session/${missionSessionID}/message`,
+      ),
+      requestJSON<{ ok: true; enabled: boolean; traceDir: string; events: Array<Record<string, any>> }>(
+        `/session/${missionSessionID}/trace`,
+      ),
+      readJSONLines(bridgeEventsPath),
+    ])
+  const missionRecord = missionRecords.find((record) => record.missionID === missionID)
+  if (!missionRecord) throw new Error(`Mission ${missionID} is missing from the current project projection`)
+  if (!missionTraceProjection.enabled) throw new Error("OpenCorvus AgentTrace is disabled for the benchmark Mission")
+  const observedTaskIDs = [
+    ...new Set(
+      (Array.isArray(missionStatus.tasks) ? missionStatus.tasks : [])
+        .map((task: any) => task.taskID)
+        .filter((value: unknown): value is string => typeof value === "string" && value.length > 0),
     ),
-    requestJSON<Array<Record<string, any>>>(`/task/${taskID}/interactions`),
-    readJSONLines(bridgeEventsPath),
-  ])
-  if (!traceProjection.enabled) throw new Error("OpenCorvus AgentTrace is disabled for the benchmark Task")
-  const current = { board, transcript, trace: traceProjection.events, interactions, benchmarkEvents }
+  ].sort()
+  const tasks = await Promise.all(
+    observedTaskIDs.map(async (observedTaskID) => {
+      const [board, transcript, traceProjection, interactions] = await Promise.all([
+        requestJSON<Record<string, any>>(`/task/${observedTaskID}/board?sync=0`),
+        requestJSON<Array<{ info: Record<string, any>; parts: Array<Record<string, any>> }>>(
+          `/task/${observedTaskID}/transcript`,
+        ),
+        requestJSON<{ ok: true; enabled: boolean; traceDir: string; events: Array<Record<string, any>> }>(
+          `/task/${observedTaskID}/trace`,
+        ),
+        requestJSON<Array<Record<string, any>>>(`/task/${observedTaskID}/interactions`),
+      ])
+      if (!traceProjection.enabled) {
+        throw new Error(`OpenCorvus AgentTrace is disabled for benchmark child Task ${observedTaskID}`)
+      }
+      return {
+        task_id: observedTaskID,
+        board,
+        transcript,
+        trace: traceProjection.events,
+        interactions: interactions.map(
+          (interaction): Record<string, any> => ({ ...interaction, task_id: observedTaskID }),
+        ),
+      }
+    }),
+  )
+  taskIDs = observedTaskIDs
+  taskID = observedTaskIDs[0]
+  const taskTranscript = orderedMessages(tasks.flatMap((task) => task.transcript))
+  const allTranscript = orderedMessages([...missionTranscript, ...taskTranscript])
+  const trace = [...missionTraceProjection.events, ...tasks.flatMap((task) => task.trace)].sort(
+    (left, right) => Number(left.ts ?? 0) - Number(right.ts ?? 0),
+  )
+  const interactions = tasks.flatMap((task) => task.interactions)
+  const board = {
+    launch_mode: "mission",
+    mission: missionRecord,
+    mission_status: missionStatus,
+    tasks: tasks.map((task) => ({ task_id: task.task_id, board: task.board })),
+  }
+  const current = {
+    board,
+    missionRecord,
+    missionStatus,
+    missionTranscript,
+    taskTranscript,
+    allTranscript,
+    tasks,
+    transcript: taskTranscript,
+    trace,
+    interactions,
+    benchmarkEvents,
+  }
   latestObservation = current
   latestObservationAt = Date.now()
   return current
+}
+
+function missionActivitySignature(current: Awaited<ReturnType<typeof observations>>) {
+  return benchmarkActivitySignature({
+    board: current.board,
+    transcript: current.allTranscript,
+    trace: current.trace,
+    benchmarkEventCount: current.benchmarkEvents.length,
+  })
+}
+
+function missionReachedNaturalTerminal(current: Awaited<ReturnType<typeof observations>>) {
+  const statuses = Array.isArray(current.missionStatus.tasks) ? current.missionStatus.tasks : []
+  return (
+    current.missionStatus.status === "inactive" &&
+    current.missionRecord.interruptible === false &&
+    statuses.every((task: any) => ["completed", "failed", "cancelled"].includes(String(task.lifecycleStatus)))
+  )
+}
+
+function missionOutcomeForObservation(current: Awaited<ReturnType<typeof observations>>) {
+  return auditMissionOutcome({
+    missionRecord: current.missionRecord,
+    missionStatus: current.missionStatus,
+    missionTranscript: current.missionTranscript,
+    taskTranscripts: current.tasks.map((task) => ({
+      task_id: task.task_id,
+      lifecycle_status: task.board?.task?.status,
+      transcript: task.transcript,
+    })),
+  })
+}
+
+function requestMissionSchedulerDrain() {
+  if (!drainMissionSchedulerMessages || activeMissionSchedulerDrain) return
+  activeMissionSchedulerDrain = drainMissionSchedulerMessages()
+    .catch((error) => {
+      missionSchedulerDrainError = error
+    })
+    .finally(() => {
+      activeMissionSchedulerDrain = undefined
+    })
+}
+
+function throwIfMissionSchedulerDrainFailed() {
+  if (!missionSchedulerDrainError) return
+  const error = missionSchedulerDrainError
+  missionSchedulerDrainError = undefined
+  throw error
+}
+
+function currentMissionSchedulerSettlement() {
+  const settlement = missionSchedulerSettlement?.()
+  if (settlement?.deadLetterInboxIDs.length || settlement?.invalidTerminalInboxIDs.length) {
+    throw new Error(`AutomationBench Mission scheduler delivery settlement failed: ${JSON.stringify(settlement)}`)
+  }
+  return settlement
 }
 
 async function waitForTerminal() {
@@ -1047,15 +1187,17 @@ async function waitForTerminal() {
   let inactivityDeadline = Date.now() + arguments_.inactivityMs
   while (Date.now() < inactivityDeadline) {
     throwIfTerminationRequested()
+    throwIfMissionSchedulerDrainFailed()
     const current = await observations()
-    const status = String(current.board.task?.status ?? "")
-    if (["completed", "failed", "cancelled"].includes(status)) return current
-    const next = benchmarkActivitySignature({
-      board: current.board,
-      transcript: current.transcript,
-      trace: current.trace,
-      benchmarkEventCount: current.benchmarkEvents.length,
-    })
+    const status = String(current.missionStatus.status ?? "")
+    if (
+      current.missionRecord.completion &&
+      missionReachedNaturalTerminal(current) &&
+      missionOutcomeForObservation(current).scored_terminal
+    ) {
+      return current
+    }
+    const next = missionActivitySignature(current)
     if (next !== signature) {
       signature = next
       inactivityDeadline = Date.now() + arguments_.inactivityMs
@@ -1063,46 +1205,87 @@ async function waitForTerminal() {
         JSON.stringify({
           event: "activity",
           profile: arguments_.profile,
-          taskID,
+          missionID,
+          taskIDs,
           status,
-          messages: current.transcript.length,
+          messages: current.allTranscript.length,
           traceEvents: current.trace.length,
           benchmarkCalls: current.benchmarkEvents.filter((event) => event.kind === "tool").length,
           pendingInteractions: current.interactions.filter((item) => item.status === "pending").length,
         }) + "\n",
       )
     }
+    if (missionReachedNaturalTerminal(current) && currentMissionSchedulerSettlement()?.passed === false) {
+      requestMissionSchedulerDrain()
+    }
     await Bun.sleep(1000)
   }
   const current = await observations()
+  throwIfMissionSchedulerDrainFailed()
+  if (activeMissionSchedulerDrain || currentMissionSchedulerSettlement()?.passed === false) {
+    throw new Error("AutomationBench Mission scheduler delivery remained active through the full inactivity window")
+  }
+  const outcome = missionOutcomeForObservation(current)
+  if (missionReachedNaturalTerminal(current) && outcome.mission_assistant_healthy) {
+    process.stdout.write(
+      JSON.stringify({
+        event: "mission_incomplete_terminal",
+        profile: arguments_.profile,
+        missionID,
+        taskIDs,
+        status: current.missionStatus.status,
+      }) + "\n",
+    )
+    return current
+  }
+  if (!outcome.mission_assistant_healthy) {
+    throw new Error(
+      `AutomationBench ${arguments_.profile} Mission assistant did not settle cleanly: ${JSON.stringify(outcome)}`,
+    )
+  }
   throw new Error(
-    `AutomationBench ${arguments_.profile} Task had no observable activity for ${arguments_.inactivityMs}ms; ` +
+    `AutomationBench ${arguments_.profile} Mission had no observable activity for ${arguments_.inactivityMs}ms; ` +
       `pending interactions=${current.interactions.filter((item) => item.status === "pending").length}`,
   )
 }
 
 async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof observations>>) {
   let current = initial
-  let signature = benchmarkActivitySignature({
-    board: current.board,
-    transcript: current.transcript,
-    trace: current.trace,
-    benchmarkEventCount: current.benchmarkEvents.length,
-  })
+  let signature = missionActivitySignature(current)
   let inactivityDeadline = Date.now() + arguments_.inactivityMs
   while (Date.now() < inactivityDeadline) {
     throwIfTerminationRequested()
-    const audit = auditTerminalQuiescence(current.board)
+    throwIfMissionSchedulerDrainFailed()
+    const audit = auditMissionQuiescence({
+      missionRecord: current.missionRecord,
+      missionStatus: current.missionStatus,
+      taskBoards: current.tasks.map((task) => ({ task_id: task.task_id, board: task.board })),
+    })
     if (audit.passed) {
       await within(waitForIngressDeliveryHooks?.() ?? Promise.resolve(), CLEANUP_TIMEOUT_MS, "Terminal ingress settlement")
+      if (currentMissionSchedulerSettlement()?.passed === false) {
+        requestMissionSchedulerDrain()
+        await Bun.sleep(1000)
+        const next = await observations()
+        const nextSignature = missionActivitySignature(next)
+        if (nextSignature !== signature) inactivityDeadline = Date.now() + arguments_.inactivityMs
+        current = next
+        signature = nextSignature
+        continue
+      }
+      await within(
+        waitForProtocolDeliveryIdle?.() ?? Promise.resolve(),
+        CLEANUP_TIMEOUT_MS,
+        "Mission protocol delivery settlement",
+      )
+      await Bun.sleep(2_000)
       const confirmed = await observations()
-      const confirmedSignature = benchmarkActivitySignature({
-        board: confirmed.board,
-        transcript: confirmed.transcript,
-        trace: confirmed.trace,
-        benchmarkEventCount: confirmed.benchmarkEvents.length,
+      const confirmedSignature = missionActivitySignature(confirmed)
+      const confirmedAudit = auditMissionQuiescence({
+        missionRecord: confirmed.missionRecord,
+        missionStatus: confirmed.missionStatus,
+        taskBoards: confirmed.tasks.map((task) => ({ task_id: task.task_id, board: task.board })),
       })
-      const confirmedAudit = auditTerminalQuiescence(confirmed.board)
       if (confirmedAudit.passed && confirmedSignature === signature) {
         return { terminal: confirmed, audit: confirmedAudit }
       }
@@ -1113,12 +1296,7 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
     }
     await Bun.sleep(1000)
     const next = await observations()
-    const nextSignature = benchmarkActivitySignature({
-      board: next.board,
-      transcript: next.transcript,
-      trace: next.trace,
-      benchmarkEventCount: next.benchmarkEvents.length,
-    })
+    const nextSignature = missionActivitySignature(next)
     if (nextSignature !== signature) {
       signature = nextSignature
       inactivityDeadline = Date.now() + arguments_.inactivityMs
@@ -1126,24 +1304,39 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
     current = next
   }
   throw new Error(
-    `AutomationBench ${arguments_.profile} Task did not reach terminal execution quiescence; ${JSON.stringify(auditTerminalQuiescence(current.board))}`,
+    `AutomationBench ${arguments_.profile} Mission did not reach terminal execution quiescence; ${JSON.stringify(
+      auditMissionQuiescence({
+        missionRecord: current.missionRecord,
+        missionStatus: current.missionStatus,
+        taskBoards: current.tasks.map((task) => ({ task_id: task.task_id, board: task.board })),
+      }),
+    )}`,
   )
 }
 
 async function captureFailureObservationEvidence() {
-  const receipt = failureObservationReceipt({
-    runID,
-    runKey,
-    taskID,
-    capturedAt: latestObservationAt ?? Date.now(),
-    projection: skillProjection?.summary.projection,
-    observation: latestObservation,
-  })
+  const receipt = {
+    ...failureObservationReceipt({
+      runID,
+      runKey,
+      taskID,
+      missionID,
+      missionSessionID,
+      taskIDs,
+      capturedAt: latestObservationAt ?? Date.now(),
+      projection: skillProjection?.summary.projection,
+      observation: latestObservation,
+    }),
+    launch_mode: "mission",
+  }
   if (latestObservation) {
     const secrets = source?.protectedSecrets ?? []
     const artifacts = [
       ["latest-board.json", latestObservation.board],
       ["opencorvus-transcript.json", latestObservation.transcript],
+      ["mission-transcript.json", latestObservation.missionTranscript],
+      ["task-transcripts.json", latestObservation.tasks.map((task) => ({ task_id: task.task_id, transcript: task.transcript }))],
+      ["task-interactions.json", latestObservation.tasks.map((task) => ({ task_id: task.task_id, interactions: task.interactions }))],
       ["opencorvus-trace.json", latestObservation.trace],
       ["opencorvus-interactions.json", latestObservation.interactions],
     ] as const
@@ -1183,7 +1376,7 @@ try {
           batch_index: arguments_.batchIndex,
           wave_index: arguments_.waveIndex,
         },
-        opencorvus: { profile: arguments_.profile, model: arguments_.model },
+        opencorvus: { profile: arguments_.profile, model: arguments_.model, launch_mode: "mission" },
         process: { pid: process.pid },
       },
       null,
@@ -1326,6 +1519,47 @@ try {
   closeDatabase = () => Database.close()
   const ingress = await import("@/engine/task-root-ingress-delivery")
   waitForIngressDeliveryHooks = ingress.waitForIngressDeliveryHooksForTest
+  const protocolBridge = await import("@/orchestrator/protocol/message-bridge")
+  waitForProtocolDeliveryIdle = protocolBridge.awaitTaskMessageProtocolBridgeIdle
+  const schedulerMessages = await import("@/protocol/scheduler-message")
+  drainMissionSchedulerMessages = schedulerMessages.SchedulerMessageDeliveryService.runDueNow
+  const schedulerDelivery = await import("@/protocol/delivery")
+  missionSchedulerSettlement = () => {
+    if (!missionSessionID) throw new Error("Mission Session identity is unavailable for scheduler settlement")
+    return schedulerDelivery.auditSchedulerSessionDeliverySettlement(missionSessionID)
+  }
+  const { Session } = await import("@/session")
+  const engineStore = await import("@/engine/store")
+  const conversationView = await import("@/conversation/view")
+  captureIndependentTranscriptSurface = async () => {
+    if (!missionID || !missionSessionID) return undefined
+    const missionMessages = (await Session.messages({ sessionID: missionSessionID })).filter(
+      conversationView.conversationMessageHasDisplay,
+    )
+    const taskRows = await Promise.all(
+      taskIDs.map(async (currentTaskID) => {
+        const sessionIDs = engineStore.sessionIDsForTask(currentTaskID)
+        const messages = (
+          await Promise.all(sessionIDs.map((sessionID) => Session.messages({ sessionID })))
+        ).flat().filter(conversationView.conversationMessageHasDisplay)
+        return messages.map((message) => ({
+          surface: "task" as const,
+          owner_id: currentTaskID,
+          message_id: message.info.id,
+          session_id: message.info.sessionID,
+        }))
+      }),
+    )
+    return [
+      ...missionMessages.map((message) => ({
+        surface: "mission" as const,
+        owner_id: missionID!,
+        message_id: message.info.id,
+        session_id: message.info.sessionID,
+      })),
+      ...taskRows.flat(),
+    ]
+  }
   const { Log } = await import("@/util/log")
   const { Global } = await import("@/global")
   const { Server } = await import("@/server/server")
@@ -1362,6 +1596,8 @@ try {
   if (!preflight.ok || preflight.status !== "connected" || preflight.modelID !== source.modelID) {
     throw new Error(`Exact Provider/model preflight failed: ${JSON.stringify(preflight)}`)
   }
+  stage = "project_git_init"
+  projectInitReceipt = await requestJSON<Record<string, any>>("/project/current/init-git", { method: "POST" })
   stage = "skill_projection"
   // Fail-closed before Task creation. The sealed receipt is written after the terminal transcript,
   // because half of it — which Agents actually ran under this projection — does not exist yet.
@@ -1401,36 +1637,38 @@ try {
   ) {
     throw new Error("AutomationBench admin task identity did not match the ready identity")
   }
-  stage = "task_create"
-  const taskTitle = `AutomationBench ${arguments_.task} (${arguments_.profile}) · ${crypto.randomUUID()}`
-  const requestID = crypto.randomUUID()
+  stage = "mission_create"
   const harnessRequest = automationBenchHarnessRequest(benchmarkTask.prompt)
-  const taskCreateInput = {
-    title: taskTitle,
-    request: harnessRequest,
-    requestID,
-    source: "external-automationbench-pilot",
-    productPillar: "work",
+  const missionWakeInput = {
+    text: harnessRequest,
     model: arguments_.model,
-    promptProfile: arguments_.profile,
+    productPillar: "work",
+    expertSquadIDs: [arguments_.profile],
   }
-  const creation = requestJSON<{ task_id: string }>("/task?init-git=true", {
+  const missionWake = await requestJSON<{
+    missionID: string
+    sessionID: string
+    created: boolean
+    productPillar: string
+  }>("/mission/wake", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(taskCreateInput),
-  }).then(
-    (value) => ({ ok: true as const, value }),
-    (error) => ({ ok: false as const, error }),
-  )
-  taskID = await discoverTaskID({ title: taskTitle, creation })
-  stage = "task_execution"
+    body: JSON.stringify(missionWakeInput),
+  })
+  missionID = missionWake.missionID
+  missionSessionID = missionWake.sessionID
+  if (!missionWake.created || missionWake.productPillar !== "work") {
+    throw new Error("AutomationBench Mission wake did not create the expected fresh work Mission")
+  }
+  missionSessionReceipt = await requestJSON<Record<string, any>>(`/session/${missionSessionID}`)
+  if (!missionSessionReceipt.projectID) throw new Error("AutomationBench Mission Session omitted its project identity")
+  stage = "mission_execution"
   const observedTerminal = await waitForTerminal()
   const quiescence = await waitForTerminalQuiescence(observedTerminal)
   const terminal = quiescence.terminal
-  const created = await creation
-  if (!created.ok) throw created.error
-  if (created.value.task_id !== taskID) {
-    throw new Error(`Task creation response ${created.value.task_id} did not match observed Task ${taskID}`)
+  independentTranscriptSurface = await captureIndependentTranscriptSurface?.()
+  if (!independentTranscriptSurface) {
+    throw new Error("AutomationBench Mission transcript surface could not be rebuilt from durable Session rows")
   }
   stage = "benchmark_scoring"
   const score = await bridge.request<{
@@ -1466,28 +1704,44 @@ try {
     finalWorldPath,
     expected: { ...score, initial_world_sha256: bridge.identity.initialWorldSHA256 },
   })
-  const transcriptTokens = summarizeTranscriptUsage(terminal.transcript)
+  const transcriptTokens = summarizeTranscriptUsage(terminal.allTranscript)
   const providerUsageLedger = ledgerRows(path.join(isolatedData, "opencorvus.db"))
   const tokens = summarizeProviderUsageRows(providerUsageLedger)
   const promptCompositionAudit = auditPromptCompositionCoverage(terminal.trace, providerUsageLedger)
   const promptComposition = analyzePromptComposition(terminal.trace)
   const trajectory = normalizeTrajectory({
-    transcript: terminal.transcript,
+    transcript: terminal.allTranscript,
     trace: terminal.trace,
     benchmarkEvents,
   })
   const finishedAt = Date.now()
-  const lifecycleStatus = String(terminal.board.task?.status ?? "")
-  const boundProfile = String(terminal.board.task?.packageRevisionBinding?.id ?? "")
-  const profileAudit = {
-    passed: boundProfile === arguments_.profile,
-    requested_profile: arguments_.profile,
-    bound_profile: boundProfile || null,
-    package_revision: terminal.board.task?.packageRevisionBinding ?? null,
-  }
-  const workflowBinding = terminal.board.task?.completionDecision?.workflowBinding ?? null
-  const selectedWorkflowID = workflowBinding?.kind === "virtual_workflow" ? workflowBinding.workflow_id : null
-  const isolationAudit = auditBenchmarkIsolation(terminal.transcript, {
+  const lifecycleStatus = terminal.missionRecord.completion ? "completed" : "inactive"
+  const missionSession = missionSessionReceipt
+  const taskBoards = terminal.tasks.map((task) => ({ task_id: task.task_id, board: task.board }))
+  const profileAudit = auditMissionRunBinding({
+    resultProfile: arguments_.profile,
+    resultModel: arguments_.model,
+    resultMissionID: missionID,
+    resultMissionSessionID: missionSessionID,
+    resultTaskIDs: taskIDs,
+    wakeRequest: missionWakeInput,
+    wakeResponse: missionWake,
+    missionSession,
+    missionRecord: terminal.missionRecord,
+    missionStatus: terminal.missionStatus,
+    projectGitInit: projectInitReceipt,
+    taskBoards,
+  })
+  const workflowBindings = terminal.tasks.map((task) => ({
+    task_id: task.task_id,
+    workflow_binding: task.board.task?.completionDecision?.workflowBinding ?? null,
+  }))
+  const selectedWorkflowIDs = workflowBindings.map((item) => ({
+    task_id: item.task_id,
+    workflow_id:
+      item.workflow_binding?.kind === "virtual_workflow" ? item.workflow_binding.workflow_id : null,
+  }))
+  const isolationAudit = auditBenchmarkIsolation(terminal.allTranscript, {
     protectedPaths: [
       path.dirname(path.dirname(arguments_.python)),
       path.join(SCRIPT_DIRECTORY, "automationbench_bridge.py"),
@@ -1508,14 +1762,23 @@ try {
     ],
     protectedSecrets: source.protectedSecrets,
   })
-  const taskOutcomeAudit = auditTaskOutcome(lifecycleStatus, terminal.transcript)
+  const missionOutcomeAudit = auditMissionOutcome({
+    missionRecord: terminal.missionRecord,
+    missionStatus: terminal.missionStatus,
+    missionTranscript: terminal.missionTranscript,
+    taskTranscripts: terminal.tasks.map((task) => ({
+      task_id: task.task_id,
+      lifecycle_status: task.board.task?.status,
+      transcript: task.transcript,
+    })),
+  })
   const skillCoverageAudit = auditDispatchedSkillCoverage({
     projection: skillProjection.summary.projection,
     transcript: terminal.transcript,
   })
   const skillEvidence = { ...skillProjection.summary, dispatched_coverage: skillCoverageAudit }
   const validity = automationBenchRunValidity({
-    taskOutcomePassed: taskOutcomeAudit.scored_terminal,
+    taskOutcomePassed: missionOutcomeAudit.scored_terminal,
     profilePassed: profileAudit.passed,
     isolationPassed: isolationAudit.passed,
     promptCompositionPassed: promptCompositionAudit.passed,
@@ -1524,14 +1787,14 @@ try {
     skillRuntimeAdherencePassed: skillCoverageAudit.runtime_adherence_passed,
   })
   const valid = validity.valid
-  const invalidReason = !taskOutcomeAudit.scored_terminal
-    ? `OpenCorvus Task terminal outcome was invalid (${taskOutcomeAudit.outcome})`
+  const invalidReason = !missionOutcomeAudit.scored_terminal
+    ? "OpenCorvus Mission or one of its child Tasks did not reach a natural scorable terminal"
     : !skillProjection.summary.projection.passed
       ? "The experimental Skill was not projected onto the Expert Squad's agents"
       : !skillCoverageAudit.passed
         ? `Experimental Skill runtime evidence failed (${skillCoverageAudit.violations.join(", ")})`
         : !profileAudit.passed
-          ? "OpenCorvus Task bound a different Expert Squad profile"
+          ? "OpenCorvus Mission or child Task bound a different Expert Squad profile"
           : !promptCompositionAudit.passed
             ? `Prompt composition evidence did not cover the Provider ledger (${promptCompositionAudit.violations.join(", ")})`
             : !isolationAudit.passed
@@ -1556,7 +1819,7 @@ try {
       task_contract_schema: bridge.identity.taskContractSchema,
       task_contract_sha256: bridge.identity.taskContractSHA256,
       harness_request_sha256: crypto.createHash("sha256").update(harnessRequest).digest("hex"),
-      prompt_mapping: "remove_stock_single_model_turn_budget_v1",
+      prompt_mapping: "remove_stock_single_model_turn_budget_and_use_mission_intake_v2",
       split: "public",
       domain: arguments_.domain,
       task: arguments_.task,
@@ -1597,15 +1860,19 @@ try {
     opencorvus: {
       commit: runSource.commit,
       source: runSource,
-      task_id: taskID,
+      launch_mode: "mission",
+      mission_id: missionID,
+      mission_session_id: missionSessionID,
+      task_id: taskIDs.length === 1 ? taskID : null,
+      task_ids: taskIDs,
       lifecycle_status: lifecycleStatus,
-      task_outcome_audit: taskOutcomeAudit,
+      mission_outcome_audit: missionOutcomeAudit,
       terminal_quiescence_audit: quiescence.audit,
       profile: arguments_.profile,
       model: arguments_.model,
       skill: skillEvidence,
-      selected_workflow_id: selectedWorkflowID,
-      workflow_binding: workflowBinding,
+      selected_workflow_ids: selectedWorkflowIDs,
+      workflow_bindings: workflowBindings,
       profile_audit: profileAudit,
       isolation_audit: isolationAudit,
       sandbox_isolation_audit: sandboxAudit,
@@ -1622,15 +1889,15 @@ try {
       prompt_composition: promptComposition,
       tokens_by_agent: summarizeProviderUsageByAgent(providerUsageLedger),
       transcript_token_reconciliation: transcriptTokens,
-      sessions: new Set(terminal.transcript.map((message) => message.info?.sessionID).filter(Boolean)).size,
-      agents: [...new Set(terminal.transcript.map((message) => message.info?.agent).filter(Boolean))],
+      sessions: new Set(terminal.allTranscript.map((message) => message.info?.sessionID).filter(Boolean)).size,
+      agents: [...new Set(terminal.allTranscript.map((message) => message.info?.agent).filter(Boolean))],
       trace_events: terminal.trace.length,
       interactions: terminal.interactions,
     },
     comparison: {
       leaderboard_eligible: false,
       reason: valid
-        ? "One frozen public case under the paired 50-case OpenCorvus matrix; official AutomationBench uses a held-out private set."
+        ? "One frozen public case under the 50-case OpenCorvus Mission Base matrix; official AutomationBench uses a held-out private set."
         : `${invalidReason}; rubric values are diagnostic only.`,
     },
   }
@@ -1638,7 +1905,11 @@ try {
   const tracePath = path.join(outputDirectory, "opencorvus-trace.json")
   const transcriptPath = path.join(outputDirectory, "opencorvus-transcript.json")
   const boardPath = path.join(outputDirectory, "terminal-board.json")
-  const taskReceiptPath = path.join(outputDirectory, "task-receipt.json")
+  const missionReceiptPath = path.join(outputDirectory, "mission-receipt.json")
+  const missionTranscriptPath = path.join(outputDirectory, "mission-transcript.json")
+  const taskTranscriptsPath = path.join(outputDirectory, "task-transcripts.json")
+  const interactionsPath = path.join(outputDirectory, "opencorvus-interactions.json")
+  const taskInteractionsPath = path.join(outputDirectory, "task-interactions.json")
   const providerLedgerPath = path.join(outputDirectory, "provider-usage-ledger.json")
   const scorerReplayPath = path.join(outputDirectory, "scorer-replay-audit.json")
   const sandboxAuditPath = path.join(outputDirectory, "sandbox-isolation-audit.json")
@@ -1663,16 +1934,39 @@ try {
     fs.writeFile(resultPath, JSON.stringify(result, null, 2) + "\n", "utf8"),
     fs.writeFile(tracePath, JSON.stringify(terminal.trace, null, 2) + "\n", "utf8"),
     fs.writeFile(transcriptPath, JSON.stringify(terminal.transcript, null, 2) + "\n", "utf8"),
+    fs.writeFile(missionTranscriptPath, JSON.stringify(terminal.missionTranscript, null, 2) + "\n", "utf8"),
+    fs.writeFile(interactionsPath, JSON.stringify(terminal.interactions, null, 2) + "\n", "utf8"),
+    fs.writeFile(
+      taskInteractionsPath,
+      JSON.stringify(
+        terminal.tasks.map((task) => ({ task_id: task.task_id, interactions: task.interactions })),
+        null,
+        2,
+      ) + "\n",
+      "utf8",
+    ),
+    fs.writeFile(
+      taskTranscriptsPath,
+      JSON.stringify(
+        terminal.tasks.map((task) => ({ task_id: task.task_id, transcript: task.transcript })),
+        null,
+        2,
+      ) + "\n",
+      "utf8",
+    ),
     fs.writeFile(boardPath, JSON.stringify(terminal.board, null, 2) + "\n", "utf8"),
     fs.writeFile(
-      taskReceiptPath,
+      missionReceiptPath,
       JSON.stringify(
         {
           schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
-          request: taskCreateInput,
-          response: created.value,
+          launch_mode: "mission",
+          request: missionWakeInput,
+          response: missionWake,
+          project_git_init: projectInitReceipt,
+          mission_session: missionSession,
           bound_profile: profileAudit,
-          workflow_binding: workflowBinding,
+          workflow_bindings: workflowBindings,
         },
         null,
         2,
@@ -1713,6 +2007,9 @@ try {
             run_id: runID,
             run_key: runKey,
             task_id: taskID ?? null,
+            task_ids: taskIDs,
+            mission_id: missionID ?? null,
+            mission_session_id: missionSessionID ?? null,
             status: "capture_failed",
             reason: captureError instanceof Error ? captureError.name : "UnknownError",
           },
@@ -1778,7 +2075,11 @@ try {
     opencorvus: {
       profile: arguments_.profile,
       model: arguments_.model,
-      task_id: taskID ?? null,
+      launch_mode: "mission",
+      mission_id: missionID ?? null,
+      mission_session_id: missionSessionID ?? null,
+      task_id: taskIDs.length === 1 ? (taskID ?? null) : null,
+      task_ids: taskIDs,
       source: runSource ?? null,
     },
     error:
@@ -1794,6 +2095,24 @@ try {
   if (waitForIngressDeliveryHooks) {
     try {
       await within(waitForIngressDeliveryHooks(), CLEANUP_TIMEOUT_MS, "Ingress cleanup")
+    } catch (error) {
+      failures.push(error)
+    }
+  }
+  if (drainMissionSchedulerMessages) {
+    try {
+      await within(
+        activeMissionSchedulerDrain ?? drainMissionSchedulerMessages(),
+        CLEANUP_TIMEOUT_MS,
+        "Mission scheduler cleanup",
+      )
+    } catch (error) {
+      failures.push(error)
+    }
+  }
+  if (waitForProtocolDeliveryIdle) {
+    try {
+      await within(waitForProtocolDeliveryIdle(), CLEANUP_TIMEOUT_MS, "Mission protocol cleanup")
     } catch (error) {
       failures.push(error)
     }
@@ -1853,7 +2172,11 @@ try {
             schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
             run_id: runID,
             run_key: runKey,
-            task_id: taskID ?? null,
+            launch_mode: "mission",
+            mission_id: missionID ?? null,
+            mission_session_id: missionSessionID ?? null,
+            task_id: taskIDs.length === 1 ? (taskID ?? null) : null,
+            task_ids: taskIDs,
             tables: SNAPSHOT_TABLES,
             missing_tables: snapshot.missing,
             rows: redactSnapshot(snapshot.tables, source?.protectedSecrets ?? []),

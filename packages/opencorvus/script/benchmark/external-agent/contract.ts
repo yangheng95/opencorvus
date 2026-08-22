@@ -157,7 +157,9 @@ export function automationBenchHarnessRequest(prompt: unknown): string {
   }
   return [
     "This is an AutomationBench API-mode evaluation. The simulated business end state is the only scored deliverable.",
-    "Load the project Skill named `automationbench-api` before acting and use only its project-local client for benchmark operations.",
+    "Mission is the real intake coordinator for this run. Delegate the complete business workflow to child Task work owned by the held Expert Squad; Mission must not execute benchmark operations itself.",
+    "Every child Task request must retain the exact `This is an AutomationBench API-mode evaluation` statement and the complete SYSTEM/USER business-content block below.",
+    "Every child Task Agent that performs benchmark work must load the project Skill named `automationbench-api` before acting and use only its project-local client for benchmark operations.",
     "Do not ask the operator a question, do not modify product files, and do not replace benchmark operations with a prose report.",
     "OpenCorvus is the evaluated multi-Agent harness. Tool, model, Agent, retry, and concurrent call counts are measured without a stock single-model turn budget.",
     ...messages,
@@ -304,6 +306,385 @@ export function auditRunBinding(input: {
   }
 }
 
+export function auditMissionRunBinding(input: {
+  resultProfile: string
+  resultModel: string
+  resultMissionID: unknown
+  resultMissionSessionID: unknown
+  resultTaskIDs: unknown
+  wakeRequest: any
+  wakeResponse: any
+  missionSession: any
+  missionRecord: any
+  missionStatus: any
+  projectGitInit: any
+  taskBoards: Array<{ task_id: string; board: any }>
+}) {
+  const requestedSquads = Array.isArray(input.wakeRequest?.expertSquadIDs)
+    ? [...input.wakeRequest.expertSquadIDs].sort()
+    : []
+  const heldSquads = Array.isArray(input.missionSession?.metadata?.mission?.visibleExpertSquadIDs)
+    ? [...input.missionSession.metadata.mission.visibleExpertSquadIDs].sort()
+    : []
+  const resultTaskIDs = Array.isArray(input.resultTaskIDs) ? [...input.resultTaskIDs].map(String).sort() : []
+  const recordTaskIDs = Array.isArray(input.missionRecord?.tasks)
+    ? input.missionRecord.tasks.map((task: any) => String(task.id)).sort()
+    : []
+  const statusTaskIDs = Array.isArray(input.missionStatus?.tasks)
+    ? input.missionStatus.tasks.map((task: any) => String(task.taskID)).sort()
+    : []
+  const boardTaskIDs = input.taskBoards.map((item) => String(item.task_id)).sort()
+  const taskBindings = input.taskBoards.map((item) => ({
+    task_id: item.task_id,
+    source: item.board?.task?.source ?? null,
+    bound_profile: item.board?.task?.packageRevisionBinding?.id ?? null,
+    board_status: item.board?.task?.status ?? null,
+    record_status:
+      input.missionRecord?.tasks?.find((task: any) => String(task.id) === String(item.task_id))?.lifecycleStatus ?? null,
+    status_status:
+      input.missionStatus?.tasks?.find((task: any) => String(task.taskID) === String(item.task_id))?.lifecycleStatus ?? null,
+  }))
+  const exactTaskSet =
+    JSON.stringify(resultTaskIDs) === JSON.stringify(recordTaskIDs) &&
+    JSON.stringify(resultTaskIDs) === JSON.stringify(statusTaskIDs) &&
+    JSON.stringify(resultTaskIDs) === JSON.stringify(boardTaskIDs)
+  const exactSquad =
+    JSON.stringify(requestedSquads) === JSON.stringify([input.resultProfile]) &&
+    JSON.stringify(heldSquads) === JSON.stringify([input.resultProfile])
+  return {
+    passed:
+      input.wakeRequest?.model === input.resultModel &&
+      input.wakeRequest?.productPillar === "work" &&
+      input.wakeResponse?.created === true &&
+      input.wakeResponse?.productPillar === "work" &&
+      input.projectGitInit?.created === true &&
+      input.wakeResponse?.missionID === input.resultMissionID &&
+      input.wakeResponse?.sessionID === input.resultMissionSessionID &&
+      input.missionSession?.metadata?.mission?.id === input.resultMissionID &&
+      input.missionSession?.kind === "mission" &&
+      input.missionSession?.metadata?.mission?.productPillar === "work" &&
+      input.missionRecord?.missionID === input.resultMissionID &&
+      input.missionRecord?.sessionID === input.resultMissionSessionID &&
+      input.missionStatus?.missionID === input.resultMissionID &&
+      input.missionStatus?.sessionID === input.resultMissionSessionID &&
+      exactSquad &&
+      exactTaskSet &&
+      taskBindings.every(
+        (binding) =>
+          binding.source === "mission" &&
+          binding.bound_profile === input.resultProfile &&
+          binding.board_status === binding.record_status &&
+          binding.board_status === binding.status_status,
+      ),
+    requested_squads: requestedSquads,
+    held_squads: heldSquads,
+    task_ids: resultTaskIDs,
+    task_bindings: taskBindings,
+  }
+}
+
+function decodedJSON(value: unknown): any {
+  if (typeof value !== "string") return value
+  try {
+    return JSON.parse(value)
+  } catch {
+    return undefined
+  }
+}
+
+export function canonicalTranscriptOrder(messages: TranscriptMessage[]): TranscriptMessage[] {
+  return [...messages].sort((left, right) => {
+    const leftTime = Number(left.info?.time?.created ?? 0)
+    const rightTime = Number(right.info?.time?.created ?? 0)
+    return leftTime - rightTime || String(left.info?.id ?? "").localeCompare(String(right.info?.id ?? ""))
+  })
+}
+
+/** Rebuild Mission -> child Task -> Session lineage from the sealed relational snapshot. */
+export function auditMissionEvidenceLineage(input: {
+  snapshot: any
+  missionID: string
+  missionSessionID: string
+  taskIDs: string[]
+  missionTranscript: TranscriptMessage[]
+  taskTranscripts: Array<{ task_id: string; transcript: TranscriptMessage[] }>
+  flattenedTaskTranscript: TranscriptMessage[]
+}) {
+  const rows = input.snapshot?.rows ?? {}
+  const missing = new Set(Array.isArray(input.snapshot?.missing_tables) ? input.snapshot.missing_tables : [])
+  const sessions = Array.isArray(rows.session) ? rows.session : []
+  const tasks = Array.isArray(rows.engine_task) ? rows.engine_task : []
+  const messageRows = Array.isArray(rows.message) ? rows.message : []
+  const transcriptSurfaceRows = Array.isArray(rows.benchmark_transcript_surface)
+    ? rows.benchmark_transcript_surface
+    : []
+  const protocolInboxes = Array.isArray(rows.protocol_inbox) ? rows.protocol_inbox : []
+  const protocolReceipts = Array.isArray(rows.protocol_delivery_receipt) ? rows.protocol_delivery_receipt : []
+  const expectedTaskIDs = [...input.taskIDs].map(String).sort()
+  const transcriptTaskIDs = input.taskTranscripts.map((item) => String(item.task_id)).sort()
+  const exactTaskTranscriptSet =
+    new Set(transcriptTaskIDs).size === transcriptTaskIDs.length &&
+    JSON.stringify(expectedTaskIDs) === JSON.stringify(transcriptTaskIDs)
+  const exactFlatten =
+    JSON.stringify(canonicalTranscriptOrder(input.taskTranscripts.flatMap((item) => item.transcript))) ===
+    JSON.stringify(canonicalTranscriptOrder(input.flattenedTaskTranscript))
+  const missionSession = sessions.find((row: any) => String(row.id) === input.missionSessionID)
+  const missionMetadata = decodedJSON(missionSession?.metadata)
+  const missionSessionValid =
+    missionSession?.kind === "mission" &&
+    missionMetadata?.mission?.id === input.missionID &&
+    missionMetadata?.mission?.productPillar === "work"
+  const ownedTaskIDs = tasks
+    .filter((row: any) => {
+      const metadata = decodedJSON(row?.metadata)
+      return (
+        row?.source === "mission" &&
+        metadata?.actor === "mission" &&
+        metadata?.mission?.id === input.missionID &&
+        metadata?.mission?.session_id === input.missionSessionID
+      )
+    })
+    .map((row: any) => String(row.id))
+    .sort()
+  const exactOwnedTaskSet = JSON.stringify(ownedTaskIDs) === JSON.stringify(expectedTaskIDs)
+  const taskRows = expectedTaskIDs.map((taskID) => tasks.find((row: any) => String(row.id) === taskID))
+  const taskRowsValid = taskRows.every((row: any) => {
+    const metadata = decodedJSON(row?.metadata)
+    return (
+      row?.source === "mission" &&
+      row?.product_pillar === "work" &&
+      metadata?.actor === "mission" &&
+      metadata?.mission?.id === input.missionID &&
+      metadata?.mission?.session_id === input.missionSessionID &&
+      typeof row?.session_id === "string"
+    )
+  })
+  const sessionTree = (rootID: string) => {
+    const result = new Set([rootID])
+    let changed = true
+    while (changed) {
+      changed = false
+      for (const row of sessions) {
+        if (result.has(String(row.parent_id)) && !result.has(String(row.id))) {
+          result.add(String(row.id))
+          changed = true
+        }
+      }
+    }
+    return result
+  }
+  const messageSessionByID = new Map(messageRows.map((row: any) => [String(row.id), String(row.session_id)]))
+  const messagesMatchSnapshot = (
+    transcript: TranscriptMessage[],
+    allowed: Set<string>,
+    surface: "mission" | "task",
+    ownerID: string,
+  ) => {
+    const transcriptIDs = transcript.map((message) => String(message.info?.id ?? "")).sort()
+    const snapshotIDs = transcriptSurfaceRows
+      .filter((row: any) => row.surface === surface && String(row.owner_id) === ownerID)
+      .map((row: any) => String(row.message_id))
+      .sort()
+    return (
+      new Set(transcriptIDs).size === transcriptIDs.length &&
+      JSON.stringify(transcriptIDs) === JSON.stringify(snapshotIDs) &&
+      transcript.every((message) => {
+      const id = String(message.info?.id ?? "")
+      const sessionID = String(message.info?.sessionID ?? "")
+      return id.length > 0 && allowed.has(sessionID) && messageSessionByID.get(id) === sessionID
+      })
+    )
+  }
+  const missionMessagesValid = messagesMatchSnapshot(
+    input.missionTranscript,
+    new Set([input.missionSessionID]),
+    "mission",
+    input.missionID,
+  )
+  const taskMessagesValid = input.taskTranscripts.every((item) => {
+    const row = tasks.find((candidate: any) => String(candidate.id) === String(item.task_id))
+    return (
+      typeof row?.session_id === "string" &&
+      messagesMatchSnapshot(item.transcript, sessionTree(row.session_id), "task", item.task_id)
+    )
+  })
+  const missionInboxIDs = protocolInboxes
+    .filter((row: any) => row.actor === "session" && String(row.actor_id) === input.missionSessionID)
+    .map((row: any) => String(row.id))
+    .sort()
+  const terminalReceiptByInbox = new Map(
+    protocolReceipts.flatMap((row: any) => {
+      const receipt = decodedJSON(row.receipt)
+      return receipt?.kind && receipt.kind !== "retry_wait" ? [[String(row.inbox_id), receipt] as const] : []
+    }),
+  )
+  const pendingMissionInboxIDs = missionInboxIDs.filter((id) => !terminalReceiptByInbox.has(id))
+  const deadLetterMissionInboxIDs = missionInboxIDs.filter(
+    (id) => (terminalReceiptByInbox.get(id) as any)?.kind === "dead_letter",
+  )
+  const invalidTerminalMissionInboxIDs = missionInboxIDs.filter((id) => {
+    const receipt = terminalReceiptByInbox.get(id) as any
+    return receipt && receipt.kind !== "session_wake" && receipt.kind !== "dead_letter"
+  })
+  const unansweredMissionInboxIDs = missionInboxIDs.filter((id) => {
+    const receipt = terminalReceiptByInbox.get(id) as any
+    if (receipt?.kind !== "session_wake") return false
+    const user = messageRows.find(
+      (row: any) => String(row.id) === String(receipt.message_id) && String(row.session_id) === input.missionSessionID,
+    )
+    const assistant = messageRows.find(
+      (row: any) =>
+        row.role === "assistant" &&
+        String(row.session_id) === input.missionSessionID &&
+        String(row.parent_id) === String(receipt.message_id),
+    )
+    return !(
+      user &&
+      assistant &&
+      typeof assistant.time_completed === "number" &&
+      !assistant.error_name &&
+      assistant.finish !== "error"
+    )
+  })
+  const violations = [
+    ...(["session", "engine_task", "message", "protocol_inbox", "protocol_delivery_receipt"].some(
+      (table) => missing.has(table) || !Array.isArray(rows[table]),
+    ) || !Array.isArray(rows.benchmark_transcript_surface)
+      ? ["snapshot_relational_rows_missing"]
+      : []),
+    ...(input.snapshot?.mission_id === input.missionID &&
+    input.snapshot?.mission_session_id === input.missionSessionID &&
+    JSON.stringify([...(input.snapshot?.task_ids ?? [])].map(String).sort()) === JSON.stringify(expectedTaskIDs)
+      ? []
+      : ["snapshot_receipt_identity_mismatch"]),
+    ...(missionSessionValid ? [] : ["mission_session_lineage_mismatch"]),
+    ...(taskRowsValid && exactOwnedTaskSet ? [] : ["mission_task_creator_lineage_mismatch"]),
+    ...(exactTaskTranscriptSet ? [] : ["task_transcript_set_mismatch"]),
+    ...(exactFlatten ? [] : ["task_transcript_flatten_mismatch"]),
+    ...(missionMessagesValid ? [] : ["mission_message_session_mismatch"]),
+    ...(taskMessagesValid ? [] : ["task_message_session_mismatch"]),
+    ...(pendingMissionInboxIDs.length === 0 ? [] : ["mission_scheduler_delivery_pending"]),
+    ...(deadLetterMissionInboxIDs.length === 0 ? [] : ["mission_scheduler_delivery_dead_letter"]),
+    ...(invalidTerminalMissionInboxIDs.length === 0 ? [] : ["mission_scheduler_delivery_invalid_terminal"]),
+    ...(unansweredMissionInboxIDs.length === 0 ? [] : ["mission_scheduler_delivery_unanswered"]),
+  ]
+  return {
+    passed: violations.length === 0,
+    mission_session_valid: missionSessionValid,
+    task_rows_valid: taskRowsValid,
+    owned_task_ids: ownedTaskIDs,
+    owned_task_set_matches: exactOwnedTaskSet,
+    task_transcript_ids: transcriptTaskIDs,
+    task_transcript_flatten_matches: exactFlatten,
+    mission_messages_valid: missionMessagesValid,
+    task_messages_valid: taskMessagesValid,
+    mission_scheduler_inbox_ids: missionInboxIDs,
+    pending_mission_scheduler_inbox_ids: pendingMissionInboxIDs,
+    dead_letter_mission_scheduler_inbox_ids: deadLetterMissionInboxIDs,
+    invalid_terminal_mission_scheduler_inbox_ids: invalidTerminalMissionInboxIDs,
+    unanswered_mission_scheduler_inbox_ids: unansweredMissionInboxIDs,
+    violations,
+  }
+}
+
+export function auditMissionEvidenceCollections(input: {
+  snapshot: any
+  missionSessionID: string
+  taskIDs: string[]
+  taskBoards: Array<{ task_id: string; board: any }>
+  taskInteractions: Array<{ task_id: string; interactions: Array<Record<string, any>> }>
+  flattenedInteractions: Array<Record<string, any>>
+  resultInteractions: Array<Record<string, any>>
+  providerLedger: ProviderUsageRow[]
+}) {
+  const canonicalInteractions = (items: Array<Record<string, any>>) =>
+    [...items].sort(
+      (left, right) =>
+        String(left.task_id ?? "").localeCompare(String(right.task_id ?? "")) ||
+        String(left.id ?? left.interactionID ?? "").localeCompare(String(right.id ?? right.interactionID ?? "")),
+    )
+  const taskIDs = [...input.taskIDs].map(String).sort()
+  const interactionTaskIDs = input.taskInteractions.map((item) => String(item.task_id)).sort()
+  const boardTaskIDs = input.taskBoards.map((item) => String(item.task_id)).sort()
+  const fileFlattened = canonicalInteractions(
+    input.taskInteractions.flatMap((item) =>
+      item.interactions.map((interaction) => ({ ...interaction, task_id: item.task_id })),
+    ),
+  )
+  const boardFlattened = canonicalInteractions(
+    input.taskBoards.flatMap((item) =>
+      (Array.isArray(item.board?.interactions) ? item.board.interactions : []).map((interaction: any) => ({
+        ...interaction,
+        task_id: item.task_id,
+      })),
+    ),
+  )
+  const interactionsMatch =
+    JSON.stringify(taskIDs) === JSON.stringify(interactionTaskIDs) &&
+    JSON.stringify(taskIDs) === JSON.stringify(boardTaskIDs) &&
+    JSON.stringify(fileFlattened) === JSON.stringify(canonicalInteractions(input.flattenedInteractions)) &&
+    JSON.stringify(fileFlattened) === JSON.stringify(canonicalInteractions(input.resultInteractions)) &&
+    JSON.stringify(fileFlattened) === JSON.stringify(boardFlattened)
+  const snapshotRows = input.snapshot?.rows ?? {}
+  const snapshotLedgerPresent =
+    Array.isArray(snapshotRows.provider_usage_event) &&
+    !(Array.isArray(input.snapshot?.missing_tables) && input.snapshot.missing_tables.includes("provider_usage_event"))
+  const snapshotLedger = (Array.isArray(snapshotRows.provider_usage_event)
+    ? snapshotRows.provider_usage_event
+    : [])
+    .filter((row: any) => row.purpose !== "provider-connectivity")
+    .sort((left: any, right: any) =>
+      Number(left.occurred_at ?? 0) - Number(right.occurred_at ?? 0) || String(left.id).localeCompare(String(right.id)),
+    )
+  const ledgerMatches =
+    snapshotLedgerPresent &&
+    input.providerLedger.length > 0 &&
+    JSON.stringify(snapshotLedger) === JSON.stringify(input.providerLedger)
+  const sessions = Array.isArray(snapshotRows.session) ? snapshotRows.session : []
+  const tasks = Array.isArray(snapshotRows.engine_task) ? snapshotRows.engine_task : []
+  const allowedSessions = new Set<string>([input.missionSessionID])
+  for (const taskID of taskIDs) {
+    const root = tasks.find((row: any) => String(row.id) === taskID)?.session_id
+    if (typeof root !== "string") continue
+    allowedSessions.add(root)
+    let changed = true
+    while (changed) {
+      changed = false
+      for (const session of sessions) {
+        if (allowedSessions.has(String(session.parent_id)) && !allowedSessions.has(String(session.id))) {
+          allowedSessions.add(String(session.id))
+          changed = true
+        }
+      }
+    }
+  }
+  const knownPurposes = new Set([
+    "session",
+    "vcs-commit-message",
+    "metric-judge",
+    "acceptance-translation",
+    "other",
+  ])
+  const ledgerSessionsMatch = input.providerLedger.every((row) =>
+    row.purpose === "session"
+      ? typeof row.session_id === "string" && allowedSessions.has(row.session_id)
+      : knownPurposes.has(row.purpose) && row.session_id === null && row.agent_id === null,
+  )
+  const violations = [
+    ...(interactionsMatch ? [] : ["mission_task_interactions_mismatch"]),
+    ...(ledgerMatches ? [] : ["provider_ledger_snapshot_mismatch"]),
+    ...(ledgerSessionsMatch ? [] : ["provider_ledger_session_lineage_mismatch"]),
+  ]
+  return {
+    passed: violations.length === 0,
+    interactions_match: interactionsMatch,
+    provider_ledger_snapshot_matches: ledgerMatches,
+    provider_ledger_session_lineage_matches: ledgerSessionsMatch,
+    allowed_session_ids: [...allowedSessions].sort(),
+    violations,
+  }
+}
+
 export function auditTaskOutcome(lifecycleStatus: unknown, transcript: TranscriptMessage[]) {
   let explicitFailTask = false
   const infrastructureFailures: Array<{ operation: string | null; message: string | null }> = []
@@ -386,7 +767,15 @@ function infrastructureIncidentsFromSnapshot(snapshot: unknown): TaskInfrastruct
 }
 
 function infrastructureIncidentsFromBoard(board: unknown): TaskInfrastructureIncident[] | undefined {
-  const rows = (board as { processIncidents?: unknown } | undefined)?.processIncidents
+  const direct = (board as { processIncidents?: unknown } | undefined)?.processIncidents
+  const missionTasks = (board as { launch_mode?: unknown; tasks?: unknown } | undefined)?.tasks
+  const rows = Array.isArray(direct)
+    ? direct
+    : (board as any)?.launch_mode === "mission" && Array.isArray(missionTasks)
+      ? missionTasks.flatMap((item: any) =>
+          Array.isArray(item?.board?.processIncidents) ? item.board.processIncidents : [],
+        )
+      : undefined
   if (!Array.isArray(rows)) return undefined
   return (rows as Array<Record<string, unknown>>)
     .filter((row) => row?.source === "infrastructure")
@@ -497,6 +886,155 @@ export function auditTerminalQuiescence(board: any) {
   }
 }
 
+export function auditMissionOutcome(input: {
+  missionRecord: any
+  missionStatus: any
+  missionTranscript: TranscriptMessage[]
+  taskTranscripts: Array<{ task_id: string; lifecycle_status: unknown; transcript: TranscriptMessage[] }>
+}) {
+  const statusTasks = Array.isArray(input.missionStatus?.tasks) ? input.missionStatus.tasks : []
+  const recordTasks = Array.isArray(input.missionRecord?.tasks) ? input.missionRecord.tasks : []
+  const statusByID = new Map(statusTasks.map((task: any) => [String(task.taskID), task]))
+  const recordIDs = recordTasks.map((task: any) => String(task.id)).sort()
+  const statusIDs = statusTasks.map((task: any) => String(task.taskID)).sort()
+  const transcriptIDs = input.taskTranscripts.map((task) => task.task_id).sort()
+  const childTasks = input.taskTranscripts.map((task) => ({
+    task_id: task.task_id,
+    ...auditTaskOutcome(task.lifecycle_status, task.transcript),
+  }))
+  const missionInactive =
+    input.missionStatus?.status === "inactive" && input.missionRecord?.interruptible === false
+  const exactTaskSet =
+    JSON.stringify(recordIDs) === JSON.stringify(statusIDs) &&
+    JSON.stringify(recordIDs) === JSON.stringify(transcriptIDs)
+  const taskStatusesTerminal = statusTasks.every((task: any) =>
+    ["completed", "failed", "cancelled"].includes(String(task.lifecycleStatus)),
+  )
+  const childrenScorable = childTasks.every((task) => task.scored_terminal)
+  const transcriptSessionIDs = [
+    ...new Set(input.missionTranscript.map((message) => String(message.info?.sessionID ?? ""))),
+  ].sort()
+  const missionSessionID = String(input.missionRecord?.sessionID ?? "")
+  const transcriptSessionMatches =
+    missionSessionID.length > 0 &&
+    transcriptSessionIDs.length === 1 &&
+    transcriptSessionIDs[0] === missionSessionID
+  const assistants = input.missionTranscript.filter((message) => message.info?.role === "assistant")
+  const users = input.missionTranscript.filter((message) => message.info?.role === "user")
+  const latestAssistant = assistants.at(-1)
+  const latestUser = users.at(-1)
+  const assistantSettled = typeof latestAssistant?.info?.time?.completed === "number"
+  const assistantRepliesToLatestUser =
+    typeof latestUser?.info?.id === "string" &&
+    latestAssistant?.info?.parentID === latestUser.info.id &&
+    input.missionTranscript.at(-1)?.info?.id === latestAssistant?.info?.id
+  const assistantHealthy =
+    assistantSettled &&
+    assistantRepliesToLatestUser &&
+    latestAssistant?.info?.error === undefined &&
+    latestAssistant?.info?.finish !== "error"
+  const completionCalls = input.missionTranscript.flatMap((message) =>
+    (message.parts ?? []).flatMap((part) => {
+      if (part.type !== "tool" || part.tool !== "panel" || part.state?.status !== "completed") return []
+      const raw = part.state.input
+      const operation = raw && typeof raw === "object" && "operation" in raw ? raw.operation : raw
+      if (operation?.action !== "complete_mission") return []
+      let output: any
+      try {
+        output = typeof part.state.output === "string" ? JSON.parse(part.state.output) : part.state.output
+      } catch {
+        output = undefined
+      }
+      return [{ message, part, operation, output }]
+    }),
+  )
+  const completion = completionCalls.length === 1 ? completionCalls[0] : undefined
+  const acceptedTaskIDs = Array.isArray(completion?.output?.task_acceptances)
+    ? completion.output.task_acceptances.map((item: any) => String(item.task_id)).sort()
+    : []
+  const acceptedTaskEvidenceValid = Array.isArray(completion?.output?.task_acceptances)
+    ? completion.output.task_acceptances.every(
+        (item: any) =>
+          typeof item?.terminal_lifecycle_reference?.terminalEventID === "string" &&
+          Array.isArray(item?.evidence_locators) &&
+          item.evidence_locators.length > 0,
+      )
+    : false
+  const completionReceiptMatches = input.missionRecord?.completion
+    ? completionCalls.length === 1 &&
+      completion?.output?.kind === "mission_completed" &&
+      completion.output.mission_id === input.missionRecord?.missionID &&
+      completion.output.mission_session_id === missionSessionID &&
+      completion.output.assistant_message_id === completion.message.info?.id &&
+      completion.output.tool_call_id === completion.part.callID &&
+      completion.output.tool_part_id === completion.part.id &&
+      completion.output.summary === input.missionRecord.completion.summary &&
+      completion.output.assistant_message_id === input.missionRecord.completion.messageID &&
+      completion.output.tool_call_id === input.missionRecord.completion.toolCallID &&
+      completion.output.tool_part_id === input.missionRecord.completion.toolPartID &&
+      completion.output.time_recorded === input.missionRecord.completion.timeRecorded &&
+      acceptedTaskEvidenceValid &&
+      JSON.stringify(acceptedTaskIDs) === JSON.stringify(recordIDs)
+    : completionCalls.length === 0
+  const scoredTerminal =
+    missionInactive &&
+    exactTaskSet &&
+    taskStatusesTerminal &&
+    childrenScorable &&
+    transcriptSessionMatches &&
+    assistantHealthy &&
+    completionReceiptMatches
+  return {
+    passed: scoredTerminal,
+    scored_terminal: scoredTerminal,
+    mission_completed: input.missionRecord?.completion !== undefined,
+    explicit_complete_mission: completionCalls.length === 1,
+    completion_receipt_matches: completionReceiptMatches,
+    mission_transcript_session_ids: transcriptSessionIDs,
+    mission_assistant_settled: assistantSettled,
+    mission_assistant_replies_to_latest_user: assistantRepliesToLatestUser,
+    mission_assistant_healthy: assistantHealthy,
+    mission_status: input.missionStatus?.status ?? null,
+    child_task_count: childTasks.length,
+    child_tasks: childTasks,
+    status_task_ids: [...statusByID.keys()].sort(),
+  }
+}
+
+export function auditMissionQuiescence(input: {
+  missionRecord: any
+  missionStatus: any
+  taskBoards: Array<{ task_id: string; board: any }>
+}) {
+  const recordIDs = Array.isArray(input.missionRecord?.tasks)
+    ? input.missionRecord.tasks.map((task: any) => String(task.id)).sort()
+    : []
+  const statusTasks = Array.isArray(input.missionStatus?.tasks) ? input.missionStatus.tasks : []
+  const statusIDs = statusTasks.map((task: any) => String(task.taskID)).sort()
+  const boardIDs = input.taskBoards.map((task) => task.task_id).sort()
+  const taskAudits = input.taskBoards.map((task) => ({
+    task_id: task.task_id,
+    ...auditTerminalQuiescence(task.board),
+  }))
+  const exactTaskSet =
+    JSON.stringify(recordIDs) === JSON.stringify(statusIDs) &&
+    JSON.stringify(recordIDs) === JSON.stringify(boardIDs)
+  const missionInactive =
+    input.missionStatus?.status === "inactive" &&
+    input.missionRecord?.interruptible === false &&
+    Number(input.missionRecord?.pendingInteractions ?? 0) === 0
+  const taskStatusesTerminal = statusTasks.every((task: any) =>
+    ["completed", "failed", "cancelled"].includes(String(task.lifecycleStatus)),
+  )
+  return {
+    passed: missionInactive && exactTaskSet && taskStatusesTerminal && taskAudits.every((task) => task.passed),
+    mission_status: input.missionStatus?.status ?? null,
+    mission_completed: input.missionRecord?.completion !== undefined,
+    task_count: taskAudits.length,
+    task_audits: taskAudits,
+  }
+}
+
 export type BatchProfileSlot = {
   case_index: number
   profile: "base" | "advanced"
@@ -536,6 +1074,7 @@ export function reusableProfileRuns(
   catalog: { leaderboard: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
   profile: "base" | "advanced",
   model: string,
+  launchMode: string,
 ): Map<number, Record<string, any>> {
   const verified = new Map(
     catalog.leaderboard
@@ -543,6 +1082,7 @@ export function reusableProfileRuns(
         (record) =>
           record.opencorvus?.profile === profile &&
           record.opencorvus?.model === model &&
+          record.opencorvus?.launch_mode === launchMode &&
           record.benchmark?.repetition === 1,
       )
       .map((record) => [Number(record.benchmark.case_index), record]),
@@ -550,7 +1090,10 @@ export function reusableProfileRuns(
   const reusable = new Map<number, Record<string, any>>()
   for (const record of catalog.candidates.filter(
     (item) =>
-      item.opencorvus?.profile === profile && item.opencorvus?.model === model && item.benchmark?.repetition === 1,
+      item.opencorvus?.profile === profile &&
+      item.opencorvus?.model === model &&
+      item.opencorvus?.launch_mode === launchMode &&
+      item.benchmark?.repetition === 1,
   )) {
     const caseIndex = Number(record.benchmark.case_index)
     if (verified.has(caseIndex)) continue
@@ -620,6 +1163,7 @@ export function auditBatchEvidence(input: {
     input.plan.trial_concurrency !== 5 ||
     typeof input.plan.model !== "string" ||
     input.plan.model.length === 0 ||
+    input.plan.launch_mode !== "mission" ||
     expectedCases.length !== 5 ||
     new Set(expectedCases).size !== 5
   ) {
@@ -678,6 +1222,7 @@ export function auditBatchEvidence(input: {
       attempt.benchmark?.case_index !== item.case_index ||
       attempt.opencorvus?.profile !== item.profile ||
       attempt.opencorvus?.model !== input.plan.model ||
+      attempt.opencorvus?.launch_mode !== input.plan.launch_mode ||
       !expectedSlot ||
       !item.run_id ||
       launchedRunIDs.has(String(item.run_id))
@@ -727,6 +1272,7 @@ export function auditBatchEvidence(input: {
       attempt.benchmark?.case_index !== item.case_index ||
       attempt.opencorvus?.profile !== item.profile ||
       attempt.opencorvus?.model !== input.plan.model ||
+      attempt.opencorvus?.launch_mode !== input.plan.launch_mode ||
       !expectedSlot ||
       !item.run_id ||
       eligibleRunIDs.has(String(item.run_id)) ||
@@ -1451,6 +1997,9 @@ export function failureObservationReceipt(input: {
   runID: string
   runKey: string
   taskID?: string
+  missionID?: string
+  missionSessionID?: string
+  taskIDs?: string[]
   capturedAt: number
   projection?: {
     skill_name?: string
@@ -1459,6 +2008,8 @@ export function failureObservationReceipt(input: {
   }
   observation?: {
     transcript: TranscriptMessage[]
+    missionTranscript?: TranscriptMessage[]
+    tasks?: Array<{ task_id: string; transcript: TranscriptMessage[] }>
     trace: Array<Record<string, any>>
     interactions: Array<Record<string, any>>
     benchmarkEvents: Array<Record<string, any>>
@@ -1470,10 +2021,15 @@ export function failureObservationReceipt(input: {
       run_id: input.runID,
       run_key: input.runKey,
       task_id: input.taskID ?? null,
+      mission_id: input.missionID ?? null,
+      mission_session_id: input.missionSessionID ?? null,
+      task_ids: [...(input.taskIDs ?? [])].sort(),
       status: "unavailable" as const,
-      reason: input.taskID ? "no_successful_observation" : "task_not_created",
+      reason: input.missionID || input.taskID ? "no_successful_observation" : "mission_not_created",
       captured_at: null,
       message_count: 0,
+      mission_message_count: 0,
+      task_message_count: 0,
       trace_event_count: 0,
       interaction_count: 0,
       benchmark_event_count: 0,
@@ -1485,10 +2041,16 @@ export function failureObservationReceipt(input: {
     run_id: input.runID,
     run_key: input.runKey,
     task_id: input.taskID ?? null,
+    mission_id: input.missionID ?? null,
+    mission_session_id: input.missionSessionID ?? null,
+    task_ids: [...(input.taskIDs ?? input.observation.tasks?.map((task) => task.task_id) ?? [])].sort(),
     status: "captured" as const,
     reason: "last_successful_public_observation",
     captured_at: input.capturedAt,
-    message_count: input.observation.transcript.length,
+    message_count:
+      (input.observation.missionTranscript?.length ?? 0) + input.observation.transcript.length,
+    mission_message_count: input.observation.missionTranscript?.length ?? 0,
+    task_message_count: input.observation.transcript.length,
     trace_event_count: input.observation.trace.length,
     interaction_count: input.observation.interactions.length,
     benchmark_event_count: input.observation.benchmarkEvents.length,

@@ -6,8 +6,11 @@ import {
   auditBatchEvidence,
   auditSkillEvidenceSeal,
   auditTaskInfrastructureIncidents,
-  auditTaskOutcome,
-  auditTerminalQuiescence,
+  auditMissionOutcome,
+  auditMissionEvidenceLineage,
+  auditMissionEvidenceCollections,
+  auditMissionQuiescence,
+  auditMissionRunBinding,
   evidenceFileSetMatches,
   missingCompletedBatchProfileReceipts,
   reusableBatchCandidateRunIDs,
@@ -248,12 +251,14 @@ if (secretFindings.length > 0) {
 }
 
 const catalog = JSON.parse(await fs.readFile(path.join(root, "evidence-catalog.json"), "utf8")) as {
-  scope?: { profiles?: string[]; model?: string }
+  scope?: { profiles?: string[]; model?: string; launch_mode?: string }
   attempts: Array<Record<string, any>>
   leaderboard: Array<Record<string, any>>
   batches: Array<Record<string, any>>
 }
-if (catalog.scope?.model !== model) throw new Error("Catalog primary model does not match --model")
+if (catalog.scope?.model !== model || catalog.scope?.launch_mode !== "mission") {
+  throw new Error("Catalog primary model/launch mode does not match the Mission verifier")
+}
 const discoveredAttemptDirectories = [
   ...new Set(
     (await walk(root))
@@ -321,7 +326,8 @@ for (const attempt of catalog.attempts) {
     names.includes("result.json") &&
     infrastructureAudit.passed &&
     payload.run?.status === "scored" &&
-    payload.opencorvus?.task_outcome_audit?.scored_terminal === true &&
+    payload.opencorvus?.launch_mode === "mission" &&
+    payload.opencorvus?.mission_outcome_audit?.scored_terminal === true &&
     payload.opencorvus?.terminal_quiescence_audit?.passed === true &&
     payload.opencorvus?.skill?.projection?.passed === true &&
     payload.opencorvus?.skill?.dispatched_coverage?.passed === true &&
@@ -366,6 +372,10 @@ for (const attempt of catalog.attempts) {
     board,
     receipt,
     transcript,
+    missionTranscript,
+    taskTranscripts,
+    taskInteractions,
+    interactions,
     eventText,
     ledger,
     scorerReplay,
@@ -374,8 +384,12 @@ for (const attempt of catalog.attempts) {
     skillProjection,
   ] = await Promise.all([
     fs.readFile(path.join(directory, "terminal-board.json"), "utf8").then(JSON.parse),
-    fs.readFile(path.join(directory, "task-receipt.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "mission-receipt.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "opencorvus-transcript.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "mission-transcript.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "task-transcripts.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "task-interactions.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(directory, "opencorvus-interactions.json"), "utf8").then(JSON.parse),
     fs.readFile(path.join(directory, "automationbench-events.jsonl"), "utf8"),
     fs.readFile(path.join(directory, "provider-usage-ledger.json"), "utf8").then(JSON.parse) as Promise<
       ProviderUsageRow[]
@@ -386,8 +400,58 @@ for (const attempt of catalog.attempts) {
     fs.readFile(path.join(directory, "skill-projection.json"), "utf8").then(JSON.parse),
   ])
   const profile = payload.opencorvus.profile
-  const taskOutcomeAudit = auditTaskOutcome(payload.opencorvus.lifecycle_status, transcript)
-  const terminalQuiescenceAudit = auditTerminalQuiescence(board)
+  if (receipt.launch_mode !== "mission" || board.launch_mode !== "mission") {
+    throw new Error(`Mission launch receipt mismatch: ${attempt.run_id}`)
+  }
+  const taskBoards = Array.isArray(board.tasks) ? board.tasks : []
+  const taskOutcomeAudit = auditMissionOutcome({
+    missionRecord: board.mission,
+    missionStatus: board.mission_status,
+    missionTranscript,
+    taskTranscripts: taskBoards.map((task: any) => ({
+      task_id: task.task_id,
+      lifecycle_status: task.board?.task?.status,
+      transcript: taskTranscripts.find((candidate: any) => candidate.task_id === task.task_id)?.transcript ?? [],
+    })),
+  })
+  const missionLineageAudit = auditMissionEvidenceLineage({
+    snapshot: infrastructureSnapshot,
+    missionID: String(payload.opencorvus.mission_id ?? ""),
+    missionSessionID: String(payload.opencorvus.mission_session_id ?? ""),
+    taskIDs: Array.isArray(payload.opencorvus.task_ids) ? payload.opencorvus.task_ids.map(String) : [],
+    missionTranscript,
+    taskTranscripts,
+    flattenedTaskTranscript: transcript,
+  })
+  const missionCollectionsAudit = auditMissionEvidenceCollections({
+    snapshot: infrastructureSnapshot,
+    missionSessionID: String(payload.opencorvus.mission_session_id ?? ""),
+    taskIDs: Array.isArray(payload.opencorvus.task_ids) ? payload.opencorvus.task_ids.map(String) : [],
+    taskBoards,
+    taskInteractions,
+    flattenedInteractions: interactions,
+    resultInteractions: Array.isArray(payload.opencorvus.interactions) ? payload.opencorvus.interactions : [],
+    providerLedger: ledger,
+  })
+  const terminalQuiescenceAudit = auditMissionQuiescence({
+    missionRecord: board.mission,
+    missionStatus: board.mission_status,
+    taskBoards,
+  })
+  const bindingAudit = auditMissionRunBinding({
+    resultProfile: profile,
+    resultModel: payload.opencorvus.model,
+    resultMissionID: payload.opencorvus.mission_id,
+    resultMissionSessionID: payload.opencorvus.mission_session_id,
+    resultTaskIDs: payload.opencorvus.task_ids,
+    wakeRequest: receipt.request,
+    wakeResponse: receipt.response,
+    missionSession: receipt.mission_session,
+    missionRecord: board.mission,
+    missionStatus: board.mission_status,
+    projectGitInit: receipt.project_git_init,
+    taskBoards,
+  })
   const skillSeal = auditSkillEvidenceSeal({
     profile,
     resultSkill: payload.opencorvus.skill,
@@ -402,27 +466,33 @@ for (const attempt of catalog.attempts) {
       `Host recorded a task infrastructure error for ${attempt.run_id}: ${infrastructureAudit.violations.join(", ")}`,
     )
   }
-  const workflow = board.task?.completionDecision?.workflowBinding ?? null
-  const selectedWorkflowID = workflow?.kind === "virtual_workflow" ? workflow.workflow_id : null
+  const workflowBindings = taskBoards.map((task: any) => ({
+    task_id: task.task_id,
+    workflow_binding: task.board?.task?.completionDecision?.workflowBinding ?? null,
+  }))
+  const selectedWorkflowIDs = workflowBindings.map((item: any) => ({
+    task_id: item.task_id,
+    workflow_id:
+      item.workflow_binding?.kind === "virtual_workflow" ? item.workflow_binding.workflow_id : null,
+  }))
   if (
     !taskOutcomeAudit.passed ||
-    JSON.stringify(taskOutcomeAudit) !== JSON.stringify(payload.opencorvus.task_outcome_audit ?? null) ||
+    !missionLineageAudit.passed ||
+    !missionCollectionsAudit.passed ||
+    JSON.stringify(taskOutcomeAudit) !== JSON.stringify(payload.opencorvus.mission_outcome_audit ?? null) ||
     !terminalQuiescenceAudit.passed ||
     JSON.stringify(terminalQuiescenceAudit) !==
       JSON.stringify(payload.opencorvus.terminal_quiescence_audit ?? null) ||
-    receipt.request?.promptProfile !== profile ||
-    board.task?.packageRevisionBinding?.id !== profile ||
-    board.task?.id !== payload.opencorvus.task_id ||
-    receipt.response?.task_id !== payload.opencorvus.task_id ||
-    JSON.stringify(workflow) !== JSON.stringify(payload.opencorvus.workflow_binding ?? null) ||
-    selectedWorkflowID !== (payload.opencorvus.selected_workflow_id ?? null)
+    !bindingAudit.passed ||
+    JSON.stringify(workflowBindings) !== JSON.stringify(payload.opencorvus.workflow_bindings ?? null) ||
+    JSON.stringify(selectedWorkflowIDs) !== JSON.stringify(payload.opencorvus.selected_workflow_ids ?? null)
   ) {
-    throw new Error(`Raw profile/task/workflow binding mismatch: ${attempt.run_id}`)
+    throw new Error(`Raw Mission/profile/Task/workflow binding mismatch: ${attempt.run_id}`)
   }
-  if (digest(String(receipt.request?.request ?? "")) !== payload.benchmark.harness_request_sha256) {
+  if (digest(String(receipt.request?.text ?? "")) !== payload.benchmark.harness_request_sha256) {
     throw new Error(`Harness request hash mismatch: ${attempt.run_id}`)
   }
-  const isolation = auditBenchmarkIsolation(transcript, {
+  const isolation = auditBenchmarkIsolation([...missionTranscript, ...transcript], {
     protectedPaths: [
       path.dirname(path.dirname(python)),
       sourceData,
@@ -515,7 +585,9 @@ const verifiedBatches = await Promise.all(
     .map(async (planPath) => {
       const planBytes = await fs.readFile(planPath)
       const plan = JSON.parse(planBytes.toString("utf8"))
-      if (plan.model !== model) throw new Error(`Batch plan model mismatch: ${plan.batch_run_id}`)
+      if (plan.model !== model || plan.launch_mode !== "mission") {
+        throw new Error(`Batch plan model/launch mode mismatch: ${plan.batch_run_id}`)
+      }
       const prefix = planPath.slice(0, -"-plan.json".length)
       const receipt = await fs
         .readFile(`${prefix}-receipt.json`, "utf8")

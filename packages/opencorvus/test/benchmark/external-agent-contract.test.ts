@@ -22,6 +22,11 @@ import {
   auditTaskInfrastructureIncidents,
   auditTaskOutcome,
   auditTerminalQuiescence,
+  auditMissionOutcome,
+  auditMissionEvidenceLineage,
+  auditMissionEvidenceCollections,
+  auditMissionQuiescence,
+  auditMissionRunBinding,
   auditBatchEvidence,
   executeRollingBatchChains,
   failureObservationReceipt,
@@ -125,13 +130,13 @@ describe("external agent benchmark contract", () => {
     })
   })
 
-  test("binds preserved Provider usage to the exact Terra experiment model", () => {
+  test("binds preserved Provider usage to the exact Luna Mission experiment model", () => {
     const rows: ProviderUsageRow[] = [
       {
-        id: "usage-terra",
+        id: "usage-luna-mission",
         occurred_at: 100,
         provider_id: "openai",
-        model_id: "gpt-5.6-terra",
+        model_id: "gpt-5.6-luna",
         purpose: "session",
         input_tokens: 10,
         output_tokens: 4,
@@ -141,14 +146,14 @@ describe("external agent benchmark contract", () => {
         total_tokens: 20,
         cost_usd: 0.01,
         billing_status: "priced",
-        session_id: "ses_terra",
+        session_id: "ses_luna_mission",
         agent_id: "base-developer",
       },
     ]
-    expect(providerUsageMatchesModel(rows, "openai/gpt-5.6-terra")).toEqual({
+    expect(providerUsageMatchesModel(rows, "openai/gpt-5.6-luna")).toEqual({
       passed: true,
       provider_id: "openai",
-      model_id: "gpt-5.6-terra",
+      model_id: "gpt-5.6-luna",
     })
   })
 
@@ -190,6 +195,9 @@ describe("external agent benchmark contract", () => {
     ])
     expect(mapped).toContain(
       "OpenCorvus is the evaluated multi-Agent harness. Tool, model, Agent, retry, and concurrent call counts are measured without a stock single-model turn budget.\n\nSYSTEM:\n",
+    )
+    expect(mapped).toContain(
+      "Mission is the real intake coordinator for this run. Delegate the complete business workflow to child Task work owned by the held Expert Squad",
     )
     expect(mapped).toContain("SYSTEM:\nExecute  the requested task. Keep  records exact.\n  code = '  exact  '")
     expect(mapped).toContain("USER:\n  Update the simulated business state.  ")
@@ -261,6 +269,392 @@ describe("external agent benchmark contract", () => {
         boardWorkflow: workflow,
       }),
     ).toEqual({ passed: true, selectedWorkflowID: "planned-delivery" })
+  })
+
+  test("accepts a Luna Mission that owns the exact Base child Task set and reaches durable completion", () => {
+    const taskBoard = {
+      task: {
+        id: "task-1",
+        source: "mission",
+        status: "completed",
+        packageRevisionBinding: { id: "base" },
+      },
+      executionProjection: { occurrences: [] },
+    }
+    const missionRecord = {
+      missionID: "mission-1",
+      sessionID: "mission-session-1",
+      interruptible: false,
+      pendingInteractions: 0,
+      completion: {
+        summary: "Accepted benchmark outcome",
+        messageID: "message-mission-complete",
+        toolCallID: "call-mission-complete",
+        toolPartID: "part-mission-complete",
+        timeRecorded: 12,
+      },
+      tasks: [{ id: "task-1", lifecycleStatus: "completed" }],
+    }
+    const missionStatus = {
+      missionID: "mission-1",
+      sessionID: "mission-session-1",
+      status: "inactive",
+      tasks: [{ taskID: "task-1", lifecycleStatus: "completed" }],
+    }
+    const missionTranscript = [
+      {
+        info: {
+          id: "message-mission-user",
+          role: "user",
+          sessionID: "mission-session-1",
+          time: { created: 1 },
+        },
+        parts: [{ type: "text", text: "Run the benchmark Mission." }],
+      },
+      {
+        info: {
+          id: "message-mission-complete",
+          role: "assistant",
+          agent: "mission",
+          sessionID: "mission-session-1",
+          time: { created: 10, completed: 12 },
+          finish: "tool-calls",
+          parentID: "message-mission-user",
+        },
+        parts: [
+          {
+            id: "part-mission-complete",
+            callID: "call-mission-complete",
+            type: "tool",
+            tool: "panel",
+            state: {
+              status: "completed",
+              input: { action: "complete_mission" },
+              output: JSON.stringify({
+                kind: "mission_completed",
+                mission_id: "mission-1",
+                mission_session_id: "mission-session-1",
+                summary: "Accepted benchmark outcome",
+                task_acceptances: [{
+                  task_id: "task-1",
+                  evidence_locators: [{ source: "task_artifact", ref: "artifact-1" }],
+                  terminal_lifecycle_reference: { terminalEventID: "event-task-1-terminal" },
+                }],
+                assistant_message_id: "message-mission-complete",
+                tool_call_id: "call-mission-complete",
+                tool_part_id: "part-mission-complete",
+                time_recorded: 12,
+              }),
+            },
+          },
+        ],
+      },
+    ]
+    const taskBoards = [{ task_id: "task-1", board: taskBoard }]
+
+    expect(
+      auditMissionRunBinding({
+        resultProfile: "base",
+        resultModel: "openai/gpt-5.6-luna",
+        resultMissionID: "mission-1",
+        resultMissionSessionID: "mission-session-1",
+        resultTaskIDs: ["task-1"],
+        wakeRequest: {
+          model: "openai/gpt-5.6-luna",
+          expertSquadIDs: ["base"],
+          productPillar: "work",
+        },
+        wakeResponse: {
+          missionID: "mission-1",
+          sessionID: "mission-session-1",
+          productPillar: "work",
+          created: true,
+        },
+        missionSession: {
+          kind: "mission",
+          metadata: {
+            mission: { id: "mission-1", productPillar: "work", visibleExpertSquadIDs: ["base"] },
+          },
+        },
+        missionRecord,
+        missionStatus,
+        projectGitInit: { created: true },
+        taskBoards,
+      }),
+    ).toMatchObject({
+      passed: true,
+      requested_squads: ["base"],
+      held_squads: ["base"],
+      task_ids: ["task-1"],
+      task_bindings: [{ task_id: "task-1", source: "mission", bound_profile: "base" }],
+    })
+    expect(
+      auditMissionOutcome({
+        missionRecord,
+        missionStatus,
+        missionTranscript,
+        taskTranscripts: [{ task_id: "task-1", lifecycle_status: "completed", transcript: [] }],
+      }),
+    ).toMatchObject({
+      passed: true,
+      scored_terminal: true,
+      mission_completed: true,
+      explicit_complete_mission: true,
+      child_task_count: 1,
+    })
+    expect(auditMissionQuiescence({ missionRecord, missionStatus, taskBoards })).toMatchObject({
+      passed: true,
+      mission_status: "inactive",
+      mission_completed: true,
+      task_count: 1,
+    })
+  })
+
+  test("scores a clean naturally inactive Mission only after its assistant settled without a Provider error", () => {
+    const missionRecord = {
+      missionID: "mission-natural",
+      sessionID: "session-natural",
+      interruptible: false,
+      tasks: [],
+    }
+    const missionStatus = {
+      missionID: "mission-natural",
+      sessionID: "session-natural",
+      status: "inactive",
+      tasks: [],
+    }
+    const settled = [
+      {
+        info: { id: "message-natural-user", sessionID: "session-natural", role: "user", time: { created: 1 } },
+        parts: [{ type: "text", text: "Coordinate the benchmark." }],
+      },
+      {
+        info: {
+          id: "message-natural",
+          sessionID: "session-natural",
+          role: "assistant",
+          parentID: "message-natural-user",
+          time: { created: 2, completed: 3 },
+          finish: "stop",
+        },
+        parts: [],
+      },
+    ]
+    expect(auditMissionOutcome({ missionRecord, missionStatus, missionTranscript: settled, taskTranscripts: [] }))
+      .toMatchObject({ scored_terminal: true, mission_assistant_healthy: true, child_task_count: 0 })
+
+    const providerError = [
+      settled[0],
+      {
+        ...settled[1],
+        info: { ...settled[1].info, error: { name: "APIError", message: "provider failed" } },
+      },
+    ]
+    expect(auditMissionOutcome({ missionRecord, missionStatus, missionTranscript: providerError, taskTranscripts: [] }))
+      .toMatchObject({ scored_terminal: false, mission_assistant_healthy: false })
+    const unansweredSchedulerWake = [
+      ...settled,
+      {
+        info: { id: "message-scheduler-wake", sessionID: "session-natural", role: "user", time: { created: 4 } },
+        parts: [{ type: "text", text: "Child Task reached terminal state." }],
+      },
+    ]
+    expect(
+      auditMissionOutcome({
+        missionRecord,
+        missionStatus,
+        missionTranscript: unansweredSchedulerWake,
+        taskTranscripts: [],
+      }),
+    ).toMatchObject({
+      scored_terminal: false,
+      mission_assistant_replies_to_latest_user: false,
+    })
+
+    expect(auditMissionOutcome({
+      missionRecord: { ...missionRecord, tasks: [{ id: "task-failed", lifecycleStatus: "failed" }] },
+      missionStatus: {
+        ...missionStatus,
+        tasks: [{ taskID: "task-failed", lifecycleStatus: "failed" }],
+      },
+      missionTranscript: settled,
+      taskTranscripts: [{
+        task_id: "task-failed",
+        lifecycle_status: "failed",
+        transcript: [{
+          info: { id: "message-task-failed", sessionID: "task-session", role: "assistant" },
+          parts: [{
+            type: "tool",
+            tool: "manage_task",
+            state: { status: "completed", input: { action: "fail_task" } },
+          }],
+        }],
+      }],
+    })).toMatchObject({
+      scored_terminal: true,
+      mission_completed: false,
+      child_tasks: [{ task_id: "task-failed", outcome: "natural_failed" }],
+    })
+  })
+
+  test("rebuilds exact Mission and multi-Task lineage from the sealed relational snapshot", () => {
+    const missionTranscript = [{
+      info: { id: "message-mission", sessionID: "session-mission", role: "assistant", time: { created: 1, completed: 2 } },
+      parts: [],
+    }]
+    const taskTranscripts = [
+      { task_id: "task-a", transcript: [{ info: { id: "message-a", sessionID: "session-a", role: "assistant", time: { created: 3, completed: 4 } }, parts: [] }] },
+      { task_id: "task-b", transcript: [{ info: { id: "message-b", sessionID: "session-b", role: "assistant", time: { created: 2, completed: 5 } }, parts: [] }] },
+    ]
+    const snapshot = {
+      mission_id: "mission-1",
+      mission_session_id: "session-mission",
+      task_ids: ["task-a", "task-b"],
+      missing_tables: [],
+      rows: {
+        session: [
+          { id: "session-mission", kind: "mission", parent_id: null, metadata: JSON.stringify({ mission: { id: "mission-1", productPillar: "work" } }) },
+          { id: "session-a", kind: "root", parent_id: null, metadata: null },
+          { id: "session-b", kind: "root", parent_id: null, metadata: null },
+        ],
+        engine_task: [
+          { id: "task-a", session_id: "session-a", source: "mission", product_pillar: "work", metadata: JSON.stringify({ actor: "mission", mission: { id: "mission-1", session_id: "session-mission" } }) },
+          { id: "task-b", session_id: "session-b", source: "mission", product_pillar: "work", metadata: JSON.stringify({ actor: "mission", mission: { id: "mission-1", session_id: "session-mission" } }) },
+        ],
+        message: [
+          { id: "message-mission", session_id: "session-mission" },
+          { id: "message-a", session_id: "session-a" },
+          { id: "message-b", session_id: "session-b" },
+        ],
+        benchmark_transcript_surface: [
+          { surface: "mission", owner_id: "mission-1", message_id: "message-mission", session_id: "session-mission" },
+          { surface: "task", owner_id: "task-a", message_id: "message-a", session_id: "session-a" },
+          { surface: "task", owner_id: "task-b", message_id: "message-b", session_id: "session-b" },
+        ],
+        protocol_inbox: [],
+        protocol_delivery_receipt: [],
+        provider_usage_event: [{
+          id: "usage-1",
+          occurred_at: 6,
+          provider_id: "openai",
+          model_id: "gpt-5.6-luna",
+          purpose: "session",
+          input_tokens: 10,
+          output_tokens: 5,
+          reasoning_tokens: 2,
+          cache_read_tokens: 0,
+          cache_write_tokens: 0,
+          total_tokens: 17,
+          cost_usd: 0,
+          billing_status: "unpriced",
+          session_id: "session-a",
+          agent_id: "base-developer",
+        }, {
+          id: "usage-helper",
+          occurred_at: 7,
+          provider_id: "openai",
+          model_id: "gpt-5.6-luna",
+          purpose: "vcs-commit-message",
+          input_tokens: 3,
+          output_tokens: 1,
+          reasoning_tokens: 0,
+          cache_read_tokens: 0,
+          cache_write_tokens: 0,
+          total_tokens: 4,
+          cost_usd: 0,
+          billing_status: "unpriced",
+          session_id: null,
+          agent_id: null,
+        }],
+      },
+    }
+    expect(auditMissionEvidenceLineage({
+      snapshot,
+      missionID: "mission-1",
+      missionSessionID: "session-mission",
+      taskIDs: ["task-a", "task-b"],
+      missionTranscript,
+      taskTranscripts,
+      flattenedTaskTranscript: [taskTranscripts[1].transcript[0], taskTranscripts[0].transcript[0]],
+    })).toMatchObject({
+      passed: true,
+      task_transcript_flatten_matches: true,
+      pending_mission_scheduler_inbox_ids: [],
+    })
+    expect(auditMissionEvidenceCollections({
+      snapshot,
+      missionSessionID: "session-mission",
+      taskIDs: ["task-a", "task-b"],
+      taskBoards: [
+        { task_id: "task-a", board: { interactions: [] } },
+        { task_id: "task-b", board: { interactions: [] } },
+      ],
+      taskInteractions: [
+        { task_id: "task-a", interactions: [] },
+        { task_id: "task-b", interactions: [] },
+      ],
+      flattenedInteractions: [],
+      resultInteractions: [],
+      providerLedger: [{
+        id: "usage-1",
+        occurred_at: 6,
+        provider_id: "openai",
+        model_id: "gpt-5.6-luna",
+        purpose: "session",
+        input_tokens: 10,
+        output_tokens: 5,
+        reasoning_tokens: 2,
+        cache_read_tokens: 0,
+        cache_write_tokens: 0,
+        total_tokens: 17,
+        cost_usd: 0,
+        billing_status: "unpriced",
+        session_id: "session-a",
+        agent_id: "base-developer",
+      }, {
+        id: "usage-helper",
+        occurred_at: 7,
+        provider_id: "openai",
+        model_id: "gpt-5.6-luna",
+        purpose: "vcs-commit-message",
+        input_tokens: 3,
+        output_tokens: 1,
+        reasoning_tokens: 0,
+        cache_read_tokens: 0,
+        cache_write_tokens: 0,
+        total_tokens: 4,
+        cost_usd: 0,
+        billing_status: "unpriced",
+        session_id: null,
+        agent_id: null,
+      }],
+    })).toMatchObject({
+      passed: true,
+      interactions_match: true,
+      provider_ledger_snapshot_matches: true,
+      provider_ledger_session_lineage_matches: true,
+    })
+  })
+
+  test("reconciles Mission child-board infrastructure incidents for zero and multiple Tasks", () => {
+    const emptySnapshot = { rows: { engine_artifact: [] } }
+    expect(auditTaskInfrastructureIncidents({
+      snapshot: emptySnapshot,
+      board: { launch_mode: "mission", tasks: [] },
+    })).toMatchObject({ passed: true, sources_agree: true, incidents: [] })
+    const snapshot = { rows: { engine_artifact: [{ id: "incident-1", kind: "task-infrastructure-error", payload: "{}" }] } }
+    const board = {
+      launch_mode: "mission",
+      tasks: [
+        { task_id: "task-a", board: { processIncidents: [{ id: "incident-1", source: "infrastructure" }] } },
+        { task_id: "task-b", board: { processIncidents: [] } },
+      ],
+    }
+    expect(auditTaskInfrastructureIncidents({ snapshot, board })).toMatchObject({
+      passed: false,
+      sources_agree: true,
+      violations: ["task_infrastructure_error:1"],
+    })
   })
 
   test("passes the experimental Skill projection only for exact profile owners", () => {
@@ -1031,10 +1425,15 @@ describe("external agent benchmark contract", () => {
       run_id: "run_unavailable",
       run_key: "key_unavailable",
       task_id: null,
+      mission_id: null,
+      mission_session_id: null,
+      task_ids: [],
       status: "unavailable",
-      reason: "task_not_created",
+      reason: "mission_not_created",
       captured_at: null,
       message_count: 0,
+      mission_message_count: 0,
+      task_message_count: 0,
       trace_event_count: 0,
       interaction_count: 0,
       benchmark_event_count: 0,
@@ -1205,13 +1604,14 @@ describe("external agent benchmark contract", () => {
         wave_index: 1,
         case_index: item.case_index,
       },
-      opencorvus: { profile: "base", model: "openai/gpt-5.6-terra" },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "mission" },
     }))
     expect(
       auditBatchEvidence({
         plan: {
           batch_run_id: "batch-2",
-          model: "openai/gpt-5.6-terra",
+          model: "openai/gpt-5.6-luna",
+          launch_mode: "mission",
           trial_concurrency: 5,
           schedule_mode: "rolling_case_slots_v1",
           profiles: ["base"],
@@ -1253,12 +1653,13 @@ describe("external agent benchmark contract", () => {
         wave_index: 1,
         case_index: item.case_index,
       },
-      opencorvus: { profile: "base", model: "openai/gpt-5.6-terra" },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "mission" },
     }))
     const audit = auditBatchEvidence({
       plan: {
         batch_run_id: "batch-posthoc-host-fault",
-        model: "openai/gpt-5.6-terra",
+        model: "openai/gpt-5.6-luna",
+        launch_mode: "mission",
         trial_concurrency: 5,
         schedule_mode: "rolling_case_slots_v1",
         profiles: ["base"],
@@ -1339,7 +1740,7 @@ describe("external agent benchmark contract", () => {
     const record = (run_id: string, case_index: number) => ({
       run_id,
       benchmark: { case_index, repetition: 1 },
-      opencorvus: { profile: "base", model: "openai/gpt-5.6-terra" },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "mission" },
     })
     const reusable = reusableProfileRuns(
       {
@@ -1348,13 +1749,18 @@ describe("external agent benchmark contract", () => {
           record("superseded-candidate-1", 1),
           record("candidate-2", 2),
           {
-            ...record("luna-candidate-3", 3),
-            opencorvus: { profile: "base", model: "openai/gpt-5.6-luna" },
+            ...record("direct-task-candidate-3", 3),
+            opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "task" },
+          },
+          {
+            ...record("terra-mission-candidate-4", 4),
+            opencorvus: { profile: "base", model: "openai/gpt-5.6-terra", launch_mode: "mission" },
           },
         ],
       },
       "base",
-      "openai/gpt-5.6-terra",
+      "openai/gpt-5.6-luna",
+      "mission",
     )
 
     expect([...reusable].map(([caseIndex, item]) => [caseIndex, item.run_id])).toEqual([

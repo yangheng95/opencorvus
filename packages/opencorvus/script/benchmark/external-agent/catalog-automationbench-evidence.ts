@@ -6,11 +6,13 @@ import {
   paperEvidenceChecks,
   auditBenchmarkIsolation,
   analyzePromptComposition,
-  auditRunBinding,
   auditSkillEvidenceSeal,
   auditTaskInfrastructureIncidents,
-  auditTaskOutcome,
-  auditTerminalQuiescence,
+  auditMissionOutcome,
+  auditMissionEvidenceLineage,
+  auditMissionEvidenceCollections,
+  auditMissionQuiescence,
+  auditMissionRunBinding,
   auditBatchEvidence,
   reusableBatchCandidateRunIDs,
   permanentRunInvalidation,
@@ -52,6 +54,10 @@ type Result = {
     commit?: string
     source?: { worktree_clean?: boolean; benchmark_bundle_sha256?: string; dirty_paths?: string[] }
     task_id?: string | null
+    task_ids?: string[]
+    mission_id?: string | null
+    mission_session_id?: string | null
+    launch_mode?: string
     lifecycle_status?: string
     profile: string
     model: string
@@ -61,7 +67,7 @@ type Result = {
     agents?: string[]
     profile_audit?: { passed?: boolean }
     isolation_audit?: { passed?: boolean }
-    task_outcome_audit?: { scored_terminal?: boolean }
+    mission_outcome_audit?: { scored_terminal?: boolean }
     terminal_quiescence_audit?: { passed?: boolean }
     skill?: {
       name?: string
@@ -74,7 +80,15 @@ type Result = {
 type Failure = {
   run: { id?: string; key?: string; started_at: number; failed_at?: number; status: string; stage?: string }
   benchmark: { name: string; version: string; task: string }
-  opencorvus: { profile: string; model: string; task_id?: string | null }
+  opencorvus: {
+    profile: string
+    model: string
+    launch_mode?: string
+    mission_id?: string | null
+    mission_session_id?: string | null
+    task_id?: string | null
+    task_ids?: string[]
+  }
   error?: { name?: string; message?: string }
 }
 
@@ -294,6 +308,11 @@ async function inspectRawRunEvidence(
       board,
       receipt,
       transcript,
+      missionTranscript,
+      taskTranscripts,
+      taskInteractions,
+      interactions,
+      providerLedger,
       benchmarkEvents,
       scorerReplay,
       sandboxAudit,
@@ -302,8 +321,13 @@ async function inspectRawRunEvidence(
       runtimeSnapshot,
     ] = await Promise.all([
       fs.readFile(path.join(directory, "terminal-board.json"), "utf8").then(JSON.parse),
-      fs.readFile(path.join(directory, "task-receipt.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "mission-receipt.json"), "utf8").then(JSON.parse),
       fs.readFile(path.join(directory, "opencorvus-transcript.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "mission-transcript.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "task-transcripts.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "task-interactions.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "opencorvus-interactions.json"), "utf8").then(JSON.parse),
+      fs.readFile(path.join(directory, "provider-usage-ledger.json"), "utf8").then(JSON.parse),
       fs
         .readFile(path.join(directory, "automationbench-events.jsonl"), "utf8")
         .then((text) => text.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line))),
@@ -319,29 +343,79 @@ async function inspectRawRunEvidence(
         .then(JSON.parse)
         .catch(() => undefined),
     ])
-    const requestedProfile = receipt.request?.promptProfile
-    const boundProfile = board.task?.packageRevisionBinding?.id
-    const boardTaskID = board.task?.id
-    const responseTaskID = receipt.response?.task_id
-    const boardWorkflow = board.task?.completionDecision?.workflowBinding ?? null
-    const requestHash = crypto.createHash("sha256").update(String(receipt.request?.request ?? "")).digest("hex")
-    const bindingAudit = auditRunBinding({
+    if (result.opencorvus.launch_mode !== "mission" || receipt.launch_mode !== "mission" || board.launch_mode !== "mission") {
+      throw new Error("mission_launch_mode_missing")
+    }
+    const taskBoards = Array.isArray(board.tasks) ? board.tasks : []
+    const bindingAudit = auditMissionRunBinding({
       resultProfile: result.opencorvus.profile,
-      resultTaskID: result.opencorvus.task_id,
-      resultWorkflow: (result.opencorvus as any).workflow_binding,
-      resultSelectedWorkflowID: (result.opencorvus as any).selected_workflow_id,
-      requestedProfile,
-      boundProfile,
-      boardTaskID,
-      responseTaskID,
-      boardWorkflow,
+      resultModel: result.opencorvus.model,
+      resultMissionID: result.opencorvus.mission_id,
+      resultMissionSessionID: result.opencorvus.mission_session_id,
+      resultTaskIDs: result.opencorvus.task_ids,
+      wakeRequest: receipt.request,
+      wakeResponse: receipt.response,
+      missionSession: receipt.mission_session,
+      missionRecord: board.mission,
+      missionStatus: board.mission_status,
+      projectGitInit: receipt.project_git_init,
+      taskBoards,
     })
     const profilePassed = bindingAudit.passed
-    const taskOutcomeAudit = auditTaskOutcome(result.opencorvus.lifecycle_status, transcript)
+    const workflowBindings = taskBoards.map((task: any) => ({
+      task_id: task.task_id,
+      workflow_binding: task.board?.task?.completionDecision?.workflowBinding ?? null,
+    }))
+    const selectedWorkflowIDs = workflowBindings.map((item: any) => ({
+      task_id: item.task_id,
+      workflow_id:
+        item.workflow_binding?.kind === "virtual_workflow" ? item.workflow_binding.workflow_id : null,
+    }))
+    const workflowPassed =
+      JSON.stringify(workflowBindings) === JSON.stringify((result.opencorvus as any).workflow_bindings ?? null) &&
+      JSON.stringify(selectedWorkflowIDs) ===
+        JSON.stringify((result.opencorvus as any).selected_workflow_ids ?? null)
+    const requestHash = crypto.createHash("sha256").update(String(receipt.request?.text ?? "")).digest("hex")
+    const taskOutcomeAudit = auditMissionOutcome({
+      missionRecord: board.mission,
+      missionStatus: board.mission_status,
+      missionTranscript,
+      taskTranscripts: taskBoards.map((task: any) => ({
+        task_id: task.task_id,
+        lifecycle_status: task.board?.task?.status,
+        transcript:
+          taskTranscripts.find((candidate: any) => candidate.task_id === task.task_id)?.transcript ?? [],
+      })),
+    })
+    const missionLineageAudit = auditMissionEvidenceLineage({
+      snapshot: runtimeSnapshot,
+      missionID: String(result.opencorvus.mission_id ?? ""),
+      missionSessionID: String(result.opencorvus.mission_session_id ?? ""),
+      taskIDs: Array.isArray(result.opencorvus.task_ids) ? result.opencorvus.task_ids.map(String) : [],
+      missionTranscript,
+      taskTranscripts,
+      flattenedTaskTranscript: transcript,
+    })
+    const missionCollectionsAudit = auditMissionEvidenceCollections({
+      snapshot: runtimeSnapshot,
+      missionSessionID: String(result.opencorvus.mission_session_id ?? ""),
+      taskIDs: Array.isArray(result.opencorvus.task_ids) ? result.opencorvus.task_ids.map(String) : [],
+      taskBoards,
+      taskInteractions,
+      flattenedInteractions: interactions,
+      resultInteractions: Array.isArray((result.opencorvus as any).interactions)
+        ? (result.opencorvus as any).interactions
+        : [],
+      providerLedger,
+    })
     const taskOutcomePassed =
       taskOutcomeAudit.passed &&
-      JSON.stringify((result.opencorvus as any).task_outcome_audit ?? null) === JSON.stringify(taskOutcomeAudit)
-    const terminalQuiescenceAudit = auditTerminalQuiescence(board)
+      JSON.stringify((result.opencorvus as any).mission_outcome_audit ?? null) === JSON.stringify(taskOutcomeAudit)
+    const terminalQuiescenceAudit = auditMissionQuiescence({
+      missionRecord: board.mission,
+      missionStatus: board.mission_status,
+      taskBoards,
+    })
     const terminalQuiescencePassed =
       terminalQuiescenceAudit.passed &&
       JSON.stringify((result.opencorvus as any).terminal_quiescence_audit ?? null) ===
@@ -355,7 +429,7 @@ async function inspectRawRunEvidence(
       transcript,
     })
     const skillPassed = skillSeal.passed
-    const isolation = auditBenchmarkIsolation(transcript, {
+    const isolation = auditBenchmarkIsolation([...missionTranscript, ...transcript], {
       protectedPaths: [
         path.dirname(path.dirname(input.python)),
         input.sourceData,
@@ -410,8 +484,11 @@ async function inspectRawRunEvidence(
     // ordinary scores.
     const violations = [
       ...(profilePassed ? [] : ["profile_binding_mismatch"]),
+      ...(missionLineageAudit.passed ? [] : missionLineageAudit.violations),
+      ...(missionCollectionsAudit.passed ? [] : missionCollectionsAudit.violations),
+      ...(workflowPassed ? [] : ["workflow_binding_mismatch"]),
       ...(taskInfrastructurePassed ? [] : taskInfrastructureAudit.violations),
-      ...(taskOutcomePassed ? [] : ["task_outcome_mismatch"]),
+      ...(taskOutcomePassed ? [] : ["mission_outcome_mismatch"]),
       ...(terminalQuiescencePassed ? [] : ["terminal_quiescence_failed"]),
       ...(skillPassed ? [] : skillSeal.violations.map((item) => `skill:${item}`)),
       ...(isolation.passed ? [] : ["evaluator_isolation_failed"]),
@@ -429,8 +506,10 @@ async function inspectRawRunEvidence(
       task_infrastructure_audit: taskInfrastructureAudit,
       task_infrastructure_passed: taskInfrastructurePassed,
       profile_passed: profilePassed,
-      task_outcome_audit: taskOutcomeAudit,
-      task_outcome_passed: taskOutcomePassed,
+      mission_lineage_audit: missionLineageAudit,
+      mission_collections_audit: missionCollectionsAudit,
+      mission_outcome_audit: taskOutcomeAudit,
+      mission_outcome_passed: taskOutcomePassed,
       terminal_quiescence_audit: terminalQuiescenceAudit,
       terminal_quiescence_passed: terminalQuiescencePassed,
       skill_projection_audit: skillSeal.projection,
@@ -582,7 +661,7 @@ for (const directory of terminalDirectories) {
                 : undefined
   const eligible =
     result?.run.status === "scored" &&
-    result.opencorvus.task_outcome_audit?.scored_terminal === true &&
+    result.opencorvus.mission_outcome_audit?.scored_terminal === true &&
     result.opencorvus.terminal_quiescence_audit?.passed === true &&
     result.opencorvus.skill?.projection?.passed === true &&
     result.opencorvus.skill?.dispatched_coverage?.passed === true &&
@@ -593,7 +672,7 @@ for (const directory of terminalDirectories) {
     evidencePassed
   const developmentScore =
     result?.run.status === "scored" &&
-    result.opencorvus.task_outcome_audit?.scored_terminal === true &&
+    result.opencorvus.mission_outcome_audit?.scored_terminal === true &&
     result.opencorvus.skill?.projection?.passed === true &&
     result.opencorvus.skill?.dispatched_coverage?.passed === true &&
     result.benchmark.metrics !== null &&
@@ -842,6 +921,7 @@ const catalog = {
   scope: {
     round: 1,
     benchmark: "AutomationBench",
+    launch_mode: "mission",
     model: cli.model,
     profiles: cli.profiles,
     exploratory_profiles: exploratoryProfileSummaries.map((summary) => summary.profile),
@@ -914,16 +994,16 @@ const lines = [
   "",
   "## All attempts (paper evidence index)",
   "",
-  "| Started | Profile | Status | Reason | Task ID | Evidence |",
+  "| Started | Profile | Status | Reason | Mission / Tasks | Evidence |",
   "| --- | --- | --- | --- | --- | --- |",
   ...records.map(
     (record) =>
-      `| ${new Date(record.started_at).toISOString()} | ${record.opencorvus.profile} | ${record.evidence_status} | ${record.reason} | ${record.opencorvus.task_id ?? "—"} | [manifest](${record.evidence_directory}/evidence-manifest.json) |`,
+      `| ${new Date(record.started_at).toISOString()} | ${record.opencorvus.profile} | ${record.evidence_status} | ${record.reason} | ${record.opencorvus.mission_id ?? "—"} / ${(record.opencorvus.task_ids ?? []).join(", ") || "—"} | [manifest](${record.evidence_directory}/evidence-manifest.json) |`,
   ),
   "",
   "## Public leaderboard context (not numerically comparable)",
   "",
-  `The official AutomationBench board uses a private held-out set, while this round uses a deterministic 50-case public set. The exact \`${cli.model}\` configuration is not an official comparable row; in particular, the published GPT-5.6 Terra Max row is not relabeled as this run. No cross-dataset position, rank, slot, statistical estimate, or numeric delta is computed.`,
+  `The official AutomationBench board uses a private held-out set, while this round uses a deterministic 50-case public set. The exact \`${cli.model}\` Mission configuration is not an official comparable row, and no published model row is relabeled as this run. No cross-dataset position, rank, slot, statistical estimate, or numeric delta is computed.`,
   "",
   "| Official row | Strict success rate |",
   "| --- | ---: |",

@@ -321,7 +321,7 @@ function waveCandidateByCase(
   profile: Profile,
 ) {
   const records = [
-    ...reusableProfileRuns(catalog, profile, model).values(),
+    ...reusableProfileRuns(catalog, profile, model, "mission").values(),
     ...catalog.attempts.filter(
       (record) =>
         record.raw_leaderboard_eligible === true &&
@@ -416,8 +416,8 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
 async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
   const existing = {
-    base: reusableProfileRuns(catalogBefore, "base", model),
-    advanced: reusableProfileRuns(catalogBefore, "advanced", model),
+    base: reusableProfileRuns(catalogBefore, "base", model, "mission"),
+    advanced: reusableProfileRuns(catalogBefore, "advanced", model, "mission"),
   }
   const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = [[], []]
   await executeRollingBatchChains({
@@ -472,6 +472,7 @@ try {
   const preexistingCatalog = await refreshCatalog()
   const plan = {
     schema_version: 1,
+    launch_mode: "mission",
     batch_run_id: batchRunID,
     batch_index: batchIndex,
     started_at: Date.now(),
@@ -486,10 +487,10 @@ try {
     cases,
     waves,
     preexisting_eligible: {
-      base: [...reusableProfileRuns(preexistingCatalog, "base", model).values()]
+      base: [...reusableProfileRuns(preexistingCatalog, "base", model, "mission").values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
-      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model).values()]
+      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model, "mission").values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
     },
