@@ -320,6 +320,22 @@ test("reopens a freshly reset database with the exact current schema", async () 
   }
 })
 
+test("gracefully retires a settled connection with a retained completed prepared query", async () => {
+  const { Database } = await import("../../src/storage/db")
+  try {
+    rebuildTestDatabase()
+    const retainedQuery = Database.Client().select().from(ProjectTable).prepare()
+    expect(retainedQuery.all()).toEqual([])
+
+    Database.close()
+
+    expect(Database.use((db) => db.select().from(ProjectTable).all())).toEqual([])
+    Database.close()
+  } finally {
+    rebuildTestDatabase()
+  }
+})
+
 test("round-trips the current pre-release schema through the strict transfer contract", () => {
   try {
     rebuildTestDatabase()

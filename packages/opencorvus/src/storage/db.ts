@@ -952,7 +952,11 @@ export namespace Database {
     return state.unavailable ? new DatabaseUnavailableError(state.unavailable) : undefined
   }
 
-  function releaseOwnedSqlite(input: { clearUnavailable: boolean; checkpoint: boolean }) {
+  function releaseOwnedSqlite(input: {
+    clearUnavailable: boolean
+    checkpoint: boolean
+    closeMode: "graceful" | "strict"
+  }) {
     const sqlite = state.sqlite
     if (!sqlite) {
       state.rollbackRequired = false
@@ -966,7 +970,7 @@ export namespace Database {
       state.rollbackRequired = false
     }
     if (input.checkpoint && state.unavailable === undefined) sqlite.run("PRAGMA wal_checkpoint(TRUNCATE)")
-    sqlite.close(true)
+    sqlite.close(input.closeMode === "strict")
 
     state.sqlite = undefined
     state.rollbackRequired = false
@@ -1015,7 +1019,7 @@ export namespace Database {
   function throwOwnedInitializationFailure(error: unknown, operation: string): never {
     const normalized = recordUnavailable(error, operation) ?? error
     try {
-      releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false })
+      releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false, closeMode: "strict" })
     } catch (closeError) {
       const cleanupFailure = recordUnavailable(closeError, `${operation}.cleanup`) ?? closeError
       throw new AggregateError(
@@ -1033,7 +1037,7 @@ export namespace Database {
     const unavailable = recordUnavailable(error, operation)
     if (!unavailable) return error
     try {
-      releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false })
+      releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false, closeMode: "strict" })
       return unavailable
     } catch (closeError) {
       const cleanupFailure = recordUnavailable(closeError, `${operation}.cleanup`) ?? closeError
@@ -1146,7 +1150,11 @@ export namespace Database {
   export function close() {
     return runSynchronousLifecycle("close", () => {
       try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true })
+        // Server shutdown has already fenced and settled every logical database owner.
+        // Bun's strict close also rejects completed prepared statements retained by
+        // Drizzle query objects, so retire this process connection gracefully. Reset
+        // and rebuild keep the strict mode because they reuse or remove the file now.
+        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "graceful" })
       } catch (error) {
         throw recordUnavailable(error, "Database.close") ?? error
       }
@@ -1210,7 +1218,7 @@ export namespace Database {
     return runSharedLifecycle(`resetFiles:${normalizedDatabasePath}`, "resetFiles", async () => {
       await awaitEffectIdle(RESET_EFFECT_INACTIVITY_TIMEOUT_MS)
       try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true })
+        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "strict" })
       } catch (error) {
         throw recordUnavailable(error, "Database.resetFiles.close") ?? error
       }
@@ -1240,7 +1248,7 @@ export namespace Database {
     return runSharedLifecycle(`reset:${normalizedProjectDir}`, "reset", async () => {
       await awaitEffectIdle(RESET_EFFECT_INACTIVITY_TIMEOUT_MS)
       try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true })
+        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "strict" })
       } catch (error) {
         throw recordUnavailable(error, "Database.reset.close") ?? error
       }
@@ -1254,7 +1262,7 @@ export namespace Database {
   ): void {
     return runSynchronousLifecycle("rebuildSqlite", () => {
       try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true })
+        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "strict" })
       } catch (error) {
         throw recordUnavailable(error, "Database.rebuildSqlite.closeExisting") ?? error
       }
@@ -1327,7 +1335,7 @@ export namespace Database {
         const normalized = recordUnavailable(operationFailure, "Database.rebuildSqlite") ?? operationFailure
         if (rollbackFailed) throw normalized
         try {
-          releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false })
+          releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false, closeMode: "strict" })
         } catch (closeError) {
           const cleanupFailure = recordUnavailable(closeError, "Database.rebuildSqlite.cleanup") ?? closeError
           throw new AggregateError([normalized, cleanupFailure], "Database rebuild and SQLite close both failed", {
@@ -1338,7 +1346,7 @@ export namespace Database {
       }
 
       try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true })
+        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "strict" })
       } catch (error) {
         throw recordUnavailable(error, "Database.rebuildSqlite.close") ?? error
       }
