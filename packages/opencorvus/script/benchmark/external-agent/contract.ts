@@ -1469,11 +1469,48 @@ export function summarizeTranscriptUsage(transcript: TranscriptMessage[]): Token
   return result
 }
 
+export type BenchmarkScheduledWake = {
+  id: string
+  target: { scope: "session"; sessionID: string } | { scope: "task"; taskID: string }
+  nextRun: number
+  leaseUntil: number
+  state: "scheduled" | "leased"
+  claim: {
+    leaseID: string
+    ownerOccurrenceID: string
+    activatedAt: number
+  } | null
+}
+
+export function benchmarkInactivityDeadline(input: {
+  now: number
+  currentDeadline: number
+  inactivityMs: number
+  scheduledWakes: BenchmarkScheduledWake[]
+}): number {
+  if (
+    input.scheduledWakes.some(
+      (wake) => wake.state === "leased" || !Number.isFinite(wake.nextRun) || wake.nextRun <= input.now,
+    )
+  ) {
+    return input.currentDeadline
+  }
+  const earliestFutureWake = input.scheduledWakes
+    .filter(
+      (wake) => wake.state === "scheduled" && Number.isFinite(wake.nextRun) && wake.nextRun > input.now,
+    )
+    .sort((left, right) => left.nextRun - right.nextRun || left.id.localeCompare(right.id))[0]
+  return earliestFutureWake
+    ? Math.max(input.currentDeadline, earliestFutureWake.nextRun + input.inactivityMs)
+    : input.currentDeadline
+}
+
 export function benchmarkActivitySignature(input: {
   board: Record<string, any>
   transcript: TranscriptMessage[]
   trace: Array<Record<string, any>>
   benchmarkEventCount: number
+  scheduledWakes?: BenchmarkScheduledWake[]
 }): string {
   const messages = input.transcript.map((message) => ({
     id: message.info?.id,
@@ -1510,6 +1547,9 @@ export function benchmarkActivitySignature(input: {
         messages,
         trace: input.trace.map((event) => [event.ts, event.kind, event.sessionID, event.agentName]),
         benchmarkEventCount: input.benchmarkEventCount,
+        scheduledWakes: (input.scheduledWakes ?? [])
+          .map((wake) => [wake.id, wake.target, wake.nextRun, wake.state, wake.claim])
+          .sort((left, right) => String(left[0]).localeCompare(String(right[0]))),
       }),
     )
     .digest("hex")

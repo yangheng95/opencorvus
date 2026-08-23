@@ -12,6 +12,7 @@ import { prepareTestProcessSupervisor } from "../../prepare-test-process-supervi
 import {
   EXTERNAL_BENCHMARK_SCHEMA_VERSION,
   benchmarkActivitySignature,
+  benchmarkInactivityDeadline,
   benchmarkRunKey,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
@@ -37,6 +38,7 @@ import {
   automationBenchSkillAgentIDs,
   failureObservationReceipt,
   type ProviderUsageRow,
+  type BenchmarkScheduledWake,
   type SkillMountMatrix,
 } from "./contract"
 
@@ -690,6 +692,21 @@ const SNAPSHOT_TABLES = [
  * named out here instead of being redacted after the fact.
  */
 const SNAPSHOT_TABLE_COLUMNS: Record<string, string[]> = {
+  automation: [
+    "id",
+    "definition_id",
+    "revision",
+    "project_id",
+    "session_id",
+    "task_id",
+    "kind",
+    "status",
+    "due_at",
+    "time_created",
+  ],
+  automation_definition_tombstone: ["id", "definition_id", "revision", "time_created"],
+  automation_run: ["id", "automation_revision_id", "fire_id", "target_project_id", "started_at"],
+  automation_run_receipt: ["id", "run_id", "outcome", "retry_at", "time_created"],
   engine_task_root_ingress: [
     "id",
     "task_id",
@@ -879,6 +896,13 @@ let missionSchedulerSettlement:
       invalidTerminalInboxIDs: string[]
     })
   | undefined
+let pendingDelayedWakeSchedule:
+  | ((input: {
+      projectID: string
+      sessionIDs: readonly string[]
+      taskIDs: readonly string[]
+    }) => Array<BenchmarkScheduledWake & { projectID: string }>)
+  | undefined
 let activeMissionSchedulerDrain: Promise<void> | undefined
 let missionSchedulerDrainError: unknown
 let closeDatabase: (() => void) | undefined
@@ -890,6 +914,8 @@ let taskIDs: string[] = []
 let missionID: string | undefined
 let missionSessionID: string | undefined
 let missionSessionReceipt: Record<string, any> | undefined
+const scheduledWakeEvidence: Array<Record<string, unknown>> = []
+let scheduledWakeProjectionKey = ""
 let independentTranscriptSurface: Array<{
   surface: "mission" | "task"
   owner_id: string
@@ -1045,6 +1071,9 @@ const orderedMessages = canonicalTranscriptOrder
 
 async function observations() {
   if (!missionID || !missionSessionID) throw new Error("Mission has not been created")
+  if (typeof missionSessionReceipt?.projectID !== "string" || !missionSessionReceipt.projectID) {
+    throw new Error("Mission Session project identity is unavailable for delayed-wake observation")
+  }
   const [missionStatus, missionRecords, missionTranscript, benchmarkEvents] =
     await Promise.all([
       requestJSON<Record<string, any>>(`/mission/${missionID}/status`),
@@ -1093,6 +1122,30 @@ async function observations() {
   taskID = observedTaskIDs[0]
   const taskTranscript = orderedMessages(tasks.flatMap((task) => task.transcript))
   const allTranscript = orderedMessages([...missionTranscript, ...taskTranscript])
+  const scheduledWakes =
+    pendingDelayedWakeSchedule?.({
+      projectID: missionSessionReceipt.projectID,
+      sessionIDs: [
+        ...new Set([
+          missionSessionID,
+          ...allTranscript
+            .map((message) => message.info?.sessionID)
+            .filter((value): value is string => typeof value === "string" && value.length > 0),
+        ]),
+      ],
+      taskIDs: observedTaskIDs,
+    }) ?? []
+  const scheduledWakeKey = JSON.stringify(
+    scheduledWakes.map((wake) => [wake.id, wake.projectID, wake.target, wake.nextRun, wake.state, wake.claim]),
+  )
+  if (scheduledWakeKey !== scheduledWakeProjectionKey) {
+    scheduledWakeProjectionKey = scheduledWakeKey
+    scheduledWakeEvidence.push({
+      kind: "projection",
+      observed_at: Date.now(),
+      wakes: scheduledWakes,
+    })
+  }
   // AgentTrace is physically Task-bound: Mission Sessions have no Task trace directory.
   // Mission Provider calls remain complete in the preserved usage ledger and DB snapshot.
   const trace = tasks.flatMap((task) => task.trace).sort(
@@ -1117,6 +1170,7 @@ async function observations() {
     trace,
     interactions,
     benchmarkEvents,
+    scheduledWakes,
   }
   latestObservation = current
   latestObservationAt = Date.now()
@@ -1129,6 +1183,7 @@ function missionActivitySignature(current: Awaited<ReturnType<typeof observation
     transcript: current.allTranscript,
     trace: current.trace,
     benchmarkEventCount: current.benchmarkEvents.length,
+    scheduledWakes: current.scheduledWakes,
   })
 }
 
@@ -1210,6 +1265,34 @@ async function waitForTerminal() {
           traceEvents: current.trace.length,
           benchmarkCalls: current.benchmarkEvents.filter((event) => event.kind === "tool").length,
           pendingInteractions: current.interactions.filter((item) => item.status === "pending").length,
+        }) + "\n",
+      )
+    }
+    const extendedDeadline = benchmarkInactivityDeadline({
+      now: Date.now(),
+      currentDeadline: inactivityDeadline,
+      inactivityMs: arguments_.inactivityMs,
+      scheduledWakes: current.scheduledWakes,
+    })
+    if (extendedDeadline > inactivityDeadline) {
+      const previousDeadline = inactivityDeadline
+      inactivityDeadline = extendedDeadline
+      scheduledWakeEvidence.push({
+        kind: "deadline_extension",
+        observed_at: Date.now(),
+        previous_deadline: previousDeadline,
+        extended_deadline: extendedDeadline,
+        inactivity_ms: arguments_.inactivityMs,
+        wakes: current.scheduledWakes,
+      })
+      process.stdout.write(
+        JSON.stringify({
+          event: "scheduled_wait_observed",
+          profile: arguments_.profile,
+          missionID,
+          taskIDs,
+          nextRun: extendedDeadline - arguments_.inactivityMs,
+          inactivityDeadline,
         }) + "\n",
       )
     }
@@ -1526,6 +1609,8 @@ try {
     if (!missionSessionID) throw new Error("Mission Session identity is unavailable for scheduler settlement")
     return schedulerDelivery.auditSchedulerSessionDeliverySettlement(missionSessionID)
   }
+  const automationService = await import("@/scheduler/automation-service")
+  pendingDelayedWakeSchedule = automationService.AutomationService.pendingDelayedWakeSchedule
   const { Session } = await import("@/session")
   const engineStore = await import("@/engine/store")
   const conversationView = await import("@/conversation/view")
@@ -2164,6 +2249,24 @@ try {
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") failures.push(error)
     }
   }
+  try {
+    await fs.writeFile(
+      path.join(outputDirectory, "scheduled-wake-observations.json"),
+      JSON.stringify(
+        {
+          schema_version: EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+          run_id: runID,
+          run_key: runKey,
+          events: scheduledWakeEvidence,
+        },
+        null,
+        2,
+      ) + "\n",
+      { encoding: "utf8", flag: "wx" },
+    )
+  } catch (error) {
+    failures.push(error)
+  }
   // A run that failed before the runtime opened its database has nothing to snapshot. Treating that
   // as a cleanup failure would permanently invalidate an attempt whose real stage is `blocked_preflight`.
   const isolatedDatabasePath = isolatedData ? path.join(isolatedData, "opencorvus.db") : ""
@@ -2188,7 +2291,7 @@ try {
             mission_session_id: missionSessionID ?? null,
             task_id: taskIDs.length === 1 ? (taskID ?? null) : null,
             task_ids: taskIDs,
-            tables: SNAPSHOT_TABLES,
+            tables: [...SNAPSHOT_TABLES, ...Object.keys(SNAPSHOT_TABLE_COLUMNS).sort()],
             missing_tables: snapshot.missing,
             rows: redactSnapshot(snapshot.tables, source?.protectedSecrets ?? []),
           },

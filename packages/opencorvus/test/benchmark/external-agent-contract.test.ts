@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import {
   benchmarkActivitySignature,
+  benchmarkInactivityDeadline,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
   automationBenchToolConfig,
@@ -185,6 +186,130 @@ describe("external agent benchmark contract", () => {
   test("changes the activity signature when benchmark world activity advances", () => {
     const base = { board: { task: { status: "active" }, artifacts: [] }, transcript, trace: [], benchmarkEventCount: 1 }
     expect(benchmarkActivitySignature({ ...base, benchmarkEventCount: 2 })).not.toBe(benchmarkActivitySignature(base))
+  })
+
+  test("extends inactivity through the earliest durable scheduled wake promise", () => {
+    const scheduledWakes = [
+      {
+        id: "automation-early",
+        target: { scope: "session" as const, sessionID: "mission-session" },
+        nextRun: 21_000,
+        leaseUntil: 0,
+        state: "scheduled" as const,
+        claim: null,
+      },
+      {
+        id: "automation-later",
+        target: { scope: "task" as const, taskID: "task-1" },
+        nextRun: 41_000,
+        leaseUntil: 0,
+        state: "scheduled" as const,
+        claim: null,
+      },
+    ]
+    const leasedWake = {
+      ...scheduledWakes[0]!,
+      state: "leased" as const,
+      leaseUntil: 12_000,
+      claim: {
+        leaseID: "lease-a",
+        ownerOccurrenceID: "automation-attempt-a",
+        activatedAt: 11_000,
+      },
+    }
+    expect(
+      benchmarkInactivityDeadline({
+        now: 1_000,
+        currentDeadline: 11_000,
+        inactivityMs: 10_000,
+        scheduledWakes,
+      }),
+    ).toBe(31_000)
+    expect(
+      benchmarkInactivityDeadline({
+        now: 1_000,
+        currentDeadline: 11_000,
+        inactivityMs: 10_000,
+        scheduledWakes: [leasedWake],
+      }),
+    ).toBe(11_000)
+    expect(
+      benchmarkInactivityDeadline({
+        now: 22_000,
+        currentDeadline: 32_000,
+        inactivityMs: 10_000,
+        scheduledWakes,
+      }),
+    ).toBe(32_000)
+    expect(
+      benchmarkInactivityDeadline({
+        now: 22_000,
+        currentDeadline: 32_000,
+        inactivityMs: 10_000,
+        scheduledWakes: [scheduledWakes[1]!],
+      }),
+    ).toBe(51_000)
+    expect(
+      benchmarkActivitySignature({
+        board: { task: { status: "active" }, artifacts: [] },
+        transcript,
+        trace: [],
+        benchmarkEventCount: 1,
+        scheduledWakes: [scheduledWakes[0]!],
+      }),
+    ).not.toBe(
+      benchmarkActivitySignature({
+        board: { task: { status: "active" }, artifacts: [] },
+        transcript,
+        trace: [],
+        benchmarkEventCount: 1,
+        scheduledWakes: [leasedWake],
+      }),
+    )
+    expect(
+      benchmarkActivitySignature({
+        board: { task: { status: "active" }, artifacts: [] },
+        transcript,
+        trace: [],
+        benchmarkEventCount: 1,
+        scheduledWakes: [leasedWake],
+      }),
+    ).toBe(
+      benchmarkActivitySignature({
+        board: { task: { status: "active" }, artifacts: [] },
+        transcript,
+        trace: [],
+        benchmarkEventCount: 1,
+        scheduledWakes: [{ ...leasedWake, leaseUntil: 42_000 }],
+      }),
+    )
+    expect(
+      benchmarkActivitySignature({
+        board: { task: { status: "active" }, artifacts: [] },
+        transcript,
+        trace: [],
+        benchmarkEventCount: 1,
+        scheduledWakes: [leasedWake],
+      }),
+    ).not.toBe(
+      benchmarkActivitySignature({
+        board: { task: { status: "active" }, artifacts: [] },
+        transcript,
+        trace: [],
+        benchmarkEventCount: 1,
+        scheduledWakes: [
+          {
+            ...leasedWake,
+            leaseUntil: 42_000,
+            claim: {
+              leaseID: "lease-b",
+              ownerOccurrenceID: "automation-attempt-b",
+              activatedAt: 41_000,
+            },
+          },
+        ],
+      }),
+    )
   })
 
   test("assigns every run an immutable timestamp and run identity key", () => {
