@@ -298,7 +298,7 @@ export type Config = {
    */
   assistant?: {
     /**
-     * Chunk-driven inactivity thresholds for session LLM streams and provider execution work.
+     * Inactivity thresholds for session LLM chunks, durable live Tool progress, and provider execution work.
      */
     activity?: {
       /**
@@ -309,6 +309,10 @@ export type Config = {
        * Max idle (no stream chunk) window for session LLM streams, ms
        */
       session_llm_idle_ms?: number
+      /**
+       * Max idle window without a committed Tool progress fact, ms
+       */
+      session_tool_idle_ms?: number
     }
     /**
      * Maximum parallel projected agent sessions

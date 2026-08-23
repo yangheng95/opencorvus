@@ -1001,7 +1001,7 @@
             "description": "Shared assistant runtime activity and parallelism configuration",
             "properties": {
               "activity": {
-                "description": "Chunk-driven inactivity thresholds for session LLM streams and provider execution work.",
+                "description": "Inactivity thresholds for session LLM chunks, durable live Tool progress, and provider execution work.",
                 "properties": {
                   "execution_progress_idle_ms": {
                     "description": "Max idle window without durable execution progress, ms",
@@ -1011,6 +1011,12 @@
                   },
                   "session_llm_idle_ms": {
                     "description": "Max idle (no stream chunk) window for session LLM streams, ms",
+                    "maximum": 9007199254740991,
+                    "minimum": 1000,
+                    "type": "integer"
+                  },
+                  "session_tool_idle_ms": {
+                    "description": "Max idle window without a committed Tool progress fact, ms",
                     "maximum": 9007199254740991,
                     "minimum": 1000,
                     "type": "integer"

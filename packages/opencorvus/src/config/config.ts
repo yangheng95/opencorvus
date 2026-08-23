@@ -1483,7 +1483,7 @@ export namespace Config {
                 .int()
                 .min(1000)
                 .optional()
-                .describe("Max idle window without a persisted live Tool Part metadata revision, ms"),
+                .describe("Max idle window without a committed Tool progress fact, ms"),
               execution_progress_idle_ms: z
                 .number()
                 .int()
