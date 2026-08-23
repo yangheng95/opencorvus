@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Work Ledger double-click rename repair: [`2026-08-24-work-ledger-double-click-rename-repair.md`](records/2026-08/2026-08-24-work-ledger-double-click-rename-repair.md).
+
 Latest single-owner Tool disclosure repair: [`2026-08-23-tool-disclosure-single-owner-repair.md`](records/2026-08/2026-08-23-tool-disclosure-single-owner-repair.md).
 
 Latest long-running Tool durable-progress convergence and fresh Mission rerun: [`2026-08-23-tool-pause-durable-progress-convergence.md`](records/2026-08/2026-08-23-tool-pause-durable-progress-convergence.md).

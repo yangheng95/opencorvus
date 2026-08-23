@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-24-work-ledger-double-click-rename-repair.md](2026-08-24-work-ledger-double-click-rename-repair.md) restores the shared Mission/Task/Chat row double-click binding to the existing rename dialogs and durable writers.
+
 - [2026-08-23-tool-disclosure-single-owner-repair.md](2026-08-23-tool-disclosure-single-owner-repair.md) removes the nested second collapse owner from chronological Tool calls so one click reveals the canonical Tool body in both the main conversation and Expert Squad member dock.
 
 - [2026-08-23-tool-pause-durable-progress-convergence.md](2026-08-23-tool-pause-durable-progress-convergence.md) traces a real RTX 5090 Mission failure to the shared 15-minute absolute Tool-pause bound and records the append-only Tool progress bridge, configuration contract, focused benchmark, and fresh-Mission acceptance required before a website-success claim.

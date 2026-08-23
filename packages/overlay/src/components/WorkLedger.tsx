@@ -457,6 +457,16 @@ function WorkLedgerRowView(props: {
               aria-keyshortcuts={hasActions() ? "ArrowRight" : undefined}
               onKeyDown={rowActions.openActionsFromKeyboard}
               onClick={() => props.onSelect(row())}
+              onDblClick={(event) => {
+                event.preventDefault()
+                event.stopPropagation()
+                void runAction("rename", () => {
+                  const current = row()
+                  if (current.kind === "mission") return props.onRenameMission(current)
+                  if (current.kind === "chat") return props.onRenameChat(current)
+                  return props.onRenameTask(current)
+                })
+              }}
             >
               <div class="task-row-head work-row-head">
                 <Show when={hasMissionTasks()}>
