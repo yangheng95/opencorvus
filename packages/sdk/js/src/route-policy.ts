@@ -28,7 +28,13 @@ export const PROJECT_DIRECTORY_BYPASS_PATHS = [
  * global reader with project-owned writers, so their global members are listed
  * above and in `GLOBAL_MIXED_ROUTER_ROUTES` one route at a time.
  */
-export const PROJECT_DIRECTORY_BYPASS_PREFIXES = ["/global/", "/auth/", "/ui/", "/log/", "/mailbox/"] as const
+export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
+  "/global/",
+  "/auth/",
+  "/ui/",
+  "/log/",
+  "/mailbox/",
+] as const
 
 /**
  * Global routes that live on a router whose other routes are project-owned.

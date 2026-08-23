@@ -504,7 +504,8 @@ export namespace SessionProcessor {
         const shouldBreak =
           (await EffectiveConfig.effective({ sessionID: input.assistantMessage.sessionID })).experimental
             ?.continue_loop_on_deny !== true
-        const idleMs = (await EngineConfig.get()).activity.session_llm_idle_ms
+        const activity = (await EngineConfig.get()).activity
+        const idleMs = activity.session_llm_idle_ms
         const canonicalActivityErrors = new Map<unknown, NonNullable<Message.Assistant["error"]>>()
         // Activity owns retries (rule 8 â€” single source). The runner's
         // classifier + per-class maxRetries + totalMs deadline replace the
@@ -519,6 +520,7 @@ export namespace SessionProcessor {
         const activityPolicy: LLMActivityPolicy = {
           ...DefaultLLMActivityPolicy,
           idleMs,
+          maxPauseMs: activity.session_tool_idle_ms,
           classify(error, context) {
             let canonical = canonicalActivityErrors.get(error)
             if (!canonical) {

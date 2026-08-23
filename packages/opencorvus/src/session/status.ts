@@ -225,6 +225,11 @@ export namespace SessionStatus {
     }
   }
 
+  /** Renew one Session's inactivity window after a durable execution fact commits. */
+  export function observeActivity(sessionID: string): void {
+    activityMonitors[sessionID]?.observe()
+  }
+
   export function abortActivityMonitor(sessionID: string, reason?: unknown) {
     activityMonitors[sessionID]?.abort(reason)
   }

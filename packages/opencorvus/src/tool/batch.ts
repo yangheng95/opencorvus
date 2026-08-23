@@ -65,6 +65,7 @@ export function createBatchTool(visibleTools: InitializedTool[]): Tool.Info {
       },
       async execute(params, ctx) {
         const { Session } = await import("../session")
+        const { SessionStatus } = await import("../session/status")
         const { Identifier } = await import("../id/id")
         const { toolFailureCauseFromUnknown } = await import("../session/tool-failure-cause")
 
@@ -112,23 +113,14 @@ export function createBatchTool(visibleTools: InitializedTool[]): Tool.Info {
               title?: string
               metadata?: Record<string, any>
             }>(async (value) => {
-              await Session.updatePart({
-                id: partID,
+              const progress = await Session.appendToolProgress({
                 messageID: ctx.messageID,
                 sessionID: ctx.sessionID,
-                type: "tool",
-                tool: call.tool,
-                callID: partID,
-                state: {
-                  status: "running",
-                  input: persistedParams,
-                  title: value.title,
-                  metadata: value.metadata,
-                  time: {
-                    start: callStartTime,
-                  },
-                },
+                partID,
+                title: value.title,
+                metadata: value.metadata,
               })
+              if (progress.persisted) SessionStatus.observeActivity(ctx.sessionID)
             })
             let rawResult: Awaited<ReturnType<typeof tool.execute>>
             try {

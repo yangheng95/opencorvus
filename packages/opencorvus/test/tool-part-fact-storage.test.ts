@@ -5,7 +5,7 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
-import { ToolPartOutcomeTable, ToolPartRequestTable } from "@/session/session.sql"
+import { ToolPartOutcomeTable, ToolPartProgressTable, ToolPartRequestTable } from "@/session/session.sql"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -63,6 +63,20 @@ describe("Tool effect fact storage", () => {
           state: { status: "running", input: { filePath: "README.md" }, time: { start: now + 2 } },
         })
         expect(running).toMatchObject({ type: "tool", state: { status: "running" } })
+        const progress = await Session.appendToolProgress({
+          sessionID: session.id,
+          messageID: assistant.id,
+          partID,
+          title: "Reading README",
+          metadata: { bytes: 128 },
+        })
+        expect(progress).toMatchObject({
+          persisted: true,
+          part: {
+            type: "tool",
+            state: { status: "running", title: "Reading README", metadata: { bytes: 128 } },
+          },
+        })
         const text = await Session.updatePart({
           id: Identifier.ascending("part"),
           sessionID: session.id,
@@ -105,6 +119,7 @@ describe("Tool effect fact storage", () => {
 
         const facts = Database.use((db) => ({
           requests: db.select().from(ToolPartRequestTable).all(),
+          progress: db.select().from(ToolPartProgressTable).all(),
           outcomes: db.select().from(ToolPartOutcomeTable).all(),
         }))
         expect(facts.requests).toEqual([
@@ -118,6 +133,15 @@ describe("Tool effect fact storage", () => {
               input: { filePath: "README.md" },
               time: { start: now + 2 },
             },
+            time_created: expect.any(Number),
+          },
+        ])
+        expect(facts.progress).toEqual([
+          {
+            id: expect.any(String),
+            request_part_id: partID,
+            title: "Reading README",
+            metadata: { bytes: 128 },
             time_created: expect.any(Number),
           },
         ])

@@ -1,7 +1,14 @@
 import { asc, Database, eq, inArray } from "@/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "./engine.sql"
 import { listAllMissionTasks, projectInteractionRowInTransaction, projectTaskRowInTransaction, type TaskRow } from "./store"
-import { MessageTable, PartTable, SessionTable, ToolPartOutcomeTable, ToolPartRequestTable } from "@/session/session.sql"
+import {
+  MessageTable,
+  PartTable,
+  SessionTable,
+  ToolPartOutcomeTable,
+  ToolPartProgressTable,
+  ToolPartRequestTable,
+} from "@/session/session.sql"
 import { DurableActivityCursorSchema, type DurableActivityCursor } from "@opencorvus-ai/plugin"
 import z from "zod"
 import { createHash } from "node:crypto"
@@ -91,6 +98,14 @@ function readSessionTree(db: Database.TxOrDb, input: { projectID: string; rootSe
         .where(inArray(ToolPartOutcomeTable.request_part_id, toolRequests.map((part) => part.id)))
         .orderBy(asc(ToolPartOutcomeTable.time_created), asc(ToolPartOutcomeTable.id)).all()
     : []
+  const toolProgress = toolRequests.length
+    ? db
+        .select()
+        .from(ToolPartProgressTable)
+        .where(inArray(ToolPartProgressTable.request_part_id, toolRequests.map((part) => part.id)))
+        .orderBy(asc(ToolPartProgressTable.time_created), asc(ToolPartProgressTable.id))
+        .all()
+    : []
   const projectedToolParts = toolRequests.map((request) => {
     const projected = projectToolPartInTransaction(db, request)
     if (!projected) throw new Error(`Tool request ${request.id} could not be projected`)
@@ -104,7 +119,15 @@ function readSessionTree(db: Database.TxOrDb, input: { projectID: string; rootSe
       data,
     }
   })
-  return { sessions, messages, parts, visibleParts: [...parts, ...projectedToolParts], toolRequests, toolOutcomes }
+  return {
+    sessions,
+    messages,
+    parts,
+    visibleParts: [...parts, ...projectedToolParts],
+    toolRequests,
+    toolProgress,
+    toolOutcomes,
+  }
 }
 
 export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow) {
@@ -157,6 +180,12 @@ export function readTaskDurableActivityScope(db: Database.TxOrDb, task: TaskRow)
       id: request.id,
       time_updated: request.time_created,
       revision: revisionDigest(request.data),
+    })),
+    ...sessionTree.toolProgress.map((progress) => ({
+      source: "part" as const,
+      id: progress.id,
+      time_updated: progress.time_created,
+      revision: revisionDigest({ title: progress.title, metadata: progress.metadata }),
     })),
     ...sessionTree.toolOutcomes.map((outcome) => ({
       source: "part" as const,

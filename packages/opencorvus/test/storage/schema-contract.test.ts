@@ -41,6 +41,7 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
       "provider_usage_event",
       "provider_activity_request",
       "tool_part_request",
+      "tool_part_progress",
     ]
     expect(
       sqlite
@@ -218,7 +219,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("a944e8f1bc6df4b5b879dec268737b733763e14fcb034626c26512cccb487daa")
+    expect(mysqlSchemaFingerprint()).toBe("db474b5c15f19b5f7ddcc58f33e2e78bdb007f31265f411606c994745ee64081")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )

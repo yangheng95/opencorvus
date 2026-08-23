@@ -7,7 +7,7 @@ import { Identifier } from "../src/id/id"
 import { ensureMissionSession, MissionExpertSquadSnapshotMismatchError } from "../src/mission/session"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
-import { MessageTable, SessionTable } from "../src/session/session.sql"
+import { MessageTable, SessionTable, ToolPartProgressTable } from "../src/session/session.sql"
 import { Database } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { createOpenCorvusClient } from "@opencorvus-ai/sdk/client"
@@ -359,6 +359,59 @@ describe("Mission durable activity", () => {
             sessionID: mission.id,
           }),
         )
+
+        const progressAssistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: sameMillisecondMessage.id,
+          sessionID: taskSession.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          providerID: "test",
+          modelID: "test",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          time: { created: messageActivityTime + 3_000 },
+        })
+        const progressPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: taskSession.id,
+          messageID: progressAssistant.id,
+          type: "tool",
+          tool: "bash",
+          callID: "call_mission_durable_progress",
+          state: {
+            status: "running",
+            input: { command: "train" },
+            time: { start: messageActivityTime + 3_001 },
+          },
+        })
+        const progressTime = messageActivityTime + 4_000
+        const progressID = Identifier.ascending("part")
+        Database.use((db) =>
+          db
+            .insert(ToolPartProgressTable)
+            .values({
+              id: progressID,
+              request_part_id: progressPart.id,
+              metadata: { output_bytes: 31_337 },
+              time_created: progressTime,
+            })
+            .run(),
+        )
+        expect(
+          readMissionDurableActivity({
+            projectID: Instance.project.id,
+            missionID,
+            sessionID: mission.id,
+          }),
+        ).toMatchObject({
+          source: "part",
+          id: progressID,
+          time_updated: progressTime,
+          tasks: [{ task_id: taskID, source: "part", id: progressID, time_updated: progressTime }],
+        })
       },
     })
   }, 0)

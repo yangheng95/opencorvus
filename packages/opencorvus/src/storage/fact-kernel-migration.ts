@@ -45,6 +45,7 @@ const NEW_TABLES = [
   "event_job_fire_receipt",
   "event_job_definition_tombstone",
   "event_occurrence",
+  "tool_part_progress",
   "tool_part_outcome",
   "provider_activity_outcome",
   "session_control_event",
@@ -936,6 +937,7 @@ export function migrateFactKernelSchema(sqlite: RawDatabase): boolean {
     columns(sqlite, "protocol_delivery_receipt").includes("receipt") &&
     !columns(sqlite, "part").includes("session_id") &&
     !columns(sqlite, "tool_part_request").includes("session_id") &&
+    exists(sqlite, "tool_part_progress") &&
     !columns(sqlite, "provider_activity_request").includes("session_id") &&
     tableDefinition(sqlite, "permission_ledger").includes("permission_ledger_request_owner_shape") &&
     exists(sqlite, "permission_execution_result") &&

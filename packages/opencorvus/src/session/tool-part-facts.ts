@@ -1,6 +1,6 @@
 import { Identifier } from "@/id/id"
 import { PermissionExecutionResultTable } from "@/permission/permission.sql"
-import { Database, eq } from "@/storage/db"
+import { Database, desc, eq } from "@/storage/db"
 import { isDeepStrictEqual } from "node:util"
 import { Message } from "./message"
 import { normalizeToolResult } from "./tool-result-normalization"
@@ -8,6 +8,7 @@ import {
   PartTable,
   MessageTable,
   ToolPartRequestTable,
+  ToolPartProgressTable,
   ToolPartOutcomeTable,
   type ToolOutcomePartData,
   type ToolRequestPartData,
@@ -62,15 +63,25 @@ export function projectToolPartInTransaction(
     .from(ToolPartOutcomeTable)
     .where(eq(ToolPartOutcomeTable.request_part_id, row.id))
     .get()
+  const progress = !outcome
+    ? db
+        .select()
+        .from(ToolPartProgressTable)
+        .where(eq(ToolPartProgressTable.request_part_id, row.id))
+        .orderBy(desc(ToolPartProgressTable.time_created), desc(ToolPartProgressTable.id))
+        .get()
+    : undefined
   const output = outcome
     ? completedToolOutcomeOutput(db, outcome.data, () => `Tool outcome Part ${outcome.id}`)
     : undefined
+  const liveTitle = progress?.title ?? request.title
+  const liveMetadata = progress?.metadata ?? request.metadata
   const state: Message.ToolPart["state"] = !outcome
     ? {
         status: "running",
         input: request.input,
-        ...(request.title ? { title: request.title } : {}),
-        ...(request.metadata ? { metadata: request.metadata } : {}),
+        ...(liveTitle ? { title: liveTitle } : {}),
+        ...(liveMetadata ? { metadata: liveMetadata } : {}),
         time: { start: request.time.start },
       }
     : outcome.data.outcome === "completed"

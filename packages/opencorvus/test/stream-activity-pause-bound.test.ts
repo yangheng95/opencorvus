@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { SessionStatus } from "../src/session/status"
 import { withStreamActivity } from "../src/util/stream-activity"
 
 const settle = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -35,6 +36,34 @@ describe("stream activity pause bound", () => {
     await settle(60)
     expect(monitor.timedOut()).toBe(true)
     monitor.dispose()
+  })
+
+  test("durable progress renews the paused inactivity window for the exact Session", async () => {
+    const active = withStreamActivity({ idleMs: 10_000, maxPauseMs: 200, label: "active-session" })
+    const inactive = withStreamActivity({ idleMs: 10_000, maxPauseMs: 200, label: "inactive-session" })
+    const unregisterActive = SessionStatus.registerActivityMonitor("session-progress-active", active)
+    const unregisterInactive = SessionStatus.registerActivityMonitor("session-progress-inactive", inactive)
+    try {
+      active.pause()
+      inactive.pause()
+      await settle(120)
+      SessionStatus.observeActivity("session-progress-active")
+      await settle(120)
+      expect({
+        active: { paused: active.paused(), timedOut: active.timedOut() },
+        inactive: { paused: inactive.paused(), timedOut: inactive.timedOut() },
+      }).toEqual({
+        active: { paused: true, timedOut: false },
+        inactive: { paused: true, timedOut: true },
+      })
+      await settle(120)
+      expect(active.timedOut()).toBe(true)
+    } finally {
+      unregisterActive()
+      unregisterInactive()
+      active.dispose()
+      inactive.dispose()
+    }
   })
 
   test("an unbounded monitor keeps the previous forever-pause behaviour", async () => {

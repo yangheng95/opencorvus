@@ -289,6 +289,13 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
     // async iterator is parked on `await new Promise`, defeating the monitor.
   }
 
+  const schedulePause = () => {
+    if (disposed) return
+    clearPause()
+    if (pauseDepth <= 0 || options.maxPauseMs === undefined) return
+    pauseTimer = setTimeout(tripPause, options.maxPauseMs)
+  }
+
   schedule()
 
   return {
@@ -296,6 +303,10 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
     observe() {
       if (disposed) return
       last = Date.now()
+      if (pauseDepth > 0) {
+        schedulePause()
+        return
+      }
       schedule()
     },
     pause() {
@@ -306,7 +317,7 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
       // window, and restarting it per owner would let a chain of nested pauses
       // extend the disarm indefinitely.
       if (pauseDepth === 1 && options.maxPauseMs !== undefined && pauseTimer === null) {
-        pauseTimer = setTimeout(tripPause, options.maxPauseMs)
+        schedulePause()
       }
     },
     resume() {

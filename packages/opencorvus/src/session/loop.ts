@@ -2800,18 +2800,14 @@ export namespace SessionLoop {
       }>(async (value) => {
         const match = input.processor.partFromToolCall(options.toolCallId)
         if (!match || match.state.status !== "running") return
-        await Session.updatePart({
-          ...match,
-          state: {
-            title: value.title,
-            metadata: value.metadata,
-            status: "running",
-            input: invocation?.persistedInput ?? args,
-            time: {
-              start: match.state.time.start,
-            },
-          },
+        const progress = await Session.appendToolProgress({
+          sessionID: input.session.id,
+          messageID: match.messageID,
+          partID: match.id,
+          title: value.title,
+          metadata: value.metadata,
         })
+        if (progress.persisted) SessionStatus.observeActivity(input.session.id)
       })
       return {
         sessionID: input.session.id,

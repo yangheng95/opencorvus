@@ -1079,6 +1079,37 @@ WHEN EXISTS (
   SELECT 1 FROM message JOIN session ON session.id=message.session_id WHERE message.id=OLD.message_id
 )
 BEGIN SELECT RAISE(ABORT, 'tool_part_request: immutable request fact'); END;
+CREATE TRIGGER IF NOT EXISTS tool_part_progress_running_insert
+BEFORE INSERT ON tool_part_progress FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM tool_part_outcome WHERE request_part_id=NEW.request_part_id)
+  OR EXISTS (
+    SELECT 1 FROM tool_part_request
+    JOIN message ON message.id=tool_part_request.message_id
+    WHERE tool_part_request.id=NEW.request_part_id
+      AND json_type(message.data,'$.time.completed') IN ('integer','real')
+  )
+  OR EXISTS (
+    SELECT 1 FROM tool_part_request
+    JOIN message ON message.id=tool_part_request.message_id
+    JOIN protocol_event
+      ON protocol_event.aggregate_type='session'
+     AND protocol_event.aggregate_id=message.session_id
+     AND protocol_event.type='session.deleted'
+    WHERE tool_part_request.id=NEW.request_part_id
+  )
+BEGIN SELECT RAISE(ABORT, 'tool_part_progress: request is no longer running'); END;
+CREATE TRIGGER IF NOT EXISTS tool_part_progress_no_update
+BEFORE UPDATE ON tool_part_progress FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'tool_part_progress: immutable progress fact'); END;
+CREATE TRIGGER IF NOT EXISTS tool_part_progress_no_delete
+BEFORE DELETE ON tool_part_progress FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM tool_part_request
+  JOIN message ON message.id=tool_part_request.message_id
+  JOIN session ON session.id=message.session_id
+  WHERE tool_part_request.id=OLD.request_part_id
+)
+BEGIN SELECT RAISE(ABORT, 'tool_part_progress: immutable progress fact'); END;
 CREATE TRIGGER IF NOT EXISTS tool_part_outcome_no_update
 BEFORE UPDATE ON tool_part_outcome FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'tool_part_outcome: immutable outcome fact'); END;

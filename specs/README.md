@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest long-running Tool durable-progress convergence and fresh Mission rerun: [`2026-08-23-tool-pause-durable-progress-convergence.md`](records/2026-08/2026-08-23-tool-pause-durable-progress-convergence.md).
+
 Latest `v0.0.52-beta` application and website release: [`2026-08-22-v0.0.52-beta-release.md`](records/2026-08/2026-08-22-v0.0.52-beta-release.md).
 
 Latest real website data-analysis Expert Squad demonstration: [`2026-08-22-website-data-analysis-expert-squad-demo.md`](records/2026-08/2026-08-22-website-data-analysis-expert-squad-demo.md).
