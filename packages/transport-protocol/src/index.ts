@@ -20,6 +20,32 @@ export const ComposerIntentSchema = z
   .strict()
 export type ComposerIntent = z.output<typeof ComposerIntentSchema>
 
+export const ToolFailureClassification = z.enum([
+  "tool-input-invalid",
+  "tool-execution",
+  "llm-activity",
+  "processor-contract",
+])
+export type ToolFailureClassification = z.infer<typeof ToolFailureClassification>
+
+export const ToolFailureCause = z
+  .object({
+    kind: z.string().min(1),
+    name: z.string().min(1),
+    message: z.string().min(1),
+    originSite: z.string().min(1),
+    classification: ToolFailureClassification,
+    data: z.record(z.string(), z.unknown()).optional(),
+  })
+  .meta({ ref: "ToolFailureCause" })
+export type ToolFailureCause = z.infer<typeof ToolFailureCause>
+
+export function renderToolFailureCause(cause: ToolFailureCause): string {
+  const prefix = `${cause.kind}/${cause.name}`
+  const data = cause.data ? `; data=${JSON.stringify(cause.data)}` : ""
+  return `${prefix} at ${cause.originSite}: ${cause.message}${data}`
+}
+
 export const DEFAULT_COMPOSER_INTENT: ComposerIntent = {
   productPillar: "work",
   conversationTarget: "chat",
@@ -842,13 +868,7 @@ export const PROJECT_DIRECTORY_BYPASS_PATHS = [
  * global reader with project-owned writers, so their global members are listed
  * above and in `GLOBAL_MIXED_ROUTER_ROUTES` one route at a time.
  */
-export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
-  "/global/",
-  "/auth/",
-  "/ui/",
-  "/log/",
-  "/mailbox/",
-] as const
+export const PROJECT_DIRECTORY_BYPASS_PREFIXES = ["/global/", "/auth/", "/ui/", "/log/", "/mailbox/"] as const
 
 /**
  * Global routes that live on a router whose other routes are project-owned.

@@ -14,6 +14,7 @@ import {
   WorkLedgerArchiveList,
   WorkLedgerEvent,
   WorkLedgerList,
+  ToolFailureCause,
   base64ToUint8,
   conversationMessageDisplayStage,
   projectConversationAgentActivityPart,
@@ -24,10 +25,26 @@ import {
   isNativeCommand,
   isOverlayPersistedSettings,
   routeRequiresProjectDirectory,
+  renderToolFailureCause,
   uint8ToBase64,
   type NativeCommand,
   type OverlayPersistedSettings,
 } from "../src/index"
+
+test("Tool failure transport preserves and renders the complete canonical cause", () => {
+  const failure = ToolFailureCause.parse({
+    kind: "shell-exit",
+    name: "CommandFailed",
+    message: "command exited with code 17",
+    originSite: "session.processor.tool",
+    classification: "tool-execution",
+    data: { exit_code: 17, command: "verify" },
+  })
+
+  expect(renderToolFailureCause(failure)).toBe(
+    'shell-exit/CommandFailed at session.processor.tool: command exited with code 17; data={"exit_code":17,"command":"verify"}',
+  )
+})
 
 describe("canonical Server-Sent Events payload contracts", () => {
   test("parses each canonical Pseudo Terminal event branch", () => {

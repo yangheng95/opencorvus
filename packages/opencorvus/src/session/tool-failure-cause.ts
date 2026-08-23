@@ -2,6 +2,19 @@ import z from "zod"
 import { redactInlinePayloads } from "@/util/inline-base64"
 import { redactToolDiagnosticValue } from "@/tool/diagnostic-value"
 import type { Message } from "./message"
+import {
+  ToolFailureCause as SharedToolFailureCause,
+  ToolFailureClassification as SharedToolFailureClassification,
+  renderToolFailureCause,
+  type ToolFailureCause as SharedToolFailureCauseType,
+  type ToolFailureClassification as SharedToolFailureClassificationType,
+} from "@opencorvus-ai/transport-protocol"
+
+export const ToolFailureClassification = SharedToolFailureClassification
+export type ToolFailureClassification = SharedToolFailureClassificationType
+export const ToolFailureCause = SharedToolFailureCause
+export type ToolFailureCause = SharedToolFailureCauseType
+export { renderToolFailureCause }
 
 export const FailureOccurrenceAnchor = z
   .object({
@@ -46,30 +59,6 @@ export const ProcessorObservationFailure = z
   .strict()
 
 export type ProcessorObservationFailure = z.infer<typeof ProcessorObservationFailure>
-
-export const ToolFailureClassification = z.enum([
-  "tool-input-invalid",
-  "tool-execution",
-  "llm-activity",
-  "processor-contract",
-])
-
-export type ToolFailureClassification = z.infer<typeof ToolFailureClassification>
-
-export const ToolFailureCause = z
-  .object({
-    kind: z.string().min(1),
-    name: z.string().min(1),
-    message: z.string().min(1),
-    originSite: z.string().min(1),
-    classification: ToolFailureClassification,
-    data: z.record(z.string(), z.unknown()).optional(),
-  })
-  .meta({
-    ref: "ToolFailureCause",
-  })
-
-export type ToolFailureCause = z.infer<typeof ToolFailureCause>
 
 export function failureOccurrenceAnchor(input: {
   sessionID: string
@@ -149,10 +138,4 @@ export function toolFailureCauseFromUnknown(input: {
     }
   }
   throw new Error(`Tool failure cause at ${input.originSite} did not include an Error or message string`)
-}
-
-export function renderToolFailureCause(cause: ToolFailureCause): string {
-  const prefix = `${cause.kind}/${cause.name}`
-  const data = cause.data ? `; data=${JSON.stringify(cause.data)}` : ""
-  return `${prefix} at ${cause.originSite}: ${cause.message}${data}`
 }

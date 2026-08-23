@@ -14,6 +14,7 @@ import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { t, tc } from "../utils/i18n"
 import { ComputerControlSurface } from "./ComputerControlSurface"
+import { ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
 
 // Same tool-kind sets used to drive code rendering below.
 const FILE_WRITE_TOOLS = new Set(["write", "writefile"])
@@ -39,6 +40,30 @@ function ToolPayload(props: { label: string; value: string; live?: boolean }) {
 
 function isRecord(value: unknown): value is Record<string, any> {
   return !!value && typeof value === "object" && !Array.isArray(value)
+}
+
+function toolPayloadText(value: unknown): string {
+  if (typeof value === "string") return value
+  if (value === undefined) return ""
+  try {
+    return JSON.stringify(value, null, 2) ?? String(value)
+  } catch {
+    return String(value)
+  }
+}
+
+function toolFailureMessage(value: unknown): string {
+  const parsed = ToolFailureCause.safeParse(value)
+  if (parsed.success) return renderToolFailureCause(parsed.data)
+  return toolPayloadText(value)
+}
+
+function hasToolPayloadValue(value: unknown): boolean {
+  if (value === undefined) return false
+  if (typeof value === "string") return Boolean(value.trim())
+  if (Array.isArray(value)) return value.length > 0
+  if (isRecord(value)) return Object.keys(value).length > 0
+  return true
 }
 
 function BrowserEvidenceImage(props: { url: string; alt: string }) {
@@ -271,12 +296,8 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     return status() === "completed" ? r : visibleStreamingText(r)
   }
   const output = () => stripAnsi(state().output || "")
-  const error = () => stripAnsi(state().error || "") || output()
+  const error = () => stripAnsi(toolFailureMessage(state().failure) || state().error || "") || output()
   const key = () => toolNameKey(toolName())
-  const completedShellCommand = createMemo(() => {
-    if (status() !== "completed" || !SHELL_TOOLS.has(key())) return ""
-    return detail()
-  })
   const readView = createMemo(() => {
     if (status() !== "completed") return null
     if (!FILE_READ_TOOLS.has(key())) return null
@@ -362,6 +383,35 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (showStructuredOutput()) return /<diagnostics\b/i.test(output())
     return !codeResult()
   })
+  const visibleShellCommand = createMemo(() => {
+    if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""
+    return detail()
+  })
+  const fallbackToolPayload = createMemo(() => {
+    const hasVisibleBody = Boolean(
+      (todoItems()?.length ?? 0) > 0 ||
+        (status() !== "completed" && raw() && !todoItems()) ||
+        visibleShellCommand() ||
+        showStructuredOutput() ||
+        codeResult() ||
+        readView()?.note ||
+        readView()?.reminder ||
+        browserEvidence() ||
+        computerControl() ||
+        attachments().length > 0 ||
+        showPlainOutput() ||
+        (status() === "error" && error()),
+    )
+    if (hasVisibleBody) return null
+    const currentState = state()
+    if (hasToolPayloadValue(currentState.metadata)) {
+      return { label: t("tool.output"), value: toolPayloadText(currentState.metadata) }
+    }
+    if (Object.prototype.hasOwnProperty.call(currentState, "input")) {
+      return { label: t("tool.input"), value: toolPayloadText(currentState.input) }
+    }
+    return null
+  })
 
   const showChip = () => mode() !== "body"
   const showBody = () => mode() === "block" || mode() === "body"
@@ -389,7 +439,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
               <Show when={status() !== "completed" && raw() && !todoItems()}>
                 <ToolPayload label={t("tool.input")} value={raw()} live />
               </Show>
-              <Show when={completedShellCommand()}>
+              <Show when={visibleShellCommand()}>
                 {(command) => (
                   <div class="msg-tool-command">
                     <span class="msg-tool-command__prompt" aria-hidden="true">
@@ -449,6 +499,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                   const text = output()
                   return <ToolPayload label={t("tool.output")} value={text} />
                 }}
+              </Show>
+              <Show when={fallbackToolPayload()}>
+                {(payload) => <ToolPayload label={payload().label} value={payload().value} />}
               </Show>
             </>
           }

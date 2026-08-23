@@ -17,11 +17,12 @@ import {
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { InteractiveArtifactPart } from "./InteractiveArtifactPart"
-import { conversationDisclosureExpanded, setConversationDisclosureExpanded } from "../store/conversation-ui"
+import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 import { partitionCardMessageRuns } from "../utils/card-message-run"
 import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { ConversationTurnArtifactSummary } from "./ConversationTurnArtifactSummary"
 import { isConversationSourcePart, SourceParts } from "./SourceParts"
+import { InlineToolPart } from "./InlineToolPart"
 
 function unsupportedPartFallback(part: any) {
   const type = String(part?.type || "")
@@ -47,11 +48,6 @@ function partErrorMeta(part: any): string {
 function workPartKind(part: any): "tool" | "patch" {
   if (part?.type === "patch") return "patch"
   return "tool"
-}
-
-function patchSummary(parts: any[]): string {
-  const count = parts.filter((part) => workPartKind(part) === "patch").length
-  return t("transcript.execution_patch", { count: String(count) })
 }
 
 /** The card has one session lifecycle, but it can contain persisted history
@@ -127,9 +123,7 @@ interface PartCollectionProps {
   turnArtifacts?: NonNullable<CardNode["turnArtifacts"]>
 }
 
-type CitationRenderRun =
-  | { kind: "source"; parts: ReturnType<typeof sourceParts> }
-  | { kind: "part"; parts: any[] }
+type CitationRenderRun = { kind: "source"; parts: ReturnType<typeof sourceParts> } | { kind: "part"; parts: any[] }
 
 function sourceParts(parts: any[]) {
   return parts.filter(isConversationSourcePart)
@@ -175,32 +169,37 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
 
 function ExecutionEventRun(props: PartCollectionProps) {
   return (
-    <div class="msg-work-details__body">
-      <Index each={props.parts}>
-        {(part) => (
-          <div class="msg-work-details__event" data-event-kind={workPartKind(part())}>
-            <div class="msg-work-details__event-content">
-              <RenderableCardPart
-                part={part()}
-                depth={props.depth}
-                streaming={props.streaming}
-                renderNestedCard={props.renderNestedCard}
-              />
+    <Index each={props.parts}>
+      {(part) => (
+        <Show
+          when={workPartKind(part()) === "tool"}
+          fallback={
+            <div class="msg-work-details__event" data-event-kind={workPartKind(part())}>
+              <div class="msg-work-details__event-content">
+                <RenderableCardPart
+                  part={part()}
+                  depth={props.depth}
+                  streaming={props.streaming}
+                  renderNestedCard={props.renderNestedCard}
+                />
+              </div>
             </div>
-          </div>
-        )}
-      </Index>
-    </div>
+          }
+        >
+          <ExecutionToolDisclosure {...props} part={part()} />
+        </Show>
+      )}
+    </Index>
   )
 }
 
-function ExecutionDisclosureRun(props: PartCollectionProps) {
-  const disclosureKey = createMemo(() => executionDisclosureKey(props.parts))
-  const expanded = () => conversationDisclosureExpanded(disclosureKey())
-  const currentTool = createMemo(() => describeCurrentToolPart(props.parts, selectedTaskDirectory()))
+function ExecutionToolDisclosure(props: PartCollectionProps & { part: any }) {
+  const disclosureKey = createMemo(() => executionDisclosureKey([props.part]))
+  const expanded = () => cardExpanded(disclosureKey(), false)
+  const currentTool = createMemo(() => describeCurrentToolPart([props.part], selectedTaskDirectory()))
   const summary = createMemo(() => {
     const tool = currentTool()
-    if (!tool) return patchSummary(props.parts)
+    if (!tool) return ""
     return [tool.label, tool.detail].filter(Boolean).join(t("card.meta_separator"))
   })
 
@@ -223,7 +222,7 @@ function ExecutionDisclosureRun(props: PartCollectionProps) {
         title={summary()}
         onClick={(event) => {
           event.stopPropagation()
-          setConversationDisclosureExpanded(disclosureKey(), !expanded())
+          setCardExpanded(disclosureKey(), !expanded())
         }}
       >
         <Show when={currentTool()} fallback={<span class="msg-transcript-disclosure__label">{summary()}</span>}>
@@ -244,7 +243,13 @@ function ExecutionDisclosureRun(props: PartCollectionProps) {
         </span>
       </Button>
       <Show when={expanded()}>
-        <ExecutionEventRun {...props} />
+        <div class="msg-work-details__body">
+          <div class="msg-work-details__event" data-event-kind="tool">
+            <div class="msg-work-details__event-content">
+              <InlineToolPart part={props.part} mode="body" />
+            </div>
+          </div>
+        </div>
       </Show>
     </section>
   )
@@ -254,11 +259,8 @@ function ChronologicalCollapsedParts(props: PartCollectionProps & { runs: Messag
   return (
     <Index each={props.runs}>
       {(run) => (
-        <Show
-          when={run().kind === "execution"}
-          fallback={<CitationAwareBodyParts {...props} parts={run().parts} />}
-        >
-          <ExecutionDisclosureRun {...props} parts={run().parts} />
+        <Show when={run().kind === "execution"} fallback={<CitationAwareBodyParts {...props} parts={run().parts} />}>
+          <ExecutionEventRun {...props} parts={run().parts} />
         </Show>
       )}
     </Index>
