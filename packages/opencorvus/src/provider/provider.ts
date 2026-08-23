@@ -982,7 +982,7 @@ export namespace Provider {
               url,
               requestBodyValues,
               statusCode: response.status,
-              responseHeaders,
+              responseHeaders: ProviderError.redactSensitiveProviderHeaders(responseHeaders),
               responseBody: text,
             })
           }

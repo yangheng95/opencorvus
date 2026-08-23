@@ -8,6 +8,7 @@ import { sanitizeMessage } from "./log-safety"
 import { SessionObservability } from "./session-observability"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Lock } from "./lock"
+import { ProviderError } from "@/provider/error"
 
 export namespace Log {
   export const Level = z.enum(["DEBUG", "INFO", "WARN", "ERROR"]).meta({ ref: "LogLevel", description: "Log level" })
@@ -371,7 +372,8 @@ export namespace Log {
     const output: Record<string, any> = {}
     for (const [key, value] of Object.entries(input)) {
       if (value === undefined || value === null) continue
-      output[key] = typeof value === "string" ? sanitizeMessage(value) : value
+      const safeValue = ProviderError.safeProviderErrorDiagnostic(value)
+      output[key] = typeof safeValue === "string" ? sanitizeMessage(safeValue) : safeValue
     }
     return output
   }

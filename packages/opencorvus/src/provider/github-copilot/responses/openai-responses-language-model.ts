@@ -31,6 +31,7 @@ import type { OpenAIResponsesIncludeOptions, OpenAIResponsesIncludeValue } from 
 import { prepareResponsesTools } from "./openai-responses-prepare-tools"
 import type { OpenAIResponsesModelId } from "./openai-responses-settings"
 import { localShellInputSchema } from "./tool/local-shell"
+import { ProviderError } from "../../error"
 
 const webSearchCallItem = z.object({
   type: z.literal("web_search_call"),
@@ -500,7 +501,7 @@ export class OpenAIResponsesLanguageModel implements LanguageModelV3 {
         url,
         requestBodyValues: body,
         statusCode: 400,
-        responseHeaders,
+        responseHeaders: ProviderError.redactSensitiveProviderHeaders(responseHeaders),
         responseBody: rawResponse as string,
         isRetryable: false,
       })
