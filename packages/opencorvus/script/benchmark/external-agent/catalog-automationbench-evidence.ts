@@ -12,6 +12,8 @@ import {
   auditMissionEvidenceLineage,
   auditMissionEvidenceCollections,
   auditTaskBoundPromptCompositionCoverage,
+  auditTaskTraceScopeSeal,
+  auditLegacyTraceEnvironmentAttestation,
   auditMissionQuiescence,
   auditMissionRunBinding,
   auditBatchEvidence,
@@ -300,6 +302,7 @@ async function inspectRawRunEvidence(
     python: string
     protectedSecrets: Array<{ label: string; value: string }>
     wrapperSHA256: string
+    legacyTraceRunIDs: Set<string>
   },
 ) {
   if (!result) return { required: false, passed: true }
@@ -421,15 +424,16 @@ async function inspectRawRunEvidence(
       promptCompositionAudit.passed &&
       JSON.stringify((result.opencorvus as any).prompt_composition_audit ?? null) ===
         JSON.stringify(promptCompositionAudit)
-    const expectedTraceScope = {
-      kind: "task_bound_agent_trace",
-      mission_session_traced: false,
-      mission_usage_preserved_in_provider_ledger: true,
-      traced_session_ids: missionCollectionsAudit.traced_task_session_ids,
-    }
+    const traceScopeAudit = auditTaskTraceScopeSeal({
+      taskIDs: Array.isArray(result.opencorvus.task_ids) ? result.opencorvus.task_ids.map(String) : [],
+      traceEvents: trace,
+      tracedSessionIDs: missionCollectionsAudit.traced_task_session_ids,
+      declaredScope: (result.opencorvus as any).trace_scope,
+      legacyDefaultBoundAttested: input.legacyTraceRunIDs.has(String(result.run.id ?? "")),
+    })
     const traceScopePassed =
       Number((result.opencorvus as any).trace_events ?? -1) === trace.length &&
-      JSON.stringify((result.opencorvus as any).trace_scope ?? null) === JSON.stringify(expectedTraceScope)
+      traceScopeAudit.passed
     const taskOutcomePassed =
       taskOutcomeAudit.passed &&
       JSON.stringify((result.opencorvus as any).mission_outcome_audit ?? null) === JSON.stringify(taskOutcomeAudit)
@@ -534,6 +538,7 @@ async function inspectRawRunEvidence(
       mission_collections_audit: missionCollectionsAudit,
       prompt_composition_audit: promptCompositionAudit,
       prompt_composition_passed: promptCompositionPassed,
+      trace_scope_audit: traceScopeAudit,
       trace_scope_passed: traceScopePassed,
       mission_outcome_audit: taskOutcomeAudit,
       mission_outcome_passed: taskOutcomePassed,
@@ -615,6 +620,14 @@ const protectedSecrets = sourceAuthSecretLeaves(
 const dispositions = JSON.parse(
   await fs.readFile(path.join(root, "run-dispositions.json"), "utf8").catch(() => '{"runs":{}}'),
 ) as { runs: Record<string, { status: string; reason: string }> }
+const legacyTraceAttestation = JSON.parse(
+  await fs.readFile(path.join(root, "legacy-trace-environment-attestation.json"), "utf8").catch(() => '{"runs":[]}'),
+)
+const legacyTraceAttestationAudit = auditLegacyTraceEnvironmentAttestation(legacyTraceAttestation)
+if ((legacyTraceAttestation.runs?.length ?? 0) > 0 && !legacyTraceAttestationAudit.passed) {
+  throw new Error(`Legacy trace environment attestation failed: ${legacyTraceAttestationAudit.violations.join(", ")}`)
+}
+const legacyTraceRunIDs = new Set(legacyTraceAttestationAudit.run_ids)
 const files = await walk(root)
 const records: Array<Record<string, any>> = []
 const terminalDirectories = new Set(
@@ -642,6 +655,7 @@ for (const directory of terminalDirectories) {
     sourceData: cli.sourceData,
     python: cli.python,
     protectedSecrets,
+    legacyTraceRunIDs,
     wrapperSHA256: restrictedShellSHA256,
   })
   const frozenCase = result
@@ -814,6 +828,19 @@ for (const file of files.filter(
     raw_evidence_audit: { required: false, passed: false, reason: "terminal_record_missing" },
     permanent_invalidation: permanentInvalidation,
   })
+}
+
+for (const runID of legacyTraceRunIDs) {
+  const record = records.find((candidate) => candidate.run_id === runID)
+  if (
+    !record ||
+    dispositions.runs?.[runID]?.status === "invalid_bug" ||
+    record.permanent_invalidation?.invalid === true ||
+    record.raw_leaderboard_eligible !== true ||
+    record.raw_evidence_audit?.trace_scope_audit?.mode !== "legacy_operator_attested_tail_lower_bound"
+  ) {
+    throw new Error(`Legacy trace attestation references an unknown or permanently invalid run: ${runID}`)
+  }
 }
 
 const batchPlanArtifacts = await walk(path.join(root, "batch-plans")).catch(() => [] as string[])
@@ -1011,12 +1038,15 @@ const lines = [
   "",
   "## Primary eligible per-case scores",
   "",
-  "| Case | Batch | Profile | Task | Strict | Partial | Total tokens | Model calls | API attempts | API failures | Duration |",
-  "| ---: | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+  "| Case | Batch | Profile | Task | Trace evidence grade | Strict | Partial | Total tokens | Model calls | API attempts | API failures | Duration |",
+  "| ---: | ---: | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
   ...primaryEligible.map((record) => {
     const metrics = record.benchmark.metrics
     const tokens = record.opencorvus.tokens
-    return `| ${record.benchmark.case_index} | ${record.benchmark.batch_index} | ${record.opencorvus.profile} | ${record.benchmark.task} | ${strictScore(metrics.task_completed_correctly)} | ${percent(metrics.partial_credit)} | ${integer(tokens?.total)} | ${integer(tokens?.modelCalls)} | ${integer(record.benchmark.tool_attempts)} | ${integer(record.benchmark.tool_failed)} | ${duration(record.duration_ms)} |`
+    const traceGrade = record.raw_evidence_audit?.trace_scope_audit?.mode === "complete_post_quiescence"
+      ? "independent complete"
+      : "legacy operator-attested"
+    return `| ${record.benchmark.case_index} | ${record.benchmark.batch_index} | ${record.opencorvus.profile} | ${record.benchmark.task} | ${traceGrade} | ${strictScore(metrics.task_completed_correctly)} | ${percent(metrics.partial_credit)} | ${integer(tokens?.total)} | ${integer(tokens?.modelCalls)} | ${integer(record.benchmark.tool_attempts)} | ${integer(record.benchmark.tool_failed)} | ${duration(record.duration_ms)} |`
   }),
   "",
   "## All attempts (paper evidence index)",
@@ -1043,6 +1073,7 @@ await fs.writeFile(path.join(root, "leaderboard.md"), lines.join("\n"))
 const paperArtifacts = [
   path.join(root, "automationbench-case-set.json"),
   path.join(root, "run-dispositions.json"),
+  ...(legacyTraceRunIDs.size > 0 ? [path.join(root, "legacy-trace-environment-attestation.json")] : []),
   path.join(root, "evidence-catalog.json"),
   path.join(root, "leaderboard.md"),
   ...batchPlanArtifacts,

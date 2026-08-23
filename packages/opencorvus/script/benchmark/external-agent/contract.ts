@@ -5,6 +5,127 @@ import {
 import crypto from "node:crypto"
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
+export const LEGACY_TRACE_ATTESTATION_KIND = "post_hoc_operator_environment_attestation" as const
+export const LEGACY_TRACE_ATTESTATION_LIMITATION =
+  "This is a post-hoc operator environment attestation, not a contemporaneous per-run environment receipt. It preserves the listed official scores without claiming independently complete legacy Task trace capture."
+
+export function auditLegacyTraceEnvironmentAttestation(input: unknown) {
+  const value = input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, any>) : {}
+  const runs = Array.isArray(value.runs) ? value.runs : []
+  const basis = value.basis && typeof value.basis === "object" && !Array.isArray(value.basis) ? value.basis : {}
+  const profiles = Array.isArray(basis.profile_files) ? basis.profile_files : []
+  const violations = [
+    ...(value.schema_version === 1 ? [] : ["attestation_schema"]),
+    ...(value.kind === LEGACY_TRACE_ATTESTATION_KIND ? [] : ["attestation_kind"]),
+    ...(value.event_max_bytes === 512 * 1024 ? [] : ["attestation_event_bound"]),
+    ...(Number.isSafeInteger(value.created_at) && value.created_at > 0 ? [] : ["attestation_created_at"]),
+    ...(value.limitation === LEGACY_TRACE_ATTESTATION_LIMITATION ? [] : ["attestation_limitation"]),
+    ...(basis.launch_form === "fresh wsl -u root -- bash -lc coordinator process" ? [] : ["attestation_launch_form"]),
+    ...(basis.windows_parent_override_present_at_attestation === false ? [] : ["attestation_windows_env"]),
+    ...(basis.wsl_login_override_present_at_attestation === false ? [] : ["attestation_wsl_login_env"]),
+    ...(basis.wsl_pid1_override_present_at_attestation === false ? [] : ["attestation_wsl_pid1_env"]),
+    ...(profiles.length > 0 ? [] : ["attestation_profile_files"]),
+    ...profiles.flatMap((profile: any, index: number) =>
+      typeof profile?.path === "string" &&
+      typeof profile?.mtime_ns === "number" && Number.isFinite(profile.mtime_ns) && profile.mtime_ns > 0 &&
+      Number.isSafeInteger(profile?.bytes) &&
+      /^[a-f0-9]{64}$/.test(String(profile?.sha256 ?? "")) &&
+      profile?.override_marker_present === false
+        ? []
+        : [`attestation_profile_file:${index}`],
+    ),
+    ...runs.flatMap((runID: unknown, index: number) =>
+      typeof runID === "string" && /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(runID)
+        ? []
+        : [`attestation_run_id:${index}`],
+    ),
+    ...(new Set(runs).size === runs.length ? [] : ["attestation_duplicate_run_id"]),
+  ]
+  return { passed: violations.length === 0, run_ids: runs.filter((item): item is string => typeof item === "string"), violations }
+}
+
+export function completeTaskTraceReceipt(taskIDs: string[], traceEvents: Array<Record<string, any>>) {
+  const exactTaskIDs = [...new Set(taskIDs)].sort()
+  const expectedTaskIDs = new Set(exactTaskIDs)
+  const violations: string[] = []
+  for (const [index, event] of traceEvents.entries()) {
+    if (typeof event?.taskID !== "string" || !expectedTaskIDs.has(event.taskID)) {
+      violations.push(`trace_event_task_identity:${index}:${String(event?.taskID ?? "missing")}`)
+    }
+  }
+  return {
+    schema_version: 1,
+    kind: "complete_post_quiescence_task_trace",
+    passed: violations.length === 0,
+    task_ids: exactTaskIDs,
+    tasks: exactTaskIDs.map((taskID) => {
+      const events = traceEvents.filter((event) => event.taskID === taskID)
+      return {
+        task_id: taskID,
+        event_count: events.length,
+        events_sha256: crypto.createHash("sha256").update(JSON.stringify(events)).digest("hex"),
+      }
+    }),
+    violations,
+  }
+}
+
+export const TASK_TRACE_LIVE_TAIL_BYTES = 2 * 1024 * 1024
+export const TASK_TRACE_DEFAULT_EVENT_BYTES = 512 * 1024
+const LEGACY_TASK_TRACE_KINDS = new Set([
+  "llm_request",
+  "helper_llm_call",
+  "agent_turn",
+  "agent_turn_failure",
+  "orchestrator_wake",
+  "orchestrator_wake_failure",
+])
+
+export function auditTaskTraceScopeSeal(input: {
+  taskIDs: string[]
+  traceEvents: Array<Record<string, any>>
+  tracedSessionIDs: string[]
+  declaredScope: unknown
+  legacyDefaultBoundAttested?: boolean
+}) {
+  const completeReceipt = completeTaskTraceReceipt(input.taskIDs, input.traceEvents)
+  const baseScope = {
+    kind: "task_bound_agent_trace",
+    mission_session_traced: false,
+    mission_usage_preserved_in_provider_ledger: true,
+    traced_session_ids: [...input.tracedSessionIDs].sort(),
+  }
+  const completeScope = { ...baseScope, complete_task_trace: completeReceipt }
+  const current = JSON.stringify(input.declaredScope ?? null) === JSON.stringify(completeScope)
+  const legacyLines = input.traceEvents.map((event) => Buffer.byteLength(JSON.stringify(event), "utf8") + 1)
+  const legacyCompactBytes = legacyLines.reduce((total, bytes) => total + bytes, 0)
+  const legacyEventsUseBoundedPhysicalKinds = input.traceEvents.every(
+    (event, index) =>
+      LEGACY_TASK_TRACE_KINDS.has(String(event?.kind)) &&
+      event?.payload !== undefined &&
+      legacyLines[index]! <= TASK_TRACE_DEFAULT_EVENT_BYTES + 1,
+  )
+  // In tail mode the product reads exactly 2 MiB and removes at most one
+  // canonical event line. With the frozen default 512 KiB event cap, the
+  // returned compact JSONL must therefore be at least 2 MiB - 512 KiB - 1.
+  // A smaller known-kind projection proves the source never entered tail mode.
+  const legacy =
+    input.legacyDefaultBoundAttested === true &&
+    legacyEventsUseBoundedPhysicalKinds &&
+    legacyCompactBytes < TASK_TRACE_LIVE_TAIL_BYTES - TASK_TRACE_DEFAULT_EVENT_BYTES - 1 &&
+    JSON.stringify(input.declaredScope ?? null) === JSON.stringify(baseScope)
+  const violations = [
+    ...(completeReceipt.passed ? [] : completeReceipt.violations),
+    ...(current || legacy ? [] : ["complete_task_trace_seal_missing_or_unproven"]),
+  ]
+  return {
+    passed: violations.length === 0,
+    mode: current ? "complete_post_quiescence" : legacy ? "legacy_operator_attested_tail_lower_bound" : "invalid",
+    complete_task_trace: completeReceipt,
+    legacy_compact_jsonl_bytes: legacyCompactBytes,
+    violations,
+  }
+}
 
 export function auditBenchmarkBunRuntime(packageManager: unknown, actualVersion: string | undefined) {
   const expectedVersion =

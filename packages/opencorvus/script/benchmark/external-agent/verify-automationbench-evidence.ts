@@ -10,6 +10,8 @@ import {
   auditMissionEvidenceLineage,
   auditMissionEvidenceCollections,
   auditTaskBoundPromptCompositionCoverage,
+  auditTaskTraceScopeSeal,
+  auditLegacyTraceEnvironmentAttestation,
   auditMissionQuiescence,
   auditMissionRunBinding,
   evidenceFileSetMatches,
@@ -274,6 +276,26 @@ if (JSON.stringify(discoveredAttemptDirectories) !== JSON.stringify(catalogAttem
 const dispositions = JSON.parse(await fs.readFile(path.join(root, "run-dispositions.json"), "utf8")) as {
   runs?: Record<string, { status: string; reason: string }>
 }
+const legacyTraceAttestation = JSON.parse(
+  await fs.readFile(path.join(root, "legacy-trace-environment-attestation.json"), "utf8").catch(() => '{"runs":[]}'),
+)
+const legacyTraceAttestationAudit = auditLegacyTraceEnvironmentAttestation(legacyTraceAttestation)
+if ((legacyTraceAttestation.runs?.length ?? 0) > 0 && !legacyTraceAttestationAudit.passed) {
+  throw new Error(`Legacy trace environment attestation failed: ${legacyTraceAttestationAudit.violations.join(", ")}`)
+}
+const legacyTraceRunIDs = new Set(legacyTraceAttestationAudit.run_ids)
+for (const runID of legacyTraceRunIDs) {
+  const attempt = catalog.attempts.find((candidate) => candidate.run_id === runID)
+  if (
+    !attempt ||
+    dispositions.runs?.[runID]?.status === "invalid_bug" ||
+    attempt.permanent_invalidation?.invalid === true ||
+    attempt.raw_leaderboard_eligible !== true ||
+    attempt.raw_evidence_audit?.trace_scope_audit?.mode !== "legacy_operator_attested_tail_lower_bound"
+  ) {
+    throw new Error(`Legacy trace attestation references an unknown or permanently invalid run: ${runID}`)
+  }
+}
 const independentlyRawEligible: string[] = []
 const independentAttempts: Array<Record<string, any>> = []
 for (const attempt of catalog.attempts) {
@@ -442,12 +464,13 @@ for (const attempt of catalog.attempts) {
     providerRows: ledger,
     missionSessionID: String(payload.opencorvus.mission_session_id ?? ""),
   })
-  const expectedTraceScope = {
-    kind: "task_bound_agent_trace",
-    mission_session_traced: false,
-    mission_usage_preserved_in_provider_ledger: true,
-    traced_session_ids: missionCollectionsAudit.traced_task_session_ids,
-  }
+  const traceScopeAudit = auditTaskTraceScopeSeal({
+    taskIDs: Array.isArray(payload.opencorvus.task_ids) ? payload.opencorvus.task_ids.map(String) : [],
+    traceEvents: trace,
+    tracedSessionIDs: missionCollectionsAudit.traced_task_session_ids,
+    declaredScope: payload.opencorvus.trace_scope,
+    legacyDefaultBoundAttested: legacyTraceRunIDs.has(String(payload.run.id ?? "")),
+  })
   const terminalQuiescenceAudit = auditMissionQuiescence({
     missionRecord: board.mission,
     missionStatus: board.mission_status,
@@ -497,8 +520,8 @@ for (const attempt of catalog.attempts) {
     !promptCompositionAudit.passed ||
     JSON.stringify(promptCompositionAudit) !==
       JSON.stringify(payload.opencorvus.prompt_composition_audit ?? null) ||
+    !traceScopeAudit.passed ||
     Number(payload.opencorvus.trace_events ?? -1) !== trace.length ||
-    JSON.stringify(payload.opencorvus.trace_scope ?? null) !== JSON.stringify(expectedTraceScope) ||
     JSON.stringify(taskOutcomeAudit) !== JSON.stringify(payload.opencorvus.mission_outcome_audit ?? null) ||
     !terminalQuiescenceAudit.passed ||
     JSON.stringify(terminalQuiescenceAudit) !==
@@ -674,6 +697,7 @@ const batchArtifactFiles = await walk(path.join(root, "batch-plans")).catch(() =
 const expectedPaperPaths = [
   "automationbench-case-set.json",
   "run-dispositions.json",
+  ...(legacyTraceRunIDs.size > 0 ? ["legacy-trace-environment-attestation.json"] : []),
   "evidence-catalog.json",
   "leaderboard.md",
   ...batchArtifactFiles.map((file) => path.relative(root, file).replaceAll("\\", "/")),

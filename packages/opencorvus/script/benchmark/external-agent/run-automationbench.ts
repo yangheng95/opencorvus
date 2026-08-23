@@ -25,6 +25,7 @@ import {
   auditMissionOutcome,
   auditMissionQuiescence,
   auditMissionRunBinding,
+  completeTaskTraceReceipt,
   normalizeTrajectory,
   renderTrajectorySVG,
   sourceAuthSecretLeaves,
@@ -41,6 +42,7 @@ import {
   type BenchmarkScheduledWake,
   type SkillMountMatrix,
 } from "./contract"
+import { readCompleteTaskTraceEvents } from "./trace-evidence"
 
 const SCRIPT_DIRECTORY = import.meta.dir
 const AUTOMATIONBENCH_VERSION = "1.0.6"
@@ -294,6 +296,9 @@ async function verifySourceProjection(input: Arguments) {
 }
 
 async function sourceEvidence() {
+  if (process.env.OPENCORVUS_AGENT_TRACE_EVENT_MAX_BYTES !== undefined) {
+    throw new Error("Formal benchmark runs require the frozen default AgentTrace event byte bound")
+  }
   const commit = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: process.cwd() }).stdout.toString().trim()
   const status = Bun.spawnSync(["git", "status", "--short"], { cwd: process.cwd() }).stdout.toString().trim()
   const bundleFiles = [
@@ -305,6 +310,7 @@ async function sourceEvidence() {
     "restricted-agent-shell.sh",
     "verify_automationbench_replay.py",
     "contract.ts",
+    "trace-evidence.ts",
     "run-automationbench.ts",
   ]
   const bundle = crypto.createHash("sha256")
@@ -1111,6 +1117,7 @@ async function observations() {
         task_id: observedTaskID,
         board,
         transcript,
+        trace_dir: traceProjection.traceDir,
         trace: traceProjection.events,
         interactions: interactions.map(
           (interaction): Record<string, any> => ({ ...interaction, task_id: observedTaskID }),
@@ -1749,6 +1756,20 @@ try {
   const observedTerminal = await waitForTerminal()
   const quiescence = await waitForTerminalQuiescence(observedTerminal)
   const terminal = quiescence.terminal
+  const completeTaskTrace = (
+    await Promise.all(
+      terminal.tasks.map(async (task) => ({
+        task_id: task.task_id,
+        events: await readCompleteTaskTraceEvents({ traceDir: task.trace_dir, taskID: task.task_id }),
+      })),
+    )
+  )
+    .flatMap((task) => task.events)
+    .sort((left, right) => Number(left.ts ?? 0) - Number(right.ts ?? 0))
+  const completeTraceReceipt = completeTaskTraceReceipt(taskIDs, completeTaskTrace)
+  if (!completeTraceReceipt.passed) {
+    throw new Error(`Complete Task trace evidence failed: ${completeTraceReceipt.violations.join(", ")}`)
+  }
   independentTranscriptSurface = await captureIndependentTranscriptSurface?.()
   if (!independentTranscriptSurface) {
     throw new Error("AutomationBench Mission transcript surface could not be rebuilt from durable Session rows")
@@ -1791,17 +1812,17 @@ try {
   const providerUsageLedger = ledgerRows(path.join(isolatedData, "opencorvus.db"))
   const tokens = summarizeProviderUsageRows(providerUsageLedger)
   const tracedSessionIDs = new Set(
-    terminal.trace.map((event) => event.sessionID).filter((value): value is string => typeof value === "string"),
+    completeTaskTrace.map((event) => event.sessionID).filter((value): value is string => typeof value === "string"),
   )
   const promptCompositionAudit = auditTaskBoundPromptCompositionCoverage({
-    traceEvents: terminal.trace,
+    traceEvents: completeTaskTrace,
     providerRows: providerUsageLedger,
     missionSessionID: missionSessionID!,
   })
-  const promptComposition = analyzePromptComposition(terminal.trace)
+  const promptComposition = analyzePromptComposition(completeTaskTrace)
   const trajectory = normalizeTrajectory({
     transcript: terminal.allTranscript,
-    trace: terminal.trace,
+    trace: completeTaskTrace,
     benchmarkEvents,
   })
   const finishedAt = Date.now()
@@ -1981,12 +2002,13 @@ try {
       transcript_token_reconciliation: transcriptTokens,
       sessions: new Set(terminal.allTranscript.map((message) => message.info?.sessionID).filter(Boolean)).size,
       agents: [...new Set(terminal.allTranscript.map((message) => message.info?.agent).filter(Boolean))],
-      trace_events: terminal.trace.length,
+      trace_events: completeTaskTrace.length,
       trace_scope: {
         kind: "task_bound_agent_trace",
         mission_session_traced: false,
         mission_usage_preserved_in_provider_ledger: true,
         traced_session_ids: [...tracedSessionIDs].sort(),
+        complete_task_trace: completeTraceReceipt,
       },
       interactions: terminal.interactions,
     },
@@ -2028,7 +2050,7 @@ try {
       "utf8",
     ),
     fs.writeFile(resultPath, JSON.stringify(result, null, 2) + "\n", "utf8"),
-    fs.writeFile(tracePath, JSON.stringify(terminal.trace, null, 2) + "\n", "utf8"),
+    fs.writeFile(tracePath, JSON.stringify(completeTaskTrace, null, 2) + "\n", "utf8"),
     fs.writeFile(transcriptPath, JSON.stringify(terminal.transcript, null, 2) + "\n", "utf8"),
     fs.writeFile(missionTranscriptPath, JSON.stringify(terminal.missionTranscript, null, 2) + "\n", "utf8"),
     fs.writeFile(interactionsPath, JSON.stringify(terminal.interactions, null, 2) + "\n", "utf8"),
