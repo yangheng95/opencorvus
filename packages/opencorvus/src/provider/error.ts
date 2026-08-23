@@ -3,12 +3,75 @@ import { STATUS_CODES } from "http"
 import { iife } from "@/util/iife"
 
 export namespace ProviderError {
+  const SENSITIVE_PROVIDER_HEADER_NAME =
+    /(?:^|[-_])(?:authorization|proxy[-_]?authorization|cookie|set[-_]?cookie|password|passwd|secret|token|api[-_]?key|access[-_]?key|private[-_]?key|client[-_]?secret|credential|oauth|code|state)(?:[-_]|$)/i
+
   export function redactSensitiveProviderText(input: string): string {
     return input
       .replace(/\*{4}[0-9A-Fa-f]{4,}\b/g, "****<redacted>")
-      .replace(/\b((?:x[-_]?api[-_ ]?key|api[-_ ]?key)["']?\s*[:=]\s*["']?)([^,;\s"'}]+)/gi, "$1<redacted>")
-      .replace(/\b(authorization["']?\s*[:=]\s*["']?)(bearer\s+)?[^,;\s"'}]+/gi, "$1<redacted>")
+      .replace(
+        /\b((?:authorization|proxy-authorization|cookie|set-cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state))["']?\s*[:=]\s*)"[^"\r\n]*"/gi,
+        '$1"<redacted>"',
+      )
+      .replace(
+        /\b((?:authorization|proxy-authorization|cookie|set-cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state))["']?\s*[:=]\s*)'[^'\r\n]*'/gi,
+        "$1'<redacted>'",
+      )
+      .replace(
+        /\b((?:authorization|proxy-authorization|cookie|set-cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state))["']?\s*[:=]\s*)(?:bearer\s+)?[^,;\s"'}]+/gi,
+        "$1<redacted>",
+      )
+      .replace(
+        /\b((?:x[-_]?api[-_ ]?key|api[-_ ]?key|password|passwd|secret|token|access[-_ ]?key|private[-_ ]?key|client[-_ ]?secret|credential)["']?\s*[:=]\s*["']?)[^,;\s"'}]+/gi,
+        "$1<redacted>",
+      )
       .replace(/\b(bearer\s+)[A-Za-z0-9._~+/=-]+/gi, "$1<redacted>")
+  }
+
+  export function redactSensitiveProviderHeaders(
+    input: Record<string, string> | undefined,
+  ): Record<string, string> | undefined {
+    if (!input) return undefined
+    return Object.fromEntries(
+      Object.entries(input).map(([name, value]) => [
+        name,
+        SENSITIVE_PROVIDER_HEADER_NAME.test(name) ? "<redacted>" : redactSensitiveProviderText(value),
+      ]),
+    )
+  }
+
+  export function safeProviderErrorDiagnostic(input: unknown): unknown {
+    if (!APICallError.isInstance(input)) return input
+    return {
+      type: input.name,
+      message: redactSensitiveProviderText(input.message),
+      stack: input.stack ? redactSensitiveProviderText(input.stack) : undefined,
+      statusCode: input.statusCode,
+      isRetryable: input.isRetryable,
+      responseHeaders: redactSensitiveProviderHeaders(input.responseHeaders),
+      responseBody: input.responseBody ? redactSensitiveProviderText(input.responseBody) : undefined,
+      url: redactSensitiveProviderURL(input.url),
+    }
+  }
+
+  export function redactSensitiveProviderURL(input: string): string {
+    try {
+      const url = new URL(input)
+      let changed = false
+      if (url.username || url.password) {
+        url.username = "<redacted>"
+        url.password = "<redacted>"
+        changed = true
+      }
+      for (const name of [...url.searchParams.keys()]) {
+        if (!SENSITIVE_PROVIDER_HEADER_NAME.test(name)) continue
+        url.searchParams.set(name, "<redacted>")
+        changed = true
+      }
+      return changed ? url.toString() : redactSensitiveProviderText(input)
+    } catch {
+      return redactSensitiveProviderText(input)
+    }
   }
 
   // Adapted from overflow detection patterns in:
@@ -277,7 +340,7 @@ export namespace ProviderError {
       }
     }
 
-    const metadata = input.error.url ? { url: input.error.url } : undefined
+    const metadata = input.error.url ? { url: redactSensitiveProviderURL(input.error.url) } : undefined
     return {
       type: "api_error",
       message: m,
@@ -287,7 +350,7 @@ export namespace ProviderError {
         : input.providerID.startsWith("openai")
           ? isOpenAiErrorRetryable(input.error)
           : input.error.isRetryable,
-      responseHeaders: input.error.responseHeaders,
+      responseHeaders: redactSensitiveProviderHeaders(input.error.responseHeaders),
       responseBody: input.error.responseBody ? redactSensitiveProviderText(input.error.responseBody) : undefined,
       metadata,
     }
