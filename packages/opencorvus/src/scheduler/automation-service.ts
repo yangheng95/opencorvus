@@ -73,6 +73,20 @@ export type AutomationView = {
   lastError: string | null
 }
 
+export type PendingDelayedWakeView = {
+  id: string
+  projectID: string
+  target: { scope: "session"; sessionID: string } | { scope: "task"; taskID: string }
+  nextRun: number
+  leaseUntil: number
+  state: "scheduled" | "leased"
+  claim: {
+    leaseID: string
+    ownerOccurrenceID: string
+    activatedAt: number
+  } | null
+}
+
 export type CreateAutomationInput = {
   name: string
   target: AutomationTarget
@@ -238,6 +252,60 @@ export namespace AutomationService {
     const rows = Database.use((db) => currentAutomationDefinitions(db).filter((row) => row.kind !== "delay"))
       .map((row) => Database.use((db) => projectAutomationInTransaction(db, row))).sort((left, right) => left.next_run - right.next_run || left.id.localeCompare(right.id))
     return rows.map(view)
+  }
+
+  /** Read the exact active one-shot wake facts for known runtime owners.
+   * This is a physical scheduling projection only: it never claims, fires,
+   * consumes, or otherwise changes an Automation. */
+  export function pendingDelayedWakeSchedule(input: {
+    projectID: string
+    sessionIDs: readonly string[]
+    taskIDs: readonly string[]
+    now?: number
+  }): PendingDelayedWakeView[] {
+    const sessionIDs = new Set(input.sessionIDs)
+    const taskIDs = new Set(input.taskIDs)
+    if (sessionIDs.size === 0 && taskIDs.size === 0) return []
+    const now = input.now ?? Date.now()
+    return Database.use((db) =>
+      currentAutomationDefinitions(db).filter((row) => row.kind === "delay" && row.status === "active"),
+    )
+      .map((row) =>
+        Database.use((db) => ({
+          row: projectAutomationInTransaction(db, row),
+          lease: currentControlLeaseInTransaction(db, "automation", row.definition_id),
+        })),
+      )
+      .filter(({ row }) => row.project_id === input.projectID)
+      .flatMap(({ row, lease }): PendingDelayedWakeView[] => {
+        const target = row.task_id
+          ? taskIDs.has(row.task_id)
+            ? ({ scope: "task", taskID: row.task_id } as const)
+            : undefined
+          : row.session_id && sessionIDs.has(row.session_id)
+            ? ({ scope: "session", sessionID: row.session_id } as const)
+            : undefined
+        if (!target || !row.project_id) return []
+        const activeLease = lease && lease.expires_at > now ? lease : undefined
+        return [
+          {
+            id: row.id,
+            projectID: row.project_id,
+            target,
+            nextRun: row.next_run,
+            leaseUntil: lease?.expires_at ?? 0,
+            state: activeLease ? "leased" : "scheduled",
+            claim: activeLease
+              ? {
+                  leaseID: activeLease.id,
+                  ownerOccurrenceID: activeLease.owner_occurrence_id,
+                  activatedAt: activeLease.time_activated,
+                }
+              : null,
+          },
+        ]
+      })
+      .sort((left, right) => left.nextRun - right.nextRun || left.id.localeCompare(right.id))
   }
 
   export function listRuns(id: string): AutomationRunView[] {
