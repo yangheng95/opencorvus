@@ -12,6 +12,7 @@ import {
   auditTaskBoundPromptCompositionCoverage,
   auditTaskTraceScopeSeal,
   auditLegacyTraceEnvironmentAttestation,
+  auditBatchReceiptRedaction,
   auditMissionQuiescence,
   auditMissionRunBinding,
   evidenceFileSetMatches,
@@ -694,6 +695,24 @@ for (const attempt of catalog.attempts) {
     throw new Error(`Catalog final eligibility mismatch: ${attempt.run_id}`)
 }
 const batchArtifactFiles = await walk(path.join(root, "batch-plans")).catch(() => [] as string[])
+const batchRedactionAudits = await Promise.all(
+  batchArtifactFiles
+    .filter((file) => file.endsWith("-redaction-receipt.json"))
+    .map(async (redactionPath) => {
+      const redactionFileName = path.basename(redactionPath)
+      const targetFileName = redactionFileName.replace(/-redaction-receipt\.json$/, "-receipt.json")
+      const targetPath = path.join(path.dirname(redactionPath), targetFileName)
+      return auditBatchReceiptRedaction({
+        redactionFileName,
+        redactionReceipt: JSON.parse(await fs.readFile(redactionPath, "utf8")),
+        targetFileName,
+        targetBytes: await fs.readFile(targetPath),
+      })
+    }),
+)
+if (batchRedactionAudits.some((audit) => !audit.passed)) {
+  throw new Error("Batch receipt redaction chain did not reconcile")
+}
 const expectedPaperPaths = [
   "automationbench-case-set.json",
   "run-dispositions.json",

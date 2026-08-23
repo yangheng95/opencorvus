@@ -1,11 +1,13 @@
 import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import crypto from "node:crypto"
 import {
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
+  auditBatchReceiptRedaction,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   automationBenchRunValidity,
@@ -46,6 +48,72 @@ import {
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
+  test("reconciles a sanitized Provider diagnostic batch-receipt redaction chain", () => {
+    const batchRunID = "367ae713-7598-4422-be04-37634d5e958a"
+    const targetFileName = `batch-05-${batchRunID}-receipt.json`
+    const targetBytes = Buffer.from(
+      JSON.stringify({
+        schema_version: 1,
+        batch_run_id: batchRunID,
+        batch_index: 5,
+        status: "failed",
+        wave_1: { launched: [{ stderr_tail: '"set-cookie": "<redacted>", "x-codex-turn-state": "<redacted>"' }] },
+      }, null, 2) + "\n",
+    )
+    const afterSHA256 = crypto.createHash("sha256").update(targetBytes).digest("hex")
+    expect(
+      auditBatchReceiptRedaction({
+        redactionFileName: `batch-05-${batchRunID}-redaction-receipt.json`,
+        targetFileName,
+        targetBytes,
+        redactionReceipt: {
+          schema_version: 1,
+          kind: "automationbench_batch_receipt_secret_redaction",
+          target: targetFileName,
+          created_at: 1,
+          reason: "provider_response_header_diagnostic_disclosure",
+          redacted_labels: ["set-cookie", "x-codex-turn-state"],
+          changed_stderr_tails: 1,
+          before_sha256: "a".repeat(64),
+          after_sha256: afterSHA256,
+        },
+      }),
+    ).toEqual({ passed: true, target_sha256: afterSHA256, redacted_tail_count: 1, violations: [] })
+
+    const prefixedTargetBytes = Buffer.from(
+      JSON.stringify({
+        schema_version: 1,
+        batch_run_id: batchRunID,
+        batch_index: 5,
+        status: "failed",
+        wave_1: {
+          launched: [
+            { stderr_tail: '"not-set-cookie": "<redacted>", "prefix-x-codex-turn-state": "<redacted>"' },
+          ],
+        },
+      }, null, 2) + "\n",
+    )
+    const prefixedAfterSHA256 = crypto.createHash("sha256").update(prefixedTargetBytes).digest("hex")
+    expect(
+      auditBatchReceiptRedaction({
+        redactionFileName: `batch-05-${batchRunID}-redaction-receipt.json`,
+        targetFileName,
+        targetBytes: prefixedTargetBytes,
+        redactionReceipt: {
+          schema_version: 1,
+          kind: "automationbench_batch_receipt_secret_redaction",
+          target: targetFileName,
+          created_at: 1,
+          reason: "provider_response_header_diagnostic_disclosure",
+          redacted_labels: ["set-cookie", "x-codex-turn-state"],
+          changed_stderr_tails: 1,
+          before_sha256: "a".repeat(64),
+          after_sha256: prefixedAfterSHA256,
+        },
+      }).violations,
+    ).toContain("redaction_exact_labels_missing")
+  })
+
   test("binds formal batches to the repository's exact Bun runtime", () => {
     expect(auditBenchmarkBunRuntime("bun@1.3.14", "1.3.14")).toEqual({
       passed: true,

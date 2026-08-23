@@ -2,6 +2,7 @@ import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import lockfile from "proper-lockfile"
+import { ProviderError } from "../../../src/provider/error"
 import {
   auditBenchmarkBunRuntime,
   executeRollingBatchChains,
@@ -421,7 +422,7 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
       exit_code: exitCode,
       run_id: terminalEvent?.result?.run?.id ?? terminalEvent?.failure?.run?.id ?? null,
       run_status: terminalEvent?.result?.run?.status ?? terminalEvent?.failure?.run?.status ?? null,
-      stderr_tail: stderr.slice(-2000),
+      stderr_tail: ProviderError.redactSensitiveProviderText(stderr).slice(-2000),
     }
   } finally {
     activeChildren.delete(child)
@@ -450,7 +451,7 @@ async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshC
           exit_code: -1,
           run_id: null,
           run_status: "coordinator_failed",
-          stderr_tail: error instanceof Error ? error.message : String(error),
+          stderr_tail: ProviderError.redactSensitiveProviderText(error instanceof Error ? error.message : String(error)).slice(-2000),
         }))
         launchedByWave[waveIndex - 1]!.push(outcome)
         void queueDashboardWrite()

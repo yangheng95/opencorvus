@@ -144,3 +144,20 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 5. Add focused positive coverage for a canonical trace larger than 2 MiB whose early request event remains present in the complete reader, stable Task identity/digest reconstruction, zero-child Mission's exact empty Task trace receipt, and the real bounded-reader lower-bound legacy proof. Do not change the product trace API or merge this benchmark-only repair to `v0.0.52beta`.
 6. Preserve case 21 as permanent `invalid_bug: bounded_task_trace_evidence`. After focused checks and independent read-only review, rerun only case 21, adopt sealed cases 22–25, complete batch 5, and resume batches 6–10.
 7. The final uninvolved read-only review reported no remaining P0/P1/P2 after independently checking the complete-reader boundary, tail lower-bound arithmetic, exact attestation contract and run-ID set, per-row evidence grade, Case 21 invalidation, Case 22–25 reuse, and the 63-file paper manifest. Focused tests passed `54/54`; package plus benchmark typecheck, docs check, diff check, catalog regeneration and the development verifier all passed.
+
+## r3 Provider-preflight response-header disclosure
+
+### Evidence and root cause
+
+- After the WSL-to-Windows proxy boundary was repaired, Case 21 preflight reached the exact OpenAI Luna Provider and returned HTTP 429 `usage_limit_reached`. The batch correctly created no Mission and retained the attempt as `blocked_preflight`.
+- The child error's diagnostic object contained the Provider response-header map. `ProviderError.parseAPICallError()` redacted response bodies and credential-like text but copied `responseHeaders` verbatim; the exact Provider probe also constructed `APICallError` with that raw map. Bun's stderr rendering therefore exposed `set-cookie` and `x-codex-turn-state` values.
+- `run-automationbench-batch.ts` copied the last 2,000 stderr characters verbatim into the create-only batch receipt. The per-run failure record kept only the safe typed message, but the derived batch receipt became secret-bearing paper evidence. Existing source-auth leaf checks cannot discover refreshed cookies or turn-state material that never existed in `auth.json`.
+- This is a shared product diagnostic-redaction defect plus a benchmark defense-in-depth defect. The product must sanitize Provider header values at the error boundary; the batch must sanitize any child diagnostic before persistence because third-party errors can bypass the parsed Provider contract.
+
+### Repair contract
+
+1. Add one ProviderError header projection that preserves safe diagnostic names/values while replacing values for authorization, proxy authorization, cookie/set-cookie, token, API key, secret, credential, OAuth, code and state-bearing header names. Extend labelled-text redaction to the same header vocabulary.
+2. Apply the projection before constructing product `APICallError` values and again when parsing arbitrary Provider errors. Do not remove safe rate-limit status, request IDs or reset timestamps.
+3. Sanitize child stderr and coordinator error messages before truncating or persisting `stderr_tail`. Add focused positive tests that observe redacted cookie/turn-state fields and preserved safe diagnostics.
+4. Treat the affected blocked-preflight batch receipt as secret-affected evidence. Rewrite it only through an explicit redaction chain recording prior/new SHA-256 and redacted labels without values; include that receipt in the paper manifest. It remains non-scored and never becomes reusable.
+5. Commit the product Provider fix separately and merge/cherry-pick only that commit into `v0.0.52beta`; keep batch code, benchmark tests, Skill/spec and external evidence on the benchmark branch. Do not retry until the exact Luna Provider preflight is available; current Provider response states reset at `2026-08-27 11:31:35 +08:00`.

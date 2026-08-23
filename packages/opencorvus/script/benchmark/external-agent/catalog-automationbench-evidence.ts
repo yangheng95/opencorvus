@@ -14,6 +14,7 @@ import {
   auditTaskBoundPromptCompositionCoverage,
   auditTaskTraceScopeSeal,
   auditLegacyTraceEnvironmentAttestation,
+  auditBatchReceiptRedaction,
   auditMissionQuiescence,
   auditMissionRunBinding,
   auditBatchEvidence,
@@ -844,6 +845,23 @@ for (const runID of legacyTraceRunIDs) {
 }
 
 const batchPlanArtifacts = await walk(path.join(root, "batch-plans")).catch(() => [] as string[])
+const batchRedactionAudits = await Promise.all(
+  batchPlanArtifacts
+    .filter((file) => file.endsWith("-redaction-receipt.json"))
+    .map(async (redactionPath) => {
+      const redactionFileName = path.basename(redactionPath)
+      const targetFileName = redactionFileName.replace(/-redaction-receipt\.json$/, "-receipt.json")
+      const targetPath = path.join(path.dirname(redactionPath), targetFileName)
+      const audit = auditBatchReceiptRedaction({
+        redactionFileName,
+        redactionReceipt: JSON.parse(await fs.readFile(redactionPath, "utf8")),
+        targetFileName,
+        targetBytes: await fs.readFile(targetPath),
+      })
+      if (!audit.passed) throw new Error(`Batch redaction audit failed for ${redactionFileName}: ${audit.violations.join(", ")}`)
+      return { file: path.relative(root, redactionPath).replaceAll("\\", "/"), target: path.relative(root, targetPath).replaceAll("\\", "/"), ...audit }
+    }),
+)
 const batchAudits = await Promise.all(
   batchPlanArtifacts
     .filter((file) => file.endsWith("-plan.json"))
@@ -1002,6 +1020,7 @@ const catalog = {
   exploratory_profile_summaries: exploratoryProfileSummaries,
   internal_ranking: internalRanking,
   batches: batchAudits,
+  batch_redactions: batchRedactionAudits,
 }
 
 await fs.writeFile(path.join(root, "evidence-catalog.json"), JSON.stringify(catalog, null, 2) + "\n")

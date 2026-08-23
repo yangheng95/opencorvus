@@ -3,8 +3,79 @@ import {
   type PromptCompositionFingerprint,
 } from "../../../src/session/prompt-composition"
 import crypto from "node:crypto"
+import { ProviderError } from "../../../src/provider/error"
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
+
+export function auditBatchReceiptRedaction(input: {
+  redactionFileName: string
+  redactionReceipt: unknown
+  targetFileName: string
+  targetBytes: Uint8Array
+}) {
+  const receipt =
+    input.redactionReceipt && typeof input.redactionReceipt === "object" && !Array.isArray(input.redactionReceipt)
+      ? (input.redactionReceipt as Record<string, any>)
+      : {}
+  const match = /^batch-(\d{2})-([a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})-redaction-receipt\.json$/.exec(
+    input.redactionFileName,
+  )
+  let target: Record<string, any> = {}
+  let targetText = ""
+  try {
+    targetText = Buffer.from(input.targetBytes).toString("utf8")
+    target = JSON.parse(targetText)
+  } catch {}
+  const sha256 = (bytes: Uint8Array) => crypto.createHash("sha256").update(bytes).digest("hex")
+  const afterSHA256 = sha256(input.targetBytes)
+  const redactedTailCount = ["wave_1", "wave_2"].reduce((count, wave) => {
+    const launched = target[wave]?.launched
+    return (
+      count +
+      (Array.isArray(launched)
+        ? launched.filter((item) => typeof item?.stderr_tail === "string" && item.stderr_tail.includes("<redacted>"))
+            .length
+        : 0)
+    )
+  }, 0)
+  const stderrTails = ["wave_1", "wave_2"].flatMap((wave) => {
+    const launched = target[wave]?.launched
+    return Array.isArray(launched)
+      ? launched.map((item) => item?.stderr_tail).filter((value): value is string => typeof value === "string")
+      : []
+  })
+  const exactLabelsRedacted = ["set-cookie", "x-codex-turn-state"].every((label) => {
+    const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    const pattern = new RegExp(`(?:^|[\\s,{])["']?${escaped}["']?\\s*:\\s*["']?<redacted>["']?`, "i")
+    return stderrTails.some((tail) => pattern.test(tail))
+  })
+  const violations = [
+    ...(match ? [] : ["redaction_filename"]),
+    ...(receipt.schema_version === 1 ? [] : ["redaction_schema"]),
+    ...(receipt.kind === "automationbench_batch_receipt_secret_redaction" ? [] : ["redaction_kind"]),
+    ...(receipt.target === input.targetFileName ? [] : ["redaction_target"]),
+    ...(receipt.reason === "provider_response_header_diagnostic_disclosure" ? [] : ["redaction_reason"]),
+    ...(JSON.stringify(receipt.redacted_labels) === JSON.stringify(["set-cookie", "x-codex-turn-state"])
+      ? []
+      : ["redaction_labels"]),
+    ...(Number.isSafeInteger(receipt.created_at) && receipt.created_at > 0 ? [] : ["redaction_created_at"]),
+    ...(Number.isSafeInteger(receipt.changed_stderr_tails) && receipt.changed_stderr_tails > 0
+      ? []
+      : ["redaction_changed_count"]),
+    ...(/^[a-f0-9]{64}$/.test(String(receipt.before_sha256 ?? "")) && receipt.before_sha256 !== afterSHA256
+      ? []
+      : ["redaction_before_sha256"]),
+    ...(receipt.after_sha256 === afterSHA256 ? [] : ["redaction_after_sha256"]),
+    ...(match && input.targetFileName === `batch-${match[1]}-${match[2]}-receipt.json` ? [] : ["redaction_prefix"]),
+    ...(match && target.batch_run_id === match[2] && Number(target.batch_index) === Number(match[1])
+      ? []
+      : ["redaction_batch_identity"]),
+    ...(redactedTailCount >= Number(receipt.changed_stderr_tails ?? 0) ? [] : ["redaction_tail_count"]),
+    ...(exactLabelsRedacted ? [] : ["redaction_exact_labels_missing"]),
+    ...(ProviderError.redactSensitiveProviderText(targetText) === targetText ? [] : ["redaction_target_still_sensitive"]),
+  ]
+  return { passed: violations.length === 0, target_sha256: afterSHA256, redacted_tail_count: redactedTailCount, violations }
+}
 export const LEGACY_TRACE_ATTESTATION_KIND = "post_hoc_operator_environment_attestation" as const
 export const LEGACY_TRACE_ATTESTATION_LIMITATION =
   "This is a post-hoc operator environment attestation, not a contemporaneous per-run environment receipt. It preserves the listed official scores without claiming independently complete legacy Task trace capture."
