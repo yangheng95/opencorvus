@@ -1,9 +1,8 @@
-import { For, createEffect, createMemo, createSignal, onCleanup, type Accessor, type JSX } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, onCleanup, type Accessor, type JSX } from "solid-js"
 import { t } from "../utils/i18n"
-import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/native-menu-surface"
-import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
+import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
 
 export type RightDockPanel =
@@ -106,10 +105,7 @@ export interface RightDockProps {
 export function RightDock(props: RightDockProps): JSX.Element {
   let stripEl!: HTMLDivElement
   let moreBtnEl!: HTMLButtonElement
-  let addBtnEl!: HTMLButtonElement
   const [hidden, setHidden] = createSignal<Set<string>>(new Set())
-  const addMenuOwner = "right-dock-add"
-  const overflowMenuOwner = "right-dock-overflow"
 
   const openSet = () => new Set(props.tabs().map((tab) => tab.id))
 
@@ -208,6 +204,11 @@ export function RightDock(props: RightDockProps): JSX.Element {
   }
 
   const hiddenTabs = () => props.tabs().filter((tab) => hidden().has(tab.id))
+  createEffect(() => {
+    if (hiddenTabs().length === 0 && props.overflowMenuOpen()) {
+      props.onOverflowMenuOpenChange(false)
+    }
+  })
   const browserTabIdentitySignature = createMemo(() =>
     props
       .tabs()
@@ -242,7 +243,8 @@ export function RightDock(props: RightDockProps): JSX.Element {
 
   function openTabChooserFromStrip(event: MouseEvent): void {
     if (event.target !== event.currentTarget) return
-    void openAddMenu(addBtnEl)
+    props.onOverflowMenuOpenChange(false)
+    props.onAddMenuOpenChange(true)
   }
 
   function addMenuGroups() {
@@ -254,100 +256,6 @@ export function RightDock(props: RightDockProps): JSX.Element {
     }))
     return [{ items: items.slice(0, 4) }, { items: items.slice(4, 5) }, { items: items.slice(5) }]
   }
-
-  async function openAddMenu(anchor: HTMLElement): Promise<void> {
-    props.onOverflowMenuOpenChange(false)
-    props.onAddMenuOpenChange(true)
-    try {
-      await openNativeMenuSurface({
-        owner: addMenuOwner,
-        anchor,
-        groups: addMenuGroups(),
-        onDismiss: () => props.onAddMenuOpenChange(false),
-        onError: (error) => reportError({
-          id: "right-dock:add-menu:close",
-          title: t("common.error"),
-          message: error instanceof Error ? error.message : String(error),
-          details: formatErrorDetails(error),
-        }),
-        onAction: (itemID) => {
-          const meta = RIGHT_DOCK_CATALOG.find((candidate) => candidate.id === itemID)
-          if (!meta) throw new Error(`Right Dock add menu item "${itemID}" is not in the catalog`)
-          if (meta.id === "browser") {
-            props.onNewBrowserTab(nextBlankBrowserTab().id)
-            return
-          }
-          props.onOpen(meta.id)
-        },
-      })
-    } catch (error) {
-      props.onAddMenuOpenChange(false)
-      reportError({
-        id: "right-dock:add-menu:open",
-        title: t("common.error"),
-        message: error instanceof Error ? error.message : String(error),
-        details: formatErrorDetails(error),
-      })
-    }
-  }
-
-  async function openOverflowMenu(anchor: HTMLElement): Promise<void> {
-    if (props.overflowMenuOpen()) {
-      await closeNativeMenuSurface(overflowMenuOwner)
-      return
-    }
-
-    props.onAddMenuOpenChange(false)
-    props.onOverflowMenuOpenChange(true)
-    try {
-      await openNativeMenuSurface({
-        owner: overflowMenuOwner,
-        anchor,
-        groups: [
-          {
-            items: hiddenTabs().map((tab) => {
-              const meta = rightDockPanelMeta(tab.panel)
-              return {
-                id: tab.id,
-                label: tabTitle(tab),
-                icon: meta.icon,
-                checked: props.active() === tab.id,
-              }
-            }),
-          },
-        ],
-        onDismiss: () => props.onOverflowMenuOpenChange(false),
-        onError: (error) => reportError({
-          id: "right-dock:overflow-menu:close",
-          title: t("common.error"),
-          message: error instanceof Error ? error.message : String(error),
-          details: formatErrorDetails(error),
-        }),
-        onAction: (tabID) => props.onSelect(tabID),
-      })
-    } catch (error) {
-      props.onOverflowMenuOpenChange(false)
-      reportError({
-        id: "right-dock:overflow-menu:open",
-        title: t("common.error"),
-        message: error instanceof Error ? error.message : String(error),
-        details: formatErrorDetails(error),
-      })
-    }
-  }
-
-  createEffect(() => {
-    if (!props.addMenuOpen()) void closeNativeMenuSurface(addMenuOwner)
-  })
-
-  createEffect(() => {
-    if (!props.overflowMenuOpen()) void closeNativeMenuSurface(overflowMenuOwner)
-  })
-
-  onCleanup(() => {
-    void closeNativeMenuSurface(addMenuOwner)
-    void closeNativeMenuSurface(overflowMenuOwner)
-  })
 
   return (
     <Tabs class="right-dock-tabs-root" value={props.active() ?? ""} onValueChange={props.onSelect}>
@@ -414,47 +322,113 @@ export function RightDock(props: RightDockProps): JSX.Element {
         </TabList>
 
         <div class="right-dock-more-wrap" data-show={String(hiddenTabs().length > 0)}>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            tone="neutral"
-            data-chrome="icon-action"
-            class="right-dock-more"
-            ref={moreBtnEl}
-            title={t("right_dock.more")}
-            aria-label={t("right_dock.more")}
-            aria-haspopup="menu"
-            aria-expanded={props.overflowMenuOpen()}
-            onClick={() => void openOverflowMenu(moreBtnEl)}
+          <DropdownMenu.Root
+            open={props.overflowMenuOpen()}
+            onOpenChange={(open) => {
+              if (open) props.onAddMenuOpenChange(false)
+              props.onOverflowMenuOpenChange(open)
+            }}
+            placement="bottom-end"
+            gutter={6}
+            fitViewport
           >
-            <Icon name="more-horizontal" size="medium" />
-          </Button>
+            <DropdownMenu.Trigger
+              as={Button}
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              data-chrome="icon-action"
+              class="right-dock-more"
+              ref={moreBtnEl}
+              title={t("right_dock.more")}
+              aria-label={t("right_dock.more")}
+            >
+              <Icon name="more-horizontal" size="medium" />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content class="right-dock-menu" data-ui="right-dock-overflow-menu">
+                <For each={hiddenTabs()}>
+                  {(tab) => {
+                    const meta = () => rightDockPanelMeta(tab.panel)
+                    return (
+                      <DropdownMenu.Item
+                        as="button"
+                        type="button"
+                        class="right-dock-menu-item"
+                        data-checked={props.active() === tab.id ? "" : undefined}
+                        onSelect={() => props.onSelect(tab.id)}
+                      >
+                        <Icon name={meta().icon} size="compact" />
+                        <span>{tabTitle(tab)}</span>
+                      </DropdownMenu.Item>
+                    )
+                  }}
+                </For>
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
         </div>
 
         <div class="right-dock-add-wrap">
-          <Button
-            ref={addBtnEl}
-            type="button"
-            variant="ghost"
-            size="icon"
-            tone="neutral"
-            data-chrome="icon-action"
-            class="right-dock-add"
-            title={t("right_dock.add")}
-            aria-label={t("right_dock.add")}
-            aria-haspopup="menu"
-            aria-expanded={props.addMenuOpen()}
-            onClick={() => {
-              if (props.addMenuOpen()) {
-                void closeNativeMenuSurface(addMenuOwner)
-                return
-              }
-              void openAddMenu(addBtnEl)
+          <DropdownMenu.Root
+            open={props.addMenuOpen()}
+            onOpenChange={(open) => {
+              if (open) props.onOverflowMenuOpenChange(false)
+              props.onAddMenuOpenChange(open)
             }}
+            placement="bottom-end"
+            gutter={6}
+            fitViewport
           >
-            <Icon name="plus" size="medium" />
-          </Button>
+            <DropdownMenu.Trigger
+              as={Button}
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              data-chrome="icon-action"
+              class="right-dock-add"
+              title={t("right_dock.add")}
+              aria-label={t("right_dock.add")}
+            >
+              <Icon name="plus" size="medium" />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content class="right-dock-menu" data-ui="right-dock-add-menu">
+                <For each={addMenuGroups()}>
+                  {(group, groupIndex) => (
+                    <>
+                      <Show when={groupIndex() > 0}>
+                        <DropdownMenu.Separator />
+                      </Show>
+                      <For each={group.items}>
+                        {(item) => (
+                          <DropdownMenu.Item
+                            as="button"
+                            type="button"
+                            class="right-dock-menu-item"
+                            disabled={!item.enabled}
+                            onSelect={() => {
+                              if (!item.enabled) return
+                              if (item.id === "browser") {
+                                props.onNewBrowserTab(nextBlankBrowserTab().id)
+                                return
+                              }
+                              props.onOpen(item.id)
+                            }}
+                          >
+                            <Icon name={item.icon} size="compact" />
+                            <span>{item.label}</span>
+                          </DropdownMenu.Item>
+                        )}
+                      </For>
+                    </>
+                  )}
+                </For>
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
         </div>
 
         <Button

@@ -421,7 +421,7 @@ export function App(props: AppProps) {
                     data-active={String(props.primarySurface() === "conversation")}
                   >
                     <div id="solidConversationAgentRailMount" class="conversation-agent-rail-host">
-                      <ConversationAgentRail />
+                      <ConversationAgentRail onOpenSubagentConversation={props.onOpenSubagentConversation} />
                     </div>
                     <div class="center-workbench-activity chat-conversation-activity">
                       <section class="chat" id="chatSection" data-empty-chat-home={String(props.homeActive)}>

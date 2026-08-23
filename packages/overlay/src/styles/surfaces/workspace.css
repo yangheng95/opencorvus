@@ -712,6 +712,19 @@ body[data-resizing="true"] .pane-resizer::after {
   flex: none;
 }
 
+.right-dock-menu.oc-menu {
+  width: max-content;
+  min-width: calc(184px * var(--ui-scale));
+  max-width: min(calc(320px * var(--ui-scale)), calc(100vw - 24px * var(--ui-scale)));
+}
+
+.right-dock-menu-item.oc-menu-item > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Body: holds the mounted tool views and the canonical empty tool launcher. */
 .right-dock-body {
   flex: 1 1 auto;
