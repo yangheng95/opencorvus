@@ -18,6 +18,7 @@ import {
   PartTable,
   ProviderActivityRequestTable,
   ToolPartRequestTable,
+  ToolPartProgressTable,
   ToolPartOutcomeTable,
   SESSION_KINDS,
   type PartData,
@@ -1692,6 +1693,86 @@ export namespace Session {
         .where(eq(PartTable.id, input.partID)).returning({ id: PartTable.id }).get()
     })
     if (!row) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
+  })
+
+  const AppendToolProgressInput = z
+    .object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+      partID: Identifier.schema("part"),
+      title: z.string().optional(),
+      metadata: z.record(z.string(), z.unknown()).optional(),
+    })
+    .refine((value) => value.title !== undefined || value.metadata !== undefined, {
+      message: "Tool progress requires a title or metadata payload",
+    })
+
+  /** Append a real, durable progress fact for one still-running Tool request. */
+  export const appendToolProgress = fn(AppendToolProgressInput, async (input) => {
+    const publishAfterCommit = Database.hasActiveTransaction()
+    let projected: Message.ToolPart | undefined
+    let orderKey = ""
+    const persisted = Database.use((db) => {
+      const request = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, input.partID)).get()
+      if (!request || request.message_id !== input.messageID) {
+        throw new NotFoundError({ message: `Tool request Part not found: ${input.partID}` })
+      }
+      const message = db
+        .select({ sessionID: MessageTable.session_id, timeCreated: MessageTable.time_created })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.messageID))
+        .get()
+      if (!message || message.sessionID !== input.sessionID) {
+        throw new NotFoundError({ message: `Tool request Part not found: ${input.partID}` })
+      }
+      const projectRequest = () => {
+        const part = projectToolPartInTransaction(db, request)
+        if (!part) throw new HostProcessingFaultError(`Tool request Part ${input.partID} cannot be projected`)
+        return {
+          ...part,
+          orderKey: timelinePartOrderKey({ id: request.id, timeCreated: request.time_created }),
+        }
+      }
+      const outcome = db
+        .select({ id: ToolPartOutcomeTable.id })
+        .from(ToolPartOutcomeTable)
+        .where(eq(ToolPartOutcomeTable.request_part_id, input.partID))
+        .get()
+      if (outcome) {
+        projected = projectRequest()
+        return false
+      }
+      const latest = db
+        .select()
+        .from(ToolPartProgressTable)
+        .where(eq(ToolPartProgressTable.request_part_id, input.partID))
+        .orderBy(desc(ToolPartProgressTable.time_created), desc(ToolPartProgressTable.id))
+        .get()
+      if (latest && latest.title === input.title && isDeepStrictEqual(latest.metadata ?? undefined, input.metadata)) {
+        projected = projectRequest()
+        return false
+      }
+      db.insert(ToolPartProgressTable)
+        .values({
+          id: Identifier.ascending("part"),
+          request_part_id: input.partID,
+          title: input.title,
+          metadata: input.metadata,
+          time_created: Date.now(),
+        })
+        .run()
+      projected = projectRequest()
+      orderKey = timelineMessageOrderKey({ info: { id: input.messageID, time: { created: message.timeCreated } } })
+      if (publishAfterCommit) {
+        Bus.publishOwnedInTransaction(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
+      }
+      return true
+    })
+    if (!projected) throw new HostProcessingFaultError(`Tool request Part ${input.partID} cannot be projected`)
+    if (persisted && !publishAfterCommit) {
+      await Bus.publish(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
+    }
+    return { part: projected, persisted }
   })
 
   function updatePartRow(

@@ -108,6 +108,7 @@ export type ToolOutcomePartData =
       time: { end: number }
       attachments?: Message.FilePart[]
     }
+
   | {
       outcome: "completed"
       resultAttemptID: string
@@ -123,6 +124,11 @@ export type ToolOutcomePartData =
       metadata?: Record<string, unknown>
       time: { end: number }
     }
+
+export type ToolProgressPartData = {
+  title?: string
+  metadata?: Record<string, unknown>
+}
 
 export type ProviderActivityOutcomeData = {
   outcome: "done" | "failed" | "aborted"
@@ -229,6 +235,29 @@ export const ToolPartRequestTable = sqliteTable(
       AND json_type(${table.data}, '$.tool') = 'text'
       AND json_type(${table.data}, '$.time.start') IN ('integer', 'real')
       AND json_type(${table.data}, '$.state') IS NULL
+    `),
+  ],
+)
+
+/** Append-only live progress emitted by one running Tool request. The latest
+ * row is projected into the visible running ToolPart; terminal outcome facts
+ * remain the sole authority after settlement. */
+export const ToolPartProgressTable = sqliteTable(
+  "tool_part_progress",
+  {
+    id: text().primaryKey(),
+    request_part_id: text()
+      .notNull()
+      .references(() => ToolPartRequestTable.id, { onDelete: "cascade" }),
+    title: text(),
+    metadata: text({ mode: "json" }).$type<Record<string, unknown>>(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    index("tool_part_progress_request_idx").on(table.request_part_id, table.time_created, table.id),
+    check("tool_part_progress_fact_shape", sql`
+      (${table.title} IS NOT NULL OR ${table.metadata} IS NOT NULL)
+      AND (${table.metadata} IS NULL OR json_type(${table.metadata}) = 'object')
     `),
   ],
 )

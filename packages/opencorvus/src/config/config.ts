@@ -1478,6 +1478,12 @@ export namespace Config {
                 .min(1000)
                 .optional()
                 .describe("Max idle (no stream chunk) window for session LLM streams, ms"),
+              session_tool_idle_ms: z
+                .number()
+                .int()
+                .min(1000)
+                .optional()
+                .describe("Max idle window without a persisted live Tool Part metadata revision, ms"),
               execution_progress_idle_ms: z
                 .number()
                 .int()
@@ -1486,7 +1492,9 @@ export namespace Config {
                 .describe("Max idle window without durable execution progress, ms"),
             })
             .optional()
-            .describe("Chunk-driven inactivity thresholds for session LLM streams and provider execution work."),
+            .describe(
+              "Inactivity thresholds for session LLM chunks, durable live Tool progress, and provider execution work.",
+            ),
           max_executor_groups: z.number().int().min(1).optional().describe("Maximum parallel projected agent sessions"),
         })
         .strict()

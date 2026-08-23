@@ -242,6 +242,10 @@ const CONTROL_STATE_INVENTORY = {
     causal: ["time_created"],
     fact: ["data"],
   }),
+  ToolPartProgressTable: inventory({
+    identity: ["id", "request_part_id"],
+    fact: ["title", "metadata", "time_created"],
+  }),
   ToolPartOutcomeTable: inventory({
     identity: ["id", "request_part_id"],
     receipt: ["data", "time_created"],
@@ -311,6 +315,7 @@ try {
     key === "MessageTable" ||
     key === "PartTable" ||
     key === "ToolPartRequestTable" ||
+    key === "ToolPartProgressTable" ||
     key === "ToolPartOutcomeTable" ||
     key === "ProviderActivityRequestTable" ||
     key === "ProviderActivityOutcomeTable" ||
@@ -374,6 +379,7 @@ try {
     "bus_publication_outbox_no_update", "bus_publication_outbox_no_delete",
     "bus_publication_delivery_no_update", "bus_publication_delivery_no_delete",
     "tool_part_request_no_update", "tool_part_request_no_delete",
+    "tool_part_progress_no_update", "tool_part_progress_no_delete",
     "tool_part_outcome_no_update", "tool_part_outcome_no_delete",
     "provider_activity_request_no_update", "provider_activity_request_no_delete",
     "provider_activity_outcome_no_update", "provider_activity_outcome_no_delete",

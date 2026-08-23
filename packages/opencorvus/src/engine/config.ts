@@ -10,6 +10,7 @@
  *   import { EngineConfig } from "@/engine/config"
  *   const cfg = await EngineConfig.get()
  *   cfg.activity.session_llm_idle_ms
+ *   cfg.activity.session_tool_idle_ms
  */
 import { Config } from "@/config/config"
 
@@ -30,6 +31,7 @@ import { Config } from "@/config/config"
  */
 interface ActivityConfig {
   session_llm_idle_ms: number
+  session_tool_idle_ms: number
   execution_progress_idle_ms: number
 }
 
@@ -48,6 +50,9 @@ const DEFAULTS: EngineConfigType = {
     // 3 min of zero chunks is already anomalous (observed cases: TCP
     // hang to alibaba-coding-plan-cn, NAT-silenced connection).
     session_llm_idle_ms: 180_000,
+    // Tool execution pauses Provider chunk-idle accounting. The pause remains
+    // bounded by durable running Tool Part metadata rather than wall time.
+    session_tool_idle_ms: 20 * 60_000,
     // Durable execution recovery compares against chunk-driven progress;
     // this is a real deadline, not a self-fed timer.
     execution_progress_idle_ms: 600_000,
@@ -103,6 +108,7 @@ function merge(user?: Config.Info["assistant"]): EngineConfigType {
   return {
     activity: {
       session_llm_idle_ms: user?.activity?.session_llm_idle_ms ?? DEFAULTS.activity.session_llm_idle_ms,
+      session_tool_idle_ms: user?.activity?.session_tool_idle_ms ?? DEFAULTS.activity.session_tool_idle_ms,
       execution_progress_idle_ms:
         user?.activity?.execution_progress_idle_ms ?? DEFAULTS.activity.execution_progress_idle_ms,
     },

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-23-tool-pause-durable-progress-convergence.md](2026-08-23-tool-pause-durable-progress-convergence.md) traces a real RTX 5090 Mission failure to the shared 15-minute absolute Tool-pause bound and records the append-only Tool progress bridge, configuration contract, focused benchmark, and fresh-Mission acceptance required before a website-success claim.
+
 - [2026-08-22-v0.0.52-beta-release.md](2026-08-22-v0.0.52-beta-release.md) tracks canonical `0.0.52-beta` convergence, the reviewed immutable binary release, public website deployment, and the truthful boundary around the concurrent real Expert Squad demonstration.
 
 - [2026-08-22-website-data-analysis-expert-squad-demo.md](2026-08-22-website-data-analysis-expert-squad-demo.md) records one current-source, real-Provider, real-website, seven-node data-analysis Expert Squad demonstration from Mission submission through the final audited Markdown Artifact.

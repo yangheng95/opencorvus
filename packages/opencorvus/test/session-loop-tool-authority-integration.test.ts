@@ -14,6 +14,8 @@ import { LLM } from "../src/session/llm"
 import { SessionLoop } from "../src/session/loop"
 import { MessageStore } from "../src/session/message-store"
 import { SessionProcessor } from "../src/session/processor"
+import { SessionStatus } from "../src/session/status"
+import { ToolPartProgressTable } from "../src/session/session.sql"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
@@ -269,6 +271,101 @@ describe("SessionLoop Tool execution authority integration", () => {
             finish: "stop",
             tokens: { total: 2, input: 1, output: 1 },
           },
+        })
+      },
+    })
+  }, 30_000)
+
+  test("renews Session activity after the real Tool wrapper persists live metadata", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "full_access" })
+        const model = providerModel()
+        const config = await Config.get()
+        const agent = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("coding", { config }))
+        const session = await Session.create({ kind: "assistant", title: "Durable Tool activity renewal" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          agent: "coding",
+          time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const tools = await SessionLoop.resolveTools({
+          agent,
+          agentID: "coding",
+          model,
+          session,
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+        })
+        const edit = tools.edit
+        if (!edit?.execute) throw new Error("SessionLoop did not project the edit Tool")
+        const toolCallID = "call_durable_tool_activity"
+        const evidencePath = path.join(project.path, "durable-tool-activity.txt")
+        const input = {
+          filePath: evidencePath,
+          oldString: "",
+          newString: "durable Tool metadata activity\n",
+        }
+        const observe = spyOn(SessionStatus, "observeActivity")
+        let observed: Array<[string]>
+        try {
+          await edit.execute(input, {
+            toolCallId: toolCallID,
+            messages: [],
+            abortSignal: abort,
+          })
+          observed = observe.mock.calls.map((call) => [call[0]])
+        } finally {
+          observe.mockRestore()
+        }
+
+        const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        const part = persisted.parts.find((candidate) => candidate.type === "tool" && candidate.callID === toolCallID)
+        const progress = Database.use((db) => db.select().from(ToolPartProgressTable).all())
+        expect({ observed, file: await fs.readFile(evidencePath, "utf8"), part, progress }).toMatchObject({
+          observed: [[session.id]],
+          file: "durable Tool metadata activity\n",
+          part: {
+            type: "tool",
+            tool: "edit",
+            state: {
+              status: "running",
+              input,
+              metadata: {
+                diff: expect.stringContaining("durable Tool metadata activity"),
+              },
+            },
+          },
+          progress: [
+            {
+              request_part_id: part?.id,
+              metadata: { diff: expect.stringContaining("durable Tool metadata activity") },
+              time_created: expect.any(Number),
+            },
+          ],
         })
       },
     })

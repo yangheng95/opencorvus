@@ -12,6 +12,7 @@ describe("execution progress inactivity configuration ownership", () => {
       assistant: {
         activity: {
           session_llm_idle_ms: 321,
+          session_tool_idle_ms: 543,
           execution_progress_idle_ms: 654,
         },
       },
@@ -20,6 +21,7 @@ describe("execution progress inactivity configuration ownership", () => {
       expect(await EngineConfig.getGlobal()).toMatchObject({
         activity: {
           session_llm_idle_ms: 321,
+          session_tool_idle_ms: 543,
           execution_progress_idle_ms: 654,
         },
       })

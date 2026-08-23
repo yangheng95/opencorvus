@@ -37,6 +37,7 @@ function installLegacyControlSchema(sqlite: SQLite): void {
     DROP TABLE provider_activity_outcome;
     DROP TABLE provider_activity_request;
     DROP TABLE tool_part_outcome;
+    DROP TABLE tool_part_progress;
     DROP TABLE tool_part_request;
     DROP TABLE session_control_event;
     DROP TABLE event_job_fire_receipt;

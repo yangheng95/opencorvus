@@ -30,8 +30,12 @@ import { LocalEnvironment } from "@/config/local-environment"
 import { forbiddenShellEnvironmentKeys, sanitizeShellEnvironment } from "@/shell/environment"
 import { redactInlinePayloads } from "@/util/inline-base64"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
+import { StringDecoder } from "node:string_decoder"
 
 const MAX_METADATA_LENGTH = 30_000
+export const BASH_LIVE_PREVIEW_LENGTH = 4_096
+export const BASH_LIVE_PROGRESS_MIN_INTERVAL_MS = 5_000
+export const BASH_LIVE_PROGRESS_MIN_BYTES = 64 * 1_024
 export const DEFAULT_TIMEOUT = Flag.OPENCORVUS_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS || DEFAULT_BASH_TIMEOUT_MS
 
 export const log = Log.create({ service: "bash-tool" })
@@ -56,6 +60,79 @@ function canAppendForegroundLifecycleHint(output: string) {
 function bashMetadataOutput(output: string): string {
   const safe = redactInlinePayloads(output)
   return safe.length > MAX_METADATA_LENGTH ? safe.slice(0, MAX_METADATA_LENGTH) + "\n\n..." : safe
+}
+
+/** Bounded visible output plus a real monotone coordinate that continues to
+ * change after the preview reaches its truncation limit. */
+function utf8Prefix(text: string, maxBytes: number): string {
+  const bytes = Buffer.from(text, "utf8")
+  if (bytes.length <= maxBytes) return text
+  let end = maxBytes
+  while (end > 0 && (bytes[end]! & 0xc0) === 0x80) end--
+  return bytes.subarray(0, end).toString("utf8")
+}
+
+export function bashLiveProgressMetadata(preview: string, outputBytes: number, description?: string) {
+  const safe = redactInlinePayloads(preview)
+  const marker = "\n\n..."
+  const truncated = Buffer.byteLength(safe, "utf8") > BASH_LIVE_PREVIEW_LENGTH || outputBytes > Buffer.byteLength(preview, "utf8")
+  return {
+    output: truncated
+      ? utf8Prefix(safe, BASH_LIVE_PREVIEW_LENGTH - Buffer.byteLength(marker, "utf8")) + marker
+      : safe,
+    output_bytes: outputBytes,
+    description,
+  }
+}
+
+export class BashLiveOutputAccumulator {
+  private readonly decoders = {
+    stdout: new StringDecoder("utf8"),
+    stderr: new StringDecoder("utf8"),
+  }
+  private previewValue = ""
+  private bytesValue = 0
+  private ended = false
+
+  append(stream: "stdout" | "stderr", chunk: Buffer): string {
+    if (this.ended) throw new Error("Bash live output accumulator is already ended")
+    this.bytesValue += chunk.length
+    const text = this.decoders[stream].write(chunk)
+    if (Buffer.byteLength(this.previewValue, "utf8") < BASH_LIVE_PREVIEW_LENGTH) {
+      this.previewValue = utf8Prefix(this.previewValue + text, BASH_LIVE_PREVIEW_LENGTH)
+    }
+    return text
+  }
+
+  end(): string {
+    if (this.ended) return ""
+    this.ended = true
+    const text = this.decoders.stdout.end() + this.decoders.stderr.end()
+    if (Buffer.byteLength(this.previewValue, "utf8") < BASH_LIVE_PREVIEW_LENGTH) {
+      this.previewValue = utf8Prefix(this.previewValue + text, BASH_LIVE_PREVIEW_LENGTH)
+    }
+    return text
+  }
+
+  get outputBytes() {
+    return this.bytesValue
+  }
+
+  metadata(description?: string) {
+    return bashLiveProgressMetadata(this.previewValue, this.bytesValue, description)
+  }
+}
+
+export function shouldPublishBashLiveProgress(input: {
+  now: number
+  lastPublishedAt: number
+  outputBytes: number
+  lastPublishedBytes: number
+}) {
+  return (
+    input.now - input.lastPublishedAt >= BASH_LIVE_PROGRESS_MIN_INTERVAL_MS ||
+    input.outputBytes - input.lastPublishedBytes >= BASH_LIVE_PROGRESS_MIN_BYTES
+  )
 }
 
 // Commands that kill processes by name — can destroy the host process (benchmark,
@@ -232,6 +309,7 @@ export const BashTool = Tool.define("bash", async () => {
             refused: true as boolean,
             command: params.command,
             output: "",
+            output_bytes: 0,
             exit: null as number | null,
             pid: null as number | null,
             background: false,
@@ -315,12 +393,12 @@ export const BashTool = Tool.define("bash", async () => {
       })
 
       let output = ""
+      const liveOutput = new BashLiveOutputAccumulator()
+      let lastProgressAt = Date.now()
+      let lastProgressBytes = 0
       // Initialize metadata with empty output
       ctx.metadata({
-        metadata: {
-          output: "",
-          description: params.description,
-        },
+        metadata: bashLiveProgressMetadata("", 0, params.description),
       })
 
       const outputObserver =
@@ -329,15 +407,18 @@ export const BashTool = Tool.define("bash", async () => {
           : undefined
 
       const append = (stream: "stdout" | "stderr", chunk: Buffer) => {
-        const text = chunk.toString()
+        const text = liveOutput.append(stream, chunk)
         output += text
         outputObserver?.({ stream, chunk: text, output })
+        const now = Date.now()
+        if (!shouldPublishBashLiveProgress({ now, lastPublishedAt: lastProgressAt, outputBytes: liveOutput.outputBytes, lastPublishedBytes: lastProgressBytes })) {
+          return
+        }
+        lastProgressAt = now
+        lastProgressBytes = liveOutput.outputBytes
         ctx.metadata({
-          metadata: {
-            // truncate the metadata to avoid GIANT blobs of data (has nothing to do w/ what agent can access)
-            output: bashMetadataOutput(output),
-            description: params.description,
-          },
+          // A real chunk, never a timer, drives this bounded durable sample.
+          metadata: liveOutput.metadata(params.description),
         })
       }
 
@@ -476,6 +557,7 @@ export const BashTool = Tool.define("bash", async () => {
             refused: false as boolean,
             command: params.command,
             output: bashMetadataOutput(output),
+            output_bytes: liveOutput.outputBytes,
             exit: exited ? exitCode : null,
             pid: supervisor.pid ?? null,
             background: true,
@@ -523,6 +605,7 @@ export const BashTool = Tool.define("bash", async () => {
           throw error
         }
       }
+      output += liveOutput.end()
 
       const resultMetadata: string[] = []
 
@@ -548,6 +631,7 @@ export const BashTool = Tool.define("bash", async () => {
           refused: false as boolean,
           command: params.command,
           output: bashMetadataOutput(output),
+          output_bytes: liveOutput.outputBytes,
           exit: exitCode,
           pid: null as number | null,
           background: false,
