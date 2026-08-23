@@ -46,6 +46,8 @@ test("Mission acceptance resume projects current message authority and real-deci
   expect(notice).toContain("Use the real Message identified above when deciding")
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
+  expect(notice).toContain("no_action alone cannot settle it")
+  expect(notice).toContain("complete/fail lifecycle decision")
   expect(isCurrentWakeIngress(event)).toBe(true)
 
   expect(authorizedTaskRootMessagesForWake(event)).toEqual([

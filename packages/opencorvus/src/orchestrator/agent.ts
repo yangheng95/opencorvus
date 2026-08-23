@@ -1274,7 +1274,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
       `Current missionAcceptanceResume: mission_id=${resume.missionID}; mission_session_id=${resume.missionSessionID}; ` +
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
         `evidence_locators=${JSON.stringify(resume.evidenceLocators)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message identified above when deciding, without a Host-prescribed retrieval tool. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message identified above when deciding, without a Host-prescribed retrieval tool. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: dispatch the responsible existing lineage, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }
@@ -1614,6 +1614,9 @@ async function buildSystemParts(
     )
     ctx.push(
       "- Read the exact visible Mission message before deciding. This is a current same-Task repair authority tied to the reviewed terminal occurrence and evidence locators shown in Wake Provenance.",
+    )
+    ctx.push(
+      "- This resume opened a non-terminal repair occurrence. Do not use no_action as its sole decision; dispatch the responsible existing lineage, or record the evidence-backed complete/fail lifecycle decision when no further physical progress authority remains.",
     )
     ctx.push("")
   }

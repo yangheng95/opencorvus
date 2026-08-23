@@ -28,6 +28,10 @@ describe("scheduler message model harness", () => {
       "Use `reply` only for the current scheduler request and pass its exact `event_id` as `reply_to`",
       "Target `mission` for an owning-Mission decision or update",
       "resolve its requested scheduler action in this wake and send the exact correlated reply",
+      "It never closes, suspends, or supplies future progress for a non-terminal Task",
+      "A scheduler reply or notification does not itself provide future Task progress",
+      "A Mission acceptance resume always opened a new non-terminal repair occurrence",
+      "send its correlated reply and make that lifecycle decision in the same wake",
     ]
 
     expect(requiredOrchestratorGuidance.map((clause) => ORCHESTRATOR_CORE.includes(clause))).toEqual(
