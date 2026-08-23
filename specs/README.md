@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest full-repository architecture-debt saturation audit: [`2026-08-24-repository-architecture-debt-saturation-audit.md`](records/2026-08/2026-08-24-repository-architecture-debt-saturation-audit.md).
+
 Latest Work Ledger double-click rename repair: [`2026-08-24-work-ledger-double-click-rename-repair.md`](records/2026-08/2026-08-24-work-ledger-double-click-rename-repair.md).
 
 Latest Right Dock child-agent navigation and Add-tool menu repair: [`2026-08-24-right-dock-subagent-navigation-and-add-menu.md`](records/2026-08/2026-08-24-right-dock-subagent-navigation-and-add-menu.md).

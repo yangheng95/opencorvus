@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-24-repository-architecture-debt-saturation-audit.md](2026-08-24-repository-architecture-debt-saturation-audit.md) defines the evidence-complete whole-repository architecture-debt benchmark, carries the verified Browser/Computer seed findings, and iterates cross-domain audits until a repeated sweep finds no new P0/P1.
+
 - [2026-08-24-work-ledger-double-click-rename-repair.md](2026-08-24-work-ledger-double-click-rename-repair.md) restores the shared Mission/Task/Chat row double-click binding to the existing rename dialogs and durable writers.
 
 - [2026-08-24-right-dock-subagent-navigation-and-add-menu.md](2026-08-24-right-dock-subagent-navigation-and-add-menu.md) reconnects Agent activity child-session clicks to the exact Right Dock conversation and replaces the Dock's unavailable Webview-only Add/overflow menus with the shared accessible Overlay menu primitive.

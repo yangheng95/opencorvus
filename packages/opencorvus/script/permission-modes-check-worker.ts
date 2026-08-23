@@ -8,7 +8,6 @@ import { InstanceBootstrap } from "@/project/bootstrap"
 import type { Provider } from "@/provider/provider"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
-import { Scheduler } from "@/scheduler"
 import { Session } from "@/session"
 import { SessionLoop } from "@/session/loop"
 import { SessionProcessor } from "@/session/processor"
@@ -917,10 +916,13 @@ async function main() {
     process.stdout.write(`${JSON.stringify({ status: "passed", ...evidence })}\n`)
   } finally {
     modelServer.stop(true)
-    markActivity("cleanup:dispose-global-scheduler")
-    await Scheduler.disposeGlobal({ inactivityTimeoutMilliseconds: INACTIVITY_MS })
-    markActivity("cleanup:dispose-instances")
-    await Instance.disposeAll()
+    markActivity("cleanup:settle-runtime")
+    const terminated = await Server.settleCurrentProcessExecution("Permission checker cleanup", {
+      disposeInstances: () => Instance.disposeAll(),
+      runtimeInactivityTimeoutMilliseconds: INACTIVITY_MS,
+    })
+    await Server.releaseRuntimeHandoff(terminated.releaseHandoff)
+    markActivity("cleanup:runtime-settled")
     markActivity("cleanup:close-database")
     Database.close()
     await removeManagedDirectoryTree(root)
