@@ -11,8 +11,8 @@ Treat OpenCorvus Base and Advanced as the evaluated multi-Agent harness, not as 
 
 - Keep benchmark work on the dedicated bench branch. Do not merge benchmark adapters, Skills, scores, specs, or evidence into the release branch.
 - Keep that branch in the dedicated `D:\myhexin-local\opencorvus-bench` worktree. Do not switch the main `opencorvus` worktree onto the benchmark branch.
-- The current primary round is AutomationBench `1.0.6`, a committed deterministic set of 50 public cases, exact model `openai/gpt-5.6-luna`, and one fresh-world Base run for every case through the real Mission entry. The runner must call `POST /mission/wake`, hold only the Base Expert Squad, let Mission create and accept its child Task set, and score only after Mission plus every child Task reaches stable physical quiescence. A direct `POST /task` run is invalid for this round. All earlier direct-Task Luna/Terra rounds remain immutable debug evidence and are excluded from the Mission aggregate. WorkBuddy is out of scope until the user explicitly adds it.
-- The post-forensic Luna Mission Base r3 round uses empty evidence `/var/lib/opencorvus-benchmark/evidence-luna-mission-base-v20260822-r3`, control `/var/lib/opencorvus-benchmark/control-luna-mission-base-v20260822-r3`, and dashboard `D:\myhexin-local\opencorvus-benchmark-results\luna-mission-base-v20260822-r3\index.html`. Preserve every earlier root and do not adopt its candidates. The valid r2 batch remains the immutable pre-repair baseline at Strict `1/5` and mean Partial `52.67%`. Mission receives the unchanged mapped AutomationBench request, exact model, product pillar, and immutable held Base Squad. Base Tester publishes its independent acceptance inventory from the original request and current raw authorities before reading Planner or implementation claims.
+- The current primary round is AutomationBench `1.0.6`, the committed deterministic 50 public cases, exact model `openai/gpt-5.6-sol`, Mission intake, Base only, and repetition 1. The runner calls `POST /mission/wake`, holds only the Base Expert Squad, lets Mission create and accept its child Task set, and scores only after Mission plus every child Task reaches stable physical quiescence. Its dedicated roots are `evidence-sol-mission-base-v20260823-r1`, `control-sol-mission-base-v20260823-r1`, and external dashboard `sol-mission-base-v20260823-r1/index.html`.
+- The completed Luna Mission/Base r3 evidence is a historical read-only comparison baseline. Preserve it unchanged and never execute, resume, or adopt it into Sol. The cancelled Luna supplemental 250-trial plan never started and must not be resumed. Earlier direct-Task Luna/Terra rounds remain immutable debug evidence. WorkBuddy and Advanced are out of scope until the user explicitly adds them.
 - Schedule deterministic five-case Base-only Mission batches until Base is 50/50. No more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, Mission and child Task evidence directory.
 - Before each run, require an isolated runtime containing both the source `auth.json` and `models.json`; verify the exact Provider/model reports `connected`. Never print or copy credential contents into evidence.
 - Formal runs use WSL2 as an operational benchmark boundary, not as a hostile multi-tenant security proof. Keep evaluator, scorer, Provider data, control, and evidence roots owned by root with mode `0700`; run Agent Bash under the case UID with a private HOME, mount namespace, Windows mounts removed, and a UID-scoped Unix tool socket. The preflight must show that credentials/evaluator data are not readable and that the trial can use its own project/socket. Do not add stronger sandbox machinery unless an observed benchmark leak requires it.
@@ -52,7 +52,7 @@ An excessive call count, long duration while observable work continues, parallel
 
 ## Execute
 
-Run one deterministic five-case Base-only batch with the committed coordinator. Use a ten-minute inactivity window so a legitimate long streaming model call is not mistaken for a stuck trial:
+Run the committed Sol/Base supervisor. It schedules deterministic five-case batches and uses a ten-minute inactivity window so a legitimate long streaming model call is not mistaken for a stuck trial:
 
 ```bash
 apt-get update && apt-get install -y ripgrep nodejs
@@ -63,20 +63,10 @@ bun run --cwd packages/sdk/js build
 git restore -- packages/sdk/js/src/route-policy.ts
 test -z "$(git status --porcelain)"
 
-bun packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts \
-  --batch-index 1 \
-  --model openai/gpt-5.6-luna \
-  --python /var/lib/opencorvus-benchmark/evaluator-venv/bin/python \
-  --source-data /var/lib/opencorvus-benchmark/provider-data \
-  --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell \
-  --output /var/lib/opencorvus-benchmark/evidence-luna-mission-base-v20260822-r3 \
-  --control-root /var/lib/opencorvus-benchmark/control-luna-mission-base-v20260822-r3 \
-  --profiles base \
-  --dashboard /mnt/d/myhexin-local/opencorvus-benchmark-results/luna-mission-base-v20260822-r3/index.html \
-  --inactivity-ms 600000
+bash packages/opencorvus/script/benchmark/external-agent/run-sol-mission-base-50.sh
 ```
 
-Regenerate and verify this round with exact `--model openai/gpt-5.6-luna --profiles base`; use final mode after Base reaches 50/50. Do not add direct-Task or Advanced rows to this Mission Base primary aggregate.
+Regenerate and verify this round with exact `--model openai/gpt-5.6-sol --profiles base --repetition 1`; use final mode after Base reaches 50/50. Do not add Luna, direct-Task, Terra, or Advanced rows to this Sol Mission/Base primary aggregate.
 
 ## Score and report
 
@@ -86,5 +76,5 @@ Regenerate and verify this round with exact `--model openai/gpt-5.6-luna --profi
 - The bridge must atomically seal the world, score it, and record attempted/succeeded/failed API counts in one terminal critical section. Independently verify the initial-to-final world hash chain, replay deterministic stateless tools, reload the sealed final world, and rerun the official rubric; require exact strict, partial, assertions, final-world hash, deterministic output hashes, and call-count agreement.
 - Only natural scorable terminal runs—durable `complete_mission`, a healthy inactive Mission observed unchanged through the full inactivity window with every child Task terminal, or an explicit child `fail_task` with no structured infrastructure failure—with official scorer output, clean source, exact profile binding, passed evaluator-isolation audit, recomputable Provider ledger, and verified exact-set manifest are leaderboard-eligible. Cancelled, interrupted, infrastructure-affected, operator-steered, dirty-source final candidates, and `invalid_bug` runs remain evidence only.
 - Report strict `task_completed_correctly` as the primary score and `partial_credit` as diagnostic. Include input, text output, reasoning, cache read/write, total tokens, model calls, benchmark calls, Sessions, Agents, duration, and exact assertions. Report the per-Agent token split from the ledger's own Session/Agent attribution rather than inferring it from transcript timestamps, which cannot separate concurrent workers.
-- Write only the 50 Luna Mission Base rows into this round's primary aggregate. Earlier direct-Task, Terra, and Advanced rows remain separate historical/debug evidence and must never be merged into the Mission Base score. Official private leaderboard rows are a separate context table only: never compute a cross-dataset rank, slot, band, position, or numeric delta; keep the exact Luna Mission configuration explicitly absent from the public board.
+- Write only the 50 Sol Mission/Base rows into this round's primary aggregate. Luna, direct-Task, Terra, and Advanced rows remain separate historical/debug evidence and must never be merged into the Sol score. Official private leaderboard rows are a separate context table only: never compute a cross-dataset rank, slot, band, position, or numeric delta; keep the exact Sol Mission configuration explicitly absent from the public board.
 - Render and visually inspect the current Mission Base trajectories. Keep direct-Task and Advanced trajectories as separate debug evidence only. If labels or lanes are unreadable, fix the renderer and regenerate the derived view without changing raw run evidence.

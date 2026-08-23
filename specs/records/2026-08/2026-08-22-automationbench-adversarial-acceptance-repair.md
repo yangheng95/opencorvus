@@ -178,3 +178,20 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. A Mission acceptance resume always opens a non-terminal repair occurrence. Its current ingress cannot be settled by `no_action` alone: the Orchestrator must dispatch the responsible existing lineage, or make an evidence-backed complete/fail lifecycle decision. A scheduler request to finalize requires the correlated reply and the same lifecycle closure when no future progress authority remains.
 3. Add positive prompt/provenance tests for the general liveness invariant and exact Mission acceptance-resume instruction. Do not add a Host behavioral gate, scorer-aware branch, case-name condition, synthetic wake, fallback, or hidden assertion.
 4. Preserve cases 41 and 42 as invalid infrastructure attempts. After product commit separation, merge-back to `v0.0.52beta`, focused checks, and independent read-only review, rerun only cases 41 and 42; reuse clean sealed cases 43–45, complete Batch 9, then run Batch 10.
+
+## GPT-5.6 Sol Mission/Base comparison round
+
+### Recall
+
+- The user cancelled the proposed additional 250 Luna trials before any supervisor or case started. Do not create or resume those Luna repetition roots.
+- Run the same frozen AutomationBench `1.0.6` public 50-case manifest once with exact model `openai/gpt-5.6-sol`, real Mission intake, and the held Base Expert Squad. Advanced remains out of scope.
+- Use repetition 1 because model identity makes these 50 slots distinct from the completed Luna matrix. Preserve Luna r3 unchanged and do not adopt any Luna attempt.
+- Sol evidence is `/var/lib/opencorvus-benchmark/evidence-sol-mission-base-v20260823-r1`; control is `/var/lib/opencorvus-benchmark/control-sol-mission-base-v20260823-r1`; dashboard is `D:\myhexin-local\opencorvus-benchmark-results\sol-mission-base-v20260823-r1\index.html`.
+- Run deterministic Base batches 1 through 10 with the existing audited five-case coordinator. Every valid strict-zero result counts; only invalid/bug or missing slots may be rerun. Preserve complete attempt evidence and update the external dashboard after every settled trial.
+
+### Acceptance
+
+1. Before launch, verify the benchmark worktree is clean and the WSL runner's exact detached commit equals pushed `origin/codex/automation-workbuddy-benchmark`, the exact Sol model is projected by the isolated `auth.json` plus `models.json`, Exa configuration is present, and the proxy boundary is reachable without printing credential values.
+2. Use a dedicated Sol/Base supervisor source. It must pass only `--model openai/gpt-5.6-sol --profiles base` and the Sol-specific evidence/control/dashboard roots.
+3. An uninvolved read-only reviewer confirms there is no Luna, Terra, or Advanced launch path and no result-root collision.
+4. Start batch 1 only after the benchmark-only supervisor commit is pushed and the WSL runner is updated to that exact commit. Confirm five distinct Base cases have live leases or preserved terminal evidence and the Sol dashboard updates.
