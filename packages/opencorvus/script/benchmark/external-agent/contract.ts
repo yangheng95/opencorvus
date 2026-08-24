@@ -1259,6 +1259,49 @@ export type BatchProfileSlot = {
   profile: "base" | "advanced"
 }
 
+export type AutomationBenchTrialLease = {
+  run_id: string
+  pid: number
+  case_id: string
+  profile: "base" | "advanced"
+  started_at: number
+  batch_run_id: string
+  batch_index: number
+  batch_plan_sha256: string
+}
+
+export function acquireAutomationBenchTrialLease(input: {
+  active: AutomationBenchTrialLease[]
+  candidate: AutomationBenchTrialLease
+  maxConcurrent: number
+  maxPerBatch: number
+}) {
+  const sameBatch = input.active.filter(
+    (item) =>
+      item.batch_run_id === input.candidate.batch_run_id &&
+      item.batch_index === input.candidate.batch_index &&
+      item.batch_plan_sha256 === input.candidate.batch_plan_sha256,
+  )
+  const conflictingBatchIdentity = input.active.some(
+    (item) =>
+      item.batch_run_id === input.candidate.batch_run_id &&
+      (item.batch_index !== input.candidate.batch_index ||
+        item.batch_plan_sha256 !== input.candidate.batch_plan_sha256),
+  )
+  const reason = input.active.some((item) => item.case_id === input.candidate.case_id)
+    ? "case_already_active"
+    : conflictingBatchIdentity
+      ? "batch_identity_conflict"
+      : sameBatch.length >= input.maxPerBatch
+        ? "batch_concurrency_exhausted"
+        : input.active.length >= input.maxConcurrent
+          ? "global_concurrency_exhausted"
+          : null
+  return reason
+    ? { acquired: false as const, reason, active: input.active }
+    : { acquired: true as const, reason: null, active: [...input.active, input.candidate] }
+}
+
 export function rollingBatchChains(waves: BatchProfileSlot[][]) {
   if (waves.length < 1 || waves.some((wave) => wave.length !== 5)) {
     throw new Error("Rolling AutomationBench batches require one or more five-slot profile lists")

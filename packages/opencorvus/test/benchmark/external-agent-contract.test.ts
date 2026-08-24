@@ -5,6 +5,7 @@ import crypto from "node:crypto"
 import {
   automationBenchCaseSetAuthority,
   automationBenchRestrictedShellAuthority,
+  acquireAutomationBenchTrialLease,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
@@ -51,6 +52,7 @@ import {
   renderTrajectorySVG,
   summarizeTranscriptUsage,
   type ProviderUsageRow,
+  type AutomationBenchTrialLease,
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
@@ -1978,6 +1980,49 @@ describe("external agent benchmark contract", () => {
     )
   })
 
+  test("admits two independent five-case batches up to ten shared trial leases", () => {
+    const candidate = (caseIndex: number, batchIndex: number) => ({
+      run_id: `run-${caseIndex}`,
+      pid: caseIndex,
+      case_id: `domain:task-${caseIndex}`,
+      profile: "base" as const,
+      started_at: caseIndex,
+      batch_run_id: `batch-${batchIndex}`,
+      batch_index: batchIndex,
+      batch_plan_sha256: String(batchIndex).repeat(64),
+    })
+    let active: AutomationBenchTrialLease[] = []
+    for (const caseIndex of [56, 57, 58, 59, 60, 61, 62, 63, 64, 65]) {
+      const batchIndex = caseIndex <= 60 ? 12 : 13
+      const result = acquireAutomationBenchTrialLease({
+        active,
+        candidate: candidate(caseIndex, batchIndex),
+        maxConcurrent: 10,
+        maxPerBatch: 5,
+      })
+      expect(result.acquired).toBe(true)
+      active = result.active
+    }
+    expect({
+      total: active.length,
+      batch12: active.filter((item) => item.batch_index === 12).length,
+      batch13: active.filter((item) => item.batch_index === 13).length,
+      cases: active.map((item) => item.case_id),
+      eleventh: acquireAutomationBenchTrialLease({
+        active,
+        candidate: candidate(66, 14),
+        maxConcurrent: 10,
+        maxPerBatch: 5,
+      }),
+    }).toEqual({
+      total: 10,
+      batch12: 5,
+      batch13: 5,
+      cases: Array.from({ length: 10 }, (_, offset) => `domain:task-${offset + 56}`),
+      eleventh: { acquired: false, reason: "global_concurrency_exhausted", active },
+    })
+  })
+
   test("keeps five rolling case slots busy and continues each case after a settled invalid attempt", async () => {
     const wave1 = [1, 2, 3, 4, 5].map((case_index) => ({
       case_index,
@@ -2237,6 +2282,10 @@ describe("external agent benchmark contract", () => {
       path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-luna-mission-base-cases-51-600.sh"),
       "utf8",
     )
+    const coordinator = await fs.readFile(
+      path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-automationbench-batch.ts"),
+      "utf8",
+    )
     const assignment = (name: string) => script.match(new RegExp(`^${name}=(.+)$`, "m"))?.[1]
     const lines = script.split(/\r?\n/)
     const invocations: Array<{ entry: string | undefined; args: Record<string, string> }> = []
@@ -2263,7 +2312,10 @@ describe("external agent benchmark contract", () => {
       dashboardRoot: assignment("dashboard_root"),
       caseSet: assignment("case_set"),
       supervisorLock: script.match(/^exec 9>"(.+)"$/m)?.[1],
-      batchRange: script.match(/^for batch_index in (.+); do$/m)?.[1],
+      batchRange: script.includes("for batch_index in {11..120}; do"),
+      parallelBatchLimit: script.match(/-eq ([0-9]+) \]\]; then/)?.[1],
+      batchScopedAuthorization: coordinator.includes("`active-batch-${batchIndex}.json`"),
+      serializedCatalog: coordinator.includes('path.join(controlRoot, "catalog.lock")'),
       invocations,
       resumeIdentityOwner: script.includes("automationBenchBatchPlanMatches(plan"),
     }).toEqual({
@@ -2272,7 +2324,10 @@ describe("external agent benchmark contract", () => {
       dashboardRoot: "/mnt/d/myhexin-local/opencorvus-benchmark-results/luna-mission-base-v20260822-r3",
       caseSet: "packages/opencorvus/script/benchmark/external-agent/automationbench-case-set-600.json",
       supervisorLock: "$control_root/supervisor.lock",
-      batchRange: "{11..120}",
+      batchRange: true,
+      parallelBatchLimit: "2",
+      batchScopedAuthorization: true,
+      serializedCatalog: true,
       invocations: [
         {
           entry: "packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts",

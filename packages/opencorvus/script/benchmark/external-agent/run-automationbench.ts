@@ -11,6 +11,7 @@ import {
 import { prepareTestProcessSupervisor } from "../../prepare-test-process-supervisor"
 import {
   EXTERNAL_BENCHMARK_SCHEMA_VERSION,
+  acquireAutomationBenchTrialLease,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
@@ -341,9 +342,9 @@ function processIsAlive(pid: number) {
   }
 }
 
-async function updateActiveLeases(
+async function updateActiveLeases<T extends { active: ActiveLease[] }>(
   outputRoot: string,
-  update: (active: ActiveLease[]) => { active: ActiveLease[]; acquired?: boolean },
+  update: (active: ActiveLease[]) => T,
 ) {
   await fs.mkdir(outputRoot, { recursive: true })
   const statePath = path.join(outputRoot, ".automationbench-active-leases.json")
@@ -1508,37 +1509,25 @@ try {
   stage = "batch_authority_preflight"
   batchAuthority = await loadBatchAuthority(arguments_, frozenCaseInfo.case)
   stage = "trial_lease"
-  const lease = await updateActiveLeases(arguments_.output, (active) => {
-    const wrongBatch = active.some(
-      (item) =>
-        item.batch_run_id !== arguments_.batchRunID ||
-        item.batch_index !== arguments_.batchIndex ||
-        item.batch_plan_sha256 !== batchAuthority!.sha256,
-    )
-    if (active.length >= 5 || wrongBatch || active.some((item) => item.case_id === caseID)) {
-      return { active, acquired: false }
-    }
-    return {
-      active: [
-        ...active,
-        {
-          run_id: runID,
-          pid: process.pid,
-          case_id: caseID,
-          profile: arguments_.profile,
-          started_at: startedAt,
-          batch_run_id: arguments_.batchRunID,
-          batch_index: arguments_.batchIndex,
-          batch_plan_sha256: batchAuthority!.sha256,
-        },
-      ],
-      acquired: true,
-    }
-  })
+  const lease = await updateActiveLeases(arguments_.output, (active) =>
+    acquireAutomationBenchTrialLease({
+      active,
+      candidate: {
+        run_id: runID,
+        pid: process.pid,
+        case_id: caseID,
+        profile: arguments_.profile,
+        started_at: startedAt,
+        batch_run_id: arguments_.batchRunID,
+        batch_index: arguments_.batchIndex,
+        batch_plan_sha256: batchAuthority!.sha256,
+      },
+      maxConcurrent: 10,
+      maxPerBatch: 5,
+    }),
+  )
   if (!lease.acquired) {
-    throw new Error(
-      "AutomationBench trial lease rejected: at most five distinct cases may run and paired profiles may not overlap",
-    )
+    throw new Error(`AutomationBench trial lease rejected: ${lease.reason}`)
   }
   leaseAcquired = true
   throwIfTerminationRequested()

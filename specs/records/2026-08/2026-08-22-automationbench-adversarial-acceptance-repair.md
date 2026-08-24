@@ -310,3 +310,17 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. Focused positive tests exercise boundary UIDs through the real shell probe contract; shell syntax, benchmark typecheck and independent review pass.
 3. Restart only batch 11. Its plan remains cases 51–55, and all five trials must pass `agent_shell_isolation` and acquire leases before the batch is considered live.
 4. Catalog and verifier bind cases 1–50 to their single sealed historical shell digest and cases 51–600 to the current installed/source shell digest. A focused contract test covers the case-50/51 crossover; a development catalog/verifier must preserve the original 50 eligible rows before restart.
+
+## Luna Base 10-case execution concurrency
+
+### Recall and implementation boundary
+
+- The operator raised only the execution concurrency from five to ten. Existing case identities, five-case manifest batches, repetition 1, Base/Mission/model selection, scoring, receipts and sealed candidates remain unchanged.
+- Starting after completed batch 11, the supervisor runs two adjacent five-case coordinators concurrently. Each coordinator retains its own plan, authorization and receipt, so batches 12/13 cover exact unique cases 56–65 without inventing a new manifest or rerunning cases 1–55.
+- Coordinator authorization and lifecycle locks are batch-scoped. Evidence catalog replay remains globally serialized at the shared root so concurrent coordinators cannot overwrite catalog/leaderboard/paper artifacts. The active lease ledger remains the aggregate concurrency fact and may contain at most ten distinct cases.
+
+### Acceptance
+
+1. A focused supervisor contract proves two adjacent batches are launched concurrently and the maximum is ten distinct cases.
+2. Two live batch plans retain `trial_concurrency: 5`, exact repetition/model/profile and non-overlapping five-case sets; their aggregate active leases contain cases 56–65 only.
+3. Catalog refreshes never overlap, completed batch receipts stay independent, and any invalid case is retried only in its own missing slot.

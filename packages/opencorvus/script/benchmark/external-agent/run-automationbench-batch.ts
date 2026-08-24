@@ -125,10 +125,12 @@ await fs.writeFile(evidenceCaseSetPath, caseSetBytes, { flag: "wx" }).catch(asyn
   const existing = await fs.readFile(evidenceCaseSetPath)
   if (!existing.equals(caseSetBytes)) throw new Error("Evidence root contains a different frozen AutomationBench case set")
 })
-const coordinatorLockPath = "/run/lock/opencorvus-automationbench-coordinator.lock"
+const coordinatorLockPath = path.join(controlRoot, `coordinator-batch-${batchIndex}.lock`)
+const catalogLockPath = path.join(controlRoot, "catalog.lock")
 await fs.open(coordinatorLockPath, "a").then((handle) => handle.close())
+await fs.open(catalogLockPath, "a").then((handle) => handle.close())
 const releaseCoordinator = await lockfile.lock(coordinatorLockPath, { realpath: false, stale: 60_000, update: 10_000 })
-const activeAuthorizationPath = path.join(controlRoot, "active-batch.json")
+const activeAuthorizationPath = path.join(controlRoot, `active-batch-${batchIndex}.json`)
 const staleAuthorization = await fs.readFile(activeAuthorizationPath, "utf8").then(JSON.parse).catch(() => undefined) as
   | { coordinator_pid?: number }
   | undefined
@@ -219,37 +221,48 @@ async function readWithInactivity(
 }
 
 async function refreshCatalog() {
-  const child = Bun.spawn(
-    [
-      process.execPath,
-      path.join(import.meta.dir, "catalog-automationbench-evidence.ts"),
-      "--root",
-      output,
-      "--source-data",
-      sourceData,
-      "--python",
-      python,
-      "--restricted-shell",
-      restrictedShell,
-      "--case-set",
-      caseSet,
-      "--model",
-      model,
-      "--profiles",
-      profiles.join(","),
-    ],
-    { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
-  )
-  const [exitCode, stderr] = await Promise.all([
-    child.exited,
-    new Response(child.stderr).text(),
-    new Response(child.stdout).text(),
-  ])
-  if (exitCode !== 0) throw new Error(`Evidence catalog refresh failed: ${stderr.trim() || exitCode}`)
-  return JSON.parse(await fs.readFile(path.join(output, "evidence-catalog.json"), "utf8")) as {
-    attempts: Array<Record<string, any>>
-    candidates: Array<Record<string, any>>
-    leaderboard: Array<Record<string, any>>
+  const releaseCatalog = await lockfile.lock(catalogLockPath, { realpath: false, stale: 60_000, update: 10_000 })
+  try {
+    if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
+    const child = Bun.spawn(
+      [
+        process.execPath,
+        path.join(import.meta.dir, "catalog-automationbench-evidence.ts"),
+        "--root",
+        output,
+        "--source-data",
+        sourceData,
+        "--python",
+        python,
+        "--restricted-shell",
+        restrictedShell,
+        "--case-set",
+        caseSet,
+        "--model",
+        model,
+        "--profiles",
+        profiles.join(","),
+      ],
+      { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
+    )
+    activeChildren.add(child)
+    try {
+      const [exitCode, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stderr).text(),
+        new Response(child.stdout).text(),
+      ])
+      if (exitCode !== 0) throw new Error(`Evidence catalog refresh failed: ${stderr.trim() || exitCode}`)
+      return JSON.parse(await fs.readFile(path.join(output, "evidence-catalog.json"), "utf8")) as {
+        attempts: Array<Record<string, any>>
+        candidates: Array<Record<string, any>>
+        leaderboard: Array<Record<string, any>>
+      }
+    } finally {
+      activeChildren.delete(child)
+    }
+  } finally {
+    await releaseCatalog()
   }
 }
 

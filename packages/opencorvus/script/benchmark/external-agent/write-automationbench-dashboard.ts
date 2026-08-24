@@ -196,6 +196,19 @@ if (plan && (plan.model !== model || plan.launch_mode !== "mission")) {
 if (catalog?.scope && (catalog.scope.model !== model || catalog.scope.launch_mode !== "mission")) {
   throw new Error("Dashboard catalog model/launch mode does not match the Mission run")
 }
+const activeBatchRunIDs = new Set((activeLeases?.active ?? []).map((item) => item.batch_run_id))
+if (plan) activeBatchRunIDs.add(plan.batch_run_id)
+const currentPlans = (
+  await Promise.all(
+    allFiles
+      .filter((file) => /-plan\.json$/.test(path.basename(file)))
+      .map((file) => readJSON<BatchPlan>(file)),
+  )
+)
+  .filter((item): item is BatchPlan => Boolean(item && activeBatchRunIDs.has(item.batch_run_id)))
+  .filter((item) => item.model === model && item.launch_mode === "mission")
+const currentBatchRunIDs = new Set(currentPlans.map((item) => item.batch_run_id))
+const currentCases = currentPlans.flatMap((item) => item.cases)
 
 const verified = (catalog?.primary_leaderboard ?? catalog?.leaderboard ?? [])
   .filter(
@@ -217,8 +230,8 @@ const currentResults = (
         const payload = await readJSON<DashboardResult>(file)
         if (
           !payload ||
-          !plan ||
-          payload.benchmark.batch_run_id !== plan.batch_run_id ||
+          currentPlans.length === 0 ||
+          !currentBatchRunIDs.has(String(payload.benchmark.batch_run_id)) ||
           payload.opencorvus.model !== model ||
           payload.opencorvus.launch_mode !== "mission" ||
           verifiedRunIDs.has(String(payload.run.id))
@@ -249,8 +262,8 @@ const currentResults = (
           item.payload.run.status === "scored" &&
           item.payload.benchmark.metrics &&
           profiles.includes(item.payload.opencorvus.profile) &&
-          plan &&
-          item.payload.benchmark.batch_run_id === plan.batch_run_id &&
+          currentPlans.length > 0 &&
+          currentBatchRunIDs.has(String(item.payload.benchmark.batch_run_id)) &&
           !verifiedRunIDs.has(String(item.payload.run.id)),
       ),
   )
@@ -278,10 +291,10 @@ const currentResults = (
   }))
 
 const active = (activeLeases?.active ?? []).filter(
-  (item) => profiles.includes(item.profile) && (!plan || item.batch_run_id === plan.batch_run_id),
+  (item) => profiles.includes(item.profile) && currentBatchRunIDs.has(item.batch_run_id),
 )
 const slotKey = (caseIndex: unknown, profile: unknown) => `${Number(caseIndex)}:${String(profile)}`
-const activeSlots = new Set(active.map((item) => slotKey(plan?.cases.find((entry) => entry.task === item.case_id.split(":", 2)[1])?.case_index, item.profile)))
+const activeSlots = new Set(active.map((item) => slotKey(currentCases.find((entry) => entry.task === item.case_id.split(":", 2)[1])?.case_index, item.profile)))
 const verifiedBySlot = new Map(
   verified.map((record) => [slotKey(record.benchmark.case_index, record.opencorvus.profile), record]),
 )
@@ -290,10 +303,12 @@ const pendingBySlot = new Map(
 )
 const adoptedCandidateBySlot = new Map(
   profiles.flatMap((profile) =>
-    (plan?.preexisting_eligible?.[profile] ?? []).map((record) => [
-      slotKey(record.case_index, record.profile),
-      record.run_id,
-    ] as const),
+    currentPlans.flatMap((currentPlan) =>
+      (currentPlan.preexisting_eligible?.[profile] ?? []).map((record) => [
+        slotKey(record.case_index, record.profile),
+        record.run_id,
+      ] as const),
+    ),
   ),
 )
 const adoptedRunIDs = new Set(adoptedCandidateBySlot.values())
@@ -320,7 +335,7 @@ for (const attempt of catalog?.attempts ?? []) {
   if (current && current.startedAt >= startedAt) continue
   invalidatedBySlot.set(key, { status, reason: String(attempt.reason ?? ""), startedAt })
 }
-const planned = plan?.waves.flat() ?? []
+const planned = currentPlans.flatMap((currentPlan) => currentPlan.waves.flat())
 const displayRecords = [
   ...verified,
   ...adoptedRecords.filter((record) => !verifiedRunIDs.has(String(record.run_id))),
@@ -393,7 +408,7 @@ const plannedRows = planned
     return !verifiedBySlot.has(key) && !pendingBySlot.has(key) && !adoptedCandidateBySlot.has(key)
   })
   .map((slot) => {
-    const task = plan?.cases.find((item) => item.case_index === slot.case_index)?.task ?? ""
+    const task = currentCases.find((item) => item.case_index === slot.case_index)?.task ?? ""
     const key = slotKey(slot.case_index, slot.profile)
     const state = plannedAutomationBenchSlotState({
       active: activeSlots.has(key),
