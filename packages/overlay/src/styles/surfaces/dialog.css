@@ -225,8 +225,8 @@
 
 .app-dialog-form .dialog-title {
   font-size: var(--ui-font-heading);
-  line-height: 1.25;
-  letter-spacing: var(--ui-letter-spacing-normal);
+  line-height: var(--ui-line-height-tight);
+  letter-spacing: var(--ui-letter-spacing-tight);
 }
 
 .app-dialog-form > .app-dialog-body {

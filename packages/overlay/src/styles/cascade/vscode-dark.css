@@ -74,15 +74,19 @@
   --bad: #f48771;
   --bad-dim: color-mix(in srgb, var(--bad) 14%, transparent);
 
-  /* High-lights (white inset) and shadow tones (black scrim) are
-   * structural, not theme color — they shape edges and depth, and
-   * every dark UI uses the same physics regardless of palette. Black
-   * and white CSS keywords here are the standard expression of that
-   * structural concern (cf. Material elevation overlays, Carbon
-   * shadow scale). */
-  --shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
-  --shadow-md: inset 0 1px 0 color-mix(in srgb, white 4.5%, transparent);
-  --shadow-lg: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+  /* Shadow tones are structural, not theme color — they shape depth, and
+   * every dark UI uses the same physics regardless of palette. The black
+   * CSS keyword here is the standard expression of that structural
+   * concern (cf. Material elevation overlays, Carbon shadow scale).
+   *
+   * These three used to declare `inset 0 1px 0 white` — a top bevel, not
+   * a shadow. Every `box-shadow: var(--shadow)` consumer asking for a
+   * drop shadow got a highlight line instead, which is exactly the
+   * faux-bevel material the other two themes just had removed. Now they
+   * cast, matching the dark theme's shape at VS Code's flatter weight. */
+  --shadow: 0 calc(1px * var(--ui-scale)) calc(2px * var(--ui-scale)) color-mix(in srgb, black 24%, transparent);
+  --shadow-md: 0 calc(4px * var(--ui-scale)) calc(12px * var(--ui-scale)) color-mix(in srgb, black 30%, transparent);
+  --shadow-lg: 0 calc(12px * var(--ui-scale)) calc(32px * var(--ui-scale)) color-mix(in srgb, black 38%, transparent);
 
   --scrollbar-thumb: color-mix(in srgb, #797979 40%, transparent);
   --scrollbar-thumb-hover: color-mix(in srgb, #646464 70%, transparent);

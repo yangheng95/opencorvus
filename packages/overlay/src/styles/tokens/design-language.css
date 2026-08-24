@@ -95,8 +95,13 @@
   --ui-opacity-subtle: 0.85;
   --ui-opacity-full: 1;
 
-  /* Letter-spacing — semantic tightness levels. */
-  --ui-letter-spacing-tight: -0.01em;
+  /* Letter-spacing — semantic tightness levels. Larger type needs
+   * tighter tracking to hold together: the scale tops out at
+   * `tighter` for --ui-font-display and `tight` for --ui-font-heading.
+   * `tight` moved -0.01em -> -0.015em when `tighter` was added, so the
+   * two negative steps stay distinguishable. */
+  --ui-letter-spacing-tighter: -0.025em;
+  --ui-letter-spacing-tight: -0.015em;
   --ui-letter-spacing-normal: 0;
   --ui-letter-spacing-loose: 0.04em;
 
@@ -112,7 +117,7 @@
   --oc-header-padding-x: calc(6px * var(--ui-scale, 1));
   --oc-header-padding-y: 0;
   --oc-header-gap: calc(6px * var(--ui-scale, 1));
-  --oc-header-title-font: 550 var(--ui-font-title, 12px) var(--font, sans-serif);
+  --oc-header-title-font: var(--ui-font-weight-medium) var(--ui-font-title) var(--font, sans-serif);
   --oc-header-title-line-height: 1;
   --oc-header-title-letter-spacing: 0;
   --oc-header-title-transform: none;
@@ -164,9 +169,9 @@
    * heading: panel / section titles, dialog headers.
    * title:   card titles, sidebar item titles, menu items.
    * body:    body text, message content. */
-  --ui-font-display: calc(32px * var(--ui-scale));
-  --ui-font-heading: calc(20px * var(--ui-scale));
-  --ui-font-title: calc(15px * var(--ui-scale));
+  --ui-font-display: calc(26px * var(--ui-scale));
+  --ui-font-heading: calc(21px * var(--ui-scale));
+  --ui-font-title: calc(17px * var(--ui-scale));
   --ui-font-brand: calc(18px * var(--ui-scale));
   --ui-font-body: calc(14px * var(--ui-scale));
   --ui-font-control: calc(14px * var(--ui-scale));
@@ -176,7 +181,15 @@
   --ui-font-tiny: calc(11px * var(--ui-scale));
   --ui-font-code: calc(13px * var(--ui-scale));
   --ui-font-navigation: var(--ui-font-body);
+  /* Line-height — three steps. `tight` covers UI controls, single-line
+   * labels and headings; `normal` covers code and compact prose;
+   * `relaxed` is the CJK body setting — Chinese copy has no
+   * ascender/descender rhythm, so it needs more leading than Latin to
+   * read open, and the mixed zh/en transcript is the primary reading
+   * surface. */
   --ui-line-height-tight: 1.35;
+  --ui-line-height-normal: 1.5;
+  --ui-line-height-relaxed: 1.68;
 
   --ui-titlebar-height: calc(36px * var(--ui-scale));
   --ui-panel-header-height: calc(40px * var(--ui-scale));

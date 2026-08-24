@@ -167,9 +167,9 @@
   margin: 0;
   text-align: center;
   font-size: var(--ui-font-display);
-  line-height: 1.18;
+  line-height: var(--ui-line-height-tight);
   font-weight: var(--ui-font-weight-body);
-  letter-spacing: var(--ui-letter-spacing-normal);
+  letter-spacing: var(--ui-letter-spacing-tighter);
 }
 
 .chat-home-after {

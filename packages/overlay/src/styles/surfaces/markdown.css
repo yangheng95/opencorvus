@@ -98,15 +98,17 @@
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);
   margin: calc(10px * var(--ui-scale)) 0 calc(4px * var(--ui-scale));
-  line-height: 1.45;
+  line-height: var(--ui-line-height-tight);
 }
 .msg-text h1,
 .md-content h1 {
   font-size: var(--ui-font-display);
+  letter-spacing: var(--ui-letter-spacing-tighter);
 }
 .msg-text h2,
 .md-content h2 {
   font-size: var(--ui-font-heading);
+  letter-spacing: var(--ui-letter-spacing-tight);
 }
 .msg-text h3,
 .md-content h3 {
@@ -116,10 +118,7 @@
 .msg-text p,
 .md-content p {
   margin: calc(6px * var(--ui-scale)) 0;
-  /* 1.68: CJK body copy has no ascender/descender rhythm, so it needs more
-   * leading than Latin to read open; the mixed zh/en transcripts are the
-   * primary reading surface. */
-  line-height: 1.68;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .md-active-text {
@@ -133,7 +132,7 @@
 .md-content ol {
   margin: calc(5px * var(--ui-scale)) 0;
   padding-left: calc(20px * var(--ui-scale));
-  line-height: 1.62;
+  line-height: var(--ui-line-height-relaxed);
 }
 .msg-text li,
 .md-content li {
@@ -150,7 +149,7 @@
   overflow-x: auto;
   font-family: var(--mono);
   font-size: var(--ui-font-code);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   white-space: pre;
 }
