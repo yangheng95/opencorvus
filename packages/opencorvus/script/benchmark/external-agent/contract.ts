@@ -1375,6 +1375,33 @@ export function activeAutomationBenchBatchRunIDs(
   )
 }
 
+export function reconcileAutomationBenchBatchCandidates(input: {
+  profile: "base" | "advanced"
+  preexisting: Array<Record<string, any>>
+  current: Array<Record<string, any>>
+}) {
+  const candidates = new Map<number, Record<string, any>>()
+  for (const record of input.preexisting) {
+    const caseIndex = Number(record.benchmark?.case_index)
+    const existing = candidates.get(caseIndex)
+    if (!Number.isInteger(caseIndex) || !record.run_id || (existing && existing.run_id !== record.run_id)) {
+      throw new Error(`Invalid selected preexisting candidate for ${input.profile} case ${caseIndex}`)
+    }
+    candidates.set(caseIndex, record)
+  }
+  for (const record of input.current) {
+    const caseIndex = Number(record.benchmark?.case_index)
+    if (!Number.isInteger(caseIndex) || !record.run_id) continue
+    const existing = candidates.get(caseIndex)
+    if (existing && input.preexisting.some((candidate) => candidate.run_id === existing.run_id)) continue
+    if (existing && existing.run_id !== record.run_id) {
+      throw new Error(`Multiple eligible candidates exist for ${input.profile} case ${caseIndex}`)
+    }
+    candidates.set(caseIndex, record)
+  }
+  return candidates
+}
+
 export function reusableProfileRuns(
   catalog: { leaderboard: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
   profile: "base" | "advanced",

@@ -356,3 +356,18 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 1. A failed five-case receipt with one explicitly unstarted coordinator row retains the other four valid `sealing_run_ids` as reusable candidates.
 2. A generic launched-trial identity mismatch, concurrency violation, structural error, or untyped missing run still yields no reusable candidate.
 3. Focused tests, benchmark typecheck, catalog/verifier checks and uninvolved review pass before the next group starts.
+
+## Luna Base recovery candidate collision
+
+### Evidence and root cause
+
+- After sealed-candidate recovery was repaired, the already-running recovery coordinator reached its post-trial catalog with both an old reusable sealed run and an accidental new raw-eligible run for case 61. `waveCandidateByCase()` rebuilt candidates by concatenating every reusable run with every current-batch raw-eligible attempt, then threw `Multiple eligible candidates exist for base case 61`.
+- The plan had already selected its adoption set in `preexisting_eligible`, but result reconciliation ignored that immutable selection and recomputed a broader candidate set. The immediate disposition update removed the three known duplicate bug attempts, but data cleanup alone did not repair this control-flow defect.
+- The coordinator must capture each profile's exact preexisting case-to-run map before writing plans. Launch skips those cases, plan evidence records those exact run ids, and post-trial reconciliation adopts only those selected preexisting runs. Current-batch candidates are considered only for cases with no selected preexisting run. Multiple current candidates for an unadopted case still fail closed.
+
+### Acceptance
+
+1. Given one selected preexisting run and one current raw-eligible duplicate for the same case, reconciliation returns the selected preexisting run without throwing or referencing the duplicate.
+2. Given two current raw-eligible runs for an unadopted case, reconciliation still throws the typed multiple-candidate error.
+3. Plan `preexisting_eligible`, launch skipping and receipt eligible claims derive from the same captured map; no second candidate source or fallback is introduced.
+4. Focused tests, benchmark typecheck, catalog/verifier checks and uninvolved review pass before the repaired runner is activated.

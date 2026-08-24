@@ -8,6 +8,7 @@ import {
   automationBenchCoordinatorBatchIndexes,
   automationBenchCoordinatorSettlement,
   executeRollingBatchChains,
+  reconcileAutomationBenchBatchCandidates,
   reusableProfileRuns,
   rollingBatchChains,
 } from "./contract"
@@ -143,6 +144,7 @@ type BatchContext = (typeof selectedBatches)[number] & {
   receiptPath: string
   activeAuthorizationPath: string
   receiptWritten: boolean
+  preexistingByProfile?: Record<Profile, Map<number, Record<string, any>>>
   batchOutcomes?: Array<{
     launched: Array<Awaited<ReturnType<typeof runTrial>>>
     eligible: Array<{ case_index: number; profile: Profile; run_id: string }>
@@ -412,26 +414,20 @@ function waveCandidateByCase(
     leaderboard: Array<Record<string, any>>
   },
   profile: Profile,
-  batchRunID: string,
+  context: BatchContext,
 ) {
-  const records = [
-    ...reusableProfileRuns(catalog, profile, model, "mission").values(),
-    ...catalog.attempts.filter(
+  const preexisting = [...(context.preexistingByProfile?.[profile]?.values() ?? [])]
+  return reconcileAutomationBenchBatchCandidates({
+    profile,
+    preexisting,
+    current: catalog.attempts.filter(
       (record) =>
         record.raw_leaderboard_eligible === true &&
-        record.benchmark?.batch_run_id === batchRunID &&
+        record.benchmark?.batch_run_id === context.batchRunID &&
         record.opencorvus?.profile === profile &&
         record.benchmark?.repetition === 1,
     ),
-  ]
-  const candidates = new Map<number, Record<string, any>>()
-  for (const record of records) {
-    const caseIndex = Number(record.benchmark.case_index)
-    const existing = candidates.get(caseIndex)
-    if (existing && existing.run_id !== record.run_id) throw new Error(`Multiple eligible candidates exist for ${profile} case ${caseIndex}`)
-    candidates.set(caseIndex, record)
-  }
-  return candidates
+  })
 }
 
 async function runTrial(context: BatchContext, item: FrozenCase, profile: Profile, waveIndex: number) {
@@ -509,10 +505,8 @@ async function runTrial(context: BatchContext, item: FrozenCase, profile: Profil
 
 async function launchRollingBatch(context: BatchContext, catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
-  const existing = {
-    base: reusableProfileRuns(catalogBefore, "base", model, "mission"),
-    advanced: reusableProfileRuns(catalogBefore, "advanced", model, "mission"),
-  }
+  const existing = context.preexistingByProfile
+  if (!existing) throw new Error(`Batch ${context.batchIndex} preexisting candidate selection is unavailable`)
   const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = context.waves.map(() => [])
   await executeRollingBatchChains({
     chains: rollingBatchChains(context.waves),
@@ -547,7 +541,7 @@ function batchOutcomes(
 ) {
   const outcomes = context.waves.map((slots, offset) => {
     const eligible = slots
-      .map((slot) => waveCandidateByCase(catalogAfter, slot.profile, context.batchRunID).get(slot.case_index))
+      .map((slot) => waveCandidateByCase(catalogAfter, slot.profile, context).get(slot.case_index))
       .filter(Boolean)
       .map((record) => ({
         case_index: record!.benchmark.case_index,
@@ -571,6 +565,10 @@ try {
   await fs.mkdir(planDirectory, { recursive: true })
   const preexistingCatalog = await refreshCatalog()
   for (const context of contexts) {
+    context.preexistingByProfile = {
+      base: reusableProfileRuns(preexistingCatalog, "base", model, "mission"),
+      advanced: reusableProfileRuns(preexistingCatalog, "advanced", model, "mission"),
+    }
     const plan = {
       schema_version: 2,
       launch_mode: "mission",
@@ -589,10 +587,10 @@ try {
       cases: context.cases,
       waves: context.waves,
       preexisting_eligible: {
-        base: [...reusableProfileRuns(preexistingCatalog, "base", model, "mission").values()]
+        base: [...context.preexistingByProfile.base.values()]
           .filter((record) => context.cases.some((item) => item.case_index === record.benchmark.case_index))
           .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
-        advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model, "mission").values()]
+        advanced: [...context.preexistingByProfile.advanced.values()]
           .filter((record) => context.cases.some((item) => item.case_index === record.benchmark.case_index))
           .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
       },

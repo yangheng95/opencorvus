@@ -47,6 +47,7 @@ import {
   failureObservationReceipt,
   missingCompletedBatchProfileReceipts,
   reusableProfileRuns,
+  reconcileAutomationBenchBatchCandidates,
   reusableBatchCandidateRunIDs,
   plannedAutomationBenchSlotState,
   rollingBatchChains,
@@ -2601,6 +2602,25 @@ describe("external agent benchmark contract", () => {
       { passed: false, schema_version: null, repetition: null, legacy: false, reason: "batch_plan_schema" },
       { passed: false, schema_version: null, repetition: null, legacy: false, reason: "batch_plan_schema" },
     ])
+  })
+
+  test("keeps the plan-selected sealed run when an accidental current duplicate exists", () => {
+    const selected = { run_id: "sealed-61", benchmark: { case_index: 61 } }
+    const duplicate = { run_id: "duplicate-61", benchmark: { case_index: 61 } }
+    expect(
+      reconcileAutomationBenchBatchCandidates({
+        profile: "base",
+        preexisting: [selected],
+        current: [duplicate],
+      }),
+    ).toEqual(new Map([[61, selected]]))
+    expect(() =>
+      reconcileAutomationBenchBatchCandidates({
+        profile: "base",
+        preexisting: [],
+        current: [selected, duplicate],
+      }),
+    ).toThrow("Multiple eligible candidates exist for base case 61")
   })
 
   test("reuses verified profile rows before failed-batch candidates", () => {
