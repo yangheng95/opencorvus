@@ -77,6 +77,23 @@ export namespace Bus {
 
   let processSettlementGate: ProcessSettlementScope | undefined
 
+  type PublicationActivityState = {
+    executionID: string
+    occurrenceID: string
+    type: string
+    phase: "local" | "global"
+    pending: Map<string, {
+      phase: "exact" | "wildcard"
+      id: string
+      durable: boolean
+      source?: string
+    }>
+    aborted: boolean
+    abortReason?: string
+  }
+
+  const publicationActivity = new Map<string, PublicationActivityState>()
+
   function occurrenceID() {
     return `bus-occurrence:${randomUUID()}`
   }
@@ -88,7 +105,12 @@ export namespace Bus {
     }),
   )
 
-  async function dispatchPhase(subscriptions: Map<any, Subscription[]>, payload: Envelope<any>, key: string) {
+  async function dispatchPhase(
+    subscriptions: Map<any, Subscription[]>,
+    payload: Envelope<any>,
+    key: string,
+    activity?: PublicationActivityState,
+  ) {
     const pending: Array<Promise<unknown>> = []
     let index = 0
     const match = [...(subscriptions.get(key) ?? [])]
@@ -104,6 +126,14 @@ export namespace Bus {
         })
       }
       const label = `${payload.type}/${sub.source ?? "unknown"}`
+      const phase = key === "*" ? "wildcard" : "exact"
+      const activityKey = `${phase}:${sub.id}`
+      activity?.pending.set(activityKey, {
+        phase,
+        id: sub.id,
+        durable: sub.durable,
+        source: sub.source,
+      })
       let result: unknown
       try {
         result = sub.callback(payload)
@@ -111,10 +141,12 @@ export namespace Bus {
         result = Promise.reject(err)
       }
       pending.push(
-        Promise.resolve(result).catch((err) => {
-          log.warn("subscriber failed", { type: payload.type, label, error: String(err) })
-          throw err
-        }),
+        Promise.resolve(result)
+          .catch((err) => {
+            log.warn("subscriber failed", { type: payload.type, label, error: String(err) })
+            throw err
+          })
+          .finally(() => activity?.pending.delete(activityKey)),
       )
     }
     const settled = await Promise.allSettled(pending)
@@ -124,9 +156,13 @@ export namespace Bus {
     return { settled, failures }
   }
 
-  async function dispatchTo(subscriptions: Map<any, Subscription[]>, payload: Envelope<any>) {
+  async function dispatchTo(
+    subscriptions: Map<any, Subscription[]>,
+    payload: Envelope<any>,
+    activity?: PublicationActivityState,
+  ) {
     if (payload.type === "*") {
-      const exact = await dispatchPhase(subscriptions, payload, payload.type)
+      const exact = await dispatchPhase(subscriptions, payload, payload.type, activity)
       if (exact.failures.length === 1) throw exact.failures[0]
       if (exact.failures.length > 1) {
         throw new AggregateError(exact.failures, `${exact.failures.length} Bus subscribers failed for ${payload.type}`)
@@ -137,8 +173,8 @@ export namespace Bus {
     // the exact channel must not prevent the durable wildcard consumer from
     // accepting the same occurrence.
     const [exact, wildcard] = await Promise.all([
-      dispatchPhase(subscriptions, payload, payload.type),
-      dispatchPhase(subscriptions, payload, "*"),
+      dispatchPhase(subscriptions, payload, payload.type, activity),
+      dispatchPhase(subscriptions, payload, "*", activity),
     ])
     const failures = [...exact.failures, ...wildcard.failures]
     if (failures.length === 1) throw failures[0]
@@ -229,23 +265,69 @@ export namespace Bus {
     signal: AbortSignal,
   ): Promise<void> {
     signal.throwIfAborted()
+    const activity: PublicationActivityState = {
+      executionID: randomUUID(),
+      occurrenceID: payload.occurrenceID,
+      type: payload.type,
+      phase: "local",
+      pending: new Map(),
+      aborted: false,
+    }
+    publicationActivity.set(activity.executionID, activity)
+    const observeAbort = () => {
+      activity.aborted = true
+      activity.abortReason = String(signal.reason)
+      log.warn("publication owner aborted while delivery remained active", {
+        occurrenceID: payload.occurrenceID,
+        type: payload.type,
+        phase: activity.phase,
+        pendingLocal: [...activity.pending.values()],
+        pendingGlobal: GlobalBus.deliveryActivitySnapshot(payload.occurrenceID),
+        reason: activity.abortReason,
+      })
+    }
+    signal.addEventListener("abort", observeAbort, { once: true })
     const deliveryPayload = { ...payload } as Envelope<any>
     Object.defineProperty(deliveryPayload, "signal", { value: signal, enumerable: false })
     const failures: unknown[] = []
     try {
-      await dispatchTo(subscriptions, deliveryPayload)
-    } catch (error) {
-      failures.push(error)
+      try {
+        await dispatchTo(subscriptions, deliveryPayload, activity)
+      } catch (error) {
+        failures.push(error)
+      }
+      if (signal.aborted) throw signal.reason
+      activity.phase = "global"
+      try {
+        await GlobalBus.emitAndWait("event", { directory, payload: deliveryPayload })
+      } catch (error) {
+        failures.push(error)
+      }
+      if (signal.aborted) throw signal.reason
+      if (failures.length === 1) throw failures[0]
+      if (failures.length > 1) throw new AggregateError(failures, `Bus publication failed for ${payload.type}`)
+    } finally {
+      signal.removeEventListener("abort", observeAbort)
+      publicationActivity.delete(activity.executionID)
     }
-    if (signal.aborted) throw signal.reason
-    try {
-      await GlobalBus.emitAndWait("event", { directory, payload: deliveryPayload })
-    } catch (error) {
-      failures.push(error)
-    }
-    if (signal.aborted) throw signal.reason
-    if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, `Bus publication failed for ${payload.type}`)
+  }
+
+  export function publicationActivitySnapshot() {
+    return [...publicationActivity.values()]
+      .map((activity) => ({
+        execution_id: activity.executionID,
+        occurrence_id: activity.occurrenceID,
+        type: activity.type,
+        phase: activity.phase,
+        aborted: activity.aborted,
+        abort_reason: activity.abortReason,
+        pending_local: [...activity.pending.values()].sort((left, right) => left.id.localeCompare(right.id)),
+        pending_global: GlobalBus.deliveryActivitySnapshot(activity.occurrenceID),
+      }))
+      .sort(
+        (left, right) =>
+          left.occurrence_id.localeCompare(right.occurrence_id) || left.execution_id.localeCompare(right.execution_id),
+      )
   }
 
   function retryPrepared(payload: Envelope<any>, directory: string): Publication {
@@ -1239,18 +1321,17 @@ export namespace Bus {
       }
       if (existing) return createUnsubscribe(existing)
     }
+    const source = new Error().stack
+      ?.split("\n")
+      .slice(2, 6)
+      .map((x) => x.trim())
+      .join(" | ")
     const subscription: Subscription = {
       callback,
       id: options?.durableID ?? `runtime:${runtimeSubscriptionID}:${++subscriptionSequence}`,
       durable: options !== undefined,
       effectContract: options?.effect,
-      source: isBusTraceEnabled()
-        ? new Error().stack
-            ?.split("\n")
-            .slice(2, 6)
-            .map((x) => x.trim())
-            .join(" | ")
-        : undefined,
+      source,
     }
     if (durableKey) current.durableSubscriptions.set(durableKey, subscription)
     let match = subscriptions.get(type) ?? []

@@ -219,10 +219,23 @@ export namespace SessionStatus {
   export function getActivity(sessionID: string) {
     const monitor = activityMonitors[sessionID]
     if (!monitor) return undefined
+    const diagnostic = monitor.diagnostics()
     return {
-      last_activity_at: monitor.lastActivityAt(),
-      paused: monitor.paused(),
+      last_activity_at: diagnostic.lastActivityAt,
+      paused: diagnostic.paused,
+      pause_depth: diagnostic.pauseDepth,
+      pause_owners: diagnostic.pauseOwners,
+      timed_out: diagnostic.timedOut,
+      abort_reason: diagnostic.abortReason,
     }
+  }
+
+  export function listActivity() {
+    return Object.fromEntries(
+      Object.keys(activityMonitors)
+        .sort()
+        .map((sessionID) => [sessionID, getActivity(sessionID)]),
+    )
   }
 
   /** Renew one Session's inactivity window after a durable execution fact commits. */

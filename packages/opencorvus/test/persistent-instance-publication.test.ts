@@ -99,6 +99,16 @@ test("a physical owner abort settles its in-flight Bus publication before succes
         await started
         owner.abort(reason)
         await abortObserved
+        expect(Bus.publicationActivitySnapshot()).toContainEqual(
+          expect.objectContaining({
+            occurrence_id: publication.occurrenceID,
+            phase: "local",
+            aborted: true,
+            pending_local: [
+              expect.objectContaining({ phase: "exact", id: expect.any(String), source: expect.any(String) }),
+            ],
+          }),
+        )
         expect(RuntimeExecutionSettlement.snapshot()).toContainEqual({
           kind: "protocol_publication",
           label: `${FileWatcher.Event.Updated.type}:${publication.occurrenceID}`,
@@ -113,6 +123,46 @@ test("a physical owner abort settles its in-flight Bus publication before succes
         })
         expect(deliveryOrder).toEqual(["old-finished", "successor-delivered"])
       } finally {
+        unsubscribe()
+      }
+    },
+  })
+})
+
+test("concurrent physical retries retain distinct diagnostics for one occurrence", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      let startedCount = 0
+      let resolveBothStarted!: () => void
+      const bothStarted = new Promise<void>((resolve) => (resolveBothStarted = resolve))
+      let releaseSubscribers!: () => void
+      const released = new Promise<void>((resolve) => (releaseSubscribers = resolve))
+      const unsubscribe = Bus.subscribe(FileWatcher.Event.Updated, async () => {
+        startedCount += 1
+        if (startedCount === 2) resolveBothStarted()
+        await released
+      })
+      try {
+        const first = Bus.publish(FileWatcher.Event.Updated, {
+          file: `${project.path}\\concurrent-retry.ts`,
+          event: "change",
+        })
+        const retry = first.retry()
+        await bothStarted
+        const active = Bus.publicationActivitySnapshot().filter(
+          (publication) => publication.occurrence_id === first.occurrenceID,
+        )
+        expect({
+          count: active.length,
+          executionIDs: new Set(active.map((publication) => publication.execution_id)).size,
+          allHavePendingSubscribers: active.every((publication) => publication.pending_local.length > 0),
+        }).toEqual({ count: 2, executionIDs: 2, allHavePendingSubscribers: true })
+        releaseSubscribers()
+        await Promise.all([first, retry])
+      } finally {
+        releaseSubscribers()
         unsubscribe()
       }
     },
@@ -160,6 +210,25 @@ test("a GlobalBus publication retains its exact owner abort through physical lis
         await started
         owner.abort(reason)
         await abortObserved
+        expect(Bus.publicationActivitySnapshot()).toContainEqual(
+          expect.objectContaining({
+            occurrence_id: publication.occurrenceID,
+            phase: "global",
+            aborted: true,
+            pending_global: [
+              expect.objectContaining({
+                occurrence_id: publication.occurrenceID,
+                pending: [expect.objectContaining({ id: expect.any(String), source: expect.any(String) })],
+              }),
+            ],
+          }),
+        )
+        expect(GlobalBus.deliveryActivitySnapshot(publication.occurrenceID)).toContainEqual(
+          expect.objectContaining({
+            occurrence_id: publication.occurrenceID,
+            pending: [expect.objectContaining({ id: expect.any(String), source: expect.any(String) })],
+          }),
+        )
         expect(RuntimeExecutionSettlement.snapshot()).toContainEqual({
           kind: "protocol_publication",
           label: `${FileWatcher.Event.Updated.type}:${publication.occurrenceID}`,
