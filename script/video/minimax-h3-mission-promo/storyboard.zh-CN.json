@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "production_status": "rejected_pending_v2_approval",
+  "superseded_by": "creative-brief-v2.zh-CN.md",
+  "title": "OpenCorvus：把长程任务推进到经过验收的交付",
+  "canvas": { "width": 1920, "height": 1080, "fps": 25 },
+  "brand": {
+    "product": "OpenCorvus",
+    "tagline": "The open-source harness for long-horizon agent work",
+    "website": "opencorvus.com",
+    "github": "github.com/yangheng95/opencorvus"
+  },
+  "case": {
+    "mission_id": "ae773cbff6362f19",
+    "project": "D:/myhexin-local/demos/deberta-absa-builtins-mission-rerun2-20260823",
+    "model": "openai/gpt-5.6-sol",
+    "task_count": 6,
+    "verified_result": "validation Macro-F1 0.8343；selected test Macro-F1 0.8361；single seed 42",
+    "public_repository": "https://github.com/yangheng95/deberta-absa-reproducibility"
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "kind": "h3",
+      "duration": 8,
+      "eyebrow": "LONG-HORIZON WORK",
+      "title": "真正困难的任务\n不是回答得快",
+      "subtitle": "而是几小时之后，仍然能把结果交出来。",
+      "narration": "真正困难的任务，不是回答得快，而是几小时之后，仍然能把结果交出来。",
+      "h3_prompt": "Cinematic macro journey through a vast branching network of luminous work nodes extending across time, unfinished branches flicker and collapse while one persistent golden path continues through checkpoints toward a tangible finished artifact. Dark graphite background, cyan and warm amber accents, precise physical motion, premium technology documentary, no text, no logos, no user interface, native subtle stereo sound design, 16:9."
+    },
+    {
+      "id": "pain",
+      "kind": "motion_pain",
+      "duration": 13,
+      "eyebrow": "THE PAIN",
+      "title": "长程任务会断在三个地方",
+      "bullets": ["跑不彻底", "结果不能核对", "同样的错误反复发生"],
+      "subtitle": "上下文变长、进程中断、工具失败、责任漂移——任何一个都足以让“快完成”永远停在快完成。",
+      "narration": "长程任务会断在三个地方：跑不彻底，结果不能核对，同样的错误还会反复发生。上下文变长、进程中断、工具失败、责任漂移，任何一个都足以让快完成永远停在快完成。"
+    },
+    {
+      "id": "why",
+      "kind": "motion_compare",
+      "duration": 11,
+      "eyebrow": "WHY ONE-SHOT SOFTWARE STRUGGLES",
+      "title": "不是模型不够聪明\n是运行层没有承担责任",
+      "subtitle": "单一会话和匿名 Agent 池，通常缺少固定责任、可恢复状态、带来源交接与独立验收。",
+      "narration": "问题不只是模型够不够聪明。单一会话和匿名 Agent 池，通常缺少固定责任、可恢复状态、带来源交接与独立验收。"
+    },
+    {
+      "id": "mission",
+      "kind": "motion_mission",
+      "duration": 14,
+      "eyebrow": "MISSION DESIGN",
+      "title": "目标在 Mission 层组合\n责任留在每一个 Task",
+      "subtitle": "每个 Task 固定一个专家团版本和工作流；任务之间交接的是带来源的 Artifact。",
+      "narration": "OpenCorvus 的 Mission 在目标层组合多个 Task，责任仍然留在每一个 Task。每个 Task 固定一个专家团版本和工作流，任务之间交接的是带来源的 Artifact。",
+      "assets": ["mission-overview-7884.png"],
+      "asset_label": "真实页面 · 127.0.0.1:7884"
+    },
+    {
+      "id": "command",
+      "kind": "typewriter",
+      "duration": 20,
+      "eyebrow": "ONE MISSION · SIX COMPLETE SQUADS",
+      "title": "把一条长命令，变成可检查的执行图",
+      "subtitle": "以下为真实 Mission 要求的压缩展示；原始要求与执行证据完整保留。",
+      "narration": "我们给它一条真正的长任务：获取 DeBERTa 模型和数据，只用 CUDA 训练；每次创新都记录训练和测试性能；自动更新训练监控和推理网页；根据最佳实验绘图；调研文献并写成 ACL 风格短文；独立审校；最后发布一个组织良好的公开仓库。",
+      "command": [
+        "mission run --model openai/gpt-5.6-sol \\",
+        "  \"获取 DeBERTa-v3-base ABSA 模型与训练数据；\" \\",
+        "  \"仅用 CUDA 训练，逐次记录实验与测试性能；\" \\",
+        "  \"构建自动更新的训练监控与推理网页；\" \\",
+        "  \"按最佳实验绘图，撰写并深度审校 ACL 短文；\" \\",
+        "  \"整理仓库并发布到 GitHub。\""
+      ]
+    },
+    {
+      "id": "execution",
+      "kind": "motion_execution",
+      "duration": 14,
+      "eyebrow": "REAL EXECUTION",
+      "title": "6 个 Task，各自完成、各自可核",
+      "subtitle": "模型与数据 → CUDA 训练和网页 → 图表 → 论文 → 审校 → GitHub 发布",
+      "narration": "Mission 把工作拆成六个真实 Task：模型与数据，CUDA 训练和网页，最佳实验图表，论文，独立审校，以及 GitHub 发布。每一步都能单独打开、复核和继续。",
+      "assets": ["cuda-task-7884.png", "publication-task-7884.png"],
+      "asset_label": "真实页面 · Completed 子任务"
+    },
+    {
+      "id": "monitor",
+      "kind": "motion_monitor",
+      "duration": 13,
+      "eyebrow": "HOST EVIDENCE",
+      "title": "不是一句“训练完成”\n而是能重新打开的证据",
+      "subtitle": "真实训练监控、推理页面和冻结的实验选择记录。",
+      "narration": "完成不是一句模型自述。训练监控、推理页面、CUDA 环境和实验选择记录都作为真实文件留下，可以重新打开并交叉核对。",
+      "assets": ["ready-desktop.png", "inference-success-desktop.png"],
+      "asset_label": "真实产物 · 训练监控与推理"
+    },
+    {
+      "id": "results",
+      "kind": "motion_results",
+      "duration": 19,
+      "eyebrow": "REVIEWED DELIVERABLES",
+      "title": "结果负责吸引\n证据负责让人相信",
+      "subtitle": "最佳模型图、实验生命周期、5 页 ACL 风格短文与公开可访问仓库。",
+      "narration": "最后交付的不只是一个 checkpoint。它还包括最佳模型架构图、实验生命周期图、五页 ACL 风格短文和匿名可访问的公开仓库。所有宣传画面只做版式美化，不改变原始指标和内容。",
+      "assets": ["best-model-architecture.png", "best-experiment-lifecycle.png", "paper-1.png", "paper-2.png"],
+      "metric": "Selected run · validation Macro-F1 0.8343 · test Macro-F1 0.8361 · seed 42",
+      "asset_label": "真实产物 · 单种子有界实验，不作泛化承诺"
+    },
+    {
+      "id": "cta",
+      "kind": "h3",
+      "duration": 9,
+      "eyebrow": "OPEN SOURCE · INSPECTABLE · RECOVERABLE",
+      "title": "让一支可检查的 Agent 团队\n把目标推进到经过验收的交付",
+      "subtitle": "OpenCorvus · opencorvus.com · GitHub",
+      "narration": "OpenCorvus。让一支可检查的 Agent 团队，把模糊目标推进到经过验收的交付。",
+      "h3_prompt": "Premium closing shot for an open-source agent workbench: multiple luminous specialist paths converge into one polished, tangible delivery object on a dark graphite stage; an independent inspection beam passes over it and turns green, camera slowly pulls back with confident calm motion, cyan and amber brand palette, generous negative space for later title overlay, absolutely no text, no logos, no software UI, 16:9, native stereo audio."
+    }
+  ]
+}
