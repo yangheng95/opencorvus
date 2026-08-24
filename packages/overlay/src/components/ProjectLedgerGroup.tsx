@@ -7,6 +7,7 @@ import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Tooltip } from "./ui/Tooltip"
+import { pathRevealLabelKey } from "../services/workspace"
 
 export interface ProjectLedgerGroupProps {
   directory: string
@@ -241,7 +242,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                       }}
                     >
                       <Icon name="folder-open" size="medium" />
-                      <span>{t("project.open_in_file_manager")}</span>
+                      <span>{t(pathRevealLabelKey())}</span>
                     </DropdownMenu.Item>
                   </Show>
                   <Show when={canRenameProject()}>

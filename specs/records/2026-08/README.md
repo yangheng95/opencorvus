@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-web-host-path-actions-and-settings-audit.md](2026-08-25-web-host-path-actions-and-settings-audit.md) audits every Settings section against the real Web build and gives the browser host a usable action wherever the desktop opens the OS file manager, chosen by host capability rather than by a fallback inside the native call.
+
 - [2026-08-24-v0.0.53-beta-release.md](2026-08-24-v0.0.53-beta-release.md) tracks canonical `0.0.53-beta` convergence, immutable application publication, the same-source public website deployment, and integration of the reviewed release source into `main`.
 
 - [2026-08-24-repository-architecture-debt-saturation-audit.md](2026-08-24-repository-architecture-debt-saturation-audit.md) defines the evidence-complete whole-repository architecture-debt benchmark, carries the verified Browser/Computer seed findings, and iterates cross-domain audits until a repeated sweep finds no new P0/P1.

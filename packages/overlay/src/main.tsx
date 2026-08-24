@@ -2157,11 +2157,8 @@ function OverlayRoot() {
           onCreateChat={(directory) =>
             runMainAsync("work-ledger.project-new-chat", () => selectWorkLedgerProject(directory))
           }
-          onOpenProjectDirectory={
-            getHostTransport().capabilities.nativeCommands["open-path"]
-              ? (directory) =>
-                  runMainAsync("work-ledger.project-open-directory", () => openWorkLedgerProjectDirectory(directory))
-              : undefined
+          onOpenProjectDirectory={(directory) =>
+            runMainAsync("work-ledger.project-open-directory", () => openWorkLedgerProjectDirectory(directory))
           }
           onRenameProject={(directory, currentName) =>
             runMainAsync("work-ledger.project-rename", () => renameWorkLedgerProject(directory, currentName))

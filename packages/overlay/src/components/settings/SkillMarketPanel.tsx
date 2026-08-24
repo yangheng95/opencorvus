@@ -10,7 +10,14 @@ import { createStore } from "solid-js/store"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import { t } from "../../utils/i18n"
 import { configure as configureApi } from "../../services/api"
-import { pickDirectory, syncActiveDirectoryApiContext } from "../../services/workspace"
+import {
+  pathRevealFailureText,
+  pathRevealLabelKey,
+  pathRevealNoticeKey,
+  pickDirectory,
+  revealPath,
+  syncActiveDirectoryApiContext,
+} from "../../services/workspace"
 import { appStore } from "../../store/app"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeConfirm, nativeOpen } from "../../utils/native"
@@ -239,7 +246,6 @@ function SharedResourceManagementPanel(props: {
   onResourcesChanged?: () => void
 }) {
   const nativeCommands = getHostTransport().capabilities.nativeCommands
-  const canOpenLocalPath = createMemo(() => nativeCommands["open-path"])
   const canOpenRemoteUrl = createMemo(() => nativeCommands["open-url"])
   const canPickSkillDirectory = createMemo(() => nativeCommands["workspace.pickDir"])
   const skillSourceOptions = (): FormSelectOption[] => [
@@ -381,13 +387,29 @@ function SharedResourceManagementPanel(props: {
     }
   }
 
+  // A remote skill still opens as a link; a local one is revealed by whatever
+  // this host supports, so the button has to say which of the two it will do.
+  function skillOpenLabel(location: string): string {
+    return isRemoteUrl(location) ? t("skill.open_button_title") : t(pathRevealLabelKey())
+  }
+
   async function handleOpenSkill(location: string) {
-    if (isRemoteUrl(location) ? !canOpenRemoteUrl() : !canOpenLocalPath()) return
+    if (isRemoteUrl(location)) {
+      if (!canOpenRemoteUrl()) return
+      try {
+        const opened = await nativeOpen(location)
+        if (!opened) throw new Error("native open returned false")
+      } catch (e) {
+        setPanelNotice(t("skill.open_failed", { error: errorDetail(e) }))
+      }
+      return
+    }
     try {
-      const opened = await nativeOpen(location)
-      if (!opened) throw new Error("native open returned false")
+      const outcome = await revealPath(location)
+      const notice = pathRevealNoticeKey(outcome)
+      if (notice) setPanelNotice(t(notice, { path: location }), "active")
     } catch (e) {
-      setPanelNotice(t("skill.open_failed", { error: errorDetail(e) }))
+      setPanelNotice(pathRevealFailureText(e))
     }
   }
 
@@ -838,7 +860,7 @@ function SharedResourceManagementPanel(props: {
                             when={
                               item.location &&
                               item.location !== "builtin" &&
-                              (isRemoteUrl(item.location) ? canOpenRemoteUrl() : canOpenLocalPath())
+                              (isRemoteUrl(item.location) ? canOpenRemoteUrl() : true)
                             }
                           >
                             <Button
@@ -846,11 +868,11 @@ function SharedResourceManagementPanel(props: {
                               variant="ghost"
                               size="md"
                               tone="neutral"
-                              title={t("skill.open_button_title")}
-                              aria-label={t("skill.open_button_title")}
+                              title={skillOpenLabel(item.location!)}
+                              aria-label={skillOpenLabel(item.location!)}
                               onClick={() => handleOpenSkill(item.location!)}
                             >
-                              {t("common.open")}
+                              {skillOpenLabel(item.location!)}
                             </Button>
                           </Show>
                           <Badge tone="ok">{item.builtin ? t("skill.builtin") : t("common.loaded")}</Badge>

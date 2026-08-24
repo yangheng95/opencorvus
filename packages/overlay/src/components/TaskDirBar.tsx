@@ -5,7 +5,7 @@ import { HoverCard } from "./ui/HoverCard"
 import { createEffect, createMemo, createResource, createSignal, For, type JSX, onCleanup, Show } from "solid-js"
 import { activeSessionID, activeTaskID, boardStore, loadBoard } from "../store/board"
 import { appStore } from "../store/app"
-import { activeDirectory, browseDirectory, openDirectory } from "../services/workspace"
+import { activeDirectory, browseDirectory, openDirectory, pathRevealLabelKey } from "../services/workspace"
 import {
   commitVcsChanges,
   loadVcsBranches,
@@ -688,7 +688,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           },
           {
             items: [
-              { id: "local-open", label: t("cwd.open"), icon: "folder-open" },
+              { id: "local-open", label: t(pathRevealLabelKey()), icon: "folder-open" },
               { id: "local-browse", label: t("cwd.browse"), icon: "folder" },
             ],
           },
