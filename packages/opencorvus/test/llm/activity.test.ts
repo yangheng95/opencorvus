@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, spyOn, test } from "bun:test"
 import { DefaultLLMActivityPolicy, chunkHeartbeatKind, withLLMActivity, type LLMActivityEvent } from "@/llm/activity"
 import { abortableIterable } from "@/util/stream-activity"
 import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
@@ -21,6 +21,45 @@ function waitForAbort(signal: AbortSignal): Promise<never> {
 }
 
 describe("LLM semantic activity", () => {
+  test("bounds long-duration idle and first-byte recovery to one retry", async () => {
+    const random = spyOn(Math, "random").mockReturnValue(1)
+    const maximumFirstRetryBackoff = Math.max(
+      DefaultLLMActivityPolicy.backoffMs("idle", 0, Number.MAX_SAFE_INTEGER),
+      DefaultLLMActivityPolicy.backoffMs("first_byte", 0, Number.MAX_SAFE_INTEGER),
+    )
+    random.mockRestore()
+    expect(
+      2 * (DefaultLLMActivityPolicy.firstByteMs + DefaultLLMActivityPolicy.idleMs) + maximumFirstRetryBackoff,
+    ).toBeLessThan(600_000)
+    for (const cls of ["idle", "first_byte"] as const) {
+      const events: LLMActivityEvent[] = []
+      let attempts = 0
+      await expect(
+        withLLMActivity(
+          { sessionID: `session-${cls}-budget`, provider: "test", model: `${cls}-budget` },
+          {
+            ...DefaultLLMActivityPolicy,
+            totalMs: 1_000,
+            idleMs: 20,
+            firstByteMs: 20,
+            backoffMs: () => 0,
+          },
+          new AbortController().signal,
+          async (run) => {
+            attempts += 1
+            if (cls === "idle") run.bump("first-byte")
+            return waitForAbort(run.signal)
+          },
+          (event) => events.push(event),
+        ),
+      ).rejects.toMatchObject({ name: "LLMActivityError", cls, attempts: 1 })
+      expect({ attempts, retries: events.filter((event) => event.type === "retry") }).toMatchObject({
+        attempts: 2,
+        retries: [{ type: "retry", attempt: 1, cls }],
+      })
+    }
+  })
+
   test("terminates a typed missing Provider credential after one attempt", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0
