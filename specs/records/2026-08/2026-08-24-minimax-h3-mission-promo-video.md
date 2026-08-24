@@ -19,6 +19,8 @@
 | User correction 2 | 第二版仍被否决。用户要求先学习文案、视频、推广与 H3，而不是继续盲目生成。已停止在途动画渲染；正式生成前新增强制创意确认门，并以 `script/video/minimax-h3-mission-promo/creative-brief-v2.zh-CN.md` 为当前创意事实源。 |
 | User addition | 结尾必须给出工作上需要长工作流的具体场景。V2 收束新增模型训练与评测、深度研究与报告、软件开发测试发布、数据分析与审计四个连续场景，再进入唯一 CTA。 |
 | User correction 3 | 本地 RTX 5090 已真实生成 4.458 秒“琥珀任务核心 + 青色接力滑轨”H3 风格测试，但用户明确否决并要求咨询 Claude。该方向标记 rejected，不得继续生成。Claude Code 2.1.237 显示 Max 登录态，但推理返回 `403 Request not allowed`；浏览器 OAuth 涉及持久凭据授权，未获用户确认前不得继续。 |
+| User decision | 用户停止 Claude 路线并要求寻找专用 Skill。完整比较 MiniMax 官方极简产品广告、纸艺定格科普与手绘实拍混合 Skill 后，用户批准 `papercraft-stop-motion-explainer` 路线 D「一份交付的一生」与约 80 秒目标；当前授权范围仅到三张 16:9 视觉预览，不含 H3 正式镜头或 push。 |
+| Preview evidence | `assets/previews/papercraft-v2/` 已生成三张 16:9 预览：夜班失败、清理假文字后的专家交接、锁定档案身份并减法构图的四类工作场景。三张图只用于确认成人向编辑纸艺的世界、材质、主角和协作隐喻；用户确认前不得生成 H3 镜头。 |
 
 ## Impact analysis
 
