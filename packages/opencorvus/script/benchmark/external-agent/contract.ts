@@ -1703,6 +1703,10 @@ export function auditBatchEvidence(input: {
     const expectedSlot = (input.plan.waves?.[item.waveIndex - 1] as BatchPlanSlot[] | undefined)?.some(
       (slot) => slot.case_index === item.case_index && slot.profile === item.profile,
     )
+    if (!item.run_id && item.run_status === "coordinator_failed" && item.exit_code === -1 && expectedSlot) {
+      reasons.push(`launched_trial_unstarted:${item.profile}:${item.case_index}`)
+      continue
+    }
     if (
       !attempt ||
       attempt.benchmark?.batch_run_id !== input.plan.batch_run_id ||
@@ -1842,10 +1846,11 @@ export function auditBatchEvidence(input: {
  * `auditBatchEvidence` intentionally rejects the old receipt because it claimed
  * the now-invalid sibling as eligible. That does not erase the exact launch and
  * per-run seal of another run in the same receipt. Reuse is safe only when the
- * receipt has no structural, identity, coverage, or concurrency violation: the
- * only permitted audit reasons are the post-hoc invalid eligible claims, and a
- * run enters this list only if the audit already retained it in
- * `sealing_run_ids`.
+ * receipt has no structural, identity, coverage, or concurrency violation. The
+ * only permitted audit reasons are post-hoc invalid eligible claims or a typed
+ * unstarted slot that the audit derived from an expected receipt row with no
+ * run id, `coordinator_failed`, and exit code -1. A run enters this list only
+ * if the audit already retained it in `sealing_run_ids`.
  */
 export function reusableBatchCandidateRunIDs(audit: {
   passed?: boolean
@@ -1859,7 +1864,15 @@ export function reusableBatchCandidateRunIDs(audit: {
   const reasons = Array.isArray(audit.reasons)
     ? audit.reasons.filter((reason): reason is string => typeof reason === "string")
     : []
-  if (reasons.length === 0 || !reasons.every((reason) => reason.startsWith("eligible_trial_raw_invalid:"))) return []
+  if (
+    reasons.length === 0 ||
+    !reasons.every(
+      (reason) =>
+        reason.startsWith("eligible_trial_raw_invalid:") || reason.startsWith("launched_trial_unstarted:"),
+    )
+  ) {
+    return []
+  }
   return sealingRunIDs
 }
 

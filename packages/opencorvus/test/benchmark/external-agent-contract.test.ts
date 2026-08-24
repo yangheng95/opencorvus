@@ -2263,6 +2263,83 @@ describe("external agent benchmark contract", () => {
     ).toEqual([])
   })
 
+  test("preserves sealed siblings when one coordinator slot never produces a run identity", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const successful = [1, 3, 4, 5].map((case_index) => ({
+      case_index,
+      profile: "base",
+      run_id: `sealed-${case_index}`,
+      exit_code: 0,
+      run_status: "scored",
+    }))
+    const attempts = successful.map((item) => ({
+      run_id: item.run_id,
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at: 100,
+      finished_at: 200 + item.case_index,
+      benchmark: {
+        batch_run_id: "batch-unstarted-sibling",
+        batch_plan_sha256: "unstarted-plan-sha",
+        wave_index: 1,
+        case_index: item.case_index,
+      },
+      opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "mission" },
+    }))
+    const audit = auditBatchEvidence({
+      plan: {
+        schema_version: 2,
+        repetition: 1,
+        batch_run_id: "batch-unstarted-sibling",
+        batch_index: 1,
+        model: "openai/gpt-5.6-luna",
+        launch_mode: "mission",
+        trial_concurrency: 5,
+        schedule_mode: "rolling_case_slots_v1",
+        profiles: ["base"],
+        cases,
+        waves: [wave],
+        preexisting_eligible: { base: [], advanced: [] },
+      },
+      receipt: {
+        batch_run_id: "batch-unstarted-sibling",
+        batch_index: 1,
+        status: "failed",
+        wave_1: {
+          launched: [
+            ...successful,
+            {
+              case_index: 2,
+              profile: "base",
+              run_id: null,
+              exit_code: -1,
+              run_status: "coordinator_failed",
+            },
+          ],
+          eligible: successful,
+        },
+      },
+      attempts,
+      planSHA256: "unstarted-plan-sha",
+    })
+
+    expect({ audit, reusable: reusableBatchCandidateRunIDs(audit) }).toEqual({
+      audit: {
+        passed: false,
+        status: "invalid",
+        reasons: ["launched_trial_unstarted:base:2"],
+        eligible_run_ids: successful.map((item) => item.run_id).sort(),
+        sealing_run_ids: successful.map((item) => item.run_id).sort(),
+        adopted_run_ids: [],
+      },
+      reusable: successful.map((item) => item.run_id).sort(),
+    })
+    expect(
+      reusableBatchCandidateRunIDs({ ...audit, reasons: ["launched_trial:base:2"] }),
+    ).toEqual([])
+  })
+
   test("projects active and terminal attempts ahead of an unstarted planned slot", () => {
     const invalidation = { status: "invalid_bug", reason: "host_decision_ambiguous" }
     expect([

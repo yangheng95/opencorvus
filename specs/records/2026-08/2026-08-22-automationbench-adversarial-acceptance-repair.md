@@ -341,3 +341,18 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. One coordinator performs one preflight catalog refresh, owns two batch-scoped locks and authorizations, and launches ten non-overlapping cases through ten child trial processes. No second batch coordinator or catalog waiter exists.
 3. Both five-case plans keep schema version 2, `trial_concurrency: 5`, exact batch identity and independent receipts, while the shared active lease ledger reaches at most ten unique cases and the dashboard renders their real `running`/terminal state without a synthetic queued group.
 4. Focused positive tests, benchmark typecheck, real catalog/verifier acceptance, and an uninvolved read-only review pass before the new supervisor is used.
+
+## Luna Base partial-batch sealed-candidate recovery
+
+### Evidence and root cause
+
+- The first single-coordinator recovery plan correctly reused four sealed candidates from failed batch 12, but reused none from failed batch 13 and therefore reran cases 61/63/65. Catalog evidence showed those three old runs were individually raw-eligible and present in `sealing_run_ids`; the batch audit had exactly one reason, `launched_trial:base:62`, because case 62 failed at the coordinator inactivity boundary before producing a run id.
+- `reusableBatchCandidateRunIDs()` only admitted post-hoc `eligible_trial_raw_invalid:*` reasons. It could preserve clean siblings when a launched sibling later became invalid, but not when a sibling never produced a run identity. The broad `launched_trial:*` reason did not distinguish an explicitly unstarted coordinator failure from plan/run identity corruption, so admitting it wholesale would be unsafe.
+- The audit now emits a typed `launched_trial_unstarted:*` reason only for a receipt row with no run id, `run_status: coordinator_failed`, and `exit_code: -1`. Candidate recovery accepts that typed reason together with existing post-hoc raw-invalid reasons, while all structural, identity, interval, concurrency, or generic launched-trial reasons still fail closed.
+- The accidental recovery reruns for cases 61/63/65 remain preserved as bug attempts. Current missing cases 57/62/64 continue without restart; the repair affects future recovery/catalog selection and does not authorize another rerun of an already sealed slot.
+
+### Acceptance
+
+1. A failed five-case receipt with one explicitly unstarted coordinator row retains the other four valid `sealing_run_ids` as reusable candidates.
+2. A generic launched-trial identity mismatch, concurrency violation, structural error, or untyped missing run still yields no reusable candidate.
+3. Focused tests, benchmark typecheck, catalog/verifier checks and uninvolved review pass before the next group starts.
