@@ -122,8 +122,6 @@ async function arguments_() {
   ) {
     throw new Error("--profiles must be base, advanced, or base,advanced")
   }
-  const repetitions = Number(values.get("repetitions") ?? 1)
-  if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer")
   return {
     root: path.resolve(root),
     sourceData: path.resolve(sourceData),
@@ -131,7 +129,6 @@ async function arguments_() {
     restrictedShell: path.resolve(restrictedShell),
     model,
     profiles,
-    repetitions,
     caseSet: path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json")),
   }
 }
@@ -886,7 +883,6 @@ const batchAudits = await Promise.all(
       return {
         batch_run_id: plan.batch_run_id,
         batch_index: plan.batch_index,
-        repetition: plan.repetition ?? 1,
         plan: path.relative(root, planPath).replaceAll("\\", "/"),
         plan_sha256: planSHA256,
         receipt_present: receipt !== undefined,
@@ -948,9 +944,7 @@ function summarizeProfile(profile: "base" | "advanced") {
   const keys = rows.map((record) => `${record.benchmark.case_index}:${record.benchmark.repetition ?? 1}`)
   if (new Set(keys).size !== keys.length)
     throw new Error(`Eligible ${profile} runs contain duplicate case/repetition identities`)
-  const expectedKeys = Array.from({ length: cli.repetitions }, (_, repetitionOffset) =>
-    Array.from({ length: 50 }, (_, index) => `${index + 1}:${repetitionOffset + 1}`),
-  ).flat()
+  const expectedKeys = Array.from({ length: 50 }, (_, index) => `${index + 1}:1`)
   const matrixComplete = JSON.stringify([...keys].sort()) === JSON.stringify(expectedKeys.sort())
   const strictPasses = rows.reduce(
     (sum, record) => sum + Number(record.benchmark.metrics?.task_completed_correctly ?? 0),
@@ -962,7 +956,7 @@ function summarizeProfile(profile: "base" | "advanced") {
   const durationTotal = rows.reduce((sum, record) => sum + Number(record.duration_ms ?? 0), 0)
   return {
     profile,
-    target_cases: 50 * cli.repetitions,
+    target_cases: 50,
     completed_cases: rows.length,
     matrix_complete: matrixComplete,
     strict_passes: strictPasses,
@@ -1002,7 +996,6 @@ const catalog = {
     launch_mode: "mission",
     model: cli.model,
     profiles: cli.profiles,
-    repetitions: cli.repetitions,
     exploratory_profiles: exploratoryProfileSummaries.map((summary) => summary.profile),
     note: "Every attempt is evidence; only natural terminal official scores enter the self-owned leaderboard.",
   },
@@ -1037,7 +1030,7 @@ const lines = [
   "",
   `This board contains only \`${cli.model}\` runs made through the OpenCorvus harness. Every attempt is retained below; only a clean-source, natural OpenCorvus \`completed\` terminal state followed by the official AutomationBench scorer is leaderboard-eligible.`,
   "",
-  `## Primary ${50 * cli.repetitions}-slot profile summary`,
+  "## Primary 50-case profile summary",
   "",
   "| Internal rank | Profile | Coverage | Strict | Partial mean | Total tokens | Output tokens | Model calls | API attempts | Failed API | Mean duration |",
   "| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
@@ -1064,15 +1057,15 @@ const lines = [
   "",
   "## Primary eligible per-case scores",
   "",
-  "| Repetition | Case | Batch | Profile | Task | Trace evidence grade | Strict | Partial | Total tokens | Model calls | API attempts | API failures | Duration |",
-  "| ---: | ---: | ---: | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+  "| Case | Batch | Profile | Task | Trace evidence grade | Strict | Partial | Total tokens | Model calls | API attempts | API failures | Duration |",
+  "| ---: | ---: | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
   ...primaryEligible.map((record) => {
     const metrics = record.benchmark.metrics
     const tokens = record.opencorvus.tokens
     const traceGrade = record.raw_evidence_audit?.trace_scope_audit?.mode === "complete_post_quiescence"
       ? "independent complete"
       : "legacy operator-attested"
-    return `| ${record.benchmark.repetition ?? 1} | ${record.benchmark.case_index} | ${record.benchmark.batch_index} | ${record.opencorvus.profile} | ${record.benchmark.task} | ${traceGrade} | ${strictScore(metrics.task_completed_correctly)} | ${percent(metrics.partial_credit)} | ${integer(tokens?.total)} | ${integer(tokens?.modelCalls)} | ${integer(record.benchmark.tool_attempts)} | ${integer(record.benchmark.tool_failed)} | ${duration(record.duration_ms)} |`
+    return `| ${record.benchmark.case_index} | ${record.benchmark.batch_index} | ${record.opencorvus.profile} | ${record.benchmark.task} | ${traceGrade} | ${strictScore(metrics.task_completed_correctly)} | ${percent(metrics.partial_credit)} | ${integer(tokens?.total)} | ${integer(tokens?.modelCalls)} | ${integer(record.benchmark.tool_attempts)} | ${integer(record.benchmark.tool_failed)} | ${duration(record.duration_ms)} |`
   }),
   "",
   "## All attempts (paper evidence index)",

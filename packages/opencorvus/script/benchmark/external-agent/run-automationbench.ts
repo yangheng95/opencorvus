@@ -177,7 +177,6 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
   const authorization = JSON.parse(await fs.readFile(input.batchAuthorization, "utf8")) as {
     batch_run_id: string
     batch_index: number
-    repetition: number
     output_root: string
     batch_plan: string
     batch_plan_sha256: string
@@ -187,7 +186,6 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
     launch_mode: string
     batch_run_id: string
     batch_index: number
-    repetition: number
     model: string
     profiles: string[]
     trial_concurrency: number
@@ -206,14 +204,12 @@ async function loadBatchAuthority(input: Arguments, frozenCase: FrozenCase) {
   if (
     authorization.batch_run_id !== input.batchRunID ||
     authorization.batch_index !== input.batchIndex ||
-    authorization.repetition !== input.repetition ||
     path.resolve(authorization.output_root) !== input.output ||
     path.resolve(authorization.batch_plan) !== input.batchPlan ||
     authorization.batch_plan_sha256 !== planSHA256 ||
     !processIsAlive(authorization.coordinator_pid) ||
     plan.batch_run_id !== input.batchRunID ||
     plan.batch_index !== input.batchIndex ||
-    plan.repetition !== input.repetition ||
     frozenCase.batch_index !== input.batchIndex ||
     plan.model !== input.model ||
     plan.launch_mode !== "mission" ||

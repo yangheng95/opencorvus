@@ -47,8 +47,6 @@ const sourceData = path.resolve(sourceDataValue)
 const python = path.resolve(pythonValue)
 const restrictedShell = path.resolve(restrictedShellValue)
 const finalMode = values.get("mode") === "final"
-const repetitions = Number(values.get("repetitions") ?? 1)
-if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer")
 const finalProfiles = (values.get("profiles") ?? "base,advanced").split(",").map((item) => item.trim())
 if (
   finalProfiles.length < 1 ||
@@ -258,7 +256,7 @@ if (secretFindings.length > 0) {
 }
 
 const catalog = JSON.parse(await fs.readFile(path.join(root, "evidence-catalog.json"), "utf8")) as {
-  scope?: { profiles?: string[]; model?: string; launch_mode?: string; repetitions?: number }
+  scope?: { profiles?: string[]; model?: string; launch_mode?: string }
   attempts: Array<Record<string, any>>
   leaderboard: Array<Record<string, any>>
   batches: Array<Record<string, any>>
@@ -653,7 +651,6 @@ const verifiedBatches = await Promise.all(
       return {
         batchRunID: plan.batch_run_id,
         profiles: plan.profiles as string[],
-        repetition: plan.repetition ?? 1,
         planSHA256,
         receipt,
         audit,
@@ -741,36 +738,32 @@ if (finalMode) {
   if (JSON.stringify([...(catalog.scope?.profiles ?? [])].sort()) !== JSON.stringify([...finalProfiles].sort())) {
     throw new Error("Final verifier profiles do not match the catalog primary profile scope")
   }
-  if (catalog.scope?.repetitions !== repetitions) {
-    throw new Error("Final verifier repetition count does not match the catalog scope")
-  }
   const selectedRows = catalog.leaderboard.filter((attempt) => finalProfiles.includes(attempt.opencorvus?.profile))
-  if (selectedRows.length !== finalProfiles.length * 50 * repetitions) {
-    throw new Error(`Final matrix requires exactly ${finalProfiles.length * 50 * repetitions} selected-profile trials`)
+  if (selectedRows.length !== finalProfiles.length * 50) {
+    throw new Error(`Final matrix requires exactly ${finalProfiles.length * 50} selected-profile trials`)
   }
   const missingBatchProfiles = missingCompletedBatchProfileReceipts({
     batches: verifiedBatches,
     batchIndexes: Array.from({ length: 10 }, (_, index) => index + 1),
     profiles: finalProfiles,
-    repetitions: Array.from({ length: repetitions }, (_, index) => index + 1),
   })
   if (missingBatchProfiles.length > 0) {
     throw new Error(
       `Final matrix requires completed receipts for: ${missingBatchProfiles
-        .map((slot) => `repetition ${slot.repetition} batch ${slot.batch_index} ${slot.profile}`)
+        .map((slot) => `batch ${slot.batch_index} ${slot.profile}`)
         .join(", ")}`,
     )
   }
   for (const profile of finalProfiles) {
     const rows = catalog.leaderboard.filter((attempt) => attempt.opencorvus?.profile === profile)
-    const slots = rows
-      .map((attempt) => `${attempt.benchmark?.repetition}:${attempt.benchmark?.case_index}`)
-      .sort()
-    const expected = Array.from({ length: repetitions }, (_, repetitionOffset) =>
-      Array.from({ length: 50 }, (_, index) => `${repetitionOffset + 1}:${index + 1}`),
-    ).flat().sort()
-    if (JSON.stringify(slots) !== JSON.stringify(expected)) {
-      throw new Error(`Final ${profile} matrix does not cover exact cases 1 through 50 at repetitions 1 through ${repetitions}`)
+    const indexes = rows.map((attempt) => attempt.benchmark?.case_index).sort((left, right) => left - right)
+    const expected = Array.from({ length: 50 }, (_, index) => index + 1)
+    if (
+      rows.length !== 50 ||
+      rows.some((attempt) => attempt.benchmark?.repetition !== 1) ||
+      JSON.stringify(indexes) !== JSON.stringify(expected)
+    ) {
+      throw new Error(`Final ${profile} matrix does not cover exact cases 1 through 50 at repetition 1`)
     }
   }
 }
