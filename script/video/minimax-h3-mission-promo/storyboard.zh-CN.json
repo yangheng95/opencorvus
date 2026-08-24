@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "production_status": "rejected",
-  "rejected_by": "user-dark-card-visual-rejection-2026-08-24",
+  "rejected_by": "user-light-ppt-visual-rejection-2026-08-24",
   "title": "OpenCorvus Mission：别再给 Agent 当项目经理",
   "canvas": { "width": 1920, "height": 1080, "fps": 25 },
   "brand": {
@@ -34,7 +34,7 @@
       "title": "你有没有遇到过\n这样的 Agent？",
       "subtitle": "回复很快，代码也像模像样。可真正检查时，项目真的完成了吗？",
       "narration": "你有没有遇到过这样的 Agent？你把一长串要求交给它。它回复得很快，代码也写得像模像样。",
-      "h3_prompt": "integrated_multimodal_description: A personal creator working alone at a home desk late at night, seen over the shoulder. The creator looks from a long handwritten checklist to a laptop with a completely blank dark screen, then notices several unfinished project materials around the desk and exhales in frustration. Intimate consumer perspective, realistic small apartment workspace, tasteful AI technology atmosphere, natural human motion, cinematic but relatable, not a corporate office. The laptop screen must remain blank and dark for later real UI compositing. No text, no letters, no numbers, no logos, no readable screens, no fake user interface. overall_soundscape: quiet room tone, soft keyboard taps, paper movement, one tired breath. non_diegetic_music: minimal empathetic electronic pulse, no vocals."
+      "h3_prompt": "integrated_multimodal_description: A personal creator working alone at a bright home desk in clear morning daylight, seen over the shoulder. Soft sun enters through a large window onto a warm white desk and pale walls. The creator looks from a long handwritten checklist to a laptop with a completely blank neutral screen, notices several unfinished project materials, and exhales in frustration. Intimate consumer perspective, realistic small apartment workspace, airy high-key editorial lighting, natural human motion, relatable and contemporary, not a corporate office and not a night scene. The laptop screen must remain blank and neutral for later real UI compositing. No dark room, no moody low-key lighting, no text, no letters, no numbers, no logos, no readable screens, no fake user interface. overall_soundscape: gentle morning room tone, soft keyboard taps, paper movement, one tired breath. non_diegetic_music: light empathetic electronic pulse, no vocals."
     },
     {
       "id": "agent-loop",
@@ -96,7 +96,7 @@
       "eyebrow": "THE OPEN-SOURCE ADVANTAGE",
       "title": "最大的杀手锏：完全开源",
       "subtitle": "开源 · 定制 · 可控 · 透明 · 会按你的反馈修订专家团",
-      "narration": "而且，OpenCorvus 完全开源。MIT 许可证，全部源码公开，可以自托管、审计和 fork；模型、工具、权限与专家团都能定制；任务跑在你的机器上，不可逆操作先问你；每次工具调用、参数和结果全程可回看。你给专家团的长期反馈，还能形成一次可回退的修订，只有你确认才安装。开源、定制、可控、透明，是你能把长期项目真正交给它的前提。"
+      "narration": "而且 OpenCorvus 完全开源：MIT 许可，源码公开，可以自托管、审计和 fork。模型、工具、权限与专家团都能定制；任务在你的机器上运行，不可逆操作先确认，工具记录全程可回看。长期反馈还能形成可回退修订，只有你确认才安装。"
     },
     {
       "id": "real-agents",

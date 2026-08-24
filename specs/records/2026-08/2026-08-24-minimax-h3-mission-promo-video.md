@@ -36,6 +36,10 @@
 | User addition: comparison | 用户要求加入 WorkBuddy、DeepSeek Harness、Codex、Claude Code 的对比。采用“同一个个人长项目，各产品重点解决哪一层”的动态定位带，不使用企业采购表、主观评分或绝对贬损。核对日期为 2026-08-24：本站官网比较的 WorkBuddy 是 `workbuddy.ai` 商业云端桌面产品，强调一句话交付办公成品与平台内 Expert Group，不得误用同名 `work-buddy.ai` 开源项目；DeepSeek Harness 是插件化且运行可追踪的开发者 Harness；Codex Cloud 在隔离环境并行运行编码任务；Claude Code 提供 subagent、agent view、实验性的 Agent Teams 与动态工作流。OpenCorvus 的本片差异只陈述为开源、自托管的跨研究、训练、网页、论文和发布的多专家团 Mission 接力与验收。 |
 | User addition: open-source pillars | 用户强调最大杀手锏是开源，并要求不得遗漏官网现有卖点。已以 `packages/web/src/content/landing-copy.ts` 为事实源，新增独立动画段呈现：开源（MIT、全部源码公开、可自托管/审计/fork）、定制（模型/工具/权限/专家团）、可控（本机运行、不可逆操作需确认）、透明（工具调用/参数/结果全程可回看）。这些能力同时支撑官网三条长程承诺：跑不彻底、结果不能用、永远不会变好。 |
 | User correction 6 | 用户否决 4:55 的 2C comparison animatic，先指出不喜欢暗色背景，再要求解释为什么丑。根因不是单一配色，而是仍沿用 PPT/采购表/中心节点图语法：标题、卡片和底部字幕竞争注意力；没有一个具体用户贯穿；青黑橙渐变、扫描线与发光描边形成廉价模板感；真实浅色 WebUI 与伪科技动效割裂；“最大杀手锏 + MIT 圆心”把开源讲成口号。该 animatic 标记 rejected，不得作为最终视频或进入网站。下一版禁止只换白底，必须用明亮编辑动画中的同一用户、同一项目和连续动作来呈现对比、开源、本机控制、透明记录与可回退修订。 |
+| User production override | 用户随后明确要求“我要看视频，你等谁呢”，授权跳过三张关键帧确认门，直接制作并交付一版可播放的明亮完整视频。该授权只解除视觉预览门，不解除真实证据、H3 不生成文字/UI、五分钟上限、人工抽帧复核、独立审查、提交但不 push 等约束。 |
+| User correction 7 | 用户查看明亮版关键截图后再次否决，指出仍是 PPT。根因是只把暗色卡片换成浅色卡片，继续用大标题、流程线、圆点、居中说明和功能排版代替角色与事件。第三次合成已立即中断。下一版必须是角色驱动的连续动画：具体用户与 Agent 在同一空间中行动，失忆、停工、追问、交接、复核和交付都由事件表现；禁止大标题页、功能卡、采购表、时间线、节点图和流程图。 |
+| User correction 8 | 用户进一步明确“核心是故事，例子占比很小”，并禁止用 WebUI 截图糊弄。案例只允许在结尾用十几秒说明：真实 DeBERTa ABSA 项目做了什么、规模和重要产物、公开项目地址；不得再展示 7884 截图、训练页面截图或论文页充当主体。主片必须完整讲述用户交出梦想项目、Agent 快速承诺后遗忘/停工/交半成品、用户被迫当项目经理、多开 Agent 更乱、Mission 介入分工/交接/恢复/独立复核，最终拿到完整成果的故事。 |
+| User correction 9 | 全片只能使用动画角色，不出现真人或写实人物。主角必须从头到尾是同一个角色，脸型、发型、服装和色板一致；所有 Agent 使用同一套卡通造型语言，只以颜色、工具和动作区分职责。除片头片尾的官方品牌 Logo 外，故事中不得出现渡鸦、鸟、Corvus 化身或类似意象。纯 T2V 独立生成会导致人物漂移，禁止作为成片路径；必须先冻结角色设定图，再使用参考图驱动的视频工作流。此前真人开场、人物漂移和渡鸦编排器镜头全部作废。 |
 
 ## Impact analysis
 
@@ -159,3 +163,38 @@ python produce.py prepare --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 - 人工复核：查看完整接触表和放大后的 comparison middle、open-source pillars end、real-agents middle、mission-reveal end。比较段五行均可读且用动态焦点表达“重心不同”；开源段 MIT、四支柱、源码地址和可回退修订不遮挡；真实 Agent 会话保留原始截图并能看清具名角色；Mission 命令使用用户聊天气泡而不是终端。
 - 当前 `user-pain` 仍是明确标记的 H3 占位动画；正式版必须替换为本地 H3 生成的无文字个人工作空间镜头，并重新执行同一轮检查。
 - 用户尚未批准本 animatic；不得 push 或将其称为最终视频。
+
+## Character-story motion proof V1
+
+状态：**REJECTED / INVALIDATED**。用户更正 9 已废除这一版的全部角色与镜头设计；它只能保留为失败过程证据，不能作为风格样片、网站候选或后续 H3 参考。
+
+- 视频：`D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824\character-story\opencorvus-mission-character-story-v1.mp4`
+- 接触表：`D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824\character-story\contact-sheet-v1.jpg`
+- 媒体事实：53.0 秒、1920×1080、25 fps、H.264、AAC；片头 3 秒、故事 42 秒、片尾 8 秒。
+- 故事镜头：清晨个人项目开场；多个 Agent 把半成品留给用户；渡鸦编排器组织 Agent 接力同一份项目；Agent 团队把包含模型、网页、图表与论文意象的完成项目箱交给用户。中间不使用 7884、训练页、论文页或产品截图。
+- 旁白中的案例只说明 DeBERTa ABSA、12 小时 45 分、46 个 Agent 会话、GPU 训练、网页、图表、五页论文和公开仓库；精确项目地址只在片尾显示。
+- 否决原因：第一镜包含近真人质感人物；后续至少出现三套不同主角身份；Agent 基础造型不一致；故事将渡鸦拟人化为编排器，直接违反同一角色、同模 Agent、无真人和无 Corvus 意象的新约束。
+- 叙事缺失：没有完整演出中断恢复、独立复核退回再修复、开源自托管、权限确认、透明工具记录和可回退修订。竞品差异仅由旁白交代。
+- 媒体缺陷：AAC 为 24 kHz 单声道，结尾约 10.64 秒没有有效旁白；生成场景含不可读伪文字。该视频没有与其逐镜一致的权威 storyboard/manifest；`storyboard.zh-CN.json` 当时和现在均为 rejected，不能宣称已批准。
+- 用户未批准前不得 push、不得进入网站、不得把 V1 称为最终视频。
+
+## Frozen character direction V2
+
+- 唯一角色设定：`script/video/minimax-h3-mission-promo/assets/character-story/character-bible-v1.png`。
+- 第一张故事关键帧：`script/video/minimax-h3-mission-promo/assets/character-story/user-pain-keyframe-v1.png`。
+- 主角固定为短卷发、海军蓝圆框眼镜、薄荷绿外套、白 T 恤、深灰裤、珊瑚色鞋的卡通个人创作者。
+- 所有 Agent 固定为暖白圆角机器人本体、黑色面屏、青色椭圆眼；仅用青、蓝、橙、紫色配件与工具区别调研、实现、测试和独立复核。
+- 故事中禁止真人、写真人、鸟、渡鸦、羽毛和 Corvus 化身。官方 Logo 只允许以确定性品牌图层出现在片头片尾。
+- 角色设定图先派生逐镜关键帧，再以 H3 I2V/FL2VA 驱动动作。独立 T2V 片段不得进入成片。
+- 第一张关键帧演出用户痛点：调研 Agent 交付不完整资料、实现 Agent 留下松散部件、测试 Agent 给出未勾选清单，用户仍被迫收尾。画面无可读文字、无 UI 截图、无卡片或表格。
+
+### H3 I2V consistency proof
+
+- 哈希绑定样片：`D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824\h3-local\user-pain-character-v2-verified.mp4`。
+- 哈希绑定报告：`D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824\reports\local-h3-user-pain-character-v2-verified.json`；原始非缓存运行与报告保留 `user-pain-character-v2` 名称作为性能证据。
+- 输入：冻结关键帧 `user-pain-keyframe-v1.png`；ComfyUI 实际使用 `video_minimax_h3_i2v.api.json`、`minimax_h3_fl2va_pruned_int8_convrot.safetensors` 与 `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors`。
+- 实测：单张 RTX 5090，10 steps，107 帧，原始非缓存生成耗时 35.48 秒；峰值显存 31,902 MiB，最低空闲系统内存 7.07 GiB。加入哈希字段后的同 seed 复跑命中 ComfyUI 缓存，耗时 5.02 秒，不能冒充新的模型推理性能。
+- 可复现绑定：参考图 SHA-256 `70f059b473855be9a9974cdea05aea3dd05e3b07a0b19910f802f420ef632c7e`；I2V 工作流 SHA-256 `79591267bfc4371e51436170441993131645575c649bd60c2420a2e81ac3ba81`。
+- 媒体：4.458 秒、608×352、24 fps、H.264、AAC 32 kHz 双声道；首中尾非黑且相邻抽帧平均亮度差分别为 31.57 和 30.25。
+- 人工抽帧复核：主角发型、圆框眼镜、薄荷绿服装保持一致；三只 Agent 的暖白圆角本体、黑面屏、青色眼睛与角色配色保持一致。画面从半成品堆到用户面前推进到用户按额叹气，没有真人、鸟、渡鸦、Logo、UI 截图、卡片或表格。
+- 该样片只通过“痛点镜头与角色一致性”门，不等于整片已获用户批准；完整 storyboard 仍保持 rejected，批准前不得扩展为整片、网站产物或 push。

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -19,6 +20,14 @@ from PIL import Image, ImageChops, ImageOps, ImageStat
 DEFAULT_INSTALL = Path(r"D:\myhexin-local\demos\minimax-h3-local-5090")
 DEFAULT_OUTPUT = Path(r"D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824")
 TERMINAL_HISTORY = {"success", "error"}
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        while chunk := source.read(1024 * 1024):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def request_json(url: str, *, method: str = "GET", payload: dict[str, Any] | None = None, timeout: int = 30) -> dict[str, Any]:
@@ -138,6 +147,33 @@ def download_output(base_url: str, media: dict[str, str], destination: Path) -> 
             output.write(chunk)
 
 
+def upload_input_image(base_url: str, source: Path) -> str:
+    if not source.is_file():
+        raise FileNotFoundError(f"Reference image not found: {source}")
+    boundary = f"----opencorvus-{uuid.uuid4().hex}"
+    chunks = [
+        f"--{boundary}\r\n".encode(),
+        f'Content-Disposition: form-data; name="image"; filename="{source.name}"\r\n'.encode(),
+        b"Content-Type: image/png\r\n\r\n",
+        source.read_bytes(),
+        f"\r\n--{boundary}\r\n".encode(),
+        b'Content-Disposition: form-data; name="subfolder"\r\n\r\nopencorvus\r\n',
+        f"--{boundary}\r\n".encode(),
+        b'Content-Disposition: form-data; name="type"\r\n\r\ninput\r\n',
+        f"--{boundary}--\r\n".encode(),
+    ]
+    request = urllib.request.Request(f"{base_url}/upload/image", data=b"".join(chunks), method="POST")
+    request.add_header("Content-Type", f"multipart/form-data; boundary={boundary}")
+    with urllib.request.urlopen(request, timeout=120) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    name = payload.get("name")
+    subfolder = payload.get("subfolder", "")
+    if not name:
+        raise RuntimeError(f"ComfyUI did not return an uploaded image name: {payload}")
+    uploaded = f"{subfolder}/{name}" if subfolder else name
+    return uploaded.replace("\\", "/")
+
+
 def inspect_clip(video: Path, frames_root: Path) -> dict[str, Any]:
     probe = json.loads(
         subprocess.check_output(
@@ -199,11 +235,14 @@ def generate(
     steps: int,
     seed: int,
     inactivity_timeout: int,
+    reference_image_name: str | None = None,
 ) -> dict[str, Any]:
     workflow = json.loads(workflow_path.read_text(encoding="utf-8"))
     length = max(5, round(duration * 24))
     length += (5 - (length % 17)) % 17
     workflow["104"]["inputs"].update(prompt=prompt, width=width, height=height, length=length)
+    if reference_image_name is not None:
+        workflow["114"]["inputs"]["image"] = reference_image_name
     workflow["9"]["inputs"]["steps"] = steps
     workflow["15"]["inputs"]["noise_seed"] = seed
     workflow["92"]["inputs"]["filename_prefix"] = f"video/opencorvus_h3_{output_path.stem}"
@@ -254,6 +293,7 @@ def generate(
         "seed": seed,
         "diffusion": workflow["6"]["inputs"]["unet_name"],
         "text_encoder": workflow["13"]["inputs"]["clip_name"],
+        "reference_image": reference_image_name,
         "peak_vram_mib": max((item.get("vram_mib", 0) for item in monitor.samples), default=0),
         "minimum_free_ram_gib": min((item.get("free_ram_gib", 9999) for item in monitor.samples), default=0),
         "resource_samples": monitor.samples,
@@ -268,6 +308,11 @@ def main() -> int:
     parser.add_argument("--base-url", default="http://127.0.0.1:8188")
     parser.add_argument("--scene", default="smoke")
     parser.add_argument("--prompt")
+    parser.add_argument(
+        "--reference-image",
+        type=Path,
+        help="Drive the clip from a frozen character/story keyframe through the H3 I2V workflow.",
+    )
     parser.add_argument("--width", type=int, default=608)
     parser.add_argument("--height", type=int, default=352)
     parser.add_argument("--duration", type=float, default=3)
@@ -295,7 +340,14 @@ def main() -> int:
 
     process = start_comfy(args.install, args.base_url)
     output = args.output_root / "h3-local" / f"{args.scene}.mp4"
-    workflow = args.install / "api-client" / "resources" / "workflows_api" / "video_minimax_h3_t2v.api.json"
+    reference_image_name = None
+    reference_image_source = None
+    workflow_name = "video_minimax_h3_t2v.api.json"
+    if args.reference_image:
+        reference_image_source = args.reference_image.resolve()
+        reference_image_name = upload_input_image(args.base_url, reference_image_source)
+        workflow_name = "video_minimax_h3_i2v.api.json"
+    workflow = args.install / "api-client" / "resources" / "workflows_api" / workflow_name
     report = generate(
         base_url=args.base_url,
         workflow_path=workflow,
@@ -307,7 +359,12 @@ def main() -> int:
         steps=args.steps,
         seed=args.seed,
         inactivity_timeout=args.inactivity_timeout,
+        reference_image_name=reference_image_name,
     )
+    report["workflow_path"] = str(workflow.resolve())
+    report["workflow_sha256"] = sha256_file(workflow)
+    report["reference_image_source"] = None if reference_image_source is None else str(reference_image_source)
+    report["reference_image_sha256"] = None if reference_image_source is None else sha256_file(reference_image_source)
     report["frame_inspection"] = inspect_clip(output, args.output_root / "h3-local" / "frames" / args.scene)
     reports = args.output_root / "reports"
     reports.mkdir(parents=True, exist_ok=True)
