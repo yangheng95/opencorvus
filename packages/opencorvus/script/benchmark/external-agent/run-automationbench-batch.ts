@@ -5,6 +5,8 @@ import lockfile from "proper-lockfile"
 import { ProviderError } from "../../../src/provider/error"
 import {
   auditBenchmarkBunRuntime,
+  automationBenchCoordinatorBatchIndexes,
+  automationBenchCoordinatorSettlement,
   executeRollingBatchChains,
   reusableProfileRuns,
   rollingBatchChains,
@@ -50,8 +52,7 @@ const restrictedShell = required("restricted-shell")
 const controlRoot = required("control-root")
 const dashboard = values.get("dashboard") ? path.resolve(values.get("dashboard")!) : undefined
 const evaluatorRoot = path.dirname(path.dirname(python))
-const batchIndex = Number(values.get("batch-index"))
-if (!Number.isInteger(batchIndex) || batchIndex < 1) throw new Error("--batch-index must be a positive integer")
+const batchIndexes = automationBenchCoordinatorBatchIndexes(values.get("batch-index") ?? "")
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
 const model =
   values.get("model") ??
@@ -65,19 +66,27 @@ if (profile !== "base" && profile !== "advanced") {
 }
 const profiles: Profile[] = [profile]
 const manifest = JSON.parse(await fs.readFile(caseSet, "utf8")) as { selection: { count: number }; cases: FrozenCase[] }
-const cases = manifest.cases.filter((item) => item.batch_index === batchIndex).sort((left, right) => left.case_index - right.case_index)
 if (
   !Number.isInteger(manifest.selection?.count) ||
   manifest.selection.count < 5 ||
   manifest.selection.count % 5 !== 0 ||
   manifest.cases.length !== manifest.selection.count ||
-  batchIndex > manifest.selection.count / 5 ||
-  cases.length !== 5
+  batchIndexes.some((batchIndex) => batchIndex > manifest.selection.count / 5)
 ) {
-  throw new Error(`Frozen batch ${batchIndex} must contain five cases inside the selected manifest`)
+  throw new Error(`Frozen batches ${batchIndexes.join(",")} must exist inside the selected manifest`)
 }
 type BatchSlot = { case_index: number; profile: Profile }
-const waves: BatchSlot[][] = [cases.map((item) => ({ case_index: item.case_index, profile }))]
+const selectedBatches = batchIndexes.map((batchIndex) => {
+  const cases = manifest.cases
+    .filter((item) => item.batch_index === batchIndex)
+    .sort((left, right) => left.case_index - right.case_index)
+  if (cases.length !== 5) throw new Error(`Frozen batch ${batchIndex} must contain five cases inside the selected manifest`)
+  return {
+    batchIndex,
+    cases,
+    waves: [cases.map((item) => ({ case_index: item.case_index, profile }))] as BatchSlot[][],
+  }
+})
 
 await Promise.all([
   fs.mkdir(output, { recursive: true, mode: 0o700 }),
@@ -125,28 +134,64 @@ await fs.writeFile(evidenceCaseSetPath, caseSetBytes, { flag: "wx" }).catch(asyn
   const existing = await fs.readFile(evidenceCaseSetPath)
   if (!existing.equals(caseSetBytes)) throw new Error("Evidence root contains a different frozen AutomationBench case set")
 })
-const coordinatorLockPath = path.join(controlRoot, `coordinator-batch-${batchIndex}.lock`)
 const catalogLockPath = path.join(controlRoot, "catalog.lock")
-await fs.open(coordinatorLockPath, "a").then((handle) => handle.close())
 await fs.open(catalogLockPath, "a").then((handle) => handle.close())
-const releaseCoordinator = await lockfile.lock(coordinatorLockPath, { realpath: false, stale: 60_000, update: 10_000 })
-const activeAuthorizationPath = path.join(controlRoot, `active-batch-${batchIndex}.json`)
-const staleAuthorization = await fs.readFile(activeAuthorizationPath, "utf8").then(JSON.parse).catch(() => undefined) as
-  | { coordinator_pid?: number }
-  | undefined
-if (staleAuthorization?.coordinator_pid) {
+const planDirectory = path.join(output, "batch-plans")
+type BatchContext = (typeof selectedBatches)[number] & {
+  batchRunID: string
+  planPath: string
+  receiptPath: string
+  activeAuthorizationPath: string
+  receiptWritten: boolean
+  batchOutcomes?: Array<{
+    launched: Array<Awaited<ReturnType<typeof runTrial>>>
+    eligible: Array<{ case_index: number; profile: Profile; run_id: string }>
+  }>
+}
+const releaseCoordinators: Array<() => Promise<void>> = []
+for (const batchIndex of batchIndexes) {
+  const coordinatorLockPath = path.join(controlRoot, `coordinator-batch-${batchIndex}.lock`)
+  await fs.open(coordinatorLockPath, "a").then((handle) => handle.close())
   try {
-    process.kill(staleAuthorization.coordinator_pid, 0)
-    throw new Error("A live batch authorization exists while acquiring the coordinator lock")
+    releaseCoordinators.push(
+      await lockfile.lock(coordinatorLockPath, { realpath: false, stale: 60_000, update: 10_000 }),
+    )
   } catch (error) {
-    if (error instanceof Error && error.message.startsWith("A live batch authorization")) throw error
+    await Promise.all(releaseCoordinators.toReversed().map((release) => release()))
+    throw error
   }
 }
-await fs.rm(activeAuthorizationPath, { force: true })
-const batchRunID = crypto.randomUUID()
-const planDirectory = path.join(output, "batch-plans")
-const planPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-plan.json`)
-const receiptPath = path.join(planDirectory, `batch-${String(batchIndex).padStart(2, "0")}-${batchRunID}-receipt.json`)
+const contexts: BatchContext[] = []
+try {
+  for (const selected of selectedBatches) {
+    const activeAuthorizationPath = path.join(controlRoot, `active-batch-${selected.batchIndex}.json`)
+    const staleAuthorization = (await fs
+      .readFile(activeAuthorizationPath, "utf8")
+      .then(JSON.parse)
+      .catch(() => undefined)) as { coordinator_pid?: number } | undefined
+    if (staleAuthorization?.coordinator_pid) {
+      try {
+        process.kill(staleAuthorization.coordinator_pid, 0)
+        throw new Error("A live batch authorization exists while acquiring the coordinator lock")
+      } catch (error) {
+        if (error instanceof Error && error.message.startsWith("A live batch authorization")) throw error
+      }
+    }
+    await fs.rm(activeAuthorizationPath, { force: true })
+    const batchRunID = crypto.randomUUID()
+    contexts.push({
+      ...selected,
+      batchRunID,
+      planPath: path.join(planDirectory, `batch-${String(selected.batchIndex).padStart(2, "0")}-${batchRunID}-plan.json`),
+      receiptPath: path.join(planDirectory, `batch-${String(selected.batchIndex).padStart(2, "0")}-${batchRunID}-receipt.json`),
+      activeAuthorizationPath,
+      receiptWritten: false,
+    })
+  }
+} catch (error) {
+  await Promise.all(releaseCoordinators.toReversed().map((release) => release()))
+  throw error
+}
 const activeChildren = new Set<ReturnType<typeof Bun.spawn>>()
 let dashboardFailure: Error | undefined
 let dashboardQueue = Promise.resolve()
@@ -282,7 +327,7 @@ async function writeDashboard() {
       "--dashboard",
       dashboard,
       "--batch-plan",
-      planPath,
+      contexts.map((context) => context.planPath).join(","),
       "--model",
       model,
       "--profiles",
@@ -327,7 +372,7 @@ function queueDashboardWrite() {
   return dashboardQueue
 }
 
-async function queueDashboardWhenLeaseActive(item: FrozenCase, profile: Profile) {
+async function queueDashboardWhenLeaseActive(context: BatchContext, item: FrozenCase, profile: Profile) {
   if (!dashboard) return
   const caseID = `${item.domain}:${item.task}`
   for (let attempt = 0; attempt < 40 && !terminationSignal; attempt += 1) {
@@ -339,7 +384,7 @@ async function queueDashboardWhenLeaseActive(item: FrozenCase, profile: Profile)
     }
     if (
       leases.active?.some(
-        (lease) => lease.case_id === caseID && lease.profile === profile && lease.batch_run_id === batchRunID,
+        (lease) => lease.case_id === caseID && lease.profile === profile && lease.batch_run_id === context.batchRunID,
       )
     ) {
       await queueDashboardWrite()
@@ -367,6 +412,7 @@ function waveCandidateByCase(
     leaderboard: Array<Record<string, any>>
   },
   profile: Profile,
+  batchRunID: string,
 ) {
   const records = [
     ...reusableProfileRuns(catalog, profile, model, "mission").values(),
@@ -388,7 +434,7 @@ function waveCandidateByCase(
   return candidates
 }
 
-async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
+async function runTrial(context: BatchContext, item: FrozenCase, profile: Profile, waveIndex: number) {
   const args = [
     process.execPath,
     path.join(import.meta.dir, "run-automationbench.ts"),
@@ -413,13 +459,13 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
     "--inactivity-ms",
     inactivityMs,
     "--batch-plan",
-    planPath,
+    context.planPath,
     "--batch-run-id",
-    batchRunID,
+    context.batchRunID,
     "--batch-index",
-    String(batchIndex),
+    String(context.batchIndex),
     "--batch-authorization",
-    activeAuthorizationPath,
+    context.activeAuthorizationPath,
     "--restricted-shell",
     restrictedShell,
     "--wave-index",
@@ -427,7 +473,7 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
   ]
   const child = Bun.spawn(args, { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" })
   activeChildren.add(child)
-  void queueDashboardWhenLeaseActive(item, profile)
+  void queueDashboardWhenLeaseActive(context, item, profile)
   try {
     const stdoutPromise = readWithInactivity(child.stdout, child, Number(inactivityMs) + 60_000)
     const stderrPromise = new Response(child.stderr).text()
@@ -461,39 +507,47 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
   }
 }
 
-async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
+async function launchRollingBatch(context: BatchContext, catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
   const existing = {
     base: reusableProfileRuns(catalogBefore, "base", model, "mission"),
     advanced: reusableProfileRuns(catalogBefore, "advanced", model, "mission"),
   }
-  const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = [[], []]
+  const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = context.waves.map(() => [])
   await executeRollingBatchChains({
-    chains: rollingBatchChains(waves),
+    chains: rollingBatchChains(context.waves),
     shouldRun: (slot) => !existing[slot.profile].has(slot.case_index),
     run: async (slot, waveIndex) => {
-        if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
-        const outcome = await runTrial(
-          cases.find((item) => item.case_index === slot.case_index)!,
-          slot.profile,
-          waveIndex,
-        ).catch((error) => ({
-          case_index: slot.case_index,
-          profile: slot.profile,
-          exit_code: -1,
-          run_id: null,
-          run_status: "coordinator_failed",
-          stderr_tail: ProviderError.redactSensitiveProviderText(error instanceof Error ? error.message : String(error)).slice(-2000),
-        }))
-        launchedByWave[waveIndex - 1]!.push(outcome)
-        void queueDashboardWrite()
-        return outcome
+      if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
+      const outcome = await runTrial(
+        context,
+        context.cases.find((item) => item.case_index === slot.case_index)!,
+        slot.profile,
+        waveIndex,
+      ).catch((error) => ({
+        case_index: slot.case_index,
+        profile: slot.profile,
+        exit_code: -1,
+        run_id: null,
+        run_status: "coordinator_failed",
+        stderr_tail: ProviderError.redactSensitiveProviderText(error instanceof Error ? error.message : String(error)).slice(-2000),
+      }))
+      launchedByWave[waveIndex - 1]!.push(outcome)
+      void queueDashboardWrite()
+      return outcome
     },
   })
-  const catalogAfter = await refreshCatalog()
-  const outcomes = waves.map((slots, offset) => {
+  return launchedByWave
+}
+
+function batchOutcomes(
+  context: BatchContext,
+  launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>>,
+  catalogAfter: Awaited<ReturnType<typeof refreshCatalog>>,
+) {
+  const outcomes = context.waves.map((slots, offset) => {
     const eligible = slots
-      .map((slot) => waveCandidateByCase(catalogAfter, slot.profile).get(slot.case_index))
+      .map((slot) => waveCandidateByCase(catalogAfter, slot.profile, context.batchRunID).get(slot.case_index))
       .filter(Boolean)
       .map((record) => ({
         case_index: record!.benchmark.case_index,
@@ -513,104 +567,127 @@ async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshC
   }
 }
 
-let receiptWritten = false
-let batchOutcomes: Awaited<ReturnType<typeof runRollingBatch>>["outcomes"] | undefined
 try {
   await fs.mkdir(planDirectory, { recursive: true })
   const preexistingCatalog = await refreshCatalog()
-  const plan = {
-    schema_version: 2,
-    launch_mode: "mission",
-    batch_run_id: batchRunID,
-    batch_index: batchIndex,
-    repetition: 1,
-    started_at: Date.now(),
-    model,
-    profiles,
-    trial_concurrency: 5,
-    schedule_mode: "rolling_case_slots_v1",
-    protected_roots: {
-      evidence: protectedRootAudits[0],
-      control: protectedRootAudits[1],
-    },
-    cases,
-    waves,
-    preexisting_eligible: {
-      base: [...reusableProfileRuns(preexistingCatalog, "base", model, "mission").values()]
-        .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
-        .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
-      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model, "mission").values()]
-        .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
-        .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
-    },
+  for (const context of contexts) {
+    const plan = {
+      schema_version: 2,
+      launch_mode: "mission",
+      batch_run_id: context.batchRunID,
+      batch_index: context.batchIndex,
+      repetition: 1,
+      started_at: Date.now(),
+      model,
+      profiles,
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      protected_roots: {
+        evidence: protectedRootAudits[0],
+        control: protectedRootAudits[1],
+      },
+      cases: context.cases,
+      waves: context.waves,
+      preexisting_eligible: {
+        base: [...reusableProfileRuns(preexistingCatalog, "base", model, "mission").values()]
+          .filter((record) => context.cases.some((item) => item.case_index === record.benchmark.case_index))
+          .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
+        advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model, "mission").values()]
+          .filter((record) => context.cases.some((item) => item.case_index === record.benchmark.case_index))
+          .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
+      },
+    }
+    const planBytes = JSON.stringify(plan, null, 2) + "\n"
+    await fs.writeFile(context.planPath, planBytes, { encoding: "utf8", flag: "wx" })
+    await fs.writeFile(
+      context.activeAuthorizationPath,
+      JSON.stringify(
+        {
+          batch_run_id: context.batchRunID,
+          batch_index: context.batchIndex,
+          output_root: output,
+          batch_plan: context.planPath,
+          batch_plan_sha256: crypto.createHash("sha256").update(planBytes).digest("hex"),
+          coordinator_pid: process.pid,
+        },
+        null,
+        2,
+      ) + "\n",
+      { encoding: "utf8", flag: "wx" },
+    )
   }
-  const planBytes = JSON.stringify(plan, null, 2) + "\n"
-  await fs.writeFile(planPath, planBytes, { encoding: "utf8", flag: "wx" })
-  await fs.writeFile(
-    activeAuthorizationPath,
-    JSON.stringify(
-      {
-        batch_run_id: batchRunID,
-        batch_index: batchIndex,
-        output_root: output,
-        batch_plan: planPath,
-        batch_plan_sha256: crypto.createHash("sha256").update(planBytes).digest("hex"),
-        coordinator_pid: process.pid,
-      },
-      null,
-      2,
-    ) + "\n",
-    { encoding: "utf8", flag: "wx" },
-  )
   await queueDashboardWrite()
-  const rolling = await runRollingBatch(preexistingCatalog)
-  batchOutcomes = rolling.outcomes
-  if (!rolling.complete) throw new Error("Rolling batch contains a failed, invalid, or unsealed trial")
-  await fs.writeFile(
-    receiptPath,
-    JSON.stringify(
-      {
-        schema_version: 1,
-        batch_run_id: batchRunID,
-        batch_index: batchIndex,
-        status: "completed",
-        finished_at: Date.now(),
-        ...Object.fromEntries(rolling.outcomes.map((outcome, index) => [`wave_${index + 1}`, outcome])),
-      },
-      null,
-      2,
-    ) + "\n",
-    { encoding: "utf8", flag: "wx" },
+  const launched = await Promise.all(contexts.map((context) => launchRollingBatch(context, preexistingCatalog)))
+  const trialCatalog = await refreshCatalog()
+  const rolling = contexts.map((context, index) => batchOutcomes(context, launched[index]!, trialCatalog))
+  for (const [index, context] of contexts.entries()) {
+    context.batchOutcomes = rolling[index]!.outcomes
+  }
+  const settlement = automationBenchCoordinatorSettlement(
+    contexts.map((context, index) => ({ batch_index: context.batchIndex, complete: rolling[index]!.complete })),
   )
-  receiptWritten = true
+  for (const [index, context] of contexts.entries()) {
+    const complete = settlement.status_by_batch[context.batchIndex] === "completed"
+    await fs.writeFile(
+      context.receiptPath,
+      JSON.stringify(
+        {
+          schema_version: 1,
+          batch_run_id: context.batchRunID,
+          batch_index: context.batchIndex,
+          status: complete ? "completed" : "failed",
+          finished_at: Date.now(),
+          signal: complete ? undefined : terminationSignal ?? null,
+          ...Object.fromEntries(context.batchOutcomes!.map((outcome, index) => [`wave_${index + 1}`, outcome])),
+          error: complete
+            ? undefined
+            : { name: "Error", message: `Rolling batch ${context.batchIndex} contains a failed, invalid, or unsealed trial` },
+        },
+        null,
+        2,
+      ) + "\n",
+      { encoding: "utf8", flag: "wx" },
+    )
+    context.receiptWritten = true
+  }
   const finalCatalog = await refreshCatalog()
   await queueDashboardWrite()
-  const finalizedSlots = waves.flat().filter((slot) => eligibleByCase(finalCatalog, slot.profile).has(slot.case_index))
-  if (finalizedSlots.length !== waves.flat().length) throw new Error("Completed receipt did not finalize every selected batch slot")
+  for (const [index, context] of contexts.entries()) {
+    if (!rolling[index]!.complete) continue
+    const finalizedSlots = context.waves
+      .flat()
+      .filter((slot) => eligibleByCase(finalCatalog, slot.profile).has(slot.case_index))
+    if (finalizedSlots.length !== context.waves.flat().length) {
+      throw new Error(`Completed receipt did not finalize every selected batch ${context.batchIndex} slot`)
+    }
+  }
+  if (!settlement.complete) {
+    throw new Error(`Rolling batches ${settlement.failed_batch_indexes.join(",")} contain failed, invalid, or unsealed trials`)
+  }
   process.stdout.write(
     JSON.stringify({
       ok: true,
-      batch_index: batchIndex,
-      receipt: receiptPath,
+      batch_indices: contexts.map((context) => context.batchIndex),
+      receipts: contexts.map((context) => context.receiptPath),
       dashboard_warning: dashboardFailure?.message,
     }) + "\n",
   )
 } catch (error) {
-  if (!receiptWritten) {
+  for (const context of contexts.filter((item) => !item.receiptWritten)) {
     await fs.mkdir(planDirectory, { recursive: true }).catch(() => undefined)
     await fs
       .writeFile(
-        receiptPath,
+        context.receiptPath,
         JSON.stringify(
           {
             schema_version: 1,
-            batch_run_id: batchRunID,
-            batch_index: batchIndex,
+            batch_run_id: context.batchRunID,
+            batch_index: context.batchIndex,
             status: "failed",
             finished_at: Date.now(),
             signal: terminationSignal ?? null,
-            ...(batchOutcomes
-              ? Object.fromEntries(batchOutcomes.map((outcome, index) => [`wave_${index + 1}`, outcome]))
+            ...(context.batchOutcomes
+              ? Object.fromEntries(context.batchOutcomes.map((outcome, index) => [`wave_${index + 1}`, outcome]))
               : {}),
             error: error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError" },
           },
@@ -622,15 +699,15 @@ try {
       .catch((writeError: NodeJS.ErrnoException) => {
         if (writeError.code !== "EEXIST") throw writeError
       })
-    await queueDashboardWrite()
   }
+  await queueDashboardWrite()
   throw error
 } finally {
   for (const child of activeChildren) child.kill("SIGTERM")
   await Promise.all([...activeChildren].map((child) => stopChild(child)))
   if (forcedTerminationTimer) clearTimeout(forcedTerminationTimer)
-  await fs.rm(activeAuthorizationPath, { force: true })
+  await Promise.all(contexts.map((context) => fs.rm(context.activeAuthorizationPath, { force: true })))
   process.removeListener("SIGINT", onSIGINT)
   process.removeListener("SIGTERM", onSIGTERM)
-  await releaseCoordinator()
+  await Promise.all(releaseCoordinators.toReversed().map((release) => release()))
 }

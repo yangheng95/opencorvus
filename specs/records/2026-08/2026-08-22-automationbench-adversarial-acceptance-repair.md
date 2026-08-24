@@ -5,7 +5,7 @@
 | Item | Requirement or evidence |
 | --- | --- |
 | User request | Treat Tester as an adversarial collaborator rather than a consumer of Planner output and repair tool allocation. Use exact model `openai/gpt-5.6-luna`, launch through a real Mission, and hold the Base Expert Squad. The latest correction expands the deterministic public test set from the completed unique cases 1–50 through unique case 600; it does not repeat the first 50 cases. Every direct-Task, Advanced, Sol/Terra and accidental repetition-2 attempt remains excluded. |
-| Benchmark definition | AutomationBench `1.0.6` contains exactly 600 unique public tasks. Preserve the frozen public 50-case manifest as cases 1–50, append the other 550 unique tasks deterministically as cases 51–600, use exact model `openai/gpt-5.6-luna`, real `POST /mission/wake` intake, immutable held Base Squad, repetition 1, and one fresh simulated world per case. Run at most five distinct Base Mission cases concurrently and never repeat a verified case index. |
+| Benchmark definition | AutomationBench `1.0.6` contains exactly 600 unique public tasks. Preserve the frozen public 50-case manifest as cases 1–50, append the other 550 unique tasks deterministically as cases 51–600, use exact model `openai/gpt-5.6-luna`, real `POST /mission/wake` intake, immutable held Base Squad, repetition 1, and one fresh simulated world per case. Run at most ten distinct Base Mission cases concurrently and never repeat a verified case index. |
 | Input and output | Input is the unchanged official business request plus the benchmark-only uncapped multi-Agent harness notice delivered through a real Mission wake. Output is the official final simulated world score, immutable run evidence, Mission transcript, exact 0..N child-Task transcript set, Task-bound AgentTrace, Mission and Task Provider usage, relational Mission/Task/Session/scheduler-delivery snapshot, and a ten-second-refresh external HTML dashboard. Mission Sessions are not bound to a Task trace directory; their calls remain independently evidenced by the exact Provider ledger and snapshot. |
 | Environment | WSL2 root-owned evaluator, Provider data, control and evidence roots; the Agent sees only its unique-UID project and Unix-socket AutomationBench client. Exact OpenAI credential/model and Exa MCP probes must pass before the first formal run. Secrets remain outside Git, logs, specs and evidence. |
 | Timeout | 600 seconds without real Task/message/tool/trace/world activity. There is no wall-clock limit while observable work continues. |
@@ -325,3 +325,19 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 1. A focused supervisor contract proves two adjacent batches are launched concurrently and the maximum is ten distinct cases.
 2. Two live batch plans retain `trial_concurrency: 5`, exact repetition/model/profile and non-overlapping five-case sets; their aggregate active leases contain cases 56–65 only.
 3. Catalog refreshes never overlap, completed batch receipts stay independent, and any invalid case is retried only in its own missing slot.
+
+## Luna Base single-coordinator 10-case correction
+
+### Evidence and root cause
+
+- The two-coordinator implementation started both batch processes, but each process independently performed a full evidence-catalog replay before publishing its five case leases. The shared catalog lock therefore exposed one five-case group as `running` and the other as `queued` for several minutes. Two coordinator processes were observable even though the operator requested one execution coordinator with ten concurrent case slots.
+- The direct trigger was retaining the one-batch CLI shape and composing concurrency in the shell supervisor. The real data model already permits ten globally unique active leases; only the coordinator's plan/authorization/receipt context was singular.
+- The correction must preserve the existing five-case manifest batch identities and independent receipts because cases 1–65 are already sealed against them. It changes only the execution owner: one coordinator accepts one or two ascending missing batch indices, refreshes the catalog once, creates each existing five-case plan/authorization, launches the combined five or ten unique slots together, refreshes the catalog once after all slots settle, and writes each receipt independently. The two indices need not be consecutive after a partial retry; their case sets must remain disjoint.
+- Already running batches 12/13 are not restarted. Their valid results remain eligible. The corrected single-coordinator path begins with the next missing pair after the current pair settles.
+
+### Acceptance
+
+1. The continuation supervisor launches exactly one `run-automationbench-batch.ts` process per pair and passes two ascending missing batch indices to that process; a final odd batch remains a valid one-batch invocation.
+2. One coordinator performs one preflight catalog refresh, owns two batch-scoped locks and authorizations, and launches ten non-overlapping cases through ten child trial processes. No second batch coordinator or catalog waiter exists.
+3. Both five-case plans keep schema version 2, `trial_concurrency: 5`, exact batch identity and independent receipts, while the shared active lease ledger reaches at most ten unique cases and the dashboard renders their real `running`/terminal state without a synthetic queued group.
+4. Focused positive tests, benchmark typecheck, real catalog/verifier acceptance, and an uninvolved read-only review pass before the new supervisor is used.

@@ -1332,6 +1332,49 @@ export async function executeRollingBatchChains<T>(input: {
   )
 }
 
+export function automationBenchCoordinatorBatchIndexes(value: string) {
+  const batchIndexes = value.split(",").map((item) => Number(item))
+  if (
+    batchIndexes.length < 1 ||
+    batchIndexes.length > 2 ||
+    batchIndexes.some((batchIndex) => !Number.isInteger(batchIndex) || batchIndex < 1) ||
+    new Set(batchIndexes).size !== batchIndexes.length ||
+    (batchIndexes.length === 2 && batchIndexes[1]! < batchIndexes[0]!)
+  ) {
+    throw new Error("Batch coordinator requires one positive batch or two ascending distinct batches")
+  }
+  return batchIndexes
+}
+
+export function automationBenchCoordinatorSettlement(
+  batches: Array<{ batch_index: number; complete: boolean }>,
+) {
+  if (
+    batches.length < 1 ||
+    batches.length > 2 ||
+    batches.some((batch) => !Number.isInteger(batch.batch_index) || batch.batch_index < 1) ||
+    new Set(batches.map((batch) => batch.batch_index)).size !== batches.length
+  ) {
+    throw new Error("Batch coordinator settlement requires one or two distinct positive batches")
+  }
+  const statusByBatch = Object.fromEntries(
+    batches.map((batch) => [batch.batch_index, batch.complete ? "completed" : "failed"] as const),
+  ) as Record<number, "completed" | "failed">
+  const failedBatchIndexes = batches.filter((batch) => !batch.complete).map((batch) => batch.batch_index)
+  return { complete: failedBatchIndexes.length === 0, failed_batch_indexes: failedBatchIndexes, status_by_batch: statusByBatch }
+}
+
+export function activeAutomationBenchBatchRunIDs(
+  active: Array<{ batch_run_id?: string }>,
+  anchoredPlans: Array<{ batch_run_id?: string } | undefined>,
+) {
+  return new Set(
+    [...active.map((item) => item.batch_run_id), ...anchoredPlans.map((item) => item?.batch_run_id)].filter(
+      (batchRunID): batchRunID is string => typeof batchRunID === "string" && batchRunID.length > 0,
+    ),
+  )
+}
+
 export function reusableProfileRuns(
   catalog: { leaderboard: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
   profile: "base" | "advanced",

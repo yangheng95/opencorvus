@@ -40,6 +40,9 @@ import {
   auditAutomationBenchBatchPlanSchema,
   automationBenchBatchPlanIdentity,
   automationBenchBatchPlanMatches,
+  automationBenchCoordinatorBatchIndexes,
+  automationBenchCoordinatorSettlement,
+  activeAutomationBenchBatchRunIDs,
   executeRollingBatchChains,
   failureObservationReceipt,
   missingCompletedBatchProfileReceipts,
@@ -1980,6 +1983,37 @@ describe("external agent benchmark contract", () => {
     )
   })
 
+  test("maps one or two missing manifest batches onto one coordinator invocation", () => {
+    expect(automationBenchCoordinatorBatchIndexes("14")).toEqual([14])
+    expect(automationBenchCoordinatorBatchIndexes("14,15")).toEqual([14, 15])
+    expect(automationBenchCoordinatorBatchIndexes("14,16")).toEqual([14, 16])
+    expect(() => automationBenchCoordinatorBatchIndexes("15,14")).toThrow(
+      "Batch coordinator requires one positive batch or two ascending distinct batches",
+    )
+    expect(() => automationBenchCoordinatorBatchIndexes("14,14")).toThrow(
+      "Batch coordinator requires one positive batch or two ascending distinct batches",
+    )
+  })
+
+  test("settles sibling receipts independently and keeps both plans anchored on the dashboard", () => {
+    expect(
+      automationBenchCoordinatorSettlement([
+        { batch_index: 14, complete: true },
+        { batch_index: 15, complete: false },
+      ]),
+    ).toEqual({
+      complete: false,
+      failed_batch_indexes: [15],
+      status_by_batch: { 14: "completed", 15: "failed" },
+    })
+    expect(
+      activeAutomationBenchBatchRunIDs(
+        [{ batch_run_id: "batch-14" }],
+        [{ batch_run_id: "batch-14" }, { batch_run_id: "batch-15" }],
+      ),
+    ).toEqual(new Set(["batch-14", "batch-15"]))
+  })
+
   test("admits two independent five-case batches up to ten shared trial leases", () => {
     const candidate = (caseIndex: number, batchIndex: number) => ({
       run_id: `run-${caseIndex}`,
@@ -2313,8 +2347,10 @@ describe("external agent benchmark contract", () => {
       caseSet: assignment("case_set"),
       supervisorLock: script.match(/^exec 9>"(.+)"$/m)?.[1],
       batchRange: script.includes("for batch_index in {11..120}; do"),
-      parallelBatchLimit: script.match(/-eq ([0-9]+) \]\]; then/)?.[1],
-      batchScopedAuthorization: coordinator.includes("`active-batch-${batchIndex}.json`"),
+      groupedBatchLimit: script.match(/-eq ([0-9]+) \]\]; then/)?.[1],
+      singleCoordinator: script.includes('active_coordinator="$!"') && !script.includes("active_coordinators=("),
+      batchScopedAuthorization: coordinator.includes("`active-batch-${selected.batchIndex}.json`"),
+      allPlansAnchored: coordinator.includes('contexts.map((context) => context.planPath).join(",")'),
       serializedCatalog: coordinator.includes('path.join(controlRoot, "catalog.lock")'),
       catalogLockWaits: coordinator.includes("retries: { retries: 900, factor: 1, minTimeout: 1_000, maxTimeout: 1_000 }"),
       invocations,
@@ -2326,8 +2362,10 @@ describe("external agent benchmark contract", () => {
       caseSet: "packages/opencorvus/script/benchmark/external-agent/automationbench-case-set-600.json",
       supervisorLock: "$control_root/supervisor.lock",
       batchRange: true,
-      parallelBatchLimit: "2",
+      groupedBatchLimit: "2",
+      singleCoordinator: true,
       batchScopedAuthorization: true,
+      allPlansAnchored: true,
       serializedCatalog: true,
       catalogLockWaits: true,
       invocations: [
@@ -2341,7 +2379,7 @@ describe("external agent benchmark contract", () => {
             "control-root": '"$control_root"',
             dashboard: '"$dashboard_root/index.html"',
             "case-set": '"$case_set"',
-            "batch-index": '"$batch_index"',
+            "batch-index": '"$batch_indices"',
             repetition: "1",
             model: "openai/gpt-5.6-luna",
             profiles: "base",

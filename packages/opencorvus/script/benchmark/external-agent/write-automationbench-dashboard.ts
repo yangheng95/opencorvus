@@ -1,7 +1,7 @@
 import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
-import { plannedAutomationBenchSlotState } from "./contract"
+import { activeAutomationBenchBatchRunIDs, plannedAutomationBenchSlotState } from "./contract"
 
 type Profile = "base" | "advanced"
 type DashboardResult = {
@@ -82,7 +82,12 @@ const model = values.get("model")
 if (!rootValue || !dashboardValue || !model) throw new Error("--root, --dashboard, and --model are required")
 const root = path.resolve(rootValue)
 const dashboard = path.resolve(dashboardValue)
-const planPath = planValue ? path.resolve(planValue) : undefined
+const planPaths = planValue
+  ? planValue
+      .split(",")
+      .filter(Boolean)
+      .map((item) => path.resolve(item))
+  : []
 const profiles = (values.get("profiles") ?? "base").split(",").map((item) => item.trim()) as Profile[]
 if (
   profiles.length < 1 ||
@@ -174,7 +179,7 @@ function duration(value: unknown) {
   return Number.isFinite(number) ? `${(number / 60_000).toFixed(2)} min` : "—"
 }
 
-const [catalog, plan, allFiles, activeLeases] = await Promise.all([
+const [catalog, anchoredPlans, allFiles, activeLeases] = await Promise.all([
   readJSON<{
     generated_at?: number
     attempts?: CatalogAttempt[]
@@ -184,20 +189,19 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
     public_context?: PublicContext
     scope?: { model?: string; launch_mode?: string; case_count?: number }
   }>(path.join(root, "evidence-catalog.json")),
-  planPath ? readJSON<BatchPlan>(planPath) : Promise.resolve(undefined),
+  Promise.all(planPaths.map((planPath) => readJSON<BatchPlan>(planPath))),
   walk(root),
   readJSON<{ active?: Array<{ run_id: string; case_id: string; profile: Profile; batch_run_id: string }> }>(
     path.join(root, ".automationbench-active-leases.json"),
   ),
 ])
-if (plan && (plan.model !== model || plan.launch_mode !== "mission")) {
+if (anchoredPlans.some((plan) => plan && (plan.model !== model || plan.launch_mode !== "mission"))) {
   throw new Error("Dashboard batch plan model/launch mode does not match the Mission run")
 }
 if (catalog?.scope && (catalog.scope.model !== model || catalog.scope.launch_mode !== "mission")) {
   throw new Error("Dashboard catalog model/launch mode does not match the Mission run")
 }
-const activeBatchRunIDs = new Set((activeLeases?.active ?? []).map((item) => item.batch_run_id))
-if (plan) activeBatchRunIDs.add(plan.batch_run_id)
+const activeBatchRunIDs = activeAutomationBenchBatchRunIDs(activeLeases?.active ?? [], anchoredPlans)
 const currentPlans = (
   await Promise.all(
     allFiles
