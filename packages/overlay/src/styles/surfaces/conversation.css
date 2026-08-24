@@ -1870,12 +1870,17 @@
 }
 
 .project-runtime-category.oc-section[open] > .oc-section__head,
-.project-runtime-category.oc-section > .oc-section__head:hover,
-.project-runtime-category.oc-section > .oc-section__head:focus-visible {
+.project-runtime-category.oc-section > .oc-section__head:hover {
   --oc-button-bg: transparent;
 
   background: transparent;
   box-shadow: none;
+}
+
+.project-runtime-category.oc-section > .oc-section__head:focus-visible {
+  --oc-button-bg: transparent;
+
+  background: transparent;
 }
 
 .project-runtime-category.oc-section > .oc-section__head > .oc-section__title {
@@ -1955,7 +1960,7 @@
   text-align: left;
 }
 
-.project-runtime-category-link.oc-button:is(:hover, :focus-visible) {
+.project-runtime-category-link.oc-button:hover {
   --oc-button-bg: transparent;
   --oc-button-border: 0 solid transparent;
   --oc-button-color: var(--text-strong);
@@ -1963,6 +1968,14 @@
 
   background: transparent;
   box-shadow: none;
+}
+
+.project-runtime-category-link.oc-button:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-strong);
+
+  background: transparent;
 }
 
 .project-runtime-category-summary {
@@ -2695,14 +2708,23 @@
 }
 
 .project-runtime-panel-disclosure.oc-button:hover,
-.project-runtime-panel-disclosure.oc-button:focus-visible,
-.project-runtime-category.oc-section > .oc-section__head:hover,
-.project-runtime-category.oc-section > .oc-section__head:focus-visible {
+.project-runtime-category.oc-section > .oc-section__head:hover {
   --oc-button-bg: transparent;
   --oc-button-color: var(--text-strong);
 
   background: transparent;
   box-shadow: none;
+}
+
+/* Focus suppresses the fill but keeps the ring. These selectors used to share
+ * the list above, so `box-shadow: none` erased the very shadow the focus ring
+ * is drawn with and keyboard focus landed here invisibly. */
+.project-runtime-panel-disclosure.oc-button:focus-visible,
+.project-runtime-category.oc-section > .oc-section__head:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-strong);
+
+  background: transparent;
 }
 
 .project-runtime-panel-title {
@@ -2747,8 +2769,11 @@
   text-align: left;
 }
 
+/* Matches its siblings below. The base rule is already transparent, so
+ * re-declaring transparent here made hover a no-op: three rows in this list
+ * lit up and "Git changes" did not, which read as "not clickable". */
 .project-runtime-info-action.oc-button[data-ui="project-runtime-changes"]:is(:hover, :focus-visible) {
-  --oc-button-bg: transparent;
+  --oc-button-bg: var(--hover-wash);
   --oc-button-border: 0 solid transparent;
   --oc-button-shadow: none;
 }

@@ -157,8 +157,13 @@
   padding-inline-end: calc(var(--ui-left-rail-project-action-half-size) - (var(--work-row-action-size) / 2));
 }
 
+/* The row is the feedback unit, so the main button suppresses its own fill —
+ * but not its focus ring. sidebar.css does exactly this for the task row
+ * (`--oc-button-bg: transparent` alone). Nulling the box-shadow here removed
+ * the ring instead, and a keyboard-focused row then looked identical to a
+ * mouse-hovered one. */
 .work-row:is([data-kind="mission"], [data-kind="chat"]) .oc-button[data-ui="ledger-row-main"]:focus-visible {
-  box-shadow: none;
+  --oc-button-bg: transparent;
 }
 
 .work-row .oc-button[data-ui="ledger-row-main"] .work-row-title {

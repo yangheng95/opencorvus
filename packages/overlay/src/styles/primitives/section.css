@@ -31,6 +31,15 @@
   padding: 0 var(--oc-section-head-pad-x);
 }
 
+/* A section head is a <summary>: keyboard-reachable, but it carried no focus
+ * style of its own, so it fell back to whatever ring the browser draws and
+ * matched nothing else in the app. Same inset ring the disclosure trigger
+ * uses — these two are the same affordance wearing different markup. */
+.oc-section__head:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--oc-border-width) var(--accent);
+}
+
 .oc-section__icon {
   display: flex;
   align-items: center;
