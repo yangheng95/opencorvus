@@ -466,9 +466,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .task-row-mini[data-notification-unread="true"] {
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--warn) 13%, transparent), transparent 72%),
-    color-mix(in srgb, var(--surface-hover) 62%, transparent);
+  background: color-mix(in srgb, var(--warn) 9%, var(--surface-hover));
   border-color: color-mix(in srgb, var(--warn) 34%, transparent);
 }
 
@@ -477,9 +475,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .task-row-mini[data-active="true"][data-notification-unread="true"] {
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--warn) 11%, transparent), transparent 76%),
-    color-mix(in srgb, var(--accent) 10%, var(--surface-hover));
+  background: color-mix(in srgb, var(--warn) 8%, color-mix(in srgb, var(--accent) 10%, var(--surface-hover)));
   border-color: color-mix(in srgb, var(--warn) 36%, var(--accent));
 }
 

@@ -1935,8 +1935,7 @@
   min-height: calc(300px * var(--ui-scale));
   padding: calc(14px * var(--ui-scale)) calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale));
   color: var(--text);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-inset) 60%, transparent), transparent 30%), var(--surface);
+  background: var(--surface);
 }
 
 .msg-artifact-timeline .vis-timeline,

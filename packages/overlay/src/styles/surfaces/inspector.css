@@ -49,9 +49,7 @@
   flex: 1 1 0;
   flex-direction: column;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-hover) 24%, transparent), transparent 34%),
-    var(--inspector-surface);
+  background: var(--inspector-surface);
 }
 
 .task-scope-panel .oc-surface-header[data-ui="task-scope-toolbar"] {
@@ -180,8 +178,7 @@
   gap: calc(4px * var(--ui-scale));
   padding: calc(7px * var(--ui-scale)) calc(10px * var(--ui-scale));
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-hover) 24%, transparent), transparent 88%), var(--surface);
+  background: var(--surface);
 }
 
 .browser-preview-browser-controls {

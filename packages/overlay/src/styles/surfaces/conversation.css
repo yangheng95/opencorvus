@@ -476,8 +476,7 @@
   --oc-button-color: var(--text-strong);
   --oc-button-shadow:
     0 calc(8px * var(--ui-scale)) calc(18px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 24%, transparent),
-    inset 0 calc(1px * var(--ui-scale)) 0 color-mix(in srgb, var(--text-strong) 10%, transparent);
+      color-mix(in srgb, var(--ui-shadow-tone) 24%, transparent);
 
   width: var(--oc-button-height);
   min-width: var(--oc-button-height);
@@ -3069,9 +3068,7 @@
   padding: calc(11px * var(--ui-scale));
   border: var(--oc-border-width) solid color-mix(in srgb, var(--card-stage, var(--accent)) 18%, var(--border));
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--card-stage, var(--accent)) 5%, transparent), transparent 44%),
-    var(--surface);
+  background: color-mix(in srgb, var(--card-stage, var(--accent)) 3%, var(--surface));
   color: var(--text);
   cursor: pointer;
   overflow: hidden;

@@ -15,9 +15,7 @@
 }
 
 .chat-bubble-row[data-kind="agent"] {
-  --conversation-card-background:
-    linear-gradient(135deg, color-mix(in srgb, var(--card-stage, var(--accent)) 5%, transparent), transparent 44%),
-    var(--surface);
+  --conversation-card-background: color-mix(in srgb, var(--card-stage, var(--accent)) 3%, var(--surface));
   --conversation-card-edge: color-mix(in srgb, var(--border) 64%, transparent);
 }
 

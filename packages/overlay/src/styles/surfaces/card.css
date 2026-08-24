@@ -519,7 +519,6 @@ body {
   border: var(--oc-border-width) solid color-mix(in srgb, var(--card-stage, var(--accent)) 24%, var(--card-border));
   border-left-width: calc(3px * var(--ui-scale));
   background: color-mix(in srgb, var(--card-stage, var(--accent)) 7%, var(--surface-inset));
-  box-shadow: inset 0 calc(1px * var(--ui-scale)) 0 color-mix(in srgb, var(--text-strong) 5%, transparent);
 }
 
 .card__agent-summary-label {
