@@ -1,7 +1,9 @@
 # OpenCorvus Mission 技术故事动画 · 六列标准镜头信息表 V3
 
-状态：`INVALID PREMATURE DRAFT · blocked before Skill Step 3/4`  
-绑定简报：`preproduction-v3.zh-CN.md`  
+状态：`INVALID PREMATURE DRAFT · blocked before Skill Step 3/4`
+
+绑定简报：`preproduction-v3.zh-CN.md`
+
 规划：16:9 · 169s · 30fps · 中文离屏旁白 · MiniMax H3 I2V
 
 | 镜头编号 & 时长 | 连续性衔接 | 参考锚点（空间+身份） | Hook 类型 | 镜头描述（每秒指令） | 音频与对白轨 |
