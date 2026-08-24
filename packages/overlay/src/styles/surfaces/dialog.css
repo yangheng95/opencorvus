@@ -136,10 +136,8 @@
   margin: calc(-1 * var(--dialog-form-padding-block)) calc(-1 * var(--dialog-form-padding-inline)) 0;
   padding: calc(16px * var(--ui-scale)) calc(18px * var(--ui-scale));
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
-  background:
-    linear-gradient(180deg, var(--ui-highlight-tone), transparent 72%),
-    color-mix(in srgb, var(--surface-strong) 74%, transparent);
-  box-shadow: inset 0 calc(-1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  background: transparent;
+  box-shadow: none;
   flex-shrink: 0;
 }
 
@@ -171,9 +169,7 @@
   margin: auto calc(-1 * var(--dialog-form-padding-inline)) calc(-1 * var(--dialog-form-padding-block));
   padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale));
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
-  background:
-    linear-gradient(0deg, var(--ui-highlight-tone), transparent 76%),
-    color-mix(in srgb, var(--surface-strong) 72%, transparent);
+  background: transparent;
 }
 
 .dialog-actions.compact {
@@ -201,15 +197,8 @@
   padding: calc(14px * var(--ui-scale));
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 84%, transparent);
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(
-      180deg,
-      var(--ui-highlight-tone),
-      color-mix(in srgb, var(--accent) 1.2%, transparent) 76%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface-inset) 94%, transparent);
-  box-shadow: inset 0 calc(1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  background: var(--surface-inset);
+  box-shadow: none;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -270,15 +259,8 @@
   padding: calc(14px * var(--ui-scale)) calc(16px * var(--ui-scale));
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 84%, transparent);
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--text-strong) 3%, transparent),
-      color-mix(in srgb, var(--accent) 1%, transparent) 76%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface-inset) 94%, transparent);
-  box-shadow: var(--shadow);
+  background: var(--surface-inset);
+  box-shadow: none;
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.5;

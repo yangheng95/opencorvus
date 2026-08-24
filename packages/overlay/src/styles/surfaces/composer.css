@@ -133,11 +133,7 @@
 
 .chat-input:focus-within {
   border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surface-elevated) 98%, transparent),
-    color-mix(in srgb, var(--surface-strong) 98%, transparent)
-  );
+  background: var(--surface-elevated);
   box-shadow:
     0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 16%, transparent),
     var(--shadow-lg);

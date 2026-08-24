@@ -586,18 +586,8 @@ body .sidebar-header.oc-surface-header {
   margin: calc(8px * var(--ui-scale)) 0 calc(10px * var(--ui-scale));
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 34%, var(--border));
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--bad) 10%, transparent),
-      color-mix(in srgb, var(--bad) 3.4%, transparent) 72%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface-strong) 74%, transparent);
-  box-shadow:
-    0 calc(10px * var(--ui-scale)) calc(18px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 31%, transparent),
-    inset 0 calc(1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  background: color-mix(in srgb, var(--bad) 7%, var(--surface-strong));
+  box-shadow: none;
   font-size: var(--ui-font-control);
   color: var(--text-soft);
 }

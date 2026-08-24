@@ -67,9 +67,7 @@
   align-items: center;
   justify-content: center;
   padding: calc(24px * var(--ui-scale));
-  background:
-    linear-gradient(180deg, var(--ui-highlight-tone), transparent 72%),
-    color-mix(in srgb, var(--surface-inset) 92%, transparent);
+  background: color-mix(in srgb, var(--surface-inset) 92%, transparent);
 }
 
 /* ── File Link (inline code → selected IDE opener) ── */

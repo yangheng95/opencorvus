@@ -1106,7 +1106,9 @@ button.s-row:focus-visible {
   flex-direction: column;
   gap: calc(6px * var(--ui-scale));
   padding: calc(10px * var(--ui-scale)) 0;
-  border-bottom: var(--oc-border-width) solid var(--ui-highlight-tone);
+  /* --divider-soft: the previous --ui-highlight-tone is a white tint, which
+   * disappears entirely on the light theme's pale surfaces. */
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
   content-visibility: auto;
   contain-intrinsic-size: 0 calc(48px * var(--ui-scale));
 }

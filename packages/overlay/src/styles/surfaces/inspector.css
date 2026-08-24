@@ -493,9 +493,7 @@
   border: var(--ui-focused-popup-border);
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
-  box-shadow:
-    0 calc(22px * var(--ui-scale)) calc(52px * var(--ui-scale)) var(--ui-shadow-tone),
-    inset 0 var(--oc-border-width) 0 var(--ui-highlight-tone);
+  box-shadow: 0 calc(22px * var(--ui-scale)) calc(52px * var(--ui-scale)) var(--ui-shadow-tone);
   backdrop-filter: blur(calc(18px * var(--ui-scale)));
 }
 
@@ -881,7 +879,7 @@
 
 .task-scope-disclosure-content {
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
-  background: linear-gradient(180deg, var(--ui-highlight-tone), transparent 26%);
+  background: transparent;
 }
 
 /* GWG (Goal Group) card — flat shell. Status is carried by
@@ -1945,14 +1943,7 @@
 
 .session-msg[data-role="assistant"] {
   border-color: color-mix(in srgb, var(--accent) 16%, var(--border));
-  background:
-    linear-gradient(
-      180deg,
-      var(--ui-highlight-tone),
-      color-mix(in srgb, var(--accent) 1.2%, transparent) 74%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface) 88%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
 }
 
 .session-msg[data-role="user"] {
