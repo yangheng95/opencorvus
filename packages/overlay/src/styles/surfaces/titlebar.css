@@ -464,6 +464,38 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Titlebar responsive collapse (extracted 2026-05-04). At
-   max-width 760px, the titlebar reflows to two stacked rows.
+   Titlebar responsive collapse. Below --ui-breakpoint-md (760px) each
+   menu trigger drops to its single-letter label.
+
+   This block used to hold only the heading above: the rules were lost
+   in the 2026-05-04 extraction and never landed anywhere else, so the
+   file ended on a comment describing behaviour that did not exist.
+   Meanwhile `.titlebar-menu-trigger-compact` kept an unconditional
+   `display: none` and nothing ever flipped it back, while
+   TitlebarMenubar went on rendering that span — the markup has been
+   shipping a fallback that could not appear. The full labels are
+   `white-space: nowrap` at the default `min-width: auto`, so they never
+   shrank either; in a narrow window they pushed out of their grid track
+   and under the window controls.
+
+   The heading also promised two stacked rows. That is a larger reflow
+   than the evidence supports, and the compact labels alone resolve the
+   overflow, so it is not reinstated here.
+
+   Reachability: the desktop window sets minWidth 1120 (src-tauri/
+   tauri.conf.json), so this breakpoint never fires there — it covers the
+   browser and Docker builds, where the viewport is unconstrained. That
+   is also why it stays a media query rather than a container query: the
+   titlebar spans the full window, so its container *is* the viewport,
+   and the two would behave identically. Panels that can be squeezed by
+   their neighbours use @container instead (composer, conversation).
    ───────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .titlebar-menu-trigger-label {
+    display: none;
+  }
+
+  .titlebar-menu-trigger-compact {
+    display: inline;
+  }
+}
