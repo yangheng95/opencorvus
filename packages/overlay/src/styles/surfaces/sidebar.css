@@ -212,7 +212,12 @@ body .sidebar-header.oc-surface-header {
   justify-content: center;
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--good) 62%, var(--surface-inset));
-  color: var(--text-on-strong);
+  /* Fixed dark ink, not --text-on-strong. That token answers "what reads on
+   * --text-strong", so it flips to white on the light theme — and this fill is
+   * a mid-brightness green in every theme, which left the initials at 1.87
+   * there while dark and vscode-dark (whose --text-on-strong is black) sat at
+   * 7.23 and 6.96. Black holds 11.23 / 7.23 / 6.96 across all three. */
+  color: black;
   font-size: var(--ui-font-small);
   font-weight: var(--ui-font-weight-strong);
 }
