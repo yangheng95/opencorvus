@@ -193,5 +193,9 @@
   -webkit-box-shadow: 0 0 0 calc(1000px * var(--ui-scale)) var(--oc-text-field-surface) inset;
   -webkit-text-fill-color: var(--text-strong);
   caret-color: var(--text-strong);
+  /* Not a duration from the motion scale: a sentinel. Chrome paints its own
+   * background on an autofilled field and only stops once the background-color
+   * transition completes, so a transition long enough never to finish is the
+   * standard way to keep the field's own surface. */
   transition: background-color 9999s ease-in-out 0s;
 }

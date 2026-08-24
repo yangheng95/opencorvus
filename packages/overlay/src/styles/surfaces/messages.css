@@ -111,7 +111,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     will-change: background-position;
-    animation: msg-terminal-activity-wave calc(5.6s * var(--ui-scale)) linear infinite;
+    animation: msg-terminal-activity-wave var(--ui-duration-loop-terminal-wave) linear infinite;
   }
 }
 

@@ -16,9 +16,10 @@
       `tokens/design-language.css` :root — they are theme-
       independent physical constants.
    3. Three theme files declare the **same palette token set**.
-      Symmetry is enforced by `test/flat-redesign-theme-symmetry.
-      test.ts`. Adding a token to one theme without the other two
-      breaks the test.
+      Symmetry is enforced by `test/design-token-invariants.test.ts`
+      (the flat-redesign-theme-symmetry test it used to name was
+      deleted, leaving the rule unguarded until 2026-08-24). Adding a
+      token to one theme without the other two breaks the test.
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="dark"] {

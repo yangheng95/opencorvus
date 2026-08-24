@@ -80,7 +80,10 @@
    * noise. Animation loop tokens are named by the visible motion role
    * because spinner, pulse, progress, and shimmer cycles do not share a
    * single interaction scale. Any value outside this set is rejected by
-   * `flat-redesign-motion-coverage.test.ts`. */
+   * `test/design-token-invariants.test.ts`, which also pins durations to
+   * plain tokens: zoom changes how large things are, never how long they
+   * take. (It replaces flat-redesign-motion-coverage.test.ts, deleted at
+   * some point before 2026-08-24 and cited here long after.) */
   --ui-duration-instant: 0s;
   --ui-duration-fast: 80ms;
   --ui-duration-base: 120ms;
@@ -94,6 +97,7 @@
   --ui-duration-loop-pulse: 1.6s;
   --ui-duration-loop-skeleton-shimmer: 1.6s;
   --ui-duration-loop-tool-wave: 6.8s;
+  --ui-duration-loop-terminal-wave: 5.6s;
   --ui-timing-standard: ease;
 
   /* Elevation scale — 9 z-index tokens. Step 8a (2026-05-04).

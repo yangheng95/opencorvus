@@ -18,9 +18,10 @@
       Material, Carbon, FAST).
 
    The token name set is symmetric with cascade/dark.css and
-   cascade/light.css; only the values differ. flat-redesign-theme-
-   symmetry.test.ts pins the parity. flat-redesign-vscode-theme-
-   passthrough.test.ts pins the no-host-token discipline.
+   cascade/light.css; only the values differ.
+   test/design-token-invariants.test.ts pins both the parity and the
+   no-host-token discipline; the two flat-redesign-* tests named here
+   before had been deleted, leaving both rules unguarded.
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="vscode-dark"] {
