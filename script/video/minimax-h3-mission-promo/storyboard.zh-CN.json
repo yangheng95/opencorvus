@@ -7,8 +7,9 @@
   "brand": {
     "product": "OpenCorvus",
     "tagline": "The open-source harness for long-horizon agent work",
-    "website": "opencorvus.com",
-    "github": "github.com/yangheng95/opencorvus"
+    "website": "https://opencorvus.com",
+    "github": "https://github.com/yangheng95/opencorvus",
+    "author": "Heng Yang (@yangheng95)"
   },
   "case": {
     "mission_id": "ae773cbff6362f19",
@@ -16,9 +17,19 @@
     "model": "openai/gpt-5.6-sol",
     "task_count": 6,
     "verified_result": "validation Macro-F1 0.8343；selected test Macro-F1 0.8361；single seed 42",
-    "public_repository": "https://github.com/yangheng95/deberta-absa-reproducibility"
+    "public_repository": "https://github.com/yangheng95/deberta-v3-absa-public-evidence"
   },
   "scenes": [
+    {
+      "id": "brand-opener",
+      "kind": "brand_opener",
+      "duration": 6,
+      "title": "OpenCorvus",
+      "subtitle": "Mission · 长程智能体团队编排",
+      "credits": ["https://opencorvus.com", "github.com/yangheng95/opencorvus", "Heng Yang · @yangheng95"],
+      "assets": ["assets/promo-redraw/brand-opener-v1.png"],
+      "narration": "OpenCorvus。"
+    },
     {
       "id": "hook",
       "kind": "h3",
@@ -106,19 +117,20 @@
       "title": "结果负责吸引\n证据负责让人相信",
       "subtitle": "最佳模型图、实验生命周期、5 页 ACL 风格短文与公开可访问仓库。",
       "narration": "最后交付的不只是一个 checkpoint。它还包括最佳模型架构图、实验生命周期图、五页 ACL 风格短文和匿名可访问的公开仓库。所有宣传画面只做版式美化，不改变原始指标和内容。",
-      "assets": ["best-model-architecture.png", "best-experiment-lifecycle.png", "paper-1.png", "paper-2.png"],
+      "assets": ["assets/promo-redraw/architecture-promo-v1.png", "assets/promo-redraw/lifecycle-promo-v1.png", "paper-1.png", "paper-2.png"],
       "metric": "Selected run · validation Macro-F1 0.8343 · test Macro-F1 0.8361 · seed 42",
-      "asset_label": "真实产物 · 单种子有界实验，不作泛化承诺"
+      "asset_label": "真实产物 · github.com/yangheng95/deberta-v3-absa-public-evidence · 单种子有界实验"
     },
     {
       "id": "cta",
-      "kind": "h3",
-      "duration": 9,
+      "kind": "brand_outro",
+      "duration": 12,
       "eyebrow": "OPEN SOURCE · INSPECTABLE · RECOVERABLE",
       "title": "让一支可检查的 Agent 团队\n把目标推进到经过验收的交付",
       "subtitle": "OpenCorvus · opencorvus.com · GitHub",
       "narration": "OpenCorvus。让一支可检查的 Agent 团队，把模糊目标推进到经过验收的交付。",
-      "h3_prompt": "Premium closing shot for an open-source agent workbench: multiple luminous specialist paths converge into one polished, tangible delivery object on a dark graphite stage; an independent inspection beam passes over it and turns green, camera slowly pulls back with confident calm motion, cyan and amber brand palette, generous negative space for later title overlay, absolutely no text, no logos, no software UI, 16:9, native stereo audio."
+      "credits": ["https://opencorvus.com", "github.com/yangheng95/opencorvus", "Heng Yang · @yangheng95", "Case: github.com/yangheng95/deberta-v3-absa-public-evidence"],
+      "assets": ["assets/promo-redraw/brand-outro-v1.png"]
     }
   ]
 }

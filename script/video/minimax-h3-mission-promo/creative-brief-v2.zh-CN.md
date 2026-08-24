@@ -114,23 +114,37 @@
 | 研究产物 | 模型与数据、三组 CUDA 实验、监控与推理网页、两张论文图表（模型架构与实验生命周期）、五页 ACL 风格论文、审校证据、公开 GitHub 仓库 | 产物均有项目文件或发布回执 |
 | 质量保障 | 114 文件发布审计；公开、主仓和聚焦测试组均通过；RTX 5090 CUDA 干净环境复验通过 | 测试组存在覆盖重叠，不合并宣称为总测试数 |
 
+### 5.2 品牌、作者与地址
+
+- 片头：渡鸦 Logo 与 `OpenCorvus` 为中心主视觉；同时显示 `https://opencorvus.com`、`github.com/yangheng95/opencorvus`、`Heng Yang · @yangheng95`。构图克制、居中、以品牌识别为主。
+- 片尾：使用信息型分栏构图，再次显示 Logo 与品牌，并列出网站、OpenCorvus 项目仓库、作者和实例仓库 `github.com/yangheng95/deberta-v3-absa-public-evidence`。
+- 案例产物段：实例仓库地址必须与 GitHub 发布回执一致，不使用旧的 `deberta-absa-reproducibility` 地址。
+- 所有 Logo、作者名和 URL 由确定性 SVG 后期排版；H3 与图片生成模型只提供无文字底板。
+- OpenCorvus 的 MIT License 口径只能绑定 OpenCorvus 项目，不扩展到实例仓库；片尾必须写成 `OpenCorvus project · MIT License`。
+
 规模口径：当前仓库没有单个 Mission 已真实调度几十或上百个 Agent Team 并完成交付的证据。宣传片不得使用这一完成式口径，除非补充对应 Mission ID、持久化活动、Provider 活动和交付证据。
 
 ## 6. 镜头节拍
 
+下表时间仅描述主叙事的相对节拍；正式配音后按 3 分 20 秒至 4 分钟成片重新展开。主叙事前增加 6 秒品牌片头，主叙事后增加 12 秒信息型品牌片尾。
+
 | 时间 | 传播任务 | 画面主动作 | 证据/文字 |
 | --- | --- | --- | --- |
+| 片前 6s | Brand opener | 官方渡鸦 Logo 从芯片计算底板中显现，`OpenCorvus`、Mission 定位、官网、项目地址与作者依次稳定出现 | `assets/promo-redraw/brand-opener-v1.png` |
 | 0–6s | Hook | 长 Mission 命令在真实 WebUI 逐字输入；最后一个字符落下时镜头穿过屏幕像素进入真实感硅芯片微距世界 | 真实命令；后期准确排字 |
 | 6–14s | Pain | 一条计算流同时承受上下文、工具结果、状态和责任；确定性动画表现缓冲区填满、执行中断和来源断开 | 明确标注为机制示意，不冒充实时遥测 |
 | 14–23s | Mission | 硬切回真实 Mission 页面；六个真实 Task 与对应子会话依次出现，右侧 Dock 展示具名专家消息和交付依赖 | 真实 UI、真实 Task 名、真实子会话 |
 | 23–35s | Execution | 真实子会话、Provider Activity、终端和 CUDA 训练轮流成为主画面；同一真实 Artifact locator 被下游 Task 打开 | 只使用本次 Mission 持久化证据 |
 | 35–48s | Training | RTX 5090、CUDA 活动、训练监控和推理页通过匹配剪辑连续呈现；芯片微距 H3 镜头只作为无文字声桥 | 真实 GPU/训练/网页数据 |
-| 48–60s | Deliverables | 镜头穿过真实架构图、实验生命周期图、ACL 论文页和 GitHub 发布回执；产物保持原始比例与内容 | 真实文件，不做漂浮卡片墙 |
+| 48–60s | Deliverables | 镜头穿过宣传重绘版模型架构图、实验生命周期图、ACL 论文页和 GitHub 发布回执；重绘版只改变视觉表达，事实、指标与关系保持可追溯 | `assets/promo-redraw/*-promo-v1.png`；真实论文图作为核对来源 |
 | 60–68s | Proof | 真实运行记录聚焦受限指标与独立审校结论，随后回到 Mission 完成状态 | 0.8343 / 0.8361 / single seed 42 / bounded run |
 | 68–77s | Work scenarios | 四个高端真实科技工作环境快速匹配剪辑：模型训练、深度研究、软件发布、数据审计；屏幕保持空白供后期真实内容合成 | 场景名和证据均由后期准确合成 |
-| 77–82s | CTA | 回到真实 Mission composer，光标等待下一条长任务；品牌与 CTA 在最后稳定出现 | “让它把结果交出来” + 创建 Mission |
+| 77–82s | CTA | 回到真实 Mission composer，光标等待下一条长任务 | “让它把结果交出来” + 创建 Mission |
+| 片尾 12s | Brand outro | 切换到不同于片头的左右分栏信息卡：左侧 CTA 与长工作流场景，右侧列出官网、OpenCorvus 仓库、实例仓库和作者 | `assets/promo-redraw/brand-outro-v1.png` |
 
 前 6 秒至少发生真实 UI 输入、屏幕像素微距和硅芯片世界三个尺度变化；全片 2–3 个高峰，证据段主动减速。相邻段落以相同运动方向、屏幕反射、光标动作、声音和真实 Artifact locator 完成匹配剪辑；不使用节点图、轨道或发光物充当连续性。
+
+两张宣传重绘图不得作为缩小后的整图长时间静止展示。视频中沿实体计算路径局部推近并逐段高亮，先读阶段，再读指标，最后停留限制口径；网站预览可提供点击查看 1920×1080 原图。
 
 ## 7. H3 生产方式
 

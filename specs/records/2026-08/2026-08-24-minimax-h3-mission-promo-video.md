@@ -28,6 +28,8 @@
 | Real-case orchestration | Mission status 的会话拓扑合计 46 个唯一 Agent 会话、20 种角色；创建元数据限定 `research-studio`、`base`、`advanced` 三个内置专家团。文案必须区分 Agent 会话、角色和专家团数量。 |
 | Real-case model quality | 三组 RTX 5090 CUDA 实验中，`innovation-smoothing-seed42` 验证 Macro-F1 0.8343229869，较基线绝对提升 0.0146971878；测试 Macro-F1 0.8360914009、准确率 0.8428143713。仅单 seed 42、1800 条训练样本预算，不得外推为普遍优势。 |
 | Real-case deliverables | 已核对模型/数据基础、三组实验及最佳检查点、训练监控与推理网页、两张多格式架构图、五页 ACL 风格论文、独立审校证据、公开 GitHub 仓库及匿名回读回执。Stage 6 记录 114 文件发布审计、portable 11 passed、canonical 25 passed、targeted 11 passed 及 RTX 5090 CUDA 干净环境复验；测试组可能重叠，不相加为总测试数。 |
+| Promotional figure redraw | 将原始论文纵向模型架构图和横向实验生命周期图重绘为两张 16:9 科技宣传图。生成模型只负责无文字的高端计算视觉底板；所有模型名、流程、指标、箭头与证据限制通过确定性 SVG/HTML 后期准确排版。不得让生成模型伪造 UI、指标、代码或实验关系。原论文图保留不覆盖，宣传版使用新文件名。 |
+| Brand and credits | 片头和片尾均展示官方 OpenCorvus 渡鸦 Logo、品牌名、网站 `https://opencorvus.com`、项目仓库 `https://github.com/yangheng95/opencorvus` 和作者 `Heng Yang (@yangheng95)`；两处使用不同构图。案例结果段及片尾展示实例仓库 `https://github.com/yangheng95/deberta-v3-absa-public-evidence`。地址使用确定性排版，不由生成模型绘制。 |
 
 ## Impact analysis
 

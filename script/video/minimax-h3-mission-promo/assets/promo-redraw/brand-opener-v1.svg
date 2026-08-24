@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <radialGradient id="veil" cx="50%" cy="43%" r="72%">
+      <stop offset="0" stop-color="#07111d" stop-opacity="0.78"/>
+      <stop offset="0.6" stop-color="#03070c" stop-opacity="0.93"/>
+      <stop offset="1" stop-color="#010306" stop-opacity="0.99"/>
+    </radialGradient>
+    <filter id="logoGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#3f93ff" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+
+  <image href="__BACKGROUND__" width="1920" height="1080" preserveAspectRatio="xMidYMid slice" opacity="0.42"/>
+  <rect width="1920" height="1080" fill="url(#veil)"/>
+  <path d="M260 822 H1660" stroke="#223d50" stroke-width="1"/>
+  <path d="M710 822 H1210" stroke="#4bbbd2" stroke-width="2"/>
+
+  <g font-family="Inter, Segoe UI, Arial, sans-serif" text-anchor="middle">
+    <image href="__LOGO__" x="812" y="112" width="296" height="296" filter="url(#logoGlow)"/>
+    <text x="960" y="486" fill="#f5f8fb" font-size="86" font-weight="760" letter-spacing="-2">OpenCorvus</text>
+    <text x="960" y="546" fill="#6fd5e7" font-size="23" font-weight="780" letter-spacing="5">MISSION</text>
+    <text x="960" y="612" fill="#d9e5ea" font-size="38" font-weight="650">长程智能体团队编排系统</text>
+    <text x="960" y="668" fill="#829da9" font-size="21" font-weight="600" letter-spacing="1">THE OPEN-SOURCE HARNESS FOR LONG-HORIZON AGENT WORK</text>
+
+    <g transform="translate(0 870)" font-size="20" font-weight="650">
+      <text x="510" y="0" fill="#809ba8">WEBSITE</text>
+      <text x="510" y="34" fill="#e7f2f6">https://opencorvus.com</text>
+      <text x="960" y="0" fill="#809ba8">OPEN-SOURCE PROJECT</text>
+      <text x="960" y="34" fill="#e7f2f6">github.com/yangheng95/opencorvus</text>
+      <text x="1410" y="0" fill="#809ba8">AUTHOR</text>
+      <text x="1410" y="34" fill="#e7f2f6">Heng Yang · @yangheng95</text>
+    </g>
+  </g>
+
+  <text x="64" y="1032" fill="#526c78" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="650" letter-spacing="1.5">OPEN SOURCE · INSPECTABLE · RECOVERABLE</text>
+</svg>
