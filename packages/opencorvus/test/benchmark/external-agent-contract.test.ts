@@ -1913,7 +1913,7 @@ describe("external agent benchmark contract", () => {
     })
   })
 
-  test("accepts a completed five-case Base-only rolling batch", () => {
+  test("accepts a completed repetition-two five-case Base-only rolling batch", () => {
     const cases = [6, 7, 8, 9, 10].map((case_index) => ({ case_index }))
     const wave = cases.map((item) => ({ ...item, profile: "base" }))
     const launched = wave.map((item, index) => ({ ...item, run_id: `base-${item.case_index}`, index }))
@@ -1928,14 +1928,16 @@ describe("external agent benchmark contract", () => {
         batch_plan_sha256: "base-plan-sha",
         wave_index: 1,
         case_index: item.case_index,
+        repetition: 2,
       },
       opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "mission" },
     }))
     expect(
       auditBatchEvidence({
         plan: {
-          schema_version: 1,
+          schema_version: 2,
           batch_run_id: "batch-2",
+          repetition: 2,
           model: "openai/gpt-5.6-luna",
           launch_mode: "mission",
           trial_concurrency: 5,
@@ -1947,6 +1949,7 @@ describe("external agent benchmark contract", () => {
         },
         receipt: {
           batch_run_id: "batch-2",
+          repetition: 2,
           status: "completed",
           wave_1: { launched, eligible: launched },
         },
@@ -2043,24 +2046,107 @@ describe("external agent benchmark contract", () => {
     ])
   })
 
-  test("accepts profile-phased completed receipts for the final paired matrix", () => {
-    const completed = (batch_index: number, profiles: string[]) => ({
+  test("accepts repetition-bound profile receipts for the final matrix", () => {
+    const completed = (batch_index: number, profiles: string[], repetition: number) => ({
       profiles,
-      receipt: { batch_index },
+      repetition,
+      receipt: { batch_index, repetition },
       audit: { passed: true, status: "completed" },
     })
-    const batches = Array.from({ length: 10 }, (_, offset) => [
-      completed(offset + 1, ["base"]),
-      completed(offset + 1, ["advanced"]),
-    ]).flat()
+    const batches = [1, 2].flatMap((repetition) =>
+      Array.from({ length: 10 }, (_, offset) => [
+        completed(offset + 1, ["base"], repetition),
+        completed(offset + 1, ["advanced"], repetition),
+      ]).flat(),
+    )
 
     expect(
       missingCompletedBatchProfileReceipts({
         batches,
         batchIndexes: Array.from({ length: 10 }, (_, offset) => offset + 1),
         profiles: ["base", "advanced"],
+        repetitions: [1, 2],
       }),
     ).toEqual([])
+  })
+
+  test("binds the Luna Mission Base continuation to repetitions 2 through 12 and 600 slots", async () => {
+    const script = await fs.readFile(
+      path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-luna-mission-base-600.sh"),
+      "utf8",
+    )
+    const assignment = (name: string) => script.match(new RegExp(`^${name}=(.+)$`, "m"))?.[1]
+    const lines = script.split(/\r?\n/)
+    const invocations: Array<{ entry: string | undefined; args: Record<string, string> }> = []
+    for (let index = 0; index < lines.length; index++) {
+      if (lines[index]?.trim() !== "/root/.bun/bin/bun \\") continue
+      const command: string[] = []
+      for (index += 1; index < lines.length; index++) {
+        const raw = lines[index]!.trim()
+        const continued = raw.endsWith("\\")
+        command.push(raw.replace(/ \\$/, "").replace(/ &$/, ""))
+        if (!continued) break
+      }
+      const args: Record<string, string> = {}
+      for (const item of command.slice(1)) {
+        const match = item.match(/^--([^ ]+) (.+)$/)
+        if (match) args[match[1]!] = match[2]!
+      }
+      invocations.push({ entry: command[0], args })
+    }
+
+    expect({
+      evidenceRoot: assignment("evidence_root"),
+      controlRoot: assignment("control_root"),
+      dashboardRoot: assignment("dashboard_root"),
+      targetRepetitions: assignment("target_repetitions"),
+      supervisorLock: script.match(/^exec 9>"(.+)"$/m)?.[1],
+      repetitionRange: script.match(/^for repetition in (.+); do$/m)?.[1],
+      batchRange: script.match(/^  for batch_index in (.+); do$/m)?.[1],
+      invocations,
+      resumeIdentityOwner: script.includes("automationBenchBatchPlanMatches(plan"),
+    }).toEqual({
+      evidenceRoot: "/var/lib/opencorvus-benchmark/evidence-luna-mission-base-v20260822-r3",
+      controlRoot: "/var/lib/opencorvus-benchmark/control-luna-mission-base-v20260822-r3",
+      dashboardRoot: "/mnt/d/myhexin-local/opencorvus-benchmark-results/luna-mission-base-v20260822-r3",
+      targetRepetitions: "12",
+      supervisorLock: "$control_root/supervisor.lock",
+      repetitionRange: "{2..12}",
+      batchRange: "{1..10}",
+      invocations: [
+        {
+          entry: "packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts",
+          args: {
+            python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+            "source-data": "/var/lib/opencorvus-benchmark/provider-data",
+            output: '"$evidence_root"',
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            "control-root": '"$control_root"',
+            dashboard: '"$dashboard_root/index.html"',
+            "batch-index": '"$batch_index"',
+            repetition: '"$repetition"',
+            repetitions: '"$target_repetitions"',
+            model: "openai/gpt-5.6-luna",
+            profiles: "base",
+            "inactivity-ms": "600000",
+          },
+        },
+        {
+          entry: "packages/opencorvus/script/benchmark/external-agent/verify-automationbench-evidence.ts",
+          args: {
+            root: '"$evidence_root"',
+            "source-data": "/var/lib/opencorvus-benchmark/provider-data",
+            python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            model: "openai/gpt-5.6-luna",
+            profiles: "base",
+            repetitions: '"$target_repetitions"',
+            mode: "final",
+          },
+        },
+      ],
+      resumeIdentityOwner: true,
+    })
   })
 
   test("binds the dedicated Luna Mission Advanced supervisor to its isolated 50-case round", async () => {
@@ -2170,6 +2256,7 @@ describe("external agent benchmark contract", () => {
     expect([
       auditAutomationBenchBatchPlanSchema({ schema_version: 1 }),
       auditAutomationBenchBatchPlanSchema({ schema_version: 2, repetition: 1 }),
+      auditAutomationBenchBatchPlanSchema({ schema_version: 2, repetition: 12 }),
       auditAutomationBenchBatchPlanSchema({ schema_version: 2 }),
       auditAutomationBenchBatchPlanSchema({ schema_version: 3, repetition: 1 }),
       auditAutomationBenchBatchPlanSchema({ schema_version: "1" }),
@@ -2177,6 +2264,7 @@ describe("external agent benchmark contract", () => {
     ]).toEqual([
       { passed: true, schema_version: 1, repetition: null, legacy: true, reason: null },
       { passed: true, schema_version: 2, repetition: 1, legacy: false, reason: null },
+      { passed: true, schema_version: 2, repetition: 12, legacy: false, reason: null },
       { passed: false, schema_version: 2, repetition: null, legacy: false, reason: "batch_plan_schema" },
       { passed: false, schema_version: 3, repetition: 1, legacy: false, reason: "batch_plan_schema" },
       { passed: false, schema_version: null, repetition: null, legacy: false, reason: "batch_plan_schema" },
@@ -2209,6 +2297,7 @@ describe("external agent benchmark contract", () => {
       "base",
       "openai/gpt-5.6-luna",
       "mission",
+      1,
     )
 
     expect([...reusable].map(([caseIndex, item]) => [caseIndex, item.run_id])).toEqual([

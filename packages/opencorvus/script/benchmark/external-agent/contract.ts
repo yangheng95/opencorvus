@@ -1294,6 +1294,7 @@ export function reusableProfileRuns(
   profile: "base" | "advanced",
   model: string,
   launchMode: string,
+  repetition = 1,
 ): Map<number, Record<string, any>> {
   const verified = new Map(
     catalog.leaderboard
@@ -1302,7 +1303,7 @@ export function reusableProfileRuns(
           record.opencorvus?.profile === profile &&
           record.opencorvus?.model === model &&
           record.opencorvus?.launch_mode === launchMode &&
-          record.benchmark?.repetition === 1,
+          record.benchmark?.repetition === repetition,
       )
       .map((record) => [Number(record.benchmark.case_index), record]),
   )
@@ -1312,7 +1313,7 @@ export function reusableProfileRuns(
       item.opencorvus?.profile === profile &&
       item.opencorvus?.model === model &&
       item.opencorvus?.launch_mode === launchMode &&
-      item.benchmark?.repetition === 1,
+      item.benchmark?.repetition === repetition,
   )) {
     const caseIndex = Number(record.benchmark.case_index)
     if (verified.has(caseIndex)) continue
@@ -1328,23 +1329,28 @@ export function reusableProfileRuns(
 export function missingCompletedBatchProfileReceipts(input: {
   batches: Array<{
     profiles: string[]
-    receipt?: { batch_index?: number }
+    receipt?: { batch_index?: number; repetition?: number }
+    repetition?: number
     audit: { passed?: boolean; status?: string }
   }>
   batchIndexes: number[]
   profiles: string[]
-}): Array<{ batch_index: number; profile: "base" | "advanced" }> {
-  return input.batchIndexes.flatMap((caseBatchIndex) =>
-    input.profiles.flatMap((profile) =>
-      input.batches.some(
-        (batch) =>
-          batch.audit.passed === true &&
-          batch.audit.status === "completed" &&
-          batch.receipt?.batch_index === caseBatchIndex &&
-          batch.profiles.includes(profile),
-      )
-        ? []
-        : [{ batch_index: caseBatchIndex, profile: profile as BatchProfileSlot["profile"] }],
+  repetitions?: number[]
+}): Array<{ batch_index: number; profile: "base" | "advanced"; repetition: number }> {
+  return (input.repetitions ?? [1]).flatMap((repetition) =>
+    input.batchIndexes.flatMap((caseBatchIndex) =>
+      input.profiles.flatMap((profile) =>
+        input.batches.some(
+          (batch) =>
+            batch.audit.passed === true &&
+            batch.audit.status === "completed" &&
+            batch.receipt?.batch_index === caseBatchIndex &&
+            (batch.receipt?.repetition ?? batch.repetition ?? 1) === repetition &&
+            batch.profiles.includes(profile),
+        )
+          ? []
+          : [{ batch_index: caseBatchIndex, profile: profile as BatchProfileSlot["profile"], repetition }],
+      ),
     ),
   )
 }
@@ -1397,8 +1403,8 @@ export function auditAutomationBenchBatchPlanSchema(plan: any) {
   if (schemaVersion === 1 && repetition === null) {
     return { passed: true, schema_version: 1, repetition: null, legacy: true, reason: null }
   }
-  if (schemaVersion === 2 && repetition === 1) {
-    return { passed: true, schema_version: 2, repetition: 1, legacy: false, reason: null }
+  if (schemaVersion === 2 && repetition !== null && Number.isFinite(repetition) && repetition >= 1) {
+    return { passed: true, schema_version: 2, repetition, legacy: false, reason: null }
   }
   return {
     passed: false,
@@ -1428,10 +1434,12 @@ export function auditBatchEvidence(input: {
   }
   const reasons: string[] = []
   const planSchemaAudit = auditAutomationBenchBatchPlanSchema(input.plan)
+  const planRepetition = planSchemaAudit.legacy ? 1 : input.plan.repetition
   if (!planSchemaAudit.passed) reasons.push(planSchemaAudit.reason!)
   if (
     !["completed", "failed"].includes(input.receipt.status) ||
-    input.receipt.batch_run_id !== input.plan.batch_run_id
+    input.receipt.batch_run_id !== input.plan.batch_run_id ||
+    (input.receipt.repetition ?? (planSchemaAudit.legacy ? 1 : Number.NaN)) !== planRepetition
   ) {
     reasons.push("batch_receipt_identity")
   }
@@ -1499,6 +1507,7 @@ export function auditBatchEvidence(input: {
       attempt.benchmark?.batch_plan_sha256 !== input.planSHA256 ||
       attempt.benchmark?.wave_index !== item.waveIndex ||
       attempt.benchmark?.case_index !== item.case_index ||
+      (attempt.benchmark?.repetition ?? (planSchemaAudit.legacy ? 1 : Number.NaN)) !== planRepetition ||
       attempt.opencorvus?.profile !== item.profile ||
       attempt.opencorvus?.model !== input.plan.model ||
       attempt.opencorvus?.launch_mode !== input.plan.launch_mode ||
@@ -1549,6 +1558,7 @@ export function auditBatchEvidence(input: {
     if (
       !attempt ||
       attempt.benchmark?.case_index !== item.case_index ||
+      (attempt.benchmark?.repetition ?? (planSchemaAudit.legacy ? 1 : Number.NaN)) !== planRepetition ||
       attempt.opencorvus?.profile !== item.profile ||
       attempt.opencorvus?.model !== input.plan.model ||
       attempt.opencorvus?.launch_mode !== input.plan.launch_mode ||

@@ -52,6 +52,12 @@ const dashboard = values.get("dashboard") ? path.resolve(values.get("dashboard")
 const evaluatorRoot = path.dirname(path.dirname(python))
 const batchIndex = Number(values.get("batch-index"))
 if (!Number.isInteger(batchIndex) || batchIndex < 1 || batchIndex > 10) throw new Error("--batch-index must be 1 through 10")
+const repetition = Number(values.get("repetition") ?? 1)
+const repetitions = Number(values.get("repetitions") ?? repetition)
+if (!Number.isInteger(repetition) || repetition < 1) throw new Error("--repetition must be a positive integer")
+if (!Number.isInteger(repetitions) || repetitions < repetition) {
+  throw new Error("--repetitions must be a positive integer greater than or equal to --repetition")
+}
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
 const model =
   values.get("model") ??
@@ -223,6 +229,8 @@ async function refreshCatalog() {
       model,
       "--profiles",
       profiles.join(","),
+      "--repetitions",
+      String(repetitions),
     ],
     { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
   )
@@ -255,6 +263,8 @@ async function writeDashboard() {
       model,
       "--profiles",
       profiles.join(","),
+      "--repetitions",
+      String(repetitions),
     ],
     { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
   )
@@ -323,7 +333,7 @@ async function queueDashboardWhenLeaseActive(item: FrozenCase, profile: Profile)
 function eligibleByCase(catalog: { leaderboard: Array<Record<string, any>> }, profile: Profile) {
   return new Map(
     catalog.leaderboard
-      .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === 1)
+      .filter((record) => record.opencorvus?.profile === profile && record.benchmark?.repetition === repetition)
       .map((record) => [Number(record.benchmark.case_index), record]),
   )
 }
@@ -337,13 +347,13 @@ function waveCandidateByCase(
   profile: Profile,
 ) {
   const records = [
-    ...reusableProfileRuns(catalog, profile, model, "mission").values(),
+    ...reusableProfileRuns(catalog, profile, model, "mission", repetition).values(),
     ...catalog.attempts.filter(
       (record) =>
         record.raw_leaderboard_eligible === true &&
         record.benchmark?.batch_run_id === batchRunID &&
         record.opencorvus?.profile === profile &&
-        record.benchmark?.repetition === 1,
+        record.benchmark?.repetition === repetition,
     ),
   ]
   const candidates = new Map<number, Record<string, any>>()
@@ -377,7 +387,7 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
     "--case-set",
     caseSet,
     "--repetition",
-    "1",
+    String(repetition),
     "--inactivity-ms",
     inactivityMs,
     "--batch-plan",
@@ -432,8 +442,8 @@ async function runTrial(item: FrozenCase, profile: Profile, waveIndex: number) {
 async function runRollingBatch(catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
   if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
   const existing = {
-    base: reusableProfileRuns(catalogBefore, "base", model, "mission"),
-    advanced: reusableProfileRuns(catalogBefore, "advanced", model, "mission"),
+    base: reusableProfileRuns(catalogBefore, "base", model, "mission", repetition),
+    advanced: reusableProfileRuns(catalogBefore, "advanced", model, "mission", repetition),
   }
   const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = [[], []]
   await executeRollingBatchChains({
@@ -491,7 +501,7 @@ try {
     launch_mode: "mission",
     batch_run_id: batchRunID,
     batch_index: batchIndex,
-    repetition: 1,
+    repetition,
     started_at: Date.now(),
     model,
     profiles,
@@ -504,10 +514,10 @@ try {
     cases,
     waves,
     preexisting_eligible: {
-      base: [...reusableProfileRuns(preexistingCatalog, "base", model, "mission").values()]
+      base: [...reusableProfileRuns(preexistingCatalog, "base", model, "mission", repetition).values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "base" })),
-      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model, "mission").values()]
+      advanced: [...reusableProfileRuns(preexistingCatalog, "advanced", model, "mission", repetition).values()]
         .filter((record) => cases.some((item) => item.case_index === record.benchmark.case_index))
         .map((record) => ({ run_id: record.run_id, case_index: record.benchmark.case_index, profile: "advanced" })),
     },
@@ -520,6 +530,7 @@ try {
       {
         batch_run_id: batchRunID,
         batch_index: batchIndex,
+        repetition,
         output_root: output,
         batch_plan: planPath,
         batch_plan_sha256: crypto.createHash("sha256").update(planBytes).digest("hex"),
@@ -541,6 +552,7 @@ try {
         schema_version: 1,
         batch_run_id: batchRunID,
         batch_index: batchIndex,
+        repetition,
         status: "completed",
         finished_at: Date.now(),
         ...Object.fromEntries(rolling.outcomes.map((outcome, index) => [`wave_${index + 1}`, outcome])),
@@ -559,6 +571,7 @@ try {
     JSON.stringify({
       ok: true,
       batch_index: batchIndex,
+      repetition,
       receipt: receiptPath,
       dashboard_warning: dashboardFailure?.message,
     }) + "\n",
@@ -574,6 +587,7 @@ try {
             schema_version: 1,
             batch_run_id: batchRunID,
             batch_index: batchIndex,
+            repetition,
             status: "failed",
             finished_at: Date.now(),
             signal: terminationSignal ?? null,
