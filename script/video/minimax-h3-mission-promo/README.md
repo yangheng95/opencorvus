@@ -1,15 +1,20 @@
 # MiniMax H3 Mission promo pipeline
 
-> Production gate: `storyboard.zh-CN.json` and `creative-brief-v2.zh-CN.md` are rejected/superseded historical drafts. The current Skill-driven source is `preproduction-v3.zh-CN.md`, stopped at story-outline approval. `standard-shot-table-v3.zh-CN.md` is an invalid premature draft retained for review evidence: required labeled character cards and environment-only scene cards were not locked first, so its self-check is revoked. No new image, voice, shot clip, or final composition may be generated until the user approves the brief/outline and the remaining MiniMax 3D Animation Skill gates are completed in order.
+> Current production direction: `desktop-brief-v5.zh-CN.md`. V5 stays inside one continuous user Desktop and uses deterministic UI/text animation plus retained real evidence. V4 character animation is paused and must not be mixed into V5; `storyboard.zh-CN.json`, character cards and H3 clips are historical or alternate-direction evidence only.
 
-This directory produces the Chinese OpenCorvus long-horizon Mission case film from one approved storyboard. The next cut uses one cartoon personal user, one consistent cartoon Agent family, and one project in a bright character-animation world:
+The current machine-readable source is `desktop-storyboard-v5.zh-CN.json`; `desktop-script-v5.zh-CN.md` records how two independent drafts were synthesized. The story remains: user pain → context failure → multi-Agent fragmentation → persistent Mission → scheduling/resume/Artifact/review → expert-squad self-evolution and open source → short DeBERTa proof → personal long workflows.
 
-- MiniMax H3 is used only for approved, text-free cartoon character shots derived from the frozen character bible and per-shot keyframes. Standalone T2V shots are excluded from the film.
-- The explanatory body is told through continuous character actions. Product UI, training pages, paper pages, and screenshot collages do not carry the story; the short case proof uses deterministic labels and artifact icons only.
-- Generation runs on the local RTX 5090; no MiniMax API key is required.
-- Every reference-driven run records the local source path and SHA-256 for both the keyframe and H3 workflow; the final composer refuses missing H3 clips.
+```powershell
+python -m pip install -r .\script\video\minimax-h3-mission-promo\requirements.txt
+python .\script\video\minimax-h3-mission-promo\produce-desktop-v5.py compose
+python .\script\video\minimax-h3-mission-promo\produce-desktop-v5.py inspect
+```
 
-## Why the single-5090 quantized path
+Default output: `D:\myhexin-local\demos\opencorvus-desktop-promo-v5-20260824`. The final is 218 seconds, 1920×1080, H.264/AAC. H3 is intentionally not used in V5 because exact Desktop UI, code, metrics, logos, and repository addresses must remain deterministic.
+
+Each scene and voice cache filename includes a build digest over the storyboard, renderer, official Logo, and retained evidence. A changed input therefore cannot silently reuse a stale scene. `inspect` samples every scene at start/middle/end plus the D11 confirmation and four D12 evidence events, writes 47 full-resolution frames and a contact sheet, and reports only structural checks as automated; text clipping and evidence semantics still require human visual review.
+
+## Historical H3 character path
 
 The production host has one RTX 5090 (32 GB VRAM) and 64 GB system RAM. The full BF16 H3 components do not fit, so this pipeline uses the community-qualified ComfyUI path: a pruned INT8 ConvRot FL2VA diffusion model, NVFP4 AWQ Qwen3-VL text encoder, the two H3 VAEs, and ComfyUI DynamicVRAM. The four model files total about 39.6 GiB and retain native video plus stereo-audio generation. The installation manifest labels these as third-party quantized/repackaged weights rather than implying an official full-precision run.
 
@@ -40,7 +45,7 @@ character bible and run the H3 image-to-video workflow:
 input directory and selects the official H3 I2V API workflow. Standalone T2V
 clips are exploratory only and are not valid character-story production shots.
 
-## Run
+## Historical H3 run
 
 Use the bundled Codex Python or any Python 3.11+ with Pillow, plus FFmpeg and FFprobe on `PATH`.
 

@@ -1,6 +1,6 @@
 # OpenCorvus Mission 科普动画创意简报 V2
 
-状态：`SUPERSEDED`。本文件保留调研、品牌事实、案例口径和失败历史；V9 自写分镜已被用户否决，不得用于生产。当前唯一前期方案与镜头事实源是 `preproduction-v3.zh-CN.md` 和 `standard-shot-table-v3.zh-CN.md`，它们严格按已安装 MiniMax H3 Prompt Writing、Brand Promo 和 3D Animation Short Generator Skills 编写。用户批准 Skill 镜头表前，禁止继续图片、视频、配音和整片生成。
+状态：`SUPERSEDED`。本文件只保留调研、品牌事实、案例口径和失败历史；V9 自写分镜已被用户否决，不得用于生产。当前唯一前期事实源是 `preproduction-v3.zh-CN.md`。`standard-shot-table-v3.zh-CN.md` 是失效的过早草案，只能作为审查证据。新的角色卡、场景卡、镜头表和文本分镜必须按 Skill 顺序产生并更新当前事实源。
 
 ## 1. 这支片只解决一个传播问题
 

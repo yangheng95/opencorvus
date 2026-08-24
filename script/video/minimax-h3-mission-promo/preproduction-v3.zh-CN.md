@@ -1,6 +1,13 @@
 # OpenCorvus Mission 技术故事动画 · 前期方案 V3
 
-状态：`story-outline-approval`。本文件按 MiniMax H3 `brand-promo-video-generator`、`3d-animation-short-generator` 和 `h3-prompt-writing` Skill 编写。当前必须先由用户批准项目简报与八拍故事大纲；批准后才锁定带名称的角色卡与无人物场景卡。`standard-shot-table-v3.zh-CN.md` 是一次过早产出的失效草案，不能进入分镜或生产。
+状态：`text-storyboard-production`。本文件按 MiniMax H3 `brand-promo-video-generator`、`3d-animation-short-generator` 和 `h3-prompt-writing` Skill 编写。用户在阅读独立审查结论后于 2026-08-24T18:40:18+08:00 明确要求“修复后生成完整视频”，作为后续推荐生产门的继续授权。带名称角色卡、无人物场景卡和 V4 六列镜头表已锁定，V4 自检通过；按推荐项进入单文本分镜。旧 V3 镜头表仍是失效草案。
+
+- Project Brief gate：`approved by user · 2026-08-24T18:40:18+08:00`
+- Story Outline gate：`approved by user · 2026-08-24T18:40:18+08:00`
+- Character Card gate：`approved by continuing user instruction · character-card-v3.png · sha256 4d980f60bd7d4b2cda9db2c23abbc8e4c5603bdef21ac5be09082280f86be261`
+- Scene Card gate：`approved by continuing user instruction · scene-cards-v3.png · sha256 f9d4d8b8d016e2996c90a23459a431cfcc0cf95b7ad950bcfbc6b45241b12de8`
+- Shot Table gate：`approved by continuing user instruction · standard-shot-table-v4.zh-CN.md · self-check passed 2026-08-24T19:00:37+08:00`
+- Storyboard mode：`single text storyboard · recommended default`
 
 ## 项目简报
 
@@ -53,7 +60,7 @@
 4. 错误补救：用户多开 Agent，重复工作与断裂交接反而增加。
 5. Mission 介入：目标、约束、验收被持久保存并拆成有依赖 Task。
 6. 长程机制：完整专家团、等待/唤醒、执行轮次、恢复和 Artifact locator 形成连续因果链。
-7. 验收与可信：独立复核退回缺陷；用户反馈形成新专家团版本，查看差异后确认安装或保持旧版；开源、自托管、权限确认和记录回放让用户保持控制。
+7. 验收与可信：独立复核退回缺陷，原团队修复并复验；通过时 Mission 才进入 accepted，无法继续时留下证据进入 blocked。用户反馈形成新专家团版本，查看差异后确认安装或保持旧版；开源、自托管、权限确认和记录回放让用户保持控制。
 8. 证明与回收：真实 DeBERTa Mission 证明机制跑通过；主角把下一个个人长项目交给 Mission，而不是继续当项目经理。
 
 ## 待锁定角色卡

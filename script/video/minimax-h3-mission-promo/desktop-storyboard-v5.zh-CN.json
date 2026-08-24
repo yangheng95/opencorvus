@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "production_status": "approved",
+  "approved_by": "user-request-two-independent-drafts-then-synthesize-2026-08-24",
+  "title": "别再给 Agent 当项目经理",
+  "canvas": { "width": 1920, "height": 1080, "fps": 25 },
+  "desktop_contract": {
+    "wallpaper": "fixed-light-gray-cyan",
+    "taskbar": "always-visible",
+    "cursor": "single-purposeful-pointer",
+    "mechanism_label": "MECHANISM RECONSTRUCTION · 机制重建",
+    "evidence_label": "CAPTURED EVIDENCE · 2026-08-24 · NOT LIVE",
+    "forbidden": ["characters", "full-screen-slides", "feature-card-wall", "fake-product-ui", "H3-redrawn-text"]
+  },
+  "brand": {
+    "product": "OpenCorvus",
+    "website": "opencorvus.com",
+    "repository": "github.com/yangheng95/opencorvus",
+    "author": "Heng Yang · @yangheng95",
+    "case_repository": "github.com/yangheng95/deberta-v3-absa-public-evidence"
+  },
+  "scenes": [
+    {
+      "id": "D01-brand",
+      "duration": 5,
+      "narration": "Agent 很能干。但长项目，难的不是开头。",
+      "mode": "desktop-brand",
+      "terms": ["Open-source Agent Harness for long-horizon work"]
+    },
+    {
+      "id": "D02-intent",
+      "duration": 18,
+      "narration": "你把目标一次写清：下载模型和数据，只用 CUDA 完成实验，交付网页、图表、论文、测试，再发布仓库。它立刻开工，看起来一切都在推进。",
+      "mode": "desktop-typewriter",
+      "command": [
+        "复现 DeBERTa ABSA 项目，获取模型与数据，完成 baseline 和两次改进实验。",
+        "硬约束：RTX 5090，CUDA only；所有实验可复验；不得用测试集调参。",
+        "交付：训练监控页、推理页、两张论文图、五页论文、测试报告。",
+        "验收通过后，经我确认，发布公开 GitHub 仓库。"
+      ]
+    },
+    {
+      "id": "D03-context-failure",
+      "duration": 18,
+      "narration": "但 Agent 的上下文有限。新信息不断进入，早期 CUDA 约束、测试计划和发布要求在压缩中变淡。这就是 instruction loss。接着 plan drift 出现：路径偏离，测试被跳过，局部结果却被当成完成。",
+      "mode": "desktop-context",
+      "terms": ["Context Window 98%", "Context Compaction", "Instruction Loss", "Plan Drift", "Premature Termination"]
+    },
+    {
+      "id": "D04-multi-agent",
+      "duration": 16,
+      "narration": "多开几个 Agent，也不会自动变成协作。没有共同的持久状态，它们重复实现、互相等待，还会留下没人拥有的依赖。你只能复制上下文、追问和派活。",
+      "mode": "desktop-multi-window",
+      "terms": ["State Fragmentation", "Duplicated Work", "Orphaned Dependency"]
+    },
+    {
+      "id": "D05-comparison",
+      "duration": 14,
+      "narration": "不同工具解决不同层次：办公成品、可组合运行时、软件工程、编码协作。OpenCorvus 关心的是，一个跨领域长目标怎样持续推进、恢复、交接和验收。",
+      "mode": "desktop-tabs",
+      "tabs": [
+        ["WorkBuddy", "一句话交付办公成品"],
+        ["DeepSeek Harness", "开发者可组合运行时"],
+        ["Codex", "软件工程 Agent"],
+        ["Claude Code", "编码与并行协作"],
+        ["OpenCorvus", "开源的跨领域长程 Mission"]
+      ]
+    },
+    {
+      "id": "D06-persistent-mission",
+      "duration": 18,
+      "narration": "这一次，用户创建 Mission。最终目标、硬约束和验收标准进入持久 Mission Record，成为规划、执行和复核共同读取的契约。",
+      "mode": "desktop-mission-create",
+      "terms": ["Persistent Mission Record", "Final Goal", "Hard Constraints", "Acceptance Contract"]
+    },
+    {
+      "id": "D07-scheduling",
+      "duration": 18,
+      "narration": "Mission 把交付拆成有依赖的重型 Task，并在创建时锁定专家团版本。上游没交付，下游保持 waiting；依赖满足才变为 ready。系统重读持久事实、取得执行 lease，唯一一次 occurrence 才进入 running。",
+      "mode": "desktop-scheduler",
+      "terms": ["Task Dependency", "Squad Revision · Frozen", "Queue Hint", "Wakeup", "Activation Lease", "Occurrence"]
+    },
+    {
+      "id": "D08-resume",
+      "duration": 18,
+      "narration": "运行到第三步，服务中断。进度、工具结果和 occurrence 已写入 durable state。重启后，Mission 恢复同一个执行轮次，从原游标继续；不从头猜，也不重复派发 Task。",
+      "mode": "desktop-resume",
+      "terms": ["Durable State", "Same Occurrence", "Resume Cursor · Step 3/6", "dispatchCount: 1"]
+    },
+    {
+      "id": "D09-artifact",
+      "duration": 15,
+      "narration": "专家团交接的不是一句完成了。Artifact 记录来源、真实文件路径和精确 locator。下一支专家团读取同一份产物，再明确选择自己消费的来源。",
+      "mode": "desktop-artifact",
+      "terms": ["Artifact Lineage", "artifact_read", "artifact_select"],
+      "artifact": {
+        "source": "task/T2",
+        "path": "reports/experiments/comparison.json",
+        "locator": "/runs/1/validation/macroF1",
+        "value": "0.8343229869545659"
+      }
+    },
+    {
+      "id": "D10-review",
+      "duration": 15,
+      "narration": "实现者不能自己宣布过关。独立复核重现问题：缺陷成立就 rejected，退回修复、复验；证据满足契约才 accepted。无法继续，也必须带着原因收敛为 blocked。",
+      "mode": "desktop-review",
+      "terms": ["Independent Review", "Rejected", "Focused Verification · PASS", "Accepted", "Blocked with Evidence"]
+    },
+    {
+      "id": "D11-open-source",
+      "duration": 16,
+      "narration": "更重要的是，专家团会在反馈中自进化。失败证据形成候选 revision，经过差异审查和验证，再由用户确认安装；新任务使用新版本，运行中任务锁定旧版。系统开源、可自托管、可审计、可回滚。",
+      "mode": "desktop-open-source",
+      "terms": ["Expert Squad Self-Evolution", "Evidence → Candidate Revision → Verify", "MIT License", "Audit Log", "v4.1 → v4.2", "Rollback Ref", "Confirm Install"]
+    },
+    {
+      "id": "D12-case-proof",
+      "duration": 25,
+      "narration": "真实 DeBERTa Mission 用十二小时四十五分，调度三支专家团、四十六个会话，推进六个重型 Task。在 RTX 5090 上跑完三组 CUDA 实验，交付网页、图表、五页论文、测试和公开仓库。单 seed 42、训练样本一千八百条，验证 Macro-F1 83.43%，测试 83.61%。结果受限，但可复验。",
+      "mode": "desktop-evidence",
+      "evidence": ["mission", "agents", "cuda", "web", "figures", "paper", "publication", "metrics"]
+    },
+    {
+      "id": "D13-personal",
+      "duration": 12,
+      "narration": "论文、课程项目、开源软件、副业、作品集、独立研究——只要必须跨过调研、实现、测试、修改和发布，就不该再靠你手工维持每一次交接。",
+      "mode": "desktop-folders",
+      "folders": ["毕业论文", "课程项目", "个人 OSS", "副业应用", "求职作品集", "独立研究"]
+    },
+    {
+      "id": "D14-outro",
+      "duration": 10,
+      "narration": "别再给 Agent 当项目经理。打开 OpenCorvus，创建你的第一个 Mission。",
+      "mode": "desktop-outro",
+      "terms": ["Goal Persisted", "Waiting for Task Plan"]
+    }
+  ]
+}

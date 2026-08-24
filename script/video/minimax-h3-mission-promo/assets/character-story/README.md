@@ -4,6 +4,8 @@ These images are the frozen identity source for the character-led promo directio
 
 - `character-bible-v1.png`: the only approved base identity for the protagonist and Agent cast.
 - `user-pain-keyframe-v1.png`: the first story keyframe derived from that bible; it is the input to H3 image-to-video, not a standalone slide.
+- `character-card-v3.png`: Skill-compliant labeled character card. SHA-256 `4d980f60bd7d4b2cda9db2c23abbc8e4c5603bdef21ac5be09082280f86be261`.
+- `scene-cards-v3.png`: six environment-only scene cards with locked landmarks and day/night continuity. SHA-256 `f9d4d8b8d016e2996c90a23459a431cfcc0cf95b7ad950bcfbc6b45241b12de8`.
 
 Character contract:
 

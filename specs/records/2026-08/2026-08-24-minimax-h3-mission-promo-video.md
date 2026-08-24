@@ -42,6 +42,15 @@
 | User correction 9 | 全片只能使用动画角色，不出现真人或写实人物。主角必须从头到尾是同一个角色，脸型、发型、服装和色板一致；所有 Agent 使用同一套卡通造型语言，只以颜色、工具和动作区分职责。除片头片尾的官方品牌 Logo 外，故事中不得出现渡鸦、鸟、Corvus 化身或类似意象。纯 T2V 独立生成会导致人物漂移，禁止作为成片路径；必须先冻结角色设定图，再使用参考图驱动的视频工作流。此前真人开场、人物漂移和渡鸦编排器镜头全部作废。 |
 | User correction 10 | 一致角色本身不构成合格故事。上一轮“机器人搬箱子、分工、交付”的通用项目管理叙事被否决：没有讲明白简单大纲，也没有呈现长程 Agent 的技术需求。返工版必须按单一因果线说明上下文淘汰、目标/约束/计划持久化、Task 依赖、完整专家团、调度/队列/唤醒/occurrence 恢复、带来源 locator 的 Artifact 交接、独立验收退回、终态收敛、反馈修订和开源运行控制。每个机制必须成为角色事件中的可观察因果，不得只在旁白中报术语。DeBERTa 仍只承担短 Proof。此次未纳入仓库的通用搬箱关键帧全部视为 rejected exploration，不得进入新分镜。 |
 | User correction 11 | 用户进一步要求分镜必须参考专门 Skill，不接受主 agent 自由发挥。已完整读取本地 `h3-prompt-writing`、`brand-promo-video-generator`、`3d-animation-short-generator` 及其 `storyboard-guidelines.md`、`shot-table-spec.md`、`qc-checklist.md`，并读取 H3 `base-en.txt` 与 `DIRECTOR_PLAN_GUIDE_en.md`。返工顺序锁定为：前期简报/故事/角色与场景锚点 → 六列标准镜头表 → 六项自检 → 用户确认 → 单文本分镜 → H3 I2V 提示与片段。禁止跳过确认门继续生成。 |
+| User correction 12 | 用户要求新增 V5：全程只能看见同一台用户 Desktop 桌面，通过窗口、终端、文件、鼠标和真实产品证据讲故事；加入 AI 术语、问题与技术展示，重写脚本并重新生成。V4 角色动画停止生产但保留已生成资产与文档，不得混入 V5。V5 不让 H3 重绘产品 UI 或文字；桌面、窗口、术语、代码、指标和品牌信息由确定性合成，真实 Mission/Agent/CUDA/网页/论文/发布证据按来源嵌入窗口。 |
+| User correction 13 | “专家团自进化”必须成为关键卖点并有机进入现有故事。它不是静默在线漂移：失败证据先形成候选 revision，再经过 diff、聚焦验证、rollback 点和用户确认；新任务采用新版本，运行中的 Task/occurrence 保持冻结。 |
+
+### V5 Desktop-only direction
+
+- 单一视觉世界：1920×1080 用户桌面，固定壁纸、任务栏、窗口圆角、鼠标和窗口层级贯穿全片；禁止离开 Desktop 进入角色动画、全屏卡片或抽象空间。
+- 技术因果：`context window / context compaction → instruction loss → plan drift → premature termination`；`state fragmentation / duplicated work / orphaned dependency`；`persistent goal / Task dependency / queue / wakeup / occurrence / durable resume / Artifact locator / independent review / accepted-or-blocked convergence`；失败证据驱动的 `Expert Squad Self-Evolution` 采用 `candidate revision → diff → focused verification → rollback point → user confirmation`，新版本不改写运行中的 Task/occurrence。
+- 真实证据：使用已留存的 7884 Mission/Agent/Task 截图、DeBERTa CUDA/网页/图表/论文/发布回执；当前 7883 与 7884 均连接拒绝，不能伪称为实时录屏，也不得主动重启服务。
+- H3 边界：V5 的 UI 像素和可读文字全部确定性生成或来自真实证据，H3 不参与界面重绘。若保留 H3，只能作为不承载事实的桌面壁纸动效；本版默认不使用，以避免伪 UI。
 
 ### Skill-driven storyboard review findings
 
@@ -88,7 +97,7 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 - 中文字体与 FFmpeg 文本转义易出错：文本先由 Pillow 渲染为帧，不依赖 `drawtext`。
 - 长生成卡死：API polling 以状态变化为活动信号，草稿 12 分钟无活动即失败；下载 2 分钟无字节活动即失败。
 
-## Current 2C story truth
+## SUPERSEDED HISTORICAL — Current 2C story truth
 
 1. 从用户真正的痛点起手：长要求得到快速回复，但资料、测试、网页、论文仍是半成品，用户被迫给 Agent 当项目经理。
 2. 展示个人目标为什么天然是长工作流：论文、开源项目、副业应用、作品集都要跨调研、设计、实现、测试、修改和发布。
@@ -108,7 +117,7 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 - https://code.claude.com/docs/en/agents
 - https://code.claude.com/docs/en/agent-teams
 
-## Animation grammar after user correction
+## SUPERSEDED HISTORICAL — Animation grammar after user correction
 
 - 不使用逐页标题加卡片或要点列表的演示文稿语法。
 - 每个非 H3 段落必须表现真实 UI 或真实证据中的一个变化：命令输入、Task/子会话出现、Provider/CUDA 活动、训练曲线更新、Artifact locator 打开、审校完成或发布回执产生。
@@ -117,7 +126,7 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 - 相邻段落使用真实屏幕反射、光标动作、相同运动方向、声音和 Artifact locator 连续转场；禁止以发光点、轨道、节点网络或抽象粒子替代真实协作。
 - 接触表之外，至少抽取每个动画段的首、中、尾帧，确认对象状态确实发生有意义变化，而不是只做整体缩放。
 
-## Pipeline contract
+## SUPERSEDED HISTORICAL — Pipeline contract
 
 ### Inputs
 
@@ -151,7 +160,7 @@ python produce.py prepare --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 - 字幕与旁白共用同一文本源，字幕安全区距离边缘至少 80px。
 - 接触表人工检查无黑帧、错误裁切、文字溢出、UI 假字、内容重复或 CTA 截断。
 
-## Iteration policy
+## SUPERSEDED HISTORICAL — Iteration policy
 
 1. 先制作三张 1920×1080 明亮关键帧：用户痛点、同一项目上的工具切换、开源动作链。用户不认可就只改关键帧，不渲染整片。
 2. 三张获认可后重写唯一 storyboard，并先生成不计费的本地 animatic，验证叙事、时长、截图裁切和聊天输入打字效果。
@@ -211,3 +220,14 @@ python produce.py prepare --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 - 媒体：4.458 秒、608×352、24 fps、H.264、AAC 32 kHz 双声道；首中尾非黑且相邻抽帧平均亮度差分别为 31.57 和 30.25。
 - 人工抽帧复核：主角发型、圆框眼镜、薄荷绿服装保持一致；三只 Agent 的暖白圆角本体、黑面屏、青色眼睛与角色配色保持一致。画面从半成品堆到用户面前推进到用户按额叹气，没有真人、鸟、渡鸦、Logo、UI 截图、卡片或表格。
 - 该样片只通过“痛点镜头与角色一致性”门，不等于整片已获用户批准；完整 storyboard 仍保持 rejected，批准前不得扩展为整片、网站产物或 push。
+
+## Desktop V5 production evidence
+
+- 用户要求两个独立 Agent 分别写稿后由主 Agent 加工。A 稿负责 2C 痛点、故事节奏与 CTA；B 稿负责调度、恢复、Artifact、终态和证据语义。当前合成事实源为 `desktop-storyboard-v5.zh-CN.json`。
+- 新增要求“专家团自进化”被并入反馈闭环，而不是独立功能卡：`failure evidence → candidate revision → diff → focused verification → user confirmation`；新任务采用新 revision，运行中的 Task/occurrence 保持冻结，保留 rollback ref。
+- 全片固定浅色 Desktop、任务栏、鼠标和一致窗口框；无真人、无角色、无 Corvus 意象、无全屏标题卡。真实截图只出现在短案例证明段，并带 `CAPTURED EVIDENCE · 2026-08-24 · NOT LIVE`。
+- 当前成片：`D:\myhexin-local\demos\opencorvus-desktop-promo-v5-20260824\opencorvus-mission-desktop-v5.mp4`。
+- 媒体实测：218.0 秒，1920×1080，25 fps 时间线，H.264 视频和 AAC 音频；`desktop-v5-inspection.json` 校验期望时长一致，并为 14 个场景生成首/中/尾帧、D11 确认点和 D12 四个证据事件，共 47 个全尺寸 checkpoint 与 `frames/contact-sheet.jpg`。自动报告只宣称媒体结构、编解码、时长和非黑帧通过，不把亮度检查冒充视觉验收。
+- 人工视觉复核查看完整接触表，以及自进化确认弹窗、Mission 记录、CUDA/推理网页、论文证据、公开仓库和首尾品牌帧。首轮修正案例 Facts 栏越界；独立复核又发现重复 URL 压住限制条件、旧 publication Task 截图包含 `GitHub CLI unavailable`、缓存无失效摘要和中点抽帧漏检。最终删除重复 URL，用 2026-08-24 GitHub API 核验的 Public/main/真实根目录视图替换失败截图，并让缓存绑定 storyboard、renderer、Logo 和全部 evidence 摘要后完整重建。
+- 片头片尾均使用仓库官方 PNG Logo；展示 `opencorvus.com`、主项目地址、作者信息；片尾另给案例项目地址。旧 `publication.json` 未作为当前发布证明。
+- 最终本地 build digest：`d1a0c54577baaeeed7f7d3b1ca867db235fa9112183346aa3c9265e48ddc50d5`；当前状态为本地候选片，等待用户观看确认；按用户要求不得 push。
