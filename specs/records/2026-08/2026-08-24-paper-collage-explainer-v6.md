@@ -1,36 +1,39 @@
 # OpenCorvus 长程 Agent 科普片 V6：纸拼贴解释片 Gate 1
 
-状态：**AWAITING USER APPROVAL / 禁止生成静帧与视频**  
-适用 Skill：`paper-collage-explainer-generator`  
-目标成片：16:9，128 秒（2:08），不超过 5 分钟
+状态：**AWAITING USER APPROVAL / 禁止生成静帧与视频**
+
+适用 Skill：`paper-collage-explainer-generator`
+
+目标成片：16:9，280 秒（4:40），40 个逐镜审批的 7 秒镜头
 
 ## Recall
 
-### 用户原始要求
+### 用户原始要求与纠正
 
-- 保留当前 Desktop V5 为待定候选，再制作一个“类似科普风格”的完整版本。
-- 新版本同样必须遵守专门视频 Skill，不能由主 Agent 自由发挥后直接生成。
-- 沿用已经确认的核心内容：长程 Agent 的故障机制、Mission 的持久编排、独立验收、开源控制、专家团自进化、短 DeBERTa 真实案例、个人长工作流与 OpenCorvus 品牌入口。
+- 保留 Desktop V5 为待定候选，再制作一个真正的科普风格版本，并继续遵守专门视频 Skill。
+- 核心内容不变：长程 Agent 的故障机制、Mission 持久编排、调度恢复、Artifact、独立验收、开源控制、专家团自进化、短 DeBERTa 真实案例、个人长工作流和品牌入口。
+- 用户明确否决 2:08 方案：“2 分钟讲不清，更别说专家团自进化”。因此 128 秒方案作废，不得进入 Gate 2。
+- 修订后目标为 4:40；专家团自进化成为独立 70 秒章节，不再压成一句功能介绍。
 
 ### 验收指标
 
-- 观众先理解“为什么聪明 Agent 做不完长任务”，再理解 Mission 怎样补上运行层。
-- 主要信息通过物体关系和定格动作解释；不靠 PPT 卡片、术语墙、节点图或大段 UI 截图。
-- 6 个宏观知识段、32 个逐一审批的纸拼贴镜头；每镜固定 4 秒并绑定一张 Gate 2 最终静帧。
-- 全片 16:9、少于 5 分钟；拼贴风格、色板、纸张材质、阴影和音效节奏一致。
-- H3 画面不生成可读文字、Logo、指标、代码或 UI；品牌、产品名、URL 和真实数字只做确定性后期。
-- 片头与片尾均展示官方 OpenCorvus Logo、品牌、官网、主仓和作者，使用不同构图；片尾另给案例仓库。
-- 案例只证明结论，不抢占故事；指标必须同时保留 single seed 42、1,800 条训练样本和 fixed-run 限制。
+- 观众先理解“为什么聪明 Agent 做不完长任务”，再理解 Mission 为什么是上下文之外的运行层。
+- 主要信息由物体关系和定格动作解释，不靠 PPT 卡片、术语墙、节点图或截图轮播。
+- 六个宏观章节、40 个连续镜头；每镜 7 秒并绑定 Gate 2 的一张最终静帧。
+- 专家团自进化完整覆盖：反馈证据归因、候选 revision、old/new diff、聚焦验证、回归拒绝、rollback、用户确认、新旧任务版本隔离。
+- H3 不生成可读文字、Logo、指标、代码或 UI；术语、品牌、产品名、URL 和真实数字只做确定性后期。
+- 案例只证明结论，不抢故事；指标必须同时保留 single seed 42、1,800 条训练样本和 fixed-run 限制。
+- 片头片尾均有官方 Logo、品牌、官网、主仓和作者，构图不同；片尾另给案例仓库。
 - 静帧与视频均须抽帧人工复核；最终修改后由未参与实现的独立 Agent 只读复核。
 
 ### 硬约束
 
-- 严格执行 Skill 两个门：Gate 1 生产计划审批；Gate 2 每段最终静帧审批。两门通过前不得生成视频。
-- Skill 默认音频是纸张滑动、弹入、压平、轻敲和摩擦等 collage SFX；不得默认添加 BGM、旁白或字幕。
-- 纸片必须逐件 `appear → bounce → press flat → pause → lock`；禁止整体淡入、慢推镜、数字图层漂移、快速旋转、混乱飞入和相机缩放。
-- 不使用脏污、泛黄、牛皮纸和重度褶皱；底色为干净的彩色纸场。
-- 不生成真人、人物面孔或需要跨镜保持身份的角色；采用物体驱动的视觉隐喻，规避人物漂移。
-- V5 成片与证据继续保留；V6 使用独立文件名、目录和 build digest，不覆盖 V5。
+- 严格执行 Skill 两个门：Gate 1 生产计划审批；Gate 2 四十张最终静帧逐镜审批。未批准镜头不得生成视频。
+- Skill 默认音频为纸张 slide、pop、press、tap、rustle、snap 等 collage SFX；不得默认添加 BGM、旁白或字幕。
+- 纸片必须逐件 `appear → light bounce → press flat → pause → lock`；禁止整体淡入、慢推镜、数字图层漂移、快速旋转、混乱飞入和相机缩放。
+- 使用干净彩色纸场、轻微纤维与柔和阴影；禁止脏污、泛黄、牛皮纸和重度褶皱。
+- 不使用真人、人物面孔或需要跨镜保持身份的角色；采用同一套项目卷宗、约束卡、任务车厢、Artifact 档案、审查透镜和版本抽屉贯穿。
+- V6 使用独立文件名、目录与 build digest，不覆盖 V5。
 - 用户确认前不 push。
 
 ### 已读资料
@@ -39,201 +42,156 @@
 - `specs/records/2026-08/2026-08-24-minimax-h3-mission-promo-video.md` 的用户纠正、真实案例口径、V5 证据和拒绝方向。
 - `script/video/minimax-h3-mission-promo/README.md` 的当前 V5 生产事实、5090 H3 路径和证据边界。
 
-### 搜索结果与兼容性
+### 搜索与兼容性
 
-- 本地同时存在手绘实拍、纸拼贴、纸艺定格和极简广告 Skill；`paper-collage-explainer-generator` 与“抽象知识科普”最匹配。
-- Skill 原始兼容层依赖 MiniMax Hub；当前环境没有 Hub canvas，但已有单张 RTX 5090 上验证过的 MiniMax H3 I2V 路径。后续只替换执行工具，不改变 Gate、静帧锚点、动作语法、音频默认和 QA 规则。
-- 本轮只到 Gate 1，不需要启动 7883/7884、ComfyUI 或 H3，也不读取用户凭据。
+- 本地同时存在手绘实拍、纸拼贴、纸艺定格和极简广告 Skill；`paper-collage-explainer-generator` 与抽象知识科普最匹配。
+- Skill 原始执行层依赖 MiniMax Hub；当前环境没有 Hub canvas，但已有单张 RTX 5090 上验证过的 MiniMax H3 I2V 路径。后续只替换执行工具，不改变 Gate、静帧锚点、动作语法、音频默认和 QA 规则。
+- 当前只到 Gate 1，不启动 7883/7884、ComfyUI 或 H3，也不读取用户凭据。
 
 ### 独立 Agent 反馈
 
-- 首轮只读复核发现：212 秒目标与六张静帧审批不一致，会让约 53 个实际镜头绕过 Gate 2；P3 未逐一锁定产品重心；P5 未明确映射官网四支柱；新 spec 受 `/specs/` ignore 影响需要精确强制跟踪。
-- 处置：目标收紧为 128 秒；新增 32 镜逐镜表且 Gate 2 必须审批 32 张静帧；补全五产品映射和四支柱映射；提交前只对本文件使用精确 `git add -f`。
-- 二次只读复核脚本化确认 32 镜时间连续、每镜 4 秒、总长 128 秒，逐镜 final frame / motion / SFX / continuity 非空；五产品、四支柱、Gate 2 数量、V5 保留和禁 push 均无未解决发现。
+- 首轮只读复核发现：旧计划 212 秒却只承诺审批六张静帧；P3 未逐一锁定产品重心；P5 未明确映射官网四支柱；新 spec 受 `/specs/` ignore 影响。
+- 首次处置曾收紧为 128 秒、32 镜，但用户明确认为两分钟无法讲清，尤其无法讲清专家团自进化。
+- 当前处置：改为 280 秒、40 镜；专家团自进化独占 S27–S36 共 70 秒；保留五产品与四支柱映射；提交时只对本文件精确 `git add -f`。
+- 第三轮只读复核确认 40 镜时间、六章节区间和自进化十步因果一致，但指出 P6/S38 未把 `fixed-run evidence only` 锁进实际画面；已补入案例确定性后期与 S38 anchor/motion/continuity。最终只读复核无未解决发现，且确认未生成任何 V6 媒体。
 
 ## Brief
 
 ### 主题与学习目标
 
-不是解释“Agent 不够聪明”，而是解释：长程任务为什么会超出单个上下文；为什么增加 Agent 数量仍会失控；为什么需要一个把目标、依赖、状态、产物、验收和反馈保存到上下文之外的 Mission 运行层。
+本片不解释“Agent 不够聪明”，而是解释：长任务为什么超出单个上下文；为什么增加 Agent 数量仍会失控；为什么需要一个把目标、依赖、状态、产物、验收和反馈保存到上下文之外的 Mission 运行层；专家团又如何在证据和用户控制下进化。
 
-观众看完应能复述三句话：
+观众看完应能复述四句话：
 
-1. Context Window 会满，旧约束可能在压缩后失去作用。
+1. Context Window 会满，旧约束可能在 compaction 后失去作用。
 2. 多 Agent 没有共同持久状态，只会放大碎片化和交接成本。
-3. Mission 用持久契约、依赖调度、可恢复 occurrence、可定位 Artifact、独立验收和版本化专家团修订，让长任务诚实收敛。
+3. Mission 用持久契约、依赖调度、可恢复 occurrence、可定位 Artifact 和独立验收让长任务诚实收敛。
+4. 专家团自进化不是静默改 prompt，而是证据驱动、可验证、可拒绝、可回滚、由用户确认的版本升级。
 
-### 受众与使用场景
+### 受众、画幅与节奏
 
 - 受众：学生、研究者、独立开发者、开源作者和副业创作者。
 - 使用：官网、GitHub、Bilibili/YouTube 横版介绍和产品演示前导。
-- 视角：2C；讨论“为什么我又要替 Agent 收尾”，不是企业采购或管理汇报。
-
-### 画幅、时长、语气与节奏
-
-- 16:9，1920×1080 交付；32 个 H3 小镜头各 4 秒。
-- 六个宏观段共 128 秒；每段由 4–6 个经 Gate 2 审批的定格镜头组成。
-- 语气：好奇、尖锐、清晰、最后转为可信和有希望；不做胜利号角或万能承诺。
-- 节奏：前 36 秒建立失败实验；中间 72 秒逐层解释机制；最后 20 秒给受限证据、个人场景和 CTA。
+- 视角：2C；讨论“为什么我又要替 Agent 收尾”，不是企业采购汇报。
+- 交付：1920×1080、16:9、4:40；40 镜 × 7 秒。
+- 节奏：前 84 秒建立失败与工具层次；中间 98 秒解释 Mission 运行机制；70 秒讲透专家团自进化；最后 28 秒给受限案例、个人场景和 CTA。
 
 ### 视觉风格
 
-高级编辑纸拼贴：干净彩色纸场、黑白 halftone 摄影剪影、选择性色卡、暖奶油描边、轻微纸纤维、柔软物理阴影、撕边和清楚的前中后景。全片没有人物面孔；主角是同一组可追踪物件：项目卷宗、约束卡、任务车厢、Artifact 档案、审查透镜和版本抽屉。
+高级编辑纸拼贴：干净彩色纸场、黑白 halftone 摄影剪影、选择性色卡、暖奶油描边、轻微纸纤维、柔软物理阴影、撕边和清楚的前中后景。全片没有人物面孔；主角是可追踪物件。
 
 控制色板：
 
-- burnt orange：时间压力、遗忘和提前结束；
+- burnt orange：时间压力、遗忘与提前结束；
 - mustard yellow：警告、工具与累积错误；
 - deep purple：上下文、记忆与结构；
 - teal：协作、执行与系统流；
 - ink green：判断、复核与恢复；
-- rose red：荒诞的重复劳动和 rejected。
+- rose red：重复劳动、rejected 与回归风险。
 
-片头前 4 秒在干净 cream 纸场上使用官方 Logo 的确定性图层，短暂给出 `OpenCorvus`、`opencorvus.com`、主仓与作者后，Logo 像一枚纸制铆钉压入项目卷宗并进入 P1；片尾最后 8 秒在完成后的个人 Mission 卷宗内用不同构图展示同一品牌信息和案例仓库。Logo、文字与地址都不由 H3 生成。
+片头在 cream 纸场上使用官方 Logo 的确定性图层；Logo 像铆钉压入项目卷宗并进入故事。片尾在完成后的 Mission 卷宗内使用另一种构图展示品牌、官网、主仓、作者和案例仓。Logo、文字与地址都不由 H3 生成。
 
 ### 媒体方式
 
-Skill 默认：保留或生成纸拼贴 SFX；当前 Gate 1 **不添加 BGM、旁白或字幕**。科普长片建议用户显式批准“中文旁白 + collage SFX + 克制 BGM”，可不烧录字幕；未批准则按 SFX-only 生产。
+Skill 默认：collage SFX only；当前 Gate 1 不添加 BGM、旁白或字幕。对于 4:40 科普片，制作建议是“中文旁白 + collage SFX + 克制 BGM，无烧录字幕”，但必须由用户显式批准后才写口播和生成音频。
 
-## 六个视觉隐喻
+## 六章知识结构
 
-### 1. 有限窗口吞掉旧约束（00:00–00:20）
+### P1｜有限上下文怎样毁掉长任务（00:00–00:49，S01–S07）
 
-- 核心意义：Agent 能快速开工，但有限 Context Window 在持续输入下发生 compaction，早期约束被挤出，随后 plan drift 和 premature termination。
-- 情绪：惊讶 → 不安。
-- 视觉命题：一条长纸带穿过很小的紫色取景框；新纸片不断进入，最早的 CUDA 芯片卡、测试尺和发布钥匙从背后掉落；半成品模型却被玫红印章提前封箱。
-- 关键物件：紫色 context 框、长纸带、CUDA 芯片卡、测试尺、发布钥匙、半成品封箱。
-- 底色与强调：deep purple → burnt orange；mustard 警示边。
-- 组装顺序：空纸场 → context 框 → 项目纸带 → 新结果片 → 旧约束掉落 → 半成品提前封箱。
-- SFX：纸带滑入、压缩折叠、三次掉落、错误印章闷响。
+- 因果：完整要求进入 → Context Window 持续填满 → Context Compaction → 旧约束掉出活动记忆 → Instruction Loss → Plan Drift → Premature Termination → 用户重新收尾。
+- 隐喻：长项目纸带穿过狭小紫色窗口；CUDA 卡、测试尺、发布钥匙被压缩折叠后掉出；半成品箱却被提前盖章。
+- 术语后期：`Context Window`、`Context Compaction`、`Instruction Loss`、`Plan Drift`、`Premature Termination`。
 
-### 2. 更多 Agent 放大碎片（00:20–00:36）
+### P2｜更多 Agent 为什么仍不等于协作（00:49–01:24，S08–S12）
 
-- 核心意义：没有共同持久状态，多 Agent 会重复实现、互相等待并遗留无人拥有的依赖。
-- 情绪：荒诞、焦躁。
-- 视觉命题：四把不同颜色的剪刀同时裁同一张蓝图，得到四套无法拼合的零件；线轴互相缠住，一枚关键齿轮孤零零留在画外。
-- 关键物件：共享蓝图、四把剪刀、重复零件、缠结线轴、孤立齿轮。
-- 底色与强调：rose red + mustard；少量 deep purple。
-- 组装顺序：蓝图铺平 → 剪刀弹入 → 重复裁切 → 零件冲突 → 线轴打结 → 孤立齿轮停住。
-- SFX：剪纸、重复弹响、线绳摩擦、小齿轮滚停。
+- 因果：没有共同持久状态 → 重复裁切同一蓝图 → 线程缠结 → 孤儿依赖 → 用户继续同步上下文。
+- 工具重心锁定：`WorkBuddy → 一句话交付办公成品`；`DeepSeek Harness → 开发者可组合运行时`；`Codex → 软件工程 Agent`；`Claude Code → 编码与并行协作`；不排名、不宣称对方做不到。
+- 隐喻：四把职责色剪刀裁出不兼容零件；随后四种纸制工具展示各自强项，但中央长程档案槽仍为空。
+- 术语后期：`State Fragmentation`、`Duplicated Work`、`Orphaned Dependency`。
 
-### 3. 工具层次与 Mission 外部记忆（00:36–01:00）
+### P3｜Mission 把目标变成外部记忆（01:24–02:06，S13–S18）
 
-- 核心意义：不同工具分别聚焦办公成品、可组合运行时、软件工程与编码协作；长目标还需要保存契约和编排责任的层。
-- 情绪：澄清、重新掌握方向。
-- 视觉命题：四种纸制工具围绕一个空缺的档案槽；OpenCorvus 的卷宗从下方滑入，目标石、约束锁和验收尺被铆接到卷宗上，随后展开六个 Task 页签。
-- 关键物件：办公压印机、模块工具箱、代码夹具、协作线板、Mission 卷宗、目标石/约束锁/验收尺。
-- 底色与强调：warm cream + teal + ink green。
-- 组装顺序：四种工具依次出现 → 中央空槽显露 → Mission 卷宗滑入 → 三种契约物件压平 → Task 页签展开。
-- SFX：四次轻敲、档案滑入、铆钉压合、页签连弹。
-- 确定性后期映射：`WorkBuddy → 一句话交付办公成品`；`DeepSeek Harness → 开发者可组合运行时`；`Codex → 软件工程 Agent`；`Claude Code → 编码与并行协作`；`OpenCorvus → 开源、跨领域、长程 Mission`。只说工作重心，不排名、不画勾叉、不宣称其他产品做不到。
+- 因果：OpenCorvus Mission 填补长期运行层 → 保存 Final Goal / Hard Constraints / Acceptance Contract → 拆分有依赖 Task → Task 创建时冻结精确专家团 revision → 所有团队读取同一持久契约。
+- 隐喻：Mission 卷宗填入中央空槽；目标石、约束锁和验收尺被铆接；六个 Task 页签展开，完整专家团色带锁定在每页。
+- OpenCorvus 定位：`开源、跨领域、长程 Mission`。
+- 术语后期：`Persistent Mission Record`、`Final Goal`、`Hard Constraints`、`Acceptance Contract`、`Task Dependency`、`Squad Revision · Frozen`。
 
-### 4. 调度与同一轮次恢复（01:00–01:24）
+### P4｜调度、恢复、Artifact 与独立验收（02:06–03:02，S19–S26）
 
-- 核心意义：Task 依赖决定 waiting/ready/running；queue 只是提示，系统重读持久事实并取得 activation lease 后才执行；专家团版本在创建时冻结；中断后从同一个 occurrence 和游标恢复，不重复派发。
-- 情绪：精密、可信。
-- 视觉命题：六节纸制任务车厢由依赖铆钉连接；信号灯按条件依次翻片。运行到第三节时纸场被撕开，书签和编号封条跨过裂缝保持位置；纸场重新拼合后同一节车厢继续，不出现复制车厢。
-- 关键物件：六节任务车厢、依赖铆钉、翻片信号灯、专家团版本封条、断裂纸场、occurrence 书签。
-- 底色与强调：teal + ink green；中断瞬间 burnt orange。
-- 组装顺序：轨道压平 → 车厢逐节出现 → 版本封条锁定 → queue 小票弹出但信号不动 → 持久事实铆钉到位 → lease 封蜡落下 → 信号翻片 → 第三节运行 → 纸场撕裂 → 书签保留 → 原车厢恢复。
-- SFX：铆钉轻压、翻片、纸张撕裂、短静默、重新压合、同节奏继续。
+- 因果：queue 只是 hint → 调度器重读 durable facts → activation lease → occurrence running → 服务中断 → 同一 occurrence / cursor 恢复且不重复派发 → Artifact source/path/locator 交接 → downstream read/select → 独立 review → rejected/fix/retest → accepted 或 blocked-with-evidence。
+- 隐喻：Task 车厢、依赖铆钉、queue 小票、lease 封蜡、occurrence 书签；纸场撕裂后原车厢继续。Artifact 用来源线和 locator 透镜传递，独立审查透镜退回裂口。
+- 术语后期：`Queue Hint`、`Wakeup`、`Activation Lease`、`Occurrence`、`Durable State`、`Resume Cursor`、`Artifact Lineage`、`artifact_read`、`artifact_select`、`Independent Review`、`Rejected`、`Accepted`、`Blocked with Evidence`。
 
-### 5. Artifact、独立验收与专家团自进化（01:24–01:48）
+### P5｜专家团如何在控制下自进化（03:02–04:12，S27–S36）
 
-- 核心意义：交接的是带来源和 locator 的真实产物；实现者不能自验；任务只能以 accepted 或 blocked-with-evidence 诚实收敛；失败证据进入候选 revision，经 diff、聚焦验证、回滚点和用户确认后才服务新任务。
-- 情绪：审慎、可控。
-- 视觉命题：Artifact 档案由一根 teal 线连接到来源卷宗，locator 透镜精确对准其中一格；独立审查透镜发现裂口，玫红退回片弹出。修补通过后，裂口形状被压成一张候选专家团补丁，与旧版并排放入透明开源抽屉；确认拨片落下，新任务取新版，运行中车厢仍保留旧封条。
-- 关键物件：Artifact 档案、来源线、locator 透镜、审查透镜、退回片、修补片、旧/新版本抽屉、确认拨片。
-- 底色与强调：ink green + deep purple；rejected 使用 rose red，accepted 使用 teal。
-- 组装顺序：Artifact 建立来源 → locator 锁定 → 独立审查 → rejected 退回 → 修补复验 → accepted；无法继续的分支进入带证据的封存袋 → 候选补丁生成 → old/new 并排 → 确认 → 新旧任务分流。
-- SFX：线绳绷紧、透镜咔哒、退回弹响、补丁压平、抽屉滑动、确认拨片。
-- 开源支柱：透明抽屉表现审计；可替换模块表现模型/工具；钥匙表现权限；旧版抽屉表现 rollback；确定性后期只在必要处解释 MIT、自托管和可审计。
-- 官网四支柱锁定映射：`开源 = MIT / 自托管 / fork`；`定制 = 可替换模型 / 工具 / 权限规则 / 专家团`；`可控 = 不可逆操作确认 / user confirmation / rollback`；`透明 = Artifact lineage / diff / tool audit`。四项必须在同一开放式工作台中由动作连续揭示，不排成四张功能卡。
+- 核心声明：自进化不是自动保证“越来越强”，不是静默在线漂移，也不改写运行中的 Task。它是版本化工程闭环。
+- 十步因果：
+  1. Reviewer 的失败证据保留来源、locator 和 occurrence；
+  2. 多次证据归因，区分一次性 Task 缺陷与可复用专家团缺口；
+  3. 生成独立 candidate revision，current revision 继续冻结；
+  4. 展示 old/new diff，只改变被证据支持的步骤；
+  5. 使用原 Acceptance Contract 做 focused verification；
+  6. 候选产生回归则 rejected，不安装；
+  7. 保留 rollback ref 与旧 package digest；
+  8. 开源与定制让用户审计源码、替换模型/工具/权限规则/专家团；
+  9. 可控与透明让不可逆操作确认、Artifact/diff/tool audit 可回看；
+  10. 用户确认后，新 Task 使用新 revision，运行中 Task/occurrence 继续旧 revision。
+- 官网四支柱映射：`开源 = MIT / 自托管 / fork`；`定制 = 模型 / 工具 / 权限规则 / 专家团`；`可控 = user confirmation / rollback / 不可逆操作确认`；`透明 = Artifact lineage / diff / tool audit`。四项在同一开放工作台连续出现，不排成四张功能卡。
+- 术语后期：`Expert Squad Self-Evolution`、`Failure Attribution`、`Candidate Revision`、`Diff`、`Focused Verification`、`Regression Rejected`、`Rollback Ref`、`MIT`、`Self-hosted`、`Audit`、`User Confirmation`。
 
-### 6. 受限证据回到个人项目（01:48–02:08）
+### P6｜受限证据回到个人项目（04:12–04:40，S37–S40）
 
-- 核心意义：DeBERTa Mission 证明机制能够长时间协调真实产物，但不证明普遍 SOTA；这些机制最终服务个人论文、开源项目、副业、作品集和独立研究。
-- 情绪：可信、开放、有行动欲。
-- 视觉命题：一个小型证据陈列架依次放入 GPU 芯片、三个实验条、网页窗、两张图和五页论文；天平另一侧始终保留 single-seed 限制砝码。陈列架折叠成六个个人项目文件夹，最后一个文件夹滑入 OpenCorvus Mission 卷宗。
-- 关键物件：证据架、GPU 芯片、三条实验纸、网页窗、两张图、五页纸、限制砝码、六个项目文件夹、Mission 卷宗。
-- 底色与强调：warm cream + ink green + teal；品牌处少量官方蓝。
-- 组装顺序：空架 → 证据逐件落位 → 限制砝码压稳 → 架子折成文件夹 → 六类项目展开 → 其中一个滑入 Mission → 品牌收束。
-- SFX：陈列轻放、砝码闷响、折纸、文件夹翻动、卷宗压合。
-- 确定性后期：12h45m、6 Tasks、3 squads、46 sessions、20 roles、RTX 5090、三组 CUDA、83.43%/83.61%、single seed 42、1,800 examples、主仓/案例仓/官网/作者。
+- 因果：真实 DeBERTa Mission 证明运行机制能协调长交付，但不证明普遍 SOTA；机制最终服务个人论文、开源项目、副业、作品集和独立研究。
+- 隐喻：证据架装入 GPU、三实验条、网页、图表和论文；single-seed 限制砝码与指标同时落下；架子折成个人项目文件夹，其中一个进入 Mission 卷宗。
+- 确定性后期：12h45m、6 Tasks、3 squads、46 sessions、20 roles、RTX 5090、三组 CUDA、83.43%/83.61%、single seed 42、1,800 examples、`fixed-run evidence only`、官网/主仓/作者/案例仓。
 
-## Silent Visual Beat Track
+## 40 镜 Gate 1 逐镜表
 
-在用户没有显式批准旁白前，不写口播稿。无旁白版本依靠以下理解链：
-
-1. 项目要求完整进入，但窗口容量有限；旧约束被挤出，半成品被提前封箱。
-2. 多把剪刀不是协作；没有共同卷宗，结果互不兼容且留下孤儿依赖。
-3. 四类工具各自有效，但中央仍缺长期契约；Mission 卷宗补上这个外部记忆。
-4. 依赖铆钉、信号灯、版本封条和 occurrence 书签共同解释调度与恢复。
-5. Artifact 来源线与独立透镜解释可追溯验收；失败形状进入可审查、可回滚的新专家团修订。
-6. 真实案例证据与限制砝码同时出现；最后回到个人项目和唯一 CTA。
-
-## 确定性技术术语轨
-
-术语只在对应纸片事件发生时短暂出现，不能独立形成术语墙：
-
-| 段 | 后期术语 |
-|---|---|
-| P1 | `Context Window`、`Context Compaction`、`Instruction Loss`、`Plan Drift`、`Premature Termination` |
-| P2 | `State Fragmentation`、`Duplicated Work`、`Orphaned Dependency` |
-| P3 | `Persistent Mission Record`、`Final Goal`、`Hard Constraints`、`Acceptance Contract`；五个产品只陈述工作重心 |
-| P4 | `Task Dependency`、`Squad Revision · Frozen`、`Queue Hint`、`Wakeup`、`Activation Lease`、`Occurrence`、`Durable State`、`Resume Cursor` |
-| P5 | `Artifact Lineage`、`artifact_read`、`artifact_select`、`Independent Review`、`Rejected`、`Accepted`、`Blocked with Evidence`、`Expert Squad Self-Evolution`、`Rollback`、`User Confirmation`、`MIT`、`Self-hosted`、`Audit` |
-| P6 | 案例运行时、规模、CUDA、产物、指标和 single-seed/fixed-run 限制；品牌、官网、主仓、作者与案例仓 |
-
-## Gate 1 Storyboard
-
-| 段 | 时间 | 最终画面 | 动作核心 | SFX | 连续性 |
-|---|---:|---|---|---|---|
-| P1 有限上下文 | 20s | 半成品箱被提前封住，三张约束卡散落在 context 框外 | 纸带进入、压缩、掉卡、封箱 | slide / fold / drop / stamp | 紫→橙，项目卷宗首次出现 |
-| P2 多 Agent 碎片 | 16s | 四套重复零件互不兼容，线轴打结，孤儿齿轮停住 | 裁切、冲突、打结、滚停 | cut / pop / rub / stop | 保留同一项目蓝图 |
-| P3 Mission 外部记忆 | 24s | Mission 卷宗锁住目标、约束、验收并展开 Task 页签 | 工具轮换、卷宗滑入、铆接、页签展开 | tap / slide / press / pop | 红色混乱回归 cream/teal 秩序 |
-| P4 调度与恢复 | 24s | 裂缝修复后，同一第三节车厢从原书签继续 | 车厢组装、事实/lease、生效、撕裂、原位恢复 | press / flip / tear / relock | 版本封条始终不换 |
-| P5 证据、验收、自进化 | 24s | 新任务取候选新版，运行中任务继续持有旧版 | 定位、退回、修补、验证、抽屉、确认 | click / reject / patch / drawer | Artifact 来源线贯穿全段 |
-| P6 Proof 与个人场景 | 20s | 个人项目文件夹进入 Mission，品牌与入口后期出现 | 证据陈列、限制砝码、折叠、文件夹、压合 | place / weight / fold / press | 证据色板过渡到品牌收束 |
-
-## 32 镜 Gate 1 逐镜表
-
-每一行都对应 Gate 2 的一张最终静帧和后续一个 4 秒 H3 clip。用户可按镜头编号单独批准或退回；未批准镜头不得进入视频生成。
+每行对应 Gate 2 的一张最终静帧与后续一个 7 秒 H3 clip。用户可按镜头编号批准或退回；未批准镜头不得进入视频生成。
 
 | 镜头 | 时间 | 最终静帧锚点 | 组装与动作 | SFX | 连续性 |
 |---|---:|---|---|---|---|
-| S01 | 00:00–00:04 | 官方 Logo 后期压在 cream 卷宗铆钉位；品牌/官网/主仓/作者可读 | 空纸场→卷宗→Logo 确定性压入 | paper place / press | 品牌构图 A；Logo 不进 H3 |
-| S02 | 00:04–00:08 | 完整长项目纸带与三张约束物件进入紫色窗口 | 纸带滑入，CUDA 卡、测试尺、发布钥匙依次弹入 | slide / pop×3 | 同一卷宗成为项目纸带 |
-| S03 | 00:08–00:12 | Context 窗口被新结果纸片填满 | 新结果逐片压入，窗口边缘收紧 | pop / fold / press | 紫色窗口位置不变 |
-| S04 | 00:12–00:16 | 三张早期约束掉在窗口外 | 压缩折叠后，约束卡逐张滑落 | fold / drop×3 | 纸带仍向前运动 |
-| S05 | 00:16–00:20 | 半成品箱被 rose 印章提前封住 | 缺口箱体弹入，错误印章压下并停住 | pop / stamp | 箱上缺口进入 P2 蓝图 |
-| S06 | 00:20–00:24 | 同一缺口蓝图被四把剪刀包围 | 蓝图铺平，四把剪刀从四侧弹入 | paper spread / pop | 延续 S05 的缺口形状 |
-| S07 | 00:24–00:28 | 四套相似但不兼容的零件堆叠 | 同步裁切，重复零件轻弹后错位 | cut / pop / tap | 四种职责色首次出现 |
-| S08 | 00:28–00:32 | 四个线轴在中央打结 | 线绳逐根滑入、缠绕、拉紧 | slide / rub / snap | 零件仍在四角 |
-| S09 | 00:32–00:36 | 孤立齿轮停在画外，中央结无法运转 | 齿轮滚入边缘后停住，其余物件冻结 | roll / stop | 齿轮成为 P3 中央空槽 |
-| S10 | 00:36–00:40 | 办公压印机产出整齐成品纸 | 机器纸件组装并压出成品 | assemble / press | 后期锁定 WorkBuddy 重心 |
-| S11 | 00:40–00:44 | 模块工具箱展开可组合插槽 | 工具箱滑入，模块逐个扣合 | slide / click | 后期锁定 DeepSeek Harness 重心 |
-| S12 | 00:44–00:48 | 代码夹具把零件固定成软件构件 | 夹具合拢，构件压平 | clamp / press | 后期锁定 Codex 重心 |
-| S13 | 00:48–00:52 | 协作线板连接多条编码工作线 | 线程卡逐一扣在线板上 | pop / string snap | 后期锁定 Claude Code 重心 |
-| S14 | 00:52–00:56 | 四种工具围绕仍为空的长程档案槽 | 工具向外让位，中央空槽显露 | slide / hollow tap | 不排名、不画勾叉 |
-| S15 | 00:56–01:00 | Mission 卷宗填入槽位并锁住目标石、约束锁、验收尺、六页签 | 卷宗滑入，三件契约物压平，页签连弹 | slide / press / pop | 后期锁定 OpenCorvus 重心 |
-| S16 | 01:00–01:04 | 六节 Task 车厢由依赖铆钉串联 | 轨道压平、车厢逐节出现、铆钉落位 | press / pop / rivet | teal/green 调度色板开始 |
-| S17 | 01:04–01:08 | Queue 小票已出现，但信号仍 waiting；持久事实铆钉刚到位 | 小票弹出、信号保持、事实铆钉逐个压下 | ticket pop / rivet | 表明 queue 不是事实源 |
-| S18 | 01:08–01:12 | Activation lease 封蜡落下，信号翻到 running | lease 封蜡压入，信号翻片，第二车厢启动 | press / flip / start tap | 版本封条已锁定 |
-| S19 | 01:12–01:16 | 第三步 occurrence 书签夹在同一车厢 | 车厢行进三格，书签落在第三格 | rail taps / bookmark | dispatch 仅一份 |
-| S20 | 01:16–01:20 | 纸场撕裂，但书签和版本封条跨裂缝保留 | 撕裂穿过轨道，车厢停住 | tear / short silence | occurrence 身份不变 |
-| S21 | 01:20–01:24 | 纸场重新压合，同一车厢从第三格继续 | 裂缝压平，原车厢恢复下一格 | press / relock / continue | 没有复制车厢 |
-| S22 | 01:24–01:28 | Artifact 档案通过 teal 来源线连接上游卷宗，locator 透镜锁定一格 | 档案滑入、来源线绷紧、透镜咔哒 | slide / string / click | 同一来源线贯穿 P5 |
-| S23 | 01:28–01:32 | 下游档案先读取再选中同一来源 | read 透明片落下，selected 边框随后压平 | place / press×2 | 后期标 `artifact_read/select` |
-| S24 | 01:32–01:36 | 独立审查透镜发现裂口，rose 退回片弹出 | 透镜移到裂口，退回片反弹 | lens click / reject pop | 实现者与审查者视觉分离 |
-| S25 | 01:36–01:40 | 修补通过进入 accepted；另一受阻分支进入带证据封存袋 | 补丁压平，green 封条落下；amber 袋并列封存 | patch / accept / bag seal | 两种诚实终态并列但不成卡片墙 |
-| S26 | 01:40–01:44 | 失败裂口形状成为候选专家团补丁，old/new 抽屉并排 | 缺陷轮廓转印到补丁，两个抽屉滑开 | rub / print / drawer | candidate 未自动安装 |
-| S27 | 01:44–01:48 | 开放工作台同时可见源码卷、可替换模块、权限钥匙、审计线轴与 rollback 抽屉；确认拨片使新任务取新版、旧任务保留旧封条 | 四支柱物件逐件压入，拨片最后落下，任务分流 | place×4 / confirm / split | 四支柱是连续动作，不是四卡片 |
-| S28 | 01:48–01:52 | DeBERTa 证据架装入 GPU、三实验条、网页窗、两图与五页论文 | 证据物逐件轻放并锁定 | place / tap | 真实证据后期可短暂嵌入 |
-| S29 | 01:52–01:56 | 结果天平一侧为指标，另一侧为 single-seed/1,800 限制砝码 | 数值后期出现，限制砝码同时落下保持平衡 | weight thud / balance | 不做 SOTA 或普遍承诺 |
-| S30 | 01:56–02:00 | 证据架折成论文、课程、OSS、副业、作品集、研究六个文件夹 | 架子连续折叠，六文件夹扇形展开 | fold / folder flutter | 从 Proof 返回 2C 场景 |
-| S31 | 02:00–02:04 | 一个个人项目文件夹滑入 Mission 卷宗并压合 | 文件夹滑入、卷宗合拢、目标石重新亮起 | slide / close / press | 与 S15 卷宗同一造型 |
-| S32 | 02:04–02:08 | 完成的 Mission 卷宗内显示官方 Logo、品牌、官网、主仓、作者和案例仓 | 纸场安静锁定，品牌确定性图层依次出现并保持 | soft press / final tap | 品牌构图 B；无 H3 文字 |
+| S01 | 00:00–00:07 | 官方 Logo 后期压在 cream 项目卷宗铆钉位，品牌信息可读 | 空纸场→卷宗→Logo 确定性压入→项目要求纸带露出 | place / press | 品牌构图 A；Logo 不进 H3 |
+| S02 | 00:07–00:14 | 长项目纸带完整铺开，CUDA 卡、测试尺、发布钥匙都在 | 纸带滑入，三件硬约束逐件弹入并压平 | slide / pop / press | 同一卷宗转为项目纸带 |
+| S03 | 00:14–00:21 | 紫色 Context Window 被新消息、工具结果和代码纸片填至边缘 | 结果纸片逐片出现、轻弹、压平，窗口收紧 | pop / press / fold | 三件约束仍在最早位置 |
+| S04 | 00:21–00:28 | Compaction 折页包住最早内容，CUDA 卡开始淡出活动层 | 紫色折页压缩旧纸片，最早约束移到背层 | fold / rustle | 不直接让约束凭空消失 |
+| S05 | 00:28–00:35 | CUDA 卡、测试尺和发布钥匙落到窗口外 | 三件约束依次滑落，执行箭头改向省事路径 | drop×3 / paper turn | Context 框仍继续接收新纸片 |
+| S06 | 00:35–00:42 | 缺测试、论文和发布的半成品箱被 rose 印章提前封住 | 缺口箱体弹入，错误印章压下，未完成零件仍在外面 | pop / stamp / dull tap | 缺口形状进入下一镜 |
+| S07 | 00:42–00:49 | 用户侧项目托盘堆满追问便签、复制纸带和待收尾零件 | 追问纸、复制条和缺口零件逐件堆叠，托盘下沉 | rustle / stack / creak | 无人物，用托盘表现用户负担 |
+| S08 | 00:49–00:56 | 同一缺口蓝图被四把职责色剪刀同时包围 | 蓝图铺平，四把剪刀弹入并开始重复裁切 | spread / pop / cut | 延续 S06 缺口 |
+| S09 | 00:56–01:03 | 四套相似零件错位堆叠，四根线在中央打结 | 重复零件弹出，线绳逐根滑入、缠绕、拉紧 | pop / rub / snap | 四种职责色稳定 |
+| S10 | 01:03–01:10 | 孤儿齿轮停在中央空槽外，系统无法运转 | 齿轮滚近空槽后停住，其余物件冻结 | roll / stop | 空槽成为长程运行层缺口 |
+| S11 | 01:10–01:17 | 办公压印机、模块工具箱分别产出成品纸和可组合模块 | 两种工具左右组装并各完成一次动作 | press / click | 后期标 WorkBuddy / DeepSeek Harness 重心 |
+| S12 | 01:17–01:24 | 代码夹具和协作线板完成软件构件与并行工作线，但中央槽仍空 | 夹具合拢、线程卡扣合，随后向外让位露出空槽 | clamp / snap / hollow tap | 后期标 Codex / Claude Code；不排名 |
+| S13 | 01:24–01:31 | OpenCorvus Mission 卷宗滑入中央空槽 | 卷宗从下方滑入、轻弹、压平并锁定位置 | slide / bounce / press | 后期标 OpenCorvus 重心 |
+| S14 | 01:31–01:38 | 目标石、约束锁、验收尺铆接在同一卷宗 | 三件契约物依次落位，铆钉逐个压下 | place / rivet×3 | 对应 goal/constraints/acceptance |
+| S15 | 01:38–01:45 | 六个 Task 页签从卷宗展开并按依赖串联 | 页签逐个弹出，依赖纸带从前页连到后页 | pop / string / press | 六个 Task 结构开始稳定 |
+| S16 | 01:45–01:52 | 每个 Task 页签绑上完整专家团色带和 revision 封条 | 色带逐支进入，版本封蜡压下 | slide / seal | 精确 revision 在创建时冻结 |
+| S17 | 01:52–01:59 | 三支专家团从同一卷宗读取目标、约束和验收 | 三组工具从不同方向接触同一卷宗，不复制卷宗 | tap / shared rustle | 表现共同持久事实源 |
+| S18 | 01:59–02:06 | 上游 Task 完成 Artifact 后，下游 waiting 页签刚转 ready | 上游产物落位，依赖带绷紧，下游页签翻色 | place / string snap / flip | 进入调度章节 |
+| S19 | 02:06–02:13 | Queue 小票出现，但 Task 信号仍保持 waiting | 小票弹入后停在侧边，信号不动 | ticket pop / pause | 明示 queue 只是 hint |
+| S20 | 02:13–02:20 | Durable facts 铆钉全部到位，activation lease 封蜡落下 | 事实铆钉逐个压入，lease 封蜡最后落下 | rivet / seal | 执行资格由事实和 lease 决定 |
+| S21 | 02:20–02:27 | 信号翻到 running，同一 occurrence 书签落在 step 3 | 车厢启动三格，书签压在第三格 | flip / rail taps / bookmark | dispatch 仅一份 |
+| S22 | 02:27–02:34 | 纸场被撕裂，车厢停住，但书签和 revision 封条跨裂缝保留 | 撕裂穿过轨道，动作冻结 | tear / short silence | occurrence 身份不变 |
+| S23 | 02:34–02:41 | 裂缝压合，同一车厢从第三格继续，旁边没有复制车厢 | 纸场重新压平，原车厢继续下一格 | press / relock / continue | no duplicate dispatch |
+| S24 | 02:41–02:48 | Artifact 档案通过 teal 来源线连接上游卷宗，locator 透镜锁定一格 | 档案滑入、来源线绷紧、透镜咔哒 | slide / string / click | source/path/locator 后期标注 |
+| S25 | 02:48–02:55 | 下游档案先读取再选择同一来源 | read 透明片落下，selected 边框随后压平 | place / press×2 | artifact_read 在 artifact_select 之前 |
+| S26 | 02:55–03:02 | 独立审查透镜退回裂口；修补复验后 accepted，受阻分支进入证据袋 | 透镜定位→退回片→补丁压平→green 封条；amber 证据袋并列 | reject pop / patch / seal | accepted 与 blocked-with-evidence 都诚实收敛 |
+| S27 | 03:02–03:09 | Reviewer 失败证据连同来源线、locator 和 occurrence 被完整封存 | 证据片逐件进入透明档案并压平 | place / press / archive snap | 自进化从真实失败证据开始 |
+| S28 | 03:09–03:16 | 多份证据在归因桌上对齐，一次性 Task 缺陷与专家团共性缺口分开 | 证据按形状分组，一组进入 Task 袋，另一组进入 Squad 槽 | sort / slide / click | 不用关键字匹配冒充归因 |
+| S29 | 03:16–03:23 | Candidate revision 在独立工作区生成，current revision 保持封存 | 候选纸从证据轮廓转印而来，旧版抽屉保持锁定 | rub / print / drawer lock | 运行中 Task 不被静默改写 |
+| S30 | 03:23–03:30 | Old/new 两版并排，只有证据支持的 preflight 步骤呈绿色新增 | 两版抽屉滑开，新增补丁逐件压在新版上 | drawer / patch / press | 后期展示真实 diff 与 digest |
+| S31 | 03:30–03:37 | 原 Acceptance Contract 接入 focused verification 台，候选版进入测试 | 验收尺落下，候选模块逐项通过测试槽 | place / test taps | 验证标准不由候选自己改写 |
+| S32 | 03:37–03:44 | 一个回归候选被 rose 退回片弹出，不进入安装槽 | 回归裂口出现，退回片反弹，安装槽保持关闭 | error snap / reject pop | 明示自进化不保证每版更好 |
+| S33 | 03:44–03:51 | 通过候选保留 rollback ref，旧 package digest 仍在抽屉中 | rollback 线系住旧版，候选停在确认门前 | string / drawer / pause | 回退点在安装前建立 |
+| S34 | 03:51–03:58 | 开放源码卷、MIT 封签和自托管底座在同一工作台展开 | 源码卷展开、MIT 封签压入、本机底座落位 | unroll / press / base thud | 官网支柱：开源 |
+| S35 | 03:58–04:05 | 模型、工具、权限规则和专家团模块可替换；审计线轴记录每次动作 | 模块逐件拔插，权限钥匙转动，审计线轴同步收线 | click / key turn / reel | 官网支柱：定制、透明、可控 |
+| S36 | 04:05–04:12 | 用户确认拨片落下；新 Task 取新版，运行中 Task 保留旧封条，rollback 抽屉仍可见 | 拨片压下，两条任务路径分流并锁定 | confirm / split / lock | 版本化安装，不改历史 occurrence |
+| S37 | 04:12–04:19 | DeBERTa 证据架装入 GPU、三实验条、网页、两图、五页论文和测试仓库 | 证据物逐件轻放并锁定 | place / tap | 真实证据可短暂确定性嵌入 |
+| S38 | 04:19–04:26 | 指标与运行规模在天平一侧，`single seed 42 / 1,800 examples / fixed-run evidence only` 三块限制砝码同时压稳另一侧 | 数字与三条限制后期同时出现，三块砝码逐件落下并保持平衡 | weight thud / balance | fixed-run 只证明当前受限实验；不做 SOTA、多 seed 或普遍承诺 |
+| S39 | 04:26–04:33 | 证据架折成论文、课程、OSS、副业、作品集、研究六个文件夹，其中一个进入 Mission | 架子折叠，六文件夹扇开，一个滑入卷宗 | fold / flutter / slide | 回到 2C 个人场景 |
+| S40 | 04:33–04:40 | 完成的 Mission 卷宗内显示官方 Logo、品牌、官网、主仓、作者和案例仓 | 卷宗压合，品牌确定性图层依次出现并保持 | soft press / final tap | 品牌构图 B；无 H3 文字 |
 
 ## 全局静帧与视频约束
 
@@ -243,21 +201,32 @@ Skill 默认：保留或生成纸拼贴 SFX；当前 Gate 1 **不添加 BGM、�
 flat bold color field, black-and-white halftone photographic cut-outs, selective colored cardstock accents, warm cream keylines, soft paper shadows, fine uncoated-paper grain, premium editorial paper collage, clean refined hand-torn paper edges, subtle fibrous edges, layered paper seams
 ```
 
-- 每个最终静帧只保留 3–6 个主要纸组，前中后景清楚，保留负空间。
+- 每张静帧只保留 3–6 个主要纸组，前中后景清楚，保留负空间。
 - 生成画面无可读文字、数字、Logo、UI、代码、字幕或水印。
-- 每段从与批准静帧一致的干净色纸场开始；纸片逐件进入，结束时保持批准静帧至少 0.5 秒。
+- 每镜从与批准静帧一致的干净色纸场开始；纸片逐件进入，结束时保持批准静帧至少 0.7 秒。
 - 品牌、术语、产品名、URL、指标和限制条件全部由确定性后期添加。
-- 真实 DeBERTa 证据可在 P6 以短暂确定性窗口出现，但不交给 H3 重绘。
+- 真实 DeBERTa 证据只在 S37–S38 短暂出现，不交给 H3 重绘。
+
+## Silent Visual Beat Track
+
+在用户没有显式批准旁白前，不写口播稿。无旁白版本依靠以下理解链：
+
+1. 项目要求完整进入，但窗口容量有限；旧约束被挤出，半成品被提前封箱。
+2. 多把剪刀不是协作；四类工具各有强项，但中央仍缺长期契约。
+3. Mission 卷宗把目标、约束、验收、Task 依赖和专家团版本固定在上下文之外。
+4. Durable facts、lease、occurrence、resume、Artifact 和独立审查把运行与交付变成可追溯闭环。
+5. 七十秒自进化章节完整展示证据归因、候选版本、diff、验证、回归拒绝、rollback、四支柱、用户确认和版本隔离。
+6. 真实案例证据与限制砝码同时出现；最后回到个人项目和唯一 CTA。
 
 ## Gate 1 待用户确认
 
 请一次确认两件事：
 
-1. 是否批准上述六段、32 镜、2:08 的科普结构、纸拼贴隐喻和色板，进入 Gate 2 静帧生成？Gate 2 将交付 32 张逐镜最终静帧，不以六张宏观图代替。
+1. 是否批准上述六章、40 镜、4:40 的科普结构、纸拼贴隐喻和色板，进入 Gate 2？Gate 2 将交付 40 张逐镜最终静帧，不以六张宏观图代替。
 2. 音频选择：
    - A：仅 collage SFX（Skill 默认）；
-   - B：中文旁白 + collage SFX，无 BGM（科普信息最清楚）；
+   - B：中文旁白 + collage SFX，无 BGM；
    - C：中文旁白 + collage SFX + 克制 BGM（推荐用于官网成片）；
    - 字幕另行明确选择“无字幕”或“确定性字幕”。
 
-只有用户批准 Gate 1 并明确音频后，才进入 Gate 2；Gate 2 先生成 32 张 16:9 最终静帧供逐镜审批，不生成视频。
+只有用户批准 Gate 1 并明确音频后，才进入 Gate 2；Gate 2 先生成 40 张 16:9 最终静帧供逐镜审批，不生成视频。
