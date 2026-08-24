@@ -1,5 +1,9 @@
 # August 2026 Records
 
+- [2026-08-24-site-native-explainer-v7.md](2026-08-24-site-native-explainer-v7.md) replaces the rejected paper-collage direction with a website-audited light brand motion system, exact visual tokens, truthful product positioning, and a three-frame approval gate before full video production.
+
+- [2026-08-24-paper-collage-explainer-v6.md](2026-08-24-paper-collage-explainer-v6.md) preserves the rejected paper-collage video direction and its exploratory-media boundary; none of its generated stills may enter the OpenCorvus film.
+
 - [2026-08-24-minimax-h3-mission-promo-video.md](2026-08-24-minimax-h3-mission-promo-video.md) records the single-RTX-5090 MiniMax H3 setup, real DeBERTa Mission evidence, rejected draft history, and the approval-gated V2 explainer-video production contract.
 
 - [2026-08-24-v0.0.53-beta-release.md](2026-08-24-v0.0.53-beta-release.md) tracks canonical `0.0.53-beta` convergence, immutable application publication, the same-source public website deployment, and integration of the reviewed release source into `main`.

@@ -1,10 +1,17 @@
-# OpenCorvus 长程 Agent 科普片 V6：纸拼贴解释片 Gate 1
+# OpenCorvus 长程 Agent 科普片 V6：已否决的纸拼贴方向
 
-状态：**AWAITING USER APPROVAL / 禁止生成静帧与视频**
+状态：**REJECTED / 不得用于成片**
 
 适用 Skill：`paper-collage-explainer-generator`
 
-目标成片：16:9，280 秒（4:40），40 个逐镜审批的 7 秒镜头
+目标成片：16:9，280 秒（4:40），40 个逐镜审批的 7 秒镜头。时长和叙事结构可供后续版本参考，视觉合同已被用户否决。
+
+## 2026-08-24 用户否决与证据保留
+
+- 用户纠正：“读取官网的视觉，不要瞎撺”。官网视觉必须成为唯一品牌事实源。
+- 本方向在纠正前生成了 S01–S19 的探索静帧；它们已原样移出仓库并保存在 `D:\myhexin-local\demos\opencorvus-video-rejected-paper-collage-v6-20260824`，仅作为被拒证据保留，不进入后续合成，也不代表 OpenCorvus 品牌视觉。
+- 纸拼贴的紫色、青色、芥末黄、撕边、halftone 和纸纤维都不是官网当前视觉语言；后续不得通过“换个色板”继续复用。
+- 替代方案以 `2026-08-24-site-native-explainer-v7.md` 为当前事实源；本文件不再是生产入口。
 
 ## Recall
 
