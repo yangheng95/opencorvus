@@ -310,9 +310,17 @@
   outline-offset: calc(-1px * var(--ui-scale));
 }
 
+/* inline-block, not inline: max-width has no effect on a non-replaced inline
+ * box, so the 92px cap never applied and a long agent or session id took its
+ * full width — squeezing the filename beside it into an early ellipsis, which
+ * is the exact outcome the cap was written to prevent. */
 .change-scope {
-  display: inline;
+  display: inline-block;
   max-width: calc(92px * var(--ui-scale));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
   font-weight: var(--ui-font-weight-strong);
 }
 

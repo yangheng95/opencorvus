@@ -305,12 +305,19 @@ body {
 .mission-board-card__title {
   display: -webkit-box;
   overflow: hidden;
+  /* Clamped text needs a break strategy: an English title carrying a URL or
+   * a long path has no break opportunity, overflows the line, and is clipped
+   * with no ellipsis to show for it. CJK breaks anywhere, so this only ever
+   * showed in the English locale. Every other clamped block in the tree sets
+   * one of these. */
+  overflow-wrap: anywhere;
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .mission-board-card__project {
@@ -330,11 +337,18 @@ body {
 .mission-board-card__summary {
   display: -webkit-box;
   overflow: hidden;
+  /* Clamped text needs a break strategy: an English title carrying a URL or
+   * a long path has no break opportunity, overflows the line, and is clipped
+   * with no ellipsis to show for it. CJK breaks anywhere, so this only ever
+   * showed in the English locale. Every other clamped block in the tree sets
+   * one of these. */
+  overflow-wrap: anywhere;
   color: var(--text-soft);
   font-size: var(--ui-font-small);
   line-height: var(--ui-line-height-tight);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .mission-board-card__progress {

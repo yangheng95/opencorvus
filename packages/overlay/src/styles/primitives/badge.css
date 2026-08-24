@@ -5,6 +5,12 @@
   flex: 0 0 auto;
   gap: var(--ui-gap-xs);
   max-width: 100%;
+  /* max-width caps the pill's rounded background, but a nowrap flex line
+   * inside keeps laying out past it, so long content painted *outside* the
+   * coloured shape. Two call sites already added this clip by hand
+   * (composer, mailbox); the ones that did not are where it showed. */
+  min-width: 0;
+  overflow: hidden;
   border: 0 solid transparent;
   border-radius: var(--oc-radius-pill);
   background: var(--surface-inset);

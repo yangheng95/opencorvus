@@ -301,7 +301,10 @@
   grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ui-gap-md);
-  height: calc(45px * var(--ui-scale));
+  /* min-height only. A row with a description stacks 21 + 2 + 16.5 plus 12 of
+   * padding = 51.5px against the 45px this used to hard-set, and descriptions
+   * are the norm here — the copy bled into the 4px row gap above and below,
+   * and the last row's descenders were clipped at the scroll edge. */
   min-height: calc(45px * var(--ui-scale));
   padding: var(--ui-gap-sm) var(--ui-gap-md);
 }

@@ -35,7 +35,12 @@
   --ui-btn-padding-y: calc(5px * var(--ui-scale));
   --ui-btn-padding-x: calc(12px * var(--ui-scale));
   --ui-btn-mini-padding-y: calc(3px * var(--ui-scale));
-  --ui-btn-mini-padding-x: min(calc(8px * var(--ui-scale)), 8px);
+  /* Was `min(calc(8px * var(--ui-scale)), 8px)` — the only entry in the whole
+   * ladder pinned to a bare px. Above 1x the min() always picked the
+   * constant, so a mini button's horizontal padding froze at 8px while its
+   * font and vertical padding kept scaling: at 1.6x the label crowded both
+   * pill edges. */
+  --ui-btn-mini-padding-x: calc(8px * var(--ui-scale));
   --ui-pill-padding-y: calc(2px * var(--ui-scale));
   --ui-pill-padding-x: calc(8px * var(--ui-scale));
   --ui-pill-min-height: calc(20px * var(--ui-scale));
