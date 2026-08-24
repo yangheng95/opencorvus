@@ -17,23 +17,34 @@
   --text-on-accent: #ffffff;
   --text-on-strong: #ffffff;
   --text-on-danger: #101527;
-  --bg: rgb(244, 244, 244);
-  --surface: rgb(255, 255, 255);
-  --surface-hover: rgb(240, 240, 240);
-  --surface-inset: rgb(244, 244, 245);
+  /* Value ramp. Every step is a distinct lightness level, and the whole
+   * neutral scale carries the same slight cyan bias as --text / --border
+   * (R two points below G/B) so the greys read as chosen rather than
+   * inherited. Previously --surface, --surface-strong and --chat-canvas
+   * were all rgb(255,255,255): a card sat on the canvas with *zero*
+   * value difference and had to be carried by a 9%-alpha edge and a
+   * 6%-alpha shadow. Reading order, dimmest to brightest:
+   *   bg 238 < rail/chrome 242 < inset 241 < hover 246
+   *          < canvas 248 < surface 253 < strong 255
+   * Pure white is now reserved for what is genuinely lifted — dialogs,
+   * menus, popovers — so it reads as elevation instead of as default. */
+  --bg: rgb(236, 238, 238);
+  --surface: rgb(251, 253, 253);
+  --surface-hover: rgb(244, 246, 246);
+  --surface-inset: rgb(239, 241, 241);
   --surface-strong: rgb(255, 255, 255);
-  --rail-surface: rgb(247, 247, 247);
+  --rail-surface: rgb(240, 242, 242);
   /* Flat rail: the earlier 4-stop ambient gradient made the light rail read
    * muddy next to the white canvas; all three themes now share the flat
    * treatment and the rail separates by value, not by hue. */
   --rail-background-image: none;
-  --chat-canvas: rgb(255, 255, 255);
+  --chat-canvas: rgb(246, 248, 248);
   --workspace-ambient-fill: var(--chat-canvas);
   --inspector-surface: var(--chat-canvas);
   --body-bg: var(--rail-surface);
   --panel-body-bg: var(--rail-surface);
   --panel-body-blur: blur(20px);
-  --chrome: rgb(247, 247, 247);
+  --chrome: rgb(240, 242, 242);
   --border: rgba(32, 38, 40, 0.14);
   --border-hover: rgba(32, 38, 40, 0.28);
   --border-strong: rgba(32, 38, 40, 0.22);
@@ -64,17 +75,22 @@
   /* Flat elevation: plain soft drops, no inset top-highlight layer. The
    * embossed highlight fought the flat-surface direction and read as a
    * second material on every raised panel. */
-  --shadow: 0 1px 2px rgba(32, 38, 40, 0.06);
-  --shadow-md: 0 4px 12px rgba(32, 38, 40, 0.08);
-  --shadow-lg: 0 12px 32px rgba(32, 38, 40, 0.1);
+  --shadow: 0 1px 2px rgba(32, 38, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(32, 38, 40, 0.1);
+  --shadow-lg: 0 12px 32px rgba(32, 38, 40, 0.12);
   --scrollbar-thumb: rgba(32, 38, 40, 0.18);
   --scrollbar-thumb-hover: color-mix(in srgb, var(--accent) 34%, transparent);
   --session-scrollbar-track: color-mix(in srgb, var(--surface-strong) 48%, transparent);
-  --subtle-1: color-mix(in srgb, var(--accent) 4%, transparent);
-  --subtle-2: color-mix(in srgb, var(--accent) 6.5%, transparent);
-  --subtle-3: color-mix(in srgb, var(--accent) 8.5%, transparent);
-  --subtle-4: color-mix(in srgb, var(--accent) 12%, transparent);
-  --subtle-5: color-mix(in srgb, var(--accent) 16%, transparent);
+  /* Neutral wash ladder — derived from --text-strong so it always moves
+   * the fill toward the text color, on every theme. It used to be mixed
+   * from --accent here and in vscode-dark (dark alone was neutral), which
+   * tinted every "subtle" surface blue: inline code, skeletons, ghost
+   * button fills, diff gutters. All three themes now share one semantic. */
+  --subtle-1: color-mix(in srgb, var(--text-strong) 3%, transparent);
+  --subtle-2: color-mix(in srgb, var(--text-strong) 5%, transparent);
+  --subtle-3: color-mix(in srgb, var(--text-strong) 7%, transparent);
+  --subtle-4: color-mix(in srgb, var(--text-strong) 9%, transparent);
+  --subtle-5: color-mix(in srgb, var(--text-strong) 12%, transparent);
 
   /* Markdown / hljs (highlight.js) syntax palette. Code blocks render on
    * --surface-inset, so syntax colors are theme-scoped instead of fixed at
