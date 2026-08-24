@@ -14,13 +14,7 @@ chmod 0700 "$evidence_root" "$control_root"
 exec 9>"$control_root/supervisor.lock"
 flock -n 9 || exit 1
 
-set -a
-. /var/lib/opencorvus-benchmark/provider-data/exa.env
-set +a
-export HTTP_PROXY=http://172.26.64.1:17892
-export HTTPS_PROXY=http://172.26.64.1:17892
-export ALL_PROXY=http://172.26.64.1:17892
-export NO_PROXY=127.0.0.1,localhost
+. packages/opencorvus/script/benchmark/external-agent/load-automationbench-environment.sh
 
 exec >>"$control_root/supervisor.log" 2>&1
 

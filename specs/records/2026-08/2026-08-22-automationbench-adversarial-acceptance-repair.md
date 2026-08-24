@@ -371,3 +371,32 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. Given two current raw-eligible runs for an unadopted case, reconciliation still throws the typed multiple-candidate error.
 3. Plan `preexisting_eligible`, launch skipping and receipt eligible claims derive from the same captured map; no second candidate source or fallback is introduced.
 4. Focused tests, benchmark typecheck, catalog/verifier checks and uninvolved review pass before the repaired runner is activated.
+
+## WSL benchmark environment and proxy authority refresh
+
+### Recall
+
+| Item | Requirement or evidence |
+| --- | --- |
+| User request | Switch to the benchmark branch, configure its environment, then continue after explicit authorization to use the current OpenCorvus and Exa credentials and repair the benchmark proxy entry point. |
+| Branch boundary | Preserve the primary clean `main` worktree. Use dedicated worktree `D:\myhexin-local\opencorvus-bench` and WSL runner `/var/lib/opencorvus-benchmark/opencorvus-runner`, both on `codex/automation-workbuddy-benchmark`. |
+| Formal-run boundary | Configure and validate the environment only. Do not launch the Sol Mission/Base 50-case supervisor without a separate explicit request. |
+| Credential authority | The installed OpenCorvus pair under `C:\Users\hengu\AppData\Local\opencorvus\data` contains provider `openai` and exact model `gpt-5.6-sol`; project only that `auth.json` plus `models.json`. Project the existing `EXA_API_KEY` into root-private `exa.env` without logging values. |
+| Proxy evidence | The old fixed `172.26.64.1:17892` endpoint accepts a TCP connection but its HTTPS CONNECT path times out. The current WSL default gateway `172.31.64.1` reaches Boost Net on port `7890` and returns a successful HTTPS CONNECT response. The gateway address is runtime state and must not become a new committed constant. |
+| Independent agent feedback | The uninvolved environment reviewer confirmed clean branch identity, exact runner/toolchain/package identities and no benchmark process. It identified missing Provider files, the stale proxy endpoint, and evaluator mode `0755`; evaluator mode was repaired to root-private `0700` and re-reviewed. |
+
+### Problem and impact analysis
+
+- **Observable failure:** a real HTTPS request through the supervisor's fixed proxy times out even though the current WSL-to-Boost-Net gateway path succeeds.
+- **Direct trigger:** all three benchmark supervisors overwrite `HTTP_PROXY`, `HTTPS_PROXY`, and `ALL_PROXY` with one historical WSL gateway address after loading Exa configuration.
+- **Root cause:** machine-local network discovery was committed as experiment policy. The scripts have three copies of the same stale address and no root-private environment configuration owner.
+- **Why the old path did not recover:** changing Windows global proxy mode makes Boost Net listen on `7890`, but it cannot update a literal address in committed shell scripts. Copying proxy variables into `exa.env` also cannot work because every supervisor overwrites them afterwards.
+- **Impact surface:** the three benchmark supervisor scripts, one shared environment projection helper, their focused non-UI contract test, this spec, and the benchmark Skill setup/preflight instructions. Product runtime networking, historical evidence, case manifests, model/profile selection, and experiment roots are excluded.
+
+### Repair and acceptance
+
+1. One shared supervisor helper loads root-private `exa.env` and `network.env`, derives the current Windows host from WSL's default route, validates the configured Boost Net port, and projects one URL into the standard proxy variables. No supervisor owns a proxy address or parallel projection.
+2. The root-private network configuration owns only the machine-selected proxy port and no credential values. The current machine config uses port `7890`; a WSL restart may change the gateway without requiring a source edit.
+3. A focused positive contract test proves all three supervisors source the same helper and that the helper projects the configured port/default gateway into `HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and the configured bypass list.
+4. Before Provider work, real WSL validation proves the configured proxy can complete HTTPS CONNECT, both source credential files match their root-private copies, Exa is present without printing it, and exact `openai/gpt-5.6-sol` projection is available.
+5. Rerun shell syntax, the focused benchmark contract test, benchmark typecheck, bridge diagnostics, exact Provider connectivity, five-case isolation diagnostics, and an uninvolved read-only review. Commit and push the benchmark-only repair, update the WSL runner to the exact pushed commit, and keep the formal evidence/control roots empty.

@@ -2389,6 +2389,47 @@ describe("external agent benchmark contract", () => {
     ).toEqual([])
   })
 
+  test("projects one root-private WSL network authority across every benchmark supervisor", async () => {
+    const scriptRoot = path.resolve(import.meta.dir, "../../script/benchmark/external-agent")
+    const helperPath = path.join(scriptRoot, "load-automationbench-environment.sh")
+    const [helper, ...supervisors] = await Promise.all([
+      fs.readFile(helperPath, "utf8"),
+      fs.readFile(path.join(scriptRoot, "run-sol-mission-base-50.sh"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "run-luna-mission-base-cases-51-600.sh"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "run-luna-mission-advanced-50.sh"), "utf8"),
+    ])
+    const sourcePath = (script: string) =>
+      script.match(/^\. (packages\/opencorvus\/script\/benchmark\/external-agent\/load-automationbench-environment\.sh)$/m)?.[1]
+    const exports = Array.from(
+      helper.matchAll(/^export (AUTOMATIONBENCH_PROXY_URL|HTTP_PROXY|HTTPS_PROXY|ALL_PROXY|NO_PROXY)(?:=(.+))?$/gm),
+      ([, name, value]) => ({ name, value }),
+    )
+
+    expect({
+      supervisorEnvironmentOwners: supervisors.map(sourcePath),
+      providerDataRoot: helper.match(/^provider_data_root=(.+)$/m)?.[1],
+      environmentFiles: Array.from(helper.matchAll(/^\. "\$provider_data_root\/(.+\.env)"$/gm), ([, name]) => name),
+      gatewayProjection: helper.match(/^automationbench_windows_host=(.+)$/m)?.[1],
+      proxyProjection: helper.match(/^AUTOMATIONBENCH_PROXY_URL=(.+)$/m)?.[1],
+      exports,
+    }).toEqual({
+      supervisorEnvironmentOwners: Array(3).fill(
+        "packages/opencorvus/script/benchmark/external-agent/load-automationbench-environment.sh",
+      ),
+      providerDataRoot: "/var/lib/opencorvus-benchmark/provider-data",
+      environmentFiles: ["exa.env", "network.env"],
+      gatewayProjection: '"$(ip -4 route show default | awk \'NR == 1 { print $3; exit }\')"',
+      proxyProjection: '"http://${automationbench_windows_host}:${AUTOMATIONBENCH_PROXY_PORT}"',
+      exports: [
+        { name: "AUTOMATIONBENCH_PROXY_URL", value: '"$AUTOMATIONBENCH_PROXY_URL"' },
+        { name: "HTTP_PROXY", value: '"$AUTOMATIONBENCH_PROXY_URL"' },
+        { name: "HTTPS_PROXY", value: '"$AUTOMATIONBENCH_PROXY_URL"' },
+        { name: "ALL_PROXY", value: '"$AUTOMATIONBENCH_PROXY_URL"' },
+        { name: "NO_PROXY", value: '"${AUTOMATIONBENCH_NO_PROXY:-127.0.0.1,localhost}"' },
+      ],
+    })
+  })
+
   test("binds the Luna Mission Base continuation to unique cases 51 through 600", async () => {
     const script = await fs.readFile(
       path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-luna-mission-base-cases-51-600.sh"),
