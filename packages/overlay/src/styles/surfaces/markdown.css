@@ -156,11 +156,12 @@
 
 .msg-text code,
 .md-content code {
-  /* Neutral chip, no border: --subtle-4 is accent-mixed in the light theme,
-   * so every inline code span used to read as a blue-tinted outlined pill —
-   * loud at transcript frequency. A quiet text-derived wash carries the
-   * "this is code" cue in every theme without joining the color story. */
-  background: color-mix(in srgb, var(--text-strong) 6.5%, transparent);
+  /* Neutral chip, no border. This used to be an inline text-derived wash,
+   * written that way because --subtle-* was accent-mixed on light and every
+   * inline code span read as a blue-tinted pill — loud at transcript
+   * frequency. The ladder is neutral on all three themes now, so the chip
+   * takes its rung directly. */
+  background: var(--subtle-3);
   border-radius: var(--oc-radius-soft);
   padding: var(--ui-gap-3xs) var(--ui-gap-xs);
   font-family: var(--mono);

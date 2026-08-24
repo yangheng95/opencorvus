@@ -1374,7 +1374,7 @@ body {
 
 .interaction-dialog-form .interaction-card__option:not([data-disabled]):hover,
 .interaction-dialog-form .interaction-card__option[data-selected="true"] {
-  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  background: var(--hover-wash);
 }
 
 .interaction-dialog-form .interaction-card__option[data-disabled] {

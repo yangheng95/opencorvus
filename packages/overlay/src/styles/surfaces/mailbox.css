@@ -24,7 +24,7 @@
   padding-block: var(--ui-gap-md);
   padding-inline-start: var(--ui-gap-lg);
   padding-inline-end: calc(var(--ui-left-rail-project-action-center-inset) - (var(--ui-gap-3xl) / 2));
-  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
   background: transparent;
 }
 
@@ -380,7 +380,7 @@
   min-width: 0;
   margin-top: var(--ui-gap-3xs);
   padding-top: var(--ui-gap-md);
-  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .mailbox-item__body--expanded {

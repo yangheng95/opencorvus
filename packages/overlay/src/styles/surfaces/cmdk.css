@@ -121,7 +121,7 @@
 
 .cmdk-item[data-highlighted],
 .cmdk-item[data-selected] {
-  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  background: var(--hover-wash);
   color: var(--text-strong);
 }
 
@@ -141,7 +141,7 @@
   margin: 0 calc(-12px * var(--ui-scale));
   min-height: calc(36px * var(--ui-scale));
   border-radius: var(--oc-radius-large);
-  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  background: var(--hover-wash);
 }
 
 .cmdk-item-group {

@@ -2002,7 +2002,7 @@
   height: calc(420px * var(--ui-scale));
   min-height: calc(280px * var(--ui-scale));
   background:
-    radial-gradient(circle, color-mix(in srgb, var(--border) 72%, transparent) 1px, transparent 1px), var(--surface);
+    radial-gradient(circle, var(--divider-soft) 1px, transparent 1px), var(--surface);
   background-size: calc(22px * var(--ui-scale)) calc(22px * var(--ui-scale));
 }
 

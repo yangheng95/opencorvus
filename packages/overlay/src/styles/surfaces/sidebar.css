@@ -158,7 +158,7 @@ body .sidebar-header.oc-surface-header {
   justify-content: space-between;
   gap: var(--ui-gap-md);
   padding: var(--ui-gap-lg) var(--ui-gap-xl);
-  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
   min-width: 0;
@@ -659,10 +659,10 @@ body .sidebar-header.oc-surface-header {
 .ledger-skeleton-row {
   height: calc(48px * var(--ui-scale));
   border-radius: var(--oc-radius-soft);
-  /* Neutral placeholder: --subtle-* is accent-mixed in the light theme, which
-   * tinted the loading rows blue; a text-derived wash stays achromatic in
-   * every theme. */
-  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  /* Placeholder rows sit on the neutral rung. The inline wash this replaces
+   * existed only because --subtle-* was accent-mixed on light and tinted the
+   * loading rows blue; the ladder is achromatic on every theme now. */
+  background: var(--subtle-3);
 }
 
 .ledger-skeleton-row:nth-child(2) {

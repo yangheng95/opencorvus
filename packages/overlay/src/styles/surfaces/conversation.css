@@ -2936,7 +2936,7 @@
   display: grid;
   gap: var(--ui-gap-3xs);
   padding-top: var(--ui-gap-md);
-  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .dialog-form.project-runtime-git-dialog-form
