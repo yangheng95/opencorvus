@@ -227,3 +227,41 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. Package benchmark typecheck, docs check, diff check, and the existing external-agent contract suite pass.
 3. The replacement case 5 loads the repaired Skill on Base Planner, Developer, Tester, and Orchestrator; no exact successful mutation endpoint is repeated solely because GET/List did not project it.
 4. The replacement seals a natural official score. Model-natural success or failure counts; only infrastructure/prompt bugs permit another rerun.
+
+## Luna Mission/Advanced completion round
+
+### Recall
+
+| Item | Requirement or evidence |
+| --- | --- |
+| User request | Continue and finish every Luna AutomationBench case, with a watcher that checks every 30 minutes and repairs genuine blockers. |
+| Starting state | Luna Mission/Base r3 is already complete: dashboard `luna-mission-base-v20260822-r3` reports `verified 50`, `pending 0`, with 59 indexed attempts. Preserve that matrix and never submit another Base case. No Luna Advanced evidence/control root exists and no Luna benchmark process is running. |
+| Remaining benchmark | AutomationBench `1.0.6`, frozen public 50-case manifest, exact model `openai/gpt-5.6-luna`, real Mission intake, immutable held Advanced Expert Squad, repetition 1, five distinct cases per batch, batches 1–10. |
+| New isolation boundary | Runner `run-luna-mission-advanced-50.sh`; evidence `/var/lib/opencorvus-benchmark/evidence-luna-mission-advanced-v20260824-r1`; control `/var/lib/opencorvus-benchmark/control-luna-mission-advanced-v20260824-r1`; dashboard `D:\myhexin-local\opencorvus-benchmark-results\luna-mission-advanced-v20260824-r1\index.html`. Base and Advanced never share a supervisor script, root, lock, receipt or dashboard. |
+| Timeout and retry | The runner uses 600 seconds without real Message/Tool/Provider/trace/world activity, not a wall-clock cap. Natural model failure is an official score and is not rerun. Invalid/bug and missing slots retain complete evidence and may be rerun only after root-cause repair. Verified and reusable sealed candidates are never repeated. |
+| Watcher | A current-thread heartbeat wakes every 30 minutes, reads this Recall and the latest incident section, performs read-only liveness/catalog/database/trace checks first, refreshes the dashboard, resumes only a missing batch, and fixes evidenced framework or benchmark blockers before retrying only missing slots. Healthy work is never restarted. |
+| Branch boundary | Benchmark runner/spec/dashboard changes remain only on `codex/automation-workbuddy-benchmark`. Any shared product/framework fix is separately reviewed, committed and merged into current maintenance branch `v0.0.53beta`, then synchronized back to the benchmark branch. No release, tag, website or binary publication is authorized by this round. |
+
+### Acceptance
+
+1. The dedicated Advanced supervisor contains only Luna, Mission, `advanced`, repetition 1, the new Advanced roots and the existing audited five-case coordinator. It has no Base, Sol or Terra execution path.
+2. Before launch, the bench worktree and WSL runner must be at the same pushed benchmark commit; isolated `auth.json` plus `models.json`, Exa environment, proxy reachability, exact Luna Provider preflight, Advanced Skill/profile projection and fresh-root isolation must pass without printing credential values.
+3. Every batch reuses sealed eligible Advanced slots, runs only missing case indices, writes create-only plans/receipts and per-run evidence, and refreshes the external dashboard after settled trials.
+4. The watcher distinguishes healthy activity, durable wait, Provider/Exa rate limit or authentication, no-activity timeout, and scheduler/terminal convergence defects using process, catalog, receipt, durable database and trace evidence. Page age or title alone is never a stuck signal.
+5. Completion requires the existing Base `50/50` plus Advanced `verified 50/50`, final catalog/verifier success, no active leases/processes, complete evidence, and an independent read-only review of any implemented repair.
+
+## Luna Advanced supervisor prelaunch identity incident
+
+### Evidence and root cause
+
+- No Advanced case was launched. Preflight found the WSL runner Git metadata temporarily unreadable from Linux while the supervisor's `test "$(git ...)"` expressions could still compare two empty substitutions and return success. The source-fence syntax was fail-open even though the runner repository later became readable again.
+- The first independent review found that `batch_is_complete` trusted only `batch_index` plus completed/passed audit state. Catalog batches link their immutable plan but do not inline its model, launch mode or profile, so a foreign completed plan accidentally placed in the new root could suppress the real Advanced batch until final verification.
+- The first positive script test read only the first occurrence of each flag. A later second coordinator invocation could therefore escape the intended exact single-invocation topology while the test remained green.
+- WSL can reach the configured gateway proxy on `172.26.64.1:17892`; Windows loopback reachability is not the benchmark path. Provider/model/Exa configuration is root-private and must be checked inside WSL without printing values.
+
+### Repair contract
+
+1. Capture Git status, HEAD and pushed benchmark-branch HEAD in separate assignments under `set -e`; only then compare clean/exact values. Any Git command failure aborts before root creation or case launch.
+2. New batch plans use schema v2 and record repetition 1. A completed catalog batch is reusable only when its referenced immutable plan also binds schema v2, the same batch index, exact Luna model, Mission launch mode, sole `advanced` profile, repetition 1 and five-case rolling schedule. Shared audit and final verification accept only numeric historical schema v1 with its original absent repetition field, or numeric schema v2 with numeric repetition 1; every missing, coerced, malformed or future schema maps to the explicit `batch_plan_schema` error.
+3. The positive supervisor test parses the complete coordinator and final-verifier invocations, requires one of each, and compares their projected argument maps and root variables to the exact Advanced experiment contract.
+4. Rerun shell syntax, focused benchmark tests, benchmark typecheck and independent review. Push the bench commit and update the WSL runner to that exact commit before any Provider preflight or formal case.

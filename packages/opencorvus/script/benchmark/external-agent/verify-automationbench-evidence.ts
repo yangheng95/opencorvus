@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import {
   auditBenchmarkIsolation,
+  auditAutomationBenchBatchPlanSchema,
   auditBatchEvidence,
   auditSkillEvidenceSeal,
   auditTaskInfrastructureIncidents,
@@ -629,6 +630,10 @@ const verifiedBatches = await Promise.all(
     .map(async (planPath) => {
       const planBytes = await fs.readFile(planPath)
       const plan = JSON.parse(planBytes.toString("utf8"))
+      const planSchemaAudit = auditAutomationBenchBatchPlanSchema(plan)
+      if (!planSchemaAudit.passed) {
+        throw new Error(`Batch plan schema mismatch (${planSchemaAudit.reason}): ${plan.batch_run_id}`)
+      }
       if (plan.model !== model || plan.launch_mode !== "mission") {
         throw new Error(`Batch plan model/launch mode mismatch: ${plan.batch_run_id}`)
       }

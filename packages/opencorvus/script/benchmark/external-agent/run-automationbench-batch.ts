@@ -487,10 +487,11 @@ try {
   await fs.mkdir(planDirectory, { recursive: true })
   const preexistingCatalog = await refreshCatalog()
   const plan = {
-    schema_version: 1,
+    schema_version: 2,
     launch_mode: "mission",
     batch_run_id: batchRunID,
     batch_index: batchIndex,
+    repetition: 1,
     started_at: Date.now(),
     model,
     profiles,

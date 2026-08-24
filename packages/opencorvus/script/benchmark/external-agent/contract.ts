@@ -1351,6 +1351,64 @@ export function missingCompletedBatchProfileReceipts(input: {
 
 type BatchPlanSlot = { case_index: number; profile: string }
 
+export type AutomationBenchBatchPlanIdentity = {
+  schema_version: number
+  batch_index: number
+  model: string
+  launch_mode: string
+  repetition: number
+  trial_concurrency: number
+  schedule_mode: string
+  profiles: string[]
+  case_count: number
+}
+
+function strictInteger(value: unknown) {
+  return typeof value === "number" && Number.isFinite(value) && Number.isInteger(value) ? value : Number.NaN
+}
+
+export function automationBenchBatchPlanIdentity(plan: any): AutomationBenchBatchPlanIdentity {
+  return {
+    schema_version: strictInteger(plan?.schema_version),
+    batch_index: strictInteger(plan?.batch_index),
+    model: typeof plan?.model === "string" ? plan.model : "",
+    launch_mode: typeof plan?.launch_mode === "string" ? plan.launch_mode : "",
+    repetition: strictInteger(plan?.repetition),
+    trial_concurrency: strictInteger(plan?.trial_concurrency),
+    schedule_mode: typeof plan?.schedule_mode === "string" ? plan.schedule_mode : "",
+    profiles:
+      Array.isArray(plan?.profiles) && plan.profiles.every((profile: unknown) => typeof profile === "string")
+        ? [...plan.profiles]
+        : [],
+    case_count: Array.isArray(plan?.cases) ? plan.cases.length : 0,
+  }
+}
+
+export function automationBenchBatchPlanMatches(
+  plan: any,
+  expected: AutomationBenchBatchPlanIdentity,
+) {
+  return JSON.stringify(automationBenchBatchPlanIdentity(plan)) === JSON.stringify(expected)
+}
+
+export function auditAutomationBenchBatchPlanSchema(plan: any) {
+  const schemaVersion = strictInteger(plan?.schema_version)
+  const repetition = plan?.repetition === undefined ? null : strictInteger(plan.repetition)
+  if (schemaVersion === 1 && repetition === null) {
+    return { passed: true, schema_version: 1, repetition: null, legacy: true, reason: null }
+  }
+  if (schemaVersion === 2 && repetition === 1) {
+    return { passed: true, schema_version: 2, repetition: 1, legacy: false, reason: null }
+  }
+  return {
+    passed: false,
+    schema_version: Number.isFinite(schemaVersion) ? schemaVersion : null,
+    repetition: repetition !== null && Number.isFinite(repetition) ? repetition : null,
+    legacy: false,
+    reason: "batch_plan_schema",
+  }
+}
+
 export function auditBatchEvidence(input: {
   plan: any
   receipt?: any
@@ -1369,6 +1427,8 @@ export function auditBatchEvidence(input: {
     }
   }
   const reasons: string[] = []
+  const planSchemaAudit = auditAutomationBenchBatchPlanSchema(input.plan)
+  if (!planSchemaAudit.passed) reasons.push(planSchemaAudit.reason!)
   if (
     !["completed", "failed"].includes(input.receipt.status) ||
     input.receipt.batch_run_id !== input.plan.batch_run_id

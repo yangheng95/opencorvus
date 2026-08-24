@@ -33,6 +33,9 @@ import {
   auditMissionQuiescence,
   auditMissionRunBinding,
   auditBatchEvidence,
+  auditAutomationBenchBatchPlanSchema,
+  automationBenchBatchPlanIdentity,
+  automationBenchBatchPlanMatches,
   executeRollingBatchChains,
   failureObservationReceipt,
   missingCompletedBatchProfileReceipts,
@@ -1931,6 +1934,7 @@ describe("external agent benchmark contract", () => {
     expect(
       auditBatchEvidence({
         plan: {
+          schema_version: 1,
           batch_run_id: "batch-2",
           model: "openai/gpt-5.6-luna",
           launch_mode: "mission",
@@ -1979,6 +1983,7 @@ describe("external agent benchmark contract", () => {
     }))
     const audit = auditBatchEvidence({
       plan: {
+        schema_version: 1,
         batch_run_id: "batch-posthoc-host-fault",
         model: "openai/gpt-5.6-luna",
         launch_mode: "mission",
@@ -2056,6 +2061,127 @@ describe("external agent benchmark contract", () => {
         profiles: ["base", "advanced"],
       }),
     ).toEqual([])
+  })
+
+  test("binds the dedicated Luna Mission Advanced supervisor to its isolated 50-case round", async () => {
+    const script = await fs.readFile(
+      path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-luna-mission-advanced-50.sh"),
+      "utf8",
+    )
+    const assignment = (name: string) => script.match(new RegExp(`^${name}=(.+)$`, "m"))?.[1]
+    const lines = script.split(/\r?\n/)
+    const invocations: Array<{ entry: string | undefined; args: Record<string, string> }> = []
+    for (let index = 0; index < lines.length; index++) {
+      if (lines[index]?.trim() !== "/root/.bun/bin/bun \\") continue
+      const command: string[] = []
+      for (index += 1; index < lines.length; index++) {
+        const raw = lines[index]!.trim()
+        const continued = raw.endsWith("\\")
+        command.push(raw.replace(/ \\$/, "").replace(/ &$/, ""))
+        if (!continued) break
+      }
+      const args: Record<string, string> = {}
+      for (const item of command.slice(1)) {
+        const match = item.match(/^--([^ ]+) (.+)$/)
+        if (match) args[match[1]!] = match[2]!
+      }
+      invocations.push({ entry: command[0], args })
+    }
+
+    expect({
+      evidenceRoot: assignment("evidence_root"),
+      controlRoot: assignment("control_root"),
+      dashboardRoot: assignment("dashboard_root"),
+      invocations,
+      batchRange: script.match(/^for batch_index in (.+); do$/m)?.[1],
+      startEvent: script.includes('"event":"luna_advanced_batch_start"'),
+      completionEvent: script.includes('"event":"luna_advanced_batch_complete"'),
+      resumeIdentityOwner: script.includes("automationBenchBatchPlanMatches(plan"),
+    }).toEqual({
+      evidenceRoot: "/var/lib/opencorvus-benchmark/evidence-luna-mission-advanced-v20260824-r1",
+      controlRoot: "/var/lib/opencorvus-benchmark/control-luna-mission-advanced-v20260824-r1",
+      dashboardRoot: "/mnt/d/myhexin-local/opencorvus-benchmark-results/luna-mission-advanced-v20260824-r1",
+      invocations: [
+        {
+          entry: "packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts",
+          args: {
+            python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+            "source-data": "/var/lib/opencorvus-benchmark/provider-data",
+            output: '"$evidence_root"',
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            "control-root": '"$control_root"',
+            dashboard: '"$dashboard_root/index.html"',
+            "batch-index": '"$batch_index"',
+            repetition: "1",
+            model: "openai/gpt-5.6-luna",
+            profiles: "advanced",
+            "inactivity-ms": "600000",
+          },
+        },
+        {
+          entry: "packages/opencorvus/script/benchmark/external-agent/verify-automationbench-evidence.ts",
+          args: {
+            root: '"$evidence_root"',
+            "source-data": "/var/lib/opencorvus-benchmark/provider-data",
+            python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            model: "openai/gpt-5.6-luna",
+            profiles: "advanced",
+            repetition: "1",
+            mode: "final",
+          },
+        },
+      ],
+      batchRange: "{1..10}",
+      startEvent: true,
+      completionEvent: true,
+      resumeIdentityOwner: true,
+    })
+  })
+
+  test("projects and matches the complete Luna Mission Advanced batch-plan identity", () => {
+    const plan = {
+      schema_version: 2,
+      batch_index: 4,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      repetition: 1,
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      profiles: ["advanced"],
+      cases: Array.from({ length: 5 }, (_, offset) => ({ case_index: 16 + offset })),
+    }
+    const expected = {
+      schema_version: 2,
+      batch_index: 4,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      repetition: 1,
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      profiles: ["advanced"],
+      case_count: 5,
+    }
+    expect(automationBenchBatchPlanIdentity(plan)).toEqual(expected)
+    expect(automationBenchBatchPlanMatches(plan, expected)).toBe(true)
+  })
+
+  test("maps legacy, current, and unsupported batch-plan schemas to the explicit audit contract", () => {
+    expect([
+      auditAutomationBenchBatchPlanSchema({ schema_version: 1 }),
+      auditAutomationBenchBatchPlanSchema({ schema_version: 2, repetition: 1 }),
+      auditAutomationBenchBatchPlanSchema({ schema_version: 2 }),
+      auditAutomationBenchBatchPlanSchema({ schema_version: 3, repetition: 1 }),
+      auditAutomationBenchBatchPlanSchema({ schema_version: "1" }),
+      auditAutomationBenchBatchPlanSchema({ schema_version: "2", repetition: "1" }),
+    ]).toEqual([
+      { passed: true, schema_version: 1, repetition: null, legacy: true, reason: null },
+      { passed: true, schema_version: 2, repetition: 1, legacy: false, reason: null },
+      { passed: false, schema_version: 2, repetition: null, legacy: false, reason: "batch_plan_schema" },
+      { passed: false, schema_version: 3, repetition: 1, legacy: false, reason: "batch_plan_schema" },
+      { passed: false, schema_version: null, repetition: null, legacy: false, reason: "batch_plan_schema" },
+      { passed: false, schema_version: null, repetition: null, legacy: false, reason: "batch_plan_schema" },
+    ])
   })
 
   test("reuses verified profile rows before failed-batch candidates", () => {
