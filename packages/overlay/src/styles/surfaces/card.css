@@ -243,7 +243,10 @@ body {
 .card__head--with-meta {
   align-items: flex-start;
 }
-.card__head:hover {
+/* :focus-within too — messages.css already gives this same element both
+ * states when it sits in a work-details body. */
+.card__head:hover,
+.card__head:focus-within {
   background: color-mix(in srgb, var(--card-bg-hover) 68%, transparent);
 }
 .card:not([data-depth="0"]) .card__head {
@@ -826,7 +829,8 @@ body {
   background: color-mix(in srgb, var(--surface-hover) 58%, transparent);
 }
 
-.card[data-depth="0"][data-kind="tool"].card--collapsed > .card__head:hover {
+.card[data-depth="0"][data-kind="tool"].card--collapsed > .card__head:hover,
+.card[data-depth="0"][data-kind="tool"].card--collapsed > .card__head:focus-within {
   background: var(--surface-hover);
 }
 
@@ -1631,9 +1635,15 @@ body {
   font-size: calc(12px * var(--ui-scale));
 }
 
+/* Hover-only here left keyboard focus on the primitive's fainter
+ * --hover-wash with no glyph lift, so the focused state read dimmer than
+ * the pointer state on the same button. */
 .trace-panel-actions .oc-button[data-ui="trace-copy"]:hover:not([disabled]),
+.trace-panel-actions .oc-button[data-ui="trace-copy"]:focus-visible:not([disabled]),
 .trace-panel-actions .oc-button[data-ui="trace-refresh"]:hover,
-.trace-panel-actions .oc-button[data-ui="trace-close"]:hover {
+.trace-panel-actions .oc-button[data-ui="trace-refresh"]:focus-visible,
+.trace-panel-actions .oc-button[data-ui="trace-close"]:hover,
+.trace-panel-actions .oc-button[data-ui="trace-close"]:focus-visible {
   --oc-button-color: var(--text-strong);
   --oc-button-bg: var(--surface-hover);
 }
