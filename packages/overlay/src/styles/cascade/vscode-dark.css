@@ -62,15 +62,8 @@
   --accent-dim: rgba(0, 122, 204, 0.18);
   --accent-hover: #1a8fd4;
   --accent-start: var(--accent);
-  --accent-mid: var(--accent);
   --accent-end: var(--accent-hover);
-  --accent-gradient: var(--accent);
-  --accent-gradient-hover: var(--accent-hover);
-  --accent-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 28%, transparent);
   --accent-ring: color-mix(in srgb, var(--accent) 30%, transparent);
-  --accent-glow: color-mix(in srgb, var(--accent) 24%, transparent);
-  --hover-accent-border: color-mix(in srgb, var(--accent) 36%, transparent);
-  --hover-accent-wash: color-mix(in srgb, var(--accent) 10%, transparent);
 
   --info: #3794ff;
   --info-dim: color-mix(in srgb, var(--info) 12%, transparent);
@@ -129,9 +122,4 @@
 
   --menu-panel-bg: rgb(31, 31, 31);
   --divider-soft: color-mix(in srgb, var(--border) 60%, transparent);
-
-  --panel-fill: var(--surface);
-  --panel-fill-hover: var(--surface-hover);
-  --card-fill: rgba(45, 45, 48, 0.72);
-  --card-fill-hover: var(--surface-hover);
 }

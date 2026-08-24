@@ -972,7 +972,7 @@
   display: grid;
   gap: calc(4px * var(--ui-scale));
   padding-top: calc(6px * var(--ui-scale));
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--divider-soft);
   min-width: 0;
 }
 
@@ -987,7 +987,7 @@
 
 .composer-reference-market-error {
   padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
-  color: var(--text-bad, var(--text-muted));
+  color: var(--bad);
   font-size: var(--ui-font-meta);
   overflow-wrap: anywhere;
 }

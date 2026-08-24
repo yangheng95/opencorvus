@@ -2403,13 +2403,13 @@ button.s-row:focus-visible {
   gap: calc(8px * var(--ui-scale));
   align-items: center;
   padding: calc(7px * var(--ui-scale)) calc(10px * var(--ui-scale));
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   border-radius: calc(7px * var(--ui-scale));
   min-width: 0;
 }
 
 .expert-squad-evolution-revision[data-installed="true"] {
-  border-color: var(--accent-border, var(--border-strong));
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
 }
 
 .expert-squad-evolution-revision strong {
