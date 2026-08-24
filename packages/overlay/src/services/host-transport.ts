@@ -192,7 +192,7 @@ const TAURI_NATIVE_COMMANDS: NativeCommandCapabilities = {
 }
 
 const BROWSER_NATIVE_COMMANDS: NativeCommandCapabilities = {
-  "open-url": false,
+  "open-url": true,
   "open-path": false,
   "browserPreview.sync": false,
   "browserPreview.navigate": false,

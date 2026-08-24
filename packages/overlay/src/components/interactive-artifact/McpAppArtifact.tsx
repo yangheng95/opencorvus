@@ -26,6 +26,7 @@ import { getLocale, t } from "../../utils/i18n"
 import { OVERLAY_VERSION } from "../../utils/version"
 import { Button } from "../ui/Button"
 import { ArtifactFrame } from "./ArtifactFrame"
+import { externalUrl } from "../../utils/external-url"
 
 type McpAppPayload = Extract<InteractiveArtifactPayload, { renderer: "mcp-app@1" }>
 
@@ -68,14 +69,6 @@ export function secureMcpAppHtml(html: string, csp?: McpUiResourceCsp): string {
   policy.content = mcpAppContentSecurityPolicy(csp)
   documentNode.head.prepend(policy)
   return `<!doctype html>${documentNode.documentElement.outerHTML}`
-}
-
-function safeHttpUrl(value: string): URL {
-  const url = new URL(value)
-  if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {
-    throw new Error("MCP App links must be credential-free HTTP(S) URLs")
-  }
-  return url
 }
 
 function safeFilename(value: string): string {
@@ -462,7 +455,7 @@ export function McpAppArtifact(props: {
     bridge.onopenlink = async ({ url }) => {
       try {
         if (!canOpenLinks) throw new Error("This OpenCorvus Host cannot open external links")
-        const parsed = safeHttpUrl(url)
+        const parsed = externalUrl(url)
         const approved = await askConfirmation({
           kind: "link",
           title: t("artifact.mcp_app.confirm_link_title"),

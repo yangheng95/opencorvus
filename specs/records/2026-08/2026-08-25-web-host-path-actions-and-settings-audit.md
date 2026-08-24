@@ -294,3 +294,156 @@ directory"），与实际动作不符 —— 新增 `cwd.copy_failed` 并按宿�
 overlay 单元测试 73 文件全过。Web 真实页面复验：编辑器启动器已不渲染、
 项目菜单项为 `Copy path`、确认提示为
 `Path copied to the clipboard: <绝对路径>`。
+
+
+---
+
+# 续章：给浏览器宿主补上 `open-url`
+
+## Recall（本章）
+
+**用户要求**：上一章末尾把「`open-url` 在浏览器下同为 `false`，8 处入口全部打不开，
+而浏览器本就能 `window.open`」作为发现上报并询问是否要做；用户答「做」。
+
+**与上一章的性质区别**：上一章是**同一意图在不同宿主上换动作**（开文件管理器 / 复制路径），
+因为浏览器根本做不到前者。本章是**给浏览器宿主补一项它真正具备的能力实现** ——
+`window.open` 就是浏览器打开外部链接的原生方式，不是任何东西的降级。
+因此本章直接改 `BROWSER_NATIVE_COMMANDS`，这与 二-2 不冲突：
+仍然是「一项能力、一个实现、一个事实来源」，只是那个实现此前缺失。
+
+**硬约束**：`utils/native.ts` 的注释写着「no silent fallback to `window.open`」。
+该约束针对的是「宿主不支持时偷偷降级」。本章使 `window.open` 成为浏览器宿主
+**已声明**的实现，`nativeOpen` 在能力缺失时仍然抛错。该注释现在会误导，一并更正。
+
+## 分析
+
+**现状**：`tauri-transport.ts` 的 browser 分支只实现 5 条命令，`open-url` 落到
+`nativeUnsupported("browser", command)`。8 处消费点全部据此关闭功能：
+
+**能力门控的 7 处**：`BrowserPreviewPanel.tsx:1204`、`McpAppArtifact.tsx:381`、
+`ChannelsPanel.tsx:59`、`SkillMarketPanel.tsx:247`、`TitlebarMenubar.tsx:683`、
+`main.tsx:1529`、`main.tsx:2040`。（初稿写「8 处」是笔误，独立审查指出；实为 7 处门控。）
+
+**另有 3 处未受能力门控、但行为同样随本次改动变化**（审查补充）：
+`services/llm.ts:611`、`services/documentation.ts:22`、`services/browser-preview-link.ts:29`。
+它们打开的也都是 http(s) 链接 —— 教程文档、Squad Market 网页、MCP 应用内链接、
+Provider 授权页、外部 URL。
+
+**安全边界**：Tauri 侧 `overlay_open_url`（`src-tauri/src/main.rs:1794`）把 URL 直接交给
+OS opener，没有协议白名单 —— 在桌面上由操作系统兜底。**浏览器里不能照搬**：
+`javascript:` 与 `data:` URL 在页面上下文中是 XSS 面，`window.open` 会照单执行。
+另外 `McpAppArtifact` 的链接来自 MCP 应用，属不可信输入。
+
+**既有重复**：http(s) + 无凭据的校验在仓库里已有 4 份 ——
+`McpAppArtifact.tsx:73`（`safeHttpUrl`）、`NetworkPanel.tsx:41`、
+`browser-preview-native.ts:108`、`SkillMarketPanel.tsx:205`（`isRemoteUrl`）。
+不新增第五份。
+
+## 方案
+
+1. `BROWSER_NATIVE_COMMANDS["open-url"]` → `true`。
+2. 新增纯函数 `utils/external-url.ts::externalUrl(value): URL` —— http(s)、禁止内嵌凭据，
+   否则抛出明确错误。无 DOM 依赖，可直接做非 UI 正向测试。
+3. `tauri-transport.ts` 的 browser 分支实现 `open-url`：经 `externalUrl` 校验后
+   `window.open(href, "_blank", "noopener,noreferrer")`；返回 `null` 视为被弹窗拦截并抛错
+   （`nativeOpen` 期待 `true`，调用方已有 catch）。`noopener` 同时消除 tabnabbing。
+4. `McpAppArtifact` 的 `safeHttpUrl` 改用 `externalUrl` —— 它正在本次路径上，且是
+   不可信输入的那一处，消除一份重复。`NetworkPanel` 与 `browser-preview-native`
+   不在本次路径上，记录不动。
+5. 更正 `utils/native.ts` 中现已误导的注释。
+
+**不做**：`clipboard.readText`、`workspace.pickDir` 等其余 browser 侧 `false` 能力 ——
+浏览器要么确实做不到，要么需要独立的交互设计，不在本次要求内。
+
+## 落地
+
+- `host-transport.ts`：`BROWSER_NATIVE_COMMANDS["open-url"]` → `true`。
+- `utils/external-url.ts`（新增）：`externalUrl(value): URL` —— http(s)、禁内嵌凭据，
+  否则抛明确错误。纯函数，无 DOM 依赖。
+- `tauri-transport.ts` browser 分支实现 `open-url`：经 `externalUrl` 校验后
+  `window.open(href, "_blank", "noopener,noreferrer")`；返回 `null` 判为被拦截并抛错。
+- `McpAppArtifact.tsx`：删除私有的 `safeHttpUrl`，改用 `externalUrl`（不可信输入那一处）。
+- `utils/native.ts`：更正现已误导的注释 —— 它禁止的是「宿主不支持时偷偷降级」，
+  而浏览器**实现** `open-url` 用 `window.open` 是另一回事。
+
+未动：`NetworkPanel.tsx:41` 与 `browser-preview-native.ts:108` 的同类校验 ——
+不在本次路径上，记录待后续合并。
+
+## 验收
+
+**非 UI 正向测试** `test/external-url-gate.test.ts`（8 passed）：接受 http/https、
+查询串/片段/端口、首尾空白；拒绝 `javascript:`、`data:`、`file:`、`vbscript:`、
+内嵌凭据、非 URL、空值 —— 每一条都以**明确错误契约**断言，不使用「不发生」断言。
+
+**既有契约测试抓到了本次变更**：`test/host-transport-capabilities.test.ts` 的能力矩阵
+断言失败，因为 browser 的受支持命令集合多了 `open-url`。这正是它的职责；已更新期望
+并加注说明原因。（74 个测试文件全过。）
+
+**Web 真实页面**：设置 → Squad Market → 「Open Squad Market」。该按钮受
+`canOpenMarketWebPage`（`main.tsx:2040`，读 `open-url`）控制。点击后记录到
+`window.open("https://opencorvus.com/market/", "_blank", "noopener,noreferrer")` ——
+目标、`_blank`、`noopener,noreferrer` 三项均正确。
+
+**桌面路径未变**：仍走 `invokeTauri("overlay_open_url")`；同上一章，桌面无真实截图验收。
+
+## 独立 agent 审查
+
+一名未参与实现的 agent 只读审查了完整差异，重点为安全边界。
+
+### 决定性缺陷（已修）
+
+**`window.open(..., "noopener,noreferrer")` 按 HTML 规范恒返回 `null`** —— 成功与失败
+都一样。原实现把 `null` 判为「被弹窗拦截」并抛错，因此**每一次成功打开都会向用户报错**：
+Channel 教程提示、Squad Market 通知、浏览器预览地址栏错误、标题栏 `reportError` 对话框、
+Mission 创建对话框的 market 错误，以及 MCP 应用在用户已批准链接之后收到 `{isError:true}`。
+带 `noopener` 时不存在能区分「已打开」与「被拦截」的返回值，因此正确做法是保留
+`noopener,noreferrer` 并忽略返回值 —— 仓库自身的先例
+（`TitlebarMenubar.tsx:370` 用 `"noopener"` 且不看返回值）本就如此。
+
+**我的验收方法掩盖了它。** 首轮 Web 验收把 `window.open` stub 成返回一个假窗口对象，
+于是那条永远为真的失败分支从未触发。改用不 stub 的验收后，判据变为「面板是否出现
+错误提示」：修复后 `errorsShown: []`。
+
+### 测试覆盖（已补）
+
+审查指出 transport 分支零覆盖，且 `test/notification-host-transports.test.ts` 早有
+可复用的 fake `window` harness。新增 `test/browser-open-url-transport.test.ts`：
+fake 的 `open` **刻意返回 `null`**（与真实 `noopener` 行为一致），断言
+`native({kind:"open-url"})` 仍 resolve；并断言交给 `window.open` 的
+`href` / `_blank` / `noopener,noreferrer` 三元组，以及恶意 scheme 与内嵌凭据在
+transport 边界被拒。**已验证其有效性**：临时回退修复后该文件 3 项失败，恢复后 5 项通过。
+
+### 采纳的其余意见
+
+- **`browser-preview-native.ts` 其实在本次路径上**（其输出直接喂给 `nativeOpen`），
+  且与新 gate 对内嵌凭据的判断相反 —— 桌面接受、Web 拒绝。已让它同样拒绝凭据。
+  两个函数不合并：一个规范化宽松的地址栏输入，一个校验成品 URL，契约不同；
+  但对「什么可接受」必须一致。
+- **注释在四处重复同一段辩护**（spec、`native.ts`、`tauri-transport.ts`、能力矩阵测试）。
+  论证留在 spec，代码只陈述行为。
+
+### 未采纳，并说明理由
+
+- **把 gate 从 browser 分支上移到 `native()` 共享入口**（覆盖两个宿主）。审查确认
+  当前无任何调用点能把恶意 scheme 送到 `open-url`：`native.ts:132` 按
+  `/^https?:\/\//i` 路由，非 http(s) 一律走 `open-path`（browser 下为 `false`，抛错）；
+  唯一直接构造 `{kind:"open-url"}` 的 `McpAppArtifact` 已在上一帧校验。上移会让桌面
+  开始拒绝带凭据的 URL —— 那是产品决策，且当前不存在可利用路径，不在本次范围内。
+  记录为后续。
+- **弹窗拦截**（审查 §4）：`llm.ts:611` 在 `await apiJson(...)` 之后才调用，用户手势
+  已失效，浏览器上会被拦截。这不是回归（此前是直接抛
+  `UnsupportedNativeCommandError`），但声明能力并不能修复它。MCP 应用链接在
+  `await askConfirmation` 之后打开，Chrome 的瞬时激活通常够用，Firefox/Safari 更严格。
+  两者均记录，未处理。
+
+### 审查确认无误
+
+`externalUrl` 的校验逻辑无可构造的绕过；MCP 应用的用户确认步骤未被削弱且仍在打开之前；
+`test/external-url-gate.test.ts` 完全符合 三-2（每条拒绝都以明确错误契约断言）；
+6 个点击驱动的消费点保持到 `window.open` 的同步路径；`nativeOpen` 仍对缺失能力抛错，
+「非 fallback」的论证成立。
+
+### 复验
+
+`tsc --noEmit` 0；overlay 单元测试 **75 个文件全过**；Web 真实页面（不 stub）
+点击「Open Squad Market」后面板无任何错误提示。

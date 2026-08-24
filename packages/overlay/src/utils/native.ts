@@ -117,8 +117,9 @@ export async function nativeSelect(
 // HostTransport.native so the same call works under Tauri (invokes
 // overlay_open_url / overlay_open_path) and, in the future, under VS
 // Code (vscode.env.openExternal). Throws UnsupportedNativeCommandError
-// in hosts that don't implement the command — no silent fallback to
-// `window.open` (CLAUDE.md §一-7 / plan §5.4).
+// in hosts that don't implement the command. It never substitutes one command
+// for another, and never opens anything itself; each host's transport carries
+// out the command it declares.
 
 import { getHostTransport } from "../services/host-transport-runtime"
 

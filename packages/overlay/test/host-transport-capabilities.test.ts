@@ -20,7 +20,9 @@ describe("HostTransport capability contract", () => {
 
   test("capability matrix matches implemented native command surfaces", () => {
     expect(supported(HOST_CAPABILITIES.tauri)).toEqual([...NATIVE_COMMAND_KINDS])
+    // open-url is implemented on the browser branch of tauri-transport.
     expect(supported(HOST_CAPABILITIES.browser)).toEqual([
+      "open-url",
       "clipboard.writeText",
       "settings.load",
       "settings.save",

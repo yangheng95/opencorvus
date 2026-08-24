@@ -36,6 +36,7 @@ import type {
 } from "./host-transport"
 import { HOST_CAPABILITIES, nativeUnsupported, transportRequestSignal } from "./host-transport"
 import type { HostKind } from "./host-transport"
+import { externalUrl } from "../utils/external-url"
 import { loadBrowserOverlaySettings, saveBrowserOverlaySettings } from "./overlay-settings-storage"
 
 /**
@@ -540,6 +541,18 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
             return loadBrowserOverlaySettings()
           case "settings.save":
             return saveBrowserOverlaySettings(command.payload)
+          case "open-url": {
+            // Validated first: unlike the desktop's OS opener, a page has no
+            // backstop against a javascript: or data: URL.
+            //
+            // The return value is deliberately ignored. `window.open` returns
+            // null whenever `noopener` or `noreferrer` is set — by spec, on
+            // success as much as on failure — so it cannot distinguish an
+            // opened tab from a blocked one, and treating null as failure
+            // would report every successful open as an error.
+            window.open(externalUrl(command.url).href, "_blank", "noopener,noreferrer")
+            return true
+          }
           case "clipboard.writeText":
             if (!navigator.clipboard?.writeText) {
               throw new Error("navigator.clipboard.writeText is unavailable")
