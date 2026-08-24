@@ -152,7 +152,7 @@
 .screenshot-browser-empty p {
   max-width: calc(240px * var(--ui-scale));
   margin: 0;
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .screenshot-browser-group {
@@ -237,7 +237,7 @@
   color: var(--bad);
   background: color-mix(in srgb, var(--bad-dim) 72%, var(--surface-inset));
   font-size: var(--ui-font-tiny);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   text-align: center;
 }
 
@@ -266,7 +266,7 @@
   gap: var(--ui-gap-3xs);
   padding: var(--ui-gap-sm);
   font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .screenshot-browser-card__body strong {

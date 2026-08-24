@@ -296,7 +296,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   font-size: var(--ui-font-brand);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-tight);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .titlebar-menubar .oc-button[data-ui="titlebar-menubar-trigger"] {
@@ -401,7 +401,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 .titlebar-menubar-item-title {
   color: var(--text-strong);
   font-size: var(--ui-font-navigation);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -411,7 +411,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 .titlebar-menubar-item-meta {
   color: var(--text-soft);
   font-size: var(--ui-font-small);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
   flex: 0 0 auto;
   max-width: 46%;
   overflow: hidden;
@@ -442,7 +442,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   color: var(--text-muted);
   font-size: var(--ui-font-small);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   text-align: right;
   white-space: nowrap;
 }

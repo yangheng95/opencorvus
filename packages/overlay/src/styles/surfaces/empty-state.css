@@ -14,7 +14,7 @@
   display: block;
   font-size: var(--ui-font-control);
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   padding: var(--ui-gap-3xs) 0;
 }
 

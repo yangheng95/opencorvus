@@ -77,7 +77,7 @@
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   font-variant-numeric: tabular-nums;
 }
 
@@ -474,7 +474,7 @@
   color: var(--text-on-accent);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   box-shadow: 0 calc(8px * var(--ui-scale)) calc(28px * var(--ui-scale))
     color-mix(in srgb, var(--accent) 42%, transparent);
 }
@@ -704,7 +704,7 @@
   margin: 0 var(--ui-gap-sm);
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -720,7 +720,7 @@
   margin: 0 var(--ui-gap-sm);
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -945,7 +945,7 @@
   width: calc(14px * var(--ui-scale));
   height: calc(14px * var(--ui-scale));
   flex-shrink: 0;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   background: transparent;
   color: var(--text-muted);
   box-shadow: none;
@@ -966,7 +966,7 @@
   color: var(--accent);
   font-size: var(--ui-font-tiny);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   white-space: nowrap;
 }
 
@@ -1025,7 +1025,7 @@
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--surface-inset) 84%, transparent);
   color: var(--text-soft);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 @container side-activity (max-width: 340px) {
@@ -1068,7 +1068,7 @@
 .gwg-objective-text {
   font-size: var(--ui-font-body);
   color: var(--text);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
   word-break: break-word;
 }
 
@@ -1092,7 +1092,7 @@
 .gwg-done-definition-text {
   font-size: var(--ui-font-body);
   color: var(--text);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 /* Markdown reset for goal-card prose blocks: nuke the default
@@ -1164,21 +1164,21 @@
   background: var(--accent-dim);
   color: var(--accent);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .gwg-plan-node-title {
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-strong);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .gwg-plan-node-brief {
   margin-top: var(--ui-gap-3xs);
   font-size: var(--ui-font-control);
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 /* Eval verdict pill — accepted / rejected / inconclusive. The
@@ -1192,7 +1192,7 @@
   text-transform: uppercase;
   letter-spacing: var(--ui-letter-spacing-loose);
   font-variant-numeric: tabular-nums;
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .gwg-verdict--accepted {
@@ -1220,7 +1220,7 @@
   border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-small);
   color: var(--text);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 /* Eval checks list — itemized pass/fail rows shown after the
@@ -1266,7 +1266,7 @@
   border-radius: 50%;
   font-size: calc(10px * var(--ui-scale));
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   background: var(--gwg-surface-hover);
   color: var(--text-muted);
 }
@@ -1411,7 +1411,7 @@
 .req-desc {
   min-width: 0;
   color: var(--text);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -1473,7 +1473,7 @@
   margin: 0;
   font-size: var(--ui-font-control);
   color: var(--text);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .integrity__report {
@@ -1488,7 +1488,7 @@
   color: var(--text);
   font-family: var(--mono);
   font-size: var(--ui-font-small);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: break-word;
 }
 
@@ -1596,7 +1596,7 @@
   margin: 0;
   color: var(--text);
   font-size: var(--ui-font-control);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: break-word;
 }
 
@@ -1612,7 +1612,7 @@
   gap: var(--ui-gap-xs) var(--ui-gap-sm);
   margin: 0;
   font-size: var(--ui-font-small);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .integrity__evidence-grid dt {
@@ -1646,7 +1646,7 @@
   margin: 0;
   color: var(--text);
   font-size: var(--ui-font-small);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -1663,7 +1663,7 @@
   margin: 0;
   color: var(--text);
   font-size: var(--ui-font-small);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
   padding: var(--ui-gap-xs) var(--ui-gap-sm);
   border-left: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--border) 72%, transparent);
@@ -1688,7 +1688,7 @@
   margin-top: var(--ui-gap-xs);
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
 }
 
 .integrity__manifest-meta span {
@@ -1708,7 +1708,7 @@
   border-left: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--border) 72%, transparent);
   border-radius: 0;
   font-size: var(--ui-font-control);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .integrity__issue {
@@ -1823,7 +1823,7 @@
 .arch-detail {
   font-size: var(--ui-font-control);
   color: var(--text);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 /* Decision list: each flat row carries the decision key, target
@@ -1873,14 +1873,14 @@
 .arch-decision-value {
   color: var(--text);
   font-size: var(--ui-font-control);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
 .arch-decision-reason {
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -1892,7 +1892,7 @@
   font-weight: var(--ui-font-weight-strong);
   text-transform: uppercase;
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 .verdict-pill[data-verdict="pass"],
 .verdict-pill[data-verdict="accepted"] {

@@ -12,7 +12,7 @@
   font-family: var(--font);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   letter-spacing: var(--ui-letter-spacing-normal);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;

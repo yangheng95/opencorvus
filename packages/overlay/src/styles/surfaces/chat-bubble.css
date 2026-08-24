@@ -173,7 +173,7 @@
   color: var(--text);
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
   overflow-wrap: anywhere;
   text-align: left;
   white-space: pre-wrap;
@@ -235,7 +235,7 @@
   color: var(--text-soft);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -249,7 +249,7 @@
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -371,7 +371,7 @@
   font-size: var(--ui-font-compact-row);
   font-weight: var(--ui-font-weight-body);
   font-variant-numeric: tabular-nums;
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   white-space: nowrap;
 }
 
@@ -455,7 +455,7 @@
   min-width: 0;
   width: 100%;
   color: var(--text);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .chat-bubble__body-inner {
@@ -547,12 +547,12 @@
 .chat-bubble-row[data-kind="agent"] .msg-text,
 .chat-bubble-row[data-role="user"] .msg-text {
   font-size: var(--ui-font-title);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .chat-bubble-row[data-kind="agent"] .msg-text :is(p, ul, ol),
 .chat-bubble-row[data-role="user"] .msg-text :is(p, ul, ol) {
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .chat-bubble .card-message-run + .card-message-run {

@@ -38,7 +38,7 @@
 .usage-section__head p {
   margin: 0;
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-body) / 1.55 var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-hero__controls {
@@ -76,7 +76,7 @@
 .usage-total > strong {
   margin-top: var(--ui-gap-md);
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) clamp(48px, calc(68px * var(--ui-scale)), 78px) / 0.98 var(--font);
+  font: var(--ui-font-weight-medium) clamp(48px, calc(68px * var(--ui-scale)), 78px) / var(--ui-line-height-flat) var(--font);
   letter-spacing: calc(-2.5px * var(--ui-scale));
   font-variant-numeric: tabular-nums;
 }
@@ -148,7 +148,7 @@
   max-width: 100%;
   overflow: hidden;
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) clamp(17px, calc(20px * var(--ui-scale)), 24px) / 1.15 var(--font);
+  font: var(--ui-font-weight-medium) clamp(17px, calc(20px * var(--ui-scale)), 24px) / var(--ui-line-height-snug) var(--font);
   text-overflow: ellipsis;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -204,7 +204,7 @@
 .usage-official-card > footer,
 .usage-official-card__message {
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) / 1.45 var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-small) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-official-card > p {
@@ -337,7 +337,7 @@
   margin: 0;
   padding: 0 var(--ui-gap-2xl) var(--ui-gap-xl);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) / 1.45 var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-small) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-section {
@@ -371,7 +371,7 @@
 .usage-section__head h2 {
   margin: 0 0 var(--ui-gap-xs);
   color: var(--text-strong);
-  font: var(--ui-font-weight-strong) var(--ui-font-heading) / 1.25 var(--font);
+  font: var(--ui-font-weight-strong) var(--ui-font-heading) / var(--ui-line-height-snug) var(--font);
   letter-spacing: var(--ui-letter-spacing-tight);
 }
 
@@ -699,7 +699,7 @@
 .usage-coverage-note {
   margin: calc(-10px * var(--ui-scale)) 0 0;
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) / 1.5 var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-small) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-model-table-wrap {
@@ -781,7 +781,7 @@
 
 .usage-empty span {
   max-width: calc(420px * var(--ui-scale));
-  font: var(--ui-font-weight-body) var(--ui-font-body) / 1.5 var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-loading {

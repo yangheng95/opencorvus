@@ -297,7 +297,7 @@
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -321,7 +321,7 @@
   overflow: hidden;
   color: var(--text-soft);
   font-size: var(--ui-font-small);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -494,7 +494,7 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .mission-create-form__context-error {
@@ -632,7 +632,7 @@
   margin: var(--ui-gap-3xs) 0 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .mission-create-form__market-actions {

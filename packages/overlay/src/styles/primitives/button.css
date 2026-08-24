@@ -36,7 +36,7 @@
   font-family: var(--font);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   letter-spacing: var(--ui-letter-spacing-normal);
   text-transform: none;
   white-space: nowrap;

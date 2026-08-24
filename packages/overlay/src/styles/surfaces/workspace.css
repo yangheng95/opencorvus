@@ -316,7 +316,7 @@ code .file-link:focus-visible {
   color: var(--text);
   font-family: var(--mono);
   font-size: var(--ui-font-code);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
   user-select: text;
   -webkit-user-select: text;
 }
@@ -332,7 +332,7 @@ code .file-link:focus-visible {
 
 .file-editor-code .cm-scroller {
   font-family: var(--mono);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
 }
 
 .file-editor-code .cm-content {

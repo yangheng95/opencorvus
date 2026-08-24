@@ -482,7 +482,7 @@
   padding: var(--ui-gap-xs) var(--ui-gap-sm);
   color: var(--warn);
   font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .chat-input-warning svg {
@@ -555,7 +555,7 @@
   overflow: hidden;
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -641,7 +641,7 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .composer-intent-selects {
@@ -664,7 +664,7 @@
   color: var(--text-strong);
   font-size: var(--chat-composer-font-size);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .composer-mode-menu-option {
@@ -777,7 +777,7 @@
   color: var(--accent);
   font-size: var(--ui-font-tiny);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .composer-reference-popover {
@@ -797,7 +797,7 @@
 .composer-reference-popover-heading > :last-child {
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .composer-reference-search,
@@ -950,7 +950,7 @@
   overflow: hidden;
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1068,7 +1068,7 @@
   color: var(--text-strong);
   font-size: var(--chat-composer-font-size);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1158,7 +1158,7 @@ div:has(> .composer-model-selector-popover) {
   overflow: hidden;
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1245,7 +1245,7 @@ div:has(> .composer-model-selector-popover) {
   padding: var(--ui-gap-lg);
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .model-selector-popover-error {

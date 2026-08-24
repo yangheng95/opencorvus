@@ -133,7 +133,7 @@ body .sidebar-header.oc-surface-header {
   background: color-mix(in srgb, var(--text-strong) 8%, transparent);
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   padding: var(--ui-gap-xs) var(--ui-gap-md);
 }
 
@@ -173,7 +173,7 @@ body .sidebar-header.oc-surface-header {
   gap: var(--ui-gap-lg);
   min-width: 0;
   color: var(--text-soft);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   overflow: hidden;
 }
 
@@ -420,7 +420,7 @@ body .sidebar-header.oc-surface-header {
   display: block;
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
   letter-spacing: var(--ui-letter-spacing-normal);
   color: var(--text-soft);
   min-width: 0;
@@ -436,7 +436,7 @@ body .sidebar-header.oc-surface-header {
   margin-left: auto;
   flex-shrink: 0;
   font-size: var(--ui-font-small);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

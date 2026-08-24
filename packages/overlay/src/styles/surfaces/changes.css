@@ -212,7 +212,7 @@
   padding: 0 var(--ui-gap-md);
   color: var(--text-muted);
   font-size: var(--ui-font-control);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   white-space: nowrap;
 }
 

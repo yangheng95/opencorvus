@@ -16,7 +16,7 @@
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: 0;
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .oc-text-field__label,

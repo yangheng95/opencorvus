@@ -206,7 +206,7 @@
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   text-align: left;
   white-space: normal;
   transition:
@@ -268,7 +268,7 @@
   color: var(--text-strong);
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
   white-space: nowrap;
 }
 
@@ -278,7 +278,7 @@
   text-overflow: ellipsis;
   color: var(--text-muted);
   font-size: var(--ui-font-body);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   white-space: nowrap;
 }
 
@@ -408,7 +408,7 @@
   padding-inline: var(--ui-gap-xl);
   color: var(--text-muted);
   font-size: var(--ui-font-title);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .conversation-thinking__text {
@@ -740,7 +740,7 @@
   overflow-wrap: anywhere;
   color: var(--text-strong);
   font-size: var(--ui-font-small);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
 }
 
@@ -857,14 +857,14 @@
   flex-basis: 100%;
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .conversation-artifact-summary__identity strong {
   overflow: hidden;
   color: var(--text-strong);
   font-size: var(--ui-font-small);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -872,7 +872,7 @@
 .conversation-artifact-summary__file-total {
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__totals,
@@ -905,7 +905,7 @@
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__outcome strong {
@@ -926,7 +926,7 @@
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__outcome + .conversation-artifact-summary__empty,
@@ -939,7 +939,7 @@
   padding: var(--ui-gap-md) var(--ui-gap-lg) var(--ui-gap-xs);
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .conversation-artifact-summary__artifacts,
@@ -1149,14 +1149,14 @@
   color: var(--text);
   font-size: var(--ui-font-small);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__artifact-copy span,
 .conversation-artifact-summary__artifact-meta {
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
 }
 
 .conversation-artifact-summary__artifact-meta {
@@ -1173,7 +1173,7 @@
   overflow: hidden;
   color: var(--text);
   font-size: var(--ui-font-small);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1190,7 +1190,7 @@
   border-block-start: var(--oc-border-width) solid var(--divider-soft);
   color: var(--bad);
   font-size: var(--ui-font-tiny);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__disclosure.oc-button {
@@ -1297,7 +1297,7 @@
   grid-column: 1 / -1;
   max-width: calc(320px * var(--ui-scale));
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
   white-space: normal;
 }
@@ -1453,12 +1453,12 @@
   font-size: var(--ui-font-meta);
   text-transform: none;
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .chat-task-status .elapsed {
   font-size: var(--ui-font-meta);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .chat-title-icon {
@@ -1517,14 +1517,14 @@
 .chat-empty-kicker {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .chat-empty-title {
   color: var(--text-strong);
   font-size: var(--ui-font-heading);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1575,7 +1575,7 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -2840,7 +2840,7 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .project-runtime-local-environment-variable-section,
@@ -2977,7 +2977,7 @@
 .project-runtime-git-notice {
   color: var(--text-muted);
   font-size: var(--ui-font-control);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   padding: var(--ui-gap-md) var(--ui-gap-lg);
 }
 
@@ -3260,7 +3260,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ui-gap-md);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-snug);
 }
 
 .todo-progress--subagent .todo-progress__count {
@@ -3368,7 +3368,7 @@
   padding: var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-small);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .computer-control-surface__error {

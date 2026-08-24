@@ -49,7 +49,7 @@
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-normal);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .oc-section__title {

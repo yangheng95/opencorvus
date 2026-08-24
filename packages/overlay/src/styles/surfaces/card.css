@@ -143,7 +143,7 @@ body {
 .card[data-depth="0"] > .card__body {
   padding: calc(var(--card-pad-y) + var(--ui-gap-xs)) calc(var(--card-pad-x) + var(--ui-gap-3xs))
     calc(var(--card-pad-y) + var(--ui-gap-sm));
-  line-height: 1.62;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .card[data-depth="0"] > .card__body > .card__children {
@@ -224,7 +224,7 @@ body {
   color: var(--text-strong);
   user-select: none;
   cursor: default;
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   min-height: calc(34px * var(--ui-scale, 1));
   box-sizing: border-box;
 }
@@ -371,7 +371,7 @@ body {
   color: var(--text-strong);
   font-family: var(--mono);
   font-size: var(--ui-font-tiny);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
@@ -426,7 +426,7 @@ body {
   font-size: calc(var(--card-title-size) + calc(1px * var(--ui-scale)));
   opacity: var(--ui-opacity-subtle);
   flex: none;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .card__icon > svg {
@@ -500,7 +500,7 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   white-space: pre-wrap;
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   word-break: break-word;
   border-left: 0 solid transparent;
   padding-left: 0;
@@ -532,7 +532,7 @@ body {
   font-size: var(--ui-font-tiny);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-normal);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   white-space: nowrap;
 }
 
@@ -541,7 +541,7 @@ body {
   color: color-mix(in srgb, var(--text) 92%, transparent);
   font-size: var(--card-sub-size);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -674,7 +674,7 @@ body {
   color: var(--text-muted);
   box-shadow: none;
   letter-spacing: var(--ui-letter-spacing-normal);
-  line-height: 1.1;
+  line-height: var(--ui-line-height-flat);
 }
 .card__stat[data-kind="messages"] {
   border-color: color-mix(in srgb, var(--accent) 26%, transparent);
@@ -693,7 +693,7 @@ body {
   font-size: calc(var(--card-sub-size) - calc(1px * var(--ui-scale)));
   font-weight: var(--ui-font-weight-medium);
   color: color-mix(in srgb, var(--text-soft) 88%, transparent);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .card__stat-value {
@@ -836,7 +836,7 @@ body {
   font-family: var(--mono);
   font-weight: var(--ui-font-weight-body);
   font-size: var(--card-sub-size);
-  line-height: 1.46;
+  line-height: var(--ui-line-height-normal);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -864,7 +864,7 @@ body {
   font-family: var(--mono);
   font-size: var(--card-sub-size);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.46;
+  line-height: var(--ui-line-height-normal);
   padding-left: 0;
   margin-left: 0;
   color: color-mix(in srgb, var(--text-muted) 72%, transparent);
@@ -892,7 +892,7 @@ body {
   word-break: normal;
   font-family: var(--mono);
   font-size: var(--card-sub-size);
-  line-height: 1.46;
+  line-height: var(--ui-line-height-normal);
 }
 
 /* ── Body ────────────────────────────────────────────────── */
@@ -903,7 +903,7 @@ body {
   background: transparent;
   font-size: var(--card-sub-size);
   color: var(--text-strong);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
   min-width: 0;
 }
 .card:not([data-depth="0"]) > .card__body {
@@ -949,7 +949,7 @@ body {
 .card__goal-desc-text .msg-text {
   color: var(--text);
   font-size: var(--ui-font-small);
-  line-height: 1.7;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 :is(.card__goal-desc-text .msg-text, .card__goal-desc-text .md-frozen-block, .card__goal-desc-text .md-active-text) {
@@ -1113,7 +1113,7 @@ body {
   color: var(--card-stage);
   margin-bottom: var(--ui-gap-sm);
   letter-spacing: var(--ui-letter-spacing-normal);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 .interaction-card__icon {
@@ -1306,7 +1306,7 @@ body {
   color: var(--text-strong);
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .interaction-dialog-form .interaction-card__icon {
@@ -1321,7 +1321,7 @@ body {
   margin: 0;
   color: var(--text);
   font-size: var(--ui-font-control);
-  line-height: 1.65;
+  line-height: var(--ui-line-height-relaxed);
 }
 
 .interaction-dialog-form .interaction-card__questions {
@@ -1336,7 +1336,7 @@ body {
 .interaction-dialog-form .interaction-card__question-text {
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.65;
+  line-height: var(--ui-line-height-relaxed);
   color: var(--text-strong);
 }
 
@@ -1358,7 +1358,7 @@ body {
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   border-radius: var(--oc-radius-large);
   font-size: var(--ui-font-control);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   transition:
     background-color var(--ui-duration-fast) var(--ui-timing-standard),
     box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
@@ -1397,7 +1397,7 @@ body {
   grid-column: 2;
   grid-row: 1;
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .interaction-dialog-form .interaction-card__option-desc {
@@ -1405,7 +1405,7 @@ body {
   grid-row: 2;
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .interaction-dialog-form .interaction-card__actions {
@@ -1501,7 +1501,7 @@ body {
   color: var(--text);
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   font: inherit;
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   user-select: text;
   outline: none;
   overflow-y: auto;
@@ -1565,7 +1565,7 @@ body {
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 36%, transparent);
   color: var(--bad);
   font-size: var(--card-sub-size);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 .card__agent-reply-error-msg {
   flex: 1;
@@ -1676,7 +1676,7 @@ body {
   font-family: var(--mono);
   font-size: calc(11.5px * var(--ui-scale));
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   text-align: left;
 }
 .trace-event-ts {
@@ -1722,7 +1722,7 @@ body {
     var(--ui-gap-4xl);
   font-family: var(--mono);
   font-size: calc(11px * var(--ui-scale));
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   white-space: pre-wrap;
   word-break: break-word;

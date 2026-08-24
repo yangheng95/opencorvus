@@ -100,7 +100,7 @@ body {
 
   font-family: var(--font);
   font-size: var(--ui-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   position: fixed;
   inset: 0 auto auto 0;

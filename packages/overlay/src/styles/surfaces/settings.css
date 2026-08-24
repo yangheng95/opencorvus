@@ -73,7 +73,7 @@
 .s-group-description {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .s-group-body {
@@ -125,7 +125,7 @@
 .s-detail-section-actions {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .s-row {
@@ -202,21 +202,21 @@ button.s-row:focus-visible {
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-medium);
   color: var(--text-strong);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
 .s-row-desc {
   font-size: var(--ui-font-body);
   color: var(--text-soft);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
 .s-row-meta {
   font-size: var(--ui-font-meta);
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   display: flex;
   flex-wrap: wrap;
   gap: var(--ui-gap-xs) var(--ui-gap-md);
@@ -260,7 +260,7 @@ button.s-row:focus-visible {
   color: var(--text-muted);
   font-size: var(--ui-font-body);
   text-align: left;
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -321,13 +321,13 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .s-state-body {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -374,7 +374,7 @@ button.s-row:focus-visible {
 .mission-skill-boundary span:not(.oc-badge) {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .mission-skill-search {
@@ -481,7 +481,7 @@ button.s-row:focus-visible {
   margin: 0;
   color: var(--text-soft);
   font-size: var(--ui-font-body);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
 }
 
 .mission-skill-detail-section {
@@ -730,7 +730,7 @@ button.s-row:focus-visible {
 }
 
 .memory-panel[data-compact="true"] .knowledge-item-title {
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
   white-space: nowrap;
   overflow: hidden;
@@ -747,7 +747,7 @@ button.s-row:focus-visible {
 }
 
 .memory-panel[data-compact="true"] .knowledge-item-meta {
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -828,7 +828,7 @@ button.s-row:focus-visible {
   border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-control);
   font-family: var(--mono);
-  line-height: 1.6;
+  line-height: var(--ui-line-height-relaxed);
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--text);
@@ -903,7 +903,7 @@ button.s-row:focus-visible {
 .extension-settings-row .s-row-desc,
 .extension-settings-row .s-row-meta {
   font-size: var(--ui-font-control);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   color: var(--text-soft);
 }
 
@@ -964,7 +964,7 @@ button.s-row:focus-visible {
 
 .channel-doc-title {
   font-size: var(--ui-font-control);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   color: var(--text-soft);
 }
 
@@ -1029,7 +1029,7 @@ button.s-row:focus-visible {
 
 .skill-drop-zone__copy span {
   font-size: var(--ui-font-small);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   color: var(--text-muted);
 }
 
@@ -1061,7 +1061,7 @@ button.s-row:focus-visible {
   padding: var(--ui-gap-md);
   font-family: var(--mono);
   font-size: var(--ui-font-control);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
   word-break: break-all;
 }
@@ -1074,7 +1074,7 @@ button.s-row:focus-visible {
   background: color-mix(in srgb, var(--bad) 10%, var(--surface));
   color: var(--bad);
   font-size: var(--ui-font-control);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -1086,7 +1086,7 @@ button.s-row:focus-visible {
   background: color-mix(in srgb, var(--good) 9%, var(--surface));
   color: var(--good);
   font-size: var(--ui-font-control);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .log-copy-feedback[data-tone="error"] {
@@ -1310,7 +1310,7 @@ button.s-row:focus-visible {
   margin: var(--ui-gap-md) var(--ui-gap-xl) var(--ui-gap-xs);
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .config-sidebar .oc-tabs {
@@ -1458,7 +1458,7 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--settings-font-page-title);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   letter-spacing: var(--ui-letter-spacing-normal);
 }
 
@@ -1577,7 +1577,7 @@ button.s-row:focus-visible {
 
 #configDialog .config-tab-panel:not([data-config-panel="expert-squad"]) .s-group-description {
   font-size: var(--settings-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 #configDialog .s-group-body {
@@ -1600,12 +1600,12 @@ button.s-row:focus-visible {
 
 #configDialog .config-tab-panel:not([data-config-panel="expert-squad"]) .s-row-title {
   font-size: var(--ui-font-title);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 #configDialog .config-tab-panel:not([data-config-panel="expert-squad"]) .s-row-desc {
   font-size: var(--settings-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 #configDialog .config-tab-panel:not([data-config-panel="expert-squad"]) .permissions-settings-group .s-row {
@@ -1823,21 +1823,21 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-type-body {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-type-meta {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-layout {
@@ -1893,7 +1893,7 @@ button.s-row:focus-visible {
   max-width: calc(760px * var(--ui-scale));
   color: var(--text-soft);
   font-size: var(--ui-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-market-facts {
@@ -1915,7 +1915,7 @@ button.s-row:focus-visible {
   background: color-mix(in srgb, var(--accent) 5%, var(--settings-surface-muted));
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-market-facts strong {
@@ -1966,7 +1966,7 @@ button.s-row:focus-visible {
 .expert-squad-local-install-head small {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-local-install-scope {
@@ -2006,7 +2006,7 @@ button.s-row:focus-visible {
 .expert-squad-local-install-option > div > span {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-local-install-icon {
@@ -2159,7 +2159,7 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -2169,7 +2169,7 @@ button.s-row:focus-visible {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-identity-meta {
@@ -2293,7 +2293,7 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-overview-note p {
@@ -2301,7 +2301,7 @@ button.s-row:focus-visible {
   color: var(--text-muted);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-evolution {
@@ -2337,7 +2337,7 @@ button.s-row:focus-visible {
 .expert-squad-evolution-detail > header span {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-evolution-authority {
@@ -2588,7 +2588,7 @@ button.s-row:focus-visible {
   white-space: pre-wrap;
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-evolution-slot {
@@ -2621,7 +2621,7 @@ button.s-row:focus-visible {
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-configuration-field,
@@ -2717,7 +2717,7 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -2783,7 +2783,7 @@ button.s-row:focus-visible {
   color: var(--text-soft);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -2792,7 +2792,7 @@ button.s-row:focus-visible {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-capability-empty {
@@ -2806,7 +2806,7 @@ button.s-row:focus-visible {
   background: color-mix(in srgb, var(--bad) 5%, transparent);
   color: var(--bad);
   font-size: var(--ui-font-meta);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-technical-body {
@@ -2842,7 +2842,7 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
 }
 
@@ -2888,7 +2888,7 @@ button.s-row:focus-visible {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .expert-squad-selector-summary p {
@@ -2917,7 +2917,7 @@ button.s-row:focus-visible {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
 
@@ -2945,14 +2945,14 @@ button.s-row:focus-visible {
   color: var(--text-strong);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-recovery-body {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .expert-squad-recovery-content {
@@ -2972,7 +2972,7 @@ button.s-row:focus-visible {
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .conversation-capability-scope-path,
@@ -3120,13 +3120,13 @@ button.s-row:focus-visible {
 .provider-catalog-hint {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   text-align: right;
 }
 .provider-section-count {
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 .provider-flat-list {
   display: flex;
@@ -3193,7 +3193,7 @@ button.s-row:focus-visible {
 .provider-row-meta {
   color: var(--text-soft);
   font-size: var(--ui-font-control);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   display: flex;
   flex-wrap: wrap;
   gap: var(--ui-gap-xs) var(--ui-gap-md);
@@ -3242,7 +3242,7 @@ button.s-row:focus-visible {
   border-top: 0 solid transparent;
   color: var(--text-muted);
   font-size: var(--ui-font-control);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   font-family: var(--mono);
   overflow-wrap: anywhere;
 }
@@ -3353,7 +3353,7 @@ button.s-row:focus-visible {
   padding: var(--ui-gap-xs) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-control);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   border: var(--oc-border-width) solid transparent;
   background: var(--settings-surface-hover);
 }
@@ -3380,7 +3380,7 @@ button.s-row:focus-visible {
   padding: var(--ui-gap-xs) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-control);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--good) 36%, transparent);
   background: var(--good-dim);
   color: var(--good);
@@ -3409,7 +3409,7 @@ button.s-row:focus-visible {
   padding: var(--ui-gap-xs) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   font-size: var(--ui-font-control);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 36%, transparent);
   background: var(--bad-dim);
   color: var(--bad);

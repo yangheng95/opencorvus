@@ -162,7 +162,7 @@
   grid-column: 1 / -1;
   grid-row: 1;
   color: var(--text-muted);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   padding: 0 0 var(--ui-gap-xs);
 }
 
@@ -223,7 +223,7 @@
   background: color-mix(in srgb, var(--text-strong) 8%, transparent);
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   padding: var(--ui-gap-xs) var(--ui-gap-md);
   white-space: nowrap;
 }

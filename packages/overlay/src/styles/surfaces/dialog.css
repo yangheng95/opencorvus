@@ -128,7 +128,7 @@
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
   margin: 0;
 }
 
@@ -263,7 +263,7 @@
   box-shadow: none;
   white-space: pre-wrap;
   word-break: break-word;
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   font-size: var(--ui-font-control);
 }

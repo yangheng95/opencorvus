@@ -12,7 +12,7 @@
   color: var(--text-strong);
   font-family: var(--font);
   font-size: var(--ui-font-tiny);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   white-space: normal;
   overflow-wrap: anywhere;
   box-shadow: var(--shadow-lg);
@@ -35,7 +35,7 @@
 
 .oc-tooltip-explainer__description {
   color: var(--text-muted);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 /* One extra line under the description. Deliberately rule-free: a tooltip this

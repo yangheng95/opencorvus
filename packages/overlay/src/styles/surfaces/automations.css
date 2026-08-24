@@ -21,7 +21,7 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-title);
-  line-height: 1.45;
+  line-height: var(--ui-line-height-normal);
 }
 
 .automations-page-actions {
@@ -397,7 +397,7 @@
   border-radius: var(--oc-radius-large);
   background: var(--surface);
   color: var(--text);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
 }
 

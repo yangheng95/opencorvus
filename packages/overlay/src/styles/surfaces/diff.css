@@ -27,7 +27,7 @@
   flex-direction: column;
   font-family: var(--mono);
   font-size: var(--ui-font-small);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
 }
 
 .diff-row {

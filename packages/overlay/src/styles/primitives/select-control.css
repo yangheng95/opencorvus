@@ -78,7 +78,7 @@
   border-radius: var(--oc-radius-soft);
   color: var(--text-strong);
   font-size: var(--ui-font-control);
-  line-height: 1.3;
+  line-height: var(--ui-line-height-tight);
   cursor: default;
   transition:
     background-color var(--ui-duration-base) var(--ui-timing-standard),
@@ -147,7 +147,7 @@
   box-shadow: none;
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .oc-select-trigger[data-variant="composer"]:hover:not([data-disabled]):not(:disabled),

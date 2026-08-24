@@ -119,7 +119,7 @@
   margin: var(--ui-gap-md) var(--ui-left-rail-section-inline-inset) var(--ui-gap-xs);
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-snug);
 }
 
 .work-ledger-pinned-groups {

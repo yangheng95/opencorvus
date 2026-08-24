@@ -29,7 +29,7 @@
   background: transparent;
   color: var(--text-soft);
   font: var(--ui-font-weight-medium) var(--ui-font-control) var(--font);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   white-space: nowrap;
   cursor: pointer;
   transition:
