@@ -16,6 +16,7 @@ mkdir -p "$evidence_root" "$control_root" "$dashboard_root"
 chmod 0700 "$evidence_root" "$control_root"
 exec 9>"$control_root/supervisor.lock"
 flock -n 9 || exit 1
+packages/opencorvus/script/benchmark/external-agent/install-automationbench-restricted-shells.sh
 
 . packages/opencorvus/script/benchmark/external-agent/load-automationbench-environment.sh
 
@@ -54,14 +55,14 @@ batch_is_complete() {
 
 active_coordinator=""
 terminate_supervisor() {
-  trap - INT TERM
+  trap - INT TERM HUP
   if [[ -n "$active_coordinator" ]]; then
     kill -TERM "$active_coordinator" 2>/dev/null || true
     wait "$active_coordinator" 2>/dev/null || true
   fi
   exit 130
 }
-trap terminate_supervisor INT TERM
+trap terminate_supervisor INT TERM HUP
 
 for batch_index in {1..10}; do
   if batch_is_complete "$batch_index"; then
@@ -74,7 +75,7 @@ for batch_index in {1..10}; do
     --python /var/lib/opencorvus-benchmark/evaluator-venv/bin/python \
     --source-data /var/lib/opencorvus-benchmark/provider-data \
     --output "$evidence_root" \
-    --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell \
+    --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell-base \
     --control-root "$control_root" \
     --dashboard "$dashboard_root/index.html" \
     --batch-index "$batch_index" \
@@ -94,7 +95,7 @@ done
   --root "$evidence_root" \
   --source-data /var/lib/opencorvus-benchmark/provider-data \
   --python /var/lib/opencorvus-benchmark/evaluator-venv/bin/python \
-  --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell \
+  --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell-base \
   --model openai/gpt-5.6-luna \
   --profiles advanced \
   --repetition 1 \

@@ -1621,6 +1621,16 @@ export function automationBenchCaseSetAuthority(input: {
 export const AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256 =
   "32ed4bd67d0c51d4acc8f86c7fbc1c47b7fc68aa75d5bc0d69728f658e3893b0"
 
+export function automationBenchRestrictedShellSourceFile(input: {
+  caseIndex: unknown
+  baseCount: number
+  extendedCount: number
+}) {
+  const caseIndex = strictInteger(input.caseIndex)
+  if (caseIndex < 1 || caseIndex > input.extendedCount) return null
+  return caseIndex <= input.baseCount ? "restricted-agent-shell-base.sh" : "restricted-agent-shell.sh"
+}
+
 export function automationBenchRestrictedShellAuthority(input: {
   caseIndex: unknown
   baseCount: number
@@ -1628,12 +1638,8 @@ export function automationBenchRestrictedShellAuthority(input: {
   sealedSHA256: unknown
   extendedSHA256: string
 }) {
-  const caseIndex = strictInteger(input.caseIndex)
-  const authority = caseIndex >= 1 && caseIndex <= input.baseCount
-    ? "base"
-    : caseIndex > input.baseCount && caseIndex <= input.extendedCount
-      ? "extended"
-      : null
+  const sourceFile = automationBenchRestrictedShellSourceFile(input)
+  const authority = sourceFile === "restricted-agent-shell-base.sh" ? "base" : sourceFile ? "extended" : null
   const expectedSHA256 = authority === "base"
     ? AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256
     : authority === "extended"

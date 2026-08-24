@@ -19,6 +19,7 @@ mkdir -p "$control_root" "$dashboard_root"
 chmod 0700 "$evidence_root" "$control_root"
 exec 9>"$control_root/supervisor.lock"
 flock -n 9 || exit 1
+packages/opencorvus/script/benchmark/external-agent/install-automationbench-restricted-shells.sh
 
 . packages/opencorvus/script/benchmark/external-agent/load-automationbench-environment.sh
 
@@ -59,14 +60,14 @@ batch_is_complete() {
 
 active_coordinator=""
 terminate_supervisor() {
-  trap - INT TERM
+  trap - INT TERM HUP
   if [[ -n "$active_coordinator" ]]; then
     kill -TERM "$active_coordinator" 2>/dev/null || true
     wait "$active_coordinator" 2>/dev/null || true
   fi
   exit 130
 }
-trap terminate_supervisor INT TERM
+trap terminate_supervisor INT TERM HUP
 
 pending_batches=()
 run_pending_batches() {

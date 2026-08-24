@@ -60,14 +60,20 @@ if (
   throw new Error("--profiles must be base, advanced, or base,advanced")
 }
 const caseSetPath = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
-const [restrictedShellBytes, expectedRestrictedShellBytes, restrictedShellStat] = await Promise.all([
-  fs.readFile(restrictedShell),
-  fs.readFile(path.join(import.meta.dir, "restricted-agent-shell.sh")),
-  fs.stat(restrictedShell),
-])
+const [restrictedShellBytes, baseRestrictedShellBytes, extendedRestrictedShellBytes, restrictedShellStat] =
+  await Promise.all([
+    fs.readFile(restrictedShell),
+    fs.readFile(path.join(import.meta.dir, "restricted-agent-shell-base.sh")),
+    fs.readFile(path.join(import.meta.dir, "restricted-agent-shell.sh")),
+    fs.stat(restrictedShell),
+  ])
 const restrictedShellSHA256 = digest(restrictedShellBytes)
+const extendedRestrictedShellSHA256 = digest(extendedRestrictedShellBytes)
+const allowedRestrictedShellSHA256 = new Set(
+  [baseRestrictedShellBytes, extendedRestrictedShellBytes].map((bytes) => digest(bytes)),
+)
 if (
-  restrictedShellSHA256 !== digest(expectedRestrictedShellBytes) ||
+  !allowedRestrictedShellSHA256.has(restrictedShellSHA256) ||
   restrictedShellStat.uid !== 0 ||
   (restrictedShellStat.mode & 0o022) !== 0
 ) {
@@ -633,7 +639,7 @@ for (const attempt of catalog.attempts) {
     baseCount: baseCaseSet.selection.count,
     extendedCount: caseSet.selection.count,
     sealedSHA256: sandboxAudit.wrapper_sha256,
-    extendedSHA256: restrictedShellSHA256,
+    extendedSHA256: extendedRestrictedShellSHA256,
   })
   if (
     sandboxAudit.passed !== true ||

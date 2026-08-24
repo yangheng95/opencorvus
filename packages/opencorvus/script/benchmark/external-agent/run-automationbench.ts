@@ -38,6 +38,8 @@ import {
   AUTOMATIONBENCH_SKILL_NAME,
   AUTOMATIONBENCH_SKILL_REF,
   automationBenchSkillAgentIDs,
+  automationBenchRestrictedShellAuthority,
+  automationBenchRestrictedShellSourceFile,
   failureObservationReceipt,
   type ProviderUsageRow,
   type BenchmarkScheduledWake,
@@ -278,6 +280,7 @@ async function loadFrozenCase(input: Arguments) {
     manifest_sha256: crypto.createHash("sha256").update(raw).digest("hex"),
     manifest_canonical_sha256: crypto.createHash("sha256").update(JSON.stringify(manifest)).digest("hex"),
     dataset_index_sha256: manifest.selection.dataset_index_sha256,
+    case_count: manifest.selection.count,
   }
 }
 
@@ -312,6 +315,7 @@ async function sourceEvidence() {
     "automationbench_tool.py",
     "automationbench-case-set.json",
     "freeze_automationbench_case_set.py",
+    "restricted-agent-shell-base.sh",
     "restricted-agent-shell.sh",
     "verify_automationbench_replay.py",
     "contract.ts",
@@ -544,6 +548,10 @@ async function verifyAgentShellIsolation(input: {
   isolatedData: string
   bridgePID: number
   restrictedShell: string
+  expectedRestrictedShell: string
+  caseIndex: number
+  baseCaseCount: number
+  extendedCaseCount: number
   evidenceRoot: string
   controlRoot: string
 }) {
@@ -553,15 +561,25 @@ async function verifyAgentShellIsolation(input: {
     )
   }
   const shell = input.restrictedShell
-  const [wrapperBytes, expectedWrapperBytes, wrapperStat] = await Promise.all([
+  const [wrapperBytes, expectedWrapperBytes, extendedWrapperBytes, wrapperStat] = await Promise.all([
     fs.readFile(shell),
+    fs.readFile(input.expectedRestrictedShell),
     fs.readFile(path.join(SCRIPT_DIRECTORY, "restricted-agent-shell.sh")),
     fs.stat(shell),
   ])
   const wrapperSHA256 = crypto.createHash("sha256").update(wrapperBytes).digest("hex")
   const expectedWrapperSHA256 = crypto.createHash("sha256").update(expectedWrapperBytes).digest("hex")
+  const extendedWrapperSHA256 = crypto.createHash("sha256").update(extendedWrapperBytes).digest("hex")
+  const restrictedShellAuthority = automationBenchRestrictedShellAuthority({
+    caseIndex: input.caseIndex,
+    baseCount: input.baseCaseCount,
+    extendedCount: input.extendedCaseCount,
+    sealedSHA256: wrapperSHA256,
+    extendedSHA256: extendedWrapperSHA256,
+  })
   if (
     wrapperSHA256 !== expectedWrapperSHA256 ||
+    !restrictedShellAuthority.passed ||
     wrapperStat.uid !== 0 ||
     (wrapperStat.mode & 0o022) !== 0 ||
     !wrapperStat.isFile()
@@ -1592,6 +1610,17 @@ try {
     isolatedData,
     bridgePID: bridge.process.pid,
     restrictedShell: arguments_.restrictedShell,
+    expectedRestrictedShell: path.join(
+      SCRIPT_DIRECTORY,
+      automationBenchRestrictedShellSourceFile({
+        caseIndex: frozenCaseInfo.case.case_index,
+        baseCount: 50,
+        extendedCount: frozenCaseInfo.case_count,
+      }) ?? "invalid-restricted-shell-authority",
+    ),
+    caseIndex: frozenCaseInfo.case.case_index,
+    baseCaseCount: 50,
+    extendedCaseCount: frozenCaseInfo.case_count,
     evidenceRoot: arguments_.output,
     controlRoot: path.dirname(arguments_.batchAuthorization),
   })

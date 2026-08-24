@@ -5,6 +5,8 @@ import crypto from "node:crypto"
 import {
   automationBenchCaseSetAuthority,
   automationBenchRestrictedShellAuthority,
+  automationBenchRestrictedShellSourceFile,
+  AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256,
   acquireAutomationBenchTrialLease,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
@@ -200,9 +202,17 @@ describe("external agent benchmark contract", () => {
     })
   })
 
-  test("binds sealed restricted shells to the old and extended case ranges", () => {
-    const baseSHA256 = "32ed4bd67d0c51d4acc8f86c7fbc1c47b7fc68aa75d5bc0d69728f658e3893b0"
-    const extendedSHA256 = "extended-shell"
+  test("binds real restricted-shell sources to the old and extended case ranges", async () => {
+    const scriptRoot = path.resolve(import.meta.dir, "../../script/benchmark/external-agent")
+    const [baseBytes, extendedBytes, runner, catalog, verifier] = await Promise.all([
+      fs.readFile(path.join(scriptRoot, "restricted-agent-shell-base.sh")),
+      fs.readFile(path.join(scriptRoot, "restricted-agent-shell.sh")),
+      fs.readFile(path.join(scriptRoot, "run-automationbench.ts"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "catalog-automationbench-evidence.ts"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "verify-automationbench-evidence.ts"), "utf8"),
+    ])
+    const baseSHA256 = crypto.createHash("sha256").update(baseBytes).digest("hex")
+    const extendedSHA256 = crypto.createHash("sha256").update(extendedBytes).digest("hex")
     const authority = (caseIndex: number, sealedSHA256: string) =>
       automationBenchRestrictedShellAuthority({
         caseIndex,
@@ -213,10 +223,22 @@ describe("external agent benchmark contract", () => {
       })
 
     expect({
+      frozenBaseDigest: baseSHA256,
+      case50Source: automationBenchRestrictedShellSourceFile({ caseIndex: 50, baseCount: 50, extendedCount: 600 }),
+      case51Source: automationBenchRestrictedShellSourceFile({ caseIndex: 51, baseCount: 50, extendedCount: 600 }),
       case50: authority(50, baseSHA256),
       case51: authority(51, extendedSHA256),
       crossedDigest: authority(51, baseSHA256),
+      productionAuthorityOwners: {
+        runner: runner.includes("extendedSHA256: extendedWrapperSHA256"),
+        catalogInput: catalog.includes("extendedSHA256: input.extendedWrapperSHA256"),
+        catalogSource: catalog.includes("extendedWrapperSHA256: extendedRestrictedShellSHA256"),
+        verifier: verifier.includes("extendedSHA256: extendedRestrictedShellSHA256"),
+      },
     }).toEqual({
+      frozenBaseDigest: AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256,
+      case50Source: "restricted-agent-shell-base.sh",
+      case51Source: "restricted-agent-shell.sh",
       case50: { passed: true, authority: "base", expected_sha256: baseSHA256, violations: [] },
       case51: { passed: true, authority: "extended", expected_sha256: extendedSHA256, violations: [] },
       crossedDigest: {
@@ -224,6 +246,12 @@ describe("external agent benchmark contract", () => {
         authority: "extended",
         expected_sha256: extendedSHA256,
         violations: ["restricted_shell_authority_mismatch"],
+      },
+      productionAuthorityOwners: {
+        runner: true,
+        catalogInput: true,
+        catalogSource: true,
+        verifier: true,
       },
     })
   })
@@ -2430,6 +2458,54 @@ describe("external agent benchmark contract", () => {
     })
   })
 
+  test("installs and selects the case-range restricted-shell authorities before every supervisor", async () => {
+    const scriptRoot = path.resolve(import.meta.dir, "../../script/benchmark/external-agent")
+    const [installer, solBase, lunaExtended, lunaAdvanced] = await Promise.all([
+      fs.readFile(path.join(scriptRoot, "install-automationbench-restricted-shells.sh"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "run-sol-mission-base-50.sh"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "run-luna-mission-base-cases-51-600.sh"), "utf8"),
+      fs.readFile(path.join(scriptRoot, "run-luna-mission-advanced-50.sh"), "utf8"),
+    ])
+    const installationCall =
+      "packages/opencorvus/script/benchmark/external-agent/install-automationbench-restricted-shells.sh"
+
+    expect({
+      installerProjectsBase: installer.includes('"$install_root/restricted-agent-shell-base"'),
+      installerProjectsExtended: installer.includes('"$install_root/restricted-agent-shell"'),
+      installerConcurrencyAuthority: {
+        sharedLock: installer.includes('exec 9>"$install_root/restricted-shell-install.lock"'),
+        exclusiveLock: installer.includes("flock -x 9"),
+        sameDirectoryTemporary: installer.includes('local temporary="${target}.$$.tmp"'),
+        atomicProjection: installer.includes('mv -f -- "$temporary" "$target"'),
+      },
+      installationCalls: [solBase, lunaExtended, lunaAdvanced].map((script) => script.includes(installationCall)),
+      installationAfterSupervisorLock: [solBase, lunaExtended, lunaAdvanced].map(
+        (script) => script.indexOf("flock -n 9") < script.indexOf(installationCall),
+      ),
+      signalSettlement: [solBase, lunaExtended, lunaAdvanced].map((script) =>
+        script.includes("trap - INT TERM HUP") && script.includes("trap terminate_supervisor INT TERM HUP"),
+      ),
+      solBaseAuthority: Array.from(solBase.matchAll(/--restricted-shell (.+)$/gm), ([, value]) => value),
+      lunaExtendedAuthority: Array.from(lunaExtended.matchAll(/--restricted-shell (.+)$/gm), ([, value]) => value),
+      lunaAdvancedAuthority: Array.from(lunaAdvanced.matchAll(/--restricted-shell (.+)$/gm), ([, value]) => value),
+    }).toEqual({
+      installerProjectsBase: true,
+      installerProjectsExtended: true,
+      installerConcurrencyAuthority: {
+        sharedLock: true,
+        exclusiveLock: true,
+        sameDirectoryTemporary: true,
+        atomicProjection: true,
+      },
+      installationCalls: [true, true, true],
+      installationAfterSupervisorLock: [true, true, true],
+      signalSettlement: [true, true, true],
+      solBaseAuthority: Array(2).fill("/var/lib/opencorvus-benchmark/restricted-agent-shell-base \\"),
+      lunaExtendedAuthority: Array(2).fill("/var/lib/opencorvus-benchmark/restricted-agent-shell \\"),
+      lunaAdvancedAuthority: Array(2).fill("/var/lib/opencorvus-benchmark/restricted-agent-shell-base \\"),
+    })
+  })
+
   test("binds the Luna Mission Base continuation to unique cases 51 through 600", async () => {
     const script = await fs.readFile(
       path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-luna-mission-base-cases-51-600.sh"),
@@ -2569,7 +2645,7 @@ describe("external agent benchmark contract", () => {
             python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
             "source-data": "/var/lib/opencorvus-benchmark/provider-data",
             output: '"$evidence_root"',
-            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
             "control-root": '"$control_root"',
             dashboard: '"$dashboard_root/index.html"',
             "batch-index": '"$batch_index"',
@@ -2585,7 +2661,7 @@ describe("external agent benchmark contract", () => {
             root: '"$evidence_root"',
             "source-data": "/var/lib/opencorvus-benchmark/provider-data",
             python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
-            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
             model: "openai/gpt-5.6-luna",
             profiles: "advanced",
             repetition: "1",

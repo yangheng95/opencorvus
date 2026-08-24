@@ -304,7 +304,7 @@ async function inspectRawRunEvidence(
     sourceData: string
     python: string
     protectedSecrets: Array<{ label: string; value: string }>
-    currentWrapperSHA256: string
+    extendedWrapperSHA256: string
     baseCaseCount: number
     extendedCaseCount: number
     legacyTraceRunIDs: Set<string>
@@ -501,7 +501,7 @@ async function inspectRawRunEvidence(
       baseCount: input.baseCaseCount,
       extendedCount: input.extendedCaseCount,
       sealedSHA256: sandboxAudit.wrapper_sha256,
-      extendedSHA256: input.currentWrapperSHA256,
+      extendedSHA256: input.extendedWrapperSHA256,
     })
     const sandboxPassed =
       sandboxAudit.passed === true &&
@@ -597,14 +597,25 @@ await fs
   .catch((error: NodeJS.ErrnoException) => {
     if (error.code !== "EEXIST") throw error
   })
-const [restrictedShellBytes, expectedRestrictedShellBytes, restrictedShellStat] = await Promise.all([
-  fs.readFile(cli.restrictedShell),
-  fs.readFile(path.join(import.meta.dir, "restricted-agent-shell.sh")),
-  fs.stat(cli.restrictedShell),
-])
+const [restrictedShellBytes, baseRestrictedShellBytes, extendedRestrictedShellBytes, restrictedShellStat] =
+  await Promise.all([
+    fs.readFile(cli.restrictedShell),
+    fs.readFile(path.join(import.meta.dir, "restricted-agent-shell-base.sh")),
+    fs.readFile(path.join(import.meta.dir, "restricted-agent-shell.sh")),
+    fs.stat(cli.restrictedShell),
+  ])
 const restrictedShellSHA256 = crypto.createHash("sha256").update(restrictedShellBytes).digest("hex")
+const extendedRestrictedShellSHA256 = crypto
+  .createHash("sha256")
+  .update(extendedRestrictedShellBytes)
+  .digest("hex")
+const allowedRestrictedShellSHA256 = new Set(
+  [baseRestrictedShellBytes, extendedRestrictedShellBytes].map((bytes) =>
+    crypto.createHash("sha256").update(bytes).digest("hex"),
+  ),
+)
 if (
-  restrictedShellSHA256 !== crypto.createHash("sha256").update(expectedRestrictedShellBytes).digest("hex") ||
+  !allowedRestrictedShellSHA256.has(restrictedShellSHA256) ||
   restrictedShellStat.uid !== 0 ||
   (restrictedShellStat.mode & 0o022) !== 0
 ) {
@@ -716,7 +727,7 @@ for (const directory of terminalDirectories) {
     python: cli.python,
     protectedSecrets,
     legacyTraceRunIDs,
-    currentWrapperSHA256: restrictedShellSHA256,
+    extendedWrapperSHA256: extendedRestrictedShellSHA256,
     baseCaseCount: baseCaseSet.selection.count,
     extendedCaseCount: caseSet.selection.count,
   })
