@@ -21,6 +21,7 @@
 | User correction 3 | 本地 RTX 5090 已真实生成 4.458 秒“琥珀任务核心 + 青色接力滑轨”H3 风格测试，但用户明确否决并要求咨询 Claude。该方向标记 rejected，不得继续生成。Claude Code 2.1.237 显示 Max 登录态，但推理返回 `403 Request not allowed`；浏览器 OAuth 涉及持久凭据授权，未获用户确认前不得继续。 |
 | User decision | 用户停止 Claude 路线并要求寻找专用 Skill。完整比较 MiniMax 官方极简产品广告、纸艺定格科普与手绘实拍混合 Skill 后，用户批准 `papercraft-stop-motion-explainer` 路线 D「一份交付的一生」与约 80 秒目标；当前授权范围仅到三张 16:9 视觉预览，不含 H3 正式镜头或 push。 |
 | Preview evidence | `assets/previews/papercraft-v2/` 已生成三张 16:9 预览：夜班失败、清理假文字后的专家交接、锁定档案身份并减法构图的四类工作场景。三张图只用于确认成人向编辑纸艺的世界、材质、主角和协作隐喻；用户确认前不得生成 H3 镜头。 |
+| User correction 4 | 用户否决纸艺路线，指出其与科技和 AI 完全无关。`papercraft-v2` 只保留为失败证据，不得继续迭代。当前切换到 MiniMax 官方 `brand-promo-video-generator` 的 AI/SaaS 故事骨架，并结合 `h3-prompt-writing`；候选方向 E「Silicon to Delivery」必须以真实 Mission UI、CUDA/GPU 计算、真实子会话和证据交付为主角，用户确认前不得生成或 push。 |
 
 ## Impact analysis
 
@@ -60,13 +61,13 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 
 | Beat | Narrative | Evidence/visual |
 | --- | --- | --- |
-| 1. Hook | 真正困难的任务，不是回答得快，而是几小时后仍能把结果交出来。 | H3 时间隧道或复杂工作流氛围镜头；不出现伪 UI。 |
-| 2. Pain | 长任务会停、结果难核、修正无法积累。 | 三条执行路径推进后依次爆裂，错误与后果随断点出现。 |
-| 3. Why others struggle | 单一会话或匿名 agent 池缺乏固定责任、可恢复状态、带来源交接和独立验收。 | 上下文条溢出并丢失状态，对照具名节点与 Artifact 接力；避免点名或无证据贬损具体产品。 |
+| 1. Hook | 真正困难的任务，不是回答得快，而是几小时后仍能把结果交出来。 | 真实 Mission 长命令输入，镜头从屏幕像素进入无文字硅芯片微距；不出现伪 UI。 |
+| 2. Pain | 长任务会停、结果难核、修正无法积累。 | 按真实运行契约确定性绘制上下文占用、执行中断、来源断开；明确标注机制示意，不冒充遥测。 |
+| 3. Why others struggle | 当运行层缺少固定责任、可恢复状态、带来源交接和独立验收时，单次会话无法承担完整长任务。 | 回到真实 Mission/Task/子会话 UI，对照具名责任、持久状态、Artifact locator 与独立审校；不画节点图。 |
 | 4. Mission | Mission 在目标层组合多个 Task；每个 Task 固定一个专家团版本和工作流，以 Artifact 交接。 | 7884 Mission 真实页面和 README 架构图。 |
 | 5. Command | 展示完整 DeBERTa 长 Mission 输入，以打字效果呈现关键条目。 | 终端风格文字层，注明已压缩展示完整要求的关键条目。 |
 | 6. Execution | 下载模型和数据、CUDA 训练与监控、迭代、架构图、ACL 短文、复核、GitHub。 | 7884 Task 列表与真实训练监控、推理页面。 |
-| 7. Deliverables | 最佳模型架构图、实验生命周期图、论文、公开仓库。 | 原始产物从不同路径飞入并装配成可交付集合，仅做版式美化，不改变数据。 |
+| 7. Deliverables | 最佳模型架构图、实验生命周期图、论文、公开仓库。 | 镜头穿过真实文件与发布回执，保持原始比例、内容和来源；不做漂浮卡片墙。 |
 | 8. CTA | OpenCorvus 让一支可检查的 Agent 团队，把模糊目标推进到经过验收的交付。 | Logo、案例路径、GitHub 和官网。 |
 
 禁止口径：`100% autonomous`、`production-ready`、未验证的性能提升、未发生的 H3 生成、对具体竞品能力的绝对否定。
@@ -74,10 +75,10 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 ## Animation grammar after user correction
 
 - 不使用逐页标题加卡片或要点列表的演示文稿语法。
-- 每个非 H3 段落必须表现一个正在变化的系统：路径断裂、状态丢失、节点接力、Artifact 传递、Task 完成、曲线更新或产物装配。
+- 每个非 H3 段落必须表现真实 UI 或真实证据中的一个变化：命令输入、Task/子会话出现、Provider/CUDA 活动、训练曲线更新、Artifact locator 打开、审校完成或发布回执产生。
 - 文字只做运动标题、对象标签和必要字幕；核心解释必须从运动关系中看懂。
 - 真实截图以摄像机推拉、局部放大、扫描光、时间轴或对象窗口进入动画，不能静态并排超过 3 秒。
-- 相邻段落用共享对象连续转场：断裂的工作光点进入 Mission 图；Mission 的 Artifact 光点进入 6-Task 执行；执行完成节点汇聚成最终产物。
+- 相邻段落使用真实屏幕反射、光标动作、相同运动方向、声音和 Artifact locator 连续转场；禁止以发光点、轨道、节点网络或抽象粒子替代真实协作。
 - 接触表之外，至少抽取每个动画段的首、中、尾帧，确认对象状态确实发生有意义变化，而不是只做整体缩放。
 
 ## Pipeline contract
@@ -120,7 +121,7 @@ python produce.py inspect --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 ## Iteration policy
 
 1. 先生成不计费的本地 animatic，验证叙事、时长、截图裁切和打字效果。
-2. 先在单张 RTX 5090 上生成一个 0.2MP、3秒、10步的 H3 烟雾测试镜头；成功后只为 Hook 和 CTA 生成 2 个本地 H3 镜头；机制解释全部使用可控的连续对象动画。
+2. 候选科技方向获用户确认后，先在单张 RTX 5090 上生成一个 0.2MP、4–5 秒、10步的无文字硅芯片/计算环境测试镜头；机制解释、UI、遥测、指标和产物全部使用真实证据或确定性后期，不由 H3 生成。
 3. 抽取每个 H3 镜头首、中、尾帧；发现人物或文字畸变、闪烁、黑帧、叙事不符时，只改该镜头 prompt 并重生成。
 4. 合成后再次自动检查和人工接触表检查。
 5. 只把抽帧通过的本地镜头纳入最终合成；最终 1080p 由 FFmpeg 高质量放大与真实 UI 原生 1080p 图层共同完成，不把插值描述成 H3 原生 2K。
