@@ -116,6 +116,23 @@ async function waitFor(check: () => boolean, message: string, timeout = 5_000) {
   }
 }
 
+function textOnlyLLMStream(...deltas: string[]) {
+  const text = deltas.join("")
+  return {
+    text: Promise.resolve(text),
+    textStream: (async function* () {
+      yield* deltas
+    })(),
+    fullStream: (async function* () {
+      yield { type: "start" as const }
+      yield { type: "text-start" as const, id: "text-1" }
+      for (const delta of deltas) yield { type: "text-delta" as const, id: "text-1", text: delta }
+      yield { type: "text-end" as const, id: "text-1" }
+      yield { type: "finish" as const }
+    })(),
+  } as never
+}
+
 function permissionInvocation(sessionID: string, suffix: string) {
   return {
     projectID: Instance.project.id,
@@ -982,12 +999,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamCalls: Parameters<typeof LLM.stream>[0][] = []
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamCalls.push(input)
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           const response = await Server.App().request("/experimental/project-memory/organize", {
@@ -1056,12 +1068,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             disposition: "organized",
             markdown: "# Project context\n\nThe oldest pending Task owns the cross-Task Organizer model.",
           })
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           Database.transaction((db) => {
@@ -1140,12 +1147,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             disposition: "organized",
             markdown: "# Project context\n\nThe configured FIFO successor organized after unavailable heads settled.",
           })
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           Database.transaction((db) => {
@@ -1301,12 +1303,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             disposition: "organized",
             markdown: "# Project context\n\nOne coherent Organizer configuration snapshot.",
           })
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           await expect(ProjectMemoryOrganizer.run({ projectID: Instance.project.id })).rejects.toBeInstanceOf(
@@ -1365,14 +1362,8 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamCalls: Parameters<typeof LLM.stream>[0][] = []
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamCalls.push(input)
-          return {
-            text: new Promise<string>(() => undefined),
-            textStream: (async function* () {
-              const split = Math.floor(candidate.length / 2)
-              yield candidate.slice(0, split)
-              yield candidate.slice(split)
-            })(),
-          } as never
+          const split = Math.floor(candidate.length / 2)
+          return textOnlyLLMStream(candidate.slice(0, split), candidate.slice(split))
         })
         const configSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({
           model: `${model.providerID}/${model.modelID}`,
@@ -1451,6 +1442,10 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             text: physicalStream,
             textStream: (async function* () {
               yield await physicalStream
+            })(),
+            fullStream: (async function* () {
+              yield { type: "start" as const }
+              yield { type: "text-delta" as const, id: "text-1", text: await physicalStream }
             })(),
           } as never
         })

@@ -20,6 +20,7 @@ import { MissingModelConfigError } from "@/config/model-resolution-error"
 import { GlobalBus } from "@/bus/global"
 import { randomUUID } from "node:crypto"
 import { findTask } from "@/engine/store"
+import { collectLLMText } from "@/llm/activity"
 
 const log = Log.create({ service: "memory.organizer" })
 const PROTOCOL_RESERVE_TOKENS = 2_000
@@ -276,23 +277,27 @@ export namespace ProjectMemoryOrganizer {
       const sessionID = owner.sessionID
       const user = await sourceUser(sessionID)
       const messages: ModelMessage[] = [{ role: "user", content: prompt }]
-      const result = await LLM.stream({
-        agentID: "memory",
-        agent: sessionRuntimeFromNativeAgent(helper),
-        ...(user ? { user } : { requestID: selected.entries[0]!.occurrenceID }),
-        system: [],
-        small: true,
-        tools: {},
-        model,
-        abort: input?.abort ?? new AbortController().signal,
-        sessionID,
-        config,
-        retries: 0,
-        messages,
-        toolChoice: "none",
+      const external = input?.abort ?? new AbortController().signal
+      const candidateText = await collectLLMText({
+        context: { sessionID, provider: model.providerID, model: model.id },
+        external,
+        start: (run) =>
+          LLM.stream({
+            agentID: "memory",
+            agent: sessionRuntimeFromNativeAgent(helper),
+            ...(user ? { user } : { requestID: selected.entries[0]!.occurrenceID }),
+            system: [],
+            small: true,
+            tools: {},
+            model,
+            abort: run.signal,
+            sessionID,
+            config,
+            retries: 0,
+            messages,
+            toolChoice: "none",
+          }),
       })
-      let candidateText = ""
-      for await (const chunk of result.textStream) candidateText += chunk
       checkpoint()
       const candidate = parseCandidate(candidateText)
       checkpoint()

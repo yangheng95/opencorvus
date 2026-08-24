@@ -409,6 +409,17 @@ export const DefaultLLMActivityPolicy: LLMActivityPolicy = {
   backoffMs,
 }
 
+/**
+ * Bounded activity policy for streams whose incremental output is already
+ * externally visible and therefore cannot be replayed without duplicating
+ * deltas. It keeps the same first-byte, semantic-idle, total-deadline, and
+ * classification authority while making every failure terminal.
+ */
+export const NonReplayableLLMActivityPolicy: LLMActivityPolicy = {
+  ...DefaultLLMActivityPolicy,
+  maxRetries: { default: 0 },
+}
+
 // ---- Internals -------------------------------------------------------------
 
 interface MarkedReason extends DOMException {
@@ -783,4 +794,49 @@ export async function withLLMActivity<T>(
       emitTerminal("failed", "unknown")
     }
   }
+}
+
+export interface LLMTextActivityStream {
+  fullStream: AsyncIterable<Record<string, unknown>>
+}
+
+export interface CollectLLMTextInput {
+  context: LLMActivityContext
+  external: AbortSignal
+  start: (run: LLMActivityRun) => Promise<LLMTextActivityStream> | LLMTextActivityStream
+  policy?: LLMActivityPolicy
+  sink?: (event: LLMActivityEvent) => void
+  onTextDelta?: (delta: string) => void | Promise<void>
+  options?: LLMActivityOptions
+}
+
+/**
+ * Canonical activity boundary for production helpers that need only streamed
+ * text rather than the Session processor's full tool/reasoning state machine.
+ * Every retry creates a fresh Provider stream; callers with externally visible
+ * delta side effects must select NonReplayableLLMActivityPolicy.
+ */
+export function collectLLMText(input: CollectLLMTextInput): Promise<string> {
+  return withLLMActivity(
+    input.context,
+    input.policy ?? DefaultLLMActivityPolicy,
+    input.external,
+    async (run) => {
+      const stream = await input.start(run)
+      let text = ""
+      for await (const chunk of stream.fullStream) {
+        run.bump("first-byte")
+        run.signal.throwIfAborted()
+        if (chunk.type === "error") throw chunk.error
+        const heartbeat = chunkHeartbeatKind(chunk)
+        if (heartbeat) run.bump(heartbeat)
+        if (chunk.type !== "text-delta" || typeof chunk.text !== "string" || chunk.text.length === 0) continue
+        text += chunk.text
+        await input.onTextDelta?.(chunk.text)
+      }
+      return text
+    },
+    input.sink ?? (() => undefined),
+    input.options,
+  )
 }
