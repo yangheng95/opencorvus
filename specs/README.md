@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest `v0.0.53-beta` application and website release: [`2026-08-24-v0.0.53-beta-release.md`](records/2026-08/2026-08-24-v0.0.53-beta-release.md).
+
 Latest full-repository architecture-debt saturation audit: [`2026-08-24-repository-architecture-debt-saturation-audit.md`](records/2026-08/2026-08-24-repository-architecture-debt-saturation-audit.md).
 
 Latest Work Ledger double-click rename repair: [`2026-08-24-work-ledger-double-click-rename-repair.md`](records/2026-08/2026-08-24-work-ledger-double-click-rename-repair.md).
