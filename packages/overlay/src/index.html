@@ -4,12 +4,21 @@
     <script>
       const acceptanceLocale = new URLSearchParams(location.search).get("acceptance-locale")
       if (acceptanceLocale) globalThis.__OPENCORVUS_LOCALE__ = acceptanceLocale
+      // Mirrors OVERLAY_THEME_IDS. This block runs before any module loads,
+      // so it cannot import the list; keep the two in sync.
+      const ocThemeIDs = ["dark", "vscode-dark", "light", "system"]
       const ocStartupThemeQuery = matchMedia("(prefers-color-scheme: light)")
       const ocStartupTheme = new URLSearchParams(location.search).get("acceptance-startup-theme")
-      const ocNativeStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""
-      const ocRequestedStartupTheme = ocStartupTheme || ocNativeStartupTheme
+      // Mirror the acceptance parameter onto the same global the native host
+      // sets, so the settings store has one source to read. Without this the
+      // document attribute was the only place the requested theme ever landed,
+      // and the store's default overwrote it as soon as Solid mounted.
+      if (ocStartupTheme && ocThemeIDs.includes(ocStartupTheme)) {
+        globalThis.__OPENCORVUS_STARTUP_THEME__ = ocStartupTheme
+      }
+      const ocRequestedStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""
       document.documentElement.dataset.theme =
-        ocRequestedStartupTheme === "system" || !ocRequestedStartupTheme
+        ocRequestedStartupTheme === "system" || !ocThemeIDs.includes(ocRequestedStartupTheme)
           ? (ocStartupThemeQuery.matches ? "light" : "dark")
           : ocRequestedStartupTheme
     </script>
