@@ -1,8 +1,8 @@
 # MiniMax H3 Mission promo pipeline
 
-> Production gate: `storyboard.zh-CN.json` is a rejected historical draft retained as evidence. It is blocked from voice, animatic, storyboard H3 scenes, and final composition commands. The current pre-production source is `creative-brief-v2.zh-CN.md`; first approve the frozen cartoon cast and reference-driven motion proof, then rewrite and explicitly approve the storyboard before generating the full film.
+> Production gate: `storyboard.zh-CN.json` and `creative-brief-v2.zh-CN.md` are rejected/superseded historical drafts. The current Skill-driven source is `preproduction-v3.zh-CN.md`, stopped at story-outline approval. `standard-shot-table-v3.zh-CN.md` is an invalid premature draft retained for review evidence: required labeled character cards and environment-only scene cards were not locked first, so its self-check is revoked. No new image, voice, shot clip, or final composition may be generated until the user approves the brief/outline and the remaining MiniMax 3D Animation Skill gates are completed in order.
 
-This directory produces the Chinese OpenCorvus long-horizon Mission case film from one frozen storyboard. The next cut uses one cartoon personal user, one consistent cartoon Agent family, and one project in a bright character-animation world:
+This directory produces the Chinese OpenCorvus long-horizon Mission case film from one approved storyboard. The next cut uses one cartoon personal user, one consistent cartoon Agent family, and one project in a bright character-animation world:
 
 - MiniMax H3 is used only for approved, text-free cartoon character shots derived from the frozen character bible and per-shot keyframes. Standalone T2V shots are excluded from the film.
 - The explanatory body is told through continuous character actions. Product UI, training pages, paper pages, and screenshot collages do not carry the story; the short case proof uses deterministic labels and artifact icons only.
@@ -53,7 +53,7 @@ $out = 'D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824'
 
 `voice`, `animatic`, and `compose` currently fail by design because the only storyboard is rejected. The retained animatic is evidence of the rejected direction, not a production candidate.
 
-First approve the frozen cast and reference-driven motion proof. Then derive the remaining per-shot keyframes from the same cast and rewrite the storyboard with official H3 prompt fields. Generate only scene IDs declared by that approved storyboard; do not reuse retired scene IDs.
+First approve `preproduction-v3.zh-CN.md` (project brief and story outline). Then create and separately lock labeled character cards and environment-only scene cards. Only after those Skill gates may the six-column shot table be rewritten, self-checked, approved, and expanded into the authoritative text storyboard. Per-shot keyframes and H3 prompts come after storyboard approval; retired scene IDs and old motion proofs are never reused.
 
 After approval, the production sequence is:
 
