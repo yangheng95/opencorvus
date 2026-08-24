@@ -1,6 +1,6 @@
 # MiniMax H3 Mission promo pipeline
 
-> Current production direction: `desktop-brief-v5.zh-CN.md`. V5 stays inside one continuous user Desktop and uses deterministic UI/text animation plus retained real evidence. V4 character animation is paused and must not be mixed into V5; `storyboard.zh-CN.json`, character cards and H3 clips are historical or alternate-direction evidence only.
+> Current planning direction: paper-collage science explainer V6, paused at Skill Gate 1 in `specs/records/2026-08/2026-08-24-paper-collage-explainer-v6.md`. No V6 still or video may be generated before approval. Desktop V5 remains a complete local candidate and is not overwritten. V4 character animation is paused; `storyboard.zh-CN.json`, character cards and H3 clips remain historical or alternate-direction evidence only.
 
 The current machine-readable source is `desktop-storyboard-v5.zh-CN.json`; `desktop-script-v5.zh-CN.md` records how two independent drafts were synthesized. The story remains: user pain → context failure → multi-Agent fragmentation → persistent Mission → scheduling/resume/Artifact/review → expert-squad self-evolution and open source → short DeBERTa proof → personal long workflows.
 

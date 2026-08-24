@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest OpenCorvus paper-collage science explainer V6 Gate 1 production plan: [`2026-08-24-paper-collage-explainer-v6.md`](records/2026-08/2026-08-24-paper-collage-explainer-v6.md).
+
 Latest `v0.0.53-beta` application and website release: [`2026-08-24-v0.0.53-beta-release.md`](records/2026-08/2026-08-24-v0.0.53-beta-release.md).
 
 Latest MiniMax H3 long-horizon Mission promo-video pipeline and frame-review benchmark: [`2026-08-24-minimax-h3-mission-promo-video.md`](records/2026-08/2026-08-24-minimax-h3-mission-promo-video.md).
