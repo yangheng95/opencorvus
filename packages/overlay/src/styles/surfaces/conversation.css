@@ -598,7 +598,10 @@
   width: var(--conversation-agent-rail-marker-width);
   height: 2px;
   border-radius: var(--oc-radius-pill);
-  background: color-mix(in srgb, var(--text-muted) 56%, transparent);
+  /* 34%: the resting ticks are wayfinding, not content — they should be
+   * discoverable when sought and invisible when reading. Status colors
+   * below keep their stronger presence. */
+  background: color-mix(in srgb, var(--text-muted) 34%, transparent);
   opacity: var(--ui-opacity-full);
   transform: scaleX(calc(0.4 + 0.6 * var(--conversation-agent-rail-marker-progress)));
   transform-origin: center;

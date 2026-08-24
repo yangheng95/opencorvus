@@ -841,6 +841,13 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Tool rows repeat in long runs; the name is scannable chrome, not
+   * content, so it steps down from the default title presence and the
+   * args fade one step further (three levels: name > args > icon). */
+  color: var(--text-soft);
+}
+.card[data-kind="tool"] .card__icon {
+  opacity: var(--ui-opacity-dim);
 }
 .card[data-kind="tool"] .card__title-spacer {
   display: none;
@@ -861,6 +868,7 @@ body {
   line-height: 1.46;
   padding-left: 0;
   margin-left: 0;
+  color: color-mix(in srgb, var(--text-muted) 72%, transparent);
 }
 .card[data-kind="tool"] .card__subtitle::before {
   content: none;

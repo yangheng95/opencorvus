@@ -424,11 +424,14 @@
 
 .chat-compose-meta-right .oc-button[data-mode="send"]:disabled {
   --oc-button-border: 0 solid transparent;
-  --oc-button-bg: color-mix(in srgb, var(--text-strong) 42%, var(--surface-inset));
-  --oc-button-color: var(--text-on-strong);
+  /* Clearly inert: a low-presence wash with a muted glyph. The previous
+   * 42% solid fill read as an enabled mid-gray button, so an empty
+   * composer still advertised a clickable send. */
+  --oc-button-bg: color-mix(in srgb, var(--text-strong) 10%, transparent);
+  --oc-button-color: var(--text-muted);
 
   opacity: var(--ui-opacity-full);
-  box-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--text-strong) 12%, transparent);
+  box-shadow: none;
 }
 
 .chat-send-icon {

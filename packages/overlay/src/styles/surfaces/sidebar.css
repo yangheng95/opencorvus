@@ -673,7 +673,10 @@ body .sidebar-header.oc-surface-header {
 .ledger-skeleton-row {
   height: calc(48px * var(--ui-scale));
   border-radius: var(--oc-radius-soft);
-  background: var(--subtle-2);
+  /* Neutral placeholder: --subtle-* is accent-mixed in the light theme, which
+   * tinted the loading rows blue; a text-derived wash stays achromatic in
+   * every theme. */
+  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
 }
 
 .ledger-skeleton-row:nth-child(2) {

@@ -77,8 +77,10 @@
 .md-content hr {
   border: 0;
   height: var(--oc-border-width);
-  margin: var(--ui-gap-md) 0;
-  background: var(--border-strong);
+  /* A thematic break inside prose is a pause, not a wall: soft divider
+   * tone plus extra leading, instead of the strong chrome border. */
+  margin: calc(16px * var(--ui-scale)) 0;
+  background: var(--divider-soft);
 }
 
 .msg-text h1,
@@ -113,8 +115,11 @@
 
 .msg-text p,
 .md-content p {
-  margin: calc(5px * var(--ui-scale)) 0;
-  line-height: 1.55;
+  margin: calc(6px * var(--ui-scale)) 0;
+  /* 1.68: CJK body copy has no ascender/descender rhythm, so it needs more
+   * leading than Latin to read open; the mixed zh/en transcripts are the
+   * primary reading surface. */
+  line-height: 1.68;
 }
 
 .md-active-text {
@@ -128,7 +133,7 @@
 .md-content ol {
   margin: calc(5px * var(--ui-scale)) 0;
   padding-left: calc(20px * var(--ui-scale));
-  line-height: 1.55;
+  line-height: 1.62;
 }
 .msg-text li,
 .md-content li {
@@ -152,8 +157,11 @@
 
 .msg-text code,
 .md-content code {
-  background: var(--subtle-4);
-  border: var(--oc-border-width) solid var(--border);
+  /* Neutral chip, no border: --subtle-4 is accent-mixed in the light theme,
+   * so every inline code span used to read as a blue-tinted outlined pill —
+   * loud at transcript frequency. A quiet text-derived wash carries the
+   * "this is code" cue in every theme without joining the color story. */
+  background: color-mix(in srgb, var(--text-strong) 6.5%, transparent);
   border-radius: var(--oc-radius-soft);
   padding: calc(1px * var(--ui-scale)) calc(4px * var(--ui-scale));
   font-family: var(--mono);
@@ -325,8 +333,8 @@
 .md-content hr,
 .msg-text hr {
   border: none;
-  border-top: var(--oc-border-width) solid var(--border);
-  margin: calc(8px * var(--ui-scale)) 0;
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+  margin: calc(14px * var(--ui-scale)) 0;
 }
 .md-content del,
 .msg-text del {
