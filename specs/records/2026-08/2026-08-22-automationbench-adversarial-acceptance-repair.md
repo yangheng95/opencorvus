@@ -433,3 +433,19 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. A focused Bus test holds a real subscriber after the publication envelope aborts, positively observes the still-owned protocol-publication reservation, then releases it and proves the exact owner reason, empty reservation set and ordered successor delivery. Existing processor tests continue to prove abandoned Part cleanup, delayed reasoning-flush settlement and recovered persistence.
 3. Existing LLM activity and Session retry tests, product typecheck, benchmark tests and benchmark typecheck pass; an uninvolved reviewer reports no unresolved P0/P1/P2.
 4. Only after that repair is merged and pushed to `v0.0.53beta`, synced into the benchmark branch and WSL runner may missing case 85 rerun. Run `9ef36fa4-d10b-4278-ae8c-06b446456614` remains excluded, while cases 81–84 remain adopted from their sealed candidates.
+
+## Luna Base post-repair reasoning-end stall
+
+### Evidence and stop boundary
+
+- The repaired batches 17/18 raised the catalog to `85/600`: case 85 sealed cleanly, while cases 86, 88, 89 and 90 are clean reusable sealed candidates from the failed batch-18 receipt. Case 87 (`finance.invoice_file_organization`, run `a6f6e162-c969-4349-98fd-1742e5cca531`) stopped after the external 600-second no-activity interval and is permanently `invalid_bug: non_cooperative_session_stream_abort_after_reasoning`; none of the five clean siblings may rerun.
+- Case 87's final Developer assistant Message contains `step-start` followed by two reasoning Parts whose `time.end` is `1787603907829` and `1787603907909`; it has no Tool Part, text, `step-finish`, Provider usage row, activity retry or activity terminal. All 59 earlier Tool Parts in the Task transcript are terminal (`57 completed`, `2 error`), pending interactions are zero, and there are no scheduled wakes. The last real Tool completed before this new assistant Message began.
+- The process event loop remained live for the whole interval: runtime memory metrics and the runner's Mission/Task/transcript/trace polling requests continued to complete. The final reasoning Part proves the Provider yielded `reasoning-end` and the database write occurred, but it does **not** distinguish a stalled `message.part.updated` publication from a later parked Provider `next()`; the previous case-85 conclusion was too narrow at this boundary.
+- The shipped activity policy should abort either path after 180 seconds and allow one idle retry, yet no retry was emitted before the runner's 600-second owner fired. The exact missing fact is whether the activity monitor aborted, whether it was paused, and—if the chunk handler was still active—which Bus subscriber remained physical. Do not add another timeout, detach the attempt Promise, or rerun case 87 until those facts are captured and the shared cause is repaired.
+
+### Acceptance
+
+1. Failure evidence includes the exact Provider activity request/outcome set plus the live activity-monitor state (`last_activity_at`, paused state and pause owners) for every active Session, without treating those diagnostics as benchmark progress.
+2. An owner-aborted Bus publication reports the exact still-pending local/Global subscriber identities until each physically settles; diagnostics do not change delivery order, retry policy or settlement authority.
+3. A focused production-path test reproduces a post-`reasoning-end` parked stream under the real Session subscriber set and proves a typed idle retry or terminal strictly before the benchmark inactivity boundary, with no late Part delivery across attempts.
+4. Product changes pass focused tests and typecheck, receive uninvolved read-only review, merge to `v0.0.53beta`, and sync back to the benchmark runner. Only then may case 87 rerun; cases 1–86 and 88–90 remain immutable/reusable as applicable.
