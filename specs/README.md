@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest public-site version-bound download repair: [`2026-08-25-website-version-bound-download.md`](records/2026-08/2026-08-25-website-version-bound-download.md).
+
 Latest OpenCorvus website-native long-horizon explainer V7 Gate 1 visual contract: [`2026-08-24-site-native-explainer-v7.md`](records/2026-08/2026-08-24-site-native-explainer-v7.md). The earlier [`paper-collage V6`](records/2026-08/2026-08-24-paper-collage-explainer-v6.md) is rejected evidence only.
 
 Latest `v0.0.53-beta` application and website release: [`2026-08-24-v0.0.53-beta-release.md`](records/2026-08/2026-08-24-v0.0.53-beta-release.md).
