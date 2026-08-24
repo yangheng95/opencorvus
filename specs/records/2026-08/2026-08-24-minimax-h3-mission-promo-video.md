@@ -17,6 +17,8 @@
 | Independent agent feedback | 实施前无。首轮验证后按仓库规则委托未参与实现的 agent 只读复核。 |
 | User correction | 首版 animatic 被明确否决：不能做成 BPPT（带轻动效的幻灯片），必须用连续动画形式科普。保留真实截图、旁白、命令打字和 H3 本地生成要求，但痛点、机制、Mission、执行和产物段落必须通过对象运动、因果关系、状态变化和镜头连续性来解释。 |
 | User correction 2 | 第二版仍被否决。用户要求先学习文案、视频、推广与 H3，而不是继续盲目生成。已停止在途动画渲染；正式生成前新增强制创意确认门，并以 `script/video/minimax-h3-mission-promo/creative-brief-v2.zh-CN.md` 为当前创意事实源。 |
+| User addition | 结尾必须给出工作上需要长工作流的具体场景。V2 收束新增模型训练与评测、深度研究与报告、软件开发测试发布、数据分析与审计四个连续场景，再进入唯一 CTA。 |
+| User correction 3 | 本地 RTX 5090 已真实生成 4.458 秒“琥珀任务核心 + 青色接力滑轨”H3 风格测试，但用户明确否决并要求咨询 Claude。该方向标记 rejected，不得继续生成。Claude Code 2.1.237 显示 Max 登录态，但推理返回 `403 Request not allowed`；浏览器 OAuth 涉及持久凭据授权，未获用户确认前不得继续。 |
 
 ## Impact analysis
 
@@ -106,7 +108,7 @@ python produce.py inspect --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 ### Benchmark acceptance
 
 - 1920×1080、25 或 30 fps、H.264 视频；最终版含 AAC 音轨。
-- V2 目标总时长 68–72 秒；叙事覆盖具体失败、运行层原因、Mission 接力机制、真实执行、受限指标与唯一 CTA。
+- V2 目标总时长 78–82 秒；叙事覆盖具体失败、运行层原因、Mission 接力机制、真实执行、受限指标、四类工作场景与唯一 CTA。
 - 每个段落的中点帧非黑；连续检查点不得全同；实际媒体时长与时间线误差不超过 0.5 秒。
 - 命令字号在 1080p 下至少 34px，逐字出现后完整停留至少 1.5 秒。
 - 真实截图不由 H3 重绘；产物数据、指标和文件名保持来源一致。
