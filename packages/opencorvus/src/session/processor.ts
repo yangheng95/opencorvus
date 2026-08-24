@@ -535,21 +535,26 @@ export namespace SessionProcessor {
           let currentText: Message.TextPart | undefined
           let currentTextStreamID: string | undefined
           let reasoningMap: Record<string, Message.ReasoningPart> = {}
-          const flushReasoningDeltas = async () => {
+          const flushReasoningDeltas = async (signal?: AbortSignal) => {
+            signal?.throwIfAborted()
             const buffered = [...reasoningDeltaBuf]
             reasoningDeltaBuf.clear()
             for (const [partID, delta] of buffered) {
+              signal?.throwIfAborted()
               if (!delta.replace(/[\[\]\s]/g, "")) continue
               const part = Object.values(reasoningMap).find((candidate) => candidate.id === partID)
               if (!part) continue
-              await Session.updatePartDelta({
+              const input = {
                 sessionID: part.sessionID,
                 messageID: part.messageID,
                 partID: part.id,
                 field: "text",
                 delta,
-              })
+              }
+              if (signal) await Session.updatePartDeltaWithSignal(signal, input)
+              else await Session.updatePartDelta(input)
             }
+            signal?.throwIfAborted()
           }
           const reportReasoningFlushFailure = (error: unknown) => {
             log.warn("reasoning delta flush failed", {
@@ -558,25 +563,28 @@ export namespace SessionProcessor {
               error: error instanceof Error ? error.message : String(error),
             })
           }
-          const scheduleReasoningFlush = () => {
+          const scheduleReasoningFlush = (signal: AbortSignal) => {
             if (reasoningFlushTimer || reasoningFlushOperation) return
             reasoningFlushTimer = setTimeout(() => {
               reasoningFlushTimer = null
-              const operation = flushReasoningDeltas().catch(reportReasoningFlushFailure)
+              const operation = flushReasoningDeltas(signal).catch((error) => {
+                if (signal.aborted && error === signal.reason) return
+                reportReasoningFlushFailure(error)
+              })
               reasoningFlushOperation = operation
               void operation.finally(() => {
                 if (reasoningFlushOperation === operation) reasoningFlushOperation = undefined
               })
             }, 200)
           }
-          const settleReasoningFlush = async (flush: boolean) => {
+          const settleReasoningFlush = async (flush: boolean, signal?: AbortSignal) => {
             if (reasoningFlushTimer) {
               clearTimeout(reasoningFlushTimer)
               reasoningFlushTimer = null
             }
             const operation = reasoningFlushOperation
             if (operation) await operation
-            if (flush) await flushReasoningDeltas()
+            if (flush) await flushReasoningDeltas(signal)
             else reasoningDeltaBuf.clear()
           }
           const closeOpenReasoningParts = async () => {
@@ -731,7 +739,7 @@ export namespace SessionProcessor {
                         metadata: value.providerMetadata,
                       }
                       reasoningMap[value.id] = reasoningPart
-                      await Session.updatePart(reasoningPart)
+                      await Session.updatePartWithSignal(run.signal, reasoningPart)
                       trackCreatedPart(run.attempt, reasoningPart.id)
                       semanticChunkAccepted = true
                       break
@@ -746,7 +754,7 @@ export namespace SessionProcessor {
                         const bufKey = part.id
                         const prev = reasoningDeltaBuf.get(bufKey) || ""
                         reasoningDeltaBuf.set(bufKey, prev + value.text)
-                        scheduleReasoningFlush()
+                        scheduleReasoningFlush(run.signal)
                         semanticChunkAccepted = true
                       }
                       break
@@ -754,7 +762,7 @@ export namespace SessionProcessor {
                     case "reasoning-end":
                       if (value.id in reasoningMap) {
                         // Flush any buffered reasoning delta before closing the part
-                        await settleReasoningFlush(true)
+                        await settleReasoningFlush(true, run.signal)
 
                         const part = reasoningMap[value.id]
                         part.text = part.text.trimEnd()
@@ -764,7 +772,7 @@ export namespace SessionProcessor {
                           end: Date.now(),
                         }
                         if (value.providerMetadata) part.metadata = value.providerMetadata
-                        await Session.updatePart(part)
+                        await Session.updatePartWithSignal(run.signal, part)
                         delete reasoningMap[value.id]
                         semanticChunkAccepted = true
                       }
@@ -786,7 +794,7 @@ export namespace SessionProcessor {
                       const part = await withToolPartLock(toolCallID, async () => {
                         const existing = await priorToolPart(toolCallID)
                         const start = existing ? toolStartTime(existing) : Date.now()
-                        const part = await Session.updatePart({
+                        const part = await Session.updatePartWithSignal(run.signal, {
                           id: existing?.id ?? Identifier.ascending("part"),
                           messageID: input.assistantMessage.id,
                           sessionID: input.assistantMessage.sessionID,
@@ -826,7 +834,7 @@ export namespace SessionProcessor {
                       const match = toolcalls[toolCallID]
                       if (match && match.state.status === "pending") {
                         ;(match.state as any).raw += delta
-                        await Session.updatePartDelta({
+                        await Session.updatePartDeltaWithSignal(run.signal, {
                           sessionID: match.sessionID,
                           messageID: match.messageID,
                           partID: match.id,
@@ -866,7 +874,7 @@ export namespace SessionProcessor {
                       const persistedToolInput = cloneToolInputForPersistence(value.input)
                       const part = await withToolPartLock(value.toolCallId, async () => {
                         const match = await priorToolPart(value.toolCallId)
-                        const part = await Session.updatePart({
+                        const part = await Session.updatePartWithSignal(run.signal, {
                           ...(match ?? {
                             id: Identifier.ascending("part"),
                             messageID: input.assistantMessage.id,
@@ -1006,7 +1014,7 @@ export namespace SessionProcessor {
                               toolName: value.toolName,
                             },
                           })
-                          await Session.updatePart({
+                          await Session.updatePartWithSignal(run.signal, {
                             ...match,
                             state: {
                               status: "error",
@@ -1033,7 +1041,7 @@ export namespace SessionProcessor {
                     case "start-step":
                       snapshot = await Snapshot.track()
                       {
-                        const part = await Session.updatePart({
+                        const part = await Session.updatePartWithSignal(run.signal, {
                           id: Identifier.ascending("part"),
                           messageID: input.assistantMessage.id,
                           sessionID: input.sessionID,
@@ -1068,7 +1076,7 @@ export namespace SessionProcessor {
                         },
                       }
                       {
-                        const part = await Session.updatePart({
+                        const part = await Session.updatePartWithSignal(run.signal, {
                           id: Identifier.ascending("part"),
                           reason: value.finishReason,
                           snapshot: await Snapshot.track(),
@@ -1086,7 +1094,7 @@ export namespace SessionProcessor {
                         const patch = await Snapshot.patch(snapshot)
                         Snapshot.assertPatchEvidenceIntegrity(patch)
                         if (patch.files.length) {
-                          const part = await Session.updatePart({
+                          const part = await Session.updatePartWithSignal(run.signal, {
                             id: Identifier.ascending("part"),
                             messageID: input.assistantMessage.id,
                             sessionID: input.sessionID,
@@ -1127,7 +1135,7 @@ export namespace SessionProcessor {
                         },
                         metadata: value.providerMetadata,
                       }
-                      await Session.updatePart(currentText)
+                      await Session.updatePartWithSignal(run.signal, currentText)
                       trackCreatedPart(run.attempt, currentText.id)
                       semanticChunkAccepted = true
                       break
@@ -1136,7 +1144,7 @@ export namespace SessionProcessor {
                       if (currentText && value.id === currentTextStreamID) {
                         currentText.text += value.text
                         if (value.providerMetadata) currentText.metadata = value.providerMetadata
-                        await Session.updatePartDelta({
+                        await Session.updatePartDeltaWithSignal(run.signal, {
                           sessionID: currentText.sessionID,
                           messageID: currentText.messageID,
                           partID: currentText.id,
@@ -1166,7 +1174,7 @@ export namespace SessionProcessor {
                         }
                         if (value.providerMetadata) currentText.metadata = value.providerMetadata
 
-                        await Session.updatePart(currentText)
+                        await Session.updatePartWithSignal(run.signal, currentText)
                         semanticChunkAccepted = true
                         currentText = undefined
                         currentTextStreamID = undefined
@@ -1212,6 +1220,11 @@ export namespace SessionProcessor {
                       })
                       continue
                   }
+                  // An async chunk hook or publication may settle only after
+                  // the activity owner has aborted it. Fence the late handler
+                  // before it can publish another heartbeat or advance the
+                  // physical stream after retry cleanup has started.
+                  run.signal.throwIfAborted()
                   if (semanticChunkAccepted) {
                     const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
                     if (heartbeatKind) run.bump(heartbeatKind)

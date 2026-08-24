@@ -185,20 +185,32 @@ export namespace Bus {
     payload: Envelope<any>,
     directory: string,
     subscriptions: Map<any, Subscription[]>,
+    ownerSignal?: AbortSignal,
   ): Publication {
     let result: Promise<void>
     let reservation: RuntimeExecutionReservation | undefined
+    let removeOwnerAbort: () => void = () => {}
     try {
       reservation = RuntimeExecutionSettlement.reserve(
         "protocol_publication",
         `${payload.type}:${payload.occurrenceID}`,
       )
+      if (ownerSignal) {
+        const cancel = () => reservation?.cancel(ownerSignal.reason)
+        if (ownerSignal.aborted) cancel()
+        else {
+          ownerSignal.addEventListener("abort", cancel, { once: true })
+          removeOwnerAbort = () => ownerSignal.removeEventListener("abort", cancel)
+          reservation.onCancel(removeOwnerAbort)
+        }
+      }
       result = executePublication(payload, directory, subscriptions, reservation.signal)
       reservation.settleWith(result)
     } catch (error) {
       reservation?.settle()
       result = Promise.reject(error)
     }
+    void result.finally(removeOwnerAbort).catch(() => undefined)
     const observed = observePublishPromise(result, payload.type) as Publication
     Object.defineProperties(observed, {
       occurrenceID: { value: payload.occurrenceID, enumerable: true },
@@ -216,6 +228,7 @@ export namespace Bus {
     subscriptions: Map<any, Subscription[]>,
     signal: AbortSignal,
   ): Promise<void> {
+    signal.throwIfAborted()
     const deliveryPayload = { ...payload } as Envelope<any>
     Object.defineProperty(deliveryPayload, "signal", { value: signal, enumerable: false })
     const failures: unknown[] = []
@@ -224,11 +237,13 @@ export namespace Bus {
     } catch (error) {
       failures.push(error)
     }
+    if (signal.aborted) throw signal.reason
     try {
       await GlobalBus.emitAndWait("event", { directory, payload: deliveryPayload })
     } catch (error) {
       failures.push(error)
     }
+    if (signal.aborted) throw signal.reason
     if (failures.length === 1) throw failures[0]
     if (failures.length > 1) throw new AggregateError(failures, `Bus publication failed for ${payload.type}`)
   }
@@ -1030,6 +1045,7 @@ export namespace Bus {
   export function publish<Definition extends BusEvent.Definition>(
     def: Definition,
     properties: z.output<Definition["properties"]>,
+    options?: { signal?: AbortSignal },
   ): Publication {
     const id = occurrenceID()
     try {
@@ -1045,12 +1061,12 @@ export namespace Bus {
       })
       const directory = currentProjectDirectory()
       const current = state()
-      return publishPrepared(payload, directory, current.subscriptions)
+      return publishPrepared(payload, directory, current.subscriptions, options?.signal)
     } catch (err) {
       const rejected = observePublishPromise(Promise.reject(err), def.type) as Publication
       Object.defineProperties(rejected, {
         occurrenceID: { value: id, enumerable: true },
-        retry: { value: () => publish(def, properties), enumerable: false },
+        retry: { value: () => publish(def, properties, options), enumerable: false },
       })
       return rejected
     }

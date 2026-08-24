@@ -25,6 +25,7 @@ import {
 } from "@/mission/caller-participant"
 import { rightSidebarConversationAgentID } from "@/chat/session"
 import { Context } from "@/util/context"
+import { awaitWithAbort } from "@/util/abort"
 
 const log = Log.create({ service: "task-message-protocol-bridge" })
 let globalRelayInitialized = false
@@ -69,6 +70,22 @@ export const TaskMessageProtocolBridgeTestHooks = {
       },
     )
     return queued
+  },
+  enqueueRelay(input: {
+    type: string
+    hostDirectory: string
+    sourceDirectory?: string
+    signal?: AbortSignal
+    fn: () => Promise<void>
+  }): Promise<void> {
+    return enqueueCrossInstanceBridge(
+      input.type,
+      {},
+      input.hostDirectory,
+      input.sourceDirectory,
+      async () => input.fn(),
+      input.signal,
+    )
   },
 }
 
@@ -1002,7 +1019,8 @@ async function bridgeSessionError(type: string, properties: Record<string, unkno
   await appendBridgeEvent(event)
 }
 
-async function bridgeEvent(type: string, properties: Record<string, unknown>) {
+async function bridgeEvent(type: string, properties: Record<string, unknown>, signal?: AbortSignal) {
+  signal?.throwIfAborted()
   // Top-level guard: subscribers run synchronously inside Bus.dispatch's for-loop;
   // a sync throw here would abort dispatch for sibling subscribers. Old code hid
   // this behind enqueueBridgeWork's swallowed promise — keep the same behaviour
@@ -1022,7 +1040,9 @@ async function bridgeEvent(type: string, properties: Record<string, unknown>) {
       orderKey: ephemeralEnvelopeOrderKey(type, enriched),
       payload: enriched,
     })
+    signal?.throwIfAborted()
   } catch (err) {
+    signal?.throwIfAborted()
     const error = err instanceof Error ? err.message : String(err)
     await appendBridgePreparationFailure({ type, properties: messageEventDiagnosticProperties(properties), error })
     log.warn("bridge: live message event preparation failed", { type, error })
@@ -1087,7 +1107,8 @@ function enqueueCrossInstanceBridge(
   props: Record<string, unknown>,
   hostDirectory: string,
   sourceDirectory: string | undefined,
-  handler: (props: Record<string, unknown>) => Promise<void>,
+  handler: (props: Record<string, unknown>, signal?: AbortSignal) => Promise<void>,
+  signal?: AbortSignal,
 ): Promise<void> {
   let queued: Promise<void> | undefined
   const deletionAdmission = projectDeletionBridgeAdmission.tryUse()
@@ -1103,13 +1124,21 @@ function enqueueCrossInstanceBridge(
     await runOutsideInstanceContext(() => Instance.provideProjectIdentity({ directory: hostDirectory, fn }))
   }
   Database.runOutsideContext(() => {
-    const operation = crossInstanceBridgeQueue
-      .then(() =>
-        Database.runLifecycleActivity(`cross-instance message bridge ${type}`, () =>
-          provideHostIdentity(async () => await handler(props)),
-        ),
+    const previous = crossInstanceBridgeQueue
+    const operation = (async () => {
+      await awaitWithAbort(previous, signal)
+      signal?.throwIfAborted()
+      await Database.runLifecycleActivity(`cross-instance message bridge ${type}`, () =>
+        provideHostIdentity(async () => {
+          signal?.throwIfAborted()
+          await handler(props, signal)
+          signal?.throwIfAborted()
+        }),
       )
+      signal?.throwIfAborted()
+    })()
       .catch(async (err) => {
+        if (signal?.aborted) throw signal.reason
         const error = err instanceof Error ? err.message : String(err)
         try {
           await Database.runOutsideContext(() =>
@@ -1145,13 +1174,19 @@ function enqueueCrossInstanceBridge(
         })
         throw err
       })
-    crossInstanceBridgeQueue = operation.then(
+    const observed = operation.then(
       () => undefined,
       (error) => {
+        if (signal?.aborted && error === signal.reason) return
         crossInstanceBridgeFailures.push(error)
       },
     )
-    queued = crossInstanceBridgeQueue
+    // A cancelled relay may stop waiting for its predecessor promptly, but it
+    // must not replace the serialization tail until that predecessor has
+    // physically settled. Otherwise the next relay can overtake still-running
+    // work and observe a late ProtocolStore delivery from the old owner.
+    crossInstanceBridgeQueue = Promise.all([previous, observed]).then(() => undefined)
+    queued = operation
   })
   if (!queued) throw new Error(`cross-instance message bridge ${type} was not queued`)
   return queued
@@ -1159,22 +1194,26 @@ function enqueueCrossInstanceBridge(
 
 // Cross-Instance event types and their handlers. Additions don't require
 // touching dispatch logic — register the type → handler here.
-const CROSS_INSTANCE_HANDLERS: Record<string, (props: Record<string, unknown>) => Promise<void>> = {
-  [Message.Event.Updated.type]: async (props) => {
+const CROSS_INSTANCE_HANDLERS: Record<
+  string,
+  (props: Record<string, unknown>, signal?: AbortSignal) => Promise<void>
+> = {
+  [Message.Event.Updated.type]: async (props, signal) => {
+    signal?.throwIfAborted()
     cacheMessageInfo(props)
-    await bridgeEvent(Message.Event.Updated.type, props)
+    await bridgeEvent(Message.Event.Updated.type, props, signal)
   },
-  [Message.Event.PartUpdated.type]: async (props) => {
-    await bridgeEvent(Message.Event.PartUpdated.type, props)
+  [Message.Event.PartUpdated.type]: async (props, signal) => {
+    await bridgeEvent(Message.Event.PartUpdated.type, props, signal)
   },
-  [Message.Event.Removed.type]: async (props) => {
-    await bridgeEvent(Message.Event.Removed.type, props)
+  [Message.Event.Removed.type]: async (props, signal) => {
+    await bridgeEvent(Message.Event.Removed.type, props, signal)
   },
-  [Message.Event.PartRemoved.type]: async (props) => {
-    await bridgeEvent(Message.Event.PartRemoved.type, props)
+  [Message.Event.PartRemoved.type]: async (props, signal) => {
+    await bridgeEvent(Message.Event.PartRemoved.type, props, signal)
   },
-  [Message.Event.PartDelta.type]: async (props) => {
-    await bridgeEvent(Message.Event.PartDelta.type, props)
+  [Message.Event.PartDelta.type]: async (props, signal) => {
+    await bridgeEvent(Message.Event.PartDelta.type, props, signal)
   },
   [Todo.Event.Updated.type]: async (props) => {
     await bridgeTodoUpdated(props)
@@ -1200,20 +1239,21 @@ export function ensureTaskMessageProtocolBridge() {
       { durableID: "task-message-protocol-bridge.message-moved", effect: "idempotent_by_occurrence" },
     )
     Bus.subscribe(Message.Event.Updated, async (event) => {
+      event.signal?.throwIfAborted()
       cacheMessageInfo(event.properties)
-      await bridgeEvent(Message.Event.Updated.type, event.properties)
+      await bridgeEvent(Message.Event.Updated.type, event.properties, event.signal)
     })
     Bus.subscribe(Message.Event.PartUpdated, async (event) => {
-      await bridgeEvent(Message.Event.PartUpdated.type, event.properties)
+      await bridgeEvent(Message.Event.PartUpdated.type, event.properties, event.signal)
     })
     Bus.subscribe(Message.Event.Removed, async (event) => {
-      await bridgeEvent(Message.Event.Removed.type, event.properties)
+      await bridgeEvent(Message.Event.Removed.type, event.properties, event.signal)
     })
     Bus.subscribe(Message.Event.PartRemoved, async (event) => {
-      await bridgeEvent(Message.Event.PartRemoved.type, event.properties)
+      await bridgeEvent(Message.Event.PartRemoved.type, event.properties, event.signal)
     })
     Bus.subscribe(Message.Event.PartDelta, async (event) => {
-      await bridgeEvent(Message.Event.PartDelta.type, event.properties)
+      await bridgeEvent(Message.Event.PartDelta.type, event.properties, event.signal)
     })
     Bus.subscribe(Todo.Event.Updated, async (event) => {
       await bridgeTodoUpdated(event.properties)
@@ -1234,6 +1274,7 @@ export function ensureTaskMessageProtocolBridge() {
   // sees all Instances; we re-execute inside the host Instance context so
   // Database lookups (sessionRole etc.) use the main DB, not the worktree's.
   GlobalBus.on("event", (envelope) => {
+    envelope.payload?.signal?.throwIfAborted()
     if (!envelope.payload || !RELAY_EVENT_TYPES.has(envelope.payload.type)) return
     const props = envelope.payload.properties
     if (!props) return
@@ -1249,6 +1290,13 @@ export function ensureTaskMessageProtocolBridge() {
     }
     const handler = CROSS_INSTANCE_HANDLERS[envelope.payload.type]
     if (!handler) return
-    return enqueueCrossInstanceBridge(envelope.payload.type, props, hostDirectory, envelope.directory, handler)
+    return enqueueCrossInstanceBridge(
+      envelope.payload.type,
+      props,
+      hostDirectory,
+      envelope.directory,
+      handler,
+      envelope.payload.signal,
+    )
   })
 }
