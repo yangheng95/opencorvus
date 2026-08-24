@@ -61,7 +61,7 @@
   display: flex;
   align-items: center;
   gap: var(--ui-gap-md);
-  width: min(calc(760px * var(--ui-scale)), calc(100vw - 40px));
+  width: min(calc(760px * var(--ui-scale)), calc(100vw - calc(40px * var(--ui-scale))));
   padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-radius: var(--oc-radius-large);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--warn) 58%, transparent);

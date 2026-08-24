@@ -643,7 +643,7 @@
 
 .file-explorer-context-menu {
   position: fixed;
-  width: min(calc(260px * var(--ui-scale)), calc(100cqw - 16px));
+  width: min(calc(260px * var(--ui-scale)), calc(100cqw - calc(16px * var(--ui-scale))));
 }
 
 .file-explorer-context-menu[hidden] {
@@ -2124,8 +2124,8 @@
 }
 
 .subagent-conversation-panel__agent-menu.oc-menu {
-  width: min(calc(280px * var(--ui-scale)), calc(100vw - 24px));
-  max-height: min(calc(360px * var(--ui-scale)), calc(100vh - 24px));
+  width: min(calc(280px * var(--ui-scale)), calc(100vw - calc(24px * var(--ui-scale))));
+  max-height: min(calc(360px * var(--ui-scale)), calc(100vh - calc(24px * var(--ui-scale))));
   overflow-y: auto;
 }
 
