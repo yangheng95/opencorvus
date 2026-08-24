@@ -74,13 +74,20 @@ const featurableSquadTotal = platformFacts.squadTotal
             target; with JavaScript off the reader still gets the full list rather than a button
             that does nothing.
           */}
-          <div class="oc-download" data-oc-download data-download-verb={copy.hero.download.verb}>
+          <div
+            class="oc-download"
+            data-oc-download
+            data-download-verb={copy.hero.download.verb}
+            data-download-version={downloads?.version ?? ""}
+          >
             <a
               class="oc-btn oc-btn-primary oc-btn-m oc-download-primary"
               href={downloads?.releaseUrl ?? config.github}
               data-oc-download-primary
             >
-              <span data-oc-download-label>{copy.hero.download.label}</span>
+              <span data-oc-download-label>
+                {copy.hero.download.label}{downloads?.version && ` · ${downloads.version}`}
+              </span>
             </a>
 
             {
@@ -106,8 +113,21 @@ const featurableSquadTotal = platformFacts.squadTotal
                           <ul>
                             {group.assets.map((asset) => (
                               <li>
-                                <a href={asset.url} data-oc-download-asset={`${asset.platform}-${asset.architecture}`}>
-                                  <span>{asset.architecture} · {asset.format}</span>
+                                <a
+                                  href={asset.url}
+                                  download={asset.fileName}
+                                  title={asset.fileName}
+                                  data-oc-download-asset
+                                  data-oc-download-platform={asset.platform}
+                                  data-oc-download-architecture={asset.architecture}
+                                  data-oc-download-format={asset.format}
+                                  data-oc-download-file={asset.fileName}
+                                  data-oc-download-version={downloads.version}
+                                >
+                                  <span class="oc-download-asset-meta">
+                                    <span>{asset.architecture} · {asset.format} · {downloads.version}</span>
+                                    <span class="oc-download-file">{asset.fileName}</span>
+                                  </span>
                                   <span class="oc-download-size">{formatBytes(asset.bytes)}</span>
                                 </a>
                               </li>
@@ -685,7 +705,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     z-index: 20;
     top: calc(100% + var(--oc-space-2));
     left: 0;
-    width: max(100%, 290px);
+    width: max(100%, 390px);
     /* Bounded twice: never taller than the viewport allows, and never so tall that it dominates
        the hero on a big screen. Anything beyond that scrolls inside the panel. */
     max-height: min(60vh, 420px);
@@ -720,7 +740,7 @@ const featurableSquadTotal = platformFacts.squadTotal
 
   .oc-download-group a {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: var(--oc-space-3);
     padding: var(--oc-space-2) var(--oc-space-3);
@@ -743,6 +763,21 @@ const featurableSquadTotal = platformFacts.squadTotal
   .oc-download-group a[data-detected="true"] {
     color: var(--oc-color-text-primary);
     background: var(--oc-color-bg-surface-5);
+  }
+
+  .oc-download-asset-meta {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .oc-download-file {
+    overflow-wrap: anywhere;
+    font-family: var(--oc-font-mono);
+    font-size: 10px;
+    line-height: 1.35;
+    color: var(--oc-color-text-description);
   }
 
   .oc-download-size {
@@ -1583,12 +1618,10 @@ const featurableSquadTotal = platformFacts.squadTotal
   /* --------------------------------------------------- platform detect */
 
   /*
-   * Detection only picks a default. Every installer is already a link in the server-rendered menu,
-   * so failing to detect costs the reader one extra click, not the download.
-   *
-   * Same principle the retired download page held to: offer a specific build only when the browser
-   * states both platform and architecture. Handing an arm64 Mac an x64 DMG is worse than showing
-   * the list, so a guess is not an improvement.
+   * Detection only picks a default. Every installer is already a version-bound link in the
+   * server-rendered menu, so an ambiguous platform opens that menu instead of presenting the
+   * Release page as though it were a direct download. When the browser withholds architecture,
+   * the rendered manifest may still prove a safe choice if that platform publishes only one.
    */
   const downloadRoot = document.querySelector<HTMLElement>("[data-oc-download]")
   if (downloadRoot) {
@@ -1598,7 +1631,17 @@ const featurableSquadTotal = platformFacts.squadTotal
 
     const PLATFORM_LABEL: Record<string, string> = { windows: "Windows", macos: "macOS", linux: "Linux" }
 
-    async function detect(): Promise<{ platform: string; architecture: string } | null> {
+    type DetectedDownloadTarget = { platform: string; architecture?: string }
+
+    const namedPlatform = (value: string | undefined) => {
+      const text = (value ?? "").toLowerCase()
+      if (text.includes("win")) return "windows"
+      if (text.includes("mac")) return "macos"
+      if (text.includes("linux") || text.includes("x11") || text.includes("cros")) return "linux"
+      return null
+    }
+
+    async function detect(): Promise<DetectedDownloadTarget | null> {
       const uaData = (
         navigator as Navigator & {
           userAgentData?: {
@@ -1607,41 +1650,58 @@ const featurableSquadTotal = platformFacts.squadTotal
           }
         }
       ).userAgentData
-      if (!uaData?.getHighEntropyValues) return null
-
-      const named = (value: string | undefined) => {
-        const text = (value ?? "").toLowerCase()
-        if (text.includes("win")) return "windows"
-        if (text.includes("mac")) return "macos"
-        if (text.includes("linux") || text.includes("x11") || text.includes("cros")) return "linux"
-        return null
-      }
+      const coarsePlatform =
+        namedPlatform(uaData?.platform) ?? namedPlatform(navigator.platform) ?? namedPlatform(navigator.userAgent)
+      if (!uaData?.getHighEntropyValues) return coarsePlatform ? { platform: coarsePlatform } : null
 
       try {
         const hints = await uaData.getHighEntropyValues(["platform", "architecture", "bitness"])
-        const platform = named(hints.platform ?? uaData.platform)
+        const platform = namedPlatform(hints.platform ?? uaData.platform) ?? coarsePlatform
         if (!platform) return null
         if (hints.architecture === "arm") return { platform, architecture: "arm64" }
         if (hints.architecture === "x86" && hints.bitness === "64") return { platform, architecture: "x64" }
-        return null
+        return { platform }
       } catch {
-        return null
+        return coarsePlatform ? { platform: coarsePlatform } : null
       }
+    }
+
+    if (primary && menu) {
+      primary.addEventListener("click", (event) => {
+        if (primary.dataset.ocDownloadReady === "true") return
+        event.preventDefault()
+        menu.open = true
+        menu.querySelector("summary")?.focus()
+      })
     }
 
     void (async () => {
       const target = await detect()
       if (!target || !primary || !label) return
 
-      // The menu is ordered most-wanted-first per platform, so the first match is the right default.
-      const match = downloadRoot.querySelector<HTMLAnchorElement>(
-        `[data-oc-download-asset="${target.platform}-${target.architecture}"]`,
+      const platformAssets = Array.from(
+        downloadRoot.querySelectorAll<HTMLAnchorElement>(
+          `[data-oc-download-asset][data-oc-download-platform="${target.platform}"]`,
+        ),
       )
+      const architectures = new Set(platformAssets.map((asset) => asset.dataset.ocDownloadArchitecture))
+      const architecture = target.architecture ?? (architectures.size === 1 ? [...architectures][0] : undefined)
+      if (!architecture) return
+
+      // The manifest orders the normal installer before alternatives, so the first match is the
+      // platform's preferred current asset (EXE before MSI on Windows).
+      const match = platformAssets.find((asset) => asset.dataset.ocDownloadArchitecture === architecture)
       if (!match) return
 
       const verb = downloadRoot.dataset.downloadVerb ?? ""
+      const version = match.dataset.ocDownloadVersion ?? downloadRoot.dataset.downloadVersion ?? ""
+      const format = match.dataset.ocDownloadFormat ?? ""
+      const fileName = match.dataset.ocDownloadFile ?? ""
       primary.href = match.href
-      label.textContent = `${verb} ${PLATFORM_LABEL[target.platform] ?? target.platform} · ${target.architecture}`.trim()
+      primary.download = fileName
+      primary.title = fileName
+      primary.dataset.ocDownloadReady = "true"
+      label.textContent = `${verb} ${PLATFORM_LABEL[target.platform] ?? target.platform} · ${architecture} · ${format} · ${version}`.trim()
       match.dataset.detected = "true"
     })()
 
