@@ -177,7 +177,7 @@
 
 .changes-status-strip
   .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="deleted"][data-pressed] {
-  background: color-mix(in srgb, var(--bad) 12%, transparent);
+  background: color-mix(in srgb, var(--diff-del-fg) 12%, transparent);
 }
 
 .changes-status-option-label,
@@ -356,22 +356,22 @@
   font-size: var(--ui-font-small);
 }
 
+/* The three chips below carry their tone through background + text only,
+ * matching the .oc-badge primitive. They used to also set border-color,
+ * which never rendered: the base rule above sets `border: 0`. */
 .change-status[data-status="added"] {
   color: var(--diff-add-fg);
   background: var(--diff-add-bg);
-  border-color: var(--diff-add-border);
 }
 
 .change-status[data-status="deleted"] {
   color: var(--diff-del-fg);
-  background: var(--bad-dim);
-  border-color: color-mix(in srgb, var(--bad) 14%, transparent);
+  background: var(--diff-del-bg);
 }
 
 .change-status[data-status="modified"] {
   color: var(--accent);
   background: var(--accent-dim);
-  border-color: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .change-row[data-selected] .change-status[data-status="modified"] {

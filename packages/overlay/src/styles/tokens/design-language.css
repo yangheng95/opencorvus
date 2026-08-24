@@ -358,12 +358,21 @@ body {
    * which froze them to the dark-default values; light + vscode-dark
    * never picked up their own palette. Body scope re-resolves the
    * var() chain per theme. */
-  --diff-add-fg: color-mix(in srgb, var(--accent) 58%, var(--text-strong) 42%);
-  --diff-add-bg: color-mix(in srgb, var(--accent) 12%, transparent);
-  --diff-add-border: color-mix(in srgb, var(--accent) 22%, transparent);
+  /* One colour source per side: added is --good, deleted is --bad. The add
+   * half used to draw fg/bg from --accent while --diff-add-row-bg alone used
+   * --good, so a single concept carried two hues — and since "modified" is
+   * also accent-toned, an added file and a modified one read as the same
+   * colour in the changes list. Green-for-added is also what every diff tool
+   * the user has open next to this one does.
+   *
+   * The `-border` roles were retired 2026-08-24: their only consumer set
+   * border-color on a chip whose base rule is `border: 0`, so nothing could
+   * ever draw them, and the badge primitive establishes that status chips
+   * carry tone through background and text alone. */
+  --diff-add-fg: color-mix(in srgb, var(--good) 58%, var(--text-strong) 42%);
+  --diff-add-bg: color-mix(in srgb, var(--good) 12%, transparent);
   --diff-del-fg: color-mix(in srgb, var(--bad) 58%, var(--text-strong) 42%);
   --diff-del-bg: color-mix(in srgb, var(--bad) 10%, transparent);
-  --diff-del-border: color-mix(in srgb, var(--bad) 22%, transparent);
   --diff-add-row-bg: color-mix(in srgb, var(--good) 9%, transparent);
   --diff-del-row-bg: color-mix(in srgb, var(--bad) 10%, transparent);
 
