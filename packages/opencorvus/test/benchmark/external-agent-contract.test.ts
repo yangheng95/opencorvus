@@ -2316,6 +2316,7 @@ describe("external agent benchmark contract", () => {
       parallelBatchLimit: script.match(/-eq ([0-9]+) \]\]; then/)?.[1],
       batchScopedAuthorization: coordinator.includes("`active-batch-${batchIndex}.json`"),
       serializedCatalog: coordinator.includes('path.join(controlRoot, "catalog.lock")'),
+      catalogLockWaits: coordinator.includes("retries: { retries: 900, factor: 1, minTimeout: 1_000, maxTimeout: 1_000 }"),
       invocations,
       resumeIdentityOwner: script.includes("automationBenchBatchPlanMatches(plan"),
     }).toEqual({
@@ -2328,6 +2329,7 @@ describe("external agent benchmark contract", () => {
       parallelBatchLimit: "2",
       batchScopedAuthorization: true,
       serializedCatalog: true,
+      catalogLockWaits: true,
       invocations: [
         {
           entry: "packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts",

@@ -221,7 +221,12 @@ async function readWithInactivity(
 }
 
 async function refreshCatalog() {
-  const releaseCatalog = await lockfile.lock(catalogLockPath, { realpath: false, stale: 60_000, update: 10_000 })
+  const releaseCatalog = await lockfile.lock(catalogLockPath, {
+    realpath: false,
+    stale: 60_000,
+    update: 10_000,
+    retries: { retries: 900, factor: 1, minTimeout: 1_000, maxTimeout: 1_000 },
+  })
   try {
     if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
     const child = Bun.spawn(

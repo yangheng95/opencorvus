@@ -318,6 +318,7 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 - The operator raised only the execution concurrency from five to ten. Existing case identities, five-case manifest batches, repetition 1, Base/Mission/model selection, scoring, receipts and sealed candidates remain unchanged.
 - Starting after completed batch 11, the supervisor runs two adjacent five-case coordinators concurrently. Each coordinator retains its own plan, authorization and receipt, so batches 12/13 cover exact unique cases 56–65 without inventing a new manifest or rerunning cases 1–55.
 - Coordinator authorization and lifecycle locks are batch-scoped. Evidence catalog replay remains globally serialized at the shared root so concurrent coordinators cannot overwrite catalog/leaderboard/paper artifacts. The active lease ledger remains the aggregate concurrency fact and may contain at most ten distinct cases.
+- The first live pair exposed that serialization without lock retries rejects the second coordinator with `ELOCKED`. The catalog lock now waits in bounded one-second retries while the owning replay keeps its lease fresh; this preserves one writer without collapsing execution back to five.
 
 ### Acceptance
 
