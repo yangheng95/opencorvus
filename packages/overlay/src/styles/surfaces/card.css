@@ -9,12 +9,16 @@
   /* iter51: message-card redesign per the flat message-card direction.
      Card corner-rounding is now driven by the global radius scale
      (`--oc-radius-soft`); the local `--card-radius` alias was retired
-     2026-05-04 (flat-redesign Step 1). The 14-color --card-stage-*
-     palette is collapsed to 4 semantic tones (info / success / warn
-     / danger) folded into accent / good / warn / bad — every former
-     stage rail is one of these four. Stage-specific brand colors
-     (architect violet / planner teal / etc) are gone; agents are
-     differentiated by header icon + label, not by a hue. */
+     2026-05-04 (flat-redesign Step 1).
+
+     The rest of this note used to say the --card-stage-* palette had
+     been collapsed to four semantic tones and that per-agent hues were
+     gone for good. That decision was later reversed — the body block
+     below declares a rail hue for every projected stage again, because
+     a multi-actor transcript reads better when each actor holds a hue.
+     The four semantic tones survive as the status-layer overrides and
+     the unknown-stage fallback. Corrected 2026-08-24: the stale claim
+     had been contradicting the declarations thirty lines beneath it. */
   --card-gap: calc(8px * var(--ui-scale, 1));
   --card-pad-x: calc(13px * var(--ui-scale, 1));
   --card-pad-y: calc(10px * var(--ui-scale, 1));

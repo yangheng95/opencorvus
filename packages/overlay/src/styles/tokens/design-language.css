@@ -291,20 +291,18 @@
   --oc-theme-swatch-vscode-dark: linear-gradient(135deg, #1e1e1e 50%, #252526 50%);
   --oc-theme-swatch-system: linear-gradient(135deg, #1a1b1e 50%, #f2f2f2 50%);
 
-  /* Agent stage palette. Each pipeline stage carries a stable identity
-     hue so users can spot which agent emitted a card in a long log:
-     goal=violet, architect=teal, planner=cobalt, executor=amber.
-     The default fallback is the same cobalt as planner.
-     The hues are intentional metadata, not theme-
-     adaptive: stage identity must read the same in every overlay
-     theme so muscle memory stays portable. Surfaces consume these
-     through color-mix() with the alpha they need; raw alpha values
-     do not belong in design-language. */
-  --oc-stage-default: #6eb7ff;
-  --oc-stage-goal: #8c6edc;
-  --oc-stage-architect: #50aaa0;
-  --oc-stage-planner: #64a0dc;
-  --oc-stage-executor: #e68c32;
+  /* The --oc-stage-* palette (default / goal / architect / planner /
+   * executor) was retired 2026-08-24. It was the last survivor of the
+   * per-agent brand hues that surfaces/card.css retired in iter51, and its
+   * premise — fixed hex so stage identity reads the same in every theme —
+   * is the exact failure card.css calls out: "hardcoded hex landing wrong
+   * on light/vscode-dark". Measured against the light theme's surfaces the
+   * five sat between 1.87 and 3.82.
+   *
+   * Three had no consumer at all. The two that did now derive their colour
+   * from the palette at the point of use (surfaces/mission-board.css,
+   * surfaces/automations.css), which is how the live per-stage rails in
+   * card.css have always worked. */
 }
 
 /* Theme-wired tokens MUST live at body scope, not :root. CSS custom

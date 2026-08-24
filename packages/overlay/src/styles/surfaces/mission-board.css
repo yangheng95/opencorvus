@@ -1,3 +1,14 @@
+/* The review lane's violet. Derived from the palette instead of a fixed hex
+ * so it tracks the theme the way the board's other three lanes already do
+ * (--accent / --warn / --good). The retired --oc-stage-goal was a hardcoded
+ * #8c6edc that measured 3.4-3.9 against every theme's surfaces, and read as
+ * the one lane that ignored the palette. Declared on `body`, not `:root`, so
+ * the var() substitution resolves against the active theme — see the scope
+ * note in surfaces/card.css. */
+body {
+  --mission-board-review-accent: color-mix(in oklch, var(--accent) 55%, var(--bad) 45%);
+}
+
 .mission-board {
   display: flex;
   flex: 1 1 auto;
@@ -153,7 +164,7 @@
 }
 
 .mission-board-lane[data-lane="review"] {
-  --mission-board-lane-accent: var(--oc-stage-goal);
+  --mission-board-lane-accent: var(--mission-board-review-accent);
 }
 
 .mission-board-lane[data-lane="completed"] {
@@ -723,7 +734,7 @@
 }
 
 .mission-board-nav-summary__lane[data-lane="review"] {
-  --mission-board-nav-accent: var(--oc-stage-goal);
+  --mission-board-nav-accent: var(--mission-board-review-accent);
 }
 
 .mission-board-nav-summary__lane[data-lane="completed"] {

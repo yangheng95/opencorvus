@@ -243,8 +243,12 @@
   color: var(--accent);
 }
 
+/* Sits between the --accent and --good icons above and below it, so it is
+ * derived as the midpoint rather than named as a fixed hex. The retired
+ * --oc-stage-default was #6eb7ff, which measured 2.08 against the light
+ * theme's surfaces — under the 3.0 that non-text UI needs to stay legible. */
 .automation-suggestion:nth-of-type(2) > .oc-icon {
-  color: var(--oc-stage-default);
+  color: color-mix(in oklch, var(--accent) 50%, var(--good) 50%);
 }
 
 .automation-suggestion:nth-of-type(3) > .oc-icon {
