@@ -1,5 +1,12 @@
-import { describe, expect, test } from "bun:test"
-import { DefaultLLMActivityPolicy, chunkHeartbeatKind, withLLMActivity, type LLMActivityEvent } from "@/llm/activity"
+import { describe, expect, spyOn, test } from "bun:test"
+import {
+  DefaultLLMActivityPolicy,
+  NonReplayableLLMActivityPolicy,
+  chunkHeartbeatKind,
+  collectLLMText,
+  withLLMActivity,
+  type LLMActivityEvent,
+} from "@/llm/activity"
 import { abortableIterable } from "@/util/stream-activity"
 import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 
@@ -21,6 +28,146 @@ function waitForAbort(signal: AbortSignal): Promise<never> {
 }
 
 describe("LLM semantic activity", () => {
+  test("collects streamed helper text through one semantic activity lifecycle", async () => {
+    const events: LLMActivityEvent[] = []
+    const deltas: string[] = []
+    const result = await collectLLMText({
+      context: { sessionID: "session-text-helper", provider: "test", model: "text-helper" },
+      external: new AbortController().signal,
+      policy,
+      sink: (event) => events.push(event),
+      onTextDelta: (delta) => {
+        deltas.push(delta)
+      },
+      start: () => ({
+        fullStream: (async function* () {
+          yield { type: "start" }
+          yield { type: "reasoning-delta", id: "reasoning-1", text: "working" }
+          yield { type: "text-delta", id: "text-1", text: "bounded " }
+          yield { type: "text-delta", id: "text-1", text: "result" }
+          yield { type: "finish" }
+        })(),
+      }),
+    })
+
+    expect({ result, deltas }).toEqual({ result: "bounded result", deltas: ["bounded ", "result"] })
+    expect(events.filter((event) => event.type === "heartbeat").map((event) => event.kind)).toEqual([
+      "first-byte",
+      "reasoning-delta",
+      "text-delta",
+      "text-delta",
+    ])
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("restarts a helper stream once after a bounded first-byte stall", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await collectLLMText({
+      context: { sessionID: "session-text-retry", provider: "test", model: "text-retry" },
+      external: new AbortController().signal,
+      policy: {
+        ...policy,
+        firstByteMs: 20,
+        maxRetries: { default: 0, first_byte: 1 },
+      },
+      sink: (event) => events.push(event),
+      start: (run) => {
+        attempts += 1
+        if (run.attempt === 0) {
+          return {
+            fullStream: (async function* () {
+              await waitForAbort(run.signal)
+            })(),
+          }
+        }
+        return {
+          fullStream: (async function* () {
+            yield { type: "text-delta", id: "text-1", text: "recovered" }
+          })(),
+        }
+      },
+    })
+
+    expect({ result, attempts }).toEqual({ result: "recovered", attempts: 2 })
+    expect(events.find((event) => event.type === "retry")).toMatchObject({
+      type: "retry",
+      attempt: 1,
+      cls: "first_byte",
+    })
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("settles a non-replayable helper stream on its first bounded timeout", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    await expect(
+      collectLLMText({
+        context: { sessionID: "session-non-replayable", provider: "test", model: "non-replayable" },
+        external: new AbortController().signal,
+        policy: {
+          ...NonReplayableLLMActivityPolicy,
+          totalMs: 1_000,
+          firstByteMs: 20,
+          idleMs: 30,
+          backoffMs: () => 0,
+        },
+        sink: (event) => events.push(event),
+        start: (run) => {
+          attempts += 1
+          return {
+            fullStream: (async function* () {
+              await waitForAbort(run.signal)
+            })(),
+          }
+        },
+      }),
+    ).rejects.toMatchObject({ name: "LLMActivityError", cls: "first_byte", attempts: 0 })
+    expect({ attempts, terminal: events.at(-1) }).toMatchObject({
+      attempts: 1,
+      terminal: { type: "terminal", outcome: "failed", cls: "first_byte" },
+    })
+  })
+
+  test("bounds long-duration idle and first-byte recovery to one retry", async () => {
+    const random = spyOn(Math, "random").mockReturnValue(1)
+    const maximumFirstRetryBackoff = Math.max(
+      DefaultLLMActivityPolicy.backoffMs("idle", 0, Number.MAX_SAFE_INTEGER),
+      DefaultLLMActivityPolicy.backoffMs("first_byte", 0, Number.MAX_SAFE_INTEGER),
+    )
+    random.mockRestore()
+    expect(
+      2 * (DefaultLLMActivityPolicy.firstByteMs + DefaultLLMActivityPolicy.idleMs) + maximumFirstRetryBackoff,
+    ).toBeLessThan(600_000)
+    for (const cls of ["idle", "first_byte"] as const) {
+      const events: LLMActivityEvent[] = []
+      let attempts = 0
+      await expect(
+        withLLMActivity(
+          { sessionID: `session-${cls}-budget`, provider: "test", model: `${cls}-budget` },
+          {
+            ...DefaultLLMActivityPolicy,
+            totalMs: 1_000,
+            idleMs: 20,
+            firstByteMs: 20,
+            backoffMs: () => 0,
+          },
+          new AbortController().signal,
+          async (run) => {
+            attempts += 1
+            if (cls === "idle") run.bump("first-byte")
+            return waitForAbort(run.signal)
+          },
+          (event) => events.push(event),
+        ),
+      ).rejects.toMatchObject({ name: "LLMActivityError", cls, attempts: 1 })
+      expect({ attempts, retries: events.filter((event) => event.type === "retry") }).toMatchObject({
+        attempts: 2,
+        retries: [{ type: "retry", attempt: 1, cls }],
+      })
+    }
+  })
+
   test("terminates a typed missing Provider credential after one attempt", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0

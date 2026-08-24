@@ -2388,6 +2388,7 @@ export namespace SessionLoop {
                 await ensureTitle({
                   session,
                   history: msgs,
+                  abort,
                 }).catch((err) => log.error("failed to ensure session title", { error: String(err) }))
               }
 

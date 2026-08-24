@@ -1,6 +1,10 @@
 # August 2026 Records
 
-- [2026-08-25-web-host-path-actions-and-settings-audit.md](2026-08-25-web-host-path-actions-and-settings-audit.md) audits every Settings section against the real Web build and gives the browser host a usable action wherever the desktop opens the OS file manager, chosen by host capability rather than by a fallback inside the native call.
+- [2026-08-25-v0.0.54-beta-release.md](2026-08-25-v0.0.54-beta-release.md) freezes, validates, publishes, and integrates the `0.0.54-beta` application and website release from the reviewed post-`0.0.53-beta` runtime and download-selection repairs.
+
+- [2026-08-25-website-version-bound-download.md](2026-08-25-website-version-bound-download.md) binds the landing-page primary action to the current manifest asset on single-architecture Windows, exposes the exact version/file selection, and makes ambiguous platforms choose explicitly.
+
+- [2026-08-25-web-host-path-actions-and-settings-audit.md](2026-08-25-web-host-path-actions-and-settings-audit.md) audits every Settings section against the real Web build, gives the browser host a usable action wherever the desktop opens the OS file manager, and implements `open-url` on that host so its external links stop being dead — both chosen by declared capability rather than by a fallback inside the native call.
 
 - [2026-08-24-v0.0.53-beta-release.md](2026-08-24-v0.0.53-beta-release.md) tracks canonical `0.0.53-beta` convergence, immutable application publication, the same-source public website deployment, and integration of the reviewed release source into `main`.
 
