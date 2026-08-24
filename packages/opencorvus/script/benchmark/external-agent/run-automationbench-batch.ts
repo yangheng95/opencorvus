@@ -51,7 +51,7 @@ const controlRoot = required("control-root")
 const dashboard = values.get("dashboard") ? path.resolve(values.get("dashboard")!) : undefined
 const evaluatorRoot = path.dirname(path.dirname(python))
 const batchIndex = Number(values.get("batch-index"))
-if (!Number.isInteger(batchIndex) || batchIndex < 1 || batchIndex > 10) throw new Error("--batch-index must be 1 through 10")
+if (!Number.isInteger(batchIndex) || batchIndex < 1) throw new Error("--batch-index must be a positive integer")
 const caseSet = path.resolve(values.get("case-set") ?? path.join(import.meta.dir, "automationbench-case-set.json"))
 const model =
   values.get("model") ??
@@ -66,7 +66,16 @@ if (profile !== "base" && profile !== "advanced") {
 const profiles: Profile[] = [profile]
 const manifest = JSON.parse(await fs.readFile(caseSet, "utf8")) as { selection: { count: number }; cases: FrozenCase[] }
 const cases = manifest.cases.filter((item) => item.batch_index === batchIndex).sort((left, right) => left.case_index - right.case_index)
-if (manifest.selection?.count !== 50 || cases.length !== 5) throw new Error(`Frozen batch ${batchIndex} must contain five of 50 cases`)
+if (
+  !Number.isInteger(manifest.selection?.count) ||
+  manifest.selection.count < 5 ||
+  manifest.selection.count % 5 !== 0 ||
+  manifest.cases.length !== manifest.selection.count ||
+  batchIndex > manifest.selection.count / 5 ||
+  cases.length !== 5
+) {
+  throw new Error(`Frozen batch ${batchIndex} must contain five cases inside the selected manifest`)
+}
 type BatchSlot = { case_index: number; profile: Profile }
 const waves: BatchSlot[][] = [cases.map((item) => ({ case_index: item.case_index, profile }))]
 
@@ -105,7 +114,12 @@ const protectedRootAudits = await Promise.all(
   }),
 )
 const caseSetBytes = await fs.readFile(caseSet)
-const evidenceCaseSetPath = path.join(output, "automationbench-case-set.json")
+const evidenceCaseSetPath = path.join(
+  output,
+  manifest.selection.count === 50
+    ? "automationbench-case-set.json"
+    : `automationbench-case-set-${manifest.selection.count}.json`,
+)
 await fs.writeFile(evidenceCaseSetPath, caseSetBytes, { flag: "wx" }).catch(async (error: NodeJS.ErrnoException) => {
   if (error.code !== "EEXIST") throw error
   const existing = await fs.readFile(evidenceCaseSetPath)

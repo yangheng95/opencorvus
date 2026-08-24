@@ -141,11 +141,10 @@ function parseArguments(argv: string[]): Arguments {
     !restrictedShell ||
     !Number.isInteger(batchIndex) ||
     batchIndex < 1 ||
-    batchIndex > 10 ||
     ![1, 2].includes(waveIndex)
   ) {
     throw new Error(
-      "Batch plan/run/authorization, restricted shell, --batch-index 1..10, and --wave-index 1|2 are required",
+      "Batch plan/run/authorization, restricted shell, a positive --batch-index, and --wave-index 1|2 are required",
     )
   }
   return {
@@ -260,10 +259,15 @@ async function loadFrozenCase(input: Arguments) {
     manifest.distribution_version !== AUTOMATIONBENCH_VERSION ||
     manifest.source_revision !== AUTOMATIONBENCH_SOURCE_REVISION ||
     manifest.package_tree_sha256 !== AUTOMATIONBENCH_PACKAGE_TREE_SHA256 ||
-    manifest.selection?.count !== 50 ||
-    manifest.cases?.length !== 50
+    !Number.isInteger(manifest.selection?.count) ||
+    manifest.selection.count < 5 ||
+    manifest.selection.count % 5 !== 0 ||
+    manifest.cases?.length !== manifest.selection.count ||
+    manifest.cases.some(
+      (item, index) => item.case_index !== index + 1 || item.batch_index !== Math.floor(index / 5) + 1,
+    )
   ) {
-    throw new Error("Frozen AutomationBench case-set identity does not match the round-one contract")
+    throw new Error("Frozen AutomationBench case-set identity does not match the ordered five-case-batch contract")
   }
   const matches = manifest.cases.filter((item) => item.domain === input.domain && item.task === input.task)
   if (matches.length !== 1)

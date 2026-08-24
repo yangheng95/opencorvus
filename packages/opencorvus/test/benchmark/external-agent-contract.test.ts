@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import crypto from "node:crypto"
 import {
+  automationBenchCaseSetAuthority,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
@@ -33,6 +34,7 @@ import {
   auditMissionQuiescence,
   auditMissionRunBinding,
   auditBatchEvidence,
+  auditExcludedWrongExperimentBatch,
   auditAutomationBenchBatchPlanSchema,
   automationBenchBatchPlanIdentity,
   automationBenchBatchPlanMatches,
@@ -122,6 +124,72 @@ describe("external agent benchmark contract", () => {
       passed: true,
       expected_version: "1.3.14",
       actual_version: "1.3.14",
+    })
+  })
+
+  test("extends the frozen first 50 cases to all 600 unique public cases", async () => {
+    const directory = path.resolve(import.meta.dir, "../../script/benchmark/external-agent")
+    const [baseBytes, extendedBytes] = await Promise.all([
+      fs.readFile(path.join(directory, "automationbench-case-set.json")),
+      fs.readFile(path.join(directory, "automationbench-case-set-600.json")),
+    ])
+    const base = JSON.parse(baseBytes.toString("utf8"))
+    const extended = JSON.parse(extendedBytes.toString("utf8"))
+    const identity = (item: Record<string, unknown>) => ({
+      domain: item.domain,
+      task: item.task,
+      example_id: item.example_id,
+      task_contract_sha256: item.task_contract_sha256,
+      selection_rank_sha256: item.selection_rank_sha256,
+      case_index: item.case_index,
+      batch_index: item.batch_index,
+    })
+
+    expect({
+      baseCount: base.selection.count,
+      extendedCount: extended.selection.count,
+      basePrefix: extended.cases.slice(0, 50).map(identity),
+      base: base.cases.map(identity),
+      uniqueTasks: new Set(extended.cases.map((item: any) => `${item.domain}:${item.task}`)).size,
+      firstAdded: { case_index: extended.cases[50].case_index, batch_index: extended.cases[50].batch_index },
+      last: { case_index: extended.cases[599].case_index, batch_index: extended.cases[599].batch_index },
+      quotas: extended.selection.domain_quotas,
+      baseManifestSHA256: extended.selection.base_manifest_sha256,
+    }).toEqual({
+      baseCount: 50,
+      extendedCount: 600,
+      basePrefix: base.cases.map(identity),
+      base: base.cases.map(identity),
+      uniqueTasks: 600,
+      firstAdded: { case_index: 51, batch_index: 11 },
+      last: { case_index: 600, batch_index: 120 },
+      quotas: { sales: 100, marketing: 100, operations: 100, support: 100, finance: 100, hr: 100 },
+      baseManifestSHA256: crypto.createHash("sha256").update(baseBytes).digest("hex"),
+    })
+  })
+
+  test("projects the old and extended case-set authorities across the case-50 boundary", () => {
+    const base = { sha256: "base-bytes", canonical_sha256: "base-canonical" }
+    const extended = { sha256: "extended-bytes", canonical_sha256: "extended-canonical" }
+    const authority = (caseIndex: number, sealed: typeof base) =>
+      automationBenchCaseSetAuthority({
+        caseIndex,
+        baseCount: 50,
+        extendedCount: 600,
+        sealedSHA256: sealed.sha256,
+        sealedCanonicalSHA256: sealed.canonical_sha256,
+        base,
+        extended,
+      })
+
+    expect({
+      case50: authority(50, base),
+      case51: authority(51, extended),
+      crossedDigest: authority(51, base),
+    }).toEqual({
+      case50: { passed: true, authority: "base", violations: [] },
+      case51: { passed: true, authority: "extended", violations: [] },
+      crossedDigest: { passed: false, authority: "extended", violations: ["case_set_authority_mismatch"] },
     })
   })
 
@@ -1963,6 +2031,63 @@ describe("external agent benchmark contract", () => {
     })
   })
 
+  test("preserves and excludes the exact five-run wrong-repetition incident", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const launched = wave.map((item) => ({ ...item, run_id: `wrong-repetition-${item.case_index}` }))
+    const plan = {
+      schema_version: 2,
+      batch_run_id: "wrong-repetition-batch",
+      batch_index: 1,
+      repetition: 2,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      profiles: ["base"],
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      cases,
+      waves: [wave],
+    }
+    const attempts = launched.map((item) => ({
+      run_id: item.run_id,
+      benchmark: {
+        batch_run_id: plan.batch_run_id,
+        batch_plan_sha256: "wrong-repetition-plan-sha",
+        batch_index: 1,
+        wave_index: 1,
+        case_index: item.case_index,
+        repetition: 2,
+      },
+      opencorvus: { profile: "base", model: plan.model, launch_mode: "mission" },
+    }))
+    const dispositions = Object.fromEntries(
+      launched.map((item) => [
+        item.run_id,
+        { status: "invalid_bug", reason: "wrong_test_set_repetition" },
+      ]),
+    )
+    expect(
+      auditExcludedWrongExperimentBatch({
+        plan,
+        receipt: {
+          batch_run_id: plan.batch_run_id,
+          batch_index: 1,
+          repetition: 2,
+          status: "failed",
+          wave_1: { launched, eligible: [] },
+        },
+        attempts,
+        dispositions,
+        model: plan.model,
+        planSHA256: "wrong-repetition-plan-sha",
+      }),
+    ).toEqual({
+      passed: true,
+      run_ids: launched.map((item) => item.run_id).sort(),
+      violations: [],
+    })
+  })
+
   test("preserves clean sealed candidates when later Host faults invalidate sibling claims", () => {
     const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
     const wave = cases.map((item) => ({ ...item, profile: "base" }))
@@ -2061,6 +2186,99 @@ describe("external agent benchmark contract", () => {
         profiles: ["base", "advanced"],
       }),
     ).toEqual([])
+  })
+
+  test("accepts all 120 completed Base batch receipts for the unique-case matrix", () => {
+    const batches = Array.from({ length: 120 }, (_, offset) => ({
+      profiles: ["base"],
+      receipt: { batch_index: offset + 1 },
+      audit: { passed: true, status: "completed" },
+    }))
+    expect(
+      missingCompletedBatchProfileReceipts({
+        batches,
+        batchIndexes: Array.from({ length: 120 }, (_, offset) => offset + 1),
+        profiles: ["base"],
+      }),
+    ).toEqual([])
+  })
+
+  test("binds the Luna Mission Base continuation to unique cases 51 through 600", async () => {
+    const script = await fs.readFile(
+      path.resolve(import.meta.dir, "../../script/benchmark/external-agent/run-luna-mission-base-cases-51-600.sh"),
+      "utf8",
+    )
+    const assignment = (name: string) => script.match(new RegExp(`^${name}=(.+)$`, "m"))?.[1]
+    const lines = script.split(/\r?\n/)
+    const invocations: Array<{ entry: string | undefined; args: Record<string, string> }> = []
+    for (let index = 0; index < lines.length; index++) {
+      if (lines[index]?.trim() !== "/root/.bun/bin/bun \\") continue
+      const command: string[] = []
+      for (index += 1; index < lines.length; index++) {
+        const raw = lines[index]!.trim()
+        const continued = raw.endsWith("\\")
+        command.push(raw.replace(/ \\$/, "").replace(/ &$/, ""))
+        if (!continued) break
+      }
+      const args: Record<string, string> = {}
+      for (const item of command.slice(1)) {
+        const match = item.match(/^--([^ ]+) (.+)$/)
+        if (match) args[match[1]!] = match[2]!
+      }
+      invocations.push({ entry: command[0], args })
+    }
+
+    expect({
+      evidenceRoot: assignment("evidence_root"),
+      controlRoot: assignment("control_root"),
+      dashboardRoot: assignment("dashboard_root"),
+      caseSet: assignment("case_set"),
+      supervisorLock: script.match(/^exec 9>"(.+)"$/m)?.[1],
+      batchRange: script.match(/^for batch_index in (.+); do$/m)?.[1],
+      invocations,
+      resumeIdentityOwner: script.includes("automationBenchBatchPlanMatches(plan"),
+    }).toEqual({
+      evidenceRoot: "/var/lib/opencorvus-benchmark/evidence-luna-mission-base-v20260822-r3",
+      controlRoot: "/var/lib/opencorvus-benchmark/control-luna-mission-base-v20260822-r3",
+      dashboardRoot: "/mnt/d/myhexin-local/opencorvus-benchmark-results/luna-mission-base-v20260822-r3",
+      caseSet: "packages/opencorvus/script/benchmark/external-agent/automationbench-case-set-600.json",
+      supervisorLock: "$control_root/supervisor.lock",
+      batchRange: "{11..120}",
+      invocations: [
+        {
+          entry: "packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts",
+          args: {
+            python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+            "source-data": "/var/lib/opencorvus-benchmark/provider-data",
+            output: '"$evidence_root"',
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            "control-root": '"$control_root"',
+            dashboard: '"$dashboard_root/index.html"',
+            "case-set": '"$case_set"',
+            "batch-index": '"$batch_index"',
+            repetition: "1",
+            model: "openai/gpt-5.6-luna",
+            profiles: "base",
+            "inactivity-ms": "600000",
+          },
+        },
+        {
+          entry: "packages/opencorvus/script/benchmark/external-agent/verify-automationbench-evidence.ts",
+          args: {
+            root: '"$evidence_root"',
+            "source-data": "/var/lib/opencorvus-benchmark/provider-data",
+            python: "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+            "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+            "case-set": '"$case_set"',
+            model: "openai/gpt-5.6-luna",
+            profiles: "base",
+            repetition: "1",
+            mode: "final",
+          },
+        },
+      ],
+      resumeIdentityOwner: true,
+    })
   })
 
   test("binds the dedicated Luna Mission Advanced supervisor to its isolated 50-case round", async () => {

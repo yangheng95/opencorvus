@@ -92,6 +92,10 @@ if (
 ) {
   throw new Error("--profiles must be base, advanced, or base,advanced")
 }
+const [brandLogoLight, brandLogoDark] = await Promise.all([
+  fs.readFile(path.resolve(import.meta.dir, "../../../../web/src/assets/logo-light.svg"), "utf8"),
+  fs.readFile(path.resolve(import.meta.dir, "../../../../web/src/assets/logo-dark.svg"), "utf8"),
+])
 
 async function readJSON<T>(file: string): Promise<T | undefined> {
   return fs.readFile(file, "utf8").then(JSON.parse).catch(() => undefined) as Promise<T | undefined>
@@ -178,7 +182,7 @@ const [catalog, plan, allFiles, activeLeases] = await Promise.all([
     leaderboard?: DashboardRecord[]
     primary_leaderboard?: DashboardRecord[]
     public_context?: PublicContext
-    scope?: { model?: string; launch_mode?: string }
+    scope?: { model?: string; launch_mode?: string; case_count?: number }
   }>(path.join(root, "evidence-catalog.json")),
   planPath ? readJSON<BatchPlan>(planPath) : Promise.resolve(undefined),
   walk(root),
@@ -339,6 +343,8 @@ const summaries = profiles.map((profile) => {
   )
   const mean = (selector: (record: DashboardRecord) => number) =>
     rows.length ? rows.reduce((sum, record) => sum + selector(record), 0) / rows.length : 0
+  const total = (selector: (record: DashboardRecord) => number) =>
+    rows.reduce((sum, record) => sum + selector(record), 0)
   return {
     profile,
     rows,
@@ -346,10 +352,14 @@ const summaries = profiles.map((profile) => {
     strictRate: rows.length ? strictPasses / rows.length : 0,
     partialMean: mean((record) => Number(record.benchmark.metrics?.partial_credit ?? 0)),
     tokensMean: mean((record) => Number(record.opencorvus.tokens?.total ?? 0)),
+    tokensTotal: total((record) => Number(record.opencorvus.tokens?.total ?? 0)),
+    modelCallsMean: mean((record) => Number(record.opencorvus.tokens?.modelCalls ?? 0)),
+    modelCallsTotal: total((record) => Number(record.opencorvus.tokens?.modelCalls ?? 0)),
   }
 })
 const coverage = verified.length
-const targetSlots = profiles.length * 50
+const targetCases = Number(catalog?.scope?.case_count ?? 50)
+const targetSlots = profiles.length * targetCases
 const generatedAt = Date.now()
 
 const officialRows = catalog?.public_context?.rows ?? []
@@ -409,6 +419,12 @@ const html = `<!doctype html>
     :root { color-scheme: light dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background:#f6f7f9; color:#172033; }
     body { margin:0; padding:28px; }
     main { max-width:1180px; margin:0 auto; }
+    .brand-hero { display:flex; justify-content:space-between; gap:28px; align-items:center; margin:0 0 28px; padding:24px 26px; border:1px solid #eadfc9; border-radius:16px; background:linear-gradient(135deg,#fffaf0 0%,#fff 62%,#eef4ff 100%); box-shadow:0 16px 40px rgba(51,65,85,.08); color:#1f1c1c; }
+    .brand-hero svg { display:block; width:234px; height:42px; }
+    .brand-kicker { margin-top:8px; color:#705b39; font:600 11px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; }
+    .brand-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+    .brand-link { display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid #d7deea; border-radius:999px; background:rgba(255,255,255,.82); color:#24324a; font:600 12px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; text-decoration:none; }
+    .brand-link:hover { border-color:#8aa4d6; background:#fff; }
     h1 { margin:0 0 6px; font-size:28px; font-weight:650; }
     h2 { margin:30px 0 12px; font-size:18px; }
     .subtle { color:#667085; font-size:13px; }
@@ -430,7 +446,11 @@ const html = `<!doctype html>
     th { color:#475467; font-weight:600; background:#fafbfc; }
     tr:last-child td { border-bottom:0; }
     a { color:#2563eb; }
-    footer { margin:24px 0 8px; }
+    .brand-footer { display:grid; grid-template-columns:auto 1fr; gap:18px 34px; align-items:center; margin:32px 0 8px; padding:24px 26px; border-radius:14px; background:#111827; color:#e8edf6; }
+    .brand-footer svg { display:block; width:190px; height:auto; }
+    .brand-footer-copy { display:grid; gap:6px; justify-items:end; font:500 12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; text-align:right; }
+    .brand-footer a { color:#9fc1ff; overflow-wrap:anywhere; }
+    .evidence-footer { grid-column:1 / -1; padding-top:14px; border-top:1px solid #2d3748; color:#9ca8ba; }
     @media (prefers-color-scheme:dark) {
       :root { background:#0f141d; color:#eef2f8; }
       .subtle, .metric span { color:#98a2b3; }
@@ -445,19 +465,35 @@ const html = `<!doctype html>
       .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .bar { grid-template-columns:1fr 64px; }
       .track { grid-column:1 / -1; grid-row:2; }
+      .brand-hero { align-items:flex-start; flex-direction:column; }
+      .brand-links { justify-content:flex-start; }
+      .brand-footer { grid-template-columns:1fr; }
+      .brand-footer-copy { justify-items:start; text-align:left; }
+      .evidence-footer { grid-column:1; }
     }
   </style>
 </head>
 <body>
 <main>
+  <header class="brand-hero">
+    <div>
+      <a href="https://opencorvus.com" aria-label="OpenCorvus 官网">${brandLogoLight}</a>
+      <div class="brand-kicker">Mission benchmark evidence · reproducible by design</div>
+    </div>
+    <nav class="brand-links" aria-label="OpenCorvus project links">
+      <a class="brand-link" href="https://opencorvus.com">官网 · opencorvus.com</a>
+      <a class="brand-link" href="https://github.com/yangheng95">作者 · yangheng95</a>
+      <a class="brand-link" href="https://github.com/yangheng95/opencorvus">项目 · github.com/yangheng95/opencorvus</a>
+    </nav>
+  </header>
   <h1>AutomationBench · OpenCorvus Mission ${profiles.map((profile) => escapeHTML(profile)).join(" + ")} / ${escapeHTML(model)}</h1>
-  <div class="subtle">Primary profiles: ${profiles.map(escapeHTML).join(" + ")} · updated ${new Date(generatedAt).toISOString()}</div>
+  <div class="subtle">Primary profiles: ${profiles.map(escapeHTML).join(" + ")} · target ${targetCases} unique cases · updated ${new Date(generatedAt).toISOString()}</div>
   <section class="metrics" aria-label="Profile benchmark summary">
     ${summaries
       .flatMap((summary) => [
-        `<div class="metric"><span>${escapeHTML(summary.profile)} verified coverage</span><strong>${summary.rows.length} / 50</strong></div>`,
+        `<div class="metric"><span>${escapeHTML(summary.profile)} verified coverage</span><strong>${summary.rows.length} / ${targetCases}</strong></div>`,
         `<div class="metric"><span>${escapeHTML(summary.profile)} strict pass rate</span><strong>${percent(summary.strictRate)}</strong></div>`,
-        `<div class="metric"><span>${escapeHTML(summary.profile)} mean partial · tokens</span><strong>${percent(summary.partialMean)}</strong><span>${integer(summary.tokensMean)} mean tokens</span></div>`,
+        `<div class="metric"><span>${escapeHTML(summary.profile)} mean partial · usage</span><strong>${percent(summary.partialMean)}</strong><span>${integer(summary.tokensTotal)} total tokens · ${integer(summary.tokensMean)} mean</span><span>${integer(summary.modelCallsTotal)} model calls · ${integer(summary.modelCallsMean)} mean</span></div>`,
       ])
       .join("\n    ")}
   </section>
@@ -478,7 +514,7 @@ const html = `<!doctype html>
       )
       .join("\n    ")}
   </div>
-  <div class="subtle">Same deterministic strict metric; the local frozen 50-case subset is not assigned a cross-sample rank.</div>
+  <div class="subtle">Same deterministic strict metric; the local frozen ${targetCases}-case public set is not assigned a cross-sample rank.</div>
 
   <h2>Profile results</h2>
   <div class="table-wrap">
@@ -489,7 +525,15 @@ const html = `<!doctype html>
   </div>
 
   ${plannedRows ? `<h2>Current batch</h2><div class="table-wrap"><table><thead><tr><th>Case</th><th>Task</th><th>Profile</th><th>Status</th></tr></thead><tbody>${plannedRows}</tbody></table></div>` : ""}
-  <footer class="subtle">Verified ${coverage} · pending ${currentResults.length} · indexed attempts ${integer(catalog?.attempts?.length ?? 0)} · source: <a href="${escapeHTML(catalog?.public_context?.source ?? "https://github.com/zapier/AutomationBench")}">AutomationBench official leaderboard</a>${catalog?.public_context?.snapshot_date ? ` · snapshot ${escapeHTML(catalog.public_context.snapshot_date)}` : ""}</footer>
+  <footer class="brand-footer">
+    <a href="https://opencorvus.com" aria-label="OpenCorvus 官网">${brandLogoDark}</a>
+    <div class="brand-footer-copy">
+      <span>作者 · <a href="https://github.com/yangheng95">yangheng95</a></span>
+      <span>官网 · <a href="https://opencorvus.com">https://opencorvus.com</a></span>
+      <span>项目 · <a href="https://github.com/yangheng95/opencorvus">https://github.com/yangheng95/opencorvus</a></span>
+    </div>
+    <div class="evidence-footer">Verified ${coverage} / ${targetSlots} · remaining ${Math.max(0, targetSlots - coverage)} · indexed attempts ${integer(catalog?.attempts?.length ?? 0)} · source: <a href="${escapeHTML(catalog?.public_context?.source ?? "https://github.com/zapier/AutomationBench")}">AutomationBench official leaderboard</a>${catalog?.public_context?.snapshot_date ? ` · snapshot ${escapeHTML(catalog.public_context.snapshot_date)}` : ""}</div>
+  </footer>
 </main>
 </body>
 </html>

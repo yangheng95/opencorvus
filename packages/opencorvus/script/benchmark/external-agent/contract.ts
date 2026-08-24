@@ -1409,6 +1409,102 @@ export function auditAutomationBenchBatchPlanSchema(plan: any) {
   }
 }
 
+export function auditExcludedWrongExperimentBatch(input: {
+  plan: any
+  receipt?: any
+  attempts: Array<Record<string, any>>
+  dispositions: Record<string, { status: string; reason: string }>
+  model: string
+  planSHA256: string
+}) {
+  const violations: string[] = []
+  const cases = Array.isArray(input.plan?.cases) ? input.plan.cases : []
+  const expectedSlots = cases.map((item: any) => `${item.case_index}:base`).sort()
+  const wave = Array.isArray(input.plan?.waves?.[0]) ? input.plan.waves[0] : []
+  const plannedSlots = wave.map((item: any) => `${item.case_index}:${item.profile}`).sort()
+  const launched = Array.isArray(input.receipt?.wave_1?.launched) ? input.receipt.wave_1.launched : []
+  const launchedSlots = launched.map((item: any) => `${item.case_index}:${item.profile}`).sort()
+  const eligible = Array.isArray(input.receipt?.wave_1?.eligible) ? input.receipt.wave_1.eligible : []
+  const runIDs = launched.map((item: any) => String(item.run_id ?? "")).filter(Boolean)
+  if (
+    input.plan?.schema_version !== 2 ||
+    !Number.isInteger(input.plan?.repetition) ||
+    input.plan.repetition === 1 ||
+    input.plan?.model !== input.model ||
+    input.plan?.launch_mode !== "mission" ||
+    JSON.stringify(input.plan?.profiles) !== JSON.stringify(["base"]) ||
+    input.plan?.trial_concurrency !== 5 ||
+    input.plan?.schedule_mode !== "rolling_case_slots_v1" ||
+    !Number.isInteger(input.plan?.batch_index) ||
+    cases.length !== 5 ||
+    new Set(cases.map((item: any) => item.case_index)).size !== 5 ||
+    input.plan?.waves?.length !== 1 ||
+    JSON.stringify(plannedSlots) !== JSON.stringify(expectedSlots)
+  ) {
+    violations.push("wrong_experiment_plan_shape")
+  }
+  if (
+    input.receipt?.status !== "failed" ||
+    input.receipt?.batch_run_id !== input.plan?.batch_run_id ||
+    input.receipt?.batch_index !== input.plan?.batch_index ||
+    input.receipt?.repetition !== input.plan?.repetition ||
+    launched.length !== 5 ||
+    runIDs.length !== 5 ||
+    new Set(runIDs).size !== 5 ||
+    eligible.length !== 0 ||
+    JSON.stringify(launchedSlots) !== JSON.stringify(expectedSlots)
+  ) {
+    violations.push("wrong_experiment_receipt_shape")
+  }
+  for (const item of launched) {
+    const runID = String(item.run_id ?? "")
+    const attempt = input.attempts.find((candidate) => candidate.run_id === runID)
+    const disposition = input.dispositions[runID]
+    if (
+      !attempt ||
+      attempt.benchmark?.batch_run_id !== input.plan?.batch_run_id ||
+      attempt.benchmark?.batch_plan_sha256 !== input.planSHA256 ||
+      attempt.benchmark?.batch_index !== input.plan?.batch_index ||
+      attempt.benchmark?.wave_index !== 1 ||
+      attempt.benchmark?.case_index !== item.case_index ||
+      attempt.benchmark?.repetition !== input.plan?.repetition ||
+      attempt.opencorvus?.profile !== "base" ||
+      attempt.opencorvus?.model !== input.model ||
+      attempt.opencorvus?.launch_mode !== "mission" ||
+      disposition?.status !== "invalid_bug" ||
+      disposition.reason !== "wrong_test_set_repetition"
+    ) {
+      violations.push(`wrong_experiment_run:${runID || "missing"}`)
+    }
+  }
+  return { passed: violations.length === 0, run_ids: [...runIDs].sort(), violations }
+}
+
+export function automationBenchCaseSetAuthority(input: {
+  caseIndex: unknown
+  baseCount: number
+  extendedCount: number
+  sealedSHA256: unknown
+  sealedCanonicalSHA256: unknown
+  base: { sha256: string; canonical_sha256: string }
+  extended: { sha256: string; canonical_sha256: string }
+}) {
+  const caseIndex = strictInteger(input.caseIndex)
+  const authority = caseIndex >= 1 && caseIndex <= input.baseCount
+    ? "base"
+    : caseIndex > input.baseCount && caseIndex <= input.extendedCount
+      ? "extended"
+      : null
+  const expected = authority === "base" ? input.base : authority === "extended" ? input.extended : undefined
+  const violations = [
+    ...(authority ? [] : ["case_index_out_of_manifest"]),
+    ...(expected && input.sealedSHA256 === expected.sha256 && input.sealedCanonicalSHA256 === expected.canonical_sha256
+      ? []
+      : ["case_set_authority_mismatch"]),
+  ]
+  return { passed: violations.length === 0, authority, violations }
+}
+
 export function auditBatchEvidence(input: {
   plan: any
   receipt?: any

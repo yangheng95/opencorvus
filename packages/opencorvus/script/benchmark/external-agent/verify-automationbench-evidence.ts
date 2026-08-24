@@ -2,9 +2,11 @@ import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import {
+  automationBenchCaseSetAuthority,
   auditBenchmarkIsolation,
   auditAutomationBenchBatchPlanSchema,
   auditBatchEvidence,
+  auditExcludedWrongExperimentBatch,
   auditSkillEvidenceSeal,
   auditTaskInfrastructureIncidents,
   auditMissionOutcome,
@@ -210,13 +212,68 @@ const caseSet = JSON.parse(caseSetBytes.toString("utf8")) as {
   cases: Array<Record<string, any>>
 }
 const caseSetCanonicalSHA256 = digest(JSON.stringify(caseSet))
-if (caseSet.selection?.count !== 50 || caseSet.cases?.length !== 50)
-  throw new Error("Verifier requires the frozen 50-case manifest")
-if (digest(await fs.readFile(path.join(root, "automationbench-case-set.json"))) !== caseSetSHA256) {
-  throw new Error("Paper case-set copy does not match the committed frozen manifest")
+if (
+  !Number.isInteger(caseSet.selection?.count) ||
+  caseSet.selection.count < 5 ||
+  caseSet.selection.count % 5 !== 0 ||
+  caseSet.cases?.length !== caseSet.selection.count ||
+  caseSet.cases.some(
+    (item, index) => item.case_index !== index + 1 || item.batch_index !== Math.floor(index / 5) + 1,
+  )
+) {
+  throw new Error("Verifier requires an ordered AutomationBench manifest with five-case batches")
 }
+const baseCaseSetPath = path.join(import.meta.dir, "automationbench-case-set.json")
+const baseCaseSetBytes = await fs.readFile(baseCaseSetPath)
+const baseCaseSet = JSON.parse(baseCaseSetBytes.toString("utf8")) as typeof caseSet
+const baseCaseSetSHA256 = digest(baseCaseSetBytes)
+const baseCaseSetCanonicalSHA256 = digest(JSON.stringify(baseCaseSet))
+const caseIdentity = (item: Record<string, any>) =>
+  JSON.stringify({
+    domain: item.domain,
+    task: item.task,
+    example_id: item.example_id,
+    task_contract_sha256: item.task_contract_sha256,
+    case_index: item.case_index,
+    batch_index: item.batch_index,
+  })
+if (
+  baseCaseSet.selection?.count !== 50 ||
+  baseCaseSet.cases?.length !== 50 ||
+  baseCaseSet.cases.some((item, index) => caseIdentity(item) !== caseIdentity(caseSet.cases[index]!)) ||
+  digest(await fs.readFile(path.join(root, "automationbench-case-set.json"))) !== baseCaseSetSHA256
+) {
+  throw new Error("Verifier could not reconcile the frozen first 50 cases")
+}
+const caseSetArtifactNames = ["automationbench-case-set.json"]
+if (caseSetSHA256 !== baseCaseSetSHA256) {
+  const extendedName = `automationbench-case-set-${caseSet.selection.count}.json`
+  if (digest(await fs.readFile(path.join(root, extendedName))) !== caseSetSHA256) {
+    throw new Error("Paper extended case-set copy does not match the committed manifest")
+  }
+  caseSetArtifactNames.push(extendedName)
+}
+const acceptedCaseSets = [
+  {
+    sha256: baseCaseSetSHA256,
+    canonical_sha256: baseCaseSetCanonicalSHA256,
+    dataset_index_sha256: baseCaseSet.selection.dataset_index_sha256,
+  },
+  {
+    sha256: caseSetSHA256,
+    canonical_sha256: caseSetCanonicalSHA256,
+    dataset_index_sha256: caseSet.selection.dataset_index_sha256,
+  },
+].filter((item, index, items) => items.findIndex((candidate) => candidate.sha256 === item.sha256) === index)
+const selectorArguments = [
+  python,
+  path.join(import.meta.dir, "freeze_automationbench_case_set.py"),
+  "--count",
+  String(caseSet.selection.count),
+  ...(caseSet.selection.count > 50 ? ["--base-manifest", baseCaseSetPath] : []),
+]
 const selector = Bun.spawn(
-  [python, path.join(import.meta.dir, "freeze_automationbench_case_set.py"), "--count", "50"],
+  selectorArguments,
   { cwd: import.meta.dir, stdout: "pipe", stderr: "pipe" },
 )
 const [selectorExit, selectorStdout, selectorStderr] = await Promise.all([
@@ -256,7 +313,7 @@ if (secretFindings.length > 0) {
 }
 
 const catalog = JSON.parse(await fs.readFile(path.join(root, "evidence-catalog.json"), "utf8")) as {
-  scope?: { profiles?: string[]; model?: string; launch_mode?: string }
+  scope?: { profiles?: string[]; model?: string; launch_mode?: string; case_count?: number }
   attempts: Array<Record<string, any>>
   leaderboard: Array<Record<string, any>>
   batches: Array<Record<string, any>>
@@ -377,18 +434,29 @@ for (const attempt of catalog.attempts) {
   }
   if (!rawEligible) continue
 
-  const frozenCase = caseSet.cases.find(
+  const caseSetAuthority = automationBenchCaseSetAuthority({
+    caseIndex: payload.benchmark.case_index,
+    baseCount: baseCaseSet.selection.count,
+    extendedCount: caseSet.selection.count,
+    sealedSHA256: payload.benchmark.case_set_manifest_sha256,
+    sealedCanonicalSHA256: payload.benchmark.case_set_canonical_sha256,
+    base: { sha256: baseCaseSetSHA256, canonical_sha256: baseCaseSetCanonicalSHA256 },
+    extended: { sha256: caseSetSHA256, canonical_sha256: caseSetCanonicalSHA256 },
+  })
+  const authorityCaseSet = caseSetAuthority.authority === "base" ? baseCaseSet : caseSet
+  const frozenCase = authorityCaseSet.cases.find(
     (item) => item.domain === payload.benchmark.domain && item.task === payload.benchmark.task,
   )
+  const sealedCaseSet = caseSetAuthority.authority === "base" ? acceptedCaseSets[0] : acceptedCaseSets.at(-1)
   if (
     !frozenCase ||
     payload.benchmark.task_contract_sha256 !== frozenCase.task_contract_sha256 ||
     payload.benchmark.example_id !== frozenCase.example_id ||
     payload.benchmark.case_index !== frozenCase.case_index ||
     payload.benchmark.batch_index !== frozenCase.batch_index ||
-    payload.benchmark.case_set_manifest_sha256 !== caseSetSHA256 ||
-    payload.benchmark.case_set_canonical_sha256 !== caseSetCanonicalSHA256 ||
-    payload.benchmark.dataset_index_sha256 !== caseSet.selection.dataset_index_sha256
+    !caseSetAuthority.passed ||
+    sealedCaseSet === undefined ||
+    payload.benchmark.dataset_index_sha256 !== sealedCaseSet.dataset_index_sha256
   ) {
     throw new Error(`Frozen case identity mismatch: ${attempt.run_id}`)
   }
@@ -630,18 +698,46 @@ const verifiedBatches = await Promise.all(
     .map(async (planPath) => {
       const planBytes = await fs.readFile(planPath)
       const plan = JSON.parse(planBytes.toString("utf8"))
-      const planSchemaAudit = auditAutomationBenchBatchPlanSchema(plan)
-      if (!planSchemaAudit.passed) {
-        throw new Error(`Batch plan schema mismatch (${planSchemaAudit.reason}): ${plan.batch_run_id}`)
-      }
-      if (plan.model !== model || plan.launch_mode !== "mission") {
-        throw new Error(`Batch plan model/launch mode mismatch: ${plan.batch_run_id}`)
-      }
       const prefix = planPath.slice(0, -"-plan.json".length)
       const receipt = await fs
         .readFile(`${prefix}-receipt.json`, "utf8")
         .then(JSON.parse)
         .catch(() => undefined)
+      const planSchemaAudit = auditAutomationBenchBatchPlanSchema(plan)
+      if (!planSchemaAudit.passed) {
+        const planSHA256 = digest(planBytes)
+        const exclusion = auditExcludedWrongExperimentBatch({
+          plan,
+          receipt,
+          attempts: independentAttempts,
+          dispositions: dispositions.runs ?? {},
+          model,
+          planSHA256,
+        })
+        if (!exclusion.passed) {
+          throw new Error(`Batch plan schema mismatch (${planSchemaAudit.reason}): ${plan.batch_run_id}`)
+        }
+        return {
+          batchRunID: plan.batch_run_id,
+          profiles: plan.profiles as string[],
+          planSHA256,
+          receipt,
+          audit: {
+            passed: false,
+            status: "excluded_wrong_experiment",
+            reasons: ["wrong_test_set_repetition"],
+            eligible_run_ids: [],
+            sealing_run_ids: [],
+            adopted_run_ids: [],
+          },
+          referencedRunIDs: new Set<string>(),
+          eligibleRunIDs: new Set<string>(),
+          adoptedRunIDs: [] as string[],
+        }
+      }
+      if (plan.model !== model || plan.launch_mode !== "mission") {
+        throw new Error(`Batch plan model/launch mode mismatch: ${plan.batch_run_id}`)
+      }
       const waveCompletion = await fs
         .readFile(`${prefix}-wave-1-complete.json`, "utf8")
         .then(JSON.parse)
@@ -719,7 +815,7 @@ if (batchRedactionAudits.some((audit) => !audit.passed)) {
   throw new Error("Batch receipt redaction chain did not reconcile")
 }
 const expectedPaperPaths = [
-  "automationbench-case-set.json",
+  ...caseSetArtifactNames,
   "run-dispositions.json",
   ...(legacyTraceRunIDs.size > 0 ? ["legacy-trace-environment-attestation.json"] : []),
   "evidence-catalog.json",
@@ -738,13 +834,16 @@ if (finalMode) {
   if (JSON.stringify([...(catalog.scope?.profiles ?? [])].sort()) !== JSON.stringify([...finalProfiles].sort())) {
     throw new Error("Final verifier profiles do not match the catalog primary profile scope")
   }
+  if (catalog.scope?.case_count !== caseSet.selection.count) {
+    throw new Error("Final verifier case count does not match the catalog scope")
+  }
   const selectedRows = catalog.leaderboard.filter((attempt) => finalProfiles.includes(attempt.opencorvus?.profile))
-  if (selectedRows.length !== finalProfiles.length * 50) {
-    throw new Error(`Final matrix requires exactly ${finalProfiles.length * 50} selected-profile trials`)
+  if (selectedRows.length !== finalProfiles.length * caseSet.selection.count) {
+    throw new Error(`Final matrix requires exactly ${finalProfiles.length * caseSet.selection.count} selected-profile trials`)
   }
   const missingBatchProfiles = missingCompletedBatchProfileReceipts({
     batches: verifiedBatches,
-    batchIndexes: Array.from({ length: 10 }, (_, index) => index + 1),
+    batchIndexes: Array.from({ length: caseSet.selection.count / 5 }, (_, index) => index + 1),
     profiles: finalProfiles,
   })
   if (missingBatchProfiles.length > 0) {
@@ -757,13 +856,15 @@ if (finalMode) {
   for (const profile of finalProfiles) {
     const rows = catalog.leaderboard.filter((attempt) => attempt.opencorvus?.profile === profile)
     const indexes = rows.map((attempt) => attempt.benchmark?.case_index).sort((left, right) => left - right)
-    const expected = Array.from({ length: 50 }, (_, index) => index + 1)
+    const expected = Array.from({ length: caseSet.selection.count }, (_, index) => index + 1)
     if (
-      rows.length !== 50 ||
+      rows.length !== caseSet.selection.count ||
       rows.some((attempt) => attempt.benchmark?.repetition !== 1) ||
       JSON.stringify(indexes) !== JSON.stringify(expected)
     ) {
-      throw new Error(`Final ${profile} matrix does not cover exact cases 1 through 50 at repetition 1`)
+      throw new Error(
+        `Final ${profile} matrix does not cover exact cases 1 through ${caseSet.selection.count} at repetition 1`,
+      )
     }
   }
 }

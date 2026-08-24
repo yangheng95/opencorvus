@@ -2,6 +2,7 @@ import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import {
+  automationBenchCaseSetAuthority,
   evidenceFileSetMatches,
   paperEvidenceChecks,
   auditBenchmarkIsolation,
@@ -612,9 +613,56 @@ const caseSet = JSON.parse(caseSetBytes.toString("utf8")) as {
   }>
 }
 const caseSetCanonicalSHA256 = crypto.createHash("sha256").update(JSON.stringify(caseSet)).digest("hex")
-if (caseSet.selection?.count !== 50 || caseSet.cases?.length !== 50)
-  throw new Error("Catalog requires the frozen 50-case manifest")
-await fs.writeFile(path.join(root, "automationbench-case-set.json"), caseSetBytes)
+if (
+  !Number.isInteger(caseSet.selection?.count) ||
+  caseSet.selection.count < 5 ||
+  caseSet.selection.count % 5 !== 0 ||
+  caseSet.cases?.length !== caseSet.selection.count ||
+  caseSet.cases.some(
+    (item, index) => item.case_index !== index + 1 || item.batch_index !== Math.floor(index / 5) + 1,
+  )
+) {
+  throw new Error("Catalog requires an ordered AutomationBench manifest with five-case batches")
+}
+const baseCaseSetBytes = await fs.readFile(path.join(import.meta.dir, "automationbench-case-set.json"))
+const baseCaseSet = JSON.parse(baseCaseSetBytes.toString("utf8")) as typeof caseSet
+const baseCaseSetSHA256 = crypto.createHash("sha256").update(baseCaseSetBytes).digest("hex")
+const baseCaseSetCanonicalSHA256 = crypto.createHash("sha256").update(JSON.stringify(baseCaseSet)).digest("hex")
+const caseIdentity = (item: (typeof caseSet.cases)[number]) =>
+  JSON.stringify({
+    domain: item.domain,
+    task: item.task,
+    example_id: item.example_id,
+    task_contract_sha256: item.task_contract_sha256,
+    case_index: item.case_index,
+    batch_index: item.batch_index,
+  })
+if (
+  baseCaseSet.selection?.count !== 50 ||
+  baseCaseSet.cases?.length !== 50 ||
+  baseCaseSet.cases.some((item, index) => caseIdentity(item) !== caseIdentity(caseSet.cases[index]!))
+) {
+  throw new Error("Extended AutomationBench manifest does not preserve the frozen first 50 cases")
+}
+const acceptedCaseSets = [
+  {
+    sha256: baseCaseSetSHA256,
+    canonical_sha256: baseCaseSetCanonicalSHA256,
+    dataset_index_sha256: baseCaseSet.selection.dataset_index_sha256,
+  },
+  {
+    sha256: caseSetSHA256,
+    canonical_sha256: caseSetCanonicalSHA256,
+    dataset_index_sha256: caseSet.selection.dataset_index_sha256,
+  },
+].filter((item, index, items) => items.findIndex((candidate) => candidate.sha256 === item.sha256) === index)
+const caseSetArtifacts = [path.join(root, "automationbench-case-set.json")]
+await fs.writeFile(caseSetArtifacts[0]!, baseCaseSetBytes)
+if (caseSetSHA256 !== baseCaseSetSHA256) {
+  const extendedArtifact = path.join(root, `automationbench-case-set-${caseSet.selection.count}.json`)
+  await fs.writeFile(extendedArtifact, caseSetBytes)
+  caseSetArtifacts.push(extendedArtifact)
+}
 const protectedSecrets = sourceAuthSecretLeaves(
   JSON.parse(await fs.readFile(path.join(cli.sourceData, "auth.json"), "utf8")),
 )
@@ -659,11 +707,24 @@ for (const directory of terminalDirectories) {
     legacyTraceRunIDs,
     wrapperSHA256: restrictedShellSHA256,
   })
+  const caseSetAuthority = result
+    ? automationBenchCaseSetAuthority({
+        caseIndex: result.benchmark.case_index,
+        baseCount: baseCaseSet.selection.count,
+        extendedCount: caseSet.selection.count,
+        sealedSHA256: result.benchmark.case_set_manifest_sha256,
+        sealedCanonicalSHA256: result.benchmark.case_set_canonical_sha256,
+        base: { sha256: baseCaseSetSHA256, canonical_sha256: baseCaseSetCanonicalSHA256 },
+        extended: { sha256: caseSetSHA256, canonical_sha256: caseSetCanonicalSHA256 },
+      })
+    : undefined
+  const authorityCaseSet = caseSetAuthority?.authority === "base" ? baseCaseSet : caseSet
   const frozenCase = result
-    ? caseSet.cases.find(
+    ? authorityCaseSet.cases.find(
         (item) => item.domain === (result.benchmark as any).domain && item.task === result.benchmark.task,
       )
     : undefined
+  const sealedCaseSet = caseSetAuthority?.authority === "base" ? acceptedCaseSets[0] : acceptedCaseSets.at(-1)
   const benchmarkIdentityPassed =
     result?.opencorvus.model === cli.model &&
     result?.benchmark.version === "1.0.6" &&
@@ -673,9 +734,9 @@ for (const directory of terminalDirectories) {
     result.benchmark.example_id === frozenCase.example_id &&
     result.benchmark.case_index === frozenCase.case_index &&
     result.benchmark.batch_index === frozenCase.batch_index &&
-    result.benchmark.case_set_manifest_sha256 === caseSetSHA256 &&
-    result.benchmark.case_set_canonical_sha256 === caseSetCanonicalSHA256 &&
-    result.benchmark.dataset_index_sha256 === caseSet.selection.dataset_index_sha256
+    caseSetAuthority?.passed === true &&
+    sealedCaseSet !== undefined &&
+    result.benchmark.dataset_index_sha256 === sealedCaseSet.dataset_index_sha256
   const evidenceChecks = paperEvidenceChecks({
     manifestVerified: manifest.verified === true,
     providerLedgerVerified: ledgerAudit.passed === true,
@@ -944,7 +1005,7 @@ function summarizeProfile(profile: "base" | "advanced") {
   const keys = rows.map((record) => `${record.benchmark.case_index}:${record.benchmark.repetition ?? 1}`)
   if (new Set(keys).size !== keys.length)
     throw new Error(`Eligible ${profile} runs contain duplicate case/repetition identities`)
-  const expectedKeys = Array.from({ length: 50 }, (_, index) => `${index + 1}:1`)
+  const expectedKeys = Array.from({ length: caseSet.selection.count }, (_, index) => `${index + 1}:1`)
   const matrixComplete = JSON.stringify([...keys].sort()) === JSON.stringify(expectedKeys.sort())
   const strictPasses = rows.reduce(
     (sum, record) => sum + Number(record.benchmark.metrics?.task_completed_correctly ?? 0),
@@ -956,7 +1017,7 @@ function summarizeProfile(profile: "base" | "advanced") {
   const durationTotal = rows.reduce((sum, record) => sum + Number(record.duration_ms ?? 0), 0)
   return {
     profile,
-    target_cases: 50,
+    target_cases: caseSet.selection.count,
     completed_cases: rows.length,
     matrix_complete: matrixComplete,
     strict_passes: strictPasses,
@@ -996,6 +1057,7 @@ const catalog = {
     launch_mode: "mission",
     model: cli.model,
     profiles: cli.profiles,
+    case_count: caseSet.selection.count,
     exploratory_profiles: exploratoryProfileSummaries.map((summary) => summary.profile),
     note: "Every attempt is evidence; only natural terminal official scores enter the self-owned leaderboard.",
   },
@@ -1030,7 +1092,7 @@ const lines = [
   "",
   `This board contains only \`${cli.model}\` runs made through the OpenCorvus harness. Every attempt is retained below; only a clean-source, natural OpenCorvus \`completed\` terminal state followed by the official AutomationBench scorer is leaderboard-eligible.`,
   "",
-  "## Primary 50-case profile summary",
+  `## Primary ${caseSet.selection.count}-case profile summary`,
   "",
   "| Internal rank | Profile | Coverage | Strict | Partial mean | Total tokens | Output tokens | Model calls | API attempts | Failed API | Mean duration |",
   "| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
@@ -1079,7 +1141,7 @@ const lines = [
   "",
   "## Public leaderboard context (not numerically comparable)",
   "",
-  `The official AutomationBench board uses a private held-out set, while this round uses a deterministic 50-case public set. The exact \`${cli.model}\` Mission configuration is not an official comparable row, and no published model row is relabeled as this run. No cross-dataset position, rank, slot, statistical estimate, or numeric delta is computed.`,
+  `The official AutomationBench board uses a private held-out set, while this round uses a deterministic ${caseSet.selection.count}-case public set. The exact \`${cli.model}\` Mission configuration is not an official comparable row, and no published model row is relabeled as this run. No cross-dataset position, rank, slot, statistical estimate, or numeric delta is computed.`,
   "",
   "| Official row | Strict success rate |",
   "| --- | ---: |",
@@ -1090,7 +1152,7 @@ const lines = [
 ]
 await fs.writeFile(path.join(root, "leaderboard.md"), lines.join("\n"))
 const paperArtifacts = [
-  path.join(root, "automationbench-case-set.json"),
+  ...caseSetArtifacts,
   path.join(root, "run-dispositions.json"),
   ...(legacyTraceRunIDs.size > 0 ? [path.join(root, "legacy-trace-environment-attestation.json")] : []),
   path.join(root, "evidence-catalog.json"),

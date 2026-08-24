@@ -4,8 +4,8 @@
 
 | Item | Requirement or evidence |
 | --- | --- |
-| User request | Treat Tester as an adversarial collaborator rather than a consumer of Planner output and repair tool allocation. The latest correction supersedes the direct-Task Terra plan: use exact model `openai/gpt-5.6-luna`, launch through a real Mission, hold the Base Expert Squad, and finish Base first. Every direct-Task attempt is the wrong harness boundary and remains excluded. |
-| Benchmark definition | AutomationBench `1.0.6`, frozen public 50-case manifest, exact model `openai/gpt-5.6-luna`, real `POST /mission/wake` intake, immutable held Base Squad, and one fresh simulated world per case. Run five distinct Base Mission cases concurrently until Base is 50/50, and never repeat a verified slot within this experiment revision. |
+| User request | Treat Tester as an adversarial collaborator rather than a consumer of Planner output and repair tool allocation. Use exact model `openai/gpt-5.6-luna`, launch through a real Mission, and hold the Base Expert Squad. The latest correction expands the deterministic public test set from the completed unique cases 1–50 through unique case 600; it does not repeat the first 50 cases. Every direct-Task, Advanced, Sol/Terra and accidental repetition-2 attempt remains excluded. |
+| Benchmark definition | AutomationBench `1.0.6` contains exactly 600 unique public tasks. Preserve the frozen public 50-case manifest as cases 1–50, append the other 550 unique tasks deterministically as cases 51–600, use exact model `openai/gpt-5.6-luna`, real `POST /mission/wake` intake, immutable held Base Squad, repetition 1, and one fresh simulated world per case. Run at most five distinct Base Mission cases concurrently and never repeat a verified case index. |
 | Input and output | Input is the unchanged official business request plus the benchmark-only uncapped multi-Agent harness notice delivered through a real Mission wake. Output is the official final simulated world score, immutable run evidence, Mission transcript, exact 0..N child-Task transcript set, Task-bound AgentTrace, Mission and Task Provider usage, relational Mission/Task/Session/scheduler-delivery snapshot, and a ten-second-refresh external HTML dashboard. Mission Sessions are not bound to a Task trace directory; their calls remain independently evidenced by the exact Provider ledger and snapshot. |
 | Environment | WSL2 root-owned evaluator, Provider data, control and evidence roots; the Agent sees only its unique-UID project and Unix-socket AutomationBench client. Exact OpenAI credential/model and Exa MCP probes must pass before the first formal run. Secrets remain outside Git, logs, specs and evidence. |
 | Timeout | 600 seconds without real Task/message/tool/trace/world activity. There is no wall-clock limit while observable work continues. |
@@ -265,3 +265,32 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 2. New batch plans use schema v2 and record repetition 1. A completed catalog batch is reusable only when its referenced immutable plan also binds schema v2, the same batch index, exact Luna model, Mission launch mode, sole `advanced` profile, repetition 1 and five-case rolling schedule. Shared audit and final verification accept only numeric historical schema v1 with its original absent repetition field, or numeric schema v2 with numeric repetition 1; every missing, coerced, malformed or future schema maps to the explicit `batch_plan_schema` error.
 3. The positive supervisor test parses the complete coordinator and final-verifier invocations, requires one of each, and compares their projected argument maps and root variables to the exact Advanced experiment contract.
 4. Rerun shell syntax, focused benchmark tests, benchmark typecheck and independent review. Push the bench commit and update the WSL runner to that exact commit before any Provider preflight or formal case.
+
+## Luna Mission/Base unique-case extension to 600
+
+### Recall
+
+| Item | Requirement or evidence |
+| --- | --- |
+| User correction | “续完600个case” means extend the test set to unique AutomationBench cases 1–600. Cases 1–50 are already complete and immutable; start at case 51. It never meant 50 cases × 12 repetitions. |
+| Starting state | The original Base r3 root has 59 attempts and 50 eligible repetition-1 results for exact cases 1–50. The accidental repetition-2 cases 1–5 were stopped as soon as the correction arrived; their active leases are empty, their evidence is retained as `invalid_bug: wrong_test_set_repetition`, and they never count or authorize a rerun. |
+| Dataset fact | AutomationBench `1.0.6` exposes exactly 600 public tasks: six domains × 100 tasks. The committed 50-case balanced selection is a subset. The extended manifest must byte-preserve the old 50 identities/order/indices, append every remaining unique identity exactly once as 51–600, and assign batches 1–120 in groups of five. |
+| Runtime boundary | Same model/intake/profile and same external dashboard. The existing 50-case manifest remains the authority for old evidence; a committed 600-case extension manifest is the authority for new cases. Catalog and final verifier reconcile both manifest digests while using the 600-case identity/order as the aggregate matrix. New execution starts only at batch 11 (cases 51–55) and continues through batch 120. |
+| Branding | The same dashboard must retain visibly different top/bottom OpenCorvus brand regions with repository wordmarks, `https://opencorvus.com`, author `yangheng95`, and `https://github.com/yangheng95/opencorvus`. |
+| Independent agent feedback | An uninvolved read-only reviewer found and verified fixes for a same-root case-set artifact collision, a fail-open wrong-experiment batch exclusion, and a dual-manifest digest that was not partitioned at the case-50 boundary. The final chain uses separate immutable 50/600 manifest artifacts, exact case-index authority, and a five-run incident-shaped exclusion contract. After 58/58 focused tests, shell/diff checks and a real 64-attempt development verifier pass with 50 eligible, the reviewer reported no unresolved P0/P1/P2. |
+
+### Problem and impact analysis
+
+- **Observable error:** the first continuation launched case indices 1–5 with `repetition: 2`. This was a wrong experiment definition, not a model failure.
+- **Direct trigger:** “600 cases” was interpreted as 50 × 12 repetitions despite the generator already exposing `--count` and the installed dataset containing 600 distinct public tasks.
+- **Root cause:** the frozen manifest, coordinator, runner, catalog, verifier and dashboard hardcode 50 cases/10 batches. Increasing a shell loop cannot extend the dataset because old evidence is cryptographically bound to the original 50-case manifest.
+- **Why a naive replacement fails:** replacing the manifest would invalidate the first 50 evidence digests and could reorder them. The extension must preserve the old manifest as a valid historical authority, add a second 600-case manifest, and reconcile each run against the manifest digest it actually sealed.
+- **Impact surface:** benchmark-only manifest generator/artifact, runner/coordinator bounds, catalog/verifier dual-manifest evidence mapping, dashboard target/count display, dedicated Base continuation supervisor, focused non-UI contract tests and this spec. Product/framework code and release branches are excluded.
+
+### Acceptance
+
+1. Generated 600-case manifest contains 600 unique `(domain, task, example_id, task_contract_sha256)` identities, cases 1–50 exactly equal the committed old manifest, and cases 51–600 cover every remaining installed public task once.
+2. Coordinator/runner accept a positive batch index only when the selected manifest contains exactly five cases for it. The continuation supervisor loops batches 11–120 only, passes repetition 1 and the 600-case manifest, reuses the same Base lock/root/dashboard, and has no Advanced/Sol/Terra/direct-Task path.
+3. Catalog/verifier accept old results only against the old 50-manifest digest and new results only against the 600-manifest digest, while final coverage is exact case indices 1–600 at repetition 1 with completed receipts for batches 1–120.
+4. Dry catalog/verifier proves the original 50 eligible results remain unchanged before case 51 launches. The first live batch plan must contain only cases 51–55 and five distinct tasks.
+5. Dashboard reports verified coverage against 600, displays actual case indices without a repetition-series fiction, retains aggregate strict/partial/token/model-call metrics and both branded regions, and passes real-page screenshot inspection. No UI automation test is created or run.
