@@ -30,6 +30,12 @@
 | Real-case deliverables | 已核对模型/数据基础、三组实验及最佳检查点、训练监控与推理网页、两张多格式架构图、五页 ACL 风格论文、独立审校证据、公开 GitHub 仓库及匿名回读回执。Stage 6 记录 114 文件发布审计、portable 11 passed、canonical 25 passed、targeted 11 passed 及 RTX 5090 CUDA 干净环境复验；测试组可能重叠，不相加为总测试数。 |
 | Promotional figure redraw | 将原始论文纵向模型架构图和横向实验生命周期图重绘为两张 16:9 科技宣传图。生成模型只负责无文字的高端计算视觉底板；所有模型名、流程、指标、箭头与证据限制通过确定性 SVG/HTML 后期准确排版。不得让生成模型伪造 UI、指标、代码或实验关系。原论文图保留不覆盖，宣传版使用新文件名。 |
 | Brand and credits | 片头和片尾均展示官方 OpenCorvus 渡鸦 Logo、品牌名、网站 `https://opencorvus.com`、项目仓库 `https://github.com/yangheng95/opencorvus` 和作者 `Heng Yang (@yangheng95)`；两处使用不同构图。案例结果段及片尾展示实例仓库 `https://github.com/yangheng95/deberta-v3-absa-public-evidence`。地址使用确定性排版，不由生成模型绘制。 |
+| Production authorization | 用户于 2026-08-24 明确要求“开始做视频”，解除候选方向 E 的生产门。`storyboard.zh-CN.json` 升级为 schema 2 / approved，使用审核通过的 V7 旁白，目标总时长不超过 5 分钟。被否决的 BPPT、接力轨道、纸艺路线仍禁止复用。 |
+| Production edit | 生产版 13 段：差异化品牌片头；H3 硅芯片开场；长任务失效机制；软件工程连续链；运行层缺口；真实 Mission 设计与命令；真实执行、产物、指标和质量门；H3 长工作流场景；信息型品牌片尾。H3 只生成两段无文字 B-roll，其余使用真实证据或确定性运动设计。 |
+| User correction 5 | 用户审看 4:36 animatic 接触表后指出影片与 Agent 关联不明显，且站在系统/企业而非用户视角；OpenCorvus 面向 2C，不是 2B。该 animatic 标记 rejected，不得进入最终 H3 合成。新版本必须以个人用户的挫败和收益为主角，真实展示具名 Agent/专家团会话与协作；技术机制和 CUDA 指标降为证明。结尾场景转为毕业论文、个人开源项目、副业产品、求职作品集和独立研究等个人长工作流。 |
+| User addition: comparison | 用户要求加入 WorkBuddy、DeepSeek Harness、Codex、Claude Code 的对比。采用“同一个个人长项目，各产品重点解决哪一层”的动态定位带，不使用企业采购表、主观评分或绝对贬损。核对日期为 2026-08-24：本站官网比较的 WorkBuddy 是 `workbuddy.ai` 商业云端桌面产品，强调一句话交付办公成品与平台内 Expert Group，不得误用同名 `work-buddy.ai` 开源项目；DeepSeek Harness 是插件化且运行可追踪的开发者 Harness；Codex Cloud 在隔离环境并行运行编码任务；Claude Code 提供 subagent、agent view、实验性的 Agent Teams 与动态工作流。OpenCorvus 的本片差异只陈述为开源、自托管的跨研究、训练、网页、论文和发布的多专家团 Mission 接力与验收。 |
+| User addition: open-source pillars | 用户强调最大杀手锏是开源，并要求不得遗漏官网现有卖点。已以 `packages/web/src/content/landing-copy.ts` 为事实源，新增独立动画段呈现：开源（MIT、全部源码公开、可自托管/审计/fork）、定制（模型/工具/权限/专家团）、可控（本机运行、不可逆操作需确认）、透明（工具调用/参数/结果全程可回看）。这些能力同时支撑官网三条长程承诺：跑不彻底、结果不能用、永远不会变好。 |
+| User correction 6 | 用户否决 4:55 的 2C comparison animatic，先指出不喜欢暗色背景，再要求解释为什么丑。根因不是单一配色，而是仍沿用 PPT/采购表/中心节点图语法：标题、卡片和底部字幕竞争注意力；没有一个具体用户贯穿；青黑橙渐变、扫描线与发光描边形成廉价模板感；真实浅色 WebUI 与伪科技动效割裂；“最大杀手锏 + MIT 圆心”把开源讲成口号。该 animatic 标记 rejected，不得作为最终视频或进入网站。下一版禁止只换白底，必须用明亮编辑动画中的同一用户、同一项目和连续动作来呈现对比、开源、本机控制、透明记录与可回退修订。 |
 
 ## Impact analysis
 
@@ -39,7 +45,7 @@
 
 ### Direct trigger and data flow
 
-V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主线、视觉方向、证据与 CTA。用户确认后再重写唯一的 `storyboard.zh-CN.json`，由它驱动旁白、命令打字、H3 官方格式提示词、时间线和抽帧检查点。被否决的 121 秒 storyboard 保留作证据但带拒绝状态，生产入口在其获批前必须失败。
+V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主线、视觉方向、证据与 CTA。用户确认后再重写唯一的 `storyboard.zh-CN.json`，由它驱动旁白、命令打字、H3 官方格式提示词、时间线和抽帧检查点。当前被否决的是 295 秒暗色卡片 storyboard；它只保留作证据且 `production_status=rejected`，生产入口在新分镜获批前必须失败。
 
 ### Root constraints and why a naïve path fails
 
@@ -65,27 +71,32 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 - 中文字体与 FFmpeg 文本转义易出错：文本先由 Pillow 渲染为帧，不依赖 `drawtext`。
 - 长生成卡死：API polling 以状态变化为活动信号，草稿 12 分钟无活动即失败；下载 2 分钟无字节活动即失败。
 
-## Story structure and frozen claims
+## Current 2C story truth
 
-| Beat | Narrative | Evidence/visual |
-| --- | --- | --- |
-| 1. Hook | 真正困难的任务，不是回答得快，而是几小时后仍能把结果交出来。 | 真实 Mission 长命令输入，镜头从屏幕像素进入无文字硅芯片微距；不出现伪 UI。 |
-| 2. Pain | 长任务会停、结果难核、修正无法积累。 | 按真实运行契约确定性绘制上下文占用、执行中断、来源断开；明确标注机制示意，不冒充遥测。 |
-| 3. Why others struggle | 当运行层缺少固定责任、可恢复状态、带来源交接和独立验收时，单次会话无法承担完整长任务。 | 回到真实 Mission/Task/子会话 UI，对照具名责任、持久状态、Artifact locator 与独立审校；不画节点图。 |
-| 4. Mission | Mission 在目标层组合多个 Task；每个 Task 固定一个专家团版本和工作流，以 Artifact 交接。 | 7884 Mission 真实页面和 README 架构图。 |
-| 5. Command | 展示完整 DeBERTa 长 Mission 输入，以打字效果呈现关键条目。 | 终端风格文字层，注明已压缩展示完整要求的关键条目。 |
-| 6. Execution | 下载模型和数据、CUDA 训练与监控、迭代、架构图、ACL 短文、复核、GitHub。 | 7884 Task 列表与真实训练监控、推理页面。 |
-| 7. Deliverables | 最佳模型架构图、实验生命周期图、论文、公开仓库。 | 镜头穿过真实文件与发布回执，保持原始比例、内容和来源；不做漂浮卡片墙。 |
-| 8. CTA | OpenCorvus 让一支可检查的 Agent 团队，把模糊目标推进到经过验收的交付。 | Logo、案例路径、GitHub 和官网。 |
+1. 从用户真正的痛点起手：长要求得到快速回复，但资料、测试、网页、论文仍是半成品，用户被迫给 Agent 当项目经理。
+2. 展示个人目标为什么天然是长工作流：论文、开源项目、副业应用、作品集都要跨调研、设计、实现、测试、修改和发布。
+3. 在同一用户与同一项目中表现 WorkBuddy、DeepSeek Harness、Codex、Claude Code 与 OpenCorvus 的工作重心不同；不使用采购表，也不比较胜负。
+4. 再揭示 OpenCorvus Mission，并单独解释开源、定制、可控、透明四个官网支柱。
+5. 以真实 7884 具名 Agent 会话展示调研、实现、测试和独立复核的接力。
+6. DeBERTa 案例只作为后半段可信证明，展示 12 小时 45 分、46 个 Agent 会话、产物、受限指标和公开仓库。
+7. 回到用户可立即代入的个人长项目，最后给出品牌、作者、官网、主仓和实例仓库。
 
-禁止口径：`100% autonomous`、`production-ready`、未验证的性能提升、未发生的 H3 生成、对具体竞品能力的绝对否定。
+禁止口径：`100% autonomous`、`production-ready`、未验证的性能提升、未发生的 H3 生成、对具体竞品能力的绝对否定。当前故事顺序只冻结叙事事实，不授权暗色卡片 storyboard 继续生产。
+
+同类资料来源：
+
+- https://www.workbuddy.ai/
+- https://deepseek.com/harness/en/
+- https://developers.openai.com/codex/cloud
+- https://code.claude.com/docs/en/agents
+- https://code.claude.com/docs/en/agent-teams
 
 ## Animation grammar after user correction
 
 - 不使用逐页标题加卡片或要点列表的演示文稿语法。
 - 每个非 H3 段落必须表现真实 UI 或真实证据中的一个变化：命令输入、Task/子会话出现、Provider/CUDA 活动、训练曲线更新、Artifact locator 打开、审校完成或发布回执产生。
 - 文字只做运动标题、对象标签和必要字幕；核心解释必须从运动关系中看懂。
-- 真实截图以摄像机推拉、局部放大、扫描光、时间轴或对象窗口进入动画，不能静态并排超过 3 秒。
+- 真实截图以用户动作、摄像机推拉、局部放大或对象窗口进入动画，不能静态并排超过 3 秒。
 - 相邻段落使用真实屏幕反射、光标动作、相同运动方向、声音和 Artifact locator 连续转场；禁止以发光点、轨道、节点网络或抽象粒子替代真实协作。
 - 接触表之外，至少抽取每个动画段的首、中、尾帧，确认对象状态确实发生有意义变化，而不是只做整体缩放。
 
@@ -100,26 +111,23 @@ V2 先以 `creative-brief-v2.zh-CN.md` 冻结受众、单一承诺、故事主�
 
 ### Outputs
 
-- `draft/opencorvus-long-mission-animatic.mp4`
-- `final/opencorvus-long-mission-h3.mp4`：只有全部声明的 H3 镜头真实存在时生成
-- `frames/contact-sheet.jpg` 与逐段 PNG
-- `reports/media-check.json`、`reports/frame-check.json`、`reports/generation-manifest.json`
+- `draft/opencorvus-long-mission-animatic-<storyboard-sha12>.mp4`
+- `final/opencorvus-long-mission-h3-<storyboard-sha12>.mp4`：只有全部声明的 H3 镜头真实存在时生成
+- `frames/animatic-<storyboard-sha12>/contact-sheet.jpg` 与逐段 PNG
+- `reports/frame-check-animatic-<storyboard-sha12>.json` 与生成回执
 
 ### Commands
 
 ```powershell
 python produce.py prepare --output D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824
-python produce.py animatic --output D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824
-python generate-local-h3.py --scene hook --width 864 --height 480 --duration 5 --steps 10
-python generate-local-h3.py --scene cta --width 864 --height 480 --duration 5 --steps 10
-python produce.py compose --output D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824
-python produce.py inspect --output D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824
 ```
+
+`voice`、`animatic` 与 `compose` 当前必须因 rejected storyboard 失败。三张明亮关键帧获用户认可并重写唯一 storyboard 后，才恢复这些生产命令；新的 H3 scene ID 必须来自新 storyboard，不预写 `hook`、`cta` 等旧场景名。
 
 ### Benchmark acceptance
 
 - 1920×1080、25 或 30 fps、H.264 视频；最终版含 AAC 音轨。
-- V2 目标总时长 78–82 秒；叙事覆盖具体失败、运行层原因、Mission 接力机制、真实执行、受限指标、四类工作场景与唯一 CTA。
+- 生产版目标总时长 3 分 30 秒至 5 分钟；叙事覆盖具体失败、运行层原因、Mission 持久机制、真实执行、运行时长、产物、受限指标、质量门、长工作流场景与唯一 CTA。
 - 每个段落的中点帧非黑；连续检查点不得全同；实际媒体时长与时间线误差不超过 0.5 秒。
 - 命令字号在 1080p 下至少 34px，逐字出现后完整停留至少 1.5 秒。
 - 真实截图不由 H3 重绘；产物数据、指标和文件名保持来源一致。
@@ -128,11 +136,12 @@ python produce.py inspect --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 
 ## Iteration policy
 
-1. 先生成不计费的本地 animatic，验证叙事、时长、截图裁切和打字效果。
-2. 候选科技方向获用户确认后，先在单张 RTX 5090 上生成一个 0.2MP、4–5 秒、10步的无文字硅芯片/计算环境测试镜头；机制解释、UI、遥测、指标和产物全部使用真实证据或确定性后期，不由 H3 生成。
-3. 抽取每个 H3 镜头首、中、尾帧；发现人物或文字畸变、闪烁、黑帧、叙事不符时，只改该镜头 prompt 并重生成。
-4. 合成后再次自动检查和人工接触表检查。
-5. 只把抽帧通过的本地镜头纳入最终合成；最终 1080p 由 FFmpeg 高质量放大与真实 UI 原生 1080p 图层共同完成，不把插值描述成 H3 原生 2K。
+1. 先制作三张 1920×1080 明亮关键帧：用户痛点、同一项目上的工具切换、开源动作链。用户不认可就只改关键帧，不渲染整片。
+2. 三张获认可后重写唯一 storyboard，并先生成不计费的本地 animatic，验证叙事、时长、截图裁切和聊天输入打字效果。
+3. animatic 获认可后，在单张 RTX 5090 上用 H3 生成一个 0.2MP、4–5 秒、10 步的无文字明亮个人工作空间镜头；不得生成脱离人物的芯片空镜。
+4. 抽取每个 H3 镜头首、中、尾帧；发现人物或文字畸变、闪烁、黑帧、叙事不符时，只改该镜头 prompt 并重生成。
+5. 合成后再次自动检查媒体结构，并人工查看完整接触表和关键全尺寸帧；帧差只能证明画面变化，不能替代语义运动判断。
+6. 只把人工复核通过的本地镜头纳入最终合成；最终 1080p 由 FFmpeg 高质量放大与真实 UI 原生 1080p 图层共同完成，不把插值描述成 H3 原生 2K。
 
 ## Single-5090 local acceptance
 
@@ -141,3 +150,12 @@ python produce.py inspect --output D:\myhexin-local\demos\opencorvus-minimax-h3-
 - 通过 ComfyUI `/prompt` 提交扁平 API 工作流；不得依赖人工点击完成烟雾测试。
 - 烟雾测试必须含 24fps H.264 视频和 32kHz 双声道 AAC 音频；无黑帧；首、中、尾帧可辨且有运动差异。
 - 记录峰值显存、峰值系统已用内存、冷启动时长和完整请求时长；任何 OOM 或系统换页失控都视为失败，并先降分辨率再评估，不隐藏故障。
+
+## 2C comparison animatic acceptance
+
+- 失败证据已移动到不会被新分镜覆盖的显式路径：`D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824\draft\opencorvus-long-mission-animatic-rejected-dark-20260824.mp4`；对应帧目录和报告也使用 `rejected-dark-20260824` 后缀。
+- 实测媒体：295.0 秒（4:55）、1920×1080、25 fps、H.264、AAC 48 kHz 双声道。
+- 自动抽帧：15 段各取首/中/尾帧；全部非黑，旧报告中全部段落的两组整帧差大于 0.5。该检查只能证明媒体结构和抽样帧发生变化，不能证明语义运动；旧渲染器的全局扫描线会制造假阳性，现已删除，字段改为 `frame_change_observed`，不得再称 `motion_verified`。
+- 人工复核：查看完整接触表和放大后的 comparison middle、open-source pillars end、real-agents middle、mission-reveal end。比较段五行均可读且用动态焦点表达“重心不同”；开源段 MIT、四支柱、源码地址和可回退修订不遮挡；真实 Agent 会话保留原始截图并能看清具名角色；Mission 命令使用用户聊天气泡而不是终端。
+- 当前 `user-pain` 仍是明确标记的 H3 占位动画；正式版必须替换为本地 H3 生成的无文字个人工作空间镜头，并重新执行同一轮检查。
+- 用户尚未批准本 animatic；不得 push 或将其称为最终视频。
