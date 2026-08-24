@@ -4,6 +4,7 @@ import path from "node:path"
 import crypto from "node:crypto"
 import {
   automationBenchCaseSetAuthority,
+  automationBenchRestrictedShellAuthority,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
@@ -190,6 +191,34 @@ describe("external agent benchmark contract", () => {
       case50: { passed: true, authority: "base", violations: [] },
       case51: { passed: true, authority: "extended", violations: [] },
       crossedDigest: { passed: false, authority: "extended", violations: ["case_set_authority_mismatch"] },
+    })
+  })
+
+  test("binds sealed restricted shells to the old and extended case ranges", () => {
+    const baseSHA256 = "32ed4bd67d0c51d4acc8f86c7fbc1c47b7fc68aa75d5bc0d69728f658e3893b0"
+    const extendedSHA256 = "extended-shell"
+    const authority = (caseIndex: number, sealedSHA256: string) =>
+      automationBenchRestrictedShellAuthority({
+        caseIndex,
+        baseCount: 50,
+        extendedCount: 600,
+        sealedSHA256,
+        extendedSHA256,
+      })
+
+    expect({
+      case50: authority(50, baseSHA256),
+      case51: authority(51, extendedSHA256),
+      crossedDigest: authority(51, baseSHA256),
+    }).toEqual({
+      case50: { passed: true, authority: "base", expected_sha256: baseSHA256, violations: [] },
+      case51: { passed: true, authority: "extended", expected_sha256: extendedSHA256, violations: [] },
+      crossedDigest: {
+        passed: false,
+        authority: "extended",
+        expected_sha256: extendedSHA256,
+        violations: ["restricted_shell_authority_mismatch"],
+      },
     })
   })
 

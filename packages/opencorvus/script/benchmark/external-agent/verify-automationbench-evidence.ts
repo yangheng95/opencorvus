@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import {
   automationBenchCaseSetAuthority,
+  automationBenchRestrictedShellAuthority,
   auditBenchmarkIsolation,
   auditAutomationBenchBatchPlanSchema,
   auditBatchEvidence,
@@ -627,10 +628,17 @@ for (const attempt of catalog.attempts) {
     protectedSecrets,
   })
   if (!isolation.passed) throw new Error(`Evaluator isolation mismatch: ${attempt.run_id}`)
+  const restrictedShellAuthority = automationBenchRestrictedShellAuthority({
+    caseIndex: payload.benchmark.case_index,
+    baseCount: baseCaseSet.selection.count,
+    extendedCount: caseSet.selection.count,
+    sealedSHA256: sandboxAudit.wrapper_sha256,
+    extendedSHA256: restrictedShellSHA256,
+  })
   if (
     sandboxAudit.passed !== true ||
     sandboxAudit.boundary !== "linux_mount_namespace_unique_uid_unix_socket" ||
-    sandboxAudit.wrapper_sha256 !== restrictedShellSHA256 ||
+    !restrictedShellAuthority.passed ||
     sandboxAudit.uid !== 60_000 + Number(payload.benchmark.case_index) ||
     sandboxAudit.home !== "private" ||
     sandboxAudit.socket !== "scoped"

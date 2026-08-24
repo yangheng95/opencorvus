@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import {
   automationBenchCaseSetAuthority,
+  automationBenchRestrictedShellAuthority,
   evidenceFileSetMatches,
   paperEvidenceChecks,
   auditBenchmarkIsolation,
@@ -303,7 +304,9 @@ async function inspectRawRunEvidence(
     sourceData: string
     python: string
     protectedSecrets: Array<{ label: string; value: string }>
-    wrapperSHA256: string
+    currentWrapperSHA256: string
+    baseCaseCount: number
+    extendedCaseCount: number
     legacyTraceRunIDs: Set<string>
   },
 ) {
@@ -493,10 +496,17 @@ async function inspectRawRunEvidence(
       scorerReplay.example_id === (result.benchmark as any).example_id &&
       JSON.stringify(independentReplay) === JSON.stringify(scorerReplay)
     const expectedAgentUID = 60_000 + Number((result.benchmark as any).case_index)
+    const restrictedShellAuthority = automationBenchRestrictedShellAuthority({
+      caseIndex: (result.benchmark as any).case_index,
+      baseCount: input.baseCaseCount,
+      extendedCount: input.extendedCaseCount,
+      sealedSHA256: sandboxAudit.wrapper_sha256,
+      extendedSHA256: input.currentWrapperSHA256,
+    })
     const sandboxPassed =
       sandboxAudit.passed === true &&
       sandboxAudit.boundary === "linux_mount_namespace_unique_uid_unix_socket" &&
-      sandboxAudit.wrapper_sha256 === input.wrapperSHA256 &&
+      restrictedShellAuthority.passed &&
       sandboxAudit.uid === expectedAgentUID &&
       sandboxAudit.home === "private" &&
       sandboxAudit.socket === "scoped"
@@ -556,6 +566,7 @@ async function inspectRawRunEvidence(
       request_hash_passed: requestPassed,
       scorer_replay_passed: replayPassed,
       sandbox_isolation_passed: sandboxPassed,
+      restricted_shell_authority_audit: restrictedShellAuthority,
       host_boundary_isolation_passed: hostBoundaryPassed,
     }
   } catch (error) {
@@ -705,7 +716,9 @@ for (const directory of terminalDirectories) {
     python: cli.python,
     protectedSecrets,
     legacyTraceRunIDs,
-    wrapperSHA256: restrictedShellSHA256,
+    currentWrapperSHA256: restrictedShellSHA256,
+    baseCaseCount: baseCaseSet.selection.count,
+    extendedCaseCount: caseSet.selection.count,
   })
   const caseSetAuthority = result
     ? automationBenchCaseSetAuthority({

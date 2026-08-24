@@ -302,9 +302,11 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 - The first correct batch-11 plan is exact: repetition 1, Base, unique cases 51–55 and the 600-case manifest. All five trials stopped at `agent_shell_isolation` before any model work with `Restricted Agent shell probe failed: restricted-agent-shell received an invalid trial identity`.
 - Runner identity is `60000 + case_index`; cases 51–55 therefore use UIDs 60051–60055. The restricted shell retained the original 50-case regex and admitted only 60000–60050. Runner, catalog and verifier already derive the UID from the actual case index; the shell was the sole stale bound.
 - The five attempts retain their full preflight evidence and are `invalid_bug: restricted_shell_case_range`; they do not count. Only cases 51–55 may be retried after the reviewed shell fix.
+- The first post-fix catalog preflight then failed closed before leases because historical cases 1–50 sealed the original shell digest while catalog compared every run to the new shell digest. All 53 existing result records use the same original digest. The case-set boundary already proves those rows belong to the immutable 50-case round, so shell provenance must follow that same boundary rather than rewriting or discarding old evidence.
 
 ### Repair and acceptance
 
 1. The restricted shell accepts only decimal UIDs 60001–60600, the exact range for unique public cases 1–600, while preserving the private benchmark home-path check.
 2. Focused positive tests exercise boundary UIDs through the real shell probe contract; shell syntax, benchmark typecheck and independent review pass.
 3. Restart only batch 11. Its plan remains cases 51–55, and all five trials must pass `agent_shell_isolation` and acquire leases before the batch is considered live.
+4. Catalog and verifier bind cases 1–50 to their single sealed historical shell digest and cases 51–600 to the current installed/source shell digest. A focused contract test covers the case-50/51 crossover; a development catalog/verifier must preserve the original 50 eligible rows before restart.
