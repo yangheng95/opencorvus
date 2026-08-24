@@ -220,6 +220,11 @@ body {
   display: flex;
   align-items: center;
   gap: var(--ui-gap-md);
+  /* The card itself eases its background over --ui-duration-base. Without a
+   * matching transition the full-width header popped ahead of the body on
+   * hover; on a collapsed depth-0 tool card, where the card is transparent
+   * and the head *is* the visible pill, the whole element snapped. */
+  transition: background-color var(--ui-duration-base) var(--ui-timing-standard);
   scroll-margin-block-start: calc(12px * var(--ui-scale));
   padding: var(--card-pad-y) var(--card-pad-x);
   background: transparent;

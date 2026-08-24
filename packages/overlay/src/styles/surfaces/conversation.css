@@ -962,8 +962,11 @@
   text-align: start;
 }
 
-.conversation-artifact-summary__artifact:hover,
-.conversation-artifact-summary__file:hover {
+/* __file carries .oc-file-row and takes --hover-wash from that primitive.
+ * Re-declaring a fill here at equal specificity in a later sheet won the
+ * cascade and highlighted transcript file rows in a different colour from the
+ * identical rows in Changes and the file explorer. */
+.conversation-artifact-summary__artifact:hover {
   background: color-mix(in srgb, var(--surface-hover) 62%, transparent);
 }
 

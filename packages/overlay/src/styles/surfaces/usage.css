@@ -329,7 +329,8 @@
   text-decoration: none;
 }
 
-.usage-official-card > footer a:hover {
+.usage-official-card > footer a:hover,
+.usage-official-card > footer a:focus-visible {
   text-decoration: underline;
 }
 

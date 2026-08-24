@@ -620,6 +620,9 @@
   border-radius: var(--oc-radius-large);
   color: var(--text);
   cursor: pointer;
+  /* listbox, dropdown-menu and select-control all ease their highlight at
+   * --ui-duration-base; this list arrowed through with a hard strobe. */
+  transition: background-color var(--ui-duration-base) var(--ui-timing-standard);
 }
 
 .automation-time-zone-option[data-highlighted],

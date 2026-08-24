@@ -3420,7 +3420,8 @@ button.s-row:focus-visible {
 .config-content .extension-head:focus-within,
 .config-content .channel-doc-card:hover,
 .config-content .channel-doc-card:focus-within,
-.config-content .knowledge-item:hover {
+.config-content .knowledge-item:hover,
+.config-content .knowledge-item:focus-within {
   border-color: transparent;
   background: var(--settings-surface-hover);
   box-shadow: none;

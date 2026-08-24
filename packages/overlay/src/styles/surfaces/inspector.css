@@ -370,9 +370,10 @@
   color: color-mix(in srgb, var(--text-muted) 78%, transparent);
 }
 
-.browser-preview-chrome .browser-preview-browser-controls .oc-button[data-size="icon"]:not(:disabled):hover {
+.browser-preview-chrome .browser-preview-browser-controls .oc-button[data-size="icon"]:not(:disabled):hover,
+.browser-preview-chrome .browser-preview-browser-controls .oc-button[data-size="icon"]:not(:disabled):focus-visible {
   color: var(--text);
-  background: color-mix(in srgb, var(--text) 7%, transparent);
+  background: var(--hover-wash);
 }
 
 .browser-preview-address-form {
@@ -413,9 +414,11 @@
 }
 
 .browser-preview-address-form .oc-button[data-size="icon"]:not(:disabled):hover,
-.browser-preview-chrome-actions .oc-button[data-size="icon"]:not(:disabled):hover {
+.browser-preview-chrome-actions .oc-button[data-size="icon"]:not(:disabled):hover,
+.browser-preview-address-form .oc-button[data-size="icon"]:not(:disabled):focus-visible,
+.browser-preview-chrome-actions .oc-button[data-size="icon"]:not(:disabled):focus-visible {
   color: var(--text);
-  background: color-mix(in srgb, var(--text) 7%, transparent);
+  background: var(--hover-wash);
 }
 
 .browser-preview-address-error {
@@ -2137,8 +2140,10 @@
   gap: var(--ui-gap-md);
 }
 
+/* Every other menu marks selection with the accent-tinted list token; a
+ * neutral --surface-hover here read as a stuck hover rather than a choice. */
 .subagent-conversation-panel__agent-menu-item.oc-menu-item[data-active="true"] {
-  background: var(--surface-hover);
+  background: var(--ui-list-selected-bg);
 }
 
 .subagent-conversation-panel__agent-menu-avatar {
