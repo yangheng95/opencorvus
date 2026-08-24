@@ -8,7 +8,7 @@ fi
 
 agent_uid="${OPENCORVUS_BENCH_AGENT_UID:?missing OPENCORVUS_BENCH_AGENT_UID}"
 agent_home="${OPENCORVUS_BENCH_AGENT_HOME:?missing OPENCORVUS_BENCH_AGENT_HOME}"
-if [[ ! "$agent_uid" =~ ^600([0-4][0-9]|50)$ ]] || [[ "$agent_home" != /tmp/opencorvus-benchmark-agent-* ]]; then
+if [[ ! "$agent_uid" =~ ^[0-9]+$ ]] || (( agent_uid < 60001 || agent_uid > 60600 )) || [[ "$agent_home" != /tmp/opencorvus-benchmark-agent-* ]]; then
   echo "restricted-agent-shell received an invalid trial identity" >&2
   exit 126
 fi

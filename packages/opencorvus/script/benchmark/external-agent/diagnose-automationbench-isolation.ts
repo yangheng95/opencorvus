@@ -13,6 +13,7 @@ if (process.platform !== "linux" || process.getuid?.() !== 0) throw new Error("I
 
 const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-five-trial-isolation-"))
 await fs.chmod(root, 0o711)
+const trialUIDs = [60_001, 60_050, 60_051, 60_599, 60_600] as const
 const trials: Array<{
   uid: number
   directory: string
@@ -52,8 +53,7 @@ async function ready(child: PipedChild) {
 }
 
 try {
-  for (let index = 0; index < 5; index++) {
-    const uid = 60_001 + index
+  for (const [index, uid] of trialUIDs.entries()) {
     const directory = path.join(root, `trial-${index + 1}`)
     const project = path.join(directory, "project")
     const socketDirectory = path.join(directory, "socket")

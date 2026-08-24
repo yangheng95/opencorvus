@@ -294,3 +294,17 @@ The previous prompts added Task-element inventories, finite candidate ledgers an
 3. Catalog/verifier accept old results only against the old 50-manifest digest and new results only against the 600-manifest digest, while final coverage is exact case indices 1–600 at repetition 1 with completed receipts for batches 1–120.
 4. Dry catalog/verifier proves the original 50 eligible results remain unchanged before case 51 launches. The first live batch plan must contain only cases 51–55 and five distinct tasks.
 5. Dashboard reports verified coverage against 600, displays actual case indices without a repetition-series fiction, retains aggregate strict/partial/token/model-call metrics and both branded regions, and passes real-page screenshot inspection. No UI automation test is created or run.
+
+## Unique-case batch 11 restricted UID incident
+
+### Evidence and root cause
+
+- The first correct batch-11 plan is exact: repetition 1, Base, unique cases 51–55 and the 600-case manifest. All five trials stopped at `agent_shell_isolation` before any model work with `Restricted Agent shell probe failed: restricted-agent-shell received an invalid trial identity`.
+- Runner identity is `60000 + case_index`; cases 51–55 therefore use UIDs 60051–60055. The restricted shell retained the original 50-case regex and admitted only 60000–60050. Runner, catalog and verifier already derive the UID from the actual case index; the shell was the sole stale bound.
+- The five attempts retain their full preflight evidence and are `invalid_bug: restricted_shell_case_range`; they do not count. Only cases 51–55 may be retried after the reviewed shell fix.
+
+### Repair and acceptance
+
+1. The restricted shell accepts only decimal UIDs 60001–60600, the exact range for unique public cases 1–600, while preserving the private benchmark home-path check.
+2. Focused positive tests exercise boundary UIDs through the real shell probe contract; shell syntax, benchmark typecheck and independent review pass.
+3. Restart only batch 11. Its plan remains cases 51–55, and all five trials must pass `agent_shell_isolation` and acquire leases before the batch is considered live.
