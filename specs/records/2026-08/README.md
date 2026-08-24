@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-v0.0.54-beta-release.md](2026-08-25-v0.0.54-beta-release.md) freezes, validates, publishes, and integrates the `0.0.54-beta` application and website release from the reviewed post-`0.0.53-beta` runtime and download-selection repairs.
+
 - [2026-08-24-v0.0.53-beta-release.md](2026-08-24-v0.0.53-beta-release.md) tracks canonical `0.0.53-beta` convergence, immutable application publication, the same-source public website deployment, and integration of the reviewed release source into `main`.
 
 - [2026-08-24-repository-architecture-debt-saturation-audit.md](2026-08-24-repository-architecture-debt-saturation-audit.md) defines the evidence-complete whole-repository architecture-debt benchmark, carries the verified Browser/Computer seed findings, and iterates cross-domain audits until a repeated sweep finds no new P0/P1.
