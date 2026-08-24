@@ -49,6 +49,15 @@ export interface StreamActivityMonitor {
   lastActivityAt(): number
   /** True once the monitor's own controller has aborted due to inactivity. */
   timedOut(): boolean
+  /** Read-only physical liveness facts for failure evidence and operator diagnostics. */
+  diagnostics(): {
+    lastActivityAt: number
+    paused: boolean
+    pauseDepth: number
+    pauseOwners: string[]
+    timedOut: boolean
+    abortReason?: string
+  }
   /** Abort the monitor from its owning session cancellation path. */
   abort(reason?: unknown): void
   /** Idempotent. Clears all timers and detaches listeners. */
@@ -338,6 +347,22 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
     },
     timedOut() {
       return inactivity.signal.aborted
+    },
+    diagnostics() {
+      const owners = options.describePause?.()
+      return {
+        lastActivityAt: last,
+        paused: !disposed && pauseDepth > 0,
+        pauseDepth,
+        pauseOwners: owners
+          ? owners
+              .split(",")
+              .map((owner) => owner.trim())
+              .filter(Boolean)
+          : [],
+        timedOut: inactivity.signal.aborted,
+        ...(combined.aborted ? { abortReason: String(combined.reason) } : {}),
+      }
     },
     abort(reason?: unknown) {
       if (disposed) return
