@@ -22,6 +22,12 @@
 | User decision | 用户停止 Claude 路线并要求寻找专用 Skill。完整比较 MiniMax 官方极简产品广告、纸艺定格科普与手绘实拍混合 Skill 后，用户批准 `papercraft-stop-motion-explainer` 路线 D「一份交付的一生」与约 80 秒目标；当前授权范围仅到三张 16:9 视觉预览，不含 H3 正式镜头或 push。 |
 | Preview evidence | `assets/previews/papercraft-v2/` 已生成三张 16:9 预览：夜班失败、清理假文字后的专家交接、锁定档案身份并减法构图的四类工作场景。三张图只用于确认成人向编辑纸艺的世界、材质、主角和协作隐喻；用户确认前不得生成 H3 镜头。 |
 | User correction 4 | 用户否决纸艺路线，指出其与科技和 AI 完全无关。`papercraft-v2` 只保留为失败证据，不得继续迭代。当前切换到 MiniMax 官方 `brand-promo-video-generator` 的 AI/SaaS 故事骨架，并结合 `h3-prompt-writing`；候选方向 E「Silicon to Delivery」必须以真实 Mission UI、CUDA/GPU 计算、真实子会话和证据交付为主角，用户确认前不得生成或 push。 |
+| User narrative | 新旁白以“Agent 已经会做事，真正的问题是能否把一件大事做完”为传播钩子；用有限上下文导致遗忘约束、计划走样、提前收尾和半成品交付解释痛点，再以调研→设计→实现→测试→部署说明多个重型 Task 的放大效应，最后引出 Mission 中 Task 锁定精确专家团版本及工作流、可恢复状态、带来源 Artifact 与独立验收。 |
+| Scale-claim evidence | 全仓未发现单个 Mission 已真实调度几十或上百个 Agent Team 并完成交付的证据。宣传口径保持“扩展到更多 Team 和更长工作链”的设计目标；若要使用已完成规模实验的口径，必须补 Mission ID、持久化活动、Provider 活动和交付证据。 |
+| Real-case runtime | Mission `ae773cbff6362f19` 从 2026-08-23 19:05:25 派发至 2026-08-24 07:50:44 最后任务更新，墙钟时间 12.76 小时。六个 Task 的 `lifecycleStatus` 均为 `completed`。 |
+| Real-case orchestration | Mission status 的会话拓扑合计 46 个唯一 Agent 会话、20 种角色；创建元数据限定 `research-studio`、`base`、`advanced` 三个内置专家团。文案必须区分 Agent 会话、角色和专家团数量。 |
+| Real-case model quality | 三组 RTX 5090 CUDA 实验中，`innovation-smoothing-seed42` 验证 Macro-F1 0.8343229869，较基线绝对提升 0.0146971878；测试 Macro-F1 0.8360914009、准确率 0.8428143713。仅单 seed 42、1800 条训练样本预算，不得外推为普遍优势。 |
+| Real-case deliverables | 已核对模型/数据基础、三组实验及最佳检查点、训练监控与推理网页、两张多格式架构图、五页 ACL 风格论文、独立审校证据、公开 GitHub 仓库及匿名回读回执。Stage 6 记录 114 文件发布审计、portable 11 passed、canonical 25 passed、targeted 11 passed 及 RTX 5090 CUDA 干净环境复验；测试组可能重叠，不相加为总测试数。 |
 
 ## Impact analysis
 
