@@ -134,9 +134,15 @@ button {
   padding: var(--ui-gap-xs);
 }
 
+/* min-width: 0, not max-content. The card is a fixed 240px with
+ * overflow: hidden and the items grid beside this takes 122px, leaving ~86px.
+ * Today's label fits in both locales, but max-content guaranteed that any
+ * longer translation would clip against the card edge with no fallback. */
 .native-menu-group[data-layout="toolbar"] .native-menu-group__heading {
-  min-width: max-content;
+  min-width: 0;
   flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text-soft);
   white-space: nowrap;
 }

@@ -151,7 +151,12 @@
   --oc-header-padding-y: 0;
   --oc-header-gap: calc(6px * var(--ui-scale, 1));
   --oc-header-title-font: var(--ui-font-weight-medium) var(--ui-font-title) var(--font, sans-serif);
-  --oc-header-title-line-height: 1;
+  /* Was a flat 1. A 1.0 line box is shorter than Noto Sans SC's
+   * ascent + descent, so Chinese glyph ink clipped against the header's
+   * overflow: hidden; Latin descenders had the same exposure. The header
+   * height is fixed and centres its content, so the taller line box costs
+   * nothing. */
+  --oc-header-title-line-height: var(--ui-line-height-tight);
   --oc-header-title-letter-spacing: 0;
   --oc-header-title-transform: none;
   --oc-header-border: 0 solid transparent;
