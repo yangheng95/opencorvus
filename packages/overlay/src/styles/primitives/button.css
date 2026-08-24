@@ -159,11 +159,22 @@
   --oc-button-color: var(--bad);
 }
 
-.oc-button[data-variant="solid"][data-tone="neutral"],
-.oc-button[data-variant="solid"][data-tone="accent"] {
+/* A solid button's tone decides its fill. `accent` used to share this rule
+ * with `neutral` and paint --text-strong, so tone="accent" was inert on the
+ * solid variant: roughly 30 primary actions across 19 files — connect a
+ * provider, install a squad, create a mission, export logs — all rendered as
+ * the same near-black chip, and the app had no primary call to action at all.
+ * `danger` had always had its own fill; these two now do too. */
+.oc-button[data-variant="solid"][data-tone="neutral"] {
   --oc-button-bg: var(--text-strong);
   --oc-button-border: var(--oc-border-width) solid var(--text-strong);
   --oc-button-color: var(--text-on-strong);
+}
+
+.oc-button[data-variant="solid"][data-tone="accent"] {
+  --oc-button-bg: var(--accent);
+  --oc-button-border: var(--oc-border-width) solid var(--accent);
+  --oc-button-color: var(--text-on-accent);
 }
 
 .oc-button[data-variant="solid"][data-tone="danger"] {
@@ -282,12 +293,17 @@
 }
 
 .oc-button[data-variant="solid"][data-tone="neutral"]:hover,
-.oc-button[data-variant="solid"][data-tone="neutral"]:focus-visible,
-.oc-button[data-variant="solid"][data-tone="accent"]:hover,
-.oc-button[data-variant="solid"][data-tone="accent"]:focus-visible {
+.oc-button[data-variant="solid"][data-tone="neutral"]:focus-visible {
   --oc-button-bg: color-mix(in srgb, var(--text-strong) 86%, var(--surface));
   --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 86%, var(--surface));
   --oc-button-color: var(--text-on-strong);
+}
+
+.oc-button[data-variant="solid"][data-tone="accent"]:hover,
+.oc-button[data-variant="solid"][data-tone="accent"]:focus-visible {
+  --oc-button-bg: var(--accent-hover);
+  --oc-button-border: var(--oc-border-width) solid var(--accent-hover);
+  --oc-button-color: var(--text-on-accent);
 }
 
 .oc-button[data-variant="solid"][data-tone="danger"]:hover,

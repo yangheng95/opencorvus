@@ -26,11 +26,17 @@
 }
 
 .cmdk-panel {
-  top: calc(10px * var(--ui-scale));
+  /* Hangs below the titlebar rather than over it. At a flat 10px the panel
+   * covered the menubar it opens on top of — File / Edit / View stayed
+   * readable but Help was clipped mid-word, and the window read as broken
+   * for the moment the palette was up. */
+  top: calc(var(--ui-titlebar-height) + var(--ui-gap-md));
   transform: translateX(-50%);
   width: min(calc(900px * var(--ui-scale)), calc(100cqw - calc(20px * var(--ui-scale))));
   max-width: calc(100cqw - calc(20px * var(--ui-scale)));
-  max-height: calc(var(--ui-overlay-shell-height) - calc(20px * var(--ui-scale)));
+  max-height: calc(
+    var(--ui-overlay-shell-height) - var(--ui-titlebar-height) - calc(2 * var(--ui-gap-md))
+  );
   display: flex;
   flex-direction: column;
   gap: 0;
