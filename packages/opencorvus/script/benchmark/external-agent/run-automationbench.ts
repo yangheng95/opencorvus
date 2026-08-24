@@ -706,6 +706,8 @@ const SNAPSHOT_TABLES = [
   "engine_artifact",
   "engine_artifact_catalog_revision",
   "session",
+  "provider_activity_request",
+  "provider_activity_outcome",
   "provider_usage_event",
   "protocol_inbox",
   "protocol_delivery_receipt",
@@ -952,6 +954,7 @@ let independentTranscriptSurface: Array<{
   session_id: string
 }> | undefined
 let captureIndependentTranscriptSurface: (() => Promise<typeof independentTranscriptSurface>) | undefined
+let runtimeActivityDiagnostics: (() => Record<string, unknown>) | undefined
 let projectInitReceipt: Record<string, any> | undefined
 let stage = "source_preflight"
 let agentUID: number | undefined
@@ -1426,6 +1429,8 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
 }
 
 async function captureFailureObservationEvidence() {
+  const secrets = source?.protectedSecrets ?? []
+  const runtimeActivity = redactSnapshot(runtimeActivityDiagnostics?.() ?? null, secrets)
   const receipt = {
     ...failureObservationReceipt({
       runID,
@@ -1439,9 +1444,9 @@ async function captureFailureObservationEvidence() {
       observation: latestObservation,
     }),
     launch_mode: "mission",
+    runtime_activity: runtimeActivity,
   }
   if (latestObservation) {
-    const secrets = source?.protectedSecrets ?? []
     const artifacts = [
       ["latest-board.json", latestObservation.board],
       ["opencorvus-transcript.json", latestObservation.transcript],
@@ -1459,6 +1464,13 @@ async function captureFailureObservationEvidence() {
           { encoding: "utf8", flag: "wx" },
         ),
       ),
+    )
+  }
+  if (runtimeActivity) {
+    await fs.writeFile(
+      path.join(outputDirectory, "runtime-activity-diagnostics.json"),
+      JSON.stringify(runtimeActivity, null, 2) + "\n",
+      { encoding: "utf8", flag: "wx" },
     )
   }
   await fs.writeFile(
@@ -1640,6 +1652,20 @@ try {
   }
   const automationService = await import("@/scheduler/automation-service")
   pendingDelayedWakeSchedule = automationService.AutomationService.pendingDelayedWakeSchedule
+  const { SessionStatus } = await import("@/session/status")
+  const { Bus } = await import("@/bus")
+  const { GlobalBus } = await import("@/bus/global")
+  const providerActivity = await import("@/session/session.sql")
+  runtimeActivityDiagnostics = () => ({
+    captured_at: Date.now(),
+    sessions: SessionStatus.listActivity(),
+    bus_publications: Bus.publicationActivitySnapshot(),
+    global_bus_deliveries: GlobalBus.deliveryActivitySnapshot(),
+    provider_activity: Database.use((db) => ({
+      requests: db.select().from(providerActivity.ProviderActivityRequestTable).all(),
+      outcomes: db.select().from(providerActivity.ProviderActivityOutcomeTable).all(),
+    })),
+  })
   const { Session } = await import("@/session")
   const engineStore = await import("@/engine/store")
   const conversationView = await import("@/conversation/view")
