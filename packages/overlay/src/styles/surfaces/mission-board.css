@@ -35,7 +35,7 @@
 .mission-board__heading > div,
 .mission-board__error > span {
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-board__title-icon {
@@ -303,7 +303,7 @@
 }
 
 .mission-board-card__project {
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-soft);
   font-size: var(--ui-font-small);
 }
@@ -348,17 +348,17 @@
 
 .mission-board-card__tasks {
   flex-wrap: wrap;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .mission-board-card__task {
   max-width: 100%;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .mission-board-card__attention {
   align-self: flex-start;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .mission-board-card__actions {
@@ -510,7 +510,7 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__context-error small {
@@ -527,7 +527,7 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__option strong,
@@ -583,7 +583,7 @@
 }
 
 .mission-create-form__market > header > div {
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__market > header strong {
@@ -611,7 +611,7 @@
 }
 
 .mission-create-form__market-copy {
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__market-copy > strong,
@@ -629,7 +629,7 @@
 .mission-create-form__market-copy p {
   display: -webkit-box;
   overflow: hidden;
-  margin: calc(2px * var(--ui-scale)) 0 0;
+  margin: var(--ui-gap-3xs) 0 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-height: 1.4;
@@ -701,7 +701,7 @@
 .mission-board-nav-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(3px * var(--ui-scale)) var(--ui-gap-sm);
+  gap: var(--ui-gap-xs) var(--ui-gap-sm);
 }
 
 .mission-board-nav-summary__lane {
@@ -709,7 +709,7 @@
 
   display: inline-flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-soft);
   font-variant-numeric: tabular-nums;
 }

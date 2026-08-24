@@ -13,6 +13,35 @@
   --oc-radius-xl: calc(24px * var(--ui-scale, 1));
   --oc-radius-pill: 999px;
 
+  /* Spacing ladder — 9 rungs, the single vocabulary for padding / gap /
+   * margin. Extended from the original four (xs/sm/md/lg) on 2026-08-24;
+   * those four keep their exact values so no existing consumer shifts.
+   *
+   * Before the ladder, surfaces/ carried these three properties at 37
+   * distinct pixel values — nearly every integer from 1 to 36. No vertical
+   * rhythm survives that: each surface picked its own breathing room, and
+   * the eye reads the sum as "nothing lines up" even where no single value
+   * looks wrong. Rungs sit on the values that were already most common, so
+   * collapsing onto them moved 802 of 1350 declarations by 0px.
+   *
+   * Sizes above 32px are structural dimensions (dialog widths, rail insets),
+   * not rhythm steps, and stay as literals. See
+   * script/migrate-spacing-ladder.ts.
+   *
+   * Lives here rather than in cascade/base.css because native-menu.html
+   * loads design-language.css but not base.css — the ladder is design
+   * language, so it belongs with the radius / density / type scales that
+   * every document entry already gets. */
+  --ui-gap-3xs: calc(2px * var(--ui-scale, 1));
+  --ui-gap-xs: calc(4px * var(--ui-scale, 1));
+  --ui-gap-sm: calc(6px * var(--ui-scale, 1));
+  --ui-gap-md: calc(8px * var(--ui-scale, 1));
+  --ui-gap-lg: calc(12px * var(--ui-scale, 1));
+  --ui-gap-xl: calc(16px * var(--ui-scale, 1));
+  --ui-gap-2xl: calc(20px * var(--ui-scale, 1));
+  --ui-gap-3xl: calc(24px * var(--ui-scale, 1));
+  --ui-gap-4xl: calc(32px * var(--ui-scale, 1));
+
   /* Font-weight scale — 3 tokens, single source.
    *
    * Step 5 v3 (2026-05-04): the 2-token plan (body / strong) was

@@ -108,11 +108,11 @@
   flex: 1 1 0;
   min-height: 0;
   flex-direction: column;
-  gap: calc(12px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: calc(8px * var(--ui-scale));
-  padding-right: calc(4px * var(--ui-scale));
+  padding: var(--ui-gap-md);
+  padding-right: var(--ui-gap-xs);
 }
 
 .screenshot-browser-groups[data-virtualized="true"] {
@@ -133,7 +133,7 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  padding-bottom: calc(8px * var(--ui-scale));
+  padding-bottom: var(--ui-gap-md);
 }
 
 .screenshot-browser-empty {
@@ -143,8 +143,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(18px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-2xl);
   color: var(--text-muted);
   text-align: center;
 }
@@ -165,7 +165,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-height: calc(24px * var(--ui-scale));
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);
@@ -192,7 +192,7 @@
 .screenshot-browser-row-grid {
   display: grid;
   grid-template-columns: repeat(var(--screenshot-browser-columns), minmax(0, var(--screenshot-browser-card-width)));
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   min-width: 0;
 }
 
@@ -232,7 +232,7 @@
 
 .screenshot-browser__thumb-error {
   flex-direction: column;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   cursor: default;
   color: var(--bad);
   background: color-mix(in srgb, var(--bad-dim) 72%, var(--surface-inset));
@@ -263,8 +263,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
+  padding: var(--ui-gap-sm);
   font-size: var(--ui-font-meta);
   line-height: 1.35;
 }
@@ -298,7 +298,7 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-right: calc(2px * var(--ui-scale));
+  padding-right: var(--ui-gap-3xs);
 }
 
 .file-changes-diff-header {
@@ -307,8 +307,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(6px * var(--ui-scale));
-  padding: 0 calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  padding: 0 var(--ui-gap-sm);
   background: var(--surface-strong);
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);

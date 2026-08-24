@@ -62,7 +62,7 @@
 .oc-text-field__textarea[data-surface="composer"] {
   border-color: transparent;
   background: transparent;
-  padding: calc(5px * var(--ui-scale)) calc(6px * var(--ui-scale)) calc(3px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-xs);
   font-size: var(--chat-composer-font-size);
   line-height: var(--chat-textarea-line-height);
 }

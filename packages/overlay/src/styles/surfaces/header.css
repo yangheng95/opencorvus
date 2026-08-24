@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .chat-title-group .chat-title {

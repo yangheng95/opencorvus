@@ -1,8 +1,8 @@
 .oc-menu {
   box-sizing: border-box;
   display: grid;
-  gap: calc(3px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-sm);
   border: var(--ui-focused-popup-border);
   border-radius: var(--oc-radius-large);
   outline: none;
@@ -19,8 +19,8 @@
   min-height: var(--oc-density-control-height);
   display: flex;
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
   border: 0;
   border-radius: var(--oc-radius-soft);
   outline: none;
@@ -59,7 +59,7 @@
 
 .oc-menu-separator {
   height: var(--oc-border-width);
-  margin: calc(4px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  margin: var(--ui-gap-xs) var(--ui-gap-md);
   border: 0;
   background: var(--border);
 }

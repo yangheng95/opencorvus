@@ -18,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   min-height: auto;
-  padding: 0 0 0 calc(10px * var(--ui-scale));
+  padding: 0 0 0 var(--ui-gap-lg);
   border: none;
   border-radius: var(--oc-radius-soft);
   background: transparent;

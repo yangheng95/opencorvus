@@ -5,13 +5,13 @@
 
   display: flex;
   width: 100%;
-  margin: calc(16px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-xl) 0;
   box-sizing: border-box;
   justify-content: flex-start;
 }
 
 .chat-bubble-row:has(> .chat-bubble-shell > .conversation-turn-control) {
-  margin-block-end: calc(4px * var(--ui-scale));
+  margin-block-end: var(--ui-gap-xs);
 }
 
 .chat-bubble-row[data-kind="agent"] {
@@ -31,7 +31,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .chat-bubble-shell > .chat-bubble {
@@ -60,7 +60,7 @@
   max-width: 100%;
   min-width: 0;
   flex-direction: column;
-  gap: calc(9px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   padding: 0;
   border: 0 solid transparent;
   border-radius: 0;
@@ -75,7 +75,7 @@
 .chat-bubble-row[data-kind="agent"] .chat-bubble,
 .chat-bubble-row[data-role="user"] .chat-bubble {
   overflow: hidden;
-  padding: calc(14px * var(--ui-scale)) calc(16px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-xl) var(--ui-gap-xl);
   border: var(--oc-border-width) solid var(--conversation-card-edge);
   border-radius: var(--oc-radius-large);
   background: var(--conversation-card-background);
@@ -88,7 +88,7 @@
   min-width: 0;
   align-items: center;
   justify-content: space-between;
-  gap: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
   color: var(--text-soft);
 }
 
@@ -163,7 +163,7 @@
   min-width: 0;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
 }
 
 .chat-bubble__collapsed-preview {
@@ -186,7 +186,7 @@
   display: inline-flex;
   min-width: 0;
   align-items: center;
-  gap: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   overflow: visible;
 }
 
@@ -276,9 +276,9 @@
   min-height: calc(28px * var(--ui-scale));
   align-items: center;
   flex-wrap: nowrap;
-  gap: calc(2px * var(--ui-scale));
-  margin-inline-start: calc(12px * var(--ui-scale));
-  padding: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
+  margin-inline-start: var(--ui-gap-lg);
+  padding: var(--ui-gap-3xs);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 66%, transparent);
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--surface) 78%, transparent);
@@ -306,13 +306,13 @@
   display: inline-flex;
   min-width: 0;
   align-items: center;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .conversation-turn-control__facts {
   min-height: calc(20px * var(--ui-scale));
-  margin-inline-start: calc(2px * var(--ui-scale));
-  padding-inline-start: calc(4px * var(--ui-scale));
+  margin-inline-start: var(--ui-gap-3xs);
+  padding-inline-start: var(--ui-gap-xs);
   border-inline-start: var(--oc-border-width) solid color-mix(in srgb, var(--border) 58%, transparent);
 }
 
@@ -366,7 +366,7 @@
 }
 
 .conversation-turn-control__time {
-  padding-inline: calc(5px * var(--ui-scale));
+  padding-inline: var(--ui-gap-sm);
   color: var(--text-muted);
   font-size: var(--ui-font-compact-row);
   font-weight: var(--ui-font-weight-body);
@@ -377,15 +377,15 @@
 
 .conversation-turn-usage-popover {
   width: min(calc(430px * var(--ui-scale)), calc(100vw - 16px * var(--ui-scale)));
-  padding: calc(14px * var(--ui-scale));
+  padding: var(--ui-gap-xl);
 }
 
 .conversation-turn-usage-popover__heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: calc(12px * var(--ui-scale));
-  margin-bottom: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  margin-bottom: var(--ui-gap-lg);
 }
 
 .conversation-turn-usage-popover__heading strong {
@@ -404,7 +404,7 @@
 .conversation-turn-usage-popover__models.oc-segmented {
   max-width: 100%;
   flex-wrap: wrap;
-  margin-bottom: calc(10px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-lg);
 }
 
 .conversation-turn-usage-popover__models .oc-segmented__item {
@@ -416,7 +416,7 @@
 .conversation-turn-usage-popover__rows {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 calc(18px * var(--ui-scale));
+  gap: 0 var(--ui-gap-2xl);
   margin: 0;
 }
 
@@ -424,8 +424,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(7px * var(--ui-scale)) 0;
+  gap: var(--ui-gap-lg);
+  padding: var(--ui-gap-md) 0;
   border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 
@@ -462,7 +462,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
 }
 
 .chat-bubble-row[data-kind="agent"] .chat-bubble__body-inner:has(> .card-message-run .msg-work-details) {
@@ -492,7 +492,7 @@
 .chat-bubble-row[data-role="user"] .chat-bubble__body-inner {
   flex: 1 1 auto;
   align-items: stretch;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .chat-bubble__image-strip {
@@ -501,7 +501,7 @@
   min-width: 0;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .msg-image-attachment {
@@ -587,9 +587,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: calc(14px * var(--ui-scale));
-  margin-top: calc(4px * var(--ui-scale));
-  padding-left: calc(26px * var(--ui-scale));
+  gap: var(--ui-gap-xl);
+  margin-top: var(--ui-gap-xs);
+  padding-left: var(--ui-gap-3xl);
 }
 
 .chat-bubble__children::before {
@@ -609,8 +609,8 @@
 }
 
 .chat-bubble__child[data-kind="agent"] {
-  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(12px * var(--ui-scale))
-    calc(14px * var(--ui-scale));
+  padding: var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-lg)
+    var(--ui-gap-xl);
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--surface-inset) 72%, var(--surface));
 }
@@ -640,8 +640,8 @@
 .chat-bubble__child-identity {
   display: flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
-  margin-bottom: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  margin-bottom: var(--ui-gap-md);
 }
 
 .chat-bubble__identity-meta[data-compact="true"] .chat-avatar {

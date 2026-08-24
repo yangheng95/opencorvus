@@ -3,7 +3,7 @@
 .oc-radio {
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-soft);
   cursor: pointer;
 }

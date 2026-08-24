@@ -21,9 +21,9 @@
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  padding-block: calc(8px * var(--ui-scale));
-  padding-inline-start: calc(10px * var(--ui-scale));
-  padding-inline-end: calc(var(--ui-left-rail-project-action-center-inset) - (calc(24px * var(--ui-scale)) / 2));
+  padding-block: var(--ui-gap-md);
+  padding-inline-start: var(--ui-gap-lg);
+  padding-inline-end: calc(var(--ui-left-rail-project-action-center-inset) - (var(--ui-gap-3xl) / 2));
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
   background: transparent;
 }
@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .mailbox-panel__selection-summary {
@@ -42,7 +42,7 @@
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  gap: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .mailbox-panel__select-visible {
@@ -83,7 +83,7 @@
   flex: 0 0 auto;
   min-width: calc(26px * var(--ui-scale));
   height: calc(26px * var(--ui-scale));
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   color: var(--text-muted);
 }
 
@@ -111,7 +111,7 @@
   flex: 1 1 0;
   width: 100%;
   min-width: 0;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .mailbox-panel__search {
@@ -139,7 +139,7 @@
   scrollbar-gutter: stable;
   scrollbar-width: auto;
   scrollbar-color: var(--scrollbar-thumb) transparent;
-  padding: calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-sm);
 }
 
 .mailbox-panel__body::-webkit-scrollbar {
@@ -161,20 +161,20 @@
 
 .mailbox-project-groups {
   display: grid;
-  gap: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
   min-width: 0;
 }
 .mailbox-project-group {
   display: grid;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-width: 0;
 }
 .mailbox-project-group__header {
   display: flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
-  padding: 0 calc(7px * var(--ui-scale));
+  padding: 0 var(--ui-gap-md);
   color: var(--text-muted);
   line-height: calc(22px * var(--ui-scale));
   cursor: pointer;
@@ -208,7 +208,7 @@
 
 .mailbox-list {
   display: grid;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-width: 0;
 }
 
@@ -217,9 +217,9 @@
   display: grid;
   grid-template-columns: calc(28px * var(--ui-scale)) minmax(0, 1fr);
   align-items: start;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
-  padding: calc(8px * var(--ui-scale));
+  padding: var(--ui-gap-md);
   border: var(--oc-border-width) solid transparent;
   border-radius: var(--oc-radius-large);
   background: transparent;
@@ -320,7 +320,7 @@
   justify-content: stretch;
   height: auto;
   min-height: 0;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   padding: 0;
   text-align: left;
   white-space: normal;
@@ -330,7 +330,7 @@
   min-width: 0;
   display: flex;
   align-items: baseline;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .mailbox-item__subject {
@@ -378,8 +378,8 @@
   grid-column: 2 / 3;
   grid-row: 2;
   min-width: 0;
-  margin-top: calc(2px * var(--ui-scale));
-  padding-top: calc(7px * var(--ui-scale));
+  margin-top: var(--ui-gap-3xs);
+  padding-top: var(--ui-gap-md);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
 }
 
@@ -416,7 +416,7 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   overflow: hidden;
   color: var(--text-muted);
   font-size: var(--ui-font-tiny);
@@ -424,7 +424,7 @@
 }
 
 .mailbox-item__meta .oc-badge {
-  gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .mailbox-item__agent,
@@ -480,7 +480,7 @@
 .mailbox-panel__empty,
 .mailbox-panel__error {
   min-height: calc(180px * var(--ui-scale));
-  padding: calc(18px * var(--ui-scale));
+  padding: var(--ui-gap-2xl);
   color: var(--text-muted);
   font-size: var(--ui-font-meta);
   text-align: center;
@@ -492,7 +492,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .mailbox-panel__empty > svg {
@@ -513,5 +513,5 @@
 .mailbox-panel__load-more {
   display: flex;
   justify-content: center;
-  padding: calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-lg);
 }

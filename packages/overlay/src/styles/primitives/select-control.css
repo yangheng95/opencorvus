@@ -93,7 +93,7 @@
 .oc-select-option-copy {
   display: flex;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   min-width: 0;
 }
 
@@ -133,13 +133,13 @@
  * internal trigger, popup, option, indicator, or icon part. */
 .oc-select-trigger[data-variant="composer"] {
   justify-content: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: auto;
   max-width: 100%;
   min-width: 0;
   height: var(--oc-density-chip-height);
   min-height: var(--oc-density-chip-height);
-  padding: 0 calc(8px * var(--ui-scale));
+  padding: 0 var(--ui-gap-md);
   border: 0;
   border-radius: var(--oc-radius-pill);
   background: transparent;
@@ -171,15 +171,15 @@
 
 .oc-select-content[data-variant="composer"] {
   min-width: calc(188px * var(--ui-scale));
-  padding: calc(8px * var(--ui-scale));
+  padding: var(--ui-gap-md);
 }
 
 .oc-select-listbox[data-variant="composer"] {
   display: flex;
   flex-direction: column;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   max-height: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
-  padding: calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-sm);
   border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
@@ -187,9 +187,9 @@
 
 .oc-select-option[data-variant="composer"] {
   justify-content: flex-start;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   min-height: calc(34px * var(--ui-scale));
-  padding-block: calc(4px * var(--ui-scale));
+  padding-block: var(--ui-gap-xs);
   font-size: var(--ui-font-small);
 }
 

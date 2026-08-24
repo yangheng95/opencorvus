@@ -16,8 +16,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
-  margin: calc(8px * var(--ui-scale)) var(--ui-left-rail-section-inline-inset) calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  margin: var(--ui-gap-md) var(--ui-left-rail-section-inline-inset) var(--ui-gap-xs);
 }
 
 .work-ledger-projects-toolbar .work-ledger-section-title {
@@ -54,7 +54,7 @@
 
 .work-ledger-toolbar-menu {
   min-width: calc(238px * var(--ui-scale));
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .work-ledger-create-menu {
@@ -62,7 +62,7 @@
 }
 
 .work-ledger-toolbar-menu-heading {
-  padding: calc(7px * var(--ui-scale)) calc(9px * var(--ui-scale)) calc(3px * var(--ui-scale));
+  padding: var(--ui-gap-md) var(--ui-gap-md) var(--ui-gap-xs);
   color: var(--text-muted);
   line-height: var(--ui-line-height-tight);
 }
@@ -70,7 +70,7 @@
 .work-ledger-toolbar-menu-item {
   display: grid;
   grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr);
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   min-height: calc(34px * var(--ui-scale));
   font-size: var(--ui-font-body);
 }
@@ -97,7 +97,7 @@
 
 .work-ledger-implicit-project {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   min-width: 0;
 }
 
@@ -116,7 +116,7 @@
 }
 
 .work-ledger-section-title {
-  margin: calc(8px * var(--ui-scale)) var(--ui-left-rail-section-inline-inset) calc(4px * var(--ui-scale));
+  margin: var(--ui-gap-md) var(--ui-left-rail-section-inline-inset) var(--ui-gap-xs);
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-medium);
   line-height: 1.2;
@@ -124,7 +124,7 @@
 
 .work-ledger-pinned-groups {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   padding: 0 var(--ui-left-rail-section-inline-inset);
 }
 
@@ -211,7 +211,7 @@
   min-width: 0;
   align-items: center;
   flex-direction: row;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .work-row-head {
@@ -219,7 +219,7 @@
   max-width: 100%;
   display: flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   overflow: hidden;
   white-space: nowrap;
 }
@@ -279,8 +279,8 @@
   height: calc(20px * var(--ui-scale));
   align-items: center;
   justify-content: center;
-  gap: calc(2px * var(--ui-scale));
-  padding-inline: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
+  padding-inline: var(--ui-gap-xs);
   color: color-mix(in srgb, var(--text-muted) 72%, transparent);
   font-size: var(--work-row-font-size);
   font-weight: var(--ui-font-weight-body);
@@ -380,7 +380,7 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   margin: 0 0 0 var(--ui-left-rail-tree-depth);
   padding: 0;
   list-style: none;
@@ -395,11 +395,11 @@
 }
 
 .work-row-child:first-child {
-  margin-block-start: calc(1px * var(--ui-scale));
+  margin-block-start: var(--ui-gap-3xs);
 }
 
 .work-row-child:last-child {
-  margin-block-end: calc(2px * var(--ui-scale));
+  margin-block-end: var(--ui-gap-3xs);
 }
 
 .work-row-shell[data-has-child-tasks="true"]:is(
@@ -439,8 +439,8 @@
 .work-row-summary-tooltip,
 .project-group-summary-tooltip {
   display: grid;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-lg) var(--ui-gap-lg);
 }
 
 [data-ui="work-row-summary-tooltip"] {
@@ -461,7 +461,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   align-items: baseline;
-  gap: calc(14px * var(--ui-scale));
+  gap: var(--ui-gap-xl);
 }
 
 .work-row-summary-tooltip__headline strong {
@@ -485,7 +485,7 @@
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: baseline;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   font-size: var(--ui-font-small);
   line-height: var(--ui-line-height-tight);
 }
@@ -508,7 +508,7 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   color: var(--text-soft);
   font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
@@ -536,7 +536,7 @@
 
 .project-group-summary-tooltip__path {
   align-items: flex-start;
-  padding-top: calc(8px * var(--ui-scale));
+  padding-top: var(--ui-gap-md);
   border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 

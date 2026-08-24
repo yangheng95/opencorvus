@@ -15,7 +15,7 @@
   font-size: var(--ui-font-control);
   color: var(--text-muted);
   line-height: 1.4;
-  padding: calc(1px * var(--ui-scale)) 0;
+  padding: var(--ui-gap-3xs) 0;
 }
 
 .sidebar-list-cluster > .empty-hint,
@@ -23,10 +23,10 @@
 .empty-hint--card {
   position: relative;
   display: grid;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: min(100%, calc(320px * var(--ui-scale)));
   margin: 0;
-  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
   border-radius: var(--oc-radius-soft);
   background: var(--surface);

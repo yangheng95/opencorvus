@@ -23,7 +23,7 @@
   justify-content: center;
   min-height: var(--oc-segmented-height);
   padding: 0 var(--oc-header-gap);
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   border: var(--oc-border-width) solid transparent;
   border-radius: var(--oc-radius-pill);
   background: transparent;

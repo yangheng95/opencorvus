@@ -19,13 +19,13 @@
 }
 
 .oc-badge[data-size="sm"] {
-  padding: calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
   font-size: var(--ui-font-tiny);
   font-weight: var(--ui-font-weight-strong);
 }
 
 .oc-badge[data-size="md"] {
-  padding: calc(2px * var(--ui-scale)) var(--ui-gap-sm);
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
 }
 
 .oc-badge[data-tone="accent"] {

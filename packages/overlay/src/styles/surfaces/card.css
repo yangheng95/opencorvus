@@ -133,22 +133,22 @@ body {
    body. The 1px bottom border keeps the head/body relationship
    visible without painting two backgrounds. */
 .card[data-depth="0"] > .card__head {
-  gap: calc(10px * var(--ui-scale, 1));
-  padding: calc(var(--card-pad-y) + calc(1px * var(--ui-scale))) calc(var(--card-pad-x) + calc(1px * var(--ui-scale)));
+  gap: var(--ui-gap-lg);
+  padding: calc(var(--card-pad-y) + var(--ui-gap-3xs)) calc(var(--card-pad-x) + var(--ui-gap-3xs));
   min-height: calc(42px * var(--ui-scale, 1));
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--card-line-dim) 84%, transparent);
   background: transparent;
 }
 
 .card[data-depth="0"] > .card__body {
-  padding: calc(var(--card-pad-y) + calc(4px * var(--ui-scale))) calc(var(--card-pad-x) + calc(1px * var(--ui-scale)))
-    calc(var(--card-pad-y) + calc(6px * var(--ui-scale)));
+  padding: calc(var(--card-pad-y) + var(--ui-gap-xs)) calc(var(--card-pad-x) + var(--ui-gap-3xs))
+    calc(var(--card-pad-y) + var(--ui-gap-sm));
   line-height: 1.62;
 }
 
 .card[data-depth="0"] > .card__body > .card__children {
-  gap: calc(8px * var(--ui-scale));
-  margin-top: calc(var(--card-pad-y) + calc(2px * var(--ui-scale)));
+  gap: var(--ui-gap-md);
+  margin-top: calc(var(--card-pad-y) + var(--ui-gap-3xs));
 }
 
 .card[data-depth="0"] {
@@ -191,7 +191,7 @@ body {
   border: 0;
   border-left: calc(2px * var(--ui-scale)) solid var(--card-line-dim);
   border-radius: 0;
-  margin: calc(6px * var(--ui-scale, 1)) 0;
+  margin: var(--ui-gap-sm) 0;
   background: transparent;
   opacity: var(--ui-opacity-full);
 }
@@ -215,7 +215,7 @@ body {
 .card__head {
   display: flex;
   align-items: center;
-  gap: calc(8px * var(--ui-scale, 1));
+  gap: var(--ui-gap-md);
   scroll-margin-block-start: calc(12px * var(--ui-scale));
   padding: var(--card-pad-y) var(--card-pad-x);
   background: transparent;
@@ -239,11 +239,11 @@ body {
 }
 .card:not([data-depth="0"]) .card__head {
   min-height: calc(28px * var(--ui-scale, 1));
-  padding: calc(6px * var(--ui-scale, 1)) calc(9px * var(--ui-scale, 1));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
 }
 
 .card:not([data-depth="0"])[data-kind="tool"].card--collapsed > .card__head {
-  padding-block: calc(4px * var(--ui-scale, 1));
+  padding-block: var(--ui-gap-xs);
 }
 
 .oc-button[data-ui="card-head-main"].card__head-main {
@@ -260,7 +260,7 @@ body {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: calc(8px * var(--ui-scale, 1));
+  gap: var(--ui-gap-md);
   padding: 0;
   border: 0;
   background: transparent;
@@ -289,14 +289,14 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .card__title-row {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: calc(7px * var(--ui-scale, 1));
+  gap: var(--ui-gap-md);
   flex-wrap: nowrap;
 }
 
@@ -308,7 +308,7 @@ body {
 .card__preview-row {
   min-width: 0;
   display: flex;
-  margin-top: calc(3px * var(--ui-scale));
+  margin-top: var(--ui-gap-xs);
 }
 
 .card__actions {
@@ -320,8 +320,8 @@ body {
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: calc(8px * var(--ui-scale));
-  row-gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  row-gap: var(--ui-gap-xs);
 }
 
 :is(.card__error-actions, .card__meta-actions, .card__control-actions) {
@@ -357,8 +357,8 @@ body {
 .card-error-reason-tooltip {
   display: grid;
   width: min(calc(360px * var(--ui-scale)), calc(100cqw - calc(32px * var(--ui-scale))));
-  gap: calc(5px * var(--ui-scale));
-  padding: calc(9px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
 }
 
 .card-error-reason-tooltip strong {
@@ -403,7 +403,7 @@ body {
 }
 
 .card__head--with-meta .card__actions {
-  padding-top: calc(1px * var(--ui-scale));
+  padding-top: var(--ui-gap-3xs);
 }
 
 .card__title {
@@ -438,7 +438,7 @@ body {
   font-size: var(--card-meta-size);
   color: var(--text-soft);
   flex: none;
-  padding: calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
   letter-spacing: var(--ui-letter-spacing-normal);
   /* --border carries enough contrast across all themes (≥10% in dark, ≥12%
      in light, satisfies WCAG AA over the canonical surface). The previous
@@ -451,7 +451,7 @@ body {
  * before the goal name. Slightly stronger contrast than the normal
  * round chip because it acts as the goal's primary identifier. */
 .card__round--lead {
-  margin-right: calc(4px * var(--ui-scale));
+  margin-right: var(--ui-gap-xs);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
   color: color-mix(in srgb, var(--card-stage) 90%, var(--text));
@@ -473,8 +473,8 @@ body {
   text-overflow: ellipsis;
   font-weight: var(--ui-font-weight-body);
   position: relative;
-  padding-left: calc(10px * var(--ui-scale));
-  margin-left: calc(2px * var(--ui-scale));
+  padding-left: var(--ui-gap-lg);
+  margin-left: var(--ui-gap-3xs);
 }
 .card__subtitle::before {
   content: "·";
@@ -511,10 +511,10 @@ body {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  gap: calc(8px * var(--ui-scale));
-  margin-top: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  margin-top: var(--ui-gap-sm);
   min-height: calc(38px * var(--ui-scale));
-  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-radius: var(--oc-radius-soft);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--card-stage, var(--accent)) 24%, var(--card-border));
   border-left-width: calc(3px * var(--ui-scale));
@@ -525,7 +525,7 @@ body {
   display: inline-flex;
   align-items: center;
   min-height: calc(18px * var(--ui-scale));
-  padding: 0 calc(6px * var(--ui-scale));
+  padding: 0 var(--ui-gap-sm);
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--card-stage, var(--accent)) 14%, var(--surface));
   color: color-mix(in srgb, var(--card-stage, var(--accent)) 82%, var(--text));
@@ -574,7 +574,7 @@ body {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .todo-progress__track {
@@ -612,8 +612,8 @@ body {
   display: grid;
   grid-template-columns: minmax(calc(60px * var(--ui-scale)), calc(240px * var(--ui-scale))) auto minmax(0, 1fr);
   align-items: center;
-  gap: calc(10px * var(--ui-scale));
-  margin-top: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  margin-top: var(--ui-gap-xs);
   font-size: var(--card-sub-size);
   font-weight: var(--ui-font-weight-body);
 }
@@ -654,8 +654,8 @@ body {
 .card__foot {
   display: flex;
   align-items: center;
-  gap: calc(4px * var(--ui-scale, 1));
-  padding: calc(6px * var(--ui-scale, 1)) calc(10px * var(--ui-scale, 1));
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--card-border) 60%, transparent);
   font-size: calc(var(--card-sub-size) - calc(1px * var(--ui-scale, 1)));
   color: color-mix(in srgb, var(--text-muted) 92%, transparent);
@@ -665,9 +665,9 @@ body {
 .card__stat {
   display: inline-flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-height: calc(20px * var(--ui-scale, 1));
-  padding: calc(2px * var(--ui-scale, 1)) calc(7px * var(--ui-scale, 1));
+  padding: var(--ui-gap-3xs) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--surface-inset) 88%, transparent);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--text-muted) 16%, transparent);
@@ -801,7 +801,7 @@ body {
 .card[data-depth="0"][data-kind="tool"].card--collapsed {
   background: transparent;
   border-color: transparent;
-  margin: calc(2px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-3xs) 0;
 }
 
 .card[data-depth="0"][data-kind="tool"].card--collapsed:hover {
@@ -811,7 +811,7 @@ body {
 
 .card[data-depth="0"][data-kind="tool"].card--collapsed > .card__head {
   min-height: calc(28px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 76%, transparent);
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-hover) 58%, transparent);
@@ -827,7 +827,7 @@ body {
 .card[data-kind="tool"] .card__title-row {
   flex-wrap: nowrap;
   align-items: center;
-  column-gap: calc(6px * var(--ui-scale, 1));
+  column-gap: var(--ui-gap-sm);
 }
 .card[data-kind="tool"] .card__title {
   flex: 0 1 auto;
@@ -898,7 +898,7 @@ body {
 /* ── Body ────────────────────────────────────────────────── */
 
 .card__body {
-  padding: calc(10px * var(--ui-scale, 1)) var(--card-pad-x);
+  padding: var(--ui-gap-lg) var(--card-pad-x);
   border-top: 0 solid transparent;
   background: transparent;
   font-size: var(--card-sub-size);
@@ -907,23 +907,23 @@ body {
   min-width: 0;
 }
 .card:not([data-depth="0"]) > .card__body {
-  padding: calc(6px * var(--ui-scale, 1)) calc(8px * var(--ui-scale, 1)) calc(8px * var(--ui-scale, 1))
-    calc(12px * var(--ui-scale, 1));
+  padding: var(--ui-gap-sm) var(--ui-gap-md) var(--ui-gap-md)
+    var(--ui-gap-lg);
   border-top: none;
 }
 
 .card__children {
-  margin-top: calc(8px * var(--ui-scale, 1));
+  margin-top: var(--ui-gap-md);
   display: flex;
   flex-direction: column;
-  gap: calc(6px * var(--ui-scale, 1));
+  gap: var(--ui-gap-sm);
   min-width: 0;
 }
 
 /* ── Goal preamble ───────────────────────────────────────── */
 
 .card__goal-desc {
-  margin: calc(6px * var(--ui-scale)) 0 calc(12px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-sm) 0 var(--ui-gap-lg) 0;
   padding: 0;
   background: transparent;
   border: 0 solid transparent;
@@ -934,7 +934,7 @@ body {
 .card__goal-desc-label {
   display: inline-flex;
   align-items: center;
-  margin-bottom: calc(6px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-sm);
   padding: 0;
   border-radius: 0;
   background: transparent;
@@ -972,7 +972,7 @@ body {
 }
 
 .card-message-run + .card-message-run {
-  margin-top: calc(10px * var(--ui-scale));
+  margin-top: var(--ui-gap-lg);
 }
 
 /* ── Compatibility: make sure inline tool chips inside a card
@@ -980,10 +980,10 @@ body {
       Most rules are already in styles.css; only tweak spacing here. ── */
 
 .card__body .msg-tool {
-  margin: calc(2px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-3xs) 0;
 }
 .card__body .msg-text {
-  margin: calc(2px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-3xs) 0;
 }
 
 /* Model, context and usage share one ordinary icon in the header. The
@@ -991,12 +991,12 @@ body {
    tier instead of projecting three undersized text chips into the toolbar. */
 .card-metadata-tooltip {
   min-width: calc(240px * var(--ui-scale));
-  padding: calc(9px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
 }
 
 .card-metadata-tooltip__rows {
   display: grid;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   margin: 0;
 }
 
@@ -1004,7 +1004,7 @@ body {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: baseline;
-  gap: calc(14px * var(--ui-scale));
+  gap: var(--ui-gap-xl);
   font-size: var(--ui-font-control);
 }
 
@@ -1055,7 +1055,7 @@ body {
 
 .card__duration {
   flex: 0 0 auto;
-  padding: 0 calc(4px * var(--ui-scale));
+  padding: 0 var(--ui-gap-xs);
   font-size: var(--ui-font-control);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--ui-letter-spacing-loose);
@@ -1086,7 +1086,7 @@ body {
   background: var(--surface-inset);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 28%, var(--card-border));
   border-left: calc(3px * var(--ui-scale, 1)) solid var(--card-stage, var(--card-stage-info));
-  padding: calc(10px * var(--ui-scale, 1)) var(--card-pad-x);
+  padding: var(--ui-gap-lg) var(--card-pad-x);
   margin: var(--card-gap) 0;
   font-size: var(--card-title-size);
   color: var(--text);
@@ -1107,11 +1107,11 @@ body {
   display: flex;
   align-items: center;
   min-inline-size: 0;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   font-size: var(--card-title-size);
   font-weight: var(--ui-font-weight-strong);
   color: var(--card-stage);
-  margin-bottom: calc(6px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-sm);
   letter-spacing: var(--ui-letter-spacing-normal);
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -1131,7 +1131,7 @@ body {
 .interaction-card__body {
   font-size: var(--card-sub-size);
   color: var(--text);
-  margin-bottom: calc(8px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-md);
   word-break: break-word;
   user-select: text;
   -webkit-user-select: text;
@@ -1142,26 +1142,26 @@ body {
   font-size: var(--card-sub-size);
   color: var(--bad);
   overflow-wrap: anywhere;
-  margin-bottom: calc(6px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-sm);
 }
 .interaction-card__status {
   min-inline-size: 0;
   font-size: var(--card-meta-size);
   color: var(--text-muted);
   overflow-wrap: anywhere;
-  margin-bottom: calc(6px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-sm);
 }
 
 .interaction-card__questions {
   display: flex;
   flex-direction: column;
-  gap: calc(10px * var(--ui-scale));
-  margin-bottom: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  margin-bottom: var(--ui-gap-md);
 }
 .interaction-card__question {
   display: flex;
   flex-direction: column;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-inline-size: 0;
   margin: 0;
   padding: 0;
@@ -1179,13 +1179,13 @@ body {
 .interaction-card__options {
   display: flex;
   flex-direction: column;
-  gap: calc(3px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale)) 0;
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-xs) 0;
 }
 .interaction-card__option {
   align-items: baseline;
   min-inline-size: 0;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   font-size: var(--card-sub-size);
   color: var(--text);
   cursor: pointer;
@@ -1204,11 +1204,11 @@ body {
 .interaction-card__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(6px * var(--ui-scale));
-  margin-top: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  margin-top: var(--ui-gap-xs);
 }
 .interaction-card__actions .oc-button {
-  padding: calc(3px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
   font-size: var(--card-sub-size);
 }
 .interaction-card__option:focus-within {
@@ -1261,7 +1261,7 @@ body {
 .interaction-dialog-form > .dialog-header {
   flex: 0 0 auto;
   margin: 0;
-  padding: calc(18px * var(--ui-scale)) calc(22px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  padding: var(--ui-gap-2xl) var(--ui-gap-3xl) var(--ui-gap-xl);
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 74%, transparent);
   background: transparent;
   box-shadow: none;
@@ -1296,13 +1296,13 @@ body {
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
-  padding: calc(18px * var(--ui-scale)) calc(22px * var(--ui-scale));
+  padding: var(--ui-gap-2xl) var(--ui-gap-3xl);
 }
 
 .interaction-dialog-form .interaction-card__title {
   align-items: flex-start;
-  gap: calc(10px * var(--ui-scale));
-  margin: 0 0 calc(18px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  margin: 0 0 var(--ui-gap-2xl);
   color: var(--text-strong);
   font-size: var(--ui-font-title);
   font-weight: var(--ui-font-weight-strong);
@@ -1325,12 +1325,12 @@ body {
 }
 
 .interaction-dialog-form .interaction-card__questions {
-  gap: calc(22px * var(--ui-scale));
+  gap: var(--ui-gap-3xl);
   margin: 0;
 }
 
 .interaction-dialog-form .interaction-card__question {
-  gap: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
 }
 
 .interaction-dialog-form .interaction-card__question-text {
@@ -1341,7 +1341,7 @@ body {
 }
 
 .interaction-dialog-form .interaction-card__options {
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   padding: 0;
 }
 
@@ -1350,12 +1350,12 @@ body {
   grid-template-columns: calc(18px * var(--ui-scale)) minmax(0, 1fr);
   grid-template-rows: auto auto;
   align-items: start;
-  column-gap: calc(10px * var(--ui-scale));
-  row-gap: calc(3px * var(--ui-scale));
+  column-gap: var(--ui-gap-lg);
+  row-gap: var(--ui-gap-xs);
   min-width: 0;
   min-height: calc(48px * var(--ui-scale));
   box-sizing: border-box;
-  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-lg) var(--ui-gap-lg);
   border-radius: var(--oc-radius-large);
   font-size: var(--ui-font-control);
   line-height: 1.45;
@@ -1390,7 +1390,7 @@ body {
   grid-column: 1;
   grid-row: 1 / span 2;
   align-self: start;
-  margin: calc(2px * var(--ui-scale)) 0 0;
+  margin: var(--ui-gap-3xs) 0 0;
 }
 
 .interaction-dialog-form .interaction-card__option-label {
@@ -1412,16 +1412,16 @@ body {
   flex: 0 0 auto;
   align-items: center;
   justify-content: flex-end;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   margin: 0;
-  padding: calc(14px * var(--ui-scale)) calc(22px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-3xl);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 74%, transparent);
   background: var(--dialog-bg);
 }
 
 .interaction-dialog-form .interaction-card__actions .oc-button {
   min-width: calc(88px * var(--ui-scale));
-  padding-inline: calc(14px * var(--ui-scale));
+  padding-inline: var(--ui-gap-xl);
   font-size: var(--ui-font-control);
 }
 
@@ -1439,8 +1439,8 @@ body {
    body-first. Keep the steer form behind a quiet disclosure row by default. */
 .card__agent-reply-shell {
   display: grid;
-  gap: calc(7px * var(--ui-scale));
-  margin-top: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  margin-top: var(--ui-gap-xs);
 }
 
 .card__agent-reply-disclosure.oc-button {
@@ -1482,7 +1482,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   margin-top: 0;
   cursor: default;
 }
@@ -1496,8 +1496,8 @@ body {
   max-height: calc(58px * var(--ui-scale));
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
-  padding: calc(8px * var(--ui-scale)) calc(104px * var(--ui-scale)) calc(8px * var(--ui-scale))
-    calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-md) calc(104px * var(--ui-scale)) var(--ui-gap-md)
+    var(--ui-gap-lg);
   color: var(--text);
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   font: inherit;
@@ -1557,9 +1557,9 @@ body {
 .card__agent-reply-error {
   display: flex;
   align-items: flex-start;
-  gap: calc(6px * var(--ui-scale));
-  margin-top: calc(6px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  margin-top: var(--ui-gap-sm);
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
   border-radius: var(--oc-radius-soft);
   background: var(--bad-dim);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 36%, transparent);
@@ -1582,7 +1582,7 @@ body {
   min-width: calc(22px * var(--ui-scale));
 }
 .trace-panel {
-  margin: calc(8px * var(--ui-scale)) 0 calc(12px * var(--ui-scale));
+  margin: var(--ui-gap-md) 0 var(--ui-gap-lg);
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
@@ -1596,8 +1596,8 @@ body {
 /* trace-panel-head replaced by oc-panel__header override */
 .trace-panel > .oc-panel__header {
   justify-content: space-between;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--border);
   background: var(--surface);
 }
@@ -1608,7 +1608,7 @@ body {
 }
 .trace-panel-actions {
   display: inline-flex;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 .trace-panel-actions .oc-button[data-ui="trace-copy"],
 .trace-panel-actions .oc-button[data-ui="trace-refresh"],
@@ -1641,7 +1641,7 @@ body {
   --oc-button-color: var(--bad);
 }
 .trace-panel-empty {
-  padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  padding: var(--ui-gap-lg) var(--ui-gap-xl);
   font-size: calc(12px * var(--ui-scale));
   color: var(--text-muted);
 }
@@ -1649,7 +1649,7 @@ body {
   font-family: var(--mono);
   font-size: calc(11px * var(--ui-scale));
   background: var(--subtle-2);
-  padding: calc(1px * var(--ui-scale)) calc(4px * var(--ui-scale));
+  padding: var(--ui-gap-3xs) var(--ui-gap-xs);
   border-radius: var(--oc-radius-soft);
 }
 .trace-panel-body {
@@ -1718,8 +1718,8 @@ body {
 }
 .trace-event-body {
   margin: 0;
-  padding: calc(6px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(10px * var(--ui-scale))
-    calc(28px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-lg) var(--ui-gap-lg)
+    var(--ui-gap-4xl);
   font-family: var(--mono);
   font-size: calc(11px * var(--ui-scale));
   line-height: 1.5;
@@ -1745,14 +1745,14 @@ body {
   width: 100%;
   min-width: 0;
   margin: 0;
-  padding: calc(8px * var(--ui-scale)) 0;
+  padding: var(--ui-gap-md) 0;
   background: transparent;
   border: 0;
   border-top: 0;
   border-radius: 0;
   display: flex;
   flex-direction: column;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   font-size: var(--card-meta-size);
   color: var(--text-soft);
   box-sizing: border-box;
@@ -1761,7 +1761,7 @@ body {
 .task-progress__header {
   display: flex;
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   flex: none;
 }
 .task-progress__body {
@@ -1769,7 +1769,7 @@ body {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   overflow: visible;
   padding-bottom: 0;
 }
@@ -1827,8 +1827,8 @@ body {
   align-content: start;
   flex: none;
   min-height: 0;
-  column-gap: calc(5px * var(--ui-scale));
-  row-gap: calc(2px * var(--ui-scale));
+  column-gap: var(--ui-gap-sm);
+  row-gap: var(--ui-gap-3xs);
   overflow: visible;
 }
 

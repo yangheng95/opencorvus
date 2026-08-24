@@ -50,7 +50,7 @@
   min-height: var(--oc-density-control-height);
   height: auto;
   justify-content: flex-start;
-  padding: calc(5px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
   border: var(--oc-border-width) solid transparent;
   border-radius: var(--oc-radius-soft);
   font: var(--ui-font-weight-body) var(--ui-font-control) var(--font);

@@ -27,10 +27,6 @@
   --ui-left-rail-scrollbar-gutter-x: 0px;
 
   --ui-font-label: var(--ui-font-meta);
-  --ui-gap-xs: calc(4px * var(--ui-scale));
-  --ui-gap-sm: calc(6px * var(--ui-scale));
-  --ui-gap-md: calc(8px * var(--ui-scale));
-  --ui-gap-lg: calc(12px * var(--ui-scale));
   --ui-titlebar-padding-x: calc(8px * var(--ui-scale));
   --ui-brand-logo-size: calc(14px * var(--ui-scale));
   --ui-input-padding-y: calc(5px * var(--ui-scale));

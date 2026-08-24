@@ -341,7 +341,7 @@
   --oc-button-padding-x: calc(6px * var(--ui-scale));
 
   justify-content: flex-start;
-  margin-top: calc(4px * var(--ui-scale));
+  margin-top: var(--ui-gap-xs);
   color: var(--text-muted);
   font-size: var(--ui-font-control);
   font-weight: var(--ui-font-weight-body);
