@@ -59,6 +59,7 @@ describe("control lease release", () => {
         const released = releaseControlLease({
           target: "protocol_delivery",
           targetID,
+          leaseID: first.lease.id,
           ownerOccurrenceID: "owner-first",
           now: now + 500,
         })
@@ -90,7 +91,7 @@ describe("control lease release", () => {
       fn: async () => {
         const targetID = Identifier.ascending("protocol_inbox")
         const now = 2_000_000
-        acquireControlLease({
+        const holding = acquireControlLease({
           target: "protocol_delivery",
           targetID,
           ownerOccurrenceID: "owner-holding",
@@ -101,6 +102,7 @@ describe("control lease release", () => {
         const foreign = releaseControlLease({
           target: "protocol_delivery",
           targetID,
+          leaseID: holding.lease.id,
           ownerOccurrenceID: "owner-other",
           now: now + 10,
         })

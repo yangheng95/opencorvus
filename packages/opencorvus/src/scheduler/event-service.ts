@@ -13,7 +13,7 @@ import { isDeepStrictEqual } from "node:util"
 import { EventJobDefinitionTombstoneTable, EventJobFireReceiptTable, EventJobFireTable, EventJobTable, EventOccurrenceTable, type EventJobFireCausationEntry } from "./event.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { projectEventFireInTransaction, projectEventJobInTransaction, type EventJobFireRow, type EventJobRow } from "./event-projection"
-import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLeaseInTransaction, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 import { RuntimeExecutionAdmissionClosedError, RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
@@ -649,29 +649,35 @@ export namespace EventService {
     }
   }
 
+  /**
+   * Take the fire owner for the exact fire that is still at the head of its
+   * job's queue.
+   *
+   * Head-of-queue validation and lease acquisition share one write
+   * transaction. Split apart, another process can settle or supersede the fire
+   * between the two, and this claim then holds a lease over a fire it never
+   * validated.
+   */
   function claimFire(fireID: string, ownerID: string): EventJobFire | undefined {
     const now = Date.now()
-    const candidate = Database.use((db) => {
+    return Database.immediateTransaction((db) => {
       const candidate = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
       if (!candidate) return undefined
       const projected = projectEventFireInTransaction(db, candidate, now)
-      const projectedCandidate = projectEventFireInTransaction(db, candidate, now)
+      if (projected.status !== "pending") return undefined
       const head = db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all()
-        .map((row) => projectEventFireInTransaction(db, row, now)).find((row) => row.event_job_id === projectedCandidate.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
-      return head?.id === fireID && projected.status === "pending" ? projected : undefined
+        .map((row) => projectEventFireInTransaction(db, row, now)).find((row) => row.event_job_id === projected.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
+      if (head?.id !== fireID) return undefined
+      const acquired = acquireControlLeaseInTransaction(db, {
+        target: "event_fire",
+        targetID: fireID,
+        ownerOccurrenceID: ownerID,
+        now,
+        leaseMilliseconds: FIRE_LEASE_MS,
+      })
+      if (!acquired.acquired) return undefined
+      return { ...projected, status: "running" as const, owner_id: acquired.lease.owner_occurrence_id, lease_until: acquired.lease.expires_at }
     })
-    if (!candidate) return undefined
-    const supersedeLeaseID = Database.use((db) => {
-      const lease = currentControlLeaseInTransaction(db, "event_fire", fireID)
-      if (!lease || lease.expires_at <= now) return undefined
-      const latest = db.select().from(EventJobFireReceiptTable).where(eq(EventJobFireReceiptTable.fire_id, fireID))
-        .orderBy(sql`${EventJobFireReceiptTable.time_created} DESC`, sql`${EventJobFireReceiptTable.id} DESC`).get()
-      return latest?.outcome === "retry_wait" && latest.time_created >= lease.time_activated && (latest.retry_at ?? 0) <= now
-        ? lease.id
-        : undefined
-    })
-    const acquired = acquireControlLease({ target: "event_fire", targetID: fireID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: FIRE_LEASE_MS, supersedeLeaseID })
-    return acquired.acquired ? Database.use((db) => projectEventFireInTransaction(db, db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()!, now)) : undefined
   }
 
   function enqueueNextFireForJob(jobID: string): void {
@@ -889,6 +895,7 @@ export namespace EventService {
       const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
       if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now || fire.target_session_id !== sessionID) throw new Error(`Event fire ${fire.id} owner is no longer authoritative at success`)
       db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "succeeded", disposition: null, message_id: messageID, retry_at: null, error: null, time_created: now }).run()
+      releaseControlLeaseInTransaction(db, { target: "event_fire", targetID: fire.id, leaseID: lease.id, ownerOccurrenceID: ownerID, now })
     })
     enqueueNextFireForJob(fire.event_job_id)
     log.info("event job fire settled", {
@@ -918,13 +925,14 @@ export namespace EventService {
       const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
       if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
       db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "disposition", disposition, message_id: null, retry_at: null, error, time_created: now }).run()
+      releaseControlLeaseInTransaction(db, { target: "event_fire", targetID: fire.id, leaseID: lease.id, ownerOccurrenceID: ownerID, now })
       return true
     })
     if (settled) enqueueNextFireForJob(fire.event_job_id)
   }
 
   function deferFire(fire: EventJobFire, ownerID: string, error: unknown): void {
-    log.info("event fire deferred until its immutable lease expires", { fireID: fire.id, ownerID, error: errorMessage(error) })
+    log.info("event fire deferred to its current owner", { fireID: fire.id, ownerID, error: errorMessage(error) })
   }
 
   function scheduleRetry(fire: EventJobFire, job: EventJob | undefined, ownerID: string, error: unknown): void {
@@ -935,6 +943,9 @@ export namespace EventService {
       const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
       if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
       db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "retry_wait", disposition: null, message_id: null, retry_at: retryAt, error: message, time_created: now }).run()
+      // The receipt owns the retry time. Holding the lease past it would make
+      // the lease duration the retry period instead.
+      releaseControlLeaseInTransaction(db, { target: "event_fire", targetID: fire.id, leaseID: lease.id, ownerOccurrenceID: ownerID, now })
       return true
     })
     if (settled) scheduleLeaseRecovery(fire.id)

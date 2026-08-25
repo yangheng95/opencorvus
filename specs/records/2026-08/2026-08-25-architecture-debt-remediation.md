@@ -103,10 +103,12 @@ The audit's dependency order is the execution order. A stage may not start befor
 
 ### ARC-038 — Attached public clients have no terminal signal on a non-Task Session (new finding, open)
 
-- Trigger and impact: `opencorvus run --attach <server> --session <id>` converges only on `agent.execution.lifecycle` with a terminal status for its session (`cli/cmd/run.ts:556-564`). For a Session that no Task owns, that event is never published, so an attached CLI does not exit when the session is aborted — it waits out its stall timeout instead. The checker proves it: after `transport:session-aborted` the CLI is still alive ten seconds later.
-- Root: `persistTaskSessionLifecycle` (`orchestrator/protocol/message-bridge.ts`) resolves `taskID = explicitTaskID ?? lineageTaskID` and returns without publishing when there is none, and `appendBridgeEvent` writes every bridge event as `aggregate: "task"` with `aggregate_id: taskID`. `session.events` streams `ProtocolStore.subscribeEvents({ sessionID })`, so the terminal fact never reaches the subscriber. `persistSettledSessionTerminalStatus` deliberately sets `publish: false` and delegates to that bridge, so no other publication covers it.
-- Why this is architecture, not a local bug: the terminal execution fact is a Session fact, but its only publication path is a Task aggregate. Every attached public client of a non-Task Session therefore has no terminal receipt.
-- Bounded direction: the settled terminal status must publish on the Session aggregate when no Task owns the Session, so one event type carries one fact for every Session. `protocol_event.task_id` is already nullable, so this is an aggregate-binding change rather than a schema migration. Not implemented in this change.
+- Trigger and impact: `opencorvus run --attach <server> --session <id>` converges only on `agent.execution.lifecycle` with a terminal status for its session (`cli/cmd/run.ts:556-564`). When the Session settles through the restart-safe settled path, that event is published on no transport the CLI can see, so the CLI does not exit when the session is aborted — it waits out its stall timeout instead.
+- It is nondeterministic, which is why it must not be downgraded. Two consecutive `check:permission-modes` runs on the same source: the first reported `{"status":"passed"}` with `transports.cli` bound to the exact permission request; the second failed with `Attached CLI did not exit after the transport session was aborted`. Whether the abort settles through `publishSessionStatus` (which publishes on the Bus) or through `persistSettledSessionTerminalStatus` (which publishes nowhere) depends on whether the prompt was still in flight, so the terminal receipt an attached client sees is a race.
+- Root: the settled terminal path publishes nowhere the CLI can see it. `persistSettledSessionTerminalStatus` (`session/status-publication.ts:81-89`) calls `SessionStatus.set(..., { publish: false })` on both of its branches, which suppresses the `agent.execution.lifecycle` Bus publication that `SessionStatus.set` otherwise performs (`session/status.ts:322-345`), and then delegates to `persistTaskSessionLifecycle`, which returns without publishing when no Task owns the Session (`orchestrator/protocol/message-bridge.ts`: `taskID = explicitTaskID ?? lineageTaskID`, then `if (!taskID) return`) and which in any case writes to `protocol_event` as `aggregate: "task"`, feeding `session.events` rather than the global Bus stream.
+- Which transport each client uses, corrected by the independent review: `cli/cmd/run.ts:419` subscribes through `sdk.event.subscribe({})` — the global Bus SSE route (`server/routes/app.ts`, `operationId: "event.subscribe"`) — not `session.events`. So the CLI's blocker is the suppressed Bus publication, while the Overlay and web `session.events` subscribers are blocked by the Task-aggregate binding. Two transports, one missing fact.
+- Why this is architecture, not a local bug: one terminal execution fact has two publication owners and the settled path satisfies neither. The normal path (`publishSessionStatus`) publishes on the Bus; the restart-safe settled path publishes on neither, for every Session, Task-owned or not.
+- Bounded direction: the settled terminal fact must publish exactly once through the same owner the normal path uses, so an attached client converges regardless of which path settled the Session; the Task-aggregate binding of `protocol_event` is the separate half that `session.events` subscribers need. Not implemented in this change — the record earlier attributed the CLI symptom to the aggregate binding alone, which would have repaired `session.events` and left the CLI exactly as stuck.
 
 ### Checker repair
 
@@ -115,4 +117,32 @@ The audit's dependency order is the execution order. A stage may not start befor
 ## Stage log
 
 - Stage 1 (ARC-030): complete, reviewed and repaired against the review. Verification evidence is in the stage-1 section.
-- Stage 2 (ARC-036, ARC-037): implemented and verified as recorded above. ARC-038 is recorded and open; `check:permission-modes` still terminates on it, which is the honest current state of that checker.
+- Stage 2 (ARC-036, ARC-037, plus the shared-mechanism sweep across `channel`, `build_cleanup`, `lifecycle`, `session_control` and `event_fire` lease owners): implemented, independently reviewed, and repaired against that review. `check:permission-modes` reached a full `{"status":"passed"}` for the first time on this branch, and then failed the next run on ARC-038, which is recorded as an open nondeterministic terminal-convergence defect with a corrected root cause. Stage 2's remaining ledger items (ARC-009, ARC-014, ARC-016 through ARC-019, ARC-026, ARC-027) are not started.
+
+### Stage 2 independent review disposition
+
+The uninvolved read-only review of the stage-2 commit returned twelve findings.
+
+**Repaired in the follow-up change**
+
+- The `AGENTS.md` shared-mechanism sweep the stage owed. Four further control-lease owners abandoned their leases exactly as ARC-036 described, and all four now end their lease with the receipt that settles them: `channel/ingress.ts` (same `effect` target as ARC-037, and its `executeMessage` had no failure path at all), `engine/build-observation-cleanup.ts` (both the complete and the failed receipt, where reconciliation re-selects only after the lease ends), `mission/execution-closure.ts` (whose next closure busy-polls every 10-100 ms until the previous lease expires, and whose throwing path released nothing), and `session/control.ts` plus `session/loop.ts` (terminal settlement, and the renewal-failure path that abandons a still-pending control).
+- The `event_fire` shadow implementation. `event-projection.ts` derived a `leaseConsumed` flag to pretend a retry_wait receipt had ended its lease, and `event-service.ts` reconstructed the same predicate a second time to compute `supersedeLeaseID`. Both are deleted: `settleSuccess`, `settleDisposition` and `scheduleRetry` now release the lease with their receipt, and `claimFire` validates head-of-queue and acquires under one write transaction instead of three.
+- `triggerTaskWaitFromActivity` settled its whole batch in one transaction, so one job's lost fence rolled back every earlier job's tombstone *and its release*. Each wait now settles in its own transaction, and a wait whose revision moved on still hands its lease back.
+- `releaseControlLeaseInTransaction` now fences on the exact `leaseID`, like `assertControlLeaseInTransaction` and `renewControlLease`. Automation owner strings are `pid:now`, so owner identity alone was not an identity.
+- `completeExecution` asserted its fence at one `Date.now()` and released at a later one, and dropped the release's boolean; it now uses one settlement instant and fails if the release did not take.
+- `abandonEffectLease` could replace the caller's real error with its own write failure; it now keeps the original error and logs the handback failure.
+- The one-shot Automation settlement committed its succeeded receipt and then returned on a changed revision, contradicting the "one terminal transaction" it claims; it now throws so nothing commits.
+- The recurring, activity and failure settlements now take the same immediate write lock as the delay settlement.
+- `claim()` no longer runs the full run-history projection twice inside the write lock.
+- The checker's required-event loop no longer lists `mcp_task_status` and immediately skips it — that event is asserted after MCP task recovery, where it is produced — and the `full_access` assertion now also requires the `full-access-policy` decision actor, which is the settled decision the original list position implied.
+
+**Accepted as accurate and acted on**
+
+- ARC-038's recorded root cause was wrong about the transport. Corrected above.
+- The first added test asserts refusal and single-lease bookkeeping, which held before the change too. It is renamed to what it proves and now also asserts that a claim publishes the lease it took. The interleaving that ARC-036 describes needs a concurrent revision commit between two statements of one transaction and is not reproducible in-process without a production seam, so it is covered by the atomic transaction rather than by a test; this is stated rather than implied.
+- Two settlement paths gained the missing positive tests: a fire that throws hands back its lease with its failure receipt (through the real `executeWithRuntimeSettlement` failure path), and the one-shot delay settlement ends its lease with its terminal receipt (through the real `runDueNow` path).
+
+**Still open**
+
+- ARC-037 has no unit test of its own. Its evidence is the real `check:permission-modes` run, which now reaches and passes MCP task recovery, the durable task result, and SSE/CLI/ACP transport hydration. One full run reported `{"status":"passed"}`; the next failed on ARC-038, so the checker is not a stable green gate yet and is not claimed as one.
+- The activity-triggered Task-wait release and `claimPendingTaskWaitsFromActivity`'s revision fence are exercised only indirectly.

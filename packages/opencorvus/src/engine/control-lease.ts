@@ -79,6 +79,8 @@ export function assertControlLeaseInTransaction(db: Database.TxOrDb, input: {
 export interface ReleaseControlLeaseInput {
   target: EngineControlActivationTarget
   targetID: string
+  /** The exact lease being ended. Owner identity alone is not an identity. */
+  leaseID: string
   ownerOccurrenceID: string
   now: number
 }
@@ -97,7 +99,12 @@ export interface ReleaseControlLeaseInput {
  */
 export function releaseControlLeaseInTransaction(db: Database.TxOrDb, input: ReleaseControlLeaseInput): boolean {
   const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
-  if (!current || current.owner_occurrence_id !== input.ownerOccurrenceID || current.expires_at <= input.now) {
+  if (
+    !current ||
+    current.id !== input.leaseID ||
+    current.owner_occurrence_id !== input.ownerOccurrenceID ||
+    current.expires_at <= input.now
+  ) {
     return false
   }
   db.update(EngineControlActivationLeaseTable)

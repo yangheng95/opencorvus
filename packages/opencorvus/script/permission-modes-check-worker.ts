@@ -764,6 +764,7 @@ async function main() {
           pending: pendingCount,
           events: history.map((row) => row.event_type),
           modes: history.map((row) => row.mode),
+          actors: history.map((row) => row.actor_id),
           providers: history.map((row) => row.provider_kind),
           decisions: history.filter((row) => row.decision_scope).map((row) => row.decision_scope),
         }
@@ -848,12 +849,17 @@ async function main() {
     markActivity("matrix:cleanup-complete")
     // `full_access` is a Permission mode column, not a ledger event type — the
     // event union is declared by `PermissionEventType` in permission.sql.ts.
-    // Assert it where it is actually recorded.
+    // Assert both halves of the full-access path: the request carried the mode,
+    // and the policy settled the decision itself.
     if (!evidence.modes.includes("full_access")) {
       throw new Error("Permission checker missed a full_access ledger decision mode")
     }
-    for (const required of ["requested", "allowed_once", "execution_started", "mcp_task_created", "mcp_task_status", "execution_succeeded"]) {
-      if (required === "mcp_task_status") continue
+    if (!evidence.actors.includes("full-access-policy")) {
+      throw new Error("Permission checker missed the full-access policy decision actor")
+    }
+    // `mcp_task_status` belongs to the restarted poll and is asserted after MCP
+    // task recovery below, where it is actually produced.
+    for (const required of ["requested", "allowed_once", "execution_started", "mcp_task_created", "execution_succeeded"]) {
       if (!evidence.events.includes(required)) throw new Error(`Permission checker missed ledger event ${required}`)
     }
     await Instance.provide({

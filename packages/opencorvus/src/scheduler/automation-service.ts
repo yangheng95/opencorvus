@@ -880,17 +880,35 @@ export namespace AutomationService {
       for (const job of claimed) await fail(job, owner, error)
       throw error
     }
-    Database.transaction((db) => {
+    // Each claimed wait settles in its own transaction. Settling the whole
+    // batch in one meant that the last job's lost fence rolled back every
+    // earlier job's tombstone *and its lease release*, leaving those waits
+    // holding a two-minute lease with no receipt and no owner.
+    const unsettled: string[] = []
+    for (const job of claimed) {
       const settledAt = Date.now()
-      for (const job of claimed) {
+      const settled = Database.immediateTransaction((db) => {
         const lease = currentControlLeaseInTransaction(db, "automation", job.id)
-        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= settledAt) throw new AutomationRunningConflictError({ message: `Automation ${job.id} lost its activity lease`, automationID: job.id })
+        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= settledAt) return "lease"
         const latest = latestAutomationDefinitionInTransaction(db, job.id)
-        if (!latest || latest.id !== job.revision_id) throw new AutomationRunningConflictError({ message: `Automation ${job.id} definition changed during activity delivery`, automationID: job.id })
+        if (!latest || latest.id !== job.revision_id) {
+          // The definition moved on, so this wait has no tombstone to write —
+          // but this owner still holds its lease and must hand it back.
+          releaseControlLeaseInTransaction(db, { target: "automation", targetID: job.id, leaseID: lease.id, ownerOccurrenceID: owner, now: settledAt })
+          return "revision"
+        }
         appendAutomationTombstoneInTransaction(db, latest, settledAt)
-        releaseControlLeaseInTransaction(db, { target: "automation", targetID: job.id, ownerOccurrenceID: owner, now: settledAt })
-      }
-    })
+        releaseControlLeaseInTransaction(db, { target: "automation", targetID: job.id, leaseID: lease.id, ownerOccurrenceID: owner, now: settledAt })
+        return "settled"
+      })
+      if (settled !== "settled") unsettled.push(`${job.id} (${settled})`)
+    }
+    if (unsettled.length > 0) {
+      throw new AutomationRunningConflictError({
+        message: `Automation activity delivery could not settle ${unsettled.join(", ")}`,
+        automationID: claimed[0]!.id,
+      })
+    }
     log.info("pending task wait triggered early from activity", {
       taskID: input.taskId,
       projectID: input.projectId,
@@ -1133,7 +1151,9 @@ export namespace AutomationService {
         leaseMilliseconds: LEASE_MS,
       })
       if (!acquired.acquired) return undefined
-      return projectAutomationInTransaction(db, persisted)
+      // The projection already scanned every run of every revision; the only
+      // fact it could not know is the lease this transaction just took.
+      return { ...projected, lease_owner: acquired.lease.owner_occurrence_id, lease_until: acquired.lease.expires_at }
     })
   }
 
@@ -1182,26 +1202,32 @@ export namespace AutomationService {
         const completedAt = Date.now()
         // One terminal transaction: the succeeded receipt, the one-shot
         // tombstone and the end of this fire's lease are the same fact.
-        const settled = Database.immediateTransaction((db) => {
+        // One terminal transaction: the succeeded receipt, the one-shot
+        // tombstone and the end of this fire's lease are the same fact, so a
+        // lost fence must leave none of them behind.
+        Database.immediateTransaction((db) => {
           const lease = currentControlLeaseInTransaction(db, "automation", job.id)
-          if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= completedAt) return undefined
+          if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= completedAt) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${job.id} lost its execution lease before one-shot completion`,
+              automationID: job.id,
+            })
+          }
           const existing = db.select().from(AutomationRunReceiptTable).where(eq(AutomationRunReceiptTable.run_id, runID)).all()
             .find((receipt) => receipt.outcome === "succeeded")
           if (!existing) db.insert(AutomationRunReceiptTable).values({ id: Identifier.ascending("automation"), run_id: runID, outcome: "succeeded", time_created: completedAt }).run()
           if (!outcome.automationConsumed) {
             const latest = latestAutomationDefinitionInTransaction(db, job.id)
-            if (!latest || latest.id !== job.revision_id) return undefined
+            if (!latest || latest.id !== job.revision_id) {
+              throw new AutomationRunningConflictError({
+                message: `Automation ${job.id} definition changed before one-shot completion`,
+                automationID: job.id,
+              })
+            }
             appendAutomationTombstoneInTransaction(db, latest, completedAt)
           }
-          releaseControlLeaseInTransaction(db, { target: "automation", targetID: job.id, ownerOccurrenceID: owner, now: completedAt })
-          return { id: job.id }
+          releaseControlLeaseInTransaction(db, { target: "automation", targetID: job.id, leaseID: lease.id, ownerOccurrenceID: owner, now: completedAt })
         })
-        if (!settled) {
-          throw new AutomationRunningConflictError({
-            message: `Automation ${job.id} lost its execution lease before one-shot completion`,
-            automationID: job.id,
-          })
-        }
         log.info("automation triggered session wake", {
           jobId: job.id,
           fireID,
@@ -1277,7 +1303,7 @@ export namespace AutomationService {
       const retryAt = error ? automationRetryAt(job.failure_count + 1, committedAt) : 0
       const nextRun = error ? retryAt : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
       inactivityFence.touch("durable fire settlement")
-      Database.transaction((tx) => {
+      Database.immediateTransaction((tx) => {
         const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
         if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= committedAt) {
           throw new AutomationRunningConflictError({
@@ -1303,7 +1329,7 @@ export namespace AutomationService {
         // it, so the recorded retry time — or the next recurrence — is the
         // only thing deferring the target, and an immediately following
         // update, delete or manual rerun is not refused by a dead owner.
-        releaseControlLeaseInTransaction(tx, { target: "automation", targetID: job.id, ownerOccurrenceID: owner, now: committedAt })
+        releaseControlLeaseInTransaction(tx, { target: "automation", targetID: job.id, leaseID: lease.id, ownerOccurrenceID: owner, now: committedAt })
       })
       log.info("automation fire completed", {
         jobId: job.id,
@@ -1777,13 +1803,13 @@ export namespace AutomationService {
     const retryAt = automationRetryAt(step, now)
     const msg = err instanceof Error ? err.message : String(err)
 
-    const finalized = Database.transaction((tx) => {
+    const finalized = Database.immediateTransaction((tx) => {
       const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
       if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= now) return false
       appendAutomationFailureReceipts(tx, job, msg, retryAt, now)
       // The failure receipt owns the retry time; keeping the lease past it
       // would silently replace that retry time with the lease duration.
-      releaseControlLeaseInTransaction(tx, { target: "automation", targetID: job.id, ownerOccurrenceID: owner, now })
+      releaseControlLeaseInTransaction(tx, { target: "automation", targetID: job.id, leaseID: lease.id, ownerOccurrenceID: owner, now })
       return true
     })
 

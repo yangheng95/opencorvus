@@ -3,12 +3,7 @@ import { EngineBuildObservationCleanupReceiptTable, EngineBuildObservationCleanu
 import { Database, and, asc, eq } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { hostGit as runGit } from "@/util/git"
-import {
-  acquireControlLease,
-  assertControlLeaseInTransaction,
-  currentControlLeaseInTransaction,
-  renewControlLease,
-} from "./control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "./control-lease"
 import { Log } from "@/util/log"
 
 const log = Log.create({ service: "engine.build-observation-cleanup" })
@@ -246,41 +241,62 @@ export async function settleBuildObservationCleanup(input: {
   try {
     await (options?.deleteRefs ?? deleteOwnedRefs)(row, owner.signal)
     if (renewalFailure) throw renewalFailure
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
+      const settledAt = Date.now()
       assertControlLeaseInTransaction(db, {
         target: "build_cleanup",
         targetID: id,
         leaseID: acquired.lease.id,
         ownerOccurrenceID,
-        now: Date.now(),
+        now: settledAt,
       })
       db.insert(EngineBuildObservationCleanupReceiptTable).values({
         id: Identifier.deterministic("artifact", `build-cleanup-complete\0${id}`),
         observation_id: id,
         outcome: "complete",
         error: null,
-        time_created: Date.now(),
+        time_created: settledAt,
       }).onConflictDoNothing().run()
+      // The receipt is terminal, so this owner is done. Reconciliation selects
+      // an active row only once its lease has ended; keeping the lease alive
+      // after the receipt would make the lease duration the real retry period.
+      releaseControlLeaseInTransaction(db, {
+        target: "build_cleanup",
+        targetID: id,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now: settledAt,
+      })
     })
   } catch (cause) {
     if (renewalFailure || owner.signal.aborted) {
       throw new BuildObservationCleanupPendingError(id, renewalFailure ?? owner.signal.reason ?? cause)
     }
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
+      const settledAt = Date.now()
       assertControlLeaseInTransaction(db, {
         target: "build_cleanup",
         targetID: id,
         leaseID: acquired.lease.id,
         ownerOccurrenceID,
-        now: Date.now(),
+        now: settledAt,
       })
       db.insert(EngineBuildObservationCleanupReceiptTable).values({
         id: Identifier.ascending("artifact"),
         observation_id: id,
         outcome: "failed",
         error: cause instanceof Error ? cause.message : String(cause),
-        time_created: Date.now(),
+        time_created: settledAt,
       }).run()
+      // A failure receipt asks for another attempt. Reconciliation can only
+      // give it one once this lease has ended.
+      releaseControlLeaseInTransaction(db, {
+        target: "build_cleanup",
+        targetID: id,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now: settledAt,
+      })
     })
     throw new BuildObservationCleanupPendingError(id, cause)
   } finally {

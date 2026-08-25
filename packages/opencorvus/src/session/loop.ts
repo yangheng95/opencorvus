@@ -23,7 +23,7 @@ import { SessionCompaction } from "./compaction"
 import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
-import { acquireControlLease, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, releaseControlLease, renewControlLease } from "@/engine/control-lease"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
@@ -461,12 +461,27 @@ export namespace SessionLoop {
       }
     }, 30_000)
     const settlementLease = () => ({ leaseID: acquired.lease.id, ownerOccurrenceID, now: Date.now() })
+    // A renewal failure means this owner is gone while the control is still
+    // pending. Settlement cannot record that, so ownership goes back directly;
+    // otherwise the next attempt waits out the remaining lease for nothing.
+    const abandonControlLease = () => {
+      releaseControlLease({
+        target: "session_control",
+        targetID: input.control.id,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now: Date.now(),
+      })
+    }
     let result: Awaited<ReturnType<typeof SessionCompaction.process>>
     try {
       result = await input.run(leaseAbort.signal)
     } catch (error) {
       clearInterval(heartbeat)
-      if (renewalFailure) throw renewalFailure
+      if (renewalFailure) {
+        abandonControlLease()
+        throw renewalFailure
+      }
       const settled = SessionControl.fail({
         id: input.control.id,
         sessionID: input.sessionID,
@@ -479,7 +494,10 @@ export namespace SessionLoop {
       throw error
     }
     clearInterval(heartbeat)
-    if (renewalFailure) throw renewalFailure
+    if (renewalFailure) {
+      abandonControlLease()
+      throw renewalFailure
+    }
     if (typeof result === "object") {
       const throwable = compactionControlThrowable(result.error)
       const settled = SessionControl.fail({

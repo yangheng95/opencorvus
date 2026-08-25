@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { EngineTaskRootIngressTable } from "../src/engine/engine.sql"
 import { configureTaskIngressRunner, waitForIngressDeliveryHooksForTest } from "../src/engine/task-root-ingress-delivery"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
-import { acquireControlLease, renewControlLease } from "../src/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "../src/engine/control-lease"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { AutomationDefinitionTombstoneTable, AutomationRunTable, AutomationTable } from "../src/scheduler/automation.sql"
@@ -200,6 +200,10 @@ describe("delayed Task-wait immutable occurrence", () => {
         expect(run?.fire_id).toBe(taskWaitFireID(scheduled.id))
         const ingress = Database.use((db) => db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.source_id, run!.id)).get())
         expect(ingress).toMatchObject({ task_id: taskID, source: "automation_run", inline_payload: null })
+        // The one-shot terminal transaction writes the succeeded receipt, the
+        // tombstone and the end of the fire's lease as one fact.
+        const settledLease = Database.use((db) => currentControlLeaseInTransaction(db, "automation", scheduled.id))!
+        expect(settledLease.expires_at).toBeLessThanOrEqual(Date.now())
         expect(
           AutomationService.pendingDelayedWakeSchedule({
             projectID: Instance.project.id,

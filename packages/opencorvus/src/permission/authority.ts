@@ -340,12 +340,24 @@ export namespace PermissionAuthority {
    * and recovery in the next process waits on an owner that no longer exists.
    */
   function abandonEffectLease(lease: EffectLease): void {
-    releaseControlLease({
-      target: "effect",
-      targetID: lease.targetID,
-      ownerOccurrenceID: lease.ownerOccurrenceID,
-      now: Date.now(),
-    })
+    try {
+      releaseControlLease({
+        target: "effect",
+        targetID: lease.targetID,
+        leaseID: lease.id,
+        ownerOccurrenceID: lease.ownerOccurrenceID,
+        now: Date.now(),
+      })
+    } catch (error) {
+      // The caller is already raising the real failure — transport loss or
+      // shutdown — and that error carries the keys recovery needs. A write
+      // that cannot land here must not take its place; the lease then ends by
+      // expiry, which is the behavior that existed before this release.
+      log.warn("permission effect lease could not be handed back", {
+        attempt: lease.targetID,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
   }
 
   function appendEffectOutcome(
@@ -374,6 +386,7 @@ export namespace PermissionAuthority {
       if (lease) releaseControlLeaseInTransaction(db, {
         target: "effect",
         targetID: lease.targetID,
+        leaseID: lease.id,
         ownerOccurrenceID: lease.ownerOccurrenceID,
         now: settledAt,
       })
@@ -422,18 +435,19 @@ export namespace PermissionAuthority {
       time_created: Date.now(),
     }
     Database.immediateTransaction((db) => {
+      const settledAt = Date.now()
       if (input.lease) assertControlLeaseInTransaction(db, {
         target: "effect",
         targetID: input.lease.targetID,
         leaseID: input.lease.id,
         ownerOccurrenceID: input.lease.ownerOccurrenceID,
-        now: Date.now(),
+        now: settledAt,
       })
       db.insert(PermissionExecutionResultTable)
         .values({
           attempt_id: input.attempt,
           result: durable.payload,
-          time_created: Date.now(),
+          time_created: settledAt,
         })
         .onConflictDoNothing()
         .run()
@@ -458,12 +472,20 @@ export namespace PermissionAuthority {
       }
       // The durable result is the terminal receipt for this attempt. Its lease
       // ends with it, so nothing else has to wait out the remaining duration.
-      if (input.lease) releaseControlLeaseInTransaction(db, {
-        target: "effect",
-        targetID: input.lease.targetID,
-        ownerOccurrenceID: input.lease.ownerOccurrenceID,
-        now: Date.now(),
-      })
+      // Asserting the release keeps the two facts inseparable: a receipt that
+      // committed while the lease stayed live is the defect this repairs.
+      if (
+        input.lease &&
+        !releaseControlLeaseInTransaction(db, {
+          target: "effect",
+          targetID: input.lease.targetID,
+          leaseID: input.lease.id,
+          ownerOccurrenceID: input.lease.ownerOccurrenceID,
+          now: settledAt,
+        })
+      ) {
+        throw new Error(`Permission execution ${input.attempt} could not end the lease it settled`)
+      }
     })
     return input.result
   }
