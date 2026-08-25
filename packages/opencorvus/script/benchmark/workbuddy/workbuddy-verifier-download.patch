@@ -1,0 +1,13 @@
+diff --git a/src/workbuddy_bench/judge/runtime/harbor.py b/src/workbuddy_bench/judge/runtime/harbor.py
+index e977fb7..a0d3f82 100644
+--- a/src/workbuddy_bench/judge/runtime/harbor.py
++++ b/src/workbuddy_bench/judge/runtime/harbor.py
+@@ -107,8 +107,6 @@ class HarborAttemptRuntime:
+         source_dir: str | None = None,
+         target_dir: Path | None = None,
+     ) -> None:
+-        if getattr(self.environment.capabilities, "mounted", False):
+-            return
+         await self.environment.download_dir(
+             source_dir=source_dir or self.container_verifier_dir,
+             target_dir=target_dir or self.host_verifier_dir,

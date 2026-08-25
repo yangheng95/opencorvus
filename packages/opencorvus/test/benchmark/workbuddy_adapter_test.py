@@ -98,6 +98,7 @@ def test_preparation_records_exact_verifier_permission_overlay() -> None:
     preparation = PREPARE_PATH.read_text()
     permission_patch = VERIFIER_PERMISSION_PATCH_PATH.read_text()
     assert "workbuddy-verifier-upload-permission.patch" in preparation
+    assert "workbuddy-verifier-download.patch" in preparation
     assert "tmp_path.chmod(0o644)" in permission_patch
     assert "src/workbuddy_bench/judge/runtime/harbor.py" in permission_patch
 
@@ -110,6 +111,33 @@ def test_accepts_exact_skill_as_each_participating_owners_first_tool() -> None:
     result = MODULE.audit_skill_load_order(messages)
     assert result["passed"] is True
     assert len(result["successful_skill_loads"]) == 4
+
+
+def test_accepts_skill_discovery_before_exact_load_and_ignores_mission_outer_agent() -> None:
+    messages = [
+        assistant(
+            "mission",
+            "mission-session",
+            [{"type": "tool", "tool": "mission_skill", "state": {"status": "completed"}}],
+        ),
+        assistant(
+            "orchestrator",
+            "orchestrator-session",
+            [
+                {
+                    "type": "tool",
+                    "tool": "skill",
+                    "state": {"status": "completed", "input": {"action": "list"}},
+                },
+                skill_part(),
+                {"type": "tool", "tool": "read", "state": {"status": "completed"}},
+            ],
+        ),
+    ]
+    result = MODULE.audit_skill_load_order(messages, ["orchestrator"])
+    assert result["passed"] is True
+    assert result["dispatched_agents"] == ["orchestrator"]
+    assert result["unexpected_dispatched_agents"] == []
 
 
 def test_reports_action_before_skill_load_as_runtime_non_adherence() -> None:
@@ -518,6 +546,30 @@ def test_catalog_pairs_orphan_recovery_evidence_with_sibling_official_result(tmp
     assert attempt["official_result"] == (
         "attempts/run-1/2026-08-25__00-00-00/task-1__attempt/result.json"
     )
+
+
+def test_manifest_audit_preserves_zero_byte_files(tmp_path: Path) -> None:
+    wal = tmp_path / "opencorvus.db-wal"
+    wal.write_bytes(b"")
+    (tmp_path / "evidence-manifest.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "files": [
+                    {
+                        "path": "opencorvus.db-wal",
+                        "bytes": 0,
+                        "sha256": hashlib.sha256(b"").hexdigest(),
+                    }
+                ],
+            }
+        )
+    )
+    assert CATALOG.evidence_manifest_audit(tmp_path) == {
+        "passed": True,
+        "files": 1,
+        "violations": [],
+    }
 
 
 def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_path: Path) -> None:

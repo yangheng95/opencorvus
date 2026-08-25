@@ -285,7 +285,7 @@ def audit_skill_load_order(
     for message_index, message in enumerate(canonical_messages(messages)):
         info = message.get("info") or {}
         agent = info.get("agent")
-        if isinstance(agent, str) and agent:
+        if isinstance(agent, str) and agent and agent != "mission":
             dispatched.add(agent)
         if info.get("role") != "assistant" or agent not in OWNERS:
             continue
@@ -314,8 +314,10 @@ def audit_skill_load_order(
         if not exact_load:
             violations.append(f"missing_skill_load:{agent}:{current_session}")
             continue
-        first_tool = tools[0] if tools else None
-        if not first_tool or first_tool[:2] != exact_load[:2]:
+        first_material_tool = next(
+            (tool for tool in tools if tool[2].get("tool") != "skill"), None
+        )
+        if first_material_tool and exact_load[:2] > first_material_tool[:2]:
             violations.append(f"action_before_skill_load:{agent}:{current_session}")
         loads.append(
             {

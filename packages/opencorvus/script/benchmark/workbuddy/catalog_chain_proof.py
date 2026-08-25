@@ -92,10 +92,13 @@ def evidence_manifest_audit(root: Path) -> dict[str, Any]:
     if not manifest_path.is_file():
         return {"passed": False, "violations": ["evidence_manifest_missing"]}
     manifest = read_json(manifest_path)
-    expected = {
-        str(row.get("path")): (int(row.get("bytes") or -1), str(row.get("sha256") or ""))
-        for row in manifest.get("files") or []
-    }
+    expected = {}
+    for row in manifest.get("files") or []:
+        byte_count = row.get("bytes")
+        expected[str(row.get("path"))] = (
+            int(byte_count) if isinstance(byte_count, int) and byte_count >= 0 else -1,
+            str(row.get("sha256") or ""),
+        )
     actual = {}
     for path in sorted(root.rglob("*")):
         if not path.is_file() or path == manifest_path:

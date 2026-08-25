@@ -77,6 +77,10 @@ if ! grep -F 'tmp_path.chmod(0o644)' \
   "$workbuddy_root/src/workbuddy_bench/judge/runtime/harbor.py" >/dev/null; then
   git -C "$workbuddy_root" apply "$adapter_root/workbuddy-verifier-upload-permission.patch"
 fi
+if grep -F 'if getattr(self.environment.capabilities, "mounted", False):' \
+  "$workbuddy_root/src/workbuddy_bench/judge/runtime/harbor.py" >/dev/null; then
+  git -C "$workbuddy_root" apply "$adapter_root/workbuddy-verifier-download.patch"
+fi
 python3 - "$workbuddy_root" <<'PY'
 import subprocess
 import sys
