@@ -12,6 +12,7 @@ import { prepareTestProcessSupervisor } from "../../prepare-test-process-supervi
 import {
   EXTERNAL_BENCHMARK_SCHEMA_VERSION,
   acquireAutomationBenchTrialLease,
+  advanceBenchmarkActivityWindow,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
@@ -1271,10 +1272,11 @@ function currentMissionSchedulerSettlement() {
 async function waitForTerminal() {
   let signature = ""
   let inactivityDeadline = Date.now() + arguments_.inactivityMs
-  while (Date.now() < inactivityDeadline) {
+  let current: Awaited<ReturnType<typeof observations>>
+  while (true) {
     throwIfTerminationRequested()
     throwIfMissionSchedulerDrainFailed()
-    const current = await observations()
+    current = await observations()
     const status = String(current.missionStatus.status ?? "")
     if (
       current.missionRecord.completion &&
@@ -1283,10 +1285,16 @@ async function waitForTerminal() {
     ) {
       return current
     }
-    const next = missionActivitySignature(current)
-    if (next !== signature) {
-      signature = next
-      inactivityDeadline = Date.now() + arguments_.inactivityMs
+    const activity = advanceBenchmarkActivityWindow({
+      now: Date.now(),
+      currentDeadline: inactivityDeadline,
+      inactivityMs: arguments_.inactivityMs,
+      previousSignature: signature,
+      observedSignature: missionActivitySignature(current),
+    })
+    signature = activity.signature
+    inactivityDeadline = activity.deadline
+    if (activity.changed) {
       process.stdout.write(
         JSON.stringify({
           event: "activity",
@@ -1332,9 +1340,9 @@ async function waitForTerminal() {
     if (missionReachedNaturalTerminal(current) && currentMissionSchedulerSettlement()?.passed === false) {
       requestMissionSchedulerDrain()
     }
+    if (Date.now() >= inactivityDeadline) break
     await Bun.sleep(1000)
   }
-  const current = await observations()
   throwIfMissionSchedulerDrainFailed()
   if (activeMissionSchedulerDrain || currentMissionSchedulerSettlement()?.passed === false) {
     throw new Error("AutomationBench Mission scheduler delivery remained active through the full inactivity window")
@@ -1824,9 +1832,11 @@ try {
   }
   stage = "benchmark_scoring"
   const score = await bridge.request<{
+    scorer_state_schema: number
     partial_credit: number
     task_completed_correctly: number
     assertion_results: Array<Record<string, unknown>>
+    transient_assertion_state: { google_sheets_updated_row_keys: string[] }
     end_state_sha256: string
     final_world_sha256: string
     tool_calls: number
@@ -2005,6 +2015,8 @@ try {
         task_completed_correctly: score.task_completed_correctly,
       },
       assertion_results: score.assertion_results,
+      scorer_state_schema: score.scorer_state_schema,
+      transient_assertion_state: score.transient_assertion_state,
       end_state_sha256: score.end_state_sha256,
       initial_world_sha256: bridge.identity.initialWorldSHA256,
       final_world_sha256: score.final_world_sha256,

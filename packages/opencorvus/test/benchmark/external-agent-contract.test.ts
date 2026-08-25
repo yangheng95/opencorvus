@@ -9,6 +9,7 @@ import {
   AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256,
   acquireAutomationBenchTrialLease,
   benchmarkActivitySignature,
+  advanceBenchmarkActivityWindow,
   benchmarkInactivityDeadline,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
@@ -392,6 +393,27 @@ describe("external agent benchmark contract", () => {
   test("changes the activity signature when benchmark world activity advances", () => {
     const base = { board: { task: { status: "active" }, artifacts: [] }, transcript, trace: [], benchmarkEventCount: 1 }
     expect(benchmarkActivitySignature({ ...base, benchmarkEventCount: 2 })).not.toBe(benchmarkActivitySignature(base))
+  })
+
+  test("renews inactivity when a durable observation changes at the old deadline", () => {
+    expect(
+      advanceBenchmarkActivityWindow({
+        now: 11_000,
+        currentDeadline: 11_000,
+        inactivityMs: 10_000,
+        previousSignature: "before",
+        observedSignature: "after",
+      }),
+    ).toEqual({ changed: true, signature: "after", deadline: 21_000 })
+    expect(
+      advanceBenchmarkActivityWindow({
+        now: 11_000,
+        currentDeadline: 11_000,
+        inactivityMs: 10_000,
+        previousSignature: "same",
+        observedSignature: "same",
+      }),
+    ).toEqual({ changed: false, signature: "same", deadline: 11_000 })
   })
 
   test("extends inactivity through the earliest durable scheduled wake promise", () => {

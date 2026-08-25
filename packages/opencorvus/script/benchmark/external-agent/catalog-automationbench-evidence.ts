@@ -266,6 +266,8 @@ async function replayScorer(directory: string, result: Result, python: string) {
     task_completed_correctly:
       benchmark.diagnostic_metrics?.task_completed_correctly ?? benchmark.metrics?.task_completed_correctly,
     assertion_results: benchmark.assertion_results,
+    scorer_state_schema: benchmark.scorer_state_schema,
+    transient_assertion_state: benchmark.transient_assertion_state,
     end_state_sha256: benchmark.end_state_sha256,
     initial_world_sha256: benchmark.initial_world_sha256,
     final_world_sha256: benchmark.final_world_sha256,

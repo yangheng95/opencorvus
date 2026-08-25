@@ -2013,6 +2013,21 @@ export function benchmarkInactivityDeadline(input: {
     : input.currentDeadline
 }
 
+export function advanceBenchmarkActivityWindow(input: {
+  now: number
+  currentDeadline: number
+  inactivityMs: number
+  previousSignature: string
+  observedSignature: string
+}) {
+  const changed = input.observedSignature !== input.previousSignature
+  return {
+    changed,
+    signature: changed ? input.observedSignature : input.previousSignature,
+    deadline: changed ? input.now + input.inactivityMs : input.currentDeadline,
+  }
+}
+
 export function benchmarkActivitySignature(input: {
   board: Record<string, any>
   transcript: TranscriptMessage[]

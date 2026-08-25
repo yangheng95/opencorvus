@@ -351,14 +351,21 @@ class BridgeState:
                 }
                 partial = partial_credit(scoring_state)
                 strict = task_completed_correctly(scoring_state)
+                transient_assertion_state = {
+                    "google_sheets_updated_row_keys": sorted(
+                        getattr(self.world.google_sheets, "_updated_row_keys", set())
+                    )
+                }
                 final_world_bytes = self._world_bytes()
                 self.final_world_path.parent.mkdir(parents=True, exist_ok=True)
                 self.final_world_path.write_bytes(final_world_bytes)
                 final_world_sha256 = hashlib.sha256(final_world_bytes).hexdigest()
                 result = {
+                    "scorer_state_schema": 2,
                     "partial_credit": partial,
                     "task_completed_correctly": strict,
                     "assertion_results": scoring_state.get("_assertion_results", []),
+                    "transient_assertion_state": transient_assertion_state,
                     "end_state_sha256": final_world_sha256,
                     "final_world_sha256": final_world_sha256,
                     "tool_calls": self.tool_attempts,

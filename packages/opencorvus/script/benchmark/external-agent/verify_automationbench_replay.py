@@ -54,6 +54,22 @@ def main() -> None:
     if len(score_indexes) != 1:
         raise RuntimeError("event ledger must contain exactly one score event")
     score_index = score_indexes[0]
+    score_event = events[score_index]
+    scorer_state_schema = expected.get("scorer_state_schema", 1)
+    if scorer_state_schema != score_event.get("scorer_state_schema", 1):
+        raise RuntimeError("event ledger scorer-state schema did not match the sealed bridge score")
+    if scorer_state_schema == 2:
+        transient_assertion_state = expected.get("transient_assertion_state")
+        if not isinstance(transient_assertion_state, dict):
+            raise RuntimeError("sealed bridge score omitted transient assertion state")
+        if score_event.get("transient_assertion_state") != transient_assertion_state:
+            raise RuntimeError("event ledger transient assertion state did not match the sealed bridge score")
+        updated_row_keys = transient_assertion_state.get("google_sheets_updated_row_keys")
+        if not isinstance(updated_row_keys, list) or not all(isinstance(item, str) for item in updated_row_keys):
+            raise RuntimeError("sealed bridge score contained invalid Google Sheets row-write state")
+        object.__setattr__(world.google_sheets, "_updated_row_keys", set(updated_row_keys))
+    elif scorer_state_schema != 1:
+        raise RuntimeError(f"unsupported scorer-state schema: {scorer_state_schema}")
     accepted = [event for event in events[:score_index] if event.get("kind") in {"tool", "tool_error"}]
     replayed_stateful = 0
     replayed_non_stateful = 0

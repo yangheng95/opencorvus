@@ -147,6 +147,8 @@ async function replayScore(directory: string, payload: Record<string, any>) {
       payload.benchmark.diagnostic_metrics?.task_completed_correctly ??
       payload.benchmark.metrics?.task_completed_correctly,
     assertion_results: payload.benchmark.assertion_results,
+    scorer_state_schema: payload.benchmark.scorer_state_schema,
+    transient_assertion_state: payload.benchmark.transient_assertion_state,
     end_state_sha256: payload.benchmark.end_state_sha256,
     tool_attempts: payload.benchmark.tool_attempts,
     tool_succeeded: payload.benchmark.tool_succeeded,
