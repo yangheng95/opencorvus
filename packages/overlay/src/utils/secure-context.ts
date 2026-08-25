@@ -1,24 +1,30 @@
-// ── secureContextHint ──
-// Several browser APIs the overlay depends on exist only in a secure context:
-// the clipboard and SubtleCrypto among them. Reached over plain HTTP from
-// anything but localhost they are simply absent, and the failure that follows
-// names an API rather than a cause.
+// ── secure-context ──
+// Why a capability is missing, in the operator's language.
 //
-// This turns that into something an operator can act on. It is a *message*
-// helper, not a capability gate — callers still fail; they just say why.
+// A browser withholds the clipboard, SubtleCrypto and a few other APIs outside
+// a secure context — HTTPS, or localhost. There is no equivalent to reach for:
+// on a plain-HTTP LAN or Docker origin they are simply absent. All this module
+// can do is replace "点了没反应" with the actual reason and the actual remedy.
 
-/** Whether this page runs somewhere the restricted browser APIs exist. */
+import { t } from "./i18n"
+
+/**
+ * Whether this page is a secure context. A browser always answers; anything
+ * else (a test, a non-browser render) is treated as secure, because claiming
+ * an insecure origin without evidence would state a cause that may be false.
+ */
 export function inSecureContext(): boolean {
   return typeof globalThis.isSecureContext === "boolean" ? globalThis.isSecureContext : true
 }
 
 /**
- * Explain why a secure-context API is missing.
+ * Why `subjectKey`'s capability is unavailable here, localised.
  *
- * @param subject what the operator was trying to do, already localised.
+ * @param subjectKey i18n key naming what the operator was trying to do.
  */
-export function secureContextFailure(subject: string): string {
+export function secureContextFailure(subjectKey: string): string {
+  const subject = t(subjectKey)
   return inSecureContext()
-    ? `${subject} is unavailable in this browser`
-    : `${subject} needs a secure context: open OpenCorvus over HTTPS, or from localhost`
+    ? t("secure_context.unsupported", { subject })
+    : t("secure_context.needs_https", { subject })
 }

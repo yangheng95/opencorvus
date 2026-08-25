@@ -13,6 +13,7 @@ import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { SearchField } from "../ui/SearchField"
+import { copyText } from "../../services/clipboard"
 import {
   SettingsEmpty,
   SettingsGroup,
@@ -197,7 +198,7 @@ export default function MissionSkillPanel() {
   async function copyInvocation(skill: MissionSkillSettingsItem): Promise<void> {
     const owner = beginOperation(skill.name)
     try {
-      await navigator.clipboard.writeText(invocation(skill.name))
+      await copyText(invocation(skill.name))
       if (!owner.owns()) return
       setNoticeTone("active")
       setNotice(t("mission_skill.copied", { name: skill.name }))

@@ -24,6 +24,7 @@ import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
 import { SelectControl } from "./ui/SelectControl"
 import { fmtElapsed, logDetailFields, parseServerLogLine, stringifyLogValue } from "../utils/log"
+import { copyText } from "../services/clipboard"
 
 // ── Re-export types so callers can use them without importing store/app ──
 export type { LogEntry, LogLevel, LogSource }
@@ -166,11 +167,6 @@ function formatLogText(entries: LogEntry[]): string {
       return parts.join(" ")
     })
     .join("\n")
-}
-
-async function copyText(text: string): Promise<boolean> {
-  await navigator.clipboard.writeText(text)
-  return true
 }
 
 // ── LogEntryDetail subcomponent ──

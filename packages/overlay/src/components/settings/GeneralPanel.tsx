@@ -93,7 +93,6 @@ export default function GeneralPanel() {
       <Show when={!inSecureContext()}>
         <SettingsState>{t("settings.insecure_context")}</SettingsState>
       </Show>
-
       <PermissionsSettingsGroup />
 
       <SettingsGroup title={t("settings.section.notifications")}>

@@ -704,8 +704,9 @@ navigator.clipboard:  undefined     ← 上一章的判断成立
 | API | 位置 | 后果 | 处理 |
 |---|---|---|---|
 | `crypto.randomUUID` | 8 处，含 `tauri-transport.ts:440` 的流 ID（**启动必经**） | 启动即崩、白屏 | **B**：等价实现 |
-| `navigator.clipboard` | 6+ 处 | 复制静默失败 | **A**：人话错误 |
-| `crypto.subtle` | `ExpertSquadMarketPanel.tsx:49` 的包 SHA-256 校验 | 该功能失败 | **A**：人话错误 |
+| `navigator.clipboard`（写） | 8 处组件直接调用 + transport 1 处 | 复制静默失败 | **A**：统一到 transport 并给人话错误 |
+| `crypto.subtle` | 2 处：`ExpertSquadMarketPanel.tsx` 的包校验、`clipboard-api-key-prompt.ts:97` 的粘贴检测 | 前者失败、后者静默降级 | **A**：前者人话错误；后者已被 catch 成 unavailable，行为可接受 |
+| `Notification` | `tauri-transport.ts:106-123` | 权限恒为 denied | **A**：并入 General 说明 |
 
 这三处 `crypto.randomUUID` 自 `v0.0.35beta` 即存在，非本轮引入。
 
@@ -763,3 +764,45 @@ localhost 与桌面路径不受影响。
 
 桌面 Tauri 侧同一入口显示 **Open in File Manager**，编辑器启动器正常渲染，
 证明能力分支两端各自成立。证据：`desktop-open-in-file-manager.png`。
+
+### 独立复核结论与返工
+
+复核判定首版实现违反 二-2，理由成立，已返工。三项实质变更：
+
+**1. `randomUUID` 的分支是禁止的 fallback。** 首版写成
+`if (typeof crypto.randomUUID === "function") return crypto.randomUUID()`，
+失败时才推导。这是 二-2 明文禁止的 `try A else B`：在维护者实际运行的每个环境
+（localhost、Tauri、HTTPS）都走 A，而 B —— 唯一服务于本次修复受益者的路径 ——
+是冷代码，只有测试伪造 `globalThis.crypto` 才能进入。本仓库在同一 spec 谱系里
+（`specs/records/2026-08/README.md:7`）已经写明「both chosen by declared capability
+rather than by **a fallback inside the native call**」，首版正是走了回头路。
+
+现改为**无条件**从 `crypto.getRandomValues` 推导。二者依据同一 CSPRNG、同一 v4 契约，
+`getRandomValues` 的可用范围严格更广，调用量在每次用户操作数个 id 的量级，
+原生实现的速度差无从体现 —— 删掉分支没有代价，且让所有人跑的路径正是被测的路径。
+
+**2. 剪贴板写入原有 9 个实现。** 首版只在 transport 分支加了守卫，而 8 个组件
+各自直调 `navigator.clipboard.writeText`：其中 `CodeArtifact`、`TerminalArtifact`
+的 `onClick` 是裸 async，非安全源下抛未捕获 Promise、界面毫无反应 —— 恰是本章
+分析里 A 要消灭的「点了没反应」；`LogViewer`、`MissionSkillPanel`、`main.tsx`
+把裸 TypeError 文本塞进通知；另有 4 种互不相同的措辞描述同一种失败。
+
+现新增 `services/clipboard.ts` 作为唯一写入口，走已声明的 `clipboard.writeText`
+能力：桌面端因此拿到 Tauri 原生剪贴板（此前用的是 WebView 的），浏览器端拿到
+带守卫的实现，失败原因只在一处措辞。裸 `onClick` 用 `copyTextReporting` 收敛为
+可见报告。`chat.message_copy_unavailable` 随之失去调用点，已删除。
+
+**3. 失败文案此前不过 i18n。** `secureContextFailure` 接收英文字面量并拼接英文尾巴，
+于是 zh-CN 用户在 General 读到正确中文说明，点复制却弹出整句英文 —— 偏偏后者才是
+真正会碰到的那一半。现改为接收 i18n key，两条模板与两个 subject 均入双语目录。
+
+复核同时更正了本章审计表两处事实错误（`crypto.subtle` 有 2 处而非 1 处；
+桌面通知在非安全源同样恒为 denied，此前未列入），表格已改，General 说明已补上桌面通知。
+
+**测试返工**：首版 `random-uuid.test.ts` 只做正则匹配与 500 次去重，
+一个零熵计数器 `00000000-0000-4000-8000-{n}` 可完整通过，而这些 id 是流请求 ID；
+version/variant 位更只是单样本抽查，实现漏置时有 1/64 概率蒙混过关。
+现改为对固定字节序列断言精确输出（全 0x00、全 0xff、0x00..0x0f 三组），
+并钉住每次调用都取用 `getRandomValues`。以「删掉 version 位」反向验证：新测试 3 项失败，
+旧测试大概率通过。另补 `secure-context.test.ts` 与 `clipboard-single-writer.test.ts`
+（三-32 要求的新增非 UI 逻辑正向测试）。

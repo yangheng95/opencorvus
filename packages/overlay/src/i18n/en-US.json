@@ -202,7 +202,6 @@
   "chat.message_copy": "Copy message",
   "chat.message_copied": "Message copied",
   "chat.message_copy_failed": "The message could not be copied.",
-  "chat.message_copy_unavailable": "Clipboard access is unavailable.",
   "chat.debug_copy_hint": "Open the conversation menu to copy diagnostics, then paste them into AI for analysis.",
   "chat.debug_copy_action": "Copy diagnostics",
   "chat.debug_copy_project_directory_unavailable": "Debug information is unavailable because this conversation has no persisted project directory.",
@@ -1341,7 +1340,7 @@
   "settings.section.connection": "Connection",
   "settings.section.diagnostics": "Diagnostics",
   "settings.section.notifications": "Notifications",
-  "settings.insecure_context": "This page is not in a secure context. Copying to the clipboard and Expert Squad package verification are unavailable here — open OpenCorvus over HTTPS, or from localhost.",
+  "settings.insecure_context": "This page is not in a secure context. Copying to the clipboard, desktop notifications, and Expert Squad package verification are unavailable here — open OpenCorvus over HTTPS, or from localhost.",
   "settings.log_export_label": "Export logs",
   "settings.log_export_hint": "Download a ZIP support bundle with every retained raw log, readable formatted copies, and a detailed diagnostic manifest.",
   "settings.log_export_button": "Export ZIP",
@@ -1893,5 +1892,9 @@
   "usage.table_tokens": "Token",
   "usage.table_cost": "Cost",
   "usage.table_share": "Share",
-  "usage.no_model_data": "No model usage for this period."
+  "usage.no_model_data": "No model usage for this period.",
+  "secure_context.needs_https": "{{subject}} needs a secure context: open OpenCorvus over HTTPS, or from localhost",
+  "secure_context.unsupported": "{{subject}} is unavailable in this browser",
+  "secure_context.subject.clipboard": "The clipboard",
+  "secure_context.subject.package_digest": "Verifying the package digest"
 }

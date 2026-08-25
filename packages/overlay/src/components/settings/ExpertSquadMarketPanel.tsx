@@ -49,7 +49,7 @@ async function blobToBase64(blob: Blob): Promise<string> {
 async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
   // SubtleCrypto has no equivalent outside a secure context, so this check
   // cannot be performed at all there — say so rather than throwing on undefined.
-  if (!crypto.subtle) throw new Error(secureContextFailure("Verifying the package digest"))
+  if (!crypto.subtle) throw new Error(secureContextFailure("secure_context.subject.package_digest"))
   const digest = await crypto.subtle.digest("SHA-256", bytes)
   return Array.from(new Uint8Array(digest), (value) => value.toString(16).padStart(2, "0")).join("")
 }

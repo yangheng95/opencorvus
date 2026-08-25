@@ -226,6 +226,7 @@ import {
   mergeComposerExpertSquadOptions,
 } from "./services/composer-expert-squad-catalog"
 import { currentUIScale, layoutTokenPx } from "./utils/layout-tokens"
+import { copyText } from "./services/clipboard"
 
 // ── Module teardown ──
 // Centralised cleanup for top-level document/window listeners and the Solid root.
@@ -1590,7 +1591,7 @@ document.addEventListener(
       .replace(/&#39;/g, "'")
     runMainAsync("markdown.copy-code", async () => {
       try {
-        await navigator.clipboard.writeText(decoded)
+        await copyText(decoded)
         flash(t("markdown.copied"))
       } catch (err) {
         console.error("[md-copy] clipboard write failed", err)

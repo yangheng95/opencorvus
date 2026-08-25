@@ -202,7 +202,6 @@
   "chat.message_copy": "复制消息",
   "chat.message_copied": "消息已复制",
   "chat.message_copy_failed": "无法复制消息。",
-  "chat.message_copy_unavailable": "剪贴板访问不可用。",
   "chat.debug_copy_hint": "在对话菜单中复制诊断信息，然后粘贴到 AI 中分析。",
   "chat.debug_copy_action": "复制诊断信息",
   "chat.debug_copy_project_directory_unavailable": "无法获取调试信息：当前会话没有持久化的项目目录。",
@@ -1341,7 +1340,7 @@
   "settings.section.connection": "连接",
   "settings.section.diagnostics": "诊断",
   "settings.section.notifications": "通知",
-  "settings.insecure_context": "当前页面不在安全上下文中。复制到剪贴板、专家团安装包校验在此环境下不可用 —— 请通过 HTTPS 或 localhost 访问 OpenCorvus。",
+  "settings.insecure_context": "当前页面不在安全上下文中。复制到剪贴板、桌面通知、专家团安装包校验在此环境下不可用 —— 请通过 HTTPS 或 localhost 访问 OpenCorvus。",
   "settings.log_export_label": "导出日志",
   "settings.log_export_hint": "下载 ZIP 支持包，包含全部保留的原始日志、易读格式化副本和详细诊断清单。",
   "settings.log_export_button": "导出 ZIP",
@@ -1893,5 +1892,9 @@
   "usage.table_tokens": "Token",
   "usage.table_cost": "成本",
   "usage.table_share": "占比",
-  "usage.no_model_data": "本周期暂无模型用量。"
+  "usage.no_model_data": "本周期暂无模型用量。",
+  "secure_context.needs_https": "{{subject}}需要安全上下文：请经 HTTPS 或 localhost 访问 OpenCorvus",
+  "secure_context.unsupported": "此浏览器不支持{{subject}}",
+  "secure_context.subject.clipboard": "剪贴板",
+  "secure_context.subject.package_digest": "校验安装包摘要"
 }

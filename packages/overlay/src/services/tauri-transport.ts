@@ -557,7 +557,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           }
           case "clipboard.writeText":
             if (!navigator.clipboard?.writeText) {
-              throw new Error(secureContextFailure("The clipboard"))
+              throw new Error(secureContextFailure("secure_context.subject.clipboard"))
             }
             return navigator.clipboard.writeText(command.text)
           case "notification.permission":
