@@ -3,7 +3,7 @@ set -euo pipefail
 
 workbuddy_root=/var/lib/opencorvus-benchmark/source/workbuddy-bench
 active_runner=/var/lib/opencorvus-benchmark/opencorvus-runner
-runtime_source=/var/lib/opencorvus-benchmark/source/opencorvus-workbuddy-runtime-e8cdd1be
+runtime_source=/var/lib/opencorvus-benchmark/source/opencorvus-workbuddy-runtime-e8cdd1be-r2
 control_root=/var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-code-v20260825-chain-proof
 bench_root=/mnt/d/myhexin-local/opencorvus-bench
 bench_commit="${OPENCORVUS_BENCH_COMMIT:?OPENCORVUS_BENCH_COMMIT must be supplied by the Windows worktree owner}"
@@ -63,17 +63,13 @@ PY
 if [ ! -d "$runtime_source/.git" ]; then
   git clone --shared --no-checkout "$active_runner" "$runtime_source"
   git -C "$runtime_source" checkout --detach "$runtime_commit"
-  cp -al "$active_runner/node_modules" "$runtime_source/node_modules"
 fi
 test "$(git -C "$runtime_source" rev-parse HEAD)" = "$runtime_commit"
-while IFS= read -r source_modules; do
-  relative="${source_modules#"$active_runner"/}"
-  target_modules="$runtime_source/$relative"
-  if [ ! -e "$target_modules" ]; then
-    mkdir -p "$(dirname "$target_modules")"
-    cp -al "$source_modules" "$target_modules"
-  fi
-done < <(find "$active_runner/packages" -mindepth 2 -maxdepth 4 -type d -name node_modules -print)
+if [ ! -d "$runtime_source/node_modules" ]; then
+  cd "$runtime_source"
+  PATH=/var/lib/opencorvus-benchmark/bun/bin:$PATH \
+    /var/lib/opencorvus-benchmark/bun/bin/bun install --frozen-lockfile
+fi
 
 if [ ! -f "$runtime_source/packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz" ]; then
   cd "$runtime_source"
