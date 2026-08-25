@@ -100,14 +100,14 @@ def find_node(workflow: dict[str, Any], class_type: str) -> tuple[str, dict[str,
 
 def load_shot(manifest_path: Path, shot_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("schema_version") != 1 or manifest.get("creative_direction") != "live-type-runtime-v9":
-        raise RuntimeError(f"Unsupported or non-V9 production manifest: {manifest_path}")
+    if manifest.get("schema_version") != 1 or manifest.get("manifest_kind") != "h3-video-production":
+        raise RuntimeError(f"Unsupported H3 production manifest: {manifest_path}")
     if manifest.get("production_status") != "prompt-locked":
-        raise RuntimeError(f"V9 manifest is not prompt-locked: {manifest.get('production_status')!r}")
+        raise RuntimeError(f"H3 manifest is not prompt-locked: {manifest.get('production_status')!r}")
     shot_pool = [*manifest.get("bootstrap_shots", []), *manifest.get("shots", [])]
     shot = next((item for item in shot_pool if item.get("id") == shot_id), None)
     if shot is None:
-        raise ValueError(f"Shot {shot_id!r} is absent from the V9 manifest")
+        raise ValueError(f"Shot {shot_id!r} is absent from the H3 manifest")
     required = {
         "mode",
         "duration_seconds",
@@ -513,7 +513,7 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--base-url", default="http://127.0.0.1:8188")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
-    parser.add_argument("--shot", required=True, help="V9 shot id, for example S03.")
+    parser.add_argument("--shot", required=True, help="Manifest shot id, for example S03.")
     parser.add_argument("--take", required=True, help="Immutable take label, for example take-001.")
     parser.add_argument("--width", type=int, default=608)
     parser.add_argument("--height", type=int, default=352)

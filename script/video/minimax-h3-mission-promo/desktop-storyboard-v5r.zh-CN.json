@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "production_status": "renderer-locked",
+  "title": "别再给 Agent 当项目经理",
+  "canvas": {"width": 1920, "height": 1080, "fps": 25},
+  "brand": {
+    "product": "OpenCorvus",
+    "website": "opencorvus.com",
+    "repository": "github.com/yangheng95/opencorvus",
+    "author": "Heng Yang · @yangheng95",
+    "case_repository": "github.com/yangheng95/deberta-v3-absa-public-evidence"
+  },
+  "scenes": [
+    {
+      "id": "R01-project",
+      "duration": 18,
+      "mode": "project-input",
+      "narration": "你交给 Agent 的，往往不是一句问题，而是一个项目：模型、数据、CUDA 实验、网页、论文、测试，最后还要经你确认再发布。"
+    },
+    {
+      "id": "R02-failure",
+      "duration": 24,
+      "mode": "context-failure",
+      "narration": "任务一长，工具结果不断写回有限的 context。第三次 compaction 后，CUDA、测试和发布确认被压成模糊摘要。计划跳到写报告，device 变成 CPU，测试没跑，Agent 却已经说 Done。"
+    },
+    {
+      "id": "R03-fragmentation",
+      "duration": 16,
+      "mode": "fragmentation",
+      "narration": "多开几个 Agent 也不会自动协作。两个会话改同一个文件，第三个等待不存在的 checkpoint。状态被切碎，最后还是你复制上下文、追问和派活。"
+    },
+    {
+      "id": "R04-mission-record",
+      "duration": 22,
+      "mode": "mission-record",
+      "narration": "Mission 先把目标、硬约束、验收标准和 Task 依赖写进对话之外的持久记录。后面的计划、执行和复核，都读取同一份契约。"
+    },
+    {
+      "id": "R05-scheduler",
+      "duration": 25,
+      "mode": "scheduler",
+      "narration": "上游未交付，下游保持 waiting。依赖满足后，协调者重新读取持久事实，模型判断下一步，再发出真实的 dispatch agent 调用。收到回执后，这一次 occurrence 才进入 running。"
+    },
+    {
+      "id": "R06-recovery",
+      "duration": 21,
+      "mode": "recovery",
+      "narration": "如果服务中断，旧的 physical attempt 会在 lease 到期后被明确终结。新的 successor activation 读取持久事实和既有产物，继续同一个 Task，而不是假装旧进程从原地复活。"
+    },
+    {
+      "id": "R07-artifact",
+      "duration": 19,
+      "mode": "artifact",
+      "narration": "专家团交接的不是一句完成了。Artifact 记录 type、source、locator 和 digest；适用时再带真实 path。下游先 read，再明确 select 自己消费的来源。"
+    },
+    {
+      "id": "R08-review",
+      "duration": 19,
+      "mode": "review",
+      "narration": "实现者不能自己宣布过关。独立 Reviewer 按验收标准复现问题：缺陷成立就 rejected，退回修复和复验；证据满足才 accepted，无法继续则 blocked with evidence。"
+    },
+    {
+      "id": "R09-evolution",
+      "duration": 23,
+      "mode": "evolution",
+      "narration": "专家团的改进也不能静默发生。你的反馈先形成 candidate revision，由你决定是否安装；度量路径则冻结版本、用例、评分器和预算，同条件比较。回归候选直接淘汰，安装与恢复都有 receipt。"
+    },
+    {
+      "id": "R10-open-ecosystem",
+      "duration": 14,
+      "mode": "open-ecosystem",
+      "narration": "OpenCorvus 采用 MIT License，可以自托管、审计和 fork。编码 Agent、办公 Agent 和 runtime harness 都能接入；Mission 负责更上层的长程推进和验收。"
+    },
+    {
+      "id": "R11-proof",
+      "duration": 21,
+      "mode": "case-proof",
+      "narration": "一条真实 DeBERTa Mission 用约十二小时四十五分推进六个重型 Task，调度三支内置专家团和四十六个 Agent 会话。在一张 RTX 5090 上完成三组 CUDA 实验；验证 Macro F1 为 83.43，测试为 83.61。单 seed、1800 条训练样本，只代表本次 fixed run。"
+    },
+    {
+      "id": "R12-personal-cta",
+      "duration": 16,
+      "mode": "personal-cta",
+      "narration": "论文、课程项目、个人开源软件、副业应用、作品集、独立研究。别再替 Agent 维持每一次交接。打开 OpenCorvus，创建你的第一个 Mission。"
+    }
+  ]
+}

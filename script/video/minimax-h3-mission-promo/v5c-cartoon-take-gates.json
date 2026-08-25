@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "manifest": "v5c-cartoon-task-metaphor-trials.json",
+  "manifest_sha256": "cb307a83d38cd95cda641e3edf5030cd2a08ac9a7a96cb0df67433b970602d01",
+  "review_contract": [
+    "same recurring character and visual grammar",
+    "intended cause and emotional beat readable without narration",
+    "no extra limbs, melting, clipping or identity drift",
+    "no generated readable text, third-party logo or fake interface",
+    "five-frame action continuity",
+    "physical file and frame digests match this ledger"
+  ],
+  "shots": {
+    "C01": {
+      "status": "accepted",
+      "rejected": [
+        {
+          "take": "take-001-8a8a6bbd58d2",
+          "sha256": "03eb23f01492a031abee050664669c6f888051b2079b2a57426b771642632193",
+          "reason": "The task objects accumulated, but the creator smiled through the entire shot; user pain was not observable."
+        },
+        {
+          "take": "take-002-8bd78ea86554",
+          "sha256": "6745b459eebe4770dfc2e952ce9c6cce4734c203419e20bc3f595c3c3b609034",
+          "reason": "The pain performance worked, but H3 invented a desktop computer with an Apple-like third-party logo and broke the reference laptop continuity."
+        }
+      ],
+      "accepted": {
+        "take": "take-003-2857426cfe27",
+        "path": "D:/myhexin-local/demos/opencorvus-cartoon-v5c-20260825/h3-local/C01/take-003-2857426cfe27/C01.mp4",
+        "sha256": "db003d02ae97224c5e09f6c8fc484095549fb4fb6112859a8aba5a5794f70120",
+        "reason": "Same creator and flat-line visual grammar; six differentiated task objects accumulate; the creator stops typing and presses the temple; laptop remains unbranded; no extra limbs or readable fake text.",
+        "frames": {
+          "start": "fcaf65f1adba412f9ef229c89de894572453ba55ade2545510a8c862317f178b",
+          "quarter": "a1b39ebc109744abdd226487df8ae9c799047afa69f29e04fe010321720fde8d",
+          "middle": "cd01d322d14e3b14cc373e5f9f7a57f30fc12d65a2618f6533e540c656ed9810",
+          "three_quarter": "f2e2705b35fa869e5fbae9347c730e6ae2c4a7d6b4289a8d325e9de2c2d6d382",
+          "end": "ca7d8f3d07cdebe280a441b9441b50e93749d5f4d595ba828d7ac0f1939f0182"
+        }
+      }
+    },
+    "C02": {
+      "status": "accepted",
+      "rejected": [
+        {
+          "take": "take-001-606b0c666b5d",
+          "sha256": "460d82653b6febc09ba916d2a7a3a6b2463646dfb9a4ef5e7943b099cfbc1ad9",
+          "reason": "Four mechanisms overloaded one short shot: the orange constraint never detached, checkpoints were absent, a second human appeared and generated pseudo-text polluted the floor."
+        },
+        {
+          "take": "take-002-95537c11916f",
+          "sha256": "f5550a10ce47854e295f55fe77b7780265111561ca9115d99c5472d8b01fbd43",
+          "reason": "The blue ring filled and the orange tail detached correctly, but the full infographic reference reappeared as three expert panels with generated pseudo-text behind the single-Agent mechanism."
+        },
+        {
+          "take": "take-003-403f5db3f63a",
+          "sha256": "0c9a2dc5c4fecfbb5f49e8be42c6650b74d3a324015b27631fb706b7a2fdca64",
+          "reason": "Small robot-only references still produced a surrounding human team; the robot also collapsed to a head-only identity."
+        },
+        {
+          "take": "take-004-557757ff5a4e",
+          "sha256": "79cfb9041f1fceb97d159108e8d6cce54f92144451c4b496fafd777d155506fc",
+          "reason": "Clean FL2VA endpoints worked, but runtime_elements injected the global Mission and squad contract, causing experts and pseudo-documents to appear throughout the middle frames."
+        }
+      ],
+      "accepted": {
+        "take": "take-005-38933233d45c",
+        "path": "D:/myhexin-local/demos/opencorvus-cartoon-v5c-20260825/h3-local/C02/take-005-38933233d45c/C02.mp4",
+        "sha256": "10cd7fdbef2984f901a0f1d70676229077f4562dd69a8229e4e2bd2a7d838c4c",
+        "reason": "Exactly one stable full-body robot and one finite ring; blue segments fill the fixed ring; the sole orange tail peels away and lands below-left; clean background with no people, panels, pseudo-text or logos.",
+        "frames": {
+          "start": "c7318ab61681d3ce4f66957e9b242aba99209f791c0a45d188910b09c825bf2b",
+          "quarter": "9c7472cdfc63d35fcc588f7c7ddd2d8ccddfaffcba24235b225b14d47361cba7",
+          "middle": "515e9450d9321864210b23a6730261635df7636bb2e2a3e84f540cbdcc85484b",
+          "three_quarter": "4f8ce0b93d010b846cf4c6e614be29b7e65a8a1511a1be55d026e1262d5f659d",
+          "end": "398f7d8d3f7c6d118ef0d5b64b5dd92e85c4c41660be4ef8da2b91d1c0689dcb"
+        }
+      }
+    },
+    "C02B": {
+      "status": "accepted",
+      "rejected": [],
+      "accepted": {
+        "take": "take-001-8391795552b6",
+        "path": "D:/myhexin-local/demos/opencorvus-cartoon-v5c-20260825/h3-local/C02B/take-001-8391795552b6/C02B.mp4",
+        "sha256": "82d58b1d81249ee3826fb088117912f610ef4ebff5c3bafe2c28b54717619ec5",
+        "reason": "Exactly one recurring creator and one robot; physical box handoff and lid opening are continuous; one thin artifact and multiple empty compartments clearly communicate incomplete delivery; no extra people, fake text or logo.",
+        "frames": {
+          "start": "48c4313acbcdd7448efb36637452b1913283579df1ee121f6a43309e442c983b",
+          "quarter": "59c61cd469d82db56a3289ed7569b892481d1a068f2e73411396798f5f41a62a",
+          "middle": "4d0f2daef76404b59519be07700988e24ab31cdc79cc7b171de89951ef67fe59",
+          "three_quarter": "852089b60983c7aea3b4b062edd0a8abc9b403e486a635e5e7796ea6a8c927d1",
+          "end": "745f4d556ea79e171a3c3dc30217429213d54977b0b638a52be284e1abcbd88d"
+        }
+      }
+    },
+    "C03": {
+      "status": "accepted",
+      "rejected": [
+        {
+          "take": "take-001-74eb9791f8d9",
+          "sha256": "de6818f9e9ae0432d71d2905e991412c2a8c47fa4cb9086ca02e12ba80f7155c",
+          "reason": "The three-squad Artifact handoff was clear, but Mission became another smiling robot head with a flag, collapsing the coordinator-versus-Agent distinction."
+        },
+        {
+          "take": "take-002-c784b6dc30b5",
+          "sha256": "83fddb21b01eead2aa4b6860a3ed5bd3f6030c11d66563d1a0d3811dff6b8726",
+          "reason": "The compass identity was correct, but the overloaded three-squad scene collapsed into labeled infographic cards; artifacts appeared under panels instead of being physically handed off."
+        }
+      ],
+      "accepted": {
+        "take": "take-003-94e4fe0b8b5c",
+        "path": "D:/myhexin-local/demos/opencorvus-cartoon-v5c-20260825/h3-local/C03/take-003-94e4fe0b8b5c/C03.mp4",
+        "sha256": "86d8c9a2100d28fc28e8933ffb391bb5dddc5a1cd0ccb2d3305d5891e4a0e0b7",
+        "reason": "Exactly three mint research experts and three cobalt development experts remain stable; one physical Artifact is carried through one glowing green acceptance arch and becomes the papers used by the receiving team; no panels, labels, pseudo-text or extra characters.",
+        "frames": {
+          "start": "bc9d7179b38bbe9e5add5a22125220884aaf5a91cd1c9aa02d3d9104b1439cab",
+          "quarter": "a2eb3c031acb0dbaa5346fc8ce22e73cc94e2973e316a2b26d37fdea8214adcf",
+          "middle": "b4c00271eb1dad3defe77766f0db739acfe56b7421c83b3fd068e9cbe5b6d243",
+          "three_quarter": "9b71b18223fc0e9c5aa410d69c006e462da75e9199910e8e531bad439cd783ce",
+          "end": "6e533c15ae0b852d8dc42ec853e260b9b5c230d08bca0f1e5756a4f9914fb44b"
+        }
+      }
+    }
+  }
+}

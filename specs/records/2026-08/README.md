@@ -1,5 +1,11 @@
 # August 2026 Records
 
+- [2026-08-25-cartoon-task-metaphor-video-v5c.md](2026-08-25-cartoon-task-metaphor-video-v5c.md) records the user-supplied cartoon expert-squad material, H3 take gate and reusable visual grammar; it is material-trial evidence only, and its accepted clips may supplement R01/R02/R07 without replacing V5R.
+
+- [2026-08-25-desktop-video-v5r.md](2026-08-25-desktop-video-v5r.md) returns to the V5 desktop story and records the full regeneration contract for current runtime semantics, readable typography, continuous causal motion, subtitles, event sound and concise evidence.
+
+- [2026-08-25-tech-blog-mission-video-v10.md](2026-08-25-tech-blog-mission-video-v10.md) replaces the rejected private-metaphor V9 film with an observable technical story: one continuous execution trace, real prompts, state transitions, calls, files, receipts and evidence; production is gated on a 30-second comprehension proof.
+
 - [2026-08-25-live-type-runtime-video-v9.md](2026-08-25-live-type-runtime-video-v9.md) ingests the authenticated Claude `活字运行层` A–I artifact as the new creative authority, freezes the Agent-native cursor/context/material grammar and 42-shot 4:36 story, records technical corrections, and supersedes the rejected character-workshop direction.
 
 - [2026-08-25-website-version-bound-download.md](2026-08-25-website-version-bound-download.md) binds the landing-page primary action to the current manifest asset on single-architecture Windows, exposes the exact version/file selection, and makes ambiguous platforms choose explicitly.

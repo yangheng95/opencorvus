@@ -15,6 +15,20 @@ MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 
 class GenerateLocalH3ContractTest(unittest.TestCase):
+    def test_v5c_trial_manifest_binds_three_ref2va_story_shots(self) -> None:
+        manifest_path = MODULE_PATH.with_name("v5c-cartoon-task-metaphor-trials.json")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        self.assertEqual(manifest["creative_direction"], "cartoon-task-metaphor-v5c-trials")
+        self.assertEqual([shot["id"] for shot in manifest["shots"]], ["C01", "C02", "C02B", "C03"])
+        for shot in manifest["shots"]:
+            loaded_manifest, loaded_shot = MODULE.load_shot(manifest_path, shot["id"])
+            references = MODULE.resolve_references(manifest_path, loaded_manifest, loaded_shot)
+            MODULE.validate_reference_count(loaded_shot["mode"], references)
+            self.assertEqual(len(references), 2)
+        self.assertEqual({shot["id"]: shot["mode"] for shot in manifest["shots"]}, {
+            "C01": "Ref2VA", "C02": "FL2VA", "C02B": "Ref2VA", "C03": "Ref2VA"
+        })
+
     def test_canonical_digest_is_key_order_independent(self) -> None:
         self.assertEqual(MODULE.canonical_sha256({"b": 2, "a": 1}), MODULE.canonical_sha256({"a": 1, "b": 2}))
 
@@ -98,6 +112,7 @@ class GenerateLocalH3ContractTest(unittest.TestCase):
                 json.dumps(
                     {
                         "schema_version": 1,
+                        "manifest_kind": "h3-video-production",
                         "creative_direction": "live-type-runtime-v9",
                         "production_status": "prompt-locked",
                         "shots": [
@@ -118,6 +133,35 @@ class GenerateLocalH3ContractTest(unittest.TestCase):
             _, shot = MODULE.load_shot(manifest_path, "S03")
             self.assertEqual(shot["mode"], "FL2VA")
             self.assertEqual(shot["duration_seconds"], 4)
+
+    def test_loader_accepts_an_independent_tech_blog_direction(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            manifest_path = Path(temporary) / "manifest.json"
+            manifest_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "manifest_kind": "h3-video-production",
+                        "creative_direction": "tech-blog-mission-v10",
+                        "production_status": "prompt-locked",
+                        "shots": [
+                            {
+                                "id": "T01",
+                                "mode": "T2VA",
+                                "duration_seconds": 10,
+                                "integrated_multimodal_description": "A continuous technical workspace shot.",
+                                "overall_soundscape": "Quiet keyboard and room tone.",
+                                "non_diegetic_music": "A restrained pulse.",
+                                "references": [],
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            manifest, shot = MODULE.load_shot(manifest_path, "T01")
+            self.assertEqual(manifest["creative_direction"], "tech-blog-mission-v10")
+            self.assertEqual(shot["mode"], "T2VA")
 
     def test_fl2va_workflow_binds_both_hash_locked_frames(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

@@ -1,0 +1,3077 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="MOSA 是比 WorkBuddy 更能干的个人助手：按任务组建 Agent Team，自动编排到可验证交付。"
+    />
+    <title>MOSA｜比 WorkBuddy 更能干的个人助手</title>
+    <style>
+      :root {
+        --navy: #0b1b3b;
+        --navy-2: #11264d;
+        --ink: #10203b;
+        --muted: #65738a;
+        --blue: #4ea1ff;
+        --blue-dark: #246eea;
+        --violet: #7c5cfc;
+        --soft: #f4f7fb;
+        --line: #dce3ee;
+        --white: #ffffff;
+        --content: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--white);
+        font-family:
+          Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+        text-rendering: optimizeLegibility;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: min(calc(100% - 80px), var(--content));
+        margin-inline: auto;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: min(calc(100% - 80px), var(--content));
+        height: 82px;
+        margin-inline: auto;
+        color: white;
+      }
+
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-size: 17px;
+        font-weight: 780;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        grid-template-columns: repeat(2, 7px);
+        gap: 3px;
+      }
+
+      .brand-mark i {
+        width: 7px;
+        height: 7px;
+        border-radius: 2px;
+        background: var(--blue);
+      }
+
+      .topbar nav {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        font-size: 15px;
+      }
+
+      .topbar nav a {
+        color: #b9c6dc;
+        text-decoration: none;
+      }
+
+      .topbar nav .experience-entry {
+        padding: 10px 16px;
+        border: 1px solid rgba(143, 191, 255, 0.55);
+        border-radius: 999px;
+        color: white;
+        background: rgba(78, 161, 255, 0.1);
+        font-weight: 720;
+        transition:
+          border-color 160ms ease,
+          background 160ms ease;
+      }
+
+      .topbar nav .experience-entry:hover,
+      .topbar nav .experience-entry:focus-visible {
+        border-color: var(--blue);
+        background: rgba(78, 161, 255, 0.2);
+        outline: none;
+      }
+
+      .experience-entry span {
+        margin-left: 7px;
+        color: var(--blue);
+      }
+
+      .hero {
+        min-height: 1120px;
+        color: white;
+        background:
+          radial-gradient(circle at 72% 30%, rgba(78, 161, 255, 0.15), transparent 32%),
+          var(--navy);
+      }
+
+      .hero-inner {
+        display: flex;
+        min-height: 1120px;
+        flex-direction: column;
+        justify-content: center;
+        padding: 132px 0 92px;
+      }
+
+      .eyebrow {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        color: #8fbfff;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        width: 34px;
+        height: 2px;
+        background: currentColor;
+        content: "";
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: var(--content);
+        margin: 34px 0 34px;
+        font-size: clamp(60px, 4.8vw, 84px);
+        font-weight: 800;
+        line-height: 0.96;
+        letter-spacing: -0.07em;
+      }
+
+      h1 span {
+        display: block;
+        white-space: nowrap;
+      }
+
+      h1 .accent {
+        margin-top: 0.12em;
+        color: var(--blue);
+      }
+
+      .hero-copy {
+        max-width: 700px;
+        margin-bottom: 46px;
+        color: #c3cee0;
+        font-size: 22px;
+        line-height: 1.6;
+      }
+
+      .text-link {
+        width: fit-content;
+        color: white;
+        font-size: 16px;
+        font-weight: 720;
+        text-decoration: none;
+      }
+
+      .text-link span {
+        margin-left: 8px;
+        color: var(--blue);
+      }
+
+      .section[id] {
+        scroll-margin-top: 28px;
+      }
+
+      .section-cursor {
+        display: grid;
+        width: fit-content;
+        grid-template-columns: 28px auto 24px;
+        gap: 12px;
+        align-items: center;
+        margin: 54px 0 0 auto;
+        color: var(--ink);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .section-cursor.on-dark {
+        color: white;
+      }
+
+      .cursor-mark {
+        position: relative;
+        width: 24px;
+        height: 38px;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        opacity: 0.62;
+      }
+
+      .cursor-mark::after {
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        width: 4px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--blue);
+        content: "";
+        transform: translateX(-50%);
+        animation: cursor-scroll 1.8s ease-in-out infinite;
+      }
+
+      .section-cursor-copy small,
+      .section-cursor-copy b {
+        display: block;
+      }
+
+      .section-cursor-copy small {
+        margin-bottom: 3px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .on-dark .section-cursor-copy small {
+        color: #8191aa;
+      }
+
+      .section-cursor-copy b {
+        font-size: 14px;
+      }
+
+      .section-cursor-arrow {
+        color: var(--blue);
+        font-size: 22px;
+        transition: transform 160ms ease;
+      }
+
+      .section-cursor:hover .section-cursor-arrow,
+      .section-cursor:focus-visible .section-cursor-arrow {
+        transform: translateY(4px);
+      }
+
+      .section-cursor:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 6px;
+      }
+
+      .closing-cursor {
+        margin: 40px auto 0;
+      }
+
+      .closing-cursor:hover .section-cursor-arrow,
+      .closing-cursor:focus-visible .section-cursor-arrow {
+        transform: translateY(-4px);
+      }
+
+      .section-rail {
+        position: fixed;
+        z-index: 60;
+        top: 50%;
+        left: 0;
+        display: grid;
+        gap: 3px;
+        padding: 8px 9px 8px 6px;
+        border: 1px solid rgba(143, 191, 255, 0.2);
+        border-left: 0;
+        border-radius: 0 999px 999px 0;
+        background: rgba(7, 20, 45, 0.9);
+        box-shadow: 0 12px 32px rgba(11, 27, 59, 0.18);
+        transform: translateY(-50%);
+        backdrop-filter: blur(12px);
+      }
+
+      .section-rail a {
+        position: relative;
+        display: grid;
+        width: 26px;
+        height: 34px;
+        place-items: center;
+        border-radius: 999px;
+        color: #7f91ad;
+        font-size: 9px;
+        font-weight: 820;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+      }
+
+      .section-rail a::before {
+        position: absolute;
+        top: 50%;
+        left: -4px;
+        width: 3px;
+        height: 8px;
+        border-radius: 999px;
+        background: currentColor;
+        content: "";
+        transform: translateY(-50%);
+        transition: width 160ms ease, height 160ms ease, background 160ms ease;
+      }
+
+      .section-rail-index {
+        opacity: 1;
+      }
+
+      .section-rail-label {
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 12px);
+        min-width: max-content;
+        padding: 7px 10px;
+        border-radius: 4px;
+        color: white;
+        background: var(--navy);
+        box-shadow: 0 8px 22px rgba(11, 27, 59, 0.22);
+        font-size: 11px;
+        letter-spacing: 0;
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-6px, -50%);
+        visibility: hidden;
+        transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+      }
+
+      .section-rail a:hover,
+      .section-rail a:focus-visible,
+      .section-rail a.is-active {
+        color: var(--blue);
+      }
+
+      .section-rail a:hover::before,
+      .section-rail a:focus-visible::before,
+      .section-rail a.is-active::before {
+        width: 3px;
+        height: 20px;
+        background: var(--blue);
+        box-shadow: 0 0 0 3px rgba(78, 161, 255, 0.1);
+      }
+
+      .section-rail a:hover .section-rail-label,
+      .section-rail a:focus-visible .section-rail-label {
+        opacity: 1;
+        transform: translate(0, -50%);
+        visibility: visible;
+      }
+
+      .section-rail a:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 2px;
+      }
+
+      .hero-compare {
+        margin-top: 72px;
+        border-block: 1px solid rgba(143, 191, 255, 0.22);
+        overflow-x: auto;
+      }
+
+      .hero-compare-head,
+      .hero-compare-row {
+        display: grid;
+        min-width: 1120px;
+        grid-template-columns: minmax(320px, 1.55fr) repeat(5, minmax(140px, 0.62fr));
+        align-items: stretch;
+      }
+
+      .hero-compare-group {
+        min-width: 960px;
+        padding: 10px 18px;
+        border-top: 1px solid rgba(143, 191, 255, 0.22);
+        background: rgba(78, 161, 255, 0.055);
+        color: #76b5ff;
+        font-size: 12px;
+        font-weight: 820;
+        letter-spacing: 0.1em;
+      }
+
+      .hero-compare-head {
+        color: #9fb0c9;
+        font-size: 15px;
+        font-weight: 760;
+      }
+
+      .hero-compare-head a {
+        text-decoration: none;
+      }
+
+      .hero-compare-head a:hover,
+      .hero-compare-head a:focus-visible {
+        color: white;
+        outline: none;
+      }
+
+      .hero-compare-head > *,
+      .hero-compare-row > * {
+        display: flex;
+        min-height: 62px;
+        align-items: center;
+        padding: 14px 18px;
+      }
+
+      .hero-compare-head > :not(:first-child),
+      .hero-compare-row > :not(:first-child) {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .hero-compare-head .mosa-column,
+      .hero-compare-row .mosa-column {
+        background: rgba(78, 161, 255, 0.09);
+      }
+
+      .hero-compare-head .mosa-column {
+        color: white;
+      }
+
+      .hero-compare-row {
+        border-top: 1px solid rgba(143, 191, 255, 0.16);
+      }
+
+      .plain-feature {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 4px;
+        color: #dce6f5;
+      }
+
+      .plain-feature b {
+        font-size: 16px;
+        font-weight: 720;
+        line-height: 1.4;
+      }
+
+      .plain-feature small {
+        color: #8294af;
+        font-size: 11px;
+        font-weight: 620;
+        line-height: 1.4;
+      }
+
+      .status-light {
+        display: inline-flex;
+        gap: 7px;
+        align-items: center;
+        justify-content: center;
+        color: #8998af;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .status-light::before {
+        width: 11px;
+        height: 11px;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: #9aa6b8;
+        content: "";
+      }
+
+      .status-light::after {
+        color: #9aa6b8;
+        content: "未确认";
+      }
+
+      .status-light.partial::before {
+        background: #f0ad4e;
+        box-shadow: 0 0 0 4px rgba(240, 173, 78, 0.12);
+      }
+
+      .status-light.partial::after {
+        color: #f2c77f;
+        content: "部分";
+      }
+
+      .status-light.confirmed::before {
+        background: #10b866;
+        box-shadow: 0 0 0 4px rgba(16, 184, 102, 0.12);
+      }
+
+      .status-light.confirmed::after {
+        color: #88dcae;
+        content: "支持";
+      }
+
+      .hero-compare-note {
+        margin: 14px 0 0;
+        color: #8191aa;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .section {
+        padding: 150px 0;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.5fr);
+        gap: 100px;
+        align-items: end;
+        margin-bottom: 90px;
+      }
+
+      .kicker {
+        color: var(--blue-dark);
+        font-size: 14px;
+        font-weight: 820;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .section-head h2 {
+        max-width: 850px;
+        margin: 18px 0 0;
+        font-size: clamp(54px, 5.4vw, 82px);
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+      }
+
+      .section-head > p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.65;
+      }
+      .long-case-block {
+        margin-top: 0;
+        padding-top: 0;
+      }
+
+      .long-case-list {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .long-case {
+        border-top: 1px solid var(--line);
+      }
+
+      .long-case summary {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr) 30px;
+        gap: 18px;
+        min-height: 62px;
+        align-items: center;
+        color: var(--ink);
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .long-case summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .long-case summary:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 4px;
+      }
+
+      .long-case-id {
+        color: var(--blue-dark);
+        font-size: 13px;
+        font-weight: 820;
+        letter-spacing: 0.08em;
+      }
+
+      .long-case summary strong {
+        font-size: 17px;
+        line-height: 1.4;
+      }
+
+      .long-case-toggle {
+        color: var(--blue-dark);
+        font-size: 24px;
+        font-weight: 400;
+        text-align: center;
+        transition: transform 180ms ease;
+      }
+
+      .long-case[open] .long-case-toggle {
+        transform: rotate(45deg);
+      }
+
+      .long-case-source {
+        display: grid;
+        gap: 6px;
+        padding: 2px 36px 26px 80px;
+      }
+
+      .long-case-source p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.62;
+      }
+
+      .case-source-heading {
+        display: block;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.4;
+      }
+
+      .case-source-heading::before {
+        display: inline-block;
+        width: 20px;
+        height: 3px;
+        margin: 0 9px 4px 0;
+        background: var(--blue);
+        content: "";
+      }
+
+      .case-source-heading.acceptance::before {
+        background: var(--violet);
+      }
+
+      .case-source-space {
+        display: none;
+      }
+
+      .case-milestone,
+      .case-acceptance {
+        display: grid;
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: 8px;
+        align-items: start;
+        font-size: 15px;
+        line-height: 1.58;
+      }
+
+      .case-milestone {
+        padding: 7px 10px;
+        background: rgba(78, 161, 255, 0.06);
+        color: var(--ink);
+      }
+
+      .case-milestone b {
+        color: var(--blue-dark);
+        font-size: 15px;
+      }
+
+      .milestone-owners {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-left: 9px;
+        vertical-align: 1px;
+      }
+
+      .milestone-owners em {
+        padding: 1px 6px;
+        background: rgba(78, 161, 255, 0.11);
+        color: var(--blue-dark);
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 760;
+        line-height: 1.4;
+      }
+
+      .case-acceptance {
+        color: var(--muted);
+      }
+
+      .case-acceptance i {
+        color: var(--violet);
+        font-style: normal;
+        font-weight: 820;
+      }
+
+      .capability-foundry {
+        color: white;
+        background: radial-gradient(circle at 18% 22%, rgba(78, 161, 255, 0.14), transparent 26%), radial-gradient(circle at 78% 76%, rgba(124, 92, 252, 0.13), transparent 30%), var(--navy);
+      }
+
+      .capability-foundry .kicker { color: #90beff; }
+      .capability-foundry .section-head > p { color: #aebbd0; }
+
+      .foundry-diagram {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(220px, 0.9fr) minmax(360px, 1.35fr) minmax(240px, 0.95fr);
+        gap: 24px;
+        min-height: 560px;
+        padding: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.025);
+        overflow: hidden;
+      }
+
+      .foundry-zone { position: relative; z-index: 2; min-width: 0; }
+
+      .foundry-zone-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 18px;
+        color: #9fb0c9;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+      }
+
+      .foundry-zone-head b { color: white; font-size: 15px; letter-spacing: 0; }
+      .source-mosaic { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+
+      .source-system {
+        position: relative;
+        display: grid;
+        min-height: 112px;
+        align-content: space-between;
+        padding: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .source-system:nth-child(1) { border-radius: 28px 5px 20px 5px; transform: rotate(-1.5deg); }
+      .source-system:nth-child(2) { border-radius: 4px; transform: translateY(10px); }
+      .source-system:nth-child(3) { border-radius: 50% 50% 8px 8px; }
+      .source-system:nth-child(4) { clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); transform: translateY(4px) rotate(1deg); }
+      .source-system:nth-child(5) { grid-column: 1 / -1; min-height: 92px; padding-inline: 24px; border-style: dashed; border-radius: 999px; }
+      .source-system small { color: #8495b0; font-size: 10px; font-weight: 800; letter-spacing: 0.09em; }
+      .source-system strong { font-size: 14px; line-height: 1.35; }
+      .source-limitation { margin-top: 14px; padding: 10px 12px; border-left: 2px solid #72819a; background: rgba(255, 255, 255, 0.035); color: #9aabc3; font-size: 11px; line-height: 1.5; }
+      .source-limitation b { display: block; margin-bottom: 2px; color: white; font-size: 12px; }
+
+      .source-core {
+        justify-self: start;
+        padding: 3px 7px;
+        border: 1px solid rgba(143, 191, 255, 0.3);
+        color: #8fbfff;
+        font-size: 10px;
+        font-weight: 760;
+        animation: source-core-pulse 7.2s ease-in-out infinite;
+      }
+
+      .source-system:nth-child(2) .source-core { animation-delay: -1.2s; }
+      .source-system:nth-child(3) .source-core { animation-delay: -2.4s; }
+      .source-system:nth-child(4) .source-core { animation-delay: -3.6s; }
+      .source-system:nth-child(5) .source-core { animation-delay: -4.8s; }
+
+      .mosa-factory {
+        display: grid;
+        align-content: start;
+        padding: 18px;
+        border: 1px solid rgba(78, 161, 255, 0.36);
+        background: rgba(6, 19, 44, 0.88);
+        box-shadow: inset 0 0 42px rgba(78, 161, 255, 0.08);
+      }
+
+      .factory-core { display: grid; gap: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.035); }
+      .factory-brand { display: flex; justify-content: space-between; align-items: end; padding-bottom: 14px; border-bottom: 1px solid rgba(143, 191, 255, 0.18); }
+      .factory-brand strong { font-size: 24px; }
+      .factory-brand span { color: var(--blue); font-size: 11px; font-weight: 820; letter-spacing: 0.08em; }
+      .factory-slots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .factory-slot { padding: 10px 11px; border-left: 2px solid var(--blue); background: rgba(78, 161, 255, 0.08); }
+      .factory-slot:nth-child(even) { border-left-color: var(--violet); background: rgba(124, 92, 252, 0.09); }
+      .factory-slot b, .factory-slot span { display: block; }
+      .factory-slot b { font-size: 13px; }
+      .factory-slot span { margin-top: 3px; color: #8799b5; font-size: 10px; }
+      .factory-protocol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .factory-protocol span { padding: 8px 5px; border: 1px solid rgba(255, 255, 255, 0.1); color: #a9bad2; font-size: 10px; font-weight: 720; text-align: center; }
+      .factory-base { display: flex; justify-content: space-between; gap: 14px; margin-top: 14px; padding: 13px 15px; background: #041027; color: #91a7c7; font-size: 11px; }
+      .factory-base b { color: white; }
+
+      .module-transit {
+        position: absolute;
+        top: 260px;
+        right: 22%;
+        left: 20%;
+        z-index: 5;
+        height: 58px;
+        border-block: 1px solid rgba(143, 191, 255, 0.24);
+        background: repeating-linear-gradient(90deg, transparent 0 36px, rgba(143, 191, 255, 0.1) 36px 38px);
+        pointer-events: none;
+      }
+
+      .flying-module {
+        position: absolute;
+        top: 15px;
+        left: -84px;
+        min-width: 74px;
+        padding: 6px 9px;
+        border: 1px solid rgba(143, 191, 255, 0.38);
+        background: #11294f;
+        color: #cfe2ff;
+        font-size: 10px;
+        font-weight: 780;
+        text-align: center;
+        opacity: 0;
+        animation: core-transfer 7.2s linear infinite;
+      }
+
+      .flying-module:nth-child(2) { animation-delay: 1.15s; }
+      .flying-module:nth-child(3) { animation-delay: 2.3s; }
+      .flying-module:nth-child(4) { animation-delay: 3.45s; }
+      .flying-module:nth-child(5) { animation-delay: 4.6s; }
+      .flying-module:nth-child(6) { animation-delay: 5.75s; }
+
+      .team-output { display: grid; align-content: start; }
+      .agent-team-board { position: relative; display: grid; gap: 12px; padding: 18px; border: 1px solid rgba(124, 92, 252, 0.46); background: linear-gradient(160deg, rgba(124, 92, 252, 0.16), rgba(78, 161, 255, 0.07)); }
+      .agent-team-board::before { position: absolute; top: -7px; right: 20px; left: 20px; height: 7px; background: linear-gradient(90deg, var(--blue), var(--violet)); content: ""; }
+      .agent-team-title small, .agent-team-title strong { display: block; }
+      .agent-team-title small { color: #8fbfff; font-size: 10px; font-weight: 800; letter-spacing: 0.09em; }
+      .agent-team-title strong { margin-top: 6px; font-size: 20px; }
+
+      .orchestration-graph { position: relative; height: 314px; border-block: 1px solid rgba(143, 191, 255, 0.14); overflow: hidden; }
+      .orchestration-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .graph-line { fill: none; stroke: rgba(143, 191, 255, 0.38); stroke-width: 1.3; }
+      .graph-line.review-loop { stroke: rgba(124, 92, 252, 0.72); stroke-dasharray: 5 5; }
+      .graph-flow { fill: none; stroke: var(--blue); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 2 18; animation: graph-flow 3.6s linear infinite; }
+      .graph-flow.violet { stroke: var(--violet); animation-delay: -1.8s; }
+
+      .team-agent { position: absolute; z-index: 2; display: grid; min-width: 92px; gap: 3px; padding: 9px 10px; border-top: 2px solid var(--blue); background: #11264d; box-shadow: 0 8px 20px rgba(2, 12, 30, 0.22); }
+      .team-agent::before { color: #58a8ff; content: "MOSA"; font-size: 7px; font-weight: 850; letter-spacing: 0.12em; line-height: 1; }
+      .team-agent b { font-size: 12px; line-height: 1.3; }
+      .team-agent span { color: #8fa4c1; font-size: 9px; line-height: 1.3; }
+      .team-agent.coordinator { top: 16px; left: 50%; border-top-color: white; transform: translateX(-50%); }
+      .team-agent.researcher { top: 100px; left: 7px; }
+      .team-agent.builder { top: 100px; right: 7px; border-top-color: var(--violet); }
+      .team-agent.reviewer { top: 191px; left: 50%; border-top-color: #a98fff; transform: translateX(-50%); }
+      .team-agent.delivery { bottom: 14px; left: 50%; border-top-color: #37d78a; transform: translateX(-50%); }
+      .team-agent::after { position: absolute; top: 9px; right: 8px; width: 5px; height: 5px; border-radius: 50%; background: #37d78a; box-shadow: 0 0 0 3px rgba(55, 215, 138, 0.1); content: ""; }
+
+      .team-status { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+      .team-status span { padding: 6px 4px; border: 1px solid rgba(255, 255, 255, 0.14); color: #a9bad2; font-size: 9px; text-align: center; }
+
+      .foundry-caption { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 4px; padding-top: 18px; border-top: 1px solid rgba(143, 191, 255, 0.16); color: #91a3be; font-size: 12px; line-height: 1.5; }
+      .foundry-caption b { display: block; margin-bottom: 3px; color: white; font-size: 13px; }
+
+      @keyframes source-core-pulse {
+        0%, 12%, 100% { opacity: 1; transform: translateX(0); }
+        20%, 30% { opacity: 0.22; transform: translateX(8px); }
+        42% { opacity: 1; transform: translateX(0); }
+      }
+
+      @keyframes core-transfer {
+        0% { left: -84px; opacity: 0; transform: scale(0.78); }
+        8% { opacity: 1; }
+        68% { opacity: 1; transform: scale(1); }
+        78%, 100% { left: calc(100% - 4px); opacity: 0; transform: scale(0.82); }
+      }
+
+      @keyframes graph-flow {
+        to { stroke-dashoffset: -40; }
+      }
+
+      @keyframes cursor-scroll {
+        0%, 100% { opacity: 0.35; transform: translate(-50%, 0); }
+        55% { opacity: 1; transform: translate(-50%, 11px); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .source-core, .flying-module, .graph-flow, .cursor-mark::after { animation: none; }
+        .flying-module { display: none; }
+      }
+
+      .data-story {
+        background: white;
+      }
+
+      .delivery-proof {
+        padding-block: 110px;
+        color: white;
+        background:
+          radial-gradient(circle at 18% 12%, rgba(78, 161, 255, 0.15), transparent 28%),
+          radial-gradient(circle at 86% 72%, rgba(124, 92, 252, 0.13), transparent 30%),
+          var(--navy);
+      }
+
+      .delivery-proof .kicker {
+        color: #8fbdff;
+      }
+
+      .delivery-proof .section-head > p {
+        color: #b6c2d6;
+      }
+
+      .delivery-journey {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 62px;
+      }
+
+      .delivery-journey::before {
+        position: absolute;
+        top: 31px;
+        right: 16.66%;
+        left: 16.66%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--blue), var(--violet));
+        content: "";
+      }
+
+      .delivery-stage {
+        position: relative;
+        z-index: 1;
+        min-width: 0;
+        padding: 0 28px 30px;
+      }
+
+      .delivery-stage + .delivery-stage {
+        border-left: 1px solid rgba(255, 255, 255, 0.13);
+      }
+
+      .stage-index {
+        display: grid;
+        width: 64px;
+        height: 64px;
+        place-items: center;
+        margin-bottom: 30px;
+        border: 1px solid rgba(143, 189, 255, 0.55);
+        border-radius: 50%;
+        background: var(--navy);
+        color: #8fbdff;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+      }
+
+      .delivery-stage:nth-child(2) .stage-index {
+        border-color: rgba(124, 92, 252, 0.65);
+        color: #a993ff;
+      }
+
+      .delivery-stage:nth-child(3) .stage-index {
+        border-color: rgba(78, 161, 255, 0.72);
+        background: linear-gradient(145deg, rgba(78, 161, 255, 0.18), rgba(124, 92, 252, 0.13)), var(--navy);
+        color: white;
+      }
+
+      .stage-label {
+        display: block;
+        margin-bottom: 10px;
+        color: #8fbdff;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .delivery-stage h3 {
+        margin: 0 0 14px;
+        font-size: 29px;
+        line-height: 1.12;
+        letter-spacing: -0.04em;
+      }
+
+      .delivery-stage > p {
+        min-height: 82px;
+        margin: 0;
+        color: #acbad0;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .stage-evidence {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 30px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .stage-evidence.single {
+        grid-template-columns: 1fr;
+      }
+
+      .stage-evidence strong {
+        display: block;
+        color: var(--blue);
+        font-size: clamp(38px, 3vw, 54px);
+        line-height: 0.95;
+        letter-spacing: -0.055em;
+      }
+
+      .delivery-stage:nth-child(2) .stage-evidence strong {
+        color: #9a7fff;
+      }
+
+      .stage-evidence span {
+        display: block;
+        margin-top: 9px;
+        color: #d8e1ef;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .delivery-method {
+        display: grid;
+        grid-template-columns: 0.85fr 1.6fr;
+        gap: 48px;
+        align-items: center;
+        margin-top: 34px;
+        padding: 30px 28px;
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      }
+
+      .delivery-method h3 {
+        margin: 0 0 8px;
+        font-size: 23px;
+        line-height: 1.2;
+      }
+
+      .delivery-method p {
+        margin: 0;
+        color: #9faec5;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .method-loop {
+        display: grid;
+        grid-template-columns: repeat(7, auto);
+        gap: 12px;
+        align-items: center;
+        justify-content: end;
+        color: #dce6f5;
+        font-size: 15px;
+        font-weight: 760;
+      }
+
+      .method-loop i {
+        color: #7258f0;
+        font-style: normal;
+      }
+
+      .support-inputs {
+        display: grid;
+        grid-template-columns: 0.92fr repeat(3, 1fr);
+        gap: 0;
+        margin-top: 28px;
+      }
+
+      .support-intro,
+      .support-item {
+        min-height: 104px;
+        padding: 20px 22px;
+        border-left: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .support-intro {
+        border-left: 2px solid var(--blue);
+        color: #8fbdff;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.5;
+      }
+
+      .support-item b {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 16px;
+      }
+
+      .support-item span {
+        color: #9faec5;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .delivery-footnote {
+        margin: 22px 28px 0;
+        color: #7588a7;
+        font-size: 11px;
+        line-height: 1.6;
+      }
+
+      .evaluation-story {
+        background: #f4f7fb;
+      }
+
+      .data-story,
+      .evaluation-story {
+        padding-block: 110px;
+      }
+
+      .chart-stack {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .chart-section {
+        min-width: 0;
+        padding: 22px;
+        border: 1px solid var(--line);
+        background: #fbfcff;
+      }
+
+      .chart-stack > .chart-section.full-span,
+      .score-chart-stack > .chart-section {
+        grid-column: 1 / -1;
+      }
+
+      .chart-copy h3 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        line-height: 1.15;
+        letter-spacing: -0.04em;
+      }
+
+      .chart-copy p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .paired-groups {
+        display: grid;
+        gap: 18px;
+      }
+
+      .pair-group {
+        display: grid;
+        gap: 7px;
+      }
+
+      .pair-title {
+        display: flex;
+        justify-content: space-between;
+        font-size: 15px;
+        font-weight: 740;
+      }
+
+      .pair-title b {
+        color: var(--blue-dark);
+      }
+
+      .pair-row {
+        display: grid;
+        grid-template-columns: 66px minmax(0, 1fr) 76px;
+        gap: 9px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .pair-row > b {
+        color: var(--ink);
+        text-align: right;
+      }
+
+      .pair-track {
+        height: 11px;
+        border-radius: 999px;
+        background: #e5e9f0;
+      }
+
+      .pair-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: #98a4b6;
+      }
+
+      .pair-row.mosa .pair-fill {
+        background: var(--blue);
+      }
+
+      .score-report {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .evaluation-lens {
+        position: relative;
+        display: grid;
+        gap: 14px;
+        min-width: 0;
+        padding: 18px;
+        border: 1px solid var(--line);
+        background: white;
+      }
+
+      .evaluation-lens + .evaluation-lens {
+        padding-top: 18px;
+      }
+
+      .lens-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: end;
+      }
+
+      .lens-head h4 {
+        margin: 0 0 8px;
+        font-size: 19px;
+        letter-spacing: -0.03em;
+      }
+
+      .lens-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .lens-tag {
+        justify-self: end;
+        padding: 5px 8px;
+        border-radius: 999px;
+        color: var(--blue-dark);
+        background: #eaf2ff;
+        font-size: 12px;
+        font-weight: 760;
+        text-align: right;
+      }
+
+      .score-overview {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) 92px;
+        gap: 8px;
+      }
+
+      .score-total,
+      .score-lead {
+        min-height: 98px;
+        padding: 14px;
+        border-radius: 10px;
+      }
+
+      .score-total {
+        color: var(--ink);
+        background: var(--soft);
+      }
+
+      .score-total.competitor {
+        background: #f0edff;
+      }
+
+      .score-total span,
+      .score-total small,
+      .score-lead span {
+        display: block;
+      }
+
+      .score-total span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 760;
+      }
+
+      .score-total strong {
+        display: block;
+        margin: 8px 0 2px;
+        color: var(--blue-dark);
+        font-size: 32px;
+        line-height: 1;
+      }
+
+      .score-total.competitor strong {
+        color: var(--violet);
+      }
+
+      .score-total small {
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .score-lead {
+        display: grid;
+        align-content: center;
+        color: white;
+        background: var(--navy);
+        text-align: center;
+      }
+
+      .score-lead strong {
+        color: var(--blue);
+        font-size: 25px;
+        line-height: 1;
+      }
+
+      .score-lead span {
+        margin-top: 8px;
+        color: #c1cde0;
+        font-size: 11px;
+      }
+
+      .score-detail-hover {
+        position: relative;
+      }
+
+      .score-detail-trigger {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 9px 11px;
+        border: 0;
+        border-left: 3px solid var(--blue);
+        background: #eef5ff;
+        color: var(--ink);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 760;
+        cursor: default;
+      }
+
+      .score-detail-trigger span {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 650;
+      }
+
+      .score-detail-panel {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        z-index: 40;
+        display: grid;
+        width: min(900px, calc(200% + 16px));
+        max-height: 74vh;
+        gap: 20px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        background: white;
+        box-shadow: 0 24px 60px rgba(11, 27, 59, 0.2);
+        opacity: 0;
+        overflow: auto;
+        pointer-events: none;
+        transform: translateY(-7px);
+        visibility: hidden;
+        transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+      }
+
+      .evaluation-lens:last-child .score-detail-panel {
+        right: 0;
+        left: auto;
+      }
+
+      .score-detail-hover:hover .score-detail-panel,
+      .score-detail-hover:focus-within .score-detail-panel {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+        visibility: visible;
+      }
+
+      .score-method {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-block: 1px solid var(--line);
+      }
+
+      .score-method div {
+        padding: 20px 22px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .score-method div + div {
+        border-left: 1px solid var(--line);
+      }
+
+      .score-method b {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--ink);
+        font-size: 17px;
+      }
+
+      .criteria-defs {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .criteria-defs div {
+        min-width: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .criteria-defs b {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      .dimension-chart {
+        display: grid;
+        gap: 18px;
+        padding: 28px;
+        border-radius: 18px;
+        background: var(--soft);
+      }
+
+      .dimension-legend {
+        display: flex;
+        gap: 20px;
+        justify-content: flex-end;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .dimension-legend span::before {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 7px;
+        border-radius: 50%;
+        background: var(--blue);
+        content: "";
+      }
+
+      .dimension-legend span:last-child::before {
+        background: var(--violet);
+      }
+
+      .dimension-row {
+        display: grid;
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 18px;
+        align-items: center;
+      }
+
+      .dimension-row > b {
+        font-size: 15px;
+      }
+
+      .dimension-bars {
+        display: grid;
+        gap: 7px;
+      }
+
+      .dimension-bar {
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) 76px;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .dimension-bar strong {
+        color: var(--ink);
+        text-align: right;
+      }
+
+      .dimension-track {
+        height: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #dfe5ee;
+      }
+
+      .dimension-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--blue);
+      }
+
+      .dimension-bar.competitor .dimension-fill {
+        background: var(--violet);
+      }
+
+      .case-results {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .case-results.two-cases {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .case-result {
+        padding: 16px 14px;
+        border-top: 3px solid var(--violet);
+        background: var(--soft);
+      }
+
+      .case-result.mosa-win {
+        border-top-color: var(--blue);
+      }
+
+      .case-result b,
+      .case-result span,
+      .case-result small {
+        display: block;
+      }
+
+      .case-result b {
+        margin-bottom: 6px;
+        font-size: 15px;
+      }
+
+      .case-result span {
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 760;
+      }
+
+      .case-result small {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .score-evidence {
+        padding-left: 16px;
+        border-left: 3px solid var(--blue);
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .case-duel-block {
+        margin-top: 22px;
+      }
+
+      .case-duel-intro {
+        display: flex;
+        justify-content: space-between;
+        gap: 28px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+
+      .case-duel-intro h3 {
+        margin: 0;
+        font-size: 25px;
+        letter-spacing: -0.035em;
+      }
+
+      .case-duel-intro p {
+        max-width: 650px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .case-duel-stack {
+        display: grid;
+        gap: 20px;
+      }
+
+      .case-duel {
+        border: 1px solid var(--line);
+        background: white;
+      }
+
+      .case-duel summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: 150px;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .case-duel summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .duel-summary-side,
+      .duel-side {
+        min-width: 0;
+        padding: 20px 22px;
+      }
+
+      .duel-summary-side.oc,
+      .duel-side.oc {
+        color: white;
+        background: var(--navy);
+      }
+
+      .duel-summary-side.wb,
+      .duel-side.wb {
+        color: var(--ink);
+        background: white;
+      }
+
+      .duel-summary-side {
+        position: relative;
+        display: grid;
+        align-content: center;
+      }
+
+      .duel-summary-side small {
+        color: #8fbfff;
+        font-size: 10px;
+        font-weight: 820;
+        letter-spacing: 0.11em;
+      }
+
+      .duel-summary-side.wb small {
+        color: var(--blue-dark);
+      }
+
+      .duel-summary-side h4 {
+        margin: 8px 0 12px;
+        font-size: 21px;
+        line-height: 1.25;
+      }
+
+      .duel-total {
+        display: flex;
+        gap: 12px;
+        align-items: end;
+      }
+
+      .duel-total strong {
+        color: var(--blue);
+        font-size: 38px;
+        line-height: 0.9;
+      }
+
+      .duel-summary-side.wb .duel-total strong {
+        color: var(--ink);
+      }
+
+      .duel-total span {
+        color: #9fb0c9;
+        font-size: 12px;
+      }
+
+      .duel-summary-side.wb .duel-total span {
+        color: var(--muted);
+      }
+
+      .duel-summary-side p {
+        margin: 11px 0 0;
+        color: #aebbd0;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+
+      .duel-summary-side.wb p {
+        color: var(--muted);
+      }
+
+      .duel-toggle {
+        position: absolute;
+        right: 18px;
+        bottom: 18px;
+        color: var(--blue-dark);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .case-duel[open] .duel-toggle::after {
+        content: "收起 ↑";
+      }
+
+      .case-duel:not([open]) .duel-toggle::after {
+        content: "展开 8 项 ↓";
+      }
+
+      .duel-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .duel-side {
+        border-top: 1px solid rgba(143, 191, 255, 0.18);
+      }
+
+      .duel-side.wb {
+        border-top-color: var(--line);
+      }
+
+      .duel-item-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: start;
+      }
+
+      .duel-item-head span,
+      .duel-item-head b {
+        display: block;
+      }
+
+      .duel-item-head span {
+        margin-bottom: 4px;
+        color: #8fbfff;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.09em;
+      }
+
+      .duel-side.wb .duel-item-head span {
+        color: var(--blue-dark);
+      }
+
+      .duel-item-head b {
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .duel-score {
+        color: var(--blue);
+        font-size: 27px;
+        font-weight: 820;
+        line-height: 1;
+      }
+
+      .duel-side.wb .duel-score {
+        color: var(--ink);
+      }
+
+      .duel-score small {
+        color: #8fa4c1;
+        font-size: 10px;
+      }
+
+      .duel-side > p {
+        margin: 12px 0 0;
+        color: #b2c2d8;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+
+      .duel-side.wb > p {
+        color: var(--muted);
+      }
+
+      .duel-evidence {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 11px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .duel-evidence li {
+        padding: 5px 7px;
+        border: 1px solid rgba(143, 191, 255, 0.2);
+        color: #9fb0c9;
+        font-size: 10px;
+      }
+
+      .duel-side.wb .duel-evidence li {
+        border-color: var(--line);
+        color: var(--muted);
+        background: var(--soft);
+      }
+
+      .duel-why {
+        padding-left: 10px;
+        border-left: 2px solid var(--blue);
+        color: white !important;
+        font-weight: 700;
+      }
+
+      .duel-side.wb .duel-why {
+        color: var(--ink) !important;
+      }
+
+      .duel-source-link {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 12px;
+        color: var(--blue);
+        font-size: 11px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .duel-summary-side.wb .duel-source-link {
+        color: var(--blue-dark);
+      }
+
+      /* Color belongs to the vertical case section, never to a product column. */
+      .case-duel.theme-dark {
+        --duel-bg: var(--navy);
+        --duel-ink: #ffffff;
+        --duel-muted: #aebbd0;
+        --duel-line: rgba(143, 191, 255, 0.2);
+        --duel-chip: rgba(78, 161, 255, 0.06);
+        --duel-score: var(--blue);
+        border-color: rgba(143, 191, 255, 0.26);
+      }
+
+      .case-duel.theme-light {
+        --duel-bg: #ffffff;
+        --duel-ink: var(--ink);
+        --duel-muted: var(--muted);
+        --duel-line: var(--line);
+        --duel-chip: var(--soft);
+        --duel-score: var(--blue-dark);
+      }
+
+      .case-duel.theme-dark,
+      .case-duel.theme-light,
+      .case-duel.theme-dark .duel-summary-side,
+      .case-duel.theme-light .duel-summary-side,
+      .case-duel.theme-dark .duel-side,
+      .case-duel.theme-light .duel-side {
+        color: var(--duel-ink);
+        background: var(--duel-bg);
+      }
+
+      .case-duel.theme-dark .duel-summary-side + .duel-summary-side,
+      .case-duel.theme-light .duel-summary-side + .duel-summary-side,
+      .case-duel.theme-dark .duel-side + .duel-side,
+      .case-duel.theme-light .duel-side + .duel-side {
+        border-left: 1px solid var(--duel-line);
+      }
+
+      .case-duel.theme-dark .duel-side,
+      .case-duel.theme-light .duel-side {
+        border-top-color: var(--duel-line);
+      }
+
+      .case-duel.theme-dark .duel-summary-side small,
+      .case-duel.theme-light .duel-summary-side small,
+      .case-duel.theme-dark .duel-item-head span,
+      .case-duel.theme-light .duel-item-head span {
+        color: var(--blue);
+      }
+
+      .case-duel.theme-dark .duel-summary-side p,
+      .case-duel.theme-light .duel-summary-side p,
+      .case-duel.theme-dark .duel-side > p,
+      .case-duel.theme-light .duel-side > p,
+      .case-duel.theme-dark .duel-total span,
+      .case-duel.theme-light .duel-total span {
+        color: var(--duel-muted);
+      }
+
+      .case-duel.theme-dark .duel-total strong,
+      .case-duel.theme-light .duel-total strong,
+      .case-duel.theme-dark .duel-score,
+      .case-duel.theme-light .duel-score {
+        color: var(--duel-score);
+      }
+
+      .case-duel.theme-dark .duel-evidence li,
+      .case-duel.theme-light .duel-evidence li {
+        border-color: var(--duel-line);
+        color: var(--duel-muted);
+        background: var(--duel-chip);
+      }
+
+      .case-duel.theme-dark .duel-why,
+      .case-duel.theme-light .duel-why {
+        color: var(--duel-ink) !important;
+      }
+
+      .case-duel.theme-dark .duel-toggle,
+      .case-duel.theme-light .duel-toggle,
+      .case-duel.theme-dark .duel-source-link,
+      .case-duel.theme-light .duel-source-link {
+        color: var(--blue);
+      }
+
+      .long-case[id] {
+        scroll-margin-top: 32px;
+      }
+
+      .collaboration-figure {
+        margin: 64px 0 8px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        background: white;
+      }
+
+      .collaboration-figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .collaboration-figure figcaption {
+        padding: 13px 4px 1px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .range-chart {
+        display: grid;
+        grid-template-columns: minmax(180px, 0.7fr) minmax(0, 2fr);
+        gap: 30px;
+        align-items: center;
+        padding: 24px;
+        border: 1px solid #cfdced;
+        color: var(--ink);
+        background: #f7faff;
+      }
+
+      .range-summary span,
+      .range-summary strong,
+      .range-summary small {
+        display: block;
+      }
+
+      .range-summary span {
+        color: var(--blue-dark);
+        font-size: 12px;
+        font-weight: 820;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .range-summary strong {
+        margin-top: 5px;
+        color: var(--blue-dark);
+        font-size: 44px;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+
+      .range-summary small {
+        max-width: 190px;
+        margin-top: 9px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .efficiency-bars {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .efficiency-scenario {
+        min-width: 0;
+        padding-left: 14px;
+        border-left: 2px solid #d4e5fb;
+      }
+
+      .efficiency-scenario-head {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+
+      .efficiency-scenario-head span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .efficiency-scenario-head b {
+        color: var(--blue-dark);
+        font-size: 22px;
+      }
+
+      .effort-bar {
+        height: 8px;
+        margin-top: 16px;
+        background: #dfe8f4;
+        overflow: hidden;
+      }
+
+      .effort-bar i {
+        display: block;
+        height: 100%;
+        background: var(--blue);
+      }
+
+      .efficiency-scenario:nth-child(2) .effort-bar i { background: #378be9; }
+      .efficiency-scenario:nth-child(3) .effort-bar i { background: var(--blue-dark); }
+
+      .efficiency-scenario small {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.4;
+      }
+
+      .method-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.65;
+      }
+
+      .method-note-hover {
+        position: relative;
+        margin-top: 14px;
+      }
+
+      .method-note-trigger {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        background: #fbfcff;
+        color: var(--ink);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 760;
+        cursor: default;
+      }
+
+      .method-note-trigger span {
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .method-note-panel {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 8px);
+        left: 0;
+        z-index: 40;
+        max-height: 68vh;
+        padding: 22px;
+        border: 1px solid var(--line);
+        background: white;
+        box-shadow: 0 22px 54px rgba(11, 27, 59, 0.18);
+        opacity: 0;
+        overflow: auto;
+        pointer-events: none;
+        transform: translateY(7px);
+        visibility: hidden;
+        transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+      }
+
+      .method-note-hover:hover .method-note-panel,
+      .method-note-hover:focus-within .method-note-panel {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+        visibility: visible;
+      }
+
+      .method-note strong {
+        display: block;
+        margin-top: 18px;
+        color: var(--ink);
+      }
+
+      .method-note strong:first-child {
+        margin-top: 0;
+      }
+
+      .method-note span {
+        display: block;
+        margin-top: 6px;
+      }
+
+      .closing {
+        min-height: 760px;
+        color: white;
+        background:
+          radial-gradient(circle at 50% 65%, rgba(124, 92, 252, 0.18), transparent 32%),
+          var(--navy);
+      }
+
+      .closing-inner {
+        display: flex;
+        min-height: 760px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .closing h2 {
+        max-width: 900px;
+        margin: 0 0 28px;
+        font-size: clamp(60px, 6vw, 90px);
+        line-height: 1;
+        letter-spacing: -0.065em;
+      }
+
+      .closing p {
+        max-width: 660px;
+        margin-bottom: 42px;
+        color: #b4c0d4;
+        font-size: 19px;
+        line-height: 1.6;
+      }
+
+      .closing-line {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 100px;
+        color: #7f91ad;
+        font-size: 12px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .closing-line::before,
+      .closing-line::after {
+        width: 58px;
+        height: 1px;
+        background: linear-gradient(90deg, var(--blue), var(--violet));
+        content: "";
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="section-rail" aria-label="章节快速跳转">
+      <a href="#hero" data-section="hero" aria-label="跳转到首页"><span class="section-rail-index">00</span><span class="section-rail-label">首页</span></a>
+      <a href="#complex" data-section="complex" aria-label="跳转到长程任务案例"><span class="section-rail-index">01</span><span class="section-rail-label">长程任务案例</span></a>
+      <a href="#efficiency" data-section="efficiency" aria-label="跳转到 MOSA 能力工厂"><span class="section-rail-index">02</span><span class="section-rail-label">MOSA 能力工厂</span></a>
+      <a href="#efficiency-data" data-section="efficiency-data" aria-label="跳转到代码瘦身与效率"><span class="section-rail-index">03</span><span class="section-rail-label">代码瘦身与效率</span></a>
+      <a href="#delivery-proof" data-section="delivery-proof" aria-label="跳转到实战交付成果"><span class="section-rail-index">04</span><span class="section-rail-label">实战交付成果</span></a>
+      <a href="#evaluation" data-section="evaluation" aria-label="跳转到性能评估"><span class="section-rail-index">05</span><span class="section-rail-label">性能评估</span></a>
+      <a href="#closing" data-section="closing" aria-label="跳转到开始使用 MOSA"><span class="section-rail-index">06</span><span class="section-rail-label">开始使用 MOSA</span></a>
+    </nav>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="返回 MOSA 页面顶部">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>OpenCorvus · MOSA</span>
+      </a>
+      <nav aria-label="页面导航">
+        <a href="#complex">任务范围</a>
+        <a href="#efficiency">Agent Team 平台</a>
+        <a href="#efficiency-data">灵活调度</a>
+        <a href="#delivery-proof">实战成果</a>
+        <a href="#evaluation">性能评估</a>
+        <a
+          class="experience-entry"
+          href="https://mirror.myhexin.com/opencorvus-dist/dist/index.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="打开 MOSA 体验入口（新窗口）"
+        >体验入口 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section id="hero" class="hero" aria-labelledby="hero-title">
+        <div class="page hero-inner">
+          <span class="eyebrow">MOSA · 你的全天候 Agent Team</span>
+          <h1 id="hero-title">
+            <span>比 WorkBuddy 更好的个人助手</span>
+            <span class="accent">不只搭把手，直接把事办完</span>
+          </h1>
+
+          <div class="hero-compare" aria-label="MOSA 与 WorkBuddy、Claude Code、Codex、Multica 能力对比">
+            <div class="hero-compare-head">
+              <span>真正使用时，用户会关心什么？</span>
+              <span><a href="https://docs.work-buddy.ai/" target="_blank" rel="noopener noreferrer" title="查看 WorkBuddy 官方资料">WorkBuddy</a></span>
+              <span><a href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener noreferrer" title="查看 Claude Code 官方资料">Claude Code</a></span>
+              <span><a href="https://developers.openai.com/codex/" target="_blank" rel="noopener noreferrer" title="查看 Codex 官方资料">Codex</a></span>
+              <span><a href="https://multica.ai/docs" target="_blank" rel="noopener noreferrer" title="查看 Multica 官方资料">Multica</a></span>
+              <span class="mosa-column">MOSA</span>
+            </div>
+            <div class="hero-compare-group">01 · 从提问到开工</div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>日常能问，复杂任务也能直接开干</b><small>轻问答 / 深执行双模式</small></span>
+              <span class="status-light partial" aria-label="部分对标" title="具备个人助手与多步 Workflow，但官方资料未定义 Chat / Work 双模式"></span>
+              <span class="status-light partial" aria-label="部分对标" title="交互式编码与 Agentic Coding 执行均可用，但不是产品级 Chat / Work 双模式"></span>
+              <span class="status-light partial" aria-label="部分对标" title="支持交互协作与长任务执行，但官方资料未定义 Chat / Work 双模式"></span>
+              <span class="status-light confirmed" aria-label="有对标能力" title="Chat 对话 / Issue 指派后自主执行"></span>
+              <span class="mosa-column status-light confirmed" aria-label="有对标能力" title="Chat / Work"></span>
+            </div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>大任务自动拆开，多名 Agent 同时推进</b><small>Multi-Agent 并行协作</small></span>
+              <span class="status-light partial" aria-label="部分对标" title="Workflow 支持主 Agent 与 Subagent 执行；官方资料未明确多名 Agent 并行推进"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="Agent Teams：多实例并行与共享任务列表，目前为实验功能"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="支持多 Agent 并行处理独立子任务并汇总结果"></span>
+              <span class="status-light partial" aria-label="部分对标" title="支持 Squad 与 Agent 分工；公开资料未证明同一任务内多成员并行执行"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认"></span>
+            </div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>按你的业务，配一套专属执行团队</b><small>Agent / Skill 自定义</small></span>
+              <span class="status-light partial" aria-label="部分对标" title="可扩展 Capability 与 Workflow，但未见完整 Agent Team 配置协议"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="支持自定义 Subagent、Skill、工具权限与模型"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="支持 Agent、Skill、Plugin 与 MCP 扩展"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="支持自定义 Agent、运行时、环境变量与 Workspace Skill"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认"></span>
+            </div>
+            <div class="hero-compare-group">02 · 过程能不能管住</div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>做到哪一步、产出了什么，随时可看</b><small>过程透明 / 交付物可见</small></span>
+              <span class="status-light confirmed" aria-label="已确认" title="Dashboard 展示 Workflow、后台服务与执行状态"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="工具调用、代码变更、任务列表与 Agent 输出可见"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="任务进度、工具调用、代码变更与交付物可见"></span>
+              <span class="status-light confirmed" aria-label="已确认" title="Issue、队列状态、评论、阻塞项与执行输出统一可见"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认"></span>
+            </div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>已有工作流程，导入后直接执行</b><small>私有 Workflow / 编排图导入</small></span>
+              <span class="status-light partial" aria-label="部分对标" title="内置结构化 Workflow；官方资料未确认外部私有编排图导入"></span>
+              <span class="status-light partial" aria-label="部分对标" title="Skill 或 Plugin 可封装步骤，但不等同于导入编排图"></span>
+              <span class="status-light partial" aria-label="部分对标" title="Skill 或 Plugin 可复用方法，但不等同于导入编排图"></span>
+              <span class="status-light partial" aria-label="部分对标" title="可导入 Workspace Skill；官方资料未确认 Workflow 编排图导入"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认" title="Agent Team 包可携带编排契约并导入私有范围"></span>
+            </div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>自己的算法，也能接入平台统一调度</b><small>私有算法 + Runtime 接入</small></span>
+              <span class="status-light partial" aria-label="部分对标" title="MCP Gateway 可暴露私有能力；未证明算法作为统一 Workflow 节点参与平台调度"></span>
+              <span class="status-light partial" aria-label="部分对标" title="MCP Server 或 Agent SDK 可接入工具，但不等同于平台级 Runtime 调度"></span>
+              <span class="status-light partial" aria-label="部分对标" title="MCP、Plugin 或 CLI 可接入工具，但不等同于能力包 Runtime 调度"></span>
+              <span class="status-light partial" aria-label="部分对标" title="可配置本地 Runtime 与 MCP；调度主体仍是底层 Coding Agent"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认" title="算法代码、依赖与 Runtime 可随能力包迁入平台，并作为 Workflow 节点参与统一调度"></span>
+            </div>
+            <div class="hero-compare-group">03 · 做好的能力能不能带走</div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>整套 Agent Team，可以复制、分享、复用</b><small>完整资产包分发</small></span>
+              <span class="status-light" aria-label="公开资料未确认" title="项目可整体安装与修改，但未见独立 Agent Team 资产包协议"></span>
+              <span class="status-light partial" aria-label="部分对标" title="Plugin 可分发 Agents、Skills、Hooks 与 MCP；未形成独立 Team 资产协议"></span>
+              <span class="status-light partial" aria-label="部分对标" title="Plugin 可分发 Skills、MCP 与工具；未形成独立 Team 资产协议"></span>
+              <span class="status-light partial" aria-label="部分对标" title="Workspace Skill 可共享，Agent 与 Squad 可配置；未见整套 Squad 资产导入导出"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认"></span>
+            </div>
+            <div class="hero-compare-row">
+              <span class="plain-feature"><b>多个 Agent Team，自动按先后关系协作</b><small>跨 Team 依赖编排</small></span>
+              <span class="status-light" aria-label="公开资料未确认" title="Workflow 有步骤依赖，但未见多个可复用 Agent Team 之间的依赖编排"></span>
+              <span class="status-light" aria-label="未具备" title="单个 Agent Team 内可共享任务，但一条 Session 仅支持一个 Team，且不支持嵌套 Team"></span>
+              <span class="status-light" aria-label="公开资料未确认" title="支持多 Agent 并行与任务委派，但未见多个可复用 Agent Team 之间的依赖编排协议"></span>
+              <span class="status-light" aria-label="公开资料未确认" title="Squad 由 Leader 为单个 Issue 选择成员，未见多个 Squad 按依赖形成任务链"></span>
+              <span class="mosa-column status-light confirmed" aria-label="已确认"></span>
+            </div>
+          </div>
+            <a class="section-cursor on-dark" href="#complex" aria-label="前往下一节：长程任务案例">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Next section</small><b>长程任务案例</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="complex" class="section">
+        <div class="page">
+          <div class="long-case-block">
+            <div class="section-head">
+              <div><span class="kicker">01 · Long-horizon cases</span><h2>长程任务可能有多长？</h2></div>
+              <p>不是按耗时定义，而是看一个目标是否必须跨越多种专业工作，并让上游数据、下游成果和独立验收始终保持一致。展开后可在每条重点里程碑旁直接查看负责角色。</p>
+            </div>
+
+            <div class="long-case-list" aria-label="长程混合任务实验案例">
+              <details id="case-01" class="long-case">
+                <summary><span class="long-case-id">CASE 01</span><strong>连锁零售年度经营复盘与门店投资计划</strong><span class="long-case-toggle" aria-hidden="true">＋</span></summary>
+                <div class="long-case-source">
+                  <strong class="case-source-heading">输入</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <p>为一家拥有 12 家门店的虚构生活方式零售公司完成年度经营复盘，并制定下一年度门店投资计划。整个项目从空目录开始。</p>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-milestone"><b>1.</b><span>创建确定性业务数据生成器，生成连续 24 个月的日级销售、退货、客流、会员、促销、库存、采购、排班、租金和支付结算数据。包含 800 个商品、三个城市和四种门店类型；明确植入重复销售、跨月退货、缺货、促销毛利倒挂、客流增长但转化下降、结算短款和错误门店编码，并生成独立事实校验表。<span class="milestone-owners" aria-label="负责角色"><em>经营数据证据工程师</em><em>零售业务口径研究员</em></span></span></span>
+                  <span class="case-milestone"><b>2.</b><span>建立原始层、清洗层和经营层数据模型，完成字段校验、实体统一、去重、退款归属、支付结算核对和库存滚动计算。每条排除或修订记录必须保存原因、原值、新值和责任规则。<span class="milestone-owners" aria-label="负责角色"><em>经营数据架构师</em></span></span></span>
+                  <span class="case-milestone"><b>3.</b><span>分析门店、品类、会员和促销表现，拆解收入、毛利、转化、复购、库存周转和单位面积产出；区分数据质量异常、短期波动和结构性问题，并为每项结论保留可下钻证据。<span class="milestone-owners" aria-label="负责角色"><em>门店经营分析师</em></span></span></span>
+                  <span class="case-milestone"><b>4.</b><span>建立未来 12 个月基准、保守和进取三种经营预测。预测必须联动客流、转化率、客单价、毛利率、库存、人员和租金，说明假设、敏感性和不能从数据证明的部分。<span class="milestone-owners" aria-label="负责角色"><em>经营预测建模师</em></span></span></span>
+                  <span class="case-milestone"><b>5.</b><span>生成带公式的 XLSX 经营模型、DOCX 复盘报告、面向管理层的 PPTX 和两页 PDF 摘要。四种成果中的门店排名、关键数字、问题和建议必须一致。<span class="milestone-owners" aria-label="负责角色"><em>管理交付物构建师</em></span></span></span>
+                  <span class="case-milestone"><b>6.</b><span>创建独立审计程序，从清洗层重新计算至少 20 个核心指标，检查跨文件数字、公式、门店归属、异常处理和预测口径。审计发现差异时，修正责任步骤并生成修订版，不得只改最终报告。<span class="milestone-owners" aria-label="负责角色"><em>经营事实审计员</em></span></span></span>
+                  <span class="case-milestone"><b>7.</b><span>在审计通过的数据上分配 3,000 万元年度投资预算，候选项目包括新开门店、低效店改造、会员系统、补货系统和员工培训。考虑现金上限、城市集中度、开店准备期、项目依赖和收益不确定性，给出推荐组合、放弃项目、阶段目标、停止条件和季度复盘机制。<span class="milestone-owners" aria-label="负责角色"><em>门店投资组合规划师</em></span></span></span>
+                  <span class="case-milestone"><b>8.</b><span>制作可本地运行的经营决策网站，支持门店和月份下钻、三种预测切换、投资预算调整、项目组合重算、异常证据查看和审计状态查看。<span class="milestone-owners" aria-label="负责角色"><em>经营决策网站构建师</em></span></span></span>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <strong class="case-source-heading acceptance">验收标准</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>数据生成器可重复运行，记录数量、异常身份、事实校验表和摘要保持一致。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>销售、退款、支付结算、库存和总账口径能够勾稽，异常不会被静默删除。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>分析结论能够下钻到清洗规则和业务记录，相关性不会被表述为已证明的因果关系。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>三种预测由公式或代码计算，参数变化能够传导到利润、现金和库存。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>XLSX、DOCX、PPTX、PDF 和网站中的关键数字与版本一致。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>审计程序独立读取经营层数据，不复用报表中的手填结论。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>投资组合满足全部约束，预期收益、风险、依赖、停止条件和复盘指标完整。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>网站可以本地启动，筛选、下钻、预测和投资组合重算真实有效。</span></span>
+                </div>
+              </details>
+
+              <details id="case-02" class="long-case">
+                <summary><span class="long-case-id">CASE 02</span><strong>制造企业采购审计与设备资本投入决策</strong><span class="long-case-toggle" aria-hidden="true">＋</span></summary>
+                <div class="long-case-source">
+                  <strong class="case-source-heading">输入</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <p>为一家生产工业传感器的虚构制造企业，完成供应商经营分析、采购审计和新产线投资决策。项目从空目录开始。</p>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-milestone"><b>1.</b><span>创建确定性数据生成器，生成 18 个月的采购申请、采购订单、分批收货、质检、供应商发票、付款、退货和停线记录。覆盖 40 家供应商、300 种物料、人民币/美元/欧元和不同税率；植入数量差异、阶梯价格错误、重复发票、错用汇率、提前付款、质检后退货、同名供应商和交期被修改等情形。<span class="milestone-owners" aria-label="负责角色"><em>采购证据探索员</em><em>财税与供应链研究员</em></span></span></span>
+                  <span class="case-milestone"><b>2.</b><span>建立供应商和物料主数据，执行订单—收货—质检—发票—付款五方关联。设计可解释的匹配优先级，形成自动通过、采购确认、仓库确认、质量确认和财务冻结五类队列。<span class="milestone-owners" aria-label="负责角色"><em>五方关联架构师</em></span></span></span>
+                  <span class="case-milestone"><b>3.</b><span>计算供应商总拥有成本，包括采购价、运费、关税、质量损失、停线损失、付款资金成本和交期波动；分析单一来源风险、替代周期、质量趋势和供应商集中度。<span class="milestone-owners" aria-label="负责角色"><em>供应商成本风险分析师</em></span></span></span>
+                  <span class="case-milestone"><b>4.</b><span>比较“继续外购”“购买一条自动化产线”“与核心供应商合资扩产”三种方案，建立五年现金流、产能爬坡、良率、折旧、维护、残值和情景模型。<span class="milestone-owners" aria-label="负责角色"><em>设备资本模型师</em></span></span></span>
+                  <span class="case-milestone"><b>5.</b><span>生成 XLSX 五方对账与投资模型、供应商差异通知 DOCX、采购委员会 PPTX、PDF 决策摘要和可导入财务系统的审批 CSV。<span class="milestone-owners" aria-label="负责角色"><em>采购委员会交付师</em></span></span></span>
+                  <span class="case-milestone"><b>6.</b><span>开发独立审计工具，复算抽样订单、付款和投资现金流，验证币种、税率、数量、质量损失、审批权限和重复付款；将审计问题映射到数据规则、责任部门和整改期限。<span class="milestone-owners" aria-label="负责角色"><em>采购独立审计员</em></span></span></span>
+                  <span class="case-milestone"><b>7.</b><span>审计完成后给出供应商调整、合同重谈、库存缓冲和设备投资策略，明确 6、12、24 个月行动顺序，以及触发扩产、暂停投资或切换供应商的量化条件。<span class="milestone-owners" aria-label="负责角色"><em>设备资本模型师</em></span></span></span>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <strong class="case-source-heading acceptance">验收标准</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>五类业务记录通过稳定业务身份关联，不依赖名称或行号猜测。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>部分收货、部分退货、价格阶梯、汇率和税额处理可复算。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>总拥有成本能够追溯到具体订单、质量事件和停线记录。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>三种资本方案使用一致的产能与需求假设，净现值和现金占用由公式计算。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>审计抽样规则、样本、发现、影响金额和整改责任完整。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>所有办公成果中的金额、供应商状态、投资结论和版本一致。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>最终策略基于审计后的数据，并包含反向情景和停止条件。</span></span>
+                </div>
+              </details>
+
+              <details id="case-03" class="long-case">
+                <summary><span class="long-case-id">CASE 03</span><strong>SaaS 客户证据全栈平台与产品研发投资组合</strong><span class="long-case-toggle" aria-hidden="true">＋</span></summary>
+                <div class="long-case-source">
+                  <strong class="case-source-heading">输入</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <p>这是一个以 Coding 交付为主的任务。从空目录创建包含 Web 客户端、服务端 API、异步分析 Worker、关系数据库和报表生成器的“客户证据与研发投资”系统，并用系统自行生成的数据完成一次季度决策。必须使用成熟框架和数据库库，不得用静态 JSON、页面内存状态或手工文件冒充服务端与持久化。</p>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-milestone"><b>1.</b><span>创建确定性数据源模拟器，生成 600 条客服工单、200 份访谈纪要、90 天产品事件、60 个客户合同、续费记录和 20 次线上事故。角色覆盖普通用户、管理员、财务、安全负责人和决策人；植入语义重复、相互冲突反馈、埋点重复、身份合并、低频高损失问题和高声量低价值诉求。<span class="milestone-owners" aria-label="负责角色"><em>客户证据探索员</em><em>产品研究方法专家</em></span></span></span>
+                  <span class="case-milestone"><b>2.</b><span>开发接入服务和存储层，支持批量文件与分页本地 API，建立客户、账号、用户、功能、反馈和证据的统一身份；重复执行不得重复建档，原始内容、清洗内容和关联历史分别保存。<span class="milestone-owners" aria-label="负责角色"><em>客户证据平台架构师</em><em>接入与存储构建师</em></span></span></span>
+                  <span class="case-milestone"><b>3.</b><span>建立反馈聚类、问题严重度、收入暴露、使用深度、续费风险和证据强度模型。每个产品机会必须同时展示支持证据、反证、受影响客户、潜在收入和信息缺口。<span class="milestone-owners" aria-label="负责角色"><em>机会证据分析师</em></span></span></span>
+                  <span class="case-milestone"><b>4.</b><span>生成季度产品洞察 XLSX、DOCX 研究报告、PPTX 路线图和可导入项目管理工具的 backlog CSV。路线图项目要包含依赖、工作量、成功指标、停止条件和证据链接。<span class="milestone-owners" aria-label="负责角色"><em>产品洞察交付师</em></span></span></span>
+                  <span class="case-milestone"><b>5.</b><span>开发审计模块，抽查身份合并、反馈聚类、收入归属和机会评分；检测同一大客户大量反馈造成的权重偏差，以及模型生成摘要偏离原文的情况。审计结论能够要求上游重新处理并产生新版本。<span class="milestone-owners" aria-label="负责角色"><em>证据偏差审计员</em></span></span></span>
+                  <span class="case-milestone"><b>6.</b><span>在 24 个人月、两个季度和四个技能组约束下，构建研发投资组合。比较增长优先、续费优先和风险优先三种方案，处理项目依赖、关键人员冲突和最低合规投入。<span class="milestone-owners" aria-label="负责角色"><em>研发投资组合规划师</em></span></span></span>
+                  <span class="case-milestone"><b>7.</b><span>开发可本地运行的网站，提供证据搜索、客户下钻、机会评分解释、审计队列、路线图拖拽调整和容量变化后的组合重算；所有变化写入可追踪的决策记录。<span class="milestone-owners" aria-label="负责角色"><em>产品决策网站构建师</em></span></span></span>
+                  <span class="case-milestone"><b>8.</b><span>模拟新增 80 条企业安全反馈和一名关键工程师离岗，重新执行接入、分析、审计和投资组合，只更新受影响成果，并解释决策变化。<span class="milestone-owners" aria-label="负责角色"><em>变更影响复核员</em></span></span></span>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <strong class="case-source-heading acceptance">验收标准</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>接入服务、数据库、分析程序、审计模块和网站均可真实运行。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>原始证据、清洗结果、实体关系和摘要版本可以双向追溯。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>重复、冲突、收入暴露和证据强度的处理规则明确且可复算。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>大客户声量不会直接等同于多数用户需求，偏差审计具有可观察结果。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>backlog、报告、路线图和网站引用同一产品机会身份。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>三种投资组合都满足容量、技能、依赖和合规硬约束。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>新反馈和人员变化能够触发局部重算，不会破坏历史决策记录。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>最终建议区分事实、假设、模型判断和仍需验证的问题。</span></span>
+                </div>
+              </details>
+
+              <details id="case-04" class="long-case">
+                <summary><span class="long-case-id">CASE 04</span><strong>跨境电商支付清算服务、欺诈审计与风控投资</strong><span class="long-case-toggle" aria-hidden="true">＋</span></summary>
+                <div class="long-case-source">
+                  <strong class="case-source-heading">输入</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <p>这是一个以服务端和分布式数据一致性为主的 Coding 任务。从空目录创建事件接入 API、清算 Worker、双重记账账本、对账作业、审计服务和运营控制台，并基于系统真实运行结果制定下一年度风控投资策略。不得把事件处理、账本或对账逻辑放在前端模拟。</p>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-milestone"><b>1.</b><span>创建确定性事件生成器，生成 30 天订单、支付授权、支付成功、失败、退款、拒付、支付机构结算和银行入账事件。覆盖 20 个商户、四种币种、三个时区和两家支付机构；植入重复 Webhook、乱序到达、部分退款、退款早于结算文件、汇率差、手续费差、账户接管和商户串账风险。<span class="milestone-owners" aria-label="负责角色"><em>支付事件证据探索员</em><em>支付协议研究员</em></span></span></span>
+                  <span class="case-milestone"><b>2.</b><span>实现带签名验证和幂等处理的事件接入服务、双重记账账本、结算文件接入和银行流水接入。原始事件不可覆盖，修订通过新事件表达；并发、重试和重启后业务结果必须一致。<span class="milestone-owners" aria-label="负责角色"><em>账本与清算架构师</em><em>支付账本构建师</em></span></span></span>
+                  <span class="case-milestone"><b>3.</b><span>完成订单—支付—退款—拒付—机构结算—银行入账的全链路对账，形成自动关闭、等待晚到、资金短缺、费率差异、疑似欺诈和商户隔离失败队列。<span class="milestone-owners" aria-label="负责角色"><em>全链路对账构建师</em></span></span></span>
+                  <span class="case-milestone"><b>4.</b><span>分析欺诈损失、误拦截、拒付率、回收率、资金到账周期和商户风险，建立规则效果与成本模型。不得用生成时写入的异常标签直接作为线上判断，只能用于最终独立核验。<span class="milestone-owners" aria-label="负责角色"><em>欺诈成本分析师</em></span></span></span>
+                  <span class="case-milestone"><b>5.</b><span>生成财务清算 XLSX、风险分析 DOCX、管理层 PPTX、商户对账 PDF 和监管审计 CSV；金额、币种、汇率、事件状态和责任归属必须跨成果一致。<span class="milestone-owners" aria-label="负责角色"><em>清算运营交付师</em></span></span></span>
+                  <span class="case-milestone"><b>6.</b><span>开发独立审计程序，验证账本平衡、事件幂等、商户隔离、签名密钥轮换、退款上限、审计日志完整性和欺诈指标计算。执行并发重放、服务中途终止、结算晚到和密钥轮换演练。<span class="milestone-owners" aria-label="负责角色"><em>支付安全审计员</em></span></span></span>
+                  <span class="case-milestone"><b>7.</b><span>在 1,500 万元预算内比较设备指纹、行为模型、人工审核、拒付自动申诉和多支付机构路由五类投资，考虑实施依赖、误拦截成本、回收周期和模型漂移，给出分阶段组合及撤回条件。<span class="milestone-owners" aria-label="负责角色"><em>风控投资组合规划师</em></span></span></span>
+                  <span class="case-milestone"><b>8.</b><span>构建运营控制台，展示资金差异、事件链、欺诈证据、审计状态和投资情景；支持按商户隔离访问，并可从汇总指标下钻到不可变事件。<span class="milestone-owners" aria-label="负责角色"><em>清算运营交付师</em></span></span></span>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <strong class="case-source-heading acceptance">验收标准</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>账本使用整数最小货币单位，借贷平衡且币种不会混算。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>重复、乱序、并发和重启不会造成重复入账或丢失合法事件。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>对账差异具有明确状态、金额、证据和处理责任。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>欺诈分析不读取仅供验收的真实标签，最终指标可由标签独立核验。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>密钥轮换、商户隔离和不可变审计记录通过真实服务演练验证。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>五种交付成果引用同一事件、账本和差异身份。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>风控投资策略同时衡量损失降低、误拦截、人工成本和实施风险。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>控制台可运行，下钻、筛选、审计查看和投资情景重算真实有效。</span></span>
+                </div>
+              </details>
+
+              <details id="case-05" class="long-case">
+                <summary><span class="long-case-id">CASE 05</span><strong>区域门诊排班系统、隐私审计与扩容投资</strong><span class="long-case-toggle" aria-hidden="true">＋</span></summary>
+                <div class="long-case-source">
+                  <strong class="case-source-heading">输入</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <p>这是一个同时包含办公成果和系统开发的 Coding 任务。为一个由三家门诊中心组成的虚构医疗集团，从空目录创建排班与容量规划系统，包含管理端 Web、服务端 API、约束求解 Worker、关系数据库、报表生成器和审计日志；再使用系统完成容量优化和扩容投资决策。不进行疾病诊断或治疗建议。</p>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-milestone"><b>1.</b><span>创建确定性数据生成器，生成连续 52 周的预约、改期、取消、到诊、离场、医生排班、诊室、设备、服务项目和匿名满意度数据。覆盖 24 名医生、18 间诊室和 6 类设备；植入重复预约、跨院区改约、缺失离场时间、设备停机、节假日需求变化和医生技能约束。<span class="milestone-owners" aria-label="负责角色"><em>门诊运营证据探索员</em><em>医疗隐私规则研究员</em></span></span></span>
+                  <span class="case-milestone"><b>2.</b><span>建立脱敏数据层和访问记录，校验预约生命周期、医生与诊室冲突、服务时长和设备可用性；原始身份与分析身份严格分离，报表只使用最小必要字段。<span class="milestone-owners" aria-label="负责角色"><em>排班容量架构师</em><em>排班求解构建师</em></span></span></span>
+                  <span class="case-milestone"><b>3.</b><span>分析需求到达、爽约、服务时间、候诊、加班、诊室利用率和设备瓶颈；分别给出工作日、周末、旺季和设备停机情景。<span class="milestone-owners" aria-label="负责角色"><em>容量预测建模师</em></span></span></span>
+                  <span class="case-milestone"><b>4.</b><span>建立未来 26 周容量模型，比较延长营业时间、跨院区调度、增加医生、增加诊室和购买设备的影响，报告置信区间和无法量化的运营风险。<span class="milestone-owners" aria-label="负责角色"><em>容量预测建模师</em></span></span></span>
+                  <span class="case-milestone"><b>5.</b><span>生成 XLSX 容量模型、DOCX 运营方案、PPTX 管理汇报、PDF 周排班和隐私影响评估；不同文档中的人力、房间、设备和候诊指标必须一致。<span class="milestone-owners" aria-label="负责角色"><em>运营管理交付师</em></span></span></span>
+                  <span class="case-milestone"><b>6.</b><span>执行独立审计，检查脱敏、最小权限、排班硬约束、统计口径、极端值处理和预测数据泄漏；对每个失败项定位到数据或模型步骤并完成修订。<span class="milestone-owners" aria-label="负责角色"><em>隐私与预测审计员</em></span></span></span>
+                  <span class="case-milestone"><b>7.</b><span>在 2,000 万元和 18 个月实施期内，制定院区扩建、设备采购和人员招聘组合，考虑施工顺序、设备前置条件、医生招聘周期和需求不确定性，给出阶段投资、触发条件和退出方案。<span class="milestone-owners" aria-label="负责角色"><em>院区扩容组合规划师</em></span></span></span>
+                  <span class="case-milestone"><b>8.</b><span>开发可本地运行的容量规划工具，允许调整需求、爽约率、服务时间和预算，重新生成排班、候诊预测和投资组合，同时保留每次方案的审计版本。<span class="milestone-owners" aria-label="负责角色"><em>容量规划工具构建师</em></span></span></span>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <strong class="case-source-heading acceptance">验收标准</strong>
+                  <span class="case-source-space" aria-hidden="true"></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>预约生命周期、医生、诊室和设备关系一致，冲突不会被平均值掩盖。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>分析成果不包含可还原个人身份的信息，并具有访问与导出记录。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>容量模型区分需求、供给、排班约束和设备约束。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>预测只使用当时可获得的数据，旺季和停机情景可以复算。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>排班、运营方案和投资计划在资源数量及时间上相互一致。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>审计发现会触发责任步骤修订，并保留前后版本差异。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>投资组合满足预算、工期和依赖约束，不承诺医疗结果。</span></span>
+                  <span class="case-acceptance"><i aria-hidden="true">✓</i><span>规划工具可运行，参数变化会真实更新模型而非只改变展示文本。</span></span>
+                </div>
+              </details>
+            </div>
+          </div>
+          <figure class="collaboration-figure">
+            <img src="opencorvus-collaboration-levels.png" alt="MOSA 与 OpenCorvus 的协作层级：Skill 提供能力，Agent 承担职责，Agent Team 完成领域任务，Mission 串联跨领域交付" />
+            <figcaption>从能力插件到跨领域交付：Skill、Agent、Agent Team 与 Mission 各自承担不同层级的职责。</figcaption>
+          </figure>
+          <a class="section-cursor" href="#efficiency" aria-label="前往下一节：MOSA 能力工厂">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Next section</small><b>MOSA 能力工厂</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </section>
+      <section id="efficiency" class="section capability-foundry">
+        <div class="page">
+          <div class="section-head">
+            <div>
+              <span class="kicker">02 · MOSA Capability Foundry</span>
+              <h2>不重搭系统，把好能力拆出来，列装成 Agent Team。</h2>
+            </div>
+            <p>异构 Agent 各自能干，却不具备天然编排能力；MOSA 将核心能力统一列装为标准 Agent Team，再按任务自由组成编排图。</p>
+          </div>
+
+          <div class="foundry-diagram" aria-label="异构 Agent 系统抽取核心模块，经 MOSA 能力工厂列装为可自由编排的标准 Agent Team">
+            <div class="foundry-zone source-bay">
+              <div class="foundry-zone-head"><span>01 · INPUT</span><b>异构 Agent 系统</b></div>
+              <div class="source-mosaic">
+                <article class="source-system"><small>RESEARCH AGENT</small><strong>研究与信息综合系统</strong><span class="source-core">Prompt · Search</span></article>
+                <article class="source-system"><small>CODING AGENT</small><strong>代码与工程执行系统</strong><span class="source-core">Skill · Runtime</span></article>
+                <article class="source-system"><small>BROWSER AGENT</small><strong>网页操作与视觉系统</strong><span class="source-core">Tool · MCP</span></article>
+                <article class="source-system"><small>DATA AGENT</small><strong>分析与报表系统</strong><span class="source-core">Model · Memory</span></article>
+                <article class="source-system"><small>DOMAIN AGENT</small><strong>行业流程与规则 Agent</strong><span class="source-core">Workflow · Policy</span></article>
+              </div>
+              <div class="source-limitation"><b>能力孤岛</b>身份、上下文与交付协议各不相同，不能天然组成同一张编排图。</div>
+            </div>
+
+            <div class="foundry-zone mosa-factory">
+              <div class="foundry-zone-head"><span>02 · STANDARDIZE & EQUIP</span><b>MOSA 能力工厂</b></div>
+              <div class="factory-core">
+                <div class="factory-brand"><strong>MOSA</strong><span>UNIVERSAL BASE</span></div>
+                <div class="factory-slots">
+                  <div class="factory-slot"><b>Agent Role</b><span>身份与职责边界</span></div>
+                  <div class="factory-slot"><b>Prompt / Skill</b><span>领域知识与方法</span></div>
+                  <div class="factory-slot"><b>Tool / MCP</b><span>外部执行能力</span></div>
+                  <div class="factory-slot"><b>Workflow</b><span>依赖与并行关系</span></div>
+                  <div class="factory-slot"><b>Memory</b><span>上下文与历史事实</span></div>
+                  <div class="factory-slot"><b>Runtime</b><span>模型与运行环境</span></div>
+                </div>
+                <div class="factory-protocol"><span>统一编排</span><span>证据 Evidence</span><span>交付物 Artifact</span></div>
+              </div>
+              <div class="factory-base"><b>一次接入，按场景重组</b><span>版本 · 验收 · 分发 · 复用</span></div>
+            </div>
+
+            <div class="foundry-zone team-output">
+              <div class="foundry-zone-head"><span>03 · ORCHESTRATE</span><b>标准 Agent Team</b></div>
+              <div class="agent-team-board">
+                <div class="agent-team-title"><small>ORCHESTRATION READY</small><strong>按任务自由组成编排图</strong></div>
+                <div class="orchestration-graph" aria-label="协调、研究、构建、复核与交付角色组成的可重组编排图">
+                  <svg class="orchestration-lines" viewBox="0 0 300 314" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="graph-line" d="M150 64 V80 H60 V100 M150 80 H240 V100 M60 151 V172 H150 V191 M240 151 V172 H150 M150 241 V263" />
+                    <path class="graph-line review-loop" d="M198 216 C278 216 278 137 244 137" />
+                    <path class="graph-flow" d="M150 64 V80 H60 V100 M60 151 V172 H150 V191 M150 241 V263" />
+                    <path class="graph-flow violet" d="M150 80 H240 V100 M240 151 V172 H150 M198 216 C278 216 278 137 244 137" />
+                  </svg>
+                  <div class="team-agent coordinator"><b>任务协调官</b><span>目标拆解 · 依赖编排</span></div>
+                  <div class="team-agent researcher"><b>研究专家</b><span>事实与证据</span></div>
+                  <div class="team-agent builder"><b>工程专家</b><span>实现与集成</span></div>
+                  <div class="team-agent reviewer"><b>独立复核官</b><span>验收 · 责任回修</span></div>
+                  <div class="team-agent delivery"><b>交付专家</b><span>产物 · 证据包</span></div>
+                </div>
+                <div class="team-status"><span>角色可替换</span><span>依赖可重组</span><span>证据可交接</span></div>
+              </div>
+            </div>
+
+            <div class="module-transit" aria-hidden="true">
+              <span class="flying-module">Prompt</span>
+              <span class="flying-module">Skill</span>
+              <span class="flying-module">Tool / MCP</span>
+              <span class="flying-module">Workflow</span>
+              <span class="flying-module">Memory</span>
+              <span class="flying-module">Runtime</span>
+            </div>
+
+            <div class="foundry-caption">
+              <div><b>异构 Agent 不能天然互编排</b>各自拥有独立身份、上下文和运行方式，并排放置不等于形成 Agent Team。</div>
+              <div><b>统一列装为标准角色</b>每个 Agent 获得明确职责、依赖关系、交付物和验收证据。</div>
+              <div><b>Agent Team 可以自由组成编排图</b>按新任务重组并行、串行、复核和回修关系，形成新的端到端执行链。</div>
+            </div>
+          </div>
+          <a class="section-cursor on-dark" href="#efficiency-data" aria-label="前往下一节：代码瘦身与效率">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Next section</small><b>代码瘦身与效率</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="efficiency-data" class="section data-story">
+        <div class="page">
+          <div class="section-head">
+            <div>
+              <span class="kicker">03 · Less is more</span>
+              <h2>更少代码，更高效率。</h2>
+            </div>
+            <p>四套真实迁移都把重复底座和耦合工作流拆掉：代码资产更轻、维护触点更少，下一次交付不必再从零搭建。</p>
+          </div>
+
+          <div class="chart-stack">
+            <article class="chart-section">
+              <div class="chart-copy">
+                <h3>Mirror Watch</h3>
+                <p>完整活动代码与文本资产。前后绝对量并列，降幅直接标在条端。</p>
+              </div>
+              <div class="paired-groups" aria-label="Mirror Watch 迁移前后资产差距">
+                <div class="pair-group">
+                  <div class="pair-title"><span>资产体积</span><b>−89.6%</b></div>
+                  <div class="pair-row"><span>迁移前</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>16.30 MB</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 10.4%"></span></div><b>1.70 MB</b></div>
+                </div>
+                <div class="pair-group">
+                  <div class="pair-title"><span>文件数量</span><b>−30.2%</b></div>
+                  <div class="pair-row"><span>迁移前</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>242</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 69.8%"></span></div><b>169</b></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chart-section">
+              <div class="chart-copy">
+                <h3>Mirror Prism</h3>
+                <p>使用与 Mirror Watch 相同的完整闭包和排除规则。</p>
+              </div>
+              <div class="paired-groups" aria-label="Mirror Prism 迁移前后资产差距">
+                <div class="pair-group">
+                  <div class="pair-title"><span>资产体积</span><b>−75.7%</b></div>
+                  <div class="pair-row"><span>迁移前</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>2.82 MB</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 24.3%"></span></div><b>0.69 MB</b></div>
+                </div>
+                <div class="pair-group">
+                  <div class="pair-title"><span>文件数量</span><b>−56.7%</b></div>
+                  <div class="pair-row"><span>迁移前</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>291</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 43.3%"></span></div><b>126</b></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chart-section">
+              <div class="chart-copy">
+                <h3>Equity Research</h3>
+                <p>对齐 FinRobot 投资研究功能闭包；资产缩至 1 / 28，维护阅读量下降 98.9%。</p>
+              </div>
+              <div class="paired-groups" aria-label="FinRobot 与 MOSA Equity Research 功能闭包差距">
+                <div class="pair-group">
+                  <div class="pair-title"><span>资产体积</span><b>−96.4%</b></div>
+                  <div class="pair-row"><span>FinRobot</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>646.88 KB</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 3.6%"></span></div><b>23.08 KB</b></div>
+                </div>
+                <div class="pair-group">
+                  <div class="pair-title"><span>维护文件</span><b>−63.9%</b></div>
+                  <div class="pair-row"><span>FinRobot</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>36</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 36.1%"></span></div><b>13</b></div>
+                </div>
+                <div class="pair-group">
+                  <div class="pair-title"><span>非空实现行</span><b>−98.9%</b></div>
+                  <div class="pair-row"><span>FinRobot</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>12,244</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 1.1%"></span></div><b>136</b></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chart-section">
+              <div class="chart-copy">
+                <h3>Deep Research</h3>
+                <p>对齐 Stanford STORM 深度研究功能闭包；资产缩至 1 / 15.9，维护阅读量下降 98.3%。</p>
+              </div>
+              <div class="paired-groups" aria-label="Stanford STORM 与 MOSA Deep Research 功能闭包差距">
+                <div class="pair-group">
+                  <div class="pair-title"><span>资产体积</span><b>−93.7%</b></div>
+                  <div class="pair-row"><span>STORM</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>294.75 KB</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 6.3%"></span></div><b>18.53 KB</b></div>
+                </div>
+                <div class="pair-group">
+                  <div class="pair-title"><span>维护文件</span><b>−45.5%</b></div>
+                  <div class="pair-row"><span>STORM</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>22</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 54.5%"></span></div><b>12</b></div>
+                </div>
+                <div class="pair-group">
+                  <div class="pair-title"><span>非空实现行</span><b>−98.3%</b></div>
+                  <div class="pair-row"><span>STORM</span><div class="pair-track"><span class="pair-fill" style="width: 100%"></span></div><b>6,582</b></div>
+                  <div class="pair-row mosa"><span>MOSA</span><div class="pair-track"><span class="pair-fill" style="width: 1.7%"></span></div><b>113</b></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chart-section full-span">
+              <div class="chart-copy">
+                <h3>重复交付投入</h3>
+                <p>工时未被独立记录，因此只报告复用敏感性区间；上方文件数与非空行是可复核的维护效率代理。</p>
+              </div>
+              <div class="range-chart" aria-label="重复交付投入降低估计区间为 30% 到 80%，典型值 50%">
+                <div class="range-summary">
+                  <span>重复投入降低</span>
+                  <strong>30–80%</strong>
+                  <small>情景估算，不作为单点实测结果。</small>
+                </div>
+                <div class="efficiency-bars" aria-hidden="true">
+                  <div class="efficiency-scenario">
+                    <div class="efficiency-scenario-head"><span>保守复用</span><b>−30%</b></div>
+                    <div class="effort-bar"><i style="width: 70%"></i></div>
+                    <small>仍需 70% 重复投入</small>
+                  </div>
+                  <div class="efficiency-scenario">
+                    <div class="efficiency-scenario-head"><span>典型场景</span><b>−50%</b></div>
+                    <div class="effort-bar"><i style="width: 50%"></i></div>
+                    <small>仍需 50% 重复投入</small>
+                  </div>
+                  <div class="efficiency-scenario">
+                    <div class="efficiency-scenario-head"><span>高复用</span><b>−80%</b></div>
+                    <div class="effort-bar"><i style="width: 20%"></i></div>
+                    <small>仅需 20% 重复投入</small>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="method-note-hover">
+            <button class="method-note-trigger" type="button">源码瘦身与提效口径 <span>悬停查看</span></button>
+            <div class="method-note-panel">
+              <div class="method-note">
+                <strong>源码瘦身统计口径</strong>
+                <span>比较对象：Mirror Watch、Mirror Prism 使用用户提供的原始算法 ZIP；Equity Research 使用 FinRobot commit 01ed408 的投资研究功能闭包；Deep Research 使用 Stanford STORM commit fb951af 的 STORM Wiki 功能闭包。迁移后均统计对应 OpenCorvus Agent Team 的完整自包含包。</span>
+                <span>纳入范围：Prompt、Agent、Workflow、Skill、Tool、脚本、模板、协议与配置、知识引用、项目自有报告源码，以及其他文本型实现资产。</span>
+                <span>排除范围：.git、node_modules、macOS 元数据、依赖锁文件、二进制媒体，以及依赖或运行时缓存。</span>
+                <span>闭包边界：FinRobot 纳入 finrobot_equity/core/src、核心配置与依赖声明，排除 Web 外壳、演示、测试和报告样本；STORM 纳入 knowledge_storm/storm_wiki、其共享运行模块、GPT 入口、依赖与安装声明，排除 Co-STORM、前端和其他模型示例。</span>
+                <span>计量方法：以精确字节数为主指标、文件数量为第二指标；MB / KB 均为便于阅读的十进制换算。Equity Research 与 Deep Research 的源文件均为正常排版文本，因此补充非空行作为维护阅读量代理；Mirror Watch 原始包包含大型压缩 HTML / JSON，同一物理行可能承载大量内容，因此不展示行数。</span>
+                <strong>提效区间口径</strong>
+                <span>两个新 Agent Team 的维护文件分别减少 63.9% 与 45.5%，非空实现行分别减少 98.9% 与 98.3%；这些是可复核的维护效率代理，不等同于交付工时。重复交付投入降低 30–80% 仍是复用敏感性估计，50% 为典型场景，不作为单点实测。</span>
+              </div>
+            </div>
+          </div>
+          <a class="section-cursor" href="#delivery-proof" aria-label="前往下一节：实战交付成果">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Next section</small><b>实战交付成果</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="delivery-proof" class="section delivery-proof">
+        <div class="page">
+          <div class="section-head">
+            <div>
+              <span class="kicker">04 · From prototype to production</span>
+              <h2>三阶段，<br />把自动化交付推向生产。</h2>
+            </div>
+            <p>试用期的三阶段不是并列事项，而是一条递进路径：先让系统完整运行，再让质量能够自证，最后把能力扩展到线上真实业务。</p>
+          </div>
+
+          <div class="delivery-journey" aria-label="Agent Team 自动化开发工具三阶段交付成果">
+            <article class="delivery-stage">
+              <span class="stage-index">01</span>
+              <span class="stage-label">主链路成型</span>
+              <h3>从零搭起，先让系统完整跑通</h3>
+              <p>构建初始客户端，完成 Solid.js、Vite 与 Tauri 迁移；统一大模型调用生命周期，贯通 Task 创建、多 Agent 流式输出、工具调用、结果回传与任务结束。</p>
+              <div class="stage-evidence single">
+                <div><strong>&gt;90%</strong><span>PRD2Code、Design2Code<br />阶段验收成功率</span></div>
+              </div>
+            </article>
+
+            <article class="delivery-stage">
+              <span class="stage-index">02</span>
+              <span class="stage-label">质量闭环</span>
+              <h3>不靠“看起来完成”，让结果可以复核</h3>
+              <p>建立 Mirror 自动化评测与 Visual QA 修复闭环：问题进入验证、修复后重新评测，直到测试证据与网页抽检同时收敛。</p>
+              <div class="stage-evidence">
+                <div><strong>209/209</strong><span>相关测试<br />全部通过</span></div>
+                <div><strong>&gt;90%</strong><span>网页复刻<br />抽检一致率</span></div>
+              </div>
+            </article>
+
+            <article class="delivery-stage">
+              <span class="stage-index">03</span>
+              <span class="stage-label">线上规模化</span>
+              <h3>从单次验证，走向多场景生产交付</h3>
+              <p>推动算法服务上线，并完成 Forex、Currency、Economy 等 AInvest 竞品场景；同一套能力开始跨页面、跨任务稳定复用。</p>
+              <div class="stage-evidence">
+                <div><strong>12</strong><span>真实竞品<br />开发场景</span></div>
+                <div><strong>&gt;0.95</strong><span>平均 SSIM<br />全部指标达成</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="delivery-method">
+            <div>
+              <h3>沉淀下来的，是持续交付方法</h3>
+              <p>从关注单点功能，转向关注生命周期、上下文、结果回传和修复闭环的完整性。</p>
+            </div>
+            <div class="method-loop" aria-label="真实场景、量化验收、问题回流、自动修复的方法闭环">
+              <span>真实场景</span><i>→</i><span>量化验收</span><i>→</i><span>问题回流</span><i>→</i><span>自动修复</span>
+            </div>
+          </div>
+
+          <div class="support-inputs" aria-label="下一阶段需要的公司支持">
+            <div class="support-intro">下一阶段要放大这条曲线，需要三类输入</div>
+            <div class="support-item"><b>基础资源</b><span>稳定的模型调用、算测环境与线上部署资源。</span></div>
+            <div class="support-item"><b>真实反馈</b><span>更多真实开发任务，以及线上使用数据的反馈渠道。</span></div>
+            <div class="support-item"><b>阶段复盘</b><span>阶段性技术评审与成果复盘，让协作、评测和修复持续迭代。</span></div>
+          </div>
+
+          <p class="delivery-footnote">口径说明：PRD 为 Product Requirements Document（产品需求文档）；QA 为 Quality Assurance（质量保证）；SSIM 为 Structural Similarity Index（结构相似性指数），用于衡量图像结构相似度。以上指标来自试用期工作总结，均按原报告阈值表达，不将“超过”改写为精确单点值。</p>
+
+          <a class="section-cursor on-dark" href="#evaluation" aria-label="前往下一节：性能评估">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Next section</small><b>性能评估</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="evaluation" class="section evaluation-story">
+        <div class="page">
+          <div class="section-head">
+            <div>
+              <span class="kicker">05 · Performance evaluation</span>
+              <h2>性能好不好，任务里见</h2>
+            </div>
+            <p>代码更少不等于能力打折。长程 Coding 与长程混合任务分别评估工程质量和跨类型执行稳定性，不拼成一个虚假的总分。</p>
+          </div>
+
+          <div class="chart-stack score-chart-stack">
+            <article class="chart-section">
+              <div class="chart-copy">
+                <h3>两套任务评分</h3>
+                <p>长程 Coding 与长程混合任务回答不同问题，分别展示，不合并成一个总分。</p>
+              </div>
+              <div class="score-report">
+                <section class="evaluation-lens" aria-labelledby="long-score-title">
+                  <div class="lens-head">
+                    <div>
+                      <h4 id="long-score-title">长程 Coding 任务</h4>
+                      <p>只比较任务语义一致的 C01 与 C04；N01、N08 因题目不一致，仅作观察，不进入横向评分。</p>
+                    </div>
+                    <span class="lens-tag">同题工程审计</span>
+                  </div>
+
+                  <div class="score-overview" aria-label="长程同题审计综合分 OpenCorvus 85，WorkBuddy 73.5">
+                    <div class="score-total">
+                      <span>MOSA / OpenCorvus</span>
+                      <strong>85.0</strong>
+                      <small>C01、C04 同题均分</small>
+                    </div>
+                    <div class="score-total competitor">
+                      <span>WorkBuddy</span>
+                      <strong>73.5</strong>
+                      <small>C01、C04 同题均分</small>
+                    </div>
+                    <div class="score-lead"><strong>+11.5</strong><span>综合领先</span></div>
+                  </div>
+
+                  <div class="score-detail-hover">
+                    <button class="score-detail-trigger" type="button">详细评分 <span>悬停查看方法、维度与逐案结果</span></button>
+                    <div class="score-detail-panel">
+                  <div class="score-method" aria-label="长程同题审计样本与证据口径">
+                    <div><b>2 组同题样本</b>C01、C04 纳入评分</div>
+                    <div><b>98 / 100</b>两组任务相似度</div>
+                    <div><b>A / B 级优先</b>独立复跑或多证据互证</div>
+                  </div>
+
+                  <div class="criteria-defs" aria-label="长程同题审计五项权重">
+                    <div><b>需求覆盖 · 35%</b>是否完成原始硬性要求</div>
+                    <div><b>正确性 · 30%</b>协议、边界与业务语义</div>
+                    <div><b>验收证据 · 20%</b>结果是否被真实证据支持</div>
+                    <div><b>产物质量 · 10%</b>交付物是否真实可用</div>
+                    <div><b>可复现性 · 5%</b>干净环境能否复跑</div>
+                  </div>
+
+                  <div class="dimension-chart" aria-label="长程同题审计各评分维度均值">
+                    <div class="dimension-legend"><span>MOSA</span><span>WorkBuddy</span></div>
+                    <div class="dimension-row"><b>需求覆盖</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:90%"></span></div><strong>31.5/35</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:74.3%"></span></div><strong>26/35</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>正确性</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:88.3%"></span></div><strong>26.5/30</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:66.7%"></span></div><strong>20/30</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>验收证据</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:80%"></span></div><strong>16/20</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:75%"></span></div><strong>15/20</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>产物质量</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:85%"></span></div><strong>8.5/10</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:75%"></span></div><strong>7.5/10</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>可复现性</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:50%"></span></div><strong>2.5/5</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:100%"></span></div><strong>5/5</strong></div>
+                    </div></div>
+                  </div>
+
+                  <div class="case-results two-cases" aria-label="长程同题审计逐案结果">
+                    <div class="case-result mosa-win"><b>C01 · 现场服务</b><span>MOSA 81 · WB 67</span><small>MOSA 需求覆盖与断点续传领先</small></div>
+                    <div class="case-result mosa-win"><b>C04 · 实时消息</b><span>MOSA 89 · WB 80</span><small>MOSA 撤回隐私语义正确</small></div>
+                  </div>
+                  <div class="score-evidence">长程分数是当前同题样本的审计评分，不代表所有任务的绝对能力。MOSA 的主要短板是干净环境复跑；WorkBuddy 的优势正是在可复现性。</div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="evaluation-lens" aria-labelledby="mixed-score-title">
+                  <div class="lens-head">
+                    <div>
+                      <h4 id="mixed-score-title">长程混合任务</h4>
+                      <p>五个同题 Case 混合 Code、Work 与大任务类型，重点判断复杂任务能否完整推进到可验证终态。</p>
+                    </div>
+                    <span class="lens-tag">跨类型组合稳定性</span>
+                  </div>
+
+                  <div class="score-overview" aria-label="长程混合任务执行力 OpenCorvus 92，WorkBuddy 84.1">
+                    <div class="score-total">
+                      <span>MOSA / OpenCorvus</span>
+                      <strong>92.0</strong>
+                      <small>五案长链执行力均值</small>
+                    </div>
+                    <div class="score-total competitor">
+                      <span>WorkBuddy</span>
+                      <strong>84.1</strong>
+                      <small>五案长链执行力均值</small>
+                    </div>
+                    <div class="score-lead"><strong>+7.9</strong><span>执行力领先</span></div>
+                  </div>
+
+                  <div class="score-detail-hover">
+                    <button class="score-detail-trigger" type="button">详细评分 <span>悬停查看方法、维度与逐案结果</span></button>
+                    <div class="score-detail-panel">
+                  <div class="score-method" aria-label="长程混合任务稳定性指标">
+                    <div><b>5 / 5 vs 4 / 5</b>主链抵达终态覆盖</div>
+                    <div><b>86.9 vs 51.1</b>双方最低单案得分</div>
+                    <div><b>3.3 vs 16.7</b>跨案标准差</div>
+                  </div>
+
+                  <div class="criteria-defs" aria-label="长程混合任务执行力五项权重">
+                    <div><b>终态达成 · 30%</b>输入是否贯穿到真实交付</div>
+                    <div><b>依赖回修 · 20%</b>上游变化是否同步传播</div>
+                    <div><b>运行验证 · 20%</b>测试、服务与页面是否真实运行</div>
+                    <div><b>产物一致 · 15%</b>数据、文档与页面结论是否一致</div>
+                    <div><b>追溯恢复 · 15%</b>是否保留版本、失败与恢复路径</div>
+                  </div>
+
+                  <div class="dimension-chart" aria-label="长程混合任务执行力五维均值">
+                    <div class="dimension-legend"><span>MOSA</span><span>WorkBuddy</span></div>
+                    <div class="dimension-row"><b>终态达成</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:92.6%"></span></div><strong>92.6</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:85%"></span></div><strong>85.0</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>依赖回修</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:94.4%"></span></div><strong>94.4</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:85.6%"></span></div><strong>85.6</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>运行验证</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:92.2%"></span></div><strong>92.2</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:83.6%"></span></div><strong>83.6</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>产物一致</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:83.2%"></span></div><strong>83.2</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:82.8%"></span></div><strong>82.8</strong></div>
+                    </div></div>
+                    <div class="dimension-row"><b>追溯恢复</b><div class="dimension-bars">
+                      <div class="dimension-bar"><span>MOSA</span><div class="dimension-track"><span class="dimension-fill" style="width:95.8%"></span></div><strong>95.8</strong></div>
+                      <div class="dimension-bar competitor"><span>WB</span><div class="dimension-track"><span class="dimension-fill" style="width:82.4%"></span></div><strong>82.4</strong></div>
+                    </div></div>
+                  </div>
+
+                  <div class="case-results" aria-label="长程混合任务逐案执行力结果，分数顺序为 MOSA 与 WorkBuddy">
+                    <div class="case-result"><b>C1 · 零售</b><span>86.9 / 94.1</span><small>WorkBuddy 领先</small></div>
+                    <div class="case-result"><b>C2 · 采购</b><span>90.6 / 92.1</span><small>WorkBuddy 领先</small></div>
+                    <div class="case-result mosa-win"><b>C3 · SaaS</b><span>95.9 / 94.9</span><small>MOSA 领先</small></div>
+                    <div class="case-result mosa-win"><b>C4 · 支付</b><span>91.2 / 51.1</span><small>MOSA 领先</small></div>
+                    <div class="case-result mosa-win"><b>C5 · 门诊</b><span>95.3 / 88.5</span><small>MOSA 领先</small></div>
+                  </div>
+                  <div class="score-evidence">MOSA 五案全部抵达可验证终态，并以 3.3 的跨案标准差保持稳定；WorkBuddy 虽在两案领先，但 Case 4 断链把最低分拉至 51.1，跨案标准差升至 16.7。</div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="case-duel-block" aria-labelledby="case-duel-title">
+            <div class="case-duel-intro">
+              <h3 id="case-duel-title">Case 1 / Case 4 逐项审计</h3>
+              <p>两案均按 8 项需求等权评分，每项 0–5 分。本区沿用独立报告口径，与上方两套综合评分并列展示，不相加、不换算；逐项显示保留一位小数，总分采用报告原始精度。</p>
+            </div>
+
+            <div class="case-duel-stack">
+              <details class="case-duel theme-dark" open>
+                <summary>
+                  <div class="duel-summary-side oc">
+                    <small>CASE 1 · OPENCORVUS</small>
+                    <h4>连锁零售年度经营复盘与门店投资计划</h4>
+                    <div class="duel-total"><strong>37.5</strong><span>/ 40 · 6 项胜出</span></div>
+                    <p>可验证性、独立审计和责任步骤闭环更稳。</p>
+                  </div>
+                  <div class="duel-summary-side wb">
+                    <small>CASE 1 · WORKBUDDY</small>
+                    <h4>多格式成果与管理层表达更强</h4>
+                    <div class="duel-total"><strong>34.2</strong><span>/ 40 · 2 项胜出</span></div>
+                    <p>OpenCorvus 总体胜出，但 WorkBuddy 在预测表达与多格式成果上领先。</p>
+                    <span class="duel-toggle" aria-hidden="true"></span>
+                  </div>
+                </summary>
+
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>01 · 数据基础</span><b>数据生成与可复现</b></div><div class="duel-score">5.0<small>/5</small></div></div><p>同种子双生成、16 个文件逐字节一致，203/203 事实核验。</p><ul class="duel-evidence"><li>7 类异常、203 条事实</li><li>16/16 文件 SHA 一致</li></ul><p class="duel-why">判定：两边覆盖完整；OpenCorvus 的“确定性”证据链更硬。</p><a class="duel-source-link" href="#case-01">回看 Case 01 原始需求 ↑</a></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>01 · 数据基础</span><b>数据生成与可复现</b></div><div class="duel-score">4.5<small>/5</small></div></div><p>数据规模更大，raw 销售约 189 MB，并有独立 fact_check.csv。</p><ul class="duel-evidence"><li>24 个月日级数据齐全</li><li>未见同级别复现比对记录</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>02 · 数据基础</span><b>三层模型与治理日志</b></div><div class="duel-score">4.8<small>/5</small></div></div><p>三层 DB、行数守恒、60 条治理记录四字段全部完整。</p><ul class="duel-evidence"><li>raw 1,381,213 → clean 1,381,189</li><li>退款、结算、库存均有校验</li></ul><p class="duel-why">判定：WorkBuddy 工程量更大；OpenCorvus 的守恒与治理字段验收更清楚。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>02 · 数据基础</span><b>三层模型与治理日志</b></div><div class="duel-score">4.6<small>/5</small></div></div><p>raw / clean / business 齐全，change_log 约 17.9 MB。</p><ul class="duel-evidence"><li>治理日志覆盖规模更大</li><li>独立验收证据相对较少</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>03 · 分析预测</span><b>经营分析与证据下钻</b></div><div class="duel-score">4.8<small>/5</small></div></div><p>12 条结论覆盖四维度与三类问题，12/12 下钻验证。</p><ul class="duel-evidence"><li>可下钻至治理和业务记录</li><li>相关性表述边界清楚</li></ul><p class="duel-why">判定：结论可追溯性更强；WorkBuddy 图表更丰富，但审计值削弱可信度。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>03 · 分析预测</span><b>经营分析与证据下钻</b></div><div class="duel-score">4.3<small>/5</small></div></div><p>10 张分析图、findings.json 丰富；部分品类指标仍有差异。</p><ul class="duel-evidence"><li>呈现质量更好</li><li>品类审计期望/实际不一致</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>04 · 分析预测</span><b>三情景预测与敏感性</b></div><div class="duel-score">4.7<small>/5</small></div></div><p>3 × 12 × 7 变量完整，预测工作表含 78 个公式。</p><ul class="duel-evidence"><li>联动公式与确定性证据强</li><li>表达层偏简洁</li></ul></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>04 · 分析预测</span><b>三情景预测与敏感性</b></div><div class="duel-score">4.8<small>/5</small></div></div><p>预测 JSON 约 212 KB，含季节性修订、敏感性图与 45 个公式。</p><ul class="duel-evidence"><li>预测材料更完整</li><li>三情景切换清楚</li></ul><p class="duel-why">判定：两边都合格；WorkBuddy 的表达、季节性与敏感性材料更丰富。</p></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>05 · 成果交付</span><b>XLSX / DOCX / PPTX / PDF</b></div><div class="duel-score">3.9<small>/5</small></div></div><p>4 个工作表、132 公式；7 页 PPT；PDF 1 页，内容可靠但偏素。</p><ul class="duel-evidence"><li>四种文件齐全</li><li>跨成果一致性验证更严</li></ul></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>05 · 成果交付</span><b>XLSX / DOCX / PPTX / PDF</b></div><div class="duel-score">4.8<small>/5</small></div></div><p>10 个工作表、214 公式；14 页 PPT、9 图；DOCX 8 图；PDF 2 页。</p><ul class="duel-evidence"><li>信息密度与视觉表达更强</li><li>更接近直接汇报材料</li></ul><p class="duel-why">判定：WorkBuddy 在演示与管理层可读性上明显更强。</p></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>06 · 审计决策</span><b>独立审计与责任步骤修订</b></div><div class="duel-score">4.9<small>/5</small></div></div><p>30 项指标 original = recomputed，difference = 0，责任步骤闭环清楚。</p><ul class="duel-evidence"><li>五类审计面完整</li><li>最终状态与成果一致</li></ul><p class="duel-why">决定性差距：OpenCorvus 最终零差异；WorkBuddy 把非零差异标为通过。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>06 · 审计决策</span><b>独立审计与责任步骤修订</b></div><div class="duel-score">2.9<small>/5</small></div></div><p>完成 v1 → v2，但 v2 的 M01 与多项品类收入不相等仍记为通过。</p><ul class="duel-evidence"><li>网站写 28 项、报告写 40 项</li><li>通过阈值掩盖实际差异</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>07 · 审计决策</span><b>3,000 万投资组合</b></div><div class="duel-score">4.5<small>/5</small></div></div><p>30M / 25M / 5M 预算重算均满足现金与城市集中度。</p><ul class="duel-evidence"><li>约束、依赖、停止条件可验证</li><li>预算利用率偏低</li></ul><p class="duel-why">判定：WorkBuddy 更接近用满预算，但执行里程碑与 chosen / rejected 状态不一致。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>07 · 审计决策</span><b>3,000 万投资组合</b></div><div class="duel-score">4.1<small>/5</small></div></div><p>使用 2,780 万；但 Q2 / Q4 仍安排被拒的 P6 / P2 项目。</p><ul class="duel-evidence"><li>预算利用率更高</li><li>组合与里程碑未完全同步</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>08 · 运行交互</span><b>本地经营决策网站</b></div><div class="duel-score">4.8<small>/5</small></div></div><p>HTTP 200、7/7 交互检查；预算组合由后端 API 重算。</p><ul class="duel-evidence"><li>门店/月、预测、异常、审计全覆盖</li><li>有运行截图与端点证据</li></ul><p class="duel-why">判定：两边交互都完整；OpenCorvus 有后端端点与自动验证，可信度更高。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>08 · 运行交互</span><b>本地经营决策网站</b></div><div class="duel-score">4.5<small>/5</small></div></div><p>静态网站信息丰富，浏览器中真实执行组合优化。</p><ul class="duel-evidence"><li>演示体验更丰富</li><li>算法在前端重复实现</li></ul></div>
+                </div>
+              </details>
+
+              <details class="case-duel theme-light" open>
+                <summary>
+                  <div class="duel-summary-side oc">
+                    <small>CASE 4 · OPENCORVUS</small>
+                    <h4>跨境电商支付清算服务、欺诈审计与风控投资</h4>
+                    <div class="duel-total"><strong>38.8</strong><span>/ 40 · 6 项胜出</span></div>
+                    <p>真实服务端、不可变性验证和商户授权更可信。</p>
+                  </div>
+                  <div class="duel-summary-side wb">
+                    <small>CASE 4 · WORKBUDDY</small>
+                    <h4>全量报表规模与可视化交付更强</h4>
+                    <div class="duel-total"><strong>33.7</strong><span>/ 40 · 2 项胜出</span></div>
+                    <p>OpenCorvus 总体胜出，最大差距来自真实服务边界与服务端权限控制。</p>
+                    <span class="duel-toggle" aria-hidden="true"></span>
+                  </div>
+                </summary>
+
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>01 · 事件基础</span><b>确定性事件生成</b></div><div class="duel-score">4.9<small>/5</small></div></div><p>25,826 输入行，两次全目录逐字节一致，八类异常引用可核验。</p><ul class="duel-evidence"><li>固定种子任意重跑可比</li><li>异常清单与事件引用一致</li></ul><p class="duel-why">判定：WorkBuddy 规模更大；OpenCorvus 对“确定性”的直接证明更充分。</p><a class="duel-source-link" href="#case-04">回看 Case 04 原始需求 ↑</a></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>01 · 事件基础</span><b>确定性事件生成</b></div><div class="duel-score">4.7<small>/5</small></div></div><p>运行日志生成 55,832 个签名事件，最终库 73,251 事件。</p><ul class="duel-evidence"><li>覆盖规模更大</li><li>下游 UUID 使结果身份不完全稳定</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>02 · 核心服务</span><b>接入、幂等与不可变账本</b></div><div class="duel-score">5.0<small>/5</small></div></div><p>顺序/乱序余额一致，重启演练通过，事件存储无 UPDATE / DELETE 路径。</p><ul class="duel-evidence"><li>真实事件接入服务</li><li>不可变性代码扫描通过</li></ul><p class="duel-why">判定：OpenCorvus 有真实服务层；WorkBuddy 主要是 Python 类和离线流水线，没有独立网络事件接入 API。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>02 · 核心服务</span><b>接入、幂等与不可变账本</b></div><div class="duel-score">4.1<small>/5</small></div></div><p>SQLite WAL、唯一键、事务回滚和双分录完善，但 API 层缺失。</p><ul class="duel-evidence"><li>核心后端逻辑真实存在</li><li>对外服务边界不完整</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>03 · 核心服务</span><b>全链路对账与六类队列</b></div><div class="duel-score">4.8<small>/5</small></div></div><p>4,765 条全量案例，六类队列均有真实样本与责任证据。</p><ul class="duel-evidence"><li>差异/成因/责任/事件闭环</li><li>scorer 自动验证</li></ul></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>03 · 核心服务</span><b>全链路对账与六类队列</b></div><div class="duel-score">4.9<small>/5</small></div></div><p>16,860 条 recon cases，XLSX 队列 16,862 行。</p><ul class="duel-evidence"><li>明细覆盖更完整</li><li>一致性脚本与数据库 0 差异</li></ul><p class="duel-why">判定：两边逻辑完整；WorkBuddy 在交付中保留的全量对账规模更大。</p></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>04 · 风险分析</span><b>欺诈分析与标签隔离</b></div><div class="duel-score">4.9<small>/5</small></div></div><p>标签引用扫描为 0，欺诈指标消费全量 4,765 / 4,765。</p><ul class="duel-evidence"><li>独立 label-isolation evidence</li><li>全量无截断核验</li></ul><p class="duel-why">判定：两边线上判断均不读标签；OpenCorvus 的边界与独立核验证据更干净。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>04 · 风险分析</span><b>欺诈分析与标签隔离</b></div><div class="duel-score">4.6<small>/5</small></div></div><p>risk.py 只读事件特征，但静态控制台快照同时包含 ground_truth。</p><ul class="duel-evidence"><li>判定代码合格</li><li>展示层暴露验收标签</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>05 · 成果交付</span><b>五类财务与监管成果</b></div><div class="duel-score">4.4<small>/5</small></div></div><p>XLSX 队列 502 行、CSV 239 行、PDF 7 页、PPT 5 页。</p><ul class="duel-evidence"><li>五类成果齐全</li><li>指标清单与真实数据一致</li></ul></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>05 · 成果交付</span><b>五类财务与监管成果</b></div><div class="duel-score">5.0<small>/5</small></div></div><p>两张 XLSX 明细约 16.8k 行、CSV 73,251 行、PDF 22 页、PPT 含 4 图表。</p><ul class="duel-evidence"><li>明细规模与表达明显更强</li><li>管理层材料可用性高</li></ul><p class="duel-why">判定：WorkBuddy 更接近全量运营交付，且当前跨成果一致性检查为 0 处差异。</p></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>06 · 审计韧性</span><b>独立审计与四项演练</b></div><div class="duel-score">5.0<small>/5</small></div></div><p>本次实跑 bun test 19 pass / 0 fail，acceptance 19/19。</p><ul class="duel-evidence"><li>每项审计/演练独立 JSON</li><li>当前环境测试可复现</li></ul><p class="duel-why">判定：两边都做了 19/19；OpenCorvus 的测试套件和逐项证据文件更完整。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>06 · 审计韧性</span><b>独立审计与四项演练</b></div><div class="duel-score">4.7<small>/5</small></div></div><p>run.log 显示 audit 19/19，四类演练代码完整。</p><ul class="duel-evidence"><li>流水线执行成功</li><li>证据更集中于日志与数据库</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>07 · 审计韧性</span><b>1,500 万风控投资</b></div><div class="duel-score">4.9<small>/5</small></div></div><p>1,490 万项目 + 10 万预备金，五类投资、三阶段、撤回条件完整。</p><ul class="duel-evidence"><li>预算精确封顶</li><li>实施依赖与回收期清楚</li></ul><p class="duel-why">判定：WorkBuddy 把五项防损率直接相加为 1.31，存在收益重复计算。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>07 · 审计韧性</span><b>1,500 万风控投资</b></div><div class="duel-score">3.6<small>/5</small></div></div><p>总成本 1,470 万，但 balanced prevent = 1.31，未做交互或 100% 上限。</p><ul class="duel-evidence"><li>结构完整</li><li>收益可能超过基础损失暴露</li></ul></div>
+                </div>
+                <div class="duel-row">
+                  <div class="duel-side oc"><div class="duel-item-head"><div><span>08 · 运行权限</span><b>运营控制台与商户隔离</b></div><div class="duel-score">5.0<small>/5</small></div></div><p>服务端 token 隔离；跨商户 summary / fraud 均返回 403；API 下钻到不可变事件。</p><ul class="duel-evidence"><li>真实访问控制与越权拒绝</li><li>前端无业务逻辑扫描通过</li></ul><p class="duel-why">决定性差距：服务端 403 权限控制，不能用客户端筛选替代。</p></div>
+                  <div class="duel-side wb"><div class="duel-item-head"><div><span>08 · 运行权限</span><b>运营控制台与商户隔离</b></div><div class="duel-score">2.0<small>/5</small></div></div><p>约 53 MB 全量 snapshot.js 已加载所有商户事件和 ground_truth，仅由 JS filter 模拟令牌。</p><ul class="duel-evidence"><li>控制台展示丰富</li><li>不构成安全隔离</li></ul></div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="method-note-hover">
+            <button class="method-note-trigger" type="button">性能评估口径与数据来源 <span>悬停查看</span></button>
+            <div class="method-note-panel">
+              <div class="method-note">
+                <strong>任务评分来源与边界</strong>
+                <span>长程 Coding 评分来自《长程coding任务对比.html》：只纳入任务相似度均为 98/100 的 C01、C04；N01、N08 因需求不同不进入横向总分。85.0 与 73.5 为两案精确均值，页面同时保留报告中的四舍五入表达 85 vs 74。</span>
+                <span>长程混合任务评分来自《长程混合任务对比.html》：五个同题 Case 按终态达成 30%、依赖回修 20%、运行验证 20%、产物一致 15%、追溯恢复 15% 计分，再对五案等权平均，得到 OpenCorvus 92.0、WorkBuddy 84.1。</span>
+                <span>两套评分的样本、权重和问题定义不同，只能并列观察，不能相加或再求平均。</span>
+                <strong>Case 1 / Case 4 逐项审计口径</strong>
+                <span>逐项详情迁移自《case1-case4-opencorvus-vs-workbuddy.html》：每个 Case 的 8 项需求等权，每项 0–5 分，综合功能完成度、架构符合度、证据可信度、跨成果一致性和交付可用性。Case 1 为 37.5 vs 34.2，Case 4 为 38.8 vs 33.7，满分均为 40。</span>
+                <span>Case 4 的运行证据包含 OpenCorvus bun test 19/19 与 WorkBuddy 跨成果一致性 0 处差异；Case 1 结合独立测试/审计报告及 XLSX、DOCX、PPTX、PDF 结构抽查。PDF 已渲染检查，DOCX/PPTX 因原评估环境缺少 LibreOffice 未逐页渲染。</span>
+              </div>
+            </div>
+          </div>
+          <a class="section-cursor" href="#closing" aria-label="前往下一节：开始使用 MOSA">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Next section</small><b>开始使用 MOSA</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="closing" class="closing">
+        <div class="page closing-inner">
+          <h2>把长程任务，交给专业的 Agent Team</h2>
+          <p>不必每次从零。MOSA 让 Agent Team 自动编排、完整交付，也让下一次更省力。</p>
+          <a class="text-link" href="#top">开始使用 MOSA <span>↑</span></a>
+          <div class="closing-line">Less is more · 少搭一次，多成一件</div>
+          <a class="section-cursor on-dark closing-cursor" href="#top" aria-label="返回页面顶部">
+            <span class="cursor-mark" aria-hidden="true"></span>
+            <span class="section-cursor-copy"><small>Back to top</small><b>返回顶部</b></span>
+            <span class="section-cursor-arrow" aria-hidden="true">↑</span>
+          </a>
+        </div>
+      </section>
+    </main>
+    <script>
+      (() => {
+        const links = [...document.querySelectorAll(".section-rail a[data-section]")];
+        const sections = links.map((link) => document.getElementById(link.dataset.section)).filter(Boolean);
+        const activate = (id) => {
+          links.forEach((link) => {
+            const active = link.dataset.section === id;
+            link.classList.toggle("is-active", active);
+            if (active) link.setAttribute("aria-current", "location");
+            else link.removeAttribute("aria-current");
+          });
+        };
+        activate("hero");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (visible) activate(visible.target.id);
+          },
+          { rootMargin: "-42% 0px -42% 0px", threshold: [0, 0.01] }
+        );
+        sections.forEach((section) => observer.observe(section));
+      })();
+    </script>
+  </body>
+</html>
