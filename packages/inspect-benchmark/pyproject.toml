@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opencorvus-inspect"
+version = "0.1.0"
+description = "Inspect AI benchmark adapter for the OpenCorvus Task API"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "OpenCorvus contributors" }]
+dependencies = [
+  "httpx>=0.28,<1",
+  "inspect-ai==0.3.259",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.15,<2",
+  "pytest>=8.3,<9",
+  "pytest-asyncio>=0.25,<1",
+  "ruff>=0.11,<1",
+]
+
+[project.entry-points.inspect_ai]
+opencorvus_inspect = "opencorvus_inspect._registry"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+opencorvus_inspect = ["examples/*.jsonl", "py.typed"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+packages = ["opencorvus_inspect"]

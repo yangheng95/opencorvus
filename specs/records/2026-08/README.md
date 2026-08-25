@@ -2,6 +2,8 @@
 
 - [2026-08-26-mission-stream-interruption-retry-budget.md](2026-08-26-mission-stream-interruption-retry-budget.md) reconstructs the real `idle -> network -> idle` Mission failure and restores mid-stream semantic idle to the shared bounded transient-retry budget while preserving first-byte, total-deadline, cancellation, and post-side-effect safety contracts.
 
+- [2026-08-26-inspect-ai-benchmark-adapter.md](2026-08-26-inspect-ai-benchmark-adapter.md) defines a model-free Inspect AI solver that maps ordinary evaluation Samples onto the public OpenCorvus Task lifecycle and projects the exact Completion Decision Message back into Inspect logs and scorers.
+
 - [2026-08-25-open-pull-request-triage.md](2026-08-25-open-pull-request-triage.md) classifies the stale release and Dependabot backlog against current package-family, runtime, UI, and GitHub Actions contracts before any remote merge or closure.
 
 - [2026-08-25-architecture-debt-remediation.md](2026-08-25-architecture-debt-remediation.md) carries the staged repair of the whole-repository architecture-debt saturation audit, starting with renderer privilege containment and advancing through the recorded dependency order.
