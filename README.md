@@ -66,10 +66,10 @@ rather than a boast: it is what makes every layer replaceable. It stands on a gr
 deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
 
 <p align="center">
-  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.gif" alt="One recorded OpenCorvus run" width="880" /></a>
+  <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-mission-v5r-en-US.mp4"><img src="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-mission-v5r-en-US-poster.jpg" alt="OpenCorvus Mission product story" width="880" /></a>
 </p>
 
-<p align="center"><sub>Two moments from one real run: the daily-candle chart it drew, then the ecosystem graph and Word report it published. <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-demo.mp4">Watch the whole run</a> &mdash; 1 min 44 s, desktop v0.0.47beta, no audio.</sub></p>
+<p align="center"><sub>Why long-horizon agents fail, how Mission schedules durable work, and what a 12 h 45 min DeBERTa case delivered. 4 min 11 s, narrated with subtitles: <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-mission-v5r-en-US.mp4">English</a> · <a href="https://github.com/yangheng95/opencorvus/raw/main/packages/web/public/media/opencorvus-mission-v5r-zh-CN.mp4">简体中文</a>.</sub></p>
 
 <table>
   <tr>
