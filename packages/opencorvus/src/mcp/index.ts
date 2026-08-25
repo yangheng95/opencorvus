@@ -2335,45 +2335,39 @@ export namespace MCP {
         ? McpAuth.StaticCredential.parse({ secret: parsed.credentialSecret })
         : undefined
       const authKey = mcpAuthKey(parsed.name)
-      const previousProject = await Config.getProject()
-      const previousMcp = previousProject.mcp?.[parsed.name]
       const previousAuth = await McpAuth.get(authKey)
 
+      // The credential commits BEFORE the definition. An enabled definition
+      // whose required secret is absent fails persistently with nothing to
+      // recover it — the audited half-committed configure — while the inverse
+      // interruption leaves an orphan or identity-mismatched credential, which
+      // credential reconciliation already collects on the next project-config
+      // commit. Ordering the writes this way makes the existing reconciler
+      // the recovery path instead of requiring a journal.
+      if (parsed.config.type === "remote" && parsed.config.credential && staticCredential) {
+        await McpAuth.setStaticCredential(
+          authKey,
+          staticCredential.secret,
+          parsed.config.url,
+          configuredCredentialIdentity(parsed.config)!,
+        )
+      }
       try {
         await Config.updateProjectPatchAtomic(() => ({
           mcp: {
             [parsed.name]: parsed.config,
           },
         }))
-        if (parsed.config.type === "remote" && parsed.config.credential && staticCredential) {
-          await McpAuth.setStaticCredential(
-            authKey,
-            staticCredential.secret,
-            parsed.config.url,
-            configuredCredentialIdentity(parsed.config)!,
-          )
-        }
       } catch (error) {
-        const rollbackFailures: unknown[] = []
-        try {
-          await Config.updateProjectPatchAtomic(() => ({
-            mcp: {
-              [parsed.name]: previousMcp ?? null,
-            },
-          }))
-        } catch (rollbackError) {
-          rollbackFailures.push(rollbackError)
-        }
+        // The definition never committed; hand the credential store back to
+        // its previous fact so the failure leaves no half-configured server.
         try {
           if (previousAuth) await McpAuth.set(authKey, previousAuth)
           else await McpAuth.remove(authKey)
         } catch (rollbackError) {
-          rollbackFailures.push(rollbackError)
-        }
-        if (rollbackFailures.length > 0) {
           throw new AggregateError(
-            [error, ...rollbackFailures],
-            `MCP server ${parsed.name} credential storage and rollback failed`,
+            [error, rollbackError],
+            `MCP server ${parsed.name} definition commit and credential rollback failed`,
           )
         }
         throw error
