@@ -356,16 +356,24 @@ export namespace ProjectMemoryOrganizer {
     }
     const entry = { again: false }
     scheduledRuns.set(projectID, entry)
-    runInstanceBackgroundWork(`project-memory.organize:${projectID}`, async (signal) => {
-      try {
-        do {
-          entry.again = false
-          await run({ projectID, abort: signal })
-        } while (entry.again && !signal.aborted)
-      } finally {
-        if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)
-      }
-    })
+    try {
+      runInstanceBackgroundWork(`project-memory.organize:${projectID}`, async (signal) => {
+        try {
+          do {
+            entry.again = false
+            await run({ projectID, abort: signal })
+          } while (entry.again && !signal.aborted)
+        } finally {
+          if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)
+        }
+      })
+    } catch (error) {
+      // A synchronous scheduling failure would otherwise leave this slot
+      // populated forever, sending every later request down the `again` path
+      // toward a runner that never existed.
+      if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)
+      throw error
+    }
   }
 
   export function init() {

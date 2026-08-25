@@ -330,6 +330,33 @@ The lease redesign, ARC-026 and ARC-038's Bus half were verified sound end-to-en
 - Focused positive tests: `test/instance-background-work.test.ts` pins the primitive's three contracts — context stays valid after the scheduling scope returns (the first attempt's failure), disposal cancels in-flight work instead of waiting for it (the second attempt's deadlock), and completed work leaves nothing to cancel. `test/memory/organizer-background.test.ts` pins the decoupling itself: a user message's own settlement completes while the Organizer's model turn is held open, and the run then settles through its durable states.
 - The obsolete shutdown test — which asserted the old coupling by cancelling `protocol_publication` to abort the Organizer — is rewritten to the current contract: instance disposal cancels the in-flight run, and the durable owner settles to `retry_wait` with the pending input intact. Its old form was also the source of the memory suite's flake; the suite now passes three consecutive runs.
 
+### Stage 2 eighth independent review disposition
+
+The primitive's cancellation topology, the organizer rewire's coalescing and replay semantics, the rewritten shutdown test's discrimination, and all round-7 fixes were verified sound — with five findings.
+
+**Repaired**
+
+- The controller could end up registered on a dead entry while the work admitted on a live one: the entry is resolved at scheduling, but `Instance.provide` re-resolves at admission, so an entry replaced in between left the work uncancellable — the exact disposeAll wait the primitive exists to prevent. The work now verifies at admission that the cache still holds the entry its controller guards, and refuses to run otherwise.
+- Project deletion never cancelled background work — an in-flight model turn longer than the deletion's inactivity budget failed the deletion instead of being aborted. `disposeProjectEntries` cancels each target entry's work before waiting, and the nested exclusive-drain path in `prepareContextExclusive` cancels before draining serving handles, so the record's "every teardown path" claim is now true rather than aspirational.
+- Five committed test call sites still passed the deleted `publish` option to `SessionStatus.set` — invisible to typecheck because the test tree is excluded from it. All five are cleaned to the current signature.
+- `scheduleOrganizerRun` populated its per-project slot before scheduling; a synchronous scheduling failure would have wedged the project's Organizer until restart, with every later request taking the `again` path toward a runner that never existed. The slot is now cleared on a synchronous throw.
+
+**Rejected with evidence**
+
+- The finding that `mcp debug` can destroy a stored static credential is unreachable: the debug command returns at its `oauth === false` guard before the 401 OAuth probe (`cli/cmd/mcp.ts:666-670`), and the config schema forces `credential` ⇒ `oauth: false`, so a static-credential server can never reach the probe that would stamp the OAuth identity. TypeScript agrees — a guard added at the probe site fails to compile, because `oauth` is already narrowed to exclude `false` there.
+
+**Recorded**
+
+- The reviewer confirmed a deliberate contract change worth naming: the durable Bus's backoff retry no longer re-drives a transiently failed Organizer turn on a timer — the durable `retry_wait` status is re-driven by the next request or project open. That is the recovery owner this design chose.
+- One doc correction: outbox-replayed deliveries do run under a lease; the true constraint the primitive addresses is that the delivering lease dies at settlement, not that no lease exists.
+
+## ARC-014 — a global Task request owns one Project and one Task across replays
+
+- Root cause as audited: `GlobalTaskService.create` allocated a random carrying Project before creating the Task, and request replay looked the request up inside `Instance.project.id` — the Project the retry itself had just allocated. A lost response therefore duplicated both the Project and the Task, and the caller's `requestID` could never find the first attempt.
+- The repair: the request identity of a global create is global. `findGlobalTaskByRequest` resolves a live Task carrying the request ID whose root Session still lives in an anonymous Project directory, BEFORE any Project is allocated; the service then re-enters that Project and runs the same per-project replay path every create uses — one idempotency implementation, including its pillar and artifact-import conflict checks. Only an unresolved request allocates a new Project.
+- Boundary stated in the lookup: a Project promoted out of the anonymous root stops matching, so a replay arriving after the user adopted the Project allocates anew — the pre-existing behavior for every replay, now confined to that narrow window.
+- Focused positive tests in `test/global-task-request-replay.test.ts`: a replayed create returns the first attempt's exact `{task_id, project_id, directory}`, and a conflicting replay is refused by the same per-project idempotency error every create uses.
+
 ## Stage log
 
 - Stage 1 (ARC-030): complete, reviewed and repaired against the review. Verification evidence is in the stage-1 section.

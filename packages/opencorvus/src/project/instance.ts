@@ -884,6 +884,9 @@ async function prepareContextExclusive(
     for (;;) {
       const outcome = await prepareContextInTurn(key, entry, lease, init, chain)
       if (outcome !== TEARDOWN_REQUIRED) return outcome
+      // Draining serving handles waits on background work's lease like any
+      // other; cancel it first, as every teardown-grade drain does.
+      cancelInstanceBackgroundWork(entry, "instance context refresh")
       await drainOtherServing(entry, chain)
     }
   }
@@ -1132,6 +1135,14 @@ export function runInstanceBackgroundWork(
       directory,
       fn: async () => {
         controller.signal.throwIfAborted()
+        // The controller guards exactly one entry. If that entry was replaced
+        // or deleted between scheduling and admission — a teardown drained
+        // and this provide re-created the instance — running here would put
+        // uncancellable work on an entry whose teardown already cancelled,
+        // which is the deadlock this primitive exists to prevent.
+        if (cache.get(instanceCacheKey(directory)) !== entry) {
+          throw controller.signal.reason ?? new Error(`Instance background work outlived its instance: ${label}`)
+        }
         await work(controller.signal)
       },
     }),
@@ -1597,6 +1608,9 @@ export const Instance: InstanceApi = {
         inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
       })
       const targets = [...cache.entries()].filter(([, entry]) => entry.projectID === projectID && !processed.has(entry))
+      // Project deletion is a teardown like any other: an in-flight background
+      // model turn must be cancelled, not waited out of the inactivity budget.
+      for (const [, entry] of targets) cancelInstanceBackgroundWork(entry, "project instance disposal")
       if (targets.length === 0) {
         if (admission.discoveries.size === 0) break
         continue

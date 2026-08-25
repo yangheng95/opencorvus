@@ -142,7 +142,7 @@ describe("explicit conversation and Task execution authority", () => {
           model: { providerID: "test", modelID: "test-model" },
         })
         SessionStatus.beginExecutionOccurrence(session.id, terminalInput.id, new AbortController().signal)
-        await SessionStatus.set(session.id, { type: "terminal", reason: "completed" }, { publish: false })
+        await SessionStatus.set(session.id, { type: "terminal", reason: "completed" }, {})
         const terminalFollowupAuthority = await SessionLoop.TestHooks.resolveToolExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,

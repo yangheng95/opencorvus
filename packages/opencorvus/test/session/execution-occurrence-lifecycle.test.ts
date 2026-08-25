@@ -108,7 +108,7 @@ test("one exact generation settlement releases a waiter while its reusable promp
       })
       const owner = new AbortController()
       SessionStatus.beginExecutionOccurrence(session.id, input.id, owner.signal)
-      await SessionStatus.set(session.id, { type: "streaming" }, { publish: false, inputMessageID: input.id })
+      await SessionStatus.set(session.id, { type: "streaming" }, { inputMessageID: input.id })
 
       let released = false
       const settlement = SessionStatus.waitForExecutionSettlement({
@@ -188,7 +188,7 @@ test("a failed terminal publication releases its occurrence latch for the succes
       })
       const owner = new AbortController()
       SessionStatus.beginExecutionOccurrence(session.id, input.id, owner.signal)
-      await SessionStatus.set(session.id, { type: "streaming" }, { publish: false, inputMessageID: input.id })
+      await SessionStatus.set(session.id, { type: "streaming" }, { inputMessageID: input.id })
 
       const stopFailure = Bus.subscribe(SessionStatus.Event.Status, () => {
         throw new Error("lifecycle persistence unavailable")
