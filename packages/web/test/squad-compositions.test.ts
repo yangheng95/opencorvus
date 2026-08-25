@@ -39,6 +39,15 @@ describe("generated long-Mission composition facts", () => {
       requirements: 6,
       outputs: 7,
     })
+    expect(deberta.artifacts).toEqual([
+      {
+        label: {
+          root: "View the audited CUDA experiment artifact on GitHub",
+          "zh-cn": "查看经审计的 CUDA 实验 GitHub 产物",
+        },
+        href: "https://github.com/yangheng95/deberta-v3-absa-public-evidence",
+      },
+    ])
 
     expect(generatedSelfPaper.squads.map(identity)).toEqual(selfPaper.steps.map((step) => step.squadId))
     expect({

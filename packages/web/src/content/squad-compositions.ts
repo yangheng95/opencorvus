@@ -33,6 +33,11 @@ export type SquadCompositionLane = {
   readonly outcome: LocalizedText
 }
 
+export type SquadCompositionArtifact = {
+  readonly label: LocalizedText
+  readonly href: string
+}
+
 export type SquadComposition = {
   readonly id: string
   readonly title: LocalizedText
@@ -43,6 +48,8 @@ export type SquadComposition = {
   readonly requirements?: readonly LocalizedText[]
   /** Concrete final deliverables readers can recognize before inspecting the execution graph. */
   readonly outputs?: readonly LocalizedText[]
+  /** Existing public work artifacts that prove the case beyond its editorial description. */
+  readonly artifacts?: readonly SquadCompositionArtifact[]
   readonly steps: readonly SquadCompositionStep[]
   /** Editorial grouping for `steps`; squad identities and counts still come from generated facts. */
   readonly lanes?: readonly SquadCompositionLane[]
@@ -111,6 +118,15 @@ export const squadCompositions: readonly SquadComposition[] = [
       text("Architecture & experiment figures", "架构图与实验图表"),
       text("Reviewed ACL paper", "经审校的 ACL 论文"),
       text("Published Mission repository", "已发布的 Mission 仓库"),
+    ],
+    artifacts: [
+      {
+        label: text(
+          "View the audited CUDA experiment artifact on GitHub",
+          "查看经审计的 CUDA 实验 GitHub 产物",
+        ),
+        href: "https://github.com/yangheng95/deberta-v3-absa-public-evidence",
+      },
     ],
     steps: [
       {

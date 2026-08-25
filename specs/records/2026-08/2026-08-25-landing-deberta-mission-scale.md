@@ -1,6 +1,6 @@
 # Landing DeBERTa Mission scale expansion
 
-Status: follow-up complexity visualization implemented, locally validated, and independently reviewed; deployment pending
+Status: GitHub artifact-link follow-up implemented, locally validated, and independently reviewed; deployment pending
 
 ## Recall
 
@@ -23,6 +23,25 @@ Status: follow-up complexity visualization implemented, locally validated, and i
 | Root cause | The previous renderer flattened every stage into the same rectangular card and gave title, owner, handoff, and role count equal visual weight. A grid preserves inventory but erases causal structure: it cannot distinguish research from GPU execution, parallel product work from publication work, or a milestone from an ordinary Task. Increasing the number of cards therefore made the Mission look repetitive instead of difficult. |
 | Design decision | Keep `squad-compositions.ts` as the editorial authority and generated Market facts as the ownership/count authority. Add the complete numbered original-requirement list, editorial workstream identity, concise workstream summaries, milestone outputs, and deliverable labels to that same composition record. Render requirements in full without a disclosure gate; render the six-stage overview as one connected delivery spine; render the eighteen-stage expansion as five color-coded workstream lanes with numbered Tasks, arrows, per-lane role/stage totals, and milestone endpoints. Render the self-paper stages through four production lanes. |
 | Scope boundary | This is a presentation and editorial-grouping correction. It does not change Mission runtime scheduling, imply that lanes are executing live, claim completed model training, or alter Expert Squad packages. |
+
+## Follow-up Recall: link the real GitHub artifact
+
+| Item | Requirement or evidence |
+| --- | --- |
+| User correction | The CUDA/DeBERTa example names a published Mission repository but exposes no clickable GitHub artifact. Add the real artifact link. |
+| Accepted artifact | `https://github.com/yangheng95/deberta-v3-absa-public-evidence`. Authenticated GitHub repository inspection confirms it is public and describes itself as audited DeBERTa-v3 ABSA CUDA experiments, demo, figures, paper, and reproducibility evidence. Its default branch is `main` and its root contains artifacts, configs, docs, manifests, reports, requirements, samples, scripts, `src`, and tests. |
+| Acceptance | The DeBERTa case shows a prominent bilingual external link labelled as the GitHub artifact in the final-delivery area, and the same composition documentation exposes the identical URL. The artifact URL has one editorial authority in `squad-compositions.ts`, projects through `landing-compositions.ts`, opens as an external GitHub link with safe `rel` attributes, and is positively covered by the non-User-Interface composition contract. The self-paper case must not inherit the link. |
+| Root cause | The composition model supported requirements, outputs, steps, lanes, and counts but had no artifact-link field. Consequently the renderer could only promise a repository in prose; the only clickable link in the release stage was the owning Base Expert Squad page. |
+| Scope boundary | This change links an already existing public repository. It does not create, mutate, publish, or claim ownership of a new GitHub repository and does not change Mission execution semantics. |
+| Independent review | None before implementation. A previously uninvolved read-only agent will review the stable diff and real-page evidence after validation. |
+
+### Artifact-link plan
+
+1. Add an optional localized artifact-link record to the composition editorial type and declare the verified public GitHub URL only on the DeBERTa composition.
+2. Project the link through the shared composition view and render it in both the landing final-delivery section and the composition documentation.
+3. Extend the positive composition contract with the exact public URL and absence of an artifact link on the self-paper case.
+4. Run the focused contract, docs check, Astro check/build, and real packaged-page link/visual/console review without adding or running User Interface automation.
+5. Obtain mandatory independent read-only review, repair findings, commit, merge upstream, push, monitor deployment, and verify fresh public HTML.
 
 ### Follow-up plan
 
@@ -66,4 +85,8 @@ Status: follow-up complexity visualization implemented, locally validated, and i
 - Follow-up validation passes `git diff --check`, the focused positive composition contract (1 test, 9 expectations), `docs:check`, Astro check (87 files, zero errors and zero warnings; 21 unrelated pre-existing hints), and the production build. No User Interface automation was added or run.
 - The packaged production page was visually reviewed in light and dark themes. The final captures in `specs/artifacts/landing-missions` now show the explicit original requests, delivery spine, five-lane DeBERTa map, and four-lane self-paper production map. The browser console was clean.
 - The first follow-up independent review found that section labels skipped from `h3` to `h5`; all requirement, output, overview, and workflow section headings now use semantic `h4` elements. The second review found that the documentation page used the same title for the six structured requirements and the complete copy-ready Mission; the latter is now explicitly labelled “可直接交给 OpenCorvus 的 Mission / Mission to give OpenCorvus.” Validation was repeated after both repairs, and the final independent read-only review reported `clean`.
+- GitHub artifact-link follow-up: authenticated repository inspection identified the existing public artifact `https://github.com/yangheng95/deberta-v3-absa-public-evidence`, whose description explicitly covers audited DeBERTa-v3 ABSA CUDA experiments, demo, figures, paper, and reproducibility evidence. The URL and bilingual label now live once in the DeBERTa composition editorial record, project through the shared view, and render as a prominent external link in both the landing final-delivery area and the composition documentation.
+- The focused positive composition contract now has 10 expectations and checks the exact bilingual artifact record and URL. `git diff --check`, `test:compositions`, `docs:check`, Astro check (90 files, zero errors and zero warnings; 21 unrelated pre-existing hints), and the production build pass. No User Interface automation was added or run.
+- The packaged production runtime was exercised at `http://127.0.0.1:4332/zh-cn/#compose` and the composition documentation route. Real-page evidence confirmed one visible GitHub artifact link on each surface with the exact URL, `_blank`, and `noopener noreferrer`; light/dark visual review passed and the console was clean. Durable link evidence is retained in [`deberta-collapsed-light.png`](../../artifacts/landing-missions/deberta-collapsed-light.png) and [`deberta-github-dark.png`](../../artifacts/landing-missions/deberta-github-dark.png).
+- First independent review found that the saved light screenshot had captured the earlier video section and that the artifact inventory said `source` instead of the repository's exact `src` directory. The screenshot was recaptured after measuring the real link position, a separate dark capture was added, and the inventory was corrected. The second independent read-only review reported `clean`.
 - Pending: commit, upstream merge/push, deployment, and public HTML verification.

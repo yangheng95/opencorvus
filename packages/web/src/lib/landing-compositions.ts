@@ -36,6 +36,11 @@ export type CompositionLaneView = {
   readonly steps: readonly CompositionStepView[]
 }
 
+export type CompositionArtifactView = {
+  readonly label: string
+  readonly href: string
+}
+
 export type CompositionView = {
   readonly id: string
   readonly title: string
@@ -43,6 +48,7 @@ export type CompositionView = {
   readonly prompt?: string
   readonly requirements?: readonly string[]
   readonly outputs?: readonly string[]
+  readonly artifacts?: readonly CompositionArtifactView[]
   readonly squadCount: number
   readonly roleCount: number
   readonly steps: readonly CompositionStepView[]
@@ -140,6 +146,9 @@ function viewOf(id: string, locale: PublicLocale): CompositionView {
     ...(declared.prompt ? { prompt: declared.prompt[locale] } : {}),
     ...(declared.requirements ? { requirements: declared.requirements.map((requirement) => requirement[locale]) } : {}),
     ...(declared.outputs ? { outputs: declared.outputs.map((output) => output[locale]) } : {}),
+    ...(declared.artifacts
+      ? { artifacts: declared.artifacts.map((artifact) => ({ label: artifact.label[locale], href: artifact.href })) }
+      : {}),
     squadCount: generated.squadCount,
     roleCount: generated.roleCount,
     steps,

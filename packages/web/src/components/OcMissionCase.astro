@@ -47,9 +47,26 @@ const { study, caseLabel, copy } = Astro.props
     study.outputs && (
       <section class="oc-mission-outputs">
         <h4>{copy.outputsLabel}</h4>
-        <ul>
-          {study.outputs.map((output) => <li>{output}</li>)}
-        </ul>
+        <div class="oc-mission-output-content">
+          <ul>
+            {study.outputs.map((output) => <li>{output}</li>)}
+          </ul>
+          {study.artifacts && (
+            <div class="oc-mission-artifacts">
+              {study.artifacts.map((artifact) => (
+                <a href={artifact.href} target="_blank" rel="noopener noreferrer">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M15 3h6v6"></path>
+                    <path d="M10 14 21 3"></path>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  </svg>
+                  <span>{artifact.label}</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     )
   }
@@ -268,6 +285,43 @@ const { study, caseLabel, copy } = Astro.props
     gap: var(--oc-space-2);
     margin: 0;
     padding: 0;
+  }
+
+  .oc-mission-output-content {
+    display: grid;
+    gap: var(--oc-space-3);
+  }
+
+  .oc-mission-artifacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-2);
+  }
+
+  .oc-mission-artifacts a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oc-space-2);
+    width: fit-content;
+    padding: var(--oc-space-2) var(--oc-space-3);
+    border: 1px solid var(--oc-color-brand);
+    border-radius: var(--oc-radius-pill);
+    color: var(--oc-color-text-link);
+    background: var(--oc-color-bg-surface-3);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .oc-mission-artifacts a:hover {
+    border-color: var(--oc-color-brand-medium);
+    background: var(--oc-color-bg-hover);
+  }
+
+  .oc-mission-artifacts a:focus-visible {
+    outline: 2px solid var(--oc-color-brand);
+    outline-offset: 3px;
   }
 
   .oc-mission-outputs li {

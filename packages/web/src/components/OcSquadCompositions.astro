@@ -60,6 +60,14 @@ const others = otherCompositions(locale)
         </blockquote>
       )}
 
+      {study.artifacts && (
+        <p class="oc-doc-composition-artifacts">
+          {study.artifacts.map((artifact) => (
+            <a href={artifact.href} target="_blank" rel="noopener noreferrer">{artifact.label} ↗</a>
+          ))}
+        </p>
+      )}
+
       <table>
         <thead>
           <tr>
@@ -146,6 +154,10 @@ const others = otherCompositions(locale)
 
   .oc-doc-composition-extras {
     margin-top: var(--oc-space-4);
+  }
+
+  .oc-doc-composition-artifacts {
+    margin-block: var(--oc-space-4);
   }
 
   .oc-doc-composition-prompt {
