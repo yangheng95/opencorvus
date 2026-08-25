@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Mission stream-interruption retry-budget repair: [`2026-08-26-mission-stream-interruption-retry-budget.md`](records/2026-08/2026-08-26-mission-stream-interruption-retry-budget.md).
+
 Latest open pull request triage: [`2026-08-25-open-pull-request-triage.md`](records/2026-08/2026-08-25-open-pull-request-triage.md).
 
 Latest landing AutomationBench proof: [`2026-08-25-landing-automationbench-proof.md`](records/2026-08/2026-08-25-landing-automationbench-proof.md).

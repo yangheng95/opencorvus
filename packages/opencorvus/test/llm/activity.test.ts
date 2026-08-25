@@ -1,4 +1,4 @@
-import { describe, expect, spyOn, test } from "bun:test"
+import { describe, expect, test } from "bun:test"
 import {
   DefaultLLMActivityPolicy,
   NonReplayableLLMActivityPolicy,
@@ -129,43 +129,95 @@ describe("LLM semantic activity", () => {
     })
   })
 
-  test("bounds long-duration idle and first-byte recovery to one retry", async () => {
-    const random = spyOn(Math, "random").mockReturnValue(1)
-    const maximumFirstRetryBackoff = Math.max(
-      DefaultLLMActivityPolicy.backoffMs("idle", 0, Number.MAX_SAFE_INTEGER),
-      DefaultLLMActivityPolicy.backoffMs("first_byte", 0, Number.MAX_SAFE_INTEGER),
+  test("recovers through the observed idle, network, idle transient sequence", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await withLLMActivity(
+      { sessionID: "session-mixed-transient-budget", provider: "openai", model: "gpt-5.6-sol" },
+      {
+        ...DefaultLLMActivityPolicy,
+        totalMs: 1_000,
+        idleMs: 20,
+        firstByteMs: 20,
+        backoffMs: () => 0,
+      },
+      new AbortController().signal,
+      async (run) => {
+        attempts += 1
+        run.bump("text-delta")
+        if (run.attempt === 1) {
+          throw new Error("Cannot connect to API: The socket connection was closed unexpectedly")
+        }
+        if (run.attempt < 3) return waitForAbort(run.signal)
+        return "recovered"
+      },
+      (event) => events.push(event),
     )
-    random.mockRestore()
+
+    expect({ result, attempts }).toEqual({ result: "recovered", attempts: 4 })
     expect(
-      2 * (DefaultLLMActivityPolicy.firstByteMs + DefaultLLMActivityPolicy.idleMs) + maximumFirstRetryBackoff,
-    ).toBeLessThan(600_000)
-    for (const cls of ["idle", "first_byte"] as const) {
-      const events: LLMActivityEvent[] = []
-      let attempts = 0
-      await expect(
-        withLLMActivity(
-          { sessionID: `session-${cls}-budget`, provider: "test", model: `${cls}-budget` },
-          {
-            ...DefaultLLMActivityPolicy,
-            totalMs: 1_000,
-            idleMs: 20,
-            firstByteMs: 20,
-            backoffMs: () => 0,
-          },
-          new AbortController().signal,
-          async (run) => {
-            attempts += 1
-            if (cls === "idle") run.bump("first-byte")
-            return waitForAbort(run.signal)
-          },
-          (event) => events.push(event),
-        ),
-      ).rejects.toMatchObject({ name: "LLMActivityError", cls, attempts: 1 })
-      expect({ attempts, retries: events.filter((event) => event.type === "retry") }).toMatchObject({
-        attempts: 2,
-        retries: [{ type: "retry", attempt: 1, cls }],
-      })
-    }
+      events.filter((event) => event.type === "retry").map((event) => ({ attempt: event.attempt, cls: event.cls })),
+    ).toEqual([
+      { attempt: 1, cls: "idle" },
+      { attempt: 2, cls: "network" },
+      { attempt: 3, cls: "idle" },
+    ])
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("settles transport-only idle after the first-byte retry budget", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    await expect(
+      withLLMActivity(
+        { sessionID: "session-transport-only-idle", provider: "test", model: "transport-only-idle" },
+        {
+          ...DefaultLLMActivityPolicy,
+          totalMs: 1_000,
+          idleMs: 20,
+          firstByteMs: 20,
+          backoffMs: () => 0,
+        },
+        new AbortController().signal,
+        async (run) => {
+          attempts += 1
+          run.bump("first-byte")
+          return waitForAbort(run.signal)
+        },
+        (event) => events.push(event),
+      ),
+    ).rejects.toMatchObject({ name: "LLMActivityError", cls: "idle", attempts: 1 })
+    expect({ attempts, retries: events.filter((event) => event.type === "retry") }).toMatchObject({
+      attempts: 2,
+      retries: [{ type: "retry", attempt: 1, cls: "idle" }],
+    })
+  })
+
+  test("settles repeated first-byte stalls after its one retry budget", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    await expect(
+      withLLMActivity(
+        { sessionID: "session-first-byte-budget", provider: "test", model: "first-byte-budget" },
+        {
+          ...DefaultLLMActivityPolicy,
+          totalMs: 1_000,
+          idleMs: 20,
+          firstByteMs: 20,
+          backoffMs: () => 0,
+        },
+        new AbortController().signal,
+        async (run) => {
+          attempts += 1
+          return waitForAbort(run.signal)
+        },
+        (event) => events.push(event),
+      ),
+    ).rejects.toMatchObject({ name: "LLMActivityError", cls: "first_byte", attempts: 1 })
+    expect({ attempts, retries: events.filter((event) => event.type === "retry") }).toMatchObject({
+      attempts: 2,
+      retries: [{ type: "retry", attempt: 1, cls: "first_byte" }],
+    })
   })
 
   test("terminates a typed missing Provider credential after one attempt", async () => {
