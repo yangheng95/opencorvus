@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-landing-automationbench-proof.md](2026-08-25-landing-automationbench-proof.md) adapts the current 100-case AutomationBench result into a bilingual native landing proof with an explicit 8.07% Luna baseline, 34.00% OpenCorvus strict pass rate, derived lift, and cross-sample comparison boundary.
+
 - [2026-08-25-landing-deberta-mission-scale.md](2026-08-25-landing-deberta-mission-scale.md) replaces the featured long-horizon landing example with a catalog-bound DeBERTa research-engineering Mission and an accessible six-to-eighteen-stage magical expansion.
 
 - [2026-08-25-v0.0.54-beta-release.md](2026-08-25-v0.0.54-beta-release.md) freezes, validates, publishes, and integrates the `0.0.54-beta` application and website release from the reviewed post-`0.0.53-beta` runtime and download-selection repairs.

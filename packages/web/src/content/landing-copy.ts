@@ -59,6 +59,27 @@ export type LandingCopy = {
     readonly label: string
     readonly caption: string
   }
+  readonly benchmark: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly strictMetric: string
+    readonly baselineLabel: string
+    readonly baselineDetail: string
+    readonly currentLabel: string
+    readonly currentDetail: string
+    readonly trackLabel: string
+    readonly casesLabel: string
+    readonly casesDetail: string
+    readonly deltaLabel: string
+    readonly deltaDetail: string
+    readonly multiplierLabel: string
+    readonly multiplierDetail: string
+    readonly referenceEyebrow: string
+    readonly referenceTitle: string
+    readonly notRanking: string
+    readonly note: string
+  }
   /**
    * The long-horizon section: three ways long work fails, and the mechanism that answers each.
    *
@@ -244,6 +265,27 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       lead: "NVDA 近一年日线进去，K 线图、技术分析和 Word 报告出来。",
       label: "OpenCorvus 桌面端运行录屏",
       caption: "桌面端 v0.0.47beta 的一次真实运行 · 1 分 44 秒 · 无音轨",
+    },
+    benchmark: {
+      eyebrow: "实测结果",
+      title: "Mission 把 Luna 的正确率提升到 {current}",
+      lead: "{cases} 个 AutomationBench case，按严格通过标准计分；先看原始模型，再看 OpenCorvus 完整执行后的结果。",
+      strictMetric: "严格正确率",
+      baselineLabel: "原始 GPT-5.6 Luna",
+      baselineDetail: "没有 OpenCorvus Mission 编排",
+      currentLabel: "OpenCorvus Mission Base",
+      currentDetail: "同一 Luna 模型 · {cases} case",
+      trackLabel: "严格正确率从 {baseline} 提升到 {current}",
+      casesLabel: "已评测 case",
+      casesDetail: "本次冻结样本",
+      deltaLabel: "绝对提升",
+      deltaDetail: "个百分点",
+      multiplierLabel: "相对原始 Luna",
+      multiplierDetail: "严格通过率倍数",
+      referenceEyebrow: "不同样本参考",
+      referenceTitle: "官方 held-out 结果",
+      notRanking: "不可横向排名",
+      note: "参考值来自所附官方 held-out 对照；它们与本次 {cases}-case 冻结样本不是同一集合，因此只提供量级背景，不构成模型排名。",
     },
     horizon: {
       eyebrow: "长程",
@@ -519,6 +561,27 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       lead: "NVDA's last year of daily candles in; chart, technical read and Word report out.",
       label: "Screen recording of an OpenCorvus desktop run",
       caption: "One real run on desktop v0.0.47beta · 1 min 44 s · no audio track",
+    },
+    benchmark: {
+      eyebrow: "Measured result",
+      title: "Mission raises the same Luna to {current}",
+      lead: "{cases} AutomationBench cases scored by strict pass criteria: the unassisted model first, then the result after full OpenCorvus execution.",
+      strictMetric: "Strict pass rate",
+      baselineLabel: "Original GPT-5.6 Luna",
+      baselineDetail: "Without OpenCorvus Mission orchestration",
+      currentLabel: "OpenCorvus Mission Base",
+      currentDetail: "Same Luna model · {cases} cases",
+      trackLabel: "Strict pass rate rises from {baseline} to {current}",
+      casesLabel: "Evaluated cases",
+      casesDetail: "Current frozen sample",
+      deltaLabel: "Absolute lift",
+      deltaDetail: "percentage points",
+      multiplierLabel: "Versus original Luna",
+      multiplierDetail: "strict-pass multiple",
+      referenceEyebrow: "Different-sample context",
+      referenceTitle: "Official held-out results",
+      notRanking: "Not a cross-sample rank",
+      note: "Reference values come from the supplied official held-out comparison. They do not use the same sample as this {cases}-case frozen run, so they provide scale context only, not a model ranking.",
     },
     horizon: {
       eyebrow: "Long-horizon",

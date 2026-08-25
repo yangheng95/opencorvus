@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+Latest landing AutomationBench proof: [`2026-08-25-landing-automationbench-proof.md`](records/2026-08/2026-08-25-landing-automationbench-proof.md).
+
+Landing AutomationBench visual evidence: [`light`](artifacts/landing-benchmark/automationbench-light.png) and [`dark`](artifacts/landing-benchmark/automationbench-dark.png).
+
 Latest landing DeBERTa Mission scale expansion: [`2026-08-25-landing-deberta-mission-scale.md`](records/2026-08/2026-08-25-landing-deberta-mission-scale.md).
 
 Latest `v0.0.54-beta` application and website release: [`2026-08-25-v0.0.54-beta-release.md`](records/2026-08/2026-08-25-v0.0.54-beta-release.md).

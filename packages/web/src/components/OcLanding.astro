@@ -2,6 +2,7 @@
 import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
 import OcDemoVideo from "./OcDemoVideo.astro"
+import OcAutomationBench from "./OcAutomationBench.astro"
 import OcMissionCase from "./OcMissionCase.astro"
 import { landingCopy } from "../content/landing-copy"
 import { publicPath, type PublicLocale } from "../content/public-market"
@@ -212,7 +213,10 @@ const combinations = otherCompositions(locale)
   */}
   <OcDemoVideo {locale} />
 
-  {/* -------------------------------------------------- 3 · long-horizon */}
+  {/* ----------------------------------------------------- 3 · benchmark */}
+  <OcAutomationBench copy={copy.benchmark} />
+
+  {/* -------------------------------------------------- 4 · long-horizon */}
   {/*
     Named failures before named mechanisms. Borrowed from LongHorizon-Harness, which opens on
     compounding errors, context rot, task-state loss and unverified premises rather than on its
@@ -242,7 +246,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* ---------------------------------------------------- 4 · composition */}
+  {/* ---------------------------------------------------- 5 · composition */}
   {/*
     The case study is the argument for combining squads, so it is shown as a real chain rather than
     described: every stage names the squad that owns it, how many roles that squad declares, and
@@ -296,7 +300,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* ------------------------------------------------------ 5 · evolution */}
+  {/* ------------------------------------------------------ 6 · evolution */}
   <section class="oc-section-tight oc-anchor" id="evolve">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.evolve.eyebrow}</p>
@@ -326,7 +330,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* ------------------------------------------------------------- 6 · why */}
+  {/* ------------------------------------------------------------- 7 · why */}
   <section class="oc-section oc-anchor" id="why">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.why.eyebrow}</p>
@@ -411,7 +415,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* --------------------------------------------------------- 7 · squads */}
+  {/* --------------------------------------------------------- 8 · squads */}
   {/*
     A funnel, not a second market. Six static cards and a link out. The filtering, search and
     segment browsing all live on /market/ — duplicating them here would mean two implementations
@@ -451,7 +455,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* ---------------------------------------------------------- 8 · start */}
+  {/* ---------------------------------------------------------- 9 · start */}
   <section class="oc-section oc-anchor" id="start">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.start.eyebrow}</p>
@@ -514,7 +518,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* ------------------------------------------------------------ 9 · faq */}
+  {/* ----------------------------------------------------------- 10 · faq */}
   {/*
     Native <details>. An accordion is the one place a section can hold six answers without costing
     six answers' worth of scroll, and the disclosure widget browsers already ship is keyboard
@@ -544,7 +548,7 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/* ---------------------------------------------------------- 10 · join */}
+  {/* ---------------------------------------------------------- 11 · join */}
   <section class="oc-section-tight oc-anchor" id="join">
     <div class="oc-container">
       <div class="oc-cta-block oc-join oc-reveal">
