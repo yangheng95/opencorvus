@@ -4,6 +4,7 @@ import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
+import { randomUUID } from "../utils/random-id"
 
 export type RightDockPanel =
   | "requirements"
@@ -219,7 +220,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
   )
   const nextBlankBrowserTab = createMemo<RightDockTab>(() => {
     browserTabIdentitySignature()
-    return { id: `browser:${crypto.randomUUID()}`, panel: "browser" }
+    return { id: `browser:${randomUUID()}`, panel: "browser" }
   })
   const tabCollection = () => {
     const open = props.tabs()

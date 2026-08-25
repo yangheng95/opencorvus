@@ -623,3 +623,143 @@ transport 侧的 gate 对经由 `nativeOpen` 的调用是防御纵深，真正�
 
 `tsc --noEmit` 0；`check:i18n` ok（1838 keys）；`check:css-tokens` ok；
 overlay 单元测试 **77 个文件全过**。
+
+
+---
+
+# 续章三：用真实环境补齐三项未验收
+
+用户授权删除本机数据库并重启，因此上面三章里标注「未达成」的验收得以补做。
+数据库以**重命名方式备份**（`data/opencorvus.db{,-wal,-shm}.backup-20260825-100525`），
+未删除；`auth.json` 与 `models.json` 未触碰。执行前确认过 7878 端口空闲、
+无 opencorvus 进程在运行，因此移走数据库不会打断任何正在使用的实例。
+
+## 一、Provider 授权按钮 —— 已验收
+
+真实 `OPENCORVUS_HOME` 的 `auth.json` 中 `openai` 的类型正是 `oauth`。
+真实流程：Providers → OpenAI 的 `Connect` → 选择「ChatGPT Pro/Plus (browser)」→
+弹出「Model & Provider」对话框，正文为
+`Complete authorization in your browser. This window will close automatically.`，
+footer 为 **`[Open authorization page]` … `[OK]`** —— 辅助动作左对齐，
+与决定动作分组分开，与上一章的布局修正一致。
+
+走的是**隐式流**分支（`showLlmNotice` + `link`），即 `llm.ts` 中
+`authorization.method !== "code"` 的那条路径。
+
+截图未归档：该页面同时显示用户已配置的 provider 清单，而本仓库是公开仓库。
+截图保留在会话 scratchpad，未进入 git。
+
+## 二、非安全源 —— 结论比原先记录的更严重
+
+用 `--hostname 0.0.0.0` 启动并从局域网地址 `http://10.216.136.242:7878/ui/` 访问：
+
+```
+isSecureContext:      false
+navigator.clipboard:  undefined     ← 上一章的判断成立
+```
+
+但真正的结论是：**页面完全白屏，应用根本没有启动**。
+未捕获异常 `TypeError: crypto.randomUUID is not a function`。
+
+`crypto.randomUUID` 同样是仅安全上下文可用的 API。overlay 中受影响的三类：
+
+| API | 处数 | 后果 | 是否有非安全上下文等价物 |
+|---|---|---|---|
+| `crypto.randomUUID` | 8 | **启动即崩，白屏** | 有：`crypto.getRandomValues` 不限安全上下文 |
+| `navigator.clipboard` | 6+ | 所有复制动作失效 | 无可靠等价物 |
+| `crypto.subtle` | 1（`ExpertSquadMarketPanel` 的 SHA-256） | 该功能失效 | **无** |
+
+因此「让 Web 版在纯 HTTP 下完全可用」做不到 —— 这是浏览器安全模型，不是本仓库的缺陷。
+上一章记录的「复制会失败」属实但不完整：在到达复制之前，应用已经起不来了。
+
+**待用户决策**，本章未实施：
+
+- 方案 A（推荐）：明确要求安全上下文。在 `index.html` 的 bootstrap 里检测
+  `isSecureContext`，非安全源时渲染一条明确说明（需要 HTTPS 或 localhost），
+  而不是留下白屏。成本小，把无法诊断的白屏变成可理解的提示。
+- 方案 B：把 `crypto.randomUUID` 换成基于 `getRandomValues` 的 v4 生成器，让启动
+  不再崩溃。这能救回启动，但复制与 SHA-256 仍然不可用，属于部分可用，
+  且需要在 8 个调用点统一到一个工具函数。
+- 两者可叠加：B 让应用起得来，A 让用户知道哪些功能在此环境下不可用。
+
+
+---
+
+# 续章四：非安全来源下的 Web 版（用户选定 A+B）
+
+## Recall（本章）
+
+用户在读过三个选项后选择「A+B 都做」。
+
+- **B**：把 `crypto.randomUUID` 收敛到一个工具函数，内部在缺失时用
+  `crypto.getRandomValues` 生成 v4 —— 后者不受安全上下文限制。目的是让应用**能启动**。
+- **A**：原始描述是「非安全源时渲染说明而不是白屏」。B 落地后白屏不再存在，
+  因此 A 的合理形态调整为**明确告知哪些功能在此环境下不可用**，并在用户实际
+  撞上时给出人话而不是 API 名字。
+
+## 分析
+
+`isSecureContext` 为 false 时（即经非 localhost 的 HTTP 访问），overlay 触及三类受限 API：
+
+| API | 位置 | 后果 | 处理 |
+|---|---|---|---|
+| `crypto.randomUUID` | 8 处，含 `tauri-transport.ts:440` 的流 ID（**启动必经**） | 启动即崩、白屏 | **B**：等价实现 |
+| `navigator.clipboard` | 6+ 处 | 复制静默失败 | **A**：人话错误 |
+| `crypto.subtle` | `ExpertSquadMarketPanel.tsx:49` 的包 SHA-256 校验 | 该功能失败 | **A**：人话错误 |
+
+这三处 `crypto.randomUUID` 自 `v0.0.35beta` 即存在，非本轮引入。
+
+**为什么 B 只能救启动**：`getRandomValues` 不受安全上下文限制，所以 UUID 有等价实现；
+而剪贴板没有可靠等价物（`execCommand('copy')` 已废弃且行为不一），
+`crypto.subtle` 在非安全上下文**完全不存在**。因此 HTTP 部署下这两项功能
+不可能可用 —— 这是浏览器安全模型，不是本仓库的缺陷。A 的价值正在于把这一点
+说清楚，而不是让它表现为「点了没反应」。
+
+## 方案
+
+**B**：`src/utils/random-id.ts` 导出 `randomUUID()`。优先 `crypto.randomUUID()`；
+缺失时用 `crypto.getRandomValues` 取 16 字节，按 RFC 4122 置 version/variant 位后
+格式化。8 个调用点全部改用它 —— 一个实现、一个事实来源，不在调用点各写各的。
+
+**A**：
+1. 受限能力失败时给出可理解的原因，而不是 API 名字。判据是 `isSecureContext`：
+   为 false 时说明「需要经 HTTPS 或 localhost 访问」。落在**抛出点**
+   （`tauri-transport.ts` 的 clipboard 分支、`ExpertSquadMarketPanel` 的摘要函数），
+   因为那里才知道失败的真实原因。
+2. 设置页 General 增加一条环境说明，仅在非安全上下文出现，列出受影响的功能。
+   复用既有的 `SettingsState`，与 About 页「仅桌面版可用」同一范式，不新增 UI 构件。
+
+**不做**：启动时的全局横幅。`ConnectionBanner` 的语义是连接故障，扩展它会混淆职责；
+另造一个常驻横幅会在每次启动打扰用户，而按需提示已覆盖真实触发场景。
+
+## 验收
+
+非 UI 正向测试：`randomUUID()` 在有/无 `crypto.randomUUID` 两种环境下都产出合法 v4，
+且两次调用不相同。真实页面：经 `http://<lan-ip>:7878/ui/` 访问 —— 应用**启动成功**
+（不再白屏），设置页 General 出现环境说明，触发复制时给出人话错误。
+localhost 与桌面路径不受影响。
+
+### 实测结果
+
+经 `http://10.216.136.242:7878/ui/`（`isSecureContext === false`）实测，先确认环境本身：
+
+| 能力 | 实测 |
+|---|---|
+| `crypto.randomUUID` | `undefined` —— 白屏的直接成因 |
+| `crypto.getRandomValues` | `function` —— B 的等价实现依据 |
+| `navigator.clipboard` | `undefined` |
+| `crypto.subtle` | `undefined` |
+
+在此环境下：
+
+- **应用启动成功**，不再白屏（`appBooted: true`）。
+- 设置页 General 出现环境说明：「This page is not in a secure context. Copying to the
+  clipboard and Expert Squad package verification are unavailable here — open OpenCorvus
+  over HTTPS, or from localhost.」证据：`insecure-origin-general-notice.png`。
+- 项目菜单条目为 **Copy path**，点击后弹出「Working Directory / Failed to copy the path:
+  The clipboard needs a secure context: open OpenCorvus over HTTPS, or from localhost」——
+  动词为 copy 而非 open，说明 `pathRevealFailureKey()` 选中了 `cwd.copy_failed`；未出现
+  `UnsupportedNativeCommandError` 或裸 TypeError。证据：`insecure-origin-copy-failure.png`。
+
+桌面 Tauri 侧同一入口显示 **Open in File Manager**，编辑器启动器正常渲染，
+证明能力分支两端各自成立。证据：`desktop-open-in-file-manager.png`。

@@ -1341,6 +1341,7 @@
   "settings.section.connection": "连接",
   "settings.section.diagnostics": "诊断",
   "settings.section.notifications": "通知",
+  "settings.insecure_context": "当前页面不在安全上下文中。复制到剪贴板、专家团安装包校验在此环境下不可用 —— 请通过 HTTPS 或 localhost 访问 OpenCorvus。",
   "settings.log_export_label": "导出日志",
   "settings.log_export_hint": "下载 ZIP 支持包，包含全部保留的原始日志、易读格式化副本和详细诊断清单。",
   "settings.log_export_button": "导出 ZIP",

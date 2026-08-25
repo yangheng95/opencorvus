@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup } from "solid-js"
+import { createSignal, For, onCleanup, Show } from "solid-js"
 import { t } from "../../utils/i18n"
 import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
 import { ensureDesktopNotificationPermission } from "../../services/desktop-notifications"
@@ -8,6 +8,7 @@ import { Button } from "../ui/Button"
 import { Switch } from "../ui/Switch"
 import { PermissionsSettingsGroup } from "./PermissionsPanel"
 import { SettingsGroup, SettingsPanel, SettingsRow, SettingsState } from "./layout"
+import { inSecureContext } from "../../utils/secure-context"
 
 let desktopNotificationAction = 0
 let persistedDesktopNotificationError = ""
@@ -89,6 +90,10 @@ export default function GeneralPanel() {
           </SettingsState>
         )}
       </For>
+      <Show when={!inSecureContext()}>
+        <SettingsState>{t("settings.insecure_context")}</SettingsState>
+      </Show>
+
       <PermissionsSettingsGroup />
 
       <SettingsGroup title={t("settings.section.notifications")}>

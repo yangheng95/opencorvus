@@ -45,6 +45,7 @@ import { Icon } from "./ui/Icon"
 import { PreviewableImage } from "./ImagePreview"
 import { Button } from "./ui/Button"
 import { TextField } from "./ui/TextField"
+import { randomUUID } from "../utils/random-id"
 
 type BrowserPreviewScopedTarget = BrowserPreviewTarget & { directory: string }
 
@@ -630,7 +631,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
       throw new Error("Browser preview native lease acquisition requires the previous lease to be detached.")
     }
     const lease: BrowserPreviewNativeLease = {
-      key: crypto.randomUUID(),
+      key: randomUUID(),
       logicalTargetKey: browserPreviewLogicalTargetKey(scope),
       scope,
       commandTail: Promise.resolve(),

@@ -61,6 +61,7 @@ import { requestTaskCancellation, type TaskCancellationSurface } from "./task-ca
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
 import { wakeMission } from "./mission"
 import { workLedgerSessionExecution } from "./work-ledger"
+import { randomUUID } from "../utils/random-id"
 
 // ── Types ──
 
@@ -583,7 +584,7 @@ export async function submitMessage(
   attachments: Attachment[] = [],
   options: SubmitMessageOptions = {},
 ): Promise<unknown> {
-  const requestID = options.requestID ?? crypto.randomUUID()
+  const requestID = options.requestID ?? randomUUID()
   const timeoutMs = chatRequestTimeoutMs()
   const controller = new AbortController()
   const cleanupRelay = relayAbort(options.signal, controller)
@@ -804,7 +805,7 @@ async function offerInitGitAndRetry(): Promise<boolean> {
 export async function createTask(options: CreateTaskOptions): Promise<CreateTaskResult> {
   const { text, attachments = [], metadata = {}, signal, budget } = options
   if (!text) throw new Error("createTask: text is required")
-  const requestID = crypto.randomUUID()
+  const requestID = randomUUID()
   const body = JSON.stringify({
     request: text,
     requestID,

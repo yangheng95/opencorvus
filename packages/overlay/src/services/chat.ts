@@ -27,6 +27,7 @@ import { directoryScopedPath, taskScopedPath } from "./task-path"
 import { requestTaskCancellation } from "./task-cancellation"
 import { abortMission, wakeMission } from "./mission"
 import { workLedgerSessionExecution, type WorkLedgerMissionRow } from "./work-ledger"
+import { randomUUID } from "../utils/random-id"
 
 // ── Types ──
 
@@ -226,7 +227,7 @@ export async function promptSessionMessage(input: {
   model?: { providerID: string; modelID: string }
   onDispatch?: () => void
 }): Promise<any> {
-  const requestID = crypto.randomUUID()
+  const requestID = randomUUID()
   const controller = new AbortController()
   const mission = missionExecutionForPrompt(input.sessionID)
   const request: ChatRequestState = {
@@ -320,7 +321,7 @@ export async function panelMessage(
     })
   }
 
-  const requestID = crypto.randomUUID()
+  const requestID = randomUUID()
   const controller = new AbortController()
   const requestBase = {
     requestID,

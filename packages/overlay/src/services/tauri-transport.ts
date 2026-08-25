@@ -37,7 +37,9 @@ import type {
 import { HOST_CAPABILITIES, nativeUnsupported, transportRequestSignal } from "./host-transport"
 import type { HostKind } from "./host-transport"
 import { externalUrl } from "../utils/external-url"
+import { secureContextFailure } from "../utils/secure-context"
 import { loadBrowserOverlaySettings, saveBrowserOverlaySettings } from "./overlay-settings-storage"
+import { randomUUID } from "../utils/random-id"
 
 /**
  * Tauri window-handle accessor — the ONE place in the overlay that touches
@@ -437,7 +439,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
       // be polyfilled on top of fetch in this transport for unauthed
       // streams. The note in services/sse.ts documents the original
       // incident.
-      const streamID = globalThis.crypto.randomUUID()
+      const streamID = randomUUID()
       const url = buildUrl(input.path, input.query)
       url.searchParams.set(STREAM_INSTANCE_QUERY_KEY, streamID)
       const source = new EventSource(url.toString())
@@ -555,7 +557,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           }
           case "clipboard.writeText":
             if (!navigator.clipboard?.writeText) {
-              throw new Error("navigator.clipboard.writeText is unavailable")
+              throw new Error(secureContextFailure("The clipboard"))
             }
             return navigator.clipboard.writeText(command.text)
           case "notification.permission":
