@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-workbuddybench-luna-mission-base-code.md](2026-08-25-workbuddybench-luna-mission-base-code.md) defines the official WorkBuddy Bench Code Luna Mission/Base experiment, mandatory answer-free runtime Skill projection/load evidence, Harbor adapter boundary, immutable evidence contract, and Docker-gated chain proof.
+
 - [2026-08-24-sol-base-restricted-shell-authority-repair.md](2026-08-24-sol-base-restricted-shell-authority-repair.md) repairs the impossible fresh 1–50 restricted-shell authority contract, preserves historical and extended digests, and requires prelaunch identity proof before resuming the Sol Mission/Base round.
 
 - [2026-08-23-tool-pause-durable-progress-convergence.md](2026-08-23-tool-pause-durable-progress-convergence.md) traces a real RTX 5090 Mission failure to the shared 15-minute absolute Tool-pause bound and records the append-only Tool progress bridge, configuration contract, focused benchmark, and fresh-Mission acceptance required before a website-success claim.

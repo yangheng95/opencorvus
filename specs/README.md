@@ -1978,6 +1978,8 @@ Latest Conversation scroll-bottom Environment-panel alignment: [`2026-07-30-conv
 7. Every new landed plan, implementation record, or architecture-change record must include a `Recall` section with the user request, acceptance criteria, hard constraints, sources read, whole-repository search evidence, and independent agent feedback.
 8. Dated prompt-profile and expert-squad records are indexed through the monthly records README, not as root-level handpicked links.
 
+Latest WorkBuddy Bench Luna Mission/Base Code experiment: [`2026-08-25-workbuddybench-luna-mission-base-code.md`](records/2026-08/2026-08-25-workbuddybench-luna-mission-base-code.md).
+
 ## Verification
 
 Run the documentation check declared by the root `package.json` after changing
