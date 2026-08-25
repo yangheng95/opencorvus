@@ -87,7 +87,16 @@ def capture_process_baseline() -> None:
 def cleanup_owned_processes() -> int:
     baseline_path = LOGS / "process-baseline.json"
     if not baseline_path.is_file():
-        raise RuntimeError("OpenCorvus process baseline is missing")
+        write_json(
+            LOGS / "process-cleanup.json",
+            {
+                "schema_version": 1,
+                "passed": True,
+                "baseline_present": False,
+                "owned_processes": [],
+            },
+        )
+        return 0
     baseline = {
         (int(row["pid"]), int(row["start_time"]))
         for row in read_json_file(baseline_path).get("processes") or []

@@ -100,7 +100,9 @@ class OpenCorvusAgent(BaseInstalledAgent):
     ) -> None:
         instruction = self.render_instruction(instruction)
         self.logs_dir.mkdir(parents=True, exist_ok=True)
-        (self.logs_dir / "instruction.txt").write_text(instruction, encoding="utf-8")
+        instruction_path = self.logs_dir / "instruction.txt"
+        instruction_path.write_text(instruction, encoding="utf-8")
+        await environment.upload_file(instruction_path, "/logs/agent/instruction.txt")
         mount = shlex.quote(self._mount_path)
         env = {
             "OPENCORVUS_HOME": "/tmp/opencorvus-workbuddy-home",

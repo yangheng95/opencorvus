@@ -322,6 +322,10 @@ def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_pa
         def __init__(self) -> None:
             self.started = asyncio.Event()
             self.commands: list[str] = []
+            self.uploads: list[tuple[Path, str]] = []
+
+        async def upload_file(self, source_path: Path, target_path: str) -> None:
+            self.uploads.append((Path(source_path), target_path))
 
         async def exec(self, *, command: str, **_: object) -> Result:
             self.commands.append(command)
@@ -330,7 +334,7 @@ def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_pa
                 await asyncio.Event().wait()
             return Result()
 
-    async def scenario() -> list[str]:
+    async def scenario() -> tuple[list[str], list[tuple[Path, str]]]:
         environment = Environment()
         agent = AGENT_MODULE.OpenCorvusAgent(
             tmp_path,
@@ -346,12 +350,29 @@ def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_pa
             pass
         else:
             raise AssertionError("cancelled adapter run did not propagate cancellation")
-        return environment.commands
+        return environment.commands, environment.uploads
 
-    commands = asyncio.run(scenario())
+    commands, uploads = asyncio.run(scenario())
     assert len(commands) == 2
+    assert uploads == [(tmp_path / "instruction.txt", "/logs/agent/instruction.txt")]
     assert "opencorvus-server.pid" in commands[1]
     assert "host-cleanup.txt" in commands[1]
+
+
+def test_cleanup_before_process_baseline_records_settled_noop(tmp_path: Path) -> None:
+    previous_logs = MODULE.LOGS
+    MODULE.LOGS = tmp_path
+    try:
+        assert MODULE.cleanup_owned_processes() == 0
+    finally:
+        MODULE.LOGS = previous_logs
+    cleanup = json.loads((tmp_path / "process-cleanup.json").read_text())
+    assert cleanup == {
+        "schema_version": 1,
+        "passed": True,
+        "baseline_present": False,
+        "owned_processes": [],
+    }
 
 
 def test_host_cancel_finalizer_seals_database_usage_and_invalid_disposition(tmp_path: Path) -> None:
