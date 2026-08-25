@@ -260,11 +260,11 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       ],
     },
     demo: {
-      eyebrow: "实录",
-      title: "一次完整的运行",
-      lead: "NVDA 近一年日线进去，K 线图、技术分析和 Word 报告出来。",
-      label: "OpenCorvus 桌面端运行录屏",
-      caption: "桌面端 v0.0.47beta 的一次真实运行 · 1 分 44 秒 · 无音轨",
+      eyebrow: "产品故事",
+      title: "别再替 Agent 维持交接",
+      lead: "从上下文遗忘，到 Mission 调度、恢复、验收和专家团进化，4 分 11 秒讲清楚。",
+      label: "OpenCorvus Mission 中文产品故事",
+      caption: "简体中文版 · 4 分 11 秒 · 有声旁白与字幕 · 随页面语言切换",
     },
     benchmark: {
       eyebrow: "实测结果",
@@ -556,11 +556,11 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       ],
     },
     demo: {
-      eyebrow: "Recorded run",
-      title: "One full run",
-      lead: "NVDA's last year of daily candles in; chart, technical read and Word report out.",
-      label: "Screen recording of an OpenCorvus desktop run",
-      caption: "One real run on desktop v0.0.47beta · 1 min 44 s · no audio track",
+      eyebrow: "Product story",
+      title: "Stop maintaining every agent handoff yourself",
+      lead: "From context loss to Mission scheduling, recovery, acceptance and squad evolution—in 4 minutes 11 seconds.",
+      label: "OpenCorvus Mission product story in English",
+      caption: "English version · 4 min 11 s · narrated with subtitles · follows the page language",
     },
     benchmark: {
       eyebrow: "Measured result",

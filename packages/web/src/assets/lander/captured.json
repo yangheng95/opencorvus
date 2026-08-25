@@ -3,7 +3,7 @@
   "refresh": {
     "gallery": "Run the desktop app on the target release, drive it to the state each shot describes, and capture the window. Shots must show real work, not an empty state.",
     "conceptFlow": "qa/record-real-client-demo.ps1 records the desktop window against a live task, then qa/curate-client-demo.mjs edits the frames into the GIF.",
-    "demoVideo": "Record the desktop app driving one real task end to end, then re-encode for the web: ffmpeg -i <capture> -an -c:v libx264 -profile:v high -level 4.0 -preset slow -crf 28 -pix_fmt yuv420p -g 60 -movflags +faststart public/media/opencorvus-demo.mp4. -an drops the capture's silent system-audio channel and +faststart puts the moov atom in front, without which a browser must download the whole file before the first frame. The poster is one frame of the same file: ffmpeg -ss <t> -i <mp4> -frames:v 1 -q:v 4 <poster>.jpg. The README cannot show that file playing: GitHub renders an inline player only for its own user-attachments uploads, and a raw URL to a committed .mp4 is served as an attachment, so it downloads. media/opencorvus-demo.gif is the excerpt that does autoplay there — two beats cut from the same recording: ffmpeg -ss 15.5 -t 9 and -ss 42.5 -t 9, concat, then fps=12,scale=900:-1,palettegen(max_colors=128,stats_mode=diff) + paletteuse(dither=bayer). Keep it under a few megabytes; GitHub proxies README images through camo."
+    "demoVideo": "Generate the zh-CN and en-US V5R masters from the same 12-scene renderer, complete the SHA-bound five-frame gate and final inspection for each locale, then encode each accepted master to H.264/AAC with 48 kHz stereo audio and +faststart. Extract the poster from 250 seconds of that locale's physical web file so the idle player shows the final brand, author and project addresses without subtitles. The route locale is the only media selector: / uses en-US and /zh-cn/ uses zh-CN."
   },
   "assets": [
     {
@@ -22,32 +22,48 @@
       "knownIssues": []
     },
     {
-      "file": "media/opencorvus-demo.mp4",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
-      "knownIssues": [
-        "a browser_session_create tool call fails on screen at ~16s (BrowserRuntime could not connect); the run recovers through webfetch and carries on"
-      ],
-      "sourceMission": "NVDA daily candles over the past year, then the NVDA ecosystem — chart, technical read, network graph and a Word research report",
-      "model": "openai/gpt-5.6-terra",
-      "durationSeconds": 103.67,
-      "bytes": 7077401
+      "file": "media/opencorvus-mission-v5r-en-US.mp4",
+      "locale": "en-US",
+      "capturedAppVersion": "0.0.53-beta",
+      "capturedOn": "2026-08-25",
+      "knownIssues": [],
+      "sourceMission": "OpenCorvus Mission product story: long-horizon failure, durable scheduling and recovery, artifact acceptance, squad evolution, a DeBERTa evidence case, and AutomationBench same-model control",
+      "durationSeconds": 251,
+      "buildDigest": "67f1192dae55",
+      "sha256": "aac5ba7b6aad91f0f1a49fd93fe9ddbe197a0717cef9f59b71ada823a9a2fd44",
+      "bytes": 21932471
     },
     {
-      "file": "media/opencorvus-demo-poster.jpg",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
+      "file": "media/opencorvus-mission-v5r-en-US-poster.jpg",
+      "locale": "en-US",
+      "capturedAppVersion": "0.0.53-beta",
+      "capturedOn": "2026-08-25",
       "knownIssues": [],
-      "sourceMission": "frame at 18.6s of media/opencorvus-demo.mp4",
-      "bytes": 123414
+      "sourceMission": "frame at 250s of media/opencorvus-mission-v5r-en-US.mp4",
+      "sha256": "d76e953e8b15b8978f7c0ee21940b6be66f94f8995511bff9fd2167a98447463",
+      "bytes": 161279
     },
     {
-      "file": "media/opencorvus-demo.gif",
-      "capturedAppVersion": "0.0.47-beta",
-      "capturedOn": "2026-08-19",
+      "file": "media/opencorvus-mission-v5r-zh-CN.mp4",
+      "locale": "zh-CN",
+      "capturedAppVersion": "0.0.53-beta",
+      "capturedOn": "2026-08-25",
       "knownIssues": [],
-      "sourceMission": "18s excerpt of media/opencorvus-demo.mp4 — 15.5s-24.5s (candle chart) and 42.5s-51.5s (ecosystem graph, Word report)",
-      "bytes": 3199154
+      "sourceMission": "OpenCorvus Mission 中文产品故事：长程任务失效、持久调度与恢复、产物验收、专家团进化、DeBERTa 证据案例与 AutomationBench 同模型对照",
+      "durationSeconds": 251,
+      "buildDigest": "771513f83c88",
+      "sha256": "8a6d389dd47c066a292461ec91b017bbcc60cf9dceb6fff2bee56009053195dc",
+      "bytes": 21436523
+    },
+    {
+      "file": "media/opencorvus-mission-v5r-zh-CN-poster.jpg",
+      "locale": "zh-CN",
+      "capturedAppVersion": "0.0.53-beta",
+      "capturedOn": "2026-08-25",
+      "knownIssues": [],
+      "sourceMission": "frame at 250.85s of media/opencorvus-mission-v5r-zh-CN.mp4",
+      "sha256": "37d2a767411ea61e25bbfaae30759f4111d5e42ee98b471255db1e31d1c5db7e",
+      "bytes": 156766
     }
   ]
 }
