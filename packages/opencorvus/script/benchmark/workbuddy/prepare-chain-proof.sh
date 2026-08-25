@@ -10,6 +10,8 @@ bench_commit="${OPENCORVUS_BENCH_COMMIT:?OPENCORVUS_BENCH_COMMIT must be supplie
 adapter_root="$bench_root/packages/opencorvus/script/benchmark/workbuddy"
 image_context="$control_root/harness-image"
 payload_root="$image_context/payload"
+runtime_bundle_dir="$runtime_source/packages/opencorvus/dist/opencorvus-linux-x64-baseline"
+runtime_bundle_archive="$control_root/opencorvus-linux-x64-baseline-bundle.tar.gz"
 official_commit=625b2233093ae4f23e76be28c1f341d41cc70373
 runtime_commit=e8cdd1be4d280399bbb953562000b430f4e59fe7
 image=workbuddy-bench/harness/opencorvus:chain-proof-r1
@@ -71,15 +73,18 @@ if [ ! -d "$runtime_source/node_modules" ]; then
     /var/lib/opencorvus-benchmark/bun/bin/bun install --frozen-lockfile
 fi
 
-if [ ! -f "$runtime_source/packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz" ]; then
+if [ ! -x "$runtime_bundle_dir/opencorvus" ]; then
   cd "$runtime_source"
   PATH=/var/lib/opencorvus-benchmark/bun/bin:$PATH \
-    /var/lib/opencorvus-benchmark/bun/bin/bun run script/package-linux-binary.ts
+    /var/lib/opencorvus-benchmark/bun/bin/bun run --cwd packages/opencorvus script/build.ts --single --baseline
+fi
+"$runtime_bundle_dir/opencorvus" --version
+if [ ! -f "$runtime_bundle_archive" ]; then
+  tar -czf "$runtime_bundle_archive" -C "$runtime_bundle_dir" .
 fi
 
 mkdir -p "$payload_root/bin" "$payload_root/share/workbuddybench-code"
-tar -xzf "$runtime_source/packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz" \
-  -C "$payload_root"
+tar -xzf "$runtime_bundle_archive" -C "$payload_root"
 install -m 0644 "$adapter_root/configs/harnesses/opencorvus/docker/Dockerfile" \
   "$image_context/Dockerfile"
 install -m 0755 "$adapter_root/run_opencorvus_trial.py" \
@@ -93,14 +98,14 @@ image_context_windows="$(wslpath -w "$image_context")"
 "$docker_exe" build --pull=false -f "$image_context_windows\\Dockerfile" -t "$image" "$image_context_windows"
 "$docker_exe" image inspect "$image" > "$control_root/image-inspect.json"
 
-python3 - "$control_root/source-receipt.json" "$bench_root" "$bench_commit" "$workbuddy_root" "$runtime_source" "$image" "$control_root/image-inspect.json" <<'PY'
+python3 - "$control_root/source-receipt.json" "$bench_root" "$bench_commit" "$workbuddy_root" "$runtime_source" "$runtime_bundle_archive" "$image" "$control_root/image-inspect.json" <<'PY'
 import hashlib
 import json
 import subprocess
 import sys
 from pathlib import Path
 
-output, bench, bench_commit, workbuddy, runtime, image, image_inspect_path = sys.argv[1:]
+output, bench, bench_commit, workbuddy, runtime, bundle_path, image, image_inspect_path = sys.argv[1:]
 def git(path, *args):
     return subprocess.check_output(['git', '-C', path, *args], text=True).strip()
 adapter_root = Path(bench) / 'packages/opencorvus/script/benchmark/workbuddy'
@@ -117,7 +122,7 @@ for path in tracked_adapter_files:
         'sha256': hashlib.sha256(data).hexdigest(),
     })
 image_inspect = json.loads(Path(image_inspect_path).read_text())[0]
-bundle = Path(runtime) / 'packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz'
+bundle = Path(bundle_path)
 receipt = {
     'schema_version': 1,
     'bench_commit': bench_commit,
