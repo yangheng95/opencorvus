@@ -66,6 +66,14 @@ if [ ! -d "$runtime_source/.git" ]; then
   cp -al "$active_runner/node_modules" "$runtime_source/node_modules"
 fi
 test "$(git -C "$runtime_source" rev-parse HEAD)" = "$runtime_commit"
+while IFS= read -r source_modules; do
+  relative="${source_modules#"$active_runner"/}"
+  target_modules="$runtime_source/$relative"
+  if [ ! -e "$target_modules" ]; then
+    mkdir -p "$(dirname "$target_modules")"
+    cp -al "$source_modules" "$target_modules"
+  fi
+done < <(find "$active_runner/packages" -mindepth 2 -maxdepth 4 -type d -name node_modules -print)
 
 if [ ! -f "$runtime_source/packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz" ]; then
   cd "$runtime_source"
