@@ -763,6 +763,7 @@ async function main() {
           },
           pending: pendingCount,
           events: history.map((row) => row.event_type),
+          modes: history.map((row) => row.mode),
           providers: history.map((row) => row.provider_kind),
           decisions: history.filter((row) => row.decision_scope).map((row) => row.decision_scope),
         }
@@ -845,7 +846,13 @@ async function main() {
       },
     })
     markActivity("matrix:cleanup-complete")
-    for (const required of ["requested", "allowed_once", "full_access", "execution_started", "mcp_task_created", "mcp_task_status", "execution_succeeded"]) {
+    // `full_access` is a Permission mode column, not a ledger event type — the
+    // event union is declared by `PermissionEventType` in permission.sql.ts.
+    // Assert it where it is actually recorded.
+    if (!evidence.modes.includes("full_access")) {
+      throw new Error("Permission checker missed a full_access ledger decision mode")
+    }
+    for (const required of ["requested", "allowed_once", "execution_started", "mcp_task_created", "mcp_task_status", "execution_succeeded"]) {
       if (required === "mcp_task_status") continue
       if (!evidence.events.includes(required)) throw new Error(`Permission checker missed ledger event ${required}`)
     }

@@ -14,7 +14,11 @@ export function currentControlLeaseInTransaction(
     .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id)).get()
 }
 
-export function acquireControlLease(input: {
+export type ControlLeaseAcquisition =
+  | { acquired: true; lease: ControlLease }
+  | { acquired: false; lease: ControlLease }
+
+export interface AcquireControlLeaseInput {
   target: EngineControlActivationTarget
   targetID: string
   ownerOccurrenceID: string
@@ -22,26 +26,40 @@ export function acquireControlLease(input: {
   leaseMilliseconds: number
   /** An immutable receipt may consume a still-unexpired physical lease. */
   supersedeLeaseID?: string
-}): { acquired: true; lease: ControlLease } | { acquired: false; lease: ControlLease } {
+}
+
+/**
+ * Take the fire owner inside the caller's transaction.
+ *
+ * A caller that must also validate what it is claiming — the exact definition
+ * revision, an active status, a due time — has to do that validation and this
+ * acquisition under one write lock. Acquiring in a separate transaction leaves
+ * a window in which the validated fact changes after the lease exists, and the
+ * caller then abandons a live lease that no fire owner holds.
+ */
+export function acquireControlLeaseInTransaction(
+  db: Database.TxOrDb,
+  input: AcquireControlLeaseInput,
+): ControlLeaseAcquisition {
   if (input.leaseMilliseconds <= 0) throw new Error("Control lease duration must be positive")
-  return Database.immediateTransaction((db) => {
-    const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
-    if (
-      current &&
-      current.expires_at > input.now &&
-      current.id !== input.supersedeLeaseID
-    ) return { acquired: false as const, lease: current }
-    const lease = {
-      id: Identifier.ascending("call"),
-      target: input.target,
-      target_id: input.targetID,
-      owner_occurrence_id: input.ownerOccurrenceID,
-      time_activated: input.now,
-      expires_at: input.now + input.leaseMilliseconds,
-    }
-    db.insert(EngineControlActivationLeaseTable).values(lease).run()
-    return { acquired: true as const, lease }
-  })
+  const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
+  if (current && current.expires_at > input.now && current.id !== input.supersedeLeaseID) {
+    return { acquired: false as const, lease: current }
+  }
+  const lease = {
+    id: Identifier.ascending("call"),
+    target: input.target,
+    target_id: input.targetID,
+    owner_occurrence_id: input.ownerOccurrenceID,
+    time_activated: input.now,
+    expires_at: input.now + input.leaseMilliseconds,
+  }
+  db.insert(EngineControlActivationLeaseTable).values(lease).run()
+  return { acquired: true as const, lease }
+}
+
+export function acquireControlLease(input: AcquireControlLeaseInput): ControlLeaseAcquisition {
+  return Database.immediateTransaction((db) => acquireControlLeaseInTransaction(db, input))
 }
 
 export function assertControlLeaseInTransaction(db: Database.TxOrDb, input: {
@@ -58,32 +76,39 @@ export function assertControlLeaseInTransaction(db: Database.TxOrDb, input: {
   return current
 }
 
-/**
- * End one lease early, so the next claim waits on the retry's own schedule.
- *
- * Leases otherwise only end by expiry, which silently becomes the retry
- * period: a caller that records "try again in 500ms" and keeps holding a
- * two-minute lease is not retried in 500ms, it is retried in two minutes.
- * Expiring in place rather than deleting keeps the attempt history that
- * `projectProtocolDeliveryInTransaction` counts.
- */
-export function releaseControlLease(input: {
+export interface ReleaseControlLeaseInput {
   target: EngineControlActivationTarget
   targetID: string
   ownerOccurrenceID: string
   now: number
-}): boolean {
-  return Database.immediateTransaction((db) => {
-    const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
-    if (!current || current.owner_occurrence_id !== input.ownerOccurrenceID || current.expires_at <= input.now) {
-      return false
-    }
-    db.update(EngineControlActivationLeaseTable)
-      .set({ expires_at: input.now })
-      .where(eq(EngineControlActivationLeaseTable.id, current.id))
-      .run()
-    return true
-  })
+}
+
+/**
+ * End one lease early, inside the transaction that records why it ended.
+ *
+ * Leases otherwise only end by expiry, which silently becomes the retry
+ * period: a caller that records "try again in 500ms" and keeps holding a
+ * two-minute lease is not retried in 500ms, it is retried in two minutes. A
+ * completed fire that keeps its lease likewise blocks update, delete and
+ * manual rerun until expiry. Settlement state and lease state are therefore
+ * one fact and must commit together. Expiring in place rather than deleting
+ * keeps the attempt history that `projectProtocolDeliveryInTransaction`
+ * counts.
+ */
+export function releaseControlLeaseInTransaction(db: Database.TxOrDb, input: ReleaseControlLeaseInput): boolean {
+  const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
+  if (!current || current.owner_occurrence_id !== input.ownerOccurrenceID || current.expires_at <= input.now) {
+    return false
+  }
+  db.update(EngineControlActivationLeaseTable)
+    .set({ expires_at: input.now })
+    .where(eq(EngineControlActivationLeaseTable.id, current.id))
+    .run()
+  return true
+}
+
+export function releaseControlLease(input: ReleaseControlLeaseInput): boolean {
+  return Database.immediateTransaction((db) => releaseControlLeaseInTransaction(db, input))
 }
 
 export function renewControlLease(input: {
