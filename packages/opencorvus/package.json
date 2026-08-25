@@ -18,7 +18,8 @@
     "check:mission-task-duplex-e2e": "bun run script/check-mission-task-duplex-e2e.ts",
     "check:evolution-e2e": "bun run script/expert-squad-evolution-e2e.ts",
     "check:control-state-redundancy": "bun run script/control-state-redundancy-check.ts",
-    "dev": "bun ./src/index.ts"
+    "dev": "bun ./src/index.ts",
+    "check:control-lease-owners": "bun run script/check/control-lease-owners.ts"
   },
   "bin": {
     "opencorvus": "./bin/opencorvus"

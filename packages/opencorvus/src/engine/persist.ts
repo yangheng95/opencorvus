@@ -1,4 +1,5 @@
 import { Identifier } from "@/id/id"
+import { currentControlLeaseInTransaction, releaseControlLeaseInTransaction } from "./control-lease"
 import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
@@ -1786,6 +1787,20 @@ export function recordTaskLevelBuildHostObservation(input: {
       error: null,
       time_created: now,
     }).onConflictDoNothing().run()
+    // `retained` is terminal for this cleanup, so whoever is holding its
+    // activation is done. Leaving the lease live would keep the observation
+    // unclaimable for the rest of the lease duration even though nothing will
+    // ever act on it again.
+    const activation = currentControlLeaseInTransaction(db, "build_cleanup", observationID)
+    if (activation && activation.expires_at > now) {
+      releaseControlLeaseInTransaction(db, {
+        target: "build_cleanup",
+        targetID: observationID,
+        leaseID: activation.id,
+        ownerOccurrenceID: activation.owner_occurrence_id,
+        now,
+      })
+    }
   })
   return observationID
 }

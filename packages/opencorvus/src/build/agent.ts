@@ -786,7 +786,14 @@ export namespace BuildAgent {
         // throw here is an unhandled exception, not a caught one.
         try {
           renewBuildObservationCleanupActivation(observationID, cleanupActivation)
-        } catch {
+        } catch (error) {
+          // Either this build's own settlement already ended the lease, or
+          // another owner took it while this build is still running. The
+          // second case has no later fence to surface it, so say so.
+          log.warn("build observation cleanup lease renewal ended", {
+            observationID,
+            error: error instanceof Error ? error.message : String(error),
+          })
           clearInterval(cleanupRenewal)
         }
       }, 40_000)

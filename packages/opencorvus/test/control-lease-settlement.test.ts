@@ -100,7 +100,50 @@ describe("control lease settlement", () => {
     })
   })
 
-  test("the error-path release reports its own failure instead of raising it", async () => {
+  test("the error-path release reports a lease it no longer owns rather than raising", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const targetID = Identifier.ascending("call")
+        const now = 6_000_000
+        const mine = acquireControlLease({
+          target: "effect",
+          targetID,
+          ownerOccurrenceID: "owner-losing",
+          now,
+          leaseMilliseconds: 1_000,
+        })
+        expect(mine.acquired).toBe(true)
+        const taken = acquireControlLease({
+          target: "effect",
+          targetID,
+          ownerOccurrenceID: "owner-taking",
+          now: now + 1_000,
+          leaseMilliseconds: 120_000,
+        })
+        expect(taken.acquired).toBe(true)
+
+        // A caller on an error path is already carrying the failure that
+        // matters. Discovering that the lease has moved on must be reported,
+        // never raised in place of that failure.
+        expect(
+          releaseControlLeaseOnErrorPath({
+            target: "effect",
+            targetID,
+            leaseID: mine.lease.id,
+            ownerOccurrenceID: "owner-losing",
+            now: now + 1_100,
+          }),
+        ).toEqual({ released: false })
+        expect(Database.use((db) => currentControlLeaseInTransaction(db, "effect", targetID))).toMatchObject({
+          id: taken.lease.id,
+        })
+      },
+    })
+  })
+
+  test("the error-path release reports a successful handback", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,

@@ -1,3 +1,5 @@
+import { Filesystem } from "./filesystem"
+import { withKeyedLock } from "./lock"
 import lockfile, { type LockOptions } from "proper-lockfile"
 
 /**
@@ -89,3 +91,49 @@ export async function withProcessLock<T>(
     if (!released) await release().catch(() => undefined)
   }
 }
+
+/**
+ * How a cross-process lock waits for the current holder.
+ *
+ * Every critical section behind these locks is short and bounded by its own
+ * work, so waiting is the correct answer to contention: failing instead would
+ * turn a concurrent credential write into a lost update or a user-visible
+ * error for something the caller can simply queue behind.
+ */
+export const CROSS_PROCESS_LOCK_RETRY = {
+  forever: true,
+  factor: 1.2,
+  minTimeout: 25,
+  maxTimeout: 250,
+  randomize: true,
+} as const
+
+/**
+ * Cross-process read-modify-write for one shared JSON fact file.
+ *
+ * `withKeyedLock` serializes writers inside one process. The current data
+ * architecture explicitly supports more than one backend over a single data
+ * root, so two processes can read the same snapshot, update different keys, and
+ * have the later atomic replacement discard the earlier update. Atomic
+ * replacement prevents torn bytes; it does not prevent a lost update. The read
+ * therefore has to happen inside the cross-process lock, not before it.
+ *
+ * `proper-lockfile` locks an existing path, so the fact file is provisioned
+ * with its empty representation first. Every reader of these stores already
+ * treats a missing file as empty, so provisioning changes nothing observable.
+ */
+export async function withSharedJsonFactLock<T>(input: {
+  /** Process-local writer queue for this exact path. */
+  locks: Map<string, Promise<unknown>>
+  filepath: string
+  /** The bytes a reader would synthesize for a missing file. */
+  empty: string
+  mode?: number
+  run: () => Promise<T>
+}): Promise<T> {
+  await Filesystem.writeAtomicIfAbsent(input.filepath, input.empty, input.mode)
+  return withKeyedLock(input.locks, input.filepath, () =>
+    withProcessLock(input.filepath, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, input.run),
+  )
+}
+

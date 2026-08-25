@@ -1,6 +1,9 @@
 import { Identifier } from "@/id/id"
+import { Log } from "@/util/log"
 import { Database, and, desc, eq, gt } from "@/storage/db"
 import { EngineControlActivationLeaseTable, type EngineControlActivationTarget } from "./engine.sql"
+
+const log = Log.create({ service: "control-lease" })
 
 export type ControlLease = typeof EngineControlActivationLeaseTable.$inferSelect
 
@@ -133,6 +136,16 @@ export function releaseControlLeaseOnErrorPath(
   try {
     return { released: releaseControlLease(input) }
   } catch (error) {
+    // Report here rather than relying on the caller: an error path is exactly
+    // where a caller has something more important to do with its control flow,
+    // and a handback that silently did not happen is how a lease outlives its
+    // owner unnoticed.
+    log.warn("control lease could not be handed back on an error path", {
+      target: input.target,
+      targetID: input.targetID,
+      leaseID: input.leaseID,
+      error: error instanceof Error ? error.message : String(error),
+    })
     return { released: false, error }
   }
 }

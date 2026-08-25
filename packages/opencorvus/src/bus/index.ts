@@ -587,17 +587,6 @@ export namespace Bus {
       if (outcomes.some((receipt) => receipt.outcome === "ignored")) return "ignored" as const
       return outcomes.at(-1)?.outcome
     })
-    const settleDelivery = (subscriberID: string, outcome: "succeeded" | "ignored" | "failed", error?: unknown) =>
-      Database.use((db) => db.insert(BusPublicationDeliveryReceiptTable).values({
-        id: Identifier.ascending("call"),
-        occurrence_id: payload.occurrenceID,
-        phase,
-        subscriber_id: subscriberID,
-        outcome,
-        error: error === undefined ? null : error instanceof Error ? error.message : String(error),
-        retry_at: null,
-        time_created: Date.now(),
-      }).run())
     Database.transaction((db) => {
       const stale = db
         .select()
@@ -691,15 +680,21 @@ export namespace Bus {
               eq(BusPublicationDeliveryReceiptTable.subscriber_id, target.id),
               inArray(BusPublicationDeliveryReceiptTable.outcome, ["succeeded", "ignored"]),
             )).get()
-          if (terminal) return { kind: "terminal" as const, outcome: terminal.outcome }
-          const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
-          if (
-            !current ||
-            current.id !== lease.lease.id ||
-            current.owner_occurrence_id !== ownerID ||
-            current.expires_at <= Date.now()
-          ) return { kind: "stale" as const }
           const settledAt = Date.now()
+          const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
+          const held =
+            current &&
+            current.id === lease.lease.id &&
+            current.owner_occurrence_id === ownerID &&
+            current.expires_at > settledAt
+          if (terminal) {
+            // Somebody else — the stale-subscriber sweep, or another runtime —
+            // already settled this delivery. This owner writes nothing, so the
+            // only thing it still has to do is stop holding the lease.
+            if (held) releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
+            return { kind: "terminal" as const, outcome: terminal.outcome }
+          }
+          if (!held) return { kind: "stale" as const }
           db.insert(BusPublicationDeliveryReceiptTable).values({
             id: Identifier.ascending("call"),
             occurrence_id: payload.occurrenceID,

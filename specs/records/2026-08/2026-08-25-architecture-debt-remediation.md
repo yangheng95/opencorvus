@@ -152,10 +152,53 @@ The repair commit was reviewed again. Fourteen findings; the important ones are 
 - `mission/execution-closure.ts`, `engine/build-observation-cleanup.ts`, `session/control.ts` and the three `event_fire` receipts have no lease test of their own.
 - The renamed claim test still does not discriminate against the pre-change revision, because the pre-change `claim` re-projected after acquiring inside the same transaction and therefore already carried the lease it took. It is kept as a true contract test, not as coverage of the interleaving.
 
+### Stage 2 third independent review disposition
+
+Thirteen findings. Two were new lease owners the previous two rounds had missed, one was a hot loop the previous repair had rate-limited rather than fixed, and one was the reviewer's structural point about why each round keeps finding another owner.
+
+**Correctness**
+
+- `bus/index.ts`'s already-terminal branch returned while still holding the lease, reachable whenever the stale-subscriber sweep settles a delivery between this owner's `prior` check and its own transaction. It now hands the lease back before returning. The same transaction also read the clock twice — the fence at one `Date.now()` and the release at a later one, the exact defect round 2 fixed in `permission/authority.ts` — and now uses one settlement instant.
+- `engine/persist.ts` writes the terminal `retained` build-cleanup receipt on the normal success path and never ended that cleanup's lease, so a terminal receipt committed while a two-minute lease stayed live. It releases now. That makes `build_cleanup` the second owner found after the sweep was declared complete.
+- `scheduleLeaseRecovery` chose its deadline as `retry_at ?? lease_until`. `retry_at` survives as a *past* value on every attempt after the first, so a fire another runtime is currently executing was re-enqueued against an expired retry time and polled for the whole of that runtime's attempt. The 250 ms floor added in the previous round rate-limited that loop instead of removing it. The deadline now comes from the status being recovered — `lease_until` while `running`, `retry_at` while `retry_wait` — and a genuinely due row, which has neither, re-enqueues on the next tick rather than waiting out the contention floor.
+- `releaseControlLeaseOnErrorPath` documented itself as reporting its own failure and only returned it; three of its four call sites discarded the result, so a handback that silently did not happen was invisible. It logs inside the primitive, which is the single-owner fix — two of those call sites have no logger of their own.
+- `session/loop.ts`'s three settlement-conflict paths called `abandonControlLease()` after `SessionControl.settle` had already handed the lease back inside the transaction that observed the conflict. The redundant caller-side handback is removed; the renewal-failure paths keep theirs, because there is no settlement there to carry it.
+- `build/agent.ts`'s renewal guard could not tell "our own settlement ended this lease" from "another owner took it while this build is still running", and the second case has no later fence to surface it. It logs before stopping.
+- Four `releaseControlLease` imports left dead by the move to the error-path primitive, and `bus/index.ts`'s `settleDelivery`, which had no caller before this stage began, are deleted.
+
+**The structural finding, and the gate for it**
+
+Three review rounds each found a lease owner the previous round missed, because nothing enumerated them. `packages/opencorvus/script/check/control-lease-owners.ts` is that enumeration: every site that acquires a control lease is declared with the release its settlement performs, an undeclared acquire fails the check, and a declaration whose acquire is gone fails too, so the list cannot rot. It is wired as `bun run check:control-lease-owners` and is proven to fail on a newly added acquire site. It also keeps `engine/task-root-fact-store.ts` visible: that file acquires by inserting into the lease table directly, never releases, and carries its own consumed-activation predicate — a second implementation of this mechanism that this stage does not converge, declared as such rather than left to be rediscovered.
+
+**Tests**
+
+- `test/event-fire-claim-attempt.test.ts` pins the arithmetic the previous round's regression broke: a claim reports the attempt it just took, and a re-claim after a settled retry counts both. Against the previous revision the first claim reported `attempt: 0`, which is what halved the first retry delay.
+- `test/control-lease-settlement.test.ts` gains the branch that is the primitive's reason to exist: discovering the lease has moved on is reported, not raised.
+
+**Still open**
+
+- `engine/task-root-fact-store.ts`'s parallel implementation, now declared and gated rather than silent.
+- `protocol/delivery.ts`'s terminal settlement deliberately does not release; the reason is recorded in the owner declaration so it does not have to be re-derived.
+- `mission/execution-closure.ts`, `engine/build-observation-cleanup.ts` and `session/control.ts` still have no lease test of their own.
+
+## ARC-009 — Shared data root versus process-local mutation locks
+
+### First half: no shared fact is replaced from a snapshot the writer did not read under the lock
+
+- Root cause as recorded by the audit: `withKeyedLock` is a process-local `Map`, while the current data architecture explicitly supports several backends over one data root. Two processes read the same snapshot, update different keys, and the later atomic replacement discards the earlier update. Atomic replacement prevents torn bytes, not lost updates.
+- The repository already had the correct pattern in exactly one place: `provider/models.ts` wraps its keyed lock in `withProcessLock` and re-reads inside it. This change generalizes that pattern rather than inventing a mechanism: `withSharedJsonFactLock` in `util/process-lock.ts` provisions the fact file with the empty representation its readers already synthesize, takes the process-local writer queue, then takes the cross-process lock, and runs the read-modify-write inside it.
+- Applied to every mutable shared JSON fact the audit named: `config/config.ts` (`writeConfigFile`, both project and global), `auth/index.ts` (`set`/`remove`), `mcp/auth.ts` (`updateStore`/`removeMany`) and `expert-squad/configuration.ts`, which had only a module-level promise chain.
+- Contention policy converged: `CROSS_PROCESS_LOCK_RETRY` is now declared once in `util/process-lock.ts` and consumed by the JSON fact lock, by `expert-squad/install-lock.ts` (which had declared its own copy) and by `provider/models.ts` (which had none, so a contended catalog write failed instead of waiting).
+- Focused positive test: `test/shared-json-fact-lock.test.ts` spawns a second OS process that holds the critical section while this process performs its own read-modify-write, and asserts both updates survive. Without the cross-process lock the peer's write lands last and drops this process's key entirely.
+
+### Second half, not implemented
+
+The audit's boundary also requires that readers and writers consume the same revisioned fact. That is untouched: `mcp/auth.ts` still keys its compare-and-swap on a process-local `revisions` Map, and a peer process's caches are still invalidated only in the writer process. Making the revision durable and the invalidation cross-process is the remaining half of ARC-009 and is not claimed here.
+
 ## Stage log
 
 - Stage 1 (ARC-030): complete, reviewed and repaired against the review. Verification evidence is in the stage-1 section.
-- Stage 2 (ARC-036, ARC-037, plus the shared-mechanism sweep across `channel`, `build_cleanup`, `lifecycle`, `session_control` and `event_fire` lease owners): implemented, independently reviewed, and repaired against that review. `check:permission-modes` reached a full `{"status":"passed"}` for the first time on this branch, alternated with the ARC-038 CLI hang, and after the second review's repairs passed three consecutive runs. ARC-038 remains open as an unrepaired publication gap whose symptom no longer reproduces here. Stage 2's remaining ledger items (ARC-009, ARC-014, ARC-016 through ARC-019, ARC-026, ARC-027) are not started.
+- Stage 2 (ARC-036, ARC-037, plus the shared-mechanism sweep across `channel`, `build_cleanup`, `lifecycle`, `session_control` and `event_fire` lease owners): implemented, independently reviewed, and repaired against that review. `check:permission-modes` reached a full `{"status":"passed"}` for the first time on this branch, alternated with the ARC-038 CLI hang, and after the second review's repairs passed three consecutive runs. ARC-038 remains open as an unrepaired publication gap whose symptom no longer reproduces here. ARC-009's first half is implemented; its revisioned-fact half and the remaining ledger items (ARC-014, ARC-016 through ARC-019, ARC-026, ARC-027) are not started.
 
 ### Stage 2 independent review disposition
 

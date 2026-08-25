@@ -2,7 +2,7 @@ import path from "path"
 import z from "zod"
 import { Global } from "../global"
 import { Filesystem } from "../util/filesystem"
-import { withKeyedLock } from "../util/lock"
+import { withSharedJsonFactLock } from "../util/process-lock"
 
 export namespace McpAuth {
   export const Tokens = z.object({
@@ -109,12 +109,21 @@ export namespace McpAuth {
     }
   }
 
+  /**
+   * Read, change and replace the MCP credential store under one cross-process
+   * lock, for the same reason `Auth` does: a second backend on the same data
+   * root would otherwise overwrite a credential it never read.
+   */
+  function mutate<T>(run: () => Promise<T>): Promise<T> {
+    return withSharedJsonFactLock({ locks: storeLocks, filepath, empty: "{}", mode: 0o600, run })
+  }
+
   async function updateStore(
     authKey: string,
     update: (entry: Entry | undefined) => Entry | undefined,
     expectedRevision?: Revision,
   ) {
-    await withKeyedLock(storeLocks, filepath, async () => {
+    await mutate(async () => {
       assertRevision(authKey, expectedRevision)
       const data = await all()
       const next = update(data[authKey] ? structuredClone(data[authKey]) : undefined)
@@ -165,7 +174,7 @@ export namespace McpAuth {
 
   export async function removeMany(authKeys: readonly string[]): Promise<void> {
     const keys = [...new Set(authKeys)]
-    await withKeyedLock(storeLocks, filepath, async () => {
+    await mutate(async () => {
       const data = await all()
       for (const authKey of keys) delete data[authKey]
       await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)

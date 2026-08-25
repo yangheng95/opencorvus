@@ -705,7 +705,13 @@ export namespace EventService {
         const persisted = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
         if (!persisted) return undefined
         const fire = projectEventFireInTransaction(db, persisted, Date.now())
-        return { jobID: fire.event_job_id, status: fire.status, lease: fire.retry_at ?? fire.lease_until }
+        // The deadline belongs to the status being recovered. `retry_at`
+        // survives as a past value on every attempt after the first, so a fire
+        // that another runtime is currently executing would otherwise be
+        // re-enqueued against an expired retry time — a poll for the whole of
+        // that runtime's attempt rather than a wait for its lease.
+        const deadline = fire.status === "running" ? fire.lease_until : (fire.retry_at ?? fire.lease_until)
+        return { jobID: fire.event_job_id, status: fire.status, lease: deadline }
       })
     } catch (error) {
       log.warn("event fire recovery metadata read failed", { fireID, error: errorMessage(error) })
@@ -727,7 +733,10 @@ export namespace EventService {
           scheduleRecoveryControlRetry(s, fireID)
         }
       },
-      Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
+      // A due row has no deadline at all (`pending` carries neither a retry
+      // time nor a lease), and must re-enqueue on the next tick rather than
+      // wait out the contention floor.
+      row.lease <= 0 ? 1 : Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
     )
     s.recoveryTimers.set(fireID, timer)
   }

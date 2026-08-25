@@ -23,7 +23,7 @@ import { SessionCompaction } from "./compaction"
 import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
-import { acquireControlLease, releaseControlLease, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
@@ -488,8 +488,9 @@ export namespace SessionLoop {
         error: compactionControlErrorText(error),
         lease: settlementLease(),
       })
+      // `settle()` hands the lease back inside the transaction that observed
+      // the conflict, so there is nothing left to abandon here.
       if (!settled) {
-        abandonControlLease()
         throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "failed", cause: error })
       }
       throw error
@@ -508,7 +509,6 @@ export namespace SessionLoop {
         lease: settlementLease(),
       })
       if (!settled) {
-        abandonControlLease()
         throw compactionControlSettlementConflict({
           control: input.control,
           intendedStatus: "failed",
@@ -519,7 +519,6 @@ export namespace SessionLoop {
     }
     const settled = SessionControl.consume({ id: input.control.id, sessionID: input.sessionID, lease: settlementLease() })
     if (!settled) {
-      abandonControlLease()
       throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "consumed" })
     }
     return result

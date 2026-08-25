@@ -21,7 +21,7 @@ import {
   ToolInvocationProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
-import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLease, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { PermissionDecision } from "./decision"
 // Type-only: the value import stays dynamic so the runtime module cycle with
 // SessionLoop is never created.

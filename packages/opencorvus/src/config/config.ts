@@ -1,5 +1,5 @@
 import { Log } from "../util/log"
-import { acquireProcessLock } from "@/util/process-lock"
+import { acquireProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
 import os from "os"
@@ -2076,7 +2076,17 @@ export namespace Config {
       onWritten?(merged: Info): Promise<void>
     },
   ) {
-    return withKeyedLock(writeConfigLocks, filepath, async () => {
+    // The read has to happen inside the cross-process lock. Two backends over
+    // one data root would otherwise read the same "before" snapshot, patch
+    // different keys, and let the later atomic replacement discard the
+    // earlier override — the same lost update the in-process queue below
+    // already prevents between two requests to this process.
+    return withSharedJsonFactLock({
+      locks: writeConfigLocks,
+      filepath,
+      // Exactly what the reader below synthesizes for a missing file.
+      empty: "{}",
+      run: async () => {
       const before = await Filesystem.readText(filepath).catch((err: NodeJS.ErrnoException) => {
         if (err.code === "ENOENT") return "{}"
         throw new JsonError({ path: filepath }, { cause: err })
@@ -2106,6 +2116,7 @@ export namespace Config {
       }
       await hooks?.onWritten?.(merged)
       return merged
+      },
     })
   }
 
