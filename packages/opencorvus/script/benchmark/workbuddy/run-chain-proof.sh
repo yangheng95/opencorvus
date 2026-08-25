@@ -8,10 +8,22 @@ adapter_root=/mnt/d/myhexin-local/opencorvus-bench/packages/opencorvus/script/be
 catalog="$adapter_root/catalog_chain_proof.py"
 active="$control_root/active-run.json"
 docker_socket=/mnt/wsl/docker-desktop/shared-sockets/host-services/docker.proxy.sock
+provider_volume=opencorvus-workbuddy-provider-chain-proof-r1
+. "$adapter_root/docker-volume-lifecycle.sh"
 
-test -S "$docker_socket"
-export DOCKER_HOST="unix://$docker_socket"
-docker version --format '{{.Server.Version}} {{.Server.Os}}/{{.Server.Arch}}' >/dev/null
+cleanup_provider_volume() {
+  workbuddy_remove_provider_volume "$provider_volume"
+}
+
+cleanup_owned_exit() {
+  rc=$?
+  if ! cleanup_provider_volume; then
+    workbuddy_write_cleanup_pending "$control_root" "$provider_volume" "supervisor_exit_cleanup_unavailable"
+    [ "$rc" -ne 0 ] || rc=5
+  fi
+  trap - EXIT
+  exit "$rc"
+}
 
 mkdir -p "$evidence_root" "$control_root"
 exec 9>"$control_root/chain-proof.lock"
@@ -19,6 +31,16 @@ if ! flock -n 9; then
   echo "chain-proof supervisor lock is already held" >&2
   exit 4
 fi
+trap cleanup_owned_exit EXIT
+if [ -f "$control_root/provider-volume-cleanup-pending.json" ]; then
+  cleanup_provider_volume || exit 6
+  echo "cleared pending provider volume; rerun preparation before benchmark launch" >&2
+  exit 6
+fi
+test -S "$docker_socket"
+export DOCKER_HOST="unix://$docker_socket"
+docker version --format '{{.Server.Version}} {{.Server.Os}}/{{.Server.Arch}}' >/dev/null
+docker volume inspect "$provider_volume" >/dev/null
 python3 "$catalog" --evidence-root "$evidence_root" --control-root "$control_root" --preflight
 
 run_id="$(python3 -c 'import uuid; print(uuid.uuid4())')"
@@ -58,6 +80,11 @@ PY
 
 finish() {
   rc=$?
+  python3 "$catalog" --evidence-root "$evidence_root" --control-root "$control_root" || true
+  if ! cleanup_provider_volume; then
+    workbuddy_write_cleanup_pending "$control_root" "$provider_volume" "trial_finished_cleanup_unavailable"
+    [ "$rc" -ne 0 ] || rc=5
+  fi
   python3 - "$active" "$rc" <<'PY'
 import json
 import time
@@ -69,7 +96,7 @@ value = json.loads(path.read_text()) if path.is_file() else {'schema_version': 1
 value.update({'status': 'finished', 'exit_code': int(sys.argv[2]), 'finished_at': time.time()})
 path.write_text(json.dumps(value, indent=2) + '\n')
 PY
-  python3 "$catalog" --evidence-root "$evidence_root" --control-root "$control_root" || true
+  trap - EXIT
   exit "$rc"
 }
 trap finish EXIT

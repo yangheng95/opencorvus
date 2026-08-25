@@ -15,6 +15,30 @@ runtime_bundle_archive="$control_root/opencorvus-linux-x64-bundle.tar.gz"
 official_commit=625b2233093ae4f23e76be28c1f341d41cc70373
 runtime_commit=e8cdd1be4d280399bbb953562000b430f4e59fe7
 image=workbuddy-bench/harness/opencorvus:chain-proof-r1
+docker_socket=/mnt/wsl/docker-desktop/shared-sockets/host-services/docker.proxy.sock
+provider_volume=opencorvus-workbuddy-provider-chain-proof-r1
+provider_utility_image='python:3.12-slim@sha256:3ecf5ebe01fef4b6e81be34511fb40bf378ea7fd81ab215ba15b2775ef85413d'
+provider_volume_owned=0
+. "$adapter_root/docker-volume-lifecycle.sh"
+
+cleanup_failed_preparation() {
+  rc=$?
+  if [ "$rc" -ne 0 ] && [ "$provider_volume_owned" -eq 1 ]; then
+    if ! workbuddy_remove_provider_volume "$provider_volume"; then
+      workbuddy_write_cleanup_pending "$control_root" "$provider_volume" "preparation_failed_cleanup_unavailable"
+    fi
+  fi
+  trap - EXIT
+  exit "$rc"
+}
+trap cleanup_failed_preparation EXIT
+
+mkdir -p "$control_root"
+exec 8>"$control_root/chain-proof.lock"
+if ! flock -n 8; then
+  echo "chain-proof lock is already held" >&2
+  exit 4
+fi
 
 test "$(git -C "$workbuddy_root" rev-parse HEAD)" = "$official_commit"
 case "$bench_commit" in
@@ -99,20 +123,43 @@ install -m 0755 "$adapter_root/run_opencorvus_trial.py" \
 install -m 0644 "$adapter_root/workbuddybench-code.SKILL.md" \
   "$payload_root/share/workbuddybench-code/SKILL.md"
 
-docker_exe='/mnt/c/Program Files/Docker/Docker/resources/bin/docker.exe'
+docker_exe="$workbuddy_windows_docker"
 test -x "$docker_exe"
+test -S "$docker_socket"
+export DOCKER_HOST="unix://$docker_socket"
+docker version --format '{{.Server.Version}} {{.Server.Os}}/{{.Server.Arch}}' >/dev/null
 cd "$bench_root"
 tar -C "$image_context" -cf - . | "$docker_exe" build --pull=false --provenance=false --load -t "$image" -
 "$docker_exe" image inspect "$image" > "$control_root/image-inspect.json"
 
-python3 - "$control_root/source-receipt.json" "$bench_root" "$bench_commit" "$workbuddy_root" "$runtime_source" "$runtime_bundle_archive" "$image" "$control_root/image-inspect.json" <<'PY'
+workbuddy_remove_provider_volume "$provider_volume"
+workbuddy_clear_cleanup_pending "$control_root"
+docker volume create "$provider_volume" >/dev/null
+provider_volume_owned=1
+provider_mountpoint="$(docker volume inspect --format '{{.Mountpoint}}' "$provider_volume")"
+test -n "$provider_mountpoint"
+
+python3 - "$workbuddy_root/configs/jobs/opencorvus-luna-code-chain-proof.yaml" "$provider_mountpoint" <<'PY'
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+mountpoint = sys.argv[2]
+placeholder = "__OPENCORVUS_PROVIDER_MOUNTPOINT__"
+content = path.read_text()
+if content.count(placeholder) != 3:
+    raise SystemExit("WorkBuddy job must contain exactly three provider-volume placeholders")
+path.write_text(content.replace(placeholder, mountpoint))
+PY
+
+python3 - "$control_root/source-receipt.json" "$bench_root" "$bench_commit" "$workbuddy_root" "$runtime_source" "$runtime_bundle_archive" "$image" "$control_root/image-inspect.json" "$provider_volume" "$provider_mountpoint" <<'PY'
 import hashlib
 import json
 import subprocess
 import sys
 from pathlib import Path
 
-output, bench, bench_commit, workbuddy, runtime, bundle_path, image, image_inspect_path = sys.argv[1:]
+output, bench, bench_commit, workbuddy, runtime, bundle_path, image, image_inspect_path, provider_volume, provider_mountpoint = sys.argv[1:]
 def git(path, *args):
     return subprocess.check_output(['git', '-C', path, *args], text=True).strip()
 adapter_root = Path(bench) / 'packages/opencorvus/script/benchmark/workbuddy'
@@ -147,10 +194,29 @@ receipt = {
         'size': image_inspect.get('Size'),
         'created': image_inspect.get('Created'),
     },
+    'credential_projection': {
+        'type': 'ephemeral_docker_volume',
+        'volume': provider_volume,
+        'mountpoint': provider_mountpoint,
+        'files': ['auth.json', 'models.json', 'source-receipt.json'],
+    },
 }
 Path(output).write_text(json.dumps(receipt, indent=2) + '\n')
 PY
 
+docker pull "$provider_utility_image" >/dev/null
+tar -C /var/lib/opencorvus-benchmark/provider-data -cf - auth.json models.json | \
+  docker run --rm -i --mount "type=volume,source=$provider_volume,target=/target" \
+    "$provider_utility_image" tar -C /target -xf -
+tar -C "$control_root" -cf - source-receipt.json | \
+  docker run --rm -i --mount "type=volume,source=$provider_volume,target=/target" \
+    "$provider_utility_image" tar -C /target -xf -
+docker run --rm --mount "type=volume,source=$provider_volume,target=/target" \
+  "$provider_utility_image" sh -ceu \
+    'chmod 600 /target/auth.json /target/models.json; chmod 644 /target/source-receipt.json; test "$(find /target -mindepth 1 -maxdepth 1 -type f | wc -l)" -eq 3; test -s /target/auth.json; test -s /target/models.json; test -s /target/source-receipt.json'
+workbuddy_clear_cleanup_pending "$control_root"
+
 echo "chain-proof payload prepared"
 echo "image=$image"
 echo "payload=$payload_root"
+echo "provider_projection=ephemeral_docker_volume:$provider_volume"

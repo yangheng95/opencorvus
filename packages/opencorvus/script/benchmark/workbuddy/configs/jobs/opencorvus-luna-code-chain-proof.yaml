@@ -19,14 +19,14 @@ environment_override:
       target: /opt/opencorvus
       read_only: true
     - type: bind
-      source: /var/lib/opencorvus-benchmark/provider-data/auth.json
+      source: __OPENCORVUS_PROVIDER_MOUNTPOINT__/auth.json
       target: /run/secrets/opencorvus-provider/auth.json
       read_only: true
     - type: bind
-      source: /var/lib/opencorvus-benchmark/provider-data/models.json
+      source: __OPENCORVUS_PROVIDER_MOUNTPOINT__/models.json
       target: /run/secrets/opencorvus-provider/models.json
       read_only: true
     - type: bind
-      source: /var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-code-v20260825-chain-proof/source-receipt.json
+      source: __OPENCORVUS_PROVIDER_MOUNTPOINT__/source-receipt.json
       target: /run/evidence/source-receipt.json
       read_only: true

@@ -29,6 +29,10 @@ AGENT_SPEC = importlib.util.spec_from_file_location("opencorvus_agent", AGENT_PA
 assert AGENT_SPEC and AGENT_SPEC.loader
 AGENT_MODULE = importlib.util.module_from_spec(AGENT_SPEC)
 AGENT_SPEC.loader.exec_module(AGENT_MODULE)
+JOB_CONFIG_PATH = MODULE_PATH.parent / "configs" / "jobs" / "opencorvus-luna-code-chain-proof.yaml"
+PREPARE_PATH = MODULE_PATH.parent / "prepare-chain-proof.sh"
+SUPERVISOR_PATH = MODULE_PATH.parent / "run-chain-proof.sh"
+VOLUME_LIFECYCLE_PATH = MODULE_PATH.parent / "docker-volume-lifecycle.sh"
 
 
 def assistant(agent: str, session: str, parts: list[dict]) -> dict:
@@ -50,6 +54,35 @@ def skill_part() -> dict:
         "tool": "skill",
         "state": {"status": "completed", "input": {"name": "workbuddybench-code"}},
     }
+
+
+def test_job_projects_exact_engine_private_provider_files_read_only() -> None:
+    content = JOB_CONFIG_PATH.read_text()
+    assert content.count("source: __OPENCORVUS_PROVIDER_MOUNTPOINT__/") == 3
+    assert content.count("read_only: true") == 4
+    assert "target: /run/secrets/opencorvus-provider/auth.json" in content
+    assert "target: /run/secrets/opencorvus-provider/models.json" in content
+    assert "target: /run/evidence/source-receipt.json" in content
+
+
+def test_provider_projection_permissions_and_cleanup_follow_runtime_owners() -> None:
+    preparation = PREPARE_PATH.read_text()
+    supervisor = SUPERVISOR_PATH.read_text()
+    assert "chmod 600 /target/auth.json /target/models.json" in preparation
+    assert "chmod 644 /target/source-receipt.json" in preparation
+    assert supervisor.index("flock -n 9") < supervisor.index("trap cleanup_owned_exit EXIT")
+
+
+def test_prepare_and_run_share_lock_and_engine_cleanup_contract() -> None:
+    preparation = PREPARE_PATH.read_text()
+    supervisor = SUPERVISOR_PATH.read_text()
+    lifecycle = VOLUME_LIFECYCLE_PATH.read_text()
+    assert "chain-proof.lock" in preparation
+    assert preparation.index("flock -n 8") < preparation.rindex("workbuddy_remove_provider_volume")
+    assert supervisor.index("flock -n 9") < supervisor.index("trap cleanup_owned_exit EXIT")
+    assert supervisor.index("trap cleanup_owned_exit EXIT") < supervisor.index("test -S \"$docker_socket\"")
+    assert "workbuddy_windows_docker" in lifecycle
+    assert "provider-volume-cleanup-pending.json" in lifecycle
 
 
 def test_accepts_exact_skill_as_each_participating_owners_first_tool() -> None:
