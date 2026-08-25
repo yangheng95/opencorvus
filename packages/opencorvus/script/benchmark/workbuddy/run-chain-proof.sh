@@ -7,6 +7,11 @@ control_root=/var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-c
 adapter_root=/mnt/d/myhexin-local/opencorvus-bench/packages/opencorvus/script/benchmark/workbuddy
 catalog="$adapter_root/catalog_chain_proof.py"
 active="$control_root/active-run.json"
+docker_socket=/mnt/wsl/docker-desktop/shared-sockets/host-services/docker.proxy.sock
+
+test -S "$docker_socket"
+export DOCKER_HOST="unix://$docker_socket"
+docker version --format '{{.Server.Version}} {{.Server.Os}}/{{.Server.Arch}}' >/dev/null
 
 mkdir -p "$evidence_root" "$control_root"
 exec 9>"$control_root/chain-proof.lock"
