@@ -9,6 +9,7 @@ import math
 import re
 import subprocess
 import wave
+from contextvars import ContextVar
 from pathlib import Path
 from typing import Any, Callable
 
@@ -19,11 +20,13 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
 STORYBOARD = HERE / "desktop-storyboard-v5r.zh-CN.json"
+EN_STORYBOARD = HERE / "desktop-storyboard-v5r.en-US.json"
+STORYBOARDS = {"zh-CN": STORYBOARD, "en-US": EN_STORYBOARD}
 DEFAULT_OUTPUT = Path(r"D:\myhexin-local\demos\opencorvus-desktop-promo-v5r-20260825")
 V5C_MANIFEST = HERE / "v5c-cartoon-task-metaphor-trials.json"
 V5C_GATES = HERE / "v5c-cartoon-take-gates.json"
 ICON_PATH = REPO / "packages" / "web" / "public" / "web-app-manifest-512x512.png"
-WORDMARK_PATH = HERE / "assets" / "live-type-runtime-v9-post" / "official-logo-light-4x.png"
+WORDMARK_PATH = REPO / "packages" / "web" / "src" / "assets" / "logo-light.svg"
 BENCHMARK_RESULT_PATH = Path(r"D:\myhexin-local\opencorvus-benchmark-results\luna-mission-base-v20260822-r3\index.html")
 AUTOMATIONBENCH_CLAIMS = {
     "model": "openai/gpt-5.6-luna",
@@ -42,6 +45,7 @@ SPEC.loader.exec_module(BASE)
 
 W, H, FPS = BASE.W, BASE.H, BASE.FPS
 NARRATION_RATE = "+25%"
+NARRATION_VOICES = {"zh-CN": "zh-CN-YunxiNeural", "en-US": "en-US-BrianNeural"}
 INK = (28, 32, 40)
 MUTED = (94, 98, 106)
 PAPER = (249, 248, 248)
@@ -56,6 +60,51 @@ LINE = (203, 210, 220)
 MONO = r"C:\Windows\Fonts\consola.ttf"
 SANS = r"C:\Windows\Fonts\msyh.ttc"
 BOLD = r"C:\Windows\Fonts\msyhbd.ttc"
+
+ACTIVE_LOCALE: ContextVar[str] = ContextVar("desktop_v5r_locale", default="zh-CN")
+EN_SCREEN_TEXT = {
+    "下载 DeBERTa V3 Base ABSA 模型与训练数据": "Download DeBERTa V3 Base ABSA and training data",
+    "调研并完成 baseline + 两次创新实验": "Research, establish a baseline, then run two innovations",
+    "RTX 5090 · CUDA ONLY · 禁止 CPU 训练": "RTX 5090 · CUDA ONLY · no CPU training",
+    "记录 train / validation / test 指标": "Record train / validation / test metrics",
+    "交付监控、推理、图表、论文与测试": "Deliver monitoring, inference, figures, paper and tests",
+    "验收通过，并经我确认后再发布": "Pass acceptance; release only after my approval",
+    "一个需要跨越调研、实现、测试、修改和发布的项目": "One project spanning research, implementation, testing, revision and release",
+    "完成可复验的 DeBERTa ABSA 项目": "Deliver a reproducible DeBERTa ABSA project",
+    "不保证成功；保证诚实收敛和可检查证据。": "Success is not guaranteed; honest convergence and checkable evidence are.",
+    "“训练前先核对 CUDA 环境”": "Verify the CUDA environment before training",
+    "不是排名：编码、办公、runtime 与 Mission orchestration 解决不同层次。": "Not a ranking: coding, office work, runtimes and Mission orchestration solve different layers.",
+    "AUTOMATIONBENCH · 同模型对照": "AUTOMATIONBENCH · SAME-MODEL CONTROL",
+    "用户提供最新更新 · 本地旧仪表盘仅作历史快照": "User-provided latest update · local dashboard is a historical snapshot",
+    "公开案例核验进度": "PUBLIC CASE VERIFICATION",
+    "同一个 Luna 模型": "THE SAME LUNA MODEL",
+    "原始对照": "Raw control",
+    "严格通过率": "Strict pass rate",
+    "严格通过案例": "Strictly passed cases",
+    "全部最终状态断言通过": "Final-state assertions passed",
+    "最新部分得分未并入": "Partial score excluded",
+    "官方保留集参照标尺": "OFFICIAL HELD-OUT REFERENCE SCALE",
+    "不同样本上下文 · 仅作参照 · 不做跨样本排名": "Different sample context · reference only · no cross-sample ranking",
+    "毕业论文": "Thesis",
+    "课程项目": "Course project",
+    "个人 OSS": "Personal OSS",
+    "副业应用": "Side project",
+    "作品集": "Portfolio",
+    "独立研究": "Independent study",
+    "别再替 Agent 维持每一次交接。": "Stop maintaining every agent handoff yourself.",
+}
+
+
+def localize(text: str) -> str:
+    return EN_SCREEN_TEXT.get(text, text) if ACTIVE_LOCALE.get() == "en-US" else text
+
+
+def load_storyboard(locale: str) -> tuple[Path, dict[str, Any]]:
+    path = STORYBOARDS[locale]
+    storyboard = json.loads(path.read_text(encoding="utf-8"))
+    if storyboard.get("locale") != locale:
+        raise RuntimeError(f"Storyboard locale mismatch: {path}")
+    return path, storyboard
 
 
 def font(size: int, *, mono: bool = False, bold: bool = False) -> ImageFont.FreeTypeFont:
@@ -191,12 +240,11 @@ def official_brand() -> tuple[Image.Image, Image.Image]:
     box = icon.getbbox()
     assert box is not None
     icon = icon.crop(box)
-    icon.thumbnail((54, 54), Image.Resampling.LANCZOS)
-    wordmark = Image.open(WORDMARK_PATH).convert("RGBA")
+    wordmark = Image.new("RGBA", (936, 168), (0, 0, 0, 0))
+    ImageDraw.Draw(wordmark).text((0, 16), "OpenCorvus", font=ImageFont.truetype(MONO, 112), fill=(*INK, 255))
     box = wordmark.getbbox()
     assert box is not None
     wordmark = wordmark.crop(box)
-    wordmark = wordmark.resize((188, round(wordmark.height * 188 / wordmark.width)), Image.Resampling.LANCZOS)
     return icon, wordmark
 
 
@@ -217,8 +265,10 @@ def brand_signature(image: Image.Image, *, full: bool = False) -> None:
         image.alpha_composite(group, ((W - group.width) // 2, 132))
         return
     group = Image.new("RGBA", (300, 68), (249, 248, 248, 210))
-    group.alpha_composite(ICON, (12, 7))
-    group.alpha_composite(WORDMARK, (78, 16))
+    icon = ICON.resize((54, 54), Image.Resampling.LANCZOS)
+    wordmark = WORDMARK.resize((188, round(WORDMARK.height * 188 / WORDMARK.width)), Image.Resampling.LANCZOS)
+    group.alpha_composite(icon, (12, 7))
+    group.alpha_composite(wordmark, (78, 16))
     d = ImageDraw.Draw(group)
     d.text((79, 43), "opencorvus.com", font=font(18, mono=True), fill=BLUE)
     image.alpha_composite(group, (18, 14))
@@ -256,12 +306,12 @@ def render_project(t: float, duration: float, _: dict[str, Image.Image]) -> Imag
     draw.text((230, 92), "New project request", font=font(24, mono=True, bold=True), fill=BLUE)
     draw.line((230, 135, 1175, 135), fill=(*BLUE, 90), width=2)
     items = [
-        ("01", "下载 DeBERTa V3 Base ABSA 模型与训练数据", False),
-        ("02", "调研并完成 baseline + 两次创新实验", False),
-        ("HARD", "RTX 5090 · CUDA ONLY · 禁止 CPU 训练", True),
-        ("04", "记录 train / validation / test 指标", False),
-        ("05", "交付监控、推理、图表、论文与测试", False),
-        ("HARD", "验收通过，并经我确认后再发布", True),
+        ("01", localize("下载 DeBERTa V3 Base ABSA 模型与训练数据"), False),
+        ("02", localize("调研并完成 baseline + 两次创新实验"), False),
+        ("HARD", localize("RTX 5090 · CUDA ONLY · 禁止 CPU 训练"), True),
+        ("04", localize("记录 train / validation / test 指标"), False),
+        ("05", localize("交付监控、推理、图表、论文与测试"), False),
+        ("HARD", localize("验收通过，并经我确认后再发布"), True),
     ]
     active_row = min(len(items) - 1, int(t / 2.2))
     for i, (number, text, hard) in enumerate(items):
@@ -281,7 +331,7 @@ def render_project(t: float, duration: float, _: dict[str, Image.Image]) -> Imag
             cursor_x = 340 + draw.textbbox((0, 0), visible_text, font=face)[2] + 4
             draw.rectangle((cursor_x, y - 2, cursor_x + 4, y + 29), fill=ORANGE)
     if t >= 14.0:
-        slogan = "一个需要跨越调研、实现、测试、修改和发布的项目"
+        slogan = localize("一个需要跨越调研、实现、测试、修改和发布的项目")
         slogan_progress = min(1.0, (t - 14.0) / 2.5)
         visible_slogan = slogan[: max(1, math.ceil(len(slogan) * slogan_progress))]
         draw.text((230, 602), visible_slogan, font=font(20), fill=BLUE)
@@ -382,7 +432,7 @@ def render_mission(t: float, duration: float, _: dict[str, Image.Image]) -> Imag
     rounded_panel(draw, (120, 58, 1215, 650))
     header(draw, "NEW MISSION", "persistent record outside any one chat context")
     rows = [
-        ("GOAL", "完成可复验的 DeBERTa ABSA 项目", BLUE),
+        ("GOAL", localize("完成可复验的 DeBERTa ABSA 项目"), BLUE),
         ("CONSTRAINTS", "RTX 5090 · CUDA only · test split not used for tuning", ORANGE),
         ("ACCEPTANCE", "3 runs · monitor · inference · figures · paper · tests", GREEN),
         ("DEPENDENCIES", "data → CUDA experiments → web/paper → publication", COBALT),
@@ -558,7 +608,7 @@ def render_review(t: float, duration: float, _: dict[str, Image.Image]) -> Image
         tag(draw, 116, 480, "accepted", GREEN)
         draw.text((300, 486), "or", font=font(20, mono=True), fill=MUTED)
         tag(draw, 348, 480, "blocked with evidence", AMBER)
-        draw.text((116, 556), "不保证成功；保证诚实收敛和可检查证据。", font=font(21), fill=BLUE)
+        draw.text((116, 556), localize("不保证成功；保证诚实收敛和可检查证据。"), font=font(21), fill=BLUE)
     motion_geometry(image, t, duration, "review")
     return camera(image, t, duration, (660, 340), 0.022)
 
@@ -574,7 +624,7 @@ def render_evolution(t: float, duration: float, _: dict[str, Image.Image]) -> Im
     draw.text((116, 148), "PATH A · USER FEEDBACK", font=font(19, mono=True, bold=True), fill=ORANGE)
     draw.text((688, 148), "PATH B · METRIC CAMPAIGN", font=font(19, mono=True, bold=True), fill=COBALT)
     if t >= 2:
-        draw.text((116, 202), "“训练前先核对 CUDA 环境”", font=font(20), fill=INK)
+        draw.text((116, 202), localize("“训练前先核对 CUDA 环境”"), font=font(20), fill=INK)
         tag(draw, 116, 252, "candidate revision v4.2", ORANGE)
     if t >= 6:
         draw.text((116, 318), "+ verify CUDA_VISIBLE_DEVICES", font=font(18, mono=True), fill=GREEN)
@@ -618,7 +668,7 @@ def render_open_ecosystem(t: float, duration: float, _: dict[str, Image.Image]) 
             draw.rounded_rectangle((112 + i * 36, y, 1120 - i * 36, y + 62), radius=12, fill=(*color, 18), outline=(*color, 130), width=2)
             draw.text((142 + i * 36, y + 15), title, font=font(20, mono=True, bold=True), fill=color)
             draw.text((480, y + 16), desc, font=font(19), fill=INK)
-    draw.text((112, 574), "不是排名：编码、办公、runtime 与 Mission orchestration 解决不同层次。", font=font(20), fill=BLUE)
+    draw.text((112, 574), localize("不是排名：编码、办公、runtime 与 Mission orchestration 解决不同层次。"), font=font(20), fill=BLUE)
     motion_geometry(image, t, duration, "stack")
     return camera(image, t, duration, (690, 360), 0.018)
 
@@ -632,12 +682,12 @@ def render_automationbench(draw: ImageDraw.ImageDraw, t: float) -> None:
     mission_strict = float(AUTOMATIONBENCH_CLAIMS["mission_strict_percent"])
     verified_cases = int(AUTOMATIONBENCH_CLAIMS["mission_verified_cases"])
     target_cases = int(AUTOMATIONBENCH_CLAIMS["public_target_cases"])
-    draw.text((112, 92), "AUTOMATIONBENCH · 同模型对照", font=font(24, bold=True), fill=BLUE)
+    draw.text((112, 92), localize("AUTOMATIONBENCH · 同模型对照"), font=font(24, bold=True), fill=BLUE)
     draw.text((112, 128), f"OpenCorvus Mission base · {AUTOMATIONBENCH_CLAIMS['model']}", font=font(18, mono=True), fill=MUTED)
-    draw.text((112, 156), "用户提供最新更新 · 本地旧仪表盘仅作历史快照", font=font(18), fill=ORANGE)
+    draw.text((112, 156), localize("用户提供最新更新 · 本地旧仪表盘仅作历史快照"), font=font(18), fill=ORANGE)
 
     coverage = phase(t, 0.2, 1.7)
-    draw.text((112, 188), "公开案例核验进度", font=font(19, bold=True), fill=INK)
+    draw.text((112, 188), localize("公开案例核验进度"), font=font(19, bold=True), fill=INK)
     draw.text((1004, 184), f"{verified_cases} / {target_cases}", font=font(24, mono=True, bold=True), fill=COBALT)
     cells = 60
     x0, y0, gap, cell_w = 112, 226, 3, 15
@@ -652,8 +702,8 @@ def render_automationbench(draw: ImageDraw.ImageDraw, t: float) -> None:
 
     gain = phase(t, 1.2, 1.8)
     draw.rounded_rectangle((112, 266, 548, 490), radius=20, fill=(*PALE_BLUE, 145), outline=(*COBALT, 105), width=2)
-    draw.text((142, 292), "同一个 Luna 模型", font=font(20, bold=True), fill=INK)
-    draw.text((142, 342), "原始对照", font=font(18), fill=MUTED)
+    draw.text((142, 292), localize("同一个 Luna 模型"), font=font(20, bold=True), fill=INK)
+    draw.text((142, 342), localize("原始对照"), font=font(18), fill=MUTED)
     draw.text((142, 376), f"{raw_strict:.2f}%", font=font(40, mono=True, bold=True), fill=MUTED)
     arrow_start, arrow_end = 318, 420
     arrow_x = arrow_start + (arrow_end - arrow_start) * gain
@@ -661,22 +711,27 @@ def render_automationbench(draw: ImageDraw.ImageDraw, t: float) -> None:
     draw.polygon([(arrow_x, 420), (arrow_x + 18, 430), (arrow_x, 440)], fill=(*ORANGE, 235))
     draw.text((338, 342), "Mission base", font=font(18, bold=True), fill=BLUE)
     draw.text((338, 376), f"{raw_strict + (mission_strict - raw_strict) * gain:.2f}%", font=font(40, mono=True, bold=True), fill=COBALT)
-    draw.text((142, 454), f"用户更新 · +{mission_strict - raw_strict:.2f} 个百分点 · n={verified_cases}", font=font(18), fill=ORANGE)
+    gain_label = (
+        f"User update · +{mission_strict - raw_strict:.2f} points · n={verified_cases}"
+        if ACTIVE_LOCALE.get() == "en-US"
+        else f"用户更新 · +{mission_strict - raw_strict:.2f} 个百分点 · n={verified_cases}"
+    )
+    draw.text((142, 454), gain_label, font=font(18), fill=ORANGE)
 
     metrics = phase(t, 2.8, 1.2)
     draw.rounded_rectangle((584, 266, 1168, 490), radius=20, fill=(252, 252, 252, 246), outline=(*GREEN, 105), width=2)
     strict_value = mission_strict * metrics
     passed_value = round(verified_cases * mission_strict / 100) * metrics
-    draw.text((620, 294), "严格通过率", font=font(19, bold=True), fill=INK)
+    draw.text((620, 294), localize("严格通过率"), font=font(19, bold=True), fill=INK)
     draw.text((620, 334), f"{strict_value:.2f}%", font=font(38, mono=True, bold=True), fill=COBALT)
-    draw.text((888, 294), "严格通过案例", font=font(19, bold=True), fill=INK)
+    draw.text((888, 294), localize("严格通过案例"), font=font(19, bold=True), fill=INK)
     draw.text((888, 334), f"{passed_value:.0f} / {verified_cases}", font=font(38, mono=True, bold=True), fill=GREEN)
-    draw.text((620, 416), "全部最终状态断言通过", font=font(18), fill=MUTED)
-    draw.text((888, 416), "最新部分得分未并入", font=font(18), fill=MUTED)
+    draw.text((620, 416), localize("全部最终状态断言通过"), font=font(18), fill=MUTED)
+    draw.text((888, 416), localize("最新部分得分未并入"), font=font(18), fill=MUTED)
 
     reference = phase(t, 6.4, 2.2)
     axis_x0, axis_x1, axis_y = 112, 1168, 548
-    draw.text((112, 510), "官方保留集参照标尺", font=font(18, bold=True), fill=MUTED)
+    draw.text((112, 510), localize("官方保留集参照标尺"), font=font(18, bold=True), fill=MUTED)
     draw.line((axis_x0, axis_y, axis_x1, axis_y), fill=(128, 139, 160, round(130 * reference)), width=3)
     official = [("Sol", 19.63), ("Terra", 21.00), ("Claude", 26.94), ("Gemini", 30.44)]
     for index, (label, value) in enumerate(official):
@@ -689,7 +744,7 @@ def render_automationbench(draw: ImageDraw.ImageDraw, t: float) -> None:
 
     boundary = phase(t, 8.8, 1.0)
     draw.rounded_rectangle((112, 610, 1168, 654), radius=12, fill=(*ORANGE, round(24 + 20 * boundary)), outline=(*ORANGE, round(130 * boundary)), width=2)
-    draw.text((248, 619), "不同样本上下文 · 仅作参照 · 不做跨样本排名", font=font(20, bold=True), fill=(*ORANGE, round(255 * boundary)))
+    draw.text((248, 619), localize("不同样本上下文 · 仅作参照 · 不做跨样本排名"), font=font(20, bold=True), fill=(*ORANGE, round(255 * boundary)))
 
 
 def render_proof(t: float, duration: float, assets: dict[str, Image.Image]) -> Image.Image:
@@ -735,7 +790,7 @@ def render_personal_cta(t: float, duration: float, _: dict[str, Image.Image]) ->
     workflow = desktop("12:41")
     draw = ImageDraw.Draw(workflow, "RGBA")
     header(draw, "YOUR NEXT LONG WORKFLOW", "research → implementation → test → revision → release")
-    folders = ["毕业论文", "课程项目", "个人 OSS", "副业应用", "作品集", "独立研究"]
+    folders = [localize(label) for label in ("毕业论文", "课程项目", "个人 OSS", "副业应用", "作品集", "独立研究")]
     centers: list[tuple[int, int]] = []
     for i, label in enumerate(folders):
         x = 100 + (i % 3) * 365
@@ -788,8 +843,8 @@ def render_personal_cta(t: float, duration: float, _: dict[str, Image.Image]) ->
         closing_draw.text((668, y - 2), value, font=font(20, mono=True), fill=INK)
     closing_draw.rounded_rectangle((132, 466, 1148, 532), radius=18, fill=(*PALE_BLUE, 210), outline=(*COBALT, 100), width=2)
     closing_draw.ellipse((160, 488, 174, 502), fill=ORANGE)
-    closing_draw.text((196, 479), "别再替 Agent 维持每一次交接。", font=font(28, bold=True), fill=BLUE)
-    closing_draw.line((666, 498, 1110, 498), fill=(*COBALT, 70), width=2)
+    closing_draw.text((196, 479), localize("别再替 Agent 维持每一次交接。"), font=font(28, bold=True), fill=BLUE)
+    closing_draw.line((196, 520, 1110, 520), fill=(*COBALT, 70), width=2)
     closing_draw.rounded_rectangle((132, 558, 1148, 608), radius=13, fill=(255, 255, 255, 242), outline=(*GREEN, 90), width=2)
     closing_draw.text((160, 571), "CASE", font=font(18, mono=True, bold=True), fill=GREEN)
     closing_draw.text((250, 570), "github.com/yangheng95/deberta-v3-absa-public-evidence", font=font(18, mono=True), fill=INK)
@@ -838,7 +893,9 @@ def accepted_cartoon_sources() -> dict[str, Path]:
     return sources
 
 
-def build_inputs(storyboard: dict[str, Any]) -> dict[str, Any]:
+def build_inputs(storyboard: dict[str, Any], storyboard_path: Path | None = None) -> dict[str, Any]:
+    locale = str(storyboard.get("locale", "zh-CN"))
+    storyboard_path = storyboard_path or STORYBOARDS[locale]
     sources = {}
     for name, path in BASE.evidence_paths().items():
         if path.exists():
@@ -847,7 +904,8 @@ def build_inputs(storyboard: dict[str, Any]) -> dict[str, Any]:
     if not BENCHMARK_RESULT_PATH.is_file():
         raise FileNotFoundError(f"Missing AutomationBench evidence: {BENCHMARK_RESULT_PATH}")
     return {
-        "storyboard_sha256": sha256_file(STORYBOARD),
+        "locale": locale,
+        "storyboard_sha256": sha256_file(storyboard_path),
         "renderer_sha256": sha256_file(Path(__file__).resolve()),
         "base_renderer_sha256": sha256_file(BASE_PATH),
         "icon_sha256": sha256_file(ICON_PATH),
@@ -862,7 +920,7 @@ def build_inputs(storyboard: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def render_scene(scene: dict[str, Any], destination: Path, assets: dict[str, Image.Image]) -> None:
+def render_scene(scene: dict[str, Any], destination: Path, assets: dict[str, Image.Image], locale: str = "zh-CN") -> None:
     duration = float(scene["duration"])
     renderer = RENDERERS[scene["mode"]]
     command = [
@@ -872,11 +930,13 @@ def render_scene(scene: dict[str, Any], destination: Path, assets: dict[str, Ima
     ]
     process = subprocess.Popen(command, stdin=subprocess.PIPE)
     assert process.stdin is not None
+    locale_token = ACTIVE_LOCALE.set(locale)
     try:
         for frame in range(round(duration * FPS)):
             image = renderer(frame / FPS, duration, assets).convert("RGB")
             process.stdin.write(image.tobytes())
     finally:
+        ACTIVE_LOCALE.reset(locale_token)
         process.stdin.close()
     if process.wait() != 0:
         raise RuntimeError(f"Scene encoder failed: {scene['id']}")
@@ -896,15 +956,15 @@ def scene_motion(path: Path) -> dict[str, float]:
     }
 
 
-def gate_paths(output: Path, storyboard: dict[str, Any]) -> tuple[str, Path, Path, Path]:
-    digest = canonical_sha256(build_inputs(storyboard))
+def gate_paths(output: Path, storyboard: dict[str, Any], storyboard_path: Path | None = None) -> tuple[str, Path, Path, Path]:
+    digest = canonical_sha256(build_inputs(storyboard, storyboard_path))
     root = output / "gates" / digest[:12]
     return digest, root, root / "gate-report.json", root / "gate-acceptance.json"
 
 
-def render_gates(output: Path) -> dict[str, Any]:
-    storyboard = json.loads(STORYBOARD.read_text(encoding="utf-8"))
-    digest, root, report_path, _ = gate_paths(output, storyboard)
+def render_gates(output: Path, locale: str = "zh-CN") -> dict[str, Any]:
+    storyboard_path, storyboard = load_storyboard(locale)
+    digest, root, report_path, _ = gate_paths(output, storyboard, storyboard_path)
     scenes_root = root / "candidates"
     frames_root = root / "frames"
     scenes_root.mkdir(parents=True, exist_ok=True)
@@ -916,7 +976,7 @@ def render_gates(output: Path) -> dict[str, Any]:
         candidate = scenes_root / f"{index:02d}-{scene['id']}.mp4"
         if not candidate.is_file():
             print(f"gate render {scene['id']}", flush=True)
-            render_scene(scene, candidate, assets)
+            render_scene(scene, candidate, assets, locale)
         duration = media_duration(candidate)
         scene_frames = []
         thumbnails = []
@@ -949,7 +1009,7 @@ def render_gates(output: Path) -> dict[str, Any]:
     contact_sheet = root / "gate-contact-sheet.jpg"
     sheet.save(contact_sheet, quality=94)
     report = {
-        "build_digest": digest, "storyboard": str(STORYBOARD), "renderer": str(Path(__file__).resolve()),
+        "build_digest": digest, "locale": locale, "storyboard": str(storyboard_path), "renderer": str(Path(__file__).resolve()),
         "contact_sheet": str(contact_sheet), "scenes": scene_reports,
         "automated_passed": all(scene["automated_passed"] for scene in scene_reports),
         "manual_review_required": [
@@ -963,9 +1023,9 @@ def render_gates(output: Path) -> dict[str, Any]:
     return report
 
 
-def accept_gates(output: Path, reason: str) -> Path:
-    storyboard = json.loads(STORYBOARD.read_text(encoding="utf-8"))
-    digest, _, report_path, acceptance_path = gate_paths(output, storyboard)
+def accept_gates(output: Path, reason: str, locale: str = "zh-CN") -> Path:
+    storyboard_path, storyboard = load_storyboard(locale)
+    digest, _, report_path, acceptance_path = gate_paths(output, storyboard, storyboard_path)
     if not report_path.is_file():
         raise FileNotFoundError("Render and inspect the current gate candidates before acceptance")
     report = json.loads(report_path.read_text(encoding="utf-8"))
@@ -980,7 +1040,7 @@ def accept_gates(output: Path, reason: str) -> Path:
         if physical != scene["candidate_sha256"]:
             raise RuntimeError(f"Gate candidate changed after inspection: {candidate}")
         accepted.append({"scene": scene["scene"], "candidate": str(candidate), "sha256": physical})
-    payload = {"build_digest": digest, "manual_reviewer": "primary-agent", "reason": reason, "accepted": accepted}
+    payload = {"build_digest": digest, "locale": locale, "manual_reviewer": "primary-agent", "reason": reason, "accepted": accepted}
     acceptance_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"acceptance": str(acceptance_path), "scenes": len(accepted)}, ensure_ascii=False))
     return acceptance_path
@@ -1005,13 +1065,13 @@ def accepted_scene_files(output: Path, storyboard: dict[str, Any]) -> list[Path]
     return files
 
 
-async def synthesize(text: str, destination: Path) -> None:
+async def synthesize(text: str, destination: Path, locale: str = "zh-CN") -> None:
     import edge_tts
 
     for attempt in range(3):
         try:
             await asyncio.wait_for(
-                edge_tts.Communicate(text=text, voice="zh-CN-YunxiNeural", rate=NARRATION_RATE).save(str(destination)),
+                edge_tts.Communicate(text=text, voice=NARRATION_VOICES[locale], rate=NARRATION_RATE).save(str(destination)),
                 timeout=30,
             )
             return
@@ -1026,8 +1086,8 @@ def media_duration(path: Path) -> float:
     return float(run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", str(path)], capture=True).stdout.strip())
 
 
-def voice_scene(scene: dict[str, Any], destination: Path, raw: Path) -> dict[str, Any]:
-    asyncio.run(synthesize(scene["narration"], raw))
+def voice_scene(scene: dict[str, Any], destination: Path, raw: Path, locale: str = "zh-CN") -> dict[str, Any]:
+    asyncio.run(synthesize(scene["narration"], raw, locale))
     target = float(scene["duration"])
     raw_duration = media_duration(raw)
     if raw_duration > target - 0.45:
@@ -1047,17 +1107,20 @@ def ass_time(seconds: float) -> str:
 
 
 def split_sentences(text: str) -> list[str]:
-    return [part.strip() for part in re.split(r"(?<=[。！？；])", text) if part.strip()]
+    boundary = r"(?<=[。！？；])|(?<=[.!?;])(?=\s|$)"
+    return [part.strip() for part in re.split(boundary, text) if part.strip()]
 
 
 def wrap_subtitle(text: str, line_units: int = 46) -> str:
+    text = re.sub(r"(?<=\d)\s*/\s*(?=\d)", "/", text)
     tokens = re.findall(r"[A-Za-z0-9_./:+%\-]+|\s+|.", text)
     lines: list[str] = []
     current = ""
     units = 0
+    prohibited_line_start = set("；，。！？、,.;:/!?%")
     for token in tokens:
         token_units = sum(2 if "\u4e00" <= char <= "\u9fff" else 1 for char in token)
-        if current.strip() and units + token_units > line_units:
+        if current.strip() and units + token_units > line_units and token.strip() not in prohibited_line_start:
             lines.append(current.strip())
             current = token.lstrip()
             units = sum(2 if "\u4e00" <= char <= "\u9fff" else 1 for char in current)
@@ -1086,6 +1149,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     events = []
     cursor = 0.0
     by_scene = {item["scene"]: item for item in voice_report}
+    line_units = 68 if storyboard.get("locale") == "en-US" else 46
     for scene in storyboard["scenes"]:
         duration = float(scene["duration"])
         spoken_duration = min(duration - 0.18, float(by_scene[scene["id"]]["spoken_duration"]) + 0.12)
@@ -1095,13 +1159,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         offset = cursor + 0.12
         for part, weight in zip(parts, weights):
             span = (spoken_duration - 0.16) * weight / total
-            events.append(f"Dialogue: 0,{ass_time(offset)},{ass_time(offset + span - 0.04)},Narration,,0,0,0,,{wrap_subtitle(part)}")
+            events.append(f"Dialogue: 0,{ass_time(offset)},{ass_time(offset + span - 0.04)},Narration,,0,0,0,,{wrap_subtitle(part, line_units)}")
             offset += span
         cursor += duration
     destination.write_text(header_text + "\n".join(events) + "\n", encoding="utf-8-sig")
 
 
-def sound_cue_schedule() -> list[tuple[str, float, str]]:
+def sound_cue_schedule(storyboard: dict[str, Any] | None = None) -> list[tuple[str, float, str]]:
     """Sparse action-bound foley; narration, not synthetic beeps, carries the film."""
     relative = {
         "R01-project": [(0.7, "typing"), (3.6, "paper"), (5.65, "transition"), (7.0, "typing"), (11.4, "click"), (15.6, "confirm")],
@@ -1119,7 +1183,7 @@ def sound_cue_schedule() -> list[tuple[str, float, str]]:
     }
     starts: dict[str, float] = {}
     cursor = 0.0
-    storyboard = json.loads(STORYBOARD.read_text(encoding="utf-8"))
+    storyboard = storyboard or load_storyboard("zh-CN")[1]
     for scene in storyboard["scenes"]:
         starts[scene["id"]] = cursor
         cursor += float(scene["duration"])
@@ -1179,9 +1243,9 @@ def cue_wave(kind: str, x: np.ndarray) -> tuple[np.ndarray, float]:
     raise ValueError(f"Unknown sound cue: {kind}")
 
 
-def build_sound(duration: float, destination: Path) -> None:
+def build_sound(duration: float, destination: Path, storyboard: dict[str, Any] | None = None) -> None:
     sample_rate = 48000
-    cues = sound_cue_schedule()
+    cues = sound_cue_schedule(storyboard)
     destination.parent.mkdir(parents=True, exist_ok=True)
     with wave.open(str(destination), "wb") as target:
         target.setnchannels(2)
@@ -1305,9 +1369,9 @@ def hybrid_scene_files(scene_files: list[Path], storyboard: dict[str, Any], root
     return outputs
 
 
-def compose(output: Path) -> Path:
-    storyboard = json.loads(STORYBOARD.read_text(encoding="utf-8"))
-    inputs = build_inputs(storyboard)
+def compose(output: Path, locale: str = "zh-CN") -> Path:
+    storyboard_path, storyboard = load_storyboard(locale)
+    inputs = build_inputs(storyboard, storyboard_path)
     digest = canonical_sha256(inputs)
     root = output / "builds" / digest[:12]
     voice_root = root / "voice"
@@ -1322,7 +1386,7 @@ def compose(output: Path) -> Path:
         raw_file = raw_root / f"{index:02d}-{scene['id']}.mp3"
         if not voice_file.is_file():
             print(f"voice {scene['id']}", flush=True)
-            report = voice_scene(scene, voice_file, raw_file)
+            report = voice_scene(scene, voice_file, raw_file, locale)
         else:
             raw_duration = media_duration(raw_file)
             target = float(scene["duration"])
@@ -1343,11 +1407,11 @@ def compose(output: Path) -> Path:
     run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(voice_list), "-c", "copy", str(voice)])
     total = sum(float(scene["duration"]) for scene in storyboard["scenes"])
     sound = root / "sound.wav"
-    build_sound(total, sound)
+    build_sound(total, sound, storyboard)
     ass = root / "subtitles.ass"
     subtitles(storyboard, voice_report, ass)
     ass_filter = ass.as_posix().replace(":", r"\:")
-    final = output / f"opencorvus-desktop-v5r-{digest[:12]}.mp4"
+    final = output / f"opencorvus-desktop-v5r-{locale}-{digest[:12]}.mp4"
     run([
         "ffmpeg", "-y", "-v", "error", "-i", str(video), "-i", str(voice), "-i", str(sound),
         "-filter_complex",
@@ -1366,8 +1430,8 @@ def compose(output: Path) -> Path:
     return final
 
 
-def inspect(video: Path, output: Path) -> dict[str, Any]:
-    storyboard = json.loads(STORYBOARD.read_text(encoding="utf-8"))
+def inspect(video: Path, output: Path, locale: str = "zh-CN") -> dict[str, Any]:
+    _, storyboard = load_storyboard(locale)
     probe = json.loads(run(["ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json", str(video)], capture=True).stdout)
     vs = next(stream for stream in probe["streams"] if stream["codec_type"] == "video")
     audio = next(stream for stream in probe["streams"] if stream["codec_type"] == "audio")
@@ -1409,7 +1473,7 @@ def inspect(video: Path, output: Path) -> dict[str, Any]:
     diffs = np.abs(frames[1:].astype(np.int16) - frames[:-1].astype(np.int16)).mean(axis=(1, 2, 3))
     static_ratio = float((diffs < .1).sum() / max(1, len(diffs)))
     result = {
-        "video": str(video), "sha256": sha256_file(video), "duration": duration, "expected_duration": cursor,
+        "video": str(video), "sha256": sha256_file(video), "locale": locale, "duration": duration, "expected_duration": cursor,
         "width": int(vs["width"]), "height": int(vs["height"]), "video_codec": vs["codec_name"],
         "audio_codec": audio["codec_name"], "sample_rate": int(audio["sample_rate"]), "channels": int(audio["channels"]),
         "contact_sheet": str(contact), "static_one_second_ratio": static_ratio, "motion_median": float(np.median(diffs)), "scenes": checks,
@@ -1426,16 +1490,17 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--video", type=Path)
     parser.add_argument("--reason", default="Five-frame manual review passed for all current scenes")
+    parser.add_argument("--locale", choices=sorted(STORYBOARDS), default="zh-CN")
     args = parser.parse_args()
     if args.command == "gates":
-        render_gates(args.output.resolve())
+        render_gates(args.output.resolve(), args.locale)
     elif args.command == "accept-gates":
-        accept_gates(args.output.resolve(), args.reason)
+        accept_gates(args.output.resolve(), args.reason, args.locale)
     elif args.command == "compose":
-        compose(args.output.resolve())
+        compose(args.output.resolve(), args.locale)
     else:
-        video = args.video.resolve() if args.video else max(args.output.glob("opencorvus-desktop-v5r-*.mp4"), key=lambda path: path.stat().st_mtime)
-        inspect(video, args.output.resolve())
+        video = args.video.resolve() if args.video else max(args.output.glob(f"opencorvus-desktop-v5r-{args.locale}-*.mp4"), key=lambda path: path.stat().st_mtime)
+        inspect(video, args.output.resolve(), args.locale)
     return 0
 
 

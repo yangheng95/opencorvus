@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-bilingual-v5r-website-video.md](2026-08-25-bilingual-v5r-website-video.md) localizes the reviewed 4:11 V5R film into complete `zh-CN` and `en-US` masters, replaces the silent landing demo, and binds the site locale to the matching narrated media without a browser-language side path.
+
 - [2026-08-25-cartoon-task-metaphor-video-v5c.md](2026-08-25-cartoon-task-metaphor-video-v5c.md) records the user-supplied cartoon expert-squad material, H3 take gate and reusable visual grammar; it is material-trial evidence only, and its accepted clips may supplement R01/R02/R07 without replacing V5R.
 
 - [2026-08-25-desktop-video-v5r.md](2026-08-25-desktop-video-v5r.md) returns to the V5 desktop story and records the full regeneration contract for current runtime semantics, readable typography, continuous causal motion, subtitles, event sound and concise evidence.

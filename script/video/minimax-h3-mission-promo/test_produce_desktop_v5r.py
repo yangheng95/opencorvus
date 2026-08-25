@@ -22,7 +22,24 @@ class DesktopV5RTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.storyboard = json.loads(V5R.STORYBOARD.read_text(encoding="utf-8"))
+        cls.english_storyboard = json.loads(V5R.EN_STORYBOARD.read_text(encoding="utf-8"))
         cls.assets = V5R.evidence()
+
+    def test_locale_storyboards_share_one_timeline_and_renderer_contract(self) -> None:
+        chinese = self.storyboard
+        english = self.english_storyboard
+        self.assertEqual(chinese["locale"], "zh-CN")
+        self.assertEqual(english["locale"], "en-US")
+        self.assertEqual(
+            [(scene["id"], scene["mode"], scene["duration"]) for scene in chinese["scenes"]],
+            [(scene["id"], scene["mode"], scene["duration"]) for scene in english["scenes"]],
+        )
+        self.assertEqual(sum(float(scene["duration"]) for scene in english["scenes"]), 251.0)
+        self.assertTrue(all(scene["narration"].strip() for scene in english["scenes"]))
+        self.assertNotEqual(
+            V5R.build_inputs(chinese)["storyboard_sha256"],
+            V5R.build_inputs(english)["storyboard_sha256"],
+        )
 
     def test_storyboard_and_renderers_cover_the_frozen_twelve_scene_story(self) -> None:
         scenes = self.storyboard["scenes"]
@@ -63,6 +80,22 @@ class DesktopV5RTest(unittest.TestCase):
             dialogue = next(line for line in destination.read_text(encoding="utf-8-sig").splitlines() if line.startswith("Dialogue:"))
             self.assertIn(",0:00:05.", dialogue)
             self.assertIn("Mission", dialogue)
+
+    def test_english_subtitle_sentence_boundaries_preserve_decimal_metrics(self) -> None:
+        text = "Validation and test Macro F1 were 83.43 and 83.61. Raw was 8.07; Mission reached 34.00, up 25.93 points."
+        sentences = V5R.split_sentences(text)
+        self.assertEqual(len(sentences), 3)
+        self.assertIn("83.43", sentences[0])
+        self.assertIn("83.61", sentences[0])
+        self.assertIn("8.07", sentences[1])
+        self.assertIn("25.93", sentences[2])
+
+    def test_subtitle_wrapping_keeps_ratios_and_punctuation_with_the_previous_line(self) -> None:
+        wrapped = V5R.wrap_subtitle("AutomationBench 原始严格通过率 8.07%；按用户最新更新，已核验 100 / 600。", 28)
+        self.assertIn("8.07%；", wrapped)
+        self.assertIn("100/600", wrapped)
+        for orphan in (r"\N；", r"\N，", r"\N。", r"\N/", r"/\N"):
+            self.assertNotIn(orphan, wrapped)
 
     def test_opening_brand_overlay_contains_the_full_delivery_identity(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
