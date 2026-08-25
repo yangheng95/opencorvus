@@ -8,6 +8,16 @@
 
 - 桌面端渲染进程不再向 `window` 暴露实时设置、应用和看板 store、明文服务器密码，以及目录切换、任务加载/选择、看板加载和设置持久化等业务写入入口；相关生产代码改为直接使用类型化模块导入。渲染进程中的任意脚本或开发者工具表达式因此无法再读取服务器密码或触发这些业务写入。
 
+### Added
+
+- 新增 `GET /lifecycle/{occurrenceID}`：`server.shutdown` 与 `server.restart` 现在同步受理为一次带稳定标识的生命周期 occurrence，响应携带 `occurrenceID`；受理后处理器被清除或失败会把该 occurrence 结算为 `failed` 并附精确错误，重复请求收敛到在途 occurrence，冲突的另一种转换以 409 拒绝并返回在途 occurrence 标识。关机成功即进程退出，无法自证，故没有 `succeeded` 状态。
+
+### Changed
+
+- MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
+- 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
+- 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
+
 ### Removed
 
 - 移除渲染进程遗留的全局诊断 ABI（Application Binary Interface，应用程序二进制接口）：`window.__ocNextChatMetadata` 聊天元数据注入入口、`window.__overlayTest` 与 `window.__ocOverlayTiming` 超时覆盖、`window.__overlayInitSettled` 就绪标记、`window.__ocMarkdownRenderPrewarmPending` 预热计数、无调用方的 `window.openWorkspaceDiff`，以及由 `?acceptance-locale` 查询参数写入、可在正式版本中覆盖界面语言的 `__OPENCORVUS_LOCALE__` 入口。这些入口在当前仓库中已无任何写入方或读取方。渲染进程现在只保留一个显式声明的全局（启动接管握手），并由 `bun run --cwd packages/overlay check:renderer-surface` 作为构建后的正向契约守卫。
