@@ -100,6 +100,15 @@ export async function withProcessLock<T>(
  * turn a concurrent credential write into a lost update or a user-visible
  * error for something the caller can simply queue behind.
  */
+/**
+ * How long a caller queues behind other callers in this process for one fact.
+ *
+ * Long enough that a genuine cross-process wait is never mistaken for a
+ * deadlock, short enough that a re-entrant acquisition surfaces as an error
+ * naming the file instead of hanging the process.
+ */
+export const SHARED_JSON_FACT_QUEUE_TIMEOUT_MS = 10 * 60 * 1000
+
 export const CROSS_PROCESS_LOCK_RETRY = {
   forever: true,
   factor: 1.2,
@@ -132,8 +141,16 @@ export async function withSharedJsonFactLock<T>(input: {
   run: () => Promise<T>
 }): Promise<T> {
   await Filesystem.writeAtomicIfAbsent(input.filepath, input.empty, input.mode)
-  return withKeyedLock(input.locks, input.filepath, () =>
-    withProcessLock(input.filepath, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, input.run),
+  // The in-process queue must outlast a real cross-process wait: with the
+  // keyed lock's own 30-second default, the first caller in this process waits
+  // for the file lock while every other caller of the same file fails with an
+  // error naming the wrong lock. It must still end, though — waiting forever
+  // would turn a re-entrant acquisition into a hang instead of an error.
+  return withKeyedLock(
+    input.locks,
+    input.filepath,
+    () => withProcessLock(input.filepath, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, input.run),
+    SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
   )
 }
 

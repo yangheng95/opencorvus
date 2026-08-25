@@ -657,7 +657,15 @@ export namespace Bus {
       const renewal = setInterval(() => {
         try {
           renewControlLease({ target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: Date.now(), expiresAt: Date.now() + 30_000 })
-        } catch {}
+        } catch (error) {
+          // Either this delivery's own receipt already ended the lease, or
+          // another runtime took it. The receipt fence below surfaces the
+          // second case, but saying so here is what makes it diagnosable.
+          log.warn("durable Bus delivery lease renewal ended", {
+            deliveryID,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
       }, 10_000)
       renewal.unref()
       try {

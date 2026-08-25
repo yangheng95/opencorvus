@@ -2575,7 +2575,7 @@ export namespace MCP {
         McpOAuthCallback.cancelPending(mcpAuthKey(name))
         pendingOAuthFlows.delete(mcpAuthKey(name))
       } else if (authIdentity(previous)) {
-        McpAuth.invalidate(mcpAuthKey(name))
+        await McpAuth.invalidate(mcpAuthKey(name))
       }
       if (!next) {
         s.cleanupPending.add(name)
@@ -2731,7 +2731,7 @@ export namespace MCP {
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
-          McpAuth.revision(authKey),
+          await McpAuth.revision(authKey),
           () => assertCredentialIdentity(key, mcp),
           undefined,
           correlationID,
@@ -3502,8 +3502,8 @@ export namespace MCP {
     const previousFlow = pendingOAuthFlows.get(authKey)
     if (previousFlow) McpOAuthCallback.cancelPending(authKey)
     pendingOAuthFlows.delete(authKey)
-    McpAuth.invalidate(authKey)
-    const authRevision = McpAuth.revision(authKey)
+    await McpAuth.invalidate(authKey)
+    const authRevision = await McpAuth.revision(authKey)
     await assertCredentialIdentity(mcpName, mcpConfig)
     const oauthConfig = typeof mcpConfig.oauth === "object" ? mcpConfig.oauth : undefined
     const oauthProviderConfig = {
@@ -3571,7 +3571,7 @@ export namespace MCP {
       if (error instanceof UnauthorizedError && capturedUrl) {
         try {
           await assertCurrentOAuthOwner("before the OAuth authorization flow was published")
-          if (McpAuth.revision(authKey) !== authRevision) {
+          if ((await McpAuth.revision(authKey)) !== authRevision) {
             throw new Error(`MCP auth lease was revoked: ${authKey}`)
           }
           pendingOAuthFlows.set(authKey, { state: oauthState, revision: authRevision, correlationID })
@@ -3614,7 +3614,7 @@ export namespace MCP {
         if (retainOAuthState) {
           const pending = pendingOAuthFlows.get(authKey)
           if (
-            McpAuth.revision(authKey) !== authRevision ||
+            (await McpAuth.revision(authKey)) !== authRevision ||
             pending?.revision !== authRevision ||
             pending.state !== oauthState
           ) {

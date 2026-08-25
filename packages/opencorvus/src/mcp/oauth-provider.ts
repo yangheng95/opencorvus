@@ -181,7 +181,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
 
   async state(): Promise<string> {
     if (this.ownedOAuthState !== undefined) {
-      if (McpAuth.revision(this.authKey) !== this.authRevision) {
+      if ((await McpAuth.revision(this.authKey)) !== this.authRevision) {
         throw new Error(`MCP auth lease was revoked: ${this.authKey}`)
       }
       return this.ownedOAuthState

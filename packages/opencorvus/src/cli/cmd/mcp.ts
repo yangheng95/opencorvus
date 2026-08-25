@@ -749,7 +749,7 @@ export const McpDebugCommand = cmd({
               {
                 onRedirect: async () => {},
               },
-              McpAuth.revision(authKey),
+              await McpAuth.revision(authKey),
             )
 
             prompts.log.info("Testing OAuth flow (without completing authorization)...")

@@ -96,6 +96,9 @@ describe("remote MCP static credential contract", () => {
         staticCredential: { secret: "initial-secret" },
         serverUrl,
         credentialIdentity,
+        // The durable mutation counter is part of the stored entry: it is what
+        // makes a revoke performed by another backend visible here.
+        revision: 1,
       })
 
       await McpAuth.setStaticCredential(authKey, "rotated-secret", serverUrl, credentialIdentity)
@@ -103,6 +106,7 @@ describe("remote MCP static credential contract", () => {
         staticCredential: { secret: "rotated-secret" },
         serverUrl,
         credentialIdentity,
+        revision: 2,
       })
     } finally {
       await McpAuth.remove(authKey)

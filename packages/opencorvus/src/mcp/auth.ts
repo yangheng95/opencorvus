@@ -34,22 +34,43 @@ export namespace McpAuth {
     oauthState: z.string().optional(),
     serverUrl: z.string().optional(), // Track the URL these credentials are for
     credentialIdentity: z.string().optional(),
+    /**
+     * Monotonic per-key mutation counter, durable in the store itself.
+     *
+     * A holder of a long-running OAuth flow reads this before it starts and
+     * presents it again when it writes. A revoke or a competing flow bumps it,
+     * so the stale write is refused. Keeping the counter in the file rather
+     * than in memory is what makes a revoke performed by another backend on
+     * the same data root visible here.
+     */
+    revision: z.number().int().nonnegative().optional(),
   })
   export type Entry = z.infer<typeof Entry>
 
   const filepath = path.join(Global.Path.data, "mcp-auth.json")
   const Store = z.record(z.string(), Entry)
   const storeLocks = new Map<string, Promise<unknown>>()
-  const revisions = new Map<string, number>()
 
   export type Revision = number
 
-  export function revision(authKey: string): Revision {
-    return revisions.get(authKey) ?? 0
+  /**
+   * The durable mutation counter for one credential.
+   *
+   * A key with no entry reads as revision zero, so a holder that presents any
+   * revision it was given is refused after a revoke — the entry, and with it
+   * the counter, is gone.
+   */
+  export async function revision(authKey: string): Promise<Revision> {
+    const data = await all()
+    return data[authKey]?.revision ?? 0
   }
 
-  function assertRevision(authKey: string, expected?: Revision) {
-    if (expected !== undefined && revision(authKey) !== expected) {
+  function assertRevisionInStore(
+    data: Record<string, Entry>,
+    authKey: string,
+    expected?: Revision,
+  ) {
+    if (expected !== undefined && (data[authKey]?.revision ?? 0) !== expected) {
       throw new Error(`MCP auth lease was revoked: ${authKey}`)
     }
   }
@@ -112,7 +133,9 @@ export namespace McpAuth {
   /**
    * Read, change and replace the MCP credential store under one cross-process
    * lock, for the same reason `Auth` does: a second backend on the same data
-   * root would otherwise overwrite a credential it never read.
+   * root would otherwise overwrite a credential it never read. The revision
+   * compare-and-swap runs inside this lock against the counter stored in the
+   * file, so a revoke performed by another backend is visible to it.
    */
   function mutate<T>(run: () => Promise<T>): Promise<T> {
     return withSharedJsonFactLock({ locks: storeLocks, filepath, empty: "{}", mode: 0o600, run })
@@ -124,10 +147,14 @@ export namespace McpAuth {
     expectedRevision?: Revision,
   ) {
     await mutate(async () => {
-      assertRevision(authKey, expectedRevision)
+      // The comparison, the change and the replacement are one read-modify-write
+      // inside the cross-process lock. Comparing against a counter read before
+      // the lock is what let a revoke performed between the two be missed.
       const data = await all()
-      const next = update(data[authKey] ? structuredClone(data[authKey]) : undefined)
-      if (next) data[authKey] = Entry.parse(next)
+      assertRevisionInStore(data, authKey, expectedRevision)
+      const current = data[authKey]
+      const next = update(current ? structuredClone(current) : undefined)
+      if (next) data[authKey] = Entry.parse({ ...next, revision: (current?.revision ?? 0) + 1 })
       else delete data[authKey]
       await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
     })
@@ -178,12 +205,24 @@ export namespace McpAuth {
       const data = await all()
       for (const authKey of keys) delete data[authKey]
       await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
-      for (const authKey of keys) revisions.set(authKey, revision(authKey) + 1)
     })
   }
 
-  export function invalidate(authKey: string): void {
-    revisions.set(authKey, revision(authKey) + 1)
+  /**
+   * End every outstanding lease on one credential without removing it.
+   *
+   * Bumping the durable counter is the whole effect: any holder that presents
+   * the revision it was given is refused from now on, in this process and in
+   * any other backend reading the same store.
+   */
+  export async function invalidate(authKey: string): Promise<void> {
+    await mutate(async () => {
+      const data = await all()
+      const current = data[authKey]
+      if (!current) return
+      data[authKey] = Entry.parse({ ...current, revision: (current.revision ?? 0) + 1 })
+      await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
+    })
   }
 
   export async function updateTokens(
@@ -285,12 +324,12 @@ export namespace McpAuth {
   }
 
   export async function clearOAuthStateIfOwned(authKey: string, expectedRevision: Revision): Promise<boolean> {
-    if (revision(authKey) !== expectedRevision) return false
+    if ((await revision(authKey)) !== expectedRevision) return false
     try {
       await clearOAuthState(authKey, expectedRevision)
       return true
     } catch (error) {
-      if (revision(authKey) !== expectedRevision) return false
+      if ((await revision(authKey)) !== expectedRevision) return false
       throw error
     }
   }

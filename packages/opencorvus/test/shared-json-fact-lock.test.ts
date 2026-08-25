@@ -35,12 +35,15 @@ await withSharedJsonFactLock({
   empty: "{}",
   mode: 0o600,
   run: async () => {
+    // Announce only once the lock is actually held, so the parent races the
+    // held lock rather than a guess about process startup time.
+    process.stdout.write("acquired\\n")
     const current = JSON.parse(await fs.readFile(target, "utf8"))
     await new Promise((resolve) => setTimeout(resolve, holdMilliseconds))
     await fs.writeFile(target, JSON.stringify({ ...current, [key]: "peer" }, null, 2))
   },
 })
-process.stdout.write("peer-written")
+process.stdout.write("written\\n")
 `
 
 describe("shared JSON fact lock", () => {
@@ -57,9 +60,18 @@ describe("shared JSON fact lock", () => {
       stderr: "pipe",
     })
 
-    // Let the peer take the lock first, so this process must wait for it and
-    // then read the snapshot the peer already committed.
-    await new Promise((resolve) => setTimeout(resolve, 150))
+    // Wait for the peer to say it holds the lock. A fixed sleep would let
+    // this process win the race on a slow machine, and the assertion below
+    // would then pass with the lock removed entirely.
+    const peerOutput = peer.stdout.getReader()
+    const decoder = new TextDecoder()
+    let announced = ""
+    while (!announced.includes("acquired")) {
+      const chunk = await peerOutput.read()
+      if (chunk.done) throw new Error(`peer exited before acquiring: ${announced}`)
+      announced += decoder.decode(chunk.value)
+    }
+    peerOutput.releaseLock()
 
     const locks = new Map<string, Promise<unknown>>()
     await withSharedJsonFactLock({

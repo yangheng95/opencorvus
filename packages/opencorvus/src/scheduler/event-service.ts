@@ -733,10 +733,13 @@ export namespace EventService {
           scheduleRecoveryControlRetry(s, fireID)
         }
       },
-      // A due row has no deadline at all (`pending` carries neither a retry
-      // time nor a lease), and must re-enqueue on the next tick rather than
-      // wait out the contention floor.
-      row.lease <= 0 ? 1 : Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
+      // A row with no deadline of its own was refused by something else —
+      // usually a head-of-queue fire running in another runtime — and this
+      // timer is the only thing that will ask again. Re-asking immediately is
+      // a poll for the whole of that other attempt, so every refused claim
+      // backs off. The head-of-queue handoff inside this runtime does not come
+      // through here; `enqueueNextFireForJob` drives it directly.
+      Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
     )
     s.recoveryTimers.set(fireID, timer)
   }

@@ -1672,7 +1672,13 @@ export namespace Config {
             modify(original, [field], undefined, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
           )
         }
-        await Bun.write(options.path, original)
+        // Deliberately unlocked. `loadFile` runs inside `writeConfigFile`'s
+        // own commit hook, so taking the write lock here would deadlock
+        // against the write that is calling it. Atomic replacement is what
+        // this rewrite can guarantee on its own: the file is never torn, and
+        // the migration is idempotent, so a concurrent writer that loses it
+        // re-applies it on its next load.
+        await Filesystem.writeAtomic(options.path, original)
       }
     }
 
@@ -1680,10 +1686,17 @@ export namespace Config {
 
     const parsed = Info.safeParse(data)
     if (parsed.success) {
-      if (!parsed.data.$schema && isFile && loadOptions?.writeSchema !== false) {
+      // A file that holds nothing but the empty object is either untouched or
+      // freshly provisioned by the write lock. Injecting a `$schema` into it
+      // would turn a read into a write, and would put content into a file the
+      // user never created.
+      const isEmptyObjectFile = original.trim() === "{}"
+      if (!parsed.data.$schema && isFile && !isEmptyObjectFile && loadOptions?.writeSchema !== false) {
         parsed.data.$schema = "https://opencorvus.ai/config.json"
         const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://opencorvus.ai/config.json",')
-        await Bun.write(options.path, updated)
+        // Unlocked for the same reason as the migration rewrite above, and
+        // idempotent: the next load re-injects it if a concurrent writer wins.
+        await Filesystem.writeAtomic(options.path, updated)
       }
       return parsed.data
     }
@@ -1830,14 +1843,18 @@ export namespace Config {
   }
 
   export async function writeMcpConfigEntry(name: string, mcpConfig: Mcp, configPath: string) {
-    const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
-      if (error.code === "ENOENT") return "{}"
-      throw error
+    // A read-modify-write of the same file `writeConfigFile` owns, so it takes
+    // the same lock and replaces the file atomically.
+    await withConfigFileLock(configPath, async () => {
+      const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return "{}"
+        throw error
+      })
+      const edits = modify(text, ["mcp", name], mcpConfig, {
+        formattingOptions: { tabSize: 2, insertSpaces: true },
+      })
+      await Filesystem.writeAtomic(configPath, applyEdits(text, edits))
     })
-    const edits = modify(text, ["mcp", name], mcpConfig, {
-      formattingOptions: { tabSize: 2, insertSpaces: true },
-    })
-    await Filesystem.write(configPath, applyEdits(text, edits))
     return configPath
   }
 
@@ -2067,6 +2084,17 @@ export namespace Config {
   // project file and the global file get independent locks.
   const writeConfigLocks = new Map<string, Promise<unknown>>()
 
+  /** Every writer of a config file takes the same cross-process lock. */
+  function withConfigFileLock<T>(filepath: string, run: () => Promise<T>): Promise<T> {
+    return withSharedJsonFactLock({
+      locks: writeConfigLocks,
+      filepath,
+      // Exactly what `loadFile` synthesizes for a missing file.
+      empty: "{}",
+      run,
+    })
+  }
+
   async function writeConfigFile(
     filepath: string,
     config: unknown | ((existing: Info) => unknown | Promise<unknown>),
@@ -2079,14 +2107,9 @@ export namespace Config {
     // The read has to happen inside the cross-process lock. Two backends over
     // one data root would otherwise read the same "before" snapshot, patch
     // different keys, and let the later atomic replacement discard the
-    // earlier override — the same lost update the in-process queue below
-    // already prevents between two requests to this process.
-    return withSharedJsonFactLock({
-      locks: writeConfigLocks,
-      filepath,
-      // Exactly what the reader below synthesizes for a missing file.
-      empty: "{}",
-      run: async () => {
+    // earlier override — the same lost update the in-process queue already
+    // prevents between two requests to this process.
+    return withConfigFileLock(filepath, async () => {
       const before = await Filesystem.readText(filepath).catch((err: NodeJS.ErrnoException) => {
         if (err.code === "ENOENT") return "{}"
         throw new JsonError({ path: filepath }, { cause: err })
@@ -2116,7 +2139,6 @@ export namespace Config {
       }
       await hooks?.onWritten?.(merged)
       return merged
-      },
     })
   }
 

@@ -172,7 +172,7 @@ Three review rounds each found a lease owner the previous round missed, because 
 
 **Tests**
 
-- `test/event-fire-claim-attempt.test.ts` pins the arithmetic the previous round's regression broke: a claim reports the attempt it just took, and a re-claim after a settled retry counts both. Against the previous revision the first claim reported `attempt: 0`, which is what halved the first retry delay.
+- `test/event-fire-claim-attempt.test.ts` pins the arithmetic: a claim reports the attempt it just took, and a re-claim after a settled retry counts both. It discriminates against `0c4a9a1cd`, where the first claim reported `attempt: 0` and halved the first retry delay — not against `9b8b81bbb`, which already carried the fix.
 - `test/control-lease-settlement.test.ts` gains the branch that is the primitive's reason to exist: discovering the lease has moved on is reported, not raised.
 
 **Still open**
@@ -191,14 +191,58 @@ Three review rounds each found a lease owner the previous round missed, because 
 - Contention policy converged: `CROSS_PROCESS_LOCK_RETRY` is now declared once in `util/process-lock.ts` and consumed by the JSON fact lock, by `expert-squad/install-lock.ts` (which had declared its own copy) and by `provider/models.ts` (which had none, so a contended catalog write failed instead of waiting).
 - Focused positive test: `test/shared-json-fact-lock.test.ts` spawns a second OS process that holds the critical section while this process performs its own read-modify-write, and asserts both updates survive. Without the cross-process lock the peer's write lands last and drops this process's key entirely.
 
-### Second half, not implemented
+### Second half: the revision is a durable fact, not a process-local counter
 
-The audit's boundary also requires that readers and writers consume the same revisioned fact. That is untouched: `mcp/auth.ts` still keys its compare-and-swap on a process-local `revisions` Map, and a peer process's caches are still invalidated only in the writer process. Making the revision durable and the invalidation cross-process is the remaining half of ARC-009 and is not claimed here.
+- `mcp/auth.ts` kept its compare-and-swap counter in a process-local `Map`. A revoke performed by another backend on the same data root was invisible, so a stale holder's write succeeded and resurrected a credential that had been revoked.
+- The counter now lives in the store as `Entry.revision`, is incremented by every mutation, and is compared inside the same cross-process lock as the read-modify-write. `invalidate` bumps it durably instead of bumping memory, and a removed credential reads as revision zero, so every outstanding lease on it is refused.
+- `revision()` is async now, because the answer comes from the file. Its six call sites await it.
+- Focused positive tests in `test/mcp/auth-durable-revision.test.ts`: a peer's direct write to the store is visible to the next reader; a holder presenting a superseded revision is refused while the current one is accepted; a removed credential reads as zero and refuses every outstanding lease.
+
+### Still open in ARC-009
+
+Peer caches are still invalidated only in the writing process — `Config`'s `state.reset()`/`global.reset()` and the `config.changed` Bus event do not cross a process boundary. A second backend keeps serving its cached configuration until something in that process resets it. The durable facts are now correct; their propagation is not.
+
+### Stage 2 fourth independent review disposition
+
+Fourteen findings. One was a regression the third-round repair introduced, three were control-lease owners the new gate could not see, and one was the gate itself giving false confidence.
+
+**Regression introduced by the third-round repair, now fixed**
+
+- `scheduleLeaseRecovery`'s "no deadline, re-enqueue on the next tick" branch was a 1 ms loop in exactly the deployment this campaign targets. A `pending` fire whose job's head-of-queue fire is running in *another* runtime has no deadline of its own, so it re-asked every millisecond — each iteration projecting every row of the fire table — for the whole of that runtime's attempt. Every refused claim now backs off; the in-runtime head-of-queue handoff never came through this path, `enqueueNextFireForJob` drives it.
+
+**Owners the gate could not see, and one that never released**
+
+- The gate's direct-table detection was a hardcoded one-element list, so it could only re-find the file it already knew. It now scans for lease-table inserts as a first-class acquire shape, which surfaced `engine/process-liveness.ts`, `engine/task-completion-closure.ts` and `task-api/index.ts`.
+- `task-api/index.ts`'s cancellation-convergence owner never released: `close()` cleared only its heartbeat, and `acquireCancellationConvergence` then busy-polled every 100 ms for up to 30 seconds waiting out a lease whose owner had already finished. That is ARC-036's defect plus `mission/execution-closure.ts`'s busy-poll pathology, still live after three rounds. It releases now.
+- `engine/process-liveness.ts` deliberately never releases and is declared as such: that lease **is** the liveness fact, so ending it early would assert a process had exited.
+
+**The gate was giving false confidence, and now does not**
+
+It counted presence, not sites, so a second acquire inside an already-declared file passed silently — and three declared files have two acquires each. It also skipped by path prefix, ignored aliased imports of the primitive, and scanned only one package. It now declares an acquire-site count per file, scans the other packages that could take a lease, treats an aliased import as a failure, and is proven to fail on a new acquire in an already-declared file and on an aliased import. It is wired into `.husky/pre-push` — a gate that exists so a fifth round does not rediscover an owner only helps if something runs it.
+
+**Other repairs**
+
+- The `retained` build-cleanup release added in round 3 read the current lease and released it with that row's own id and owner — a fence derived from the thing it was fencing against, so it ended whoever happened to hold the activation rather than the caller's. The build agent now passes its own activation and the release is fenced on it.
+- `withSharedJsonFactLock` nested a `forever` cross-process wait inside the keyed lock's 30-second default, so the first caller in a process waited while every other caller of the same file failed with an error naming the wrong lock. The in-process queue now waits as long as the cross-process lock does.
+- `config/config.ts` had three further writers of the same file that took no lock: the legacy-permission migration rewrite, the `$schema` injection — which provisioning made newly reachable for files that previously did not exist — and `writeMcpConfigEntry`, a full unlocked read-modify-write. All three now take the same lock and replace the file atomically.
+- `bus/index.ts`'s renewal guard swallowed its failure with a bare `catch {}` while the same round added logging to the identical guard in `build/agent.ts`.
+- The `$schema` injection no longer fires for a file holding nothing but the empty object. Provisioning made that write newly reachable, so it turned a config *read* into a locked write on every load of a provisioned file — about two seconds of fixture setup in the focused suites. A file the user never created should not gain content from being read.
+- The cross-process test's discrimination rested on a 150 ms sleep guessing that the peer had acquired. On a slow machine this process would win the race and the assertion would pass with the lock removed. The peer now announces that it holds the lock and the parent waits for that line.
+
+**A deadlock this round introduced and removed**
+
+Locking the two config load-path writes was wrong: `loadFile` runs inside `writeConfigFile`'s own commit hook, so taking the write lock there deadlocked against the write calling it. The real permission matrix caught it as a 120-second inactivity timeout. Both load-path writes are unlocked again and replace the file atomically, with the reason stated at each: they are idempotent rewrites that the next load re-applies if a concurrent writer wins. `writeMcpConfigEntry` keeps the lock — it is only reached from the CLI, never from inside a write. The keyed-lock timeout also stopped being infinite: waiting forever turns a re-entrant acquisition into a hang instead of an error, so it is now a bounded ten minutes, long enough that a genuine cross-process wait is never mistaken for a deadlock.
+
+**Recorded rather than changed**
+
+- The cross-process config lock is held across `MCP.reconcileProjectConfig` and a Bus round-trip, and that reconciliation takes a second cross-process lock (`mcp-auth.json`). The ordering is project-config → mcp-auth and must never invert; no inverting path exists today, because `reconcileProjectConfig` does not write config back. A critical section that outruns `proper-lockfile`'s ten-second stale threshold surfaces as a compromise error from `release()` after the write already committed.
+- Provisioning leaves a file behind if the operation throws. Every reader accepts the empty representation, but a provisioned `.opencorvus/opencorvus.jsonc` becomes a canonical-config conflict for descendant directories in the same worktree, and each config write now creates a transient lock directory inside the user's repository where the old in-memory lock created nothing.
+- The first project-config commit costs about 5.6 seconds on this machine, measured against the pre-change revision as well, so it is not this change's cost. It is why `permission-two-mode.test.ts`'s untimed test now sits near the default five-second per-test limit.
 
 ## Stage log
 
 - Stage 1 (ARC-030): complete, reviewed and repaired against the review. Verification evidence is in the stage-1 section.
-- Stage 2 (ARC-036, ARC-037, plus the shared-mechanism sweep across `channel`, `build_cleanup`, `lifecycle`, `session_control` and `event_fire` lease owners): implemented, independently reviewed, and repaired against that review. `check:permission-modes` reached a full `{"status":"passed"}` for the first time on this branch, alternated with the ARC-038 CLI hang, and after the second review's repairs passed three consecutive runs. ARC-038 remains open as an unrepaired publication gap whose symptom no longer reproduces here. ARC-009's first half is implemented; its revisioned-fact half and the remaining ledger items (ARC-014, ARC-016 through ARC-019, ARC-026, ARC-027) are not started.
+- Stage 2 (ARC-036, ARC-037, plus the shared-mechanism sweep across `channel`, `build_cleanup`, `lifecycle`, `session_control` and `event_fire` lease owners): implemented, independently reviewed, and repaired against that review. `check:permission-modes` reached a full `{"status":"passed"}` for the first time on this branch, alternated with the ARC-038 CLI hang, and after the second review's repairs passed three consecutive runs. ARC-038 remains open as an unrepaired publication gap whose symptom no longer reproduces here. ARC-009 is implemented, including the durable per-credential revision; the cross-process invalidation of peer caches and the remaining ledger items (ARC-014, ARC-016 through ARC-019, ARC-026, ARC-027) are not started.
 
 ### Stage 2 independent review disposition
 

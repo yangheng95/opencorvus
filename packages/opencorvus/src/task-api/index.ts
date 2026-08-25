@@ -225,6 +225,7 @@ import {
   projectTaskRowsInTransaction,
   taskDeletedInTransaction,
 } from "@/engine/store"
+import { releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
 import { Identifier } from "@/id/id"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
@@ -884,6 +885,16 @@ async function acquireCancellationConvergence(taskID: string) {
         },
         close() {
           clearInterval(heartbeat)
+          // This convergence is settled, so its owner is done. Holding the
+          // activation until expiry is what makes the next cancellation wait
+          // out the lease in a hundred-millisecond poll instead of taking it.
+          releaseControlLeaseOnErrorPath({
+            target: "lifecycle",
+            targetID: claimed.requestEventID,
+            leaseID: claimed.activationID,
+            ownerOccurrenceID: claimed.ownerOccurrenceID,
+            now: Date.now(),
+          })
         },
       }
     }

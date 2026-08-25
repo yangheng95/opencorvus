@@ -1020,6 +1020,9 @@ export namespace BuildAgent {
           diffs,
           observedArtifactLocators: provenance.observedArtifactLocators,
           sourceArtifactLocators: provenance.sourceArtifactLocators,
+          // The retained receipt this publication writes is terminal for the
+          // cleanup, so it ends this build's own activation with it.
+          cleanupActivation,
         },
         observationErrors,
       }
