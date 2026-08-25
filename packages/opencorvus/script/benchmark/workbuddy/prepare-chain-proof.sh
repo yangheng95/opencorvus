@@ -6,6 +6,7 @@ active_runner=/var/lib/opencorvus-benchmark/opencorvus-runner
 runtime_source=/var/lib/opencorvus-benchmark/source/opencorvus-workbuddy-runtime-e8cdd1be
 control_root=/var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-code-v20260825-chain-proof
 bench_root=/mnt/d/myhexin-local/opencorvus-bench
+bench_commit="${OPENCORVUS_BENCH_COMMIT:?OPENCORVUS_BENCH_COMMIT must be supplied by the Windows worktree owner}"
 adapter_root="$bench_root/packages/opencorvus/script/benchmark/workbuddy"
 image_context="$control_root/harness-image"
 payload_root="$image_context/payload"
@@ -14,7 +15,10 @@ runtime_commit=e8cdd1be4d280399bbb953562000b430f4e59fe7
 image=workbuddy-bench/harness/opencorvus:chain-proof-r1
 
 test "$(git -C "$workbuddy_root" rev-parse HEAD)" = "$official_commit"
-git -C "$bench_root" merge-base --is-ancestor aece3726 HEAD
+case "$bench_commit" in
+  [0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]) ;;
+  *) echo "invalid OPENCORVUS_BENCH_COMMIT" >&2; exit 1 ;;
+esac
 test "$(git -C "$active_runner" rev-parse HEAD)" = "$runtime_commit"
 
 mkdir -p \
@@ -85,14 +89,14 @@ image_context_windows="$(wslpath -w "$image_context")"
 "$docker_exe" build --pull=false -f "$image_context_windows\\Dockerfile" -t "$image" "$image_context_windows"
 "$docker_exe" image inspect "$image" > "$control_root/image-inspect.json"
 
-python3 - "$control_root/source-receipt.json" "$bench_root" "$workbuddy_root" "$runtime_source" "$image" "$control_root/image-inspect.json" <<'PY'
+python3 - "$control_root/source-receipt.json" "$bench_root" "$bench_commit" "$workbuddy_root" "$runtime_source" "$image" "$control_root/image-inspect.json" <<'PY'
 import hashlib
 import json
 import subprocess
 import sys
 from pathlib import Path
 
-output, bench, workbuddy, runtime, image, image_inspect_path = sys.argv[1:]
+output, bench, bench_commit, workbuddy, runtime, image, image_inspect_path = sys.argv[1:]
 def git(path, *args):
     return subprocess.check_output(['git', '-C', path, *args], text=True).strip()
 adapter_root = Path(bench) / 'packages/opencorvus/script/benchmark/workbuddy'
@@ -112,7 +116,7 @@ image_inspect = json.loads(Path(image_inspect_path).read_text())[0]
 bundle = Path(runtime) / 'packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz'
 receipt = {
     'schema_version': 1,
-    'bench_commit': git(bench, 'rev-parse', 'HEAD'),
+    'bench_commit': bench_commit,
     'workbuddy_upstream_commit': git(workbuddy, 'rev-parse', 'HEAD'),
     'workbuddy_overlay_diff_sha256': hashlib.sha256(
         subprocess.check_output(['git', '-C', workbuddy, 'diff', '--binary'])
