@@ -15,73 +15,73 @@
       "id": "R01-project",
       "duration": 18,
       "mode": "project-input",
-      "narration": "你交给 Agent 的，往往不是一句问题，而是一个项目：模型、数据、CUDA 实验、网页、论文、测试，最后还要经你确认再发布。"
+      "narration": "你交给智能体的，往往不是一句能马上回答的问题，而是一个要连续推进几小时、甚至几天的项目：先找模型和数据，只用 CUDA 做实验，再把结果做成网页、图表和论文，跑完测试，最后还得等你确认才能发布。"
     },
     {
       "id": "R02-failure",
       "duration": 24,
       "mode": "context-failure",
-      "narration": "任务一长，工具结果不断写回有限的 context。第三次 compaction 后，CUDA、测试和发布确认被压成模糊摘要。计划跳到写报告，device 变成 CPU，测试没跑，Agent 却已经说 Done。"
+      "narration": "问题从任务变长开始。搜索、代码和工具结果不断写回有限的上下文。几轮压缩后，最早的硬约束只剩模糊摘要：CUDA 被忘掉，测试和发布确认从计划里消失。训练设备变成 CPU，智能体最后仍然宣布完成。局部步骤做出来了，但判断完成所需的契约已经丢失。"
     },
     {
       "id": "R03-fragmentation",
       "duration": 16,
       "mode": "fragmentation",
-      "narration": "多开几个 Agent 也不会自动协作。两个会话改同一个文件，第三个等待不存在的 checkpoint。状态被切碎，最后还是你复制上下文、追问和派活。"
+      "narration": "多开几个智能体，也不会自动变成团队。两个会话同时改一个文件，第三个等待从未落盘的检查点。重复工作和无人负责的依赖越积越多，最后还是你复制上下文、核对文件、重新派活。"
     },
     {
       "id": "R04-mission-record",
       "duration": 22,
       "mode": "mission-record",
-      "narration": "Mission 先把目标、硬约束、验收标准和 Task 依赖写进对话之外的持久记录。后面的计划、执行和复核，都读取同一份契约。"
+      "narration": "Mission 任务系统不会立刻派出智能体。它先把目标、硬约束、验收标准和任务依赖，写进对话之外的持久记录。此后无论换多少会话，计划、执行和复核都读取同一份契约。CUDA、测试和发布确认不再依赖你反复提醒，而是成为可查询、可审计的项目事实。"
     },
     {
       "id": "R05-scheduler",
       "duration": 25,
       "mode": "scheduler",
-      "narration": "上游未交付，下游保持 waiting。依赖满足后，协调者重新读取持久事实，模型判断下一步，再发出真实的 dispatch agent 调用。收到回执后，这一次 occurrence 才进入 running。"
+      "narration": "调度也不是看到队列就自动启动。上游没有提交可追溯产物，下游就保持等待；依赖满足后，协调者重新读取持久事实，由模型判断下一项可运行任务，再发出真实的智能体调度调用。只有收到回执并取得执行租约，本次执行轮次才进入运行状态。队列只是提示，真正的状态来自可核对的事实。"
     },
     {
       "id": "R06-recovery",
       "duration": 21,
       "mode": "recovery",
-      "narration": "如果服务中断，旧的 physical attempt 会在 lease 到期后被明确终结。新的 successor activation 读取持久事实和既有产物，继续同一个 Task，而不是假装旧进程从原地复活。"
+      "narration": "服务中断时，OpenCorvus 不会假装旧智能体还活着。旧的物理执行尝试在租约到期后明确终结；新的后继激活重新读取持久事实和既有产物，继续同一个任务。这样不会伪装旧进程复活，也不会重复创建同名任务。"
     },
     {
       "id": "R07-artifact",
       "duration": 19,
       "mode": "artifact",
-      "narration": "专家团交接的不是一句完成了。Artifact 记录 type、source、locator 和 digest；适用时再带真实 path。下游先 read，再明确 select 自己消费的来源。"
+      "narration": "专家团交接的不是一句完成了，而是下一步能读取的可追溯产物。它记录类型、来源、定位引用和内容摘要，必要时带真实路径。下游先读取，再选择真正消费的来源。论文、网页和测试用的哪份结果，都能回到同一证据。"
     },
     {
       "id": "R08-review",
       "duration": 19,
       "mode": "review",
-      "narration": "实现者不能自己宣布过关。独立 Reviewer 按验收标准复现问题：缺陷成立就 rejected，退回修复和复验；证据满足才 accepted，无法继续则 blocked with evidence。"
+      "narration": "实现者不能自己宣布过关。独立复核者按原始标准复现问题；缺陷成立，就连同证据和定位引用退回。修复后再验，满足才通过；仍被硬件、凭据或权限阻塞，就保留证据并停止。Mission 不允许一句完成掩盖未完成。"
     },
     {
       "id": "R09-evolution",
       "duration": 23,
       "mode": "evolution",
-      "narration": "专家团的改进也不能静默发生。你的反馈先形成 candidate revision，由你决定是否安装；度量路径则冻结版本、用例、评分器和预算，同条件比较。回归候选直接淘汰，安装与恢复都有 receipt。"
+      "narration": "专家团可以进化，但不能静默改写。你的反馈先形成候选版本，展示修改差异和回滚点，再由你决定是否安装；度量路径则冻结版本、用例、评分器和预算，在同一条件下比较。退步的候选直接淘汰，安装和恢复留下回执。自进化因此可审查、可拒绝、可回退。"
     },
     {
       "id": "R10-open-ecosystem",
       "duration": 14,
       "mode": "open-ecosystem",
-      "narration": "OpenCorvus 采用 MIT License，可以自托管、审计和 fork。编码 Agent、办公 Agent 和 runtime harness 都能接入；Mission 负责更上层的长程推进和验收。"
+      "narration": "OpenCorvus 采用 MIT License，可以自托管、审计和派生修改。编码智能体、办公智能体和运行时框架都能接入；Mission 负责更上层的长程推进和验收。"
     },
     {
       "id": "R11-proof",
-      "duration": 21,
+      "duration": 34,
       "mode": "case-proof",
-      "narration": "一条真实 DeBERTa Mission 用约十二小时四十五分推进六个重型 Task，调度三支内置专家团和四十六个 Agent 会话。在一张 RTX 5090 上完成三组 CUDA 实验；验证 Macro F1 为 83.43，测试为 83.61。单 seed、1800 条训练样本，只代表本次 fixed run。"
+      "narration": "真实 DeBERTa Mission 运行约十二小时四十五分，推进六个重型任务，调度三支内置专家团和四十六个智能体会话；RTX 5090 三组 CUDA 实验的验证和测试 Macro F1 为 83.43 与 83.61，仅代表单随机种子、1800 条样本的固定条件。AutomationBench 使用 Luna：原始严格通过率 8.07%；按用户最新更新，加入 Mission base 后已核验 100 / 600，严格通过率 34%，提高 25.93 个百分点。官方数字来自不同测试环境，只作参照，不做跨样本排名。"
     },
     {
       "id": "R12-personal-cta",
       "duration": 16,
       "mode": "personal-cta",
-      "narration": "论文、课程项目、个人开源软件、副业应用、作品集、独立研究。别再替 Agent 维持每一次交接。打开 OpenCorvus，创建你的第一个 Mission。"
+      "narration": "毕业论文、课程项目、开源软件、副业应用、作品集、独立研究，都要经过调研、实现、测试与发布。定义目标、约束和验收，不必再替智能体维持交接。打开 OpenCorvus，创建首个 Mission。"
     }
   ]
 }

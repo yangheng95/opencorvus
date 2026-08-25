@@ -24,6 +24,15 @@ V5C_MANIFEST = HERE / "v5c-cartoon-task-metaphor-trials.json"
 V5C_GATES = HERE / "v5c-cartoon-take-gates.json"
 ICON_PATH = REPO / "packages" / "web" / "public" / "web-app-manifest-512x512.png"
 WORDMARK_PATH = HERE / "assets" / "live-type-runtime-v9-post" / "official-logo-light-4x.png"
+BENCHMARK_RESULT_PATH = Path(r"D:\myhexin-local\opencorvus-benchmark-results\luna-mission-base-v20260822-r3\index.html")
+AUTOMATIONBENCH_CLAIMS = {
+    "model": "openai/gpt-5.6-luna",
+    "raw_strict_percent": 8.07,
+    "mission_verified_cases": 100,
+    "public_target_cases": 600,
+    "mission_strict_percent": 34.00,
+    "claim_source": "user-provided latest update",
+}
 
 BASE_PATH = HERE / "produce-desktop-v5.py"
 SPEC = importlib.util.spec_from_file_location("desktop_v5_base", BASE_PATH)
@@ -32,6 +41,7 @@ BASE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(BASE)
 
 W, H, FPS = BASE.W, BASE.H, BASE.FPS
+NARRATION_RATE = "+25%"
 INK = (28, 32, 40)
 MUTED = (94, 98, 106)
 PAPER = (249, 248, 248)
@@ -617,11 +627,77 @@ def fit(source: Image.Image, size: tuple[int, int]) -> Image.Image:
     return BASE.fit_image(source, size)
 
 
+def render_automationbench(draw: ImageDraw.ImageDraw, t: float) -> None:
+    raw_strict = float(AUTOMATIONBENCH_CLAIMS["raw_strict_percent"])
+    mission_strict = float(AUTOMATIONBENCH_CLAIMS["mission_strict_percent"])
+    verified_cases = int(AUTOMATIONBENCH_CLAIMS["mission_verified_cases"])
+    target_cases = int(AUTOMATIONBENCH_CLAIMS["public_target_cases"])
+    draw.text((112, 92), "AUTOMATIONBENCH · 同模型对照", font=font(24, bold=True), fill=BLUE)
+    draw.text((112, 128), f"OpenCorvus Mission base · {AUTOMATIONBENCH_CLAIMS['model']}", font=font(18, mono=True), fill=MUTED)
+    draw.text((112, 156), "用户提供最新更新 · 本地旧仪表盘仅作历史快照", font=font(18), fill=ORANGE)
+
+    coverage = phase(t, 0.2, 1.7)
+    draw.text((112, 188), "公开案例核验进度", font=font(19, bold=True), fill=INK)
+    draw.text((1004, 184), f"{verified_cases} / {target_cases}", font=font(24, mono=True, bold=True), fill=COBALT)
+    cells = 60
+    x0, y0, gap, cell_w = 112, 226, 3, 15
+    lit_units = cells * verified_cases / target_cases * coverage
+    for index in range(cells):
+        x = x0 + index * (cell_w + gap)
+        amount = max(0.0, min(1.0, lit_units - index))
+        color = COBALT if amount else (205, 211, 222)
+        draw.rounded_rectangle((x, y0, x + cell_w, y0 + 16), radius=4, fill=(*color, round(80 + 150 * amount)))
+        if 0 < amount < 1:
+            draw.rectangle((x, y0, x + round(cell_w * amount), y0 + 16), fill=(*COBALT, 230))
+
+    gain = phase(t, 1.2, 1.8)
+    draw.rounded_rectangle((112, 266, 548, 490), radius=20, fill=(*PALE_BLUE, 145), outline=(*COBALT, 105), width=2)
+    draw.text((142, 292), "同一个 Luna 模型", font=font(20, bold=True), fill=INK)
+    draw.text((142, 342), "原始对照", font=font(18), fill=MUTED)
+    draw.text((142, 376), f"{raw_strict:.2f}%", font=font(40, mono=True, bold=True), fill=MUTED)
+    arrow_start, arrow_end = 318, 420
+    arrow_x = arrow_start + (arrow_end - arrow_start) * gain
+    draw.line((302, 430, arrow_x, 430), fill=(*ORANGE, 220), width=6)
+    draw.polygon([(arrow_x, 420), (arrow_x + 18, 430), (arrow_x, 440)], fill=(*ORANGE, 235))
+    draw.text((338, 342), "Mission base", font=font(18, bold=True), fill=BLUE)
+    draw.text((338, 376), f"{raw_strict + (mission_strict - raw_strict) * gain:.2f}%", font=font(40, mono=True, bold=True), fill=COBALT)
+    draw.text((142, 454), f"用户更新 · +{mission_strict - raw_strict:.2f} 个百分点 · n={verified_cases}", font=font(18), fill=ORANGE)
+
+    metrics = phase(t, 2.8, 1.2)
+    draw.rounded_rectangle((584, 266, 1168, 490), radius=20, fill=(252, 252, 252, 246), outline=(*GREEN, 105), width=2)
+    strict_value = mission_strict * metrics
+    passed_value = round(verified_cases * mission_strict / 100) * metrics
+    draw.text((620, 294), "严格通过率", font=font(19, bold=True), fill=INK)
+    draw.text((620, 334), f"{strict_value:.2f}%", font=font(38, mono=True, bold=True), fill=COBALT)
+    draw.text((888, 294), "严格通过案例", font=font(19, bold=True), fill=INK)
+    draw.text((888, 334), f"{passed_value:.0f} / {verified_cases}", font=font(38, mono=True, bold=True), fill=GREEN)
+    draw.text((620, 416), "全部最终状态断言通过", font=font(18), fill=MUTED)
+    draw.text((888, 416), "最新部分得分未并入", font=font(18), fill=MUTED)
+
+    reference = phase(t, 6.4, 2.2)
+    axis_x0, axis_x1, axis_y = 112, 1168, 548
+    draw.text((112, 510), "官方保留集参照标尺", font=font(18, bold=True), fill=MUTED)
+    draw.line((axis_x0, axis_y, axis_x1, axis_y), fill=(128, 139, 160, round(130 * reference)), width=3)
+    official = [("Sol", 19.63), ("Terra", 21.00), ("Claude", 26.94), ("Gemini", 30.44)]
+    for index, (label, value) in enumerate(official):
+        x = axis_x0 + (axis_x1 - axis_x0) * value / 35
+        reveal = phase(t, 6.6 + index * 0.35, 0.55)
+        draw.line((x, axis_y - 13 * reveal, x, axis_y + 13 * reveal), fill=(110, 122, 145, round(210 * reveal)), width=3)
+        draw.ellipse((x - 6, axis_y - 6, x + 6, axis_y + 6), fill=(125, 138, 165, round(220 * reveal)))
+        label_y = axis_y + (16 if index % 2 == 0 else 38)
+        draw.text((x - 42, label_y), f"{label} {value:.2f}", font=font(16, mono=True), fill=(92, 101, 120, round(235 * reveal)))
+
+    boundary = phase(t, 8.8, 1.0)
+    draw.rounded_rectangle((112, 610, 1168, 654), radius=12, fill=(*ORANGE, round(24 + 20 * boundary)), outline=(*ORANGE, round(130 * boundary)), width=2)
+    draw.text((248, 619), "不同样本上下文 · 仅作参照 · 不做跨样本排名", font=font(20, bold=True), fill=(*ORANGE, round(255 * boundary)))
+
+
 def render_proof(t: float, duration: float, assets: dict[str, Image.Image]) -> Image.Image:
     image = desktop("12:20")
     draw = ImageDraw.Draw(image, "RGBA")
-    evidence_mark(draw)
-    phase_index = min(2, int(t / 7))
+    phase_index = min(3, int(t / 7))
+    if phase_index < 3:
+        evidence_mark(draw)
     box = (80, 58, 1200, 652)
     rounded_panel(draw, box, accent=GREEN)
     if phase_index == 0:
@@ -641,14 +717,18 @@ def render_proof(t: float, duration: float, assets: dict[str, Image.Image]) -> I
         draw.text((780, 442), "83.61%", font=font(38, mono=True, bold=True), fill=GREEN)
         draw.text((780, 526), "single seed 42 · 1,800 examples", font=font(18, mono=True), fill=ORANGE)
         draw.text((780, 560), "fixed-run evidence only", font=font(18, mono=True, bold=True), fill=ORANGE)
-    else:
+    elif phase_index == 2:
         image.paste(fit(assets["web"], (570, 430)), (100, 112))
         image.paste(fit(assets["paper1"], (350, 430)), (700, 112))
         draw.rounded_rectangle((100, 548, 1168, 620), radius=12, fill=(249, 248, 248, 244), outline=(*GREEN, 140), width=2)
         draw.text((128, 558), "monitor + inference · figures · 5-page paper · tests · public repository", font=font(20, mono=True), fill=INK)
         draw.text((128, 588), "github.com/yangheng95/deberta-v3-absa-public-evidence", font=font(18, mono=True, bold=True), fill=BLUE)
+    else:
+        render_automationbench(draw, t - 21)
     motion_geometry(image, t, duration, "evidence")
-    return camera(image, t % 7, 7, (650, 350), 0.014)
+    local_duration = 13 if phase_index == 3 else 7
+    local_t = t - 21 if phase_index == 3 else t % 7
+    return camera(image, local_t, local_duration, (650, 350), 0.014)
 
 
 def render_personal_cta(t: float, duration: float, _: dict[str, Image.Image]) -> Image.Image:
@@ -764,6 +844,8 @@ def build_inputs(storyboard: dict[str, Any]) -> dict[str, Any]:
         if path.exists():
             sources[name] = {"path": str(path), "sha256": sha256_file(path)}
     cartoon = accepted_cartoon_sources()
+    if not BENCHMARK_RESULT_PATH.is_file():
+        raise FileNotFoundError(f"Missing AutomationBench evidence: {BENCHMARK_RESULT_PATH}")
     return {
         "storyboard_sha256": sha256_file(STORYBOARD),
         "renderer_sha256": sha256_file(Path(__file__).resolve()),
@@ -773,6 +855,8 @@ def build_inputs(storyboard: dict[str, Any]) -> dict[str, Any]:
         "cartoon_manifest_sha256": sha256_file(V5C_MANIFEST),
         "cartoon_gates_sha256": sha256_file(V5C_GATES),
         "cartoon_sources": {shot: {"path": str(path), "sha256": sha256_file(path)} for shot, path in cartoon.items()},
+        "automationbench_evidence": {"path": str(BENCHMARK_RESULT_PATH), "sha256": sha256_file(BENCHMARK_RESULT_PATH)},
+        "automationbench_claims": AUTOMATIONBENCH_CLAIMS,
         "duration": sum(float(scene["duration"]) for scene in storyboard["scenes"]),
         "evidence": sources,
     }
@@ -924,7 +1008,18 @@ def accepted_scene_files(output: Path, storyboard: dict[str, Any]) -> list[Path]
 async def synthesize(text: str, destination: Path) -> None:
     import edge_tts
 
-    await edge_tts.Communicate(text=text, voice="zh-CN-YunxiNeural", rate="+8%").save(str(destination))
+    for attempt in range(3):
+        try:
+            await asyncio.wait_for(
+                edge_tts.Communicate(text=text, voice="zh-CN-YunxiNeural", rate=NARRATION_RATE).save(str(destination)),
+                timeout=30,
+            )
+            return
+        except (edge_tts.exceptions.NoAudioReceived, asyncio.TimeoutError):
+            destination.unlink(missing_ok=True)
+            if attempt == 2:
+                raise
+            await asyncio.sleep(0.6 * (attempt + 1))
 
 
 def media_duration(path: Path) -> float:
@@ -935,13 +1030,10 @@ def voice_scene(scene: dict[str, Any], destination: Path, raw: Path) -> dict[str
     asyncio.run(synthesize(scene["narration"], raw))
     target = float(scene["duration"])
     raw_duration = media_duration(raw)
-    tempo = max(1.0, raw_duration / max(0.5, target - 0.7))
-    if tempo > 1.14:
-        raise RuntimeError(f"Narration too dense for {scene['id']}: {tempo:.3f}x")
-    filters = []
-    if tempo > 1:
-        filters.append(f"atempo={tempo:.6f}")
-    filters += [f"apad=pad_dur={target}", f"atrim=duration={target}"]
+    if raw_duration > target - 0.45:
+        raise RuntimeError(f"Narration exceeds the scene after fixed 1.25x delivery for {scene['id']}: {raw_duration:.3f}s > {target - 0.45:.3f}s")
+    tempo = 1.0
+    filters = [f"apad=pad_dur={target}", f"atrim=duration={target}"]
     run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-af", ",".join(filters), "-ar", "48000", "-ac", "2", str(destination)])
     return {"raw_duration": raw_duration, "tempo": tempo, "spoken_duration": raw_duration / tempo}
 
@@ -1010,20 +1102,20 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 
 def sound_cue_schedule() -> list[tuple[str, float, str]]:
-    """An explicit, inspectable cue ledger; every scene has its own audible action language."""
+    """Sparse action-bound foley; narration, not synthetic beeps, carries the film."""
     relative = {
-        "R01-project": [(0.7, "typing"), (2.1, "typing"), (3.6, "paper"), (5.65, "transition"), (7.0, "typing"), (9.2, "typing"), (11.4, "click"), (13.7, "typing"), (15.6, "confirm"), (17.5, "scene")],
-        "R02-failure": [(0.4, "data"), (2.5, "data"), (4.7, "data"), (6.8, "warning"), (9.0, "compaction"), (11.15, "transition"), (12.8, "constraint-drop"), (14.7, "warning"), (16.3, "transition"), (18.2, "skip"), (20.5, "false-done"), (23.3, "scene")],
-        "R03-fragmentation": [(0.4, "session"), (2.2, "typing"), (4.0, "duplicate"), (5.9, "typing"), (7.7, "conflict"), (9.5, "orphan"), (11.3, "paper"), (13.1, "click"), (15.4, "scene")],
-        "R04-mission-record": [(0.4, "write"), (2.9, "stamp"), (5.4, "write"), (7.9, "stamp"), (10.4, "write"), (12.9, "stamp"), (15.4, "dependency"), (18.0, "commit"), (19.7, "write"), (21.3, "scene")],
-        "R05-scheduler": [(0.4, "queue"), (2.9, "waiting"), (5.4, "read"), (7.8, "judge"), (10.2, "dispatch"), (12.7, "call"), (15.1, "receipt"), (17.6, "ready"), (20.0, "dispatch"), (22.5, "running"), (24.5, "scene")],
-        "R06-recovery": [(0.4, "process"), (2.8, "data"), (5.0, "dropout"), (7.1, "lease"), (9.3, "clock"), (11.5, "terminal"), (13.7, "successor"), (15.8, "recovery"), (18.0, "reread"), (20.4, "scene")],
-        "R07-artifact": [(0.4, "artifact"), (2.5, "typing"), (4.6, "checksum"), (6.7, "read"), (8.8, "select"), (11.15, "transition"), (12.8, "handoff"), (14.8, "transition"), (16.3, "receipt"), (18.4, "scene")],
-        "R08-review": [(0.4, "review"), (2.7, "reproduce"), (5.1, "reject"), (7.5, "patch"), (9.9, "test"), (12.3, "retest"), (14.7, "accept"), (17.1, "evidence"), (18.5, "scene")],
-        "R09-evolution": [(0.4, "candidate"), (2.8, "feedback"), (5.2, "proposal"), (7.6, "compare"), (10.0, "metric"), (12.4, "metric"), (14.8, "regression"), (17.2, "reject"), (19.6, "receipt"), (22.3, "scene")],
-        "R10-open-ecosystem": [(0.4, "layer"), (2.1, "layer"), (3.8, "layer"), (5.5, "open"), (7.2, "selfhost"), (8.9, "audit"), (10.6, "fork"), (12.3, "mission"), (13.5, "scene")],
-        "R11-proof": [(0.4, "server"), (2.7, "task"), (5.0, "agent"), (7.3, "cuda"), (9.6, "gpu"), (11.9, "experiment"), (14.2, "metric"), (16.5, "result"), (18.8, "boundary"), (20.5, "scene")],
-        "R12-personal-cta": [(0.4, "option"), (2.2, "option"), (4.0, "option"), (5.8, "option"), (7.6, "option"), (9.4, "option"), (11.2, "new-mission"), (13.2, "confirm"), (15.3, "resolve")],
+        "R01-project": [(0.7, "typing"), (3.6, "paper"), (5.65, "transition"), (7.0, "typing"), (11.4, "click"), (15.6, "confirm")],
+        "R02-failure": [(6.8, "warning"), (9.0, "compaction"), (11.15, "transition"), (12.8, "constraint-drop"), (16.3, "transition"), (20.5, "false-done")],
+        "R03-fragmentation": [(0.4, "session"), (4.0, "duplicate"), (7.7, "conflict"), (9.5, "orphan"), (11.3, "paper")],
+        "R04-mission-record": [(0.4, "write"), (2.9, "stamp"), (10.4, "write"), (18.0, "commit")],
+        "R05-scheduler": [(0.4, "queue"), (10.2, "dispatch"), (12.7, "call"), (15.1, "receipt"), (22.5, "running")],
+        "R06-recovery": [(0.4, "process"), (5.0, "dropout"), (7.1, "lease"), (11.5, "terminal"), (13.7, "successor"), (15.8, "recovery")],
+        "R07-artifact": [(0.4, "artifact"), (4.6, "checksum"), (6.7, "read"), (11.15, "transition"), (12.8, "handoff"), (14.8, "transition"), (16.3, "receipt")],
+        "R08-review": [(0.4, "review"), (5.1, "reject"), (7.5, "patch"), (9.9, "test"), (14.7, "accept")],
+        "R09-evolution": [(0.4, "candidate"), (2.8, "feedback"), (7.6, "compare"), (14.8, "regression"), (17.2, "reject"), (19.6, "receipt")],
+        "R10-open-ecosystem": [(0.4, "layer"), (5.5, "open"), (7.2, "selfhost"), (8.9, "audit"), (10.6, "fork")],
+        "R11-proof": [(0.4, "server"), (7.3, "cuda"), (9.6, "gpu"), (14.2, "metric"), (16.5, "result"), (21.0, "paper"), (27.0, "click")],
+        "R12-personal-cta": [(0.4, "option"), (4.0, "option"), (7.6, "option"), (11.2, "new-mission"), (15.3, "resolve")],
     }
     starts: dict[str, float] = {}
     cursor = 0.0
@@ -1075,11 +1167,15 @@ def cue_wave(kind: str, x: np.ndarray) -> tuple[np.ndarray, float]:
         envelope = np.exp(-32 * x) * (x < 0.18) * active
         return 0.065 * envelope * (np.sin(2 * np.pi * 1250 * x) + 0.35 * np.sin(2 * np.pi * 2800 * x)), 0.25
     if kind in DATA_CUES:
-        pulse = np.mod(x, 0.17)
-        gate = (pulse < 0.055) * (x < 0.58) * active
-        envelope = np.exp(-7 * pulse)
+        offsets = (0.0, 0.14, 0.37)
+        impacts = np.zeros_like(x)
         base = 500 + 37 * (sum(ord(char) for char in kind) % 9)
-        return 0.038 * gate * envelope * (np.sin(2 * np.pi * base * x) + 0.32 * np.sin(2 * np.pi * base * 2.01 * x)), 0.18
+        for index, offset in enumerate(offsets):
+            local = x - offset
+            impacts += (0.026 / (index + 1)) * np.exp(-34 * local) * (local >= 0) * (local < 0.16) * (
+                np.sin(2 * np.pi * base * 1.7 * local) + 0.45 * np.sin(2 * np.pi * 2650 * local)
+            )
+        return impacts, 0.12
     raise ValueError(f"Unknown sound cue: {kind}")
 
 
@@ -1097,14 +1193,9 @@ def build_sound(duration: float, destination: Path) -> None:
         while written < total_samples:
             count = min(chunk_samples, total_samples - written)
             t = (written + np.arange(count, dtype=np.float64)) / sample_rate
-            beat = np.mod(t, 60 / 86)
-            beat_envelope = np.exp(-7.2 * beat) * (beat < 0.34)
-            left = 0.0060 * np.sin(2 * np.pi * 71 * t) + 0.0040 * np.sin(2 * np.pi * 113 * t + 0.3)
-            right = 0.0060 * np.sin(2 * np.pi * 73 * t + 0.2) + 0.0040 * np.sin(2 * np.pi * 109 * t)
-            pulse = 0.012 * beat_envelope * np.sin(2 * np.pi * 122 * t)
-            shimmer = 0.0035 * np.sin(2 * np.pi * 247 * t + 0.55 * np.sin(2 * np.pi * 0.05 * t))
-            left += pulse + shimmer
-            right += pulse + 0.9 * shimmer
+            room = 0.76 + 0.24 * np.sin(2 * np.pi * 0.027 * t)
+            left = room * (0.0032 * np.sin(2 * np.pi * 61 * t) + 0.0018 * np.sin(2 * np.pi * 103 * t + 0.3))
+            right = room * (0.0032 * np.sin(2 * np.pi * 63 * t + 0.2) + 0.0018 * np.sin(2 * np.pi * 101 * t))
             chunk_start = written / sample_rate
             chunk_end = (written + count) / sample_rate
             for _, start, kind in cues:
@@ -1235,8 +1326,9 @@ def compose(output: Path) -> Path:
         else:
             raw_duration = media_duration(raw_file)
             target = float(scene["duration"])
-            tempo = max(1.0, raw_duration / max(0.5, target - 0.7))
-            report = {"cached": True, "raw_duration": raw_duration, "tempo": tempo, "spoken_duration": raw_duration / tempo}
+            if raw_duration > target - 0.45:
+                raise RuntimeError(f"Cached narration exceeds the scene after fixed 1.25x delivery for {scene['id']}: {raw_duration:.3f}s > {target - 0.45:.3f}s")
+            report = {"cached": True, "raw_duration": raw_duration, "tempo": 1.0, "spoken_duration": raw_duration}
         report.update(scene=scene["id"], target=float(scene["duration"]))
         voice_report.append(report)
         voice_files.append(voice_file)

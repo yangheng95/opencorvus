@@ -27,7 +27,7 @@ class DesktopV5RTest(unittest.TestCase):
     def test_storyboard_and_renderers_cover_the_frozen_twelve_scene_story(self) -> None:
         scenes = self.storyboard["scenes"]
         self.assertEqual(len(scenes), 12)
-        self.assertEqual(sum(float(scene["duration"]) for scene in scenes), 238.0)
+        self.assertEqual(sum(float(scene["duration"]) for scene in scenes), 251.0)
         self.assertEqual(set(scene["mode"] for scene in scenes), set(V5R.RENDERERS))
         for scene in scenes:
             image = V5R.RENDERERS[scene["mode"]](float(scene["duration"]) * 0.5, float(scene["duration"]), self.assets)
@@ -116,25 +116,37 @@ class DesktopV5RTest(unittest.TestCase):
             self.assertAlmostEqual(float(probe["format"]["duration"]), 2.0, places=2)
             with wave.open(str(soundtrack), "rb") as source:
                 samples = np.frombuffer(source.readframes(source.getnframes()), dtype="<i2")
-            self.assertGreater(float(np.sqrt(np.mean(samples.astype(np.float64) ** 2))), 60.0)
+            self.assertGreater(float(np.sqrt(np.mean(samples.astype(np.float64) ** 2))), 40.0)
 
-    def test_sound_cue_ledger_covers_every_scene_at_dense_intervals(self) -> None:
+    def test_sound_cue_ledger_covers_every_scene_with_action_bound_foley(self) -> None:
         schedule = V5R.sound_cue_schedule()
         by_scene: dict[str, list[float]] = {}
         for scene, timestamp, _ in schedule:
             by_scene.setdefault(scene, []).append(timestamp)
         self.assertEqual(set(by_scene), {scene["id"] for scene in self.storyboard["scenes"]})
-        self.assertGreaterEqual(len(schedule), 110)
+        self.assertEqual(len(schedule), 67)
         for scene in self.storyboard["scenes"]:
             timestamps = by_scene[scene["id"]]
-            self.assertGreaterEqual(len(timestamps), 9, scene["id"])
-            self.assertLessEqual(max(b - a for a, b in zip(timestamps, timestamps[1:])), 3.0, scene["id"])
+            self.assertGreaterEqual(len(timestamps), 4, scene["id"])
+        self.assertEqual(V5R.NARRATION_RATE, "+25%")
 
     def test_closing_frame_uses_a_fixed_full_canvas_brand_grid(self) -> None:
         frame = V5R.render_personal_cta(15.8, 16.0, self.assets)
         self.assertEqual(frame.size, (1280, 720))
         self.assertEqual(frame.mode, "RGB")
         self.assertGreater(len(frame.getcolors(maxcolors=1280 * 720) or []), 64)
+
+    def test_automationbench_claim_revision_is_bound_to_the_build(self) -> None:
+        claims = V5R.AUTOMATIONBENCH_CLAIMS
+        self.assertEqual(claims["model"], "openai/gpt-5.6-luna")
+        self.assertEqual(claims["raw_strict_percent"], 8.07)
+        self.assertEqual(claims["mission_verified_cases"], 100)
+        self.assertEqual(claims["public_target_cases"], 600)
+        self.assertEqual(claims["mission_strict_percent"], 34.00)
+        inputs = V5R.build_inputs(self.storyboard)
+        self.assertEqual(inputs["automationbench_claims"], claims)
+        frame = V5R.render_proof(32.8, 34.0, self.assets)
+        self.assertEqual(frame.size, (1280, 720))
 
 
 if __name__ == "__main__":
