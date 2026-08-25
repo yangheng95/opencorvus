@@ -118,6 +118,25 @@ export function releaseControlLease(input: ReleaseControlLeaseInput): boolean {
   return Database.immediateTransaction((db) => releaseControlLeaseInTransaction(db, input))
 }
 
+/**
+ * Hand the lease back while an error is already being raised.
+ *
+ * Releasing is a database write, and a write can fail — on shutdown, or under
+ * contention. On an error path the caller is carrying the real failure, and
+ * that failure holds the keys recovery needs; a bookkeeping write must never
+ * take its place. The lease then ends by expiry, which is exactly the behavior
+ * that existed before it was released here at all.
+ */
+export function releaseControlLeaseOnErrorPath(
+  input: ReleaseControlLeaseInput,
+): { released: boolean; error?: unknown } {
+  try {
+    return { released: releaseControlLease(input) }
+  } catch (error) {
+    return { released: false, error }
+  }
+}
+
 export function renewControlLease(input: {
   target: EngineControlActivationTarget
   targetID: string

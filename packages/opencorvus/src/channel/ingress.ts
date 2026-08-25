@@ -5,7 +5,7 @@ import { ControlMessage, controlFinalMessageText } from "@/control/message"
 import { ControlMessageInput, ControlMessageResult } from "@/control/message-schema"
 import { Database, and, eq } from "@/storage/db"
 import { Identifier } from "@/id/id"
-import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLease, releaseControlLeaseInTransaction } from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLease, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
 import { Instance } from "@/project/instance"
 import z from "zod"
 import { ChannelId } from "./catalog"
@@ -114,7 +114,7 @@ export namespace ChannelIngress {
       // it. Holding the lease would make the whole lease duration the retry
       // period and leave `reconcile` unable to take the request, so ownership
       // goes back before the failure propagates.
-      releaseControlLease({
+      releaseControlLeaseOnErrorPath({
         target: "effect",
         targetID: accepted.row.id,
         leaseID: lease.lease.id,

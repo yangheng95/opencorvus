@@ -779,8 +779,16 @@ export namespace BuildAgent {
       const cleanupOwner = beginBuildObservationCleanup({ observationID, taskID: task.id, gitDir: observationGitDir })
       const cleanupActivation = cleanupOwner.activation
       if (!cleanupActivation) throw new Error(`Build observation cleanup ${observationID} has no physical activation`)
-      const cleanupRenewal = setInterval(() => {
-        renewBuildObservationCleanupActivation(observationID, cleanupActivation)
+      const cleanupRenewal: ReturnType<typeof setInterval> = setInterval(() => {
+        // The settle transaction ends this lease as part of writing its
+        // receipt, so a tick can land after the lease is already over. Renewal
+        // throws on a lost fence, and this is a timer callback: an unguarded
+        // throw here is an unhandled exception, not a caught one.
+        try {
+          renewBuildObservationCleanupActivation(observationID, cleanupActivation)
+        } catch {
+          clearInterval(cleanupRenewal)
+        }
       }, 40_000)
       cleanupRenewal.unref()
       using _cleanupActivation = { [Symbol.dispose]() { clearInterval(cleanupRenewal) } }

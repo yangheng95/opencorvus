@@ -82,6 +82,12 @@ type AfterEventFireClaimHook = (input: {
 export namespace EventService {
   const log = Log.create({ service: "event-service" })
   const FIRE_LEASE_MS = 30_000
+  /**
+   * A recovery timer floor. A row whose retry time has already passed while a
+   * lease is still live would otherwise re-enter claim every millisecond until
+   * that lease expires, which is a hot loop rather than a wait.
+   */
+  const FIRE_RECOVERY_MIN_DELAY_MS = 250
   const FIRE_LEASE_RENEW_MS = 5_000
   const FIRE_RETRY_BASE_MS = 1_000
   const FIRE_RETRY_MAX_MS = 60_000
@@ -643,8 +649,9 @@ export namespace EventService {
     } finally {
       clearInterval(renewTimer)
       // Every nonterminal claim exit retains a same-identity recovery owner.
-      // Terminal rows make this a no-op; retry_wait and deferred/lost claims
-      // retain their existing lease as the next attempt's durable schedule.
+      // Terminal rows make this a no-op. A retry_wait receipt now ends its own
+      // lease, so its recovery schedule is the receipt's `retry_at`; a
+      // deferred or lost claim still rides the current owner's lease.
       scheduleLeaseRecovery(claimed.id)
     }
   }
@@ -676,7 +683,11 @@ export namespace EventService {
         leaseMilliseconds: FIRE_LEASE_MS,
       })
       if (!acquired.acquired) return undefined
-      return { ...projected, status: "running" as const, owner_id: acquired.lease.owner_occurrence_id, lease_until: acquired.lease.expires_at }
+      // Re-project inside the same transaction. `attempt` and `time_started`
+      // are derived from the lease rows, so a projection taken before the
+      // acquire under-counts this very attempt — and `attempt` is the retry
+      // backoff exponent.
+      return projectEventFireInTransaction(db, candidate, now)
     })
   }
 
@@ -716,7 +727,7 @@ export namespace EventService {
           scheduleRecoveryControlRetry(s, fireID)
         }
       },
-      Math.max(1, row.lease - Date.now() + 1),
+      Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
     )
     s.recoveryTimers.set(fireID, timer)
   }

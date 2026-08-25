@@ -884,7 +884,8 @@ export namespace AutomationService {
     // batch in one meant that the last job's lost fence rolled back every
     // earlier job's tombstone *and its lease release*, leaving those waits
     // holding a two-minute lease with no receipt and no owner.
-    const unsettled: string[] = []
+    const unsettled: { id: string; reason: string }[] = []
+    const settledJobIDs: string[] = []
     for (const job of claimed) {
       const settledAt = Date.now()
       const settled = Database.immediateTransaction((db) => {
@@ -901,12 +902,17 @@ export namespace AutomationService {
         releaseControlLeaseInTransaction(db, { target: "automation", targetID: job.id, leaseID: lease.id, ownerOccurrenceID: owner, now: settledAt })
         return "settled"
       })
-      if (settled !== "settled") unsettled.push(`${job.id} (${settled})`)
+      if (settled === "settled") settledJobIDs.push(job.id)
+      else unsettled.push({ id: job.id, reason: settled })
     }
     if (unsettled.length > 0) {
+      // Earlier waits in this batch are already tombstoned and released. The
+      // error names the first wait that could not settle, not the first that
+      // was claimed, and carries the settled ids so a caller can tell them
+      // apart.
       throw new AutomationRunningConflictError({
-        message: `Automation activity delivery could not settle ${unsettled.join(", ")}`,
-        automationID: claimed[0]!.id,
+        message: `Automation activity delivery settled ${settledJobIDs.join(", ") || "none"} and could not settle ${unsettled.map((item) => item.id).join(", ")}`,
+        automationID: unsettled[0]!.id,
       })
     }
     log.info("pending task wait triggered early from activity", {
@@ -1200,8 +1206,6 @@ export namespace AutomationService {
         inactivityFence.touch("delayed wake dispatch")
         const outcome = await executeDelayedWake(job, fireID, runID, owner, executionSignal)
         const completedAt = Date.now()
-        // One terminal transaction: the succeeded receipt, the one-shot
-        // tombstone and the end of this fire's lease are the same fact.
         // One terminal transaction: the succeeded receipt, the one-shot
         // tombstone and the end of this fire's lease are the same fact, so a
         // lost fence must leave none of them behind.

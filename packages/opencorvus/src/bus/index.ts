@@ -22,7 +22,7 @@ import {
 } from "./bus.sql"
 import { Instance, runAsInstanceActivity, runOutsideInstanceContext } from "../project/instance"
 import { Identifier } from "@/id/id"
-import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 
 export namespace Bus {
   const log = Log.create({ service: "bus" })
@@ -656,10 +656,11 @@ export namespace Bus {
       const deliveryID = `${payload.occurrenceID}\0${phase}\0${target.id}`
       const ownerID = `bus:${runtimeSubscriptionID}`
       const now = Date.now()
-      const existingLease = Database.use((db) => currentControlLeaseInTransaction(db, "bus_delivery", deliveryID))
-      const lease = existingLease?.owner_occurrence_id === ownerID && existingLease.expires_at > now
-        ? { acquired: true as const, lease: existingLease }
-        : acquireControlLease({ target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: 30_000 })
+      // Receipts now end their own lease, so a live lease for this exact
+      // delivery is a real concurrent owner rather than this runtime's own
+      // leftover. Reusing one would have been a way of tolerating a lease that
+      // nothing handed back.
+      const lease = acquireControlLease({ target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: 30_000 })
       if (!lease.acquired) {
         failures.push(new Error(`Durable Bus delivery ${deliveryID} is leased by another runtime`))
         continue
@@ -673,9 +674,11 @@ export namespace Bus {
       try {
         await target.deliver()
         Database.immediateTransaction((db) => {
+          const settledAt = Date.now()
           const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
-          if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= Date.now()) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
-          db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: Date.now() }).run()
+          if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= settledAt) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
+          db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: settledAt }).run()
+          releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
         })
       } catch (error) {
         const outcome = target.settleFailure ? "ignored" as const : "failed" as const
@@ -696,6 +699,7 @@ export namespace Bus {
             current.owner_occurrence_id !== ownerID ||
             current.expires_at <= Date.now()
           ) return { kind: "stale" as const }
+          const settledAt = Date.now()
           db.insert(BusPublicationDeliveryReceiptTable).values({
             id: Identifier.ascending("call"),
             occurrence_id: payload.occurrenceID,
@@ -704,8 +708,10 @@ export namespace Bus {
             outcome,
             error: error instanceof Error ? error.message : String(error),
             retry_at: null,
-            time_created: Date.now(),
+            time_created: settledAt,
           }).run()
+          // This delivery has its terminal receipt, so its owner is done.
+          releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
           return { kind: "written" as const }
         })
         if (settled.kind === "terminal") continue

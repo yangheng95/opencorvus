@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { ChannelIngress, ChannelIngressInput, ChannelIngressOutcomeUnknownError } from "@/channel/ingress"
 import { ChannelIngressAcceptedTable, ChannelIngressOutcomeTable } from "@/channel/channel.sql"
+import { currentControlLeaseInTransaction } from "@/engine/control-lease"
 import { Instance } from "@/project/instance"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -20,6 +21,30 @@ describe("Channel ingress fact storage", () => {
     })
     expect(parsed.success ? undefined : parsed.error.issues.map((issue) => ({ path: issue.path, code: issue.code })))
       .toEqual([{ path: ["request_id"], code: "invalid_type" }])
+  })
+
+  test("a settled ingress ends its effect lease with its outcome receipt", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = {
+          platform: "slack" as const,
+          channel: "channel-settled",
+          thread: "thread-settled",
+          text: "status",
+          request_id: "channel-request-settled",
+          allow_create: false,
+        }
+        await expect(ChannelIngress.message(input)).resolves.toBeDefined()
+        const accepted = Database.use((db) => db.select().from(ChannelIngressAcceptedTable).get())!
+        expect(Database.use((db) => db.select().from(ChannelIngressOutcomeTable).all())).toHaveLength(1)
+        // The outcome receipt is terminal, so the request's effect owner ends
+        // with it and the request is immediately claimable again.
+        const lease = Database.use((db) => currentControlLeaseInTransaction(db, "effect", accepted.id))!
+        expect(lease.expires_at).toBeLessThanOrEqual(Date.now())
+      },
+    })
   })
 
   test("a crash after the effect remains unknown until an exact outcome is reconciled", async () => {

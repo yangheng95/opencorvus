@@ -114,6 +114,43 @@ The audit's dependency order is the execution order. A stage may not start befor
 
 `packages/opencorvus/script/permission-modes-check-worker.ts` required `full_access` as a *ledger event type*. `PermissionEventType` (`permission/permission.sql.ts:6-22`) has no such member — `full_access` is the `mode` column. The assertion could never pass and had been unreachable behind the ARC-036 failure. The checker now collects `modes` from the same history rows and asserts `full_access` where it is actually recorded.
 
+### Stage 2 second independent review disposition
+
+The repair commit was reviewed again. Fourteen findings; the important ones are that the sweep was incomplete, that it introduced one arithmetic regression, and that it re-created in three new places the error-masking defect the first round asked it to remove.
+
+**Regression introduced by the first repair, now fixed**
+
+- `claimFire` synthesized its return value from a projection taken *before* the acquire, overriding only `status`, `owner_id` and `lease_until`. `attempt` and `time_started` are also lease-derived, and `attempt` is the retry backoff exponent — so a first claim reported `attempt: 0`, making the first retry `1000 * 2 ** -1` = 500 ms instead of 1000 ms, with every later attempt one step behind. It now re-projects inside the same transaction. `AutomationService.claim` does the same synthesis correctly because `AutomationRow` has only two lease-derived fields, both overridden; the event version copied the shape without checking the field set.
+
+**Sweep completed**
+
+- `bus/index.ts` is a seventh control-lease owner and released nothing: terminal `succeeded`/`ignored`/`failed` receipts were written under a fence and the `finally` cleared only the renewal timer. Its receipts now release. The same-owner lease-reuse branch that let it tolerate never releasing is deleted; a live lease for an exact delivery is now a real concurrent owner.
+- `session/control.ts` still had an abandonment path inside a file the sweep claimed to have covered: the `terminalExists` early return left the caller's lease live, and `session/loop.ts` then threw a settlement conflict with no release. Both are fixed.
+- `protocol/delivery.ts`'s terminal settlement and `event-service.ts`'s `deferFire` are named in the record as owners the "every owner" claim does not cover: the first is benign because terminal status wins over the lease in its projection and due selection filters terminal rows, and the second deliberately rides the lease as its recovery schedule on shutdown.
+
+**Error masking removed a second time**
+
+- The first repair guarded `abandonEffectLease` with a try/catch and then added three unguarded `releaseControlLease` calls on error paths — worst inside `mission/execution-closure.ts`'s `finally`, where a throw discards the original close failure entirely. All four now go through one primitive, `releaseControlLeaseOnErrorPath`, which reports its own failure instead of raising it. The bespoke try/catch in `authority.ts` is deleted in favor of it.
+
+**Other repairs**
+
+- `build/agent.ts`'s cleanup renewal `setInterval` had no guard. Now that the settle releases the lease, a tick landing after settlement throws out of a timer callback — an unhandled exception. It is guarded and stops itself.
+- A legacy row whose `retry_wait` receipt was written before this change keeps a live lease, and its recovery timer floor of 1 ms turned that into a hot claim/refuse loop until the lease expired. The floor is now 250 ms, and this one-time transition cost is stated rather than left to be discovered.
+- `completeExecution`'s release assertion was unreachable — the release predicate is the assert predicate, same transaction, same instant — and is removed rather than left as defensive dead code.
+- `triggerTaskWaitFromActivity`'s error named the first *claimed* wait, which is usually one that settled fine; it now names the first unsettled wait and lists the settled ids, because partial commit is deliberate and a caller must be able to tell the halves apart.
+- A duplicated stale comment block was removed.
+
+**Tests added for the behavior this change actually alters**
+
+- `test/control-lease-settlement.test.ts`: a release fenced to the exact lease ends it and frees the target for the next owner; a release carrying a superseded lease identity leaves the current lease untouched (the `leaseID` fence, which owner identity alone could not provide since owner strings are `pid:now`); the error-path release reports its own outcome.
+- `test/channel-ingress-fact-storage.test.ts`: a settled ingress ends its effect lease with its outcome receipt.
+
+**Still open after this round**
+
+- `engine/task-root-fact-store.ts` contains a second complete implementation of acquire/renew/assert against `EngineControlActivationLeaseTable`, bypassing `engine/control-lease.ts`, and it has no release at all. It is the same class as the `event_fire` shadow this stage deleted. Not introduced here and outside this stage's boundary, so the record does not claim the shared mechanism has one implementation yet.
+- `mission/execution-closure.ts`, `engine/build-observation-cleanup.ts`, `session/control.ts` and the three `event_fire` receipts have no lease test of their own.
+- The renamed claim test still does not discriminate against the pre-change revision, because the pre-change `claim` re-projected after acquiring inside the same transaction and therefore already carried the lease it took. It is kept as a true contract test, not as coverage of the interleaving.
+
 ## Stage log
 
 - Stage 1 (ARC-030): complete, reviewed and repaired against the review. Verification evidence is in the stage-1 section.

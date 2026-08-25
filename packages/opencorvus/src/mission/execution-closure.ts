@@ -11,7 +11,7 @@ import { Database, and, eq, sql } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { withKeyedLock } from "@/util/lock"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLease, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLease, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 
 export const MISSION_EXECUTION_CLOSURE_EVENT_TYPES = {
   opened: "mission.execution.opened",
@@ -505,7 +505,7 @@ export function closeMissionExecutionOperation(input: {
       // another attempt. That attempt cannot start while this dead owner still
       // holds the lease.
       if (!settled) {
-        releaseControlLease({
+        releaseControlLeaseOnErrorPath({
           target: "lifecycle",
           targetID,
           leaseID: acquired.lease.id,

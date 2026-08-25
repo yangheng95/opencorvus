@@ -23,7 +23,7 @@ import { SessionCompaction } from "./compaction"
 import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
-import { acquireControlLease, releaseControlLease, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, releaseControlLease, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
@@ -465,7 +465,7 @@ export namespace SessionLoop {
     // pending. Settlement cannot record that, so ownership goes back directly;
     // otherwise the next attempt waits out the remaining lease for nothing.
     const abandonControlLease = () => {
-      releaseControlLease({
+      releaseControlLeaseOnErrorPath({
         target: "session_control",
         targetID: input.control.id,
         leaseID: acquired.lease.id,
@@ -489,6 +489,7 @@ export namespace SessionLoop {
         lease: settlementLease(),
       })
       if (!settled) {
+        abandonControlLease()
         throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "failed", cause: error })
       }
       throw error
@@ -507,6 +508,7 @@ export namespace SessionLoop {
         lease: settlementLease(),
       })
       if (!settled) {
+        abandonControlLease()
         throw compactionControlSettlementConflict({
           control: input.control,
           intendedStatus: "failed",
@@ -517,6 +519,7 @@ export namespace SessionLoop {
     }
     const settled = SessionControl.consume({ id: input.control.id, sessionID: input.sessionID, lease: settlementLease() })
     if (!settled) {
+      abandonControlLease()
       throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "consumed" })
     }
     return result
