@@ -1,0 +1,18 @@
+diff --git a/src/workbuddy_bench/runner/harness_adapters.py b/src/workbuddy_bench/runner/harness_adapters.py
+index 25a1722..64a5ce5 100644
+--- a/src/workbuddy_bench/runner/harness_adapters.py
++++ b/src/workbuddy_bench/runner/harness_adapters.py
+@@ -69,4 +69,13 @@ HARNESS_ADAPTERS: dict[str, HarnessRuntimeAdapter] = {
+         proxy_url_env="CBC_PROXY_URL",
+         uses_anthropic_env=False,
+     ),
++    "opencorvus-agent": HarnessRuntimeAdapter(
++        harness_name="opencorvus-agent",
++        canonical_display_name="OpenCorvus Mission/Base",
++        harness_protocol="openai",
++        backend_base_env="OPENCORVUS_WB_BASE_URL",
++        backend_key_env="OPENCORVUS_WB_API_KEY",
++        proxy_url_env="",
++        uses_anthropic_env=False,
++    ),
+ }

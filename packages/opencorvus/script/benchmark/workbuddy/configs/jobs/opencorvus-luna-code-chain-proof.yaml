@@ -1,0 +1,32 @@
+model: opencorvus-luna
+harness: opencorvus/chain-proof-r1
+dataset: datasets/wb-bench-code-v1.0/tasks
+harness_backend: local
+model_connection: direct
+jobs_dir: /var/lib/opencorvus-benchmark/evidence-workbuddy-luna-mission-base-code-v20260825-chain-proof
+n_attempts: 1
+task_selection:
+  mode: first
+  count: 1
+orchestrator_override:
+  n_concurrent_trials: 1
+environment_override:
+  force_build: false
+  delete: false
+  mounts:
+    - type: image
+      source: workbuddy-bench/harness/opencorvus:chain-proof-r1
+      target: /opt/opencorvus
+      read_only: true
+    - type: bind
+      source: /var/lib/opencorvus-benchmark/provider-data/auth.json
+      target: /run/secrets/opencorvus-provider/auth.json
+      read_only: true
+    - type: bind
+      source: /var/lib/opencorvus-benchmark/provider-data/models.json
+      target: /run/secrets/opencorvus-provider/models.json
+      read_only: true
+    - type: bind
+      source: /var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-code-v20260825-chain-proof/source-receipt.json
+      target: /run/evidence/source-receipt.json
+      read_only: true

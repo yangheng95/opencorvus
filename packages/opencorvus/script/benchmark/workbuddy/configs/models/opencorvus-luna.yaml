@@ -1,0 +1,7 @@
+model:
+  name: gpt-5.6-luna
+  protocols: [openai]
+  backend_url_env: OPENCORVUS_WB_BASE_URL
+  backend_key_env: OPENCORVUS_WB_API_KEY
+  context_window: 1050000
+  params: {}
