@@ -481,15 +481,17 @@ export const ProviderRoutes = lazy(() =>
         z.object({
           method: z.number().meta({ description: "Auth method index" }),
           code: z.string().optional().meta({ description: "OAuth authorization code" }),
+          flowID: z.string().optional().meta({ description: "Exact authorization flow occurrence to finish" }),
         }),
       ),
       async (c) => {
         const providerID = c.req.valid("param").providerID
-        const { method, code } = c.req.valid("json")
+        const { method, code, flowID } = c.req.valid("json")
         await ProviderAuth.callback({
           providerID,
           method,
           code,
+          flowID,
         })
         const issues = await settleProviderRefreshInvalidation([
           { phase: "cache.provider", run: Provider.reset },

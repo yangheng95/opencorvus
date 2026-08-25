@@ -670,12 +670,13 @@ export const GlobalRoutes = lazy(() =>
         z.object({
           method: z.number(),
           code: z.string().optional(),
+          flowID: z.string().optional(),
         }),
       ),
       async (c) => {
         const { providerID } = c.req.valid("param")
-        const { method, code } = c.req.valid("json")
-        await ProviderAuth.callback({ providerID, method, code, scope: "global" })
+        const { method, code, flowID } = c.req.valid("json")
+        await ProviderAuth.callback({ providerID, method, code, flowID, scope: "global" })
         const issues = await settleProviderRefreshInvalidation([
           { phase: "cache.provider", run: Provider.resetAll },
           { phase: "cache.primary-assistants", run: PrimaryAssistantRegistry.resetAll },

@@ -4019,6 +4019,7 @@ export type ProviderAccountUsageResponse =
     }
 
 export type ProviderAuthAuthorization = {
+  flowID: string
   instructions: string
   method: "auto" | "code"
   url: string
@@ -17888,6 +17889,7 @@ export type GlobalProvidersOauthAuthorizeResponse =
 export type GlobalProvidersOauthCallbackData = {
   body: {
     code?: string
+    flowID?: string
     method: number
   }
   path: {
@@ -22636,6 +22638,10 @@ export type ProviderOauthCallbackData = {
      * OAuth authorization code
      */
     code?: string
+    /**
+     * Exact authorization flow occurrence to finish
+     */
+    flowID?: string
     /**
      * Auth method index
      */

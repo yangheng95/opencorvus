@@ -6147,6 +6147,7 @@ export class Oauth extends HeyApiClient {
     parameters: {
       providerID: string
       code?: string
+      flowID?: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -6158,6 +6159,7 @@ export class Oauth extends HeyApiClient {
           args: [
             { in: "path", key: "providerID" },
             { in: "body", key: "code" },
+            { in: "body", key: "flowID" },
             { in: "body", key: "method" },
           ],
         },
@@ -10602,6 +10604,7 @@ export class Oauth2 extends HeyApiClient {
       providerID: string
       directory?: string
       code?: string
+      flowID?: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -10614,6 +10617,7 @@ export class Oauth2 extends HeyApiClient {
             { in: "path", key: "providerID" },
             { in: "query", key: "directory" },
             { in: "body", key: "code" },
+            { in: "body", key: "flowID" },
             { in: "body", key: "method" },
           ],
         },

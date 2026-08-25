@@ -14047,6 +14047,9 @@
       },
       "ProviderAuthAuthorization": {
         "properties": {
+          "flowID": {
+            "type": "string"
+          },
           "instructions": {
             "type": "string"
           },
@@ -14069,7 +14072,8 @@
         "required": [
           "url",
           "method",
-          "instructions"
+          "instructions",
+          "flowID"
         ],
         "type": "object"
       },
@@ -62717,6 +62721,9 @@
                   "code": {
                     "type": "string"
                   },
+                  "flowID": {
+                    "type": "string"
+                  },
                   "method": {
                     "type": "number"
                   }
@@ -75971,6 +75978,10 @@
                 "properties": {
                   "code": {
                     "description": "OAuth authorization code",
+                    "type": "string"
+                  },
+                  "flowID": {
+                    "description": "Exact authorization flow occurrence to finish",
                     "type": "string"
                   },
                   "method": {

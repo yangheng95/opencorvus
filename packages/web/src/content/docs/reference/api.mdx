@@ -50,7 +50,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
 | POST | `/global/providers/{providerID}/auth/prompts` | Get global Provider auth prompts Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.auth.prompts` |
 | POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.oauth.authorize` |
-| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
+| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source Body: `kind`, `policy`, `value`; Errors: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
@@ -405,7 +405,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/provider/{providerID}/auth/execute` | Execute auth method Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
 | POST | `/provider/{providerID}/auth/prompts` | Get auth prompts Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.auth.prompts` |
 | POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.oauth.authorize` |
-| POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
+| POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
 | POST | `/provider/{providerID}/test` | Test provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `provider.test` |
 
 ### Question
