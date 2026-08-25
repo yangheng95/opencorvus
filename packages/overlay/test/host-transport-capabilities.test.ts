@@ -32,5 +32,9 @@ describe("HostTransport capability contract", () => {
     ])
     expect(HOST_CAPABILITIES.tauri.ui.desktopNotificationsRequirePermission).toBe(true)
     expect(HOST_CAPABILITIES.browser.ui.desktopNotificationsRequirePermission).toBe(true)
+    // Whether a click has to be in progress to open an external URL. The
+    // browser grants `window.open` only during transient activation.
+    expect(HOST_CAPABILITIES.tauri.ui.externalUrlNeedsUserGesture).toBe(false)
+    expect(HOST_CAPABILITIES.browser.ui.externalUrlNeedsUserGesture).toBe(true)
   })
 })

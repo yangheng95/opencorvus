@@ -31,6 +31,7 @@ import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
 import { TextField } from "../ui/TextField"
+import { getHostTransport } from "../../services/host-transport-runtime"
 import {
   SettingsDetailSection,
   SettingsEmpty,
@@ -309,8 +310,9 @@ export default function ProvidersPanel() {
       }),
     nativeConfirm: (message, opts) => nativeConfirm(message, opts),
     nativeOpen,
-    showLlmNotice: (message, tone = "info") => {
-      void nativeMessage(message, { title: t("llm.title"), kind: tone }).catch((error) => {
+    externalUrlNeedsUserGesture: getHostTransport().capabilities.ui.externalUrlNeedsUserGesture,
+    showLlmNotice: (message, tone = "info", _duration, link) => {
+      void nativeMessage(message, { title: t("llm.title"), kind: tone, link }).catch((error) => {
         setFormError(t("provider.auth.failed", { reason: describeFailure(error) }))
       })
     },

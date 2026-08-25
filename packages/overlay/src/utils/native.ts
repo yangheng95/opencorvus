@@ -48,6 +48,7 @@ export async function nativePrompt(
     inputType?: "text" | "password"
     inputRequired?: boolean
     inputRequiredMessage?: string
+    link?: { url: string; label: string }
   },
 ): Promise<string | null> {
   const result = await showAppDialog({
@@ -64,6 +65,7 @@ export async function nativePrompt(
     inputValue: options?.inputValue || "",
     inputRequired: options?.inputRequired === true,
     inputRequiredMessage: options?.inputRequiredMessage,
+    link: options?.link,
   })
   return result?.confirmed ? (result.value ?? null) : null
 }

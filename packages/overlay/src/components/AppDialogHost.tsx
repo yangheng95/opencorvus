@@ -1,7 +1,8 @@
-import { Show } from "solid-js"
+import { Show, createEffect, createSignal } from "solid-js"
 import { dialogStore, setDialogStore } from "../store/dialog"
 import { dismissAppDialog, settleAppDialog } from "../services/app-dialog"
 import { t } from "../utils/i18n"
+import { nativeOpen } from "../utils/native"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
 import { TextField } from "./ui/TextField"
@@ -10,6 +11,14 @@ import { SelectControl } from "./ui/SelectControl"
 type AppDialogSelectOption = { value: string; label?: string }
 
 export function AppDialogHost() {
+  // Reported by the link action alone. Cleared whenever a new dialog opens, so
+  // one dialog's failure never greets the next.
+  const [linkError, setLinkError] = createSignal("")
+  createEffect(() => {
+    dialogStore.app.epoch
+    setLinkError("")
+  })
+
   let okButtonRef: HTMLButtonElement | undefined
   let inputRef: HTMLInputElement | undefined
   let selectRef: HTMLButtonElement | undefined
@@ -51,6 +60,31 @@ export function AppDialogHost() {
       }}
       footer={
         <>
+          <Show when={dialogStore.app.link}>
+            {(link) => (
+              <Button
+                type="button"
+                id="btnAppDialogLink"
+                data-ui="app-dialog-link"
+                variant="outline"
+                size="md"
+                tone="accent"
+                onClick={() => {
+                  // Synchronous on purpose. The browser transport reaches
+                  // window.open before its first await, so this call still
+                  // holds the activation from this very click — which is the
+                  // whole reason the dialog offers a button instead of the
+                  // flow opening the URL by itself. Attaching .catch() does not
+                  // change that: nativeOpen(url) is evaluated first.
+                  void nativeOpen(link().url).catch((error) => {
+                    setLinkError(error instanceof Error ? error.message : String(error))
+                  })
+                }}
+              >
+                {link().label}
+              </Button>
+            )}
+          </Show>
           <Show when={dialogStore.app.cancel === true}>
             <Button
               type="button"
@@ -86,6 +120,11 @@ export function AppDialogHost() {
       <div class="app-dialog-body" id="appDialogBody" data-kind={dialogStore.app.kind || undefined}>
         {dialogStore.app.message || ""}
       </div>
+      <Show when={linkError()}>
+        <p class="app-dialog-link-error" data-ui="app-dialog-link-error" role="alert">
+          {linkError()}
+        </p>
+      </Show>
       <TextField.Root
         as="label"
         classList={{ hidden: dialogStore.app.input !== true }}

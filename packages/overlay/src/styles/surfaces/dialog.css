@@ -273,3 +273,20 @@
 }
 
 /* Matches --ui-breakpoint-sm; media queries cannot consume var(). */
+
+/* Reported by the dialog's link action when the host refuses to open the URL.
+ * The action is the operator's last affordance in an authorization flow, so a
+ * silent failure there leaves them with nothing. */
+/* The link action is an aside, not one of the dialog's two decisions. Pushing
+ * it to the far edge separates "go do this elsewhere" from Cancel/Confirm
+ * instead of leaving three buttons crowded together on the right. */
+.app-dialog-form .dialog-actions > [data-ui="app-dialog-link"] {
+  margin-inline-end: auto;
+}
+
+.app-dialog-link-error {
+  margin: var(--ui-gap-3xs) 0 0;
+  color: var(--bad);
+  font-size: var(--ui-font-meta);
+  line-height: var(--ui-line-height-snug);
+}

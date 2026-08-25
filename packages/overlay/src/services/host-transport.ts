@@ -149,6 +149,13 @@ export interface HostUiCapabilities {
   readonly overlayZoomHotkeys: boolean
   /** Whether a missing workspace should be entered manually instead of through a host picker. */
   readonly manualWorkspacePathEntry: boolean
+  /**
+   * Whether opening an external URL has to happen inside a user gesture.
+   * A browser only permits `window.open` during transient activation, so any
+   * flow that reaches for one after an await has already lost the right to.
+   * Desktop hosts hand the URL to the OS and have no such window.
+   */
+  readonly externalUrlNeedsUserGesture: boolean
   /** Whether desktop notification delivery requires a host permission grant. */
   readonly desktopNotificationsRequirePermission: boolean
   /** Project editors that this host can launch through workspace.openProjectEditor. */
@@ -228,6 +235,7 @@ export const HOST_CAPABILITIES: Readonly<Record<HostKind, HostCapabilities>> = {
     ui: {
       overlayZoomHotkeys: true,
       manualWorkspacePathEntry: false,
+      externalUrlNeedsUserGesture: false,
       desktopNotificationsRequirePermission: true,
       projectEditors: PROJECT_EDITOR_IDS,
     },
@@ -237,6 +245,7 @@ export const HOST_CAPABILITIES: Readonly<Record<HostKind, HostCapabilities>> = {
     ui: {
       overlayZoomHotkeys: false,
       manualWorkspacePathEntry: true,
+      externalUrlNeedsUserGesture: true,
       desktopNotificationsRequirePermission: true,
       projectEditors: [],
     },

@@ -447,3 +447,179 @@ transport 边界被拒。**已验证其有效性**：临时回退修复后该文
 
 `tsc --noEmit` 0；overlay 单元测试 **75 个文件全过**；Web 真实页面（不 stub）
 点击「Open Squad Market」后面板无任何错误提示。
+
+
+---
+
+# 续章二：Provider 授权在浏览器上的弹窗拦截
+
+## Recall（本章）
+
+**用户要求**：上一章把 `services/llm.ts:611` 的弹窗拦截作为「记录、未处理」上报，
+用户答「把 llm.ts 的弹窗拦截问题也修了」。
+
+## 分析
+
+**根因**：浏览器只在**瞬时用户激活**期内允许 `window.open`。OAuth 流程从用户点击
+「连接 Provider」到打开授权页之间隔着 1–2 次网络往返：
+
+```
+点击 → [nativeConfirm?] → providerAuthInputs()（内含 apiJson，可能不弹任何对话框）
+     → apiJson(oauth/authorize) → nativeOpen(authorization.url)
+```
+
+`providerAuthInputs` 在 provider 不需要输入时**一个对话框都不弹**，直接返回 —— 此时
+最后一次手势远在两次网络往返之前，激活必然已过期。
+
+**为什么不能靠「确认对话框刚点完」**：`finishAppDialog`
+（`services/app-dialog.ts:168`）在 resolve 之前 `await runAppDialogTransition(...)`
+与 `await revealNativeSurfaces(...)`，都是真实异步。对话框 resolve 之后的代码不再享有
+点击时的激活。
+
+**为什么当前不会卡死**：后续步骤已把 URL 显示给用户 —— `code` 流程的 prompt
+message 含 `authorization.url`，隐式流走 `showLlmNotice`。用户可以手动复制打开。
+所以这是**体验缺陷**（点了没反应，然后被要求粘贴回调），不是功能阻断。
+
+**为什么不能只加提示**：那是缓解不是修复。根因是「在没有手势的地方尝试开窗」，
+修复就应当**把开窗移回一次真实点击里**。
+
+**现有 UI 原语不足**：`AppDialogOptions`（`services/app-dialog.ts:9`）只有纯文本
+`message`，没有链接、没有自定义动作。`showLlmNotice` 也只是 `nativeMessage` 的包装。
+所以用户无处可点。
+
+## 方案
+
+1. `AppDialogOptions` 增加可选 `link?: { url: string; label: string }`。
+   `AppDialogState` 由继承自动获得。
+2. `AppDialogHost` 在 footer 渲染该动作按钮，`onClick` 内**同步**调用 `nativeOpen(url)`。
+   `native()` 的 browser 分支在首个 `await` 之前执行 `window.open`，因此调用发生在
+   点击的同步路径上，激活有效 —— 这正是根因的对应修复。
+3. `nativePrompt` / `nativeMessage` 透传 `link`。
+4. `llm.ts` 的授权流程按宿主分支：
+   - 声明 `open-url` **且**无需用户激活的宿主（桌面）：保持现有自动打开，行为不变。
+   - 浏览器：不再在无手势处尝试自动打开，改为把授权 URL 作为对话框的动作按钮交给用户点击。
+5. 新增判定：宿主是否需要用户手势才能打开外部 URL。它是 `HostCapabilities.ui` 的一项，
+   与 `manualWorkspacePathEntry`、`overlayZoomHotkeys` 同类 —— 描述的是宿主的交互约束，
+   不是能力有无。
+
+**不做**：预开空窗口后异步导航（`window.open("", "_blank")` 再设 `location`）。
+它要求把窗口句柄穿过整条异步链、失去 `noopener` 保护，并在流程取消时泄漏窗口 ——
+代价高于收益，且引入有状态的窗口管理。
+
+## 落地
+
+| 文件 | 改动 |
+|---|---|
+| `services/host-transport.ts` | `HostCapabilities.ui` 新增 `externalUrlNeedsUserGesture`（tauri `false` / browser `true`） |
+| `services/app-dialog.ts` | `AppDialogOptions` 新增 `link?: { url, label }`；`nativeMessage` 透传 |
+| `components/AppDialogHost.tsx` | footer 渲染该动作按钮，`onClick` 内同步调 `nativeOpen` |
+| `utils/native.ts` | `nativePrompt` 透传 `link` |
+| `services/llm.ts` | 授权流程按 `externalUrlNeedsUserGesture` 分支；`AuthDialogCallbacks` 的 `nativePrompt` / `showLlmNotice` 接受 `link` |
+| `settings/ProvidersPanel.tsx` | `showLlmNotice` 把 `link` 转交给 `nativeMessage` |
+| i18n | 新增 `llm.auth_open_page` |
+
+同步性是这次修复的全部要害：`AppDialogHost` 的 `onClick` → `nativeOpen` →
+`native()` 的 browser 分支，在首个 `await` 之前执行 `window.open`，因此仍处在这次点击的
+激活期内。
+
+## 验收
+
+**非 UI 正向测试** `test/provider-auth-open-gesture.test.ts`（3 passed）：
+桌面宿主自行打开授权页且不下发动作；需要手势的宿主不打开、改把
+`{ url, label }` 交给对话框；两个宿主的 `externalUrlNeedsUserGesture` 取值。
+
+**既有测试的契约更新**：`test/llm-provider-auth-select-source.test.ts` 断言
+「授权 URL 被打开」，而测试环境默认解析为 browser 宿主，新契约下不再自动打开。
+该文件验证的是**请求路径不注入 project directory**，与宿主交互约束无关，
+因此在 `beforeEach` 里显式固定为桌面宿主并加注说明 —— 而不是把断言改成空数组。
+
+**其他检查**：`typecheck` 0；`check:i18n` ok（1838 keys）；`check:css-tokens` ok；
+overlay 单元测试 **76 个文件全过**。
+
+**真实页面**：按钮的渲染与 OAuth 无关 —— 独立审查指出我最初「隔离实例没有 OAuth
+provider 所以无法验收」的理由不成立。任何一个对话框调用点加上 `link` 都能看到它。
+用临时探针给「选择文件夹」对话框挂一个 `link`，经命令面板 → `Open folder` 触发：
+
+- 按钮渲染为 outline/accent，与 ghost 的 Cancel、solid 的主按钮层次分明；
+- `<button type="button">`，键盘可达，且不抢初始焦点；
+- 点击后失败信息以红字显示在对话框正文下方；
+- 辅助动作左对齐，与 `Cancel` / 主按钮分组分开（见下）。
+
+截图：[`dialog-link-action.png`](../../artifacts/2026-08-25-web-host-path-actions/dialog-link-action.png)。
+探针已撤销，`workspace.ts` 回到无改动状态。
+
+**该次验收顺带产生的一个运行时事实**：探针用 `javascript:alert(1)` 作为 URL，
+显示的错误是 `Native command "open-path" is not available in host "browser"` ——
+即 `nativeOpen` 按 `/^https?:\/\//i` 路由，非 http(s) 一律走 `open-path`，
+**根本到不了 `externalUrl` 的 scheme 拒绝分支**。这与上一章审查的判断一致：
+transport 侧的 gate 对经由 `nativeOpen` 的调用是防御纵深，真正会送入非 http(s) 的
+只有直接构造 `{kind:"open-url"}` 的调用点。
+
+## 独立 agent 审查
+
+一名未参与实现的 agent 只读审查了完整差异，并在真实模块上做了运行时验证。
+
+### 致命缺陷（已修）
+
+**`link` 从未到达 store，按钮是不可达的死代码。** `showAppDialog`
+（`services/app-dialog.ts:130`）以一次**穷举式整对象写入**提交对话框状态，
+而 `link` 不在那个字面量里。`AppDialogState extends AppDialogOptions` 给了**类型**，
+方案里「`AppDialogState` 由继承自动获得」对类型成立、对运行时值不成立。
+审查实测：`showAppDialog({ link })` 之后 `dialogStore.app.link === undefined`。
+
+后果比不改更糟：browser 上 `llm.ts` 不再尝试 `nativeOpen`，而**没有任何东西替代它**。
+
+修复是在那次写入里显式列出 `link`。同时确认它是自清理的 —— Solid 的
+`setProperty` 在合并值为 `undefined` 时删除该键，所以下一个不带 link 的对话框
+不会继承上一个的按钮。
+
+### 其余必修项（已修）
+
+- **按钮吞掉自己的失败**：`void nativeOpen(...)` 没有 `catch`，而 `externalUrl` 与
+  `UnsupportedNativeCommandError` 都会拒绝。它是操作者在授权流程中的最后一个可用入口，
+  静默失败等于无路可走。现在捕获并在对话框内显红字（`.app-dialog-link-error`）。
+  附 `.catch()` 不影响激活：`nativeOpen(url)` 仍先被求值。
+- **测试停在 mock 边界，恰好差一跳**：两个用例都断言测试自己的 `nativePrompt` stub
+  收到了什么，没有任何一处触及 `showAppDialog` → `dialogStore` —— 也就是这次真正
+  出问题的那一层，因此功能完全失效时它们仍然全绿。新增
+  `test/app-dialog-link-action.test.ts` 断言 store 实际持有的值，并验证过它有效：
+  移除那行写入后 2 项全部失败，恢复后全过。
+- **`llm.ts` 绕过了自己的宿主边界**：`authorizeProvider` 的 `AuthDialogCallbacks`
+  本是它与宿主之间的**唯一**接缝，我却给它加了对 `getHostTransport()` 单例的直接依赖，
+  使一个原本完全可注入的函数变成环境耦合（症状：`llm-auth-cancel.test.ts` 会随环境
+  单例漂移）。trait 改为经 callbacks 注入，`ProvidersPanel` 负责接线 —— 它本来就
+  持有宿主接线。两个授权测试文件因此都显式声明该 trait，不再依赖任何 transport。
+- **测试卫生**：能力矩阵断言归位到 `host-transport-capabilities.test.ts`
+  （它本就断言其他 `ui` trait），删除无人读取的 recorder 参数与那条
+  `toEqual([undefined])` 的缺席断言。
+
+### 采纳的其余意见
+
+- **方案里「激活必然已过期」的说法过强**。Chrome 的瞬时激活窗口是 5 秒，两次本地
+  往返常常来得及；`providerAuthInputs` 有时还会补上一次对话框点击。所以改前的自动打开
+  **有时可用**。本次改动在浏览器上无条件用一次额外点击换取可靠性 —— 这是一个取舍，
+  不是纯粹的收益。（同时尝试自动打开**并**给出按钮，才正是 二-2 禁止的 fallback 形态。）
+- **按钮位置**：审查质疑三个按钮挤在右侧。已让辅助动作 `margin-inline-end: auto`
+  左对齐，与 Cancel / 主按钮分组分开，并重新截图确认。
+
+### 审查确认无误
+
+激活链逐跳验证：`onClick` → `nativeOpen`（`getHostTransport().native(...)` 在 `await`
+挂起前被求值）→ browser 分支直达 `window.open`，其间没有 `await`、没有微任务边界，
+瞬时激活保持。`externalUrlNeedsUserGesture` 位置与命名正确（陈述约束而非
+`isBrowser`），且不存在第二事实源 —— `nativeCommands["open-url"]` 回答的是「能否打开」，
+不是「何时可以」。二-3 未被违反：这是宿主交互约束，不是引导 LLM 的流程门。
+按钮键盘可达、不抢初始焦点、不结算对话框（操作者需要回来粘贴 code），无不可信标记渲染。
+
+### 记录但未修（横向审计结果）
+
+`McpAppArtifact.tsx:456-465` 的 `bridge.onopenlink` 在 `await askConfirmation(...)`
+之后才 `native({kind:"open-url"})` —— **同一个根因的另一处实例**。审查核对了其余
+`open-url` 调用点（`main.tsx:1537`、`ChannelsPanel.tsx:289`、`SkillMarketPanel.tsx:400`）
+均保持同步路径，无此问题。该处未修：修它需要决定「确认」与「打开」如何合并为一次点击，
+是产品交互决策。
+
+### 复验
+
+`tsc --noEmit` 0；`check:i18n` ok（1838 keys）；`check:css-tokens` ok；
+overlay 单元测试 **77 个文件全过**。

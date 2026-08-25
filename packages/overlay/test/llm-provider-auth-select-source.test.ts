@@ -35,6 +35,7 @@ function authCallbacks(overrides: Partial<AuthDialogCallbacks> = {}): AuthDialog
     nativeSelect: async () => null,
     nativeConfirm: async () => false,
     nativeOpen: async () => false,
+    externalUrlNeedsUserGesture: false,
     showLlmNotice: () => undefined,
     onAuthCancelled: () => undefined,
     ...overrides,
