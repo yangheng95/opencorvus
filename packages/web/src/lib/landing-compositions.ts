@@ -23,6 +23,17 @@ export type CompositionStepView = {
   readonly href: string
   readonly agentCount: number
   readonly handoff: string
+  readonly laneId?: string
+}
+
+export type CompositionLaneView = {
+  readonly id: string
+  readonly tone: "research" | "compute" | "product" | "publication" | "release"
+  readonly label: string
+  readonly summary: string
+  readonly outcome: string
+  readonly roleCount: number
+  readonly steps: readonly CompositionStepView[]
 }
 
 export type CompositionView = {
@@ -30,13 +41,17 @@ export type CompositionView = {
   readonly title: string
   readonly lead: string
   readonly prompt?: string
+  readonly requirements?: readonly string[]
+  readonly outputs?: readonly string[]
   readonly squadCount: number
   readonly roleCount: number
   readonly steps: readonly CompositionStepView[]
+  readonly lanes?: readonly CompositionLaneView[]
   readonly expanded?: {
     readonly squadCount: number
     readonly roleCount: number
     readonly steps: readonly CompositionStepView[]
+    readonly lanes?: readonly CompositionLaneView[]
   }
   /** Present only where the chain declares optional extensions. Counts include the base chain. */
   readonly extras?: {
@@ -82,23 +97,60 @@ function viewOf(id: string, locale: PublicLocale): CompositionView {
         href: publicPath(locale, `/market/${squad.namespace}/${squad.id}/`),
         agentCount: squad.agentCount,
         handoff: step.handoff[locale],
+        ...(step.laneId ? { laneId: step.laneId } : {}),
       }
     })
+
+  const lanesOf = (
+    lanes: typeof declared.lanes | typeof declared.expandedLanes,
+    steps: readonly CompositionStepView[],
+    boundary: "base" | "expanded",
+  ): readonly CompositionLaneView[] | undefined => {
+    if (!lanes) return undefined
+    const projected = lanes.map((lane) => {
+      const laneSteps = steps.filter((step) => step.laneId === lane.id)
+      if (laneSteps.length === 0) {
+        throw new Error(`Squad composition ${id} ${boundary} lane ${lane.id} has no declared steps`)
+      }
+      return {
+        id: lane.id,
+        tone: lane.tone,
+        label: lane.label[locale],
+        summary: lane.summary[locale],
+        outcome: lane.outcome[locale],
+        roleCount: laneSteps.reduce((sum, step) => sum + step.agentCount, 0),
+        steps: laneSteps,
+      }
+    })
+    if (projected.reduce((sum, lane) => sum + lane.steps.length, 0) !== steps.length) {
+      throw new Error(`Squad composition ${id} ${boundary} lanes do not own every declared step`)
+    }
+    return projected
+  }
+
+  const steps = stepsOf(declared.steps, generated.squads, "base")
+  const expandedSteps = declared.expandedSteps
+    ? stepsOf(declared.expandedSteps, generated.expanded, "expanded")
+    : undefined
 
   return {
     id,
     title: declared.title[locale],
     lead: declared.lead[locale],
     ...(declared.prompt ? { prompt: declared.prompt[locale] } : {}),
+    ...(declared.requirements ? { requirements: declared.requirements.map((requirement) => requirement[locale]) } : {}),
+    ...(declared.outputs ? { outputs: declared.outputs.map((output) => output[locale]) } : {}),
     squadCount: generated.squadCount,
     roleCount: generated.roleCount,
-    steps: stepsOf(declared.steps, generated.squads, "base"),
-    ...(declared.expandedSteps
+    steps,
+    ...(declared.lanes ? { lanes: lanesOf(declared.lanes, steps, "base") } : {}),
+    ...(declared.expandedSteps && expandedSteps
       ? {
           expanded: {
             squadCount: generated.expandedSquadCount,
             roleCount: generated.expandedRoleCount,
-            steps: stepsOf(declared.expandedSteps, generated.expanded, "expanded"),
+            steps: expandedSteps,
+            ...(declared.expandedLanes ? { lanes: lanesOf(declared.expandedLanes, expandedSteps, "expanded") } : {}),
           },
         }
       : {}),

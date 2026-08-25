@@ -85,6 +85,12 @@ export type LandingCopy = {
     readonly caseLabel: string
     readonly paperCaseLabel: string
     readonly missionPromptLabel: string
+    readonly requirementsLabel: string
+    readonly outputsLabel: string
+    readonly overviewLabel: string
+    readonly workflowLabel: string
+    readonly tasksUnit: string
+    readonly milestoneLabel: string
     readonly stageHeading: string
     readonly squadHeading: string
     readonly handoffHeading: string
@@ -274,6 +280,12 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       caseLabel: "案例",
       paperCaseLabel: "另一个长 Mission",
       missionPromptLabel: "可直接交给 OpenCorvus 的 Mission",
+      requirementsLabel: "原始 Mission 要求",
+      outputsLabel: "最终必须交付",
+      overviewLabel: "六项高层交付",
+      workflowLabel: "完整执行工作流",
+      tasksUnit: "个阶段",
+      milestoneLabel: "本工作流交付",
       stageHeading: "阶段",
       squadHeading: "专家团",
       handoffHeading: "交出什么",
@@ -281,12 +293,12 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       rolesUnit: "个具名角色",
       rolesHeading: "角色",
       scale: {
-        summary: "施展任务扩展术",
-        openSummary: "收起 18 阶段",
-        hint: "点一下，把 6 个完整交付阶段展开成 18 个专家团任务。",
+        summary: "展开完整执行图",
+        openSummary: "收起完整执行图",
+        hint: "把 6 项高层交付展开为 5 条工作流、18 个专家团阶段和逐层里程碑。",
         eyebrow: "任务规模 ×3",
-        title: "同一个 Mission，还能继续拆得更深",
-        lead: "每一步都有自己的完整专家团、可验收交接和下游依赖。更复杂的目标，只是继续展开这张图。",
+        title: "这才是 OpenCorvus 实际要协调的完整任务图",
+        lead: "从模型与数据证据开始，穿过 CUDA 训练、实时产品、研究发表，最后收敛到独立复现和 GitHub 发布。",
         stagesUnit: "个专家团阶段",
       },
       moreLabel: "其它组合",
@@ -543,6 +555,12 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       caseLabel: "Case",
       paperCaseLabel: "Another long Mission",
       missionPromptLabel: "Mission to give OpenCorvus",
+      requirementsLabel: "Original Mission requirements",
+      outputsLabel: "Required final deliveries",
+      overviewLabel: "Six high-level deliveries",
+      workflowLabel: "Complete execution workflow",
+      tasksUnit: "stages",
+      milestoneLabel: "Workstream delivery",
       stageHeading: "Stage",
       squadHeading: "Squad",
       handoffHeading: "Hands on",
@@ -550,12 +568,12 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       rolesUnit: "named roles",
       rolesHeading: "Roles",
       scale: {
-        summary: "Cast the workload spell",
-        openSummary: "Collapse 18 stages",
-        hint: "One click turns six complete deliveries into eighteen squad-owned Tasks.",
+        summary: "Unfold the complete execution map",
+        openSummary: "Collapse the execution map",
+        hint: "Turn six high-level deliveries into five workstreams, eighteen squad-owned stages, and visible milestones.",
         eyebrow: "Workload ×3",
-        title: "The same Mission can go much deeper",
-        lead: "Every step has a complete squad, an accepted handoff, and a downstream dependency. A harder outcome just keeps unfolding the graph.",
+        title: "This is the complete Mission OpenCorvus has to coordinate",
+        lead: "It starts with model and data evidence, crosses CUDA training, a live product, and research publication, then converges on independent reproduction and GitHub release.",
         stagesUnit: "squad-owned stages",
       },
       moreLabel: "Other combinations",

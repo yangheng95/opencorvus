@@ -1,0 +1,541 @@
+---
+import type { LandingCopy } from "../content/landing-copy"
+import type { CompositionView } from "../lib/landing-compositions"
+import OcMissionLanes from "./OcMissionLanes.astro"
+
+type Props = {
+  study: CompositionView
+  caseLabel: string
+  copy: LandingCopy["compose"]
+}
+
+const { study, caseLabel, copy } = Astro.props
+---
+
+<article class="oc-card-raised oc-mission-case oc-reveal">
+  <header class="oc-mission-case-head">
+    <div>
+      <p class="oc-eyebrow">{caseLabel}</p>
+      <h3 class="oc-text-title oc-cjk-spacing">{study.title}</h3>
+      <p class="oc-text-caption oc-text-description">{study.lead}</p>
+    </div>
+    <p class="oc-mission-total">
+      <span>{study.squadCount}</span>
+      <small>{copy.squadsUnit}</small>
+      <span>{study.roleCount}</span>
+      <small>{copy.rolesUnit}</small>
+    </p>
+  </header>
+
+  {
+    study.requirements && (
+      <section class="oc-mission-requirements">
+        <header>
+          <h4 class="oc-eyebrow">{copy.requirementsLabel}</h4>
+          <span aria-hidden="true">INPUT</span>
+        </header>
+        <ol>
+          {study.requirements.map((requirement) => (
+            <li><span>{requirement}</span></li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    study.outputs && (
+      <section class="oc-mission-outputs">
+        <h4>{copy.outputsLabel}</h4>
+        <ul>
+          {study.outputs.map((output) => <li>{output}</li>)}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    study.lanes ? (
+      <section class="oc-mission-production">
+        <h4 class="oc-eyebrow">{copy.workflowLabel}</h4>
+        <OcMissionLanes
+          lanes={study.lanes}
+          rolesUnit={copy.rolesUnit}
+          tasksUnit={copy.tasksUnit}
+          milestoneLabel={copy.milestoneLabel}
+        />
+      </section>
+    ) : (
+      <section class="oc-mission-overview">
+        <h4 class="oc-eyebrow">{copy.overviewLabel}</h4>
+        <ol class="oc-delivery-spine">
+          {study.steps.map((step, index) => (
+            <li>
+              <span class="oc-delivery-number">{String(index + 1).padStart(2, "0")}</span>
+              <strong>{step.stage}</strong>
+              <a href={step.href}>{step.squadLabel}</a>
+              <small>{step.handoff}</small>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    study.expanded?.lanes && (
+      <details class="oc-mission-scale" data-oc-mission-scale>
+        <summary class="oc-mission-spell">
+          <span class="oc-mission-spell-stars" aria-hidden="true">
+            <span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span>
+          </span>
+          <span class="oc-mission-spell-copy">
+            <span class="oc-mission-spell-label oc-mission-spell-label-closed">{copy.scale.summary}</span>
+            <span class="oc-mission-spell-label oc-mission-spell-label-open">{copy.scale.openSummary}</span>
+            <span>{copy.scale.hint}</span>
+          </span>
+          <span class="oc-mission-scale-count" aria-hidden="true">
+            <span>{study.squadCount}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path>
+            </svg>
+            <span>{study.expanded.squadCount}</span>
+          </span>
+        </summary>
+
+        <div class="oc-mission-expanded">
+          <header class="oc-mission-expanded-head">
+            <div>
+              <p class="oc-eyebrow">{copy.scale.eyebrow}</p>
+              <h4 class="oc-text-title oc-cjk-spacing">{copy.scale.title}</h4>
+              <p class="oc-text-caption oc-text-description">{copy.scale.lead}</p>
+            </div>
+            <p class="oc-mission-total">
+              <span>{study.expanded.squadCount}</span>
+              <small>{copy.scale.stagesUnit}</small>
+              <span>{study.expanded.roleCount}</span>
+              <small>{copy.rolesUnit}</small>
+            </p>
+          </header>
+          <OcMissionLanes
+            lanes={study.expanded.lanes}
+            rolesUnit={copy.rolesUnit}
+            tasksUnit={copy.tasksUnit}
+            milestoneLabel={copy.milestoneLabel}
+            animated
+          />
+        </div>
+      </details>
+    )
+  }
+</article>
+
+<style>
+  .oc-mission-case {
+    margin-top: var(--oc-space-8);
+    padding: var(--oc-space-6);
+  }
+
+  .oc-mission-case-head,
+  .oc-mission-expanded-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--oc-space-5);
+  }
+
+  .oc-mission-case-head > div,
+  .oc-mission-expanded-head > div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    max-width: 66ch;
+  }
+
+  .oc-mission-case-head h3,
+  .oc-mission-case-head p,
+  .oc-mission-expanded-head h4,
+  .oc-mission-expanded-head p {
+    margin: 0;
+  }
+
+  .oc-mission-total {
+    display: flex;
+    align-items: baseline;
+    gap: var(--oc-space-2);
+    margin: 0;
+  }
+
+  .oc-mission-total > span {
+    font-family: var(--oc-font-display);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-mission-total > small {
+    font-size: 11px;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-mission-requirements {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: var(--oc-space-5);
+    margin-top: var(--oc-space-5);
+    padding: var(--oc-space-5);
+    border-radius: var(--oc-radius-panel);
+    background:
+      radial-gradient(circle at 100% 0, rgba(111, 141, 250, 0.13), transparent 34%),
+      var(--oc-color-bg-surface-2);
+  }
+
+  .oc-mission-requirements header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--oc-space-5);
+  }
+
+  .oc-mission-requirements header h4 {
+    margin: 0;
+  }
+
+  .oc-mission-requirements header > span {
+    font-family: var(--oc-font-display);
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: var(--oc-color-border-secondary);
+  }
+
+  .oc-mission-requirements ol {
+    list-style: none;
+    counter-reset: oc-requirement;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--oc-space-6);
+    margin: 0;
+    padding: 0;
+  }
+
+  .oc-mission-requirements li {
+    counter-increment: oc-requirement;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-3) 0;
+    border-top: 1px solid var(--oc-color-border-subtle);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .oc-mission-requirements li::before {
+    content: counter(oc-requirement, decimal-leading-zero);
+    font-family: var(--oc-font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--oc-color-text-link);
+  }
+
+  .oc-mission-outputs {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: var(--oc-space-5);
+    align-items: start;
+    padding: var(--oc-space-4) var(--oc-space-5);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-mission-outputs > h4 {
+    margin: 3px 0 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-mission-outputs ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-2);
+    margin: 0;
+    padding: 0;
+  }
+
+  .oc-mission-outputs li {
+    padding: 5px 10px;
+    border: 1px solid var(--oc-color-border-secondary);
+    border-radius: 999px;
+    background: var(--oc-color-bg-surface-1);
+    font-size: 12px;
+    color: var(--oc-color-text-secondary);
+  }
+
+  .oc-mission-overview,
+  .oc-mission-production {
+    margin-top: var(--oc-space-5);
+  }
+
+  .oc-mission-overview > h4,
+  .oc-mission-production > h4 {
+    margin: 0 0 var(--oc-space-4);
+  }
+
+  .oc-delivery-spine {
+    list-style: none;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--oc-space-4);
+    margin: 0;
+    padding: 0;
+  }
+
+  .oc-delivery-spine::before {
+    content: "";
+    position: absolute;
+    top: 17px;
+    right: 4%;
+    left: 4%;
+    height: 2px;
+    background: linear-gradient(90deg, #6f8dfa, #a978f7, #32b7b0, #ec8c47, #43a66f);
+  }
+
+  .oc-delivery-spine li {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .oc-delivery-number {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    margin-bottom: var(--oc-space-2);
+    border: 2px solid var(--oc-color-bg-surface-4);
+    border-radius: 50%;
+    background: var(--oc-color-bg-page);
+    font-family: var(--oc-font-display);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--oc-color-text-link);
+  }
+
+  .oc-delivery-spine strong {
+    font-size: 14px;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-delivery-spine a {
+    font-size: 12px;
+    color: var(--oc-color-text-link);
+  }
+
+  .oc-delivery-spine small {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-mission-scale {
+    position: relative;
+    margin-top: var(--oc-space-6);
+    padding-top: var(--oc-space-5);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-mission-spell {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--oc-space-4);
+    min-height: 76px;
+    padding: var(--oc-space-3) var(--oc-space-4);
+    overflow: hidden;
+    border: 1px solid var(--oc-color-border-secondary);
+    border-radius: var(--oc-radius-panel);
+    background:
+      radial-gradient(circle at 18% 20%, rgba(111, 141, 250, 0.2), transparent 38%),
+      linear-gradient(120deg, var(--oc-color-bg-surface-3), var(--oc-color-bg-surface-5));
+    cursor: pointer;
+    list-style: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .oc-mission-spell::-webkit-details-marker {
+    display: none;
+  }
+
+  .oc-mission-spell:hover,
+  .oc-mission-spell:focus-visible {
+    border-color: #6f8dfa;
+    box-shadow: 0 0 0 3px rgba(111, 141, 250, 0.13), 0 12px 32px rgba(50, 65, 120, 0.13);
+    outline: none;
+  }
+
+  .oc-mission-spell-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .oc-mission-spell-copy > span:last-child {
+    font-size: 11px;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-mission-spell-label {
+    font-family: var(--oc-font-display);
+    font-size: 15px;
+    font-weight: 650;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-mission-spell-label-open,
+  .oc-mission-scale[open] .oc-mission-spell-label-closed {
+    display: none;
+  }
+
+  .oc-mission-scale[open] .oc-mission-spell-label-open {
+    display: inline;
+  }
+
+  .oc-mission-scale-count {
+    display: flex;
+    align-items: center;
+    gap: var(--oc-space-2);
+    padding: 9px 13px;
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: 999px;
+    background: var(--oc-color-bg-surface-1);
+    font-family: var(--oc-font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-mission-scale-count svg {
+    color: #6f8dfa;
+    transition: transform 0.38s ease;
+  }
+
+  .oc-mission-scale[open] .oc-mission-scale-count svg {
+    transform: rotate(180deg);
+  }
+
+  .oc-mission-spell-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .oc-mission-spell-stars span {
+    position: absolute;
+    color: #7f98f4;
+    opacity: 0.8;
+  }
+
+  .oc-mission-spell-stars span:nth-child(1) { top: 18%; left: 46%; }
+  .oc-mission-spell-stars span:nth-child(2) { top: 58%; left: 57%; }
+  .oc-mission-spell-stars span:nth-child(3) { top: 26%; left: 78%; }
+  .oc-mission-spell-stars span:nth-child(4) { top: 63%; left: 86%; }
+  .oc-mission-spell-stars span:nth-child(5) { top: 14%; left: 92%; }
+
+  .oc-mission-scale[data-burst="true"] .oc-mission-spell-stars span {
+    animation: oc-star-burst 0.78s ease both;
+  }
+
+  .oc-mission-expanded {
+    margin-top: var(--oc-space-3);
+    padding: var(--oc-space-5);
+    border: 1px solid rgba(111, 141, 250, 0.22);
+    border-radius: var(--oc-radius-panel);
+    background:
+      radial-gradient(circle at 85% 0, rgba(111, 141, 250, 0.14), transparent 35%),
+      var(--oc-color-bg-surface-2);
+  }
+
+  .oc-mission-expanded-head {
+    padding-bottom: var(--oc-space-5);
+  }
+
+  .oc-mission-case:has(> .oc-mission-scale[open]) .oc-mission-overview {
+    display: none;
+  }
+
+  @keyframes oc-star-burst {
+    0% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+    45% { opacity: 1; }
+    100% { opacity: 0.72; transform: scale(1.7) rotate(90deg); }
+  }
+
+  @media (max-width: 1020px) {
+    .oc-delivery-spine {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      row-gap: var(--oc-space-5);
+    }
+
+    .oc-delivery-spine::before {
+      display: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .oc-mission-case {
+      padding: var(--oc-space-4);
+    }
+
+    .oc-mission-requirements,
+    .oc-mission-outputs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .oc-mission-requirements header > span {
+      display: none;
+    }
+
+    .oc-mission-requirements ol {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .oc-delivery-spine {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .oc-mission-spell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .oc-mission-scale-count {
+      width: fit-content;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oc-mission-spell,
+    .oc-mission-scale-count svg,
+    .oc-mission-spell-stars span {
+      transition: none;
+      animation: none !important;
+    }
+  }
+</style>

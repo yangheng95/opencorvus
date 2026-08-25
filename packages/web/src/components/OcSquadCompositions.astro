@@ -44,6 +44,15 @@ const others = otherCompositions(locale)
         </strong>
       </p>
 
+      {study.requirements && (
+        <div class="oc-doc-composition-requirements">
+          <strong>{copy.requirementsLabel}</strong>
+          <ol>
+            {study.requirements.map((requirement) => <li>{requirement}</li>)}
+          </ol>
+        </div>
+      )}
+
       {study.prompt && (
         <blockquote class="oc-doc-composition-prompt">
           <strong>{copy.missionPromptLabel}</strong>
@@ -145,5 +154,13 @@ const others = otherCompositions(locale)
 
   .oc-doc-composition-prompt p {
     margin-bottom: 0;
+  }
+
+  .oc-doc-composition-requirements {
+    margin-block: var(--oc-space-4);
+  }
+
+  .oc-doc-composition-requirements ol {
+    margin-top: var(--oc-space-2);
   }
 </style>
