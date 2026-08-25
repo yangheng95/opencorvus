@@ -6,6 +6,7 @@ import importlib.util
 import json
 import sqlite3
 from pathlib import Path
+import types
 
 
 MODULE_PATH = (
@@ -33,6 +34,7 @@ JOB_CONFIG_PATH = MODULE_PATH.parent / "configs" / "jobs" / "opencorvus-luna-cod
 PREPARE_PATH = MODULE_PATH.parent / "prepare-chain-proof.sh"
 SUPERVISOR_PATH = MODULE_PATH.parent / "run-chain-proof.sh"
 VOLUME_LIFECYCLE_PATH = MODULE_PATH.parent / "docker-volume-lifecycle.sh"
+VERIFIER_PERMISSION_PATCH_PATH = MODULE_PATH.parent / "workbuddy-verifier-upload-permission.patch"
 
 
 def assistant(agent: str, session: str, parts: list[dict]) -> dict:
@@ -90,6 +92,14 @@ def test_prepare_and_run_share_lock_and_engine_cleanup_contract() -> None:
     assert "/run/evidence/attempt-owner.json" in supervisor
     assert "orphan-recovery-pending.json" in supervisor
     assert "credential-leak-audit.json" in supervisor
+
+
+def test_preparation_records_exact_verifier_permission_overlay() -> None:
+    preparation = PREPARE_PATH.read_text()
+    permission_patch = VERIFIER_PERMISSION_PATCH_PATH.read_text()
+    assert "workbuddy-verifier-upload-permission.patch" in preparation
+    assert "tmp_path.chmod(0o644)" in permission_patch
+    assert "src/workbuddy_bench/judge/runtime/harbor.py" in permission_patch
 
 
 def test_accepts_exact_skill_as_each_participating_owners_first_tool() -> None:
@@ -257,6 +267,126 @@ def test_activity_signature_ignores_query_generation_time() -> None:
     assert MODULE.activity_signature(observation) == first
 
 
+def test_runtime_evidence_is_downloaded_after_cleanup_failure(tmp_path: Path) -> None:
+    agent = object.__new__(AGENT_MODULE.OpenCorvusAgent)
+    agent.logs_dir = tmp_path / "agent"
+
+    async def cleanup(_self: object, _environment: object) -> None:
+        raise RuntimeError("cleanup failed after finalization")
+
+    class Environment:
+        async def download_file(self, source: str, target: Path) -> None:
+            assert source == "/run/opencorvus-host/credential-leak-audit.json"
+            Path(target).write_text('{"passed":true}\n')
+
+        async def download_dir(self, source: str, target: Path) -> None:
+            assert source == "/logs/agent"
+            target.mkdir(parents=True, exist_ok=True)
+            (target / "captured.json").write_text('{"captured":true}\n')
+
+    agent._cleanup_runtime = types.MethodType(cleanup, agent)
+    try:
+        asyncio.run(agent._cleanup_and_capture_runtime(Environment()))
+    except RuntimeError as error:
+        assert str(error) == "cleanup failed after finalization"
+    else:
+        raise AssertionError("cleanup failure must remain visible")
+    assert json.loads((agent.logs_dir / "captured.json").read_text()) == {"captured": True}
+
+
+def test_runtime_evidence_is_downloaded_before_cancellation_propagates(tmp_path: Path) -> None:
+    agent = object.__new__(AGENT_MODULE.OpenCorvusAgent)
+    agent.logs_dir = tmp_path / "agent"
+
+    async def cleanup(_self: object, _environment: object) -> None:
+        await asyncio.sleep(0.01)
+
+    class Environment:
+        async def download_file(self, source: str, target: Path) -> None:
+            assert source == "/run/opencorvus-host/credential-leak-audit.json"
+            Path(target).write_text('{"passed":true}\n')
+
+        async def download_dir(self, source: str, target: Path) -> None:
+            assert source == "/logs/agent"
+            target.mkdir(parents=True, exist_ok=True)
+            (target / "captured.json").write_text('{"captured":true}\n')
+
+    agent._cleanup_runtime = types.MethodType(cleanup, agent)
+
+    async def scenario() -> None:
+        task = asyncio.create_task(agent._cleanup_and_capture_runtime(Environment()))
+        await asyncio.sleep(0)
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            return
+        raise AssertionError("cancellation must propagate after evidence capture")
+
+    asyncio.run(scenario())
+    assert json.loads((agent.logs_dir / "captured.json").read_text()) == {"captured": True}
+
+
+def test_failed_credential_audit_blocks_full_evidence_download(tmp_path: Path) -> None:
+    agent = object.__new__(AGENT_MODULE.OpenCorvusAgent)
+    agent.logs_dir = tmp_path / "agent"
+
+    class Environment:
+        full_download_called = False
+
+        async def download_file(self, source: str, target: Path) -> None:
+            assert source == "/run/opencorvus-host/credential-leak-audit.json"
+            Path(target).write_text('{"passed":false,"violations":["redacted"]}\n')
+
+        async def download_dir(self, _source: str, _target: Path) -> None:
+            self.full_download_called = True
+
+    environment = Environment()
+    try:
+        asyncio.run(agent._capture_runtime_evidence(environment))
+    except RuntimeError as error:
+        assert str(error) == "container credential audit did not authorize evidence capture"
+    else:
+        raise AssertionError("failed credential audit must block full evidence capture")
+    assert environment.full_download_called is False
+    blocked = json.loads((agent.logs_dir / "evidence-capture-blocked.json").read_text())
+    assert blocked == {
+        "schema_version": 1,
+        "full_capture_authorized": False,
+        "reason": "credential_audit_not_passed",
+    }
+
+
+def test_primary_agent_failure_is_not_replaced_by_resource_failure(tmp_path: Path) -> None:
+    agent = AGENT_MODULE.OpenCorvusAgent(
+        tmp_path,
+        model_name="gpt-5.6-luna",
+        OPENCORVUS_VERSION="chain-proof-r1",
+    )
+
+    async def primary_failure(_self: object, *_args: object, **_kwargs: object) -> None:
+        raise ValueError("primary agent failure")
+
+    async def resource_failure(_self: object, _environment: object) -> None:
+        raise RuntimeError("resource settlement failure")
+
+    class Environment:
+        async def upload_file(self, _source: Path, _target: str) -> None:
+            return None
+
+    agent.exec_as_agent = types.MethodType(primary_failure, agent)
+    agent._cleanup_and_capture_runtime = types.MethodType(resource_failure, agent)
+    try:
+        asyncio.run(agent.run("instruction", Environment(), object()))
+    except ValueError as error:
+        assert str(error) == "primary agent failure"
+        assert error.__notes__ == [
+            "runtime cleanup/capture also failed: RuntimeError('resource settlement failure')"
+        ]
+    else:
+        raise AssertionError("primary Agent failure must remain the Trial exception")
+
+
 def test_credential_audit_accepts_logs_without_projected_secret_bytes(tmp_path: Path) -> None:
     home = tmp_path / "home"
     logs = tmp_path / "logs"
@@ -330,6 +460,66 @@ def test_catalog_adopts_one_fully_audited_official_result(tmp_path: Path) -> Non
     assert "audit_not_passed:evidence-manifest" in corrupted["attempts"][0]["violations"]
 
 
+def test_catalog_preserves_official_trial_when_agent_evidence_is_missing(tmp_path: Path) -> None:
+    trial = tmp_path / "run-1" / "trial-1"
+    trial.mkdir(parents=True)
+    (trial / "result.json").write_text(
+        json.dumps(
+            {
+                "task_name": "workbuddy/task-1",
+                "trial_name": "task-1__attempt",
+                "agent_result": {"n_input_tokens": None},
+                "verifier_result": {"rewards": {"reward": 0.0}},
+                "exception_info": {"exception_type": "NonZeroAgentExitCodeError"},
+            }
+        )
+    )
+    (trial / "agent").mkdir()
+    (trial / "agent" / "instruction.txt").write_text("preserved input")
+    catalog = CATALOG.build_catalog(tmp_path)
+    assert catalog["counts"] == {"sealed_candidate": 0, "invalid_bug": 1, "incomplete": 0}
+    attempt = catalog["attempts"][0]
+    assert attempt["disposition"]["reason"] == "agent_evidence_missing_after_trial"
+    assert attempt["official_result"] == "run-1/trial-1/result.json"
+    assert attempt["violations"] == ["agent_evidence_missing_after_trial"]
+
+
+def test_catalog_pairs_orphan_recovery_evidence_with_sibling_official_result(tmp_path: Path) -> None:
+    slot = tmp_path / "attempts" / "run-1"
+    trial = slot / "2026-08-25__00-00-00" / "task-1__attempt"
+    trial.mkdir(parents=True)
+    (trial / "result.json").write_text(
+        json.dumps(
+            {
+                "task_name": "workbuddy/task-1",
+                "trial_name": "task-1__attempt",
+                "agent_result": {"n_input_tokens": None},
+                "verifier_result": {"rewards": {"reward": 0.0}},
+                "exception_info": {"exception_type": "HostInterruption"},
+            }
+        )
+    )
+    recovered = slot / "orphan-recovery" / "container-1" / "agent"
+    recovered.mkdir(parents=True)
+    (recovered / "attempt-disposition.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "status": "invalid_bug",
+                "score_eligible": False,
+                "reason": "host_cancelled_before_agent_settlement",
+            }
+        )
+    )
+    catalog = CATALOG.build_catalog(tmp_path)
+    assert catalog["counts"] == {"sealed_candidate": 0, "invalid_bug": 1, "incomplete": 0}
+    attempt = catalog["attempts"][0]
+    assert attempt["slot_root"] == "attempts/run-1"
+    assert attempt["official_result"] == (
+        "attempts/run-1/2026-08-25__00-00-00/task-1__attempt/result.json"
+    )
+
+
 def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_path: Path) -> None:
     class Result:
         return_code = 0
@@ -346,6 +536,15 @@ def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_pa
 
         async def upload_file(self, source_path: Path, target_path: str) -> None:
             self.uploads.append((Path(source_path), target_path))
+
+        async def download_dir(self, source_path: str, target_path: Path) -> None:
+            assert source_path == "/logs/agent"
+            Path(target_path).mkdir(parents=True, exist_ok=True)
+            (Path(target_path) / "captured.json").write_text('{"captured":true}\n')
+
+        async def download_file(self, source_path: str, target_path: Path) -> None:
+            assert source_path == "/run/opencorvus-host/credential-leak-audit.json"
+            Path(target_path).write_text('{"passed":true}\n')
 
         async def exec(self, *, command: str, **_: object) -> Result:
             self.commands.append(command)
@@ -376,6 +575,9 @@ def test_host_cleanup_settles_exact_server_group_after_agent_cancellation(tmp_pa
     assert len(commands) == 2
     assert uploads == [(tmp_path / "instruction.txt", "/logs/agent/instruction.txt")]
     assert "opencorvus-server.pid" in commands[1]
+    assert "install -m 0600 /logs/agent/credential-leak-audit.json" in commands[1]
+    assert "/run/opencorvus-host/credential-leak-audit.json" in commands[1]
+    assert json.loads((tmp_path / "captured.json").read_text()) == {"captured": True}
     assert "host-cleanup.txt" in commands[1]
 
 

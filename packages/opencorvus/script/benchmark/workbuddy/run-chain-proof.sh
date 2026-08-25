@@ -228,6 +228,7 @@ print("\t".join([
         if [ -f "$pid_file" ]; then pid=$(cat "$pid_file"); fi
         OPENCORVUS_HOME=/tmp/opencorvus-workbuddy-home /opt/opencorvus/bin/run-opencorvus-workbuddy.py --cleanup-owned-processes
         printf "server_pid=%s\nserver_group_stopped=1\n" "$pid" > /logs/agent/host-cleanup.txt
+        rm -f /logs/agent/credential-leak-audit.json
         OPENCORVUS_HOME=/tmp/opencorvus-workbuddy-home /opt/opencorvus/bin/run-opencorvus-workbuddy.py --finalize-host-cancelled
       '; then
         quiesce_recovery_failure "$id" "$running" || true

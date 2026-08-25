@@ -73,6 +73,25 @@ if ! grep -F '"opencorvus-agent": HarnessRuntimeAdapter(' \
   "$workbuddy_root/src/workbuddy_bench/runner/harness_adapters.py" >/dev/null; then
   git -C "$workbuddy_root" apply "$adapter_root/workbuddy-harness-adapter.patch"
 fi
+if ! grep -F 'tmp_path.chmod(0o644)' \
+  "$workbuddy_root/src/workbuddy_bench/judge/runtime/harbor.py" >/dev/null; then
+  git -C "$workbuddy_root" apply "$adapter_root/workbuddy-verifier-upload-permission.patch"
+fi
+python3 - "$workbuddy_root" <<'PY'
+import subprocess
+import sys
+
+root = sys.argv[1]
+changed = set(subprocess.check_output(
+    ['git', '-C', root, 'diff', '--name-only'], text=True
+).splitlines())
+expected = {
+    'src/workbuddy_bench/judge/runtime/harbor.py',
+    'src/workbuddy_bench/runner/harness_adapters.py',
+}
+if changed != expected:
+    raise SystemExit(f'unexpected WorkBuddy overlay files: {sorted(changed)}')
+PY
 
 python3 - <<'PY'
 import os

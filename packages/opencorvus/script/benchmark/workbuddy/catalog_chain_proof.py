@@ -44,6 +44,17 @@ def nearest_result(agent_dir: Path, evidence_root: Path) -> Path | None:
     return None
 
 
+def attempt_slot_root(path: Path, evidence_root: Path) -> Path | None:
+    current = path
+    while evidence_root == current or evidence_root in current.parents:
+        if current.parent.name == "attempts":
+            return current
+        if current == evidence_root:
+            break
+        current = current.parent
+    return None
+
+
 def protected_secrets() -> list[bytes]:
     auth_path = Path("/var/lib/opencorvus-benchmark/provider-data/auth.json")
     if not auth_path.is_file():
@@ -105,10 +116,33 @@ def evidence_manifest_audit(root: Path) -> dict[str, Any]:
 def build_catalog(evidence_root: Path) -> dict[str, Any]:
     attempts = []
     secrets = protected_secrets()
+    official_results: dict[Path, dict[str, Any]] = {}
+    results_by_slot: dict[Path, list[Path]] = {}
+    for result_path in sorted(evidence_root.rglob("result.json")):
+        result = read_json(result_path)
+        if not isinstance(result, dict) or not result.get("trial_name") or not result.get("task_name"):
+            continue
+        resolved = result_path.resolve()
+        official_results[resolved] = result
+        slot_root = attempt_slot_root(result_path, evidence_root)
+        if slot_root is not None:
+            results_by_slot.setdefault(slot_root.resolve(), []).append(resolved)
+    claimed_results: set[Path] = set()
+    cataloged_slots: set[Path] = set()
     for disposition_path in sorted(evidence_root.rglob("agent/attempt-disposition.json")):
         agent_dir = disposition_path.parent
+        slot_root = attempt_slot_root(agent_dir, evidence_root)
+        resolved_slot = slot_root.resolve() if slot_root is not None else None
+        if resolved_slot is not None and resolved_slot in cataloged_slots:
+            continue
         disposition = read_json(disposition_path)
         result_path = nearest_result(agent_dir, evidence_root)
+        slot_results = results_by_slot.get(resolved_slot, []) if resolved_slot is not None else []
+        if result_path is None and len(slot_results) == 1:
+            result_path = slot_results[0]
+        if result_path is not None:
+            result_path = result_path.resolve()
+            claimed_results.add(result_path)
         audits = {}
         for name in (
             "skill-projection-audit",
@@ -162,6 +196,9 @@ def build_catalog(evidence_root: Path) -> dict[str, Any]:
         attempts.append(
             {
                 "attempt_root": agent_dir.parent.relative_to(evidence_root).as_posix(),
+                "slot_root": (
+                    slot_root.relative_to(evidence_root).as_posix() if slot_root is not None else None
+                ),
                 "status": status,
                 "score_eligible": status == "sealed_candidate",
                 "disposition": disposition,
@@ -170,6 +207,48 @@ def build_catalog(evidence_root: Path) -> dict[str, Any]:
                 "violations": violations,
             }
         )
+        if resolved_slot is not None:
+            cataloged_slots.add(resolved_slot)
+    for result_path, result in sorted(official_results.items(), key=lambda item: str(item[0])):
+        if result_path in claimed_results:
+            continue
+        slot_root = attempt_slot_root(result_path, evidence_root)
+        resolved_slot = slot_root.resolve() if slot_root is not None else None
+        if resolved_slot is not None and resolved_slot in cataloged_slots:
+            continue
+        trial_root = result_path.parent
+        agent_dir = trial_root / "agent"
+        slot_results = results_by_slot.get(resolved_slot, [result_path]) if resolved_slot is not None else [result_path]
+        violations = ["agent_evidence_missing_after_trial"]
+        if len(slot_results) != 1:
+            violations.append("multiple_official_trial_results_in_slot")
+        attempts.append(
+            {
+                "attempt_root": trial_root.relative_to(evidence_root).as_posix(),
+                "slot_root": (
+                    slot_root.relative_to(evidence_root).as_posix() if slot_root is not None else None
+                ),
+                "status": "invalid_bug",
+                "score_eligible": False,
+                "disposition": {
+                    "schema_version": 1,
+                    "status": "invalid_bug",
+                    "score_eligible": False,
+                    "reason": "agent_evidence_missing_after_trial",
+                },
+                "official_result": result_path.relative_to(evidence_root).as_posix(),
+                "official_results_in_slot": [
+                    path.relative_to(evidence_root).as_posix() for path in slot_results
+                ],
+                "audits": {
+                    "host-evidence-credential-leak": evidence_credential_audit(trial_root, secrets),
+                    "evidence-manifest": evidence_manifest_audit(agent_dir),
+                },
+                "violations": violations,
+            }
+        )
+        if resolved_slot is not None:
+            cataloged_slots.add(resolved_slot)
     counts = {
         status: sum(1 for attempt in attempts if attempt["status"] == status)
         for status in ("sealed_candidate", "invalid_bug", "incomplete")

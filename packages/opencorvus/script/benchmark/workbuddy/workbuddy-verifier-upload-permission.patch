@@ -1,0 +1,14 @@
+diff --git a/src/workbuddy_bench/judge/runtime/harbor.py b/src/workbuddy_bench/judge/runtime/harbor.py
+index e3a56f0..e977fb7 100644
+--- a/src/workbuddy_bench/judge/runtime/harbor.py
++++ b/src/workbuddy_bench/judge/runtime/harbor.py
+@@ -91,6 +91,7 @@ class HarborAttemptRuntime:
+         with tempfile.NamedTemporaryFile(
+             "w", suffix=".py", encoding="utf-8", delete=False
+         ) as tmp:
+             tmp.write(transformed)
+             tmp_path = Path(tmp.name)
++            tmp_path.chmod(0o644)
+         try:
+             await self.environment.upload_file(tmp_path, f"{self.tests_dir}/verifier.py")
+         finally:

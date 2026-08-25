@@ -7,6 +7,8 @@ import hashlib
 import json
 import shlex
 from pathlib import Path
+import tempfile
+from types import TracebackType
 from typing import Any
 
 from harbor.agents.installed.base import BaseInstalledAgent
@@ -90,6 +92,7 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 "install -m 0600 /run/secrets/opencorvus-provider/models.json "
                 "/tmp/opencorvus-workbuddy-home/data/models.json; "
                 "install -d -m 0755 /logs/agent; "
+                "install -d -m 0700 /run/opencorvus-host; "
                 f"{chown}"
                 f"{mount}/opencorvus --version"
             ),
@@ -117,6 +120,8 @@ class OpenCorvusAgent(BaseInstalledAgent):
             "OPENCORVUS_AGENT_TRACE": "1",
             "NO_PROXY": "127.0.0.1,localhost",
         }
+        primary_error: BaseException | None = None
+        primary_traceback: TracebackType | None = None
         try:
             await self.exec_as_agent(
                 environment,
@@ -128,13 +133,91 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 cwd="/workspace",
                 timeout_sec=None,
             )
-        finally:
-            cleanup = asyncio.create_task(self._cleanup_runtime(environment))
+        except BaseException as error:
+            primary_error = error
+            primary_traceback = error.__traceback__
+
+        resource_error: BaseException | None = None
+        try:
+            await self._cleanup_and_capture_runtime(environment)
+        except BaseException as error:
+            resource_error = error
+
+        if primary_error is not None:
+            if resource_error is not None:
+                primary_error.add_note(f"runtime cleanup/capture also failed: {resource_error!r}")
+            raise primary_error.with_traceback(primary_traceback)
+        if resource_error is not None:
+            raise resource_error
+
+    async def _cleanup_and_capture_runtime(self, environment: BaseEnvironment) -> None:
+        cleanup_error: BaseException | None = None
+        cleanup = asyncio.create_task(self._cleanup_runtime(environment))
+        try:
+            await asyncio.shield(cleanup)
+        except asyncio.CancelledError as error:
             try:
-                await asyncio.shield(cleanup)
-            except asyncio.CancelledError:
                 await cleanup
-                raise
+            except BaseException as settled_error:
+                cleanup_error = settled_error
+            else:
+                cleanup_error = error
+        except BaseException as error:
+            cleanup_error = error
+
+        capture_error: BaseException | None = None
+        try:
+            await self._capture_runtime_evidence(environment)
+        except BaseException as error:
+            capture_error = error
+
+        if cleanup_error is not None:
+            if capture_error is not None:
+                cleanup_error.add_note(f"runtime evidence capture also failed: {capture_error!r}")
+            raise cleanup_error
+        if capture_error is not None:
+            raise capture_error
+
+    async def _capture_runtime_evidence(self, environment: BaseEnvironment) -> None:
+        self.logs_dir.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(
+            prefix="opencorvus-credential-audit-", dir=self.logs_dir.parent
+        ) as temporary:
+            audit_path = Path(temporary) / "credential-leak-audit.json"
+            try:
+                await environment.download_file(
+                    "/run/opencorvus-host/credential-leak-audit.json", audit_path
+                )
+                audit = json.loads(audit_path.read_text(encoding="utf-8"))
+            except BaseException as error:
+                (self.logs_dir / "evidence-capture-blocked.json").write_text(
+                    json.dumps(
+                        {
+                            "schema_version": 1,
+                            "full_capture_authorized": False,
+                            "reason": "credential_audit_unavailable",
+                        },
+                        indent=2,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+                raise RuntimeError("container credential audit was unavailable") from error
+            if not isinstance(audit, dict) or audit.get("passed") is not True:
+                (self.logs_dir / "evidence-capture-blocked.json").write_text(
+                    json.dumps(
+                        {
+                            "schema_version": 1,
+                            "full_capture_authorized": False,
+                            "reason": "credential_audit_not_passed",
+                        },
+                        indent=2,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+                raise RuntimeError("container credential audit did not authorize evidence capture")
+        await environment.download_dir("/logs/agent", self.logs_dir)
 
     async def _cleanup_runtime(self, environment: BaseEnvironment) -> None:
         helper = f"{shlex.quote(self._mount_path)}/bin/run-opencorvus-workbuddy.py"
@@ -148,7 +231,16 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 "fi; "
                 f"OPENCORVUS_HOME=/tmp/opencorvus-workbuddy-home {helper} --cleanup-owned-processes; "
                 "printf 'server_pid=%s\\nserver_group_stopped=1\\n' \"$pid\" > /logs/agent/host-cleanup.txt; "
-                f"OPENCORVUS_HOME=/tmp/opencorvus-workbuddy-home {helper} --finalize-host-cancelled"
+                "rm -f /logs/agent/credential-leak-audit.json "
+                "/run/opencorvus-host/credential-leak-audit.json; "
+                "finalize_rc=0; "
+                f"OPENCORVUS_HOME=/tmp/opencorvus-workbuddy-home {helper} "
+                "--finalize-host-cancelled || finalize_rc=$?; "
+                "if [ ! -f /logs/agent/credential-leak-audit.json ]; then "
+                "[ \"$finalize_rc\" -ne 0 ] || finalize_rc=1; exit \"$finalize_rc\"; fi; "
+                "install -m 0600 /logs/agent/credential-leak-audit.json "
+                "/run/opencorvus-host/credential-leak-audit.json; "
+                "exit \"$finalize_rc\""
             ),
             timeout_sec=300,
         )
