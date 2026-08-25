@@ -3727,8 +3727,24 @@ export namespace MCP {
     return finishAuthCallback(mcpName, callback.code, oauthState)
   }
 
+  /**
+   * Rebuild a flow owner from the durable credential entry.
+   *
+   * The flow's facts — its OAuth state, its PKCE verifier and its lease
+   * generation — are all durable; only the in-process owner record is not. A
+   * process restart between authorize and callback therefore used to reject a
+   * completion whose every durable fact matched. The rebuilt owner carries the
+   * durable lease generation, so all of its writes stay exactly as fenced as
+   * the original flow's.
+   */
+  async function rebuildPendingOAuthFlowFromDurableFacts(authKey: string): Promise<PendingOAuthFlow | undefined> {
+    const entry = await McpAuth.get(authKey)
+    if (!entry?.oauthState || !entry.codeVerifier || !entry.revision) return undefined
+    return { state: entry.oauthState, revision: entry.revision, correlationID: crypto.randomUUID() }
+  }
+
   async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<PendingOAuthFlow> {
-    const owner = pendingOAuthFlows.get(authKey)
+    const owner = pendingOAuthFlows.get(authKey) ?? (await rebuildPendingOAuthFlowFromDurableFacts(authKey))
     if (!owner) {
       throw new OAuthStateError({ mcpName, message: "OAuth flow is no longer current" })
     }
@@ -3785,8 +3801,18 @@ export namespace MCP {
     const mcpConfig = requireMcpEntry(config, mcpName)
     const authKey = mcpAuthKey(mcpName)
 
-    const owner = flow ?? pendingOAuthFlows.get(authKey)
-    if (!owner || pendingOAuthFlows.get(authKey) !== owner) {
+    let owner = flow ?? pendingOAuthFlows.get(authKey)
+    if (owner && !flow && pendingOAuthFlows.get(authKey) !== owner) {
+      throw new Error(`No pending OAuth flow for MCP server: ${mcpName}`)
+    }
+    if (!owner) {
+      // The durable facts outlive the process that started the flow. A
+      // rebuilt owner finishes with the same PKCE verifier and under the same
+      // lease generation; only a flow whose durable facts are gone — revoked,
+      // superseded, or never started — is refused.
+      owner = await rebuildPendingOAuthFlowFromDurableFacts(authKey)
+    }
+    if (!owner) {
       throw new Error(`No pending OAuth flow for MCP server: ${mcpName}`)
     }
     if (!isMcpConfigured(mcpConfig)) {
