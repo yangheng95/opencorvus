@@ -4,7 +4,10 @@ import importlib.util
 import json
 import tempfile
 import unittest
+import wave
 from pathlib import Path
+
+import numpy as np
 
 
 HERE = Path(__file__).resolve().parent
@@ -111,6 +114,27 @@ class DesktopV5RTest(unittest.TestCase):
             self.assertEqual(int(stream["sample_rate"]), 48000)
             self.assertEqual(int(stream["channels"]), 2)
             self.assertAlmostEqual(float(probe["format"]["duration"]), 2.0, places=2)
+            with wave.open(str(soundtrack), "rb") as source:
+                samples = np.frombuffer(source.readframes(source.getnframes()), dtype="<i2")
+            self.assertGreater(float(np.sqrt(np.mean(samples.astype(np.float64) ** 2))), 60.0)
+
+    def test_sound_cue_ledger_covers_every_scene_at_dense_intervals(self) -> None:
+        schedule = V5R.sound_cue_schedule()
+        by_scene: dict[str, list[float]] = {}
+        for scene, timestamp, _ in schedule:
+            by_scene.setdefault(scene, []).append(timestamp)
+        self.assertEqual(set(by_scene), {scene["id"] for scene in self.storyboard["scenes"]})
+        self.assertGreaterEqual(len(schedule), 110)
+        for scene in self.storyboard["scenes"]:
+            timestamps = by_scene[scene["id"]]
+            self.assertGreaterEqual(len(timestamps), 9, scene["id"])
+            self.assertLessEqual(max(b - a for a, b in zip(timestamps, timestamps[1:])), 3.0, scene["id"])
+
+    def test_closing_frame_uses_a_fixed_full_canvas_brand_grid(self) -> None:
+        frame = V5R.render_personal_cta(15.8, 16.0, self.assets)
+        self.assertEqual(frame.size, (1280, 720))
+        self.assertEqual(frame.mode, "RGB")
+        self.assertGreater(len(frame.getcolors(maxcolors=1280 * 720) or []), 64)
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ import json
 import math
 import re
 import subprocess
+import wave
 from pathlib import Path
 from typing import Any, Callable
 
@@ -84,7 +85,75 @@ def desktop(clock: str = "10:24") -> Image.Image:
 
 
 def rounded_panel(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], *, fill: tuple[int, int, int] = PAPER, accent: tuple[int, int, int] = BLUE) -> None:
+    x0, y0, x1, y1 = box
+    draw.rounded_rectangle((x0 + 9, y0 + 11, x1 + 9, y1 + 11), radius=18, fill=(35, 48, 77, 18))
     draw.rounded_rectangle(box, radius=16, fill=(*fill, 248), outline=(*accent, 110), width=2)
+    draw.line((x0 + 28, y0, min(x1 - 28, x0 + 170), y0), fill=(*accent, 220), width=5)
+    for offset, color in ((0, accent), (18, COBALT), (36, GREEN)):
+        draw.ellipse((x1 - 76 + offset, y0 + 18, x1 - 66 + offset, y0 + 28), fill=(*color, 150))
+
+
+def motion_geometry(image: Image.Image, t: float, duration: float, motif: str) -> None:
+    """Scene-bound motion language in safe margins; every shape represents flow or state."""
+    draw = ImageDraw.Draw(image, "RGBA")
+    progress = max(0.0, min(1.0, t / max(duration, 0.01)))
+    accent = {
+        "input": ORANGE, "context": COBALT, "branches": RED, "anchor": BLUE,
+        "frontier": GREEN, "recovery": GREEN, "artifact": COBALT, "review": GREEN,
+        "evolution": ORANGE, "stack": BLUE, "evidence": GREEN, "workflow": COBALT,
+    }[motif]
+    # A persistent animated runtime rail makes time and scene progress visible.
+    rail_x0, rail_x1, rail_y = 356, 930, 34
+    draw.line((rail_x0, rail_y, rail_x1, rail_y), fill=(*BLUE, 38), width=2)
+    for index in range(9):
+        x = rail_x0 + index * (rail_x1 - rail_x0) / 8
+        radius = 4 if index / 8 <= progress else 2
+        draw.ellipse((x - radius, rail_y - radius, x + radius, rail_y + radius), fill=(*accent, 205 if radius == 4 else 65))
+    head = rail_x0 + (rail_x1 - rail_x0) * progress
+    draw.ellipse((head - 8, rail_y - 8, head + 8, rail_y + 8), fill=(*accent, 235), outline=(*PAPER, 255), width=2)
+
+    # Side telemetry uses moving diamonds and connective traces, never text cards.
+    for index in range(7):
+        y = 112 + index * 73
+        offset = 12 * math.sin(t * 1.2 + index * 0.8)
+        x = 1242 + offset
+        color = (accent, COBALT, GREEN, ORANGE)[index % 4]
+        draw.line((1219, y, x - 9, y), fill=(*color, 48), width=2)
+        draw.polygon([(x, y - 8), (x + 8, y), (x, y + 8), (x - 8, y)], fill=(*color, 118))
+
+    # The lower flow line changes topology per scene and remains above the taskbar.
+    base_y = 666
+    if motif in {"branches", "recovery", "review", "evolution"}:
+        origin = (84, base_y)
+        branches = [(260, base_y - 16), (430, base_y + 4), (600, base_y - 12)]
+        for index, destination in enumerate(branches):
+            reveal = phase(t, index * 0.35, 0.7)
+            end = (origin[0] + (destination[0] - origin[0]) * reveal, origin[1] + (destination[1] - origin[1]) * reveal)
+            draw.line((origin, end), fill=(*accent, 115), width=3)
+            draw.ellipse((end[0] - 5, end[1] - 5, end[0] + 5, end[1] + 5), fill=(*accent, 190))
+    else:
+        points = [(80 + index * 82, base_y + 8 * math.sin(t * 1.5 + index * 0.65)) for index in range(8)]
+        draw.line(points, fill=(*accent, 105), width=3)
+        for index, (x, y) in enumerate(points):
+            radius = 5 + (2 if (index + int(t * 2)) % 4 == 0 else 0)
+            draw.ellipse((x - radius, y - radius, x + radius, y + radius), fill=(*accent, 175))
+
+    # Scene-specific focal geometry strengthens causality without adding labels.
+    if motif == "context":
+        center = (1120, 350)
+        for radius, alpha in ((54, 70), (72, 42), (90, 25)):
+            start = int((t * 72 + radius) % 360)
+            draw.arc((center[0] - radius, center[1] - radius, center[0] + radius, center[1] + radius), start, start + int(220 * progress + 40), fill=(*accent, alpha + 55), width=5)
+    elif motif in {"frontier", "artifact", "workflow"}:
+        for index in range(5):
+            travel = (progress * 1.7 + index / 5) % 1
+            x = 74 + travel * 1125
+            y = 635 - 10 * math.sin(travel * math.pi)
+            draw.ellipse((x - 6, y - 6, x + 6, y + 6), fill=(*accent, 190))
+    elif motif == "anchor":
+        center = (1170, 606)
+        for radius in (18, 32, 46):
+            draw.ellipse((center[0] - radius, center[1] - radius, center[0] + radius, center[1] + radius), outline=(*accent, 115 - radius), width=3)
 
 
 def header(draw: ImageDraw.ImageDraw, title: str, subtitle: str = "") -> None:
@@ -206,6 +275,7 @@ def render_project(t: float, duration: float, _: dict[str, Image.Image]) -> Imag
         slogan_progress = min(1.0, (t - 14.0) / 2.5)
         visible_slogan = slogan[: max(1, math.ceil(len(slogan) * slogan_progress))]
         draw.text((230, 602), visible_slogan, font=font(20), fill=BLUE)
+    motion_geometry(image, t, duration, "input")
     return camera(image, t, duration, (810, 350), 0.018)
 
 
@@ -256,6 +326,7 @@ def render_failure(t: float, duration: float, _: dict[str, Image.Image]) -> Imag
     fill_y = 505 - int(370 * occupancy)
     draw.rectangle((1175, fill_y, 1187, 505), fill=COBALT)
     draw.text((1142, 526), f"{round(occupancy * 100)}%", font=font(18, mono=True), fill=BLUE)
+    motion_geometry(image, t, duration, "context")
     return camera(image, t, duration, (760, 350), 0.022)
 
 
@@ -289,6 +360,7 @@ def render_fragmentation(t: float, duration: float, _: dict[str, Image.Image]) -
     if clipboard:
         draw.rounded_rectangle((220, 555, 1080, 625), radius=14, fill=(30, 35, 43, round(235 * clipboard)))
         draw.text((252, 573), "clipboard history: project-context-v1 / v2 / v3", font=font(20, mono=True), fill=(245, 248, 250, round(255 * clipboard)))
+    motion_geometry(image, t, duration, "branches")
     return camera(image, t, duration, (650, 360), 0.018)
 
 
@@ -314,6 +386,7 @@ def render_mission(t: float, duration: float, _: dict[str, Image.Image]) -> Imag
     if t > 17:
         tag(draw, 820, 558, "Mission record committed", GREEN)
         draw.text((170, 566), "revision: 1 · durable facts: 4", font=font(19, mono=True), fill=BLUE)
+    motion_geometry(image, t, duration, "anchor")
     return camera(image, t, duration, (720, 350), 0.021)
 
 
@@ -365,6 +438,7 @@ def render_scheduler(t: float, duration: float, _: dict[str, Image.Image]) -> Im
     if running:
         tag(draw, 112, 470, "activation lease acquired", GREEN)
         draw.text((112, 530), "occurrence: occ_03 · squad revision: frozen", font=font(19, mono=True), fill=BLUE)
+    motion_geometry(image, t, duration, "frontier")
     return camera(image, t, duration, (760, 360), 0.024)
 
 
@@ -403,6 +477,7 @@ def render_recovery(t: float, duration: float, _: dict[str, Image.Image]) -> Ima
         if t >= reveal_at:
             draw.text((160, yy), line[0], font=font(18, mono=True), fill=line[1])
             yy += 27
+    motion_geometry(image, t, duration, "recovery")
     return camera(image, t, duration, (720, 360), 0.02)
 
 
@@ -441,6 +516,7 @@ def render_artifact(t: float, duration: float, _: dict[str, Image.Image]) -> Ima
             yy += 100
     if t >= 14:
         tag(draw, 866, 506, "source accepted", GREEN)
+    motion_geometry(image, t, duration, "artifact")
     return camera(image, t, duration, (720, 350), 0.021)
 
 
@@ -473,6 +549,7 @@ def render_review(t: float, duration: float, _: dict[str, Image.Image]) -> Image
         draw.text((300, 486), "or", font=font(20, mono=True), fill=MUTED)
         tag(draw, 348, 480, "blocked with evidence", AMBER)
         draw.text((116, 556), "不保证成功；保证诚实收敛和可检查证据。", font=font(21), fill=BLUE)
+    motion_geometry(image, t, duration, "review")
     return camera(image, t, duration, (660, 340), 0.022)
 
 
@@ -506,6 +583,7 @@ def render_evolution(t: float, duration: float, _: dict[str, Image.Image]) -> Im
     if t >= 17:
         draw.line((116, 548, 1100, 548), fill=(*BLUE, 70), width=2)
         draw.text((116, 574), "mutation receipt · before v4.1 → after v4.2 · rollback ref · restore requires confirmation", font=font(18, mono=True), fill=BLUE)
+    motion_geometry(image, t, duration, "evolution")
     return camera(image, t, duration, (710, 360), 0.02)
 
 
@@ -531,6 +609,7 @@ def render_open_ecosystem(t: float, duration: float, _: dict[str, Image.Image]) 
             draw.text((142 + i * 36, y + 15), title, font=font(20, mono=True, bold=True), fill=color)
             draw.text((480, y + 16), desc, font=font(19), fill=INK)
     draw.text((112, 574), "不是排名：编码、办公、runtime 与 Mission orchestration 解决不同层次。", font=font(20), fill=BLUE)
+    motion_geometry(image, t, duration, "stack")
     return camera(image, t, duration, (690, 360), 0.018)
 
 
@@ -568,30 +647,78 @@ def render_proof(t: float, duration: float, assets: dict[str, Image.Image]) -> I
         draw.rounded_rectangle((100, 548, 1168, 620), radius=12, fill=(249, 248, 248, 244), outline=(*GREEN, 140), width=2)
         draw.text((128, 558), "monitor + inference · figures · 5-page paper · tests · public repository", font=font(20, mono=True), fill=INK)
         draw.text((128, 588), "github.com/yangheng95/deberta-v3-absa-public-evidence", font=font(18, mono=True, bold=True), fill=BLUE)
+    motion_geometry(image, t, duration, "evidence")
     return camera(image, t % 7, 7, (650, 350), 0.014)
 
 
 def render_personal_cta(t: float, duration: float, _: dict[str, Image.Image]) -> Image.Image:
-    image = desktop("12:41")
-    draw = ImageDraw.Draw(image, "RGBA")
-    if t < 10:
-        header(draw, "YOUR NEXT LONG WORKFLOW", "research → implementation → test → revision → release")
-        folders = ["毕业论文", "课程项目", "个人 OSS", "副业应用", "作品集", "独立研究"]
-        for i, label in enumerate(folders):
-            if t >= i * 1.1:
-                x = 100 + (i % 3) * 365
-                y = 180 + (i // 3) * 180
-                draw.rounded_rectangle((x, y, x + 300, y + 118), radius=16, fill=(249, 248, 248), outline=(*BLUE, 110), width=2)
-                draw.rectangle((x + 24, y + 30, x + 84, y + 80), fill=PALE_BLUE, outline=COBALT, width=2)
-                draw.text((x + 112, y + 43), label, font=font(22, bold=True), fill=INK)
-        if t > 7:
-            tag(draw, 450, 558, "Create Mission", GREEN)
-        brand_signature(image)
-    else:
-        brand_signature(image, full=True)
-        draw.text((360, 476), "别再替 Agent 维持每一次交接。", font=font(27, bold=True), fill=BLUE)
-        draw.text((400, 530), "Case · github.com/yangheng95/deberta-v3-absa-public-evidence", font=font(18, mono=True), fill=MUTED)
-    return camera(image, min(t, 10), 10, (650, 360), 0.012)
+    workflow = desktop("12:41")
+    draw = ImageDraw.Draw(workflow, "RGBA")
+    header(draw, "YOUR NEXT LONG WORKFLOW", "research → implementation → test → revision → release")
+    folders = ["毕业论文", "课程项目", "个人 OSS", "副业应用", "作品集", "独立研究"]
+    centers: list[tuple[int, int]] = []
+    for i, label in enumerate(folders):
+        x = 100 + (i % 3) * 365
+        y = 180 + (i // 3) * 180
+        centers.append((x + 150, y + 59))
+        if t >= i * 1.1:
+            reveal = phase(t, i * 1.1, 0.55)
+            outline = (COBALT, GREEN, ORANGE)[i % 3]
+            draw.rounded_rectangle((x + 7, y + 9, x + 307, y + 127), radius=18, fill=(35, 48, 77, 17))
+            draw.rounded_rectangle((x, y, x + 300, y + 118), radius=16, fill=(249, 248, 248), outline=(*outline, 155), width=2)
+            size = round(24 + 32 * reveal)
+            draw.regular_polygon((x + 54, y + 58, size), n_sides=6, rotation=30 + i * 15, fill=(*outline, 42), outline=(*outline, 190))
+            draw.ellipse((x + 48, y + 52, x + 60, y + 64), fill=(*outline, 230))
+            draw.text((x + 112, y + 43), label, font=font(22, bold=True), fill=INK)
+            if i:
+                previous = centers[i - 1]
+                line_progress = phase(t, i * 1.1 + 0.2, 0.5)
+                endpoint = (previous[0] + (centers[i][0] - previous[0]) * line_progress, previous[1] + (centers[i][1] - previous[1]) * line_progress)
+                draw.line((previous, endpoint), fill=(*outline, 95), width=3)
+    if t > 7:
+        tag(draw, 450, 558, "Create Mission", GREEN)
+    brand_signature(workflow)
+    motion_geometry(workflow, min(t, 10), 10, "workflow")
+    workflow = camera(workflow, min(t, 9.2), 9.2, (650, 360), 0.012)
+
+    closing = desktop("12:41")
+    closing_draw = ImageDraw.Draw(closing, "RGBA")
+    for x in range(48, W, 64):
+        closing_draw.line((x, 54, x, 642), fill=(*BLUE, 12), width=1)
+    for y in range(66, 642, 64):
+        closing_draw.line((44, y, 1236, y), fill=(*BLUE, 12), width=1)
+    closing_draw.rounded_rectangle((76, 82, 1204, 636), radius=28, fill=(249, 248, 248, 247), outline=(*BLUE, 62), width=2)
+    closing_draw.line((410, 120, 410, 438), fill=(*BLUE, 65), width=2)
+    orbit = 38 * math.sin(min(1.0, max(0.0, (t - 9.2) / 1.3)) * math.pi / 2)
+    center = (242, 270)
+    for radius, start, color in ((126, 205, BLUE), (96, 25, COBALT), (66, 128, GREEN)):
+        closing_draw.arc((center[0] - radius, center[1] - radius, center[0] + radius, center[1] + radius), start, start + 235 + orbit, fill=(*color, 145), width=4)
+    closing.alpha_composite(ICON.resize((176, 176), Image.Resampling.LANCZOS), (154, 182))
+    wordmark = WORDMARK.resize((465, round(WORDMARK.height * 465 / WORDMARK.width)), Image.Resampling.LANCZOS)
+    closing.alpha_composite(wordmark, (486, 138))
+    identities = [
+        ("WEBSITE", "opencorvus.com", BLUE),
+        ("PROJECT", "github.com/yangheng95/opencorvus", COBALT),
+        ("AUTHOR", "Heng Yang · @yangheng95", GREEN),
+    ]
+    for index, (label, value, color) in enumerate(identities):
+        y = 244 + index * 66
+        closing_draw.regular_polygon((498, y + 13, 10), n_sides=6, rotation=30, fill=(*color, 210))
+        closing_draw.text((524, y), label, font=font(18, mono=True, bold=True), fill=color)
+        closing_draw.text((668, y - 2), value, font=font(20, mono=True), fill=INK)
+    closing_draw.rounded_rectangle((132, 466, 1148, 532), radius=18, fill=(*PALE_BLUE, 210), outline=(*COBALT, 100), width=2)
+    closing_draw.ellipse((160, 488, 174, 502), fill=ORANGE)
+    closing_draw.text((196, 479), "别再替 Agent 维持每一次交接。", font=font(28, bold=True), fill=BLUE)
+    closing_draw.line((666, 498, 1110, 498), fill=(*COBALT, 70), width=2)
+    closing_draw.rounded_rectangle((132, 558, 1148, 608), radius=13, fill=(255, 255, 255, 242), outline=(*GREEN, 90), width=2)
+    closing_draw.text((160, 571), "CASE", font=font(18, mono=True, bold=True), fill=GREEN)
+    closing_draw.text((250, 570), "github.com/yangheng95/deberta-v3-absa-public-evidence", font=font(18, mono=True), fill=INK)
+    for index, color in enumerate((COBALT, BLUE, GREEN, ORANGE, COBALT)):
+        x = 1000 + index * 28
+        closing_draw.regular_polygon((x, 108, 9), n_sides=6, rotation=30, fill=(*color, 175))
+
+    blend = phase(t, 9.2, 0.9)
+    return Image.blend(workflow.convert("RGB"), closing.convert("RGB"), blend)
 
 
 RENDERERS: dict[str, Callable[[float, float, dict[str, Image.Image]], Image.Image]] = {
@@ -882,26 +1009,119 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     destination.write_text(header_text + "\n".join(events) + "\n", encoding="utf-8-sig")
 
 
+def sound_cue_schedule() -> list[tuple[str, float, str]]:
+    """An explicit, inspectable cue ledger; every scene has its own audible action language."""
+    relative = {
+        "R01-project": [(0.7, "typing"), (2.1, "typing"), (3.6, "paper"), (5.65, "transition"), (7.0, "typing"), (9.2, "typing"), (11.4, "click"), (13.7, "typing"), (15.6, "confirm"), (17.5, "scene")],
+        "R02-failure": [(0.4, "data"), (2.5, "data"), (4.7, "data"), (6.8, "warning"), (9.0, "compaction"), (11.15, "transition"), (12.8, "constraint-drop"), (14.7, "warning"), (16.3, "transition"), (18.2, "skip"), (20.5, "false-done"), (23.3, "scene")],
+        "R03-fragmentation": [(0.4, "session"), (2.2, "typing"), (4.0, "duplicate"), (5.9, "typing"), (7.7, "conflict"), (9.5, "orphan"), (11.3, "paper"), (13.1, "click"), (15.4, "scene")],
+        "R04-mission-record": [(0.4, "write"), (2.9, "stamp"), (5.4, "write"), (7.9, "stamp"), (10.4, "write"), (12.9, "stamp"), (15.4, "dependency"), (18.0, "commit"), (19.7, "write"), (21.3, "scene")],
+        "R05-scheduler": [(0.4, "queue"), (2.9, "waiting"), (5.4, "read"), (7.8, "judge"), (10.2, "dispatch"), (12.7, "call"), (15.1, "receipt"), (17.6, "ready"), (20.0, "dispatch"), (22.5, "running"), (24.5, "scene")],
+        "R06-recovery": [(0.4, "process"), (2.8, "data"), (5.0, "dropout"), (7.1, "lease"), (9.3, "clock"), (11.5, "terminal"), (13.7, "successor"), (15.8, "recovery"), (18.0, "reread"), (20.4, "scene")],
+        "R07-artifact": [(0.4, "artifact"), (2.5, "typing"), (4.6, "checksum"), (6.7, "read"), (8.8, "select"), (11.15, "transition"), (12.8, "handoff"), (14.8, "transition"), (16.3, "receipt"), (18.4, "scene")],
+        "R08-review": [(0.4, "review"), (2.7, "reproduce"), (5.1, "reject"), (7.5, "patch"), (9.9, "test"), (12.3, "retest"), (14.7, "accept"), (17.1, "evidence"), (18.5, "scene")],
+        "R09-evolution": [(0.4, "candidate"), (2.8, "feedback"), (5.2, "proposal"), (7.6, "compare"), (10.0, "metric"), (12.4, "metric"), (14.8, "regression"), (17.2, "reject"), (19.6, "receipt"), (22.3, "scene")],
+        "R10-open-ecosystem": [(0.4, "layer"), (2.1, "layer"), (3.8, "layer"), (5.5, "open"), (7.2, "selfhost"), (8.9, "audit"), (10.6, "fork"), (12.3, "mission"), (13.5, "scene")],
+        "R11-proof": [(0.4, "server"), (2.7, "task"), (5.0, "agent"), (7.3, "cuda"), (9.6, "gpu"), (11.9, "experiment"), (14.2, "metric"), (16.5, "result"), (18.8, "boundary"), (20.5, "scene")],
+        "R12-personal-cta": [(0.4, "option"), (2.2, "option"), (4.0, "option"), (5.8, "option"), (7.6, "option"), (9.4, "option"), (11.2, "new-mission"), (13.2, "confirm"), (15.3, "resolve")],
+    }
+    starts: dict[str, float] = {}
+    cursor = 0.0
+    storyboard = json.loads(STORYBOARD.read_text(encoding="utf-8"))
+    for scene in storyboard["scenes"]:
+        starts[scene["id"]] = cursor
+        cursor += float(scene["duration"])
+    return [(scene, starts[scene] + offset, kind) for scene, cues in relative.items() for offset, kind in cues]
+
+
+POSITIVE_CUES = {"confirm", "commit", "receipt", "ready", "running", "recovery", "accept", "result", "new-mission", "resolve"}
+NEGATIVE_CUES = {"warning", "constraint-drop", "skip", "false-done", "duplicate", "conflict", "orphan", "dropout", "lease", "terminal", "reject", "regression"}
+MATERIAL_CUES = {"paper", "stamp", "artifact", "handoff", "evidence"}
+DATA_CUES = {"data", "session", "write", "dependency", "queue", "waiting", "read", "judge", "dispatch", "call", "process", "clock", "successor", "reread", "checksum", "select", "review", "reproduce", "patch", "test", "retest", "candidate", "feedback", "proposal", "compare", "metric", "layer", "open", "selfhost", "audit", "fork", "mission", "server", "task", "agent", "cuda", "experiment", "boundary", "option"}
+
+
+def cue_wave(kind: str, x: np.ndarray) -> tuple[np.ndarray, float]:
+    active = (x >= 0).astype(np.float64)
+    if kind == "typing":
+        gate = (np.mod(x, 0.115) < 0.018) * (x < 0.82) * active
+        return gate * (0.030 * np.sin(2 * np.pi * 1780 * x) + 0.018 * np.sin(2 * np.pi * 2960 * x)), -0.25
+    if kind in {"transition", "compaction"}:
+        envelope = np.sin(np.pi * np.clip(x / 0.72, 0, 1)) ** 2 * (x < 0.72) * active
+        texture = np.sin(2 * np.pi * (180 * x + 620 * x * x)) + 0.38 * np.sin(2 * np.pi * 3371 * x)
+        return 0.055 * envelope * texture, 0.0
+    if kind in NEGATIVE_CUES:
+        envelope = np.exp(-3.8 * x) * (x < 0.9) * active
+        phase_value = 2 * np.pi * (330 * x - 125 * x * x)
+        glitch = (np.mod(x, 0.095) < 0.045).astype(np.float64)
+        return envelope * (0.050 * np.sin(phase_value) + 0.016 * glitch * np.sin(2 * np.pi * 890 * x)), -0.18
+    if kind in POSITIVE_CUES:
+        first = np.exp(-7 * x) * np.sin(2 * np.pi * 620 * x) * (x < 0.65) * active
+        y = x - 0.16
+        second = np.exp(-6 * y) * np.sin(2 * np.pi * 930 * y) * (y >= 0) * (y < 0.7)
+        return 0.050 * first + 0.042 * second, 0.22
+    if kind in MATERIAL_CUES:
+        envelope = np.exp(-8 * x) * (x < 0.65) * active
+        knock = 0.055 * np.sin(2 * np.pi * 145 * x) + 0.026 * np.sin(2 * np.pi * 1850 * x)
+        rustle = 0.012 * np.sin(2 * np.pi * (1150 * x + 950 * x * x)) * (x < 0.45)
+        return envelope * knock + rustle, -0.08
+    if kind == "gpu":
+        envelope = np.sin(np.pi * np.clip(x / 2.0, 0, 1)) ** 2 * (x < 2.0) * active
+        fan = 0.028 * np.sin(2 * np.pi * 118 * x) + 0.013 * np.sin(2 * np.pi * 236 * x)
+        return envelope * fan, 0.05
+    if kind == "scene":
+        envelope = np.exp(-5.5 * x) * (x < 0.6) * active
+        return 0.030 * envelope * (np.sin(2 * np.pi * 110 * x) + 0.4 * np.sin(2 * np.pi * 220 * x)), 0.0
+    if kind == "click":
+        envelope = np.exp(-32 * x) * (x < 0.18) * active
+        return 0.065 * envelope * (np.sin(2 * np.pi * 1250 * x) + 0.35 * np.sin(2 * np.pi * 2800 * x)), 0.25
+    if kind in DATA_CUES:
+        pulse = np.mod(x, 0.17)
+        gate = (pulse < 0.055) * (x < 0.58) * active
+        envelope = np.exp(-7 * pulse)
+        base = 500 + 37 * (sum(ord(char) for char in kind) % 9)
+        return 0.038 * gate * envelope * (np.sin(2 * np.pi * base * x) + 0.32 * np.sin(2 * np.pi * base * 2.01 * x)), 0.18
+    raise ValueError(f"Unknown sound cue: {kind}")
+
+
 def build_sound(duration: float, destination: Path) -> None:
-    typing = "0.022*sin(2*PI*1450*t)*between(mod(t,0.18),0,0.012)*between(t,0.4,15.5)"
-    events = [
-        (5.65, 760, 0.11), (18, 520, 0.16), (25, 420, 0.22), (29.15, 650, 0.12), (34.30, 980, 0.16),
-        (47, 730, 0.12), (58, 880, 0.14), (78, 1040, 0.18), (86, 620, 0.12), (93, 760, 0.12),
-        (98, 920, 0.14), (103, 1100, 0.18), (110, 260, 0.32), (116, 360, 0.22), (121, 880, 0.18),
-        (132, 720, 0.12), (137.15, 980, 0.18), (140.80, 820, 0.14), (151, 340, 0.25), (160, 1080, 0.2), (181, 920, 0.18),
-        (201, 720, 0.12), (208, 840, 0.12), (215, 960, 0.15), (232, 1040, 0.18),
-    ]
-    pulses = []
-    for start, frequency, amplitude in events:
-        dt = f"(t-{start})"
-        pulses.append(f"{amplitude}*sin(2*PI*{frequency}*{dt})*exp(-18*abs({dt}))*between(t,{start},{start + .35})")
-    ambience = "0.010*(sin(2*PI*92*t)+0.45*sin(2*PI*138*t))*(0.72+0.28*sin(2*PI*0.07*t))"
-    expression = typing + "+" + ambience + "+" + "+".join(pulses)
-    lavfi_expression = expression.replace(",", r"\,")
-    run([
-        "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", f"aevalsrc={lavfi_expression}:s=48000:d={duration}",
-        "-af", f"afade=t=in:st=0:d=1.2,afade=t=out:st={max(0, duration - 3)}:d=3", "-ac", "2", str(destination),
-    ])
+    sample_rate = 48000
+    cues = sound_cue_schedule()
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(destination), "wb") as target:
+        target.setnchannels(2)
+        target.setsampwidth(2)
+        target.setframerate(sample_rate)
+        chunk_samples = sample_rate
+        written = 0
+        total_samples = int(round(duration * sample_rate))
+        while written < total_samples:
+            count = min(chunk_samples, total_samples - written)
+            t = (written + np.arange(count, dtype=np.float64)) / sample_rate
+            beat = np.mod(t, 60 / 86)
+            beat_envelope = np.exp(-7.2 * beat) * (beat < 0.34)
+            left = 0.0060 * np.sin(2 * np.pi * 71 * t) + 0.0040 * np.sin(2 * np.pi * 113 * t + 0.3)
+            right = 0.0060 * np.sin(2 * np.pi * 73 * t + 0.2) + 0.0040 * np.sin(2 * np.pi * 109 * t)
+            pulse = 0.012 * beat_envelope * np.sin(2 * np.pi * 122 * t)
+            shimmer = 0.0035 * np.sin(2 * np.pi * 247 * t + 0.55 * np.sin(2 * np.pi * 0.05 * t))
+            left += pulse + shimmer
+            right += pulse + 0.9 * shimmer
+            chunk_start = written / sample_rate
+            chunk_end = (written + count) / sample_rate
+            for _, start, kind in cues:
+                if start + 2.1 < chunk_start or start >= chunk_end:
+                    continue
+                mono, pan = cue_wave(kind, t - start)
+                left += mono * math.sqrt((1 - pan) / 2)
+                right += mono * math.sqrt((1 + pan) / 2)
+            fade_in = np.clip(t / 1.0, 0, 1)
+            fade_out = np.clip((duration - t) / 2.5, 0, 1)
+            left *= fade_in * fade_out
+            right *= fade_in * fade_out
+            stereo = np.column_stack((left, right))
+            peak = max(1.0, float(np.max(np.abs(stereo))) / 0.82)
+            pcm = np.asarray(np.clip(stereo / peak, -1, 1) * 32767, dtype="<i2")
+            target.writeframes(pcm.tobytes())
+            written += count
 
 
 def opening_brand_overlay(root: Path) -> Path:
@@ -1039,7 +1259,12 @@ def compose(output: Path) -> Path:
     run([
         "ffmpeg", "-y", "-v", "error", "-i", str(video), "-i", str(voice), "-i", str(sound),
         "-filter_complex",
-        f"[0:v]scale=1920:1080:flags=lanczos,cas=0.30,ass='{ass_filter}'[v];[1:a]volume=1.0[vo];[2:a]volume=0.62[fx];[vo][fx]amix=inputs=2:duration=first:dropout_transition=0[a]",
+        f"[0:v]scale=1920:1080:flags=lanczos,cas=0.30,ass='{ass_filter}'[v];"
+        "[1:a]volume=1.0,asplit=2[vo][sidechain];"
+        "[2:a]volume=0.92[fx];"
+        "[fx][sidechain]sidechaincompress=threshold=0.018:ratio=7:attack=10:release=280:makeup=1[ducked];"
+        "[vo][ducked]amix=inputs=2:duration=first:dropout_transition=0,"
+        "loudnorm=I=-16:TP=-1.5:LRA=9[a]",
         "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "slow", "-crf", "17", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", "-movflags", "+faststart", str(final),
     ])
