@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-landing-deberta-mission-scale.md](2026-08-25-landing-deberta-mission-scale.md) replaces the featured long-horizon landing example with a catalog-bound DeBERTa research-engineering Mission and an accessible six-to-eighteen-stage magical expansion.
+
 - [2026-08-25-v0.0.54-beta-release.md](2026-08-25-v0.0.54-beta-release.md) freezes, validates, publishes, and integrates the `0.0.54-beta` application and website release from the reviewed post-`0.0.53-beta` runtime and download-selection repairs.
 
 - [2026-08-25-website-version-bound-download.md](2026-08-25-website-version-bound-download.md) binds the landing-page primary action to the current manifest asset on single-architecture Windows, exposes the exact version/file selection, and makes ambiguous platforms choose explicitly.

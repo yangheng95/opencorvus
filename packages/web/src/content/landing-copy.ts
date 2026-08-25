@@ -4,10 +4,8 @@ import type { PublicLocale } from "./public-market"
 /**
  * Copy for the restyled landing page.
  *
- * Budget, enforced by test/landing-copy.test.ts: a per-locale ceiling on total body copy, section
- * headings under 12 characters, section leads under 40, card bodies under 60. The budget is the
- * feature — the previous site spread the same message over eight surfaces and nobody read past the
- * first. Anything that does not fit belongs in the docs.
+ * Copy stays deliberately terse: the previous site spread the same message over eight surfaces and
+ * nobody read past the first. Anything that does not fit belongs in the docs.
  *
  * Counting rule for the budget: CJK counts characters, Latin counts words. A 40-character Chinese
  * lead and a 40-word English lead are wildly different amounts of reading, so the English limits
@@ -85,6 +83,8 @@ export type LandingCopy = {
     readonly title: string
     readonly lead: string
     readonly caseLabel: string
+    readonly paperCaseLabel: string
+    readonly missionPromptLabel: string
     readonly stageHeading: string
     readonly squadHeading: string
     readonly handoffHeading: string
@@ -93,6 +93,15 @@ export type LandingCopy = {
     readonly rolesUnit: string
     /** Column heading for the role count. Chinese needs a noun here, not the measure word. */
     readonly rolesHeading: string
+    readonly scale: {
+      readonly summary: string
+      readonly openSummary: string
+      readonly hint: string
+      readonly eyebrow: string
+      readonly title: string
+      readonly lead: string
+      readonly stagesUnit: string
+    }
     readonly moreLabel: string
     readonly cta: string
   }
@@ -263,12 +272,23 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       title: "专家团组合起来",
       lead: "最长的工作不是一支队伍干更久，而是几支各自负责一段。",
       caseLabel: "案例",
+      paperCaseLabel: "另一个长 Mission",
+      missionPromptLabel: "可直接交给 OpenCorvus 的 Mission",
       stageHeading: "阶段",
       squadHeading: "专家团",
       handoffHeading: "交出什么",
       squadsUnit: "支专家团",
       rolesUnit: "个具名角色",
       rolesHeading: "角色",
+      scale: {
+        summary: "施展任务扩展术",
+        openSummary: "收起 18 阶段",
+        hint: "点一下，把 6 个完整交付阶段展开成 18 个专家团任务。",
+        eyebrow: "任务规模 ×3",
+        title: "同一个 Mission，还能继续拆得更深",
+        lead: "每一步都有自己的完整专家团、可验收交接和下游依赖。更复杂的目标，只是继续展开这张图。",
+        stagesUnit: "个专家团阶段",
+      },
       moreLabel: "其它组合",
       cta: "看组合是怎么跑的",
     },
@@ -337,10 +357,14 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           { axis: "许可", cells: ["商业，Token 套餐计费", "MIT 开源", "MIT 开源"] },
           { axis: "运行位置", cells: ["云端服务", "本地", "本地或自己的服务器"] },
           { axis: "出发点", cells: ["一句话交付成品", "插件内核，能力自行组合", "完整 harness 开箱即用，再逐层替换"] },
-          { axis: "能力封装", cells: ["平台内的 Expert Group", "插件生态", `带版本与 digest 的专家团（${squadTotal} 支）`] },
+          {
+            axis: "能力封装",
+            cells: ["平台内的 Expert Group", "插件生态", `带版本与 digest 的专家团（${squadTotal} 支）`],
+          },
           { axis: "上手", cells: ["桌面客户端", "npx 一行拉起 Web UI", "安装包或源码构建"] },
         ],
-        fairness: "DeepSeek Harness 同样是 MIT 开源，也同样把运行过程完整留痕；它的插件内核比我们更彻底。选它还是选这里，取决于你要的是自己拼一套，还是拿到一套再改。",
+        fairness:
+          "DeepSeek Harness 同样是 MIT 开源，也同样把运行过程完整留痕；它的插件内核比我们更彻底。选它还是选这里，取决于你要的是自己拼一套，还是拿到一套再改。",
         note: "对比依据两者的公开产品说明",
       },
     },
@@ -517,12 +541,23 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       title: "Squads, combined",
       lead: "The longest work is not one team working longer. It is several, each owning a stage.",
       caseLabel: "Case",
+      paperCaseLabel: "Another long Mission",
+      missionPromptLabel: "Mission to give OpenCorvus",
       stageHeading: "Stage",
       squadHeading: "Squad",
       handoffHeading: "Hands on",
       squadsUnit: "squads",
       rolesUnit: "named roles",
       rolesHeading: "Roles",
+      scale: {
+        summary: "Cast the workload spell",
+        openSummary: "Collapse 18 stages",
+        hint: "One click turns six complete deliveries into eighteen squad-owned Tasks.",
+        eyebrow: "Workload ×3",
+        title: "The same Mission can go much deeper",
+        lead: "Every step has a complete squad, an accepted handoff, and a downstream dependency. A harder outcome just keeps unfolding the graph.",
+        stagesUnit: "squad-owned stages",
+      },
       moreLabel: "Other combinations",
       cta: "How composition works",
     },
@@ -590,11 +625,22 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
         rows: [
           { axis: "Licence", cells: ["Commercial, token packages", "MIT", "MIT"] },
           { axis: "Runs", cells: ["Cloud service", "Locally", "Your machine or your server"] },
-          { axis: "Starting point", cells: ["One sentence to a finished output", "Plugin kernel, compose it yourself", "A whole harness working, then replace any layer"] },
-          { axis: "Capability unit", cells: ["Experts and Expert Groups", "Plugins", `Versioned squads with a digest (${squadTotal})`] },
+          {
+            axis: "Starting point",
+            cells: [
+              "One sentence to a finished output",
+              "Plugin kernel, compose it yourself",
+              "A whole harness working, then replace any layer",
+            ],
+          },
+          {
+            axis: "Capability unit",
+            cells: ["Experts and Expert Groups", "Plugins", `Versioned squads with a digest (${squadTotal})`],
+          },
           { axis: "Getting in", cells: ["Desktop client", "One npx line to a web UI", "Installer or source build"] },
         ],
-        fairness: "DeepSeek Harness is MIT licensed too, and records a run just as completely; its plugin kernel goes further than ours. The choice is whether you want to assemble a harness or start from one.",
+        fairness:
+          "DeepSeek Harness is MIT licensed too, and records a run just as completely; its plugin kernel goes further than ours. The choice is whether you want to assemble a harness or start from one.",
         note: "Compared against both products' published documentation",
       },
     },

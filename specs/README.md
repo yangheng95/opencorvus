@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest landing DeBERTa Mission scale expansion: [`2026-08-25-landing-deberta-mission-scale.md`](records/2026-08/2026-08-25-landing-deberta-mission-scale.md).
+
 Latest `v0.0.54-beta` application and website release: [`2026-08-25-v0.0.54-beta-release.md`](records/2026-08/2026-08-25-v0.0.54-beta-release.md).
 
 Latest public-site version-bound download repair: [`2026-08-25-website-version-bound-download.md`](records/2026-08/2026-08-25-website-version-bound-download.md).

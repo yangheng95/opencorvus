@@ -3,11 +3,14 @@ import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
 import OcDemoVideo from "./OcDemoVideo.astro"
 import { landingCopy } from "../content/landing-copy"
-import { platformFacts } from "../content/platform-facts"
 import { publicPath, type PublicLocale } from "../content/public-market"
 import config from "../../config.mjs"
 import type { FeaturedSquad } from "../lib/landing-featured-squads"
-import { featuredComposition, otherCompositions } from "../lib/landing-compositions"
+import {
+  featuredComposition,
+  otherCompositions,
+  selfPaperComposition,
+} from "../lib/landing-compositions"
 import { readDownloadManifest, formatBytes } from "../lib/landing-downloads"
 
 type Props = {
@@ -35,10 +38,10 @@ const downloads = readDownloadManifest()
 // The case study and the shorter chains beside it. Counts come from the generated catalog facts;
 // see lib/landing-compositions.ts.
 const caseStudy = featuredComposition(locale)
+const paperStudy = selfPaperComposition(locale)
+const detailedCases = [caseStudy, paperStudy]
 const combinations = otherCompositions(locale)
 
-// Only generated facts are allowed to be the largest thing on the page. See platform-facts.ts.
-const featurableSquadTotal = platformFacts.squadTotal
 ---
 
 <OcLayout
@@ -251,10 +254,14 @@ const featurableSquadTotal = platformFacts.squadTotal
       <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.compose.title}</h2>
       <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.compose.lead}</p>
 
+      {
+        detailedCases.map((caseStudy, caseIndex) => (
       <div class="oc-card-raised oc-case oc-reveal">
         <div class="oc-case-head">
           <div class="oc-case-head-copy">
-            <p class="oc-eyebrow">{copy.compose.caseLabel}</p>
+            <p class="oc-eyebrow">
+              {caseIndex === 0 ? copy.compose.caseLabel : copy.compose.paperCaseLabel}
+            </p>
             <h3 class="oc-text-title oc-cjk-spacing">{caseStudy.title}</h3>
             <p class="oc-text-caption oc-text-description">{caseStudy.lead}</p>
           </div>
@@ -265,6 +272,15 @@ const featurableSquadTotal = platformFacts.squadTotal
             <span class="oc-text-xs oc-text-description">{copy.compose.rolesUnit}</span>
           </p>
         </div>
+
+        {
+          caseStudy.prompt && (
+            <details class="oc-paper-prompt">
+              <summary>{copy.compose.missionPromptLabel}</summary>
+              <p class="oc-text-caption oc-text-description">{caseStudy.prompt}</p>
+            </details>
+          )
+        }
 
         <ol class="oc-case-chain">
           {
@@ -286,6 +302,67 @@ const featurableSquadTotal = platformFacts.squadTotal
         </ol>
 
         {
+          caseStudy.expanded && (
+            <details class="oc-mission-scale" data-oc-mission-scale>
+              <summary class="oc-mission-spell">
+                <span class="oc-mission-spell-stars" aria-hidden="true">
+                  <span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span>
+                </span>
+                <span class="oc-mission-spell-copy">
+                  <span class="oc-mission-spell-label oc-mission-spell-label-closed">{copy.compose.scale.summary}</span>
+                  <span class="oc-mission-spell-label oc-mission-spell-label-open">{copy.compose.scale.openSummary}</span>
+                  <span class="oc-text-xs oc-mission-spell-hint">{copy.compose.scale.hint}</span>
+                </span>
+                <span class="oc-mission-scale-count" aria-hidden="true">
+                  <span>{caseStudy.squadCount}</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path>
+                  </svg>
+                  <span>{caseStudy.expanded.squadCount}</span>
+                </span>
+              </summary>
+
+              <div class="oc-mission-expanded">
+                <div class="oc-mission-expanded-head">
+                  <div>
+                    <p class="oc-eyebrow">{copy.compose.scale.eyebrow}</p>
+                    <h4 class="oc-text-title oc-cjk-spacing">{copy.compose.scale.title}</h4>
+                    <p class="oc-text-caption oc-text-description">{copy.compose.scale.lead}</p>
+                  </div>
+                  <p class="oc-case-total">
+                    <span class="oc-case-total-value">{caseStudy.expanded.squadCount}</span>
+                    <span class="oc-text-xs oc-text-description">{copy.compose.scale.stagesUnit}</span>
+                    <span class="oc-case-total-value">{caseStudy.expanded.roleCount}</span>
+                    <span class="oc-text-xs oc-text-description">{copy.compose.rolesUnit}</span>
+                  </p>
+                </div>
+
+                <ol class="oc-mission-expanded-chain">
+                  {
+                    caseStudy.expanded.steps.map((step, index) => (
+                      <li class="oc-mission-expanded-step" style={`animation-delay: ${Math.min(index, 9) * 45}ms`}>
+                        <p class="oc-mission-expanded-stage">
+                          <span>{String(index + 1).padStart(2, "0")}</span>
+                          {step.stage}
+                        </p>
+                        <p class="oc-case-squad">
+                          <a class="oc-link" href={step.href}>{step.squadLabel}</a>
+                          <span class="oc-text-xs oc-text-description">
+                            {step.agentCount} {copy.compose.rolesUnit}
+                          </span>
+                        </p>
+                        <p class="oc-text-caption oc-text-description oc-case-handoff">{step.handoff}</p>
+                      </li>
+                    ))
+                  }
+                </ol>
+              </div>
+            </details>
+          )
+        }
+
+        {
           caseStudy.extras && (
             <p class="oc-text-caption oc-text-secondary oc-case-extras">
               {caseStudy.extras.lead}{" "}
@@ -297,6 +374,8 @@ const featurableSquadTotal = platformFacts.squadTotal
           )
         }
       </div>
+        ))
+      }
 
       <p class="oc-eyebrow oc-combo-label oc-reveal">{copy.compose.moreLabel}</p>
       <ul class="oc-combo-grid">
@@ -1047,6 +1126,361 @@ const featurableSquadTotal = platformFacts.squadTotal
     margin: 0;
   }
 
+  /* Expanded means eighteen total stages, not the six-stage summary plus eighteen more. The
+     native disclosure remains the one state source; :has() lets CSS replace the preceding chain
+     without a parallel JavaScript-owned visibility flag. */
+  .oc-case:has(> .oc-mission-scale[open]) > .oc-case-head .oc-case-total,
+  .oc-case:has(> .oc-mission-scale[open]) > .oc-case-chain {
+    display: none;
+  }
+
+  .oc-paper-prompt {
+    margin-top: var(--oc-space-5);
+    border: 1px solid var(--oc-color-border-secondary);
+    border-radius: var(--oc-radius-card);
+    background: var(--oc-color-bg-surface-2);
+  }
+
+  .oc-paper-prompt summary {
+    padding: var(--oc-space-3) var(--oc-space-4);
+    font-family: var(--oc-font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--oc-color-text-primary);
+    cursor: pointer;
+  }
+
+  .oc-paper-prompt p {
+    margin: 0;
+    padding: var(--oc-space-2) var(--oc-space-4) var(--oc-space-4);
+    max-width: 104ch;
+    line-height: 1.75;
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  /* ------------------------------------------------ Mission scale spell */
+
+  .oc-mission-scale {
+    position: relative;
+    margin-top: var(--oc-space-6);
+    padding-top: var(--oc-space-5);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-mission-spell {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--oc-space-4);
+    min-height: 72px;
+    padding: var(--oc-space-3) var(--oc-space-4);
+    overflow: hidden;
+    border: 1px solid var(--oc-color-border-secondary);
+    border-radius: var(--oc-radius-panel);
+    background:
+      radial-gradient(circle at 18% 20%, rgba(111, 141, 250, 0.2), transparent 38%),
+      linear-gradient(120deg, var(--oc-color-bg-surface-3), var(--oc-color-bg-surface-5));
+    cursor: pointer;
+    list-style: none;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .oc-mission-spell::-webkit-details-marker {
+    display: none;
+  }
+
+  .oc-mission-spell::before,
+  .oc-mission-spell::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .oc-mission-spell::before {
+    width: 220px;
+    height: 220px;
+    right: -72px;
+    top: 50%;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 10deg,
+      transparent,
+      rgba(111, 141, 250, 0.55),
+      transparent 28%,
+      rgba(224, 75, 34, 0.28),
+      transparent 58%,
+      rgba(111, 141, 250, 0.45),
+      transparent
+    );
+    opacity: 0.45;
+    transform: translateY(-50%) rotate(0deg);
+    transition: opacity 0.25s ease;
+  }
+
+  .oc-mission-spell::after {
+    inset: 1px;
+    border-radius: calc(var(--oc-radius-panel) - 1px);
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.22) 50%, transparent 65%);
+    transform: translateX(-115%);
+  }
+
+  .oc-mission-spell:hover {
+    border-color: var(--oc-color-brand-light);
+    box-shadow: 0 0 0 4px rgba(111, 141, 250, 0.08), var(--oc-shadow-card);
+    transform: translateY(-1px);
+  }
+
+  .oc-mission-spell:focus-visible {
+    outline: 2px solid var(--oc-color-brand);
+    outline-offset: 3px;
+  }
+
+  .oc-mission-scale[data-burst="true"] .oc-mission-spell::before {
+    animation: oc-mission-ring 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .oc-mission-scale[data-burst="true"] .oc-mission-spell::after {
+    animation: oc-mission-shimmer 0.75s ease-out;
+  }
+
+  .oc-mission-spell-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-1);
+  }
+
+  .oc-mission-spell-label {
+    font-family: var(--oc-font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-mission-spell-label-open,
+  .oc-mission-scale[open] .oc-mission-spell-label-closed {
+    display: none;
+  }
+
+  .oc-mission-scale[open] .oc-mission-spell-label-open {
+    display: inline;
+  }
+
+  .oc-mission-spell-hint {
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-mission-scale-count {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-2) var(--oc-space-3);
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-pill);
+    background: var(--oc-color-bg-surface-raised);
+    font-family: var(--oc-font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--oc-color-text-primary);
+    white-space: nowrap;
+  }
+
+  .oc-mission-scale-count svg {
+    color: var(--oc-color-brand);
+    transition: transform 0.35s ease;
+  }
+
+  .oc-mission-scale[open] .oc-mission-scale-count svg {
+    transform: rotate(180deg);
+  }
+
+  .oc-mission-spell-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .oc-mission-spell-stars span {
+    position: absolute;
+    color: var(--oc-color-brand);
+    opacity: 0.65;
+    transform: scale(0.85);
+  }
+
+  .oc-mission-spell-stars span:nth-child(1) { left: 48%; top: 14%; }
+  .oc-mission-spell-stars span:nth-child(2) { left: 58%; bottom: 10%; }
+  .oc-mission-spell-stars span:nth-child(3) { right: 22%; top: 14%; }
+  .oc-mission-spell-stars span:nth-child(4) { right: 13%; bottom: 12%; }
+  .oc-mission-spell-stars span:nth-child(5) { right: 5%; top: 10%; }
+
+  .oc-mission-scale[data-burst="true"] .oc-mission-spell-stars span {
+    animation: oc-mission-star 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--oc-star-index, 0) * 55ms);
+  }
+
+  .oc-mission-spell-stars span:nth-child(1) { --oc-star-index: 0; }
+  .oc-mission-spell-stars span:nth-child(2) { --oc-star-index: 1; }
+  .oc-mission-spell-stars span:nth-child(3) { --oc-star-index: 2; }
+  .oc-mission-spell-stars span:nth-child(4) { --oc-star-index: 3; }
+  .oc-mission-spell-stars span:nth-child(5) { --oc-star-index: 4; }
+
+  .oc-mission-expanded {
+    position: relative;
+    margin-top: var(--oc-space-4);
+    padding: var(--oc-space-5);
+    overflow: hidden;
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-panel);
+    background:
+      linear-gradient(180deg, rgba(111, 141, 250, 0.08), transparent 220px),
+      var(--oc-color-bg-surface-4);
+  }
+
+  .oc-mission-expanded::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    right: -150px;
+    top: -150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(111, 141, 250, 0.22), transparent 68%);
+    pointer-events: none;
+  }
+
+  .oc-mission-expanded-head {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--oc-space-5);
+    padding-bottom: var(--oc-space-5);
+    border-bottom: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-mission-expanded-head > div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    max-width: 56ch;
+  }
+
+  .oc-mission-expanded-chain {
+    position: relative;
+    list-style: none;
+    margin: var(--oc-space-5) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--oc-space-3);
+  }
+
+  @media (min-width: 700px) {
+    .oc-mission-expanded-chain {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .oc-mission-expanded-chain {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .oc-mission-expanded-step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-2);
+    min-width: 0;
+    padding: var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .oc-mission-scale[open] .oc-mission-expanded-step {
+    animation: oc-mission-step 0.5s ease-out backwards;
+  }
+
+  .oc-mission-expanded-stage {
+    display: flex;
+    align-items: baseline;
+    gap: var(--oc-space-2);
+    margin: 0;
+    font-family: var(--oc-font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-mission-expanded-stage span {
+    color: var(--oc-color-brand);
+  }
+
+  @keyframes oc-mission-ring {
+    0% { transform: translateY(-50%) rotate(0deg) scale(0.7); opacity: 0.2; }
+    55% { opacity: 0.85; }
+    100% { transform: translateY(-50%) rotate(280deg) scale(1.15); opacity: 0.45; }
+  }
+
+  @keyframes oc-mission-shimmer {
+    from { transform: translateX(-115%); }
+    to { transform: translateX(115%); }
+  }
+
+  @keyframes oc-mission-star {
+    0% { opacity: 0; transform: translateY(8px) scale(0.4) rotate(0deg); }
+    55% { opacity: 1; }
+    100% { opacity: 0.65; transform: translateY(-8px) scale(1.25) rotate(90deg); }
+  }
+
+  @keyframes oc-mission-step {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 520px) {
+    .oc-mission-spell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .oc-mission-scale-count {
+      justify-self: start;
+    }
+
+    .oc-mission-expanded {
+      padding: var(--oc-space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oc-mission-spell,
+    .oc-mission-scale-count svg,
+    .oc-mission-scale[open] .oc-mission-expanded-step {
+      transition: none;
+      animation: none;
+    }
+
+    .oc-mission-scale[data-burst="true"] .oc-mission-spell::before,
+    .oc-mission-scale[data-burst="true"] .oc-mission-spell::after,
+    .oc-mission-scale[data-burst="true"] .oc-mission-spell-stars span {
+      animation: none;
+    }
+  }
+
   .oc-case-extras {
     margin: var(--oc-space-6) 0 0;
     padding-top: var(--oc-space-5);
@@ -1475,6 +1909,24 @@ const featurableSquadTotal = platformFacts.squadTotal
       revealTargets.forEach((element) => observer.observe(element))
     }
   }
+
+  /* ----------------------------------------------- Mission scale disclosure */
+
+  const reducedMissionMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+  document.querySelectorAll<HTMLDetailsElement>("[data-oc-mission-scale]").forEach((scale) => {
+    let burstTimer = 0
+    scale.addEventListener("toggle", () => {
+      window.clearTimeout(burstTimer)
+      delete scale.dataset.burst
+      if (!scale.open || reducedMissionMotion.matches) return
+      // Restarting on a new frame lets repeated opens replay one finite burst without leaving an
+      // ambient animation running around eighteen paragraphs of actual work.
+      requestAnimationFrame(() => {
+        scale.dataset.burst = "true"
+        burstTimer = window.setTimeout(() => delete scale.dataset.burst, 950)
+      })
+    })
+  })
 
   /* ------------------------------------------------------------- tab groups */
 
