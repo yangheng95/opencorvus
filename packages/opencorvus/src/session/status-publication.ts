@@ -1,13 +1,12 @@
 import {
   awaitTaskMessageProtocolBridgeIdle,
   ensureTaskMessageProtocolBridge,
-  persistTaskSessionLifecycle,
   provideTaskMessageProtocolBridgeProjectDeletionAdmission,
 } from "@/orchestrator/protocol/message-bridge"
 import { Instance, type ProjectDeletionAdmission } from "@/project/instance"
 import { runWithIndependentProjectIdentity, runWithProjectDeletionIdentity } from "@/project/independent-project-owner"
 import type { Session } from "@/session"
-import { executionLifecycleOrderKey, SessionStatus } from "@/session/status"
+import { SessionStatus } from "@/session/status"
 import { awaitWithAbort } from "@/util/abort"
 
 type SettledSessionTerminalStatusInput = {
@@ -75,19 +74,18 @@ async function persistSettledSessionTerminalStatus(
   const isCurrentOccurrence =
     SessionStatus.executionOccurrence(input.session.id)?.inputMessageID === input.inputMessageID
   const current = SessionStatus.getExecution(input.session.id, input.inputMessageID)
-  if (!isCurrentOccurrence) {
-    // Validate the historical occurrence against its durable user Message
-    // without replacing the Session's live process occurrence or activity.
+  // One publication owner for both settlement paths: `SessionStatus.set`
+  // publishes the lifecycle fact on the Bus, and the protocol bridge
+  // subscriber persists it — exactly how a live prompt's own terminal
+  // travels. Suppressing the publication here and persisting directly was
+  // the split that left every Bus subscriber, including an attached public
+  // client, without the settled path's terminal receipt.
+  ensureTaskMessageProtocolBridge()
+  if (!isCurrentOccurrence || current.type !== "terminal") {
     await SessionStatus.set(input.session.id, input.status, {
-      publish: false,
       taskID: input.taskID,
       inputMessageID: input.inputMessageID,
-    })
-  } else if (current.type !== "terminal") {
-    await SessionStatus.set(input.session.id, input.status, {
-      publish: false,
-      taskID: input.taskID,
-      inputMessageID: input.inputMessageID,
+      settledOccurrence: true,
     })
   }
   input.signal?.throwIfAborted()
@@ -97,13 +95,7 @@ async function persistSettledSessionTerminalStatus(
   if (terminal.type !== "terminal") {
     throw new Error(`settled Session ${input.session.id} did not acquire a terminal lifecycle fact`)
   }
-  await persistTaskSessionLifecycle(SessionStatus.Event.Status.type, {
-    sessionID: input.session.id,
-    inputMessageID: input.inputMessageID,
-    taskID: input.taskID,
-    orderKey: executionLifecycleOrderKey(input.session.id, input.inputMessageID),
-    status: terminal,
-  })
+  await awaitWithAbort(awaitTaskMessageProtocolBridgeIdle(), input.signal)
   input.signal?.throwIfAborted()
   return terminal
 }

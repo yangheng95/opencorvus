@@ -264,14 +264,24 @@ export namespace SessionStatus {
       promptGenerationOwner?: AbortSignal
       taskID?: string
       inputMessageID?: string
+      /**
+       * The caller settled this occurrence against its durable facts — its
+       * user Message and Task ledger — not against the live prompt. The
+       * prompt-owner gate exists to stop a stale writer from clobbering the
+       * live owner's status; a validated settlement is not a stale writer,
+       * and silently dropping it would leave the durable occurrence without
+       * its terminal publication.
+       */
+      settledOccurrence?: boolean
     },
   ): Promise<void> {
     const promptOwner = promptGenerationOwners[sessionID]
     if (
-      (promptOwner && options?.promptGenerationOwner !== promptOwner) ||
-      (!promptOwner &&
-        options?.promptGenerationOwner &&
-        options.promptGenerationOwner !== finishedPromptGenerationOwners[sessionID])
+      !options?.settledOccurrence &&
+      ((promptOwner && options?.promptGenerationOwner !== promptOwner) ||
+        (!promptOwner &&
+          options?.promptGenerationOwner &&
+          options.promptGenerationOwner !== finishedPromptGenerationOwners[sessionID]))
     ) {
       return Promise.resolve()
     }
