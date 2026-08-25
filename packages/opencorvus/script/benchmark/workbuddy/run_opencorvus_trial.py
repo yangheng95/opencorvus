@@ -520,8 +520,13 @@ def observe(mission_id: str, mission_session_id: str) -> dict[str, Any]:
 
 
 def activity_signature(observation: dict[str, Any]) -> str:
+    mission_status = {
+        key: value
+        for key, value in observation["mission_status"].items()
+        if key != "generatedAt"
+    }
     compact = {
-        "mission_status": observation["mission_status"],
+        "mission_status": mission_status,
         "mission_completion": observation["mission_record"].get("completion"),
         "messages": [
             (
@@ -753,9 +758,10 @@ def finalize_host_cancelled() -> int:
                 "reason": "host_cancelled_before_agent_settlement",
             },
         )
-    write_json(LOGS / "credential-leak-audit.json", credential_leak_audit())
+    credential_audit = credential_leak_audit()
+    write_json(LOGS / "credential-leak-audit.json", credential_audit)
     seal_manifest(LOGS)
-    return 0
+    return 0 if credential_audit["passed"] else 2
 
 
 def main() -> int:

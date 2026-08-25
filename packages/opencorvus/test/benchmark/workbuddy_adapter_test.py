@@ -83,6 +83,13 @@ def test_prepare_and_run_share_lock_and_engine_cleanup_contract() -> None:
     assert supervisor.index("trap cleanup_owned_exit EXIT") < supervisor.index("test -S \"$docker_socket\"")
     assert "workbuddy_windows_docker" in lifecycle
     assert "provider-volume-cleanup-pending.json" in lifecycle
+    assert "setsid env PYTHONPATH=" in supervisor
+    assert 'mounts.get("/run/secrets/opencorvus-provider/auth.json")' in supervisor
+    assert "--cleanup-owned-processes" in supervisor
+    assert "orphan-recovery" in supervisor
+    assert "/run/evidence/attempt-owner.json" in supervisor
+    assert "orphan-recovery-pending.json" in supervisor
+    assert "credential-leak-audit.json" in supervisor
 
 
 def test_accepts_exact_skill_as_each_participating_owners_first_tool() -> None:
@@ -235,6 +242,19 @@ def test_streaming_part_growth_advances_activity_signature() -> None:
     observation["all_transcript"][0]["parts"][0]["text"] = "first and more streamed reasoning"
     after = MODULE.activity_signature(observation)
     assert before != after
+
+
+def test_activity_signature_ignores_query_generation_time() -> None:
+    observation = {
+        "mission_status": {"status": "inactive", "generatedAt": 100},
+        "mission_record": {"completion": {"status": "completed"}},
+        "all_transcript": [],
+        "tasks": [],
+        "durable_settlement": {"passed": True, "violations": []},
+    }
+    first = MODULE.activity_signature(observation)
+    observation["mission_status"]["generatedAt"] = 200
+    assert MODULE.activity_signature(observation) == first
 
 
 def test_credential_audit_accepts_logs_without_projected_secret_bytes(tmp_path: Path) -> None:
@@ -412,3 +432,22 @@ def test_host_cancel_finalizer_seals_database_usage_and_invalid_disposition(tmp_
     assert len(usage) == 1
     assert (logs / "opencorvus-data" / "opencorvus.db").is_file()
     assert (logs / "evidence-manifest.json").is_file()
+
+
+def test_host_cancel_finalizer_rejects_secret_bearing_evidence(tmp_path: Path) -> None:
+    home = tmp_path / "home"
+    logs = tmp_path / "logs"
+    (home / "data").mkdir(parents=True)
+    logs.mkdir()
+    secret = "secret-access-value"
+    (home / "data" / "auth.json").write_text(json.dumps({"openai": {"access": secret}}))
+    (logs / "server.log").write_text(f"unsafe {secret}")
+    previous_home, previous_logs = MODULE.HOME, MODULE.LOGS
+    MODULE.HOME, MODULE.LOGS = home, logs
+    try:
+        assert MODULE.finalize_host_cancelled() == 2
+    finally:
+        MODULE.HOME, MODULE.LOGS = previous_home, previous_logs
+    audit = json.loads((logs / "credential-leak-audit.json").read_text())
+    assert audit["passed"] is False
+    assert audit["violations"] == ["credential_bytes_present:server.log"]

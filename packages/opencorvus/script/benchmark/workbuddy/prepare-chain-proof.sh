@@ -17,7 +17,6 @@ runtime_commit=e8cdd1be4d280399bbb953562000b430f4e59fe7
 image=workbuddy-bench/harness/opencorvus:chain-proof-r1
 docker_socket=/mnt/wsl/docker-desktop/shared-sockets/host-services/docker.proxy.sock
 provider_volume=opencorvus-workbuddy-provider-chain-proof-r1
-provider_utility_image='python:3.12-slim@sha256:3ecf5ebe01fef4b6e81be34511fb40bf378ea7fd81ab215ba15b2775ef85413d'
 provider_volume_owned=0
 . "$adapter_root/docker-volume-lifecycle.sh"
 
@@ -38,6 +37,10 @@ exec 8>"$control_root/chain-proof.lock"
 if ! flock -n 8; then
   echo "chain-proof lock is already held" >&2
   exit 4
+fi
+if [ -f "$control_root/orphan-recovery-pending.json" ]; then
+  echo "orphan recovery is pending; preserve container and volume for recovery" >&2
+  exit 6
 fi
 
 test "$(git -C "$workbuddy_root" rev-parse HEAD)" = "$official_commit"
@@ -204,15 +207,15 @@ receipt = {
 Path(output).write_text(json.dumps(receipt, indent=2) + '\n')
 PY
 
-docker pull "$provider_utility_image" >/dev/null
+docker pull "$workbuddy_provider_utility_image" >/dev/null
 tar -C /var/lib/opencorvus-benchmark/provider-data -cf - auth.json models.json | \
   docker run --rm -i --mount "type=volume,source=$provider_volume,target=/target" \
-    "$provider_utility_image" tar -C /target -xf -
+    "$workbuddy_provider_utility_image" tar -C /target -xf -
 tar -C "$control_root" -cf - source-receipt.json | \
   docker run --rm -i --mount "type=volume,source=$provider_volume,target=/target" \
-    "$provider_utility_image" tar -C /target -xf -
+    "$workbuddy_provider_utility_image" tar -C /target -xf -
 docker run --rm --mount "type=volume,source=$provider_volume,target=/target" \
-  "$provider_utility_image" sh -ceu \
+  "$workbuddy_provider_utility_image" sh -ceu \
     'chmod 600 /target/auth.json /target/models.json; chmod 644 /target/source-receipt.json; test "$(find /target -mindepth 1 -maxdepth 1 -type f | wc -l)" -eq 3; test -s /target/auth.json; test -s /target/models.json; test -s /target/source-receipt.json'
 workbuddy_clear_cleanup_pending "$control_root"
 

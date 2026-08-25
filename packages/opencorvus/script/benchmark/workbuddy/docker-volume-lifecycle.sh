@@ -3,6 +3,7 @@
 workbuddy_docker_socket=/mnt/wsl/docker-desktop/shared-sockets/host-services/docker.proxy.sock
 workbuddy_windows_docker='/mnt/c/Program Files/Docker/Docker/resources/bin/docker.exe'
 workbuddy_windows_cwd=/mnt/d/myhexin-local/opencorvus-bench
+workbuddy_provider_utility_image='python:3.12-slim@sha256:3ecf5ebe01fef4b6e81be34511fb40bf378ea7fd81ab215ba15b2775ef85413d'
 
 workbuddy_docker_with_engine() {
   if [ -S "$workbuddy_docker_socket" ] && \
