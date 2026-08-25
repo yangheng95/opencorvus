@@ -73,6 +73,11 @@ if [ ! -d "$runtime_source/node_modules" ]; then
     /var/lib/opencorvus-benchmark/bun/bin/bun install --frozen-lockfile
 fi
 
+cd "$runtime_source"
+PATH=/var/lib/opencorvus-benchmark/bun/bin:$PATH \
+  /var/lib/opencorvus-benchmark/bun/bin/bun run --cwd packages/sdk/js build
+test -f "$runtime_source/packages/sdk/js/dist/expert-squad-authoring.js"
+
 if [ ! -x "$runtime_bundle_dir/opencorvus" ]; then
   cd "$runtime_source"
   PATH=/var/lib/opencorvus-benchmark/bun/bin:$PATH \
