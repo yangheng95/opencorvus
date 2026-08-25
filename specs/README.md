@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest open pull request triage: [`2026-08-25-open-pull-request-triage.md`](records/2026-08/2026-08-25-open-pull-request-triage.md).
+
 Latest landing AutomationBench proof: [`2026-08-25-landing-automationbench-proof.md`](records/2026-08/2026-08-25-landing-automationbench-proof.md).
 
 Landing AutomationBench visual evidence: [`light`](artifacts/landing-benchmark/automationbench-light.png) and [`dark`](artifacts/landing-benchmark/automationbench-dark.png).

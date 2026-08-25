@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-25-open-pull-request-triage.md](2026-08-25-open-pull-request-triage.md) classifies the stale release and Dependabot backlog against current package-family, runtime, UI, and GitHub Actions contracts before any remote merge or closure.
+
 - [2026-08-25-architecture-debt-remediation.md](2026-08-25-architecture-debt-remediation.md) carries the staged repair of the whole-repository architecture-debt saturation audit, starting with renderer privilege containment and advancing through the recorded dependency order.
 
 - [2026-08-25-landing-automationbench-proof.md](2026-08-25-landing-automationbench-proof.md) adapts the current 100-case AutomationBench result into a bilingual native landing proof with an explicit 8.07% Luna baseline, 34.00% OpenCorvus strict pass rate, derived lift, and cross-sample comparison boundary.
