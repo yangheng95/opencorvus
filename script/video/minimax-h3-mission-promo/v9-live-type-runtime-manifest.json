@@ -1,0 +1,531 @@
+{
+  "schema_version": 1,
+  "creative_direction": "live-type-runtime-v9",
+  "production_status": "prompt-locked",
+  "creative_source_url": "https://claude.ai/code/artifact/26b573c9-0c32-414e-b8a7-d1d55af27a97",
+  "total_duration_seconds": 276,
+  "global_visual_contract": "Premium bright hand-drawn 2D/2.5D editorial animation with subtle paper texture, restrained cobalt and deep blue, generous negative space and gentle cinematic depth. The only human in the film is the same gender-neutral young adult with natural warm-brown skin, black hair, a warm-gray hoodie and one thin orange earbud cable. Short-lived computation glows; durable physical facts are matte warm-white ceramic; candidates are translucent. Orange belongs only to human intent and confirmation. Reviewer decisions and system evidence are deep blue. No presentation slides, dashboard cards, split-screen UI, live action, photorealism, corvid imagery or generated writing.",
+  "runtime_visual_contract": "When runtime entities are present, every Agent is a faceless limbless tall rounded cobalt cursor-pillar, height three times its width, with its own separate finite translucent context ring. The Mission Orchestrator is a substantial deep-blue roaming gantry that reads durable facts, pauses for model judgment, visibly calls a scheduler dispatch press and waits for an accepted receipt; it never performs worker domain tools. The durable task state is a long matte ceramic keel; artifacts are heavy matte ceramic bricks. No automatic conveyor or host state machine.",
+  "reference_assets": {
+    "master_bible": {
+      "role": "h3_runtime_world_reference",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R00\\take-004-5f0420720d16\\frames\\middle.png",
+      "sha256": "84ff7aae996260791de9ef58eaf74127598f89970006e48dd44631d2f4f75de5",
+      "generated_by": "MiniMax H3 T2VA R00 take-004"
+    },
+    "hero_world": {
+      "role": "h3_user_reference_without_intent_ribbon",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R01\\take-002-74c110ecb2b6\\frames\\start.png",
+      "sha256": "c51fec485c720c82530cee2e7499c0862a72211953de0fe51ab6052bbbd09c7a",
+      "generated_by": "MiniMax H3 T2VA R01 take-002"
+    },
+    "user_intent_end": {
+      "role": "h3_user_intent_ribbon_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R01\\take-002-74c110ecb2b6\\frames\\end.png",
+      "sha256": "6ba9fc652f76e8f59d05d7419c898e0c0a62bb5ec55234c265a3e47c57abe217",
+      "generated_by": "MiniMax H3 T2VA R01 take-002"
+    },
+    "single_agent_session": {
+      "role": "h3_single_agent_session_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R02\\take-002-fd5332bdbb79\\frames\\end.png",
+      "sha256": "d2b8ba03d06892aae464d6139ab24366e806f494177f770e3fe44c7acf655c79",
+      "generated_by": "MiniMax H3 T2VA R02 take-002"
+    },
+    "context_full_after_shedding": {
+      "role": "h3_s03_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S03\\take-001-cc555a7bd532\\frames\\end.png",
+      "sha256": "ca6573fc162c71f15d45b9d294b8d697d99d07ed2346676a680419fef29f8d1c",
+      "generated_by": "MiniMax H3 I2VA S03 take-001"
+    },
+    "user_exhausted": {
+      "role": "h3_s05_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S05\\take-001-358126edd38a\\frames\\end.png",
+      "sha256": "69fb671b45103b7c8f323642533b4f6b47b6dd82cc24ac5518c07dcdf54bffa2",
+      "generated_by": "MiniMax H3 I2VA S05 take-001"
+    },
+    "isolated_sessions": {
+      "role": "h3_s09_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S09\\take-001-49ba3a9d7ab4\\frames\\end.png",
+      "sha256": "99c2c5ca35d1c7f1b2e7b88e981f3daf1174f422b0b7ebe2582380b22ab55f77",
+      "generated_by": "MiniMax H3 T2VA S09 take-001"
+    },
+    "user_dependency_note": {
+      "role": "h3_s11_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S11\\take-001-a7eb847d9a17\\frames\\end.png",
+      "sha256": "3d3963b85327454678548b7360ec79e6925a3e1a1e49be9ffebb9203e1ebb765",
+      "generated_by": "MiniMax H3 I2VA S11 take-001"
+    },
+    "orange_descent_start": {
+      "role": "h3_s12_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S12\\take-001-c38ab188f915\\frames\\end.png",
+      "sha256": "1972dabca850c135f1bc2612645ccc9bb6fdac0c6b1de9b8288ffdf1f7e70cc1",
+      "generated_by": "MiniMax H3 I2VA S12 take-001"
+    },
+    "orchestrator_paused": {
+      "role": "h3_s14a_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S14A\\take-001-c00a165c73b3\\frames\\end.png",
+      "sha256": "4c322c361b0076192990620bb7b12c76daf8e8c814595b346a4e553ddd63c008",
+      "generated_by": "MiniMax H3 I2VA S14A take-001"
+    },
+    "squad_role_orbit_end": {
+      "role": "h3_s17_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S17\\take-001-70e75959397e\\frames\\end.png",
+      "sha256": "8b6f46c1a760a24e04f73e95d78d95b3eb7a3e2cc028dbbe51588478ed05e3bf",
+      "generated_by": "MiniMax H3 I2VA S17 take-001"
+    },
+    "artifact_brick": {
+      "role": "h3_s19_artifact_brick_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S19\\take-001-0df3df7626ed\\frames\\end.png",
+      "sha256": "4cbf6126356dddd3aa5b1e4e3248ccd8213e5816b09bdb6cadf05293606b311c",
+      "generated_by": "MiniMax H3 T2VA S19 take-001"
+    },
+    "reviewer_bench": {
+      "role": "h3_r03_reviewer_reference",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R03\\take-002-cfeb354050c4\\frames\\end.png",
+      "sha256": "c9efff0861acee9546bb65625d9913c405324c7c996ab504c883512a755500bf",
+      "generated_by": "MiniMax H3 T2VA R03 take-002"
+    },
+    "review_failed": {
+      "role": "h3_s22_accepted_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S22\\take-002-1e957f7804a3\\frames\\end.png",
+      "sha256": "ad6df2ab297dcb76156457ecee11cb443d07d4e873b122c530b9042c6909240c",
+      "generated_by": "MiniMax H3 I2VA S22 take-002"
+    },
+    "attempt_empty": {
+      "role": "h3_s25_empty_workstation_end_frame",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S25\\take-001-291f5a31a595\\frames\\end.png",
+      "sha256": "4247f070bc12e41e15be06ae0e0fad235dc941bc95d1d7af46aafe2fce22d4cb",
+      "generated_by": "MiniMax H3 I2VA S25 take-001"
+    },
+    "feedback_bench": {
+      "role": "h3_r04_feedback_bench_start",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R04\\take-001-9c4f9a5a8d8b\\frames\\start.png",
+      "sha256": "3a37e58e497c58d4b89268b25aa7f5d02bf6f05dfe9cf6f4726726320196aeb8",
+      "generated_by": "MiniMax H3 T2VA R04 take-001"
+    },
+    "feedback_confirm_touch": {
+      "role": "h3_r04_orange_fingertip_touch",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R04\\take-001-9c4f9a5a8d8b\\frames\\quarter.png",
+      "sha256": "f17e0a01c410e0b0381dcbef9e965259df94ad5e1340bf624d5ebb7f2b607f66",
+      "generated_by": "MiniMax H3 T2VA R04 take-001"
+    },
+    "metric_rig": {
+      "role": "h3_r05_frozen_comparison_rig",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R05\\take-001-959dee59fb03\\frames\\start.png",
+      "sha256": "6d6ec98275c425b34ce9f356e2f1fe69d58998850c71dd6ff5869acd26ab7b76",
+      "generated_by": "MiniMax H3 T2VA R05 take-001"
+    },
+    "metric_run_complete": {
+      "role": "h3_s31_complete_comparison_end",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S31\\take-001-3222e3c551cb\\frames\\end.png",
+      "sha256": "1c379c4be9c654b9e1f76406f30f887bc5152352e66b1054b3f2d531ba40bca1",
+      "generated_by": "MiniMax H3 I2VA S31 take-001"
+    },
+    "installed_method_receipts": {
+      "role": "h3_s30_installed_plate_and_receipts",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S30\\take-001-603384a7a900\\frames\\end.png",
+      "sha256": "02852127468d60be80aa499a21489fed6813a432e8c84ac7776a569c6b67299c",
+      "generated_by": "MiniMax H3 I2VA S30 take-001"
+    },
+    "desktop_tools": {
+      "role": "h3_r06_two_tool_desktop",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\R06\\take-001-c4b111052dc3\\frames\\end.png",
+      "sha256": "1dd538a677002f55876dc2dc36ec74d2b07cacccc170ce395b2eb6fd7e929f54",
+      "generated_by": "MiniMax H3 T2VA R06 take-001"
+    },
+    "evidence_keel": {
+      "role": "h3_s37_evidence_keel_end",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S37\\take-001-538371ea3f21\\frames\\end.png",
+      "sha256": "baa627c825c5d73128c46d24c6acd087b60a6c53d62bf84453791ff24a7ecfb2",
+      "generated_by": "MiniMax H3 I2VA S37 take-001"
+    },
+    "case_artifact_bricks": {
+      "role": "h3_s38_three_case_artifact_bricks",
+      "path": "D:\\myhexin-local\\demos\\opencorvus-minimax-h3-promo-20260824\\h3-local\\S38\\take-001-c371162c5170\\frames\\end.png",
+      "sha256": "bfab5194a0d97961e893781844cc01e0f752087807bd991462b39bbbcf77b21a",
+      "generated_by": "MiniMax H3 I2VA S38 take-001"
+    }
+  },
+  "bootstrap_shots": [
+    {
+      "id": "R00", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "A static world-design hero shot of the physical runtime only, with no human and no mechanism demonstration. Five Agent bodies stand clearly on one warm-white ceramic Expert Squad platform. Every Agent body is a tall upright cobalt rounded-rectangle cursor pillar, height exactly three times its width, flat front plane, not a sphere, not an egg and not a humanoid; no face, eyes, mouth, arms or legs. Each pillar has its own separate thin translucent finite context ring at waist height, with no shared ring. Nothing floats above the pillars: no role seals, no icons, no labels. The platform is already docked beside a long matte ceramic task keel engraved with abstract durable grooves. A substantial deep-blue rectangular scheduler gantry with thick architectural legs and top beam stands across the keel behind the Squad, clearly a different species from the cursor pillars. It does not move or touch the platform in this reference shot. A lens tool, lathe tool, gauge tool, heavy artifact press and a short catalog row of matte ceramic artifact bricks are arranged naturally at the platform edges. The complete palette is only warm white, cobalt blue, deep blue and neutral translucent glass. Absolutely no orange, red, amber, yellow, green or warm accent anywhere. Static three-quarter camera with only a very slow five-percent push-in, no cuts, no object transformation, no montage and no panels. Keep all five tall cursor pillars fully visible and large throughout.",
+      "overall_soundscape": "Quiet ceramic room tone, soft distant mechanisms and one restrained deep runtime pulse; no event cue.",
+      "non_diegetic_music": "Minimal three-note piano motif with soft low strings, calm technical-documentary tone, no trailer swell."
+    },
+    {
+      "id": "R01", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "runtime_elements": false, "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "One coherent character reference shot at a real personal desk at night. The same gender-neutral young adult user is shown from the waist up in a clean three-quarter side view, fully inside the frame from hair to hands, with a clearly drawn expressive face, short slightly tousled black hair, warm-gray hoodie and one thin orange earbud cable. The user's skin is natural warm light-brown human skin in every frame—never blue, cobalt, gray, white, orange or synthetic. This is premium stylized 2D/2.5D editorial animation with subtle paper grain and natural human proportions, not live action and not photorealistic. The monitor is turned so the camera sees only its plain warm-gray back; no screen is visible. The user holds one warm-white task sheet whose surface has only a few non-readable embossed lines, no letters or words, looks from the sheet toward the unseen screen, takes one breath, then speaks a precise goal. Only in the final second, one continuous segmented orange ink ribbon begins forming at the mouth and travels toward the unseen screen; it is not a row of blocks. The desk has one lamp, keyboard, closed blank notebook and coffee; the window shows restrained blue-gray rain. Orange appears only in the earbud cable and the human intent ribbon. Slow five-percent dolly-in, no cuts, no montage, no split screen, no other character, no Agent, no runtime, no visible UI, no readable text on paper or objects.",
+      "overall_soundscape": "Rain at the window, soft room tone, one page touch, quiet breath and a delicate ink-drop onset in the final second.",
+      "non_diegetic_music": "One minimal low piano tone with generous silence, intimate personal scale."
+    },
+    {
+      "id": "R02", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "One static medium reference inside a completely empty small warm-white session chamber with no human, no person, no silhouette, no observer and no furniture for a person. Exactly one Agent stands centered: a tall upright cobalt rounded-rectangle cursor pillar, height exactly three times its width, flat front plane, no face, no eyes, no mouth, no arms and no legs. One thin translucent finite context ring wraps only this pillar at waist height and is one-third filled with tiny abstract cobalt light grains. A small physical lens/search tool station stands to the left, a lathe/build station behind, and a measurement-clock/test station to the right rear. One thin cobalt call filament already connects the Agent to the lens station; one compact result packet is returning along it toward the ring. Three blank matte ceramic plan strips are pinned vertically on the wall, with no text or symbols. The runtime uses the same clean miniature 2.5D ceramic model language as H3 R00: subtle paper texture, soft shadows, not photorealistic, not a live-action room. Palette only warm white, cobalt, deep blue and transparent glass; no orange, red, amber, yellow or green. Slow two-percent push-in, no cuts, no transformation, no extra Agent, no floating icon, no generated writing.",
+      "overall_soundscape": "Soft session-room air, one fine call-filament hum and a tiny result-packet click entering the finite ring.",
+      "non_diegetic_music": "The same minimal two-note technical pulse used at the start of the story."
+    },
+    {
+      "id": "S14A", "timecode": "S14-subshot-1", "duration_seconds": 2.3, "mode": "I2VA", "references": ["master_bible"],
+      "voiceover_zh": "协调者先读事实。",
+      "integrated_multimodal_description": "Begin exactly on the H3 runtime reference. Keep the five cursor-pillar Squad bodies and their platform stationary. Only the substantial deep-blue rectangular scheduler gantry moves: it slides slowly one short distance along the matte task keel while a narrow cobalt scan washes across the engraved grooves beneath it. Then the gantry stops completely and remains still for a full visible beat of judgment. No filament, no dispatch press, no token, no platform motion and no orange in this subshot.",
+      "overall_soundscape": "One quiet scanning hum that stops into a clean silent beat.",
+      "non_diegetic_music": "Single restrained procedural pulse, then space."
+    },
+    {
+      "id": "S14B", "timecode": "S14-subshot-2", "duration_seconds": 2.3, "mode": "I2VA", "references": ["orchestrator_paused"],
+      "voiceover_zh": "自然判断后，发出真实调度调用。",
+      "integrated_multimodal_description": "Begin exactly on the H3 frame of the paused deep-blue scheduler gantry. Keep the five cursor-pillar Agents, their platform, gantry and keel completely stationary. A small solid warm-white dispatch press rises from an empty socket at the right edge of the keel. Only after it locks in place, one thin cobalt scheduler filament extends from a socket in the gantry to that press. One small solid deep-blue request token slides from gantry to press; half a beat later one different small solid deep-blue accepted-receipt token returns from press to gantry and seats visibly into the gantry socket. No card, paper, screen, panel, text, orange line, platform motion, Agent motion or domain tool action.",
+      "overall_soundscape": "Dispatch press locks, one outbound token click, one distinct accepted-receipt return tone.",
+      "non_diegetic_music": "Two precise low pulses separated by a brief judgment gap."
+    },
+    {
+      "id": "R03", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "A static medium reference shot of an independent reproduction bench in the warm-white ceramic runtime, isolated by generous empty space. Exactly one Reviewer stands at the bench: a tall upright deep-navy rounded-rectangle cursor pillar, height three times its width, no face, eyes, mouth, arms or legs, with one separate thin translucent ring and one deep-blue gauge-arc seal lying at its base. Exactly one heavy matte ceramic artifact brick rests in a recessed test cradle. Beside it stands one large physical deep-blue gauge with a clear needle and one raised matte acceptance marker. A short segment of task keel with abstract threshold grooves runs behind the bench. No Squad, no gantry, no second Agent, no human, no press, no orange or red, no text and no pseudo-writing on the brick. Static three-quarter instrument composition with a two-percent push-in only.",
+      "overall_soundscape": "Quiet instrument-room air and one soft deep-blue gauge tick.",
+      "non_diegetic_music": "Cool objective sustained interval, almost silent."
+    },
+    {
+      "id": "S24C", "timecode": "S24-subshot-accepted", "duration_seconds": 2.3, "mode": "I2VA", "references": ["reviewer_bench"],
+      "voiceover_zh": "复验通过，这一段才算数。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 independent Reviewer bench reference. Keep the one deep-navy Reviewer and matte artifact brick completely still. On the deep-blue gauge, one thin physical needle rises smoothly clockwise from rest, crosses visibly beyond the raised matte acceptance marker, then settles without bouncing and remains there. A stable deep-blue accepted light travels once from the gauge into the adjacent durable task-keel groove and stays. No celebration, no second Agent, no press, no human, no orange or red, no text and no new object.",
+      "overall_soundscape": "One clean rising gauge tone, a precise threshold click and a stable low accepted resonance.",
+      "non_diegetic_music": "Objective cadence resolves quietly."
+    },
+    {
+      "id": "R04", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "runtime_elements": false, "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "A static warm close reference of a personal evolution workbench on the same warm-white desk. Only the exact user's natural warm-brown right hand and warm-gray hoodie cuff are visible at the lower edge; no face. Centered is one durable matte warm-white ceramic method plate with six rows of abstract grooves and no text. Directly above it floats one thin translucent candidate overlay of identical shape; exactly two added grooves glow faint cobalt and one removed groove is crossed by a thin cobalt line. To the right hang exactly three small matte ceramic mutation-receipt tags on one fine chain, each blank except for a geometric notch. The user's orange fingertip rests nearby but does not touch the candidate. Orange appears only on that fingertip. No Agent, no Campaign, no gauge, no trial lanes, no text, no UI and no extra plate. Static overhead three-quarter composition with soft paper texture.",
+      "overall_soundscape": "Quiet ceramic desk tone, faint translucent-glass resonance and one soft receipt-tag touch.",
+      "non_diegetic_music": "Warm human three-note motif held open for a decision."
+    },
+    {
+      "id": "R05", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "A static cool symmetric reference of a metric-evolution comparison rig in the warm-white ceramic runtime. No human and no Agent. Two perfectly mirrored physical lanes run left and right. A matte baseline method plate rests at the left start and an identically shaped translucent candidate plate rests at the right start. Exactly six small deep-blue physical lock seals are closed around the arena perimeter. Identical ceramic case tokens wait in both lanes; one shared deep-blue scoring gauge with two needles stands at the far center; one neutral light covers the whole rig evenly. No text, no labels, no orange or red, no extra lane, no chart, no UI and no presentation card. Static front-on instrument composition emphasizing same conditions.",
+      "overall_soundscape": "Cool quiet instrument tone and six faint locked-mechanism resonances.",
+      "non_diegetic_music": "Symmetric low ostinato, objective and restrained."
+    },
+    {
+      "id": "R06", "timecode": "reference-bootstrap", "duration_seconds": 5, "mode": "T2VA", "runtime_elements": false, "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "A clean morning desktop product reference with the same warm-white paper-textured animation style. Only the user's natural warm-brown hands and warm-gray cuffs appear. On the left is one polished neutral finished-product appliance: a simple warm-white rounded machine with one narrow intent slot and one output tray. A short orange intent strip enters the slot and one complete small matte object exits onto the tray. On the right is one open neutral modular kit: a shallow warm-white tray holding six cobalt and white plug-in components that visibly snap together into one useful compact assembly. The user receives the finished object with the left hand and tests the modular assembly with the right hand, showing equal satisfaction. No real logos, no text, no ranking, no winner lighting, no Agent, no runtime, no conveyor, no boxes and no UI. Static desk-height camera with a slow lateral move from left tool to right tool.",
+      "overall_soundscape": "Smooth finished-object delivery on the left and crisp modular assembly clicks on the right, equally pleasant.",
+      "non_diegetic_music": "Light neutral comparison motif with no winner accent."
+    },
+    {
+      "id": "S32A", "timecode": "S32-subshot-regression", "duration_seconds": 2.5, "mode": "I2VA", "runtime_elements": false, "references": ["metric_run_complete"],
+      "voiceover_zh": "退步的候选直接出局，不装。",
+      "integrated_multimodal_description": "Begin exactly on the H3 complete symmetric comparison frame. Keep the frozen locks and left baseline lane unchanged. On the central two-needle gauge, the right candidate needle settles visibly below the left baseline needle. Immediately a deep-blue reject recess opens only beside the right lane; the translucent candidate block slides sideways into that recess and the recess closes. The left baseline block remains on its lane. No token travels to a user, no installation, no human, no orange, no text and no new object.",
+      "overall_soundscape": "One dry comparison stop, a clean sideways slide and a closed archive click.",
+      "non_diegetic_music": "Cool unresolved cadence, no failure melodrama."
+    },
+    {
+      "id": "S32B", "timecode": "S32-subshot-promote", "duration_seconds": 2.5, "mode": "I2VA", "runtime_elements": false, "references": ["metric_run_complete"],
+      "voiceover_zh": "只有完整比较后的晋升建议，才会送到你面前。",
+      "integrated_multimodal_description": "Begin exactly on the H3 complete symmetric comparison frame. Keep all six frozen locks closed. On the central two-needle gauge, the right candidate needle settles clearly above the left baseline needle. Six tiny deep-blue completeness lights around the perimeter illuminate one by one; no light is missing. Only after the sixth light, one small solid deep-blue recommendation token rises from the central gauge and travels slowly toward the camera. No user, no installation, no orange, no text, no chart and no extra token.",
+      "overall_soundscape": "Two-needle settle, six soft completeness ticks, then one restrained recommendation release tone.",
+      "non_diegetic_music": "Objective motif opens but does not resolve until human confirmation."
+    }
+  ],
+  "shots": [
+    {
+      "id": "S01", "timecode": "00:00-00:06", "duration_seconds": 6, "mode": "FL2VA", "runtime_elements": false, "references": ["hero_world", "user_intent_end"],
+      "voiceover_zh": "你把要做的事，交代得清清楚楚。",
+      "integrated_multimodal_description": "Late-night locked three-quarter side view of the exact same user from the H3 reference frames, holding the same task sheet at the same desk. Preserve the start composition almost perfectly. For the first five seconds only three tiny movements occur: natural breathing, one eye movement from the sheet toward the monitor, and a slight opening of the mouth. In the final second only, one narrow segmented orange ink ribbon grows continuously from the mouth in a straight gentle path toward the unseen front of the monitor, matching the final reference frame. The ribbon is thin and solid orange, never white and never glowing. Nothing else appears or moves across the desk. No circle, disc, wheel, orb, sphere, halo, ring, portal, ripple, interface element or new object. The lamp remains steadily on; the camera makes only a two-percent slow push-in.",
+      "overall_soundscape": "Steady rain, quiet breathing and one delicate ink-drop onset in the final second; no lamp switch and no interface sound.",
+      "non_diegetic_music": "Almost absent; one restrained low piano tone under the final ripple."
+    },
+    {
+      "id": "S02", "timecode": "00:06-00:12", "duration_seconds": 6, "mode": "FL2VA", "references": ["user_intent_end", "single_agent_session"],
+      "voiceover_zh": "它答应得很好，计划也列得很好。",
+      "integrated_multimodal_description": "Begin exactly on the H3 user reference with the narrow segmented orange intent ribbon already traveling toward the monitor. For the first two seconds, the camera follows directly behind that ribbon until the warm-gray monitor back fills the frame and becomes a warm-white physical wipe—no portal, no orb and no interface. Emerge into the empty isolated session chamber containing exactly one tall cobalt cursor-pillar Agent. The orange ribbon wraps once into the head of its finite translucent context ring and disappears into it; no orange remains in the chamber. The Agent then sends one thin cobalt call filament into the lens tool station and one compact result packet returns along the filament. End exactly on the H3 single-Agent reference frame with the ring one-third bright. No extra Agent, no human in the chamber, no floating card, no circle crossing the camera.",
+      "overall_soundscape": "Granular type impacts, three precise ceramic pin clicks, a fine spring sound when the call filament connects.",
+      "non_diegetic_music": "A controlled two-note pulse suggesting early confidence."
+    },
+    {
+      "id": "S03", "timecode": "00:12-00:16", "duration_seconds": 4, "mode": "I2VA", "references": ["single_agent_session"],
+      "voiceover_zh": "但它的记忆是有限的。新信息进来，最早的要求就被挤了出去——包括你最在意的那一条。",
+      "integrated_multimodal_description": "Begin exactly on the H3 single-Agent reference, then make a controlled macro push toward the finite translucent context ring until the ring fills most of the frame but the same tall cobalt cursor-pillar remains identifiable in soft background. Tiny cobalt result grains stream into the head of the ring and visibly fill its fixed circumference. At the opposite tail, exactly one small oldest constraint segment is orange at first; the incoming grains push it beyond the fixed ring boundary. That single orange segment turns gray, peels away like a thin paper fragment, spirals downward once and extinguishes. The Agent continues a steady cursor-like blink without reacting. No human, no second Agent, no card, no screen, no floating icon, no extra orange object. End with the ring completely full of cobalt grains and the old fragment gone.",
+      "overall_soundscape": "A dry paper hiss for the peeled constraint, tiny streaming granules, then a brief deadened vacuum at extinction.",
+      "non_diegetic_music": "The confidence pulse loses one note and leaves an uneasy low sustain."
+    },
+    {
+      "id": "S04", "timecode": "00:16-00:20", "duration_seconds": 4, "mode": "I2VA", "references": ["context_full_after_shedding"],
+      "voiceover_zh": "然后它宣布：完成了。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 close-up of the completely full cobalt context ring. Pull back quickly but smoothly to reveal the same single tall cursor-pillar Agent. The Agent straightens, pauses one blink, leans back slightly and tosses one small lightweight translucent green completion seal upward; the seal is one abstract check-shaped light object with no text, letters or logo. Rack focus past it to a half-collapsed blue ceramic web scaffold on the left. Far on the right rear stands one isolated warm-white measurement-clock test station. The test station is completely inactive: its needle does not move and there is absolutely no wire, cable, filament, tube, colored line, sign, paper, card, label or object connected to it or standing beside it. Leave visible empty floor around that test station so its non-use is unmistakable. The only green object is the floating completion seal. The rest of the palette is warm white and blue with no orange or red anywhere. No human, no extra Agent, no readable marking and no screen.",
+      "overall_soundscape": "Intentionally cheap sweet chime, fine structural crack, then a sharp real mouse click.",
+      "non_diegetic_music": "A false cadence cuts off abruptly on the click."
+    },
+    {
+      "id": "S05", "timecode": "00:20-00:27", "duration_seconds": 7, "mode": "I2VA", "runtime_elements": false, "references": ["hero_world"],
+      "voiceover_zh": "打不开的网页、没跑过的测试。你把上下文一遍遍粘回去，重新解释、重新追问。",
+      "integrated_multimodal_description": "Begin on the accepted H3 user reference at the same rainy night desk, monitor back still facing the camera and no visible interface. Keep the same user's face, warm-gray hoodie and orange earbud cable unchanged. In one continuous side shot, the user performs three increasingly tired context re-entry gestures: take a short segmented orange strip from the task sheet and feed it behind the monitor, then a longer strip, then a much longer strip. After each strip disappears behind the monitor, a brief cobalt reflection flashes on the user's face, indicating the unseen Agent has restarted from the beginning. The rhythm accelerates; after the third strip the user lowers both hands, rubs one eye and exhales. The strips are narrow continuous segmented ribbons, never blocks, rings, discs or screens. No Agent or runtime appears in this shot, no readable text and no new object crosses the desk.",
+      "overall_soundscape": "Urgent keyboard taps and three paste impacts rising slightly in pitch; faint rain remains constant.",
+      "non_diegetic_music": "A repetitive three-beat ostinato becomes irritating, never triumphant."
+    },
+    {
+      "id": "S06", "timecode": "00:27-00:34", "duration_seconds": 7, "mode": "I2VA", "references": ["single_agent_session"],
+      "voiceover_zh": "它不知不觉换掉了你的计划。这叫 plan drift——漂移的时候，它自己也不知道。",
+      "integrated_multimodal_description": "Begin exactly on the H3 single-Agent session reference. Make a very slow lateral camera move toward the three blank matte ceramic plan strips on the rear wall, keeping the same tall cobalt cursor-pillar Agent visible but softly out of focus at left. The Agent's cursor-like blink remains perfectly steady. The middle plan strip quietly slides sideways and is replaced by a slightly cooler blank strip that seats at a visibly wrong angle; the original middle strip drops to the floor and gathers a trace of dust. The top goal strip gradually tilts and loses saturation. No hand, no human, no extra Agent, no words, no symbols, no orange object and no floating card. Only the plan strips move; the Agent does not react.",
+      "overall_soundscape": "Near silence with one barely audible paper slide; distant machinery continues indifferently.",
+      "non_diegetic_music": "A thin sustained interval drifts slowly out of tune."
+    },
+    {
+      "id": "S07", "timecode": "00:34-00:40", "duration_seconds": 6, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "最后在干活的人，是你。",
+      "integrated_multimodal_description": "Use <Picture 1> as the exact user character, desk and rainy-night room reference. Use <Picture 2> only as the exact shape and material reference for one tall cobalt cursor-pillar Agent and its finite ring. Create one continuous physical room with one continuous desk and background—no split screen, no divider, no panel and no white half-frame. On the right, the same user from Picture 1 sets down the task sheet, checks three blank file sheets one by one and physically activates a small warm-white measurement device on the desk. In the far left background beyond the monitor, exactly one Agent shaped like Picture 2 stands dim and asleep in a shallow warm-white alcove. The Agent has no face, eyes, mouth, smile, arms or legs; its finite ring is dark and its one call filament lies disconnected on the alcove floor. The Agent remains still while the user keeps working. Slowly pull back until both are visible in the same perspective and shared lighting. No other person, no other Agent, no visible UI and no readable text.",
+      "overall_soundscape": "Normal keyboard and paper sounds only on the human side; complete silence on the sleeping Agent side.",
+      "non_diegetic_music": "No melody, only a subdued room-tone bass."
+    },
+    {
+      "id": "S08", "timecode": "00:40-00:45", "duration_seconds": 5, "mode": "I2VA", "runtime_elements": false, "references": ["user_exhausted"],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 exhausted-user frame, preserving the same natural warm-brown face, black hair, warm-gray hoodie, orange earbud cable, monitor back, lamp, keyboard, coffee, papers and rainy-night desk. The user lowers the rubbing hand, slowly leans far back into the chair, lets both arms hang, closes the eyes and makes one long visible exhale. That is the entire shot. The camera rises only slightly into a gentle top-down pressure angle; predawn blue-gray light softens the existing window while the lamp remains steady. Every desk object remains fixed. Nothing enters from any edge and nothing appears above or behind the user. No visible screen, no Agent, no session, no track, no ribbon, no curve, no ring, no orb, no floating object, no new device and no text.",
+      "overall_soundscape": "Five seconds of breathing, rain and one chair creak; no interface sounds.",
+      "non_diegetic_music": "Silence."
+    },
+    {
+      "id": "S09", "timecode": "00:45-00:52", "duration_seconds": 7, "mode": "T2VA", "references": [],
+      "voiceover_zh": "你多开几个，事情反而更多：它们互相看不见，重复造一样的东西。",
+      "integrated_multimodal_description": "A single clean top-down 2.5D ceramic view of exactly three separate warm-white session wells arranged side by side, with thick solid walls and no doors, windows, bridges, cables or shared floor openings. Each well contains exactly one tall cobalt faceless cursor-pillar Agent with its own separate finite translucent context ring. The left and right Agents independently use identical small blue build tools to assemble the exact same sequence of three matte ceramic web-frame parts; their motions are synchronized but they never see or communicate with each other. The middle Agent remains idle. End as the two duplicate three-part structures stand completed at the same moment. No human, no shared ring, no conveyor, no text, no cards, no orange and no extra chamber.",
+      "overall_soundscape": "Perfectly synchronized lathe sounds from left and right, emphasizing duplicate work.",
+      "non_diegetic_music": "The repetitive ostinato returns in mirrored stereo."
+    },
+    {
+      "id": "S10", "timecode": "00:52-00:58", "duration_seconds": 6, "mode": "I2VA", "references": ["isolated_sessions"],
+      "voiceover_zh": "有人空等，有人冲突，有条依赖，谁也不认。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 top-down frame of three isolated session wells. Preserve the walls, three cursor-pillar Agents and separate rings. The middle Agent remains completely idle with one loose cobalt call filament lying unconnected. From the left and right wells, the two duplicate matte ceramic frame assemblies extend toward the shared foreground and physically overlap at the center, scraping and bending each other. At the same time one small narrow deep-blue dependency strip slips from above and falls into the thin wall gap between the middle and right wells. None of the three Agents turns toward it. End with the conflicting assemblies still pressed together and hold one full second on the abandoned dependency strip. No human, no extra chamber, no shared ring, no text, no orange and no conveyor.",
+      "overall_soundscape": "A muffled overlap scrape, a tiny dependency-strip click, then one full second of silence.",
+      "non_diegetic_music": "Tension remains low and unresolved."
+    },
+    {
+      "id": "S11", "timecode": "00:58-01:02", "duration_seconds": 4, "mode": "I2VA", "runtime_elements": false, "references": ["hero_world"],
+      "voiceover_zh": "不知不觉，你成了它们的项目经理。",
+      "integrated_multimodal_description": "Begin on the accepted H3 user desk and smoothly move into a tight overhead macro of the same natural warm-brown right hand, warm-gray hoodie cuff and the same warm-white desk. The hand draws a simple dependency map on one blank ceramic-paper note using a graphite pencil: exactly four small empty circles connected by three directional lines, then two short abstract task marks. These are physical shapes only, with no letters, words or numbers. The pencil begins fast and frustrated, then slows and stops dead with the tip resting on the final connection. Keep the monitor back, coffee and closed notebook softly out of focus at the frame edges. No Agent, no runtime object, no floating element, no orange ribbon and no second hand entering.",
+      "overall_soundscape": "Dense pen scratches thinning to a stopped nib; quiet rain below.",
+      "non_diegetic_music": "One held note waits for a decision."
+    },
+    {
+      "id": "S12", "timecode": "01:02-01:05", "duration_seconds": 3, "mode": "I2VA", "runtime_elements": false, "references": ["user_dependency_note"],
+      "voiceover_zh": "别再替 Agent 收尾。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 overhead dependency-note frame. The same hand and pencil remain still for half a second, then withdraw completely out of frame. The four graphite circles and three arrows softly lose contrast and disappear into the paper fibers. A clean shallow debossed blank line grows across the center of the note as a placeholder for deterministic post-production copy; it contains no letters or symbols. Warm human-orange light appears only beneath that blank debossing, spreads gently through the paper fibers, then sinks straight downward through the desk as the camera begins to follow it. No Agent, no ring, no orb, no floating object, no visible text and no new hand.",
+      "overall_soundscape": "Paper fibers settling and one deep warm descent tone.",
+      "non_diegetic_music": "The three-note main theme appears for the first time."
+    },
+    {
+      "id": "S13", "timecode": "01:05-01:12", "duration_seconds": 7, "mode": "FL2VA", "references": ["orange_descent_start", "master_bible"],
+      "voiceover_zh": "OpenCorvus 把这一切搬进一个持久的运行层——在任何 Agent 的上下文之外。目标、硬约束、验收标准、任务、依赖、执行事实、交付证据，都刻在这里，不会被挤掉。",
+      "integrated_multimodal_description": "Begin exactly on the H3 orange glow beneath the blank note. The camera follows that human-orange light straight down through the desk material in one smooth vertical move; the keyboard and paper dissolve into warm-white ceramic texture, not a portal or interface. Enter the physical runtime at the head of a long matte ceramic task keel. The orange light becomes one engraved goal mark at the keel head and then stops moving. Three hard-constraint locks close around adjacent grooves with physical ceramic clicks; an acceptance-threshold channel rises along the side; dependency channels and evidence sockets form farther down the keel. The camera turns from vertical descent into a low forward glide along those durable features and ends exactly on the H3 runtime reference with the deep-blue gantry and five tall cursor-pillar Squad bodies in the distance. No human body below the desk, no text, no floating card, no conveyor and no orange anywhere except the fixed goal engraving.",
+      "overall_soundscape": "Low stone engraving resonance and several exact ceramic lock clicks.",
+      "non_diegetic_music": "The main theme gains a stable deep-blue harmonic foundation."
+    },
+    {
+      "id": "S14", "timecode": "01:12-01:19", "duration_seconds": 7, "mode": "I2VA", "references": ["master_bible"],
+      "voiceover_zh": "协调者不是流水线。它读事实：账本、前置条件、新发生的事——自然判断后，再用真实的调度调用推进就绪前沿。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 runtime world reference. Track low beside the substantial deep-blue rectangular scheduler gantry as it slides slowly along the matte ceramic task keel, casting a narrow cobalt scan over engraved durable grooves. At one ready segment the gantry stops completely for one visible beat of model judgment. Only then one thin deep-blue scheduler filament extends from the gantry into a small solid dispatch press at the keel edge; one compact cobalt request token enters, and one solid deep-blue accepted-receipt token physically returns along the same filament and seats into a gantry socket. Only after that receipt seats, a second warm-white Expert Squad platform with five tall cursor-pillar Agents slides in from off-frame and docks to the ready segment. The gantry then reaches the next unmet prerequisite groove, stops again, and this time emits no filament, no token and no platform. No domain tool is touched by the gantry. No human, no text, no card, no screen, no conveyor, no orange and no automatic motion before the receipt.",
+      "overall_soundscape": "Velvet scanning hum, one precise dispatch-press click, a returned receipt tone, then a deliberate empty beat at the blocked segment.",
+      "non_diegetic_music": "Measured procedural pulse, calm rather than heroic."
+    },
+    {
+      "id": "S15", "timecode": "01:19-01:25", "duration_seconds": 6, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "这一层是 MIT 开源的，跑在你自己的机器上。源码可以查、可以审计、可以 fork；模型、工具、专家团，都可以换成你自己的。",
+      "integrated_multimodal_description": "Macro tracking with the user's hand: open a tool station to reveal legible physical mechanisms, close it, remove one neutral model cartridge from a cursor-core and seat a differently patterned one. Everything keeps operating on the user's own desk-connected runtime; no brand marks are generated.",
+      "overall_soundscape": "Warm ceramic lid movement and a precise cartridge seating click.",
+      "non_diegetic_music": "Open, lightly optimistic variation of the main theme."
+    },
+    {
+      "id": "S16", "timecode": "01:25-01:30", "duration_seconds": 5, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "不可逆的操作，只认你的确认。每一次调用、每个参数、每个结果，都可以回看。开源、定制、可控、透明——在这里，是四个动词。",
+      "integrated_multimodal_description": "A cursor-core tries to connect a filament to the publication press but a human-orange threshold gate blocks it. The user's hand locks the gate; the Agent calmly retracts the filament. The hand pulls a review lever and the prior call, parameter packet and result packet replay visibly backward then forward before dissolving.",
+      "overall_soundscape": "Clockwork gate lock, silk-like reverse replay, then one reassuring ceramic tap.",
+      "non_diegetic_music": "Main theme steady and transparent, with space around every action."
+    },
+    {
+      "id": "S17", "timecode": "01:30-01:37", "duration_seconds": 7, "mode": "I2VA", "references": ["master_bible"],
+      "voiceover_zh": "重活交给完整的专家团。策划、检索、构建、测试、撰写——各有各的记忆，各干各的事。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 runtime reference and keep the same ceramic Squad platform, five tall cobalt cursor-pillar Agents, separate translucent finite rings and deep-blue gantry. The gantry remains parked and inactive in the background. Make the film's only slow controlled half-orbit around the complete five-member Expert Squad, never faster than a product turntable. As the camera reveals each Agent, one small abstract role seal made only of cobalt or deep blue becomes visible on the platform at its base: compass polygon, lens ring, angle brackets, gauge arc and pen-nib diamond. The planning Agent aligns three blank plan strips; search sweeps a lens; build receives one compact result token; test waits beside a gauge; writing touches a nib-shaped tool. Rings remain completely separate and never join. No human, no orange or red accent, no text, no card, no extra Agent and no platform transformation.",
+      "overall_soundscape": "Five restrained role timbres combine into one coherent chord.",
+      "non_diegetic_music": "The procedural theme opens into a confident ensemble."
+    },
+    {
+      "id": "S18", "timecode": "01:37-01:43", "duration_seconds": 6, "mode": "I2VA", "references": ["squad_role_orbit_end"],
+      "voiceover_zh": "它们必须用真实的工具干活，",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 Expert Squad orbit end frame. Keep all five cursor-pillar Agents and their separate rings in place while the camera makes one controlled rack-focus between two adjacent work zones. In the foreground, the Agent beside the angle-bracket role seal sends one thin cobalt call filament into a small warm-white ceramic lathe; a compact parameter token travels down the filament and one real matte component is cut on the lathe. Rack focus to the Agent beside the gauge-arc seal at the rear: it sends a different cobalt filament into a separate warm-white measurement clock; the physical needle climbs and settles clearly beyond a raised matte acceptance marker. No human, no orange or red wire, no floating card, no text, no extra Agent and no tool moving before its filament connects.",
+      "overall_soundscape": "Fine lathe cutting, packet clicks, and one clear measurement-clock chime.",
+      "non_diegetic_music": "Quiet rhythmic precision; no flourish."
+    },
+    {
+      "id": "S19", "timecode": "01:43-01:50", "duration_seconds": 7, "mode": "T2VA", "references": [],
+      "voiceover_zh": "交接必须靠真实的产物——不是一句‘完成了’。",
+      "integrated_multimodal_description": "Low-angle close shot inside the established warm-white ceramic runtime. A substantial physical artifact press fills the upper frame; exactly one tall cobalt cursor-pillar build Agent and one tall cobalt writing Agent stand at safe opposite sides, each with its own separate thin context ring. The heavy press head rises once, holds, then drops with decisive force onto a warm-white ceramic blank. On impact one thick matte artifact brick forms and lands on the platform with visible weight, a short bounce, dust and small ceramic particles. The press lifts; the brick remains solid and still. The writing Agent connects one thin cobalt call filament to a small engraving nib that cuts four neat rows of abstract non-readable evidence grooves into the brick surface. No green claim, no human, no orange or red, no text, no card, no box, no conveyor and no second impact.",
+      "overall_soundscape": "The film's heaviest warm thud, settling dust, and dry engraving scratches.",
+      "non_diegetic_music": "A grounded bass resolution synchronized to the brick landing."
+    },
+    {
+      "id": "S20", "timecode": "01:50-01:57", "duration_seconds": 7, "mode": "T2VA", "references": [],
+      "voiceover_zh": "产物进入目录。下游不听转述：自己搜、自己读、自己选。",
+      "integrated_multimodal_description": "One continuous lateral tracking shot along a warm-white ceramic Artifact catalog corridor containing exactly eight heavy matte artifact bricks in fixed recessed slots. Exactly one tall cobalt search cursor-pillar Agent with one separate finite translucent ring moves beside the corridor. Search: its small cobalt lens sweeps across the eight brick spines and each spine gives one brief blue response. Read: at the fifth brick the Agent stops; that brick remains in its slot while one thin evidence surface unfolds upward from it like a physical page, showing only four rows of abstract geometric grooves with no writing. Select: the Agent touches the lens call filament to the unfolded surface and takes one small luminous cobalt duplicate slab; the original matte brick and its unfolded surface remain physically in the catalog. End with the Agent carrying only the luminous copy away. No human, no text, no labels, no orange or red, no boxes and no conveyor.",
+      "overall_soundscape": "Continuous scanning shimmer, soft page fabric, one light copy release pop.",
+      "non_diegetic_music": "Orderly forward pulse."
+    },
+    {
+      "id": "S21", "timecode": "01:57-02:00", "duration_seconds": 3, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "多支专家团，各占一段，互不踩脚。",
+      "integrated_multimodal_description": "Rise into a deep runtime wide shot: three Expert Squad platforms work on separate keel segments while bricks and luminous copies circulate. After reading a newly placed artifact, the roaming arch pauses, calls the scheduler press, receives an accepted deep-blue receipt, and connects an independent reproduction platform; the receipt and brick travel together into depth.",
+      "overall_soundscape": "Stable system pulse, one quiet scheduler-call exchange, distant ceramic traffic.",
+      "non_diegetic_music": "Full procedural motif, broad but restrained."
+    },
+    {
+      "id": "S22", "timecode": "02:00-02:07", "duration_seconds": 7, "mode": "I2VA", "references": ["reviewer_bench"],
+      "voiceover_zh": "还有一位独立验收官。它不参与构建，只做一件事：按刻好的验收标准，把问题重新跑出来。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 independent Reviewer bench reference. Keep exactly one deep-navy cursor-pillar Reviewer, one matte artifact brick and one deep-blue gauge. First a narrow cobalt scan from the Reviewer passes over the raised acceptance-threshold groove on the keel behind the bench. The matte brick then slides smoothly into the recessed test cradle without changing shape. Only after it seats, the Reviewer connects one deep-blue call filament to the gauge. A single thin physical gauge needle grows from the center pivot, climbs clockwise toward a raised matte threshold peg, stops visibly short of the peg, then drops downward and remains there for one full beat. The Reviewer stays still and does not celebrate. No second Agent, no Squad, no press, no human, no orange or red, no text and no pseudo-writing.",
+      "overall_soundscape": "The exact same mechanism sound as the earlier test, ending in a dry downward gauge tone.",
+      "non_diegetic_music": "Cool, objective sustained harmony."
+    },
+    {
+      "id": "S23", "timecode": "02:07-02:13", "duration_seconds": 6, "mode": "I2VA", "references": ["review_failed"],
+      "voiceover_zh": "不合格，就退回。退回也是事实，刻进账本。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 failed-review frame with one deep-navy Reviewer, failed gauge and one matte artifact brick. A compact solid deep-blue institutional seal rises from the review bench, presses once onto the top of the matte brick and lifts, leaving one abstract deep-blue rejection groove with no text. At the same instant, one matching short deep-blue rejection notch engraves into the adjacent durable task keel. The brick then slides away from the isolated review bench along a shallow ceramic return channel toward the distant Squad direction; the Reviewer remains in place and does not follow. Deep blue only: no orange, red, card, paper, screen, text, second Agent or human.",
+      "overall_soundscape": "A blunt deep-blue institutional seal, fresh stone engraving, ceramic return glide.",
+      "non_diegetic_music": "A firm unresolved cadence, no melodrama."
+    },
+    {
+      "id": "S24", "timecode": "02:13-02:20", "duration_seconds": 7, "mode": "Ref2VA", "references": ["master_bible", "hero_world"],
+      "voiceover_zh": "修好、重交、复验通过——这一段才算数。",
+      "integrated_multimodal_description": "Five-beat physical montage: open the returned artifact, re-machine the failed component, test past threshold, press a revised brick that retains the old rejection history, send it back, reproduce again, and hold on the deep-blue gauge passing. The keel segment ends in stable accepted blue light; the Reviewer simply leaves.",
+      "overall_soundscape": "Rhythmic repair tools resolving into the clear measurement chime and a warm stable resonance.",
+      "non_diegetic_music": "Procedural phrase finally resolves, without celebration."
+    },
+    {
+      "id": "S25", "timecode": "02:20-02:26", "duration_seconds": 6, "mode": "I2VA", "references": ["single_agent_session"],
+      "voiceover_zh": "进程会死。上下文会随它一起消失——我们不假装它能复活。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 single-Agent session reference. Lock the camera. The one tall cobalt cursor-pillar Agent works normally for one second, then flickers twice and physically disintegrates from top to bottom into tiny cobalt glyph-like dust that loses light and falls. At the same time its entire finite translucent context ring loses its anchor, breaks into short segments and every segment extinguishes before reaching the floor; no ring remains. After both body and ring are completely gone, one small deep-blue lease lamp separates from the empty workstation, descends into a warm-white ceramic lamp seat, dims and releases a small locking collar. End on the truly empty workstation, dark lamp and open collar for one full beat. No successor, no ghost, no silhouette, no resurrection, no human, no text and no orange or red.",
+      "overall_soundscape": "Two descending tones, half a second of total silence, then a tiny lease-lamp seat click.",
+      "non_diegetic_music": "Music cuts out during the disappearance and returns only after the lease settles."
+    },
+    {
+      "id": "S26", "timecode": "02:26-02:33", "duration_seconds": 7, "mode": "FL2VA", "references": ["attempt_empty", "single_agent_session"],
+      "voiceover_zh": "旧的尝试结束，租约释放。新的执行体接过租约，从持久事实和产物里，把该知道的重新读回来。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 empty workstation after the old attempt has vanished. For one full second keep it empty. Then a visibly new tall cobalt cursor-pillar body forms upward from a clean template glow; it has a thin pale-blue vertical surface stripe that the old body did not have, and a completely empty transparent context ring with no grains. A released small deep-blue lease lamp rises from its seat and locks into a new socket at the base of this new body. Two narrow cobalt reading beams—not tool filaments—scan one durable ceramic groove and one matte artifact brick at the workstation edge. With each scan, small cobalt fact grains enter the empty ring segment by segment until it is half full. End on the H3 single-Agent composition but keep the new pale-blue identity stripe visible. No old dust returns, no ghost, no resurrection, no human, no text, no orange or red.",
+      "overall_soundscape": "Glass-like formation tone, one ascending lease note, then discrete type impacts as context is rebuilt.",
+      "non_diegetic_music": "The theme resumes from a new voicing, signaling succession rather than resurrection."
+    },
+    {
+      "id": "S27", "timecode": "02:33-02:40", "duration_seconds": 7, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "工作继续。而当一件事确实做不下去，它的终态也可以是‘受阻’——附上证据，而不是硬说成功。",
+      "integrated_multimodal_description": "Track across two keel segments. At the successor segment, the arch reads new facts, pauses, dispatches through the scheduler press and proceeds only on the accepted deep-blue receipt. At the next blocked segment it pauses and deliberately emits no dispatch; a deep-blue-edged evidence tablet settles. The user's hand takes it, and only the human touch adds a faint orange glow.",
+      "overall_soundscape": "One accepted scheduler receipt, then a muted stop tone and quiet ceramic evidence pickup.",
+      "non_diegetic_music": "Honest unresolved harmony with no tragic swell."
+    },
+    {
+      "id": "S28", "timecode": "02:40-02:47", "duration_seconds": 7, "mode": "Ref2VA", "runtime_elements": false, "references": ["hero_world", "feedback_bench"],
+      "voiceover_zh": "你看了证据，说了一句很具体的话。",
+      "integrated_multimodal_description": "Use <Picture 1> as the exact user character and rainy-night desk reference. Use <Picture 2> as the exact durable method plate, translucent candidate-overlay material and receipt-chain reference. In one warm close shot at the same desk, the user reads one blank deep-blue evidence tablet, then speaks one precise correction. A narrow segmented orange intent ribbon forms at the mouth and travels intact across the desk to the method plate from Picture 2. The complete orange ribbon lays down beside the durable matte plate without changing shape, shortening, splitting or being summarized. The translucent candidate overlay remains inactive and clear above the plate; the user's hand does not touch it. No Agent, no Campaign, no gauge, no comparison lanes, no text and no other orange object.",
+      "overall_soundscape": "The original human ink-drop motif and a respectful ceramic placement sound.",
+      "non_diegetic_music": "Warm human variation of the main theme."
+    },
+    {
+      "id": "S29", "timecode": "02:47-02:54", "duration_seconds": 7, "mode": "I2VA", "runtime_elements": false, "references": ["feedback_bench"],
+      "voiceover_zh": "专家团把你的原话，变成一份候选修订。这条路不需要试验场——你的接受，就是裁决。",
+      "integrated_multimodal_description": "Begin exactly on the H3 feedback-bench reference. Keep the matte method plate and three receipt tags fixed. Above the plate, the thin translucent candidate overlay becomes more visible: exactly two added grooves illuminate cobalt and exactly one removed groove receives one thin cobalt strike-through. The durable original plate remains simultaneously visible beneath it. The candidate overlay then glides only a short distance toward the user's side of the desk and stops, hovering in a flat waiting posture. No hand touches it, no installation occurs and no receipt is created. No Agent, no Campaign, no trial, no baseline, no gauge, no comparison lane, no text and no orange.",
+      "overall_soundscape": "Thin glass formation, gentle transport air, then attentive silence.",
+      "non_diegetic_music": "Warm theme held open, waiting for human judgment."
+    },
+    {
+      "id": "S30", "timecode": "02:54-03:00", "duration_seconds": 6, "mode": "I2VA", "runtime_elements": false, "references": ["feedback_confirm_touch"],
+      "voiceover_zh": "你确认，它才安装。装完，留下一张编号回执。",
+      "integrated_multimodal_description": "Begin exactly on the H3 close frame where the user's natural warm-brown hand has one orange fingertip touching the translucent candidate overlay. Hold the contact for half a second. Only after the orange fingertip lifts, the candidate overlay descends vertically and fuses into the matte durable method plate: its two added cobalt grooves become physical grooves and its struck groove disappears. After fusion is visibly complete, the plate casts exactly one new small matte ceramic mutation-receipt tag from its right edge; the tag drops onto the existing fine chain and swings twice before stopping. No installation before the fingertip, no Agent, no Campaign, no gauge, no text and no additional orange.",
+      "overall_soundscape": "Warm clockwork confirmation, soft fusion flow, one ceramic receipt chime.",
+      "non_diegetic_music": "Human theme resolves gently on confirmed installation."
+    },
+    {
+      "id": "S31", "timecode": "03:00-03:09", "duration_seconds": 9, "mode": "I2VA", "runtime_elements": false, "references": ["metric_rig"],
+      "voiceover_zh": "另一条路从度量来。先冻结试验场：版本、用例、评分器、环境、预算、可改的范围——全部锁死。基线和候选，同条件开跑。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 symmetric comparison-rig reference. Keep the two lanes, paired method blocks and central two-needle gauge perfectly mirrored. Around the arena perimeter, exactly six small deep-blue mechanical lock seals close one at a time in a clear rhythm. Nothing in either lane moves before the sixth lock closes. After the sixth lock, the matte baseline block in the left lane and the identically shaped translucent candidate block in the right lane start together. Identical pairs of warm-white case tokens enter both lanes at the same times under one even neutral light. Both central gauge needles rise together, then begin to separate slightly near the end. No human, no Agent, no text, no label, no orange or red, no third lane and no chart.",
+      "overall_soundscape": "Six rhythmic lock clicks, then mirrored left-right trial mechanics and synchronized gauge movement.",
+      "non_diegetic_music": "Cool geometric ostinato, symmetrical and objective."
+    },
+    {
+      "id": "S32", "timecode": "03:09-03:17", "duration_seconds": 8, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "比较必须同源。退步的候选直接出局，不装。只有比较完整、没有缺失维度且建议晋升的，才会送到你面前——还是那枚指印。",
+      "integrated_multimodal_description": "Two concise outcomes in the same comparison rig. First, a worse candidate slides into a reject archive and is never installed. Second, only after every deterministic comparison seal is complete and no dimension is unavailable, a deep-blue promote recommendation travels to the user. Repeat the exact human fingertip confirmation composition; only then fuse the candidate and cast a second receipt.",
+      "overall_soundscape": "Dry reject-slide click, complete-seal confirmation sequence, then the familiar warm human confirmation tone.",
+      "non_diegetic_music": "Cool comparison motif gives way to the warm human motif only after the complete recommendation."
+    },
+    {
+      "id": "S33", "timecode": "03:17-03:25", "duration_seconds": 8, "mode": "I2VA", "runtime_elements": false, "references": ["installed_method_receipts"],
+      "voiceover_zh": "每张回执都可以回退：引用它、再确认一次，就能恢复。自进化不是偷偷改提示词，也不保证每次都变强——但每一步，都有据可查。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 installed method plate and receipt-chain frame. The same natural warm-brown hand enters and gently pulls the first older ceramic receipt tag from the chain toward the method plate, clearly citing that specific prior tag. A thin translucent ghost preview appears above the plate showing its earlier groove arrangement; the durable plate below does not change yet. The user's single orange fingertip presses the ghost preview once and then lifts. Only after that second confirmation, the durable plate restores to the previewed groove arrangement. After restoration completes, exactly one new ceramic receipt tag forms at the plate edge and a new fine chain segment visibly connects this new tag back to the selected prior tag. No restoration before confirmation, no Agent, no Campaign, no gauge, no text and no other orange.",
+      "overall_soundscape": "Soft ceramic receipt touch, airy preview, a lower warm confirmation tone, new-link click.",
+      "non_diegetic_music": "Gentle reflective variation emphasizing reversible human control."
+    },
+    {
+      "id": "S34", "timecode": "03:25-03:32", "duration_seconds": 7, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "你的桌上可以同时放很多工具。WorkBuddy，一句话交付成品；DeepSeek Harness，MIT 开源的插件内核，能力自己组合。",
+      "integrated_multimodal_description": "Morning desk-level tracking. The user happily operates two neutral physical metaphors in sequence: a polished product appliance that accepts one human intent ribbon and outputs a finished object, then an open modular kit whose components visibly assemble. Both are useful and treated with equal visual dignity; no real product appearance or logo.",
+      "overall_soundscape": "Smooth finished-object delivery and crisp modular component clicks.",
+      "non_diegetic_music": "Light comparative passage with no winner accent."
+    },
+    {
+      "id": "S35", "timecode": "03:32-03:39", "duration_seconds": 7, "mode": "T2VA", "references": [],
+      "voiceover_zh": "Codex 和 Claude Code，是编码会话里的软件工程 Agent——它们和 OpenCorvus 不在同一层，可以一起用。",
+      "integrated_multimodal_description": "One coherent vertical architectural cutaway in the established warm-white 2.5D ceramic world, not a software UI. At the upper level float exactly two neutral physical glass session panes, each containing exactly one tall cobalt cursor-pillar coding Agent with its own separate finite ring; abstract blue code-grain lines stream beside them but contain no text. Both work productively. From the left session pane only, one narrow cobalt connection stair extends downward through the desk plane to the lower runtime level, where it seats into one empty position on a five-member Expert Squad platform. The left coding Agent remains visibly present in its upper session while a luminous activation copy travels down the stair and fills the lower position; the right coding Agent stays in its session unchanged. Both levels continue operating. No human, no brand logo, no text, no ranking, no orange, no card grid and no screen bezel.",
+      "overall_soundscape": "Code-like type grains, a descending piano staircase, one precise platform connection.",
+      "non_diegetic_music": "Layered motif showing coexistence, never competition."
+    },
+    {
+      "id": "S36", "timecode": "03:39-03:45", "duration_seconds": 6, "mode": "Ref2VA", "references": ["desktop_tools", "master_bible"],
+      "voiceover_zh": "OpenCorvus 是它们脚下那一层：模型无关、多 Agent、自托管的长程 harness。各有各的用处，没有谁取代谁。",
+      "integrated_multimodal_description": "Use <Picture 1> as the exact reference for two useful neutral desktop tools: polished finished-product appliance and open modular kit. Use <Picture 2> as the exact reference for the warm-white ceramic Mission runtime, tall cursor-pillar Squad and deep-blue gantry. Build one elegant vertical architectural cutaway with exactly three horizontal layers in a single coherent space, not cards: top layer is the desk holding both Picture 1 tools; middle layer is two plain translucent coding-session panes with abstract cobalt grains and one cursor-pillar each, no writing; bottom layer is the full Picture 2 long-running Mission runtime with task keel, gantry and Squad. All three layers operate simultaneously with equal light and no winner. The camera slowly descends from top through middle toward one stable completed keel segment below. No human, no text, no logo, no ranking, no arrow, no podium, no orange and no panel borders.",
+      "overall_soundscape": "Everyday desk sounds, session type grains and deep runtime pulse coexist in three depth planes.",
+      "non_diegetic_music": "Three motifs interlock without a dominant winner."
+    },
+    {
+      "id": "S37", "timecode": "03:45-03:55", "duration_seconds": 10, "mode": "I2VA", "references": ["master_bible"],
+      "voiceover_zh": "这是一次真实的运行：DeBERTa 的 ABSA 长程任务。六个 Task，约十二小时四十五分，全部完成并交付证据——三支内置专家团，四十六个 Agent 会话，二十种角色。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 runtime world reference. Leave the finished Squad platform behind and make a calm documentary lateral track along exactly six consecutive completed segments of the matte ceramic task keel. Each segment has one stable deep-blue accepted lamp and one blank matte evidence tablet recessed beside it. As the camera passes, the tablets rise one by one and receive only abstract horizontal groove placeholders—no letters, digits, icons or pseudo-writing. Keep at most three blank tablets visible at once. Distant Squad platforms remain tiny and quiet in depth. No human, no orange or red, no gauge, no chart, no celebration and no text. End at the fourth segment while the lateral motion continues for S38.",
+      "overall_soundscape": "Runtime pulse recedes; each evidence engraving has one dry documentary scratch.",
+      "non_diegetic_music": "Plain factual motif, steady and uninflated."
+    },
+    {
+      "id": "S38", "timecode": "03:55-04:03", "duration_seconds": 8, "mode": "I2VA", "references": ["evidence_keel"],
+      "voiceover_zh": "一张 RTX 5090，三组 CUDA 实验。验证集 Macro-F1 83.43，选定测试集 83.61——单一种子，一千八百条训练样本。这是一次固定运行的证据，不代表普遍 SOTA。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 evidence-keel frame and continue the same calm lateral track at the same speed and camera height. Along the next completed keel segment, reveal one neutral warm-white single-card compute station, exactly three small cobalt CUDA experiment sockets, two equal-size matte measurement tablets side by side, and one equal-size matte limitation tablet beside them. Every tablet is blank except for abstract horizontal groove placeholders; no writing, digits or icons. The limitation tablet has exactly the same material, height and visual weight as the performance tablets. End with the camera arriving at exactly three heavy matte artifact bricks arranged at the segment end. No human, no orange or red, no brand hardware shape, no chart and no text.",
+      "overall_soundscape": "Same engraving grammar; paired metric tablets land with an objective perfect-fifth interval.",
+      "non_diegetic_music": "Evidence motif remains measured, avoiding a victory swell."
+    },
+    {
+      "id": "S39", "timecode": "04:03-04:08", "duration_seconds": 5, "mode": "I2VA", "references": ["case_artifact_bricks"],
+      "voiceover_zh": "监控与推理网页、图表、论文、测试，和一个公开仓库。都在这里，你可以自己查。",
+      "integrated_multimodal_description": "Begin exactly on the accepted H3 frame of three heavy matte case artifact bricks. The three bricks remain in their fixed positions and each opens once into a miniature physical proof scene, never a screenshot. Left brick unfolds a tiny warm-white monitoring and inference site scaffold with one cobalt activity curve and one input-output aperture, no UI text. Middle brick unfolds a small chart folio with two simple cobalt lines and a concise matte paper booklet whose blank pages turn once. Right brick unfolds a small physical test array whose eight points illuminate cobalt, beside one open-repository ceramic block with an open lid and no logo. Hold all three miniature scenes together for one beat, then the middle paper booklet closes with physical weight. No human, no Agent, no text, no generated URL, no orange or red and no card layout.",
+      "overall_soundscape": "Three light proof tones and one real paper-book closing sound.",
+      "non_diegetic_music": "A small factual resolution leads into the personal-life ending."
+    },
+    {
+      "id": "S40", "timecode": "04:08-04:18", "duration_seconds": 10, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "毕业论文、课程项目、开源软件、副业产品、作品集、独立研究——真正需要长程工作的，是你自己的事。",
+      "integrated_multimodal_description": "One continuous overhead desk transformation, never a grid: literature for a thesis becomes an electronics course project, then a personal open-source laptop, a side-project sample, a portfolio camera and prints, and independent research notes. Beneath every transformation the same tiny task keel keeps advancing. The user performs only small acts of setting intent, constraint, reading evidence, feedback or confirmation.",
+      "overall_soundscape": "Soft object morphing and handling sounds; the deep runtime pulse remains constant underneath.",
+      "non_diegetic_music": "The main theme broadens into a warm personal-life sequence."
+    },
+    {
+      "id": "S41", "timecode": "04:18-04:28", "duration_seconds": 10, "mode": "Ref2VA", "references": ["hero_world", "master_bible"],
+      "voiceover_zh": "你只做五件事：提目标、给约束、看证据、给反馈、按下确认。剩下的——别再替 Agent 收尾。",
+      "integrated_multimodal_description": "Return to the exact opening camera angle at dawn. The same user brings coffee, studies a newly arrived matte evidence brick, makes one final orange fingertip confirmation and smiles subtly. The runtime continues as distant blue light under the desk. Leave generous warm-white negative space for deterministic closing copy, then overexpose softly to white.",
+      "overall_soundscape": "Very faint morning birds, one final warm confirmation tone, quiet room breath.",
+      "non_diegetic_music": "The main theme resolves fully and gently to its home chord."
+    },
+    {
+      "id": "S42", "timecode": "04:28-04:36", "duration_seconds": 8, "mode": "POST", "references": [],
+      "voiceover_zh": "",
+      "integrated_multimodal_description": "Deterministic post-production only: warm-white memorial-style closing composition, subtle six-percent grid and restrained blue-orange mesh glow. Official logo, brand, website, repository, author and case repository are composited from verified assets; first four seconds fade in, final four seconds remain completely still.",
+      "overall_soundscape": "Music tail falls to one instant of room tone before black.",
+      "non_diegetic_music": "Natural final decay; no generated audio."
+    }
+  ]
+}

@@ -1,6 +1,10 @@
 # August 2026 Records
 
+- [2026-08-25-live-type-runtime-video-v9.md](2026-08-25-live-type-runtime-video-v9.md) ingests the authenticated Claude `活字运行层` A–I artifact as the new creative authority, freezes the Agent-native cursor/context/material grammar and 42-shot 4:36 story, records technical corrections, and supersedes the rejected character-workshop direction.
+
 - [2026-08-25-website-version-bound-download.md](2026-08-25-website-version-bound-download.md) binds the landing-page primary action to the current manifest asset on single-architecture Windows, exposes the exact version/file selection, and makes ambiguous platforms choose explicitly.
+
+- [2026-08-24-character-led-product-video-v8.md](2026-08-24-character-led-product-video-v8.md) freezes the GrillMe decisions, Design Taste dials, source-grounded claim ledger, character-led continuous-workshop visual proposition, and parallel narrative/visual production method for the replacement long-horizon explainer.
 
 - [2026-08-24-site-native-explainer-v7.md](2026-08-24-site-native-explainer-v7.md) replaces the rejected paper-collage direction with a website-audited light brand motion system, exact visual tokens, truthful product positioning, and a three-frame approval gate before full video production.
 

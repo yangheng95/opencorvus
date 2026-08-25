@@ -19,6 +19,7 @@ from PIL import Image, ImageChops, ImageOps, ImageStat
 
 DEFAULT_INSTALL = Path(r"D:\myhexin-local\demos\minimax-h3-local-5090")
 DEFAULT_OUTPUT = Path(r"D:\myhexin-local\demos\opencorvus-minimax-h3-promo-20260824")
+DEFAULT_MANIFEST = Path(__file__).with_name("v9-live-type-runtime-manifest.json")
 TERMINAL_HISTORY = {"success", "error"}
 
 
@@ -28,6 +29,142 @@ def sha256_file(path: Path) -> str:
         while chunk := source.read(1024 * 1024):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def canonical_sha256(value: Any) -> str:
+    return sha256_text(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+
+
+def model_identities(install: Path, workflow: dict[str, Any]) -> list[dict[str, Any]]:
+    inventory_path = install / "installer" / "assets" / "hf_model_inventory.json"
+    inventory = {
+        item["path"]: item
+        for item in json.loads(inventory_path.read_text(encoding="utf-8"))
+        if isinstance(item, dict) and isinstance(item.get("path"), str)
+    }
+    requested: list[tuple[str, str, str]] = []
+    vae_index = 0
+    for node in workflow.values():
+        node_type = node.get("class_type")
+        inputs = node.get("inputs", {})
+        if node_type == "UNETLoader":
+            requested.append(("diffusion", "diffusion_models", inputs["unet_name"]))
+        elif node_type == "CLIPLoader":
+            requested.append(("text_encoder", "text_encoders", inputs["clip_name"]))
+        elif node_type == "VAELoader":
+            role = "video_vae" if vae_index == 0 else "audio_vae"
+            requested.append((role, "vae", inputs["vae_name"]))
+            vae_index += 1
+    role_order = {"diffusion": 0, "text_encoder": 1, "video_vae": 2, "audio_vae": 3}
+    requested.sort(key=lambda item: role_order[item[0]])
+    if [item[0] for item in requested] != ["diffusion", "text_encoder", "video_vae", "audio_vae"]:
+        raise RuntimeError(f"Workflow model contract is incomplete: {[item[0] for item in requested]}")
+    models_root = install / "runtime" / "ComfyUI" / "models"
+    identities: list[dict[str, Any]] = []
+    for role, directory, name in requested:
+        relative = f"{directory}/{name}"
+        source = models_root / directory / name
+        if not source.is_file():
+            raise FileNotFoundError(f"H3 model not found: {source}")
+        expected = inventory.get(relative)
+        if not expected:
+            raise RuntimeError(f"H3 model is missing installer inventory identity: {relative}")
+        size = source.stat().st_size
+        if size != int(expected["size"]):
+            raise RuntimeError(f"H3 model size differs from verified inventory: {relative}")
+        physical_sha256 = sha256_file(source)
+        if physical_sha256 != expected["sha256"]:
+            raise RuntimeError(f"H3 model digest differs from verified inventory: {relative}")
+        identities.append(
+            {
+                "role": role,
+                "path": str(source.resolve()),
+                "bytes": size,
+                "inventory_sha256": expected["sha256"],
+                "physical_sha256": physical_sha256,
+            }
+        )
+    return identities
+
+
+def find_node(workflow: dict[str, Any], class_type: str) -> tuple[str, dict[str, Any]]:
+    matches = [(node_id, node) for node_id, node in workflow.items() if node.get("class_type") == class_type]
+    if len(matches) != 1:
+        raise RuntimeError(f"Expected exactly one {class_type} node, found {len(matches)}")
+    return matches[0]
+
+
+def load_shot(manifest_path: Path, shot_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != 1 or manifest.get("creative_direction") != "live-type-runtime-v9":
+        raise RuntimeError(f"Unsupported or non-V9 production manifest: {manifest_path}")
+    if manifest.get("production_status") != "prompt-locked":
+        raise RuntimeError(f"V9 manifest is not prompt-locked: {manifest.get('production_status')!r}")
+    shot_pool = [*manifest.get("bootstrap_shots", []), *manifest.get("shots", [])]
+    shot = next((item for item in shot_pool if item.get("id") == shot_id), None)
+    if shot is None:
+        raise ValueError(f"Shot {shot_id!r} is absent from the V9 manifest")
+    required = {
+        "mode",
+        "duration_seconds",
+        "integrated_multimodal_description",
+        "overall_soundscape",
+        "non_diegetic_music",
+        "references",
+    }
+    missing = sorted(required - shot.keys())
+    if missing:
+        raise RuntimeError(f"Shot {shot_id} is missing production fields: {missing}")
+    return manifest, shot
+
+
+def resolve_references(manifest_path: Path, manifest: dict[str, Any], shot: dict[str, Any]) -> list[dict[str, Any]]:
+    references: list[dict[str, Any]] = []
+    for index, item in enumerate(shot["references"]):
+        if isinstance(item, str):
+            item = manifest.get("reference_assets", {}).get(item)
+        if not isinstance(item, dict) or not item.get("path") or not item.get("sha256"):
+            raise RuntimeError(f"Shot {shot['id']} reference {index} is not hash-locked")
+        source = (manifest_path.parent / item["path"]).resolve()
+        if not source.is_file():
+            raise FileNotFoundError(f"Shot {shot['id']} reference is missing: {source}")
+        physical_sha256 = sha256_file(source)
+        if physical_sha256 != item["sha256"]:
+            raise RuntimeError(f"Shot {shot['id']} reference digest mismatch: {source}")
+        references.append(
+            {
+                "role": item.get("role", f"reference_{index}"),
+                "path": source,
+                "sha256": physical_sha256,
+            }
+        )
+    return references
+
+
+def workflow_for_mode(install: Path, mode: str) -> Path:
+    names = {
+        "T2VA": "video_minimax_h3_t2v.api.json",
+        "I2VA": "video_minimax_h3_i2v.api.json",
+        "FL2VA": "video_minimax_h3_i2v.api.json",
+        "Ref2VA": "video_minimax_h3_r2v.api.json",
+    }
+    if mode not in names:
+        raise RuntimeError(f"Shot mode {mode!r} is not locally generatable")
+    workflow = install / "api-client" / "resources" / "workflows_api" / names[mode]
+    if not workflow.is_file():
+        raise FileNotFoundError(f"H3 workflow for {mode} is missing: {workflow}")
+    return workflow
+
+
+def validate_reference_count(mode: str, references: list[dict[str, Any]]) -> None:
+    expected = {"T2VA": (0, 0), "I2VA": (1, 1), "FL2VA": (2, 2), "Ref2VA": (2, 2)}
+    minimum, maximum = expected[mode]
+    if not minimum <= len(references) <= maximum:
+        raise RuntimeError(f"{mode} requires {minimum}..{maximum} hash-locked references, got {len(references)}")
 
 
 def request_json(url: str, *, method: str = "GET", payload: dict[str, Any] | None = None, timeout: int = 30) -> dict[str, Any]:
@@ -186,10 +323,14 @@ def inspect_clip(video: Path, frames_root: Path) -> dict[str, Any]:
     audio_stream = next((stream for stream in probe["streams"] if stream["codec_type"] == "audio"), None)
     duration = float(probe["format"]["duration"])
     frames_root.mkdir(parents=True, exist_ok=True)
-    times = [max(0.05, min(duration - 0.05, value)) for value in (0.2, duration / 2, duration - 0.2)]
+    labels = ("start", "quarter", "middle", "three_quarter", "end")
+    times = [
+        max(0.05, min(duration - 0.05, value))
+        for value in (0.2, duration * 0.25, duration * 0.5, duration * 0.75, duration - 0.2)
+    ]
     inspections: list[dict[str, Any]] = []
     previous: Image.Image | None = None
-    for label, timestamp in zip(("start", "middle", "end"), times, strict=True):
+    for label, timestamp in zip(labels, times, strict=True):
         path = frames_root / f"{label}.png"
         subprocess.run(
             ["ffmpeg", "-y", "-v", "error", "-ss", f"{timestamp:.3f}", "-i", str(video), "-frames:v", "1", "-update", "1", str(path)],
@@ -212,15 +353,76 @@ def inspect_clip(video: Path, frames_root: Path) -> dict[str, Any]:
         "audio_sample_rate": None if audio_stream is None else int(audio_stream.get("sample_rate", 0)),
         "frames": inspections,
     }
+    motion_checkpoint_count = sum(
+        item["difference"] is not None and item["difference"] >= 0.75 for item in inspections
+    )
+    result["motion_checkpoint_count"] = motion_checkpoint_count
     result["passed"] = (
         result["video_codec"] == "h264"
         and result["audio_codec"] == "aac"
         and result["audio_channels"] == 2
         and result["audio_sample_rate"] == 32000
         and all(item["luminance"] >= 8 for item in inspections)
-        and all(item["difference"] is None or item["difference"] >= 0.75 for item in inspections)
+        and motion_checkpoint_count >= 2
     )
     return result
+
+
+def prepare_workflow(
+    workflow_path: Path,
+    *,
+    mode: str,
+    prompt: str,
+    width: int,
+    height: int,
+    duration: float,
+    steps: int,
+    seed: int,
+    output_stem: str,
+    reference_image_names: list[str],
+) -> tuple[dict[str, Any], int]:
+    workflow = json.loads(workflow_path.read_text(encoding="utf-8"))
+    length = max(5, round(duration * 24))
+    length += (5 - (length % 17)) % 17
+    if mode == "Ref2VA":
+        _, generation_node = find_node(workflow, "MiniMaxH3ReferenceToVideo")
+        generation_node["inputs"].update(prompt=prompt, width=width, height=height, length=length)
+        load_nodes = [(node_id, node) for node_id, node in workflow.items() if node.get("class_type") == "LoadImage"]
+        load_nodes.sort(key=lambda item: int(item[0]))
+        for (_, node), image_name in zip(load_nodes, reference_image_names, strict=True):
+            node["inputs"]["image"] = image_name
+    else:
+        _, generation_node = find_node(workflow, "MiniMaxH3ImageToVideo")
+        generation_node["inputs"].update(prompt=prompt, width=width, height=height, length=length)
+        if mode in {"I2VA", "FL2VA"}:
+            first_id, first_node = find_node(workflow, "LoadImage")
+            first_node["inputs"]["image"] = reference_image_names[0]
+            generation_node["inputs"]["first_frame"] = [first_id, 0]
+        if mode == "FL2VA":
+            last_id = str(max(int(node_id) for node_id in workflow) + 1)
+            workflow[last_id] = {
+                "class_type": "LoadImage",
+                "inputs": {"image": reference_image_names[1]},
+                "_meta": {"title": "Hash-locked last frame"},
+            }
+            generation_node["inputs"]["last_frame"] = [last_id, 0]
+    _, scheduler = find_node(workflow, "BasicScheduler")
+    scheduler["inputs"]["steps"] = steps
+    _, noise = find_node(workflow, "RandomNoise")
+    noise["inputs"]["noise_seed"] = seed
+    _, save = find_node(workflow, "SaveVideo")
+    save["inputs"]["filename_prefix"] = f"video/opencorvus_h3_{output_stem}"
+
+    _, unet = find_node(workflow, "UNETLoader")
+    _, clip = find_node(workflow, "CLIPLoader")
+    unet["inputs"]["unet_name"] = {
+        "T2VA": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "I2VA": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "FL2VA": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "Ref2VA": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+    }[mode]
+    clip["inputs"]["clip_name"] = "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+    return workflow, length
 
 
 def generate(
@@ -235,20 +437,21 @@ def generate(
     steps: int,
     seed: int,
     inactivity_timeout: int,
-    reference_image_name: str | None = None,
+    mode: str,
+    reference_image_names: list[str],
 ) -> dict[str, Any]:
-    workflow = json.loads(workflow_path.read_text(encoding="utf-8"))
-    length = max(5, round(duration * 24))
-    length += (5 - (length % 17)) % 17
-    workflow["104"]["inputs"].update(prompt=prompt, width=width, height=height, length=length)
-    if reference_image_name is not None:
-        workflow["114"]["inputs"]["image"] = reference_image_name
-    workflow["9"]["inputs"]["steps"] = steps
-    workflow["15"]["inputs"]["noise_seed"] = seed
-    workflow["92"]["inputs"]["filename_prefix"] = f"video/opencorvus_h3_{output_path.stem}"
-    # This exact stack is the single-5090 contract; refuse accidental BF16 expansion.
-    workflow["6"]["inputs"]["unet_name"] = "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
-    workflow["13"]["inputs"]["clip_name"] = "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+    workflow, length = prepare_workflow(
+        workflow_path,
+        mode=mode,
+        prompt=prompt,
+        width=width,
+        height=height,
+        duration=duration,
+        steps=steps,
+        seed=seed,
+        output_stem=output_path.stem,
+        reference_image_names=reference_image_names,
+    )
 
     started = time.time()
     client_id = str(uuid.uuid4())
@@ -279,6 +482,8 @@ def generate(
         raise RuntimeError(f"Generation failed: {json.dumps(status, ensure_ascii=False)[:3000]}")
     media = find_media(record.get("outputs", {}))
     download_output(base_url, media, output_path)
+    _, report_unet = find_node(workflow, "UNETLoader")
+    _, report_clip = find_node(workflow, "CLIPLoader")
     report = {
         "prompt_id": prompt_id,
         "started_at": started,
@@ -291,9 +496,10 @@ def generate(
         "frames": length,
         "steps": steps,
         "seed": seed,
-        "diffusion": workflow["6"]["inputs"]["unet_name"],
-        "text_encoder": workflow["13"]["inputs"]["clip_name"],
-        "reference_image": reference_image_name,
+        "diffusion": report_unet["inputs"]["unet_name"],
+        "text_encoder": report_clip["inputs"]["clip_name"],
+        "mode": mode,
+        "uploaded_reference_images": reference_image_names,
         "peak_vram_mib": max((item.get("vram_mib", 0) for item in monitor.samples), default=0),
         "minimum_free_ram_gib": min((item.get("free_ram_gib", 9999) for item in monitor.samples), default=0),
         "resource_samples": monitor.samples,
@@ -306,48 +512,63 @@ def main() -> int:
     parser.add_argument("--install", type=Path, default=DEFAULT_INSTALL)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--base-url", default="http://127.0.0.1:8188")
-    parser.add_argument("--scene", default="smoke")
-    parser.add_argument("--prompt")
-    parser.add_argument(
-        "--reference-image",
-        type=Path,
-        help="Drive the clip from a frozen character/story keyframe through the H3 I2V workflow.",
-    )
+    parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    parser.add_argument("--shot", required=True, help="V9 shot id, for example S03.")
+    parser.add_argument("--take", required=True, help="Immutable take label, for example take-001.")
     parser.add_argument("--width", type=int, default=608)
     parser.add_argument("--height", type=int, default=352)
-    parser.add_argument("--duration", type=float, default=3)
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--seed", type=int, default=20260824)
     parser.add_argument("--inactivity-timeout", type=int, default=3600)
     args = parser.parse_args()
 
-    storyboard_path = Path(__file__).with_name("storyboard.zh-CN.json")
-    storyboard = json.loads(storyboard_path.read_text(encoding="utf-8"))
-    if args.prompt:
-        prompt = args.prompt
-    elif args.scene == "smoke":
-        prompt = "Cinematic macro view of a luminous workflow path continuing through durable checkpoints toward a polished artifact, graphite background, cyan and amber light, precise physical motion, no text, no logos, no software interface. [background_audio] subtle machine room ambience, soft confirmation tones, restrained stereo movement."
-    else:
-        if storyboard.get("production_status") != "approved":
-            raise RuntimeError(
-                "The current storyboard was rejected and is blocked from production. "
-                "Approve creative-brief-v2.zh-CN.md and rewrite the storyboard first."
-            )
-        scene = next((item for item in storyboard["scenes"] if item["id"] == args.scene), None)
-        if not scene or not scene.get("h3_prompt"):
-            raise ValueError(f"Scene {args.scene!r} has no H3 prompt")
-        prompt = scene["h3_prompt"]
+    manifest_path = args.manifest.resolve()
+    manifest, shot = load_shot(manifest_path, args.shot)
+    if not args.take.replace("-", "").replace("_", "").isalnum():
+        raise ValueError("--take may contain only letters, numbers, '-' and '_'")
+    mode = shot["mode"]
+    if mode == "POST":
+        raise RuntimeError(f"Shot {args.shot} is deterministic post-production and must not be sent to H3")
+    references = resolve_references(manifest_path, manifest, shot)
+    validate_reference_count(mode, references)
+    workflow = workflow_for_mode(args.install, mode)
+    workflow_payload = json.loads(workflow.read_text(encoding="utf-8"))
+    identities = model_identities(args.install, workflow_payload)
+    visual_contract = manifest["global_visual_contract"]
+    if shot.get("runtime_elements", True):
+        visual_contract = f"{visual_contract}\n\n{manifest['runtime_visual_contract']}"
+    prompt = (
+        f"{visual_contract}\n\n"
+        f"{shot['integrated_multimodal_description']}\n\n"
+        f"Overall soundscape: {shot['overall_soundscape']}\n\n"
+        f"Non-diegetic music: {shot['non_diegetic_music']}\n\n"
+        "No generated text, letters, numbers, subtitles, logos, watermarks, UI cards, presentation slides, "
+        "talking heads, live-action humans, bird or corvid imagery."
+    )
+    build_inputs = {
+        "manifest_sha256": sha256_file(manifest_path),
+        "generator_script_sha256": sha256_file(Path(__file__).resolve()),
+        "workflow_sha256": sha256_file(workflow),
+        "prompt_sha256": sha256_text(prompt),
+        "references": [{"role": item["role"], "sha256": item["sha256"]} for item in references],
+        "model_identities": identities,
+        "shot": args.shot,
+        "mode": mode,
+        "width": args.width,
+        "height": args.height,
+        "duration": shot["duration_seconds"],
+        "steps": args.steps,
+        "seed": args.seed,
+    }
+    build_digest = canonical_sha256(build_inputs)
+    take_root = args.output_root / "h3-local" / args.shot / f"{args.take}-{build_digest[:12]}"
+    output = take_root / f"{args.shot}.mp4"
+    report_path = args.output_root / "reports" / args.shot / f"{args.take}-{build_digest[:12]}.json"
+    if output.exists() or report_path.exists():
+        raise FileExistsError(f"Immutable take already exists: {take_root}")
 
     process = start_comfy(args.install, args.base_url)
-    output = args.output_root / "h3-local" / f"{args.scene}.mp4"
-    reference_image_name = None
-    reference_image_source = None
-    workflow_name = "video_minimax_h3_t2v.api.json"
-    if args.reference_image:
-        reference_image_source = args.reference_image.resolve()
-        reference_image_name = upload_input_image(args.base_url, reference_image_source)
-        workflow_name = "video_minimax_h3_i2v.api.json"
-    workflow = args.install / "api-client" / "resources" / "workflows_api" / workflow_name
+    uploaded_names = [upload_input_image(args.base_url, item["path"]) for item in references]
     report = generate(
         base_url=args.base_url,
         workflow_path=workflow,
@@ -355,20 +576,24 @@ def main() -> int:
         prompt=prompt,
         width=args.width,
         height=args.height,
-        duration=args.duration,
+        duration=float(shot["duration_seconds"]),
         steps=args.steps,
         seed=args.seed,
         inactivity_timeout=args.inactivity_timeout,
-        reference_image_name=reference_image_name,
+        mode=mode,
+        reference_image_names=uploaded_names,
     )
+    report.update(build_inputs)
+    report["build_digest"] = build_digest
+    report["manifest_path"] = str(manifest_path)
+    report["creative_source_url"] = manifest["creative_source_url"]
     report["workflow_path"] = str(workflow.resolve())
-    report["workflow_sha256"] = sha256_file(workflow)
-    report["reference_image_source"] = None if reference_image_source is None else str(reference_image_source)
-    report["reference_image_sha256"] = None if reference_image_source is None else sha256_file(reference_image_source)
-    report["frame_inspection"] = inspect_clip(output, args.output_root / "h3-local" / "frames" / args.scene)
-    reports = args.output_root / "reports"
-    reports.mkdir(parents=True, exist_ok=True)
-    report_path = reports / f"local-h3-{args.scene}.json"
+    report["reference_sources"] = [
+        {"role": item["role"], "path": str(item["path"]), "sha256": item["sha256"]} for item in references
+    ]
+    report["frame_inspection"] = inspect_clip(output, take_root / "frames")
+    report["output_sha256"] = sha256_file(output)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     if not report["frame_inspection"]["passed"]:
         raise RuntimeError(f"Local H3 clip failed frame/media inspection; see {report_path}")
