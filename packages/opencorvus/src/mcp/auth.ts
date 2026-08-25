@@ -35,15 +35,17 @@ export namespace McpAuth {
     serverUrl: z.string().optional(), // Track the URL these credentials are for
     credentialIdentity: z.string().optional(),
     /**
-     * Revocation generation, durable in the store itself.
+     * Lease generation, durable in the store itself.
      *
-     * A holder of a long-running OAuth flow reads this once and presents it
-     * with every write of that flow, so it must stay stable across the flow's
-     * own writes — an OAuth exchange is several store writes under one
-     * captured revision. Only a revocation mints a new generation; a removed
-     * entry reads as the empty generation. Keeping it in the file rather than
-     * in memory is what makes a revoke performed by another backend on the
-     * same data root visible here.
+     * A holder of a long-running OAuth flow establishes a lease once and
+     * presents its generation with every write of that flow, so it must stay
+     * stable across the flow's own writes — an OAuth exchange is several
+     * store writes under one captured generation. Only `beginCredentialLease`
+     * and `invalidate` mint; ordinary writes preserve. The empty generation
+     * is never handed out as a lease, so a value captured before a removal
+     * can never match anything after recreation. Keeping the generation in
+     * the file rather than in memory is what makes a revoke performed by
+     * another backend on the same data root visible here.
      */
     revision: z.string().optional(),
   })
@@ -75,7 +77,14 @@ export namespace McpAuth {
     authKey: string,
     expected?: Revision,
   ) {
-    if (expected !== undefined && (data[authKey]?.revision ?? INITIAL_REVISION) !== expected) {
+    if (expected === undefined) return
+    // The empty generation is the absence of a lease, never a lease. A caller
+    // presenting it skipped `beginCredentialLease`, and admitting it is what
+    // let a value captured before a removal write into a recreated credential.
+    if (expected === INITIAL_REVISION) {
+      throw new Error(`MCP auth write presented an unestablished lease: ${authKey}`)
+    }
+    if ((data[authKey]?.revision ?? INITIAL_REVISION) !== expected) {
       throw new Error(`MCP auth lease was revoked: ${authKey}`)
     }
   }
@@ -217,14 +226,42 @@ export namespace McpAuth {
   }
 
   /**
+   * End every outstanding lease and establish a new one, in one store write.
+   *
+   * This is how a flow starts: whatever lease existed is revoked, the caller
+   * receives the only copy of the new generation, and both facts commit under
+   * the same cross-process lock — so there is no window in which a competitor
+   * can read the old generation as current. An absent entry is created bare;
+   * a flow that dies immediately leaves it for credential reconciliation to
+   * collect.
+   */
+  export async function beginCredentialLease(
+    authKey: string,
+    serverUrl?: string,
+    credentialIdentity?: string,
+  ): Promise<Revision> {
+    const generation = crypto.randomUUID()
+    await mutate(async () => {
+      const data = await all()
+      data[authKey] = Entry.parse({
+        ...(data[authKey] ?? {}),
+        ...(serverUrl ? { serverUrl } : {}),
+        ...(credentialIdentity ? { credentialIdentity } : {}),
+        revision: generation,
+      })
+      await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
+    })
+    return generation
+  }
+
+  /**
    * End every outstanding lease on one credential without removing it.
    *
    * Minting a new durable generation is the whole effect: any holder that
    * presents the generation it captured is refused from now on, in this
    * process and in any other backend reading the same store. A key with no
-   * entry has nothing to revoke: flows over a never-revoked key are fenced by
-   * the stored OAuth state and the single pending-flow slot, not by the
-   * generation.
+   * entry has nothing to revoke — no lease over it can exist, because the
+   * empty generation is never handed out.
    */
   export async function invalidate(authKey: string): Promise<void> {
     await mutate(async () => {

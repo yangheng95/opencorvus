@@ -59,6 +59,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/global/usage` | Get natural-period Provider usage Errors: `BadRequestError`. | `global.usage` |
 | POST | `/global/work` | Create Work in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.work.create` |
 | POST | `/instance/dispose` | Dispose instance Errors: `OwnedPromptControllersError`. | `instance.dispose` |
+| GET | `/lifecycle/{occurrenceID}` | Get a server lifecycle occurrence | `server.lifecycle` |
 | GET | `/log` | Read logs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `log.read` |
 | POST | `/log` | Write log batch Body: `entries`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `app.log` |
 | GET | `/log/export` | Export log support bundle | `log.export` |

@@ -15239,6 +15239,40 @@
         },
         "type": "object"
       },
+      "ServerLifecycleOccurrence": {
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "shutdown",
+              "restart"
+            ],
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "executing",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "timeAdmitted": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "state",
+          "timeAdmitted"
+        ],
+        "type": "object"
+      },
       "Session": {
         "properties": {
           "directory": {
@@ -65473,6 +65507,68 @@
         ]
       }
     },
+    "/lifecycle/{occurrenceID}": {
+      "get": {
+        "description": "Return the state of an admitted shutdown or restart occurrence. A completed shutdown is unobservable from inside the process, so `executing` is the last state a successful one shows.",
+        "operationId": "server.lifecycle",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "occurrenceID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerLifecycleOccurrence"
+                }
+              }
+            },
+            "description": "Lifecycle occurrence state"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unknown lifecycle occurrence"
+          }
+        },
+        "summary": "Get a server lifecycle occurrence",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.server.lifecycle({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/log": {
       "get": {
         "description": "Read the last N lines from the current or named server log file in the unified log directory.",
@@ -77073,6 +77169,9 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
                     "ok": {
                       "type": "boolean"
                     }
@@ -77084,7 +77183,28 @@
                 }
               }
             },
-            "description": "Restart initiated"
+            "description": "Restart admitted"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "A live lifecycle occurrence owns the process"
           },
           "503": {
             "content": {
@@ -87630,6 +87750,9 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
                     "ok": {
                       "type": "boolean"
                     }
@@ -87641,13 +87764,16 @@
                 }
               }
             },
-            "description": "Shutdown initiated"
+            "description": "Shutdown admitted"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
                   "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
                     "ok": {
                       "type": "boolean"
                     }
@@ -87659,7 +87785,7 @@
                 }
               }
             },
-            "description": "Supervisor process occurrence does not own this backend"
+            "description": "Supervisor identity mismatch, or a live lifecycle occurrence owns the process"
           },
           "503": {
             "content": {

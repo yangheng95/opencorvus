@@ -4480,6 +4480,14 @@ export type ServerConfig = {
   publicUrl?: string
 }
 
+export type ServerLifecycleOccurrence = {
+  error?: string
+  id: string
+  kind: "shutdown" | "restart"
+  state: "executing" | "failed"
+  timeAdmitted: number
+}
+
 export type Session = {
   directory: string
   id: string
@@ -18758,6 +18766,40 @@ export type InteractionReplyResponses = {
 
 export type InteractionReplyResponse = InteractionReplyResponses[keyof InteractionReplyResponses]
 
+export type ServerLifecycleData = {
+  body?: never
+  path: {
+    occurrenceID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/lifecycle/{occurrenceID}"
+}
+
+export type ServerLifecycleErrors = {
+  /**
+   * Unknown lifecycle occurrence
+   */
+  404: {
+    ok: boolean
+  }
+}
+
+export type ServerLifecycleError = ServerLifecycleErrors[keyof ServerLifecycleErrors]
+
+export type ServerLifecycleResponses = {
+  /**
+   * Lifecycle occurrence state
+   */
+  200: ServerLifecycleOccurrence
+}
+
+export type ServerLifecycleResponse = ServerLifecycleResponses[keyof ServerLifecycleResponses]
+
 export type LogReadData = {
   body?: never
   path?: never
@@ -23128,6 +23170,13 @@ export type ServerRestartData = {
 
 export type ServerRestartErrors = {
   /**
+   * A live lifecycle occurrence owns the process
+   */
+  409: {
+    occurrenceID?: string
+    ok: boolean
+  }
+  /**
    * Shutdown handler unavailable
    */
   503: {
@@ -23139,9 +23188,10 @@ export type ServerRestartError = ServerRestartErrors[keyof ServerRestartErrors]
 
 export type ServerRestartResponses = {
   /**
-   * Restart initiated
+   * Restart admitted
    */
   200: {
+    occurrenceID?: string
     ok: boolean
   }
 }
@@ -26181,9 +26231,10 @@ export type ServerShutdownData = {
 
 export type ServerShutdownErrors = {
   /**
-   * Supervisor process occurrence does not own this backend
+   * Supervisor identity mismatch, or a live lifecycle occurrence owns the process
    */
   409: {
+    occurrenceID?: string
     ok: boolean
   }
   /**
@@ -26198,9 +26249,10 @@ export type ServerShutdownError = ServerShutdownErrors[keyof ServerShutdownError
 
 export type ServerShutdownResponses = {
   /**
-   * Shutdown initiated
+   * Shutdown admitted
    */
   200: {
+    occurrenceID?: string
     ok: boolean
   }
 }

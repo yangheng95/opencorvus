@@ -14,11 +14,11 @@ afterEach(async () => {
   await fs.rm(await storePath(), { force: true })
 })
 
-describe("MCP credential revocation generation", () => {
-  test("one captured generation stays valid across every write of its own flow", async () => {
-    const held = await McpAuth.revision(AUTH_KEY)
+describe("MCP credential lease generation", () => {
+  test("one established lease stays valid across every write of its own flow", async () => {
+    const held = await McpAuth.beginCredentialLease(AUTH_KEY)
 
-    // An OAuth exchange is several store writes under one captured revision:
+    // An OAuth exchange is several store writes under one established lease:
     // client registration, the state, the verifier, then the tokens. Every one
     // of them must pass with the generation the flow captured at its start.
     await McpAuth.updateClientInfo(AUTH_KEY, { clientId: "client-1" }, "https://example.test", held)
@@ -32,27 +32,26 @@ describe("MCP credential revocation generation", () => {
     expect(await McpAuth.revision(AUTH_KEY)).toBe(held)
   })
 
-  test("a revoke mints a durable generation that refuses the old holder and admits the new one", async () => {
-    await McpAuth.set(AUTH_KEY, { tokens: { accessToken: "first" } }, "https://example.test")
-    const held = await McpAuth.revision(AUTH_KEY)
+  test("beginning a new lease refuses the previous holder and admits the new one, in one store write", async () => {
+    const first = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
+    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", first)
 
-    await McpAuth.invalidate(AUTH_KEY)
-    const current = await McpAuth.revision(AUTH_KEY)
-    expect(current).not.toBe(held)
+    const second = await McpAuth.beginCredentialLease(AUTH_KEY)
+    expect(second).not.toBe(first)
 
-    await expect(McpAuth.updateCodeVerifier(AUTH_KEY, "stale-flow", held)).rejects.toThrow(
+    await expect(McpAuth.updateCodeVerifier(AUTH_KEY, "stale-flow", first)).rejects.toThrow(
       `MCP auth lease was revoked: ${AUTH_KEY}`,
     )
 
-    await McpAuth.updateCodeVerifier(AUTH_KEY, "current-flow", current)
+    await McpAuth.updateCodeVerifier(AUTH_KEY, "current-flow", second)
     expect((await McpAuth.get(AUTH_KEY))?.codeVerifier).toBe("current-flow")
-    // The holder's own write did not consume its generation.
-    expect(await McpAuth.revision(AUTH_KEY)).toBe(current)
+    // The holder's own write did not consume its lease.
+    expect(await McpAuth.revision(AUTH_KEY)).toBe(second)
   })
 
   test("a peer's revoke through the shared store is visible to a later reader", async () => {
-    await McpAuth.set(AUTH_KEY, { tokens: { accessToken: "first" } }, "https://example.test")
-    const held = await McpAuth.revision(AUTH_KEY)
+    const held = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
+    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", held)
 
     // A different backend on the same data root revokes by writing the store
     // directly. Nothing in this process was told; the generation has to come
@@ -68,19 +67,30 @@ describe("MCP credential revocation generation", () => {
     )
   })
 
-  test("a generation minted before removal never matches one minted after recreation", async () => {
-    await McpAuth.set(AUTH_KEY, { tokens: { accessToken: "first" } }, "https://example.test")
-    await McpAuth.invalidate(AUTH_KEY)
-    const preRemoval = await McpAuth.revision(AUTH_KEY)
+  test("a lease held before removal never matches anything after recreation", async () => {
+    const preRemoval = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
+    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", preRemoval)
 
     await McpAuth.remove(AUTH_KEY)
-    await McpAuth.set(AUTH_KEY, { tokens: { accessToken: "recreated" } }, "https://example.test")
-    await McpAuth.invalidate(AUTH_KEY)
+    await McpAuth.setStaticCredential(AUTH_KEY, "brand-new-secret", "https://example.test", "identity-2")
 
-    const recreated = await McpAuth.revision(AUTH_KEY)
-    expect(recreated).not.toBe(preRemoval)
-    await expect(McpAuth.updateCodeVerifier(AUTH_KEY, "stale", preRemoval)).rejects.toThrow(
+    await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", preRemoval)).rejects.toThrow(
       `MCP auth lease was revoked: ${AUTH_KEY}`,
     )
+    expect((await McpAuth.get(AUTH_KEY))?.staticCredential?.secret).toBe("brand-new-secret")
+  })
+
+  test("the empty generation is never a lease: a write presenting it is refused outright", async () => {
+    // A recreated entry that no flow has leased reads as the initial
+    // generation. A holder presenting that value skipped establishing a lease,
+    // and admitting it is what let a value captured before a removal write
+    // into a recreated credential.
+    await McpAuth.setStaticCredential(AUTH_KEY, "configured-secret", "https://example.test", "identity-1")
+    expect(await McpAuth.revision(AUTH_KEY)).toBe("")
+
+    await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", "")).rejects.toThrow(
+      `MCP auth write presented an unestablished lease: ${AUTH_KEY}`,
+    )
+    expect((await McpAuth.get(AUTH_KEY))?.staticCredential?.secret).toBe("configured-secret")
   })
 })

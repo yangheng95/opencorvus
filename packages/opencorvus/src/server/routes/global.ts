@@ -28,7 +28,6 @@ import {
   errors,
   namedErrorResponse,
 } from "../error"
-import { canRestartServer, startServerRestart } from "../restart"
 import { GlobalConversationService } from "@/chat/global-chat-service"
 import { RightSidebarConversationSessionResponse } from "@/chat/session"
 import { ImplicitProject } from "@/project/implicit-project"

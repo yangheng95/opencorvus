@@ -2731,7 +2731,9 @@ export namespace MCP {
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
-          await McpAuth.revision(authKey),
+          // A connection reads; it must not revoke a flow to do so. Over a
+          // never-leased credential its refresh writes stay unfenced.
+          await McpAuth.revision(authKey).then((generation) => (generation === "" ? undefined : generation)),
           () => assertCredentialIdentity(key, mcp),
           undefined,
           correlationID,
@@ -3502,8 +3504,10 @@ export namespace MCP {
     const previousFlow = pendingOAuthFlows.get(authKey)
     if (previousFlow) McpOAuthCallback.cancelPending(authKey)
     pendingOAuthFlows.delete(authKey)
-    await McpAuth.invalidate(authKey)
-    const authRevision = await McpAuth.revision(authKey)
+    // Revoking the previous flow and establishing this one's lease is one
+    // store write, so no competitor can read the superseded generation as
+    // current in between.
+    const authRevision = await McpAuth.beginCredentialLease(authKey)
     await assertCredentialIdentity(mcpName, mcpConfig)
     const oauthConfig = typeof mcpConfig.oauth === "object" ? mcpConfig.oauth : undefined
     const oauthProviderConfig = {

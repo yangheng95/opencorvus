@@ -658,15 +658,17 @@ export namespace Bus {
         try {
           renewControlLease({ target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: Date.now(), expiresAt: Date.now() + 30_000 })
         } catch (error) {
-          // Another runtime took this lease — the receipt fence surfaces that
-          // when this delivery tries to settle. Renewal cannot lose to this
+          // A lost fence means another runtime took this lease; the receipt
+          // fence surfaces that when this delivery settles, and renewing again
+          // is pointless. Anything else — a busy database, shutdown-in-progress
+          // — is transient, and ending renewal on it would let a long delivery
+          // outlive its lease over a hiccup. Renewal cannot lose to this
           // delivery's own receipt: the release and clearInterval have no
-          // await between them. Stop renewing rather than warn every tick.
-          log.warn("durable Bus delivery lease renewal ended", {
-            deliveryID,
-            error: error instanceof Error ? error.message : String(error),
-          })
-          clearInterval(renewal)
+          // await between them.
+          const message = error instanceof Error ? error.message : String(error)
+          const fenceLost = message.includes("Control lease fence rejected") || message.includes("renewal lost fence")
+          log.warn("durable Bus delivery lease renewal failed", { deliveryID, fenceLost, error: message })
+          if (fenceLost) clearInterval(renewal)
         }
       }, 10_000)
       renewal.unref()

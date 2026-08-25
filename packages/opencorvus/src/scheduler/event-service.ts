@@ -1,7 +1,7 @@
 import { Bus } from "@/bus"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
-import { Database, and, eq, sql } from "@/storage/db"
+import { Database, and, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Session } from "@/session"
 import { MessageTable, SessionTable } from "@/session/session.sql"
@@ -88,6 +88,12 @@ export namespace EventService {
    * that lease expires, which is a hot loop rather than a wait.
    */
   const FIRE_RECOVERY_MIN_DELAY_MS = 250
+  /**
+   * How often a queued fire re-checks a head that is live in another runtime.
+   * The head's own settlement wakes only its runtime, so this poll is what
+   * hands the queue over here; the head's full lease is the crash bound.
+   */
+  const FIRE_RUNNING_HEAD_POLL_MS = 2_500
   const FIRE_LEASE_RENEW_MS = 5_000
   const FIRE_RETRY_BASE_MS = 1_000
   const FIRE_RETRY_MAX_MS = 60_000
@@ -714,11 +720,24 @@ export namespace EventService {
         // pending row itself will change until the head settles.
         let deadline = fire.status === "running" ? fire.lease_until : (fire.retry_at ?? fire.lease_until)
         if (fire.status === "pending" && deadline <= now) {
-          const head = db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all()
+          // Bounded to this fire's own job: projecting every fire of every
+          // job to find one head is a full-table scan on every scheduling.
+          const revisions = db.select({ id: EventJobTable.id }).from(EventJobTable)
+            .where(eq(EventJobTable.definition_id, fire.event_job_id)).all().map((row) => row.id)
+          const head = (revisions.length === 0 ? [] : db.select().from(EventJobFireTable)
+            .where(inArray(EventJobFireTable.event_job_revision_id, revisions))
+            .orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all())
             .map((row) => projectEventFireInTransaction(db, row, now))
-            .find((row) => row.event_job_id === fire.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
+            .find((row) => ["pending", "running", "retry_wait"].includes(row.status))
           if (head && head.id !== fire.id) {
-            deadline = head.status === "running" ? head.lease_until : (head.retry_at ?? head.lease_until)
+            // A retry head's deadline is exact. A running head normally
+            // settles well before its lease expires and nothing else wakes
+            // this runtime when it does, so waiting the whole lease is only
+            // right when its owner crashed — poll it instead.
+            deadline =
+              head.status === "running"
+                ? Math.min(head.lease_until, now + FIRE_RUNNING_HEAD_POLL_MS)
+                : (head.retry_at ?? head.lease_until)
           }
         }
         return { jobID: fire.event_job_id, status: fire.status, lease: deadline }

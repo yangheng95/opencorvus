@@ -59,6 +59,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/usage` | Get natural-period Provider usage 错误: `BadRequestError`. | `global.usage` |
 | POST | `/global/work` | Create Work in a temporary project 请求体: `model`; 错误: `BadRequestError`. | `global.work.create` |
 | POST | `/instance/dispose` | Dispose instance 错误: `OwnedPromptControllersError`. | `instance.dispose` |
+| GET | `/lifecycle/{occurrenceID}` | Get a server lifecycle occurrence | `server.lifecycle` |
 | GET | `/log` | Read logs 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `log.read` |
 | POST | `/log` | Write log batch 请求体: `entries`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `app.log` |
 | GET | `/log/export` | Export log support bundle | `log.export` |

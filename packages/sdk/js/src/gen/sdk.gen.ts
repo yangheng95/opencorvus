@@ -440,6 +440,8 @@ import type {
   QuestionReplyResponses,
   QuicknoteCreateErrors,
   QuicknoteCreateResponses,
+  ServerLifecycleErrors,
+  ServerLifecycleResponses,
   ServerRestartErrors,
   ServerRestartResponses,
   ServerShutdownErrors,
@@ -8344,6 +8346,62 @@ export class Interaction extends HeyApiClient {
   }
 }
 
+export class Server extends HeyApiClient {
+  /**
+   * Get a server lifecycle occurrence
+   *
+   * Return the state of an admitted shutdown or restart occurrence. A completed shutdown is unobservable from inside the process, so `executing` is the last state a successful one shows.
+   */
+  public lifecycle<ThrowOnError extends boolean = false>(
+    parameters: {
+      occurrenceID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "occurrenceID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<ServerLifecycleResponses, ServerLifecycleErrors, ThrowOnError>({
+      url: "/lifecycle/{occurrenceID}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Restart the server
+   *
+   * Spawn a new server process with the same arguments, then exit.
+   */
+  public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+    return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({
+      url: "/restart",
+      ...options,
+    })
+  }
+
+  /**
+   * Shutdown the server
+   *
+   * Gracefully abort live execution state and stop the current process.
+   */
+  public shutdown<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+    return (options?.client ?? this.client).post<ServerShutdownResponses, ServerShutdownErrors, ThrowOnError>({
+      url: "/shutdown",
+      ...options,
+    })
+  }
+}
+
 export class Log extends HeyApiClient {
   /**
    * Read logs
@@ -11059,32 +11117,6 @@ export class Question extends HeyApiClient {
   }
 }
 
-export class Server extends HeyApiClient {
-  /**
-   * Restart the server
-   *
-   * Spawn a new server process with the same arguments, then exit.
-   */
-  public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({
-      url: "/restart",
-      ...options,
-    })
-  }
-
-  /**
-   * Shutdown the server
-   *
-   * Gracefully abort live execution state and stop the current process.
-   */
-  public shutdown<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<ServerShutdownResponses, ServerShutdownErrors, ThrowOnError>({
-      url: "/shutdown",
-      ...options,
-    })
-  }
-}
-
 export class Config3 extends HeyApiClient {
   /**
    * Get session effective configuration
@@ -13747,6 +13779,11 @@ export class OpenCorvusClient extends HeyApiClient {
     return (this._interaction ??= new Interaction({ client: this.client }))
   }
 
+  private _server?: Server
+  get server(): Server {
+    return (this._server ??= new Server({ client: this.client }))
+  }
+
   private _log?: Log
   get log(): Log {
     return (this._log ??= new Log({ client: this.client }))
@@ -13810,11 +13847,6 @@ export class OpenCorvusClient extends HeyApiClient {
   private _question?: Question
   get question(): Question {
     return (this._question ??= new Question({ client: this.client }))
-  }
-
-  private _server?: Server
-  get server(): Server {
-    return (this._server ??= new Server({ client: this.client }))
   }
 
   private _session?: Session4
