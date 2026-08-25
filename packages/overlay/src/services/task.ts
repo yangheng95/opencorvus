@@ -127,21 +127,8 @@ function taskRecordPath(taskID: string): string {
   return `task/${encodeURIComponent(id)}`
 }
 
-/**
- * Default chat request timeout: 10 minutes.
- */
-function chatRequestTimeoutMs(): number {
-  const overlayTiming = (window as any).__ocOverlayTiming
-  const testTiming = (window as any).__overlayTest
-  const override =
-    typeof overlayTiming?.chatTimeoutMs === "number"
-      ? overlayTiming.chatTimeoutMs
-      : typeof testTiming?.chatTimeoutMs === "number"
-        ? testTiming.chatTimeoutMs
-        : undefined
-  const value = typeof override === "number" ? override : 10 * 60 * 1000
-  return Math.max(value, 1000)
-}
+/** Chat request timeout. */
+const CHAT_REQUEST_TIMEOUT_MS = 10 * 60 * 1000
 
 function activeDirectory(): string {
   return activeProjectDirectory()
@@ -584,7 +571,7 @@ export async function submitMessage(
   options: SubmitMessageOptions = {},
 ): Promise<unknown> {
   const requestID = options.requestID ?? crypto.randomUUID()
-  const timeoutMs = chatRequestTimeoutMs()
+  const timeoutMs = CHAT_REQUEST_TIMEOUT_MS
   const controller = new AbortController()
   const cleanupRelay = relayAbort(options.signal, controller)
   let inactivityTimer: ReturnType<typeof setTimeout> | null = null

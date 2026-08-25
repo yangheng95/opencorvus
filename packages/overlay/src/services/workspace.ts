@@ -784,10 +784,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   clearProjectScopeData()
 
   if (options.persist !== false) {
-    // Persist through the active host settings source.
-    const persistFn =
-      typeof globalThis.window === "object" ? (globalThis.window as any).persistOverlaySettings : undefined
-    if (typeof persistFn === "function") await persistFn()
+    // Persist the cleared workspace memory through the settings owner before
+    // the switch continues, so a reload cannot restore the previous directory.
+    await saveSettings()
   }
 
   if (!ownsWorkspaceSelection(selectionEpoch)) return false

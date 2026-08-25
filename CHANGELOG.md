@@ -4,6 +4,14 @@
 
 ## 未发布
 
+### Security
+
+- 桌面端渲染进程不再向 `window` 暴露实时设置、应用和看板 store、明文服务器密码，以及目录切换、任务加载/选择、看板加载和设置持久化等业务写入入口；相关生产代码改为直接使用类型化模块导入。渲染进程中的任意脚本或开发者工具表达式因此无法再读取服务器密码或触发这些业务写入。
+
+### Removed
+
+- 移除渲染进程遗留的全局诊断 ABI（Application Binary Interface，应用程序二进制接口）：`window.__ocNextChatMetadata` 聊天元数据注入入口、`window.__overlayTest` 与 `window.__ocOverlayTiming` 超时覆盖、`window.__overlayInitSettled` 就绪标记、`window.__ocMarkdownRenderPrewarmPending` 预热计数、无调用方的 `window.openWorkspaceDiff`，以及由 `?acceptance-locale` 查询参数写入、可在正式版本中覆盖界面语言的 `__OPENCORVUS_LOCALE__` 入口。这些入口在当前仓库中已无任何写入方或读取方。渲染进程现在只保留一个显式声明的全局（启动接管握手），并由 `bun run --cwd packages/overlay check:renderer-surface` 作为构建后的正向契约守卫。
+
 ## 0.0.54beta - 2026-08-25
 
 本版本为共享 LLM 流停滞恢复增加明确上限，并修复公开网站“页面显示新版、主按钮却未绑定精确新版安装包”的下载交互；桌面端、命令行二进制和网站使用同一份 `0.0.54-beta` 发布事实。

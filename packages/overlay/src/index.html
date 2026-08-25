@@ -2,8 +2,6 @@
 <html lang="en-US">
   <head>
     <script>
-      const acceptanceLocale = new URLSearchParams(location.search).get("acceptance-locale")
-      if (acceptanceLocale) globalThis.__OPENCORVUS_LOCALE__ = acceptanceLocale
       const ocStartupThemeQuery = matchMedia("(prefers-color-scheme: light)")
       const ocStartupTheme = new URLSearchParams(location.search).get("acceptance-startup-theme")
       const ocNativeStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""

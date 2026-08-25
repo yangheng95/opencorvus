@@ -1,13 +1,13 @@
 {
   "name": "@opencorvus-ai/overlay",
-  "version": "0.0.54-beta",
+  "version": "0.0.55-beta",
   "private": true,
   "type": "module",
   "scripts": {
     "icons:generate": "bun run script/generate-app-icons.ts",
     "dev": "tauri dev",
     "dev:vite": "vite --config vite.config.ts",
-    "build": "bun run build:vite",
+    "build": "bun run build:vite && bun run check:renderer-surface",
     "build:vite": "node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build --config vite.config.ts",
     "build:overlay": "bun run script/build-overlay.ts",
     "build:docker": "bun run script/build-docker.ts",
@@ -18,7 +18,8 @@
     "test": "bun run test:unit",
     "pretest:unit": "bun ../opencorvus/script/prepare-test-process-supervisor.ts",
     "test:unit": "bun run script/run-unit-tests.ts",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "check:renderer-surface": "bun run script/check-renderer-public-surface.ts"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

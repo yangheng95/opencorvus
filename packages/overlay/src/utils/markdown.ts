@@ -381,11 +381,6 @@ export function renderMarkdown(text: string): string {
   return rendered
 }
 
-function setMarkdownPrewarmPending(count: number): void {
-  if (typeof window === "undefined") return
-  ;(window as any).__ocMarkdownRenderPrewarmPending = count
-}
-
 export function cancelMarkdownRenderPrewarm(): void {
   markdownPrewarmEpoch += 1
   if (typeof window !== "undefined" && markdownPrewarmAnimationHandle !== null) {
@@ -394,7 +389,6 @@ export function cancelMarkdownRenderPrewarm(): void {
   if (markdownPrewarmTimer !== null) clearTimeout(markdownPrewarmTimer)
   markdownPrewarmAnimationHandle = null
   markdownPrewarmTimer = null
-  setMarkdownPrewarmPending(0)
 }
 
 export function prewarmMarkdownRenderCache(sources: readonly string[]): void {
@@ -411,12 +405,10 @@ export function prewarmMarkdownRenderCache(sources: readonly string[]): void {
   }
   const epoch = ++markdownPrewarmEpoch
   let index = 0
-  setMarkdownPrewarmPending(unique.length)
   const runAfterPaint = () => {
     if (epoch !== markdownPrewarmEpoch) return
     renderMarkdown(unique[index]!)
     index += 1
-    setMarkdownPrewarmPending(unique.length - index)
     if (index < unique.length) scheduleNext()
   }
   const scheduleNext = () => {

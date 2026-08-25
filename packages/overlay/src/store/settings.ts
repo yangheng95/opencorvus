@@ -307,17 +307,3 @@ export function workspaceRestoreDirectory(value: any): string {
   const text = typeof value === "string" ? value.trim() : ""
   return text
 }
-
-// ── Test / timing helpers ──
-
-export function overlayTestConfig(): Record<string, unknown> | null {
-  if (typeof window === "undefined") return null
-  const value = (window as any).__overlayTest
-  return value && typeof value === "object" ? value : null
-}
-
-export function overlayTiming(name: string, defaultValue: number, min = 50): number {
-  const value = Number(overlayTestConfig()?.[name])
-  if (!Number.isFinite(value)) return defaultValue
-  return Math.max(min, Math.floor(value))
-}
