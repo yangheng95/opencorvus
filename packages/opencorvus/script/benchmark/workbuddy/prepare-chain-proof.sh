@@ -10,8 +10,8 @@ bench_commit="${OPENCORVUS_BENCH_COMMIT:?OPENCORVUS_BENCH_COMMIT must be supplie
 adapter_root="$bench_root/packages/opencorvus/script/benchmark/workbuddy"
 image_context="$control_root/harness-image"
 payload_root="$image_context/payload"
-runtime_bundle_dir="$runtime_source/packages/opencorvus/dist/opencorvus-linux-x64-baseline"
-runtime_bundle_archive="$control_root/opencorvus-linux-x64-baseline-bundle.tar.gz"
+runtime_bundle_dir="$runtime_source/packages/opencorvus/dist/opencorvus-linux-x64"
+runtime_bundle_archive="$control_root/opencorvus-linux-x64-bundle.tar.gz"
 official_commit=625b2233093ae4f23e76be28c1f341d41cc70373
 runtime_commit=e8cdd1be4d280399bbb953562000b430f4e59fe7
 image=workbuddy-bench/harness/opencorvus:chain-proof-r1
@@ -78,10 +78,12 @@ PATH=/var/lib/opencorvus-benchmark/bun/bin:$PATH \
   /var/lib/opencorvus-benchmark/bun/bin/bun run --cwd packages/sdk/js build
 test -f "$runtime_source/packages/sdk/js/dist/expert-squad-authoring.js"
 
-if [ ! -x "$runtime_bundle_dir/opencorvus" ]; then
+if [ ! -x "$runtime_bundle_dir/opencorvus" ] || \
+   [ ! -f "$runtime_bundle_dir/package.json" ] || \
+   [ ! -f "$runtime_bundle_dir/work-artifact-target-package-manifest.json" ]; then
   cd "$runtime_source"
   PATH=/var/lib/opencorvus-benchmark/bun/bin:$PATH \
-    /var/lib/opencorvus-benchmark/bun/bin/bun run --cwd packages/opencorvus script/build.ts --single --baseline
+    /var/lib/opencorvus-benchmark/bun/bin/bun run --cwd packages/opencorvus script/build.ts --single
 fi
 "$runtime_bundle_dir/opencorvus" --version
 if [ ! -f "$runtime_bundle_archive" ]; then
