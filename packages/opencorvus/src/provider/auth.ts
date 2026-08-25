@@ -35,6 +35,22 @@ export namespace ProviderAuth {
     return scope === "global" ? globalState() : projectState()
   }
 
+  /**
+   * Hold a flow's live executor, releasing every executor whose flow is no
+   * longer pending. The open that minted this flow superseded any previous
+   * pending occurrence for the provider and scope; without the sweep the
+   * superseded closure (and its PKCE material) would live as long as the
+   * scope's state — for the global scope, the life of the process.
+   */
+  async function holdExecutor(scope: Scope, flowID: string, executor: AuthOAuthResult) {
+    const executors = await state(scope).then((s) => s.executors)
+    for (const id of [...executors.keys()]) {
+      const record = await ProviderOAuthFlowStore.get(id)
+      if (!record || record.state !== "pending") executors.delete(id)
+    }
+    executors.set(flowID, executor)
+  }
+
   export const TestHooks = {
     installGlobalAuthHooksForTest(hooks: Parameters<typeof createState>[0]): Disposable {
       const override = createState(hooks)
@@ -106,7 +122,7 @@ export namespace ProviderAuth {
           method: input.method,
           inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
         })
-        await state(input.scope).then((s) => s.executors.set(flow.id, result))
+        await holdExecutor(input.scope ?? "project", flow.id, result)
         return {
           url: result.url,
           method: result.method,
@@ -185,7 +201,15 @@ export namespace ProviderAuth {
         // must not write a second credential for the same flow.
         const consumed = await ProviderOAuthFlowStore.settle({ id: flow.id, state: "consumed" })
         if (!consumed) {
-          throw new OauthFlowAlreadySettled({ providerID: input.providerID, flowID: flow.id, state: "consumed" })
+          // Losing the settle means another writer got there first — for a
+          // claimed executor that can only be a supersession, so no
+          // credential was written. Report the flow's real durable state.
+          const settled = await ProviderOAuthFlowStore.get(flow.id)
+          throw new OauthFlowAlreadySettled({
+            providerID: input.providerID,
+            flowID: flow.id,
+            state: settled?.state ?? "superseded",
+          })
         }
         if ("key" in result) {
           await Auth.set(input.providerID, {
@@ -348,7 +372,7 @@ export namespace ProviderAuth {
           method: input.method,
           inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
         })
-        await state(input.scope).then((s) => s.executors.set(flow.id, result))
+        await holdExecutor(input.scope ?? "project", flow.id, result)
         return
       }
     },

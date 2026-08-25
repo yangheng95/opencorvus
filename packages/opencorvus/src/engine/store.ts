@@ -333,6 +333,9 @@ export function findGlobalTaskByRequest(requestID: string, isAnonymousDirectory:
       .from(EngineTaskTable)
       .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
       .where(eq(EngineTaskTable.request_id, requestID))
+      // Deterministic resolution if the request ever left more than one
+      // live candidate: every replay resolves the earliest commit.
+      .orderBy(EngineTaskTable.time_created, EngineTaskTable.id)
       .all()
     for (const row of rows) {
       if (!row.directory || !isAnonymousDirectory(row.directory)) continue

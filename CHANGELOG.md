@@ -17,6 +17,13 @@
 - MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
 - 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
 - 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
+- Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，两个回调路由接受可选 `flowID` 以精确结算对应流程；新授权显式取代（supersede）同 provider 同作用域的在途流程，回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。
+
+### Fixed
+
+- 修复全局任务创建的请求重放会重复分配项目与任务的问题：请求身份现在在项目分配之前全局解析，重放返回首次提交的同一 `{task_id, project_id, directory}`，冲突重放由既有的项目内幂等检查拒绝。
+- 修复 MCP `configure` 在定义提交与凭据写入之间被打断会留下"有定义无凭据"的半配置服务器的问题：凭据现在先于定义提交，反向中断留下的孤儿凭据由既有的凭据回收在下一次项目配置提交时收集。
+- 修复 MCP OAuth 授权发起进程死亡后回调无法完成的问题：回调进程现在可仅凭持久事实（凭据租约、OAuth state、PKCE verifier）重建流程并完成兑换，全部写入仍以原租约代为栅栏。
 
 ### Removed
 
