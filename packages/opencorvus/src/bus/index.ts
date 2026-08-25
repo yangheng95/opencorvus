@@ -22,7 +22,7 @@ import {
 } from "./bus.sql"
 import { Instance, runAsInstanceActivity, runOutsideInstanceContext } from "../project/instance"
 import { Identifier } from "@/id/id"
-import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { ControlLeaseFenceLostError, acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 
 export namespace Bus {
   const log = Log.create({ service: "bus" })
@@ -665,9 +665,12 @@ export namespace Bus {
           // outlive its lease over a hiccup. Renewal cannot lose to this
           // delivery's own receipt: the release and clearInterval have no
           // await between them.
-          const message = error instanceof Error ? error.message : String(error)
-          const fenceLost = message.includes("Control lease fence rejected") || message.includes("renewal lost fence")
-          log.warn("durable Bus delivery lease renewal failed", { deliveryID, fenceLost, error: message })
+          const fenceLost = error instanceof ControlLeaseFenceLostError
+          log.warn("durable Bus delivery lease renewal failed", {
+            deliveryID,
+            fenceLost,
+            error: error instanceof Error ? error.message : String(error),
+          })
           if (fenceLost) clearInterval(renewal)
         }
       }, 10_000)

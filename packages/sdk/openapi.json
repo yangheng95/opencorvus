@@ -65513,15 +65513,6 @@
         "operationId": "server.lifecycle",
         "parameters": [
           {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "in": "path",
             "name": "occurrenceID",
             "required": true,

@@ -8355,21 +8355,10 @@ export class Server extends HeyApiClient {
   public lifecycle<ThrowOnError extends boolean = false>(
     parameters: {
       occurrenceID: string
-      directory?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "occurrenceID" },
-            { in: "query", key: "directory" },
-          ],
-        },
-      ],
-    )
+    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "occurrenceID" }] }])
     return (options?.client ?? this.client).get<ServerLifecycleResponses, ServerLifecycleErrors, ThrowOnError>({
       url: "/lifecycle/{occurrenceID}",
       ...options,

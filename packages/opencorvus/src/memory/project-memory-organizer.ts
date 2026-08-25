@@ -16,6 +16,7 @@ import { ProjectMemory, type Entry } from "./project-memory"
 import { Bus } from "@/bus"
 import { withKeyedLock } from "@/util/lock"
 import { createInstanceState } from "@/project/instance-state"
+import { runInstanceBackgroundWork } from "@/project/instance"
 import { MissingModelConfigError } from "@/config/model-resolution-error"
 import { GlobalBus } from "@/bus/global"
 import { randomUUID } from "node:crypto"
@@ -338,6 +339,35 @@ export namespace ProjectMemoryOrganizer {
     }
   }
 
+  /**
+   * One background runner per project. A request arriving while a run is in
+   * flight marks it to go again, because the in-flight run may have read
+   * `pending` before the new input was appended. The run itself executes as
+   * instance background work: its context stays valid for as long as it
+   * runs, and instance teardown cancels it instead of waiting for it.
+   */
+  const scheduledRuns = new Map<string, { again: boolean }>()
+
+  function scheduleOrganizerRun(projectID: string): void {
+    const scheduled = scheduledRuns.get(projectID)
+    if (scheduled) {
+      scheduled.again = true
+      return
+    }
+    const entry = { again: false }
+    scheduledRuns.set(projectID, entry)
+    runInstanceBackgroundWork(`project-memory.organize:${projectID}`, async (signal) => {
+      try {
+        do {
+          entry.again = false
+          await run({ projectID, abort: signal })
+        } while (entry.again && !signal.aborted)
+      } finally {
+        if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)
+      }
+    })
+  }
+
   export function init() {
     const state = lifecycle()
     if (state.unsub) return
@@ -355,7 +385,15 @@ export namespace ProjectMemoryOrganizer {
       unsubs.push(
         Bus.subscribe(
           ProjectMemory.Event.OrganizationRequested,
-          ({ properties, signal }) => run({ projectID: properties.projectID, abort: signal }),
+          // The delivery settles when the request has reached the Organizer.
+          // Organization itself is a full model turn, and the pending inputs,
+          // the Organizer lease and the retry_wait status are all durable
+          // before this event fires — so awaiting the turn here held every
+          // publisher of this event, including a user message's own
+          // settlement, hostage to a model call that has its own durable
+          // recovery. Failures end in `retry_wait`; the next request or the
+          // next project open re-drives them.
+          ({ properties }) => scheduleOrganizerRun(properties.projectID),
           { durableID: "project-memory.organizer", effect: "idempotent_by_occurrence" },
         ),
       )

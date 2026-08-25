@@ -749,7 +749,20 @@ export const McpDebugCommand = cmd({
               {
                 onRedirect: async () => {},
               },
-              await McpAuth.beginCredentialLease(authKey),
+              // The lease carries the server identity from the start, so the
+              // entry it establishes is never in credential reconciliation's
+              // stale class. Note this debug probe deliberately revokes any
+              // pending interactive flow on this credential: its SDK callbacks
+              // write registration and state, and a writer needs the lease.
+              await McpAuth.beginCredentialLease(
+                authKey,
+                serverConfig.url,
+                McpOAuthProvider.credentialIdentity(serverConfig.url, {
+                  clientId: oauthConfig?.clientId,
+                  clientSecret: oauthConfig?.clientSecret,
+                  scope: oauthConfig?.scope,
+                }),
+              ),
             )
 
             prompts.log.info("Testing OAuth flow (without completing authorization)...")

@@ -260,7 +260,6 @@ export namespace SessionStatus {
     sessionID: string,
     status: Info,
     options?: {
-      publish?: boolean
       promptGenerationOwner?: AbortSignal
       taskID?: string
       inputMessageID?: string
@@ -329,7 +328,7 @@ export namespace SessionStatus {
     } else if (isCurrentOccurrence) {
       executionStates[sessionID] = { inputMessageID, status: parsedStatus }
     }
-    if (options?.publish !== false) {
+    {
       // Bus subscribers can synchronously re-enter set() with this same fact.
       // During dispatch that nested write must complete immediately; awaiting
       // the outer publication would form a promise cycle through Bus.publish.
@@ -376,7 +375,6 @@ export namespace SessionStatus {
       void completion.catch(() => undefined)
       return completion
     }
-    return Promise.resolve()
   }
 
   function requireDurableInputMessage(sessionID: string, inputMessageID: string): void {

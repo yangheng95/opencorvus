@@ -62,6 +62,13 @@ interface CacheEntry {
   }
   teardownParks: Set<TeardownPark>
   servingObservers: Set<() => void>
+  /**
+   * Abort controllers for instance background work. Teardown cancels these
+   * BEFORE draining serving handles: the work holds a serving lease so its
+   * context stays valid, and without this cancellation that same lease is
+   * what teardown would wait on forever.
+   */
+  backgroundWork: Set<AbortController>
 }
 
 interface Lease {
@@ -278,6 +285,7 @@ function createCacheEntry(contextPromise: Promise<Context>, identityKnown: Promi
     },
     teardownParks: new Set(),
     servingObservers: new Set(),
+    backgroundWork: new Set(),
   }
 }
 
@@ -386,6 +394,7 @@ async function drainOtherServing(entry: CacheEntry, chain: Lease | undefined): P
  * starving it, while the excused ambient chain keeps running to completion.
  */
 async function runTeardownTurn<T>(entry: CacheEntry, chain: Lease | undefined, fn: () => Promise<T>): Promise<T> {
+  cancelInstanceBackgroundWork(entry, "instance teardown")
   if (holdsEntryTurn(entry)) {
     // Already inside this entry's turn: the running turn itself gates
     // admissions, so drain in place and run directly instead of queueing
@@ -1079,6 +1088,65 @@ export function registerInstanceHealthCheck(label: string, check: () => void): v
     throw new Error(`Instance health check is already registered: ${label}`)
   }
   lease.entry.healthChecks.set(label, check)
+}
+
+function cancelInstanceBackgroundWork(entry: CacheEntry, reason: string): void {
+  for (const controller of [...entry.backgroundWork]) {
+    controller.abort(new Error(`Instance background work cancelled: ${reason}`))
+  }
+}
+
+/**
+ * Run work in the background of the current instance, cancelled by teardown.
+ *
+ * The work runs under its own serving lease, so its context stays valid for
+ * exactly as long as it runs — a detached callback loses the context the
+ * moment its scheduling scope ends. What makes that lease safe is the
+ * cancellation: teardown aborts the work's signal before it drains serving
+ * handles, so the work unwinds at its next checkpoint instead of being the
+ * lease teardown waits on forever. That pairing is the difference between
+ * this and `Instance.provide` from a fire-and-forget callback, which is a
+ * deadlock against disposal.
+ *
+ * The work owns its own durable recovery. A cancelled or failed run is logged
+ * and dropped here; whatever durable state the work maintains is what the
+ * next trigger resumes from.
+ */
+export function runInstanceBackgroundWork(
+  label: string,
+  work: (signal: AbortSignal) => Promise<void>,
+): void {
+  // Only the instance context is required: schedulers such as a durable Bus
+  // delivery replayed from the outbox run with a project identity but no
+  // lease of their own, and background work must be schedulable from exactly
+  // those places.
+  const directory = ProjectInstanceContext.use().directory
+  const entry = cache.get(instanceCacheKey(directory))
+  if (!entry) {
+    throw new Error(`Instance background work has no live instance for ${directory}`)
+  }
+  const controller = new AbortController()
+  entry.backgroundWork.add(controller)
+  void runOutsideInstanceContext(() =>
+    Instance.provide({
+      directory,
+      fn: async () => {
+        controller.signal.throwIfAborted()
+        await work(controller.signal)
+      },
+    }),
+  )
+    .catch((error) => {
+      if (controller.signal.aborted) return
+      Log.Default.warn("instance background work did not complete", {
+        label,
+        directory,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    })
+    .finally(() => {
+      entry.backgroundWork.delete(controller)
+    })
 }
 
 export function runAsInstanceActivity<R>(fn: () => Promise<R>): Promise<R> {
@@ -1882,6 +1950,7 @@ export const Instance: InstanceApi = {
       const { Scheduler } = await import("@/scheduler")
       const errors: unknown[] = []
       for (const [key, entry] of entries) {
+        cancelInstanceBackgroundWork(entry, "global instance disposal")
         await Promise.all([...entry.activeLeases].map((lease) => lease.closedSignal))
         let release = await acquireEntryTurn(entry)
         // A lease admitted between the settlement wait and the turn grant is

@@ -5,6 +5,16 @@ import { EngineControlActivationLeaseTable, type EngineControlActivationTarget }
 
 const log = Log.create({ service: "control-lease" })
 
+/**
+ * The exact lease this caller held is no longer current. Distinct from every
+ * transient failure — a busy database, shutdown in progress — because the
+ * correct reactions differ: a lost fence ends renewal and defers to the new
+ * owner, a transient failure retries.
+ */
+export class ControlLeaseFenceLostError extends Error {
+  override readonly name = "ControlLeaseFenceLostError"
+}
+
 export type ControlLease = typeof EngineControlActivationLeaseTable.$inferSelect
 
 export function currentControlLeaseInTransaction(
@@ -74,7 +84,7 @@ export function assertControlLeaseInTransaction(db: Database.TxOrDb, input: {
 }): ControlLease {
   const current = currentControlLeaseInTransaction(db, input.target, input.targetID)
   if (!current || current.id !== input.leaseID || current.owner_occurrence_id !== input.ownerOccurrenceID || current.expires_at <= input.now) {
-    throw new Error(`Control lease fence rejected ${input.target}/${input.targetID}/${input.leaseID}`)
+    throw new ControlLeaseFenceLostError(`Control lease fence rejected ${input.target}/${input.targetID}/${input.leaseID}`)
   }
   return current
 }
@@ -164,6 +174,6 @@ export function renewControlLease(input: {
     const updated = db.update(EngineControlActivationLeaseTable).set({ expires_at: input.expiresAt })
       .where(and(eq(EngineControlActivationLeaseTable.id, input.leaseID), eq(EngineControlActivationLeaseTable.expires_at, current.expires_at), gt(EngineControlActivationLeaseTable.expires_at, input.now)))
       .returning({ id: EngineControlActivationLeaseTable.id }).get()
-    if (!updated) throw new Error(`Control lease renewal lost fence ${input.leaseID}`)
+    if (!updated) throw new ControlLeaseFenceLostError(`Control lease renewal lost fence ${input.leaseID}`)
   })
 }

@@ -18771,12 +18771,7 @@ export type ServerLifecycleData = {
   path: {
     occurrenceID: string
   }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
+  query?: never
   url: "/lifecycle/{occurrenceID}"
 }
 

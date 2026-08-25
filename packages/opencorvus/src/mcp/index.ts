@@ -3504,10 +3504,6 @@ export namespace MCP {
     const previousFlow = pendingOAuthFlows.get(authKey)
     if (previousFlow) McpOAuthCallback.cancelPending(authKey)
     pendingOAuthFlows.delete(authKey)
-    // Revoking the previous flow and establishing this one's lease is one
-    // store write, so no competitor can read the superseded generation as
-    // current in between.
-    const authRevision = await McpAuth.beginCredentialLease(authKey)
     await assertCredentialIdentity(mcpName, mcpConfig)
     const oauthConfig = typeof mcpConfig.oauth === "object" ? mcpConfig.oauth : undefined
     const oauthProviderConfig = {
@@ -3515,6 +3511,17 @@ export namespace MCP {
       clientSecret: oauthConfig?.clientSecret,
       scope: oauthConfig?.scope,
     }
+    // Revoking the previous flow and establishing this one's lease is one
+    // store write, so no competitor can read the superseded generation as
+    // current in between. The lease carries the server identity from the
+    // start: a bare entry with no serverUrl sits in credential
+    // reconciliation's stale class, and any concurrent project-config commit
+    // would collect it out from under the flow.
+    const authRevision = await McpAuth.beginCredentialLease(
+      authKey,
+      mcpConfig.url,
+      McpOAuthProvider.credentialIdentity(mcpConfig.url, oauthProviderConfig),
+    )
     await McpAuth.updateOAuthState(
       authKey,
       oauthState,

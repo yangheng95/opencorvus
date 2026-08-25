@@ -1408,12 +1408,20 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     })
   })
 
-  test("settles a cancelled durable Organizer owner before project shutdown completes", async () => {
+  test("instance disposal cancels an in-flight Organizer run and releases its durable owner for the next attempt", async () => {
+    // The Organizer runs as instance background work: the request's own
+    // durable delivery settles immediately, and teardown — not a
+    // protocol-publication gate — is what ends an in-flight run. What must
+    // survive that cancellation is the durable owner state: the lease is
+    // released with a retry_wait status, so the next request or project open
+    // simply takes its own attempt.
     await using project = await memoryProject()
+    let projectID!: string
+    let cancelled = false
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const automaticDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
+        projectID = Instance.project.id
         const session = await Session.create({ kind: "assistant", title: "Organizer shutdown settlement" })
         await Session.persistMessage(
           userMessage(
@@ -1435,7 +1443,14 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamStarted()
           const physicalStream = new Promise<string>((_, reject) => {
-            input.abort.addEventListener("abort", () => reject(input.abort.reason), { once: true })
+            input.abort.addEventListener(
+              "abort",
+              () => {
+                cancelled = true
+                reject(input.abort.reason)
+              },
+              { once: true },
+            )
           })
           void physicalStream.catch(() => undefined)
           return {
@@ -1458,29 +1473,11 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         } as never)
         try {
           ProjectMemoryOrganizer.init()
-          automaticDrain[Symbol.dispose]()
-          Bus.resumeDurablePublications()
           await started
-          using runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
-          using busGate = Bus.acquireProcessSettlementGate()
-          runtimeGate.closeAdmission(["protocol_publication"])
-          runtimeGate.requestCancellation(["protocol_publication"], new Error("Organizer shutdown settlement"))
-          await runtimeGate.waitForIdle(["protocol_publication"], 5_000)
-
-          const snapshot = ProjectMemory.read(Instance.project.id)
-          expect(snapshot).toMatchObject({
-            revision: 0,
-            pendingCount: 1,
-          })
-          expect(Bus.TestHooks.ownedPublications()).toEqual(
-            expect.arrayContaining([expect.objectContaining({ pending: false })]),
-          )
-          busGate.commit()
-          runtimeGate.commit()
-          await Bun.sleep(25)
-          expect(ProjectMemory.read(Instance.project.id)).toEqual(snapshot)
+          // The run holds its durable attempt lease while its model turn is
+          // in flight; the triggering request settled long ago.
+          expect(ProjectMemory.read(projectID)).toMatchObject({ revision: 0, pendingCount: 1 })
         } finally {
-          automaticDrain[Symbol.dispose]()
           baseSpy.mockRestore()
           configSpy.mockRestore()
           streamSpy.mockRestore()
@@ -1488,6 +1485,21 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         }
       },
     })
+
+    await Instance.disposeAll()
+    expect(cancelled).toBe(true)
+    // The durable owner settled for the next attempt: no live Organizer lease,
+    // the pending input intact, the document unchanged.
+    const deadline = Date.now() + 10_000
+    for (;;) {
+      const snapshot = ProjectMemory.read(projectID)
+      if (snapshot.status === "retry_wait") {
+        expect(snapshot).toMatchObject({ revision: 0, pendingCount: 1, status: "retry_wait" })
+        break
+      }
+      if (Date.now() > deadline) throw new Error(`Organizer owner never settled: ${snapshot.status}`)
+      await new Promise((resolve) => setTimeout(resolve, 25))
+    }
   })
 
   test("injects a capacity notice that requires a visible user prompt without delegating organization to the main agent", async () => {
