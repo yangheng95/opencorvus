@@ -102,6 +102,7 @@ install -m 0644 "$adapter_root/workbuddybench-code.SKILL.md" \
 docker_exe='/mnt/c/Program Files/Docker/Docker/resources/bin/docker.exe'
 test -x "$docker_exe"
 image_context_windows="$(wslpath -w "$image_context")"
+cd "$bench_root"
 "$docker_exe" build --pull=false -f "$image_context_windows\\Dockerfile" -t "$image" "$image_context_windows"
 "$docker_exe" image inspect "$image" > "$control_root/image-inspect.json"
 
