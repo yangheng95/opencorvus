@@ -102,7 +102,7 @@ install -m 0644 "$adapter_root/workbuddybench-code.SKILL.md" \
 docker_exe='/mnt/c/Program Files/Docker/Docker/resources/bin/docker.exe'
 test -x "$docker_exe"
 cd "$bench_root"
-tar -C "$image_context" -cf - . | "$docker_exe" build --pull=false --provenance=false -t "$image" -
+tar -C "$image_context" -cf - . | "$docker_exe" build --pull=false --provenance=false --load -t "$image" -
 "$docker_exe" image inspect "$image" > "$control_root/image-inspect.json"
 
 python3 - "$control_root/source-receipt.json" "$bench_root" "$bench_commit" "$workbuddy_root" "$runtime_source" "$runtime_bundle_archive" "$image" "$control_root/image-inspect.json" <<'PY'
