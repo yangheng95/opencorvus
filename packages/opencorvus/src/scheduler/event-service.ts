@@ -704,13 +704,23 @@ export namespace EventService {
       row = Database.use((db) => {
         const persisted = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
         if (!persisted) return undefined
-        const fire = projectEventFireInTransaction(db, persisted, Date.now())
-        // The deadline belongs to the status being recovered. `retry_at`
-        // survives as a past value on every attempt after the first, so a fire
-        // that another runtime is currently executing would otherwise be
-        // re-enqueued against an expired retry time — a poll for the whole of
-        // that runtime's attempt rather than a wait for its lease.
-        const deadline = fire.status === "running" ? fire.lease_until : (fire.retry_at ?? fire.lease_until)
+        const now = Date.now()
+        const fire = projectEventFireInTransaction(db, persisted, now)
+        // The deadline belongs to whatever is actually deferring this fire.
+        // `retry_at` survives as a past value on every attempt after the
+        // first, so a running fire waits on its lease, a retry waits on its
+        // retry time — and a pending fire that is not the head of its job's
+        // queue waits on the HEAD's deadline, because nothing about the
+        // pending row itself will change until the head settles.
+        let deadline = fire.status === "running" ? fire.lease_until : (fire.retry_at ?? fire.lease_until)
+        if (fire.status === "pending" && deadline <= now) {
+          const head = db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all()
+            .map((row) => projectEventFireInTransaction(db, row, now))
+            .find((row) => row.event_job_id === fire.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
+          if (head && head.id !== fire.id) {
+            deadline = head.status === "running" ? head.lease_until : (head.retry_at ?? head.lease_until)
+          }
+        }
         return { jobID: fire.event_job_id, status: fire.status, lease: deadline }
       })
     } catch (error) {

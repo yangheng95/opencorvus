@@ -35,15 +35,17 @@ export namespace McpAuth {
     serverUrl: z.string().optional(), // Track the URL these credentials are for
     credentialIdentity: z.string().optional(),
     /**
-     * Monotonic per-key mutation counter, durable in the store itself.
+     * Revocation generation, durable in the store itself.
      *
-     * A holder of a long-running OAuth flow reads this before it starts and
-     * presents it again when it writes. A revoke or a competing flow bumps it,
-     * so the stale write is refused. Keeping the counter in the file rather
-     * than in memory is what makes a revoke performed by another backend on
-     * the same data root visible here.
+     * A holder of a long-running OAuth flow reads this once and presents it
+     * with every write of that flow, so it must stay stable across the flow's
+     * own writes — an OAuth exchange is several store writes under one
+     * captured revision. Only a revocation mints a new generation; a removed
+     * entry reads as the empty generation. Keeping it in the file rather than
+     * in memory is what makes a revoke performed by another backend on the
+     * same data root visible here.
      */
-    revision: z.number().int().nonnegative().optional(),
+    revision: z.string().optional(),
   })
   export type Entry = z.infer<typeof Entry>
 
@@ -51,18 +53,21 @@ export namespace McpAuth {
   const Store = z.record(z.string(), Entry)
   const storeLocks = new Map<string, Promise<unknown>>()
 
-  export type Revision = number
+  export type Revision = string
+
+  /** The revision an absent or never-revoked entry reads as. */
+  const INITIAL_REVISION: Revision = ""
 
   /**
-   * The durable mutation counter for one credential.
+   * The durable revocation generation for one credential.
    *
-   * A key with no entry reads as revision zero, so a holder that presents any
-   * revision it was given is refused after a revoke — the entry, and with it
-   * the counter, is gone.
+   * A key with no entry reads as the initial generation. Generations are
+   * random, so a generation captured before a removal can never match one
+   * minted after a later revoke.
    */
   export async function revision(authKey: string): Promise<Revision> {
     const data = await all()
-    return data[authKey]?.revision ?? 0
+    return data[authKey]?.revision ?? INITIAL_REVISION
   }
 
   function assertRevisionInStore(
@@ -70,7 +75,7 @@ export namespace McpAuth {
     authKey: string,
     expected?: Revision,
   ) {
-    if (expected !== undefined && (data[authKey]?.revision ?? 0) !== expected) {
+    if (expected !== undefined && (data[authKey]?.revision ?? INITIAL_REVISION) !== expected) {
       throw new Error(`MCP auth lease was revoked: ${authKey}`)
     }
   }
@@ -148,13 +153,16 @@ export namespace McpAuth {
   ) {
     await mutate(async () => {
       // The comparison, the change and the replacement are one read-modify-write
-      // inside the cross-process lock. Comparing against a counter read before
+      // inside the cross-process lock. Comparing against a value read before
       // the lock is what let a revoke performed between the two be missed.
       const data = await all()
       assertRevisionInStore(data, authKey, expectedRevision)
       const current = data[authKey]
       const next = update(current ? structuredClone(current) : undefined)
-      if (next) data[authKey] = Entry.parse({ ...next, revision: (current?.revision ?? 0) + 1 })
+      // A write preserves the generation: the holder's captured revision must
+      // stay valid across every write of its own flow. Only `invalidate`
+      // mints a new one.
+      if (next) data[authKey] = Entry.parse({ ...next, revision: current?.revision })
       else delete data[authKey]
       await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
     })
@@ -211,16 +219,19 @@ export namespace McpAuth {
   /**
    * End every outstanding lease on one credential without removing it.
    *
-   * Bumping the durable counter is the whole effect: any holder that presents
-   * the revision it was given is refused from now on, in this process and in
-   * any other backend reading the same store.
+   * Minting a new durable generation is the whole effect: any holder that
+   * presents the generation it captured is refused from now on, in this
+   * process and in any other backend reading the same store. A key with no
+   * entry has nothing to revoke: flows over a never-revoked key are fenced by
+   * the stored OAuth state and the single pending-flow slot, not by the
+   * generation.
    */
   export async function invalidate(authKey: string): Promise<void> {
     await mutate(async () => {
       const data = await all()
       const current = data[authKey]
       if (!current) return
-      data[authKey] = Entry.parse({ ...current, revision: (current.revision ?? 0) + 1 })
+      data[authKey] = Entry.parse({ ...current, revision: crypto.randomUUID() })
       await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
     })
   }

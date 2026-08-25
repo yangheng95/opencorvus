@@ -21,10 +21,16 @@
 import { Glob } from "bun"
 import path from "node:path"
 
-const PACKAGE_ROOTS = [
-  path.resolve(import.meta.dir, "../../src"),
-  path.resolve(import.meta.dir, "../../../channel-runtime/src"),
-  path.resolve(import.meta.dir, "../../../plugin/src"),
+/**
+ * Packages that can reach the lease table or the acquire primitive. The other
+ * workspace packages (util, sdk, channel-config, transport-protocol, overlay,
+ * web) have no dependency edge to either, so scanning them would only slow the
+ * gate; a new edge shows up here as an undeclared owner the moment it acquires.
+ */
+const PACKAGE_ROOTS: Array<{ prefix: string; root: string }> = [
+  { prefix: "", root: path.resolve(import.meta.dir, "../../src") },
+  { prefix: "channel-runtime:", root: path.resolve(import.meta.dir, "../../../channel-runtime/src") },
+  { prefix: "plugin:", root: path.resolve(import.meta.dir, "../../../plugin/src") },
 ]
 
 type Declaration = {
@@ -59,7 +65,7 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     targets: ["runtime_process"],
     sites: 1,
     release:
-      "Deliberately none. This lease IS the liveness fact: a process is live exactly while its lease is unexpired, so releasing it would assert the process had exited. It ends by expiry, and expireRuntimeProcessLease ends it explicitly on a recorded exit.",
+      "Deliberately none. This lease IS the liveness fact: a process is live exactly while its lease is unexpired, so releasing it would assert the process had exited. It ends by expiry, and expireProcessLivenessLease ends it explicitly on a recorded exit.",
   },
   "engine/task-completion-closure.ts": {
     targets: ["lifecycle"],
@@ -131,11 +137,11 @@ const ALIASED_IMPORT = /import\s*\{[^}]*\bacquireControlLease(?:InTransaction)?\
 const found = new Map<string, number>()
 const aliased: string[] = []
 
-for (const root of PACKAGE_ROOTS) {
+for (const { prefix, root } of PACKAGE_ROOTS) {
   for await (const relative of new Glob("**/*.{ts,tsx,mts,cts}").scan({ cwd: root })) {
-    const file = relative.replaceAll("\\", "/")
+    const file = prefix + relative.replaceAll("\\", "/")
     // The primitive itself is where acquiring is defined, not an owner of a lease.
-    if (root.replaceAll("\\", "/").endsWith("opencorvus/src") && file === "engine/control-lease.ts") continue
+    if (file === "engine/control-lease.ts") continue
     const text = await Bun.file(path.join(root, relative)).text()
     if (ALIASED_IMPORT.test(text)) aliased.push(file)
     ALIASED_IMPORT.lastIndex = 0

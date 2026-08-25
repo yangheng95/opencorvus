@@ -658,13 +658,15 @@ export namespace Bus {
         try {
           renewControlLease({ target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: Date.now(), expiresAt: Date.now() + 30_000 })
         } catch (error) {
-          // Either this delivery's own receipt already ended the lease, or
-          // another runtime took it. The receipt fence below surfaces the
-          // second case, but saying so here is what makes it diagnosable.
+          // Another runtime took this lease — the receipt fence surfaces that
+          // when this delivery tries to settle. Renewal cannot lose to this
+          // delivery's own receipt: the release and clearInterval have no
+          // await between them. Stop renewing rather than warn every tick.
           log.warn("durable Bus delivery lease renewal ended", {
             deliveryID,
             error: error instanceof Error ? error.message : String(error),
           })
+          clearInterval(renewal)
         }
       }, 10_000)
       renewal.unref()

@@ -193,10 +193,10 @@ Three review rounds each found a lease owner the previous round missed, because 
 
 ### Second half: the revision is a durable fact, not a process-local counter
 
-- `mcp/auth.ts` kept its compare-and-swap counter in a process-local `Map`. A revoke performed by another backend on the same data root was invisible, so a stale holder's write succeeded and resurrected a credential that had been revoked.
-- The counter now lives in the store as `Entry.revision`, is incremented by every mutation, and is compared inside the same cross-process lock as the read-modify-write. `invalidate` bumps it durably instead of bumping memory, and a removed credential reads as revision zero, so every outstanding lease on it is refused.
+- `mcp/auth.ts` kept its compare-and-swap value in a process-local `Map`. A revoke performed by another backend on the same data root was invisible, so a stale holder's write succeeded and resurrected a credential that had been revoked.
+- The value now lives in the store as `Entry.revision` — a revocation generation, random, minted only by `invalidate`, preserved by ordinary writes, compared inside the same cross-process lock as the read-modify-write. The first cut of this (a bump-per-mutation counter) broke MCP OAuth and was repaired in the fifth review round, recorded below.
 - `revision()` is async now, because the answer comes from the file. Its six call sites await it.
-- Focused positive tests in `test/mcp/auth-durable-revision.test.ts`: a peer's direct write to the store is visible to the next reader; a holder presenting a superseded revision is refused while the current one is accepted; a removed credential reads as zero and refuses every outstanding lease.
+- Focused positive tests in `test/mcp/auth-durable-revision.test.ts`: one captured generation survives a five-write flow; a revoke refuses the old holder and admits the new one; a peer's revoke through the shared file is visible; a pre-removal generation never matches a post-recreation one.
 
 ### Still open in ARC-009
 
@@ -238,6 +238,32 @@ Locking the two config load-path writes was wrong: `loadFile` runs inside `write
 - The cross-process config lock is held across `MCP.reconcileProjectConfig` and a Bus round-trip, and that reconciliation takes a second cross-process lock (`mcp-auth.json`). The ordering is project-config → mcp-auth and must never invert; no inverting path exists today, because `reconcileProjectConfig` does not write config back. A critical section that outruns `proper-lockfile`'s ten-second stale threshold surfaces as a compromise error from `release()` after the write already committed.
 - Provisioning leaves a file behind if the operation throws. Every reader accepts the empty representation, but a provisioned `.opencorvus/opencorvus.jsonc` becomes a canonical-config conflict for descendant directories in the same worktree, and each config write now creates a transient lock directory inside the user's repository where the old in-memory lock created nothing.
 - The first project-config commit costs about 5.6 seconds on this machine, measured against the pre-change revision as well, so it is not this change's cost. It is why `permission-two-mode.test.ts`'s untimed test now sits near the default five-second per-test limit.
+
+### Stage 2 fifth independent review disposition
+
+Fifteen findings. The critical one: the durable-revision design shipped in the previous commit deterministically broke MCP OAuth.
+
+**Critical, fixed**
+
+- `Entry.revision` was bumped by *every* mutation, but every OAuth consumer captures one revision and presents it to several writes — client registration, state, verifier, tokens are one flow under one captured revision. The flow's own first write invalidated its second: `state()` threw `MCP auth lease was revoked` on the very next SDK callback, and `finishAuth` failed after the tokens were already written. The reviewer traced it through the SDK's real callback order, and the previous commit's own test had codified the defect (`revision === current + 1` after a holder's own write).
+- The revision is now a **revocation generation**, not a mutation counter: a random string minted only by `invalidate`, preserved unchanged by every ordinary write, absent on a fresh entry. One captured generation stays valid across a flow's writes; a revoke refuses every outstanding holder; and because generations are random, a generation captured before a removal can never match one minted after recreation — which also closes the reviewer's ABA finding (the counter restarting at 1 after remove-and-recreate). The tests now assert the real contract: a five-write flow under one captured generation, revoke-refuses-old-admits-new, peer revoke through the file, and no post-recreation match.
+- `invalidate` on a key with no entry stays a no-op, stated in its contract: flows over a never-revoked key are fenced by the stored OAuth state and the single pending-flow slot, not by the generation. `clearOAuthStateIfOwned`'s cleanup works again as a consequence of the flow's generation staying valid.
+
+**Other repairs**
+
+- A `pending` fire refused because its job's head runs elsewhere now waits on the *head's* deadline instead of polling every 250 ms for up to the full retry backoff — the reviewer showed `enqueueNextFireForJob` selects the head, not the queued fire, so nothing else drives that handoff.
+- `task-api`'s convergence `close()` logs when the handback did not take without an error — it runs in a `finally`, so it must not throw, but a silent non-release returns the next cancellation to the poll this change removed.
+- The Bus renewal guard stops its interval like the `build/agent.ts` guard it was modeled on, and its comment no longer claims an unreachable cause.
+- The gate: the process-liveness declaration names the real function (`expireProcessLivenessLease`); the three scanned roots are prefixed so identical relative paths cannot collide across packages; the root-selection criterion is stated in the file.
+- `process-lock.ts`'s two constants have their own doc comments again instead of one carrying the other's.
+
+**ARC-040 — a durable Bus subscriber that runs a model turn inline (new finding, open, attempt reverted)**
+
+- Evidence, from the failed `check:permission-modes` run at 15:05–15:06: `POST /session/.../abort` completed at :21.7, the attached CLI was still alive at :31.7 when the checker gave up, `Durable Bus publication failed for project.memory.organize.requested` logged at :32.899, and `POST /session/.../message` completed at :32.927 — 28 ms later, with a 31.97-second total duration. The CLI cannot exit before its `session.prompt` HTTP response, and that response was blocked for eleven seconds behind the durable delivery of `project.memory.organize.requested`, whose subscriber (`project-memory.organizer`) runs a complete Organizer model turn inline in the delivery.
+- Why it is architecture: the durable Bus's delivery receipt is the retry authority for its subscribers, so a subscriber whose work is a model turn couples every publisher of that event — including a user message's own settlement — to LLM latency. The organize request's facts (pending entries, organizer lease, `retry_wait` status) are all durable *before* the event fires, so the delivery does not need to encompass the turn.
+- Two implementation attempts were made and both reverted, which is why this is recorded open rather than fixed: a detached background runner loses instance context the moment the delivering scope ends (`Cannot access instance context through a closed instance cache lease` across eight memory tests), and a runner holding its own Instance lease deadlocks `Instance.disposeAll` — disposal waits for every lease before running the state disposers that would abort the runner (observed as the canonical runner's 120-second inactivity kill).
+- Bounded direction: the organizer needs a disposal-aware background execution primitive — a reservation that instance disposal cancels *before* waiting on leases, which is what `RuntimeExecutionSettlement` provides at process scope but nothing provides at instance scope. That primitive, not another ad-hoc runner, is the fix; it likely also serves the other inline-LLM subscriber candidates.
+- ARC-038's CLI symptom is therefore two-layered: the settled terminal publication gap (recorded earlier, still open), and this settlement coupling, either of which alone can hold the CLI past the checker's ten-second bound.
 
 ## Stage log
 

@@ -888,13 +888,22 @@ async function acquireCancellationConvergence(taskID: string) {
           // This convergence is settled, so its owner is done. Holding the
           // activation until expiry is what makes the next cancellation wait
           // out the lease in a hundred-millisecond poll instead of taking it.
-          releaseControlLeaseOnErrorPath({
+          // close() runs in a finally, so a handback failure must not replace
+          // the path's own error — but one that silently did not take returns
+          // the next cancellation to exactly that poll, so say so.
+          const handback = releaseControlLeaseOnErrorPath({
             target: "lifecycle",
             targetID: claimed.requestEventID,
             leaseID: claimed.activationID,
             ownerOccurrenceID: claimed.ownerOccurrenceID,
             now: Date.now(),
           })
+          if (!handback.released && !handback.error) {
+            log.warn("task cancellation convergence lease was already gone at close", {
+              taskID,
+              requestEventID: claimed.requestEventID,
+            })
+          }
         },
       }
     }

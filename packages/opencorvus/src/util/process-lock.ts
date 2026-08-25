@@ -93,14 +93,6 @@ export async function withProcessLock<T>(
 }
 
 /**
- * How a cross-process lock waits for the current holder.
- *
- * Every critical section behind these locks is short and bounded by its own
- * work, so waiting is the correct answer to contention: failing instead would
- * turn a concurrent credential write into a lost update or a user-visible
- * error for something the caller can simply queue behind.
- */
-/**
  * How long a caller queues behind other callers in this process for one fact.
  *
  * Long enough that a genuine cross-process wait is never mistaken for a
@@ -109,6 +101,14 @@ export async function withProcessLock<T>(
  */
 export const SHARED_JSON_FACT_QUEUE_TIMEOUT_MS = 10 * 60 * 1000
 
+/**
+ * How a cross-process lock waits for the current holder.
+ *
+ * Every critical section behind these locks is short and bounded by its own
+ * work, so waiting is the correct answer to contention: failing instead would
+ * turn a concurrent credential write into a lost update or a user-visible
+ * error for something the caller can simply queue behind.
+ */
 export const CROSS_PROCESS_LOCK_RETRY = {
   forever: true,
   factor: 1.2,
