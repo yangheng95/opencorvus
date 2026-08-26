@@ -6003,9 +6003,9 @@ export class Account extends HeyApiClient {
 
 export class Auth2 extends HeyApiClient {
   /**
-   * Execute global Provider auth
+   * Execute global Provider API auth
    *
-   * Execute a built-in Provider authentication method without a project.
+   * Execute a built-in Provider API credential method without a project.
    */
   public execute<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6142,7 +6142,7 @@ export class Oauth extends HeyApiClient {
     parameters: {
       providerID: string
       code?: string
-      flowID?: string
+      flowID: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -10562,9 +10562,9 @@ export class Account2 extends HeyApiClient {
 
 export class Auth4 extends HeyApiClient {
   /**
-   * Execute auth method
+   * Execute Provider API auth method
    *
-   * Execute an authentication method with collected inputs.
+   * Execute an API credential method with collected inputs.
    */
   public execute<ThrowOnError extends boolean = false>(
     parameters: {
@@ -10704,7 +10704,7 @@ export class Oauth2 extends HeyApiClient {
       providerID: string
       directory?: string
       code?: string
-      flowID?: string
+      flowID: string
       method: number
     },
     options?: Options<never, ThrowOnError>,

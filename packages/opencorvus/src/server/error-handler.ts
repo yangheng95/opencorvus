@@ -47,6 +47,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "SkillMarketUpstreamError") return 502
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400
+  if (err.name.startsWith("ProviderAuth")) return 400
   if (err.name === "DirectoryRequiredError") return 400
   if (err.name === "RequestOriginForbiddenError") return 403
   if (err.name === "InvalidInitGitParameterError") return 400

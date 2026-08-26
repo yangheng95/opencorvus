@@ -15,6 +15,7 @@ import { Auth } from "../../auth"
 import { ConfigCandidateValidationError } from "@/config/candidate-validation"
 import { Provider } from "../../provider/provider"
 import { ProviderAuth } from "../../provider/auth"
+import { ProviderOAuthFlowStore } from "../../provider/oauth-flow-store"
 import { ProviderRemovalReceipt, removeProvider } from "../../provider/removal"
 import { discoverProviderModels, testProviderConnection } from "../../provider/operations"
 import { updateGlobalConfigPatch } from "../../config/update-global"
@@ -25,6 +26,7 @@ import {
   AuthReadUnavailableResponse,
   OwnedPromptControllersResponse,
   badRequestBody,
+  badRequestOrNamedErrorResponse,
   errors,
   namedErrorResponse,
 } from "../error"
@@ -590,8 +592,8 @@ export const GlobalRoutes = lazy(() =>
     .post(
       "/providers/:providerID/auth/execute",
       describeRoute({
-        summary: "Execute global Provider auth",
-        description: "Execute a built-in Provider authentication method without a project.",
+        summary: "Execute global Provider API auth",
+        description: "Execute a built-in Provider API credential method without a project.",
         operationId: "global.providers.auth.execute",
         responses: {
           200: {
@@ -630,9 +632,14 @@ export const GlobalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Provider authorization",
-            content: { "application/json": { schema: resolver(ProviderAuth.Authorization.optional()) } },
+            content: { "application/json": { schema: resolver(ProviderAuth.Authorization) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse(
+            "Provider OAuth authorization request rejected",
+            "ProviderAuthProviderNotFound",
+            "ProviderAuthMethodNotFound",
+            "ProviderAuthMethodAuthorizationTypeMismatch",
+          ),
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -670,7 +677,7 @@ export const GlobalRoutes = lazy(() =>
         z.object({
           method: z.number(),
           code: z.string().optional(),
-          flowID: z.string().optional(),
+          flowID: ProviderOAuthFlowStore.FlowID,
         }),
       ),
       async (c) => {

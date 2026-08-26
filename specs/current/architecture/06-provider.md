@@ -269,6 +269,28 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 - 打开 Providers 配置页时只按当前 project/global scope 读取稳定的 Provider catalog、Auth method 和 config owner；不得隐式执行网络刷新。Provider 目录刷新和实时模型刷新只由两个显式按钮分别触发，各自完成后重读 Provider owner，各自拥有独立错误面。
 - 没有活动项目目录的桌面首次启动使用 `/global/providers`、`/global/providers/refresh`、`/global/providers/models/refresh`、`/global/providers/discover-models` 和 `/global/providers/:providerID/test`；这些路由把 `Config.getGlobal()` 显式传入与项目路由共用的 Provider 实现。`/auth/:providerID` 仍是唯一 API credential 写入面，项目目录不是新增 Provider、保存 API key、发现模型、测试连接或使用内置 Provider OAuth 的前置条件。`Plugin.listGlobalProviderHooks()` 是唯一 project-independent built-in hook catalog，同时投影 auth method、OAuth loader 和 Provider model projection；installed project plugins 仍只由真实 Project `Instance` 的 `Plugin.list()` 拥有。
 
+### Provider Auth occurrence authority
+
+`ProviderAuth` 是 plugin 认证 method 执行和 credential 写入的唯一 owner。HTTP project/global route、Overlay 和
+`opencorvus auth login` 都只通过它的 `execute`、`authorize` 和 `callback` 进入；`execute` 只接受 API
+credential method，OAuth 只能通过 `authorize` 开始。CLI 只负责 method/prompt
+呈现和输入收集，不得直接调用 plugin `authorize` / OAuth callback closure，也不得解释 callback result 后自行
+写 `Auth`。CLI 在当前 Project `Instance` 中使用 project scope，因而保留 installed project plugin catalog；它
+不能改用只包含 built-in hooks 的 global scope。
+
+每次 OAuth authorize 都先由 plugin 创建 live executor，再由 `ProviderOAuthFlowStore` 持久化 exact flow occurrence
+并以 `flowID` 绑定 executor。callback 必须携带该 `flowID`，先 exact-claim executor，再把 occurrence 从
+`pending` 单次结算为 `consumed` 或 `failed`；所有 callback caller 必须回传 authorize 返回的 exact `flowID`，
+不存在按 provider/scope 查找当前 pending flow 的后备路径。superseded、method/scope mismatch、settled 和 executor 丢失均使用
+typed refusal。callback 成功返回的 provider alias、API credential metadata、OAuth account ID 和 enterprise URL
+由同一个 ProviderAuth writer 投影到 `Auth`。Flow store 是 admission/terminal fact；PKCE callback closure 仍是
+process-local live capability，restart 后不可伪造恢复。
+
+`authorize` 是 total OAuth-only contract：未知 Provider、未知 method index 和 API method 误入分别返回具名的
+`ProviderAuthProviderNotFound`、`ProviderAuthMethodNotFound` 和
+`ProviderAuthMethodAuthorizationTypeMismatch`，成功则总是返回非空 `ProviderAuthAuthorization`，不存在 undefined
+成功响应。所有 `ProviderAuth*` 具名拒绝在 HTTP 边界映射为 400，而不是泄漏为通用 500。
+
 ## Provider 故障隔离
 
 - Provider/config 管理与修复路由只需要 project identity，不得先运行完整 `InstanceBootstrap`。失效模型或其他 runtime bootstrap 输入不能阻塞读取 catalog/Auth/config、保存 key、刷新模型或修复 config；Task/runtime 路由仍严格执行完整 bootstrap。

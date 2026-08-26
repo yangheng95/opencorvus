@@ -144,12 +144,7 @@ export interface AuthDialogCallbacks {
   externalUrlNeedsUserGesture: boolean
 
   /** Show long-running provider auth instructions to the operator. */
-  showLlmNotice: (
-    message: string,
-    tone?: string,
-    duration?: number,
-    link?: { url: string; label: string },
-  ) => void
+  showLlmNotice: (message: string, tone?: string, duration?: number, link?: { url: string; label: string }) => void
 
   /** Mark provider auth as dismissed after the operator cancels an auth flow. */
   onAuthCancelled: (providerID: string) => void
@@ -617,7 +612,13 @@ export async function authorizeProvider(
     signal: AbortSignal.timeout(300_000),
   })
 
-  if (!record(authorization) || typeof authorization.url !== "string" || typeof authorization.method !== "string") {
+  if (
+    !record(authorization) ||
+    typeof authorization.url !== "string" ||
+    typeof authorization.method !== "string" ||
+    typeof authorization.flowID !== "string" ||
+    !authorization.flowID
+  ) {
     throw new Error("OAuth authorization unavailable")
   }
 
@@ -650,7 +651,7 @@ export async function authorizeProvider(
     await apiJson(providerAuthPath(providerID, "oauth/callback", options), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ method: match.index, code }),
+      body: JSON.stringify({ method: match.index, code, flowID: authorization.flowID }),
       signal: AbortSignal.timeout(300_000),
     })
     return true
@@ -661,7 +662,7 @@ export async function authorizeProvider(
   await apiJson(providerAuthPath(providerID, "oauth/callback", options), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ method: match.index }),
+    body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),
     signal: AbortSignal.timeout(300_000),
   })
   return true

@@ -14153,6 +14153,7 @@
       "ProviderAuthAuthorization": {
         "properties": {
           "flowID": {
+            "minLength": 1,
             "type": "string"
           },
           "instructions": {
@@ -63446,7 +63447,7 @@
     },
     "/global/providers/{providerID}/auth/execute": {
       "post": {
-        "description": "Execute a built-in Provider authentication method without a project.",
+        "description": "Execute a built-in Provider API credential method without a project.",
         "operationId": "global.providers.auth.execute",
         "parameters": [
           {
@@ -63553,7 +63554,7 @@
             "description": "Saved Provider credentials could not be observed safely"
           }
         },
-        "summary": "Execute global Provider auth",
+        "summary": "Execute global Provider API auth",
         "x-codeSamples": [
           {
             "lang": "js",
@@ -63693,11 +63694,75 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderAuthProviderNotFound",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderAuthMethodNotFound",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderAuthMethodAuthorizationTypeMismatch",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Provider OAuth authorization request rejected"
           }
         },
         "summary": "Authorize a global Provider subscription",
@@ -63732,6 +63797,7 @@
                     "type": "string"
                   },
                   "flowID": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "method": {
@@ -63739,7 +63805,8 @@
                   }
                 },
                 "required": [
-                  "method"
+                  "method",
+                  "flowID"
                 ],
                 "type": "object"
               }
@@ -77022,7 +77089,7 @@
     },
     "/provider/{providerID}/auth/execute": {
       "post": {
-        "description": "Execute an authentication method with collected inputs.",
+        "description": "Execute an API credential method with collected inputs.",
         "operationId": "provider.auth.execute",
         "parameters": [
           {
@@ -77141,7 +77208,7 @@
             "description": "Saved Provider credentials could not be observed safely"
           }
         },
-        "summary": "Execute auth method",
+        "summary": "Execute Provider API auth method",
         "x-codeSamples": [
           {
             "lang": "js",
@@ -77305,11 +77372,75 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderAuthProviderNotFound",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderAuthMethodNotFound",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderAuthMethodAuthorizationTypeMismatch",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Provider OAuth authorization request rejected"
           }
         },
         "summary": "OAuth authorize",
@@ -77356,6 +77487,7 @@
                   },
                   "flowID": {
                     "description": "Exact authorization flow occurrence to finish",
+                    "minLength": 1,
                     "type": "string"
                   },
                   "method": {
@@ -77364,7 +77496,8 @@
                   }
                 },
                 "required": [
-                  "method"
+                  "method",
+                  "flowID"
                 ],
                 "type": "object"
               }

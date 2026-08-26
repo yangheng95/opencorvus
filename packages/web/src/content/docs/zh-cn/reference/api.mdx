@@ -47,9 +47,9 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/global/providers/refresh` | Refresh the global provider registry | `global.providers.refresh` |
 | DELETE | `/global/providers/{providerID}` | Delete a global provider 错误: `AuthReadError`, `BadRequestError`. | `global.providers.remove` |
 | GET | `/global/providers/{providerID}/account-usage` | Get global Provider account usage 错误: `AuthReadError`. | `global.providers.account.usage` |
-| POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
+| POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider API auth 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
 | POST | `/global/providers/{providerID}/auth/prompts` | Get global Provider auth prompts 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.auth.prompts` |
-| POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.oauth.authorize` |
+| POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription 请求体: `inputs`, `method`; 错误: `BadRequestError`, `ProviderAuthMethodAuthorizationTypeMismatch`, `ProviderAuthMethodNotFound`, `ProviderAuthProviderNotFound`. | `global.providers.oauth.authorize` |
 | POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization 请求体: `code`, `flowID`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source 请求体: `kind`, `policy`, `value`; 错误: `BadRequestError`. | `global.skill.install` |
@@ -408,9 +408,9 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/provider/refresh` | Refresh the provider registry | `provider.refresh` |
 | DELETE | `/provider/{providerID}` | Delete a project provider 错误: `AuthReadError`, `BadRequestError`. | `provider.remove` |
 | GET | `/provider/{providerID}/account-usage` | Get Provider account usage 错误: `AuthReadError`. | `provider.account.usage` |
-| POST | `/provider/{providerID}/auth/execute` | Execute auth method 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
+| POST | `/provider/{providerID}/auth/execute` | Execute Provider API auth method 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
 | POST | `/provider/{providerID}/auth/prompts` | Get auth prompts 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.auth.prompts` |
-| POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.oauth.authorize` |
+| POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize 请求体: `inputs`, `method`; 错误: `BadRequestError`, `ProviderAuthMethodAuthorizationTypeMismatch`, `ProviderAuthMethodNotFound`, `ProviderAuthProviderNotFound`. | `provider.oauth.authorize` |
 | POST | `/provider/{providerID}/oauth/callback` | OAuth callback 请求体: `code`, `flowID`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
 | POST | `/provider/{providerID}/test` | Test provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `provider.test` |
 

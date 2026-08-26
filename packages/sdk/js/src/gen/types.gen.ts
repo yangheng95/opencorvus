@@ -18099,9 +18099,28 @@ export type GlobalProvidersOauthAuthorizeData = {
 
 export type GlobalProvidersOauthAuthorizeErrors = {
   /**
-   * Bad request
+   * Provider OAuth authorization request rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthProviderNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodAuthorizationTypeMismatch"
+      }
 }
 
 export type GlobalProvidersOauthAuthorizeError =
@@ -18120,7 +18139,7 @@ export type GlobalProvidersOauthAuthorizeResponse =
 export type GlobalProvidersOauthCallbackData = {
   body: {
     code?: string
-    flowID?: string
+    flowID: string
     method: number
   }
   path: {
@@ -22963,9 +22982,28 @@ export type ProviderOauthAuthorizeData = {
 
 export type ProviderOauthAuthorizeErrors = {
   /**
-   * Bad request
+   * Provider OAuth authorization request rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthProviderNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodAuthorizationTypeMismatch"
+      }
 }
 
 export type ProviderOauthAuthorizeError = ProviderOauthAuthorizeErrors[keyof ProviderOauthAuthorizeErrors]
@@ -22988,7 +23026,7 @@ export type ProviderOauthCallbackData = {
     /**
      * Exact authorization flow occurrence to finish
      */
-    flowID?: string
+    flowID: string
     /**
      * Auth method index
      */

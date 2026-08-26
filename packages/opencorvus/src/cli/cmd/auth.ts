@@ -15,15 +15,20 @@ import { entries } from "@/util/object"
 import { ProviderAuth } from "@/provider/auth"
 
 type PluginAuth = NonNullable<Hooks["auth"]>
+type AuthPromptRuntime = Pick<typeof prompts, "select" | "text" | "password" | "isCancel" | "log" | "spinner" | "outro">
 
 /**
  * Handle plugin-based authentication flow.
  * Returns true if auth was handled, false if it should fall through to default handling.
  */
-export async function handlePluginAuth(plugin: { auth: PluginAuth }, provider: string): Promise<boolean> {
+export async function handlePluginAuth(
+  plugin: { auth: PluginAuth },
+  provider: string,
+  promptRuntime: AuthPromptRuntime = prompts,
+): Promise<boolean> {
   let index = 0
   if (plugin.auth.methods.length > 1) {
-    const method = await prompts.select({
+    const method = await promptRuntime.select({
       message: "Login method",
       options: [
         ...plugin.auth.methods.map((x, index) => ({
@@ -32,7 +37,7 @@ export async function handlePluginAuth(plugin: { auth: PluginAuth }, provider: s
         })),
       ],
     })
-    if (prompts.isCancel(method)) throw new UI.CancelledError()
+    if (promptRuntime.isCancel(method)) throw new UI.CancelledError()
     index = parseInt(method)
   }
   const method = plugin.auth.methods[index]
@@ -46,135 +51,79 @@ export async function handlePluginAuth(plugin: { auth: PluginAuth }, provider: s
         continue
       }
       if (prompt.type === "select") {
-        const value = await prompts.select({
+        const value = await promptRuntime.select({
           message: prompt.message,
           options: prompt.options,
         })
-        if (prompts.isCancel(value)) throw new UI.CancelledError()
+        if (promptRuntime.isCancel(value)) throw new UI.CancelledError()
         inputs[prompt.key] = value
       } else {
-        const value = await prompts.text({
+        const value = await promptRuntime.text({
           message: prompt.message,
           placeholder: prompt.placeholder,
           validate: prompt.validate ? (v) => prompt.validate!(v ?? "") : undefined,
         })
-        if (prompts.isCancel(value)) throw new UI.CancelledError()
+        if (promptRuntime.isCancel(value)) throw new UI.CancelledError()
         inputs[prompt.key] = value
       }
     }
   }
 
   if (method.type === "oauth") {
-    const authorize = await method.authorize(inputs)
+    const authorization = await ProviderAuth.authorize({ providerID: provider, method: index, inputs })
+    if (!authorization) throw new Error(`Provider ${provider} method ${index} did not open an OAuth authorization`)
 
-    if (authorize.url) {
-      prompts.log.info("Go to: " + authorize.url)
+    if (authorization.url) {
+      promptRuntime.log.info("Go to: " + authorization.url)
     }
 
-    if (authorize.method === "auto") {
-      if (authorize.instructions) {
-        prompts.log.info(authorize.instructions)
+    if (authorization.method === "auto") {
+      if (authorization.instructions) {
+        promptRuntime.log.info(authorization.instructions)
       }
-      const spinner = prompts.spinner()
+      const spinner = promptRuntime.spinner()
       spinner.start("Waiting for authorization...")
-      const result = await authorize.callback()
-      if (result.type === "failed") {
+      try {
+        await ProviderAuth.callback({
+          providerID: provider,
+          method: index,
+          flowID: authorization.flowID,
+        })
+      } catch (error) {
         spinner.stop("Failed to authorize", 1)
+        throw error
       }
-      if (result.type === "success") {
-        const saveProvider = result.provider ?? provider
-        if ("refresh" in result) {
-          const { type: _, provider: __, refresh, access, expires, ...extraFields } = result
-          await Auth.set(saveProvider, {
-            type: "oauth",
-            refresh,
-            access,
-            expires,
-            ...extraFields,
-          })
-        }
-        if ("key" in result) {
-          await Auth.set(saveProvider, {
-            type: "api",
-            key: result.key,
-            metadata: result.metadata,
-          })
-        }
-        spinner.stop("Login successful")
-      }
+      spinner.stop("Login successful")
     }
 
-    if (authorize.method === "code") {
-      const code = await prompts.text({
+    if (authorization.method === "code") {
+      const code = await promptRuntime.text({
         message: "Paste the authorization code here: ",
         validate: (x) => (x && x.length > 0 ? undefined : "Required"),
       })
-      if (prompts.isCancel(code)) throw new UI.CancelledError()
-      const result = await authorize.callback(code)
-      if (result.type === "failed") {
-        prompts.log.error("Failed to authorize")
-      }
-      if (result.type === "success") {
-        const saveProvider = result.provider ?? provider
-        if ("refresh" in result) {
-          const { type: _, provider: __, refresh, access, expires, ...extraFields } = result
-          await Auth.set(saveProvider, {
-            type: "oauth",
-            refresh,
-            access,
-            expires,
-            ...extraFields,
-          })
-        }
-        if ("key" in result) {
-          await Auth.set(saveProvider, {
-            type: "api",
-            key: result.key,
-            metadata: result.metadata,
-          })
-        }
-        prompts.log.success("Login successful")
-      }
+      if (promptRuntime.isCancel(code)) throw new UI.CancelledError()
+      await ProviderAuth.callback({
+        providerID: provider,
+        method: index,
+        code,
+        flowID: authorization.flowID,
+      })
+      promptRuntime.log.success("Login successful")
     }
 
-    prompts.outro("Done")
+    promptRuntime.outro("Done")
     return true
   }
 
   if (method.type === "api") {
-    const key = await prompts.password({
+    const key = await promptRuntime.password({
       message: "Enter your API key",
       validate: (x) => (x && x.length > 0 ? undefined : "Required"),
     })
-    if (prompts.isCancel(key)) throw new UI.CancelledError()
-
-    const metadata = Object.keys(inputs).length ? { metadata: inputs } : {}
-    const authorizeApi = method.authorize
-    if (!authorizeApi) {
-      await Auth.set(provider, {
-        type: "api",
-        key,
-        ...metadata,
-      })
-      prompts.outro("Done")
-      return true
-    }
-
-    const result = await authorizeApi(inputs)
-    if (result.type === "failed") {
-      prompts.log.error("Failed to authorize")
-    }
-    if (result.type === "success") {
-      const saveProvider = result.provider ?? provider
-      const merged = { ...(metadata.metadata ?? {}), ...(result.metadata ?? {}) }
-      await Auth.set(saveProvider, {
-        type: "api",
-        key: result.key ?? key,
-        ...(Object.keys(merged).length ? { metadata: merged } : {}),
-      })
-      prompts.log.success("Login successful")
-    }
-    prompts.outro("Done")
+    if (promptRuntime.isCancel(key)) throw new UI.CancelledError()
+    await ProviderAuth.execute({ providerID: provider, method: index, inputs: { ...inputs, key } })
+    promptRuntime.log.success("Login successful")
+    promptRuntime.outro("Done")
     return true
   }
 

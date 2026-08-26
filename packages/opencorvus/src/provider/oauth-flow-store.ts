@@ -22,11 +22,12 @@ import { withSharedJsonFactLock } from "@/util/process-lock"
  * rather than a generic "nothing pending".
  */
 export namespace ProviderOAuthFlowStore {
+  export const FlowID = z.string().trim().min(1)
   export const FlowState = z.enum(["pending", "superseded", "consumed", "failed"])
   export type FlowState = z.infer<typeof FlowState>
 
   export const Flow = z.object({
-    id: z.string().min(1),
+    id: FlowID,
     providerID: z.string().min(1),
     scope: z.enum(["project", "global"]),
     method: z.number().int().nonnegative(),
@@ -125,12 +126,14 @@ export namespace ProviderOAuthFlowStore {
     return flow
   }
 
-  /** The pending occurrence for one provider and scope, when one exists. */
-  export async function pendingFor(providerID: string, scope: "project" | "global"): Promise<Flow | undefined> {
-    const data = await read()
-    return Object.values(data).find(
-      (flow) => flow.state === "pending" && flow.providerID === providerID && flow.scope === scope,
-    )
+  export const TestHooks = {
+    /** Observe the pending occurrence without adding a production fallback lookup path. */
+    async pendingFor(providerID: string, scope: "project" | "global"): Promise<Flow | undefined> {
+      const data = await read()
+      return Object.values(data).find(
+        (flow) => flow.state === "pending" && flow.providerID === providerID && flow.scope === scope,
+      )
+    },
   }
 
   export async function get(id: string): Promise<Flow | undefined> {

@@ -29,9 +29,11 @@ export namespace ProviderAuth {
   const projectState = createInstanceState(() => Plugin.list().then(createState), undefined, "provider-auth")
   const globalState = lazy(() => Plugin.listGlobalProviderHooks().then(createState))
   let globalStateOverrideForTest: ReturnType<typeof createState> | undefined
+  let projectStateOverrideForTest: ReturnType<typeof createState> | undefined
 
   function state(scope: Scope = "project") {
     if (scope === "global" && globalStateOverrideForTest) return globalStateOverrideForTest
+    if (scope === "project" && projectStateOverrideForTest) return projectStateOverrideForTest
     return scope === "global" ? globalState() : projectState()
   }
 
@@ -58,6 +60,15 @@ export namespace ProviderAuth {
       return {
         [Symbol.dispose]() {
           if (globalStateOverrideForTest === override) globalStateOverrideForTest = undefined
+        },
+      }
+    },
+    installProjectAuthHooksForTest(hooks: Parameters<typeof createState>[0]): Disposable {
+      const override = createState(hooks)
+      projectStateOverrideForTest = override
+      return {
+        [Symbol.dispose]() {
+          if (projectStateOverrideForTest === override) projectStateOverrideForTest = undefined
         },
       }
     },
@@ -93,7 +104,7 @@ export namespace ProviderAuth {
       method: z.union([z.literal("auto"), z.literal("code")]),
       instructions: z.string(),
       /** The durable flow occurrence this authorization opened. */
-      flowID: z.string(),
+      flowID: ProviderOAuthFlowStore.FlowID,
     })
     .meta({
       ref: "ProviderAuthAuthorization",
@@ -107,28 +118,36 @@ export namespace ProviderAuth {
       inputs: z.record(z.string(), z.string()).optional(),
       scope: Scope.optional(),
     }),
-    async (input): Promise<Authorization | undefined> => {
+    async (input): Promise<Authorization> => {
       const auth = await state(input.scope).then((s) => s.methods[input.providerID])
+      if (!auth) throw new ProviderNotFound({ providerID: input.providerID })
       const method = auth.methods[input.method]
-      if (method.type === "oauth") {
-        const result = await method.authorize(input.inputs)
-        // The durable occurrence supersedes any pending flow for this
-        // provider and scope — an explicit fact of the old flow, not a silent
-        // replacement — and the live executor is held under the occurrence's
-        // own identity.
-        const flow = await ProviderOAuthFlowStore.open({
+      if (!method) throw new MethodNotFound({ providerID: input.providerID, method: input.method })
+      if (method.type !== "oauth") {
+        throw new MethodAuthorizationTypeMismatch({
           providerID: input.providerID,
-          scope: input.scope ?? "project",
           method: input.method,
-          inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
+          expected: "oauth",
+          actual: method.type,
         })
-        await holdExecutor(input.scope ?? "project", flow.id, result)
-        return {
-          url: result.url,
-          method: result.method,
-          instructions: result.instructions,
-          flowID: flow.id,
-        }
+      }
+      const result = await method.authorize(input.inputs)
+      // The durable occurrence supersedes any pending flow for this
+      // provider and scope — an explicit fact of the old flow, not a silent
+      // replacement — and the live executor is held under the occurrence's
+      // own identity.
+      const flow = await ProviderOAuthFlowStore.open({
+        providerID: input.providerID,
+        scope: input.scope ?? "project",
+        method: input.method,
+        inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
+      })
+      await holdExecutor(input.scope ?? "project", flow.id, result)
+      return {
+        url: result.url,
+        method: result.method,
+        instructions: result.instructions,
+        flowID: flow.id,
       }
     },
   )
@@ -138,17 +157,13 @@ export namespace ProviderAuth {
       providerID: z.string(),
       method: z.number(),
       code: z.string().optional(),
-      /** The exact flow this code belongs to. Omitted, the current pending
-       *  occurrence for the provider and scope is resolved — and must still
-       *  match the declared method. */
-      flowID: z.string().optional(),
+      /** The exact flow this code belongs to. */
+      flowID: ProviderOAuthFlowStore.FlowID,
       scope: Scope.optional(),
     }),
     async (input) => {
       const scope = input.scope ?? "project"
-      const flow = input.flowID
-        ? await ProviderOAuthFlowStore.get(input.flowID)
-        : await ProviderOAuthFlowStore.pendingFor(input.providerID, scope)
+      const flow = await ProviderOAuthFlowStore.get(input.flowID)
       if (!flow || flow.state === "superseded") throw new OauthMissing({ providerID: input.providerID })
       if (flow.state !== "pending") {
         throw new OauthFlowAlreadySettled({ providerID: input.providerID, flowID: flow.id, state: flow.state })
@@ -211,8 +226,9 @@ export namespace ProviderAuth {
             state: settled?.state ?? "superseded",
           })
         }
+        const credentialProvider = result.provider ?? input.providerID
         if ("key" in result) {
-          await Auth.set(input.providerID, {
+          await Auth.set(credentialProvider, {
             type: "api",
             key: result.key,
             metadata: result.metadata,
@@ -231,7 +247,7 @@ export namespace ProviderAuth {
           if (result.enterpriseUrl) {
             info.enterpriseUrl = result.enterpriseUrl
           }
-          await Auth.set(input.providerID, info)
+          await Auth.set(credentialProvider, info)
         }
         return
       }
@@ -337,44 +353,40 @@ export namespace ProviderAuth {
       const method = auth.methods[input.method]
       if (!method) throw new MethodNotFound({ providerID: input.providerID, method: input.method })
 
-      if (method.type === "api") {
-        if (method.authorize) {
-          const result = await method.authorize(input.inputs)
-          if (result.type === "success") {
-            await Auth.set(result.provider ?? input.providerID, {
-              type: "api",
-              key: result.key,
-              metadata: result.metadata,
-            })
-            return
-          }
-          throw new AuthExecuteFailed({})
-        }
-        // API methods with provider-specific prompts use an explicit `key`
-        // field; every other collected value is persisted as provider metadata.
-        if (!input.inputs) throw new AuthExecuteFailed({})
-        const key = input.inputs.key
-        if (!key) throw new AuthExecuteFailed({})
-        const { key: _, ...metadata } = input.inputs
-        await Auth.set(input.providerID, {
-          type: "api",
-          key,
-          metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
+      if (method.type !== "api") {
+        throw new MethodExecutionTypeMismatch({
+          providerID: input.providerID,
+          method: input.method,
+          expected: "api",
+          actual: method.type,
         })
-        return
       }
 
-      if (method.type === "oauth") {
+      if (method.authorize) {
         const result = await method.authorize(input.inputs)
-        const flow = await ProviderOAuthFlowStore.open({
-          providerID: input.providerID,
-          scope: input.scope ?? "project",
-          method: input.method,
-          inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
-        })
-        await holdExecutor(input.scope ?? "project", flow.id, result)
-        return
+        if (result.type === "success") {
+          const { key: _, ...inputMetadata } = input.inputs ?? {}
+          const metadata = { ...inputMetadata, ...(result.metadata ?? {}) }
+          await Auth.set(result.provider ?? input.providerID, {
+            type: "api",
+            key: result.key,
+            metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
+          })
+          return
+        }
+        throw new AuthExecuteFailed({})
       }
+      // API methods with provider-specific prompts use an explicit `key`
+      // field; every other collected value is persisted as provider metadata.
+      if (!input.inputs) throw new AuthExecuteFailed({})
+      const key = input.inputs.key
+      if (!key) throw new AuthExecuteFailed({})
+      const { key: _, ...metadata } = input.inputs
+      await Auth.set(input.providerID, {
+        type: "api",
+        key,
+        metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
+      })
     },
   )
 
@@ -398,6 +410,24 @@ export namespace ProviderAuth {
   export const MethodNotFound = NamedError.create(
     "ProviderAuthMethodNotFound",
     z.object({ providerID: z.string(), method: z.number() }),
+  )
+  export const MethodExecutionTypeMismatch = NamedError.create(
+    "ProviderAuthMethodExecutionTypeMismatch",
+    z.object({
+      providerID: z.string(),
+      method: z.number(),
+      expected: z.literal("api"),
+      actual: z.literal("oauth"),
+    }),
+  )
+  export const MethodAuthorizationTypeMismatch = NamedError.create(
+    "ProviderAuthMethodAuthorizationTypeMismatch",
+    z.object({
+      providerID: z.string(),
+      method: z.number(),
+      expected: z.literal("oauth"),
+      actual: z.literal("api"),
+    }),
   )
   export const AuthExecuteFailed = NamedError.create("ProviderAuthExecuteFailed", z.object({}))
 
