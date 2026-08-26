@@ -335,8 +335,11 @@ export namespace Session {
       if (!original) throw new Error("session not found")
       const title = getForkedTitle(original.title)
       // Forking preserves the original physical Session kind while creating a
-      // new Session identity and parent edge.
-      const session = await createNext({
+      // new Session identity and parent edge. The target Session and its
+      // complete bounded transcript commit in ONE transaction: an interrupted
+      // fork leaves nothing visible — no child Session carrying a transcript
+      // prefix — so a retry simply runs a whole new fork.
+      const prepared = await prepareNext({
         directory: Instance.directory,
         parentID: input.sessionID,
         kind: original.kind,
@@ -344,6 +347,7 @@ export namespace Session {
       })
       const msgs = await messages({ sessionID: input.sessionID })
       const idMap = new Map<string, string>()
+      const clones: { info: Message.Info; parts: Message.Part[] }[] = []
 
       for (const msg of msgs) {
         if (input.messageID && msg.info.id >= input.messageID) break
@@ -354,7 +358,7 @@ export namespace Session {
         const { orderKey: _clonedMessageOrderKey, ...messageInfo } = msg.info
         const clonedInfo = {
           ...messageInfo,
-          sessionID: session.id,
+          sessionID: prepared.id,
           id: newID,
           ...(parentID && { parentID }),
         } as Message.Info
@@ -364,12 +368,19 @@ export namespace Session {
             ...partInfo,
             id: Identifier.ascending("part"),
             messageID: clonedInfo.id,
-            sessionID: session.id,
+            sessionID: prepared.id,
           } as Message.Part
         })
-        await persistMessage({ info: clonedInfo, parts: clonedParts })
+        clones.push({ info: clonedInfo, parts: clonedParts })
       }
-      return session
+
+      return Database.transaction((db) => {
+        const session = persistPreparedNextInTransaction(db, prepared)
+        for (const clone of clones) {
+          persistMessageWithCommitInTransaction(clone, () => undefined)
+        }
+        return session
+      })
     },
   )
 
