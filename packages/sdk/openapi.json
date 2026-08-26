@@ -2307,12 +2307,6 @@
             "$ref": "#/components/schemas/Event.interactive-artifact.mcp-app.lifecycle.changed"
           },
           {
-            "$ref": "#/components/schemas/Event.lsp.client.diagnostics"
-          },
-          {
-            "$ref": "#/components/schemas/Event.lsp.updated"
-          },
-          {
             "$ref": "#/components/schemas/Event.mailbox.acknowledged"
           },
           {
@@ -3267,51 +3261,6 @@
           },
           "type": {
             "const": "interactive-artifact.mcp-app.lifecycle.changed",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
-      "Event.lsp.client.diagnostics": {
-        "properties": {
-          "properties": {
-            "properties": {
-              "path": {
-                "type": "string"
-              },
-              "serverID": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "serverID",
-              "path"
-            ],
-            "type": "object"
-          },
-          "type": {
-            "const": "lsp.client.diagnostics",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
-      "Event.lsp.updated": {
-        "properties": {
-          "properties": {
-            "properties": {},
-            "type": "object"
-          },
-          "type": {
-            "const": "lsp.updated",
             "type": "string"
           }
         },
@@ -10829,38 +10778,6 @@
         },
         "type": "object"
       },
-      "LSPStatus": {
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "root": {
-            "type": "string"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "const": "connected",
-                "type": "string"
-              },
-              {
-                "const": "error",
-                "type": "string"
-              }
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "root",
-          "status"
-        ],
-        "type": "object"
-      },
       "LineChannelConfig": {
         "additionalProperties": false,
         "properties": {
@@ -17171,37 +17088,6 @@
         "required": [
           "name",
           "data"
-        ],
-        "type": "object"
-      },
-      "Symbol": {
-        "properties": {
-          "kind": {
-            "type": "number"
-          },
-          "location": {
-            "properties": {
-              "range": {
-                "$ref": "#/components/schemas/Range"
-              },
-              "uri": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "uri",
-              "range"
-            ],
-            "type": "object"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "kind",
-          "location"
         ],
         "type": "object"
       },
@@ -57263,53 +57149,6 @@
         ]
       }
     },
-    "/find/symbol": {
-      "get": {
-        "description": "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
-        "operationId": "find.symbols",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/Symbol"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "Symbols"
-          }
-        },
-        "summary": "Find symbols",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.find.symbols({\n  ...\n})"
-          }
-        ]
-      }
-    },
     "/formatter": {
       "get": {
         "description": "Get formatter status",
@@ -67637,45 +67476,6 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.log.tail({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/lsp": {
-      "get": {
-        "description": "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
-        "operationId": "lsp.status",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/LSPStatus"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "LSP server status"
-          }
-        },
-        "summary": "Get LSP status",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.lsp.status({\n  ...\n})"
           }
         ]
       }

@@ -7,7 +7,6 @@ import { Global } from "@/global"
 import { Vcs } from "@/project/vcs"
 import { streamCommitMessage } from "@/project/vcs-commit-message"
 import { Instance } from "@/project/instance"
-import { LSP } from "@/lsp"
 import { Command } from "@/command"
 import { Format } from "@/format"
 import { Log } from "@/util/log"
@@ -810,27 +809,6 @@ export function AppRoutes(root: Hono) {
       }),
       async (c) => {
         return c.json(await PrimaryAssistantRegistry.list())
-      },
-    )
-    .get(
-      "/lsp",
-      describeRoute({
-        summary: "Get LSP status",
-        description: "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
-        operationId: "lsp.status",
-        responses: {
-          200: {
-            description: "LSP server status",
-            content: {
-              "application/json": {
-                schema: resolver(LSP.Status.array()),
-              },
-            },
-          },
-        },
-      }),
-      async (c) => {
-        return c.json(await LSP.status())
       },
     )
     .get(

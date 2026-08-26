@@ -811,8 +811,6 @@ export type Event =
   | EventInteractionRequested
   | EventInteractionResolved
   | EventInteractiveArtifactMcpAppLifecycleChanged
-  | EventLspClientDiagnostics
-  | EventLspUpdated
   | EventMailboxAcknowledged
   | EventMailboxMessage
   | EventMcpAuthRequired
@@ -1094,21 +1092,6 @@ export type EventInteractiveArtifactMcpAppLifecycleChanged = {
     sessionID: string
   }
   type: "interactive-artifact.mcp-app.lifecycle.changed"
-}
-
-export type EventLspClientDiagnostics = {
-  properties: {
-    path: string
-    serverID: string
-  }
-  type: "lsp.client.diagnostics"
-}
-
-export type EventLspUpdated = {
-  properties: {
-    [key: string]: unknown
-  }
-  type: "lsp.updated"
 }
 
 export type EventMailboxAcknowledged = {
@@ -2920,13 +2903,6 @@ export type InteractiveArtifactRecord = {
 
 export type JsonSchema = {
   [key: string]: unknown
-}
-
-export type LspStatus = {
-  id: string
-  name: string
-  root: string
-  status: "connected" | "error"
 }
 
 export type LineChannelConfig = {
@@ -4997,15 +4973,6 @@ export type StructuredOutputPayloadError = {
     reason: string
   }
   name: "StructuredOutputPayloadError"
-}
-
-export type Symbol = {
-  kind: number
-  location: {
-    range: Range
-    uri: string
-  }
-  name: string
 }
 
 export type SymbolSource = {
@@ -15722,28 +15689,6 @@ export type FindFilesResponses = {
 
 export type FindFilesResponse = FindFilesResponses[keyof FindFilesResponses]
 
-export type FindSymbolsData = {
-  body?: never
-  path?: never
-  query: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-    query: string
-  }
-  url: "/find/symbol"
-}
-
-export type FindSymbolsResponses = {
-  /**
-   * Symbols
-   */
-  200: Array<Symbol>
-}
-
-export type FindSymbolsResponse = FindSymbolsResponses[keyof FindSymbolsResponses]
-
 export type FormatterStatusData = {
   body?: never
   path?: never
@@ -19407,27 +19352,6 @@ export type LogTailResponses = {
 }
 
 export type LogTailResponse = LogTailResponses[keyof LogTailResponses]
-
-export type LspStatusData = {
-  body?: never
-  path?: never
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/lsp"
-}
-
-export type LspStatusResponses = {
-  /**
-   * LSP server status
-   */
-  200: Array<LspStatus>
-}
-
-export type LspStatusResponse = LspStatusResponses[keyof LspStatusResponses]
 
 export type MailboxDeleteManyData = {
   body: {

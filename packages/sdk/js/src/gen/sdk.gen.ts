@@ -196,7 +196,6 @@ import type {
   FileWriteResponses,
   FindFilesErrors,
   FindFilesResponses,
-  FindSymbolsResponses,
   FindTextErrors,
   FindTextResponses,
   FormatterStatusResponses,
@@ -297,7 +296,6 @@ import type {
   LogReadResponses,
   LogTailErrors,
   LogTailResponses,
-  LspStatusResponses,
   MailboxAcknowledgeErrors,
   MailboxAcknowledgeResponses,
   MailboxDeleteErrors,
@@ -4435,36 +4433,6 @@ export class Find extends HeyApiClient {
       ...params,
     })
   }
-
-  /**
-   * Find symbols
-   *
-   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
-   */
-  public symbols<ThrowOnError extends boolean = false>(
-    parameters: {
-      directory?: string
-      query: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "query", key: "directory" },
-            { in: "query", key: "query" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).get<FindSymbolsResponses, unknown, ThrowOnError>({
-      url: "/find/symbol",
-      ...options,
-      ...params,
-    })
-  }
 }
 
 export class Formatter extends HeyApiClient {
@@ -8579,27 +8547,6 @@ export class Log extends HeyApiClient {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "n" }] }])
     return (options?.client ?? this.client).get<LogTailResponses, LogTailErrors, ThrowOnError>({
       url: "/log/tail",
-      ...options,
-      ...params,
-    })
-  }
-}
-
-export class Lsp extends HeyApiClient {
-  /**
-   * Get LSP status
-   *
-   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
-   */
-  public status<ThrowOnError extends boolean = false>(
-    parameters?: {
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<LspStatusResponses, unknown, ThrowOnError>({
-      url: "/lsp",
       ...options,
       ...params,
     })
@@ -14007,11 +13954,6 @@ export class OpenCorvusClient extends HeyApiClient {
   private _log?: Log
   get log(): Log {
     return (this._log ??= new Log({ client: this.client }))
-  }
-
-  private _lsp?: Lsp
-  get lsp(): Lsp {
-    return (this._lsp ??= new Lsp({ client: this.client }))
   }
 
   private _mailbox?: Mailbox
