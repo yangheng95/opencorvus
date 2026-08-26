@@ -1315,7 +1315,20 @@ export namespace Session {
         .from(MessageTable)
         .where(eq(MessageTable.id, msg.id))
         .get()
-      const persistedMessage = messageWithPersistedCreated(msg, existing?.time_created ?? msg.time.created)
+      const latestSessionMessage = existing
+        ? undefined
+        : db
+            .select({ timeCreated: MessageTable.time_created })
+            .from(MessageTable)
+            .where(eq(MessageTable.session_id, msg.sessionID))
+            .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+            .limit(1)
+            .get()
+      const persistedCreated = existing?.time_created ?? Math.max(
+        msg.time.created,
+        latestSessionMessage ? latestSessionMessage.timeCreated + 1 : msg.time.created,
+      )
+      const persistedMessage = messageWithPersistedCreated(msg, persistedCreated)
       let allowAcceptedActivitySettlement = false
       if (existing) {
         const prior = Message.Info.parse({
@@ -1535,10 +1548,10 @@ export namespace Session {
         const { finish: _finish, error: _error, ...initialAssistant } = input.info
         initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
       }
-      upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
+      const initialPersisted = upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
       beforeVisibilityEffects?.()
       if (!existing) {
-        const createdInfo = messageWithPersistedCreated(input.info, input.info.time.created)
+        const createdInfo = messageWithPersistedCreated(input.info, initialPersisted.time.created)
         Bus.publishOwnedInTransaction(Message.Event.Created, { info: createdInfo })
       }
       const writtenParts: Message.Part[] = []
@@ -1546,18 +1559,15 @@ export namespace Session {
         const written = updatePartRow(part, { publish: false })
         if (written.wrotePart) writtenParts.push(written.outputPart)
       }
-      upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
-      const messageOrderKey = messageWithPersistedCreated(
-        input.info,
-        existing?.timeCreated ?? input.info.time.created,
-      ).orderKey
+      const finalPersisted = upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
+      const messageOrderKey = finalPersisted.orderKey
       for (const part of writtenParts) {
         Bus.publishOwnedInTransaction(Message.Event.PartUpdated, {
           orderKey: messageOrderKey,
           part: part as Message.VisiblePart,
         })
       }
-      ProjectMemory.captureMessageInTransaction(db, { info: input.info, parts: input.parts })
+      ProjectMemory.captureMessageInTransaction(db, { info: finalPersisted, parts: input.parts })
       for (const control of input.controls ?? []) SessionControl.createInTransaction(db, control)
       for (const patch of input.metadataPatches ?? []) mergeMetadataInTransaction(db, patch)
       if (input.touchSessionID) touch(input.touchSessionID)
@@ -1872,7 +1882,7 @@ export namespace Session {
         throw new HostProcessingFaultError(`Session.updatePart: part ${id} orderKey drift between input and persisted row`)
       }
     }
-    const time = Date.now()
+    const requestedTime = Date.now()
     let outputPart = part
     let messageOrderKey = ""
     const publishPartUpdated = () =>
@@ -1889,6 +1899,7 @@ export namespace Session {
         .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
         .get()
       if (!message) throw new NotFoundError({ message: `Message not found: ${messageID}` })
+      const time = Math.max(requestedTime, message.timeCreated)
       messageOrderKey = timelineMessageOrderKey({
         info: {
           id: messageID,

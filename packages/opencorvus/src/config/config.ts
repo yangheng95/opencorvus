@@ -1634,6 +1634,19 @@ export namespace Config {
     })
     .strict()
     .superRefine((config, ctx) => {
+      const computer = config.mcp?.[ComputerMCPBuiltin.ServerName]
+      if (computer) {
+        try {
+          ComputerMCPBuiltin.configuredDeclaration(computer)
+        } catch (error) {
+          if (!ComputerMCPBuiltin.ConfigurationError.isInstance(error)) throw error
+          ctx.addIssue({
+            code: "custom",
+            path: ["mcp", ComputerMCPBuiltin.ServerName, "type"],
+            message: error.data.message,
+          })
+        }
+      }
       for (const [agentID, agentConfig] of Object.entries(config.agent ?? {})) {
         if (!agentConfig) continue
         const role = AgentRoleContract.get(agentID)

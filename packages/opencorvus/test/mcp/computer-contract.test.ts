@@ -568,7 +568,7 @@ describe("Computer Use exact control contract", () => {
   })
 
   test(
-    "projects explicitly declared Computer tools through an Expert Squad harness with canonical permissions",
+    "projects enabled Computer tools and reports the disabled Expert Squad configuration contract",
     { timeout: 30_000 },
     async () => {
       await using project = await memoryProject()
@@ -610,6 +610,29 @@ describe("Computer Use exact control contract", () => {
               virtual_workflows: {},
             }),
           })
+          const disabledConfig = Config.Info.parse({
+            prompt_profile: { active: profileID },
+            mcp: {
+              [ComputerMCPBuiltin.ServerName]: {
+                ...ComputerMCPBuiltin.localConfig(),
+                enabled: false,
+              },
+            },
+          })
+          await expect(
+            PromptProfileResolver.resolveSchedulerCapability({
+              projectDirectory: project.path,
+              config: disabledConfig,
+            }),
+          ).rejects.toMatchObject({
+            name: "ComputerMCPConfigurationError",
+            data: {
+              message: "Configured MCP server computer is disabled.",
+              reason: "disabled",
+              serverName: ComputerMCPBuiltin.ServerName,
+            },
+          })
+
           const config = Config.Info.parse({
             prompt_profile: { active: profileID },
             // The builtin Computer provider is a configured declaration, the

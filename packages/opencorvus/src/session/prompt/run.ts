@@ -10,6 +10,7 @@ import {
   claimPreparedUserMessageRuntime,
   materializeUserMessage,
   persistMaterializedUserMessage,
+  persistMaterializedUserMessageInTransaction,
   prepareUserMessage,
   type PersistedUserMessageReceipt,
   type PreparedUserMessageRuntimeClaim,
@@ -18,11 +19,75 @@ import {
 import type { PromptInput } from "./schema"
 import type { Message } from "../message"
 import { setSessionTitleFromFirstUserMessage } from "../first-message-title"
+import { Database } from "@/storage/db"
 
 export type PromptRuntimeHooks = UserMessagePersistenceHooks & {
   beforeLoop?: (signal?: AbortSignal) => void | Promise<void>
   signal?: AbortSignal
   runtimeClaim?: PreparedUserMessageRuntimeClaim
+}
+
+export type NoReplyUserMessageSequenceEntry = {
+  input: PromptInput
+  hooks?: Omit<UserMessagePersistenceHooks, "prepared">
+}
+
+/**
+ * Publish a bounded sequence of real user Messages as one durable visibility
+ * cut. This is reserved for host-authored participant sequences that must be
+ * visible together before a runtime wake is allowed to start generation.
+ */
+export async function persistNoReplyUserMessageSequence(
+  entries: readonly NoReplyUserMessageSequenceEntry[],
+): Promise<Message.WithParts[]> {
+  if (entries.length === 0) throw new Error("No-reply user Message sequence must not be empty")
+  const sessionID = entries[0]!.input.sessionID
+  for (const entry of entries) {
+    if (entry.input.sessionID !== sessionID) {
+      throw new Error("No-reply user Message sequence must target exactly one Session")
+    }
+    if (entry.input.noReply !== true) {
+      throw new Error(`No-reply user Message sequence entry for Session ${sessionID} must set noReply=true`)
+    }
+    if (entry.input.tools && Object.keys(entry.input.tools).length > 0) {
+      throw new Error(`No-reply user Message sequence cannot mutate Session capability rules`)
+    }
+  }
+
+  const prepared = [await prepareUserMessage(entries[0]!.input)]
+  using runtimeClaim = claimPreparedUserMessageRuntime(prepared[0]!)
+  for (const entry of entries.slice(1)) prepared.push(await prepareUserMessage(entry.input))
+
+  const materialized: Awaited<ReturnType<typeof materializeUserMessage>>[] = []
+  for (let index = 0; index < entries.length; index++) {
+    materialized.push(await materializeUserMessage(entries[index]!.input, { prepared: prepared[index]! }))
+  }
+
+  const persisted = Database.immediateTransaction(() =>
+    materialized.map((message, index) => {
+      const hooks = entries[index]!.hooks
+      return persistMaterializedUserMessageInTransaction(message, {
+        ...hooks,
+        commitBundle: hooks?.commitBundle ?? (() => undefined),
+      })
+    }),
+  )
+  const messages: Message.WithParts[] = []
+  for (let index = 0; index < persisted.length; index++) {
+    const receipt = await persisted[index]!.complete()
+    messages.push(consumePersistedUserMessageReceipt(entries[index]!.input, receipt))
+  }
+
+  await clearRewindCursorForSession(sessionID)
+  for (const message of messages) {
+    await setSessionTitleFromFirstUserMessage({
+      sessionID,
+      messageID: message.info.id,
+      parts: message.parts,
+    })
+  }
+  await Session.touch(sessionID)
+  return messages
 }
 
 async function continueUserMessage(

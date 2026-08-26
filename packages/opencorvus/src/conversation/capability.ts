@@ -349,11 +349,13 @@ export namespace ConversationCapability {
     // projection a second authority that could disagree with what
     // configuration, assignment and status all reported.
     const configured = config.mcp?.[ComputerMCPBuiltin.ServerName]
-    if (!configured || configured.enabled === false || configured.type !== "local") return ordinaryTools
+    if (!configured) return ordinaryTools
+    const declaration = ComputerMCPBuiltin.configuredDeclaration(configured)
+    if (declaration.status === "disabled") return ordinaryTools
 
     const owner = computerConnectionOwner(sessionID)
     const mcp = ComputerMCPBuiltin.withRuntimeScope(
-      configured,
+      declaration.config,
       owner.id,
       ComputerHostRuntime.adapter({ runtimeScope: owner.id }),
     )

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-26-mission-task-causal-order-and-close-convergence.md](2026-08-26-mission-task-causal-order-and-close-convergence.md) makes fresh Task creator/control publication one atomic Session cut, gives every Session Message a persisted monotonic causal frontier, and re-reduces Mission closure after lifecycle-lease acquisition before any physical close.
+
 - [2026-08-26-session-stream-message-cutover-convergence.md](2026-08-26-session-stream-message-cutover-convergence.md) closes first-connect and reconnect gaps for newly created messages in Work, Chat, Mission, and ordinary Sessions by merging a subscribe-before-snapshot handshake through the canonical conversation writer.
 
 - [2026-08-26-extensible-inspect-benchmark-framework.md](2026-08-26-extensible-inspect-benchmark-framework.md) evolves the OpenCorvus Inspect adapter into a versioned benchmark registry with deterministic manifests, frozen scorer provenance, and attributed Apodex BrowseComp and FrontierScience integrations without importing a second runner or Agent runtime.

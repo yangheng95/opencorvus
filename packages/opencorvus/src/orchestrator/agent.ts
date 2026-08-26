@@ -864,19 +864,47 @@ export namespace Orchestrator {
               `Fresh Orchestrator creator Message cannot be materialized while Session ${agentSession.id} has a prompt owner`,
             )
           }
-          await SessionPrompt.prompt({
-            sessionID: agentSession.id,
-            author: taskCreator.actor,
-            model: { providerID: model.providerID, modelID: model.api.id },
-            agent: "orchestrator",
-            byteMaterializationProjectID: agentSession.projectID,
-            noReply: true,
-            parts: creatorPartsWithIds,
-          })
+          if (!currentControlMessage) {
+            throw new Error(`Fresh typed Orchestrator creator requires an exact control occurrence`)
+          }
+          assertSessionCreatorMessageAbsent(agentSession.id)
+          assertOrchestratorControlIdentityUnoccupied(currentControlMessage)
+          const published = await SessionPrompt.persistNoReplySequence([
+            {
+              input: {
+                sessionID: agentSession.id,
+                author: taskCreator.actor,
+                model: { providerID: model.providerID, modelID: model.api.id },
+                agent: "orchestrator",
+                byteMaterializationProjectID: agentSession.projectID,
+                noReply: true,
+                parts: creatorPartsWithIds,
+              },
+              hooks: {
+                preflightBundle: () => assertSessionCreatorMessageAbsent(agentSession.id),
+              },
+            },
+            {
+              input: orchestratorControlPromptInput({
+                session: agentSession,
+                model: { providerID: model.providerID, modelID: model.api.id },
+                control: currentControlMessage,
+              }),
+              hooks: {
+                preflightBundle: () => assertOrchestratorControlIdentityUnoccupied(currentControlMessage),
+                beforeVisibilityEffects: () =>
+                  Database.effect(() => {
+                    SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+                    runtimeWakeArmed = true
+                  }),
+              },
+            },
+          ])
+          assertExactOrchestratorControlMessage(published[1]!, currentControlMessage)
         }
         schedulerMcpOwnerTransferred = true
         promptInFlight = true
-        if (currentControlMessage) {
+        if (currentControlMessage && !materializeCreatorBeforeTypedControl) {
           const materialized = await materializeOrReuseCurrentOrchestratorControlMessage({
             session: agentSession,
             model: { providerID: model.providerID, modelID: model.api.id },
@@ -1203,17 +1231,28 @@ export namespace Orchestrator {
 }
 
 async function sessionHasCreatorMessage(sessionID: string): Promise<boolean> {
-  for await (const item of MessageStore.stream(sessionID)) {
-    if (item.info.role !== "user") continue
-    const extra = item.info.extra as
-      | {
-          task_root_message?: unknown
-          orchestrator_control_ingress?: unknown
-        }
-      | undefined
-    if (!extra?.task_root_message && !extra?.orchestrator_control_ingress) return true
+  return Database.use((db) => hasSessionCreatorMessage(db, sessionID))
+}
+
+function hasSessionCreatorMessage(db: Database.TxOrDb, sessionID: string): boolean {
+  const rows = db
+    .select({ data: MessageTable.data })
+    .from(MessageTable)
+    .where(eq(MessageTable.session_id, sessionID))
+    .all()
+  return rows.some((row) => {
+    const info = row.data as {
+      role?: string
+      extra?: { task_root_message?: unknown; orchestrator_control_ingress?: unknown }
+    }
+    return info.role === "user" && !info.extra?.task_root_message && !info.extra?.orchestrator_control_ingress
+  })
+}
+
+function assertSessionCreatorMessageAbsent(sessionID: string): void {
+  if (Database.use((db) => hasSessionCreatorMessage(db, sessionID))) {
+    throw new Error(`Orchestrator Session ${sessionID} already has a creator Message`)
   }
-  return false
 }
 
 export function orchestratorUserText(task: Pick<TaskRow, "request"> & Partial<Pick<TaskRow, "id">>): string {
@@ -1385,35 +1424,78 @@ export function currentOrchestratorControlMessage(
   }
 }
 
+function orchestratorControlPromptInput(input: {
+  session: Session.Info
+  model: { providerID: string; modelID: string }
+  control: CurrentOrchestratorControlMessage
+}): SessionPrompt.PromptInput {
+  return {
+    sessionID: input.session.id,
+    messageID: input.control.messageID,
+    author: "orchestrator",
+    model: input.model,
+    agent: "orchestrator",
+    byteMaterializationProjectID: input.session.projectID,
+    noReply: true,
+    extra: input.control.extra,
+    parts: [
+      {
+        id: input.control.partID,
+        type: "text",
+        text: input.control.text,
+        kind: "control",
+        source: "system",
+      },
+    ],
+  }
+}
+
+function assertOrchestratorControlIdentityUnoccupied(control: CurrentOrchestratorControlMessage): void {
+  const messageRow = Database.use((db) =>
+    db.select().from(MessageTable).where(eq(MessageTable.id, control.messageID)).get(),
+  )
+  const partRow = Database.use((db) =>
+    db.select().from(PartTable).where(eq(PartTable.id, control.partID)).get(),
+  )
+  if (!messageRow && !partRow) return
+  throw new OrchestratorControlIdentityConflictError({
+    message: `Orchestrator control occurrence for ingress ${control.extra.orchestrator_control_ingress.ingress_id} is already occupied.`,
+    wakeID: control.extra.orchestrator_control_ingress.ingress_id,
+  })
+}
+
+function assertExactOrchestratorControlMessage(
+  existing: Message.WithParts,
+  control: CurrentOrchestratorControlMessage,
+): void {
+  const part = existing.parts[0]
+  const valid =
+    existing.info.role === "user" &&
+    existing.info.author === "orchestrator" &&
+    existing.info.agent === "orchestrator" &&
+    isDeepStrictEqual(existing.info.extra, control.extra) &&
+    existing.parts.length === 1 &&
+    part?.id === control.partID &&
+    part.type === "text" &&
+    part.text === control.text &&
+    part.kind === "control" &&
+    part.source === "system" &&
+    part.metadata === undefined
+  if (valid) return
+  throw new OrchestratorControlIdentityConflictError({
+    message:
+      `Orchestrator control Message ${control.messageID} does not match exact ingress ` +
+      `${control.extra.orchestrator_control_ingress.ingress_id}`,
+    wakeID: control.extra.orchestrator_control_ingress.ingress_id,
+  })
+}
+
 export async function materializeOrReuseCurrentOrchestratorControlMessage(input: {
   session: Session.Info
   model: { providerID: string; modelID: string }
   control: CurrentOrchestratorControlMessage
   beforeVisibilityEffects?: () => void
 }): Promise<"created" | "reused"> {
-  const assertExact = (existing: Message.WithParts) => {
-    const part = existing.parts[0]
-    const valid =
-      existing.info.role === "user" &&
-      existing.info.author === "orchestrator" &&
-      existing.info.agent === "orchestrator" &&
-      isDeepStrictEqual(existing.info.extra, input.control.extra) &&
-      existing.parts.length === 1 &&
-      part?.id === input.control.partID &&
-      part.type === "text" &&
-      part.text === input.control.text &&
-      part.kind === "control" &&
-      part.source === "system" &&
-      part.metadata === undefined
-    if (!valid) {
-      throw new OrchestratorControlIdentityConflictError({
-        message:
-          `Orchestrator control Message ${input.control.messageID} does not match exact ingress ` +
-          `${input.control.extra.orchestrator_control_ingress.ingress_id}`,
-        wakeID: input.control.extra.orchestrator_control_ingress.ingress_id,
-      })
-    }
-  }
   let existing: Message.WithParts | undefined
   let disposition: "created" | "reused" = "reused"
   try {
@@ -1422,52 +1504,21 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
     if (!NotFoundError.isInstance(error as Error)) throw error
   }
   if (!existing) {
-    const assertUnoccupied = () => {
-      const messageRow = Database.use((db) =>
-        db.select().from(MessageTable).where(eq(MessageTable.id, input.control.messageID)).get(),
-      )
-      const partRow = Database.use((db) =>
-        db.select().from(PartTable).where(eq(PartTable.id, input.control.partID)).get(),
-      )
-      if (!messageRow && !partRow) return
-      throw new OrchestratorControlIdentityConflictError({
-        message: `Orchestrator control occurrence for ingress ${input.control.extra.orchestrator_control_ingress.ingress_id} is already occupied.`,
-        wakeID: input.control.extra.orchestrator_control_ingress.ingress_id,
-      })
-    }
     // Reject a known compact-ID occupant before prompt preparation. The same
     // check runs again in the persistence transaction to fence a concurrent
     // occupant created after this read.
-    assertUnoccupied()
+    assertOrchestratorControlIdentityUnoccupied(input.control)
     disposition = "created"
     await SessionPrompt.prompt(
-      {
-        sessionID: input.session.id,
-        messageID: input.control.messageID,
-        author: "orchestrator",
-        model: input.model,
-        agent: "orchestrator",
-        byteMaterializationProjectID: input.session.projectID,
-        noReply: true,
-        extra: input.control.extra,
-        parts: [
-          {
-            id: input.control.partID,
-            type: "text",
-            text: input.control.text,
-            kind: "control",
-            source: "system",
-          },
-        ],
-      },
+      orchestratorControlPromptInput(input),
       {
         beforeVisibilityEffects: input.beforeVisibilityEffects,
-        preflightBundle: assertUnoccupied,
+        preflightBundle: () => assertOrchestratorControlIdentityUnoccupied(input.control),
       },
     )
     existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
   }
-  assertExact(existing)
+  assertExactOrchestratorControlMessage(existing, input.control)
   return disposition
 }
 

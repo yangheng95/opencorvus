@@ -11,7 +11,7 @@ import { Database, and, eq, sql } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { withKeyedLock } from "@/util/lock"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLease, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 
 export const MISSION_EXECUTION_CLOSURE_EVENT_TYPES = {
   opened: "mission.execution.opened",
@@ -438,6 +438,32 @@ export function closeMissionExecutionOperation(input: {
         now: Date.now(),
         leaseMilliseconds,
       })
+    }
+    const postAcquire = currentMissionExecutionClosure(closing.sessionID)
+    if (postAcquire?.state === "closed") {
+      releaseControlLease({
+        target: "lifecycle",
+        targetID,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now: Date.now(),
+      })
+      return postAcquire
+    }
+    if (
+      !postAcquire ||
+      postAcquire.state !== "closing" ||
+      postAcquire.missionID !== closing.missionID ||
+      postAcquire.operationID !== closing.operationID
+    ) {
+      releaseControlLeaseOnErrorPath({
+        target: "lifecycle",
+        targetID,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now: Date.now(),
+      })
+      throw new Error(`Mission execution closure ${closing.sessionID} changed while acquiring its lifecycle lease`)
     }
     const owner = new AbortController()
     let renewalFailure: unknown

@@ -1,7 +1,74 @@
 import path from "node:path"
+import { NamedError } from "@opencorvus-ai/util/error"
+import z from "zod"
 
 export namespace ComputerMCPBuiltin {
   export const ServerName = "computer"
+
+  export const ConfigurationError = NamedError.create(
+    "ComputerMCPConfigurationError",
+    z.object({
+      message: z.string().min(1),
+      reason: z.enum(["disabled", "unsupported_provider"]),
+      serverName: z.literal(ServerName),
+      providerType: z.string().min(1).optional(),
+    }),
+  )
+
+  export type LocalDeclaration = {
+    type: "local"
+    command: string[]
+    environment?: Record<string, string>
+    enabled?: boolean
+    timeout?: number
+  }
+
+  export type ConfiguredDeclaration =
+    | { status: "disabled" }
+    | { status: "enabled"; config: LocalDeclaration }
+
+  /** One interpretation of the reserved `computer` MCP declaration for every
+   * projection consumer. Computer is a host-native provider: a remote MCP
+   * under the reserved name would not share its ownership or evidence
+   * contract, while both the shorthand and typed local forms may disable it. */
+  export function configuredDeclaration(input: unknown): ConfiguredDeclaration {
+    if (!input || typeof input !== "object" || Array.isArray(input)) {
+      throw new ConfigurationError({
+        message: `Configured MCP server ${ServerName} must use the host-native local provider.`,
+        reason: "unsupported_provider",
+        serverName: ServerName,
+      })
+    }
+    const declaration = input as { type?: unknown; enabled?: unknown }
+    if (declaration.type !== undefined && declaration.type !== "local") {
+      const providerType = typeof declaration.type === "string" ? declaration.type : String(declaration.type)
+      throw new ConfigurationError({
+        message: `Configured MCP server ${ServerName} must use the host-native local provider, got ${providerType}.`,
+        reason: "unsupported_provider",
+        serverName: ServerName,
+        providerType,
+      })
+    }
+    if (declaration.enabled === false) return { status: "disabled" }
+    if (declaration.type !== "local") {
+      throw new ConfigurationError({
+        message: `Configured MCP server ${ServerName} must use the host-native local provider.`,
+        reason: "unsupported_provider",
+        serverName: ServerName,
+      })
+    }
+    return { status: "enabled", config: input as LocalDeclaration }
+  }
+
+  export function requireEnabledConfiguredDeclaration(input: unknown): LocalDeclaration {
+    const declaration = configuredDeclaration(input)
+    if (declaration.status === "enabled") return declaration.config
+    throw new ConfigurationError({
+      message: `Configured MCP server ${ServerName} is disabled.`,
+      reason: "disabled",
+      serverName: ServerName,
+    })
+  }
 
   const ToolNames = [
     "session_create",
