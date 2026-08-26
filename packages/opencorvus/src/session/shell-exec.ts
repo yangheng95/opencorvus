@@ -43,6 +43,9 @@ export namespace SessionShell {
 
   export const ShellInput = z.object({
     sessionID: Identifier.schema("session"),
+    /** The caller-visible request occurrence: the input Message identity.
+     *  Minted here only for internal callers that carry no replay contract. */
+    messageID: Identifier.schema("message").optional(),
     agent: z.string(),
     model: z
       .object({
@@ -51,6 +54,9 @@ export namespace SessionShell {
       })
       .optional(),
     command: z.string(),
+    /** Caller-owned durable facts merged onto the input Message (never part
+     *  of the public route schema). */
+    extra: z.record(z.string(), z.any()).optional(),
   })
   export type ShellInput = z.infer<typeof ShellInput>
   export async function shell(input: ShellInput) {
@@ -115,7 +121,7 @@ export namespace SessionShell {
             }),
       )
       const userMsg: Message.User = {
-        id: Identifier.ascending("message"),
+        id: input.messageID ?? Identifier.ascending("message"),
         sessionID: input.sessionID,
         author: "user",
         time: {
@@ -127,7 +133,10 @@ export namespace SessionShell {
           providerID: model.providerID,
           modelID: model.modelID,
         },
-        extra: ProjectMemory.userInputExtra({ surface: "session.shell", literalText: input.command }),
+        extra: {
+          ...ProjectMemory.userInputExtra({ surface: "session.shell", literalText: input.command }),
+          ...input.extra,
+        },
       }
       const userPart: Message.Part = {
         type: "text",

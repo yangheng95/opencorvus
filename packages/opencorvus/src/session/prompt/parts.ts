@@ -793,8 +793,11 @@ function consumeMaterializedUserMessageForPersistence(materialized: Materialized
     throw new Error("Unrecognized materialized user message")
   }
   materializedUserMessages.delete(materialized)
-  markPendingDeliveryIfTurnInFlight(materialized.info)
-  return { info: materialized.info, parts: materialized.parts }
+  // The materialized snapshot is deep-frozen; the persistence copy is where
+  // write-time facts like pendingDelivery may still be stamped.
+  const info = { ...materialized.info }
+  markPendingDeliveryIfTurnInFlight(info)
+  return { info, parts: materialized.parts }
 }
 
 /**

@@ -1,9 +1,9 @@
 import z from "zod"
-import { text } from "node:stream/consumers"
+import { minimatch } from "minimatch"
 import { Tool } from "./tool"
 import { Filesystem } from "../util/filesystem"
 import { Ripgrep } from "../file/ripgrep"
-import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { Process } from "../util/process"
 
 import DESCRIPTION from "./grep.txt"
 import { Instance } from "../project/instance"
@@ -11,10 +11,35 @@ import path from "path"
 import fs from "node:fs/promises"
 import { assertExternalDirectory } from "./external-directory"
 import { redactInlinePayloads } from "../util/inline-base64"
-import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { activeExecutionCapsuleRuntimeFact } from "@/execution-capsule/runtime"
 
 const MAX_LINE_LENGTH = 2000
+export const SEARCH_CODE_TIMEOUT_MS = 30_000
+export const SEARCH_CODE_MAX_OUTPUT_BYTES = 2 * 1024 * 1024
+
+export class SearchCodeExecutionError extends Error {
+  readonly code = "SEARCH_CODE_EXECUTION_FAILED"
+
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options)
+    this.name = "SearchCodeExecutionError"
+  }
+}
+
+function executionError(cause: unknown) {
+  const detail = cause instanceof Error ? cause.message : String(cause)
+  return new SearchCodeExecutionError(`search_code execution failed: ${detail}`, { cause })
+}
+
+function matchesInclude(filePath: string, searchPath: string, searchIsFile: boolean, include: string | undefined) {
+  if (!include) return true
+  const candidate = (searchIsFile ? path.basename(filePath) : path.relative(searchPath, filePath)).replaceAll("\\", "/")
+  const pattern = include.replaceAll("\\", "/")
+  return minimatch(candidate, pattern, {
+    dot: true,
+    matchBase: !pattern.includes("/"),
+  })
+}
 
 export const SearchCodeTool = Tool.define("search_code", {
   description: DESCRIPTION,
@@ -24,13 +49,11 @@ export const SearchCodeTool = Tool.define("search_code", {
       .describe(
         'Required regex pattern to search for in file contents. This field is named "pattern"; do not use "query".',
       ),
-    path: z
-      .string()
-      .optional()
-      .describe("The file or directory to search. Defaults to the current working directory."),
+    path: z.string().optional().describe("The file or directory to search. Defaults to the current working directory."),
     include: z.string().optional().describe('File pattern to include in the search (e.g. "*.js", "*.{ts,tsx}")'),
   }),
   async execute(params, ctx) {
+    ctx.abort.throwIfAborted()
     if (!params.pattern) {
       throw new Error("pattern is required")
     }
@@ -47,39 +70,44 @@ export const SearchCodeTool = Tool.define("search_code", {
     if (!commandCwd) throw new Error(`Search path is not a file or directory: ${searchPath}`)
 
     const executionAuthority = Tool.requireExecutionAuthority(ctx)
-    const rgPath = executionAuthority.kind === "task"
-      ? (await activeExecutionCapsuleRuntimeFact())?.ripgrepPath ?? (await Ripgrep.filepath())
-      : await Ripgrep.filepath()
-    const args: string[] = ["-nH", "--hidden", "--no-messages", "--field-match-separator=|", "--regexp", params.pattern]
-    if (params.include) {
-      args.push("--glob", params.include)
+    const rgPath =
+      executionAuthority.kind === "task"
+        ? ((await activeExecutionCapsuleRuntimeFact())?.ripgrepPath ?? (await Ripgrep.filepath()))
+        : await Ripgrep.filepath()
+    const args = [
+      "-nH",
+      "--hidden",
+      "--field-match-separator=|",
+      "--regexp",
+      params.pattern,
+      "--glob",
+      "!**/.git/**",
+      searchPath,
+    ]
+    const command = [rgPath, ...args]
+    const options = {
+      abort: ctx.abort,
+      timeoutMs: SEARCH_CODE_TIMEOUT_MS,
+      maxOutputBytes: SEARCH_CODE_MAX_OUTPUT_BYTES,
+      nothrow: true,
     }
-    args.push(searchPath)
-
-    const processOptions = { executable: rgPath, args, owner: "search-code" }
-    const proc = executionAuthority.kind === "task"
-      ? await ProcessSupervisor.spawnTaskCommand(
-          { taskID: executionAuthority.taskID, cwd: commandCwd },
-          processOptions,
-        )
-      : await ProcessSupervisor.spawnHostCommand({ ...processOptions, cwd: commandCwd })
-    const abort = () => void proc.terminate().catch(() => undefined)
-    ctx.abort.addEventListener("abort", abort, { once: true })
-
-    if (!proc.stdout || !proc.stderr) {
-      throw new Error("Process output not available")
+    let result: Process.Result
+    try {
+      result =
+        executionAuthority.kind === "task"
+          ? await Process.runTask({ taskID: executionAuthority.taskID, cwd: commandCwd }, command, options)
+          : await Process.runHost(command, { ...options, cwd: commandCwd })
+      ctx.abort.throwIfAborted()
+    } catch (cause) {
+      ctx.abort.throwIfAborted()
+      throw executionError(cause)
     }
-
-    const output = await text(proc.stdout)
-    const errorOutput = await text(proc.stderr)
-    const exitCode = await proc.exited
-    ctx.abort.removeEventListener("abort", abort)
-    await proc.dispose()
+    const output = result.stdout.toString()
+    const errorOutput = result.stderr.toString().trim()
+    const exitCode = result.code
 
     // Exit codes: 0 = matches found, 1 = no matches, 2 = errors (but may still have matches)
-    // With --no-messages, we suppress error output but still get exit code 2 for broken symlinks etc.
-    // Only fail if exit code is 2 AND no output was produced
-    if (exitCode === 1 || (exitCode === 2 && !output.trim())) {
+    if (exitCode === 1) {
       return {
         title: params.pattern,
         metadata: { matches: 0, truncated: false },
@@ -87,8 +115,12 @@ export const SearchCodeTool = Tool.define("search_code", {
       }
     }
 
+    if (exitCode === 2 && !output.trim()) {
+      throw executionError(new Error(errorOutput || "ripgrep exited with code 2"))
+    }
+
     if (exitCode !== 0 && exitCode !== 2) {
-      throw new Error(`ripgrep failed: ${errorOutput}`)
+      throw executionError(new Error(errorOutput || `ripgrep exited with code ${exitCode}`))
     }
 
     const hasErrors = exitCode === 2
@@ -105,6 +137,8 @@ export const SearchCodeTool = Tool.define("search_code", {
 
       const lineNum = parseInt(lineNumStr, 10)
       const lineText = lineTextParts.join("|")
+
+      if (!matchesInclude(filePath, searchPath, searchStat.isFile(), params.include)) continue
 
       const stats = Filesystem.stat(filePath)
       if (!stats) continue

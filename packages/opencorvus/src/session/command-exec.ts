@@ -29,6 +29,9 @@ export namespace SessionCommand {
     arguments: z.string(),
     command: z.string(),
     variant: z.string().optional(),
+    /** Caller-owned durable facts merged onto the input Message (never part
+     *  of the public route schema). */
+    extra: z.record(z.string(), z.any()).optional(),
     parts: z
       .array(
         z.discriminatedUnion("type", [
@@ -162,10 +165,13 @@ export namespace SessionCommand {
       model: taskModel,
       agent: agentName,
       byteMaterializationProjectID: session.projectID,
-      extra: ProjectMemory.userInputExtra({
-        surface: "session.command",
-        literalText: `/${input.command}${input.arguments ? ` ${input.arguments}` : ""}`,
-      }),
+      extra: {
+        ...ProjectMemory.userInputExtra({
+          surface: "session.command",
+          literalText: `/${input.command}${input.arguments ? ` ${input.arguments}` : ""}`,
+        }),
+        ...input.extra,
+      },
       parts,
       variant: input.variant,
     })

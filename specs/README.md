@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest bounded `search_code` execution repair: [`2026-08-26-search-code-bounded-execution-repair.md`](records/2026-08/2026-08-26-search-code-bounded-execution-repair.md).
+
 Latest Inspect AI benchmark platform and OpenCorvus Task adapter: [`2026-08-26-inspect-ai-benchmark-adapter.md`](records/2026-08/2026-08-26-inspect-ai-benchmark-adapter.md).
 
 Latest Mission stream-interruption retry-budget repair: [`2026-08-26-mission-stream-interruption-retry-budget.md`](records/2026-08/2026-08-26-mission-stream-interruption-retry-budget.md).

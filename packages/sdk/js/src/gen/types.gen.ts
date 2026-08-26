@@ -69,6 +69,70 @@ export type ApiAuth = {
   type: "api"
 }
 
+export type AssistantMessage = {
+  activationID?: string
+  agent: string
+  author: string
+  billing?: BillingCoverage
+  convergenceFailure?: {
+    failure_occurrence: {
+      assistant_message_id: string
+      error_name: string
+      session_id: string
+    }
+    inspection_error?: string
+    unconverged_part_ids: Array<string>
+    write_errors: Array<{
+      message: string
+      part_id: string
+    }>
+  }
+  cost: number
+  error?:
+    | ProviderAuthError
+    | UnknownError
+    | MessageOutputLengthError
+    | MessageAbortedError
+    | StructuredOutputPayloadError
+    | SnapshotIntegrityError
+    | SnapshotEmptyTreeError
+    | ContextOverflowError
+    | CompactionContinuationMissingError
+    | PromptBudgetOverflowError
+    | ToolSchemaBudgetError
+    | ModelImageInputTooLargeError
+    | ApiError
+  failureOccurrence?: {
+    assistant_message_id: string
+    error_name: string
+    session_id: string
+  }
+  finish?: string
+  id: string
+  modelID: string
+  observationFailures?: Array<{
+    message: string
+    phase: "snapshot_patch"
+  }>
+  orderKey?: string
+  parentID: string
+  path: {
+    cwd: string
+    root: string
+  }
+  providerID: string
+  role: "assistant"
+  sessionID: string
+  structured?: unknown
+  summary?: boolean
+  time: {
+    completed?: number
+    created: number
+  }
+  tokens: TokenUsage
+  variant?: string
+}
+
 export type Auth = OAuth | ApiAuth | WellKnownAuth
 
 export type AuthReadError = {
@@ -23712,7 +23776,10 @@ export type SessionCommandData = {
     agent?: string
     arguments: string
     command: string
-    messageID?: string
+    /**
+     * Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt
+     */
+    messageID: string
     model?: string
     parts?: Array<{
       filename?: string
@@ -23763,14 +23830,21 @@ export type SessionCommandErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * Mission authority conflict, or the message identity is already bound to another public Session execution
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
 }
 
 export type SessionCommandError = SessionCommandErrors[keyof SessionCommandErrors]
@@ -25317,7 +25391,10 @@ export type SessionPromptData = {
   body: {
     agent?: string
     format?: OutputFormat
-    messageID?: string
+    /**
+     * Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt
+     */
+    messageID: string
     model?: {
       modelID: string
       providerID: string
@@ -25690,6 +25767,10 @@ export type SessionShellData = {
   body: {
     agent: string
     command: string
+    /**
+     * Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again
+     */
+    messageID: string
     model?: {
       modelID: string
       providerID: string
@@ -25732,14 +25813,21 @@ export type SessionShellErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * Mission authority conflict, or the message identity is already bound to another public Session execution
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
 }
 
 export type SessionShellError = SessionShellErrors[keyof SessionShellErrors]
@@ -25749,67 +25837,8 @@ export type SessionShellResponses = {
    * Created message
    */
   200: {
-    activationID?: string
-    agent: string
-    author: string
-    billing?: BillingCoverage
-    convergenceFailure?: {
-      failure_occurrence: {
-        assistant_message_id: string
-        error_name: string
-        session_id: string
-      }
-      inspection_error?: string
-      unconverged_part_ids: Array<string>
-      write_errors: Array<{
-        message: string
-        part_id: string
-      }>
-    }
-    cost: number
-    error?:
-      | ProviderAuthError
-      | UnknownError
-      | MessageOutputLengthError
-      | MessageAbortedError
-      | StructuredOutputPayloadError
-      | SnapshotIntegrityError
-      | SnapshotEmptyTreeError
-      | ContextOverflowError
-      | CompactionContinuationMissingError
-      | PromptBudgetOverflowError
-      | ToolSchemaBudgetError
-      | ModelImageInputTooLargeError
-      | ApiError
-    failureOccurrence?: {
-      assistant_message_id: string
-      error_name: string
-      session_id: string
-    }
-    finish?: string
-    id: string
-    modelID: string
-    observationFailures?: Array<{
-      message: string
-      phase: "snapshot_patch"
-    }>
-    orderKey: string
-    parentID: string
-    path: {
-      cwd: string
-      root: string
-    }
-    providerID: string
-    role: "assistant"
-    sessionID: string
-    structured?: unknown
-    summary?: boolean
-    time: {
-      completed?: number
-      created: number
-    }
-    tokens: TokenUsage
-    variant?: string
+    info: AssistantMessage
+    parts: Array<VisibleMessagePart>
   }
 }
 

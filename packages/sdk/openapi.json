@@ -224,6 +224,259 @@
         ],
         "type": "object"
       },
+      "AssistantMessage": {
+        "properties": {
+          "activationID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "agent": {
+            "type": "string"
+          },
+          "author": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "billing": {
+            "$ref": "#/components/schemas/BillingCoverage"
+          },
+          "convergenceFailure": {
+            "additionalProperties": false,
+            "properties": {
+              "failure_occurrence": {
+                "additionalProperties": false,
+                "properties": {
+                  "assistant_message_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "error_name": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "session_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "session_id",
+                  "assistant_message_id",
+                  "error_name"
+                ],
+                "type": "object"
+              },
+              "inspection_error": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "unconverged_part_ids": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "write_errors": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "message": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "part_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "part_id",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "failure_occurrence",
+              "unconverged_part_ids",
+              "write_errors"
+            ],
+            "type": "object"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "error": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ProviderAuthError"
+              },
+              {
+                "$ref": "#/components/schemas/UnknownError"
+              },
+              {
+                "$ref": "#/components/schemas/MessageOutputLengthError"
+              },
+              {
+                "$ref": "#/components/schemas/MessageAbortedError"
+              },
+              {
+                "$ref": "#/components/schemas/StructuredOutputPayloadError"
+              },
+              {
+                "$ref": "#/components/schemas/SnapshotIntegrityError"
+              },
+              {
+                "$ref": "#/components/schemas/SnapshotEmptyTreeError"
+              },
+              {
+                "$ref": "#/components/schemas/ContextOverflowError"
+              },
+              {
+                "$ref": "#/components/schemas/CompactionContinuationMissingError"
+              },
+              {
+                "$ref": "#/components/schemas/PromptBudgetOverflowError"
+              },
+              {
+                "$ref": "#/components/schemas/ToolSchemaBudgetError"
+              },
+              {
+                "$ref": "#/components/schemas/ModelImageInputTooLargeError"
+              },
+              {
+                "$ref": "#/components/schemas/APIError"
+              }
+            ]
+          },
+          "failureOccurrence": {
+            "additionalProperties": false,
+            "properties": {
+              "assistant_message_id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "error_name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "session_id": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "session_id",
+              "assistant_message_id",
+              "error_name"
+            ],
+            "type": "object"
+          },
+          "finish": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "modelID": {
+            "type": "string"
+          },
+          "observationFailures": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "message": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "phase": {
+                  "const": "snapshot_patch",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "phase",
+                "message"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "orderKey": {
+            "type": "string"
+          },
+          "parentID": {
+            "type": "string"
+          },
+          "path": {
+            "properties": {
+              "cwd": {
+                "type": "string"
+              },
+              "root": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "cwd",
+              "root"
+            ],
+            "type": "object"
+          },
+          "providerID": {
+            "type": "string"
+          },
+          "role": {
+            "const": "assistant",
+            "type": "string"
+          },
+          "sessionID": {
+            "type": "string"
+          },
+          "structured": {},
+          "summary": {
+            "type": "boolean"
+          },
+          "time": {
+            "properties": {
+              "completed": {
+                "type": "number"
+              },
+              "created": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "created"
+            ],
+            "type": "object"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/TokenUsage"
+          },
+          "variant": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sessionID",
+          "author",
+          "role",
+          "time",
+          "parentID",
+          "modelID",
+          "providerID",
+          "agent",
+          "path",
+          "cost",
+          "tokens"
+        ],
+        "type": "object"
+      },
       "Auth": {
         "oneOf": [
           {
@@ -78455,6 +78708,7 @@
                     "type": "string"
                   },
                   "messageID": {
+                    "description": "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
                     "pattern": "^msg.*",
                     "type": "string"
                   },
@@ -78509,6 +78763,7 @@
                   }
                 },
                 "required": [
+                  "messageID",
                   "arguments",
                   "command"
                 ],
@@ -78861,28 +79116,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PublicSessionPromptIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
           }
         },
         "summary": "Send command",
@@ -84837,6 +85116,7 @@
                     "$ref": "#/components/schemas/OutputFormat"
                   },
                   "messageID": {
+                    "description": "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
                     "pattern": "^msg.*",
                     "type": "string"
                   },
@@ -84873,6 +85153,7 @@
                   }
                 },
                 "required": [
+                  "messageID",
                   "parts"
                 ],
                 "type": "object"
@@ -85811,6 +86092,11 @@
                   "command": {
                     "type": "string"
                   },
+                  "messageID": {
+                    "description": "Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again",
+                    "pattern": "^msg.*",
+                    "type": "string"
+                  },
                   "model": {
                     "properties": {
                       "modelID": {
@@ -85828,6 +86114,7 @@
                   }
                 },
                 "required": [
+                  "messageID",
                   "agent",
                   "command"
                 ],
@@ -85843,256 +86130,19 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "activationID": {
-                      "minLength": 1,
-                      "type": "string"
+                    "info": {
+                      "$ref": "#/components/schemas/AssistantMessage"
                     },
-                    "agent": {
-                      "type": "string"
-                    },
-                    "author": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "billing": {
-                      "$ref": "#/components/schemas/BillingCoverage"
-                    },
-                    "convergenceFailure": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "failure_occurrence": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "assistant_message_id": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "error_name": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "session_id": {
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "session_id",
-                            "assistant_message_id",
-                            "error_name"
-                          ],
-                          "type": "object"
-                        },
-                        "inspection_error": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "unconverged_part_ids": {
-                          "items": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "type": "array"
-                        },
-                        "write_errors": {
-                          "items": {
-                            "additionalProperties": false,
-                            "properties": {
-                              "message": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "part_id": {
-                                "minLength": 1,
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "part_id",
-                              "message"
-                            ],
-                            "type": "object"
-                          },
-                          "type": "array"
-                        }
-                      },
-                      "required": [
-                        "failure_occurrence",
-                        "unconverged_part_ids",
-                        "write_errors"
-                      ],
-                      "type": "object"
-                    },
-                    "cost": {
-                      "type": "number"
-                    },
-                    "error": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/ProviderAuthError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/UnknownError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/MessageOutputLengthError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/MessageAbortedError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/StructuredOutputPayloadError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/SnapshotIntegrityError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/SnapshotEmptyTreeError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/ContextOverflowError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/CompactionContinuationMissingError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/PromptBudgetOverflowError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/ToolSchemaBudgetError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/ModelImageInputTooLargeError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/APIError"
-                        }
-                      ]
-                    },
-                    "failureOccurrence": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "assistant_message_id": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "error_name": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "session_id": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "session_id",
-                        "assistant_message_id",
-                        "error_name"
-                      ],
-                      "type": "object"
-                    },
-                    "finish": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "modelID": {
-                      "type": "string"
-                    },
-                    "observationFailures": {
+                    "parts": {
                       "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                          "message": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "phase": {
-                            "const": "snapshot_patch",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "phase",
-                          "message"
-                        ],
-                        "type": "object"
+                        "$ref": "#/components/schemas/VisibleMessagePart"
                       },
                       "type": "array"
-                    },
-                    "orderKey": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "parentID": {
-                      "type": "string"
-                    },
-                    "path": {
-                      "properties": {
-                        "cwd": {
-                          "type": "string"
-                        },
-                        "root": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "cwd",
-                        "root"
-                      ],
-                      "type": "object"
-                    },
-                    "providerID": {
-                      "type": "string"
-                    },
-                    "role": {
-                      "const": "assistant",
-                      "type": "string"
-                    },
-                    "sessionID": {
-                      "type": "string"
-                    },
-                    "structured": {},
-                    "summary": {
-                      "type": "boolean"
-                    },
-                    "time": {
-                      "properties": {
-                        "completed": {
-                          "type": "number"
-                        },
-                        "created": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "created"
-                      ],
-                      "type": "object"
-                    },
-                    "tokens": {
-                      "$ref": "#/components/schemas/TokenUsage"
-                    },
-                    "variant": {
-                      "type": "string"
                     }
                   },
                   "required": [
-                    "id",
-                    "sessionID",
-                    "orderKey",
-                    "author",
-                    "role",
-                    "time",
-                    "parentID",
-                    "modelID",
-                    "providerID",
-                    "agent",
-                    "path",
-                    "cost",
-                    "tokens"
+                    "info",
+                    "parts"
                   ],
                   "type": "object"
                 }
@@ -86165,28 +86215,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PublicSessionPromptIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
           }
         },
         "summary": "Run shell command",

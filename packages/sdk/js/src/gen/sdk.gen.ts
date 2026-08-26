@@ -11684,7 +11684,7 @@ export class Session4 extends HeyApiClient {
       agent?: string
       arguments: string
       command: string
-      messageID?: string
+      messageID: string
       model?: string
       parts?: Array<{
         filename?: string
@@ -11943,7 +11943,7 @@ export class Session4 extends HeyApiClient {
       directory?: string
       agent?: string
       format?: OutputFormat
-      messageID?: string
+      messageID: string
       model?: {
         modelID: string
         providerID: string
@@ -12061,6 +12061,7 @@ export class Session4 extends HeyApiClient {
       directory?: string
       agent: string
       command: string
+      messageID: string
       model?: {
         modelID: string
         providerID: string
@@ -12077,6 +12078,7 @@ export class Session4 extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "body", key: "agent" },
             { in: "body", key: "command" },
+            { in: "body", key: "messageID" },
             { in: "body", key: "model" },
           ],
         },

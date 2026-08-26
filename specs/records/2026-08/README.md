@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-26-search-code-bounded-execution-repair.md](2026-08-26-search-code-bounded-execution-repair.md) reconstructs the live repository-wide ripgrep stall and restores ignored-tree, wall-clock, output, cancellation, and process-settlement bounds to the shared `search_code` Tool.
+
 - [2026-08-26-mission-stream-interruption-retry-budget.md](2026-08-26-mission-stream-interruption-retry-budget.md) reconstructs the real `idle -> network -> idle` Mission failure and restores mid-stream semantic idle to the shared bounded transient-retry budget while preserving first-byte, total-deadline, cancellation, and post-side-effect safety contracts.
 
 - [2026-08-26-inspect-ai-benchmark-adapter.md](2026-08-26-inspect-ai-benchmark-adapter.md) defines a model-free Inspect AI solver that maps ordinary evaluation Samples onto the public OpenCorvus Task lifecycle and projects the exact Completion Decision Message back into Inspect logs and scorers.
