@@ -86,6 +86,69 @@ describe("package installation readiness is a receipt, not a directory", () => {
     })
   }, 60_000)
 
+  test("a dependency resolved by nesting is a complete install, not a missing one", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        // A version conflict with something already in the shared cache is
+        // resolved by NESTING the dependency under the package that needs it.
+        // Reading only the hoisted flat path called that correct tree
+        // incomplete, so no receipt was ever published and every later load
+        // reinstalled and failed again.
+        const moduleDirectory = await writeCachedTree({
+          dependencies: { "receipt-probe-dependency": "^2.0.0" },
+        })
+        const nested = path.join(moduleDirectory, "node_modules", "receipt-probe-dependency")
+        await fs.mkdir(nested, { recursive: true })
+        await fs.writeFile(
+          path.join(nested, "package.json"),
+          JSON.stringify({ name: "receipt-probe-dependency", version: "2.1.0" }),
+        )
+
+        const occurrenceID = await PackageInstallReceipt.begin({ package: PKG, requestedVersion: VERSION })
+        await PackageInstallReceipt.verifyAndPublish({
+          occurrenceID,
+          package: PKG,
+          requestedVersion: VERSION,
+          resolvedVersion: VERSION,
+          moduleDirectory,
+        })
+        expect(await PackageInstallReceipt.isPublished(PKG, VERSION)).toBe(true)
+      },
+    })
+  }, 60_000)
+
+  test("a dependency whose manifest is truncated is not a readable manifest", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        // The same killed install that leaves a partial tree also leaves
+        // zero-byte and truncated manifests; a path that merely exists is not
+        // proof that anything is installed.
+        const moduleDirectory = await writeCachedTree({
+          dependencies: { "receipt-probe-truncated": "^1.0.0" },
+        })
+        const flat = path.join(Global.Path.cache, "node_modules", "receipt-probe-truncated")
+        await fs.mkdir(flat, { recursive: true })
+        await fs.writeFile(path.join(flat, "package.json"), '{"name": "receipt-probe-trunc')
+
+        const occurrenceID = await PackageInstallReceipt.begin({ package: PKG, requestedVersion: VERSION })
+        await expect(
+          PackageInstallReceipt.verifyAndPublish({
+            occurrenceID,
+            package: PKG,
+            requestedVersion: VERSION,
+            resolvedVersion: VERSION,
+            moduleDirectory,
+          }),
+        ).rejects.toThrow("unresolved receipt-probe-truncated")
+        expect(await PackageInstallReceipt.isPublished(PKG, VERSION)).toBe(false)
+      },
+    })
+  }, 60_000)
+
   test("a new attempt supersedes an unsettled occurrence for the same revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({

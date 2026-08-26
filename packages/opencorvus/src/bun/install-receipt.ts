@@ -44,12 +44,7 @@ export namespace PackageInstallReceipt {
   }
 
   export async function isPublished(pkg: string, version: string): Promise<boolean> {
-    try {
-      const occurrence = await store().read(KIND, occurrenceID(pkg, version))
-      return occurrence.terminal?.outcome === "committed"
-    } catch {
-      return false
-    }
+    return (await readOccurrence(occurrenceID(pkg, version)))?.terminal?.outcome === "committed"
   }
 
   /**
@@ -59,32 +54,80 @@ export namespace PackageInstallReceipt {
    */
   export async function begin(input: { package: string; requestedVersion: string }): Promise<string> {
     const id = occurrenceID(input.package, input.requestedVersion)
-    try {
-      const existing = await store().read(KIND, id)
-      if (!existing.terminal) {
-        await store().settle(KIND, {
-          occurrenceID: id,
-          outcome: "rolled_back",
-          payload: { reason: "superseded by a new install attempt of the same revision" },
-          timeCreated: Date.now(),
-        })
+    const subject = `package:${Global.Path.cache}:${input.package}`
+    // Reading the prior occurrence, superseding it, removing it and opening
+    // the new one is ONE mutation of this subject. Split across the lock, a
+    // second backend could replace the occurrence a first was installing
+    // under, and the first would then commit its receipt into the second's
+    // occurrence while that install was still rewriting the tree.
+    await store().withSubjectLock(KIND, subject, async () => {
+      const existing = await readOccurrence(id)
+      if (existing) {
+        if (!existing.terminal) {
+          await store().settle(KIND, {
+            occurrenceID: id,
+            outcome: "rolled_back",
+            payload: { reason: "superseded by a new install attempt of the same revision" },
+            timeCreated: Date.now(),
+          })
+        }
+        await store().removeSettled(KIND, id)
       }
-      await store().removeSettled(KIND, id)
-    } catch {
-      // No prior occurrence for this revision.
-    }
-    await store().create({
-      occurrenceID: id,
-      kind: KIND,
-      subject: `package:${Global.Path.cache}:${input.package}`,
-      payload: IntentPayload.parse({
-        package: input.package,
-        requestedVersion: input.requestedVersion,
-        cacheRoot: Global.Path.cache,
-      }),
-      timeCreated: Date.now(),
+      await store().create({
+        occurrenceID: id,
+        kind: KIND,
+        subject,
+        payload: IntentPayload.parse({
+          package: input.package,
+          requestedVersion: input.requestedVersion,
+          cacheRoot: Global.Path.cache,
+        }),
+        timeCreated: Date.now(),
+      })
     })
     return id
+  }
+
+  /** The occurrence for this revision, or undefined when there is none. Any
+   *  other failure is a real failure and surfaces. */
+  async function readOccurrence(id: string) {
+    try {
+      return await store().read(KIND, id)
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("intent is missing")) return undefined
+      throw error
+    }
+  }
+
+/**
+   * Whether one declared dependency resolves to a manifest this runtime can
+   * actually read.
+   *
+   * Resolution follows Node's own order — the dependent package's private
+   * `node_modules` first, then each ancestor up to the cache root — because a
+   * version conflict with something already in the shared cache is resolved by
+   * nesting, and reading only the hoisted flat path reported a correct install
+   * as incomplete forever. The manifest is PARSED, not merely stat-ed: a
+   * zero-byte or truncated `package.json` is exactly what a killed install
+   * leaves behind, so treating its path's existence as proof would reproduce
+   * the defect this receipt exists to remove.
+   */
+  async function resolvesToAReadableManifest(moduleDirectory: string, dependency: string): Promise<boolean> {
+    const cacheRoot = path.resolve(Global.Path.cache)
+    let directory = path.resolve(moduleDirectory)
+    for (;;) {
+      const candidate = path.join(directory, "node_modules", dependency, "package.json")
+      const manifest = await Filesystem.readJson<unknown>(candidate).catch(() => undefined)
+      if (manifest && typeof manifest === "object" && typeof (manifest as { name?: unknown }).name === "string") {
+        return true
+      }
+      if (directory === cacheRoot) return false
+      const parent = path.dirname(directory)
+      if (parent === directory) return false
+      // Never walk above the cache this installation owns.
+      if (!path.resolve(parent).startsWith(cacheRoot) && path.resolve(parent) !== cacheRoot) return false
+      directory = parent
+    }
   }
 
   /**
@@ -118,8 +161,7 @@ export namespace PackageInstallReceipt {
     const dependencies = Object.keys(manifest.dependencies ?? {})
     const missing: string[] = []
     for (const dependency of dependencies) {
-      const resolved = path.join(Global.Path.cache, "node_modules", dependency, "package.json")
-      if (!(await Filesystem.exists(resolved))) missing.push(dependency)
+      if (!(await resolvesToAReadableManifest(input.moduleDirectory, dependency))) missing.push(dependency)
     }
     if (missing.length > 0) {
       throw new Error(

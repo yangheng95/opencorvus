@@ -71,7 +71,9 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
     return stopTask
   }
 
-  const url = await new Promise<string>((resolve, reject) => {
+  let url: string
+  try {
+    url = await new Promise<string>((resolve, reject) => {
     let state: "pending" | "stopping_failure" | "ready" | "failed" = "pending"
     const observer = new StartupOutputObserver()
     let pollReceipt: ReturnType<typeof setInterval> | undefined
@@ -155,9 +157,13 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
       if (options.signal.aborted) abortListener()
       else options.signal.addEventListener("abort", abortListener)
     }
-  })
-
-  await receipt.dispose()
+    })
+  } finally {
+    // The launcher owns the receipt channel on EVERY exit path: a timeout,
+    // a child that died, a spawn error and an abort each leave a directory
+    // holding the bound URL behind otherwise.
+    await receipt.dispose()
+  }
 
   return {
     url,
