@@ -4,20 +4,23 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "opencorvus-inspect"
-version = "0.1.0"
-description = "Inspect AI benchmark adapter for the OpenCorvus Task API"
+version = "0.2.0"
+description = "Extensible Inspect AI benchmark platform for the OpenCorvus Task API"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSES/*", "THIRD_PARTY_NOTICES.md"]
 authors = [{ name = "OpenCorvus contributors" }]
 dependencies = [
   "httpx>=0.28,<1",
   "inspect-ai==0.3.259",
+  "openai>=3.1,<4",
 ]
 
 [project.optional-dependencies]
 dev = [
   "mypy>=1.15,<2",
+  "numpy>=1.26,<2.3",
   "pytest>=8.3,<9",
   "pytest-asyncio>=0.25,<1",
   "ruff>=0.11,<1",
@@ -42,6 +45,9 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/opencorvus_inspect/benchmark/apodex.py" = ["E501"] # Exact attributed judge prompts.
 
 [tool.mypy]
 python_version = "3.10"

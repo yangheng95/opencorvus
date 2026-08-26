@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+from pathlib import Path
+from typing import Any, cast
 
 import pytest
 from inspect_ai.model import ChatMessageUser
 from inspect_ai.scorer import Target
 from inspect_ai.solver import TaskState
 
-from opencorvus_inspect.adapter import TaskResult
+from opencorvus_inspect.adapter import AdapterConfig, TaskResult
 from opencorvus_inspect.solver import opencorvus_task
 
 
@@ -19,7 +20,7 @@ async def test_solver_projects_terminal_result_into_inspect_state(
 
     class Client:
         def __init__(self, config: object) -> None:
-            captured["config"] = config
+            captured.setdefault("configs", []).append(config)
 
         async def __aenter__(self) -> Client:
             return self
@@ -55,7 +56,11 @@ async def test_solver_projects_terminal_result_into_inspect_state(
         metadata={"opencorvus_title": "Custom title"},
         sample_uuid="sample-uuid",
     )
-    solve = opencorvus_task(base_url="http://localhost:7878", project_dir="D:/bench")
+    solve = opencorvus_task(
+        base_url="http://localhost:7878",
+        project_dir="D:/bench",
+        project_isolation="sample_epoch",
+    )
     result = await solve(state, None)  # type: ignore[arg-type]
 
     assert result is state
@@ -72,3 +77,19 @@ async def test_solver_projects_terminal_result_into_inspect_state(
     assert state.output.completion == "final accepted answer"
     assert state.messages[-1].text == "final accepted answer"
     assert state.metadata["opencorvus_result"]["task_id"] == "task-1"
+    sample_config = cast(list[AdapterConfig], captured["configs"])[0]
+    assert sample_config.init_git is True
+    assert Path(sample_config.project_dir).name == "attempt-1"
+    assert Path(sample_config.project_dir).parent.name == "epoch-2"
+    assert Path(sample_config.project_dir).parent.parent.name.startswith("sample-")
+    assert state.metadata["opencorvus_project"] == {
+        "directory_sha256": state.metadata["opencorvus_project"]["directory_sha256"],
+        "isolation": "sample_epoch",
+        "init_git": True,
+        "attempt": 1,
+    }
+
+    await solve(state, None)  # type: ignore[arg-type]
+    retry_config = cast(list[AdapterConfig], captured["configs"])[1]
+    assert Path(retry_config.project_dir).name == "attempt-2"
+    assert state.metadata["opencorvus_project"]["attempt"] == 2
