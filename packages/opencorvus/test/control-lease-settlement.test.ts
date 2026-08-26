@@ -1,9 +1,13 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import {
   acquireControlLease,
+  acquireControlLeaseInTransaction,
+  assertControlLeaseInTransaction,
   currentControlLeaseInTransaction,
   releaseControlLease,
+  releaseControlLeaseInTransaction,
   releaseControlLeaseOnErrorPath,
+  renewControlLeaseInTransaction,
 } from "../src/engine/control-lease"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -13,6 +17,64 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 afterAll(resetMemoryDatabase)
 
 describe("control lease settlement", () => {
+  test("one transaction carries an exact domain activation through acquire, renewal, assertion and settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const targetID = Identifier.ascending("call")
+        const activationID = Identifier.ascending("activity")
+        const now = 2_000_000
+        const lifecycle = Database.immediateTransaction((db) => {
+          const acquired = acquireControlLeaseInTransaction(db, {
+            target: "task_root_ingress",
+            targetID,
+            ownerOccurrenceID: "domain-activation-owner",
+            now,
+            leaseMilliseconds: 10_000,
+            leaseID: activationID,
+          })
+          if (!acquired.acquired) throw new Error("Expected the domain activation to acquire its lease")
+          renewControlLeaseInTransaction(db, {
+            target: "task_root_ingress",
+            targetID,
+            leaseID: activationID,
+            ownerOccurrenceID: "domain-activation-owner",
+            now: now + 100,
+            expiresAt: now + 20_000,
+          })
+          const asserted = assertControlLeaseInTransaction(db, {
+            target: "task_root_ingress",
+            targetID,
+            leaseID: activationID,
+            ownerOccurrenceID: "domain-activation-owner",
+            now: now + 200,
+          })
+          const released = releaseControlLeaseInTransaction(db, {
+            target: "task_root_ingress",
+            targetID,
+            leaseID: activationID,
+            ownerOccurrenceID: "domain-activation-owner",
+            now: now + 300,
+          })
+          return { acquired: acquired.lease, asserted, released }
+        })
+
+        expect(lifecycle).toMatchObject({
+          acquired: { id: activationID, owner_occurrence_id: "domain-activation-owner" },
+          asserted: { id: activationID, expires_at: now + 20_000 },
+          released: true,
+        })
+        expect(Database.use((db) => currentControlLeaseInTransaction(db, "task_root_ingress", targetID))).toMatchObject(
+          {
+            id: activationID,
+            expires_at: now + 300,
+          },
+        )
+      },
+    })
+  })
+
   test("a release fenced to the exact lease ends it and frees the target for the next owner", async () => {
     await using project = await memoryProject()
     await Instance.provide({

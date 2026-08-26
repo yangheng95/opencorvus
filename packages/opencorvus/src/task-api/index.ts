@@ -67,7 +67,6 @@ import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
   EngineArtifactTable,
-  EngineControlActivationLeaseTable,
   EngineChannelBindingTable,
   EngineGoalTable,
   EngineTaskTable,
@@ -224,7 +223,12 @@ import {
   projectTaskRowsInTransaction,
   taskDeletedInTransaction,
 } from "@/engine/store"
-import { releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
+import {
+  acquireControlLeaseInTransaction,
+  assertControlLeaseInTransaction,
+  releaseControlLeaseOnErrorPath,
+  renewControlLeaseInTransaction,
+} from "@/engine/control-lease"
 import { Identifier } from "@/id/id"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
@@ -775,34 +779,18 @@ async function acquireCancellationConvergence(taskID: string) {
       if (lifecycle.status !== "cancelling" || !lifecycle.requestEventID) {
         throw new Error(`Task ${taskID} has no durable cancellation request to converge`)
       }
-      const current = db
-        .select()
-        .from(EngineControlActivationLeaseTable)
-        .where(
-          and(
-            eq(EngineControlActivationLeaseTable.target, "lifecycle"),
-            eq(EngineControlActivationLeaseTable.target_id, lifecycle.requestEventID),
-          ),
-        )
-        .orderBy(
-          sql`${EngineControlActivationLeaseTable.time_activated} DESC`,
-          sql`${EngineControlActivationLeaseTable.id} DESC`,
-        )
-        .get()
-      if (current && current.expires_at > now) return false
       const activationID = Identifier.ascending("activity")
       const ownerOccurrenceID = `task-cancellation:${process.pid}:${randomUUID()}`
-      db.insert(EngineControlActivationLeaseTable)
-        .values({
-          id: activationID,
-          target: "lifecycle",
-          target_id: lifecycle.requestEventID,
-          owner_occurrence_id: ownerOccurrenceID,
-          time_activated: now,
-          expires_at: now + CANCELLATION_CONVERGENCE_LEASE_MS,
-        })
-        .run()
-      return { activationID, ownerOccurrenceID, requestEventID: lifecycle.requestEventID }
+      const acquired = acquireControlLeaseInTransaction(db, {
+        target: "lifecycle",
+        targetID: lifecycle.requestEventID,
+        ownerOccurrenceID,
+        now,
+        leaseMilliseconds: CANCELLATION_CONVERGENCE_LEASE_MS,
+        leaseID: activationID,
+      })
+      if (!acquired.acquired) return false
+      return { activationID: acquired.lease.id, ownerOccurrenceID, requestEventID: lifecycle.requestEventID }
     })
     if (claimed === undefined) return undefined
     if (claimed) {
@@ -814,26 +802,18 @@ async function acquireCancellationConvergence(taskID: string) {
         try {
           if (injectedFailure === "exception")
             throw new Error("injected Task cancellation convergence heartbeat failure")
-          const renewed = Database.immediateTransaction((db) =>
-            Boolean(
-              db
-                .update(EngineControlActivationLeaseTable)
-                .set({ expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
-                .where(
-                  and(
-                    eq(EngineControlActivationLeaseTable.id, claimed.activationID),
-                    eq(
-                      EngineControlActivationLeaseTable.owner_occurrence_id,
-                      injectedFailure === "zero-row" ? `${claimed.ownerOccurrenceID}:stale` : claimed.ownerOccurrenceID,
-                    ),
-                    eq(EngineControlActivationLeaseTable.target_id, claimed.requestEventID),
-                  ),
-                )
-                .returning({ id: EngineControlActivationLeaseTable.id })
-                .get(),
-            ),
+          const renewedAt = Date.now()
+          Database.immediateTransaction((db) =>
+            renewControlLeaseInTransaction(db, {
+              target: "lifecycle",
+              targetID: claimed.requestEventID,
+              leaseID: claimed.activationID,
+              ownerOccurrenceID:
+                injectedFailure === "zero-row" ? `${claimed.ownerOccurrenceID}:stale` : claimed.ownerOccurrenceID,
+              now: renewedAt,
+              expiresAt: renewedAt + CANCELLATION_CONVERGENCE_LEASE_MS,
+            }),
           )
-          if (!renewed) throw new Error(`Task ${taskID} cancellation activation ${claimed.activationID} is fenced`)
         } catch (error) {
           leaseFence.abort(error)
         }
@@ -852,35 +832,34 @@ async function acquireCancellationConvergence(taskID: string) {
         },
         assertActive() {
           leaseFence.signal.throwIfAborted()
-          const lease = Database.use((db) =>
-            db
-              .select({
-                ownerID: EngineControlActivationLeaseTable.owner_occurrence_id,
-                leaseExpiresAt: EngineControlActivationLeaseTable.expires_at,
-              })
-              .from(EngineControlActivationLeaseTable)
-              .where(eq(EngineControlActivationLeaseTable.id, claimed.activationID))
-              .get(),
-          )
-          if (lease?.ownerID !== claimed.ownerOccurrenceID || (lease.leaseExpiresAt ?? 0) <= Date.now()) {
-            const error = new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
+          try {
+            Database.use((db) =>
+              assertControlLeaseInTransaction(db, {
+                target: "lifecycle",
+                targetID: claimed.requestEventID,
+                leaseID: claimed.activationID,
+                ownerOccurrenceID: claimed.ownerOccurrenceID,
+                now: Date.now(),
+              }),
+            )
+          } catch (cause) {
+            const error = new Error(
+              `Task ${taskID} cancellation convergence owner lease is no longer authoritative`,
+              { cause },
+            )
             leaseFence.abort(error)
             throw error
           }
         },
         assertInTransaction(db: Database.TxOrDb) {
           leaseFence.signal.throwIfAborted()
-          const lease = db
-            .select({
-              ownerID: EngineControlActivationLeaseTable.owner_occurrence_id,
-              leaseExpiresAt: EngineControlActivationLeaseTable.expires_at,
-            })
-            .from(EngineControlActivationLeaseTable)
-            .where(eq(EngineControlActivationLeaseTable.id, claimed.activationID))
-            .get()
-          if (lease?.ownerID !== claimed.ownerOccurrenceID || (lease.leaseExpiresAt ?? 0) <= Date.now()) {
-            throw new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
-          }
+          assertControlLeaseInTransaction(db, {
+            target: "lifecycle",
+            targetID: claimed.requestEventID,
+            leaseID: claimed.activationID,
+            ownerOccurrenceID: claimed.ownerOccurrenceID,
+            now: Date.now(),
+          })
         },
         close() {
           clearInterval(heartbeat)

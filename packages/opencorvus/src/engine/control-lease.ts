@@ -37,6 +37,8 @@ export interface AcquireControlLeaseInput {
   ownerOccurrenceID: string
   now: number
   leaseMilliseconds: number
+  /** Domain occurrences such as Task activations may also be the physical lease identity. */
+  leaseID?: string
   /** An immutable receipt may consume a still-unexpired physical lease. */
   supersedeLeaseID?: string
 }
@@ -59,8 +61,10 @@ export function acquireControlLeaseInTransaction(
   if (current && current.expires_at > input.now && current.id !== input.supersedeLeaseID) {
     return { acquired: false as const, lease: current }
   }
+  const leaseID = input.leaseID === undefined ? Identifier.ascending("call") : input.leaseID.trim()
+  if (!leaseID) throw new Error("Control lease identity must be non-empty")
   const lease = {
-    id: Identifier.ascending("call"),
+    id: leaseID,
     target: input.target,
     target_id: input.targetID,
     owner_occurrence_id: input.ownerOccurrenceID,
@@ -160,20 +164,24 @@ export function releaseControlLeaseOnErrorPath(
   }
 }
 
-export function renewControlLease(input: {
+export interface RenewControlLeaseInput {
   target: EngineControlActivationTarget
   targetID: string
   leaseID: string
   ownerOccurrenceID: string
   now: number
   expiresAt: number
-}): void {
+}
+
+export function renewControlLeaseInTransaction(db: Database.TxOrDb, input: RenewControlLeaseInput): void {
   if (input.expiresAt <= input.now) throw new Error("Control lease renewal must extend into the future")
-  Database.immediateTransaction((db) => {
-    const current = assertControlLeaseInTransaction(db, input)
-    const updated = db.update(EngineControlActivationLeaseTable).set({ expires_at: input.expiresAt })
-      .where(and(eq(EngineControlActivationLeaseTable.id, input.leaseID), eq(EngineControlActivationLeaseTable.expires_at, current.expires_at), gt(EngineControlActivationLeaseTable.expires_at, input.now)))
-      .returning({ id: EngineControlActivationLeaseTable.id }).get()
-    if (!updated) throw new ControlLeaseFenceLostError(`Control lease renewal lost fence ${input.leaseID}`)
-  })
+  const current = assertControlLeaseInTransaction(db, input)
+  const updated = db.update(EngineControlActivationLeaseTable).set({ expires_at: input.expiresAt })
+    .where(and(eq(EngineControlActivationLeaseTable.id, input.leaseID), eq(EngineControlActivationLeaseTable.expires_at, current.expires_at), gt(EngineControlActivationLeaseTable.expires_at, input.now)))
+    .returning({ id: EngineControlActivationLeaseTable.id }).get()
+  if (!updated) throw new ControlLeaseFenceLostError(`Control lease renewal lost fence ${input.leaseID}`)
+}
+
+export function renewControlLease(input: RenewControlLeaseInput): void {
+  Database.immediateTransaction((db) => renewControlLeaseInTransaction(db, input))
 }

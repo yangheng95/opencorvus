@@ -37,6 +37,7 @@ import { insertTaskPackageRevisionBinding } from "@/engine/task-package-revision
 import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
+import { InstanceBootstrap } from "@/project/bootstrap"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { ProjectTable } from "@/project/project.sql"
 import { Project } from "@/project/project"
@@ -488,6 +489,7 @@ test("closes continuation admission before the real completion checkpoint and im
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
+    init: InstanceBootstrap,
     fn: async () => {
       const task = await taskFixture(project.path)
       const childSessionID = Identifier.ascending("session")

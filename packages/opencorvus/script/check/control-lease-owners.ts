@@ -70,13 +70,14 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   "engine/task-completion-closure.ts": {
     targets: ["lifecycle"],
     sites: 1,
-    release: "releaseTaskCompletionClosureInTransaction ends it with the closure fact.",
+    release:
+      "The domain validates the active Task epoch, then the shared primitive acquires, asserts and releases the exact semantic activation with the closure fact.",
   },
   "engine/task-root-fact-store.ts": {
     targets: ["task_root_ingress"],
     sites: 1,
     release:
-      "NOT RELEASED. This is a second implementation of acquire/renew/assert against the lease table that bypasses engine/control-lease.ts, and it carries its own consumed-activation predicate. Recorded as open architecture debt; converging it onto the shared primitive is the fix, not a release bolted on here.",
+      "The shared primitive owns physical acquire and renewal. Exact assistant/effect receipts consume an activation and authorize the next semantic activation to supersede that lease; the ingress's final projection is absorbing.",
   },
   "mission/execution-closure.ts": {
     targets: ["lifecycle"],
@@ -117,13 +118,14 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   "task-api/index.ts": {
     targets: ["lifecycle"],
     sites: 1,
-    release: "The convergence owner's close() ends its activation.",
+    release:
+      "The domain validates the cancelling lifecycle boundary, then the shared primitive acquires, renews and asserts it; close() ends the exact activation.",
   },
 }
 
 /**
  * A lease is taken either through the shared primitive or by writing the lease
- * table directly. Both shapes count: the second is how three owners stayed
+ * table directly. Both shapes count: the second is how several owners stayed
  * invisible to the first version of this gate.
  */
 const ACQUIRE_SHAPES = [
