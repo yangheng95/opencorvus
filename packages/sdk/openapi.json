@@ -65760,6 +65760,7 @@
                     "type": "string"
                   },
                   "requestID": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "source": {
@@ -92735,6 +92736,7 @@
                     "type": "string"
                   },
                   "requestID": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "source": {
